@@ -1,6 +1,5 @@
 load("@bazel_gazelle//:def.bzl", "gazelle")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_missing_pkgs", "bzlformat_pkg")
-load("@cgrindel_bazel_starlib//shlib:defs.bzl", "execute_binary")
 load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_update_all")
 
 # MARK: - Bazel Starlark Lint and Formatting
@@ -48,12 +47,14 @@ gazelle(
 
 # MARK: - Golang
 
-execute_binary(
-    name = "go_mod_tidy",
-    arguments = [
-        "mod",
-        "tidy",
-    ],
-    binary = "@go_sdk//:bin/go",
-    execute_in_workspace = True,
-)
+# TODO(chuck): Upgrade bazel-starlib
+
+# execute_binary(
+#     name = "go_mod_tidy",
+#     arguments = [
+#         "mod",
+#         "tidy",
+#     ],
+#     binary = "@go_sdk//:bin/go",
+#     execute_in_workspace = True,
+# )
