@@ -27,11 +27,18 @@ buildifier_prebuilt_register_toolchains()
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
+# gazelle:repo bazel_gazelle
+
 ############################################################
 # Define your own dependencies here using go_repository.
 # Else, dependencies declared by rules_go/gazelle will be used.
 # The first declaration of an external repository "wins".
 ############################################################
+
+load("//:go_deps.bzl", "swift_bazel_go_dependencies")
+
+# gazelle:repository_macro go_deps.bzl%swift_bazel_go_dependencies
+swift_bazel_go_dependencies()
 
 go_rules_dependencies()
 
