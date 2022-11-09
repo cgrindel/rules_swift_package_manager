@@ -1,4 +1,5 @@
-load("@bazel_gazelle//:def.bzl", "gazelle")
+load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_missing_pkgs", "bzlformat_pkg")
 load("@cgrindel_bazel_starlib//shlib/rules:execute_binary.bzl", "execute_binary")
 load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_update_all")
@@ -31,10 +32,18 @@ alias(
 
 # MARK: - Gazelle
 
-# gazelle:prefix github.com/cgrindel/swift_bazel
-gazelle(name = "gazelle")
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = DEFAULT_LANGUAGES + [
+        "@bazel_skylib//gazelle/bzl",
+    ],
+)
 
-# TODO(chuck): Define gazelle_binary to load skylib plugin
+# gazelle:prefix github.com/cgrindel/swift_bazel
+gazelle(
+    name = "gazelle",
+    gazelle = ":gazelle_bin",
+)
 
 gazelle(
     name = "gazelle_update_repos",
@@ -57,4 +66,21 @@ execute_binary(
     ],
     binary = "@go_sdk//:bin/go",
     execute_in_workspace = True,
+)
+
+bzl_library(
+    name = "deps",
+    srcs = ["deps.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@bazel_tools//tools/build_defs/repo:http.bzl",
+        "@bazel_tools//tools/build_defs/repo:utils.bzl",
+    ],
+)
+
+bzl_library(
+    name = "go_deps",
+    srcs = ["go_deps.bzl"],
+    visibility = ["//visibility:public"],
+    deps = ["@bazel_gazelle//:deps"],
 )
