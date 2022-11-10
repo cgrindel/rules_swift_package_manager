@@ -1,8 +1,6 @@
 package gazelle
 
 import (
-	"path"
-
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/language"
@@ -13,10 +11,29 @@ import (
 
 const swiftName = "swift"
 
+const swiftLibraryRule = "swift_library"
+const swiftBinaryRule = "swift_binary"
+const swiftTestRule = "swift_test"
+
+var kindShared = rule.KindInfo{
+	NonEmptyAttrs:  map[string]bool{"srcs": true, "deps": true},
+	MergeableAttrs: map[string]bool{"srcs": true},
+}
+
 var kinds = map[string]rule.KindInfo{
-	"swift_library": {
-		NonEmptyAttrs:  map[string]bool{"srcs": true, "deps": true},
-		MergeableAttrs: map[string]bool{"srcs": true},
+	swiftLibraryRule: kindShared,
+	swiftBinaryRule:  kindShared,
+	swiftTestRule:    kindShared,
+}
+
+var loads = []rule.LoadInfo{
+	{
+		Name: "@build_bazel_rules_swift//swift:swift.bzl",
+		Symbols: []string{
+			swiftLibraryRule,
+			swiftBinaryRule,
+			swiftTestRule,
+		},
 	},
 }
 
@@ -24,35 +41,19 @@ type swiftLang struct {
 	language.BaseLang
 }
 
-func NewLanguage() language.Language {
-	return &swiftLang{}
-}
+func NewLanguage() language.Language { return &swiftLang{} }
 
 func (*swiftLang) Name() string { return swiftName }
 
-func (*swiftLang) Kinds() map[string]rule.KindInfo {
-	return kinds
-}
+func (*swiftLang) Kinds() map[string]rule.KindInfo { return kinds }
 
-func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateResult {
-	r := rule.NewRule("filegroup", "all_files")
-	srcs := make([]string, 0, len(args.Subdirs)+len(args.RegularFiles))
-	srcs = append(srcs, args.RegularFiles...)
-	for _, f := range args.Subdirs {
-		pkg := path.Join(args.Rel, f)
-		srcs = append(srcs, "//"+pkg+":all_files")
-	}
-	r.SetAttr("srcs", srcs)
-	r.SetAttr("testonly", true)
-	if args.File == nil || !args.File.HasDefaultVisibility() {
-		r.SetAttr("visibility", []string{"//visibility:public"})
-	}
-	return language.GenerateResult{
-		Gen:     []*rule.Rule{r},
-		Imports: []interface{}{nil},
-	}
-}
+func (*swiftLang) Loads() []rule.LoadInfo { return loads }
 
-func (l *swiftLang) Resolve(c *config.Config, ix *resolve.RuleIndex, rc *repo.RemoteCache, r *rule.Rule, imports interface{}, from label.Label) {
-
+func (l *swiftLang) Resolve(
+	c *config.Config,
+	ix *resolve.RuleIndex,
+	rc *repo.RemoteCache,
+	r *rule.Rule,
+	imports interface{},
+	from label.Label) {
 }

@@ -1,6 +1,12 @@
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
+# MARK: - Starlark
+
+bzlformat_pkg(name = "bzlformat")
+
+# MARK: - Gazelle Plugin
+
 go_library(
     name = "gazelle",
     srcs = ["lang.go"],
@@ -15,5 +21,3 @@ go_library(
         "@bazel_gazelle//rule:go_default_library",
     ],
 )
-
-bzlformat_pkg(name = "bzlformat")
