@@ -53,16 +53,16 @@ func NewLanguage() language.Language {
 func (*swiftLang) Name() string { return languageName }
 
 func (*swiftLang) Kinds() map[string]rule.KindInfo {
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: Kinds kinds: %+#v", kinds)
-	// DEBUG END
+	// // DEBUG BEGIN
+	// log.Printf("*** CHUCK: Kinds kinds: %+#v", kinds)
+	// // DEBUG END
 	return kinds
 }
 
 func (*swiftLang) Loads() []rule.LoadInfo {
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: Loads loads: %+#v", loads)
-	// DEBUG END
+	// // DEBUG BEGIN
+	// log.Printf("*** CHUCK: Loads loads: %+#v", loads)
+	// // DEBUG END
 	return loads
 }
 
@@ -84,12 +84,12 @@ func (l *swiftLang) Resolve(
 }
 
 func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
-	// DEBUG BEGIN
-	// log.Printf("*** CHUCK: Configure c: %+#v", c)
-	log.Printf("*** CHUCK: Configure c.Langs: %+#v", c.Langs)
-	log.Printf("*** CHUCK: Configure rel: %+#v", rel)
-	log.Printf("*** CHUCK: Configure f: %v", f)
-	// DEBUG END
+	// // DEBUG BEGIN
+	// // log.Printf("*** CHUCK: Configure c: %+#v", c)
+	// log.Printf("*** CHUCK: Configure c.Langs: %+#v", c.Langs)
+	// log.Printf("*** CHUCK: Configure rel: %+#v", rel)
+	// log.Printf("*** CHUCK: Configure f: %v", f)
+	// // DEBUG END
 }
 
 // // Imports returns a list of ImportSpecs that can be used to import the rule

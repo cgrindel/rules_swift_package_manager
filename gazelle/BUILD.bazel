@@ -9,7 +9,10 @@ bzlformat_pkg(name = "bzlformat")
 
 go_library(
     name = "gazelle",
-    srcs = ["lang.go"],
+    srcs = [
+        "generate.go",
+        "lang.go",
+    ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle",
     visibility = ["//visibility:public"],
     deps = [

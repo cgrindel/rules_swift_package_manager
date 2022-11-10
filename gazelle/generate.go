@@ -28,5 +28,15 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 	// 	Imports: []interface{}{nil},
 	// }
 
+	allFiles := append(args.RegularFiles, args.GenFiles...)
+
+	// var rules []*rule.Rule
+	// var imports
+	// for _, f := range allFiles {
+	// 	if !isSwiftSourceFile(f) {
+	// 		continue
+	// 	}
+	// }
+
 	return language.GenerateResult{}
 }
