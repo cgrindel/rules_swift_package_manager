@@ -8,7 +8,7 @@ import (
 
 func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateResult {
 	// DEBUG BEGIN
-	log.Printf("*** CHUCK:  args: %+#v", args)
+	log.Printf("*** CHUCK: GenerateRules args: %+#v", args)
 	// DEBUG END
 
 	// r := rule.NewRule("filegroup", "all_files")
