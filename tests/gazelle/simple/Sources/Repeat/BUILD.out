@@ -1,11 +1,9 @@
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
-swift_binary(
+swift_library(
     name = "Repeat",
     srcs = [
+        "Foo/Foo.swift",
         "Repeat.swift",
-    ],
-    deps = [
-        "@apple_swift_argument_parser//:ArgumentParser",
     ],
 )

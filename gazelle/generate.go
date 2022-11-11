@@ -5,13 +5,18 @@ import (
 	"path/filepath"
 
 	"github.com/bazelbuild/bazel-gazelle/language"
+	"github.com/bazelbuild/bazel-gazelle/rule"
 	"golang.org/x/exp/slices"
 )
 
 func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateResult {
 	result := language.GenerateResult{}
 
+	// Collect Swift files
 	swiftFiles := collectSwiftFiles(append(args.RegularFiles, args.GenFiles...))
+	if len(swiftFiles) == 0 {
+		return result
+	}
 
 	// Be sure to use args.Rel when determining whether this is a module directory. We do not want
 	// to check directories that are outside of the workspace.
@@ -19,7 +24,8 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 	if args.Rel != moduleRootDir {
 		dirRelToModuleRoot, err := filepath.Rel(moduleRootDir, args.Rel)
 		if err != nil {
-			log.Fatalf("failed to find the relative path for %s from %s. %s", args.Rel, moduleRootDir, err)
+			log.Fatalf("failed to find the relative path for %s from %s. %s",
+				args.Rel, moduleRootDir, err)
 		}
 		swiftFilesWithParentDir := make([]string, len(swiftFiles))
 		for idx, swf := range swiftFiles {
@@ -30,14 +36,26 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 	}
 
 	// Retrieve any Swift files that have already been found
-	swiftFiles = append(swiftFiles, getModuleFilesInSubdirs(moduleRootDir)...)
+	srcs := append(swiftFiles, getModuleFilesInSubdirs(moduleRootDir)...)
+	slices.Sort(srcs)
+
+	// TODO(chuck): Add code to check for kind of rule
+
+	// Create a rule
+	pkgName := filepath.Base(args.Rel)
+	r := rule.NewRule(swiftLibraryRule, pkgName)
+	r.SetAttr("srcs", srcs)
+	result.Gen = append(result.Gen, r)
+
+	// TODO(chuck): What should I add for imports?
+	result.Imports = make([]interface{}, len(result.Gen))
+	for idx := range result.Gen {
+		result.Imports[idx] = nil
+	}
 
 	// DEBUG BEGIN
-	log.Printf("*** CHUCK: GenerateRules args.Rel: %+#v", args.Rel)
-	log.Printf("*** CHUCK: GenerateRules swiftFiles: ")
-	for idx, item := range swiftFiles {
-		log.Printf("*** CHUCK %d: %+#v", idx, item)
-	}
+	log.Printf("*** CHUCK: GenerateRules pkgName: %+#v", pkgName)
+	log.Printf("*** CHUCK: GenerateRules result: %+#v", result)
 	// DEBUG END
 
 	return result
