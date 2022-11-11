@@ -6,7 +6,7 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/pathdistance"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"golang.org/x/exp/slices"
 )
 
@@ -21,7 +21,7 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 
 	// Be sure to use args.Rel when determining whether this is a module directory. We do not want
 	// to check directories that are outside of the workspace.
-	moduleRootDir := getModuleRootDir(args.Rel)
+	moduleRootDir := swift.ModuleRootDir(args.Rel)
 	if args.Rel != moduleRootDir {
 		dirRelToModuleRoot, err := filepath.Rel(moduleRootDir, args.Rel)
 		if err != nil {
@@ -90,26 +90,4 @@ func getModuleFilesInSubdirs(moduleRootDir string) []string {
 		moduleSwiftFiles = eps
 	}
 	return moduleSwiftFiles
-}
-
-var moduleParentDirNames = []string{
-	"Sources",
-	"Source",
-	"Tests",
-}
-
-// Return the module root directory and the distance to the directory.
-func getModuleRootDir(path string) string {
-	// If we do not see the module parent in the path, we could be a Swift module
-	moduleParentDistance := pathdistance.DistanceFrom(moduleParentDirNames, path)
-	switch moduleParentDistance {
-	case -1:
-		// We did not find a module parent. So, we could be non-standard Swift directory.
-		return path
-	case 1:
-		// We are a bonafide module root.
-		return path
-	default:
-		return pathdistance.PathAt(path, moduleParentDistance-1)
-	}
 }

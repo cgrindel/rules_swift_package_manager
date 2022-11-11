@@ -16,7 +16,7 @@ go_library(
     importpath = "github.com/cgrindel/swift_bazel/gazelle",
     visibility = ["//visibility:public"],
     deps = [
-        "//gazelle/internal/pathdistance",
+        "//gazelle/internal/swift",
         "@bazel_gazelle//language:go_default_library",
         "@bazel_gazelle//rule:go_default_library",
         "@org_golang_x_exp//slices",
