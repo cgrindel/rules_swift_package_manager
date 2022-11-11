@@ -2,7 +2,10 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "swift",
-    srcs = ["module_dir.go"],
+    srcs = [
+        "files.go",
+        "module_dir.go",
+    ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/swift",
     visibility = ["//gazelle:__subpackages__"],
     deps = ["//gazelle/internal/pathdistance"],
@@ -10,7 +13,10 @@ go_library(
 
 go_test(
     name = "swift_test",
-    srcs = ["module_dir_test.go"],
+    srcs = [
+        "files_test.go",
+        "module_dir_test.go",
+    ],
     deps = [
         ":swift",
         "@com_github_stretchr_testify//assert",

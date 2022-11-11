@@ -14,7 +14,7 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 	result := language.GenerateResult{}
 
 	// Collect Swift files
-	swiftFiles := collectSwiftFiles(append(args.RegularFiles, args.GenFiles...))
+	swiftFiles := swift.FilterFiles(append(args.RegularFiles, args.GenFiles...))
 	if len(swiftFiles) == 0 {
 		return result
 	}
@@ -54,23 +54,7 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 		result.Imports[idx] = nil
 	}
 
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: GenerateRules pkgName: %+#v", pkgName)
-	log.Printf("*** CHUCK: GenerateRules result: %+#v", result)
-	// DEBUG END
-
 	return result
-}
-
-func collectSwiftFiles(paths []string) []string {
-	var results []string
-	for _, path := range paths {
-		ext := filepath.Ext(path)
-		if ext == ".swift" {
-			results = append(results, path)
-		}
-	}
-	return results
 }
 
 var moduleFilesInSubdirs = make(map[string][]string)
