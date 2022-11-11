@@ -10,11 +10,15 @@ func PathAt(path string, distance int) string {
 	if path == "" || distance <= 0 {
 		return path
 	}
-	parent := filepath.Dir(path)
+	parent := parentDir(path)
 	return PathAt(parent, distance-1)
 }
 
-func DistanceFrom(values []string, path string, distance int) int {
+func DistanceFrom(values []string, path string) int {
+	return doDistanceFrom(values, path, 0)
+}
+
+func doDistanceFrom(values []string, path string, distance int) int {
 	if path == "" {
 		return -1
 	}
@@ -22,6 +26,14 @@ func DistanceFrom(values []string, path string, distance int) int {
 	if slices.Contains(values, basename) {
 		return distance
 	}
-	dir := filepath.Dir(path)
-	return DistanceFrom(values, dir, distance+1)
+	parent := parentDir(path)
+	return doDistanceFrom(values, parent, distance+1)
+}
+
+func parentDir(path string) string {
+	parent := filepath.Dir(path)
+	if parent == "." {
+		parent = ""
+	}
+	return parent
 }

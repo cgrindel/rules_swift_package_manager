@@ -101,7 +101,7 @@ var moduleParentDirNames = []string{
 // Return the module root directory and the distance to the directory.
 func getModuleRootDir(path string) string {
 	// If we do not see the module parent in the path, we could be a Swift module
-	moduleParentDistance := pathdistance.DistanceFrom(moduleParentDirNames, path, 0)
+	moduleParentDistance := pathdistance.DistanceFrom(moduleParentDirNames, path)
 	switch moduleParentDistance {
 	case -1:
 		// We did not find a module parent. So, we could be non-standard Swift directory.
