@@ -3,11 +3,7 @@ package gazelle
 import (
 	"log"
 
-	"github.com/bazelbuild/bazel-gazelle/config"
-	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/language"
-	"github.com/bazelbuild/bazel-gazelle/repo"
-	"github.com/bazelbuild/bazel-gazelle/resolve"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 )
 
@@ -66,31 +62,41 @@ func (*swiftLang) Loads() []rule.LoadInfo {
 	return loads
 }
 
-func (l *swiftLang) Resolve(
-	c *config.Config,
-	ix *resolve.RuleIndex,
-	rc *repo.RemoteCache,
-	r *rule.Rule,
-	imports interface{},
-	from label.Label) {
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: Resolve ix: %+#v", ix)
-	log.Printf("*** CHUCK: Resolve rc: %+#v", rc)
-	log.Printf("*** CHUCK: Resolve r: %+#v", r)
-	log.Printf("*** CHUCK: Resolve imports: %+#v", imports)
-	log.Printf("*** CHUCK: Resolve from: %+#v", from)
-	// DEBUG END
+// func (sl *swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) {
+// 	// DEBUG BEGIN
+// 	log.Printf("*** CHUCK: RegisterFlags cmd: %+#v", cmd)
+// 	log.Printf("*** CHUCK: RegisterFlags c: %+#v", c)
+// 	// DEBUG END
+// }
 
-}
+// type swiftModuleCollector struct {
+// 	ModuleFiles map[string][]string
+// }
 
-func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
-	// // DEBUG BEGIN
-	// // log.Printf("*** CHUCK: Configure c: %+#v", c)
-	// log.Printf("*** CHUCK: Configure c.Langs: %+#v", c.Langs)
-	// log.Printf("*** CHUCK: Configure rel: %+#v", rel)
-	// log.Printf("*** CHUCK: Configure f: %v", f)
-	// // DEBUG END
-}
+// func (l *swiftLang) Resolve(
+// 	c *config.Config,
+// 	ix *resolve.RuleIndex,
+// 	rc *repo.RemoteCache,
+// 	r *rule.Rule,
+// 	imports interface{},
+// 	from label.Label) {
+// 	// DEBUG BEGIN
+// 	log.Printf("*** CHUCK: Resolve ix: %+#v", ix)
+// 	log.Printf("*** CHUCK: Resolve rc: %+#v", rc)
+// 	log.Printf("*** CHUCK: Resolve r: %+#v", r)
+// 	log.Printf("*** CHUCK: Resolve imports: %+#v", imports)
+// 	log.Printf("*** CHUCK: Resolve from: %+#v", from)
+// 	// DEBUG END
+// }
+
+// func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
+// 	// // DEBUG BEGIN
+// 	// // log.Printf("*** CHUCK: Configure c: %+#v", c)
+// 	// log.Printf("*** CHUCK: Configure c.Langs: %+#v", c.Langs)
+// 	// log.Printf("*** CHUCK: Configure rel: %+#v", rel)
+// 	// log.Printf("*** CHUCK: Configure f: %v", f)
+// 	// // DEBUG END
+// }
 
 // // Imports returns a list of ImportSpecs that can be used to import the rule
 // // r. This is used to populate RuleIndex.
