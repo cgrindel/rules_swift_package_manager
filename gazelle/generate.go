@@ -23,16 +23,16 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 	// to check directories that are outside of the workspace.
 	moduleDir := swift.ModuleDir(args.Rel)
 	if args.Rel != moduleDir {
-		dirRelToModuleRoot, err := filepath.Rel(moduleDir, args.Rel)
+		relDir, err := filepath.Rel(moduleDir, args.Rel)
 		if err != nil {
 			log.Fatalf("failed to find the relative path for %s from %s. %s",
 				args.Rel, moduleDir, err)
 		}
-		swiftFilesWithParentDir := make([]string, len(swiftFiles))
+		swiftFilesWithRelDir := make([]string, len(swiftFiles))
 		for idx, swf := range swiftFiles {
-			swiftFilesWithParentDir[idx] = filepath.Join(dirRelToModuleRoot, swf)
+			swiftFilesWithRelDir[idx] = filepath.Join(relDir, swf)
 		}
-		appendModuleFilesInSubdirs(moduleDir, swiftFilesWithParentDir)
+		appendModuleFilesInSubdirs(moduleDir, swiftFilesWithRelDir)
 		return result
 	}
 
