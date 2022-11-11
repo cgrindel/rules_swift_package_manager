@@ -9,50 +9,52 @@ import (
 )
 
 func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateResult {
+	result := language.GenerateResult{}
+
 	// DEBUG BEGIN
 	log.Printf("*** CHUCK: GenerateRules args: %+#v", args)
 	// DEBUG END
 
-	// r := rule.NewRule("filegroup", "all_files")
-	// srcs := make([]string, 0, len(args.Subdirs)+len(args.RegularFiles))
-	// srcs = append(srcs, args.RegularFiles...)
-	// for _, f := range args.Subdirs {
-	// 	pkg := path.Join(args.Rel, f)
-	// 	srcs = append(srcs, "//"+pkg+":all_files")
-	// }
-	// r.SetAttr("srcs", srcs)
-	// r.SetAttr("testonly", true)
-	// if args.File == nil || !args.File.HasDefaultVisibility() {
-	// 	r.SetAttr("visibility", []string{"//visibility:public"})
-	// }
-	// return language.GenerateResult{
-	// 	Gen:     []*rule.Rule{r},
-	// 	Imports: []interface{}{nil},
-	// }
-
-	// allFiles := append(args.RegularFiles, args.GenFiles...)
-
-	// var rules []*rule.Rule
-	// var imports
-	// for _, f := range allFiles {
-	// 	if !isSwiftSourceFile(f) {
-	// 		continue
-	// 	}
-	// }
-
-	result := language.GenerateResult{}
-
+	// Be sure to use args.Rel when determining whether this is a module directory. We do not want
+	// to check directories that are outside of the workspace.
 	if isModuleRootDir(args.Rel) == noResult {
-		// DEBUG BEGIN
-		log.Printf("*** CHUCK: IS_NOT_MODULE args.Dir: %+#v", args.Dir)
-		// DEBUG END
 		return result
 	}
+
+	// Recursively, find all of the Swift files under this directory
+	// Concatenate with the generated files.
+	swiftFiles := findSwiftFiles(args.Dir)
+	allFiles := append(swiftFiles, args.GenFiles...)
+	slices.Sort(allFiles)
+
 	// DEBUG BEGIN
-	log.Printf("*** CHUCK: IS_MODULE args.Dir: %+#v", args.Dir)
+	log.Printf("*** CHUCK allFiles: ")
+	for idx, item := range allFiles {
+		log.Printf("*** CHUCK %d: %+#v", idx, item)
+	}
 	// DEBUG END
 
 	return result
+}
+
+func findSwiftFiles(dir string) []string {
+	pattern := filepath.Join(dir, "**", "*.swift")
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK: findSwiftFiles pattern: %+#v", pattern)
+	// DEBUG END
+	absSwiftFiles, err := filepath.Glob(pattern)
+	if err != nil {
+		log.Fatal("failed finding Swift files", err)
+
+	}
+	swiftFiles := make([]string, len(absSwiftFiles))
+	for idx, swf := range absSwiftFiles {
+		swiftFiles[idx], err = filepath.Rel(dir, swf)
+		if err != nil {
+			log.Fatalf("failed calculating the relative path for %s. %s", swf, err)
+		}
+	}
+	return swiftFiles
 }
 
 var moduleParentDirNames = []string{
