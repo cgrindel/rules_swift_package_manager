@@ -6,6 +6,7 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/stringslices"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"golang.org/x/exp/slices"
 )
@@ -28,10 +29,9 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 			log.Fatalf("failed to find the relative path for %s from %s. %s",
 				args.Rel, moduleDir, err)
 		}
-		swiftFilesWithRelDir := make([]string, len(swiftFiles))
-		for idx, swf := range swiftFiles {
-			swiftFilesWithRelDir[idx] = filepath.Join(relDir, swf)
-		}
+		swiftFilesWithRelDir := stringslices.Map(swiftFiles, func(file string) string {
+			return filepath.Join(relDir, file)
+		})
 		appendModuleFilesInSubdirs(moduleDir, swiftFilesWithRelDir)
 		return result
 	}
