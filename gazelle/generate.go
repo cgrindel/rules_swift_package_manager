@@ -21,23 +21,23 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 
 	// Be sure to use args.Rel when determining whether this is a module directory. We do not want
 	// to check directories that are outside of the workspace.
-	moduleRootDir := swift.ModuleRootDir(args.Rel)
-	if args.Rel != moduleRootDir {
-		dirRelToModuleRoot, err := filepath.Rel(moduleRootDir, args.Rel)
+	moduleDir := swift.ModuleDir(args.Rel)
+	if args.Rel != moduleDir {
+		dirRelToModuleRoot, err := filepath.Rel(moduleDir, args.Rel)
 		if err != nil {
 			log.Fatalf("failed to find the relative path for %s from %s. %s",
-				args.Rel, moduleRootDir, err)
+				args.Rel, moduleDir, err)
 		}
 		swiftFilesWithParentDir := make([]string, len(swiftFiles))
 		for idx, swf := range swiftFiles {
 			swiftFilesWithParentDir[idx] = filepath.Join(dirRelToModuleRoot, swf)
 		}
-		appendModuleFilesInSubdirs(moduleRootDir, swiftFilesWithParentDir)
+		appendModuleFilesInSubdirs(moduleDir, swiftFilesWithParentDir)
 		return result
 	}
 
 	// Retrieve any Swift files that have already been found
-	srcs := append(swiftFiles, getModuleFilesInSubdirs(moduleRootDir)...)
+	srcs := append(swiftFiles, getModuleFilesInSubdirs(moduleDir)...)
 	slices.Sort(srcs)
 
 	// TODO(chuck): Add code to check for kind of rule
@@ -59,18 +59,18 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 
 var moduleFilesInSubdirs = make(map[string][]string)
 
-func appendModuleFilesInSubdirs(moduleRootDir string, paths []string) {
+func appendModuleFilesInSubdirs(moduleDir string, paths []string) {
 	var existingPaths []string
-	if eps, ok := moduleFilesInSubdirs[moduleRootDir]; ok {
+	if eps, ok := moduleFilesInSubdirs[moduleDir]; ok {
 		existingPaths = eps
 	}
 	existingPaths = append(existingPaths, paths...)
-	moduleFilesInSubdirs[moduleRootDir] = existingPaths
+	moduleFilesInSubdirs[moduleDir] = existingPaths
 }
 
-func getModuleFilesInSubdirs(moduleRootDir string) []string {
+func getModuleFilesInSubdirs(moduleDir string) []string {
 	var moduleSwiftFiles []string
-	if eps, ok := moduleFilesInSubdirs[moduleRootDir]; ok {
+	if eps, ok := moduleFilesInSubdirs[moduleDir]; ok {
 		moduleSwiftFiles = eps
 	}
 	return moduleSwiftFiles

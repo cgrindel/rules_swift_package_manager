@@ -9,20 +9,20 @@ import (
 
 func TestModuleRootDir(t *testing.T) {
 	t.Run("path contains module parent directory", func(t *testing.T) {
-		actual := swift.ModuleRootDir("Sources/Chicken")
+		actual := swift.ModuleDir("Sources/Chicken")
 		assert.Equal(t, "Sources/Chicken", actual)
 
-		actual = swift.ModuleRootDir("foo/Source/Chicken")
+		actual = swift.ModuleDir("foo/Source/Chicken")
 		assert.Equal(t, "foo/Source/Chicken", actual)
 
-		actual = swift.ModuleRootDir("foo/Sources/Chicken/Panther")
+		actual = swift.ModuleDir("foo/Sources/Chicken/Panther")
 		assert.Equal(t, "foo/Sources/Chicken", actual)
 
-		actual = swift.ModuleRootDir("Tests/ChickenTests/PantherTests")
+		actual = swift.ModuleDir("Tests/ChickenTests/PantherTests")
 		assert.Equal(t, "Tests/ChickenTests", actual)
 	})
 	t.Run("path does not contain module parent directory", func(t *testing.T) {
-		actual := swift.ModuleRootDir("foo/Chicken")
+		actual := swift.ModuleDir("foo/Chicken")
 		assert.Equal(t, "foo/Chicken", actual)
 	})
 }
