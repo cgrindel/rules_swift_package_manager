@@ -11,28 +11,33 @@ const fileInfoRel = "Foo/Hello.swift"
 const fileInfoAbs = "/path/to/workspace/Foo/Hello.swift"
 
 func TestNewFileInfoFromSrc(t *testing.T) {
-	t.Run("no imports", func(t *testing.T) {
+	t.Run("main function without imports", func(t *testing.T) {
 		actual := swift.NewFileInfoFromSrc(
-			fileInfoRel, fileInfoAbs, srcWithoutImports)
+			fileInfoRel, fileInfoAbs, mainFnWithoutImports)
 		expected := &swift.FileInfo{
-			Rel: fileInfoRel,
-			Abs: fileInfoAbs,
+			Rel:          fileInfoRel,
+			Abs:          fileInfoAbs,
+			ContainsMain: true,
 		}
 		assert.Equal(t, expected, actual)
 	})
-	t.Run("with imports", func(t *testing.T) {
+	t.Run("main annotation with imports", func(t *testing.T) {
 		actual := swift.NewFileInfoFromSrc(
-			fileInfoRel, fileInfoAbs, srcWithImports)
+			fileInfoRel, fileInfoAbs, mainAnnotationWithImports)
 		expected := &swift.FileInfo{
-			Rel:     fileInfoRel,
-			Abs:     fileInfoAbs,
-			Imports: []string{"ArgumentParser", "Foundation"},
+			Rel:          fileInfoRel,
+			Abs:          fileInfoAbs,
+			Imports:      []string{"ArgumentParser", "Foundation"},
+			ContainsMain: true,
 		}
 		assert.Equal(t, expected, actual)
+	})
+	t.Run("test file", func(t *testing.T) {
+		t.Error("IMPLEMENT ME!")
 	})
 }
 
-const srcWithoutImports = `
+const mainFnWithoutImports = `
 @main
 public struct Hello {
     public private(set) var text = "Hello, World!"
@@ -43,7 +48,7 @@ public struct Hello {
 }
 `
 
-const srcWithImports = `
+const mainAnnotationWithImports = `
 // Intentionally not sorted to ensure that FileInfo imports is sorted
 import Foundation
 import ArgumentParser
@@ -64,5 +69,13 @@ struct CountLines: AsyncParsableCommand {
     
     @Flag(help: "Include extra information in the output.")
     var verbose = false
+}
+`
+
+const testFile = `
+@testable import DateUtils
+import XCTest
+
+class DateISOTests: XCTestCase {
 }
 `

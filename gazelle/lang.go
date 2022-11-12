@@ -5,7 +5,7 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/rule"
 )
 
-const languageName = "swift"
+const swiftLangName = "swift"
 
 const swiftLibraryRule = "swift_library"
 const swiftBinaryRule = "swift_binary"
@@ -41,7 +41,7 @@ func NewLanguage() language.Language {
 	return &swiftLang{}
 }
 
-func (*swiftLang) Name() string { return languageName }
+func (*swiftLang) Name() string { return swiftLangName }
 
 func (*swiftLang) Kinds() map[string]rule.KindInfo {
 	return kinds
@@ -83,7 +83,7 @@ func (*swiftLang) Loads() []rule.LoadInfo {
 // 		spec := resolve.ImportSpec{
 // 			// Lang is the language in which the import string appears (this should
 // 			// match Resolver.Name).
-// 			Lang: languageName,
+// 			Lang: swiftLangName,
 // 			// Imp is an import string for the library.
 // 			Imp: fmt.Sprintf("//%s:%s", f.Pkg, src),
 // 		}
