@@ -43,13 +43,13 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 	slices.Sort(srcs)
 
 	fileInfos := createFileInfos(args.Dir, srcs)
-	swiftImports := collectSwiftInfo(fileInfos)
+	swiftImports, ruleKind := collectSwiftInfo(fileInfos)
 
 	// TODO(chuck): Add code to check for kind of rule
 
 	// Create a rule
 	pkgName := filepath.Base(args.Rel)
-	r := rule.NewRule(swiftLibraryRule, pkgName)
+	r := rule.NewRule(ruleKind, pkgName)
 	r.SetAttr("srcs", srcs)
 	r.SetPrivateAttr(config.GazelleImportsKey, swiftImports)
 	result.Gen = append(result.Gen, r)
@@ -76,19 +76,29 @@ func createFileInfos(dir string, srcs []string) []*swift.FileInfo {
 	return fileInfos
 }
 
-func collectSwiftInfo(fileInfos []*swift.FileInfo) []string {
+func collectSwiftInfo(fileInfos []*swift.FileInfo) ([]string, string) {
+	ruleKind := swiftLibraryRuleKind
 	swiftImports := make([]string, 0)
 	swiftImportsSet := make(map[string]bool)
 	for _, fi := range fileInfos {
+		// Collect the imports
 		for _, imp := range fi.Imports {
 			if _, ok := swiftImportsSet[imp]; !ok {
 				swiftImportsSet[imp] = true
 				swiftImports = append(swiftImports, imp)
 			}
 		}
+
+		// Adjust the rule kind, if necessary
+		switch {
+		case fi.ContainsMain:
+			ruleKind = swiftBinaryRuleKind
+		case fi.IsTest:
+			ruleKind = swiftTestRuleKind
+		}
 	}
 	sort.Strings(swiftImports)
-	return swiftImports
+	return swiftImports, ruleKind
 }
 
 var moduleFilesInSubdirs = make(map[string][]string)

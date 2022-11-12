@@ -7,9 +7,9 @@ import (
 
 const swiftLangName = "swift"
 
-const swiftLibraryRule = "swift_library"
-const swiftBinaryRule = "swift_binary"
-const swiftTestRule = "swift_test"
+const swiftLibraryRuleKind = "swift_library"
+const swiftBinaryRuleKind = "swift_binary"
+const swiftTestRuleKind = "swift_test"
 
 var kindShared = rule.KindInfo{
 	NonEmptyAttrs:  map[string]bool{"srcs": true, "deps": true},
@@ -17,18 +17,18 @@ var kindShared = rule.KindInfo{
 }
 
 var kinds = map[string]rule.KindInfo{
-	swiftLibraryRule: kindShared,
-	swiftBinaryRule:  kindShared,
-	swiftTestRule:    kindShared,
+	swiftLibraryRuleKind: kindShared,
+	swiftBinaryRuleKind:  kindShared,
+	swiftTestRuleKind:    kindShared,
 }
 
 var loads = []rule.LoadInfo{
 	{
 		Name: "@build_bazel_rules_swift//swift:swift.bzl",
 		Symbols: []string{
-			swiftLibraryRule,
-			swiftBinaryRule,
-			swiftTestRule,
+			swiftLibraryRuleKind,
+			swiftBinaryRuleKind,
+			swiftTestRuleKind,
 		},
 	},
 }
