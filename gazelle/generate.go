@@ -45,11 +45,10 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 	fileInfos := createFileInfos(args.Dir, srcs)
 	swiftImports, ruleKind := collectSwiftInfo(fileInfos)
 
-	// TODO(chuck): Add code to check for kind of rule
-
 	// Create a rule
 	pkgName := filepath.Base(args.Rel)
 	r := rule.NewRule(ruleKind, pkgName)
+	r.SetAttr("module_name", pkgName)
 	r.SetAttr("srcs", srcs)
 	r.SetPrivateAttr(config.GazelleImportsKey, swiftImports)
 	result.Gen = append(result.Gen, r)

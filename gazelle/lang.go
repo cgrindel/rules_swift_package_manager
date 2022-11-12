@@ -7,10 +7,6 @@ import (
 
 const swiftLangName = "swift"
 
-const swiftLibraryRuleKind = "swift_library"
-const swiftBinaryRuleKind = "swift_binary"
-const swiftTestRuleKind = "swift_test"
-
 var kindShared = rule.KindInfo{
 	NonEmptyAttrs:  map[string]bool{"srcs": true, "deps": true},
 	MergeableAttrs: map[string]bool{"srcs": true},
