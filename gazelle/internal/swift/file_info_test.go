@@ -13,7 +13,7 @@ const fileInfoAbs = "/path/to/workspace/Foo/Hello.swift"
 func TestNewFileInfoFromSrc(t *testing.T) {
 	t.Run("no imports", func(t *testing.T) {
 		actual := swift.NewFileInfoFromSrc(
-			fileInfoRel, fileInfoAbs, []byte(srcWithoutImports))
+			fileInfoRel, fileInfoAbs, srcWithoutImports)
 		expected := &swift.FileInfo{
 			Rel: fileInfoRel,
 			Abs: fileInfoAbs,
@@ -22,7 +22,7 @@ func TestNewFileInfoFromSrc(t *testing.T) {
 	})
 	t.Run("with imports", func(t *testing.T) {
 		actual := swift.NewFileInfoFromSrc(
-			fileInfoRel, fileInfoAbs, []byte(srcWithImports))
+			fileInfoRel, fileInfoAbs, srcWithImports)
 		expected := &swift.FileInfo{
 			Rel:     fileInfoRel,
 			Abs:     fileInfoAbs,
