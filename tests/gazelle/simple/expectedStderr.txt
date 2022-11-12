@@ -1,5 +1,0 @@
-2022/11/11 18:03:58 *** CHUCK: NewLanguage START
-gazelle: *** CHUCK: GenerateRules pkgName: "Repeat"
-gazelle: *** CHUCK: GenerateRules result: language.GenerateResult{Gen:[]*rule.Rule{(*rule.Rule)(0xc0001ca580)}, Empty:[]*rule.Rule(nil), Imports:[]interface {}{interface {}(nil)}}
-gazelle: *** CHUCK: GenerateRules pkgName: "Roll"
-gazelle: *** CHUCK: GenerateRules result: language.GenerateResult{Gen:[]*rule.Rule{(*rule.Rule)(0xc0001ca600)}, Empty:[]*rule.Rule(nil), Imports:[]interface {}{interface {}(nil)}}

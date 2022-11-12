@@ -3,7 +3,9 @@ package gazelle
 import (
 	"log"
 	"path/filepath"
+	"sort"
 
+	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/stringslices"
@@ -40,21 +42,53 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 	srcs := append(swiftFiles, getModuleFilesInSubdirs(moduleDir)...)
 	slices.Sort(srcs)
 
+	fileInfos := createFileInfos(args.Dir, srcs)
+	swiftImports := collectSwiftInfo(fileInfos)
+
 	// TODO(chuck): Add code to check for kind of rule
 
 	// Create a rule
 	pkgName := filepath.Base(args.Rel)
 	r := rule.NewRule(swiftLibraryRule, pkgName)
 	r.SetAttr("srcs", srcs)
+	r.SetPrivateAttr(config.GazelleImportsKey, swiftImports)
 	result.Gen = append(result.Gen, r)
 
-	// TODO(chuck): What should I add for imports?
 	result.Imports = make([]interface{}, len(result.Gen))
 	for idx := range result.Gen {
-		result.Imports[idx] = nil
+		result.Imports[idx] = r.PrivateAttr(config.GazelleImportsKey)
 	}
 
 	return result
+}
+
+func createFileInfos(dir string, srcs []string) []*swift.FileInfo {
+	fileInfos := make([]*swift.FileInfo, len(srcs))
+	for idx, src := range srcs {
+		abs := filepath.Join(dir, src)
+		fi, err := swift.NewFileInfoFromPath(src, abs)
+		if err != nil {
+			log.Printf("failed to create swift.FileInfo for %s. %s", abs, err)
+			continue
+		}
+		fileInfos[idx] = fi
+	}
+	return fileInfos
+}
+
+func collectSwiftInfo(fileInfos []*swift.FileInfo) []string {
+	swiftImports := make([]string, 0)
+	swiftImportsSet := make(map[string]bool)
+	for _, fi := range fileInfos {
+		for _, imp := range fi.Imports {
+			if _, ok := swiftImportsSet[imp]; !ok {
+				swiftImportsSet[imp] = true
+				swiftImports = append(swiftImports, imp)
+			}
+		}
+	}
+	sort.Strings(swiftImports)
+	return swiftImports
 }
 
 var moduleFilesInSubdirs = make(map[string][]string)
