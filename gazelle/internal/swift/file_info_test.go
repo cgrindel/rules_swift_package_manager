@@ -1,6 +1,7 @@
 package swift_test
 
 import (
+	"path/filepath"
 	"testing"
 
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
@@ -33,7 +34,17 @@ func TestNewFileInfoFromSrc(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	})
 	t.Run("test file", func(t *testing.T) {
-		t.Error("IMPLEMENT ME!")
+		rel := "FooTests/HelloTests.swift"
+		abs := filepath.Join("Tests", rel)
+		actual := swift.NewFileInfoFromSrc(rel, abs, testFile)
+		expected := &swift.FileInfo{
+			Rel:          rel,
+			Abs:          abs,
+			Imports:      []string{"DateUtils", "XCTest"},
+			IsTest:       true,
+			ContainsMain: false,
+		}
+		assert.Equal(t, expected, actual)
 	})
 }
 
@@ -75,6 +86,9 @@ struct CountLines: AsyncParsableCommand {
 const testFile = `
 @testable import DateUtils
 import XCTest
+
+// The following should not be seen.
+// @main
 
 class DateISOTests: XCTestCase {
 }

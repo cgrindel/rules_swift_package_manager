@@ -21,13 +21,15 @@ func NewFileInfoFromReader(rel, abs string, reader io.Reader) *FileInfo {
 	fi := FileInfo{
 		Rel:    rel,
 		Abs:    abs,
-		IsTest: strings.HasPrefix(rel, "_test.swift"),
+		IsTest: testSuffixes.HasSuffix(rel),
 	}
 
 	scanner := bufio.NewScanner(reader)
 	for scanner.Scan() {
 		for _, match := range swiftRe.FindAllSubmatch(scanner.Bytes(), -1) {
 			switch {
+			case match[commentLineReSubexpIdx] != nil:
+				// Found a comment line; do not try and match anything else
 			case match[importReSubexpIdx] != nil:
 				fi.Imports = append(fi.Imports, string(match[importReSubexpIdx]))
 			case match[mainAnnotationReSubexpIdx] != nil:
@@ -59,16 +61,31 @@ var swiftRe = buildSwiftRegexp()
 
 func buildSwiftRegexp() *regexp.Regexp {
 	ident := `[A-Za-z][A-Za-z0-9_]*`
-	importStmt := `^\s*\bimport\s*(?P<import>` + ident + `)\b`
+	commentLine := `^\s*(?P<commentline>//.*)`
+	importStmt := `\bimport\s*(?P<import>` + ident + `)\b`
 	mainAnnotation := `^\s*(?P<mainanno>@main\b)`
 	mainFnDecl := `(?P<mainfn>\bstatic\s+func\s+main\b)`
-	swiftReSrc := strings.Join([]string{importStmt, mainAnnotation, mainFnDecl}, "|")
+	swiftReSrc := strings.Join([]string{commentLine, importStmt, mainAnnotation, mainFnDecl}, "|")
 	return regexp.MustCompile(swiftReSrc)
 }
 
 const (
 	// The subexpression index values are derived from the order in the swiftReSrc expression.
-	importReSubexpIdx         = 1
-	mainAnnotationReSubexpIdx = 2
-	mainFnReSubexpIdx         = 3
+	commentLineReSubexpIdx    = 1
+	importReSubexpIdx         = 2
+	mainAnnotationReSubexpIdx = 3
+	mainFnReSubexpIdx         = 4
 )
+
+type fileSuffixes []string
+
+func (fs fileSuffixes) HasSuffix(path string) bool {
+	for _, suffix := range fs {
+		if strings.HasSuffix(path, suffix) {
+			return true
+		}
+	}
+	return false
+}
+
+var testSuffixes = fileSuffixes{"Tests.swift", "Test.swift"}
