@@ -51,25 +51,6 @@ func (*swiftLang) Loads() []rule.LoadInfo {
 	return loads
 }
 
-// func (sl *swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) {
-// }
-
-// type swiftModuleCollector struct {
-// 	ModuleFiles map[string][]string
-// }
-
-// func (l *swiftLang) Resolve(
-// 	c *config.Config,
-// 	ix *resolve.RuleIndex,
-// 	rc *repo.RemoteCache,
-// 	r *rule.Rule,
-// 	imports interface{},
-// 	from label.Label) {
-// }
-
-// func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
-// }
-
 // // Imports returns a list of ImportSpecs that can be used to import the rule
 // // r. This is used to populate RuleIndex.
 // //
