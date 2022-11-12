@@ -3,6 +3,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 go_library(
     name = "swift",
     srcs = [
+        "file_info.go",
         "files.go",
         "module_dir.go",
     ],
@@ -14,6 +15,7 @@ go_library(
 go_test(
     name = "swift_test",
     srcs = [
+        "file_info_test.go",
         "files_test.go",
         "module_dir_test.go",
     ],
