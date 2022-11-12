@@ -12,6 +12,7 @@ go_library(
     srcs = [
         "generate.go",
         "lang.go",
+        "resolve.go",
     ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle",
     visibility = ["//visibility:public"],
@@ -19,7 +20,10 @@ go_library(
         "//gazelle/internal/stringslices",
         "//gazelle/internal/swift",
         "@bazel_gazelle//config:go_default_library",
+        "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//language:go_default_library",
+        "@bazel_gazelle//repo:go_default_library",
+        "@bazel_gazelle//resolve:go_default_library",
         "@bazel_gazelle//rule:go_default_library",
         "@org_golang_x_exp//slices",
     ],

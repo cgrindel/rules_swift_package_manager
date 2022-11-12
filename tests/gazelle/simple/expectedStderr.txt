@@ -1,0 +1,9 @@
+gazelle: *** CHUCK: Resolve r: &rule.Rule{stmt:rule.stmt{index:0, deleted:false, inserted:true, updated:true, comments:[]string(nil), commentsUpdated:false, expr:(*build.CallExpr)(0xc0001c81e0)}, kind:"swift_library", args:[]build.Expr(nil), attrs:map[string]*build.AssignExpr{"name":(*build.AssignExpr)(0xc0001bc1e0), "srcs":(*build.AssignExpr)(0xc0001bc320)}, private:map[string]interface {}{"_gazelle_imports":[]string{"ArgumentParser", "Foundation"}}}
+gazelle: *** CHUCK: Resolve imports: []string{"ArgumentParser", "Foundation"}
+gazelle: *** CHUCK: Resolve from: label.Label{Repo:"", Pkg:"Sources/CountLines", Name:"CountLines", Relative:false}
+gazelle: *** CHUCK: Resolve r: &rule.Rule{stmt:rule.stmt{index:0, deleted:false, inserted:true, updated:true, comments:[]string(nil), commentsUpdated:false, expr:(*build.CallExpr)(0xc0001c83c0)}, kind:"swift_library", args:[]build.Expr(nil), attrs:map[string]*build.AssignExpr{"name":(*build.AssignExpr)(0xc0001bc500), "srcs":(*build.AssignExpr)(0xc0001bc6e0)}, private:map[string]interface {}{"_gazelle_imports":[]string{"ArgumentParser"}}}
+gazelle: *** CHUCK: Resolve imports: []string{"ArgumentParser"}
+gazelle: *** CHUCK: Resolve from: label.Label{Repo:"", Pkg:"Sources/Repeat", Name:"Repeat", Relative:false}
+gazelle: *** CHUCK: Resolve r: &rule.Rule{stmt:rule.stmt{index:0, deleted:false, inserted:true, updated:true, comments:[]string(nil), commentsUpdated:false, expr:(*build.CallExpr)(0xc0001c85a0)}, kind:"swift_library", args:[]build.Expr(nil), attrs:map[string]*build.AssignExpr{"name":(*build.AssignExpr)(0xc0001bc8c0), "srcs":(*build.AssignExpr)(0xc0001bca00)}, private:map[string]interface {}{"_gazelle_imports":[]string{"ArgumentParser"}}}
+gazelle: *** CHUCK: Resolve imports: []string{"ArgumentParser"}
+gazelle: *** CHUCK: Resolve from: label.Label{Repo:"", Pkg:"Sources/Roll", Name:"Roll", Relative:false}
