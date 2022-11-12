@@ -19,8 +19,13 @@ func (l *swiftLang) Resolve(
 	from label.Label) {
 
 	// DEBUG BEGIN
+	log.Printf("*** CHUCK: Resolve =========")
+	log.Printf("*** CHUCK: Resolve ix: %+#v", ix)
+	log.Printf("*** CHUCK: Resolve rc: %+#v", rc)
 	log.Printf("*** CHUCK: Resolve r: %+#v", r)
 	log.Printf("*** CHUCK: Resolve imports: %+#v", imports)
 	log.Printf("*** CHUCK: Resolve from: %+#v", from)
 	// DEBUG END
+
+	// TODO(chuck): Add deps attribute here!
 }
