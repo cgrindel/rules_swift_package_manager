@@ -39,7 +39,6 @@ func NewFileInfoFromReader(rel, abs string, reader io.Reader) *FileInfo {
 			}
 		}
 	}
-
 	sort.Strings(fi.Imports)
 
 	return &fi
