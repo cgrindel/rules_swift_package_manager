@@ -29,12 +29,6 @@ load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_depe
 
 # gazelle:repo bazel_gazelle
 
-############################################################
-# Define your own dependencies here using go_repository.
-# Else, dependencies declared by rules_go/gazelle will be used.
-# The first declaration of an external repository "wins".
-############################################################
-
 load("//:go_deps.bzl", "swift_bazel_go_dependencies")
 
 # gazelle:repository_macro go_deps.bzl%swift_bazel_go_dependencies
@@ -47,3 +41,30 @@ go_register_toolchains(version = "1.19.1")
 gazelle_dependencies()
 
 bazel_skylib_workspace()
+
+# MARK: - Bazel Integration Test
+
+# load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+# http_archive(
+#     name = "contrib_rules_bazel_integration_test",
+#     sha256 = "0259d529d1a056025f19269aa911633e5c0e86ca9292d405fa513bb0ea4f1abc",
+#     strip_prefix = "rules_bazel_integration_test-0.8.0",
+#     urls = [
+#         "http://github.com/bazel-contrib/rules_bazel_integration_test/archive/v0.8.0.tar.gz",
+#     ],
+# )
+
+local_repository(
+    name = "contrib_rules_bazel_integration_test",
+    path = "/Users/chuck/code/bazel-contrib/rules_bazel_integration_test/fix_find_child_wksps",
+)
+
+load("@contrib_rules_bazel_integration_test//bazel_integration_test:deps.bzl", "bazel_integration_test_rules_dependencies")
+
+bazel_integration_test_rules_dependencies()
+
+load("@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl", "bazel_binaries")
+load("//:bazel_versions.bzl", "SUPPORTED_BAZEL_VERSIONS")
+
+bazel_binaries(versions = SUPPORTED_BAZEL_VERSIONS)

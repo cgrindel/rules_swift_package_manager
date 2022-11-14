@@ -1,0 +1,8 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+bzlformat_pkg(name = "bzlformat")
+
+# Exclude this entire directory from having anything gnerated by Gazelle. That
+# way the test cases won't be fixed by `bazel run //:gazelle` when run in this
+# repository.
+# gazelle:exclude **
