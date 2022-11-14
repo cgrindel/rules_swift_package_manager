@@ -10,7 +10,15 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/rule"
 )
 
+const (
+	ModuleNameAttrName = "module_name"
+)
+
 func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK: Imports =========")
+	log.Printf("*** CHUCK: Imports r: %+#v", r)
+	// DEBUG END
 	if !isSwiftRuleKind(r.Kind()) {
 		// Do not index
 		return nil
@@ -27,7 +35,7 @@ func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolv
 }
 
 func getModuleName(r *rule.Rule) string {
-	moduleName := r.AttrString("module_name")
+	moduleName := r.AttrString(ModuleNameAttrName)
 	if moduleName != "" {
 		return moduleName
 	}
@@ -44,8 +52,8 @@ func (l *swiftLang) Resolve(
 
 	// DEBUG BEGIN
 	log.Printf("*** CHUCK: Resolve =========")
-	log.Printf("*** CHUCK: Resolve ix: %+#v", ix)
-	log.Printf("*** CHUCK: Resolve rc: %+#v", rc)
+	// log.Printf("*** CHUCK: Resolve ix: %+#v", ix)
+	// log.Printf("*** CHUCK: Resolve rc: %+#v", rc)
 	log.Printf("*** CHUCK: Resolve r: %+#v", r)
 	log.Printf("*** CHUCK: Resolve imports: %+#v", imports)
 	log.Printf("*** CHUCK: Resolve from: %+#v", from)
