@@ -57,7 +57,8 @@ bazel_skylib_workspace()
 
 local_repository(
     name = "contrib_rules_bazel_integration_test",
-    path = "/Users/chuck/code/bazel-contrib/rules_bazel_integration_test/fix_find_child_wksps",
+    # path = "/Users/chuck/code/bazel-contrib/rules_bazel_integration_test/fix_find_child_wksps",
+    path = "/Users/chuck/code/bazel-contrib/rules_bazel_integration_test/add_remove_bazel_symlinks",
 )
 
 load("@contrib_rules_bazel_integration_test//bazel_integration_test:deps.bzl", "bazel_integration_test_rules_dependencies")
