@@ -27,6 +27,7 @@ go_test(
     ],
     deps = [
         ":swift",
+        "@bazel_gazelle//rule:go_default_library",
         "@com_github_stretchr_testify//assert",
     ],
 )
