@@ -41,22 +41,12 @@ def swift_bazel_dependencies():
         ],
     )
 
-    # native.local_repository(
-    #     name = "bazel_gazelle",
-    #     path = "/Users/chuck/code/bazelbuild/bazel-gazelle",
-    # )
-
-    # maybe(
-    #     http_archive,
-    #     name = "cgrindel_bazel_starlib",
-    #     sha256 = "3a3b3a5e9b0f63e8a9a193a66bc588c1f2fb2873562be68f2026adb815eea06f",
-    #     strip_prefix = "bazel-starlib-0.8.0",
-    #     urls = [
-    #         "http://github.com/cgrindel/bazel-starlib/archive/v0.8.0.tar.gz",
-    #     ],
-    # )
-
-    native.local_repository(
+    maybe(
+        http_archive,
         name = "cgrindel_bazel_starlib",
-        path = "/Users/chuck/code/cgrindel/bazel-starlib/main",
+        sha256 = "f10f9a47f23a76e6cc6f8af0b2d0c6377452e5b17ebeed6dbd656f0ba2aaa4ec",
+        strip_prefix = "bazel-starlib-0.8.1",
+        urls = [
+            "http://github.com/cgrindel/bazel-starlib/archive/v0.8.1.tar.gz",
+        ],
     )
