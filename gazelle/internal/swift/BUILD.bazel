@@ -22,6 +22,7 @@ go_test(
         "file_info_test.go",
         "files_test.go",
         "module_dir_test.go",
+        "module_name_test.go",
     ],
     deps = [
         ":swift",
