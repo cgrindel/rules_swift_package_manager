@@ -48,8 +48,6 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 	// Create a rule
 	pkgName := filepath.Base(args.Rel)
 	r := rule.NewRule(ruleKind, pkgName)
-	// TODO(chuck): This is redundant. Remove it!
-	// r.SetAttr(ModuleNameAttrName, pkgName)
 	r.SetAttr("srcs", srcs)
 	r.SetPrivateAttr(config.GazelleImportsKey, swiftImports)
 	result.Gen = append(result.Gen, r)

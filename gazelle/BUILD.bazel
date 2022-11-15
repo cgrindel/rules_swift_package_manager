@@ -10,6 +10,7 @@ bzlformat_pkg(name = "bzlformat")
 go_library(
     name = "gazelle",
     srcs = [
+        "config.go",
         "generate.go",
         "lang.go",
         "resolve.go",
@@ -20,6 +21,7 @@ go_library(
     deps = [
         "//gazelle/internal/stringslices",
         "//gazelle/internal/swift",
+        "//gazelle/internal/wspace",
         "@bazel_gazelle//config:go_default_library",
         "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//language:go_default_library",

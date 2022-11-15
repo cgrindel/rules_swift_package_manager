@@ -6,10 +6,14 @@ go_library(
         "file_info.go",
         "files.go",
         "module_dir.go",
+        "module_name.go",
     ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/swift",
     visibility = ["//gazelle:__subpackages__"],
-    deps = ["//gazelle/internal/pathdistance"],
+    deps = [
+        "//gazelle/internal/pathdistance",
+        "@bazel_gazelle//rule:go_default_library",
+    ],
 )
 
 go_test(

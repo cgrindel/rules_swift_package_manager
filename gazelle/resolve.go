@@ -8,10 +8,7 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/repo"
 	"github.com/bazelbuild/bazel-gazelle/resolve"
 	"github.com/bazelbuild/bazel-gazelle/rule"
-)
-
-const (
-	ModuleNameAttrName = "module_name"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 )
 
 func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {
@@ -23,7 +20,7 @@ func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolv
 		// Do not index
 		return nil
 	}
-	moduleName := getModuleName(r)
+	moduleName := swift.ModuleName(r)
 	if moduleName == "" {
 		// Returning an empty list will cause the rule to be indexed
 		return []resolve.ImportSpec{}
@@ -32,14 +29,6 @@ func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolv
 		Lang: swiftLangName,
 		Imp:  moduleName,
 	}}
-}
-
-func getModuleName(r *rule.Rule) string {
-	moduleName := r.AttrString(ModuleNameAttrName)
-	if moduleName != "" {
-		return moduleName
-	}
-	return r.Name()
 }
 
 func (l *swiftLang) Resolve(
