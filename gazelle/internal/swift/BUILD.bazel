@@ -8,6 +8,7 @@ go_library(
         "files.go",
         "module_dir.go",
         "module_name.go",
+        "rule_kinds.go",
     ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/swift",
     visibility = ["//gazelle:__subpackages__"],
@@ -24,6 +25,7 @@ go_test(
         "files_test.go",
         "module_dir_test.go",
         "module_name_test.go",
+        "rule_kinds_test.go",
     ],
     deps = [
         ":swift",

@@ -3,6 +3,7 @@ package gazelle
 import (
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 )
 
 const swiftLangName = "swift"
@@ -13,18 +14,18 @@ var kindShared = rule.KindInfo{
 }
 
 var kinds = map[string]rule.KindInfo{
-	swiftLibraryRuleKind: kindShared,
-	swiftBinaryRuleKind:  kindShared,
-	swiftTestRuleKind:    kindShared,
+	swift.LibraryRuleKind: kindShared,
+	swift.BinaryRuleKind:  kindShared,
+	swift.TestRuleKind:    kindShared,
 }
 
 var loads = []rule.LoadInfo{
 	{
 		Name: "@build_bazel_rules_swift//swift:swift.bzl",
 		Symbols: []string{
-			swiftLibraryRuleKind,
-			swiftBinaryRuleKind,
-			swiftTestRuleKind,
+			swift.LibraryRuleKind,
+			swift.BinaryRuleKind,
+			swift.TestRuleKind,
 		},
 	},
 }

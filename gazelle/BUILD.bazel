@@ -14,7 +14,6 @@ go_library(
         "generate.go",
         "lang.go",
         "resolve.go",
-        "rule_kinds.go",
     ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle",
     visibility = ["//visibility:public"],

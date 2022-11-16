@@ -75,7 +75,7 @@ func createFileInfos(dir string, srcs []string) []*swift.FileInfo {
 }
 
 func collectSwiftInfo(fileInfos []*swift.FileInfo) ([]string, string) {
-	ruleKind := swiftLibraryRuleKind
+	ruleKind := swift.LibraryRuleKind
 	swiftImports := make([]string, 0)
 	swiftImportsSet := make(map[string]bool)
 	for _, fi := range fileInfos {
@@ -90,9 +90,9 @@ func collectSwiftInfo(fileInfos []*swift.FileInfo) ([]string, string) {
 		// Adjust the rule kind, if necessary
 		switch {
 		case fi.ContainsMain:
-			ruleKind = swiftBinaryRuleKind
+			ruleKind = swift.BinaryRuleKind
 		case fi.IsTest:
-			ruleKind = swiftTestRuleKind
+			ruleKind = swift.TestRuleKind
 		}
 	}
 	sort.Strings(swiftImports)

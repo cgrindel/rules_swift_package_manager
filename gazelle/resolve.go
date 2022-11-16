@@ -16,7 +16,7 @@ func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolv
 	log.Printf("*** CHUCK: Imports =========")
 	log.Printf("*** CHUCK: Imports r: %+#v", r)
 	// DEBUG END
-	if !isSwiftRuleKind(r.Kind()) {
+	if !swift.IsSwiftRuleKind(r.Kind()) {
 		// Do not index
 		return nil
 	}
