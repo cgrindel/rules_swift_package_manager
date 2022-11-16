@@ -3,6 +3,10 @@ load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_missing_pkgs", "bzlformat_pkg")
 load("@cgrindel_bazel_starlib//shlib/rules:execute_binary.bzl", "execute_binary")
 load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_update_all")
+load(
+    "@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl",
+    "integration_test_utils",
+)
 
 # MARK: - Bazel Starlark Lint and Formatting
 
@@ -95,4 +99,42 @@ bzl_library(
     name = "bazel_versions",
     srcs = ["bazel_versions.bzl"],
     visibility = ["//visibility:public"],
+)
+
+# MARK: - Integration Test
+
+# This target collects all of the parent workspace files needed by the child workspaces.
+filegroup(
+    name = "local_repository_files",
+    # Include every package that is required by the child workspaces.
+    srcs = [
+        "BUILD.bazel",
+        "WORKSPACE",
+        ":deps.bzl",
+        ":go_deps.bzl",
+        "//gazelle:all_files",
+        "//gazelle/internal/pathdistance:all_files",
+        "//gazelle/internal/stringslices:all_files",
+        "//gazelle/internal/swift:all_files",
+        "//gazelle/internal/wspace:all_files",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+test_suite(
+    name = "all_smoke_integration_tests",
+    tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
+    tests = [
+        "//examples:smoke_integration_tests",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+test_suite(
+    name = "all_integration_tests",
+    tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
+    tests = [
+        "//examples:all_integration_tests",
+    ],
+    visibility = ["//:__subpackages__"],
 )
