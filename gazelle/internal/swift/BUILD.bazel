@@ -28,10 +28,12 @@ go_test(
         "files_test.go",
         "module_dir_test.go",
         "module_name_test.go",
+        "repo_test.go",
         "rule_kinds_test.go",
     ],
     deps = [
         ":swift",
+        "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//rule:go_default_library",
         "@com_github_stretchr_testify//assert",
     ],
