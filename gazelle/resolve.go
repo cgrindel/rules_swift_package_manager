@@ -1,6 +1,8 @@
 package gazelle
 
 import (
+	"log"
+
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/repo"
@@ -23,6 +25,10 @@ func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolv
 		// Returning an empty list will cause the rule to be indexed
 		return []resolve.ImportSpec{}
 	}
+
+	// TODO(chuck): I would prefer to add the module to the moduleIndex, but I do not have acces to
+	// the Label.
+
 	return []resolve.ImportSpec{{
 		Lang: swiftLangName,
 		Imp:  moduleName,
@@ -37,33 +43,34 @@ func (l *swiftLang) Resolve(
 	imports interface{},
 	from label.Label) {
 
-	// // DEBUG BEGIN
-	// log.Printf("*** CHUCK: Resolve =========")
-	// // log.Printf("*** CHUCK: Resolve ix: %+#v", ix)
-	// // log.Printf("*** CHUCK: Resolve rc: %+#v", rc)
-	// log.Printf("*** CHUCK: Resolve r: %+#v", r)
-	// log.Printf("*** CHUCK: Resolve imports: %+#v", imports)
-	// log.Printf("*** CHUCK: Resolve from: %+#v", from)
-	// // DEBUG END
+	mi := getSwiftConfig(c).moduleIndex
+	swiftImports := imports.([]string)
 
 	var deps []string
-	swiftImports := imports.([]string)
 	for _, imp := range swiftImports {
 		findResults := ix.FindRulesByImportWithConfig(
 			c, resolve.ImportSpec{Lang: swiftLangName, Imp: imp}, swiftLangName)
 		if len(findResults) > 0 {
-			// TODO(chuck): What do we select if more than one?
 			l := findResults[0].Label
 			deps = append(deps, l.String())
+		} else if m := mi.Resolve(c.RepoName, imp); m != nil {
+			deps = append(deps, m.Label.String())
+		} else {
+			log.Printf("Unable to find dependency label for %v", imp)
 		}
 	}
 
-	// // DEBUG BEGIN
-	// log.Printf("*** CHUCK: Resolve deps: ")
-	// for idx, item := range deps {
-	// 	log.Printf("*** CHUCK %d: %+#v", idx, item)
-	// }
-	// // DEBUG END
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK: Resolve ======")
+	log.Printf("*** CHUCK swiftImports: ")
+	for idx, item := range swiftImports {
+		log.Printf("*** CHUCK %d: %+#v", idx, item)
+	}
+	log.Printf("*** CHUCK deps: ")
+	for idx, item := range deps {
+		log.Printf("*** CHUCK %d: %+#v", idx, item)
+	}
+	// DEBUG END
 
 	// Set the deps for the rule
 	r.SetAttr("deps", deps)

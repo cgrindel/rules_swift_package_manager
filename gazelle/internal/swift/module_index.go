@@ -5,7 +5,9 @@ type ModuleIndex struct {
 }
 
 func NewModuleIndex() *ModuleIndex {
-	return &ModuleIndex{}
+	return &ModuleIndex{
+		index: make(map[string][]*Module),
+	}
 }
 
 func (mi *ModuleIndex) AddModule(m *Module) {
@@ -16,6 +18,14 @@ func (mi *ModuleIndex) AddModule(m *Module) {
 
 func (mi *ModuleIndex) Resolve(repoName, moduleName string) *Module {
 	modules := mi.index[moduleName]
+	// // DEBUG BEGIN
+	// log.Printf("*** CHUCK: ModuleIndex.Resolve repoName: %+#v", repoName)
+	// log.Printf("*** CHUCK: ModuleIndex.Resolve moduleName: %+#v", moduleName)
+	// log.Printf("*** CHUCK: ModuleIndex.Resolve modules: ")
+	// for idx, item := range modules {
+	// 	log.Printf("*** CHUCK %d: %+#v", idx, item)
+	// }
+	// // DEBUG END
 	if len(modules) == 0 {
 		return nil
 	}
