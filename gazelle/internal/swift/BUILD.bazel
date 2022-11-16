@@ -8,6 +8,7 @@ go_library(
         "files.go",
         "module.go",
         "module_dir.go",
+        "module_index.go",
         "module_name.go",
         "repo.go",
         "rule_kinds.go",
