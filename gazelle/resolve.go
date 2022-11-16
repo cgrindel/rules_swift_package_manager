@@ -48,10 +48,11 @@ func (l *swiftLang) Resolve(
 		findResults := ix.FindRulesByImportWithConfig(
 			c, resolve.ImportSpec{Lang: swiftLangName, Imp: imp}, swiftLangName)
 		if len(findResults) > 0 {
-			l := findResults[0].Label
+			l := normalizeLabel(c.RepoName, findResults[0].Label)
 			deps = append(deps, l.String())
 		} else if m := mi.Resolve(c.RepoName, imp); m != nil {
-			deps = append(deps, m.Label.String())
+			l := normalizeLabel(c.RepoName, m.Label)
+			deps = append(deps, l.String())
 		} else {
 			log.Printf("Unable to find dependency label for %v", imp)
 		}
@@ -60,4 +61,13 @@ func (l *swiftLang) Resolve(
 	if len(deps) > 0 {
 		r.SetAttr("deps", deps)
 	}
+}
+
+// Adjusts the label to not include the repo value if they are in the same repo.
+func normalizeLabel(repoName string, l label.Label) label.Label {
+	if repoName != l.Repo {
+		return l
+	}
+	newL := label.New("", l.Pkg, l.Name)
+	return newL
 }
