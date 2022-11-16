@@ -6,4 +6,5 @@ swift_binary(
         "Foo/Foo.swift",
         "Repeat.swift",
     ],
+    deps = [],
 )
