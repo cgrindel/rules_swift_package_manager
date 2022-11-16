@@ -1,1 +1,9 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+
 # Intentionally blank
+
+swift_binary(
+    name = "PrintStuff",
+    srcs = ["PrintStuff.swift"],
+    deps = ["@simple_example//Sources/MyDequeModule"],
+)

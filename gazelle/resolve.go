@@ -1,8 +1,6 @@
 package gazelle
 
 import (
-	"log"
-
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/repo"
@@ -12,10 +10,10 @@ import (
 )
 
 func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: Imports =========")
-	log.Printf("*** CHUCK: Imports r: %+#v", r)
-	// DEBUG END
+	// // DEBUG BEGIN
+	// log.Printf("*** CHUCK: Imports =========")
+	// log.Printf("*** CHUCK: Imports r: %+#v", r)
+	// // DEBUG END
 	if !swift.IsSwiftRuleKind(r.Kind()) {
 		// Do not index
 		return nil
@@ -39,14 +37,14 @@ func (l *swiftLang) Resolve(
 	imports interface{},
 	from label.Label) {
 
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: Resolve =========")
-	// log.Printf("*** CHUCK: Resolve ix: %+#v", ix)
-	// log.Printf("*** CHUCK: Resolve rc: %+#v", rc)
-	log.Printf("*** CHUCK: Resolve r: %+#v", r)
-	log.Printf("*** CHUCK: Resolve imports: %+#v", imports)
-	log.Printf("*** CHUCK: Resolve from: %+#v", from)
-	// DEBUG END
+	// // DEBUG BEGIN
+	// log.Printf("*** CHUCK: Resolve =========")
+	// // log.Printf("*** CHUCK: Resolve ix: %+#v", ix)
+	// // log.Printf("*** CHUCK: Resolve rc: %+#v", rc)
+	// log.Printf("*** CHUCK: Resolve r: %+#v", r)
+	// log.Printf("*** CHUCK: Resolve imports: %+#v", imports)
+	// log.Printf("*** CHUCK: Resolve from: %+#v", from)
+	// // DEBUG END
 
 	var deps []string
 	swiftImports := imports.([]string)
@@ -60,12 +58,12 @@ func (l *swiftLang) Resolve(
 		}
 	}
 
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: Resolve deps: ")
-	for idx, item := range deps {
-		log.Printf("*** CHUCK %d: %+#v", idx, item)
-	}
-	// DEBUG END
+	// // DEBUG BEGIN
+	// log.Printf("*** CHUCK: Resolve deps: ")
+	// for idx, item := range deps {
+	// 	log.Printf("*** CHUCK %d: %+#v", idx, item)
+	// }
+	// // DEBUG END
 
 	// Set the deps for the rule
 	r.SetAttr("deps", deps)

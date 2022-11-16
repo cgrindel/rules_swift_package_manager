@@ -12,7 +12,9 @@ import (
 
 const swiftConfigName = "swift"
 
-type swiftConfig struct{}
+type swiftConfig struct {
+	moduleTargetsMap map[string][]string
+}
 
 func getSwiftConfig(c *config.Config) *swiftConfig {
 	return c.Exts[swiftConfigName].(*swiftConfig)
@@ -49,6 +51,8 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 		log.Printf("*** CHUCK %d: %+#v", idx, item)
 	}
 	// DEBUG END
+
+	// Check any http_archive repositories for Swift targets
 
 	return nil
 }
