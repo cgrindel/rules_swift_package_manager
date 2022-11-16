@@ -49,6 +49,7 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 	pkgName := filepath.Base(args.Rel)
 	r := rule.NewRule(ruleKind, pkgName)
 	r.SetAttr("srcs", srcs)
+	r.SetAttr(swift.ModuleNameAttrName, pkgName)
 	r.SetPrivateAttr(config.GazelleImportsKey, swiftImports)
 	setVisibility(args, r)
 	result.Gen = append(result.Gen, r)
