@@ -2,7 +2,6 @@ load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load(
     "@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "bazel_integration_tests",
-    "default_test_runner",
     "integration_test_utils",
 )
 load("//:bazel_versions.bzl", "CURRENT_BAZEL_VERSION", "SUPPORTED_BAZEL_VERSIONS")
@@ -14,20 +13,23 @@ bzlformat_pkg(name = "bzlformat")
 # repository.
 # gazelle:exclude **
 
-# Declare a test runner to drive the integration tests.
-default_test_runner(
-    name = "default_test_runner",
-    bazel_cmds = [
-        "info",
-        "run //:gazelle",
-        "test //...",
+sh_binary(
+    name = "simple_test_runner",
+    testonly = True,
+    srcs = ["simple_test_runner.sh"],
+    data = [
+        "@contrib_rules_bazel_integration_test//tools:create_scratch_dir",
+    ],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:assertions",
     ],
 )
 
 bazel_integration_tests(
     name = "simple_test",
     bazel_versions = SUPPORTED_BAZEL_VERSIONS,
-    test_runner = ":default_test_runner",
+    test_runner = ":simple_test_runner",
     workspace_files = integration_test_utils.glob_workspace_files("simple") + [
         "//:local_repository_files",
     ],
