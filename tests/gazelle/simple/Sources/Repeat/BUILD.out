@@ -6,5 +6,5 @@ swift_binary(
         "Foo/Foo.swift",
         "Repeat.swift",
     ],
-    deps = [],
+    deps = ["@com_github_apple_swift_argument_parser//:ArgumentParser"],
 )

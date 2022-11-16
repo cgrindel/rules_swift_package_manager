@@ -6,6 +6,7 @@ go_library(
     srcs = [
         "file_info.go",
         "files.go",
+        "is_builtin_module.go",
         "module.go",
         "module_dir.go",
         "module_index.go",
@@ -17,6 +18,7 @@ go_library(
     visibility = ["//gazelle:__subpackages__"],
     deps = [
         "//gazelle/internal/pathdistance",
+        "//gazelle/internal/stringslices",
         "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//rule:go_default_library",
     ],
@@ -28,6 +30,7 @@ go_test(
         "file_info_test.go",
         "files_test.go",
         "module_dir_test.go",
+        "module_index_test.go",
         "module_name_test.go",
         "repo_test.go",
         "rule_kinds_test.go",

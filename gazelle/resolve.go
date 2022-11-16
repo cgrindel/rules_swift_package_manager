@@ -12,10 +12,6 @@ import (
 )
 
 func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {
-	// // DEBUG BEGIN
-	// log.Printf("*** CHUCK: Imports =========")
-	// log.Printf("*** CHUCK: Imports r: %+#v", r)
-	// // DEBUG END
 	if !swift.IsSwiftRuleKind(r.Kind()) {
 		// Do not index
 		return nil
@@ -25,9 +21,6 @@ func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolv
 		// Returning an empty list will cause the rule to be indexed
 		return []resolve.ImportSpec{}
 	}
-
-	// TODO(chuck): I would prefer to add the module to the moduleIndex, but I do not have acces to
-	// the Label.
 
 	return []resolve.ImportSpec{{
 		Lang: swiftLangName,
@@ -48,6 +41,10 @@ func (l *swiftLang) Resolve(
 
 	var deps []string
 	for _, imp := range swiftImports {
+		if swift.IsBuiltInModule(imp) {
+			continue
+		}
+
 		findResults := ix.FindRulesByImportWithConfig(
 			c, resolve.ImportSpec{Lang: swiftLangName, Imp: imp}, swiftLangName)
 		if len(findResults) > 0 {
@@ -60,18 +57,7 @@ func (l *swiftLang) Resolve(
 		}
 	}
 
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: Resolve ======")
-	log.Printf("*** CHUCK swiftImports: ")
-	for idx, item := range swiftImports {
-		log.Printf("*** CHUCK %d: %+#v", idx, item)
+	if len(deps) > 0 {
+		r.SetAttr("deps", deps)
 	}
-	log.Printf("*** CHUCK deps: ")
-	for idx, item := range deps {
-		log.Printf("*** CHUCK %d: %+#v", idx, item)
-	}
-	// DEBUG END
-
-	// Set the deps for the rule
-	r.SetAttr("deps", deps)
 }

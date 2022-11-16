@@ -1,5 +1,4 @@
 @testable import StringUtils
-import Truth
 import XCTest
 
 class StaticStringTests: XCTestCase {
