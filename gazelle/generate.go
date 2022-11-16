@@ -50,6 +50,7 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 	r := rule.NewRule(ruleKind, pkgName)
 	r.SetAttr("srcs", srcs)
 	r.SetPrivateAttr(config.GazelleImportsKey, swiftImports)
+	setVisibility(args, r)
 	result.Gen = append(result.Gen, r)
 
 	result.Imports = make([]interface{}, len(result.Gen))
@@ -58,6 +59,29 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 	}
 
 	return result
+}
+
+func setVisibility(args language.GenerateArgs, r *rule.Rule) {
+	if !shouldSetVisibility(args) {
+		return
+	}
+
+	var visibility []string
+	switch r.Kind() {
+	case swift.LibraryRuleKind, swift.BinaryRuleKind:
+		visibility = []string{"//visibility:public"}
+	}
+	if len(visibility) > 0 {
+		r.SetAttr("visibility", visibility)
+	}
+}
+
+func shouldSetVisibility(args language.GenerateArgs) bool {
+	// If the package has a default visibility set, do not set visibility
+	if args.File != nil && args.File.HasDefaultVisibility() {
+		return false
+	}
+	return true
 }
 
 func createFileInfos(dir string, srcs []string) []*swift.FileInfo {
