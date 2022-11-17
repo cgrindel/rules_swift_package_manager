@@ -44,21 +44,15 @@ bazel_skylib_workspace()
 
 # MARK: - Bazel Integration Test
 
-# load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-# http_archive(
-#     name = "contrib_rules_bazel_integration_test",
-#     sha256 = "0259d529d1a056025f19269aa911633e5c0e86ca9292d405fa513bb0ea4f1abc",
-#     strip_prefix = "rules_bazel_integration_test-0.8.0",
-#     urls = [
-#         "http://github.com/bazel-contrib/rules_bazel_integration_test/archive/v0.8.0.tar.gz",
-#     ],
-# )
-
-local_repository(
+http_archive(
     name = "contrib_rules_bazel_integration_test",
-    # path = "/Users/chuck/code/bazel-contrib/rules_bazel_integration_test/fix_find_child_wksps",
-    path = "/Users/chuck/code/bazel-contrib/rules_bazel_integration_test/add_remove_bazel_symlinks",
+    sha256 = "dc104db22f2845aed0aa5dfcdd8af35de15ce0985502859db48c902977ca0dda",
+    strip_prefix = "rules_bazel_integration_test-a9b2a411712e75851a1c21222df4fc317ed98fee",
+    urls = [
+        "http://github.com/bazel-contrib/rules_bazel_integration_test/archive/a9b2a411712e75851a1c21222df4fc317ed98fee.tar.gz",
+    ],
 )
 
 load("@contrib_rules_bazel_integration_test//bazel_integration_test:deps.bzl", "bazel_integration_test_rules_dependencies")
