@@ -1,8 +1,10 @@
+import ArgumentParser
+
 @main
-public struct MySwiftPackage {
+struct MySwiftPackage: AsyncParsableCommand {
     public private(set) var text = "Hello, World!"
 
-    public static func main() {
+    mutating func main() async throws {
         print(MySwiftPackage().text)
     }
 }
