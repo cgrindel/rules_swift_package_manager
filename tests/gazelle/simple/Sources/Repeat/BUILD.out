@@ -1,10 +1,18 @@
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary", "swift_library")
 
-swift_binary(
-    name = "Repeat",
+swift_library(
+    name = "RepeatLibrary",
     srcs = [
         "Foo/Foo.swift",
         "Repeat.swift",
     ],
+    module_name = "RepeatLibrary",
     deps = ["@com_github_apple_swift_argument_parser//:ArgumentParser"],
+)
+
+swift_binary(
+    name = "Repeat",
+    module_name = "Repeat",
+    visibility = ["//visibility:public"],
+    deps = ["//Sources/Repeat:RepeatLibrary"],
 )
