@@ -47,27 +47,3 @@ func (*swiftLang) Kinds() map[string]rule.KindInfo {
 func (*swiftLang) Loads() []rule.LoadInfo {
 	return loads
 }
-
-// // Imports returns a list of ImportSpecs that can be used to import the rule
-// // r. This is used to populate RuleIndex.
-// //
-// // If nil is returned, the rule will not be indexed. If any non-nil slice is
-// // returned, including an empty slice, the rule will be indexed.
-// func (*swiftLang) Imports(c *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {
-// 	srcs := r.AttrStrings("srcs")
-// 	imports := make([]resolve.ImportSpec, 0, len(srcs))
-//
-// 	for _, src := range srcs {
-// 		spec := resolve.ImportSpec{
-// 			// Lang is the language in which the import string appears (this should
-// 			// match Resolver.Name).
-// 			Lang: swiftLangName,
-// 			// Imp is an import string for the library.
-// 			Imp: fmt.Sprintf("//%s:%s", f.Pkg, src),
-// 		}
-//
-// 		imports = append(imports, spec)
-// 	}
-//
-// 	return imports
-// }
