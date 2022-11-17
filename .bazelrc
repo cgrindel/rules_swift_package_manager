@@ -2,3 +2,12 @@
 # `bazel run @contrib_rules_bazel_integration_test//tools:update_deleted_packages`
 build --deleted_packages=examples/simple,examples/simple/Sources/MyDequeModule,examples/simple/Sources/PrintStuff,examples/simple/Tests/MyDequeModuleTests
 query --deleted_packages=examples/simple,examples/simple/Sources/MyDequeModule,examples/simple/Sources/PrintStuff,examples/simple/Tests/MyDequeModuleTests
+
+# Import Shared settings
+import %workspace%/shared.bazelrc
+
+# Import CI settings.
+import %workspace%/ci.bazelrc
+
+# Try to import a local.rc file; typically, written by CI
+try-import %workspace%/local.bazelrc
