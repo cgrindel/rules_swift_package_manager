@@ -117,21 +117,6 @@ func setCommonAttrs(
 
 // Visibility
 
-// func setVisibility(args language.GenerateArgs, r *rule.Rule) {
-// 	if !shouldSetVisibility(args) {
-// 		return
-// 	}
-
-// 	var visibility []string
-// 	switch r.Kind() {
-// 	case swift.LibraryRuleKind, swift.BinaryRuleKind:
-// 		visibility = []string{"//visibility:public"}
-// 	}
-// 	if len(visibility) > 0 {
-// 		r.SetAttr("visibility", visibility)
-// 	}
-// }
-
 func shouldSetVisibility(args language.GenerateArgs) bool {
 	// If the package has a default visibility set, do not set visibility
 	if args.File != nil && args.File.HasDefaultVisibility() {
