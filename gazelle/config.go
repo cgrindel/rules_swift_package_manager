@@ -21,11 +21,6 @@ func getSwiftConfig(c *config.Config) *swiftConfig {
 }
 
 func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) {
-	// // DEBUG BEGIN
-	// log.Printf("*** CHUCK: RegisterFlags ========")
-	// log.Printf("*** CHUCK: RegisterFlags c: %+#v", c)
-	// // DEBUG END
-
 	// Initialize location for custom configuration
 	sc := &swiftConfig{
 		moduleIndex: swift.NewModuleIndex(),
@@ -35,12 +30,6 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 
 func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	sc := getSwiftConfig(c)
-
-	// // DEBUG BEGIN
-	// log.Printf("*** CHUCK: CheckFlags ========")
-	// log.Printf("*** CHUCK: CheckFlags c: %+#v", c)
-	// log.Printf("*** CHUCK: CheckFlags sc: %+#v", sc)
-	// // DEBUG END
 
 	wkspFilePath := wspace.FindWORKSPACEFile(c.RepoRoot)
 	wkspFile, err := rule.LoadWorkspaceFile(wkspFilePath, "")
