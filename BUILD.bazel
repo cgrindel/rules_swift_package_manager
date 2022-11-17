@@ -95,12 +95,6 @@ bzl_library(
     deps = ["@bazel_gazelle//:deps"],
 )
 
-bzl_library(
-    name = "bazel_versions",
-    srcs = ["bazel_versions.bzl"],
-    visibility = ["//visibility:public"],
-)
-
 # MARK: - Integration Test
 
 # This target collects all of the parent workspace files needed by the child workspaces.
@@ -137,4 +131,10 @@ test_suite(
         "//examples:all_integration_tests",
     ],
     visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "bazel_versions",
+    srcs = ["bazel_versions.bzl"],
+    visibility = ["//visibility:public"],
 )

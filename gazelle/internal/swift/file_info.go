@@ -3,7 +3,9 @@ package swift
 import (
 	"bufio"
 	"io"
+	"log"
 	"os"
+	"path/filepath"
 	"regexp"
 	"sort"
 	"strings"
@@ -54,6 +56,20 @@ func NewFileInfoFromPath(rel, abs string) (*FileInfo, error) {
 		return nil, err
 	}
 	return NewFileInfoFromReader(rel, abs, file), nil
+}
+
+func NewFileInfosFromRelPaths(dir string, srcs []string) []*FileInfo {
+	fileInfos := make([]*FileInfo, len(srcs))
+	for idx, src := range srcs {
+		abs := filepath.Join(dir, src)
+		fi, err := NewFileInfoFromPath(src, abs)
+		if err != nil {
+			log.Printf("failed to create swift.FileInfo for %s. %s", abs, err)
+			continue
+		}
+		fileInfos[idx] = fi
+	}
+	return fileInfos
 }
 
 var swiftRe = buildSwiftRegexp()

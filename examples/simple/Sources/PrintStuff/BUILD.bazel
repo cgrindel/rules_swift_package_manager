@@ -1,1 +1,38 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary", "swift_library")
+
 # Intentionally blank
+
+# swift_library(
+#     name = "PrintStuff.library",
+#     srcs = ["PrintStuff.swift"],
+#     module_name = "PrintStuff",
+#     deps = [
+#         "//Sources/MyDequeModule",
+#         "@com_github_apple_swift_argument_parser//:ArgumentParser",
+#     ],
+# )
+
+# swift_binary(
+#     name = "PrintStuff",
+#     visibility = ["//visibility:public"],
+#     deps = [
+#         ":PrintStuff.library",
+#     ],
+# )
+
+swift_binary(
+    name = "PrintStuff",
+    module_name = "PrintStuff",
+    visibility = ["//visibility:public"],
+    deps = ["//Sources/PrintStuff:PrintStuffLibrary"],
+)
+
+swift_library(
+    name = "PrintStuffLibrary",
+    srcs = ["PrintStuff.swift"],
+    module_name = "PrintStuffLibrary",
+    deps = [
+        "//Sources/MyDequeModule",
+        "@com_github_apple_swift_argument_parser//:ArgumentParser",
+    ],
+)

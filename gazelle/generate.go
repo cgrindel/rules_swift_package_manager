@@ -3,11 +3,9 @@ package gazelle
 import (
 	"log"
 	"path/filepath"
-	"sort"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
-	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/stringslices"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"golang.org/x/exp/slices"
@@ -42,86 +40,36 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 	srcs := append(swiftFiles, getModuleFilesInSubdirs(moduleDir)...)
 	slices.Sort(srcs)
 
-	fileInfos := createFileInfos(args.Dir, srcs)
-	swiftImports, ruleKind := collectSwiftInfo(fileInfos)
+	// fileInfos := createFileInfos(args.Dir, srcs)
+	// swiftImports, ruleKind := collectSwiftInfo(fileInfos)
 
-	// Create a rule
-	pkgName := filepath.Base(args.Rel)
-	r := rule.NewRule(ruleKind, pkgName)
-	r.SetAttr("srcs", srcs)
-	r.SetAttr(swift.ModuleNameAttrName, pkgName)
-	r.SetPrivateAttr(config.GazelleImportsKey, swiftImports)
-	setVisibility(args, r)
-	result.Gen = append(result.Gen, r)
+	// var rules []*rule.Rule
+	// switch ruleKind {
+	// case swift.LibraryRuleKind:
+	// 	rules = rulesForSwiftLibrary()
+	// case swift.BinaryRuleKind:
+	// 	rules = rulesForSwiftBinary()
+	// case swift.TestRuleKind:
+	// 	rules = rulesForSwiftBinary()
+	// }
+
+	// // Create a rule
+	// pkgName := filepath.Base(args.Rel)
+	// r := rule.NewRule(ruleKind, pkgName)
+	// r.SetAttr("srcs", srcs)
+	// r.SetAttr(swift.ModuleNameAttrName, pkgName)
+	// r.SetPrivateAttr(config.GazelleImportsKey, swiftImports)
+	// setVisibility(args, r)
+	// result.Gen = append(result.Gen, r)
+
+	result.Gen = swift.Rules(args, srcs)
 
 	result.Imports = make([]interface{}, len(result.Gen))
-	for idx := range result.Gen {
+	for idx, r := range result.Gen {
 		result.Imports[idx] = r.PrivateAttr(config.GazelleImportsKey)
 	}
 
 	return result
-}
-
-func setVisibility(args language.GenerateArgs, r *rule.Rule) {
-	if !shouldSetVisibility(args) {
-		return
-	}
-
-	var visibility []string
-	switch r.Kind() {
-	case swift.LibraryRuleKind, swift.BinaryRuleKind:
-		visibility = []string{"//visibility:public"}
-	}
-	if len(visibility) > 0 {
-		r.SetAttr("visibility", visibility)
-	}
-}
-
-func shouldSetVisibility(args language.GenerateArgs) bool {
-	// If the package has a default visibility set, do not set visibility
-	if args.File != nil && args.File.HasDefaultVisibility() {
-		return false
-	}
-	return true
-}
-
-func createFileInfos(dir string, srcs []string) []*swift.FileInfo {
-	fileInfos := make([]*swift.FileInfo, len(srcs))
-	for idx, src := range srcs {
-		abs := filepath.Join(dir, src)
-		fi, err := swift.NewFileInfoFromPath(src, abs)
-		if err != nil {
-			log.Printf("failed to create swift.FileInfo for %s. %s", abs, err)
-			continue
-		}
-		fileInfos[idx] = fi
-	}
-	return fileInfos
-}
-
-func collectSwiftInfo(fileInfos []*swift.FileInfo) ([]string, string) {
-	ruleKind := swift.LibraryRuleKind
-	swiftImports := make([]string, 0)
-	swiftImportsSet := make(map[string]bool)
-	for _, fi := range fileInfos {
-		// Collect the imports
-		for _, imp := range fi.Imports {
-			if _, ok := swiftImportsSet[imp]; !ok {
-				swiftImportsSet[imp] = true
-				swiftImports = append(swiftImports, imp)
-			}
-		}
-
-		// Adjust the rule kind, if necessary
-		switch {
-		case fi.ContainsMain:
-			ruleKind = swift.BinaryRuleKind
-		case fi.IsTest:
-			ruleKind = swift.TestRuleKind
-		}
-	}
-	sort.Strings(swiftImports)
-	return swiftImports, ruleKind
 }
 
 var moduleFilesInSubdirs = make(map[string][]string)
