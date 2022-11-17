@@ -1,0 +1,51 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Every day at 11:14 UTC.
+    - cron: '14 11 * * *'
+
+jobs:
+
+  macos_build:
+    runs-on: macos-11.0
+    steps:
+    - uses: actions/checkout@v3
+    - uses: cgrindel/gha_set_up_bazel@v1
+      with:
+        repo_name: rules_spm
+    - uses: ./.github/actions/build_and_test
+
+  ubuntu_build:
+    runs-on: ubuntu-20.04
+    env:
+      CC: clang
+    steps:
+    - uses: cgrindel/gha_install_swift_on_ubuntu@v1
+      with:
+        swift_release_tag: "swift-5.7.1-RELEASE"
+        ubuntu_version: "20.04"
+    - uses: actions/checkout@v3
+    - name: Update local.bazelrc with Linux Flags
+      shell: bash
+      run: |
+        cat >> "local.bazelrc" <<EOF
+        # Need to expose the PATH so that the Swift toolchain can be found
+        build --action_env=PATH
+        EOF
+    - uses: cgrindel/gha_set_up_bazel@v1
+      with:
+        repo_name: rules_spm
+    - uses: ./.github/actions/build_and_test
+
+  all_ci_tests:
+    runs-on: ubuntu-20.04
+    needs: [macos_build, ubuntu_build]
+    steps:
+      - name: All is Well
+        shell: bash
+        run: |
+          echo "All is well!"
+
