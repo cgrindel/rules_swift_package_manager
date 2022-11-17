@@ -1,0 +1,58 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "swift",
+    srcs = [
+        "file_info.go",
+        "files.go",
+        "is_builtin_module.go",
+        "module.go",
+        "module_dir.go",
+        "module_index.go",
+        "module_name.go",
+        "module_type.go",
+        "repo.go",
+        "rule_kinds.go",
+        "rules.go",
+    ],
+    importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/swift",
+    visibility = ["//gazelle:__subpackages__"],
+    deps = [
+        "//gazelle/internal/pathdistance",
+        "//gazelle/internal/stringslices",
+        "@bazel_gazelle//config:go_default_library",
+        "@bazel_gazelle//label:go_default_library",
+        "@bazel_gazelle//language:go_default_library",
+        "@bazel_gazelle//rule:go_default_library",
+    ],
+)
+
+go_test(
+    name = "swift_test",
+    srcs = [
+        "file_info_test.go",
+        "files_test.go",
+        "module_dir_test.go",
+        "module_index_test.go",
+        "module_name_test.go",
+        "repo_test.go",
+        "rule_kinds_test.go",
+    ],
+    deps = [
+        ":swift",
+        "@bazel_gazelle//label:go_default_library",
+        "@bazel_gazelle//rule:go_default_library",
+        "@com_github_stretchr_testify//assert",
+    ],
+)
+
+bzlformat_pkg(name = "bzlformat")
+
+# MARK: - Integration Test
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)

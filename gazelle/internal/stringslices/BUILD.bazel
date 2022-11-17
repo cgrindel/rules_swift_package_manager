@@ -1,0 +1,34 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "stringslices",
+    srcs = [
+        "contains.go",
+        "map.go",
+    ],
+    importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/stringslices",
+    visibility = ["//gazelle:__subpackages__"],
+)
+
+go_test(
+    name = "stringslices_test",
+    srcs = [
+        "contains_test.go",
+        "map_test.go",
+    ],
+    deps = [
+        ":stringslices",
+        "@com_github_stretchr_testify//assert",
+    ],
+)
+
+bzlformat_pkg(name = "bzlformat")
+
+# MARK: - Integration Test
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)

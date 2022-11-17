@@ -1,0 +1,135 @@
+load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_missing_pkgs", "bzlformat_pkg")
+load("@cgrindel_bazel_starlib//shlib/rules:execute_binary.bzl", "execute_binary")
+load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_update_all")
+load(
+    "@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl",
+    "integration_test_utils",
+)
+
+# MARK: - Bazel Starlark Lint and Formatting
+
+bzlformat_pkg(name = "bzlformat")
+
+bzlformat_missing_pkgs(
+    name = "bzlformat_missing_pkgs",
+)
+
+# MARK: - Tidy / Update Source Files
+
+updatesrc_update_all(
+    name = "tidy",
+    targets_to_run = [
+        # Run go_mod_tidy before gazelle_update_repos
+        ":go_mod_tidy",
+        ":gazelle_update_repos",
+        ":gazelle",
+    ],
+    targets_to_run_before = [
+        # Remove the child workspace symlinks before doing some of the other
+        # operations that my experience infinite symlink expansion errors.
+        "@contrib_rules_bazel_integration_test//tools:remove_child_wksp_bazel_symlinks",
+        "@contrib_rules_bazel_integration_test//tools:update_deleted_packages",
+        ":bzlformat_missing_pkgs_fix",
+    ],
+)
+
+# MARK: - Gazelle
+
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = DEFAULT_LANGUAGES + [
+        "@bazel_skylib//gazelle/bzl",
+    ],
+)
+
+# gazelle:prefix github.com/cgrindel/swift_bazel
+gazelle(
+    name = "gazelle",
+    gazelle = ":gazelle_bin",
+)
+
+gazelle(
+    name = "gazelle_update_repos",
+    args = [
+        "-from_file=go.mod",
+        "-to_macro=go_deps.bzl%swift_bazel_go_dependencies",
+        "-build_external=external",
+        "-prune",
+    ],
+    command = "update-repos",
+)
+
+# MARK: - Golang
+
+execute_binary(
+    name = "go_mod_tidy",
+    arguments = [
+        "mod",
+        "tidy",
+    ],
+    binary = "@go_sdk//:bin/go",
+    execute_in_workspace = True,
+)
+
+bzl_library(
+    name = "deps",
+    srcs = ["deps.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@bazel_tools//tools/build_defs/repo:http.bzl",
+        "@bazel_tools//tools/build_defs/repo:utils.bzl",
+    ],
+)
+
+bzl_library(
+    name = "go_deps",
+    srcs = ["go_deps.bzl"],
+    visibility = ["//visibility:public"],
+    deps = ["@bazel_gazelle//:deps"],
+)
+
+# MARK: - Integration Test
+
+# This target collects all of the parent workspace files needed by the child workspaces.
+filegroup(
+    name = "local_repository_files",
+    # Include every package that is required by the child workspaces.
+    srcs = [
+        "BUILD.bazel",
+        "WORKSPACE",
+        ":deps.bzl",
+        ":go_deps.bzl",
+        "//gazelle:all_files",
+        "//gazelle/internal/pathdistance:all_files",
+        "//gazelle/internal/stringslices:all_files",
+        "//gazelle/internal/swift:all_files",
+        "//gazelle/internal/wspace:all_files",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+test_suite(
+    name = "all_smoke_integration_tests",
+    tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
+    tests = [
+        "//examples:smoke_integration_tests",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+test_suite(
+    name = "all_integration_tests",
+    tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
+    tests = [
+        "//examples:all_integration_tests",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "bazel_versions",
+    srcs = ["bazel_versions.bzl"],
+    visibility = ["//visibility:public"],
+)

@@ -1,0 +1,17 @@
+load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
+
+# MARK: - Gazelle
+
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = DEFAULT_LANGUAGES + [
+        "@bazel_skylib//gazelle/bzl",
+        "@cgrindel_swift_bazel//gazelle",
+    ],
+)
+
+# gazelle:prefix github.com/cgrindel/swift_bazel/examples/simple
+gazelle(
+    name = "gazelle",
+    gazelle = ":gazelle_bin",
+)
