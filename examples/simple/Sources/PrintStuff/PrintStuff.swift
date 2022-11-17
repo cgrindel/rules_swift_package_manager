@@ -12,12 +12,3 @@ struct PrintStuff: AsyncParsableCommand {
         }
     }
 }
-
-// import ArgumentParser
-
-// @main
-// struct PrintStuff: ParsableCommand {
-//     mutating func run() throws {
-//         print("MADE IT!")
-//     }
-// }

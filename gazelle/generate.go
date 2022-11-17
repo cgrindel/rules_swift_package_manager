@@ -40,30 +40,7 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 	srcs := append(swiftFiles, getModuleFilesInSubdirs(moduleDir)...)
 	slices.Sort(srcs)
 
-	// fileInfos := createFileInfos(args.Dir, srcs)
-	// swiftImports, ruleKind := collectSwiftInfo(fileInfos)
-
-	// var rules []*rule.Rule
-	// switch ruleKind {
-	// case swift.LibraryRuleKind:
-	// 	rules = rulesForSwiftLibrary()
-	// case swift.BinaryRuleKind:
-	// 	rules = rulesForSwiftBinary()
-	// case swift.TestRuleKind:
-	// 	rules = rulesForSwiftBinary()
-	// }
-
-	// // Create a rule
-	// pkgName := filepath.Base(args.Rel)
-	// r := rule.NewRule(ruleKind, pkgName)
-	// r.SetAttr("srcs", srcs)
-	// r.SetAttr(swift.ModuleNameAttrName, pkgName)
-	// r.SetPrivateAttr(config.GazelleImportsKey, swiftImports)
-	// setVisibility(args, r)
-	// result.Gen = append(result.Gen, r)
-
 	result.Gen = swift.Rules(args, srcs)
-
 	result.Imports = make([]interface{}, len(result.Gen))
 	for idx, r := range result.Gen {
 		result.Imports[idx] = r.PrivateAttr(config.GazelleImportsKey)
