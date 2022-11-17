@@ -10,7 +10,7 @@ on:
 jobs:
 
   macos_build:
-    runs-on: macos-12.0
+    runs-on: macos-12
     steps:
     - uses: actions/checkout@v3
     - uses: cgrindel/gha_set_up_bazel@v1
