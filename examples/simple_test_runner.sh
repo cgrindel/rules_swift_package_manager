@@ -46,3 +46,7 @@ bazel run //:gazelle
 
 # Ensure that it builds
 bazel test //...
+
+# Run PrintStuff
+output="$(bazel run //Sources/PrintStuff)"
+assert_match "My deque colors" "${output}" 
