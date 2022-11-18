@@ -1,8 +1,17 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "jsonmap",
     srcs = ["json_map.go"],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/jsonmap",
     visibility = ["//gazelle:__subpackages__"],
+)
+
+go_test(
+    name = "jsonmap_test",
+    srcs = ["json_map_test.go"],
+    deps = [
+        ":jsonmap",
+        "@com_github_stretchr_testify//assert",
+    ],
 )
