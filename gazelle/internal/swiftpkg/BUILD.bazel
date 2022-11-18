@@ -3,8 +3,8 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 go_library(
     name = "swiftpkg",
     srcs = [
+        "manifest.go",
         "swift_package.go",
-        "swift_package_dump.go",
     ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg",
     visibility = ["//gazelle:__subpackages__"],
@@ -13,7 +13,7 @@ go_library(
 
 go_test(
     name = "swiftpkg_test",
-    srcs = ["swift_package_dump_test.go"],
+    srcs = ["manifest_test.go"],
     deps = [
         ":swiftpkg",
         "@com_github_stretchr_testify//assert",

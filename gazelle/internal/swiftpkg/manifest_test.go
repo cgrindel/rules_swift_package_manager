@@ -8,14 +8,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewDumpFromJSON(t *testing.T) {
-	expected := &swiftpkg.Dump{
+func TestNewManifestFromJSON(t *testing.T) {
+	expected := &swiftpkg.Manifest{
 		Name: "MySwiftPackage",
-		Dependencies: []swiftpkg.DumpDependency{
+		Dependencies: []swiftpkg.Dependency{
 			{
 				Name: "swift-argument-parser",
 				URL:  "https://github.com/apple/swift-argument-parser",
-				Requirement: swiftpkg.DumpDependencyRequirement{
+				Requirement: swiftpkg.DependencyRequirement{
 					Range: []swiftpkg.VersionRange{
 						{LowerBound: "1.2.0", UpperBound: "2.0.0"},
 					},
@@ -23,14 +23,14 @@ func TestNewDumpFromJSON(t *testing.T) {
 			},
 		},
 	}
-	dump, err := swiftpkg.NewDumpFromJSON([]byte(swiftPackageJSONStr))
+	manifest, err := swiftpkg.NewManifestFromJSON([]byte(swiftPackageJSONStr))
 	assert.NoError(t, err)
-	assert.Equal(t, expected, dump)
+	assert.Equal(t, expected, manifest)
 
 	// DEBUG BEGIN
-	log.Printf("*** CHUCK:  dump: %+#v", dump)
-	log.Printf("*** CHUCK dump.Dependencies: ")
-	for idx, item := range dump.Dependencies {
+	log.Printf("*** CHUCK:  manifest: %+#v", manifest)
+	log.Printf("*** CHUCK manifest.Dependencies: ")
+	for idx, item := range manifest.Dependencies {
 		log.Printf("*** CHUCK %d: %+#v", idx, item)
 	}
 	// assert.Fail(t, "STOP")
