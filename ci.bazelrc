@@ -1,0 +1,14 @@
+# CI Settings for Bazel
+
+# Output information about the flags that are applied
+common:ci --announce_rc
+
+# Disable color
+common:ci --color=no
+
+# Information about Github Action hosted runners
+# https://docs.github.com/en/free-pro-team@latest/actions/reference/specifications-for-github-hosted-runners#supported-runners-and-hardware-resources
+build:ci --local_cpu_resources=2
+
+# Test output information
+test:ci --test_output=errors --test_summary=detailed
