@@ -14,6 +14,10 @@ func TestNewDumpFromJSON(t *testing.T) {
 
 	// DEBUG BEGIN
 	log.Printf("*** CHUCK:  dump: %+#v", dump)
+	log.Printf("*** CHUCK dump.Dependencies: ")
+	for idx, item := range dump.Dependencies {
+		log.Printf("*** CHUCK %d: %+#v", idx, item)
+	}
 	assert.Fail(t, "STOP")
 	// DEBUG END
 }
