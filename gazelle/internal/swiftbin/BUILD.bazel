@@ -3,7 +3,10 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "swiftbin",
-    srcs = ["find_swift_bin.go"],
+    srcs = [
+        "find_swift_bin.go",
+        "swift_bin.go",
+    ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin",
     visibility = ["//gazelle:__subpackages__"],
 )
