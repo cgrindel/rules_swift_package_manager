@@ -22,7 +22,7 @@ func Map(jm map[string]any, k string) (map[string]any, bool) {
 		return nil, false
 	}
 	switch t := rawValue.(type) {
-	case []any:
+	case map[string]any:
 		return rawValue.(map[string]any), true
 	default:
 		log.Println("Expected map[string]any for key %v, but was %v", k, t)
