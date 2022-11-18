@@ -7,19 +7,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type myStruct struct {
+	Name string `json:"name"`
+}
+
 var rawMap map[string]any
 var mapValue map[string]any
+var structValue map[string]any
 var sliceValue = []any{"hello", "goodbye"}
 
 func init() {
 	mapValue = make(map[string]any)
 	mapValue["foo"] = "bar"
 
+	structValue = make(map[string]any)
+	structValue["name"] = "harry"
+
 	rawMap = make(map[string]any)
 	rawMap["stringKey"] = "stringValue"
 	rawMap["intKey"] = 123
 	rawMap["mapKey"] = mapValue
 	rawMap["sliceKey"] = sliceValue
+	rawMap["structKey"] = structValue
 }
 
 func TestString(t *testing.T) {
@@ -73,5 +82,20 @@ func TestSlice(t *testing.T) {
 		actual, ok := jsonmap.Slice(rawMap, "sliceKey")
 		assert.True(t, ok)
 		assert.Equal(t, sliceValue, actual)
+	})
+}
+
+func TestUnmarshal(t *testing.T) {
+	t.Run("key does not exist", func(t *testing.T) {
+		var v myStruct
+		ok := jsonmap.Unmarshal(rawMap, "doesNotExist", &v)
+		assert.False(t, ok)
+	})
+	t.Run("key exists, unmarshal succeeds", func(t *testing.T) {
+		var v myStruct
+		ok := jsonmap.Unmarshal(rawMap, "structKey", &v)
+		assert.True(t, ok)
+		expected := myStruct{Name: "harry"}
+		assert.Equal(t, expected, v)
 	})
 }

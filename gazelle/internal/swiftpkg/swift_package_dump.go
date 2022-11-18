@@ -29,9 +29,18 @@ type Dump struct {
 // DumpDependency
 
 type DumpDependency struct {
-	Name string
-	URL  string
-	// Requirement DumpDependencyRequirement
+	Name        string
+	URL         string
+	Requirement DumpDependencyRequirement
+}
+
+type DumpDependencyRequirement struct {
+	Range []VersionRange
+}
+
+type VersionRange struct {
+	LowerBound string
+	UpperBound string
 }
 
 const dumpDependencyLogPrefix = "Decoding DumpDependency:"
@@ -55,16 +64,13 @@ func (dd *DumpDependency) UnmarshalJSON(b []byte) error {
 	srcCtrlEntry := srcCtrlList[0].(map[string]any)
 
 	// Name
-	dd.Name, ok = jsonmap.String(srcCtrlEntry, "identity")
-	if !ok {
+	if dd.Name, ok = jsonmap.String(srcCtrlEntry, "identity"); !ok {
 		log.Println(dumpDependencyLogPrefix, "Expected `identity` in source control entry.")
 	}
 
 	// URL
-	location, ok := jsonmap.Map(srcCtrlEntry, "location")
-	if ok {
-		remotes, ok := jsonmap.Slice(location, "remote")
-		if ok {
+	if location, ok := jsonmap.Map(srcCtrlEntry, "location"); ok {
+		if remotes, ok := jsonmap.Slice(location, "remote"); ok {
 			if len(remotes) > 0 {
 				dd.URL = remotes[0].(string)
 			}
@@ -72,6 +78,9 @@ func (dd *DumpDependency) UnmarshalJSON(b []byte) error {
 	} else {
 		log.Println(dumpDependencyLogPrefix, "Expected `location` in source control entry.")
 	}
+
+	// Requirement
+
 
 	return err
 }
