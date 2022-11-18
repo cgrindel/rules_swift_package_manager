@@ -12,7 +12,15 @@ func TestNewDumpFromJSON(t *testing.T) {
 	expected := &swiftpkg.Dump{
 		Name: "MySwiftPackage",
 		Dependencies: []swiftpkg.DumpDependency{
-			{Name: "swift-argument-parser", URL: "https://github.com/apple/swift-argument-parser"},
+			{
+				Name: "swift-argument-parser",
+				URL:  "https://github.com/apple/swift-argument-parser",
+				Requirement: swiftpkg.DumpDependencyRequirement{
+					Range: []swiftpkg.VersionRange{
+						{LowerBound: "1.2.0", UpperBound: "2.0.0"},
+					},
+				},
+			},
 		},
 	}
 	dump, err := swiftpkg.NewDumpFromJSON([]byte(swiftPackageJSONStr))

@@ -80,7 +80,9 @@ func (dd *DumpDependency) UnmarshalJSON(b []byte) error {
 	}
 
 	// Requirement
+	if ok := jsonmap.Unmarshal(srcCtrlEntry, "requirement", &dd.Requirement); !ok {
+		log.Println(dumpDependencyLogPrefix, "Expected `requirement` in source control entry.")
+	}
 
-
-	return err
+	return nil
 }
