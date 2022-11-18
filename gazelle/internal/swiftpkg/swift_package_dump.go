@@ -20,7 +20,7 @@ func NewDumpFromJSON(bytes []byte) (*Dump, error) {
 
 type Dump struct {
 	Name         string
-	Dependencies []*DumpDependency
+	Dependencies []DumpDependency
 	// Platforms    []*DumpPlatform
 	// Products     []*DumpProduct
 	// Targets      []*DumpTarget
@@ -43,12 +43,11 @@ func (dd *DumpDependency) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	rawSrcCtrl, ok := raw["sourceControl"]
+	srcCtrlList, ok := jsonmap.Slice(raw, "sourceControl")
 	if !ok {
 		log.Println(dumpDependencyLogPrefix, "Expected to find `sourceControl`.")
 		return nil
 	}
-	srcCtrlList := rawSrcCtrl.([]any)
 	if len(srcCtrlList) == 0 {
 		log.Println(dumpDependencyLogPrefix, "Expected at least one entry in `sourceControl` list.")
 		return nil
@@ -56,24 +55,23 @@ func (dd *DumpDependency) UnmarshalJSON(b []byte) error {
 	srcCtrlEntry := srcCtrlList[0].(map[string]any)
 
 	// Name
-	// rawName, ok := srcCtrlEntry["identity"]
-	// if ok {
-	// 	dd.Name = rawName.(string)
-	// } else {
-	// 	log.Println(dumpDependencyLogPrefix, "Expected `identity` in source control entry.")
-	// }
 	dd.Name, ok = jsonmap.String(srcCtrlEntry, "identity")
 	if !ok {
 		log.Println(dumpDependencyLogPrefix, "Expected `identity` in source control entry.")
 	}
 
-	// // URL
-	// rawLocation, ok := srcCtrlEntry["location"]
-	// if ok {
-	// 	location := rawLocation.(jsonMap)
-	// } else {
-	// 	log.Println(dumpDependencyLogPrefix, "Expected `location` in source control entry.")
-	// }
+	// URL
+	location, ok := jsonmap.Map(srcCtrlEntry, "location")
+	if ok {
+		remotes, ok := jsonmap.Slice(location, "remote")
+		if ok {
+			if len(remotes) > 0 {
+				dd.URL = remotes[0].(string)
+			}
+		}
+	} else {
+		log.Println(dumpDependencyLogPrefix, "Expected `location` in source control entry.")
+	}
 
 	return err
 }

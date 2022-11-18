@@ -9,8 +9,15 @@ import (
 )
 
 func TestNewDumpFromJSON(t *testing.T) {
+	expected := &swiftpkg.Dump{
+		Name: "MySwiftPackage",
+		Dependencies: []swiftpkg.DumpDependency{
+			{Name: "swift-argument-parser", URL: "https://github.com/apple/swift-argument-parser"},
+		},
+	}
 	dump, err := swiftpkg.NewDumpFromJSON([]byte(swiftPackageJSONStr))
 	assert.NoError(t, err)
+	assert.Equal(t, expected, dump)
 
 	// DEBUG BEGIN
 	log.Printf("*** CHUCK:  dump: %+#v", dump)
@@ -18,7 +25,7 @@ func TestNewDumpFromJSON(t *testing.T) {
 	for idx, item := range dump.Dependencies {
 		log.Printf("*** CHUCK %d: %+#v", idx, item)
 	}
-	assert.Fail(t, "STOP")
+	// assert.Fail(t, "STOP")
 	// DEBUG END
 }
 

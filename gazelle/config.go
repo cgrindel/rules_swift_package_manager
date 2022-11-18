@@ -3,7 +3,6 @@ package gazelle
 import (
 	"flag"
 	"fmt"
-	"log"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -46,9 +45,6 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 		return err
 	}
 	setStringToPtr(&sc.swiftBinPath, swiftBinPath)
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: CheckFlags swiftBinPath: %+#v", swiftBinPath)
-	// DEBUG END
 
 	// Look for http_archive declarations with Swift declarations.
 	wkspFilePath := wspace.FindWORKSPACEFile(c.RepoRoot)
