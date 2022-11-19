@@ -24,7 +24,7 @@ type Manifest struct {
 	Name         string
 	Dependencies []Dependency
 	Platforms    []Platform
-	// Products     []Product
+	Products     []Product
 	// Targets      []Target
 }
 
@@ -96,4 +96,46 @@ type Platform struct {
 	Version string
 }
 
+// Product
 
+type ProductType int
+
+const (
+	UnknownProductType ProductType = iota
+	ExecutableProductType
+	LibraryProductType
+	PluginProductType
+)
+
+type Product struct {
+	Name    string
+	Targets []string
+	Type    ProductType
+}
+
+func (p *Product) UnmarshalJSON(b []byte) error {
+	var ok bool
+	var raw map[string]any
+	err := json.Unmarshal(b, &raw)
+	if err != nil {
+		return err
+	}
+	if p.Name, ok = jsonmap.String(raw, "name"); !ok {
+		log.Println(dependencyLogPrefix, "Expected `name` in product.")
+	}
+	if p.Targets, ok = jsonmap.Strings(raw, "targets"); !ok {
+		log.Println(dependencyLogPrefix, "Expected `targets` in product.")
+	}
+	if typeMap, ok := jsonmap.Map(raw, "type"); ok {
+		if _, present := typeMap["executable"]; present {
+			p.Type = ExecutableProductType
+		} else if _, present = typeMap["library"]; present {
+			p.Type = LibraryProductType
+		} else if _, present = typeMap["plugin"]; present {
+			p.Type = PluginProductType
+		}
+	} else {
+		log.Println(dependencyLogPrefix, "Expected `type` in product.")
+	}
+	return nil
+}

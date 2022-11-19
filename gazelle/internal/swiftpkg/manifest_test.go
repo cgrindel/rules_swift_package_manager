@@ -25,6 +25,13 @@ func TestNewManifestFromJSON(t *testing.T) {
 		Platforms: []swiftpkg.Platform{
 			{Name: "macos", Version: "10.15"},
 		},
+		Products: []swiftpkg.Product{
+			{
+				Name:    "printstuff",
+				Targets: []string{"MySwiftPackage"},
+				Type:    swiftpkg.ExecutableProductType,
+			},
+		},
 	}
 	manifest, err := swiftpkg.NewManifestFromJSON([]byte(swiftPackageJSONStr))
 	assert.NoError(t, err)
@@ -84,7 +91,18 @@ const swiftPackageJSONStr = `
     }
   ],
   "products" : [
+    {
+      "name" : "printstuff",
+      "settings" : [
 
+      ],
+      "targets" : [
+        "MySwiftPackage"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
   ],
   "providers" : null,
   "swiftLanguageVersions" : null,
