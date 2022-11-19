@@ -1,6 +1,6 @@
 package jsonmap
 
-import 	(
+import (
 	"encoding/json"
 	"log"
 )
@@ -72,4 +72,20 @@ func Unmarshal(jm map[string]any, k string, v any) bool {
 	return true
 }
 
-
+func Strings(jm map[string]any, k string) ([]string, bool) {
+	anyValues, ok := Slice(jm, k)
+	if !ok {
+		return nil, false
+	}
+	values := make([]string, len(anyValues))
+	for idx, v := range anyValues {
+		switch t := v.(type) {
+		case string:
+			values[idx] = v.(string)
+		default:
+			log.Printf("Expected to string values, but item %v for key %v is a %v", idx, k, t)
+			return nil, false
+		}
+	}
+	return values, true
+}

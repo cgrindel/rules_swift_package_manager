@@ -14,7 +14,8 @@ type myStruct struct {
 var rawMap map[string]any
 var mapValue map[string]any
 var structValue map[string]any
-var sliceValue = []any{"hello", "goodbye"}
+var stringSliceValue = []any{"hello", "goodbye"}
+var intSliceValue = []any{123, 456}
 
 func init() {
 	mapValue = make(map[string]any)
@@ -27,8 +28,9 @@ func init() {
 	rawMap["stringKey"] = "stringValue"
 	rawMap["intKey"] = 123
 	rawMap["mapKey"] = mapValue
-	rawMap["sliceKey"] = sliceValue
+	rawMap["stringSliceKey"] = stringSliceValue
 	rawMap["structKey"] = structValue
+	rawMap["intSliceKey"] = intSliceValue
 }
 
 func TestString(t *testing.T) {
@@ -79,9 +81,9 @@ func TestSlice(t *testing.T) {
 		assert.Nil(t, actual)
 	})
 	t.Run("key exists, is slice", func(t *testing.T) {
-		actual, ok := jsonmap.Slice(rawMap, "sliceKey")
+		actual, ok := jsonmap.Slice(rawMap, "stringSliceKey")
 		assert.True(t, ok)
-		assert.Equal(t, sliceValue, actual)
+		assert.Equal(t, stringSliceValue, actual)
 	})
 }
 
@@ -97,5 +99,23 @@ func TestUnmarshal(t *testing.T) {
 		assert.True(t, ok)
 		expected := myStruct{Name: "harry"}
 		assert.Equal(t, expected, v)
+	})
+}
+
+func TestStrings(t *testing.T) {
+	t.Run("key does not exist", func(t *testing.T) {
+		actual, ok := jsonmap.Strings(rawMap, "doesNotExist")
+		assert.False(t, ok)
+		assert.Nil(t, actual)
+	})
+	t.Run("key is not a slice of strings", func(t *testing.T) {
+		actual, ok := jsonmap.Strings(rawMap, "intSliceKey")
+		assert.False(t, ok)
+		assert.Nil(t, actual)
+	})
+	t.Run("key is a slice of strings", func(t *testing.T) {
+		actual, ok := jsonmap.Strings(rawMap, "stringSliceKey")
+		assert.True(t, ok)
+		assert.Equal(t, []string{"hello", "goodbye"}, actual)
 	})
 }
