@@ -7,6 +7,8 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonmap"
 )
 
+// The JSON formats described in this file are for the swift package dump-package JSON output.
+
 func NewManifestFromJSON(bytes []byte) (*Manifest, error) {
 	var manifest Manifest
 	err := json.Unmarshal(bytes, &manifest)
@@ -21,7 +23,7 @@ func NewManifestFromJSON(bytes []byte) (*Manifest, error) {
 type Manifest struct {
 	Name         string
 	Dependencies []Dependency
-	// Platforms    []Platform
+	Platforms    []Platform
 	// Products     []Product
 	// Targets      []Target
 }
@@ -86,3 +88,12 @@ func (d *Dependency) UnmarshalJSON(b []byte) error {
 
 	return nil
 }
+
+// Platform
+
+type Platform struct {
+	Name    string `json:"platformName"`
+	Version string
+}
+
+

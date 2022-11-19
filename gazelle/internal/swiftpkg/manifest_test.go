@@ -22,6 +22,9 @@ func TestNewManifestFromJSON(t *testing.T) {
 				},
 			},
 		},
+		Platforms: []swiftpkg.Platform{
+			{Name: "macos", Version: "10.15"},
+		},
 	}
 	manifest, err := swiftpkg.NewManifestFromJSON([]byte(swiftPackageJSONStr))
 	assert.NoError(t, err)
