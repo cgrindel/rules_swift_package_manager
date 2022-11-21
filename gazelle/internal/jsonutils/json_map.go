@@ -1,4 +1,4 @@
-package jsonmap
+package jsonutils
 
 import (
 	"encoding/json"

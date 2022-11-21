@@ -8,7 +8,7 @@ go_library(
     ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg",
     visibility = ["//gazelle:__subpackages__"],
-    deps = ["//gazelle/internal/jsonmap"],
+    deps = ["//gazelle/internal/jsonutils"],
 )
 
 go_test(

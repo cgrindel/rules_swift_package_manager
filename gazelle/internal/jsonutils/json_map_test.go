@@ -1,9 +1,9 @@
-package jsonmap_test
+package jsonutils_test
 
 import (
 	"testing"
 
-	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonmap"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -35,17 +35,17 @@ func init() {
 
 func TestString(t *testing.T) {
 	t.Run("key does not exist", func(t *testing.T) {
-		actual, ok := jsonmap.String(rawMap, "doesNotExist")
+		actual, ok := jsonutils.String(rawMap, "doesNotExist")
 		assert.False(t, ok)
 		assert.Equal(t, "", actual)
 	})
 	t.Run("key exists, is not string", func(t *testing.T) {
-		actual, ok := jsonmap.String(rawMap, "intKey")
+		actual, ok := jsonutils.String(rawMap, "intKey")
 		assert.False(t, ok)
 		assert.Equal(t, "", actual)
 	})
 	t.Run("key exists, is string", func(t *testing.T) {
-		actual, ok := jsonmap.String(rawMap, "stringKey")
+		actual, ok := jsonutils.String(rawMap, "stringKey")
 		assert.True(t, ok)
 		assert.Equal(t, "stringValue", actual)
 	})
@@ -53,17 +53,17 @@ func TestString(t *testing.T) {
 
 func TestMap(t *testing.T) {
 	t.Run("key does not exist", func(t *testing.T) {
-		actual, ok := jsonmap.Map(rawMap, "doesNotExist")
+		actual, ok := jsonutils.Map(rawMap, "doesNotExist")
 		assert.False(t, ok)
 		assert.Nil(t, actual)
 	})
 	t.Run("key exists, is not map", func(t *testing.T) {
-		actual, ok := jsonmap.Map(rawMap, "intKey")
+		actual, ok := jsonutils.Map(rawMap, "intKey")
 		assert.False(t, ok)
 		assert.Nil(t, actual)
 	})
 	t.Run("key exists, is map", func(t *testing.T) {
-		actual, ok := jsonmap.Map(rawMap, "mapKey")
+		actual, ok := jsonutils.Map(rawMap, "mapKey")
 		assert.True(t, ok)
 		assert.Equal(t, mapValue, actual)
 	})
@@ -71,17 +71,17 @@ func TestMap(t *testing.T) {
 
 func TestSlice(t *testing.T) {
 	t.Run("key does not exist", func(t *testing.T) {
-		actual, ok := jsonmap.Slice(rawMap, "doesNotExist")
+		actual, ok := jsonutils.Slice(rawMap, "doesNotExist")
 		assert.False(t, ok)
 		assert.Nil(t, actual)
 	})
 	t.Run("key exists, is not slice", func(t *testing.T) {
-		actual, ok := jsonmap.Slice(rawMap, "intKey")
+		actual, ok := jsonutils.Slice(rawMap, "intKey")
 		assert.False(t, ok)
 		assert.Nil(t, actual)
 	})
 	t.Run("key exists, is slice", func(t *testing.T) {
-		actual, ok := jsonmap.Slice(rawMap, "stringSliceKey")
+		actual, ok := jsonutils.Slice(rawMap, "stringSliceKey")
 		assert.True(t, ok)
 		assert.Equal(t, stringSliceValue, actual)
 	})
@@ -90,12 +90,12 @@ func TestSlice(t *testing.T) {
 func TestUnmarshal(t *testing.T) {
 	t.Run("key does not exist", func(t *testing.T) {
 		var v myStruct
-		ok := jsonmap.Unmarshal(rawMap, "doesNotExist", &v)
+		ok := jsonutils.Unmarshal(rawMap, "doesNotExist", &v)
 		assert.False(t, ok)
 	})
 	t.Run("key exists, unmarshal succeeds", func(t *testing.T) {
 		var v myStruct
-		ok := jsonmap.Unmarshal(rawMap, "structKey", &v)
+		ok := jsonutils.Unmarshal(rawMap, "structKey", &v)
 		assert.True(t, ok)
 		expected := myStruct{Name: "harry"}
 		assert.Equal(t, expected, v)
@@ -104,17 +104,17 @@ func TestUnmarshal(t *testing.T) {
 
 func TestStrings(t *testing.T) {
 	t.Run("key does not exist", func(t *testing.T) {
-		actual, ok := jsonmap.Strings(rawMap, "doesNotExist")
+		actual, ok := jsonutils.Strings(rawMap, "doesNotExist")
 		assert.False(t, ok)
 		assert.Nil(t, actual)
 	})
 	t.Run("key is not a slice of strings", func(t *testing.T) {
-		actual, ok := jsonmap.Strings(rawMap, "intSliceKey")
+		actual, ok := jsonutils.Strings(rawMap, "intSliceKey")
 		assert.False(t, ok)
 		assert.Nil(t, actual)
 	})
 	t.Run("key is a slice of strings", func(t *testing.T) {
-		actual, ok := jsonmap.Strings(rawMap, "stringSliceKey")
+		actual, ok := jsonutils.Strings(rawMap, "stringSliceKey")
 		assert.True(t, ok)
 		assert.Equal(t, []string{"hello", "goodbye"}, actual)
 	})
