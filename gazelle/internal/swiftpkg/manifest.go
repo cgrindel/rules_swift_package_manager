@@ -139,3 +139,113 @@ func (p *Product) UnmarshalJSON(b []byte) error {
 	}
 	return nil
 }
+
+// // Target
+//
+// type TargetType int
+//
+// const (
+// 	UnknownTargetType TargetType = iota
+// 	ExecutableTargetType
+// 	LibraryTargetType
+// 	TestTargetType
+// )
+//
+// type Target struct {
+// 	Name         string
+// 	Type         TargetType
+// 	Dependencies []TargetDependency
+// }
+//
+// type TargetDependencyType int
+//
+// const (
+// 	UnknownTargetDependencyType TargetDependencyType = iota
+// 	ProductTargetDependencyType
+// 	ByNameTargetDependencyType
+// )
+//
+// // type TargetDependency interface {
+// // 	TargetDependencyType() TargetDependencyType
+// // }
+//
+// type TargetDependency struct {
+// 	Type    TargetDependencyType
+// 	Product ProductReference
+// 	ByName  ByNameReference
+// }
+//
+// func (td *TargetDependency) UnmarshalJSON(b []byte) error {
+// 	var raw map[string]any
+// 	err := json.Unmarshal(b, &raw)
+// 	if err != nil {
+// 		return err
+// 	}
+//
+// 	if rawProduct, ok := jsonmap.Slice(raw, "product"); ok {
+// 		td.Type = ProductTargetDependencyType
+// 		td.Product, err = newProductReferenceFromAnySlice(rawProduct)
+// 		if err != nil {
+// 			return err
+// 		}
+// 		// } else if rawByName, ok := jsonmap.Slice(raw, "byName"); ok {
+// 		// 	td.Type = ByNameTargetDependencyType
+// 		// 	td.ByName, err = newByNameReferenceFromAnySlice(rawByName)
+// 		// 	if err != nil {
+// 		// 		return err
+// 		// 	}
+// 	} else {
+// 		return fmt.Errorf("unrecognized target dependency")
+// 	}
+// 	return nil
+// }
+//
+// // Reference a product
+// type ProductReference struct {
+// 	ProductName    string
+// 	DependencyName string
+// }
+//
+// func newProductReferenceFromAnySlice(anyValues []any) (ProductReference, error) {
+// 	var pr ProductReference
+// 	// Product reference slices usually have 4 values.
+// 	// 0: ProductName
+// 	// 1: DependencyName
+// 	// 2: null
+// 	// 3: null
+// 	if len(anyValues) < 2 {
+// 		return pr, fmt.Errorf("expected at least two values from any slice for ProduceReference")
+// 	}
+// 	// TODO(chuck): FIX ME!
+// 	// DEBUG BEGIN
+// 	log.Printf("*** CHUCK newProductReferenceFromAnySlice anyValues: ")
+// 	for idx, item := range anyValues {
+// 		log.Printf("*** CHUCK %d: %+#v", idx, item)
+// 	}
+// 	// DEBUG END
+// 	return pr, nil
+// }
+//
+// // Reference a target by name
+// type ByNameReference struct {
+// 	TargetName string
+// }
+//
+// // func newByNameReferenceFromAnySlice(anyValues []any) (ByNameReference, error) {
+// // 	var bnr ByNameReference
+// // 	if len(anyValues) < 1 {
+// // 		return bnr, fmt.Errorf("expected at least one value from any slice for ByNameReference")
+// // 	}
+// // 	v := anyValues[0]
+// // 	switch t := value {
+// // 	case value1:
+//
+// // 	case value2:
+//
+// // 	default:
+//
+// // 	}
+//
+// // 	bnr.TargetName = ""
+// // 	return bnr, nil
+// // }
