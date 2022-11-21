@@ -54,7 +54,7 @@ func (d *Dependency) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	srcCtrlList, ok := jsonutils.Slice(raw, "sourceControl")
+	srcCtrlList, ok := jsonutils.SliceAtKey(raw, "sourceControl")
 	if !ok {
 		log.Println(dependencyLogPrefix, "Expected to find `sourceControl`.")
 		return nil
@@ -66,13 +66,13 @@ func (d *Dependency) UnmarshalJSON(b []byte) error {
 	srcCtrlEntry := srcCtrlList[0].(map[string]any)
 
 	// Name
-	if d.Name, ok = jsonutils.String(srcCtrlEntry, "identity"); !ok {
+	if d.Name, ok = jsonutils.StringAtKey(srcCtrlEntry, "identity"); !ok {
 		log.Println(dependencyLogPrefix, "Expected `identity` in source control entry.")
 	}
 
 	// URL
-	if location, ok := jsonutils.Map(srcCtrlEntry, "location"); ok {
-		if remotes, ok := jsonutils.Slice(location, "remote"); ok {
+	if location, ok := jsonutils.MapAtKey(srcCtrlEntry, "location"); ok {
+		if remotes, ok := jsonutils.SliceAtKey(location, "remote"); ok {
 			if len(remotes) > 0 {
 				d.URL = remotes[0].(string)
 			}
@@ -82,7 +82,7 @@ func (d *Dependency) UnmarshalJSON(b []byte) error {
 	}
 
 	// Requirement
-	if ok := jsonutils.Unmarshal(srcCtrlEntry, "requirement", &d.Requirement); !ok {
+	if ok := jsonutils.UnmarshalAtKey(srcCtrlEntry, "requirement", &d.Requirement); !ok {
 		log.Println(dependencyLogPrefix, "Expected `requirement` in source control entry.")
 	}
 
@@ -120,13 +120,13 @@ func (p *Product) UnmarshalJSON(b []byte) error {
 	if err != nil {
 		return err
 	}
-	if p.Name, ok = jsonutils.String(raw, "name"); !ok {
+	if p.Name, ok = jsonutils.StringAtKey(raw, "name"); !ok {
 		log.Println(dependencyLogPrefix, "Expected `name` in product.")
 	}
-	if p.Targets, ok = jsonutils.Strings(raw, "targets"); !ok {
+	if p.Targets, ok = jsonutils.StringsAtKey(raw, "targets"); !ok {
 		log.Println(dependencyLogPrefix, "Expected `targets` in product.")
 	}
-	if typeMap, ok := jsonutils.Map(raw, "type"); ok {
+	if typeMap, ok := jsonutils.MapAtKey(raw, "type"); ok {
 		if _, present := typeMap["executable"]; present {
 			p.Type = ExecutableProductType
 		} else if _, present = typeMap["library"]; present {
@@ -182,13 +182,13 @@ func (p *Product) UnmarshalJSON(b []byte) error {
 // 		return err
 // 	}
 //
-// 	if rawProduct, ok := jsonutils.Slice(raw, "product"); ok {
+// 	if rawProduct, ok := jsonutils.SliceAtKey(raw, "product"); ok {
 // 		td.Type = ProductTargetDependencyType
 // 		td.Product, err = newProductReferenceFromAnySlice(rawProduct)
 // 		if err != nil {
 // 			return err
 // 		}
-// 		// } else if rawByName, ok := jsonutils.Slice(raw, "byName"); ok {
+// 		// } else if rawByName, ok := jsonutils.SliceAtKey(raw, "byName"); ok {
 // 		// 	td.Type = ByNameTargetDependencyType
 // 		// 	td.ByName, err = newByNameReferenceFromAnySlice(rawByName)
 // 		// 	if err != nil {

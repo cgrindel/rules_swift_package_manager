@@ -5,7 +5,7 @@ import (
 	"log"
 )
 
-func String(jm map[string]any, k string) (string, bool) {
+func StringAtKey(jm map[string]any, k string) (string, bool) {
 	rawValue, ok := jm[k]
 	if !ok {
 		return "", false
@@ -19,7 +19,7 @@ func String(jm map[string]any, k string) (string, bool) {
 	}
 }
 
-func Map(jm map[string]any, k string) (map[string]any, bool) {
+func MapAtKey(jm map[string]any, k string) (map[string]any, bool) {
 	rawValue, ok := jm[k]
 	if !ok {
 		return nil, false
@@ -33,7 +33,7 @@ func Map(jm map[string]any, k string) (map[string]any, bool) {
 	}
 }
 
-func Slice(jm map[string]any, k string) ([]any, bool) {
+func SliceAtKey(jm map[string]any, k string) ([]any, bool) {
 	rawValue, ok := jm[k]
 	if !ok {
 		return nil, false
@@ -47,7 +47,7 @@ func Slice(jm map[string]any, k string) ([]any, bool) {
 	}
 }
 
-func Bytes(jm map[string]any, k string) ([]byte, bool) {
+func BytesAtKey(jm map[string]any, k string) ([]byte, bool) {
 	rawValue, ok := jm[k]
 	if !ok {
 		return nil, false
@@ -60,8 +60,8 @@ func Bytes(jm map[string]any, k string) ([]byte, bool) {
 	return valueBytes, true
 }
 
-func Unmarshal(jm map[string]any, k string, v any) bool {
-	valueBytes, ok := Bytes(jm, k)
+func UnmarshalAtKey(jm map[string]any, k string, v any) bool {
+	valueBytes, ok := BytesAtKey(jm, k)
 	if !ok {
 		return false
 	}
@@ -72,8 +72,8 @@ func Unmarshal(jm map[string]any, k string, v any) bool {
 	return true
 }
 
-func Strings(jm map[string]any, k string) ([]string, bool) {
-	anyValues, ok := Slice(jm, k)
+func StringsAtKey(jm map[string]any, k string) ([]string, bool) {
+	anyValues, ok := SliceAtKey(jm, k)
 	if !ok {
 		return nil, false
 	}

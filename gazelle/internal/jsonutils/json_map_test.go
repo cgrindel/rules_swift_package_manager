@@ -33,88 +33,88 @@ func init() {
 	rawMap["intSliceKey"] = intSliceValue
 }
 
-func TestString(t *testing.T) {
+func TestStringAtKey(t *testing.T) {
 	t.Run("key does not exist", func(t *testing.T) {
-		actual, ok := jsonutils.String(rawMap, "doesNotExist")
+		actual, ok := jsonutils.StringAtKey(rawMap, "doesNotExist")
 		assert.False(t, ok)
 		assert.Equal(t, "", actual)
 	})
 	t.Run("key exists, is not string", func(t *testing.T) {
-		actual, ok := jsonutils.String(rawMap, "intKey")
+		actual, ok := jsonutils.StringAtKey(rawMap, "intKey")
 		assert.False(t, ok)
 		assert.Equal(t, "", actual)
 	})
 	t.Run("key exists, is string", func(t *testing.T) {
-		actual, ok := jsonutils.String(rawMap, "stringKey")
+		actual, ok := jsonutils.StringAtKey(rawMap, "stringKey")
 		assert.True(t, ok)
 		assert.Equal(t, "stringValue", actual)
 	})
 }
 
-func TestMap(t *testing.T) {
+func TestMapAtKey(t *testing.T) {
 	t.Run("key does not exist", func(t *testing.T) {
-		actual, ok := jsonutils.Map(rawMap, "doesNotExist")
+		actual, ok := jsonutils.MapAtKey(rawMap, "doesNotExist")
 		assert.False(t, ok)
 		assert.Nil(t, actual)
 	})
 	t.Run("key exists, is not map", func(t *testing.T) {
-		actual, ok := jsonutils.Map(rawMap, "intKey")
+		actual, ok := jsonutils.MapAtKey(rawMap, "intKey")
 		assert.False(t, ok)
 		assert.Nil(t, actual)
 	})
 	t.Run("key exists, is map", func(t *testing.T) {
-		actual, ok := jsonutils.Map(rawMap, "mapKey")
+		actual, ok := jsonutils.MapAtKey(rawMap, "mapKey")
 		assert.True(t, ok)
 		assert.Equal(t, mapValue, actual)
 	})
 }
 
-func TestSlice(t *testing.T) {
+func TestSliceAtKey(t *testing.T) {
 	t.Run("key does not exist", func(t *testing.T) {
-		actual, ok := jsonutils.Slice(rawMap, "doesNotExist")
+		actual, ok := jsonutils.SliceAtKey(rawMap, "doesNotExist")
 		assert.False(t, ok)
 		assert.Nil(t, actual)
 	})
 	t.Run("key exists, is not slice", func(t *testing.T) {
-		actual, ok := jsonutils.Slice(rawMap, "intKey")
+		actual, ok := jsonutils.SliceAtKey(rawMap, "intKey")
 		assert.False(t, ok)
 		assert.Nil(t, actual)
 	})
 	t.Run("key exists, is slice", func(t *testing.T) {
-		actual, ok := jsonutils.Slice(rawMap, "stringSliceKey")
+		actual, ok := jsonutils.SliceAtKey(rawMap, "stringSliceKey")
 		assert.True(t, ok)
 		assert.Equal(t, stringSliceValue, actual)
 	})
 }
 
-func TestUnmarshal(t *testing.T) {
+func TestUnmarshalAtKey(t *testing.T) {
 	t.Run("key does not exist", func(t *testing.T) {
 		var v myStruct
-		ok := jsonutils.Unmarshal(rawMap, "doesNotExist", &v)
+		ok := jsonutils.UnmarshalAtKey(rawMap, "doesNotExist", &v)
 		assert.False(t, ok)
 	})
 	t.Run("key exists, unmarshal succeeds", func(t *testing.T) {
 		var v myStruct
-		ok := jsonutils.Unmarshal(rawMap, "structKey", &v)
+		ok := jsonutils.UnmarshalAtKey(rawMap, "structKey", &v)
 		assert.True(t, ok)
 		expected := myStruct{Name: "harry"}
 		assert.Equal(t, expected, v)
 	})
 }
 
-func TestStrings(t *testing.T) {
+func TestStringsAtKey(t *testing.T) {
 	t.Run("key does not exist", func(t *testing.T) {
-		actual, ok := jsonutils.Strings(rawMap, "doesNotExist")
+		actual, ok := jsonutils.StringsAtKey(rawMap, "doesNotExist")
 		assert.False(t, ok)
 		assert.Nil(t, actual)
 	})
 	t.Run("key is not a slice of strings", func(t *testing.T) {
-		actual, ok := jsonutils.Strings(rawMap, "intSliceKey")
+		actual, ok := jsonutils.StringsAtKey(rawMap, "intSliceKey")
 		assert.False(t, ok)
 		assert.Nil(t, actual)
 	})
 	t.Run("key is a slice of strings", func(t *testing.T) {
-		actual, ok := jsonutils.Strings(rawMap, "stringSliceKey")
+		actual, ok := jsonutils.StringsAtKey(rawMap, "stringSliceKey")
 		assert.True(t, ok)
 		assert.Equal(t, []string{"hello", "goodbye"}, actual)
 	})
