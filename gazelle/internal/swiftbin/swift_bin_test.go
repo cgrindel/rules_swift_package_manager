@@ -30,10 +30,20 @@ func TestSwiftBin(t *testing.T) {
 		// Dump the package
 		out, err := sb.DumpPackage(dir)
 		assert.NoError(t, err)
-		var anyMap map[string]any
-		err = json.Unmarshal(out, &anyMap)
+		var dumpMap map[string]any
+		err = json.Unmarshal(out, &dumpMap)
 		assert.NoError(t, err)
-		actualPkgName, err := jsonutils.StringAtKey(anyMap, "name")
+		actualPkgName, err := jsonutils.StringAtKey(dumpMap, "name")
+		assert.NoError(t, err)
+		assert.Equal(t, pkgName, actualPkgName)
+
+		// Describe the package
+		out, err = sb.DescribePackage(dir)
+		assert.NoError(t, err)
+		var descMap map[string]any
+		err = json.Unmarshal(out, &descMap)
+		assert.NoError(t, err)
+		actualPkgName, err = jsonutils.StringAtKey(descMap, "name")
 		assert.NoError(t, err)
 		assert.Equal(t, pkgName, actualPkgName)
 	})
