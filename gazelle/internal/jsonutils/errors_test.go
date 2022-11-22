@@ -1,6 +1,7 @@
 package jsonutils_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
@@ -35,4 +36,12 @@ func TestKeyTypeError(t *testing.T) {
 	assert.Equal(t, key, kte.Key)
 	assert.Equal(t, expectedType, kte.ExpectedType)
 	assert.Equal(t, "int", kte.ActualType)
+}
+
+func TestKeyError(t *testing.T) {
+	key := "foo"
+	oerr := fmt.Errorf("original error")
+	ke := jsonutils.NewKeyError(key, oerr)
+	assert.Equal(t, ke.Key, key)
+	assert.Equal(t, ke.Err, oerr)
 }

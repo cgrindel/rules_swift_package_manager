@@ -44,22 +44,21 @@ func SliceAtKey(jm map[string]any, k string) ([]any, error) {
 	}
 }
 
-func BytesAtKey(jm map[string]any, k string) ([]byte, bool) {
+func BytesAtKey(jm map[string]any, k string) ([]byte, error) {
 	rawValue, ok := jm[k]
 	if !ok {
-		return nil, false
+		return nil, NewMissingKeyError(k)
 	}
 	valueBytes, err := json.Marshal(rawValue)
 	if err != nil {
-		log.Printf("Failed to marshal the value for %v. %v", k, err)
-		return nil, false
+		return nil, NewKeyError(k, err)
 	}
-	return valueBytes, true
+	return valueBytes, nil
 }
 
 func UnmarshalAtKey(jm map[string]any, k string, v any) bool {
-	valueBytes, ok := BytesAtKey(jm, k)
-	if !ok {
+	valueBytes, err := BytesAtKey(jm, k)
+	if err != nil {
 		return false
 	}
 	if err := json.Unmarshal(valueBytes, v); err != nil {

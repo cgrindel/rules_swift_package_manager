@@ -56,3 +56,26 @@ func (e *KeyTypeError) Error() string {
 		"key '%s' expected to be type '%s', but was type '%s'",
 		e.Key, e.ExpectedType, e.ActualType)
 }
+
+// MarshalKeyError
+
+type KeyError struct {
+	Err error
+	mapKey
+}
+
+func NewKeyError(k string, err error) *KeyError {
+	mk := mapKey{Key: k}
+	return &KeyError{
+		Err:    err,
+		mapKey: mk,
+	}
+}
+
+func (e *KeyError) Error() string {
+	return fmt.Sprintf("error occurred processing '%v', %v", e.Key, e.Err)
+}
+
+func (e *KeyError) Unwrap() error {
+	return e.Err
+}
