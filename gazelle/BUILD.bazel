@@ -21,6 +21,7 @@ go_library(
         "//gazelle/internal/stringslices",
         "//gazelle/internal/swift",
         "//gazelle/internal/swiftbin",
+        "//gazelle/internal/swiftpkg",
         "//gazelle/internal/wspace",
         "@bazel_gazelle//config:go_default_library",
         "@bazel_gazelle//label:go_default_library",

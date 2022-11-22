@@ -11,6 +11,7 @@ go_library(
     visibility = ["//gazelle:__subpackages__"],
     deps = [
         "//gazelle/internal/jsonutils",
+        "//gazelle/internal/swiftbin",
         "@com_github_hashicorp_go_multierror//:go-multierror",
     ],
 )
