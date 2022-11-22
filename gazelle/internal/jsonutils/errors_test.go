@@ -1,6 +1,7 @@
 package jsonutils_test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
@@ -12,6 +13,26 @@ func TestMissingKeyError(t *testing.T) {
 	mke := jsonutils.NewMissingKeyError(key)
 	assert.Equal(t, key, mke.Key)
 	assert.Implements(t, (*error)(nil), mke)
+
+	// // DEBUG BEGIN
+	// var err error
+	// log.Printf("*** CHUCK:  errors.Is(err, jsonutils.MissingKeyError: %+#v", errors.Is(err, jsonutils.MissingKeyError))
+	// assert.Fail(t, "STOP")
+	// // DEBUG END
+}
+
+func TestIsMissingKeyError(t *testing.T) {
+	t.Run("err is nil", func(t *testing.T) {
+		assert.False(t, jsonutils.IsMissingKeyError(nil))
+	})
+	t.Run("err is not nil, is not MissingKeyError", func(t *testing.T) {
+		err := errors.New("my error")
+		assert.False(t, jsonutils.IsMissingKeyError(err))
+	})
+	t.Run("err is not nil, is MissingKeyError", func(t *testing.T) {
+		err := jsonutils.NewMissingKeyError("foo")
+		assert.True(t, jsonutils.IsMissingKeyError(err))
+	})
 }
 
 func TestKeyTypeError(t *testing.T) {

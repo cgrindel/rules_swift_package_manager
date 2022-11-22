@@ -1,6 +1,7 @@
 package jsonutils
 
 import (
+	"errors"
 	"fmt"
 )
 
@@ -26,7 +27,12 @@ func NewMissingKeyError(key string) *MissingKeyError {
 }
 
 func (e *MissingKeyError) Error() string {
-	return fmt.Sprintf("map key '%v' is missing", e.Key)
+	return fmt.Sprintf("key '%v' not found", e.Key)
+}
+
+func IsMissingKeyError(err error) bool {
+	var mke *MissingKeyError
+	return errors.As(err, &mke)
 }
 
 // KeyTypeError
@@ -48,6 +54,6 @@ func NewKeyTypeError(key, expected string, actual any) *KeyTypeError {
 
 func (e *KeyTypeError) Error() string {
 	return fmt.Sprintf(
-		"map key '%s' expected to be '%s', but was '%s'",
+		"key '%s' expected to be type '%s', but was type '%s'",
 		e.Key, e.ExpectedType, e.ActualType)
 }
