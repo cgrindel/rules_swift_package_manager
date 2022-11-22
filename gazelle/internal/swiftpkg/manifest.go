@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
+	multierror "github.com/hashicorp/go-multierror"
 )
 
 // The JSON formats described in this file are for the swift package dump-package JSON output.
@@ -48,6 +49,8 @@ type VersionRange struct {
 const dependencyLogPrefix = "Decoding Dependency:"
 
 func (d *Dependency) UnmarshalJSON(b []byte) error {
+	var errs error
+
 	var raw map[string]any
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
@@ -66,8 +69,8 @@ func (d *Dependency) UnmarshalJSON(b []byte) error {
 	srcCtrlEntry := srcCtrlList[0].(map[string]any)
 
 	// Name
-	if d.Name, ok = jsonutils.StringAtKey(srcCtrlEntry, "identity"); !ok {
-		log.Println(dependencyLogPrefix, "Expected `identity` in source control entry.")
+	if d.Name, err = jsonutils.StringAtKey(srcCtrlEntry, "identity"); err != nil {
+		errs = multierror.Append(errs, err)
 	}
 
 	// URL
@@ -86,7 +89,7 @@ func (d *Dependency) UnmarshalJSON(b []byte) error {
 		log.Println(dependencyLogPrefix, "Expected `requirement` in source control entry.")
 	}
 
-	return nil
+	return errs
 }
 
 // Platform
@@ -114,17 +117,19 @@ type Product struct {
 }
 
 func (p *Product) UnmarshalJSON(b []byte) error {
+	var errs error
+
 	var ok bool
 	var raw map[string]any
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
 		return err
 	}
-	if p.Name, ok = jsonutils.StringAtKey(raw, "name"); !ok {
-		log.Println(dependencyLogPrefix, "Expected `name` in product.")
+	if p.Name, err = jsonutils.StringAtKey(raw, "name"); err != nil {
+		errs = multierror.Append(errs, err)
 	}
 	if p.Targets, ok = jsonutils.StringsAtKey(raw, "targets"); !ok {
-		log.Println(dependencyLogPrefix, "Expected `targets` in product.")
+		log.Printf("over zealous edit")
 	}
 	if typeMap, ok := jsonutils.MapAtKey(raw, "type"); ok {
 		if _, present := typeMap["executable"]; present {
@@ -137,7 +142,7 @@ func (p *Product) UnmarshalJSON(b []byte) error {
 	} else {
 		log.Println(dependencyLogPrefix, "Expected `type` in product.")
 	}
-	return nil
+	return errs
 }
 
 // // Target

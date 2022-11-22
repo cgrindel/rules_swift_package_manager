@@ -13,12 +13,6 @@ func TestMissingKeyError(t *testing.T) {
 	mke := jsonutils.NewMissingKeyError(key)
 	assert.Equal(t, key, mke.Key)
 	assert.Implements(t, (*error)(nil), mke)
-
-	// // DEBUG BEGIN
-	// var err error
-	// log.Printf("*** CHUCK:  errors.Is(err, jsonutils.MissingKeyError: %+#v", errors.Is(err, jsonutils.MissingKeyError))
-	// assert.Fail(t, "STOP")
-	// // DEBUG END
 }
 
 func TestIsMissingKeyError(t *testing.T) {

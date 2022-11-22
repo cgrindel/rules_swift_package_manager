@@ -5,17 +5,16 @@ import (
 	"log"
 )
 
-func StringAtKey(jm map[string]any, k string) (string, bool) {
+func StringAtKey(jm map[string]any, k string) (string, error) {
 	rawValue, ok := jm[k]
 	if !ok {
-		return "", false
+		return "", NewMissingKeyError(k)
 	}
-	switch t := rawValue.(type) {
+	switch v := rawValue.(type) {
 	case string:
-		return rawValue.(string), true
+		return v, nil
 	default:
-		log.Printf("Expected string for key %v, but was %v", k, t)
-		return "", false
+		return "", NewKeyTypeError(k, "string", v)
 	}
 }
 

@@ -42,11 +42,11 @@ type KeyTypeError struct {
 	unexpectedType
 }
 
-func NewKeyTypeError(key, expected string, actual any) *KeyTypeError {
+func NewKeyTypeError(key, expectedType string, actual any) *KeyTypeError {
 	return &KeyTypeError{
 		mapKey{Key: key},
 		unexpectedType{
-			ExpectedType: expected,
+			ExpectedType: expectedType,
 			ActualType:   fmt.Sprintf("%T", actual),
 		},
 	}
