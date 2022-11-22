@@ -1,7 +1,6 @@
 package jsonutils
 
 import (
-	"errors"
 	"fmt"
 )
 
@@ -30,10 +29,10 @@ func (e *MissingKeyError) Error() string {
 	return fmt.Sprintf("key '%v' not found", e.Key)
 }
 
-func IsMissingKeyError(err error) bool {
-	var mke *MissingKeyError
-	return errors.As(err, &mke)
-}
+// func IsMissingKeyError(err error) bool {
+// 	var mke *MissingKeyError
+// 	return errors.As(err, &mke)
+// }
 
 // KeyTypeError
 
