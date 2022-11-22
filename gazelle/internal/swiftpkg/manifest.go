@@ -57,10 +57,9 @@ func (d *Dependency) UnmarshalJSON(b []byte) error {
 		return err
 	}
 
-	srcCtrlList, ok := jsonutils.SliceAtKey(raw, "sourceControl")
-	if !ok {
-		log.Println(dependencyLogPrefix, "Expected to find `sourceControl`.")
-		return nil
+	srcCtrlList, err := jsonutils.SliceAtKey(raw, "sourceControl")
+	if err != nil {
+		return err
 	}
 	if len(srcCtrlList) == 0 {
 		log.Println(dependencyLogPrefix, "Expected at least one entry in `sourceControl` list.")
@@ -75,13 +74,14 @@ func (d *Dependency) UnmarshalJSON(b []byte) error {
 
 	// URL
 	if location, err := jsonutils.MapAtKey(srcCtrlEntry, "location"); err == nil {
-		if remotes, ok := jsonutils.SliceAtKey(location, "remote"); ok {
+		if remotes, err := jsonutils.SliceAtKey(location, "remote"); err == nil {
 			if len(remotes) > 0 {
 				d.URL = remotes[0].(string)
 			}
+		} else {
+			errs = multierror.Append(errs, err)
 		}
 	} else {
-		log.Println(dependencyLogPrefix, "Expected `location` in source control entry.")
 		errs = multierror.Append(errs, err)
 	}
 

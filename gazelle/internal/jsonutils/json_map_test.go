@@ -76,18 +76,20 @@ func TestMapAtKey(t *testing.T) {
 
 func TestSliceAtKey(t *testing.T) {
 	t.Run("key does not exist", func(t *testing.T) {
-		actual, ok := jsonutils.SliceAtKey(rawMap, "doesNotExist")
-		assert.False(t, ok)
+		k := "doesNotExist"
+		actual, err := jsonutils.SliceAtKey(rawMap, "doesNotExist")
+		assert.Equal(t, jsonutils.NewMissingKeyError(k), err)
 		assert.Nil(t, actual)
 	})
 	t.Run("key exists, is not slice", func(t *testing.T) {
-		actual, ok := jsonutils.SliceAtKey(rawMap, "intKey")
-		assert.False(t, ok)
+		k := "intKey"
+		actual, err := jsonutils.SliceAtKey(rawMap, "intKey")
+		assert.Equal(t, jsonutils.NewKeyTypeError(k, "[]any", intValue), err)
 		assert.Nil(t, actual)
 	})
 	t.Run("key exists, is slice", func(t *testing.T) {
-		actual, ok := jsonutils.SliceAtKey(rawMap, "stringSliceKey")
-		assert.True(t, ok)
+		actual, err := jsonutils.SliceAtKey(rawMap, "stringSliceKey")
+		assert.NoError(t, err)
 		assert.Equal(t, stringSliceValue, actual)
 	})
 }

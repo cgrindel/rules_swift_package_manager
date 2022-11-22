@@ -31,17 +31,16 @@ func MapAtKey(jm map[string]any, k string) (map[string]any, error) {
 	}
 }
 
-func SliceAtKey(jm map[string]any, k string) ([]any, bool) {
+func SliceAtKey(jm map[string]any, k string) ([]any, error) {
 	rawValue, ok := jm[k]
 	if !ok {
-		return nil, false
+		return nil, NewMissingKeyError(k)
 	}
 	switch t := rawValue.(type) {
 	case []any:
-		return rawValue.([]any), true
+		return t, nil
 	default:
-		log.Printf("Expected []any for key %v, but was %v", k, t)
-		return nil, false
+		return nil, NewKeyTypeError(k, "[]any", t)
 	}
 }
 
@@ -71,8 +70,8 @@ func UnmarshalAtKey(jm map[string]any, k string, v any) bool {
 }
 
 func StringsAtKey(jm map[string]any, k string) ([]string, bool) {
-	anyValues, ok := SliceAtKey(jm, k)
-	if !ok {
+	anyValues, err := SliceAtKey(jm, k)
+	if err != nil {
 		return nil, false
 	}
 	values := make([]string, len(anyValues))
