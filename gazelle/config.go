@@ -18,10 +18,6 @@ type swiftConfig struct {
 	swiftBinPath string
 }
 
-func setStringToPtr(ptr *string, val string) {
-	*ptr = val
-}
-
 func getSwiftConfig(c *config.Config) *swiftConfig {
 	return c.Exts[swiftConfigName].(*swiftConfig)
 }
@@ -35,16 +31,16 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 }
 
 func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
+	var err error
 	sc := getSwiftConfig(c)
 
 	// TODO(chuck): Add flag so that the client can tell use which Swift to use.
 
 	// Find the Swift executable
-	swiftBinPath, err := swiftbin.FindSwiftBinPath()
+	sc.swiftBinPath, err = swiftbin.FindSwiftBinPath()
 	if err != nil {
 		return err
 	}
-	setStringToPtr(&sc.swiftBinPath, swiftBinPath)
 
 	// Look for http_archive declarations with Swift declarations.
 	wkspFilePath := wspace.FindWORKSPACEFile(c.RepoRoot)
