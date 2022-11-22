@@ -112,18 +112,24 @@ func TestUnmarshalAtKey(t *testing.T) {
 
 func TestStringsAtKey(t *testing.T) {
 	t.Run("key does not exist", func(t *testing.T) {
-		actual, ok := jsonutils.StringsAtKey(rawMap, "doesNotExist")
-		assert.False(t, ok)
+		k := "doesNotExist"
+		actual, err := jsonutils.StringsAtKey(rawMap, k)
+		assert.Equal(t, jsonutils.NewMissingKeyError(k), err)
 		assert.Nil(t, actual)
 	})
 	t.Run("key is not a slice of strings", func(t *testing.T) {
-		actual, ok := jsonutils.StringsAtKey(rawMap, "intSliceKey")
-		assert.False(t, ok)
+		key := "intSliceKey"
+		actual, err := jsonutils.StringsAtKey(rawMap, key)
+		assert.Equal(
+			t,
+			jsonutils.NewKeyError(key, jsonutils.NewIndexTypeError(0, "string", intSliceValue[0])),
+			err,
+		)
 		assert.Nil(t, actual)
 	})
 	t.Run("key is a slice of strings", func(t *testing.T) {
-		actual, ok := jsonutils.StringsAtKey(rawMap, "stringSliceKey")
-		assert.True(t, ok)
+		actual, err := jsonutils.StringsAtKey(rawMap, "stringSliceKey")
+		assert.NoError(t, err)
 		assert.Equal(t, []string{"hello", "goodbye"}, actual)
 	})
 }

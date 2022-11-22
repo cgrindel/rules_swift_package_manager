@@ -8,6 +8,10 @@ type mapKey struct {
 	Key string
 }
 
+type sliceIndex struct {
+	Index int
+}
+
 type unexpectedType struct {
 	ExpectedType string
 	ActualType   string
@@ -78,4 +82,27 @@ func (e *KeyError) Error() string {
 
 func (e *KeyError) Unwrap() error {
 	return e.Err
+}
+
+// IndexTypeError
+
+type IndexTypeError struct {
+	sliceIndex
+	unexpectedType
+}
+
+func NewIndexTypeError(index int, expectedType string, actual any) *IndexTypeError {
+	return &IndexTypeError{
+		sliceIndex{Index: index},
+		unexpectedType{
+			ExpectedType: expectedType,
+			ActualType:   fmt.Sprintf("%T", actual),
+		},
+	}
+}
+
+func (e *IndexTypeError) Error() string {
+	return fmt.Sprintf(
+		"index %d expected to be type '%s', but was type '%s'",
+		e.Index, e.ExpectedType, e.ActualType)
 }

@@ -120,7 +120,6 @@ type Product struct {
 func (p *Product) UnmarshalJSON(b []byte) error {
 	var errs error
 
-	var ok bool
 	var raw map[string]any
 	err := json.Unmarshal(b, &raw)
 	if err != nil {
@@ -129,8 +128,8 @@ func (p *Product) UnmarshalJSON(b []byte) error {
 	if p.Name, err = jsonutils.StringAtKey(raw, "name"); err != nil {
 		errs = multierror.Append(errs, err)
 	}
-	if p.Targets, ok = jsonutils.StringsAtKey(raw, "targets"); !ok {
-		log.Printf("over zealous edit")
+	if p.Targets, err = jsonutils.StringsAtKey(raw, "targets"); err != nil {
+		errs = multierror.Append(errs, err)
 	}
 	if typeMap, err := jsonutils.MapAtKey(raw, "type"); err == nil {
 		if _, present := typeMap["executable"]; present {

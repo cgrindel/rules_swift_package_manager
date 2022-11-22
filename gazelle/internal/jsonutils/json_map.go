@@ -2,7 +2,6 @@ package jsonutils
 
 import (
 	"encoding/json"
-	"log"
 )
 
 func StringAtKey(jm map[string]any, k string) (string, error) {
@@ -67,20 +66,19 @@ func UnmarshalAtKey(jm map[string]any, k string, v any) error {
 	return nil
 }
 
-func StringsAtKey(jm map[string]any, k string) ([]string, bool) {
+func StringsAtKey(jm map[string]any, k string) ([]string, error) {
 	anyValues, err := SliceAtKey(jm, k)
 	if err != nil {
-		return nil, false
+		return nil, err
 	}
 	values := make([]string, len(anyValues))
 	for idx, v := range anyValues {
 		switch t := v.(type) {
 		case string:
-			values[idx] = v.(string)
+			values[idx] = t
 		default:
-			log.Printf("Expected to string values, but item %v for key %v is a %v", idx, k, t)
-			return nil, false
+			return nil, NewKeyError(k, NewIndexTypeError(idx, "string", t))
 		}
 	}
-	return values, true
+	return values, nil
 }

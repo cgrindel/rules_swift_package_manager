@@ -36,6 +36,7 @@ func TestKeyTypeError(t *testing.T) {
 	assert.Equal(t, key, kte.Key)
 	assert.Equal(t, expectedType, kte.ExpectedType)
 	assert.Equal(t, "int", kte.ActualType)
+	assert.Implements(t, (*error)(nil), kte)
 }
 
 func TestKeyError(t *testing.T) {
@@ -44,4 +45,15 @@ func TestKeyError(t *testing.T) {
 	ke := jsonutils.NewKeyError(key, oerr)
 	assert.Equal(t, ke.Key, key)
 	assert.Equal(t, ke.Err, oerr)
+	assert.Implements(t, (*error)(nil), ke)
+}
+
+func TestIndexTypeError(t *testing.T) {
+	index := 3
+	expectedType := "string"
+	ite := jsonutils.NewIndexTypeError(index, expectedType, 123)
+	assert.Equal(t, index, ite.Index)
+	assert.Equal(t, expectedType, ite.ExpectedType)
+	assert.Equal(t, "int", ite.ActualType)
+	assert.Implements(t, (*error)(nil), ite)
 }
