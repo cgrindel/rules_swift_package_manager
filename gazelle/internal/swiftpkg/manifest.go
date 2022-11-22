@@ -174,23 +174,22 @@ func (tt *TargetType) UnmarshalJSON(b []byte) error {
 }
 
 type Target struct {
-	Name string
-	Type TargetType
-	// Dependencies []TargetDependency
+	Name         string
+	Type         TargetType
+	Dependencies []TargetDependency
 }
 
 // TargetDependenncy
 
-type TargetDependencyType int
+// type TargetDependencyType int
 
-const (
-	UnknownTargetDependencyType TargetDependencyType = iota
-	ProductTargetDependencyType
-	ByNameTargetDependencyType
-)
+// const (
+// 	UnknownTargetDependencyType TargetDependencyType = iota
+// 	ProductTargetDependencyType
+// 	ByNameTargetDependencyType
+// )
 
 type TargetDependency struct {
-	// Type    TargetDependencyType
 	Product *ProductReference
 	// ByName  ByNameReference
 }
@@ -238,7 +237,6 @@ func (pr *ProductReference) UnmarshalJSON(b []byte) error {
 	if pr.DependencyName, err = jsonutils.StringAtIndex(raw, 1); err != nil {
 		return err
 	}
-
 	return nil
 }
 

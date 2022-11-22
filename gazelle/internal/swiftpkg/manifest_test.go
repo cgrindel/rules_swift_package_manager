@@ -33,8 +33,25 @@ func TestNewManifestFromJSON(t *testing.T) {
 			},
 		},
 		Targets: []swiftpkg.Target{
-			{Name: "MySwiftPackage", Type: swiftpkg.ExecutableTargetType},
-			{Name: "MySwiftPackageTests", Type: swiftpkg.TestTargetType},
+			{
+				Name: "MySwiftPackage",
+				Type: swiftpkg.ExecutableTargetType,
+				Dependencies: []swiftpkg.TargetDependency{
+					{
+						Product: &swiftpkg.ProductReference{
+							ProductName:    "ArgumentParser",
+							DependencyName: "swift-argument-parser",
+						},
+					},
+				},
+			},
+			{
+				Name: "MySwiftPackageTests",
+				Type: swiftpkg.TestTargetType,
+				Dependencies: []swiftpkg.TargetDependency{
+					{},
+				},
+			},
 		},
 	}
 	manifest, err := swiftpkg.NewManifestFromJSON([]byte(swiftPackageJSONStr))
