@@ -2,14 +2,20 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "jsonutils",
-    srcs = ["json_map.go"],
+    srcs = [
+        "errors.go",
+        "json_map.go",
+    ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils",
     visibility = ["//gazelle:__subpackages__"],
 )
 
 go_test(
     name = "jsonutils_test",
-    srcs = ["json_map_test.go"],
+    srcs = [
+        "errors_test.go",
+        "json_map_test.go",
+    ],
     deps = [
         ":jsonutils",
         "@com_github_stretchr_testify//assert",
