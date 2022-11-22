@@ -32,6 +32,10 @@ func TestNewManifestFromJSON(t *testing.T) {
 				Type:    swiftpkg.ExecutableProductType,
 			},
 		},
+		Targets: []swiftpkg.Target{
+			{Name: "MySwiftPackage", Type: swiftpkg.ExecutableTargetType},
+			{Name: "MySwiftPackageTests", Type: swiftpkg.TestTargetType},
+		},
 	}
 	manifest, err := swiftpkg.NewManifestFromJSON([]byte(swiftPackageJSONStr))
 	assert.NoError(t, err)
