@@ -96,14 +96,15 @@ func TestSliceAtKey(t *testing.T) {
 
 func TestUnmarshalAtKey(t *testing.T) {
 	t.Run("key does not exist", func(t *testing.T) {
+		k := "doesNotExist"
 		var v myStruct
-		ok := jsonutils.UnmarshalAtKey(rawMap, "doesNotExist", &v)
-		assert.False(t, ok)
+		err := jsonutils.UnmarshalAtKey(rawMap, k, &v)
+		assert.Equal(t, jsonutils.NewMissingKeyError(k), err)
 	})
 	t.Run("key exists, unmarshal succeeds", func(t *testing.T) {
 		var v myStruct
-		ok := jsonutils.UnmarshalAtKey(rawMap, "structKey", &v)
-		assert.True(t, ok)
+		err := jsonutils.UnmarshalAtKey(rawMap, "structKey", &v)
+		assert.NoError(t, err)
 		expected := myStruct{Name: "harry"}
 		assert.Equal(t, expected, v)
 	})

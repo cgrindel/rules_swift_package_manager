@@ -86,8 +86,8 @@ func (d *Dependency) UnmarshalJSON(b []byte) error {
 	}
 
 	// Requirement
-	if ok := jsonutils.UnmarshalAtKey(srcCtrlEntry, "requirement", &d.Requirement); !ok {
-		log.Println(dependencyLogPrefix, "Expected `requirement` in source control entry.")
+	if err = jsonutils.UnmarshalAtKey(srcCtrlEntry, "requirement", &d.Requirement); err != nil {
+		errs = multierror.Append(errs, err)
 	}
 
 	return errs

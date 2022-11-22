@@ -56,16 +56,15 @@ func BytesAtKey(jm map[string]any, k string) ([]byte, error) {
 	return valueBytes, nil
 }
 
-func UnmarshalAtKey(jm map[string]any, k string, v any) bool {
+func UnmarshalAtKey(jm map[string]any, k string, v any) error {
 	valueBytes, err := BytesAtKey(jm, k)
 	if err != nil {
-		return false
+		return err
 	}
-	if err := json.Unmarshal(valueBytes, v); err != nil {
-		log.Printf("Failed to unmarshal the value bytes for %v. %v", k, err)
-		return false
+	if err = json.Unmarshal(valueBytes, v); err != nil {
+		return NewKeyError(k, err)
 	}
-	return true
+	return nil
 }
 
 func StringsAtKey(jm map[string]any, k string) ([]string, bool) {
