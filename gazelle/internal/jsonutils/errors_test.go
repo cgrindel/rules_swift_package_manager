@@ -15,20 +15,6 @@ func TestMissingKeyError(t *testing.T) {
 	assert.Implements(t, (*error)(nil), mke)
 }
 
-// func TestIsMissingKeyError(t *testing.T) {
-// 	t.Run("err is nil", func(t *testing.T) {
-// 		assert.False(t, jsonutils.IsMissingKeyError(nil))
-// 	})
-// 	t.Run("err is not nil, is not MissingKeyError", func(t *testing.T) {
-// 		err := errors.New("my error")
-// 		assert.False(t, jsonutils.IsMissingKeyError(err))
-// 	})
-// 	t.Run("err is not nil, is MissingKeyError", func(t *testing.T) {
-// 		err := jsonutils.NewMissingKeyError("foo")
-// 		assert.True(t, jsonutils.IsMissingKeyError(err))
-// 	})
-// }
-
 func TestKeyTypeError(t *testing.T) {
 	key := "foo"
 	expectedType := "string"
