@@ -191,33 +191,8 @@ type Target struct {
 
 type TargetDependency struct {
 	Product *ProductReference
-	// ByName  ByNameReference
+	ByName  *ByNameReference
 }
-
-// func (td *TargetDependency) UnmarshalJSON(b []byte) error {
-// 	var raw map[string]any
-// 	err := json.Unmarshal(b, &raw)
-// 	if err != nil {
-// 		return err
-// 	}
-
-// 	if rawProduct, err := jsonutils.SliceAtKey(raw, "product"); err != nil {
-// 		td.Type = ProductTargetDependencyType
-// 		td.Product, err = newProductReferenceFromAnySlice(rawProduct)
-// 		if err != nil {
-// 			return err
-// 		}
-// 		// } else if rawByName, ok := jsonutils.SliceAtKey(raw, "byName"); ok {
-// 		// 	td.Type = ByNameTargetDependencyType
-// 		// 	td.ByName, err = newByNameReferenceFromAnySlice(rawByName)
-// 		// 	if err != nil {
-// 		// 		return err
-// 		// 	}
-// 	} else {
-// 		return err
-// 	}
-// 	return nil
-// }
 
 // Reference a product
 type ProductReference struct {
@@ -240,47 +215,19 @@ func (pr *ProductReference) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// func newProductReferenceFromAnySlice(anyValues []any) (ProductReference, error) {
-// 	var pr ProductReference
-// 	// Product reference slices usually have 4 values.
-// 	// 0: ProductName
-// 	// 1: DependencyName
-// 	// 2: null
-// 	// 3: null
-// 	if len(anyValues) < 2 {
-// 		return pr, fmt.Errorf("expected at least two values from any slice for ProduceReference")
-// 	}
-// 	// TODO(chuck): FIX ME!
-// 	// DEBUG BEGIN
-// 	log.Printf("*** CHUCK newProductReferenceFromAnySlice anyValues: ")
-// 	for idx, item := range anyValues {
-// 		log.Printf("*** CHUCK %d: %+#v", idx, item)
-// 	}
-// 	// DEBUG END
-// 	return pr, nil
-// }
+// Reference a target by name
+type ByNameReference struct {
+	TargetName string
+}
 
-//
-// // Reference a target by name
-// type ByNameReference struct {
-// 	TargetName string
-// }
-//
-// // func newByNameReferenceFromAnySlice(anyValues []any) (ByNameReference, error) {
-// // 	var bnr ByNameReference
-// // 	if len(anyValues) < 1 {
-// // 		return bnr, fmt.Errorf("expected at least one value from any slice for ByNameReference")
-// // 	}
-// // 	v := anyValues[0]
-// // 	switch t := value {
-// // 	case value1:
-//
-// // 	case value2:
-//
-// // 	default:
-//
-// // 	}
-//
-// // 	bnr.TargetName = ""
-// // 	return bnr, nil
-// // }
+func (bnr *ByNameReference) UnmarshalJSON(b []byte) error {
+	var err error
+	var raw []any
+	if err := json.Unmarshal(b, &raw); err != nil {
+		return err
+	}
+	if bnr.TargetName, err = jsonutils.StringAtIndex(raw, 0); err != nil {
+		return err
+	}
+	return nil
+}

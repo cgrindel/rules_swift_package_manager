@@ -49,7 +49,9 @@ func TestNewManifestFromJSON(t *testing.T) {
 				Name: "MySwiftPackageTests",
 				Type: swiftpkg.TestTargetType,
 				Dependencies: []swiftpkg.TargetDependency{
-					{},
+					{
+						ByName: &swiftpkg.ByNameReference{TargetName: "MySwiftPackage"},
+					},
 				},
 			},
 		},
