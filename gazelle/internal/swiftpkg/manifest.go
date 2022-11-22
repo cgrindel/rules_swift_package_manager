@@ -181,18 +181,12 @@ type Target struct {
 
 // TargetDependenncy
 
-// type TargetDependencyType int
-
-// const (
-// 	UnknownTargetDependencyType TargetDependencyType = iota
-// 	ProductTargetDependencyType
-// 	ByNameTargetDependencyType
-// )
-
 type TargetDependency struct {
 	Product *ProductReference
 	ByName  *ByNameReference
 }
+
+// ProductReference
 
 // Reference a product
 type ProductReference struct {
@@ -214,6 +208,8 @@ func (pr *ProductReference) UnmarshalJSON(b []byte) error {
 	}
 	return nil
 }
+
+// ByNameReference
 
 // Reference a target by name
 type ByNameReference struct {
