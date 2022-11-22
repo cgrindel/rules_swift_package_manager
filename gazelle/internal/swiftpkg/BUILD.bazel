@@ -18,9 +18,16 @@ go_library(
 
 go_test(
     name = "swiftpkg_test",
-    srcs = ["manifest_test.go"],
+    srcs = [
+        "manifest_test.go",
+        "package_info_test.go",
+    ],
+    # The PackageInfo tests use SwiftBin to create an actual Swift package. To use Swift, the test
+    # needs to be executed outside of the sandbox.
+    local = True,
     deps = [
         ":swiftpkg",
+        "//gazelle/internal/swiftbin",
         "@com_github_stretchr_testify//assert",
     ],
 )

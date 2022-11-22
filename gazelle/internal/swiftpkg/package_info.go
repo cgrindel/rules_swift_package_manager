@@ -5,23 +5,30 @@ import (
 )
 
 type PackageInfo struct {
-	// Path to the Package.swift file
-	ManifestPath string
-	// Path to the Package.resolved file
-	ResolvedPath string
+	// Package directory
+	Dir string
+
+	// The manifest information 
+	Manifest *Manifest
 }
 
-func FindPackageInfo(dir string) (*PackageInfo, error) {
-	// TODO(chuck): IMPLEMENT ME!
-	return nil, nil
+func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
+	dump, err := sw.DumpPackage(dir)
+	if err != nil {
+		return nil, err
+	}
+	manifest, err := NewManifestFromJSON(dump)
+	if err != nil {
+		return nil, err
+	}
+
+	return &PackageInfo{
+		Dir: dir,
+		Manifest: manifest,
+	}, nil
 }
 
 func (pi *PackageInfo) Resolve(sw swiftbin.Executor) error {
-	// TODO(chuck): IMPLEMENT ME!
-	return nil
-}
-
-func (pi *PackageInfo) Read(sw swiftbin.Executor) error {
 	// TODO(chuck): IMPLEMENT ME!
 	return nil
 }

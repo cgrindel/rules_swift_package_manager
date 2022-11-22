@@ -61,10 +61,11 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	if sc.swiftBinPath, err = swiftbin.FindSwiftBinPath(); err != nil {
 		return err
 	}
+	sb := sc.swiftBin()
 
 	shouldProcWkspFile := true
 	if sc.genFromPkgManifest {
-		if pkg, err := swiftpkg.FindPackageInfo(c.RepoRoot); err != nil {
+		if pkg, err := swiftpkg.NewPackageInfo(sb, c.RepoRoot); err != nil {
 			return err
 		} else if pkg != nil {
 			shouldProcWkspFile = false
@@ -105,12 +106,6 @@ func findExternalDepsInWorkspace(mi *swift.ModuleIndex, repoRoot string) error {
 }
 
 func processSwiftPackage(sc *swiftConfig, pkg *swiftpkg.PackageInfo) error {
-	sb := sc.swiftBin()
-	// We may not want to resolve here. We may want to resolve during update-repos.
-	if err := pkg.Read(sb); err != nil {
-		return err
-	}
-
 	// TODO(chuck): Generate a BUILD file with everything from the module OR store the info in the
 	// config and generate build files as we visit the appropriate directories.
 
