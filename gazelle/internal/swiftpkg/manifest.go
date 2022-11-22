@@ -179,47 +179,30 @@ type Target struct {
 	// Dependencies []TargetDependency
 }
 
-// type TargetType int
-//
-// const (
-// 	UnknownTargetType TargetType = iota
-// 	ExecutableTargetType
-// 	LibraryTargetType
-// 	TestTargetType
-// )
-//
-// type Target struct {
-// 	Name         string
-// 	Type         TargetType
-// 	Dependencies []TargetDependency
-// }
-//
-// type TargetDependencyType int
-//
-// const (
-// 	UnknownTargetDependencyType TargetDependencyType = iota
-// 	ProductTargetDependencyType
-// 	ByNameTargetDependencyType
-// )
-//
-// // type TargetDependency interface {
-// // 	TargetDependencyType() TargetDependencyType
-// // }
-//
-// type TargetDependency struct {
-// 	Type    TargetDependencyType
-// 	Product ProductReference
-// 	ByName  ByNameReference
-// }
-//
+// TargetDependenncy
+
+type TargetDependencyType int
+
+const (
+	UnknownTargetDependencyType TargetDependencyType = iota
+	ProductTargetDependencyType
+	ByNameTargetDependencyType
+)
+
+type TargetDependency struct {
+	// Type    TargetDependencyType
+	Product *ProductReference
+	// ByName  ByNameReference
+}
+
 // func (td *TargetDependency) UnmarshalJSON(b []byte) error {
 // 	var raw map[string]any
 // 	err := json.Unmarshal(b, &raw)
 // 	if err != nil {
 // 		return err
 // 	}
-//
-// 	if rawProduct, ok := jsonutils.SliceAtKey(raw, "product"); ok {
+
+// 	if rawProduct, err := jsonutils.SliceAtKey(raw, "product"); err != nil {
 // 		td.Type = ProductTargetDependencyType
 // 		td.Product, err = newProductReferenceFromAnySlice(rawProduct)
 // 		if err != nil {
@@ -232,17 +215,33 @@ type Target struct {
 // 		// 		return err
 // 		// 	}
 // 	} else {
-// 		return fmt.Errorf("unrecognized target dependency")
+// 		return err
 // 	}
 // 	return nil
 // }
-//
-// // Reference a product
-// type ProductReference struct {
-// 	ProductName    string
-// 	DependencyName string
-// }
-//
+
+// Reference a product
+type ProductReference struct {
+	ProductName    string
+	DependencyName string
+}
+
+func (pr *ProductReference) UnmarshalJSON(b []byte) error {
+	var err error
+	var raw []any
+	if err := json.Unmarshal(b, &raw); err != nil {
+		return err
+	}
+	if pr.ProductName, err = jsonutils.StringAtIndex(raw, 0); err != nil {
+		return err
+	}
+	if pr.DependencyName, err = jsonutils.StringAtIndex(raw, 1); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // func newProductReferenceFromAnySlice(anyValues []any) (ProductReference, error) {
 // 	var pr ProductReference
 // 	// Product reference slices usually have 4 values.
@@ -262,6 +261,7 @@ type Target struct {
 // 	// DEBUG END
 // 	return pr, nil
 // }
+
 //
 // // Reference a target by name
 // type ByNameReference struct {

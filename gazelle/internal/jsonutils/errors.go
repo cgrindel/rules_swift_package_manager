@@ -101,3 +101,23 @@ func (e *IndexTypeError) Error() string {
 		"index %d expected to be type '%s', but was type '%s'",
 		e.Index, e.ExpectedType, e.ActualType)
 }
+
+// IndexOutOfBoundsError
+
+type IndexOutOfBoundsError struct {
+	sliceIndex
+	ActualLen int
+}
+
+func NewIndexOutOfBoundsError(idx, actualLen int) *IndexOutOfBoundsError {
+	return &IndexOutOfBoundsError{
+		sliceIndex: sliceIndex{Index: idx},
+		ActualLen:  actualLen,
+	}
+}
+
+func (e *IndexOutOfBoundsError) Error() string {
+	return fmt.Sprintf(
+		"index %d out of bounds for slice with length %d",
+		e.Index, e.ActualLen)
+}
