@@ -1,7 +1,6 @@
 package swiftpkg_test
 
 import (
-	"log"
 	"testing"
 
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
@@ -59,15 +58,6 @@ func TestNewManifestFromJSON(t *testing.T) {
 	manifest, err := swiftpkg.NewManifestFromJSON([]byte(swiftPackageJSONStr))
 	assert.NoError(t, err)
 	assert.Equal(t, expected, manifest)
-
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK:  manifest: %+#v", manifest)
-	log.Printf("*** CHUCK manifest.Dependencies: ")
-	for idx, item := range manifest.Dependencies {
-		log.Printf("*** CHUCK %d: %+#v", idx, item)
-	}
-	// assert.Fail(t, "STOP")
-	// DEBUG END
 }
 
 const swiftPackageJSONStr = `
