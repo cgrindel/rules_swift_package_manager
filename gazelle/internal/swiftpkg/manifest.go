@@ -74,7 +74,7 @@ func (d *Dependency) UnmarshalJSON(b []byte) error {
 	}
 
 	// URL
-	if location, ok := jsonutils.MapAtKey(srcCtrlEntry, "location"); ok {
+	if location, err := jsonutils.MapAtKey(srcCtrlEntry, "location"); err == nil {
 		if remotes, ok := jsonutils.SliceAtKey(location, "remote"); ok {
 			if len(remotes) > 0 {
 				d.URL = remotes[0].(string)
@@ -82,6 +82,7 @@ func (d *Dependency) UnmarshalJSON(b []byte) error {
 		}
 	} else {
 		log.Println(dependencyLogPrefix, "Expected `location` in source control entry.")
+		errs = multierror.Append(errs, err)
 	}
 
 	// Requirement
@@ -131,7 +132,7 @@ func (p *Product) UnmarshalJSON(b []byte) error {
 	if p.Targets, ok = jsonutils.StringsAtKey(raw, "targets"); !ok {
 		log.Printf("over zealous edit")
 	}
-	if typeMap, ok := jsonutils.MapAtKey(raw, "type"); ok {
+	if typeMap, err := jsonutils.MapAtKey(raw, "type"); err == nil {
 		if _, present := typeMap["executable"]; present {
 			p.Type = ExecutableProductType
 		} else if _, present = typeMap["library"]; present {
@@ -140,7 +141,7 @@ func (p *Product) UnmarshalJSON(b []byte) error {
 			p.Type = PluginProductType
 		}
 	} else {
-		log.Println(dependencyLogPrefix, "Expected `type` in product.")
+		errs = multierror.Append(errs, err)
 	}
 	return errs
 }

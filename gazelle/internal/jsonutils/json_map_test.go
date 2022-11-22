@@ -56,18 +56,20 @@ func TestStringAtKey(t *testing.T) {
 
 func TestMapAtKey(t *testing.T) {
 	t.Run("key does not exist", func(t *testing.T) {
-		actual, ok := jsonutils.MapAtKey(rawMap, "doesNotExist")
-		assert.False(t, ok)
+		k := "doesNotExist"
+		actual, err := jsonutils.MapAtKey(rawMap, k)
+		assert.Equal(t, jsonutils.NewMissingKeyError(k), err)
 		assert.Nil(t, actual)
 	})
 	t.Run("key exists, is not map", func(t *testing.T) {
-		actual, ok := jsonutils.MapAtKey(rawMap, "intKey")
-		assert.False(t, ok)
+		k := "intKey"
+		actual, err := jsonutils.MapAtKey(rawMap, "intKey")
+		assert.Equal(t, jsonutils.NewKeyTypeError(k, "map[string]any", intValue), err)
 		assert.Nil(t, actual)
 	})
 	t.Run("key exists, is map", func(t *testing.T) {
-		actual, ok := jsonutils.MapAtKey(rawMap, "mapKey")
-		assert.True(t, ok)
+		actual, err := jsonutils.MapAtKey(rawMap, "mapKey")
+		assert.NoError(t, err)
 		assert.Equal(t, mapValue, actual)
 	})
 }

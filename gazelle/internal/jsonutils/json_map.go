@@ -10,25 +10,24 @@ func StringAtKey(jm map[string]any, k string) (string, error) {
 	if !ok {
 		return "", NewMissingKeyError(k)
 	}
-	switch v := rawValue.(type) {
+	switch t := rawValue.(type) {
 	case string:
-		return v, nil
+		return t, nil
 	default:
-		return "", NewKeyTypeError(k, "string", v)
+		return "", NewKeyTypeError(k, "string", t)
 	}
 }
 
-func MapAtKey(jm map[string]any, k string) (map[string]any, bool) {
+func MapAtKey(jm map[string]any, k string) (map[string]any, error) {
 	rawValue, ok := jm[k]
 	if !ok {
-		return nil, false
+		return nil, NewMissingKeyError(k)
 	}
 	switch t := rawValue.(type) {
 	case map[string]any:
-		return rawValue.(map[string]any), true
+		return t, nil
 	default:
-		log.Printf("Expected map[string]any for key %v, but was %v", k, t)
-		return nil, false
+		return nil, NewKeyTypeError(k, "map[string]any", t)
 	}
 }
 
