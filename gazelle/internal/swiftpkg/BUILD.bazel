@@ -5,7 +5,7 @@ go_library(
     name = "swiftpkg",
     srcs = [
         "manifest.go",
-        "swift_package.go",
+        "package_info.go",
     ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg",
     visibility = ["//gazelle:__subpackages__"],
