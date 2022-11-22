@@ -1,0 +1,11 @@
+# List the rules by running "swiftlint rules"
+disabled_rules:
+  - trailing_comma
+excluded:
+  - .build
+identifier_name:
+  excluded:
+    - id
+    - db
+nesting:
+  type_level: 2

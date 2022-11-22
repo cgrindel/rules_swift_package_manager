@@ -1,0 +1,28 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "jsonutils",
+    srcs = [
+        "errors.go",
+        "json_map.go",
+        "json_slice.go",
+    ],
+    importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils",
+    visibility = ["//gazelle:__subpackages__"],
+)
+
+go_test(
+    name = "jsonutils_test",
+    srcs = [
+        "errors_test.go",
+        "json_map_test.go",
+        "json_slice_test.go",
+    ],
+    deps = [
+        ":jsonutils",
+        "@com_github_stretchr_testify//assert",
+    ],
+)
+
+bzlformat_pkg(name = "bzlformat")

@@ -1,0 +1,11 @@
+# For information on the rules, see
+# https://github.com/nicklockwood/SwiftFormat/blob/master/Rules.md
+
+--allman false
+--indent 2
+--semicolons never 
+--stripunusedargs always
+--maxwidth 100
+--wraparguments before-first
+--wrapparameters before-first
+--wrapcollections before-first

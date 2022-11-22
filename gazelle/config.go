@@ -7,13 +7,15 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/wspace"
 )
 
 const swiftConfigName = "swift"
 
 type swiftConfig struct {
-	moduleIndex *swift.ModuleIndex
+	moduleIndex  *swift.ModuleIndex
+	swiftBinPath string
 }
 
 func getSwiftConfig(c *config.Config) *swiftConfig {
@@ -29,8 +31,18 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 }
 
 func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
+	var err error
 	sc := getSwiftConfig(c)
 
+	// TODO(chuck): Add flag so that the client can tell use which Swift to use.
+
+	// Find the Swift executable
+	sc.swiftBinPath, err = swiftbin.FindSwiftBinPath()
+	if err != nil {
+		return err
+	}
+
+	// Look for http_archive declarations with Swift declarations.
 	wkspFilePath := wspace.FindWORKSPACEFile(c.RepoRoot)
 	wkspFile, err := rule.LoadWorkspaceFile(wkspFilePath, "")
 	if err != nil {

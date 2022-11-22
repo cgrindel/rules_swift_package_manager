@@ -139,6 +139,21 @@ def swift_bazel_go_dependencies():
         version = "v0.5.9",
     )
     go_repository(
+        name = "com_github_hashicorp_errwrap",
+        build_external = "external",
+        importpath = "github.com/hashicorp/errwrap",
+        sum = "h1:hLrqtEDnRye3+sgx6z4qVLNuviH3MR5aQ0ykNJa/UYA=",
+        version = "v1.0.0",
+    )
+    go_repository(
+        name = "com_github_hashicorp_go_multierror",
+        build_external = "external",
+        importpath = "github.com/hashicorp/go-multierror",
+        sum = "h1:H5DkEtf6CXdFp0N0Em5UCwQpXMWke8IA0+lD48awMYo=",
+        version = "v1.1.1",
+    )
+
+    go_repository(
         name = "com_github_pelletier_go_toml",
         build_external = "external",
         importpath = "github.com/pelletier/go-toml",

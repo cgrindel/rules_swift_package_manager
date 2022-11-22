@@ -1,0 +1,27 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "swiftpkg",
+    srcs = [
+        "manifest.go",
+        "swift_package.go",
+    ],
+    importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg",
+    visibility = ["//gazelle:__subpackages__"],
+    deps = [
+        "//gazelle/internal/jsonutils",
+        "@com_github_hashicorp_go_multierror//:go-multierror",
+    ],
+)
+
+go_test(
+    name = "swiftpkg_test",
+    srcs = ["manifest_test.go"],
+    deps = [
+        ":swiftpkg",
+        "@com_github_stretchr_testify//assert",
+    ],
+)
+
+bzlformat_pkg(name = "bzlformat")
