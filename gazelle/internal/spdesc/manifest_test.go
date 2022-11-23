@@ -16,6 +16,13 @@ func TestNewManifestFromJSON(t *testing.T) {
 		Platforms: []spdesc.Platform{
 			{Name: "macos", Version: "10.15"},
 		},
+		Products: []spdesc.Product{
+			{
+				Name:    "printstuff",
+				Targets: []string{"MySwiftPackage"},
+				Type:    spdesc.ExecutableProductType,
+			},
+		},
 		Targets: []spdesc.Target{
 			{
 				Name:       "MySwiftPackageTests",
