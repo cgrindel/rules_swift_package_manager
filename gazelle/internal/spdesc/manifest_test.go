@@ -12,6 +12,7 @@ func TestNewManifestFromJSON(t *testing.T) {
 		Name:                "MySwiftPackage",
 		ManifestDisplayName: "MySwiftPackage",
 		Path:                "/Users/chuck/code/cgrindel/swift_bazel/gh008_incorporate_describe/examples/MySwiftPackage",
+		ToolsVersion:        "5.7",
 		// Dependencies: []spdesc.Dependency{
 		// 	{
 		// 		Name: "swift-argument-parser",

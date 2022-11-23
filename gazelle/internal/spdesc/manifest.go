@@ -13,11 +13,26 @@ func NewManifestFromJSON(bytes []byte) (*Manifest, error) {
 	return &manifest, nil
 }
 
+// Manifest
+
 type Manifest struct {
 	Name                string
 	ManifestDisplayName string `json:"manifest_display_name"`
 	Path                string
+	ToolsVersion        string `json:"tools_version"`
 	// Platforms          []Platform
 	// Products           []Product
 	// Targets            []Target
 }
+
+// Targets
+
+// type Target struct {
+// 	C99name            string
+// 	ModuleType         string
+// 	Name               string
+// 	Path               string
+// 	Sources            []string
+// 	TargetDependencies []string
+// 	Type               string
+// }
