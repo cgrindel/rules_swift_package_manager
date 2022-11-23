@@ -55,7 +55,7 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	var err error
 	sc := getSwiftConfig(c)
 
-	// TODO(chuck): Add flag so that the client can tell us which Swift to use.
+	// GH021: Add flag so that the client can tell us which Swift to use.
 
 	// Find the Swift executable
 	if sc.swiftBinPath, err = swiftbin.FindSwiftBinPath(); err != nil {
@@ -106,8 +106,7 @@ func findExternalDepsInWorkspace(mi *swift.ModuleIndex, repoRoot string) error {
 }
 
 func processSwiftPackage(sc *swiftConfig, pkg *swiftpkg.PackageInfo) error {
-	// TODO(chuck): Generate a BUILD file with everything from the module OR store the info in the
-	// config and generate build files as we visit the appropriate directories.
-
+	// GH008: Generate a BUILD file with everything from the module OR store the info in the config
+	// and generate build files as we visit the appropriate directories.
 	return nil
 }

@@ -27,8 +27,3 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 		Manifest: manifest,
 	}, nil
 }
-
-func (pi *PackageInfo) Resolve(sw swiftbin.Executor) error {
-	// TODO(chuck): IMPLEMENT ME!
-	return nil
-}

@@ -10,9 +10,6 @@ type Executor interface {
 	InitPackage(dir, name, pkgType string) error
 	DumpPackage(dir string) ([]byte, error)
 	DescribePackage(dir string) ([]byte, error)
-	// ResolvePackage(dir string) error
-	// TODO(chuck): Remove Build() if not used
-	// Build(dir string) error
 }
 
 type SwiftBin struct {
@@ -32,16 +29,6 @@ func (sb *SwiftBin) InitPackage(dir, name, pkgType string) error {
 	}
 	return nil
 }
-
-// func (sb *SwiftBin) Build(dir string) error {
-// 	args := []string{"build"}
-// 	cmd := exec.Command(sb.BinPath, args...)
-// 	cmd.Dir = dir
-// 	if out, err := cmd.CombinedOutput(); err != nil {
-// 		return fmt.Errorf("failed executing `swift build`, out\n%v: %w", string(out), err)
-// 	}
-// 	return nil
-// }
 
 func (sb *SwiftBin) DumpPackage(dir string) ([]byte, error) {
 	var stdout bytes.Buffer
@@ -76,8 +63,3 @@ func (sb *SwiftBin) DescribePackage(dir string) ([]byte, error) {
 	}
 	return stdout.Bytes(), nil
 }
-
-// func (sb *SwiftBin) ResolvePackage(dir string) error {
-// 	// TODO(chuck): IMPLEMENT ME!
-// 	return nil
-// }
