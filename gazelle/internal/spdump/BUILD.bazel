@@ -1,0 +1,21 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "spdump",
+    srcs = ["manifest.go"],
+    importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/spdump",
+    visibility = ["//gazelle:__subpackages__"],
+    deps = [
+        "//gazelle/internal/jsonutils",
+        "@com_github_hashicorp_go_multierror//:go-multierror",
+    ],
+)
+
+go_test(
+    name = "spdump_test",
+    srcs = ["manifest_test.go"],
+    deps = [
+        ":spdump",
+        "@com_github_stretchr_testify//assert",
+    ],
+)

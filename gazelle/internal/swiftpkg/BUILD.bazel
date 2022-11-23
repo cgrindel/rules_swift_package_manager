@@ -3,25 +3,18 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "swiftpkg",
-    srcs = [
-        "manifest.go",
-        "package_info.go",
-    ],
+    srcs = ["package_info.go"],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg",
     visibility = ["//gazelle:__subpackages__"],
     deps = [
-        "//gazelle/internal/jsonutils",
+        "//gazelle/internal/spdump",
         "//gazelle/internal/swiftbin",
-        "@com_github_hashicorp_go_multierror//:go-multierror",
     ],
 )
 
 go_test(
     name = "swiftpkg_test",
-    srcs = [
-        "manifest_test.go",
-        "package_info_test.go",
-    ],
+    srcs = ["package_info_test.go"],
     # The PackageInfo tests use SwiftBin to create an actual Swift package. To use Swift, the test
     # needs to be executed outside of the sandbox.
     local = True,

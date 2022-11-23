@@ -1,6 +1,7 @@
 package swiftpkg
 
 import (
+	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
 )
 
@@ -8,8 +9,8 @@ type PackageInfo struct {
 	// Package directory
 	Dir string
 
-	// The manifest information 
-	Manifest *Manifest
+	// The manifest information
+	Manifest *spdump.Manifest
 }
 
 func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
@@ -17,13 +18,13 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	manifest, err := NewManifestFromJSON(dump)
+	manifest, err := spdump.NewManifestFromJSON(dump)
 	if err != nil {
 		return nil, err
 	}
 
 	return &PackageInfo{
-		Dir: dir,
+		Dir:      dir,
 		Manifest: manifest,
 	}, nil
 }

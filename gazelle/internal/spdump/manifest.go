@@ -1,4 +1,4 @@
-package swiftpkg
+package spdump
 
 import (
 	"encoding/json"
