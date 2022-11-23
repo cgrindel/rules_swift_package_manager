@@ -97,8 +97,11 @@ filegroup(
     name = "local_repository_files",
     # Include every package that is required by the child workspaces.
     srcs = [
+        ".bazelrc",
         "BUILD.bazel",
         "WORKSPACE",
+        "ci.bazelrc",
+        "shared.bazelrc",
         ":deps.bzl",
         ":go_deps.bzl",
         "//gazelle:all_files",
