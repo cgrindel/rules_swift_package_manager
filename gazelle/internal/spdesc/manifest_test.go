@@ -66,50 +66,6 @@ func TestNewManifestFromJSON(t *testing.T) {
 				},
 			},
 		},
-		// Dependencies: []spdesc.Dependency{
-		// 	{
-		// 		Name: "swift-argument-parser",
-		// 		URL:  "https://github.com/apple/swift-argument-parser",
-		// 		Requirement: spdesc.DependencyRequirement{
-		// 			Range: []spdesc.VersionRange{
-		// 				{LowerBound: "1.2.0", UpperBound: "2.0.0"},
-		// 			},
-		// 		},
-		// 	},
-		// },
-		// Platforms: []spdesc.Platform{
-		// 	{Name: "macos", Version: "10.15"},
-		// },
-		// Products: []spdesc.Product{
-		// 	{
-		// 		Name:    "printstuff",
-		// 		Targets: []string{"MySwiftPackage"},
-		// 		Type:    spdesc.ExecutableProductType,
-		// 	},
-		// },
-		// Targets: []spdesc.Target{
-		// 	{
-		// 		Name: "MySwiftPackage",
-		// 		Type: spdesc.ExecutableTargetType,
-		// 		Dependencies: []spdesc.TargetDependency{
-		// 			{
-		// 				Product: &spdesc.ProductReference{
-		// 					ProductName:    "ArgumentParser",
-		// 					DependencyName: "swift-argument-parser",
-		// 				},
-		// 			},
-		// 		},
-		// 	},
-		// 	{
-		// 		Name: "MySwiftPackageTests",
-		// 		Type: spdesc.TestTargetType,
-		// 		Dependencies: []spdesc.TargetDependency{
-		// 			{
-		// 				ByName: &spdesc.ByNameReference{TargetName: "MySwiftPackage"},
-		// 			},
-		// 		},
-		// 	},
-		// },
 	}
 	manifest, err := spdesc.NewManifestFromJSON([]byte(swiftPackageJSONStr))
 	assert.NoError(t, err)
