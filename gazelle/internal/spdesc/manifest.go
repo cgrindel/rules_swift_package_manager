@@ -20,19 +20,21 @@ type Manifest struct {
 	ManifestDisplayName string `json:"manifest_display_name"`
 	Path                string
 	ToolsVersion        string `json:"tools_version"`
+	Targets             []Target
 	// Platforms          []Platform
 	// Products           []Product
-	// Targets            []Target
 }
 
 // Targets
 
-// type Target struct {
-// 	C99name            string
-// 	ModuleType         string
-// 	Name               string
-// 	Path               string
-// 	Sources            []string
-// 	TargetDependencies []string
-// 	Type               string
-// }
+type Target struct {
+	Name                string
+	C99name             string `json:"c99name"`
+	Type                string
+	ModuleType          string `json:"module_type"`
+	Path                string
+	Sources             []string
+	TargetDependencies  []string `json:"target_dependencies"`
+	ProductDependencies []string `json:"product_dependencies"`
+	ProductMemberships  []string `json:"product_memberships"`
+}

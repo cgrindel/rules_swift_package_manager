@@ -13,6 +13,37 @@ func TestNewManifestFromJSON(t *testing.T) {
 		ManifestDisplayName: "MySwiftPackage",
 		Path:                "/Users/chuck/code/cgrindel/swift_bazel/gh008_incorporate_describe/examples/MySwiftPackage",
 		ToolsVersion:        "5.7",
+		Targets: []spdesc.Target{
+			{
+				Name:       "MySwiftPackageTests",
+				C99name:    "MySwiftPackageTests",
+				ModuleType: "SwiftTarget",
+				Path:       "Tests/MySwiftPackageTests",
+				Sources: []string{
+					"MySwiftPackageTests.swift",
+				},
+				TargetDependencies: []string{
+					"MySwiftPackage",
+				},
+				Type: "test",
+			},
+			{
+				Name:       "MySwiftPackage",
+				C99name:    "MySwiftPackage",
+				Type:       "executable",
+				ModuleType: "SwiftTarget",
+				Path:       "Sources/MySwiftPackage",
+				Sources: []string{
+					"MySwiftPackage.swift",
+				},
+				ProductDependencies: []string{
+					"ArgumentParser",
+				},
+				ProductMemberships: []string{
+					"printstuff",
+				},
+			},
+		},
 		// Dependencies: []spdesc.Dependency{
 		// 	{
 		// 		Name: "swift-argument-parser",
