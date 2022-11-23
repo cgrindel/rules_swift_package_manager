@@ -29,6 +29,7 @@ func TestPackageInfo(t *testing.T) {
 		pi, err := swiftpkg.NewPackageInfo(sb, dir)
 		assert.NoError(t, err)
 		assert.Equal(t, dir, pi.Dir)
-		assert.Equal(t, pkgName, pi.Manifest.Name)
+		assert.Equal(t, pkgName, pi.DumpManifest.Name)
+		assert.Equal(t, pkgName, pi.DescManifest.Name)
 	})
 }
