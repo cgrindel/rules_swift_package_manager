@@ -112,38 +112,26 @@ const (
 	PluginProductType
 )
 
+func (pt *ProductType) UnmarshalJSON(b []byte) error {
+	var anyMap map[string]any
+	err := json.Unmarshal(b, &anyMap)
+	if err != nil {
+		return err
+	}
+	if _, ok := anyMap["executable"]; ok {
+		*pt = ExecutableProductType
+	} else if _, ok = anyMap["library"]; ok {
+		*pt = LibraryProductType
+	} else if _, ok = anyMap["plugin"]; ok {
+		*pt = PluginProductType
+	}
+	return nil
+}
+
 type Product struct {
 	Name    string
 	Targets []string
 	Type    ProductType
-}
-
-func (p *Product) UnmarshalJSON(b []byte) error {
-	var errs error
-
-	var raw map[string]any
-	err := json.Unmarshal(b, &raw)
-	if err != nil {
-		return err
-	}
-	if p.Name, err = jsonutils.StringAtKey(raw, "name"); err != nil {
-		errs = multierror.Append(errs, err)
-	}
-	if p.Targets, err = jsonutils.StringsAtKey(raw, "targets"); err != nil {
-		errs = multierror.Append(errs, err)
-	}
-	if typeMap, err := jsonutils.MapAtKey(raw, "type"); err == nil {
-		if _, present := typeMap["executable"]; present {
-			p.Type = ExecutableProductType
-		} else if _, present = typeMap["library"]; present {
-			p.Type = LibraryProductType
-		} else if _, present = typeMap["plugin"]; present {
-			p.Type = PluginProductType
-		}
-	} else {
-		errs = multierror.Append(errs, err)
-	}
-	return errs
 }
 
 // Target
