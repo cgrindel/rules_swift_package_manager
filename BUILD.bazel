@@ -97,13 +97,18 @@ filegroup(
     name = "local_repository_files",
     # Include every package that is required by the child workspaces.
     srcs = [
+        ".bazelrc",
         "BUILD.bazel",
         "WORKSPACE",
+        "ci.bazelrc",
+        "shared.bazelrc",
         ":deps.bzl",
         ":go_deps.bzl",
         "//gazelle:all_files",
         "//gazelle/internal/jsonutils:all_files",
         "//gazelle/internal/pathdistance:all_files",
+        "//gazelle/internal/spdesc:all_files",
+        "//gazelle/internal/spdump:all_files",
         "//gazelle/internal/stringslices:all_files",
         "//gazelle/internal/swift:all_files",
         "//gazelle/internal/swiftbin:all_files",

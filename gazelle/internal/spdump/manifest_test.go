@@ -1,43 +1,43 @@
-package swiftpkg_test
+package spdump_test
 
 import (
 	"testing"
 
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestNewManifestFromJSON(t *testing.T) {
-	expected := &swiftpkg.Manifest{
+	expected := &spdump.Manifest{
 		Name: "MySwiftPackage",
-		Dependencies: []swiftpkg.Dependency{
+		Dependencies: []spdump.Dependency{
 			{
 				Name: "swift-argument-parser",
 				URL:  "https://github.com/apple/swift-argument-parser",
-				Requirement: swiftpkg.DependencyRequirement{
-					Range: []swiftpkg.VersionRange{
+				Requirement: spdump.DependencyRequirement{
+					Range: []spdump.VersionRange{
 						{LowerBound: "1.2.0", UpperBound: "2.0.0"},
 					},
 				},
 			},
 		},
-		Platforms: []swiftpkg.Platform{
+		Platforms: []spdump.Platform{
 			{Name: "macos", Version: "10.15"},
 		},
-		Products: []swiftpkg.Product{
+		Products: []spdump.Product{
 			{
 				Name:    "printstuff",
 				Targets: []string{"MySwiftPackage"},
-				Type:    swiftpkg.ExecutableProductType,
+				Type:    spdump.ExecutableProductType,
 			},
 		},
-		Targets: []swiftpkg.Target{
+		Targets: []spdump.Target{
 			{
 				Name: "MySwiftPackage",
-				Type: swiftpkg.ExecutableTargetType,
-				Dependencies: []swiftpkg.TargetDependency{
+				Type: spdump.ExecutableTargetType,
+				Dependencies: []spdump.TargetDependency{
 					{
-						Product: &swiftpkg.ProductReference{
+						Product: &spdump.ProductReference{
 							ProductName:    "ArgumentParser",
 							DependencyName: "swift-argument-parser",
 						},
@@ -46,16 +46,16 @@ func TestNewManifestFromJSON(t *testing.T) {
 			},
 			{
 				Name: "MySwiftPackageTests",
-				Type: swiftpkg.TestTargetType,
-				Dependencies: []swiftpkg.TargetDependency{
+				Type: spdump.TestTargetType,
+				Dependencies: []spdump.TargetDependency{
 					{
-						ByName: &swiftpkg.ByNameReference{TargetName: "MySwiftPackage"},
+						ByName: &spdump.ByNameReference{TargetName: "MySwiftPackage"},
 					},
 				},
 			},
 		},
 	}
-	manifest, err := swiftpkg.NewManifestFromJSON([]byte(swiftPackageJSONStr))
+	manifest, err := spdump.NewManifestFromJSON([]byte(swiftPackageJSONStr))
 	assert.NoError(t, err)
 	assert.Equal(t, expected, manifest)
 }
