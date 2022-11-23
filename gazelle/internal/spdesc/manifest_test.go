@@ -13,6 +13,18 @@ func TestNewManifestFromJSON(t *testing.T) {
 		ManifestDisplayName: "MySwiftPackage",
 		Path:                "/Users/chuck/code/cgrindel/swift_bazel/gh008_incorporate_describe/examples/MySwiftPackage",
 		ToolsVersion:        "5.7",
+		Dependencies: []spdesc.Dependency{
+			{
+				Identity: "swift-argument-parser",
+				Type:     "sourceControl",
+				URL:      "https://github.com/apple/swift-argument-parser",
+				Requirement: spdesc.DependencyRequirement{
+					Range: []spdesc.VersionRange{
+						{LowerBound: "1.2.0", UpperBound: "2.0.0"},
+					},
+				},
+			},
+		},
 		Platforms: []spdesc.Platform{
 			{Name: "macos", Version: "10.15"},
 		},

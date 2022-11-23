@@ -23,7 +23,7 @@ type Manifest struct {
 	Targets             []Target
 	Platforms           []Platform
 	Products            []Product
-	// Dependencies       []Dependency
+	Dependencies        []Dependency
 }
 
 // Targets
@@ -82,9 +82,20 @@ type Product struct {
 
 // Dependency
 
-//type Dependency struct {
-//	Identity string
-//	Type     string
-//	URL      string
-//	//Requirements []Requirement
-//}
+type Dependency struct {
+	Identity     string
+	Type         string
+	URL          string
+	Requirement DependencyRequirement
+}
+
+// Requirement
+
+type DependencyRequirement struct {
+	Range []VersionRange
+}
+
+type VersionRange struct {
+	LowerBound string `json:"lower_bound"`
+	UpperBound string `json:"upper_bound"`
+}
