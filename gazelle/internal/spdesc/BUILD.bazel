@@ -1,0 +1,17 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "spdesc",
+    srcs = ["manifest.go"],
+    importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/spdesc",
+    visibility = ["//gazelle:__subpackages__"],
+)
+
+go_test(
+    name = "spdesc_test",
+    srcs = ["manifest_test.go"],
+    deps = [
+        ":spdesc",
+        "@com_github_stretchr_testify//assert",
+    ],
+)
