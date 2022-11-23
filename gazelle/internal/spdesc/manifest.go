@@ -21,8 +21,9 @@ type Manifest struct {
 	Path                string
 	ToolsVersion        string `json:"tools_version"`
 	Targets             []Target
-	// Platforms          []Platform
+	Platforms           []Platform
 	// Products           []Product
+	// Dependencies       []Dependency
 }
 
 // Targets
@@ -38,3 +39,19 @@ type Target struct {
 	ProductDependencies []string `json:"product_dependencies"`
 	ProductMemberships  []string `json:"product_memberships"`
 }
+
+// Platforms
+
+type Platform struct {
+	Name    string
+	Version string
+}
+
+// Dependency
+
+//type Dependency struct {
+//	Identity string
+//	Type     string
+//	URL      string
+//	//Requirements []Requirement
+//}

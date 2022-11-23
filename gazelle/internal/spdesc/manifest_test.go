@@ -13,6 +13,9 @@ func TestNewManifestFromJSON(t *testing.T) {
 		ManifestDisplayName: "MySwiftPackage",
 		Path:                "/Users/chuck/code/cgrindel/swift_bazel/gh008_incorporate_describe/examples/MySwiftPackage",
 		ToolsVersion:        "5.7",
+		Platforms: []spdesc.Platform{
+			{Name: "macos", Version: "10.15"},
+		},
 		Targets: []spdesc.Target{
 			{
 				Name:       "MySwiftPackageTests",
