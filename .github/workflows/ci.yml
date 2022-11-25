@@ -43,9 +43,8 @@ jobs:
   all_ci_tests:
     runs-on: ubuntu-20.04
     needs: [macos_build, ubuntu_build]
+    if: ${{ always() }}
     steps:
-      - name: All is Well
-        shell: bash
-        run: |
-          echo "All is well!"
-
+      - uses: cgrindel/gha_join_jobs@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
