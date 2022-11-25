@@ -4,15 +4,15 @@ description: Common build and test steps.
 runs:
   using: composite
   steps:
+    - name: Ensure everything is tidy
+      shell: bash
+      run: |
+        bazelisk run //:tidy_check
+
     - name: Execute Tests
       shell: bash
       run: |
         bazelisk test //... 
-
-    - name: Ensure Bazel packages covered by bzlformat_pkg
-      shell: bash
-      run: |
-        bazelisk run //:bzlformat_missing_pkgs_test
 
     - name: Execute Integration Tests
       shell: bash
