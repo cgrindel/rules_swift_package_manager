@@ -49,10 +49,10 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 # Point to the https://github.com/bazel-contrib/rules_bazel_integration_test/tree/add_remove_bazel_symlinks_new branch.
 http_archive(
     name = "contrib_rules_bazel_integration_test",
-    sha256 = "985fa668fc555687c8e7e08ae209f228a8723a4fc6e51122025a17f413e9278a",
-    strip_prefix = "rules_bazel_integration_test-d94af0ffe3fdaab01c26a5e46816f9c217e5e20d",
+    sha256 = "ef93cb1f609819294649a30b545382e269bf7d71a2f9730e5189de22e12d788e",
+    strip_prefix = "rules_bazel_integration_test-5426ab1778a24149ec25b3ba84f57200ce090458",
     urls = [
-        "http://github.com/bazel-contrib/rules_bazel_integration_test/archive/d94af0ffe3fdaab01c26a5e46816f9c217e5e20d.tar.gz",
+        "http://github.com/bazel-contrib/rules_bazel_integration_test/archive/5426ab1778a24149ec25b3ba84f57200ce090458.tar.gz",
     ],
 )
 
