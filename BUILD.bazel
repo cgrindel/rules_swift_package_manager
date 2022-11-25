@@ -1,6 +1,7 @@
 load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_missing_pkgs", "bzlformat_pkg")
+load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 load("@cgrindel_bazel_starlib//shlib/rules:execute_binary.bzl", "execute_binary")
 load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_update_all")
 load(
@@ -18,20 +19,21 @@ bzlformat_missing_pkgs(
 
 # MARK: - Tidy / Update Source Files
 
-updatesrc_update_all(
+updatesrc_update_all(name = "update_all")
+
+tidy(
     name = "tidy",
-    targets_to_run = [
-        # Run go_mod_tidy before gazelle_update_repos
-        ":go_mod_tidy",
-        ":gazelle_update_repos",
-        ":gazelle",
-    ],
-    targets_to_run_before = [
+    targets = [
         # Remove the child workspace symlinks before doing some of the other
         # operations that my experience infinite symlink expansion errors.
         "@contrib_rules_bazel_integration_test//tools:remove_child_wksp_bazel_symlinks",
         "@contrib_rules_bazel_integration_test//tools:update_deleted_packages",
         ":bzlformat_missing_pkgs_fix",
+        ":update_all",
+        # Run go_mod_tidy before gazelle_update_repos
+        ":go_mod_tidy",
+        ":gazelle_update_repos",
+        ":gazelle",
     ],
 )
 
