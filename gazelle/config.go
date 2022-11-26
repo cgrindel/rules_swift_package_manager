@@ -8,6 +8,7 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/wspace"
 )
@@ -16,12 +17,12 @@ import (
 
 func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) {
 	// Initialize location for custom configuration
-	sc := newSwiftConfig()
+	sc := swiftcfg.NewSwiftConfig()
 
 	switch cmd {
 	case "fix", "update":
 		fs.BoolVar(
-			&sc.genFromPkgManifest,
+			&sc.GenFromPkgManifest,
 			"gen_from_pkg_manifest",
 			false,
 			"If set and a Package.swift file is found, then generate build files from manifest info.",
@@ -31,34 +32,34 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 	}
 
 	// Store the config for later steps
-	c.Exts[swiftConfigName] = sc
+	swiftcfg.SetSwiftConfig(c, sc)
 }
 
 func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	var err error
-	sc := getSwiftConfig(c)
+	sc := swiftcfg.GetSwiftConfig(c)
 
 	// GH021: Add flag so that the client can tell us which Swift to use.
 
 	// Find the Swift executable
-	if sc.swiftBinPath, err = swiftbin.FindSwiftBinPath(); err != nil {
+	if sc.SwiftBinPath, err = swiftbin.FindSwiftBinPath(); err != nil {
 		return err
 	}
-	sb := sc.swiftBin()
+	sb := sc.SwiftBin()
 
 	shouldProcWkspFile := true
-	if sc.genFromPkgManifest {
+	if sc.GenFromPkgManifest {
 		if pi, err := swiftpkg.NewPackageInfo(sb, c.RepoRoot); err != nil {
 			return err
 		} else if pi != nil {
 			shouldProcWkspFile = false
-			sc.packageInfo = pi
+			sc.PackageInfo = pi
 		}
 	}
 
 	if shouldProcWkspFile {
 		// Look for http_archive declarations with Swift declarations.
-		if err = findExternalDepsInWorkspace(sc.moduleIndex, c.RepoRoot); err != nil {
+		if err = findExternalDepsInWorkspace(sc.ModuleIndex, c.RepoRoot); err != nil {
 			return err
 		}
 	}

@@ -9,6 +9,7 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/resolve"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 )
 
 func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {
@@ -36,7 +37,7 @@ func (l *swiftLang) Resolve(
 	imports interface{},
 	from label.Label) {
 
-	mi := getSwiftConfig(c).moduleIndex
+	mi := swiftcfg.GetSwiftConfig(c).ModuleIndex
 	swiftImports := imports.([]string)
 
 	var deps []string

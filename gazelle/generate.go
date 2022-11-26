@@ -8,22 +8,23 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/stringslices"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 	"golang.org/x/exp/slices"
 )
 
 func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateResult {
-	sc := getSwiftConfig(args.Config)
-	switch sc.generateRulesMode(args) {
-	case swiftPkgGenRulesMode:
+	sc := swiftcfg.GetSwiftConfig(args.Config)
+	switch sc.GenerateRulesMode(args) {
+	case swiftcfg.SwiftPkgGenRulesMode:
 		return genRulesFromSwiftPkg(sc, args)
-	case srcFileGenRulesMode:
+	case swiftcfg.SrcFileGenRulesMode:
 		return genRulesFromSrcFiles(sc, args)
 	default:
 		return language.GenerateResult{}
 	}
 }
 
-func genRulesFromSrcFiles(sc *swiftConfig, args language.GenerateArgs) language.GenerateResult {
+func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) language.GenerateResult {
 	result := language.GenerateResult{}
 
 	// Collect Swift files
@@ -44,12 +45,12 @@ func genRulesFromSrcFiles(sc *swiftConfig, args language.GenerateArgs) language.
 		swiftFilesWithRelDir := stringslices.Map(swiftFiles, func(file string) string {
 			return filepath.Join(relDir, file)
 		})
-		sc.moduleFilesCollector.AppendModuleFiles(moduleDir, swiftFilesWithRelDir)
+		sc.ModuleFilesCollector.AppendModuleFiles(moduleDir, swiftFilesWithRelDir)
 		return result
 	}
 
 	// Retrieve any Swift files that have already been found
-	srcs := append(swiftFiles, sc.moduleFilesCollector.GetModuleFiles(moduleDir)...)
+	srcs := append(swiftFiles, sc.ModuleFilesCollector.GetModuleFiles(moduleDir)...)
 	slices.Sort(srcs)
 
 	result.Gen = swift.Rules(args, srcs)
@@ -63,7 +64,7 @@ func genRulesFromSrcFiles(sc *swiftConfig, args language.GenerateArgs) language.
 
 // Generate from Swift Package
 
-func genRulesFromSwiftPkg(sc *swiftConfig, args language.GenerateArgs) language.GenerateResult {
+func genRulesFromSwiftPkg(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) language.GenerateResult {
 	result := language.GenerateResult{}
 	// TODO(chuck): IMPLEMENT ME!
 	return result

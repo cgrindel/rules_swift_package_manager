@@ -1,9 +1,9 @@
-package gazelle_test
+package swiftcfg_test
 
 import (
 	"testing"
 
-	"github.com/cgrindel/swift_bazel/gazelle"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -13,7 +13,7 @@ const (
 )
 
 func TestModuleFilesCollector(t *testing.T) {
-	mfc := gazelle.NewModuleFilesCollector()
+	mfc := swiftcfg.NewModuleFilesCollector()
 	mfc.AppendModuleFiles(fooModulePath, []string{"SubA/Chicken.swift"})
 	mfc.AppendModuleFiles(fooModulePath, []string{"SubB/Smidgen.swift"})
 	mfc.AppendModuleFiles(barModulePath, []string{"SubC/Hello.swift"})
