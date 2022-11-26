@@ -10,7 +10,7 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/rule"
 )
 
-func Rules(args language.GenerateArgs, srcs []string) []*rule.Rule {
+func RulesFromSrcs(args language.GenerateArgs, srcs []string) []*rule.Rule {
 	fileInfos := NewFileInfosFromRelPaths(args.Dir, srcs)
 	swiftImports, moduleType := collectSwiftInfo(fileInfos)
 
