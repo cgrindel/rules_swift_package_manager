@@ -31,13 +31,24 @@ def swift_bazel_dependencies():
         ],
     )
 
+    # maybe(
+    #     http_archive,
+    #     name = "bazel_gazelle",
+    #     sha256 = "448e37e0dbf61d6fa8f00aaa12d191745e14f07c31cabfa731f0c8e8a4f41b97",
+    #     urls = [
+    #         "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.28.0/bazel-gazelle-v0.28.0.tar.gz",
+    #         "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.28.0/bazel-gazelle-v0.28.0.tar.gz",
+    #     ],
+    # )
+
+    # Contains fix for passing test args to gazelle_generation_test.
     maybe(
         http_archive,
         name = "bazel_gazelle",
-        sha256 = "448e37e0dbf61d6fa8f00aaa12d191745e14f07c31cabfa731f0c8e8a4f41b97",
+        sha256 = "7454b0816b364a6878b8fed3bdac0c61bf6f135f7eff70e1f48d806c5bdb5013",
+        strip_prefix = "bazel-gazelle-bff438f6178c9e3a732694f670cd344484365f6f",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.28.0/bazel-gazelle-v0.28.0.tar.gz",
-            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.28.0/bazel-gazelle-v0.28.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/archive/bff438f6178c9e3a732694f670cd344484365f6f.tar.gz",
         ],
     )
 

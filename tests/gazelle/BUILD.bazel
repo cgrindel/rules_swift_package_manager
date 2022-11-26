@@ -1,5 +1,7 @@
 load("@bazel_gazelle//:def.bzl", "gazelle_binary", "gazelle_generation_test")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@cgrindel_bazel_starlib//shlib/rules:execute_binary.bzl", "execute_binary")
+load(":test_infos.bzl", "test_infos")
 
 bzlformat_pkg(name = "bzlformat")
 
@@ -9,17 +11,43 @@ bzlformat_pkg(name = "bzlformat")
 # gazelle:exclude **
 
 gazelle_binary(
-    name = "gazelle_with_swift",
-    languages = [
-        "//gazelle",
-    ],
+    name = "swift_gazelle",
+    languages = ["//gazelle"],
     visibility = ["//visibility:private"],
 )
+
+execute_binary(
+    name = "swift_gazelle_gen_from_pkg_manifest",
+    arguments = ["--gen_from_pkg_manifest"],
+    binary = ":swift_gazelle",
+)
+
+_DEFAULT_TEST_INFO = test_infos.new(
+    binary = ":swift_gazelle",
+    local = False,
+)
+
+_SWIFT_PKG_TEST_INFO = test_infos.new(
+    binary = ":swift_gazelle_gen_from_pkg_manifest",
+    local = True,
+)
+
+_GAZELLE_BINARY = {
+    "MySwiftPackage": _SWIFT_PKG_TEST_INFO,
+}
 
 [gazelle_generation_test(
     # Name the test the path to the directory containing the WORKSPACE file.
     name = file[0:-len("/WORKSPACE")],
-    gazelle_binary = ":gazelle_with_swift",
+    gazelle_binary = _GAZELLE_BINARY.get(
+        file[0:-len("/WORKSPACE")],
+        default = _DEFAULT_TEST_INFO,
+    ).binary,
+    # Some of the tests require the use of the Swift command. These need to be run outside of the sandbox.
+    local = _GAZELLE_BINARY.get(
+        file[0:-len("/WORKSPACE")],
+        default = _DEFAULT_TEST_INFO,
+    ).local,
     test_data = glob(
         include = [file[0:-len("/WORKSPACE")] + "/**"],
     ),
