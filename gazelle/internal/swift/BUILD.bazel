@@ -6,6 +6,7 @@ go_library(
     srcs = [
         "file_info.go",
         "files.go",
+        "imports.go",
         "is_builtin_module.go",
         "module.go",
         "module_dir.go",
@@ -14,6 +15,7 @@ go_library(
         "module_type.go",
         "repo.go",
         "rule_kinds.go",
+        "rules_from_manifest.go",
         "rules_with_srcs.go",
     ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/swift",
@@ -21,6 +23,7 @@ go_library(
     deps = [
         "//gazelle/internal/pathdistance",
         "//gazelle/internal/stringslices",
+        "//gazelle/internal/swiftpkg",
         "@bazel_gazelle//config:go_default_library",
         "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//language:go_default_library",

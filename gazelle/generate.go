@@ -4,7 +4,6 @@ import (
 	"log"
 	"path/filepath"
 
-	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/stringslices"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
@@ -54,10 +53,11 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 	slices.Sort(srcs)
 
 	result.Gen = swift.RulesFromSrcs(args, srcs)
-	result.Imports = make([]interface{}, len(result.Gen))
-	for idx, r := range result.Gen {
-		result.Imports[idx] = r.PrivateAttr(config.GazelleImportsKey)
-	}
+	result.Imports = swift.Imports(result.Gen)
+	// result.Imports = make([]interface{}, len(result.Gen))
+	// for idx, r := range result.Gen {
+	// 	result.Imports[idx] = r.PrivateAttr(config.GazelleImportsKey)
+	// }
 
 	return result
 }
@@ -72,5 +72,9 @@ func genRulesFromSwiftPkg(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 	// DEBUG END
 
 	// TODO(chuck): IMPLEMENT ME!
+
+	result.Gen = swift.RulesFromManifest(args, sc.PackageInfo)
+	result.Imports = swift.Imports(result.Gen)
+
 	return result
 }
