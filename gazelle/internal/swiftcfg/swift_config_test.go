@@ -3,6 +3,7 @@ package swiftcfg_test
 import (
 	"testing"
 
+	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
@@ -50,5 +51,13 @@ func TestSwiftConfigGenerateRulesMode(t *testing.T) {
 }
 
 func TestGetSetSwiftConfig(t *testing.T) {
-	t.Error("IMPLEMENT ME!")
+	c := config.New()
+
+	actual := swiftcfg.GetSwiftConfig(c)
+	assert.Nil(t, actual)
+
+	sc := swiftcfg.NewSwiftConfig()
+	swiftcfg.SetSwiftConfig(c, sc)
+	actual = swiftcfg.GetSwiftConfig(c)
+	assert.Equal(t, sc, actual)
 }

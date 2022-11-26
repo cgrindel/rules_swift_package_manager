@@ -46,7 +46,11 @@ func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRul
 }
 
 func GetSwiftConfig(c *config.Config) *SwiftConfig {
-	return c.Exts[SwiftConfigName].(*SwiftConfig)
+	scAny := c.Exts[SwiftConfigName]
+	if scAny == nil {
+		return nil
+	}
+	return scAny.(*SwiftConfig)
 }
 
 func SetSwiftConfig(c *config.Config, sc *SwiftConfig) {

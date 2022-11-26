@@ -28,6 +28,7 @@ go_test(
         ":swiftcfg",
         "//gazelle/internal/swiftbin",
         "//gazelle/internal/swiftpkg",
+        "@bazel_gazelle//config:go_default_library",
         "@bazel_gazelle//language:go_default_library",
         "@com_github_stretchr_testify//assert",
     ],
