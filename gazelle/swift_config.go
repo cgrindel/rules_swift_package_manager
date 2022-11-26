@@ -27,8 +27,16 @@ type swiftConfig struct {
 	// If this is true and a Package.swift is found, then use it to generate Bazel build files.
 	genFromPkgManifest bool
 
-	moduleIndex *swift.ModuleIndex
-	packageInfo *swiftpkg.PackageInfo
+	moduleFilesCollector moduleFilesCollector
+	moduleIndex          *swift.ModuleIndex
+	packageInfo          *swiftpkg.PackageInfo
+}
+
+func newSwiftConfig() *swiftConfig {
+	return &swiftConfig{
+		moduleFilesCollector: newModuleFilesCollector(),
+		moduleIndex:          swift.NewModuleIndex(),
+	}
 }
 
 func (sc *swiftConfig) swiftBin() *swiftbin.SwiftBin {
@@ -36,7 +44,7 @@ func (sc *swiftConfig) swiftBin() *swiftbin.SwiftBin {
 }
 
 // Determines how the specified directory should be processed.
-func (sc *swiftConfig) shouldGenerateRules(args language.GenerateArgs) generateRulesMode {
+func (sc *swiftConfig) generateRulesMode(args language.GenerateArgs) generateRulesMode {
 	if sc.packageInfo == nil {
 		return srcFileGenRulesMode
 	} else if args.Dir == sc.packageInfo.Dir {

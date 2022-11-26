@@ -13,17 +13,17 @@ import (
 
 func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateResult {
 	sc := getSwiftConfig(args.Config)
-	switch sc.shouldGenerateRules(args) {
+	switch sc.generateRulesMode(args) {
 	case swiftPkgGenRulesMode:
 		return genRulesFromSwiftPkg(sc, args)
 	case srcFileGenRulesMode:
-		return genRulesFromSrcFiles(args)
+		return genRulesFromSrcFiles(sc, args)
 	default:
 		return language.GenerateResult{}
 	}
 }
 
-func genRulesFromSrcFiles(args language.GenerateArgs) language.GenerateResult {
+func genRulesFromSrcFiles(sc *swiftConfig, args language.GenerateArgs) language.GenerateResult {
 	result := language.GenerateResult{}
 
 	// Collect Swift files
@@ -44,12 +44,13 @@ func genRulesFromSrcFiles(args language.GenerateArgs) language.GenerateResult {
 		swiftFilesWithRelDir := stringslices.Map(swiftFiles, func(file string) string {
 			return filepath.Join(relDir, file)
 		})
-		appendModuleFilesInSubdirs(moduleDir, swiftFilesWithRelDir)
+		// appendModuleFilesInSubdirs(moduleDir, swiftFilesWithRelDir)
+		sc.moduleFilesCollector.appendModuleFiles(moduleDir, swiftFilesWithRelDir)
 		return result
 	}
 
 	// Retrieve any Swift files that have already been found
-	srcs := append(swiftFiles, getModuleFilesInSubdirs(moduleDir)...)
+	srcs := append(swiftFiles, sc.moduleFilesCollector.getModuleFiles(moduleDir)...)
 	slices.Sort(srcs)
 
 	result.Gen = swift.Rules(args, srcs)
@@ -59,25 +60,6 @@ func genRulesFromSrcFiles(args language.GenerateArgs) language.GenerateResult {
 	}
 
 	return result
-}
-
-var moduleFilesInSubdirs = make(map[string][]string)
-
-func appendModuleFilesInSubdirs(moduleDir string, paths []string) {
-	var existingPaths []string
-	if eps, ok := moduleFilesInSubdirs[moduleDir]; ok {
-		existingPaths = eps
-	}
-	existingPaths = append(existingPaths, paths...)
-	moduleFilesInSubdirs[moduleDir] = existingPaths
-}
-
-func getModuleFilesInSubdirs(moduleDir string) []string {
-	var moduleSwiftFiles []string
-	if eps, ok := moduleFilesInSubdirs[moduleDir]; ok {
-		moduleSwiftFiles = eps
-	}
-	return moduleSwiftFiles
 }
 
 // Generate from Swift Package

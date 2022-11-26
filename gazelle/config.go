@@ -16,9 +16,7 @@ import (
 
 func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) {
 	// Initialize location for custom configuration
-	sc := &swiftConfig{
-		moduleIndex: swift.NewModuleIndex(),
-	}
+	sc := newSwiftConfig()
 
 	switch cmd {
 	case "fix", "update":
