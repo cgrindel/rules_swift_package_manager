@@ -27,6 +27,8 @@ go_test(
     deps = [
         ":swiftcfg",
         "//gazelle/internal/swiftbin",
+        "//gazelle/internal/swiftpkg",
+        "@bazel_gazelle//language:go_default_library",
         "@com_github_stretchr_testify//assert",
     ],
 )
