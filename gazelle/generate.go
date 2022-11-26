@@ -12,6 +12,18 @@ import (
 )
 
 func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateResult {
+	sc := getSwiftConfig(args.Config)
+	switch sc.shouldGenerateRules(args) {
+	case swiftPkgGenRulesMode:
+		return genRulesFromSwiftPkg(sc, args)
+	case srcFileGenRulesMode:
+		return genRulesFromSrcFiles(args)
+	default:
+		return language.GenerateResult{}
+	}
+}
+
+func genRulesFromSrcFiles(args language.GenerateArgs) language.GenerateResult {
 	result := language.GenerateResult{}
 
 	// Collect Swift files
@@ -66,4 +78,12 @@ func getModuleFilesInSubdirs(moduleDir string) []string {
 		moduleSwiftFiles = eps
 	}
 	return moduleSwiftFiles
+}
+
+// Generate from Swift Package
+
+func genRulesFromSwiftPkg(sc *swiftConfig, args language.GenerateArgs) language.GenerateResult {
+	result := language.GenerateResult{}
+	// TODO(chuck): IMPLEMENT ME!
+	return result
 }

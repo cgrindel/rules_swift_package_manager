@@ -12,22 +12,7 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/wspace"
 )
 
-const swiftConfigName = "swift"
-
-type swiftConfig struct {
-	moduleIndex  *swift.ModuleIndex
-	swiftBinPath string
-	// If this is true and a Package.swift is found, then use it to generate Bazel build files.
-	genFromPkgManifest bool
-}
-
-func (sc *swiftConfig) swiftBin() *swiftbin.SwiftBin {
-	return swiftbin.NewSwiftBin(sc.swiftBinPath)
-}
-
-func getSwiftConfig(c *config.Config) *swiftConfig {
-	return c.Exts[swiftConfigName].(*swiftConfig)
-}
+// Register Flags
 
 func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) {
 	// Initialize location for custom configuration
@@ -65,13 +50,11 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 	shouldProcWkspFile := true
 	if sc.genFromPkgManifest {
-		if pkg, err := swiftpkg.NewPackageInfo(sb, c.RepoRoot); err != nil {
+		if pi, err := swiftpkg.NewPackageInfo(sb, c.RepoRoot); err != nil {
 			return err
-		} else if pkg != nil {
+		} else if pi != nil {
 			shouldProcWkspFile = false
-			if err = processSwiftPackage(sc, pkg); err != nil {
-				return err
-			}
+			sc.packageInfo = pi
 		}
 	}
 
@@ -102,11 +85,5 @@ func findExternalDepsInWorkspace(mi *swift.ModuleIndex, repoRoot string) error {
 	for _, archive := range archives {
 		mi.AddModules(archive.Modules...)
 	}
-	return nil
-}
-
-func processSwiftPackage(sc *swiftConfig, pkg *swiftpkg.PackageInfo) error {
-	// GH008: Generate a BUILD file with everything from the module OR store the info in the config
-	// and generate build files as we visit the appropriate directories.
 	return nil
 }
