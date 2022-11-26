@@ -27,14 +27,14 @@ type swiftConfig struct {
 	// If this is true and a Package.swift is found, then use it to generate Bazel build files.
 	genFromPkgManifest bool
 
-	moduleFilesCollector moduleFilesCollector
+	moduleFilesCollector ModuleFilesCollector
 	moduleIndex          *swift.ModuleIndex
 	packageInfo          *swiftpkg.PackageInfo
 }
 
 func newSwiftConfig() *swiftConfig {
 	return &swiftConfig{
-		moduleFilesCollector: newModuleFilesCollector(),
+		moduleFilesCollector: NewModuleFilesCollector(),
 		moduleIndex:          swift.NewModuleIndex(),
 	}
 }

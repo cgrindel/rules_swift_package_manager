@@ -1,9 +1,17 @@
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 # MARK: - Starlark
 
 bzlformat_pkg(name = "bzlformat")
+
+# MARK: - Integration Test
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
 
 # MARK: - Gazelle Plugin
 
@@ -35,10 +43,11 @@ go_library(
     ],
 )
 
-# MARK: - Integration Test
-
-filegroup(
-    name = "all_files",
-    srcs = glob(["*"]),
-    visibility = ["//:__subpackages__"],
+go_test(
+    name = "gazelle_test",
+    srcs = ["module_files_collector_test.go"],
+    deps = [
+        ":gazelle",
+        "@com_github_stretchr_testify//assert",
+    ],
 )

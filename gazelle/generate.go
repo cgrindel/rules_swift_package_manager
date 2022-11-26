@@ -44,13 +44,12 @@ func genRulesFromSrcFiles(sc *swiftConfig, args language.GenerateArgs) language.
 		swiftFilesWithRelDir := stringslices.Map(swiftFiles, func(file string) string {
 			return filepath.Join(relDir, file)
 		})
-		// appendModuleFilesInSubdirs(moduleDir, swiftFilesWithRelDir)
-		sc.moduleFilesCollector.appendModuleFiles(moduleDir, swiftFilesWithRelDir)
+		sc.moduleFilesCollector.AppendModuleFiles(moduleDir, swiftFilesWithRelDir)
 		return result
 	}
 
 	// Retrieve any Swift files that have already been found
-	srcs := append(swiftFiles, sc.moduleFilesCollector.getModuleFiles(moduleDir)...)
+	srcs := append(swiftFiles, sc.moduleFilesCollector.GetModuleFiles(moduleDir)...)
 	slices.Sort(srcs)
 
 	result.Gen = swift.Rules(args, srcs)

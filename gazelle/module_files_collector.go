@@ -1,12 +1,12 @@
 package gazelle
 
-type moduleFilesCollector map[string][]string
+type ModuleFilesCollector map[string][]string
 
-func newModuleFilesCollector() moduleFilesCollector {
-	return make(moduleFilesCollector)
+func NewModuleFilesCollector() ModuleFilesCollector {
+	return make(ModuleFilesCollector)
 }
 
-func (mfc moduleFilesCollector) appendModuleFiles(moduleDir string, paths []string) {
+func (mfc ModuleFilesCollector) AppendModuleFiles(moduleDir string, paths []string) {
 	var existingPaths []string
 	if eps, ok := mfc[moduleDir]; ok {
 		existingPaths = eps
@@ -15,7 +15,7 @@ func (mfc moduleFilesCollector) appendModuleFiles(moduleDir string, paths []stri
 	mfc[moduleDir] = existingPaths
 }
 
-func (mfc moduleFilesCollector) getModuleFiles(moduleDir string) []string {
+func (mfc ModuleFilesCollector) GetModuleFiles(moduleDir string) []string {
 	var moduleSwiftFiles []string
 	if eps, ok := mfc[moduleDir]; ok {
 		moduleSwiftFiles = eps
