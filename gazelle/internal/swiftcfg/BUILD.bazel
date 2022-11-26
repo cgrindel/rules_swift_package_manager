@@ -26,6 +26,7 @@ go_test(
     ],
     deps = [
         ":swiftcfg",
+        "//gazelle/internal/swiftbin",
         "@com_github_stretchr_testify//assert",
     ],
 )

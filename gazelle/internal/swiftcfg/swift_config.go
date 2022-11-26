@@ -29,6 +29,9 @@ func NewSwiftConfig() *SwiftConfig {
 }
 
 func (sc *SwiftConfig) SwiftBin() *swiftbin.SwiftBin {
+	if sc.SwiftBinPath == "" {
+		return nil
+	}
 	return swiftbin.NewSwiftBin(sc.SwiftBinPath)
 }
 
