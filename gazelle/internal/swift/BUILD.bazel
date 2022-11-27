@@ -15,6 +15,7 @@ go_library(
         "module_type.go",
         "repo.go",
         "rule_kinds.go",
+        "rules_common.go",
         "rules_from_manifest.go",
         "rules_from_srcs.go",
     ],
