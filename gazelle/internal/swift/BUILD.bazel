@@ -22,6 +22,8 @@ go_library(
     visibility = ["//gazelle:__subpackages__"],
     deps = [
         "//gazelle/internal/pathdistance",
+        "//gazelle/internal/spdesc",
+        "//gazelle/internal/spdump",
         "//gazelle/internal/stringslices",
         "//gazelle/internal/swiftpkg",
         "@bazel_gazelle//config:go_default_library",
