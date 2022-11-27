@@ -91,12 +91,16 @@ func findExternalDepsInWorkspace(mi *swift.ModuleIndex, repoRoot string) error {
 }
 
 func findExternalDepsInManifest(mi *swift.ModuleIndex, pi *swiftpkg.PackageInfo) {
+	var err error
 	dump := pi.DumpManifest
 
 	// Create a map of Swift external dep identity and Bazel repo name
 	depIdentToBazelRepoName := make(map[string]string)
 	for _, d := range dump.Dependencies {
-		depIdentToBazelRepoName[d.Name] = swift.RepoName(d.URL)
+		depIdentToBazelRepoName[d.Name], err = swift.RepoName(d.URL)
+		if err != nil {
+			log.Fatalf("Failed to create repo name for %s: %w", d.Name, err)
+		}
 	}
 
 	// Find all of the unique product references (under TargetDependency)
