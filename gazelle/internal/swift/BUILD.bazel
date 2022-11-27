@@ -6,6 +6,7 @@ go_library(
     srcs = [
         "file_info.go",
         "files.go",
+        "http_archive.go",
         "imports.go",
         "is_builtin_module.go",
         "module.go",
@@ -13,7 +14,7 @@ go_library(
         "module_index.go",
         "module_name.go",
         "module_type.go",
-        "repo.go",
+        "repo_name.go",
         "rule_kinds.go",
         "rules_common.go",
         "rules_from_manifest.go",
@@ -38,10 +39,11 @@ go_test(
     srcs = [
         "file_info_test.go",
         "files_test.go",
+        "http_archive_test.go",
         "module_dir_test.go",
         "module_index_test.go",
         "module_name_test.go",
-        "repo_test.go",
+        "repo_name_test.go",
         "rule_kinds_test.go",
     ],
     deps = [

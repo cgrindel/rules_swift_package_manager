@@ -30,6 +30,12 @@ type Manifest struct {
 	Targets      []Target
 }
 
+// Returns a uniq slice of the product references used in the manifest
+func (m *Manifest) ProductReferences() []*ProductReference {
+	// TODO(chuck): IMPLEMENT ME!
+	return nil
+}
+
 // Dependency
 
 type Dependency struct {

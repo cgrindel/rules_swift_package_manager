@@ -3,8 +3,10 @@ package gazelle
 import (
 	"flag"
 	"fmt"
+	"log"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
+	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
@@ -54,6 +56,7 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 		} else if pi != nil {
 			shouldProcWkspFile = false
 			sc.PackageInfo = pi
+			findExternalDepsInManifest(sc.ModuleIndex, pi)
 		}
 	}
 
@@ -85,4 +88,31 @@ func findExternalDepsInWorkspace(mi *swift.ModuleIndex, repoRoot string) error {
 		mi.AddModules(archive.Modules...)
 	}
 	return nil
+}
+
+func findExternalDepsInManifest(mi *swift.ModuleIndex, pi *swiftpkg.PackageInfo) {
+	dump := pi.DumpManifest
+
+	// Create a map of Swift external dep identity and Bazel repo name
+	depIdentToBazelRepoName := make(map[string]string)
+	for _, d := range dump.Dependencies {
+		depIdentToBazelRepoName[d.Name] = swift.RepoName(d.URL)
+	}
+
+	// Find all of the unique product references (under TargetDependency)
+	prodRefs := dump.ProductReferences()
+
+	// Create a Module for each product reference
+	for _, pr := range prodRefs {
+		// For external deps, the product name appears toe always be the Swift module name
+		repo, ok := depIdentToBazelRepoName[pr.DependencyName]
+		if !ok {
+			log.Fatalf("Did not find dependency name '%s' in manifest %s",
+				pr.DependencyName, pi.DescManifest.Path)
+		}
+		// All external dep targets are defined at the root
+		l := label.New(repo, "", pr.ProductName)
+		m := swift.NewModule(pr.ProductName, l)
+		mi.AddModule(m)
+	}
 }

@@ -100,6 +100,10 @@ func TestTargetImports(t *testing.T) {
 	assert.Equal(t, []string{"ArgumentParser", "MySwiftPackage"}, actual)
 }
 
+func TestManifestProductReferences(t *testing.T) {
+	t.Error("IMPLEMENT ME!")
+}
+
 const swiftPackageJSONStr = `
 {
   "cLanguageStandard" : null,

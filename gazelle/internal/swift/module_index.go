@@ -16,6 +16,7 @@ func (mi *ModuleIndex) AddModule(m *Module) {
 	mi.index[m.Name] = modules
 }
 
+// Find the module given the Bazel repo name and the Swift module name.
 func (mi *ModuleIndex) Resolve(repoName, moduleName string) *Module {
 	modules := mi.index[moduleName]
 	if len(modules) == 0 {
