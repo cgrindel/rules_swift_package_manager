@@ -80,6 +80,26 @@ func TestTargetDependencyImportName(t *testing.T) {
 	})
 }
 
+func TestTargetImports(t *testing.T) {
+	target := spdump.Target{
+		Name: "Foo",
+		Type: spdump.LibraryTargetType,
+		Dependencies: []spdump.TargetDependency{
+			{
+				Product: &spdump.ProductReference{
+					ProductName:    "ArgumentParser",
+					DependencyName: "swift-argument-parser",
+				},
+			},
+			{
+				ByName: &spdump.ByNameReference{TargetName: "MySwiftPackage"},
+			},
+		},
+	}
+	actual := target.Imports()
+	assert.Equal(t, []string{"ArgumentParser", "MySwiftPackage"}, actual)
+}
+
 const swiftPackageJSONStr = `
 {
   "cLanguageStandard" : null,

@@ -167,6 +167,14 @@ type Target struct {
 	Dependencies []TargetDependency
 }
 
+func (t *Target) Imports() []string {
+	imports := make([]string, len(t.Dependencies))
+	for idx, td := range t.Dependencies {
+		imports[idx] = td.ImportName()
+	}
+	return imports
+}
+
 // TargetDependenncy
 
 type TargetDependency struct {
