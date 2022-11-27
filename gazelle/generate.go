@@ -52,12 +52,9 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 	srcs := append(swiftFiles, sc.ModuleFilesCollector.GetModuleFiles(moduleDir)...)
 	slices.Sort(srcs)
 
+	// Generate the rules and imports
 	result.Gen = swift.RulesFromSrcs(args, srcs)
 	result.Imports = swift.Imports(result.Gen)
-	// result.Imports = make([]interface{}, len(result.Gen))
-	// for idx, r := range result.Gen {
-	// 	result.Imports[idx] = r.PrivateAttr(config.GazelleImportsKey)
-	// }
 
 	return result
 }
@@ -66,15 +63,7 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 
 func genRulesFromSwiftPkg(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) language.GenerateResult {
 	result := language.GenerateResult{}
-
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK:  args: %+#v", args)
-	// DEBUG END
-
-	// TODO(chuck): IMPLEMENT ME!
-
 	result.Gen = swift.RulesFromManifest(args, sc.PackageInfo)
 	result.Imports = swift.Imports(result.Gen)
-
 	return result
 }
