@@ -60,9 +60,33 @@ func TestNewManifestFromJSON(t *testing.T) {
 	assert.Equal(t, expected, manifest)
 }
 
-
 func TestManifestProductReferences(t *testing.T) {
-	t.Error("IMPLEMENT ME!")
+	m := spdump.Manifest{
+		Targets: []spdump.Target{
+			{
+				Dependencies: []spdump.TargetDependency{
+					{Product: &spdump.ProductReference{ProductName: "Foo", DependencyName: "repoA"}},
+					{Product: &spdump.ProductReference{ProductName: "Bar", DependencyName: "repoA"}},
+					{Product: &spdump.ProductReference{ProductName: "Chicken", DependencyName: "repoB"}},
+				},
+			},
+			{
+				Dependencies: []spdump.TargetDependency{
+					{Product: &spdump.ProductReference{ProductName: "Foo", DependencyName: "repoA"}},
+					{Product: &spdump.ProductReference{ProductName: "Smidgen", DependencyName: "repoB"}},
+				},
+			},
+		},
+	}
+
+	actual := m.ProductReferences()
+	expected := []*spdump.ProductReference{
+		&spdump.ProductReference{ProductName: "Bar", DependencyName: "repoA"},
+		&spdump.ProductReference{ProductName: "Foo", DependencyName: "repoA"},
+		&spdump.ProductReference{ProductName: "Chicken", DependencyName: "repoB"},
+		&spdump.ProductReference{ProductName: "Smidgen", DependencyName: "repoB"},
+	}
+	assert.Equal(t, expected, actual)
 }
 
 const swiftPackageJSONStr = `

@@ -2,6 +2,7 @@ package spdump
 
 import (
 	"encoding/json"
+	"sort"
 )
 
 // The JSON formats described in this file are for the swift package dump-package JSON output.
@@ -45,9 +46,15 @@ func (m *Manifest) ProductReferences() []*ProductReference {
 		}
 	}
 
+	keys := make([]string, 0, len(prs))
+	for k := range prs {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
 	result := make([]*ProductReference, 0, len(prs))
-	for _, v := range prs {
-		result = append(result, v)
+	for _, k := range keys {
+		result = append(result, prs[k])
 	}
 	return result
 }
