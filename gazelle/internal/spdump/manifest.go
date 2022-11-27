@@ -2,6 +2,7 @@ package spdump
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"strings"
 
@@ -32,8 +33,29 @@ type Manifest struct {
 
 // Returns a uniq slice of the product references used in the manifest
 func (m *Manifest) ProductReferences() []*ProductReference {
-	// TODO(chuck): IMPLEMENT ME!
-	return nil
+	prs := make(map[string]*ProductReference)
+
+	addProdRef := func(pr *ProductReference) {
+		if pr == nil {
+			return
+		}
+		uk := pr.UniqKey()
+		if _, ok := prs[uk]; !ok {
+			prs[uk] = pr
+		}
+	}
+
+	for _, t := range m.Targets {
+		for _, td := range t.Dependencies {
+			addProdRef(td.Product)
+		}
+	}
+
+	result := make([]*ProductReference, 0, len(prs))
+	for _, v := range prs {
+		result = append(result, v)
+	}
+	return result
 }
 
 // Dependency
@@ -218,6 +240,10 @@ func (pr *ProductReference) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	return nil
+}
+
+func (pr *ProductReference) UniqKey() string {
+	return fmt.Sprintf("%s-%s", pr.DependencyName, pr.ProductName)
 }
 
 // ByNameReference
