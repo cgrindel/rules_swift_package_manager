@@ -20,13 +20,24 @@ type Manifest struct {
 	ManifestDisplayName string `json:"manifest_display_name"`
 	Path                string
 	ToolsVersion        string `json:"tools_version"`
-	Targets             []Target
+	Targets             Targets
 	Platforms           []Platform
 	Products            []Product
 	Dependencies        []Dependency
 }
 
 // Targets
+
+type Targets []Target
+
+func (ts Targets) FindByName(name string) *Target {
+	for _, t := range ts {
+		if t.Name == name {
+			return &t
+		}
+	}
+	return nil
+}
 
 type Target struct {
 	Name                string
@@ -83,9 +94,9 @@ type Product struct {
 // Dependency
 
 type Dependency struct {
-	Identity     string
-	Type         string
-	URL          string
+	Identity    string
+	Type        string
+	URL         string
 	Requirement DependencyRequirement
 }
 

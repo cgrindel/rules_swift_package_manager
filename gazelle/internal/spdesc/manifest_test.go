@@ -72,6 +72,17 @@ func TestNewManifestFromJSON(t *testing.T) {
 	assert.Equal(t, expected, manifest)
 }
 
+func TestTargetsFromName(t *testing.T) {
+	manifest, err := spdesc.NewManifestFromJSON([]byte(swiftPackageJSONStr))
+	assert.NoError(t, err)
+
+	actual := manifest.Targets.FindByName("MySwiftPackage")
+	assert.NotNil(t, actual)
+
+	actual = manifest.Targets.FindByName("DoesNotExist")
+	assert.Nil(t, actual)
+}
+
 const swiftPackageJSONStr = `
 {
   "dependencies" : [
