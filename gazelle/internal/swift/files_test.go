@@ -8,7 +8,7 @@ import (
 )
 
 func TestFilterFiles(t *testing.T) {
-	values := []string{"Foo.swift", "README.md", "Bar/Hello.swift"}
+	values := []string{"Foo.swift", "README.md", "Bar/Hello.swift", "Package.swift"}
 
 	actual := swift.FilterFiles(values)
 	expected := []string{"Foo.swift", "Bar/Hello.swift"}
