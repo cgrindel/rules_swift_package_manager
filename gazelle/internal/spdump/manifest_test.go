@@ -60,45 +60,6 @@ func TestNewManifestFromJSON(t *testing.T) {
 	assert.Equal(t, expected, manifest)
 }
 
-func TestTargetDependencyImportName(t *testing.T) {
-	t.Run("product", func(t *testing.T) {
-		td := spdump.TargetDependency{
-			Product: &spdump.ProductReference{
-				ProductName:    "ArgumentParser",
-				DependencyName: "swift-argument-parser",
-			},
-		}
-		actual := td.ImportName()
-		assert.Equal(t, "ArgumentParser", actual)
-	})
-	t.Run("by name", func(t *testing.T) {
-		td := spdump.TargetDependency{
-			ByName: &spdump.ByNameReference{TargetName: "MySwiftPackage"},
-		}
-		actual := td.ImportName()
-		assert.Equal(t, "MySwiftPackage", actual)
-	})
-}
-
-func TestTargetImports(t *testing.T) {
-	target := spdump.Target{
-		Name: "Foo",
-		Type: spdump.LibraryTargetType,
-		Dependencies: []spdump.TargetDependency{
-			{
-				Product: &spdump.ProductReference{
-					ProductName:    "ArgumentParser",
-					DependencyName: "swift-argument-parser",
-				},
-			},
-			{
-				ByName: &spdump.ByNameReference{TargetName: "MySwiftPackage"},
-			},
-		},
-	}
-	actual := target.Imports()
-	assert.Equal(t, []string{"ArgumentParser", "MySwiftPackage"}, actual)
-}
 
 func TestManifestProductReferences(t *testing.T) {
 	t.Error("IMPLEMENT ME!")
