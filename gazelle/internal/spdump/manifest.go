@@ -174,6 +174,15 @@ type TargetDependency struct {
 	ByName  *ByNameReference
 }
 
+func (td *TargetDependency) ImportName() string {
+	if td.Product != nil {
+		return td.Product.ProductName
+	} else if td.ByName != nil {
+		return td.ByName.TargetName
+	}
+	return ""
+}
+
 // ProductReference
 
 // Reference a product
