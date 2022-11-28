@@ -4,7 +4,7 @@ swift_library(
     name = "MySwiftPackageLibrary",
     srcs = ["Sources/MySwiftPackage/MySwiftPackage.swift"],
     module_name = "MySwiftPackageLibrary",
-    deps = ["@com_github_apple_swift_argument_parser//:ArgumentParser"],
+    deps = ["@apple_swift_argument_parser//:ArgumentParser"],
 )
 
 swift_binary(
