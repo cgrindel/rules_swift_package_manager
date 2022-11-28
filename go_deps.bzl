@@ -264,8 +264,8 @@ def swift_bazel_go_dependencies():
         name = "org_golang_x_exp",
         build_external = "external",
         importpath = "golang.org/x/exp",
-        sum = "h1:NoHlPRbyl1VFI6FjwHtPQCN7wAMXI6cKcqrmXhOOfBQ=",
-        version = "v0.0.0-20221114191408-850992195362",
+        sum = "h1:yZNXmy+j/JpX19vZkVktWqAo7Gny4PBWYYK3zskGpx4=",
+        version = "v0.0.0-20221126150942-6ab00d035af9",
     )
     go_repository(
         name = "org_golang_x_lint",
