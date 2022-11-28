@@ -1,6 +1,9 @@
 package spdesc
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"path/filepath"
+)
 
 // The JSON formats described in this file are for the `swift package describe --type json` JSON output.
 
@@ -49,6 +52,17 @@ type Target struct {
 	TargetDependencies  []string `json:"target_dependencies"`
 	ProductDependencies []string `json:"product_dependencies"`
 	ProductMemberships  []string `json:"product_memberships"`
+}
+
+func (t *Target) SourcesWithPath() []string {
+	if t.Path == "" {
+		return t.Sources
+	}
+	result := make([]string, len(t.Sources))
+	for idx, src := range t.Sources {
+		result[idx] = filepath.Join(t.Path, src)
+	}
+	return result
 }
 
 // Platforms
