@@ -1,8 +1,6 @@
 package swift
 
 import (
-	"log"
-
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
@@ -13,10 +11,6 @@ func RulesFromManifest(args language.GenerateArgs, pi *swiftpkg.PackageInfo) []*
 	dump := pi.DumpManifest
 	desc := pi.DescManifest
 	shouldSetVis := shouldSetVisibility(args)
-
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: RulesFromManifest desc: %+#v", desc)
-	// DEBUG END
 
 	var rules []*rule.Rule
 	for _, dumpt := range dump.Targets {

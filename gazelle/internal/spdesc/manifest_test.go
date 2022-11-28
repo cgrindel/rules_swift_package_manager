@@ -83,6 +83,30 @@ func TestTargetsFromName(t *testing.T) {
 	assert.Nil(t, actual)
 }
 
+func TestTargetSourcesWithPath(t *testing.T) {
+	target := spdesc.Target{
+		Sources: []string{
+			"Foo.swift",
+			"Bar.swift",
+		},
+	}
+
+	t.Run("path is empty string", func(t *testing.T) {
+		target.Path = ""
+		actual := target.SourcesWithPath()
+		assert.Equal(t, target.Sources, actual)
+	})
+	t.Run("path is not empty string", func(t *testing.T) {
+		target.Path = "Sources/Chicken"
+		actual := target.SourcesWithPath()
+		expected := []string{
+			"Sources/Chicken/Foo.swift",
+			"Sources/Chicken/Bar.swift",
+		}
+		assert.Equal(t, expected, actual)
+	})
+}
+
 const swiftPackageJSONStr = `
 {
   "dependencies" : [
