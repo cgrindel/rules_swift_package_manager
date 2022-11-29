@@ -62,6 +62,7 @@ func (l *swiftLang) Resolve(
 	if len(deps) > 0 {
 		r.SetAttr("deps", deps)
 	}
+
 }
 
 // Adjusts the label to not include the repo value if they are in the same repo.

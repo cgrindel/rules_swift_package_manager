@@ -18,16 +18,19 @@ gazelle_binary(
 
 execute_binary(
     name = "swift_gazelle_gen_from_pkg_manifest",
-    arguments = ["--gen_from_pkg_manifest"],
+    # arguments = ["--gen_from_pkg_manifest"],
+    arguments = ["-gen_from_pkg_manifest"],
     binary = ":swift_gazelle",
 )
 
 _DEFAULT_TEST_INFO = test_infos.new(
+    timeout = 2,
     binary = ":swift_gazelle",
     local = False,
 )
 
 _SWIFT_PKG_TEST_INFO = test_infos.new(
+    timeout = 5,
     binary = ":swift_gazelle_gen_from_pkg_manifest",
     local = True,
 )
@@ -43,6 +46,10 @@ _GAZELLE_BINARY = {
         file[0:-len("/WORKSPACE")],
         default = _DEFAULT_TEST_INFO,
     ).binary,
+    gazelle_timeout_seconds = _GAZELLE_BINARY.get(
+        file[0:-len("/WORKSPACE")],
+        default = _DEFAULT_TEST_INFO,
+    ).timeout,
     # Some of the tests require the use of the Swift command. These need to be run outside of the sandbox.
     local = _GAZELLE_BINARY.get(
         file[0:-len("/WORKSPACE")],
