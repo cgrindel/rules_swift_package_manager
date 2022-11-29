@@ -41,15 +41,21 @@ def swift_bazel_dependencies():
     #     ],
     # )
 
-    # Post v0.28.0: Contains fix for passing test args to gazelle_generation_test.
+    # # Post v0.28.0: Contains fix for passing test args to gazelle_generation_test.
+    # maybe(
+    #     http_archive,
+    #     name = "bazel_gazelle",
+    #     sha256 = "0b5f1b9f0fe50fa893f3830472a1b036bd84e7c9b009ed27678ecb5ecd03c14b",
+    #     strip_prefix = "bazel-gazelle-498f2fc081afda84b82d444880bfedfa49c18baa",
+    #     urls = [
+    #         "https://github.com/bazelbuild/bazel-gazelle/archive/498f2fc081afda84b82d444880bfedfa49c18baa.tar.gz",
+    #     ],
+    # )
+
     maybe(
-        http_archive,
+        native.local_repository,
         name = "bazel_gazelle",
-        sha256 = "0b5f1b9f0fe50fa893f3830472a1b036bd84e7c9b009ed27678ecb5ecd03c14b",
-        strip_prefix = "bazel-gazelle-498f2fc081afda84b82d444880bfedfa49c18baa",
-        urls = [
-            "https://github.com/bazelbuild/bazel-gazelle/archive/498f2fc081afda84b82d444880bfedfa49c18baa.tar.gz",
-        ],
+        path = "/Users/chuck/code/cgrindel/bazel-gazelle/support_multiple_langs_with_update_repos",
     )
 
     maybe(
