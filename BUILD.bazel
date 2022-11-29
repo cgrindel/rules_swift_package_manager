@@ -114,6 +114,7 @@ filegroup(
         "//gazelle/internal/stringslices:all_files",
         "//gazelle/internal/swift:all_files",
         "//gazelle/internal/swiftbin:all_files",
+        "//gazelle/internal/swiftcfg:all_files",
         "//gazelle/internal/swiftpkg:all_files",
         "//gazelle/internal/wspace:all_files",
     ],

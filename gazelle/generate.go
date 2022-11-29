@@ -4,14 +4,26 @@ import (
 	"log"
 	"path/filepath"
 
-	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/stringslices"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 	"golang.org/x/exp/slices"
 )
 
 func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateResult {
+	sc := swiftcfg.GetSwiftConfig(args.Config)
+	switch sc.GenerateRulesMode(args) {
+	case swiftcfg.SwiftPkgGenRulesMode:
+		return genRulesFromSwiftPkg(sc, args)
+	case swiftcfg.SrcFileGenRulesMode:
+		return genRulesFromSrcFiles(sc, args)
+	default:
+		return language.GenerateResult{}
+	}
+}
+
+func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) language.GenerateResult {
 	result := language.GenerateResult{}
 
 	// Collect Swift files
@@ -32,38 +44,26 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 		swiftFilesWithRelDir := stringslices.Map(swiftFiles, func(file string) string {
 			return filepath.Join(relDir, file)
 		})
-		appendModuleFilesInSubdirs(moduleDir, swiftFilesWithRelDir)
+		sc.ModuleFilesCollector.AppendModuleFiles(moduleDir, swiftFilesWithRelDir)
 		return result
 	}
 
 	// Retrieve any Swift files that have already been found
-	srcs := append(swiftFiles, getModuleFilesInSubdirs(moduleDir)...)
+	srcs := append(swiftFiles, sc.ModuleFilesCollector.GetModuleFiles(moduleDir)...)
 	slices.Sort(srcs)
 
-	result.Gen = swift.Rules(args, srcs)
-	result.Imports = make([]interface{}, len(result.Gen))
-	for idx, r := range result.Gen {
-		result.Imports[idx] = r.PrivateAttr(config.GazelleImportsKey)
-	}
+	// Generate the rules and imports
+	result.Gen = swift.RulesFromSrcs(args, srcs)
+	result.Imports = swift.Imports(result.Gen)
 
 	return result
 }
 
-var moduleFilesInSubdirs = make(map[string][]string)
+// Generate from Swift Package
 
-func appendModuleFilesInSubdirs(moduleDir string, paths []string) {
-	var existingPaths []string
-	if eps, ok := moduleFilesInSubdirs[moduleDir]; ok {
-		existingPaths = eps
-	}
-	existingPaths = append(existingPaths, paths...)
-	moduleFilesInSubdirs[moduleDir] = existingPaths
-}
-
-func getModuleFilesInSubdirs(moduleDir string) []string {
-	var moduleSwiftFiles []string
-	if eps, ok := moduleFilesInSubdirs[moduleDir]; ok {
-		moduleSwiftFiles = eps
-	}
-	return moduleSwiftFiles
+func genRulesFromSwiftPkg(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) language.GenerateResult {
+	result := language.GenerateResult{}
+	result.Gen = swift.RulesFromManifest(args, sc.PackageInfo)
+	result.Imports = swift.Imports(result.Gen)
+	return result
 }

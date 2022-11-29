@@ -5,6 +5,14 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 bzlformat_pkg(name = "bzlformat")
 
+# MARK: - Integration Test
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
+
 # MARK: - Gazelle Plugin
 
 go_library(
@@ -21,6 +29,7 @@ go_library(
         "//gazelle/internal/stringslices",
         "//gazelle/internal/swift",
         "//gazelle/internal/swiftbin",
+        "//gazelle/internal/swiftcfg",
         "//gazelle/internal/swiftpkg",
         "//gazelle/internal/wspace",
         "@bazel_gazelle//config:go_default_library",
@@ -31,12 +40,4 @@ go_library(
         "@bazel_gazelle//rule:go_default_library",
         "@org_golang_x_exp//slices",
     ],
-)
-
-# MARK: - Integration Test
-
-filegroup(
-    name = "all_files",
-    srcs = glob(["*"]),
-    visibility = ["//:__subpackages__"],
 )
