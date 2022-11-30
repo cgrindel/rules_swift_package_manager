@@ -1,4 +1,4 @@
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "spreso",
@@ -6,8 +6,16 @@ go_library(
         "package_reference.go",
         "pin.go",
         "pin_store_json.go",
-        "resolved_package.go",
     ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/spreso",
     visibility = ["//gazelle:__subpackages__"],
+)
+
+go_test(
+    name = "spreso_test",
+    srcs = ["package_reference_test.go"],
+    deps = [
+        ":spreso",
+        "@com_github_stretchr_testify//assert",
+    ],
 )
