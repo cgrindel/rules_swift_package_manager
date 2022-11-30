@@ -1,5 +1,11 @@
 package spreso
 
+import (
+	"fmt"
+	"net/url"
+	"path/filepath"
+)
+
 // V1
 
 // Maps to PinStorage.V1
@@ -27,8 +33,8 @@ type V1PinState struct {
 
 func NewPinsFromV1PinStore(ps V1PinStore) ([]*Pin, error) {
 	pins := make([]*Pin, len(ps.Object.Pins))
-	for idx, psp := range ps.Object.Pins {
-		pin, err := newPinFromV1PinStore(psp)
+	for idx, v1p := range ps.Object.Pins {
+		pin, err := NewPinFromV1Pin(v1p)
 		if err != nil {
 			return nil, err
 		}
@@ -37,15 +43,15 @@ func NewPinsFromV1PinStore(ps V1PinStore) ([]*Pin, error) {
 	return pins, nil
 }
 
-func newPinFromV1PinStore(psp V1Pin) (*Pin, error) {
-	kind, err := pkgRefKindFromV1RepoURL(psp.RepositoryURL)
+func NewPinFromV1Pin(psp V1Pin) (*Pin, error) {
+	kind, err := PkgRefKindFromV1RepoURL(psp.RepositoryURL)
 	if err != nil {
 		return nil, err
 	}
 	return &Pin{
 		PkgRef: &PackageReference{
 			Identity: identityFromV1RepoURL(psp.RepositoryURL),
-			Kind: kind,
+			Kind:     kind,
 			Location: psp.RepositoryURL,
 			Name:     psp.Package,
 		},
@@ -53,9 +59,15 @@ func newPinFromV1PinStore(psp V1Pin) (*Pin, error) {
 	}, nil
 }
 
-func pkgRefKindFromV1RepoURL(repoURL string) (PkgRefKind, error) {
-	// TODO(chuck): IMPLEMENT ME!
-	return UnknownPkgRefKind, nil
+func PkgRefKindFromV1RepoURL(repoURL string) (PkgRefKind, error) {
+	if filepath.IsAbs(repoURL) {
+		return LocalSourceControlPkgRefKind, nil
+	}
+	if _, err := url.ParseRequestURI(repoURL); err == nil {
+		return RemoteSourceControlPkgRefKind, nil
+	}
+	return UnknownPkgRefKind, fmt.Errorf(
+		"could not determine package reference kind from repository URL %v", repoURL)
 }
 
 func identityFromV1RepoURL(repoURL string) string {
