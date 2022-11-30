@@ -30,9 +30,9 @@ tidy(
         "@contrib_rules_bazel_integration_test//tools:update_deleted_packages",
         ":bzlformat_missing_pkgs_fix",
         ":update_all",
-        # Run go_mod_tidy before gazelle_update_repos
+        # Run go_mod_tidy before go_update_repos
         ":go_mod_tidy",
-        ":gazelle_update_repos",
+        ":go_update_repos",
         ":gazelle",
     ],
 )
@@ -53,7 +53,7 @@ gazelle(
 )
 
 gazelle(
-    name = "gazelle_update_repos",
+    name = "go_update_repos",
     args = [
         "-from_file=go.mod",
         "-to_macro=go_deps.bzl%swift_bazel_go_dependencies",
@@ -61,6 +61,7 @@ gazelle(
         "-prune",
     ],
     command = "update-repos",
+    gazelle = ":gazelle_bin",
 )
 
 # MARK: - Golang

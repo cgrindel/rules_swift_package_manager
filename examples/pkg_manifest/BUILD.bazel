@@ -1,0 +1,28 @@
+load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+
+# MARK: - Gazelle
+
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = [
+        "@bazel_skylib//gazelle/bzl",
+        "@cgrindel_swift_bazel//gazelle",
+    ],
+)
+
+# gazelle:prefix github.com/cgrindel/swift_bazel/examples/simple
+gazelle(
+    name = "gazelle",
+    gazelle = ":gazelle_bin",
+)
+
+gazelle(
+    name = "swift_update_repos",
+    args = [
+        "-from_file=Package.resolved",
+        "-to_macro=swift_deps.bzl%swift_dependencies",
+        "-prune",
+    ],
+    command = "update-repos",
+    gazelle = ":gazelle_bin",
+)

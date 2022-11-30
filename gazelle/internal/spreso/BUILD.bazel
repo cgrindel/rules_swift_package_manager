@@ -1,0 +1,30 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "spreso",
+    srcs = [
+        "package_reference.go",
+        "pin.go",
+        "pin_store_v1.go",
+        "pin_store_v2.go",
+    ],
+    importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/spreso",
+    visibility = ["//gazelle:__subpackages__"],
+)
+
+go_test(
+    name = "spreso_test",
+    srcs = [
+        "package_reference_test.go",
+        "pin_store_v1_test.go",
+        "pin_store_v2_test.go",
+        "pin_test.go",
+    ],
+    deps = [
+        ":spreso",
+        "@com_github_stretchr_testify//assert",
+    ],
+)
+
+bzlformat_pkg(name = "bzlformat")
