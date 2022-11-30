@@ -3,7 +3,9 @@ package spreso
 import (
 	"fmt"
 	"net/url"
+	"path"
 	"path/filepath"
+	"strings"
 )
 
 // V1
@@ -12,17 +14,17 @@ import (
 // https://github.com/apple/swift-package-manager/blob/main/Sources/PackageGraph/PinsStore.swift#L230
 type V1PinStore struct {
 	Version int
-	Object  V1Container
+	Object  *V1Container
 }
 
 type V1Container struct {
-	Pins []V1Pin
+	Pins []*V1Pin
 }
 
 type V1Pin struct {
 	Package       string
 	RepositoryURL string
-	State         V1PinState
+	State         *V1PinState
 }
 
 type V1PinState struct {
@@ -43,39 +45,44 @@ func NewPinsFromV1PinStore(ps V1PinStore) ([]*Pin, error) {
 	return pins, nil
 }
 
-func NewPinFromV1Pin(psp V1Pin) (*Pin, error) {
-	kind, err := PkgRefKindFromV1RepoURL(psp.RepositoryURL)
+func NewPinFromV1Pin(v1p *V1Pin) (*Pin, error) {
+	pkgRef, err := NewPkgRefFromV1Pin(v1p)
 	if err != nil {
 		return nil, err
 	}
 	return &Pin{
-		PkgRef: &PackageReference{
-			Identity: identityFromV1RepoURL(psp.RepositoryURL),
-			Kind:     kind,
-			Location: psp.RepositoryURL,
-			Name:     psp.Package,
-		},
-		State: newPinStateFromV1PinState(psp.State),
+		PkgRef: pkgRef,
+		State:  newPinStateFromV1PinState(v1p.State),
 	}, nil
 }
 
-func PkgRefKindFromV1RepoURL(repoURL string) (PkgRefKind, error) {
-	if filepath.IsAbs(repoURL) {
-		return LocalSourceControlPkgRefKind, nil
+const gitExtension = ".git"
+
+func NewPkgRefFromV1Pin(v1p *V1Pin) (*PackageReference, error) {
+	var kind PkgRefKind
+	var identity string
+	if filepath.IsAbs(v1p.RepositoryURL) {
+		kind = LocalSourceControlPkgRefKind
+		identity = filepath.Base(v1p.RepositoryURL)
+	} else if _, err := url.ParseRequestURI(v1p.RepositoryURL); err == nil {
+		kind = RemoteSourceControlPkgRefKind
+		identity = path.Base(v1p.RepositoryURL)
+	} else {
+		return nil, fmt.Errorf(
+			"could not determine package reference kind from V1 repository URL %v",
+			v1p.RepositoryURL,
+		)
 	}
-	if _, err := url.ParseRequestURI(repoURL); err == nil {
-		return RemoteSourceControlPkgRefKind, nil
-	}
-	return UnknownPkgRefKind, fmt.Errorf(
-		"could not determine package reference kind from repository URL %v", repoURL)
+	identity = strings.TrimSuffix(identity, gitExtension)
+	return &PackageReference{
+		Identity: identity,
+		Kind:     kind,
+		Location: v1p.RepositoryURL,
+		Name:     v1p.Package,
+	}, nil
 }
 
-func identityFromV1RepoURL(repoURL string) string {
-	// TODO(chuck): IMPLEMENT ME!
-	return ""
-}
-
-func newPinStateFromV1PinState(ps V1PinState) PinState {
+func newPinStateFromV1PinState(ps *V1PinState) PinState {
 	// TODO(chuck): IMPLEMENT ME!
 	return nil
 }
