@@ -2,6 +2,7 @@ package gazelle
 
 import (
 	"log"
+	"path/filepath"
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 )
@@ -9,10 +10,8 @@ import (
 // language.RepoImporter Implementation
 
 func (*swiftLang) CanImport(path string) bool {
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: CanImport path: %+#v", path)
-	// DEBUG END
-	return false
+	base := filepath.Base(path)
+	return base == "Package.resolved"
 }
 
 func (*swiftLang) ImportRepos(args language.ImportReposArgs) language.ImportReposResult {

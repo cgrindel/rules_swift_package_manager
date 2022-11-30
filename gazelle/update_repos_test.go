@@ -12,3 +12,12 @@ func TestImplementsRepoImporter(t *testing.T) {
 	lang := gazelle.NewLanguage()
 	assert.Implements(t, (*language.RepoImporter)(nil), lang)
 }
+
+func TestCanImport(t *testing.T) {
+	lang := gazelle.NewLanguage()
+	ri, ok := lang.(language.RepoImporter)
+	assert.True(t, ok)
+
+	assert.True(t, ri.CanImport("/path/to/Package.resolved"))
+	assert.False(t, ri.CanImport("/path/to/Package.swift"))
+}
