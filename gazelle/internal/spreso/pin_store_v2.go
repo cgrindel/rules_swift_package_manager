@@ -1,6 +1,9 @@
 package spreso
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // V2
 
@@ -41,6 +44,18 @@ func (vpk *V2PinKind) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+func (vpk V2PinKind) PkgRefKind() PkgRefKind {
+	switch vpk {
+	case LocalSourceControlV2PinKind:
+		return LocalSourceControlPkgRefKind
+	case RemoteSourceControlV2PinKind:
+		return RemoteSourceControlPkgRefKind
+	case RegistryV2PinKind:
+		return RegistryPkgRefKind
+	}
+	return UnknownPkgRefKind
+}
+
 type V2PinState struct {
 	Version  string
 	Branch   string
@@ -64,35 +79,33 @@ func NewPinFromV2Pin(v2p *V2Pin) (*Pin, error) {
 	if err != nil {
 		return nil, err
 	}
+	state, err := NewPinStateFromV2PinState(v2p.State)
+	if err != nil {
+		return nil, err
+	}
 	return &Pin{
 		PkgRef: pkgRef,
-		State:  NewPinStateFromV2PinState(v2p.State),
+		State:  state,
 	}, nil
 }
 
 func NewPkgRefFromV2Pin(v2p *V2Pin) (*PackageReference, error) {
-	var kind PkgRefKind
-	switch v2p.Kind {
-	case LocalSourceControlV2PinKind:
-		kind = LocalSourceControlPkgRefKind
-	case RemoteSourceControlV2PinKind:
-		kind = RemoteSourceControlPkgRefKind
-	case RegistryV2PinKind:
-		kind = RegistryPkgRefKind
-	}
 	return &PackageReference{
 		Identity: v2p.Identity,
-		Kind:     kind,
+		Kind:     v2p.Kind.PkgRefKind(),
 		Location: v2p.Location,
 	}, nil
 }
 
-func NewPinStateFromV2PinState(ps *V2PinState) PinState {
+func NewPinStateFromV2PinState(ps *V2PinState) (PinState, error) {
+	if ps.Revision == "" {
+		return nil, fmt.Errorf("revision cannot be empty %+v", ps)
+	}
 	if ps.Version != "" {
-		return NewVersionPinState(ps.Version, ps.Revision)
+		return NewVersionPinState(ps.Version, ps.Revision), nil
 	}
 	if ps.Branch != "" {
-		return NewBranchPinState(ps.Branch, ps.Revision)
+		return NewBranchPinState(ps.Branch, ps.Revision), nil
 	}
-	return NewRevisionPinState(ps.Revision)
+	return NewRevisionPinState(ps.Revision), nil
 }
