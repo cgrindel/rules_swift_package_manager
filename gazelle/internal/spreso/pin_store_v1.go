@@ -33,7 +33,7 @@ type V1PinState struct {
 	Version  string
 }
 
-func NewPinsFromV1PinStore(ps V1PinStore) ([]*Pin, error) {
+func NewPinsFromV1PinStore(ps *V1PinStore) ([]*Pin, error) {
 	pins := make([]*Pin, len(ps.Object.Pins))
 	for idx, v1p := range ps.Object.Pins {
 		pin, err := NewPinFromV1Pin(v1p)
