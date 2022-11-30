@@ -25,6 +25,19 @@ type V1PinState struct {
 	Version  string
 }
 
+// func NewPinsFromV1PinStore(ps V1PinStore) []*Pin {
+// 	pins := make([]*Pin, len(ps.Object.Pins))
+// 	for idx, psp := range ps.Object.Pins {
+// 		pin := Pin{}
+// 		pin.PkgRef = &PackageReference{
+// 			Identity: psp.RepositoryURL,
+// 			Kind:
+// 			Location string
+// 			Name     string
+// 		}
+// 	}
+// }
+
 // V2
 
 type V2PinStore struct {

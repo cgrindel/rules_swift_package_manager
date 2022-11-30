@@ -1,9 +1,13 @@
 package spreso
 
+// Pin
+
 type Pin struct {
-	PkgRef PackageReference
+	PkgRef *PackageReference
 	State  PinState
 }
+
+// PinStateType
 
 type PinStateType int
 
@@ -14,9 +18,13 @@ const (
 	RevisionPinStateType
 )
 
+// PinState
+
 type PinState interface {
 	PinStateType() PinStateType
 }
+
+// BranchPinState
 
 type BranchPinState struct {
 	Name     string
@@ -27,6 +35,8 @@ func (bps *BranchPinState) PinStateType() PinStateType {
 	return BranchPinStateType
 }
 
+// VersionPinState
+
 type VersionPinState struct {
 	Version  string
 	Revision string
@@ -35,6 +45,8 @@ type VersionPinState struct {
 func (vps *VersionPinState) PinStateType() PinStateType {
 	return VersionPinStateType
 }
+
+// RevisionPinState
 
 type RevisionPinState struct {
 	Revision string
