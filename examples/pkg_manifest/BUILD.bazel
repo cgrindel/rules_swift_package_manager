@@ -21,8 +21,8 @@ gazelle(
     args = [
         "-from_file=Package.swift",
         "-to_macro=swift_deps.bzl%swift_dependencies",
-        "-build_external=external",
         "-prune",
     ],
     command = "update-repos",
+    gazelle = ":gazelle_bin",
 )
