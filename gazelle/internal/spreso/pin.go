@@ -31,6 +31,13 @@ type BranchPinState struct {
 	Revision string
 }
 
+func NewBranchPinState(name, revision string) *BranchPinState {
+	return &BranchPinState{
+		Name:     name,
+		Revision: revision,
+	}
+}
+
 func (bps *BranchPinState) PinStateType() PinStateType {
 	return BranchPinStateType
 }
@@ -42,6 +49,13 @@ type VersionPinState struct {
 	Revision string
 }
 
+func NewVersionPinState(version, revision string) *VersionPinState {
+	return &VersionPinState{
+		Version:  version,
+		Revision: revision,
+	}
+}
+
 func (vps *VersionPinState) PinStateType() PinStateType {
 	return VersionPinStateType
 }
@@ -50,6 +64,10 @@ func (vps *VersionPinState) PinStateType() PinStateType {
 
 type RevisionPinState struct {
 	Revision string
+}
+
+func NewRevisionPinState(revision string) *RevisionPinState {
+	return &RevisionPinState{Revision: revision}
 }
 
 func (rps *RevisionPinState) PinStateType() PinStateType {

@@ -52,7 +52,7 @@ func NewPinFromV1Pin(v1p *V1Pin) (*Pin, error) {
 	}
 	return &Pin{
 		PkgRef: pkgRef,
-		State:  newPinStateFromV1PinState(v1p.State),
+		State:  NewPinStateFromV1PinState(v1p.State),
 	}, nil
 }
 
@@ -82,7 +82,12 @@ func NewPkgRefFromV1Pin(v1p *V1Pin) (*PackageReference, error) {
 	}, nil
 }
 
-func newPinStateFromV1PinState(ps *V1PinState) PinState {
-	// TODO(chuck): IMPLEMENT ME!
-	return nil
+func NewPinStateFromV1PinState(ps *V1PinState) PinState {
+	if ps.Version != "" {
+		return NewVersionPinState(ps.Version, ps.Revision)
+	}
+	if ps.Branch != "" {
+		return NewBranchPinState(ps.Branch, ps.Revision)
+	}
+	return NewRevisionPinState(ps.Revision)
 }

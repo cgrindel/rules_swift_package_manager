@@ -18,6 +18,7 @@ go_test(
         "package_reference_test.go",
         "pin_store_v1_test.go",
         "pin_store_v2_test.go",
+        "pin_test.go",
     ],
     deps = [
         ":spreso",
