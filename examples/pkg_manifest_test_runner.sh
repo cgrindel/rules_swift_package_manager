@@ -41,8 +41,11 @@ cd "${scratch_dir}"
 # Dump Bazel info
 bazel info
 
-# Run gazelle
-bazel run //:gazelle -- --gen_from_pkg_manifest
+# Generate Swift external deps 
+bazel run //:swift_update_repos
+
+# Generate build files for the workspace
+bazel run //:gazelle
 
 # Ensure that it builds
 bazel test //...
