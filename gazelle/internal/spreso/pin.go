@@ -1,10 +1,44 @@
 package spreso
 
+import (
+	"encoding/json"
+	"fmt"
+
+	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
+)
+
 // Pin
 
 type Pin struct {
 	PkgRef *PackageReference
 	State  PinState
+}
+
+func NewPinsFromResolvedPackageJSON(b []byte) ([]*Pin, error) {
+	var anyMap map[string]any
+	if err := json.Unmarshal(b, &anyMap); err != nil {
+		return nil, err
+	}
+	ver, err := jsonutils.IntAtKey(anyMap, "version")
+	if err != nil {
+		return nil, err
+	}
+	switch ver {
+	case 1:
+		var v1ps V1PinStore
+		if err := json.Unmarshal(b, &v1ps); err != nil {
+			return nil, err
+		}
+		return NewPinsFromV1PinStore(&v1ps)
+	case 2:
+		var v2ps V2PinStore
+		if err := json.Unmarshal(b, &v2ps); err != nil {
+			return nil, err
+		}
+		return NewPinsFromV2PinStore(&v2ps)
+	default:
+		return nil, fmt.Errorf("unrecognized version %d for resolved package JSON", ver)
+	}
 }
 
 // PinStateType

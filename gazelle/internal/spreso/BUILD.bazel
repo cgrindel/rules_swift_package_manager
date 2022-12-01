@@ -11,6 +11,7 @@ go_library(
     ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/spreso",
     visibility = ["//gazelle:__subpackages__"],
+    deps = ["//gazelle/internal/jsonutils"],
 )
 
 go_test(

@@ -17,6 +17,9 @@ var structValue map[string]any
 var stringSliceValue = []any{"hello", "goodbye"}
 var intSliceValue = []any{123, 456}
 var intValue = 123
+var stringValue = "stringValue"
+var floatValue = float64(2)
+var floatValueAsInt = 2
 
 func init() {
 	mapValue = make(map[string]any)
@@ -26,12 +29,13 @@ func init() {
 	structValue["name"] = "harry"
 
 	rawMap = make(map[string]any)
-	rawMap["stringKey"] = "stringValue"
+	rawMap["stringKey"] = stringValue
 	rawMap["intKey"] = intValue
 	rawMap["mapKey"] = mapValue
 	rawMap["stringSliceKey"] = stringSliceValue
 	rawMap["structKey"] = structValue
 	rawMap["intSliceKey"] = intSliceValue
+	rawMap["floatKey"] = floatValue
 }
 
 func TestStringAtKey(t *testing.T) {
@@ -51,6 +55,31 @@ func TestStringAtKey(t *testing.T) {
 		actual, err := jsonutils.StringAtKey(rawMap, "stringKey")
 		assert.NoError(t, err)
 		assert.Equal(t, "stringValue", actual)
+	})
+}
+
+func TestIntAtKey(t *testing.T) {
+	t.Run("key does not exist", func(t *testing.T) {
+		k := "doesNotExist"
+		actual, err := jsonutils.IntAtKey(rawMap, k)
+		assert.Equal(t, jsonutils.NewMissingKeyError(k), err)
+		assert.Equal(t, 0, actual)
+	})
+	t.Run("key exists, is not int", func(t *testing.T) {
+		k := "stringKey"
+		actual, err := jsonutils.IntAtKey(rawMap, k)
+		assert.Equal(t, jsonutils.NewKeyTypeError(k, "int", stringValue), err)
+		assert.Equal(t, 0, actual)
+	})
+	t.Run("key exists, is int", func(t *testing.T) {
+		actual, err := jsonutils.IntAtKey(rawMap, "intKey")
+		assert.NoError(t, err)
+		assert.Equal(t, intValue, actual)
+	})
+	t.Run("key exists, is float64", func(t *testing.T) {
+		actual, err := jsonutils.IntAtKey(rawMap, "floatKey")
+		assert.NoError(t, err)
+		assert.Equal(t, floatValueAsInt, actual)
 	})
 }
 

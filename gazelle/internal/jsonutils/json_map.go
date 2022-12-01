@@ -2,6 +2,7 @@ package jsonutils
 
 import (
 	"encoding/json"
+	"math"
 )
 
 func StringAtKey(jm map[string]any, k string) (string, error) {
@@ -14,6 +15,23 @@ func StringAtKey(jm map[string]any, k string) (string, error) {
 		return t, nil
 	default:
 		return "", NewKeyTypeError(k, "string", t)
+	}
+}
+
+func IntAtKey(jm map[string]any, k string) (int, error) {
+	rawValue, ok := jm[k]
+	if !ok {
+		return 0, NewMissingKeyError(k)
+	}
+	switch t := rawValue.(type) {
+	case int:
+		return t, nil
+	case float64:
+		// Unmarshal stores all numbers as float64 when unmarshaled to an interface value
+		// https://pkg.go.dev/encoding/json#Unmarshal.
+		return int(math.Round(t)), nil
+	default:
+		return 0, NewKeyTypeError(k, "int", t)
 	}
 }
 

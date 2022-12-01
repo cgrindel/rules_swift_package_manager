@@ -65,6 +65,8 @@ bazel_integration_tests(
 
 # MARK: - Test Suites
 
+# GH009: Add pkg_manifest_test to test_suite declarations
+
 test_suite(
     name = "smoke_integration_tests",
     tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
