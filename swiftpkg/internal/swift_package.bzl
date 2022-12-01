@@ -22,9 +22,15 @@ def _clone_or_update_repo(ctx):
     root = ctx.path(".")
     directory = str(root)
 
+    # DEBUG BEGIN
+    print("*** CHUCK directory: ", directory)
+    # DEBUG END
+
     git_ = git_repo(ctx, directory)
 
-    return {"commit": git_.commit, "shallow_since": git_.shallow_since}
+    # Do not include shallow_since as required for the canonical form. I am not
+    # sure how to determine that when generating the swift_package declarations
+    return {"commit": git_.commit}
 
 def _update_git_attrs(orig, keys, override):
     result = update_attrs(orig, keys, override)
