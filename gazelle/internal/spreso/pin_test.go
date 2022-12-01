@@ -46,7 +46,10 @@ func TestNewPinsFromResolvedPackageJSON(t *testing.T) {
 		assert.Equal(t, &swiftArgParserPin, pins[0])
 	})
 	t.Run("v2", func(t *testing.T) {
-		t.Error("IMPLEMENT ME!")
+		pins, err := spreso.NewPinsFromResolvedPackageJSON([]byte(v2PinStoreJSON))
+		assert.NoError(t, err)
+		assert.Len(t, pins, 1)
+		assert.Equal(t, &swiftArgParserPin, pins[0])
 	})
 	t.Run("unrecognized version", func(t *testing.T) {
 		t.Error("IMPLEMENT ME!")
@@ -80,5 +83,22 @@ const v1PinStoreJSON = `
 	  }
 	]
   }
+}
+`
+
+const v2PinStoreJSON = `
+{
+  "pins" : [
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser",
+      "state" : {
+        "revision" : "fddd1c00396eed152c45a46bea9f47b98e59301d",
+        "version" : "1.2.0"
+      }
+    }
+  ],
+  "version" : 2
 }
 `
