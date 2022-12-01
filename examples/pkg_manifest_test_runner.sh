@@ -45,7 +45,7 @@ bazel info
 bazel run //:swift_update_repos
 
 # Generate build files for the workspace
-bazel run //:gazelle
+bazel run //:update_build_files
 
 # Ensure that it builds
 bazel test //...

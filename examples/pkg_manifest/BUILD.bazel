@@ -12,7 +12,7 @@ gazelle_binary(
 )
 
 gazelle(
-    name = "gazelle",
+    name = "update_build_files",
     extra_args = [
         "-gen_from_pkg_manifest",
     ],
