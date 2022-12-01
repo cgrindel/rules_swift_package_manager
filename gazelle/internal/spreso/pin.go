@@ -7,6 +7,16 @@ type Pin struct {
 	State  PinState
 }
 
+func NewPinsFromResolvedPackageFile(path string) ([]*Pin, error) {
+	// TODO(chuck): IMPLEMENT ME!
+	return nil, nil
+}
+
+func NewPinsFromResolvedPackageJSON(b []byte) ([]*Pin, error) {
+	// TODO(chuck): IMPLEMENT ME!
+	return nil, nil
+}
+
 // PinStateType
 
 type PinStateType int
