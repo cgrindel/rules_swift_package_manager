@@ -18,6 +18,8 @@ var stringSliceValue = []any{"hello", "goodbye"}
 var intSliceValue = []any{123, 456}
 var intValue = 123
 var stringValue = "stringValue"
+var floatValue = float64(2)
+var floatValueAsInt = 2
 
 func init() {
 	mapValue = make(map[string]any)
@@ -33,6 +35,7 @@ func init() {
 	rawMap["stringSliceKey"] = stringSliceValue
 	rawMap["structKey"] = structValue
 	rawMap["intSliceKey"] = intSliceValue
+	rawMap["floatKey"] = floatValue
 }
 
 func TestStringAtKey(t *testing.T) {
@@ -72,6 +75,11 @@ func TestIntAtKey(t *testing.T) {
 		actual, err := jsonutils.IntAtKey(rawMap, "intKey")
 		assert.NoError(t, err)
 		assert.Equal(t, intValue, actual)
+	})
+	t.Run("key exists, is float64", func(t *testing.T) {
+		actual, err := jsonutils.IntAtKey(rawMap, "floatKey")
+		assert.NoError(t, err)
+		assert.Equal(t, floatValueAsInt, actual)
 	})
 }
 
