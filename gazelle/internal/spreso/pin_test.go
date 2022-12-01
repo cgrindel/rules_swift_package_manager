@@ -52,7 +52,10 @@ func TestNewPinsFromResolvedPackageJSON(t *testing.T) {
 		assert.Equal(t, &swiftArgParserPin, pins[0])
 	})
 	t.Run("unrecognized version", func(t *testing.T) {
-		t.Error("IMPLEMENT ME!")
+		unrecognizedJSON := `{"version": 9}`
+		pins, err := spreso.NewPinsFromResolvedPackageJSON([]byte(unrecognizedJSON))
+		assert.ErrorContains(t, err, "unrecognized version 9 for resolved package JSON")
+		assert.Nil(t, pins)
 	})
 }
 
