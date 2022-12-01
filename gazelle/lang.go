@@ -28,6 +28,12 @@ var loads = []rule.LoadInfo{
 			swift.TestRuleKind,
 		},
 	},
+	{
+		Name: "@cgrindel_swift_bazel//swiftpkg:defs.bzl",
+		Symbols: []string{
+			swift.SwiftPkgRuleKind,
+		},
+	},
 }
 
 type swiftLang struct {
