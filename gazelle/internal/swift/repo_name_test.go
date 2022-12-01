@@ -7,16 +7,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestRepoName(t *testing.T) {
-	actual, err := swift.RepoName("https://github.com/nicklockwood/SwiftFormat.git")
+func TestRepoNameFromURL(t *testing.T) {
+	actual, err := swift.RepoNameFromURL("https://github.com/nicklockwood/SwiftFormat.git")
 	assert.NoError(t, err)
 	assert.Equal(t, "nicklockwood_SwiftFormat", actual)
 
-	actual, err = swift.RepoName("https://github.com/nicklockwood/SwiftFormat")
+	actual, err = swift.RepoNameFromURL("https://github.com/nicklockwood/SwiftFormat")
 	assert.NoError(t, err)
 	assert.Equal(t, "nicklockwood_SwiftFormat", actual)
 
-	actual, err = swift.RepoName("")
+	actual, err = swift.RepoNameFromURL("")
 	assert.ErrorContains(t, err, "URL cannot be empty string")
 	assert.Equal(t, "", actual)
 }

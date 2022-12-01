@@ -15,6 +15,7 @@ go_library(
         "module_name.go",
         "module_type.go",
         "repo_name.go",
+        "repo_rule_from_pin.go",
         "rule_kinds.go",
         "rules_common.go",
         "rules_from_manifest.go",
@@ -25,6 +26,7 @@ go_library(
     deps = [
         "//gazelle/internal/pathdistance",
         "//gazelle/internal/spdump",
+        "//gazelle/internal/spreso",
         "//gazelle/internal/stringslices",
         "//gazelle/internal/swiftpkg",
         "@bazel_gazelle//config:go_default_library",
@@ -44,6 +46,7 @@ go_test(
         "module_index_test.go",
         "module_name_test.go",
         "repo_name_test.go",
+        "repo_rule_from_pin_test.go",
         "rule_kinds_test.go",
     ],
     deps = [
