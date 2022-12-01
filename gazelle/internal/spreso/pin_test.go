@@ -37,3 +37,15 @@ func TestNewRevisionPinState(t *testing.T) {
 	}
 	assert.Equal(t, expected, actual)
 }
+
+func TestNewPinsFromResolvedPackageJSON(t *testing.T) {
+	t.Run("v1", func(t *testing.T) {
+		t.Error("IMPLEMENT ME!")
+	})
+	t.Run("v2", func(t *testing.T) {
+		t.Error("IMPLEMENT ME!")
+	})
+	t.Run("unrecognized version", func(t *testing.T) {
+		t.Error("IMPLEMENT ME!")
+	})
+}
