@@ -51,6 +51,7 @@ go_test(
     ],
     deps = [
         ":swift",
+        "//gazelle/internal/spreso",
         "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//rule:go_default_library",
         "@com_github_stretchr_testify//assert",
