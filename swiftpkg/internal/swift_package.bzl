@@ -1,9 +1,11 @@
 """Implementation for `swift_package`."""
 
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_tools//tools/build_defs/repo:git_worker.bzl", "git_repo")
 load(
     "@bazel_tools//tools/build_defs/repo:utils.bzl",
     "patch",
+    "update_attrs",
     "workspace_and_buildfile",
 )
 
@@ -24,29 +26,45 @@ def _clone_or_update_repo(ctx):
 
     return {"commit": git_.commit, "shallow_since": git_.shallow_since}
 
+def _update_git_attrs(orig, keys, override):
+    result = update_attrs(orig, keys, override)
+
+    # if we found the actual commit, remove all other means of specifying it,
+    # like tag or branch.
+    if "commit" in result:
+        result.pop("tag", None)
+        result.pop("branch", None)
+    return result
+
 def _swift_package_impl(ctx):
     update = _clone_or_update_repo(ctx)
     workspace_and_buildfile(ctx)
     patch(ctx)
     ctx.delete(ctx.path(".git"))
-    return _update_git_attrs(ctx.attr, _common_attrs.keys(), update)
 
-swift_package = repository_rule(
-    implementation = _swift_package_impl,
-    attrs = dicts.add([
-        _PATCH_ATTRS,
-        _WORKSPACE_AND_BUILD_FILE_ATTRS,
-        _GIT_ATTRS,
-    ]),
-    doc = "",
-)
+    # Return attributes that make this reproducible
+    return _update_git_attrs(ctx.attr, _COMMON_ATTRS.keys(), update)
 
 _GIT_ATTRS = {
+    "branch": attr.string(
+        default = "",
+        doc =
+            "branch in the remote repository to checked out." +
+            " Precisely one of branch, tag, or commit must be specified.",
+    ),
     "commit": attr.string(
         mandatory = True,
         doc = """\
 The commit or revision to download from version control.\
 """,
+    ),
+    "init_submodules": attr.bool(
+        default = False,
+        doc = "Whether to clone submodules in the repository.",
+    ),
+    "recursive_init_submodules": attr.bool(
+        default = False,
+        doc = "Whether to clone submodules recursively in the repository.",
     ),
     "remote": attr.string(
         mandatory = True,
@@ -54,6 +72,23 @@ The commit or revision to download from version control.\
 The version control location from where the repository should be downloaded.\
 """,
     ),
+    "shallow_since": attr.string(
+        default = "",
+        doc =
+            "an optional date, not after the specified commit; the " +
+            "argument is not allowed if a tag is specified (which allows " +
+            "cloning with depth 1). Setting such a date close to the " +
+            "specified commit allows for a more shallow clone of the " +
+            "repository, saving bandwidth " +
+            "and wall-clock time.",
+    ),
+    "tag": attr.string(
+        default = "",
+        doc =
+            "tag in the remote repository to checked out." +
+            " Precisely one of branch, tag, or commit must be specified.",
+    ),
+    "verbose": attr.bool(default = False),
 }
 
 _WORKSPACE_AND_BUILD_FILE_ATTRS = {
@@ -123,3 +158,15 @@ _PATCH_ATTRS = {
             "arguments other than `-p` in `patch_args` attribute.",
     ),
 }
+
+_COMMON_ATTRS = dicts.add(
+    _PATCH_ATTRS,
+    _WORKSPACE_AND_BUILD_FILE_ATTRS,
+    _GIT_ATTRS,
+)
+
+swift_package = repository_rule(
+    implementation = _swift_package_impl,
+    attrs = _COMMON_ATTRS,
+    doc = "",
+)

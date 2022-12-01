@@ -4,6 +4,11 @@ bzl_library(
     name = "swift_package",
     srcs = ["swift_package.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        "@bazel_skylib//lib:dicts",
+        "@bazel_tools//tools/build_defs/repo:git_worker.bzl",
+        "@bazel_tools//tools/build_defs/repo:utils.bzl",
+    ],
 )
 
 bzl_library(
