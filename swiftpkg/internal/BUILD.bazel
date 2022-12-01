@@ -5,3 +5,9 @@ bzl_library(
     srcs = ["swift_package.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
+
+bzl_library(
+    name = "env_execute",
+    srcs = ["env_execute.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
