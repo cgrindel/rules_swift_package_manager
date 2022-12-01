@@ -17,6 +17,19 @@ func StringAtKey(jm map[string]any, k string) (string, error) {
 	}
 }
 
+func IntAtKey(jm map[string]any, k string) (int, error) {
+	rawValue, ok := jm[k]
+	if !ok {
+		return 0, NewMissingKeyError(k)
+	}
+	switch t := rawValue.(type) {
+	case int:
+		return t, nil
+	default:
+		return 0, NewKeyTypeError(k, "int", t)
+	}
+}
+
 func MapAtKey(jm map[string]any, k string) (map[string]any, error) {
 	rawValue, ok := jm[k]
 	if !ok {
