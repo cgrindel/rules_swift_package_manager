@@ -1,7 +1,6 @@
 package gazelle
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 
@@ -19,9 +18,6 @@ func (*swiftLang) CanImport(path string) bool {
 }
 
 func (*swiftLang) ImportRepos(args language.ImportReposArgs) language.ImportReposResult {
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: ImportRepos args: %+#v", args)
-	// DEBUG END
 	result := language.ImportReposResult{}
 
 	// Read the Package.resolved file
@@ -47,14 +43,3 @@ func (*swiftLang) ImportRepos(args language.ImportReposArgs) language.ImportRepo
 
 	return result
 }
-
-// // language.RepoUpdate Implementation
-
-// // Update repository rules that provide named libraries
-// func (*swiftLang) UpdateRepos(args language.UpdateReposArgs) language.UpdateReposResult {
-// 	result := language.UpdateReposResult{}
-// 	// DEBUG BEGIN
-// 	log.Printf("*** CHUCK: UpdateRepos args: %+#v", args)
-// 	// DEBUG END
-// 	return result
-// }
