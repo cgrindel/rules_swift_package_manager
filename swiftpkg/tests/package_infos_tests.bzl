@@ -38,6 +38,43 @@ def _get_test(ctx):
                 type = package_infos.new_product_type(executable = True),
             ),
         ],
+        targets = [
+            package_infos.new_target(
+                name = "MySwiftPackage",
+                type = "executable",
+                c99name = "MySwiftPackage",
+                module_type = "SwiftTarget",
+                path = "Sources/MySwiftPackage",
+                sources = [
+                    "MySwiftPackage.swift",
+                ],
+                dependencies = [
+                    package_infos.new_target_dependency(
+                        product = package_infos.new_product_reference(
+                            product_name = "ArgumentParser",
+                            dep_identity = "swift-argument-parser",
+                        ),
+                    ),
+                ],
+            ),
+            package_infos.new_target(
+                name = "MySwiftPackageTests",
+                type = "test",
+                c99name = "MySwiftPackageTests",
+                module_type = "SwiftTarget",
+                path = "Tests/MySwiftPackageTests",
+                sources = [
+                    "MySwiftPackageTests.swift",
+                ],
+                dependencies = [
+                    package_infos.new_target_dependency(
+                        by_name = package_infos.new_target_reference(
+                            target_name = "MySwiftPackage",
+                        ),
+                    ),
+                ],
+            ),
+        ],
     )
     asserts.equals(env, expected, actual)
 

@@ -97,6 +97,38 @@ def _new_product_from_desc_json_map(prd_map):
         type = prd_type,
     )
 
+def _new_target_dependency_from_dump_json_map(dep_map):
+    by_name_list = dep_map.get("byName")
+    by_name = _new_target_reference(by_name_list[0]) if by_name_list else None
+
+    product = None
+    product_list = dep_map.get("product")
+    if product_list:
+        product = _new_product_reference(
+            product_name = product_list[0],
+            dep_identity = product_list[1],
+        )
+
+    return _new_target_dependency(
+        by_name = by_name,
+        product = product,
+    )
+
+def _new_target_from_json_maps(dump_map, desc_map):
+    dependencies = [
+        _new_target_dependency_from_dump_json_map(d)
+        for d in dump_map["dependencies"]
+    ]
+    return _new_target(
+        name = dump_map["name"],
+        type = dump_map["type"],
+        c99name = desc_map["c99name"],
+        module_type = desc_map["module_type"],
+        path = desc_map["path"],
+        sources = desc_map["sources"],
+        dependencies = dependencies,
+    )
+
 def _new_from_parsed_json(dump_manifest, desc_manifest):
     tools_version = dump_manifest["toolsVersion"]["_version"]
     platforms = [
@@ -112,6 +144,17 @@ def _new_from_parsed_json(dump_manifest, desc_manifest):
         for prd_map in desc_manifest["products"]
     ]
 
+    desc_targets_by_name = {
+        target_map["name"]: target_map
+        for target_map in desc_manifest["targets"]
+    }
+    targets = [
+        _new_target_from_json_maps(
+            dump_map = target_map,
+            desc_map = desc_targets_by_name[target_map["name"]],
+        )
+        for target_map in dump_manifest["targets"]
+    ]
     return _new(
         name = dump_manifest["name"],
         path = desc_manifest["path"],
@@ -119,6 +162,7 @@ def _new_from_parsed_json(dump_manifest, desc_manifest):
         platforms = platforms,
         dependencies = dependencies,
         products = products,
+        targets = targets,
     )
 
 def _new(
@@ -154,6 +198,10 @@ def _new_dependency(identity, type, url, requirement):
     )
 
 def _new_dependency_requirement(ranges = None):
+    if ranges == None:
+        fail("""\
+A depdendency requirement must have one of the following: `ranges`.\
+""")
     return struct(
         ranges = ranges,
     )
@@ -194,12 +242,37 @@ def _new_product(name, type, targets):
         targets = targets,
     )
 
-# def _target(name, type, dependencies = []):
-#     return struct(
-#         name = name,
-#         type = type,
-#         dependencies = dependencies,
-#     )
+def _new_product_reference(product_name, dep_identity):
+    return struct(
+        product_name = product_name,
+        dep_identity = dep_identity,
+    )
+
+def _new_target_reference(target_name):
+    return struct(
+        target_name = target_name,
+    )
+
+def _new_target_dependency(by_name = None, product = None):
+    if by_name == None and product == None:
+        fail("""\
+A target dependency must have one of the following: `by_name` or a `product`.\
+""")
+    return struct(
+        by_name = by_name,
+        product = product,
+    )
+
+def _new_target(name, type, c99name, module_type, path, sources, dependencies):
+    return struct(
+        name = name,
+        type = type,
+        c99name = c99name,
+        module_type = module_type,
+        path = path,
+        sources = sources,
+        dependencies = dependencies,
+    )
 
 package_infos = struct(
     get = _get,
@@ -211,4 +284,8 @@ package_infos = struct(
     new_version_range = _new_version_range,
     new_product = _new_product,
     new_product_type = _new_product_type,
+    new_product_reference = _new_product_reference,
+    new_target_reference = _new_target_reference,
+    new_target_dependency = _new_target_dependency,
+    new_target = _new_target,
 )
