@@ -8,25 +8,46 @@ load(
     "update_attrs",
     "workspace_and_buildfile",
 )
+load(":package_infos.bzl", "package_infos")
 
 # The implementation of this repository rule is heavily influenced by the
 # implementation for git_repository.
 
-def _clone_or_update_repo(ctx):
-    if ((not ctx.attr.tag and not ctx.attr.commit and not ctx.attr.branch) or
-        (ctx.attr.tag and ctx.attr.commit) or
-        (ctx.attr.tag and ctx.attr.branch) or
-        (ctx.attr.commit and ctx.attr.branch)):
+# MARK: - Environment Variables
+
+_DEVELOPER_DIR_ENV = "DEVELOPER_DIR"
+
+def _get_exec_env(repository_ctx):
+    """Creates a `dict` of environment variables which will be past to all execution environments for this rule.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+
+    Returns:
+        A `dict` of environment variables which will be used for execution environments for this rule.
+    """
+
+    # If the DEVELOPER_DIR is specified in the environment, it will override
+    # the value which may be specified in the env attribute.
+    env = dicts.add(repository_ctx.attr.env)
+    dev_dir = repository_ctx.os.environ.get(_DEVELOPER_DIR_ENV)
+    if dev_dir:
+        env[_DEVELOPER_DIR_ENV] = dev_dir
+    return env
+
+def _clone_or_update_repo(repository_ctx, directory):
+    if ((not repository_ctx.attr.tag and not repository_ctx.attr.commit and not repository_ctx.attr.branch) or
+        (repository_ctx.attr.tag and repository_ctx.attr.commit) or
+        (repository_ctx.attr.tag and repository_ctx.attr.branch) or
+        (repository_ctx.attr.commit and repository_ctx.attr.branch)):
         fail("Exactly one of commit, tag, or branch must be provided")
 
-    root = ctx.path(".")
-    directory = str(root)
-
     # DEBUG BEGIN
-    print("*** CHUCK directory: ", directory)
+    print("*** _clone_or_update_repo CHUCK directory: ", directory)
+
     # DEBUG END
 
-    git_ = git_repo(ctx, directory)
+    git_ = git_repo(repository_ctx, directory)
 
     # Do not include shallow_since as required for the canonical form. I am not
     # sure how to determine that when generating the swift_package declarations
@@ -42,14 +63,32 @@ def _update_git_attrs(orig, keys, override):
         result.pop("branch", None)
     return result
 
-def _swift_package_impl(ctx):
-    update = _clone_or_update_repo(ctx)
-    workspace_and_buildfile(ctx)
-    patch(ctx)
-    ctx.delete(ctx.path(".git"))
+def _gen_build_files(repository_ctx, pkg_info):
+    # Generate build file from targets
+    pass
+
+def _swift_package_impl(repository_ctx):
+    root = repository_ctx.path(".")
+    directory = str(root)
+    env = _get_exec_env(repository_ctx)
+
+    # Download the repo
+    update = _clone_or_update_repo(repository_ctx, directory)
+
+    # Get the package info
+    pkg_info = package_infos.get(repository_ctx, directory, env = env)
+
+    # DEBUG BEGIN
+    print("*** CHUCK _swift_package_impl pkg_info: ", pkg_info)
+    # DEBUG END
+
+    workspace_and_buildfile(repository_ctx)
+    _gen_build_files(repository_ctx, pkg_info)
+    patch(repository_ctx)
+    repository_ctx.delete(repository_ctx.path(".git"))
 
     # Return attributes that make this reproducible
-    return _update_git_attrs(ctx.attr, _COMMON_ATTRS.keys(), update)
+    return _update_git_attrs(repository_ctx.attr, _COMMON_ATTRS.keys(), update)
 
 _GIT_ATTRS = {
     "branch": attr.string(
@@ -165,10 +204,21 @@ _PATCH_ATTRS = {
     ),
 }
 
+_ENV_ATTRS = {
+    "env": attr.string_dict(
+        doc = """\
+Environment variables that will be passed to the execution environments for \
+this repository rule. (e.g. SPM version check, SPM dependency resolution, SPM \
+package description generation)\
+""",
+    ),
+}
+
 _COMMON_ATTRS = dicts.add(
     _PATCH_ATTRS,
     _WORKSPACE_AND_BUILD_FILE_ATTRS,
     _GIT_ATTRS,
+    _ENV_ATTRS,
 )
 
 swift_package = repository_rule(
