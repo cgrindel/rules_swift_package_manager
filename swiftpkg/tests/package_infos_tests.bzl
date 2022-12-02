@@ -19,6 +19,18 @@ def _get_test(ctx):
         platforms = [
             package_infos.new_platform(name = "macos", version = "10.15"),
         ],
+        dependencies = [
+            package_infos.new_dependency(
+                identity = "swift-argument-parser",
+                type = "sourceControl",
+                url = "https://github.com/apple/swift-argument-parser",
+                requirement = package_infos.new_dependency_requirement(
+                    ranges = [
+                        package_infos.new_version_range("1.2.0", "2.0.0"),
+                    ],
+                ),
+            ),
+        ],
     )
     asserts.equals(env, expected, actual)
 
