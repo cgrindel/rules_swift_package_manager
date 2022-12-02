@@ -50,10 +50,6 @@ def _get_desc_manifest(repository_ctx, env = {}, working_directory = ""):
     return json.decode(json_str)
 
 def _get(repository_ctx, directory, env = {}):
-    # DEBUG BEGIN
-    print("*** package_infos.get CHUCK directory: ", directory)
-
-    # DEBUG END
     dump_manifest = _get_dump_manifest(
         repository_ctx,
         env = env,
