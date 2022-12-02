@@ -1,9 +1,12 @@
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load(":clang_files_tests.bzl", "clang_files_test_suite")
 load(":package_infos_tests.bzl", "package_infos_test_suite")
+load(":starlark_utils_tests.bzl", "starlark_utils_test_suite")
 
 bzlformat_pkg(name = "bzlformat")
 
 clang_files_test_suite()
 
 package_infos_test_suite()
+
+starlark_utils_test_suite()

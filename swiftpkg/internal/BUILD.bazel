@@ -74,3 +74,9 @@ bzl_library(
     srcs = ["repository_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
+
+bzl_library(
+    name = "starlark_utils",
+    srcs = ["starlark_utils.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
