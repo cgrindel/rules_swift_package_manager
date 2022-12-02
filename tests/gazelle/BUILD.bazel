@@ -31,7 +31,7 @@ _DEFAULT_TEST_INFO = test_infos.new(
 
 _SWIFT_PKG_TEST_INFO = test_infos.new(
     # CI tests run on low power machines. Need to give it plenty of time to run.
-    timeout = 10,
+    timeout = 30,
     binary = ":swift_gazelle_gen_from_pkg_manifest",
     local = True,
 )
