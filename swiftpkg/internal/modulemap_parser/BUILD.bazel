@@ -4,7 +4,7 @@ load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 bzl_library(
     name = "character_sets",
     srcs = ["character_sets.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         "@bazel_skylib//lib:sets",
     ],
@@ -13,7 +13,7 @@ bzl_library(
 bzl_library(
     name = "collect_export_declaration",
     srcs = ["collect_export_declaration.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":collection_results",
         ":declarations",
@@ -25,7 +25,7 @@ bzl_library(
 bzl_library(
     name = "collect_extern_module",
     srcs = ["collect_extern_module.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":collection_results",
         ":declarations",
@@ -36,7 +36,7 @@ bzl_library(
 bzl_library(
     name = "collect_header_declaration",
     srcs = ["collect_header_declaration.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":collection_results",
         ":declarations",
@@ -48,7 +48,7 @@ bzl_library(
 bzl_library(
     name = "collect_link_declaration",
     srcs = ["collect_link_declaration.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":collection_results",
         ":declarations",
@@ -60,7 +60,7 @@ bzl_library(
 bzl_library(
     name = "collect_module",
     srcs = ["collect_module.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":collect_module_members",
         ":collection_results",
@@ -74,7 +74,7 @@ bzl_library(
 bzl_library(
     name = "collect_module_members",
     srcs = ["collect_module_members.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":collect_export_declaration",
         ":collect_header_declaration",
@@ -91,7 +91,7 @@ bzl_library(
 bzl_library(
     name = "collect_umbrella_dir_declaration",
     srcs = ["collect_umbrella_dir_declaration.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":collection_results",
         ":declarations",
@@ -103,7 +103,7 @@ bzl_library(
 bzl_library(
     name = "collect_unprocessed_submodule",
     srcs = ["collect_unprocessed_submodule.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":collection_results",
         ":declarations",
@@ -115,14 +115,14 @@ bzl_library(
 bzl_library(
     name = "collection_results",
     srcs = ["collection_results.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [],
 )
 
 bzl_library(
     name = "declarations",
     srcs = ["declarations.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":errors",
     ],
@@ -131,7 +131,7 @@ bzl_library(
 bzl_library(
     name = "module_declarations",
     srcs = ["module_declarations.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":declarations",
         ":errors",
@@ -141,7 +141,7 @@ bzl_library(
 bzl_library(
     name = "parser",
     srcs = ["parser.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":collect_extern_module",
         ":collect_module",
@@ -156,7 +156,7 @@ bzl_library(
 bzl_library(
     name = "tokenizer",
     srcs = ["tokenizer.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":character_sets",
         ":tokens",
@@ -167,7 +167,7 @@ bzl_library(
 bzl_library(
     name = "tokens",
     srcs = ["tokens.bzl"],
-    visibility = ["//spm:__subpackages__"],
+    visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":errors",
         "@bazel_skylib//lib:partial",

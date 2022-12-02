@@ -73,11 +73,6 @@ def _parsed_json_from_spm_command(
     if debug_json_path:
         if not paths.is_absolute(debug_json_path):
             debug_json_path = paths.join(working_directory, debug_json_path)
-
-        # DEBUG BEGIN
-        print("*** CHUCK parsed_json_from_spm_command debug_json_path: ", debug_json_path)
-
-        # DEBUG END
         repository_ctx.file(debug_json_path, content = json_str, executable = False)
     return json.decode(json_str)
 

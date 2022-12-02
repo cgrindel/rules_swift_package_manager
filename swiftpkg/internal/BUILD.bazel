@@ -43,20 +43,14 @@ bzl_library(
 bzlformat_pkg(name = "bzlformat")
 
 bzl_library(
-    name = "common",
-    srcs = ["common.bzl"],
+    name = "repository_utils",
+    srcs = ["repository_utils.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
+    deps = ["@bazel_skylib//lib:paths"],
 )
 
 bzl_library(
     name = "repository_files",
     srcs = ["repository_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
-)
-
-bzl_library(
-    name = "repository_utils",
-    srcs = ["repository_utils.bzl"],
-    visibility = ["//swiftpkg:__subpackages__"],
-    deps = ["@bazel_skylib//lib:paths"],
 )
