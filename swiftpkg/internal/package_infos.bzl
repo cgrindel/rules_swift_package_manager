@@ -43,6 +43,20 @@ def _get_desc_manifest(repository_ctx, env = {}, working_directory = ""):
     )
 
 def _get(repository_ctx, directory, env = {}):
+    """Retrieves the package information for the Swift package defined at the \
+    specified directory.
+
+    Args:
+        repository_ctx: A `repository_ctx`.
+        directory: The path for the Swift package (`string`).
+        env: A `dict` of environment variables that will be included in the
+             command execution.
+
+
+    Returns:
+        A `struct` representing the package information as returned by
+        `package_infos.new()`.
+    """
     dump_manifest = _get_dump_manifest(
         repository_ctx,
         env = env,
@@ -130,6 +144,19 @@ def _new_target_from_json_maps(dump_map, desc_map):
     )
 
 def _new_from_parsed_json(dump_manifest, desc_manifest):
+    """Returns the package information from the provided Swift package JSON \
+    structures.
+
+    Args:
+        dump_manifest: A `dict` representing the parsed JSON from `swift
+            package dump-package`.
+        desc_manifest: A `dict` representing the parsed JSON from `swift
+            package describe`.
+
+    Returns:
+        A `struct` representing the package information as returned by
+        `package_infos.new()`.
+    """
     tools_version = dump_manifest["toolsVersion"]["_version"]
     platforms = [
         _new_platform(name = pl["platformName"], version = pl["version"])
@@ -173,6 +200,25 @@ def _new(
         dependencies = [],
         products = [],
         targets = []):
+    """Returns a `struct` representing information about a Swift package.
+
+    Args:
+        name: The name of the Swift package (`string`).
+        path: The path to the Swift package (`string`).
+        tools_version: Optional. The semantic version for Swift from which the
+            package was created (`string`).
+        platforms: A `list` of platform structs as created by
+            `package_infos.new_platform()`.
+        dependencies: A `list` of external depdency structs as created by
+            `package_infos.new_dependency()`.
+        products: A `list` of product structs as created by
+            `package_infos.new_product()`.
+        targets: A `list` of target structs as created by
+            `package_infos.new_target()`.
+
+    Returns:
+        A `struct` representing information about a Swift package.
+    """
     return struct(
         name = name,
         path = path,
@@ -184,12 +230,34 @@ def _new(
     )
 
 def _new_platform(name, version):
+    """Creates a `struct` with information about a platform.
+
+    Args:
+        name: The name of the platform (`string`).
+        version: The minimum version for the platorm (`string`).
+
+    Returns:
+        A `struct` representing a Swift package platform.
+    """
     return struct(
         name = name,
         version = version,
     )
 
 def _new_dependency(identity, type, url, requirement):
+    """Creates a `struct` representing an external dependency for a Swift \
+    package.
+
+    Args:
+        identity: The identifier for the external depdendency (`string`).
+        type: Type type of external dependency (`string`).
+        url: The URL of the external dependency (`string`).
+        requirement: A `struct` as returned by \
+            `package_infos.new_dependency_requirement()`.
+
+    Returns:
+        A `struct` representing an external dependency.
+    """
     return struct(
         identity = identity,
         type = type,
@@ -198,6 +266,16 @@ def _new_dependency(identity, type, url, requirement):
     )
 
 def _new_dependency_requirement(ranges = None):
+    """Creates a `struct` representing the requirements for an external \
+    dependency.
+
+    Args:
+        ranges: Optional. A `list` of version range `struct` values as returned
+            by `package_infos.new_version_range()`.
+
+    Returns:
+        A `struct` representing the requirements for an external dependency.
+    """
     if ranges == None:
         fail("""\
 A depdendency requirement must have one of the following: `ranges`.\
@@ -207,6 +285,15 @@ A depdendency requirement must have one of the following: `ranges`.\
     )
 
 def _new_version_range(lower, upper):
+    """Creates a `struct` representing a version range.
+
+    Args:
+        lower: The minimum semantic version (`string`).
+        upper: The non-inclusive maximum semantic version (`string`).
+
+    Returns:
+        A `struct` representing a version range.
+    """
     return struct(
         lower = lower,
         upper = upper,
@@ -243,17 +330,45 @@ def _new_product(name, type, targets):
     )
 
 def _new_product_reference(product_name, dep_identity):
+    """Creates a product reference.
+
+    Args:
+        product_name: The name of the product (`string`).
+        dep_identity: The identity of the external dependency (`string`).
+
+    Returns:
+        A `struct` representing a product reference.
+    """
     return struct(
         product_name = product_name,
         dep_identity = dep_identity,
     )
 
 def _new_target_reference(target_name):
+    """Creates a target reference.
+
+    Args:
+        target_name: The name of the target (`string`).
+
+    Returns:
+        A `struct` representing a target reference.
+    """
     return struct(
         target_name = target_name,
     )
 
 def _new_target_dependency(by_name = None, product = None):
+    """Creates a target dependency.
+
+    Args:
+        by_name: A `struct` as returned by
+            `package_infos.new_target_reference()`.
+        product: A `struct` as returned by
+            `package_infos.new_product_reference()`.
+
+    Returns:
+        A `struct` representing a target dependency.
+    """
     if by_name == None and product == None:
         fail("""\
 A target dependency must have one of the following: `by_name` or a `product`.\
@@ -264,6 +379,22 @@ A target dependency must have one of the following: `by_name` or a `product`.\
     )
 
 def _new_target(name, type, c99name, module_type, path, sources, dependencies):
+    """Creates a target.
+
+    Args:
+        name: The name of the target (`string`).
+        type: The type of target (`string`).
+        c99name: The C name for the target (`string`).
+        module_type: The module type (`string`).
+        path: The path to the Swift package (`string`).
+        sources: A `list` of the source files (`string`) in the module relative
+            to the `path`.
+        dependencies: A `list` of target dependency values as returned by
+            `package_infos.new_target_dependency()`.
+
+    Returns:
+        A `struct` representing a target in a Swift package.
+    """
     return struct(
         name = name,
         type = type,
