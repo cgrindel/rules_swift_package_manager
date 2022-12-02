@@ -112,6 +112,7 @@ filegroup(
         "//gazelle/internal/pathdistance:all_files",
         "//gazelle/internal/spdesc:all_files",
         "//gazelle/internal/spdump:all_files",
+        "//gazelle/internal/spreso:all_files",
         "//gazelle/internal/stringslices:all_files",
         "//gazelle/internal/swift:all_files",
         "//gazelle/internal/swiftbin:all_files",
