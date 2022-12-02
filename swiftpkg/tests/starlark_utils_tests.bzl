@@ -1,11 +1,16 @@
 """Tests for `starlark_utils` API"""
 
-load("@bazel_skylib//lib:unittest.bzl", "unittest")
+load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
+load("//swiftpkg/internal:starlark_utils.bzl", "starlark_utils")
 
 def _quote_test(ctx):
     env = unittest.begin(ctx)
 
-    unittest.fail(env, "IMPLEMENT ME!")
+    actual = starlark_utils.quote("")
+    asserts.equals(env, "\"\"", actual)
+
+    actual = starlark_utils.quote("hello")
+    asserts.equals(env, "\"hello\"", actual)
 
     return unittest.end(env)
 
@@ -14,7 +19,35 @@ quote_test = unittest.make(_quote_test)
 def _list_to_str_test(ctx):
     env = unittest.begin(ctx)
 
-    unittest.fail(env, "IMPLEMENT ME!")
+    actual = starlark_utils.list_to_str([])
+    expected = ""
+    asserts.equals(env, expected, actual, "no values")
+
+    values = ["apple", "pear", "cherries"]
+
+    actual = starlark_utils.list_to_str(values, double_quote_values = False)
+    expected = """\
+        apple,
+        pear,
+        cherries,\
+"""
+    asserts.equals(env, expected, actual, "values, no double quote")
+
+    actual = starlark_utils.list_to_str(values)
+    expected = """\
+        "apple",
+        "pear",
+        "cherries",\
+"""
+    asserts.equals(env, expected, actual, "values, double quote")
+
+    actual = starlark_utils.list_to_str(values, indent = "")
+    expected = """\
+"apple",
+"pear",
+"cherries",\
+"""
+    asserts.equals(env, expected, actual, "values, no double quote, no indent")
 
     return unittest.end(env)
 
