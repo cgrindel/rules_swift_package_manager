@@ -58,8 +58,8 @@ def _get(repository_ctx, directory, env = {}):
         desc_manifest = desc_manifest,
     )
 
-def _new_dependency_requirement_from_desc_json_map(reqMap):
-    ranges = reqMap.get("range")
+def _new_dependency_requirement_from_desc_json_map(req_map):
+    ranges = req_map.get("range")
     if ranges != None:
         return _new_dependency_requirement(
             ranges = [
@@ -72,12 +72,29 @@ def _new_dependency_requirement_from_desc_json_map(reqMap):
         )
     return None
 
-def _new_dependency_from_desc_json_map(depMap):
+def _new_dependency_from_desc_json_map(dep_map):
     return _new_dependency(
-        identity = depMap["identity"],
-        type = depMap["type"],
-        url = depMap["url"],
-        requirement = _new_dependency_requirement_from_desc_json_map(depMap["requirement"]),
+        identity = dep_map["identity"],
+        type = dep_map["type"],
+        url = dep_map["url"],
+        requirement = _new_dependency_requirement_from_desc_json_map(dep_map["requirement"]),
+    )
+
+def _new_product_from_desc_json_map(prd_map):
+    does_not_exist = struct(exists = False)
+
+    prd_type_map = prd_map["type"]
+    executable = (
+        prd_type_map.get("executable", default = does_not_exist) != does_not_exist
+    )
+    prd_type = _new_product_type(
+        executable = executable,
+    )
+
+    return _new_product(
+        name = prd_map["name"],
+        targets = prd_map["targets"],
+        type = prd_type,
     )
 
 def _new_from_parsed_json(dump_manifest, desc_manifest):
@@ -87,8 +104,12 @@ def _new_from_parsed_json(dump_manifest, desc_manifest):
         for pl in dump_manifest["platforms"]
     ]
     dependencies = [
-        _new_dependency_from_desc_json_map(depMap)
-        for depMap in desc_manifest["dependencies"]
+        _new_dependency_from_desc_json_map(dep_map)
+        for dep_map in desc_manifest["dependencies"]
+    ]
+    products = [
+        _new_product_from_desc_json_map(prd_map)
+        for prd_map in desc_manifest["products"]
     ]
 
     return _new(
@@ -97,14 +118,8 @@ def _new_from_parsed_json(dump_manifest, desc_manifest):
         tools_version = tools_version,
         platforms = platforms,
         dependencies = dependencies,
+        products = products,
     )
-
-# def _new(directory, dump_manifest, desc_manifest):
-#     return struct(
-#         directory = directory,
-#         dump_manifest = dump_manifest,
-#         desc_manifest = desc_manifest,
-#     )
 
 def _new(
         name,
@@ -149,12 +164,35 @@ def _new_version_range(lower, upper):
         upper = upper,
     )
 
-# def _new_product(name, type, targets):
-#     return struct(
-#         name = name,
-#         type = type,
-#         targets = targets,
-#     )
+def _new_product_type(executable = False):
+    """Creates a product type.
+
+    Args:
+        executable: A `bool` specifying whether the product is an executable.
+
+    Returns:
+        A `struct` representing a product type.
+    """
+    return struct(
+        executable = executable,
+    )
+
+def _new_product(name, type, targets):
+    """Creates a product.
+
+    Args:
+        name: The name of the product as a `string`.
+        type: A `struct` as returned by `package_infos.new_product_type`.
+        targets: A `list` of target names (`string`).
+
+    Returns:
+        A `struct` representing a product.
+    """
+    return struct(
+        name = name,
+        type = type,
+        targets = targets,
+    )
 
 # def _target(name, type, dependencies = []):
 #     return struct(
@@ -171,4 +209,6 @@ package_infos = struct(
     new_dependency = _new_dependency,
     new_dependency_requirement = _new_dependency_requirement,
     new_version_range = _new_version_range,
+    new_product = _new_product,
+    new_product_type = _new_product_type,
 )

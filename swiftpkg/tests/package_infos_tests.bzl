@@ -31,6 +31,13 @@ def _get_test(ctx):
                 ),
             ),
         ],
+        products = [
+            package_infos.new_product(
+                name = "printstuff",
+                targets = ["MySwiftPackage"],
+                type = package_infos.new_product_type(executable = True),
+            ),
+        ],
     )
     asserts.equals(env, expected, actual)
 
