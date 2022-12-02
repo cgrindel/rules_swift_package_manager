@@ -1,6 +1,7 @@
 """Implementation for `swift_package`."""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@bazel_skylib//lib:versions.bzl", "versions")
 load("@bazel_tools//tools/build_defs/repo:git_worker.bzl", "git_repo")
 load(
     "@bazel_tools//tools/build_defs/repo:utils.bzl",
@@ -9,6 +10,7 @@ load(
     "workspace_and_buildfile",
 )
 load(":package_infos.bzl", "package_infos")
+load(":spm_versions.bzl", "spm_versions")
 
 # The implementation of this repository rule is heavily influenced by the
 # implementation for git_repository.
@@ -34,6 +36,15 @@ def _get_exec_env(repository_ctx):
     if dev_dir:
         env[_DEVELOPER_DIR_ENV] = dev_dir
     return env
+
+def _check_spm_version(repository_ctx, env = {}):
+    min_spm_ver = "5.4.0"
+    spm_ver = spm_versions.get(repository_ctx, env = env)
+    if not versions.is_at_least(threshold = min_spm_ver, version = spm_ver):
+        fail("""\
+`rules_spm` requires that Swift Package Manager be version %s or \
+higher. Found version %s installed.\
+""" % (min_spm_ver, spm_ver))
 
 def _clone_or_update_repo(repository_ctx, directory):
     if ((not repository_ctx.attr.tag and not repository_ctx.attr.commit and not repository_ctx.attr.branch) or
@@ -61,15 +72,6 @@ def _update_git_attrs(orig, keys, override):
 def _gen_build_files(repository_ctx, pkg_info):
     # Generate build file from targets
     pass
-
-def _check_spm_version(repository_ctx, env = {}):
-    min_spm_ver = "5.4.0"
-    spm_ver = spm_versions.get(repository_ctx, env = env)
-    if not versions.is_at_least(threshold = min_spm_ver, version = spm_ver):
-        fail("""\
-`rules_spm` requires that Swift Package Manager be version %s or \
-higher. Found version %s installed.\
-""" % (min_spm_ver, spm_ver))
 
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))

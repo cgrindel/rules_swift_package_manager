@@ -47,3 +47,10 @@ bzl_library(
     srcs = ["repository_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
+
+bzl_library(
+    name = "spm_versions",
+    srcs = ["spm_versions.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":repository_utils"],
+)

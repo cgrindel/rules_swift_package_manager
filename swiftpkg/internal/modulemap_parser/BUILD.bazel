@@ -129,12 +129,6 @@ bzl_library(
 )
 
 bzl_library(
-    name = "errors",
-    srcs = ["errors.bzl"],
-    visibility = ["//spm:__subpackages__"],
-)
-
-bzl_library(
     name = "module_declarations",
     srcs = ["module_declarations.bzl"],
     visibility = ["//spm:__subpackages__"],
@@ -189,4 +183,10 @@ filegroup(
     name = "all_files",
     srcs = glob(["*"]),
     visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "errors",
+    srcs = ["errors.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
 )
