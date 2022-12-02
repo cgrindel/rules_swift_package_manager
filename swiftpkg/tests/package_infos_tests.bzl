@@ -16,6 +16,9 @@ def _get_test(ctx):
         name = "MySwiftPackage",
         path = "/Users/chuck/code/cgrindel/swift_bazel/gh009_update_repos_new/examples/pkg_manifest",
         tools_version = "5.7.0",
+        platforms = [
+            package_infos.new_platform(name = "macos", version = "10.15"),
+        ],
     )
     asserts.equals(env, expected, actual)
 

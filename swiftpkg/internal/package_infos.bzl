@@ -60,10 +60,20 @@ def _get(repository_ctx, directory, env = {}):
 
 def _new_from_parsed_json(dump_manifest, desc_manifest):
     tools_version = dump_manifest["toolsVersion"]["_version"]
+
+    platforms = [
+        _new_platform(
+            name = pl["platformName"],
+            version = pl["version"],
+        )
+        for pl in dump_manifest["platforms"]
+    ]
+
     return _new(
         name = dump_manifest["name"],
         path = desc_manifest["path"],
         tools_version = tools_version,
+        platforms = platforms,
     )
 
 # def _new(directory, dump_manifest, desc_manifest):
@@ -91,11 +101,11 @@ def _new(
         targets = targets,
     )
 
-# def _new_platform(name, version):
-#     return struct(
-#         name = name,
-#         version = version,
-#     )
+def _new_platform(name, version):
+    return struct(
+        name = name,
+        version = version,
+    )
 
 # def _new_product(name, type, targets):
 #     return struct(
@@ -115,4 +125,5 @@ package_infos = struct(
     get = _get,
     new = _new,
     new_from_parsed_json = _new_from_parsed_json,
+    new_platform = _new_platform,
 )
