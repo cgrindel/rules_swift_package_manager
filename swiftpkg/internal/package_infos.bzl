@@ -67,7 +67,7 @@ def _get(repository_ctx, directory, env = {}):
         env = env,
         working_directory = directory,
     )
-    return _new(
+    return _new_from_parsed_json(
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
     )
