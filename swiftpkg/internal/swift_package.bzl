@@ -42,11 +42,6 @@ def _clone_or_update_repo(repository_ctx, directory):
         (repository_ctx.attr.commit and repository_ctx.attr.branch)):
         fail("Exactly one of commit, tag, or branch must be provided")
 
-    # DEBUG BEGIN
-    print("*** _clone_or_update_repo CHUCK directory: ", directory)
-
-    # DEBUG END
-
     git_ = git_repo(repository_ctx, directory)
 
     # Do not include shallow_since as required for the canonical form. I am not
@@ -67,10 +62,19 @@ def _gen_build_files(repository_ctx, pkg_info):
     # Generate build file from targets
     pass
 
+def _check_spm_version(repository_ctx, env = {}):
+    min_spm_ver = "5.4.0"
+    spm_ver = spm_versions.get(repository_ctx, env = env)
+    if not versions.is_at_least(threshold = min_spm_ver, version = spm_ver):
+        fail("""\
+`rules_spm` requires that Swift Package Manager be version %s or \
+higher. Found version %s installed.\
+""" % (min_spm_ver, spm_ver))
+
 def _swift_package_impl(repository_ctx):
-    root = repository_ctx.path(".")
-    directory = str(root)
+    directory = str(repository_ctx.path("."))
     env = _get_exec_env(repository_ctx)
+    _check_spm_version(repository_ctx, env = env)
 
     # Download the repo
     update = _clone_or_update_repo(repository_ctx, directory)
@@ -78,13 +82,16 @@ def _swift_package_impl(repository_ctx):
     # Get the package info
     pkg_info = package_infos.get(repository_ctx, directory, env = env)
 
-    # DEBUG BEGIN
-    print("*** CHUCK _swift_package_impl pkg_info: ", pkg_info)
-    # DEBUG END
-
+    # Generate the WORKSPACE file
     workspace_and_buildfile(repository_ctx)
+
+    # Generate the build file
     _gen_build_files(repository_ctx, pkg_info)
+
+    # Apply any patches
     patch(repository_ctx)
+
+    # Remove the git stuff
     repository_ctx.delete(repository_ctx.path(".git"))
 
     # Return attributes that make this reproducible
