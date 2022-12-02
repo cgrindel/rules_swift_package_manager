@@ -50,6 +50,26 @@ bzl_library(
 )
 
 bzl_library(
+    name = "build_declarations",
+    srcs = ["build_declarations.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        "@bazel_skylib//lib:sets",
+    ],
+)
+
+bzl_library(
+    name = "bazel_build_declarations",
+    srcs = ["bazel_build_declarations.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":build_declarations",
+        ":clang_files",
+        "@bazel_skylib//lib:paths",
+    ],
+)
+
+bzl_library(
     name = "repository_files",
     srcs = ["repository_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],

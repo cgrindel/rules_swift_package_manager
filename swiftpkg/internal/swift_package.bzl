@@ -73,7 +73,9 @@ def _update_git_attrs(orig, keys, override):
 
 # buildifier: disable=unused-variable
 def _gen_build_files(repository_ctx, pkg_info):
-    # Generate build file from targets
+    # build_decl = bazel_build_declarations.new_from_pkg_info(pkg_info)
+    # bld_path = paths.join(pkg_info.path, "BUILD.bazel")
+    # build_declarations.write_build_file(repository_ctx, bld_path, build_decl)
     pass
 
 def _swift_package_impl(repository_ctx):
