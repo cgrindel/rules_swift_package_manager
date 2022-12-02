@@ -30,3 +30,20 @@ bzl_library(
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [":repository_utils"],
 )
+
+bzl_library(
+    name = "clang_files",
+    srcs = ["clang_files.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":repository_files",
+        "@bazel_skylib//lib:paths",
+        "@bazel_skylib//lib:sets",
+    ],
+)
+
+bzl_library(
+    name = "repository_files",
+    srcs = ["repository_files.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)

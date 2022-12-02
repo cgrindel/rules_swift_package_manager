@@ -1,3 +1,4 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary", "swift_library", "swift_test")
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 
@@ -34,4 +35,26 @@ bzl_library(
     name = "swift_deps",
     srcs = ["swift_deps.bzl"],
     visibility = ["//visibility:public"],
+    deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
+)
+
+swift_library(
+    name = "MySwiftPackageLibrary",
+    srcs = ["Sources/MySwiftPackage/MySwiftPackage.swift"],
+    module_name = "MySwiftPackageLibrary",
+    deps = ["@apple_swift_argument_parser//:ArgumentParser"],
+)
+
+swift_binary(
+    name = "MySwiftPackage",
+    module_name = "MySwiftPackage",
+    visibility = ["//visibility:public"],
+    deps = ["//:MySwiftPackageLibrary"],
+)
+
+swift_test(
+    name = "MySwiftPackageTests",
+    srcs = ["Tests/MySwiftPackageTests/MySwiftPackageTests.swift"],
+    module_name = "MySwiftPackageTests",
+    deps = ["//:MySwiftPackage"],
 )
