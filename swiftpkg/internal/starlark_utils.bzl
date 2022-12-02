@@ -1,5 +1,10 @@
 """Utility functions for generating Starlark code"""
 
+_single_indent_str = "    "
+
+def _indent(count, suffix = ""):
+    return (_single_indent_str * count) + suffix
+
 def _quote(value):
     return "\"{}\"".format(value)
 
@@ -46,6 +51,7 @@ def _list_to_str(values, double_quote_values = True, indent = "        "):
 #     return _bazel_list_str(target_labels, double_quote_values = True)
 
 starlark_utils = struct(
+    indent = _indent,
     quote = _quote,
     list_to_str = _list_to_str,
     # bazel_deps_str = _bazel_deps_str,
