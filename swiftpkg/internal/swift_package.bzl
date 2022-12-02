@@ -69,6 +69,9 @@ def _update_git_attrs(orig, keys, override):
         result.pop("branch", None)
     return result
 
+# TODO(chuck): REMOVE unused-variable directive!
+
+# buildifier: disable=unused-variable
 def _gen_build_files(repository_ctx, pkg_info):
     # Generate build file from targets
     pass

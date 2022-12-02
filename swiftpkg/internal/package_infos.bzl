@@ -54,6 +54,12 @@ def _get(repository_ctx, directory, env = {}):
         working_directory = directory,
     )
     return _new(
+        dump_manifest = dump_manifest,
+        desc_manifest = desc_manifest,
+    )
+
+def _new_from_parsed_json(dump_manifest, desc_manifest):
+    return _new(
         name = dump_manifest["name"],
         path = desc_manifest["path"],
     )
@@ -83,27 +89,28 @@ def _new(
         targets = targets,
     )
 
-def _new_platform(name, version):
-    return struct(
-        name = name,
-        version = version,
-    )
+# def _new_platform(name, version):
+#     return struct(
+#         name = name,
+#         version = version,
+#     )
 
-def _new_product(name, type, targets):
-    return struct(
-        name = name,
-        type = type,
-        targets = targets,
-    )
+# def _new_product(name, type, targets):
+#     return struct(
+#         name = name,
+#         type = type,
+#         targets = targets,
+#     )
 
-def _target(name, type, dependencies = []):
-    return struct(
-        name = name,
-        type = type,
-        dependencies = dependencies,
-    )
+# def _target(name, type, dependencies = []):
+#     return struct(
+#         name = name,
+#         type = type,
+#         dependencies = dependencies,
+#     )
 
 package_infos = struct(
     get = _get,
     new = _new,
+    new_from_parsed_json = _new_from_parsed_json,
 )
