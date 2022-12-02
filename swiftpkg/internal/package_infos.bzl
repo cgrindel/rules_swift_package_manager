@@ -59,9 +59,11 @@ def _get(repository_ctx, directory, env = {}):
     )
 
 def _new_from_parsed_json(dump_manifest, desc_manifest):
+    tools_version = dump_manifest["toolsVersion"]["_version"]
     return _new(
         name = dump_manifest["name"],
         path = desc_manifest["path"],
+        tools_version = tools_version,
     )
 
 # def _new(directory, dump_manifest, desc_manifest):
