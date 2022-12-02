@@ -41,3 +41,8 @@ type PackageReference struct {
 	Location string
 	Name     string
 }
+
+func (pr *PackageReference) Remote() string {
+	// We probably want to use a different value based upon the Kind
+	return pr.Location
+}

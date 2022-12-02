@@ -1,0 +1,192 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+bzl_library(
+    name = "character_sets",
+    srcs = ["character_sets.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        "@bazel_skylib//lib:sets",
+    ],
+)
+
+bzl_library(
+    name = "collect_export_declaration",
+    srcs = ["collect_export_declaration.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":collection_results",
+        ":declarations",
+        ":errors",
+        ":tokens",
+    ],
+)
+
+bzl_library(
+    name = "collect_extern_module",
+    srcs = ["collect_extern_module.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":collection_results",
+        ":declarations",
+        ":tokens",
+    ],
+)
+
+bzl_library(
+    name = "collect_header_declaration",
+    srcs = ["collect_header_declaration.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":collection_results",
+        ":declarations",
+        ":errors",
+        ":tokens",
+    ],
+)
+
+bzl_library(
+    name = "collect_link_declaration",
+    srcs = ["collect_link_declaration.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":collection_results",
+        ":declarations",
+        ":errors",
+        ":tokens",
+    ],
+)
+
+bzl_library(
+    name = "collect_module",
+    srcs = ["collect_module.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":collect_module_members",
+        ":collection_results",
+        ":declarations",
+        ":errors",
+        ":module_declarations",
+        ":tokens",
+    ],
+)
+
+bzl_library(
+    name = "collect_module_members",
+    srcs = ["collect_module_members.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":collect_export_declaration",
+        ":collect_header_declaration",
+        ":collect_link_declaration",
+        ":collect_umbrella_dir_declaration",
+        ":collect_unprocessed_submodule",
+        ":collection_results",
+        ":errors",
+        ":tokens",
+        "@bazel_skylib//lib:sets",
+    ],
+)
+
+bzl_library(
+    name = "collect_umbrella_dir_declaration",
+    srcs = ["collect_umbrella_dir_declaration.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":collection_results",
+        ":declarations",
+        ":errors",
+        ":tokens",
+    ],
+)
+
+bzl_library(
+    name = "collect_unprocessed_submodule",
+    srcs = ["collect_unprocessed_submodule.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":collection_results",
+        ":declarations",
+        ":errors",
+        ":tokens",
+    ],
+)
+
+bzl_library(
+    name = "collection_results",
+    srcs = ["collection_results.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [],
+)
+
+bzl_library(
+    name = "declarations",
+    srcs = ["declarations.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":errors",
+    ],
+)
+
+bzl_library(
+    name = "module_declarations",
+    srcs = ["module_declarations.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":declarations",
+        ":errors",
+    ],
+)
+
+bzl_library(
+    name = "parser",
+    srcs = ["parser.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":collect_extern_module",
+        ":collect_module",
+        ":collection_results",
+        ":declarations",
+        ":errors",
+        ":tokenizer",
+        ":tokens",
+    ],
+)
+
+bzl_library(
+    name = "tokenizer",
+    srcs = ["tokenizer.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":character_sets",
+        ":tokens",
+        "@bazel_skylib//lib:sets",
+    ],
+)
+
+bzl_library(
+    name = "tokens",
+    srcs = ["tokens.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":errors",
+        "@bazel_skylib//lib:partial",
+        "@bazel_skylib//lib:sets",
+        "@bazel_skylib//lib:structs",
+        "@bazel_skylib//lib:types",
+    ],
+)
+
+bzlformat_pkg(name = "bzlformat")
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "errors",
+    srcs = ["errors.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)

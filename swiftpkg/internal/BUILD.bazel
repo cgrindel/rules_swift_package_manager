@@ -1,0 +1,56 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+bzl_library(
+    name = "swift_package",
+    srcs = ["swift_package.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":package_infos",
+        ":spm_versions",
+        "@bazel_skylib//lib:dicts",
+        "@bazel_skylib//lib:versions",
+        "@bazel_tools//tools/build_defs/repo:git_worker.bzl",
+        "@bazel_tools//tools/build_defs/repo:utils.bzl",
+    ],
+)
+
+bzl_library(
+    name = "package_infos",
+    srcs = ["package_infos.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":repository_utils"],
+)
+
+bzl_library(
+    name = "clang_files",
+    srcs = ["clang_files.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":repository_files",
+        "@bazel_skylib//lib:paths",
+        "@bazel_skylib//lib:sets",
+    ],
+)
+
+bzl_library(
+    name = "spm_versions",
+    srcs = ["spm_versions.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":repository_utils"],
+)
+
+bzlformat_pkg(name = "bzlformat")
+
+bzl_library(
+    name = "repository_utils",
+    srcs = ["repository_utils.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = ["@bazel_skylib//lib:paths"],
+)
+
+bzl_library(
+    name = "repository_files",
+    srcs = ["repository_files.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)

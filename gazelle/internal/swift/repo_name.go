@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"path"
 	"strings"
+
+	"github.com/cgrindel/swift_bazel/gazelle/internal/spreso"
 )
 
-func RepoName(url string) (string, error) {
+func RepoNameFromURL(url string) (string, error) {
 	if url == "" {
 		return "", fmt.Errorf("URL cannot be empty string")
 	}
@@ -17,7 +19,7 @@ func RepoName(url string) (string, error) {
 
 	// Normalize parts
 	for idx, p := range parts {
-		parts[idx] = strings.ReplaceAll(p, "-", "_")
+		parts[idx] = normalizeStrForRepoName(p)
 	}
 
 	// Remove the extension from the last part of the URL
@@ -29,4 +31,21 @@ func RepoName(url string) (string, error) {
 
 	// Put parts back together
 	return strings.Join(parts, "_"), nil
+}
+
+func normalizeStrForRepoName(v string) string {
+	return strings.ReplaceAll(v, "-", "_")
+}
+
+func RepoNameFromStr(v string) string {
+	return normalizeStrForRepoName(v)
+}
+
+func RepoNameFromPin(p *spreso.Pin) (string, error) {
+	switch p.PkgRef.Kind {
+	case spreso.RemoteSourceControlPkgRefKind:
+		return RepoNameFromURL(p.PkgRef.Location)
+	default:
+		return RepoNameFromStr(p.PkgRef.Identity), nil
+	}
 }

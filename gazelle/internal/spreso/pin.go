@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
+ 	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
 )
 
 // Pin
@@ -76,6 +76,10 @@ func (bps *BranchPinState) PinStateType() PinStateType {
 	return BranchPinStateType
 }
 
+func (bps *BranchPinState) Commit() string {
+	return bps.Revision
+}
+
 // VersionPinState
 
 type VersionPinState struct {
@@ -94,6 +98,10 @@ func (vps *VersionPinState) PinStateType() PinStateType {
 	return VersionPinStateType
 }
 
+func (vps *VersionPinState) Commit() string {
+	return vps.Revision
+}
+
 // RevisionPinState
 
 type RevisionPinState struct {
@@ -106,4 +114,8 @@ func NewRevisionPinState(revision string) *RevisionPinState {
 
 func (rps *RevisionPinState) PinStateType() PinStateType {
 	return RevisionPinStateType
+}
+
+func (rps *RevisionPinState) Commit() string {
+	return rps.Revision
 }

@@ -1,0 +1,55 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load(":collect_export_declaration_tests.bzl", "collect_export_declaration_test_suite")
+load(":collect_extern_module_tests.bzl", "collect_extern_module_test_suite")
+load(":collect_header_declaration_tests.bzl", "collect_header_declaration_test_suite")
+load(":collect_link_declaration_tests.bzl", "collect_link_declaration_test_suite")
+load(":collect_module_member_tests.bzl", "collect_module_member_test_suite")
+load(":collect_module_tests.bzl", "collect_module_test_suite")
+load(":collect_umbrella_dir_declaration_tests.bzl", "collect_umbrella_dir_declaration_test_suite")
+load(":declarations_tests.bzl", "declarations_test_suite")
+load(":errors_tests.bzl", "errors_test_suite")
+load(":module_declarations_tests.bzl", "module_declarations_test_suite")
+load(":parser_tests.bzl", "parser_test_suite")
+load(":tokenizer_tests.bzl", "tokenizer_test_suite")
+load(":tokens_tests.bzl", "tokens_test_suite")
+
+errors_test_suite()
+
+declarations_test_suite()
+
+module_declarations_test_suite()
+
+tokens_test_suite()
+
+tokenizer_test_suite()
+
+parser_test_suite()
+
+collect_extern_module_test_suite()
+
+collect_module_test_suite()
+
+collect_module_member_test_suite()
+
+collect_header_declaration_test_suite()
+
+collect_umbrella_dir_declaration_test_suite()
+
+collect_export_declaration_test_suite()
+
+collect_link_declaration_test_suite()
+
+bzlformat_pkg(name = "bzlformat")
+
+bzl_library(
+    name = "test_helpers",
+    srcs = ["test_helpers.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//swiftpkg/internal/modulemap_parser:errors",
+        "//swiftpkg/internal/modulemap_parser:parser",
+        "@bazel_skylib//lib:types",
+        "@bazel_skylib//lib:unittest",
+    ],
+)
