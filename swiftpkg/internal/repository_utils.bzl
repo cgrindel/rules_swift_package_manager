@@ -56,7 +56,21 @@ Failed to execute SPM command. name: {repo_name}, args: {exec_args}\n{stderr}.\
         ))
     return exec_result.stdout
 
+def _parsed_json_from_spm_command(
+        repository_ctx,
+        arguments,
+        env = {},
+        working_directory = ""):
+    json_str = repository_utils.exec_spm_command(
+        repository_ctx,
+        arguments,
+        env = env,
+        working_directory = working_directory,
+    )
+    return json.decode(json_str)
+
 repository_utils = struct(
     is_macos = _is_macos,
     exec_spm_command = _execute_spm_command,
+    parsed_json_from_spm_command = _parsed_json_from_spm_command,
 )
