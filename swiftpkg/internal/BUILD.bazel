@@ -58,4 +58,5 @@ bzl_library(
     name = "repository_utils",
     srcs = ["repository_utils.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
+    deps = ["@bazel_skylib//lib:paths"],
 )

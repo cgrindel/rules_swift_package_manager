@@ -21,19 +21,12 @@ def _get_dump_manifest(repository_ctx, env = {}, working_directory = ""):
     Returns:
         A `dict` representing an SPM package dump.
     """
-
-    # json_str = repository_utils.exec_spm_command(
-    #     repository_ctx,
-    #     ["swift", "package", "dump-package"],
-    #     env = env,
-    #     working_directory = working_directory,
-    # )
-    # return json.decode(json_str)
     return repository_utils.parsed_json_from_spm_command(
         repository_ctx,
         ["swift", "package", "dump-package"],
         env = env,
         working_directory = working_directory,
+        debug_json_path = "dump.json",
     )
 
 def _get_desc_manifest(repository_ctx, env = {}, working_directory = ""):
@@ -48,19 +41,12 @@ def _get_desc_manifest(repository_ctx, env = {}, working_directory = ""):
     Returns:
         A `dict` representing an SPM package description.
     """
-
-    # json_str = repository_utils.exec_spm_command(
-    #     repository_ctx,
-    #     ["swift", "package", "describe", "--type", "json"],
-    #     env = env,
-    #     working_directory = working_directory,
-    # )
-    # return json.decode(json_str)
     return repository_utils.parsed_json_from_spm_command(
         repository_ctx,
         ["swift", "package", "describe", "--type", "json"],
         env = env,
         working_directory = working_directory,
+        debug_json_path = "desc.json",
     )
 
 def _get(repository_ctx, directory, env = {}):
