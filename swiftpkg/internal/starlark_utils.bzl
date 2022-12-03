@@ -45,20 +45,20 @@ def _process_complex_types(out, current_indent):
 
         finished = False
         if v_type == "list":
-            new_out.extend(_list_to_starlark(v, current_indent))
+            new_out.extend(_list_starlark_parts(v, current_indent))
         elif v_type == "dict":
-            new_out.extend(_dict_to_starlark(v, current_indent))
+            new_out.extend(_dict_to_starlark_parts(v, current_indent))
         elif v_type == "struct":
-            to_starlark_fn = getattr(v, "to_starlark", None)
+            to_starlark_fn = getattr(v, "to_starlark_parts", None)
             if to_starlark_fn == None:
-                fail("Starlark code gen received a struct without a to_starlark function.", v)
+                fail("Starlark code gen received a struct without a to_starlark_parts function.", v)
             new_out.extend(to_starlark_fn(v, current_indent))
         else:
             fail("Starlark code gen received an unsupported type.", v_type, v)
 
     return new_out, finished
 
-def _list_to_starlark(val, current_indent):
+def _list_starlark_parts(val, current_indent):
     if len(val) == 0:
         return ["[]"]
 
@@ -70,7 +70,7 @@ def _list_to_starlark(val, current_indent):
     output.extend([_indent(current_indent), "]"])
     return output
 
-def _dict_to_starlark(val, current_indent):
+def _dict_to_starlark_parts(val, current_indent):
     if len(val) == 0:
         return ["{}"]
 

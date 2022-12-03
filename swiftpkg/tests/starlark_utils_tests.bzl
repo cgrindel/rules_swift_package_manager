@@ -25,6 +25,19 @@ def _indent_str_test(ctx):
 
 indent_str_test = unittest.make(_indent_str_test)
 
+def _custom_struct(name, kind):
+    return struct(
+        name = name,
+        kind = kind,
+        to_starlark_parts = _custom_to_starlark_parts,
+    )
+
+def _custom_to_starlark_parts(val, indent):
+    output = ["{kind}(\n".format(kind = val.kind)]
+    output.extend([su.indent(indent + 1), "name = {},\n".format(repr(val.name))])
+    output.extend([su.indent(indent), ")"])
+    return output
+
 def _to_starlark_test(ctx):
     env = unittest.begin(ctx)
 
@@ -84,6 +97,15 @@ def _to_starlark_test(ctx):
         "chicken": "smidgen",
     },
 ]\
+"""
+    asserts.equals(env, expected, actual)
+
+    my_struct = _custom_struct(kind = "chicken_binary", name = "say_hello")
+    actual = su.to_starlark(my_struct)
+    expected = """\
+chicken_binary(
+    name = "say_hello",
+)\
 """
     asserts.equals(env, expected, actual)
 
