@@ -40,6 +40,10 @@ def _to_starlark_test(ctx):
     expected = "123"
     asserts.equals(env, expected, actual)
 
+    actual = su.to_starlark([])
+    expected = "[]"
+    asserts.equals(env, expected, actual)
+
     actual = su.to_starlark(["hello", 123, "goodbye"])
     expected = """\
 [
@@ -48,6 +52,11 @@ def _to_starlark_test(ctx):
     "goodbye",
 ]\
 """
+    asserts.equals(env, expected, actual)
+
+    actual = su.to_starlark({})
+    expected = "{}"
+    asserts.equals(env, expected, actual)
 
     actual = su.to_starlark({
         "goodbye": True,

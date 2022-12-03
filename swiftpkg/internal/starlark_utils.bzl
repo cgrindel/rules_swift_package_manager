@@ -57,6 +57,9 @@ def _process_complex_types(out, current_indent):
     return new_out, finished
 
 def _list_to_starlark(val, current_indent):
+    if len(val) == 0:
+        return ["[]"]
+
     output = ["[\n"]
     for item in val:
         if _is_simple_type(item):
@@ -66,6 +69,9 @@ def _list_to_starlark(val, current_indent):
     return output
 
 def _dict_to_starlark(val, current_indent):
+    if len(val) == 0:
+        return ["{}"]
+
     output = ["{\n"]
     for (k, v) in val.items():
         if _is_simple_type(k):
