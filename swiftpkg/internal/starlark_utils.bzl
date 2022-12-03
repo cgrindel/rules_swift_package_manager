@@ -68,9 +68,9 @@ def _list_to_starlark(val, current_indent):
 def _dict_to_starlark(val, current_indent):
     output = ["{\n"]
     for (k, v) in val.items():
-        if _simple_starlark_types(k):
+        if _is_simple_type(k):
             k = repr(k)
-        if _simple_starlark_types(v):
+        if _is_simple_type(v):
             v = repr(v)
         output.extend([_indent(current_indent + 1), k, ": ", v, ",\n"])
     output.append("}")
