@@ -19,7 +19,7 @@ def _is_simple_type(val):
             return True
     return False
 
-def _to_starlark(val):
+def _to_starlark(val, indent = 0):
     # Simple types should be converted to their Stalark representation upfront.
     if _is_simple_type(val):
         return repr(val)
@@ -27,12 +27,12 @@ def _to_starlark(val):
     # Dealing with a complex type
     out = [val]
     for _iteration in range(100):
-        out, finished = _process_complex_types(out)
+        out, finished = _process_complex_types(out, indent)
         if finished:
             return "".join(out)
     fail("Failed to finish processing starlark for value: {}".format(val))
 
-def _process_complex_types(out):
+def _process_complex_types(out, current_indent):
     finished = True
     new_out = []
     for v in out:
@@ -43,36 +43,36 @@ def _process_complex_types(out):
 
         finished = False
         if v_type == "list":
-            new_out.extend(_list_to_starlark(v))
+            new_out.extend(_list_to_starlark(v, current_indent))
         elif v_type == "dict":
-            new_out.extend(_dict_to_starlark(v))
+            new_out.extend(_dict_to_starlark(v, current_indent))
         elif v_type == "struct":
             to_starlark_fn = getattr(v, "to_starlark", None)
             if to_starlark_fn == None:
                 fail("Starlark code gen received a struct without a to_starlark function.", v)
-            new_out.extend(to_starlark_fn(v))
+            new_out.extend(to_starlark_fn(v, current_indent))
         else:
             fail("Starlark code gen received an unsupported type.", v_type, v)
 
     return new_out, finished
 
-def _list_to_starlark(val):
+def _list_to_starlark(val, current_indent):
     output = ["[\n"]
     for item in val:
         if _is_simple_type(item):
             item = repr(item)
-        output.extend([item, ",\n"])
+        output.extend([_indent(current_indent + 1), item, ",\n"])
     output.append("]")
     return output
 
-def _dict_to_starlark(val):
+def _dict_to_starlark(val, current_indent):
     output = ["{\n"]
     for (k, v) in val.items():
         if _simple_starlark_types(k):
             k = repr(k)
         if _simple_starlark_types(v):
             v = repr(v)
-        output.extend([k, ": ", v, ",\n"])
+        output.extend([_indent(current_indent + 1), k, ": ", v, ",\n"])
     output.append("}")
     return output
 

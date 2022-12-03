@@ -43,9 +43,9 @@ def _to_starlark_test(ctx):
     actual = su.to_starlark(["hello", 123, "goodbye"])
     expected = """\
 [
-"hello",
-123,
-"goodbye",
+    "hello",
+    123,
+    "goodbye",
 ]\
 """
     asserts.equals(env, expected, actual)
