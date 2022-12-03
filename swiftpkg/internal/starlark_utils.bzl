@@ -19,17 +19,19 @@ def _is_simple_type(val):
             return True
     return False
 
-def _to_starlark(val, indent = 0):
+def _to_starlark(val):
     # Simple types should be converted to their Stalark representation upfront.
     if _is_simple_type(val):
         return repr(val)
 
     # Dealing with a complex type
     out = [val]
+    current_indent = 0
     for _iteration in range(100):
-        out, finished = _process_complex_types(out, indent)
+        out, finished = _process_complex_types(out, current_indent)
         if finished:
             return "".join(out)
+        current_indent = current_indent + 1
     fail("Failed to finish processing starlark for value: {}".format(val))
 
 def _process_complex_types(out, current_indent):
@@ -65,7 +67,7 @@ def _list_to_starlark(val, current_indent):
         if _is_simple_type(item):
             item = repr(item)
         output.extend([_indent(current_indent + 1), item, ",\n"])
-    output.append("]")
+    output.extend([_indent(current_indent), "]"])
     return output
 
 def _dict_to_starlark(val, current_indent):
@@ -79,7 +81,7 @@ def _dict_to_starlark(val, current_indent):
         if _is_simple_type(v):
             v = repr(v)
         output.extend([_indent(current_indent + 1), k, ": ", v, ",\n"])
-    output.append("}")
+    output.extend([_indent(current_indent), "}"])
     return output
 
 # def _quote(value):

@@ -70,18 +70,22 @@ def _to_starlark_test(ctx):
 """
     asserts.equals(env, expected, actual)
 
-    # actual = su.to_starlark("hello", 1)
-    # expected = [su.line('"hello"', 0)]
-    # asserts.equals(env, expected, actual)
-
-    # actual = su.to_starlark(["hello", "goodbye"])
-    # expected = [
-    #     su.line("[", 0),
-    #     su.line('"hello"', 1),
-    #     su.line('"goodbye"', 1),
-    #     su.line("]", 0),
-    # ]
-    # asserts.equals(env, expected, actual)
+    actual = su.to_starlark([["hello"], [123, "goodbye"], {"chicken": "smidgen"}])
+    expected = """\
+[
+    [
+        "hello",
+    ],
+    [
+        123,
+        "goodbye",
+    ],
+    {
+        "chicken": "smidgen",
+    },
+]\
+"""
+    asserts.equals(env, expected, actual)
 
     return unittest.end(env)
 
