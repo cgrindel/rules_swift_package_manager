@@ -405,6 +405,12 @@ def _new_target(name, type, c99name, module_type, path, sources, dependencies):
         dependencies = dependencies,
     )
 
+module_types = struct(
+    swift = "SwiftTarget",
+    clang = "ClangTarget",
+    system_library = "SystemLibraryTarget",
+)
+
 package_infos = struct(
     get = _get,
     new = _new,
