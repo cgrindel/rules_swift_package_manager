@@ -5,6 +5,9 @@ _single_indent_str = "    "
 def _indent(count, suffix = ""):
     return (_single_indent_str * count) + suffix
 
+def attr(name, value, indent):
+    return [_indent(indent), "{} = ".format(name), _normalize(value), ",\n"]
+
 _simple_starlark_types = [
     "None",
     "bool",
@@ -18,6 +21,11 @@ def _is_simple_type(val):
         if val_type == t:
             return True
     return False
+
+def _normalize(val):
+    if _is_simple_type(val):
+        return repr(val)
+    return val
 
 def _to_starlark(val):
     # Simple types should be converted to their Stalark representation upfront.
@@ -45,9 +53,9 @@ def _process_complex_types(out, current_indent):
 
         finished = False
         if v_type == "list":
-            new_out.extend(_list_starlark_parts(v, current_indent))
+            new_out.extend(_list(v, current_indent))
         elif v_type == "dict":
-            new_out.extend(_dict_to_starlark_parts(v, current_indent))
+            new_out.extend(_dict(v, current_indent))
         elif v_type == "struct":
             to_starlark_fn = getattr(v, "to_starlark_parts", None)
             if to_starlark_fn == None:
@@ -58,28 +66,25 @@ def _process_complex_types(out, current_indent):
 
     return new_out, finished
 
-def _list_starlark_parts(val, current_indent):
+def _list(val, current_indent):
     if len(val) == 0:
         return ["[]"]
 
     output = ["[\n"]
     for item in val:
-        if _is_simple_type(item):
-            item = repr(item)
+        item = _normalize(item)
         output.extend([_indent(current_indent + 1), item, ",\n"])
     output.extend([_indent(current_indent), "]"])
     return output
 
-def _dict_to_starlark_parts(val, current_indent):
+def _dict(val, current_indent):
     if len(val) == 0:
         return ["{}"]
 
     output = ["{\n"]
     for (k, v) in val.items():
-        if _is_simple_type(k):
-            k = repr(k)
-        if _is_simple_type(v):
-            v = repr(v)
+        k = _normalize(k)
+        v = _normalize(v)
         output.extend([_indent(current_indent + 1), k, ": ", v, ",\n"])
     output.extend([_indent(current_indent), "}"])
     return output
@@ -87,4 +92,6 @@ def _dict_to_starlark_parts(val, current_indent):
 starlark_utils = struct(
     indent = _indent,
     to_starlark = _to_starlark,
+    normalize = _normalize,
+    attr = attr,
 )
