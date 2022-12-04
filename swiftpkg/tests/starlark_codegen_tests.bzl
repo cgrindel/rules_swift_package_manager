@@ -1,24 +1,24 @@
-"""Tests for `starlark_utils` API"""
+"""Tests for `starlark_codegen` API"""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
-load("//swiftpkg/internal:starlark_utils.bzl", su = "starlark_utils")
+load("//swiftpkg/internal:starlark_codegen.bzl", scg = "starlark_codegen")
 
 def _indent_str_test(ctx):
     env = unittest.begin(ctx)
 
-    actual = su.indent(0)
+    actual = scg.indent(0)
     asserts.equals(env, "", actual)
 
-    actual = su.indent(1)
+    actual = scg.indent(1)
     asserts.equals(env, "    ", actual)
 
-    actual = su.indent(2)
+    actual = scg.indent(2)
     asserts.equals(env, "        ", actual)
 
-    actual = su.indent(0, "foo")
+    actual = scg.indent(0, "foo")
     asserts.equals(env, "foo", actual)
 
-    actual = su.indent(1, "foo")
+    actual = scg.indent(1, "foo")
     asserts.equals(env, "    foo", actual)
 
     return unittest.end(env)
@@ -28,23 +28,23 @@ indent_str_test = unittest.make(_indent_str_test)
 def _to_starlark_test(ctx):
     env = unittest.begin(ctx)
 
-    actual = su.to_starlark("hello")
+    actual = scg.to_starlark("hello")
     expected = '"hello"'
     asserts.equals(env, expected, actual)
 
-    actual = su.to_starlark(True)
+    actual = scg.to_starlark(True)
     expected = "True"
     asserts.equals(env, expected, actual)
 
-    actual = su.to_starlark(123)
+    actual = scg.to_starlark(123)
     expected = "123"
     asserts.equals(env, expected, actual)
 
-    actual = su.to_starlark([])
+    actual = scg.to_starlark([])
     expected = "[]"
     asserts.equals(env, expected, actual)
 
-    actual = su.to_starlark(["hello", 123, "goodbye"])
+    actual = scg.to_starlark(["hello", 123, "goodbye"])
     expected = """\
 [
     "hello",
@@ -54,11 +54,11 @@ def _to_starlark_test(ctx):
 """
     asserts.equals(env, expected, actual)
 
-    actual = su.to_starlark({})
+    actual = scg.to_starlark({})
     expected = "{}"
     asserts.equals(env, expected, actual)
 
-    actual = su.to_starlark({
+    actual = scg.to_starlark({
         "goodbye": True,
         "hello": 123,
     })
@@ -70,7 +70,7 @@ def _to_starlark_test(ctx):
 """
     asserts.equals(env, expected, actual)
 
-    actual = su.to_starlark([["hello"], [123, "goodbye"], {"chicken": "smidgen"}])
+    actual = scg.to_starlark([["hello"], [123, "goodbye"], {"chicken": "smidgen"}])
     expected = """\
 [
     [
@@ -100,15 +100,15 @@ def _custom_struct(name, kind):
 
 def _custom_to_starlark_parts(val, indent):
     output = ["{}(\n".format(val.kind)]
-    output.extend(su.attr("name", val.name, indent + 1))
-    output.append(su.indent(indent, ")"))
+    output.extend(scg.attr("name", val.name, indent + 1))
+    output.append(scg.indent(indent, ")"))
     return output
 
 def _to_starlark_with_struct_test(ctx):
     env = unittest.begin(ctx)
 
     my_struct = _custom_struct(kind = "chicken_binary", name = "say_hello")
-    actual = su.to_starlark(my_struct)
+    actual = scg.to_starlark(my_struct)
     expected = """\
 chicken_binary(
     name = "say_hello",
@@ -120,9 +120,9 @@ chicken_binary(
 
 to_starlark_with_struct_test = unittest.make(_to_starlark_with_struct_test)
 
-def starlark_utils_test_suite():
+def starlark_codegen_test_suite():
     return unittest.suite(
-        "starlark_utils_tests",
+        "starlark_codegen_tests",
         indent_str_test,
         to_starlark_test,
         to_starlark_with_struct_test,

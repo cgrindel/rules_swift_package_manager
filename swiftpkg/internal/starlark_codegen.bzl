@@ -5,7 +5,7 @@ _single_indent_str = "    "
 def _indent(count, suffix = ""):
     return (_single_indent_str * count) + suffix
 
-def attr(name, value, indent):
+def _attr(name, value, indent):
     return [_indent(indent), "{} = ".format(name), _normalize(value), ",\n"]
 
 _simple_starlark_types = [
@@ -89,9 +89,9 @@ def _dict(val, current_indent):
     output.extend([_indent(current_indent), "}"])
     return output
 
-starlark_utils = struct(
+starlark_codegen = struct(
+    attr = _attr,
     indent = _indent,
-    to_starlark = _to_starlark,
     normalize = _normalize,
-    attr = attr,
+    to_starlark = _to_starlark,
 )
