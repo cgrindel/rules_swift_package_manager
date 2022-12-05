@@ -52,12 +52,20 @@ def swift_bazel_dependencies():
         ],
     )
 
+    #     maybe(
+    #         http_archive,
+    #         name = "cgrindel_bazel_starlib",
+    #         sha256 = "42a496dddbc089c68cd72b1f20dfe6acf474c53043dafe230ec887f617c0c252",
+    #         strip_prefix = "bazel-starlib-0.9.0",
+    #         urls = [
+    #             "http://github.com/cgrindel/bazel-starlib/archive/v0.9.0.tar.gz",
+    #         ],
+    #     )
+
+    # TODO(chuck): REVERT ME!
+
     maybe(
-        http_archive,
+        native.local_repository,
         name = "cgrindel_bazel_starlib",
-        sha256 = "42a496dddbc089c68cd72b1f20dfe6acf474c53043dafe230ec887f617c0c252",
-        strip_prefix = "bazel-starlib-0.9.0",
-        urls = [
-            "http://github.com/cgrindel/bazel-starlib/archive/v0.9.0.tar.gz",
-        ],
+        path = "/Users/chuck/code/cgrindel/bazel-starlib/add_bazel_labels",
     )
