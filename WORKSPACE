@@ -46,13 +46,12 @@ bazel_skylib_workspace()
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
-# Point to the https://github.com/bazel-contrib/rules_bazel_integration_test/tree/add_remove_bazel_symlinks_new branch.
 http_archive(
     name = "contrib_rules_bazel_integration_test",
-    sha256 = "ef93cb1f609819294649a30b545382e269bf7d71a2f9730e5189de22e12d788e",
-    strip_prefix = "rules_bazel_integration_test-5426ab1778a24149ec25b3ba84f57200ce090458",
+    sha256 = "20d670bb614d311a2a0fc8af53760439214731c3d5be2d9b0a197dccc19583f5",
+    strip_prefix = "rules_bazel_integration_test-0.9.0",
     urls = [
-        "http://github.com/bazel-contrib/rules_bazel_integration_test/archive/5426ab1778a24149ec25b3ba84f57200ce090458.tar.gz",
+        "http://github.com/bazel-contrib/rules_bazel_integration_test/archive/v0.9.0.tar.gz",
     ],
 )
 
