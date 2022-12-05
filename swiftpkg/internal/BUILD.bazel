@@ -99,6 +99,12 @@ bzl_library(
 )
 
 bzl_library(
+    name = "pkginfo_target_deps",
+    srcs = ["pkginfo_target_deps.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
     name = "repository_files",
     srcs = ["repository_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],

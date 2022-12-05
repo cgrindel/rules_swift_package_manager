@@ -51,7 +51,7 @@ def _swift_library_from_target(target):
         kind = "swift_library",
         name = target.name,
         attrs = {
-            "deps": deps,
+            "deps": pkginfo_targets.deps(target),
             "module_name": target.c99name,
             "srcs": pkginfo_targets.srcs(target),
             "visibility": ["//visibility:public"],
