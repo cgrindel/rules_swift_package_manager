@@ -11,9 +11,9 @@ def _srcs(target):
         for src in target.sources
     ]
 
-def _deps(target):
+def _deps(pkg_info, target):
     return [
-        pkginfo_target_deps.bzl_dep(td)
+        pkginfo_target_deps.bazel_label(pkg_info, td)
         for td in target.dependencies
     ]
 
