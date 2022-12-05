@@ -1,5 +1,7 @@
 """API for creating and loading Swift package information."""
 
+# TODO(chuck): Rename package_infos to pkginfos to match pkginfo_targets.
+
 load(":repository_utils.bzl", "repository_utils")
 
 def _get_dump_manifest(repository_ctx, env = {}, working_directory = ""):
