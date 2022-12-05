@@ -2,12 +2,12 @@
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 
-def _srcs_from_target(target):
+def _srcs(target):
     return [
-        paths.join(t.path, src)
+        paths.join(target.path, src)
         for src in target.sources
     ]
 
 pkginfo_targets = struct(
-    srcs = _srcs_from_target,
+    srcs = _srcs,
 )
