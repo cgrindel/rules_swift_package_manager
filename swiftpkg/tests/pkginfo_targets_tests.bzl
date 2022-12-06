@@ -1,8 +1,37 @@
 """Tests for `pkginfo_targets`."""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "make_bazel_labels", "make_stub_workspace_name_resolvers")
 load("//swiftpkg/internal:package_infos.bzl", "module_types", "package_infos", "target_types")
-load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
+load("//swiftpkg/internal:pkginfo_target_deps.bzl", "make_pkginfo_target_deps")
+load("//swiftpkg/internal:pkginfo_targets.bzl", "make_pkginfo_targets")
+
+workspace_name_resolovers = make_stub_workspace_name_resolvers()
+bazel_labels = make_bazel_labels(workspace_name_resolovers)
+pkginfo_target_deps = make_pkginfo_target_deps(bazel_labels)
+pkginfo_targets = make_pkginfo_targets(pkginfo_target_deps)
+
+_external_dep = package_infos.new_dependency(
+    identity = "example-swift-package",
+    type = "sourceControl",
+    url = "https://github.com/example/swift-package",
+    requirement = package_infos.new_dependency_requirement(
+        ranges = [
+            package_infos.new_version_range("1.2.0", "2.0.0"),
+        ],
+    ),
+)
+_by_name = package_infos.new_target_reference("Foo")
+_product_ref = package_infos.new_product_reference(
+    product_name = "Chicken",
+    dep_identity = _external_dep.identity,
+)
+
+_pkg_info = package_infos.new(
+    name = "MyPackage",
+    path = "/path/to/package",
+    dependencies = [_external_dep],
+)
 
 _foo_target = package_infos.new_target(
     name = "Foo",
@@ -11,7 +40,10 @@ _foo_target = package_infos.new_target(
     module_type = module_types.swift,
     path = "Sources/Foo",
     sources = ["Chicken.swift", "Chicken+Extensions.swift"],
-    dependencies = [],
+    dependencies = [
+        package_infos.new_target_dependency(by_name = _by_name),
+        package_infos.new_target_dependency(product = _product_ref),
+    ],
 )
 
 def _srcs_test(ctx):
@@ -31,7 +63,12 @@ srcs_test = unittest.make(_srcs_test)
 def _deps_test(ctx):
     env = unittest.begin(ctx)
 
-    unittest.fail(env, "IMPLEMENT ME!")
+    actual = pkginfo_targets.deps(_pkg_info, _foo_target)
+    expected = [
+        "@//:Foo",
+        "@example_swift_package//:Chicken",
+    ]
+    asserts.equals(env, expected, actual)
 
     return unittest.end(env)
 

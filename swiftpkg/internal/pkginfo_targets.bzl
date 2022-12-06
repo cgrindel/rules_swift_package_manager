@@ -11,12 +11,16 @@ def _srcs(target):
         for src in target.sources
     ]
 
-def _deps(pkg_info, target):
-    return [
-        pkginfo_target_deps.bazel_label(pkg_info, td)
-        for td in target.dependencies
-    ]
+def make_pkginfo_targets(pkginfo_target_deps = pkginfo_target_deps):
+    def _deps(pkg_info, target):
+        return [
+            pkginfo_target_deps.bazel_label(pkg_info, td)
+            for td in target.dependencies
+        ]
 
-pkginfo_targets = struct(
-    srcs = _srcs,
-)
+    return struct(
+        srcs = _srcs,
+        deps = _deps,
+    )
+
+pkginfo_targets = make_pkginfo_targets(pkginfo_target_deps = pkginfo_target_deps)
