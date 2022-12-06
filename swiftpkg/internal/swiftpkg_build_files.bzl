@@ -49,9 +49,10 @@ def _decls_for_swift_target(target):
         decls = [_swift_library_from_target(target)]
     elif target.type == target_types.executable:
         # TODO(chuck): IMPLEMENT ME!
-        pass
+        load_stmts = []
+        decls = []
     else:
-        fail("Unrecognized target type for a Swift target.", target.type)
+        fail("Unrecognized target type for a Swift target. type:", target.type)
 
     return build_files.new(
         load_stmts = load_stmts,

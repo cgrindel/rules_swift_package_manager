@@ -1,5 +1,8 @@
 """Module for defining and generating Bazel build files."""
 
+load("//swiftpkg/internal:build_decls.bzl", "build_decls")
+load("//swiftpkg/internal:load_statements.bzl", "load_statements")
+
 def _new(load_stmts = [], decls = []):
     """Create a `struct` that represents the parts of a Bazel build file.
 
@@ -12,9 +15,13 @@ def _new(load_stmts = [], decls = []):
     Returns:
         A `struct` representing parts of a Bazel  build file.
     """
+    if len(load_stmts) == 0 and len(decls) == 0:
+        fail("""\
+Attempted to create a build file with no load statements or declarations.\
+""")
     return struct(
-        load_stmts = new_load_stmts,
-        decls = new_decls,
+        load_stmts = load_stmts,
+        decls = decls,
     )
 
 def _merge(*bld_files):
@@ -24,12 +31,15 @@ def _merge(*bld_files):
     by type and name.
 
     Args:
-        *build_files: A `sequence` of build file declaration `struct` values
+        *bld_files: A `sequence` of build file declaration `struct` values
             as returned by `build_files.new`.
 
     Returns:
         A merged build file declaration `struct`.
     """
+    if len(bld_files) == 0:
+        fail("Attempted to merge build files, but none were provided.")
+
     load_stmts = []
     decls = []
     for bf in bld_files:

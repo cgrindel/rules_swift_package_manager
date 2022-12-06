@@ -128,6 +128,10 @@ bzl_library(
     name = "build_files",
     srcs = ["build_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":build_decls",
+        ":load_statements",
+    ],
 )
 
 bzl_library(
