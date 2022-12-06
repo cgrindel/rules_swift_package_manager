@@ -8,26 +8,26 @@ load(":pkginfo_ext_deps_tests.bzl", "pkginfo_ext_deps_test_suite")
 load(":pkginfo_target_deps_tests.bzl", "pkginfo_target_deps_test_suite")
 load(":pkginfo_targets_tests.bzl", "pkginfo_targets_test_suite")
 load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
-load(":swiftpkg_bld_decls_tests.bzl", "swiftpkg_bld_decls_test_suite")
+load(":swiftpkg_build_files_tests.bzl", "swiftpkg_build_files_test_suite")
 
 bzlformat_pkg(name = "bzlformat")
 
-clang_files_test_suite()
-
-package_infos_test_suite()
-
-starlark_codegen_test_suite()
+bazel_repo_names_test_suite()
 
 build_decls_test_suite()
 
-pkginfo_targets_test_suite()
+clang_files_test_suite()
 
-pkginfo_target_deps_test_suite()
+load_statements_test_suite()
+
+package_infos_test_suite()
 
 pkginfo_ext_deps_test_suite()
 
-bazel_repo_names_test_suite()
+pkginfo_target_deps_test_suite()
 
-swiftpkg_bld_decls_test_suite()
+pkginfo_targets_test_suite()
 
-load_statements_test_suite()
+starlark_codegen_test_suite()
+
+swiftpkg_build_files_test_suite()
