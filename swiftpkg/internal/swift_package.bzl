@@ -69,14 +69,17 @@ def _update_git_attrs(orig, keys, override):
         result.pop("branch", None)
     return result
 
-def _gen_build_file(repository_ctx, pkg_info):
-    bld_file = swiftpkg_bld_decls.build_file_from_pkg_info(pkg_info)
-    bld_path = paths.join(pkg_info.path, "BUILD.bazel")
+def _gen_build_files(repository_ctx, pkg_info):
+    targets_pkg = repository_ctx.attr.targets_pkg
+    targets_bld_file = swiftpkg_bld_decls.build_file_from_pkg_info(pkg_info)
+    targets_bld_path = paths.join(pkg_info.path, targets_pkg, "BUILD.bazel")
     repository_ctx.file(
-        bld_path,
-        content = starlark_codegen.to_starlark(bld_file),
+        targets_bld_path,
+        content = starlark_codegen.to_starlark(targets_bld_file),
         executable = False,
     )
+
+    # TODO(chuck): Add products package
 
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))
@@ -93,7 +96,7 @@ def _swift_package_impl(repository_ctx):
     workspace_and_buildfile(repository_ctx)
 
     # Generate the build file
-    _gen_build_file(repository_ctx, pkg_info)
+    _gen_build_files(repository_ctx, pkg_info)
 
     # Apply any patches
     patch(repository_ctx)
@@ -228,11 +231,33 @@ package description generation)\
     ),
 }
 
+_CODEGEN_ATTRS = {
+    "products_pkg": attr.string(
+        default = "",
+        doc = """\
+The name of the Bazel package under which the Bazel declarations for the Swift \
+products will be created.  Bazel declarations for the Swift package products are \
+placed in their own Bazel package to avoid name conflicts with target \
+declarations.\
+""",
+    ),
+    "targets_pkg": attr.string(
+        default = "swiftpkg_targets",
+        doc = """\
+The name of the Bazel package under which the Bazel declarations for the Swift \
+targets will be created.  Bazel declarations for the Swift package targets are \
+placed in their own Bazel package to avoid name conflicts with product \
+declarations.\
+""",
+    ),
+}
+
 _COMMON_ATTRS = dicts.add(
     _PATCH_ATTRS,
     _WORKSPACE_AND_BUILD_FILE_ATTRS,
     _GIT_ATTRS,
     _ENV_ATTRS,
+    _CODEGEN_ATTRS,
 )
 
 swift_package = repository_rule(

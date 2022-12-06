@@ -6,8 +6,12 @@ load(":load_statements.bzl", "load_statements")
 load(":package_infos.bzl", "module_types", "target_types")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 
-def _new(pkg_info):
-    """Create a build file from a package info instance.
+# def _new_for_targets(pkg_info, bzl_pkg_for_swift_pkg_targets = "_swiftpkg_targets"):
+# bzl_pkg_for_swift_pkg_targets: Optional. The Bazel package under which
+#     all Swift package targets will be defined.
+
+def _new_for_targets(pkg_info):
+    """Create a build file for the Swift package targets.
 
     Args:
         pkg_info: A `struct` as returned by `package_infos.new`.
@@ -16,15 +20,15 @@ def _new(pkg_info):
         A `struct` as returned by `build_files.new` populated with declarations
         appropriate for the provide Swift package.
     """
-    bld_files = []
-
-    # Generate declarations for targets
-    for target in pkg_info.targets:
-        bld_files.append(_decls_for_target(pkg_info, target))
-
-    # Generate declarations for products as alias
-
+    bld_files = [
+        _decls_for_target(pkg_info, target)
+        for target in pkg_info.targets
+    ]
     return build_files.merge(*bld_files)
+
+def _new_for_products(pkg_info, targets_build_file):
+    # TODO(chuck): IMPLEMENT ME!
+    pass
 
 def _decls_for_target(pkg_info, target):
     if target.module_type == module_types.clang:
@@ -95,7 +99,7 @@ _swift_library_load_stmt = load_statements.new(
 )
 
 swiftpkg_build_files = struct(
-    new = _new,
+    new_for_targets = _new_for_targets,
     kinds = _kinds,
     locations = _locations,
 )

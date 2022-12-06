@@ -78,10 +78,10 @@ _pkg_info = package_infos.new(
     ],
 )
 
-def _new_test(ctx):
+def _new_for_targets_test(ctx):
     env = unittest.begin(ctx)
 
-    build_file = swiftpkg_build_files.new(_pkg_info)
+    build_file = swiftpkg_build_files.new_for_targets(_pkg_info)
 
     decl = build_files.find_decl(build_file, "SwiftLintFramework")
     if decl == None:
@@ -95,10 +95,10 @@ def _new_test(ctx):
 
     return unittest.end(env)
 
-new_test = unittest.make(_new_test)
+new_for_targets_test = unittest.make(_new_for_targets_test)
 
 def swiftpkg_build_files_test_suite():
     return unittest.suite(
         "swiftpkg_build_files_tests",
-        new_test,
+        new_for_targets_test,
     )
