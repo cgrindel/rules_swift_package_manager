@@ -100,6 +100,12 @@ bzl_library(
 )
 
 bzl_library(
+    name = "bazel_repo_names",
+    srcs = ["bazel_repo_names.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
     name = "build_files",
     srcs = ["build_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
