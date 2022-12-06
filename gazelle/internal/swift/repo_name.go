@@ -8,6 +8,9 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spreso"
 )
 
+// The logic in RepoNameFromURL must stay in-sync with bazel_repo_names.from_url in
+// swiftpkg/internal/bazel_repo_names.bzl.
+
 func RepoNameFromURL(url string) (string, error) {
 	if url == "" {
 		return "", fmt.Errorf("URL cannot be empty string")

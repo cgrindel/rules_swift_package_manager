@@ -1,6 +1,6 @@
 """Module for creating Bazel repository names."""
 
-# The logic in from_url should stay in-sync with the RepoNameFromURL logic in
+# The logic in from_url must stay in-sync with the RepoNameFromURL logic in
 # gazelle/internal/swift/repo_name.go.
 def _from_url(url):
     if url.startswith("https://"):
