@@ -1,6 +1,7 @@
 """Module for creating and managing Starlark load statements."""
 
 load("@bazel_skylib//lib:sets.bzl", "sets")
+load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
 def _new(location, *symbols):
     """Create a load statement `struct`.
@@ -25,7 +26,21 @@ Expected at least one symbol to be specified. location: {location}\
     return struct(
         location = location,
         symbols = new_symbols,
+        to_starlark_parts = _to_starlark_parts,
     )
+
+def _to_starlark_parts(load_stmt, indent):
+    parts = [
+        scg.indent(indent),
+        "load(",
+        scg.normalize(load_stmt.location),
+    ]
+
+    # The symbols should already be sorted and deduped.
+    for symbol in load_stmt.symbols:
+        parts.extend([", ", scg.normalize(symbol)])
+    parts.append(")")
+    return parts
 
 def _index(load_stmts):
     index_by_location = {}
