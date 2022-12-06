@@ -1,3 +1,5 @@
+"""Tests for `bazel_repo_names` module."""
+
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
 
