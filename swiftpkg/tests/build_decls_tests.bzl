@@ -39,8 +39,29 @@ smidgen_library(
 
 to_starlark_parts_test = unittest.make(_to_starlark_parts_test)
 
+def _uniq_test(ctx):
+    env = unittest.begin(ctx)
+
+    decls = [
+        build_decls.new("smidgen_library", "zzz"),
+        build_decls.new("chicken_library", "goodbye"),
+        build_decls.new("smidgen_library", "hello"),
+    ]
+    actual = build_decls.uniq(decls)
+    expected = [
+        build_decls.new("chicken_library", "goodbye"),
+        build_decls.new("smidgen_library", "hello"),
+        build_decls.new("smidgen_library", "zzz"),
+    ]
+    asserts.equals(env, expected, actual)
+
+    return unittest.end(env)
+
+uniq_test = unittest.make(_uniq_test)
+
 def build_decls_test_suite():
     return unittest.suite(
         "build_decls_tests",
         to_starlark_parts_test,
+        uniq_test,
     )

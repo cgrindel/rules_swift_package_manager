@@ -1,6 +1,7 @@
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load(":bazel_repo_names_tests.bzl", "bazel_repo_names_test_suite")
 load(":build_decls_tests.bzl", "build_decls_test_suite")
+load(":build_files_tests.bzl", "build_files_test_suite")
 load(":clang_files_tests.bzl", "clang_files_test_suite")
 load(":load_statements_tests.bzl", "load_statements_test_suite")
 load(":package_infos_tests.bzl", "package_infos_test_suite")
@@ -15,6 +16,8 @@ bzlformat_pkg(name = "bzlformat")
 bazel_repo_names_test_suite()
 
 build_decls_test_suite()
+
+build_files_test_suite()
 
 clang_files_test_suite()
 
