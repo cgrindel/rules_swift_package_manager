@@ -1,9 +1,17 @@
-load("@bazel_skylib//lib:unittest.bzl", "unittest")
+load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
+load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
 
 def _from_url_test(ctx):
     env = unittest.begin(ctx)
 
-    unittest.fail(env, "IMPLEMENT ME!")
+    test_data = [
+        ("https://github.com/nicklockwood/SwiftFormat.git", "nicklockwood_SwiftFormat"),
+        ("http://github.com/nicklockwood/SwiftFormat", "nicklockwood_SwiftFormat"),
+        ("https://github.com/apple/swift-argument-parser", "apple_swift_argument_parser"),
+    ]
+    for (url, expected) in test_data:
+        actual = bazel_repo_names.from_url(url)
+        asserts.equals(env, expected, actual)
 
     return unittest.end(env)
 
