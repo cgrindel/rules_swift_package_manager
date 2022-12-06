@@ -3,7 +3,7 @@
 load(":package_infos.bzl", "module_types")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 
-def _new(pkg_info):
+def _build_file_from_pkg_info(pkg_info):
     decls = []
 
     # Generate declarations for targets
@@ -66,5 +66,5 @@ def _decls_for_system_library_target(target):
     return []
 
 swiftpkg_bld_decls = struct(
-    new = _new,
+    build_file_from_pkg_info = _build_file_from_pkg_info,
 )

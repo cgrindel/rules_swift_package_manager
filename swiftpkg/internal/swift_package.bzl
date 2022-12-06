@@ -75,6 +75,8 @@ def _update_git_attrs(orig, keys, override):
 def _gen_build_files(repository_ctx, pkg_info):
     # decls = swiftpkg_bld_decls.new(pkg_info)
     # bld_file = bld_files.new(decls)
+    bld_file = swiftpkg_bld_decls.build_file_from_pkg_info(pkg_info)
+
     # bld_path = paths.join(pkg_info.path, "BUILD.bazel")
     # bld_files.write(repository_ctx, bld_file, bld_path)
     pass
