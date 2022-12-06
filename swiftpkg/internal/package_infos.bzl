@@ -411,6 +411,7 @@ target_types = struct(
     executable = "executable",
     library = "library",
     system = "system-target",
+    regular = "regular",
 )
 
 module_types = struct(

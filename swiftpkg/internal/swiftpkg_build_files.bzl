@@ -1,6 +1,9 @@
 """Module for creating Bazel declarations to build a Swift package."""
 
-load(":package_infos.bzl", "module_types")
+load(":build_decls.bzl", "build_decls")
+load(":build_files.bzl", "build_files")
+load(":load_statements.bzl", "load_statements")
+load(":package_infos.bzl", "module_types", "target_types")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 
 def _new(pkg_info):
@@ -17,17 +20,17 @@ def _new(pkg_info):
 
     # Generate declarations for targets
     for target in pkg_info.targets:
-        bld_files.append(_decls_for_target(target))
+        bld_files.append(_decls_for_target(pkg_info, target))
 
     # Generate declarations for products as alias
 
     return build_files.merge(*bld_files)
 
-def _decls_for_target(target):
+def _decls_for_target(pkg_info, target):
     if target.module_type == module_types.clang:
         return _decls_for_clang_target(target)
     elif target.module_type == module_types.swift:
-        return _decls_for_swift_target(target)
+        return _decls_for_swift_target(pkg_info, target)
     elif target.module_type == module_types.system_library:
         return _decls_for_system_library_target(target)
     fail("Unrecognized module type.", target.module_type)
@@ -43,10 +46,10 @@ def _decls_for_clang_target(target):
 
 # MARK: - Swift
 
-def _decls_for_swift_target(target):
-    if target.type == target_types.library:
+def _decls_for_swift_target(pkg_info, target):
+    if target.type == target_types.library or target.type == target_types.regular:
         load_stmts = [_swift_library_load_stmt]
-        decls = [_swift_library_from_target(target)]
+        decls = [_swift_library_from_target(pkg_info, target)]
     elif target.type == target_types.executable:
         # TODO(chuck): IMPLEMENT ME!
         load_stmts = []
@@ -59,12 +62,12 @@ def _decls_for_swift_target(target):
         decls = decls,
     )
 
-def _swift_library_from_target(target):
+def _swift_library_from_target(pkg_info, target):
     return build_decls.new(
         kind = _kinds.swift_library,
         name = target.name,
         attrs = {
-            "deps": pkginfo_targets.deps(target),
+            "deps": pkginfo_targets.deps(pkg_info, target),
             "module_name": target.c99name,
             "srcs": pkginfo_targets.srcs(target),
             "visibility": ["//visibility:public"],
@@ -86,7 +89,7 @@ _kinds = struct(
     swift_library = "swift_library",
 )
 
-_swift_library_load_stmt = load_statments.new(
+_swift_library_load_stmt = load_statements.new(
     _locations.rules_swift,
     _kinds.swift_library,
 )
