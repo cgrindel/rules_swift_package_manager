@@ -69,17 +69,14 @@ def _update_git_attrs(orig, keys, override):
         result.pop("branch", None)
     return result
 
-# TODO(chuck): REMOVE unused-variable directive!
-
-# buildifier: disable=unused-variable
-def _gen_build_files(repository_ctx, pkg_info):
-    # decls = swiftpkg_bld_decls.new(pkg_info)
-    # bld_file = bld_files.new(decls)
+def _gen_build_file(repository_ctx, pkg_info):
     bld_file = swiftpkg_bld_decls.build_file_from_pkg_info(pkg_info)
-
-    # bld_path = paths.join(pkg_info.path, "BUILD.bazel")
-    # bld_files.write(repository_ctx, bld_file, bld_path)
-    pass
+    bld_path = paths.join(pkg_info.path, "BUILD.bazel")
+    repository_ctx.file(
+        bld_path,
+        content = starlark_codegen.to_starlark(bld_file),
+        executable = False,
+    )
 
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))
@@ -96,7 +93,7 @@ def _swift_package_impl(repository_ctx):
     workspace_and_buildfile(repository_ctx)
 
     # Generate the build file
-    _gen_build_files(repository_ctx, pkg_info)
+    _gen_build_file(repository_ctx, pkg_info)
 
     # Apply any patches
     patch(repository_ctx)
