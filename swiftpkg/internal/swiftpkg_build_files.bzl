@@ -4,7 +4,7 @@ load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":load_statements.bzl", "load_statements")
 load(":package_infos.bzl", "module_types", "target_types")
-load(":pkginfo_targets.bzl", "pkginfo_targets")
+load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 
 # def _new_for_targets(pkg_info, bzl_pkg_for_swift_pkg_targets = "_swiftpkg_targets"):
 # bzl_pkg_for_swift_pkg_targets: Optional. The Bazel package under which
@@ -82,9 +82,12 @@ def _swift_library_from_target(pkg_info, target, name = None, c99name = None):
         kind = swift_kinds.library,
         name = name,
         attrs = {
-            "deps": pkginfo_targets.deps(pkg_info, target),
+            "deps": [
+                pkginfo_target_deps.bazel_label(pkg_info, td)
+                for td in target.dependencies
+            ],
             "module_name": c99name,
-            "srcs": pkginfo_targets.srcs(target),
+            "srcs": target.sources,
             "visibility": ["//visibility:public"],
         },
     )
@@ -94,9 +97,9 @@ def _swift_binary_from_target(target, lib_name):
         kind = swift_kinds.binary,
         name = target.name,
         attrs = {
-            "deps": ":{}".format(lib_name),
+            "deps": [":{}".format(lib_name)],
             "module_name": target.c99name,
-            "srcs": pkginfo_targets.srcs(target),
+            "srcs": target.sources,
             "visibility": ["//visibility:public"],
         },
     )

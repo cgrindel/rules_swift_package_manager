@@ -115,7 +115,7 @@ def _new_for_targets_test(ctx):
         name = "swiftlint",
         attrs = {
             "deps": [
-                "//Source/SwiftLintFramework",
+                "@//Source/SwiftLintFramework",
             ],
             "module_name": "swiftlint",
             "srcs": [
