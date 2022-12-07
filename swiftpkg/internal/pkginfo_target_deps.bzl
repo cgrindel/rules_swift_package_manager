@@ -20,10 +20,7 @@ def make_pkginfo_target_deps(bazel_labels = bazel_labels):
         if target_dep.by_name:
             # GH009: Need to handle the byName references to external modules. Ugh.
             target = pkginfo_targets.get(pkg_info.targets, target_dep.by_name.target_name)
-            label = bazel_labels.new(
-                package = target.path,
-                name = target_dep.by_name.target_name,
-            )
+            label = pkginfo_targets.bazel_label(target)
         elif target_dep.product:
             prod_ref = target_dep.product
             ext_dep = pkginfo_ext_deps.find_by_identity(
