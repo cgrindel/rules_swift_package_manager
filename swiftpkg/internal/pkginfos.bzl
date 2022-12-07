@@ -102,8 +102,17 @@ def _new_product_from_desc_json_map(prd_map):
     executable = (
         prd_type_map.get("executable", default = does_not_exist) != does_not_exist
     )
+    plugin = (
+        prd_type_map.get("plugin", default = does_not_exist) != does_not_exist
+    )
+    library = None
+    lib_list = prd_type_map.get("library")
+    if lib_list != None and len(lib_list) > 0:
+        library = _new_library_type(lib_list[0])
     prd_type = _new_product_type(
         executable = executable,
+        library = library,
+        plugin = plugin,
     )
 
     return _new_product(
@@ -300,7 +309,7 @@ def _new_version_range(lower, upper):
         upper = upper,
     )
 
-def _new_product_type(executable = False, library = None):
+def _new_product_type(executable = False, library = None, plugin = False):
     """Creates a product type.
 
     Args:
@@ -312,13 +321,14 @@ def _new_product_type(executable = False, library = None):
     """
     is_executable = executable
     is_library = (library != None)
-    type_bools = [is_executable, is_library]
+    is_plugin = plugin
+    type_bools = [is_executable, is_library, is_plugin]
     true_cnt = 0
     for bt in type_bools:
         if bt:
             true_cnt = true_cnt + 1
     if true_cnt == 0:
-        fail("A product type must be one of the following: executable, library.")
+        fail("A product type must be one of the following: executable, library, plugin.")
     elif true_cnt > 1:
         fail("Multiple args provided to `pkginfos.new_product_type`.")
 
@@ -328,6 +338,7 @@ def _new_product_type(executable = False, library = None):
         # Type boolean values
         is_executable = is_executable,
         is_library = is_library,
+        is_plugin = is_plugin,
     )
 
 def _new_library_type(kind):
@@ -454,12 +465,14 @@ def _new_target(name, type, c99name, module_type, path, sources, dependencies):
 target_types = struct(
     executable = "executable",
     library = "library",
+    plugin = "plugin",
     regular = "regular",
     system = "system-target",
     test = "test",
     all_values = [
         "executable",
         "library",
+        "plugin",
         "regular",
         "system-target",
         "test",
@@ -468,10 +481,12 @@ target_types = struct(
 
 module_types = struct(
     clang = "ClangTarget",
+    plugin = "PluginTarget",
     swift = "SwiftTarget",
     system_library = "SystemLibraryTarget",
     all_values = [
         "ClangTarget",
+        "PluginTarget",
         "SwiftTarget",
         "SystemLibraryTarget",
     ],
