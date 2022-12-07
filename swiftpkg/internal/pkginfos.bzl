@@ -1,6 +1,7 @@
 """API for creating and loading Swift package information."""
 
 load(":repository_utils.bzl", "repository_utils")
+load(":validations.bzl", "validations")
 
 def _get_dump_manifest(repository_ctx, env = {}, working_directory = ""):
     """Returns a dict representing the package dump for an SPM package.
@@ -55,7 +56,7 @@ def _get(repository_ctx, directory, env = {}):
 
     Returns:
         A `struct` representing the package information as returned by
-        `package_infos.new()`.
+        `pkginfos.new()`.
     """
     dump_manifest = _get_dump_manifest(
         repository_ctx,
@@ -155,7 +156,7 @@ def _new_from_parsed_json(dump_manifest, desc_manifest):
 
     Returns:
         A `struct` representing the package information as returned by
-        `package_infos.new()`.
+        `pkginfos.new()`.
     """
     tools_version = dump_manifest["toolsVersion"]["_version"]
     platforms = [
@@ -208,13 +209,13 @@ def _new(
         tools_version: Optional. The semantic version for Swift from which the
             package was created (`string`).
         platforms: A `list` of platform structs as created by
-            `package_infos.new_platform()`.
+            `pkginfos.new_platform()`.
         dependencies: A `list` of external depdency structs as created by
-            `package_infos.new_dependency()`.
+            `pkginfos.new_dependency()`.
         products: A `list` of product structs as created by
-            `package_infos.new_product()`.
+            `pkginfos.new_product()`.
         targets: A `list` of target structs as created by
-            `package_infos.new_target()`.
+            `pkginfos.new_target()`.
 
     Returns:
         A `struct` representing information about a Swift package.
@@ -253,7 +254,7 @@ def _new_dependency(identity, type, url, requirement):
         type: Type type of external dependency (`string`).
         url: The URL of the external dependency (`string`).
         requirement: A `struct` as returned by \
-            `package_infos.new_dependency_requirement()`.
+            `pkginfos.new_dependency_requirement()`.
 
     Returns:
         A `struct` representing an external dependency.
@@ -271,7 +272,7 @@ def _new_dependency_requirement(ranges = None):
 
     Args:
         ranges: Optional. A `list` of version range `struct` values as returned
-            by `package_infos.new_version_range()`.
+            by `pkginfos.new_version_range()`.
 
     Returns:
         A `struct` representing the requirements for an external dependency.
@@ -299,17 +300,52 @@ def _new_version_range(lower, upper):
         upper = upper,
     )
 
-def _new_product_type(executable = False):
+def _new_product_type(executable = False, library = None):
     """Creates a product type.
 
     Args:
         executable: A `bool` specifying whether the product is an executable.
+        library: A `struct` as returned by `pkginfos.new_library_type`.
 
     Returns:
         A `struct` representing a product type.
     """
+    is_executable = executable
+    is_library = (library != None)
+    type_bools = [is_executable, is_library]
+    true_cnt = 0
+    for bt in type_bools:
+        if bt:
+            true_cnt = true_cnt + 1
+    if true_cnt == 0:
+        fail("A product type must be one of the following: executable, library.")
+    elif true_cnt > 1:
+        fail("Multiple args provided to `pkginfos.new_product_type`.")
+
     return struct(
         executable = executable,
+        library = library,
+        # Type boolean values
+        is_executable = is_executable,
+        is_library = is_library,
+    )
+
+def _new_library_type(kind):
+    """Creates a library type as expected by `pkginfos.new_product_type`.
+
+    Args:
+        kind: The kind of library. Must be one of `library_type_kinds`.
+
+    Returns:
+        A `struct` representing a library type.
+    """
+    validations.in_list(
+        library_type_kinds.all_values,
+        kind,
+        "Invalid library type kind. kind:",
+    )
+    return struct(
+        kind = kind,
     )
 
 def _new_product(name, type, targets):
@@ -317,7 +353,7 @@ def _new_product(name, type, targets):
 
     Args:
         name: The name of the product as a `string`.
-        type: A `struct` as returned by `package_infos.new_product_type`.
+        type: A `struct` as returned by `pkginfos.new_product_type`.
         targets: A `list` of target names (`string`).
 
     Returns:
@@ -362,9 +398,9 @@ def _new_target_dependency(by_name = None, product = None):
 
     Args:
         by_name: A `struct` as returned by
-            `package_infos.new_target_reference()`.
+            `pkginfos.new_target_reference()`.
         product: A `struct` as returned by
-            `package_infos.new_product_reference()`.
+            `pkginfos.new_product_reference()`.
 
     Returns:
         A `struct` representing a target dependency.
@@ -390,11 +426,21 @@ def _new_target(name, type, c99name, module_type, path, sources, dependencies):
         sources: A `list` of the source files (`string`) in the module relative
             to the `path`.
         dependencies: A `list` of target dependency values as returned by
-            `package_infos.new_target_dependency()`.
+            `pkginfos.new_target_dependency()`.
 
     Returns:
         A `struct` representing a target in a Swift package.
     """
+    validations.in_list(
+        target_types.all_values,
+        type,
+        "Unrecognized target type. type:",
+    )
+    validations.in_list(
+        module_types.all_values,
+        module_type,
+        "Unrecognized module type. type:",
+    )
     return struct(
         name = name,
         type = type,
@@ -405,7 +451,40 @@ def _new_target(name, type, c99name, module_type, path, sources, dependencies):
         dependencies = dependencies,
     )
 
-package_infos = struct(
+target_types = struct(
+    executable = "executable",
+    library = "library",
+    regular = "regular",
+    system = "system-target",
+    test = "test",
+    all_values = [
+        "executable",
+        "library",
+        "regular",
+        "system-target",
+        "test",
+    ],
+)
+
+module_types = struct(
+    clang = "ClangTarget",
+    swift = "SwiftTarget",
+    system_library = "SystemLibraryTarget",
+    all_values = [
+        "ClangTarget",
+        "SwiftTarget",
+        "SystemLibraryTarget",
+    ],
+)
+
+library_type_kinds = struct(
+    automatic = "automatic",
+    dynamic = "dynamic",
+    static = "static",
+    all_values = ["automatic", "dynamic", "static"],
+)
+
+pkginfos = struct(
     get = _get,
     new = _new,
     new_from_parsed_json = _new_from_parsed_json,
@@ -419,4 +498,5 @@ package_infos = struct(
     new_target_reference = _new_target_reference,
     new_target_dependency = _new_target_dependency,
     new_target = _new_target,
+    new_library_type = _new_library_type,
 )

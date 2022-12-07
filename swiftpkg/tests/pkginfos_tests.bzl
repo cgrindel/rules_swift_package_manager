@@ -1,45 +1,45 @@
-"""Tests for `package_infos` API"""
+"""Tests for `pkginfos` API"""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
-load("//swiftpkg/internal:package_infos.bzl", "package_infos")
+load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 
 def _get_test(ctx):
     env = unittest.begin(ctx)
 
     dump_manifest = json.decode(_dump_manifest_json)
     desc_manifest = json.decode(_desc_manifest_json)
-    actual = package_infos.new_from_parsed_json(
+    actual = pkginfos.new_from_parsed_json(
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
     )
-    expected = package_infos.new(
+    expected = pkginfos.new(
         name = "MySwiftPackage",
         path = "/Users/chuck/code/cgrindel/swift_bazel/gh009_update_repos_new/examples/pkg_manifest",
         tools_version = "5.7.0",
         platforms = [
-            package_infos.new_platform(name = "macos", version = "10.15"),
+            pkginfos.new_platform(name = "macos", version = "10.15"),
         ],
         dependencies = [
-            package_infos.new_dependency(
+            pkginfos.new_dependency(
                 identity = "swift-argument-parser",
                 type = "sourceControl",
                 url = "https://github.com/apple/swift-argument-parser",
-                requirement = package_infos.new_dependency_requirement(
+                requirement = pkginfos.new_dependency_requirement(
                     ranges = [
-                        package_infos.new_version_range("1.2.0", "2.0.0"),
+                        pkginfos.new_version_range("1.2.0", "2.0.0"),
                     ],
                 ),
             ),
         ],
         products = [
-            package_infos.new_product(
+            pkginfos.new_product(
                 name = "printstuff",
                 targets = ["MySwiftPackage"],
-                type = package_infos.new_product_type(executable = True),
+                type = pkginfos.new_product_type(executable = True),
             ),
         ],
         targets = [
-            package_infos.new_target(
+            pkginfos.new_target(
                 name = "MySwiftPackage",
                 type = "executable",
                 c99name = "MySwiftPackage",
@@ -49,15 +49,15 @@ def _get_test(ctx):
                     "MySwiftPackage.swift",
                 ],
                 dependencies = [
-                    package_infos.new_target_dependency(
-                        product = package_infos.new_product_reference(
+                    pkginfos.new_target_dependency(
+                        product = pkginfos.new_product_reference(
                             product_name = "ArgumentParser",
                             dep_identity = "swift-argument-parser",
                         ),
                     ),
                 ],
             ),
-            package_infos.new_target(
+            pkginfos.new_target(
                 name = "MySwiftPackageTests",
                 type = "test",
                 c99name = "MySwiftPackageTests",
@@ -67,8 +67,8 @@ def _get_test(ctx):
                     "MySwiftPackageTests.swift",
                 ],
                 dependencies = [
-                    package_infos.new_target_dependency(
-                        by_name = package_infos.new_target_reference(
+                    pkginfos.new_target_dependency(
+                        by_name = pkginfos.new_target_reference(
                             target_name = "MySwiftPackage",
                         ),
                     ),
@@ -82,9 +82,9 @@ def _get_test(ctx):
 
 get_test = unittest.make(_get_test)
 
-def package_infos_test_suite():
+def pkginfos_test_suite():
     return unittest.suite(
-        "package_infos_tests",
+        "pkginfos_tests",
         get_test,
     )
 

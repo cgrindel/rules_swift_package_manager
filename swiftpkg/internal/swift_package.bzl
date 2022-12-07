@@ -9,8 +9,9 @@ load(
     "update_attrs",
     "workspace_and_buildfile",
 )
-load(":package_infos.bzl", "package_infos")
+load(":pkginfos.bzl", "pkginfos")
 load(":spm_versions.bzl", "spm_versions")
+load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
 # The implementation of this repository rule is heavily influenced by the
 # implementation for git_repository.
@@ -69,12 +70,21 @@ def _update_git_attrs(orig, keys, override):
         result.pop("branch", None)
     return result
 
-# TODO(chuck): REMOVE unused-variable directive!
-
-# buildifier: disable=unused-variable
 def _gen_build_files(repository_ctx, pkg_info):
-    # Generate build file from targets
-    pass
+    # Create a build file for each Swift package target in their corresponding
+    # target path.
+    for target in pkg_info.targets:
+        bld_file = swiftpkg_build_files.new_for_target(pkg_info, target)
+        bld_file_path = paths.join(pkg_info.path, target.path, "BUILD.bazel")
+        repository_ctx.file(
+            bld_file_path,
+            content = starlark_codegen.to_starlark(bld_file),
+            executable = False,
+        )
+
+    # Create a build file at the root with all of the products
+
+    # GH009: Add products package
 
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))
@@ -85,7 +95,7 @@ def _swift_package_impl(repository_ctx):
     update = _clone_or_update_repo(repository_ctx, directory)
 
     # Get the package info
-    pkg_info = package_infos.get(repository_ctx, directory, env = env)
+    pkg_info = pkginfos.get(repository_ctx, directory, env = env)
 
     # Generate the WORKSPACE file
     workspace_and_buildfile(repository_ctx)

@@ -6,7 +6,7 @@ bzl_library(
     srcs = ["swift_package.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
-        ":package_infos",
+        ":pkginfos",
         ":spm_versions",
         "@bazel_skylib//lib:dicts",
         "@bazel_skylib//lib:versions",
@@ -16,8 +16,8 @@ bzl_library(
 )
 
 bzl_library(
-    name = "package_infos",
-    srcs = ["package_infos.bzl"],
+    name = "pkginfos",
+    srcs = ["pkginfos.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [":repository_utils"],
 )
@@ -50,7 +50,82 @@ bzl_library(
 )
 
 bzl_library(
+    name = "build_decls",
+    srcs = ["build_decls.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":starlark_codegen"],
+)
+
+bzl_library(
+    name = "pkginfo_targets",
+    srcs = ["pkginfo_targets.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = ["@bazel_skylib//lib:paths"],
+)
+
+bzl_library(
+    name = "pkginfo_target_deps",
+    srcs = ["pkginfo_target_deps.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = ["@cgrindel_bazel_starlib//bzllib:defs"],
+)
+
+bzl_library(
+    name = "load_statements",
+    srcs = ["load_statements.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":starlark_codegen",
+        "@bazel_skylib//lib:sets",
+    ],
+)
+
+bzl_library(
+    name = "swiftpkg_build_files",
+    srcs = ["swiftpkg_build_files.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":pkginfo_targets",
+        ":pkginfos",
+    ],
+)
+
+bzl_library(
+    name = "build_files",
+    srcs = ["build_files.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":build_decls",
+        ":load_statements",
+    ],
+)
+
+bzl_library(
+    name = "bazel_repo_names",
+    srcs = ["bazel_repo_names.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "pkginfo_ext_deps",
+    srcs = ["pkginfo_ext_deps.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
     name = "repository_files",
     srcs = ["repository_files.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "starlark_codegen",
+    srcs = ["starlark_codegen.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "validations",
+    srcs = ["validations.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
