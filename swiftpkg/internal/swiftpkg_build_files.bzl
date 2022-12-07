@@ -65,6 +65,9 @@ def _decls_for_swift_target(pkg_info, target):
         bin_decl = _swift_binary_from_target(pkg_info, target, lib_name)
         load_stmts = [swift_binary_load_stmt]
         decls = [lib_decl, bin_decl]
+    elif target.type == target_types.test:
+        load_stmts = [swift_test_load_stmt]
+        decls = [_swift_test_from_target(pkg_info, target)]
     else:
         fail("Unrecognized target type for a Swift target. type:", target.type)
 
@@ -104,6 +107,21 @@ def _swift_binary_from_target(target, lib_name):
         },
     )
 
+def _swift_test_from_target(pkg_info, target):
+    return build_decls.new(
+        kind = swift_kinds.test,
+        name = target.name,
+        attrs = {
+            "deps": [
+                pkginfo_target_deps.bazel_label(pkg_info, td)
+                for td in target.dependencies
+            ],
+            "module_name": target.c99name,
+            "srcs": target.sources,
+            "visibility": ["//visibility:public"],
+        },
+    )
+
 # MARK: - System Library
 
 # buildifier: disable=unused-variable
@@ -116,6 +134,7 @@ swift_location = "@build_bazel_rules_swift//swift:swift.bzl"
 swift_kinds = struct(
     library = "swift_library",
     binary = "swift_binary",
+    test = "swift_test",
 )
 
 swift_library_load_stmt = load_statements.new(
@@ -128,6 +147,8 @@ swift_binary_load_stmt = load_statements.new(
     swift_kinds.library,
     swift_kinds.binary,
 )
+
+swift_test_load_stmt = load_statements.new(swift_location, swift_kinds.test)
 
 swiftpkg_build_files = struct(
     new_for_target = _new_for_target,

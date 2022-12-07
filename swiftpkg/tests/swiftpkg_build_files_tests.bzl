@@ -2,9 +2,15 @@
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:build_decls.bzl", "build_decls")
+load("//swiftpkg/internal:build_files.bzl", "build_files")
 load("//swiftpkg/internal:package_infos.bzl", "package_infos")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
-load("//swiftpkg/internal:swiftpkg_build_files.bzl", "swift_kinds", "swift_library_load_stmt", "swiftpkg_build_files")
+load(
+    "//swiftpkg/internal:swiftpkg_build_files.bzl",
+    "swift_kinds",
+    "swift_library_load_stmt",
+    "swiftpkg_build_files",
+)
 
 # This is a simplified version of SwiftLint.
 _pkg_info = package_infos.new(
@@ -83,23 +89,41 @@ def _new_for_targets_test(ctx):
     env = unittest.begin(ctx)
 
     target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFramework")
-    build_file = swiftpkg_build_files.new_for_target(_pkg_info, target)
-    asserts.equals(env, 1, len(build_file.decls))
-    decl = build_decls.get(build_file.decls, "SwiftLintFramework")
-    asserts.false(env, decl == None)
-    expected = build_decls.new(
-        kind = swift_kinds.library,
-        name = "SwiftLintFramework",
-        attrs = {
-            "deps": [],
-            "module_name": "SwiftLintFramework",
-            "srcs": [
-                "SwiftLintFramework.swift",
-            ],
-            "visibility": ["//visibility:public"],
-        },
+    actual = swiftpkg_build_files.new_for_target(_pkg_info, target)
+    expected = build_files.new(
+        load_stmts = [swift_library_load_stmt],
+        decls = [
+            build_decls.new(
+                kind = swift_kinds.library,
+                name = "SwiftLintFramework",
+                attrs = {
+                    "deps": [],
+                    "module_name": "SwiftLintFramework",
+                    "srcs": [
+                        "SwiftLintFramework.swift",
+                    ],
+                    "visibility": ["//visibility:public"],
+                },
+            ),
+        ],
     )
-    # asserts.equals(env, swift_kinds.library, decl.kind)
+    asserts.equals(env, expected, actual)
+    # asserts.equals(env, 1, len(build_file.decls))
+    # decl = build_decls.get(build_file.decls, "SwiftLintFramework")
+    # asserts.false(env, decl == None)
+    # expected = build_decls.new(
+    #     kind = swift_kinds.library,
+    #     name = "SwiftLintFramework",
+    #     attrs = {
+    #         "deps": [],
+    #         "module_name": "SwiftLintFramework",
+    #         "srcs": [
+    #             "SwiftLintFramework.swift",
+    #         ],
+    #         "visibility": ["//visibility:public"],
+    #     },
+    # )
+    # asserts.equals(env, expected, decl, "SwiftLintFramework")
 
     # The swiftlint target is an older style executable definition (regular).
     # We create the swift_library in the target package. Then, we create the
@@ -125,8 +149,29 @@ def _new_for_targets_test(ctx):
             "visibility": ["//visibility:public"],
         },
     )
-    asserts.equals(env, expected, decl)
-    # asserts.equals(env, swift_kinds.library, decl.kind)
+    asserts.equals(env, expected, decl, "swiftlint")
+
+    # target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFrameworkTests")
+    # build_file = swiftpkg_build_files.new_for_target(_pkg_info, target)
+    # expected_load_stmts = [swift_test_load_stmt]
+    # asserts.equals(env, expected_load_stmts, build_file.load_stmts)
+    # asserts.equals(env, 1, len(build_file.decls))
+    # decl = build_decls.get(build_file.decls, "SwiftLintFrameworkTests")
+    # expected = build_decls.new(
+    #     kind = swift_kinds.library,
+    #     name = "SwiftLintFrameworkTests",
+    #     attrs = {
+    #         "deps": [
+    #             "@//Source/SwiftLintFramework:SwiftLintFramework",
+    #         ],
+    #         "module_name": "SwiftLintFrameworkTests",
+    #         "srcs": [
+    #             "SwiftLintFrameworkTests.swift",
+    #         ],
+    #         "visibility": ["//visibility:public"],
+    #     },
+    # )
+    # asserts.equals(env, expected, decl, "SwiftLintFrameworkTests")
 
     return unittest.end(env)
 
