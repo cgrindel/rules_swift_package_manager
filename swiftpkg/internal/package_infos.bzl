@@ -443,6 +443,8 @@ def _new_target(name, type, c99name, module_type, path, sources, dependencies):
         dependencies = dependencies,
     )
 
+# TODO(chuck): Should I target_types check in new_target?
+
 target_types = struct(
     executable = "executable",
     library = "library",
@@ -450,6 +452,8 @@ target_types = struct(
     system = "system-target",
     test = "test",
 )
+
+# TODO(chuck): Should I module_types check in new_target?
 
 module_types = struct(
     clang = "ClangTarget",
