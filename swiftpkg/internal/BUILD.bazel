@@ -151,3 +151,9 @@ bzl_library(
     srcs = ["starlark_codegen.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
+
+bzl_library(
+    name = "validations",
+    srcs = ["validations.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)

@@ -1,6 +1,7 @@
 """API for creating and loading Swift package information."""
 
 load(":repository_utils.bzl", "repository_utils")
+load(":validations.bzl", "validations")
 
 def _get_dump_manifest(repository_ctx, env = {}, working_directory = ""):
     """Returns a dict representing the package dump for an SPM package.
@@ -338,13 +339,11 @@ def _new_library_type(kind):
     Returns:
         A `struct` representing a library type.
     """
-    valid_kind = False
-    for k in library_type_kinds.all_values:
-        if kind == k:
-            valid_kind = True
-            break
-    if not valid_kind:
-        fail("Invalid library type kind. kind:", kind)
+    validations.in_list(
+        library_type_kinds.all_values,
+        kind,
+        "Invalid library type kind. kind:",
+    )
     return struct(
         kind = kind,
     )
@@ -432,6 +431,16 @@ def _new_target(name, type, c99name, module_type, path, sources, dependencies):
     Returns:
         A `struct` representing a target in a Swift package.
     """
+    validations.in_list(
+        target_types.all_values,
+        type,
+        "Unrecognized target type. type:",
+    )
+    validations.in_list(
+        module_types.all_values,
+        module_type,
+        "Unrecognized module type. type:",
+    )
     return struct(
         name = name,
         type = type,
@@ -442,22 +451,30 @@ def _new_target(name, type, c99name, module_type, path, sources, dependencies):
         dependencies = dependencies,
     )
 
-# TODO(chuck): Should I target_types check in new_target?
-
 target_types = struct(
     executable = "executable",
     library = "library",
     regular = "regular",
     system = "system-target",
     test = "test",
+    all_values = [
+        "executable",
+        "library",
+        "regular",
+        "system-target",
+        "test",
+    ],
 )
-
-# TODO(chuck): Should I module_types check in new_target?
 
 module_types = struct(
     clang = "ClangTarget",
     swift = "SwiftTarget",
     system_library = "SystemLibraryTarget",
+    all_values = [
+        "ClangTarget",
+        "SwiftTarget",
+        "SystemLibraryTarget",
+    ],
 )
 
 library_type_kinds = struct(
