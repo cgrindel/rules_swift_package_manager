@@ -1,6 +1,18 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 
+bzlformat_pkg(name = "bzlformat")
+
+# MARK: - Integration Test
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
+
+# MARK: - Starlark
+
 bzl_library(
     name = "swift_package",
     srcs = ["swift_package.bzl"],
@@ -39,8 +51,6 @@ bzl_library(
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [":repository_utils"],
 )
-
-bzlformat_pkg(name = "bzlformat")
 
 bzl_library(
     name = "repository_utils",

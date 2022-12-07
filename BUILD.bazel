@@ -119,6 +119,9 @@ filegroup(
         "//gazelle/internal/swiftcfg:all_files",
         "//gazelle/internal/swiftpkg:all_files",
         "//gazelle/internal/wspace:all_files",
+        "//swiftpkg:all_files",
+        "//swiftpkg/internal:all_files",
+        "//swiftpkg/internal/modulemap_parser:all_files",
     ],
     visibility = ["//:__subpackages__"],
 )

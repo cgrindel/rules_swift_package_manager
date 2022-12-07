@@ -5,6 +5,7 @@ load(
     "integration_test_utils",
 )
 load("//:bazel_versions.bzl", "CURRENT_BAZEL_VERSION", "SUPPORTED_BAZEL_VERSIONS")
+load(":test_utils.bzl", "test_utils")
 
 bzlformat_pkg(name = "bzlformat")
 
@@ -65,17 +66,29 @@ bazel_integration_tests(
 
 # MARK: - Test Suites
 
-# GH009: Add pkg_manifest_test to test_suite declarations
+_test_base_names = [
+    "simple_test",
+    # GH009: Add pkg_manifest_test to test_suite declarations
+    # "pkg_manifest_test",
+]
+
+_smoke_test_names = [
+    integration_test_utils.bazel_integration_test_name(
+        test_base_name,
+        CURRENT_BAZEL_VERSION,
+    )
+    for test_base_name in _test_base_names
+]
+
+_all_test_names = test_utils.integration_test_names(
+    base_names = _test_base_names,
+    versions = SUPPORTED_BAZEL_VERSIONS,
+)
 
 test_suite(
     name = "smoke_integration_tests",
     tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
-    tests = [
-        integration_test_utils.bazel_integration_test_name(
-            "simple_test",
-            CURRENT_BAZEL_VERSION,
-        ),
-    ],
+    tests = _smoke_test_names,
     visibility = ["//:__subpackages__"],
 )
 
@@ -84,9 +97,6 @@ test_suite(
     # If you don't apply the test tags to the test suite, the test suite will
     # be found when `bazel test //...` is executed.
     tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
-    tests = integration_test_utils.bazel_integration_test_names(
-        "simple_test",
-        SUPPORTED_BAZEL_VERSIONS,
-    ),
+    tests = _all_test_names,
     visibility = ["//:__subpackages__"],
 )
