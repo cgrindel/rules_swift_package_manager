@@ -7,6 +7,16 @@ load(":pkginfo_targets.bzl", "pkginfo_targets")
 
 def make_pkginfo_target_deps(bazel_labels = bazel_labels):
     def _bazel_label(pkg_info, target_dep):
+        """Create a Bazel label string from a target dependency.
+
+        Args:
+            pkg_info: A `struct` as returned by `package_infos.new`.
+            target_dep: A `struct` as returned by
+                `package_infos.new_target_dependency`.
+
+        Returns:
+            A `string` representing the label for the target dependency.
+        """
         if target_dep.by_name:
             # GH009: Need to handle the byName references to external modules. Ugh.
             target = pkginfo_targets.get(pkg_info.targets, target_dep.by_name.target_name)
