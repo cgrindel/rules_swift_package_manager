@@ -84,7 +84,7 @@ def _gen_build_files(repository_ctx, pkg_info):
 
     # Create a build file at the root with all of the products
 
-    # TODO(chuck): Add products package
+    # GH009: Add products package
 
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))
@@ -236,35 +236,11 @@ package description generation)\
     ),
 }
 
-# TODO(chuck): REMOVE _CODEGEN_ATTRS
-
-# _CODEGEN_ATTRS = {
-#     "products_pkg": attr.string(
-#         default = "",
-#         doc = """\
-# The name of the Bazel package under which the Bazel declarations for the Swift \
-# products will be created.  Bazel declarations for the Swift package products are \
-# placed in their own Bazel package to avoid name conflicts with target \
-# declarations.\
-# """,
-#     ),
-#     "targets_pkg": attr.string(
-#         default = "swiftpkg_targets",
-#         doc = """\
-# The name of the Bazel package under which the Bazel declarations for the Swift \
-# targets will be created.  Bazel declarations for the Swift package targets are \
-# placed in their own Bazel package to avoid name conflicts with product \
-# declarations.\
-# """,
-#     ),
-# }
-
 _COMMON_ATTRS = dicts.add(
     _PATCH_ATTRS,
     _WORKSPACE_AND_BUILD_FILE_ATTRS,
     _GIT_ATTRS,
     _ENV_ATTRS,
-    # _CODEGEN_ATTRS,
 )
 
 swift_package = repository_rule(
