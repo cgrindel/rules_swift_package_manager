@@ -29,17 +29,27 @@ _pkg_info = package_infos.new(
     name = "MyPackage",
     path = "/path/to/package",
     dependencies = [_external_dep],
+    targets = [
+        package_infos.new_target(
+            name = "Foo",
+            type = "regular",
+            c99name = "Foo",
+            module_type = "SwiftTarget",
+            path = "Source/Foo",
+            sources = [
+                "Foo.swift",
+            ],
+            dependencies = [],
+        ),
+    ],
 )
 
 def _bazel_label_by_name_test(ctx):
     env = unittest.begin(ctx)
 
     target_dep = package_infos.new_target_dependency(by_name = _by_name)
-
     actual = pkginfo_target_deps.bazel_label(_pkg_info, target_dep)
-    expected = bazel_labels.normalize(
-        bazel_labels.new(name = _by_name.target_name),
-    )
+    expected = bazel_labels.normalize("@//Source/Foo:Foo")
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)
@@ -50,7 +60,6 @@ def _bazel_label_product_ref_test(ctx):
     env = unittest.begin(ctx)
 
     target_dep = package_infos.new_target_dependency(product = _product_ref)
-
     actual = pkginfo_target_deps.bazel_label(_pkg_info, target_dep)
     expected = bazel_labels.normalize(
         bazel_labels.new(
