@@ -87,7 +87,19 @@ def _new_for_targets_test(ctx):
     asserts.equals(env, 1, len(build_file.decls))
     decl = build_decls.get(build_file.decls, "SwiftLintFramework")
     asserts.false(env, decl == None)
-    asserts.equals(env, swift_kinds.library, decl.kind)
+    expected = build_decls.new(
+        kind = swift_kinds.library,
+        name = "SwiftLintFramework",
+        attrs = {
+            "deps": [],
+            "module_name": "SwiftLintFramework",
+            "srcs": [
+                "SwiftLintFramework.swift",
+            ],
+            "visibility": ["//visibility:public"],
+        },
+    )
+    # asserts.equals(env, swift_kinds.library, decl.kind)
 
     # The swiftlint target is an older style executable definition (regular).
     # We create the swift_library in the target package. Then, we create the
@@ -98,7 +110,23 @@ def _new_for_targets_test(ctx):
     asserts.equals(env, expected_load_stmts, build_file.load_stmts)
     asserts.equals(env, 1, len(build_file.decls))
     decl = build_decls.get(build_file.decls, "swiftlint")
-    asserts.equals(env, swift_kinds.library, decl.kind)
+    expected = build_decls.new(
+        kind = swift_kinds.library,
+        name = "swiftlint",
+        attrs = {
+            "deps": [
+                "//Source/SwiftLintFramework",
+            ],
+            "module_name": "swiftlint",
+            "srcs": [
+                "Commands/SwiftLint.swift",
+                "main.swift",
+            ],
+            "visibility": ["//visibility:public"],
+        },
+    )
+    asserts.equals(env, expected, decl)
+    # asserts.equals(env, swift_kinds.library, decl.kind)
 
     return unittest.end(env)
 
