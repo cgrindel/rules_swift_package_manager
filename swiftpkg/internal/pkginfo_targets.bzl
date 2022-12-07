@@ -11,6 +11,14 @@ def _srcs(target):
         for src in target.sources
     ]
 
+def _get(targets, name, fail_if_not_found = True):
+    for target in targets:
+        if target.name == name:
+            return target
+    if fail_if_not_found:
+        fail("Failed to find target. name:", name)
+    return None
+
 def make_pkginfo_targets(pkginfo_target_deps = pkginfo_target_deps):
     def _deps(pkg_info, target):
         return [
@@ -21,6 +29,7 @@ def make_pkginfo_targets(pkginfo_target_deps = pkginfo_target_deps):
     return struct(
         srcs = _srcs,
         deps = _deps,
+        get = _get,
     )
 
 pkginfo_targets = make_pkginfo_targets(pkginfo_target_deps = pkginfo_target_deps)

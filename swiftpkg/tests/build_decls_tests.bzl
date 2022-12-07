@@ -59,9 +59,30 @@ def _uniq_test(ctx):
 
 uniq_test = unittest.make(_uniq_test)
 
+def _get_test(ctx):
+    env = unittest.begin(ctx)
+
+    horse_decl = build_decls.new("smidgen_library", "horse")
+    decls = [
+        build_decls.new("chicken_binary", "goodbye"),
+        build_decls.new("chicken_library", "hello"),
+        horse_decl,
+    ]
+
+    actual = build_decls.get(decls, "does_not_exist", fail_if_not_found = False)
+    asserts.equals(env, None, actual)
+
+    actual = build_decls.get(decls, "horse", fail_if_not_found = False)
+    asserts.equals(env, horse_decl, actual)
+
+    return unittest.end(env)
+
+get_test = unittest.make(_get_test)
+
 def build_decls_test_suite():
     return unittest.suite(
         "build_decls_tests",
         to_starlark_parts_test,
         uniq_test,
+        get_test,
     )

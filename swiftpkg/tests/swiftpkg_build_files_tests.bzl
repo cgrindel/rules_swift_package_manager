@@ -1,8 +1,9 @@
 """Tests for `swiftpkg_bld_decls` module."""
 
-load("@bazel_skylib//lib:unittest.bzl", "unittest")
-load("//swiftpkg/internal:build_files.bzl", "build_files")
+load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
+load("//swiftpkg/internal:build_decls.bzl", "build_decls")
 load("//swiftpkg/internal:package_infos.bzl", "package_infos")
+load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
 load("//swiftpkg/internal:swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
 # This is a simplified version of SwiftLint.
@@ -81,11 +82,16 @@ _pkg_info = package_infos.new(
 def _new_for_targets_test(ctx):
     env = unittest.begin(ctx)
 
-    build_file = swiftpkg_build_files.new_for_targets(_pkg_info)
-
-    decl = build_files.find_decl(build_file, "SwiftLintFramework")
+    target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFramework")
+    build_file = swiftpkg_build_files.new_for_target(_pkg_info, target)
+    asserts.equals(env, 1, len(build_file.decls))
+    decl = build_decls.get(build_file.decls, "SwiftLintFramework")
     if decl == None:
         unittest.fail(env, "Expected to find SwiftLintFramework declaration.")
+
+    # decl = build_files.find_decl(build_file, "SwiftLintFramework")
+    # if decl == None:
+    #     unittest.fail(env, "Expected to find SwiftLintFramework declaration.")
 
     # # DEBUG BEGIN
     # print("*** CHUCK decl: ", decl)

@@ -52,16 +52,7 @@ def _merge(*bld_files):
         decls = decls,
     )
 
-def _find_decl(bld_file, name, fail_if_not_found = True):
-    for decl in bld_file.decls:
-        if decl.name == name:
-            return decl
-    if fail_if_not_found:
-        fail("Failed to find build declaration. name:", name)
-    return None
-
 build_files = struct(
     new = _new,
     merge = _merge,
-    find_decl = _find_decl,
 )

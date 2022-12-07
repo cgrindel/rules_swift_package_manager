@@ -65,7 +65,16 @@ def _uniq(decls):
 
     return results
 
+def _get(decls, name, fail_if_not_found = True):
+    for decl in decls:
+        if decl.name == name:
+            return decl
+    if fail_if_not_found:
+        fail("Failed to find build declaration. name:", name)
+    return None
+
 build_decls = struct(
     new = _new,
     uniq = _uniq,
+    get = _get,
 )

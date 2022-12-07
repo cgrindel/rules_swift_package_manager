@@ -74,9 +74,46 @@ def _deps_test(ctx):
 
 deps_test = unittest.make(_deps_test)
 
+def _get_test(ctx):
+    env = unittest.begin(ctx)
+
+    bar_target = package_infos.new_target(
+        name = "Bar",
+        type = target_types.library,
+        c99name = "Bar",
+        module_type = module_types.swift,
+        path = "/path/to/bar",
+        sources = [],
+        dependencies = [],
+    )
+    foo_target = package_infos.new_target(
+        name = "Foo",
+        type = target_types.library,
+        c99name = "Foo",
+        module_type = module_types.swift,
+        path = "/path/to/foo",
+        sources = [],
+        dependencies = [],
+    )
+    targets = [foo_target, bar_target]
+
+    actual = pkginfo_targets.get(targets, "does_not_exist", fail_if_not_found = False)
+    asserts.equals(env, None, actual)
+
+    actual = pkginfo_targets.get(targets, bar_target.name, fail_if_not_found = False)
+    asserts.equals(env, bar_target, actual)
+
+    actual = pkginfo_targets.get(targets, foo_target.name, fail_if_not_found = False)
+    asserts.equals(env, foo_target, actual)
+
+    return unittest.end(env)
+
+get_test = unittest.make(_get_test)
+
 def pkginfo_targets_test_suite():
     return unittest.suite(
         "pkginfo_targets_tests",
         srcs_test,
         deps_test,
+        get_test,
     )

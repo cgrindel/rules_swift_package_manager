@@ -11,6 +11,7 @@ load(
 )
 load(":package_infos.bzl", "package_infos")
 load(":spm_versions.bzl", "spm_versions")
+load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
 # The implementation of this repository rule is heavily influenced by the
 # implementation for git_repository.
@@ -70,14 +71,18 @@ def _update_git_attrs(orig, keys, override):
     return result
 
 def _gen_build_files(repository_ctx, pkg_info):
-    targets_pkg = repository_ctx.attr.targets_pkg
-    targets_bld_file = swiftpkg_bld_decls.build_file_from_pkg_info(pkg_info)
-    targets_bld_path = paths.join(pkg_info.path, targets_pkg, "BUILD.bazel")
-    repository_ctx.file(
-        targets_bld_path,
-        content = starlark_codegen.to_starlark(targets_bld_file),
-        executable = False,
-    )
+    # Create a build file for each Swift package target in their corresponding
+    # target path.
+    for target in pkg_info.targets:
+        bld_file = swiftpkg_build_files.new_for_target(pkg_info, target)
+        bld_file_path = paths.join(pkg_info.path, target.path, "BUILD.bazel")
+        repository_ctx.file(
+            bld_file_path,
+            content = starlark_codegen.to_starlark(bld_file),
+            executable = False,
+        )
+
+    # Create a build file at the root with all of the products
 
     # TODO(chuck): Add products package
 
@@ -231,33 +236,35 @@ package description generation)\
     ),
 }
 
-_CODEGEN_ATTRS = {
-    "products_pkg": attr.string(
-        default = "",
-        doc = """\
-The name of the Bazel package under which the Bazel declarations for the Swift \
-products will be created.  Bazel declarations for the Swift package products are \
-placed in their own Bazel package to avoid name conflicts with target \
-declarations.\
-""",
-    ),
-    "targets_pkg": attr.string(
-        default = "swiftpkg_targets",
-        doc = """\
-The name of the Bazel package under which the Bazel declarations for the Swift \
-targets will be created.  Bazel declarations for the Swift package targets are \
-placed in their own Bazel package to avoid name conflicts with product \
-declarations.\
-""",
-    ),
-}
+# TODO(chuck): REMOVE _CODEGEN_ATTRS
+
+# _CODEGEN_ATTRS = {
+#     "products_pkg": attr.string(
+#         default = "",
+#         doc = """\
+# The name of the Bazel package under which the Bazel declarations for the Swift \
+# products will be created.  Bazel declarations for the Swift package products are \
+# placed in their own Bazel package to avoid name conflicts with target \
+# declarations.\
+# """,
+#     ),
+#     "targets_pkg": attr.string(
+#         default = "swiftpkg_targets",
+#         doc = """\
+# The name of the Bazel package under which the Bazel declarations for the Swift \
+# targets will be created.  Bazel declarations for the Swift package targets are \
+# placed in their own Bazel package to avoid name conflicts with product \
+# declarations.\
+# """,
+#     ),
+# }
 
 _COMMON_ATTRS = dicts.add(
     _PATCH_ATTRS,
     _WORKSPACE_AND_BUILD_FILE_ATTRS,
     _GIT_ATTRS,
     _ENV_ATTRS,
-    _CODEGEN_ATTRS,
+    # _CODEGEN_ATTRS,
 )
 
 swift_package = repository_rule(
