@@ -306,6 +306,7 @@ def _new_product_type(executable = False, library = None):
 
     Args:
         executable: A `bool` specifying whether the product is an executable.
+        library: A `struct` as returned by `package_infos.new_library_type`.
 
     Returns:
         A `struct` representing a product type.
