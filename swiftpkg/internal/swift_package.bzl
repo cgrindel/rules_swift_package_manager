@@ -1,6 +1,7 @@
 """Implementation for `swift_package`."""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:versions.bzl", "versions")
 load("@bazel_tools//tools/build_defs/repo:git_worker.bzl", "git_repo")
 load(
@@ -11,6 +12,7 @@ load(
 )
 load(":pkginfos.bzl", "pkginfos")
 load(":spm_versions.bzl", "spm_versions")
+load(":starlark_codegen.bzl", "starlark_codegen")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
 # The implementation of this repository rule is heavily influenced by the
