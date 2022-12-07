@@ -68,8 +68,7 @@ bazel_integration_tests(
 
 _test_base_names = [
     "simple_test",
-    # GH009: Add pkg_manifest_test to test_suite declarations
-    # "pkg_manifest_test",
+    "pkg_manifest_test",
 ]
 
 _smoke_test_names = [
