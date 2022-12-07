@@ -4,10 +4,11 @@ load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:build_decls.bzl", "build_decls")
 load("//swiftpkg/internal:build_files.bzl", "build_files")
 load("//swiftpkg/internal:load_statements.bzl", "load_statements")
-load("//swiftpkg/internal:package_infos.bzl", "package_infos")
+load("//swiftpkg/internal:package_infos.bzl", "library_type_kinds", "package_infos")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
 load(
     "//swiftpkg/internal:swiftpkg_build_files.bzl",
+    "native_kinds",
     "swift_kinds",
     "swift_library_load_stmt",
     "swift_location",
@@ -32,11 +33,19 @@ _pkg_info = package_infos.new(
         ),
     ],
     products = [
-        # TODO(chuck): Add product for SwiftLintFramework
         package_infos.new_product(
             name = "swiftlint",
             type = package_infos.new_product_type(executable = True),
             targets = ["swiftlint"],
+        ),
+        package_infos.new_product(
+            name = "SwiftLintFramework",
+            type = package_infos.new_product_type(
+                library = package_infos.new_library_type(
+                    library_type_kinds.automatic,
+                ),
+            ),
+            targets = ["SwiftLintFramework"],
         ),
     ],
     targets = [
@@ -190,6 +199,14 @@ def _products_test(ctx):
             load_statements.new(swift_location, swift_kinds.binary),
         ],
         decls = [
+            build_decls.new(
+                kind = native_kinds.alias,
+                name = "SwiftLintFramework",
+                attrs = {
+                    "actual": "@//Source/SwiftLintFramework:SwiftLintFramework",
+                    "visibility": ["//visibility:public"],
+                },
+            ),
             build_decls.new(
                 kind = swift_kinds.binary,
                 name = "swiftlint",

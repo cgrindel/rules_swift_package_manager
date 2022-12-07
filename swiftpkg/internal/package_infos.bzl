@@ -301,7 +301,7 @@ def _new_version_range(lower, upper):
         upper = upper,
     )
 
-def _new_product_type(executable = False):
+def _new_product_type(executable = False, library = None):
     """Creates a product type.
 
     Args:
@@ -310,9 +310,44 @@ def _new_product_type(executable = False):
     Returns:
         A `struct` representing a product type.
     """
+    is_executable = executable
+    is_library = (library != None)
+    type_bools = [is_executable, is_library]
+    true_cnt = 0
+    for bt in type_bools:
+        if bt:
+            true_cnt = true_cnt + 1
+    if true_cnt == 0:
+        fail("A product type must be one of the following: executable, library.")
+    elif true_cnt > 1:
+        fail("Multiple args provided to `package_infos.new_product_type`.")
+
     return struct(
         executable = executable,
-        is_executable = (executable != None),
+        library = library,
+        # Type boolean values
+        is_executable = is_executable,
+        is_library = is_library,
+    )
+
+def _new_library_type(kind):
+    """Creates a library type as expected by `package_infos.new_product_type`.
+
+    Args:
+        kind: The kind of library. Must be one of `library_type_kinds`.
+
+    Returns:
+        A `struct` representing a library type.
+    """
+    valid_kind = False
+    for k in library_type_kinds.all_values:
+        if kind == k:
+            valid_kind = True
+            break
+    if not valid_kind:
+        fail("Invalid library type kind. kind:", kind)
+    return struct(
+        kind = kind,
     )
 
 def _new_product(name, type, targets):
@@ -422,6 +457,13 @@ module_types = struct(
     system_library = "SystemLibraryTarget",
 )
 
+library_type_kinds = struct(
+    automatic = "automatic",
+    dynamic = "dynamic",
+    static = "static",
+    all_values = ["automatic", "dynamic", "static"],
+)
+
 package_infos = struct(
     get = _get,
     new = _new,
@@ -436,4 +478,5 @@ package_infos = struct(
     new_target_reference = _new_target_reference,
     new_target_dependency = _new_target_dependency,
     new_target = _new_target,
+    new_library_type = _new_library_type,
 )

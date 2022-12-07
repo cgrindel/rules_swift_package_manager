@@ -121,6 +121,8 @@ def _new_for_product(pkg_info, product):
     prod_type = product.type
     if prod_type.is_executable:
         return _executable_product_build_file(pkg_info, product)
+    elif prod_type.is_library:
+        return _library_product_build_file(pkg_info, product)
     else:
         fail("Unrecognized product type. type:", prod_type)
 
@@ -144,10 +146,35 @@ def _executable_product_build_file(pkg_info, product):
                 decls = [_swift_binary_from_product(product, target)],
             )
     elif targets_len > 1:
-        # TODO(chuck): IMPLEMENT ME!
-        return None
+        fail("Multiple targets specified for an executable product. name:", product.name)
     else:
         fail("Did not find any targets associated with product. name:", product.name)
+
+def _library_product_build_file(pkg_info, product):
+    # Retrieve the targets
+    targets = [
+        pkginfo_targets.get(pkg_info.targets, tname)
+        for tname in product.targets
+    ]
+    targets_len = len(targets)
+    if targets_len == 0:
+        fail("No targets specified for a library product. name:", product.name)
+    elif targets_len > 1:
+        fail("Multiple targets specified for a library product. name:", product.name)
+
+    actual_target = targets[0]
+    return build_files.new(
+        decls = [
+            build_decls.new(
+                native_kinds.alias,
+                product.name,
+                attrs = {
+                    "actual": pkginfo_targets.bazel_label(actual_target),
+                    "visibility": ["//visibility:public"],
+                },
+            ),
+        ],
+    )
 
 def _swift_binary_from_product(product, dep_target):
     return build_decls.new(
@@ -181,6 +208,10 @@ swift_binary_load_stmt = load_statements.new(
 )
 
 swift_test_load_stmt = load_statements.new(swift_location, swift_kinds.test)
+
+native_kinds = struct(
+    alias = "alias",
+)
 
 swiftpkg_build_files = struct(
     new_for_target = _new_for_target,
