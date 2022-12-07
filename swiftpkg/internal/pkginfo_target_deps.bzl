@@ -1,4 +1,4 @@
-"""Module for generating data from target dependencies created by `package_infos`."""
+"""Module for generating data from target dependencies created by `pkginfos`."""
 
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels")
 load(":bazel_repo_names.bzl", "bazel_repo_names")
@@ -10,9 +10,9 @@ def make_pkginfo_target_deps(bazel_labels = bazel_labels):
         """Create a Bazel label string from a target dependency.
 
         Args:
-            pkg_info: A `struct` as returned by `package_infos.new`.
+            pkg_info: A `struct` as returned by `pkginfos.new`.
             target_dep: A `struct` as returned by
-                `package_infos.new_target_dependency`.
+                `pkginfos.new_target_dependency`.
 
         Returns:
             A `string` representing the label for the target dependency.

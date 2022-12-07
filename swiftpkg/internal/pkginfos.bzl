@@ -1,7 +1,5 @@
 """API for creating and loading Swift package information."""
 
-# TODO(chuck): Rename package_infos to pkginfos to match pkginfo_targets.
-
 load(":repository_utils.bzl", "repository_utils")
 
 def _get_dump_manifest(repository_ctx, env = {}, working_directory = ""):
@@ -57,7 +55,7 @@ def _get(repository_ctx, directory, env = {}):
 
     Returns:
         A `struct` representing the package information as returned by
-        `package_infos.new()`.
+        `pkginfos.new()`.
     """
     dump_manifest = _get_dump_manifest(
         repository_ctx,
@@ -157,7 +155,7 @@ def _new_from_parsed_json(dump_manifest, desc_manifest):
 
     Returns:
         A `struct` representing the package information as returned by
-        `package_infos.new()`.
+        `pkginfos.new()`.
     """
     tools_version = dump_manifest["toolsVersion"]["_version"]
     platforms = [
@@ -210,13 +208,13 @@ def _new(
         tools_version: Optional. The semantic version for Swift from which the
             package was created (`string`).
         platforms: A `list` of platform structs as created by
-            `package_infos.new_platform()`.
+            `pkginfos.new_platform()`.
         dependencies: A `list` of external depdency structs as created by
-            `package_infos.new_dependency()`.
+            `pkginfos.new_dependency()`.
         products: A `list` of product structs as created by
-            `package_infos.new_product()`.
+            `pkginfos.new_product()`.
         targets: A `list` of target structs as created by
-            `package_infos.new_target()`.
+            `pkginfos.new_target()`.
 
     Returns:
         A `struct` representing information about a Swift package.
@@ -255,7 +253,7 @@ def _new_dependency(identity, type, url, requirement):
         type: Type type of external dependency (`string`).
         url: The URL of the external dependency (`string`).
         requirement: A `struct` as returned by \
-            `package_infos.new_dependency_requirement()`.
+            `pkginfos.new_dependency_requirement()`.
 
     Returns:
         A `struct` representing an external dependency.
@@ -273,7 +271,7 @@ def _new_dependency_requirement(ranges = None):
 
     Args:
         ranges: Optional. A `list` of version range `struct` values as returned
-            by `package_infos.new_version_range()`.
+            by `pkginfos.new_version_range()`.
 
     Returns:
         A `struct` representing the requirements for an external dependency.
@@ -306,7 +304,7 @@ def _new_product_type(executable = False, library = None):
 
     Args:
         executable: A `bool` specifying whether the product is an executable.
-        library: A `struct` as returned by `package_infos.new_library_type`.
+        library: A `struct` as returned by `pkginfos.new_library_type`.
 
     Returns:
         A `struct` representing a product type.
@@ -321,7 +319,7 @@ def _new_product_type(executable = False, library = None):
     if true_cnt == 0:
         fail("A product type must be one of the following: executable, library.")
     elif true_cnt > 1:
-        fail("Multiple args provided to `package_infos.new_product_type`.")
+        fail("Multiple args provided to `pkginfos.new_product_type`.")
 
     return struct(
         executable = executable,
@@ -332,7 +330,7 @@ def _new_product_type(executable = False, library = None):
     )
 
 def _new_library_type(kind):
-    """Creates a library type as expected by `package_infos.new_product_type`.
+    """Creates a library type as expected by `pkginfos.new_product_type`.
 
     Args:
         kind: The kind of library. Must be one of `library_type_kinds`.
@@ -356,7 +354,7 @@ def _new_product(name, type, targets):
 
     Args:
         name: The name of the product as a `string`.
-        type: A `struct` as returned by `package_infos.new_product_type`.
+        type: A `struct` as returned by `pkginfos.new_product_type`.
         targets: A `list` of target names (`string`).
 
     Returns:
@@ -401,9 +399,9 @@ def _new_target_dependency(by_name = None, product = None):
 
     Args:
         by_name: A `struct` as returned by
-            `package_infos.new_target_reference()`.
+            `pkginfos.new_target_reference()`.
         product: A `struct` as returned by
-            `package_infos.new_product_reference()`.
+            `pkginfos.new_product_reference()`.
 
     Returns:
         A `struct` representing a target dependency.
@@ -429,7 +427,7 @@ def _new_target(name, type, c99name, module_type, path, sources, dependencies):
         sources: A `list` of the source files (`string`) in the module relative
             to the `path`.
         dependencies: A `list` of target dependency values as returned by
-            `package_infos.new_target_dependency()`.
+            `pkginfos.new_target_dependency()`.
 
     Returns:
         A `struct` representing a target in a Swift package.
@@ -469,7 +467,7 @@ library_type_kinds = struct(
     all_values = ["automatic", "dynamic", "static"],
 )
 
-package_infos = struct(
+pkginfos = struct(
     get = _get,
     new = _new,
     new_from_parsed_json = _new_from_parsed_json,

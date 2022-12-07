@@ -3,9 +3,9 @@
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":load_statements.bzl", "load_statements")
-load(":package_infos.bzl", "module_types", "target_types")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
+load(":pkginfos.bzl", "module_types", "target_types")
 
 # MARK: - Target Entry Point
 
@@ -137,7 +137,8 @@ def _executable_product_build_file(pkg_info, product):
     if targets_len == 1:
         target = targets[0]
         if target.type == target_types.executable:
-            # TODO(chuck): Create an alias to the binary target created in the target package.
+            # GH009(chuck): Support executable targets
+            # Create an alias to the binary target created in the target package.
             return None
         else:
             # Create the binary target here.

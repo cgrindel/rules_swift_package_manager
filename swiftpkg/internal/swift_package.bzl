@@ -9,7 +9,7 @@ load(
     "update_attrs",
     "workspace_and_buildfile",
 )
-load(":package_infos.bzl", "package_infos")
+load(":pkginfos.bzl", "pkginfos")
 load(":spm_versions.bzl", "spm_versions")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
@@ -95,7 +95,7 @@ def _swift_package_impl(repository_ctx):
     update = _clone_or_update_repo(repository_ctx, directory)
 
     # Get the package info
-    pkg_info = package_infos.get(repository_ctx, directory, env = env)
+    pkg_info = pkginfos.get(repository_ctx, directory, env = env)
 
     # Generate the WORKSPACE file
     workspace_and_buildfile(repository_ctx)

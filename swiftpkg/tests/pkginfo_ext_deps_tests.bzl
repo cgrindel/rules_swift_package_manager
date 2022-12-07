@@ -1,16 +1,16 @@
 """Tests for `pkginfo_ext_deps` module."""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
-load("//swiftpkg/internal:package_infos.bzl", "package_infos")
 load("//swiftpkg/internal:pkginfo_ext_deps.bzl", "pkginfo_ext_deps")
+load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 
-_swift_arg_parser = package_infos.new_dependency(
+_swift_arg_parser = pkginfos.new_dependency(
     identity = "swift-argument-parser",
     type = "sourceControl",
     url = "https://github.com/apple/swift-argument-parser",
-    requirement = package_infos.new_dependency_requirement(
+    requirement = pkginfos.new_dependency_requirement(
         ranges = [
-            package_infos.new_version_range(
+            pkginfos.new_version_range(
                 lower = "1.2.0",
                 upper = "2.0.0",
             ),
@@ -18,13 +18,13 @@ _swift_arg_parser = package_infos.new_dependency(
     ),
 )
 
-_super_cool_pkg = package_infos.new_dependency(
+_super_cool_pkg = pkginfos.new_dependency(
     identity = "super-cool-package",
     type = "sourceControl",
     url = "https://github.com/example/super-cool-package",
-    requirement = package_infos.new_dependency_requirement(
+    requirement = pkginfos.new_dependency_requirement(
         ranges = [
-            package_infos.new_version_range(
+            pkginfos.new_version_range(
                 lower = "0.0.0",
                 upper = "1.0.0",
             ),

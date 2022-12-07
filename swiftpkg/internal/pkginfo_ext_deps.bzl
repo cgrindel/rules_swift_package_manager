@@ -1,4 +1,4 @@
-"""Module for generating data from external dependencies created by `package_infos`."""
+"""Module for generating data from external dependencies created by `pkginfos`."""
 
 def _find_by_identity(ext_deps, identity, fail_if_not_found = True):
     for ext_dep in ext_deps:

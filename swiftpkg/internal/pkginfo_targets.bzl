@@ -1,4 +1,4 @@
-"""Module for generating data from targets created by `package_infos`."""
+"""Module for generating data from targets created by `pkginfos`."""
 
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels")
 
@@ -7,7 +7,7 @@ def _get(targets, name, fail_if_not_found = True):
 
     Args:
         targets: A `list` of target `struct` values as returned by
-            `package_infos.new_target`.
+            `pkginfos.new_target`.
         name: The name of a target as a `string`.
         fail_if_not_found: Optional. A `bool` that determines whether to fail
             (True) or return `None` (False) if a target is not found.
@@ -37,7 +37,7 @@ def make_pkginfo_targets(bazel_labels = bazel_labels):
         """Create a Bazel label string from a target.
 
         Args:
-            target: A `struct` as returned from `package_infos.new_target`.
+            target: A `struct` as returned from `pkginfos.new_target`.
 
         Returns:
             A `string` representing the label for the target.

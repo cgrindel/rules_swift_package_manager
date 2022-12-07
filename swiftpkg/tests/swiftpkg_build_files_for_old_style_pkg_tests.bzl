@@ -4,8 +4,8 @@ load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:build_decls.bzl", "build_decls")
 load("//swiftpkg/internal:build_files.bzl", "build_files")
 load("//swiftpkg/internal:load_statements.bzl", "load_statements")
-load("//swiftpkg/internal:package_infos.bzl", "library_type_kinds", "package_infos")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
+load("//swiftpkg/internal:pkginfos.bzl", "library_type_kinds", "pkginfos")
 load(
     "//swiftpkg/internal:swiftpkg_build_files.bzl",
     "native_kinds",
@@ -17,31 +17,31 @@ load(
 )
 
 # This is a simplified version of SwiftLint.
-_pkg_info = package_infos.new(
+_pkg_info = pkginfos.new(
     name = "SwiftLint",
     path = "/path/to/swiftlint",
     dependencies = [
-        package_infos.new_dependency(
+        pkginfos.new_dependency(
             identity = "swift-argument-parser",
             type = "sourceControl",
             url = "https://github.com/apple/swift-argument-parser.git",
-            requirement = package_infos.new_dependency_requirement(
+            requirement = pkginfos.new_dependency_requirement(
                 ranges = [
-                    package_infos.new_version_range("0.3.1", "0.4.0"),
+                    pkginfos.new_version_range("0.3.1", "0.4.0"),
                 ],
             ),
         ),
     ],
     products = [
-        package_infos.new_product(
+        pkginfos.new_product(
             name = "swiftlint",
-            type = package_infos.new_product_type(executable = True),
+            type = pkginfos.new_product_type(executable = True),
             targets = ["swiftlint"],
         ),
-        package_infos.new_product(
+        pkginfos.new_product(
             name = "SwiftLintFramework",
-            type = package_infos.new_product_type(
-                library = package_infos.new_library_type(
+            type = pkginfos.new_product_type(
+                library = pkginfos.new_library_type(
                     library_type_kinds.automatic,
                 ),
             ),
@@ -51,7 +51,7 @@ _pkg_info = package_infos.new(
     targets = [
         # Old-style regular library that is used to create a binary from an
         # executable product.
-        package_infos.new_target(
+        pkginfos.new_target(
             name = "swiftlint",
             type = "regular",
             c99name = "swiftlint",
@@ -62,14 +62,14 @@ _pkg_info = package_infos.new(
                 "main.swift",
             ],
             dependencies = [
-                package_infos.new_target_dependency(
-                    by_name = package_infos.new_target_reference(
+                pkginfos.new_target_dependency(
+                    by_name = pkginfos.new_target_reference(
                         "SwiftLintFramework",
                     ),
                 ),
             ],
         ),
-        package_infos.new_target(
+        pkginfos.new_target(
             name = "SwiftLintFramework",
             type = "regular",
             c99name = "SwiftLintFramework",
@@ -80,7 +80,7 @@ _pkg_info = package_infos.new(
             ],
             dependencies = [],
         ),
-        package_infos.new_target(
+        pkginfos.new_target(
             name = "SwiftLintFrameworkTests",
             type = "test",
             c99name = "SwiftLintFrameworkTests",
@@ -90,8 +90,8 @@ _pkg_info = package_infos.new(
                 "SwiftLintFrameworkTests.swift",
             ],
             dependencies = [
-                package_infos.new_target_dependency(
-                    by_name = package_infos.new_target_reference(
+                pkginfos.new_target_dependency(
+                    by_name = pkginfos.new_target_reference(
                         "SwiftLintFramework",
                     ),
                 ),

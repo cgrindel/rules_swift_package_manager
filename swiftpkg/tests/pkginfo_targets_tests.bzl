@@ -2,14 +2,14 @@
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "make_bazel_labels", "make_stub_workspace_name_resolvers")
-load("//swiftpkg/internal:package_infos.bzl", "module_types", "package_infos", "target_types")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "make_pkginfo_targets")
+load("//swiftpkg/internal:pkginfos.bzl", "module_types", "pkginfos", "target_types")
 
 workspace_name_resolovers = make_stub_workspace_name_resolvers()
 bazel_labels = make_bazel_labels(workspace_name_resolovers)
 pkginfo_targets = make_pkginfo_targets(bazel_labels)
 
-_bar_target = package_infos.new_target(
+_bar_target = pkginfos.new_target(
     name = "Bar",
     type = target_types.library,
     c99name = "Bar",
@@ -18,7 +18,7 @@ _bar_target = package_infos.new_target(
     sources = [],
     dependencies = [],
 )
-_foo_target = package_infos.new_target(
+_foo_target = pkginfos.new_target(
     name = "Foo",
     type = target_types.library,
     c99name = "Foo",
