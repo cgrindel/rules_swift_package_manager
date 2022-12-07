@@ -94,18 +94,18 @@ def _swift_test_from_target(pkg_info, target):
 
 # MARK: - Clang Targets
 
-# TODO(chuck): Remove unused-variable directives
+# GH009(chuck): Remove unused-variable directives
 
 # buildifier: disable=unused-variable
 def _clang_target_build_file(target):
-    # TODO(chuck): IMPLEMENT ME!
+    # GH009(chuck): Implement _clang_target_build_file
     return []
 
 # MARK: - System Library Targets
 
 # buildifier: disable=unused-variable
 def _system_library_build_file(target):
-    # TODO(chuck): IMPLEMENT ME!
+    # GH009(chuck): Implement _system_library_build_file
     return []
 
 # MARK: - Products Entry Point

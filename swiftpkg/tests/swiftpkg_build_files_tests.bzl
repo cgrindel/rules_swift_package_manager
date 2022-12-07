@@ -49,6 +49,8 @@ _pkg_info = package_infos.new(
         ),
     ],
     targets = [
+        # Old-style regular library that is used to create a binary from an
+        # executable product.
         package_infos.new_target(
             name = "swiftlint",
             type = "regular",
