@@ -4,7 +4,7 @@ load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:build_decls.bzl", "build_decls")
 load("//swiftpkg/internal:package_infos.bzl", "package_infos")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
-load("//swiftpkg/internal:swiftpkg_build_files.bzl", "swiftpkg_build_files")
+load("//swiftpkg/internal:swiftpkg_build_files.bzl", "swift_kinds", "swift_library_load_stmt", "swiftpkg_build_files")
 
 # This is a simplified version of SwiftLint.
 _pkg_info = package_infos.new(
@@ -86,18 +86,19 @@ def _new_for_targets_test(ctx):
     build_file = swiftpkg_build_files.new_for_target(_pkg_info, target)
     asserts.equals(env, 1, len(build_file.decls))
     decl = build_decls.get(build_file.decls, "SwiftLintFramework")
-    if decl == None:
-        unittest.fail(env, "Expected to find SwiftLintFramework declaration.")
+    asserts.false(env, decl == None)
+    asserts.equals(env, swift_kinds.library, decl.kind)
 
-    # decl = build_files.find_decl(build_file, "SwiftLintFramework")
-    # if decl == None:
-    #     unittest.fail(env, "Expected to find SwiftLintFramework declaration.")
-
-    # # DEBUG BEGIN
-    # print("*** CHUCK decl: ", decl)
-    # # DEBUG END
-
-    # unittest.fail(env, "STOP")
+    # The swiftlint target is an older style executable definition (regular).
+    # We create the swift_library in the target package. Then, we create the
+    # executable when defining the product.
+    target = pkginfo_targets.get(_pkg_info.targets, "swiftlint")
+    build_file = swiftpkg_build_files.new_for_target(_pkg_info, target)
+    expected_load_stmts = [swift_library_load_stmt]
+    asserts.equals(env, expected_load_stmts, build_file.load_stmts)
+    asserts.equals(env, 1, len(build_file.decls))
+    decl = build_decls.get(build_file.decls, "swiftlint")
+    asserts.equals(env, swift_kinds.library, decl.kind)
 
     return unittest.end(env)
 

@@ -52,10 +52,10 @@ def _decls_for_clang_target(target):
 
 def _decls_for_swift_target(pkg_info, target):
     if target.type == target_types.library or target.type == target_types.regular:
-        load_stmts = [_swift_library_load_stmt]
+        load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(pkg_info, target)]
     elif target.type == target_types.executable:
-        lib_name = "{}Library".format(target.name)
+        lib_name = "{}Lib".format(target.name)
         lib_decl = _swift_library_from_target(
             pkg_info,
             target,
@@ -63,7 +63,7 @@ def _decls_for_swift_target(pkg_info, target):
             c99name = lib_name,
         )
         bin_decl = _swift_binary_from_target(pkg_info, target, lib_name)
-        load_stmts = [_swift_binary_load_stmt]
+        load_stmts = [swift_binary_load_stmt]
         decls = [lib_decl, bin_decl]
     else:
         fail("Unrecognized target type for a Swift target. type:", target.type)
@@ -79,7 +79,7 @@ def _swift_library_from_target(pkg_info, target, name = None, c99name = None):
     if c99name == None:
         c99name = target.c99name
     return build_decls.new(
-        kind = _kinds.swift_library,
+        kind = swift_kinds.library,
         name = name,
         attrs = {
             "deps": pkginfo_targets.deps(pkg_info, target),
@@ -91,7 +91,7 @@ def _swift_library_from_target(pkg_info, target, name = None, c99name = None):
 
 def _swift_binary_from_target(target, lib_name):
     return build_decls.new(
-        kind = _kinds.swift_binary,
+        kind = swift_kinds.binary,
         name = target.name,
         attrs = {
             "deps": ":{}".format(lib_name),
@@ -108,28 +108,24 @@ def _decls_for_system_library_target(target):
     # TODO(chuck): IMPLEMENT ME!
     return []
 
-_locations = struct(
-    rules_swift = "@build_bazel_rules_swift//swift:swift.bzl",
+swift_location = "@build_bazel_rules_swift//swift:swift.bzl"
+
+swift_kinds = struct(
+    library = "swift_library",
+    binary = "swift_binary",
 )
 
-_kinds = struct(
-    swift_library = "swift_library",
-    swift_binary = "swift_binary",
+swift_library_load_stmt = load_statements.new(
+    swift_location,
+    swift_kinds.library,
 )
 
-_swift_library_load_stmt = load_statements.new(
-    _locations.rules_swift,
-    _kinds.swift_library,
-)
-
-_swift_binary_load_stmt = load_statements.new(
-    _locations.rules_swift,
-    _kinds.swift_library,
-    _kinds.swift_binary,
+swift_binary_load_stmt = load_statements.new(
+    swift_location,
+    swift_kinds.library,
+    swift_kinds.binary,
 )
 
 swiftpkg_build_files = struct(
     new_for_target = _new_for_target,
-    kinds = _kinds,
-    locations = _locations,
 )
