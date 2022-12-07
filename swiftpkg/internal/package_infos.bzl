@@ -312,6 +312,7 @@ def _new_product_type(executable = False):
     """
     return struct(
         executable = executable,
+        is_executable = (executable != None),
     )
 
 def _new_product(name, type, targets):
