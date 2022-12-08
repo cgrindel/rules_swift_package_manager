@@ -91,27 +91,44 @@ def _to_starlark_test(ctx):
 
 to_starlark_test = unittest.make(_to_starlark_test)
 
-def _custom_struct(name, kind):
+def _custom_struct(name, kind, values = {}):
     return struct(
         name = name,
         kind = kind,
+        values = values,
         to_starlark_parts = _custom_to_starlark_parts,
     )
 
 def _custom_to_starlark_parts(val, indent):
+    child_indent = indent + 1
     output = ["{}(\n".format(val.kind)]
-    output.extend(scg.attr("name", val.name, indent + 1))
+    output.extend(scg.attr("name", val.name, child_indent))
+    if len(val.values) > 0:
+        output.extend(scg.attr("values", val.values, child_indent))
     output.append(scg.indent(indent, ")"))
     return output
 
 def _to_starlark_with_struct_test(ctx):
     env = unittest.begin(ctx)
 
-    my_struct = _custom_struct(kind = "chicken_binary", name = "say_hello")
+    my_struct = _custom_struct(
+        kind = "chicken_binary",
+        name = "say_hello",
+        values = {
+            "bar": _custom_struct("goodbye", "chicken_library"),
+            "foo": "hello",
+        },
+    )
     actual = scg.to_starlark(my_struct)
     expected = """\
 chicken_binary(
     name = "say_hello",
+    values = {
+        "bar": chicken_library(
+            name = "goodbye",
+        ),
+        "foo": "hello",
+    },
 )\
 """
     asserts.equals(env, expected, actual)

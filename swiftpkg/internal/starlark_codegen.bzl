@@ -6,7 +6,13 @@ def _indent(count, suffix = ""):
     return (_single_indent_str * count) + suffix
 
 def _attr(name, value, indent):
-    return [_indent(indent), "{} = ".format(name), _normalize(value), ",\n"]
+    value = _normalize(value)
+    return [
+        _indent(indent),
+        "{} = ".format(name),
+        _with_indent(indent, value),
+        ",\n",
+    ]
 
 _simple_starlark_types = [
     "None",
@@ -34,24 +40,36 @@ def _to_starlark(val):
 
     # Dealing with a complex type
     out = [val]
-    current_indent = 0
     for _iteration in range(100):
-        out, finished = _process_complex_types(out, current_indent)
+        out, finished = _process_complex_types(out)
         if finished:
             return "".join(out)
-        current_indent = current_indent + 1
     fail("Failed to finish processing starlark for value: {}".format(val))
 
-def _process_complex_types(out, current_indent):
+def _process_complex_types(out):
     finished = True
     new_out = []
     for v in out:
         v_type = type(v)
+
+        # Check for a with_indent struct and get its indent value and process
+        # its wrapped value
+        current_indent = 0
+        if v_type == "struct":
+            with_indent_val = getattr(v, "with_indent", None)
+            if with_indent_val != None:
+                current_indent = with_indent_val
+                v = v.wrapped_value
+                v_type = type(v)
+
         if v_type == "string":
             new_out.append(v)
             continue
 
+        # If it is not a string, then we need process the output at least one
+        # more time
         finished = False
+
         if v_type == "list":
             new_out.extend(_list(v, current_indent))
         elif v_type == "dict":
@@ -66,14 +84,25 @@ def _process_complex_types(out, current_indent):
 
     return new_out, finished
 
+def _with_indent(indent, value):
+    return struct(
+        with_indent = indent,
+        wrapped_value = value,
+    )
+
 def _list(val, current_indent):
     if len(val) == 0:
         return ["[]"]
 
+    child_indent = current_indent + 1
     output = ["[\n"]
     for item in val:
         item = _normalize(item)
-        output.extend([_indent(current_indent + 1), item, ",\n"])
+        output.extend([
+            _indent(child_indent),
+            _with_indent(child_indent, item),
+            ",\n",
+        ])
     output.extend([_indent(current_indent), "]"])
     return output
 
@@ -81,11 +110,18 @@ def _dict(val, current_indent):
     if len(val) == 0:
         return ["{}"]
 
+    child_indent = current_indent + 1
     output = ["{\n"]
     for (k, v) in val.items():
         k = _normalize(k)
         v = _normalize(v)
-        output.extend([_indent(current_indent + 1), k, ": ", v, ",\n"])
+        output.extend([
+            _indent(child_indent),
+            k,
+            ": ",
+            _with_indent(child_indent, v),
+            ",\n",
+        ])
     output.extend([_indent(current_indent), "}"])
     return output
 
@@ -94,4 +130,5 @@ starlark_codegen = struct(
     indent = _indent,
     normalize = _normalize,
     to_starlark = _to_starlark,
+    with_indent = _with_indent,
 )
