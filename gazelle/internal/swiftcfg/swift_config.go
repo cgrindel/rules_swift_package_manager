@@ -8,7 +8,6 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 )
 
-
 const SwiftConfigName = "swift"
 
 type SwiftConfig struct {
@@ -37,9 +36,12 @@ func (sc *SwiftConfig) SwiftBin() *swiftbin.SwiftBin {
 
 // Determines how the specified directory should be processed.
 func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRulesMode {
-	if sc.PackageInfo == nil {
+	pi := sc.PackageInfo
+	if pi == nil {
 		return SrcFileGenRulesMode
-	} else if args.Dir == sc.PackageInfo.Dir {
+	} else if args.Dir == pi.Dir {
+		return SwiftPkgGenRulesMode
+	} else if desct := pi.DescManifest.Targets.FindByPath(args.Rel); desct != nil {
 		return SwiftPkgGenRulesMode
 	}
 	return SkipGenRulesMode
@@ -56,5 +58,3 @@ func GetSwiftConfig(c *config.Config) *SwiftConfig {
 func SetSwiftConfig(c *config.Config, sc *SwiftConfig) {
 	c.Exts[SwiftConfigName] = sc
 }
-
-

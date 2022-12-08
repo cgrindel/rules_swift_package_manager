@@ -1,8 +1,6 @@
 package swift
 
 import (
-	"fmt"
-
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -27,15 +25,20 @@ func rulesForBinaryModule(
 	swiftImports []string,
 	shouldSetVis bool,
 ) []*rule.Rule {
-	libModName := fmt.Sprintf("%sLibrary", moduleName)
-	libR := rule.NewRule(LibraryRuleKind, libModName)
-	setCommonAttrs(libR, libModName, srcs, swiftImports, shouldSetVis, nil)
+	// libModName := fmt.Sprintf("%sLibrary", moduleName)
+	// libR := rule.NewRule(LibraryRuleKind, libModName)
+	// // libR.SetPrivateAttr(SwiftImportAs, [])
+	// setCommonAttrs(libR, moduleName, srcs, swiftImports, shouldSetVis, nil)
+	// binR := rule.NewRule(BinaryRuleKind, moduleName)
+	// setCommonAttrs(
+	// 	binR, moduleName, nil, []string{libModName}, shouldSetVis, []string{"//visibility:public"})
+	// return []*rule.Rule{libR, binR}
 
-	binR := rule.NewRule(BinaryRuleKind, moduleName)
-	setCommonAttrs(
-		binR, moduleName, nil, []string{libModName}, shouldSetVis, []string{"//visibility:public"})
-
-	return []*rule.Rule{libR, binR}
+	// Create a library target. We will create a binary target when this is referenced from an
+	// executable product.
+	r := rule.NewRule(LibraryRuleKind, moduleName)
+	setCommonAttrs(r, moduleName, srcs, swiftImports, shouldSetVis, []string{"//visibility:public"})
+	return []*rule.Rule{r}
 }
 
 func rulesForTestModule(

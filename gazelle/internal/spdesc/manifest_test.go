@@ -83,6 +83,10 @@ func TestTargetsFromName(t *testing.T) {
 	assert.Nil(t, actual)
 }
 
+func TestTargetsFromPath(t *testing.T) {
+	t.Error("IMPLEMENT ME!")
+}
+
 func TestTargetSourcesWithPath(t *testing.T) {
 	target := spdesc.Target{
 		Sources: []string{

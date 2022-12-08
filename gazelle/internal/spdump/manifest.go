@@ -23,7 +23,7 @@ type Manifest struct {
 	Dependencies []Dependency
 	Platforms    []Platform
 	Products     []Product
-	Targets      []Target
+	Targets      Targets
 }
 
 // Returns a uniq slice of the product references used in the manifest

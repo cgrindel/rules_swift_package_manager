@@ -26,3 +26,7 @@ func TestTargetImports(t *testing.T) {
 	actual := target.Imports()
 	assert.Equal(t, []string{"ArgumentParser", "MySwiftPackage"}, actual)
 }
+
+func TestTargetsByName(t *testing.T) {
+	t.Error("IMPLEMENT ME!")
+}

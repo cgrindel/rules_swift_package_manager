@@ -40,3 +40,16 @@ func (t *Target) Imports() []string {
 	}
 	return imports
 }
+
+// Targets
+
+type Targets []Target
+
+func (ts Targets) FindByName(name string) *Target {
+	for _, t := range ts {
+		if t.Name == name {
+			return &t
+		}
+	}
+	return nil
+}

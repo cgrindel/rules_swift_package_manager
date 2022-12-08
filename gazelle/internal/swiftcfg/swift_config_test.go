@@ -5,6 +5,7 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/spdesc"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
@@ -36,17 +37,21 @@ func TestSwiftConfigGenerateRulesMode(t *testing.T) {
 		sc.PackageInfo = nil
 		assert.Equal(t, swiftcfg.SrcFileGenRulesMode, sc.GenerateRulesMode(args))
 	})
-	t.Run("has package info, args Dir is not the package dir", func(t *testing.T) {
-		sc.PackageInfo = &swiftpkg.PackageInfo{
-			Dir: "/path/bazel/pkg/subdir",
-		}
-		assert.Equal(t, swiftcfg.SkipGenRulesMode, sc.GenerateRulesMode(args))
-	})
 	t.Run("has package info, args Dir is the package dir", func(t *testing.T) {
 		sc.PackageInfo = &swiftpkg.PackageInfo{
 			Dir: "/path/bazel/pkg",
 		}
 		assert.Equal(t, swiftcfg.SwiftPkgGenRulesMode, sc.GenerateRulesMode(args))
+	})
+	t.Run("has package info, not package dir, is target dir", func(t *testing.T) {
+		t.Error("IMPLEMENT ME!")
+	})
+	t.Run("has package info, not package dir, not target dir", func(t *testing.T) {
+		sc.PackageInfo = &swiftpkg.PackageInfo{
+			Dir:          "/path/bazel/pkg/subdir",
+			DescManifest: &spdesc.Manifest{},
+		}
+		assert.Equal(t, swiftcfg.SkipGenRulesMode, sc.GenerateRulesMode(args))
 	})
 }
 
