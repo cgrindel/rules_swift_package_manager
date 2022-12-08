@@ -73,10 +73,16 @@ def _update_git_attrs(orig, keys, override):
     return result
 
 def _gen_build_files(repository_ctx, pkg_info):
+    repo_name = repository_ctx.name
+
     # Create a build file for each Swift package target in their corresponding
     # target path.
     for target in pkg_info.targets:
-        bld_file = swiftpkg_build_files.new_for_target(pkg_info, target)
+        bld_file = swiftpkg_build_files.new_for_target(
+            pkg_info,
+            target,
+            repo_name,
+        )
         if bld_file == None:
             continue
         build_files.write(
@@ -86,7 +92,7 @@ def _gen_build_files(repository_ctx, pkg_info):
         )
 
     # Create a build file at the root with all of the products
-    bld_file = swiftpkg_build_files.new_for_products(pkg_info)
+    bld_file = swiftpkg_build_files.new_for_products(pkg_info, repo_name)
     build_files.write(repository_ctx, bld_file, pkg_info.path)
 
 def _swift_package_impl(repository_ctx):

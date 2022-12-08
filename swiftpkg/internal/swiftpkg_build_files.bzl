@@ -8,205 +8,215 @@ load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "module_types", "target_types")
 
-# MARK: - Target Entry Point
+# TODO(chuck): Remove make_swiftpkg_build_files! This will always be called off of the BUILD thread.
 
-def _new_for_target(pkg_info, target):
-    if target.module_type == module_types.clang:
-        return _clang_target_build_file(target)
-    elif target.module_type == module_types.swift:
-        return _swift_target_build_file(pkg_info, target)
-    elif target.module_type == module_types.system_library:
-        return _system_library_build_file(target)
+def make_swiftpkg_build_files(pkginfo_targets, pkginfo_target_deps):
+    """Create a `swiftpkg_build_files` module.
 
-    # GH046: Support plugins.
-    return None
+    Args:
+        pkginfo_targets: The module for managing Swift package targets.
+        pkginfo_target_deps: The module fo managing Swift package target
+            depdencies.
 
-# MARK: - Swift Target
+    Returns:
+        A `struct` representing the `swiftpkg_build_files` module.
+    """
+    # MARK: - Target Entry Point
 
-def _swift_target_build_file(pkg_info, target):
-    # GH046: Support plugins.
-    if target.type == target_types.library or target.type == target_types.regular:
-        load_stmts = [swift_library_load_stmt]
-        decls = [_swift_library_from_target(pkg_info, target)]
-    elif target.type == target_types.executable:
-        lib_name = "{}Lib".format(target.name)
-        lib_decl = _swift_library_from_target(
-            pkg_info,
-            target,
-            name = lib_name,
-            c99name = lib_name,
-        )
-        bin_decl = _swift_binary_from_target(target, lib_name)
-        load_stmts = [swift_binary_load_stmt]
-        decls = [lib_decl, bin_decl]
-    elif target.type == target_types.test:
-        load_stmts = [swift_test_load_stmt]
-        decls = [_swift_test_from_target(pkg_info, target)]
-    else:
-        fail("Unrecognized target type for a Swift target. type:", target.type)
+    def _new_for_target(pkg_info, target, repo_name):
+        if target.module_type == module_types.clang:
+            return _clang_target_build_file(target)
+        elif target.module_type == module_types.swift:
+            return _swift_target_build_file(pkg_info, target, repo_name)
+        elif target.module_type == module_types.system_library:
+            return _system_library_build_file(target)
 
-    return build_files.new(
-        load_stmts = load_stmts,
-        decls = decls,
-    )
+        # GH046: Support plugins.
+        return None
 
-def _swift_library_from_target(pkg_info, target, name = None, c99name = None):
-    if name == None:
-        name = target.name
-    if c99name == None:
-        c99name = target.c99name
-    return build_decls.new(
-        kind = swift_kinds.library,
-        name = name,
-        attrs = {
-            "deps": [
-                pkginfo_target_deps.bazel_label(pkg_info, td)
-                for td in target.dependencies
-            ],
-            "module_name": c99name,
-            "srcs": target.sources,
-            "visibility": ["//visibility:public"],
-        },
-    )
+    # MARK: - Swift Target
 
-def _swift_binary_from_target(target, lib_name):
-    return build_decls.new(
-        kind = swift_kinds.binary,
-        name = target.name,
-        attrs = {
-            "deps": [":{}".format(lib_name)],
-            "module_name": target.c99name,
-            "srcs": target.sources,
-            "visibility": ["//visibility:public"],
-        },
-    )
-
-def _swift_test_from_target(pkg_info, target):
-    return build_decls.new(
-        kind = swift_kinds.test,
-        name = target.name,
-        attrs = {
-            "deps": [
-                pkginfo_target_deps.bazel_label(pkg_info, td)
-                for td in target.dependencies
-            ],
-            "module_name": target.c99name,
-            "srcs": target.sources,
-            "visibility": ["//visibility:public"],
-        },
-    )
-
-# MARK: - Clang Targets
-
-# GH009(chuck): Remove unused-variable directives
-
-# buildifier: disable=unused-variable
-def _clang_target_build_file(target):
-    # GH009(chuck): Implement _clang_target_build_file
-    return []
-
-# MARK: - System Library Targets
-
-# buildifier: disable=unused-variable
-def _system_library_build_file(target):
-    # GH009(chuck): Implement _system_library_build_file
-    return []
-
-# MARK: - Products Entry Point
-
-def _new_for_products(pkg_info):
-    bld_files = lists.compact([
-        _new_for_product(pkg_info, prod)
-        for prod in pkg_info.products
-    ])
-    return build_files.merge(*bld_files)
-
-def _new_for_product(pkg_info, product):
-    prod_type = product.type
-    if prod_type.is_executable:
-        return _executable_product_build_file(pkg_info, product)
-    elif prod_type.is_library:
-        return _library_product_build_file(pkg_info, product)
-    return None
-
-def _executable_product_build_file(pkg_info, product):
-    # DEBUG BEGIN
-    print("*** CHUCK =======")
-    print("*** CHUCK _executable_product_build_file product: ", product)
-
-    # DEBUG END
-    # Retrieve the targets
-    targets = [
-        pkginfo_targets.get(pkg_info.targets, tname)
-        for tname in product.targets
-    ]
-
-    # DEBUG BEGIN
-    print("*** CHUCK _executable_product_build_file targets: ", targets)
-    # DEBUG END
-
-    targets_len = len(targets)
-    if targets_len == 1:
-        target = targets[0]
-        if target.type == target_types.executable:
-            # Create an alias to the binary target created in the target package.
-            return build_files.new(
-                decls = [
-                    build_decls.new(
-                        native_kinds.alias,
-                        product.name,
-                        attrs = {
-                            "actual": pkginfo_targets.bazel_label(target),
-                            "visibility": ["//visibility:public"],
-                        },
-                    ),
-                ],
+    def _swift_target_build_file(pkg_info, target, repo_name):
+        # GH046: Support plugins.
+        if target.type == target_types.library or target.type == target_types.regular:
+            load_stmts = [swift_library_load_stmt]
+            decls = [_swift_library_from_target(pkg_info, target, repo_name)]
+        elif target.type == target_types.executable:
+            lib_name = "{}Lib".format(target.name)
+            lib_decl = _swift_library_from_target(
+                pkg_info,
+                target,
+                repo_name,
+                name = lib_name,
+                c99name = lib_name,
             )
+            bin_decl = _swift_binary_from_target(target, lib_name)
+            load_stmts = [swift_binary_load_stmt]
+            decls = [lib_decl, bin_decl]
+        elif target.type == target_types.test:
+            load_stmts = [swift_test_load_stmt]
+            decls = [_swift_test_from_target(pkg_info, target, repo_name)]
         else:
-            # Create the binary target here.
-            return build_files.new(
-                load_stmts = [load_statements.new(swift_location, swift_kinds.binary)],
-                decls = [_swift_binary_from_product(product, target)],
-            )
-    elif targets_len > 1:
-        fail("Multiple targets specified for an executable product. name:", product.name)
-    else:
-        fail("Did not find any targets associated with product. name:", product.name)
+            fail("Unrecognized target type for a Swift target. type:", target.type)
 
-def _library_product_build_file(pkg_info, product):
-    # Retrieve the targets
-    targets = [
-        pkginfo_targets.get(pkg_info.targets, tname)
-        for tname in product.targets
-    ]
-    targets_len = len(targets)
-    if targets_len == 0:
-        fail("No targets specified for a library product. name:", product.name)
-    elif targets_len > 1:
-        fail("Multiple targets specified for a library product. name:", product.name)
+        return build_files.new(
+            load_stmts = load_stmts,
+            decls = decls,
+        )
 
-    actual_target = targets[0]
-    return build_files.new(
-        decls = [
-            build_decls.new(
-                native_kinds.alias,
-                product.name,
-                attrs = {
-                    "actual": pkginfo_targets.bazel_label(actual_target),
-                    "visibility": ["//visibility:public"],
-                },
-            ),
-        ],
-    )
+    def _swift_library_from_target(pkg_info, target, repo_name, name = None, c99name = None):
+        if name == None:
+            name = target.name
+        if c99name == None:
+            c99name = target.c99name
+        return build_decls.new(
+            kind = swift_kinds.library,
+            name = name,
+            attrs = {
+                "deps": [
+                    pkginfo_target_deps.bazel_label(pkg_info, td, repo_name)
+                    for td in target.dependencies
+                ],
+                "module_name": c99name,
+                "srcs": target.sources,
+                "visibility": ["//visibility:public"],
+            },
+        )
 
-def _swift_binary_from_product(product, dep_target):
-    return build_decls.new(
-        kind = swift_kinds.binary,
-        name = product.name,
-        attrs = {
-            "deps": [pkginfo_targets.bazel_label(dep_target)],
-            "visibility": ["//visibility:public"],
-        },
+    def _swift_binary_from_target(target, lib_name):
+        return build_decls.new(
+            kind = swift_kinds.binary,
+            name = target.name,
+            attrs = {
+                "deps": [":{}".format(lib_name)],
+                "module_name": target.c99name,
+                "srcs": target.sources,
+                "visibility": ["//visibility:public"],
+            },
+        )
+
+    def _swift_test_from_target(pkg_info, target, repo_name):
+        return build_decls.new(
+            kind = swift_kinds.test,
+            name = target.name,
+            attrs = {
+                "deps": [
+                    pkginfo_target_deps.bazel_label(pkg_info, td, repo_name)
+                    for td in target.dependencies
+                ],
+                "module_name": target.c99name,
+                "srcs": target.sources,
+                "visibility": ["//visibility:public"],
+            },
+        )
+
+    # MARK: - Clang Targets
+
+    # GH009(chuck): Remove unused-variable directives
+
+    # buildifier: disable=unused-variable
+    def _clang_target_build_file(target):
+        # GH009(chuck): Implement _clang_target_build_file
+        return []
+
+    # MARK: - System Library Targets
+
+    # buildifier: disable=unused-variable
+    def _system_library_build_file(target):
+        # GH009(chuck): Implement _system_library_build_file
+        return []
+
+    # MARK: - Products Entry Point
+
+    def _new_for_products(pkg_info, repo_name):
+        bld_files = lists.compact([
+            _new_for_product(pkg_info, prod, repo_name)
+            for prod in pkg_info.products
+        ])
+        return build_files.merge(*bld_files)
+
+    def _new_for_product(pkg_info, product, repo_name):
+        prod_type = product.type
+        if prod_type.is_executable:
+            return _executable_product_build_file(pkg_info, product, repo_name)
+        elif prod_type.is_library:
+            return _library_product_build_file(pkg_info, product, repo_name)
+        return None
+
+    def _executable_product_build_file(pkg_info, product, repo_name):
+        # Retrieve the targets
+        targets = [
+            pkginfo_targets.get(pkg_info.targets, tname)
+            for tname in product.targets
+        ]
+
+        targets_len = len(targets)
+        if targets_len == 1:
+            target = targets[0]
+            if target.type == target_types.executable:
+                # Create an alias to the binary target created in the target package.
+                return build_files.new(
+                    decls = [
+                        build_decls.new(
+                            native_kinds.alias,
+                            product.name,
+                            attrs = {
+                                "actual": pkginfo_targets.bazel_label(target, repo_name = repo_name),
+                                "visibility": ["//visibility:public"],
+                            },
+                        ),
+                    ],
+                )
+            else:
+                # Create the binary target here.
+                return build_files.new(
+                    load_stmts = [load_statements.new(swift_location, swift_kinds.binary)],
+                    decls = [_swift_binary_from_product(product, target, repo_name)],
+                )
+        elif targets_len > 1:
+            fail("Multiple targets specified for an executable product. name:", product.name)
+        else:
+            fail("Did not find any targets associated with product. name:", product.name)
+
+    def _library_product_build_file(pkg_info, product, repo_name):
+        # Retrieve the targets
+        targets = [
+            pkginfo_targets.get(pkg_info.targets, tname)
+            for tname in product.targets
+        ]
+        targets_len = len(targets)
+        if targets_len == 0:
+            fail("No targets specified for a library product. name:", product.name)
+        elif targets_len > 1:
+            fail("Multiple targets specified for a library product. name:", product.name)
+
+        actual_target = targets[0]
+        return build_files.new(
+            decls = [
+                build_decls.new(
+                    native_kinds.alias,
+                    product.name,
+                    attrs = {
+                        "actual": pkginfo_targets.bazel_label(actual_target, repo_name),
+                        "visibility": ["//visibility:public"],
+                    },
+                ),
+            ],
+        )
+
+    def _swift_binary_from_product(product, dep_target, repo_name):
+        return build_decls.new(
+            kind = swift_kinds.binary,
+            name = product.name,
+            attrs = {
+                "deps": [pkginfo_targets.bazel_label(dep_target, repo_name = repo_name)],
+                "visibility": ["//visibility:public"],
+            },
+        )
+
+    return struct(
+        new_for_target = _new_for_target,
+        new_for_products = _new_for_products,
     )
 
 # MARK: - Constants and API Definition
@@ -236,7 +246,7 @@ native_kinds = struct(
     alias = "alias",
 )
 
-swiftpkg_build_files = struct(
-    new_for_target = _new_for_target,
-    new_for_products = _new_for_products,
+swiftpkg_build_files = make_swiftpkg_build_files(
+    pkginfo_targets = pkginfo_targets,
+    pkginfo_target_deps = pkginfo_target_deps,
 )

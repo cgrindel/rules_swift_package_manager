@@ -3,11 +3,20 @@
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "make_bazel_labels", "make_stub_workspace_name_resolvers")
 load("//swiftpkg/internal:pkginfo_target_deps.bzl", "make_pkginfo_target_deps")
+load("//swiftpkg/internal:pkginfo_targets.bzl", "make_pkginfo_targets")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 
-workspace_name_resolovers = make_stub_workspace_name_resolvers()
+_repo_name = "@example_cool_repo"
+
+workspace_name_resolovers = make_stub_workspace_name_resolvers(
+    repo_name = _repo_name,
+)
 bazel_labels = make_bazel_labels(workspace_name_resolovers)
-pkginfo_target_deps = make_pkginfo_target_deps(bazel_labels)
+pkginfo_targets = make_pkginfo_targets(bazel_labels = bazel_labels)
+pkginfo_target_deps = make_pkginfo_target_deps(
+    bazel_labels = bazel_labels,
+    pkginfo_targets = pkginfo_targets,
+)
 
 _external_dep = pkginfos.new_dependency(
     identity = "example-swift-package",
@@ -48,8 +57,17 @@ def _bazel_label_by_name_test(ctx):
     env = unittest.begin(ctx)
 
     target_dep = pkginfos.new_target_dependency(by_name = _by_name)
+
     actual = pkginfo_target_deps.bazel_label(_pkg_info, target_dep)
-    expected = bazel_labels.normalize("@//Source/Foo:Foo")
+    expected = bazel_labels.normalize("@example_cool_repo//Source/Foo:Foo")
+    asserts.equals(env, expected, actual)
+
+    actual = pkginfo_target_deps.bazel_label(
+        _pkg_info,
+        target_dep,
+        repo_name = "@another_repo",
+    )
+    expected = bazel_labels.normalize("@another_repo//Source/Foo:Foo")
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)

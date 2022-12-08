@@ -5,7 +5,11 @@ load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "make_bazel_labels", "make_stub
 load("//swiftpkg/internal:pkginfo_targets.bzl", "make_pkginfo_targets")
 load("//swiftpkg/internal:pkginfos.bzl", "module_types", "pkginfos", "target_types")
 
-workspace_name_resolovers = make_stub_workspace_name_resolvers()
+_repo_name = "@example_cool_repo"
+
+workspace_name_resolovers = make_stub_workspace_name_resolvers(
+    repo_name = _repo_name,
+)
 bazel_labels = make_bazel_labels(workspace_name_resolovers)
 pkginfo_targets = make_pkginfo_targets(bazel_labels)
 
@@ -50,11 +54,11 @@ def _bazel_label_test(ctx):
     env = unittest.begin(ctx)
 
     actual = pkginfo_targets.bazel_label(_bar_target)
-    expected = "@//Sources/Bar:Bar"
+    expected = "@example_cool_repo//Sources/Bar:Bar"
     asserts.equals(env, expected, actual)
 
-    actual = pkginfo_targets.bazel_label(_foo_target)
-    expected = "@//Sources/Foo:Foo"
+    actual = pkginfo_targets.bazel_label(_foo_target, "@another_repo")
+    expected = "@another_repo//Sources/Foo:Foo"
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)

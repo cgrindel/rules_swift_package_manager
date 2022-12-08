@@ -1,19 +1,37 @@
 """Tests for `swiftpkg_bld_decls` module."""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "make_bazel_labels", "make_stub_workspace_name_resolvers")
 load("//swiftpkg/internal:build_decls.bzl", "build_decls")
 load("//swiftpkg/internal:build_files.bzl", "build_files")
 load("//swiftpkg/internal:load_statements.bzl", "load_statements")
-load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
+load("//swiftpkg/internal:pkginfo_target_deps.bzl", "make_pkginfo_target_deps")
+load("//swiftpkg/internal:pkginfo_targets.bzl", "make_pkginfo_targets")
 load("//swiftpkg/internal:pkginfos.bzl", "library_type_kinds", "pkginfos")
 load(
     "//swiftpkg/internal:swiftpkg_build_files.bzl",
+    "make_swiftpkg_build_files",
     "native_kinds",
     "swift_kinds",
     "swift_library_load_stmt",
     "swift_location",
     "swift_test_load_stmt",
-    "swiftpkg_build_files",
+)
+
+_repo_name = "@realm_swiftlint"
+
+workspace_name_resolovers = make_stub_workspace_name_resolvers(
+    repo_name = _repo_name,
+)
+bazel_labels = make_bazel_labels(workspace_name_resolovers)
+pkginfo_targets = make_pkginfo_targets(bazel_labels = bazel_labels)
+pkginfo_target_deps = make_pkginfo_target_deps(
+    bazel_labels = bazel_labels,
+    pkginfo_targets = pkginfo_targets,
+)
+swiftpkg_build_files = make_swiftpkg_build_files(
+    pkginfo_targets = pkginfo_targets,
+    pkginfo_target_deps = pkginfo_target_deps,
 )
 
 # This is a simplified version of SwiftLint.
@@ -104,7 +122,7 @@ def _swift_library_target_test(ctx):
     env = unittest.begin(ctx)
 
     target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFramework")
-    actual = swiftpkg_build_files.new_for_target(_pkg_info, target)
+    actual = swiftpkg_build_files.new_for_target(_pkg_info, target, _repo_name)
     expected = build_files.new(
         load_stmts = [swift_library_load_stmt],
         decls = [
@@ -135,7 +153,7 @@ def _swift_library_target_for_binary_test(ctx):
     # We create the swift_library in the target package. Then, we create the
     # executable when defining the product.
     target = pkginfo_targets.get(_pkg_info.targets, "swiftlint")
-    actual = swiftpkg_build_files.new_for_target(_pkg_info, target)
+    actual = swiftpkg_build_files.new_for_target(_pkg_info, target, _repo_name)
     expected = build_files.new(
         load_stmts = [swift_library_load_stmt],
         decls = [
@@ -144,7 +162,7 @@ def _swift_library_target_for_binary_test(ctx):
                 name = "swiftlint",
                 attrs = {
                     "deps": [
-                        "@//Source/SwiftLintFramework:SwiftLintFramework",
+                        "@realm_swiftlint//Source/SwiftLintFramework:SwiftLintFramework",
                     ],
                     "module_name": "swiftlint",
                     "srcs": [
@@ -166,7 +184,7 @@ def _swift_test_target_test(ctx):
     env = unittest.begin(ctx)
 
     target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFrameworkTests")
-    actual = swiftpkg_build_files.new_for_target(_pkg_info, target)
+    actual = swiftpkg_build_files.new_for_target(_pkg_info, target, _repo_name)
     expected = build_files.new(
         load_stmts = [swift_test_load_stmt],
         decls = [
@@ -175,7 +193,7 @@ def _swift_test_target_test(ctx):
                 name = "SwiftLintFrameworkTests",
                 attrs = {
                     "deps": [
-                        "@//Source/SwiftLintFramework:SwiftLintFramework",
+                        "@realm_swiftlint//Source/SwiftLintFramework:SwiftLintFramework",
                     ],
                     "module_name": "SwiftLintFrameworkTests",
                     "srcs": [
@@ -195,7 +213,7 @@ swift_test_target_test = unittest.make(_swift_test_target_test)
 def _products_test(ctx):
     env = unittest.begin(ctx)
 
-    actual = swiftpkg_build_files.new_for_products(_pkg_info)
+    actual = swiftpkg_build_files.new_for_products(_pkg_info, _repo_name)
     expected = build_files.new(
         load_stmts = [
             load_statements.new(swift_location, swift_kinds.binary),
@@ -205,7 +223,7 @@ def _products_test(ctx):
                 kind = native_kinds.alias,
                 name = "SwiftLintFramework",
                 attrs = {
-                    "actual": "@//Source/SwiftLintFramework:SwiftLintFramework",
+                    "actual": "@realm_swiftlint//Source/SwiftLintFramework:SwiftLintFramework",
                     "visibility": ["//visibility:public"],
                 },
             ),
@@ -213,7 +231,7 @@ def _products_test(ctx):
                 kind = swift_kinds.binary,
                 name = "swiftlint",
                 attrs = {
-                    "deps": ["@//Source/swiftlint:swiftlint"],
+                    "deps": ["@realm_swiftlint//Source/swiftlint:swiftlint"],
                     "visibility": ["//visibility:public"],
                 },
             ),
