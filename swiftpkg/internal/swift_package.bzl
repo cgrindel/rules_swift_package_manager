@@ -10,9 +10,9 @@ load(
     "update_attrs",
     "workspace_and_buildfile",
 )
+load(":build_files.bzl", "build_files")
 load(":pkginfos.bzl", "pkginfos")
 load(":spm_versions.bzl", "spm_versions")
-load(":starlark_codegen.bzl", "starlark_codegen")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
 # The implementation of this repository rule is heavily influenced by the
@@ -79,16 +79,15 @@ def _gen_build_files(repository_ctx, pkg_info):
         bld_file = swiftpkg_build_files.new_for_target(pkg_info, target)
         if bld_file == None:
             continue
-        bld_file_path = paths.join(pkg_info.path, target.path, "BUILD.bazel")
-        repository_ctx.file(
-            bld_file_path,
-            content = starlark_codegen.to_starlark(bld_file),
-            executable = False,
+        build_files.write(
+            repository_ctx,
+            bld_file,
+            paths.join(pkg_info.path, target.path),
         )
 
     # Create a build file at the root with all of the products
-
-    # GH009: Add products package
+    bld_file = swiftpkg_build_files.new_for_products(pkg_info)
+    build_files.write(repository_ctx, bld_file, pkg_info.path)
 
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))

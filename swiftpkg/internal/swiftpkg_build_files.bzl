@@ -115,11 +115,10 @@ def _system_library_build_file(target):
 # MARK: - Products Entry Point
 
 def _new_for_products(pkg_info):
-    bld_files = [
+    bld_files = lists.compact([
         _new_for_product(pkg_info, prod)
         for prod in pkg_info.products
-    ]
-    bld_files = lists.compact(bld_files)
+    ])
     return build_files.merge(*bld_files)
 
 def _new_for_product(pkg_info, product):
@@ -131,19 +130,38 @@ def _new_for_product(pkg_info, product):
     return None
 
 def _executable_product_build_file(pkg_info, product):
+    # DEBUG BEGIN
+    print("*** CHUCK =======")
+    print("*** CHUCK _executable_product_build_file product: ", product)
+
+    # DEBUG END
     # Retrieve the targets
     targets = [
         pkginfo_targets.get(pkg_info.targets, tname)
         for tname in product.targets
     ]
 
+    # DEBUG BEGIN
+    print("*** CHUCK _executable_product_build_file targets: ", targets)
+    # DEBUG END
+
     targets_len = len(targets)
     if targets_len == 1:
         target = targets[0]
         if target.type == target_types.executable:
-            # GH009(chuck): Support executable targets
             # Create an alias to the binary target created in the target package.
-            return None
+            return build_files.new(
+                decls = [
+                    build_decls.new(
+                        native_kinds.alias,
+                        product.name,
+                        attrs = {
+                            "actual": pkginfo_targets.bazel_label(target),
+                            "visibility": ["//visibility:public"],
+                        },
+                    ),
+                ],
+            )
         else:
             # Create the binary target here.
             return build_files.new(
