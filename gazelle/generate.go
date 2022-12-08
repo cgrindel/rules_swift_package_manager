@@ -62,6 +62,8 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 // Generate from Swift Package
 
 func genRulesFromSwiftPkg(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) language.GenerateResult {
+	// TODO(chuck): Generate BUILD files in the package directories like we do for sources and in
+	// swift_package.
 	result := language.GenerateResult{}
 	result.Gen = swift.RulesFromManifest(args, sc.PackageInfo)
 	result.Imports = swift.Imports(result.Gen)
