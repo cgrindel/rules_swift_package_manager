@@ -77,6 +77,8 @@ def _gen_build_files(repository_ctx, pkg_info):
     # target path.
     for target in pkg_info.targets:
         bld_file = swiftpkg_build_files.new_for_target(pkg_info, target)
+        if bld_file == None:
+            continue
         bld_file_path = paths.join(pkg_info.path, target.path, "BUILD.bazel")
         repository_ctx.file(
             bld_file_path,

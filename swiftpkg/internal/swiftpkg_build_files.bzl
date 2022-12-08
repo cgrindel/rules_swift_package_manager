@@ -2,6 +2,7 @@
 
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
+load(":lists.bzl", "lists")
 load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
@@ -16,11 +17,14 @@ def _new_for_target(pkg_info, target):
         return _swift_target_build_file(pkg_info, target)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
-    fail("Unrecognized module type.", target.module_type)
+
+    # GH046: Support plugins.
+    return None
 
 # MARK: - Swift Target
 
 def _swift_target_build_file(pkg_info, target):
+    # GH046: Support plugins.
     if target.type == target_types.library or target.type == target_types.regular:
         load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(pkg_info, target)]
@@ -115,6 +119,7 @@ def _new_for_products(pkg_info):
         _new_for_product(pkg_info, prod)
         for prod in pkg_info.products
     ]
+    bld_files = lists.compact(bld_files)
     return build_files.merge(*bld_files)
 
 def _new_for_product(pkg_info, product):
@@ -123,8 +128,7 @@ def _new_for_product(pkg_info, product):
         return _executable_product_build_file(pkg_info, product)
     elif prod_type.is_library:
         return _library_product_build_file(pkg_info, product)
-    else:
-        fail("Unrecognized product type. type:", prod_type)
+    return None
 
 def _executable_product_build_file(pkg_info, product):
     # Retrieve the targets
