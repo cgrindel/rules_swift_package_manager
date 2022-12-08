@@ -31,7 +31,6 @@ Expected at least one symbol to be specified. location: {location}\
 
 def _to_starlark_parts(load_stmt, indent):
     parts = [
-        scg.indent(indent),
         "load(",
         scg.normalize(load_stmt.location),
     ]
