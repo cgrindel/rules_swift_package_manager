@@ -36,7 +36,7 @@ def _swift_target_build_file(pkg_info, target):
             name = lib_name,
             c99name = lib_name,
         )
-        bin_decl = _swift_binary_from_target(pkg_info, target, lib_name)
+        bin_decl = _swift_binary_from_target(target, lib_name)
         load_stmts = [swift_binary_load_stmt]
         decls = [lib_decl, bin_decl]
     elif target.type == target_types.test:
