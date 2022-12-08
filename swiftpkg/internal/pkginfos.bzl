@@ -315,6 +315,7 @@ def _new_product_type(executable = False, library = None, plugin = False):
     Args:
         executable: A `bool` specifying whether the product is an executable.
         library: A `struct` as returned by `pkginfos.new_library_type`.
+        plugin: A `bool` specifying whether the product is a plugin.
 
     Returns:
         A `struct` representing a product type.

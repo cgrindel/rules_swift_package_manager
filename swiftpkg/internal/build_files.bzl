@@ -2,6 +2,7 @@
 
 load("//swiftpkg/internal:build_decls.bzl", "build_decls")
 load("//swiftpkg/internal:load_statements.bzl", "load_statements")
+load("//swiftpkg/internal:starlark_codegen.bzl", scg = "starlark_codegen")
 
 def _new(load_stmts = [], decls = []):
     """Create a `struct` that represents the parts of a Bazel build file.
@@ -22,7 +23,25 @@ Attempted to create a build file with no load statements or declarations.\
     return struct(
         load_stmts = load_stmts,
         decls = decls,
+        to_starlark_parts = _to_starlark_parts,
     )
+
+def _to_starlark_parts(build_file, indent):
+    parts = []
+    for load_stmt in build_file.load_stmts:
+        parts.extend([scg.with_indent(indent, load_stmt), "\n"])
+    for decl in build_file.decls:
+        parts.extend(["\n", scg.with_indent(indent, decl), "\n"])
+    return parts
+
+# def _to_starlark_parts(build_file, indent):
+#     # Build files are a special case. Ignore the indent.
+#     parts = []
+#     for load_stmt in build_file.load_stmts:
+#         parts.extend([load_stmt, "\n"])
+#     for decl in build_file.decls:
+#         parts.extend(["\n", decl, "\n"])
+#     return parts
 
 def _merge(*bld_files):
     """Merge build file `struct` values into a single value.

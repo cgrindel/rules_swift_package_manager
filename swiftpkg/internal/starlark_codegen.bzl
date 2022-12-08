@@ -1,5 +1,7 @@
 """Utility functions for generating Starlark code"""
 
+# TODO(chuck): Document this file!
+
 _single_indent_str = "    "
 
 def _indent(count, suffix = ""):
@@ -32,6 +34,12 @@ def _normalize(val):
     if _is_simple_type(val):
         return repr(val)
     return val
+
+def _with_indent(indent, value):
+    return struct(
+        with_indent = indent,
+        wrapped_value = value,
+    )
 
 def _to_starlark(val):
     # Simple types should be converted to their Stalark representation upfront.
@@ -83,12 +91,6 @@ def _process_complex_types(out):
             fail("Starlark code gen received an unsupported type.", v_type, v)
 
     return new_out, finished
-
-def _with_indent(indent, value):
-    return struct(
-        with_indent = indent,
-        wrapped_value = value,
-    )
 
 def _list(val, current_indent):
     if len(val) == 0:
