@@ -1,38 +1,22 @@
 """Tests for `swiftpkg_bld_decls` module."""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
-load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "make_bazel_labels", "make_stub_workspace_name_resolvers")
 load("//swiftpkg/internal:build_decls.bzl", "build_decls")
 load("//swiftpkg/internal:build_files.bzl", "build_files")
 load("//swiftpkg/internal:load_statements.bzl", "load_statements")
-load("//swiftpkg/internal:pkginfo_target_deps.bzl", "make_pkginfo_target_deps")
-load("//swiftpkg/internal:pkginfo_targets.bzl", "make_pkginfo_targets")
+load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
 load("//swiftpkg/internal:pkginfos.bzl", "library_type_kinds", "pkginfos")
 load(
     "//swiftpkg/internal:swiftpkg_build_files.bzl",
-    "make_swiftpkg_build_files",
     "native_kinds",
     "swift_kinds",
     "swift_library_load_stmt",
     "swift_location",
     "swift_test_load_stmt",
+    "swiftpkg_build_files",
 )
 
 _repo_name = "@realm_swiftlint"
-
-workspace_name_resolovers = make_stub_workspace_name_resolvers(
-    repo_name = _repo_name,
-)
-bazel_labels = make_bazel_labels(workspace_name_resolovers)
-pkginfo_targets = make_pkginfo_targets(bazel_labels = bazel_labels)
-pkginfo_target_deps = make_pkginfo_target_deps(
-    bazel_labels = bazel_labels,
-    pkginfo_targets = pkginfo_targets,
-)
-swiftpkg_build_files = make_swiftpkg_build_files(
-    pkginfo_targets = pkginfo_targets,
-    pkginfo_target_deps = pkginfo_target_deps,
-)
 
 # This is a simplified version of SwiftLint.
 _pkg_info = pkginfos.new(
