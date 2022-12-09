@@ -84,7 +84,18 @@ func TestTargetsFromName(t *testing.T) {
 }
 
 func TestTargetsFromPath(t *testing.T) {
-	t.Error("IMPLEMENT ME!")
+	foo := spdesc.Target{Name: "Foo", Path: "Sources/Foo"}
+	bar := spdesc.Target{Name: "Bar", Path: "Sources/Bar"}
+	targets := spdesc.Targets{foo, bar}
+
+	actual := targets.FindByPath("Sources/Foo")
+	assert.Equal(t, &foo, actual)
+
+	actual = targets.FindByPath("Sources/Bar")
+	assert.Equal(t, &bar, actual)
+
+	actual = targets.FindByPath("Sources/Another")
+	assert.Nil(t, actual)
 }
 
 func TestTargetSourcesWithPath(t *testing.T) {
