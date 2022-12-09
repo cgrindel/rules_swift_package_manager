@@ -50,10 +50,6 @@ bazel run //:update_build_files
 # Ensure that it builds
 bazel test //...
 
-# Run the target
-output="$(bazel run //:MySwiftPackage)"
-assert_match "Hello, World!" "${output}" 
-
 # Run the product alias
-output="$(bazel run //:printstuff)"
+output="$(bazel run //:sayhello)"
 assert_match "Hello, World!" "${output}" 
