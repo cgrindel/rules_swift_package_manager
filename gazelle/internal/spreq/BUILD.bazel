@@ -1,0 +1,11 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "spreq",
+    srcs = ["requirements.go"],
+    importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/spreq",
+    visibility = ["//gazelle:__subpackages__"],
+)
+
+bzlformat_pkg(name = "bzlformat")
