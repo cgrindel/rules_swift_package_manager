@@ -162,7 +162,7 @@ def _swift_library_target_for_binary_test(ctx):
                 name = "swiftlint",
                 attrs = {
                     "deps": [
-                        "@realm_swiftlint//Source/SwiftLintFramework:SwiftLintFramework",
+                        "@realm_swiftlint//Source/SwiftLintFramework",
                     ],
                     "module_name": "swiftlint",
                     "srcs": [
@@ -193,7 +193,7 @@ def _swift_test_target_test(ctx):
                 name = "SwiftLintFrameworkTests",
                 attrs = {
                     "deps": [
-                        "@realm_swiftlint//Source/SwiftLintFramework:SwiftLintFramework",
+                        "@realm_swiftlint//Source/SwiftLintFramework",
                     ],
                     "module_name": "SwiftLintFrameworkTests",
                     "srcs": [
@@ -223,7 +223,7 @@ def _products_test(ctx):
                 kind = native_kinds.alias,
                 name = "SwiftLintFramework",
                 attrs = {
-                    "actual": "@realm_swiftlint//Source/SwiftLintFramework:SwiftLintFramework",
+                    "actual": "@realm_swiftlint//Source/SwiftLintFramework",
                     "visibility": ["//visibility:public"],
                 },
             ),
@@ -231,7 +231,7 @@ def _products_test(ctx):
                 kind = swift_kinds.binary,
                 name = "swiftlint",
                 attrs = {
-                    "deps": ["@realm_swiftlint//Source/swiftlint:swiftlint"],
+                    "deps": ["@realm_swiftlint//Source/swiftlint"],
                     "visibility": ["//visibility:public"],
                 },
             ),
