@@ -42,11 +42,11 @@ func RulesForSwiftTarget(args language.GenerateArgs, pi *swiftpkg.PackageInfo, t
 	desc := pi.DescManifest
 	shouldSetVis := shouldSetVisibility(args)
 
-	var rules []*rule.Rule
 	dumpt := dump.Targets.FindByName(targetName)
 	desct := desc.Targets.FindByName(dumpt.Name)
 	srcs := desct.Sources
 
+	var rules []*rule.Rule
 	switch dumpt.Type {
 	case spdump.LibraryTargetType:
 		rules = rulesForLibraryModule(dumpt.Name, srcs, dumpt.Imports(), shouldSetVis)

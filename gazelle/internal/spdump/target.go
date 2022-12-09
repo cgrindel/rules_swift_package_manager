@@ -1,6 +1,8 @@
 package spdump
 
-import "strings"
+import (
+	"strings"
+)
 
 type TargetType int
 
@@ -19,7 +21,7 @@ func (tt *TargetType) UnmarshalJSON(b []byte) error {
 		*tt = ExecutableTargetType
 	case "test":
 		*tt = TestTargetType
-	case "library":
+	case "library", "regular":
 		*tt = LibraryTargetType
 	default:
 		*tt = UnknownTargetType
