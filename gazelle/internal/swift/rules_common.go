@@ -1,8 +1,6 @@
 package swift
 
 import (
-	"log"
-
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -27,36 +25,6 @@ func rulesForBinaryModule(
 	swiftImports []string,
 	shouldSetVis bool,
 ) []*rule.Rule {
-	// libModName := fmt.Sprintf("%sLibrary", moduleName)
-	// libR := rule.NewRule(LibraryRuleKind, libModName)
-	// // libR.SetPrivateAttr(SwiftImportAs, [])
-	// setCommonAttrs(libR, moduleName, srcs, swiftImports, shouldSetVis, nil)
-	// binR := rule.NewRule(BinaryRuleKind, moduleName)
-	// setCommonAttrs(
-	// 	binR, moduleName, nil, []string{libModName}, shouldSetVis, []string{"//visibility:public"})
-	// return []*rule.Rule{libR, binR}
-
-	// Create a library target. We will create a binary target when this is referenced from an
-	// executable product.
-
-	// r := rule.NewRule(LibraryRuleKind, moduleName)
-	// setCommonAttrs(r, moduleName, srcs, swiftImports, shouldSetVis, []string{"//visibility:public"})
-
-	// TODO(chuck): Check if this is a single source file and it is not main.swift.
-	// copts = [
-	//     "-parse-as-library",
-	// ],
-	// Code from rules_swift
-	// use_parse_as_library = len(srcs) == 1 and \
-	//                        srcs[0].basename != "main.swift"
-	// return ["-parse-as-library"] if use_parse_as_library else []
-
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: rulesForBinaryModule srcs: %+#v", srcs)
-	// DEBUG END
-
-	// use_parse_as_library = ((len(srcs) == 1) and (srcs[0] != "main.swift"))
-
 	r := rule.NewRule(BinaryRuleKind, moduleName)
 	setCommonAttrs(r, moduleName, srcs, swiftImports, shouldSetVis, []string{"//visibility:public"})
 	// Swift treats single file binary compilations differently. We need to tell Swift to compile
@@ -65,15 +33,6 @@ func rulesForBinaryModule(
 		r.SetAttr("copts", []string{"-parse-as-library"})
 	}
 	return []*rule.Rule{r}
-
-	// libR := rule.NewRule(LibraryRuleKind, moduleName)
-	// setCommonAttrs(libR, moduleName, srcs, swiftImports, shouldSetVis, []string{"//visibility:public"})
-	// binName := "binary"
-	// binR := rule.NewRule(BinaryRuleKind, binName)
-	// setCommonAttrs(
-	// 	binR, "", nil, []string{moduleName}, shouldSetVis, []string{"//visibility:public"})
-	// return []*rule.Rule{libR, binR}
-
 }
 
 func rulesForTestModule(

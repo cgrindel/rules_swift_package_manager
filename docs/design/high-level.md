@@ -6,8 +6,7 @@
 ### Swit Package Target
 
 - Generate a BUILD file in the target path directory.
-- Executable targets will have a `swift_library` declaration. The corresponding `swift_binary`
-  declaration will be created by the Swift executable product processing.
+- Executable targets will have a `swift_binary` declaration. 
 
 ### Swift Package Product
 
