@@ -1,13 +1,30 @@
 """Utility functions for generating Starlark code"""
 
-# TODO(chuck): Document this file!
-
 _single_indent_str = "    "
 
 def _indent(count, suffix = ""):
+    """Generate the proper indent string based upon the count.
+
+    Args:
+        count: An `int` representing the number of indents to be generated.
+        suffix: Optional. A `string` that is appended to the generated indents.
+
+    Returns:
+        A `string` with the specified number of indets.
+    """
     return (_single_indent_str * count) + suffix
 
 def _attr(name, value, indent):
+    """Generates the Starlark codegen parts that represents an attribute value.
+
+    Args:
+        name: The attribute name as a `string`.
+        value: The attribute value as any type supported by Starlark codegen.
+        indent: The number of indents to be used for the attribute.
+
+    Returns:
+        A `list` of Starlark codegen parts.
+    """
     value = _normalize(value)
     return [
         _indent(indent),
@@ -24,6 +41,16 @@ _simple_starlark_types = [
 ]
 
 def _is_simple_type(val):
+    """Determines if the specified value is 'simple' Starlark codegen type.
+
+    Simple types are converted to strings using the `repr()` function.
+
+    Args:
+        val: The value to evaluate.
+
+    Returns:
+        A `bool` specifying whether the type is considered simple.
+    """
     val_type = type(val)
     for t in _simple_starlark_types:
         if val_type == t:
@@ -31,17 +58,43 @@ def _is_simple_type(val):
     return False
 
 def _normalize(val):
+    """Attempts to simplify the value, if possible. Otherwise, returns the value unchanged.
+
+    Args:
+        val: The value to evaluate.
+
+    Returns:
+        A `string` if the value is a simple type. Otherwise, the original value.
+    """
     if _is_simple_type(val):
         return repr(val)
     return val
 
 def _with_indent(indent, value):
+    """Wraps a value with a directive to evaluate it at a specified indent level.
+
+    Args:
+        indent: The indent level as an `int`.
+        value: The value to be wrapped.
+
+    Returns:
+        A `struct` that encapsulates the value and the indent information.
+    """
     return struct(
         with_indent = indent,
         wrapped_value = value,
     )
 
 def _to_starlark(val):
+    """Generates Starlark code from the provided value.
+
+    Args:
+        val: The value to evaluate.
+
+    Returns:
+        A `string` of Starlark code.
+    """
+
     # Simple types should be converted to their Stalark representation upfront.
     if _is_simple_type(val):
         return repr(val)
