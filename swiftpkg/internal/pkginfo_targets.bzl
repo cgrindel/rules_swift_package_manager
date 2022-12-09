@@ -23,7 +23,7 @@ def _get(targets, name, fail_if_not_found = True):
         fail("Failed to find target. name:", name)
     return None
 
-def make_pkginfo_targets(bazel_labels = bazel_labels):
+def make_pkginfo_targets(bazel_labels):
     """Create a `pkginfo_targets` module.
 
     Args:
@@ -33,17 +33,23 @@ def make_pkginfo_targets(bazel_labels = bazel_labels):
         A `struct` representing the `pkginfo_targets` module.
     """
 
-    def _bazel_label(target):
+    def _bazel_label(target, repo_name = None):
         """Create a Bazel label string from a target.
 
         Args:
             target: A `struct` as returned from `pkginfos.new_target`.
+            repo_name: The name of the repository as a `string`. This must be
+                provided if the module is being used outside of a BUILD thread.
 
         Returns:
             A `string` representing the label for the target.
         """
         return bazel_labels.normalize(
-            bazel_labels.new(package = target.path, name = target.name),
+            bazel_labels.new(
+                repository_name = repo_name,
+                package = target.path,
+                name = target.name,
+            ),
         )
 
     return struct(
@@ -51,4 +57,4 @@ def make_pkginfo_targets(bazel_labels = bazel_labels):
         bazel_label = _bazel_label,
     )
 
-pkginfo_targets = make_pkginfo_targets()
+pkginfo_targets = make_pkginfo_targets(bazel_labels = bazel_labels)

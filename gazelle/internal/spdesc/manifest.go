@@ -42,6 +42,15 @@ func (ts Targets) FindByName(name string) *Target {
 	return nil
 }
 
+func (ts Targets) FindByPath(path string) *Target {
+	for _, t := range ts {
+		if t.Path == path {
+			return &t
+		}
+	}
+	return nil
+}
+
 type Target struct {
 	Name                string
 	C99name             string `json:"c99name"`

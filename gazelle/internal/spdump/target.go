@@ -1,6 +1,8 @@
 package spdump
 
-import "strings"
+import (
+	"strings"
+)
 
 type TargetType int
 
@@ -19,7 +21,7 @@ func (tt *TargetType) UnmarshalJSON(b []byte) error {
 		*tt = ExecutableTargetType
 	case "test":
 		*tt = TestTargetType
-	case "library":
+	case "library", "regular":
 		*tt = LibraryTargetType
 	default:
 		*tt = UnknownTargetType
@@ -39,4 +41,17 @@ func (t *Target) Imports() []string {
 		imports[idx] = td.ImportName()
 	}
 	return imports
+}
+
+// Targets
+
+type Targets []Target
+
+func (ts Targets) FindByName(name string) *Target {
+	for _, t := range ts {
+		if t.Name == name {
+			return &t
+		}
+	}
+	return nil
 }

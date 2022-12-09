@@ -7,21 +7,24 @@ let package = Package(
     name: "MySwiftPackage",
     platforms: [.macOS(.v10_15)],
     products: [
-        .executable(name: "printstuff", targets: ["MySwiftPackage"]),
+        .executable(name: "sayhello", targets: ["MyExecutable"]),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
     ],
     targets: [
         .executableTarget(
-            name: "MySwiftPackage",
+            name: "MyExecutable",
             dependencies: [
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
+                "MyLibrary",
             ]
         ),
+        .target(
+            name: "MyLibrary"),
         .testTarget(
-            name: "MySwiftPackageTests",
-            dependencies: ["MySwiftPackage"]
+            name: "MyLibraryTests",
+            dependencies: ["MyLibrary"]
         ),
     ]
 )

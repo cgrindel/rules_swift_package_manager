@@ -29,9 +29,9 @@ Expected at least one symbol to be specified. location: {location}\
         to_starlark_parts = _to_starlark_parts,
     )
 
+# buildifier: disable=unused-variable
 def _to_starlark_parts(load_stmt, indent):
     parts = [
-        scg.indent(indent),
         "load(",
         scg.normalize(load_stmt.location),
     ]

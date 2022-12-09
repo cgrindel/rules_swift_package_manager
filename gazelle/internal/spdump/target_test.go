@@ -26,3 +26,18 @@ func TestTargetImports(t *testing.T) {
 	actual := target.Imports()
 	assert.Equal(t, []string{"ArgumentParser", "MySwiftPackage"}, actual)
 }
+
+func TestTargetsByName(t *testing.T) {
+	foo := spdump.Target{Name: "Foo"}
+	bar := spdump.Target{Name: "Bar"}
+	targets := spdump.Targets{foo, bar}
+
+	actual := targets.FindByName("Foo")
+	assert.Equal(t, &foo, actual)
+
+	actual = targets.FindByName("Bar")
+	assert.Equal(t, &bar, actual)
+
+	actual = targets.FindByName("DoesNotExist")
+	assert.Nil(t, actual)
+}

@@ -31,16 +31,6 @@ def swift_bazel_dependencies():
         ],
     )
 
-    # maybe(
-    #     http_archive,
-    #     name = "bazel_gazelle",
-    #     sha256 = "448e37e0dbf61d6fa8f00aaa12d191745e14f07c31cabfa731f0c8e8a4f41b97",
-    #     urls = [
-    #         "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.28.0/bazel-gazelle-v0.28.0.tar.gz",
-    #         "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.28.0/bazel-gazelle-v0.28.0.tar.gz",
-    #     ],
-    # )
-
     # Post v0.28.0: Contains fix for passing test args to gazelle_generation_test.
     maybe(
         http_archive,
@@ -55,9 +45,9 @@ def swift_bazel_dependencies():
     maybe(
         http_archive,
         name = "cgrindel_bazel_starlib",
-        sha256 = "99132d1074717e3952ebe57e9bddcd76e735bc83336093d8dc6a0820e6819998",
-        strip_prefix = "bazel-starlib-0.10.0",
+        sha256 = "139e0c2dfff30da86e3190789fdf21d76602628293143c3fca3f130ed96b2c42",
+        strip_prefix = "bazel-starlib-0.10.1",
         urls = [
-            "http://github.com/cgrindel/bazel-starlib/archive/v0.10.0.tar.gz",
+            "http://github.com/cgrindel/bazel-starlib/archive/v0.10.1.tar.gz",
         ],
     )

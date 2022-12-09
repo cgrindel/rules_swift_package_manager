@@ -1,5 +1,14 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
+
+tidy(
+    name = "tidy",
+    targets = [
+        ":swift_update_repos",
+        ":update_build_files",
+    ],
+)
 
 # MARK: - Gazelle
 
@@ -35,4 +44,9 @@ bzl_library(
     srcs = ["swift_deps.bzl"],
     visibility = ["//visibility:public"],
     deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
+)
+
+alias(
+    name = "sayhello",
+    actual = "//Sources/MyExecutable",
 )

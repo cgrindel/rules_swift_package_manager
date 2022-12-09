@@ -4,6 +4,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 go_library(
     name = "swift",
     srcs = [
+        "bazel_label.go",
         "file_info.go",
         "files.go",
         "http_archive.go",
@@ -25,6 +26,7 @@ go_library(
     visibility = ["//gazelle:__subpackages__"],
     deps = [
         "//gazelle/internal/pathdistance",
+        "//gazelle/internal/spdesc",
         "//gazelle/internal/spdump",
         "//gazelle/internal/spreso",
         "//gazelle/internal/stringslices",
