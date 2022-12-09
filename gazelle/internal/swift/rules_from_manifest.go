@@ -1,6 +1,8 @@
 package swift
 
 import (
+	"log"
+
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
@@ -8,8 +10,33 @@ import (
 )
 
 func RulesForSwiftProducts(args language.GenerateArgs, pi *swiftpkg.PackageInfo) []*rule.Rule {
-	// TODO(chuck): IMPLEMENT ME!
-	return nil
+	var rules []*rule.Rule
+	for _, prd := range pi.DumpManifest.Products {
+		prdRules := rulesForSwiftProduct(args, pi, &prd)
+		rules = append(rules, prdRules...)
+	}
+	return rules
+}
+
+func rulesForSwiftProduct(
+	args language.GenerateArgs,
+	pi *swiftpkg.PackageInfo,
+	product *spdump.Product,
+) []*rule.Rule {
+	if len(product.Targets) == 0 {
+		log.Printf("No targets found in product %s while generating rules.", product.Name)
+		return nil
+	}
+	targetName := product.Targets[0]
+	target := pi.DescManifest.Targets.FindByName(targetName)
+	if target == nil {
+		log.Printf("Target with name %s not found while generating rules for %s product.",
+			targetName, product.Name)
+		return nil
+	}
+	actual := bazelLabelFromTarget(target)
+	r := aliasRule(product.Name, actual)
+	return []*rule.Rule{r}
 }
 
 func RulesForSwiftTarget(args language.GenerateArgs, pi *swiftpkg.PackageInfo, targetName string) []*rule.Rule {
@@ -30,6 +57,5 @@ func RulesForSwiftTarget(args language.GenerateArgs, pi *swiftpkg.PackageInfo, t
 	case spdump.TestTargetType:
 		rules = rulesForTestModule(dumpt.Name, srcs, dumpt.Imports(), shouldSetVis)
 	}
-
 	return rules
 }

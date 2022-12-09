@@ -15,7 +15,8 @@ func rulesForLibraryModule(
 	shouldSetVis bool,
 ) []*rule.Rule {
 	r := rule.NewRule(LibraryRuleKind, moduleName)
-	setCommonAttrs(r, moduleName, srcs, swiftImports, shouldSetVis, []string{"//visibility:public"})
+	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
+	setVisibilityAttr(r, shouldSetVis, []string{"//visibility:public"})
 	return []*rule.Rule{r}
 }
 
@@ -26,7 +27,8 @@ func rulesForBinaryModule(
 	shouldSetVis bool,
 ) []*rule.Rule {
 	r := rule.NewRule(BinaryRuleKind, moduleName)
-	setCommonAttrs(r, moduleName, srcs, swiftImports, shouldSetVis, []string{"//visibility:public"})
+	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
+	setVisibilityAttr(r, shouldSetVis, []string{"//visibility:public"})
 	// Swift treats single file binary compilations differently. We need to tell Swift to compile
 	// the single file as a library.
 	if len(srcs) == 1 && srcs[0] != "main.swift" {
@@ -42,18 +44,11 @@ func rulesForTestModule(
 	shouldSetVis bool,
 ) []*rule.Rule {
 	r := rule.NewRule(TestRuleKind, moduleName)
-	setCommonAttrs(r, moduleName, srcs, swiftImports, shouldSetVis, nil)
+	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
 	return []*rule.Rule{r}
 }
 
-func setCommonAttrs(
-	r *rule.Rule,
-	moduleName string,
-	srcs []string,
-	swiftImports []string,
-	shouldSetVis bool,
-	visibility []string,
-) {
+func setCommonSwiftAttrs(r *rule.Rule, moduleName string, srcs []string, swiftImports []string) {
 	if moduleName != "" {
 		r.SetAttr(ModuleNameAttrName, moduleName)
 	}
@@ -61,9 +56,14 @@ func setCommonAttrs(
 		r.SetAttr("srcs", srcs)
 	}
 	r.SetPrivateAttr(config.GazelleImportsKey, swiftImports)
-	if shouldSetVis && visibility != nil {
-		r.SetAttr("visibility", visibility)
-	}
+}
+
+// Alias
+
+func aliasRule(name, actual string) *rule.Rule {
+	r := rule.NewRule(AliasRuleKind, name)
+	r.SetAttr("actual", actual)
+	return r
 }
 
 // Visibility
@@ -74,4 +74,11 @@ func shouldSetVisibility(args language.GenerateArgs) bool {
 		return false
 	}
 	return true
+}
+
+func setVisibilityAttr(r *rule.Rule, shouldSetVis bool, visibility []string) {
+	if !shouldSetVis || visibility == nil {
+		return
+	}
+	r.SetAttr("visibility", visibility)
 }

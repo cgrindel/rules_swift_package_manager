@@ -7,6 +7,8 @@ const (
 
 	// Repository Rule
 	SwiftPkgRuleKind = "swift_package"
+
+	AliasRuleKind = "alias"
 )
 
 func IsSwiftRuleKind(ruleKind string) bool {

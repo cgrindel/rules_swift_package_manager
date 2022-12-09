@@ -45,3 +45,8 @@ bzl_library(
     visibility = ["//visibility:public"],
     deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
 )
+
+alias(
+    name = "sayhello",
+    actual = "//Sources/MyExecutable",
+)
