@@ -28,5 +28,16 @@ func TestTargetImports(t *testing.T) {
 }
 
 func TestTargetsByName(t *testing.T) {
-	t.Error("IMPLEMENT ME!")
+	foo := spdump.Target{Name: "Foo"}
+	bar := spdump.Target{Name: "Bar"}
+	targets := spdump.Targets{foo, bar}
+
+	actual := targets.FindByName("Foo")
+	assert.Equal(t, &foo, actual)
+
+	actual = targets.FindByName("Bar")
+	assert.Equal(t, &bar, actual)
+
+	actual = targets.FindByName("DoesNotExist")
+	assert.Nil(t, actual)
 }
