@@ -1,8 +1,8 @@
 """Module for creating Bazel declarations to build a Swift package."""
 
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
-load(":lists.bzl", "lists")
 load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")

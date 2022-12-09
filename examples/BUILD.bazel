@@ -14,12 +14,12 @@ bzlformat_pkg(name = "bzlformat")
 # repository.
 # gazelle:exclude **
 
-# MARK: - Simple Example
+# MARK: - Example Using http_archive to Specify External Dependencies
 
 sh_binary(
-    name = "simple_test_runner",
+    name = "http_archive_ext_deps_test_runner",
     testonly = True,
-    srcs = ["simple_test_runner.sh"],
+    srcs = ["http_archive_ext_deps_test_runner.sh"],
     data = [
         "@contrib_rules_bazel_integration_test//tools:create_scratch_dir",
     ],
@@ -30,13 +30,13 @@ sh_binary(
 )
 
 bazel_integration_tests(
-    name = "simple_test",
+    name = "http_archive_ext_deps_test",
     bazel_versions = SUPPORTED_BAZEL_VERSIONS,
-    test_runner = ":simple_test_runner",
-    workspace_files = integration_test_utils.glob_workspace_files("simple") + [
+    test_runner = ":http_archive_ext_deps_test_runner",
+    workspace_files = integration_test_utils.glob_workspace_files("http_archive_ext_deps") + [
         "//:local_repository_files",
     ],
-    workspace_path = "simple",
+    workspace_path = "http_archive_ext_deps",
 )
 
 # MARK: - Package Manifest example
@@ -67,7 +67,7 @@ bazel_integration_tests(
 # MARK: - Test Suites
 
 _test_base_names = [
-    "simple_test",
+    "http_archive_ext_deps_test",
     "pkg_manifest_test",
 ]
 
