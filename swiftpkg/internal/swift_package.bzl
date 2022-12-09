@@ -75,7 +75,7 @@ def _update_git_attrs(orig, keys, override):
 def _gen_build_files(repository_ctx, pkg_info):
     repo_name = repository_ctx.name
 
-    # Create a build file for each Swift package target in their corresponding
+    # Create build files for each Swift package target in their corresponding
     # target path.
     for target in pkg_info.targets:
         bld_file = swiftpkg_build_files.new_for_target(
