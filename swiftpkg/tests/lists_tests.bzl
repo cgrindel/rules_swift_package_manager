@@ -19,8 +19,25 @@ def _compact_test(ctx):
 
 compact_test = unittest.make(_compact_test)
 
+def _contains_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = lists.contains([], "apple")
+    asserts.false(env, actual)
+
+    actual = lists.contains(["zebra"], "apple")
+    asserts.false(env, actual)
+
+    actual = lists.contains(["zebra", "apple"], "apple")
+    asserts.true(env, actual)
+
+    return unittest.end(env)
+
+contains_test = unittest.make(_contains_test)
+
 def lists_test_suite():
     return unittest.suite(
         "lists_tests",
         compact_test,
+        contains_test,
     )
