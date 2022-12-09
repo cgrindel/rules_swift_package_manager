@@ -12,6 +12,4 @@
 
 - All Bazel declarations for Swift package products will be defined in the Swift package path
   directory.
-- Each library product will be an `alias` to the corresponding Swift target declaration.
-- Each executable product will be a `swift_binary` declaration that depends on the `swift_library`
-  referenced by the product.
+- Each library and executable product will be an `alias` to the corresponding Swift target declaration.
