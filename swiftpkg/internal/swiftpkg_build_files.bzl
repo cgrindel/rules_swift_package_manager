@@ -25,21 +25,12 @@ def _new_for_target(pkg_info, target, repo_name):
 
 def _swift_target_build_file(pkg_info, target, repo_name):
     # GH046: Support plugins.
-    if target.type == target_types.library or target.type == target_types.regular:
+    if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(pkg_info, target, repo_name)]
     elif target.type == target_types.executable:
-        lib_name = "{}Lib".format(target.name)
-        lib_decl = _swift_library_from_target(
-            pkg_info,
-            target,
-            repo_name,
-            name = lib_name,
-            c99name = lib_name,
-        )
-        bin_decl = _swift_binary_from_target(target, lib_name)
         load_stmts = [swift_binary_load_stmt]
-        decls = [lib_decl, bin_decl]
+        decls = [_swift_binary_from_target(pkg_info, target, repo_name)]
     elif target.type == target_types.test:
         load_stmts = [swift_test_load_stmt]
         decls = [_swift_test_from_target(pkg_info, target, repo_name)]
@@ -70,12 +61,15 @@ def _swift_library_from_target(pkg_info, target, repo_name, name = None, c99name
         },
     )
 
-def _swift_binary_from_target(target, lib_name):
+def _swift_binary_from_target(pkg_info, target, repo_name):
     return build_decls.new(
         kind = swift_kinds.binary,
         name = target.name,
         attrs = {
-            "deps": [":{}".format(lib_name)],
+            "deps": [
+                pkginfo_target_deps.bazel_label(pkg_info, td, repo_name)
+                for td in target.dependencies
+            ],
             "module_name": target.c99name,
             "srcs": target.sources,
             "visibility": ["//visibility:public"],
@@ -218,7 +212,6 @@ swift_library_load_stmt = load_statements.new(
 
 swift_binary_load_stmt = load_statements.new(
     swift_location,
-    swift_kinds.library,
     swift_kinds.binary,
 )
 
