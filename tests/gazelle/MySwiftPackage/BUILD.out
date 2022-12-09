@@ -1,4 +1,4 @@
 alias(
-    name = "printstuff",
-    actual = "//Sources/MySwiftPackage",
+    name = "sayhello",
+    actual = "//Sources/MyExecutable",
 )
