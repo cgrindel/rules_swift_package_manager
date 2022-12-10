@@ -19,5 +19,6 @@ func TestCanImport(t *testing.T) {
 	assert.True(t, ok)
 
 	assert.True(t, ri.CanImport("/path/to/Package.resolved"))
-	assert.False(t, ri.CanImport("/path/to/Package.swift"))
+	assert.True(t, ri.CanImport("/path/to/Package.swift"))
+	assert.False(t, ri.CanImport("/path/to/some_other_file"))
 }

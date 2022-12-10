@@ -27,6 +27,7 @@ go_library(
     importpath = "github.com/cgrindel/swift_bazel/gazelle",
     visibility = ["//visibility:public"],
     deps = [
+        "//gazelle/internal/spreq",
         "//gazelle/internal/spreso",
         "//gazelle/internal/stringslices",
         "//gazelle/internal/swift",

@@ -1,7 +1,17 @@
 package spreq
 
+import "gopkg.in/yaml.v3"
+
 type Requirements struct {
 	Dependencies []*Dependency
+}
+
+func NewRequirementsFromYAML(b []byte) (*Requirements, error) {
+	var reqs Requirements
+	if err := yaml.Unmarshal(b, &reqs); err != nil {
+		return nil, err
+	}
+	return &reqs, nil
 }
 
 type Dependency struct {

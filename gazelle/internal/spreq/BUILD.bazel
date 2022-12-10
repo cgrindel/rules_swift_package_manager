@@ -5,9 +5,13 @@ bzlformat_pkg(name = "bzlformat")
 
 go_library(
     name = "spreq",
-    srcs = ["requirements.go"],
+    srcs = [
+        "requirements.go",
+        "write_pkg_manifest.go",
+    ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/spreq",
     visibility = ["//gazelle:__subpackages__"],
+    deps = ["@in_gopkg_yaml_v3//:yaml_v3"],
 )
 
 go_test(
