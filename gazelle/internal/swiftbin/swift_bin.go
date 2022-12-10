@@ -63,3 +63,13 @@ func (sb *SwiftBin) DescribePackage(dir string) ([]byte, error) {
 	}
 	return stdout.Bytes(), nil
 }
+
+func (sb *SwiftBin) ResolvePackage(dir string) error {
+	args := []string{"package", "resolve"}
+	cmd := exec.Command(sb.BinPath, args...)
+	cmd.Dir = dir
+	if out, err := cmd.CombinedOutput(); err != nil {
+		return fmt.Errorf("failed executing `swift package resolve`, out\n%v: %w", string(out), err)
+	}
+	return nil
+}
