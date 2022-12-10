@@ -8,12 +8,9 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/spreq"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spreso"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/stringslices"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 )
 
 // language.RepoImporter Implementation
@@ -21,10 +18,11 @@ import (
 const resolvedPkgBasename = "Package.resolved"
 const pkgManifestBasename = "Package.swift"
 
-var yamlExtensions = []string{".yaml", ".yml"}
+// var yamlExtensions = []string{".yaml", ".yml"}
 
 func (*swiftLang) CanImport(path string) bool {
-	return isResolvedPkg(path) || isPkgManifest(path) || isSwiftReqs(path)
+	return isResolvedPkg(path) || isPkgManifest(path)
+	// return isResolvedPkg(path) || isPkgManifest(path) || isSwiftReqs(path)
 }
 
 func isResolvedPkg(path string) bool {
@@ -35,17 +33,17 @@ func isPkgManifest(path string) bool {
 	return filepath.Base(path) == pkgManifestBasename
 }
 
-func isSwiftReqs(path string) bool {
-	return stringslices.Contains(yamlExtensions, filepath.Ext(path))
-}
+// func isSwiftReqs(path string) bool {
+// 	return stringslices.Contains(yamlExtensions, filepath.Ext(path))
+// }
 
 func (*swiftLang) ImportRepos(args language.ImportReposArgs) language.ImportReposResult {
 	if isResolvedPkg(args.Path) {
 		return importReposFromResolvedPackage(args.Path)
 	} else if isPkgManifest(args.Path) {
 		return importReposFromPackageManifest(args)
-	} else if isSwiftReqs(args.Path) {
-		return importReposFromSwiftReqs(args)
+		// } else if isSwiftReqs(args.Path) {
+		// 	return importReposFromSwiftReqs(args)
 	}
 	log.Fatal("No handler found for ImportRepos.")
 	return language.ImportReposResult{}
@@ -85,8 +83,9 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 
 	pkgDir := filepath.Dir(args.Path)
 	if _, err := os.Stat(pkgDir); errors.Is(err, os.ErrNotExist) {
+		sb := sc.SwiftBin()
 		// Generate a resolved package
-		if err := swiftpkg.Resolve(sc.SwiftBin(), pkgDir); err != nil {
+		if err := sb.ResolvePackage(pkgDir); err != nil {
 			result.Error = err
 			return result
 		}
@@ -98,33 +97,34 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	return importReposFromResolvedPackage(resolvedPkgPath)
 }
 
-func importReposFromSwiftReqs(args language.ImportReposArgs) language.ImportReposResult {
-	result := language.ImportReposResult{}
-	c := args.Config
-	sc := swiftcfg.GetSwiftConfig(c)
+// func importReposFromSwiftReqs(args language.ImportReposArgs) language.ImportReposResult {
+// 	result := language.ImportReposResult{}
+// 	c := args.Config
+// 	sc := swiftcfg.GetSwiftConfig(c)
 
-	b, err := os.ReadFile(args.Path)
-	if err != nil {
-		result.Error = err
-		return result
-	}
-	reqs, err := spreq.NewRequirementsFromYAML(b)
-	if err != nil {
-		result.Error = err
-		return result
-	}
-	pkgDir := filepath.Dir(args.Path)
-	err = spreq.WritePkgManifest(reqs, pkgDir)
-	if err != nil {
-		result.Error = err
-		return result
-	}
-	err = swiftpkg.Resolve(sc.SwiftBin(), pkgDir)
-	if err != nil {
-		result.Error = err
-		return result
-	}
+// 	b, err := os.ReadFile(args.Path)
+// 	if err != nil {
+// 		result.Error = err
+// 		return result
+// 	}
+// 	reqs, err := spreq.NewRequirementsFromYAML(b)
+// 	if err != nil {
+// 		result.Error = err
+// 		return result
+// 	}
+// 	pkgDir := filepath.Dir(args.Path)
+// 	err = spreq.WritePkgManifest(reqs, pkgDir)
+// 	if err != nil {
+// 		result.Error = err
+// 		return result
+// 	}
+// 	sb := sc.SwiftBin()
+// 	err = sb.Resolve(pkgDir)
+// 	if err != nil {
+// 		result.Error = err
+// 		return result
+// 	}
 
-	resolvedPkgPath := filepath.Join(pkgDir, resolvedPkgBasename)
-	return importReposFromResolvedPackage(resolvedPkgPath)
-}
+// 	resolvedPkgPath := filepath.Join(pkgDir, resolvedPkgBasename)
+// 	return importReposFromResolvedPackage(resolvedPkgPath)
+// }
