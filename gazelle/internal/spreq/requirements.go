@@ -10,16 +10,14 @@ type Dependency struct {
 }
 
 type RemoteDependency struct {
-	URL         string
-	Requirement *DependencyRequirement
-}
-
-type DependencyRequirement struct {
-	Exact    string
+	Name     string
+	URL      string
+	Version  string
 	Revision string
 	Branch   string
 }
 
 type LocalDependency struct {
+	Name string
 	Path string
 }

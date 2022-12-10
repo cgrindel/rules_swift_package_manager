@@ -1,5 +1,7 @@
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
-load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+bzlformat_pkg(name = "bzlformat")
 
 go_library(
     name = "spreq",
@@ -8,4 +10,12 @@ go_library(
     visibility = ["//gazelle:__subpackages__"],
 )
 
-bzlformat_pkg(name = "bzlformat")
+go_test(
+    name = "spreq_test",
+    srcs = ["requirements_test.go"],
+    deps = [
+        ":spreq",
+        "@com_github_stretchr_testify//assert",
+        "@in_gopkg_yaml_v3//:yaml_v3",
+    ],
+)
