@@ -11,7 +11,7 @@ type commitProvider interface {
 	Commit() string
 }
 
-func RepoRuleFromPin(p *spreso.Pin) (*rule.Rule, error) {
+func RepoRuleFromPin(p *spreso.Pin, modules []string) (*rule.Rule, error) {
 	repoName, err := RepoNameFromPin(p)
 	if err != nil {
 		return nil, err
@@ -24,6 +24,7 @@ func RepoRuleFromPin(p *spreso.Pin) (*rule.Rule, error) {
 	r := rule.NewRule(SwiftPkgRuleKind, repoName)
 	r.SetAttr("commit", cp.Commit())
 	r.SetAttr("remote", p.PkgRef.Remote())
+	r.SetAttr("modules", modules)
 
 	switch t := p.State.(type) {
 	case *spreso.VersionPinState:

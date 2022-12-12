@@ -122,6 +122,10 @@ func TestTargetSourcesWithPath(t *testing.T) {
 	})
 }
 
+func TestProductModules(t *testing.T) {
+	t.Error("IMPLEMENT ME!")
+}
+
 const swiftPackageJSONStr = `
 {
   "dependencies" : [

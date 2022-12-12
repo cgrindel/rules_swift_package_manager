@@ -1,7 +1,7 @@
 package gazelle
 
 import (
-	"errors"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -11,23 +11,26 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spreso"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 )
 
 // language.RepoImporter Implementation
 
 const resolvedPkgBasename = "Package.resolved"
 const pkgManifestBasename = "Package.swift"
+const swiftPkgBuildDirname = ".build"
+const swiftPkgCheckoutsDirname = "checkouts"
 
 // var yamlExtensions = []string{".yaml", ".yml"}
 
 func (*swiftLang) CanImport(path string) bool {
-	return isResolvedPkg(path) || isPkgManifest(path)
+	return isPkgManifest(path)
 	// return isResolvedPkg(path) || isPkgManifest(path) || isSwiftReqs(path)
 }
 
-func isResolvedPkg(path string) bool {
-	return filepath.Base(path) == resolvedPkgBasename
-}
+// func isResolvedPkg(path string) bool {
+// 	return filepath.Base(path) == resolvedPkgBasename
+// }
 
 func isPkgManifest(path string) bool {
 	return filepath.Base(path) == pkgManifestBasename
@@ -38,9 +41,7 @@ func isPkgManifest(path string) bool {
 // }
 
 func (*swiftLang) ImportRepos(args language.ImportReposArgs) language.ImportReposResult {
-	if isResolvedPkg(args.Path) {
-		return importReposFromResolvedPackage(args.Path)
-	} else if isPkgManifest(args.Path) {
+	if isPkgManifest(args.Path) {
 		return importReposFromPackageManifest(args)
 		// } else if isSwiftReqs(args.Path) {
 		// 	return importReposFromSwiftReqs(args)
@@ -49,7 +50,60 @@ func (*swiftLang) ImportRepos(args language.ImportReposArgs) language.ImportRepo
 	return language.ImportReposResult{}
 }
 
-func importReposFromResolvedPackage(resolvedPkgPath string) language.ImportReposResult {
+func importReposFromPackageManifest(args language.ImportReposArgs) language.ImportReposResult {
+	result := language.ImportReposResult{}
+	c := args.Config
+	sc := swiftcfg.GetSwiftConfig(c)
+	sb := sc.SwiftBin()
+
+	// Ensure that we have resolved and fetched the Swift package dependencies
+	pkgDir := filepath.Dir(args.Path)
+	if err := sb.ResolvePackage(pkgDir); err != nil {
+		result.Error = err
+		return result
+	}
+
+	// Get the package info for the workspace's Swift package
+	pi, err := swiftpkg.NewPackageInfo(sb, pkgDir)
+	if err != nil {
+		result.Error = err
+		return result
+	}
+
+	// Collect product/module info for each of the dependencies
+	// Key: External dependency identity
+	// Value: Pointer to the dependency's package info
+	depPkgInfoMap := make(map[string]*swiftpkg.PackageInfo)
+	for _, dep := range pi.DumpManifest.Dependencies {
+		depDir := filepath.Join(pkgDir, swiftPkgBuildDirname, swiftPkgCheckoutsDirname, dep.Name)
+		if err != nil {
+			result.Error = err
+			return result
+		}
+		depPkgInfo, err := swiftpkg.NewPackageInfo(sb, depDir)
+		if err != nil {
+			result.Error = err
+			return result
+		}
+		depPkgInfoMap[dep.Name] = depPkgInfo
+	}
+
+	resolvedPkgPath := filepath.Join(pkgDir, resolvedPkgBasename)
+	return importReposFromResolvedPackage(depPkgInfoMap, resolvedPkgPath)
+}
+
+// func collectModuleInfoFromSwiftPkg(, pkgDir string, repoName string) error {
+// 	// DEBUG BEGIN
+// 	log.Printf("*** CHUCK: collectModuleInfoFromSwiftPkg repoName: %+#v", repoName)
+// 	log.Printf("*** CHUCK: collectModuleInfoFromSwiftPkg pkgDir: %+#v", pkgDir)
+// 	// DEBUG END
+// 	return nil
+// }
+
+func importReposFromResolvedPackage(
+	depPkgInfoMap map[string]*swiftpkg.PackageInfo,
+	resolvedPkgPath string,
+) language.ImportReposResult {
 	result := language.ImportReposResult{}
 
 	// Read the Package.resolved file
@@ -66,7 +120,17 @@ func importReposFromResolvedPackage(resolvedPkgPath string) language.ImportRepos
 
 	result.Gen = make([]*rule.Rule, len(pins))
 	for idx, p := range pins {
-		result.Gen[idx], err = swift.RepoRuleFromPin(p)
+		depPkgInfo, ok := depPkgInfoMap[p.PkgRef.Identity]
+		if !ok {
+			result.Error = fmt.Errorf("did not find package info for %s dep", p.PkgRef.Identity)
+			return result
+		}
+		modules, err := depPkgInfo.DescManifest.ProductModules()
+		if err != nil {
+			result.Error = err
+			return result
+		}
+		result.Gen[idx], err = swift.RepoRuleFromPin(p, modules)
 		if err != nil {
 			result.Error = err
 			return result
@@ -74,27 +138,6 @@ func importReposFromResolvedPackage(resolvedPkgPath string) language.ImportRepos
 	}
 
 	return result
-}
-
-func importReposFromPackageManifest(args language.ImportReposArgs) language.ImportReposResult {
-	result := language.ImportReposResult{}
-	c := args.Config
-	sc := swiftcfg.GetSwiftConfig(c)
-
-	pkgDir := filepath.Dir(args.Path)
-	resolvedPkgPath := filepath.Join(pkgDir, resolvedPkgBasename)
-	if _, err := os.Stat(resolvedPkgPath); errors.Is(err, os.ErrNotExist) {
-		sb := sc.SwiftBin()
-		// Generate a resolved package
-		if err := sb.ResolvePackage(pkgDir); err != nil {
-			result.Error = err
-			return result
-		}
-	} else if err != nil {
-		result.Error = err
-		return result
-	}
-	return importReposFromResolvedPackage(resolvedPkgPath)
 }
 
 // func importReposFromSwiftReqs(args language.ImportReposArgs) language.ImportReposResult {

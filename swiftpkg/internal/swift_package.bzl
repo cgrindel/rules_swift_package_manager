@@ -245,11 +245,22 @@ package description generation)\
     ),
 }
 
+_SWIFT_ATTRS = {
+    "modules": attr.string_list(
+        doc = """\
+The list of Swift modules provided by the Swift package. This list is not \
+used internal to the rule. Instead, it is used by the Gazelle plugin to \
+resolve external dependencies.\
+""",
+    ),
+}
+
 _COMMON_ATTRS = dicts.add(
     _PATCH_ATTRS,
     _WORKSPACE_AND_BUILD_FILE_ATTRS,
     _GIT_ATTRS,
     _ENV_ATTRS,
+    _SWIFT_ATTRS,
 )
 
 swift_package = repository_rule(
