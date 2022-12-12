@@ -2,7 +2,6 @@ package spdesc
 
 import (
 	"encoding/json"
-	"fmt"
 	"path/filepath"
 )
 
@@ -133,29 +132,4 @@ type DependencyRequirement struct {
 type VersionRange struct {
 	LowerBound string `json:"lower_bound"`
 	UpperBound string `json:"upper_bound"`
-}
-
-// Module from Product
-
-func (m *Manifest) ProductModules() ([]string, error) {
-	var err error
-	modules := make([]string, len(m.Products))
-	for idx, prd := range m.Products {
-		if modules[idx], err = m.moduleForProduct(&prd); err != nil {
-			return nil, err
-		}
-	}
-	return modules, nil
-}
-
-func (m *Manifest) moduleForProduct(p *Product) (string, error) {
-	if len(p.Targets) == 0 {
-		return "", fmt.Errorf("product %s has not targets", p.Name)
-	}
-	targetName := p.Targets[0]
-	t := m.Targets.FindByName(targetName)
-	if t == nil {
-		return "", fmt.Errorf("target %s not found while finding product module", targetName)
-	}
-	return t.C99name, nil
 }

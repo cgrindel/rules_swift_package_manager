@@ -125,11 +125,17 @@ func importReposFromResolvedPackage(
 			result.Error = fmt.Errorf("did not find package info for %s dep", p.PkgRef.Identity)
 			return result
 		}
-		modules, err := depPkgInfo.DescManifest.ProductModules()
+		targets, err := depPkgInfo.ExportedTargets()
 		if err != nil {
 			result.Error = err
 			return result
 		}
+		// Create a map of the module names (key) to relative Bazel label (value)
+		modules := make(map[string]string)
+		for _, t := range targets {
+			modules[t.C99name] = swift.BazelLabelFromTarget("", t)
+		}
+
 		result.Gen[idx], err = swift.RepoRuleFromPin(p, modules)
 		if err != nil {
 			result.Error = err

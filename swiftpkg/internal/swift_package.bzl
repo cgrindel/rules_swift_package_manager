@@ -246,13 +246,20 @@ package description generation)\
 }
 
 _SWIFT_ATTRS = {
-    "modules": attr.string_list(
+    "modules": attr.string_dict(
         doc = """\
-The list of Swift modules provided by the Swift package. This list is not \
-used internal to the rule. Instead, it is used by the Gazelle plugin to \
-resolve external dependencies.\
+Maps the module names (key) exported by the package to their Bazel label \
+(value). The map is not used internal to the rule. Intead, it used by the \
+gazelle plugin to resolve external dependencies.\
 """,
     ),
+    # "modules": attr.string_list(
+    #     doc = """\
+    # The list of Swift modules provided by the Swift package. This list is not \
+    # used internal to the rule. Instead, it is used by the Gazelle plugin to \
+    # resolve external dependencies.\
+    # """,
+    # ),
 }
 
 _COMMON_ATTRS = dicts.add(
