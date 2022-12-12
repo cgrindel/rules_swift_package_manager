@@ -76,11 +76,24 @@ func findExternalDepsInWorkspace(mi *swift.ModuleIndex, repoRoot string) error {
 	if err != nil {
 		return fmt.Errorf("failed to load WORKSPACE file %v: %w", wkspFilePath, err)
 	}
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK: wkspFile.Loads: ")
+	for idx, item := range wkspFile.Loads {
+		log.Printf("*** CHUCK %d: %+#v", idx, item)
+	}
+	// DEBUG END
+	if err := processHTTPArchives(mi, wkspFile); err != nil {
+		return err
+	}
+	return nil
+}
+
+func processHTTPArchives(mi *swift.ModuleIndex, wkspFile *rule.File) error {
 	archives, err := swift.NewHTTPArchivesFromWkspFile(wkspFile)
 	if err != nil {
 		return fmt.Errorf(
 			"failed to retrieve archives from workspace file %v: %w",
-			wkspFilePath,
+			wkspFile.Path,
 			err,
 		)
 	}

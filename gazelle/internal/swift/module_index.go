@@ -1,6 +1,8 @@
 package swift
 
 type ModuleIndex struct {
+	// Key: Module name
+	// Value: Slice of module pointers
 	index map[string][]*Module
 }
 
