@@ -82,7 +82,8 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	sc := swiftcfg.GetSwiftConfig(c)
 
 	pkgDir := filepath.Dir(args.Path)
-	if _, err := os.Stat(pkgDir); errors.Is(err, os.ErrNotExist) {
+	resolvedPkgPath := filepath.Join(pkgDir, resolvedPkgBasename)
+	if _, err := os.Stat(resolvedPkgPath); errors.Is(err, os.ErrNotExist) {
 		sb := sc.SwiftBin()
 		// Generate a resolved package
 		if err := sb.ResolvePackage(pkgDir); err != nil {
@@ -93,7 +94,6 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 		result.Error = err
 		return result
 	}
-	resolvedPkgPath := filepath.Join(pkgDir, resolvedPkgBasename)
 	return importReposFromResolvedPackage(resolvedPkgPath)
 }
 
