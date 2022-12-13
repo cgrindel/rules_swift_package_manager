@@ -24,9 +24,9 @@ type PackageInfo struct {
 	Path         string
 	ToolsVersion string
 	Targets      Targets
-	Platforms    []Platform
-	Products     []Product
-	Dependencies []Dependency
+	Platforms    []*Platform
+	Products     []*Product
+	Dependencies []*Dependency
 }
 
 func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
@@ -60,6 +60,19 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 		}
 	}
 
+	platforms := make([]*Platform, len(descManifest.Platforms))
+	for idx, p := range descManifest.Platforms {
+		platforms[idx] = NewPlatfromFromManifestInfo(&p)
+	}
+
+	products := make([]*Product, len(dumpManifest.Products))
+	for idx, p := range dumpManifest.Products {
+		products[idx], err = NewProductFromManifestInfo(&p)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create product for %v: %w", p.Name, err)
+		}
+	}
+
 	return &PackageInfo{
 		// TODO(chuck): Remove Dir, DumpManifest, DescManifest
 		Dir:          dir,
@@ -70,5 +83,7 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 		Path:         descManifest.Path,
 		ToolsVersion: descManifest.ToolsVersion,
 		Targets:      targets,
+		Platforms:    platforms,
+		Products:     products,
 	}, nil
 }
