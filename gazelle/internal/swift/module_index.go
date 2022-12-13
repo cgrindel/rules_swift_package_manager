@@ -28,6 +28,14 @@ func (mi *ModuleIndex) AddModule(m *Module) {
 // Find the module given the Bazel repo name and the Swift module name.
 func (mi *ModuleIndex) Resolve(repoName, moduleName string) *Module {
 	modules := mi.index[moduleName]
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK: Resovle ------")
+	log.Printf("*** CHUCK: Resolve moduleName: %+#v", moduleName)
+	log.Printf("*** CHUCK: Resolve modules: ")
+	for idx, item := range modules {
+		log.Printf("*** CHUCK %d: %+#v", idx, item)
+	}
+	// DEBUG END
 	if len(modules) == 0 {
 		return nil
 	}
@@ -58,10 +66,6 @@ func (mi *ModuleIndex) AddModules(modules ...*Module) {
 }
 
 func (mi *ModuleIndex) IndexRepoRule(r *rule.Rule) error {
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: IndexRepoRule r.Kind(): %+#v", r.Kind())
-	log.Printf("*** CHUCK: IndexRepoRule r.Name(): %+#v", r.Name())
-	// DEBUG END
 	var err error
 	switch r.Kind() {
 	case SwiftPkgRuleKind:
@@ -79,7 +83,7 @@ func (mi *ModuleIndex) indexSwiftPkg(r *rule.Rule) error {
 		return err
 	}
 	for moduleName, relLbl := range modules {
-		lbl, err := label.Parse(repoName + relLbl)
+		lbl, err := label.Parse("@" + repoName + relLbl)
 		if err != nil {
 			return err
 		}

@@ -63,13 +63,6 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 		}
 	}
 
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: CheckFlags mi.ModuleNames(): ")
-	for idx, item := range mi.ModuleNames() {
-		log.Printf("*** CHUCK %d: %+#v", idx, item)
-	}
-	// DEBUG END
-
 	return nil
 }
 

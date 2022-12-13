@@ -22,23 +22,6 @@ func NewHTTPArchive(name string, modules []*Module) *HTTPArchive {
 	}
 }
 
-// func NewHTTPArchivesFromWkspFile(f *rule.File) ([]*HTTPArchive, error) {
-// 	var archives []*HTTPArchive
-// 	for _, r := range f.Rules {
-// 		if r.Kind() != httpArchiveRuleKind {
-// 			continue
-// 		}
-// 		ha, err := NewHTTPArchiveFromRule(r)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 		if ha != nil {
-// 			archives = append(archives, ha)
-// 		}
-// 	}
-// 	return archives, nil
-// }
-
 func NewHTTPArchiveFromRule(r *rule.Rule) (*HTTPArchive, error) {
 	bldFileContent := r.AttrString(buildFileContentAttrName)
 	if bldFileContent == "" {
