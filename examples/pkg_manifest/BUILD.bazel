@@ -31,7 +31,7 @@ gazelle(
 gazelle(
     name = "swift_update_repos",
     args = [
-        "-from_file=Package.resolved",
+        "-from_file=Package.swift",
         "-to_macro=swift_deps.bzl%swift_dependencies",
         "-prune",
     ],
