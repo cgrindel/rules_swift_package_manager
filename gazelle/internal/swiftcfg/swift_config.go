@@ -39,9 +39,9 @@ func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRul
 	pi := sc.PackageInfo
 	if pi == nil {
 		return SrcFileGenRulesMode
-	} else if args.Dir == pi.Dir {
+	} else if args.Dir == pi.Path {
 		return SwiftPkgGenRulesMode
-	} else if desct := pi.DescManifest.Targets.FindByPath(args.Rel); desct != nil {
+	} else if desct := pi.Targets.FindByPath(args.Rel); desct != nil {
 		return SwiftPkgGenRulesMode
 	}
 	return SkipGenRulesMode

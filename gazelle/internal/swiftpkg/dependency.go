@@ -25,6 +25,18 @@ func (d *Dependency) Identity() string {
 	return ""
 }
 
+func (d *Dependency) URL() string {
+	if d.SourceControl != nil {
+		if d.SourceControl.Location != nil {
+			if d.SourceControl.Location.Remote != nil {
+				return d.SourceControl.Location.Remote.URL
+			}
+		}
+	}
+	log.Fatalf("URL could not be determined.")
+	return ""
+}
+
 // SourceControl
 
 type SourceControl struct {

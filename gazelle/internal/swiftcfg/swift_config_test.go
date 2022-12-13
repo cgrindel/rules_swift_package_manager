@@ -5,7 +5,6 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/spdesc"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
@@ -30,26 +29,24 @@ func TestSwiftConfigSwiftBin(t *testing.T) {
 func TestSwiftConfigGenerateRulesMode(t *testing.T) {
 	sc := swiftcfg.NewSwiftConfig()
 	pi := &swiftpkg.PackageInfo{
-		Dir: "/path/to/pkg",
-		DescManifest: &spdesc.Manifest{
-			Targets: spdesc.Targets{
-				{Name: "Foo", Path: "Sources/Target"},
-			},
+		Path: "/path/to/pkg",
+		Targets: swiftpkg.Targets{
+			&swiftpkg.Target{Name: "Foo", Path: "Sources/Target"},
 		},
 	}
 	sc.PackageInfo = pi
 
 	t.Run("no package info", func(t *testing.T) {
 		nopkgSc := swiftcfg.NewSwiftConfig()
-		args := language.GenerateArgs{Dir: pi.Dir}
+		args := language.GenerateArgs{Dir: pi.Path}
 		assert.Equal(t, swiftcfg.SrcFileGenRulesMode, nopkgSc.GenerateRulesMode(args))
 	})
 	t.Run("has package info, args Dir is the package dir", func(t *testing.T) {
-		args := language.GenerateArgs{Dir: pi.Dir, Rel: ""}
+		args := language.GenerateArgs{Dir: pi.Path, Rel: ""}
 		assert.Equal(t, swiftcfg.SwiftPkgGenRulesMode, sc.GenerateRulesMode(args))
 	})
 	t.Run("has package info, not package dir, is target dir", func(t *testing.T) {
-		args := language.GenerateArgs{Dir: pi.DescManifest.Targets[0].Path, Rel: "Sources/Target"}
+		args := language.GenerateArgs{Dir: pi.Targets[0].Path, Rel: "Sources/Target"}
 		assert.Equal(t, swiftcfg.SwiftPkgGenRulesMode, sc.GenerateRulesMode(args))
 	})
 	t.Run("has package info, not package dir, not target dir", func(t *testing.T) {

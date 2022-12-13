@@ -68,11 +68,10 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 func indexExtDepsInManifest(mi *swift.ModuleIndex, pi *swiftpkg.PackageInfo) {
 	var err error
-	dump := pi.DumpManifest
 
 	// Create a map of Swift external dep identity and Bazel repo name
 	depIdentToBazelRepoName := make(map[string]string)
-	for _, d := range dump.Dependencies {
+	for _, d := range pi.Dependencies {
 		depIdentToBazelRepoName[d.Identity()], err = swift.RepoNameFromURL(d.URL())
 		if err != nil {
 			log.Fatalf("Failed to create repo name for %s: %w", d.Identity(), err)
@@ -80,15 +79,14 @@ func indexExtDepsInManifest(mi *swift.ModuleIndex, pi *swiftpkg.PackageInfo) {
 	}
 
 	// Find all of the unique product references (under TargetDependency)
-	prodRefs := dump.ProductReferences()
+	prodRefs := pi.ProductReferences()
 
 	// Create a Module for each product reference
 	for _, pr := range prodRefs {
 		// For external deps, the product name appears toe always be the Swift module name
-		repo, ok := depIdentToBazelRepoName[pr.DependencyName]
+		repo, ok := depIdentToBazelRepoName[pr.Identity]
 		if !ok {
-			log.Fatalf("Did not find dependency name '%s' in manifest %s",
-				pr.DependencyName, pi.DescManifest.Path)
+			log.Fatalf("Did not find dependency name '%s' in manifest %s", pr.Identity, pi.Path)
 		}
 		// All external dep targets are defined at the root
 		l := label.New(repo, "", pr.ProductName)

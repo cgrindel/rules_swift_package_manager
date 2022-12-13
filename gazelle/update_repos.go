@@ -61,7 +61,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	// Key: External dependency identity
 	// Value: Pointer to the dependency's package info
 	depPkgInfoMap := make(map[string]*swiftpkg.PackageInfo)
-	for _, dep := range pi.DumpManifest.Dependencies {
+	for _, dep := range pi.Dependencies {
 		depDir := filepath.Join(pkgDir, swiftPkgBuildDirname, swiftPkgCheckoutsDirname, dep.Identity())
 		if err != nil {
 			result.Error = err

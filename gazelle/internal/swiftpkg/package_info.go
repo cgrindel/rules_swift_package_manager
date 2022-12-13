@@ -2,6 +2,7 @@ package swiftpkg
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdesc"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
@@ -9,16 +10,6 @@ import (
 )
 
 type PackageInfo struct {
-	// Package directory
-	Dir string
-
-	// Info from the dump
-	DumpManifest *spdump.Manifest
-
-	// Info from the describe
-	DescManifest *spdesc.Manifest
-
-	// Package attributes from manifests
 	Name         string
 	DisplayName  string
 	Path         string
@@ -82,10 +73,6 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 	}
 
 	return &PackageInfo{
-		// TODO(chuck): Remove Dir, DumpManifest, DescManifest
-		Dir:          dir,
-		DumpManifest: dumpManifest,
-		DescManifest: descManifest,
 		Name:         descManifest.Name,
 		DisplayName:  descManifest.ManifestDisplayName,
 		Path:         descManifest.Path,
@@ -95,4 +82,37 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 		Products:     products,
 		Dependencies: deps,
 	}, nil
+}
+
+// Returns a uniq slice of the product references used in the manifest
+func (pi *PackageInfo) ProductReferences() []*ProductReference {
+	prs := make(map[string]*ProductReference)
+
+	addProdRef := func(pr *ProductReference) {
+		if pr == nil {
+			return
+		}
+		uk := pr.UniqKey()
+		if _, ok := prs[uk]; !ok {
+			prs[uk] = pr
+		}
+	}
+
+	for _, t := range pi.Targets {
+		for _, td := range t.Dependencies {
+			addProdRef(td.Product)
+		}
+	}
+
+	keys := make([]string, 0, len(prs))
+	for k := range prs {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	result := make([]*ProductReference, 0, len(prs))
+	for _, k := range keys {
+		result = append(result, prs[k])
+	}
+	return result
 }
