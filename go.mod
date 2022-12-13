@@ -6,7 +6,7 @@ require (
 	github.com/bazelbuild/bazel-gazelle v0.28.0
 	github.com/hashicorp/go-multierror v1.1.1
 	github.com/stretchr/testify v1.8.1
-	golang.org/x/exp v0.0.0-20221211140036-ad323defaf05
+	golang.org/x/exp v0.0.0-20221212164502-fae10dda9338
 )
 
 require (
