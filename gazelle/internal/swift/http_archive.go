@@ -8,7 +8,6 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/rule"
 )
 
-const httpArchiveRuleKind = "http_archive"
 const buildFileContentAttrName = "build_file_content"
 
 type HTTPArchive struct {
@@ -23,24 +22,7 @@ func NewHTTPArchive(name string, modules []*Module) *HTTPArchive {
 	}
 }
 
-func NewHTTPArchivesFromWkspFile(f *rule.File) ([]*HTTPArchive, error) {
-	var archives []*HTTPArchive
-	for _, r := range f.Rules {
-		if r.Kind() != httpArchiveRuleKind {
-			continue
-		}
-		ha, err := newHTTPArchiveFromRule(r)
-		if err != nil {
-			return nil, err
-		}
-		if ha != nil {
-			archives = append(archives, ha)
-		}
-	}
-	return archives, nil
-}
-
-func newHTTPArchiveFromRule(r *rule.Rule) (*HTTPArchive, error) {
+func NewHTTPArchiveFromRule(r *rule.Rule) (*HTTPArchive, error) {
 	bldFileContent := r.AttrString(buildFileContentAttrName)
 	if bldFileContent == "" {
 		return nil, nil

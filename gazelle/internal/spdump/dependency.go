@@ -9,6 +9,7 @@ import (
 )
 
 type Dependency struct {
+	// TODO(chuck): Change Name to Identity
 	Name        string
 	URL         string
 	Requirement DependencyRequirement

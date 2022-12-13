@@ -33,7 +33,6 @@ go_library(
         "//gazelle/internal/swiftbin",
         "//gazelle/internal/swiftcfg",
         "//gazelle/internal/swiftpkg",
-        "//gazelle/internal/wspace",
         "@bazel_gazelle//config:go_default_library",
         "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//language:go_default_library",

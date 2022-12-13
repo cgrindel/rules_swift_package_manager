@@ -12,6 +12,9 @@ tidy(
 
 # MARK: - Gazelle
 
+# Ignore the Swift build folder
+# gazelle:exclude .build
+
 gazelle_binary(
     name = "gazelle_bin",
     languages = [
@@ -22,9 +25,6 @@ gazelle_binary(
 
 gazelle(
     name = "update_build_files",
-    extra_args = [
-        "-gen_from_pkg_manifest",
-    ],
     gazelle = ":gazelle_bin",
 )
 
@@ -44,9 +44,4 @@ bzl_library(
     srcs = ["swift_deps.bzl"],
     visibility = ["//visibility:public"],
     deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
-)
-
-alias(
-    name = "sayhello",
-    actual = "//Sources/MyExecutable",
 )

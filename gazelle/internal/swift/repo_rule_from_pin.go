@@ -11,7 +11,8 @@ type commitProvider interface {
 	Commit() string
 }
 
-func RepoRuleFromPin(p *spreso.Pin) (*rule.Rule, error) {
+// The modules parameter is a map of the module name (key) to the relative Bazel label (value).
+func RepoRuleFromPin(p *spreso.Pin, modules map[string]string) (*rule.Rule, error) {
 	repoName, err := RepoNameFromPin(p)
 	if err != nil {
 		return nil, err
@@ -24,6 +25,7 @@ func RepoRuleFromPin(p *spreso.Pin) (*rule.Rule, error) {
 	r := rule.NewRule(SwiftPkgRuleKind, repoName)
 	r.SetAttr("commit", cp.Commit())
 	r.SetAttr("remote", p.PkgRef.Remote())
+	r.SetAttr("modules", modules)
 
 	switch t := p.State.(type) {
 	case *spreso.VersionPinState:

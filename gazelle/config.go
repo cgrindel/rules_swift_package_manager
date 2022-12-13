@@ -2,17 +2,14 @@ package gazelle
 
 import (
 	"flag"
-	"fmt"
 	"log"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/label"
-	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/wspace"
 )
 
 // Register Flags
@@ -40,6 +37,7 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	var err error
 	sc := swiftcfg.GetSwiftConfig(c)
+	mi := sc.ModuleIndex
 
 	// GH021: Add flag so that the client can tell us which Swift to use.
 
@@ -49,20 +47,18 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	}
 	sb := sc.SwiftBin()
 
-	shouldProcWkspFile := true
 	if sc.GenFromPkgManifest {
 		if pi, err := swiftpkg.NewPackageInfo(sb, c.RepoRoot); err != nil {
 			return err
 		} else if pi != nil {
-			shouldProcWkspFile = false
 			sc.PackageInfo = pi
-			findExternalDepsInManifest(sc.ModuleIndex, pi)
+			indexExtDepsInManifest(mi, pi)
 		}
 	}
 
-	if shouldProcWkspFile {
-		// Look for http_archive declarations with Swift declarations.
-		if err = findExternalDepsInWorkspace(sc.ModuleIndex, c.RepoRoot); err != nil {
+	// All of the repository rules have been loaded into c.Repos. Process them.
+	for _, r := range c.Repos {
+		if err := mi.IndexRepoRule(r); err != nil {
 			return err
 		}
 	}
@@ -70,27 +66,7 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	return nil
 }
 
-func findExternalDepsInWorkspace(mi *swift.ModuleIndex, repoRoot string) error {
-	wkspFilePath := wspace.FindWORKSPACEFile(repoRoot)
-	wkspFile, err := rule.LoadWorkspaceFile(wkspFilePath, "")
-	if err != nil {
-		return fmt.Errorf("failed to load WORKSPACE file %v: %w", wkspFilePath, err)
-	}
-	archives, err := swift.NewHTTPArchivesFromWkspFile(wkspFile)
-	if err != nil {
-		return fmt.Errorf(
-			"failed to retrieve archives from workspace file %v: %w",
-			wkspFilePath,
-			err,
-		)
-	}
-	for _, archive := range archives {
-		mi.AddModules(archive.Modules...)
-	}
-	return nil
-}
-
-func findExternalDepsInManifest(mi *swift.ModuleIndex, pi *swiftpkg.PackageInfo) {
+func indexExtDepsInManifest(mi *swift.ModuleIndex, pi *swiftpkg.PackageInfo) {
 	var err error
 	dump := pi.DumpManifest
 

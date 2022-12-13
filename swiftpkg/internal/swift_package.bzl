@@ -245,11 +245,22 @@ package description generation)\
     ),
 }
 
+_SWIFT_ATTRS = {
+    "modules": attr.string_dict(
+        doc = """\
+Maps the module names (key) exported by the package to their Bazel label \
+(value). The map is not used internal to the rule. Intead, it used by the \
+gazelle plugin to resolve external dependencies.\
+""",
+    ),
+}
+
 _COMMON_ATTRS = dicts.add(
     _PATCH_ATTRS,
     _WORKSPACE_AND_BUILD_FILE_ATTRS,
     _GIT_ATTRS,
     _ENV_ATTRS,
+    _SWIFT_ATTRS,
 )
 
 swift_package = repository_rule(

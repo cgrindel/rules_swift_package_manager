@@ -34,7 +34,7 @@ func rulesForSwiftProduct(
 			targetName, product.Name)
 		return nil
 	}
-	actual := bazelLabelFromTarget(target)
+	actual := BazelLabelFromTarget("", target)
 	r := aliasRule(product.Name, actual)
 	return []*rule.Rule{r}
 }
