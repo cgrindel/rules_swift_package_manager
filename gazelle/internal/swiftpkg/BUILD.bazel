@@ -19,7 +19,6 @@ go_library(
 go_test(
     name = "swiftpkg_test",
     srcs = [
-        "exported_targets_test.go",
         "package_info_test.go",
     ],
     # The PackageInfo tests use SwiftBin to create an actual Swift package. To use Swift, the test
