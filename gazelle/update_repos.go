@@ -92,14 +92,6 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	return importReposFromResolvedPackage(depPkgInfoMap, resolvedPkgPath)
 }
 
-// func collectModuleInfoFromSwiftPkg(, pkgDir string, repoName string) error {
-// 	// DEBUG BEGIN
-// 	log.Printf("*** CHUCK: collectModuleInfoFromSwiftPkg repoName: %+#v", repoName)
-// 	log.Printf("*** CHUCK: collectModuleInfoFromSwiftPkg pkgDir: %+#v", pkgDir)
-// 	// DEBUG END
-// 	return nil
-// }
-
 func importReposFromResolvedPackage(
 	depPkgInfoMap map[string]*swiftpkg.PackageInfo,
 	resolvedPkgPath string,

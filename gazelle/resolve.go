@@ -13,11 +13,6 @@ import (
 )
 
 func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: ----")
-	log.Printf("*** CHUCK: Imports f.Path: %+#v", f.Path)
-	log.Printf("*** CHUCK: Imports r: %+#v", r)
-	// DEBUG END
 	if !swift.IsSwiftRuleKind(r.Kind()) {
 		// Do not index
 		return nil

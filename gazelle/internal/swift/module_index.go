@@ -1,8 +1,6 @@
 package swift
 
 import (
-	"log"
-
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 )
@@ -28,14 +26,6 @@ func (mi *ModuleIndex) AddModule(m *Module) {
 // Find the module given the Bazel repo name and the Swift module name.
 func (mi *ModuleIndex) Resolve(repoName, moduleName string) *Module {
 	modules := mi.index[moduleName]
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: Resovle ------")
-	log.Printf("*** CHUCK: Resolve moduleName: %+#v", moduleName)
-	log.Printf("*** CHUCK: Resolve modules: ")
-	for idx, item := range modules {
-		log.Printf("*** CHUCK %d: %+#v", idx, item)
-	}
-	// DEBUG END
 	if len(modules) == 0 {
 		return nil
 	}

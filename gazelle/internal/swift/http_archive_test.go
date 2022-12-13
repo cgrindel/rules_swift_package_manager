@@ -9,16 +9,19 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewHTTPArchivesFromWkspFile(t *testing.T) {
+func TestNewHTTPArchiveFromRule(t *testing.T) {
 	f, err := rule.LoadWorkspaceData("/path/to/project/WORKSPACE", "",
 		[]byte(sampleWorkspaceFileContent))
 	assert.NoError(t, err)
 
-	archives, err := swift.NewHTTPArchivesFromWkspFile(f)
-	assert.NoError(t, err)
-	assert.Len(t, archives, 2)
+	assert.Len(t, f.Rules, 3)
 
-	actual := archives[0]
+	actual, err := swift.NewHTTPArchiveFromRule(f.Rules[0])
+	assert.NoError(t, err)
+	assert.Nil(t, actual)
+
+	actual, err = swift.NewHTTPArchiveFromRule(f.Rules[1])
+	assert.NoError(t, err)
 	expected := swift.NewHTTPArchive(
 		"com_github_apple_swift_collections",
 		[]*swift.Module{
@@ -38,7 +41,8 @@ func TestNewHTTPArchivesFromWkspFile(t *testing.T) {
 	)
 	assert.Equal(t, expected, actual)
 
-	actual = archives[1]
+	actual, err = swift.NewHTTPArchiveFromRule(f.Rules[2])
+	assert.NoError(t, err)
 	expected = swift.NewHTTPArchive(
 		"com_github_apple_swift_argument_parser",
 		[]*swift.Module{
