@@ -12,11 +12,17 @@ func TestNewManifestFromJSON(t *testing.T) {
 		Name: "MySwiftPackage",
 		Dependencies: []spdump.Dependency{
 			{
-				Name: "swift-argument-parser",
-				URL:  "https://github.com/apple/swift-argument-parser",
-				Requirement: spdump.DependencyRequirement{
-					Range: []spdump.VersionRange{
-						{LowerBound: "1.2.0", UpperBound: "2.0.0"},
+				SourceControl: &spdump.SourceControl{
+					Identity: "swift-argument-parser",
+					Location: &spdump.SourceControlLocation{
+						Remote: &spdump.RemoteLocation{
+							URL: "https://github.com/apple/swift-argument-parser",
+						},
+					},
+					Requirement: &spdump.DependencyRequirement{
+						Range: []*spdump.VersionRange{
+							&spdump.VersionRange{LowerBound: "1.2.0", UpperBound: "2.0.0"},
+						},
 					},
 				},
 			},

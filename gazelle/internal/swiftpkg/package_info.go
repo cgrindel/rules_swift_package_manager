@@ -85,5 +85,7 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 		Targets:      targets,
 		Platforms:    platforms,
 		Products:     products,
+		// TODO(chuck): IMPLEMENT ME!
+		// Dependencies: deps,
 	}, nil
 }
