@@ -4,8 +4,13 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 go_library(
     name = "swiftpkg",
     srcs = [
+        "dependency.go",
         "exported_targets.go",
         "package_info.go",
+        "platform.go",
+        "product.go",
+        "target.go",
+        "target_dependency.go",
     ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg",
     visibility = ["//gazelle:__subpackages__"],
