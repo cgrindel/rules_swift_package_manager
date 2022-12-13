@@ -64,11 +64,22 @@ bazel_integration_tests(
     workspace_path = "pkg_manifest",
 )
 
+bazel_integration_tests(
+    name = "pkg_manifest_minimal_test",
+    bazel_versions = SUPPORTED_BAZEL_VERSIONS,
+    test_runner = ":pkg_manifest_test_runner",
+    workspace_files = integration_test_utils.glob_workspace_files("pkg_manifest_minimal") + [
+        "//:local_repository_files",
+    ],
+    workspace_path = "pkg_manifest_minimal",
+)
+
 # MARK: - Test Suites
 
 _test_base_names = [
     "http_archive_ext_deps_test",
     "pkg_manifest_test",
+    "pkg_manifest_minimal_test",
 ]
 
 _smoke_test_names = [
