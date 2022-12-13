@@ -17,6 +17,7 @@ go_library(
         "module_type.go",
         "repo_name.go",
         "repo_rule_from_pin.go",
+        "rule_attr_string_dict.go",
         "rule_kinds.go",
         "rules_common.go",
         "rules_from_manifest.go",
@@ -35,6 +36,7 @@ go_library(
         "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//language:go_default_library",
         "@bazel_gazelle//rule:go_default_library",
+        "@com_github_bazelbuild_buildtools//build:go_default_library",
     ],
 )
 
@@ -57,7 +59,6 @@ go_test(
         "//gazelle/internal/spreso",
         "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//rule:go_default_library",
-        "@com_github_bazelbuild_buildtools//build:go_default_library",
         "@com_github_stretchr_testify//assert",
     ],
 )

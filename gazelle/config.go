@@ -2,17 +2,14 @@ package gazelle
 
 import (
 	"flag"
-	"fmt"
 	"log"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/label"
-	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/wspace"
 )
 
 // Register Flags
@@ -40,6 +37,7 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	var err error
 	sc := swiftcfg.GetSwiftConfig(c)
+	mi := sc.ModuleIndex
 
 	// GH021: Add flag so that the client can tell us which Swift to use.
 
@@ -49,61 +47,133 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	}
 	sb := sc.SwiftBin()
 
-	shouldProcWkspFile := true
 	if sc.GenFromPkgManifest {
 		if pi, err := swiftpkg.NewPackageInfo(sb, c.RepoRoot); err != nil {
 			return err
 		} else if pi != nil {
-			shouldProcWkspFile = false
 			sc.PackageInfo = pi
-			findExternalDepsInManifest(sc.ModuleIndex, pi)
+			indexExtDepsInManifest(mi, pi)
 		}
 	}
 
-	if shouldProcWkspFile {
-		// Look for http_archive declarations with Swift declarations.
-		if err = findExternalDepsInWorkspace(sc.ModuleIndex, c.RepoRoot); err != nil {
+	// All of the repository rules have been loaded into c.Repos. Process them.
+	for _, r := range c.Repos {
+		if err := mi.IndexRepoRule(r); err != nil {
 			return err
 		}
 	}
 
-	return nil
-}
-
-func findExternalDepsInWorkspace(mi *swift.ModuleIndex, repoRoot string) error {
-	wkspFilePath := wspace.FindWORKSPACEFile(repoRoot)
-	wkspFile, err := rule.LoadWorkspaceFile(wkspFilePath, "")
-	if err != nil {
-		return fmt.Errorf("failed to load WORKSPACE file %v: %w", wkspFilePath, err)
-	}
 	// DEBUG BEGIN
-	log.Printf("*** CHUCK: wkspFile.Loads: ")
-	for idx, item := range wkspFile.Loads {
+	log.Printf("*** CHUCK: CheckFlags mi.ModuleNames(): ")
+	for idx, item := range mi.ModuleNames() {
 		log.Printf("*** CHUCK %d: %+#v", idx, item)
 	}
 	// DEBUG END
-	if err := processHTTPArchives(mi, wkspFile); err != nil {
-		return err
-	}
+
 	return nil
 }
 
-func processHTTPArchives(mi *swift.ModuleIndex, wkspFile *rule.File) error {
-	archives, err := swift.NewHTTPArchivesFromWkspFile(wkspFile)
-	if err != nil {
-		return fmt.Errorf(
-			"failed to retrieve archives from workspace file %v: %w",
-			wkspFile.Path,
-			err,
-		)
-	}
-	for _, archive := range archives {
-		mi.AddModules(archive.Modules...)
-	}
-	return nil
-}
+// func findExternalDepsInWorkspace(c *config.Config, mi *swift.ModuleIndex, repoRoot string) error {
+// 	wkspFilePath := wspace.FindWORKSPACEFile(repoRoot)
+// 	wkspFile, err := rule.LoadWorkspaceFile(wkspFilePath, "")
+// 	if err != nil {
+// 		return fmt.Errorf("failed to load WORKSPACE file %v: %w", wkspFilePath, err)
+// 	}
+// 	// DEBUG BEGIN
+// 	log.Printf("*** CHUCK: findExternalDepsInWorkspace len(c.Repos): %+#v", len(c.Repos))
+// 	log.Printf("*** CHUCK: findExternalDepsInWorkspace c.Repos: ")
+// 	for idx, item := range c.Repos {
+// 		log.Printf("*** CHUCK %d: %+#v", idx, item)
+// 	}
+// 	// DEBUG END
+// 	// repoRules, err := findRepoRulesInWorkspaceFile(c.RepoRoot, wkspFile)
+// 	// if err != nil {
+// 	// 	return err
+// 	// }
+// 	// c.Repos = append(c.Repos, repoRules...)
+// 	// TODO(chuck): Add all modules from swift_package repo rules to module index.
 
-func findExternalDepsInManifest(mi *swift.ModuleIndex, pi *swiftpkg.PackageInfo) {
+// 	if err := processHTTPArchives(mi, wkspFile); err != nil {
+// 		return err
+// 	}
+
+// 	// DEBUG BEGIN
+// 	log.Printf("*** findExternalDepsInWorkspace CHUCK: c.Repos: ")
+// 	for idx, item := range c.Repos {
+// 		log.Printf("*** CHUCK %d: %+#v", idx, item)
+// 	}
+// 	// DEBUG END
+// 	return nil
+// }
+
+// func findRepoRulesInWorkspaceFile(repoRoot string, wkspFile *rule.File) ([]*rule.Rule, error) {
+// 	// Check for any swift_package declarations in the workspace file.
+// 	repoRules := findSwiftPkgRules(wkspFile.Rules)
+
+// 	// DEBUG BEGIN
+// 	log.Printf("*** CHUCK: findRepoRulesInWorkspaceFile repoRules: ")
+// 	for idx, item := range repoRules {
+// 		log.Printf("*** CHUCK %d: %+#v", idx, item)
+// 	}
+// 	// DEBUG END
+
+// 	// // Check for any swift_package declarations in a file declared by repository_macro
+// 	// for _, d := range wkspFile.Directives {
+// 	// 	switch d.Key {
+// 	// 	case "repository_macro":
+// 	// 		parsed, err := repo.ParseRepositoryMacroDirective(d.Value)
+// 	// 		if err != nil {
+// 	// 			return nil, err
+// 	// 		}
+// 	// 		rulesFromMacros, err := findExtDepsInRepoMacro(repoRoot, parsed)
+// 	// 		if err != nil {
+// 	// 			return nil, err
+// 	// 		}
+// 	// 		repoRules = append(repoRules, rulesFromMacros...)
+// 	// 	}
+// 	// }
+
+// 	return repoRules, nil
+// }
+
+// func findExtDepsInRepoMacro(repoRoot string, rm *repo.RepoMacro) ([]*rule.Rule, error) {
+// 	macroPath := filepath.Join(repoRoot, rm.Path)
+// 	// DEBUG BEGIN
+// 	log.Printf("*** CHUCK: findExtDepsInRepoMacro macroPath: %+#v", macroPath)
+// 	// DEBUG END
+// 	macroFile, err := rule.LoadMacroFile(macroPath, "", rm.DefName)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return findSwiftPkgRules(macroFile.Rules), nil
+// }
+
+// func findSwiftPkgRules(rules []*rule.Rule) []*rule.Rule {
+// 	var repoRules []*rule.Rule
+// 	for _, r := range rules {
+// 		if r.Kind() == swift.SwiftPkgRuleKind {
+// 			repoRules = append(repoRules, r)
+// 		}
+// 	}
+// 	return repoRules
+// }
+
+// func processHTTPArchives(mi *swift.ModuleIndex, wkspFile *rule.File) error {
+// 	archives, err := swift.NewHTTPArchivesFromWkspFile(wkspFile)
+// 	if err != nil {
+// 		return fmt.Errorf(
+// 			"failed to retrieve archives from workspace file %v: %w",
+// 			wkspFile.Path,
+// 			err,
+// 		)
+// 	}
+// 	for _, archive := range archives {
+// 		mi.AddModules(archive.Modules...)
+// 	}
+// 	return nil
+// }
+
+func indexExtDepsInManifest(mi *swift.ModuleIndex, pi *swiftpkg.PackageInfo) {
 	var err error
 	dump := pi.DumpManifest
 
