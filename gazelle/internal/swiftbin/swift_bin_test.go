@@ -50,31 +50,6 @@ func TestSwiftBin(t *testing.T) {
 
 	})
 
-	// func TestResolvePackage(t *testing.T) {
-	// 	// Create temp dir
-	// 	dir, err := os.MkdirTemp("", "swiftbin")
-	// 	assert.NoError(t, err)
-	// 	defer os.RemoveAll(dir)
-
-	// 	// Find Swift
-	// 	binPath, err := swiftbin.FindSwiftBinPath()
-	// 	assert.NoError(t, err)
-	// 	sb := swiftbin.NewSwiftBin(binPath)
-
-	// 	// Init a package
-	// 	pkgName := "MyPackage"
-	// 	err = sb.InitPackage(dir, pkgName, "library")
-	// 	assert.NoError(t, err)
-
-	// 	// Write a package manfiest
-
-	// 	// Resolve the package
-	// 	err = sb.ResolvePackage(dir)
-	// 	assert.NoError(t, err)
-	// 	resolvedPkgPath := filepath.Join(dir, "Pacakge.resolved")
-	// 	assert.FileExists(t, resolvedPkgPath)
-	// }
-
 	t.Run("package resolve", func(t *testing.T) {
 		// Create temp dir
 		dir, err := os.MkdirTemp("", "swiftbin")
