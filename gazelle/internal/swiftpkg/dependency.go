@@ -10,6 +10,13 @@ type Dependency struct {
 	SourceControl *SourceControl
 }
 
+func NewDependencyFromManifestInfo(dumpD *spdump.Dependency) (*Dependency, error) {
+	srcCtrl := NewSourceControlFromManifestInfo(dumpD.SourceControl)
+	return &Dependency{
+		SourceControl: srcCtrl,
+	}, nil
+}
+
 func (d *Dependency) Identity() string {
 	if d.SourceControl != nil {
 		return d.SourceControl.Identity
@@ -18,24 +25,69 @@ func (d *Dependency) Identity() string {
 	return ""
 }
 
-func NewDependencyFromManifestInfo(dumpD *spdump.Dependency) (*Dependency, error) {
-	// TODO(chuck): IMPLEMENT ME!
-	return nil, nil
-}
+// SourceControl
 
 type SourceControl struct {
 	Identity    string
-	URL         string
-	Requirement DependencyRequirement
+	Location    *SourceControlLocation
+	Requirement *DependencyRequirement
 }
 
-// Requirement
+func NewSourceControlFromManifestInfo(dumpSC *spdump.SourceControl) *SourceControl {
+	return &SourceControl{
+		Identity:    dumpSC.Identity,
+		Location:    NewSourceControlLocationFromManifestInfo(dumpSC.Location),
+		Requirement: NewDependencyRequirementFromManifestInfo(dumpSC.Requirement),
+	}
+}
+
+type SourceControlLocation struct {
+	Remote *RemoteLocation
+}
+
+func NewSourceControlLocationFromManifestInfo(dumpL *spdump.SourceControlLocation) *SourceControlLocation {
+	return &SourceControlLocation{
+		Remote: NewRemoteLocationFromManifestInfo(dumpL.Remote),
+	}
+}
+
+type RemoteLocation struct {
+	URL string
+}
+
+func NewRemoteLocationFromManifestInfo(rl *spdump.RemoteLocation) *RemoteLocation {
+	return &RemoteLocation{
+		URL: rl.URL,
+	}
+}
+
+// DependencyRequirement
 
 type DependencyRequirement struct {
-	Range []VersionRange
+	Ranges []*VersionRange
 }
+
+func NewDependencyRequirementFromManifestInfo(dr *spdump.DependencyRequirement) *DependencyRequirement {
+	ranges := make([]*VersionRange, len(dr.Ranges))
+	for idx, r := range dr.Ranges {
+		ranges[idx] = NewVersionRangeFromManifestInfo(r)
+	}
+
+	return &DependencyRequirement{
+		Ranges: ranges,
+	}
+}
+
+// VersionRange
 
 type VersionRange struct {
 	LowerBound string
 	UpperBound string
+}
+
+func NewVersionRangeFromManifestInfo(vr *spdump.VersionRange) *VersionRange {
+	return &VersionRange{
+		LowerBound: vr.LowerBound,
+		UpperBound: vr.UpperBound,
+	}
 }

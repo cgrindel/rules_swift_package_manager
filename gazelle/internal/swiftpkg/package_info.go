@@ -73,6 +73,14 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 		}
 	}
 
+	deps := make([]*Dependency, len(dumpManifest.Dependencies))
+	for idx, d := range dumpManifest.Dependencies {
+		deps[idx], err = NewDependencyFromManifestInfo(&d)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create dependency: %w", err)
+		}
+	}
+
 	return &PackageInfo{
 		// TODO(chuck): Remove Dir, DumpManifest, DescManifest
 		Dir:          dir,
@@ -85,7 +93,6 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 		Targets:      targets,
 		Platforms:    platforms,
 		Products:     products,
-		// TODO(chuck): IMPLEMENT ME!
-		// Dependencies: deps,
+		Dependencies: deps,
 	}, nil
 }

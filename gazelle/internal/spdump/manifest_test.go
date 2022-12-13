@@ -20,7 +20,7 @@ func TestNewManifestFromJSON(t *testing.T) {
 						},
 					},
 					Requirement: &spdump.DependencyRequirement{
-						Range: []*spdump.VersionRange{
+						Ranges: []*spdump.VersionRange{
 							&spdump.VersionRange{LowerBound: "1.2.0", UpperBound: "2.0.0"},
 						},
 					},
