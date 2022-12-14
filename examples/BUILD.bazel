@@ -42,29 +42,6 @@ bazel_integration_tests(
 # MARK: - Package Manifest example
 
 sh_binary(
-    name = "pkg_manifest_test_runner",
-    testonly = True,
-    srcs = ["pkg_manifest_test_runner.sh"],
-    data = [
-        "@contrib_rules_bazel_integration_test//tools:create_scratch_dir",
-    ],
-    deps = [
-        "@bazel_tools//tools/bash/runfiles",
-        "@cgrindel_bazel_starlib//shlib/lib:assertions",
-    ],
-)
-
-bazel_integration_tests(
-    name = "pkg_manifest_test",
-    bazel_versions = SUPPORTED_BAZEL_VERSIONS,
-    test_runner = ":pkg_manifest_test_runner",
-    workspace_files = integration_test_utils.glob_workspace_files("pkg_manifest") + [
-        "//:local_repository_files",
-    ],
-    workspace_path = "pkg_manifest",
-)
-
-sh_binary(
     name = "pkg_manifest_minimal_test_runner",
     testonly = True,
     srcs = ["pkg_manifest_minimal_test_runner.sh"],
@@ -91,7 +68,6 @@ bazel_integration_tests(
 
 _test_base_names = [
     "http_archive_ext_deps_test",
-    "pkg_manifest_test",
     "pkg_manifest_minimal_test",
 ]
 
