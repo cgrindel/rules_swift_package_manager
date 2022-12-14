@@ -35,7 +35,6 @@ go_test(
     ],
     deps = [
         ":swiftcfg",
-        "//gazelle/internal/spdesc",
         "//gazelle/internal/swiftbin",
         "//gazelle/internal/swiftpkg",
         "@bazel_gazelle//config:go_default_library",
