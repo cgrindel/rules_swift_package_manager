@@ -75,6 +75,15 @@ def _update_git_attrs(orig, keys, override):
 def _gen_build_files(repository_ctx, pkg_info):
     repo_name = repository_ctx.name
 
+    module_index = _load_module_index(repository_ctx)
+
+    # DEBUG BEGIN
+    print("*** CHUCK module_index: ")
+    for key in module_index:
+        print("*** CHUCK", key, ":", module_index[key])
+
+    # DEBUG END
+
     # Create build files for each Swift package target in their corresponding
     # target path.
     for target in pkg_info.targets:
@@ -94,6 +103,10 @@ def _gen_build_files(repository_ctx, pkg_info):
     # Create a build file at the root with all of the products
     bld_file = swiftpkg_build_files.new_for_products(pkg_info, repo_name)
     build_files.write(repository_ctx, bld_file, pkg_info.path)
+
+def _load_module_index(repository_ctx):
+    json_str = repository_ctx.read(repository_ctx.attr.module_index)
+    return json.decode(json_str)
 
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))

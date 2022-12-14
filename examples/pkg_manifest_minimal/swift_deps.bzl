@@ -5,16 +5,10 @@ def swift_dependencies():
     swift_package(
         name = "apple_swift_argument_parser",
         commit = "fddd1c00396eed152c45a46bea9f47b98e59301d",
-        module_index = "module_index.json",
+        module_index = "@//:module_index.json",
         modules = {
             "ArgumentParser": "//Sources/ArgumentParser",
             "Generate_Manual": "//Plugins/GenerateManualPlugin:Generate Manual",
-            "changelog_authors": "//Tools/changelog-authors",
-            "count_lines": "//Examples/count-lines",
-            "generate_manual": "//Tools/generate-manual",
-            "math": "//Examples/math",
-            "repeat": "//Examples/repeat",
-            "roll": "//Examples/roll",
         },
         remote = "https://github.com/apple/swift-argument-parser",
     )
@@ -23,7 +17,7 @@ def swift_dependencies():
     swift_package(
         name = "apple_swift_log",
         commit = "6fe203dc33195667ce1759bf0182975e4653ba1c",
-        module_index = "module_index.json",
+        module_index = "@//:module_index.json",
         modules = {
             "Logging": "//Sources/Logging",
         },

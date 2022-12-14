@@ -7,23 +7,5 @@
   ],
   "Logging": [
     "@apple_swift_log//Sources/Logging"
-  ],
-  "changelog_authors": [
-    "@apple_swift_argument_parser//Tools/changelog-authors"
-  ],
-  "count_lines": [
-    "@apple_swift_argument_parser//Examples/count-lines"
-  ],
-  "generate_manual": [
-    "@apple_swift_argument_parser//Tools/generate-manual"
-  ],
-  "math": [
-    "@apple_swift_argument_parser//Examples/math"
-  ],
-  "repeat": [
-    "@apple_swift_argument_parser//Examples/repeat"
-  ],
-  "roll": [
-    "@apple_swift_argument_parser//Examples/roll"
   ]
 }
