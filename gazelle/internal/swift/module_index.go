@@ -8,24 +8,24 @@ import (
 type ModuleIndex struct {
 	// Key: Module name
 	// Value: Slice of module pointers
-	index map[string][]*Module
+	byName map[string][]*Module
 }
 
 func NewModuleIndex() *ModuleIndex {
 	return &ModuleIndex{
-		index: make(map[string][]*Module),
+		byName: make(map[string][]*Module),
 	}
 }
 
 func (mi *ModuleIndex) AddModule(m *Module) {
-	modules := mi.index[m.Name]
+	modules := mi.byName[m.Name]
 	modules = append(modules, m)
-	mi.index[m.Name] = modules
+	mi.byName[m.Name] = modules
 }
 
 // Find the module given the Bazel repo name and the Swift module name.
 func (mi *ModuleIndex) Resolve(repoName, moduleName string) *Module {
-	modules := mi.index[moduleName]
+	modules := mi.byName[moduleName]
 	if len(modules) == 0 {
 		return nil
 	}
@@ -40,9 +40,9 @@ func (mi *ModuleIndex) Resolve(repoName, moduleName string) *Module {
 }
 
 func (mi *ModuleIndex) ModuleNames() []string {
-	names := make([]string, len(mi.index))
+	names := make([]string, len(mi.byName))
 	idx := 0
-	for modName := range mi.index {
+	for modName := range mi.byName {
 		names[idx] = modName
 		idx++
 	}
@@ -93,4 +93,16 @@ func (mi *ModuleIndex) indexHTTPArchive(r *rule.Rule) error {
 	}
 	mi.AddModules(ha.Modules...)
 	return nil
+}
+
+func (mi *ModuleIndex) BazelMap() map[string][]string {
+	bzlMap := make(map[string][]string)
+	for modName, mods := range mi.byName {
+		labels := make([]string, len(mods))
+		for idx, mod := range mods {
+			labels[idx] = mod.Label.String()
+		}
+		bzlMap[modName] = labels
+	}
+	return bzlMap
 }

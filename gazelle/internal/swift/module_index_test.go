@@ -28,4 +28,11 @@ func TestModuleIndex(t *testing.T) {
 
 	actual = mi.Resolve("another_repo", "Foo")
 	assert.Equal(t, anotherRepoFooM, actual)
+
+	bzlMap := mi.BazelMap()
+	expectedBzlMap := map[string][]string{
+		"Foo": []string{"//Sources/Foo", "@another_repo//pkg/path:Foo"},
+		"Bar": []string{"//Sources/Bar"},
+	}
+	assert.Equal(t, expectedBzlMap, bzlMap)
 }
