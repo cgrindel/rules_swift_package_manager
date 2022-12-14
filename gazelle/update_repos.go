@@ -1,6 +1,8 @@
 package gazelle
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -20,6 +22,8 @@ const resolvedPkgBasename = "Package.resolved"
 const pkgManifestBasename = "Package.swift"
 const swiftPkgBuildDirname = ".build"
 const swiftPkgCheckoutsDirname = "checkouts"
+const moduleIndexBasename = "module_index.json"
+const moduleIndexPerms = 0666
 
 func (*swiftLang) CanImport(path string) bool {
 	return isPkgManifest(path)
@@ -75,12 +79,36 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 		depPkgInfoMap[dep.Identity()] = depPkgInfo
 	}
 
+	// Write the module index to a JSON file
+	miPath, err := writeModuleIndex(sc.ModuleIndex, pkgDir)
+	if err != nil {
+		result.Error = err
+		return result
+	}
+
 	resolvedPkgPath := filepath.Join(pkgDir, resolvedPkgBasename)
-	return importReposFromResolvedPackage(depPkgInfoMap, resolvedPkgPath)
+	return importReposFromResolvedPackage(depPkgInfoMap, miPath, resolvedPkgPath)
+}
+
+func writeModuleIndex(mi *swift.ModuleIndex, pkgDir string) (string, error) {
+	b, err := json.Marshal(mi.BazelMap())
+	if err != nil {
+		return "", err
+	}
+	var buf bytes.Buffer
+	err = json.Indent(&buf, b, "", "  ")
+	if err != nil {
+		return "", err
+	}
+
+	miPath := filepath.Join(pkgDir, moduleIndexBasename)
+	os.WriteFile(miPath, buf.Bytes(), moduleIndexPerms)
+	return miPath, nil
 }
 
 func importReposFromResolvedPackage(
 	depPkgInfoMap map[string]*swiftpkg.PackageInfo,
+	miPath string,
 	resolvedPkgPath string,
 ) language.ImportReposResult {
 	result := language.ImportReposResult{}
@@ -115,7 +143,7 @@ func importReposFromResolvedPackage(
 			modules[t.C99name] = swift.BazelLabelFromTarget("", t)
 		}
 
-		result.Gen[idx], err = swift.RepoRuleFromPin(p, modules)
+		result.Gen[idx], err = swift.RepoRuleFromPin(p, modules, moduleIndexBasename)
 		if err != nil {
 			result.Error = err
 			return result

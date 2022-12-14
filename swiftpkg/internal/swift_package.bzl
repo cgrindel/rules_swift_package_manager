@@ -246,6 +246,10 @@ package description generation)\
 }
 
 _SWIFT_ATTRS = {
+    "module_index": attr.label(
+        doc = "The JSON file that contains the module index by name.",
+        mandatory = True,
+    ),
     "modules": attr.string_dict(
         doc = """\
 Maps the module names (key) exported by the package to their Bazel label \
