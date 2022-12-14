@@ -1,6 +1,5 @@
 load("@bazel_gazelle//:def.bzl", "gazelle_binary", "gazelle_generation_test")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
-load("@cgrindel_bazel_starlib//shlib/rules:execute_binary.bzl", "execute_binary")
 load(":test_infos.bzl", "test_infos")
 
 bzlformat_pkg(name = "bzlformat")
@@ -16,13 +15,6 @@ gazelle_binary(
     visibility = ["//visibility:private"],
 )
 
-execute_binary(
-    name = "swift_gazelle_gen_from_pkg_manifest",
-    # arguments = ["--gen_from_pkg_manifest"],
-    arguments = ["-gen_from_pkg_manifest"],
-    binary = ":swift_gazelle",
-)
-
 _DEFAULT_TEST_INFO = test_infos.new(
     timeout = 2,
     binary = ":swift_gazelle",
@@ -30,10 +22,9 @@ _DEFAULT_TEST_INFO = test_infos.new(
 )
 
 _SWIFT_PKG_TEST_INFO = test_infos.new(
-    # CI tests run on low power machines. Need to give it plenty of time to run.
-    timeout = 300,
-    binary = ":swift_gazelle_gen_from_pkg_manifest",
-    local = True,
+    timeout = 2,
+    binary = ":swift_gazelle",
+    local = False,
 )
 
 _GAZELLE_BINARY = {
