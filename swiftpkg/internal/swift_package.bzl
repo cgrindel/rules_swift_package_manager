@@ -106,7 +106,7 @@ def _gen_build_files(repository_ctx, pkg_info):
 
 def _load_module_index(repository_ctx):
     json_str = repository_ctx.read(repository_ctx.attr.module_index)
-    return json.decode(json_str)
+    return module_indexes.new(json_str)
 
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))

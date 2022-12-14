@@ -118,6 +118,13 @@ bzl_library(
 )
 
 bzl_library(
+    name = "module_indexes",
+    srcs = ["module_indexes.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = ["@cgrindel_bazel_starlib//bzllib:defs"],
+)
+
+bzl_library(
     name = "pkginfo_ext_deps",
     srcs = ["pkginfo_ext_deps.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
