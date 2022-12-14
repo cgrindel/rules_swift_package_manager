@@ -12,11 +12,17 @@ func TestNewManifestFromJSON(t *testing.T) {
 		Name: "MySwiftPackage",
 		Dependencies: []spdump.Dependency{
 			{
-				Name: "swift-argument-parser",
-				URL:  "https://github.com/apple/swift-argument-parser",
-				Requirement: spdump.DependencyRequirement{
-					Range: []spdump.VersionRange{
-						{LowerBound: "1.2.0", UpperBound: "2.0.0"},
+				SourceControl: &spdump.SourceControl{
+					Identity: "swift-argument-parser",
+					Location: &spdump.SourceControlLocation{
+						Remote: &spdump.RemoteLocation{
+							URL: "https://github.com/apple/swift-argument-parser",
+						},
+					},
+					Requirement: &spdump.DependencyRequirement{
+						Ranges: []*spdump.VersionRange{
+							&spdump.VersionRange{LowerBound: "1.2.0", UpperBound: "2.0.0"},
+						},
 					},
 				},
 			},
@@ -58,35 +64,6 @@ func TestNewManifestFromJSON(t *testing.T) {
 	manifest, err := spdump.NewManifestFromJSON([]byte(swiftPackageJSONStr))
 	assert.NoError(t, err)
 	assert.Equal(t, expected, manifest)
-}
-
-func TestManifestProductReferences(t *testing.T) {
-	m := spdump.Manifest{
-		Targets: []spdump.Target{
-			{
-				Dependencies: []spdump.TargetDependency{
-					{Product: &spdump.ProductReference{ProductName: "Foo", DependencyName: "repoA"}},
-					{Product: &spdump.ProductReference{ProductName: "Bar", DependencyName: "repoA"}},
-					{Product: &spdump.ProductReference{ProductName: "Chicken", DependencyName: "repoB"}},
-				},
-			},
-			{
-				Dependencies: []spdump.TargetDependency{
-					{Product: &spdump.ProductReference{ProductName: "Foo", DependencyName: "repoA"}},
-					{Product: &spdump.ProductReference{ProductName: "Smidgen", DependencyName: "repoB"}},
-				},
-			},
-		},
-	}
-
-	actual := m.ProductReferences()
-	expected := []*spdump.ProductReference{
-		&spdump.ProductReference{ProductName: "Bar", DependencyName: "repoA"},
-		&spdump.ProductReference{ProductName: "Foo", DependencyName: "repoA"},
-		&spdump.ProductReference{ProductName: "Chicken", DependencyName: "repoB"},
-		&spdump.ProductReference{ProductName: "Smidgen", DependencyName: "repoB"},
-	}
-	assert.Equal(t, expected, actual)
 }
 
 const swiftPackageJSONStr = `

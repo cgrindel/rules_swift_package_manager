@@ -65,16 +65,16 @@ func genRulesFromSwiftPkg(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 	result := language.GenerateResult{}
 
 	// If we are in the Swift product directory (package root), then generate rules for proudcts
-	if args.Dir == sc.PackageInfo.Dir {
+	if args.Dir == sc.PackageInfo.Path {
 		result.Gen = swift.RulesForSwiftProducts(args, sc.PackageInfo)
 		result.Imports = swift.Imports(result.Gen)
 	}
 
 	// Check if we are in a Swift target directory
-	desc := sc.PackageInfo.DescManifest
-	for _, desct := range desc.Targets {
-		if desct.Path == args.Rel {
-			result.Gen = swift.RulesForSwiftTarget(args, sc.PackageInfo, desct.Name)
+	pi := sc.PackageInfo
+	for _, t := range pi.Targets {
+		if t.Path == args.Rel {
+			result.Gen = swift.RulesForSwiftTarget(args, pi, t.Name)
 			result.Imports = swift.Imports(result.Gen)
 		}
 	}

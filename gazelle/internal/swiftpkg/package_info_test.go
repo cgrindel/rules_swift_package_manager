@@ -28,8 +28,35 @@ func TestPackageInfo(t *testing.T) {
 
 		pi, err := swiftpkg.NewPackageInfo(sb, dir)
 		assert.NoError(t, err)
-		assert.Equal(t, dir, pi.Dir)
-		assert.Equal(t, pkgName, pi.DumpManifest.Name)
-		assert.Equal(t, pkgName, pi.DescManifest.Name)
+		assert.Equal(t, pkgName, pi.Name)
 	})
+}
+
+func TestManifestProductReferences(t *testing.T) {
+	m := swiftpkg.PackageInfo{
+		Targets: []*swiftpkg.Target{
+			&swiftpkg.Target{
+				Dependencies: []*swiftpkg.TargetDependency{
+					&swiftpkg.TargetDependency{Product: &swiftpkg.ProductReference{ProductName: "Foo", Identity: "repoA"}},
+					&swiftpkg.TargetDependency{Product: &swiftpkg.ProductReference{ProductName: "Bar", Identity: "repoA"}},
+					&swiftpkg.TargetDependency{Product: &swiftpkg.ProductReference{ProductName: "Chicken", Identity: "repoB"}},
+				},
+			},
+			&swiftpkg.Target{
+				Dependencies: []*swiftpkg.TargetDependency{
+					&swiftpkg.TargetDependency{Product: &swiftpkg.ProductReference{ProductName: "Foo", Identity: "repoA"}},
+					&swiftpkg.TargetDependency{Product: &swiftpkg.ProductReference{ProductName: "Smidgen", Identity: "repoB"}},
+				},
+			},
+		},
+	}
+
+	actual := m.ProductReferences()
+	expected := []*swiftpkg.ProductReference{
+		&swiftpkg.ProductReference{ProductName: "Bar", Identity: "repoA"},
+		&swiftpkg.ProductReference{ProductName: "Foo", Identity: "repoA"},
+		&swiftpkg.ProductReference{ProductName: "Chicken", Identity: "repoB"},
+		&swiftpkg.ProductReference{ProductName: "Smidgen", Identity: "repoB"},
+	}
+	assert.Equal(t, expected, actual)
 }
