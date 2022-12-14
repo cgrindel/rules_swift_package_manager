@@ -8,6 +8,6 @@ swift_binary(
     visibility = ["//visibility:public"],
     deps = [
         "//Sources/MyLibrary",
-        "@apple_swift_argument_parser//:ArgumentParser",
+        "@apple_swift_argument_parser//Sources/ArgumentParser",
     ],
 )

@@ -11,10 +11,7 @@ import (
 const SwiftConfigName = "swift"
 
 type SwiftConfig struct {
-	SwiftBinPath string
-	// If this is true and a Package.swift is found, then use it to generate Bazel build files.
-	GenFromPkgManifest bool
-
+	SwiftBinPath         string
 	ModuleFilesCollector ModuleFilesCollector
 	ModuleIndex          *swift.ModuleIndex
 	PackageInfo          *swiftpkg.PackageInfo

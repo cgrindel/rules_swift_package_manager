@@ -1,4 +1,0 @@
-alias(
-    name = "sayhello",
-    actual = "//Sources/MyExecutable",
-)
