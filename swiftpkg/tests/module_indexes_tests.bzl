@@ -7,7 +7,7 @@ load("//swiftpkg/internal:module_indexes.bzl", "module_indexes")
 def _new_from_json_test(ctx):
     env = unittest.begin(ctx)
 
-    actual = module_indexes.new_from_json(_module_index_json)
+    actual = _module_index
     expected = {
         "ArgumentParser": [
             bazel_labels.new(
@@ -52,20 +52,18 @@ new_from_json_test = unittest.make(_new_from_json_test)
 def _find_test(ctx):
     env = unittest.begin(ctx)
 
-    module_index = module_indexes.new_from_json(_module_index_json)
-
     # Find any label that provides Foo
-    actual = module_indexes.find(module_index, "Foo")
+    actual = module_indexes.find(_module_index, "Foo")
     asserts.equals(env, "@example_cool_repo", actual.repository_name)
     asserts.equals(env, "Foo", actual.name)
 
     # Module not in index
-    actual = module_indexes.find(module_index, "Bar")
+    actual = module_indexes.find(_module_index, "Bar")
     asserts.equals(env, None, actual)
 
     # Preferred repo name exists
     actual = module_indexes.find(
-        module_index,
+        _module_index,
         "Foo",
         preferred_repo_name = "example_another_repo",
     )
@@ -74,7 +72,7 @@ def _find_test(ctx):
 
     # Preferred repo name not found
     actual = module_indexes.find(
-        module_index,
+        _module_index,
         "ArgumentParser",
         preferred_repo_name = "example_another_repo",
     )
@@ -83,7 +81,7 @@ def _find_test(ctx):
 
     # Restrict to repos, found one
     actual = module_indexes.find(
-        module_index,
+        _module_index,
         "Foo",
         restrict_to_repo_names = ["some_other_repo", "example_another_repo"],
     )
@@ -92,7 +90,7 @@ def _find_test(ctx):
 
     # Restrict to repos, not found
     actual = module_indexes.find(
-        module_index,
+        _module_index,
         "Foo",
         restrict_to_repo_names = ["some_other_repo"],
     )
@@ -100,7 +98,7 @@ def _find_test(ctx):
 
     # Preferred repo and restrict to repos, found preferred
     actual = module_indexes.find(
-        module_index,
+        _module_index,
         "Foo",
         preferred_repo_name = "example_cool_repo",
         restrict_to_repo_names = ["example_cool_repo", "example_another_repo"],
@@ -110,7 +108,7 @@ def _find_test(ctx):
 
     # Preferred repo and restrict to repos, found not preferred
     actual = module_indexes.find(
-        module_index,
+        _module_index,
         "Foo",
         preferred_repo_name = "some_other_repo",
         restrict_to_repo_names = ["some_other_repo", "example_another_repo"],
@@ -125,7 +123,14 @@ find_test = unittest.make(_find_test)
 def _find_with_ctx_test(ctx):
     env = unittest.begin(ctx)
 
-    unittest.fail(env, "IMPLEMENT ME!")
+    module_index_ctx = module_indexes.new_ctx(
+        module_index = _module_index,
+        preferred_repo_name = "example_cool_repo",
+        restrict_to_repo_names = ["example_cool_repo", "example_another_repo"],
+    )
+    actual = module_indexes.find_with_ctx(module_index_ctx, "Foo")
+    asserts.equals(env, "@example_cool_repo", actual.repository_name)
+    asserts.equals(env, "Foo", actual.name)
 
     return unittest.end(env)
 
@@ -156,3 +161,5 @@ _module_index_json = """
   ]
 }
 """
+
+_module_index = module_indexes.new_from_json(_module_index_json)
