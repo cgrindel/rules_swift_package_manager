@@ -22,15 +22,15 @@ def make_pkginfo_target_deps(bazel_labels):
             A `string` representing the label for the target dependency.
         """
 
-        # TODO(chuck): Move this outside of this function so that we don't recreate it.
-        restrict_to_repo_names = [
-            pkginfo_ext_deps.repo_name(dep)
-            for dep in pkg_info.dependencies
-        ]
-        if repo_name != None:
-            restrict_to_repo_names.append(repo_name)
-
         if target_dep.by_name:
+            # TODO(chuck): Move this outside of this function so that we don't recreate it.
+            restrict_to_repo_names = [
+                pkginfo_ext_deps.repo_name(dep)
+                for dep in pkg_info.dependencies
+            ]
+            # if repo_name != None:
+            #     restrict_to_repo_names.append(repo_name)
+
             label = module_indexes.find(
                 module_index,
                 module_name = target_dep.by_name.target_name,
@@ -43,19 +43,25 @@ Unable to resolve by_name target dependency for {module_name}.
 """.format(module_name = target_dep.by_name.target_name))
 
         elif target_dep.product:
-            # TODO(chuck): Use the module index to resolve
-
             prod_ref = target_dep.product
             ext_dep = pkginfo_ext_deps.find_by_identity(
                 pkg_info.dependencies,
                 prod_ref.dep_identity,
             )
-            repo_name = bazel_repo_names.from_url(ext_dep.url)
-            label = bazel_labels.new(
-                repository_name = repo_name,
-                package = "",
-                name = prod_ref.product_name,
+            restrict_to_repo_names = [bazel_repo_names.from_url(ext_dep.url)]
+            label = module_indexes.find(
+                module_index,
+                module_name = prod_ref.product_name,
+                restrict_to_repo_names = restrict_to_repo_names,
             )
+            if label == None:
+                fail("""\
+Unable to resolve product reference target dependency for product {prod_name} provided by {dep_id}.
+""".format(
+                    prod_name = prod_ref.product_name,
+                    dep_id = prod_ref.dep_identity,
+                ))
+
         else:
             fail("""\
 Unrecognized target dependency while generating a Bazel dependency label.\

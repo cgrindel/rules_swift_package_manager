@@ -28,7 +28,7 @@ _external_dep = pkginfos.new_dependency(
 )
 _by_name = pkginfos.new_target_reference("Foo")
 _product_ref = pkginfos.new_product_reference(
-    product_name = "Chicken",
+    product_name = "AwesomePackage",
     dep_identity = _external_dep.identity,
 )
 
