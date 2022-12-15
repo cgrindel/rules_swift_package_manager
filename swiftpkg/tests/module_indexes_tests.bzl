@@ -122,11 +122,21 @@ def _find_test(ctx):
 
 find_test = unittest.make(_find_test)
 
+def _find_with_ctx_test(ctx):
+    env = unittest.begin(ctx)
+
+    unittest.fail(env, "IMPLEMENT ME!")
+
+    return unittest.end(env)
+
+find_with_ctx_test = unittest.make(_find_with_ctx_test)
+
 def module_indexes_test_suite():
     return unittest.suite(
         "module_indexes_tests",
         new_from_json_test,
         find_test,
+        find_with_ctx_test,
     )
 
 _module_index_json = """

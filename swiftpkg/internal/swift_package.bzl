@@ -11,7 +11,6 @@ load(
     "workspace_and_buildfile",
 )
 load(":build_files.bzl", "build_files")
-load(":module_indexes.bzl", "module_indexes")
 load(":pkginfos.bzl", "pkginfos")
 load(":spm_versions.bzl", "spm_versions")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
@@ -75,17 +74,24 @@ def _update_git_attrs(orig, keys, override):
 
 def _gen_build_files(repository_ctx, pkg_info):
     repo_name = repository_ctx.name
-    module_index = _load_module_index(repository_ctx)
+
+    # module_index_ctx = pkginfo_module_index_ctxs.new(
+    #     json_str = repository_ctx.read(repository_ctx.attr.module_index),
+    #     repo_name = repo_name,
+    #     pkg_info = pkg_info,
+    # )
+    pkg_ctx = pkg_ctx.new(
+        pkg_info = pkg_info,
+        repo_name = repo_name,
+        module_index_json = repository_ctx.read(
+            repository_ctx.attr.module_index,
+        ),
+    )
 
     # Create build files for each Swift package target in their corresponding
     # target path.
     for target in pkg_info.targets:
-        bld_file = swiftpkg_build_files.new_for_target(
-            pkg_info,
-            module_index,
-            target,
-            repo_name,
-        )
+        bld_file = swiftpkg_build_files.new_for_target(pkg_ctx, target)
         if bld_file == None:
             continue
         build_files.write(
@@ -97,10 +103,6 @@ def _gen_build_files(repository_ctx, pkg_info):
     # Create a build file at the root with all of the products
     bld_file = swiftpkg_build_files.new_for_products(pkg_info, repo_name)
     build_files.write(repository_ctx, bld_file, pkg_info.path)
-
-def _load_module_index(repository_ctx):
-    json_str = repository_ctx.read(repository_ctx.attr.module_index)
-    return module_indexes.new_from_json(json_str)
 
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))

@@ -73,7 +73,24 @@ def _find(
 
     return label
 
+def _new_ctx(module_index, preferred_repo_name = None, restrict_to_repo_names = []):
+    return struct(
+        module_index = module_index,
+        preferred_repo_name = preferred_repo_name,
+        restrict_to_repo_names = restrict_to_repo_names,
+    )
+
+def _find_with_ctx(module_index_ctx, module_name):
+    return _find(
+        module_index = module_index_ctx.module_index,
+        module_name = module_name,
+        preferred_repo_name = module_index_ctx.preferred_repo_name,
+        restrict_to_repo_names = module_index_ctx.restrict_to_repo_names,
+    )
+
 module_indexes = struct(
     new_from_json = _new_from_json,
     find = _find,
+    new_ctx = _new_ctx,
+    find_with_ctx = _find_with_ctx,
 )

@@ -2,7 +2,7 @@
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "make_bazel_labels", "make_stub_workspace_name_resolvers")
-load("//swiftpkg/internal:module_indexes.bzl", "module_indexes")
+load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfo_target_deps.bzl", "make_pkginfo_target_deps")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 
@@ -51,7 +51,7 @@ _pkg_info = pkginfos.new(
     ],
 )
 
-_module_index = module_indexes.new_from_json("""\
+_module_index_json = """\
 {
   "AwesomePackage": [
     "@example_swift_package//:AwesomePackage"
@@ -60,23 +60,20 @@ _module_index = module_indexes.new_from_json("""\
     "@example_swift_package//Source/Foo:Foo"
   ]
 }
-""")
+"""
+
+_pkg_ctx = pkg_ctxs.new(
+    pkg_info = _pkg_info,
+    repo_name = _repo_name,
+    module_index_json = _module_index_json,
+)
 
 def _bazel_label_by_name_test(ctx):
     env = unittest.begin(ctx)
 
     target_dep = pkginfos.new_target_dependency(by_name = _by_name)
 
-    actual = pkginfo_target_deps.bazel_label(_pkg_info, _module_index, target_dep)
-    expected = bazel_labels.normalize("@example_swift_package//Source/Foo:Foo")
-    asserts.equals(env, expected, actual)
-
-    actual = pkginfo_target_deps.bazel_label(
-        _pkg_info,
-        _module_index,
-        target_dep,
-        repo_name = "@my_repo",
-    )
+    actual = pkginfo_target_deps.bazel_label(_pkg_ctx, target_dep)
     expected = bazel_labels.normalize("@example_swift_package//Source/Foo:Foo")
     asserts.equals(env, expected, actual)
 
@@ -88,7 +85,7 @@ def _bazel_label_product_ref_test(ctx):
     env = unittest.begin(ctx)
 
     target_dep = pkginfos.new_target_dependency(product = _product_ref)
-    actual = pkginfo_target_deps.bazel_label(_pkg_info, _module_index, target_dep)
+    actual = pkginfo_target_deps.bazel_label(_pkg_ctx, target_dep)
     expected = bazel_labels.normalize(
         bazel_labels.new(
             repository_name = "example_swift_package",
