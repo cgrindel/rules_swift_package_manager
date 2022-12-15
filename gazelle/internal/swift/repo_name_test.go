@@ -53,3 +53,7 @@ func TestRepoNameFromPin(t *testing.T) {
 		assert.Equal(t, "swift_argument_parser", actual)
 	})
 }
+
+func TestRepoNameFromDep(t *testing.T) {
+	t.Error("IMPLEMENT ME!")
+}

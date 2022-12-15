@@ -3,6 +3,7 @@ package swift
 import (
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 )
 
 type ModuleIndex struct {
@@ -92,6 +93,26 @@ func (mi *ModuleIndex) indexHTTPArchive(r *rule.Rule) error {
 		return nil
 	}
 	mi.AddModules(ha.Modules...)
+	return nil
+}
+
+func (mi *ModuleIndex) IndexPkgInfo(pi *swiftpkg.PackageInfo, repoName string) error {
+	var err error
+
+	// Index targets
+	modules := make([]*Module, len(pi.Targets))
+	for idx, t := range pi.Targets {
+		modules[idx], err = NewModuleFromTarget(repoName, t)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Index products
+	// TODO(chuck): Index products
+
+	mi.AddModules(modules...)
+
 	return nil
 }
 

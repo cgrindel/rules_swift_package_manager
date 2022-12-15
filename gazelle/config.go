@@ -30,6 +30,9 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 		return err
 	}
 
+	// TODO(chuck): I think that I should be loading the index from the file, not looking at the
+	// individual repo rules.
+
 	// All of the repository rules have been loaded into c.Repos. Process them.
 	for _, r := range c.Repos {
 		if err := mi.IndexRepoRule(r); err != nil {

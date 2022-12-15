@@ -3,7 +3,6 @@ package gazelle
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -61,6 +60,11 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 		return result
 	}
 
+	// TODO(chuck): Create a new module index on the swift config and populate it from the
+	// dependencies.
+	mi := swift.NewModuleIndex()
+	sc.ModuleIndex = mi
+
 	// Collect product/module info for each of the dependencies
 	// Key: External dependency identity
 	// Value: Pointer to the dependency's package info
@@ -77,10 +81,18 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 			return result
 		}
 		depPkgInfoMap[dep.Identity()] = depPkgInfo
+
+		// Index the targets in the package
+		repoName, err := swift.RepoNameFromDep(dep)
+		if err != nil {
+			result.Error = err
+			return result
+		}
+		mi.IndexPkgInfo(depPkgInfo, repoName)
 	}
 
 	// Write the module index to a JSON file
-	miPath, err := writeModuleIndex(sc.ModuleIndex, pkgDir)
+	miPath, err := writeModuleIndex(mi, pkgDir)
 	if err != nil {
 		result.Error = err
 		return result
@@ -127,23 +139,23 @@ func importReposFromResolvedPackage(
 
 	result.Gen = make([]*rule.Rule, len(pins))
 	for idx, p := range pins {
-		depPkgInfo, ok := depPkgInfoMap[p.PkgRef.Identity]
-		if !ok {
-			result.Error = fmt.Errorf("did not find package info for %s dep", p.PkgRef.Identity)
-			return result
-		}
-		targets, err := depPkgInfo.ExportedTargets()
-		if err != nil {
-			result.Error = err
-			return result
-		}
+		// depPkgInfo, ok := depPkgInfoMap[p.PkgRef.Identity]
+		// if !ok {
+		// 	result.Error = fmt.Errorf("did not find package info for %s dep", p.PkgRef.Identity)
+		// 	return result
+		// }
+		// targets, err := depPkgInfo.ExportedTargets()
+		// if err != nil {
+		// 	result.Error = err
+		// 	return result
+		// }
 		// Create a map of the module names (key) to relative Bazel label (value)
-		modules := make(map[string]string)
-		for _, t := range targets {
-			modules[t.C99name] = swift.BazelLabelFromTarget("", t)
-		}
+		// modules := make(map[string]string)
+		// for _, t := range targets {
+		// 	modules[t.C99name] = swift.BazelLabelFromTarget("", t)
+		// }
 
-		result.Gen[idx], err = swift.RepoRuleFromPin(p, modules, moduleIndexBasename)
+		result.Gen[idx], err = swift.RepoRuleFromPin(p, moduleIndexBasename)
 		if err != nil {
 			result.Error = err
 			return result
