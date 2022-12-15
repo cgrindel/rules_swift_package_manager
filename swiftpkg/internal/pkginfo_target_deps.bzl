@@ -2,15 +2,17 @@
 
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels")
 load(":bazel_repo_names.bzl", "bazel_repo_names")
+load(":module_indexes.bzl", "module_indexes")
 load(":pkginfo_ext_deps.bzl", "pkginfo_ext_deps")
-load(":pkginfo_targets.bzl", "pkginfo_targets")
 
-def make_pkginfo_target_deps(bazel_labels, pkginfo_targets):
-    def _bazel_label(pkg_info, target_dep, repo_name = None):
+def make_pkginfo_target_deps(bazel_labels):
+    def _bazel_label(pkg_info, module_index, target_dep, repo_name = None):
         """Create a Bazel label string from a target dependency.
 
         Args:
             pkg_info: A `struct` as returned by `pkginfos.new`.
+            module_index: A `struct` as returned by
+                `module_indexes.new_from_json`.
             target_dep: A `struct` as returned by
                 `pkginfos.new_target_dependency`.
             repo_name: The name of the repository as a `string`. This must be
@@ -19,11 +21,30 @@ def make_pkginfo_target_deps(bazel_labels, pkginfo_targets):
         Returns:
             A `string` representing the label for the target dependency.
         """
+
+        # TODO(chuck): Move this outside of this function so that we don't recreate it.
+        restrict_to_repo_names = [
+            pkginfo_ext_deps.repo_name(dep)
+            for dep in pkg_info.dependencies
+        ]
+        if repo_name != None:
+            restrict_to_repo_names.append(repo_name)
+
         if target_dep.by_name:
-            # GH009: Need to handle the byName references to external modules. Ugh.
-            target = pkginfo_targets.get(pkg_info.targets, target_dep.by_name.target_name)
-            label = pkginfo_targets.bazel_label(target, repo_name)
+            label = module_indexes.find(
+                module_index,
+                module_name = target_dep.by_name.target_name,
+                preferred_repo_name = repo_name,
+                restrict_to_repo_names = restrict_to_repo_names,
+            )
+            if label == None:
+                fail("""\
+Unable to resolve by_name target dependency for {module_name}.
+""".format(module_name = target_dep.by_name.target_name))
+
         elif target_dep.product:
+            # TODO(chuck): Use the module index to resolve
+
             prod_ref = target_dep.product
             ext_dep = pkginfo_ext_deps.find_by_identity(
                 pkg_info.dependencies,
@@ -47,5 +68,4 @@ Unrecognized target dependency while generating a Bazel dependency label.\
 
 pkginfo_target_deps = make_pkginfo_target_deps(
     bazel_labels = bazel_labels,
-    pkginfo_targets = pkginfo_targets,
 )

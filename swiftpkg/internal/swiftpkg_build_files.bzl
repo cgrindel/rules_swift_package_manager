@@ -10,11 +10,11 @@ load(":pkginfos.bzl", "module_types", "target_types")
 
 # MARK: - Target Entry Point
 
-def _new_for_target(pkg_info, target, repo_name):
+def _new_for_target(pkg_info, module_index, target, repo_name):
     if target.module_type == module_types.clang:
         return _clang_target_build_file(target)
     elif target.module_type == module_types.swift:
-        return _swift_target_build_file(pkg_info, target, repo_name)
+        return _swift_target_build_file(pkg_info, module_index, target, repo_name)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
 
@@ -23,17 +23,17 @@ def _new_for_target(pkg_info, target, repo_name):
 
 # MARK: - Swift Target
 
-def _swift_target_build_file(pkg_info, target, repo_name):
+def _swift_target_build_file(pkg_info, module_index, target, repo_name):
     # GH046: Support plugins.
     if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
-        decls = [_swift_library_from_target(pkg_info, target, repo_name)]
+        decls = [_swift_library_from_target(pkg_info, module_index, target, repo_name)]
     elif target.type == target_types.executable:
         load_stmts = [swift_binary_load_stmt]
-        decls = [_swift_binary_from_target(pkg_info, target, repo_name)]
+        decls = [_swift_binary_from_target(pkg_info, module_index, target, repo_name)]
     elif target.type == target_types.test:
         load_stmts = [swift_test_load_stmt]
-        decls = [_swift_test_from_target(pkg_info, target, repo_name)]
+        decls = [_swift_test_from_target(pkg_info, module_index, target, repo_name)]
     else:
         fail("Unrecognized target type for a Swift target. type:", target.type)
 
@@ -42,7 +42,7 @@ def _swift_target_build_file(pkg_info, target, repo_name):
         decls = decls,
     )
 
-def _swift_library_from_target(pkg_info, target, repo_name, name = None, c99name = None):
+def _swift_library_from_target(pkg_info, module_index, target, repo_name, name = None, c99name = None):
     if name == None:
         name = target.name
     if c99name == None:
@@ -52,7 +52,7 @@ def _swift_library_from_target(pkg_info, target, repo_name, name = None, c99name
         name = name,
         attrs = {
             "deps": [
-                pkginfo_target_deps.bazel_label(pkg_info, td, repo_name)
+                pkginfo_target_deps.bazel_label(pkg_info, module_index, td, repo_name)
                 for td in target.dependencies
             ],
             "module_name": c99name,
@@ -61,13 +61,13 @@ def _swift_library_from_target(pkg_info, target, repo_name, name = None, c99name
         },
     )
 
-def _swift_binary_from_target(pkg_info, target, repo_name):
+def _swift_binary_from_target(pkg_info, module_index, target, repo_name):
     return build_decls.new(
         kind = swift_kinds.binary,
         name = target.name,
         attrs = {
             "deps": [
-                pkginfo_target_deps.bazel_label(pkg_info, td, repo_name)
+                pkginfo_target_deps.bazel_label(pkg_info, module_index, td, repo_name)
                 for td in target.dependencies
             ],
             "module_name": target.c99name,
@@ -76,13 +76,13 @@ def _swift_binary_from_target(pkg_info, target, repo_name):
         },
     )
 
-def _swift_test_from_target(pkg_info, target, repo_name):
+def _swift_test_from_target(pkg_info, module_index, target, repo_name):
     return build_decls.new(
         kind = swift_kinds.test,
         name = target.name,
         attrs = {
             "deps": [
-                pkginfo_target_deps.bazel_label(pkg_info, td, repo_name)
+                pkginfo_target_deps.bazel_label(pkg_info, module_index, td, repo_name)
                 for td in target.dependencies
             ],
             "module_name": target.c99name,

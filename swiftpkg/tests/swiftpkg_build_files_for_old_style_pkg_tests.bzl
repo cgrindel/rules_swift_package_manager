@@ -4,6 +4,7 @@ load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:build_decls.bzl", "build_decls")
 load("//swiftpkg/internal:build_files.bzl", "build_files")
 load("//swiftpkg/internal:load_statements.bzl", "load_statements")
+load("//swiftpkg/internal:module_indexes.bzl", "module_indexes")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
 load("//swiftpkg/internal:pkginfos.bzl", "library_type_kinds", "pkginfos")
 load(
@@ -102,11 +103,19 @@ _pkg_info = pkginfos.new(
     ],
 )
 
+_module_index = module_indexes.new_from_json("""
+{
+  "swiftlint": ["@realm_swiftlint//Source/swiftlint"],
+  "SwiftLintFramework": ["@realm_swiftlint//Source/SwiftLintFramework"],
+  "SwiftLintFrameworkTests": ["@realm_swiftlint//Tests/SwiftLintFrameworkTests"]
+}
+""")
+
 def _swift_library_target_test(ctx):
     env = unittest.begin(ctx)
 
     target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFramework")
-    actual = swiftpkg_build_files.new_for_target(_pkg_info, target, _repo_name)
+    actual = swiftpkg_build_files.new_for_target(_pkg_info, _module_index, target, _repo_name)
     expected = build_files.new(
         load_stmts = [swift_library_load_stmt],
         decls = [
@@ -137,7 +146,7 @@ def _swift_library_target_for_binary_test(ctx):
     # We create the swift_library in the target package. Then, we create the
     # executable when defining the product.
     target = pkginfo_targets.get(_pkg_info.targets, "swiftlint")
-    actual = swiftpkg_build_files.new_for_target(_pkg_info, target, _repo_name)
+    actual = swiftpkg_build_files.new_for_target(_pkg_info, _module_index, target, _repo_name)
     expected = build_files.new(
         load_stmts = [swift_library_load_stmt],
         decls = [
@@ -168,7 +177,7 @@ def _swift_test_target_test(ctx):
     env = unittest.begin(ctx)
 
     target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFrameworkTests")
-    actual = swiftpkg_build_files.new_for_target(_pkg_info, target, _repo_name)
+    actual = swiftpkg_build_files.new_for_target(_pkg_info, _module_index, target, _repo_name)
     expected = build_files.new(
         load_stmts = [swift_test_load_stmt],
         decls = [

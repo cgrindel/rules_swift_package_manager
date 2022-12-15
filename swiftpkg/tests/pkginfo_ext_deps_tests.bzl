@@ -62,6 +62,16 @@ def _find_by_identity_test(ctx):
 
 find_by_identity_test = unittest.make(_find_by_identity_test)
 
+def _repo_name_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = pkginfo_ext_deps.repo_name(_super_cool_pkg)
+    asserts.equals(env, "example_super_cool_package", actual)
+
+    return unittest.end(env)
+
+repo_name_test = unittest.make(_repo_name_test)
+
 def pkginfo_ext_deps_test_suite():
     return unittest.suite(
         "pkginfo_ext_deps_tests",
