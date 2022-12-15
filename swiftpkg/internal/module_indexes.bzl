@@ -74,6 +74,20 @@ def _find(
     return label
 
 def _new_ctx(module_index, preferred_repo_name = None, restrict_to_repo_names = []):
+    """Create a new context struct that encapsulates a module index along with \
+    select lookup criteria.
+
+    Args:
+        module_index: A `dict` as returned by `module_indexes.new_from_json`.
+        preferred_repo_name: Optional. If a target in this repository provides
+            the module, prefer it.
+        restrict_to_repo_names: Optional. A `list` of repository names to
+            restrict the match.
+
+    Returns:
+        A `struct` that encapsulates a module index along with select lookup
+        criteria.
+    """
     return struct(
         module_index = module_index,
         preferred_repo_name = preferred_repo_name,
@@ -81,6 +95,15 @@ def _new_ctx(module_index, preferred_repo_name = None, restrict_to_repo_names = 
     )
 
 def _find_with_ctx(module_index_ctx, module_name):
+    """Finds a Bazel label that provides the specified module.
+
+    Args:
+        module_index_ctx: A `struct` as returned by `module_indexes.new_ctx`.
+        module_name: The name of the module as a `string`
+
+    Returns:
+        A `struct` as returned by `bazel_labels.new`.
+    """
     return _find(
         module_index = module_index_ctx.module_index,
         module_name = module_name,

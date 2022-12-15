@@ -132,6 +132,16 @@ bzl_library(
 )
 
 bzl_library(
+    name = "pkg_ctxs",
+    srcs = ["pkg_ctxs.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":module_indexes",
+        ":pkginfo_ext_deps",
+    ],
+)
+
+bzl_library(
     name = "repository_files",
     srcs = ["repository_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],

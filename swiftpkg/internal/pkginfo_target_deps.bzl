@@ -10,9 +10,7 @@ def make_pkginfo_target_deps(bazel_labels):
         """Create a Bazel label string from a target dependency.
 
         Args:
-            pkg_info: A `struct` as returned by `pkginfos.new`.
-            module_index: A `struct` as returned by
-                `module_indexes.new_from_json`.
+            pkg_ctx: A `struct` as returned by `pkg_ctxs.new`.
             target_dep: A `struct` as returned by
                 `pkginfos.new_target_dependency`.
 
@@ -38,16 +36,14 @@ Unable to resolve by_name target dependency for {module_name}.
             )
 
             # Restrict the search to only the specified external dep
-            new_module_index_ctx = module_indexes.new_ctx(
+            label = module_indexes.find(
                 module_index = pkg_ctx.module_index_ctx.module_index,
+                module_name = prod_ref.product_name,
                 restrict_to_repo_names = [
                     bazel_repo_names.from_url(ext_dep.url),
                 ],
             )
-            label = module_indexes.find_with_ctx(
-                new_module_index_ctx,
-                prod_ref.product_name,
-            )
+
             if label == None:
                 fail("""\
 Unable to resolve product reference target dependency for product {prod_name} provided by {dep_id}.

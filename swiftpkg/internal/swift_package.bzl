@@ -11,6 +11,7 @@ load(
     "workspace_and_buildfile",
 )
 load(":build_files.bzl", "build_files")
+load(":pkg_ctxs.bzl", "pkg_ctxs")
 load(":pkginfos.bzl", "pkginfos")
 load(":spm_versions.bzl", "spm_versions")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
@@ -74,13 +75,7 @@ def _update_git_attrs(orig, keys, override):
 
 def _gen_build_files(repository_ctx, pkg_info):
     repo_name = repository_ctx.name
-
-    # module_index_ctx = pkginfo_module_index_ctxs.new(
-    #     json_str = repository_ctx.read(repository_ctx.attr.module_index),
-    #     repo_name = repo_name,
-    #     pkg_info = pkg_info,
-    # )
-    pkg_ctx = pkg_ctx.new(
+    pkg_ctx = pkg_ctxs.new(
         pkg_info = pkg_info,
         repo_name = repo_name,
         module_index_json = repository_ctx.read(
