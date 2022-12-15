@@ -98,6 +98,7 @@ func (mi *ModuleIndex) indexHTTPArchive(r *rule.Rule) error {
 func (mi *ModuleIndex) BazelMap() map[string][]string {
 	bzlMap := make(map[string][]string)
 	for modName, mods := range mi.byName {
+		// TODO(chuck): Sort the labels for consistent output?
 		labels := make([]string, len(mods))
 		for idx, mod := range mods {
 			labels[idx] = mod.Label.String()
