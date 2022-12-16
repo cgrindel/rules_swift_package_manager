@@ -69,7 +69,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 			pkgDir,
 			swiftPkgBuildDirname,
 			swiftPkgCheckoutsDirname,
-			dep.Identity(),
+			dep.SPMCheckoutDirname(),
 		)
 		if err != nil {
 			result.Error = err

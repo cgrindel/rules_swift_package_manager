@@ -2,6 +2,8 @@ package swiftpkg
 
 import (
 	"log"
+	"path"
+	"strings"
 
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
 )
@@ -35,6 +37,16 @@ func (d *Dependency) URL() string {
 	}
 	log.Fatalf("URL could not be determined.")
 	return ""
+}
+
+func (d *Dependency) SPMCheckoutDirname() string {
+	url := d.URL()
+	base := path.Base(url)
+	ext := path.Ext(base)
+	if ext == "" {
+		return base
+	}
+	return strings.TrimSuffix(base, ext)
 }
 
 // SourceControl
