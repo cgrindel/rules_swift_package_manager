@@ -123,7 +123,7 @@ def _new_product_from_desc_json_map(prd_map):
 
 def _new_target_dependency_from_dump_json_map(dep_map):
     by_name_list = dep_map.get("byName")
-    by_name = _new_target_reference(by_name_list[0]) if by_name_list else None
+    by_name = _new_by_name_reference(by_name_list[0]) if by_name_list else None
 
     product = None
     product_list = dep_map.get("product")
@@ -133,9 +133,13 @@ def _new_target_dependency_from_dump_json_map(dep_map):
             dep_identity = product_list[1],
         )
 
+    target_list = dep_map.get("target")
+    target = _new_target_reference(target_list[0]) if target_list else None
+
     return _new_target_dependency(
         by_name = by_name,
         product = product,
+        target = target,
     )
 
 def _new_target_from_json_maps(dump_map, desc_map):
@@ -392,11 +396,24 @@ def _new_product_reference(product_name, dep_identity):
         dep_identity = dep_identity,
     )
 
+def _new_by_name_reference(name):
+    """Creates a by-name reference.
+
+    Args:
+        name: The name of a target or product (`string`).
+
+    Returns:
+        A `struct` representing a by-name reference.
+    """
+    return struct(
+        name = name,
+    )
+
 def _new_target_reference(target_name):
     """Creates a target reference.
 
     Args:
-        target_name: The name of the target (`string`).
+        target_name: The name of a target (`string`).
 
     Returns:
         A `struct` representing a target reference.
@@ -405,7 +422,7 @@ def _new_target_reference(target_name):
         target_name = target_name,
     )
 
-def _new_target_dependency(by_name = None, product = None):
+def _new_target_dependency(by_name = None, product = None, target = None):
     """Creates a target dependency.
 
     Args:
@@ -413,17 +430,20 @@ def _new_target_dependency(by_name = None, product = None):
             `pkginfos.new_target_reference()`.
         product: A `struct` as returned by
             `pkginfos.new_product_reference()`.
+        target: A `struct` as returned by
+            `pkginfos.new_target_reference()`.
 
     Returns:
         A `struct` representing a target dependency.
     """
-    if by_name == None and product == None:
+    if by_name == None and product == None and target == None:
         fail("""\
-A target dependency must have one of the following: `by_name` or a `product`.\
+A target dependency must have one of the following: `by_name`, `product`, `target`.\
 """)
     return struct(
         by_name = by_name,
         product = product,
+        target = target,
     )
 
 def _new_target(name, type, c99name, module_type, path, sources, dependencies):
@@ -511,6 +531,7 @@ pkginfos = struct(
     new_product = _new_product,
     new_product_type = _new_product_type,
     new_product_reference = _new_product_reference,
+    new_by_name_reference = _new_by_name_reference,
     new_target_reference = _new_target_reference,
     new_target_dependency = _new_target_dependency,
     new_target = _new_target,

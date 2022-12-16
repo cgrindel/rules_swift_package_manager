@@ -21,12 +21,22 @@ def make_pkginfo_target_deps(bazel_labels):
         if target_dep.by_name:
             label = module_indexes.find_with_ctx(
                 pkg_ctx.module_index_ctx,
-                target_dep.by_name.target_name,
+                target_dep.by_name.name,
             )
             if label == None:
                 fail("""\
 Unable to resolve by_name target dependency for {module_name}.
 """.format(module_name = target_dep.by_name.target_name))
+
+        elif target_dep.target:
+            label = module_indexes.find_with_ctx(
+                pkg_ctx.module_index_ctx,
+                target_dep.target.target_name,
+            )
+            if label == None:
+                fail("""\
+Unable to resolve target reference target dependency for {module_name}.
+""".format(module_name = target_dep.target.target_name))
 
         elif target_dep.product:
             prod_ref = target_dep.product
