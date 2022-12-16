@@ -36,17 +36,26 @@ workspace_dir="${BIT_WORKSPACE_DIR:-}"
 scratch_dir="$("${create_scratch_dir_sh}" --workspace "${workspace_dir}")"
 cd "${scratch_dir}"
 
-# MARK - Test
-
 # Dump Bazel info
 bazel info
 
-# Run update build files
-bazel run //:tidy
+do_test() {
+  # Run update build files
+  bazel run //:tidy
 
-# Ensure that it builds
-bazel test //...
+  # Ensure that it builds
+  bazel test //...
 
-# Run PrintStuff
-output="$(bazel run //Sources/PrintStuff)"
-assert_match "My deque colors" "${output}" 
+  # Run PrintStuff
+  output="$(bazel run //Sources/PrintStuff)"
+  assert_match "My deque colors" "${output}" 
+}
+
+# MARK - Test As Is
+
+do_test
+
+# MARK - Clean Test
+
+set_up_clean_test
+do_test
