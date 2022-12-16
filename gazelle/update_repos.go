@@ -56,8 +56,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 		return result
 	}
 
-	// TODO(chuck): Create a new module index on the swift config and populate it from the
-	// dependencies.
+	// Create a new module index on the swift config and populate it from the dependencies.
 	mi := swift.NewModuleIndex()
 	sc.ModuleIndex = mi
 
@@ -66,7 +65,12 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	// Value: Pointer to the dependency's package info
 	depPkgInfoMap := make(map[string]*swiftpkg.PackageInfo)
 	for _, dep := range pi.Dependencies {
-		depDir := filepath.Join(pkgDir, swiftPkgBuildDirname, swiftPkgCheckoutsDirname, dep.Identity())
+		depDir := filepath.Join(
+			pkgDir,
+			swiftPkgBuildDirname,
+			swiftPkgCheckoutsDirname,
+			dep.Identity(),
+		)
 		if err != nil {
 			result.Error = err
 			return result
