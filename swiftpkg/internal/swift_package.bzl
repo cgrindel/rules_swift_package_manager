@@ -11,6 +11,7 @@ load(
     "workspace_and_buildfile",
 )
 load(":build_files.bzl", "build_files")
+load(":pkg_ctxs.bzl", "pkg_ctxs")
 load(":pkginfos.bzl", "pkginfos")
 load(":spm_versions.bzl", "spm_versions")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
@@ -74,15 +75,18 @@ def _update_git_attrs(orig, keys, override):
 
 def _gen_build_files(repository_ctx, pkg_info):
     repo_name = repository_ctx.name
+    pkg_ctx = pkg_ctxs.new(
+        pkg_info = pkg_info,
+        repo_name = repo_name,
+        module_index_json = repository_ctx.read(
+            repository_ctx.attr.module_index,
+        ),
+    )
 
     # Create build files for each Swift package target in their corresponding
     # target path.
     for target in pkg_info.targets:
-        bld_file = swiftpkg_build_files.new_for_target(
-            pkg_info,
-            target,
-            repo_name,
-        )
+        bld_file = swiftpkg_build_files.new_for_target(pkg_ctx, target)
         if bld_file == None:
             continue
         build_files.write(
@@ -246,6 +250,10 @@ package description generation)\
 }
 
 _SWIFT_ATTRS = {
+    "module_index": attr.label(
+        doc = "The JSON file that contains the module index by name.",
+        mandatory = True,
+    ),
     "modules": attr.string_dict(
         doc = """\
 Maps the module names (key) exported by the package to their Bazel label \

@@ -1,6 +1,9 @@
 package swiftcfg
 
 import (
+	"errors"
+	"os"
+
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
@@ -9,11 +12,14 @@ import (
 )
 
 const SwiftConfigName = "swift"
+const DefaultModuleIndexBasename = "module_index.json"
+const moduleIndexPerms = 0666
 
 type SwiftConfig struct {
 	SwiftBinPath         string
 	ModuleFilesCollector ModuleFilesCollector
 	ModuleIndex          *swift.ModuleIndex
+	ModuleIndexPath      string
 	PackageInfo          *swiftpkg.PackageInfo
 }
 
@@ -42,6 +48,30 @@ func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRul
 		return SwiftPkgGenRulesMode
 	}
 	return SkipGenRulesMode
+}
+
+func (sc *SwiftConfig) LoadModuleIndex() error {
+	// If the file does not exist, do not fail. Just exit.
+	if sc.ModuleIndexPath == "" {
+		return nil
+	}
+	if _, err := os.Stat(sc.ModuleIndexPath); errors.Is(err, os.ErrNotExist) {
+		return nil
+	}
+	data, err := os.ReadFile(sc.ModuleIndexPath)
+	if err != nil {
+		return err
+	}
+	sc.ModuleIndex, err = swift.NewModuleIndexFromJSON(data)
+	return err
+}
+
+func (sc *SwiftConfig) WriteModuleIndex() error {
+	data, err := sc.ModuleIndex.JSON()
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(sc.ModuleIndexPath, data, moduleIndexPerms)
 }
 
 func GetSwiftConfig(c *config.Config) *SwiftConfig {

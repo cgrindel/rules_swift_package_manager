@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spreso"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 )
 
 // The logic in RepoNameFromURL must stay in-sync with bazel_repo_names.from_url in
@@ -51,4 +52,11 @@ func RepoNameFromPin(p *spreso.Pin) (string, error) {
 	default:
 		return RepoNameFromStr(p.PkgRef.Identity), nil
 	}
+}
+
+func RepoNameFromDep(dep *swiftpkg.Dependency) (string, error) {
+	if url := dep.URL(); url != "" {
+		return RepoNameFromURL(url)
+	}
+	return "", fmt.Errorf("unable to determine repo name from dependency %v", dep.Identity())
 }

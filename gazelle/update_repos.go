@@ -1,7 +1,6 @@
 package gazelle
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -57,12 +56,21 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 		return result
 	}
 
+	// Create a new module index on the swift config and populate it from the dependencies.
+	mi := swift.NewModuleIndex()
+	sc.ModuleIndex = mi
+
 	// Collect product/module info for each of the dependencies
 	// Key: External dependency identity
 	// Value: Pointer to the dependency's package info
 	depPkgInfoMap := make(map[string]*swiftpkg.PackageInfo)
 	for _, dep := range pi.Dependencies {
-		depDir := filepath.Join(pkgDir, swiftPkgBuildDirname, swiftPkgCheckoutsDirname, dep.Identity())
+		depDir := filepath.Join(
+			pkgDir,
+			swiftPkgBuildDirname,
+			swiftPkgCheckoutsDirname,
+			dep.Identity(),
+		)
 		if err != nil {
 			result.Error = err
 			return result
@@ -73,14 +81,29 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 			return result
 		}
 		depPkgInfoMap[dep.Identity()] = depPkgInfo
+
+		// Index the targets in the package
+		repoName, err := swift.RepoNameFromDep(dep)
+		if err != nil {
+			result.Error = err
+			return result
+		}
+		mi.IndexPkgInfo(depPkgInfo, repoName)
+	}
+
+	// Write the module index to a JSON file
+	if err := sc.WriteModuleIndex(); err != nil {
+		result.Error = err
+		return result
 	}
 
 	resolvedPkgPath := filepath.Join(pkgDir, resolvedPkgBasename)
-	return importReposFromResolvedPackage(depPkgInfoMap, resolvedPkgPath)
+	return importReposFromResolvedPackage(depPkgInfoMap, sc.ModuleIndexPath, resolvedPkgPath)
 }
 
 func importReposFromResolvedPackage(
 	depPkgInfoMap map[string]*swiftpkg.PackageInfo,
+	miPath string,
 	resolvedPkgPath string,
 ) language.ImportReposResult {
 	result := language.ImportReposResult{}
@@ -97,25 +120,10 @@ func importReposFromResolvedPackage(
 		return result
 	}
 
+	miBase := filepath.Base(miPath)
 	result.Gen = make([]*rule.Rule, len(pins))
 	for idx, p := range pins {
-		depPkgInfo, ok := depPkgInfoMap[p.PkgRef.Identity]
-		if !ok {
-			result.Error = fmt.Errorf("did not find package info for %s dep", p.PkgRef.Identity)
-			return result
-		}
-		targets, err := depPkgInfo.ExportedTargets()
-		if err != nil {
-			result.Error = err
-			return result
-		}
-		// Create a map of the module names (key) to relative Bazel label (value)
-		modules := make(map[string]string)
-		for _, t := range targets {
-			modules[t.C99name] = swift.BazelLabelFromTarget("", t)
-		}
-
-		result.Gen[idx], err = swift.RepoRuleFromPin(p, modules)
+		result.Gen[idx], err = swift.RepoRuleFromPin(p, miBase)
 		if err != nil {
 			result.Error = err
 			return result

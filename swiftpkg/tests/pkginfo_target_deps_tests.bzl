@@ -2,8 +2,8 @@
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "make_bazel_labels", "make_stub_workspace_name_resolvers")
+load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfo_target_deps.bzl", "make_pkginfo_target_deps")
-load("//swiftpkg/internal:pkginfo_targets.bzl", "make_pkginfo_targets")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 
 _repo_name = "@example_cool_repo"
@@ -12,10 +12,8 @@ workspace_name_resolovers = make_stub_workspace_name_resolvers(
     repo_name = _repo_name,
 )
 bazel_labels = make_bazel_labels(workspace_name_resolovers)
-pkginfo_targets = make_pkginfo_targets(bazel_labels = bazel_labels)
 pkginfo_target_deps = make_pkginfo_target_deps(
     bazel_labels = bazel_labels,
-    pkginfo_targets = pkginfo_targets,
 )
 
 _external_dep = pkginfos.new_dependency(
@@ -30,7 +28,7 @@ _external_dep = pkginfos.new_dependency(
 )
 _by_name = pkginfos.new_target_reference("Foo")
 _product_ref = pkginfos.new_product_reference(
-    product_name = "Chicken",
+    product_name = "AwesomePackage",
     dep_identity = _external_dep.identity,
 )
 
@@ -40,17 +38,34 @@ _pkg_info = pkginfos.new(
     dependencies = [_external_dep],
     targets = [
         pkginfos.new_target(
-            name = "Foo",
+            name = "Bar",
             type = "regular",
-            c99name = "Foo",
+            c99name = "Bar",
             module_type = "SwiftTarget",
-            path = "Source/Foo",
+            path = "Source/Bar",
             sources = [
-                "Foo.swift",
+                "Bar.swift",
             ],
             dependencies = [],
         ),
     ],
+)
+
+_module_index_json = """\
+{
+  "AwesomePackage": [
+    "@example_swift_package//:AwesomePackage"
+  ],
+  "Foo": [
+    "@example_swift_package//Source/Foo:Foo"
+  ]
+}
+"""
+
+_pkg_ctx = pkg_ctxs.new(
+    pkg_info = _pkg_info,
+    repo_name = _repo_name,
+    module_index_json = _module_index_json,
 )
 
 def _bazel_label_by_name_test(ctx):
@@ -58,16 +73,8 @@ def _bazel_label_by_name_test(ctx):
 
     target_dep = pkginfos.new_target_dependency(by_name = _by_name)
 
-    actual = pkginfo_target_deps.bazel_label(_pkg_info, target_dep)
-    expected = bazel_labels.normalize("@example_cool_repo//Source/Foo:Foo")
-    asserts.equals(env, expected, actual)
-
-    actual = pkginfo_target_deps.bazel_label(
-        _pkg_info,
-        target_dep,
-        repo_name = "@another_repo",
-    )
-    expected = bazel_labels.normalize("@another_repo//Source/Foo:Foo")
+    actual = pkginfo_target_deps.bazel_label(_pkg_ctx, target_dep)
+    expected = bazel_labels.normalize("@example_swift_package//Source/Foo:Foo")
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)
@@ -78,7 +85,7 @@ def _bazel_label_product_ref_test(ctx):
     env = unittest.begin(ctx)
 
     target_dep = pkginfos.new_target_dependency(product = _product_ref)
-    actual = pkginfo_target_deps.bazel_label(_pkg_info, target_dep)
+    actual = pkginfo_target_deps.bazel_label(_pkg_ctx, target_dep)
     expected = bazel_labels.normalize(
         bazel_labels.new(
             repository_name = "example_swift_package",

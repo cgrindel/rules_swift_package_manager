@@ -3,6 +3,7 @@ package swift
 import (
 	"fmt"
 
+	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spreso"
 )
@@ -12,7 +13,7 @@ type commitProvider interface {
 }
 
 // The modules parameter is a map of the module name (key) to the relative Bazel label (value).
-func RepoRuleFromPin(p *spreso.Pin, modules map[string]string) (*rule.Rule, error) {
+func RepoRuleFromPin(p *spreso.Pin, miBasename string) (*rule.Rule, error) {
 	repoName, err := RepoNameFromPin(p)
 	if err != nil {
 		return nil, err
@@ -25,7 +26,10 @@ func RepoRuleFromPin(p *spreso.Pin, modules map[string]string) (*rule.Rule, erro
 	r := rule.NewRule(SwiftPkgRuleKind, repoName)
 	r.SetAttr("commit", cp.Commit())
 	r.SetAttr("remote", p.PkgRef.Remote())
-	r.SetAttr("modules", modules)
+
+	// The module index is located at the root of the parent workspace.
+	miLbl := label.New("@", "", miBasename)
+	r.SetAttr("module_index", miLbl.String())
 
 	switch t := p.State.(type) {
 	case *spreso.VersionPinState:

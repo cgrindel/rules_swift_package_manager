@@ -9,6 +9,10 @@ load("@cgrindel_swift_bazel//:deps.bzl", "swift_bazel_dependencies")
 
 swift_bazel_dependencies()
 
+load("@cgrindel_bazel_starlib//:deps.bzl", "bazel_starlib_dependencies")
+
+bazel_starlib_dependencies()
+
 # MARK: - Gazelle
 
 # gazelle:repo bazel_gazelle

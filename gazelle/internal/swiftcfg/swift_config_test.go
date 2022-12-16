@@ -1,10 +1,14 @@
 package swiftcfg_test
 
 import (
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
+	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/language"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
@@ -65,4 +69,34 @@ func TestGetSetSwiftConfig(t *testing.T) {
 	swiftcfg.SetSwiftConfig(c, sc)
 	actual = swiftcfg.GetSwiftConfig(c)
 	assert.Equal(t, sc, actual)
+}
+
+func TestWriteAndReadModuleIndex(t *testing.T) {
+	// Create temp dir
+	dir, err := os.MkdirTemp("", "swiftcfg")
+	assert.NoError(t, err)
+	defer os.RemoveAll(dir)
+
+	// Create swift config
+	origsc := swiftcfg.NewSwiftConfig()
+	origsc.ModuleIndexPath = filepath.Join(dir, swiftcfg.DefaultModuleIndexBasename)
+
+	lbl := label.New("cool_repo", "Sources/Foo", "Foo")
+	m := swift.NewModule("Foo", lbl)
+	origsc.ModuleIndex.AddModule(m)
+
+	// Write the index
+	err = origsc.WriteModuleIndex()
+	assert.NoError(t, err)
+
+	// Create a new swift config
+	newsc := swiftcfg.NewSwiftConfig()
+	newsc.ModuleIndexPath = filepath.Join(dir, swiftcfg.DefaultModuleIndexBasename)
+
+	// Read the index
+	err = newsc.LoadModuleIndex()
+	assert.NoError(t, err)
+
+	// Ensure that the indexes are that same
+	assert.Equal(t, origsc.ModuleIndex, newsc.ModuleIndex)
 }

@@ -8,13 +8,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestModuleIndex(t *testing.T) {
-	mi := swift.NewModuleIndex()
-	fooM := swift.NewModule("Foo", label.New("", "Sources/Foo", "Foo"))
-	barM := swift.NewModule("Bar", label.New("", "Sources/Bar", "Bar"))
-	anotherRepoFooM := swift.NewModule("Foo", label.New("another_repo", "pkg/path", "Foo"))
-	mi.AddModules(fooM, barM, anotherRepoFooM)
+var fooM = swift.NewModule("Foo", label.New("", "Sources/Foo", "Foo"))
+var barM = swift.NewModule("Bar", label.New("", "Sources/Bar", "Bar"))
+var anotherRepoFooM = swift.NewModule("Foo", label.New("another_repo", "pkg/path", "Foo"))
+var mi = swift.NewModuleIndex()
 
+func init() {
+	mi.AddModules(fooM, barM, anotherRepoFooM)
+}
+
+func TestModuleIndex(t *testing.T) {
 	var actual *swift.Module
 
 	actual = mi.Resolve("", "DoesNotExist")
@@ -28,4 +31,13 @@ func TestModuleIndex(t *testing.T) {
 
 	actual = mi.Resolve("another_repo", "Foo")
 	assert.Equal(t, anotherRepoFooM, actual)
+}
+
+func TestJSONRoundtrip(t *testing.T) {
+	data, err := mi.JSON()
+	assert.NoError(t, err)
+
+	newMI, err := swift.NewModuleIndexFromJSON(data)
+	assert.NoError(t, err)
+	assert.Equal(t, mi, newMI)
 }

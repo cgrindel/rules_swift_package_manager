@@ -1,8 +1,0 @@
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
-
-swift_test(
-    name = "MySwiftPackageTests",
-    srcs = ["MySwiftPackageTests.swift"],
-    module_name = "MySwiftPackageTests",
-    deps = ["//Sources/MySwiftPackage"],
-)

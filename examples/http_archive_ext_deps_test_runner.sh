@@ -41,8 +41,8 @@ cd "${scratch_dir}"
 # Dump Bazel info
 bazel info
 
-# Run gazelle
-bazel run //:gazelle
+# Run update build files
+bazel run //:tidy
 
 # Ensure that it builds
 bazel test //...

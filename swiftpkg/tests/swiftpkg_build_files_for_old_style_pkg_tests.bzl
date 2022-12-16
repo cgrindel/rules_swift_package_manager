@@ -4,6 +4,7 @@ load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:build_decls.bzl", "build_decls")
 load("//swiftpkg/internal:build_files.bzl", "build_files")
 load("//swiftpkg/internal:load_statements.bzl", "load_statements")
+load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
 load("//swiftpkg/internal:pkginfos.bzl", "library_type_kinds", "pkginfos")
 load(
@@ -15,8 +16,6 @@ load(
     "swift_test_load_stmt",
     "swiftpkg_build_files",
 )
-
-_repo_name = "@realm_swiftlint"
 
 # This is a simplified version of SwiftLint.
 _pkg_info = pkginfos.new(
@@ -102,11 +101,27 @@ _pkg_info = pkginfos.new(
     ],
 )
 
+_module_index_json = """
+{
+  "swiftlint": ["@realm_swiftlint//Source/swiftlint"],
+  "SwiftLintFramework": ["@realm_swiftlint//Source/SwiftLintFramework"],
+  "SwiftLintFrameworkTests": ["@realm_swiftlint//Tests/SwiftLintFrameworkTests"]
+}
+"""
+
+_repo_name = "@realm_swiftlint"
+
+_pkg_ctx = pkg_ctxs.new(
+    pkg_info = _pkg_info,
+    repo_name = _repo_name,
+    module_index_json = _module_index_json,
+)
+
 def _swift_library_target_test(ctx):
     env = unittest.begin(ctx)
 
     target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFramework")
-    actual = swiftpkg_build_files.new_for_target(_pkg_info, target, _repo_name)
+    actual = swiftpkg_build_files.new_for_target(_pkg_ctx, target)
     expected = build_files.new(
         load_stmts = [swift_library_load_stmt],
         decls = [
@@ -137,7 +152,7 @@ def _swift_library_target_for_binary_test(ctx):
     # We create the swift_library in the target package. Then, we create the
     # executable when defining the product.
     target = pkginfo_targets.get(_pkg_info.targets, "swiftlint")
-    actual = swiftpkg_build_files.new_for_target(_pkg_info, target, _repo_name)
+    actual = swiftpkg_build_files.new_for_target(_pkg_ctx, target)
     expected = build_files.new(
         load_stmts = [swift_library_load_stmt],
         decls = [
@@ -168,7 +183,7 @@ def _swift_test_target_test(ctx):
     env = unittest.begin(ctx)
 
     target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFrameworkTests")
-    actual = swiftpkg_build_files.new_for_target(_pkg_info, target, _repo_name)
+    actual = swiftpkg_build_files.new_for_target(_pkg_ctx, target)
     expected = build_files.new(
         load_stmts = [swift_test_load_stmt],
         decls = [
