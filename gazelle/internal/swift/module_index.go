@@ -3,6 +3,7 @@ package swift
 import (
 	"bytes"
 	"encoding/json"
+	"sort"
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -121,7 +122,7 @@ func (mi *ModuleIndex) IndexPkgInfo(pi *swiftpkg.PackageInfo, repoName string) e
 	}
 
 	// Index products
-	// TODO(chuck): Index products
+	// GH052: Index products
 
 	mi.AddModules(modules...)
 
@@ -131,11 +132,12 @@ func (mi *ModuleIndex) IndexPkgInfo(pi *swiftpkg.PackageInfo, repoName string) e
 func (mi *ModuleIndex) bazelMap() bazelMap {
 	bzlMap := make(map[string][]string)
 	for modName, mods := range mi.byName {
-		// TODO(chuck): Sort the labels for consistent output?
 		labels := make([]string, len(mods))
 		for idx, mod := range mods {
 			labels[idx] = mod.Label.String()
 		}
+		// Sort the labels to ensure that they are consistent.
+		sort.Strings(labels)
 		bzlMap[modName] = labels
 	}
 	return bzlMap
