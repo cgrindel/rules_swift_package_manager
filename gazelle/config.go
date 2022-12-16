@@ -9,8 +9,6 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 )
 
-const moduleIndexBasename = "module_index.json"
-
 // Register Flags
 
 func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) {
@@ -41,7 +39,7 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 	// We cannot initialize this path until we get into CheckFlags
 	if sc.ModuleIndexPath == "" {
-		sc.ModuleIndexPath = filepath.Join(c.RepoRoot, moduleIndexBasename)
+		sc.ModuleIndexPath = filepath.Join(c.RepoRoot, swiftcfg.DefaultModuleIndexBasename)
 	}
 
 	// Load the module index

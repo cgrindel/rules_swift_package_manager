@@ -11,6 +11,7 @@ import (
 )
 
 const SwiftConfigName = "swift"
+const DefaultModuleIndexBasename = "module_index.json"
 const moduleIndexPerms = 0666
 
 type SwiftConfig struct {
