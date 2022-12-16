@@ -1,10 +1,15 @@
 package swift
 
 import (
+	"bytes"
+	"encoding/json"
+
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 )
+
+type bazelMap map[string][]string
 
 type ModuleIndex struct {
 	// Key: Module name
@@ -16,6 +21,29 @@ func NewModuleIndex() *ModuleIndex {
 	return &ModuleIndex{
 		byName: make(map[string][]*Module),
 	}
+}
+
+func newModuleIndexFromBazelMap(bzlMap bazelMap) (*ModuleIndex, error) {
+	mi := NewModuleIndex()
+	for modName, labelStrs := range bzlMap {
+		for _, labelStr := range labelStrs {
+			lbl, err := label.Parse(labelStr)
+			if err != nil {
+				return nil, err
+			}
+			m := NewModule(modName, lbl)
+			mi.AddModule(m)
+		}
+	}
+	return mi, nil
+}
+
+func NewModuleIndexFromJSON(data []byte) (*ModuleIndex, error) {
+	var bzlMap bazelMap
+	if err := json.Unmarshal(data, &bzlMap); err != nil {
+		return nil, err
+	}
+	return newModuleIndexFromBazelMap(bzlMap)
 }
 
 func (mi *ModuleIndex) AddModule(m *Module) {
@@ -116,7 +144,7 @@ func (mi *ModuleIndex) IndexPkgInfo(pi *swiftpkg.PackageInfo, repoName string) e
 	return nil
 }
 
-func (mi *ModuleIndex) BazelMap() map[string][]string {
+func (mi *ModuleIndex) bazelMap() bazelMap {
 	bzlMap := make(map[string][]string)
 	for modName, mods := range mi.byName {
 		// TODO(chuck): Sort the labels for consistent output?
@@ -127,4 +155,17 @@ func (mi *ModuleIndex) BazelMap() map[string][]string {
 		bzlMap[modName] = labels
 	}
 	return bzlMap
+}
+
+func (mi *ModuleIndex) JSON() ([]byte, error) {
+	b, err := json.Marshal(mi.bazelMap())
+	if err != nil {
+		return nil, err
+	}
+	var buf bytes.Buffer
+	err = json.Indent(&buf, b, "", "  ")
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
 }

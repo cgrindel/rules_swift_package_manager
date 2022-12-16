@@ -1,6 +1,8 @@
 package swiftcfg
 
 import (
+	"os"
+
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
@@ -9,11 +11,13 @@ import (
 )
 
 const SwiftConfigName = "swift"
+const moduleIndexPerms = 0666
 
 type SwiftConfig struct {
 	SwiftBinPath         string
 	ModuleFilesCollector ModuleFilesCollector
 	ModuleIndex          *swift.ModuleIndex
+	ModuleIndexPath      string
 	PackageInfo          *swiftpkg.PackageInfo
 }
 
@@ -42,6 +46,23 @@ func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRul
 		return SwiftPkgGenRulesMode
 	}
 	return SkipGenRulesMode
+}
+
+func (sc *SwiftConfig) LoadModuleIndex() error {
+	data, err := os.ReadFile(sc.ModuleIndexPath)
+	if err != nil {
+		return err
+	}
+	sc.ModuleIndex, err = swift.NewModuleIndexFromJSON(data)
+	return err
+}
+
+func (sc *SwiftConfig) WriteModuleIndex() error {
+	data, err := sc.ModuleIndex.JSON()
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(sc.ModuleIndexPath, data, moduleIndexPerms)
 }
 
 func GetSwiftConfig(c *config.Config) *SwiftConfig {

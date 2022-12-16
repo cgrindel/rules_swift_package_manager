@@ -66,3 +66,7 @@ func TestGetSetSwiftConfig(t *testing.T) {
 	actual = swiftcfg.GetSwiftConfig(c)
 	assert.Equal(t, sc, actual)
 }
+
+func TestWriteAndReadModuleIndex(t *testing.T) {
+	t.Error("IMPLEMENT ME!")
+}

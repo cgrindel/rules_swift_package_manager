@@ -25,16 +25,12 @@ func TestRepoRuleFromPin(t *testing.T) {
 			Revision: revision,
 		},
 	}
-	modules := map[string]string{
-		"ArgumentParser": "//:ArgumentParser",
-	}
-	actual, err := swift.RepoRuleFromPin(p, modules, miBasename)
+	actual, err := swift.RepoRuleFromPin(p, miBasename)
 	assert.NoError(t, err)
 
 	expected := rule.NewRule(swift.SwiftPkgRuleKind, "apple_swift_argument_parser")
 	expected.SetAttr("commit", revision)
 	expected.SetAttr("remote", remote)
-	expected.SetAttr("modules", modules)
 	expected.SetAttr("module_index", fmt.Sprintf("@//:%s", miBasename))
 	expected.AddComment("# version: 1.2.3")
 	assert.Equal(t, expected, actual)

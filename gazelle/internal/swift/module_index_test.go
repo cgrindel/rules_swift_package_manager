@@ -8,13 +8,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestModuleIndex(t *testing.T) {
-	mi := swift.NewModuleIndex()
-	fooM := swift.NewModule("Foo", label.New("", "Sources/Foo", "Foo"))
-	barM := swift.NewModule("Bar", label.New("", "Sources/Bar", "Bar"))
-	anotherRepoFooM := swift.NewModule("Foo", label.New("another_repo", "pkg/path", "Foo"))
-	mi.AddModules(fooM, barM, anotherRepoFooM)
+var fooM = swift.NewModule("Foo", label.New("", "Sources/Foo", "Foo"))
+var barM = swift.NewModule("Bar", label.New("", "Sources/Bar", "Bar"))
+var anotherRepoFooM = swift.NewModule("Foo", label.New("another_repo", "pkg/path", "Foo"))
+var mi = swift.NewModuleIndex()
 
+func init() {
+	mi.AddModules(fooM, barM, anotherRepoFooM)
+}
+
+func TestModuleIndex(t *testing.T) {
 	var actual *swift.Module
 
 	actual = mi.Resolve("", "DoesNotExist")
@@ -28,11 +31,13 @@ func TestModuleIndex(t *testing.T) {
 
 	actual = mi.Resolve("another_repo", "Foo")
 	assert.Equal(t, anotherRepoFooM, actual)
+}
 
-	bzlMap := mi.BazelMap()
-	expectedBzlMap := map[string][]string{
-		"Foo": []string{"//Sources/Foo", "@another_repo//pkg/path:Foo"},
-		"Bar": []string{"//Sources/Bar"},
-	}
-	assert.Equal(t, expectedBzlMap, bzlMap)
+func TestJSONRoundtrip(t *testing.T) {
+	data, err := mi.JSON()
+	assert.NoError(t, err)
+
+	newMI, err := swift.NewModuleIndexFromJSON(data)
+	assert.NoError(t, err)
+	assert.Equal(t, mi, newMI)
 }
