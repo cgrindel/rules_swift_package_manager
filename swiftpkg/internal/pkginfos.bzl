@@ -427,7 +427,7 @@ def _new_target_dependency(by_name = None, product = None, target = None):
 
     Args:
         by_name: A `struct` as returned by
-            `pkginfos.new_target_reference()`.
+            `pkginfos.new_by_name_reference()`.
         product: A `struct` as returned by
             `pkginfos.new_product_reference()`.
         target: A `struct` as returned by

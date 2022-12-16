@@ -64,7 +64,7 @@ _pkg_info = pkginfos.new(
             ],
             dependencies = [
                 pkginfos.new_target_dependency(
-                    by_name = pkginfos.new_target_reference(
+                    by_name = pkginfos.new_by_name_reference(
                         "SwiftLintFramework",
                     ),
                 ),
@@ -92,7 +92,7 @@ _pkg_info = pkginfos.new(
             ],
             dependencies = [
                 pkginfos.new_target_dependency(
-                    by_name = pkginfos.new_target_reference(
+                    by_name = pkginfos.new_by_name_reference(
                         "SwiftLintFramework",
                     ),
                 ),
