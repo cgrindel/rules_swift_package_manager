@@ -5,6 +5,7 @@ import (
 
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spreso"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -55,5 +56,17 @@ func TestRepoNameFromPin(t *testing.T) {
 }
 
 func TestRepoNameFromDep(t *testing.T) {
-	t.Error("IMPLEMENT ME!")
+	dep := &swiftpkg.Dependency{
+		SourceControl: &swiftpkg.SourceControl{
+			Identity: "cool-repo",
+			Location: &swiftpkg.SourceControlLocation{
+				Remote: &swiftpkg.RemoteLocation{
+					URL: "https://github.com/example/cool-repo.git",
+				},
+			},
+		},
+	}
+	actual, err := swift.RepoNameFromDep(dep)
+	assert.NoError(t, err)
+	assert.Equal(t, "example_cool_repo", actual)
 }
