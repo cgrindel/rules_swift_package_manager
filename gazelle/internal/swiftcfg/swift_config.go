@@ -1,6 +1,7 @@
 package swiftcfg
 
 import (
+	"errors"
 	"os"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
@@ -50,6 +51,13 @@ func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRul
 }
 
 func (sc *SwiftConfig) LoadModuleIndex() error {
+	// If the file does not exist, do not fail. Just exit.
+	if sc.ModuleIndexPath == "" {
+		return nil
+	}
+	if _, err := os.Stat(sc.ModuleIndexPath); errors.Is(err, os.ErrNotExist) {
+		return nil
+	}
 	data, err := os.ReadFile(sc.ModuleIndexPath)
 	if err != nil {
 		return err

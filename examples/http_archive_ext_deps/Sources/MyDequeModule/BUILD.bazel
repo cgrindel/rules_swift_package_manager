@@ -1,1 +1,9 @@
-# Intentionally blank
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "MyDequeModule",
+    srcs = ["Create.swift"],
+    module_name = "MyDequeModule",
+    visibility = ["//visibility:public"],
+    deps = ["@com_github_apple_swift_collections//:DequeModule"],
+)
