@@ -1,8 +1,6 @@
 package spdump
 
-import (
-	"strings"
-)
+import "encoding/json"
 
 type TargetType int
 
@@ -11,11 +9,15 @@ const (
 	ExecutableTargetType
 	LibraryTargetType
 	TestTargetType
+	PluginTargetType
 )
 
 func (tt *TargetType) UnmarshalJSON(b []byte) error {
-	// The bytes are a raw string (i.e., includes double quotes at front and back). Remove them.
-	ttStr := strings.Trim(string(b), "\"")
+	var ttStr string
+	err := json.Unmarshal(b, &ttStr)
+	if err != nil {
+		return err
+	}
 	switch ttStr {
 	case "executable":
 		*tt = ExecutableTargetType
@@ -23,6 +25,8 @@ func (tt *TargetType) UnmarshalJSON(b []byte) error {
 		*tt = TestTargetType
 	case "library", "regular":
 		*tt = LibraryTargetType
+	case "plugin":
+		*tt = PluginTargetType
 	default:
 		*tt = UnknownTargetType
 	}

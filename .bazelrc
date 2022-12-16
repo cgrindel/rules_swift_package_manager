@@ -1,7 +1,7 @@
 # To update these lines, execute 
 # `bazel run @contrib_rules_bazel_integration_test//tools:update_deleted_packages`
-build --deleted_packages=examples/http_archive_ext_deps,examples/http_archive_ext_deps/Sources/MyDequeModule,examples/http_archive_ext_deps/Sources/PrintStuff,examples/http_archive_ext_deps/Tests/MyDequeModuleTests,examples/pkg_manifest_minimal,examples/pkg_manifest_minimal/Sources/MyExecutable,examples/pkg_manifest_minimal/Sources/MyLibrary,examples/pkg_manifest_minimal/Tests/MyLibraryTests
-query --deleted_packages=examples/http_archive_ext_deps,examples/http_archive_ext_deps/Sources/MyDequeModule,examples/http_archive_ext_deps/Sources/PrintStuff,examples/http_archive_ext_deps/Tests/MyDequeModuleTests,examples/pkg_manifest_minimal,examples/pkg_manifest_minimal/Sources/MyExecutable,examples/pkg_manifest_minimal/Sources/MyLibrary,examples/pkg_manifest_minimal/Tests/MyLibraryTests
+build --deleted_packages=examples/http_archive_ext_deps,examples/http_archive_ext_deps/Sources/MyDequeModule,examples/http_archive_ext_deps/Sources/PrintStuff,examples/http_archive_ext_deps/Tests/MyDequeModuleTests,examples/pkg_manifest_minimal
+query --deleted_packages=examples/http_archive_ext_deps,examples/http_archive_ext_deps/Sources/MyDequeModule,examples/http_archive_ext_deps/Sources/PrintStuff,examples/http_archive_ext_deps/Tests/MyDequeModuleTests,examples/pkg_manifest_minimal
 
 # Import Shared settings
 import %workspace%/shared.bazelrc

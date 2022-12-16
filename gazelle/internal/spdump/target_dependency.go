@@ -10,6 +10,7 @@ import (
 type TargetDependency struct {
 	Product *ProductReference
 	ByName  *ByNameReference
+	Target  *TargetReference
 }
 
 func (td *TargetDependency) ImportName() string {
@@ -52,6 +53,7 @@ func (pr *ProductReference) UniqKey() string {
 
 // Reference a target by name
 type ByNameReference struct {
+	// TODO(chuck): Should this be Name? Can it refer to a target or a product?
 	TargetName string
 }
 
@@ -62,6 +64,25 @@ func (bnr *ByNameReference) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	if bnr.TargetName, err = jsonutils.StringAtIndex(raw, 0); err != nil {
+		return err
+	}
+	return nil
+}
+
+// TargetReference
+
+// Reference a target by name
+type TargetReference struct {
+	TargetName string
+}
+
+func (tr *TargetReference) UnmarshalJSON(b []byte) error {
+	var err error
+	var raw []any
+	if err := json.Unmarshal(b, &raw); err != nil {
+		return err
+	}
+	if tr.TargetName, err = jsonutils.StringAtIndex(raw, 0); err != nil {
 		return err
 	}
 	return nil

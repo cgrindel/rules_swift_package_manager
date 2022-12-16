@@ -16,3 +16,11 @@ def swift_dependencies():
         module_index = "@//:module_index.json",
         remote = "https://github.com/apple/swift-log",
     )
+
+    # version: 0.50.6
+    swift_package(
+        name = "nicklockwood_SwiftFormat",
+        commit = "da637c398c5d08896521b737f2868ddc2e7996ae",
+        module_index = "@//:module_index.json",
+        remote = "https://github.com/nicklockwood/SwiftFormat",
+    )
