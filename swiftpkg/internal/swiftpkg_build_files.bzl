@@ -56,6 +56,9 @@ def _swift_library_from_target(target, deps):
         kind = swift_kinds.library,
         name = target.name,
         attrs = {
+            # SPM directive instructing the code to build as if a Swift package.
+            # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
+            "defines": ["SWIFT_PACKAGE"],
             "deps": deps,
             "module_name": target.c99name,
             "srcs": target.sources,
@@ -68,6 +71,9 @@ def _swift_binary_from_target(target, deps):
         kind = swift_kinds.binary,
         name = target.name,
         attrs = {
+            # SPM directive instructing the code to build as if a Swift package.
+            # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
+            "defines": ["SWIFT_PACKAGE"],
             "deps": deps,
             "module_name": target.c99name,
             "srcs": target.sources,
@@ -80,6 +86,9 @@ def _swift_test_from_target(target, deps):
         kind = swift_kinds.test,
         name = target.name,
         attrs = {
+            # SPM directive instructing the code to build as if a Swift package.
+            # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
+            "defines": ["SWIFT_PACKAGE"],
             "deps": deps,
             "module_name": target.c99name,
             "srcs": target.sources,
