@@ -36,20 +36,26 @@ workspace_dir="${BIT_WORKSPACE_DIR:-}"
 scratch_dir="$("${create_scratch_dir_sh}" --workspace "${workspace_dir}")"
 cd "${scratch_dir}"
 
-# MARK - Test
-
 # Dump Bazel info
 bazel info
 
-# Generate Swift external deps 
-bazel run //:swift_update_repos
+do_test() {
+  # Generate Swift external deps and update build files
+  bazel run //:tidy
 
-# Generate build files for the workspace
-bazel run //:update_build_files
+  # Ensure that it builds
+  bazel test //...
 
-# Ensure that it builds
-bazel test //...
+  # Run the product alias
+  output="$(bazel run //Sources/MyExecutable)"
+  assert_match "Hello, World!" "${output}" 
+}
 
-# Run the product alias
-output="$(bazel run //Sources/MyExecutable)"
-assert_match "Hello, World!" "${output}" 
+# MARK - Test As Is
+
+do_test
+
+# MARK - Clean Test
+
+set_up_clean_test
+do_test
