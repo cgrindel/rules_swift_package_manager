@@ -11,10 +11,6 @@ load(":pkginfos.bzl", "module_types", "target_types")
 # MARK: - Target Entry Point
 
 def _new_for_target(pkg_ctx, target):
-    # DEBUG BEGIN
-    print("*** CHUCK new_for_target target: ", target)
-
-    # DEBUG END
     if target.module_type == module_types.clang:
         return _clang_target_build_file(target)
     elif target.module_type == module_types.swift:

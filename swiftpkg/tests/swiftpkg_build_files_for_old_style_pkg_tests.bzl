@@ -129,6 +129,7 @@ def _swift_library_target_test(ctx):
                 kind = swift_kinds.library,
                 name = "SwiftLintFramework",
                 attrs = {
+                    "defines": ["SWIFT_PACKAGE"],
                     "deps": [],
                     "module_name": "SwiftLintFramework",
                     "srcs": [
@@ -160,6 +161,7 @@ def _swift_library_target_for_binary_test(ctx):
                 kind = swift_kinds.library,
                 name = "swiftlint",
                 attrs = {
+                    "defines": ["SWIFT_PACKAGE"],
                     "deps": [
                         "@realm_swiftlint//Source/SwiftLintFramework",
                     ],
@@ -191,6 +193,7 @@ def _swift_test_target_test(ctx):
                 kind = swift_kinds.test,
                 name = "SwiftLintFrameworkTests",
                 attrs = {
+                    "defines": ["SWIFT_PACKAGE"],
                     "deps": [
                         "@realm_swiftlint//Source/SwiftLintFramework",
                     ],
