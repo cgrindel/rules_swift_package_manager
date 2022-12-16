@@ -3,7 +3,10 @@ package swiftbin
 import (
 	"bytes"
 	"fmt"
+	"os"
 	"os/exec"
+	"path/filepath"
+	"strings"
 )
 
 type Executor interface {
@@ -71,5 +74,32 @@ func (sb *SwiftBin) ResolvePackage(dir string) error {
 	if out, err := cmd.CombinedOutput(); err != nil {
 		return fmt.Errorf("failed executing `swift package resolve`, out\n%v: %w", string(out), err)
 	}
+	// DEBUG BEGIN
+	buildDir := filepath.Join(dir, ".build", "checkouts")
+	debugWalkDir(buildDir, false)
+	// DEBUG END
 	return nil
 }
+
+// DEBUG BEGIN
+
+func debugWalkDir(startDir string, showAllFiles bool) {
+	walkFn := func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			fmt.Println(err)
+			return err
+		}
+		if showAllFiles || (info.IsDir()) {
+			shortPath := strings.TrimPrefix(path, startDir)
+			fmt.Println(shortPath)
+		}
+		return nil
+	}
+	fmt.Printf("Walking %s\n", startDir)
+	err := filepath.Walk(startDir, walkFn)
+	if err != nil {
+		fmt.Println(err)
+	}
+}
+
+// DEBUG END
