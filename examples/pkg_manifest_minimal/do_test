@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
+
+# Generate Swift external deps and update build files
+bazel run //:tidy
+
+# Ensure that it builds and tests pass
+bazel test //...
+
+# Run the executable target
+output="$(bazel run //Sources/MyExecutable)"
+assert_match "Hello, World!" "${output}" 
+
+# Buid and run the SwiftFormat alias
+bazel run //:swiftformat -- --version
