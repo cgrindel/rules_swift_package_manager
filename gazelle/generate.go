@@ -3,13 +3,13 @@ package gazelle
 import (
 	"log"
 	"path/filepath"
+	"sort"
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/stringslices"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
-	"golang.org/x/exp/slices"
 )
 
 func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateResult {
@@ -51,7 +51,7 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 
 	// Retrieve any Swift files that have already been found
 	srcs := append(swiftFiles, sc.ModuleFilesCollector.GetModuleFiles(moduleDir)...)
-	slices.Sort(srcs)
+	sort.Strings(srcs)
 
 	// Generate the rules and imports
 	result.Gen = swift.RulesFromSrcs(args, srcs)
