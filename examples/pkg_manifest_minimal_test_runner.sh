@@ -39,18 +39,6 @@ cd "${scratch_dir}"
 # Dump Bazel info
 bazel info
 
-do_test() {
-  # Generate Swift external deps and update build files
-  bazel run //:tidy
-
-  # Ensure that it builds
-  bazel test //...
-
-  # Run the product alias
-  output="$(bazel run //Sources/MyExecutable)"
-  assert_match "Hello, World!" "${output}" 
-}
-
 # MARK - Test As Is
 
 do_test

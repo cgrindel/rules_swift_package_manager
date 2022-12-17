@@ -7,6 +7,9 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 # Remove all build files
 find "${script_dir}" -name "BUILD.bazel" -exec rm {} \;
 
+# Remove the SPM build folder
+rm -rf .build
+
 # Replace the swift_deps.bzl with no declarations.
 cat > "${script_dir}/swift_deps.bzl"  <<-EOF
 def swift_dependencies():
@@ -61,5 +64,11 @@ bzl_library(
     srcs = ["swift_deps.bzl"],
     visibility = ["//visibility:public"],
     deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
+)
+
+alias(
+    name = "swiftformat",
+    # This is the executable product.
+    actual = "@nicklockwood_SwiftFormat//:swiftformat",
 )
 EOF

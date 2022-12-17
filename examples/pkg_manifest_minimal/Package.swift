@@ -7,6 +7,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
         .package(url: "https://github.com/apple/swift-log", from: "1.4.4"),
+        // Uses old-style executable product referencing a `regular` target.
+        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.50.6"),
     ],
     targets: [
     ]

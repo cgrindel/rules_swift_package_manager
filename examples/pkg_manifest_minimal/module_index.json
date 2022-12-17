@@ -23,6 +23,9 @@
   "ArgumentParserUnitTests": [
     "@apple_swift_argument_parser//Tests/ArgumentParserUnitTests"
   ],
+  "CommandLineTool": [
+    "@nicklockwood_SwiftFormat//CommandLineTool"
+  ],
   "Generate_Manual": [
     "@apple_swift_argument_parser//Plugins/GenerateManualPlugin:Generate Manual"
   ],
@@ -31,6 +34,15 @@
   ],
   "LoggingTests": [
     "@apple_swift_log//Tests/LoggingTests"
+  ],
+  "SwiftFormat": [
+    "@nicklockwood_SwiftFormat//Sources:SwiftFormat"
+  ],
+  "SwiftFormatPlugin": [
+    "@nicklockwood_SwiftFormat//Plugins/SwiftFormatPlugin"
+  ],
+  "SwiftFormatTests": [
+    "@nicklockwood_SwiftFormat//Tests:SwiftFormatTests"
   ],
   "changelog_authors": [
     "@apple_swift_argument_parser//Tools/changelog-authors"

@@ -68,8 +68,8 @@ def _get_test(ctx):
                 ],
                 dependencies = [
                     pkginfos.new_target_dependency(
-                        by_name = pkginfos.new_target_reference(
-                            target_name = "MySwiftPackage",
+                        by_name = pkginfos.new_by_name_reference(
+                            name = "MySwiftPackage",
                         ),
                     ),
                 ],

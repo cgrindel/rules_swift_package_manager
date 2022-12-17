@@ -16,6 +16,7 @@ const (
 	ExecutableTargetType
 	LibraryTargetType
 	TestTargetType
+	PluginTargetType
 )
 
 // Targets
@@ -63,10 +64,15 @@ func NewTargetFromManifestInfo(descT *spdesc.Target, dumpT *spdump.Target) (*Tar
 		targetType = LibraryTargetType
 	case spdump.TestTargetType:
 		targetType = TestTargetType
+	case spdump.PluginTargetType:
+		targetType = PluginTargetType
 	default:
 		return nil, fmt.Errorf(
 			"unrecognized spdump.TargetType %v for %s target", dumpT.Type, dumpT.Name)
 	}
+
+	// TODO(chuck): A Swift plugin can have a dependency on an executable target. In this case, we
+	// want to add the target as a data dependency.
 
 	var err error
 	tdeps := make([]*TargetDependency, len(dumpT.Dependencies))

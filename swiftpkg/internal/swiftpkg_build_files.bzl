@@ -52,6 +52,9 @@ def _swift_library_from_target(target, deps):
         kind = swift_kinds.library,
         name = target.name,
         attrs = {
+            # SPM directive instructing the code to build as if a Swift package.
+            # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
+            "defines": ["SWIFT_PACKAGE"],
             "deps": deps,
             "module_name": target.c99name,
             "srcs": target.sources,
@@ -64,6 +67,9 @@ def _swift_binary_from_target(target, deps):
         kind = swift_kinds.binary,
         name = target.name,
         attrs = {
+            # SPM directive instructing the code to build as if a Swift package.
+            # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
+            "defines": ["SWIFT_PACKAGE"],
             "deps": deps,
             "module_name": target.c99name,
             "srcs": target.sources,
@@ -76,6 +82,9 @@ def _swift_test_from_target(target, deps):
         kind = swift_kinds.test,
         name = target.name,
         attrs = {
+            # SPM directive instructing the code to build as if a Swift package.
+            # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
+            "defines": ["SWIFT_PACKAGE"],
             "deps": deps,
             "module_name": target.c99name,
             "srcs": target.sources,
@@ -114,6 +123,8 @@ def _new_for_product(pkg_info, product, repo_name):
         return _executable_product_build_file(pkg_info, product, repo_name)
     elif prod_type.is_library:
         return _library_product_build_file(pkg_info, product, repo_name)
+
+    # TODO(chuck): Check for plugin product
     return None
 
 def _executable_product_build_file(pkg_info, product, repo_name):
