@@ -20,6 +20,7 @@ go_library(
     srcs = [
         "config.go",
         "generate.go",
+        "kinds.go",
         "lang.go",
         "resolve.go",
         "update_repos.go",

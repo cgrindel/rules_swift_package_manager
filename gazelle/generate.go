@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/bazelbuild/bazel-gazelle/language"
+	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/stringslices"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
@@ -55,8 +56,34 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 	// Generate the rules and imports
 	result.Gen = swift.RulesFromSrcs(args, srcs)
 	result.Imports = swift.Imports(result.Gen)
+	result.Empty = generateEmpty(args, srcs)
 
 	return result
+}
+
+// Look for any rules in the existing BUILD file that do not reference one of the source files. If
+// we find any, then add an entry in empty rules list.
+func generateEmpty(args language.GenerateArgs, srcs []string) []*rule.Rule {
+	if args.File == nil {
+		return nil
+	}
+	var empty []*rule.Rule
+	for _, r := range args.File.Rules {
+		if !swift.IsSwiftRuleKind(r.Kind()) {
+			continue
+		}
+		isEmpty := true
+		for _, src := range r.AttrStrings("srcs") {
+			if stringslices.SortedContains(srcs, src) {
+				isEmpty = false
+				break
+			}
+		}
+		if isEmpty {
+			empty = append(empty, rule.NewRule(r.Kind(), r.Name()))
+		}
+	}
+	return empty
 }
 
 // Generate from Swift Package
