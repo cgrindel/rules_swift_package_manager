@@ -2,6 +2,7 @@ package gazelle
 
 import (
 	"log"
+	"sort"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/label"
@@ -59,6 +60,7 @@ func (l *swiftLang) Resolve(
 		}
 	}
 
+	sort.Strings(deps)
 	if len(deps) > 0 {
 		r.SetAttr("deps", deps)
 	}

@@ -20,6 +20,7 @@ go_library(
     srcs = [
         "config.go",
         "generate.go",
+        "kinds.go",
         "lang.go",
         "resolve.go",
         "update_repos.go",
@@ -39,7 +40,6 @@ go_library(
         "@bazel_gazelle//repo:go_default_library",
         "@bazel_gazelle//resolve:go_default_library",
         "@bazel_gazelle//rule:go_default_library",
-        "@org_golang_x_exp//slices",
     ],
 )
 
