@@ -8,16 +8,6 @@ import (
 
 const swiftLangName = "swift"
 
-var kindShared = rule.KindInfo{
-	NonEmptyAttrs:  map[string]bool{"srcs": true, "deps": true},
-	MergeableAttrs: map[string]bool{"srcs": true},
-}
-
-var kinds = map[string]rule.KindInfo{
-	swift.LibraryRuleKind: kindShared,
-	swift.BinaryRuleKind:  kindShared,
-	swift.TestRuleKind:    kindShared,
-}
 
 var loads = []rule.LoadInfo{
 	{
@@ -45,10 +35,6 @@ func NewLanguage() language.Language {
 }
 
 func (*swiftLang) Name() string { return swiftLangName }
-
-func (*swiftLang) Kinds() map[string]rule.KindInfo {
-	return kinds
-}
 
 func (*swiftLang) Loads() []rule.LoadInfo {
 	return loads
