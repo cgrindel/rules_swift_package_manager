@@ -20,6 +20,8 @@ var kinds = map[string]rule.KindInfo{
 			"srcs":          true,
 			"swiftc_inputs": true,
 		},
+		// This ensures that the deps attribute is updated properly if a dependency disappears.
+		ResolveAttrs: map[string]bool{"deps": true},
 	},
 	swift.LibraryRuleKind: rule.KindInfo{
 		MatchAttrs: []string{"module_name"},
@@ -39,6 +41,8 @@ var kinds = map[string]rule.KindInfo{
 			"srcs":                  true,
 			"swiftc_inputs":         true,
 		},
+		// This ensures that the deps attribute is updated properly if a dependency disappears.
+		ResolveAttrs: map[string]bool{"deps": true},
 	},
 	swift.TestRuleKind: rule.KindInfo{
 		MatchAny: true,
@@ -55,6 +59,8 @@ var kinds = map[string]rule.KindInfo{
 			"srcs":          true,
 			"swiftc_inputs": true,
 		},
+		// This ensures that the deps attribute is updated properly if a dependency disappears.
+		ResolveAttrs: map[string]bool{"deps": true},
 	},
 }
 
