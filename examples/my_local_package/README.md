@@ -1,3 +1,3 @@
 # MyLocalPackage
 
-A description of this package.
+This package is used by other examples.

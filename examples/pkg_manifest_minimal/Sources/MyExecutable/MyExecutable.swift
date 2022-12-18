@@ -1,4 +1,5 @@
 import ArgumentParser
+import GreetingsFramework
 import MyLibrary
 
 @main
