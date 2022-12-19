@@ -28,17 +28,26 @@ def _swift_target_build_file(pkg_ctx, target):
         pkginfo_target_deps.bazel_label(pkg_ctx, td)
         for td in target.dependencies
     ]
+    attrs = {
+        # SPM directive instructing the code to build as if a Swift package.
+        # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
+        "defines": ["SWIFT_PACKAGE"],
+        "deps": deps,
+        "module_name": target.c99name,
+        "srcs": pkginfo_targets.srcs(target),
+        "visibility": ["//visibility:public"],
+    }
 
     # GH046: Support plugins.
     if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
-        decls = [_swift_library_from_target(target, deps)]
+        decls = [_swift_library_from_target(target, attrs)]
     elif target.type == target_types.executable:
         load_stmts = [swift_binary_load_stmt]
-        decls = [_swift_binary_from_target(target, deps)]
+        decls = [_swift_binary_from_target(target, attrs)]
     elif target.type == target_types.test:
         load_stmts = [swift_test_load_stmt]
-        decls = [_swift_test_from_target(target, deps)]
+        decls = [_swift_test_from_target(target, attrs)]
     else:
         fail("Unrecognized target type for a Swift target. type:", target.type)
 
@@ -47,49 +56,25 @@ def _swift_target_build_file(pkg_ctx, target):
         decls = decls,
     )
 
-def _swift_library_from_target(target, deps):
+def _swift_library_from_target(target, attrs):
     return build_decls.new(
         kind = swift_kinds.library,
-        name = target.name,
-        attrs = {
-            # SPM directive instructing the code to build as if a Swift package.
-            # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
-            "defines": ["SWIFT_PACKAGE"],
-            "deps": deps,
-            "module_name": target.c99name,
-            "srcs": target.sources,
-            "visibility": ["//visibility:public"],
-        },
+        name = pkginfo_targets.bazel_label_name(target),
+        attrs = attrs,
     )
 
-def _swift_binary_from_target(target, deps):
+def _swift_binary_from_target(target, attrs):
     return build_decls.new(
         kind = swift_kinds.binary,
-        name = target.name,
-        attrs = {
-            # SPM directive instructing the code to build as if a Swift package.
-            # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
-            "defines": ["SWIFT_PACKAGE"],
-            "deps": deps,
-            "module_name": target.c99name,
-            "srcs": target.sources,
-            "visibility": ["//visibility:public"],
-        },
+        name = pkginfo_targets.bazel_label_name(target),
+        attrs = attrs,
     )
 
-def _swift_test_from_target(target, deps):
+def _swift_test_from_target(target, attrs):
     return build_decls.new(
         kind = swift_kinds.test,
-        name = target.name,
-        attrs = {
-            # SPM directive instructing the code to build as if a Swift package.
-            # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
-            "defines": ["SWIFT_PACKAGE"],
-            "deps": deps,
-            "module_name": target.c99name,
-            "srcs": target.sources,
-            "visibility": ["//visibility:public"],
-        },
+        name = pkginfo_targets.bazel_label_name(target),
+        attrs = attrs,
     )
 
 # MARK: - Clang Targets

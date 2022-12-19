@@ -1,7 +1,6 @@
 """Implementation for `swift_package`."""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
-load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:versions.bzl", "versions")
 load("@bazel_tools//tools/build_defs/repo:git_worker.bzl", "git_repo")
 load(
@@ -83,21 +82,20 @@ def _gen_build_files(repository_ctx, pkg_info):
         ),
     )
 
-    # Create build files for each Swift package target in their corresponding
-    # target path.
+    # Create Bazel declarations for the Swift package targets
+    bld_files = []
     for target in pkg_info.targets:
         bld_file = swiftpkg_build_files.new_for_target(pkg_ctx, target)
         if bld_file == None:
             continue
-        build_files.write(
-            repository_ctx,
-            bld_file,
-            paths.join(pkg_info.path, target.path),
-        )
+        bld_files.append(bld_file)
 
-    # Create a build file at the root with all of the products
-    bld_file = swiftpkg_build_files.new_for_products(pkg_info, repo_name)
-    build_files.write(repository_ctx, bld_file, pkg_info.path)
+    # Create Bazel declarations for the targets
+    bld_files.append(swiftpkg_build_files.new_for_products(pkg_info, repo_name))
+
+    # Write the build file
+    root_bld_file = build_files.merge(*bld_files)
+    build_files.write(repository_ctx, root_bld_file, pkg_info.path)
 
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))

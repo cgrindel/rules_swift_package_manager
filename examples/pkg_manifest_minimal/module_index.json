@@ -1,65 +1,65 @@
 {
   "ArgumentParser": [
-    "@apple_swift_argument_parser//Sources/ArgumentParser"
+    "@apple_swift_argument_parser//:Sources_ArgumentParser"
   ],
   "ArgumentParserEndToEndTests": [
-    "@apple_swift_argument_parser//Tests/ArgumentParserEndToEndTests"
+    "@apple_swift_argument_parser//:Tests_ArgumentParserEndToEndTests"
   ],
   "ArgumentParserExampleTests": [
-    "@apple_swift_argument_parser//Tests/ArgumentParserExampleTests"
+    "@apple_swift_argument_parser//:Tests_ArgumentParserExampleTests"
   ],
   "ArgumentParserGenerateManualTests": [
-    "@apple_swift_argument_parser//Tests/ArgumentParserGenerateManualTests"
+    "@apple_swift_argument_parser//:Tests_ArgumentParserGenerateManualTests"
   ],
   "ArgumentParserPackageManagerTests": [
-    "@apple_swift_argument_parser//Tests/ArgumentParserPackageManagerTests"
+    "@apple_swift_argument_parser//:Tests_ArgumentParserPackageManagerTests"
   ],
   "ArgumentParserTestHelpers": [
-    "@apple_swift_argument_parser//Sources/ArgumentParserTestHelpers"
+    "@apple_swift_argument_parser//:Sources_ArgumentParserTestHelpers"
   ],
   "ArgumentParserToolInfo": [
-    "@apple_swift_argument_parser//Sources/ArgumentParserToolInfo"
+    "@apple_swift_argument_parser//:Sources_ArgumentParserToolInfo"
   ],
   "ArgumentParserUnitTests": [
-    "@apple_swift_argument_parser//Tests/ArgumentParserUnitTests"
+    "@apple_swift_argument_parser//:Tests_ArgumentParserUnitTests"
   ],
   "CommandLineTool": [
-    "@nicklockwood_SwiftFormat//CommandLineTool"
+    "@nicklockwood_SwiftFormat//:CommandLineTool"
   ],
   "Generate_Manual": [
-    "@apple_swift_argument_parser//Plugins/GenerateManualPlugin:Generate Manual"
+    "@apple_swift_argument_parser//:Plugins_GenerateManualPlugin_Generate Manual"
   ],
   "Logging": [
-    "@apple_swift_log//Sources/Logging"
+    "@apple_swift_log//:Sources_Logging"
   ],
   "LoggingTests": [
-    "@apple_swift_log//Tests/LoggingTests"
+    "@apple_swift_log//:Tests_LoggingTests"
   ],
   "SwiftFormat": [
-    "@nicklockwood_SwiftFormat//Sources:SwiftFormat"
+    "@nicklockwood_SwiftFormat//:Sources_SwiftFormat"
   ],
   "SwiftFormatPlugin": [
-    "@nicklockwood_SwiftFormat//Plugins/SwiftFormatPlugin"
+    "@nicklockwood_SwiftFormat//:Plugins_SwiftFormatPlugin"
   ],
   "SwiftFormatTests": [
-    "@nicklockwood_SwiftFormat//Tests:SwiftFormatTests"
+    "@nicklockwood_SwiftFormat//:Tests_SwiftFormatTests"
   ],
   "changelog_authors": [
-    "@apple_swift_argument_parser//Tools/changelog-authors"
+    "@apple_swift_argument_parser//:Tools_changelog-authors"
   ],
   "count_lines": [
-    "@apple_swift_argument_parser//Examples/count-lines"
+    "@apple_swift_argument_parser//:Examples_count-lines"
   ],
   "generate_manual": [
-    "@apple_swift_argument_parser//Tools/generate-manual"
+    "@apple_swift_argument_parser//:Tools_generate-manual"
   ],
   "math": [
-    "@apple_swift_argument_parser//Examples/math"
+    "@apple_swift_argument_parser//:Examples_math"
   ],
   "repeat": [
-    "@apple_swift_argument_parser//Examples/repeat"
+    "@apple_swift_argument_parser//:Examples_repeat"
   ],
   "roll": [
-    "@apple_swift_argument_parser//Examples/roll"
+    "@apple_swift_argument_parser//:Examples_roll"
   ]
 }

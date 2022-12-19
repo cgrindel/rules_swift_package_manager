@@ -19,7 +19,7 @@ _bar_target = pkginfos.new_target(
     c99name = "Bar",
     module_type = module_types.swift,
     path = "Sources/Bar",
-    sources = [],
+    sources = ["Chicken.swift", "Smidgen/Hello.swift"],
     dependencies = [],
 )
 _foo_target = pkginfos.new_target(
@@ -28,6 +28,15 @@ _foo_target = pkginfos.new_target(
     c99name = "Foo",
     module_type = module_types.swift,
     path = "Sources/Foo",
+    sources = [],
+    dependencies = [],
+)
+_chocolate_target = pkginfos.new_target(
+    name = "Chocolate",
+    type = target_types.library,
+    c99name = "Chocolate",
+    module_type = module_types.swift,
+    path = "Sources/Bar",
     sources = [],
     dependencies = [],
 )
@@ -54,20 +63,55 @@ def _bazel_label_test(ctx):
     env = unittest.begin(ctx)
 
     actual = pkginfo_targets.bazel_label(_bar_target)
-    expected = "@example_cool_repo//Sources/Bar"
+    expected = "@example_cool_repo//:Sources_Bar"
     asserts.equals(env, expected, actual)
 
     actual = pkginfo_targets.bazel_label(_foo_target, "@another_repo")
-    expected = "@another_repo//Sources/Foo"
+    expected = "@another_repo//:Sources_Foo"
+    asserts.equals(env, expected, actual)
+
+    actual = pkginfo_targets.bazel_label(_chocolate_target)
+    expected = "@example_cool_repo//:Sources_Bar_Chocolate"
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)
 
 bazel_label_test = unittest.make(_bazel_label_test)
 
+def _srcs_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = pkginfo_targets.srcs(_bar_target)
+    expected = [
+        "Sources/Bar/Chicken.swift",
+        "Sources/Bar/Smidgen/Hello.swift",
+    ]
+    asserts.equals(env, expected, actual)
+
+    return unittest.end(env)
+
+srcs_test = unittest.make(_srcs_test)
+
+def _bazel_label_name_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = pkginfo_targets.bazel_label_name(_bar_target)
+    expected = "Sources_Bar"
+    asserts.equals(env, expected, actual)
+
+    actual = pkginfo_targets.bazel_label_name(_chocolate_target)
+    expected = "Sources_Bar_Chocolate"
+    asserts.equals(env, expected, actual)
+
+    return unittest.end(env)
+
+bazel_label_name_test = unittest.make(_bazel_label_name_test)
+
 def pkginfo_targets_test_suite():
     return unittest.suite(
         "pkginfo_targets_tests",
         get_test,
         bazel_label_test,
+        srcs_test,
+        bazel_label_name_test,
     )

@@ -15,7 +15,7 @@ func TestBazelLabelFromTarget(t *testing.T) {
 		Path: "Sources/Foo",
 	}
 	actual := swift.BazelLabelFromTarget("example_cool_repo", target)
-	expected, err := label.Parse("@example_cool_repo//Sources/Foo")
+	expected, err := label.Parse("@example_cool_repo//:Sources_Foo")
 	assert.NoError(t, err)
 	assert.Equal(t, expected, actual)
 }
