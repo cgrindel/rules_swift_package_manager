@@ -33,8 +33,10 @@ def _srcs(target):
 def _bazel_label_name(target):
     basename = paths.basename(target.path)
     if basename == target.name:
-        return target.path
-    return paths.join(target.path, target.name)
+        name = target.path
+    else:
+        name = paths.join(target.path, target.name)
+    return name.replace("/", "_")
 
 def make_pkginfo_targets(bazel_labels):
     """Create a `pkginfo_targets` module.

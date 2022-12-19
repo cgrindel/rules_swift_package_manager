@@ -63,15 +63,15 @@ def _bazel_label_test(ctx):
     env = unittest.begin(ctx)
 
     actual = pkginfo_targets.bazel_label(_bar_target)
-    expected = "@example_cool_repo//:Sources/Bar"
+    expected = "@example_cool_repo//:Sources_Bar"
     asserts.equals(env, expected, actual)
 
     actual = pkginfo_targets.bazel_label(_foo_target, "@another_repo")
-    expected = "@another_repo//:Sources/Foo"
+    expected = "@another_repo//:Sources_Foo"
     asserts.equals(env, expected, actual)
 
     actual = pkginfo_targets.bazel_label(_chocolate_target)
-    expected = "@example_cool_repo//:Sources/Bar/Chocolate"
+    expected = "@example_cool_repo//:Sources_Bar_Chocolate"
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)
