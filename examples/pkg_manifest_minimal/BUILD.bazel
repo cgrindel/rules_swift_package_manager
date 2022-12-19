@@ -49,5 +49,5 @@ bzl_library(
 alias(
     name = "swiftformat",
     # This is the executable product.
-    actual = "@nicklockwood_SwiftFormat//:swiftformat",
+    actual = "@swiftpkg_swiftformat//:swiftformat",
 )

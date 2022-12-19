@@ -8,6 +8,7 @@ swift_binary(
     visibility = ["//visibility:public"],
     deps = [
         "//Sources/MyLibrary",
-        "@apple_swift_argument_parser//:Sources_ArgumentParser",
+        "@swiftpkg_my_local_package//:Sources_GreetingsFramework",
+        "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser",
     ],
 )
