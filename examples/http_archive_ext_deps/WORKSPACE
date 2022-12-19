@@ -81,7 +81,30 @@ swift_library(
     url = "https://github.com/apple/swift-collections/archive/refs/tags/1.0.2.tar.gz",
 )
 
-http_archive(
+# TODO(chuck): Revert me before merge!
+
+# http_archive(
+#     name = "com_github_apple_swift_argument_parser",
+#     build_file_content = """\
+# load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+# swift_library(
+#     name = "ArgumentParser",
+#     srcs = glob(["Sources/ArgumentParser/**/*.swift"]),
+#     visibility = ["//visibility:public"],
+#     deps = [":ArgumentParserToolInfo"],
+# )
+# swift_library(
+#     name = "ArgumentParserToolInfo",
+#     srcs = glob(["Sources/ArgumentParserToolInfo/**/*.swift"]),
+#     visibility = ["//visibility:public"],
+# )
+# """,
+#     sha256 = "f2c3a7f20e6dede610e7bd7e6cc9e352df54070769bc5b7f5d4bb2868e3c10ae",
+#     strip_prefix = "swift-argument-parser-1.2.0",
+#     url = "https://github.com/apple/swift-argument-parser/archive/1.2.0.tar.gz",
+# )
+
+new_local_repository(
     name = "com_github_apple_swift_argument_parser",
     build_file_content = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
@@ -97,7 +120,5 @@ swift_library(
     visibility = ["//visibility:public"],
 )
 """,
-    sha256 = "f2c3a7f20e6dede610e7bd7e6cc9e352df54070769bc5b7f5d4bb2868e3c10ae",
-    strip_prefix = "swift-argument-parser-1.2.0",
-    url = "https://github.com/apple/swift-argument-parser/archive/1.2.0.tar.gz",
+    path = "/Users/chuck/code/apple/swift-argument-parser",
 )
