@@ -25,12 +25,28 @@ def _get(targets, name, fail_if_not_found = True):
     return None
 
 def _srcs(target):
+    """Returns the sources formatted for inclusion in a Bazel target's `srcs` attribute.
+
+    Args:
+        target: A `struct` as returned from `pkginfos.new_target`.
+
+    Returns:
+        A `list` of `string` values representing the path to source files for the target.
+    """
     return [
         paths.join(target.path, src)
         for src in target.sources
     ]
 
 def _bazel_label_name(target):
+    """Returns the name of the Bazel label for the specified target.
+
+    Args:
+        target: A `struct` as returned from `pkginfos.new_target`.
+
+    Returns:
+        A `string` representing the Bazel label name.
+    """
     basename = paths.basename(target.path)
     if basename == target.name:
         name = target.path
