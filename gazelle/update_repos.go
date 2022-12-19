@@ -97,7 +97,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	miBase := filepath.Base(sc.ModuleIndexPath)
 	result.Gen = make([]*rule.Rule, len(bzlRepos))
 	for idx, bzlRepo := range bzlRepos {
-		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, miBase)
+		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, miBase, pkgDir)
 		if err != nil {
 			result.Error = err
 			return result

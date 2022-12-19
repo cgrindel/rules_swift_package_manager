@@ -4,7 +4,7 @@ def swift_dependencies():
     local_swift_package(
         name = "swiftpkg_my_local_package",
         module_index = "@//:module_index.json",
-        path = "/Users/chuck/code/cgrindel/swift_bazel/support_local_packages/examples/pkg_manifest_minimal/third_party/my_local_package",
+        path = "third_party/my_local_package",
     )
 
     # version: 1.2.0

@@ -2,6 +2,7 @@ package swift
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -12,7 +13,7 @@ type commitProvider interface {
 	Commit() string
 }
 
-func RepoRuleFromBazelRepo(bzlRepo *BazelRepo, miBasename string) (*rule.Rule, error) {
+func RepoRuleFromBazelRepo(bzlRepo *BazelRepo, miBasename string, pkgDir string) (*rule.Rule, error) {
 	var r *rule.Rule
 	var err error
 	if bzlRepo.Pin != nil {
@@ -21,7 +22,11 @@ func RepoRuleFromBazelRepo(bzlRepo *BazelRepo, miBasename string) (*rule.Rule, e
 			return nil, err
 		}
 	} else {
-		r = repoRuleForLocalPackage(bzlRepo.Name, bzlRepo.PkgInfo.Path)
+		relPath, err := filepath.Rel(pkgDir, bzlRepo.PkgInfo.Path)
+		if err != nil {
+			return nil, err
+		}
+		r = repoRuleForLocalPackage(bzlRepo.Name, relPath)
 	}
 
 	// The module index is located at the root of the parent workspace.
