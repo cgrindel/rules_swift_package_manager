@@ -29,13 +29,6 @@ def _swift_target_build_file(pkg_ctx, target):
         for td in target.dependencies
     ]
 
-    # # DEBUG BEGIN
-    # print("*** CHUCK _swift_target_build_file target: ", target)
-    # print("*** CHUCK _swift_target_build_file deps: ")
-    # for idx, item in enumerate(deps):
-    #     print("*** CHUCK", idx, ":", item)
-    # # DEBUG END
-
     # GH046: Support plugins.
     if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
