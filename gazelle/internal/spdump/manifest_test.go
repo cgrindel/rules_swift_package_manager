@@ -26,6 +26,12 @@ func TestNewManifestFromJSON(t *testing.T) {
 					},
 				},
 			},
+			{
+				FileSystem: &spdump.FileSystem{
+					Identity: "my-local-package",
+					Path:     "/path/to/my-local-package",
+				},
+			},
 		},
 		Platforms: []spdump.Platform{
 			{Name: "macos", Version: "10.15"},
@@ -91,7 +97,16 @@ const swiftPackageJSONStr = `
           }
         }
       ]
-    }
+    },
+	{
+	  "fileSystem": [
+	    {
+		  "identity": "my-local-package",
+		  "path": "/path/to/my-local-package",
+		  "productFilter": null
+		}
+	  ]
+	}
   ],
   "name" : "MySwiftPackage",
   "packageKind" : {

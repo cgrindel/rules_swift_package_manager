@@ -5,6 +5,7 @@ go_library(
     name = "swift",
     srcs = [
         "bazel_label.go",
+        "bazel_repo.go",
         "file_info.go",
         "files.go",
         "http_archive.go",

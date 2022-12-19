@@ -17,8 +17,6 @@ import (
 
 const resolvedPkgBasename = "Package.resolved"
 const pkgManifestBasename = "Package.swift"
-const swiftPkgBuildDirname = ".build"
-const swiftPkgCheckoutsDirname = "checkouts"
 
 func (*swiftLang) CanImport(path string) bool {
 	return isPkgManifest(path)
@@ -61,20 +59,9 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	sc.ModuleIndex = mi
 
 	// Collect product/module info for each of the dependencies
-	// Key: External dependency identity
-	// Value: Pointer to the dependency's package info
-	depPkgInfoMap := make(map[string]*swiftpkg.PackageInfo)
-	for _, dep := range pi.Dependencies {
-		depDir := filepath.Join(
-			pkgDir,
-			swiftPkgBuildDirname,
-			swiftPkgCheckoutsDirname,
-			dep.SPMCheckoutDirname(),
-		)
-		if err != nil {
-			result.Error = err
-			return result
-		}
+	bzlRepos := make([]*swift.BazelRepo, len(pi.Dependencies))
+	for idx, dep := range pi.Dependencies {
+		depDir := dep.CodeDir(pkgDir)
 		depPkgInfo, err := swiftpkg.NewPackageInfo(sb, depDir)
 		if err != nil {
 			result.Error = err
@@ -82,13 +69,15 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 		}
 		depPkgInfoMap[dep.Identity()] = depPkgInfo
 
-		// Index the targets in the package
-		repoName, err := swift.RepoNameFromDep(dep)
+		bzlRepo, err := swift.NewBazelRepo(dep)
 		if err != nil {
 			result.Error = err
 			return result
 		}
-		mi.IndexPkgInfo(depPkgInfo, repoName)
+		bzlRepos[idx] = bzlRepo
+
+		// Index the targets in the package
+		mi.IndexPkgInfo(depPkgInfo, bzlRepo.Name)
 	}
 
 	// Write the module index to a JSON file
@@ -98,11 +87,11 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	}
 
 	resolvedPkgPath := filepath.Join(pkgDir, resolvedPkgBasename)
-	return importReposFromResolvedPackage(depPkgInfoMap, sc.ModuleIndexPath, resolvedPkgPath)
+	return importReposFromResolvedPackage(bzlRepos, sc.ModuleIndexPath, resolvedPkgPath)
 }
 
 func importReposFromResolvedPackage(
-	depPkgInfoMap map[string]*swiftpkg.PackageInfo,
+	bzlRepos []*swift.BazelRepo,
 	miPath string,
 	resolvedPkgPath string,
 ) language.ImportReposResult {
@@ -119,16 +108,31 @@ func importReposFromResolvedPackage(
 		result.Error = err
 		return result
 	}
+	pins_lookup := make(map[string]*spreso.Pin)
+	for _, p := range pins {
+		pins_lookup[p.Identity] = p
+	}
 
+	// Create a repository rule for each Bazel repo provided
 	miBase := filepath.Base(miPath)
 	result.Gen = make([]*rule.Rule, len(pins))
-	for idx, p := range pins {
-		result.Gen[idx], err = swift.RepoRuleFromPin(p, miBase)
+	for idx, bzlRepo := range bzlRepos {
+		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, miBase)
 		if err != nil {
 			result.Error = err
 			return result
 		}
 	}
+
+	// miBase := filepath.Base(miPath)
+	// result.Gen = make([]*rule.Rule, len(pins))
+	// for idx, p := range pins {
+	// 	result.Gen[idx], err = swift.RepoRuleFromPin(p, miBase)
+	// 	if err != nil {
+	// 		result.Error = err
+	// 		return result
+	// 	}
+	// }
 
 	return result
 }

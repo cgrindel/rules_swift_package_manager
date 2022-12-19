@@ -1,5 +1,9 @@
-public struct World {
-    public private(set) var name = "World"
+import GreetingsFramework
 
+public struct World {
     public init() {}
+}
+
+extension World: NameProvider {
+    public var name = "World"
 }
