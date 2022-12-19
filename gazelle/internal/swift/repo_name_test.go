@@ -26,5 +26,5 @@ func TestRepoNameFromDep(t *testing.T) {
 	}
 	actual, err := swift.RepoNameFromDep(dep)
 	assert.NoError(t, err)
-	assert.Equal(t, "swiftpkg_example_cool_repo", actual)
+	assert.Equal(t, "swiftpkg_cool_repo", actual)
 }

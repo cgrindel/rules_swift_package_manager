@@ -54,6 +54,14 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 		return result
 	}
 
+	// Read the Package.resolved file
+	resolvedPkgPath := filepath.Join(pkgDir, resolvedPkgBasename)
+	pinsByIdentity, err := readResolvedPkgPins(resolvedPkgPath)
+	if err != nil {
+		result.Error = err
+		return result
+	}
+
 	// Create a new module index on the swift config and populate it from the dependencies.
 	mi := swift.NewModuleIndex()
 	sc.ModuleIndex = mi
@@ -67,9 +75,9 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 			result.Error = err
 			return result
 		}
-		depPkgInfoMap[dep.Identity()] = depPkgInfo
+		pin := pinsByIdentity[dep.Identity()]
 
-		bzlRepo, err := swift.NewBazelRepo(dep)
+		bzlRepo, err := swift.NewBazelRepo(dep, depPkgInfo, pin)
 		if err != nil {
 			result.Error = err
 			return result
@@ -86,36 +94,8 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 		return result
 	}
 
-	resolvedPkgPath := filepath.Join(pkgDir, resolvedPkgBasename)
-	return importReposFromResolvedPackage(bzlRepos, sc.ModuleIndexPath, resolvedPkgPath)
-}
-
-func importReposFromResolvedPackage(
-	bzlRepos []*swift.BazelRepo,
-	miPath string,
-	resolvedPkgPath string,
-) language.ImportReposResult {
-	result := language.ImportReposResult{}
-
-	// Read the Package.resolved file
-	b, err := os.ReadFile(resolvedPkgPath)
-	if err != nil {
-		result.Error = err
-		return result
-	}
-	pins, err := spreso.NewPinsFromResolvedPackageJSON(b)
-	if err != nil {
-		result.Error = err
-		return result
-	}
-	pins_lookup := make(map[string]*spreso.Pin)
-	for _, p := range pins {
-		pins_lookup[p.Identity] = p
-	}
-
-	// Create a repository rule for each Bazel repo provided
-	miBase := filepath.Base(miPath)
-	result.Gen = make([]*rule.Rule, len(pins))
+	miBase := filepath.Base(sc.ModuleIndexPath)
+	result.Gen = make([]*rule.Rule, len(bzlRepos))
 	for idx, bzlRepo := range bzlRepos {
 		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, miBase)
 		if err != nil {
@@ -124,15 +104,68 @@ func importReposFromResolvedPackage(
 		}
 	}
 
-	// miBase := filepath.Base(miPath)
-	// result.Gen = make([]*rule.Rule, len(pins))
-	// for idx, p := range pins {
-	// 	result.Gen[idx], err = swift.RepoRuleFromPin(p, miBase)
-	// 	if err != nil {
-	// 		result.Error = err
-	// 		return result
-	// 	}
-	// }
-
 	return result
 }
+
+func readResolvedPkgPins(resolvedPkgPath string) (map[string]*spreso.Pin, error) {
+	b, err := os.ReadFile(resolvedPkgPath)
+	if err != nil {
+		return nil, err
+	}
+	pins, err := spreso.NewPinsFromResolvedPackageJSON(b)
+	if err != nil {
+		return nil, err
+	}
+	pinsByIdentity := make(map[string]*spreso.Pin)
+	for _, p := range pins {
+		pinsByIdentity[p.PkgRef.Identity] = p
+	}
+	return pinsByIdentity, nil
+}
+
+// func importReposFromResolvedPackage(
+// 	bzlRepos []*swift.BazelRepo,
+// 	miPath string,
+// 	resolvedPkgPath string,
+// ) language.ImportReposResult {
+// 	result := language.ImportReposResult{}
+
+// 	// Read the Package.resolved file
+// 	b, err := os.ReadFile(resolvedPkgPath)
+// 	if err != nil {
+// 		result.Error = err
+// 		return result
+// 	}
+// 	pins, err := spreso.NewPinsFromResolvedPackageJSON(b)
+// 	if err != nil {
+// 		result.Error = err
+// 		return result
+// 	}
+// 	pins_lookup := make(map[string]*spreso.Pin)
+// 	for _, p := range pins {
+// 		pins_lookup[p.Identity] = p
+// 	}
+
+// 	// Create a repository rule for each Bazel repo provided
+// 	miBase := filepath.Base(miPath)
+// 	result.Gen = make([]*rule.Rule, len(pins))
+// 	for idx, bzlRepo := range bzlRepos {
+// 		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, miBase)
+// 		if err != nil {
+// 			result.Error = err
+// 			return result
+// 		}
+// 	}
+
+// 	// miBase := filepath.Base(miPath)
+// 	// result.Gen = make([]*rule.Rule, len(pins))
+// 	// for idx, p := range pins {
+// 	// 	result.Gen[idx], err = swift.RepoRuleFromPin(p, miBase)
+// 	// 	if err != nil {
+// 	// 		result.Error = err
+// 	// 		return result
+// 	// 	}
+// 	// }
+
+// 	return result
+// }
