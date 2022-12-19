@@ -19,7 +19,7 @@ _bar_target = pkginfos.new_target(
     c99name = "Bar",
     module_type = module_types.swift,
     path = "Sources/Bar",
-    sources = [],
+    sources = ["Chicken.swift", "Smidgen/Hello.swift"],
     dependencies = [],
 )
 _foo_target = pkginfos.new_target(
@@ -81,7 +81,12 @@ bazel_label_test = unittest.make(_bazel_label_test)
 def _srcs_test(ctx):
     env = unittest.begin(ctx)
 
-    unittest.fail(env, "IMPLEMENT ME!")
+    actual = pkginfo_targets.srcs(_bar_target)
+    expected = [
+        "Sources/Bar/Chicken.swift",
+        "Sources/Bar/Smidgen/Hello.swift",
+    ]
+    asserts.equals(env, expected, actual)
 
     return unittest.end(env)
 
@@ -90,7 +95,13 @@ srcs_test = unittest.make(_srcs_test)
 def _bazel_label_name_test(ctx):
     env = unittest.begin(ctx)
 
-    unittest.fail(env, "IMPLEMENT ME!")
+    actual = pkginfo_targets.bazel_label_name(_bar_target)
+    expected = "Sources_Bar"
+    asserts.equals(env, expected, actual)
+
+    actual = pkginfo_targets.bazel_label_name(_chocolate_target)
+    expected = "Sources_Bar_Chocolate"
+    asserts.equals(env, expected, actual)
 
     return unittest.end(env)
 
