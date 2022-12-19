@@ -8,7 +8,6 @@ import (
 
 const swiftLangName = "swift"
 
-
 var loads = []rule.LoadInfo{
 	{
 		Name: "@build_bazel_rules_swift//swift:swift.bzl",
@@ -22,6 +21,7 @@ var loads = []rule.LoadInfo{
 		Name: "@cgrindel_swift_bazel//swiftpkg:defs.bzl",
 		Symbols: []string{
 			swift.SwiftPkgRuleKind,
+			swift.LocalSwiftPkgRuleKind,
 		},
 	},
 }

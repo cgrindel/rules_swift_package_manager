@@ -70,8 +70,14 @@ func (d *Dependency) CodeDir(pkgDir string) string {
 		)
 	}
 	if d.FileSystem != nil {
+		var path string
+		if filepath.IsAbs(d.FileSystem.Path) {
+			path = d.FileSystem.Path
+		} else {
+			path = filepath.Join(pkgDir, d.FileSystem.Path)
+		}
 		// Return the local path
-		return filepath.Clean(filepath.Join(pkgDir, d.FileSystem.Path))
+		return filepath.Clean(path)
 	}
 	log.Fatalf("CodeDir could not be determined.")
 	return ""

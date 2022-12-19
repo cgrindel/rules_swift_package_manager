@@ -8,6 +8,6 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
         .package(url: "https://github.com/apple/swift-log", from: "1.4.4"),
         .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.50.6"),
-        .package(path: "../my_local_package"),
+        .package(path: "third_party/my_local_package"),
     ]
 )
