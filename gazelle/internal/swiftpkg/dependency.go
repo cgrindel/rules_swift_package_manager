@@ -43,8 +43,6 @@ func (d *Dependency) Identity() string {
 	return ""
 }
 
-// TODO(chuck): What do we want to do with URL() and FileSystem?
-
 func (d *Dependency) URL() string {
 	if d.SourceControl != nil {
 		if d.SourceControl.Location != nil {
