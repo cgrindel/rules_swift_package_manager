@@ -1,5 +1,6 @@
 """Module for generating data from targets created by `pkginfos`."""
 
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels")
 
 def _get(targets, name, fail_if_not_found = True):
@@ -22,6 +23,18 @@ def _get(targets, name, fail_if_not_found = True):
     if fail_if_not_found:
         fail("Failed to find target. name:", name)
     return None
+
+def _srcs(target):
+    return [
+        paths.join(target.path, src)
+        for src in target.sources
+    ]
+
+def _bazel_label_name(target):
+    basename = paths.basename(target.path)
+    if basename == target.name:
+        return target.path
+    return paths.join(target.path, target.name)
 
 def make_pkginfo_targets(bazel_labels):
     """Create a `pkginfo_targets` module.
@@ -47,14 +60,16 @@ def make_pkginfo_targets(bazel_labels):
         return bazel_labels.normalize(
             bazel_labels.new(
                 repository_name = repo_name,
-                package = target.path,
-                name = target.name,
+                package = "",
+                name = _bazel_label_name(target),
             ),
         )
 
     return struct(
-        get = _get,
         bazel_label = _bazel_label,
+        bazel_label_name = _bazel_label_name,
+        get = _get,
+        srcs = _srcs,
     )
 
 pkginfo_targets = make_pkginfo_targets(bazel_labels = bazel_labels)

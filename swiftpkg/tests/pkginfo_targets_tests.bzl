@@ -31,6 +31,15 @@ _foo_target = pkginfos.new_target(
     sources = [],
     dependencies = [],
 )
+_chocolate_target = pkginfos.new_target(
+    name = "Chocolate",
+    type = target_types.library,
+    c99name = "Chocolate",
+    module_type = module_types.swift,
+    path = "Sources/Bar",
+    sources = [],
+    dependencies = [],
+)
 
 def _get_test(ctx):
     env = unittest.begin(ctx)
@@ -54,20 +63,44 @@ def _bazel_label_test(ctx):
     env = unittest.begin(ctx)
 
     actual = pkginfo_targets.bazel_label(_bar_target)
-    expected = "@example_cool_repo//Sources/Bar"
+    expected = "@example_cool_repo//:Sources/Bar"
     asserts.equals(env, expected, actual)
 
     actual = pkginfo_targets.bazel_label(_foo_target, "@another_repo")
-    expected = "@another_repo//Sources/Foo"
+    expected = "@another_repo//:Sources/Foo"
+    asserts.equals(env, expected, actual)
+
+    actual = pkginfo_targets.bazel_label(_chocolate_target)
+    expected = "@example_cool_repo//:Sources/Bar/Chocolate"
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)
 
 bazel_label_test = unittest.make(_bazel_label_test)
 
+def _srcs_test(ctx):
+    env = unittest.begin(ctx)
+
+    unittest.fail(env, "IMPLEMENT ME!")
+
+    return unittest.end(env)
+
+srcs_test = unittest.make(_srcs_test)
+
+def _bazel_label_name_test(ctx):
+    env = unittest.begin(ctx)
+
+    unittest.fail(env, "IMPLEMENT ME!")
+
+    return unittest.end(env)
+
+bazel_label_name_test = unittest.make(_bazel_label_name_test)
+
 def pkginfo_targets_test_suite():
     return unittest.suite(
         "pkginfo_targets_tests",
         get_test,
         bazel_label_test,
+        srcs_test,
+        bazel_label_name_test,
     )

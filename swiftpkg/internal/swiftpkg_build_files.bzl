@@ -29,6 +29,13 @@ def _swift_target_build_file(pkg_ctx, target):
         for td in target.dependencies
     ]
 
+    # # DEBUG BEGIN
+    # print("*** CHUCK _swift_target_build_file target: ", target)
+    # print("*** CHUCK _swift_target_build_file deps: ")
+    # for idx, item in enumerate(deps):
+    #     print("*** CHUCK", idx, ":", item)
+    # # DEBUG END
+
     # GH046: Support plugins.
     if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
@@ -50,14 +57,14 @@ def _swift_target_build_file(pkg_ctx, target):
 def _swift_library_from_target(target, deps):
     return build_decls.new(
         kind = swift_kinds.library,
-        name = target.name,
+        name = pkginfo_targets.bazel_label_name(target),
         attrs = {
             # SPM directive instructing the code to build as if a Swift package.
             # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
             "defines": ["SWIFT_PACKAGE"],
             "deps": deps,
             "module_name": target.c99name,
-            "srcs": target.sources,
+            "srcs": pkginfo_targets.srcs(target),
             "visibility": ["//visibility:public"],
         },
     )
@@ -65,14 +72,14 @@ def _swift_library_from_target(target, deps):
 def _swift_binary_from_target(target, deps):
     return build_decls.new(
         kind = swift_kinds.binary,
-        name = target.name,
+        name = pkginfo_targets.bazel_label_name(target),
         attrs = {
             # SPM directive instructing the code to build as if a Swift package.
             # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
             "defines": ["SWIFT_PACKAGE"],
             "deps": deps,
             "module_name": target.c99name,
-            "srcs": target.sources,
+            "srcs": pkginfo_targets.srcs(target),
             "visibility": ["//visibility:public"],
         },
     )
@@ -80,14 +87,14 @@ def _swift_binary_from_target(target, deps):
 def _swift_test_from_target(target, deps):
     return build_decls.new(
         kind = swift_kinds.test,
-        name = target.name,
+        name = pkginfo_targets.bazel_label_name(target),
         attrs = {
             # SPM directive instructing the code to build as if a Swift package.
             # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
             "defines": ["SWIFT_PACKAGE"],
             "deps": deps,
             "module_name": target.c99name,
-            "srcs": target.sources,
+            "srcs": pkginfo_targets.srcs(target),
             "visibility": ["//visibility:public"],
         },
     )
