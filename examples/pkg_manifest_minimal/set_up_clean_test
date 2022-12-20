@@ -5,7 +5,10 @@ set -o errexit -o nounset -o pipefail
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 
 # Remove all build files
-find "${script_dir}" -name "BUILD.bazel" -exec rm {} \;
+find "${script_dir}" \
+  -name "BUILD.bazel" \
+  -not -path "./third_party/*" \
+  -exec rm {} \;
 
 # Remove the SPM build folder
 rm -rf .build
