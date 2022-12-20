@@ -7,8 +7,8 @@ def _from_identity_test(ctx):
     env = unittest.begin(ctx)
 
     test_data = [
-        ("SwiftFormat", "@swiftpkg_SwiftFormat"),
-        ("swift-argument-parser", "@swiftpkg_swift_argument_parser"),
+        ("SwiftFormat", "swiftpkg_SwiftFormat"),
+        ("swift-argument-parser", "swiftpkg_swift_argument_parser"),
     ]
     for (identity, expected) in test_data:
         actual = bazel_repo_names.from_identity(identity)

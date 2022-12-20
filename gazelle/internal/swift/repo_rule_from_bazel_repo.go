@@ -13,6 +13,7 @@ type commitProvider interface {
 	Commit() string
 }
 
+// The pkgDir is the path to the Swift package that is referencing this Bazel repository.
 func RepoRuleFromBazelRepo(bzlRepo *BazelRepo, miBasename string, pkgDir string) (*rule.Rule, error) {
 	var r *rule.Rule
 	var err error

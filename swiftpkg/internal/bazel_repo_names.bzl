@@ -4,7 +4,20 @@
 # gazelle/internal/swift/bazel_repo_name.go.
 
 def _from_identity(identity):
-    return "@swiftpkg_" + identity.replace("-", "_")
+    """Create a Bazel repository name from a Swift package identity (e.g. \
+    package name in the manifest)
+
+    The value produced by this function will not have the `@` character
+    appended. Code that needs to use it as a label repository name should pass
+    it to bazel_repo_names.normalize().
+
+    Args:
+        identity: A Swift package name/identity as a `string`.
+
+    Returns:
+        A Bazel repository name as a `string`.
+    """
+    return "swiftpkg_" + identity.replace("-", "_")
 
 def _normalize(repo_name):
     """Ensures that the repository name is formatted properly (e.g. has @ suffix).

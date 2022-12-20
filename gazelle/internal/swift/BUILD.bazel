@@ -55,6 +55,7 @@ go_test(
     ],
     deps = [
         ":swift",
+        "//gazelle/internal/spreso",
         "//gazelle/internal/swiftpkg",
         "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//rule:go_default_library",

@@ -66,7 +66,7 @@ def _bazel_repo_name_test(ctx):
     env = unittest.begin(ctx)
 
     actual = pkginfo_ext_deps.bazel_repo_name(_super_cool_pkg)
-    asserts.equals(env, "@swiftpkg_super_cool_package", actual)
+    asserts.equals(env, "swiftpkg_super_cool_package", actual)
 
     return unittest.end(env)
 
