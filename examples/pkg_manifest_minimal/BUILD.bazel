@@ -46,10 +46,10 @@ bzl_library(
     deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
 )
 
-# TODO(chuck): Figure out why SwiftFormat repo name came out all lowercase.
-
 alias(
     name = "swiftformat",
     # This is the executable product.
+    # FYI. The identity for SwiftFormat in the swift package dump-package is
+    # lowercase. That is why it is lowercase here.
     actual = "@swiftpkg_swiftformat//:swiftformat",
 )
