@@ -12,7 +12,7 @@ bazel test //...
 
 # Run the executable target
 output="$(bazel run //Sources/MyExecutable)"
-[[ "${output}" =~ "Hello, World!" ]] || (echo >&2 "Expected 'Hello, World!'"; exit 1)
+[[ "${output}" =~ "Good morning, World!" ]] || (echo >&2 "Expected 'Good morning, World!'"; exit 1)
 
 # Buid and run the SwiftFormat alias
 bazel run //:swiftformat -- --version
