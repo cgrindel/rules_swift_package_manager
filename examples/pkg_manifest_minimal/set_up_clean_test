@@ -7,7 +7,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 # Remove all build files
 find "${script_dir}" \
   -name "BUILD.bazel" \
-  -not -path "./third_party/*" \
+  -not -path "${script_dir}/third_party/*" \
   -exec rm {} \;
 
 # Remove the SPM build folder
