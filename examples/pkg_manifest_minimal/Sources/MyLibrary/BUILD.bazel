@@ -5,5 +5,5 @@ swift_library(
     srcs = ["World.swift"],
     module_name = "MyLibrary",
     visibility = ["//visibility:public"],
-    deps = ["@swiftpkg_my_local_package//:Sources_GreetingsFramework"],
+    deps = ["//third_party/my_local_package/Sources/GreetingsFramework"],
 )

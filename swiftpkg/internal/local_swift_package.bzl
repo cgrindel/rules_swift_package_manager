@@ -19,7 +19,6 @@ def _list_contents(repository_ctx, repo_dir, path):
     if exec_result.return_code != 0:
         fail("Failed to list the contents of", path, ".\n", exec_result.stderr)
 
-    # return exec_result.stdout.splitlines()
     results = []
     for entry in exec_result.stdout.splitlines():
         if lists.contains(_CODE_IGNORE_LIST, entry):
@@ -44,15 +43,6 @@ def _local_swift_package_impl(repository_ctx):
         str(repository_ctx.workspace_root),
         orig_code_path,
     )
-
-    # DEBUG BEGIN
-    print("*** CHUCK repo_dir: ", repo_dir)
-    print("*** CHUCK orig_code_path: ", orig_code_path)
-    print("*** CHUCK orig_files: ")
-    for idx, item in enumerate(orig_files):
-        print("*** CHUCK", idx, ":", item)
-
-    # DEBUG END
 
     # Create symlinks to top-level files and directories from the original path
     # to the repo rule repo_dir

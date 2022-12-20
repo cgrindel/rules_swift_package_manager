@@ -66,7 +66,7 @@ func (pr *ProductReference) UniqKey() string {
 
 // Reference a target by name
 type ByNameReference struct {
-	// TODO(chuck): Should this be Name? Can it refer to a target or a product?
+	// GH084: Should this be Name? Can it refer to a target or a product?
 	TargetName string
 }
 

@@ -109,7 +109,7 @@ def _new_for_product(pkg_info, product, repo_name):
     elif prod_type.is_library:
         return _library_product_build_file(pkg_info, product, repo_name)
 
-    # TODO(chuck): Check for plugin product
+    # GH046: Check for plugin product
     return None
 
 def _executable_product_build_file(pkg_info, product, repo_name):
