@@ -54,10 +54,10 @@ _pkg_info = pkginfos.new(
 _module_index_json = """\
 {
   "AwesomePackage": [
-    "@example_swift_package//:AwesomePackage"
+    "@swiftpkg_example_swift_package//:AwesomePackage"
   ],
   "Foo": [
-    "@example_swift_package//Source/Foo:Foo"
+    "@swiftpkg_example_swift_package//:Source/Foo"
   ]
 }
 """
@@ -74,7 +74,7 @@ def _bazel_label_by_name_test(ctx):
     target_dep = pkginfos.new_target_dependency(by_name = _by_name)
 
     actual = pkginfo_target_deps.bazel_label(_pkg_ctx, target_dep)
-    expected = bazel_labels.normalize("@example_swift_package//Source/Foo:Foo")
+    expected = bazel_labels.normalize("@swiftpkg_example_swift_package//:Source/Foo")
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)
@@ -88,7 +88,7 @@ def _bazel_label_product_ref_test(ctx):
     actual = pkginfo_target_deps.bazel_label(_pkg_ctx, target_dep)
     expected = bazel_labels.normalize(
         bazel_labels.new(
-            repository_name = "example_swift_package",
+            repository_name = "swiftpkg_example_swift_package",
             package = "",
             name = _product_ref.product_name,
         ),

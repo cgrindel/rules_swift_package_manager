@@ -10,10 +10,10 @@ def _find_by_identity(ext_deps, identity, fail_if_not_found = True):
         fail("Failed to find external dependency with identity", identity)
     return None
 
-def _repo_name(ext_dep):
-    return bazel_repo_names.from_url(ext_dep.url)
+def _bazel_repo_name(ext_dep):
+    return bazel_repo_names.from_identity(ext_dep.identity)
 
 pkginfo_ext_deps = struct(
     find_by_identity = _find_by_identity,
-    repo_name = _repo_name,
+    bazel_repo_name = _bazel_repo_name,
 )

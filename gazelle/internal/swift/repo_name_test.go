@@ -10,7 +10,7 @@ import (
 
 func TestRepoNameFromIdentity(t *testing.T) {
 	actual := swift.RepoNameFromIdentity("swift-argument-parser")
-	assert.Equal(t, "swiftpkg_swift_argument_parser", actual)
+	assert.Equal(t, "@swiftpkg_swift_argument_parser", actual)
 }
 
 func TestRepoNameFromDep(t *testing.T) {
@@ -26,5 +26,5 @@ func TestRepoNameFromDep(t *testing.T) {
 	}
 	actual, err := swift.RepoNameFromDep(dep)
 	assert.NoError(t, err)
-	assert.Equal(t, "swiftpkg_cool_repo", actual)
+	assert.Equal(t, "@swiftpkg_cool_repo", actual)
 }
