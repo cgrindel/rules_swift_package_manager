@@ -137,6 +137,8 @@ def _executable_product_build_file(pkg_info, product, repo_name):
                 ],
             )
         else:
+            # This is an old-style (pre-5.4) configuration where an executable
+            # product references a regular target.
             # Create the binary target here.
             return build_files.new(
                 load_stmts = [load_statements.new(swift_location, swift_kinds.binary)],

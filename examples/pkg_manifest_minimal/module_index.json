@@ -41,6 +41,9 @@
   "LoggingTests": [
     "@swiftpkg_swift_log//:Tests_LoggingTests"
   ],
+  "PrintGreeting": [
+    "@swiftpkg_my_local_package//:Sources_PrintGreeting"
+  ],
   "SwiftFormat": [
     "@swiftpkg_swiftformat//:Sources_SwiftFormat"
   ],
