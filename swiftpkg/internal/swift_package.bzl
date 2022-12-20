@@ -110,38 +110,6 @@ The version control location from where the repository should be downloaded.\
     "verbose": attr.bool(default = False),
 }
 
-# TODO(chuck): We should not expose the _WORKSPACE_AND_BUILD_FILE_ATTRS.
-
-# _WORKSPACE_AND_BUILD_FILE_ATTRS = {
-#     "build_file": attr.label(
-#         allow_single_file = True,
-#         doc =
-#             "The file to use as the BUILD file for this repository." +
-#             "This attribute is an absolute label (use '@//' for the main " +
-#             "repo). The file does not need to be named BUILD, but can " +
-#             "be (something like BUILD.new-repo-name may work well for " +
-#             "distinguishing it from the repository's actual BUILD files. " +
-#             "Either build_file or build_file_content must be specified.",
-#     ),
-#     "build_file_content": attr.string(
-#         doc =
-#             "The content for the BUILD file for this repository. " +
-#             "Either build_file or build_file_content must be specified.",
-#     ),
-#     "workspace_file": attr.label(
-#         doc =
-#             "The file to use as the `WORKSPACE` file for this repository. " +
-#             "Either `workspace_file` or `workspace_file_content` can be " +
-#             "specified, or neither, but not both.",
-#     ),
-#     "workspace_file_content": attr.string(
-#         doc =
-#             "The content for the WORKSPACE file for this repository. " +
-#             "Either `workspace_file` or `workspace_file_content` can be " +
-#             "specified, or neither, but not both.",
-#     ),
-# }
-
 _PATCH_ATTRS = {
     "patch_args": attr.string_list(
         default = ["-p0"],
@@ -180,19 +148,8 @@ _PATCH_ATTRS = {
     ),
 }
 
-_ENV_ATTRS = {
-    "env": attr.string_dict(
-        doc = """\
-Environment variables that will be passed to the execution environments for \
-this repository rule. (e.g. SPM version check, SPM dependency resolution, SPM \
-package description generation)\
-""",
-    ),
-}
-
 _COMMON_ATTRS = dicts.add(
     _PATCH_ATTRS,
-    # _WORKSPACE_AND_BUILD_FILE_ATTRS,
     _GIT_ATTRS,
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
