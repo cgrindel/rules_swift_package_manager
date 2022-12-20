@@ -2,6 +2,7 @@ package gazelle
 
 import (
 	"flag"
+	"log"
 	"path/filepath"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
@@ -50,6 +51,9 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	}
 	// Index any of repository rules (e.g. http_archive) that may contain Swift targets.
 	for _, r := range c.Repos {
+		// DEBUG BEGIN
+		log.Printf("*** CHUCK:  r.Name(): %+#v", r.Name())
+		// DEBUG END
 		if err := sc.ModuleIndex.IndexRepoRule(r); err != nil {
 			return err
 		}
