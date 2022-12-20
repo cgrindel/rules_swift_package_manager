@@ -136,6 +136,27 @@ bzl_library(
 )
 
 bzl_library(
+    name = "local_swift_package",
+    srcs = ["local_swift_package.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":pkginfos",
+        "@bazel_tools//tools/build_defs/repo:utils.bzl",
+    ],
+)
+
+bzl_library(
+    name = "repo_rules",
+    srcs = ["repo_rules.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":build_files",
+        ":pkg_ctxs",
+        ":swiftpkg_build_files",
+    ],
+)
+
+bzl_library(
     name = "bazel_repo_names",
     srcs = ["bazel_repo_names.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],

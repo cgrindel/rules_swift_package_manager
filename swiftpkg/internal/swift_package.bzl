@@ -1,53 +1,19 @@
 """Implementation for `swift_package`."""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
-load("@bazel_skylib//lib:versions.bzl", "versions")
 load("@bazel_tools//tools/build_defs/repo:git_worker.bzl", "git_repo")
 load(
     "@bazel_tools//tools/build_defs/repo:utils.bzl",
     "patch",
     "update_attrs",
-    "workspace_and_buildfile",
 )
-load(":build_files.bzl", "build_files")
-load(":pkg_ctxs.bzl", "pkg_ctxs")
 load(":pkginfos.bzl", "pkginfos")
-load(":spm_versions.bzl", "spm_versions")
-load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
+load(":repo_rules.bzl", "repo_rules")
 
 # The implementation of this repository rule is heavily influenced by the
 # implementation for git_repository.
 
 # MARK: - Environment Variables
-
-_DEVELOPER_DIR_ENV = "DEVELOPER_DIR"
-
-def _get_exec_env(repository_ctx):
-    """Creates a `dict` of environment variables which will be past to all execution environments for this rule.
-
-    Args:
-        repository_ctx: A `repository_ctx` instance.
-
-    Returns:
-        A `dict` of environment variables which will be used for execution environments for this rule.
-    """
-
-    # If the DEVELOPER_DIR is specified in the environment, it will override
-    # the value which may be specified in the env attribute.
-    env = dicts.add(repository_ctx.attr.env)
-    dev_dir = repository_ctx.os.environ.get(_DEVELOPER_DIR_ENV)
-    if dev_dir:
-        env[_DEVELOPER_DIR_ENV] = dev_dir
-    return env
-
-def _check_spm_version(repository_ctx, env = {}):
-    min_spm_ver = "5.4.0"
-    spm_ver = spm_versions.get(repository_ctx, env = env)
-    if not versions.is_at_least(threshold = min_spm_ver, version = spm_ver):
-        fail("""\
-`rules_spm` requires that Swift Package Manager be version %s or \
-higher. Found version %s installed.\
-""" % (min_spm_ver, spm_ver))
 
 def _clone_or_update_repo(repository_ctx, directory):
     if ((not repository_ctx.attr.tag and not repository_ctx.attr.commit and not repository_ctx.attr.branch) or
@@ -72,35 +38,10 @@ def _update_git_attrs(orig, keys, override):
         result.pop("branch", None)
     return result
 
-def _gen_build_files(repository_ctx, pkg_info):
-    repo_name = repository_ctx.name
-    pkg_ctx = pkg_ctxs.new(
-        pkg_info = pkg_info,
-        repo_name = repo_name,
-        module_index_json = repository_ctx.read(
-            repository_ctx.attr.module_index,
-        ),
-    )
-
-    # Create Bazel declarations for the Swift package targets
-    bld_files = []
-    for target in pkg_info.targets:
-        bld_file = swiftpkg_build_files.new_for_target(pkg_ctx, target)
-        if bld_file == None:
-            continue
-        bld_files.append(bld_file)
-
-    # Create Bazel declarations for the targets
-    bld_files.append(swiftpkg_build_files.new_for_products(pkg_info, repo_name))
-
-    # Write the build file
-    root_bld_file = build_files.merge(*bld_files)
-    build_files.write(repository_ctx, root_bld_file, pkg_info.path)
-
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))
-    env = _get_exec_env(repository_ctx)
-    _check_spm_version(repository_ctx, env = env)
+    env = repo_rules.get_exec_env(repository_ctx)
+    repo_rules.check_spm_version(repository_ctx, env = env)
 
     # Download the repo
     update = _clone_or_update_repo(repository_ctx, directory)
@@ -109,10 +50,10 @@ def _swift_package_impl(repository_ctx):
     pkg_info = pkginfos.get(repository_ctx, directory, env = env)
 
     # Generate the WORKSPACE file
-    workspace_and_buildfile(repository_ctx)
+    repo_rules.write_workspace_file(repository_ctx, directory)
 
     # Generate the build file
-    _gen_build_files(repository_ctx, pkg_info)
+    repo_rules.gen_build_files(repository_ctx, pkg_info)
 
     # Apply any patches
     patch(repository_ctx)
@@ -169,36 +110,6 @@ The version control location from where the repository should be downloaded.\
     "verbose": attr.bool(default = False),
 }
 
-_WORKSPACE_AND_BUILD_FILE_ATTRS = {
-    "build_file": attr.label(
-        allow_single_file = True,
-        doc =
-            "The file to use as the BUILD file for this repository." +
-            "This attribute is an absolute label (use '@//' for the main " +
-            "repo). The file does not need to be named BUILD, but can " +
-            "be (something like BUILD.new-repo-name may work well for " +
-            "distinguishing it from the repository's actual BUILD files. " +
-            "Either build_file or build_file_content must be specified.",
-    ),
-    "build_file_content": attr.string(
-        doc =
-            "The content for the BUILD file for this repository. " +
-            "Either build_file or build_file_content must be specified.",
-    ),
-    "workspace_file": attr.label(
-        doc =
-            "The file to use as the `WORKSPACE` file for this repository. " +
-            "Either `workspace_file` or `workspace_file_content` can be " +
-            "specified, or neither, but not both.",
-    ),
-    "workspace_file_content": attr.string(
-        doc =
-            "The content for the WORKSPACE file for this repository. " +
-            "Either `workspace_file` or `workspace_file_content` can be " +
-            "specified, or neither, but not both.",
-    ),
-}
-
 _PATCH_ATTRS = {
     "patch_args": attr.string_list(
         default = ["-p0"],
@@ -237,36 +148,11 @@ _PATCH_ATTRS = {
     ),
 }
 
-_ENV_ATTRS = {
-    "env": attr.string_dict(
-        doc = """\
-Environment variables that will be passed to the execution environments for \
-this repository rule. (e.g. SPM version check, SPM dependency resolution, SPM \
-package description generation)\
-""",
-    ),
-}
-
-_SWIFT_ATTRS = {
-    "module_index": attr.label(
-        doc = "The JSON file that contains the module index by name.",
-        mandatory = True,
-    ),
-    "modules": attr.string_dict(
-        doc = """\
-Maps the module names (key) exported by the package to their Bazel label \
-(value). The map is not used internal to the rule. Intead, it used by the \
-gazelle plugin to resolve external dependencies.\
-""",
-    ),
-}
-
 _COMMON_ATTRS = dicts.add(
     _PATCH_ATTRS,
-    _WORKSPACE_AND_BUILD_FILE_ATTRS,
     _GIT_ATTRS,
-    _ENV_ATTRS,
-    _SWIFT_ATTRS,
+    repo_rules.env_attrs,
+    repo_rules.swift_attrs,
 )
 
 swift_package = repository_rule(

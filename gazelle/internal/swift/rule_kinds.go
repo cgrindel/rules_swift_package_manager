@@ -6,8 +6,9 @@ const (
 	TestRuleKind    = "swift_test"
 
 	// Repository Rule
-	SwiftPkgRuleKind    = "swift_package"
-	HTTPArchiveRuleKind = "http_archive"
+	SwiftPkgRuleKind      = "swift_package"
+	LocalSwiftPkgRuleKind = "local_swift_package"
+	HTTPArchiveRuleKind   = "http_archive"
 
 	AliasRuleKind = "alias"
 )

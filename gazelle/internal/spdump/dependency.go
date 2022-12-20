@@ -8,6 +8,7 @@ import (
 
 type Dependency struct {
 	SourceControl *SourceControl `json:"sourceControl"`
+	FileSystem    *FileSystem    `json:"fileSystem"`
 }
 
 func (d *Dependency) Identity() string {
@@ -25,6 +26,8 @@ func (d *Dependency) URL() string {
 	}
 	return ""
 }
+
+// Source Control
 
 type srcCtrl struct {
 	Identity    string
@@ -80,4 +83,28 @@ type DependencyRequirement struct {
 type VersionRange struct {
 	LowerBound string
 	UpperBound string
+}
+
+// FileSystem
+
+type fSystem struct {
+	Identity string
+	Path     string
+}
+
+type FileSystem struct {
+	Identity string
+	Path     string
+}
+
+func (fs *FileSystem) UnmarshalJSON(b []byte) error {
+	var raw []*fSystem
+	err := json.Unmarshal(b, &raw)
+	if err != nil {
+		return err
+	}
+	rawFS := raw[0]
+	fs.Identity = rawFS.Identity
+	fs.Path = rawFS.Path
+	return nil
 }

@@ -1,7 +1,6 @@
 """Module for generating data from target dependencies created by `pkginfos`."""
 
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels")
-load(":bazel_repo_names.bzl", "bazel_repo_names")
 load(":module_indexes.bzl", "module_indexes")
 load(":pkginfo_ext_deps.bzl", "pkginfo_ext_deps")
 
@@ -50,7 +49,7 @@ Unable to resolve target reference target dependency for {module_name}.
                 module_index = pkg_ctx.module_index_ctx.module_index,
                 module_name = prod_ref.product_name,
                 restrict_to_repo_names = [
-                    bazel_repo_names.from_url(ext_dep.url),
+                    pkginfo_ext_deps.bazel_repo_name(ext_dep),
                 ],
             )
 

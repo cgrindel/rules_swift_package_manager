@@ -1,30 +1,23 @@
 """Module for creating Bazel repository names."""
 
-# The logic in from_url must stay in-sync with the RepoNameFromURL logic in
-# gazelle/internal/swift/repo_name.go.
-def _from_url(url):
-    """Generates a repository name from a URL.
+# The logic in from_identity must stay in-sync with the RepoNameFromIdentity
+# logic in gazelle/internal/swift/bazel_repo_name.go.
+
+def _from_identity(identity):
+    """Create a Bazel repository name from a Swift package identity (e.g. \
+    package name in the manifest)
+
+    The value produced by this function will not have the `@` character
+    appended. Code that needs to use it as a label repository name should pass
+    it to bazel_repo_names.normalize().
 
     Args:
-        url: A URL as a `string`.
+        identity: A Swift package name/identity as a `string`.
 
     Returns:
-        A `string` value suitable for use as a Bazel label repository name.
+        A Bazel repository name as a `string`.
     """
-    if url.startswith("https://"):
-        host_and_path = url.removeprefix("https://")
-    elif url.startswith("http://"):
-        host_and_path = url.removeprefix("http://")
-    else:
-        fail("Only https:// and http:// URLs are supported. url:", url)
-    host_and_path = host_and_path.removesuffix(".git")
-    host_sep_idx = host_and_path.find("/")
-    if host_sep_idx < 0:
-        fail("Invalid URL: host separator was not found. url:", url)
-    elif host_sep_idx == 0:
-        fail("Invalid URL: host not specified. url:", url)
-    path = host_and_path[host_sep_idx + 1:]
-    return _normalize(path.replace("/", "_").replace("-", "_"))
+    return "swiftpkg_" + identity.replace("-", "_")
 
 def _normalize(repo_name):
     """Ensures that the repository name is formatted properly (e.g. has @ suffix).
@@ -40,6 +33,6 @@ def _normalize(repo_name):
     return repo_name
 
 bazel_repo_names = struct(
-    from_url = _from_url,
+    from_identity = _from_identity,
     normalize = _normalize,
 )

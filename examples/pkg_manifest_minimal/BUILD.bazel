@@ -49,5 +49,7 @@ bzl_library(
 alias(
     name = "swiftformat",
     # This is the executable product.
-    actual = "@nicklockwood_SwiftFormat//:swiftformat",
+    # FYI. The identity for SwiftFormat in the swift package dump-package is
+    # lowercase. That is why it is lowercase here.
+    actual = "@swiftpkg_swiftformat//:swiftformat",
 )

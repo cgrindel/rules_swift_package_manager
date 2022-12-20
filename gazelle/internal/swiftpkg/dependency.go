@@ -3,25 +3,41 @@ package swiftpkg
 import (
 	"log"
 	"path"
+	"path/filepath"
 	"strings"
 
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
 )
 
+const swiftPkgBuildDirname = ".build"
+const swiftPkgCheckoutsDirname = "checkouts"
+
 type Dependency struct {
 	SourceControl *SourceControl
+	FileSystem    *FileSystem
 }
 
 func NewDependencyFromManifestInfo(dumpD *spdump.Dependency) (*Dependency, error) {
-	srcCtrl := NewSourceControlFromManifestInfo(dumpD.SourceControl)
+	var srcCtrl *SourceControl
+	if dumpD.SourceControl != nil {
+		srcCtrl = NewSourceControlFromManifestInfo(dumpD.SourceControl)
+	}
+	var fSys *FileSystem
+	if dumpD.FileSystem != nil {
+		fSys = NewFileSystemFromManifestInfo(dumpD.FileSystem)
+	}
 	return &Dependency{
 		SourceControl: srcCtrl,
+		FileSystem:    fSys,
 	}, nil
 }
 
 func (d *Dependency) Identity() string {
 	if d.SourceControl != nil {
 		return d.SourceControl.Identity
+	}
+	if d.FileSystem != nil {
+		return d.FileSystem.Identity
 	}
 	log.Fatalf("Identity could not be determined.")
 	return ""
@@ -39,7 +55,33 @@ func (d *Dependency) URL() string {
 	return ""
 }
 
-func (d *Dependency) SPMCheckoutDirname() string {
+// Returns the path to the dependency's code. For source control dependencies, it is the checkout
+// directory. For local packages, it is the path to the local package.
+func (d *Dependency) CodeDir(pkgDir string) string {
+	if d.SourceControl != nil {
+		// Return the checkout directory
+		return filepath.Join(
+			pkgDir,
+			swiftPkgBuildDirname,
+			swiftPkgCheckoutsDirname,
+			d.spmCheckoutDirname(),
+		)
+	}
+	if d.FileSystem != nil {
+		var path string
+		if filepath.IsAbs(d.FileSystem.Path) {
+			path = d.FileSystem.Path
+		} else {
+			path = filepath.Join(pkgDir, d.FileSystem.Path)
+		}
+		// Return the local path
+		return filepath.Clean(path)
+	}
+	log.Fatalf("CodeDir could not be determined.")
+	return ""
+}
+
+func (d *Dependency) spmCheckoutDirname() string {
 	url := d.URL()
 	base := path.Base(url)
 	ext := path.Ext(base)
@@ -113,5 +155,19 @@ func NewVersionRangeFromManifestInfo(vr *spdump.VersionRange) *VersionRange {
 	return &VersionRange{
 		LowerBound: vr.LowerBound,
 		UpperBound: vr.UpperBound,
+	}
+}
+
+// FileSystem
+
+type FileSystem struct {
+	Identity string
+	Path     string
+}
+
+func NewFileSystemFromManifestInfo(fs *spdump.FileSystem) *FileSystem {
+	return &FileSystem{
+		Identity: fs.Identity,
+		Path:     fs.Path,
 	}
 }

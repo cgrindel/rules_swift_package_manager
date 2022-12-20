@@ -71,7 +71,7 @@ func NewTargetFromManifestInfo(descT *spdesc.Target, dumpT *spdump.Target) (*Tar
 			"unrecognized spdump.TargetType %v for %s target", dumpT.Type, dumpT.Name)
 	}
 
-	// TODO(chuck): A Swift plugin can have a dependency on an executable target. In this case, we
+	// GH046: A Swift plugin can have a dependency on an executable target. In this case, we
 	// want to add the target as a data dependency.
 
 	var err error
