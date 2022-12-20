@@ -29,7 +29,6 @@ gazelle_binary(
     ],
 )
 
-# gazelle:prefix github.com/cgrindel/swift_bazel/examples/http_archive_ext_deps
 gazelle(
     name = "update_build_files",
     gazelle = ":gazelle_bin",
