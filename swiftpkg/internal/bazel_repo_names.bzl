@@ -1,7 +1,7 @@
 """Module for creating Bazel repository names."""
 
-# The logic in from_url must stay in-sync with the RepoNameFromIdentity logic in
-# gazelle/internal/swift/bazel_repo_name.go.
+# The logic in from_identity must stay in-sync with the RepoNameFromIdentity
+# logic in gazelle/internal/swift/bazel_repo_name.go.
 
 def _from_identity(identity):
     """Create a Bazel repository name from a Swift package identity (e.g. \
