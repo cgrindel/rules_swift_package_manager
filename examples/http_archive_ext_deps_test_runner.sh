@@ -39,18 +39,6 @@ cd "${scratch_dir}"
 # Dump Bazel info
 bazel info
 
-do_test() {
-  # Run update build files
-  bazel run //:tidy
-
-  # Ensure that it builds
-  bazel test //...
-
-  # Run PrintStuff
-  output="$(bazel run //Sources/PrintStuff)"
-  assert_match "My deque colors" "${output}" 
-}
-
 # MARK - Test As Is
 
 do_test

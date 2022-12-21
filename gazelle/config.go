@@ -50,7 +50,7 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	}
 	// Index any of repository rules (e.g. http_archive) that may contain Swift targets.
 	for _, r := range c.Repos {
-		if err := sc.ModuleIndex.IndexRepoRule(r); err != nil {
+		if err := sc.ModuleIndex.IndexRepoRule(r, c.RepoRoot); err != nil {
 			return err
 		}
 	}

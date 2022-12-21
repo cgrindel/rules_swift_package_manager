@@ -56,31 +56,16 @@ swift_rules_extra_dependencies()
 
 # MARK: - Swift Dependencies
 
+# Example of defining Swift targets in a separate build file
 http_archive(
     name = "com_github_apple_swift_collections",
-    build_file_content = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
-swift_library(
-    name = "Collections",
-    srcs = glob(["Sources/Collections/**/*.swift"]),
-    visibility = ["//visibility:public"],
-)
-swift_library(
-    name = "DequeModule",
-    srcs = glob(["Sources/DequeModule/**/*.swift"]),
-    visibility = ["//visibility:public"],
-)
-swift_library(
-    name = "OrderedCollections",
-    srcs = glob(["Sources/OrderedCollections/**/*.swift"]),
-    visibility = ["//visibility:public"],
-)
-""",
+    build_file = "@//third_party:swift_collections.BUILD.bazel",
     sha256 = "b18c522aff4241160f60bcd0695702657c7862512c994c260a7d63f15a8450d8",
     strip_prefix = "swift-collections-1.0.2",
     url = "https://github.com/apple/swift-collections/archive/refs/tags/1.0.2.tar.gz",
 )
 
+# Example of defining Swift targets inline.
 http_archive(
     name = "com_github_apple_swift_argument_parser",
     build_file_content = """\
