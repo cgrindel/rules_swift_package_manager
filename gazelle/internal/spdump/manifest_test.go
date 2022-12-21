@@ -61,7 +61,7 @@ func TestNewManifestFromJSON(t *testing.T) {
 				Type: spdump.TestTargetType,
 				Dependencies: []spdump.TargetDependency{
 					{
-						ByName: &spdump.ByNameReference{TargetName: "MySwiftPackage"},
+						ByName: &spdump.ByNameReference{Name: "MySwiftPackage"},
 					},
 				},
 			},

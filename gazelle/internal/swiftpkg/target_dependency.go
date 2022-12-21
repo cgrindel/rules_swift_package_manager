@@ -36,7 +36,7 @@ func (td *TargetDependency) ImportName() string {
 	if td.Product != nil {
 		return td.Product.ProductName
 	} else if td.ByName != nil {
-		return td.ByName.TargetName
+		return td.ByName.Name
 	}
 	return ""
 }
@@ -64,15 +64,15 @@ func (pr *ProductReference) UniqKey() string {
 
 // ByNameReference
 
-// Reference a target by name
+// Reference a product or target by name.
 type ByNameReference struct {
-	// GH084: Should this be Name? Can it refer to a target or a product?
-	TargetName string
+	// Product name or target name
+	Name string
 }
 
 func NewByNameReferenceFromManifestInfo(dumpBNR *spdump.ByNameReference) *ByNameReference {
 	return &ByNameReference{
-		TargetName: dumpBNR.TargetName,
+		Name: dumpBNR.Name,
 	}
 }
 

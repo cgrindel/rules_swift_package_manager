@@ -19,7 +19,7 @@ func TestTargetImports(t *testing.T) {
 				},
 			},
 			{
-				ByName: &spdump.ByNameReference{TargetName: "MySwiftPackage"},
+				ByName: &spdump.ByNameReference{Name: "MySwiftPackage"},
 			},
 		},
 	}
