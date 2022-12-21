@@ -72,7 +72,7 @@ type ByNameReference struct {
 
 func NewByNameReferenceFromManifestInfo(dumpBNR *spdump.ByNameReference) *ByNameReference {
 	return &ByNameReference{
-		Name: dumpBNR.TargetName,
+		Name: dumpBNR.Name,
 	}
 }
 

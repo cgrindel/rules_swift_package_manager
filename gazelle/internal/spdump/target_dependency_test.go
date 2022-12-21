@@ -20,7 +20,7 @@ func TestTargetDependencyImportName(t *testing.T) {
 	})
 	t.Run("by name", func(t *testing.T) {
 		td := spdump.TargetDependency{
-			ByName: &spdump.ByNameReference{TargetName: "MySwiftPackage"},
+			ByName: &spdump.ByNameReference{Name: "MySwiftPackage"},
 		}
 		actual := td.ImportName()
 		assert.Equal(t, "MySwiftPackage", actual)

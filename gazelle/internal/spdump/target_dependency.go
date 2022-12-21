@@ -17,7 +17,7 @@ func (td *TargetDependency) ImportName() string {
 	if td.Product != nil {
 		return td.Product.ProductName
 	} else if td.ByName != nil {
-		return td.ByName.TargetName
+		return td.ByName.Name
 	}
 	return ""
 }
@@ -51,10 +51,10 @@ func (pr *ProductReference) UniqKey() string {
 
 // ByNameReference
 
-// Reference a target by name
+// Reference a product or target by name
 type ByNameReference struct {
-	// GH084: Should this be Name? Can it refer to a target or a product?
-	TargetName string
+	// Product name or target name
+	Name string
 }
 
 func (bnr *ByNameReference) UnmarshalJSON(b []byte) error {
@@ -63,7 +63,7 @@ func (bnr *ByNameReference) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, &raw); err != nil {
 		return err
 	}
-	if bnr.TargetName, err = jsonutils.StringAtIndex(raw, 0); err != nil {
+	if bnr.Name, err = jsonutils.StringAtIndex(raw, 0); err != nil {
 		return err
 	}
 	return nil
