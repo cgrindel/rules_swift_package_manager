@@ -10,17 +10,18 @@ import (
 )
 
 func TestNewHTTPArchiveFromRule(t *testing.T) {
+	repoRoot := "/path/to/project"
 	f, err := rule.LoadWorkspaceData("/path/to/project/WORKSPACE", "",
 		[]byte(sampleWorkspaceFileContent))
 	assert.NoError(t, err)
 
 	assert.Len(t, f.Rules, 3)
 
-	actual, err := swift.NewHTTPArchiveFromRule(f.Rules[0])
+	actual, err := swift.NewHTTPArchiveFromRule(f.Rules[0], repoRoot)
 	assert.NoError(t, err)
 	assert.Nil(t, actual)
 
-	actual, err = swift.NewHTTPArchiveFromRule(f.Rules[1])
+	actual, err = swift.NewHTTPArchiveFromRule(f.Rules[1], repoRoot)
 	assert.NoError(t, err)
 	expected := swift.NewHTTPArchive(
 		"com_github_apple_swift_collections",
@@ -41,7 +42,7 @@ func TestNewHTTPArchiveFromRule(t *testing.T) {
 	)
 	assert.Equal(t, expected, actual)
 
-	actual, err = swift.NewHTTPArchiveFromRule(f.Rules[2])
+	actual, err = swift.NewHTTPArchiveFromRule(f.Rules[2], repoRoot)
 	assert.NoError(t, err)
 	expected = swift.NewHTTPArchive(
 		"com_github_apple_swift_argument_parser",
