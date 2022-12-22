@@ -7,6 +7,7 @@ go_library(
         "bazel_label.go",
         "bazel_repo.go",
         "bazel_repo_name.go",
+        "code_dir.go",
         "file_info.go",
         "files.go",
         "http_archive.go",
@@ -44,6 +45,7 @@ go_test(
     srcs = [
         "bazel_label_test.go",
         "bazel_repo_name_test.go",
+        "code_dir_test.go",
         "file_info_test.go",
         "files_test.go",
         "http_archive_test.go",

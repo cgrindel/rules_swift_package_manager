@@ -109,7 +109,11 @@ func (mi *ModuleIndex) indexHTTPArchive(r *rule.Rule, repoRoot string) error {
 	return nil
 }
 
-func (mi *ModuleIndex) IndexPkgInfo(pi *swiftpkg.PackageInfo, repoName string) error {
+func (mi *ModuleIndex) IndexBazelRepo(bzlRepo *BazelRepo) error {
+	return mi.indexPkgInfo(bzlRepo.PkgInfo, bzlRepo.Name)
+}
+
+func (mi *ModuleIndex) indexPkgInfo(pi *swiftpkg.PackageInfo, repoName string) error {
 	var err error
 
 	// Index targets

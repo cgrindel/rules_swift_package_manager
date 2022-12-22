@@ -29,9 +29,9 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 
 	// Collect Swift files
 	swiftFiles := swift.FilterFiles(append(args.RegularFiles, args.GenFiles...))
-	if len(swiftFiles) == 0 {
-		return result
-	}
+
+	// Do not quick exit if we do not have any Swift source files in this directory. They may be
+	// Swift source files in sub-directories.
 
 	// Be sure to use args.Rel when determining whether this is a module directory. We do not want
 	// to check directories that are outside of the workspace.
@@ -51,6 +51,9 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 
 	// Retrieve any Swift files that have already been found
 	srcs := append(swiftFiles, sc.ModuleFilesCollector.GetModuleFiles(moduleDir)...)
+	if len(srcs) == 0 {
+		return result
+	}
 	sort.Strings(srcs)
 
 	// Generate the rules and imports

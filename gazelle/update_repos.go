@@ -1,7 +1,7 @@
 package gazelle
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -30,8 +30,9 @@ func (*swiftLang) ImportRepos(args language.ImportReposArgs) language.ImportRepo
 	if isPkgManifest(args.Path) {
 		return importReposFromPackageManifest(args)
 	}
-	log.Fatal("No handler found for ImportRepos.")
-	return language.ImportReposResult{}
+	return language.ImportReposResult{
+		Error: fmt.Errorf("no ImportRepos handler found for %v", args.Path),
+	}
 }
 
 func importReposFromPackageManifest(args language.ImportReposArgs) language.ImportReposResult {
@@ -66,26 +67,52 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	mi := swift.NewModuleIndex()
 	sc.ModuleIndex = mi
 
-	// Collect product/module info for each of the dependencies
-	bzlRepos := make([]*swift.BazelRepo, len(pi.Dependencies))
-	for idx, dep := range pi.Dependencies {
-		depDir := dep.CodeDir(pkgDir)
+	// Need to collect all of the direct deps and their transitive deps. These can be remote deps,
+	// which will have a spreso.Pin, and some will be local which will not have a spreso.Pin.
+	bzlReposByIdentity := make(map[string]*swift.BazelRepo)
+	for identity, pin := range pinsByIdentity {
+		depDir := swift.CodeDirForRemotePackage(pkgDir, pin.PkgRef.Remote())
 		depPkgInfo, err := swiftpkg.NewPackageInfo(sb, depDir)
 		if err != nil {
 			result.Error = err
 			return result
 		}
-		pin := pinsByIdentity[dep.Identity()]
-
-		bzlRepo, err := swift.NewBazelRepo(dep, depPkgInfo, pin)
+		bzlRepo, err := swift.NewBazelRepo(identity, depPkgInfo, pin)
 		if err != nil {
 			result.Error = err
 			return result
 		}
-		bzlRepos[idx] = bzlRepo
+		bzlReposByIdentity[bzlRepo.Identity] = bzlRepo
+	}
+	for _, dep := range pi.Dependencies {
+		identity := dep.Identity()
+		if _, ok := bzlReposByIdentity[identity]; ok {
+			continue
+		}
+		if dep.FileSystem == nil {
+			result.Error = fmt.Errorf("expected the dependency %v to be a local package", identity)
+			return result
+		}
+		depDir := swift.CodeDirForLocalPackage(pkgDir, dep.FileSystem.Path)
+		depPkgInfo, err := swiftpkg.NewPackageInfo(sb, depDir)
+		if err != nil {
+			result.Error = err
+			return result
+		}
+		bzlRepo, err := swift.NewBazelRepo(identity, depPkgInfo, nil)
+		if err != nil {
+			result.Error = err
+			return result
+		}
+		bzlReposByIdentity[bzlRepo.Identity] = bzlRepo
+	}
 
-		// Index the targets in the package
-		mi.IndexPkgInfo(depPkgInfo, bzlRepo.Name)
+	// Index all of the Bazel Repos
+	for _, bzlRepo := range bzlReposByIdentity {
+		if err := mi.IndexBazelRepo(bzlRepo); err != nil {
+			result.Error = err
+			return result
+		}
 	}
 
 	// Write the module index to a JSON file
@@ -94,14 +121,17 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 		return result
 	}
 
+	// Generate the repository rules from the Bazel Repos
 	miBase := filepath.Base(sc.ModuleIndexPath)
-	result.Gen = make([]*rule.Rule, len(bzlRepos))
-	for idx, bzlRepo := range bzlRepos {
+	result.Gen = make([]*rule.Rule, len(bzlReposByIdentity))
+	idx := 0
+	for _, bzlRepo := range bzlReposByIdentity {
 		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, miBase, pkgDir)
 		if err != nil {
 			result.Error = err
 			return result
 		}
+		idx++
 	}
 
 	return result

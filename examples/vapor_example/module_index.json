@@ -1,0 +1,455 @@
+{
+  "Algorithms": [
+    "@swiftpkg_swift_algorithms//:Sources_Algorithms"
+  ],
+  "AsyncConsoleKitTests": [
+    "@swiftpkg_console_kit//:Tests_AsyncConsoleKitTests"
+  ],
+  "AsyncHTTPClient": [
+    "@swiftpkg_async_http_client//:Sources_AsyncHTTPClient"
+  ],
+  "AsyncHTTPClientTests": [
+    "@swiftpkg_async_http_client//:Tests_AsyncHTTPClientTests"
+  ],
+  "AsyncKit": [
+    "@swiftpkg_async_kit//:Sources_AsyncKit"
+  ],
+  "AsyncKitTests": [
+    "@swiftpkg_async_kit//:Tests_AsyncKitTests"
+  ],
+  "AsyncTests": [
+    "@swiftpkg_vapor//:Tests_AsyncTests"
+  ],
+  "Atomics": [
+    "@swiftpkg_swift_atomics//:Sources_Atomics"
+  ],
+  "AtomicsTests": [
+    "@swiftpkg_swift_atomics//:Tests_AtomicsTests"
+  ],
+  "Backtrace": [
+    "@swiftpkg_swift_backtrace//:Sources_Backtrace"
+  ],
+  "BacktraceTests": [
+    "@swiftpkg_swift_backtrace//:Tests_BacktraceTests"
+  ],
+  "CAsyncHTTPClient": [
+    "@swiftpkg_async_http_client//:Sources_CAsyncHTTPClient"
+  ],
+  "CBacktrace": [
+    "@swiftpkg_swift_backtrace//:Sources_CBacktrace"
+  ],
+  "CCryptoBoringSSL": [
+    "@swiftpkg_swift_crypto//:Sources_CCryptoBoringSSL"
+  ],
+  "CCryptoBoringSSLShims": [
+    "@swiftpkg_swift_crypto//:Sources_CCryptoBoringSSLShims"
+  ],
+  "CNIOAtomics": [
+    "@swiftpkg_swift_nio//:Sources_CNIOAtomics"
+  ],
+  "CNIOBoringSSL": [
+    "@swiftpkg_swift_nio_ssl//:Sources_CNIOBoringSSL"
+  ],
+  "CNIOBoringSSLShims": [
+    "@swiftpkg_swift_nio_ssl//:Sources_CNIOBoringSSLShims"
+  ],
+  "CNIODarwin": [
+    "@swiftpkg_swift_nio//:Sources_CNIODarwin"
+  ],
+  "CNIOExtrasZlib": [
+    "@swiftpkg_swift_nio_extras//:Sources_CNIOExtrasZlib"
+  ],
+  "CNIOLLHTTP": [
+    "@swiftpkg_swift_nio//:Sources_CNIOLLHTTP"
+  ],
+  "CNIOLinux": [
+    "@swiftpkg_swift_nio//:Sources_CNIOLinux"
+  ],
+  "CNIOSHA1": [
+    "@swiftpkg_swift_nio//:Sources_CNIOSHA1"
+  ],
+  "CNIOWindows": [
+    "@swiftpkg_swift_nio//:Sources_CNIOWindows"
+  ],
+  "CSQLite": [
+    "@swiftpkg_sqlite_nio//:Sources_CSQLite"
+  ],
+  "CVaporBcrypt": [
+    "@swiftpkg_vapor//:Sources_CVaporBcrypt"
+  ],
+  "CVaporURLParser": [
+    "@swiftpkg_vapor//:Sources_CVaporURLParser"
+  ],
+  "Collections": [
+    "@swiftpkg_swift_collections//:Sources_Collections"
+  ],
+  "CollectionsTestSupportTests": [
+    "@swiftpkg_swift_collections//:Tests_CollectionsTestSupportTests"
+  ],
+  "ComplexLog": [
+    "@swiftpkg_swift_numerics//:Tests_Executable_ComplexLog"
+  ],
+  "ComplexLog1p": [
+    "@swiftpkg_swift_numerics//:Tests_Executable_ComplexLog1p"
+  ],
+  "ComplexModule": [
+    "@swiftpkg_swift_numerics//:Sources_ComplexModule"
+  ],
+  "ComplexTests": [
+    "@swiftpkg_swift_numerics//:Tests_ComplexTests"
+  ],
+  "ConsoleKit": [
+    "@swiftpkg_console_kit//:Sources_ConsoleKit"
+  ],
+  "ConsoleKitAsyncExample": [
+    "@swiftpkg_console_kit//:Sources_ConsoleKitAsyncExample"
+  ],
+  "ConsoleKitExample": [
+    "@swiftpkg_console_kit//:Sources_ConsoleKitExample"
+  ],
+  "ConsoleKitTests": [
+    "@swiftpkg_console_kit//:Tests_ConsoleKitTests"
+  ],
+  "CoreMetrics": [
+    "@swiftpkg_swift_metrics//:Sources_CoreMetrics"
+  ],
+  "Crypto": [
+    "@swiftpkg_swift_crypto//:Sources_Crypto"
+  ],
+  "CryptoBoringWrapper": [
+    "@swiftpkg_swift_crypto//:Sources_CryptoBoringWrapper"
+  ],
+  "CryptoTests": [
+    "@swiftpkg_swift_crypto//:Tests_CryptoTests"
+  ],
+  "DequeModule": [
+    "@swiftpkg_swift_collections//:Sources_DequeModule"
+  ],
+  "DequeTests": [
+    "@swiftpkg_swift_collections//:Tests_DequeTests"
+  ],
+  "Development": [
+    "@swiftpkg_vapor//:Sources_Development"
+  ],
+  "Fluent": [
+    "@swiftpkg_fluent//:Sources_Fluent"
+  ],
+  "FluentBenchmark": [
+    "@swiftpkg_fluent_kit//:Sources_FluentBenchmark"
+  ],
+  "FluentKit": [
+    "@swiftpkg_fluent_kit//:Sources_FluentKit"
+  ],
+  "FluentKitTests": [
+    "@swiftpkg_fluent_kit//:Tests_FluentKitTests"
+  ],
+  "FluentSQL": [
+    "@swiftpkg_fluent_kit//:Sources_FluentSQL"
+  ],
+  "FluentSQLiteDriver": [
+    "@swiftpkg_fluent_sqlite_driver//:Sources_FluentSQLiteDriver"
+  ],
+  "FluentSQLiteDriverTests": [
+    "@swiftpkg_fluent_sqlite_driver//:Tests_FluentSQLiteDriverTests"
+  ],
+  "FluentTests": [
+    "@swiftpkg_fluent//:Tests_FluentTests"
+  ],
+  "HTTPServerWithQuiescingDemo": [
+    "@swiftpkg_swift_nio_extras//:Sources_HTTPServerWithQuiescingDemo"
+  ],
+  "Logging": [
+    "@swiftpkg_swift_log//:Sources_Logging"
+  ],
+  "LoggingTests": [
+    "@swiftpkg_swift_log//:Tests_LoggingTests"
+  ],
+  "Metrics": [
+    "@swiftpkg_swift_metrics//:Sources_Metrics"
+  ],
+  "MetricsTestKit": [
+    "@swiftpkg_swift_metrics//:Sources_MetricsTestKit"
+  ],
+  "MetricsTests": [
+    "@swiftpkg_swift_metrics//:Tests_MetricsTests"
+  ],
+  "MultipartKit": [
+    "@swiftpkg_multipart_kit//:Sources_MultipartKit"
+  ],
+  "MultipartKitTests": [
+    "@swiftpkg_multipart_kit//:Tests_MultipartKitTests"
+  ],
+  "NIO": [
+    "@swiftpkg_swift_nio//:Sources_NIO"
+  ],
+  "NIOAsyncAwaitDemo": [
+    "@swiftpkg_swift_nio//:Sources_NIOAsyncAwaitDemo"
+  ],
+  "NIOChatClient": [
+    "@swiftpkg_swift_nio//:Sources_NIOChatClient"
+  ],
+  "NIOChatServer": [
+    "@swiftpkg_swift_nio//:Sources_NIOChatServer"
+  ],
+  "NIOConcurrencyHelpers": [
+    "@swiftpkg_swift_nio//:Sources_NIOConcurrencyHelpers"
+  ],
+  "NIOConcurrencyHelpersTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOConcurrencyHelpersTests"
+  ],
+  "NIOCore": [
+    "@swiftpkg_swift_nio//:Sources_NIOCore"
+  ],
+  "NIOCoreTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOCoreTests"
+  ],
+  "NIOCrashTester": [
+    "@swiftpkg_swift_nio//:Sources_NIOCrashTester"
+  ],
+  "NIODataStructuresTests": [
+    "@swiftpkg_swift_nio//:Tests_NIODataStructuresTests"
+  ],
+  "NIOEchoClient": [
+    "@swiftpkg_swift_nio//:Sources_NIOEchoClient"
+  ],
+  "NIOEchoServer": [
+    "@swiftpkg_swift_nio//:Sources_NIOEchoServer"
+  ],
+  "NIOEmbedded": [
+    "@swiftpkg_swift_nio//:Sources_NIOEmbedded"
+  ],
+  "NIOEmbeddedTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOEmbeddedTests"
+  ],
+  "NIOExtras": [
+    "@swiftpkg_swift_nio_extras//:Sources_NIOExtras"
+  ],
+  "NIOExtrasPerformanceTester": [
+    "@swiftpkg_swift_nio_extras//:Sources_NIOExtrasPerformanceTester"
+  ],
+  "NIOExtrasTests": [
+    "@swiftpkg_swift_nio_extras//:Tests_NIOExtrasTests"
+  ],
+  "NIOFoundationCompat": [
+    "@swiftpkg_swift_nio//:Sources_NIOFoundationCompat"
+  ],
+  "NIOFoundationCompatTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOFoundationCompatTests"
+  ],
+  "NIOHPACK": [
+    "@swiftpkg_swift_nio_http2//:Sources_NIOHPACK"
+  ],
+  "NIOHPACKTests": [
+    "@swiftpkg_swift_nio_http2//:Tests_NIOHPACKTests"
+  ],
+  "NIOHTTP1": [
+    "@swiftpkg_swift_nio//:Sources_NIOHTTP1"
+  ],
+  "NIOHTTP1Client": [
+    "@swiftpkg_swift_nio//:Sources_NIOHTTP1Client"
+  ],
+  "NIOHTTP1Server": [
+    "@swiftpkg_swift_nio//:Sources_NIOHTTP1Server"
+  ],
+  "NIOHTTP1Tests": [
+    "@swiftpkg_swift_nio//:Tests_NIOHTTP1Tests"
+  ],
+  "NIOHTTP2": [
+    "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2"
+  ],
+  "NIOHTTP2PerformanceTester": [
+    "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2PerformanceTester"
+  ],
+  "NIOHTTP2Server": [
+    "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2Server"
+  ],
+  "NIOHTTP2Tests": [
+    "@swiftpkg_swift_nio_http2//:Tests_NIOHTTP2Tests"
+  ],
+  "NIOHTTPCompression": [
+    "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPCompression"
+  ],
+  "NIOHTTPCompressionTests": [
+    "@swiftpkg_swift_nio_extras//:Tests_NIOHTTPCompressionTests"
+  ],
+  "NIOMulticastChat": [
+    "@swiftpkg_swift_nio//:Sources_NIOMulticastChat"
+  ],
+  "NIOPerformanceTester": [
+    "@swiftpkg_swift_nio//:Sources_NIOPerformanceTester"
+  ],
+  "NIOPosix": [
+    "@swiftpkg_swift_nio//:Sources_NIOPosix"
+  ],
+  "NIOPosixTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOPosixTests"
+  ],
+  "NIOSOCKS": [
+    "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKS"
+  ],
+  "NIOSOCKSClient": [
+    "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKSClient"
+  ],
+  "NIOSOCKSTests": [
+    "@swiftpkg_swift_nio_extras//:Tests_NIOSOCKSTests"
+  ],
+  "NIOSSL": [
+    "@swiftpkg_swift_nio_ssl//:Sources_NIOSSL"
+  ],
+  "NIOSSLHTTP1Client": [
+    "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLHTTP1Client"
+  ],
+  "NIOSSLPerformanceTester": [
+    "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLPerformanceTester"
+  ],
+  "NIOSSLTests": [
+    "@swiftpkg_swift_nio_ssl//:Tests_NIOSSLTests"
+  ],
+  "NIOTLS": [
+    "@swiftpkg_swift_nio//:Sources_NIOTLS"
+  ],
+  "NIOTLSServer": [
+    "@swiftpkg_swift_nio_ssl//:Sources_NIOTLSServer"
+  ],
+  "NIOTLSTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOTLSTests"
+  ],
+  "NIOTSHTTPClient": [
+    "@swiftpkg_swift_nio_transport_services//:Sources_NIOTSHTTPClient"
+  ],
+  "NIOTSHTTPServer": [
+    "@swiftpkg_swift_nio_transport_services//:Sources_NIOTSHTTPServer"
+  ],
+  "NIOTestUtils": [
+    "@swiftpkg_swift_nio//:Sources_NIOTestUtils"
+  ],
+  "NIOTestUtilsTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOTestUtilsTests"
+  ],
+  "NIOTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOTests"
+  ],
+  "NIOTransportServices": [
+    "@swiftpkg_swift_nio_transport_services//:Sources_NIOTransportServices"
+  ],
+  "NIOTransportServicesTests": [
+    "@swiftpkg_swift_nio_transport_services//:Tests_NIOTransportServicesTests"
+  ],
+  "NIOUDPEchoClient": [
+    "@swiftpkg_swift_nio//:Sources_NIOUDPEchoClient"
+  ],
+  "NIOUDPEchoServer": [
+    "@swiftpkg_swift_nio//:Sources_NIOUDPEchoServer"
+  ],
+  "NIOWebSocket": [
+    "@swiftpkg_swift_nio//:Sources_NIOWebSocket"
+  ],
+  "NIOWebSocketClient": [
+    "@swiftpkg_swift_nio//:Sources_NIOWebSocketClient"
+  ],
+  "NIOWebSocketServer": [
+    "@swiftpkg_swift_nio//:Sources_NIOWebSocketServer"
+  ],
+  "NIOWebSocketTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOWebSocketTests"
+  ],
+  "NIOWritePCAPDemo": [
+    "@swiftpkg_swift_nio_extras//:Sources_NIOWritePCAPDemo"
+  ],
+  "NIOWritePartialPCAPDemo": [
+    "@swiftpkg_swift_nio_extras//:Sources_NIOWritePartialPCAPDemo"
+  ],
+  "Numerics": [
+    "@swiftpkg_swift_numerics//:Sources_Numerics"
+  ],
+  "OrderedCollections": [
+    "@swiftpkg_swift_collections//:Sources_OrderedCollections"
+  ],
+  "OrderedCollectionsTests": [
+    "@swiftpkg_swift_collections//:Tests_OrderedCollectionsTests"
+  ],
+  "RealModule": [
+    "@swiftpkg_swift_numerics//:Sources_RealModule"
+  ],
+  "RealTests": [
+    "@swiftpkg_swift_numerics//:Tests_RealTests"
+  ],
+  "RoutingKit": [
+    "@swiftpkg_routing_kit//:Sources_RoutingKit"
+  ],
+  "RoutingKitTests": [
+    "@swiftpkg_routing_kit//:Tests_RoutingKitTests"
+  ],
+  "SQLKit": [
+    "@swiftpkg_sql_kit//:Sources_SQLKit"
+  ],
+  "SQLKitBenchmark": [
+    "@swiftpkg_sql_kit//:Sources_SQLKitBenchmark"
+  ],
+  "SQLKitTests": [
+    "@swiftpkg_sql_kit//:Tests_SQLKitTests"
+  ],
+  "SQLiteKit": [
+    "@swiftpkg_sqlite_kit//:Sources_SQLiteKit"
+  ],
+  "SQLiteKitTests": [
+    "@swiftpkg_sqlite_kit//:Tests_SQLiteKitTests"
+  ],
+  "SQLiteNIO": [
+    "@swiftpkg_sqlite_nio//:Sources_SQLiteNIO"
+  ],
+  "SQLiteNIOTests": [
+    "@swiftpkg_sqlite_nio//:Tests_SQLiteNIOTests"
+  ],
+  "Sample": [
+    "@swiftpkg_swift_backtrace//:Sources_Sample"
+  ],
+  "SwiftAlgorithmsTests": [
+    "@swiftpkg_swift_algorithms//:Tests_SwiftAlgorithmsTests"
+  ],
+  "Vapor": [
+    "@swiftpkg_vapor//:Sources_Vapor"
+  ],
+  "VaporTests": [
+    "@swiftpkg_vapor//:Tests_VaporTests"
+  ],
+  "WebSocketKit": [
+    "@swiftpkg_websocket_kit//:Sources_WebSocketKit"
+  ],
+  "WebSocketKitTests": [
+    "@swiftpkg_websocket_kit//:Tests_WebSocketKitTests"
+  ],
+  "XCTFluent": [
+    "@swiftpkg_fluent_kit//:Sources_XCTFluent"
+  ],
+  "XCTVapor": [
+    "@swiftpkg_vapor//:Sources_XCTVapor"
+  ],
+  "_AtomicsShims": [
+    "@swiftpkg_swift_atomics//:Sources__AtomicsShims"
+  ],
+  "_CollectionsTestSupport": [
+    "@swiftpkg_swift_collections//:Sources__CollectionsTestSupport"
+  ],
+  "_CryptoExtras": [
+    "@swiftpkg_swift_crypto//:Sources__CryptoExtras"
+  ],
+  "_CryptoExtrasTests": [
+    "@swiftpkg_swift_crypto//:Tests__CryptoExtrasTests"
+  ],
+  "_NIOConcurrency": [
+    "@swiftpkg_swift_nio//:Sources__NIOConcurrency"
+  ],
+  "_NIODataStructures": [
+    "@swiftpkg_swift_nio//:Sources__NIODataStructures"
+  ],
+  "_NumericsShims": [
+    "@swiftpkg_swift_numerics//:Sources__NumericsShims"
+  ],
+  "_TestSupport": [
+    "@swiftpkg_swift_numerics//:Sources__TestSupport"
+  ],
+  "crypto_shasum": [
+    "@swiftpkg_swift_crypto//:Sources_crypto-shasum"
+  ]
+}

@@ -1,0 +1,18 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "App",
+    srcs = [
+        "Configuration/configure.swift",
+        "Configuration/routes.swift",
+        "Migrations/20210819T1221_CreateFooTable.swift",
+        "Models/Foo.swift",
+    ],
+    module_name = "App",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@swiftpkg_fluent//:Sources_Fluent",
+        "@swiftpkg_fluent_sqlite_driver//:Sources_FluentSQLiteDriver",
+        "@swiftpkg_vapor//:Sources_Vapor",
+    ],
+)
