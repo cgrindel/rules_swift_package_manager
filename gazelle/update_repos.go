@@ -1,7 +1,7 @@
 package gazelle
 
 import (
-	"log"
+	"fmt"
 	"os"
 	"path/filepath"
 
@@ -30,8 +30,9 @@ func (*swiftLang) ImportRepos(args language.ImportReposArgs) language.ImportRepo
 	if isPkgManifest(args.Path) {
 		return importReposFromPackageManifest(args)
 	}
-	log.Fatal("No handler found for ImportRepos.")
-	return language.ImportReposResult{}
+	return language.ImportReposResult{
+		Error: fmt.Errorf("no ImportRepos handler found for %v", args.Path),
+	}
 }
 
 func importReposFromPackageManifest(args language.ImportReposArgs) language.ImportReposResult {
