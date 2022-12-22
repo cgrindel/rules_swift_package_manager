@@ -1,4 +1,4 @@
-@testable import App_Configuration
+@testable import App
 import XCTVapor
 
 final class AppTests: XCTestCase {

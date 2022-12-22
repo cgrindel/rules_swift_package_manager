@@ -1,4 +1,3 @@
-import App_Migrations
 import Fluent
 import FluentSQLiteDriver
 import Vapor

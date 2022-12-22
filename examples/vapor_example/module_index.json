@@ -11,6 +11,18 @@
   "Development": [
     "@swiftpkg_vapor//:Sources_Development"
   ],
+  "Fluent": [
+    "@swiftpkg_fluent//:Sources_Fluent"
+  ],
+  "FluentSQLiteDriver": [
+    "@swiftpkg_fluent_sqlite_driver//:Sources_FluentSQLiteDriver"
+  ],
+  "FluentSQLiteDriverTests": [
+    "@swiftpkg_fluent_sqlite_driver//:Tests_FluentSQLiteDriverTests"
+  ],
+  "FluentTests": [
+    "@swiftpkg_fluent//:Tests_FluentTests"
+  ],
   "Vapor": [
     "@swiftpkg_vapor//:Sources_Vapor"
   ],

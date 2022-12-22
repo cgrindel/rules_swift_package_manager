@@ -27,5 +27,8 @@ swift_library(
     srcs = ["main.swift"],
     module_name = "Run",
     visibility = ["//visibility:public"],
-    deps = ["@swiftpkg_vapor//:Sources_Vapor"],
+    deps = [
+        "//Sources/App",
+        "@swiftpkg_vapor//:Sources_Vapor",
+    ],
 )
