@@ -45,6 +45,7 @@ go_test(
     srcs = [
         "bazel_label_test.go",
         "bazel_repo_name_test.go",
+        "code_dir_test.go",
         "file_info_test.go",
         "files_test.go",
         "http_archive_test.go",

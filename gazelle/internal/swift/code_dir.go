@@ -1,6 +1,6 @@
 package swift
 
-import  (
+import (
 	"path"
 	"path/filepath"
 	"strings"
@@ -8,11 +8,6 @@ import  (
 
 const swiftPkgBuildDirname = ".build"
 const swiftPkgCheckoutsDirname = "checkouts"
-
-// func DepCodeDirFromPin(pkgDir string, pin *spreso.Pin) string {
-// 	url := pin.PkgRef.Location
-// 	return DepCodeDirForRemotePackage(pkgDir, url)
-// }
 
 // Returns the path to the dependency's code. For source control dependencies, it is the checkout
 // directory.
