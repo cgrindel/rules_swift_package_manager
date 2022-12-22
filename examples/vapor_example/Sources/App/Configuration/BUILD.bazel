@@ -1,0 +1,18 @@
+# load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+# swift_library(
+#     name = "Configuration",
+#     srcs = glob(["*.swift"]),
+#     module_name = "App_Configuration",
+#     visibility = [
+#         "//Sources:__subpackages__",
+#         "//Tests:__subpackages__",
+#     ],
+#     deps = [
+#         "//Sources/App/Migrations",
+#         "//Sources/App/Models",
+#         "@swift_pkgs//fluent:Fluent",
+#         "@swift_pkgs//fluent-sqlite-driver:FluentSQLiteDriver",
+#         "@swift_pkgs//vapor:Vapor",
+#     ],
+# )

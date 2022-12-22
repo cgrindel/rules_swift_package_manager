@@ -1,0 +1,14 @@
+# Import Shared settings
+import %workspace%/../../shared.bazelrc
+
+# Import CI settings.
+import %workspace%/../../ci.bazelrc
+
+# Try to import a local.rc file; typically, written by CI
+try-import %workspace%/../../local.bazelrc
+
+# TODO(cgrindel): Remove host_xcodes if not needed
+
+# # The Vapor tests are very sensitive to the Xcode version being used.
+# # This tells Bazel to use the Xcode version specified at //:host_xcodes
+# build --xcode_version_config=//:host_xcodes

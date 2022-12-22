@@ -22,9 +22,6 @@ swift_test(
         ],
         "//conditions:default": [],
     }),
-    deps = [
-        "//Sources/App/Configuration",
-        "@swift_pkgs//vapor:XCTVapor",
-        "@zlib",
-    ],
+    module_name = "AppTests",
+    deps = ["@swiftpkg_vapor//:Sources_XCTVapor"],
 )

@@ -1,0 +1,31 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+# load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library", "swift_binary")
+
+# swift_library(
+#     name = "Run",
+#     srcs = glob(["*.swift"]),
+#     module_name = "VaporRun",
+#     visibility = ["//visibility:private"],
+#     deps = [
+#         "//Sources/App/Configuration",
+#         "@swift_pkgs//vapor:Vapor",
+#         "@zlib//:zlib",
+#     ],
+# )
+
+# swift_binary(
+#     name = "vapor_run",
+#     deps = [
+#         ":Run"
+#     ],
+#     visibility = ["//visibility:public"],
+# )
+
+swift_library(
+    name = "Run",
+    srcs = ["main.swift"],
+    module_name = "Run",
+    visibility = ["//visibility:public"],
+    deps = ["@swiftpkg_vapor//:Sources_Vapor"],
+)

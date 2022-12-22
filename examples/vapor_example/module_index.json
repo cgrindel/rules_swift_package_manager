@@ -1,0 +1,23 @@
+{
+  "AsyncTests": [
+    "@swiftpkg_vapor//:Tests_AsyncTests"
+  ],
+  "CVaporBcrypt": [
+    "@swiftpkg_vapor//:Sources_CVaporBcrypt"
+  ],
+  "CVaporURLParser": [
+    "@swiftpkg_vapor//:Sources_CVaporURLParser"
+  ],
+  "Development": [
+    "@swiftpkg_vapor//:Sources_Development"
+  ],
+  "Vapor": [
+    "@swiftpkg_vapor//:Sources_Vapor"
+  ],
+  "VaporTests": [
+    "@swiftpkg_vapor//:Tests_VaporTests"
+  ],
+  "XCTVapor": [
+    "@swiftpkg_vapor//:Sources_XCTVapor"
+  ]
+}
