@@ -7,6 +7,7 @@ go_library(
         "bazel_label.go",
         "bazel_repo.go",
         "bazel_repo_name.go",
+        "code_dir.go",
         "file_info.go",
         "files.go",
         "http_archive.go",

@@ -6,23 +6,21 @@ import (
 )
 
 type BazelRepo struct {
-	Name    string
-	PkgInfo *swiftpkg.PackageInfo
-	Pin     *spreso.Pin
+	Name     string
+	Identity string
+	PkgInfo  *swiftpkg.PackageInfo
+	Pin      *spreso.Pin
 }
 
 func NewBazelRepo(
-	dep *swiftpkg.Dependency,
+	identity string,
 	pkgInfo *swiftpkg.PackageInfo,
 	pin *spreso.Pin,
 ) (*BazelRepo, error) {
-	repoName, err := RepoNameFromDep(dep)
-	if err != nil {
-		return nil, err
-	}
 	return &BazelRepo{
-		Name:    repoName,
-		PkgInfo: pkgInfo,
-		Pin:     pin,
+		Name:     RepoNameFromIdentity(identity),
+		Identity: identity,
+		PkgInfo:  pkgInfo,
+		Pin:      pin,
 	}, nil
 }
