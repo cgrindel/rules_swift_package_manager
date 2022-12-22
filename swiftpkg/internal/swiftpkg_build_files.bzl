@@ -3,6 +3,7 @@
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
+load(":clang_files.bzl", "clang_files")
 load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
@@ -12,11 +13,15 @@ load(":pkginfos.bzl", "module_types", "target_types")
 
 def _new_for_target(pkg_ctx, target):
     if target.module_type == module_types.clang:
-        return _clang_target_build_file(target)
+        return _clang_target_build_file(pkg_ctx, target)
     elif target.module_type == module_types.swift:
         return _swift_target_build_file(pkg_ctx, target)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
+
+    # DEBUG BEGIN
+    print("*** CHUCK FELL THROUGH target: ", target)
+    # DEBUG END
 
     # GH046: Support plugins.
     return None
@@ -82,16 +87,49 @@ def _swift_test_from_target(target, attrs):
 # GH009(chuck): Remove unused-variable directives
 
 # buildifier: disable=unused-variable
-def _clang_target_build_file(target):
-    # GH009(chuck): Implement _clang_target_build_file
-    return []
+def _clang_target_build_file(pkg_ctx, target):
+    # DEBUG BEGIN
+    print("*** CHUCK _clang_target_build_file target: ", target)
+
+    # DEBUG END
+    srcs = pkginfo_targets.srcs(target)
+    organized_files = clang_files.organize(srcs)
+    deps = [
+        pkginfo_target_deps.bazel_label(pkg_ctx, td)
+        for td in target.dependencies
+    ]
+    attrs = {
+        "deps": deps,
+        "tags": ["swift_module={}".format(target.c99name)],
+        "visibility": ["//visibility:public"],
+    }
+    if len(organized_files.srcs) > 0:
+        attrs["srcs"] = organized_files.srcs
+    if len(organized_files.hdrs) > 0:
+        attrs["hdrs"] = organized_files.hdrs
+    if len(organized_files.includes) > 0:
+        attrs["includes"] = organized_files.includes
+
+    # DEBUG BEGIN
+    print("*** CHUCK _clang_target_build_file attrs: ", attrs)
+    # DEBUG END
+
+    return build_decls.new(
+        kind = clang_kinds.library,
+        name = pkginfo_targets.bazel_label_name(target),
+        attrs = attrs,
+    )
 
 # MARK: - System Library Targets
 
 # buildifier: disable=unused-variable
 def _system_library_build_file(target):
+    # DEBUG BEGIN
+    print("*** CHUCK _system_library_build_file target: ", target)
+
+    # DEBUG END
     # GH009(chuck): Implement _system_library_build_file
-    return []
+    return None
 
 # MARK: - Products Entry Point
 
@@ -206,6 +244,10 @@ swift_binary_load_stmt = load_statements.new(
 )
 
 swift_test_load_stmt = load_statements.new(swift_location, swift_kinds.test)
+
+clang_kinds = struct(
+    library = "cc_library",
+)
 
 native_kinds = struct(
     alias = "alias",

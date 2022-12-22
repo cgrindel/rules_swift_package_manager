@@ -75,6 +75,13 @@ def _gen_build_files(repository_ctx, pkg_info):
     # Create Bazel declarations for the targets
     bld_files.append(swiftpkg_build_files.new_for_products(pkg_info, repo_name))
 
+    # # DEBUG BEGIN
+    # print("*** CHUCK repo_name: ", repo_name)
+    # print("*** CHUCK bld_files: ")
+    # for idx, item in enumerate(bld_files):
+    #     print("*** CHUCK", idx, ":", item)
+    # # DEBUG END
+
     # Write the build file
     root_bld_file = build_files.merge(*bld_files)
     build_files.write(repository_ctx, root_bld_file, pkg_info.path)
