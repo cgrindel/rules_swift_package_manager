@@ -170,8 +170,12 @@ def _new_clang_settings_from_dump_json_list(dump_list):
     for setting in dump_list:
         if setting["tool"] != "c":
             continue
-        kind_map = setting["kind"]
-        define_map = kind_map["define"]
+        kind_map = setting.get("kind")
+        if kind_map == None:
+            continue
+        define_map = kind_map.get("define")
+        if define_map == None:
+            continue
         for (k, define) in define_map.items():
             defines.append(define)
 
@@ -186,8 +190,12 @@ def _new_swift_settings_from_dump_json_list(dump_list):
     for setting in dump_list:
         if setting["tool"] != "swift":
             continue
-        kind_map = setting["kind"]
-        define_map = kind_map["define"]
+        kind_map = setting.get("kind")
+        if kind_map == None:
+            continue
+        define_map = kind_map.get("define")
+        if define_map == None:
+            continue
         for (k, define) in define_map.items():
             defines.append(define)
 
