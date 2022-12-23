@@ -126,6 +126,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             "-I{}".format(paths.join("external", repo_name, inc))
             for inc in organized_files.private_includes
         ]
+    if target.clang_settings and len(target.clang_settings.defines) > 0:
+        attrs["defines"] = target.clang_settings.defines
 
     load_stmts = []
     decls = [
