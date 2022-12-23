@@ -56,6 +56,9 @@ def _get_test(ctx):
                         ),
                     ),
                 ],
+                clang_settings = pkginfos.new_clang_settings(
+                    defines = ["__APPLE_USE_RFC_3542"],
+                ),
             ),
             pkginfos.new_target(
                 name = "MySwiftPackageTests",
@@ -167,7 +170,14 @@ _dump_manifest_json = """
 
       ],
       "settings" : [
-
+          {
+            "kind" : {
+              "define" : {
+                "_0" : "__APPLE_USE_RFC_3542"
+              }
+            },
+            "tool" : "c"
+          }
       ],
       "type" : "executable"
     },
