@@ -112,7 +112,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["srcs"] = organized_files.srcs
     if len(organized_files.hdrs) > 0:
         attrs["hdrs"] = organized_files.hdrs
-    if len(organized_files.includes) > 0:
+    if len(organized_files.public_includes) > 0:
+        attrs["includes"] = organized_files.public_includes
+    if len(organized_files.private_includes) > 0:
         # The `includes` attribute adds includes as -isystem which propagates
         # to cc_XXX that depend upon the library. Providing includes as -I only
         # provides the includes for this target.
@@ -122,7 +124,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             # Because this is an external repo, we need to prepend
             # external/<repo_name> to all of the include dirs
             "-I{}".format(paths.join("external", repo_name, inc))
-            for inc in organized_files.includes
+            for inc in organized_files.private_includes
         ]
 
     load_stmts = []

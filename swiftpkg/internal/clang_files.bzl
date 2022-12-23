@@ -120,7 +120,7 @@ def _collect_files(
     hdrs_set = sets.make()
     srcs_set = sets.make()
     others_set = sets.make()
-    includes_set = sets.make()
+    public_includes_set = sets.make()
     modulemap = None
     modulemap_orig_path = None
     for orig_path in paths_list:
@@ -129,7 +129,7 @@ def _collect_files(
         if ext == ".h":
             if _is_include_hdr(orig_path, public_includes = public_includes):
                 sets.insert(hdrs_set, path)
-                sets.insert(includes_set, paths.dirname(path))
+                sets.insert(public_includes_set, paths.dirname(path))
             else:
                 sets.insert(srcs_set, path)
         elif ext == ".c":
@@ -149,23 +149,23 @@ def _collect_files(
     others = sets.to_list(others_set)
 
     # Add each directory that contains a private header to the includes
-    private_hdr_dirs = sets.make([
+    private_includes_set = sets.make([
         paths.dirname(src)
         for src in srcs
         if _is_hdr(src)
     ])
-    includes_set = sets.union(includes_set, private_hdr_dirs)
 
     # # Be sure to add any parent directories to the includes list
     # # Some clang files reference their header files from different relative paths
-    # for include in sets.to_list(includes_set):
+    # for include in sets.to_list(public_includes_set):
     #     parts = include.split("/")
     #     for idx, _part in enumerate(parts):
     #         path = "/".join(parts[0:idx])
     #         if path != "":
-    #             sets.insert(includes_set, path)
+    #             sets.insert(public_includes_set, path)
 
-    includes = sets.to_list(includes_set)
+    public_includes = sets.to_list(public_includes_set)
+    private_includes = sets.to_list(private_includes_set)
 
     # If we found a public modulemap, get the headers from there. This
     # overrides any hdrs that we found by inspection.
@@ -182,78 +182,16 @@ def _collect_files(
     return struct(
         hdrs = sorted(hdrs),
         srcs = sorted(srcs),
-        includes = sorted(includes),
+        public_includes = sorted(public_includes),
+        private_includes = sorted(private_includes),
         modulemap = modulemap,
         others = sorted(others),
     )
-
-# files: list of file paths as strings
-# pkg_dir: the directory for the package that includes the files
-# def _organize(repository_ctx, pkg_dir, files):
-
-# def _organize(files):
-#     # hdrs: Public headers
-#     # srcs: Private headers and source files.
-#     # others: Uncategorized
-#     # modulemap: Public modulemap
-#     hdrs_set = sets.make()
-#     srcs_set = sets.make()
-#     others_set = sets.make()
-#     includes_set = sets.make()
-#     modulemap = None
-#     for path in files:
-#         _root, ext = paths.split_extension(path)
-#         if ext == ".h":
-#             # TODO(chuck): Should I plumb through public_includes?
-#             if _is_include_hdr(path):
-#                 sets.insert(hdrs_set, path)
-#                 sets.insert(includes_set, paths.dirname(path))
-#             else:
-#                 sets.insert(srcs_set, path)
-#         elif ext == ".c":
-#             sets.insert(srcs_set, path)
-#         elif ext == ".modulemap" and _is_public_modulemap(path):
-#             if modulemap != None:
-#                 fail("Found multiple modulemap files. {first} {second}".format(
-#                     first = modulemap,
-#                     second = path,
-#                 ))
-#             modulemap = path
-#         else:
-#             sets.insert(others_set, path)
-
-#     srcs = sets.to_list(srcs_set)
-#     others = sets.to_list(others_set)
-
-#     # Add each directory that contains a private header to the includes
-#     private_hdr_dirs = sets.make([
-#         paths.dirname(src)
-#         for src in srcs
-#         if _is_hdr(src)
-#     ])
-#     includes_set = sets.union(includes_set, private_hdr_dirs)
-
-#     # TODO(chuck): Do we need to handle the relative paths to header files?
-
-#     # TODO(chuck): Add code to read a public modulemap
-
-#     includes = sets.to_list(includes_set)
-#     hdrs = sets.to_list(hdrs_set)
-
-#     # Remove the prefixes before returning the results
-#     return struct(
-#         hdrs = sorted(hdrs),
-#         srcs = sorted(srcs),
-#         includes = sorted(includes),
-#         modulemap = modulemap,
-#         others = sorted(others),
-#     )
 
 clang_files = struct(
     is_hdr = _is_hdr,
     is_include_hdr = _is_include_hdr,
     is_public_modulemap = _is_public_modulemap,
     collect_files = _collect_files,
-    # organize = _organize,
     get_hdr_paths_from_modulemap = _get_hdr_paths_from_modulemap,
 )
