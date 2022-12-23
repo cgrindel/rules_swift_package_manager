@@ -1,6 +1,12 @@
 package spdump
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+
+	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
+)
 
 type TargetType int
 
@@ -37,6 +43,7 @@ type Target struct {
 	Name         string
 	Type         TargetType
 	Dependencies []TargetDependency
+	Settings     []TargetSetting
 }
 
 func (t *Target) Imports() []string {
@@ -57,5 +64,69 @@ func (ts Targets) FindByName(name string) *Target {
 			return &t
 		}
 	}
+	return nil
+}
+
+// TargetSetting
+
+type ToolType int
+
+const (
+	UnknownToolType ToolType = iota
+	ClangToolType
+)
+
+type TargetSettingKind int
+
+const (
+	UnknownTargetSettingKind = iota
+	DefineTargetSettingKind
+)
+
+type TargetSetting struct {
+	Tool    ToolType
+	Kind    TargetSettingKind
+	Defines []string
+}
+
+func (ts *TargetSetting) UnmarshalJSON(b []byte) error {
+	var anyMap map[string]any
+	err := json.Unmarshal(b, &anyMap)
+	if err != nil {
+		return err
+	}
+
+	toolStr, err := jsonutils.StringAtKey(anyMap, "tool")
+	if err != nil {
+		return err
+	}
+	switch toolStr {
+	case "c":
+		ts.Tool = ClangToolType
+	default:
+		ts.Tool = UnknownToolType
+	}
+
+	kindMap, err := jsonutils.MapAtKey(anyMap, "kind")
+	if err != nil {
+		return err
+	}
+	var mke *jsonutils.MissingKeyError
+	if defineMap, err := jsonutils.MapAtKey(kindMap, "define"); err != nil {
+		if err != nil && !errors.As(err, &mke) {
+			return err
+		}
+	} else {
+		ts.Kind = DefineTargetSettingKind
+		for _, anyVal := range defineMap {
+			switch define := anyVal.(type) {
+			case string:
+				ts.Defines = append(ts.Defines, define)
+			default:
+				return fmt.Errorf("unexpected type %T for define value", define)
+			}
+		}
+	}
+
 	return nil
 }

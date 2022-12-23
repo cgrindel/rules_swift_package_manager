@@ -1,6 +1,7 @@
 package spdump_test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
@@ -41,3 +42,31 @@ func TestTargetsByName(t *testing.T) {
 	actual = targets.FindByName("DoesNotExist")
 	assert.Nil(t, actual)
 }
+
+func TestTargetSettingUnmarshalJSON(t *testing.T) {
+	expected := []spdump.TargetSetting{
+		{
+			Tool:    spdump.ClangToolType,
+			Kind:    spdump.DefineTargetSettingKind,
+			Defines: []string{"__APPLE_USE_RFC_3542"},
+		},
+	}
+
+	var settings []spdump.TargetSetting
+	err := json.Unmarshal([]byte(targetSettingsJSON), &settings)
+	assert.NoError(t, err)
+	assert.Equal(t, expected, settings)
+}
+
+const targetSettingsJSON = `
+[
+  {
+    "kind" : {
+      "define" : {
+        "_0" : "__APPLE_USE_RFC_3542"
+      }
+    },
+    "tool" : "c"
+  }
+]
+`
