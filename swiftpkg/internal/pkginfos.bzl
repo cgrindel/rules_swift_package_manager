@@ -147,11 +147,12 @@ def _new_target_from_json_maps(dump_map, desc_map):
         _new_target_dependency_from_dump_json_map(d)
         for d in dump_map["dependencies"]
     ]
-
     clang_settings = _new_clang_settings_from_dump_json_list(
         dump_map["settings"],
     )
-
+    swift_settings = _new_swift_settings_from_dump_json_list(
+        dump_map["settings"],
+    )
     return _new_target(
         name = dump_map["name"],
         type = dump_map["type"],
@@ -161,12 +162,29 @@ def _new_target_from_json_maps(dump_map, desc_map):
         sources = desc_map["sources"],
         dependencies = dependencies,
         clang_settings = clang_settings,
+        swift_settings = swift_settings,
     )
 
 def _new_clang_settings_from_dump_json_list(dump_list):
     defines = []
     for setting in dump_list:
         if setting["tool"] != "c":
+            continue
+        kind_map = setting["kind"]
+        define_map = kind_map["define"]
+        for (k, define) in define_map.items():
+            defines.append(define)
+
+    if len(defines) == 0:
+        return None
+    return _new_clang_settings(
+        defines = defines,
+    )
+
+def _new_swift_settings_from_dump_json_list(dump_list):
+    defines = []
+    for setting in dump_list:
+        if setting["tool"] != "swift":
             continue
         kind_map = setting["kind"]
         define_map = kind_map["define"]
@@ -468,7 +486,16 @@ A target dependency must have one of the following: `by_name`, `product`, `targe
         target = target,
     )
 
-def _new_target(name, type, c99name, module_type, path, sources, dependencies, clang_settings = None):
+def _new_target(
+        name,
+        type,
+        c99name,
+        module_type,
+        path,
+        sources,
+        dependencies,
+        clang_settings = None,
+        swift_settings = None):
     """Creates a target.
 
     Args:
@@ -482,6 +509,7 @@ def _new_target(name, type, c99name, module_type, path, sources, dependencies, c
         dependencies: A `list` of target dependency values as returned by
             `pkginfos.new_target_dependency()`.
         clang_settings: Optional. A `struct` as returned by `pkginfos.new_clang_settings`.
+        swift_settings: Optional. A `struct` as returned by `pkginfos.new_swift_settings`.
 
     Returns:
         A `struct` representing a target in a Swift package.
@@ -505,9 +533,15 @@ def _new_target(name, type, c99name, module_type, path, sources, dependencies, c
         sources = sources,
         dependencies = dependencies,
         clang_settings = clang_settings,
+        swift_settings = swift_settings,
     )
 
 def _new_clang_settings(defines):
+    return struct(
+        defines = defines,
+    )
+
+def _new_swift_settings(defines):
     return struct(
         defines = defines,
     )

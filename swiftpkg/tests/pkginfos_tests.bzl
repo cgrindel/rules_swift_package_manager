@@ -56,6 +56,12 @@ def _get_test(ctx):
                         ),
                     ),
                 ],
+                swift_settings = pkginfos.new_swift_settings(
+                    defines = ["COOL_SWIFT_DEFINE"],
+                ),
+                # This is very contrived. We would not expect clang settings on
+                # a Swift target. However, the JSON structure does not prevent
+                # it.
                 clang_settings = pkginfos.new_clang_settings(
                     defines = ["__APPLE_USE_RFC_3542"],
                 ),
@@ -170,6 +176,14 @@ _dump_manifest_json = """
 
       ],
       "settings" : [
+          {
+            "kind" : {
+              "define" : {
+                "_0" : "COOL_SWIFT_DEFINE"
+              }
+            },
+            "tool" : "swift"
+          },
           {
             "kind" : {
               "define" : {

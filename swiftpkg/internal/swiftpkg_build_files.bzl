@@ -39,6 +39,8 @@ def _swift_target_build_file(pkg_ctx, target):
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//visibility:public"],
     }
+    if target.swift_settings and len(target.swift_settings.defines) > 0:
+        attrs["defines"].extend(target.swift_settings.defines)
 
     # GH046: Support plugins.
     if lists.contains([target_types.library, target_types.regular], target.type):
@@ -82,17 +84,7 @@ def _swift_test_from_target(target, attrs):
 # MARK: - Clang Targets
 
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
-    # DEBUG BEGIN
-    print("*** CHUCK ========")
-    print("*** CHUCK target.name: ", target.name)
-
-    # DEBUG END
-
-    # srcs = pkginfo_targets.srcs(target)
-    # organized_files = clang_files.organize(srcs)
-
     target_path = paths.join(pkg_ctx.pkg_info.path, target.path)
-
     organized_files = clang_files.collect_files(
         repository_ctx,
         [target_path],
