@@ -167,16 +167,21 @@ def _collect_files(
     public_includes = sets.to_list(public_includes_set)
     private_includes = sets.to_list(private_includes_set)
 
-    # If we found a public modulemap, get the headers from there. This
-    # overrides any hdrs that we found by inspection.
+    # The apple/swift-crypto package has a CCryptoBoringSSL target that has a
+    # modulemap in their include directory, but it only lists the top-level
+    # header. The modulemap spec suggests that the header is parsed and all of
+    # the referenced headers are included. For now, we will just add the
+    # modulempa hdrs to the ones that we have already found.
     if modulemap_orig_path != None:
-        hdrs = _get_hdr_paths_from_modulemap(
+        mm_hdrs = _get_hdr_paths_from_modulemap(
             repository_ctx,
             modulemap_orig_path,
         )
-        hdrs = _remove_prefixes(hdrs, remove_prefix)
-    else:
-        hdrs = sets.to_list(hdrs_set)
+        mm_hdrs = _remove_prefixes(mm_hdrs, remove_prefix)
+        mm_hdrs_set = sets.make(mm_hdrs)
+        hdrs_set = sets.union(hdrs_set, mm_hdrs_set)
+
+    hdrs = sets.to_list(hdrs_set)
 
     # Remove the prefixes before returning the results
     return struct(
