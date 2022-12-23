@@ -1,5 +1,6 @@
 """Module for creating Bazel declarations to build a Swift package."""
 
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
@@ -11,17 +12,13 @@ load(":pkginfos.bzl", "module_types", "target_types")
 
 # MARK: - Target Entry Point
 
-def _new_for_target(pkg_ctx, target):
+def _new_for_target(repository_ctx, pkg_ctx, target):
     if target.module_type == module_types.clang:
-        return _clang_target_build_file(pkg_ctx, target)
+        return _clang_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.swift:
         return _swift_target_build_file(pkg_ctx, target)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
-
-    # DEBUG BEGIN
-    print("*** CHUCK FELL THROUGH target: ", target)
-    # DEBUG END
 
     # GH046: Support plugins.
     return None
@@ -84,16 +81,24 @@ def _swift_test_from_target(target, attrs):
 
 # MARK: - Clang Targets
 
-# GH009(chuck): Remove unused-variable directives
-
-# buildifier: disable=unused-variable
-def _clang_target_build_file(pkg_ctx, target):
+def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     # DEBUG BEGIN
-    print("*** CHUCK _clang_target_build_file target: ", target)
+    print("*** CHUCK ========")
+    print("*** CHUCK target.name: ", target.name)
 
     # DEBUG END
-    srcs = pkginfo_targets.srcs(target)
-    organized_files = clang_files.organize(srcs)
+
+    # srcs = pkginfo_targets.srcs(target)
+    # organized_files = clang_files.organize(srcs)
+
+    target_path = paths.join(pkg_ctx.pkg_info.path, target.path)
+
+    organized_files = clang_files.collect_files(
+        repository_ctx,
+        [target_path],
+        public_includes = None,
+        remove_prefix = "{}/".format(pkg_ctx.pkg_info.path),
+    )
     deps = [
         pkginfo_target_deps.bazel_label(pkg_ctx, td)
         for td in target.dependencies
@@ -108,26 +113,37 @@ def _clang_target_build_file(pkg_ctx, target):
     if len(organized_files.hdrs) > 0:
         attrs["hdrs"] = organized_files.hdrs
     if len(organized_files.includes) > 0:
-        attrs["includes"] = organized_files.includes
+        # The `includes` attribute adds includes as -isystem which propagates
+        # to cc_XXX that depend upon the library. Providing includes as -I only
+        # provides the includes for this target.
+        # https://bazel.build/reference/be/c-cpp#cc_library.includes
+        repo_name = repository_ctx.name
+        attrs["copts"] = [
+            # Because this is an external repo, we need to prepend
+            # external/<repo_name> to all of the include dirs
+            "-I{}".format(paths.join("external", repo_name, inc))
+            for inc in organized_files.includes
+        ]
 
-    # DEBUG BEGIN
-    print("*** CHUCK _clang_target_build_file attrs: ", attrs)
-    # DEBUG END
-
-    return build_decls.new(
-        kind = clang_kinds.library,
-        name = pkginfo_targets.bazel_label_name(target),
-        attrs = attrs,
+    load_stmts = []
+    decls = [
+        build_decls.new(
+            kind = clang_kinds.library,
+            name = pkginfo_targets.bazel_label_name(target),
+            attrs = attrs,
+        ),
+    ]
+    return build_files.new(
+        load_stmts = load_stmts,
+        decls = decls,
     )
 
 # MARK: - System Library Targets
 
+# GH009(chuck): Remove unused-variable directives
+
 # buildifier: disable=unused-variable
 def _system_library_build_file(target):
-    # DEBUG BEGIN
-    print("*** CHUCK _system_library_build_file target: ", target)
-
-    # DEBUG END
     # GH009(chuck): Implement _system_library_build_file
     return None
 
