@@ -16,7 +16,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
     if target.module_type == module_types.clang:
         return _clang_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.swift:
-        return _swift_target_build_file(pkg_ctx, target)
+        return _swift_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
 
@@ -25,7 +25,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
 
 # MARK: - Swift Target
 
-def _swift_target_build_file(pkg_ctx, target):
+def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     deps = [
         pkginfo_target_deps.bazel_label(pkg_ctx, td)
         for td in target.dependencies
@@ -39,10 +39,16 @@ def _swift_target_build_file(pkg_ctx, target):
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//visibility:public"],
     }
-    if target.swift_settings and len(target.swift_settings.defines) > 0:
-        attrs["defines"].extend(target.swift_settings.defines)
 
     # GH046: Support plugins.
+
+    # The rules_swift code links in developer libraries if the rule is marked testonly.
+    # https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/compiling.bzl#L1312-L1319
+    is_test = _imports_xctest(repository_ctx, pkg_ctx, target)
+    if is_test:
+        attrs["testonly"] = True
+    if target.swift_settings and len(target.swift_settings.defines) > 0:
+        attrs["defines"].extend(target.swift_settings.defines)
     if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(target, attrs)]
@@ -59,6 +65,15 @@ def _swift_target_build_file(pkg_ctx, target):
         load_stmts = load_stmts,
         decls = decls,
     )
+
+def _imports_xctest(repository_ctx, pkg_ctx, target):
+    target_path = paths.join(pkg_ctx.pkg_info.path, target.path)
+    for src in target.sources:
+        path = paths.join(target_path, src)
+        file_contents = repository_ctx.read(path)
+        if file_contents.find("import XCTest") > -1:
+            return True
+    return False
 
 def _swift_library_from_target(target, attrs):
     return build_decls.new(
