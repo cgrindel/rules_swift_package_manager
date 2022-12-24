@@ -40,6 +40,9 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         "visibility": ["//visibility:public"],
     }
 
+    # TODO(chuck): Consider adding support for custom build files for select repositories. Having
+    # trouble getting vapor application to link.
+
     # GH046: Support plugins.
 
     # The rules_swift code links in developer libraries if the rule is marked testonly.

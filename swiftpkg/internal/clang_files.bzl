@@ -2,6 +2,7 @@
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load("//swiftpkg/internal/modulemap_parser:declarations.bzl", dts = "declaration_types")
 load("//swiftpkg/internal/modulemap_parser:parser.bzl", modulemap_parser = "parser")
 load(":repository_files.bzl", "repository_files")
@@ -132,7 +133,8 @@ def _collect_files(
                 sets.insert(public_includes_set, paths.dirname(path))
             else:
                 sets.insert(srcs_set, path)
-        elif ext == ".c":
+        elif lists.contains([".c", ".S", ".so", ".o"], ext):
+            # Acceptable sources: https://bazel.build/reference/be/c-cpp#cc_library.srcs
             sets.insert(srcs_set, path)
         elif ext == ".modulemap" and _is_public_modulemap(path):
             if modulemap != None:
