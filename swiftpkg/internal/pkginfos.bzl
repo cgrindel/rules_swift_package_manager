@@ -147,6 +147,12 @@ def _new_target_from_json_maps(dump_map, desc_map):
         _new_target_dependency_from_dump_json_map(d)
         for d in dump_map["dependencies"]
     ]
+    clang_settings = _new_clang_settings_from_dump_json_list(
+        dump_map["settings"],
+    )
+    swift_settings = _new_swift_settings_from_dump_json_list(
+        dump_map["settings"],
+    )
     return _new_target(
         name = dump_map["name"],
         type = dump_map["type"],
@@ -155,6 +161,48 @@ def _new_target_from_json_maps(dump_map, desc_map):
         path = desc_map["path"],
         sources = desc_map["sources"],
         dependencies = dependencies,
+        clang_settings = clang_settings,
+        swift_settings = swift_settings,
+    )
+
+def _new_clang_settings_from_dump_json_list(dump_list):
+    defines = []
+    for setting in dump_list:
+        if setting["tool"] != "c":
+            continue
+        kind_map = setting.get("kind")
+        if kind_map == None:
+            continue
+        define_map = kind_map.get("define")
+        if define_map == None:
+            continue
+        for define in define_map.values():
+            defines.append(define)
+
+    if len(defines) == 0:
+        return None
+    return _new_clang_settings(
+        defines = defines,
+    )
+
+def _new_swift_settings_from_dump_json_list(dump_list):
+    defines = []
+    for setting in dump_list:
+        if setting["tool"] != "swift":
+            continue
+        kind_map = setting.get("kind")
+        if kind_map == None:
+            continue
+        define_map = kind_map.get("define")
+        if define_map == None:
+            continue
+        for define in define_map.values():
+            defines.append(define)
+
+    if len(defines) == 0:
+        return None
+    return _new_clang_settings(
+        defines = defines,
     )
 
 def _new_from_parsed_json(dump_manifest, desc_manifest):
@@ -446,7 +494,16 @@ A target dependency must have one of the following: `by_name`, `product`, `targe
         target = target,
     )
 
-def _new_target(name, type, c99name, module_type, path, sources, dependencies):
+def _new_target(
+        name,
+        type,
+        c99name,
+        module_type,
+        path,
+        sources,
+        dependencies,
+        clang_settings = None,
+        swift_settings = None):
     """Creates a target.
 
     Args:
@@ -459,6 +516,8 @@ def _new_target(name, type, c99name, module_type, path, sources, dependencies):
             to the `path`.
         dependencies: A `list` of target dependency values as returned by
             `pkginfos.new_target_dependency()`.
+        clang_settings: Optional. A `struct` as returned by `pkginfos.new_clang_settings`.
+        swift_settings: Optional. A `struct` as returned by `pkginfos.new_swift_settings`.
 
     Returns:
         A `struct` representing a target in a Swift package.
@@ -481,6 +540,18 @@ def _new_target(name, type, c99name, module_type, path, sources, dependencies):
         path = path,
         sources = sources,
         dependencies = dependencies,
+        clang_settings = clang_settings,
+        swift_settings = swift_settings,
+    )
+
+def _new_clang_settings(defines):
+    return struct(
+        defines = defines,
+    )
+
+def _new_swift_settings(defines):
+    return struct(
+        defines = defines,
     )
 
 target_types = struct(
@@ -523,17 +594,19 @@ library_type_kinds = struct(
 pkginfos = struct(
     get = _get,
     new = _new,
-    new_from_parsed_json = _new_from_parsed_json,
-    new_platform = _new_platform,
+    new_by_name_reference = _new_by_name_reference,
+    new_clang_settings = _new_clang_settings,
     new_dependency = _new_dependency,
     new_dependency_requirement = _new_dependency_requirement,
-    new_version_range = _new_version_range,
-    new_product = _new_product,
-    new_product_type = _new_product_type,
-    new_product_reference = _new_product_reference,
-    new_by_name_reference = _new_by_name_reference,
-    new_target_reference = _new_target_reference,
-    new_target_dependency = _new_target_dependency,
-    new_target = _new_target,
+    new_from_parsed_json = _new_from_parsed_json,
     new_library_type = _new_library_type,
+    new_platform = _new_platform,
+    new_product = _new_product,
+    new_product_reference = _new_product_reference,
+    new_product_type = _new_product_type,
+    new_swift_settings = _new_swift_settings,
+    new_target = _new_target,
+    new_target_dependency = _new_target_dependency,
+    new_target_reference = _new_target_reference,
+    new_version_range = _new_version_range,
 )

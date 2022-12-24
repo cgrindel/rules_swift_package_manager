@@ -1,8 +1,10 @@
 """Module for creating Bazel declarations to build a Swift package."""
 
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
+load(":clang_files.bzl", "clang_files")
 load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
@@ -10,11 +12,11 @@ load(":pkginfos.bzl", "module_types", "target_types")
 
 # MARK: - Target Entry Point
 
-def _new_for_target(pkg_ctx, target):
+def _new_for_target(repository_ctx, pkg_ctx, target):
     if target.module_type == module_types.clang:
-        return _clang_target_build_file(target)
+        return _clang_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.swift:
-        return _swift_target_build_file(pkg_ctx, target)
+        return _swift_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
 
@@ -23,7 +25,7 @@ def _new_for_target(pkg_ctx, target):
 
 # MARK: - Swift Target
 
-def _swift_target_build_file(pkg_ctx, target):
+def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     deps = [
         pkginfo_target_deps.bazel_label(pkg_ctx, td)
         for td in target.dependencies
@@ -38,7 +40,18 @@ def _swift_target_build_file(pkg_ctx, target):
         "visibility": ["//visibility:public"],
     }
 
+    # TODO(chuck): Consider adding support for custom build files for select repositories. Having
+    # trouble getting vapor application to link.
+
     # GH046: Support plugins.
+
+    # The rules_swift code links in developer libraries if the rule is marked testonly.
+    # https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/compiling.bzl#L1312-L1319
+    is_test = _imports_xctest(repository_ctx, pkg_ctx, target)
+    if is_test:
+        attrs["testonly"] = True
+    if target.swift_settings and len(target.swift_settings.defines) > 0:
+        attrs["defines"].extend(target.swift_settings.defines)
     if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(target, attrs)]
@@ -55,6 +68,15 @@ def _swift_target_build_file(pkg_ctx, target):
         load_stmts = load_stmts,
         decls = decls,
     )
+
+def _imports_xctest(repository_ctx, pkg_ctx, target):
+    target_path = paths.join(pkg_ctx.pkg_info.path, target.path)
+    for src in target.sources:
+        path = paths.join(target_path, src)
+        file_contents = repository_ctx.read(path)
+        if file_contents.find("import XCTest") > -1:
+            return True
+    return False
 
 def _swift_library_from_target(target, attrs):
     return build_decls.new(
@@ -79,19 +101,65 @@ def _swift_test_from_target(target, attrs):
 
 # MARK: - Clang Targets
 
-# GH009(chuck): Remove unused-variable directives
+def _clang_target_build_file(repository_ctx, pkg_ctx, target):
+    target_path = paths.join(pkg_ctx.pkg_info.path, target.path)
+    organized_files = clang_files.collect_files(
+        repository_ctx,
+        [target_path],
+        public_includes = None,
+        remove_prefix = "{}/".format(pkg_ctx.pkg_info.path),
+    )
+    deps = [
+        pkginfo_target_deps.bazel_label(pkg_ctx, td)
+        for td in target.dependencies
+    ]
+    attrs = {
+        "deps": deps,
+        "tags": ["swift_module={}".format(target.c99name)],
+        "visibility": ["//visibility:public"],
+    }
+    if len(organized_files.srcs) > 0:
+        attrs["srcs"] = organized_files.srcs
+    if len(organized_files.hdrs) > 0:
+        attrs["hdrs"] = organized_files.hdrs
+    if len(organized_files.public_includes) > 0:
+        attrs["includes"] = organized_files.public_includes
+    if len(organized_files.private_includes) > 0:
+        # The `includes` attribute adds includes as -isystem which propagates
+        # to cc_XXX that depend upon the library. Providing includes as -I only
+        # provides the includes for this target.
+        # https://bazel.build/reference/be/c-cpp#cc_library.includes
+        repo_name = repository_ctx.name
+        attrs["copts"] = [
+            # Because this is an external repo, we need to prepend
+            # external/<repo_name> to all of the include dirs
+            "-I{}".format(paths.join("external", repo_name, inc))
+            for inc in organized_files.private_includes
+        ]
+    if target.clang_settings and len(target.clang_settings.defines) > 0:
+        attrs["defines"] = target.clang_settings.defines
 
-# buildifier: disable=unused-variable
-def _clang_target_build_file(target):
-    # GH009(chuck): Implement _clang_target_build_file
-    return []
+    load_stmts = []
+    decls = [
+        build_decls.new(
+            kind = clang_kinds.library,
+            name = pkginfo_targets.bazel_label_name(target),
+            attrs = attrs,
+        ),
+    ]
+    return build_files.new(
+        load_stmts = load_stmts,
+        decls = decls,
+    )
 
 # MARK: - System Library Targets
+
+# GH009(chuck): Remove unused-variable directives
 
 # buildifier: disable=unused-variable
 def _system_library_build_file(target):
     # GH009(chuck): Implement _system_library_build_file
-    return []
+    return None
 
 # MARK: - Products Entry Point
 
@@ -206,6 +274,10 @@ swift_binary_load_stmt = load_statements.new(
 )
 
 swift_test_load_stmt = load_statements.new(swift_location, swift_kinds.test)
+
+clang_kinds = struct(
+    library = "cc_library",
+)
 
 native_kinds = struct(
     alias = "alias",

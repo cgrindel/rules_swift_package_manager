@@ -51,6 +51,7 @@ type Target struct {
 	Path         string
 	Sources      []string
 	Dependencies []*TargetDependency
+	CSettings    *ClangSettings
 }
 
 func NewTargetFromManifestInfo(descT *spdesc.Target, dumpT *spdump.Target) (*Target, error) {
@@ -83,6 +84,11 @@ func NewTargetFromManifestInfo(descT *spdesc.Target, dumpT *spdump.Target) (*Tar
 		}
 	}
 
+	cSettings, err := NewClangSettingsFromManifestInfo(dumpT.Settings)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Target{
 		Name:         descT.Name,
 		C99name:      descT.C99name,
@@ -91,6 +97,7 @@ func NewTargetFromManifestInfo(descT *spdesc.Target, dumpT *spdump.Target) (*Tar
 		Path:         descT.Path,
 		Sources:      descT.Sources,
 		Dependencies: tdeps,
+		CSettings:    cSettings,
 	}, nil
 }
 
@@ -100,4 +107,23 @@ func (t *Target) Imports() []string {
 		imports[idx] = td.ImportName()
 	}
 	return imports
+}
+
+// ClangSettings
+
+type ClangSettings struct {
+	Defines []string
+}
+
+func NewClangSettingsFromManifestInfo(dumpTS []spdump.TargetSetting) (*ClangSettings, error) {
+	cSettings := &ClangSettings{}
+	for _, ts := range dumpTS {
+		if ts.Tool != spdump.ClangToolType {
+			continue
+		}
+		if ts.Kind == spdump.DefineTargetSettingKind {
+			cSettings.Defines = append(cSettings.Defines, ts.Defines...)
+		}
+	}
+	return cSettings, nil
 }

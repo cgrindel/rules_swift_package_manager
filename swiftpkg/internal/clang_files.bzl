@@ -2,6 +2,7 @@
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load("//swiftpkg/internal/modulemap_parser:declarations.bzl", dts = "declaration_types")
 load("//swiftpkg/internal/modulemap_parser:parser.bzl", modulemap_parser = "parser")
 load(":repository_files.bzl", "repository_files")
@@ -84,10 +85,7 @@ def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path):
     return hdrs
 
 def _remove_prefix(path, prefix):
-    if prefix == None or path == None:
-        return path
-    prefix_len = len(prefix)
-    return path[prefix_len:] if path.startswith(prefix) else path
+    return _remove_prefixes([path], prefix)[0]
 
 def _remove_prefixes(paths_list, prefix):
     if prefix == None:
@@ -119,7 +117,7 @@ def _collect_files(
     hdrs_set = sets.make()
     srcs_set = sets.make()
     others_set = sets.make()
-    includes_set = sets.make()
+    public_includes_set = sets.make()
     modulemap = None
     modulemap_orig_path = None
     for orig_path in paths_list:
@@ -128,10 +126,11 @@ def _collect_files(
         if ext == ".h":
             if _is_include_hdr(orig_path, public_includes = public_includes):
                 sets.insert(hdrs_set, path)
-                sets.insert(includes_set, paths.dirname(path))
+                sets.insert(public_includes_set, paths.dirname(path))
             else:
                 sets.insert(srcs_set, path)
-        elif ext == ".c":
+        elif lists.contains([".c", ".S", ".so", ".o"], ext):
+            # Acceptable sources: https://bazel.build/reference/be/c-cpp#cc_library.srcs
             sets.insert(srcs_set, path)
         elif ext == ".modulemap" and _is_public_modulemap(path):
             if modulemap != None:
@@ -148,40 +147,46 @@ def _collect_files(
     others = sets.to_list(others_set)
 
     # Add each directory that contains a private header to the includes
-    private_hdr_dirs = sets.make([
+    private_includes_set = sets.make([
         paths.dirname(src)
         for src in srcs
         if _is_hdr(src)
     ])
-    includes_set = sets.union(includes_set, private_hdr_dirs)
 
-    # Be sure to add any parent directories to the includes list
-    # Some clang files reference their header files from different relative paths
-    for include in sets.to_list(includes_set):
-        parts = include.split("/")
-        for idx, _part in enumerate(parts):
-            path = "/".join(parts[0:idx])
-            if path != "":
-                sets.insert(includes_set, path)
+    # # Be sure to add any parent directories to the includes list
+    # # Some clang files reference their header files from different relative paths
+    # for include in sets.to_list(public_includes_set):
+    #     parts = include.split("/")
+    #     for idx, _part in enumerate(parts):
+    #         path = "/".join(parts[0:idx])
+    #         if path != "":
+    #             sets.insert(public_includes_set, path)
 
-    includes = sets.to_list(includes_set)
+    public_includes = sets.to_list(public_includes_set)
+    private_includes = sets.to_list(private_includes_set)
 
-    # If we found a public modulemap, get the headers from there. This
-    # overrides any hdrs that we found by inspection.
+    # The apple/swift-crypto package has a CCryptoBoringSSL target that has a
+    # modulemap in their include directory, but it only lists the top-level
+    # header. The modulemap spec suggests that the header is parsed and all of
+    # the referenced headers are included. For now, we will just add the
+    # modulempa hdrs to the ones that we have already found.
     if modulemap_orig_path != None:
-        hdrs = _get_hdr_paths_from_modulemap(
+        mm_hdrs = _get_hdr_paths_from_modulemap(
             repository_ctx,
             modulemap_orig_path,
         )
-        hdrs = _remove_prefixes(hdrs, remove_prefix)
-    else:
-        hdrs = sets.to_list(hdrs_set)
+        mm_hdrs = _remove_prefixes(mm_hdrs, remove_prefix)
+        mm_hdrs_set = sets.make(mm_hdrs)
+        hdrs_set = sets.union(hdrs_set, mm_hdrs_set)
+
+    hdrs = sets.to_list(hdrs_set)
 
     # Remove the prefixes before returning the results
     return struct(
         hdrs = sorted(hdrs),
         srcs = sorted(srcs),
-        includes = sorted(includes),
+        public_includes = sorted(public_includes),
+        private_includes = sorted(private_includes),
         modulemap = modulemap,
         others = sorted(others),
     )

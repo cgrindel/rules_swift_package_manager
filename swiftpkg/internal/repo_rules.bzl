@@ -67,7 +67,7 @@ def _gen_build_files(repository_ctx, pkg_info):
     # Create Bazel declarations for the Swift package targets
     bld_files = []
     for target in pkg_info.targets:
-        bld_file = swiftpkg_build_files.new_for_target(pkg_ctx, target)
+        bld_file = swiftpkg_build_files.new_for_target(repository_ctx, pkg_ctx, target)
         if bld_file == None:
             continue
         bld_files.append(bld_file)

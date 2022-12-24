@@ -55,6 +55,7 @@ func TestNewManifestFromJSON(t *testing.T) {
 						},
 					},
 				},
+				Settings: []spdump.TargetSetting{},
 			},
 			{
 				Name: "MySwiftPackageTests",
@@ -64,6 +65,7 @@ func TestNewManifestFromJSON(t *testing.T) {
 						ByName: &spdump.ByNameReference{Name: "MySwiftPackage"},
 					},
 				},
+				Settings: []spdump.TargetSetting{},
 			},
 		},
 	}
