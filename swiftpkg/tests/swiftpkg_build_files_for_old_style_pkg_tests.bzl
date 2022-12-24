@@ -117,11 +117,22 @@ _pkg_ctx = pkg_ctxs.new(
     module_index_json = _module_index_json,
 )
 
+def new_stub_repository_ctx():
+    # buildifier: disable=unused-variable
+    def read(path):
+        return ""
+
+    return struct(
+        read = read,
+    )
+
+repository_ctx = new_stub_repository_ctx()
+
 def _swift_library_target_test(ctx):
     env = unittest.begin(ctx)
 
     target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFramework")
-    actual = swiftpkg_build_files.new_for_target(None, _pkg_ctx, target)
+    actual = swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target)
     expected = build_files.new(
         load_stmts = [swift_library_load_stmt],
         decls = [
@@ -153,7 +164,7 @@ def _swift_library_target_for_binary_test(ctx):
     # We create the swift_library in the target package. Then, we create the
     # executable when defining the product.
     target = pkginfo_targets.get(_pkg_info.targets, "swiftlint")
-    actual = swiftpkg_build_files.new_for_target(None, _pkg_ctx, target)
+    actual = swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target)
     expected = build_files.new(
         load_stmts = [swift_library_load_stmt],
         decls = [
@@ -185,7 +196,7 @@ def _swift_test_target_test(ctx):
     env = unittest.begin(ctx)
 
     target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFrameworkTests")
-    actual = swiftpkg_build_files.new_for_target(None, _pkg_ctx, target)
+    actual = swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target)
     expected = build_files.new(
         load_stmts = [swift_test_load_stmt],
         decls = [

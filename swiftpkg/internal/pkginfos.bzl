@@ -176,7 +176,7 @@ def _new_clang_settings_from_dump_json_list(dump_list):
         define_map = kind_map.get("define")
         if define_map == None:
             continue
-        for (k, define) in define_map.items():
+        for define in define_map.values():
             defines.append(define)
 
     if len(defines) == 0:
@@ -196,7 +196,7 @@ def _new_swift_settings_from_dump_json_list(dump_list):
         define_map = kind_map.get("define")
         if define_map == None:
             continue
-        for (k, define) in define_map.items():
+        for define in define_map.values():
             defines.append(define)
 
     if len(defines) == 0:
@@ -604,6 +604,7 @@ pkginfos = struct(
     new_product = _new_product,
     new_product_reference = _new_product_reference,
     new_product_type = _new_product_type,
+    new_swift_settings = _new_swift_settings,
     new_target = _new_target,
     new_target_dependency = _new_target_dependency,
     new_target_reference = _new_target_reference,
