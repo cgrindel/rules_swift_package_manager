@@ -114,6 +114,22 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         for td in target.dependencies
     ]
     attrs = {
+        # These flags are used by SPM when compiling clang modules.
+        "copts": [
+            # Enable 'blocks' language feature
+            "-fblocks",
+            # Synthesize retain and release calls for Objective-C pointers
+            "-fobjc-arc",
+            # Enable the ‘modules’ language feature
+            "-fmodules",
+            # Enable support for PIC macros
+            "-fPIC",
+            # Module name
+            "-fmodule-name={}".format(target.c99name),
+        ],
+        # The SWIFT_PACKAGE define is a magical value that SPM uses when it
+        # builds clang libraries that will be used as Swift modules.
+        "defines": ["SWIFT_PACKAGE=1"],
         "deps": deps,
         "tags": ["swift_module={}".format(target.c99name)],
         "visibility": ["//visibility:public"],
@@ -130,14 +146,14 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # provides the includes for this target.
         # https://bazel.build/reference/be/c-cpp#cc_library.includes
         repo_name = repository_ctx.name
-        attrs["copts"] = [
+        attrs["copts"].extend([
             # Because this is an external repo, we need to prepend
             # external/<repo_name> to all of the include dirs
             "-I{}".format(paths.join("external", repo_name, inc))
             for inc in organized_files.private_includes
-        ]
+        ])
     if target.clang_settings and len(target.clang_settings.defines) > 0:
-        attrs["defines"] = target.clang_settings.defines
+        attrs["defines"].extend(target.clang_settings.defines)
 
     load_stmts = []
     decls = [
