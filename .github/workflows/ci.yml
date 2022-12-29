@@ -34,6 +34,9 @@ jobs:
         cat >> "local.bazelrc" <<EOF
         # Need to expose the PATH so that the Swift toolchain can be found
         build --action_env=PATH
+        # Do not use the sandbox on Linux platforms. It avoids errors like:
+        # "could not build module '_Builtin_stddef_max_align_t'"
+        build --spawn_strategy=local
         EOF
     - uses: cgrindel/gha_set_up_bazel@v1
       with:
