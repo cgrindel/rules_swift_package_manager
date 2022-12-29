@@ -28,6 +28,12 @@ jobs:
         swift_release_tag: "swift-5.7.2-RELEASE"
         ubuntu_version: "22.04"
     - uses: actions/checkout@v3
+    - name: Install required system packages
+      shell: bash
+      run: |
+        sudo apt update
+        # zlib headers
+        sudo apt -y install zlib1g-dev
     - name: Update local.bazelrc with Linux Flags
       shell: bash
       run: |
