@@ -19,14 +19,14 @@ jobs:
     - uses: ./.github/actions/build_and_test
 
   ubuntu_build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     env:
       CC: clang
     steps:
     - uses: cgrindel/gha_install_swift_on_ubuntu@v1
       with:
-        swift_release_tag: "swift-5.7.1-RELEASE"
-        ubuntu_version: "20.04"
+        swift_release_tag: "swift-5.7.2-RELEASE"
+        ubuntu_version: "22.04"
     - uses: actions/checkout@v3
     - name: Update local.bazelrc with Linux Flags
       shell: bash
