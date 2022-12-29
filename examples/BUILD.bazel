@@ -14,12 +14,10 @@ bzlformat_pkg(name = "bzlformat")
 # repository.
 # gazelle:exclude **
 
-# MARK: - Example Using http_archive to Specify External Dependencies
-
 sh_binary(
-    name = "http_archive_ext_deps_test_runner",
+    name = "test_runner",
     testonly = True,
-    srcs = ["http_archive_ext_deps_test_runner.sh"],
+    srcs = ["test_runner.sh"],
     data = [
         "@contrib_rules_bazel_integration_test//tools:create_scratch_dir",
     ],
@@ -29,10 +27,12 @@ sh_binary(
     ],
 )
 
+# MARK: - Example Using http_archive to Specify External Dependencies
+
 bazel_integration_tests(
     name = "http_archive_ext_deps_test",
     bazel_versions = SUPPORTED_BAZEL_VERSIONS,
-    test_runner = ":http_archive_ext_deps_test_runner",
+    test_runner = ":test_runner",
     workspace_files = integration_test_utils.glob_workspace_files("http_archive_ext_deps") + [
         "//:local_repository_files",
     ],
@@ -41,27 +41,26 @@ bazel_integration_tests(
 
 # MARK: - Package Manifest example
 
-sh_binary(
-    name = "pkg_manifest_minimal_test_runner",
-    testonly = True,
-    srcs = ["pkg_manifest_minimal_test_runner.sh"],
-    data = [
-        "@contrib_rules_bazel_integration_test//tools:create_scratch_dir",
-    ],
-    deps = [
-        "@bazel_tools//tools/bash/runfiles",
-        "@cgrindel_bazel_starlib//shlib/lib:assertions",
-    ],
-)
-
 bazel_integration_tests(
     name = "pkg_manifest_minimal_test",
     bazel_versions = SUPPORTED_BAZEL_VERSIONS,
-    test_runner = ":pkg_manifest_minimal_test_runner",
+    test_runner = ":test_runner",
     workspace_files = integration_test_utils.glob_workspace_files("pkg_manifest_minimal") + [
         "//:local_repository_files",
     ],
     workspace_path = "pkg_manifest_minimal",
+)
+
+# MARK: - Vapor Example
+
+bazel_integration_tests(
+    name = "vapor_example_test",
+    bazel_versions = SUPPORTED_BAZEL_VERSIONS,
+    test_runner = ":test_runner",
+    workspace_files = integration_test_utils.glob_workspace_files("vapor_example") + [
+        "//:local_repository_files",
+    ],
+    workspace_path = "vapor_example",
 )
 
 # MARK: - Test Suites
@@ -69,6 +68,7 @@ bazel_integration_tests(
 _test_base_names = [
     "http_archive_ext_deps_test",
     "pkg_manifest_minimal_test",
+    "vapor_example_test",
 ]
 
 _smoke_test_names = [
