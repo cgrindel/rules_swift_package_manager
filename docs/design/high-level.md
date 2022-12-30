@@ -164,14 +164,22 @@ Generate/update the Bazel build files for your project by running the following:
 $ bazel run //:update_build_files
 ```
 
-Finally, build and test your project.
+Build and test your project.
 
 ```sh
 $ bazel test //...
 ```
 
+Check in the `Package.resolved` file and the `module_index.json` file that was generated for you.
 
-## Overview
+- The `Package.resolved` file specifies that exact versions of the dependencies that were
+  identified. If you do not keep the `Package.resolved` file, the dependencies written to the
+`swift_deps.bzl` could change when you execute `//:swift_update_repos`.
+- The `module_index.json` maps module names to targets that provide a module with that name. This
+  file is used by `swift_package` and the Gazelle plugin to resolve dependencies.
+
+
+## Underneath the Covers
 
 The implementation in this repository is separated into two parts:
 
@@ -184,10 +192,19 @@ The [Gazelle](https://github.com/bazelbuild/bazel-gazelle) plugin is [implemente
 Go](https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md). It has two modes of
 operation: `update-repos` and `update`.
 
-The `update-repos` mode does the following:
+The `update-repos` mode 
 
-1. Reads a minimal `Package.swift` file
-2. Resolves the transitive
+1. Resolves the direct and transitive dependencies for the project using the `Package.swift`.
+2. Writes a `Package.resolved` file.
+3. Writes a JSON file
+2. Writes `swift_package` declarations for the direct and transitive dependencies.
+
+The `update` mode
+
+1. Inspects the project looking for Swift source files.
+2. Identifies the Bazel packages that should contain Swift declarations.
+3. Writes the Swift declarations to Bazel build files.
+
 
 
 ---
