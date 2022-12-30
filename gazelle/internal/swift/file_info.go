@@ -24,6 +24,11 @@ func NewFileInfoFromReader(rel, abs string, reader io.Reader) *FileInfo {
 		Rel:    rel,
 		Abs:    abs,
 		IsTest: testSuffixes.HasSuffix(rel),
+		// There are several ways to detect a main.
+		// 1. A file named "main.swift"
+		// 2. @main annotation
+		// 3. public static func main()
+		ContainsMain: filepath.Base(rel) == "main.swift",
 	}
 
 	scanner := bufio.NewScanner(reader)
