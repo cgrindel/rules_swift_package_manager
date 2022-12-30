@@ -153,6 +153,9 @@ def _new_target_from_json_maps(dump_map, desc_map):
     swift_settings = _new_swift_settings_from_dump_json_list(
         dump_map["settings"],
     )
+    linker_settings = _new_linker_settings_from_dump_json_list(
+        dump_map["settings"],
+    )
     return _new_target(
         name = dump_map["name"],
         type = dump_map["type"],
@@ -163,6 +166,7 @@ def _new_target_from_json_maps(dump_map, desc_map):
         dependencies = dependencies,
         clang_settings = clang_settings,
         swift_settings = swift_settings,
+        linker_settings = linker_settings,
     )
 
 def _new_clang_settings_from_dump_json_list(dump_list):
@@ -201,8 +205,28 @@ def _new_swift_settings_from_dump_json_list(dump_list):
 
     if len(defines) == 0:
         return None
-    return _new_clang_settings(
+    return _new_swift_settings(
         defines = defines,
+    )
+
+def _new_linker_settings_from_dump_json_list(dump_list):
+    linked_libraries = []
+    for setting in dump_list:
+        if setting["tool"] != "linker":
+            continue
+        kind_map = setting.get("kind")
+        if kind_map == None:
+            continue
+        linked_library_map = kind_map.get("linkedLibrary")
+        if linked_library_map == None:
+            continue
+        for linked_library in linked_library_map.values():
+            linked_libraries.append(linked_library)
+
+    if len(linked_libraries) == 0:
+        return None
+    return _new_linker_settings(
+        linked_libraries = linked_libraries,
     )
 
 def _new_from_parsed_json(dump_manifest, desc_manifest):
@@ -503,7 +527,8 @@ def _new_target(
         sources,
         dependencies,
         clang_settings = None,
-        swift_settings = None):
+        swift_settings = None,
+        linker_settings = None):
     """Creates a target.
 
     Args:
@@ -518,6 +543,7 @@ def _new_target(
             `pkginfos.new_target_dependency()`.
         clang_settings: Optional. A `struct` as returned by `pkginfos.new_clang_settings`.
         swift_settings: Optional. A `struct` as returned by `pkginfos.new_swift_settings`.
+        linker_settings: Optional. A `struct` as returned by `pkginfos.new_linker_settings`.
 
     Returns:
         A `struct` representing a target in a Swift package.
@@ -542,6 +568,7 @@ def _new_target(
         dependencies = dependencies,
         clang_settings = clang_settings,
         swift_settings = swift_settings,
+        linker_settings = linker_settings,
     )
 
 def _new_clang_settings(defines):
@@ -553,6 +580,12 @@ def _new_swift_settings(defines):
     return struct(
         defines = defines,
     )
+
+def _new_linker_settings(linked_libraries):
+    return struct(
+        linked_libraries = linked_libraries,
+    )
+
 
 target_types = struct(
     executable = "executable",
@@ -600,6 +633,7 @@ pkginfos = struct(
     new_dependency_requirement = _new_dependency_requirement,
     new_from_parsed_json = _new_from_parsed_json,
     new_library_type = _new_library_type,
+    new_linker_settings = _new_linker_settings,
     new_platform = _new_platform,
     new_product = _new_product,
     new_product_reference = _new_product_reference,

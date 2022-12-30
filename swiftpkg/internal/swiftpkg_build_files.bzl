@@ -120,8 +120,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             "-fblocks",
             # Synthesize retain and release calls for Objective-C pointers
             "-fobjc-arc",
-            # Enable the ‘modules’ language feature
-            "-fmodules",
             # Enable support for PIC macros
             "-fPIC",
             # Module name
@@ -154,6 +152,13 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         ])
     if target.clang_settings and len(target.clang_settings.defines) > 0:
         attrs["defines"].extend(target.clang_settings.defines)
+    if target.linker_settings and len(target.linker_settings.linked_libraries) > 0:
+        linkopts = attrs.get("linkopts", default = [])
+        linkopts.extend([
+            "-l{}".format(ll)
+            for ll in target.linker_settings.linked_libraries
+        ])
+        attrs["linkopts"] = linkopts
 
     load_stmts = []
     decls = [
