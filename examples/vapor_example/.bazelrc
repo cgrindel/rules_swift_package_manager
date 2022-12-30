@@ -7,8 +7,8 @@ import %workspace%/../../ci.bazelrc
 # Try to import a local.rc file; typically, written by CI
 try-import %workspace%/../../local.bazelrc
 
-# TODO(cgrindel): Remove host_xcodes if not needed
+# The CNIOBoringSSL uses C++14 features like 'enable_if_t' macro support.
+# For more details on how to enable this in Bazel: 
+# https://stackoverflow.com/questions/40260242/how-to-set-c-standard-version-when-build-with-bazel/43388168#43388168
+build --cxxopt='-std=c++14'
 
-# # The Vapor tests are very sensitive to the Xcode version being used.
-# # This tells Bazel to use the Xcode version specified at //:host_xcodes
-# build --xcode_version_config=//:host_xcodes

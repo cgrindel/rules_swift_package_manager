@@ -129,7 +129,7 @@ def _collect_files(
                 sets.insert(public_includes_set, paths.dirname(path))
             else:
                 sets.insert(srcs_set, path)
-        elif lists.contains([".c", ".S", ".so", ".o"], ext):
+        elif lists.contains([".c", ".cc", ".S", ".so", ".o"], ext):
             # Acceptable sources: https://bazel.build/reference/be/c-cpp#cc_library.srcs
             sets.insert(srcs_set, path)
         elif ext == ".modulemap" and _is_public_modulemap(path):
