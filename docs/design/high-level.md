@@ -1,5 +1,196 @@
 # Design for Swift Bazel
 
+This document provides a high-level description for the design of the rules and utilities provided
+by the Swift Bazel repository.
+
+## Goals
+
+1. Generate Bazel build files for Swift source files in a Bazel workspace.
+2. Allow a Bazel workspace to download and use external Swift packages in a Bazel workspace.
+
+## Getting Started
+
+Update the `WORKSPACE` file to load the dependencies for
+[swift_bazel](https://github.com/cgrindel/swift_bazel),
+[rules_swift](https://github.com/bazelbuild/rules_swift) and
+[bazel-gazelle](https://github.com/bazelbuild/bazel-gazelle).
+
+```python
+workspace(name = "my_project")
+
+# MARK: - swift_bazel
+
+http_archive(
+    name = "cgrindel_swift_bazel",
+    # See the README or release for the full declaration
+)
+
+load("@cgrindel_swift_bazel//:deps.bzl", "swift_bazel_dependencies")
+
+swift_bazel_dependencies()
+
+load("@cgrindel_bazel_starlib//:deps.bzl", "bazel_starlib_dependencies")
+
+bazel_starlib_dependencies()
+
+# MARK: - bazel-gazelle
+
+# gazelle:repo bazel_gazelle
+
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+load("@cgrindel_swift_bazel//:go_deps.bzl", "swift_bazel_go_dependencies")
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+
+# Declare Go dependencies before calling go_rules_dependencies.
+swift_bazel_go_dependencies()
+
+go_rules_dependencies()
+
+go_register_toolchains(version = "1.19.1")
+
+gazelle_dependencies()
+
+# MARK: - rules_swift
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "build_bazel_rules_swift",
+    sha256 = "32f95dbe6a88eb298aaa790f05065434f32a662c65ec0a6aabdaf6881e4f169f",
+    url = "https://github.com/bazelbuild/rules_swift/releases/download/1.5.0/rules_swift.1.5.0.tar.gz",
+
+)
+
+load(
+    "@build_bazel_rules_swift//swift:repositories.bzl",
+    "swift_rules_dependencies",
+)
+load("//:swift_deps.bzl", "swift_dependencies")
+
+# gazelle:repository_macro swift_deps.bzl%swift_dependencies
+swift_dependencies()
+
+swift_rules_dependencies()
+
+load(
+    "@build_bazel_rules_swift//swift:extras.bzl",
+    "swift_rules_extra_dependencies",
+)
+
+swift_rules_extra_dependencies()
+```
+
+The above `WORKSPACE` boilerplate loads a file called `swift_deps.bzl`. The Gazelle plugin will
+populate it shortly. For now, create the file with the follwing contents:
+
+```python
+# Contents of swift_deps.bzl
+def swift_dependencies():
+    pass
+```
+
+Create a minimal `Package.swift` file that contains the external dependencies that are directly used
+by the Bazel workspace.
+
+```swift
+// swift-tools-version: 5.7
+
+import PackageDescription
+
+let package = Package(
+    name: "my-project",
+    dependencies: [
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
+        .package(url: "https://github.com/apple/swift-log", from: "1.4.4"),
+    ]
+)
+```
+
+Add the following to the `BUILD.bazel` file at the root of your workspace.
+
+```python
+load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+
+# Ignore the `.build` folder that is created by running Swift package manager 
+# commands. The Swift Gazelle plugin executes some Swift package manager commands to resolve
+# external dependencies. This results in a `.build` file being created.
+# NOTE: Swift package manager is not used to build any of the external packages. The `.build`
+# directory should be ignored. Be sure to configure your source control to ignore it (i.e., add it
+# to your `.gitignore`.
+# gazelle:exclude .build
+
+# This declaration builds a Gazelle binary that incorporates all of the Gazelle plugins for the
+# languages that you use in your workspace. In this example, we are using the Gazelle plugin for
+# Starlark from bazel_skylib and the Gazelle plugin for Swift from cgrindel_swift_bazel.
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = [
+        "@bazel_skylib//gazelle/bzl",
+        "@cgrindel_swift_bazel//gazelle",
+    ],
+)
+
+# This target should be run whenever the list of external dependencies is updated in the
+# `Package.swift`. Running this target will populate the `swift_deps.bzl` with `swift_package`
+# declarations for all of the direct and transitive Swift packages that your project uses.
+gazelle(
+    name = "swift_update_repos",
+    args = [
+        "-from_file=Package.swift",
+        "-to_macro=swift_deps.bzl%swift_dependencies",
+        "-prune",
+    ],
+    command = "update-repos",
+    gazelle = ":gazelle_bin",
+)
+
+# This target updates the Bazel build files for your project. Run this target whenever you add or
+# remove source files from your project.
+gazelle(
+    name = "update_build_files",
+    gazelle = ":gazelle_bin",
+)
+```
+
+Resolve the external dependencies for your project by running the following:
+
+```sh
+$ bazel run //:swift_update_repos
+```
+
+Generate/update the Bazel build files for your project by running the following:
+
+```sh
+$ bazel run //:update_build_files
+```
+
+Finally, build and test your project.
+
+```sh
+$ bazel test //...
+```
+
+
+## Overview
+
+The implementation in this repository is separated into two parts:
+
+1. A [Gazelle](https://github.com/bazelbuild/bazel-gazelle) plugin
+2. A Bazel repository rule called `swift_package`
+
+### Gazelle Plugin
+
+The [Gazelle](https://github.com/bazelbuild/bazel-gazelle) plugin is [implemented in
+Go](https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md). It has two modes of
+operation: `update-repos` and `update`.
+
+The `update-repos` mode does the following:
+
+1. Reads a minimal `Package.swift` file
+2. Resolves the transitive
+
+
+---
 
 ## Generated Code from Swift Package Manifest
 
