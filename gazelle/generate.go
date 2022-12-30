@@ -30,7 +30,7 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 	// Collect Swift files
 	swiftFiles := swift.FilterFiles(append(args.RegularFiles, args.GenFiles...))
 
-	// Do not quick exit if we do not have any Swift source files in this directory. They may be
+	// Do not quick exit if we do not have any Swift source files in this directory. There may be
 	// Swift source files in sub-directories.
 
 	// Be sure to use args.Rel when determining whether this is a module directory. We do not want
