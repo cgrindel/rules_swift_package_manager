@@ -184,7 +184,10 @@ Check in the `Package.resolved` file and the `module_index.json` file that was g
 The implementation in this repository is separated into two parts:
 
 1. A [Gazelle](https://github.com/bazelbuild/bazel-gazelle) plugin
-2. A Bazel repository rule called `swift_package`
+2. Bazel repository rules: `swift_package` and `local_swift_package`
+
+The Gazelle plugin generates Bazel build and Starlark files for your project. The `swift_package`
+repository rule generates Bazel build files for the external Swift packages.
 
 ### Gazelle Plugin
 
@@ -196,16 +199,26 @@ The `update-repos` mode
 
 1. Resolves the direct and transitive dependencies for the project using the `Package.swift`.
 2. Writes a `Package.resolved` file.
-3. Writes a JSON file
+3. Writes a `module_index.json` file.
 2. Writes `swift_package` declarations for the direct and transitive dependencies.
 
 The `update` mode
 
-1. Inspects the project looking for Swift source files.
-2. Identifies the Bazel packages that should contain Swift declarations.
-3. Writes the Swift declarations to Bazel build files.
+1. Reads the `module_index.json` file.
+2. Inspects the project looking for Swift source files.
+3. Identifies the Bazel packages that should contain Swift declarations.
+4. Writes the Swift declarations to Bazel build files.
 
+### Repository Rules: `swift_package` and `local_swift_package`
 
+The `swift_package` repository rule downloads a Swift package and generates the Bazel build files
+that will build the Swift targets and products.
+
+The `local_swift_package` repository rule references a Swift package directory on disk much like
+Bazel's [local_repository](https://bazel.build/reference/be/workspace#local_repository) rule. Like
+`swift_package`, it too generates Bazel build files for the Swift package.
+
+The repository rules are implemented using [Bazel Starlark](https://bazel.build/rules/language).
 
 ---
 
