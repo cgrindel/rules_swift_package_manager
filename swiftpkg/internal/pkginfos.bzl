@@ -586,7 +586,6 @@ def _new_linker_settings(linked_libraries):
         linked_libraries = linked_libraries,
     )
 
-
 target_types = struct(
     executable = "executable",
     library = "library",
