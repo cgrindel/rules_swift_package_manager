@@ -3,7 +3,8 @@ package swift
 type ModuleType int
 
 const (
-	LibraryModuleType ModuleType = iota
+	UnknownModuleType ModuleType = iota
+	LibraryModuleType
 	BinaryModuleType
 	TestModuleType
 )
