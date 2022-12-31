@@ -21,10 +21,9 @@ type FileInfo struct {
 
 func NewFileInfoFromReader(rel, abs string, reader io.Reader) *FileInfo {
 	fi := FileInfo{
-		Rel: rel,
-		Abs: abs,
-		// TODO(chuck): FIX ME!
-		IsTest: testSuffixes.HasSuffix(rel),
+		Rel:    rel,
+		Abs:    abs,
+		IsTest: testSuffixes.HasSuffix(rel) || TestDirSuffixes.IsUnderDirWithSuffix(rel),
 		// There are several ways to detect a main.
 		// 1. A file named "main.swift"
 		// 2. @main annotation
