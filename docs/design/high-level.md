@@ -249,3 +249,10 @@ repository rules is implemented in Starlark.
 
 In short, they assume that if you are using the Gazelle plugin for Go, then you must have a Go
 toolchain installed on the host system. In essence, they shell out and run Go from the system.
+
+### Is the same build file generation logic used for the Go/Gazelle and Starlark implementations?
+
+No. The Gazelle plugin inspects the Swift source files and the directory structure to determine the
+placement and content of the Bazel build files. The repository rules leverage information about the
+Swift packages (e.g., dump and describe JSON). However, both implementations use the
+`module_index.json` to resolve module references to Bazel targets.
