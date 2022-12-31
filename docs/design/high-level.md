@@ -256,3 +256,20 @@ No. The Gazelle plugin inspects the Swift source files and the directory structu
 placement and content of the Bazel build files. The repository rules leverage information about the
 Swift packages (e.g., dump and describe JSON). However, both implementations use the
 `module_index.json` to resolve module references to Bazel targets.
+
+### Does this replace [rules_spm](https://github.com/cgrindel/rules_spm/)?
+
+Yes. There are some [limitations with the rules_spm
+implementation](https://github.com/cgrindel/rules_spm/discussions/157). After receiving feedback and
+suggestions from the community, we opted to create a clean sheet implementation which includes new
+features and improvements:
+
+- Bazel build file generation for the primary workspace.
+- Build the external dependencies with [rules_swift](https://github.com/bazelbuild/rules_swift).
+- Pin the exact versions for the direct and transitive dependencies.
+
+### Can I migrate from [rules_spm](https://github.com/cgrindel/rules_spm/) to `swift_bazel`?
+
+Absolutely. A [migration guide from rules_spm](https://github.com/cgrindel/swift_bazel/issues/99) is
+on the roadmap.
+
