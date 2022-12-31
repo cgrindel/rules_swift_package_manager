@@ -179,7 +179,7 @@ Check in the `Package.resolved` file and the `module_index.json` file that was g
   file is used by `swift_package` and the Gazelle plugin to resolve dependencies.
 
 
-## Underneath the Covers
+## Implementation
 
 The implementation in this repository is separated into two parts:
 
@@ -220,17 +220,32 @@ Bazel's [local_repository](https://bazel.build/reference/be/workspace#local_repo
 
 The repository rules are implemented using [Bazel Starlark](https://bazel.build/rules/language).
 
----
+## FAQ
 
-## Generated Code from Swift Package Manifest
+### Why use Gazelle and Go?
 
-### Swit Package Target
+The [Gazelle framework](https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md) provides
+lots of great features for generating Bazel build and Starlark files. Right now, the best way to
+leverage the framework is to write the plugin in Go.
 
-- Generate a BUILD file in the target path directory.
-- Executable targets will have a `swift_binary` declaration. 
+In addition, adoption of the Gazelle ecosystem has started to take off. There are [lots of useful
+plugins for other languages](https://github.com/bazelbuild/bazel-gazelle#supported-languages).
+Letting Gazelle generate and maintain Bazel build files is a real game changer for developer
+productivity.
 
-### Swift Package Product
+### Why split the implementation between Go and Starlark? 
 
-- All Bazel declarations for Swift package products will be defined in the Swift package path
-  directory.
-- Each library and executable product will be an `alias` to the corresponding Swift target declaration.
+As mentioned previously, the easiest way to implement a Gazelle plugin is to write it in Go. This
+works great for generating build files in the primary workspace. However, there is a chicken-and-egg
+problem when it comes time to generate build files in a repository rule. The repository rule needs
+to generate files during the [loading phase](https://bazel.build/run/build#loading). The Go
+toolchain and the Gazelle framework defined in the workspace are not available to the repository
+rule during this phase. So, one needs to either perform some gymnastics to build the Gazelle plugin
+(see below) or use a language/runtime that is guaranteed to be available during the loading phase.
+Since Starlark is available during the loading phase, the build file generation logic for the
+repository rules is implemented in Starlark.
+
+#### How does the Gazelle plugin for Go handle this?
+
+In short, they assume that if you are using the Gazelle plugin for Go, then you must have a Go
+toolchain installed on the host system. In essence, they shell out and run Go from the system.
