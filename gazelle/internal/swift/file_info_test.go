@@ -48,6 +48,20 @@ func TestNewFileInfoFromSrc(t *testing.T) {
 	})
 }
 
+func TestDirSuffixes(t *testing.T) {
+	actual := swift.TestDirSuffixes.IsUnderDirWithSuffix("Sources/Foo/Bar.swift")
+	assert.False(t, actual)
+
+	actual = swift.TestDirSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Bar.swift")
+	assert.True(t, actual)
+
+	actual = swift.TestDirSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Chicken/Bar.swift")
+	assert.True(t, actual)
+
+	actual = swift.TestDirSuffixes.IsUnderDirWithSuffix("Tests/Bar.swift")
+	assert.True(t, actual)
+}
+
 const mainFnWithoutImports = `
 @main
 public struct Hello {

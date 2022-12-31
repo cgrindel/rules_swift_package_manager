@@ -21,8 +21,9 @@ type FileInfo struct {
 
 func NewFileInfoFromReader(rel, abs string, reader io.Reader) *FileInfo {
 	fi := FileInfo{
-		Rel:    rel,
-		Abs:    abs,
+		Rel: rel,
+		Abs: abs,
+		// TODO(chuck): FIX ME!
 		IsTest: testSuffixes.HasSuffix(rel),
 		// There are several ways to detect a main.
 		// 1. A file named "main.swift"
@@ -109,3 +110,27 @@ func (fs fileSuffixes) HasSuffix(path string) bool {
 }
 
 var testSuffixes = fileSuffixes{"Tests.swift", "Test.swift"}
+
+type DirSuffixes []string
+
+func (ds DirSuffixes) HasSuffix(path string) bool {
+	for _, suffix := range ds {
+		if strings.HasSuffix(path, suffix) {
+			return true
+		}
+	}
+	return false
+}
+
+func (ds DirSuffixes) IsUnderDirWithSuffix(path string) bool {
+	if path == "." || path == "" || path == "/" {
+		return false
+	}
+	dir := filepath.Dir(path)
+	if ds.HasSuffix(dir) {
+		return true
+	}
+	return ds.IsUnderDirWithSuffix(dir)
+}
+
+var TestDirSuffixes = DirSuffixes{"Tests", "Test"}
