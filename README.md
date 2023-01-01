@@ -10,6 +10,22 @@ enhancements.
 
 ## Table of Contents
 
+<!-- MARKDOWN TOC: BEGIN -->
+* [Documentation](#documentation)
+* [Prerequisites](#prerequisites)
+  * [Mac OS](#mac-os)
+  * [Linux](#linux)
+* [Quickstart](#quickstart)
+  * [1\. Configure your workspace to use swift\_bazel \.](https://github.com/cgrindel/swift_bazel)
+  * [2\. Create a minimal Package\.swift file\.](#2-create-a-minimal-packageswift-file)
+  * [3\. Add Gazelle targets to BUILD\.bazel at the root of your workspace\.](#3-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
+  * [4\. Resolve the external dependencies for your project\.](#4-resolve-the-external-dependencies-for-your-project)
+  * [5\. Create or update Bazel build files for your project\.](#5-create-or-update-bazel-build-files-for-your-project)
+  * [6\. Build and test your project\.](#6-build-and-test-your-project)
+  * [7\. Check in some generated files\.](#7-check-in-some-generated-files)
+* [Tips and Tricks](#tips-and-tricks)
+* [Future Work](#future-work)
+<!-- MARKDOWN TOC: END -->
 
 ## Documentation
 
