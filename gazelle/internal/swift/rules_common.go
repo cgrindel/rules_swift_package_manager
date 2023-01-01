@@ -29,12 +29,6 @@ func rulesForBinaryModule(
 	r := rule.NewRule(BinaryRuleKind, moduleName)
 	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
 	setVisibilityAttr(r, shouldSetVis, []string{"//visibility:public"})
-	// Fixed https://github.com/bazelbuild/rules_swift/issues/913
-	// // Swift treats single file binary compilations differently. We need to tell Swift to compile
-	// // the single file as a library.
-	// if len(srcs) == 1 && srcs[0] != "main.swift" {
-	// 	r.SetAttr("copts", []string{"-parse-as-library"})
-	// }
 	return []*rule.Rule{r}
 }
 
