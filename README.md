@@ -233,6 +233,24 @@ Check in the `Package.resolved` file and the `module_index.json` file that was g
 - The `module_index.json` maps module names to targets that provide a module with that name. This
   file is used by `swift_package` and the Gazelle plugin to resolve dependencies.
 
+### 8. Everyday Tasks
+
+You are ready to start coding. The following are a few tips to consider as you work with your
+repository:
+
+- When you add or remove source files, run `bazel run //:update_build_files`. This will
+  create/update the Bazel build files in your project. It is designed to be fast and unobtrusive.
+- When you add or remove an external dependency, run `bazel run //:swift_update_repos`. This
+  will resolve the changes to your transitive dependencies and regenerate your `Package.resolved`
+  and `module_index.json`.
+- If things do not appear to be working properly, run the following in this order:
+  - `bazel run //:swift_update_repos`
+  - `bazel run //:update_build_files`
+- Do yourself a favor and create a Bazel target (e.g., `//:tidy`) that runs your repository
+  maintenance targets (e.g., `//:swift_update_repos`, `//:update_build_files`, formatting utilities) 
+  in the proper order.  If you are looking for an easy way to do set this up, check out the 
+  [`//:tidy` declaration in this repository](BUILD.bazel) and the documentation for the [tidy] macro. 
+
 
 ## Future Work
 
@@ -245,9 +263,10 @@ Check in the `Package.resolved` file and the `module_index.json` file that was g
 
 
 [CI GitHub workflow]: .github/workflows/ci.yml
-[examples]: examples/
 [Gazelle plugin]: https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md
 [Gazelle]: https://github.com/bazelbuild/bazel-gazelle
-[swift_bazel]: https://github.com/cgrindel/swift_bazel
+[examples]: examples/
 [rules_spm]: https://github.com/cgrindel/rules_spm
 [rules_swift]: https://github.com/bazelbuild/rules_swift
+[swift_bazel]: https://github.com/cgrindel/swift_bazel
+[tidy]: https://github.com/cgrindel/bazel-starlib/blob/main/doc/bzltidy/rules_and_macros_overview.md#tidy
