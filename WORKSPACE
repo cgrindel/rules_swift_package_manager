@@ -63,3 +63,9 @@ load("@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl", "
 load("//:bazel_versions.bzl", "SUPPORTED_BAZEL_VERSIONS")
 
 bazel_binaries(versions = SUPPORTED_BAZEL_VERSIONS)
+
+# Go Deps for bazel-starlib
+
+load("@cgrindel_bazel_starlib//:go_deps.bzl", "bazel_starlib_go_dependencies")
+
+bazel_starlib_go_dependencies()
