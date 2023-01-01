@@ -128,8 +128,8 @@ def swift_dependencies():
 
 ### 2. Create a minimal `Package.swift` file.
 
-Create a minimal `Package.swift` file that contains the external dependencies that are directly used
-by the Bazel workspace.
+Create a minimal `Package.swift` file that only contains the external dependencies that are directly
+used by the Bazel workspace.
 
 ```swift
 // swift-tools-version: 5.7
@@ -144,6 +144,12 @@ let package = Package(
     ]
 )
 ```
+
+The name of the package can be whatever you like. It is required for the manifest, but it is not
+used by [swift_bazel]. If your proejct is published and consumed as a Swift package, feel free to
+populate the rest of the manifest so that your package works properly by Swift package manager. Just
+note that the Swift Gazelle plugin does not use the manifest to generate Bazel build files, at this
+time.
 
 ### 3. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.
 
@@ -227,6 +233,15 @@ Check in the `Package.resolved` file and the `module_index.json` file that was g
 - The `module_index.json` maps module names to targets that provide a module with that name. This
   file is used by `swift_package` and the Gazelle plugin to resolve dependencies.
 
+
+## Future Work
+
+- [ ] Update the Gazelle plugin to generate Bazel build files from a project's Swift package
+  manifest (e.g. `Package.swift`). NOTE: The `swift_package` repository rule does generate Bazel build
+  files from a package's project manifest.
+- [ ] Update the Gazelle plugin to support common Swift project layouts. The Gazelle plugin knows
+  how to interpret projects with `Sources` and `Tests` directories. We are looking for feedback
+  about other common patterns to make the Gazelle plugin more robust.
 
 
 [CI GitHub workflow]: .github/workflows/ci.yml
