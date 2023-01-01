@@ -44,7 +44,7 @@ toolchain installed on the host system. In essence, they shell out and run Go fr
 No. The Gazelle plugin inspects the Swift source files and the directory structure to determine the
 placement and content of the Bazel build files. The repository rules leverage information about the
 Swift packages (e.g., dump and describe JSON). However, both implementations use the
-`module_index.json` to resolve module references to Bazel targets.
+`module_index.json` to resolve module references to Bazel targets for the external dependencies.
 
 ## Does this replace [rules_spm](https://github.com/cgrindel/rules_spm/)?
 
