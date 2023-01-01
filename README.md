@@ -5,8 +5,8 @@ build, and consume Swift packages with [rules_swift] rules. The rules in this re
 external Swift packages using [rules_swift] and native C/C++ rulesets making the Swift package
 products and targets available as Bazel targets.
 
-This repository is designed to fully replace [rules_spm] and provide a foundation for future
-enhancements.
+This repository is designed to fully replace [rules_spm] and provide utilities to ease Swift
+development inside a Bazel workspace.
 
 ## Table of Contents
 
@@ -48,20 +48,16 @@ Don't forget that `rules_swift` [expects the use of
 `clang`](https://github.com/bazelbuild/rules_swift#3-additional-configuration-linux-only). Hence,
 you will need to specify `CC=clang` before running Bazel.
 
-Finally, specify a custom `PATH` to Bazel via `--action_env`. The custom `PATH` should have the
-Swift bin directory as the first item.
+Finally, help [rules_swift] and [swift_bazel] find the Swift toolchain by ensuring that a `PATH`
+that includes the Swift binary is available in the Bazel actions.
 
 ```sh
-swift_exec=$(which swift)
-real_swift_exec=$(realpath $swift_exec)
-real_swift_dir=$(dirname $real_swift_exec)
-new_path="${real_swift_dir}:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 cat >>local.bazelrc <<EOF
-build --action_env=PATH=${new_path}
+build --action_env=PATH
 EOF
 ```
 
-This approach was necessary to successfully execute the examples on an Ubuntu runner using Github
+This approach is necessary to successfully execute the examples on an Ubuntu runner using Github
 actions. See the [CI GitHub workflow] for more details.
 
 
@@ -161,6 +157,7 @@ import PackageDescription
 let package = Package(
     name: "my-project",
     dependencies: [
+        // Replace these entries with your dependencies.
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
         .package(url: "https://github.com/apple/swift-log", from: "1.4.4"),
     ]
@@ -185,7 +182,7 @@ load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 # external dependencies. This results in a `.build` file being created.
 # NOTE: Swift package manager is not used to build any of the external packages. The `.build`
 # directory should be ignored. Be sure to configure your source control to ignore it (i.e., add it
-# to your `.gitignore`.
+# to your `.gitignore`).
 # gazelle:exclude .build
 
 # This declaration builds a Gazelle binary that incorporates all of the Gazelle plugins for the
@@ -247,11 +244,14 @@ $ bazel test //...
 
 ### 7. Check in some generated files.
 
-Check in the `Package.resolved` file and the `module_index.json` file that was generated for you.
+Check in the `Package.resolved`, `swift_deps.bzl`, and the `module_index.json` files that were
+generated for you.
 
 - The `Package.resolved` file specifies that exact versions of the dependencies that were
   identified. If you do not keep the `Package.resolved` file, the dependencies written to the
-`swift_deps.bzl` could change when you execute `//:swift_update_repos`.
+  `swift_deps.bzl` could change when you execute `//:swift_update_repos`.
+- The `swift_deps.bzl` contains the Bazel repository rule declarations that load your external
+  dependencies for the Bazel build.
 - The `module_index.json` maps module names to targets that provide a module with that name. This
   file is used by `swift_package` and the Gazelle plugin to resolve dependencies.
 
@@ -271,7 +271,7 @@ The following are a few tips to consider as you work with your repository:
   - `bazel run //:update_build_files`
 - Do yourself a favor and create a Bazel target (e.g., `//:tidy`) that runs your repository
   maintenance targets (e.g., `//:swift_update_repos`, `//:update_build_files`, formatting utilities) 
-  in the proper order.  If you are looking for an easy way to do set this up, check out the 
+  in the proper order.  If you are looking for an easy way to set this up, check out the 
   [`//:tidy` declaration in this repository](BUILD.bazel) and the documentation for the [tidy] macro. 
 
 
