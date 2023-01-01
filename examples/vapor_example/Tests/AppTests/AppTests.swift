@@ -12,4 +12,8 @@ final class AppTests: XCTestCase {
             XCTAssertEqual(res.body.string, "Hello, Timmy!")
         })
     }
+
+    static var allTests = [
+      ("testHelloWorld", testHelloWorld),
+    ]
 }

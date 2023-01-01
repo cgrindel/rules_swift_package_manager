@@ -46,6 +46,33 @@ func TestNewFileInfoFromSrc(t *testing.T) {
 		}
 		assert.Equal(t, expected, actual)
 	})
+	t.Run("main under test directory", func(t *testing.T) {
+		rel := "FooTests/main.swift"
+		abs := filepath.Join("Tests", rel)
+		actual := swift.NewFileInfoFromSrc(rel, abs, mainForTest)
+		expected := &swift.FileInfo{
+			Rel:          rel,
+			Abs:          abs,
+			Imports:      []string{"XCTest"},
+			IsTest:       true,
+			ContainsMain: true,
+		}
+		assert.Equal(t, expected, actual)
+	})
+}
+
+func TestDirSuffixes(t *testing.T) {
+	actual := swift.TestDirSuffixes.IsUnderDirWithSuffix("Sources/Foo/Bar.swift")
+	assert.False(t, actual)
+
+	actual = swift.TestDirSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Bar.swift")
+	assert.True(t, actual)
+
+	actual = swift.TestDirSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Chicken/Bar.swift")
+	assert.True(t, actual)
+
+	actual = swift.TestDirSuffixes.IsUnderDirWithSuffix("Tests/Bar.swift")
+	assert.True(t, actual)
 }
 
 const mainFnWithoutImports = `
@@ -92,4 +119,14 @@ import XCTest
 
 class DateISOTests: XCTestCase {
 }
+`
+
+const mainForTest = `
+#if os(Linux)
+import XCTest
+
+XCTMain([
+    testCase(AppTests.allTests),
+])
+#endif
 `

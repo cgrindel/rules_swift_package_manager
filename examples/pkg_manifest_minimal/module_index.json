@@ -53,12 +53,6 @@
   "SwiftFormatTests": [
     "@swiftpkg_swiftformat//:Tests_SwiftFormatTests"
   ],
-  "changelog_authors": [
-    "@swiftpkg_swift_argument_parser//:Tools_changelog-authors"
-  ],
-  "count_lines": [
-    "@swiftpkg_swift_argument_parser//:Examples_count-lines"
-  ],
   "generate_manual": [
     "@swiftpkg_swift_argument_parser//:Tools_generate-manual"
   ],
