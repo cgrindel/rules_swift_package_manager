@@ -24,12 +24,13 @@ func RulesFromSrcs(args language.GenerateArgs, srcs []string) []*rule.Rule {
 	case TestModuleType:
 		rules = rulesForTestModule(moduleName, srcs, swiftImports, shouldSetVis)
 	}
-
 	return rules
 }
 
 // Returns the imports and the module typ
 func collectSwiftInfo(fileInfos []*FileInfo) ([]string, ModuleType) {
+	hasTestFiles := false
+	hasMain := false
 	moduleType := LibraryModuleType
 	swiftImports := make([]string, 0)
 	swiftImportsSet := make(map[string]bool)
@@ -41,16 +42,22 @@ func collectSwiftInfo(fileInfos []*FileInfo) ([]string, ModuleType) {
 				swiftImports = append(swiftImports, imp)
 			}
 		}
-
-		// Adjust the rule kind, if necessary
-		switch {
-		case fi.ContainsMain:
-			moduleType = BinaryModuleType
-		case fi.IsTest:
-			moduleType = TestModuleType
+		if fi.IsTest {
+			hasTestFiles = true
+		}
+		if fi.ContainsMain {
+			hasMain = true
 		}
 	}
+
+	// Adjust the rule kind, if necessary
+	// Check for test files first. On Linux, a main.swift is necessary for swift_test rules.
+	if hasTestFiles {
+		moduleType = TestModuleType
+	} else if hasMain {
+		moduleType = BinaryModuleType
+	}
+
 	sort.Strings(swiftImports)
 	return swiftImports, moduleType
 }
-
