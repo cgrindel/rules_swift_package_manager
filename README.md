@@ -11,6 +11,12 @@ enhancements.
 ## Table of Contents
 
 
+## Documentation
+
+- [High-level design](docs/design/high-level.md)
+- [Frequently Asked Questions](docs/faq.md)
+
+
 ## Prerequisites
 
 ### Mac OS
@@ -233,10 +239,11 @@ Check in the `Package.resolved` file and the `module_index.json` file that was g
 - The `module_index.json` maps module names to targets that provide a module with that name. This
   file is used by `swift_package` and the Gazelle plugin to resolve dependencies.
 
-### 8. Everyday Tasks
+You are ready to start coding.
 
-You are ready to start coding. The following are a few tips to consider as you work with your
-repository:
+## Tips and Tricks
+
+The following are a few tips to consider as you work with your repository:
 
 - When you add or remove source files, run `bazel run //:update_build_files`. This will
   create/update the Bazel build files in your project. It is designed to be fast and unobtrusive.
