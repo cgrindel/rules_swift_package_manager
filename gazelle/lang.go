@@ -30,6 +30,7 @@ type swiftLang struct {
 	language.BaseLang
 }
 
+// NewLanguage creates an instance of the Gazelle language for Swift.
 func NewLanguage() language.Language {
 	return &swiftLang{}
 }
