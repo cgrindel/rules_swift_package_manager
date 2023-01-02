@@ -158,5 +158,7 @@ _COMMON_ATTRS = dicts.add(
 swift_package = repository_rule(
     implementation = _swift_package_impl,
     attrs = _COMMON_ATTRS,
-    doc = "",
+    doc = """\
+Used to download and build an external Swift package.
+""",
 )

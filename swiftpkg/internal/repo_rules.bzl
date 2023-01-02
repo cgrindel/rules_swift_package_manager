@@ -10,7 +10,10 @@ load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
 _swift_attrs = {
     "module_index": attr.label(
-        doc = "The JSON file that contains the module index by name.",
+        doc = """\
+A JSON file that contains a mapping of Swift module names to Bazel targets \
+that provide a module with that name.\
+""",
         mandatory = True,
     ),
 }
