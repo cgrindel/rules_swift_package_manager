@@ -1,9 +1,9 @@
 # Gazelle Plugin for Swift and Swit Package Rules for Bazel
 
 This repository contains a [Gazelle plugin] and Bazel repository rules that can be used to download,
-build, and consume Swift packages with [rules_swift] rules. The rules in this repository build the
-external Swift packages using [rules_swift] and native C/C++ rulesets making the Swift package
-products and targets available as Bazel targets.
+build, and consume Swift packages. The rules in this repository build the external Swift packages
+using [rules_swift] and native C/C++ rulesets making the Swift package products and targets
+available as Bazel targets.
 
 This repository is designed to fully replace [rules_spm] and provide utilities to ease Swift
 development inside a Bazel workspace.
@@ -29,9 +29,9 @@ development inside a Bazel workspace.
 
 ## Documentation
 
-- [High-level design](docs/design/high-level.md)
-- [Frequently Asked Questions](docs/faq.md)
-
+- [Rules and API documentation](/docs/README.md)
+- [High-level design](/docs/design/high-level.md)
+- [Frequently Asked Questions](/docs/faq.md)
 
 ## Prerequisites
 

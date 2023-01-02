@@ -1,11 +1,17 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 
+# Allow docs to access the defs.bzl
+package(default_visibility = ["//visibility:public"])
+
 bzl_library(
     name = "defs",
     srcs = ["defs.bzl"],
     visibility = ["//visibility:public"],
-    deps = ["//swiftpkg/internal:swift_package"],
+    deps = [
+        "//swiftpkg/internal:local_swift_package",
+        "//swiftpkg/internal:swift_package",
+    ],
 )
 
 bzlformat_pkg(name = "bzlformat")
