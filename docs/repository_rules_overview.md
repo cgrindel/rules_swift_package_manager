@@ -8,8 +8,8 @@ products and targets available as Bazel targets.
 
 On this page:
 
-  * [swift_package](#swift_package)
   * [local_swift_package](#local_swift_package)
+  * [swift_package](#swift_package)
 
 
 <a id="local_swift_package"></a>
