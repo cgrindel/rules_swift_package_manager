@@ -29,9 +29,9 @@ development inside a Bazel workspace.
 
 ## Documentation
 
-- [High-level design](docs/design/high-level.md)
-- [Frequently Asked Questions](docs/faq.md)
-
+- [Rules and API documentation](/docs/README.md)
+- [High-level design](/docs/design/high-level.md)
+- [Frequently Asked Questions](/docs/faq.md)
 
 ## Prerequisites
 
