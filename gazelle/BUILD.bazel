@@ -1,5 +1,5 @@
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
-load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_path", "go_test")
 
 # MARK: - Starlark
 
@@ -19,6 +19,7 @@ go_library(
     name = "gazelle",
     srcs = [
         "config.go",
+        "doc.go",
         "generate.go",
         "kinds.go",
         "lang.go",
@@ -50,5 +51,12 @@ go_test(
         ":gazelle",
         "@bazel_gazelle//language:go_default_library",
         "@com_github_stretchr_testify//assert",
+    ],
+)
+
+go_path(
+    name = "godoc_root",
+    deps = [
+        ":gazelle",
     ],
 )
