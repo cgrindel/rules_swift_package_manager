@@ -1,6 +1,51 @@
+load(
+    "@cgrindel_bazel_starlib//bazeldoc:defs.bzl",
+    "doc_for_provs",
+    "write_header",
+    doc_providers = "providers",
+)
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load("@cgrindel_bazel_starlib//markdown:defs.bzl", "markdown_pkg")
 
 bzlformat_pkg(name = "bzlformat")
 
 markdown_pkg(name = "markdown")
+
+# MARK: - Documentation Declarations
+
+_DOC_WITH_SYMBOLS = {
+    "repository_rules": [
+        "swift_package",
+        "local_swift_package",
+    ],
+}
+
+_ALL_DOC_PROVIDERS = [
+    doc_providers.create(
+        name = name + "_overview",
+        stardoc_input = "//swiftpkg:defs.bzl",
+        symbols = symbols,
+        deps = ["//swiftpkg:defs"],
+    )
+    for [
+        name,
+        symbols,
+    ] in _DOC_WITH_SYMBOLS.items()
+]
+
+# MARK: - Headers
+
+write_header(
+    name = "repository_rules_overview_header",
+    header_content = [
+        "# Repository Rules",
+        "",
+        """
+The rules described below are used to build Swift packages and make their 
+products and targets available as Bazel targets.
+""",
+    ],
+    symbols = _DOC_WITH_SYMBOLS["repository_rules"],
+)
+
+doc_for_provs(doc_provs = _ALL_DOC_PROVIDERS)

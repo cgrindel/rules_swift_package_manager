@@ -31,7 +31,10 @@ bzl_library(
     name = "pkginfos",
     srcs = ["pkginfos.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
-    deps = [":repository_utils"],
+    deps = [
+        ":repository_utils",
+        ":validations",
+    ],
 )
 
 bzl_library(
@@ -40,8 +43,11 @@ bzl_library(
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":repository_files",
+        "//swiftpkg/internal/modulemap_parser:declarations",
+        "//swiftpkg/internal/modulemap_parser:parser",
         "@bazel_skylib//lib:paths",
         "@bazel_skylib//lib:sets",
+        "@cgrindel_bazel_starlib//bzllib:defs",
     ],
 )
 
@@ -95,8 +101,14 @@ bzl_library(
     srcs = ["swiftpkg_build_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":build_decls",
+        ":build_files",
+        ":clang_files",
+        ":load_statements",
+        ":pkginfo_target_deps",
         ":pkginfo_targets",
         ":pkginfos",
+        "@bazel_skylib//lib:paths",
         "@cgrindel_bazel_starlib//bzllib:defs",
     ],
 )
@@ -141,7 +153,11 @@ bzl_library(
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":pkginfos",
+        ":repo_rules",
+        "@bazel_skylib//lib:dicts",
+        "@bazel_skylib//lib:paths",
         "@bazel_tools//tools/build_defs/repo:utils.bzl",
+        "@cgrindel_bazel_starlib//bzllib:defs",
     ],
 )
 
