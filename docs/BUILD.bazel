@@ -15,8 +15,8 @@ markdown_pkg(name = "markdown")
 
 _DOC_WITH_SYMBOLS = {
     "repository_rules": [
-        "swift_package",
         "local_swift_package",
+        "swift_package",
     ],
 }
 
