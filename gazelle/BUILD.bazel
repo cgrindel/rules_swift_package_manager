@@ -58,5 +58,6 @@ go_path(
     name = "godoc_root",
     deps = [
         ":gazelle",
+        "//gazelle/internal/jsonutils",
     ],
 )
