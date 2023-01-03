@@ -24,6 +24,7 @@ go_library(
         "rules_common.go",
         "rules_from_manifest.go",
         "rules_from_srcs.go",
+        "test_rules_common.go",
     ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/swift",
     visibility = ["//gazelle:__subpackages__"],

@@ -22,7 +22,7 @@ func RulesFromSrcs(args language.GenerateArgs, srcs []string) []*rule.Rule {
 	case BinaryModuleType:
 		rules = rulesForBinaryModule(moduleName, srcs, swiftImports, shouldSetVis)
 	case TestModuleType:
-		rules = rulesForTestModule(moduleName, srcs, swiftImports, shouldSetVis)
+		rules = rulesForTestModule(moduleName, srcs, swiftImports, shouldSetVis, args.File)
 	}
 	return rules
 }

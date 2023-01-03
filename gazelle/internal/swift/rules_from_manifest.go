@@ -48,7 +48,7 @@ func RulesForSwiftTarget(args language.GenerateArgs, pi *swiftpkg.PackageInfo, t
 	case swiftpkg.ExecutableTargetType:
 		rules = rulesForBinaryModule(t.Name, t.Sources, t.Imports(), shouldSetVis)
 	case swiftpkg.TestTargetType:
-		rules = rulesForTestModule(t.Name, t.Sources, t.Imports(), shouldSetVis)
+		rules = rulesForTestModule(t.Name, t.Sources, t.Imports(), shouldSetVis, args.File)
 	}
 	return rules
 }

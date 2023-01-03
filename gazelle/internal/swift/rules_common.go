@@ -37,8 +37,10 @@ func rulesForTestModule(
 	srcs []string,
 	swiftImports []string,
 	shouldSetVis bool,
+	buildFile *rule.File,
 ) []*rule.Rule {
-	r := rule.NewRule(TestRuleKind, moduleName)
+	// Detect the type of rule that should be used to build the Swift sources.
+	r := buildRuleForTestSrcs(buildFile, moduleName)
 	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
 	return []*rule.Rule{r}
 }
