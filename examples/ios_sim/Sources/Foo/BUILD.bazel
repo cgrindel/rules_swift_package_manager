@@ -1,0 +1,11 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "Foo",
+    srcs = glob(["*.swift"]),
+    module_name = "Foo",
+    visibility = ["//:__subpackages__"],
+    deps = [
+        "@swift_pkgs//swift-nio:NIO",
+    ],
+)

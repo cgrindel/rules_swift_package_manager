@@ -1,0 +1,24 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+name = "FooTests"
+
+test_lib_name = "%sLib" % name
+
+swift_library(
+    name = test_lib_name,
+    testonly = 1,
+    srcs = glob(["*.swift"]),
+    visibility = ["//visibility:private"],
+    deps = [
+        "//Sources/Foo",
+        "@swift_pkgs//swift-nio:NIO",
+    ],
+)
+
+ios_unit_test(
+    name = name,
+    minimum_os_version = "14.0",
+    visibility = ["//visibility:private"],
+    deps = [":%s" % test_lib_name],
+)
