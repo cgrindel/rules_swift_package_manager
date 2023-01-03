@@ -13,9 +13,15 @@ jobs:
     runs-on: macos-12
     steps:
     - uses: actions/checkout@v3
+    - name: Set config to CI
+      shell: bash
+      run: |
+        cat >> "local.bazelrc" <<EOF
+        common --config=ci
+        EOF
     - uses: cgrindel/gha_set_up_bazel@v1
       with:
-        repo_name: rules_spm
+        repo_name: swift_bazel
     - uses: ./.github/actions/build_and_test
 
   ubuntu_build:
@@ -41,9 +47,15 @@ jobs:
         # Need to expose the PATH so that the Swift toolchain can be found
         build --action_env=PATH
         EOF
+    - name: Set config to CI
+      shell: bash
+      run: |
+        cat >> "local.bazelrc" <<EOF
+        common --config=ci
+        EOF
     - uses: cgrindel/gha_set_up_bazel@v1
       with:
-        repo_name: rules_spm
+        repo_name: swift_bazel
     - uses: ./.github/actions/build_and_test
 
   all_ci_tests:
