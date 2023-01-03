@@ -2,8 +2,6 @@
 
 set -o errexit -o nounset -o pipefail
 
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
-
 # Generate Swift external deps and update build files
 bazel run //:tidy
 
