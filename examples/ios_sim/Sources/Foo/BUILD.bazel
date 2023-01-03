@@ -5,7 +5,5 @@ swift_library(
     srcs = glob(["*.swift"]),
     module_name = "Foo",
     visibility = ["//:__subpackages__"],
-    deps = [
-        "@swift_pkgs//swift-nio:NIO",
-    ],
+    deps = ["@swiftpkg_swift_nio//:Sources_NIO"],
 )
