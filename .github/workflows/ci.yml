@@ -17,7 +17,7 @@ jobs:
       shell: bash
       run: |
         cat >> "local.bazelrc" <<EOF
-        common --common=ci
+        common --config=ci
         EOF
     - uses: cgrindel/gha_set_up_bazel@v1
       with:
@@ -51,7 +51,7 @@ jobs:
       shell: bash
       run: |
         cat >> "local.bazelrc" <<EOF
-        common --common=ci
+        common --config=ci
         EOF
     - uses: cgrindel/gha_set_up_bazel@v1
       with:
