@@ -1,7 +1,7 @@
 """Module for creating Bazel declarations to build a Swift package."""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":clang_files.bzl", "clang_files")
@@ -39,9 +39,6 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//visibility:public"],
     }
-
-    # TODO(chuck): Consider adding support for custom build files for select repositories. Having
-    # trouble getting vapor application to link.
 
     # GH046: Support plugins.
 
@@ -102,7 +99,9 @@ def _swift_test_from_target(target, attrs):
 # MARK: - Clang Targets
 
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
-    target_path = paths.join(pkg_ctx.pkg_info.path, target.path)
+    target_path = paths.normalize(
+        paths.join(pkg_ctx.pkg_info.path, target.path),
+    )
     organized_files = clang_files.collect_files(
         repository_ctx,
         [target_path],
@@ -189,6 +188,10 @@ def _new_for_products(pkg_info, repo_name):
         _new_for_product(pkg_info, prod, repo_name)
         for prod in pkg_info.products
     ])
+
+    # If we did not generate any build files, return an empty one.
+    if len(bld_files) == 0:
+        return build_files.new()
     return build_files.merge(*bld_files)
 
 def _new_for_product(pkg_info, product, repo_name):
@@ -212,6 +215,11 @@ def _executable_product_build_file(pkg_info, product, repo_name):
     if targets_len == 1:
         target = targets[0]
         if target.type == target_types.executable:
+            # If the alias name will have the same name as the target, then do not create the alias.
+            label = pkginfo_targets.bazel_label(target, repo_name)
+            if label.name == product.name:
+                return None
+
             # Create an alias to the binary target created in the target package.
             return build_files.new(
                 decls = [
@@ -219,7 +227,7 @@ def _executable_product_build_file(pkg_info, product, repo_name):
                         native_kinds.alias,
                         product.name,
                         attrs = {
-                            "actual": pkginfo_targets.bazel_label(target, repo_name = repo_name),
+                            "actual": bazel_labels.normalize(label),
                             "visibility": ["//visibility:public"],
                         },
                     ),
@@ -251,13 +259,18 @@ def _library_product_build_file(pkg_info, product, repo_name):
         fail("Multiple targets specified for a library product. name:", product.name)
 
     actual_target = targets[0]
+
+    # If the alias name will have the same name as the target, then do not create the alias.
+    label = pkginfo_targets.bazel_label(actual_target, repo_name)
+    if label.name == product.name:
+        return None
     return build_files.new(
         decls = [
             build_decls.new(
                 native_kinds.alias,
                 product.name,
                 attrs = {
-                    "actual": pkginfo_targets.bazel_label(actual_target, repo_name),
+                    "actual": bazel_labels.normalize(label),
                     "visibility": ["//visibility:public"],
                 },
             ),

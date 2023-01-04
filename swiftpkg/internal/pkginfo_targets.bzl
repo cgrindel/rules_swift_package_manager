@@ -33,6 +33,16 @@ def _srcs(target):
     Returns:
         A `list` of `string` values representing the path to source files for the target.
     """
+
+    # DEBUG BEGIN
+    print("*** CHUCK target.path: ", target.path)
+    print("*** CHUCK target.sources: ")
+    for idx, item in enumerate(target.sources):
+        print("*** CHUCK", idx, ":", item)
+
+    # DEBUG END
+    if target.path == ".":
+        return target.sources
     return [
         paths.join(target.path, src)
         for src in target.sources
@@ -50,6 +60,8 @@ def _bazel_label_name(target):
     basename = paths.basename(target.path)
     if basename == target.name:
         name = target.path
+    elif target.path == ".":
+        name = target.name
     else:
         name = paths.join(target.path, target.name)
     return name.replace("/", "_")
@@ -73,15 +85,21 @@ def make_pkginfo_targets(bazel_labels):
                 provided if the module is being used outside of a BUILD thread.
 
         Returns:
-            A `string` representing the label for the target.
+            A `struct`, as returned by `bazel_labels.new`, representing the
+            label for the target.
         """
-        return bazel_labels.normalize(
-            bazel_labels.new(
-                repository_name = repo_name,
-                package = "",
-                name = _bazel_label_name(target),
-            ),
+        return bazel_labels.new(
+            repository_name = repo_name,
+            package = "",
+            name = _bazel_label_name(target),
         )
+        # return bazel_labels.normalize(
+        #     bazel_labels.new(
+        #         repository_name = repo_name,
+        #         package = "",
+        #         name = _bazel_label_name(target),
+        #     ),
+        # )
 
     return struct(
         bazel_label = _bazel_label,

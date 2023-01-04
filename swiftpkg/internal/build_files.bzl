@@ -17,10 +17,6 @@ def _new(load_stmts = [], decls = []):
     Returns:
         A `struct` representing parts of a Bazel  build file.
     """
-    if len(load_stmts) == 0 and len(decls) == 0:
-        fail("""\
-Attempted to create a build file with no load statements or declarations.\
-""")
     return struct(
         load_stmts = load_stmts,
         decls = decls,
