@@ -63,10 +63,23 @@ bazel_integration_tests(
     workspace_path = "vapor_example",
 )
 
+# MARK: - iOS Example
+
+bazel_integration_tests(
+    name = "ios_sim_test",
+    bazel_versions = SUPPORTED_BAZEL_VERSIONS,
+    test_runner = ":test_runner",
+    workspace_files = integration_test_utils.glob_workspace_files("ios_sim") + [
+        "//:local_repository_files",
+    ],
+    workspace_path = "ios_sim",
+)
+
 # MARK: - Test Suites
 
 _test_base_names = [
     "http_archive_ext_deps_test",
+    "ios_sim_test",
     "pkg_manifest_minimal_test",
     "vapor_example_test",
 ]
