@@ -7,6 +7,8 @@ def swift_dependencies():
         commit = "4f52fc9b29600a03de6e05af16df0d694cb44301",
         module_index = "@//:module_index.json",
         remote = "https://github.com/SDWebImage/libwebp-Xcode.git",
+        # This repository uses submodules to gather its code.
+        init_submodules = True,
     )
 
     # version: 1.4.4
