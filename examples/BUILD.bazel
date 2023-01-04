@@ -14,6 +14,20 @@ bzlformat_pkg(name = "bzlformat")
 # repository.
 # gazelle:exclude **
 
+_all_os_test_examples = [
+    "http_archive_ext_deps",
+    "pkg_manifest_minimal",
+    "vapor_example",
+]
+
+_macos_test_examples = [
+    "ios_sim",
+]
+
+_linux_test_examples = []
+
+_all_examples = _all_os_test_examples + _macos_test_examples + _linux_test_examples
+
 sh_binary(
     name = "test_runner",
     testonly = True,
@@ -27,61 +41,54 @@ sh_binary(
     ],
 )
 
-# MARK: - Example Using http_archive to Specify External Dependencies
+# MARK: - Integration Tests
 
-bazel_integration_tests(
-    name = "http_archive_ext_deps_test",
-    bazel_versions = SUPPORTED_BAZEL_VERSIONS,
-    test_runner = ":test_runner",
-    workspace_files = integration_test_utils.glob_workspace_files("http_archive_ext_deps") + [
-        "//:local_repository_files",
-    ],
-    workspace_path = "http_archive_ext_deps",
-)
+[
+    bazel_integration_tests(
+        name = example + "_test",
+        bazel_versions = SUPPORTED_BAZEL_VERSIONS,
+        test_runner = ":test_runner",
+        workspace_files = integration_test_utils.glob_workspace_files(example) + [
+            "//:local_repository_files",
+        ],
+        workspace_path = example,
+    )
+    for example in _all_os_test_examples
+]
 
-# MARK: - Package Manifest example
+[
+    bazel_integration_tests(
+        name = example + "_test",
+        bazel_versions = SUPPORTED_BAZEL_VERSIONS,
+        target_compatible_with = ["@platforms//os:macos"],
+        test_runner = ":test_runner",
+        workspace_files = integration_test_utils.glob_workspace_files(example) + [
+            "//:local_repository_files",
+        ],
+        workspace_path = example,
+    )
+    for example in _macos_test_examples
+]
 
-bazel_integration_tests(
-    name = "pkg_manifest_minimal_test",
-    bazel_versions = SUPPORTED_BAZEL_VERSIONS,
-    test_runner = ":test_runner",
-    workspace_files = integration_test_utils.glob_workspace_files("pkg_manifest_minimal") + [
-        "//:local_repository_files",
-    ],
-    workspace_path = "pkg_manifest_minimal",
-)
-
-# MARK: - Vapor Example
-
-bazel_integration_tests(
-    name = "vapor_example_test",
-    bazel_versions = SUPPORTED_BAZEL_VERSIONS,
-    test_runner = ":test_runner",
-    workspace_files = integration_test_utils.glob_workspace_files("vapor_example") + [
-        "//:local_repository_files",
-    ],
-    workspace_path = "vapor_example",
-)
-
-# MARK: - iOS Example
-
-bazel_integration_tests(
-    name = "ios_sim_test",
-    bazel_versions = SUPPORTED_BAZEL_VERSIONS,
-    test_runner = ":test_runner",
-    workspace_files = integration_test_utils.glob_workspace_files("ios_sim") + [
-        "//:local_repository_files",
-    ],
-    workspace_path = "ios_sim",
-)
+[
+    bazel_integration_tests(
+        name = example + "_test",
+        bazel_versions = SUPPORTED_BAZEL_VERSIONS,
+        target_compatible_with = ["@platforms//os:linux"],
+        test_runner = ":test_runner",
+        workspace_files = integration_test_utils.glob_workspace_files(example) + [
+            "//:local_repository_files",
+        ],
+        workspace_path = example,
+    )
+    for example in _linux_test_examples
+]
 
 # MARK: - Test Suites
 
 _test_base_names = [
-    "http_archive_ext_deps_test",
-    "ios_sim_test",
-    "pkg_manifest_minimal_test",
-    "vapor_example_test",
+    example + "_test"
+    for example in _all_examples
 ]
 
 _smoke_test_names = [
