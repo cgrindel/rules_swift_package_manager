@@ -15,22 +15,8 @@ func rulesForLibraryModule(
 	shouldSetVis bool,
 	buildFile *rule.File,
 ) []*rule.Rule {
-	var r *rule.Rule
-	var existingRules []*rule.Rule
-	if buildFile != nil {
-		existingRules = findRulesByKind(buildFile.Rules, LibraryRuleKind)
-	}
-	// If we found a single swift_library, use its name. Otherwise, just use the module name.
-	var name, moduleName string
-	if len(existingRules) == 1 {
-		first := existingRules[0]
-		name = first.Name()
-		moduleName = first.AttrString(ModuleNameAttrName)
-	} else {
-		name = defaultModuleName
-		moduleName = defaultModuleName
-	}
-	r = rule.NewRule(LibraryRuleKind, name)
+	name, moduleName := ruleNameAndModuleName(buildFile, LibraryRuleKind, defaultModuleName)
+	r := rule.NewRule(LibraryRuleKind, name)
 	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
 	setVisibilityAttr(r, shouldSetVis, []string{"//visibility:public"})
 	return []*rule.Rule{r}
@@ -43,22 +29,8 @@ func rulesForBinaryModule(
 	shouldSetVis bool,
 	buildFile *rule.File,
 ) []*rule.Rule {
-	var r *rule.Rule
-	var existingRules []*rule.Rule
-	if buildFile != nil {
-		existingRules = findRulesByKind(buildFile.Rules, BinaryRuleKind)
-	}
-	// If we found a single swift_binary, use its name. Otherwise, just use the module name.
-	var name, moduleName string
-	if len(existingRules) == 1 {
-		first := existingRules[0]
-		name = first.Name()
-		moduleName = first.AttrString(ModuleNameAttrName)
-	} else {
-		name = defaultModuleName
-		moduleName = defaultModuleName
-	}
-	r = rule.NewRule(BinaryRuleKind, name)
+	name, moduleName := ruleNameAndModuleName(buildFile, BinaryRuleKind, defaultModuleName)
+	r := rule.NewRule(BinaryRuleKind, name)
 	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
 	setVisibilityAttr(r, shouldSetVis, []string{"//visibility:public"})
 	return []*rule.Rule{r}
@@ -110,4 +82,25 @@ func setVisibilityAttr(r *rule.Rule, shouldSetVis bool, visibility []string) {
 		return
 	}
 	r.SetAttr("visibility", visibility)
+}
+
+// Name and Module Name
+
+// Determine the rule name and module name from existing rules
+func ruleNameAndModuleName(buildFile *rule.File, kind, defaultModuleName string) (string, string) {
+	var existingRules []*rule.Rule
+	if buildFile != nil {
+		existingRules = findRulesByKind(buildFile.Rules, kind)
+	}
+	// If we found a single swift_binary, use its name. Otherwise, just use the module name.
+	var name, moduleName string
+	if len(existingRules) == 1 {
+		first := existingRules[0]
+		name = first.Name()
+		moduleName = first.AttrString(ModuleNameAttrName)
+	} else {
+		name = defaultModuleName
+		moduleName = defaultModuleName
+	}
+	return name, moduleName
 }
