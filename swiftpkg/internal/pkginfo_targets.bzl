@@ -33,14 +33,6 @@ def _srcs(target):
     Returns:
         A `list` of `string` values representing the path to source files for the target.
     """
-
-    # DEBUG BEGIN
-    print("*** CHUCK target.path: ", target.path)
-    print("*** CHUCK target.sources: ")
-    for idx, item in enumerate(target.sources):
-        print("*** CHUCK", idx, ":", item)
-
-    # DEBUG END
     if target.path == ".":
         return target.sources
     return [

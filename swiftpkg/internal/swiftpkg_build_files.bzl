@@ -131,6 +131,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "tags": ["swift_module={}".format(target.c99name)],
         "visibility": ["//visibility:public"],
     }
+    repo_name = repository_ctx.name
     if len(organized_files.srcs) > 0:
         attrs["srcs"] = organized_files.srcs
     if len(organized_files.hdrs) > 0:
@@ -142,15 +143,22 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # to cc_XXX that depend upon the library. Providing includes as -I only
         # provides the includes for this target.
         # https://bazel.build/reference/be/c-cpp#cc_library.includes
-        repo_name = repository_ctx.name
         attrs["copts"].extend([
             # Because this is an external repo, we need to prepend
             # external/<repo_name> to all of the include dirs
             "-I{}".format(paths.join("external", repo_name, inc))
             for inc in organized_files.private_includes
         ])
-    if target.clang_settings and len(target.clang_settings.defines) > 0:
-        attrs["defines"].extend(target.clang_settings.defines)
+    if target.clang_settings:
+        if len(target.clang_settings.defines) > 0:
+            attrs["defines"].extend(target.clang_settings.defines)
+        if len(target.clang_settings.hdr_srch_paths) > 0:
+            copts = attrs.get("copts", default = [])
+            copts.extend([
+                "-I{}".format(paths.join("external", repo_name, hsp))
+                for hsp in target.clang_settings.hdr_srch_paths
+            ])
+            attrs["copts"] = copts
     if target.linker_settings and len(target.linker_settings.linked_libraries) > 0:
         linkopts = attrs.get("linkopts", default = [])
         linkopts.extend([

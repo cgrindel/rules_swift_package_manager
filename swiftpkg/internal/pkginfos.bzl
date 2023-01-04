@@ -171,6 +171,7 @@ def _new_target_from_json_maps(dump_map, desc_map):
 
 def _new_clang_settings_from_dump_json_list(dump_list):
     defines = []
+    hdr_srch_paths = []
     for setting in dump_list:
         if setting["tool"] != "c":
             continue
@@ -178,15 +179,18 @@ def _new_clang_settings_from_dump_json_list(dump_list):
         if kind_map == None:
             continue
         define_map = kind_map.get("define")
-        if define_map == None:
-            continue
-        for define in define_map.values():
-            defines.append(define)
+        if define_map != None:
+            for define in define_map.values():
+                defines.append(define)
+        hdr_srch_path_map = kind_map.get("headerSearchPath")
+        if hdr_srch_path_map != None:
+            hdr_srch_paths.extend(hdr_srch_path_map.values())
 
-    if len(defines) == 0:
+    if len(defines) == 0 and len(hdr_srch_paths) == 0:
         return None
     return _new_clang_settings(
         defines = defines,
+        hdr_srch_paths = hdr_srch_paths,
     )
 
 def _new_swift_settings_from_dump_json_list(dump_list):
@@ -571,9 +575,10 @@ def _new_target(
         linker_settings = linker_settings,
     )
 
-def _new_clang_settings(defines):
+def _new_clang_settings(defines, hdr_srch_paths):
     return struct(
         defines = defines,
+        hdr_srch_paths = hdr_srch_paths,
     )
 
 def _new_swift_settings(defines):
