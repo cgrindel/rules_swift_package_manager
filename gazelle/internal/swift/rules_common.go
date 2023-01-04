@@ -9,39 +9,65 @@ import (
 // Rule Creation
 
 func rulesForLibraryModule(
-	moduleName string,
+	defaultModuleName string,
 	srcs []string,
 	swiftImports []string,
 	shouldSetVis bool,
+	buildFile *rule.File,
 ) []*rule.Rule {
-	r := rule.NewRule(LibraryRuleKind, moduleName)
+	var r *rule.Rule
+	existingLibs := findRulesByKind(buildFile.Rules, LibraryRuleKind)
+	// If we found a single swift_library, use its name. Otherwise, just use the module name.
+	var name, moduleName string
+	if len(existingLibs) == 1 {
+		first := existingLibs[0]
+		name = first.Name()
+		moduleName = first.AttrString(ModuleNameAttrName)
+	} else {
+		name = defaultModuleName
+		moduleName = defaultModuleName
+	}
+	r = rule.NewRule(LibraryRuleKind, name)
 	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
 	setVisibilityAttr(r, shouldSetVis, []string{"//visibility:public"})
 	return []*rule.Rule{r}
 }
 
 func rulesForBinaryModule(
-	moduleName string,
+	defaultModuleName string,
 	srcs []string,
 	swiftImports []string,
 	shouldSetVis bool,
+	buildFile *rule.File,
 ) []*rule.Rule {
-	r := rule.NewRule(BinaryRuleKind, moduleName)
+	var r *rule.Rule
+	existingLibs := findRulesByKind(buildFile.Rules, BinaryRuleKind)
+	// If we found a single swift_binary, use its name. Otherwise, just use the module name.
+	var name, moduleName string
+	if len(existingLibs) == 1 {
+		first := existingLibs[0]
+		name = first.Name()
+		moduleName = first.AttrString(ModuleNameAttrName)
+	} else {
+		name = defaultModuleName
+		moduleName = defaultModuleName
+	}
+	r = rule.NewRule(BinaryRuleKind, name)
 	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
 	setVisibilityAttr(r, shouldSetVis, []string{"//visibility:public"})
 	return []*rule.Rule{r}
 }
 
 func rulesForTestModule(
-	moduleName string,
+	defaultModuleName string,
 	srcs []string,
 	swiftImports []string,
 	shouldSetVis bool,
 	buildFile *rule.File,
 ) []*rule.Rule {
 	// Detect the type of rule that should be used to build the Swift sources.
-	r := buildRuleForTestSrcs(buildFile, moduleName)
-	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
+	r := buildRuleForTestSrcs(buildFile, defaultModuleName)
+	setCommonSwiftAttrs(r, defaultModuleName, srcs, swiftImports)
 	return []*rule.Rule{r}
 }
 

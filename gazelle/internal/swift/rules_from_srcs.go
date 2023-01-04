@@ -18,9 +18,9 @@ func RulesFromSrcs(args language.GenerateArgs, srcs []string) []*rule.Rule {
 	var rules []*rule.Rule
 	switch moduleType {
 	case LibraryModuleType:
-		rules = rulesForLibraryModule(moduleName, srcs, swiftImports, shouldSetVis)
+		rules = rulesForLibraryModule(moduleName, srcs, swiftImports, shouldSetVis, args.File)
 	case BinaryModuleType:
-		rules = rulesForBinaryModule(moduleName, srcs, swiftImports, shouldSetVis)
+		rules = rulesForBinaryModule(moduleName, srcs, swiftImports, shouldSetVis, args.File)
 	case TestModuleType:
 		rules = rulesForTestModule(moduleName, srcs, swiftImports, shouldSetVis, args.File)
 	}

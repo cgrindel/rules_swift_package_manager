@@ -10,6 +10,7 @@ go_library(
         "code_dir.go",
         "file_info.go",
         "files.go",
+        "find_rules.go",
         "http_archive.go",
         "imports.go",
         "is_builtin_module.go",
