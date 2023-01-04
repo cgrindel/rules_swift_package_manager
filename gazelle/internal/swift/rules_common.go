@@ -9,37 +9,43 @@ import (
 // Rule Creation
 
 func rulesForLibraryModule(
-	moduleName string,
+	defaultModuleName string,
 	srcs []string,
 	swiftImports []string,
 	shouldSetVis bool,
+	buildFile *rule.File,
 ) []*rule.Rule {
-	r := rule.NewRule(LibraryRuleKind, moduleName)
+	name, moduleName := ruleNameAndModuleName(buildFile, LibraryRuleKind, defaultModuleName)
+	r := rule.NewRule(LibraryRuleKind, name)
 	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
 	setVisibilityAttr(r, shouldSetVis, []string{"//visibility:public"})
 	return []*rule.Rule{r}
 }
 
 func rulesForBinaryModule(
-	moduleName string,
+	defaultModuleName string,
 	srcs []string,
 	swiftImports []string,
 	shouldSetVis bool,
+	buildFile *rule.File,
 ) []*rule.Rule {
-	r := rule.NewRule(BinaryRuleKind, moduleName)
+	name, moduleName := ruleNameAndModuleName(buildFile, BinaryRuleKind, defaultModuleName)
+	r := rule.NewRule(BinaryRuleKind, name)
 	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
 	setVisibilityAttr(r, shouldSetVis, []string{"//visibility:public"})
 	return []*rule.Rule{r}
 }
 
 func rulesForTestModule(
-	moduleName string,
+	defaultModuleName string,
 	srcs []string,
 	swiftImports []string,
 	shouldSetVis bool,
+	buildFile *rule.File,
 ) []*rule.Rule {
-	r := rule.NewRule(TestRuleKind, moduleName)
-	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
+	// Detect the type of rule that should be used to build the Swift sources.
+	r := buildRuleForTestSrcs(buildFile, defaultModuleName)
+	setCommonSwiftAttrs(r, defaultModuleName, srcs, swiftImports)
 	return []*rule.Rule{r}
 }
 
@@ -76,4 +82,25 @@ func setVisibilityAttr(r *rule.Rule, shouldSetVis bool, visibility []string) {
 		return
 	}
 	r.SetAttr("visibility", visibility)
+}
+
+// Name and Module Name
+
+// Determine the rule name and module name from existing rules
+func ruleNameAndModuleName(buildFile *rule.File, kind, defaultModuleName string) (string, string) {
+	var existingRules []*rule.Rule
+	if buildFile != nil {
+		existingRules = findRulesByKind(buildFile.Rules, kind)
+	}
+	// If we found a single swift_binary, use its name. Otherwise, just use the module name.
+	var name, moduleName string
+	if len(existingRules) == 1 {
+		first := existingRules[0]
+		name = first.Name()
+		moduleName = first.AttrString(ModuleNameAttrName)
+	} else {
+		name = defaultModuleName
+		moduleName = defaultModuleName
+	}
+	return name, moduleName
 }

@@ -28,6 +28,8 @@ tidy(
         # Remove the child workspace symlinks before doing some of the other
         # operations that my experience infinite symlink expansion errors.
         "@contrib_rules_bazel_integration_test//tools:remove_child_wksp_bazel_symlinks",
+        # Remove any Swift .build directories
+        "//tools/remove_swift_build_dirs",
         "@contrib_rules_bazel_integration_test//tools:update_deleted_packages",
         ":bzlformat_missing_pkgs_fix",
         ":update_all",
