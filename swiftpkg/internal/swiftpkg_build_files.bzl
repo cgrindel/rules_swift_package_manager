@@ -1,6 +1,7 @@
 """Module for creating Bazel declarations to build a Swift package."""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
@@ -132,6 +133,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "visibility": ["//visibility:public"],
     }
     repo_name = repository_ctx.name
+    local_includes = []
     if len(organized_files.srcs) > 0:
         attrs["srcs"] = organized_files.srcs
     if len(organized_files.hdrs) > 0:
@@ -139,26 +141,12 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     if len(organized_files.public_includes) > 0:
         attrs["includes"] = organized_files.public_includes
     if len(organized_files.private_includes) > 0:
-        # The `includes` attribute adds includes as -isystem which propagates
-        # to cc_XXX that depend upon the library. Providing includes as -I only
-        # provides the includes for this target.
-        # https://bazel.build/reference/be/c-cpp#cc_library.includes
-        attrs["copts"].extend([
-            # Because this is an external repo, we need to prepend
-            # external/<repo_name> to all of the include dirs
-            "-I{}".format(paths.join("external", repo_name, inc))
-            for inc in organized_files.private_includes
-        ])
+        local_includes.extend(organized_files.private_includes)
     if target.clang_settings:
         if len(target.clang_settings.defines) > 0:
             attrs["defines"].extend(target.clang_settings.defines)
         if len(target.clang_settings.hdr_srch_paths) > 0:
-            copts = attrs.get("copts", default = [])
-            copts.extend([
-                "-I{}".format(paths.join("external", repo_name, hsp))
-                for hsp in target.clang_settings.hdr_srch_paths
-            ])
-            attrs["copts"] = copts
+            local_includes.extend(target.clang_settings.hdr_srch_paths)
     if target.linker_settings and len(target.linker_settings.linked_libraries) > 0:
         linkopts = attrs.get("linkopts", default = [])
         linkopts.extend([
@@ -166,6 +154,16 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             for ll in target.linker_settings.linked_libraries
         ])
         attrs["linkopts"] = linkopts
+    if len(local_includes) > 0:
+        # The `includes` attribute adds includes as -isystem which propagates
+        # to cc_XXX that depend upon the library. Providing includes as -I only
+        # provides the includes for this target.
+        # https://bazel.build/reference/be/c-cpp#cc_library.includes
+        local_includes_set = sets.make(local_includes)
+        attrs["copts"].extend([
+            "-I{}".format(paths.join("external", repo_name, inc))
+            for inc in sets.to_list(local_includes_set)
+        ])
 
     load_stmts = []
     decls = [
