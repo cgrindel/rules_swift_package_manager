@@ -16,11 +16,14 @@ func rulesForLibraryModule(
 	buildFile *rule.File,
 ) []*rule.Rule {
 	var r *rule.Rule
-	existingLibs := findRulesByKind(buildFile.Rules, LibraryRuleKind)
+	var existingRules []*rule.Rule
+	if buildFile != nil {
+		existingRules = findRulesByKind(buildFile.Rules, LibraryRuleKind)
+	}
 	// If we found a single swift_library, use its name. Otherwise, just use the module name.
 	var name, moduleName string
-	if len(existingLibs) == 1 {
-		first := existingLibs[0]
+	if len(existingRules) == 1 {
+		first := existingRules[0]
 		name = first.Name()
 		moduleName = first.AttrString(ModuleNameAttrName)
 	} else {
@@ -41,11 +44,14 @@ func rulesForBinaryModule(
 	buildFile *rule.File,
 ) []*rule.Rule {
 	var r *rule.Rule
-	existingLibs := findRulesByKind(buildFile.Rules, BinaryRuleKind)
+	var existingRules []*rule.Rule
+	if buildFile != nil {
+		existingRules = findRulesByKind(buildFile.Rules, BinaryRuleKind)
+	}
 	// If we found a single swift_binary, use its name. Otherwise, just use the module name.
 	var name, moduleName string
-	if len(existingLibs) == 1 {
-		first := existingLibs[0]
+	if len(existingRules) == 1 {
+		first := existingRules[0]
 		name = first.Name()
 		moduleName = first.AttrString(ModuleNameAttrName)
 	} else {
