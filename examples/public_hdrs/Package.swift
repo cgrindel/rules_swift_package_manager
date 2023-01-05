@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "MySwiftPackage",
+    name: "",
     dependencies: [
         .package(url: "https://github.com/datatheorem/TrustKit.git", from: "2.0.0"),
     ]
