@@ -100,7 +100,7 @@ def _swift_test_from_target(target, attrs):
 # MARK: - Clang Targets
 
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
-    # TODO(chuck): Should I just use the srcs in the target?
+    # GH115: Should I just use the srcs in the target?
     target_path = paths.normalize(
         paths.join(pkg_ctx.pkg_info.path, target.path),
     )
