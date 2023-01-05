@@ -17,7 +17,7 @@ err_msg() {
   exit 1
 }
 
-workspace="trustkit_with_dev_dir_example"
+workspace="trustkit_example"
 binary="$(rlocation "${workspace}/trustkit")"
 
 expected="Successfully initialized with configuration"
