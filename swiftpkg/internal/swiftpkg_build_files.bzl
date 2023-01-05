@@ -173,10 +173,15 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             for inc in sets.to_list(sets.make(local_includes))
         ])
 
+    if clang_files.has_objc_srcs(organized_files.srcs):
+        kind = objc_kinds.library
+    else:
+        kind = clang_kinds.library
+
     load_stmts = []
     decls = [
         build_decls.new(
-            kind = clang_kinds.library,
+            kind = kind,
             name = pkginfo_targets.bazel_label_name(target),
             attrs = attrs,
         ),
@@ -327,6 +332,10 @@ swift_test_load_stmt = load_statements.new(swift_location, swift_kinds.test)
 
 clang_kinds = struct(
     library = "cc_library",
+)
+
+objc_kinds = struct(
+    library = "objc_library",
 )
 
 native_kinds = struct(
