@@ -13,7 +13,7 @@ def _list_files_under(repository_ctx, path):
         A `list` of path `string` values.
     """
     exec_result = repository_ctx.execute(
-        # ["find", path],
+        # Follow symlinks and report on the actual files.
         ["find", "-H", "-L", path],
         quiet = True,
     )
