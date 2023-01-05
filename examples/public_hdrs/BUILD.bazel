@@ -1,0 +1,17 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+
+swift_binary(
+    name = "trustkit",
+    srcs = ["main.swift"],
+    visibility = ["//swift:__subpackages__"],
+    deps = [
+        "@swift_pkgs//TrustKit:TrustKit",
+    ],
+)
+
+sh_test(
+    name = "trustkit_test",
+    srcs = ["trustkit_test.sh"],
+    data = [":trustkit"],
+    deps = ["@bazel_tools//tools/bash/runfiles"],
+)

@@ -1,0 +1,116 @@
+workspace(name = "trustkit_example")
+
+local_repository(
+    name = "cgrindel_swift_bazel",
+    path = "../..",
+)
+
+load("@cgrindel_swift_bazel//:deps.bzl", "swift_bazel_dependencies")
+
+swift_bazel_dependencies()
+
+load("@cgrindel_bazel_starlib//:deps.bzl", "bazel_starlib_dependencies")
+
+bazel_starlib_dependencies()
+
+# MARK: - Gazelle
+
+# gazelle:repo bazel_gazelle
+
+load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+load("@cgrindel_swift_bazel//:go_deps.bzl", "swift_bazel_go_dependencies")
+load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+
+# Declare Go dependencies before calling go_rules_dependencies.
+swift_bazel_go_dependencies()
+
+go_rules_dependencies()
+
+go_register_toolchains(version = "1.19.1")
+
+gazelle_dependencies()
+
+# MARK: - Swift Toolchain
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "build_bazel_rules_swift",
+    sha256 = "32f95dbe6a88eb298aaa790f05065434f32a662c65ec0a6aabdaf6881e4f169f",
+    url = "https://github.com/bazelbuild/rules_swift/releases/download/1.5.0/rules_swift.1.5.0.tar.gz",
+)
+
+load(
+    "@build_bazel_rules_swift//swift:repositories.bzl",
+    "swift_rules_dependencies",
+)
+load("//:swift_deps.bzl", "swift_dependencies")
+
+# gazelle:repository_macro swift_deps.bzl%swift_dependencies
+swift_dependencies()
+
+swift_rules_dependencies()
+
+load(
+    "@build_bazel_rules_swift//swift:extras.bzl",
+    "swift_rules_extra_dependencies",
+)
+
+swift_rules_extra_dependencies()
+
+# local_repository(
+#     name = "cgrindel_rules_spm",
+#     path = "../..",
+# )
+
+# load(
+#     "@cgrindel_rules_spm//spm:deps.bzl",
+#     "spm_rules_dependencies",
+# )
+
+# spm_rules_dependencies()
+
+# load("@cgrindel_bazel_starlib//:deps.bzl", "bazel_starlib_dependencies")
+
+# bazel_starlib_dependencies()
+
+# load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
+
+# bazel_skylib_workspace()
+
+# load(
+#     "@build_bazel_rules_swift//swift:repositories.bzl",
+#     "swift_rules_dependencies",
+# )
+
+# swift_rules_dependencies()
+
+# load(
+#     "@build_bazel_rules_swift//swift:extras.bzl",
+#     "swift_rules_extra_dependencies",
+# )
+
+# swift_rules_extra_dependencies()
+
+# load("@cgrindel_rules_spm//spm:defs.bzl", "spm_pkg", "spm_repositories")
+
+# spm_repositories(
+#     name = "swift_pkgs",
+#     dependencies = [
+#         spm_pkg(
+#             exact_version = "2.0.0",
+#             products = ["TrustKitStatic"],
+#             url = "https://github.com/datatheorem/TrustKit.git",
+#         ),
+#     ],
+#     env = {
+#         # If you are testing this locally, set this value to a valid Xcode
+#         # path. This value is valid for the Github action runner host for
+#         # macos-11.
+#         # "DEVELOPER_DIR": "/Applications/Xcode_12.5.1.app",
+#     },
+#     platforms = [
+#         ".iOS(.v13)",
+#         ".macOS(.v10_14)",
+#     ],
+# )
