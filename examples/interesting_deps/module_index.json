@@ -6,6 +6,6 @@
     "@swiftpkg_swift_log//:Tests_LoggingTests"
   ],
   "libwebp": [
-    "@swiftpkg_libwebp_xcode//:libwebp"
+    "@swiftpkg_add_5_5_manifest//:libwebp"
   ]
 }

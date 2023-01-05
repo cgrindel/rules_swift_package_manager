@@ -167,6 +167,7 @@ def _new_target_from_json_maps(dump_map, desc_map):
         clang_settings = clang_settings,
         swift_settings = swift_settings,
         linker_settings = linker_settings,
+        public_hdrs_path = dump_map.get("publicHeadersPath"),
     )
 
 def _new_clang_settings_from_dump_json_list(dump_list):
@@ -532,7 +533,8 @@ def _new_target(
         dependencies,
         clang_settings = None,
         swift_settings = None,
-        linker_settings = None):
+        linker_settings = None,
+        public_hdrs_path = None):
     """Creates a target.
 
     Args:
@@ -548,6 +550,7 @@ def _new_target(
         clang_settings: Optional. A `struct` as returned by `pkginfos.new_clang_settings`.
         swift_settings: Optional. A `struct` as returned by `pkginfos.new_swift_settings`.
         linker_settings: Optional. A `struct` as returned by `pkginfos.new_linker_settings`.
+        public_hdrs_path: Optional. A `string`.
 
     Returns:
         A `struct` representing a target in a Swift package.
@@ -573,6 +576,7 @@ def _new_target(
         clang_settings = clang_settings,
         swift_settings = swift_settings,
         linker_settings = linker_settings,
+        public_hdrs_path = public_hdrs_path,
     )
 
 def _new_clang_settings(defines, hdr_srch_paths):

@@ -100,6 +100,7 @@ def _swift_test_from_target(target, attrs):
 # MARK: - Clang Targets
 
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
+    # TODO(chuck): Should I just use the srcs in the target?
     target_path = paths.normalize(
         paths.join(pkg_ctx.pkg_info.path, target.path),
     )
@@ -133,13 +134,16 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "visibility": ["//visibility:public"],
     }
     repo_name = repository_ctx.name
+    public_includes = []
     local_includes = []
+    if target.public_hdrs_path != None:
+        public_includes.append(target.public_hdrs_path)
     if len(organized_files.srcs) > 0:
         attrs["srcs"] = organized_files.srcs
     if len(organized_files.hdrs) > 0:
         attrs["hdrs"] = organized_files.hdrs
     if len(organized_files.public_includes) > 0:
-        attrs["includes"] = organized_files.public_includes
+        public_includes.extend(organized_files.public_includes)
     if len(organized_files.private_includes) > 0:
         local_includes.extend(organized_files.private_includes)
     if target.clang_settings:
@@ -154,15 +158,17 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             for ll in target.linker_settings.linked_libraries
         ])
         attrs["linkopts"] = linkopts
+
+    if len(public_includes) > 0:
+        attrs["includes"] = sets.to_list(sets.make(public_includes))
     if len(local_includes) > 0:
         # The `includes` attribute adds includes as -isystem which propagates
         # to cc_XXX that depend upon the library. Providing includes as -I only
         # provides the includes for this target.
         # https://bazel.build/reference/be/c-cpp#cc_library.includes
-        local_includes_set = sets.make(local_includes)
         attrs["copts"].extend([
             "-I{}".format(paths.join("external", repo_name, inc))
-            for inc in sets.to_list(local_includes_set)
+            for inc in sets.to_list(sets.make(local_includes))
         ])
 
     load_stmts = []
