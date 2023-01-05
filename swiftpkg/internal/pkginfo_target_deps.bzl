@@ -5,7 +5,7 @@ load(":module_indexes.bzl", "module_indexes")
 load(":pkginfo_ext_deps.bzl", "pkginfo_ext_deps")
 
 def make_pkginfo_target_deps(bazel_labels):
-    def _bazel_label(pkg_ctx, target_dep):
+    def _bazel_label_str(pkg_ctx, target_dep):
         """Create a Bazel label string from a target dependency.
 
         Args:
@@ -68,7 +68,7 @@ Unrecognized target dependency while generating a Bazel dependency label.\
         return bazel_labels.normalize(label)
 
     return struct(
-        bazel_label = _bazel_label,
+        bazel_label_str = _bazel_label_str,
     )
 
 pkginfo_target_deps = make_pkginfo_target_deps(

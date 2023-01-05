@@ -10,7 +10,7 @@ load(":pkginfo_target_deps_tests.bzl", "pkginfo_target_deps_test_suite")
 load(":pkginfo_targets_tests.bzl", "pkginfo_targets_test_suite")
 load(":pkginfos_tests.bzl", "pkginfos_test_suite")
 load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
-load(":swiftpkg_build_files_for_old_style_pkg_tests.bzl", "swiftpkg_build_files_for_old_style_pkg_test_suite")
+load(":swiftpkg_build_files_tests.bzl", "swiftpkg_build_files_test_suite")
 load(":validations_tests.bzl", "validations_test_suite")
 
 bzlformat_pkg(name = "bzlformat")
@@ -37,6 +37,6 @@ pkginfos_test_suite()
 
 starlark_codegen_test_suite()
 
-swiftpkg_build_files_for_old_style_pkg_test_suite()
+swiftpkg_build_files_test_suite()
 
 validations_test_suite()

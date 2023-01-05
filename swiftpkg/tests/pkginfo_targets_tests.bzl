@@ -41,6 +41,16 @@ _chocolate_target = pkginfos.new_target(
     dependencies = [],
 )
 
+_dot_path_target = pkginfos.new_target(
+    name = "DotPath",
+    type = target_types.library,
+    c99name = "DotPath",
+    module_type = module_types.swift,
+    path = ".",
+    sources = ["Chicken.swift", "Smidgen/Hello.swift"],
+    dependencies = [],
+)
+
 def _get_test(ctx):
     env = unittest.begin(ctx)
 
@@ -63,15 +73,15 @@ def _bazel_label_test(ctx):
     env = unittest.begin(ctx)
 
     actual = pkginfo_targets.bazel_label(_bar_target)
-    expected = "@example_cool_repo//:Sources_Bar"
+    expected = bazel_labels.parse("@example_cool_repo//:Sources_Bar")
     asserts.equals(env, expected, actual)
 
     actual = pkginfo_targets.bazel_label(_foo_target, "@another_repo")
-    expected = "@another_repo//:Sources_Foo"
+    expected = bazel_labels.parse("@another_repo//:Sources_Foo")
     asserts.equals(env, expected, actual)
 
     actual = pkginfo_targets.bazel_label(_chocolate_target)
-    expected = "@example_cool_repo//:Sources_Bar_Chocolate"
+    expected = bazel_labels.parse("@example_cool_repo//:Sources_Bar_Chocolate")
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)
@@ -88,6 +98,13 @@ def _srcs_test(ctx):
     ]
     asserts.equals(env, expected, actual)
 
+    actual = pkginfo_targets.srcs(_dot_path_target)
+    expected = [
+        "Chicken.swift",
+        "Smidgen/Hello.swift",
+    ]
+    asserts.equals(env, expected, actual)
+
     return unittest.end(env)
 
 srcs_test = unittest.make(_srcs_test)
@@ -101,6 +118,10 @@ def _bazel_label_name_test(ctx):
 
     actual = pkginfo_targets.bazel_label_name(_chocolate_target)
     expected = "Sources_Bar_Chocolate"
+    asserts.equals(env, expected, actual)
+
+    actual = pkginfo_targets.bazel_label_name(_dot_path_target)
+    expected = "DotPath"
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)

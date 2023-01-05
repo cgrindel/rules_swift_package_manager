@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+# Generate Swift external deps and update build files
+bazel run //:tidy
+
+# Ensure that it builds and tests pass
+bazel test //...

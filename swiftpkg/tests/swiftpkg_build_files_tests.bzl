@@ -256,9 +256,9 @@ def _products_test(ctx):
 
 products_test = unittest.make(_products_test)
 
-def swiftpkg_build_files_for_old_style_pkg_test_suite():
+def swiftpkg_build_files_test_suite():
     return unittest.suite(
-        "swiftpkg_build_files_for_old_style_pkg_tests",
+        "swiftpkg_build_files_tests",
         swift_library_target_test,
         swift_library_target_for_binary_test,
         swift_test_target_test,

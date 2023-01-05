@@ -1,7 +1,8 @@
 """Module for creating Bazel declarations to build a Swift package."""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
+load("@bazel_skylib//lib:sets.bzl", "sets")
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":clang_files.bzl", "clang_files")
@@ -27,7 +28,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
 
 def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     deps = [
-        pkginfo_target_deps.bazel_label(pkg_ctx, td)
+        pkginfo_target_deps.bazel_label_str(pkg_ctx, td)
         for td in target.dependencies
     ]
     attrs = {
@@ -39,9 +40,6 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//visibility:public"],
     }
-
-    # TODO(chuck): Consider adding support for custom build files for select repositories. Having
-    # trouble getting vapor application to link.
 
     # GH046: Support plugins.
 
@@ -102,7 +100,10 @@ def _swift_test_from_target(target, attrs):
 # MARK: - Clang Targets
 
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
-    target_path = paths.join(pkg_ctx.pkg_info.path, target.path)
+    # GH115: Should I just use the srcs in the target?
+    target_path = paths.normalize(
+        paths.join(pkg_ctx.pkg_info.path, target.path),
+    )
     organized_files = clang_files.collect_files(
         repository_ctx,
         [target_path],
@@ -110,7 +111,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         remove_prefix = "{}/".format(pkg_ctx.pkg_info.path),
     )
     deps = [
-        pkginfo_target_deps.bazel_label(pkg_ctx, td)
+        pkginfo_target_deps.bazel_label_str(pkg_ctx, td)
         for td in target.dependencies
     ]
     attrs = {
@@ -132,26 +133,24 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "tags": ["swift_module={}".format(target.c99name)],
         "visibility": ["//visibility:public"],
     }
+    repo_name = repository_ctx.name
+    public_includes = []
+    local_includes = []
+    if target.public_hdrs_path != None:
+        public_includes.append(target.public_hdrs_path)
     if len(organized_files.srcs) > 0:
         attrs["srcs"] = organized_files.srcs
     if len(organized_files.hdrs) > 0:
         attrs["hdrs"] = organized_files.hdrs
     if len(organized_files.public_includes) > 0:
-        attrs["includes"] = organized_files.public_includes
+        public_includes.extend(organized_files.public_includes)
     if len(organized_files.private_includes) > 0:
-        # The `includes` attribute adds includes as -isystem which propagates
-        # to cc_XXX that depend upon the library. Providing includes as -I only
-        # provides the includes for this target.
-        # https://bazel.build/reference/be/c-cpp#cc_library.includes
-        repo_name = repository_ctx.name
-        attrs["copts"].extend([
-            # Because this is an external repo, we need to prepend
-            # external/<repo_name> to all of the include dirs
-            "-I{}".format(paths.join("external", repo_name, inc))
-            for inc in organized_files.private_includes
-        ])
-    if target.clang_settings and len(target.clang_settings.defines) > 0:
-        attrs["defines"].extend(target.clang_settings.defines)
+        local_includes.extend(organized_files.private_includes)
+    if target.clang_settings:
+        if len(target.clang_settings.defines) > 0:
+            attrs["defines"].extend(target.clang_settings.defines)
+        if len(target.clang_settings.hdr_srch_paths) > 0:
+            local_includes.extend(target.clang_settings.hdr_srch_paths)
     if target.linker_settings and len(target.linker_settings.linked_libraries) > 0:
         linkopts = attrs.get("linkopts", default = [])
         linkopts.extend([
@@ -159,6 +158,18 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             for ll in target.linker_settings.linked_libraries
         ])
         attrs["linkopts"] = linkopts
+
+    if len(public_includes) > 0:
+        attrs["includes"] = sets.to_list(sets.make(public_includes))
+    if len(local_includes) > 0:
+        # The `includes` attribute adds includes as -isystem which propagates
+        # to cc_XXX that depend upon the library. Providing includes as -I only
+        # provides the includes for this target.
+        # https://bazel.build/reference/be/c-cpp#cc_library.includes
+        attrs["copts"].extend([
+            "-I{}".format(paths.join("external", repo_name, inc))
+            for inc in sets.to_list(sets.make(local_includes))
+        ])
 
     load_stmts = []
     decls = [
@@ -189,6 +200,10 @@ def _new_for_products(pkg_info, repo_name):
         _new_for_product(pkg_info, prod, repo_name)
         for prod in pkg_info.products
     ])
+
+    # If we did not generate any build files, return an empty one.
+    if len(bld_files) == 0:
+        return build_files.new()
     return build_files.merge(*bld_files)
 
 def _new_for_product(pkg_info, product, repo_name):
@@ -212,6 +227,11 @@ def _executable_product_build_file(pkg_info, product, repo_name):
     if targets_len == 1:
         target = targets[0]
         if target.type == target_types.executable:
+            # If the alias name will have the same name as the target, then do not create the alias.
+            label = pkginfo_targets.bazel_label(target, repo_name)
+            if label.name == product.name:
+                return None
+
             # Create an alias to the binary target created in the target package.
             return build_files.new(
                 decls = [
@@ -219,7 +239,7 @@ def _executable_product_build_file(pkg_info, product, repo_name):
                         native_kinds.alias,
                         product.name,
                         attrs = {
-                            "actual": pkginfo_targets.bazel_label(target, repo_name = repo_name),
+                            "actual": bazel_labels.normalize(label),
                             "visibility": ["//visibility:public"],
                         },
                     ),
@@ -251,13 +271,18 @@ def _library_product_build_file(pkg_info, product, repo_name):
         fail("Multiple targets specified for a library product. name:", product.name)
 
     actual_target = targets[0]
+
+    # If the alias name will have the same name as the target, then do not create the alias.
+    label = pkginfo_targets.bazel_label(actual_target, repo_name)
+    if label.name == product.name:
+        return None
     return build_files.new(
         decls = [
             build_decls.new(
                 native_kinds.alias,
                 product.name,
                 attrs = {
-                    "actual": pkginfo_targets.bazel_label(actual_target, repo_name),
+                    "actual": bazel_labels.normalize(label),
                     "visibility": ["//visibility:public"],
                 },
             ),
@@ -269,7 +294,9 @@ def _swift_binary_from_product(product, dep_target, repo_name):
         kind = swift_kinds.binary,
         name = product.name,
         attrs = {
-            "deps": [pkginfo_targets.bazel_label(dep_target, repo_name = repo_name)],
+            "deps": [bazel_labels.normalize(
+                pkginfo_targets.bazel_label(dep_target, repo_name = repo_name),
+            )],
             "visibility": ["//visibility:public"],
         },
     )

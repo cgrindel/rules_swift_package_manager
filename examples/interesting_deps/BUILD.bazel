@@ -1,0 +1,65 @@
+load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+
+tidy(
+    name = "tidy",
+    targets = [
+        ":swift_update_repos",
+        ":update_build_files",
+    ],
+)
+
+# MARK: - Gazelle
+
+# Ignore the Swift build folder
+# gazelle:exclude .build
+
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = [
+        "@bazel_skylib//gazelle/bzl",
+        "@cgrindel_swift_bazel//gazelle",
+    ],
+)
+
+gazelle(
+    name = "update_build_files",
+    gazelle = ":gazelle_bin",
+)
+
+gazelle(
+    name = "swift_update_repos",
+    args = [
+        "-from_file=Package.swift",
+        "-to_macro=swift_deps.bzl%swift_dependencies",
+        "-prune",
+    ],
+    command = "update-repos",
+    gazelle = ":gazelle_bin",
+)
+
+bzl_library(
+    name = "swift_deps",
+    srcs = ["swift_deps.bzl"],
+    visibility = ["//visibility:public"],
+    deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
+)
+
+swift_binary(
+    name = "simple",
+    srcs = ["main.swift"],
+    visibility = ["//swift:__subpackages__"],
+    deps = [
+        "@swiftpkg_libwebp_xcode//:libwebp",
+        "@swiftpkg_swift_log//:Sources_Logging",
+    ],
+)
+
+sh_test(
+    name = "simple_test",
+    srcs = ["simple_test.sh"],
+    data = [":simple"],
+    deps = ["@bazel_tools//tools/bash/runfiles"],
+)

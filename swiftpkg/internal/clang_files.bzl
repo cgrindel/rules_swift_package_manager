@@ -153,15 +153,6 @@ def _collect_files(
         if _is_hdr(src)
     ])
 
-    # # Be sure to add any parent directories to the includes list
-    # # Some clang files reference their header files from different relative paths
-    # for include in sets.to_list(public_includes_set):
-    #     parts = include.split("/")
-    #     for idx, _part in enumerate(parts):
-    #         path = "/".join(parts[0:idx])
-    #         if path != "":
-    #             sets.insert(public_includes_set, path)
-
     public_includes = sets.to_list(public_includes_set)
     private_includes = sets.to_list(private_includes_set)
 
