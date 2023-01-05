@@ -32,11 +32,10 @@ _macos_single_bazel_version_test_examples = [
 
 _linux_single_bazel_version_test_examples = []
 
-_all_single_bazel_version_test_examples = _all_os_single_bazel_version_test_examples + \
-                                          _macos_single_bazel_version_test_examples + \
-                                          _linux_single_bazel_version_test_examples
-
-# _all_examples = _all_os_all_bazel_versions_test_examples + _macos_single_bazel_version_test_examples + _linux_single_bazel_version_test_examples
+_all_single_bazel_version_test_examples = \
+    _all_os_single_bazel_version_test_examples + \
+    _macos_single_bazel_version_test_examples + \
+    _linux_single_bazel_version_test_examples
 
 sh_binary(
     name = "test_runner",
@@ -68,7 +67,6 @@ sh_binary(
 
 [
     bazel_integration_test(
-        # name = example + "_test",
         name = integration_test_utils.bazel_integration_test_name(
             example + "_test",
             CURRENT_BAZEL_VERSION,
@@ -85,7 +83,6 @@ sh_binary(
 
 [
     bazel_integration_test(
-        # name = example + "_test",
         name = integration_test_utils.bazel_integration_test_name(
             example + "_test",
             CURRENT_BAZEL_VERSION,
@@ -103,7 +100,6 @@ sh_binary(
 
 [
     bazel_integration_test(
-        # name = example + "_test",
         name = integration_test_utils.bazel_integration_test_name(
             example + "_test",
             CURRENT_BAZEL_VERSION,
@@ -120,11 +116,6 @@ sh_binary(
 ]
 
 # MARK: - Test Suites
-
-# _test_base_names = [
-#     example + "_test"
-#     for example in _all_examples
-# ]
 
 _smoke_test_examples = _all_os_all_bazel_versions_test_examples + \
                        _all_single_bazel_version_test_examples
@@ -146,11 +137,6 @@ _all_os_all_bazel_versions_test_names = lists.flatten([
         versions = SUPPORTED_BAZEL_VERSIONS,
     ),
 ])
-
-# _all_test_names = test_utils.integration_test_names(
-#     base_names = _test_base_names,
-#     versions = SUPPORTED_BAZEL_VERSIONS,
-# )
 
 _all_test_names = sorted(sets.to_list(
     sets.make(_all_os_all_bazel_versions_test_names + _smoke_test_names),
