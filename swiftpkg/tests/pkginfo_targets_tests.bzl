@@ -1,5 +1,6 @@
 """Tests for `pkginfo_targets`."""
 
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "make_bazel_labels", "make_stub_workspace_name_resolvers")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "make_pkginfo_targets")
@@ -128,6 +129,21 @@ def _bazel_label_name_test(ctx):
 
 bazel_label_name_test = unittest.make(_bazel_label_name_test)
 
+def _join_path_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = pkginfo_targets.join_path(_bar_target, "foo")
+    expected = paths.join(_bar_target.path, "foo")
+    asserts.equals(env, expected, actual)
+
+    actual = pkginfo_targets.join_path(_dot_path_target, "foo")
+    expected = "foo"
+    asserts.equals(env, expected, actual)
+
+    return unittest.end(env)
+
+join_path_test = unittest.make(_join_path_test)
+
 def pkginfo_targets_test_suite():
     return unittest.suite(
         "pkginfo_targets_tests",
@@ -135,4 +151,5 @@ def pkginfo_targets_test_suite():
         bazel_label_test,
         srcs_test,
         bazel_label_name_test,
+        join_path_test,
     )

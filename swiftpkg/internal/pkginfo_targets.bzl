@@ -47,6 +47,7 @@ def _join_path(target, path):
     modification.
 
     Args:
+        target: A `struct` as returned from `pkginfos.new_target`.
         path: A path as a `string`.
 
     Returns:
