@@ -256,6 +256,24 @@ def _products_test(ctx):
 
 products_test = unittest.make(_products_test)
 
+def _join_path_test(ctx):
+    env = unittest.begin(ctx)
+
+    unittest.fail(env, "IMPLEMENT ME!")
+
+    return unittest.end(env)
+
+join_path_test = unittest.make(_join_path_test)
+
+def _bazel_label_name_test(ctx):
+    env = unittest.begin(ctx)
+
+    unittest.fail(env, "IMPLEMENT ME!")
+
+    return unittest.end(env)
+
+bazel_label_name_test = unittest.make(_bazel_label_name_test)
+
 def swiftpkg_build_files_test_suite():
     return unittest.suite(
         "swiftpkg_build_files_tests",
@@ -263,4 +281,6 @@ def swiftpkg_build_files_test_suite():
         swift_library_target_for_binary_test,
         swift_test_target_test,
         products_test,
+        join_path_test,
+        bazel_label_name_test,
     )

@@ -137,7 +137,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     public_includes = []
     local_includes = []
     if target.public_hdrs_path != None:
-        public_includes.append(target.public_hdrs_path)
+        public_includes.append(
+            pkginfo_targets.join_path(target, target.public_hdrs_path),
+        )
     if len(organized_files.srcs) > 0:
         attrs["srcs"] = organized_files.srcs
     if len(organized_files.hdrs) > 0:
