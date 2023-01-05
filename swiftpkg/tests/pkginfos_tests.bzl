@@ -3,11 +3,11 @@
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 
-def _get_test(ctx):
+def _new_from_parsed_json_for_swift_targets_test(ctx):
     env = unittest.begin(ctx)
 
-    dump_manifest = json.decode(_dump_manifest_json)
-    desc_manifest = json.decode(_desc_manifest_json)
+    dump_manifest = json.decode(_swift_arg_parser_dump_json)
+    desc_manifest = json.decode(_swift_arg_parser_desc_json)
     actual = pkginfos.new_from_parsed_json(
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
@@ -90,15 +90,58 @@ def _get_test(ctx):
 
     return unittest.end(env)
 
-get_test = unittest.make(_get_test)
+new_from_parsed_json_for_swift_targets_test = unittest.make(_new_from_parsed_json_for_swift_targets_test)
+
+def _new_from_parsed_json_for_clang_targets_test(ctx):
+    env = unittest.begin(ctx)
+
+    dump_manifest = json.decode(_clang_dump_json)
+    desc_manifest = json.decode(_clang_desc_json)
+    actual = pkginfos.new_from_parsed_json(
+        dump_manifest = dump_manifest,
+        desc_manifest = desc_manifest,
+    )
+
+    # The interesting features are in the libbar target.
+    libbar_target = actual.targets[0]
+    expected = pkginfos.new_target(
+        name = "libbar",
+        type = "regular",
+        c99name = "libbar",
+        module_type = "ClangTarget",
+        path = ".",
+        sources = [
+            "libbar/sharpyuv/sharpyuv.c",
+            "libbar/sharpyuv/sharpyuv_csp.c",
+            "libbar/sharpyuv/sharpyuv_dsp.c",
+            "libbar/sharpyuv/sharpyuv_gamma.c",
+            "libbar/sharpyuv/sharpyuv_neon.c",
+            "libbar/sharpyuv/sharpyuv_sse2.c",
+        ],
+        dependencies = [],
+        clang_settings = pkginfos.new_clang_settings(
+            defines = ["__APPLE_USE_RFC_3542"],
+            hdr_srch_paths = ["libbar"],
+        ),
+        linker_settings = pkginfos.new_linker_settings(
+            linked_libraries = ["foo"],
+        ),
+        public_hdrs_path = "include",
+    )
+    asserts.equals(env, expected, libbar_target)
+
+    return unittest.end(env)
+
+new_from_parsed_json_for_clang_targets_test = unittest.make(_new_from_parsed_json_for_clang_targets_test)
 
 def pkginfos_test_suite():
     return unittest.suite(
         "pkginfos_tests",
-        get_test,
+        new_from_parsed_json_for_swift_targets_test,
+        new_from_parsed_json_for_clang_targets_test,
     )
 
-_dump_manifest_json = """
+_swift_arg_parser_dump_json = """
 {
   "cLanguageStandard" : null,
   "cxxLanguageStandard" : null,
@@ -232,7 +275,7 @@ _dump_manifest_json = """
 }
 """
 
-_desc_manifest_json = """
+_swift_arg_parser_desc_json = """
 {
   "dependencies" : [
     {
@@ -301,5 +344,183 @@ _desc_manifest_json = """
     }
   ],
   "tools_version" : "5.7"
+}
+"""
+
+_clang_dump_json = """
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "libbar",
+  "packageKind" : {
+    "root" : [
+      "/path/to/libbar"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "10.10"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "9.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "9.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "2.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "libbar",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "libbar"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "libbar",
+      "path" : ".",
+      "publicHeadersPath" : "include",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "libbar"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "foo"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "__APPLE_USE_RFC_3542"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "sources" : [
+        "libbar/src",
+        "libbar/sharpyuv"
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.5.0"
+  }
+}
+"""
+
+_clang_desc_json = """
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "libbar",
+  "name" : "libbar",
+  "path" : "/path/to/libbar",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.10"
+    },
+    {
+      "name" : "ios",
+      "version" : "9.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "9.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "2.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "libbar",
+      "targets" : [
+        "libbar"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "libbar",
+      "module_type" : "ClangTarget",
+      "name" : "libbar",
+      "path" : ".",
+      "product_memberships" : [
+        "libbar"
+      ],
+      "sources" : [
+        "libbar/sharpyuv/sharpyuv.c",
+        "libbar/sharpyuv/sharpyuv_csp.c",
+        "libbar/sharpyuv/sharpyuv_dsp.c",
+        "libbar/sharpyuv/sharpyuv_gamma.c",
+        "libbar/sharpyuv/sharpyuv_neon.c",
+        "libbar/sharpyuv/sharpyuv_sse2.c"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.5"
 }
 """
