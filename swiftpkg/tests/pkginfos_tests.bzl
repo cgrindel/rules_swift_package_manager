@@ -59,13 +59,6 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
                 swift_settings = pkginfos.new_swift_settings(
                     defines = ["COOL_SWIFT_DEFINE"],
                 ),
-                # This is very contrived. We would not expect clang settings on
-                # a Swift target. However, the JSON structure does not prevent
-                # it.
-                clang_settings = pkginfos.new_clang_settings(
-                    defines = ["__APPLE_USE_RFC_3542"],
-                    hdr_srch_paths = ["include"],
-                ),
             ),
             pkginfos.new_target(
                 name = "MySwiftPackageTests",
@@ -227,22 +220,6 @@ _swift_arg_parser_dump_json = """
               }
             },
             "tool" : "swift"
-          },
-          {
-            "kind" : {
-              "define" : {
-                "_0" : "__APPLE_USE_RFC_3542"
-              }
-            },
-            "tool" : "c"
-          },
-          {
-            "kind" : {
-              "headerSearchPath" : {
-                "_0" : "include"
-              }
-            },
-            "tool" : "c"
           }
       ],
       "type" : "executable"
