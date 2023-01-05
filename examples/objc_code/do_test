@@ -16,14 +16,3 @@ bazel run //:tidy
 
 # Ensure that it builds and tests pass
 bazel test //...
-
-# Run MyExecutable target
-output="$(bazel run //Sources/MyExecutable)"
-assert_match "Good morning, World!" "${output}"
-
-# Run old-style executable in my_local_package
-output="$(bazel run @swiftpkg_my_local_package//:print-greeting)"
-assert_match "Good evening, Jim!" "${output}"
-
-# Buid and run the SwiftFormat alias
-bazel run //:swiftformat -- --version
