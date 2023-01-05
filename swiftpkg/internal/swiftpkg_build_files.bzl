@@ -28,7 +28,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
 
 def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     deps = [
-        pkginfo_target_deps.bazel_label(pkg_ctx, td)
+        pkginfo_target_deps.bazel_label_str(pkg_ctx, td)
         for td in target.dependencies
     ]
     attrs = {
@@ -111,7 +111,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         remove_prefix = "{}/".format(pkg_ctx.pkg_info.path),
     )
     deps = [
-        pkginfo_target_deps.bazel_label(pkg_ctx, td)
+        pkginfo_target_deps.bazel_label_str(pkg_ctx, td)
         for td in target.dependencies
     ]
     attrs = {

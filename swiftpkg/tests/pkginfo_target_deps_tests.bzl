@@ -68,24 +68,24 @@ _pkg_ctx = pkg_ctxs.new(
     module_index_json = _module_index_json,
 )
 
-def _bazel_label_by_name_test(ctx):
+def _bazel_label_str_by_name_test(ctx):
     env = unittest.begin(ctx)
 
     target_dep = pkginfos.new_target_dependency(by_name = _by_name)
 
-    actual = pkginfo_target_deps.bazel_label(_pkg_ctx, target_dep)
+    actual = pkginfo_target_deps.bazel_label_str(_pkg_ctx, target_dep)
     expected = bazel_labels.normalize("@swiftpkg_example_swift_package//:Source/Foo")
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)
 
-bazel_label_by_name_test = unittest.make(_bazel_label_by_name_test)
+bazel_label_by_name_test = unittest.make(_bazel_label_str_by_name_test)
 
-def _bazel_label_product_ref_test(ctx):
+def _bazel_label_str_product_ref_test(ctx):
     env = unittest.begin(ctx)
 
     target_dep = pkginfos.new_target_dependency(product = _product_ref)
-    actual = pkginfo_target_deps.bazel_label(_pkg_ctx, target_dep)
+    actual = pkginfo_target_deps.bazel_label_str(_pkg_ctx, target_dep)
     expected = bazel_labels.normalize(
         bazel_labels.new(
             repository_name = "swiftpkg_example_swift_package",
@@ -97,7 +97,7 @@ def _bazel_label_product_ref_test(ctx):
 
     return unittest.end(env)
 
-bazel_label_product_ref_test = unittest.make(_bazel_label_product_ref_test)
+bazel_label_product_ref_test = unittest.make(_bazel_label_str_product_ref_test)
 
 def pkginfo_target_deps_test_suite():
     return unittest.suite(
