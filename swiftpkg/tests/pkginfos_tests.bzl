@@ -64,6 +64,7 @@ def _get_test(ctx):
                 # it.
                 clang_settings = pkginfos.new_clang_settings(
                     defines = ["__APPLE_USE_RFC_3542"],
+                    hdr_srch_paths = ["include"],
                 ),
             ),
             pkginfos.new_target(
@@ -188,6 +189,14 @@ _dump_manifest_json = """
             "kind" : {
               "define" : {
                 "_0" : "__APPLE_USE_RFC_3542"
+              }
+            },
+            "tool" : "c"
+          },
+          {
+            "kind" : {
+              "headerSearchPath" : {
+                "_0" : "include"
               }
             },
             "tool" : "c"

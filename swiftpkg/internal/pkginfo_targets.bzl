@@ -85,13 +85,6 @@ def make_pkginfo_targets(bazel_labels):
             package = "",
             name = _bazel_label_name(target),
         )
-        # return bazel_labels.normalize(
-        #     bazel_labels.new(
-        #         repository_name = repo_name,
-        #         package = "",
-        #         name = _bazel_label_name(target),
-        #     ),
-        # )
 
     return struct(
         bazel_label = _bazel_label,

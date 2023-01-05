@@ -294,7 +294,9 @@ def _swift_binary_from_product(product, dep_target, repo_name):
         kind = swift_kinds.binary,
         name = product.name,
         attrs = {
-            "deps": [pkginfo_targets.bazel_label(dep_target, repo_name = repo_name)],
+            "deps": [bazel_labels.normalize(
+                pkginfo_targets.bazel_label(dep_target, repo_name = repo_name),
+            )],
             "visibility": ["//visibility:public"],
         },
     )
