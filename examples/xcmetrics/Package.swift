@@ -3,8 +3,8 @@
 import PackageDescription
 
 let package = Package(
-    name: "",
+    name: "xcmetrics_example",
     dependencies: [
-        .package(url: "https://github.com/spotify/XCMetrics", from: "0.0.10"),
+        .package(url: "https://github.com/spotify/XCMetrics", from: "0.0.11"),
     ]
 )
