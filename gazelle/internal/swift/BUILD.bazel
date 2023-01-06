@@ -19,6 +19,7 @@ go_library(
         "module_dir.go",
         "module_name.go",
         "module_type.go",
+        "product.go",
         "repo_rule_from_bazel_repo.go",
         "rule_attr_string_dict.go",
         "rule_kinds.go",

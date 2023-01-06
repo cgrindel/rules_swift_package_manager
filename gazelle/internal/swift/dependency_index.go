@@ -3,24 +3,36 @@ package swift
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"sort"
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 )
 
 type bazelMap map[string][]string
+
+type productIndexKey string
+
+func newProductIndexKey(identity, name string) productIndexKey {
+	return productIndexKey(fmt.Sprintf("%s|%s", identity, name))
+}
+
+func newProductIndexKeyFromProduct(p *Product) productIndexKey {
+	return newProductIndexKey(p.Identity, p.Name)
+}
 
 type DependencyIndex struct {
 	// Key: Module name
 	// Value: Slice of module pointers
 	moduleByName map[string][]*Module
+	prdByKey map[productIndexKey]*Product
 }
 
 func NewDependencyIndex() *DependencyIndex {
 	return &DependencyIndex{
 		moduleByName: make(map[string][]*Module),
+		prdByKey: make(map[productIndexKey]*Product),
 	}
 }
 
@@ -53,6 +65,12 @@ func (di *DependencyIndex) AddModule(m *Module) {
 	di.moduleByName[m.Name] = modules
 }
 
+func (di *DependencyIndex) AddModules(modules ...*Module) {
+	for _, m := range modules {
+		di.AddModule(m)
+	}
+}
+
 // Find the module given the Bazel repo name and the Swift module name.
 func (di *DependencyIndex) ResolveModule(repoName, moduleName string) *Module {
 	modules := di.moduleByName[moduleName]
@@ -79,10 +97,14 @@ func (di *DependencyIndex) ModuleNames() []string {
 	return names
 }
 
-func (di *DependencyIndex) AddModules(modules ...*Module) {
-	for _, m := range modules {
-		di.AddModule(m)
-	}
+func (di *DependencyIndex) AddProduct(p *Product) {
+	key := newProductIndexKeyFromProduct(p)
+	di.prdByKey[key] = p
+}
+
+func (di *DependencyIndex) ResolveProduct(identity, name string) *Product {
+	key := newProductIndexKey(identity, name)
+	return di.prdByKey[key]
 }
 
 // This is used to index any repository rules that are not already included in the module index
@@ -110,13 +132,11 @@ func (di *DependencyIndex) indexHTTPArchive(r *rule.Rule, repoRoot string) error
 }
 
 func (di *DependencyIndex) IndexBazelRepo(bzlRepo *BazelRepo) error {
-	return di.indexPkgInfo(bzlRepo.PkgInfo, bzlRepo.Name)
-}
-
-func (di *DependencyIndex) indexPkgInfo(pi *swiftpkg.PackageInfo, repoName string) error {
 	var err error
+	pi := bzlRepo.PkgInfo
+	repoName := bzlRepo.Name
 
-	// Index targets
+	// Index modules
 	modules := make([]*Module, len(pi.Targets))
 	for idx, t := range pi.Targets {
 		modules[idx], err = NewModuleFromTarget(repoName, t)
@@ -124,11 +144,16 @@ func (di *DependencyIndex) indexPkgInfo(pi *swiftpkg.PackageInfo, repoName strin
 			return err
 		}
 	}
+	di.AddModules(modules...)
 
 	// Index products
-	// GH052: Index products
-
-	di.AddModules(modules...)
+	for _, p := range pi.Products {
+		prd, err := NewProductFromPkgInfoProduct(bzlRepo, p)
+		if err != nil {
+			return err
+		}
+		di.AddProduct(prd)
+	}
 
 	return nil
 }
