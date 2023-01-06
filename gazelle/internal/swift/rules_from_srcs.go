@@ -13,6 +13,9 @@ func RulesFromSrcs(args language.GenerateArgs, srcs []string) []*rule.Rule {
 	swiftImports, moduleType := collectSwiftInfo(fileInfos)
 
 	moduleName := filepath.Base(args.Rel)
+	if moduleName == "." {
+		moduleName = args.Config.RepoName
+	}
 	shouldSetVis := shouldSetVisibility(args)
 
 	var rules []*rule.Rule

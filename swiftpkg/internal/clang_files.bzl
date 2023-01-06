@@ -129,8 +129,10 @@ def _collect_files(
                 sets.insert(public_includes_set, paths.dirname(path))
             else:
                 sets.insert(srcs_set, path)
-        elif lists.contains([".c", ".cc", ".S", ".so", ".o"], ext):
-            # Acceptable sources: https://bazel.build/reference/be/c-cpp#cc_library.srcs
+        elif lists.contains([".c", ".cc", ".S", ".so", ".o", ".m"], ext):
+            # Acceptable sources clang and objc:
+            # https://bazel.build/reference/be/c-cpp#cc_library.srcs
+            # https://bazel.build/reference/be/objective-c#objc_library.srcs
             sets.insert(srcs_set, path)
         elif ext == ".modulemap" and _is_public_modulemap(path):
             if modulemap != None:
@@ -182,7 +184,11 @@ def _collect_files(
         others = sorted(others),
     )
 
+def _has_objc_srcs(srcs):
+    return lists.contains(srcs, lambda x: x.endswith(".m"))
+
 clang_files = struct(
+    has_objc_srcs = _has_objc_srcs,
     is_hdr = _is_hdr,
     is_include_hdr = _is_include_hdr,
     is_public_modulemap = _is_public_modulemap,

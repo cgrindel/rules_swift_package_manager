@@ -40,6 +40,23 @@ def _srcs(target):
         for src in target.sources
     ]
 
+def _join_path(target, path):
+    """Joins the provide path with that target.path. 
+
+    If the target path is `.`, then the path input is returned without
+    modification.
+
+    Args:
+        target: A `struct` as returned from `pkginfos.new_target`.
+        path: A path as a `string`.
+
+    Returns:
+        A `string` with the target path joined with the input path.
+    """
+    if target.path == ".":
+        return path
+    return paths.join(target.path, path)
+
 def _bazel_label_name(target):
     """Returns the name of the Bazel label for the specified target.
 
@@ -52,10 +69,8 @@ def _bazel_label_name(target):
     basename = paths.basename(target.path)
     if basename == target.name:
         name = target.path
-    elif target.path == ".":
-        name = target.name
     else:
-        name = paths.join(target.path, target.name)
+        name = _join_path(target, target.name)
     return name.replace("/", "_")
 
 def make_pkginfo_targets(bazel_labels):
@@ -90,6 +105,7 @@ def make_pkginfo_targets(bazel_labels):
         bazel_label = _bazel_label,
         bazel_label_name = _bazel_label_name,
         get = _get,
+        join_path = _join_path,
         srcs = _srcs,
     )
 

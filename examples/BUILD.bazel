@@ -28,6 +28,7 @@ _all_os_single_bazel_version_test_examples = [
 
 _macos_single_bazel_version_test_examples = [
     "ios_sim",
+    "objc_code",
 ]
 
 _linux_single_bazel_version_test_examples = []
