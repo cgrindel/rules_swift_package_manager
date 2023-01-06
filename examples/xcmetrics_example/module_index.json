@@ -1,0 +1,1526 @@
+{
+  "ACM": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ACM"
+  ],
+  "ACMPCA": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ACMPCA"
+  ],
+  "APIGateway": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_APIGateway"
+  ],
+  "APIGatewayMiddleware": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_APIGateway_APIGatewayMiddleware"
+  ],
+  "AWSBackup": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AWSBackup"
+  ],
+  "AWSDirectoryService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AWSDirectoryService"
+  ],
+  "AWSSDKSwiftCore": [
+    "@swiftpkg_soto_core//:Sources_AWSSDKSwiftCore"
+  ],
+  "AWSSDKSwiftCoreTests": [
+    "@swiftpkg_soto_core//:Tests_AWSSDKSwiftCoreTests"
+  ],
+  "AWSSDKSwiftTests": [
+    "@swiftpkg_soto//:Tests_AWSSDKSwiftTests"
+  ],
+  "AccessAnalyzer": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AccessAnalyzer"
+  ],
+  "AlexaForBusiness": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AlexaForBusiness"
+  ],
+  "Algorithms": [
+    "@swiftpkg_swift_algorithms//:Sources_Algorithms"
+  ],
+  "Amplify": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Amplify"
+  ],
+  "ApiGatewayManagementApi": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApiGatewayManagementApi"
+  ],
+  "ApiGatewayV2": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApiGatewayV2"
+  ],
+  "AppConfig": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppConfig"
+  ],
+  "AppMesh": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppMesh"
+  ],
+  "AppStream": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppStream"
+  ],
+  "AppSync": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppSync"
+  ],
+  "Appflow": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Appflow"
+  ],
+  "ApplicationAutoScaling": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApplicationAutoScaling"
+  ],
+  "ApplicationDiscoveryService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApplicationDiscoveryService"
+  ],
+  "ApplicationInsights": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApplicationInsights"
+  ],
+  "ArgumentParser": [
+    "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser"
+  ],
+  "ArgumentParserEndToEndTests": [
+    "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserEndToEndTests"
+  ],
+  "ArgumentParserExampleTests": [
+    "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserExampleTests"
+  ],
+  "ArgumentParserGenerateManualTests": [
+    "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserGenerateManualTests"
+  ],
+  "ArgumentParserPackageManagerTests": [
+    "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserPackageManagerTests"
+  ],
+  "ArgumentParserTestHelpers": [
+    "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserTestHelpers"
+  ],
+  "ArgumentParserToolInfo": [
+    "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserToolInfo"
+  ],
+  "ArgumentParserUnitTests": [
+    "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserUnitTests"
+  ],
+  "AsyncConsoleKitTests": [
+    "@swiftpkg_console_kit//:Tests_AsyncConsoleKitTests"
+  ],
+  "AsyncHTTPClient": [
+    "@swiftpkg_async_http_client//:Sources_AsyncHTTPClient"
+  ],
+  "AsyncHTTPClientTests": [
+    "@swiftpkg_async_http_client//:Tests_AsyncHTTPClientTests"
+  ],
+  "AsyncKit": [
+    "@swiftpkg_async_kit//:Sources_AsyncKit"
+  ],
+  "AsyncKitTests": [
+    "@swiftpkg_async_kit//:Tests_AsyncKitTests"
+  ],
+  "AsyncTests": [
+    "@swiftpkg_vapor//:Tests_AsyncTests"
+  ],
+  "Athena": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Athena"
+  ],
+  "Atomics": [
+    "@swiftpkg_swift_atomics//:Sources_Atomics"
+  ],
+  "AtomicsTests": [
+    "@swiftpkg_swift_atomics//:Tests_AtomicsTests"
+  ],
+  "AugmentedAIRuntime": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AugmentedAIRuntime"
+  ],
+  "AutoScaling": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AutoScaling"
+  ],
+  "AutoScalingPlans": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AutoScalingPlans"
+  ],
+  "Backtrace": [
+    "@swiftpkg_swift_backtrace//:Sources_Backtrace"
+  ],
+  "BacktraceTests": [
+    "@swiftpkg_swift_backtrace//:Tests_BacktraceTests"
+  ],
+  "Batch": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Batch"
+  ],
+  "Braket": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Braket"
+  ],
+  "Budgets": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Budgets"
+  ],
+  "CAsyncHTTPClient": [
+    "@swiftpkg_async_http_client//:Sources_CAsyncHTTPClient"
+  ],
+  "CBacktrace": [
+    "@swiftpkg_swift_backtrace//:Sources_CBacktrace"
+  ],
+  "CCryptoBoringSSL": [
+    "@swiftpkg_swift_crypto//:Sources_CCryptoBoringSSL"
+  ],
+  "CCryptoBoringSSLShims": [
+    "@swiftpkg_swift_crypto//:Sources_CCryptoBoringSSLShims"
+  ],
+  "CJWTKitBoringSSL": [
+    "@swiftpkg_jwt_kit//:Sources_CJWTKitBoringSSL"
+  ],
+  "CNIOAtomics": [
+    "@swiftpkg_swift_nio//:Sources_CNIOAtomics"
+  ],
+  "CNIOBoringSSL": [
+    "@swiftpkg_swift_nio_ssl//:Sources_CNIOBoringSSL"
+  ],
+  "CNIOBoringSSLShims": [
+    "@swiftpkg_swift_nio_ssl//:Sources_CNIOBoringSSLShims"
+  ],
+  "CNIODarwin": [
+    "@swiftpkg_swift_nio//:Sources_CNIODarwin"
+  ],
+  "CNIOExtrasZlib": [
+    "@swiftpkg_swift_nio_extras//:Sources_CNIOExtrasZlib"
+  ],
+  "CNIOLLHTTP": [
+    "@swiftpkg_swift_nio//:Sources_CNIOLLHTTP"
+  ],
+  "CNIOLinux": [
+    "@swiftpkg_swift_nio//:Sources_CNIOLinux"
+  ],
+  "CNIOSHA1": [
+    "@swiftpkg_swift_nio//:Sources_CNIOSHA1"
+  ],
+  "CNIOWindows": [
+    "@swiftpkg_swift_nio//:Sources_CNIOWindows"
+  ],
+  "CVaporBcrypt": [
+    "@swiftpkg_vapor//:Sources_CVaporBcrypt"
+  ],
+  "CVaporURLParser": [
+    "@swiftpkg_vapor//:Sources_CVaporURLParser"
+  ],
+  "CYaml": [
+    "@swiftpkg_yams//:Sources_CYaml"
+  ],
+  "Chime": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Chime"
+  ],
+  "Cloud9": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Cloud9"
+  ],
+  "CloudDirectory": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudDirectory"
+  ],
+  "CloudFormation": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudFormation"
+  ],
+  "CloudFront": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudFront"
+  ],
+  "CloudHSM": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudHSM"
+  ],
+  "CloudHSMV2": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudHSMV2"
+  ],
+  "CloudSearch": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudSearch"
+  ],
+  "CloudSearchDomain": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudSearchDomain"
+  ],
+  "CloudTrail": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudTrail"
+  ],
+  "CloudWatch": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudWatch"
+  ],
+  "CloudWatchEvents": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudWatchEvents"
+  ],
+  "CloudWatchLogs": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudWatchLogs"
+  ],
+  "CodeArtifact": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeArtifact"
+  ],
+  "CodeBuild": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeBuild"
+  ],
+  "CodeCommit": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeCommit"
+  ],
+  "CodeDeploy": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeDeploy"
+  ],
+  "CodeGuruProfiler": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeGuruProfiler"
+  ],
+  "CodeGuruReviewer": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeGuruReviewer"
+  ],
+  "CodePipeline": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodePipeline"
+  ],
+  "CodeStar": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeStar"
+  ],
+  "CodeStarNotifications": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeStarNotifications"
+  ],
+  "CodeStarconnections": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeStarconnections"
+  ],
+  "CognitoIdentity": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CognitoIdentity"
+  ],
+  "CognitoIdentityProvider": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CognitoIdentityProvider"
+  ],
+  "CognitoSync": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CognitoSync"
+  ],
+  "Collections": [
+    "@swiftpkg_swift_collections//:Sources_Collections"
+  ],
+  "CollectionsTestSupportTests": [
+    "@swiftpkg_swift_collections//:Tests_CollectionsTestSupportTests"
+  ],
+  "ComplexLog": [
+    "@swiftpkg_swift_numerics//:Tests_Executable_ComplexLog"
+  ],
+  "ComplexLog1p": [
+    "@swiftpkg_swift_numerics//:Tests_Executable_ComplexLog1p"
+  ],
+  "ComplexModule": [
+    "@swiftpkg_swift_numerics//:Sources_ComplexModule"
+  ],
+  "ComplexTests": [
+    "@swiftpkg_swift_numerics//:Tests_ComplexTests"
+  ],
+  "Comprehend": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Comprehend"
+  ],
+  "ComprehendMedical": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ComprehendMedical"
+  ],
+  "ComputeOptimizer": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ComputeOptimizer"
+  ],
+  "ConfigService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ConfigService"
+  ],
+  "Conformance": [
+    "@swiftpkg_swift_protobuf//:Sources_Conformance"
+  ],
+  "Connect": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Connect"
+  ],
+  "ConnectParticipant": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ConnectParticipant"
+  ],
+  "ConsoleKit": [
+    "@swiftpkg_console_kit//:Sources_ConsoleKit"
+  ],
+  "ConsoleKitAsyncExample": [
+    "@swiftpkg_console_kit//:Sources_ConsoleKitAsyncExample"
+  ],
+  "ConsoleKitExample": [
+    "@swiftpkg_console_kit//:Sources_ConsoleKitExample"
+  ],
+  "ConsoleKitTests": [
+    "@swiftpkg_console_kit//:Tests_ConsoleKitTests"
+  ],
+  "Core": [
+    "@swiftpkg_google_cloud_kit//:Core_Sources_Core"
+  ],
+  "CoreMetrics": [
+    "@swiftpkg_swift_metrics//:Sources_CoreMetrics"
+  ],
+  "CoreTests": [
+    "@swiftpkg_google_cloud_kit//:Core_Tests_CoreTests"
+  ],
+  "CostExplorer": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CostExplorer"
+  ],
+  "CostandUsageReportService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CostandUsageReportService"
+  ],
+  "Crypto": [
+    "@swiftpkg_swift_crypto//:Sources_Crypto"
+  ],
+  "CryptoBoringWrapper": [
+    "@swiftpkg_swift_crypto//:Sources_CryptoBoringWrapper"
+  ],
+  "CryptoSwift": [
+    "@swiftpkg_cryptoswift//:Sources_CryptoSwift"
+  ],
+  "CryptoSwiftTests": [
+    "@swiftpkg_cryptoswift//:Tests_CryptoSwiftTests"
+  ],
+  "CryptoTests": [
+    "@swiftpkg_swift_crypto//:Tests_CryptoTests"
+  ],
+  "DAX": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DAX"
+  ],
+  "DLM": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DLM"
+  ],
+  "DataExchange": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DataExchange"
+  ],
+  "DataPipeline": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DataPipeline"
+  ],
+  "DataSync": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DataSync"
+  ],
+  "DatabaseMigrationService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DatabaseMigrationService"
+  ],
+  "Datastore": [
+    "@swiftpkg_google_cloud_kit//:Datastore_Sources_Datastore"
+  ],
+  "DatastoreTests": [
+    "@swiftpkg_google_cloud_kit//:Datastore_Tests_DatastoreTests"
+  ],
+  "DequeModule": [
+    "@swiftpkg_swift_collections//:Sources_DequeModule"
+  ],
+  "DequeTests": [
+    "@swiftpkg_swift_collections//:Tests_DequeTests"
+  ],
+  "Detective": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Detective"
+  ],
+  "Development": [
+    "@swiftpkg_vapor//:Sources_Development"
+  ],
+  "DeviceFarm": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DeviceFarm"
+  ],
+  "DirectConnect": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DirectConnect"
+  ],
+  "DocDB": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DocDB"
+  ],
+  "DynamoDB": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DynamoDB"
+  ],
+  "DynamoDBStreams": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DynamoDBStreams"
+  ],
+  "EBS": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EBS"
+  ],
+  "EC2": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EC2"
+  ],
+  "EC2InstanceConnect": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EC2InstanceConnect"
+  ],
+  "ECR": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ECR"
+  ],
+  "ECS": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ECS"
+  ],
+  "EFS": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EFS"
+  ],
+  "EKS": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EKS"
+  ],
+  "ELB": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ELB"
+  ],
+  "ELBV2": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ELBV2"
+  ],
+  "EMR": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EMR"
+  ],
+  "Echo": [
+    "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Runtime_Echo"
+  ],
+  "EchoImplementation": [
+    "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Implementation_EchoImplementation"
+  ],
+  "EchoModel": [
+    "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Model_EchoModel"
+  ],
+  "ElastiCache": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElastiCache"
+  ],
+  "ElasticBeanstalk": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticBeanstalk"
+  ],
+  "ElasticInference": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticInference"
+  ],
+  "ElasticTranscoder": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticTranscoder"
+  ],
+  "ElasticsearchService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticsearchService"
+  ],
+  "EventBridge": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EventBridge"
+  ],
+  "FMS": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_FMS"
+  ],
+  "FSx": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_FSx"
+  ],
+  "Firehose": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Firehose"
+  ],
+  "Fluent": [
+    "@swiftpkg_fluent//:Sources_Fluent"
+  ],
+  "FluentBenchmark": [
+    "@swiftpkg_fluent_kit//:Sources_FluentBenchmark"
+  ],
+  "FluentKit": [
+    "@swiftpkg_fluent_kit//:Sources_FluentKit"
+  ],
+  "FluentKitTests": [
+    "@swiftpkg_fluent_kit//:Tests_FluentKitTests"
+  ],
+  "FluentPostgresDriver": [
+    "@swiftpkg_fluent_postgres_driver//:Sources_FluentPostgresDriver"
+  ],
+  "FluentPostgresDriverTests": [
+    "@swiftpkg_fluent_postgres_driver//:Tests_FluentPostgresDriverTests"
+  ],
+  "FluentSQL": [
+    "@swiftpkg_fluent_kit//:Sources_FluentSQL"
+  ],
+  "FluentTests": [
+    "@swiftpkg_fluent//:Tests_FluentTests"
+  ],
+  "ForecastQueryService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ForecastQueryService"
+  ],
+  "ForecastService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ForecastService"
+  ],
+  "FraudDetector": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_FraudDetector"
+  ],
+  "GRPC": [
+    "@swiftpkg_grpc_swift//:Sources_GRPC"
+  ],
+  "GRPCConnectionBackoffInteropTest": [
+    "@swiftpkg_grpc_swift//:Sources_GRPCConnectionBackoffInteropTest"
+  ],
+  "GRPCInteroperabilityTestModels": [
+    "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTestModels"
+  ],
+  "GRPCInteroperabilityTests": [
+    "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTests"
+  ],
+  "GRPCInteroperabilityTestsImplementation": [
+    "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTestsImplementation"
+  ],
+  "GRPCPerformanceTests": [
+    "@swiftpkg_grpc_swift//:Sources_GRPCPerformanceTests"
+  ],
+  "GRPCSampleData": [
+    "@swiftpkg_grpc_swift//:Sources_GRPCSampleData"
+  ],
+  "GRPCTests": [
+    "@swiftpkg_grpc_swift//:Tests_GRPCTests"
+  ],
+  "GameLift": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GameLift"
+  ],
+  "Generate_Manual": [
+    "@swiftpkg_swift_argument_parser//:Plugins_GenerateManualPlugin_Generate Manual"
+  ],
+  "Glacier": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Glacier"
+  ],
+  "GlacierMiddleware": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_Glacier_GlacierMiddleware"
+  ],
+  "GlobalAccelerator": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GlobalAccelerator"
+  ],
+  "Glue": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Glue"
+  ],
+  "Greengrass": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Greengrass"
+  ],
+  "GroundStation": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GroundStation"
+  ],
+  "GuardDuty": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GuardDuty"
+  ],
+  "Gzip": [
+    "@swiftpkg_gzipswift//:Sources_Gzip"
+  ],
+  "GzipTests": [
+    "@swiftpkg_gzipswift//:Tests_GzipTests"
+  ],
+  "HTTPServerWithQuiescingDemo": [
+    "@swiftpkg_swift_nio_extras//:Sources_HTTPServerWithQuiescingDemo"
+  ],
+  "Health": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Health"
+  ],
+  "HelloWorldClient": [
+    "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Client_HelloWorldClient"
+  ],
+  "HelloWorldModel": [
+    "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Model_HelloWorldModel"
+  ],
+  "HelloWorldServer": [
+    "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Server_HelloWorldServer"
+  ],
+  "Honeycode": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Honeycode"
+  ],
+  "HypertextApplicationLanguage": [
+    "@swiftpkg_hypertextapplicationlanguage//:Sources_HypertextApplicationLanguage"
+  ],
+  "HypertextApplicationLanguageTests": [
+    "@swiftpkg_hypertextapplicationlanguage//:Tests_HypertextApplicationLanguageTests"
+  ],
+  "IAM": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IAM"
+  ],
+  "INIParser": [
+    "@swiftpkg_perfect_iniparser//:Sources_INIParser"
+  ],
+  "INIParserTests": [
+    "@swiftpkg_perfect_iniparser//:Tests_INIParserTests"
+  ],
+  "IVS": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IVS"
+  ],
+  "IdentityStore": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IdentityStore"
+  ],
+  "Imagebuilder": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Imagebuilder"
+  ],
+  "ImportExport": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ImportExport"
+  ],
+  "Inspector": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Inspector"
+  ],
+  "IntegrationTests": [
+    "@swiftpkg_postgres_nio//:Tests_IntegrationTests"
+  ],
+  "IoT": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoT"
+  ],
+  "IoT1ClickDevicesService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoT1ClickDevicesService"
+  ],
+  "IoT1ClickProjects": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoT1ClickProjects"
+  ],
+  "IoTAnalytics": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTAnalytics"
+  ],
+  "IoTDataPlane": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTDataPlane"
+  ],
+  "IoTEvents": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTEvents"
+  ],
+  "IoTEventsData": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTEventsData"
+  ],
+  "IoTJobsDataPlane": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTJobsDataPlane"
+  ],
+  "IoTSecureTunneling": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTSecureTunneling"
+  ],
+  "IoTSiteWise": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTSiteWise"
+  ],
+  "IoTThingsGraph": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTThingsGraph"
+  ],
+  "JWTKit": [
+    "@swiftpkg_jwt_kit//:Sources_JWTKit"
+  ],
+  "JWTKitTests": [
+    "@swiftpkg_jwt_kit//:Tests_JWTKitTests"
+  ],
+  "KMS": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KMS"
+  ],
+  "Kafka": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Kafka"
+  ],
+  "Kendra": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Kendra"
+  ],
+  "Kinesis": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Kinesis"
+  ],
+  "KinesisAnalytics": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisAnalytics"
+  ],
+  "KinesisAnalyticsV2": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisAnalyticsV2"
+  ],
+  "KinesisVideo": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideo"
+  ],
+  "KinesisVideoArchivedMedia": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideoArchivedMedia"
+  ],
+  "KinesisVideoMedia": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideoMedia"
+  ],
+  "KinesisVideoSignalingChannels": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideoSignalingChannels"
+  ],
+  "LakeFormation": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LakeFormation"
+  ],
+  "Lambda": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Lambda"
+  ],
+  "LexModelBuildingService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LexModelBuildingService"
+  ],
+  "LexRuntimeService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LexRuntimeService"
+  ],
+  "LicenseManager": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LicenseManager"
+  ],
+  "Lightsail": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Lightsail"
+  ],
+  "Logging": [
+    "@swiftpkg_swift_log//:Sources_Logging"
+  ],
+  "LoggingTests": [
+    "@swiftpkg_swift_log//:Tests_LoggingTests"
+  ],
+  "MQ": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MQ"
+  ],
+  "MTurk": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MTurk"
+  ],
+  "MachineLearning": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MachineLearning"
+  ],
+  "Macie": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Macie"
+  ],
+  "Macie2": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Macie2"
+  ],
+  "ManagedBlockchain": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ManagedBlockchain"
+  ],
+  "MarketplaceCatalog": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceCatalog"
+  ],
+  "MarketplaceCommerceAnalytics": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceCommerceAnalytics"
+  ],
+  "MarketplaceEntitlementService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceEntitlementService"
+  ],
+  "MarketplaceMetering": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceMetering"
+  ],
+  "MediaConnect": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaConnect"
+  ],
+  "MediaConvert": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaConvert"
+  ],
+  "MediaLive": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaLive"
+  ],
+  "MediaPackage": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaPackage"
+  ],
+  "MediaPackageVod": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaPackageVod"
+  ],
+  "MediaStore": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaStore"
+  ],
+  "MediaStoreData": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaStoreData"
+  ],
+  "MediaTailor": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaTailor"
+  ],
+  "Metrics": [
+    "@swiftpkg_swift_metrics//:Sources_Metrics"
+  ],
+  "MetricsTestKit": [
+    "@swiftpkg_swift_metrics//:Sources_MetricsTestKit"
+  ],
+  "MetricsTests": [
+    "@swiftpkg_swift_metrics//:Tests_MetricsTests"
+  ],
+  "MigrationHub": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MigrationHub"
+  ],
+  "MigrationHubConfig": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MigrationHubConfig"
+  ],
+  "Mobile": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Mobile"
+  ],
+  "MobileAnalytics": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MobileAnalytics"
+  ],
+  "MobiusCore": [
+    "@swiftpkg_mobius.swift//:MobiusCore_Source_MobiusCore"
+  ],
+  "MobiusCoreTests": [
+    "@swiftpkg_mobius.swift//:MobiusCore_Test_MobiusCoreTests"
+  ],
+  "MobiusExtras": [
+    "@swiftpkg_mobius.swift//:MobiusExtras_Source_MobiusExtras"
+  ],
+  "MobiusExtrasTests": [
+    "@swiftpkg_mobius.swift//:MobiusExtras_Test_MobiusExtrasTests"
+  ],
+  "MobiusNimble": [
+    "@swiftpkg_mobius.swift//:MobiusNimble_Source_MobiusNimble"
+  ],
+  "MobiusNimbleTests": [
+    "@swiftpkg_mobius.swift//:MobiusNimble_Test_MobiusNimbleTests"
+  ],
+  "MobiusTest": [
+    "@swiftpkg_mobius.swift//:MobiusTest_Source_MobiusTest"
+  ],
+  "MobiusTestTests": [
+    "@swiftpkg_mobius.swift//:MobiusTest_Test_MobiusTestTests"
+  ],
+  "MobiusThrowableAssertion": [
+    "@swiftpkg_mobius.swift//:MobiusThrowableAssertion_Source_MobiusThrowableAssertion"
+  ],
+  "MultipartKit": [
+    "@swiftpkg_multipart_kit//:Sources_MultipartKit"
+  ],
+  "MultipartKitTests": [
+    "@swiftpkg_multipart_kit//:Tests_MultipartKitTests"
+  ],
+  "NIO": [
+    "@swiftpkg_swift_nio//:Sources_NIO"
+  ],
+  "NIOAsyncAwaitDemo": [
+    "@swiftpkg_swift_nio//:Sources_NIOAsyncAwaitDemo"
+  ],
+  "NIOChatClient": [
+    "@swiftpkg_swift_nio//:Sources_NIOChatClient"
+  ],
+  "NIOChatServer": [
+    "@swiftpkg_swift_nio//:Sources_NIOChatServer"
+  ],
+  "NIOConcurrencyHelpers": [
+    "@swiftpkg_swift_nio//:Sources_NIOConcurrencyHelpers"
+  ],
+  "NIOConcurrencyHelpersTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOConcurrencyHelpersTests"
+  ],
+  "NIOCore": [
+    "@swiftpkg_swift_nio//:Sources_NIOCore"
+  ],
+  "NIOCoreTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOCoreTests"
+  ],
+  "NIOCrashTester": [
+    "@swiftpkg_swift_nio//:Sources_NIOCrashTester"
+  ],
+  "NIODataStructuresTests": [
+    "@swiftpkg_swift_nio//:Tests_NIODataStructuresTests"
+  ],
+  "NIOEchoClient": [
+    "@swiftpkg_swift_nio//:Sources_NIOEchoClient"
+  ],
+  "NIOEchoServer": [
+    "@swiftpkg_swift_nio//:Sources_NIOEchoServer"
+  ],
+  "NIOEmbedded": [
+    "@swiftpkg_swift_nio//:Sources_NIOEmbedded"
+  ],
+  "NIOEmbeddedTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOEmbeddedTests"
+  ],
+  "NIOExtras": [
+    "@swiftpkg_swift_nio_extras//:Sources_NIOExtras"
+  ],
+  "NIOExtrasPerformanceTester": [
+    "@swiftpkg_swift_nio_extras//:Sources_NIOExtrasPerformanceTester"
+  ],
+  "NIOExtrasTests": [
+    "@swiftpkg_swift_nio_extras//:Tests_NIOExtrasTests"
+  ],
+  "NIOFoundationCompat": [
+    "@swiftpkg_swift_nio//:Sources_NIOFoundationCompat"
+  ],
+  "NIOFoundationCompatTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOFoundationCompatTests"
+  ],
+  "NIOHPACK": [
+    "@swiftpkg_swift_nio_http2//:Sources_NIOHPACK"
+  ],
+  "NIOHPACKTests": [
+    "@swiftpkg_swift_nio_http2//:Tests_NIOHPACKTests"
+  ],
+  "NIOHTTP1": [
+    "@swiftpkg_swift_nio//:Sources_NIOHTTP1"
+  ],
+  "NIOHTTP1Client": [
+    "@swiftpkg_swift_nio//:Sources_NIOHTTP1Client"
+  ],
+  "NIOHTTP1Server": [
+    "@swiftpkg_swift_nio//:Sources_NIOHTTP1Server"
+  ],
+  "NIOHTTP1Tests": [
+    "@swiftpkg_swift_nio//:Tests_NIOHTTP1Tests"
+  ],
+  "NIOHTTP2": [
+    "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2"
+  ],
+  "NIOHTTP2PerformanceTester": [
+    "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2PerformanceTester"
+  ],
+  "NIOHTTP2Server": [
+    "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2Server"
+  ],
+  "NIOHTTP2Tests": [
+    "@swiftpkg_swift_nio_http2//:Tests_NIOHTTP2Tests"
+  ],
+  "NIOHTTPCompression": [
+    "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPCompression"
+  ],
+  "NIOHTTPCompressionTests": [
+    "@swiftpkg_swift_nio_extras//:Tests_NIOHTTPCompressionTests"
+  ],
+  "NIOMulticastChat": [
+    "@swiftpkg_swift_nio//:Sources_NIOMulticastChat"
+  ],
+  "NIOPerformanceTester": [
+    "@swiftpkg_swift_nio//:Sources_NIOPerformanceTester"
+  ],
+  "NIOPosix": [
+    "@swiftpkg_swift_nio//:Sources_NIOPosix"
+  ],
+  "NIOPosixTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOPosixTests"
+  ],
+  "NIOSOCKS": [
+    "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKS"
+  ],
+  "NIOSOCKSClient": [
+    "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKSClient"
+  ],
+  "NIOSOCKSTests": [
+    "@swiftpkg_swift_nio_extras//:Tests_NIOSOCKSTests"
+  ],
+  "NIOSSL": [
+    "@swiftpkg_swift_nio_ssl//:Sources_NIOSSL"
+  ],
+  "NIOSSLHTTP1Client": [
+    "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLHTTP1Client"
+  ],
+  "NIOSSLPerformanceTester": [
+    "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLPerformanceTester"
+  ],
+  "NIOSSLTests": [
+    "@swiftpkg_swift_nio_ssl//:Tests_NIOSSLTests"
+  ],
+  "NIOTLS": [
+    "@swiftpkg_swift_nio//:Sources_NIOTLS"
+  ],
+  "NIOTLSServer": [
+    "@swiftpkg_swift_nio_ssl//:Sources_NIOTLSServer"
+  ],
+  "NIOTLSTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOTLSTests"
+  ],
+  "NIOTSHTTPClient": [
+    "@swiftpkg_swift_nio_transport_services//:Sources_NIOTSHTTPClient"
+  ],
+  "NIOTSHTTPServer": [
+    "@swiftpkg_swift_nio_transport_services//:Sources_NIOTSHTTPServer"
+  ],
+  "NIOTestUtils": [
+    "@swiftpkg_swift_nio//:Sources_NIOTestUtils"
+  ],
+  "NIOTestUtilsTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOTestUtilsTests"
+  ],
+  "NIOTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOTests"
+  ],
+  "NIOTransportServices": [
+    "@swiftpkg_swift_nio_transport_services//:Sources_NIOTransportServices"
+  ],
+  "NIOTransportServicesTests": [
+    "@swiftpkg_swift_nio_transport_services//:Tests_NIOTransportServicesTests"
+  ],
+  "NIOUDPEchoClient": [
+    "@swiftpkg_swift_nio//:Sources_NIOUDPEchoClient"
+  ],
+  "NIOUDPEchoServer": [
+    "@swiftpkg_swift_nio//:Sources_NIOUDPEchoServer"
+  ],
+  "NIOWebSocket": [
+    "@swiftpkg_swift_nio//:Sources_NIOWebSocket"
+  ],
+  "NIOWebSocketClient": [
+    "@swiftpkg_swift_nio//:Sources_NIOWebSocketClient"
+  ],
+  "NIOWebSocketServer": [
+    "@swiftpkg_swift_nio//:Sources_NIOWebSocketServer"
+  ],
+  "NIOWebSocketTests": [
+    "@swiftpkg_swift_nio//:Tests_NIOWebSocketTests"
+  ],
+  "NIOWritePCAPDemo": [
+    "@swiftpkg_swift_nio_extras//:Sources_NIOWritePCAPDemo"
+  ],
+  "NIOWritePartialPCAPDemo": [
+    "@swiftpkg_swift_nio_extras//:Sources_NIOWritePartialPCAPDemo"
+  ],
+  "Neptune": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Neptune"
+  ],
+  "NetworkManager": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_NetworkManager"
+  ],
+  "Nimble": [
+    "@swiftpkg_nimble//:Sources_Nimble"
+  ],
+  "NimbleCwlCatchException": [
+    "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Dependencies_CwlCatchException_Sources_CwlCatchException_NimbleCwlCatchException"
+  ],
+  "NimbleCwlCatchExceptionSupport": [
+    "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Dependencies_CwlCatchException_Sources_CwlCatchExceptionSupport_NimbleCwlCatchExceptionSupport"
+  ],
+  "NimbleCwlMachBadInstructionHandler": [
+    "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Sources_CwlMachBadInstructionHandler_NimbleCwlMachBadInstructionHandler"
+  ],
+  "NimbleCwlPreconditionTesting": [
+    "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Sources_CwlPreconditionTesting_NimbleCwlPreconditionTesting"
+  ],
+  "NimbleTests": [
+    "@swiftpkg_nimble//:Tests_NimbleTests"
+  ],
+  "Numerics": [
+    "@swiftpkg_swift_numerics//:Sources_Numerics"
+  ],
+  "OpsWorks": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_OpsWorks"
+  ],
+  "OpsWorksCM": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_OpsWorksCM"
+  ],
+  "OrderedCollections": [
+    "@swiftpkg_swift_collections//:Sources_OrderedCollections"
+  ],
+  "OrderedCollectionsTests": [
+    "@swiftpkg_swift_collections//:Tests_OrderedCollectionsTests"
+  ],
+  "Organizations": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Organizations"
+  ],
+  "Outposts": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Outposts"
+  ],
+  "PI": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PI"
+  ],
+  "PathKit": [
+    "@swiftpkg_pathkit//:Sources_PathKit"
+  ],
+  "PathKitTests": [
+    "@swiftpkg_pathkit//:Tests_PathKitTests"
+  ],
+  "Personalize": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Personalize"
+  ],
+  "PersonalizeEvents": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PersonalizeEvents"
+  ],
+  "PersonalizeRuntime": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PersonalizeRuntime"
+  ],
+  "Pinpoint": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Pinpoint"
+  ],
+  "PinpointEmail": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PinpointEmail"
+  ],
+  "PinpointSMSVoice": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PinpointSMSVoice"
+  ],
+  "Polly": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Polly"
+  ],
+  "PostgresKit": [
+    "@swiftpkg_postgres_kit//:Sources_PostgresKit"
+  ],
+  "PostgresKitTests": [
+    "@swiftpkg_postgres_kit//:Tests_PostgresKitTests"
+  ],
+  "PostgresNIO": [
+    "@swiftpkg_postgres_nio//:Sources_PostgresNIO"
+  ],
+  "PostgresNIOTests": [
+    "@swiftpkg_postgres_nio//:Tests_PostgresNIOTests"
+  ],
+  "Pricing": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Pricing"
+  ],
+  "PubSub": [
+    "@swiftpkg_google_cloud_kit//:PubSub_Sources_PubSub"
+  ],
+  "PubSubTests": [
+    "@swiftpkg_google_cloud_kit//:PubSub_Tests_PubSubTests"
+  ],
+  "QLDB": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_QLDB"
+  ],
+  "QLDBSession": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_QLDBSession"
+  ],
+  "Queues": [
+    "@swiftpkg_queues//:Sources_Queues"
+  ],
+  "QueuesRedisDriver": [
+    "@swiftpkg_queues_redis_driver//:Sources_QueuesRedisDriver"
+  ],
+  "QueuesRedisDriverTests": [
+    "@swiftpkg_queues_redis_driver//:Tests_QueuesRedisDriverTests"
+  ],
+  "QueuesTests": [
+    "@swiftpkg_queues//:Tests_QueuesTests"
+  ],
+  "Quick": [
+    "@swiftpkg_quick//:Sources_Quick"
+  ],
+  "QuickIssue853RegressionTests": [
+    "@swiftpkg_quick//:Tests_QuickIssue853RegressionTests"
+  ],
+  "QuickObjCRuntime": [
+    "@swiftpkg_quick//:Sources_QuickObjCRuntime"
+  ],
+  "QuickSight": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_QuickSight"
+  ],
+  "QuickTests": [
+    "@swiftpkg_quick//:Tests_QuickTests"
+  ],
+  "RAM": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RAM"
+  ],
+  "RDS": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RDS"
+  ],
+  "RDSDataService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RDSDataService"
+  ],
+  "RealModule": [
+    "@swiftpkg_swift_numerics//:Sources_RealModule"
+  ],
+  "RealTests": [
+    "@swiftpkg_swift_numerics//:Tests_RealTests"
+  ],
+  "RediStack": [
+    "@swiftpkg_redistack//:Sources_RediStack"
+  ],
+  "RediStackIntegrationTests": [
+    "@swiftpkg_redistack//:Tests_RediStackIntegrationTests"
+  ],
+  "RediStackTestUtils": [
+    "@swiftpkg_redistack//:Sources_RediStackTestUtils"
+  ],
+  "RediStackTests": [
+    "@swiftpkg_redistack//:Tests_RediStackTests"
+  ],
+  "Redis": [
+    "@swiftpkg_redis//:Sources_Redis"
+  ],
+  "RedisTests": [
+    "@swiftpkg_redis//:Tests_RedisTests"
+  ],
+  "RedisTypes": [
+    "@swiftpkg_redistack//:Sources_RedisTypes"
+  ],
+  "RedisTypesTests": [
+    "@swiftpkg_redistack//:Tests_RedisTypesTests"
+  ],
+  "Redshift": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Redshift"
+  ],
+  "RedshiftDataAPIService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RedshiftDataAPIService"
+  ],
+  "Rekognition": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Rekognition"
+  ],
+  "ResourceGroups": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ResourceGroups"
+  ],
+  "ResourceGroupsTaggingAPI": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ResourceGroupsTaggingAPI"
+  ],
+  "RoboMaker": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RoboMaker"
+  ],
+  "Route53": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Route53"
+  ],
+  "Route53Domains": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Route53Domains"
+  ],
+  "Route53Resolver": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Route53Resolver"
+  ],
+  "RouteGuideClient": [
+    "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Client_RouteGuideClient"
+  ],
+  "RouteGuideModel": [
+    "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Model_RouteGuideModel"
+  ],
+  "RouteGuideServer": [
+    "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Server_RouteGuideServer"
+  ],
+  "RoutingKit": [
+    "@swiftpkg_routing_kit//:Sources_RoutingKit"
+  ],
+  "RoutingKitTests": [
+    "@swiftpkg_routing_kit//:Tests_RoutingKitTests"
+  ],
+  "S3": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_S3"
+  ],
+  "S3Control": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_S3Control"
+  ],
+  "S3ControlMiddleware": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_S3Control_S3ControlMiddleware"
+  ],
+  "S3Middleware": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_S3_S3Middleware"
+  ],
+  "SES": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SES"
+  ],
+  "SESV2": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SESV2"
+  ],
+  "SFN": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SFN"
+  ],
+  "SMS": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SMS"
+  ],
+  "SNS": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SNS"
+  ],
+  "SQLKit": [
+    "@swiftpkg_sql_kit//:Sources_SQLKit"
+  ],
+  "SQLKitBenchmark": [
+    "@swiftpkg_sql_kit//:Sources_SQLKitBenchmark"
+  ],
+  "SQLKitTests": [
+    "@swiftpkg_sql_kit//:Tests_SQLKitTests"
+  ],
+  "SQS": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SQS"
+  ],
+  "SSM": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSM"
+  ],
+  "SSO": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSO"
+  ],
+  "SSOAdmin": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSOAdmin"
+  ],
+  "SSOOIDC": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSOOIDC"
+  ],
+  "STS": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_STS"
+  ],
+  "SWF": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SWF"
+  ],
+  "SageMaker": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SageMaker"
+  ],
+  "SageMakerRuntime": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SageMakerRuntime"
+  ],
+  "Sample": [
+    "@swiftpkg_swift_backtrace//:Sources_Sample"
+  ],
+  "SavingsPlans": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SavingsPlans"
+  ],
+  "Schemas": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Schemas"
+  ],
+  "SecretManager": [
+    "@swiftpkg_google_cloud_kit//:SecretManager_Sources_SecretManager"
+  ],
+  "SecretsManager": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SecretsManager"
+  ],
+  "SecurityHub": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SecurityHub"
+  ],
+  "ServerlessApplicationRepository": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServerlessApplicationRepository"
+  ],
+  "ServiceCatalog": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServiceCatalog"
+  ],
+  "ServiceDiscovery": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServiceDiscovery"
+  ],
+  "ServiceQuotas": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServiceQuotas"
+  ],
+  "Shield": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Shield"
+  ],
+  "Signer": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Signer"
+  ],
+  "SimpleDB": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SimpleDB"
+  ],
+  "Snowball": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Snowball"
+  ],
+  "Spectre": [
+    "@swiftpkg_spectre//:Sources_Spectre"
+  ],
+  "SpectreTests": [
+    "@swiftpkg_spectre//:Tests_SpectreTests"
+  ],
+  "Storage": [
+    "@swiftpkg_google_cloud_kit//:Storage_Sources_Storage"
+  ],
+  "StorageGateway": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_StorageGateway"
+  ],
+  "StorageTests": [
+    "@swiftpkg_google_cloud_kit//:Storage_Tests_StorageTests"
+  ],
+  "Support": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Support"
+  ],
+  "SwiftAlgorithmsTests": [
+    "@swiftpkg_swift_algorithms//:Tests_SwiftAlgorithmsTests"
+  ],
+  "SwiftProtobuf": [
+    "@swiftpkg_swift_protobuf//:Sources_SwiftProtobuf"
+  ],
+  "SwiftProtobufPlugin": [
+    "@swiftpkg_swift_protobuf//:Plugins_SwiftProtobufPlugin"
+  ],
+  "SwiftProtobufPluginLibrary": [
+    "@swiftpkg_swift_protobuf//:Sources_SwiftProtobufPluginLibrary"
+  ],
+  "SwiftProtobufPluginLibraryTests": [
+    "@swiftpkg_swift_protobuf//:Tests_SwiftProtobufPluginLibraryTests"
+  ],
+  "SwiftProtobufTests": [
+    "@swiftpkg_swift_protobuf//:Tests_SwiftProtobufTests"
+  ],
+  "Synthetics": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Synthetics"
+  ],
+  "TestsPerformance": [
+    "@swiftpkg_cryptoswift//:Tests_TestsPerformance"
+  ],
+  "Textract": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Textract"
+  ],
+  "TranscribeService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_TranscribeService"
+  ],
+  "TranscribeStreamingService": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_TranscribeStreamingService"
+  ],
+  "Transfer": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Transfer"
+  ],
+  "Translate": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Translate"
+  ],
+  "Translation": [
+    "@swiftpkg_google_cloud_kit//:Translation_Sources_Translation"
+  ],
+  "TranslationTests": [
+    "@swiftpkg_google_cloud_kit//:Translation_Tests_TranslationTests"
+  ],
+  "Vapor": [
+    "@swiftpkg_vapor//:Sources_Vapor"
+  ],
+  "VaporTests": [
+    "@swiftpkg_vapor//:Tests_VaporTests"
+  ],
+  "WAF": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WAF"
+  ],
+  "WAFRegional": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WAFRegional"
+  ],
+  "WAFV2": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WAFV2"
+  ],
+  "WebSocketKit": [
+    "@swiftpkg_websocket_kit//:Sources_WebSocketKit"
+  ],
+  "WebSocketKitTests": [
+    "@swiftpkg_websocket_kit//:Tests_WebSocketKitTests"
+  ],
+  "WorkDocs": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkDocs"
+  ],
+  "WorkLink": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkLink"
+  ],
+  "WorkMail": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkMail"
+  ],
+  "WorkMailMessageFlow": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkMailMessageFlow"
+  ],
+  "WorkSpaces": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkSpaces"
+  ],
+  "XCLogParser": [
+    "@swiftpkg_xclogparser//:Sources_XCLogParser"
+  ],
+  "XCLogParserApp": [
+    "@swiftpkg_xclogparser//:Sources_XCLogParserApp"
+  ],
+  "XCLogParserTests": [
+    "@swiftpkg_xclogparser//:Tests_XCLogParserTests"
+  ],
+  "XCMetricsApp": [
+    "@swiftpkg_xcmetrics//:Sources_XCMetricsApp"
+  ],
+  "XCMetricsBackend": [
+    "@swiftpkg_xcmetrics//:Sources_XCMetricsBackend"
+  ],
+  "XCMetricsBackendLib": [
+    "@swiftpkg_xcmetrics//:Sources_XCMetricsBackendLib"
+  ],
+  "XCMetricsBackendLibTests": [
+    "@swiftpkg_xcmetrics//:Tests_XCMetricsBackendLibTests"
+  ],
+  "XCMetricsClient": [
+    "@swiftpkg_xcmetrics//:Sources_XCMetricsClient"
+  ],
+  "XCMetricsCommon": [
+    "@swiftpkg_xcmetrics//:Sources_XCMetricsCommon"
+  ],
+  "XCMetricsPlugins": [
+    "@swiftpkg_xcmetrics//:Sources_XCMetricsPlugins"
+  ],
+  "XCMetricsPluginsTests": [
+    "@swiftpkg_xcmetrics//:Tests_XCMetricsPluginsTests"
+  ],
+  "XCMetricsProto": [
+    "@swiftpkg_xcmetrics//:Sources_XCMetricsProto"
+  ],
+  "XCMetricsTests": [
+    "@swiftpkg_xcmetrics//:Tests_XCMetricsTests"
+  ],
+  "XCMetricsUtils": [
+    "@swiftpkg_xcmetrics//:Sources_XCMetricsUtils"
+  ],
+  "XCTFluent": [
+    "@swiftpkg_fluent_kit//:Sources_XCTFluent"
+  ],
+  "XCTQueues": [
+    "@swiftpkg_queues//:Sources_XCTQueues"
+  ],
+  "XCTVapor": [
+    "@swiftpkg_vapor//:Sources_XCTVapor"
+  ],
+  "XRay": [
+    "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_XRay"
+  ],
+  "XcodeHasher": [
+    "@swiftpkg_xclogparser//:Sources_XcodeHasher"
+  ],
+  "Yams": [
+    "@swiftpkg_yams//:Sources_Yams"
+  ],
+  "YamsTests": [
+    "@swiftpkg_yams//:Tests_YamsTests"
+  ],
+  "_AtomicsShims": [
+    "@swiftpkg_swift_atomics//:Sources__AtomicsShims"
+  ],
+  "_CollectionsTestSupport": [
+    "@swiftpkg_swift_collections//:Sources__CollectionsTestSupport"
+  ],
+  "_CryptoExtras": [
+    "@swiftpkg_swift_crypto//:Sources__CryptoExtras"
+  ],
+  "_CryptoExtrasTests": [
+    "@swiftpkg_swift_crypto//:Tests__CryptoExtrasTests"
+  ],
+  "_NIOConcurrency": [
+    "@swiftpkg_swift_nio//:Sources__NIOConcurrency"
+  ],
+  "_NIODataStructures": [
+    "@swiftpkg_swift_nio//:Sources__NIODataStructures"
+  ],
+  "_NumericsShims": [
+    "@swiftpkg_swift_numerics//:Sources__NumericsShims"
+  ],
+  "_TestSupport": [
+    "@swiftpkg_swift_numerics//:Sources__TestSupport"
+  ],
+  "changelog_authors": [
+    "@swiftpkg_swift_argument_parser//:Tools_changelog-authors"
+  ],
+  "count_lines": [
+    "@swiftpkg_swift_argument_parser//:Examples_count-lines"
+  ],
+  "crypto_shasum": [
+    "@swiftpkg_swift_crypto//:Sources_crypto-shasum"
+  ],
+  "generate_manual": [
+    "@swiftpkg_swift_argument_parser//:Tools_generate-manual"
+  ],
+  "math": [
+    "@swiftpkg_swift_argument_parser//:Examples_math"
+  ],
+  "protoc_gen_grpc_swift": [
+    "@swiftpkg_grpc_swift//:Sources_protoc-gen-grpc-swift"
+  ],
+  "protoc_gen_swift": [
+    "@swiftpkg_swift_protobuf//:Sources_protoc-gen-swift"
+  ],
+  "repeat": [
+    "@swiftpkg_swift_argument_parser//:Examples_repeat"
+  ],
+  "roll": [
+    "@swiftpkg_swift_argument_parser//:Examples_roll"
+  ],
+  "system_zlib": [
+    "@swiftpkg_gzipswift//:Sources_system-zlib"
+  ]
+}
