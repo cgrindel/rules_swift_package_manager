@@ -11,33 +11,33 @@ import (
 var fooM = swift.NewModule("Foo", label.New("", "Sources/Foo", "Foo"))
 var barM = swift.NewModule("Bar", label.New("", "Sources/Bar", "Bar"))
 var anotherRepoFooM = swift.NewModule("Foo", label.New("another_repo", "pkg/path", "Foo"))
-var mi = swift.NewModuleIndex()
+var di = swift.NewDependencyIndex()
 
 func init() {
-	mi.AddModules(fooM, barM, anotherRepoFooM)
+	di.AddModules(fooM, barM, anotherRepoFooM)
 }
 
-func TestModuleIndex(t *testing.T) {
+func TestDependencyIndex(t *testing.T) {
 	var actual *swift.Module
 
-	actual = mi.Resolve("", "DoesNotExist")
+	actual = di.ResolveModule("", "DoesNotExist")
 	assert.Nil(t, actual)
 
-	actual = mi.Resolve("", "Bar")
+	actual = di.ResolveModule("", "Bar")
 	assert.Equal(t, barM, actual)
 
-	actual = mi.Resolve("", "Foo")
+	actual = di.ResolveModule("", "Foo")
 	assert.Equal(t, fooM, actual)
 
-	actual = mi.Resolve("another_repo", "Foo")
+	actual = di.ResolveModule("another_repo", "Foo")
 	assert.Equal(t, anotherRepoFooM, actual)
 }
 
 func TestJSONRoundtrip(t *testing.T) {
-	data, err := mi.JSON()
+	data, err := di.JSON()
 	assert.NoError(t, err)
 
-	newMI, err := swift.NewModuleIndexFromJSON(data)
+	newMI, err := swift.NewDependencyIndexFromJSON(data)
 	assert.NoError(t, err)
-	assert.Equal(t, mi, newMI)
+	assert.Equal(t, di, newMI)
 }

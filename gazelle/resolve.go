@@ -38,7 +38,7 @@ func (l *swiftLang) Resolve(
 	imports interface{},
 	from label.Label) {
 
-	mi := swiftcfg.GetSwiftConfig(c).ModuleIndex
+	di := swiftcfg.GetSwiftConfig(c).DependencyIndex
 	swiftImports := imports.([]string)
 
 	var deps []string
@@ -52,7 +52,7 @@ func (l *swiftLang) Resolve(
 		if len(findResults) > 0 {
 			l := normalizeLabel(c.RepoName, findResults[0].Label)
 			deps = append(deps, l.String())
-		} else if m := mi.Resolve(c.RepoName, imp); m != nil {
+		} else if m := di.ResolveModule(c.RepoName, imp); m != nil {
 			l := normalizeLabel(c.RepoName, m.Label)
 			deps = append(deps, l.String())
 		} else {
