@@ -2,7 +2,6 @@ package swiftpkg
 
 import (
 	"fmt"
-	"log"
 	"sort"
 
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdesc"
@@ -22,9 +21,6 @@ type PackageInfo struct {
 }
 
 func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: NewPackageInfo dir: %+#v", dir)
-	// DEBUG END
 	dump, err := sw.DumpPackage(dir)
 	if err != nil {
 		return nil, err
