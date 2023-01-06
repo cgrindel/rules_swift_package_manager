@@ -68,4 +68,11 @@ bzl_library(
     visibility = ["//visibility:public"],
     deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
 )
+
+sh_test(
+    name = "trustkit_example_test",
+    srcs = ["trustkit_test.sh"],
+    data = [":trustkit_example"],
+    deps = ["@bazel_tools//tools/bash/runfiles"],
+)
 EOF

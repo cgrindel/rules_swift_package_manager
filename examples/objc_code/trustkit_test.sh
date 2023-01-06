@@ -18,7 +18,7 @@ err_msg() {
 }
 
 workspace="trustkit_example"
-binary="$(rlocation "${workspace}/trustkit")"
+binary="$(rlocation "${workspace}/trustkit_example")"
 
 expected="Successfully initialized with configuration"
 "${binary}" | grep "${expected}" || err_msg "Failed to find expected output. ${expected}"
