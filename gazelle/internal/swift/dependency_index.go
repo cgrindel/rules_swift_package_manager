@@ -3,108 +3,46 @@ package swift
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
-	"sort"
 
-	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 )
 
-type bazelMap map[string][]string
-
-type productIndexKey string
-
-func newProductIndexKey(identity, name string) productIndexKey {
-	return productIndexKey(fmt.Sprintf("%s|%s", identity, name))
-}
-
-func newProductIndexKeyFromProduct(p *Product) productIndexKey {
-	return newProductIndexKey(p.Identity, p.Name)
-}
-
 type DependencyIndex struct {
-	// Key: Module name
-	// Value: Slice of module pointers
-	moduleByName map[string][]*Module
-	prdByKey map[productIndexKey]*Product
+	ModuleIndex  ModuleIndex  `json:"modules"`
+	ProductIndex ProductIndex `json:"products"`
 }
 
 func NewDependencyIndex() *DependencyIndex {
 	return &DependencyIndex{
-		moduleByName: make(map[string][]*Module),
-		prdByKey: make(map[productIndexKey]*Product),
+		ModuleIndex:  make(ModuleIndex),
+		ProductIndex: make(ProductIndex),
 	}
 }
 
-func newDependencyIndexFromBazelMap(bzlMap bazelMap) (*DependencyIndex, error) {
-	di := NewDependencyIndex()
-	for modName, labelStrs := range bzlMap {
-		for _, labelStr := range labelStrs {
-			lbl, err := label.Parse(labelStr)
-			if err != nil {
-				return nil, err
-			}
-			m := NewModule(modName, lbl)
-			di.AddModule(m)
-		}
-	}
-	return di, nil
-}
+// func newDependencyIndexFromJSONData(jsonData *indexJSONData) (*DependencyIndex, error) {
+// 	// di := NewDependencyIndex()
+// 	// for modName, labelStrs := range jsonData.Modules {
+// 	// 	for _, labelStr := range labelStrs {
+// 	// 		lbl, err := label.Parse(labelStr)
+// 	// 		if err != nil {
+// 	// 			return nil, err
+// 	// 		}
+// 	// 		m := NewModule(modName, lbl)
+// 	// 		di.AddModule(m)
+// 	// 	}
+// 	// }
+// 	// di.ProductIndex = jsonData.Products
+// 	// return di, nil
+// 	// TODO(chuck): IMPLEMENT ME!
+// 	return nil, nil
+// }
 
 func NewDependencyIndexFromJSON(data []byte) (*DependencyIndex, error) {
-	var bzlMap bazelMap
-	if err := json.Unmarshal(data, &bzlMap); err != nil {
+	var di DependencyIndex
+	if err := json.Unmarshal(data, &di); err != nil {
 		return nil, err
 	}
-	return newDependencyIndexFromBazelMap(bzlMap)
-}
-
-func (di *DependencyIndex) AddModule(m *Module) {
-	modules := di.moduleByName[m.Name]
-	modules = append(modules, m)
-	di.moduleByName[m.Name] = modules
-}
-
-func (di *DependencyIndex) AddModules(modules ...*Module) {
-	for _, m := range modules {
-		di.AddModule(m)
-	}
-}
-
-// Find the module given the Bazel repo name and the Swift module name.
-func (di *DependencyIndex) ResolveModule(repoName, moduleName string) *Module {
-	modules := di.moduleByName[moduleName]
-	if len(modules) == 0 {
-		return nil
-	}
-	// Look for module with the same repo name
-	for _, module := range modules {
-		if repoName == module.Label.Repo {
-			return module
-		}
-	}
-	// Else pick the first one
-	return modules[0]
-}
-
-func (di *DependencyIndex) ModuleNames() []string {
-	names := make([]string, len(di.moduleByName))
-	idx := 0
-	for modName := range di.moduleByName {
-		names[idx] = modName
-		idx++
-	}
-	return names
-}
-
-func (di *DependencyIndex) AddProduct(p *Product) {
-	key := newProductIndexKeyFromProduct(p)
-	di.prdByKey[key] = p
-}
-
-func (di *DependencyIndex) ResolveProduct(identity, name string) *Product {
-	key := newProductIndexKey(identity, name)
-	return di.prdByKey[key]
+	return &di, nil
 }
 
 // This is used to index any repository rules that are not already included in the module index
@@ -127,7 +65,7 @@ func (di *DependencyIndex) indexHTTPArchive(r *rule.Rule, repoRoot string) error
 	if ha == nil {
 		return nil
 	}
-	di.AddModules(ha.Modules...)
+	di.ModuleIndex.Add(ha.Modules...)
 	return nil
 }
 
@@ -144,7 +82,7 @@ func (di *DependencyIndex) IndexBazelRepo(bzlRepo *BazelRepo) error {
 			return err
 		}
 	}
-	di.AddModules(modules...)
+	di.ModuleIndex.Add(modules...)
 
 	// Index products
 	for _, p := range pi.Products {
@@ -152,28 +90,44 @@ func (di *DependencyIndex) IndexBazelRepo(bzlRepo *BazelRepo) error {
 		if err != nil {
 			return err
 		}
-		di.AddProduct(prd)
+		di.ProductIndex.Add(prd)
 	}
 
 	return nil
 }
 
-func (di *DependencyIndex) bazelMap() bazelMap {
-	bzlMap := make(map[string][]string)
-	for modName, mods := range di.moduleByName {
-		labels := make([]string, len(mods))
-		for idx, mod := range mods {
-			labels[idx] = mod.Label.String()
-		}
-		// Sort the labels to ensure that they are consistent.
-		sort.Strings(labels)
-		bzlMap[modName] = labels
-	}
-	return bzlMap
-}
+// func (di *DependencyIndex) jsonOutput() *indexJSONData {
+// 	jd := &indexJSONData{
+// 		Modules: make(modulesJSONData),
+// 		Products: make(productsJSONData),
+// 	}
+// 	for modName, mods := range di.ModuleIndex {
+// 		labels := make([]string, len(mods))
+// 		for idx, mod := range mods {
+// 			labels[idx] = mod.Label.String()
+// 		}
+// 		// Sort the labels to ensure that they are consistent.
+// 		sort.Strings(labels)
+// 		jd.Modules[modName] = labels
+// 	}
+// 	return jd
+// }
+
+// func (di *DependencyIndex) MarshalJSON() ([]byte, error) {
+// 	b, err := json.Marshal(di.jsonOutput())
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	var buf bytes.Buffer
+// 	err = json.Indent(&buf, b, "", "  ")
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return buf.Bytes(), nil
+// }
 
 func (di *DependencyIndex) JSON() ([]byte, error) {
-	b, err := json.Marshal(di.bazelMap())
+	b, err := json.Marshal(di)
 	if err != nil {
 		return nil, err
 	}

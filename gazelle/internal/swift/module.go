@@ -22,3 +22,15 @@ func NewModuleFromTarget(repoName string, t *swiftpkg.Target) (*Module, error) {
 	lbl := BazelLabelFromTarget(repoName, t)
 	return NewModule(t.C99name, lbl), nil
 }
+
+// Modules
+
+type Modules []*Module
+
+func (modules Modules) ModuleNames() []string {
+	names := make([]string, len(modules))
+	for idx, m := range modules {
+		names[idx] = m.Label.String()
+	}
+	return names
+}

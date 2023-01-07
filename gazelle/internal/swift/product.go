@@ -1,11 +1,20 @@
 package swift
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 )
+
+type productJSONData struct {
+	Identity     string
+	Name         string
+	Type         string
+	TargetLabels []string
+}
 
 type ProductType int
 
@@ -14,6 +23,13 @@ const (
 	LibraryProductType
 	ExecutableProductType
 	PluginProductType
+)
+
+const (
+	UnknownProductTypeStr    = "unknown"
+	LibraryProductTypeStr    = "library"
+	ExecutableProductTypeStr = "executable"
+	PluginProductTypeStr     = "plugin"
 )
 
 // A Swift package product can
@@ -62,4 +78,81 @@ func NewProductFromPkgInfoProduct(
 	}
 
 	return NewProduct(bzlRepo.Identity, prd.Name, ptype, targetLabels), nil
+}
+
+// JSON Output
+
+func (p *Product) jsonData() *productJSONData {
+	var ptype string
+	switch p.Type {
+	case LibraryProductType:
+		ptype = LibraryProductTypeStr
+	case ExecutableProductType:
+		ptype = ExecutableProductTypeStr
+	case PluginProductType:
+		ptype = PluginProductTypeStr
+	default:
+		ptype = UnknownProductTypeStr
+	}
+
+	targetLabels := make([]string, len(p.TargetLabels))
+	for idx, tl := range p.TargetLabels {
+		targetLabels[idx] = tl.String()
+	}
+
+	return &productJSONData{
+		Identity:     p.Identity,
+		Name:         p.Name,
+		Type:         ptype,
+		TargetLabels: targetLabels,
+	}
+}
+
+func NewProductFromJSONData(jd *productJSONData) (*Product, error) {
+	var err error
+
+	var ptype ProductType
+	switch jd.Type {
+	case LibraryProductTypeStr:
+		ptype = LibraryProductType
+	case ExecutableProductTypeStr:
+		ptype = ExecutableProductType
+	case PluginProductTypeStr:
+		ptype = PluginProductType
+	default:
+		ptype = UnknownProductType
+	}
+
+	targetLabels := make([]label.Label, len(jd.TargetLabels))
+	for idx, tl := range jd.TargetLabels {
+		targetLabels[idx], err = label.Parse(tl)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return NewProduct(jd.Identity, jd.Name, ptype, targetLabels), nil
+}
+
+func (p *Product) MarshalJSON() ([]byte, error) {
+	b, err := json.Marshal(p.jsonData())
+	if err != nil {
+		return nil, err
+	}
+	var buf bytes.Buffer
+	err = json.Indent(&buf, b, "", "  ")
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
+}
+
+func (p *Product) UnmarshalJSON(b []byte) error {
+	var err error
+	var jd productJSONData
+	if err := json.Unmarshal(b, &jd); err != nil {
+		return err
+	}
+	p, err = NewProductFromJSONData(&jd)
+	return err
 }

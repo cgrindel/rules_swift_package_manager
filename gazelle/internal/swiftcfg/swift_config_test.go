@@ -83,7 +83,7 @@ func TestWriteAndReadDependencyIndex(t *testing.T) {
 
 	lbl := label.New("cool_repo", "Sources/Foo", "Foo")
 	m := swift.NewModule("Foo", lbl)
-	origsc.DependencyIndex.AddModule(m)
+	origsc.DependencyIndex.ModuleIndex.Add(m)
 
 	// Write the index
 	err = origsc.WriteDependencyIndex()
