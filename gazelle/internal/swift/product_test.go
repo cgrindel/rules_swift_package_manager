@@ -16,6 +16,6 @@ func TestProduct(t *testing.T) {
 		var p swift.Product
 		err = json.Unmarshal(data, &p)
 		assert.NoError(t, err)
-		assert.Equal(t, poultryP, p)
+		assert.Equal(t, poultryP, &p)
 	})
 }
