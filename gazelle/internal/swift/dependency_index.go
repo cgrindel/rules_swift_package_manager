@@ -19,30 +19,25 @@ func NewDependencyIndex() *DependencyIndex {
 	}
 }
 
-// func newDependencyIndexFromJSONData(jsonData *indexJSONData) (*DependencyIndex, error) {
-// 	// di := NewDependencyIndex()
-// 	// for modName, labelStrs := range jsonData.Modules {
-// 	// 	for _, labelStr := range labelStrs {
-// 	// 		lbl, err := label.Parse(labelStr)
-// 	// 		if err != nil {
-// 	// 			return nil, err
-// 	// 		}
-// 	// 		m := NewModule(modName, lbl)
-// 	// 		di.AddModule(m)
-// 	// 	}
-// 	// }
-// 	// di.ProductIndex = jsonData.Products
-// 	// return di, nil
-// 	// TODO(chuck): IMPLEMENT ME!
-// 	return nil, nil
-// }
-
 func NewDependencyIndexFromJSON(data []byte) (*DependencyIndex, error) {
 	var di DependencyIndex
 	if err := json.Unmarshal(data, &di); err != nil {
 		return nil, err
 	}
 	return &di, nil
+}
+
+func (di *DependencyIndex) JSON() ([]byte, error) {
+	b, err := json.Marshal(di)
+	if err != nil {
+		return nil, err
+	}
+	var buf bytes.Buffer
+	err = json.Indent(&buf, b, "", "  ")
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
 }
 
 // This is used to index any repository rules that are not already included in the module index
@@ -94,47 +89,4 @@ func (di *DependencyIndex) IndexBazelRepo(bzlRepo *BazelRepo) error {
 	}
 
 	return nil
-}
-
-// func (di *DependencyIndex) jsonOutput() *indexJSONData {
-// 	jd := &indexJSONData{
-// 		Modules: make(modulesJSONData),
-// 		Products: make(productsJSONData),
-// 	}
-// 	for modName, mods := range di.ModuleIndex {
-// 		labels := make([]string, len(mods))
-// 		for idx, mod := range mods {
-// 			labels[idx] = mod.Label.String()
-// 		}
-// 		// Sort the labels to ensure that they are consistent.
-// 		sort.Strings(labels)
-// 		jd.Modules[modName] = labels
-// 	}
-// 	return jd
-// }
-
-// func (di *DependencyIndex) MarshalJSON() ([]byte, error) {
-// 	b, err := json.Marshal(di.jsonOutput())
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	var buf bytes.Buffer
-// 	err = json.Indent(&buf, b, "", "  ")
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return buf.Bytes(), nil
-// }
-
-func (di *DependencyIndex) JSON() ([]byte, error) {
-	b, err := json.Marshal(di)
-	if err != nil {
-		return nil, err
-	}
-	var buf bytes.Buffer
-	err = json.Indent(&buf, b, "", "  ")
-	if err != nil {
-		return nil, err
-	}
-	return buf.Bytes(), nil
 }
