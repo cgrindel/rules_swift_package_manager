@@ -61,6 +61,7 @@ go_test(
         "module_name_test.go",
         "module_test.go",
         "product_index_test.go",
+        "product_test.go",
         "repo_rule_from_bazel_repo_test.go",
         "rule_kinds_test.go",
     ],

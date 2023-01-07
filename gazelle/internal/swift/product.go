@@ -1,7 +1,6 @@
 package swift
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 
@@ -108,7 +107,7 @@ func (p *Product) jsonData() *productJSONData {
 	}
 }
 
-func NewProductFromJSONData(jd *productJSONData) (*Product, error) {
+func newProductFromJSONData(jd *productJSONData) (*Product, error) {
 	var err error
 
 	var ptype ProductType
@@ -135,16 +134,7 @@ func NewProductFromJSONData(jd *productJSONData) (*Product, error) {
 }
 
 func (p *Product) MarshalJSON() ([]byte, error) {
-	b, err := json.Marshal(p.jsonData())
-	if err != nil {
-		return nil, err
-	}
-	var buf bytes.Buffer
-	err = json.Indent(&buf, b, "", "  ")
-	if err != nil {
-		return nil, err
-	}
-	return buf.Bytes(), nil
+	return json.Marshal(p.jsonData())
 }
 
 func (p *Product) UnmarshalJSON(b []byte) error {
@@ -153,7 +143,7 @@ func (p *Product) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, &jd); err != nil {
 		return err
 	}
-	newp, err := NewProductFromJSONData(&jd)
+	newp, err := newProductFromJSONData(&jd)
 	*p = *newp
 	return err
 }
