@@ -46,6 +46,7 @@ func TestModuleIndex(t *testing.T) {
 
 		var mi swift.ModuleIndex
 		err = json.Unmarshal(data, &mi)
+		assert.NoError(t, err)
 		assert.Equal(t, moduleIndex, mi)
 	})
 }

@@ -52,29 +52,25 @@ func (mi ModuleIndex) jsonData() moduleIndexJSONData {
 	return jd
 }
 
-func newModuleIndexFromJSONData(jd moduleIndexJSONData) (ModuleIndex, error) {
-	mi := make(ModuleIndex)
-	for mname, lblStrs := range jd {
-		for _, lblStr := range lblStrs {
-			l, err := NewLabel(lblStr)
-			if err != nil {
-				return nil, err
-			}
-			mi.Add(NewModule(mname, l))
-		}
-	}
-	return mi, nil
-}
-
 func (mi ModuleIndex) MarshalJSON() ([]byte, error) {
 	return json.Marshal(mi.jsonData())
 }
 
-func (mi ModuleIndex) UnmarshalJSON(b []byte) error {
+func (mi *ModuleIndex) UnmarshalJSON(b []byte) error {
 	var jd moduleIndexJSONData
 	if err := json.Unmarshal(b, &jd); err != nil {
 		return err
 	}
-	mi, err := newModuleIndexFromJSONData(jd)
-	return err
+	newmi := make(ModuleIndex)
+	for mname, lblStrs := range jd {
+		for _, lblStr := range lblStrs {
+			l, err := NewLabel(lblStr)
+			if err != nil {
+				return err
+			}
+			newmi.Add(NewModule(mname, l))
+		}
+	}
+	*mi = newmi
+	return nil
 }
