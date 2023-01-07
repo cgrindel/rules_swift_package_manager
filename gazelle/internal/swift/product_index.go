@@ -18,11 +18,6 @@ func NewProductIndexKeyFromProduct(p *Product) ProductIndexKey {
 
 type ProductIndex map[ProductIndexKey]*Product
 
-// func (pi ProductIndex) Add(p *Product) {
-// 	key := NewProductIndexKeyFromProduct(p)
-// 	pi[key] = p
-// }
-
 func (pi ProductIndex) Add(products ...*Product) {
 	for _, p := range products {
 		key := NewProductIndexKeyFromProduct(p)

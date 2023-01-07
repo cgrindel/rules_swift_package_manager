@@ -15,6 +15,7 @@ go_library(
         "http_archive.go",
         "imports.go",
         "is_builtin_module.go",
+        "label_str.go",
         "module.go",
         "module_dir.go",
         "module_index.go",

@@ -7,12 +7,6 @@ import (
 
 type ModuleIndex map[string]Modules
 
-// func (mi ModuleIndex) Add(m *Module) {
-// 	modules := mi[m.Name]
-// 	modules = append(modules, m)
-// 	mi[m.Name] = modules
-// }
-
 func (mi ModuleIndex) Add(modules ...*Module) {
 	for _, m := range modules {
 		cur_modules := mi[m.Name]
@@ -44,19 +38,43 @@ func (mi ModuleIndex) ModuleNames() []string {
 		names[idx] = modName
 		idx++
 	}
+	sort.Strings(names)
 	return names
 }
 
-func (mi ModuleIndex) jsonData() map[string][]string {
-	jd := make(map[string][]string)
+type moduleIndexJSONData map[string]LabelStrs
+
+func (mi ModuleIndex) jsonData() moduleIndexJSONData {
+	jd := make(moduleIndexJSONData)
 	for mname, modules := range mi {
-		names := modules.ModuleNames()
-		sort.Strings(names)
-		jd[mname] = names
+		jd[mname] = modules.LabelStrs()
 	}
 	return jd
 }
 
+func newModuleIndexFromJSONData(jd moduleIndexJSONData) (ModuleIndex, error) {
+	mi := make(ModuleIndex)
+	for mname, lblStrs := range jd {
+		for _, lblStr := range lblStrs {
+			l, err := NewLabel(lblStr)
+			if err != nil {
+				return nil, err
+			}
+			mi.Add(NewModule(mname, l))
+		}
+	}
+	return mi, nil
+}
+
 func (mi ModuleIndex) MarshalJSON() ([]byte, error) {
 	return json.Marshal(mi.jsonData())
+}
+
+func (mi ModuleIndex) UnmarshalJSON(b []byte) error {
+	var jd moduleIndexJSONData
+	if err := json.Unmarshal(b, &jd); err != nil {
+		return err
+	}
+	mi, err := newModuleIndexFromJSONData(jd)
+	return err
 }

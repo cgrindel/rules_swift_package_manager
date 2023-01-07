@@ -50,7 +50,7 @@ func NewHTTPArchiveFromRule(r *rule.Rule, repoRoot string) (*HTTPArchive, error)
 		}
 		moduleName := ModuleName(br)
 		l := label.New(repoName, "", br.Name())
-		m := NewModule(moduleName, l)
+		m := NewModule(moduleName, &l)
 		modules = append(modules, m)
 	}
 

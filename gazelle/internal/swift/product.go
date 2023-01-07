@@ -13,7 +13,7 @@ type productJSONData struct {
 	Identity     string
 	Name         string
 	Type         string
-	TargetLabels []string
+	TargetLabels LabelStrs
 }
 
 type ProductType int
@@ -37,10 +37,10 @@ type Product struct {
 	Identity     string
 	Name         string
 	Type         ProductType
-	TargetLabels []label.Label
+	TargetLabels []*label.Label
 }
 
-func NewProduct(identity, name string, ptype ProductType, targetLabels []label.Label) *Product {
+func NewProduct(identity, name string, ptype ProductType, targetLabels []*label.Label) *Product {
 	return &Product{
 		Identity:     identity,
 		Name:         name,
@@ -66,7 +66,7 @@ func NewProductFromPkgInfoProduct(
 	}
 
 	pi := bzlRepo.PkgInfo
-	targetLabels := make([]label.Label, len(prd.Targets))
+	targetLabels := make([]*label.Label, len(prd.Targets))
 	for idx, tname := range prd.Targets {
 		t := pi.Targets.FindByName(tname)
 		if t == nil {
@@ -95,9 +95,9 @@ func (p *Product) jsonData() *productJSONData {
 		ptype = UnknownProductTypeStr
 	}
 
-	targetLabels := make([]string, len(p.TargetLabels))
+	targetLabels := make(LabelStrs, len(p.TargetLabels))
 	for idx, tl := range p.TargetLabels {
-		targetLabels[idx] = tl.String()
+		targetLabels[idx] = NewLabelStr(tl)
 	}
 
 	return &productJSONData{
@@ -123,9 +123,9 @@ func NewProductFromJSONData(jd *productJSONData) (*Product, error) {
 		ptype = UnknownProductType
 	}
 
-	targetLabels := make([]label.Label, len(jd.TargetLabels))
+	targetLabels := make([]*label.Label, len(jd.TargetLabels))
 	for idx, tl := range jd.TargetLabels {
-		targetLabels[idx], err = label.Parse(tl)
+		targetLabels[idx], err = NewLabel(tl)
 		if err != nil {
 			return nil, err
 		}
@@ -153,6 +153,7 @@ func (p *Product) UnmarshalJSON(b []byte) error {
 	if err := json.Unmarshal(b, &jd); err != nil {
 		return err
 	}
-	p, err = NewProductFromJSONData(&jd)
+	newp, err := NewProductFromJSONData(&jd)
+	*p = *newp
 	return err
 }
