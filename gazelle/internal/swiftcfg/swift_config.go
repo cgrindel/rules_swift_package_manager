@@ -12,6 +12,8 @@ import (
 )
 
 const SwiftConfigName = "swift"
+
+// TODO(chuck): Rename to swift_deps_index.json
 const DefaultDependencyIndexBasename = "deps_index.json"
 const dependencyIndexPerms = 0666
 

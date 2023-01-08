@@ -22,7 +22,7 @@ def make_pkginfo_target_deps(bazel_labels):
 
         if target_dep.by_name:
             labels = lists.compact([
-                deps_indexes.resolve_module_with_ctx(
+                deps_indexes.resolve_module_label_with_ctx(
                     pkg_ctx.deps_index_ctx,
                     target_dep.by_name.name,
                 ),
@@ -34,7 +34,7 @@ Unable to resolve by_name target dependency for {module_name}.
 
         elif target_dep.target:
             labels = lists.compact([
-                deps_indexes.resolve_module_with_ctx(
+                deps_indexes.resolve_module_label_with_ctx(
                     pkg_ctx.deps_index_ctx,
                     target_dep.target.target_name,
                 ),
@@ -46,7 +46,7 @@ Unable to resolve target reference target dependency for {module_name}.
 
         elif target_dep.product:
             prod_ref = target_dep.product
-            labels = deps_indexes.resolve_product(
+            labels = deps_indexes.resolve_product_labels(
                 deps_index = pkg_ctx.deps_index_ctx.deps_index,
                 identity = prod_ref.dep_identity,
                 name = prod_ref.product_name,

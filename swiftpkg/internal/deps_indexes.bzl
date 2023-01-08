@@ -57,7 +57,7 @@ def _new_product(identity, name, type, target_labels):
         target_labels = target_labels,
     )
 
-def _resolve_module(
+def _resolve_module_label(
         deps_index,
         module_name,
         preferred_repo_name = None,
@@ -106,6 +106,42 @@ def _resolve_module(
 
     return label
 
+def _new_product_index_key(identity, name):
+    return identity.lower() + "|" + name
+
+def _find_product(deps_index, identity, name):
+    """Retrieves the product based upon the identity and the name.
+
+    Args:
+        deps_index: A `dict` as returned by `deps_indexes.new_from_json`.
+        identity: The dependency identity as a `string`.
+        name: The product name as a `string`.
+
+    Returns:
+        A product `struct` as returned by `deps_indexes.new_product`. If not
+        found, returns `None`.
+    """
+    key = _new_product_index_key(identity, name)
+    return deps_index.products.get(key)
+
+def _resolve_product_labels(deps_index, identity, name):
+    """Returns the Bazel labels that represent the specified product.
+
+    Args:
+        deps_index: A `dict` as returned by `deps_indexes.new_from_json`.
+        identity: The dependency identity as a `string`.
+        name: The product name as a `string`.
+
+    Returns:
+        A `list` of Bazel label `struct` values as returned by
+        `bazel_labels.new`. If the product is not found, an empty `list` is
+        returned.
+    """
+    product = _find_product(deps_index, identity, name)
+    if product == None:
+        return []
+    return product.target_labels
+
 def _new_ctx(deps_index, preferred_repo_name = None, restrict_to_repo_names = []):
     """Create a new context struct that encapsulates a dependency index along with \
     select lookup criteria.
@@ -127,7 +163,7 @@ def _new_ctx(deps_index, preferred_repo_name = None, restrict_to_repo_names = []
         restrict_to_repo_names = restrict_to_repo_names,
     )
 
-def _resolve_module_with_ctx(deps_index_ctx, module_name):
+def _resolve_module_label_with_ctx(deps_index_ctx, module_name):
     """Finds a Bazel label that provides the specified module.
 
     Args:
@@ -137,7 +173,7 @@ def _resolve_module_with_ctx(deps_index_ctx, module_name):
     Returns:
         A `struct` as returned by `bazel_labels.new`.
     """
-    return _resolve_module(
+    return _resolve_module_label(
         deps_index = deps_index_ctx.deps_index,
         module_name = module_name,
         preferred_repo_name = deps_index_ctx.preferred_repo_name,
@@ -149,6 +185,8 @@ deps_indexes = struct(
     new_ctx = _new_ctx,
     new_from_json = _new_from_json,
     new_product = _new_product,
-    resolve_module = _resolve_module,
-    resolve_module_with_ctx = _resolve_module_with_ctx,
+    find_product = _find_product,
+    resolve_module_label = _resolve_module_label,
+    resolve_module_label_with_ctx = _resolve_module_label_with_ctx,
+    resolve_product_labels = _resolve_product_labels,
 )
