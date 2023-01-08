@@ -28,8 +28,12 @@ def make_pkginfo_target_deps(bazel_labels):
                 ),
             ])
             if len(labels) == 0:
-                fail("""\
-Unable to resolve by_name target dependency for {module_name}.
+                # Seeing Package.swift files with byName dependencies that
+                # cannot be resolved (i.e., they do not exist). Print a warning
+                # and keep moving. Example `protoc-gen-swift` in
+                # `https://github.com/grpc/grpc-swift.git`.
+                print("""\
+Unable to resolve by_name target dependency for {module_name}.\
 """.format(module_name = target_dep.by_name.name))
 
         elif target_dep.target:
@@ -41,7 +45,7 @@ Unable to resolve by_name target dependency for {module_name}.
             ])
             if len(labels) == 0:
                 fail("""\
-Unable to resolve target reference target dependency for {module_name}.
+Unable to resolve target reference target dependency for {module_name}.\
 """.format(module_name = target_dep.target.target_name))
 
         elif target_dep.product:
