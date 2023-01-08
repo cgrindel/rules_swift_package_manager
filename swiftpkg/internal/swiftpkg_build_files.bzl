@@ -27,10 +27,10 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
 # MARK: - Swift Target
 
 def _swift_target_build_file(repository_ctx, pkg_ctx, target):
-    deps = [
-        pkginfo_target_deps.bazel_label_str(pkg_ctx, td)
+    deps = lists.flatten([
+        pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
         for td in target.dependencies
-    ]
+    ])
     attrs = {
         # SPM directive instructing the code to build as if a Swift package.
         # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
@@ -110,10 +110,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         public_includes = None,
         remove_prefix = "{}/".format(pkg_ctx.pkg_info.path),
     )
-    deps = [
-        pkginfo_target_deps.bazel_label_str(pkg_ctx, td)
+    deps = lists.flatten([
+        pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
         for td in target.dependencies
-    ]
+    ])
     attrs = {
         # These flags are used by SPM when compiling clang modules.
         "copts": [

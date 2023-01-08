@@ -101,11 +101,14 @@ _pkg_info = pkginfos.new(
     ],
 )
 
-_module_index_json = """
+_deps_index_json = """
 {
-  "swiftlint": ["@realm_swiftlint//:Source_swiftlint"],
-  "SwiftLintFramework": ["@realm_swiftlint//:Source_SwiftLintFramework"],
-  "SwiftLintFrameworkTests": ["@realm_swiftlint//:Tests_SwiftLintFrameworkTests"]
+  "modules": {
+    "swiftlint": ["@realm_swiftlint//:Source_swiftlint"],
+    "SwiftLintFramework": ["@realm_swiftlint//:Source_SwiftLintFramework"],
+    "SwiftLintFrameworkTests": ["@realm_swiftlint//:Tests_SwiftLintFrameworkTests"]
+  },
+  "products": {}
 }
 """
 
@@ -114,7 +117,7 @@ _repo_name = "@realm_swiftlint"
 _pkg_ctx = pkg_ctxs.new(
     pkg_info = _pkg_info,
     repo_name = _repo_name,
-    module_index_json = _module_index_json,
+    deps_index_json = _deps_index_json,
 )
 
 def new_stub_repository_ctx():

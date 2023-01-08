@@ -1,14 +1,14 @@
-"""Tests for `module_indexes.bzl` module."""
+"""Tests for `deps_indexes.bzl` module."""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels")
-load("//swiftpkg/internal:module_indexes.bzl", "module_indexes")
+load("//swiftpkg/internal:deps_indexes.bzl", "deps_indexes")
 
 def _new_from_json_test(ctx):
     env = unittest.begin(ctx)
 
-    actual = _module_index
-    expected = {
+    actual = _deps_index
+    expected_modules = {
         "ArgumentParser": [
             bazel_labels.new(
                 repository_name = "@apple_swift_argument_parser",
@@ -43,27 +43,28 @@ def _new_from_json_test(ctx):
             ),
         ],
     }
+    expected = deps_indexes.new(modules = expected_modules)
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)
 
 new_from_json_test = unittest.make(_new_from_json_test)
 
-def _find_test(ctx):
+def _resolve_module_test(ctx):
     env = unittest.begin(ctx)
 
     # Find any label that provides Foo
-    actual = module_indexes.find(_module_index, "Foo")
+    actual = deps_indexes.resolve_module(_deps_index, "Foo")
     asserts.equals(env, "@example_cool_repo", actual.repository_name)
     asserts.equals(env, "Foo", actual.name)
 
     # Module not in index
-    actual = module_indexes.find(_module_index, "Bar")
+    actual = deps_indexes.resolve_module(_deps_index, "Bar")
     asserts.equals(env, None, actual)
 
     # Preferred repo name exists
-    actual = module_indexes.find(
-        _module_index,
+    actual = deps_indexes.resolve_module(
+        _deps_index,
         "Foo",
         preferred_repo_name = "example_another_repo",
     )
@@ -71,8 +72,8 @@ def _find_test(ctx):
     asserts.equals(env, "Foo", actual.name)
 
     # Preferred repo name not found
-    actual = module_indexes.find(
-        _module_index,
+    actual = deps_indexes.resolve_module(
+        _deps_index,
         "ArgumentParser",
         preferred_repo_name = "example_another_repo",
     )
@@ -80,8 +81,8 @@ def _find_test(ctx):
     asserts.equals(env, "ArgumentParser", actual.name)
 
     # Restrict to repos, found one
-    actual = module_indexes.find(
-        _module_index,
+    actual = deps_indexes.resolve_module(
+        _deps_index,
         "Foo",
         restrict_to_repo_names = ["some_other_repo", "example_another_repo"],
     )
@@ -89,16 +90,16 @@ def _find_test(ctx):
     asserts.equals(env, "Foo", actual.name)
 
     # Restrict to repos, not found
-    actual = module_indexes.find(
-        _module_index,
+    actual = deps_indexes.resolve_module(
+        _deps_index,
         "Foo",
         restrict_to_repo_names = ["some_other_repo"],
     )
     asserts.equals(env, None, actual)
 
     # Preferred repo and restrict to repos, found preferred
-    actual = module_indexes.find(
-        _module_index,
+    actual = deps_indexes.resolve_module(
+        _deps_index,
         "Foo",
         preferred_repo_name = "example_cool_repo",
         restrict_to_repo_names = ["example_cool_repo", "example_another_repo"],
@@ -107,8 +108,8 @@ def _find_test(ctx):
     asserts.equals(env, "Foo", actual.name)
 
     # Preferred repo and restrict to repos, found not preferred
-    actual = module_indexes.find(
-        _module_index,
+    actual = deps_indexes.resolve_module(
+        _deps_index,
         "Foo",
         preferred_repo_name = "some_other_repo",
         restrict_to_repo_names = ["some_other_repo", "example_another_repo"],
@@ -118,48 +119,51 @@ def _find_test(ctx):
 
     return unittest.end(env)
 
-find_test = unittest.make(_find_test)
+resolve_module_test = unittest.make(_resolve_module_test)
 
-def _find_with_ctx_test(ctx):
+def _resolve_module_with_ctx_test(ctx):
     env = unittest.begin(ctx)
 
-    module_index_ctx = module_indexes.new_ctx(
-        module_index = _module_index,
+    deps_index_ctx = deps_indexes.new_ctx(
+        deps_index = _deps_index,
         preferred_repo_name = "example_cool_repo",
         restrict_to_repo_names = ["example_cool_repo", "example_another_repo"],
     )
-    actual = module_indexes.find_with_ctx(module_index_ctx, "Foo")
+    actual = deps_indexes.resolve_module_with_ctx(deps_index_ctx, "Foo")
     asserts.equals(env, "@example_cool_repo", actual.repository_name)
     asserts.equals(env, "Foo", actual.name)
 
     return unittest.end(env)
 
-find_with_ctx_test = unittest.make(_find_with_ctx_test)
+resolve_module_with_ctx_test = unittest.make(_resolve_module_with_ctx_test)
 
-def module_indexes_test_suite():
+def deps_indexes_test_suite():
     return unittest.suite(
-        "module_indexes_tests",
+        "deps_indexes_tests",
         new_from_json_test,
-        find_test,
-        find_with_ctx_test,
+        resolve_module_test,
+        resolve_module_with_ctx_test,
     )
 
-_module_index_json = """
+_deps_index_json = """
 {
-  "ArgumentParser": [
-    "@apple_swift_argument_parser//Sources/ArgumentParser"
-  ],
-  "Foo": [
-    "@example_cool_repo//:Foo",
-    "@example_another_repo//Sources/Foo"
-  ],
-  "Generate_Manual": [
-    "@apple_swift_argument_parser//Plugins/GenerateManualPlugin:Generate_Manual"
-  ],
-  "Logging": [
-    "@apple_swift_log//Sources/Logging"
-  ]
+  "modules": {
+    "ArgumentParser": [
+      "@apple_swift_argument_parser//Sources/ArgumentParser"
+    ],
+    "Foo": [
+      "@example_cool_repo//:Foo",
+      "@example_another_repo//Sources/Foo"
+    ],
+    "Generate_Manual": [
+      "@apple_swift_argument_parser//Plugins/GenerateManualPlugin:Generate_Manual"
+    ],
+    "Logging": [
+      "@apple_swift_log//Sources/Logging"
+    ]
+  },
+  "products": {}
 }
 """
 
-_module_index = module_indexes.new_from_json(_module_index_json)
+_deps_index = deps_indexes.new_from_json(_deps_index_json)

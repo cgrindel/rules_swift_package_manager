@@ -9,10 +9,9 @@ load(":spm_versions.bzl", "spm_versions")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
 _swift_attrs = {
-    "module_index": attr.label(
+    "dependencies_index": attr.label(
         doc = """\
-A JSON file that contains a mapping of Swift module names to Bazel targets \
-that provide a module with that name.\
+A JSON file that contains a mapping of Swift products and Swift modules.\
 """,
         mandatory = True,
     ),
@@ -62,8 +61,8 @@ def _gen_build_files(repository_ctx, pkg_info):
     pkg_ctx = pkg_ctxs.new(
         pkg_info = pkg_info,
         repo_name = repo_name,
-        module_index_json = repository_ctx.read(
-            repository_ctx.attr.module_index,
+        deps_index_json = repository_ctx.read(
+            repository_ctx.attr.dependencies_index,
         ),
     )
 

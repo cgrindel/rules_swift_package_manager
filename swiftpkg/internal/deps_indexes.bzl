@@ -11,28 +11,61 @@ def _new_from_json(json_str):
         json_str: A JSON `string` value.
 
     Returns:
-        A `dict` where the keys are module names (`string`) and the values are
-        `list` values that contain struct values as returned by `bazel_labels.new`.
+        A `struct` that contains indexes for external dependencies.
     """
     orig_dict = json.decode(json_str)
-    parsed_dict = {
+    orig_modules_dict = orig_dict["modules"]
+    modules_dict = {
         mod_name: [
             bazel_labels.parse(lbl_str)
             for lbl_str in lbl_strs
         ]
-        for (mod_name, lbl_strs) in orig_dict.items()
+        for (mod_name, lbl_strs) in orig_modules_dict.items()
     }
-    return parsed_dict
+    orig_products_dict = orig_dict["products"]
+    products_dict = {
+        key: _new_product_from_dict(prd_dict)
+        for (key, prd_dict) in orig_products_dict.items()
+    }
+    return struct(
+        modules = modules_dict,
+        products = products_dict,
+    )
 
-def _find(
-        module_index,
+def _new(modules = {}, products = {}):
+    return struct(
+        modules = modules,
+        products = products,
+    )
+
+def _new_product_from_dict(prd_dict):
+    return _new_product(
+        identity = prd_dict["identity"],
+        name = prd_dict["name"],
+        type = prd_dict["type"],
+        target_labels = [
+            bazel_labels.parse(lbl_str)
+            for lbl_str in prd_dict["target_labels"]
+        ],
+    )
+
+def _new_product(identity, name, type, target_labels):
+    return struct(
+        identity = identity,
+        name = name,
+        type = type,
+        target_labels = target_labels,
+    )
+
+def _resolve_module(
+        deps_index,
         module_name,
         preferred_repo_name = None,
         restrict_to_repo_names = []):
     """Finds a Bazel label that provides the specified module.
 
     Args:
-        module_index: A `dict` as returned by `module_indexes.new_from_json`.
+        deps_index: A `dict` as returned by `deps_indexes.new_from_json`.
         module_name: The name of the module as a `string`
         preferred_repo_name: Optional. If a target in this repository provides
             the module, prefer it.
@@ -46,7 +79,7 @@ def _find(
     # Resolve for the module label by passing along the current repo
     # name (preferred) and a list of preferred repositories (those
     # listed in the package's dependencies).  If not found, then fail.
-    labels = module_index.get(module_name, default = [])
+    labels = deps_index.modules.get(module_name, default = [])
     if len(labels) == 0:
         return None
 
@@ -73,12 +106,12 @@ def _find(
 
     return label
 
-def _new_ctx(module_index, preferred_repo_name = None, restrict_to_repo_names = []):
-    """Create a new context struct that encapsulates a module index along with \
+def _new_ctx(deps_index, preferred_repo_name = None, restrict_to_repo_names = []):
+    """Create a new context struct that encapsulates a dependency index along with \
     select lookup criteria.
 
     Args:
-        module_index: A `dict` as returned by `module_indexes.new_from_json`.
+        deps_index: A `dict` as returned by `deps_indexes.new_from_json`.
         preferred_repo_name: Optional. If a target in this repository provides
             the module, prefer it.
         restrict_to_repo_names: Optional. A `list` of repository names to
@@ -89,31 +122,33 @@ def _new_ctx(module_index, preferred_repo_name = None, restrict_to_repo_names = 
         criteria.
     """
     return struct(
-        module_index = module_index,
+        deps_index = deps_index,
         preferred_repo_name = preferred_repo_name,
         restrict_to_repo_names = restrict_to_repo_names,
     )
 
-def _find_with_ctx(module_index_ctx, module_name):
+def _resolve_module_with_ctx(deps_index_ctx, module_name):
     """Finds a Bazel label that provides the specified module.
 
     Args:
-        module_index_ctx: A `struct` as returned by `module_indexes.new_ctx`.
+        deps_index_ctx: A `struct` as returned by `deps_indexes.new_ctx`.
         module_name: The name of the module as a `string`
 
     Returns:
         A `struct` as returned by `bazel_labels.new`.
     """
-    return _find(
-        module_index = module_index_ctx.module_index,
+    return _resolve_module(
+        deps_index = deps_index_ctx.deps_index,
         module_name = module_name,
-        preferred_repo_name = module_index_ctx.preferred_repo_name,
-        restrict_to_repo_names = module_index_ctx.restrict_to_repo_names,
+        preferred_repo_name = deps_index_ctx.preferred_repo_name,
+        restrict_to_repo_names = deps_index_ctx.restrict_to_repo_names,
     )
 
-module_indexes = struct(
-    new_from_json = _new_from_json,
-    find = _find,
+deps_indexes = struct(
+    new = _new,
     new_ctx = _new_ctx,
-    find_with_ctx = _find_with_ctx,
+    new_from_json = _new_from_json,
+    new_product = _new_product,
+    resolve_module = _resolve_module,
+    resolve_module_with_ctx = _resolve_module_with_ctx,
 )

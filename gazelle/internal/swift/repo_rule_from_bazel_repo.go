@@ -32,7 +32,7 @@ func RepoRuleFromBazelRepo(bzlRepo *BazelRepo, miBasename string, pkgDir string)
 
 	// The module index is located at the root of the parent workspace.
 	miLbl := label.New("@", "", miBasename)
-	r.SetAttr("module_index", miLbl.String())
+	r.SetAttr("dependencies_index", miLbl.String())
 
 	return r, nil
 }

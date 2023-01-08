@@ -9,10 +9,10 @@ import (
 )
 
 type productJSONData struct {
-	Identity     string
-	Name         string
-	Type         string
-	TargetLabels LabelStrs
+	Identity     string    `json:"identity"`
+	Name         string    `json:"name"`
+	Type         string    `json:"type"`
+	TargetLabels LabelStrs `json:"target_labels"`
 }
 
 type ProductType int
