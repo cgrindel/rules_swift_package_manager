@@ -1,6 +1,7 @@
 package swift_test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/bazelbuild/bazel-gazelle/label"
@@ -31,18 +32,34 @@ func init() {
 }
 
 func TestProductIndex(t *testing.T) {
-	actual := productIndex.Resolve("farm", "Poultry")
-	assert.Equal(t, poultryP, actual)
+	t.Run("resolve", func(t *testing.T) {
+		actual := productIndex.Resolve("farm", "Poultry")
+		assert.Equal(t, poultryP, actual)
 
-	// Chicken is not a product
-	actual = productIndex.Resolve("farm", "Chicken")
-	assert.Nil(t, actual)
+		// Chicken is not a product
+		actual = productIndex.Resolve("farm", "Chicken")
+		assert.Nil(t, actual)
 
-	// Hen is not a product
-	actual = productIndex.Resolve("farm", "Hen")
-	assert.Nil(t, actual)
+		// Hen is not a product
+		actual = productIndex.Resolve("farm", "Hen")
+		assert.Nil(t, actual)
 
-	// Be sure that we disambiguate bewteen the different products named Poultry.
-	actual = productIndex.Resolve("zoo", "Poultry")
-	assert.Equal(t, anotherPoultryP, actual)
+		// Be sure that we disambiguate bewteen the different products named Poultry.
+		actual = productIndex.Resolve("zoo", "Poultry")
+		assert.Equal(t, anotherPoultryP, actual)
+	})
+	t.Run("products", func(t *testing.T) {
+		actual := productIndex.Products()
+		expected := []*swift.Product{poultryP, anotherPoultryP}
+		assert.Equal(t, expected, actual)
+	})
+	t.Run("JSON roundtrip", func(t *testing.T) {
+		data, err := json.Marshal(productIndex)
+		assert.NoError(t, err)
+
+		var pi swift.ProductIndex
+		err = json.Unmarshal(data, &pi)
+		assert.NoError(t, err)
+		assert.Equal(t, productIndex, pi)
+	})
 }

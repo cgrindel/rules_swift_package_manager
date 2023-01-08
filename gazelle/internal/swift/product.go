@@ -79,6 +79,10 @@ func NewProductFromPkgInfoProduct(
 	return NewProduct(bzlRepo.Identity, prd.Name, ptype, targetLabels), nil
 }
 
+func (p *Product) IndexKey() ProductIndexKey {
+	return NewProductIndexKey(p.Identity, p.Name)
+}
+
 // JSON Output
 
 func (p *Product) jsonData() *productJSONData {
