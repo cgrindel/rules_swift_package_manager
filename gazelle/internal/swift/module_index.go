@@ -38,17 +38,6 @@ func (mi ModuleIndex) Resolve(repoName, moduleName string) *Module {
 	return modules[0]
 }
 
-func (mi ModuleIndex) ModuleNames() []string {
-	names := make([]string, len(mi))
-	idx := 0
-	for modName := range mi {
-		names[idx] = modName
-		idx++
-	}
-	sort.Strings(names)
-	return names
-}
-
 // Return a unique list of modules.
 func (mi ModuleIndex) Modules() Modules {
 	var labels []string
@@ -70,16 +59,6 @@ func (mi ModuleIndex) Modules() Modules {
 	return result
 }
 
-// type moduleIndexJSONData map[string]LabelStrs
-
-// func (mi ModuleIndex) jsonData() moduleIndexJSONData {
-// 	jd := make(moduleIndexJSONData)
-// 	for mname, modules := range mi {
-// 		jd[mname] = modules.LabelStrs()
-// 	}
-// 	return jd
-// }
-
 func (mi ModuleIndex) MarshalJSON() ([]byte, error) {
 	return json.Marshal(mi.Modules())
 }
@@ -93,21 +72,4 @@ func (mi *ModuleIndex) UnmarshalJSON(b []byte) error {
 	newmi.Add(modules...)
 	*mi = newmi
 	return nil
-
-	// var jd moduleIndexJSONData
-	// if err := json.Unmarshal(b, &jd); err != nil {
-	// 	return err
-	// }
-	// newmi := make(ModuleIndex)
-	// for mname, lblStrs := range jd {
-	// 	for _, lblStr := range lblStrs {
-	// 		l, err := NewLabel(lblStr)
-	// 		if err != nil {
-	// 			return err
-	// 		}
-	// 		newmi.Add(NewModule(mname, l))
-	// 	}
-	// }
-	// *mi = newmi
-	// return nil
 }

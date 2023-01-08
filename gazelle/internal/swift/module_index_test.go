@@ -35,11 +35,6 @@ func TestModuleIndex(t *testing.T) {
 		actual = moduleIndex.Resolve("another_repo", "Foo")
 		assert.Equal(t, anotherRepoFooM, actual)
 	})
-	t.Run("module names", func(t *testing.T) {
-		actual := moduleIndex.ModuleNames()
-		expected := []string{"Bar", "Foo"}
-		assert.Equal(t, expected, actual)
-	})
 	t.Run("modules", func(t *testing.T) {
 		t.Error("IMPLEMENT ME!")
 	})
