@@ -9,10 +9,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var fooM = swift.NewModuleFromLabelStruct("Foo", label.New("", "Sources/Foo", "Foo"))
-var barM = swift.NewModuleFromLabelStruct("Bar", label.New("", "Sources/Bar", "Bar"))
+var fooM = swift.NewModuleFromLabelStruct("Foo", "Foo", label.New("", "Sources/Foo", "Foo"))
+var barM = swift.NewModuleFromLabelStruct("Bar", "Bar", label.New("", "Sources/Bar", "Bar"))
 var anotherRepoFooM = swift.NewModuleFromLabelStruct(
-	"Foo", label.New("another_repo", "pkg/path", "Foo"))
+	"Foo", "Foo", label.New("another_repo", "pkg/path", "Foo"))
 var moduleIndex = make(swift.ModuleIndex)
 
 func init() {
@@ -39,6 +39,9 @@ func TestModuleIndex(t *testing.T) {
 		actual := moduleIndex.ModuleNames()
 		expected := []string{"Bar", "Foo"}
 		assert.Equal(t, expected, actual)
+	})
+	t.Run("modules", func(t *testing.T) {
+		t.Error("IMPLEMENT ME!")
 	})
 	t.Run("JSON roundtrip", func(t *testing.T) {
 		data, err := json.Marshal(moduleIndex)

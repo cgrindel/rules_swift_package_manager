@@ -7,26 +7,28 @@ import (
 
 // Represents a Swift module mapped to a Bazel target.
 type Module struct {
-	Name  string
-	Label *label.Label
+	Name    string       `json:"name"`
+	C99name string       `json:"c99name"`
+	Label   *label.Label `json:"label"`
 }
 
-func NewModule(name string, bzlLabel *label.Label) *Module {
+func NewModule(name, c99name string, bzlLabel *label.Label) *Module {
 	return &Module{
-		Name:  name,
-		Label: bzlLabel,
+		Name:    name,
+		C99name: c99name,
+		Label:   bzlLabel,
 	}
 }
 
 // NewModuleFromLabelStruct is a convenience function because label.New returns a struct, not a
 // pointer.
-func NewModuleFromLabelStruct(name string, bzlLabel label.Label) *Module {
-	return NewModule(name, &bzlLabel)
+func NewModuleFromLabelStruct(name, c99name string, bzlLabel label.Label) *Module {
+	return NewModule(name, c99name, &bzlLabel)
 }
 
 func NewModuleFromTarget(repoName string, t *swiftpkg.Target) (*Module, error) {
 	lbl := BazelLabelFromTarget(repoName, t)
-	return NewModule(t.C99name, lbl), nil
+	return NewModule(t.Name, t.C99name, lbl), nil
 }
 
 func (m *Module) LabelStr() LabelStr {
