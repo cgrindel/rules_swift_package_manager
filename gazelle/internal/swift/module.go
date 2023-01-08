@@ -1,15 +1,17 @@
 package swift
 
 import (
+	"encoding/json"
+
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 )
 
 // Represents a Swift module mapped to a Bazel target.
 type Module struct {
-	Name    string       `json:"name"`
-	C99name string       `json:"c99name"`
-	Label   *label.Label `json:"label"`
+	Name    string
+	C99name string
+	Label   *label.Label
 }
 
 func NewModule(name, c99name string, bzlLabel *label.Label) *Module {
@@ -45,4 +47,33 @@ func (modules Modules) LabelStrs() LabelStrs {
 		labelStrs[idx] = NewLabelStr(m.Label)
 	}
 	return labelStrs
+}
+
+type moduleJSONData struct {
+	Name    string `json:"name"`
+	C99name string `json:"c99name"`
+	Label   string `json:"label"`
+}
+
+func (m *Module) MarshalJSON() ([]byte, error) {
+	jd := &moduleJSONData{
+		Name:    m.Name,
+		C99name: m.C99name,
+		Label:   m.Label.String(),
+	}
+	return json.Marshal(&jd)
+}
+
+func (m *Module) UnmarshalJSON(b []byte) error {
+	var jd moduleJSONData
+	if err := json.Unmarshal(b, &jd); err != nil {
+		return err
+	}
+	l, err := label.Parse(jd.Label)
+	if err != nil {
+		return err
+	}
+	newm := NewModule(jd.Name, jd.C99name, &l)
+	*m = *newm
+	return nil
 }
