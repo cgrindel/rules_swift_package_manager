@@ -9,7 +9,8 @@ load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
 load("//swiftpkg/internal:pkginfos.bzl", "library_type_kinds", "pkginfos")
 load(
     "//swiftpkg/internal:swiftpkg_build_files.bzl",
-    "native_kinds",
+    "skylib_build_test_load_stmt",
+    "skylib_kinds",
     "swift_kinds",
     "swift_library_load_stmt",
     "swift_location",
@@ -103,14 +104,25 @@ _pkg_info = pkginfos.new(
 
 _deps_index_json = """
 {
-  "modules": {
-    "swiftlint": ["@realm_swiftlint//:Source_swiftlint"],
-    "SwiftLintFramework": ["@realm_swiftlint//:Source_SwiftLintFramework"],
-    "SwiftLintFrameworkTests": ["@realm_swiftlint//:Tests_SwiftLintFrameworkTests"]
-  },
+  "modules": [
+    {"name": "swiftlint", "c99name": "swiftlint", "label": "@realm_swiftlint//:Source_swiftlint"},
+    {"name": "SwiftLintFramework", "c99name": "SwiftLintFramework", "label": "@realm_swiftlint//:Source_SwiftLintFramework"},
+    {"name": "SwiftLintFrameworkTests", "c99name": "SwiftLintFrameworkTests", "label": "@realm_swiftlint//:Source_SwiftLintFrameworkTests"}
+  ],
   "products": {}
 }
 """
+
+# _deps_index_json = """
+# {
+#   "modules": {
+#     "swiftlint": ["@realm_swiftlint//:Source_swiftlint"],
+#     "SwiftLintFramework": ["@realm_swiftlint//:Source_SwiftLintFramework"],
+#     "SwiftLintFrameworkTests": ["@realm_swiftlint//:Tests_SwiftLintFrameworkTests"]
+#   },
+#   "products": {}
+# }
+# """
 
 _repo_name = "@realm_swiftlint"
 
@@ -232,14 +244,15 @@ def _products_test(ctx):
     actual = swiftpkg_build_files.new_for_products(_pkg_info, _repo_name)
     expected = build_files.new(
         load_stmts = [
+            skylib_build_test_load_stmt,
             load_statements.new(swift_location, swift_kinds.binary),
         ],
         decls = [
             build_decls.new(
-                kind = native_kinds.alias,
-                name = "SwiftLintFramework",
+                kind = skylib_kinds.build_test,
+                name = "SwiftLintFrameworkBuildTest",
                 attrs = {
-                    "actual": "@realm_swiftlint//:Source_SwiftLintFramework",
+                    "targets": ["@realm_swiftlint//:Source_SwiftLintFramework"],
                     "visibility": ["//visibility:public"],
                 },
             ),

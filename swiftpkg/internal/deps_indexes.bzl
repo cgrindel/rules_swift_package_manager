@@ -13,29 +13,54 @@ def _new_from_json(json_str):
     Returns:
         A `struct` that contains indexes for external dependencies.
     """
+    mi = {}
+    pi = {}
+
+    # buildifier: disable=uninitialized
+    def _add_module(m):
+        entries = mi.get(m.name, default = [])
+        entries.append(m)
+        mi[m.name] = entries
+        if m.name != m.c99name:
+            entries = mi.get(m.c99name, default = [])
+            entries.append(m)
+            mi[m.c99name] = entries
+
+    # buildifier: disable=uninitialized
+    def _add_product(p):
+        key = _new_product_index_key(p.identity, p.name)
+        pi[key] = p
+
     orig_dict = json.decode(json_str)
-    orig_modules_dict = orig_dict["modules"]
-    modules_dict = {
-        mod_name: [
-            bazel_labels.parse(lbl_str)
-            for lbl_str in lbl_strs
-        ]
-        for (mod_name, lbl_strs) in orig_modules_dict.items()
-    }
-    orig_products_dict = orig_dict["products"]
-    products_dict = {
-        key: _new_product_from_dict(prd_dict)
-        for (key, prd_dict) in orig_products_dict.items()
-    }
-    return struct(
-        modules = modules_dict,
-        products = products_dict,
+    for mod_dict in orig_dict["modules"]:
+        m = _new_module_from_dict(mod_dict)
+        _add_module(m)
+    for prod_dict in orig_dict["products"]:
+        p = _new_product_from_dict(prod_dict)
+        _add_product(p)
+    return _new(
+        modules = mi,
+        products = pi,
     )
 
 def _new(modules = {}, products = {}):
     return struct(
         modules = modules,
         products = products,
+    )
+
+def _new_module_from_dict(mod_dict):
+    return _new_module(
+        name = mod_dict["name"],
+        c99name = mod_dict["c99name"],
+        label = bazel_labels.parse(mod_dict["label"]),
+    )
+
+def _new_module(name, c99name, label):
+    return struct(
+        name = name,
+        c99name = c99name,
+        label = label,
     )
 
 def _new_product_from_dict(prd_dict):
@@ -75,13 +100,17 @@ def _resolve_module_label(
     Returns:
         A `struct` as returned by `bazel_labels.new`.
     """
-
-    # Resolve for the module label by passing along the current repo
-    # name (preferred) and a list of preferred repositories (those
-    # listed in the package's dependencies).  If not found, then fail.
-    labels = deps_index.modules.get(module_name, default = [])
-    if len(labels) == 0:
+    modules = deps_index.modules.get(module_name, default = [])
+    if len(modules) == 0:
         return None
+    labels = [m.label for m in modules]
+
+    # # Resolve for the module label by passing along the current repo
+    # # name (preferred) and a list of preferred repositories (those
+    # # listed in the package's dependencies).  If not found, then fail.
+    # labels = deps_index.modules.get(module_name, default = [])
+    # if len(labels) == 0:
+    #     return None
 
     # If a repo name is provided, prefer that over any other matches
     if preferred_repo_name != None:
@@ -181,11 +210,12 @@ def _resolve_module_label_with_ctx(deps_index_ctx, module_name):
     )
 
 deps_indexes = struct(
+    find_product = _find_product,
     new = _new,
     new_ctx = _new_ctx,
     new_from_json = _new_from_json,
+    new_module = _new_module,
     new_product = _new_product,
-    find_product = _find_product,
     resolve_module_label = _resolve_module_label,
     resolve_module_label_with_ctx = _resolve_module_label_with_ctx,
     resolve_product_labels = _resolve_product_labels,

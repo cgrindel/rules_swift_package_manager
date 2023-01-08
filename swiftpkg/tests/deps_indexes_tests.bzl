@@ -10,36 +10,34 @@ def _new_from_json_test(ctx):
     actual = _deps_index
     expected_modules = {
         "ArgumentParser": [
-            bazel_labels.new(
-                repository_name = "@apple_swift_argument_parser",
-                package = "Sources/ArgumentParser",
+            deps_indexes.new_module(
                 name = "ArgumentParser",
+                c99name = "ArgumentParser",
+                label = bazel_labels.new(
+                    repository_name = "@apple_swift_argument_parser",
+                    package = "Sources/ArgumentParser",
+                    name = "ArgumentParser",
+                ),
             ),
         ],
         "Foo": [
-            bazel_labels.new(
-                repository_name = "@example_cool_repo",
-                package = "",
+            deps_indexes.new_module(
                 name = "Foo",
+                c99name = "Foo",
+                label = bazel_labels.new(
+                    repository_name = "@example_cool_repo",
+                    package = "",
+                    name = "Foo",
+                ),
             ),
-            bazel_labels.new(
-                repository_name = "@example_another_repo",
-                package = "Sources/Foo",
+            deps_indexes.new_module(
                 name = "Foo",
-            ),
-        ],
-        "Generate_Manual": [
-            bazel_labels.new(
-                repository_name = "@apple_swift_argument_parser",
-                package = "Plugins/GenerateManualPlugin",
-                name = "Generate_Manual",
-            ),
-        ],
-        "Logging": [
-            bazel_labels.new(
-                repository_name = "@apple_swift_log",
-                package = "Sources/Logging",
-                name = "Logging",
+                c99name = "Foo",
+                label = bazel_labels.new(
+                    repository_name = "@example_another_repo",
+                    package = "Sources/Foo",
+                    name = "Foo",
+                ),
             ),
         ],
     }
@@ -147,23 +145,34 @@ def deps_indexes_test_suite():
 
 _deps_index_json = """
 {
-  "modules": {
-    "ArgumentParser": [
-      "@apple_swift_argument_parser//Sources/ArgumentParser"
-    ],
-    "Foo": [
-      "@example_cool_repo//:Foo",
-      "@example_another_repo//Sources/Foo"
-    ],
-    "Generate_Manual": [
-      "@apple_swift_argument_parser//Plugins/GenerateManualPlugin:Generate_Manual"
-    ],
-    "Logging": [
-      "@apple_swift_log//Sources/Logging"
-    ]
-  },
-  "products": {}
+  "modules": [
+    {"name": "ArgumentParser", "c99name": "ArgumentParser", "label": "@apple_swift_argument_parser//Sources/ArgumentParser"},
+    {"name": "Foo", "c99name": "Foo", "label": "@example_cool_repo//:Foo"},
+    {"name": "Foo", "c99name": "Foo", "label": "@example_another_repo//Sources/Foo"}
+  ],
+  "products": []
 }
 """
+
+# _deps_index_json = """
+# {
+#   "modules": {
+#     "ArgumentParser": [
+#       "@apple_swift_argument_parser//Sources/ArgumentParser"
+#     ],
+#     "Foo": [
+#       "@example_cool_repo//:Foo",
+#       "@example_another_repo//Sources/Foo"
+#     ],
+#     "Generate_Manual": [
+#       "@apple_swift_argument_parser//Plugins/GenerateManualPlugin:Generate_Manual"
+#     ],
+#     "Logging": [
+#       "@apple_swift_log//Sources/Logging"
+#     ]
+#   },
+#   "products": {}
+# }
+# """
 
 _deps_index = deps_indexes.new_from_json(_deps_index_json)

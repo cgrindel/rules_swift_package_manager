@@ -53,17 +53,35 @@ _pkg_info = pkginfos.new(
 
 _deps_index_json = """\
 {
-  "modules": {
-    "AwesomePackage": [
-      "@swiftpkg_example_swift_package//:AwesomePackage"
-    ],
-    "Foo": [
-      "@swiftpkg_example_swift_package//:Source/Foo"
-    ]
-  },
-  "products": {}
+  "modules": [
+    {
+      "name": "AwesomePackage",
+      "c99name": "AwesomePackage",
+      "label": "@swiftpkg_example_swift_package//:AwesomePackage"
+    },
+    {
+      "name": "Foo",
+      "c99name": "Foo",
+      "label": "@swiftpkg_example_swift_package//:Source/Foo"
+    }
+  ],
+  "products": []
 }
 """
+
+# _deps_index_json = """\
+# {
+#   "modules": {
+#     "AwesomePackage": [
+#       "@swiftpkg_example_swift_package//:AwesomePackage"
+#     ],
+#     "Foo": [
+#       "@swiftpkg_example_swift_package//:Source/Foo"
+#     ]
+#   },
+#   "products": {}
+# }
+# """
 
 _pkg_ctx = pkg_ctxs.new(
     pkg_info = _pkg_info,
