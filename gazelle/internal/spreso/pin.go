@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
- 	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
 )
 
 // Pin

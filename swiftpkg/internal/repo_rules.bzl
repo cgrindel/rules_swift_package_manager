@@ -69,6 +69,10 @@ def _gen_build_files(repository_ctx, pkg_info):
     # Create Bazel declarations for the Swift package targets
     bld_files = []
     for target in pkg_info.targets:
+        # Unfortunately, Package.resolved does not contain test-only external
+        # dependencies. So, we need to skip generating test targets.
+        if target.type == "test":
+            continue
         bld_file = swiftpkg_build_files.new_for_target(repository_ctx, pkg_ctx, target)
         if bld_file == None:
             continue
