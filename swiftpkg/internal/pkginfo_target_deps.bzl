@@ -30,7 +30,7 @@ def make_pkginfo_target_deps(bazel_labels):
             if len(labels) == 0:
                 fail("""\
 Unable to resolve by_name target dependency for {module_name}.
-""".format(module_name = target_dep.by_name.target_name))
+""".format(module_name = target_dep.by_name.name))
 
         elif target_dep.target:
             labels = lists.compact([
