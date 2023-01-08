@@ -52,7 +52,13 @@ build_test(
     targets = [
         "@swiftpkg_xcmetrics//:XCMetrics",
         "@swiftpkg_xcmetrics//:XCMetricsBackend",
-        "@swiftpkg_xcmetrics//:XCMetricsClient",
-        "@swiftpkg_xcmetrics//:XCMetricsUtils",
+    ],
+)
+
+test_suite(
+    name = "xcode_metrics_package_build_tests",
+    tests = [
+        "@swiftpkg_xcmetrics//:XCMetricsClientBuildTest",
+        "@swiftpkg_xcmetrics//:XCMetricsUtilsBuildTest",
     ],
 )
