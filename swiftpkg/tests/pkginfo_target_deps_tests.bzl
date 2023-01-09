@@ -28,7 +28,7 @@ _external_dep = pkginfos.new_dependency(
 )
 _by_name = pkginfos.new_by_name_reference("Foo")
 _product_ref = pkginfos.new_product_reference(
-    product_name = "AwesomePackage",
+    product_name = "AwesomeProduct",
     dep_identity = _external_dep.identity,
 )
 
@@ -65,23 +65,18 @@ _deps_index_json = """\
       "label": "@swiftpkg_example_swift_package//:Source/Foo"
     }
   ],
-  "products": []
+  "products": [
+    {
+      "identity": "example-swift-package",
+      "name": "AwesomeProduct",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_example_swift_package//:AwesomePackage"
+      ]
+    }
+  ]
 }
 """
-
-# _deps_index_json = """\
-# {
-#   "modules": {
-#     "AwesomePackage": [
-#       "@swiftpkg_example_swift_package//:AwesomePackage"
-#     ],
-#     "Foo": [
-#       "@swiftpkg_example_swift_package//:Source/Foo"
-#     ]
-#   },
-#   "products": {}
-# }
-# """
 
 _pkg_ctx = pkg_ctxs.new(
     pkg_info = _pkg_info,
@@ -107,18 +102,14 @@ bazel_label_by_name_test = unittest.make(_bazel_label_strs_by_name_test)
 def _bazel_label_strs_product_ref_test(ctx):
     env = unittest.begin(ctx)
 
-    unittest.fail(env, "IMPLEMENT ME!")
-
-    # target_dep = pkginfos.new_target_dependency(product = _product_ref)
-    # actual = pkginfo_target_deps.bazel_label_strs(_pkg_ctx, target_dep)
-    # expected = bazel_labels.normalize(
-    #     bazel_labels.new(
-    #         repository_name = "swiftpkg_example_swift_package",
-    #         package = "",
-    #         name = _product_ref.product_name,
-    #     ),
-    # )
-    # asserts.equals(env, expected, actual)
+    target_dep = pkginfos.new_target_dependency(product = _product_ref)
+    actual = pkginfo_target_deps.bazel_label_strs(_pkg_ctx, target_dep)
+    expected = [
+        bazel_labels.normalize(
+            "@swiftpkg_example_swift_package//:AwesomePackage",
+        ),
+    ]
+    asserts.equals(env, expected, actual)
 
     return unittest.end(env)
 
