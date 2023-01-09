@@ -154,25 +154,4 @@ _deps_index_json = """
 }
 """
 
-# _deps_index_json = """
-# {
-#   "modules": {
-#     "ArgumentParser": [
-#       "@apple_swift_argument_parser//Sources/ArgumentParser"
-#     ],
-#     "Foo": [
-#       "@example_cool_repo//:Foo",
-#       "@example_another_repo//Sources/Foo"
-#     ],
-#     "Generate_Manual": [
-#       "@apple_swift_argument_parser//Plugins/GenerateManualPlugin:Generate_Manual"
-#     ],
-#     "Logging": [
-#       "@apple_swift_log//Sources/Logging"
-#     ]
-#   },
-#   "products": {}
-# }
-# """
-
 _deps_index = deps_indexes.new_from_json(_deps_index_json)

@@ -113,17 +113,6 @@ _deps_index_json = """
 }
 """
 
-# _deps_index_json = """
-# {
-#   "modules": {
-#     "swiftlint": ["@realm_swiftlint//:Source_swiftlint"],
-#     "SwiftLintFramework": ["@realm_swiftlint//:Source_SwiftLintFramework"],
-#     "SwiftLintFrameworkTests": ["@realm_swiftlint//:Tests_SwiftLintFrameworkTests"]
-#   },
-#   "products": {}
-# }
-# """
-
 _repo_name = "@realm_swiftlint"
 
 _pkg_ctx = pkg_ctxs.new(

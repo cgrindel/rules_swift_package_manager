@@ -105,13 +105,6 @@ def _resolve_module_label(
         return None
     labels = [m.label for m in modules]
 
-    # # Resolve for the module label by passing along the current repo
-    # # name (preferred) and a list of preferred repositories (those
-    # # listed in the package's dependencies).  If not found, then fail.
-    # labels = deps_index.modules.get(module_name, default = [])
-    # if len(labels) == 0:
-    #     return None
-
     # If a repo name is provided, prefer that over any other matches
     if preferred_repo_name != None:
         preferred_repo_name = bazel_repo_names.normalize(preferred_repo_name)
