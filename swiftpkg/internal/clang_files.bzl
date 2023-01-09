@@ -100,7 +100,8 @@ def _collect_files(
         repository_ctx,
         root_paths,
         public_includes = None,
-        remove_prefix = None):
+        remove_prefix = None,
+        is_library = True):
     paths_list = []
     for root_path in root_paths:
         paths_list.extend(
@@ -145,19 +146,6 @@ def _collect_files(
         else:
             sets.insert(others_set, path)
 
-    srcs = sets.to_list(srcs_set)
-    others = sets.to_list(others_set)
-
-    # Add each directory that contains a private header to the includes
-    private_includes_set = sets.make([
-        paths.dirname(src)
-        for src in srcs
-        if _is_hdr(src)
-    ])
-
-    public_includes = sets.to_list(public_includes_set)
-    private_includes = sets.to_list(private_includes_set)
-
     # The apple/swift-crypto package has a CCryptoBoringSSL target that has a
     # modulemap in their include directory, but it only lists the top-level
     # header. The modulemap spec suggests that the header is parsed and all of
@@ -180,7 +168,27 @@ def _collect_files(
         mm_hdrs_set = sets.make(mm_hdrs)
         hdrs_set = sets.union(hdrs_set, mm_hdrs_set)
 
+    # If we have not found any public header files for a library module, then
+    # promote any headers that are listed in the srcs.
+    # Example: CVaporBcrypt in https://github.com/vapor/vapor.git
+    if is_library and sets.length(hdrs_set) == 0:
+        for src in sets.to_list(srcs_set):
+            if _is_hdr(src):
+                sets.insert(hdrs_set, src)
+        srcs_set = sets.difference(srcs_set, hdrs_set)
+
+    # Add each directory that contains a private header to the includes
+    private_includes_set = sets.make([
+        paths.dirname(src)
+        for src in sets.to_list(srcs_set)
+        if _is_hdr(src)
+    ])
+
     hdrs = sets.to_list(hdrs_set)
+    srcs = sets.to_list(srcs_set)
+    others = sets.to_list(others_set)
+    public_includes = sets.to_list(public_includes_set)
+    private_includes = sets.to_list(private_includes_set)
 
     # Remove the prefixes before returning the results
     return struct(
