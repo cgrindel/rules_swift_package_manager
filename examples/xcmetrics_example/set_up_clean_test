@@ -73,7 +73,16 @@ bzl_library(
 build_test(
     name = "xcode_metrics_package_targets",
     targets = [
-        "@xcode_metrics_packages//XCMetrics:XCMetricsClient",
+        "@swiftpkg_xcmetrics//:XCMetrics",
+        "@swiftpkg_xcmetrics//:XCMetricsBackend",
+    ],
+)
+
+test_suite(
+    name = "xcode_metrics_package_build_tests",
+    tests = [
+        "@swiftpkg_xcmetrics//:XCMetricsClientBuildTest",
+        "@swiftpkg_xcmetrics//:XCMetricsUtilsBuildTest",
     ],
 )
 EOF
