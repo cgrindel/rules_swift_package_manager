@@ -14,7 +14,7 @@ import (
 
 func TestRepoRuleFromBazelRepo(t *testing.T) {
 	pkgDir := "/path/to/package"
-	diBasename := "deps_index.json"
+	diBasename := "swift_deps_index.json"
 
 	t.Run("with pin (source control dep)", func(t *testing.T) {
 		repoName := "swiftpkg_swift_argument_parser"
