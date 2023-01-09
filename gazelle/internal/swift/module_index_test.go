@@ -36,7 +36,9 @@ func TestModuleIndex(t *testing.T) {
 		assert.Equal(t, anotherRepoFooM, actual)
 	})
 	t.Run("modules", func(t *testing.T) {
-		t.Error("IMPLEMENT ME!")
+		actual := moduleIndex.Modules()
+		expected := swift.Modules{barM, fooM, anotherRepoFooM}
+		assert.Equal(t, expected, actual)
 	})
 	t.Run("JSON roundtrip", func(t *testing.T) {
 		data, err := json.Marshal(moduleIndex)
