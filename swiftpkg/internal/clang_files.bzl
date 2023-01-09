@@ -162,12 +162,20 @@ def _collect_files(
     # modulemap in their include directory, but it only lists the top-level
     # header. The modulemap spec suggests that the header is parsed and all of
     # the referenced headers are included. For now, we will just add the
-    # modulempa hdrs to the ones that we have already found.
+    # modulemap hdrs to the ones that we have already found.
     if modulemap_orig_path != None:
         mm_hdrs = _get_hdr_paths_from_modulemap(
             repository_ctx,
             modulemap_orig_path,
         )
+
+        # There are modulemaps in the wild (e.g.,
+        # https://github.com/1024jp/GzipSwift) that list system headers (i.e.,
+        # absolute path to a system header). Filter them out.
+        mm_hdrs = lists.compact([
+            hdr if not paths.is_absolute(hdr) else None
+            for hdr in mm_hdrs
+        ])
         mm_hdrs = _remove_prefixes(mm_hdrs, remove_prefix)
         mm_hdrs_set = sets.make(mm_hdrs)
         hdrs_set = sets.union(hdrs_set, mm_hdrs_set)
