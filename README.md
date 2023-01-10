@@ -75,6 +75,7 @@ workspace(name = "my_project")
 
 # MARK: - swift_bazel
 
+<!-- BEGIN WORKSPACE SNIPPET -->
 http_archive(
     name = "cgrindel_swift_bazel",
     # See the README or release for the full declaration
@@ -133,6 +134,7 @@ load(
 )
 
 swift_rules_extra_dependencies()
+<!-- END WORKSPACE SNIPPET -->
 ```
 
 The above `WORKSPACE` boilerplate loads a file called `swift_deps.bzl`. The Gazelle plugin will
