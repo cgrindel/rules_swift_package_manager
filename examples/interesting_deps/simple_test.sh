@@ -17,21 +17,9 @@ err_msg() {
   exit 1
 }
 
-# workspace="interesting_deps_"
-# binary="$(rlocation "${workspace}/simple")"
-
-# simple_location=interesting_deps_example/simple
-# binary="$(rlocation "${simple_location}")" || \
-#   (echo >&2 "Failed to locate ${simple_location}" && exit 1)
-
 print_location=interesting_deps_example/print
 binary="$(rlocation "${print_location}")" || \
   (echo >&2 "Failed to locate ${print_location}" && exit 1)
-
-# DEBUG BEGIN
-set -x
-# DEBUG END
-
 
 output="$( "${binary}" )"
 
