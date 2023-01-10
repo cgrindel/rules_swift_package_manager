@@ -70,12 +70,10 @@ repository. Also, check out the [examples] for more information.
 
 Update the `WORKSPACE` file to load the dependencies for [swift_bazel], [rules_swift] and [Gazelle].
 
+<!-- BEGIN WORKSPACE SNIPPET -->
 ```python
-workspace(name = "my_project")
-
 # MARK: - swift_bazel
 
-<!-- BEGIN WORKSPACE SNIPPET -->
 http_archive(
     name = "cgrindel_swift_bazel",
     # See the README or release for the full declaration
@@ -134,8 +132,8 @@ load(
 )
 
 swift_rules_extra_dependencies()
-<!-- END WORKSPACE SNIPPET -->
 ```
+<!-- END WORKSPACE SNIPPET -->
 
 The above `WORKSPACE` boilerplate loads a file called `swift_deps.bzl`. The Gazelle plugin will
 populate it, shortly. For now, create the file with the follwing contents:
