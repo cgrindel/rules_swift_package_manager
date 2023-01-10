@@ -28,7 +28,8 @@ def _is_include_hdr(path, public_includes = None):
     if not _is_hdr(path):
         return False
 
-    if public_includes != None:
+    public_includes = [] if public_includes == None else public_includes
+    if len(public_includes) > 0:
         for include_path in public_includes:
             if include_path[-1] != "/":
                 include_path += "/"
@@ -111,6 +112,8 @@ def _collect_files(
             ),
         )
 
+    public_includes = [] if public_includes == None else public_includes
+
     # hdrs: Public headers
     # srcs: Private headers and source files.
     # others: Uncategorized
@@ -118,7 +121,7 @@ def _collect_files(
     hdrs_set = sets.make()
     srcs_set = sets.make()
     others_set = sets.make()
-    public_includes_set = sets.make()
+
     modulemap = None
     modulemap_orig_path = None
     for orig_path in paths_list:
@@ -127,7 +130,6 @@ def _collect_files(
         if ext == ".h":
             if _is_include_hdr(orig_path, public_includes = public_includes):
                 sets.insert(hdrs_set, path)
-                sets.insert(public_includes_set, paths.dirname(path))
             else:
                 sets.insert(srcs_set, path)
         elif lists.contains([".c", ".cc", ".S", ".so", ".o", ".m"], ext):
@@ -171,11 +173,19 @@ def _collect_files(
     # If we have not found any public header files for a library module, then
     # promote any headers that are listed in the srcs.
     # Example: CVaporBcrypt in https://github.com/vapor/vapor.git
-    if is_library and sets.length(hdrs_set) == 0:
+    if is_library and sets.length(hdrs_set) == 0 and len(public_includes) == 0:
         for src in sets.to_list(srcs_set):
             if _is_hdr(src):
                 sets.insert(hdrs_set, src)
         srcs_set = sets.difference(srcs_set, hdrs_set)
+
+    # If public includes were specified, then use them. Otherwise, add every
+    # directory that holds a public header file
+    if len(public_includes) == 0:
+        public_includes = [paths.dirname(hdr) for hdr in sets.to_list(hdrs_set)]
+
+    public_includes = _remove_prefixes(public_includes, remove_prefix)
+    public_includes_set = sets.make(public_includes)
 
     # Add each directory that contains a private header to the includes
     private_includes_set = sets.make([

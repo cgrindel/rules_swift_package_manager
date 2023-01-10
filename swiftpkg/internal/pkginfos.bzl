@@ -162,7 +162,10 @@ def _new_target_from_json_maps(dump_map, desc_map):
         c99name = desc_map["c99name"],
         module_type = desc_map["module_type"],
         path = desc_map["path"],
+        # List of sources provided by SPM
         sources = desc_map["sources"],
+        # Source paths specified by the Swift package manifest author.
+        source_paths = dump_map.get("sources"),
         dependencies = dependencies,
         clang_settings = clang_settings,
         swift_settings = swift_settings,
@@ -531,6 +534,7 @@ def _new_target(
         path,
         sources,
         dependencies,
+        source_paths = None,
         clang_settings = None,
         swift_settings = None,
         linker_settings = None,
@@ -547,6 +551,8 @@ def _new_target(
             to the `path`.
         dependencies: A `list` of target dependency values as returned by
             `pkginfos.new_target_dependency()`.
+        source_paths: Optional. A `list` of paths (`string` values) specified by
+            the Swift package manfiest author.
         clang_settings: Optional. A `struct` as returned by `pkginfos.new_clang_settings`.
         swift_settings: Optional. A `struct` as returned by `pkginfos.new_swift_settings`.
         linker_settings: Optional. A `struct` as returned by `pkginfos.new_linker_settings`.
@@ -573,6 +579,7 @@ def _new_target(
         path = path,
         sources = sources,
         dependencies = dependencies,
+        source_paths = source_paths,
         clang_settings = clang_settings,
         swift_settings = swift_settings,
         linker_settings = linker_settings,
