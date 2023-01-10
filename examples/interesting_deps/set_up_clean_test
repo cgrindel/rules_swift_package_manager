@@ -13,11 +13,8 @@ find "${script_dir}" \
 # Remove the SPM build folder
 rm -rf .build
 
-# Replace the swift_deps.bzl with no declarations.
-cat > "${script_dir}/swift_deps.bzl"  <<-EOF
-def swift_dependencies():
-    pass
-EOF
+# Do note remove the swift_deps.bzl as one of the dependencies requires a
+# custom value for init_submodules.
 
 # Add back a minimal build file at the root
 cat > "${script_dir}/BUILD.bazel"  <<-EOF
@@ -67,5 +64,22 @@ bzl_library(
     srcs = ["swift_deps.bzl"],
     visibility = ["//visibility:public"],
     deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
+)
+
+swift_binary(
+    name = "print",
+    srcs = ["main.swift"],
+    visibility = ["//swift:__subpackages__"],
+    deps = [
+        "@swiftpkg_libwebp_xcode//:libwebp",
+        "@swiftpkg_swift_log//:Sources_Logging",
+    ],
+)
+
+sh_test(
+    name = "simple_test",
+    srcs = ["simple_test.sh"],
+    data = [":print"],
+    deps = ["@bazel_tools//tools/bash/runfiles"],
 )
 EOF
