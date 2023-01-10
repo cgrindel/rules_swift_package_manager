@@ -72,6 +72,14 @@ commands.  These commands result in a `.build` directory being created. The dire
 effect of running the Swift package manager commands. It can be ignored and should not be checked
 into source control. It is not used by Gazelle plugin or the Starlark repository rules.
 
+## Does the Gazelle plugin run Swift package manager with every execution?
+
+No. The Gazelle plugin only executes the Swift package manager when run in `update-repos` mode. This
+mode only needs to be run when modifying your external dependencies (e.g., add/remove a dependency,
+update the version selection for a dependency). The `update` mode for the Gazelle plugin generates
+Bazel build files for your project. It uses information written to the `swift_deps_index.json` and
+the source files that exist in your project to generate the Bazel build files.
+
 
 [loading phase]: https://bazel.build/run/build#loading 
 [quickstart]: https://github.com/cgrindel/swift_bazel/blob/main/README.md#quickstart
