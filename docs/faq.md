@@ -13,9 +13,8 @@
 
 ## Why use Gazelle and Go?
 
-The [Gazelle framework](https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md) provides
-lots of great features for generating Bazel build and Starlark files. Right now, the best way to
-leverage the framework is to write the plugin in Go.
+The [Gazelle framework] provides lots of great features for generating Bazel build and Starlark
+files. Right now, the best way to leverage the framework is to write the plugin in Go.
 
 In addition, adoption of the Gazelle ecosystem has started to take off. There are [lots of useful
 plugins for other languages](https://github.com/bazelbuild/bazel-gazelle#supported-languages).
@@ -27,12 +26,11 @@ productivity.
 As mentioned previously, the easiest way to implement a Gazelle plugin is to write it in Go. This
 works great for generating build files in the primary workspace. However, there is a chicken-and-egg
 problem when it comes time to generate build files in a repository rule. The repository rule needs
-to generate files during the [loading phase](https://bazel.build/run/build#loading). The Go
-toolchain and the Gazelle framework defined in the workspace are not available to the repository
-rule during this phase. So, one needs to either perform some gymnastics to build the Gazelle plugin
-(see below) or use a language/runtime that is guaranteed to be available during the loading phase.
-Since Starlark is available during the loading phase, the build file generation logic for the
-repository rules is implemented in Starlark.
+to generate files during the [loading phase]. The Go toolchain and the Gazelle framework defined in
+the workspace are not available to the repository rule during this phase. So, one needs to either
+perform some gymnastics to build the Gazelle plugin (see below) or use a language/runtime that is
+guaranteed to be available during the loading phase.  Since Starlark is available during the loading
+phase, the build file generation logic for the repository rules is implemented in Starlark.
 
 ### How does the Gazelle plugin for Go handle this?
 
@@ -46,7 +44,7 @@ placement and content of the Bazel build files. The repository rules leverage in
 Swift packages (e.g., dump and describe JSON). However, both implementations use the
 `module_index.json` to resolve module references to Bazel targets for the external dependencies.
 
-## Does this replace [rules_spm](https://github.com/cgrindel/rules_spm/)?
+## Does this replace [rules_spm]?
 
 Yes. There are some [limitations with the rules_spm
 implementation](https://github.com/cgrindel/rules_spm/discussions/157). After receiving feedback and
@@ -54,11 +52,29 @@ suggestions from the community, we opted to create a clean sheet implementation 
 features and improvements:
 
 - Bazel build file generation for the primary workspace.
-- Build the external dependencies with [rules_swift](https://github.com/bazelbuild/rules_swift).
+- Build the external dependencies with [rules_swift].
 - Pin the exact versions for the direct and transitive dependencies.
 
-## Can I migrate from [rules_spm](https://github.com/cgrindel/rules_spm/) to `swift_bazel`?
+## Can I migrate from [rules_spm] to `swift_bazel`?
 
 Absolutely. A [migration guide from rules_spm](https://github.com/cgrindel/swift_bazel/issues/99) is
 on the roadmap.
 
+## Can I just manage my external Swift packages and not generate Bazel build files for my project?
+
+Yes. Just omit the `//:update_build_files` target that is mentioned in the [quickstart].
+
+## After running `//:swift_update_repos`, I see a `.build` directory. What is it? Do I need it?
+
+The `//:swift_update_repos` target runs the Gazelle plugin in the `update-repos` mode. This mode
+resolves the external dependencies listed in your `Package.swift` by running Swift package manager
+commands.  These commands result in a `.build` directory being created. The directory is a side
+effect of running the Swift package manager commands. It can be ignored and should not be checked
+into source control. It is not used by Gazelle plugin or the Starlark repository rules.
+
+
+[loading phase]: https://bazel.build/run/build#loading 
+[quickstart]: https://github.com/cgrindel/swift_bazel/blob/main/README.md#quickstart
+[rules_spm]: https://github.com/cgrindel/rules_spm/
+[rules_swift]: https://github.com/bazelbuild/rules_swift
+[Gazelle framework]: https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md
