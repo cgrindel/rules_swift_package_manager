@@ -1,5 +1,7 @@
 # Gazelle Plugin for Swift and Swit Package Rules for Bazel
 
+[![Build](https://github.com/cgrindel/swift_bazel/actions/workflows/ci.yml/badge.svg?event=schedule)](https://github.com/cgrindel/swift_bazel/actions/workflows/ci.yml)
+
 This repository contains a [Gazelle plugin] and Bazel repository rules that can be used to download,
 build, and consume Swift packages. The rules in this repository build the external Swift packages
 using [rules_swift] and native C/C++ rulesets making the Swift package products and targets
