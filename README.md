@@ -76,9 +76,16 @@ workspace(name = "my_project")
 # MARK: - swift_bazel
 
 <!-- BEGIN WORKSPACE SNIPPET -->
+```python
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
 http_archive(
     name = "cgrindel_swift_bazel",
-    # See the README or release for the full declaration
+    sha256 = "095f4023b6508ec026bd35786fecea79afcafd25dd89e21171f3d46ee8f08353",
+    strip_prefix = "swift_bazel-0.0.1",
+    urls = [
+        "http://github.com/cgrindel/swift_bazel/archive/v0.0.1.tar.gz",
+    ],
 )
 
 load("@cgrindel_swift_bazel//:deps.bzl", "swift_bazel_dependencies")
@@ -89,7 +96,7 @@ load("@cgrindel_bazel_starlib//:deps.bzl", "bazel_starlib_dependencies")
 
 bazel_starlib_dependencies()
 
-# MARK: - bazel-gazelle
+# MARK: - Gazelle
 
 # gazelle:repo bazel_gazelle
 
@@ -106,15 +113,12 @@ go_register_toolchains(version = "1.19.1")
 
 gazelle_dependencies()
 
-# MARK: - rules_swift
-
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+# MARK: - Swift Toolchain
 
 http_archive(
     name = "build_bazel_rules_swift",
-    sha256 = "32f95dbe6a88eb298aaa790f05065434f32a662c65ec0a6aabdaf6881e4f169f",
-    url = "https://github.com/bazelbuild/rules_swift/releases/download/1.5.0/rules_swift.1.5.0.tar.gz",
-
+    # Populate with your preferred release 
+    # https://github.com/bazelbuild/rules_swift/releases
 )
 
 load(
@@ -134,6 +138,7 @@ load(
 )
 
 swift_rules_extra_dependencies()
+```
 <!-- END WORKSPACE SNIPPET -->
 ```
 
