@@ -21,8 +21,8 @@ by the Swift Bazel repository.
 
 The implementation in this repository is separated into two parts:
 
-1. A [Gazelle](https://github.com/bazelbuild/bazel-gazelle) plugin
-2. Bazel repository rules: `swift_package` and `local_swift_package`
+1. A [Gazelle](https://github.com/bazelbuild/bazel-gazelle) plugin.
+2. Bazel repository rules: `swift_package` and `local_swift_package`.
 
 The Gazelle plugin generates Bazel build and Starlark files for your project. The `swift_package`
 repository rule generates Bazel build files for the external Swift packages.
@@ -35,14 +35,14 @@ operation: `update-repos` and `update`.
 
 The `update-repos` mode 
 
-1. Resolves the direct and transitive dependencies for the project using the `Package.swift`.
+1. Resolves the direct and transitive dependencies for the project using a `Package.swift` file.
 2. Writes a `Package.resolved` file.
-3. Writes a `module_index.json` file.
+3. Writes a `swift_deps_index.json` file.
 2. Writes `swift_package` declarations for the direct and transitive dependencies.
 
 The `update` mode
 
-1. Reads the `module_index.json` file.
+1. Reads the `swift_deps_index.json` file.
 2. Inspects the project looking for Swift source files.
 3. Identifies the Bazel packages that should contain Swift declarations.
 4. Writes the Swift declarations to Bazel build files.
