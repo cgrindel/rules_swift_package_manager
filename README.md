@@ -78,10 +78,10 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "cgrindel_swift_bazel",
-    sha256 = "ebeaa6761c2d603aa0c5f454d0423ada38dd1c586681ce7be1fb00de8b7d4997",
-    strip_prefix = "swift_bazel-0.0.2",
+    sha256 = "de685bdb06ffb4ddb558d810d56d99a6e0fed44bd770a422e41dcea4fc3f6c2d",
+    strip_prefix = "swift_bazel-0.1.0",
     urls = [
-        "http://github.com/cgrindel/swift_bazel/archive/v0.0.2.tar.gz",
+        "http://github.com/cgrindel/swift_bazel/archive/v0.1.0.tar.gz",
     ],
 )
 
