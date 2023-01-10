@@ -100,14 +100,30 @@ def _swift_test_from_target(target, attrs):
 # MARK: - Clang Targets
 
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
-    # GH115: Should I just use the srcs in the target?
     target_path = paths.normalize(
         paths.join(pkg_ctx.pkg_info.path, target.path),
     )
+
+    public_includes = []
+    if target.public_hdrs_path != None:
+        public_includes.append(
+            # pkginfo_targets.join_path(target, target.public_hdrs_path),
+            paths.join(target_path, target.public_hdrs_path),
+        )
+
+    # If the Swift package manifest has explicit source paths, respect them.
+    # (Be sure to include any explicitly specified include directories.)
+    # Otherwise, use all of the source files under the target path.
+    if target.source_paths != None:
+        src_paths = target.source_paths + public_includes
+        src_paths = [paths.join(target_path, sp) for sp in src_paths]
+    else:
+        src_paths = [target_path]
+
     organized_files = clang_files.collect_files(
         repository_ctx,
-        [target_path],
-        public_includes = None,
+        src_paths,
+        public_includes = public_includes,
         remove_prefix = "{}/".format(pkg_ctx.pkg_info.path),
     )
     deps = lists.flatten([
@@ -134,18 +150,13 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "visibility": ["//visibility:public"],
     }
     repo_name = repository_ctx.name
-    public_includes = []
+
+    public_includes = organized_files.public_includes
     local_includes = []
-    if target.public_hdrs_path != None:
-        public_includes.append(
-            pkginfo_targets.join_path(target, target.public_hdrs_path),
-        )
     if len(organized_files.srcs) > 0:
         attrs["srcs"] = organized_files.srcs
     if len(organized_files.hdrs) > 0:
         attrs["hdrs"] = organized_files.hdrs
-    if len(organized_files.public_includes) > 0:
-        public_includes.extend(organized_files.public_includes)
     if len(organized_files.private_includes) > 0:
         local_includes.extend(organized_files.private_includes)
     if target.clang_settings:

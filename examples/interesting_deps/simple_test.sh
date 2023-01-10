@@ -17,8 +17,9 @@ err_msg() {
   exit 1
 }
 
-workspace="simple_example"
-binary="$(rlocation "${workspace}/simple")"
+print_location=interesting_deps_example/print
+binary="$(rlocation "${print_location}")" || \
+  (echo >&2 "Failed to locate ${print_location}" && exit 1)
 
 output="$( "${binary}" )"
 

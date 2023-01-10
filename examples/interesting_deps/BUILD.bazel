@@ -1,7 +1,7 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 
 tidy(
     name = "tidy",
@@ -48,7 +48,7 @@ bzl_library(
 )
 
 swift_binary(
-    name = "simple",
+    name = "print",
     srcs = ["main.swift"],
     visibility = ["//swift:__subpackages__"],
     deps = [
@@ -60,6 +60,6 @@ swift_binary(
 sh_test(
     name = "simple_test",
     srcs = ["simple_test.sh"],
-    data = [":simple"],
+    data = [":print"],
     deps = ["@bazel_tools//tools/bash/runfiles"],
 )

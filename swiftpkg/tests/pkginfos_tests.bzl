@@ -112,6 +112,10 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
             "libbar/sharpyuv/sharpyuv_sse2.c",
         ],
         dependencies = [],
+        source_paths = [
+            "libbar/src",
+            "libbar/sharpyuv",
+        ],
         clang_settings = pkginfos.new_clang_settings(
             defines = ["__APPLE_USE_RFC_3542"],
             hdr_srch_paths = ["libbar"],

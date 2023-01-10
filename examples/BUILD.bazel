@@ -30,6 +30,7 @@ _macos_single_bazel_version_test_examples = [
     "ios_sim",
     "objc_code",
     "xcmetrics_example",
+    "interesting_deps",
 ]
 
 # The default timeout is "long".

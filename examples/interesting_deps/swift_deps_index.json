@@ -1,0 +1,37 @@
+{
+  "modules": [
+    {
+      "name": "libwebp",
+      "c99name": "libwebp",
+      "label": "@swiftpkg_libwebp_xcode//:libwebp"
+    },
+    {
+      "name": "Logging",
+      "c99name": "Logging",
+      "label": "@swiftpkg_swift_log//:Sources_Logging"
+    },
+    {
+      "name": "LoggingTests",
+      "c99name": "LoggingTests",
+      "label": "@swiftpkg_swift_log//:Tests_LoggingTests"
+    }
+  ],
+  "products": [
+    {
+      "identity": "libwebp-xcode",
+      "name": "libwebp",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_libwebp_xcode//:libwebp"
+      ]
+    },
+    {
+      "identity": "swift-log",
+      "name": "Logging",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_log//:Sources_Logging"
+      ]
+    }
+  ]
+}

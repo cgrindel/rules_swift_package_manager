@@ -2,10 +2,6 @@
 
 set -o errexit -o nounset -o pipefail
 
-# DEBUG BEGIN
-set -x
-# DEBUG END
-
 if [[ -z "${BUILD_WORKSPACE_DIRECTORY:-}" ]]; then
   echo >&2 "Expected BUILD_WORKSPACE_DIRECTORY to be defined."
   exit 1
