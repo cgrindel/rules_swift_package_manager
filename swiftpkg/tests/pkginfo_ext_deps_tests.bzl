@@ -58,6 +58,14 @@ def _find_by_identity_test(ctx):
     )
     asserts.equals(env, _super_cool_pkg, actual)
 
+    # Ensure that the lookup value is normalized before doing the check
+    actual = pkginfo_ext_deps.find_by_identity(
+        _ext_deps,
+        "Super-Cool-Package",
+        fail_if_not_found = False,
+    )
+    asserts.equals(env, _super_cool_pkg, actual)
+
     return unittest.end(env)
 
 find_by_identity_test = unittest.make(_find_by_identity_test)

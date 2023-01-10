@@ -27,10 +27,10 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
 # MARK: - Swift Target
 
 def _swift_target_build_file(repository_ctx, pkg_ctx, target):
-    deps = [
-        pkginfo_target_deps.bazel_label_str(pkg_ctx, td)
+    deps = lists.flatten([
+        pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
         for td in target.dependencies
-    ]
+    ])
     attrs = {
         # SPM directive instructing the code to build as if a Swift package.
         # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
@@ -110,10 +110,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         public_includes = None,
         remove_prefix = "{}/".format(pkg_ctx.pkg_info.path),
     )
-    deps = [
-        pkginfo_target_deps.bazel_label_str(pkg_ctx, td)
+    deps = lists.flatten([
+        pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
         for td in target.dependencies
-    ]
+    ])
     attrs = {
         # These flags are used by SPM when compiling clang modules.
         "copts": [
@@ -266,30 +266,35 @@ def _executable_product_build_file(pkg_info, product, repo_name):
         fail("Did not find any targets associated with product. name:", product.name)
 
 def _library_product_build_file(pkg_info, product, repo_name):
+    # A library product can reference one or more Swift targets. Hence a
+    # dependency on a library product is a shorthand for depend upon all of the
+    # Swift targets that is associated with the product. There is no good
+    # corollary for this in Bazel. A `filegroup` supports this concept for
+    # `srcs` and `data`, but not `deps`. It would require a rule to provide
+    # multiple providers possibly of the same type.
+    #
+    # To allow someone to ensure that the associated targets do build, we will
+    # generate a build_test.
+
     # Retrieve the targets
     targets = [
         pkginfo_targets.get(pkg_info.targets, tname)
         for tname in product.targets
     ]
-    targets_len = len(targets)
-    if targets_len == 0:
+    if len(targets) == 0:
         fail("No targets specified for a library product. name:", product.name)
-    elif targets_len > 1:
-        fail("Multiple targets specified for a library product. name:", product.name)
-
-    actual_target = targets[0]
-
-    # If the alias name will have the same name as the target, then do not create the alias.
-    label = pkginfo_targets.bazel_label(actual_target, repo_name)
-    if label.name == product.name:
-        return None
+    target_labels = [
+        bazel_labels.normalize(pkginfo_targets.bazel_label(target, repo_name))
+        for target in targets
+    ]
     return build_files.new(
+        load_stmts = [skylib_build_test_load_stmt],
         decls = [
             build_decls.new(
-                native_kinds.alias,
-                product.name,
+                skylib_kinds.build_test,
+                product.name + "BuildTest",
                 attrs = {
-                    "actual": bazel_labels.normalize(label),
+                    "targets": target_labels,
                     "visibility": ["//visibility:public"],
                 },
             ),
@@ -340,6 +345,17 @@ objc_kinds = struct(
 
 native_kinds = struct(
     alias = "alias",
+)
+
+skylib_build_test_location = "@bazel_skylib//rules:build_test.bzl"
+
+skylib_kinds = struct(
+    build_test = "build_test",
+)
+
+skylib_build_test_load_stmt = load_statements.new(
+    skylib_build_test_location,
+    skylib_kinds.build_test,
 )
 
 swiftpkg_build_files = struct(

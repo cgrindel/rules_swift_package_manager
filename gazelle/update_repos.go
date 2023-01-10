@@ -64,8 +64,8 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	}
 
 	// Create a new module index on the swift config and populate it from the dependencies.
-	mi := swift.NewModuleIndex()
-	sc.ModuleIndex = mi
+	di := swift.NewDependencyIndex()
+	sc.DependencyIndex = di
 
 	// Need to collect all of the direct deps and their transitive deps. These can be remote deps,
 	// which will have a spreso.Pin, and some will be local which will not have a spreso.Pin.
@@ -109,24 +109,24 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 
 	// Index all of the Bazel Repos
 	for _, bzlRepo := range bzlReposByIdentity {
-		if err := mi.IndexBazelRepo(bzlRepo); err != nil {
+		if err := di.IndexBazelRepo(bzlRepo); err != nil {
 			result.Error = err
 			return result
 		}
 	}
 
 	// Write the module index to a JSON file
-	if err := sc.WriteModuleIndex(); err != nil {
+	if err := sc.WriteDependencyIndex(); err != nil {
 		result.Error = err
 		return result
 	}
 
 	// Generate the repository rules from the Bazel Repos
-	miBase := filepath.Base(sc.ModuleIndexPath)
+	diBase := filepath.Base(sc.DependencyIndexPath)
 	result.Gen = make([]*rule.Rule, len(bzlReposByIdentity))
 	idx := 0
 	for _, bzlRepo := range bzlReposByIdentity {
-		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, miBase, pkgDir)
+		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, diBase, pkgDir)
 		if err != nil {
 			result.Error = err
 			return result

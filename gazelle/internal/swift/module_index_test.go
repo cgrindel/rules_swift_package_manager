@@ -1,6 +1,7 @@
 package swift_test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/bazelbuild/bazel-gazelle/label"
@@ -8,36 +9,44 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var fooM = swift.NewModule("Foo", label.New("", "Sources/Foo", "Foo"))
-var barM = swift.NewModule("Bar", label.New("", "Sources/Bar", "Bar"))
-var anotherRepoFooM = swift.NewModule("Foo", label.New("another_repo", "pkg/path", "Foo"))
-var mi = swift.NewModuleIndex()
+var fooM = swift.NewModuleFromLabelStruct("Foo", "Foo", label.New("", "Sources/Foo", "Foo"))
+var barM = swift.NewModuleFromLabelStruct("Bar", "Bar", label.New("", "Sources/Bar", "Bar"))
+var anotherRepoFooM = swift.NewModuleFromLabelStruct(
+	"Foo", "Foo", label.New("another_repo", "pkg/path", "Foo"))
+var moduleIndex = make(swift.ModuleIndex)
 
 func init() {
-	mi.AddModules(fooM, barM, anotherRepoFooM)
+	moduleIndex.Add(fooM, barM, anotherRepoFooM)
 }
 
 func TestModuleIndex(t *testing.T) {
-	var actual *swift.Module
+	t.Run("resolve modules", func(t *testing.T) {
+		var actual *swift.Module
 
-	actual = mi.Resolve("", "DoesNotExist")
-	assert.Nil(t, actual)
+		actual = moduleIndex.Resolve("", "DoesNotExist")
+		assert.Nil(t, actual)
 
-	actual = mi.Resolve("", "Bar")
-	assert.Equal(t, barM, actual)
+		actual = moduleIndex.Resolve("", "Bar")
+		assert.Equal(t, barM, actual)
 
-	actual = mi.Resolve("", "Foo")
-	assert.Equal(t, fooM, actual)
+		actual = moduleIndex.Resolve("", "Foo")
+		assert.Equal(t, fooM, actual)
 
-	actual = mi.Resolve("another_repo", "Foo")
-	assert.Equal(t, anotherRepoFooM, actual)
-}
+		actual = moduleIndex.Resolve("another_repo", "Foo")
+		assert.Equal(t, anotherRepoFooM, actual)
+	})
+	t.Run("modules", func(t *testing.T) {
+		actual := moduleIndex.Modules()
+		expected := swift.Modules{barM, fooM, anotherRepoFooM}
+		assert.Equal(t, expected, actual)
+	})
+	t.Run("JSON roundtrip", func(t *testing.T) {
+		data, err := json.Marshal(moduleIndex)
+		assert.NoError(t, err)
 
-func TestJSONRoundtrip(t *testing.T) {
-	data, err := mi.JSON()
-	assert.NoError(t, err)
-
-	newMI, err := swift.NewModuleIndexFromJSON(data)
-	assert.NoError(t, err)
-	assert.Equal(t, mi, newMI)
+		var mi swift.ModuleIndex
+		err = json.Unmarshal(data, &mi)
+		assert.NoError(t, err)
+		assert.Equal(t, moduleIndex, mi)
+	})
 }

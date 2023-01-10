@@ -26,15 +26,18 @@ func TestNewHTTPArchiveFromRule(t *testing.T) {
 	expected := swift.NewHTTPArchive(
 		"com_github_apple_swift_collections",
 		[]*swift.Module{
-			swift.NewModule(
+			swift.NewModuleFromLabelStruct(
+				"Collections",
 				"Collections",
 				label.New("com_github_apple_swift_collections", "", "Collections"),
 			),
-			swift.NewModule(
+			swift.NewModuleFromLabelStruct(
+				"DequeModule",
 				"DequeModule",
 				label.New("com_github_apple_swift_collections", "", "DequeModule"),
 			),
-			swift.NewModule(
+			swift.NewModuleFromLabelStruct(
+				"OrderedCollections",
 				"OrderedCollections",
 				label.New("com_github_apple_swift_collections", "", "OrderedCollections"),
 			),
@@ -47,11 +50,13 @@ func TestNewHTTPArchiveFromRule(t *testing.T) {
 	expected = swift.NewHTTPArchive(
 		"com_github_apple_swift_argument_parser",
 		[]*swift.Module{
-			swift.NewModule(
+			swift.NewModuleFromLabelStruct(
+				"ArgumentParser",
 				"ArgumentParser",
 				label.New("com_github_apple_swift_argument_parser", "", "ArgumentParser"),
 			),
-			swift.NewModule(
+			swift.NewModuleFromLabelStruct(
+				"ArgumentParserToolInfo",
 				"ArgumentParserToolInfo",
 				label.New("com_github_apple_swift_argument_parser", "", "ArgumentParserToolInfo"),
 			),

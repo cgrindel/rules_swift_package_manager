@@ -29,7 +29,15 @@ _all_os_single_bazel_version_test_examples = [
 _macos_single_bazel_version_test_examples = [
     "ios_sim",
     "objc_code",
+    "xcmetrics_example",
 ]
+
+# The default timeout is "long".
+_default_timeout = "long"
+
+_timeouts = {
+    "xcmetrics_example": "eternal",
+}
 
 _linux_single_bazel_version_test_examples = []
 
@@ -56,6 +64,10 @@ sh_binary(
 [
     bazel_integration_tests(
         name = example + "_test",
+        timeout = _timeouts.get(
+            example,
+            default = _default_timeout,
+        ),
         bazel_versions = SUPPORTED_BAZEL_VERSIONS,
         test_runner = ":test_runner",
         workspace_files = integration_test_utils.glob_workspace_files(example) + [
@@ -71,6 +83,10 @@ sh_binary(
         name = integration_test_utils.bazel_integration_test_name(
             example + "_test",
             CURRENT_BAZEL_VERSION,
+        ),
+        timeout = _timeouts.get(
+            example,
+            default = _default_timeout,
         ),
         bazel_version = CURRENT_BAZEL_VERSION,
         test_runner = ":test_runner",
@@ -88,6 +104,10 @@ sh_binary(
             example + "_test",
             CURRENT_BAZEL_VERSION,
         ),
+        timeout = _timeouts.get(
+            example,
+            default = _default_timeout,
+        ),
         bazel_version = CURRENT_BAZEL_VERSION,
         target_compatible_with = ["@platforms//os:macos"],
         test_runner = ":test_runner",
@@ -104,6 +124,10 @@ sh_binary(
         name = integration_test_utils.bazel_integration_test_name(
             example + "_test",
             CURRENT_BAZEL_VERSION,
+        ),
+        timeout = _timeouts.get(
+            example,
+            default = _default_timeout,
         ),
         bazel_version = CURRENT_BAZEL_VERSION,
         target_compatible_with = ["@platforms//os:linux"],

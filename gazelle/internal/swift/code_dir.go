@@ -24,10 +24,14 @@ func CodeDirForRemotePackage(pkgDir string, url string) string {
 func spmCheckoutDirname(url string) string {
 	base := path.Base(url)
 	ext := path.Ext(base)
-	if ext == "" {
-		return base
+	if ext == ".git" {
+		return strings.TrimSuffix(base, ext)
 	}
-	return strings.TrimSuffix(base, ext)
+	return base
+	// if ext == "" {
+	// 	return base
+	// }
+	// return strings.TrimSuffix(base, ext)
 }
 
 // Returns the path to the dependency's code. For local packages, it is the path to the local package.

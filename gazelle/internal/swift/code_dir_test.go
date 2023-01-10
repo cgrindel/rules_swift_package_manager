@@ -14,6 +14,19 @@ func TestCodeDirForRemotePackage(t *testing.T) {
 	actual := swift.CodeDirForRemotePackage(pkgDir, url)
 	expected := "/path/to/pkg/.build/checkouts/SwiftFormat"
 	assert.Equal(t, expected, actual)
+
+	// Trim the .git
+	url = "https://github.com/nicklockwood/SwiftFormat.git"
+	actual = swift.CodeDirForRemotePackage(pkgDir, url)
+	expected = "/path/to/pkg/.build/checkouts/SwiftFormat"
+	assert.Equal(t, expected, actual)
+
+	// Keep the .swift
+	url = "https://github.com/nicklockwood/SwiftFormat.swift"
+	actual = swift.CodeDirForRemotePackage(pkgDir, url)
+	expected = "/path/to/pkg/.build/checkouts/SwiftFormat.swift"
+	assert.Equal(t, expected, actual)
+
 }
 
 func TestCodeDirForLocalPackage(t *testing.T) {

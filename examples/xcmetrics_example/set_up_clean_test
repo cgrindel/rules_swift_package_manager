@@ -1,0 +1,88 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
+
+# Remove all build files
+find "${script_dir}" \
+  -name "BUILD.bazel" \
+  -not -path "${script_dir}/third_party/*" \
+  -exec rm {} \;
+
+# Remove the SPM build folder
+rm -rf .build
+
+# Replace the swift_deps.bzl with no declarations.
+cat > "${script_dir}/swift_deps.bzl"  <<-EOF
+def swift_dependencies():
+    pass
+EOF
+
+# Add back a minimal build file at the root
+cat > "${script_dir}/BUILD.bazel"  <<-EOF
+load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
+
+tidy(
+    name = "tidy",
+    targets = [
+        ":swift_update_repos",
+        ":update_build_files",
+    ],
+)
+
+# MARK: - Gazelle
+
+# Ignore the Swift build folder
+# gazelle:exclude .build
+
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = [
+        "@bazel_skylib//gazelle/bzl",
+        "@cgrindel_swift_bazel//gazelle",
+    ],
+)
+
+gazelle(
+    name = "update_build_files",
+    gazelle = ":gazelle_bin",
+)
+
+gazelle(
+    name = "swift_update_repos",
+    args = [
+        "-from_file=Package.swift",
+        "-to_macro=swift_deps.bzl%swift_dependencies",
+        "-prune",
+    ],
+    command = "update-repos",
+    gazelle = ":gazelle_bin",
+)
+
+bzl_library(
+    name = "swift_deps",
+    srcs = ["swift_deps.bzl"],
+    visibility = ["//visibility:public"],
+    deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
+)
+
+build_test(
+    name = "xcode_metrics_package_targets",
+    targets = [
+        "@swiftpkg_xcmetrics//:XCMetrics",
+        "@swiftpkg_xcmetrics//:XCMetricsBackend",
+    ],
+)
+
+test_suite(
+    name = "xcode_metrics_package_build_tests",
+    tests = [
+        "@swiftpkg_xcmetrics//:XCMetricsClientBuildTest",
+        "@swiftpkg_xcmetrics//:XCMetricsUtilsBuildTest",
+    ],
+)
+EOF

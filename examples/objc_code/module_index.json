@@ -1,5 +1,0 @@
-{
-  "TrustKit": [
-    "@swiftpkg_trustkit//:TrustKit"
-  ]
-}

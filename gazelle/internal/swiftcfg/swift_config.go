@@ -12,21 +12,21 @@ import (
 )
 
 const SwiftConfigName = "swift"
-const DefaultModuleIndexBasename = "module_index.json"
-const moduleIndexPerms = 0666
+const DefaultDependencyIndexBasename = "swift_deps_index.json"
+const dependencyIndexPerms = 0666
 
 type SwiftConfig struct {
 	SwiftBinPath         string
 	ModuleFilesCollector ModuleFilesCollector
-	ModuleIndex          *swift.ModuleIndex
-	ModuleIndexPath      string
+	DependencyIndex      *swift.DependencyIndex
+	DependencyIndexPath  string
 	PackageInfo          *swiftpkg.PackageInfo
 }
 
 func NewSwiftConfig() *SwiftConfig {
 	return &SwiftConfig{
 		ModuleFilesCollector: NewModuleFilesCollector(),
-		ModuleIndex:          swift.NewModuleIndex(),
+		DependencyIndex:      swift.NewDependencyIndex(),
 	}
 }
 
@@ -50,28 +50,28 @@ func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRul
 	return SkipGenRulesMode
 }
 
-func (sc *SwiftConfig) LoadModuleIndex() error {
+func (sc *SwiftConfig) LoadDependencyIndex() error {
 	// If the file does not exist, do not fail. Just exit.
-	if sc.ModuleIndexPath == "" {
+	if sc.DependencyIndexPath == "" {
 		return nil
 	}
-	if _, err := os.Stat(sc.ModuleIndexPath); errors.Is(err, os.ErrNotExist) {
+	if _, err := os.Stat(sc.DependencyIndexPath); errors.Is(err, os.ErrNotExist) {
 		return nil
 	}
-	data, err := os.ReadFile(sc.ModuleIndexPath)
+	data, err := os.ReadFile(sc.DependencyIndexPath)
 	if err != nil {
 		return err
 	}
-	sc.ModuleIndex, err = swift.NewModuleIndexFromJSON(data)
+	sc.DependencyIndex, err = swift.NewDependencyIndexFromJSON(data)
 	return err
 }
 
-func (sc *SwiftConfig) WriteModuleIndex() error {
-	data, err := sc.ModuleIndex.JSON()
+func (sc *SwiftConfig) WriteDependencyIndex() error {
+	data, err := sc.DependencyIndex.JSON()
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(sc.ModuleIndexPath, data, moduleIndexPerms)
+	return os.WriteFile(sc.DependencyIndexPath, data, dependencyIndexPerms)
 }
 
 func GetSwiftConfig(c *config.Config) *SwiftConfig {

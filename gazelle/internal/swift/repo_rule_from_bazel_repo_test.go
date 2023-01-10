@@ -14,7 +14,7 @@ import (
 
 func TestRepoRuleFromBazelRepo(t *testing.T) {
 	pkgDir := "/path/to/package"
-	miBasename := "module_index.json"
+	diBasename := "swift_deps_index.json"
 
 	t.Run("with pin (source control dep)", func(t *testing.T) {
 		repoName := "swiftpkg_swift_argument_parser"
@@ -35,13 +35,13 @@ func TestRepoRuleFromBazelRepo(t *testing.T) {
 			Name: repoName,
 			Pin:  p,
 		}
-		actual, err := swift.RepoRuleFromBazelRepo(br, miBasename, pkgDir)
+		actual, err := swift.RepoRuleFromBazelRepo(br, diBasename, pkgDir)
 		assert.NoError(t, err)
 
 		expected := rule.NewRule(swift.SwiftPkgRuleKind, repoName)
 		expected.SetAttr("commit", revision)
 		expected.SetAttr("remote", remote)
-		expected.SetAttr("module_index", fmt.Sprintf("@//:%s", miBasename))
+		expected.SetAttr("dependencies_index", fmt.Sprintf("@//:%s", diBasename))
 		expected.AddComment("# version: 1.2.3")
 		assert.Equal(t, expected, actual)
 	})
@@ -58,12 +58,12 @@ func TestRepoRuleFromBazelRepo(t *testing.T) {
 				Path: localPkgDir,
 			},
 		}
-		actual, err := swift.RepoRuleFromBazelRepo(br, miBasename, pkgDir)
+		actual, err := swift.RepoRuleFromBazelRepo(br, diBasename, pkgDir)
 		assert.NoError(t, err)
 
 		expected := rule.NewRule(swift.LocalSwiftPkgRuleKind, repoName)
 		expected.SetAttr("path", relLocalPkgDir)
-		expected.SetAttr("module_index", fmt.Sprintf("@//:%s", miBasename))
+		expected.SetAttr("dependencies_index", fmt.Sprintf("@//:%s", diBasename))
 		assert.Equal(t, expected, actual)
 	})
 }

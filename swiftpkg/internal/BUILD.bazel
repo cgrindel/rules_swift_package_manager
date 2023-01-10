@@ -124,8 +124,8 @@ bzl_library(
 )
 
 bzl_library(
-    name = "module_indexes",
-    srcs = ["module_indexes.bzl"],
+    name = "deps_indexes",
+    srcs = ["deps_indexes.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = ["@cgrindel_bazel_starlib//bzllib:defs"],
 )
@@ -142,7 +142,7 @@ bzl_library(
     srcs = ["pkg_ctxs.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
-        ":module_indexes",
+        ":deps_indexes",
         ":pkginfo_ext_deps",
     ],
 )

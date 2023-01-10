@@ -1,0 +1,35 @@
+{
+  "modules": [
+    {
+      "name": "TrustKit",
+      "c99name": "TrustKit",
+      "label": "@swiftpkg_trustkit//:TrustKit"
+    }
+  ],
+  "products": [
+    {
+      "identity": "trustkit",
+      "name": "TrustKit",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_trustkit//:TrustKit"
+      ]
+    },
+    {
+      "identity": "trustkit",
+      "name": "TrustKitDynamic",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_trustkit//:TrustKit"
+      ]
+    },
+    {
+      "identity": "trustkit",
+      "name": "TrustKitStatic",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_trustkit//:TrustKit"
+      ]
+    }
+  ]
+}

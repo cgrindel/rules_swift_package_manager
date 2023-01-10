@@ -5,6 +5,6 @@ def swift_dependencies():
     swift_package(
         name = "swiftpkg_trustkit",
         commit = "65d573e0e2687ea91ab0b1be377f9dd3eb1c2785",
-        module_index = "@//:module_index.json",
+        dependencies_index = "@//:swift_deps_index.json",
         remote = "https://github.com/datatheorem/TrustKit.git",
     )

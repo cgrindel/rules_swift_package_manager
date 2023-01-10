@@ -71,7 +71,7 @@ func TestGetSetSwiftConfig(t *testing.T) {
 	assert.Equal(t, sc, actual)
 }
 
-func TestWriteAndReadModuleIndex(t *testing.T) {
+func TestWriteAndReadDependencyIndex(t *testing.T) {
 	// Create temp dir
 	dir, err := os.MkdirTemp("", "swiftcfg")
 	assert.NoError(t, err)
@@ -79,24 +79,24 @@ func TestWriteAndReadModuleIndex(t *testing.T) {
 
 	// Create swift config
 	origsc := swiftcfg.NewSwiftConfig()
-	origsc.ModuleIndexPath = filepath.Join(dir, swiftcfg.DefaultModuleIndexBasename)
+	origsc.DependencyIndexPath = filepath.Join(dir, swiftcfg.DefaultDependencyIndexBasename)
 
 	lbl := label.New("cool_repo", "Sources/Foo", "Foo")
-	m := swift.NewModule("Foo", lbl)
-	origsc.ModuleIndex.AddModule(m)
+	m := swift.NewModule("Foo", "Foo", &lbl)
+	origsc.DependencyIndex.ModuleIndex.Add(m)
 
 	// Write the index
-	err = origsc.WriteModuleIndex()
+	err = origsc.WriteDependencyIndex()
 	assert.NoError(t, err)
 
 	// Create a new swift config
 	newsc := swiftcfg.NewSwiftConfig()
-	newsc.ModuleIndexPath = filepath.Join(dir, swiftcfg.DefaultModuleIndexBasename)
+	newsc.DependencyIndexPath = filepath.Join(dir, swiftcfg.DefaultDependencyIndexBasename)
 
 	// Read the index
-	err = newsc.LoadModuleIndex()
+	err = newsc.LoadDependencyIndex()
 	assert.NoError(t, err)
 
 	// Ensure that the indexes are that same
-	assert.Equal(t, origsc.ModuleIndex, newsc.ModuleIndex)
+	assert.Equal(t, origsc.DependencyIndex, newsc.DependencyIndex)
 }

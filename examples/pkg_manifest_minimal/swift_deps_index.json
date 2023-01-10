@@ -1,0 +1,190 @@
+{
+  "modules": [
+    {
+      "name": "GreetingsFramework",
+      "c99name": "GreetingsFramework",
+      "label": "@swiftpkg_my_local_package//:Sources_GreetingsFramework"
+    },
+    {
+      "name": "PrintGreeting",
+      "c99name": "PrintGreeting",
+      "label": "@swiftpkg_my_local_package//:Sources_PrintGreeting"
+    },
+    {
+      "name": "GreetingsFrameworkTests",
+      "c99name": "GreetingsFrameworkTests",
+      "label": "@swiftpkg_my_local_package//:Tests_GreetingsFrameworkTests"
+    },
+    {
+      "name": "count-lines",
+      "c99name": "count_lines",
+      "label": "@swiftpkg_swift_argument_parser//:Examples_count-lines"
+    },
+    {
+      "name": "math",
+      "c99name": "math",
+      "label": "@swiftpkg_swift_argument_parser//:Examples_math"
+    },
+    {
+      "name": "repeat",
+      "c99name": "repeat",
+      "label": "@swiftpkg_swift_argument_parser//:Examples_repeat"
+    },
+    {
+      "name": "roll",
+      "c99name": "roll",
+      "label": "@swiftpkg_swift_argument_parser//:Examples_roll"
+    },
+    {
+      "name": "Generate Manual",
+      "c99name": "Generate_Manual",
+      "label": "@swiftpkg_swift_argument_parser//:Plugins_GenerateManualPlugin_Generate Manual"
+    },
+    {
+      "name": "ArgumentParser",
+      "c99name": "ArgumentParser",
+      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser"
+    },
+    {
+      "name": "ArgumentParserTestHelpers",
+      "c99name": "ArgumentParserTestHelpers",
+      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserTestHelpers"
+    },
+    {
+      "name": "ArgumentParserToolInfo",
+      "c99name": "ArgumentParserToolInfo",
+      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserToolInfo"
+    },
+    {
+      "name": "ArgumentParserEndToEndTests",
+      "c99name": "ArgumentParserEndToEndTests",
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserEndToEndTests"
+    },
+    {
+      "name": "ArgumentParserExampleTests",
+      "c99name": "ArgumentParserExampleTests",
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserExampleTests"
+    },
+    {
+      "name": "ArgumentParserGenerateManualTests",
+      "c99name": "ArgumentParserGenerateManualTests",
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserGenerateManualTests"
+    },
+    {
+      "name": "ArgumentParserPackageManagerTests",
+      "c99name": "ArgumentParserPackageManagerTests",
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserPackageManagerTests"
+    },
+    {
+      "name": "ArgumentParserUnitTests",
+      "c99name": "ArgumentParserUnitTests",
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserUnitTests"
+    },
+    {
+      "name": "changelog-authors",
+      "c99name": "changelog_authors",
+      "label": "@swiftpkg_swift_argument_parser//:Tools_changelog-authors"
+    },
+    {
+      "name": "generate-manual",
+      "c99name": "generate_manual",
+      "label": "@swiftpkg_swift_argument_parser//:Tools_generate-manual"
+    },
+    {
+      "name": "Logging",
+      "c99name": "Logging",
+      "label": "@swiftpkg_swift_log//:Sources_Logging"
+    },
+    {
+      "name": "LoggingTests",
+      "c99name": "LoggingTests",
+      "label": "@swiftpkg_swift_log//:Tests_LoggingTests"
+    },
+    {
+      "name": "CommandLineTool",
+      "c99name": "CommandLineTool",
+      "label": "@swiftpkg_swiftformat//:CommandLineTool"
+    },
+    {
+      "name": "SwiftFormatPlugin",
+      "c99name": "SwiftFormatPlugin",
+      "label": "@swiftpkg_swiftformat//:Plugins_SwiftFormatPlugin"
+    },
+    {
+      "name": "SwiftFormat",
+      "c99name": "SwiftFormat",
+      "label": "@swiftpkg_swiftformat//:Sources_SwiftFormat"
+    },
+    {
+      "name": "SwiftFormatTests",
+      "c99name": "SwiftFormatTests",
+      "label": "@swiftpkg_swiftformat//:Tests_SwiftFormatTests"
+    }
+  ],
+  "products": [
+    {
+      "identity": "my_local_package",
+      "name": "GreetingsFramework",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_my_local_package//:Sources_GreetingsFramework"
+      ]
+    },
+    {
+      "identity": "my_local_package",
+      "name": "print-greeting",
+      "type": "executable",
+      "target_labels": [
+        "@swiftpkg_my_local_package//:Sources_PrintGreeting"
+      ]
+    },
+    {
+      "identity": "swift-argument-parser",
+      "name": "ArgumentParser",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser"
+      ]
+    },
+    {
+      "identity": "swift-argument-parser",
+      "name": "GenerateManualPlugin",
+      "type": "plugin",
+      "target_labels": [
+        "@swiftpkg_swift_argument_parser//:Plugins_GenerateManualPlugin_Generate Manual"
+      ]
+    },
+    {
+      "identity": "swift-log",
+      "name": "Logging",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_log//:Sources_Logging"
+      ]
+    },
+    {
+      "identity": "swiftformat",
+      "name": "SwiftFormat",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swiftformat//:Sources_SwiftFormat"
+      ]
+    },
+    {
+      "identity": "swiftformat",
+      "name": "SwiftFormatPlugin",
+      "type": "plugin",
+      "target_labels": [
+        "@swiftpkg_swiftformat//:Plugins_SwiftFormatPlugin"
+      ]
+    },
+    {
+      "identity": "swiftformat",
+      "name": "swiftformat",
+      "type": "executable",
+      "target_labels": [
+        "@swiftpkg_swiftformat//:CommandLineTool"
+      ]
+    }
+  ]
+}

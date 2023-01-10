@@ -16,10 +16,10 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 	sc := swiftcfg.NewSwiftConfig()
 
 	fs.StringVar(
-		&sc.ModuleIndexPath,
-		"module_index",
+		&sc.DependencyIndexPath,
+		"dependency_index",
 		"",
-		"the location of the module index JSON file",
+		"the location of the dependency index JSON file",
 	)
 
 	// Store the config for later steps
@@ -39,18 +39,18 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 	// Initialize the module index path. We cannot initialize this path until we get into
 	// CheckFlags.
-	if sc.ModuleIndexPath == "" {
-		sc.ModuleIndexPath = filepath.Join(c.RepoRoot, swiftcfg.DefaultModuleIndexBasename)
+	if sc.DependencyIndexPath == "" {
+		sc.DependencyIndexPath = filepath.Join(c.RepoRoot, swiftcfg.DefaultDependencyIndexBasename)
 	}
 
 	// Attempt to load the module index. This is created by update-repos if the client is using
 	// external Swift packages (e.g. swift_pacakge).
-	if err = sc.LoadModuleIndex(); err != nil {
+	if err = sc.LoadDependencyIndex(); err != nil {
 		return err
 	}
 	// Index any of repository rules (e.g. http_archive) that may contain Swift targets.
 	for _, r := range c.Repos {
-		if err := sc.ModuleIndex.IndexRepoRule(r, c.RepoRoot); err != nil {
+		if err := sc.DependencyIndex.IndexRepoRule(r, c.RepoRoot); err != nil {
 			return err
 		}
 	}
