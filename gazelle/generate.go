@@ -10,6 +10,7 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/stringslices"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
+	"golang.org/x/exp/slices"
 )
 
 func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateResult {
@@ -77,7 +78,7 @@ func generateEmpty(args language.GenerateArgs, srcs []string) []*rule.Rule {
 		}
 		isEmpty := true
 		for _, src := range r.AttrStrings("srcs") {
-			if stringslices.SortedContains(srcs, src) {
+			if _, ok := slices.BinarySearch(srcs, src); ok {
 				isEmpty = false
 				break
 			}

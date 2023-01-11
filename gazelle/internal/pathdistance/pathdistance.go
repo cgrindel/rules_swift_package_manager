@@ -3,7 +3,7 @@ package pathdistance
 import (
 	"path/filepath"
 
-	"github.com/cgrindel/swift_bazel/gazelle/internal/stringslices"
+	"golang.org/x/exp/slices"
 )
 
 func PathAt(path string, distance int) string {
@@ -23,7 +23,7 @@ func doDistanceFrom(values []string, path string, distance int) int {
 		return -1
 	}
 	basename := filepath.Base(path)
-	if stringslices.Contains(values, basename) {
+	if slices.Contains(values, basename) {
 		return distance
 	}
 	parent := parentDir(path)

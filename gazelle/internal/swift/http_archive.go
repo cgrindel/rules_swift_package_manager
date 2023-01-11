@@ -7,7 +7,7 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/stringslices"
+	"golang.org/x/exp/slices"
 )
 
 const buildFileContentAttrName = "build_file_content"
@@ -70,7 +70,7 @@ func readBuildFileContent(buildFile string, repoRoot string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if !stringslices.Contains([]string{"", "@"}, lbl.Repo) {
+	if !slices.Contains([]string{"", "@"}, lbl.Repo) {
 		return "", fmt.Errorf("invalid repo name when trying to read build file %s", buildFile)
 	}
 	bldFilePath := filepath.Join(repoRoot, lbl.Pkg, lbl.Name)
