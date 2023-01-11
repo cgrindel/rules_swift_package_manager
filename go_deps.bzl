@@ -23,8 +23,8 @@ def swift_bazel_go_dependencies():
         build_external = "external",
         build_naming_convention = "go_default_library",
         importpath = "github.com/bazelbuild/buildtools",
-        sum = "h1:vtcpnkSZF7J3/YWAbaQWSQyFB+O4d7EUjuE9EBUrf/s=",
-        version = "v0.0.0-20230103153053-669c4920306e",
+        sum = "h1:DraHsDqTYhf6w1369EEdFyA5hjJnGX88xNJRv1+20E0=",
+        version = "v0.0.0-20230111132423-06e8e2436a75",
     )
     go_repository(
         name = "com_github_bazelbuild_rules_go",
