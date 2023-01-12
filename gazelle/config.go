@@ -22,6 +22,15 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 		"the location of the dependency index JSON file",
 	)
 
+	switch cmd {
+	case "update-repos":
+		fs.BoolVar(
+			&sc.UpdatePkgsToLatest,
+			"swift_update_packages_to_latest",
+			false,
+			"Determines whether to update the Swift packages to their latest eligible version.")
+	}
+
 	// Store the config for later steps
 	swiftcfg.SetSwiftConfig(c, sc)
 }

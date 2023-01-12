@@ -72,10 +72,14 @@ func TestSwiftBin(t *testing.T) {
 		assert.NoError(t, err)
 
 		// Resolve the package
-		err = sb.ResolvePackage(dir)
+		err = sb.ResolvePackage(dir, false)
 		assert.NoError(t, err)
 		resolvedPkgPath := filepath.Join(dir, "Package.resolved")
 		assert.FileExists(t, resolvedPkgPath)
+
+		// Resolve the package to their latest eligible version
+		err = sb.ResolvePackage(dir, true)
+		assert.NoError(t, err)
 	})
 }
 

@@ -64,8 +64,14 @@ func (sb *SwiftBin) DescribePackage(dir string) ([]byte, error) {
 	return stdout.Bytes(), nil
 }
 
-func (sb *SwiftBin) ResolvePackage(dir string) error {
-	args := []string{"package", "resolve"}
+func (sb *SwiftBin) ResolvePackage(dir string, updateToLatest bool) error {
+	var pkgCmd string
+	if updateToLatest {
+		pkgCmd = "update"
+	} else {
+		pkgCmd = "resolve"
+	}
+	args := []string{"package", pkgCmd}
 	cmd := exec.Command(sb.BinPath, args...)
 	cmd.Dir = dir
 	if out, err := cmd.CombinedOutput(); err != nil {

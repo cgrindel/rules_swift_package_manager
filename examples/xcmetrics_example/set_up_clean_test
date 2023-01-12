@@ -25,11 +25,12 @@ load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
+load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
 
 tidy(
     name = "tidy",
     targets = [
-        ":swift_update_repos",
+        ":swift_update_pkgs",
         ":update_build_files",
     ],
 )
@@ -52,14 +53,8 @@ gazelle(
     gazelle = ":gazelle_bin",
 )
 
-gazelle(
-    name = "swift_update_repos",
-    args = [
-        "-from_file=Package.swift",
-        "-to_macro=swift_deps.bzl%swift_dependencies",
-        "-prune",
-    ],
-    command = "update-repos",
+swift_update_packages(
+    name = "swift_update_pkgs",
     gazelle = ":gazelle_bin",
 )
 

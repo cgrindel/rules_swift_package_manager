@@ -10,7 +10,7 @@
 * [Does this replace rules\_spm ?](https://github.com/cgrindel/rules_spm/)
 * [Can I migrate from rules\_spm to swift\_bazel ?](https://github.com/cgrindel/rules_spm/)
 * [Can I just manage my external Swift packages and not generate Bazel build files for my project?](#can-i-just-manage-my-external-swift-packages-and-not-generate-bazel-build-files-for-my-project)
-* [After running //:swift\_update\_repos , I see a \.build directory\. What is it? Do I need it?](#after-running-swift_update_repos-i-see-a-build-directory-what-is-it-do-i-need-it)
+* [After running //:swift\_update\_pkgs , I see a \.build directory\. What is it? Do I need it?](#after-running-swift_update_pkgs-i-see-a-build-directory-what-is-it-do-i-need-it)
 * [Does the Gazelle plugin run Swift package manager with every execution?](#does-the-gazelle-plugin-run-swift-package-manager-with-every-execution)
 <!-- MARKDOWN TOC: END -->
 
@@ -67,9 +67,9 @@ on the roadmap.
 
 Yes. Just omit the `//:update_build_files` target that is mentioned in the [quickstart].
 
-## After running `//:swift_update_repos`, I see a `.build` directory. What is it? Do I need it?
+## After running `//:swift_update_pkgs`, I see a `.build` directory. What is it? Do I need it?
 
-The `//:swift_update_repos` target runs the Gazelle plugin in `update-repos` mode. This mode
+The `//:swift_update_pkgs` target runs the Gazelle plugin in `update-repos` mode. This mode
 resolves the external dependencies listed in your `Package.swift` by running Swift package manager
 commands.  These commands result in a `.build` directory being created. The directory is a side
 effect of running the Swift package manager commands. It can be ignored and should not be checked
