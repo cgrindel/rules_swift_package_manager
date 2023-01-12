@@ -6,7 +6,7 @@ load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
 tidy(
     name = "tidy",
     targets = [
-        ":swift_update_repos",
+        ":swift_update_pkgs",
         ":update_build_files",
     ],
 )
@@ -30,7 +30,7 @@ gazelle(
 )
 
 swift_update_packages(
-    name = "swift_update_repos",
+    name = "swift_update_pkgs",
     gazelle = ":gazelle_bin",
 )
 

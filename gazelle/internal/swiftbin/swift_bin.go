@@ -3,7 +3,6 @@ package swiftbin
 import (
 	"bytes"
 	"fmt"
-	"log"
 	"os/exec"
 )
 
@@ -73,10 +72,6 @@ func (sb *SwiftBin) ResolvePackage(dir string, updateToLatest bool) error {
 		pkgCmd = "resolve"
 	}
 	args := []string{"package", pkgCmd}
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK:  updateToLatest: %+#v", updateToLatest)
-	log.Printf("*** CHUCK:  args: %+#v", args)
-	// DEBUG END
 	cmd := exec.Command(sb.BinPath, args...)
 	cmd.Dir = dir
 	if out, err := cmd.CombinedOutput(); err != nil {
