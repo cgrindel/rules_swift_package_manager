@@ -8,46 +8,37 @@ import (
 )
 
 func TestGetPathAtDistance(t *testing.T) {
-	t.Run("path is empty", func(t *testing.T) {
-		actual := pathdistance.PathAt("", 3)
-		assert.Equal(t, "", actual)
-	})
-	t.Run("distance is greater than or equal to 0", func(t *testing.T) {
-		actual := pathdistance.PathAt("foo/bar/hello", 0)
-		assert.Equal(t, "foo/bar/hello", actual)
-
-		actual = pathdistance.PathAt("foo/bar/hello", 1)
-		assert.Equal(t, "foo/bar", actual)
-
-		actual = pathdistance.PathAt("foo/bar/hello", 2)
-		assert.Equal(t, "foo", actual)
-	})
-	t.Run("distance is greater than path parts length", func(t *testing.T) {
-		actual := pathdistance.PathAt("foo/bar/hello", 10)
-		assert.Equal(t, "", actual)
-	})
+	tests := []struct {
+		path string
+		dist int
+		wval string
+	}{
+		{path: "", dist: 3, wval: ""},
+		{path: "foo/bar/hello", dist: 0, wval: "foo/bar/hello"},
+		{path: "foo/bar/hello", dist: 1, wval: "foo/bar"},
+		{path: "foo/bar/hello", dist: 2, wval: "foo"},
+		{path: "foo/bar/hello", dist: 10, wval: ""},
+	}
+	for _, tc := range tests {
+		actual := pathdistance.PathAt(tc.path, tc.dist)
+		assert.Equal(t, tc.wval, actual)
+	}
 }
 
 func TestDistanceFromPath(t *testing.T) {
 	values := []string{"foo"}
-	t.Run("path is empty", func(t *testing.T) {
-		actual := pathdistance.DistanceFrom(values, "")
-		assert.Equal(t, -1, actual)
-	})
-	t.Run("no values found in the path", func(t *testing.T) {
-		actual := pathdistance.DistanceFrom(values, "chicken/bar/hello")
-		assert.Equal(t, -1, actual)
-	})
-	t.Run("current directory is a match", func(t *testing.T) {
-		actual := pathdistance.DistanceFrom(values, "chicken/bar/foo")
-		assert.Equal(t, 0, actual)
-	})
-	t.Run("parent directory is a match", func(t *testing.T) {
-		actual := pathdistance.DistanceFrom(values, "chicken/foo/hello")
-		assert.Equal(t, 1, actual)
-	})
-	t.Run("grandparent directory is a match", func(t *testing.T) {
-		actual := pathdistance.DistanceFrom(values, "foo/bar/hello")
-		assert.Equal(t, 2, actual)
-	})
+	tests := []struct {
+		path string
+		wval int
+	}{
+		{path: "", wval: -1},
+		{path: "chicken/bar/hello", wval: -1},
+		{path: "chicken/bar/foo", wval: 0},
+		{path: "chicken/foo/hello", wval: 1},
+		{path: "foo/bar/hello", wval: 2},
+	}
+	for _, tc := range tests {
+		actual := pathdistance.DistanceFrom(values, tc.path)
+		assert.Equal(t, tc.wval, actual)
+	}
 }

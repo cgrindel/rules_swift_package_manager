@@ -21,29 +21,19 @@ func strToPkgRefKind(val string) (spreso.PkgRefKind, error) {
 }
 
 func TestPkgRefKindUnmarshalJSON(t *testing.T) {
-	t.Run("root", func(t *testing.T) {
-		actual, err := strToPkgRefKind("root")
+	tests := []struct {
+		val  string
+		wval spreso.PkgRefKind
+	}{
+		{val: "root", wval: spreso.RootPkgRefKind},
+		{val: "fileSystem", wval: spreso.FileSystemPkgRefKind},
+		{val: "localSourceControl", wval: spreso.LocalSourceControlPkgRefKind},
+		{val: "remoteSourceControl", wval: spreso.RemoteSourceControlPkgRefKind},
+		{val: "registry", wval: spreso.RegistryPkgRefKind},
+	}
+	for _, tc := range tests {
+		actual, err := strToPkgRefKind(tc.val)
 		assert.NoError(t, err)
-		assert.Equal(t, spreso.RootPkgRefKind, actual)
-	})
-	t.Run("fileSystem", func(t *testing.T) {
-		actual, err := strToPkgRefKind("fileSystem")
-		assert.NoError(t, err)
-		assert.Equal(t, spreso.FileSystemPkgRefKind, actual)
-	})
-	t.Run("localSourceControl", func(t *testing.T) {
-		actual, err := strToPkgRefKind("localSourceControl")
-		assert.NoError(t, err)
-		assert.Equal(t, spreso.LocalSourceControlPkgRefKind, actual)
-	})
-	t.Run("remoteSourceControl", func(t *testing.T) {
-		actual, err := strToPkgRefKind("remoteSourceControl")
-		assert.NoError(t, err)
-		assert.Equal(t, spreso.RemoteSourceControlPkgRefKind, actual)
-	})
-	t.Run("registry", func(t *testing.T) {
-		actual, err := strToPkgRefKind("registry")
-		assert.NoError(t, err)
-		assert.Equal(t, spreso.RegistryPkgRefKind, actual)
-	})
+		assert.Equal(t, tc.wval, actual)
+	}
 }

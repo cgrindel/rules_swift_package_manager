@@ -39,126 +39,107 @@ func init() {
 }
 
 func TestStringAtKey(t *testing.T) {
-	t.Run("key does not exist", func(t *testing.T) {
-		k := "doesNotExist"
-		actual, err := jsonutils.StringAtKey(rawMap, k)
-		assert.Equal(t, jsonutils.NewMissingKeyError(k), err)
-		assert.Equal(t, "", actual)
-	})
-	t.Run("key exists, is not string", func(t *testing.T) {
-		k := "intKey"
-		actual, err := jsonutils.StringAtKey(rawMap, k)
-		assert.Equal(t, jsonutils.NewKeyTypeError(k, "string", intValue), err)
-		assert.Equal(t, "", actual)
-	})
-	t.Run("key exists, is string", func(t *testing.T) {
-		actual, err := jsonutils.StringAtKey(rawMap, "stringKey")
-		assert.NoError(t, err)
-		assert.Equal(t, "stringValue", actual)
-	})
+	tests := []struct {
+		key  string
+		wval string
+		werr error
+	}{
+		{key: "doesNotExist", wval: "", werr: jsonutils.NewMissingKeyError("doesNotExist")},
+		{key: "intKey", wval: "", werr: jsonutils.NewKeyTypeError("intKey", "string", intValue)},
+		{key: "stringKey", wval: stringValue, werr: nil},
+	}
+	for _, tc := range tests {
+		actual, err := jsonutils.StringAtKey(rawMap, tc.key)
+		assert.Equal(t, tc.werr, err)
+		assert.Equal(t, tc.wval, actual)
+	}
 }
 
 func TestIntAtKey(t *testing.T) {
-	t.Run("key does not exist", func(t *testing.T) {
-		k := "doesNotExist"
-		actual, err := jsonutils.IntAtKey(rawMap, k)
-		assert.Equal(t, jsonutils.NewMissingKeyError(k), err)
-		assert.Equal(t, 0, actual)
-	})
-	t.Run("key exists, is not int", func(t *testing.T) {
-		k := "stringKey"
-		actual, err := jsonutils.IntAtKey(rawMap, k)
-		assert.Equal(t, jsonutils.NewKeyTypeError(k, "int", stringValue), err)
-		assert.Equal(t, 0, actual)
-	})
-	t.Run("key exists, is int", func(t *testing.T) {
-		actual, err := jsonutils.IntAtKey(rawMap, "intKey")
-		assert.NoError(t, err)
-		assert.Equal(t, intValue, actual)
-	})
-	t.Run("key exists, is float64", func(t *testing.T) {
-		actual, err := jsonutils.IntAtKey(rawMap, "floatKey")
-		assert.NoError(t, err)
-		assert.Equal(t, floatValueAsInt, actual)
-	})
+	tests := []struct {
+		key  string
+		wval int
+		werr error
+	}{
+		{key: "doesNotExist", wval: 0, werr: jsonutils.NewMissingKeyError("doesNotExist")},
+		{key: "stringKey", wval: 0, werr: jsonutils.NewKeyTypeError(
+			"stringKey", "int", stringValue)},
+		{key: "intKey", wval: intValue, werr: nil},
+		{key: "floatKey", wval: floatValueAsInt, werr: nil},
+	}
+	for _, tc := range tests {
+		actual, err := jsonutils.IntAtKey(rawMap, tc.key)
+		assert.Equal(t, tc.werr, err)
+		assert.Equal(t, tc.wval, actual)
+	}
 }
 
 func TestMapAtKey(t *testing.T) {
-	t.Run("key does not exist", func(t *testing.T) {
-		k := "doesNotExist"
-		actual, err := jsonutils.MapAtKey(rawMap, k)
-		assert.Equal(t, jsonutils.NewMissingKeyError(k), err)
-		assert.Nil(t, actual)
-	})
-	t.Run("key exists, is not map", func(t *testing.T) {
-		k := "intKey"
-		actual, err := jsonutils.MapAtKey(rawMap, "intKey")
-		assert.Equal(t, jsonutils.NewKeyTypeError(k, "map[string]any", intValue), err)
-		assert.Nil(t, actual)
-	})
-	t.Run("key exists, is map", func(t *testing.T) {
-		actual, err := jsonutils.MapAtKey(rawMap, "mapKey")
-		assert.NoError(t, err)
-		assert.Equal(t, mapValue, actual)
-	})
+	tests := []struct {
+		key  string
+		wval map[string]any
+		werr error
+	}{
+		{key: "doesNotExist", wval: nil, werr: jsonutils.NewMissingKeyError("doesNotExist")},
+		{key: "intKey", wval: nil, werr: jsonutils.NewKeyTypeError(
+			"intKey", "map[string]any", intValue)},
+		{key: "mapKey", wval: mapValue, werr: nil},
+	}
+	for _, tc := range tests {
+		actual, err := jsonutils.MapAtKey(rawMap, tc.key)
+		assert.Equal(t, tc.werr, err)
+		assert.Equal(t, tc.wval, actual)
+	}
 }
 
 func TestSliceAtKey(t *testing.T) {
-	t.Run("key does not exist", func(t *testing.T) {
-		k := "doesNotExist"
-		actual, err := jsonutils.SliceAtKey(rawMap, "doesNotExist")
-		assert.Equal(t, jsonutils.NewMissingKeyError(k), err)
-		assert.Nil(t, actual)
-	})
-	t.Run("key exists, is not slice", func(t *testing.T) {
-		k := "intKey"
-		actual, err := jsonutils.SliceAtKey(rawMap, "intKey")
-		assert.Equal(t, jsonutils.NewKeyTypeError(k, "[]any", intValue), err)
-		assert.Nil(t, actual)
-	})
-	t.Run("key exists, is slice", func(t *testing.T) {
-		actual, err := jsonutils.SliceAtKey(rawMap, "stringSliceKey")
-		assert.NoError(t, err)
-		assert.Equal(t, stringSliceValue, actual)
-	})
+	tests := []struct {
+		key  string
+		wval []any
+		werr error
+	}{
+		{key: "doesNotExist", wval: nil, werr: jsonutils.NewMissingKeyError("doesNotExist")},
+		{key: "intKey", wval: nil, werr: jsonutils.NewKeyTypeError("intKey", "[]any", intValue)},
+		{key: "stringSliceKey", wval: stringSliceValue, werr: nil},
+	}
+	for _, tc := range tests {
+		actual, err := jsonutils.SliceAtKey(rawMap, tc.key)
+		assert.Equal(t, tc.werr, err)
+		assert.Equal(t, tc.wval, actual)
+	}
 }
 
 func TestUnmarshalAtKey(t *testing.T) {
-	t.Run("key does not exist", func(t *testing.T) {
-		k := "doesNotExist"
+	tests := []struct {
+		key  string
+		wval myStruct
+		werr error
+	}{
+		{key: "doesNotExist", wval: myStruct{}, werr: jsonutils.NewMissingKeyError("doesNotExist")},
+		{key: "structKey", wval: myStruct{Name: "harry"}, werr: nil},
+	}
+	for _, tc := range tests {
 		var v myStruct
-		err := jsonutils.UnmarshalAtKey(rawMap, k, &v)
-		assert.Equal(t, jsonutils.NewMissingKeyError(k), err)
-	})
-	t.Run("key exists, unmarshal succeeds", func(t *testing.T) {
-		var v myStruct
-		err := jsonutils.UnmarshalAtKey(rawMap, "structKey", &v)
-		assert.NoError(t, err)
-		expected := myStruct{Name: "harry"}
-		assert.Equal(t, expected, v)
-	})
+		err := jsonutils.UnmarshalAtKey(rawMap, tc.key, &v)
+		assert.Equal(t, tc.werr, err)
+		assert.Equal(t, tc.wval, v)
+	}
 }
 
 func TestStringsAtKey(t *testing.T) {
-	t.Run("key does not exist", func(t *testing.T) {
-		k := "doesNotExist"
-		actual, err := jsonutils.StringsAtKey(rawMap, k)
-		assert.Equal(t, jsonutils.NewMissingKeyError(k), err)
-		assert.Nil(t, actual)
-	})
-	t.Run("key is not a slice of strings", func(t *testing.T) {
-		key := "intSliceKey"
-		actual, err := jsonutils.StringsAtKey(rawMap, key)
-		assert.Equal(
-			t,
-			jsonutils.NewKeyError(key, jsonutils.NewIndexTypeError(0, "string", intSliceValue[0])),
-			err,
-		)
-		assert.Nil(t, actual)
-	})
-	t.Run("key is a slice of strings", func(t *testing.T) {
-		actual, err := jsonutils.StringsAtKey(rawMap, "stringSliceKey")
-		assert.NoError(t, err)
-		assert.Equal(t, []string{"hello", "goodbye"}, actual)
-	})
+	tests := []struct {
+		key  string
+		wval []string
+		werr error
+	}{
+		{key: "doesNotExist", wval: nil, werr: jsonutils.NewMissingKeyError("doesNotExist")},
+		{key: "intSliceKey", wval: nil, werr: jsonutils.NewKeyError(
+			"intSliceKey", jsonutils.NewIndexTypeError(0, "string", intSliceValue[0]))},
+		{key: "stringSliceKey", wval: []string{"hello", "goodbye"}, werr: nil},
+	}
+	for _, tc := range tests {
+		actual, err := jsonutils.StringsAtKey(rawMap, tc.key)
+		assert.Equal(t, tc.werr, err)
+		assert.Equal(t, tc.wval, actual)
+	}
 }

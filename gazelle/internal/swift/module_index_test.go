@@ -22,18 +22,20 @@ func init() {
 func TestModuleIndex(t *testing.T) {
 	t.Run("resolve modules", func(t *testing.T) {
 		var actual *swift.Module
-
-		actual = moduleIndex.Resolve("", "DoesNotExist")
-		assert.Nil(t, actual)
-
-		actual = moduleIndex.Resolve("", "Bar")
-		assert.Equal(t, barM, actual)
-
-		actual = moduleIndex.Resolve("", "Foo")
-		assert.Equal(t, fooM, actual)
-
-		actual = moduleIndex.Resolve("another_repo", "Foo")
-		assert.Equal(t, anotherRepoFooM, actual)
+		tests := []struct {
+			repoName   string
+			moduleName string
+			wval       *swift.Module
+		}{
+			{repoName: "", moduleName: "DoesNotExist", wval: nil},
+			{repoName: "", moduleName: "Bar", wval: barM},
+			{repoName: "", moduleName: "Foo", wval: fooM},
+			{repoName: "another_repo", moduleName: "Foo", wval: anotherRepoFooM},
+		}
+		for _, tc := range tests {
+			actual = moduleIndex.Resolve(tc.repoName, tc.moduleName)
+			assert.Equal(t, tc.wval, actual)
+		}
 	})
 	t.Run("modules", func(t *testing.T) {
 		actual := moduleIndex.Modules()

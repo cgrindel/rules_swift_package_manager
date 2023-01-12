@@ -10,36 +10,39 @@ import (
 const pkgDir = "/path/to/pkg"
 
 func TestCodeDirForRemotePackage(t *testing.T) {
-	url := "https://github.com/nicklockwood/SwiftFormat"
-	actual := swift.CodeDirForRemotePackage(pkgDir, url)
-	expected := "/path/to/pkg/.build/checkouts/SwiftFormat"
-	assert.Equal(t, expected, actual)
-
-	// Trim the .git
-	url = "https://github.com/nicklockwood/SwiftFormat.git"
-	actual = swift.CodeDirForRemotePackage(pkgDir, url)
-	expected = "/path/to/pkg/.build/checkouts/SwiftFormat"
-	assert.Equal(t, expected, actual)
-
-	// Keep the .swift
-	url = "https://github.com/nicklockwood/SwiftFormat.swift"
-	actual = swift.CodeDirForRemotePackage(pkgDir, url)
-	expected = "/path/to/pkg/.build/checkouts/SwiftFormat.swift"
-	assert.Equal(t, expected, actual)
-
+	tests := []struct {
+		url  string
+		wval string
+	}{
+		{
+			url:  "https://github.com/nicklockwood/SwiftFormat",
+			wval: "/path/to/pkg/.build/checkouts/SwiftFormat",
+		},
+		{
+			url:  "https://github.com/nicklockwood/SwiftFormat.git",
+			wval: "/path/to/pkg/.build/checkouts/SwiftFormat",
+		},
+		{
+			url:  "https://github.com/nicklockwood/SwiftFormat.swift",
+			wval: "/path/to/pkg/.build/checkouts/SwiftFormat.swift",
+		},
+	}
+	for _, tc := range tests {
+		actual := swift.CodeDirForRemotePackage(pkgDir, tc.url)
+		assert.Equal(t, tc.wval, actual)
+	}
 }
 
 func TestCodeDirForLocalPackage(t *testing.T) {
-	t.Run("with absolute local path", func(t *testing.T) {
-		localPkgPath := "/path/to/local_pkg"
-		actual := swift.CodeDirForLocalPackage(pkgDir, localPkgPath)
-		expected := localPkgPath
-		assert.Equal(t, expected, actual)
-	})
-	t.Run("with relative local path", func(t *testing.T) {
-		localPkgPath := "../local_pkg"
-		actual := swift.CodeDirForLocalPackage(pkgDir, localPkgPath)
-		expected := "/path/to/local_pkg"
-		assert.Equal(t, expected, actual)
-	})
+	tests := []struct {
+		pkgPath string
+		wval    string
+	}{
+		{pkgPath: "/path/to/local_pkg", wval: "/path/to/local_pkg"},
+		{pkgPath: "../local_pkg", wval: "/path/to/local_pkg"},
+	}
+	for _, tc := range tests {
+		actual := swift.CodeDirForLocalPackage(pkgDir, tc.pkgPath)
+		assert.Equal(t, tc.wval, actual)
+	}
 }
