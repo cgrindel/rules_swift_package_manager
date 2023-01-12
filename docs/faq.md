@@ -83,9 +83,15 @@ update the version selection for a dependency). The `update` mode for the Gazell
 Bazel build files for your project. It uses information written to the `swift_deps_index.json` and
 the source files that exist in your project to generate the Bazel build files.
 
+## Can I store the Swift dependency files in a sub-package (i.e., not in the root of the workspace)?
+
+Yes. The [vapor example] demonstrates storing the Swift dependency files in a sub-package called
+`swift`.
+
 
 [loading phase]: https://bazel.build/run/build#loading 
 [quickstart]: https://github.com/cgrindel/swift_bazel/blob/main/README.md#quickstart
 [rules_spm]: https://github.com/cgrindel/rules_spm/
 [rules_swift]: https://github.com/bazelbuild/rules_swift
 [Gazelle framework]: https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md
+[vapor example]: /examples/vapor_example
