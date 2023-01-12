@@ -28,12 +28,23 @@ gazelle(
     gazelle = ":gazelle_bin",
 )
 
+_UPDATE_REPOS_ARGS = [
+    "-from_file=Package.swift",
+    "-to_macro=swift_deps.bzl%swift_dependencies",
+    "-prune",
+]
+
 gazelle(
     name = "swift_update_repos",
-    args = [
-        "-from_file=Package.swift",
-        "-to_macro=swift_deps.bzl%swift_dependencies",
-        "-prune",
+    args = _UPDATE_REPOS_ARGS,
+    command = "update-repos",
+    gazelle = ":gazelle_bin",
+)
+
+gazelle(
+    name = "swift_update_repos_to_latest",
+    args = _UPDATE_REPOS_ARGS + [
+        "-swift_update_packages_to_latest",
     ],
     command = "update-repos",
     gazelle = ":gazelle_bin",
