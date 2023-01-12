@@ -179,6 +179,7 @@ Add the following to the `BUILD.bazel` file at the root of your workspace.
 
 ```python
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
 
 # Ignore the `.build` folder that is created by running Swift package manager 
 # commands. The Swift Gazelle plugin executes some Swift package manager 
@@ -201,18 +202,18 @@ gazelle_binary(
     ],
 )
 
-# This target should be run whenever the list of external dependencies is 
-# updated in the `Package.swift`. Running this target will populate the 
-# `swift_deps.bzl` with `swift_package` declarations for all of the direct and 
-# transitive Swift packages that your project uses.
-gazelle(
-    name = "swift_update_repos",
-    args = [
-        "-from_file=Package.swift",
-        "-to_macro=swift_deps.bzl%swift_dependencies",
-        "-prune",
-    ],
-    command = "update-repos",
+# This macro defines two targets: `swift_update_pkgs` and 
+# `swift_update_pkgs_to_latest`. 
+#
+# The `swift_update_pkgs` target should be run whenever the list of external 
+# dependencies is updated in the `Package.swift`. Running this target will 
+# populate the `swift_deps.bzl` with `swift_package` declarations for all of 
+# the direct and transitive Swift packages that your project uses.
+# 
+# The `swift_update_pkgs_to_latest` target should be run when you want to 
+# update your Swift dependencies to their latest eligible version.
+swift_update_packages(
+    name = "swift_update_pkgs",
     gazelle = ":gazelle_bin",
 )
 
@@ -229,7 +230,7 @@ gazelle(
 Resolve the external dependencies for your project by running the following:
 
 ```sh
-$ bazel run //:swift_update_repos
+$ bazel run //:swift_update_pkgs
 ```
 
 ### 5. Create or update Bazel build files for your project.
@@ -255,7 +256,7 @@ generated for you.
 
 - The `Package.resolved` file specifies that exact versions of the dependencies that were
   identified. If you do not keep the `Package.resolved` file, the dependencies written to the
-  `swift_deps.bzl` could change when you execute `//:swift_update_repos`.
+  `swift_deps.bzl` could change when you execute `//:swift_update_pkgs`.
 - The `swift_deps.bzl` contains the Bazel repository rule declarations that load your external
   dependencies for the Bazel build.
 - The `module_index.json` maps module names to targets that provide a module with that name. This
@@ -269,14 +270,14 @@ The following are a few tips to consider as you work with your repository:
 
 - When you add or remove source files, run `bazel run //:update_build_files`. This will
   create/update the Bazel build files in your project. It is designed to be fast and unobtrusive.
-- When you add or remove an external dependency, run `bazel run //:swift_update_repos`. This
+- When you add or remove an external dependency, run `bazel run //:swift_update_pkgs`. This
   will resolve the changes to your transitive dependencies and regenerate your `Package.resolved`
   and `module_index.json`.
 - If things do not appear to be working properly, run the following in this order:
-  - `bazel run //:swift_update_repos`
+  - `bazel run //:swift_update_pkgs`
   - `bazel run //:update_build_files`
 - Do yourself a favor and create a Bazel target (e.g., `//:tidy`) that runs your repository
-  maintenance targets (e.g., `//:swift_update_repos`, `//:update_build_files`, formatting utilities) 
+  maintenance targets (e.g., `//:swift_update_pkgs`, `//:update_build_files`, formatting utilities) 
   in the proper order.  If you are looking for an easy way to set this up, check out the 
   [`//:tidy` declaration in this repository](BUILD.bazel) and the documentation for the [tidy] macro. 
 

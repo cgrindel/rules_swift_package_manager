@@ -67,9 +67,9 @@ on the roadmap.
 
 Yes. Just omit the `//:update_build_files` target that is mentioned in the [quickstart].
 
-## After running `//:swift_update_repos`, I see a `.build` directory. What is it? Do I need it?
+## After running `//:swift_update_pkgs`, I see a `.build` directory. What is it? Do I need it?
 
-The `//:swift_update_repos` target runs the Gazelle plugin in `update-repos` mode. This mode
+The `//:swift_update_pkgs` target runs the Gazelle plugin in `update-repos` mode. This mode
 resolves the external dependencies listed in your `Package.swift` by running Swift package manager
 commands.  These commands result in a `.build` directory being created. The directory is a side
 effect of running the Swift package manager commands. It can be ignored and should not be checked
