@@ -6,5 +6,5 @@
 
 
 [quickstart]: /README.md#quickstart
-[repository rules documentation]: /doc/repository_rules_overview.md
+[repository rules documentation]: /docs/repository_rules_overview.md
 [tips and tricks]: /README.md#tips-and-tricks
