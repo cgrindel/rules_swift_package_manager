@@ -5,6 +5,9 @@ load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
 # not forget to update the `gazelle` declaration `//:update_build_files` to
 # point at the new location of the Swift dependency index JSON file.
 
+# Ignore the Swift build folder
+# gazelle:exclude .build
+
 swift_update_packages(
     name = "update_pkgs",
     gazelle = "//:gazelle_bin",

@@ -11,9 +11,6 @@ tidy(
 
 # MARK: - Gazelle
 
-# Ignore the Swift build folder
-# gazelle:exclude .build
-
 gazelle_binary(
     name = "gazelle_bin",
     languages = [
