@@ -8,21 +8,19 @@ import (
 )
 
 func TestModuleRootDir(t *testing.T) {
-	t.Run("path contains module parent directory", func(t *testing.T) {
-		actual := swift.ModuleDir("Sources/Chicken")
-		assert.Equal(t, "Sources/Chicken", actual)
-
-		actual = swift.ModuleDir("foo/Source/Chicken")
-		assert.Equal(t, "foo/Source/Chicken", actual)
-
-		actual = swift.ModuleDir("foo/Sources/Chicken/Panther")
-		assert.Equal(t, "foo/Sources/Chicken", actual)
-
-		actual = swift.ModuleDir("Tests/ChickenTests/PantherTests")
-		assert.Equal(t, "Tests/ChickenTests", actual)
-	})
-	t.Run("path does not contain module parent directory", func(t *testing.T) {
-		actual := swift.ModuleDir("foo/Chicken")
-		assert.Equal(t, "foo/Chicken", actual)
-	})
+	tests := []struct {
+		path string
+		wval string
+	}{
+		{path: "Sources/Chicken", wval: "Sources/Chicken"},
+		{path: "foo/Source/Chicken", wval: "foo/Source/Chicken"},
+		{path: "foo/Sources/Chicken/Panther", wval: "foo/Sources/Chicken"},
+		{path: "Tests/ChickenTests/PantherTests", wval: "Tests/ChickenTests"},
+		// path does not contain module directory
+		{path: "foo/Chicken", wval: "foo/Chicken"},
+	}
+	for _, tc := range tests {
+		actual := swift.ModuleDir(tc.path)
+		assert.Equal(t, tc.wval, actual)
+	}
 }

@@ -11,14 +11,15 @@ func TestMap(t *testing.T) {
 	mapFn := func(value string) string {
 		return value + "a"
 	}
-	t.Run("empty values", func(t *testing.T) {
-		actual := stringslices.Map([]string{}, mapFn)
-		expected := []string{}
-		assert.Equal(t, expected, actual)
-	})
-	t.Run("non-empty values", func(t *testing.T) {
-		actual := stringslices.Map([]string{"x", "y", "z"}, mapFn)
-		expected := []string{"xa", "ya", "za"}
-		assert.Equal(t, expected, actual)
-	})
+	tests := []struct {
+		values []string
+		wval   []string
+	}{
+		{values: []string{}, wval: []string{}},
+		{values: []string{"x", "y", "z"}, wval: []string{"xa", "ya", "za"}},
+	}
+	for _, tc := range tests {
+		actual := stringslices.Map(tc.values, mapFn)
+		assert.Equal(t, tc.wval, actual)
+	}
 }

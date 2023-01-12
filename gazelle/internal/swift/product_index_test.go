@@ -33,20 +33,21 @@ func init() {
 
 func TestProductIndex(t *testing.T) {
 	t.Run("resolve", func(t *testing.T) {
-		actual := productIndex.Resolve("farm", "Poultry")
-		assert.Equal(t, poultryP, actual)
-
-		// Chicken is not a product
-		actual = productIndex.Resolve("farm", "Chicken")
-		assert.Nil(t, actual)
-
-		// Hen is not a product
-		actual = productIndex.Resolve("farm", "Hen")
-		assert.Nil(t, actual)
-
-		// Be sure that we disambiguate bewteen the different products named Poultry.
-		actual = productIndex.Resolve("zoo", "Poultry")
-		assert.Equal(t, anotherPoultryP, actual)
+		tests := []struct {
+			identity string
+			name     string
+			wval     *swift.Product
+		}{
+			{identity: "farm", name: "Poultry", wval: poultryP},
+			{identity: "farm", name: "Chicken", wval: nil},
+			{identity: "farm", name: "Hen", wval: nil},
+			// Be sure that we disambiguate bewteen the different products named Poultry.
+			{identity: "zoo", name: "Poultry", wval: anotherPoultryP},
+		}
+		for _, tc := range tests {
+			actual := productIndex.Resolve(tc.identity, tc.name)
+			assert.Equal(t, tc.wval, actual)
+		}
 	})
 	t.Run("products", func(t *testing.T) {
 		actual := productIndex.Products()

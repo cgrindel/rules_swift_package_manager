@@ -1,8 +1,6 @@
 package swift
 
-import (
-	"github.com/cgrindel/swift_bazel/gazelle/internal/stringslices"
-)
+import "golang.org/x/exp/slices"
 
 var builtInModules = []string{
 	"Foundation",
@@ -10,5 +8,5 @@ var builtInModules = []string{
 }
 
 func IsBuiltInModule(name string) bool {
-	return stringslices.Contains(builtInModules, name)
+	return slices.Contains(builtInModules, name)
 }

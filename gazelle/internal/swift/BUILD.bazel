@@ -36,13 +36,13 @@ go_library(
     deps = [
         "//gazelle/internal/pathdistance",
         "//gazelle/internal/spreso",
-        "//gazelle/internal/stringslices",
         "//gazelle/internal/swiftpkg",
         "@bazel_gazelle//config:go_default_library",
         "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//language:go_default_library",
         "@bazel_gazelle//rule:go_default_library",
         "@com_github_bazelbuild_buildtools//build:go_default_library",
+        "@org_golang_x_exp//slices",
     ],
 )
 
