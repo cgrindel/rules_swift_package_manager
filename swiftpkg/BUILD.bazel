@@ -11,6 +11,7 @@ bzl_library(
     deps = [
         "//swiftpkg/internal:local_swift_package",
         "//swiftpkg/internal:swift_package",
+        "//swiftpkg/internal:swift_update_packages",
     ],
 )
 
