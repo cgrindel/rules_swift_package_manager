@@ -43,7 +43,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 
 	// Ensure that we have resolved and fetched the Swift package dependencies
 	pkgDir := filepath.Dir(args.Path)
-	if err := sb.ResolvePackage(pkgDir); err != nil {
+	if err := sb.ResolvePackage(pkgDir, sc.UpdatePkgsToLatest); err != nil {
 		result.Error = err
 		return result
 	}

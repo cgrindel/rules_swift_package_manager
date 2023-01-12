@@ -21,6 +21,7 @@ type SwiftConfig struct {
 	DependencyIndex      *swift.DependencyIndex
 	DependencyIndexPath  string
 	PackageInfo          *swiftpkg.PackageInfo
+	UpdatePkgsToLatest   bool
 }
 
 func NewSwiftConfig() *SwiftConfig {
@@ -51,7 +52,6 @@ func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRul
 }
 
 func (sc *SwiftConfig) LoadDependencyIndex() error {
-	// If the file does not exist, do not fail. Just exit.
 	if sc.DependencyIndexPath == "" {
 		return nil
 	}
