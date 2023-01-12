@@ -1,3 +1,5 @@
+"""Defines the `swift_update_packages` macro."""
+
 load("@bazel_gazelle//:def.bzl", _gazelle = "gazelle")
 
 def swift_update_packages(
