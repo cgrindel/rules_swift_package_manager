@@ -14,7 +14,7 @@ type commitProvider interface {
 }
 
 // The pkgDir is the path to the Swift package that is referencing this Bazel repository.
-func RepoRuleFromBazelRepo(bzlRepo *BazelRepo, miBasename string, pkgDir string) (*rule.Rule, error) {
+func RepoRuleFromBazelRepo(bzlRepo *BazelRepo, diRel string, pkgDir string) (*rule.Rule, error) {
 	var r *rule.Rule
 	var err error
 	if bzlRepo.Pin != nil {
@@ -31,7 +31,13 @@ func RepoRuleFromBazelRepo(bzlRepo *BazelRepo, miBasename string, pkgDir string)
 	}
 
 	// The module index is located at the root of the parent workspace.
-	miLbl := label.New("@", "", miBasename)
+	dir := filepath.Dir(diRel)
+	if dir == "." {
+		dir = ""
+	}
+	lpath := filepath.ToSlash(dir)
+	base := filepath.Base(diRel)
+	miLbl := label.New("@", lpath, base)
 	r.SetAttr("dependencies_index", miLbl.String())
 
 	return r, nil

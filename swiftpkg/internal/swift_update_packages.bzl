@@ -7,7 +7,8 @@ def swift_update_packages(
         gazelle,
         package_manifest = "Package.swift",
         swift_deps = "swift_deps.bzl",
-        swift_deps_fn = "swift_dependencies"):
+        swift_deps_fn = "swift_dependencies",
+        swift_deps_index = "swift_deps_index.json"):
     """Defines gazelle update-repos targets that are used to resolve and update \
     Swift package dependencies.
 
@@ -32,6 +33,7 @@ def swift_update_packages(
             swift_deps_fn = swift_deps_fn,
         ),
         "-prune",
+        "-dependency_index={}".format(swift_deps_index),
     ]
 
     _gazelle(

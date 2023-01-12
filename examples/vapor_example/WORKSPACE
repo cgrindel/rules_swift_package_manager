@@ -44,9 +44,9 @@ load(
     "@build_bazel_rules_swift//swift:repositories.bzl",
     "swift_rules_dependencies",
 )
-load("//:swift_deps.bzl", "swift_dependencies")
+load("//swift:deps.bzl", "swift_dependencies")
 
-# gazelle:repository_macro swift_deps.bzl%swift_dependencies
+# gazelle:repository_macro swift/deps.bzl%swift_dependencies
 swift_dependencies()
 
 swift_rules_dependencies()

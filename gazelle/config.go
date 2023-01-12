@@ -2,6 +2,7 @@ package gazelle
 
 import (
 	"flag"
+	"log"
 	"path/filepath"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
@@ -16,9 +17,9 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 	sc := swiftcfg.NewSwiftConfig()
 
 	fs.StringVar(
-		&sc.DependencyIndexPath,
+		&sc.DependencyIndexRel,
 		"dependency_index",
-		"",
+		swiftcfg.DefaultDependencyIndexBasename,
 		"the location of the dependency index JSON file",
 	)
 
@@ -49,8 +50,13 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	// Initialize the module index path. We cannot initialize this path until we get into
 	// CheckFlags.
 	if sc.DependencyIndexPath == "" {
-		sc.DependencyIndexPath = filepath.Join(c.RepoRoot, swiftcfg.DefaultDependencyIndexBasename)
+		sc.DependencyIndexPath = filepath.Join(c.RepoRoot, sc.DependencyIndexRel)
 	}
+
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK:  sc.DependencyIndexRel: %+#v", sc.DependencyIndexRel)
+	log.Printf("*** CHUCK:  sc.DependencyIndexPath: %+#v", sc.DependencyIndexPath)
+	// DEBUG END
 
 	// Attempt to load the module index. This is created by update-repos if the client is using
 	// external Swift packages (e.g. swift_pacakge).
