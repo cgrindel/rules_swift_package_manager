@@ -1,6 +1,10 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
 
+# NOTE: If you decide to move the Swift dependency files like this example, do
+# not forget to update the `gazelle` declaration `//:update_build_files` to
+# point at the new location of the Swift dependency index JSON file.
+
 swift_update_packages(
     name = "update_pkgs",
     gazelle = "//:gazelle_bin",

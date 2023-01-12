@@ -18,7 +18,7 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 
 	fs.StringVar(
 		&sc.DependencyIndexRel,
-		"dependency_index",
+		"swift_dependency_index",
 		swiftcfg.DefaultDependencyIndexBasename,
 		"the location of the dependency index JSON file",
 	)

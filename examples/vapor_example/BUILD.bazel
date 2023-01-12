@@ -25,6 +25,9 @@ gazelle_binary(
 
 gazelle(
     name = "update_build_files",
+    args = [
+        "-swift_dependency_index=swift/deps_index.json",
+    ],
     gazelle = ":gazelle_bin",
 )
 

@@ -33,7 +33,7 @@ def swift_update_packages(
             swift_deps_fn = swift_deps_fn,
         ),
         "-prune",
-        "-dependency_index={}".format(swift_deps_index),
+        "-swift_dependency_index={}".format(swift_deps_index),
     ]
 
     _gazelle(
