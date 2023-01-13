@@ -8,6 +8,7 @@ func valueAtIndex(js []any, idx int) (any, error) {
 	return js[idx], nil
 }
 
+// StringAtIndex returns the slice value at the specified index as a string.
 func StringAtIndex(js []any, idx int) (string, error) {
 	rawValue, err := valueAtIndex(js, idx)
 	if err != nil {
