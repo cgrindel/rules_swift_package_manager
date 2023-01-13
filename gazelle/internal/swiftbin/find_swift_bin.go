@@ -5,6 +5,7 @@ import (
 	"runtime"
 )
 
+// SwiftBinBase returns the base name for the Swift executable.
 func SwiftBinBase() string {
 	switch runtime.GOOS {
 	case "windows":
@@ -14,6 +15,7 @@ func SwiftBinBase() string {
 	}
 }
 
+// FindSwiftBinPath returns the path to the Swift executable.
 func FindSwiftBinPath() (string, error) {
 	swiftBinBase := SwiftBinBase()
 	return exec.LookPath(swiftBinBase)
