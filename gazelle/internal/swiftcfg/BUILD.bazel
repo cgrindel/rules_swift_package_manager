@@ -12,6 +12,7 @@ filegroup(
 go_library(
     name = "swiftcfg",
     srcs = [
+        "doc.go",
         "generate_rules_mode.go",
         "module_files_collector.go",
         "swift_config.go",
