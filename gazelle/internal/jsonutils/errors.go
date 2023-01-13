@@ -19,6 +19,8 @@ type unexpectedType struct {
 
 // MissingKeyError
 
+// A MissingKeyError is the error that is returned by functions in this package when a key is
+// requrested and is not found.
 type MissingKeyError struct {
 	mapKey
 }
@@ -35,6 +37,8 @@ func (e *MissingKeyError) Error() string {
 
 // KeyTypeError
 
+// A KeyTypeError is the error that is returned by functions in this package when key is requested,
+// it exists, but is not of the expected type.
 type KeyTypeError struct {
 	mapKey
 	unexpectedType
@@ -56,8 +60,9 @@ func (e *KeyTypeError) Error() string {
 		e.Key, e.ExpectedType, e.ActualType)
 }
 
-// MarshalKeyError
+// KeyError
 
+// A KeyError wraps an error that occurs when requesting a key value.
 type KeyError struct {
 	Err error
 	mapKey
@@ -81,6 +86,8 @@ func (e *KeyError) Unwrap() error {
 
 // IndexTypeError
 
+// An IndexTypeError is the error that is returned when a value is requested for an index value in a
+// slice and the value is not of the expected tpe.
 type IndexTypeError struct {
 	sliceIndex
 	unexpectedType
@@ -104,6 +111,7 @@ func (e *IndexTypeError) Error() string {
 
 // IndexOutOfBoundsError
 
+// An IndexOutOfBoundsError is returned when the requested index is not valid.
 type IndexOutOfBoundsError struct {
 	sliceIndex
 	ActualLen int

@@ -7,7 +7,7 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 )
 
-// Represents a Swift module mapped to a Bazel target.
+// Module represents a Swift module mapped to a Bazel target.
 type Module struct {
 	Name    string
 	C99name string
@@ -28,19 +28,23 @@ func NewModuleFromLabelStruct(name, c99name string, bzlLabel label.Label) *Modul
 	return NewModule(name, c99name, &bzlLabel)
 }
 
+// NewModuleFromTarget returns a module from the specified Swift target.
 func NewModuleFromTarget(repoName string, t *swiftpkg.Target) (*Module, error) {
 	lbl := BazelLabelFromTarget(repoName, t)
 	return NewModule(t.Name, t.C99name, lbl), nil
 }
 
+// LabelStr returns the label string for module.
 func (m *Module) LabelStr() LabelStr {
 	return NewLabelStr(m.Label)
 }
 
 // Modules
 
+// A Modules represents a slice of Swift modules.
 type Modules []*Module
 
+// LabelStrs returns the label strings for the modules.
 func (modules Modules) LabelStrs() LabelStrs {
 	labelStrs := make(LabelStrs, len(modules))
 	for idx, m := range modules {

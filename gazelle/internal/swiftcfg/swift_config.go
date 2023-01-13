@@ -15,6 +15,7 @@ const SwiftConfigName = "swift"
 const DefaultDependencyIndexBasename = "swift_deps_index.json"
 const dependencyIndexPerms = 0666
 
+// A SwiftConfig represents the Swift-specific configuration for the Gazelle extension.
 type SwiftConfig struct {
 	SwiftBinPath         string
 	ModuleFilesCollector ModuleFilesCollector
@@ -34,6 +35,7 @@ func NewSwiftConfig() *SwiftConfig {
 	}
 }
 
+// SwiftBin returns the Swift binary.
 func (sc *SwiftConfig) SwiftBin() *swiftbin.SwiftBin {
 	if sc.SwiftBinPath == "" {
 		return nil
@@ -41,7 +43,7 @@ func (sc *SwiftConfig) SwiftBin() *swiftbin.SwiftBin {
 	return swiftbin.NewSwiftBin(sc.SwiftBinPath)
 }
 
-// Determines how the specified directory should be processed.
+// GenerateRulesMode determines how the specified directory should be processed.
 func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRulesMode {
 	pi := sc.PackageInfo
 	if pi == nil {
@@ -54,6 +56,7 @@ func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRul
 	return SkipGenRulesMode
 }
 
+// LoadDependencyIndex reads the dependency index from disk.
 func (sc *SwiftConfig) LoadDependencyIndex() error {
 	if sc.DependencyIndexPath == "" {
 		return nil
@@ -69,6 +72,7 @@ func (sc *SwiftConfig) LoadDependencyIndex() error {
 	return err
 }
 
+// WriteDependencyIndex writes the dependency index to disk.
 func (sc *SwiftConfig) WriteDependencyIndex() error {
 	data, err := sc.DependencyIndex.JSON()
 	if err != nil {
@@ -77,6 +81,7 @@ func (sc *SwiftConfig) WriteDependencyIndex() error {
 	return os.WriteFile(sc.DependencyIndexPath, data, dependencyIndexPerms)
 }
 
+// GetSwiftConfig extracts the Swift configuration from the Gazelle configuration.
 func GetSwiftConfig(c *config.Config) *SwiftConfig {
 	scAny := c.Exts[SwiftConfigName]
 	if scAny == nil {
@@ -85,6 +90,7 @@ func GetSwiftConfig(c *config.Config) *SwiftConfig {
 	return scAny.(*SwiftConfig)
 }
 
+// SetSwiftConfig stores the Swift configuration in the Gazelle configuration.
 func SetSwiftConfig(c *config.Config, sc *SwiftConfig) {
 	c.Exts[SwiftConfigName] = sc
 }

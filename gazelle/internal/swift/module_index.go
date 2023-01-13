@@ -5,6 +5,7 @@ import (
 	"sort"
 )
 
+// A ModuleIndex represents an index organized by module name.
 type ModuleIndex map[string]Modules
 
 func (mi ModuleIndex) add(name string, m *Module) {
@@ -13,6 +14,7 @@ func (mi ModuleIndex) add(name string, m *Module) {
 	mi[name] = cur_modules
 }
 
+// Add indexes the provided modules.
 func (mi ModuleIndex) Add(modules ...*Module) {
 	for _, m := range modules {
 		mi.add(m.Name, m)
@@ -22,7 +24,7 @@ func (mi ModuleIndex) Add(modules ...*Module) {
 	}
 }
 
-// Find the module given the Bazel repo name and the Swift module name.
+// Resolve finds the module given the Bazel repo name and the Swift module name.
 func (mi ModuleIndex) Resolve(repoName, moduleName string) *Module {
 	modules := mi[moduleName]
 	if len(modules) == 0 {
@@ -38,7 +40,7 @@ func (mi ModuleIndex) Resolve(repoName, moduleName string) *Module {
 	return modules[0]
 }
 
-// Return a unique list of modules.
+// Modules returns a unique list of modules.
 func (mi ModuleIndex) Modules() Modules {
 	var labels []string
 	byLabel := make(map[string]*Module)

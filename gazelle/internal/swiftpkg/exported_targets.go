@@ -6,7 +6,8 @@ import (
 
 // GH010: Add test for ExportedTargets
 
-// Targets that are made available outside of the package via a Product reference.
+// ExportedTargets returns targets that are made available outside of the package via a Product
+// reference.
 func (pi *PackageInfo) ExportedTargets() ([]*Target, error) {
 	exported := make([]*Target, len(pi.Products))
 	for idx, p := range pi.Products {

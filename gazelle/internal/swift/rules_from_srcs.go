@@ -8,6 +8,7 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/rule"
 )
 
+// RulesFromSrcs returns the Bazel build rule declarations for the provided source files.
 func RulesFromSrcs(args language.GenerateArgs, srcs []string) []*rule.Rule {
 	fileInfos := NewFileInfosFromRelPaths(args.Dir, srcs)
 	swiftImports, moduleType := collectSwiftInfo(fileInfos)

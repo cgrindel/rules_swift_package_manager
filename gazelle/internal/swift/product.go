@@ -15,6 +15,7 @@ type productJSONData struct {
 	TargetLabels LabelStrs `json:"target_labels"`
 }
 
+// A ProductType is an enum for a Swift product type.
 type ProductType int
 
 const (
@@ -31,7 +32,7 @@ const (
 	PluginProductTypeStr     = "plugin"
 )
 
-// A Swift package product can
+// A Product represents a Swift package product.
 type Product struct {
 	Identity     string
 	Name         string
@@ -48,6 +49,7 @@ func NewProduct(identity, name string, ptype ProductType, targetLabels []*label.
 	}
 }
 
+// NewProductFromPkgInfoProduct returns a Swift product based upon a Swift manifest product.
 func NewProductFromPkgInfoProduct(
 	bzlRepo *BazelRepo,
 	prd *swiftpkg.Product,
@@ -79,6 +81,7 @@ func NewProductFromPkgInfoProduct(
 	return NewProduct(bzlRepo.Identity, prd.Name, ptype, targetLabels), nil
 }
 
+// IndexKey returns a unique key for the product.
 func (p *Product) IndexKey() ProductIndexKey {
 	return NewProductIndexKey(p.Identity, p.Name)
 }

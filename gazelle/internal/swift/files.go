@@ -2,6 +2,7 @@ package swift
 
 import "path/filepath"
 
+// FilterFiles returns a list of Swift source files excluding `Package.swift`.
 func FilterFiles(paths []string) []string {
 	var results []string
 	for _, path := range paths {

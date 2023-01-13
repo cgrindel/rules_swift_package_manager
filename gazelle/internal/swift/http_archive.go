@@ -13,6 +13,7 @@ import (
 const buildFileContentAttrName = "build_file_content"
 const buildFileAttrName = "build_file"
 
+// A HTTPArchive represents Swift module information found in a Bazel `http_archive` declaration.
 type HTTPArchive struct {
 	Name    string
 	Modules []*Module
@@ -25,6 +26,8 @@ func NewHTTPArchive(name string, modules []*Module) *HTTPArchive {
 	}
 }
 
+// NewHTTPArchiveFromRule returns an HTTPArchive from a repository rule. If the repository does not
+// provide any Swift modules, it returns nil.
 func NewHTTPArchiveFromRule(r *rule.Rule, repoRoot string) (*HTTPArchive, error) {
 	var err error
 	bldFileContent := r.AttrString(buildFileContentAttrName)

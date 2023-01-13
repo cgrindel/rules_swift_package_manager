@@ -10,7 +10,7 @@ import (
 
 // V1
 
-// Maps to PinStorage.V1
+// A V1PinStore represents PinStorage.V1.
 // https://github.com/apple/swift-package-manager/blob/main/Sources/PackageGraph/PinsStore.swift#L230
 type V1PinStore struct {
 	Version int

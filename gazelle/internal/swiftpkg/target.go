@@ -9,6 +9,7 @@ import (
 
 // TargetType
 
+// A TargetType is an enum for a Swift target type.
 type TargetType int
 
 const (
@@ -21,8 +22,10 @@ const (
 
 // Targets
 
+// A Targets represents a slice of Swift targets.
 type Targets []*Target
 
+// FindByName returns the target with the matching name. Otherwise, returns nil.
 func (ts Targets) FindByName(name string) *Target {
 	for _, t := range ts {
 		if t.Name == name {
@@ -32,6 +35,7 @@ func (ts Targets) FindByName(name string) *Target {
 	return nil
 }
 
+// FindByPath returns the target with the matching path. Otherwise, returns nil.
 func (ts Targets) FindByPath(path string) *Target {
 	for _, t := range ts {
 		if t.Path == path {
@@ -43,6 +47,7 @@ func (ts Targets) FindByPath(path string) *Target {
 
 // Target
 
+// A Target represents a Swift target.
 type Target struct {
 	Name         string
 	C99name      string
@@ -54,6 +59,7 @@ type Target struct {
 	CSettings    *ClangSettings
 }
 
+// NewTargetFromManifestInfo returns a Swift target from manifest information.
 func NewTargetFromManifestInfo(descT *spdesc.Target, dumpT *spdump.Target) (*Target, error) {
 	var targetType TargetType
 	switch dumpT.Type {
@@ -101,6 +107,7 @@ func NewTargetFromManifestInfo(descT *spdesc.Target, dumpT *spdump.Target) (*Tar
 	}, nil
 }
 
+// Imports returns the module names provided by the dependencies.
 func (t *Target) Imports() []string {
 	imports := make([]string, len(t.Dependencies))
 	for idx, td := range t.Dependencies {
@@ -111,10 +118,12 @@ func (t *Target) Imports() []string {
 
 // ClangSettings
 
+// A ClangSettings represents the clang-specific settings for a Swift target.
 type ClangSettings struct {
 	Defines []string
 }
 
+// NewClangSettingsFromManifestInfo returns the clang settings from manfiest information.
 func NewClangSettingsFromManifestInfo(dumpTS []spdump.TargetSetting) (*ClangSettings, error) {
 	cSettings := &ClangSettings{}
 	for _, ts := range dumpTS {

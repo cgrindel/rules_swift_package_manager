@@ -6,11 +6,13 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
 )
 
+// A Dependency represents an external dependency.
 type Dependency struct {
 	SourceControl *SourceControl `json:"sourceControl"`
 	FileSystem    *FileSystem    `json:"fileSystem"`
 }
 
+// Identity returns the value that identifies the external dependency in the manifest.
 func (d *Dependency) Identity() string {
 	if d.SourceControl != nil {
 		return d.SourceControl.Identity
@@ -18,6 +20,7 @@ func (d *Dependency) Identity() string {
 	return ""
 }
 
+// URL returns the URL for the external dependency.
 func (d *Dependency) URL() string {
 	if d.SourceControl != nil {
 		if d.SourceControl.Location.Remote != nil {
@@ -35,6 +38,8 @@ type srcCtrl struct {
 	Requirement *DependencyRequirement
 }
 
+// A SourceControl represents the retrieval information for an external dependency in a source
+// control server.
 type SourceControl struct {
 	Identity    string
 	Location    *SourceControlLocation
@@ -54,10 +59,12 @@ func (sc *SourceControl) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// A SourceControlLocation represents the location of a source control repository.
 type SourceControlLocation struct {
 	Remote *RemoteLocation
 }
 
+// A RemoteLocation represents a remote location for a source control repository.
 type RemoteLocation struct {
 	URL string
 }
@@ -76,10 +83,12 @@ func (rl *RemoteLocation) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// A DependencyRequirement represents the eligibility requirements for an external dependency.
 type DependencyRequirement struct {
 	Ranges []*VersionRange `json:"range"`
 }
 
+// A VersionRange represents a semver range for an external dependency.
 type VersionRange struct {
 	LowerBound string
 	UpperBound string
@@ -92,6 +101,7 @@ type fSystem struct {
 	Path     string
 }
 
+// FileSystem represents the location of an external dependency as a local Swift package.
 type FileSystem struct {
 	Identity string
 	Path     string

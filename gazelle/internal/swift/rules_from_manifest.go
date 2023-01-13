@@ -8,6 +8,7 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 )
 
+// RulesForSwiftProducts returns the Bazel rule declarations for the provided Swift products.
 func RulesForSwiftProducts(args language.GenerateArgs, pi *swiftpkg.PackageInfo) []*rule.Rule {
 	var rules []*rule.Rule
 	for _, prd := range pi.Products {
@@ -38,7 +39,12 @@ func rulesForSwiftProduct(
 	return []*rule.Rule{r}
 }
 
-func RulesForSwiftTarget(args language.GenerateArgs, pi *swiftpkg.PackageInfo, targetName string) []*rule.Rule {
+// RulesForSwiftTarget returns  the Bazel rule declaration for the specified Swift target.
+func RulesForSwiftTarget(
+	args language.GenerateArgs,
+	pi *swiftpkg.PackageInfo,
+	targetName string,
+) []*rule.Rule {
 	shouldSetVis := shouldSetVisibility(args)
 	t := pi.Targets.FindByName(targetName)
 	var rules []*rule.Rule

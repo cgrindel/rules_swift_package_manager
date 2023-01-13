@@ -16,6 +16,7 @@ filegroup(
 go_library(
     name = "swiftbin",
     srcs = [
+        "doc.go",
         "find_swift_bin.go",
         "swift_bin.go",
     ],

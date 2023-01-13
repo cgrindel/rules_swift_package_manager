@@ -7,6 +7,8 @@ import (
 
 // V2
 
+// A V2PinStore represents PinStorage.V2.
+// https://github.com/apple/swift-package-manager/blob/main/Sources/PackageGraph/PinsStore.swift#L230
 type V2PinStore struct {
 	Version int
 	Pins    []*V2Pin

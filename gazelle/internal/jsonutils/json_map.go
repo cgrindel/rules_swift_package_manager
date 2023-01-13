@@ -5,6 +5,7 @@ import (
 	"math"
 )
 
+// StringAtKey returns the requested key value as a string.
 func StringAtKey(jm map[string]any, k string) (string, error) {
 	rawValue, ok := jm[k]
 	if !ok {
@@ -18,6 +19,7 @@ func StringAtKey(jm map[string]any, k string) (string, error) {
 	}
 }
 
+// IntAtKey returns the requested key value as an int.
 func IntAtKey(jm map[string]any, k string) (int, error) {
 	rawValue, ok := jm[k]
 	if !ok {
@@ -35,6 +37,7 @@ func IntAtKey(jm map[string]any, k string) (int, error) {
 	}
 }
 
+// MapAtKey returns the requested key value as a JSON map (map[string]any).
 func MapAtKey(jm map[string]any, k string) (map[string]any, error) {
 	rawValue, ok := jm[k]
 	if !ok {
@@ -48,6 +51,7 @@ func MapAtKey(jm map[string]any, k string) (map[string]any, error) {
 	}
 }
 
+// SliceAtKey returns the requested key value as a JSON slice ([]any).
 func SliceAtKey(jm map[string]any, k string) ([]any, error) {
 	rawValue, ok := jm[k]
 	if !ok {
@@ -61,6 +65,7 @@ func SliceAtKey(jm map[string]any, k string) ([]any, error) {
 	}
 }
 
+// BytesAtKey returns the requested key value as a slice of bytes.
 func BytesAtKey(jm map[string]any, k string) ([]byte, error) {
 	rawValue, ok := jm[k]
 	if !ok {
@@ -73,6 +78,7 @@ func BytesAtKey(jm map[string]any, k string) ([]byte, error) {
 	return valueBytes, nil
 }
 
+// UnmarshalAtKey unmarshals the bytes for a key value into the specified variable.
 func UnmarshalAtKey(jm map[string]any, k string, v any) error {
 	valueBytes, err := BytesAtKey(jm, k)
 	if err != nil {
@@ -84,6 +90,7 @@ func UnmarshalAtKey(jm map[string]any, k string, v any) error {
 	return nil
 }
 
+// StringsAtKey returns the requested key value as a slice of string values.
 func StringsAtKey(jm map[string]any, k string) ([]string, error) {
 	anyValues, err := SliceAtKey(jm, k)
 	if err != nil {

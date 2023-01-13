@@ -9,11 +9,14 @@ import (
 
 // Pin
 
+// A Pin is the normalized representation for a resolved Swift package.
 type Pin struct {
 	PkgRef *PackageReference
 	State  PinState
 }
 
+// NewPinsFromResolvedPackageJSON returns the pins (resolved Swift package details) from
+// `Package.resolved` JSON.
 func NewPinsFromResolvedPackageJSON(b []byte) ([]*Pin, error) {
 	var anyMap map[string]any
 	if err := json.Unmarshal(b, &anyMap); err != nil {
@@ -43,6 +46,7 @@ func NewPinsFromResolvedPackageJSON(b []byte) ([]*Pin, error) {
 
 // PinStateType
 
+// A PinStateType is an enum for the representation type for the pin state.
 type PinStateType int
 
 const (
@@ -54,17 +58,20 @@ const (
 
 // PinState
 
+// A PinState is the interface that all underlying pin state representations must implement.
 type PinState interface {
 	PinStateType() PinStateType
 }
 
 // BranchPinState
 
+// A BranchPinState represents a source control branch.
 type BranchPinState struct {
 	Name     string
 	Revision string
 }
 
+// NewBranchPinState returns a branch pin state.
 func NewBranchPinState(name, revision string) *BranchPinState {
 	return &BranchPinState{
 		Name:     name,
@@ -72,21 +79,25 @@ func NewBranchPinState(name, revision string) *BranchPinState {
 	}
 }
 
+// PinStateType returns the type of pin state.
 func (bps *BranchPinState) PinStateType() PinStateType {
 	return BranchPinStateType
 }
 
+// Commit returns the source control commit value (e.g., hash).
 func (bps *BranchPinState) Commit() string {
 	return bps.Revision
 }
 
 // VersionPinState
 
+// A VersionPinState represents a semver tagged pin state.
 type VersionPinState struct {
 	Version  string
 	Revision string
 }
 
+// NewVersionPinState returns a semver tagged pin state.
 func NewVersionPinState(version, revision string) *VersionPinState {
 	return &VersionPinState{
 		Version:  version,
@@ -94,28 +105,34 @@ func NewVersionPinState(version, revision string) *VersionPinState {
 	}
 }
 
+// PinStateType returns the type of pin state.
 func (vps *VersionPinState) PinStateType() PinStateType {
 	return VersionPinStateType
 }
 
+// Commit returns the source control commit value (e.g., hash).
 func (vps *VersionPinState) Commit() string {
 	return vps.Revision
 }
 
 // RevisionPinState
 
+// A RevisionPinState represents a commit value/hash pin state.
 type RevisionPinState struct {
 	Revision string
 }
 
+// NewRevisionPinState returns a commit value pin state.
 func NewRevisionPinState(revision string) *RevisionPinState {
 	return &RevisionPinState{Revision: revision}
 }
 
+// PinStateType returns the type of pin state.
 func (rps *RevisionPinState) PinStateType() PinStateType {
 	return RevisionPinStateType
 }
 
+// Commit returns the source control commit value (e.g., hash).
 func (rps *RevisionPinState) Commit() string {
 	return rps.Revision
 }

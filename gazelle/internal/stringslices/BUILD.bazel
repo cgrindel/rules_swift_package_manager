@@ -3,7 +3,10 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 
 go_library(
     name = "stringslices",
-    srcs = ["map.go"],
+    srcs = [
+        "doc.go",
+        "map.go",
+    ],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/stringslices",
     visibility = ["//gazelle:__subpackages__"],
 )

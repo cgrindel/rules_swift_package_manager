@@ -6,11 +6,13 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
 )
 
+// A Dependency represents an external dependency.
 type Dependency struct {
 	SourceControl *SourceControl
 	FileSystem    *FileSystem
 }
 
+// NewDependencyFromManifestInfo returns an external dependency based upon the manifest information.
 func NewDependencyFromManifestInfo(dumpD *spdump.Dependency) (*Dependency, error) {
 	var srcCtrl *SourceControl
 	if dumpD.SourceControl != nil {
@@ -26,6 +28,7 @@ func NewDependencyFromManifestInfo(dumpD *spdump.Dependency) (*Dependency, error
 	}, nil
 }
 
+// Identity returns the unique identity for the external dependency.
 func (d *Dependency) Identity() string {
 	if d.SourceControl != nil {
 		return d.SourceControl.Identity
@@ -37,6 +40,7 @@ func (d *Dependency) Identity() string {
 	return ""
 }
 
+// URL returns the URL for the external dependency.
 func (d *Dependency) URL() string {
 	if d.SourceControl != nil {
 		if d.SourceControl.Location != nil {
@@ -51,12 +55,14 @@ func (d *Dependency) URL() string {
 
 // SourceControl
 
+// A SourceControl represents the source control information for an external dependency.
 type SourceControl struct {
 	Identity    string
 	Location    *SourceControlLocation
 	Requirement *DependencyRequirement
 }
 
+// NewSourceControlFromManifestInfo returns the source control info from manifest information.
 func NewSourceControlFromManifestInfo(dumpSC *spdump.SourceControl) *SourceControl {
 	return &SourceControl{
 		Identity:    dumpSC.Identity,
