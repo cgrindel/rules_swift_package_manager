@@ -6,12 +6,14 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
 )
 
+// A TargetDependency represents a Swift target dependency.
 type TargetDependency struct {
 	Product *ProductReference
 	ByName  *ByNameReference
 	Target  *TargetReference
 }
 
+// NewTargetDependencyFromManifestInfo returns a target dependency from manifest information.
 func NewTargetDependencyFromManifestInfo(dumpTD *spdump.TargetDependency) (*TargetDependency, error) {
 	var prodRef *ProductReference
 	var byNameRef *ByNameReference
@@ -32,6 +34,7 @@ func NewTargetDependencyFromManifestInfo(dumpTD *spdump.TargetDependency) (*Targ
 	}, nil
 }
 
+// ImportName returns the name used to import the dependency.
 func (td *TargetDependency) ImportName() string {
 	if td.Product != nil {
 		return td.Product.ProductName
@@ -43,7 +46,7 @@ func (td *TargetDependency) ImportName() string {
 
 // ProductReference
 
-// Reference a product
+// A ProductReference represents a reference to a product.
 type ProductReference struct {
 	// Product name
 	ProductName string
@@ -51,6 +54,7 @@ type ProductReference struct {
 	Identity string
 }
 
+// NewProductReferenceFromManifestInfo returns a product reference from manifest information.
 func NewProductReferenceFromManifestInfo(dumpPR *spdump.ProductReference) *ProductReference {
 	return &ProductReference{
 		ProductName: dumpPR.ProductName,
@@ -58,18 +62,20 @@ func NewProductReferenceFromManifestInfo(dumpPR *spdump.ProductReference) *Produ
 	}
 }
 
+// UniqKey returns the value used to lookup a Swift product from a reference.
 func (pr *ProductReference) UniqKey() string {
 	return fmt.Sprintf("%s-%s", pr.Identity, pr.ProductName)
 }
 
 // ByNameReference
 
-// Reference a product or target by name.
+// A ByNameReference references a product or target by name.
 type ByNameReference struct {
 	// Product name or target name
 	Name string
 }
 
+// NewByNameReferenceFromManifestInfo returns a by-name reference from manifest information.
 func NewByNameReferenceFromManifestInfo(dumpBNR *spdump.ByNameReference) *ByNameReference {
 	return &ByNameReference{
 		Name: dumpBNR.Name,
@@ -78,11 +84,12 @@ func NewByNameReferenceFromManifestInfo(dumpBNR *spdump.ByNameReference) *ByName
 
 // TargetReference
 
-// Reference a target by name
+// TargetReference references a target by name.
 type TargetReference struct {
 	TargetName string
 }
 
+// NewTargetReferenceFromManifestInfo returns a target reference from manifest information.
 func NewTargetReferenceFromManifestInfo(dumpTR *spdump.TargetReference) *TargetReference {
 	return &TargetReference{
 		TargetName: dumpTR.TargetName,

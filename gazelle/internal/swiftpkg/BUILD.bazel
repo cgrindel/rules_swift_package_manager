@@ -5,6 +5,7 @@ go_library(
     name = "swiftpkg",
     srcs = [
         "dependency.go",
+        "doc.go",
         "exported_targets.go",
         "package_info.go",
         "platform.go",

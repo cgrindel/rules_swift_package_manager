@@ -6,6 +6,7 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
 )
 
+// A ProductType is an enum for the type of Swift product.
 type ProductType int
 
 const (
@@ -15,12 +16,14 @@ const (
 	PluginProductType
 )
 
+// A Product represents a Swift product.
 type Product struct {
 	Name    string
 	Targets []string
 	Type    ProductType
 }
 
+// NewProductFromManifestInfo returns a Swift product from manifest information.
 func NewProductFromManifestInfo(dumpP *spdump.Product) (*Product, error) {
 	var prdType ProductType
 	switch dumpP.Type {

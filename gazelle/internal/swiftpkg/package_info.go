@@ -9,6 +9,7 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
 )
 
+// A PackageInfo encapsulates all of the information about a Swift package.
 type PackageInfo struct {
 	Name         string
 	DisplayName  string
@@ -20,6 +21,7 @@ type PackageInfo struct {
 	Dependencies []*Dependency
 }
 
+// NewPackageInfo returns the Swift package information from a Swift package on disk.
 func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 	dump, err := sw.DumpPackage(dir)
 	if err != nil {
@@ -84,7 +86,7 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 	}, nil
 }
 
-// Returns a uniq slice of the product references used in the manifest
+// ProductReferences returns a uniq slice of the product references used in the manifest.
 func (pi *PackageInfo) ProductReferences() []*ProductReference {
 	prs := make(map[string]*ProductReference)
 
