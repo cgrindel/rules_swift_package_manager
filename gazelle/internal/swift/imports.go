@@ -5,6 +5,7 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/rule"
 )
 
+// Imports returns the imports for Gazelle indexing.
 func Imports(rules []*rule.Rule) []any {
 	imports := make([]interface{}, len(rules))
 	for idx, r := range rules {

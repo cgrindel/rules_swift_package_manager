@@ -13,6 +13,7 @@ const (
 	AliasRuleKind = "alias"
 )
 
+// IsSwiftRuleKind determines whether to provided rule kind is a Swift rule.
 func IsSwiftRuleKind(ruleKind string) bool {
 	switch ruleKind {
 	case LibraryRuleKind, BinaryRuleKind, TestRuleKind:

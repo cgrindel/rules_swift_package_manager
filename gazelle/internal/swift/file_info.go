@@ -11,6 +11,7 @@ import (
 	"strings"
 )
 
+// FileInfo represents source file information that is pertinent for Swift build file generation.
 type FileInfo struct {
 	Rel          string
 	Abs          string
@@ -19,6 +20,7 @@ type FileInfo struct {
 	ContainsMain bool
 }
 
+// NewFileInfoFromReader returns file info for a source file.
 func NewFileInfoFromReader(rel, abs string, reader io.Reader) *FileInfo {
 	fi := FileInfo{
 		Rel:    rel,
@@ -51,10 +53,12 @@ func NewFileInfoFromReader(rel, abs string, reader io.Reader) *FileInfo {
 	return &fi
 }
 
+// NewFileInfoFromSrc returns file info for source file's contents as a string.
 func NewFileInfoFromSrc(rel, abs, src string) *FileInfo {
 	return NewFileInfoFromReader(rel, abs, strings.NewReader(src))
 }
 
+// NewFileInfoFromPath returns file info from a filesystem path.
 func NewFileInfoFromPath(rel, abs string) (*FileInfo, error) {
 	file, err := os.Open(abs)
 	if err != nil {
@@ -63,6 +67,7 @@ func NewFileInfoFromPath(rel, abs string) (*FileInfo, error) {
 	return NewFileInfoFromReader(rel, abs, file), nil
 }
 
+// NewFileInfosFromRelPaths returns a slice of file information for the source files in a directory.
 func NewFileInfosFromRelPaths(dir string, srcs []string) []*FileInfo {
 	fileInfos := make([]*FileInfo, len(srcs))
 	for idx, src := range srcs {

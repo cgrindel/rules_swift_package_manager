@@ -9,8 +9,8 @@ import (
 const swiftPkgBuildDirname = ".build"
 const swiftPkgCheckoutsDirname = "checkouts"
 
-// Returns the path to the dependency's code. For source control dependencies, it is the checkout
-// directory.
+// CodeDirForRemotePackage returns the path to the dependency's code. For source control
+// dependencies, it is the checkout directory.
 func CodeDirForRemotePackage(pkgDir string, url string) string {
 	// Return the checkout directory
 	return filepath.Join(
@@ -28,13 +28,10 @@ func spmCheckoutDirname(url string) string {
 		return strings.TrimSuffix(base, ext)
 	}
 	return base
-	// if ext == "" {
-	// 	return base
-	// }
-	// return strings.TrimSuffix(base, ext)
 }
 
-// Returns the path to the dependency's code. For local packages, it is the path to the local package.
+// CodeDirForLocalPackage returns the path to the dependency's code. For local packages, it is the
+// path to the local package.
 func CodeDirForLocalPackage(pkgDir string, localPkgPath string) string {
 	var path string
 	if filepath.IsAbs(localPkgPath) {

@@ -9,6 +9,7 @@ go_library(
         "bazel_repo_name.go",
         "code_dir.go",
         "dependency_index.go",
+        "doc.go",
         "file_info.go",
         "files.go",
         "find_rules.go",

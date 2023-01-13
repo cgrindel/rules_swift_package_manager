@@ -11,8 +11,9 @@ func normalizeStrForRepoName(v string) string {
 	return strings.ReplaceAll(v, "-", "_")
 }
 
-// Returns a Bazel repository name from a Swift package identity/name.  The value produced by this
-// function will not have the `@` character appended. This is handled by label.Label.
+// RepoNameFromIdentity returns a Bazel repository name from a Swift package identity/name.  The
+// value produced by this function will not have the `@` character appended. This is handled by
+// label.Label.
 func RepoNameFromIdentity(id string) string {
 	return "swiftpkg_" + normalizeStrForRepoName(id)
 }
