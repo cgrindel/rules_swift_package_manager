@@ -1,20 +1,15 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
-load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
 
 tidy(
     name = "tidy",
     targets = [
-        ":swift_update_pkgs",
+        "//swift:update_pkgs",
         ":update_build_files",
     ],
 )
 
 # MARK: - Gazelle
-
-# Ignore the Swift build folder
-# gazelle:exclude .build
 
 gazelle_binary(
     name = "gazelle_bin",
@@ -22,23 +17,15 @@ gazelle_binary(
         "@bazel_skylib//gazelle/bzl",
         "@cgrindel_swift_bazel//gazelle",
     ],
+    visibility = ["//:__subpackages__"],
 )
 
 gazelle(
     name = "update_build_files",
+    args = [
+        "-swift_dependency_index=swift/deps_index.json",
+    ],
     gazelle = ":gazelle_bin",
-)
-
-swift_update_packages(
-    name = "swift_update_pkgs",
-    gazelle = ":gazelle_bin",
-)
-
-bzl_library(
-    name = "swift_deps",
-    srcs = ["swift_deps.bzl"],
-    visibility = ["//visibility:public"],
-    deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
 )
 
 # Vapor was not happy building under 13.2.1. Fix the version for now.

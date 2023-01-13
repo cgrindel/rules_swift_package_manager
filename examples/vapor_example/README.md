@@ -6,6 +6,8 @@ Swift and Clang dependencies. Some of their Clang modules
 have custom module maps. This example exercises the `swift_bazel` code that processes custom module
 maps and handles novel Clang module linking issues.
 
+Also, this example demonstrates how to store the Swift-specific dependency files in a sub-package.
+
 
 ## Linux Prequisites
 

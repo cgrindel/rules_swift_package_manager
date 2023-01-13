@@ -7,7 +7,8 @@ def swift_update_packages(
         gazelle,
         package_manifest = "Package.swift",
         swift_deps = "swift_deps.bzl",
-        swift_deps_fn = "swift_dependencies"):
+        swift_deps_fn = "swift_dependencies",
+        swift_deps_index = "swift_deps_index.json"):
     """Defines gazelle update-repos targets that are used to resolve and update \
     Swift package dependencies.
 
@@ -24,6 +25,9 @@ def swift_update_packages(
         swift_deps_fn: Optional. The name of the Starlark function in the
             `swift_deps` file that should be updated with the Swift package
             dependencies as a `string`.
+        swift_deps_index: Optional. The relative path to the Swift
+            dependencies index JSON file. This path is relative to the
+            repository root, not the location of this declaration.
     """
     _SWIFT_UPDATE_REPOS_ARGS = [
         "-from_file={}".format(package_manifest),
@@ -32,6 +36,7 @@ def swift_update_packages(
             swift_deps_fn = swift_deps_fn,
         ),
         "-prune",
+        "-swift_dependency_index={}".format(swift_deps_index),
     ]
 
     _gazelle(

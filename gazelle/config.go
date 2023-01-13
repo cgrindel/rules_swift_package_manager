@@ -16,9 +16,9 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 	sc := swiftcfg.NewSwiftConfig()
 
 	fs.StringVar(
-		&sc.DependencyIndexPath,
-		"dependency_index",
-		"",
+		&sc.DependencyIndexRel,
+		"swift_dependency_index",
+		swiftcfg.DefaultDependencyIndexBasename,
 		"the location of the dependency index JSON file",
 	)
 
@@ -49,7 +49,7 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	// Initialize the module index path. We cannot initialize this path until we get into
 	// CheckFlags.
 	if sc.DependencyIndexPath == "" {
-		sc.DependencyIndexPath = filepath.Join(c.RepoRoot, swiftcfg.DefaultDependencyIndexBasename)
+		sc.DependencyIndexPath = filepath.Join(c.RepoRoot, sc.DependencyIndexRel)
 	}
 
 	// Attempt to load the module index. This is created by update-repos if the client is using

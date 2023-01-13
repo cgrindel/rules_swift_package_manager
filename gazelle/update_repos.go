@@ -122,11 +122,10 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	}
 
 	// Generate the repository rules from the Bazel Repos
-	diBase := filepath.Base(sc.DependencyIndexPath)
 	result.Gen = make([]*rule.Rule, len(bzlReposByIdentity))
 	idx := 0
 	for _, bzlRepo := range bzlReposByIdentity {
-		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, diBase, pkgDir)
+		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, sc.DependencyIndexRel, pkgDir)
 		if err != nil {
 			result.Error = err
 			return result

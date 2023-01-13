@@ -19,9 +19,12 @@ type SwiftConfig struct {
 	SwiftBinPath         string
 	ModuleFilesCollector ModuleFilesCollector
 	DependencyIndex      *swift.DependencyIndex
-	DependencyIndexPath  string
-	PackageInfo          *swiftpkg.PackageInfo
-	UpdatePkgsToLatest   bool
+	// DependencyIndexRel is the path relative to the RepoRoot to the dependency index
+	DependencyIndexRel string
+	// DependencyIndexPath is the full path to the dependency index
+	DependencyIndexPath string
+	PackageInfo         *swiftpkg.PackageInfo
+	UpdatePkgsToLatest  bool
 }
 
 func NewSwiftConfig() *SwiftConfig {

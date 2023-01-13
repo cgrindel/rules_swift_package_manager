@@ -11,10 +11,10 @@ find "${script_dir}" \
   -exec rm {} \;
 
 # Remove the SPM build folder
-rm -rf .build
+rm -rf "${script_dir}/swift/.build"
 
-# Replace the swift_deps.bzl with no declarations.
-cat > "${script_dir}/swift_deps.bzl"  <<-EOF
+# Replace the swift/deps.bzl with no declarations.
+cat > "${script_dir}/swift/deps.bzl"  <<-EOF
 def swift_dependencies():
     pass
 EOF
@@ -29,15 +29,12 @@ load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
 tidy(
     name = "tidy",
     targets = [
-        ":swift_update_pkgs",
+        "//swift:update_pkgs",
         ":update_build_files",
     ],
 )
 
 # MARK: - Gazelle
-
-# Ignore the Swift build folder
-# gazelle:exclude .build
 
 gazelle_binary(
     name = "gazelle_bin",
@@ -45,21 +42,37 @@ gazelle_binary(
         "@bazel_skylib//gazelle/bzl",
         "@cgrindel_swift_bazel//gazelle",
     ],
+    visibility = ["//:__subpackages__"],
 )
 
 gazelle(
     name = "update_build_files",
+    args = [
+        "-swift_dependency_index=swift/deps_index.json",
+    ],
     gazelle = ":gazelle_bin",
 )
 
+EOF
+
+cat > "${script_dir}/swift/BUILD.bazel"  <<-EOF
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
+
+# Ignore the Swift build folder
+# gazelle:exclude .build
+
 swift_update_packages(
-    name = "swift_update_pkgs",
-    gazelle = ":gazelle_bin",
+    name = "update_pkgs",
+    gazelle = "//:gazelle_bin",
+    package_manifest = "swift/Package.swift",
+    swift_deps = "swift/deps.bzl",
+    swift_deps_index = "swift/deps_index.json",
 )
 
 bzl_library(
-    name = "swift_deps",
-    srcs = ["swift_deps.bzl"],
+    name = "deps",
+    srcs = ["deps.bzl"],
     visibility = ["//visibility:public"],
     deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
 )
