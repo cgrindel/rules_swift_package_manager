@@ -49,17 +49,17 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	}
 
 	// Get the package info for the workspace's Swift package
-	pi, err := swiftpkg.NewPackageInfo(sb, pkgDir)
-	if err != nil {
-		result.Error = err
+	pi, pierr := swiftpkg.NewPackageInfo(sb, pkgDir)
+	if pierr != nil {
+		result.Error = pierr
 		return result
 	}
 
 	// Read the Package.resolved file
 	resolvedPkgPath := filepath.Join(pkgDir, resolvedPkgBasename)
-	pinsByIdentity, err := readResolvedPkgPins(resolvedPkgPath)
-	if err != nil {
-		result.Error = err
+	pinsByIdentity, pbierr := readResolvedPkgPins(resolvedPkgPath)
+	if pbierr != nil {
+		result.Error = pbierr
 		return result
 	}
 
@@ -72,14 +72,14 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	bzlReposByIdentity := make(map[string]*swift.BazelRepo)
 	for identity, pin := range pinsByIdentity {
 		depDir := swift.CodeDirForRemotePackage(pkgDir, pin.PkgRef.Remote())
-		depPkgInfo, err := swiftpkg.NewPackageInfo(sb, depDir)
-		if err != nil {
-			result.Error = err
+		depPkgInfo, dpierr := swiftpkg.NewPackageInfo(sb, depDir)
+		if dpierr != nil {
+			result.Error = dpierr
 			return result
 		}
-		bzlRepo, err := swift.NewBazelRepo(identity, depPkgInfo, pin)
-		if err != nil {
-			result.Error = err
+		bzlRepo, brerr := swift.NewBazelRepo(identity, depPkgInfo, pin)
+		if brerr != nil {
+			result.Error = brerr
 			return result
 		}
 		bzlReposByIdentity[bzlRepo.Identity] = bzlRepo
@@ -125,6 +125,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	result.Gen = make([]*rule.Rule, len(bzlReposByIdentity))
 	idx := 0
 	for _, bzlRepo := range bzlReposByIdentity {
+		var err error
 		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, sc.DependencyIndexRel, pkgDir)
 		if err != nil {
 			result.Error = err

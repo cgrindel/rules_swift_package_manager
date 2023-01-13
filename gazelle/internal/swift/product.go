@@ -144,7 +144,7 @@ func (p *Product) MarshalJSON() ([]byte, error) {
 func (p *Product) UnmarshalJSON(b []byte) error {
 	var err error
 	var jd productJSONData
-	if err := json.Unmarshal(b, &jd); err != nil {
+	if err = json.Unmarshal(b, &jd); err != nil {
 		return err
 	}
 	newp, err := newProductFromJSONData(&jd)

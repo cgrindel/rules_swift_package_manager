@@ -33,7 +33,7 @@ type ProductReference struct {
 func (pr *ProductReference) UnmarshalJSON(b []byte) error {
 	var err error
 	var raw []any
-	if err := json.Unmarshal(b, &raw); err != nil {
+	if err = json.Unmarshal(b, &raw); err != nil {
 		return err
 	}
 	if pr.ProductName, err = jsonutils.StringAtIndex(raw, 0); err != nil {
@@ -60,7 +60,7 @@ type ByNameReference struct {
 func (bnr *ByNameReference) UnmarshalJSON(b []byte) error {
 	var err error
 	var raw []any
-	if err := json.Unmarshal(b, &raw); err != nil {
+	if err = json.Unmarshal(b, &raw); err != nil {
 		return err
 	}
 	if bnr.Name, err = jsonutils.StringAtIndex(raw, 0); err != nil {
@@ -79,7 +79,7 @@ type TargetReference struct {
 func (tr *TargetReference) UnmarshalJSON(b []byte) error {
 	var err error
 	var raw []any
-	if err := json.Unmarshal(b, &raw); err != nil {
+	if err = json.Unmarshal(b, &raw); err != nil {
 		return err
 	}
 	if tr.TargetName, err = jsonutils.StringAtIndex(raw, 0); err != nil {
