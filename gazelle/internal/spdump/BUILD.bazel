@@ -15,6 +15,7 @@ go_library(
     name = "spdump",
     srcs = [
         "dependency.go",
+        "doc.go",
         "manifest.go",
         "platform.go",
         "product.go",

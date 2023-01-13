@@ -8,6 +8,7 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
 )
 
+// A TargetType is an enum for a Swift target type.
 type TargetType int
 
 const (
@@ -39,6 +40,7 @@ func (tt *TargetType) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// A Target represents a Swift target.
 type Target struct {
 	Name         string
 	Type         TargetType
@@ -56,8 +58,10 @@ func (t *Target) Imports() []string {
 
 // Targets
 
+// A Targets represents a slice of Swift targets.
 type Targets []Target
 
+// FindByName returns the target with the matching name. Otherwise, it returns nil.
 func (ts Targets) FindByName(name string) *Target {
 	for _, t := range ts {
 		if t.Name == name {
@@ -69,6 +73,7 @@ func (ts Targets) FindByName(name string) *Target {
 
 // TargetSetting
 
+// A ToolType is an enum representing tool setting type.
 type ToolType int
 
 const (
@@ -76,6 +81,7 @@ const (
 	ClangToolType
 )
 
+// A TargetSettingKind is an enum represeting the kind for a tool setting.
 type TargetSettingKind int
 
 const (
@@ -83,6 +89,7 @@ const (
 	DefineTargetSettingKind
 )
 
+// A TargetSetting represents customized settings for a target.
 type TargetSetting struct {
 	Tool    ToolType
 	Kind    TargetSettingKind

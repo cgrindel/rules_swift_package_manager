@@ -7,12 +7,17 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
 )
 
+// A TargetDependency represents a reference to a target's dependency.
 type TargetDependency struct {
 	Product *ProductReference
 	ByName  *ByNameReference
 	Target  *TargetReference
 }
 
+// GH148: Confirm whether targets that depend upon a library product import the product name or one
+// of the modules referenced by the product.
+
+// ImportName returns the name used to import the dependency.
 func (td *TargetDependency) ImportName() string {
 	if td.Product != nil {
 		return td.Product.ProductName
@@ -24,7 +29,7 @@ func (td *TargetDependency) ImportName() string {
 
 // ProductReference
 
-// Reference a product
+// A ProductReference encapsulates a reference to a Swift product.
 type ProductReference struct {
 	ProductName    string
 	DependencyName string
@@ -45,13 +50,14 @@ func (pr *ProductReference) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// UniqKey returns a string that can be used as a map key for the product.
 func (pr *ProductReference) UniqKey() string {
 	return fmt.Sprintf("%s-%s", pr.DependencyName, pr.ProductName)
 }
 
 // ByNameReference
 
-// Reference a product or target by name
+// A ByNameReference represents a byName reference. It can be a product name or a target name.
 type ByNameReference struct {
 	// Product name or target name
 	Name string
@@ -71,7 +77,7 @@ func (bnr *ByNameReference) UnmarshalJSON(b []byte) error {
 
 // TargetReference
 
-// Reference a target by name
+// A TargetReference represents a reference to a Swift target.
 type TargetReference struct {
 	TargetName string
 }

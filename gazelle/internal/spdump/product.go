@@ -2,6 +2,7 @@ package spdump
 
 import "encoding/json"
 
+// A ProductType is an enum for identifying the type of Swift product.
 type ProductType int
 
 const (
@@ -27,6 +28,7 @@ func (pt *ProductType) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
+// A Product represents a Swift product.
 type Product struct {
 	Name    string
 	Targets []string
