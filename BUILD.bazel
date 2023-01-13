@@ -9,6 +9,7 @@ load(
     "@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "integration_test_utils",
 )
+load("@io_bazel_rules_go//go:def.bzl", "TOOLS_NOGO", "nogo")
 
 # MARK: - Bazel Starlark Lint and Formatting
 
@@ -38,6 +39,16 @@ tidy(
         ":go_update_repos",
         ":gazelle",
     ],
+)
+
+# MARK: - nogo Code Analysis
+
+# https://github.com/bazelbuild/rules_go/blob/master/go/nogo.rst
+nogo(
+    name = "nogo",
+    config = "nogo_config.json",
+    visibility = ["//visibility:public"],
+    deps = TOOLS_NOGO,
 )
 
 # MARK: - Gazelle

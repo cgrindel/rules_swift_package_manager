@@ -113,7 +113,7 @@ func (ts *TargetSetting) UnmarshalJSON(b []byte) error {
 	}
 	var mke *jsonutils.MissingKeyError
 	if defineMap, err := jsonutils.MapAtKey(kindMap, "define"); err != nil {
-		if err != nil && !errors.As(err, &mke) {
+		if !errors.As(err, &mke) {
 			return err
 		}
 	} else {
