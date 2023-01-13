@@ -2,6 +2,7 @@ package spreso
 
 import "encoding/json"
 
+// A PkgRefKind is an enum representing the kind of package reference.
 type PkgRefKind int
 
 const (
@@ -33,7 +34,7 @@ func (prk *PkgRefKind) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-// Represents serialized form of PackageModel.PackageReference
+// A PackageReference represents a serialized form of PackageModel.PackageReference
 // https://github.com/apple/swift-package-manager/blob/main/Sources/PackageModel/PackageReference.swift
 type PackageReference struct {
 	Identity string
@@ -42,6 +43,7 @@ type PackageReference struct {
 	Name     string
 }
 
+// Remote returns the location of the remote package.
 func (pr *PackageReference) Remote() string {
 	// We probably want to use a different value based upon the Kind
 	return pr.Location
