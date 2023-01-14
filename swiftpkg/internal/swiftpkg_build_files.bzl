@@ -20,6 +20,8 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
         return _swift_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
+    elif target.module_type == module_types.binary:
+        return _apple_dynamic_xcframework_import_build_file(repository_ctx, pkg_ctx, target)
 
     # GH046: Support plugins.
     return None
@@ -211,6 +213,26 @@ def _system_library_build_file(target):
     # GH009(chuck): Implement _system_library_build_file
     return None
 
+# MARK: - Apple xcframework Targets
+
+def _apple_dynamic_xcframework_import_build_file(repository_ctx, pkg_ctx, target):
+    load_stmts = [apple_dynamic_xcframework_import_load_stmt]
+    decls = [
+        build_decls.new(
+            kind = apple_kinds.dynamic_xcframework_import,
+            name = pkginfo_targets.bazel_label_name(target),
+            attrs = {
+                "xcframework_imports": """glob(["{tpath}/*.xcframework/**"])""".format(
+                    tpath = target.path,
+                ),
+            },
+        ),
+    ]
+    return build_files.new(
+        load_stmts = load_stmts,
+        decls = decls,
+    )
+
 # MARK: - Products Entry Point
 
 def _new_for_products(pkg_info, repo_name):
@@ -372,4 +394,15 @@ skylib_build_test_load_stmt = load_statements.new(
 swiftpkg_build_files = struct(
     new_for_target = _new_for_target,
     new_for_products = _new_for_products,
+)
+
+apple_kinds = struct(
+    dynamic_xcframework_import = "apple_dynamic_xcframework_import",
+)
+
+apple_apple_location = "build_bazel_rules_apple//apple:apple.bzl"
+
+apple_dynamic_xcframework_import_load_stmt = load_statements.new(
+    apple_apple_location,
+    apple_kinds.dynamic_xcframework_import,
 )

@@ -5,6 +5,7 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:versions.bzl", "versions")
 load(":build_files.bzl", "build_files")
 load(":pkg_ctxs.bzl", "pkg_ctxs")
+load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":spm_versions.bzl", "spm_versions")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
@@ -66,6 +67,15 @@ def _gen_build_files(repository_ctx, pkg_info):
         ),
     )
 
+    # DEBUG BEGIN
+    fbTarget = pkginfo_targets.get(pkg_ctx.pkg_info.targets, "FirebaseAnalytics")
+    print("*** CHUCK fbTarget: ", fbTarget)
+    # DEBUG END
+
+    # # Download any binary target artifacts.
+    # for target in pkg_info.targets:
+    #     artifact_download_info = target.artifact_download_info
+
     # Create Bazel declarations for the Swift package targets
     bld_files = []
     for target in pkg_info.targets:
@@ -73,6 +83,8 @@ def _gen_build_files(repository_ctx, pkg_info):
         # dependencies. So, we need to skip generating test targets.
         if target.type == "test":
             continue
+        if target.artifact_download_info != None:
+            _download_artifact(repository_ctx, target.artifact_download_info, target.path)
         bld_file = swiftpkg_build_files.new_for_target(repository_ctx, pkg_ctx, target)
         if bld_file == None:
             continue
@@ -91,6 +103,18 @@ def _write_workspace_file(repository_ctx, repoDir):
 workspace(name = "{}")
 """.format(repository_ctx.name)
     repository_ctx.file(path, content = content, executable = False)
+
+def _download_artifact(repository_ctx, artifact_download_info, path):
+    result = repository_ctx.download_and_extract(
+        url = artifact_download_info.url,
+        output = path,
+        sha256 = artifact_download_info.checksum,
+    )
+    if not result.success:
+        fail("Failed to download artifact. url: {url}, sha256: {sha256}".format(
+            url = artifact_download_info.url,
+            sha256 = artifact_download_info.checksum,
+        ))
 
 repo_rules = struct(
     check_spm_version = _check_spm_version,

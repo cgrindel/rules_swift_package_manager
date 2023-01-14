@@ -156,6 +156,13 @@ def _new_target_from_json_maps(dump_map, desc_map):
     linker_settings = _new_linker_settings_from_dump_json_list(
         dump_map["settings"],
     )
+    artifact_download_info = None
+    url = dump_map.get("url")
+    if url != None:
+        artifact_download_info = _new_artifact_download_info(
+            url = url,
+            checksum = dump_map.get("checksum"),
+        )
     return _new_target(
         name = dump_map["name"],
         type = dump_map["type"],
@@ -171,6 +178,7 @@ def _new_target_from_json_maps(dump_map, desc_map):
         swift_settings = swift_settings,
         linker_settings = linker_settings,
         public_hdrs_path = dump_map.get("publicHeadersPath"),
+        artifact_download_info = artifact_download_info,
     )
 
 def _new_clang_settings_from_dump_json_list(dump_list):
@@ -538,7 +546,8 @@ def _new_target(
         clang_settings = None,
         swift_settings = None,
         linker_settings = None,
-        public_hdrs_path = None):
+        public_hdrs_path = None,
+        artifact_download_info = None):
     """Creates a target.
 
     Args:
@@ -584,6 +593,7 @@ def _new_target(
         swift_settings = swift_settings,
         linker_settings = linker_settings,
         public_hdrs_path = public_hdrs_path,
+        artifact_download_info = artifact_download_info,
     )
 
 def _new_clang_settings(defines, hdr_srch_paths):
@@ -600,6 +610,12 @@ def _new_swift_settings(defines):
 def _new_linker_settings(linked_libraries):
     return struct(
         linked_libraries = linked_libraries,
+    )
+
+def _new_artifact_download_info(url, checksum):
+    return struct(
+        url = url,
+        checksum = checksum,
     )
 
 target_types = struct(
@@ -622,11 +638,13 @@ target_types = struct(
 )
 
 module_types = struct(
+    binary = "BinaryTarget",
     clang = "ClangTarget",
     plugin = "PluginTarget",
     swift = "SwiftTarget",
     system_library = "SystemLibraryTarget",
     all_values = [
+        "BinaryTarget",
         "ClangTarget",
         "PluginTarget",
         "SwiftTarget",
