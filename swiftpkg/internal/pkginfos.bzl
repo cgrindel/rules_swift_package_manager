@@ -603,6 +603,7 @@ def _new_linker_settings(linked_libraries):
     )
 
 target_types = struct(
+    binary = "binary",
     executable = "executable",
     library = "library",
     plugin = "plugin",
@@ -610,6 +611,7 @@ target_types = struct(
     system = "system-target",
     test = "test",
     all_values = [
+        "binary",
         "executable",
         "library",
         "plugin",
