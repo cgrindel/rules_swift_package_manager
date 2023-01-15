@@ -85,21 +85,21 @@ def _fn_call_to_starlark_parts_test(ctx):
     code = scg.to_starlark(fn_call)
     asserts.equals(env, expected, code)
 
-    fn_call = build_decls.new_fn_call("foo", pos_args = ["first"])
+    fn_call = build_decls.new_fn_call("foo", "first")
     expected = """\
 foo("first")\
 """
     code = scg.to_starlark(fn_call)
     asserts.equals(env, expected, code)
 
-    fn_call = build_decls.new_fn_call("foo", pos_args = [["item0"]])
+    fn_call = build_decls.new_fn_call("foo", ["item0"])
     expected = """\
 foo(["item0"])\
 """
     code = scg.to_starlark(fn_call)
     asserts.equals(env, expected, code)
 
-    fn_call = build_decls.new_fn_call("foo", pos_args = [["item0", "item1"]])
+    fn_call = build_decls.new_fn_call("foo", ["item0", "item1"])
     expected = """\
 foo([
     "item0",
@@ -109,7 +109,7 @@ foo([
     code = scg.to_starlark(fn_call)
     asserts.equals(env, expected, code)
 
-    fn_call = build_decls.new_fn_call("foo", pos_args = [123, 456])
+    fn_call = build_decls.new_fn_call("foo", 123, 456)
     expected = """\
 foo(
     123,
@@ -121,10 +121,8 @@ foo(
 
     fn_call = build_decls.new_fn_call(
         "foo",
-        named_args = [
-            build_decls.new_named_arg("zebra", "goodbye"),
-            build_decls.new_named_arg("bar", "hello"),
-        ],
+        zebra = "goodbye",
+        bar = "hello",
     )
     expected = """\
 foo(
