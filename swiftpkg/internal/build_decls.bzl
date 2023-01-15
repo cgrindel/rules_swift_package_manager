@@ -87,9 +87,30 @@ def _new_glob(
     )
 
 def _glob_to_starlark_parts(glob, indent):
-    parts = ["glob("]
-    parts.append(scg.with_indent(indent, glob.include))
-    parts.append(")")
+    only_include = (
+        glob.exclude == None and
+        glob.exclude_directories == None and
+        glob.allow_empty == None
+    )
+    if only_include and len(glob.include) == 1:
+        parts = ["glob(", glob.include, ")"]
+    elif only_include:
+        parts = ["glob(", scg.with_indent(indent, glob.include), ")"]
+    else:
+        # TODO(chuck): FIX ME!
+        parts = ["glob("]
+        parts.append(scg.with_indent(indent + 1, glob.include))
+        parts.append(",")
+        parts.append(scg.indent(indent, ")"))
+
+    # if only_include:
+    #     parts = ["glob(", scg.with_indent()]
+    # parts = ["glob("]
+    # if not only_include:
+    #     parts.append("\n")
+    #     parts.indent(indent + 1)
+    # parts.append(scg.with_indent(indent, glob.include))
+    # parts.append(")")
     return parts
 
 build_decls = struct(

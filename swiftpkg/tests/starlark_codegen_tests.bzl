@@ -73,9 +73,7 @@ def _to_starlark_test(ctx):
     actual = scg.to_starlark([["hello"], [123, "goodbye"], {"chicken": "smidgen"}])
     expected = """\
 [
-    [
-        "hello",
-    ],
+    ["hello"],
     [
         123,
         "goodbye",

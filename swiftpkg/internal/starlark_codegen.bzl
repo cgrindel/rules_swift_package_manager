@@ -146,8 +146,11 @@ def _process_complex_types(out):
     return new_out, finished
 
 def _list(val, current_indent):
-    if len(val) == 0:
+    val_len = len(val)
+    if val_len == 0:
         return ["[]"]
+    elif val_len == 1:
+        return ["[", _with_indent(current_indent, _normalize(val[0])), "]"]
 
     child_indent = current_indent + 1
     output = ["[\n"]

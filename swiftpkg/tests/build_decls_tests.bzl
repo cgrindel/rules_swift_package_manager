@@ -24,9 +24,7 @@ def _to_starlark_parts_test(ctx):
 # Comment above the declaration.
 smidgen_library(
     name = "chicken",
-    deps = [
-        "//path/to:dep",
-    ],
+    deps = ["//path/to:dep"],
     srcs = [
         "foo.txt",
         "bar.json",
@@ -85,8 +83,16 @@ def _glob_to_starlark_parts_test(ctx):
     glob = build_decls.new_glob(["path/**"])
     code = scg.to_starlark(glob)
     expected = """\
+glob(["path/**"])\
+"""
+    asserts.equals(env, expected, code)
+
+    glob = build_decls.new_glob(["path/**", "another/*"])
+    code = scg.to_starlark(glob)
+    expected = """\
 glob([
     "path/**",
+    "another/*",
 ])\
 """
     asserts.equals(env, expected, code)
