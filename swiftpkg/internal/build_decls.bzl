@@ -73,20 +73,6 @@ def _get(decls, name, fail_if_not_found = True):
         fail("Failed to find build declaration. name:", name)
     return None
 
-# def _new_named_arg(name, value):
-#     return struct(
-#         name = name,
-#         value = value,
-#     )
-
-# def _new_fn_call(fn_name, pos_args = [], named_args = []):
-#     return struct(
-#         fn_name = fn_name,
-#         pos_args = pos_args,
-#         named_args = named_args,
-#         to_starlark_parts = _fn_call_to_starlark_parts,
-#     )
-
 def _new_fn_call(fn_name, *args, **kwargs):
     return struct(
         fn_name = fn_name,
@@ -122,69 +108,9 @@ def _fn_call_to_starlark_parts(fn_call, indent):
     parts.append(scg.indent(indent, ")"))
     return parts
 
-# def _new_glob(
-#         include,
-#         exclude = None,
-#         exclude_directories = None,
-#         allow_empty = None):
-#     named_args = []
-#     if exclude != None:
-#         named_args.append(_new_named_arg("exclude", exclude))
-#     if exclude_directories != None:
-#         named_args.append(_new_named_arg("exclude_directories", exclude_directories))
-#     if allow_empty != None:
-#         named_args.append(_new_named_arg("allow_empty", allow_empty))
-#     return _new_fn_call(
-#         fn_name = "glob",
-#         pos_args = [include],
-#         named_args = named_args,
-#     )
-
-# def _new_glob(
-#         include,
-#         exclude = None,
-#         exclude_directories = None,
-#         allow_empty = None):
-#     return struct(
-#         include = include,
-#         exclude = exclude,
-#         exclude_directories = exclude_directories,
-#         allow_empty = allow_empty,
-#         to_starlark_parts = _glob_to_starlark_parts,
-#     )
-
-# def _glob_to_starlark_parts(glob, indent):
-#     only_include = (
-#         glob.exclude == None and
-#         glob.exclude_directories == None and
-#         glob.allow_empty == None
-#     )
-#     if only_include and len(glob.include) == 1:
-#         parts = ["glob(", glob.include, ")"]
-#     elif only_include:
-#         parts = ["glob(", scg.with_indent(indent, glob.include), ")"]
-#     else:
-#         # TODO(chuck): FIX ME!
-#         parts = ["glob("]
-#         parts.append(scg.with_indent(indent + 1, glob.include))
-#         parts.append(",")
-#         parts.append(scg.indent(indent, ")"))
-
-#     # if only_include:
-#     #     parts = ["glob(", scg.with_indent()]
-#     # parts = ["glob("]
-#     # if not only_include:
-#     #     parts.append("\n")
-#     #     parts.indent(indent + 1)
-#     # parts.append(scg.with_indent(indent, glob.include))
-#     # parts.append(")")
-#     return parts
-
 build_decls = struct(
     get = _get,
     new = _new,
     new_fn_call = _new_fn_call,
-    # new_glob = _new_glob,
-    # new_named_arg = _new_named_arg,
     uniq = _uniq,
 )

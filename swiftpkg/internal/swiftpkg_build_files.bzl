@@ -217,16 +217,16 @@ def _system_library_build_file(target):
 
 def _apple_dynamic_xcframework_import_build_file(target):
     load_stmts = [apple_dynamic_xcframework_import_load_stmt]
-    glob = build_decls.new_glob(["{tpath}/*.xcframework/**".format(tpath = target.path)])
+    glob = build_decls.new_fn_call(
+        "glob",
+        ["{tpath}/*.xcframework/**".format(tpath = target.path)],
+    )
     decls = [
         build_decls.new(
             kind = apple_kinds.dynamic_xcframework_import,
             name = pkginfo_targets.bazel_label_name(target),
             attrs = {
                 "xcframework_imports": glob,
-                # "xcframework_imports": """glob(["{tpath}/*.xcframework/**"])""".format(
-                #     tpath = target.path,
-                # ),
             },
         ),
     ]
