@@ -607,6 +607,12 @@ def _new_target(
         module_type,
         "Unrecognized module type. type:",
     )
+    normalized_src_paths = None
+    if source_paths != None:
+        normalized_src_paths = [
+            sp[:-1] if sp.endswith("/") else sp
+            for sp in source_paths
+        ]
     return struct(
         name = name,
         type = type,
@@ -615,7 +621,7 @@ def _new_target(
         path = path,
         sources = sources,
         dependencies = dependencies,
-        source_paths = source_paths,
+        source_paths = normalized_src_paths,
         clang_settings = clang_settings,
         swift_settings = swift_settings,
         linker_settings = linker_settings,
