@@ -255,10 +255,6 @@ def _new_linker_settings_from_dump_json_list(dump_list):
 def _new_dependency_identity_to_name_map(dump_deps):
     result = {}
     for dep in dump_deps:
-        # DEBUG BEGIN
-        print("*** CHUCK dep: ", dep)
-
-        # DEBUG END
         src_ctrl_list = dep.get("sourceControl")
         if src_ctrl_list == None or len(src_ctrl_list) == 0:
             continue
