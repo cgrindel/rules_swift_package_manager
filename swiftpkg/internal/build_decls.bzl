@@ -100,9 +100,15 @@ def _fn_call_to_starlark_parts(fn_call, indent):
             ")",
         ]
     parts = [fn_call.fn_name, "(\n"]
-    # for pos_arg in fn_call.pos_args:
-    #     parts.append(scg.with_indent(indent + 1))
+    child_indent = indent + 1
+    for pos_arg in fn_call.pos_args:
+        parts.extend([
+            scg.indent(child_indent),
+            scg.with_indent(child_indent, scg.normalize(pos_arg)),
+            ",\n",
+        ])
 
+    parts.append(scg.indent(indent, ")"))
     return parts
 
 def _new_glob(
