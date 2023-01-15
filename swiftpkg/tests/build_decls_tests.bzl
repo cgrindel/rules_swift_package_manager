@@ -79,10 +79,27 @@ def _get_test(ctx):
 
 get_test = unittest.make(_get_test)
 
+def _glob_to_starlark_parts_test(ctx):
+    env = unittest.begin(ctx)
+
+    glob = build_decls.new_glob(["path/**"])
+    code = scg.to_starlark(glob)
+    expected = """\
+glob([
+    "path/**",
+])\
+"""
+    asserts.equals(env, expected, code)
+
+    return unittest.end(env)
+
+glob_to_starlark_parts_test = unittest.make(_glob_to_starlark_parts_test)
+
 def build_decls_test_suite():
     return unittest.suite(
         "build_decls_tests",
         to_starlark_parts_test,
         uniq_test,
         get_test,
+        glob_to_starlark_parts_test,
     )

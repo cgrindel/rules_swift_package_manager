@@ -87,13 +87,14 @@ def _new_glob(
     )
 
 def _glob_to_starlark_parts(glob, indent):
-    # TODO(chuck): IMPLEMENT ME!
     parts = ["glob("]
+    parts.append(scg.with_indent(indent, glob.include))
     parts.append(")")
     return parts
 
 build_decls = struct(
-    new = _new,
-    uniq = _uniq,
     get = _get,
+    new = _new,
+    new_glob = _new_glob,
+    uniq = _uniq,
 )
