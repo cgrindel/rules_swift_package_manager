@@ -591,6 +591,8 @@ def _new_target(
         swift_settings: Optional. A `struct` as returned by `pkginfos.new_swift_settings`.
         linker_settings: Optional. A `struct` as returned by `pkginfos.new_linker_settings`.
         public_hdrs_path: Optional. A `string`.
+        artifact_download_info: Optional. A `struct` as returned by
+            `pkginfos.new_artifact_download_info`.
 
     Returns:
         A `struct` representing a target in a Swift package.
@@ -687,6 +689,7 @@ library_type_kinds = struct(
 pkginfos = struct(
     get = _get,
     new = _new,
+    new_artifact_download_info = _new_artifact_download_info,
     new_by_name_reference = _new_by_name_reference,
     new_clang_settings = _new_clang_settings,
     new_dependency = _new_dependency,

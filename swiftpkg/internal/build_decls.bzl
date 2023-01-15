@@ -93,15 +93,17 @@ def _fn_call_to_starlark_parts(fn_call, indent):
     if pos_args_len == 0 and named_args_len == 0:
         return [fn_call.fn_name, "()"]
     if pos_args_len == 1 and named_args_len == 0:
-        parts = [fn_call.fn_name, "("]
         return [
             fn_call.fn_name,
             "(",
             scg.with_indent(indent, scg.normalize(fn_call.pos_args[0])),
             ")",
         ]
+    parts = [fn_call.fn_name, "(\n"]
+    # for pos_arg in fn_call.pos_args:
+    #     parts.append(scg.with_indent(indent + 1))
 
-    return []
+    return parts
 
 def _new_glob(
         include,

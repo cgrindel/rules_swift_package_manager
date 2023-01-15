@@ -5,7 +5,6 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:versions.bzl", "versions")
 load(":build_files.bzl", "build_files")
 load(":pkg_ctxs.bzl", "pkg_ctxs")
-load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":spm_versions.bzl", "spm_versions")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
@@ -66,15 +65,6 @@ def _gen_build_files(repository_ctx, pkg_info):
             repository_ctx.attr.dependencies_index,
         ),
     )
-
-    # DEBUG BEGIN
-    fbTarget = pkginfo_targets.get(pkg_ctx.pkg_info.targets, "FirebaseAnalytics")
-    print("*** CHUCK fbTarget: ", fbTarget)
-    # DEBUG END
-
-    # # Download any binary target artifacts.
-    # for target in pkg_info.targets:
-    #     artifact_download_info = target.artifact_download_info
 
     # Create Bazel declarations for the Swift package targets
     bld_files = []

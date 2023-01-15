@@ -21,7 +21,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
     elif target.module_type == module_types.binary:
-        return _apple_dynamic_xcframework_import_build_file(repository_ctx, pkg_ctx, target)
+        return _apple_dynamic_xcframework_import_build_file(target)
 
     # GH046: Support plugins.
     return None
@@ -215,7 +215,7 @@ def _system_library_build_file(target):
 
 # MARK: - Apple xcframework Targets
 
-def _apple_dynamic_xcframework_import_build_file(repository_ctx, pkg_ctx, target):
+def _apple_dynamic_xcframework_import_build_file(target):
     load_stmts = [apple_dynamic_xcframework_import_load_stmt]
     glob = build_decls.new_glob(["{tpath}/*.xcframework/**".format(tpath = target.path)])
     decls = [
