@@ -77,25 +77,80 @@ def _get_test(ctx):
 
 get_test = unittest.make(_get_test)
 
+def _fn_call_to_starlark_parts_test(ctx):
+    env = unittest.begin(ctx)
+
+    fn_call = build_decls.new_fn_call("foo")
+    expected = "foo()"
+    code = scg.to_starlark(fn_call)
+    asserts.equals(env, expected, code)
+
+    fn_call = build_decls.new_fn_call("foo", pos_args = ["first"])
+    expected = """\
+foo("first")\
+"""
+    code = scg.to_starlark(fn_call)
+    asserts.equals(env, expected, code)
+
+    fn_call = build_decls.new_fn_call("foo", pos_args = [["item0"]])
+    expected = """\
+foo(["item0"])\
+"""
+    code = scg.to_starlark(fn_call)
+    asserts.equals(env, expected, code)
+
+    fn_call = build_decls.new_fn_call("foo", pos_args = [["item0", "item1"]])
+    expected = """\
+foo([
+    "item0",
+    "item1",
+])\
+"""
+    code = scg.to_starlark(fn_call)
+    asserts.equals(env, expected, code)
+
+    return unittest.end(env)
+
+fn_call_to_starlark_parts_test = unittest.make(_fn_call_to_starlark_parts_test)
+
 def _glob_to_starlark_parts_test(ctx):
     env = unittest.begin(ctx)
 
-    glob = build_decls.new_glob(["path/**"])
-    code = scg.to_starlark(glob)
-    expected = """\
-glob(["path/**"])\
-"""
-    asserts.equals(env, expected, code)
+    unittest.fail(env, "IMPLEMENT ME!")
 
-    glob = build_decls.new_glob(["path/**", "another/*"])
-    code = scg.to_starlark(glob)
-    expected = """\
-glob([
-    "path/**",
-    "another/*",
-])\
-"""
-    asserts.equals(env, expected, code)
+    # glob = build_decls.new_glob(["path/**"])
+    # code = scg.to_starlark(glob)
+    # expected = """\
+    # glob(["path/**"])\
+    # """
+    # asserts.equals(env, expected, code)
+
+    # glob = build_decls.new_glob(["path/**", "another/*"])
+    # code = scg.to_starlark(glob)
+    # expected = """\
+    # glob([
+    # "path/**",
+    # "another/*",
+    # ])\
+    # """
+    # asserts.equals(env, expected, code)
+
+    # glob = build_decls.new_glob(
+    #     include = ["path/**"],
+    #     exclude = ["*.txt"],
+    #     exclude_directories = True,
+    #     allow_empty = True,
+    # )
+    # code = scg.to_starlark(glob)
+    # expected = """\
+    # glob(
+    # ["path/**"],
+    # exclude = ["*.txt"],
+    # exclude_directories = True,
+    # allow_empty = True,
+    # )\
+    # """
+    # asserts.equals(env, expected, code)
 
     return unittest.end(env)
 
@@ -108,4 +163,5 @@ def build_decls_test_suite():
         uniq_test,
         get_test,
         glob_to_starlark_parts_test,
+        fn_call_to_starlark_parts_test,
     )
