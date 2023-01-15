@@ -87,9 +87,16 @@ def _new_dependency_requirement_from_desc_json_map(req_map):
         )
     return None
 
-def _new_dependency_from_desc_json_map(dep_map):
+def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map):
+    identity = dep_map["identity"]
+    name = dep_names_by_id.get(identity)
+    if name == None:
+        fail("Did not find dependency name for {identity}".format(
+            identity = identity,
+        ))
     return _new_dependency(
-        identity = dep_map["identity"],
+        identity = identity,
+        name = name,
         type = dep_map["type"],
         url = dep_map["url"],
         requirement = _new_dependency_requirement_from_desc_json_map(dep_map["requirement"]),
@@ -130,7 +137,7 @@ def _new_target_dependency_from_dump_json_map(dep_map):
     if product_list:
         product = _new_product_reference(
             product_name = product_list[0],
-            dep_identity = product_list[1],
+            dep_name = product_list[1],
         )
 
     target_list = dep_map.get("target")
@@ -245,6 +252,22 @@ def _new_linker_settings_from_dump_json_list(dump_list):
         linked_libraries = linked_libraries,
     )
 
+def _new_dependency_identity_to_name_map(dump_deps):
+    result = {}
+    for dep in dump_deps:
+        # DEBUG BEGIN
+        print("*** CHUCK dep: ", dep)
+
+        # DEBUG END
+        src_ctrl_list = dep.get("sourceControl")
+        if src_ctrl_list == None or len(src_ctrl_list) == 0:
+            continue
+        src_ctrl = src_ctrl_list[0]
+        identity = src_ctrl["identity"]
+        name = src_ctrl["nameForTargetDependencyResolutionOnly"]
+        result[identity] = name
+    return result
+
 def _new_from_parsed_json(dump_manifest, desc_manifest):
     """Returns the package information from the provided Swift package JSON \
     structures.
@@ -264,8 +287,11 @@ def _new_from_parsed_json(dump_manifest, desc_manifest):
         _new_platform(name = pl["platformName"], version = pl["version"])
         for pl in dump_manifest["platforms"]
     ]
+    dep_names_by_id = _new_dependency_identity_to_name_map(
+        dump_manifest["dependencies"],
+    )
     dependencies = [
-        _new_dependency_from_desc_json_map(dep_map)
+        _new_dependency_from_desc_json_map(dep_names_by_id, dep_map)
         for dep_map in desc_manifest["dependencies"]
     ]
     products = [
@@ -346,12 +372,13 @@ def _new_platform(name, version):
         version = version,
     )
 
-def _new_dependency(identity, type, url, requirement):
+def _new_dependency(identity, name, type, url, requirement):
     """Creates a `struct` representing an external dependency for a Swift \
     package.
 
     Args:
         identity: The identifier for the external depdendency (`string`).
+        name: The name used for package reference resolution (`string`).
         type: Type type of external dependency (`string`).
         url: The URL of the external dependency (`string`).
         requirement: A `struct` as returned by \
@@ -362,6 +389,7 @@ def _new_dependency(identity, type, url, requirement):
     """
     return struct(
         identity = identity,
+        name = name,
         type = type,
         url = url,
         requirement = requirement,
@@ -469,19 +497,19 @@ def _new_product(name, type, targets):
         targets = targets,
     )
 
-def _new_product_reference(product_name, dep_identity):
+def _new_product_reference(product_name, dep_name):
     """Creates a product reference.
 
     Args:
         product_name: The name of the product (`string`).
-        dep_identity: The identity of the external dependency (`string`).
+        dep_name: The name of the external dependency (`string`).
 
     Returns:
         A `struct` representing a product reference.
     """
     return struct(
         product_name = product_name,
-        dep_identity = dep_identity,
+        dep_name = dep_name,
     )
 
 def _new_by_name_reference(name):

@@ -400,7 +400,7 @@ apple_kinds = struct(
     dynamic_xcframework_import = "apple_dynamic_xcframework_import",
 )
 
-apple_apple_location = "build_bazel_rules_apple//apple:apple.bzl"
+apple_apple_location = "@build_bazel_rules_apple//apple:apple.bzl"
 
 apple_dynamic_xcframework_import_load_stmt = load_statements.new(
     apple_apple_location,

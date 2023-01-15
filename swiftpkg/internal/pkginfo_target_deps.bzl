@@ -2,6 +2,7 @@
 
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
 load(":deps_indexes.bzl", "deps_indexes")
+load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 
 def make_pkginfo_target_deps(bazel_labels):
     def _bazel_label_strs(pkg_ctx, target_dep):
@@ -52,9 +53,13 @@ Unable to resolve target reference target dependency for {module_name}.\
 
         elif target_dep.product:
             prod_ref = target_dep.product
+            dep = pkginfo_dependencies.get_by_name(
+                pkg_ctx.pkg_info.dependencies,
+                prod_ref.dep_name,
+            )
             labels = deps_indexes.resolve_product_labels(
                 deps_index = pkg_ctx.deps_index_ctx.deps_index,
-                identity = prod_ref.dep_identity,
+                identity = dep.identity,
                 name = prod_ref.product_name,
             )
             if len(labels) == 0:
