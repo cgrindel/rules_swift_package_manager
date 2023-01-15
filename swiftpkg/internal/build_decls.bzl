@@ -107,6 +107,8 @@ def _fn_call_to_starlark_parts(fn_call, indent):
             scg.with_indent(child_indent, scg.normalize(pos_arg)),
             ",\n",
         ])
+    for na in fn_call.named_args:
+        parts.extend(scg.attr(na.name, na.value, child_indent))
 
     parts.append(scg.indent(indent, ")"))
     return parts

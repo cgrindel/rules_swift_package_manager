@@ -118,6 +118,23 @@ foo(
 """
     code = scg.to_starlark(fn_call)
     asserts.equals(env, expected, code)
+
+    fn_call = build_decls.new_fn_call(
+        "foo",
+        named_args = [
+            build_decls.new_named_arg("zebra", "goodbye"),
+            build_decls.new_named_arg("bar", "hello"),
+        ],
+    )
+    expected = """\
+foo(
+    zebra = "goodbye",
+    bar = "hello",
+)\
+"""
+    code = scg.to_starlark(fn_call)
+    asserts.equals(env, expected, code)
+
     return unittest.end(env)
 
 fn_call_to_starlark_parts_test = unittest.make(_fn_call_to_starlark_parts_test)
