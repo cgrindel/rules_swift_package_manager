@@ -94,6 +94,7 @@ def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map):
         fail("Did not find dependency name for {identity}".format(
             identity = identity,
         ))
+
     return _new_dependency(
         identity = identity,
         name = name,

@@ -73,6 +73,25 @@ def _get(decls, name, fail_if_not_found = True):
         fail("Failed to find build declaration. name:", name)
     return None
 
+def _new_glob(
+        include,
+        exclude = None,
+        exclude_directories = None,
+        allow_empty = None):
+    return struct(
+        include = include,
+        exclude = exclude,
+        exclude_directories = exclude_directories,
+        allow_empty = allow_empty,
+        to_starlark_parts = _glob_to_starlark_parts,
+    )
+
+def _glob_to_starlark_parts(glob, indent):
+    # TODO(chuck): IMPLEMENT ME!
+    parts = ["glob("]
+    parts.append(")")
+    return parts
+
 build_decls = struct(
     new = _new,
     uniq = _uniq,

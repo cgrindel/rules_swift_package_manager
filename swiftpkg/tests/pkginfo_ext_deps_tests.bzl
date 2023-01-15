@@ -6,6 +6,7 @@ load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 
 _swift_arg_parser = pkginfos.new_dependency(
     identity = "swift-argument-parser",
+    name = "SwiftArgumentParser",
     type = "sourceControl",
     url = "https://github.com/apple/swift-argument-parser",
     requirement = pkginfos.new_dependency_requirement(
@@ -20,6 +21,7 @@ _swift_arg_parser = pkginfos.new_dependency(
 
 _super_cool_pkg = pkginfos.new_dependency(
     identity = "super-cool-package",
+    name = "SuperCoolPackage",
     type = "sourceControl",
     url = "https://github.com/example/super-cool-package",
     requirement = pkginfos.new_dependency_requirement(
