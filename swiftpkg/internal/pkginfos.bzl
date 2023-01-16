@@ -1,5 +1,6 @@
 """API for creating and loading Swift package information."""
 
+load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":repository_utils.bzl", "repository_utils")
 load(":validations.bzl", "validations")
 
@@ -392,7 +393,7 @@ def _new_dependency(identity, name, type, url, requirement):
     """
     return struct(
         identity = identity,
-        name = name,
+        name = pkginfo_dependencies.normalize_name(name),
         type = type,
         url = url,
         requirement = requirement,

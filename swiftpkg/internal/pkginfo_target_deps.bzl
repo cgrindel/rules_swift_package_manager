@@ -57,6 +57,10 @@ Unable to resolve target reference target dependency for {module_name}.\
                 pkg_ctx.pkg_info.dependencies,
                 prod_ref.dep_name,
             )
+            if dep == None:
+                fail("""\
+Did not find external dependency with name/identity {}.\
+""".format(prod_ref.dep_name))
             labels = deps_indexes.resolve_product_labels(
                 deps_index = pkg_ctx.deps_index_ctx.deps_index,
                 identity = dep.identity,
