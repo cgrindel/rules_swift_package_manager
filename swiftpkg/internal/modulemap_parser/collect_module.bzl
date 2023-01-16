@@ -5,7 +5,7 @@ load(":collection_results.bzl", "collection_results")
 load(":declarations.bzl", "declarations")
 load(":errors.bzl", "errors")
 load(":module_declarations.bzl", "module_declarations")
-load(":tokens.bzl", "tokens", rws = "reserved_words", tts = "token_types")
+load(":tokens.bzl", "operators", "tokens", rws = "reserved_words", tts = "token_types")
 
 # MARK: - Attribute Collection
 
@@ -91,10 +91,17 @@ def _process_module_tokens(parsed_tokens, prefix_tokens, is_submodule):
         return None, err
     consumed_count += 1
 
-    module_id_token, err = tokens.get_as(parsed_tokens, 1, tts.identifier, count = tlen)
+    module_id_or_asterisk_token, err = tokens.get(parsed_tokens, 1, count = tlen)
     if err != None:
         return None, err
     consumed_count += 1
+    if not tokens.is_a(module_id_or_asterisk_token, tts.identifier) and \
+       not tokens.is_a(module_id_or_asterisk_token, tts.operator, operators.asterisk):
+        return None, errors.new(
+            "Expected module identifier or asterisk, but was {}.".format(
+                module_id_or_asterisk_token.type,
+            ),
+        )
 
     # Collect the attributes and module members
     skip_ahead = 0
@@ -139,7 +146,7 @@ def _process_module_tokens(parsed_tokens, prefix_tokens, is_submodule):
 
     # Create the declaration
     decl = declarations.module(
-        module_id = module_id_token.value,
+        module_id = module_id_or_asterisk_token.value,
         explicit = explicit,
         framework = framework,
         attributes = attributes,
