@@ -109,8 +109,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     public_includes = []
     if target.public_hdrs_path != None:
         public_includes.append(
-            # pkginfo_targets.join_path(target, target.public_hdrs_path),
-            paths.join(target_path, target.public_hdrs_path),
+            paths.normalize(paths.join(target_path, target.public_hdrs_path)),
         )
 
     # If the Swift package manifest has explicit source paths, respect them.
@@ -118,7 +117,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     # Otherwise, use all of the source files under the target path.
     if target.source_paths != None:
         src_paths = target.source_paths + public_includes
-        src_paths = [paths.join(target_path, sp) for sp in src_paths]
+        src_paths = [
+            paths.normalize(paths.join(target_path, sp))
+            for sp in src_paths
+        ]
     else:
         src_paths = [target_path]
 
@@ -132,6 +134,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
         for td in target.dependencies
     ])
+
     attrs = {
         # These flags are used by SPM when compiling clang modules.
         "copts": [
