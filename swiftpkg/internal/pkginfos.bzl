@@ -261,7 +261,13 @@ def _new_dependency_identity_to_name_map(dump_deps):
             continue
         src_ctrl = src_ctrl_list[0]
         identity = src_ctrl["identity"]
-        name = src_ctrl["nameForTargetDependencyResolutionOnly"]
+
+        # If a dependency has been given a name in the manifest, use it.
+        # Otherwise, match on the identity.
+        name = src_ctrl.get(
+            "nameForTargetDependencyResolutionOnly",
+            default = identity,
+        )
         result[identity] = name
     return result
 
