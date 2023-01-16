@@ -1,5 +1,6 @@
 """API for creating and loading Swift package information."""
 
+load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":repository_utils.bzl", "repository_utils")
 load(":validations.bzl", "validations")
 
@@ -87,9 +88,17 @@ def _new_dependency_requirement_from_desc_json_map(req_map):
         )
     return None
 
-def _new_dependency_from_desc_json_map(dep_map):
+def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map):
+    identity = dep_map["identity"]
+    name = dep_names_by_id.get(identity)
+    if name == None:
+        fail("Did not find dependency name for {identity}".format(
+            identity = identity,
+        ))
+
     return _new_dependency(
-        identity = dep_map["identity"],
+        identity = identity,
+        name = name,
         type = dep_map["type"],
         url = dep_map["url"],
         requirement = _new_dependency_requirement_from_desc_json_map(dep_map["requirement"]),
@@ -130,7 +139,7 @@ def _new_target_dependency_from_dump_json_map(dep_map):
     if product_list:
         product = _new_product_reference(
             product_name = product_list[0],
-            dep_identity = product_list[1],
+            dep_name = product_list[1],
         )
 
     target_list = dep_map.get("target")
@@ -156,6 +165,13 @@ def _new_target_from_json_maps(dump_map, desc_map):
     linker_settings = _new_linker_settings_from_dump_json_list(
         dump_map["settings"],
     )
+    artifact_download_info = None
+    url = dump_map.get("url")
+    if url != None:
+        artifact_download_info = _new_artifact_download_info(
+            url = url,
+            checksum = dump_map.get("checksum"),
+        )
     return _new_target(
         name = dump_map["name"],
         type = dump_map["type"],
@@ -171,6 +187,7 @@ def _new_target_from_json_maps(dump_map, desc_map):
         swift_settings = swift_settings,
         linker_settings = linker_settings,
         public_hdrs_path = dump_map.get("publicHeadersPath"),
+        artifact_download_info = artifact_download_info,
     )
 
 def _new_clang_settings_from_dump_json_list(dump_list):
@@ -237,6 +254,24 @@ def _new_linker_settings_from_dump_json_list(dump_list):
         linked_libraries = linked_libraries,
     )
 
+def _new_dependency_identity_to_name_map(dump_deps):
+    result = {}
+    for dep in dump_deps:
+        src_ctrl_list = dep.get("sourceControl")
+        if src_ctrl_list == None or len(src_ctrl_list) == 0:
+            continue
+        src_ctrl = src_ctrl_list[0]
+        identity = src_ctrl["identity"]
+
+        # If a dependency has been given a name in the manifest, use it.
+        # Otherwise, match on the identity.
+        name = src_ctrl.get(
+            "nameForTargetDependencyResolutionOnly",
+            default = identity,
+        )
+        result[identity] = name
+    return result
+
 def _new_from_parsed_json(dump_manifest, desc_manifest):
     """Returns the package information from the provided Swift package JSON \
     structures.
@@ -256,8 +291,11 @@ def _new_from_parsed_json(dump_manifest, desc_manifest):
         _new_platform(name = pl["platformName"], version = pl["version"])
         for pl in dump_manifest["platforms"]
     ]
+    dep_names_by_id = _new_dependency_identity_to_name_map(
+        dump_manifest["dependencies"],
+    )
     dependencies = [
-        _new_dependency_from_desc_json_map(dep_map)
+        _new_dependency_from_desc_json_map(dep_names_by_id, dep_map)
         for dep_map in desc_manifest["dependencies"]
     ]
     products = [
@@ -338,12 +376,13 @@ def _new_platform(name, version):
         version = version,
     )
 
-def _new_dependency(identity, type, url, requirement):
+def _new_dependency(identity, name, type, url, requirement):
     """Creates a `struct` representing an external dependency for a Swift \
     package.
 
     Args:
         identity: The identifier for the external depdendency (`string`).
+        name: The name used for package reference resolution (`string`).
         type: Type type of external dependency (`string`).
         url: The URL of the external dependency (`string`).
         requirement: A `struct` as returned by \
@@ -354,6 +393,7 @@ def _new_dependency(identity, type, url, requirement):
     """
     return struct(
         identity = identity,
+        name = pkginfo_dependencies.normalize_name(name),
         type = type,
         url = url,
         requirement = requirement,
@@ -461,19 +501,19 @@ def _new_product(name, type, targets):
         targets = targets,
     )
 
-def _new_product_reference(product_name, dep_identity):
+def _new_product_reference(product_name, dep_name):
     """Creates a product reference.
 
     Args:
         product_name: The name of the product (`string`).
-        dep_identity: The identity of the external dependency (`string`).
+        dep_name: The name of the external dependency (`string`).
 
     Returns:
         A `struct` representing a product reference.
     """
     return struct(
         product_name = product_name,
-        dep_identity = dep_identity,
+        dep_name = dep_name,
     )
 
 def _new_by_name_reference(name):
@@ -538,7 +578,8 @@ def _new_target(
         clang_settings = None,
         swift_settings = None,
         linker_settings = None,
-        public_hdrs_path = None):
+        public_hdrs_path = None,
+        artifact_download_info = None):
     """Creates a target.
 
     Args:
@@ -557,6 +598,8 @@ def _new_target(
         swift_settings: Optional. A `struct` as returned by `pkginfos.new_swift_settings`.
         linker_settings: Optional. A `struct` as returned by `pkginfos.new_linker_settings`.
         public_hdrs_path: Optional. A `string`.
+        artifact_download_info: Optional. A `struct` as returned by
+            `pkginfos.new_artifact_download_info`.
 
     Returns:
         A `struct` representing a target in a Swift package.
@@ -571,6 +614,12 @@ def _new_target(
         module_type,
         "Unrecognized module type. type:",
     )
+    normalized_src_paths = None
+    if source_paths != None:
+        normalized_src_paths = [
+            sp[:-1] if sp.endswith("/") else sp
+            for sp in source_paths
+        ]
     return struct(
         name = name,
         type = type,
@@ -579,11 +628,12 @@ def _new_target(
         path = path,
         sources = sources,
         dependencies = dependencies,
-        source_paths = source_paths,
+        source_paths = normalized_src_paths,
         clang_settings = clang_settings,
         swift_settings = swift_settings,
         linker_settings = linker_settings,
         public_hdrs_path = public_hdrs_path,
+        artifact_download_info = artifact_download_info,
     )
 
 def _new_clang_settings(defines, hdr_srch_paths):
@@ -602,7 +652,14 @@ def _new_linker_settings(linked_libraries):
         linked_libraries = linked_libraries,
     )
 
+def _new_artifact_download_info(url, checksum):
+    return struct(
+        url = url,
+        checksum = checksum,
+    )
+
 target_types = struct(
+    binary = "binary",
     executable = "executable",
     library = "library",
     plugin = "plugin",
@@ -610,6 +667,7 @@ target_types = struct(
     system = "system-target",
     test = "test",
     all_values = [
+        "binary",
         "executable",
         "library",
         "plugin",
@@ -620,11 +678,13 @@ target_types = struct(
 )
 
 module_types = struct(
+    binary = "BinaryTarget",
     clang = "ClangTarget",
     plugin = "PluginTarget",
     swift = "SwiftTarget",
     system_library = "SystemLibraryTarget",
     all_values = [
+        "BinaryTarget",
         "ClangTarget",
         "PluginTarget",
         "SwiftTarget",
@@ -642,6 +702,7 @@ library_type_kinds = struct(
 pkginfos = struct(
     get = _get,
     new = _new,
+    new_artifact_download_info = _new_artifact_download_info,
     new_by_name_reference = _new_by_name_reference,
     new_clang_settings = _new_clang_settings,
     new_dependency = _new_dependency,

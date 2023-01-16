@@ -72,9 +72,7 @@ chicken_library(
 
 smidgen_library(
     name = "goodbye",
-    deps = [
-        "//path/to:dep",
-    ],
+    deps = ["//path/to:dep"],
     srcs = [
         "foo.txt",
         "bar.json",

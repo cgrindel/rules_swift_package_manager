@@ -22,6 +22,7 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
         dependencies = [
             pkginfos.new_dependency(
                 identity = "swift-argument-parser",
+                name = "SwiftArgumentParser",
                 type = "sourceControl",
                 url = "https://github.com/apple/swift-argument-parser",
                 requirement = pkginfos.new_dependency_requirement(
@@ -52,7 +53,7 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
                     pkginfos.new_target_dependency(
                         product = pkginfos.new_product_reference(
                             product_name = "ArgumentParser",
-                            dep_identity = "swift-argument-parser",
+                            dep_name = "SwiftArgumentParser",
                         ),
                     ),
                 ],
@@ -152,6 +153,7 @@ _swift_arg_parser_dump_json = """
               "https://github.com/apple/swift-argument-parser"
             ]
           },
+          "nameForTargetDependencyResolutionOnly": "SwiftArgumentParser",
           "productFilter" : null,
           "requirement" : {
             "range" : [
@@ -203,7 +205,7 @@ _swift_arg_parser_dump_json = """
         {
           "product" : [
             "ArgumentParser",
-            "swift-argument-parser",
+            "SwiftArgumentParser",
             null,
             null
           ]

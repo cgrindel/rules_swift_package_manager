@@ -25,6 +25,7 @@ _pkg_info = pkginfos.new(
     dependencies = [
         pkginfos.new_dependency(
             identity = "swift-argument-parser",
+            name = "SwiftArgumentParser",
             type = "sourceControl",
             url = "https://github.com/apple/swift-argument-parser.git",
             requirement = pkginfos.new_dependency_requirement(

@@ -73,6 +73,8 @@ def _gen_build_files(repository_ctx, pkg_info):
         # dependencies. So, we need to skip generating test targets.
         if target.type == "test":
             continue
+        if target.artifact_download_info != None:
+            _download_artifact(repository_ctx, target.artifact_download_info, target.path)
         bld_file = swiftpkg_build_files.new_for_target(repository_ctx, pkg_ctx, target)
         if bld_file == None:
             continue
@@ -91,6 +93,18 @@ def _write_workspace_file(repository_ctx, repoDir):
 workspace(name = "{}")
 """.format(repository_ctx.name)
     repository_ctx.file(path, content = content, executable = False)
+
+def _download_artifact(repository_ctx, artifact_download_info, path):
+    result = repository_ctx.download_and_extract(
+        url = artifact_download_info.url,
+        output = path,
+        sha256 = artifact_download_info.checksum,
+    )
+    if not result.success:
+        fail("Failed to download artifact. url: {url}, sha256: {sha256}".format(
+            url = artifact_download_info.url,
+            sha256 = artifact_download_info.checksum,
+        ))
 
 repo_rules = struct(
     check_spm_version = _check_spm_version,

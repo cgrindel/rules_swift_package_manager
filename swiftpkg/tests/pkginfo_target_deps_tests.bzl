@@ -18,6 +18,7 @@ pkginfo_target_deps = make_pkginfo_target_deps(
 
 _external_dep = pkginfos.new_dependency(
     identity = "example-swift-package",
+    name = "ASwiftPackage",
     type = "sourceControl",
     url = "https://github.com/example/swift-package",
     requirement = pkginfos.new_dependency_requirement(
@@ -29,7 +30,7 @@ _external_dep = pkginfos.new_dependency(
 _by_name = pkginfos.new_by_name_reference("Foo")
 _product_ref = pkginfos.new_product_reference(
     product_name = "AwesomeProduct",
-    dep_identity = _external_dep.identity,
+    dep_name = _external_dep.name,
 )
 
 _pkg_info = pkginfos.new(

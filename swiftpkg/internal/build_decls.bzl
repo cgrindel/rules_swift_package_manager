@@ -73,8 +73,44 @@ def _get(decls, name, fail_if_not_found = True):
         fail("Failed to find build declaration. name:", name)
     return None
 
+def _new_fn_call(fn_name, *args, **kwargs):
+    return struct(
+        fn_name = fn_name,
+        args = args,
+        kwargs = kwargs,
+        to_starlark_parts = _fn_call_to_starlark_parts,
+    )
+
+def _fn_call_to_starlark_parts(fn_call, indent):
+    args_len = len(fn_call.args)
+    kwargs_len = len(fn_call.kwargs)
+    if args_len == 0 and kwargs_len == 0:
+        return [fn_call.fn_name, "()"]
+    if args_len == 1 and kwargs_len == 0:
+        return [
+            fn_call.fn_name,
+            "(",
+            scg.with_indent(indent, scg.normalize(fn_call.args[0])),
+            ")",
+        ]
+    parts = [fn_call.fn_name, "(\n"]
+    child_indent = indent + 1
+    for pos_arg in fn_call.args:
+        parts.extend([
+            scg.indent(child_indent),
+            scg.with_indent(child_indent, scg.normalize(pos_arg)),
+            ",\n",
+        ])
+    for name in fn_call.kwargs:
+        value = fn_call.kwargs[name]
+        parts.extend(scg.attr(name, value, child_indent))
+
+    parts.append(scg.indent(indent, ")"))
+    return parts
+
 build_decls = struct(
-    new = _new,
-    uniq = _uniq,
     get = _get,
+    new = _new,
+    new_fn_call = _new_fn_call,
+    uniq = _uniq,
 )

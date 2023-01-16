@@ -24,9 +24,7 @@ def _to_starlark_parts_test(ctx):
 # Comment above the declaration.
 smidgen_library(
     name = "chicken",
-    deps = [
-        "//path/to:dep",
-    ],
+    deps = ["//path/to:dep"],
     srcs = [
         "foo.txt",
         "bar.json",
@@ -79,10 +77,87 @@ def _get_test(ctx):
 
 get_test = unittest.make(_get_test)
 
+def _fn_call_to_starlark_parts_test(ctx):
+    env = unittest.begin(ctx)
+
+    fn_call = build_decls.new_fn_call("foo")
+    expected = "foo()"
+    code = scg.to_starlark(fn_call)
+    asserts.equals(env, expected, code)
+
+    fn_call = build_decls.new_fn_call("foo", "first")
+    expected = """\
+foo("first")\
+"""
+    code = scg.to_starlark(fn_call)
+    asserts.equals(env, expected, code)
+
+    fn_call = build_decls.new_fn_call("foo", ["item0"])
+    expected = """\
+foo(["item0"])\
+"""
+    code = scg.to_starlark(fn_call)
+    asserts.equals(env, expected, code)
+
+    fn_call = build_decls.new_fn_call("foo", ["item0", "item1"])
+    expected = """\
+foo([
+    "item0",
+    "item1",
+])\
+"""
+    code = scg.to_starlark(fn_call)
+    asserts.equals(env, expected, code)
+
+    fn_call = build_decls.new_fn_call("foo", 123, 456)
+    expected = """\
+foo(
+    123,
+    456,
+)\
+"""
+    code = scg.to_starlark(fn_call)
+    asserts.equals(env, expected, code)
+
+    fn_call = build_decls.new_fn_call(
+        "foo",
+        zebra = "goodbye",
+        bar = "hello",
+    )
+    expected = """\
+foo(
+    zebra = "goodbye",
+    bar = "hello",
+)\
+"""
+    code = scg.to_starlark(fn_call)
+    asserts.equals(env, expected, code)
+
+    fn_call = build_decls.new_fn_call(
+        "foo",
+        "chicken",
+        zebra = "goodbye",
+        bar = "hello",
+    )
+    expected = """\
+foo(
+    "chicken",
+    zebra = "goodbye",
+    bar = "hello",
+)\
+"""
+    code = scg.to_starlark(fn_call)
+    asserts.equals(env, expected, code)
+
+    return unittest.end(env)
+
+fn_call_to_starlark_parts_test = unittest.make(_fn_call_to_starlark_parts_test)
+
 def build_decls_test_suite():
     return unittest.suite(
         "build_decls_tests",
         to_starlark_parts_test,
         uniq_test,
         get_test,
+        fn_call_to_starlark_parts_test,
     )

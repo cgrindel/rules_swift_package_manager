@@ -20,6 +20,8 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
         return _swift_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
+    elif target.module_type == module_types.binary:
+        return _apple_dynamic_xcframework_import_build_file(target)
 
     # GH046: Support plugins.
     return None
@@ -107,8 +109,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     public_includes = []
     if target.public_hdrs_path != None:
         public_includes.append(
-            # pkginfo_targets.join_path(target, target.public_hdrs_path),
-            paths.join(target_path, target.public_hdrs_path),
+            paths.normalize(paths.join(target_path, target.public_hdrs_path)),
         )
 
     # If the Swift package manifest has explicit source paths, respect them.
@@ -116,7 +117,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     # Otherwise, use all of the source files under the target path.
     if target.source_paths != None:
         src_paths = target.source_paths + public_includes
-        src_paths = [paths.join(target_path, sp) for sp in src_paths]
+        src_paths = [
+            paths.normalize(paths.join(target_path, sp))
+            for sp in src_paths
+        ]
     else:
         src_paths = [target_path]
 
@@ -130,6 +134,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
         for td in target.dependencies
     ])
+
     attrs = {
         # These flags are used by SPM when compiling clang modules.
         "copts": [
@@ -210,6 +215,28 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 def _system_library_build_file(target):
     # GH009(chuck): Implement _system_library_build_file
     return None
+
+# MARK: - Apple xcframework Targets
+
+def _apple_dynamic_xcframework_import_build_file(target):
+    load_stmts = [apple_dynamic_xcframework_import_load_stmt]
+    glob = build_decls.new_fn_call(
+        "glob",
+        ["{tpath}/*.xcframework/**".format(tpath = target.path)],
+    )
+    decls = [
+        build_decls.new(
+            kind = apple_kinds.dynamic_xcframework_import,
+            name = pkginfo_targets.bazel_label_name(target),
+            attrs = {
+                "xcframework_imports": glob,
+            },
+        ),
+    ]
+    return build_files.new(
+        load_stmts = load_stmts,
+        decls = decls,
+    )
 
 # MARK: - Products Entry Point
 
@@ -372,4 +399,15 @@ skylib_build_test_load_stmt = load_statements.new(
 swiftpkg_build_files = struct(
     new_for_target = _new_for_target,
     new_for_products = _new_for_products,
+)
+
+apple_kinds = struct(
+    dynamic_xcframework_import = "apple_dynamic_xcframework_import",
+)
+
+apple_apple_location = "@build_bazel_rules_apple//apple:apple.bzl"
+
+apple_dynamic_xcframework_import_load_stmt = load_statements.new(
+    apple_apple_location,
+    apple_kinds.dynamic_xcframework_import,
 )
