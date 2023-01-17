@@ -129,7 +129,13 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             paths.normalize(paths.join(target_path, sp))
             for sp in target.source_paths
         ]
-        src_paths.extend(public_includes)
+
+        # The public includes are already relative to the target.path.
+        src_paths.extend([
+            paths.normalize(paths.join(pkg_ctx.pkg_info.path, pi))
+            for pi in public_includes
+        ])
+        src_paths = sets.to_list(sets.make(src_paths))
     else:
         src_paths = [target_path]
 
@@ -138,6 +144,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         for ep in target.exclude_paths
     ]
 
+    # Get a list of all of the source files
     all_srcs = []
     for sp in src_paths:
         all_srcs.extend(repository_files.list_files_under(
@@ -146,6 +153,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             exclude = exclude_paths,
         ))
 
+    # Organize the source files
     organized_files = clang_files.collect_files(
         repository_ctx,
         all_srcs,
