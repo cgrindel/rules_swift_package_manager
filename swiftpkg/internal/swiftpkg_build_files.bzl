@@ -163,7 +163,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         repository_ctx,
         all_srcs,
         public_includes = [
-            paths.normalize(paths.join(target_path, pi))
+            paths.normalize(paths.join(pkg_path, pi))
             for pi in public_includes
         ],
         remove_prefix = pkg_path_prefix,
