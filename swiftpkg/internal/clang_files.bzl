@@ -90,7 +90,6 @@ def _remove_prefix(path, prefix):
 def _remove_prefixes(paths_list, prefix):
     if prefix == None:
         return paths_list
-    prefix_len = len(prefix)
     return [
         path.removeprefix(prefix)
         for path in paths_list
