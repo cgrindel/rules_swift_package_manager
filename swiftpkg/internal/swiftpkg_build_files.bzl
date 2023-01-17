@@ -104,11 +104,13 @@ def _swift_test_from_target(target, attrs):
 
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     repo_name = repository_ctx.name
+    pkg_path = pkg_ctx.pkg_info.path
+    pkg_path_prefix = pkg_path + "/"
 
     # Absolute path to the target. This is typically used for filesystem
     # actions, not for values added to the cc_library or objc_library.
     target_path = paths.normalize(
-        paths.join(pkg_ctx.pkg_info.path, target.path),
+        paths.join(pkg_path, target.path),
     )
 
     # Short path relative to Bazel output base. This is typically used when
@@ -132,7 +134,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 
         # The public includes are already relative to the target.path.
         src_paths.extend([
-            paths.normalize(paths.join(pkg_ctx.pkg_info.path, pi))
+            paths.normalize(paths.join(pkg_path, pi))
             for pi in public_includes
         ])
         src_paths = sets.to_list(sets.make(src_paths))
@@ -158,7 +160,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         repository_ctx,
         all_srcs,
         public_includes = public_includes,
-        remove_prefix = "{}/".format(pkg_ctx.pkg_info.path),
+        # remove_prefix = "{}/".format(pkg_path),
+        remove_prefix = pkg_path_prefix,
     )
     deps = lists.flatten([
         pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
@@ -185,10 +188,12 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "visibility": ["//visibility:public"],
     }
 
+    srcs = []
+    extra_hdr_dirs = []
     public_includes = organized_files.public_includes
     local_includes = []
     if len(organized_files.srcs) > 0:
-        attrs["srcs"] = organized_files.srcs
+        srcs.extend(organized_files.srcs)
     if len(organized_files.hdrs) > 0:
         attrs["hdrs"] = organized_files.hdrs
     if len(organized_files.private_includes) > 0:
@@ -222,6 +227,35 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             "-I{}".format(paths.normalize(paths.join(ext_repo_path, inc)))
             for inc in sets.to_list(sets.make(local_includes))
         ])
+
+        # If the target path is not everything (i.e., dot), then check for
+        # local includes that are outside the target path. We need to add them
+        # to the srcs so that they can be found.
+        if target.path != ".":
+            # Ensure that any header files that are outside of the target path are
+            # included in the srcs.
+            target_path_prefix = target.path + "/"
+            for li in local_includes:
+                normalized_li = paths.normalize(li)
+                if normalized_li == target.path:
+                    continue
+                if normalized_li.startswith(target_path_prefix):
+                    continue
+                extra_hdr_dirs.append(normalized_li)
+
+    for ehd in extra_hdr_dirs:
+        abs_ehd = paths.normalize(paths.join(pkg_path, ehd))
+        hdr_paths = repository_files.list_files_under(repository_ctx, abs_ehd)
+        hdr_paths = [
+            hp.removeprefix(pkg_path_prefix)
+            for hp in hdr_paths
+            if hp.endswith(".h")
+        ]
+        srcs.extend(hdr_paths)
+
+    if len(srcs) > 0:
+        srcs = sets.to_list(sets.make(srcs))
+        attrs["srcs"] = srcs
 
     if clang_files.has_objc_srcs(organized_files.srcs):
         kind = objc_kinds.library

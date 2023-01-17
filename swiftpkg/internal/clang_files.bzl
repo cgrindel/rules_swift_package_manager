@@ -92,7 +92,7 @@ def _remove_prefixes(paths_list, prefix):
         return paths_list
     prefix_len = len(prefix)
     return [
-        path[prefix_len:] if path.startswith(prefix) else path
+        path.removeprefix(prefix)
         for path in paths_list
     ]
 
