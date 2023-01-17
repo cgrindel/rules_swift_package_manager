@@ -156,11 +156,16 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         ))
 
     # Organize the source files
+    # Be sure that the all_srcs and the public_includes that are passed to
+    # `collect_files` are all absolute paths.  The remove_prefix option will
+    # ensure that the output values are relative to the package path.
     organized_files = clang_files.collect_files(
         repository_ctx,
         all_srcs,
-        public_includes = public_includes,
-        # remove_prefix = "{}/".format(pkg_path),
+        public_includes = [
+            paths.normalize(paths.join(target_path, pi))
+            for pi in public_includes
+        ],
         remove_prefix = pkg_path_prefix,
     )
     deps = lists.flatten([
