@@ -181,7 +181,7 @@ def _new_target_from_json_maps(dump_map, desc_map):
         # List of sources provided by SPM
         sources = desc_map["sources"],
         # Exclude paths specified by the Swift package manifest author.
-        exclude_paths = dump_map.get("exclude"),
+        exclude_paths = dump_map.get("exclude", default = []),
         # Source paths specified by the Swift package manifest author.
         source_paths = dump_map.get("sources"),
         dependencies = dependencies,
@@ -576,7 +576,7 @@ def _new_target(
         path,
         sources,
         dependencies,
-        exclude_paths = None,
+        exclude_paths = [],
         source_paths = None,
         clang_settings = None,
         swift_settings = None,

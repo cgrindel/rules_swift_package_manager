@@ -10,6 +10,7 @@ load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "module_types", "target_types")
+load(":repository_files.bzl", "repository_files")
 
 # MARK: - Target Entry Point
 
@@ -117,7 +118,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     public_includes = []
     if target.public_hdrs_path != None:
         public_includes.append(
-            # paths.normalize(paths.join(target_path, target.public_hdrs_path)),
             paths.normalize(paths.join(target.path, target.public_hdrs_path)),
         )
 
@@ -125,17 +125,30 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     # (Be sure to include any explicitly specified include directories.)
     # Otherwise, use all of the source files under the target path.
     if target.source_paths != None:
-        src_paths = target.source_paths + public_includes
         src_paths = [
             paths.normalize(paths.join(target_path, sp))
-            for sp in src_paths
+            for sp in target.source_paths
         ]
+        src_paths.extend(public_includes)
     else:
         src_paths = [target_path]
 
+    exclude_paths = [
+        paths.normalize(paths.join(target_path, ep))
+        for ep in target.exclude_paths
+    ]
+
+    all_srcs = []
+    for sp in src_paths:
+        all_srcs.extend(repository_files.list_files_under(
+            repository_ctx,
+            sp,
+            exclude = exclude_paths,
+        ))
+
     organized_files = clang_files.collect_files(
         repository_ctx,
-        src_paths,
+        all_srcs,
         public_includes = public_includes,
         remove_prefix = "{}/".format(pkg_ctx.pkg_info.path),
     )
@@ -176,8 +189,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         if len(target.clang_settings.defines) > 0:
             attrs["defines"].extend(target.clang_settings.defines)
         if len(target.clang_settings.hdr_srch_paths) > 0:
+            # Add the header search paths relative to the target path. The
+            # proper prefix and normalization will happen below
             local_includes.extend([
-                paths.normalize(paths.join(ext_repo_path, p))
+                paths.join(target.path, p)
                 for p in target.clang_settings.hdr_srch_paths
             ])
     if target.linker_settings and len(target.linker_settings.linked_libraries) > 0:
@@ -196,7 +211,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # provides the includes for this target.
         # https://bazel.build/reference/be/c-cpp#cc_library.includes
         attrs["copts"].extend([
-            "-I{}".format(paths.join(ext_repo_path, inc))
+            "-I{}".format(paths.normalize(paths.join(ext_repo_path, inc)))
             for inc in sets.to_list(sets.make(local_includes))
         ])
 

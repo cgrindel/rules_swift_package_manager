@@ -196,6 +196,7 @@ bzl_library(
     name = "repository_files",
     srcs = ["repository_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
+    deps = ["@cgrindel_bazel_starlib//bzllib:defs"],
 )
 
 bzl_library(

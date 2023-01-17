@@ -5,7 +5,6 @@ load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load("//swiftpkg/internal/modulemap_parser:declarations.bzl", dts = "declaration_types")
 load("//swiftpkg/internal/modulemap_parser:parser.bzl", modulemap_parser = "parser")
-load(":repository_files.bzl", "repository_files")
 
 # Directory names that may include public header files.
 _PUBLIC_HDR_DIRNAMES = ["include", "public"]
@@ -97,23 +96,34 @@ def _remove_prefixes(paths_list, prefix):
         for path in paths_list
     ]
 
+# def _collect_files(
+#         repository_ctx,
+#         root_paths,
+#         excludes = [],
+#         public_includes = None,
+#         remove_prefix = None,
+#         is_library = True):
+#     paths_list = []
+
+#     # DEBUG BEGIN
+#     print("*** CHUCK root_paths: ", root_paths)
+#     print("*** CHUCK remove_prefix: ", remove_prefix)
+
+#     # DEBUG END
+#     for root_path in root_paths:
+#         paths_list.extend(
+#             repository_files.list_files_under(
+#                 repository_ctx,
+#                 root_path,
+#             ),
+#         )
+
 def _collect_files(
         repository_ctx,
-        root_paths,
-        public_includes = None,
+        all_srcs,
+        public_includes = [],
         remove_prefix = None,
         is_library = True):
-    paths_list = []
-    for root_path in root_paths:
-        paths_list.extend(
-            repository_files.list_files_under(
-                repository_ctx,
-                root_path,
-            ),
-        )
-
-    public_includes = [] if public_includes == None else public_includes
-
     # hdrs: Public headers
     # srcs: Private headers and source files.
     # others: Uncategorized
@@ -124,7 +134,7 @@ def _collect_files(
 
     modulemap = None
     modulemap_orig_path = None
-    for orig_path in paths_list:
+    for orig_path in all_srcs:
         path = _remove_prefix(orig_path, remove_prefix)
         _root, ext = paths.split_extension(path)
         if ext == ".h":
