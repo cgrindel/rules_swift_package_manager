@@ -96,28 +96,6 @@ def _remove_prefixes(paths_list, prefix):
         for path in paths_list
     ]
 
-# def _collect_files(
-#         repository_ctx,
-#         root_paths,
-#         excludes = [],
-#         public_includes = None,
-#         remove_prefix = None,
-#         is_library = True):
-#     paths_list = []
-
-#     # DEBUG BEGIN
-#     print("*** CHUCK root_paths: ", root_paths)
-#     print("*** CHUCK remove_prefix: ", remove_prefix)
-
-#     # DEBUG END
-#     for root_path in root_paths:
-#         paths_list.extend(
-#             repository_files.list_files_under(
-#                 repository_ctx,
-#                 root_path,
-#             ),
-#         )
-
 def _collect_files(
         repository_ctx,
         all_srcs,
