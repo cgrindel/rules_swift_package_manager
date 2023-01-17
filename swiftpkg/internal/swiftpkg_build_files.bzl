@@ -263,6 +263,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["srcs"] = srcs
 
     if clang_files.has_objc_srcs(organized_files.srcs):
+        # Enable clang module support.
+        # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
+        attrs["enable_modules"] = True
         kind = objc_kinds.library
     else:
         kind = clang_kinds.library
