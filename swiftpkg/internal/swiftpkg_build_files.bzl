@@ -102,14 +102,23 @@ def _swift_test_from_target(target, attrs):
 # MARK: - Clang Targets
 
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
+    repo_name = repository_ctx.name
+
+    # Absolute path to the target. This is typically used for filesystem
+    # actions, not for values added to the cc_library or objc_library.
     target_path = paths.normalize(
         paths.join(pkg_ctx.pkg_info.path, target.path),
     )
 
+    # Short path relative to Bazel output base. This is typically used when
+    # adding a path to a copt or linkeropt.
+    ext_repo_path = paths.join("external", repo_name)
+
     public_includes = []
     if target.public_hdrs_path != None:
         public_includes.append(
-            paths.normalize(paths.join(target_path, target.public_hdrs_path)),
+            # paths.normalize(paths.join(target_path, target.public_hdrs_path)),
+            paths.normalize(paths.join(target.path, target.public_hdrs_path)),
         )
 
     # If the Swift package manifest has explicit source paths, respect them.
@@ -154,7 +163,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "tags": ["swift_module={}".format(target.c99name)],
         "visibility": ["//visibility:public"],
     }
-    repo_name = repository_ctx.name
 
     public_includes = organized_files.public_includes
     local_includes = []
@@ -168,7 +176,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         if len(target.clang_settings.defines) > 0:
             attrs["defines"].extend(target.clang_settings.defines)
         if len(target.clang_settings.hdr_srch_paths) > 0:
-            local_includes.extend(target.clang_settings.hdr_srch_paths)
+            local_includes.extend([
+                paths.normalize(paths.join(ext_repo_path, p))
+                for p in target.clang_settings.hdr_srch_paths
+            ])
     if target.linker_settings and len(target.linker_settings.linked_libraries) > 0:
         linkopts = attrs.get("linkopts", default = [])
         linkopts.extend([
@@ -185,7 +196,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # provides the includes for this target.
         # https://bazel.build/reference/be/c-cpp#cc_library.includes
         attrs["copts"].extend([
-            "-I{}".format(paths.join("external", repo_name, inc))
+            "-I{}".format(paths.join(ext_repo_path, inc))
             for inc in sets.to_list(sets.make(local_includes))
         ])
 
