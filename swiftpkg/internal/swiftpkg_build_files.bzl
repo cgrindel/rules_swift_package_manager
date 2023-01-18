@@ -105,7 +105,6 @@ def _swift_test_from_target(target, attrs):
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     repo_name = repository_ctx.name
     pkg_path = pkg_ctx.pkg_info.path
-    # pkg_path_prefix = pkg_path + "/"
 
     # Absolute path to the target. This is typically used for filesystem
     # actions, not for values added to the cc_library or objc_library.
@@ -167,7 +166,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             paths.normalize(paths.join(pkg_path, pi))
             for pi in public_includes
         ],
-        # remove_prefix = pkg_path_prefix,
         relative_to = pkg_path,
     )
     deps = lists.flatten([
@@ -253,7 +251,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         abs_ehd = paths.normalize(paths.join(pkg_path, ehd))
         hdr_paths = repository_files.list_files_under(repository_ctx, abs_ehd)
         hdr_paths = [
-            # hp.removeprefix(pkg_path_prefix)
             clang_files.relativize(hp, pkg_path)
             for hp in hdr_paths
             if hp.endswith(".h")

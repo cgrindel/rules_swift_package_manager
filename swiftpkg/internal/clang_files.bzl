@@ -54,11 +54,16 @@ def _is_public_modulemap(path):
     return basename == "module.modulemap"
 
 def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path, module_name):
-    """Retrieves the list of headers declared in the specified modulemap file.
+    """Retrieves the list of headers declared in the specified modulemap file \
+    for the specified module.
+
+    If the specified module is not found, all of the headers from the top-level
+    modules are returned.
 
     Args:
         repository_ctx: A `repository_ctx` instance.
         modulemap_path: A path `string` to the `module.modulemap` file.
+        module_name: The name of the module.
 
     Returns:
         A `list` of path `string` values.
