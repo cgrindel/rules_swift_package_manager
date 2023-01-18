@@ -4,6 +4,28 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:clang_files.bzl", "clang_files")
 
+def _is_hdr_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(path = "foo.h", exp = True, msg = ".h"),
+        struct(path = "foo.hh", exp = True, msg = ".hh"),
+        struct(path = "foo.hpp", exp = True, msg = ".hpp"),
+        struct(path = "foo.hxx", exp = True, msg = ".hxx"),
+        struct(path = "foo.inc", exp = True, msg = ".inc"),
+        struct(path = "foo.inl", exp = True, msg = ".inl"),
+        struct(path = "foo.H", exp = True, msg = ".H"),
+        struct(path = "foo", exp = False, msg = "no extension"),
+        struct(path = "foo.c", exp = False, msg = "wrong extension"),
+    ]
+    for t in tests:
+        actual = clang_files.is_hdr(t.path)
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+is_hdr_test = unittest.make(_is_hdr_test)
+
 def _is_include_hdr_test(ctx):
     env = unittest.begin(ctx)
 
@@ -116,6 +138,7 @@ is_under_path_test = unittest.make(_is_under_path_test)
 def clang_files_test_suite():
     return unittest.suite(
         "clang_files_tests",
+        is_hdr_test,
         is_include_hdr_test,
         is_public_modulemap_test,
         relativize_test,

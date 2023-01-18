@@ -9,9 +9,13 @@ load("//swiftpkg/internal/modulemap_parser:parser.bzl", modulemap_parser = "pars
 # Directory names that may include public header files.
 _PUBLIC_HDR_DIRNAMES = ["include", "public"]
 
+# Supported header extensions
+# https://bazel.build/reference/be/c-cpp#cc_library.srcs
+_HEADER_EXTS = [".h", ".hh", ".hpp", ".hxx", ".inc", ".inl", ".H"]
+
 def _is_hdr(path):
     _root, ext = paths.split_extension(path)
-    return ext == ".h"
+    return lists.contains(_HEADER_EXTS, ext)
 
 def _is_include_hdr(path, public_includes = None):
     """Determines whether the path is a public header.
