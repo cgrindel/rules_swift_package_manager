@@ -1,4 +1,4 @@
-workspace(name = "xcmetrics_example")
+workspace(name = "firebase_example")
 
 local_repository(
     name = "cgrindel_swift_bazel",
