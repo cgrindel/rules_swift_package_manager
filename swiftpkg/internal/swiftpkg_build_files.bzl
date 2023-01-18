@@ -162,6 +162,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     organized_files = clang_files.collect_files(
         repository_ctx,
         all_srcs,
+        target.c99name,
         public_includes = [
             paths.normalize(paths.join(pkg_path, pi))
             for pi in public_includes
@@ -266,6 +267,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # Enable clang module support.
         # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
         attrs["enable_modules"] = True
+        attrs["module_name"] = target.c99name
         kind = objc_kinds.library
     else:
         kind = clang_kinds.library

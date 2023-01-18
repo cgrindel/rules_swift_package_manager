@@ -53,7 +53,7 @@ def _is_public_modulemap(path):
     basename = paths.basename(path)
     return basename == "module.modulemap"
 
-def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path):
+def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path, module_name):
     """Retrieves the list of headers declared in the specified modulemap file.
 
     Args:
@@ -71,6 +71,13 @@ def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path):
     module_decls = [d for d in decls if d.decl_type == dts.module]
     if len(module_decls) == 0:
         fail("No module declarations were found in %s." % (modulemap_path))
+
+    # Look for a module declaration that matches the module name. Only select
+    # headers from that module if it is found. Otherwise, we collect all of the
+    # headers in all of the module declarations at the top-level.
+    module_decl = lists.find(module_decls, lambda m: m.module_id == module_name)
+    if module_decl != None:
+        module_decls = [module_decl]
 
     modulemap_dirname = paths.dirname(modulemap_path)
     hdrs = []
@@ -98,6 +105,7 @@ def _remove_prefixes(paths_list, prefix):
 def _collect_files(
         repository_ctx,
         all_srcs,
+        module_name,
         public_includes = [],
         remove_prefix = None,
         is_library = True):
@@ -144,16 +152,19 @@ def _collect_files(
         mm_hdrs = _get_hdr_paths_from_modulemap(
             repository_ctx,
             modulemap_orig_path,
+            module_name,
         )
+        mm_hdrs = _remove_prefixes(mm_hdrs, remove_prefix)
 
         # There are modulemaps in the wild (e.g.,
         # https://github.com/1024jp/GzipSwift) that list system headers (i.e.,
-        # absolute path to a system header). Filter them out.
+        # absolute path to a system header). Filter them out AFTER we remove the
+        # prefixes.
         mm_hdrs = lists.compact([
             hdr if not paths.is_absolute(hdr) else None
             for hdr in mm_hdrs
         ])
-        mm_hdrs = _remove_prefixes(mm_hdrs, remove_prefix)
+
         mm_hdrs_set = sets.make(mm_hdrs)
         hdrs_set = sets.union(hdrs_set, mm_hdrs_set)
 
