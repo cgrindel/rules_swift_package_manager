@@ -96,6 +96,25 @@ def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path, module_name):
 
     return hdrs
 
+def _is_under_path(path, parent):
+    """Determines whether a path is under a another path.
+
+    Args:
+        path: The path to be evaluated as a `string`.
+        parent: The parent path as a `string`.
+
+    Returns:
+        A `bool` representing whether the path is under the parent path.
+    """
+    path = path.removesuffix("/")
+    parent = parent.removesuffix("/")
+    if path == parent:
+        return True
+    parent_prefix = parent if parent.endswith("/") else parent + "/"
+    if path.startswith(parent_prefix):
+        return True
+    return False
+
 def _relativize(path, relative_to):
     """Returns a path relative to another path.
 
@@ -203,9 +222,6 @@ def _collect_files(
                 sets.insert(hdrs_set, src)
         srcs_set = sets.difference(srcs_set, hdrs_set)
 
-    # TODO(chuck): Move the augmentation of the public_includes here from
-    # swiftpkg_build_files.
-
     # If public includes were specified, then use them. Otherwise, add every
     # directory that holds a public header file
     if len(public_includes) == 0:
@@ -247,5 +263,6 @@ clang_files = struct(
     is_hdr = _is_hdr,
     is_include_hdr = _is_include_hdr,
     is_public_modulemap = _is_public_modulemap,
+    is_under_path = _is_under_path,
     relativize = _relativize,
 )

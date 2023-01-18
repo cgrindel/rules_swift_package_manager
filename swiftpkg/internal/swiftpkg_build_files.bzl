@@ -238,12 +238,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         if target.path != ".":
             # Ensure that any header files that are outside of the target path are
             # included in the srcs.
-            target_path_prefix = target.path + "/"
             for li in local_includes:
                 normalized_li = paths.normalize(li)
-                if normalized_li == target.path:
-                    continue
-                if normalized_li.startswith(target_path_prefix):
+                if clang_files.is_under_path(normalized_li, target.path):
                     continue
                 extra_hdr_dirs.append(normalized_li)
 

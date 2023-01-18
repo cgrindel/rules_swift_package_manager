@@ -70,10 +70,54 @@ def _relativize_test(ctx):
 
 relativize_test = unittest.make(_relativize_test)
 
+def _is_under_path_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            path = "/parent",
+            parent = "/parent",
+            exp = True,
+            msg = "path equals parent",
+        ),
+        struct(
+            path = "/parent/foo",
+            parent = "/parent",
+            exp = True,
+            msg = "path is under parent",
+        ),
+        struct(
+            path = "/parent",
+            parent = "/parent/",
+            exp = True,
+            msg = "path equals parent, parent has trailing slash",
+        ),
+        struct(
+            path = "/parent.txt",
+            parent = "/parent",
+            exp = False,
+            msg = "path has similar prefix to parent",
+        ),
+        struct(
+            path = "/another",
+            parent = "/parent",
+            exp = False,
+            msg = "path is not under parent",
+        ),
+    ]
+    for t in tests:
+        actual = clang_files.is_under_path(t.path, t.parent)
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+is_under_path_test = unittest.make(_is_under_path_test)
+
 def clang_files_test_suite():
     return unittest.suite(
         "clang_files_tests",
         is_include_hdr_test,
         is_public_modulemap_test,
         relativize_test,
+        is_under_path_test,
     )
