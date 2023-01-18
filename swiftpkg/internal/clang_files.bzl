@@ -177,6 +177,9 @@ def _collect_files(
                 sets.insert(hdrs_set, src)
         srcs_set = sets.difference(srcs_set, hdrs_set)
 
+    # TODO(chuck): Move the augmentation of the public_includes here from
+    # swiftpkg_build_files.
+
     # If public includes were specified, then use them. Otherwise, add every
     # directory that holds a public header file
     if len(public_includes) == 0:
