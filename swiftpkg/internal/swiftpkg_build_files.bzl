@@ -194,6 +194,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "visibility": ["//visibility:public"],
     }
 
+    hdrs = []
     srcs = []
     extra_hdr_dirs = []
     public_includes = organized_files.public_includes
@@ -201,7 +202,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     if len(organized_files.srcs) > 0:
         srcs.extend(organized_files.srcs)
     if len(organized_files.hdrs) > 0:
-        attrs["hdrs"] = organized_files.hdrs
+        hdrs.extend(organized_files.hdrs)
     if len(organized_files.private_includes) > 0:
         local_includes.extend(organized_files.private_includes)
     if target.clang_settings:
@@ -259,11 +260,17 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         ]
         srcs.extend(hdr_paths)
 
-    if len(srcs) > 0:
-        srcs = sets.to_list(sets.make(srcs))
+    srcs_set = sets.make(srcs)
+    if len(hdrs) > 0:
+        hdrs_set = sets.make(hdrs)
+        srcs_set = sets.difference(srcs_set, hdrs_set)
+        attrs["hdrs"] = hdrs
+
+    if sets.length(srcs_set) > 0:
+        srcs = sets.to_list(srcs_set)
         attrs["srcs"] = srcs
 
-    if clang_files.has_objc_srcs(organized_files.srcs):
+    if clang_files.has_objc_srcs(srcs):
         # Enable clang module support.
         # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
         attrs["enable_modules"] = True
