@@ -9,6 +9,7 @@ load(
 )
 load(":pkginfos.bzl", "pkginfos")
 load(":repo_rules.bzl", "repo_rules")
+load(":repository_files.bzl", "repository_files")
 
 # The implementation of this repository rule is heavily influenced by the
 # implementation for git_repository.
@@ -38,6 +39,11 @@ def _update_git_attrs(orig, keys, override):
         result.pop("branch", None)
     return result
 
+def _remove_bazel_files(repository_ctx, directory):
+    files = ["BUILD.bazel", "BUILD", "WORKSPACE", "WORKSPACE.bazel"]
+    for file in files:
+        repository_files.find_and_delete_files(repository_ctx, directory, file)
+
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))
     env = repo_rules.get_exec_env(repository_ctx)
@@ -45,6 +51,9 @@ def _swift_package_impl(repository_ctx):
 
     # Download the repo
     update = _clone_or_update_repo(repository_ctx, directory)
+
+    # Remove any Bazel build files.
+    _remove_bazel_files(repository_ctx, directory)
 
     # Get the package info
     pkg_info = pkginfos.get(repository_ctx, directory, env = env)

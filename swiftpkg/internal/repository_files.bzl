@@ -1,6 +1,8 @@
 """Module for retrieving and manipulating repository file information."""
 
-def _list_files_under(repository_ctx, path):
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
+
+def _list_files_under(repository_ctx, path, exclude = []):
     """Retrieves the list of files under the specified path.
 
     This function returns paths for all of the files under the specified path.
@@ -8,6 +10,8 @@ def _list_files_under(repository_ctx, path):
     Args:
         repository_ctx: A `repository_ctx` instance.
         path: A path `string` value.
+        exclude: Optional. A `list` of path `string` values that should be
+            excluded from the result.
 
     Returns:
         A `list` of path `string` values.
@@ -19,8 +23,46 @@ def _list_files_under(repository_ctx, path):
     )
     if exec_result.return_code != 0:
         fail("Failed to list files in %s. stderr:\n%s" % (path, exec_result.stderr))
-    paths = exec_result.stdout.splitlines()
-    return paths
+    path_list = exec_result.stdout.splitlines()
+    path_list = _exclude_paths(path_list, exclude)
+    return path_list
+
+def _exclude_paths(path_list, exclude):
+    """Filter the list of paths using the provided exclude list.
+
+    An exclude list item can be a file or a directory. An entry is considered a
+    directory if it has a trailing slash (`/`). If a path equals a file entry,
+    it is excluded. If a path starts with a directory entry, it is excluded.
+
+    Args:
+        path_list: A `list` of paths as `string` values.
+        exclude: A `list` of files and directories to exclude from the provided
+            paths.
+
+    Returns:
+        The input `list` with the files and directories excluded.
+    """
+    exclude_files = []
+    exclude_dirs = []
+    for ex in exclude:
+        if ex.endswith("/"):
+            exclude_dirs.append(ex)
+        else:
+            exclude_files.append(ex)
+
+    results = []
+    for path in path_list:
+        if lists.contains(exclude_files, path):
+            continue
+        keep = True
+        for exd in exclude_dirs:
+            if path.startswith(exd):
+                keep = False
+                break
+        if keep:
+            results.append(path)
+
+    return results
 
 def _list_directories_under(repository_ctx, path, max_depth = None):
     """Retrieves the list of directories under the specified path.
@@ -82,8 +124,9 @@ def _copy_directory(repository_ctx, src, dest):
     )
 
 repository_files = struct(
-    list_files_under = _list_files_under,
-    list_directories_under = _list_directories_under,
-    find_and_delete_files = _find_and_delete_files,
     copy_directory = _copy_directory,
+    exclude_paths = _exclude_paths,
+    find_and_delete_files = _find_and_delete_files,
+    list_directories_under = _list_directories_under,
+    list_files_under = _list_files_under,
 )

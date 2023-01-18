@@ -180,6 +180,8 @@ def _new_target_from_json_maps(dump_map, desc_map):
         path = desc_map["path"],
         # List of sources provided by SPM
         sources = desc_map["sources"],
+        # Exclude paths specified by the Swift package manifest author.
+        exclude_paths = dump_map.get("exclude", default = []),
         # Source paths specified by the Swift package manifest author.
         source_paths = dump_map.get("sources"),
         dependencies = dependencies,
@@ -574,6 +576,7 @@ def _new_target(
         path,
         sources,
         dependencies,
+        exclude_paths = [],
         source_paths = None,
         clang_settings = None,
         swift_settings = None,
@@ -592,6 +595,8 @@ def _new_target(
             to the `path`.
         dependencies: A `list` of target dependency values as returned by
             `pkginfos.new_target_dependency()`.
+        exclude_paths: Optional. A `list` of paths that should be excluded as
+            specified by the Swift package manifest author.
         source_paths: Optional. A `list` of paths (`string` values) specified by
             the Swift package manfiest author.
         clang_settings: Optional. A `struct` as returned by `pkginfos.new_clang_settings`.
@@ -614,6 +619,9 @@ def _new_target(
         module_type,
         "Unrecognized module type. type:",
     )
+
+    # NOTE: We are explicitly not normalizing the exclude_paths. The inclusion
+    # of a trailing slash can be critical when the exclude logic is applied.
     normalized_src_paths = None
     if source_paths != None:
         normalized_src_paths = [
@@ -628,6 +636,7 @@ def _new_target(
         path = path,
         sources = sources,
         dependencies = dependencies,
+        exclude_paths = exclude_paths,
         source_paths = normalized_src_paths,
         clang_settings = clang_settings,
         swift_settings = swift_settings,

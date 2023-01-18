@@ -10,6 +10,7 @@ load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "module_types", "target_types")
+load(":repository_files.bzl", "repository_files")
 
 # MARK: - Target Entry Point
 
@@ -102,33 +103,70 @@ def _swift_test_from_target(target, attrs):
 # MARK: - Clang Targets
 
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
+    repo_name = repository_ctx.name
+    pkg_path = pkg_ctx.pkg_info.path
+    pkg_path_prefix = pkg_path + "/"
+
+    # Absolute path to the target. This is typically used for filesystem
+    # actions, not for values added to the cc_library or objc_library.
     target_path = paths.normalize(
-        paths.join(pkg_ctx.pkg_info.path, target.path),
+        paths.join(pkg_path, target.path),
     )
+
+    # Short path relative to Bazel output base. This is typically used when
+    # adding a path to a copt or linkeropt.
+    ext_repo_path = paths.join("external", repo_name)
 
     public_includes = []
     if target.public_hdrs_path != None:
         public_includes.append(
-            paths.normalize(paths.join(target_path, target.public_hdrs_path)),
+            paths.normalize(paths.join(target.path, target.public_hdrs_path)),
         )
 
     # If the Swift package manifest has explicit source paths, respect them.
     # (Be sure to include any explicitly specified include directories.)
     # Otherwise, use all of the source files under the target path.
     if target.source_paths != None:
-        src_paths = target.source_paths + public_includes
         src_paths = [
             paths.normalize(paths.join(target_path, sp))
-            for sp in src_paths
+            for sp in target.source_paths
         ]
+
+        # The public includes are already relative to the target.path.
+        src_paths.extend([
+            paths.normalize(paths.join(pkg_path, pi))
+            for pi in public_includes
+        ])
+        src_paths = sets.to_list(sets.make(src_paths))
     else:
         src_paths = [target_path]
 
+    exclude_paths = [
+        paths.normalize(paths.join(target_path, ep))
+        for ep in target.exclude_paths
+    ]
+
+    # Get a list of all of the source files
+    all_srcs = []
+    for sp in src_paths:
+        all_srcs.extend(repository_files.list_files_under(
+            repository_ctx,
+            sp,
+            exclude = exclude_paths,
+        ))
+
+    # Organize the source files
+    # Be sure that the all_srcs and the public_includes that are passed to
+    # `collect_files` are all absolute paths.  The remove_prefix option will
+    # ensure that the output values are relative to the package path.
     organized_files = clang_files.collect_files(
         repository_ctx,
-        src_paths,
-        public_includes = public_includes,
-        remove_prefix = "{}/".format(pkg_ctx.pkg_info.path),
+        all_srcs,
+        public_includes = [
+            paths.normalize(paths.join(pkg_path, pi))
+            for pi in public_includes
+        ],
+        remove_prefix = pkg_path_prefix,
     )
     deps = lists.flatten([
         pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
@@ -154,12 +192,13 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "tags": ["swift_module={}".format(target.c99name)],
         "visibility": ["//visibility:public"],
     }
-    repo_name = repository_ctx.name
 
+    srcs = []
+    extra_hdr_dirs = []
     public_includes = organized_files.public_includes
     local_includes = []
     if len(organized_files.srcs) > 0:
-        attrs["srcs"] = organized_files.srcs
+        srcs.extend(organized_files.srcs)
     if len(organized_files.hdrs) > 0:
         attrs["hdrs"] = organized_files.hdrs
     if len(organized_files.private_includes) > 0:
@@ -168,7 +207,12 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         if len(target.clang_settings.defines) > 0:
             attrs["defines"].extend(target.clang_settings.defines)
         if len(target.clang_settings.hdr_srch_paths) > 0:
-            local_includes.extend(target.clang_settings.hdr_srch_paths)
+            # Add the header search paths relative to the target path. The
+            # proper prefix and normalization will happen below
+            local_includes.extend([
+                paths.join(target.path, p)
+                for p in target.clang_settings.hdr_srch_paths
+            ])
     if target.linker_settings and len(target.linker_settings.linked_libraries) > 0:
         linkopts = attrs.get("linkopts", default = [])
         linkopts.extend([
@@ -185,9 +229,38 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # provides the includes for this target.
         # https://bazel.build/reference/be/c-cpp#cc_library.includes
         attrs["copts"].extend([
-            "-I{}".format(paths.join("external", repo_name, inc))
+            "-I{}".format(paths.normalize(paths.join(ext_repo_path, inc)))
             for inc in sets.to_list(sets.make(local_includes))
         ])
+
+        # If the target path is not everything (i.e., dot), then check for
+        # local includes that are outside the target path. We need to add them
+        # to the srcs so that they can be found.
+        if target.path != ".":
+            # Ensure that any header files that are outside of the target path are
+            # included in the srcs.
+            target_path_prefix = target.path + "/"
+            for li in local_includes:
+                normalized_li = paths.normalize(li)
+                if normalized_li == target.path:
+                    continue
+                if normalized_li.startswith(target_path_prefix):
+                    continue
+                extra_hdr_dirs.append(normalized_li)
+
+    for ehd in extra_hdr_dirs:
+        abs_ehd = paths.normalize(paths.join(pkg_path, ehd))
+        hdr_paths = repository_files.list_files_under(repository_ctx, abs_ehd)
+        hdr_paths = [
+            hp.removeprefix(pkg_path_prefix)
+            for hp in hdr_paths
+            if hp.endswith(".h")
+        ]
+        srcs.extend(hdr_paths)
+
+    if len(srcs) > 0:
+        srcs = sets.to_list(sets.make(srcs))
+        attrs["srcs"] = srcs
 
     if clang_files.has_objc_srcs(organized_files.srcs):
         kind = objc_kinds.library

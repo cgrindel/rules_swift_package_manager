@@ -107,6 +107,27 @@ def _collect_module_test(ctx):
 
     do_parse_test(
         env,
+        "module with asterisk module",
+        text = """
+        framework module MyModule {
+            module * { export * }
+        }
+        """,
+        expected = [
+            declarations.module(
+                module_id = "MyModule",
+                framework = True,
+                explicit = False,
+                attributes = [],
+                members = [declarations.module("*", members = [
+                    declarations.export(wildcard = True),
+                ])],
+            ),
+        ],
+    )
+
+    do_parse_test(
+        env,
         "module with attributes",
         text = """
         module MyModule [system] [extern_c] {}
@@ -138,7 +159,7 @@ def _collect_module_test(ctx):
         text = """
         module {}
         """,
-        expected_err = "Expected type identifier, but was curly_bracket_open",
+        expected_err = "Expected module identifier or asterisk, but was curly_bracket_open.",
     )
 
     do_failing_parse_test(
