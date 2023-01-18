@@ -223,8 +223,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         ])
         attrs["linkopts"] = linkopts
 
-    if len(public_includes) > 0:
-        attrs["includes"] = sets.to_list(sets.make(public_includes))
     if len(local_includes) > 0:
         # The `includes` attribute adds includes as -isystem which propagates
         # to cc_XXX that depend upon the library. Providing includes as -I only
@@ -260,11 +258,23 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         ]
         srcs.extend(hdr_paths)
 
+    public_includes_set = sets.make(public_includes)
     srcs_set = sets.make(srcs)
     if len(hdrs) > 0:
+        attrs["hdrs"] = hdrs
         hdrs_set = sets.make(hdrs)
         srcs_set = sets.difference(srcs_set, hdrs_set)
-        attrs["hdrs"] = hdrs
+
+        # Make sure that any directories that contain public headers is
+        # included in the public includes. The processing of a modulemap can
+        # add new headers. The directory for these headers must be part of the
+        # publicly available includes.
+        for hdr in hdrs:
+            hdr_dir = paths.dirname(hdr)
+            sets.insert(public_includes_set, hdr_dir)
+
+    if sets.length(public_includes_set) > 0:
+        attrs["includes"] = sets.to_list(public_includes_set)
 
     if sets.length(srcs_set) > 0:
         srcs = sets.to_list(srcs_set)
