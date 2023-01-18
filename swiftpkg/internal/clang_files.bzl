@@ -91,14 +91,35 @@ def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path, module_name):
 
     return hdrs
 
-def _remove_prefix(path, prefix):
-    return _remove_prefixes([path], prefix)[0]
+def _relativize(path, relative_to):
+    """Returns a path relative to another path.
 
-def _remove_prefixes(paths_list, prefix):
-    if prefix == None:
-        return paths_list
+    If `relative_to` is `None`, the `path` is returned.
+    If `path` equals `relative_to`, dot is returned.
+    If `path` starts with `relative_to`, the relative path is returned.
+    Otherwise, the `path` is not under `relative_to`. The `path` is returned.
+
+    This differs from `paths.relativize` in that this will not fail if the path
+    is not under `relative_to`.
+
+    Args:
+        path: The path to be relativized as a `string`.
+        relative_to: The parent path as a `string`.
+
+    Returns:
+        The relative path as a `string`.
+    """
+    if relative_to == None:
+        return path
+    if path == relative_to:
+        return "."
+    if path.startswith(relative_to):
+        return paths.relativize(path, relative_to)
+    return path
+
+def _relativize_paths(paths_list, relative_to):
     return [
-        path.removeprefix(prefix)
+        _relativize(path, relative_to)
         for path in paths_list
     ]
 
@@ -107,7 +128,7 @@ def _collect_files(
         all_srcs,
         module_name,
         public_includes = [],
-        remove_prefix = None,
+        relative_to = None,
         is_library = True):
     # hdrs: Public headers
     # srcs: Private headers and source files.
@@ -120,7 +141,7 @@ def _collect_files(
     modulemap = None
     modulemap_orig_path = None
     for orig_path in all_srcs:
-        path = _remove_prefix(orig_path, remove_prefix)
+        path = _relativize(orig_path, relative_to)
         _root, ext = paths.split_extension(path)
         if ext == ".h":
             if _is_include_hdr(orig_path, public_includes = public_includes):
@@ -154,7 +175,7 @@ def _collect_files(
             modulemap_orig_path,
             module_name,
         )
-        mm_hdrs = _remove_prefixes(mm_hdrs, remove_prefix)
+        mm_hdrs = _relativize_paths(mm_hdrs, relative_to)
 
         # There are modulemaps in the wild (e.g.,
         # https://github.com/1024jp/GzipSwift) that list system headers (i.e.,
@@ -185,7 +206,7 @@ def _collect_files(
     if len(public_includes) == 0:
         public_includes = [paths.dirname(hdr) for hdr in sets.to_list(hdrs_set)]
 
-    public_includes = _remove_prefixes(public_includes, remove_prefix)
+    public_includes = _relativize_paths(public_includes, relative_to)
     public_includes_set = sets.make(public_includes)
 
     # Add each directory that contains a private header to the includes
@@ -215,10 +236,11 @@ def _has_objc_srcs(srcs):
     return lists.contains(srcs, lambda x: x.endswith(".m"))
 
 clang_files = struct(
+    collect_files = _collect_files,
+    get_hdr_paths_from_modulemap = _get_hdr_paths_from_modulemap,
     has_objc_srcs = _has_objc_srcs,
     is_hdr = _is_hdr,
     is_include_hdr = _is_include_hdr,
     is_public_modulemap = _is_public_modulemap,
-    collect_files = _collect_files,
-    get_hdr_paths_from_modulemap = _get_hdr_paths_from_modulemap,
+    relativize = _relativize,
 )

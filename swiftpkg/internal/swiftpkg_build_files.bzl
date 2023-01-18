@@ -105,7 +105,7 @@ def _swift_test_from_target(target, attrs):
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     repo_name = repository_ctx.name
     pkg_path = pkg_ctx.pkg_info.path
-    pkg_path_prefix = pkg_path + "/"
+    # pkg_path_prefix = pkg_path + "/"
 
     # Absolute path to the target. This is typically used for filesystem
     # actions, not for values added to the cc_library or objc_library.
@@ -157,7 +157,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 
     # Organize the source files
     # Be sure that the all_srcs and the public_includes that are passed to
-    # `collect_files` are all absolute paths.  The remove_prefix option will
+    # `collect_files` are all absolute paths.  The relative_to option will
     # ensure that the output values are relative to the package path.
     organized_files = clang_files.collect_files(
         repository_ctx,
@@ -167,7 +167,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             paths.normalize(paths.join(pkg_path, pi))
             for pi in public_includes
         ],
-        remove_prefix = pkg_path_prefix,
+        # remove_prefix = pkg_path_prefix,
+        relative_to = pkg_path,
     )
     deps = lists.flatten([
         pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
@@ -252,7 +253,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         abs_ehd = paths.normalize(paths.join(pkg_path, ehd))
         hdr_paths = repository_files.list_files_under(repository_ctx, abs_ehd)
         hdr_paths = [
-            hp.removeprefix(pkg_path_prefix)
+            # hp.removeprefix(pkg_path_prefix)
+            clang_files.relativize(hp, pkg_path)
             for hp in hdr_paths
             if hp.endswith(".h")
         ]
