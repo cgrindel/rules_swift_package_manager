@@ -250,7 +250,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         hdr_paths = [
             clang_files.relativize(hp, pkg_path)
             for hp in hdr_paths
-            if hp.endswith(".h")
+            if clang_files.is_hdr(hp)
         ]
         srcs.extend(hdr_paths)
 
