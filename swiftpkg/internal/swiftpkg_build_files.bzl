@@ -105,7 +105,6 @@ def _swift_test_from_target(target, attrs):
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     repo_name = repository_ctx.name
     pkg_path = pkg_ctx.pkg_info.path
-    pkg_path_prefix = pkg_path + "/"
 
     # Absolute path to the target. This is typically used for filesystem
     # actions, not for values added to the cc_library or objc_library.
@@ -157,16 +156,17 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 
     # Organize the source files
     # Be sure that the all_srcs and the public_includes that are passed to
-    # `collect_files` are all absolute paths.  The remove_prefix option will
+    # `collect_files` are all absolute paths.  The relative_to option will
     # ensure that the output values are relative to the package path.
     organized_files = clang_files.collect_files(
         repository_ctx,
         all_srcs,
+        target.c99name,
         public_includes = [
             paths.normalize(paths.join(pkg_path, pi))
             for pi in public_includes
         ],
-        remove_prefix = pkg_path_prefix,
+        relative_to = pkg_path,
     )
     deps = lists.flatten([
         pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
@@ -193,6 +193,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "visibility": ["//visibility:public"],
     }
 
+    hdrs = []
     srcs = []
     extra_hdr_dirs = []
     public_includes = organized_files.public_includes
@@ -200,7 +201,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     if len(organized_files.srcs) > 0:
         srcs.extend(organized_files.srcs)
     if len(organized_files.hdrs) > 0:
-        attrs["hdrs"] = organized_files.hdrs
+        hdrs.extend(organized_files.hdrs)
     if len(organized_files.private_includes) > 0:
         local_includes.extend(organized_files.private_includes)
     if target.clang_settings:
@@ -221,8 +222,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         ])
         attrs["linkopts"] = linkopts
 
-    if len(public_includes) > 0:
-        attrs["includes"] = sets.to_list(sets.make(public_includes))
     if len(local_includes) > 0:
         # The `includes` attribute adds includes as -isystem which propagates
         # to cc_XXX that depend upon the library. Providing includes as -I only
@@ -239,12 +238,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         if target.path != ".":
             # Ensure that any header files that are outside of the target path are
             # included in the srcs.
-            target_path_prefix = target.path + "/"
             for li in local_includes:
                 normalized_li = paths.normalize(li)
-                if normalized_li == target.path:
-                    continue
-                if normalized_li.startswith(target_path_prefix):
+                if clang_files.is_under_path(normalized_li, target.path):
                     continue
                 extra_hdr_dirs.append(normalized_li)
 
@@ -252,17 +248,39 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         abs_ehd = paths.normalize(paths.join(pkg_path, ehd))
         hdr_paths = repository_files.list_files_under(repository_ctx, abs_ehd)
         hdr_paths = [
-            hp.removeprefix(pkg_path_prefix)
+            clang_files.relativize(hp, pkg_path)
             for hp in hdr_paths
             if hp.endswith(".h")
         ]
         srcs.extend(hdr_paths)
 
-    if len(srcs) > 0:
-        srcs = sets.to_list(sets.make(srcs))
+    public_includes_set = sets.make(public_includes)
+    srcs_set = sets.make(srcs)
+    if len(hdrs) > 0:
+        attrs["hdrs"] = hdrs
+        hdrs_set = sets.make(hdrs)
+        srcs_set = sets.difference(srcs_set, hdrs_set)
+
+        # Make sure that any directories that contain public headers is
+        # included in the public includes. The processing of a modulemap can
+        # add new headers. The directory for these headers must be part of the
+        # publicly available includes.
+        for hdr in hdrs:
+            hdr_dir = paths.dirname(hdr)
+            sets.insert(public_includes_set, hdr_dir)
+
+    if sets.length(public_includes_set) > 0:
+        attrs["includes"] = sets.to_list(public_includes_set)
+
+    if sets.length(srcs_set) > 0:
+        srcs = sets.to_list(srcs_set)
         attrs["srcs"] = srcs
 
-    if clang_files.has_objc_srcs(organized_files.srcs):
+    if clang_files.has_objc_srcs(srcs):
+        # Enable clang module support.
+        # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
+        attrs["enable_modules"] = True
+        attrs["module_name"] = target.c99name
         kind = objc_kinds.library
     else:
         kind = clang_kinds.library
