@@ -62,6 +62,20 @@ var kinds = map[string]rule.KindInfo{
 		// This ensures that the deps attribute is updated properly if a dependency disappears.
 		ResolveAttrs: map[string]bool{"deps": true},
 	},
+	swift.SwiftPkgRuleKind: rule.KindInfo{
+		MatchAttrs: []string{
+			"remote",
+		},
+		NonEmptyAttrs: map[string]bool{
+			"remote": true,
+		},
+		MergeableAttrs: map[string]bool{
+			"branch": true,
+			"commit": true,
+			"remote": true,
+			"tag":    true,
+		},
+	},
 }
 
 func (*swiftLang) Kinds() map[string]rule.KindInfo {
