@@ -70,10 +70,22 @@ var kinds = map[string]rule.KindInfo{
 			"remote": true,
 		},
 		MergeableAttrs: map[string]bool{
-			"branch": true,
-			"commit": true,
-			"remote": true,
-			"tag":    true,
+			"branch":             true,
+			"commit":             true,
+			"remote":             true,
+			"tag":                true,
+			"dependencies_index": true,
+		},
+	},
+	swift.LocalSwiftPkgRuleKind: rule.KindInfo{
+		MatchAttrs: []string{
+			"path",
+		},
+		NonEmptyAttrs: map[string]bool{
+			"path": true,
+		},
+		MergeableAttrs: map[string]bool{
+			"dependencies_index": true,
 		},
 	},
 }
