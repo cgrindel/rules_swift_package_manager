@@ -36,9 +36,9 @@
       "label": "@swiftpkg_swift_argument_parser//:Examples_roll"
     },
     {
-      "name": "Generate Manual",
-      "c99name": "Generate_Manual",
-      "label": "@swiftpkg_swift_argument_parser//:Plugins_GenerateManualPlugin_Generate Manual"
+      "name": "GenerateManual",
+      "c99name": "GenerateManual",
+      "label": "@swiftpkg_swift_argument_parser//:Plugins_GenerateManual"
     },
     {
       "name": "ArgumentParser",
@@ -148,10 +148,10 @@
     },
     {
       "identity": "swift-argument-parser",
-      "name": "GenerateManualPlugin",
+      "name": "GenerateManual",
       "type": "plugin",
       "target_labels": [
-        "@swiftpkg_swift_argument_parser//:Plugins_GenerateManualPlugin_Generate Manual"
+        "@swiftpkg_swift_argument_parser//:Plugins_GenerateManual"
       ]
     },
     {
