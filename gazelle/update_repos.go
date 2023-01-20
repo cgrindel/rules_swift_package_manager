@@ -122,9 +122,11 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	}
 
 	// Generate the repository rules from the Bazel Repos
+	repoUsage := make(map[string]bool)
 	result.Gen = make([]*rule.Rule, len(bzlReposByIdentity))
 	idx := 0
 	for _, bzlRepo := range bzlReposByIdentity {
+		repoUsage[bzlRepo.Name] = true
 		var err error
 		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, sc.DependencyIndexRel, pkgDir)
 		if err != nil {
@@ -132,6 +134,19 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 			return result
 		}
 		idx++
+	}
+
+	if args.Prune {
+		// Remove any existing repos that are no longer used.
+		for _, r := range c.Repos {
+			kind := r.Kind()
+			switch kind {
+			case swift.SwiftPkgRuleKind, swift.LocalSwiftPkgRuleKind:
+				if name := r.Name(); !repoUsage[name] {
+					result.Empty = append(result.Empty, rule.NewRule(kind, name))
+				}
+			}
+		}
 	}
 
 	return result

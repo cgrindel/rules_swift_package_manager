@@ -1,18 +1,18 @@
 load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_package")
 
 def swift_dependencies():
-    # version: 1.13.1
+    # version: 1.13.2
     swift_package(
         name = "swiftpkg_async_http_client",
-        commit = "5bee16a79922e3efcb5cea06ecd27e6f8048b56b",
+        commit = "7f05a8da46cc2a4ab43218722298b81ac7a08031",
         dependencies_index = "@//:swift_deps_index.json",
         remote = "https://github.com/swift-server/async-http-client.git",
     )
 
-    # version: 1.15.0
+    # version: 1.16.0
     swift_package(
         name = "swiftpkg_async_kit",
-        commit = "929808e51fea04f01de0e911ce826ef70c4db4ea",
+        commit = "9acea4c92f51a5885c149904f0d11db4712dda80",
         dependencies_index = "@//:swift_deps_index.json",
         remote = "https://github.com/vapor/async-kit.git",
     )
@@ -89,10 +89,10 @@ def swift_dependencies():
         remote = "https://github.com/swift-aws/HypertextApplicationLanguage.git",
     )
 
-    # version: 4.7.0
+    # version: 4.8.0
     swift_package(
         name = "swiftpkg_jwt_kit",
-        commit = "87ce13a1df913ba4d51cf00606df7ef24d455571",
+        commit = "dcd78f07e092ac9138327e2bfbb0687a55a80850",
         dependencies_index = "@//:swift_deps_index.json",
         remote = "https://github.com/vapor/jwt-kit.git",
     )
@@ -241,10 +241,10 @@ def swift_dependencies():
         remote = "https://github.com/apple/swift-algorithms.git",
     )
 
-    # version: 1.2.0
+    # version: 1.2.1
     swift_package(
         name = "swiftpkg_swift_argument_parser",
-        commit = "fddd1c00396eed152c45a46bea9f47b98e59301d",
+        commit = "4ad606ba5d7673ea60679a61ff867cc1ff8c8e86",
         dependencies_index = "@//:swift_deps_index.json",
         remote = "https://github.com/apple/swift-argument-parser",
     )
@@ -273,18 +273,18 @@ def swift_dependencies():
         remote = "https://github.com/apple/swift-collections.git",
     )
 
-    # version: 2.2.3
+    # version: 2.2.4
     swift_package(
         name = "swiftpkg_swift_crypto",
-        commit = "9cc89f0170308b813af05dadcd26f9a2dee47713",
+        commit = "75ec60b8b4cc0f085c3ac414f3dca5625fa3588e",
         dependencies_index = "@//:swift_deps_index.json",
         remote = "https://github.com/apple/swift-crypto.git",
     )
 
-    # version: 1.4.4
+    # version: 1.5.1
     swift_package(
         name = "swiftpkg_swift_log",
-        commit = "6fe203dc33195667ce1759bf0182975e4653ba1c",
+        commit = "3e3ef75109d6801b2c44504e73f55f0dce6662c9",
         dependencies_index = "@//:swift_deps_index.json",
         remote = "https://github.com/apple/swift-log",
     )
@@ -297,10 +297,10 @@ def swift_dependencies():
         remote = "https://github.com/apple/swift-metrics.git",
     )
 
-    # version: 2.46.0
+    # version: 2.47.0
     swift_package(
         name = "swiftpkg_swift_nio",
-        commit = "7e3b50b38e4e66f31db6cf4a784c6af148bac846",
+        commit = "4ad2c3733845abd9ee8892a323b0fa0d80f37e34",
         dependencies_index = "@//:swift_deps_index.json",
         remote = "https://github.com/apple/swift-nio.git",
     )
@@ -353,10 +353,10 @@ def swift_dependencies():
         remote = "https://github.com/apple/swift-protobuf.git",
     )
 
-    # version: 4.68.0
+    # version: 4.69.1
     swift_package(
         name = "swiftpkg_vapor",
-        commit = "888c8b68642c1d340b6b3e9b2b8445fb0f6148c9",
+        commit = "a7d88181e68f03d1aeb7ecb80269ab3da9e5d155",
         dependencies_index = "@//:swift_deps_index.json",
         remote = "https://github.com/vapor/vapor.git",
     )
@@ -377,10 +377,10 @@ def swift_dependencies():
         remote = "https://github.com/MobileNativeFoundation/XCLogParser",
     )
 
-    # version: 0.0.11
+    # version: 0.0.12
     swift_package(
         name = "swiftpkg_xcmetrics",
-        commit = "80897ba24c65172f3c56e5e1bb2407205944145b",
+        commit = "1a85cbe9d9bb47e15623952812bd8c64ce57125e",
         dependencies_index = "@//:swift_deps_index.json",
         remote = "https://github.com/spotify/XCMetrics",
     )

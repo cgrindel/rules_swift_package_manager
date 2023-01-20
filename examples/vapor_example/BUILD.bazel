@@ -28,6 +28,19 @@ gazelle(
     gazelle = ":gazelle_bin",
 )
 
+# These aliases do not need to be replicated in your workspace.
+# They are here to aid with upkeep of the example.
+
+alias(
+    name = "swift_update_pkgs",
+    actual = "//swift:update_pkgs",
+)
+
+alias(
+    name = "swift_update_pkgs_to_latest",
+    actual = "//swift:update_pkgs_to_latest",
+)
+
 # Vapor was not happy building under 13.2.1. Fix the version for now.
 # See Keith's article for more details:
 # https://www.smileykeith.com/2021/03/08/locking-xcode-in-bazel/

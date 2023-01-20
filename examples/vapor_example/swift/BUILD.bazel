@@ -15,6 +15,7 @@ swift_update_packages(
     package_manifest = "swift/Package.swift",
     swift_deps = "swift/deps.bzl",
     swift_deps_index = "swift/deps_index.json",
+    visibility = ["//:__subpackages__"],
 )
 
 bzl_library(

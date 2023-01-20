@@ -1,18 +1,18 @@
 load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_package")
 
 def swift_dependencies():
-    # version: 1.13.1
+    # version: 1.13.2
     swift_package(
         name = "swiftpkg_async_http_client",
-        commit = "5bee16a79922e3efcb5cea06ecd27e6f8048b56b",
+        commit = "7f05a8da46cc2a4ab43218722298b81ac7a08031",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/swift-server/async-http-client.git",
     )
 
-    # version: 1.15.0
+    # version: 1.16.0
     swift_package(
         name = "swiftpkg_async_kit",
-        commit = "929808e51fea04f01de0e911ce826ef70c4db4ea",
+        commit = "9acea4c92f51a5885c149904f0d11db4712dda80",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/async-kit.git",
     )
@@ -121,18 +121,18 @@ def swift_dependencies():
         remote = "https://github.com/apple/swift-collections.git",
     )
 
-    # version: 2.2.2
+    # version: 2.2.4
     swift_package(
         name = "swiftpkg_swift_crypto",
-        commit = "92a04c10fc5ce0504f8396aac7392126033e547c",
+        commit = "75ec60b8b4cc0f085c3ac414f3dca5625fa3588e",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/apple/swift-crypto.git",
     )
 
-    # version: 1.4.4
+    # version: 1.5.1
     swift_package(
         name = "swiftpkg_swift_log",
-        commit = "6fe203dc33195667ce1759bf0182975e4653ba1c",
+        commit = "3e3ef75109d6801b2c44504e73f55f0dce6662c9",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/apple/swift-log.git",
     )
@@ -145,10 +145,10 @@ def swift_dependencies():
         remote = "https://github.com/apple/swift-metrics.git",
     )
 
-    # version: 2.46.0
+    # version: 2.47.0
     swift_package(
         name = "swiftpkg_swift_nio",
-        commit = "7e3b50b38e4e66f31db6cf4a784c6af148bac846",
+        commit = "4ad2c3733845abd9ee8892a323b0fa0d80f37e34",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/apple/swift-nio.git",
     )

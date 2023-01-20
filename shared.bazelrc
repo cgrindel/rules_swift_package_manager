@@ -3,3 +3,6 @@ build --verbose_failures
 
 # Strict PATH. Helps prevent build cache invalidation due to PATH differences.
 build --incompatible_strict_action_env=true
+
+# Test output information
+test --test_output=errors --test_summary=detailed
