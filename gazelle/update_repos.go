@@ -41,16 +41,6 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	sc := swiftcfg.GetSwiftConfig(c)
 	sb := sc.SwiftBin()
 
-	// existingReposByName := make(map[string]*rule.Rule)
-	// for _, r := range c.Repos {
-	// 	switch r.Kind() {
-	// 	case swift.SwiftPkgRuleKind, swift.LocalSwiftPkgRuleKind:
-	// 		name := r.Name()
-	// 		existingReposByName[name] = r
-	// 		repoUsage[name] = false
-	// 	}
-	// }
-
 	// Ensure that we have resolved and fetched the Swift package dependencies
 	pkgDir := filepath.Dir(args.Path)
 	if err := sb.ResolvePackage(pkgDir, sc.UpdatePkgsToLatest); err != nil {
@@ -157,19 +147,6 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 			}
 		}
 	}
-
-	// if args.Prune {
-	// 	// Remove any existing repos that are no longer used.
-	// 	for name, used := range repoUsage {
-	// 		if used {
-	// 			continue
-	// 		}
-	// 		if unused, ok := existingReposByName[name]; ok {
-	// 			empty := rule.NewRule(unused.Kind(), unused.Name())
-	// 			result.Empty = append(result.Gen, empty)
-	// 		}
-	// 	}
-	// }
 
 	return result
 }
