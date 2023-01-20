@@ -61,12 +61,6 @@ Unable to resolve target reference target dependency for {module_name}.\
                 fail("""\
 Did not find external dependency with name/identity {}.\
 """.format(prod_ref.dep_name))
-
-            # DEBUG BEGIN
-            print("*** CHUCK dep: ", dep)
-            print("*** CHUCK prod_ref.product_name: ", prod_ref.product_name)
-
-            # DEBUG END
             labels = deps_indexes.resolve_product_labels(
                 deps_index = pkg_ctx.deps_index_ctx.deps_index,
                 identity = dep.identity,
