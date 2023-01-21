@@ -268,29 +268,40 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         srcs = sets.to_list(srcs_set)
         attrs["srcs"] = srcs
 
-    load_stmts = []
-    c_target_name = pkginfo_targets.bazel_label_name(target)
+    bzl_target_name = pkginfo_targets.bazel_label_name(target)
     if clang_files.has_objc_srcs(srcs):
         # Enable clang module support.
         # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
         attrs["enable_modules"] = True
         attrs["module_name"] = target.c99name
+
+        # load_stmts = [swift_c_module_load_stmt]
+        load_stmts = [swiftpkg_objc_module_alias_load_stmt]
+        objc_target_name = bzl_target_name + "Objc"
         decls = [
+            build_decls.new(objc_kinds.library, objc_target_name, attrs = attrs),
+            build_decls.new(
+                kind = swiftpkg_kinds.objc_module_alias,
+                name = bzl_target_name,
+                attrs = {
+                    "deps": [":{}".format(objc_target_name)],
+                    "module_names": [target.c99name],
+                    "visibility": ["//visibility:public"],
+                },
+            ),
             # build_decls.new(
-            #     kind = objc_kinds.library,
-            #     name = c_target_name,
-            #     attrs = attrs,
+            #     kind = swift_kinds.c_module,
+            #     name = bzl_target_name,
+            #     attrs = {
+            #         "deps": [":{}".format(objc_target_name)],
+            #         "module_name": target.c99name,
+            #     },
             # ),
-            build_decls.new(objc_kinds.library, c_target_name, attrs = attrs),
         ]
     else:
+        load_stmts = []
         decls = [
-            # build_decls.new(
-            #     kind = clang_kinds.library,
-            #     name = c_target_name,
-            #     attrs = attrs,
-            # ),
-            build_decls.new(clang_kinds.library, c_target_name, attrs = attrs),
+            build_decls.new(clang_kinds.library, bzl_target_name, attrs = attrs),
         ]
 
     return build_files.new(
@@ -450,6 +461,7 @@ swift_kinds = struct(
     library = "swift_library",
     binary = "swift_binary",
     test = "swift_test",
+    c_module = "swift_c_module",
 )
 
 swift_library_load_stmt = load_statements.new(
@@ -460,6 +472,11 @@ swift_library_load_stmt = load_statements.new(
 swift_binary_load_stmt = load_statements.new(
     swift_location,
     swift_kinds.binary,
+)
+
+swift_c_module_load_stmt = load_statements.new(
+    swift_location,
+    swift_kinds.c_module,
 )
 
 swift_test_load_stmt = load_statements.new(swift_location, swift_kinds.test)
@@ -501,4 +518,15 @@ apple_apple_location = "@build_bazel_rules_apple//apple:apple.bzl"
 apple_dynamic_xcframework_import_load_stmt = load_statements.new(
     apple_apple_location,
     apple_kinds.dynamic_xcframework_import,
+)
+
+swiftpkg_kinds = struct(
+    objc_module_alias = "swift_objc_module_alias",
+)
+
+swiftpkg_build_defs_location = "@cgrindel_swift_bazel//swiftpkg:build_defs.bzl"
+
+swiftpkg_objc_module_alias_load_stmt = load_statements.new(
+    swiftpkg_build_defs_location,
+    swiftpkg_kinds.objc_module_alias,
 )
