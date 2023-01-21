@@ -268,23 +268,31 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         srcs = sets.to_list(srcs_set)
         attrs["srcs"] = srcs
 
+    load_stmts = []
+    c_target_name = pkginfo_targets.bazel_label_name(target)
     if clang_files.has_objc_srcs(srcs):
         # Enable clang module support.
         # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
         attrs["enable_modules"] = True
         attrs["module_name"] = target.c99name
-        kind = objc_kinds.library
+        decls = [
+            # build_decls.new(
+            #     kind = objc_kinds.library,
+            #     name = c_target_name,
+            #     attrs = attrs,
+            # ),
+            build_decls.new(objc_kinds.library, c_target_name, attrs = attrs),
+        ]
     else:
-        kind = clang_kinds.library
+        decls = [
+            # build_decls.new(
+            #     kind = clang_kinds.library,
+            #     name = c_target_name,
+            #     attrs = attrs,
+            # ),
+            build_decls.new(clang_kinds.library, c_target_name, attrs = attrs),
+        ]
 
-    load_stmts = []
-    decls = [
-        build_decls.new(
-            kind = kind,
-            name = pkginfo_targets.bazel_label_name(target),
-            attrs = attrs,
-        ),
-    ]
     return build_files.new(
         load_stmts = load_stmts,
         decls = decls,
