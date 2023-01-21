@@ -13,6 +13,11 @@ _PUBLIC_HDR_DIRNAMES = ["include", "public"]
 # https://bazel.build/reference/be/c-cpp#cc_library.srcs
 _HEADER_EXTS = [".h", ".hh", ".hpp", ".hxx", ".inc", ".inl", ".H"]
 
+# Acceptable sources clang and objc:
+# https://bazel.build/reference/be/c-cpp#cc_library.srcs
+# https://bazel.build/reference/be/objective-c#objc_library.srcs
+_SRC_EXTS = [".c", ".cc", ".S", ".so", ".o", ".m"]
+
 def _is_hdr(path):
     _root, ext = paths.split_extension(path)
     return lists.contains(_HEADER_EXTS, ext)
@@ -171,15 +176,12 @@ def _collect_files(
     for orig_path in all_srcs:
         path = _relativize(orig_path, relative_to)
         _root, ext = paths.split_extension(path)
-        if ext == ".h":
+        if lists.contains(_HEADER_EXTS, ext):
             if _is_include_hdr(orig_path, public_includes = public_includes):
                 sets.insert(hdrs_set, path)
             else:
                 sets.insert(srcs_set, path)
-        elif lists.contains([".c", ".cc", ".S", ".so", ".o", ".m"], ext):
-            # Acceptable sources clang and objc:
-            # https://bazel.build/reference/be/c-cpp#cc_library.srcs
-            # https://bazel.build/reference/be/objective-c#objc_library.srcs
+        elif lists.contains(_SRC_EXTS, ext):
             sets.insert(srcs_set, path)
         elif ext == ".modulemap" and _is_public_modulemap(path):
             if modulemap != None:

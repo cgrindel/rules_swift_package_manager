@@ -68,10 +68,10 @@ Did not find external dependency with name/identity {}.\
             )
             if len(labels) == 0:
                 fail("""\
-Unable to resolve product reference target dependency for product {prod_name} provided by {dep_id}.
+Unable to resolve product reference target dependency for product {prod_name} provided by {dep_name}.
 """.format(
                     prod_name = prod_ref.product_name,
-                    dep_id = prod_ref.dep_identity,
+                    dep_name = prod_ref.dep_name,
                 ))
 
         else:
