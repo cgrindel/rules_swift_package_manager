@@ -268,6 +268,14 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         srcs = sets.to_list(srcs_set)
         attrs["srcs"] = srcs
 
+    # TODO(chuck): Need to resolve internal ObjC targets to the ObjC target and
+    # external ones to the Swift module alias.
+    #
+    # Add a type to Module in the index specifying the type of module. Then,
+    # update pkginfos.target_deps.bazel_label_strs to check if resolving for
+    # internal ref or external ref. If internal and type is objc, then use the
+    # _Objc target.
+
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     if clang_files.has_objc_srcs(srcs):
         # Enable clang module support.
@@ -277,7 +285,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 
         # load_stmts = [swift_c_module_load_stmt]
         load_stmts = [swiftpkg_objc_module_alias_load_stmt]
-        objc_target_name = bzl_target_name + "Objc"
+        objc_target_name = bzl_target_name + "_Objc"
         decls = [
             build_decls.new(objc_kinds.library, objc_target_name, attrs = attrs),
             build_decls.new(
@@ -289,14 +297,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                     "visibility": ["//visibility:public"],
                 },
             ),
-            # build_decls.new(
-            #     kind = swift_kinds.c_module,
-            #     name = bzl_target_name,
-            #     attrs = {
-            #         "deps": [":{}".format(objc_target_name)],
-            #         "module_name": target.c99name,
-            #     },
-            # ),
         ]
     else:
         load_stmts = []
