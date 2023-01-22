@@ -277,15 +277,15 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 
         if target.is_public:
             load_stmts = [swiftpkg_objc_module_alias_load_stmt]
-            objc_target_name = bzl_target_name + "Objc"
-            visibility = attrs.pop("visibility", default = [])
+            module_alias_target_name = bzl_target_name + "_SwiftModule"
+            visibility = attrs.get("visibility", default = [])
             decls = [
-                build_decls.new(objc_kinds.library, objc_target_name, attrs = attrs),
+                build_decls.new(objc_kinds.library, bzl_target_name, attrs = attrs),
                 build_decls.new(
                     kind = swiftpkg_kinds.objc_module_alias,
-                    name = bzl_target_name,
+                    name = module_alias_target_name,
                     attrs = {
-                        "deps": [":{}".format(objc_target_name)],
+                        "deps": [":{}".format(bzl_target_name)],
                         "module_names": [target.c99name],
                         "visibility": visibility,
                     },
