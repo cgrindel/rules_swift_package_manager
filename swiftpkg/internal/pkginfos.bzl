@@ -190,6 +190,7 @@ def _new_target_from_json_maps(dump_map, desc_map):
         linker_settings = linker_settings,
         public_hdrs_path = dump_map.get("publicHeadersPath"),
         artifact_download_info = artifact_download_info,
+        product_memberships = desc_map.get("product_memberships", default = []),
     )
 
 def _new_clang_settings_from_dump_json_list(dump_list):
@@ -582,7 +583,8 @@ def _new_target(
         swift_settings = None,
         linker_settings = None,
         public_hdrs_path = None,
-        artifact_download_info = None):
+        artifact_download_info = None,
+        product_memberships = []):
     """Creates a target.
 
     Args:
@@ -605,6 +607,8 @@ def _new_target(
         public_hdrs_path: Optional. A `string`.
         artifact_download_info: Optional. A `struct` as returned by
             `pkginfos.new_artifact_download_info`.
+        product_memberships: Optional. A `list` of product names that this
+            target is referenced by.
 
     Returns:
         A `struct` representing a target in a Swift package.
@@ -643,6 +647,7 @@ def _new_target(
         linker_settings = linker_settings,
         public_hdrs_path = public_hdrs_path,
         artifact_download_info = artifact_download_info,
+        product_memberships = product_memberships,
     )
 
 def _new_clang_settings(defines, hdr_srch_paths):
