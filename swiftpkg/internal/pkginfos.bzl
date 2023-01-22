@@ -648,6 +648,7 @@ def _new_target(
         public_hdrs_path = public_hdrs_path,
         artifact_download_info = artifact_download_info,
         product_memberships = product_memberships,
+        is_public = len(product_memberships) > 0,
     )
 
 def _new_clang_settings(defines, hdr_srch_paths):
