@@ -73,11 +73,6 @@ def _bazel_label_name(target):
         name = _join_path(target, target.name)
     return name.replace("/", "_")
 
-def _visibility(target):
-    # If a target is not a member of any products, then do not set a visibility.
-    # Targets associated with products must be publicly available.
-    return ["//visibility:public"] if target.is_public else []
-
 def make_pkginfo_targets(bazel_labels):
     """Create a `pkginfo_targets` module.
 
@@ -112,7 +107,6 @@ def make_pkginfo_targets(bazel_labels):
         get = _get,
         join_path = _join_path,
         srcs = _srcs,
-        visibility = _visibility,
     )
 
 pkginfo_targets = make_pkginfo_targets(bazel_labels = bazel_labels)

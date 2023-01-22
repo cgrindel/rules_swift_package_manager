@@ -41,7 +41,7 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         "deps": deps,
         "module_name": target.c99name,
         "srcs": pkginfo_targets.srcs(target),
-        "visibility": pkginfo_targets.visibility(target),
+        "visibility": ["//visibility:public"],
     }
 
     # GH046: Support plugins.
@@ -190,7 +190,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "defines": ["SWIFT_PACKAGE=1"],
         "deps": deps,
         "tags": ["swift_module={}".format(target.c99name)],
-        "visibility": pkginfo_targets.visibility(target),
+        "visibility": ["//visibility:public"],
     }
 
     hdrs = []
@@ -275,31 +275,29 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["enable_modules"] = True
         attrs["module_name"] = target.c99name
 
-        if target.is_public:
-            load_stmts = [swiftpkg_objc_module_alias_load_stmt]
-            module_alias_target_name = bzl_target_name + "_SwiftModule"
-            visibility = attrs.get("visibility", default = [])
-            decls = [
-                build_decls.new(objc_kinds.library, bzl_target_name, attrs = attrs),
-                build_decls.new(
-                    kind = swiftpkg_kinds.objc_module_alias,
-                    name = module_alias_target_name,
-                    attrs = {
-                        "deps": [":{}".format(bzl_target_name)],
-                        "module_names": [target.c99name],
-                        "visibility": visibility,
-                    },
-                ),
-            ]
-        else:
-            load_stmts = []
-            decls = [
-                build_decls.new(
-                    objc_kinds.library,
-                    bzl_target_name,
-                    attrs = attrs,
-                ),
-            ]
+        # load_stmts = [swift_c_module_load_stmt]
+        load_stmts = [swiftpkg_objc_module_alias_load_stmt]
+        objc_target_name = bzl_target_name + "Objc"
+        decls = [
+            build_decls.new(objc_kinds.library, objc_target_name, attrs = attrs),
+            build_decls.new(
+                kind = swiftpkg_kinds.objc_module_alias,
+                name = bzl_target_name,
+                attrs = {
+                    "deps": [":{}".format(objc_target_name)],
+                    "module_names": [target.c99name],
+                    "visibility": ["//visibility:public"],
+                },
+            ),
+            # build_decls.new(
+            #     kind = swift_kinds.c_module,
+            #     name = bzl_target_name,
+            #     attrs = {
+            #         "deps": [":{}".format(objc_target_name)],
+            #         "module_name": target.c99name,
+            #     },
+            # ),
+        ]
     else:
         load_stmts = []
         decls = [
