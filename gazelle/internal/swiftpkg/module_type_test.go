@@ -1,7 +1,28 @@
 package swiftpkg_test
 
-import "testing"
+import (
+	"testing"
 
-func TestModuleType(t *testing.T) {
-	t.Error("IMPLEMENT ME!")
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestNewModuleType(t *testing.T) {
+	tests := []struct {
+		name string
+		str  string
+		exp  swiftpkg.ModuleType
+	}{
+		{name: "swift", str: "SwiftTarget", exp: swiftpkg.SwiftModuleType},
+		{name: "clang", str: "ClangTarget", exp: swiftpkg.ClangModuleType},
+		{name: "unknown", str: "unknown", exp: swiftpkg.UnknownModuleType},
+		{name: "unrecognized", str: "unrecognized", exp: swiftpkg.UnknownModuleType},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			actual := swiftpkg.NewModuleType(test.str)
+			assert.Equal(t, test.exp, actual)
+		})
+	}
 }
