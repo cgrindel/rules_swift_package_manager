@@ -60,6 +60,7 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
                 swift_settings = pkginfos.new_swift_settings(
                     defines = ["COOL_SWIFT_DEFINE"],
                 ),
+                product_memberships = ["printstuff"],
             ),
             pkginfos.new_target(
                 name = "MySwiftPackageTests",
@@ -125,6 +126,7 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
             linked_libraries = ["foo"],
         ),
         public_hdrs_path = "include",
+        product_memberships = ["libbar"],
     )
     asserts.equals(env, expected, libbar_target)
 
