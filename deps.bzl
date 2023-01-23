@@ -51,3 +51,10 @@ def swift_bazel_dependencies():
             "http://github.com/cgrindel/bazel-starlib/archive/v0.11.0.tar.gz",
         ],
     )
+
+    maybe(
+        http_archive,
+        name = "build_bazel_rules_swift",
+        sha256 = "32f95dbe6a88eb298aaa790f05065434f32a662c65ec0a6aabdaf6881e4f169f",
+        url = "https://github.com/bazelbuild/rules_swift/releases/download/1.5.0/rules_swift.1.5.0.tar.gz",
+    )
