@@ -3,6 +3,7 @@ package swiftpkg
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 )
 
 type SourceType int
@@ -32,6 +33,11 @@ func init() {
 }
 
 func NewSourceType(moduleType string, srcPaths []string) SourceType {
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK: =====")
+	log.Printf("*** CHUCK:  moduleType: %+#v", moduleType)
+	log.Printf("*** CHUCK:  srcPaths: %+#v", srcPaths)
+	// DEBUG END
 	// TODO(chuck): IMPLEMENT ME!
 	return UnknownSourceType
 }

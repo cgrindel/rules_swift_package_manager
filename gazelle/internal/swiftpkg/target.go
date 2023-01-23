@@ -52,7 +52,7 @@ type Target struct {
 	Name         string
 	C99name      string
 	Type         TargetType
-	ModuleType   string
+	ModuleType   ModuleType
 	Path         string
 	Sources      []string
 	Dependencies []*TargetDependency
@@ -100,7 +100,7 @@ func NewTargetFromManifestInfo(descT *spdesc.Target, dumpT *spdump.Target) (*Tar
 		Name:         descT.Name,
 		C99name:      descT.C99name,
 		Type:         targetType,
-		ModuleType:   descT.ModuleType,
+		ModuleType:   NewModuleType(descT.ModuleType),
 		Path:         descT.Path,
 		Sources:      descT.Sources,
 		Dependencies: tdeps,
