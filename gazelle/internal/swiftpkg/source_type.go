@@ -4,6 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"path/filepath"
+
+	"golang.org/x/exp/slices"
 )
 
 type SourceType int
@@ -19,6 +22,8 @@ var sourceTypeIDToStr map[SourceType]string
 
 var sourceTypeStrToID map[string]SourceType
 
+var objcExtensions []string
+
 func init() {
 	sourceTypeIDToStr = map[SourceType]string{
 		UnknownSourceType: "unknown",
@@ -30,16 +35,30 @@ func init() {
 	for id, str := range sourceTypeIDToStr {
 		sourceTypeStrToID[str] = id
 	}
+
+	objcExtensions = []string{".m", ".mm"}
 }
 
-func NewSourceType(moduleType string, srcPaths []string) SourceType {
+func NewSourceType(moduleType ModuleType, srcPaths []string) SourceType {
 	// DEBUG BEGIN
 	log.Printf("*** CHUCK: =====")
 	log.Printf("*** CHUCK:  moduleType: %+#v", moduleType)
 	log.Printf("*** CHUCK:  srcPaths: %+#v", srcPaths)
 	// DEBUG END
-	// TODO(chuck): IMPLEMENT ME!
-	return UnknownSourceType
+	switch moduleType {
+	case SwiftModuleType:
+		return SwiftSourceType
+	case ClangModuleType:
+		for _, sp := range srcPaths {
+			ext := filepath.Ext(sp)
+			if slices.Contains(objcExtensions, ext) {
+				return ObjcSourceType
+			}
+		}
+		return ClangSourceType
+	default:
+		return UnknownSourceType
+	}
 }
 
 func (m *SourceType) MarshalJSON() ([]byte, error) {

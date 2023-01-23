@@ -96,16 +96,18 @@ func NewTargetFromManifestInfo(descT *spdesc.Target, dumpT *spdump.Target) (*Tar
 		return nil, err
 	}
 
+	moduleType := NewModuleType(descT.ModuleType)
+
 	return &Target{
 		Name:         descT.Name,
 		C99name:      descT.C99name,
 		Type:         targetType,
-		ModuleType:   NewModuleType(descT.ModuleType),
+		ModuleType:   moduleType,
 		Path:         descT.Path,
 		Sources:      descT.Sources,
 		Dependencies: tdeps,
 		CSettings:    cSettings,
-		SrcType:      NewSourceType(descT.ModuleType, descT.Sources),
+		SrcType:      NewSourceType(moduleType, descT.Sources),
 	}, nil
 }
 

@@ -21,6 +21,7 @@ go_library(
         "//gazelle/internal/spdesc",
         "//gazelle/internal/spdump",
         "//gazelle/internal/swiftbin",
+        "@org_golang_x_exp//slices",
     ],
 )
 
