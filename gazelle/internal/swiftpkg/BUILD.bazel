@@ -10,6 +10,7 @@ go_library(
         "package_info.go",
         "platform.go",
         "product.go",
+        "source_type.go",
         "target.go",
         "target_dependency.go",
     ],
@@ -24,7 +25,10 @@ go_library(
 
 go_test(
     name = "swiftpkg_test",
-    srcs = ["package_info_test.go"],
+    srcs = [
+        "package_info_test.go",
+        "source_type_test.go",
+    ],
     # The PackageInfo tests use SwiftBin to create an actual Swift package. To use Swift, the test
     # needs to be executed outside of the sandbox.
     local = True,

@@ -7,6 +7,7 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 	"golang.org/x/exp/slices"
 )
 
@@ -53,7 +54,7 @@ func NewHTTPArchiveFromRule(r *rule.Rule, repoRoot string) (*HTTPArchive, error)
 		}
 		moduleName := ModuleName(br)
 		l := label.New(repoName, "", br.Name())
-		m := NewModule(moduleName, moduleName, &l)
+		m := NewModule(moduleName, moduleName, swiftpkg.SwiftSourceType, &l)
 		modules = append(modules, m)
 	}
 

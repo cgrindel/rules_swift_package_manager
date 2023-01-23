@@ -19,7 +19,7 @@ type productJSONData struct {
 type ProductType int
 
 const (
-	UnknownProductType = iota
+	UnknownProductType ProductType = iota
 	LibraryProductType
 	ExecutableProductType
 	PluginProductType

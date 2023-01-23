@@ -5,13 +5,14 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestModule(t *testing.T) {
 	t.Run("label string", func(t *testing.T) {
 		l := label.New("my_repo", "path/to/pkg", "Foo")
-		m := swift.NewModule("Foo", "Foo", &l)
+		m := swift.NewModule("Foo", "Foo", swiftpkg.SwiftSourceType, &l)
 		actual := m.LabelStr()
 		expected := swift.NewLabelStr(&l)
 		assert.Equal(t, expected, actual)

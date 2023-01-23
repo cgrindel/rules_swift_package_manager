@@ -57,6 +57,7 @@ type Target struct {
 	Sources      []string
 	Dependencies []*TargetDependency
 	CSettings    *ClangSettings
+	SrcType      SourceType
 }
 
 // NewTargetFromManifestInfo returns a Swift target from manifest information.
@@ -104,6 +105,7 @@ func NewTargetFromManifestInfo(descT *spdesc.Target, dumpT *spdump.Target) (*Tar
 		Sources:      descT.Sources,
 		Dependencies: tdeps,
 		CSettings:    cSettings,
+		SrcType:      NewSourceType(descT.ModuleType, descT.Sources),
 	}, nil
 }
 
