@@ -3,6 +3,8 @@
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
 load(":bazel_repo_names.bzl", "bazel_repo_names")
+load(":pkginfo_targets.bzl", "pkginfo_targets")
+load(":validations.bzl", "validations")
 
 def _new_from_json(json_str):
     """Creates a module index from a JSON string.
@@ -58,6 +60,11 @@ def _new_module_from_dict(mod_dict):
     )
 
 def _new_module(name, c99name, src_type, label):
+    validations.in_list(
+        src_types.all_values,
+        src_type,
+        "Unrecognized source type. type:",
+    )
     return struct(
         name = name,
         c99name = c99name,
@@ -110,9 +117,24 @@ def _resolve_module_label(
     # If a repo name is provided, prefer that over any other matches
     if preferred_repo_name != None:
         preferred_repo_name = bazel_repo_names.normalize(preferred_repo_name)
-        label = lists.find(labels, lambda l: l.repository_name == preferred_repo_name)
-        if label != None:
-            return label
+        module = lists.find(
+            modules,
+            lambda m: m.label.repository_name == preferred_repo_name,
+        )
+        if module != None:
+            # We found a match for the current/preferred repo. If the dep is an
+            # objc, return the real Objective-C target, not the Swift module
+            # alias. This is part of a workaround for Objective-C modules not
+            # being able to `@import` modules from other Objective-C modules.
+            # See `swiftpkg_build_files.bzl` for more information.
+            if module.src_type == src_types.objc:
+                return bazel_labels.new(
+                    name = pkginfo_targets.objc_label_name(module.label.name),
+                    repository_name = module.label.repository_name,
+                    package = module.label.package,
+                )
+            else:
+                return module.label
 
     # If we are meant to only find a match in a set of repo names, then
     if len(restrict_to_repo_names) > 0:
@@ -203,6 +225,19 @@ def _resolve_module_label_with_ctx(deps_index_ctx, module_name):
         preferred_repo_name = deps_index_ctx.preferred_repo_name,
         restrict_to_repo_names = deps_index_ctx.restrict_to_repo_names,
     )
+
+src_types = struct(
+    unknown = "unknown",
+    swift = "swift",
+    clang = "clang",
+    objc = "objc",
+    all_values = [
+        "unknown",
+        "swift",
+        "clang",
+        "objc",
+    ],
+)
 
 deps_indexes = struct(
     find_product = _find_product,
