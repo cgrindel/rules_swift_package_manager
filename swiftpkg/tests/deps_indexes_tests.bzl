@@ -13,6 +13,7 @@ def _new_from_json_test(ctx):
             deps_indexes.new_module(
                 name = "ArgumentParser",
                 c99name = "ArgumentParser",
+                src_type = "swift",
                 label = bazel_labels.new(
                     repository_name = "@apple_swift_argument_parser",
                     package = "Sources/ArgumentParser",
@@ -24,6 +25,7 @@ def _new_from_json_test(ctx):
             deps_indexes.new_module(
                 name = "Foo",
                 c99name = "Foo",
+                src_type = "swift",
                 label = bazel_labels.new(
                     repository_name = "@example_cool_repo",
                     package = "",
@@ -33,6 +35,7 @@ def _new_from_json_test(ctx):
             deps_indexes.new_module(
                 name = "Foo",
                 c99name = "Foo",
+                src_type = "swift",
                 label = bazel_labels.new(
                     repository_name = "@example_another_repo",
                     package = "Sources/Foo",
@@ -146,9 +149,9 @@ def deps_indexes_test_suite():
 _deps_index_json = """
 {
   "modules": [
-    {"name": "ArgumentParser", "c99name": "ArgumentParser", "label": "@apple_swift_argument_parser//Sources/ArgumentParser"},
-    {"name": "Foo", "c99name": "Foo", "label": "@example_cool_repo//:Foo"},
-    {"name": "Foo", "c99name": "Foo", "label": "@example_another_repo//Sources/Foo"}
+    {"name": "ArgumentParser", "c99name": "ArgumentParser", "src_type": "swift", "label": "@apple_swift_argument_parser//Sources/ArgumentParser"},
+    {"name": "Foo", "c99name": "Foo", "src_type": "swift", "label": "@example_cool_repo//:Foo"},
+    {"name": "Foo", "c99name": "Foo", "src_type": "swift", "label": "@example_another_repo//Sources/Foo"}
   ],
   "products": []
 }

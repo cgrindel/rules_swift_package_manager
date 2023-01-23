@@ -53,13 +53,15 @@ def _new_module_from_dict(mod_dict):
     return _new_module(
         name = mod_dict["name"],
         c99name = mod_dict["c99name"],
+        src_type = mod_dict.get("src_type", default = "unknown"),
         label = bazel_labels.parse(mod_dict["label"]),
     )
 
-def _new_module(name, c99name, label):
+def _new_module(name, c99name, src_type, label):
     return struct(
         name = name,
         c99name = c99name,
+        src_type = src_type,
         label = label,
     )
 
