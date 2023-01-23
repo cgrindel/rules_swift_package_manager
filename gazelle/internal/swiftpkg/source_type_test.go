@@ -1,6 +1,7 @@
 package swiftpkg_test
 
 import (
+	"encoding/json"
 	"testing"
 
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
@@ -50,6 +51,29 @@ func TestNewSourceType(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			actual := swiftpkg.NewSourceType(test.mtype, test.paths)
 			assert.Equal(t, test.exp, actual)
+		})
+	}
+}
+
+func TestSourceTypeJSONRoundtrip(t *testing.T) {
+	tests := []struct {
+		name string
+		val  swiftpkg.SourceType
+	}{
+		{name: "unknown", val: swiftpkg.UnknownSourceType},
+		{name: "swift", val: swiftpkg.SwiftSourceType},
+		{name: "clang", val: swiftpkg.ClangSourceType},
+		{name: "objc", val: swiftpkg.ObjcSourceType},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			b, err := json.Marshal(test.val)
+			assert.NoError(t, err, "marshal value")
+			var actual swiftpkg.SourceType
+			err = json.Unmarshal(b, &actual)
+			assert.NoError(t, err, "unmarshal value")
+			assert.Equal(t, test.val, actual)
 		})
 	}
 }

@@ -3,7 +3,6 @@ package swiftpkg
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"path/filepath"
 
 	"golang.org/x/exp/slices"
@@ -40,11 +39,6 @@ func init() {
 }
 
 func NewSourceType(moduleType ModuleType, srcPaths []string) SourceType {
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: =====")
-	log.Printf("*** CHUCK:  moduleType: %+#v", moduleType)
-	log.Printf("*** CHUCK:  srcPaths: %+#v", srcPaths)
-	// DEBUG END
 	switch moduleType {
 	case SwiftModuleType:
 		return SwiftSourceType
@@ -61,11 +55,11 @@ func NewSourceType(moduleType ModuleType, srcPaths []string) SourceType {
 	}
 }
 
-func (m *SourceType) MarshalJSON() ([]byte, error) {
-	if str, ok := sourceTypeIDToStr[*m]; ok {
-		return json.Marshal(&str)
+func (m SourceType) MarshalJSON() ([]byte, error) {
+	if str, ok := sourceTypeIDToStr[m]; ok {
+		return json.Marshal(str)
 	}
-	return nil, fmt.Errorf("unrecognized source type value %v", *m)
+	return nil, fmt.Errorf("unrecognized source type value %v", m)
 }
 
 func (m *SourceType) UnmarshalJSON(b []byte) error {
