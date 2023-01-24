@@ -3,16 +3,19 @@
     {
       "name": "libwebp",
       "c99name": "libwebp",
+      "src_type": "clang",
       "label": "@swiftpkg_libwebp_xcode//:libwebp"
     },
     {
       "name": "Logging",
       "c99name": "Logging",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_log//:Sources_Logging"
     },
     {
       "name": "LoggingTests",
       "c99name": "LoggingTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_log//:Tests_LoggingTests"
     }
   ],

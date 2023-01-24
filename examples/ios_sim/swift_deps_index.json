@@ -3,216 +3,259 @@
     {
       "name": "CNIOAtomics",
       "c99name": "CNIOAtomics",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio//:Sources_CNIOAtomics"
     },
     {
       "name": "CNIODarwin",
       "c99name": "CNIODarwin",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio//:Sources_CNIODarwin"
     },
     {
       "name": "CNIOHTTPParser",
       "c99name": "CNIOHTTPParser",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio//:Sources_CNIOHTTPParser"
     },
     {
       "name": "CNIOLinux",
       "c99name": "CNIOLinux",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio//:Sources_CNIOLinux"
     },
     {
       "name": "CNIOSHA1",
       "c99name": "CNIOSHA1",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio//:Sources_CNIOSHA1"
     },
     {
       "name": "CNIOWindows",
       "c99name": "CNIOWindows",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio//:Sources_CNIOWindows"
     },
     {
       "name": "NIO",
       "c99name": "NIO",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIO"
     },
     {
       "name": "NIOAsyncAwaitDemo",
       "c99name": "NIOAsyncAwaitDemo",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOAsyncAwaitDemo"
     },
     {
       "name": "NIOChatClient",
       "c99name": "NIOChatClient",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOChatClient"
     },
     {
       "name": "NIOChatServer",
       "c99name": "NIOChatServer",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOChatServer"
     },
     {
       "name": "NIOConcurrencyHelpers",
       "c99name": "NIOConcurrencyHelpers",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOConcurrencyHelpers"
     },
     {
       "name": "NIOCore",
       "c99name": "NIOCore",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOCore"
     },
     {
       "name": "NIOCrashTester",
       "c99name": "NIOCrashTester",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOCrashTester"
     },
     {
       "name": "NIOEchoClient",
       "c99name": "NIOEchoClient",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOEchoClient"
     },
     {
       "name": "NIOEchoServer",
       "c99name": "NIOEchoServer",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOEchoServer"
     },
     {
       "name": "NIOEmbedded",
       "c99name": "NIOEmbedded",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOEmbedded"
     },
     {
       "name": "NIOFoundationCompat",
       "c99name": "NIOFoundationCompat",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOFoundationCompat"
     },
     {
       "name": "NIOHTTP1",
       "c99name": "NIOHTTP1",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1"
     },
     {
       "name": "NIOHTTP1Client",
       "c99name": "NIOHTTP1Client",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1Client"
     },
     {
       "name": "NIOHTTP1Server",
       "c99name": "NIOHTTP1Server",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1Server"
     },
     {
       "name": "NIOMulticastChat",
       "c99name": "NIOMulticastChat",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOMulticastChat"
     },
     {
       "name": "NIOPerformanceTester",
       "c99name": "NIOPerformanceTester",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOPerformanceTester"
     },
     {
       "name": "NIOPosix",
       "c99name": "NIOPosix",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOPosix"
     },
     {
       "name": "NIOTLS",
       "c99name": "NIOTLS",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOTLS"
     },
     {
       "name": "NIOTestUtils",
       "c99name": "NIOTestUtils",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOTestUtils"
     },
     {
       "name": "NIOUDPEchoClient",
       "c99name": "NIOUDPEchoClient",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOUDPEchoClient"
     },
     {
       "name": "NIOUDPEchoServer",
       "c99name": "NIOUDPEchoServer",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOUDPEchoServer"
     },
     {
       "name": "NIOWebSocket",
       "c99name": "NIOWebSocket",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocket"
     },
     {
       "name": "NIOWebSocketClient",
       "c99name": "NIOWebSocketClient",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocketClient"
     },
     {
       "name": "NIOWebSocketServer",
       "c99name": "NIOWebSocketServer",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocketServer"
     },
     {
       "name": "_NIOConcurrency",
       "c99name": "_NIOConcurrency",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources__NIOConcurrency"
     },
     {
       "name": "_NIODataStructures",
       "c99name": "_NIODataStructures",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources__NIODataStructures"
     },
     {
       "name": "NIOConcurrencyHelpersTests",
       "c99name": "NIOConcurrencyHelpersTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOConcurrencyHelpersTests"
     },
     {
       "name": "NIOCoreTests",
       "c99name": "NIOCoreTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOCoreTests"
     },
     {
       "name": "NIODataStructuresTests",
       "c99name": "NIODataStructuresTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIODataStructuresTests"
     },
     {
       "name": "NIOEmbeddedTests",
       "c99name": "NIOEmbeddedTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOEmbeddedTests"
     },
     {
       "name": "NIOFoundationCompatTests",
       "c99name": "NIOFoundationCompatTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOFoundationCompatTests"
     },
     {
       "name": "NIOHTTP1Tests",
       "c99name": "NIOHTTP1Tests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOHTTP1Tests"
     },
     {
       "name": "NIOPosixTests",
       "c99name": "NIOPosixTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOPosixTests"
     },
     {
       "name": "NIOTLSTests",
       "c99name": "NIOTLSTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOTLSTests"
     },
     {
       "name": "NIOTestUtilsTests",
       "c99name": "NIOTestUtilsTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOTestUtilsTests"
     },
     {
       "name": "NIOTests",
       "c99name": "NIOTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOTests"
     },
     {
       "name": "NIOWebSocketTests",
       "c99name": "NIOWebSocketTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOWebSocketTests"
     }
   ],

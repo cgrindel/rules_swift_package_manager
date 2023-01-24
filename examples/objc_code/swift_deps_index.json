@@ -3,6 +3,7 @@
     {
       "name": "TrustKit",
       "c99name": "TrustKit",
+      "src_type": "objc",
       "label": "@swiftpkg_trustkit//:TrustKit"
     }
   ],

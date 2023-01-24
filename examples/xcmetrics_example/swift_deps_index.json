@@ -3,2541 +3,3049 @@
     {
       "name": "AsyncHTTPClient",
       "c99name": "AsyncHTTPClient",
+      "src_type": "swift",
       "label": "@swiftpkg_async_http_client//:Sources_AsyncHTTPClient"
     },
     {
       "name": "CAsyncHTTPClient",
       "c99name": "CAsyncHTTPClient",
+      "src_type": "clang",
       "label": "@swiftpkg_async_http_client//:Sources_CAsyncHTTPClient"
     },
     {
       "name": "AsyncHTTPClientTests",
       "c99name": "AsyncHTTPClientTests",
+      "src_type": "swift",
       "label": "@swiftpkg_async_http_client//:Tests_AsyncHTTPClientTests"
     },
     {
       "name": "AsyncKit",
       "c99name": "AsyncKit",
+      "src_type": "swift",
       "label": "@swiftpkg_async_kit//:Sources_AsyncKit"
     },
     {
       "name": "AsyncKitTests",
       "c99name": "AsyncKitTests",
+      "src_type": "swift",
       "label": "@swiftpkg_async_kit//:Tests_AsyncKitTests"
     },
     {
       "name": "ConsoleKit",
       "c99name": "ConsoleKit",
+      "src_type": "swift",
       "label": "@swiftpkg_console_kit//:Sources_ConsoleKit"
     },
     {
       "name": "ConsoleKitAsyncExample",
       "c99name": "ConsoleKitAsyncExample",
+      "src_type": "swift",
       "label": "@swiftpkg_console_kit//:Sources_ConsoleKitAsyncExample"
     },
     {
       "name": "ConsoleKitExample",
       "c99name": "ConsoleKitExample",
+      "src_type": "swift",
       "label": "@swiftpkg_console_kit//:Sources_ConsoleKitExample"
     },
     {
       "name": "AsyncConsoleKitTests",
       "c99name": "AsyncConsoleKitTests",
+      "src_type": "swift",
       "label": "@swiftpkg_console_kit//:Tests_AsyncConsoleKitTests"
     },
     {
       "name": "ConsoleKitTests",
       "c99name": "ConsoleKitTests",
+      "src_type": "swift",
       "label": "@swiftpkg_console_kit//:Tests_ConsoleKitTests"
     },
     {
       "name": "CryptoSwift",
       "c99name": "CryptoSwift",
+      "src_type": "swift",
       "label": "@swiftpkg_cryptoswift//:Sources_CryptoSwift"
     },
     {
       "name": "CryptoSwiftTests",
       "c99name": "CryptoSwiftTests",
+      "src_type": "swift",
       "label": "@swiftpkg_cryptoswift//:Tests_CryptoSwiftTests"
     },
     {
       "name": "TestsPerformance",
       "c99name": "TestsPerformance",
+      "src_type": "swift",
       "label": "@swiftpkg_cryptoswift//:Tests_TestsPerformance"
     },
     {
       "name": "Fluent",
       "c99name": "Fluent",
+      "src_type": "swift",
       "label": "@swiftpkg_fluent//:Sources_Fluent"
     },
     {
       "name": "FluentTests",
       "c99name": "FluentTests",
+      "src_type": "swift",
       "label": "@swiftpkg_fluent//:Tests_FluentTests"
     },
     {
       "name": "FluentBenchmark",
       "c99name": "FluentBenchmark",
+      "src_type": "swift",
       "label": "@swiftpkg_fluent_kit//:Sources_FluentBenchmark"
     },
     {
       "name": "FluentKit",
       "c99name": "FluentKit",
+      "src_type": "swift",
       "label": "@swiftpkg_fluent_kit//:Sources_FluentKit"
     },
     {
       "name": "FluentSQL",
       "c99name": "FluentSQL",
+      "src_type": "swift",
       "label": "@swiftpkg_fluent_kit//:Sources_FluentSQL"
     },
     {
       "name": "XCTFluent",
       "c99name": "XCTFluent",
+      "src_type": "swift",
       "label": "@swiftpkg_fluent_kit//:Sources_XCTFluent"
     },
     {
       "name": "FluentKitTests",
       "c99name": "FluentKitTests",
+      "src_type": "swift",
       "label": "@swiftpkg_fluent_kit//:Tests_FluentKitTests"
     },
     {
       "name": "FluentPostgresDriver",
       "c99name": "FluentPostgresDriver",
+      "src_type": "swift",
       "label": "@swiftpkg_fluent_postgres_driver//:Sources_FluentPostgresDriver"
     },
     {
       "name": "FluentPostgresDriverTests",
       "c99name": "FluentPostgresDriverTests",
+      "src_type": "swift",
       "label": "@swiftpkg_fluent_postgres_driver//:Tests_FluentPostgresDriverTests"
     },
     {
       "name": "Core",
       "c99name": "Core",
+      "src_type": "swift",
       "label": "@swiftpkg_google_cloud_kit//:Core_Sources_Core"
     },
     {
       "name": "CoreTests",
       "c99name": "CoreTests",
+      "src_type": "swift",
       "label": "@swiftpkg_google_cloud_kit//:Core_Tests_CoreTests"
     },
     {
       "name": "Datastore",
       "c99name": "Datastore",
+      "src_type": "swift",
       "label": "@swiftpkg_google_cloud_kit//:Datastore_Sources_Datastore"
     },
     {
       "name": "DatastoreTests",
       "c99name": "DatastoreTests",
+      "src_type": "swift",
       "label": "@swiftpkg_google_cloud_kit//:Datastore_Tests_DatastoreTests"
     },
     {
       "name": "PubSub",
       "c99name": "PubSub",
+      "src_type": "swift",
       "label": "@swiftpkg_google_cloud_kit//:PubSub_Sources_PubSub"
     },
     {
       "name": "PubSubTests",
       "c99name": "PubSubTests",
+      "src_type": "swift",
       "label": "@swiftpkg_google_cloud_kit//:PubSub_Tests_PubSubTests"
     },
     {
       "name": "SecretManager",
       "c99name": "SecretManager",
+      "src_type": "swift",
       "label": "@swiftpkg_google_cloud_kit//:SecretManager_Sources_SecretManager"
     },
     {
       "name": "Storage",
       "c99name": "Storage",
+      "src_type": "swift",
       "label": "@swiftpkg_google_cloud_kit//:Storage_Sources_Storage"
     },
     {
       "name": "StorageTests",
       "c99name": "StorageTests",
+      "src_type": "swift",
       "label": "@swiftpkg_google_cloud_kit//:Storage_Tests_StorageTests"
     },
     {
       "name": "Translation",
       "c99name": "Translation",
+      "src_type": "swift",
       "label": "@swiftpkg_google_cloud_kit//:Translation_Sources_Translation"
     },
     {
       "name": "TranslationTests",
       "c99name": "TranslationTests",
+      "src_type": "swift",
       "label": "@swiftpkg_google_cloud_kit//:Translation_Tests_TranslationTests"
     },
     {
       "name": "EchoImplementation",
       "c99name": "EchoImplementation",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Implementation_EchoImplementation"
     },
     {
       "name": "EchoModel",
       "c99name": "EchoModel",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Model_EchoModel"
     },
     {
       "name": "Echo",
       "c99name": "Echo",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Runtime_Echo"
     },
     {
       "name": "HelloWorldClient",
       "c99name": "HelloWorldClient",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Client_HelloWorldClient"
     },
     {
       "name": "HelloWorldModel",
       "c99name": "HelloWorldModel",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Model_HelloWorldModel"
     },
     {
       "name": "HelloWorldServer",
       "c99name": "HelloWorldServer",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Server_HelloWorldServer"
     },
     {
       "name": "RouteGuideClient",
       "c99name": "RouteGuideClient",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Client_RouteGuideClient"
     },
     {
       "name": "RouteGuideModel",
       "c99name": "RouteGuideModel",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Model_RouteGuideModel"
     },
     {
       "name": "RouteGuideServer",
       "c99name": "RouteGuideServer",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Server_RouteGuideServer"
     },
     {
       "name": "GRPC",
       "c99name": "GRPC",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_GRPC"
     },
     {
       "name": "GRPCConnectionBackoffInteropTest",
       "c99name": "GRPCConnectionBackoffInteropTest",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_GRPCConnectionBackoffInteropTest"
     },
     {
       "name": "GRPCInteroperabilityTestModels",
       "c99name": "GRPCInteroperabilityTestModels",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTestModels"
     },
     {
       "name": "GRPCInteroperabilityTests",
       "c99name": "GRPCInteroperabilityTests",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTests"
     },
     {
       "name": "GRPCInteroperabilityTestsImplementation",
       "c99name": "GRPCInteroperabilityTestsImplementation",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTestsImplementation"
     },
     {
       "name": "GRPCPerformanceTests",
       "c99name": "GRPCPerformanceTests",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_GRPCPerformanceTests"
     },
     {
       "name": "GRPCSampleData",
       "c99name": "GRPCSampleData",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_GRPCSampleData"
     },
     {
       "name": "protoc-gen-grpc-swift",
       "c99name": "protoc_gen_grpc_swift",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_protoc-gen-grpc-swift"
     },
     {
       "name": "GRPCTests",
       "c99name": "GRPCTests",
+      "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Tests_GRPCTests"
     },
     {
       "name": "Gzip",
       "c99name": "Gzip",
+      "src_type": "swift",
       "label": "@swiftpkg_gzipswift//:Sources_Gzip"
     },
     {
       "name": "system-zlib",
       "c99name": "system_zlib",
+      "src_type": "clang",
       "label": "@swiftpkg_gzipswift//:Sources_system-zlib"
     },
     {
       "name": "GzipTests",
       "c99name": "GzipTests",
+      "src_type": "swift",
       "label": "@swiftpkg_gzipswift//:Tests_GzipTests"
     },
     {
       "name": "HypertextApplicationLanguage",
       "c99name": "HypertextApplicationLanguage",
+      "src_type": "swift",
       "label": "@swiftpkg_hypertextapplicationlanguage//:Sources_HypertextApplicationLanguage"
     },
     {
       "name": "HypertextApplicationLanguageTests",
       "c99name": "HypertextApplicationLanguageTests",
+      "src_type": "swift",
       "label": "@swiftpkg_hypertextapplicationlanguage//:Tests_HypertextApplicationLanguageTests"
     },
     {
       "name": "CJWTKitBoringSSL",
       "c99name": "CJWTKitBoringSSL",
+      "src_type": "clang",
       "label": "@swiftpkg_jwt_kit//:Sources_CJWTKitBoringSSL"
     },
     {
       "name": "JWTKit",
       "c99name": "JWTKit",
+      "src_type": "swift",
       "label": "@swiftpkg_jwt_kit//:Sources_JWTKit"
     },
     {
       "name": "JWTKitTests",
       "c99name": "JWTKitTests",
+      "src_type": "swift",
       "label": "@swiftpkg_jwt_kit//:Tests_JWTKitTests"
     },
     {
       "name": "MobiusCore",
       "c99name": "MobiusCore",
+      "src_type": "swift",
       "label": "@swiftpkg_mobius.swift//:MobiusCore_Source_MobiusCore"
     },
     {
       "name": "MobiusCoreTests",
       "c99name": "MobiusCoreTests",
+      "src_type": "swift",
       "label": "@swiftpkg_mobius.swift//:MobiusCore_Test_MobiusCoreTests"
     },
     {
       "name": "MobiusExtras",
       "c99name": "MobiusExtras",
+      "src_type": "swift",
       "label": "@swiftpkg_mobius.swift//:MobiusExtras_Source_MobiusExtras"
     },
     {
       "name": "MobiusExtrasTests",
       "c99name": "MobiusExtrasTests",
+      "src_type": "swift",
       "label": "@swiftpkg_mobius.swift//:MobiusExtras_Test_MobiusExtrasTests"
     },
     {
       "name": "MobiusNimble",
       "c99name": "MobiusNimble",
+      "src_type": "swift",
       "label": "@swiftpkg_mobius.swift//:MobiusNimble_Source_MobiusNimble"
     },
     {
       "name": "MobiusNimbleTests",
       "c99name": "MobiusNimbleTests",
+      "src_type": "swift",
       "label": "@swiftpkg_mobius.swift//:MobiusNimble_Test_MobiusNimbleTests"
     },
     {
       "name": "MobiusTest",
       "c99name": "MobiusTest",
+      "src_type": "swift",
       "label": "@swiftpkg_mobius.swift//:MobiusTest_Source_MobiusTest"
     },
     {
       "name": "MobiusTestTests",
       "c99name": "MobiusTestTests",
+      "src_type": "swift",
       "label": "@swiftpkg_mobius.swift//:MobiusTest_Test_MobiusTestTests"
     },
     {
       "name": "MobiusThrowableAssertion",
       "c99name": "MobiusThrowableAssertion",
+      "src_type": "objc",
       "label": "@swiftpkg_mobius.swift//:MobiusThrowableAssertion_Source_MobiusThrowableAssertion"
     },
     {
       "name": "MultipartKit",
       "c99name": "MultipartKit",
+      "src_type": "swift",
       "label": "@swiftpkg_multipart_kit//:Sources_MultipartKit"
     },
     {
       "name": "MultipartKitTests",
       "c99name": "MultipartKitTests",
+      "src_type": "swift",
       "label": "@swiftpkg_multipart_kit//:Tests_MultipartKitTests"
     },
     {
       "name": "NimbleCwlCatchExceptionSupport",
       "c99name": "NimbleCwlCatchExceptionSupport",
+      "src_type": "objc",
       "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Dependencies_CwlCatchException_Sources_CwlCatchExceptionSupport_NimbleCwlCatchExceptionSupport"
     },
     {
       "name": "NimbleCwlCatchException",
       "c99name": "NimbleCwlCatchException",
+      "src_type": "swift",
       "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Dependencies_CwlCatchException_Sources_CwlCatchException_NimbleCwlCatchException"
     },
     {
       "name": "NimbleCwlMachBadInstructionHandler",
       "c99name": "NimbleCwlMachBadInstructionHandler",
+      "src_type": "objc",
       "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Sources_CwlMachBadInstructionHandler_NimbleCwlMachBadInstructionHandler"
     },
     {
       "name": "NimbleCwlPreconditionTesting",
       "c99name": "NimbleCwlPreconditionTesting",
+      "src_type": "swift",
       "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Sources_CwlPreconditionTesting_NimbleCwlPreconditionTesting"
     },
     {
       "name": "Nimble",
       "c99name": "Nimble",
+      "src_type": "swift",
       "label": "@swiftpkg_nimble//:Sources_Nimble"
     },
     {
       "name": "NimbleTests",
       "c99name": "NimbleTests",
+      "src_type": "swift",
       "label": "@swiftpkg_nimble//:Tests_NimbleTests"
     },
     {
       "name": "PathKit",
       "c99name": "PathKit",
+      "src_type": "swift",
       "label": "@swiftpkg_pathkit//:Sources_PathKit"
     },
     {
       "name": "PathKitTests",
       "c99name": "PathKitTests",
+      "src_type": "swift",
       "label": "@swiftpkg_pathkit//:Tests_PathKitTests"
     },
     {
       "name": "INIParser",
       "c99name": "INIParser",
+      "src_type": "swift",
       "label": "@swiftpkg_perfect_iniparser//:Sources_INIParser"
     },
     {
       "name": "INIParserTests",
       "c99name": "INIParserTests",
+      "src_type": "swift",
       "label": "@swiftpkg_perfect_iniparser//:Tests_INIParserTests"
     },
     {
       "name": "PostgresKit",
       "c99name": "PostgresKit",
+      "src_type": "swift",
       "label": "@swiftpkg_postgres_kit//:Sources_PostgresKit"
     },
     {
       "name": "PostgresKitTests",
       "c99name": "PostgresKitTests",
+      "src_type": "swift",
       "label": "@swiftpkg_postgres_kit//:Tests_PostgresKitTests"
     },
     {
       "name": "PostgresNIO",
       "c99name": "PostgresNIO",
+      "src_type": "swift",
       "label": "@swiftpkg_postgres_nio//:Sources_PostgresNIO"
     },
     {
       "name": "IntegrationTests",
       "c99name": "IntegrationTests",
+      "src_type": "swift",
       "label": "@swiftpkg_postgres_nio//:Tests_IntegrationTests"
     },
     {
       "name": "PostgresNIOTests",
       "c99name": "PostgresNIOTests",
+      "src_type": "swift",
       "label": "@swiftpkg_postgres_nio//:Tests_PostgresNIOTests"
     },
     {
       "name": "Queues",
       "c99name": "Queues",
+      "src_type": "swift",
       "label": "@swiftpkg_queues//:Sources_Queues"
     },
     {
       "name": "XCTQueues",
       "c99name": "XCTQueues",
+      "src_type": "swift",
       "label": "@swiftpkg_queues//:Sources_XCTQueues"
     },
     {
       "name": "QueuesTests",
       "c99name": "QueuesTests",
+      "src_type": "swift",
       "label": "@swiftpkg_queues//:Tests_QueuesTests"
     },
     {
       "name": "QueuesRedisDriver",
       "c99name": "QueuesRedisDriver",
+      "src_type": "swift",
       "label": "@swiftpkg_queues_redis_driver//:Sources_QueuesRedisDriver"
     },
     {
       "name": "QueuesRedisDriverTests",
       "c99name": "QueuesRedisDriverTests",
+      "src_type": "swift",
       "label": "@swiftpkg_queues_redis_driver//:Tests_QueuesRedisDriverTests"
     },
     {
       "name": "Quick",
       "c99name": "Quick",
+      "src_type": "swift",
       "label": "@swiftpkg_quick//:Sources_Quick"
     },
     {
       "name": "QuickObjCRuntime",
       "c99name": "QuickObjCRuntime",
+      "src_type": "objc",
       "label": "@swiftpkg_quick//:Sources_QuickObjCRuntime"
     },
     {
       "name": "QuickIssue853RegressionTests",
       "c99name": "QuickIssue853RegressionTests",
+      "src_type": "swift",
       "label": "@swiftpkg_quick//:Tests_QuickIssue853RegressionTests"
     },
     {
       "name": "QuickTests",
       "c99name": "QuickTests",
+      "src_type": "swift",
       "label": "@swiftpkg_quick//:Tests_QuickTests"
     },
     {
       "name": "Redis",
       "c99name": "Redis",
+      "src_type": "swift",
       "label": "@swiftpkg_redis//:Sources_Redis"
     },
     {
       "name": "RedisTests",
       "c99name": "RedisTests",
+      "src_type": "swift",
       "label": "@swiftpkg_redis//:Tests_RedisTests"
     },
     {
       "name": "RediStack",
       "c99name": "RediStack",
+      "src_type": "swift",
       "label": "@swiftpkg_redistack//:Sources_RediStack"
     },
     {
       "name": "RediStackTestUtils",
       "c99name": "RediStackTestUtils",
+      "src_type": "swift",
       "label": "@swiftpkg_redistack//:Sources_RediStackTestUtils"
     },
     {
       "name": "RedisTypes",
       "c99name": "RedisTypes",
+      "src_type": "swift",
       "label": "@swiftpkg_redistack//:Sources_RedisTypes"
     },
     {
       "name": "RediStackIntegrationTests",
       "c99name": "RediStackIntegrationTests",
+      "src_type": "swift",
       "label": "@swiftpkg_redistack//:Tests_RediStackIntegrationTests"
     },
     {
       "name": "RediStackTests",
       "c99name": "RediStackTests",
+      "src_type": "swift",
       "label": "@swiftpkg_redistack//:Tests_RediStackTests"
     },
     {
       "name": "RedisTypesTests",
       "c99name": "RedisTypesTests",
+      "src_type": "swift",
       "label": "@swiftpkg_redistack//:Tests_RedisTypesTests"
     },
     {
       "name": "RoutingKit",
       "c99name": "RoutingKit",
+      "src_type": "swift",
       "label": "@swiftpkg_routing_kit//:Sources_RoutingKit"
     },
     {
       "name": "RoutingKitTests",
       "c99name": "RoutingKitTests",
+      "src_type": "swift",
       "label": "@swiftpkg_routing_kit//:Tests_RoutingKitTests"
     },
     {
       "name": "APIGatewayMiddleware",
       "c99name": "APIGatewayMiddleware",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_APIGateway_APIGatewayMiddleware"
     },
     {
       "name": "GlacierMiddleware",
       "c99name": "GlacierMiddleware",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_Glacier_GlacierMiddleware"
     },
     {
       "name": "S3ControlMiddleware",
       "c99name": "S3ControlMiddleware",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_S3Control_S3ControlMiddleware"
     },
     {
       "name": "S3Middleware",
       "c99name": "S3Middleware",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_S3_S3Middleware"
     },
     {
       "name": "ACM",
       "c99name": "ACM",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ACM"
     },
     {
       "name": "ACMPCA",
       "c99name": "ACMPCA",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ACMPCA"
     },
     {
       "name": "APIGateway",
       "c99name": "APIGateway",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_APIGateway"
     },
     {
       "name": "AWSBackup",
       "c99name": "AWSBackup",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AWSBackup"
     },
     {
       "name": "AWSDirectoryService",
       "c99name": "AWSDirectoryService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AWSDirectoryService"
     },
     {
       "name": "AccessAnalyzer",
       "c99name": "AccessAnalyzer",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AccessAnalyzer"
     },
     {
       "name": "AlexaForBusiness",
       "c99name": "AlexaForBusiness",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AlexaForBusiness"
     },
     {
       "name": "Amplify",
       "c99name": "Amplify",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Amplify"
     },
     {
       "name": "ApiGatewayManagementApi",
       "c99name": "ApiGatewayManagementApi",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApiGatewayManagementApi"
     },
     {
       "name": "ApiGatewayV2",
       "c99name": "ApiGatewayV2",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApiGatewayV2"
     },
     {
       "name": "AppConfig",
       "c99name": "AppConfig",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppConfig"
     },
     {
       "name": "AppMesh",
       "c99name": "AppMesh",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppMesh"
     },
     {
       "name": "AppStream",
       "c99name": "AppStream",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppStream"
     },
     {
       "name": "AppSync",
       "c99name": "AppSync",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppSync"
     },
     {
       "name": "Appflow",
       "c99name": "Appflow",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Appflow"
     },
     {
       "name": "ApplicationAutoScaling",
       "c99name": "ApplicationAutoScaling",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApplicationAutoScaling"
     },
     {
       "name": "ApplicationDiscoveryService",
       "c99name": "ApplicationDiscoveryService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApplicationDiscoveryService"
     },
     {
       "name": "ApplicationInsights",
       "c99name": "ApplicationInsights",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApplicationInsights"
     },
     {
       "name": "Athena",
       "c99name": "Athena",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Athena"
     },
     {
       "name": "AugmentedAIRuntime",
       "c99name": "AugmentedAIRuntime",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AugmentedAIRuntime"
     },
     {
       "name": "AutoScaling",
       "c99name": "AutoScaling",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AutoScaling"
     },
     {
       "name": "AutoScalingPlans",
       "c99name": "AutoScalingPlans",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AutoScalingPlans"
     },
     {
       "name": "Batch",
       "c99name": "Batch",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Batch"
     },
     {
       "name": "Braket",
       "c99name": "Braket",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Braket"
     },
     {
       "name": "Budgets",
       "c99name": "Budgets",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Budgets"
     },
     {
       "name": "Chime",
       "c99name": "Chime",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Chime"
     },
     {
       "name": "Cloud9",
       "c99name": "Cloud9",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Cloud9"
     },
     {
       "name": "CloudDirectory",
       "c99name": "CloudDirectory",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudDirectory"
     },
     {
       "name": "CloudFormation",
       "c99name": "CloudFormation",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudFormation"
     },
     {
       "name": "CloudFront",
       "c99name": "CloudFront",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudFront"
     },
     {
       "name": "CloudHSM",
       "c99name": "CloudHSM",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudHSM"
     },
     {
       "name": "CloudHSMV2",
       "c99name": "CloudHSMV2",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudHSMV2"
     },
     {
       "name": "CloudSearch",
       "c99name": "CloudSearch",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudSearch"
     },
     {
       "name": "CloudSearchDomain",
       "c99name": "CloudSearchDomain",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudSearchDomain"
     },
     {
       "name": "CloudTrail",
       "c99name": "CloudTrail",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudTrail"
     },
     {
       "name": "CloudWatch",
       "c99name": "CloudWatch",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudWatch"
     },
     {
       "name": "CloudWatchEvents",
       "c99name": "CloudWatchEvents",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudWatchEvents"
     },
     {
       "name": "CloudWatchLogs",
       "c99name": "CloudWatchLogs",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudWatchLogs"
     },
     {
       "name": "CodeArtifact",
       "c99name": "CodeArtifact",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeArtifact"
     },
     {
       "name": "CodeBuild",
       "c99name": "CodeBuild",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeBuild"
     },
     {
       "name": "CodeCommit",
       "c99name": "CodeCommit",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeCommit"
     },
     {
       "name": "CodeDeploy",
       "c99name": "CodeDeploy",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeDeploy"
     },
     {
       "name": "CodeGuruProfiler",
       "c99name": "CodeGuruProfiler",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeGuruProfiler"
     },
     {
       "name": "CodeGuruReviewer",
       "c99name": "CodeGuruReviewer",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeGuruReviewer"
     },
     {
       "name": "CodePipeline",
       "c99name": "CodePipeline",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodePipeline"
     },
     {
       "name": "CodeStar",
       "c99name": "CodeStar",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeStar"
     },
     {
       "name": "CodeStarNotifications",
       "c99name": "CodeStarNotifications",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeStarNotifications"
     },
     {
       "name": "CodeStarconnections",
       "c99name": "CodeStarconnections",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeStarconnections"
     },
     {
       "name": "CognitoIdentity",
       "c99name": "CognitoIdentity",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CognitoIdentity"
     },
     {
       "name": "CognitoIdentityProvider",
       "c99name": "CognitoIdentityProvider",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CognitoIdentityProvider"
     },
     {
       "name": "CognitoSync",
       "c99name": "CognitoSync",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CognitoSync"
     },
     {
       "name": "Comprehend",
       "c99name": "Comprehend",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Comprehend"
     },
     {
       "name": "ComprehendMedical",
       "c99name": "ComprehendMedical",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ComprehendMedical"
     },
     {
       "name": "ComputeOptimizer",
       "c99name": "ComputeOptimizer",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ComputeOptimizer"
     },
     {
       "name": "ConfigService",
       "c99name": "ConfigService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ConfigService"
     },
     {
       "name": "Connect",
       "c99name": "Connect",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Connect"
     },
     {
       "name": "ConnectParticipant",
       "c99name": "ConnectParticipant",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ConnectParticipant"
     },
     {
       "name": "CostExplorer",
       "c99name": "CostExplorer",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CostExplorer"
     },
     {
       "name": "CostandUsageReportService",
       "c99name": "CostandUsageReportService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CostandUsageReportService"
     },
     {
       "name": "DAX",
       "c99name": "DAX",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DAX"
     },
     {
       "name": "DLM",
       "c99name": "DLM",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DLM"
     },
     {
       "name": "DataExchange",
       "c99name": "DataExchange",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DataExchange"
     },
     {
       "name": "DataPipeline",
       "c99name": "DataPipeline",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DataPipeline"
     },
     {
       "name": "DataSync",
       "c99name": "DataSync",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DataSync"
     },
     {
       "name": "DatabaseMigrationService",
       "c99name": "DatabaseMigrationService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DatabaseMigrationService"
     },
     {
       "name": "Detective",
       "c99name": "Detective",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Detective"
     },
     {
       "name": "DeviceFarm",
       "c99name": "DeviceFarm",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DeviceFarm"
     },
     {
       "name": "DirectConnect",
       "c99name": "DirectConnect",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DirectConnect"
     },
     {
       "name": "DocDB",
       "c99name": "DocDB",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DocDB"
     },
     {
       "name": "DynamoDB",
       "c99name": "DynamoDB",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DynamoDB"
     },
     {
       "name": "DynamoDBStreams",
       "c99name": "DynamoDBStreams",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DynamoDBStreams"
     },
     {
       "name": "EBS",
       "c99name": "EBS",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EBS"
     },
     {
       "name": "EC2",
       "c99name": "EC2",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EC2"
     },
     {
       "name": "EC2InstanceConnect",
       "c99name": "EC2InstanceConnect",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EC2InstanceConnect"
     },
     {
       "name": "ECR",
       "c99name": "ECR",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ECR"
     },
     {
       "name": "ECS",
       "c99name": "ECS",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ECS"
     },
     {
       "name": "EFS",
       "c99name": "EFS",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EFS"
     },
     {
       "name": "EKS",
       "c99name": "EKS",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EKS"
     },
     {
       "name": "ELB",
       "c99name": "ELB",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ELB"
     },
     {
       "name": "ELBV2",
       "c99name": "ELBV2",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ELBV2"
     },
     {
       "name": "EMR",
       "c99name": "EMR",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EMR"
     },
     {
       "name": "ElastiCache",
       "c99name": "ElastiCache",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElastiCache"
     },
     {
       "name": "ElasticBeanstalk",
       "c99name": "ElasticBeanstalk",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticBeanstalk"
     },
     {
       "name": "ElasticInference",
       "c99name": "ElasticInference",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticInference"
     },
     {
       "name": "ElasticTranscoder",
       "c99name": "ElasticTranscoder",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticTranscoder"
     },
     {
       "name": "ElasticsearchService",
       "c99name": "ElasticsearchService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticsearchService"
     },
     {
       "name": "EventBridge",
       "c99name": "EventBridge",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EventBridge"
     },
     {
       "name": "FMS",
       "c99name": "FMS",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_FMS"
     },
     {
       "name": "FSx",
       "c99name": "FSx",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_FSx"
     },
     {
       "name": "Firehose",
       "c99name": "Firehose",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Firehose"
     },
     {
       "name": "ForecastQueryService",
       "c99name": "ForecastQueryService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ForecastQueryService"
     },
     {
       "name": "ForecastService",
       "c99name": "ForecastService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ForecastService"
     },
     {
       "name": "FraudDetector",
       "c99name": "FraudDetector",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_FraudDetector"
     },
     {
       "name": "GameLift",
       "c99name": "GameLift",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GameLift"
     },
     {
       "name": "Glacier",
       "c99name": "Glacier",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Glacier"
     },
     {
       "name": "GlobalAccelerator",
       "c99name": "GlobalAccelerator",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GlobalAccelerator"
     },
     {
       "name": "Glue",
       "c99name": "Glue",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Glue"
     },
     {
       "name": "Greengrass",
       "c99name": "Greengrass",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Greengrass"
     },
     {
       "name": "GroundStation",
       "c99name": "GroundStation",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GroundStation"
     },
     {
       "name": "GuardDuty",
       "c99name": "GuardDuty",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GuardDuty"
     },
     {
       "name": "Health",
       "c99name": "Health",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Health"
     },
     {
       "name": "Honeycode",
       "c99name": "Honeycode",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Honeycode"
     },
     {
       "name": "IAM",
       "c99name": "IAM",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IAM"
     },
     {
       "name": "IVS",
       "c99name": "IVS",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IVS"
     },
     {
       "name": "IdentityStore",
       "c99name": "IdentityStore",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IdentityStore"
     },
     {
       "name": "Imagebuilder",
       "c99name": "Imagebuilder",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Imagebuilder"
     },
     {
       "name": "ImportExport",
       "c99name": "ImportExport",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ImportExport"
     },
     {
       "name": "Inspector",
       "c99name": "Inspector",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Inspector"
     },
     {
       "name": "IoT",
       "c99name": "IoT",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoT"
     },
     {
       "name": "IoT1ClickDevicesService",
       "c99name": "IoT1ClickDevicesService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoT1ClickDevicesService"
     },
     {
       "name": "IoT1ClickProjects",
       "c99name": "IoT1ClickProjects",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoT1ClickProjects"
     },
     {
       "name": "IoTAnalytics",
       "c99name": "IoTAnalytics",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTAnalytics"
     },
     {
       "name": "IoTDataPlane",
       "c99name": "IoTDataPlane",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTDataPlane"
     },
     {
       "name": "IoTEvents",
       "c99name": "IoTEvents",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTEvents"
     },
     {
       "name": "IoTEventsData",
       "c99name": "IoTEventsData",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTEventsData"
     },
     {
       "name": "IoTJobsDataPlane",
       "c99name": "IoTJobsDataPlane",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTJobsDataPlane"
     },
     {
       "name": "IoTSecureTunneling",
       "c99name": "IoTSecureTunneling",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTSecureTunneling"
     },
     {
       "name": "IoTSiteWise",
       "c99name": "IoTSiteWise",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTSiteWise"
     },
     {
       "name": "IoTThingsGraph",
       "c99name": "IoTThingsGraph",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTThingsGraph"
     },
     {
       "name": "KMS",
       "c99name": "KMS",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KMS"
     },
     {
       "name": "Kafka",
       "c99name": "Kafka",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Kafka"
     },
     {
       "name": "Kendra",
       "c99name": "Kendra",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Kendra"
     },
     {
       "name": "Kinesis",
       "c99name": "Kinesis",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Kinesis"
     },
     {
       "name": "KinesisAnalytics",
       "c99name": "KinesisAnalytics",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisAnalytics"
     },
     {
       "name": "KinesisAnalyticsV2",
       "c99name": "KinesisAnalyticsV2",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisAnalyticsV2"
     },
     {
       "name": "KinesisVideo",
       "c99name": "KinesisVideo",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideo"
     },
     {
       "name": "KinesisVideoArchivedMedia",
       "c99name": "KinesisVideoArchivedMedia",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideoArchivedMedia"
     },
     {
       "name": "KinesisVideoMedia",
       "c99name": "KinesisVideoMedia",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideoMedia"
     },
     {
       "name": "KinesisVideoSignalingChannels",
       "c99name": "KinesisVideoSignalingChannels",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideoSignalingChannels"
     },
     {
       "name": "LakeFormation",
       "c99name": "LakeFormation",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LakeFormation"
     },
     {
       "name": "Lambda",
       "c99name": "Lambda",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Lambda"
     },
     {
       "name": "LexModelBuildingService",
       "c99name": "LexModelBuildingService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LexModelBuildingService"
     },
     {
       "name": "LexRuntimeService",
       "c99name": "LexRuntimeService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LexRuntimeService"
     },
     {
       "name": "LicenseManager",
       "c99name": "LicenseManager",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LicenseManager"
     },
     {
       "name": "Lightsail",
       "c99name": "Lightsail",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Lightsail"
     },
     {
       "name": "MQ",
       "c99name": "MQ",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MQ"
     },
     {
       "name": "MTurk",
       "c99name": "MTurk",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MTurk"
     },
     {
       "name": "MachineLearning",
       "c99name": "MachineLearning",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MachineLearning"
     },
     {
       "name": "Macie",
       "c99name": "Macie",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Macie"
     },
     {
       "name": "Macie2",
       "c99name": "Macie2",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Macie2"
     },
     {
       "name": "ManagedBlockchain",
       "c99name": "ManagedBlockchain",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ManagedBlockchain"
     },
     {
       "name": "MarketplaceCatalog",
       "c99name": "MarketplaceCatalog",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceCatalog"
     },
     {
       "name": "MarketplaceCommerceAnalytics",
       "c99name": "MarketplaceCommerceAnalytics",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceCommerceAnalytics"
     },
     {
       "name": "MarketplaceEntitlementService",
       "c99name": "MarketplaceEntitlementService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceEntitlementService"
     },
     {
       "name": "MarketplaceMetering",
       "c99name": "MarketplaceMetering",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceMetering"
     },
     {
       "name": "MediaConnect",
       "c99name": "MediaConnect",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaConnect"
     },
     {
       "name": "MediaConvert",
       "c99name": "MediaConvert",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaConvert"
     },
     {
       "name": "MediaLive",
       "c99name": "MediaLive",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaLive"
     },
     {
       "name": "MediaPackage",
       "c99name": "MediaPackage",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaPackage"
     },
     {
       "name": "MediaPackageVod",
       "c99name": "MediaPackageVod",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaPackageVod"
     },
     {
       "name": "MediaStore",
       "c99name": "MediaStore",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaStore"
     },
     {
       "name": "MediaStoreData",
       "c99name": "MediaStoreData",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaStoreData"
     },
     {
       "name": "MediaTailor",
       "c99name": "MediaTailor",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaTailor"
     },
     {
       "name": "MigrationHub",
       "c99name": "MigrationHub",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MigrationHub"
     },
     {
       "name": "MigrationHubConfig",
       "c99name": "MigrationHubConfig",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MigrationHubConfig"
     },
     {
       "name": "Mobile",
       "c99name": "Mobile",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Mobile"
     },
     {
       "name": "MobileAnalytics",
       "c99name": "MobileAnalytics",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MobileAnalytics"
     },
     {
       "name": "Neptune",
       "c99name": "Neptune",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Neptune"
     },
     {
       "name": "NetworkManager",
       "c99name": "NetworkManager",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_NetworkManager"
     },
     {
       "name": "OpsWorks",
       "c99name": "OpsWorks",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_OpsWorks"
     },
     {
       "name": "OpsWorksCM",
       "c99name": "OpsWorksCM",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_OpsWorksCM"
     },
     {
       "name": "Organizations",
       "c99name": "Organizations",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Organizations"
     },
     {
       "name": "Outposts",
       "c99name": "Outposts",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Outposts"
     },
     {
       "name": "PI",
       "c99name": "PI",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PI"
     },
     {
       "name": "Personalize",
       "c99name": "Personalize",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Personalize"
     },
     {
       "name": "PersonalizeEvents",
       "c99name": "PersonalizeEvents",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PersonalizeEvents"
     },
     {
       "name": "PersonalizeRuntime",
       "c99name": "PersonalizeRuntime",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PersonalizeRuntime"
     },
     {
       "name": "Pinpoint",
       "c99name": "Pinpoint",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Pinpoint"
     },
     {
       "name": "PinpointEmail",
       "c99name": "PinpointEmail",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PinpointEmail"
     },
     {
       "name": "PinpointSMSVoice",
       "c99name": "PinpointSMSVoice",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PinpointSMSVoice"
     },
     {
       "name": "Polly",
       "c99name": "Polly",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Polly"
     },
     {
       "name": "Pricing",
       "c99name": "Pricing",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Pricing"
     },
     {
       "name": "QLDB",
       "c99name": "QLDB",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_QLDB"
     },
     {
       "name": "QLDBSession",
       "c99name": "QLDBSession",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_QLDBSession"
     },
     {
       "name": "QuickSight",
       "c99name": "QuickSight",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_QuickSight"
     },
     {
       "name": "RAM",
       "c99name": "RAM",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RAM"
     },
     {
       "name": "RDS",
       "c99name": "RDS",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RDS"
     },
     {
       "name": "RDSDataService",
       "c99name": "RDSDataService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RDSDataService"
     },
     {
       "name": "Redshift",
       "c99name": "Redshift",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Redshift"
     },
     {
       "name": "RedshiftDataAPIService",
       "c99name": "RedshiftDataAPIService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RedshiftDataAPIService"
     },
     {
       "name": "Rekognition",
       "c99name": "Rekognition",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Rekognition"
     },
     {
       "name": "ResourceGroups",
       "c99name": "ResourceGroups",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ResourceGroups"
     },
     {
       "name": "ResourceGroupsTaggingAPI",
       "c99name": "ResourceGroupsTaggingAPI",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ResourceGroupsTaggingAPI"
     },
     {
       "name": "RoboMaker",
       "c99name": "RoboMaker",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RoboMaker"
     },
     {
       "name": "Route53",
       "c99name": "Route53",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Route53"
     },
     {
       "name": "Route53Domains",
       "c99name": "Route53Domains",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Route53Domains"
     },
     {
       "name": "Route53Resolver",
       "c99name": "Route53Resolver",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Route53Resolver"
     },
     {
       "name": "S3",
       "c99name": "S3",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_S3"
     },
     {
       "name": "S3Control",
       "c99name": "S3Control",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_S3Control"
     },
     {
       "name": "SES",
       "c99name": "SES",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SES"
     },
     {
       "name": "SESV2",
       "c99name": "SESV2",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SESV2"
     },
     {
       "name": "SFN",
       "c99name": "SFN",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SFN"
     },
     {
       "name": "SMS",
       "c99name": "SMS",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SMS"
     },
     {
       "name": "SNS",
       "c99name": "SNS",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SNS"
     },
     {
       "name": "SQS",
       "c99name": "SQS",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SQS"
     },
     {
       "name": "SSM",
       "c99name": "SSM",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSM"
     },
     {
       "name": "SSO",
       "c99name": "SSO",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSO"
     },
     {
       "name": "SSOAdmin",
       "c99name": "SSOAdmin",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSOAdmin"
     },
     {
       "name": "SSOOIDC",
       "c99name": "SSOOIDC",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSOOIDC"
     },
     {
       "name": "STS",
       "c99name": "STS",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_STS"
     },
     {
       "name": "SWF",
       "c99name": "SWF",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SWF"
     },
     {
       "name": "SageMaker",
       "c99name": "SageMaker",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SageMaker"
     },
     {
       "name": "SageMakerRuntime",
       "c99name": "SageMakerRuntime",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SageMakerRuntime"
     },
     {
       "name": "SavingsPlans",
       "c99name": "SavingsPlans",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SavingsPlans"
     },
     {
       "name": "Schemas",
       "c99name": "Schemas",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Schemas"
     },
     {
       "name": "SecretsManager",
       "c99name": "SecretsManager",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SecretsManager"
     },
     {
       "name": "SecurityHub",
       "c99name": "SecurityHub",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SecurityHub"
     },
     {
       "name": "ServerlessApplicationRepository",
       "c99name": "ServerlessApplicationRepository",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServerlessApplicationRepository"
     },
     {
       "name": "ServiceCatalog",
       "c99name": "ServiceCatalog",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServiceCatalog"
     },
     {
       "name": "ServiceDiscovery",
       "c99name": "ServiceDiscovery",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServiceDiscovery"
     },
     {
       "name": "ServiceQuotas",
       "c99name": "ServiceQuotas",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServiceQuotas"
     },
     {
       "name": "Shield",
       "c99name": "Shield",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Shield"
     },
     {
       "name": "Signer",
       "c99name": "Signer",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Signer"
     },
     {
       "name": "SimpleDB",
       "c99name": "SimpleDB",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SimpleDB"
     },
     {
       "name": "Snowball",
       "c99name": "Snowball",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Snowball"
     },
     {
       "name": "StorageGateway",
       "c99name": "StorageGateway",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_StorageGateway"
     },
     {
       "name": "Support",
       "c99name": "Support",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Support"
     },
     {
       "name": "Synthetics",
       "c99name": "Synthetics",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Synthetics"
     },
     {
       "name": "Textract",
       "c99name": "Textract",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Textract"
     },
     {
       "name": "TranscribeService",
       "c99name": "TranscribeService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_TranscribeService"
     },
     {
       "name": "TranscribeStreamingService",
       "c99name": "TranscribeStreamingService",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_TranscribeStreamingService"
     },
     {
       "name": "Transfer",
       "c99name": "Transfer",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Transfer"
     },
     {
       "name": "Translate",
       "c99name": "Translate",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Translate"
     },
     {
       "name": "WAF",
       "c99name": "WAF",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WAF"
     },
     {
       "name": "WAFRegional",
       "c99name": "WAFRegional",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WAFRegional"
     },
     {
       "name": "WAFV2",
       "c99name": "WAFV2",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WAFV2"
     },
     {
       "name": "WorkDocs",
       "c99name": "WorkDocs",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkDocs"
     },
     {
       "name": "WorkLink",
       "c99name": "WorkLink",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkLink"
     },
     {
       "name": "WorkMail",
       "c99name": "WorkMail",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkMail"
     },
     {
       "name": "WorkMailMessageFlow",
       "c99name": "WorkMailMessageFlow",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkMailMessageFlow"
     },
     {
       "name": "WorkSpaces",
       "c99name": "WorkSpaces",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkSpaces"
     },
     {
       "name": "XRay",
       "c99name": "XRay",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_XRay"
     },
     {
       "name": "AWSSDKSwiftTests",
       "c99name": "AWSSDKSwiftTests",
+      "src_type": "swift",
       "label": "@swiftpkg_soto//:Tests_AWSSDKSwiftTests"
     },
     {
       "name": "AWSSDKSwiftCore",
       "c99name": "AWSSDKSwiftCore",
+      "src_type": "swift",
       "label": "@swiftpkg_soto_core//:Sources_AWSSDKSwiftCore"
     },
     {
       "name": "AWSSDKSwiftCoreTests",
       "c99name": "AWSSDKSwiftCoreTests",
+      "src_type": "swift",
       "label": "@swiftpkg_soto_core//:Tests_AWSSDKSwiftCoreTests"
     },
     {
       "name": "Spectre",
       "c99name": "Spectre",
+      "src_type": "swift",
       "label": "@swiftpkg_spectre//:Sources_Spectre"
     },
     {
       "name": "SpectreTests",
       "c99name": "SpectreTests",
+      "src_type": "swift",
       "label": "@swiftpkg_spectre//:Tests_SpectreTests"
     },
     {
       "name": "SQLKit",
       "c99name": "SQLKit",
+      "src_type": "swift",
       "label": "@swiftpkg_sql_kit//:Sources_SQLKit"
     },
     {
       "name": "SQLKitBenchmark",
       "c99name": "SQLKitBenchmark",
+      "src_type": "swift",
       "label": "@swiftpkg_sql_kit//:Sources_SQLKitBenchmark"
     },
     {
       "name": "SQLKitTests",
       "c99name": "SQLKitTests",
+      "src_type": "swift",
       "label": "@swiftpkg_sql_kit//:Tests_SQLKitTests"
     },
     {
       "name": "Algorithms",
       "c99name": "Algorithms",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_algorithms//:Sources_Algorithms"
     },
     {
       "name": "SwiftAlgorithmsTests",
       "c99name": "SwiftAlgorithmsTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_algorithms//:Tests_SwiftAlgorithmsTests"
     },
     {
       "name": "count-lines",
       "c99name": "count_lines",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Examples_count-lines"
     },
     {
       "name": "math",
       "c99name": "math",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Examples_math"
     },
     {
       "name": "repeat",
       "c99name": "repeat",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Examples_repeat"
     },
     {
       "name": "roll",
       "c99name": "roll",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Examples_roll"
     },
     {
       "name": "GenerateManual",
       "c99name": "GenerateManual",
+      "src_type": "unknown",
       "label": "@swiftpkg_swift_argument_parser//:Plugins_GenerateManual"
     },
     {
       "name": "ArgumentParser",
       "c99name": "ArgumentParser",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser"
     },
     {
       "name": "ArgumentParserTestHelpers",
       "c99name": "ArgumentParserTestHelpers",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserTestHelpers"
     },
     {
       "name": "ArgumentParserToolInfo",
       "c99name": "ArgumentParserToolInfo",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserToolInfo"
     },
     {
       "name": "ArgumentParserEndToEndTests",
       "c99name": "ArgumentParserEndToEndTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserEndToEndTests"
     },
     {
       "name": "ArgumentParserExampleTests",
       "c99name": "ArgumentParserExampleTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserExampleTests"
     },
     {
       "name": "ArgumentParserGenerateManualTests",
       "c99name": "ArgumentParserGenerateManualTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserGenerateManualTests"
     },
     {
       "name": "ArgumentParserPackageManagerTests",
       "c99name": "ArgumentParserPackageManagerTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserPackageManagerTests"
     },
     {
       "name": "ArgumentParserUnitTests",
       "c99name": "ArgumentParserUnitTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserUnitTests"
     },
     {
       "name": "changelog-authors",
       "c99name": "changelog_authors",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Tools_changelog-authors"
     },
     {
       "name": "generate-manual",
       "c99name": "generate_manual",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Tools_generate-manual"
     },
     {
       "name": "Atomics",
       "c99name": "Atomics",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_atomics//:Sources_Atomics"
     },
     {
       "name": "_AtomicsShims",
       "c99name": "_AtomicsShims",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_atomics//:Sources__AtomicsShims"
     },
     {
       "name": "AtomicsTests",
       "c99name": "AtomicsTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_atomics//:Tests_AtomicsTests"
     },
     {
       "name": "Backtrace",
       "c99name": "Backtrace",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_backtrace//:Sources_Backtrace"
     },
     {
       "name": "CBacktrace",
       "c99name": "CBacktrace",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_backtrace//:Sources_CBacktrace"
     },
     {
       "name": "Sample",
       "c99name": "Sample",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_backtrace//:Sources_Sample"
     },
     {
       "name": "BacktraceTests",
       "c99name": "BacktraceTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_backtrace//:Tests_BacktraceTests"
     },
     {
       "name": "Collections",
       "c99name": "Collections",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_collections//:Sources_Collections"
     },
     {
       "name": "DequeModule",
       "c99name": "DequeModule",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_collections//:Sources_DequeModule"
     },
     {
       "name": "OrderedCollections",
       "c99name": "OrderedCollections",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_collections//:Sources_OrderedCollections"
     },
     {
       "name": "_CollectionsTestSupport",
       "c99name": "_CollectionsTestSupport",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_collections//:Sources__CollectionsTestSupport"
     },
     {
       "name": "CollectionsTestSupportTests",
       "c99name": "CollectionsTestSupportTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_collections//:Tests_CollectionsTestSupportTests"
     },
     {
       "name": "DequeTests",
       "c99name": "DequeTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_collections//:Tests_DequeTests"
     },
     {
       "name": "OrderedCollectionsTests",
       "c99name": "OrderedCollectionsTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_collections//:Tests_OrderedCollectionsTests"
     },
     {
       "name": "CCryptoBoringSSL",
       "c99name": "CCryptoBoringSSL",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_crypto//:Sources_CCryptoBoringSSL"
     },
     {
       "name": "CCryptoBoringSSLShims",
       "c99name": "CCryptoBoringSSLShims",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_crypto//:Sources_CCryptoBoringSSLShims"
     },
     {
       "name": "Crypto",
       "c99name": "Crypto",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_crypto//:Sources_Crypto"
     },
     {
       "name": "CryptoBoringWrapper",
       "c99name": "CryptoBoringWrapper",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_crypto//:Sources_CryptoBoringWrapper"
     },
     {
       "name": "_CryptoExtras",
       "c99name": "_CryptoExtras",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_crypto//:Sources__CryptoExtras"
     },
     {
       "name": "crypto-shasum",
       "c99name": "crypto_shasum",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_crypto//:Sources_crypto-shasum"
     },
     {
       "name": "CryptoTests",
       "c99name": "CryptoTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_crypto//:Tests_CryptoTests"
     },
     {
       "name": "_CryptoExtrasTests",
       "c99name": "_CryptoExtrasTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_crypto//:Tests__CryptoExtrasTests"
     },
     {
       "name": "Logging",
       "c99name": "Logging",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_log//:Sources_Logging"
     },
     {
       "name": "LoggingTests",
       "c99name": "LoggingTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_log//:Tests_LoggingTests"
     },
     {
       "name": "CoreMetrics",
       "c99name": "CoreMetrics",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_metrics//:Sources_CoreMetrics"
     },
     {
       "name": "Metrics",
       "c99name": "Metrics",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_metrics//:Sources_Metrics"
     },
     {
       "name": "MetricsTestKit",
       "c99name": "MetricsTestKit",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_metrics//:Sources_MetricsTestKit"
     },
     {
       "name": "MetricsTests",
       "c99name": "MetricsTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_metrics//:Tests_MetricsTests"
     },
     {
       "name": "CNIOAtomics",
       "c99name": "CNIOAtomics",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio//:Sources_CNIOAtomics"
     },
     {
       "name": "CNIODarwin",
       "c99name": "CNIODarwin",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio//:Sources_CNIODarwin"
     },
     {
       "name": "CNIOLLHTTP",
       "c99name": "CNIOLLHTTP",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio//:Sources_CNIOLLHTTP"
     },
     {
       "name": "CNIOLinux",
       "c99name": "CNIOLinux",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio//:Sources_CNIOLinux"
     },
     {
       "name": "CNIOSHA1",
       "c99name": "CNIOSHA1",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio//:Sources_CNIOSHA1"
     },
     {
       "name": "CNIOWindows",
       "c99name": "CNIOWindows",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio//:Sources_CNIOWindows"
     },
     {
       "name": "NIO",
       "c99name": "NIO",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIO"
     },
     {
       "name": "NIOAsyncAwaitDemo",
       "c99name": "NIOAsyncAwaitDemo",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOAsyncAwaitDemo"
     },
     {
       "name": "NIOChatClient",
       "c99name": "NIOChatClient",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOChatClient"
     },
     {
       "name": "NIOChatServer",
       "c99name": "NIOChatServer",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOChatServer"
     },
     {
       "name": "NIOConcurrencyHelpers",
       "c99name": "NIOConcurrencyHelpers",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOConcurrencyHelpers"
     },
     {
       "name": "NIOCore",
       "c99name": "NIOCore",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOCore"
     },
     {
       "name": "NIOCrashTester",
       "c99name": "NIOCrashTester",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOCrashTester"
     },
     {
       "name": "NIOEchoClient",
       "c99name": "NIOEchoClient",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOEchoClient"
     },
     {
       "name": "NIOEchoServer",
       "c99name": "NIOEchoServer",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOEchoServer"
     },
     {
       "name": "NIOEmbedded",
       "c99name": "NIOEmbedded",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOEmbedded"
     },
     {
       "name": "NIOFoundationCompat",
       "c99name": "NIOFoundationCompat",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOFoundationCompat"
     },
     {
       "name": "NIOHTTP1",
       "c99name": "NIOHTTP1",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1"
     },
     {
       "name": "NIOHTTP1Client",
       "c99name": "NIOHTTP1Client",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1Client"
     },
     {
       "name": "NIOHTTP1Server",
       "c99name": "NIOHTTP1Server",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1Server"
     },
     {
       "name": "NIOMulticastChat",
       "c99name": "NIOMulticastChat",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOMulticastChat"
     },
     {
       "name": "NIOPerformanceTester",
       "c99name": "NIOPerformanceTester",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOPerformanceTester"
     },
     {
       "name": "NIOPosix",
       "c99name": "NIOPosix",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOPosix"
     },
     {
       "name": "NIOTLS",
       "c99name": "NIOTLS",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOTLS"
     },
     {
       "name": "NIOTestUtils",
       "c99name": "NIOTestUtils",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOTestUtils"
     },
     {
       "name": "NIOUDPEchoClient",
       "c99name": "NIOUDPEchoClient",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOUDPEchoClient"
     },
     {
       "name": "NIOUDPEchoServer",
       "c99name": "NIOUDPEchoServer",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOUDPEchoServer"
     },
     {
       "name": "NIOWebSocket",
       "c99name": "NIOWebSocket",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocket"
     },
     {
       "name": "NIOWebSocketClient",
       "c99name": "NIOWebSocketClient",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocketClient"
     },
     {
       "name": "NIOWebSocketServer",
       "c99name": "NIOWebSocketServer",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocketServer"
     },
     {
       "name": "_NIOConcurrency",
       "c99name": "_NIOConcurrency",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources__NIOConcurrency"
     },
     {
       "name": "_NIODataStructures",
       "c99name": "_NIODataStructures",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources__NIODataStructures"
     },
     {
       "name": "NIOConcurrencyHelpersTests",
       "c99name": "NIOConcurrencyHelpersTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOConcurrencyHelpersTests"
     },
     {
       "name": "NIOCoreTests",
       "c99name": "NIOCoreTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOCoreTests"
     },
     {
       "name": "NIODataStructuresTests",
       "c99name": "NIODataStructuresTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIODataStructuresTests"
     },
     {
       "name": "NIOEmbeddedTests",
       "c99name": "NIOEmbeddedTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOEmbeddedTests"
     },
     {
       "name": "NIOFoundationCompatTests",
       "c99name": "NIOFoundationCompatTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOFoundationCompatTests"
     },
     {
       "name": "NIOHTTP1Tests",
       "c99name": "NIOHTTP1Tests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOHTTP1Tests"
     },
     {
       "name": "NIOPosixTests",
       "c99name": "NIOPosixTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOPosixTests"
     },
     {
       "name": "NIOTLSTests",
       "c99name": "NIOTLSTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOTLSTests"
     },
     {
       "name": "NIOTestUtilsTests",
       "c99name": "NIOTestUtilsTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOTestUtilsTests"
     },
     {
       "name": "NIOTests",
       "c99name": "NIOTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOTests"
     },
     {
       "name": "NIOWebSocketTests",
       "c99name": "NIOWebSocketTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Tests_NIOWebSocketTests"
     },
     {
       "name": "CNIOExtrasZlib",
       "c99name": "CNIOExtrasZlib",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio_extras//:Sources_CNIOExtrasZlib"
     },
     {
       "name": "HTTPServerWithQuiescingDemo",
       "c99name": "HTTPServerWithQuiescingDemo",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_extras//:Sources_HTTPServerWithQuiescingDemo"
     },
     {
       "name": "NIOExtras",
       "c99name": "NIOExtras",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_extras//:Sources_NIOExtras"
     },
     {
       "name": "NIOExtrasPerformanceTester",
       "c99name": "NIOExtrasPerformanceTester",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_extras//:Sources_NIOExtrasPerformanceTester"
     },
     {
       "name": "NIOHTTPCompression",
       "c99name": "NIOHTTPCompression",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPCompression"
     },
     {
       "name": "NIOSOCKS",
       "c99name": "NIOSOCKS",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKS"
     },
     {
       "name": "NIOSOCKSClient",
       "c99name": "NIOSOCKSClient",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKSClient"
     },
     {
       "name": "NIOWritePCAPDemo",
       "c99name": "NIOWritePCAPDemo",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_extras//:Sources_NIOWritePCAPDemo"
     },
     {
       "name": "NIOWritePartialPCAPDemo",
       "c99name": "NIOWritePartialPCAPDemo",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_extras//:Sources_NIOWritePartialPCAPDemo"
     },
     {
       "name": "NIOExtrasTests",
       "c99name": "NIOExtrasTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_extras//:Tests_NIOExtrasTests"
     },
     {
       "name": "NIOHTTPCompressionTests",
       "c99name": "NIOHTTPCompressionTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_extras//:Tests_NIOHTTPCompressionTests"
     },
     {
       "name": "NIOSOCKSTests",
       "c99name": "NIOSOCKSTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_extras//:Tests_NIOSOCKSTests"
     },
     {
       "name": "NIOHPACK",
       "c99name": "NIOHPACK",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHPACK"
     },
     {
       "name": "NIOHTTP2",
       "c99name": "NIOHTTP2",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2"
     },
     {
       "name": "NIOHTTP2PerformanceTester",
       "c99name": "NIOHTTP2PerformanceTester",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2PerformanceTester"
     },
     {
       "name": "NIOHTTP2Server",
       "c99name": "NIOHTTP2Server",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2Server"
     },
     {
       "name": "NIOHPACKTests",
       "c99name": "NIOHPACKTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_http2//:Tests_NIOHPACKTests"
     },
     {
       "name": "NIOHTTP2Tests",
       "c99name": "NIOHTTP2Tests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_http2//:Tests_NIOHTTP2Tests"
     },
     {
       "name": "CNIOBoringSSL",
       "c99name": "CNIOBoringSSL",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio_ssl//:Sources_CNIOBoringSSL"
     },
     {
       "name": "CNIOBoringSSLShims",
       "c99name": "CNIOBoringSSLShims",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_nio_ssl//:Sources_CNIOBoringSSLShims"
     },
     {
       "name": "NIOSSL",
       "c99name": "NIOSSL",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOSSL"
     },
     {
       "name": "NIOSSLHTTP1Client",
       "c99name": "NIOSSLHTTP1Client",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLHTTP1Client"
     },
     {
       "name": "NIOSSLPerformanceTester",
       "c99name": "NIOSSLPerformanceTester",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLPerformanceTester"
     },
     {
       "name": "NIOTLSServer",
       "c99name": "NIOTLSServer",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOTLSServer"
     },
     {
       "name": "NIOSSLTests",
       "c99name": "NIOSSLTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_ssl//:Tests_NIOSSLTests"
     },
     {
       "name": "NIOTSHTTPClient",
       "c99name": "NIOTSHTTPClient",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_transport_services//:Sources_NIOTSHTTPClient"
     },
     {
       "name": "NIOTSHTTPServer",
       "c99name": "NIOTSHTTPServer",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_transport_services//:Sources_NIOTSHTTPServer"
     },
     {
       "name": "NIOTransportServices",
       "c99name": "NIOTransportServices",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_transport_services//:Sources_NIOTransportServices"
     },
     {
       "name": "NIOTransportServicesTests",
       "c99name": "NIOTransportServicesTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_nio_transport_services//:Tests_NIOTransportServicesTests"
     },
     {
       "name": "ComplexModule",
       "c99name": "ComplexModule",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_numerics//:Sources_ComplexModule"
     },
     {
       "name": "Numerics",
       "c99name": "Numerics",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_numerics//:Sources_Numerics"
     },
     {
       "name": "RealModule",
       "c99name": "RealModule",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_numerics//:Sources_RealModule"
     },
     {
       "name": "_NumericsShims",
       "c99name": "_NumericsShims",
+      "src_type": "clang",
       "label": "@swiftpkg_swift_numerics//:Sources__NumericsShims"
     },
     {
       "name": "_TestSupport",
       "c99name": "_TestSupport",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_numerics//:Sources__TestSupport"
     },
     {
       "name": "ComplexTests",
       "c99name": "ComplexTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_numerics//:Tests_ComplexTests"
     },
     {
       "name": "ComplexLog",
       "c99name": "ComplexLog",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_numerics//:Tests_Executable_ComplexLog"
     },
     {
       "name": "ComplexLog1p",
       "c99name": "ComplexLog1p",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_numerics//:Tests_Executable_ComplexLog1p"
     },
     {
       "name": "RealTests",
       "c99name": "RealTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_numerics//:Tests_RealTests"
     },
     {
       "name": "SwiftProtobufPlugin",
       "c99name": "SwiftProtobufPlugin",
+      "src_type": "unknown",
       "label": "@swiftpkg_swift_protobuf//:Plugins_SwiftProtobufPlugin"
     },
     {
       "name": "Conformance",
       "c99name": "Conformance",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_protobuf//:Sources_Conformance"
     },
     {
       "name": "SwiftProtobuf",
       "c99name": "SwiftProtobuf",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_protobuf//:Sources_SwiftProtobuf"
     },
     {
       "name": "SwiftProtobufPluginLibrary",
       "c99name": "SwiftProtobufPluginLibrary",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_protobuf//:Sources_SwiftProtobufPluginLibrary"
     },
     {
       "name": "protoc-gen-swift",
       "c99name": "protoc_gen_swift",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_protobuf//:Sources_protoc-gen-swift"
     },
     {
       "name": "SwiftProtobufPluginLibraryTests",
       "c99name": "SwiftProtobufPluginLibraryTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_protobuf//:Tests_SwiftProtobufPluginLibraryTests"
     },
     {
       "name": "SwiftProtobufTests",
       "c99name": "SwiftProtobufTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_protobuf//:Tests_SwiftProtobufTests"
     },
     {
       "name": "CVaporBcrypt",
       "c99name": "CVaporBcrypt",
+      "src_type": "clang",
       "label": "@swiftpkg_vapor//:Sources_CVaporBcrypt"
     },
     {
       "name": "CVaporURLParser",
       "c99name": "CVaporURLParser",
+      "src_type": "clang",
       "label": "@swiftpkg_vapor//:Sources_CVaporURLParser"
     },
     {
       "name": "Development",
       "c99name": "Development",
+      "src_type": "swift",
       "label": "@swiftpkg_vapor//:Sources_Development"
     },
     {
       "name": "Vapor",
       "c99name": "Vapor",
+      "src_type": "swift",
       "label": "@swiftpkg_vapor//:Sources_Vapor"
     },
     {
       "name": "XCTVapor",
       "c99name": "XCTVapor",
+      "src_type": "swift",
       "label": "@swiftpkg_vapor//:Sources_XCTVapor"
     },
     {
       "name": "AsyncTests",
       "c99name": "AsyncTests",
+      "src_type": "swift",
       "label": "@swiftpkg_vapor//:Tests_AsyncTests"
     },
     {
       "name": "VaporTests",
       "c99name": "VaporTests",
+      "src_type": "swift",
       "label": "@swiftpkg_vapor//:Tests_VaporTests"
     },
     {
       "name": "WebSocketKit",
       "c99name": "WebSocketKit",
+      "src_type": "swift",
       "label": "@swiftpkg_websocket_kit//:Sources_WebSocketKit"
     },
     {
       "name": "WebSocketKitTests",
       "c99name": "WebSocketKitTests",
+      "src_type": "swift",
       "label": "@swiftpkg_websocket_kit//:Tests_WebSocketKitTests"
     },
     {
       "name": "XCLogParser",
       "c99name": "XCLogParser",
+      "src_type": "swift",
       "label": "@swiftpkg_xclogparser//:Sources_XCLogParser"
     },
     {
       "name": "XCLogParserApp",
       "c99name": "XCLogParserApp",
+      "src_type": "swift",
       "label": "@swiftpkg_xclogparser//:Sources_XCLogParserApp"
     },
     {
       "name": "XcodeHasher",
       "c99name": "XcodeHasher",
+      "src_type": "swift",
       "label": "@swiftpkg_xclogparser//:Sources_XcodeHasher"
     },
     {
       "name": "XCLogParserTests",
       "c99name": "XCLogParserTests",
+      "src_type": "swift",
       "label": "@swiftpkg_xclogparser//:Tests_XCLogParserTests"
     },
     {
       "name": "XCMetricsApp",
       "c99name": "XCMetricsApp",
+      "src_type": "swift",
       "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsApp"
     },
     {
       "name": "XCMetricsBackend",
       "c99name": "XCMetricsBackend",
+      "src_type": "swift",
       "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsBackend"
     },
     {
       "name": "XCMetricsBackendLib",
       "c99name": "XCMetricsBackendLib",
+      "src_type": "swift",
       "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsBackendLib"
     },
     {
       "name": "XCMetricsClient",
       "c99name": "XCMetricsClient",
+      "src_type": "swift",
       "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsClient"
     },
     {
       "name": "XCMetricsCommon",
       "c99name": "XCMetricsCommon",
+      "src_type": "swift",
       "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsCommon"
     },
     {
       "name": "XCMetricsPlugins",
       "c99name": "XCMetricsPlugins",
+      "src_type": "swift",
       "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsPlugins"
     },
     {
       "name": "XCMetricsProto",
       "c99name": "XCMetricsProto",
+      "src_type": "swift",
       "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsProto"
     },
     {
       "name": "XCMetricsUtils",
       "c99name": "XCMetricsUtils",
+      "src_type": "swift",
       "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsUtils"
     },
     {
       "name": "XCMetricsBackendLibTests",
       "c99name": "XCMetricsBackendLibTests",
+      "src_type": "swift",
       "label": "@swiftpkg_xcmetrics//:Tests_XCMetricsBackendLibTests"
     },
     {
       "name": "XCMetricsPluginsTests",
       "c99name": "XCMetricsPluginsTests",
+      "src_type": "swift",
       "label": "@swiftpkg_xcmetrics//:Tests_XCMetricsPluginsTests"
     },
     {
       "name": "XCMetricsTests",
       "c99name": "XCMetricsTests",
+      "src_type": "swift",
       "label": "@swiftpkg_xcmetrics//:Tests_XCMetricsTests"
     },
     {
       "name": "CYaml",
       "c99name": "CYaml",
+      "src_type": "clang",
       "label": "@swiftpkg_yams//:Sources_CYaml"
     },
     {
       "name": "Yams",
       "c99name": "Yams",
+      "src_type": "swift",
       "label": "@swiftpkg_yams//:Sources_Yams"
     },
     {
       "name": "YamsTests",
       "c99name": "YamsTests",
+      "src_type": "swift",
       "label": "@swiftpkg_yams//:Tests_YamsTests"
     }
   ],
