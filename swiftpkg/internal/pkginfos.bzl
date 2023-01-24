@@ -327,6 +327,8 @@ def _new_from_parsed_json(dump_manifest, desc_manifest):
         targets = targets,
     )
 
+# MARK: - Swift Package
+
 def _new(
         name,
         path,
@@ -364,6 +366,8 @@ def _new(
         targets = targets,
     )
 
+# MARK: - Platform
+
 def _new_platform(name, version):
     """Creates a `struct` with information about a platform.
 
@@ -378,6 +382,8 @@ def _new_platform(name, version):
         name = name,
         version = version,
     )
+
+# MARK: - External Dependency
 
 def _new_dependency(identity, name, type, url, requirement):
     """Creates a `struct` representing an external dependency for a Swift \
@@ -435,6 +441,8 @@ def _new_version_range(lower, upper):
         lower = lower,
         upper = upper,
     )
+
+# MARK: - Product
 
 def _new_product_type(executable = False, library = None, plugin = False):
     """Creates a product type.
@@ -504,6 +512,8 @@ def _new_product(name, type, targets):
         targets = targets,
     )
 
+# MARK: - Dependency References
+
 def _new_product_reference(product_name, dep_name):
     """Creates a product reference.
 
@@ -568,6 +578,8 @@ A target dependency must have one of the following: `by_name`, `product`, `targe
         product = product,
         target = target,
     )
+
+# MARK: - Target
 
 def _new_target(
         name,
@@ -650,6 +662,51 @@ def _new_target(
         product_memberships = product_memberships,
     )
 
+# MARK: - Build Settings
+
+def _new_build_setting_condition(platforms = None, configuration = None):
+    if platforms == None and configuration == None:
+        fail("""\
+A build setting condition must have `platforms` or `configuration` set.\
+""")
+    if platforms != None:
+        for platform in platforms:
+            validations.in_list(
+                spm_platforms.all_values,
+                platform,
+                "Unrecognized platform. platform:",
+            )
+
+    if configuration != None:
+        validations.in_list(
+            spm_configurations.all_values,
+            configuration,
+            "Unrecognized configuration. configuration:",
+        )
+
+    return struct(
+        platforms = platforms,
+        configuration = configuration,
+    )
+
+def _new_build_setting_data(name, value, condition = None):
+    """Create a build setting data struct.
+
+    Args:
+        name: The name of the build setting as a `string`.
+        value: The value for the build setting as a `list`.
+        condition: Optional. A `struct` as returned by
+            `pkginfos.new_build_setting_condition`.
+
+    Returns:
+        A `struct` representing a build setting.
+    """
+    return struct(
+        name = name,
+        value = value,
+        condition = condition,
+    )
+
 def _new_clang_settings(defines, hdr_srch_paths):
     return struct(
         defines = defines,
@@ -666,11 +723,15 @@ def _new_linker_settings(linked_libraries):
         linked_libraries = linked_libraries,
     )
 
+# MARK: - Binary Target
+
 def _new_artifact_download_info(url, checksum):
     return struct(
         url = url,
         checksum = checksum,
     )
+
+# MARK: - Constants
 
 target_types = struct(
     binary = "binary",
@@ -713,10 +774,54 @@ library_type_kinds = struct(
     all_values = ["automatic", "dynamic", "static"],
 )
 
+# Derived from BuildConfiguration values
+# https://github.com/apple/swift-package-manager/blob/main/Sources/PackageDescription/BuildSettings.swift
+spm_configurations = struct(
+    debug = "debug",
+    release = "release",
+    all_values = [
+        "debug",
+        "release",
+    ],
+)
+
+# Derived from Platform values
+# https://github.com/apple/swift-package-manager/blob/main/Sources/PackageDescription/SupportedPlatforms.swift
+spm_platforms = struct(
+    macos = "macos",
+    maccatalyst = "maccatalyst",
+    ios = "ios",
+    tvos = "tvos",
+    watchos = "watchos",
+    driverkit = "driverkit",
+    linux = "linux",
+    windows = "windows",
+    android = "android",
+    wasi = "wasi",
+    openbsd = "openbsd",
+    all_values = [
+        "macos",
+        "maccatalyst",
+        "ios",
+        "tvos",
+        "watchos",
+        "driverkit",
+        "linux",
+        "windows",
+        "android",
+        "wasi",
+        "openbsd",
+    ],
+)
+
+# MARK: - API Definition
+
 pkginfos = struct(
     get = _get,
     new = _new,
     new_artifact_download_info = _new_artifact_download_info,
+    new_build_setting_condition = _new_build_setting_condition,
+    new_build_setting_data = _new_build_setting_data,
     new_by_name_reference = _new_by_name_reference,
     new_clang_settings = _new_clang_settings,
     new_dependency = _new_dependency,
