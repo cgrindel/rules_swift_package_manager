@@ -73,6 +73,17 @@ def _bazel_label_name(target):
         name = _join_path(target, target.name)
     return name.replace("/", "_")
 
+def _objc_label_name(target_name):
+    """Returns the name of the real Objective-C target from the 
+
+    Args:
+        target_name: The publicly advertised name for the target as a `string`.
+
+    Returns:
+        The name of the Objective-C target as a `string`.
+    """
+    return target_name + "_Objc"
+
 def make_pkginfo_targets(bazel_labels):
     """Create a `pkginfo_targets` module.
 
@@ -106,6 +117,7 @@ def make_pkginfo_targets(bazel_labels):
         bazel_label_name = _bazel_label_name,
         get = _get,
         join_path = _join_path,
+        objc_label_name = _objc_label_name,
         srcs = _srcs,
     )
 

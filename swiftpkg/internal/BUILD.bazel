@@ -194,6 +194,16 @@ bzl_library(
 )
 
 bzl_library(
+    name = "swift_objc_module_alias",
+    srcs = ["swift_objc_module_alias.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        "@bazel_skylib//rules:write_file",
+        "@build_bazel_rules_swift//swift",
+    ],
+)
+
+bzl_library(
     name = "bazel_repo_names",
     srcs = ["bazel_repo_names.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],

@@ -6,13 +6,16 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 	"github.com/stretchr/testify/assert"
 )
 
-var fooM = swift.NewModuleFromLabelStruct("Foo", "Foo", label.New("", "Sources/Foo", "Foo"))
-var barM = swift.NewModuleFromLabelStruct("Bar", "Bar", label.New("", "Sources/Bar", "Bar"))
+var fooM = swift.NewModuleFromLabelStruct(
+	"Foo", "Foo", swiftpkg.SwiftSourceType, label.New("", "Sources/Foo", "Foo"))
+var barM = swift.NewModuleFromLabelStruct(
+	"Bar", "Bar", swiftpkg.SwiftSourceType, label.New("", "Sources/Bar", "Bar"))
 var anotherRepoFooM = swift.NewModuleFromLabelStruct(
-	"Foo", "Foo", label.New("another_repo", "pkg/path", "Foo"))
+	"Foo", "Foo", swiftpkg.SwiftSourceType, label.New("another_repo", "pkg/path", "Foo"))
 var moduleIndex = make(swift.ModuleIndex)
 
 func init() {

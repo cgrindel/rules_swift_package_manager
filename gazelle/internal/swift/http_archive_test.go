@@ -6,6 +6,7 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -29,16 +30,19 @@ func TestNewHTTPArchiveFromRule(t *testing.T) {
 			swift.NewModuleFromLabelStruct(
 				"Collections",
 				"Collections",
+				swiftpkg.SwiftSourceType,
 				label.New("com_github_apple_swift_collections", "", "Collections"),
 			),
 			swift.NewModuleFromLabelStruct(
 				"DequeModule",
 				"DequeModule",
+				swiftpkg.SwiftSourceType,
 				label.New("com_github_apple_swift_collections", "", "DequeModule"),
 			),
 			swift.NewModuleFromLabelStruct(
 				"OrderedCollections",
 				"OrderedCollections",
+				swiftpkg.SwiftSourceType,
 				label.New("com_github_apple_swift_collections", "", "OrderedCollections"),
 			),
 		},
@@ -53,11 +57,13 @@ func TestNewHTTPArchiveFromRule(t *testing.T) {
 			swift.NewModuleFromLabelStruct(
 				"ArgumentParser",
 				"ArgumentParser",
+				swiftpkg.SwiftSourceType,
 				label.New("com_github_apple_swift_argument_parser", "", "ArgumentParser"),
 			),
 			swift.NewModuleFromLabelStruct(
 				"ArgumentParserToolInfo",
 				"ArgumentParserToolInfo",
+				swiftpkg.SwiftSourceType,
 				label.New("com_github_apple_swift_argument_parser", "", "ArgumentParserToolInfo"),
 			),
 		},

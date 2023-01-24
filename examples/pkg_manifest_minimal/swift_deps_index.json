@@ -3,121 +3,145 @@
     {
       "name": "GreetingsFramework",
       "c99name": "GreetingsFramework",
+      "src_type": "swift",
       "label": "@swiftpkg_my_local_package//:Sources_GreetingsFramework"
     },
     {
       "name": "PrintGreeting",
       "c99name": "PrintGreeting",
+      "src_type": "swift",
       "label": "@swiftpkg_my_local_package//:Sources_PrintGreeting"
     },
     {
       "name": "GreetingsFrameworkTests",
       "c99name": "GreetingsFrameworkTests",
+      "src_type": "swift",
       "label": "@swiftpkg_my_local_package//:Tests_GreetingsFrameworkTests"
     },
     {
       "name": "count-lines",
       "c99name": "count_lines",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Examples_count-lines"
     },
     {
       "name": "math",
       "c99name": "math",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Examples_math"
     },
     {
       "name": "repeat",
       "c99name": "repeat",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Examples_repeat"
     },
     {
       "name": "roll",
       "c99name": "roll",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Examples_roll"
     },
     {
       "name": "GenerateManual",
       "c99name": "GenerateManual",
+      "src_type": "unknown",
       "label": "@swiftpkg_swift_argument_parser//:Plugins_GenerateManual"
     },
     {
       "name": "ArgumentParser",
       "c99name": "ArgumentParser",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser"
     },
     {
       "name": "ArgumentParserTestHelpers",
       "c99name": "ArgumentParserTestHelpers",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserTestHelpers"
     },
     {
       "name": "ArgumentParserToolInfo",
       "c99name": "ArgumentParserToolInfo",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserToolInfo"
     },
     {
       "name": "ArgumentParserEndToEndTests",
       "c99name": "ArgumentParserEndToEndTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserEndToEndTests"
     },
     {
       "name": "ArgumentParserExampleTests",
       "c99name": "ArgumentParserExampleTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserExampleTests"
     },
     {
       "name": "ArgumentParserGenerateManualTests",
       "c99name": "ArgumentParserGenerateManualTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserGenerateManualTests"
     },
     {
       "name": "ArgumentParserPackageManagerTests",
       "c99name": "ArgumentParserPackageManagerTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserPackageManagerTests"
     },
     {
       "name": "ArgumentParserUnitTests",
       "c99name": "ArgumentParserUnitTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserUnitTests"
     },
     {
       "name": "changelog-authors",
       "c99name": "changelog_authors",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Tools_changelog-authors"
     },
     {
       "name": "generate-manual",
       "c99name": "generate_manual",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_argument_parser//:Tools_generate-manual"
     },
     {
       "name": "Logging",
       "c99name": "Logging",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_log//:Sources_Logging"
     },
     {
       "name": "LoggingTests",
       "c99name": "LoggingTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swift_log//:Tests_LoggingTests"
     },
     {
       "name": "CommandLineTool",
       "c99name": "CommandLineTool",
+      "src_type": "swift",
       "label": "@swiftpkg_swiftformat//:CommandLineTool"
     },
     {
       "name": "SwiftFormatPlugin",
       "c99name": "SwiftFormatPlugin",
+      "src_type": "unknown",
       "label": "@swiftpkg_swiftformat//:Plugins_SwiftFormatPlugin"
     },
     {
       "name": "SwiftFormat",
       "c99name": "SwiftFormat",
+      "src_type": "swift",
       "label": "@swiftpkg_swiftformat//:Sources_SwiftFormat"
     },
     {
       "name": "SwiftFormatTests",
       "c99name": "SwiftFormatTests",
+      "src_type": "swift",
       "label": "@swiftpkg_swiftformat//:Tests_SwiftFormatTests"
     }
   ],
