@@ -193,69 +193,76 @@ def _new_target_from_json_maps(dump_map, desc_map):
         product_memberships = desc_map.get("product_memberships", default = []),
     )
 
+def _new_build_setting_condition_from_json(dump_map):
+    if dump_map == None:
+        return None
+    return _new_build_setting_condition(
+        platforms = dump_map.get("platformNames"),
+        configuration = dump_map.get("config"),
+    )
+
+def _new_build_setting_datas_from_json(dump_map):
+    # Example build setting
+    #   {
+    #     "condition" : {
+    #       "platformNames" : [
+    #         "ios",
+    #         "tvos"
+    #       ]
+    #     },
+    #     "kind" : {
+    #       "linkedFramework" : {
+    #         "_0" : "UIKit"
+    #       }
+    #     },
+    #     "tool" : "linker"
+    #   }
+    # Maps to build setting values:
+    #   _new_build_setting_data(
+    #       name = "linkedFramework",
+    #       value = ["UIKit"],
+    #       condition = _new_build_setting_condition(
+    #           platforms = ["ios", "tvos"],
+    #       ),
+    #   )
+    condition = _new_build_setting_condition_from_json(
+        dump_map.get("condition"),
+    )
+    kind_map = dump_map.get("kind")
+    if kind_map == None:
+        return []
+    return [
+        _new_build_setting_data(
+            name = build_setting_name,
+            value = kind_type_values.values(),
+            condition = condition,
+        )
+        for (build_setting_name, kind_type_values) in kind_map.items()
+    ]
+
 def _new_clang_settings_from_dump_json_list(dump_list):
-    defines = []
-    hdr_srch_paths = []
+    build_settings = []
     for setting in dump_list:
         if setting["tool"] != "c":
             continue
-        kind_map = setting.get("kind")
-        if kind_map == None:
-            continue
-        define_map = kind_map.get("define")
-        if define_map != None:
-            for define in define_map.values():
-                defines.append(define)
-        hdr_srch_path_map = kind_map.get("headerSearchPath")
-        if hdr_srch_path_map != None:
-            hdr_srch_paths.extend(hdr_srch_path_map.values())
-
-    if len(defines) == 0 and len(hdr_srch_paths) == 0:
-        return None
-    return _new_clang_settings(
-        defines = defines,
-        hdr_srch_paths = hdr_srch_paths,
-    )
+        build_settings.extend(_new_build_setting_datas_from_json(setting))
+    return _new_clang_settings(build_settings)
 
 def _new_swift_settings_from_dump_json_list(dump_list):
-    defines = []
+    build_settings = []
     for setting in dump_list:
         if setting["tool"] != "swift":
             continue
-        kind_map = setting.get("kind")
-        if kind_map == None:
-            continue
-        define_map = kind_map.get("define")
-        if define_map == None:
-            continue
-        for define in define_map.values():
-            defines.append(define)
-
-    if len(defines) == 0:
-        return None
-    return _new_swift_settings(
-        defines = defines,
-    )
+        build_settings.extend(_new_build_setting_datas_from_json(setting))
+    return _new_swift_settings(build_settings)
 
 def _new_linker_settings_from_dump_json_list(dump_list):
-    linked_libraries = []
+    build_settings = []
     for setting in dump_list:
         if setting["tool"] != "linker":
             continue
-        kind_map = setting.get("kind")
-        if kind_map == None:
-            continue
-        linked_library_map = kind_map.get("linkedLibrary")
-        if linked_library_map == None:
-            continue
-        for linked_library in linked_library_map.values():
-            linked_libraries.append(linked_library)
-
-    if len(linked_libraries) == 0:
-        return None
-    return _new_linker_settings(
-        linked_libraries = linked_libraries,
-    )
+        build_settings.extend(_new_build_setting_datas_from_json(setting))
+    return _new_linker_settings(build_settings)
 
 def _new_dependency_identity_to_name_map(dump_deps):
     result = {}
@@ -666,9 +673,7 @@ def _new_target(
 
 def _new_build_setting_condition(platforms = None, configuration = None):
     if platforms == None and configuration == None:
-        fail("""\
-A build setting condition must have `platforms` or `configuration` set.\
-""")
+        return None
     if platforms != None:
         for platform in platforms:
             validations.in_list(
@@ -701,26 +706,89 @@ def _new_build_setting_data(name, value, condition = None):
     Returns:
         A `struct` representing a build setting.
     """
+    if type(value) != "list":
+        value = [value]
     return struct(
         name = name,
         value = value,
         condition = condition,
     )
 
-def _new_clang_settings(defines, hdr_srch_paths):
+def _new_clang_settings(build_settings):
+    """Create a clang setting data struct.
+
+    Args:
+        build_settings: A `list` of `struct` values as returned by
+            `pkginfos.new_build_setting_data`.
+
+    Returns:
+        A `struct` representing the clang settings.
+    """
+    defines = []
+    hdr_srch_paths = []
+    for bs in build_settings:
+        if bs.name == "define":
+            defines.append(bs)
+        elif bs.name == "headerSearchPath":
+            hdr_srch_paths.append(bs)
+        else:
+            # We do not recognize the setting.
+            pass
+    if len(defines) == 0 and len(hdr_srch_paths) == 0:
+        return None
     return struct(
         defines = defines,
         hdr_srch_paths = hdr_srch_paths,
     )
 
-def _new_swift_settings(defines):
+def _new_swift_settings(build_settings):
+    """Create a Swift setting data struct.
+
+    Args:
+        build_settings: A `list` of `struct` values as returned by
+            `pkginfos.new_build_setting_data`.
+
+    Returns:
+        A `struct` representing the Swift settings.
+    """
+    defines = []
+    for bs in build_settings:
+        if bs.name == "define":
+            defines.append(bs)
+        else:
+            # We do not recognize the setting.
+            pass
+    if len(defines) == 0:
+        return None
     return struct(
         defines = defines,
     )
 
-def _new_linker_settings(linked_libraries):
+def _new_linker_settings(build_settings):
+    """Create a linker setting data struct.
+
+    Args:
+        build_settings: A `list` of `struct` values as returned by
+            `pkginfos.new_build_setting_data`.
+
+    Returns:
+        A `struct` representing the linker settings.
+    """
+    linked_libraries = []
+    linked_frameworks = []
+    for bs in build_settings:
+        if bs.name == "linkedLibrary":
+            linked_libraries.append(bs)
+        elif bs.name == "linkedFramework":
+            linked_frameworks.append(bs)
+        else:
+            # We do not recognize the setting.
+            pass
+    if len(linked_libraries) == 0 and len(linked_frameworks) == 0:
+        return None
     return struct(
         linked_libraries = linked_libraries,
+        linked_frameworks = linked_frameworks,
     )
 
 # MARK: - Binary Target

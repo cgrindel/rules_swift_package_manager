@@ -57,9 +57,12 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
                         ),
                     ),
                 ],
-                swift_settings = pkginfos.new_swift_settings(
-                    defines = ["COOL_SWIFT_DEFINE"],
-                ),
+                swift_settings = pkginfos.new_swift_settings([
+                    pkginfos.new_build_setting_data(
+                        name = "define",
+                        value = ["COOL_SWIFT_DEFINE"],
+                    ),
+                ]),
                 product_memberships = ["printstuff"],
             ),
             pkginfos.new_target(
@@ -118,13 +121,22 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
             "libbar/src",
             "libbar/sharpyuv",
         ],
-        clang_settings = pkginfos.new_clang_settings(
-            defines = ["__APPLE_USE_RFC_3542"],
-            hdr_srch_paths = ["libbar"],
-        ),
-        linker_settings = pkginfos.new_linker_settings(
-            linked_libraries = ["foo"],
-        ),
+        clang_settings = pkginfos.new_clang_settings([
+            pkginfos.new_build_setting_data(
+                name = "define",
+                value = ["__APPLE_USE_RFC_3542"],
+            ),
+            pkginfos.new_build_setting_data(
+                name = "headerSearchPath",
+                value = ["libbar"],
+            ),
+        ]),
+        linker_settings = pkginfos.new_linker_settings([
+            pkginfos.new_build_setting_data(
+                name = "linkedLibrary",
+                value = ["foo"],
+            ),
+        ]),
         public_hdrs_path = "include",
         product_memberships = ["libbar"],
     )
