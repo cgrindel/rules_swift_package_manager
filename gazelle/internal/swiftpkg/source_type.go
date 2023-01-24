@@ -8,6 +8,8 @@ import (
 	"golang.org/x/exp/slices"
 )
 
+// A SourceType is an enum that identifies the type of source files use to implement a Swift
+// manifest target.
 type SourceType int
 
 const (
@@ -38,6 +40,8 @@ func init() {
 	objcExtensions = []string{".m", ".mm"}
 }
 
+// NewSourceType returns the source type given the module type and a list of the sources for a
+// target.
 func NewSourceType(moduleType ModuleType, srcPaths []string) SourceType {
 	switch moduleType {
 	case SwiftModuleType:

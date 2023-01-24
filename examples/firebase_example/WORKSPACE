@@ -46,8 +46,6 @@ http_archive(
     url = "https://github.com/bazelbuild/rules_apple/releases/download/2.0.0/rules_apple.2.0.0.tar.gz",
 )
 
-# TODO(chuck): Should I add swiftpkg_build_dependencies to load rules_swift and rules_apple?
-
 load("//:swift_deps.bzl", "swift_dependencies")
 
 # gazelle:repository_macro swift_deps.bzl%swift_dependencies

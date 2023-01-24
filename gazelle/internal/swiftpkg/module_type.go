@@ -1,5 +1,6 @@
 package swiftpkg
 
+// A ModuleType is an enum for the Swift manifest module type.
 type ModuleType int
 
 const (
@@ -24,6 +25,7 @@ func init() {
 	}
 }
 
+// NewModuleType returns the module type from the provided string value.
 func NewModuleType(str string) ModuleType {
 	if id, ok := moduleTypeStrToID[str]; ok {
 		return id
