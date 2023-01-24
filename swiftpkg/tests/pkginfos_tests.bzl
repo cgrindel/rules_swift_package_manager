@@ -57,10 +57,32 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
                         ),
                     ),
                 ],
+                clang_settings = pkginfos.new_clang_settings([
+                    pkginfos.new_build_setting_data(
+                        name = "headerSearchPath",
+                        value = ["../.."],
+                    ),
+                ]),
                 swift_settings = pkginfos.new_swift_settings([
                     pkginfos.new_build_setting_data(
                         name = "define",
                         value = ["COOL_SWIFT_DEFINE"],
+                    ),
+                ]),
+                linker_settings = pkginfos.new_linker_settings([
+                    pkginfos.new_build_setting_data(
+                        name = "linkedFramework",
+                        value = ["UIKit"],
+                        condition = pkginfos.new_build_setting_condition(
+                            platforms = ["ios", "tvos"],
+                        ),
+                    ),
+                    pkginfos.new_build_setting_data(
+                        name = "linkedFramework",
+                        value = ["AppKit"],
+                        condition = pkginfos.new_build_setting_condition(
+                            platforms = ["macos"],
+                        ),
                     ),
                 ]),
                 product_memberships = ["printstuff"],
@@ -240,6 +262,41 @@ _swift_arg_parser_dump_json = """
               }
             },
             "tool" : "swift"
+          },
+          {
+            "kind" : {
+              "headerSearchPath" : {
+                "_0" : "../.."
+              }
+            },
+            "tool" : "c"
+          },
+          {
+            "condition" : {
+              "platformNames" : [
+                "ios",
+                "tvos"
+              ]
+            },
+            "kind" : {
+              "linkedFramework" : {
+                "_0" : "UIKit"
+              }
+            },
+            "tool" : "linker"
+          },
+          {
+            "condition" : {
+              "platformNames" : [
+                "macos"
+              ]
+            },
+            "kind" : {
+              "linkedFramework" : {
+                "_0" : "AppKit"
+              }
+            },
+            "tool" : "linker"
           }
       ],
       "type" : "executable"
