@@ -52,7 +52,8 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     if is_test:
         attrs["testonly"] = True
     if target.swift_settings and len(target.swift_settings.defines) > 0:
-        attrs["defines"].extend(target.swift_settings.defines)
+        for bs in target.swift_settings.defines:
+            attrs["defines"].extend(bs.value)
     if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(target, attrs)]
@@ -204,23 +205,40 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         hdrs.extend(organized_files.hdrs)
     if len(organized_files.private_includes) > 0:
         local_includes.extend(organized_files.private_includes)
-    if target.clang_settings:
+    if target.clang_settings != None:
         if len(target.clang_settings.defines) > 0:
-            attrs["defines"].extend(target.clang_settings.defines)
+            # TODO(chuck): Support conditional
+            for bs in target.clang_settings.defines:
+                attrs["defines"].extend(bs.value)
         if len(target.clang_settings.hdr_srch_paths) > 0:
-            # Add the header search paths relative to the target path. The
-            # proper prefix and normalization will happen below
+            # TODO(chuck): Support conditional
+            hdr_srch_paths = lists.flatten([
+                bs.value
+                for bs in target.clang_settings.hdr_srch_paths
+            ])
             local_includes.extend([
                 paths.join(target.path, p)
-                for p in target.clang_settings.hdr_srch_paths
+                for p in hdr_srch_paths
             ])
-    if target.linker_settings and len(target.linker_settings.linked_libraries) > 0:
-        linkopts = attrs.get("linkopts", default = [])
-        linkopts.extend([
-            "-l{}".format(ll)
-            for ll in target.linker_settings.linked_libraries
-        ])
-        attrs["linkopts"] = linkopts
+    if target.linker_settings != None:
+        # TODO(chuck): Support conditional
+        if len(target.linker_settings.linked_libraries) > 0:
+            linked_libraries = lists.flatten([
+                bs.value
+                for bs in target.linker_settings.linked_libraries
+            ])
+            linkopts = attrs.get("linkopts", default = [])
+            linkopts.extend(["-l{}".format(ll) for ll in linked_libraries])
+            attrs["linkopts"] = linkopts
+        if len(target.linker_settings.linked_frameworks) > 0:
+            # This is using a objc_library attr.
+            linked_frameworks = lists.flatten([
+                bs.value
+                for bs in target.linker_settings.linked_frameworks
+            ])
+            sdk_frameworks = attrs.get("sdk_frameworks", default = [])
+            sdk_frameworks.extend(linked_frameworks)
+            attrs["sdk_frameworks"] = sdk_frameworks
 
     if len(local_includes) > 0:
         # The `includes` attribute adds includes as -isystem which propagates
