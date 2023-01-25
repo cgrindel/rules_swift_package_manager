@@ -2,36 +2,7 @@
 
 _single_indent_str = "    "
 
-def _indent(count, suffix = ""):
-    """Generate the proper indent string based upon the count.
-
-    Args:
-        count: An `int` representing the number of indents to be generated.
-        suffix: Optional. A `string` that is appended to the generated indents.
-
-    Returns:
-        A `string` with the specified number of indets.
-    """
-    return (_single_indent_str * count) + suffix
-
-def _attr(name, value, indent):
-    """Generates the Starlark codegen parts that represents an attribute value.
-
-    Args:
-        name: The attribute name as a `string`.
-        value: The attribute value as any type supported by Starlark codegen.
-        indent: The number of indents to be used for the attribute.
-
-    Returns:
-        A `list` of Starlark codegen parts.
-    """
-    value = _normalize(value)
-    return [
-        _indent(indent),
-        "{} = ".format(name),
-        _with_indent(indent, value),
-        ",\n",
-    ]
+# MARK: - Simple Type Detection
 
 _simple_starlark_types = [
     "None",
@@ -57,18 +28,19 @@ def _is_simple_type(val):
             return True
     return False
 
-def _normalize(val):
-    """Attempts to simplify the value, if possible. Otherwise, returns the value unchanged.
+# MARK: - Indent
+
+def _indent(count, suffix = ""):
+    """Generate the proper indent string based upon the count.
 
     Args:
-        val: The value to evaluate.
+        count: An `int` representing the number of indents to be generated.
+        suffix: Optional. A `string` that is appended to the generated indents.
 
     Returns:
-        A `string` if the value is a simple type. Otherwise, the original value.
+        A `string` with the specified number of indets.
     """
-    if _is_simple_type(val):
-        return repr(val)
-    return val
+    return (_single_indent_str * count) + suffix
 
 def _with_indent(indent, value):
     """Wraps a value with a directive to evaluate it at a specified indent level.
@@ -84,6 +56,23 @@ def _with_indent(indent, value):
         with_indent = indent,
         wrapped_value = value,
     )
+
+# MARK: - Normalize
+
+def _normalize(val):
+    """Attempts to simplify the value, if possible. Otherwise, returns the value unchanged.
+
+    Args:
+        val: The value to evaluate.
+
+    Returns:
+        A `string` if the value is a simple type. Otherwise, the original value.
+    """
+    if _is_simple_type(val):
+        return repr(val)
+    return val
+
+# MARK: - Generate Starlark Code
 
 def _to_starlark(val):
     """Generates Starlark code from the provided value.
@@ -183,9 +172,131 @@ def _process_dict(val, current_indent):
     output.extend([_indent(current_indent), "}"])
     return output
 
+# MARK: - Attribute
+
+def _new_attr(name, value, indent):
+    """Generates the Starlark codegen parts that represents an attribute value.
+
+    Args:
+        name: The attribute name as a `string`.
+        value: The attribute value as any type supported by Starlark codegen.
+        indent: The number of indents to be used for the attribute.
+
+    Returns:
+        A `list` of Starlark codegen parts.
+    """
+    value = _normalize(value)
+    return [
+        _indent(indent),
+        "{} = ".format(name),
+        _with_indent(indent, value),
+        ",\n",
+    ]
+
+# MARK: - Function Call
+
+def _new_fn_call(fn_name, *args, **kwargs):
+    """Create a function call.
+
+    Args:
+        fn_name: The name of the function as a `string`.
+        *args: Positional arguments for the function call.
+        **kwargs: Named arguments for the function call.
+
+    Returns:
+        A `struct` representing a Starlark function call.
+    """
+    return struct(
+        fn_name = fn_name,
+        args = args,
+        kwargs = kwargs,
+        to_starlark_parts = _fn_call_to_starlark_parts,
+    )
+
+def _fn_call_to_starlark_parts(fn_call, indent):
+    args_len = len(fn_call.args)
+    kwargs_len = len(fn_call.kwargs)
+    if args_len == 0 and kwargs_len == 0:
+        return [fn_call.fn_name, "()"]
+    if args_len == 1 and kwargs_len == 0:
+        return [
+            fn_call.fn_name,
+            "(",
+            _with_indent(indent, _normalize(fn_call.args[0])),
+            ")",
+        ]
+    parts = [fn_call.fn_name, "(\n"]
+    child_indent = indent + 1
+    for pos_arg in fn_call.args:
+        parts.extend([
+            _indent(child_indent),
+            _with_indent(child_indent, _normalize(pos_arg)),
+            ",\n",
+        ])
+    for name in fn_call.kwargs:
+        value = fn_call.kwargs[name]
+        parts.extend(_new_attr(name, value, child_indent))
+
+    parts.append(_indent(indent, ")"))
+    return parts
+
+# MARK: - Operator
+
+def _new_op(operator):
+    """Create an operator.
+
+    Args:
+        operator: The operator as a `string`.
+
+    Returns:
+        A Starlark codegen `struct` representing the operator.
+    """
+    return struct(
+        operator = operator,
+        to_starlark_parts = _op_to_starlark_parts,
+    )
+
+# buildifier: disable=unused-variable
+def _op_to_starlark_parts(op, indent):
+    return [op.operator]
+
+# MARK: - Expression
+
+def _new_expr(first, *others):
+    """Create an expression with one or more members
+
+    Args:
+        first: The first member of the expression.
+        *others: Any additional members of the expression.
+
+    Returns:
+        A Starlark codegen `struct` representing the expression.
+    """
+    members = [first]
+    members.extend(others)
+    return struct(
+        members = members,
+        to_starlark_parts = _expr_to_starlark_parts,
+    )
+
+# buildifier: disable=unused-variable
+def _expr_to_starlark_parts(expr, indent):
+    last_idx = len(expr.members) - 1
+    parts = []
+    for (idx, m) in enumerate(expr.members):
+        parts.append(_normalize(m))
+        if idx != last_idx:
+            parts.append(" ")
+    return parts
+
+# MARK: - API Definition
+
 starlark_codegen = struct(
-    attr = _attr,
     indent = _indent,
+    new_attr = _new_attr,
+    new_expr = _new_expr,
+    new_fn_call = _new_fn_call,
+    new_op = _new_op,
     normalize = _normalize,
     to_starlark = _to_starlark,
     with_indent = _with_indent,

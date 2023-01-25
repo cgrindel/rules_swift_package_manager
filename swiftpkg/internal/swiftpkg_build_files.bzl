@@ -11,6 +11,7 @@ load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "module_types", "target_types")
 load(":repository_files.bzl", "repository_files")
+load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
 # MARK: - Target Entry Point
 
@@ -347,7 +348,7 @@ def _system_library_build_file(target):
 
 def _apple_dynamic_xcframework_import_build_file(target):
     load_stmts = [apple_dynamic_xcframework_import_load_stmt]
-    glob = build_decls.new_fn_call(
+    glob = scg.new_fn_call(
         "glob",
         ["{tpath}/*.xcframework/**".format(tpath = target.path)],
     )
