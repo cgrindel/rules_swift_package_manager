@@ -1,14 +1,7 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
-load(
-    "//config_settings/bazel/apple_platform_type:apple_platform_types.bzl",
-    "apple_platform_types",
-)
-load(
-    "//config_settings/spm/configuration:configurations.bzl",
-    "configurations",
-)
+load(":platforms.bzl", "platforms")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -22,25 +15,11 @@ bzl_library(
 # NOTE: Ensure that the list of spm_platforms in spm_platforms.bzl stays in
 # sync with the config_setting and selects.config_setting_group declarations.
 
-# Not sure how to map the following SPM platforms: maccatalyst, driverkit
-_NON_APPLE_PLATFORMS = [
-    "linux",
-    "windows",
-    "android",
-    "wasi",
-    "openbsd",
-]
+# MARK: - Platform
 
 # NOTE: The Bazel Apple platform type values match those of the corresponding
 # SPM platforms. If they ever diverge, we will need to add a mapping
 # somewhere.
-_APPLE_PLATFORMS = apple_platform_types.all_values
-
-# NOTE: We are not using spm_platforms.all_values, because there are some
-# values that we do not know how to map in Bazel.
-_ALL_PLATFORMS = _APPLE_PLATFORMS + _NON_APPLE_PLATFORMS
-
-# MARK: - Platform
 
 [
     selects.config_setting_group(
@@ -50,7 +29,7 @@ _ALL_PLATFORMS = _APPLE_PLATFORMS + _NON_APPLE_PLATFORMS
             "@platforms//os:{}".format(platform),
         ],
     )
-    for platform in _APPLE_PLATFORMS
+    for platform in platforms.apple_platforms
 ]
 
 [
@@ -60,27 +39,5 @@ _ALL_PLATFORMS = _APPLE_PLATFORMS + _NON_APPLE_PLATFORMS
             "@platforms//os:{}".format(platform),
         ],
     )
-    for platform in _NON_APPLE_PLATFORMS
-]
-
-# MARK: - Platform-Configuration
-
-_ALL_PLATFORM_CONFIGURATIONS = [
-    (platform, configuration)
-    for configuration in configurations.all_values
-    for platform in _ALL_PLATFORMS
-]
-
-[
-    selects.config_setting_group(
-        name = "{platform}_{configuration}".format(
-            configuration = configuration,
-            platform = platform,
-        ),
-        match_all = [
-            "//config_settings/spm/configuration:{}".format(configuration),
-            ":{}".format(platform),
-        ],
-    )
-    for (platform, configuration) in _ALL_PLATFORM_CONFIGURATIONS
+    for platform in platforms.non_apple_platforms
 ]
