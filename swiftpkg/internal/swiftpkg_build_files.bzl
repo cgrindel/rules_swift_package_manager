@@ -222,23 +222,26 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             ])
     if target.linker_settings != None:
         # TODO(chuck): Support conditional
+        linkopts = attrs.get("linkopts", default = [])
+        copts = attrs.get("copts", default = [])
         if len(target.linker_settings.linked_libraries) > 0:
             linked_libraries = lists.flatten([
                 bs.value
                 for bs in target.linker_settings.linked_libraries
             ])
-            linkopts = attrs.get("linkopts", default = [])
             linkopts.extend(["-l{}".format(ll) for ll in linked_libraries])
-            attrs["linkopts"] = linkopts
         if len(target.linker_settings.linked_frameworks) > 0:
             # This is using a objc_library attr.
             linked_frameworks = lists.flatten([
                 bs.value
                 for bs in target.linker_settings.linked_frameworks
             ])
-            sdk_frameworks = attrs.get("sdk_frameworks", default = [])
-            sdk_frameworks.extend(linked_frameworks)
-            attrs["sdk_frameworks"] = sdk_frameworks
+            copts.extend([
+                "-framework {}".format(lf)
+                for lf in linked_frameworks
+            ])
+        attrs["linkopts"] = linkopts
+        attrs["copts"] = copts
 
     if len(local_includes) > 0:
         # The `includes` attribute adds includes as -isystem which propagates
