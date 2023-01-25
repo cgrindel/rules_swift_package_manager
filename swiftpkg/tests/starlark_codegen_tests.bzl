@@ -284,6 +284,23 @@ def _expr_to_starlark_parts_test(ctx):
 """,
             msg = "operator with list and function call",
         ),
+        struct(
+            expr = scg.new_expr(
+                ["hello", "goodbye"],
+                scg.new_op("+"),
+                ["chicken", "smidgen"],
+            ),
+            exp = """\
+[
+    "hello",
+    "goodbye",
+] + [
+    "chicken",
+    "smidgen",
+]\
+""",
+            msg = "operator with list and function call",
+        ),
     ]
     for t in tests:
         actual = scg.to_starlark(t.expr)
