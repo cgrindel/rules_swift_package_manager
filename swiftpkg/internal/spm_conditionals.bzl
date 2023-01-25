@@ -16,6 +16,8 @@ def _new_default(identifier, value):
         value = value,
     )
 
+# GH153: Finish conditional support.
+
 # def _new_from_build_setting(build_setting):
 #     bsc = build_setting.condition
 #     results = []
