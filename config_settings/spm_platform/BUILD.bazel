@@ -1,0 +1,75 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@bazel_skylib//lib:selects.bzl", "selects")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+package(default_visibility = ["//visibility:public"])
+
+bzlformat_pkg(name = "bzlformat")
+
+bzl_library(
+    name = "spm_platforms",
+    srcs = ["spm_platforms.bzl"],
+    visibility = ["//visibility:public"],
+)
+
+# NOTE: Ensure that the list of spm_platforms in spm_platforms.bzl stays in
+# sync with the config_setting and selects.config_setting_group declarations.
+
+# Not sure how to map the following SPM platforms: maccatalyst, driverkit
+
+selects.config_setting_group(
+    name = "macos",
+    match_any = [
+        "//config_settings/apple_platform_type:macos",
+        "@platforms//os:macos",
+    ],
+)
+
+selects.config_setting_group(
+    name = "ios",
+    match_any = [
+        "//config_settings/apple_platform_type:ios",
+        "@platforms//os:ios",
+    ],
+)
+
+selects.config_setting_group(
+    name = "tvos",
+    match_any = [
+        "//config_settings/apple_platform_type:tvos",
+        "@platforms//os:tvos",
+    ],
+)
+
+selects.config_setting_group(
+    name = "watchos",
+    match_any = [
+        "//config_settings/apple_platform_type:watchos",
+        "@platforms//os:watchos",
+    ],
+)
+
+config_setting(
+    name = "linux",
+    constraint_values = ["@platforms//os:linux"],
+)
+
+config_setting(
+    name = "windows",
+    constraint_values = ["@platforms//os:windows"],
+)
+
+config_setting(
+    name = "android",
+    constraint_values = ["@platforms//os:android"],
+)
+
+config_setting(
+    name = "wasi",
+    constraint_values = ["@platforms//os:wasi"],
+)
+
+config_setting(
+    name = "openbsd",
+    constraint_values = ["@platforms//os:openbsd"],
+)

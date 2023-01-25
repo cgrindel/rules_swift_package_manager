@@ -1,5 +1,9 @@
 """Module for Swift package manager platforms."""
 
+# NOTE: Ensure that the list of spm_platforms below stays in sync with the
+# config_setting and selects.config_setting_group declarations in
+# //config_settings/spm_platform/BUILD.bazel.
+
 # Derived from Platform values
 # https://github.com/apple/swift-package-manager/blob/main/Sources/PackageDescription/SupportedPlatforms.swift
 spm_platforms = struct(

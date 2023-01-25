@@ -5,7 +5,7 @@ load(
     "spm_configurations",
 )
 load(
-    "//config_settings/platform_type:spm_platforms.bzl",
+    "//config_settings/spm_platform:spm_platforms.bzl",
     "spm_platforms",
 )
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")

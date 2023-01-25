@@ -1,10 +1,14 @@
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 
 package(default_visibility = ["//visibility:public"])
 
 bzlformat_pkg(name = "bzlformat")
 
+# NOTE: If entries are added/removed from BAZEL_APPLE_PLATFORM_TYPES, be sure
+# to update the config_setting and selects.config_setting_group declarations in
+# //config_settings/spm_platform/BUILD.bazel.
+
+# List of valid values for Bazel's --apple_platform_type
 BAZEL_APPLE_PLATFORM_TYPES = [
     "macos",
     "ios",
@@ -19,8 +23,3 @@ BAZEL_APPLE_PLATFORM_TYPES = [
     )
     for platform_type in BAZEL_APPLE_PLATFORM_TYPES
 ]
-
-bzl_library(
-    name = "spm_platforms",
-    srcs = ["spm_platforms.bzl"],
-)
