@@ -1,7 +1,7 @@
 """API for creating and loading Swift package information."""
 
 load(
-    "//config_settings/configuration:spm_configurations.bzl",
+    "//config_settings/spm_configuration:spm_configurations.bzl",
     "spm_configurations",
 )
 load(
