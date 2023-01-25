@@ -17,6 +17,11 @@ def _new_default(identifier, value):
     )
 
 # def _new_from_build_setting(build_setting):
+#     bsc = build_setting.condition
+#     results = []
+#     for platform in bsc.platforms:
+#         pass
+#     return results
 
 # NEED TO CONVERT:
 #   {

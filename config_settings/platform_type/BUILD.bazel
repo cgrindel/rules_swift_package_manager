@@ -1,10 +1,11 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 
 package(default_visibility = ["//visibility:public"])
 
 bzlformat_pkg(name = "bzlformat")
 
-APPLE_PLATFORM_TYPES = [
+BAZEL_APPLE_PLATFORM_TYPES = [
     "macos",
     "ios",
     "tvos",
@@ -16,5 +17,10 @@ APPLE_PLATFORM_TYPES = [
         name = platform_type,
         values = {"apple_platform_type": platform_type},
     )
-    for platform_type in APPLE_PLATFORM_TYPES
+    for platform_type in BAZEL_APPLE_PLATFORM_TYPES
 ]
+
+bzl_library(
+    name = "spm_platforms",
+    srcs = ["spm_platforms.bzl"],
+)

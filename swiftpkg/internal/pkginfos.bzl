@@ -1,5 +1,13 @@
 """API for creating and loading Swift package information."""
 
+load(
+    "//config_settings/configuration:spm_configurations.bzl",
+    "spm_configurations",
+)
+load(
+    "//config_settings/platform_type:spm_platforms.bzl",
+    "spm_platforms",
+)
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":repository_utils.bzl", "repository_utils")
 load(":validations.bzl", "validations")
@@ -842,45 +850,45 @@ library_type_kinds = struct(
     all_values = ["automatic", "dynamic", "static"],
 )
 
-# Derived from BuildConfiguration values
-# https://github.com/apple/swift-package-manager/blob/main/Sources/PackageDescription/BuildSettings.swift
-spm_configurations = struct(
-    debug = "debug",
-    release = "release",
-    all_values = [
-        "debug",
-        "release",
-    ],
-)
+# # Derived from BuildConfiguration values
+# # https://github.com/apple/swift-package-manager/blob/main/Sources/PackageDescription/BuildSettings.swift
+# spm_configurations = struct(
+#     debug = "debug",
+#     release = "release",
+#     all_values = [
+#         "debug",
+#         "release",
+#     ],
+# )
 
-# Derived from Platform values
-# https://github.com/apple/swift-package-manager/blob/main/Sources/PackageDescription/SupportedPlatforms.swift
-spm_platforms = struct(
-    macos = "macos",
-    maccatalyst = "maccatalyst",
-    ios = "ios",
-    tvos = "tvos",
-    watchos = "watchos",
-    driverkit = "driverkit",
-    linux = "linux",
-    windows = "windows",
-    android = "android",
-    wasi = "wasi",
-    openbsd = "openbsd",
-    all_values = [
-        "macos",
-        "maccatalyst",
-        "ios",
-        "tvos",
-        "watchos",
-        "driverkit",
-        "linux",
-        "windows",
-        "android",
-        "wasi",
-        "openbsd",
-    ],
-)
+# # Derived from Platform values
+# # https://github.com/apple/swift-package-manager/blob/main/Sources/PackageDescription/SupportedPlatforms.swift
+# spm_platforms = struct(
+#     macos = "macos",
+#     maccatalyst = "maccatalyst",
+#     ios = "ios",
+#     tvos = "tvos",
+#     watchos = "watchos",
+#     driverkit = "driverkit",
+#     linux = "linux",
+#     windows = "windows",
+#     android = "android",
+#     wasi = "wasi",
+#     openbsd = "openbsd",
+#     all_values = [
+#         "macos",
+#         "maccatalyst",
+#         "ios",
+#         "tvos",
+#         "watchos",
+#         "driverkit",
+#         "linux",
+#         "windows",
+#         "android",
+#         "wasi",
+#         "openbsd",
+#     ],
+# )
 
 # MARK: - API Definition
 
