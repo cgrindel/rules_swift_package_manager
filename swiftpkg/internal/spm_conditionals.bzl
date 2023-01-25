@@ -2,11 +2,21 @@
 Module for transforming Swift package manifest conditionals to Starlark.
 """
 
-def _new(conditions, default = None):
+def _new(identifier, condition, value):
     return struct(
-        conditions = conditions,
-        default = default,
+        identifier = identifier,
+        condition = condition,
+        value = value,
     )
+
+def _new_default(identifier, value):
+    return _new(
+        identifier = identifier,
+        condition = "//conditions:default",
+        value = value,
+    )
+
+# def _new_from_build_setting(build_setting):
 
 # NEED TO CONVERT:
 #   {
@@ -78,4 +88,5 @@ def _new(conditions, default = None):
 
 spm_conditionals = struct(
     new = _new,
+    new_default = _new_default,
 )
