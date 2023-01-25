@@ -6,7 +6,7 @@
 
 # Derived from Platform values
 # https://github.com/apple/swift-package-manager/blob/main/Sources/PackageDescription/SupportedPlatforms.swift
-spm_platforms = struct(
+platforms = struct(
     macos = "macos",
     maccatalyst = "maccatalyst",
     ios = "ios",

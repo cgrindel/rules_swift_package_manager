@@ -1,0 +1,12 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load(":compilation_modes.bzl", "compilation_modes")
+
+bzlformat_pkg(name = "bzlformat")
+
+[
+    config_setting(
+        name = comp_mode,
+        values = {"compilation_mode": comp_mode},
+    )
+    for comp_mode in compilation_modes.all_values
+]

@@ -2,12 +2,12 @@ load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load(
-    "//config_settings/apple_platform_type:apple_platform_types.bzl",
+    "//config_settings/bazel/apple_platform_type:apple_platform_types.bzl",
     "apple_platform_types",
 )
 load(
-    "//config_settings/spm_configuration:spm_configurations.bzl",
-    "spm_configurations",
+    "//config_settings/spm/configuration:configurations.bzl",
+    "configurations",
 )
 
 package(default_visibility = ["//visibility:public"])
@@ -15,8 +15,8 @@ package(default_visibility = ["//visibility:public"])
 bzlformat_pkg(name = "bzlformat")
 
 bzl_library(
-    name = "spm_platforms",
-    srcs = ["spm_platforms.bzl"],
+    name = "platforms",
+    srcs = ["platforms.bzl"],
 )
 
 # NOTE: Ensure that the list of spm_platforms in spm_platforms.bzl stays in
@@ -46,7 +46,7 @@ _ALL_PLATFORMS = _APPLE_PLATFORMS + _NON_APPLE_PLATFORMS
     selects.config_setting_group(
         name = platform,
         match_any = [
-            "//config_settings/apple_platform_type:{}".format(platform),
+            "//config_settings/bazel/apple_platform_type:{}".format(platform),
             "@platforms//os:{}".format(platform),
         ],
     )
@@ -67,7 +67,7 @@ _ALL_PLATFORMS = _APPLE_PLATFORMS + _NON_APPLE_PLATFORMS
 
 _ALL_PLATFORM_CONFIGURATIONS = [
     (platform, configuration)
-    for configuration in spm_configurations.all_values
+    for configuration in configurations.all_values
     for platform in _ALL_PLATFORMS
 ]
 
@@ -78,7 +78,7 @@ _ALL_PLATFORM_CONFIGURATIONS = [
             platform = platform,
         ),
         match_all = [
-            "//config_settings/spm_configuration:{}".format(configuration),
+            "//config_settings/spm/configuration:{}".format(configuration),
             ":{}".format(platform),
         ],
     )

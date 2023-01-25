@@ -1,12 +1,12 @@
 """API for creating and loading Swift package information."""
 
 load(
-    "//config_settings/spm_configuration:spm_configurations.bzl",
-    "spm_configurations",
+    "//config_settings/spm/configuration:configurations.bzl",
+    spm_configurations = "configurations",
 )
 load(
-    "//config_settings/spm_platform:spm_platforms.bzl",
-    "spm_platforms",
+    "//config_settings/spm/platform:platforms.bzl",
+    spm_platforms = "platforms",
 )
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":repository_utils.bzl", "repository_utils")
