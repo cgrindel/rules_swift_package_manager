@@ -57,9 +57,34 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
                         ),
                     ),
                 ],
-                swift_settings = pkginfos.new_swift_settings(
-                    defines = ["COOL_SWIFT_DEFINE"],
-                ),
+                clang_settings = pkginfos.new_clang_settings([
+                    pkginfos.new_build_setting_data(
+                        name = "headerSearchPath",
+                        value = ["../.."],
+                    ),
+                ]),
+                swift_settings = pkginfos.new_swift_settings([
+                    pkginfos.new_build_setting_data(
+                        name = "define",
+                        value = ["COOL_SWIFT_DEFINE"],
+                    ),
+                ]),
+                linker_settings = pkginfos.new_linker_settings([
+                    pkginfos.new_build_setting_data(
+                        name = "linkedFramework",
+                        value = ["UIKit"],
+                        condition = pkginfos.new_build_setting_condition(
+                            platforms = ["ios", "tvos"],
+                        ),
+                    ),
+                    pkginfos.new_build_setting_data(
+                        name = "linkedFramework",
+                        value = ["AppKit"],
+                        condition = pkginfos.new_build_setting_condition(
+                            platforms = ["macos"],
+                        ),
+                    ),
+                ]),
                 product_memberships = ["printstuff"],
             ),
             pkginfos.new_target(
@@ -118,13 +143,22 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
             "libbar/src",
             "libbar/sharpyuv",
         ],
-        clang_settings = pkginfos.new_clang_settings(
-            defines = ["__APPLE_USE_RFC_3542"],
-            hdr_srch_paths = ["libbar"],
-        ),
-        linker_settings = pkginfos.new_linker_settings(
-            linked_libraries = ["foo"],
-        ),
+        clang_settings = pkginfos.new_clang_settings([
+            pkginfos.new_build_setting_data(
+                name = "define",
+                value = ["__APPLE_USE_RFC_3542"],
+            ),
+            pkginfos.new_build_setting_data(
+                name = "headerSearchPath",
+                value = ["libbar"],
+            ),
+        ]),
+        linker_settings = pkginfos.new_linker_settings([
+            pkginfos.new_build_setting_data(
+                name = "linkedLibrary",
+                value = ["foo"],
+            ),
+        ]),
         public_hdrs_path = "include",
         product_memberships = ["libbar"],
     )
@@ -228,6 +262,41 @@ _swift_arg_parser_dump_json = """
               }
             },
             "tool" : "swift"
+          },
+          {
+            "kind" : {
+              "headerSearchPath" : {
+                "_0" : "../.."
+              }
+            },
+            "tool" : "c"
+          },
+          {
+            "condition" : {
+              "platformNames" : [
+                "ios",
+                "tvos"
+              ]
+            },
+            "kind" : {
+              "linkedFramework" : {
+                "_0" : "UIKit"
+              }
+            },
+            "tool" : "linker"
+          },
+          {
+            "condition" : {
+              "platformNames" : [
+                "macos"
+              ]
+            },
+            "kind" : {
+              "linkedFramework" : {
+                "_0" : "AppKit"
+              }
+            },
+            "tool" : "linker"
           }
       ],
       "type" : "executable"

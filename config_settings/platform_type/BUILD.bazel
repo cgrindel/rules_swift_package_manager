@@ -1,0 +1,20 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+package(default_visibility = ["//visibility:public"])
+
+bzlformat_pkg(name = "bzlformat")
+
+APPLE_PLATFORM_TYPES = [
+    "macos",
+    "ios",
+    "tvos",
+    "watchos",
+]
+
+[
+    config_setting(
+        name = platform_type,
+        values = {"apple_platform_type": platform_type},
+    )
+    for platform_type in APPLE_PLATFORM_TYPES
+]
