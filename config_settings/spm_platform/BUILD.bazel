@@ -1,6 +1,14 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load(
+    "//config_settings/apple_platform_type:apple_platform_types.bzl",
+    "apple_platform_types",
+)
+load(
+    "//config_settings/spm_configuration:spm_configurations.bzl",
+    "spm_configurations",
+)
 
 package(default_visibility = ["//visibility:public"])
 
@@ -9,67 +17,70 @@ bzlformat_pkg(name = "bzlformat")
 bzl_library(
     name = "spm_platforms",
     srcs = ["spm_platforms.bzl"],
-    visibility = ["//visibility:public"],
 )
 
 # NOTE: Ensure that the list of spm_platforms in spm_platforms.bzl stays in
 # sync with the config_setting and selects.config_setting_group declarations.
 
 # Not sure how to map the following SPM platforms: maccatalyst, driverkit
+_NON_APPLE_PLATFORMS = [
+    "linux",
+    "windows",
+    "android",
+    "wasi",
+    "openbsd",
+]
 
-selects.config_setting_group(
-    name = "macos",
-    match_any = [
-        "//config_settings/apple_platform_type:macos",
-        "@platforms//os:macos",
-    ],
-)
+# NOTE: The Bazel Apple platform type values match those of the corresponding
+# SPM platforms. If they ever diverge, we will need to add a mapping
+# somewhere.
+_APPLE_PLATFORMS = apple_platform_types.all_values
 
-selects.config_setting_group(
-    name = "ios",
-    match_any = [
-        "//config_settings/apple_platform_type:ios",
-        "@platforms//os:ios",
-    ],
-)
+# NOTE: We are not using spm_platforms.all_values, because there are some
+# values that we do not know how to map in Bazel.
+_ALL_PLATFORMS = _APPLE_PLATFORMS + _NON_APPLE_PLATFORMS
 
-selects.config_setting_group(
-    name = "tvos",
-    match_any = [
-        "//config_settings/apple_platform_type:tvos",
-        "@platforms//os:tvos",
-    ],
-)
+# MARK: - Platform
 
-selects.config_setting_group(
-    name = "watchos",
-    match_any = [
-        "//config_settings/apple_platform_type:watchos",
-        "@platforms//os:watchos",
-    ],
-)
+[
+    selects.config_setting_group(
+        name = platform,
+        match_any = [
+            "//config_settings/apple_platform_type:{}".format(platform),
+            "@platforms//os:{}".format(platform),
+        ],
+    )
+    for platform in _APPLE_PLATFORMS
+]
 
-config_setting(
-    name = "linux",
-    constraint_values = ["@platforms//os:linux"],
-)
+[
+    config_setting(
+        name = platform,
+        constraint_values = [
+            "@platforms//os:{}".format(platform),
+        ],
+    )
+    for platform in _NON_APPLE_PLATFORMS
+]
 
-config_setting(
-    name = "windows",
-    constraint_values = ["@platforms//os:windows"],
-)
+# MARK: - Platform-Configuration
 
-config_setting(
-    name = "android",
-    constraint_values = ["@platforms//os:android"],
-)
+_ALL_PLATFORM_CONFIGURATIONS = [
+    (platform, configuration)
+    for configuration in spm_configurations.all_values
+    for platform in _ALL_PLATFORMS
+]
 
-config_setting(
-    name = "wasi",
-    constraint_values = ["@platforms//os:wasi"],
-)
-
-config_setting(
-    name = "openbsd",
-    constraint_values = ["@platforms//os:openbsd"],
-)
+[
+    selects.config_setting_group(
+        name = "{platform}_{configuration}".format(
+            configuration = configuration,
+            platform = platform,
+        ),
+        match_all = [
+            "//config_settings/spm_configuration:{}".format(configuration),
+            ":{}".format(platform),
+        ],
+    )
+    for (platform, configuration) in _ALL_PLATFORM_CONFIGURATIONS
+]
