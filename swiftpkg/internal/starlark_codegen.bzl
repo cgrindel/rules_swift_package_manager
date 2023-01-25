@@ -279,6 +279,7 @@ def _new_expr(first, *others):
         to_starlark_parts = _expr_to_starlark_parts,
     )
 
+# buildifier: disable=unused-variable
 def _expr_to_starlark_parts(expr, indent):
     last_idx = len(expr.members) - 1
     parts = []
