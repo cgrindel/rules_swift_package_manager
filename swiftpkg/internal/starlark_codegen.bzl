@@ -240,18 +240,52 @@ def _fn_call_to_starlark_parts(fn_call, indent):
     parts.append(_indent(indent, ")"))
     return parts
 
+# MARK: - Operator
+
+def _new_op(operator):
+    """Create an operator.
+
+    Args:
+        operator: The operator as a `string`.
+
+    Returns:
+        A Starlark codegen `struct` representing the operator.
+    """
+    return struct(
+        operator = operator,
+        to_starlark_parts = _op_to_starlark_parts,
+    )
+
+# buildifier: disable=unused-variable
+def _op_to_starlark_parts(op, indent):
+    return [op.operator]
+
 # MARK: - Expression
 
 def _new_expr(first, *others):
-    parts = [first]
-    parts.extend(others)
+    """Create an expression with one or more members
+
+    Args:
+        first: The first member of the expression.
+        *others: Any additional members of the expression.
+
+    Returns:
+        A Starlark codegen `struct` representing the expression.
+    """
+    members = [first]
+    members.extend(others)
     return struct(
-        parts = parts,
+        members = members,
         to_starlark_parts = _expr_to_starlark_parts,
     )
 
 def _expr_to_starlark_parts(expr, indent):
-    parts = [_normalize(p) for p in expr.parts]
+    last_idx = len(expr.members) - 1
+    parts = []
+    for (idx, m) in enumerate(expr.members):
+        parts.append(_normalize(m))
+        if idx != last_idx:
+            parts.append(" ")
     return parts
 
 # MARK: - API Definition
@@ -261,6 +295,7 @@ starlark_codegen = struct(
     new_attr = _new_attr,
     new_expr = _new_expr,
     new_fn_call = _new_fn_call,
+    new_op = _new_op,
     normalize = _normalize,
     to_starlark = _to_starlark,
     with_indent = _with_indent,

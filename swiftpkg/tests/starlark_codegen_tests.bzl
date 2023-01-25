@@ -211,6 +211,24 @@ foo(
 
 fn_call_to_starlark_parts_test = unittest.make(_fn_call_to_starlark_parts_test)
 
+def _op_to_starlark_parts_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            op = scg.new_op("+"),
+            exp = "+",
+            msg = "plus",
+        ),
+    ]
+    for t in tests:
+        actual = scg.to_starlark(t.op)
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+op_to_starlark_parts_test = unittest.make(_op_to_starlark_parts_test)
+
 def _new_expr_test(ctx):
     env = unittest.begin(ctx)
 
@@ -227,7 +245,7 @@ def _new_expr_test(ctx):
         ),
     ]
     for t in tests:
-        actual = t.expr.parts
+        actual = t.expr.members
         asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)
@@ -245,6 +263,13 @@ def _expr_to_starlark_parts_test(ctx):
 """,
             msg = "a single part",
         ),
+        struct(
+            expr = scg.new_expr("hello", scg.new_op("+"), "goodbye"),
+            exp = """\
+"hello" + "goodbye"\
+""",
+            msg = "operator with two strings",
+        ),
     ]
     for t in tests:
         actual = scg.to_starlark(t.expr)
@@ -261,6 +286,7 @@ def starlark_codegen_test_suite():
         to_starlark_test,
         to_starlark_with_struct_test,
         fn_call_to_starlark_parts_test,
+        op_to_starlark_parts_test,
         new_expr_test,
         expr_to_starlark_parts_test,
     )
