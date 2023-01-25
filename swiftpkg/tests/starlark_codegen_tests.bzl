@@ -237,20 +237,18 @@ new_expr_test = unittest.make(_new_expr_test)
 def _expr_to_starlark_parts_test(ctx):
     env = unittest.begin(ctx)
 
-    unittest.fail(env, "IMPLEMENT ME!")
-
-    # tests = [
-    #     struct(
-    #         expr = scg.new_expr("hello"),
-    #         exp = """\
-    # "hello"\
-    # """,
-    #         msg = "a single part",
-    #     ),
-    # ]
-    # for t in tests:
-    #     actual = scg.to_starlark(t.expr)
-    #     asserts.equals(env, t.exp, actual, t.msg)
+    tests = [
+        struct(
+            expr = scg.new_expr("hello"),
+            exp = """\
+"hello"\
+""",
+            msg = "a single part",
+        ),
+    ]
+    for t in tests:
+        actual = scg.to_starlark(t.expr)
+        asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)
 

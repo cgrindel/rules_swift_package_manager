@@ -251,7 +251,8 @@ def _new_expr(first, *others):
     )
 
 def _expr_to_starlark_parts(expr, indent):
-    return expr.parts
+    parts = [_normalize(p) for p in expr.parts]
+    return parts
 
 # MARK: - API Definition
 
