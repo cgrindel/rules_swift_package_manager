@@ -207,11 +207,11 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         local_includes.extend(organized_files.private_includes)
     if target.clang_settings != None:
         if len(target.clang_settings.defines) > 0:
-            # TODO(chuck): Support conditional
+            # GH153: Support conditional
             for bs in target.clang_settings.defines:
                 attrs["defines"].extend(bs.value)
         if len(target.clang_settings.hdr_srch_paths) > 0:
-            # TODO(chuck): Support conditional
+            # GH153: Support conditional
             hdr_srch_paths = lists.flatten([
                 bs.value
                 for bs in target.clang_settings.hdr_srch_paths
@@ -221,7 +221,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 for p in hdr_srch_paths
             ])
     if target.linker_settings != None:
-        # TODO(chuck): Support conditional
+        # GH153: Support conditional
         linkopts = attrs.get("linkopts", default = [])
         copts = attrs.get("copts", default = [])
         if len(target.linker_settings.linked_libraries) > 0:

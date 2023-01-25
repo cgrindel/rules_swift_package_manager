@@ -4,6 +4,18 @@ load("@bazel_skylib//lib:sets.bzl", "sets")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
 def _new(kind, name, attrs = {}, comments = []):
+    """Create a rule/macro declaration for a build file.
+
+    Args:
+        kind: The kind of rule/macro as a `string`.
+        name: The name attribute value of the declaration as a `string`.
+        attrs: Optional. The attributes for the declaration as a `dict`.
+        comments: Optional. Comments that appear before the declaration as a
+            `list` of `string` values.
+
+    Returns:
+        A `struct` representing a rule/macro declaration.
+    """
     return struct(
         kind = kind,
         name = name,
@@ -66,6 +78,18 @@ def _uniq(decls):
     return results
 
 def _get(decls, name, fail_if_not_found = True):
+    """Returns the declaration with the specified name.
+
+    Args:
+        decls: A `list` of `struct` values as returned by `build_decls.new`.
+        name: The name of the desired declaration as a `string`.
+        fail_if_not_found: Optional. A `bool` the determines whether to fail
+            if the declaration is not found.
+
+    Returns:
+        The declaration `struct`, if it is found. Otherwise, it fails or
+        returns `None` depending upon the value of `fail_if_not_found`.
+    """
     for decl in decls:
         if decl.name == name:
             return decl
@@ -74,6 +98,16 @@ def _get(decls, name, fail_if_not_found = True):
     return None
 
 def _new_fn_call(fn_name, *args, **kwargs):
+    """Create a function call.
+
+    Args:
+        fn_name: The name of the function as a `string`.
+        *args: Positional arguments for the function call.
+        **kwargs: Named arguments for the function call.
+
+    Returns:
+        A `struct` representing a Starlark function call.
+    """
     return struct(
         fn_name = fn_name,
         args = args,

@@ -132,9 +132,9 @@ def _process_complex_types(out):
         finished = False
 
         if v_type == "list":
-            new_out.extend(_list(v, current_indent))
+            new_out.extend(_process_list(v, current_indent))
         elif v_type == "dict":
-            new_out.extend(_dict(v, current_indent))
+            new_out.extend(_process_dict(v, current_indent))
         elif v_type == "struct":
             to_starlark_fn = getattr(v, "to_starlark_parts", None)
             if to_starlark_fn == None:
@@ -145,7 +145,7 @@ def _process_complex_types(out):
 
     return new_out, finished
 
-def _list(val, current_indent):
+def _process_list(val, current_indent):
     val_len = len(val)
     if val_len == 0:
         return ["[]"]
@@ -164,7 +164,7 @@ def _list(val, current_indent):
     output.extend([_indent(current_indent), "]"])
     return output
 
-def _dict(val, current_indent):
+def _process_dict(val, current_indent):
     if len(val) == 0:
         return ["{}"]
 
