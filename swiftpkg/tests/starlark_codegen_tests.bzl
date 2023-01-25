@@ -211,6 +211,51 @@ foo(
 
 fn_call_to_starlark_parts_test = unittest.make(_fn_call_to_starlark_parts_test)
 
+def _new_expr_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            expr = scg.new_expr("hello"),
+            exp = ["hello"],
+            msg = "a single part",
+        ),
+        struct(
+            expr = scg.new_expr("hello", 123, ["howdy"]),
+            exp = ["hello", 123, ["howdy"]],
+            msg = "multiple parts",
+        ),
+    ]
+    for t in tests:
+        actual = t.expr.parts
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+new_expr_test = unittest.make(_new_expr_test)
+
+def _expr_to_starlark_parts_test(ctx):
+    env = unittest.begin(ctx)
+
+    unittest.fail(env, "IMPLEMENT ME!")
+
+    # tests = [
+    #     struct(
+    #         expr = scg.new_expr("hello"),
+    #         exp = """\
+    # "hello"\
+    # """,
+    #         msg = "a single part",
+    #     ),
+    # ]
+    # for t in tests:
+    #     actual = scg.to_starlark(t.expr)
+    #     asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+expr_to_starlark_parts_test = unittest.make(_expr_to_starlark_parts_test)
+
 def starlark_codegen_test_suite():
     return unittest.suite(
         "starlark_codegen_tests",
@@ -218,4 +263,6 @@ def starlark_codegen_test_suite():
         to_starlark_test,
         to_starlark_with_struct_test,
         fn_call_to_starlark_parts_test,
+        new_expr_test,
+        expr_to_starlark_parts_test,
     )

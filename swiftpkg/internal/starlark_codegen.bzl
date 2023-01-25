@@ -240,9 +240,25 @@ def _fn_call_to_starlark_parts(fn_call, indent):
     parts.append(_indent(indent, ")"))
     return parts
 
+# MARK: - Expression
+
+def _new_expr(first, *others):
+    parts = [first]
+    parts.extend(others)
+    return struct(
+        parts = parts,
+        to_starlark_parts = _expr_to_starlark_parts,
+    )
+
+def _expr_to_starlark_parts(expr, indent):
+    return expr.parts
+
+# MARK: - API Definition
+
 starlark_codegen = struct(
-    new_attr = _new_attr,
     indent = _indent,
+    new_attr = _new_attr,
+    new_expr = _new_expr,
     new_fn_call = _new_fn_call,
     normalize = _normalize,
     to_starlark = _to_starlark,
