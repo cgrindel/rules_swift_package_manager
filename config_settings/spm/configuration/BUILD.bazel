@@ -7,11 +7,6 @@ package(default_visibility = ["//visibility:public"])
 
 bzlformat_pkg(name = "bzlformat")
 
-bzl_library(
-    name = "configurations",
-    srcs = ["configurations.bzl"],
-)
-
 # Bazel compilation modes
 # https://bazel.build/docs/user-manual#compilation-mode
 SPM_CONFIG_TO_COMPILATION_MODE = {
@@ -26,3 +21,8 @@ SPM_CONFIG_TO_COMPILATION_MODE = {
     )
     for (spm_config, bzl_comp_mode) in SPM_CONFIG_TO_COMPILATION_MODE.items()
 ]
+
+bzl_library(
+    name = "configurations",
+    srcs = ["configurations.bzl"],
+)

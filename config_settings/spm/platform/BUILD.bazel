@@ -7,11 +7,6 @@ package(default_visibility = ["//visibility:public"])
 
 bzlformat_pkg(name = "bzlformat")
 
-bzl_library(
-    name = "platforms",
-    srcs = ["platforms.bzl"],
-)
-
 # NOTE: Ensure that the list of spm_platforms in spm_platforms.bzl stays in
 # sync with the config_setting and selects.config_setting_group declarations.
 
@@ -41,3 +36,8 @@ bzl_library(
     )
     for platform in platforms.non_apple_platforms
 ]
+
+bzl_library(
+    name = "platforms",
+    srcs = ["platforms.bzl"],
+)

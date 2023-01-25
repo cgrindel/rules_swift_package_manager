@@ -1,3 +1,4 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load(":platform_configurations.bzl", "platform_configurations")
@@ -19,3 +20,12 @@ bzlformat_pkg(name = "bzlformat")
     )
     for pc in platform_configurations.all_values
 ]
+
+bzl_library(
+    name = "platform_configurations",
+    srcs = ["platform_configurations.bzl"],
+    deps = [
+        "//config_settings/spm/configuration:configurations",
+        "//config_settings/spm/platform:platforms",
+    ],
+)
