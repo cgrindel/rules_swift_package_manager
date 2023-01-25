@@ -232,7 +232,12 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             ])
             linkopts.extend(["-l{}".format(ll) for ll in linked_libraries])
         if len(target.linker_settings.linked_frameworks) > 0:
-            # This is using a objc_library attr.
+            # DEBUG BEGIN
+            print("*** CHUCK target.linker_settings.linked_frameworks: ")
+            for idx, item in enumerate(target.linker_settings.linked_frameworks):
+                print("*** CHUCK", idx, ":", item)
+
+            # DEBUG END
             linked_frameworks = lists.flatten([
                 bs.value
                 for bs in target.linker_settings.linked_frameworks
