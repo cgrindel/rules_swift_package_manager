@@ -213,6 +213,11 @@ bzl_library(
     name = "spm_conditions",
     srcs = ["spm_conditions.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        "//config_settings/spm/configuration:configurations",
+        "//config_settings/spm/platform:platforms",
+        "//config_settings/spm/platform_configuration:platform_configurations",
+    ],
 )
 
 bzl_library(

@@ -2,28 +2,89 @@
 Module for transforming Swift package manifest conditionals to Starlark.
 """
 
-def _new(identifier, condition, value):
+load(
+    "//config_settings/spm/configuration:configurations.bzl",
+    spm_configurations = "configurations",
+)
+load(
+    "//config_settings/spm/platform:platforms.bzl",
+    spm_platforms = "platforms",
+)
+load(
+    "//config_settings/spm/platform_configuration:platform_configurations.bzl",
+    spm_platform_configurations = "platform_configurations",
+)
+
+def _new(value, kind = None, condition = None):
+    """Create `struct` that represents a Swift package manager condition.
+
+    Args:
+        value: The value associated with the condition.
+        kind: Optional. A `string` that identifies the value. This comes from
+            the SPM dump manifest. (e.g. `linkedFramework`)
+        condition: Optional. A `string` representing a valid `select()` label.
+
+    Returns:
+        A `struct` representing a Swift package manager condition.
+    """
+    if (kind != None and condition == None) or \
+       (kind == None and condition != None):
+        fail("""\
+An kind and condition must be specified together. \
+kind: {kind} condition: {condition}\
+""".format(kind = kind, condition = condition))
     return struct(
-        identifier = identifier,
+        kind = kind,
         condition = condition,
         value = value,
     )
 
-def _new_default(identifier, value):
+def _new_default(kind, value):
+    """Create an SPM condition with the condition set to Bazel's default value.
+
+    Args:
+        kind: A `string` that identifies the value. This comes from the SPM dump
+            manifest. (e.g. `linkedFramework`)
+        value: The value associated with the condition.
+
+    Returns:
+        A `struct` representing a Swift package manager condition.
+    """
     return _new(
-        identifier = identifier,
+        kind = kind,
         condition = "//conditions:default",
         value = value,
     )
 
 # GH153: Finish conditional support.
 
-# def _new_from_build_setting(build_setting):
-#     bsc = build_setting.condition
-#     results = []
-#     for platform in bsc.platforms:
-#         pass
-#     return results
+def _new_from_build_setting(build_setting):
+    bsc = build_setting.condition
+    if bsc == None:
+        return [
+            _new(kind = build_setting.name, value = build_setting.value),
+        ]
+
+    results = []
+    if bsc.platforms != None and bsc.configuration != None:
+        conditions = [
+            spm_platform_configurations.label(p, bsc.configuration)
+            for p in bsc.platforms
+        ]
+    elif bsc.platforms != None:
+        conditions = [spm_platforms.label(p) for p in bsc.platforms]
+    elif bsc.configuration != None:
+        conditions = [spm_configurations.label(bsc.configuration)]
+    else:
+        fail("""\
+Found a build setting condition that had no platforms or a configuration. {}\
+""".format(build_setting))
+
+    return [
+        _new(kind = build_setting.name, value = v, condition = c)
+        for v in build_setting.values
+        for c in conditions
+    ]
 
 # NEED TO CONVERT:
 #   {
@@ -63,9 +124,9 @@ def _new_default(identifier, value):
 #   }
 # TO:
 #   ["-framework Foo"] + select({
-#       "@cgrindel_swift_bazel//config_settings/platform_types:macos": ["AppKit"],
-#       "@cgrindel_swift_bazel//config_settings/platform_types:ios": ["UIKit"],
-#       "@cgrindel_swift_bazel//config_settings/platform_types:tvos": ["UIKit"],
+#       "@cgrindel_swift_bazel//config_settings/platform_types:macos": ["-framework AppKit"],
+#       "@cgrindel_swift_bazel//config_settings/platform_types:ios": ["-framework UIKit"],
+#       "@cgrindel_swift_bazel//config_settings/platform_types:tvos": ["-framework UIKit"],
 #       "//conditions:default": [],
 #   })
 
@@ -93,7 +154,13 @@ def _new_default(identifier, value):
 # def _conditional_to_starlark(with_condition):
 #     return []
 
+def _to_starlark(values, default = None):
+    # TODO(chuck): IMPLEMENT ME!
+    pass
+
 spm_conditions = struct(
     new = _new,
     new_default = _new_default,
+    new_from_build_setting = _new_from_build_setting,
+    to_starlark = _to_starlark,
 )

@@ -59,27 +59,27 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
                 ],
                 clang_settings = pkginfos.new_clang_settings([
                     pkginfos.new_build_setting(
-                        name = "headerSearchPath",
-                        value = ["../.."],
+                        kind = "headerSearchPath",
+                        values = ["../.."],
                     ),
                 ]),
                 swift_settings = pkginfos.new_swift_settings([
                     pkginfos.new_build_setting(
-                        name = "define",
-                        value = ["COOL_SWIFT_DEFINE"],
+                        kind = "define",
+                        values = ["COOL_SWIFT_DEFINE"],
                     ),
                 ]),
                 linker_settings = pkginfos.new_linker_settings([
                     pkginfos.new_build_setting(
-                        name = "linkedFramework",
-                        value = ["UIKit"],
+                        kind = "linkedFramework",
+                        values = ["UIKit"],
                         condition = pkginfos.new_build_setting_condition(
                             platforms = ["ios", "tvos"],
                         ),
                     ),
                     pkginfos.new_build_setting(
-                        name = "linkedFramework",
-                        value = ["AppKit"],
+                        kind = "linkedFramework",
+                        values = ["AppKit"],
                         condition = pkginfos.new_build_setting_condition(
                             platforms = ["macos"],
                         ),
@@ -145,18 +145,18 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
         ],
         clang_settings = pkginfos.new_clang_settings([
             pkginfos.new_build_setting(
-                name = "define",
-                value = ["__APPLE_USE_RFC_3542"],
+                kind = "define",
+                values = ["__APPLE_USE_RFC_3542"],
             ),
             pkginfos.new_build_setting(
-                name = "headerSearchPath",
-                value = ["libbar"],
+                kind = "headerSearchPath",
+                values = ["libbar"],
             ),
         ]),
         linker_settings = pkginfos.new_linker_settings([
             pkginfos.new_build_setting(
-                name = "linkedLibrary",
-                value = ["foo"],
+                kind = "linkedLibrary",
+                values = ["foo"],
             ),
         ]),
         public_hdrs_path = "include",

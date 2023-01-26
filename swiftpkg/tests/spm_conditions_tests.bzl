@@ -7,11 +7,11 @@ def _new_test(ctx):
     env = unittest.begin(ctx)
 
     actual = spm_conditions.new(
-        identifier = "platform_types",
+        kind = "platform_types",
         condition = "//path/setting:foo",
         value = ["bar"],
     )
-    asserts.equals(env, actual.identifier, "platform_types")
+    asserts.equals(env, actual.kind, "platform_types")
     asserts.equals(env, actual.condition, "//path/setting:foo")
     asserts.equals(env, actual.value, ["bar"])
 
@@ -23,11 +23,11 @@ def _new_default_test(ctx):
     env = unittest.begin(ctx)
 
     actual = spm_conditions.new_default(
-        identifier = "platform_types",
+        kind = "platform_types",
         value = [],
     )
     expected = spm_conditions.new(
-        identifier = "platform_types",
+        kind = "platform_types",
         condition = "//conditions:default",
         value = [],
     )

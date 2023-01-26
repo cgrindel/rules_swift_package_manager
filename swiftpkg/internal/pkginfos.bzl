@@ -227,8 +227,8 @@ def _new_build_settings_from_json(dump_map):
     #   }
     # Maps to build setting values:
     #   _new_build_setting(
-    #       name = "linkedFramework",
-    #       value = ["UIKit"],
+    #       kind = "linkedFramework",
+    #       values = ["UIKit"],
     #       condition = _new_build_setting_condition(
     #           platforms = ["ios", "tvos"],
     #       ),
@@ -241,11 +241,11 @@ def _new_build_settings_from_json(dump_map):
         return []
     return [
         _new_build_setting(
-            name = build_setting_name,
-            value = kind_type_values.values(),
+            kind = build_setting_kind,
+            values = kind_type_values.values(),
             condition = condition,
         )
-        for (build_setting_name, kind_type_values) in kind_map.items()
+        for (build_setting_kind, kind_type_values) in kind_map.items()
     ]
 
 def _new_clang_settings_from_dump_json_list(dump_list):
@@ -680,6 +680,16 @@ def _new_target(
 # MARK: - Build Settings
 
 def _new_build_setting_condition(platforms = None, configuration = None):
+    """Create a build setting condition.
+
+    Args:
+        platforms: Optional. A `list` of platform names as `string` values.
+        configuration: Optional. The name of an SPM configuration as a `string`
+            value.
+
+    Returns:
+        A `struct` representing build setting condition.
+    """
     if platforms == None and configuration == None:
         return None
     if platforms != None:
@@ -702,23 +712,21 @@ def _new_build_setting_condition(platforms = None, configuration = None):
         configuration = configuration,
     )
 
-def _new_build_setting(name, value, condition = None):
+def _new_build_setting(kind, values, condition = None):
     """Create a build setting data struct.
 
     Args:
-        name: The name of the build setting as a `string`.
-        value: The value for the build setting as a `list`.
+        kind: The name of the build setting as a `string`.
+        values: The value for the build setting as a `list`.
         condition: Optional. A `struct` as returned by
             `pkginfos.new_build_setting_condition`.
 
     Returns:
         A `struct` representing a build setting.
     """
-    if type(value) != "list":
-        value = [value]
     return struct(
-        name = name,
-        value = value,
+        kind = kind,
+        values = values,
         condition = condition,
     )
 
@@ -735,9 +743,9 @@ def _new_clang_settings(build_settings):
     defines = []
     hdr_srch_paths = []
     for bs in build_settings:
-        if bs.name == "define":
+        if bs.kind == "define":
             defines.append(bs)
-        elif bs.name == "headerSearchPath":
+        elif bs.kind == "headerSearchPath":
             hdr_srch_paths.append(bs)
         else:
             # We do not recognize the setting.
@@ -761,7 +769,7 @@ def _new_swift_settings(build_settings):
     """
     defines = []
     for bs in build_settings:
-        if bs.name == "define":
+        if bs.kind == "define":
             defines.append(bs)
         else:
             # We do not recognize the setting.
@@ -785,9 +793,9 @@ def _new_linker_settings(build_settings):
     linked_libraries = []
     linked_frameworks = []
     for bs in build_settings:
-        if bs.name == "linkedLibrary":
+        if bs.kind == "linkedLibrary":
             linked_libraries.append(bs)
-        elif bs.name == "linkedFramework":
+        elif bs.kind == "linkedFramework":
             linked_frameworks.append(bs)
         else:
             # We do not recognize the setting.

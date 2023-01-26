@@ -11,6 +11,7 @@ load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "module_types", "target_types")
 load(":repository_files.bzl", "repository_files")
+load(":spm_conditions.bzl", "spm_conditions")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
 # MARK: - Target Entry Point
@@ -176,17 +177,17 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     ])
 
     attrs = {
-        # These flags are used by SPM when compiling clang modules.
-        "copts": [
-            # Enable 'blocks' language feature
-            "-fblocks",
-            # Synthesize retain and release calls for Objective-C pointers
-            "-fobjc-arc",
-            # Enable support for PIC macros
-            "-fPIC",
-            # Module name
-            "-fmodule-name={}".format(target.c99name),
-        ],
+        # # These flags are used by SPM when compiling clang modules.
+        # "copts": [
+        #     # Enable 'blocks' language feature
+        #     "-fblocks",
+        #     # Synthesize retain and release calls for Objective-C pointers
+        #     "-fobjc-arc",
+        #     # Enable support for PIC macros
+        #     "-fPIC",
+        #     # Module name
+        #     "-fmodule-name={}".format(target.c99name),
+        # ],
         # The SWIFT_PACKAGE define is a magical value that SPM uses when it
         # builds clang libraries that will be used as Swift modules.
         "defines": ["SWIFT_PACKAGE=1"],
@@ -195,6 +196,22 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "visibility": ["//visibility:public"],
     }
 
+    # These flags are used by SPM when compiling clang modules.
+    copts = [
+        spm_conditions.new(value = v)
+        for v in [
+            # Enable 'blocks' language feature
+            "-fblocks",
+            # Synthesize retain and release calls for Objective-C pointers
+            "-fobjc-arc",
+            # Enable support for PIC macros
+            "-fPIC",
+            # Module name
+            "-fmodule-name={}".format(target.c99name),
+        ]
+    ]
+
+    linkopts = []
     hdrs = []
     srcs = []
     extra_hdr_dirs = []
@@ -223,8 +240,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             ])
     if target.linker_settings != None:
         # GH153: Support conditional
-        linkopts = attrs.get("linkopts", default = [])
-        copts = attrs.get("copts", default = [])
         if len(target.linker_settings.linked_libraries) > 0:
             linked_libraries = lists.flatten([
                 bs.value
@@ -232,16 +247,18 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             ])
             linkopts.extend(["-l{}".format(ll) for ll in linked_libraries])
         if len(target.linker_settings.linked_frameworks) > 0:
-            linked_frameworks = lists.flatten([
-                bs.value
+            # linked_frameworks = lists.flatten([
+            #     bs.value
+            #     for bs in target.linker_settings.linked_frameworks
+            # ])
+            # copts.extend([
+            #     "-framework {}".format(lf)
+            #     for lf in linked_frameworks
+            # ])
+            copts.extend(lists.flatten([
+                spm_conditions.new_from_build_setting(bs)
                 for bs in target.linker_settings.linked_frameworks
-            ])
-            copts.extend([
-                "-framework {}".format(lf)
-                for lf in linked_frameworks
-            ])
-        attrs["linkopts"] = linkopts
-        attrs["copts"] = copts
+            ]))
 
     if len(local_includes) > 0:
         # The `includes` attribute adds includes as -isystem which propagates
@@ -288,6 +305,12 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     if sets.length(srcs_set) > 0:
         srcs = sets.to_list(srcs_set)
         attrs["srcs"] = srcs
+
+    if len(linkopts) > 0:
+        attrs["linkopts"] = spm_conditions.to_starlark(linkopts, default = [])
+
+    if len(copts) > 0:
+        attrs["copts"] = spm_conditions.to_starlark(copts, default = [])
 
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     if clang_files.has_objc_srcs(srcs):
