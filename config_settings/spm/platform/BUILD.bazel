@@ -7,34 +7,33 @@ package(default_visibility = ["//visibility:public"])
 
 bzlformat_pkg(name = "bzlformat")
 
-# NOTE: Ensure that the list of spm_platforms in spm_platforms.bzl stays in
-# sync with the config_setting and selects.config_setting_group declarations.
+# NOTE: Ensure that the list of platforms in
+# //config_settings/spm/platform/platforms.bzl stays in sync with the
+# config_setting and selects.config_setting_group declarations.
 
 # MARK: - Platform
 
-# NOTE: The Bazel Apple platform type values match those of the corresponding
-# SPM platforms. If they ever diverge, we will need to add a mapping
-# somewhere.
-
 [
     selects.config_setting_group(
-        name = platform,
+        name = pi.spm,
         match_any = [
-            "//config_settings/bazel/apple_platform_type:{}".format(platform),
-            "@platforms//os:{}".format(platform),
+            "//config_settings/bazel/apple_platform_type:{}".format(pi.bzl),
+            "@platforms//os:{}".format(pi.os),
         ],
     )
-    for platform in platforms.apple_platforms
+    for pi in platforms.all_platform_infos
+    if pi.bzl != None and pi.os != None
 ]
 
 [
     config_setting(
-        name = platform,
+        name = pi.spm,
         constraint_values = [
-            "@platforms//os:{}".format(platform),
+            "@platforms//os:{}".format(pi.os),
         ],
     )
-    for platform in platforms.non_apple_platforms
+    for pi in platforms.all_platform_infos
+    if pi.bzl == None and pi.os != None
 ]
 
 filegroup(
@@ -46,4 +45,5 @@ filegroup(
 bzl_library(
     name = "platforms",
     srcs = ["platforms.bzl"],
+    deps = ["//config_settings/bazel/apple_platform_type:apple_platform_types"],
 )
