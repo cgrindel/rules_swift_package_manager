@@ -51,6 +51,17 @@ _PLATFORM_INFOS = [
     _platform_info(spm = "driverkit", bzl = None, os = None),
 ]
 
+def _label(name):
+    """Returns the condition label for the SPM platform name.
+
+    Args:
+        name: The SPM platform name as a `string`.
+
+    Returns:
+        The condition label as a `string`.
+    """
+    return "@cgrindel_bazel_starlib//config_settings/spm/platform:{}".format(name)
+
 platforms = struct(
     macos = "macos",
     maccatalyst = "maccatalyst",
@@ -64,4 +75,5 @@ platforms = struct(
     openbsd = "openbsd",
     all_values = [pi.spm for pi in _PLATFORM_INFOS],
     all_platform_infos = _PLATFORM_INFOS,
+    label = _label,
 )

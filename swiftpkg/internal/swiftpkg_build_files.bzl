@@ -55,7 +55,7 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["testonly"] = True
     if target.swift_settings and len(target.swift_settings.defines) > 0:
         for bs in target.swift_settings.defines:
-            attrs["defines"].extend(bs.value)
+            attrs["defines"].extend(bs.values)
     if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(target, attrs)]
@@ -198,17 +198,14 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 
     # These flags are used by SPM when compiling clang modules.
     copts = [
-        spm_conditions.new(value = v)
-        for v in [
-            # Enable 'blocks' language feature
-            "-fblocks",
-            # Synthesize retain and release calls for Objective-C pointers
-            "-fobjc-arc",
-            # Enable support for PIC macros
-            "-fPIC",
-            # Module name
-            "-fmodule-name={}".format(target.c99name),
-        ]
+        # Enable 'blocks' language feature
+        "-fblocks",
+        # Synthesize retain and release calls for Objective-C pointers
+        "-fobjc-arc",
+        # Enable support for PIC macros
+        "-fPIC",
+        # Module name
+        "-fmodule-name={}".format(target.c99name),
     ]
 
     linkopts = []
@@ -227,11 +224,11 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         if len(target.clang_settings.defines) > 0:
             # GH153: Support conditional
             for bs in target.clang_settings.defines:
-                attrs["defines"].extend(bs.value)
+                attrs["defines"].extend(bs.values)
         if len(target.clang_settings.hdr_srch_paths) > 0:
             # GH153: Support conditional
             hdr_srch_paths = lists.flatten([
-                bs.value
+                bs.values
                 for bs in target.clang_settings.hdr_srch_paths
             ])
             local_includes.extend([
@@ -242,13 +239,13 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # GH153: Support conditional
         if len(target.linker_settings.linked_libraries) > 0:
             linked_libraries = lists.flatten([
-                bs.value
+                bs.values
                 for bs in target.linker_settings.linked_libraries
             ])
             linkopts.extend(["-l{}".format(ll) for ll in linked_libraries])
         if len(target.linker_settings.linked_frameworks) > 0:
             # linked_frameworks = lists.flatten([
-            #     bs.value
+            #     bs.values
             #     for bs in target.linker_settings.linked_frameworks
             # ])
             # copts.extend([
@@ -265,7 +262,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # to cc_XXX that depend upon the library. Providing includes as -I only
         # provides the includes for this target.
         # https://bazel.build/reference/be/c-cpp#cc_library.includes
-        attrs["copts"].extend([
+        copts.extend([
             "-I{}".format(paths.normalize(paths.join(ext_repo_path, inc)))
             for inc in sets.to_list(sets.make(local_includes))
         ])
@@ -307,10 +304,18 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["srcs"] = srcs
 
     if len(linkopts) > 0:
-        attrs["linkopts"] = spm_conditions.to_starlark(linkopts, default = [])
+        attrs["linkopts"] = spm_conditions.to_starlark(linkopts)
 
     if len(copts) > 0:
-        attrs["copts"] = spm_conditions.to_starlark(copts, default = [])
+        attrs["copts"] = spm_conditions.to_starlark(
+            copts,
+            kind_handlers = {
+                "linkedFramework": spm_conditions.kind_handler(
+                    transform = lambda v: "-framework {}".format(v),
+                    default = [],
+                ),
+            },
+        )
 
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     if clang_files.has_objc_srcs(srcs):
