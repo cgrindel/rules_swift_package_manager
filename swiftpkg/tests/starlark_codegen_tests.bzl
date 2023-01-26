@@ -299,7 +299,29 @@ def _expr_to_starlark_parts_test(ctx):
     "smidgen",
 ]\
 """,
-            msg = "operator with list and function call",
+            msg = "operator with two lists",
+        ),
+        struct(
+            expr = scg.new_fn_call(
+                "foo",
+                param = scg.new_expr(
+                    ["hello", "goodbye"],
+                    scg.new_op("+"),
+                    ["chicken", "smidgen"],
+                ),
+            ),
+            exp = """\
+foo(
+    param = [
+        "hello",
+        "goodbye",
+    ] + [
+        "chicken",
+        "smidgen",
+    ],
+)\
+""",
+            msg = "expression as a function parameter",
         ),
     ]
     for t in tests:

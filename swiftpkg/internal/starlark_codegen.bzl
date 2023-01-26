@@ -284,7 +284,7 @@ def _expr_to_starlark_parts(expr, indent):
     last_idx = len(expr.members) - 1
     parts = []
     for (idx, m) in enumerate(expr.members):
-        parts.append(_normalize(m))
+        parts.append(_with_indent(indent, _normalize(m)))
         if idx != last_idx:
             parts.append(" ")
     return parts
