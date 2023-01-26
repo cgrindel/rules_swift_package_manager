@@ -175,6 +175,7 @@ spm_conditions = struct(
     new_default = _new_default,
     new_from_build_setting = _new_from_build_setting,
     to_starlark = _to_starlark,
+    default_condition = _bazel_select_default_condition,
 )
 
 # NEED TO CONVERT:

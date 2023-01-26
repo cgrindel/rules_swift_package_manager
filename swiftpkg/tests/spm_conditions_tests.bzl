@@ -189,6 +189,76 @@ def _to_starlark_test(ctx):
 ]\
 """,
         ),
+        struct(
+            msg = "with transform",
+            khs = {
+                "linkedLibrary": spm_conditions.new_kind_handler(
+                    transform = lambda v: "-l{}".format(v),
+                ),
+            },
+            vals = [
+                spm_conditions.new(
+                    value = "sqlite3",
+                    kind = "linkedLibrary",
+                ),
+                spm_conditions.new(
+                    value = "z",
+                    kind = "linkedLibrary",
+                ),
+            ],
+            exp = """\
+[
+    "-lsqlite3",
+    "-lz",
+]\
+""",
+        ),
+        struct(
+            msg = "one with condition, one without condition, no default",
+            khs = {},
+            vals = [
+                spm_conditions.new(
+                    value = "sqlite3",
+                    kind = "linkedLibrary",
+                ),
+                spm_conditions.new(
+                    value = "z",
+                    kind = "linkedLibrary",
+                    condition = "//my_conditions:condition1",
+                ),
+            ],
+            exp = """\
+["sqlite3"] + select({
+    "//my_conditions:condition1": ["z"],
+})\
+""",
+        ),
+        struct(
+            msg = "one with condition, one without condition, with default",
+            khs = {
+                "linkedLibrary": spm_conditions.new_kind_handler(
+                    transform = lambda v: v,
+                    default = [],
+                ),
+            },
+            vals = [
+                spm_conditions.new(
+                    value = "sqlite3",
+                    kind = "linkedLibrary",
+                ),
+                spm_conditions.new(
+                    value = "z",
+                    kind = "linkedLibrary",
+                    condition = "//my_conditions:condition1",
+                ),
+            ],
+            exp = """\
+["sqlite3"] + select({
+    "//my_conditions:condition1": ["z"],
+    "//conditions:default": [],
+})\
+""",
+        ),
     ]
     for t in tests:
         actual = scg.to_starlark(
