@@ -35,7 +35,7 @@ def _new(value, kind = None, condition = None):
     )
 
 def _new_default(kind, value):
-    """Create an SPM condition with the condition set to Bazel's default value.
+    """Create a condition with the condition set to Bazel's default value.
 
     Args:
         kind: A `string` that identifies the value. This comes from the SPM dump
@@ -54,6 +54,14 @@ def _new_default(kind, value):
 # GH153: Finish conditional support.
 
 def _new_from_build_setting(build_setting):
+    """Create conditions from an SPM build setting.
+
+    Args:
+        build_setting: A `struct` as returned by `pkginfos.new_build_setting`.
+
+    Returns:
+        A `list` of condition `struct` values (`spm_conditions.new`).
+    """
     bsc = build_setting.condition
     if bsc == None:
         return [

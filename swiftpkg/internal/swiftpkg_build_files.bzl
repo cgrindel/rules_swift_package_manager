@@ -237,11 +237,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             ])
     if target.linker_settings != None:
         if len(target.linker_settings.linked_libraries) > 0:
-            # linked_libraries = lists.flatten([
-            #     bs.values
-            #     for bs in target.linker_settings.linked_libraries
-            # ])
-            # linkopts.extend(["-l{}".format(ll) for ll in linked_libraries])
             linkopts.extend(lists.flatten([
                 spm_conditions.new_from_build_setting(bs)
                 for bs in target.linker_settings.linked_libraries
