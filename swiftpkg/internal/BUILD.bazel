@@ -210,8 +210,8 @@ bzl_library(
 )
 
 bzl_library(
-    name = "spm_conditionals",
-    srcs = ["spm_conditionals.bzl"],
+    name = "spm_conditions",
+    srcs = ["spm_conditions.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
 

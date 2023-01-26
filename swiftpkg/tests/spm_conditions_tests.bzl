@@ -1,12 +1,12 @@
-"""Tests for `spm_conditionals` module."""
+"""Tests for `spm_conditions` module."""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
-load("//swiftpkg/internal:spm_conditionals.bzl", "spm_conditionals")
+load("//swiftpkg/internal:spm_conditions.bzl", "spm_conditions")
 
 def _new_test(ctx):
     env = unittest.begin(ctx)
 
-    actual = spm_conditionals.new(
+    actual = spm_conditions.new(
         identifier = "platform_types",
         condition = "//path/setting:foo",
         value = ["bar"],
@@ -22,11 +22,11 @@ new_test = unittest.make(_new_test)
 def _new_default_test(ctx):
     env = unittest.begin(ctx)
 
-    actual = spm_conditionals.new_default(
+    actual = spm_conditions.new_default(
         identifier = "platform_types",
         value = [],
     )
-    expected = spm_conditionals.new(
+    expected = spm_conditions.new(
         identifier = "platform_types",
         condition = "//conditions:default",
         value = [],
@@ -37,9 +37,9 @@ def _new_default_test(ctx):
 
 new_default_test = unittest.make(_new_default_test)
 
-def spm_conditionals_test_suite():
+def spm_conditions_test_suite():
     return unittest.suite(
-        "spm_conditionals_tests",
+        "spm_conditions_tests",
         new_test,
         new_default_test,
     )

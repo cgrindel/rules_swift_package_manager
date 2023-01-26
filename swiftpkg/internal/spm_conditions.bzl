@@ -93,7 +93,7 @@ def _new_default(identifier, value):
 # def _conditional_to_starlark(with_condition):
 #     return []
 
-spm_conditionals = struct(
+spm_conditions = struct(
     new = _new,
     new_default = _new_default,
 )
