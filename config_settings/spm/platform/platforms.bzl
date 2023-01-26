@@ -60,7 +60,7 @@ def _label(name):
     Returns:
         The condition label as a `string`.
     """
-    return "@cgrindel_bazel_starlib//config_settings/spm/platform:{}".format(name)
+    return "@cgrindel_swift_bazel//config_settings/spm/platform:{}".format(name)
 
 platforms = struct(
     macos = "macos",
