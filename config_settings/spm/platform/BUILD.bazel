@@ -1,0 +1,49 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@bazel_skylib//lib:selects.bzl", "selects")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load(":platforms.bzl", "platforms")
+
+package(default_visibility = ["//visibility:public"])
+
+bzlformat_pkg(name = "bzlformat")
+
+# NOTE: Ensure that the list of spm_platforms in spm_platforms.bzl stays in
+# sync with the config_setting and selects.config_setting_group declarations.
+
+# MARK: - Platform
+
+# NOTE: The Bazel Apple platform type values match those of the corresponding
+# SPM platforms. If they ever diverge, we will need to add a mapping
+# somewhere.
+
+[
+    selects.config_setting_group(
+        name = platform,
+        match_any = [
+            "//config_settings/bazel/apple_platform_type:{}".format(platform),
+            "@platforms//os:{}".format(platform),
+        ],
+    )
+    for platform in platforms.apple_platforms
+]
+
+[
+    config_setting(
+        name = platform,
+        constraint_values = [
+            "@platforms//os:{}".format(platform),
+        ],
+    )
+    for platform in platforms.non_apple_platforms
+]
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "platforms",
+    srcs = ["platforms.bzl"],
+)

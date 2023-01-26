@@ -1,0 +1,26 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load(":apple_platform_types.bzl", "apple_platform_types")
+
+package(default_visibility = ["//visibility:public"])
+
+bzlformat_pkg(name = "bzlformat")
+
+[
+    config_setting(
+        name = platform_type,
+        values = {"apple_platform_type": platform_type},
+    )
+    for platform_type in apple_platform_types.all_values
+]
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "apple_platform_types",
+    srcs = ["apple_platform_types.bzl"],
+)

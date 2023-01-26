@@ -1,0 +1,34 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@bazel_skylib//lib:selects.bzl", "selects")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load(":configurations.bzl", "configurations")
+
+package(default_visibility = ["//visibility:public"])
+
+bzlformat_pkg(name = "bzlformat")
+
+# Bazel compilation modes
+# https://bazel.build/docs/user-manual#compilation-mode
+SPM_CONFIG_TO_COMPILATION_MODE = {
+    configurations.debug: "//config_settings/bazel/compilation_mode:dbg",
+    configurations.release: "//config_settings/bazel/compilation_mode:opt",
+}
+
+[
+    selects.config_setting_group(
+        name = spm_config,
+        match_all = [bzl_comp_mode],
+    )
+    for (spm_config, bzl_comp_mode) in SPM_CONFIG_TO_COMPILATION_MODE.items()
+]
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "configurations",
+    srcs = ["configurations.bzl"],
+)

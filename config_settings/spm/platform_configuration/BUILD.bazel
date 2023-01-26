@@ -1,0 +1,37 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@bazel_skylib//lib:selects.bzl", "selects")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load(":platform_configurations.bzl", "platform_configurations")
+
+package(default_visibility = ["//visibility:public"])
+
+bzlformat_pkg(name = "bzlformat")
+
+[
+    selects.config_setting_group(
+        name = platform_configurations.new_name(
+            pc.platform,
+            pc.configuration,
+        ),
+        match_all = [
+            "//config_settings/spm/configuration:{}".format(pc.configuration),
+            "//config_settings/spm/platform:{}".format(pc.platform),
+        ],
+    )
+    for pc in platform_configurations.all_values
+]
+
+bzl_library(
+    name = "platform_configurations",
+    srcs = ["platform_configurations.bzl"],
+    deps = [
+        "//config_settings/spm/configuration:configurations",
+        "//config_settings/spm/platform:platforms",
+    ],
+)
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
