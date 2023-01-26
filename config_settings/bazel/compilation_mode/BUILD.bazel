@@ -12,14 +12,14 @@ bzlformat_pkg(name = "bzlformat")
     for comp_mode in compilation_modes.all_values
 ]
 
-bzl_library(
-    name = "compilation_modes",
-    srcs = ["compilation_modes.bzl"],
-    visibility = ["//visibility:public"],
-)
-
 filegroup(
     name = "all_files",
     srcs = glob(["*"]),
     visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "compilation_modes",
+    srcs = ["compilation_modes.bzl"],
+    visibility = ["//visibility:public"],
 )

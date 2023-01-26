@@ -22,13 +22,13 @@ SPM_CONFIG_TO_COMPILATION_MODE = {
     for (spm_config, bzl_comp_mode) in SPM_CONFIG_TO_COMPILATION_MODE.items()
 ]
 
-bzl_library(
-    name = "configurations",
-    srcs = ["configurations.bzl"],
-)
-
 filegroup(
     name = "all_files",
     srcs = glob(["*"]),
     visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "configurations",
+    srcs = ["configurations.bzl"],
 )

@@ -14,13 +14,13 @@ bzlformat_pkg(name = "bzlformat")
     for platform_type in apple_platform_types.all_values
 ]
 
-bzl_library(
-    name = "apple_platform_types",
-    srcs = ["apple_platform_types.bzl"],
-)
-
 filegroup(
     name = "all_files",
     srcs = glob(["*"]),
     visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "apple_platform_types",
+    srcs = ["apple_platform_types.bzl"],
 )

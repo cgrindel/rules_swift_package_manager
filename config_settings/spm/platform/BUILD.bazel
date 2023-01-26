@@ -37,13 +37,13 @@ bzlformat_pkg(name = "bzlformat")
     for platform in platforms.non_apple_platforms
 ]
 
-bzl_library(
-    name = "platforms",
-    srcs = ["platforms.bzl"],
-)
-
 filegroup(
     name = "all_files",
     srcs = glob(["*"]),
     visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "platforms",
+    srcs = ["platforms.bzl"],
 )
