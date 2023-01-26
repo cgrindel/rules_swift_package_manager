@@ -15,6 +15,7 @@ load(
 )
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 load("//swiftpkg/internal:spm_conditions.bzl", "spm_conditions")
+load("//swiftpkg/internal:starlark_codegen.bzl", scg = "starlark_codegen")
 
 def _new_test(ctx):
     env = unittest.begin(ctx)
@@ -153,10 +154,57 @@ def _new_from_build_setting_test(ctx):
 
 new_from_build_setting_test = unittest.make(_new_from_build_setting_test)
 
+def _to_starlark_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "string values",
+            khs = {},
+            vals = ["first", "second"],
+            exp = """\
+[
+    "first",
+    "second",
+]\
+""",
+        ),
+        struct(
+            msg = "no condition values",
+            khs = {},
+            vals = [
+                spm_conditions.new(
+                    value = "sqlite3",
+                    kind = "linkedLibrary",
+                ),
+                spm_conditions.new(
+                    value = "z",
+                    kind = "linkedLibrary",
+                ),
+            ],
+            exp = """\
+[
+    "sqlite3",
+    "z",
+]\
+""",
+        ),
+    ]
+    for t in tests:
+        actual = scg.to_starlark(
+            spm_conditions.to_starlark(t.vals, kind_handlers = t.khs),
+        )
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+to_starlark_test = unittest.make(_to_starlark_test)
+
 def spm_conditions_test_suite():
     return unittest.suite(
         "spm_conditions_tests",
         new_test,
         new_default_test,
         new_from_build_setting_test,
+        to_starlark_test,
     )

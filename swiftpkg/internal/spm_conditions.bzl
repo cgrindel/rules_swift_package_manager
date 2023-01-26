@@ -111,6 +111,10 @@ def _new_kind_handler(transform, default = None):
         default = default,
     )
 
+_noop_kind_handler = _new_kind_handler(
+    transform = lambda v: v,
+)
+
 def _to_starlark(values, kind_handlers = {}):
     """Converts the provied values into Starlark using the information in the \
     kind handlers.
@@ -135,10 +139,7 @@ def _to_starlark(values, kind_handlers = {}):
             no_condition_results.append(v)
             continue
 
-        kind_handler = kind_handlers.get(v.kind)
-        if kind_handler == None:
-            fail("A kind handler was not found for {}.".format(v.kind))
-
+        kind_handler = kind_handlers.get(v.kind, default = _noop_kind_handler)
         tv = kind_handler.transform(v.value)
         if v.condition != None:
             select_dict = selects_by_kind.get(v.kind, default = {})
@@ -219,24 +220,3 @@ spm_conditions = struct(
 #       "@cgrindel_swift_bazel//config_settings/platform_types:tvos": ["-framework UIKit"],
 #       "//conditions:default": [],
 #   })
-
-# def _build_settings_to_starlark(build_settings_or_strs):
-#     members = []
-#     no_conditions = []
-#     with_conditions = []
-#     for bs_or_str in build_settings_or_strs:
-#         if type(bs_or_str) == "struct":
-#             bs = bs_or_str
-#             if bs.condition == None:
-#                 no_conditions.extend(bs.value)
-#             else:
-#                 with_conditions.append(bs)
-#         else:
-#             no_conditions.append(bs_or_str)
-#     if len(no_conditions) > 0:
-#         members.append(no_conditions)
-#     for bs in with_conditions:
-#         if len(members) > 0:
-#             members.append(scg.new_op("+"))
-#         members.extend(_conditional_to_starlark(bs))
-#     return scg.new_expr(*members)
