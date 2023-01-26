@@ -16,6 +16,8 @@ load(
 )
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
+_bazel_select_default_condition = "//conditions:default"
+
 def _new(value, kind = None, condition = None):
     """Create `struct` that represents a Swift package manager condition.
 
@@ -89,23 +91,38 @@ Found a build setting condition that had no platforms or a configuration. {}\
         for c in conditions
     ]
 
-def _kind_handler(transform, default = None):
+def _new_kind_handler(transform, default = None):
+    """Creates a struct that encapsulates the information needed to process a \
+    condition.
+
+    Args:
+        transform: A `function` that accepts a single value. The value for a
+            condition is passed this function. The return value is used as the
+            Starlark output.
+        default: Optional. The value that should be added to the `select` dict
+            for the kind.
+
+    Returns:
+        A `struct` representing the information needed to process and kind
+        condition.
+    """
     return struct(
         transform = transform,
         default = default,
     )
 
 def _to_starlark(values, kind_handlers = {}):
-    # DEBUG BEGIN
-    print("*** CHUCK ========")
-    print("*** CHUCK to_starlark values: ")
-    for idx, item in enumerate(values):
-        print("*** CHUCK", idx, ":", item)
-    print("*** CHUCK kind_handlers: ")
-    for key in kind_handlers:
-        print("*** CHUCK", key, ":", kind_handlers[key])
+    """Converts the provied values into Starlark using the information in the \
+    kind handlers.
 
-    # DEBUG END
+    Args:
+        values: A `list` of values that processed and added to the output.
+        kind_handlers: A `dict` of king handler `struct` values
+            (`spm_conditions.new_kind_handler`).
+
+    Returns:
+        A `struct` as returned by `starlark_codegen.new_expr`.
+    """
 
     # The selects_by_kind has keys which are the kind and the value is a select
     # dict whose keys are the conditions and the value is the value for the
@@ -117,9 +134,11 @@ def _to_starlark(values, kind_handlers = {}):
         if type(v) != "struct":
             no_condition_results.append(v)
             continue
+
         kind_handler = kind_handlers.get(v.kind)
         if kind_handler == None:
             fail("A kind handler was not found for {}.".format(v.kind))
+
         tv = kind_handler.transform(v.value)
         if v.condition != None:
             select_dict = selects_by_kind.get(v.kind, default = {})
@@ -127,6 +146,13 @@ def _to_starlark(values, kind_handlers = {}):
             # We are assuming that the select will always result in a list.
             # Hence, we wrap the transformed value in a list.
             select_dict[v.condition] = [tv]
+
+            # If a default was specified and we have not already added it. Do so.
+            if kind_handler.default != None and \
+               select_dict.get(_bazel_select_default_condition) == None:
+                select_dict[_bazel_select_default_condition] = kind_handler.default
+
+            # Save the select dict
             selects_by_kind[v.kind] = select_dict
         else:
             no_condition_results.append(tv)
@@ -134,18 +160,16 @@ def _to_starlark(values, kind_handlers = {}):
     expr_members = []
     if len(no_condition_results) > 0:
         expr_members.append(no_condition_results)
-    for (kind, select_dict) in selects_by_kind.items():
+    for (_, select_dict) in selects_by_kind.items():
         if len(expr_members) > 0:
             expr_members.append(scg.new_op("+"))
-
-        # TODO(chuck): Add default value.
         select_fn = scg.new_fn_call("select", select_dict)
         expr_members.append(select_fn)
 
     return scg.new_expr(*expr_members)
 
 spm_conditions = struct(
-    kind_handler = _kind_handler,
+    new_kind_handler = _new_kind_handler,
     new = _new,
     new_default = _new_default,
     new_from_build_setting = _new_from_build_setting,

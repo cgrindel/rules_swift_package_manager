@@ -100,14 +100,14 @@ def _new_from_build_setting_test(ctx):
                     value = "sqlite3",
                     kind = "linkedLibrary",
                     condition = spm_platforms.label(
-                        spm_configurations.ios,
+                        spm_platforms.ios,
                     ),
                 ),
                 spm_conditions.new(
                     value = "sqlite3",
                     kind = "linkedLibrary",
                     condition = spm_platforms.label(
-                        spm_configurations.tvos,
+                        spm_platforms.tvos,
                     ),
                 ),
             ],
@@ -130,7 +130,7 @@ def _new_from_build_setting_test(ctx):
                     value = "sqlite3",
                     kind = "linkedLibrary",
                     condition = spm_platform_configurations.label(
-                        spm_configurations.ios,
+                        spm_platforms.ios,
                         spm_configurations.release,
                     ),
                 ),
@@ -138,7 +138,7 @@ def _new_from_build_setting_test(ctx):
                     value = "sqlite3",
                     kind = "linkedLibrary",
                     condition = spm_platform_configurations.label(
-                        spm_configurations.tvos,
+                        spm_platforms.tvos,
                         spm_configurations.release,
                     ),
                 ),
@@ -158,4 +158,5 @@ def spm_conditions_test_suite():
         "spm_conditions_tests",
         new_test,
         new_default_test,
+        new_from_build_setting_test,
     )

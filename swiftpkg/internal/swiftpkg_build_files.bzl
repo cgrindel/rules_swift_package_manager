@@ -297,7 +297,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["linkopts"] = spm_conditions.to_starlark(
             linkopts,
             kind_handlers = {
-                "linkedLibrary": spm_conditions.kind_handler(
+                "linkedLibrary": spm_conditions.new_kind_handler(
                     transform = lambda ll: "-l{}".format(ll),
                     default = [],
                 ),
@@ -308,7 +308,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["copts"] = spm_conditions.to_starlark(
             copts,
             kind_handlers = {
-                "linkedFramework": spm_conditions.kind_handler(
+                "linkedFramework": spm_conditions.new_kind_handler(
                     transform = lambda f: "-framework {}".format(f),
                     default = [],
                 ),
