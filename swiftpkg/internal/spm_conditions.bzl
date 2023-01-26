@@ -57,7 +57,8 @@ def _new_from_build_setting(build_setting):
     bsc = build_setting.condition
     if bsc == None:
         return [
-            _new(kind = build_setting.kind, value = build_setting.values),
+            _new(kind = build_setting.kind, value = v)
+            for v in build_setting.values
         ]
 
     if bsc.platforms != None and bsc.configuration != None:
@@ -88,6 +89,7 @@ def _kind_handler(transform, default = None):
 
 def _to_starlark(values, kind_handlers = {}):
     # DEBUG BEGIN
+    print("*** CHUCK ========")
     print("*** CHUCK to_starlark values: ")
     for idx, item in enumerate(values):
         print("*** CHUCK", idx, ":", item)

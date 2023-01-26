@@ -236,22 +236,17 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 for p in hdr_srch_paths
             ])
     if target.linker_settings != None:
-        # GH153: Support conditional
         if len(target.linker_settings.linked_libraries) > 0:
-            linked_libraries = lists.flatten([
-                bs.values
-                for bs in target.linker_settings.linked_libraries
-            ])
-            linkopts.extend(["-l{}".format(ll) for ll in linked_libraries])
-        if len(target.linker_settings.linked_frameworks) > 0:
-            # linked_frameworks = lists.flatten([
+            # linked_libraries = lists.flatten([
             #     bs.values
-            #     for bs in target.linker_settings.linked_frameworks
+            #     for bs in target.linker_settings.linked_libraries
             # ])
-            # copts.extend([
-            #     "-framework {}".format(lf)
-            #     for lf in linked_frameworks
-            # ])
+            # linkopts.extend(["-l{}".format(ll) for ll in linked_libraries])
+            linkopts.extend(lists.flatten([
+                spm_conditions.new_from_build_setting(bs)
+                for bs in target.linker_settings.linked_libraries
+            ]))
+        if len(target.linker_settings.linked_frameworks) > 0:
             copts.extend(lists.flatten([
                 spm_conditions.new_from_build_setting(bs)
                 for bs in target.linker_settings.linked_frameworks
@@ -304,14 +299,22 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["srcs"] = srcs
 
     if len(linkopts) > 0:
-        attrs["linkopts"] = spm_conditions.to_starlark(linkopts)
+        attrs["linkopts"] = spm_conditions.to_starlark(
+            linkopts,
+            kind_handlers = {
+                "linkedLibrary": spm_conditions.kind_handler(
+                    transform = lambda ll: "-l{}".format(ll),
+                    default = [],
+                ),
+            },
+        )
 
     if len(copts) > 0:
         attrs["copts"] = spm_conditions.to_starlark(
             copts,
             kind_handlers = {
                 "linkedFramework": spm_conditions.kind_handler(
-                    transform = lambda v: "-framework {}".format(v),
+                    transform = lambda f: "-framework {}".format(f),
                     default = [],
                 ),
             },
