@@ -209,7 +209,7 @@ def _new_build_setting_condition_from_json(dump_map):
         configuration = dump_map.get("config"),
     )
 
-def _new_build_setting_datas_from_json(dump_map):
+def _new_build_settings_from_json(dump_map):
     # Example build setting
     #   {
     #     "condition" : {
@@ -226,7 +226,7 @@ def _new_build_setting_datas_from_json(dump_map):
     #     "tool" : "linker"
     #   }
     # Maps to build setting values:
-    #   _new_build_setting_data(
+    #   _new_build_setting(
     #       name = "linkedFramework",
     #       value = ["UIKit"],
     #       condition = _new_build_setting_condition(
@@ -240,7 +240,7 @@ def _new_build_setting_datas_from_json(dump_map):
     if kind_map == None:
         return []
     return [
-        _new_build_setting_data(
+        _new_build_setting(
             name = build_setting_name,
             value = kind_type_values.values(),
             condition = condition,
@@ -253,7 +253,7 @@ def _new_clang_settings_from_dump_json_list(dump_list):
     for setting in dump_list:
         if setting["tool"] != "c":
             continue
-        build_settings.extend(_new_build_setting_datas_from_json(setting))
+        build_settings.extend(_new_build_settings_from_json(setting))
     return _new_clang_settings(build_settings)
 
 def _new_swift_settings_from_dump_json_list(dump_list):
@@ -261,7 +261,7 @@ def _new_swift_settings_from_dump_json_list(dump_list):
     for setting in dump_list:
         if setting["tool"] != "swift":
             continue
-        build_settings.extend(_new_build_setting_datas_from_json(setting))
+        build_settings.extend(_new_build_settings_from_json(setting))
     return _new_swift_settings(build_settings)
 
 def _new_linker_settings_from_dump_json_list(dump_list):
@@ -269,7 +269,7 @@ def _new_linker_settings_from_dump_json_list(dump_list):
     for setting in dump_list:
         if setting["tool"] != "linker":
             continue
-        build_settings.extend(_new_build_setting_datas_from_json(setting))
+        build_settings.extend(_new_build_settings_from_json(setting))
     return _new_linker_settings(build_settings)
 
 def _new_dependency_identity_to_name_map(dump_deps):
@@ -702,7 +702,7 @@ def _new_build_setting_condition(platforms = None, configuration = None):
         configuration = configuration,
     )
 
-def _new_build_setting_data(name, value, condition = None):
+def _new_build_setting(name, value, condition = None):
     """Create a build setting data struct.
 
     Args:
@@ -727,7 +727,7 @@ def _new_clang_settings(build_settings):
 
     Args:
         build_settings: A `list` of `struct` values as returned by
-            `pkginfos.new_build_setting_data`.
+            `pkginfos.new_build_setting`.
 
     Returns:
         A `struct` representing the clang settings.
@@ -754,7 +754,7 @@ def _new_swift_settings(build_settings):
 
     Args:
         build_settings: A `list` of `struct` values as returned by
-            `pkginfos.new_build_setting_data`.
+            `pkginfos.new_build_setting`.
 
     Returns:
         A `struct` representing the Swift settings.
@@ -777,7 +777,7 @@ def _new_linker_settings(build_settings):
 
     Args:
         build_settings: A `list` of `struct` values as returned by
-            `pkginfos.new_build_setting_data`.
+            `pkginfos.new_build_setting`.
 
     Returns:
         A `struct` representing the linker settings.
@@ -857,7 +857,7 @@ pkginfos = struct(
     new = _new,
     new_artifact_download_info = _new_artifact_download_info,
     new_build_setting_condition = _new_build_setting_condition,
-    new_build_setting_data = _new_build_setting_data,
+    new_build_setting = _new_build_setting,
     new_by_name_reference = _new_by_name_reference,
     new_clang_settings = _new_clang_settings,
     new_dependency = _new_dependency,

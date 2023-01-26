@@ -58,26 +58,26 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
                     ),
                 ],
                 clang_settings = pkginfos.new_clang_settings([
-                    pkginfos.new_build_setting_data(
+                    pkginfos.new_build_setting(
                         name = "headerSearchPath",
                         value = ["../.."],
                     ),
                 ]),
                 swift_settings = pkginfos.new_swift_settings([
-                    pkginfos.new_build_setting_data(
+                    pkginfos.new_build_setting(
                         name = "define",
                         value = ["COOL_SWIFT_DEFINE"],
                     ),
                 ]),
                 linker_settings = pkginfos.new_linker_settings([
-                    pkginfos.new_build_setting_data(
+                    pkginfos.new_build_setting(
                         name = "linkedFramework",
                         value = ["UIKit"],
                         condition = pkginfos.new_build_setting_condition(
                             platforms = ["ios", "tvos"],
                         ),
                     ),
-                    pkginfos.new_build_setting_data(
+                    pkginfos.new_build_setting(
                         name = "linkedFramework",
                         value = ["AppKit"],
                         condition = pkginfos.new_build_setting_condition(
@@ -144,17 +144,17 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
             "libbar/sharpyuv",
         ],
         clang_settings = pkginfos.new_clang_settings([
-            pkginfos.new_build_setting_data(
+            pkginfos.new_build_setting(
                 name = "define",
                 value = ["__APPLE_USE_RFC_3542"],
             ),
-            pkginfos.new_build_setting_data(
+            pkginfos.new_build_setting(
                 name = "headerSearchPath",
                 value = ["libbar"],
             ),
         ]),
         linker_settings = pkginfos.new_linker_settings([
-            pkginfos.new_build_setting_data(
+            pkginfos.new_build_setting(
                 name = "linkedLibrary",
                 value = ["foo"],
             ),
