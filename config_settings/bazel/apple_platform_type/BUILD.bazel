@@ -18,3 +18,9 @@ bzl_library(
     name = "apple_platform_types",
     srcs = ["apple_platform_types.bzl"],
 )
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
