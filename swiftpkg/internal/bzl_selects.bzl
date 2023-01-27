@@ -92,12 +92,12 @@ Found a build setting condition that had no platforms or a configuration. {}\
         for c in conditions
     ]
 
-def _new_kind_handler(transform, default = None):
+def _new_kind_handler(transform = None, default = None):
     """Creates a struct that encapsulates the information needed to process a \
     condition.
 
     Args:
-        transform: A `function` that accepts a single value. The value for a
+        transform: Optional. A `function` that accepts a single value. The value for a
             condition is passed this function. The return value is used as the
             Starlark output.
         default: Optional. The value that should be added to the `select` dict
@@ -107,6 +107,8 @@ def _new_kind_handler(transform, default = None):
         A `struct` representing the information needed to process and kind
         condition.
     """
+    if transform == None:
+        transform = lambda v: v
     return struct(
         transform = transform,
         default = default,

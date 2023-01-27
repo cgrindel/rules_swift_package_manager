@@ -276,6 +276,40 @@ def _to_starlark_test(ctx):
 
 to_starlark_test = unittest.make(_to_starlark_test)
 
+def _new_kind_handler_test(ctx):
+    env = unittest.begin(ctx)
+
+    value = "foo"
+
+    tests = [
+        struct(
+            msg = "no parameters",
+            transform = None,
+            default = None,
+            exp_tx = "foo",
+            exp_def = None,
+        ),
+        struct(
+            msg = "with parameters",
+            transform = lambda v: v + "bar",
+            default = [],
+            exp_tx = "foobar",
+            exp_def = [],
+        ),
+    ]
+    for t in tests:
+        kh = bzl_selects.new_kind_handler(
+            transform = t.transform,
+            default = t.default,
+        )
+        actual_tx = kh.transform(value)
+        asserts.equals(env, t.exp_tx, actual_tx, t.msg + " transform")
+        asserts.equals(env, t.exp_def, kh.default, t.msg + " default")
+
+    return unittest.end(env)
+
+new_kind_handler_test = unittest.make(_new_kind_handler_test)
+
 def bzl_selects_test_suite():
     return unittest.suite(
         "bzl_selects_tests",
@@ -283,4 +317,5 @@ def bzl_selects_test_suite():
         new_default_test,
         new_from_build_setting_test,
         to_starlark_test,
+        new_kind_handler_test,
     )
