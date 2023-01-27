@@ -7,14 +7,13 @@ load("//swiftpkg/internal:load_statements.bzl", "load_statements")
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
 load("//swiftpkg/internal:pkginfos.bzl", "library_type_kinds", "pkginfos")
+load("//swiftpkg/internal:starlark_codegen.bzl", scg = "starlark_codegen")
 load(
     "//swiftpkg/internal:swiftpkg_build_files.bzl",
     "skylib_build_test_load_stmt",
     "skylib_kinds",
     "swift_kinds",
-    "swift_library_load_stmt",
     "swift_location",
-    "swift_test_load_stmt",
     "swiftpkg_build_files",
 )
 
@@ -133,100 +132,188 @@ def new_stub_repository_ctx():
 
 repository_ctx = new_stub_repository_ctx()
 
-def _swift_library_target_test(ctx):
+def _target_generation_test(ctx):
     env = unittest.begin(ctx)
 
-    target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFramework")
-    actual = swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target)
-    expected = build_files.new(
-        load_stmts = [swift_library_load_stmt],
-        decls = [
-            build_decls.new(
-                kind = swift_kinds.library,
-                name = "Source_SwiftLintFramework",
-                attrs = {
-                    "defines": ["SWIFT_PACKAGE"],
-                    "deps": [],
-                    "module_name": "SwiftLintFramework",
-                    "srcs": [
-                        "Source/SwiftLintFramework/SwiftLintFramework.swift",
-                    ],
-                    "visibility": ["//visibility:public"],
-                },
-            ),
-        ],
-    )
-    asserts.equals(env, expected, actual)
+    tests = [
+        struct(
+            msg = "Swift library target",
+            name = "SwiftLintFramework",
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "Source_SwiftLintFramework",
+    defines = ["SWIFT_PACKAGE"],
+    deps = [],
+    module_name = "SwiftLintFramework",
+    srcs = ["Source/SwiftLintFramework/SwiftLintFramework.swift"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        # The swiftlint target is an older style executable definition (regular).
+        # We create the swift_library in the target package. Then, we create the
+        # executable when defining the product.
+        struct(
+            msg = "Swift regular target associated with executable product",
+            name = "swiftlint",
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "Source_swiftlint",
+    defines = ["SWIFT_PACKAGE"],
+    deps = ["@realm_swiftlint//:Source_SwiftLintFramework"],
+    module_name = "swiftlint",
+    srcs = [
+        "Source/swiftlint/Commands/SwiftLint.swift",
+        "Source/swiftlint/main.swift",
+    ],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Swift test target",
+            name = "SwiftLintFrameworkTests",
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
+
+swift_test(
+    name = "Tests_SwiftLintFrameworkTests",
+    defines = ["SWIFT_PACKAGE"],
+    deps = ["@realm_swiftlint//:Source_SwiftLintFramework"],
+    module_name = "SwiftLintFrameworkTests",
+    srcs = ["Tests/SwiftLintFrameworkTests/SwiftLintFrameworkTests.swift"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+    ]
+    for t in tests:
+        target = pkginfo_targets.get(_pkg_info.targets, t.name)
+        actual = scg.to_starlark(
+            swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target),
+        )
+        asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)
 
-swift_library_target_test = unittest.make(_swift_library_target_test)
+target_generation_test = unittest.make(_target_generation_test)
 
-def _swift_library_target_for_binary_test(ctx):
-    env = unittest.begin(ctx)
+# def _swift_library_target_test(ctx):
+#     env = unittest.begin(ctx)
 
-    # The swiftlint target is an older style executable definition (regular).
-    # We create the swift_library in the target package. Then, we create the
-    # executable when defining the product.
-    target = pkginfo_targets.get(_pkg_info.targets, "swiftlint")
-    actual = swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target)
-    expected = build_files.new(
-        load_stmts = [swift_library_load_stmt],
-        decls = [
-            build_decls.new(
-                kind = swift_kinds.library,
-                name = "Source_swiftlint",
-                attrs = {
-                    "defines": ["SWIFT_PACKAGE"],
-                    "deps": [
-                        "@realm_swiftlint//:Source_SwiftLintFramework",
-                    ],
-                    "module_name": "swiftlint",
-                    "srcs": [
-                        "Source/swiftlint/Commands/SwiftLint.swift",
-                        "Source/swiftlint/main.swift",
-                    ],
-                    "visibility": ["//visibility:public"],
-                },
-            ),
-        ],
-    )
-    asserts.equals(env, expected, actual)
+#     # target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFramework")
+#     # actual = swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target)
+#     # expected = build_files.new(
+#     #     load_stmts = [swift_library_load_stmt],
+#     #     decls = [
+#     #         build_decls.new(
+#     #             kind = swift_kinds.library,
+#     #             name = "Source_SwiftLintFramework",
+#     #             attrs = {
+#     #                 "defines": ["SWIFT_PACKAGE"],
+#     #                 "deps": [],
+#     #                 "module_name": "SwiftLintFramework",
+#     #                 "srcs": [
+#     #                     "Source/SwiftLintFramework/SwiftLintFramework.swift",
+#     #                 ],
+#     #                 "visibility": ["//visibility:public"],
+#     #             },
+#     #         ),
+#     #     ],
+#     # )
+#     # asserts.equals(env, expected, actual)
 
-    return unittest.end(env)
+#     target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFramework")
+#     actual = scg.to_starlark(
+#         swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target),
+#     )
+#     expected = """\
+# load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
-swift_library_target_for_binary_test = unittest.make(_swift_library_target_for_binary_test)
+# swift_library(
+#     name = "Source_SwiftLintFramework",
+#     defines = ["SWIFT_PACKAGE"],
+#     deps = [],
+#     module_name = "SwiftLintFramework",
+#     srcs = ["Source/SwiftLintFramework/SwiftLintFramework.swift"],
+#     visibility = ["//visibility:public"],
+# )
+# """
+#     asserts.equals(env, expected, actual)
 
-def _swift_test_target_test(ctx):
-    env = unittest.begin(ctx)
+#     return unittest.end(env)
 
-    target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFrameworkTests")
-    actual = swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target)
-    expected = build_files.new(
-        load_stmts = [swift_test_load_stmt],
-        decls = [
-            build_decls.new(
-                kind = swift_kinds.test,
-                name = "Tests_SwiftLintFrameworkTests",
-                attrs = {
-                    "defines": ["SWIFT_PACKAGE"],
-                    "deps": [
-                        "@realm_swiftlint//:Source_SwiftLintFramework",
-                    ],
-                    "module_name": "SwiftLintFrameworkTests",
-                    "srcs": [
-                        "Tests/SwiftLintFrameworkTests/SwiftLintFrameworkTests.swift",
-                    ],
-                    "visibility": ["//visibility:public"],
-                },
-            ),
-        ],
-    )
-    asserts.equals(env, expected, actual)
+# swift_library_target_test = unittest.make(_swift_library_target_test)
 
-    return unittest.end(env)
+# def _swift_library_target_for_binary_test(ctx):
+#     env = unittest.begin(ctx)
 
-swift_test_target_test = unittest.make(_swift_test_target_test)
+#     # The swiftlint target is an older style executable definition (regular).
+#     # We create the swift_library in the target package. Then, we create the
+#     # executable when defining the product.
+#     target = pkginfo_targets.get(_pkg_info.targets, "swiftlint")
+#     actual = swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target)
+#     expected = build_files.new(
+#         load_stmts = [swift_library_load_stmt],
+#         decls = [
+#             build_decls.new(
+#                 kind = swift_kinds.library,
+#                 name = "Source_swiftlint",
+#                 attrs = {
+#                     "defines": ["SWIFT_PACKAGE"],
+#                     "deps": [
+#                         "@realm_swiftlint//:Source_SwiftLintFramework",
+#                     ],
+#                     "module_name": "swiftlint",
+#                     "srcs": [
+#                         "Source/swiftlint/Commands/SwiftLint.swift",
+#                         "Source/swiftlint/main.swift",
+#                     ],
+#                     "visibility": ["//visibility:public"],
+#                 },
+#             ),
+#         ],
+#     )
+#     asserts.equals(env, expected, actual)
+
+#     return unittest.end(env)
+
+# swift_library_target_for_binary_test = unittest.make(_swift_library_target_for_binary_test)
+
+# def _swift_test_target_test(ctx):
+#     env = unittest.begin(ctx)
+
+#     target = pkginfo_targets.get(_pkg_info.targets, "SwiftLintFrameworkTests")
+#     actual = swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target)
+#     expected = build_files.new(
+#         load_stmts = [swift_test_load_stmt],
+#         decls = [
+#             build_decls.new(
+#                 kind = swift_kinds.test,
+#                 name = "Tests_SwiftLintFrameworkTests",
+#                 attrs = {
+#                     "defines": ["SWIFT_PACKAGE"],
+#                     "deps": [
+#                         "@realm_swiftlint//:Source_SwiftLintFramework",
+#                     ],
+#                     "module_name": "SwiftLintFrameworkTests",
+#                     "srcs": [
+#                         "Tests/SwiftLintFrameworkTests/SwiftLintFrameworkTests.swift",
+#                     ],
+#                     "visibility": ["//visibility:public"],
+#                 },
+#             ),
+#         ],
+#     )
+#     asserts.equals(env, expected, actual)
+
+#     return unittest.end(env)
+
+# swift_test_target_test = unittest.make(_swift_test_target_test)
 
 def _products_test(ctx):
     env = unittest.begin(ctx)
@@ -265,8 +352,9 @@ products_test = unittest.make(_products_test)
 def swiftpkg_build_files_test_suite():
     return unittest.suite(
         "swiftpkg_build_files_tests",
-        swift_library_target_test,
-        swift_library_target_for_binary_test,
-        swift_test_target_test,
+        # swift_library_target_test,
+        # swift_library_target_for_binary_test,
+        # swift_test_target_test,
         products_test,
+        target_generation_test,
     )

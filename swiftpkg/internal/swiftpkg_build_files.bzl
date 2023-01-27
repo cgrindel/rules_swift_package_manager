@@ -37,29 +37,43 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         for td in target.dependencies
     ])
     attrs = {
-        # SPM directive instructing the code to build as if a Swift package.
-        # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
-        "defines": ["SWIFT_PACKAGE"],
         "deps": deps,
         "module_name": target.c99name,
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//visibility:public"],
     }
+    defines = [
+        # SPM directive instructing the code to build as if a Swift package.
+        # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
+        "SWIFT_PACKAGE",
+    ]
+    copts = []
 
     # GH046: Support plugins.
-
-    # TODO(chuck): Add conditional support for Swift settings.
-
-    # TODO(chuck): Add unsafe_flags
 
     # The rules_swift code links in developer libraries if the rule is marked testonly.
     # https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/compiling.bzl#L1312-L1319
     is_test = _imports_xctest(repository_ctx, pkg_ctx, target)
+
+    if target.swift_settings != None:
+        if len(target.swift_settings.defines) > 0:
+            defines.extend(lists.flatten([
+                bzl_selects.new_from_build_setting(bs)
+                for bs in target.swift_settings.defines
+            ]))
+        if len(target.swift_settings.unsafe_flags) > 0:
+            copts.extend(lists.flatten([
+                bzl_selects.new_from_build_setting(bs)
+                for bs in target.swift_settings.unsafe_flags
+            ]))
+
     if is_test:
         attrs["testonly"] = True
-    if target.swift_settings and len(target.swift_settings.defines) > 0:
-        for bs in target.swift_settings.defines:
-            attrs["defines"].extend(bs.values)
+    if len(defines) > 0:
+        attrs["defines"] = bzl_selects.to_starlark(defines)
+    if len(copts) > 0:
+        attrs["copts"] = bzl_selects.to_starlark(copts)
+
     if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(target, attrs)]
@@ -344,12 +358,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         )
 
     if len(defines) > 0:
-        attrs["defines"] = bzl_selects.to_starlark(
-            defines,
-            # kind_handlers = {
-            #     "define": bzl_selects.new_kind_handler(default = []),
-            # },
-        )
+        attrs["defines"] = bzl_selects.to_starlark(defines)
 
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     if clang_files.has_objc_srcs(srcs):

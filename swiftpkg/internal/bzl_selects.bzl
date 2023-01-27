@@ -159,7 +159,6 @@ def _to_starlark(values, kind_handlers = {}):
 bzl_selects = struct(
     new_kind_handler = _new_kind_handler,
     new = _new,
-    # new_default = _new_default,
     new_from_build_setting = _new_from_build_setting,
     to_starlark = _to_starlark,
     default_condition = _bazel_select_default_condition,
