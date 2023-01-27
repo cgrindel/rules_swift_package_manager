@@ -37,24 +37,22 @@ def _new(value, kind = None, condition = None):
         value = value,
     )
 
-def _new_default(kind, value):
-    """Create a condition with the condition set to Bazel's default value.
+# def _new_default(kind, value):
+#     """Create a condition with the condition set to Bazel's default value.
 
-    Args:
-        kind: A `string` that identifies the value. This comes from the SPM dump
-            manifest. (e.g. `linkedFramework`)
-        value: The value associated with the condition.
+#     Args:
+#         kind: A `string` that identifies the value. This comes from the SPM dump
+#             manifest. (e.g. `linkedFramework`)
+#         value: The value associated with the condition.
 
-    Returns:
-        A `struct` representing a Swift package manager condition.
-    """
-    return _new(
-        kind = kind,
-        condition = "//conditions:default",
-        value = value,
-    )
-
-# GH153: Finish conditional support.
+#     Returns:
+#         A `struct` representing a Swift package manager condition.
+#     """
+#     return _new(
+#         kind = kind,
+#         condition = "//conditions:default",
+#         value = value,
+#     )
 
 def _new_from_build_setting(build_setting):
     """Create conditions from an SPM build setting.
@@ -92,7 +90,7 @@ Found a build setting condition that had no platforms or a configuration. {}\
         for c in conditions
     ]
 
-def _new_kind_handler(transform = None, default = None):
+def _new_kind_handler(transform = None, default = []):
     """Creates a struct that encapsulates the information needed to process a \
     condition.
 
@@ -101,7 +99,7 @@ def _new_kind_handler(transform = None, default = None):
             condition is passed this function. The return value is used as the
             Starlark output.
         default: Optional. The value that should be added to the `select` dict
-            for the kind.
+            for the kind. Defaults to `[]`.
 
     Returns:
         A `struct` representing the information needed to process and kind
@@ -178,7 +176,7 @@ def _to_starlark(values, kind_handlers = {}):
 bzl_selects = struct(
     new_kind_handler = _new_kind_handler,
     new = _new,
-    new_default = _new_default,
+    # new_default = _new_default,
     new_from_build_setting = _new_from_build_setting,
     to_starlark = _to_starlark,
     default_condition = _bazel_select_default_condition,

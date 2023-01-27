@@ -215,7 +215,11 @@ def _to_starlark_test(ctx):
         ),
         struct(
             msg = "one with condition, one without condition, no default",
-            khs = {},
+            khs = {
+                # If a default is not specified, it is assumed to be [].
+                # Hence, we need to specify None.
+                "linkedLibrary": bzl_selects.new_kind_handler(default = None),
+            },
             vals = [
                 bzl_selects.new(
                     value = "sqlite3",

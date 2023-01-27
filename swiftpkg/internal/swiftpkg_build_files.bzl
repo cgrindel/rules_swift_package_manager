@@ -10,7 +10,7 @@ load(":clang_files.bzl", "clang_files")
 load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
-load(":pkginfos.bzl", "module_types", "target_types")
+load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
 load(":repository_files.bzl", "repository_files")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
@@ -211,7 +211,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     if len(organized_files.hdrs) > 0:
         hdrs.extend(organized_files.hdrs)
     if len(organized_files.private_includes) > 0:
-        local_includes.extend(organized_files.private_includes)
+        local_includes.extend([
+            bzl_selects.new(value = p, kind = _condition_kinds.private_includes)
+            for p in organized_files.private_includes
+        ])
     if target.clang_settings != None:
         if len(target.clang_settings.defines) > 0:
             defines.extend(lists.flatten([
@@ -219,15 +222,39 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 for bs in target.clang_settings.defines
             ]))
         if len(target.clang_settings.hdr_srch_paths) > 0:
-            # GH153: Support conditional
-            hdr_srch_paths = lists.flatten([
-                bs.values
+            # # GH153: Support conditional
+            # hdr_srch_paths = lists.flatten([
+            #     bs.values
+            #     for bs in target.clang_settings.hdr_srch_paths
+            # ])
+            # local_includes.extend([
+            #     paths.join(target.path, p)
+            #     for p in hdr_srch_paths
+            # ])
+
+            # Need to convert the headerSearchPaths to be relative to the
+            # target path. We also do not want to lose any conditions that may
+            # be attached.
+            hsp_bss = [
+                pkginfos.new_build_setting(
+                    kind = bs.kind,
+                    values = [
+                        paths.join(target.path, p)
+                        for p in bs.values
+                    ],
+                    condition = bs.condition,
+                )
                 for bs in target.clang_settings.hdr_srch_paths
-            ])
-            local_includes.extend([
-                paths.join(target.path, p)
-                for p in hdr_srch_paths
-            ])
+            ]
+            local_includes.extend(lists.flatten([
+                bzl_selects.new_from_build_setting(bs)
+                for bs in hsp_bss
+            ]))
+            # local_includes.extend(lists.flatten([
+            #     bzl_selects.new_from_build_setting(bs)
+            #     for bs in target.clang_settings.hdr_srch_paths
+            # ]))
+
     if target.linker_settings != None:
         if len(target.linker_settings.linked_libraries) > 0:
             linkopts.extend(lists.flatten([
@@ -241,22 +268,38 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             ]))
 
     if len(local_includes) > 0:
-        # The `includes` attribute adds includes as -isystem which propagates
-        # to cc_XXX that depend upon the library. Providing includes as -I only
-        # provides the includes for this target.
-        # https://bazel.build/reference/be/c-cpp#cc_library.includes
-        copts.extend([
-            "-I{}".format(paths.normalize(paths.join(ext_repo_path, inc)))
-            for inc in sets.to_list(sets.make(local_includes))
-        ])
+        # # The `includes` attribute adds includes as -isystem which propagates
+        # # to cc_XXX that depend upon the library. Providing includes as -I only
+        # # provides the includes for this target.
+        # # https://bazel.build/reference/be/c-cpp#cc_library.includes
+        # copts.extend([
+        #     "-I{}".format(paths.normalize(paths.join(ext_repo_path, inc)))
+        #     for inc in sets.to_list(sets.make(local_includes))
+        # ])
+
+        copts.extend(local_includes)
 
         # If the target path is not everything (i.e., dot), then check for
         # local includes that are outside the target path. We need to add them
         # to the srcs so that they can be found.
         if target.path != ".":
-            # Ensure that any header files that are outside of the target path are
-            # included in the srcs.
+            # # Ensure that any header files that are outside of the target path are
+            # # included in the srcs.
+            # for li in local_includes:
+            #     normalized_li = paths.normalize(li)
+            #     if clang_files.is_under_path(normalized_li, target.path):
+            #         continue
+            #     extra_hdr_dirs.append(normalized_li)
+            local_include_values = []
             for li in local_includes:
+                li_type = type(li)
+                if li_type == "string":
+                    local_include_values.append(li)
+                elif li_type == "struct" and hasattr(li, "value"):
+                    local_include_values.append(li.value)
+                else:
+                    fail("Unrecognized local include value.", li)
+            for li in local_include_values:
                 normalized_li = paths.normalize(li)
                 if clang_files.is_under_path(normalized_li, target.path):
                     continue
@@ -290,20 +333,36 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["linkopts"] = bzl_selects.to_starlark(
             linkopts,
             kind_handlers = {
-                "linkedLibrary": bzl_selects.new_kind_handler(
+                _condition_kinds.linked_library: bzl_selects.new_kind_handler(
                     transform = lambda ll: "-l{}".format(ll),
-                    default = [],
                 ),
             },
         )
 
     if len(copts) > 0:
+        # The `includes` attribute adds includes as -isystem which propagates
+        # to cc_XXX that depend upon the library.  Providing includes as -I
+        # only provides the includes for this target.
+        # https://bazel.build/reference/be/c-cpp#cc_library.includes
+        local_includes_transform = lambda p: "-I{}".format(
+            paths.normalize(paths.join(ext_repo_path, p)),
+        )
         attrs["copts"] = bzl_selects.to_starlark(
             copts,
             kind_handlers = {
-                "linkedFramework": bzl_selects.new_kind_handler(
+                _condition_kinds.header_search_path: bzl_selects.new_kind_handler(
+                    transform = local_includes_transform,
+                    # # Need to convert the headerSearchPaths to be relative to
+                    # # the target path.
+                    # transform = lambda p: local_includes_transform(
+                    #     paths.join(target.path, p),
+                    # ),
+                ),
+                _condition_kinds.private_includes: bzl_selects.new_kind_handler(
+                    transform = local_includes_transform,
+                ),
+                _condition_kinds.linked_framework: bzl_selects.new_kind_handler(
                     transform = lambda f: "-framework {}".format(f),
-                    default = [],
                 ),
             },
         )
@@ -311,9 +370,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     if len(defines) > 0:
         attrs["defines"] = bzl_selects.to_starlark(
             defines,
-            kind_handlers = {
-                "define": bzl_selects.new_kind_handler(default = []),
-            },
+            # kind_handlers = {
+            #     "define": bzl_selects.new_kind_handler(default = []),
+            # },
         )
 
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
@@ -581,4 +640,11 @@ swiftpkg_build_defs_location = "@cgrindel_swift_bazel//swiftpkg:build_defs.bzl"
 swiftpkg_objc_module_alias_load_stmt = load_statements.new(
     swiftpkg_build_defs_location,
     swiftpkg_kinds.objc_module_alias,
+)
+
+_condition_kinds = struct(
+    private_includes = "_privateIncludes",
+    header_search_path = build_setting_kinds.header_search_path,
+    linked_framework = build_setting_kinds.linked_framework,
+    linked_library = build_setting_kinds.linked_library,
 )
