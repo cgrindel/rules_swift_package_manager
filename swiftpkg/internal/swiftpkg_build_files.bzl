@@ -5,6 +5,7 @@ load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
+load(":bzl_selects.bzl", "bzl_selects")
 load(":clang_files.bzl", "clang_files")
 load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
@@ -54,7 +55,7 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["testonly"] = True
     if target.swift_settings and len(target.swift_settings.defines) > 0:
         for bs in target.swift_settings.defines:
-            attrs["defines"].extend(bs.value)
+            attrs["defines"].extend(bs.values)
     if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(target, attrs)]
@@ -176,17 +177,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     ])
 
     attrs = {
-        # These flags are used by SPM when compiling clang modules.
-        "copts": [
-            # Enable 'blocks' language feature
-            "-fblocks",
-            # Synthesize retain and release calls for Objective-C pointers
-            "-fobjc-arc",
-            # Enable support for PIC macros
-            "-fPIC",
-            # Module name
-            "-fmodule-name={}".format(target.c99name),
-        ],
         # The SWIFT_PACKAGE define is a magical value that SPM uses when it
         # builds clang libraries that will be used as Swift modules.
         "defines": ["SWIFT_PACKAGE=1"],
@@ -195,6 +185,19 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "visibility": ["//visibility:public"],
     }
 
+    # These flags are used by SPM when compiling clang modules.
+    copts = [
+        # Enable 'blocks' language feature
+        "-fblocks",
+        # Synthesize retain and release calls for Objective-C pointers
+        "-fobjc-arc",
+        # Enable support for PIC macros
+        "-fPIC",
+        # Module name
+        "-fmodule-name={}".format(target.c99name),
+    ]
+
+    linkopts = []
     hdrs = []
     srcs = []
     extra_hdr_dirs = []
@@ -210,11 +213,11 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         if len(target.clang_settings.defines) > 0:
             # GH153: Support conditional
             for bs in target.clang_settings.defines:
-                attrs["defines"].extend(bs.value)
+                attrs["defines"].extend(bs.values)
         if len(target.clang_settings.hdr_srch_paths) > 0:
             # GH153: Support conditional
             hdr_srch_paths = lists.flatten([
-                bs.value
+                bs.values
                 for bs in target.clang_settings.hdr_srch_paths
             ])
             local_includes.extend([
@@ -222,33 +225,23 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 for p in hdr_srch_paths
             ])
     if target.linker_settings != None:
-        # GH153: Support conditional
-        linkopts = attrs.get("linkopts", default = [])
-        copts = attrs.get("copts", default = [])
         if len(target.linker_settings.linked_libraries) > 0:
-            linked_libraries = lists.flatten([
-                bs.value
+            linkopts.extend(lists.flatten([
+                bzl_selects.new_from_build_setting(bs)
                 for bs in target.linker_settings.linked_libraries
-            ])
-            linkopts.extend(["-l{}".format(ll) for ll in linked_libraries])
+            ]))
         if len(target.linker_settings.linked_frameworks) > 0:
-            linked_frameworks = lists.flatten([
-                bs.value
+            copts.extend(lists.flatten([
+                bzl_selects.new_from_build_setting(bs)
                 for bs in target.linker_settings.linked_frameworks
-            ])
-            copts.extend([
-                "-framework {}".format(lf)
-                for lf in linked_frameworks
-            ])
-        attrs["linkopts"] = linkopts
-        attrs["copts"] = copts
+            ]))
 
     if len(local_includes) > 0:
         # The `includes` attribute adds includes as -isystem which propagates
         # to cc_XXX that depend upon the library. Providing includes as -I only
         # provides the includes for this target.
         # https://bazel.build/reference/be/c-cpp#cc_library.includes
-        attrs["copts"].extend([
+        copts.extend([
             "-I{}".format(paths.normalize(paths.join(ext_repo_path, inc)))
             for inc in sets.to_list(sets.make(local_includes))
         ])
@@ -288,6 +281,28 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     if sets.length(srcs_set) > 0:
         srcs = sets.to_list(srcs_set)
         attrs["srcs"] = srcs
+
+    if len(linkopts) > 0:
+        attrs["linkopts"] = bzl_selects.to_starlark(
+            linkopts,
+            kind_handlers = {
+                "linkedLibrary": bzl_selects.new_kind_handler(
+                    transform = lambda ll: "-l{}".format(ll),
+                    default = [],
+                ),
+            },
+        )
+
+    if len(copts) > 0:
+        attrs["copts"] = bzl_selects.to_starlark(
+            copts,
+            kind_handlers = {
+                "linkedFramework": bzl_selects.new_kind_handler(
+                    transform = lambda f: "-framework {}".format(f),
+                    default = [],
+                ),
+            },
+        )
 
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     if clang_files.has_objc_srcs(srcs):

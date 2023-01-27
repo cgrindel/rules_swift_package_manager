@@ -204,14 +204,30 @@ bzl_library(
 )
 
 bzl_library(
-    name = "bazel_repo_names",
-    srcs = ["bazel_repo_names.bzl"],
+    name = "spm_conditions",
     visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        "//config_settings/spm/configuration:configurations",
+        "//config_settings/spm/platform:platforms",
+        "//config_settings/spm/platform_configuration:platform_configurations",
+    ],
 )
 
 bzl_library(
-    name = "spm_conditionals",
-    srcs = ["spm_conditionals.bzl"],
+    name = "bzl_selects",
+    srcs = ["bzl_selects.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":starlark_codegen",
+        "//config_settings/spm/configuration:configurations",
+        "//config_settings/spm/platform:platforms",
+        "//config_settings/spm/platform_configuration:platform_configurations",
+    ],
+)
+
+bzl_library(
+    name = "bazel_repo_names",
+    srcs = ["bazel_repo_names.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
 

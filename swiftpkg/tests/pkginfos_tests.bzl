@@ -58,28 +58,28 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
                     ),
                 ],
                 clang_settings = pkginfos.new_clang_settings([
-                    pkginfos.new_build_setting_data(
-                        name = "headerSearchPath",
-                        value = ["../.."],
+                    pkginfos.new_build_setting(
+                        kind = "headerSearchPath",
+                        values = ["../.."],
                     ),
                 ]),
                 swift_settings = pkginfos.new_swift_settings([
-                    pkginfos.new_build_setting_data(
-                        name = "define",
-                        value = ["COOL_SWIFT_DEFINE"],
+                    pkginfos.new_build_setting(
+                        kind = "define",
+                        values = ["COOL_SWIFT_DEFINE"],
                     ),
                 ]),
                 linker_settings = pkginfos.new_linker_settings([
-                    pkginfos.new_build_setting_data(
-                        name = "linkedFramework",
-                        value = ["UIKit"],
+                    pkginfos.new_build_setting(
+                        kind = "linkedFramework",
+                        values = ["UIKit"],
                         condition = pkginfos.new_build_setting_condition(
                             platforms = ["ios", "tvos"],
                         ),
                     ),
-                    pkginfos.new_build_setting_data(
-                        name = "linkedFramework",
-                        value = ["AppKit"],
+                    pkginfos.new_build_setting(
+                        kind = "linkedFramework",
+                        values = ["AppKit"],
                         condition = pkginfos.new_build_setting_condition(
                             platforms = ["macos"],
                         ),
@@ -144,19 +144,19 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
             "libbar/sharpyuv",
         ],
         clang_settings = pkginfos.new_clang_settings([
-            pkginfos.new_build_setting_data(
-                name = "define",
-                value = ["__APPLE_USE_RFC_3542"],
+            pkginfos.new_build_setting(
+                kind = "define",
+                values = ["__APPLE_USE_RFC_3542"],
             ),
-            pkginfos.new_build_setting_data(
-                name = "headerSearchPath",
-                value = ["libbar"],
+            pkginfos.new_build_setting(
+                kind = "headerSearchPath",
+                values = ["libbar"],
             ),
         ]),
         linker_settings = pkginfos.new_linker_settings([
-            pkginfos.new_build_setting_data(
-                name = "linkedLibrary",
-                value = ["foo"],
+            pkginfos.new_build_setting(
+                kind = "linkedLibrary",
+                values = ["foo"],
             ),
         ]),
         public_hdrs_path = "include",
