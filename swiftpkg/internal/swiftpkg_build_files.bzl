@@ -177,17 +177,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     ])
 
     attrs = {
-        # # These flags are used by SPM when compiling clang modules.
-        # "copts": [
-        #     # Enable 'blocks' language feature
-        #     "-fblocks",
-        #     # Synthesize retain and release calls for Objective-C pointers
-        #     "-fobjc-arc",
-        #     # Enable support for PIC macros
-        #     "-fPIC",
-        #     # Module name
-        #     "-fmodule-name={}".format(target.c99name),
-        # ],
         # The SWIFT_PACKAGE define is a magical value that SPM uses when it
         # builds clang libraries that will be used as Swift modules.
         "defines": ["SWIFT_PACKAGE=1"],
