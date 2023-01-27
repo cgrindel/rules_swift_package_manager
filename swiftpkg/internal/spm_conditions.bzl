@@ -1,5 +1,6 @@
-"""
-Module for transforming Swift package manifest conditionals to Starlark.
+"""\
+Module for transforming Swift package manifest conditionals to Bazel select \
+statements.\
 """
 
 load(
