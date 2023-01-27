@@ -214,9 +214,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         local_includes.extend(organized_files.private_includes)
     if target.clang_settings != None:
         if len(target.clang_settings.defines) > 0:
-            # GH153: Support conditional
-            for bs in target.clang_settings.defines:
-                defines.extend(bs.values)
+            defines.extend(lists.flatten([
+                bzl_selects.new_from_build_setting(bs)
+                for bs in target.clang_settings.defines
+            ]))
         if len(target.clang_settings.hdr_srch_paths) > 0:
             # GH153: Support conditional
             hdr_srch_paths = lists.flatten([
