@@ -234,7 +234,7 @@ def _to_starlark_test(ctx):
 """,
         ),
         struct(
-            msg = "one with condition, one without condition, with default",
+            msg = "mix of conditions and no conditions, with default",
             khs = {
                 "linkedLibrary": spm_conditions.new_kind_handler(
                     transform = lambda v: v,
@@ -251,10 +251,16 @@ def _to_starlark_test(ctx):
                     kind = "linkedLibrary",
                     condition = "//my_conditions:condition1",
                 ),
+                spm_conditions.new(
+                    value = "c++",
+                    kind = "linkedLibrary",
+                    condition = "//my_conditions:condition2",
+                ),
             ],
             exp = """\
 ["sqlite3"] + select({
     "//my_conditions:condition1": ["z"],
+    "//my_conditions:condition2": ["c++"],
     "//conditions:default": [],
 })\
 """,
