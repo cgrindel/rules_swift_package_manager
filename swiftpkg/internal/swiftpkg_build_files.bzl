@@ -603,6 +603,7 @@ skylib_build_test_load_stmt = load_statements.new(
 swiftpkg_build_files = struct(
     new_for_target = _new_for_target,
     new_for_products = _new_for_products,
+    new_for_product = _new_for_product,
 )
 
 apple_kinds = struct(
