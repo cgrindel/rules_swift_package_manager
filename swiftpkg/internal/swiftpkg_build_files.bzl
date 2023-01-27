@@ -268,28 +268,14 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             ]))
 
     if len(local_includes) > 0:
-        # # The `includes` attribute adds includes as -isystem which propagates
-        # # to cc_XXX that depend upon the library. Providing includes as -I only
-        # # provides the includes for this target.
-        # # https://bazel.build/reference/be/c-cpp#cc_library.includes
-        # copts.extend([
-        #     "-I{}".format(paths.normalize(paths.join(ext_repo_path, inc)))
-        #     for inc in sets.to_list(sets.make(local_includes))
-        # ])
-
         copts.extend(local_includes)
 
         # If the target path is not everything (i.e., dot), then check for
         # local includes that are outside the target path. We need to add them
         # to the srcs so that they can be found.
         if target.path != ".":
-            # # Ensure that any header files that are outside of the target path are
-            # # included in the srcs.
-            # for li in local_includes:
-            #     normalized_li = paths.normalize(li)
-            #     if clang_files.is_under_path(normalized_li, target.path):
-            #         continue
-            #     extra_hdr_dirs.append(normalized_li)
+            # Ensure that any header files that are outside of the target path are
+            # included in the srcs.
             local_include_values = []
             for li in local_includes:
                 li_type = type(li)
@@ -352,11 +338,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             kind_handlers = {
                 _condition_kinds.header_search_path: bzl_selects.new_kind_handler(
                     transform = local_includes_transform,
-                    # # Need to convert the headerSearchPaths to be relative to
-                    # # the target path.
-                    # transform = lambda p: local_includes_transform(
-                    #     paths.join(target.path, p),
-                    # ),
                 ),
                 _condition_kinds.private_includes: bzl_selects.new_kind_handler(
                     transform = local_includes_transform,
