@@ -63,7 +63,7 @@ def _new_from_build_setting(build_setting):
         build_setting: A `struct` as returned by `pkginfos.new_build_setting`.
 
     Returns:
-        A `list` of condition `struct` values (`spm_conditions.new`).
+        A `list` of condition `struct` values (`bzl_selects.new`).
     """
     bsc = build_setting.condition
     if bsc == None:
@@ -123,7 +123,7 @@ def _to_starlark(values, kind_handlers = {}):
     Args:
         values: A `list` of values that processed and added to the output.
         kind_handlers: A `dict` of king handler `struct` values
-            (`spm_conditions.new_kind_handler`).
+            (`bzl_selects.new_kind_handler`).
 
     Returns:
         A `struct` as returned by `starlark_codegen.new_expr`.
@@ -173,7 +173,7 @@ def _to_starlark(values, kind_handlers = {}):
 
     return scg.new_expr(*expr_members)
 
-spm_conditions = struct(
+bzl_selects = struct(
     new_kind_handler = _new_kind_handler,
     new = _new,
     new_default = _new_default,

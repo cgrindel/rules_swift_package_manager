@@ -5,13 +5,13 @@ load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
+load(":bzl_selects.bzl", "bzl_selects")
 load(":clang_files.bzl", "clang_files")
 load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "module_types", "target_types")
 load(":repository_files.bzl", "repository_files")
-load(":spm_conditions.bzl", "spm_conditions")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
 # MARK: - Target Entry Point
@@ -238,12 +238,12 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     if target.linker_settings != None:
         if len(target.linker_settings.linked_libraries) > 0:
             linkopts.extend(lists.flatten([
-                spm_conditions.new_from_build_setting(bs)
+                bzl_selects.new_from_build_setting(bs)
                 for bs in target.linker_settings.linked_libraries
             ]))
         if len(target.linker_settings.linked_frameworks) > 0:
             copts.extend(lists.flatten([
-                spm_conditions.new_from_build_setting(bs)
+                bzl_selects.new_from_build_setting(bs)
                 for bs in target.linker_settings.linked_frameworks
             ]))
 
@@ -294,10 +294,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["srcs"] = srcs
 
     if len(linkopts) > 0:
-        attrs["linkopts"] = spm_conditions.to_starlark(
+        attrs["linkopts"] = bzl_selects.to_starlark(
             linkopts,
             kind_handlers = {
-                "linkedLibrary": spm_conditions.new_kind_handler(
+                "linkedLibrary": bzl_selects.new_kind_handler(
                     transform = lambda ll: "-l{}".format(ll),
                     default = [],
                 ),
@@ -305,10 +305,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         )
 
     if len(copts) > 0:
-        attrs["copts"] = spm_conditions.to_starlark(
+        attrs["copts"] = bzl_selects.to_starlark(
             copts,
             kind_handlers = {
-                "linkedFramework": spm_conditions.new_kind_handler(
+                "linkedFramework": bzl_selects.new_kind_handler(
                     transform = lambda f: "-framework {}".format(f),
                     default = [],
                 ),

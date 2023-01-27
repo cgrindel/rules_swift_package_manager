@@ -1,4 +1,4 @@
-"""Tests for `spm_conditions` module."""
+"""Tests for `bzl_selects` module."""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load(
@@ -13,14 +13,14 @@ load(
     "//config_settings/spm/platform_configuration:platform_configurations.bzl",
     spm_platform_configurations = "platform_configurations",
 )
+load("//swiftpkg/internal:bzl_selects.bzl", "bzl_selects")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
-load("//swiftpkg/internal:spm_conditions.bzl", "spm_conditions")
 load("//swiftpkg/internal:starlark_codegen.bzl", scg = "starlark_codegen")
 
 def _new_test(ctx):
     env = unittest.begin(ctx)
 
-    actual = spm_conditions.new(
+    actual = bzl_selects.new(
         kind = "platform_types",
         condition = "//path/setting:foo",
         value = ["bar"],
@@ -36,11 +36,11 @@ new_test = unittest.make(_new_test)
 def _new_default_test(ctx):
     env = unittest.begin(ctx)
 
-    actual = spm_conditions.new_default(
+    actual = bzl_selects.new_default(
         kind = "platform_types",
         value = [],
     )
-    expected = spm_conditions.new(
+    expected = bzl_selects.new(
         kind = "platform_types",
         condition = "//conditions:default",
         value = [],
@@ -62,7 +62,7 @@ def _new_from_build_setting_test(ctx):
                 values = ["sqlite3"],
             ),
             exp = [
-                spm_conditions.new(value = "sqlite3", kind = "linkedLibrary"),
+                bzl_selects.new(value = "sqlite3", kind = "linkedLibrary"),
             ],
         ),
         struct(
@@ -75,7 +75,7 @@ def _new_from_build_setting_test(ctx):
                 ),
             ),
             exp = [
-                spm_conditions.new(
+                bzl_selects.new(
                     value = "sqlite3",
                     kind = "linkedLibrary",
                     condition = spm_configurations.label(
@@ -97,14 +97,14 @@ def _new_from_build_setting_test(ctx):
                 ),
             ),
             exp = [
-                spm_conditions.new(
+                bzl_selects.new(
                     value = "sqlite3",
                     kind = "linkedLibrary",
                     condition = spm_platforms.label(
                         spm_platforms.ios,
                     ),
                 ),
-                spm_conditions.new(
+                bzl_selects.new(
                     value = "sqlite3",
                     kind = "linkedLibrary",
                     condition = spm_platforms.label(
@@ -127,7 +127,7 @@ def _new_from_build_setting_test(ctx):
                 ),
             ),
             exp = [
-                spm_conditions.new(
+                bzl_selects.new(
                     value = "sqlite3",
                     kind = "linkedLibrary",
                     condition = spm_platform_configurations.label(
@@ -135,7 +135,7 @@ def _new_from_build_setting_test(ctx):
                         spm_configurations.release,
                     ),
                 ),
-                spm_conditions.new(
+                bzl_selects.new(
                     value = "sqlite3",
                     kind = "linkedLibrary",
                     condition = spm_platform_configurations.label(
@@ -147,7 +147,7 @@ def _new_from_build_setting_test(ctx):
         ),
     ]
     for t in tests:
-        actual = spm_conditions.new_from_build_setting(t.bs)
+        actual = bzl_selects.new_from_build_setting(t.bs)
         asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)
@@ -173,11 +173,11 @@ def _to_starlark_test(ctx):
             msg = "no condition values",
             khs = {},
             vals = [
-                spm_conditions.new(
+                bzl_selects.new(
                     value = "sqlite3",
                     kind = "linkedLibrary",
                 ),
-                spm_conditions.new(
+                bzl_selects.new(
                     value = "z",
                     kind = "linkedLibrary",
                 ),
@@ -192,16 +192,16 @@ def _to_starlark_test(ctx):
         struct(
             msg = "with transform",
             khs = {
-                "linkedLibrary": spm_conditions.new_kind_handler(
+                "linkedLibrary": bzl_selects.new_kind_handler(
                     transform = lambda v: "-l{}".format(v),
                 ),
             },
             vals = [
-                spm_conditions.new(
+                bzl_selects.new(
                     value = "sqlite3",
                     kind = "linkedLibrary",
                 ),
-                spm_conditions.new(
+                bzl_selects.new(
                     value = "z",
                     kind = "linkedLibrary",
                 ),
@@ -217,11 +217,11 @@ def _to_starlark_test(ctx):
             msg = "one with condition, one without condition, no default",
             khs = {},
             vals = [
-                spm_conditions.new(
+                bzl_selects.new(
                     value = "sqlite3",
                     kind = "linkedLibrary",
                 ),
-                spm_conditions.new(
+                bzl_selects.new(
                     value = "z",
                     kind = "linkedLibrary",
                     condition = "//my_conditions:condition1",
@@ -236,22 +236,22 @@ def _to_starlark_test(ctx):
         struct(
             msg = "mix of conditions and no conditions, with default",
             khs = {
-                "linkedLibrary": spm_conditions.new_kind_handler(
+                "linkedLibrary": bzl_selects.new_kind_handler(
                     transform = lambda v: v,
                     default = [],
                 ),
             },
             vals = [
-                spm_conditions.new(
+                bzl_selects.new(
                     value = "sqlite3",
                     kind = "linkedLibrary",
                 ),
-                spm_conditions.new(
+                bzl_selects.new(
                     value = "z",
                     kind = "linkedLibrary",
                     condition = "//my_conditions:condition1",
                 ),
-                spm_conditions.new(
+                bzl_selects.new(
                     value = "c++",
                     kind = "linkedLibrary",
                     condition = "//my_conditions:condition2",
@@ -268,7 +268,7 @@ def _to_starlark_test(ctx):
     ]
     for t in tests:
         actual = scg.to_starlark(
-            spm_conditions.to_starlark(t.vals, kind_handlers = t.khs),
+            bzl_selects.to_starlark(t.vals, kind_handlers = t.khs),
         )
         asserts.equals(env, t.exp, actual, t.msg)
 
@@ -276,9 +276,9 @@ def _to_starlark_test(ctx):
 
 to_starlark_test = unittest.make(_to_starlark_test)
 
-def spm_conditions_test_suite():
+def bzl_selects_test_suite():
     return unittest.suite(
-        "spm_conditions_tests",
+        "bzl_selects_tests",
         new_test,
         new_default_test,
         new_from_build_setting_test,
