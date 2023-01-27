@@ -177,13 +177,16 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     ])
 
     attrs = {
-        # The SWIFT_PACKAGE define is a magical value that SPM uses when it
-        # builds clang libraries that will be used as Swift modules.
-        "defines": ["SWIFT_PACKAGE=1"],
         "deps": deps,
         "tags": ["swift_module={}".format(target.c99name)],
         "visibility": ["//visibility:public"],
     }
+
+    defines = [
+        # The SWIFT_PACKAGE define is a magical value that SPM uses when it
+        # builds clang libraries that will be used as Swift modules.
+        "SWIFT_PACKAGE=1",
+    ]
 
     # These flags are used by SPM when compiling clang modules.
     copts = [
@@ -213,7 +216,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         if len(target.clang_settings.defines) > 0:
             # GH153: Support conditional
             for bs in target.clang_settings.defines:
-                attrs["defines"].extend(bs.values)
+                defines.extend(bs.values)
         if len(target.clang_settings.hdr_srch_paths) > 0:
             # GH153: Support conditional
             hdr_srch_paths = lists.flatten([
@@ -301,6 +304,14 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                     transform = lambda f: "-framework {}".format(f),
                     default = [],
                 ),
+            },
+        )
+
+    if len(defines) > 0:
+        attrs["defines"] = bzl_selects.to_starlark(
+            defines,
+            kind_handlers = {
+                "define": bzl_selects.new_kind_handler(default = []),
             },
         )
 
