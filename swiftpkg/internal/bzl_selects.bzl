@@ -37,23 +37,6 @@ def _new(value, kind = None, condition = None):
         value = value,
     )
 
-# def _new_default(kind, value):
-#     """Create a condition with the condition set to Bazel's default value.
-
-#     Args:
-#         kind: A `string` that identifies the value. This comes from the SPM dump
-#             manifest. (e.g. `linkedFramework`)
-#         value: The value associated with the condition.
-
-#     Returns:
-#         A `struct` representing a Swift package manager condition.
-#     """
-#     return _new(
-#         kind = kind,
-#         condition = "//conditions:default",
-#         value = value,
-#     )
-
 def _new_from_build_setting(build_setting):
     """Create conditions from an SPM build setting.
 

@@ -33,24 +33,6 @@ def _new_test(ctx):
 
 new_test = unittest.make(_new_test)
 
-def _new_default_test(ctx):
-    env = unittest.begin(ctx)
-
-    actual = bzl_selects.new_default(
-        kind = "platform_types",
-        value = [],
-    )
-    expected = bzl_selects.new(
-        kind = "platform_types",
-        condition = "//conditions:default",
-        value = [],
-    )
-    asserts.equals(env, expected, actual)
-
-    return unittest.end(env)
-
-new_default_test = unittest.make(_new_default_test)
-
 def _new_from_build_setting_test(ctx):
     env = unittest.begin(ctx)
 
@@ -318,7 +300,6 @@ def bzl_selects_test_suite():
     return unittest.suite(
         "bzl_selects_tests",
         new_test,
-        new_default_test,
         new_from_build_setting_test,
         to_starlark_test,
         new_kind_handler_test,
