@@ -48,6 +48,10 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
 
     # GH046: Support plugins.
 
+    # TODO(chuck): Add conditional support for Swift settings.
+
+    # TODO(chuck): Add unsafe_flags
+
     # The rules_swift code links in developer libraries if the rule is marked testonly.
     # https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/compiling.bzl#L1312-L1319
     is_test = _imports_xctest(repository_ctx, pkg_ctx, target)
@@ -222,16 +226,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 for bs in target.clang_settings.defines
             ]))
         if len(target.clang_settings.hdr_srch_paths) > 0:
-            # # GH153: Support conditional
-            # hdr_srch_paths = lists.flatten([
-            #     bs.values
-            #     for bs in target.clang_settings.hdr_srch_paths
-            # ])
-            # local_includes.extend([
-            #     paths.join(target.path, p)
-            #     for p in hdr_srch_paths
-            # ])
-
             # Need to convert the headerSearchPaths to be relative to the
             # target path. We also do not want to lose any conditions that may
             # be attached.
@@ -250,10 +244,11 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 bzl_selects.new_from_build_setting(bs)
                 for bs in hsp_bss
             ]))
-            # local_includes.extend(lists.flatten([
-            #     bzl_selects.new_from_build_setting(bs)
-            #     for bs in target.clang_settings.hdr_srch_paths
-            # ]))
+        if len(target.clang_settings.unsafe_flags) > 0:
+            copts.extend(lists.flatten([
+                bzl_selects.new_from_build_setting(bs)
+                for bs in target.clang_settings.unsafe_flags
+            ]))
 
     if target.linker_settings != None:
         if len(target.linker_settings.linked_libraries) > 0:

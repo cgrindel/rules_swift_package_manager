@@ -742,19 +742,25 @@ def _new_clang_settings(build_settings):
     """
     defines = []
     hdr_srch_paths = []
+    unsafe_flags = []
     for bs in build_settings:
         if bs.kind == build_setting_kinds.define:
             defines.append(bs)
         elif bs.kind == build_setting_kinds.header_search_path:
             hdr_srch_paths.append(bs)
+        elif bs.kind == build_setting_kinds.unsafe_flags:
+            unsafe_flags.append(bs)
         else:
             # We do not recognize the setting.
             pass
-    if len(defines) == 0 and len(hdr_srch_paths) == 0:
+    if len(defines) == 0 and \
+       len(hdr_srch_paths) == 0 and \
+       len(unsafe_flags) == 0:
         return None
     return struct(
         defines = defines,
         hdr_srch_paths = hdr_srch_paths,
+        unsafe_flags = unsafe_flags,
     )
 
 def _new_swift_settings(build_settings):
@@ -768,16 +774,20 @@ def _new_swift_settings(build_settings):
         A `struct` representing the Swift settings.
     """
     defines = []
+    unsafe_flags = []
     for bs in build_settings:
         if bs.kind == build_setting_kinds.define:
             defines.append(bs)
+        elif bs.kind == build_setting_kinds.unsafe_flags:
+            unsafe_flags.append(bs)
         else:
             # We do not recognize the setting.
             pass
-    if len(defines) == 0:
+    if len(defines) == 0 and len(unsafe_flags) == 0:
         return None
     return struct(
         defines = defines,
+        unsafe_flags = unsafe_flags,
     )
 
 def _new_linker_settings(build_settings):
@@ -863,6 +873,7 @@ build_setting_kinds = struct(
     header_search_path = "headerSearchPath",
     linked_framework = "linkedFramework",
     linked_library = "linkedLibrary",
+    unsafe_flags = "unsafeFlags",
 )
 
 # MARK: - API Definition
