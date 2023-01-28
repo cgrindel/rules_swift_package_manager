@@ -1,5 +1,6 @@
 """Tests for `swiftpkg_bld_decls` module."""
 
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(
@@ -137,6 +138,17 @@ _pkg_info = pkginfos.new(
                 ),
             ]),
         ),
+        pkginfos.new_target(
+            name = "SwiftLibraryUsesXCTest",
+            type = "regular",
+            c99name = "SwiftLibraryUsesXCTest",
+            module_type = "SwiftTarget",
+            path = "Source/SwiftLibraryUsesXCTest",
+            sources = [
+                "SwiftLibraryUsesXCTest.swift",
+            ],
+            dependencies = [],
+        ),
     ],
 )
 
@@ -161,16 +173,13 @@ _pkg_ctx = pkg_ctxs.new(
     deps_index_json = _deps_index_json,
 )
 
-def new_stub_repository_ctx():
-    # buildifier: disable=unused-variable
+def new_stub_repository_ctx(file_contents = {}):
     def read(path):
-        return ""
+        return file_contents.get(path, default = "")
 
     return struct(
         read = read,
     )
-
-repository_ctx = new_stub_repository_ctx()
 
 def _target_generation_test(ctx):
     env = unittest.begin(ctx)
@@ -251,9 +260,37 @@ swift_binary(
 )
 """,
         ),
+        struct(
+            msg = "Swift library that uses XCTest should have testonly = True",
+            name = "SwiftLibraryUsesXCTest",
+            file_contents = {
+                "SwiftLibraryUsesXCTest.swift": """\
+import XCTest
+""",
+            },
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "Source_SwiftLibraryUsesXCTest",
+    defines = ["SWIFT_PACKAGE"],
+    deps = [],
+    module_name = "SwiftLibraryUsesXCTest",
+    srcs = ["Source/SwiftLibraryUsesXCTest/SwiftLibraryUsesXCTest.swift"],
+    testonly = True,
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
     ]
     for t in tests:
         target = pkginfo_targets.get(_pkg_info.targets, t.name)
+        repository_ctx = new_stub_repository_ctx(
+            file_contents = {
+                paths.normalize(paths.join(_pkg_info.path, target.path, fname)): cnts
+                for fname, cnts in getattr(t, "file_contents", {}).items()
+            },
+        )
         actual = scg.to_starlark(
             swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target),
         )
