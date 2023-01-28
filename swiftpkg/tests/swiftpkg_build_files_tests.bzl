@@ -1,10 +1,24 @@
 """Tests for `swiftpkg_bld_decls` module."""
 
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
+load(
+    "//config_settings/spm/configuration:configurations.bzl",
+    spm_configurations = "configurations",
+)
+load(
+    "//config_settings/spm/platform:platforms.bzl",
+    spm_platforms = "platforms",
+)
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
-load("//swiftpkg/internal:pkginfos.bzl", "library_type_kinds", "pkginfos")
+load(
+    "//swiftpkg/internal:pkginfos.bzl",
+    "build_setting_kinds",
+    "library_type_kinds",
+    "pkginfos",
+)
 load("//swiftpkg/internal:starlark_codegen.bzl", scg = "starlark_codegen")
 load(
     "//swiftpkg/internal:swiftpkg_build_files.bzl",
@@ -12,8 +26,8 @@ load(
 )
 
 _pkg_info = pkginfos.new(
-    name = "SwiftLint",
-    path = "/path/to/swiftlint",
+    name = "MyPackage",
+    path = "/path/to/my-package",
     dependencies = [
         pkginfos.new_dependency(
             identity = "swift-argument-parser",
@@ -29,68 +43,111 @@ _pkg_info = pkginfos.new(
     ],
     products = [
         pkginfos.new_product(
-            name = "swiftlint",
+            name = "oldstyleexec",
             type = pkginfos.new_product_type(executable = True),
-            targets = ["swiftlint"],
+            targets = ["RegularTargetForExec"],
         ),
         pkginfos.new_product(
-            name = "SwiftLintFramework",
+            name = "RegularSwiftTargetAsLibrary",
             type = pkginfos.new_product_type(
                 library = pkginfos.new_library_type(
                     library_type_kinds.automatic,
                 ),
             ),
-            targets = ["SwiftLintFramework"],
+            targets = ["RegularSwiftTargetAsLibrary"],
+        ),
+        pkginfos.new_product(
+            name = "swiftexec",
+            type = pkginfos.new_product_type(executable = True),
+            targets = ["SwiftExecutableTarget"],
         ),
     ],
     targets = [
         # Old-style regular library that is used to create a binary from an
         # executable product.
         pkginfos.new_target(
-            name = "swiftlint",
+            name = "RegularTargetForExec",
             type = "regular",
-            c99name = "swiftlint",
+            c99name = "RegularTargetForExec",
             module_type = "SwiftTarget",
-            path = "Source/swiftlint",
+            path = "Source/RegularTargetForExec",
             sources = [
-                "Commands/SwiftLint.swift",
                 "main.swift",
             ],
             dependencies = [
                 pkginfos.new_target_dependency(
                     by_name = pkginfos.new_by_name_reference(
-                        "SwiftLintFramework",
+                        "RegularSwiftTargetAsLibrary",
                     ),
                 ),
             ],
         ),
         pkginfos.new_target(
-            name = "SwiftLintFramework",
+            name = "RegularSwiftTargetAsLibrary",
             type = "regular",
-            c99name = "SwiftLintFramework",
+            c99name = "RegularSwiftTargetAsLibrary",
             module_type = "SwiftTarget",
-            path = "Source/SwiftLintFramework",
+            path = "Source/RegularSwiftTargetAsLibrary",
             sources = [
-                "SwiftLintFramework.swift",
+                "RegularSwiftTargetAsLibrary.swift",
             ],
             dependencies = [],
         ),
         pkginfos.new_target(
-            name = "SwiftLintFrameworkTests",
+            name = "RegularSwiftTargetAsLibraryTests",
             type = "test",
-            c99name = "SwiftLintFrameworkTests",
+            c99name = "RegularSwiftTargetAsLibraryTests",
             module_type = "SwiftTarget",
-            path = "Tests/SwiftLintFrameworkTests",
+            path = "Tests/RegularSwiftTargetAsLibraryTests",
             sources = [
-                "SwiftLintFrameworkTests.swift",
+                "RegularSwiftTargetAsLibraryTests.swift",
             ],
             dependencies = [
                 pkginfos.new_target_dependency(
                     by_name = pkginfos.new_by_name_reference(
-                        "SwiftLintFramework",
+                        "RegularSwiftTargetAsLibrary",
                     ),
                 ),
             ],
+        ),
+        pkginfos.new_target(
+            name = "SwiftExecutableTarget",
+            type = "executable",
+            c99name = "SwiftExecutableTarget",
+            module_type = "SwiftTarget",
+            path = "Source/SwiftExecutableTarget",
+            sources = ["main.swift"],
+            dependencies = [],
+            swift_settings = pkginfos.new_swift_settings([
+                pkginfos.new_build_setting(
+                    kind = build_setting_kinds.define,
+                    values = ["FOOBAR"],
+                    condition = pkginfos.new_build_setting_condition(
+                        platforms = [
+                            spm_platforms.ios,
+                            spm_platforms.tvos,
+                        ],
+                    ),
+                ),
+                pkginfos.new_build_setting(
+                    kind = build_setting_kinds.unsafe_flags,
+                    values = ["-cross-module-optimization"],
+                    condition = pkginfos.new_build_setting_condition(
+                        configuration = spm_configurations.release,
+                    ),
+                ),
+            ]),
+        ),
+        pkginfos.new_target(
+            name = "SwiftLibraryUsesXCTest",
+            type = "regular",
+            c99name = "SwiftLibraryUsesXCTest",
+            module_type = "SwiftTarget",
+            path = "Source/SwiftLibraryUsesXCTest",
+            sources = [
+                "SwiftLibraryUsesXCTest.swift",
+            ],
+            dependencies = [],
         ),
     ],
 )
@@ -98,16 +155,17 @@ _pkg_info = pkginfos.new(
 _deps_index_json = """
 {
   "modules": [
-    {"name": "swiftlint", "c99name": "swiftlint", "label": "@swiftpkg_swiftlint//:Source_swiftlint"},
-    {"name": "SwiftLintFramework", "c99name": "SwiftLintFramework", "label": "@swiftpkg_swiftlint//:Source_SwiftLintFramework"},
-    {"name": "SwiftLintFrameworkTests", "c99name": "SwiftLintFrameworkTests", "label": "@swiftpkg_swiftlint//:Source_SwiftLintFrameworkTests"}
+    {"name": "RegularTargetForExec", "c99name": "RegularTargetForExec", "label": "@swiftpkg_mypackage//:Source_RegularTargetForExec"},
+    {"name": "RegularSwiftTargetAsLibrary", "c99name": "RegularSwiftTargetAsLibrary", "label": "@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"},
+    {"name": "RegularSwiftTargetAsLibraryTests", "c99name": "RegularSwiftTargetAsLibraryTests", "label": "@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibraryTests"},
+    {"name": "SwiftExecutableTarget", "c99name": "SwiftExecutableTarget", "label": "@swiftpkg_mypackage//:Source_SwiftLibraryTarget"}
   ],
   "products": [
   ]
 }
 """
 
-_repo_name = "@swiftpkg_swiftlint"
+_repo_name = "@swiftpkg_mypackage"
 
 _pkg_ctx = pkg_ctxs.new(
     pkg_info = _pkg_info,
@@ -115,16 +173,13 @@ _pkg_ctx = pkg_ctxs.new(
     deps_index_json = _deps_index_json,
 )
 
-def new_stub_repository_ctx():
-    # buildifier: disable=unused-variable
+def new_stub_repository_ctx(file_contents = {}):
     def read(path):
-        return ""
+        return file_contents.get(path, default = "")
 
     return struct(
         read = read,
     )
-
-repository_ctx = new_stub_repository_ctx()
 
 def _target_generation_test(ctx):
     env = unittest.begin(ctx)
@@ -132,54 +187,97 @@ def _target_generation_test(ctx):
     tests = [
         struct(
             msg = "Swift library target",
-            name = "SwiftLintFramework",
+            name = "RegularSwiftTargetAsLibrary",
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "Source_SwiftLintFramework",
+    name = "Source_RegularSwiftTargetAsLibrary",
     defines = ["SWIFT_PACKAGE"],
     deps = [],
-    module_name = "SwiftLintFramework",
-    srcs = ["Source/SwiftLintFramework/SwiftLintFramework.swift"],
+    module_name = "RegularSwiftTargetAsLibrary",
+    srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
     visibility = ["//visibility:public"],
 )
 """,
         ),
-        # The swiftlint target is an older style executable definition (regular).
+        # The RegularTargetForExec target is an older style executable definition (regular).
         # We create the swift_library in the target package. Then, we create the
         # executable when defining the product.
         struct(
             msg = "Swift regular target associated with executable product",
-            name = "swiftlint",
+            name = "RegularTargetForExec",
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "Source_swiftlint",
+    name = "Source_RegularTargetForExec",
     defines = ["SWIFT_PACKAGE"],
-    deps = ["@swiftpkg_swiftlint//:Source_SwiftLintFramework"],
-    module_name = "swiftlint",
-    srcs = [
-        "Source/swiftlint/Commands/SwiftLint.swift",
-        "Source/swiftlint/main.swift",
-    ],
+    deps = ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
+    module_name = "RegularTargetForExec",
+    srcs = ["Source/RegularTargetForExec/main.swift"],
     visibility = ["//visibility:public"],
 )
 """,
         ),
         struct(
             msg = "Swift test target",
-            name = "SwiftLintFrameworkTests",
+            name = "RegularSwiftTargetAsLibraryTests",
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
 
 swift_test(
-    name = "Tests_SwiftLintFrameworkTests",
+    name = "Tests_RegularSwiftTargetAsLibraryTests",
     defines = ["SWIFT_PACKAGE"],
-    deps = ["@swiftpkg_swiftlint//:Source_SwiftLintFramework"],
-    module_name = "SwiftLintFrameworkTests",
-    srcs = ["Tests/SwiftLintFrameworkTests/SwiftLintFrameworkTests.swift"],
+    deps = ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
+    module_name = "RegularSwiftTargetAsLibraryTests",
+    srcs = ["Tests/RegularSwiftTargetAsLibraryTests/RegularSwiftTargetAsLibraryTests.swift"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Swift executable target",
+            name = "SwiftExecutableTarget",
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+
+swift_binary(
+    name = "Source_SwiftExecutableTarget",
+    copts = select({
+        "@cgrindel_swift_bazel//config_settings/spm/configuration:release": ["-cross-module-optimization"],
+        "//conditions:default": [],
+    }),
+    defines = ["SWIFT_PACKAGE"] + select({
+        "@cgrindel_swift_bazel//config_settings/spm/platform:ios": ["FOOBAR"],
+        "@cgrindel_swift_bazel//config_settings/spm/platform:tvos": ["FOOBAR"],
+        "//conditions:default": [],
+    }),
+    deps = [],
+    module_name = "SwiftExecutableTarget",
+    srcs = ["Source/SwiftExecutableTarget/main.swift"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Swift library that uses XCTest should have testonly = True",
+            name = "SwiftLibraryUsesXCTest",
+            file_contents = {
+                "SwiftLibraryUsesXCTest.swift": """\
+import XCTest
+""",
+            },
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "Source_SwiftLibraryUsesXCTest",
+    defines = ["SWIFT_PACKAGE"],
+    deps = [],
+    module_name = "SwiftLibraryUsesXCTest",
+    srcs = ["Source/SwiftLibraryUsesXCTest/SwiftLibraryUsesXCTest.swift"],
+    testonly = True,
     visibility = ["//visibility:public"],
 )
 """,
@@ -187,6 +285,12 @@ swift_test(
     ]
     for t in tests:
         target = pkginfo_targets.get(_pkg_info.targets, t.name)
+        repository_ctx = new_stub_repository_ctx(
+            file_contents = {
+                paths.normalize(paths.join(_pkg_info.path, target.path, fname)): cnts
+                for fname, cnts in getattr(t, "file_contents", {}).items()
+            },
+        )
         actual = scg.to_starlark(
             swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target),
         )
@@ -202,26 +306,38 @@ def _product_generation_test(ctx):
     tests = [
         struct(
             msg = "executable product referencing a regular target (old-style)",
-            name = "swiftlint",
+            name = "oldstyleexec",
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 
 swift_binary(
-    name = "swiftlint",
-    deps = ["@swiftpkg_swiftlint//:Source_swiftlint"],
+    name = "oldstyleexec",
+    deps = ["@swiftpkg_mypackage//:Source_RegularTargetForExec"],
     visibility = ["//visibility:public"],
 )
 """,
         ),
         struct(
             msg = "Swift library product",
-            name = "SwiftLintFramework",
+            name = "RegularSwiftTargetAsLibrary",
             exp = """\
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
 
 build_test(
-    name = "SwiftLintFrameworkBuildTest",
-    targets = ["@swiftpkg_swiftlint//:Source_SwiftLintFramework"],
+    name = "RegularSwiftTargetAsLibraryBuildTest",
+    targets = ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Swift exectable product",
+            name = "swiftexec",
+            exp = """\
+
+alias(
+    name = "swiftexec",
+    actual = "@swiftpkg_mypackage//:Source_SwiftExecutableTarget",
     visibility = ["//visibility:public"],
 )
 """,
