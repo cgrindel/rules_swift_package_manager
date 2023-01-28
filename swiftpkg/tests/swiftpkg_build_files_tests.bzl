@@ -11,7 +11,6 @@ load(
     "swiftpkg_build_files",
 )
 
-# This is a simplified version of SwiftLint.
 _pkg_info = pkginfos.new(
     name = "SwiftLint",
     path = "/path/to/swiftlint",
@@ -99,15 +98,16 @@ _pkg_info = pkginfos.new(
 _deps_index_json = """
 {
   "modules": [
-    {"name": "swiftlint", "c99name": "swiftlint", "label": "@realm_swiftlint//:Source_swiftlint"},
-    {"name": "SwiftLintFramework", "c99name": "SwiftLintFramework", "label": "@realm_swiftlint//:Source_SwiftLintFramework"},
-    {"name": "SwiftLintFrameworkTests", "c99name": "SwiftLintFrameworkTests", "label": "@realm_swiftlint//:Source_SwiftLintFrameworkTests"}
+    {"name": "swiftlint", "c99name": "swiftlint", "label": "@swiftpkg_swiftlint//:Source_swiftlint"},
+    {"name": "SwiftLintFramework", "c99name": "SwiftLintFramework", "label": "@swiftpkg_swiftlint//:Source_SwiftLintFramework"},
+    {"name": "SwiftLintFrameworkTests", "c99name": "SwiftLintFrameworkTests", "label": "@swiftpkg_swiftlint//:Source_SwiftLintFrameworkTests"}
   ],
-  "products": {}
+  "products": [
+  ]
 }
 """
 
-_repo_name = "@realm_swiftlint"
+_repo_name = "@swiftpkg_swiftlint"
 
 _pkg_ctx = pkg_ctxs.new(
     pkg_info = _pkg_info,
@@ -158,7 +158,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 swift_library(
     name = "Source_swiftlint",
     defines = ["SWIFT_PACKAGE"],
-    deps = ["@realm_swiftlint//:Source_SwiftLintFramework"],
+    deps = ["@swiftpkg_swiftlint//:Source_SwiftLintFramework"],
     module_name = "swiftlint",
     srcs = [
         "Source/swiftlint/Commands/SwiftLint.swift",
@@ -177,7 +177,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
 swift_test(
     name = "Tests_SwiftLintFrameworkTests",
     defines = ["SWIFT_PACKAGE"],
-    deps = ["@realm_swiftlint//:Source_SwiftLintFramework"],
+    deps = ["@swiftpkg_swiftlint//:Source_SwiftLintFramework"],
     module_name = "SwiftLintFrameworkTests",
     srcs = ["Tests/SwiftLintFrameworkTests/SwiftLintFrameworkTests.swift"],
     visibility = ["//visibility:public"],
@@ -208,7 +208,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 
 swift_binary(
     name = "swiftlint",
-    deps = ["@realm_swiftlint//:Source_swiftlint"],
+    deps = ["@swiftpkg_swiftlint//:Source_swiftlint"],
     visibility = ["//visibility:public"],
 )
 """,
@@ -221,7 +221,7 @@ load("@bazel_skylib//rules:build_test.bzl", "build_test")
 
 build_test(
     name = "SwiftLintFrameworkBuildTest",
-    targets = ["@realm_swiftlint//:Source_SwiftLintFramework"],
+    targets = ["@swiftpkg_swiftlint//:Source_SwiftLintFramework"],
     visibility = ["//visibility:public"],
 )
 """,
