@@ -681,7 +681,7 @@ def _new_target(
 
 # MARK: - Build Settings
 
-def _new_build_setting_condition(platforms = None, configuration = None):
+def _new_build_setting_condition(platforms = [], configuration = None):
     """Create a build setting condition.
 
     Args:
@@ -692,15 +692,15 @@ def _new_build_setting_condition(platforms = None, configuration = None):
     Returns:
         A `struct` representing build setting condition.
     """
-    if platforms == None and configuration == None:
+    if platforms == [] and configuration == None:
         return None
-    if platforms != None:
-        for platform in platforms:
-            validations.in_list(
-                spm_platforms.all_values,
-                platform,
-                "Unrecognized platform. platform:",
-            )
+
+    for platform in platforms:
+        validations.in_list(
+            spm_platforms.all_values,
+            platform,
+            "Unrecognized platform. platform:",
+        )
 
     if configuration != None:
         validations.in_list(

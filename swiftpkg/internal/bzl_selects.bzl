@@ -53,12 +53,13 @@ def _new_from_build_setting(build_setting):
             for v in build_setting.values
         ]
 
-    if bsc.platforms != None and bsc.configuration != None:
+    platforms_len = len(bsc.platforms)
+    if platforms_len > 0 and bsc.configuration != None:
         conditions = [
             spm_platform_configurations.label(p, bsc.configuration)
             for p in bsc.platforms
         ]
-    elif bsc.platforms != None:
+    elif platforms_len > 0:
         conditions = [spm_platforms.label(p) for p in bsc.platforms]
     elif bsc.configuration != None:
         conditions = [spm_configurations.label(bsc.configuration)]
