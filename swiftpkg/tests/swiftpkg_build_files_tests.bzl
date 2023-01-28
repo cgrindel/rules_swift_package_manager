@@ -412,21 +412,52 @@ cc_library(
 )
 """,
         ),
-        # struct(
-        #     msg = "Objc target",
-        #     name = "ObjcLibrary",
-        #     find_results = {
-        #         "include": [
-        #             "external.h",
-        #         ],
-        #         "src": [
-        #             "foo.m",
-        #             "foo.h",
-        #         ],
-        #     },
-        #     exp = """\
-        # """,
-        # ),
+        struct(
+            msg = "Objc target",
+            name = "ObjcLibrary",
+            find_results = {
+                "include": [
+                    "external.h",
+                ],
+                "src": [
+                    "foo.m",
+                    "foo.h",
+                ],
+            },
+            exp = """\
+load("@cgrindel_swift_bazel//swiftpkg:build_defs.bzl", "swift_objc_module_alias")
+
+objc_library(
+    name = "ObjcLibrary_Objc",
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-fmodule-name=ObjcLibrary",
+        "-Iexternal/swiftpkg_mypackage/src",
+    ],
+    defines = ["SWIFT_PACKAGE=1"],
+    deps = [],
+    enable_modules = True,
+    hdrs = ["include/external.h"],
+    includes = ["include"],
+    module_name = "ObjcLibrary",
+    srcs = [
+        "src/foo.h",
+        "src/foo.m",
+    ],
+    tags = ["swift_module=ObjcLibrary"],
+    visibility = ["//visibility:public"],
+)
+
+swift_objc_module_alias(
+    name = "ObjcLibrary",
+    deps = [":ObjcLibrary_Objc"],
+    module_names = ["ObjcLibrary"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
     ]
     for t in tests:
         target = pkginfo_targets.get(_pkg_info.targets, t.name)
