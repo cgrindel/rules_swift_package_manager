@@ -10,7 +10,7 @@ load(":clang_files.bzl", "clang_files")
 load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
-load(":pkginfos.bzl", "module_types", "target_types")
+load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
 load(":repository_files.bzl", "repository_files")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
@@ -37,25 +37,43 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         for td in target.dependencies
     ])
     attrs = {
-        # SPM directive instructing the code to build as if a Swift package.
-        # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
-        "defines": ["SWIFT_PACKAGE"],
         "deps": deps,
         "module_name": target.c99name,
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//visibility:public"],
     }
+    defines = [
+        # SPM directive instructing the code to build as if a Swift package.
+        # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
+        "SWIFT_PACKAGE",
+    ]
+    copts = []
 
     # GH046: Support plugins.
 
     # The rules_swift code links in developer libraries if the rule is marked testonly.
     # https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/compiling.bzl#L1312-L1319
     is_test = _imports_xctest(repository_ctx, pkg_ctx, target)
+
+    if target.swift_settings != None:
+        if len(target.swift_settings.defines) > 0:
+            defines.extend(lists.flatten([
+                bzl_selects.new_from_build_setting(bs)
+                for bs in target.swift_settings.defines
+            ]))
+        if len(target.swift_settings.unsafe_flags) > 0:
+            copts.extend(lists.flatten([
+                bzl_selects.new_from_build_setting(bs)
+                for bs in target.swift_settings.unsafe_flags
+            ]))
+
     if is_test:
         attrs["testonly"] = True
-    if target.swift_settings and len(target.swift_settings.defines) > 0:
-        for bs in target.swift_settings.defines:
-            attrs["defines"].extend(bs.values)
+    if len(defines) > 0:
+        attrs["defines"] = bzl_selects.to_starlark(defines)
+    if len(copts) > 0:
+        attrs["copts"] = bzl_selects.to_starlark(copts)
+
     if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(target, attrs)]
@@ -177,13 +195,16 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     ])
 
     attrs = {
-        # The SWIFT_PACKAGE define is a magical value that SPM uses when it
-        # builds clang libraries that will be used as Swift modules.
-        "defines": ["SWIFT_PACKAGE=1"],
         "deps": deps,
         "tags": ["swift_module={}".format(target.c99name)],
         "visibility": ["//visibility:public"],
     }
+
+    defines = [
+        # The SWIFT_PACKAGE define is a magical value that SPM uses when it
+        # builds clang libraries that will be used as Swift modules.
+        "SWIFT_PACKAGE=1",
+    ]
 
     # These flags are used by SPM when compiling clang modules.
     copts = [
@@ -208,22 +229,41 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     if len(organized_files.hdrs) > 0:
         hdrs.extend(organized_files.hdrs)
     if len(organized_files.private_includes) > 0:
-        local_includes.extend(organized_files.private_includes)
+        local_includes.extend([
+            bzl_selects.new(value = p, kind = _condition_kinds.private_includes)
+            for p in organized_files.private_includes
+        ])
     if target.clang_settings != None:
         if len(target.clang_settings.defines) > 0:
-            # GH153: Support conditional
-            for bs in target.clang_settings.defines:
-                attrs["defines"].extend(bs.values)
+            defines.extend(lists.flatten([
+                bzl_selects.new_from_build_setting(bs)
+                for bs in target.clang_settings.defines
+            ]))
         if len(target.clang_settings.hdr_srch_paths) > 0:
-            # GH153: Support conditional
-            hdr_srch_paths = lists.flatten([
-                bs.values
+            # Need to convert the headerSearchPaths to be relative to the
+            # target path. We also do not want to lose any conditions that may
+            # be attached.
+            hsp_bss = [
+                pkginfos.new_build_setting(
+                    kind = bs.kind,
+                    values = [
+                        paths.join(target.path, p)
+                        for p in bs.values
+                    ],
+                    condition = bs.condition,
+                )
                 for bs in target.clang_settings.hdr_srch_paths
-            ])
-            local_includes.extend([
-                paths.join(target.path, p)
-                for p in hdr_srch_paths
-            ])
+            ]
+            local_includes.extend(lists.flatten([
+                bzl_selects.new_from_build_setting(bs)
+                for bs in hsp_bss
+            ]))
+        if len(target.clang_settings.unsafe_flags) > 0:
+            copts.extend(lists.flatten([
+                bzl_selects.new_from_build_setting(bs)
+                for bs in target.clang_settings.unsafe_flags
+            ]))
+
     if target.linker_settings != None:
         if len(target.linker_settings.linked_libraries) > 0:
             linkopts.extend(lists.flatten([
@@ -237,14 +277,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             ]))
 
     if len(local_includes) > 0:
-        # The `includes` attribute adds includes as -isystem which propagates
-        # to cc_XXX that depend upon the library. Providing includes as -I only
-        # provides the includes for this target.
-        # https://bazel.build/reference/be/c-cpp#cc_library.includes
-        copts.extend([
-            "-I{}".format(paths.normalize(paths.join(ext_repo_path, inc)))
-            for inc in sets.to_list(sets.make(local_includes))
-        ])
+        copts.extend(local_includes)
 
         # If the target path is not everything (i.e., dot), then check for
         # local includes that are outside the target path. We need to add them
@@ -252,7 +285,16 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         if target.path != ".":
             # Ensure that any header files that are outside of the target path are
             # included in the srcs.
+            local_include_values = []
             for li in local_includes:
+                li_type = type(li)
+                if li_type == "string":
+                    local_include_values.append(li)
+                elif li_type == "struct" and hasattr(li, "value"):
+                    local_include_values.append(li.value)
+                else:
+                    fail("Unrecognized local include value.", li)
+            for li in local_include_values:
                 normalized_li = paths.normalize(li)
                 if clang_files.is_under_path(normalized_li, target.path):
                     continue
@@ -286,23 +328,37 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["linkopts"] = bzl_selects.to_starlark(
             linkopts,
             kind_handlers = {
-                "linkedLibrary": bzl_selects.new_kind_handler(
+                _condition_kinds.linked_library: bzl_selects.new_kind_handler(
                     transform = lambda ll: "-l{}".format(ll),
-                    default = [],
                 ),
             },
         )
 
     if len(copts) > 0:
+        # The `includes` attribute adds includes as -isystem which propagates
+        # to cc_XXX that depend upon the library.  Providing includes as -I
+        # only provides the includes for this target.
+        # https://bazel.build/reference/be/c-cpp#cc_library.includes
+        local_includes_transform = lambda p: "-I{}".format(
+            paths.normalize(paths.join(ext_repo_path, p)),
+        )
         attrs["copts"] = bzl_selects.to_starlark(
             copts,
             kind_handlers = {
-                "linkedFramework": bzl_selects.new_kind_handler(
+                _condition_kinds.header_search_path: bzl_selects.new_kind_handler(
+                    transform = local_includes_transform,
+                ),
+                _condition_kinds.private_includes: bzl_selects.new_kind_handler(
+                    transform = local_includes_transform,
+                ),
+                _condition_kinds.linked_framework: bzl_selects.new_kind_handler(
                     transform = lambda f: "-framework {}".format(f),
-                    default = [],
                 ),
             },
         )
+
+    if len(defines) > 0:
+        attrs["defines"] = bzl_selects.to_starlark(defines)
 
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     if clang_files.has_objc_srcs(srcs):
@@ -547,6 +603,7 @@ skylib_build_test_load_stmt = load_statements.new(
 swiftpkg_build_files = struct(
     new_for_target = _new_for_target,
     new_for_products = _new_for_products,
+    new_for_product = _new_for_product,
 )
 
 apple_kinds = struct(
@@ -569,4 +626,11 @@ swiftpkg_build_defs_location = "@cgrindel_swift_bazel//swiftpkg:build_defs.bzl"
 swiftpkg_objc_module_alias_load_stmt = load_statements.new(
     swiftpkg_build_defs_location,
     swiftpkg_kinds.objc_module_alias,
+)
+
+_condition_kinds = struct(
+    private_includes = "_privateIncludes",
+    header_search_path = build_setting_kinds.header_search_path,
+    linked_framework = build_setting_kinds.linked_framework,
+    linked_library = build_setting_kinds.linked_library,
 )

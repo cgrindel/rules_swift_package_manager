@@ -33,24 +33,6 @@ def _new_test(ctx):
 
 new_test = unittest.make(_new_test)
 
-def _new_default_test(ctx):
-    env = unittest.begin(ctx)
-
-    actual = bzl_selects.new_default(
-        kind = "platform_types",
-        value = [],
-    )
-    expected = bzl_selects.new(
-        kind = "platform_types",
-        condition = "//conditions:default",
-        value = [],
-    )
-    asserts.equals(env, expected, actual)
-
-    return unittest.end(env)
-
-new_default_test = unittest.make(_new_default_test)
-
 def _new_from_build_setting_test(ctx):
     env = unittest.begin(ctx)
 
@@ -215,7 +197,11 @@ def _to_starlark_test(ctx):
         ),
         struct(
             msg = "one with condition, one without condition, no default",
-            khs = {},
+            khs = {
+                # If a default is not specified, it is assumed to be [].
+                # Hence, we need to specify None.
+                "linkedLibrary": bzl_selects.new_kind_handler(default = None),
+            },
             vals = [
                 bzl_selects.new(
                     value = "sqlite3",
@@ -276,11 +262,45 @@ def _to_starlark_test(ctx):
 
 to_starlark_test = unittest.make(_to_starlark_test)
 
+def _new_kind_handler_test(ctx):
+    env = unittest.begin(ctx)
+
+    value = "foo"
+
+    tests = [
+        struct(
+            msg = "no parameters",
+            transform = None,
+            default = None,
+            exp_tx = "foo",
+            exp_def = None,
+        ),
+        struct(
+            msg = "with parameters",
+            transform = lambda v: v + "bar",
+            default = [],
+            exp_tx = "foobar",
+            exp_def = [],
+        ),
+    ]
+    for t in tests:
+        kh = bzl_selects.new_kind_handler(
+            transform = t.transform,
+            default = t.default,
+        )
+        actual_tx = kh.transform(value)
+        asserts.equals(env, t.exp_tx, actual_tx, t.msg + " transform")
+        asserts.equals(env, t.exp_def, kh.default, t.msg + " default")
+
+    return unittest.end(env)
+
+new_kind_handler_test = unittest.make(_new_kind_handler_test)
+
 def bzl_selects_test_suite():
     return unittest.suite(
         "bzl_selects_tests",
         new_test,
-        new_default_test,
         new_from_build_setting_test,
         to_starlark_test,
+        new_kind_handler_test,
     )

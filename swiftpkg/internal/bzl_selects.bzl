@@ -37,25 +37,6 @@ def _new(value, kind = None, condition = None):
         value = value,
     )
 
-def _new_default(kind, value):
-    """Create a condition with the condition set to Bazel's default value.
-
-    Args:
-        kind: A `string` that identifies the value. This comes from the SPM dump
-            manifest. (e.g. `linkedFramework`)
-        value: The value associated with the condition.
-
-    Returns:
-        A `struct` representing a Swift package manager condition.
-    """
-    return _new(
-        kind = kind,
-        condition = "//conditions:default",
-        value = value,
-    )
-
-# GH153: Finish conditional support.
-
 def _new_from_build_setting(build_setting):
     """Create conditions from an SPM build setting.
 
@@ -72,12 +53,13 @@ def _new_from_build_setting(build_setting):
             for v in build_setting.values
         ]
 
-    if bsc.platforms != None and bsc.configuration != None:
+    platforms_len = len(bsc.platforms)
+    if platforms_len > 0 and bsc.configuration != None:
         conditions = [
             spm_platform_configurations.label(p, bsc.configuration)
             for p in bsc.platforms
         ]
-    elif bsc.platforms != None:
+    elif platforms_len > 0:
         conditions = [spm_platforms.label(p) for p in bsc.platforms]
     elif bsc.configuration != None:
         conditions = [spm_configurations.label(bsc.configuration)]
@@ -92,21 +74,23 @@ Found a build setting condition that had no platforms or a configuration. {}\
         for c in conditions
     ]
 
-def _new_kind_handler(transform, default = None):
+def _new_kind_handler(transform = None, default = []):
     """Creates a struct that encapsulates the information needed to process a \
     condition.
 
     Args:
-        transform: A `function` that accepts a single value. The value for a
+        transform: Optional. A `function` that accepts a single value. The value for a
             condition is passed this function. The return value is used as the
             Starlark output.
         default: Optional. The value that should be added to the `select` dict
-            for the kind.
+            for the kind. Defaults to `[]`.
 
     Returns:
         A `struct` representing the information needed to process and kind
         condition.
     """
+    if transform == None:
+        transform = lambda v: v
     return struct(
         transform = transform,
         default = default,
@@ -176,7 +160,6 @@ def _to_starlark(values, kind_handlers = {}):
 bzl_selects = struct(
     new_kind_handler = _new_kind_handler,
     new = _new,
-    new_default = _new_default,
     new_from_build_setting = _new_from_build_setting,
     to_starlark = _to_starlark,
     default_condition = _bazel_select_default_condition,

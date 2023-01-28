@@ -1,5 +1,6 @@
 """API for creating and loading Swift package information."""
 
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(
     "//config_settings/spm/configuration:configurations.bzl",
     spm_configurations = "configurations",
@@ -242,7 +243,8 @@ def _new_build_settings_from_json(dump_map):
     return [
         _new_build_setting(
             kind = build_setting_kind,
-            values = kind_type_values.values(),
+            # Some settings (e.g. unsafeFlags) are written as a list.
+            values = lists.flatten(kind_type_values.values()),
             condition = condition,
         )
         for (build_setting_kind, kind_type_values) in kind_map.items()
@@ -679,7 +681,7 @@ def _new_target(
 
 # MARK: - Build Settings
 
-def _new_build_setting_condition(platforms = None, configuration = None):
+def _new_build_setting_condition(platforms = [], configuration = None):
     """Create a build setting condition.
 
     Args:
@@ -690,15 +692,15 @@ def _new_build_setting_condition(platforms = None, configuration = None):
     Returns:
         A `struct` representing build setting condition.
     """
-    if platforms == None and configuration == None:
+    if platforms == [] and configuration == None:
         return None
-    if platforms != None:
-        for platform in platforms:
-            validations.in_list(
-                spm_platforms.all_values,
-                platform,
-                "Unrecognized platform. platform:",
-            )
+
+    for platform in platforms:
+        validations.in_list(
+            spm_platforms.all_values,
+            platform,
+            "Unrecognized platform. platform:",
+        )
 
     if configuration != None:
         validations.in_list(
@@ -742,19 +744,25 @@ def _new_clang_settings(build_settings):
     """
     defines = []
     hdr_srch_paths = []
+    unsafe_flags = []
     for bs in build_settings:
-        if bs.kind == "define":
+        if bs.kind == build_setting_kinds.define:
             defines.append(bs)
-        elif bs.kind == "headerSearchPath":
+        elif bs.kind == build_setting_kinds.header_search_path:
             hdr_srch_paths.append(bs)
+        elif bs.kind == build_setting_kinds.unsafe_flags:
+            unsafe_flags.append(bs)
         else:
             # We do not recognize the setting.
             pass
-    if len(defines) == 0 and len(hdr_srch_paths) == 0:
+    if len(defines) == 0 and \
+       len(hdr_srch_paths) == 0 and \
+       len(unsafe_flags) == 0:
         return None
     return struct(
         defines = defines,
         hdr_srch_paths = hdr_srch_paths,
+        unsafe_flags = unsafe_flags,
     )
 
 def _new_swift_settings(build_settings):
@@ -768,16 +776,20 @@ def _new_swift_settings(build_settings):
         A `struct` representing the Swift settings.
     """
     defines = []
+    unsafe_flags = []
     for bs in build_settings:
-        if bs.kind == "define":
+        if bs.kind == build_setting_kinds.define:
             defines.append(bs)
+        elif bs.kind == build_setting_kinds.unsafe_flags:
+            unsafe_flags.append(bs)
         else:
             # We do not recognize the setting.
             pass
-    if len(defines) == 0:
+    if len(defines) == 0 and len(unsafe_flags) == 0:
         return None
     return struct(
         defines = defines,
+        unsafe_flags = unsafe_flags,
     )
 
 def _new_linker_settings(build_settings):
@@ -793,9 +805,9 @@ def _new_linker_settings(build_settings):
     linked_libraries = []
     linked_frameworks = []
     for bs in build_settings:
-        if bs.kind == "linkedLibrary":
+        if bs.kind == build_setting_kinds.linked_library:
             linked_libraries.append(bs)
-        elif bs.kind == "linkedFramework":
+        elif bs.kind == build_setting_kinds.linked_framework:
             linked_frameworks.append(bs)
         else:
             # We do not recognize the setting.
@@ -856,6 +868,14 @@ library_type_kinds = struct(
     dynamic = "dynamic",
     static = "static",
     all_values = ["automatic", "dynamic", "static"],
+)
+
+build_setting_kinds = struct(
+    define = "define",
+    header_search_path = "headerSearchPath",
+    linked_framework = "linkedFramework",
+    linked_library = "linkedLibrary",
+    unsafe_flags = "unsafeFlags",
 )
 
 # MARK: - API Definition
