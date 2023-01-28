@@ -204,6 +204,16 @@ _pkg_info = pkginfos.new(
             ],
             public_hdrs_path = "include",
             dependencies = [],
+            clang_settings = pkginfos.new_clang_settings([
+                pkginfos.new_build_setting(
+                    kind = build_setting_kinds.define,
+                    values = ["PLATFORM_POSIX=1"],
+                ),
+                pkginfos.new_build_setting(
+                    kind = build_setting_kinds.header_search_path,
+                    values = ["./"],
+                ),
+            ]),
         ),
     ],
 )
@@ -355,8 +365,12 @@ cc_library(
         "-fPIC",
         "-fmodule-name=ClangLibrary",
         "-Iexternal/swiftpkg_mypackage/src",
+        "-Iexternal/swiftpkg_mypackage",
     ],
-    defines = ["SWIFT_PACKAGE=1"],
+    defines = [
+        "SWIFT_PACKAGE=1",
+        "PLATFORM_POSIX=1",
+    ],
     deps = [],
     hdrs = ["include/external.h"],
     includes = ["include"],
