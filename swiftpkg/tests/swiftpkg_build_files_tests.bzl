@@ -25,6 +25,41 @@ load(
     "swiftpkg_build_files",
 )
 
+# MARK: - Repository CTX Stub
+
+def new_exec_result(return_code = 0, stdout = "", stderr = ""):
+    return struct(
+        return_code = return_code,
+        stdout = stdout,
+        stderr = stderr,
+    )
+
+def new_stub_repository_ctx(repo_name, file_contents = {}, find_results = {}):
+    def read(path):
+        return file_contents.get(path, default = "")
+
+    # buildifier: disable=unused-variable
+    def execute(args, quiet = True):
+        # The find command that we expect is `find -H -L path`.
+        # See repository_files.list_files_under for details.
+        if len(args) >= 4 and args[0] == "find":
+            path = args[3]
+            results = find_results.get(path, default = [])
+            exec_result = new_exec_result(
+                stdout = "\n".join(results),
+            )
+        else:
+            exec_result = new_exec_result()
+        return exec_result
+
+    return struct(
+        name = repo_name,
+        read = read,
+        execute = execute,
+    )
+
+# MARK: - Test Data
+
 _pkg_info = pkginfos.new(
     name = "MyPackage",
     path = "/path/to/my-package",
@@ -149,6 +184,63 @@ _pkg_info = pkginfos.new(
             ],
             dependencies = [],
         ),
+        pkginfos.new_target(
+            name = "ClangLibrary",
+            type = "regular",
+            c99name = "ClangLibrary",
+            module_type = "ClangTarget",
+            path = ".",
+            # NOTE: SPM does not report header files in the sources for clang
+            # targets. The `swift_package` code reads the filesystem to find
+            # the sources.
+            sources = [
+                "src/foo.cc",
+            ],
+            source_paths = [
+                "src/",
+            ],
+            exclude_paths = [
+                "src/do_not_include_me.cc",
+            ],
+            public_hdrs_path = "include",
+            dependencies = [],
+            clang_settings = pkginfos.new_clang_settings([
+                pkginfos.new_build_setting(
+                    kind = build_setting_kinds.define,
+                    values = ["PLATFORM_POSIX=1"],
+                ),
+                pkginfos.new_build_setting(
+                    kind = build_setting_kinds.header_search_path,
+                    values = ["./"],
+                ),
+                pkginfos.new_build_setting(
+                    kind = build_setting_kinds.unsafe_flags,
+                    values = ["-danger"],
+                    condition = pkginfos.new_build_setting_condition(
+                        configuration = spm_configurations.release,
+                    ),
+                ),
+            ]),
+        ),
+        pkginfos.new_target(
+            name = "ObjcLibrary",
+            type = "regular",
+            c99name = "ObjcLibrary",
+            module_type = "ClangTarget",
+            path = ".",
+            # NOTE: SPM does not report header files in the sources for clang
+            # targets. The `swift_package` code reads the filesystem to find
+            # the sources.
+            sources = [
+                "src/foo.m",
+                "src/foo.h",
+            ],
+            source_paths = [
+                "src/",
+            ],
+            public_hdrs_path = "include",
+            dependencies = [],
+        ),
     ],
 )
 
@@ -173,13 +265,7 @@ _pkg_ctx = pkg_ctxs.new(
     deps_index_json = _deps_index_json,
 )
 
-def new_stub_repository_ctx(file_contents = {}):
-    def read(path):
-        return file_contents.get(path, default = "")
-
-    return struct(
-        read = read,
-    )
+# MARK: - Tests
 
 def _target_generation_test(ctx):
     env = unittest.begin(ctx)
@@ -282,13 +368,111 @@ swift_library(
 )
 """,
         ),
+        struct(
+            msg = "simple clang target",
+            name = "ClangLibrary",
+            find_results = {
+                "include": [
+                    "external.h",
+                ],
+                "src": [
+                    "foo.cc",
+                    "foo.h",
+                    "do_not_include_me.cc",
+                ],
+            },
+            exp = """\
+
+cc_library(
+    name = "ClangLibrary",
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-fmodule-name=ClangLibrary",
+        "-Iexternal/swiftpkg_mypackage/src",
+        "-Iexternal/swiftpkg_mypackage",
+    ] + select({
+        "@cgrindel_swift_bazel//config_settings/spm/configuration:release": ["-danger"],
+        "//conditions:default": [],
+    }),
+    defines = [
+        "SWIFT_PACKAGE=1",
+        "PLATFORM_POSIX=1",
+    ],
+    deps = [],
+    hdrs = ["include/external.h"],
+    includes = ["include"],
+    srcs = [
+        "src/foo.cc",
+        "src/foo.h",
+    ],
+    tags = ["swift_module=ClangLibrary"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Objc target",
+            name = "ObjcLibrary",
+            find_results = {
+                "include": [
+                    "external.h",
+                ],
+                "src": [
+                    "foo.m",
+                    "foo.h",
+                ],
+            },
+            exp = """\
+load("@cgrindel_swift_bazel//swiftpkg:build_defs.bzl", "swift_objc_module_alias")
+
+objc_library(
+    name = "ObjcLibrary_Objc",
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-fmodule-name=ObjcLibrary",
+        "-Iexternal/swiftpkg_mypackage/src",
+    ],
+    defines = ["SWIFT_PACKAGE=1"],
+    deps = [],
+    enable_modules = True,
+    hdrs = ["include/external.h"],
+    includes = ["include"],
+    module_name = "ObjcLibrary",
+    srcs = [
+        "src/foo.h",
+        "src/foo.m",
+    ],
+    tags = ["swift_module=ObjcLibrary"],
+    visibility = ["//visibility:public"],
+)
+
+swift_objc_module_alias(
+    name = "ObjcLibrary",
+    deps = [":ObjcLibrary_Objc"],
+    module_names = ["ObjcLibrary"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
     ]
     for t in tests:
         target = pkginfo_targets.get(_pkg_info.targets, t.name)
         repository_ctx = new_stub_repository_ctx(
+            repo_name = _repo_name[1:],
             file_contents = {
                 paths.normalize(paths.join(_pkg_info.path, target.path, fname)): cnts
                 for fname, cnts in getattr(t, "file_contents", {}).items()
+            },
+            find_results = {
+                paths.normalize(paths.join(_pkg_info.path, dirname)): [
+                    paths.normalize(paths.join(_pkg_info.path, dirname, fp))
+                    for fp in file_paths
+                ]
+                for dirname, file_paths in getattr(t, "find_results", {}).items()
             },
         )
         actual = scg.to_starlark(
