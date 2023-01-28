@@ -222,6 +222,25 @@ _pkg_info = pkginfos.new(
                 ),
             ]),
         ),
+        pkginfos.new_target(
+            name = "ObjcLibrary",
+            type = "regular",
+            c99name = "ObjcLibrary",
+            module_type = "ClangTarget",
+            path = ".",
+            # NOTE: SPM does not report header files in the sources for clang
+            # targets. The `swift_package` code reads the filesystem to find
+            # the sources.
+            sources = [
+                "src/foo.m",
+                "src/foo.h",
+            ],
+            source_paths = [
+                "src/",
+            ],
+            public_hdrs_path = "include",
+            dependencies = [],
+        ),
     ],
 )
 
@@ -393,6 +412,21 @@ cc_library(
 )
 """,
         ),
+        # struct(
+        #     msg = "Objc target",
+        #     name = "ObjcLibrary",
+        #     find_results = {
+        #         "include": [
+        #             "external.h",
+        #         ],
+        #         "src": [
+        #             "foo.m",
+        #             "foo.h",
+        #         ],
+        #     },
+        #     exp = """\
+        # """,
+        # ),
     ]
     for t in tests:
         target = pkginfo_targets.get(_pkg_info.targets, t.name)
