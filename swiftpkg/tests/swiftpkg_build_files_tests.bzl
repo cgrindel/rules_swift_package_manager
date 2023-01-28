@@ -42,6 +42,11 @@ _pkg_info = pkginfos.new(
             ),
             targets = ["RegularSwiftTargetAsLibrary"],
         ),
+        pkginfos.new_product(
+            name = "swiftexec",
+            type = pkginfos.new_product_type(executable = True),
+            targets = ["SwiftExecutableTarget"],
+        ),
     ],
     targets = [
         # Old-style regular library that is used to create a binary from an
@@ -91,6 +96,15 @@ _pkg_info = pkginfos.new(
                 ),
             ],
         ),
+        pkginfos.new_target(
+            name = "SwiftExecutableTarget",
+            type = "executable",
+            c99name = "SwiftExecutableTarget",
+            module_type = "SwiftTarget",
+            path = "Source/SwiftExecutableTarget",
+            sources = ["main.swift"],
+            dependencies = [],
+        ),
     ],
 )
 
@@ -99,7 +113,8 @@ _deps_index_json = """
   "modules": [
     {"name": "RegularTargetForExec", "c99name": "RegularTargetForExec", "label": "@swiftpkg_mypackage//:Source_RegularTargetForExec"},
     {"name": "RegularSwiftTargetAsLibrary", "c99name": "RegularSwiftTargetAsLibrary", "label": "@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"},
-    {"name": "RegularSwiftTargetAsLibraryTests", "c99name": "RegularSwiftTargetAsLibraryTests", "label": "@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibraryTests"}
+    {"name": "RegularSwiftTargetAsLibraryTests", "c99name": "RegularSwiftTargetAsLibraryTests", "label": "@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibraryTests"},
+    {"name": "SwiftExecutableTarget", "c99name": "SwiftExecutableTarget", "label": "@swiftpkg_mypackage//:Source_SwiftLibraryTarget"}
   ],
   "products": [
   ]
@@ -180,6 +195,22 @@ swift_test(
 )
 """,
         ),
+        struct(
+            msg = "Swift executable target",
+            name = "SwiftExecutableTarget",
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+
+swift_binary(
+    name = "Source_SwiftExecutableTarget",
+    defines = ["SWIFT_PACKAGE"],
+    deps = [],
+    module_name = "SwiftExecutableTarget",
+    srcs = ["Source/SwiftExecutableTarget/main.swift"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
     ]
     for t in tests:
         target = pkginfo_targets.get(_pkg_info.targets, t.name)
@@ -218,6 +249,18 @@ load("@bazel_skylib//rules:build_test.bzl", "build_test")
 build_test(
     name = "RegularSwiftTargetAsLibraryBuildTest",
     targets = ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Swift exectable product",
+            name = "swiftexec",
+            exp = """\
+
+alias(
+    name = "swiftexec",
+    actual = "@swiftpkg_mypackage//:Source_SwiftExecutableTarget",
     visibility = ["//visibility:public"],
 )
 """,
