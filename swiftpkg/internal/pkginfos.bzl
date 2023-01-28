@@ -1,5 +1,6 @@
 """API for creating and loading Swift package information."""
 
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(
     "//config_settings/spm/configuration:configurations.bzl",
     spm_configurations = "configurations",
@@ -242,7 +243,8 @@ def _new_build_settings_from_json(dump_map):
     return [
         _new_build_setting(
             kind = build_setting_kind,
-            values = kind_type_values.values(),
+            # Some settings (e.g. unsafeFlags) are written as a list.
+            values = lists.flatten(kind_type_values.values()),
             condition = condition,
         )
         for (build_setting_kind, kind_type_values) in kind_map.items()
