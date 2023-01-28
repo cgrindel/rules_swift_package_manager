@@ -213,6 +213,13 @@ _pkg_info = pkginfos.new(
                     kind = build_setting_kinds.header_search_path,
                     values = ["./"],
                 ),
+                pkginfos.new_build_setting(
+                    kind = build_setting_kinds.unsafe_flags,
+                    values = ["-danger"],
+                    condition = pkginfos.new_build_setting_condition(
+                        configuration = spm_configurations.release,
+                    ),
+                ),
             ]),
         ),
     ],
@@ -366,7 +373,10 @@ cc_library(
         "-fmodule-name=ClangLibrary",
         "-Iexternal/swiftpkg_mypackage/src",
         "-Iexternal/swiftpkg_mypackage",
-    ],
+    ] + select({
+        "@cgrindel_swift_bazel//config_settings/spm/configuration:release": ["-danger"],
+        "//conditions:default": [],
+    }),
     defines = [
         "SWIFT_PACKAGE=1",
         "PLATFORM_POSIX=1",
