@@ -3,6 +3,10 @@
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(
+    "//config_settings/spm/configuration:configurations.bzl",
+    spm_configurations = "configurations",
+)
+load(
     "//config_settings/spm/platform:platforms.bzl",
     spm_platforms = "platforms",
 )
@@ -124,6 +128,13 @@ _pkg_info = pkginfos.new(
                         ],
                     ),
                 ),
+                pkginfos.new_build_setting(
+                    kind = build_setting_kinds.unsafe_flags,
+                    values = ["-cross-module-optimization"],
+                    condition = pkginfos.new_build_setting_condition(
+                        configuration = spm_configurations.release,
+                    ),
+                ),
             ]),
         ),
     ],
@@ -224,6 +235,10 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 
 swift_binary(
     name = "Source_SwiftExecutableTarget",
+    copts = select({
+        "@cgrindel_swift_bazel//config_settings/spm/configuration:release": ["-cross-module-optimization"],
+        "//conditions:default": [],
+    }),
     defines = ["SWIFT_PACKAGE"] + select({
         "@cgrindel_swift_bazel//config_settings/spm/platform:ios": ["FOOBAR"],
         "@cgrindel_swift_bazel//config_settings/spm/platform:tvos": ["FOOBAR"],
