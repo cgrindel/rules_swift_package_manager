@@ -2,9 +2,18 @@
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
+load(
+    "//config_settings/spm/platform:platforms.bzl",
+    spm_platforms = "platforms",
+)
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
-load("//swiftpkg/internal:pkginfos.bzl", "library_type_kinds", "pkginfos")
+load(
+    "//swiftpkg/internal:pkginfos.bzl",
+    "build_setting_kinds",
+    "library_type_kinds",
+    "pkginfos",
+)
 load("//swiftpkg/internal:starlark_codegen.bzl", scg = "starlark_codegen")
 load(
     "//swiftpkg/internal:swiftpkg_build_files.bzl",
@@ -104,6 +113,18 @@ _pkg_info = pkginfos.new(
             path = "Source/SwiftExecutableTarget",
             sources = ["main.swift"],
             dependencies = [],
+            swift_settings = pkginfos.new_swift_settings([
+                pkginfos.new_build_setting(
+                    kind = build_setting_kinds.define,
+                    values = ["FOOBAR"],
+                    condition = pkginfos.new_build_setting_condition(
+                        platforms = [
+                            spm_platforms.ios,
+                            spm_platforms.tvos,
+                        ],
+                    ),
+                ),
+            ]),
         ),
     ],
 )
@@ -203,7 +224,11 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 
 swift_binary(
     name = "Source_SwiftExecutableTarget",
-    defines = ["SWIFT_PACKAGE"],
+    defines = ["SWIFT_PACKAGE"] + select({
+        "@cgrindel_swift_bazel//config_settings/spm/platform:ios": ["FOOBAR"],
+        "@cgrindel_swift_bazel//config_settings/spm/platform:tvos": ["FOOBAR"],
+        "//conditions:default": [],
+    }),
     deps = [],
     module_name = "SwiftExecutableTarget",
     srcs = ["Source/SwiftExecutableTarget/main.swift"],
