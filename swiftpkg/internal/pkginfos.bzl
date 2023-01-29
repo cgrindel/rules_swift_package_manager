@@ -178,20 +178,19 @@ def _new_product_from_desc_json_map(prd_map):
 #     }
 #   ]
 # }
-
-def _new_target_dependency_from_dump_json_map(dep_map):
-    by_name_list = dep_map.get("byName")
+def _new_target_dependency_from_dump_json_map(dump_map):
+    by_name_list = dump_map.get("byName")
     by_name = _new_by_name_reference(by_name_list[0]) if by_name_list else None
 
     product = None
-    product_list = dep_map.get("product")
+    product_list = dump_map.get("product")
     if product_list:
         product = _new_product_reference(
             product_name = product_list[0],
             dep_name = product_list[1],
         )
 
-    target_list = dep_map.get("target")
+    target_list = dump_map.get("target")
     target = _new_target_reference(target_list[0]) if target_list else None
 
     return _new_target_dependency(
@@ -571,12 +570,29 @@ def _new_product(name, type, targets):
 
 # MARK: - Dependency References
 
-def _new_product_reference(product_name, dep_name):
+def _new_target_dependency_condition(platforms = []):
+    """Create a target dependency condition.
+
+    Args:
+        platforms: Optional. A `list` of platform names as `string` values.
+
+    Returns:
+        A `struct` representing a target dependency condition.
+    """
+    if len(platforms) == 0:
+        return None
+    return struct(
+        platforms = platforms,
+    )
+
+def _new_product_reference(product_name, dep_name, condition = None):
     """Creates a product reference.
 
     Args:
         product_name: The name of the product (`string`).
         dep_name: The name of the external dependency (`string`).
+        condition: Optional. A `struct` as returned by
+            `pkginfos.new_target_dependency_condition`.
 
     Returns:
         A `struct` representing a product reference.
@@ -584,32 +600,39 @@ def _new_product_reference(product_name, dep_name):
     return struct(
         product_name = product_name,
         dep_name = dep_name,
+        condition = condition,
     )
 
-def _new_by_name_reference(name):
+def _new_by_name_reference(name, condition = None):
     """Creates a by-name reference.
 
     Args:
         name: The name of a target or product (`string`).
+        condition: Optional. A `struct` as returned by
+            `pkginfos.new_target_dependency_condition`.
 
     Returns:
         A `struct` representing a by-name reference.
     """
     return struct(
         name = name,
+        condition = condition,
     )
 
-def _new_target_reference(target_name):
+def _new_target_reference(target_name, condition = None):
     """Creates a target reference.
 
     Args:
         target_name: The name of a target (`string`).
+        condition: Optional. A `struct` as returned by
+            `pkginfos.new_target_dependency_condition`.
 
     Returns:
         A `struct` representing a target reference.
     """
     return struct(
         target_name = target_name,
+        condition = condition,
     )
 
 def _new_target_dependency(by_name = None, product = None, target = None):
@@ -924,8 +947,8 @@ pkginfos = struct(
     get = _get,
     new = _new,
     new_artifact_download_info = _new_artifact_download_info,
-    new_build_setting_condition = _new_build_setting_condition,
     new_build_setting = _new_build_setting,
+    new_build_setting_condition = _new_build_setting_condition,
     new_by_name_reference = _new_by_name_reference,
     new_clang_settings = _new_clang_settings,
     new_dependency = _new_dependency,
@@ -940,6 +963,8 @@ pkginfos = struct(
     new_swift_settings = _new_swift_settings,
     new_target = _new_target,
     new_target_dependency = _new_target_dependency,
+    new_target_dependency_condition = _new_target_dependency_condition,
+    new_target_dependency_from_dump_json_map = _new_target_dependency_from_dump_json_map,
     new_target_reference = _new_target_reference,
     new_version_range = _new_version_range,
 )
