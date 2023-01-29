@@ -139,45 +139,6 @@ def _new_product_from_desc_json_map(prd_map):
         type = prd_type,
     )
 
-# Target Dependencies with Conditions
-#
-# Target Dep: .target(name: "MyLibrary", condition: .when(platforms: [.iOS])),
-# {
-#   "target" : [
-#     "MyLibrary",
-#     {
-#       "platformNames" : [
-#         "ios"
-#       ]
-#     }
-#   ]
-# }
-#
-# Product Dep: .product(name: "Logging", package: "swift-log", condition: .when(platforms: [.iOS])),
-# {
-#   "product" : [
-#     "Logging",
-#     "swift-log",
-#     null,
-#     {
-#       "platformNames" : [
-#         "ios"
-#       ]
-#     }
-#   ]
-# }
-#
-# ByName Dep: .byName(name: "MyLibrary", condition: .when(platforms: [.iOS])),
-# {
-#   "byName" : [
-#     "MyLibrary",
-#     {
-#       "platformNames" : [
-#         "ios"
-#       ]
-#     }
-#   ]
-# }
 def _new_target_dependency_condition_from_dump_json_map(dump_map):
     if dump_map == None:
         return None
@@ -192,7 +153,6 @@ def _new_target_dependency_from_dump_json_map(dump_map):
         by_name = _new_by_name_reference(
             name = by_name_list[0],
             condition = _new_target_dependency_condition_from_dump_json_map(
-                # json_utils.item_from_list(by_name_list, 1),
                 by_name_list[1],
             ),
         )
@@ -204,7 +164,6 @@ def _new_target_dependency_from_dump_json_map(dump_map):
             product_name = product_list[0],
             dep_name = product_list[1],
             condition = _new_target_dependency_condition_from_dump_json_map(
-                # json_utils.item_from_list(product_list, 3),
                 product_list[3],
             ),
         )
@@ -215,7 +174,6 @@ def _new_target_dependency_from_dump_json_map(dump_map):
         target = _new_target_reference(
             target_name = target_list[0],
             condition = _new_target_dependency_condition_from_dump_json_map(
-                # json_utils.item_from_list(product_list, 1),
                 target_list[1],
             ),
         )
