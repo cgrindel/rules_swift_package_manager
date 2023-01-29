@@ -139,6 +139,46 @@ def _new_product_from_desc_json_map(prd_map):
         type = prd_type,
     )
 
+# Target Dependencies with Conditions
+#
+# Target Dep: .target(name: "MyLibrary", condition: .when(platforms: [.iOS])),
+# {
+#   "target" : [
+#     "MyLibrary",
+#     {
+#       "platformNames" : [
+#         "ios"
+#       ]
+#     }
+#   ]
+# }
+#
+# Product Dep: .product(name: "Logging", package: "swift-log", condition: .when(platforms: [.iOS])),
+# {
+#   "product" : [
+#     "Logging",
+#     "swift-log",
+#     null,
+#     {
+#       "platformNames" : [
+#         "ios"
+#       ]
+#     }
+#   ]
+# }
+#
+# ByName Dep: .byName(name: "MyLibrary", condition: .when(platforms: [.iOS])),
+# {
+#   "byName" : [
+#     "MyLibrary",
+#     {
+#       "platformNames" : [
+#         "ios"
+#       ]
+#     }
+#   ]
+# }
+
 def _new_target_dependency_from_dump_json_map(dep_map):
     by_name_list = dep_map.get("byName")
     by_name = _new_by_name_reference(by_name_list[0]) if by_name_list else None
