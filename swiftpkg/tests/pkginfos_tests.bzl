@@ -231,6 +231,32 @@ def _target_dependency_from_json_test(ctx):
             ),
         ),
         struct(
+            msg = "product, with condition",
+            json = """\
+{
+  "product" : [
+    "Logging",
+    "swift-log",
+    null,
+    {
+      "platformNames" : [
+        "ios"
+      ]
+    }
+  ]
+}
+""",
+            exp = pkginfos.new_target_dependency(
+                product = pkginfos.new_product_reference(
+                    product_name = "Logging",
+                    dep_name = "swift-log",
+                    condition = pkginfos.new_target_dependency_condition(
+                        platforms = ["ios"],
+                    ),
+                ),
+            ),
+        ),
+        struct(
             msg = "target, no condition",
             json = """\
 {

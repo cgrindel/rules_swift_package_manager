@@ -204,6 +204,9 @@ def _new_target_dependency_from_dump_json_map(dump_map):
         product = _new_product_reference(
             product_name = product_list[0],
             dep_name = product_list[1],
+            condition = _new_target_dependency_condition_from_dump_json_map(
+                json_utils.item_from_list(product_list, 3),
+            ),
         )
 
     target_list = dump_map.get("target")
