@@ -9,7 +9,6 @@ load(
     "//config_settings/spm/platform:platforms.bzl",
     spm_platforms = "platforms",
 )
-load(":json_utils.bzl", "json_utils")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":repository_utils.bzl", "repository_utils")
 load(":validations.bzl", "validations")
@@ -187,16 +186,16 @@ def _new_target_dependency_condition_from_dump_json_map(dump_map):
     )
 
 def _new_target_dependency_from_dump_json_map(dump_map):
+    by_name = None
     by_name_list = dump_map.get("byName")
     if by_name_list:
         by_name = _new_by_name_reference(
             name = by_name_list[0],
             condition = _new_target_dependency_condition_from_dump_json_map(
-                json_utils.item_from_list(by_name_list, 1),
+                # json_utils.item_from_list(by_name_list, 1),
+                by_name_list[1],
             ),
         )
-    else:
-        by_name = None
 
     product = None
     product_list = dump_map.get("product")
@@ -205,12 +204,21 @@ def _new_target_dependency_from_dump_json_map(dump_map):
             product_name = product_list[0],
             dep_name = product_list[1],
             condition = _new_target_dependency_condition_from_dump_json_map(
-                json_utils.item_from_list(product_list, 3),
+                # json_utils.item_from_list(product_list, 3),
+                product_list[3],
             ),
         )
 
+    target = None
     target_list = dump_map.get("target")
-    target = _new_target_reference(target_list[0]) if target_list else None
+    if target_list:
+        target = _new_target_reference(
+            target_name = target_list[0],
+            condition = _new_target_dependency_condition_from_dump_json_map(
+                # json_utils.item_from_list(product_list, 1),
+                target_list[1],
+            ),
+        )
 
     return _new_target_dependency(
         by_name = by_name,

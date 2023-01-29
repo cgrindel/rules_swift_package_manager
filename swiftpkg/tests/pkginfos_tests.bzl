@@ -272,6 +272,29 @@ def _target_dependency_from_json_test(ctx):
                 ),
             ),
         ),
+        struct(
+            msg = "target, with condition",
+            json = """\
+{
+  "target" : [
+    "MyLibrary",
+    {
+      "platformNames" : [
+        "ios"
+      ]
+    }
+  ]
+}
+""",
+            exp = pkginfos.new_target_dependency(
+                target = pkginfos.new_target_reference(
+                    target_name = "MyLibrary",
+                    condition = pkginfos.new_target_dependency_condition(
+                        platforms = ["ios"],
+                    ),
+                ),
+            ),
+        ),
     ]
     for t in tests:
         dump_map = json.decode(t.json)
