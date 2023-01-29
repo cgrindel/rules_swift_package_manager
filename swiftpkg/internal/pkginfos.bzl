@@ -9,6 +9,7 @@ load(
     "//config_settings/spm/platform:platforms.bzl",
     spm_platforms = "platforms",
 )
+load(":json_utils.bzl", "json_utils")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":repository_utils.bzl", "repository_utils")
 load(":validations.bzl", "validations")
@@ -178,9 +179,24 @@ def _new_product_from_desc_json_map(prd_map):
 #     }
 #   ]
 # }
+def _new_target_dependency_condition_from_dump_json_map(dump_map):
+    if dump_map == None:
+        return None
+    return _new_target_dependency_condition(
+        platforms = dump_map.get("platformNames", default = []),
+    )
+
 def _new_target_dependency_from_dump_json_map(dump_map):
     by_name_list = dump_map.get("byName")
-    by_name = _new_by_name_reference(by_name_list[0]) if by_name_list else None
+    if by_name_list:
+        by_name = _new_by_name_reference(
+            name = by_name_list[0],
+            condition = _new_target_dependency_condition_from_dump_json_map(
+                json_utils.item_from_list(by_name_list, 1),
+            ),
+        )
+    else:
+        by_name = None
 
     product = None
     product_list = dump_map.get("product")

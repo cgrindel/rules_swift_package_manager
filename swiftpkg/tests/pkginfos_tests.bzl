@@ -189,6 +189,29 @@ def _target_dependency_from_json_test(ctx):
             ),
         ),
         struct(
+            msg = "byName, with condition",
+            json = """\
+{
+  "byName" : [
+    "MyLibrary",
+    {
+      "platformNames" : [
+        "ios"
+      ]
+    }
+  ]
+}
+""",
+            exp = pkginfos.new_target_dependency(
+                by_name = pkginfos.new_by_name_reference(
+                    name = "MyLibrary",
+                    condition = pkginfos.new_target_dependency_condition(
+                        platforms = ["ios"],
+                    ),
+                ),
+            ),
+        ),
+        struct(
             msg = "product, no condition",
             json = """\
 {
