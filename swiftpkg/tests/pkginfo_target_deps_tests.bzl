@@ -2,6 +2,8 @@
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "make_bazel_labels", "make_stub_workspace_name_resolvers")
+load("//config_settings/spm/platform:platforms.bzl", spm_platforms = "platforms")
+load("//swiftpkg/internal:bzl_selects.bzl", "bzl_selects")
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfo_target_deps.bzl", "make_pkginfo_target_deps")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
@@ -32,6 +34,30 @@ _product_ref = pkginfos.new_product_reference(
     product_name = "AwesomeProduct",
     dep_name = _external_dep.name,
 )
+_target_ref = pkginfos.new_target_reference(
+    target_name = "Foo",
+)
+
+_target_dep_condition = pkginfos.new_target_dependency_condition(
+    platforms = ["ios", "tvos"],
+)
+_by_name_with_condition = pkginfos.new_by_name_reference(
+    "Foo",
+    condition = _target_dep_condition,
+)
+_product_ref_with_condition = pkginfos.new_product_reference(
+    product_name = "AwesomeProduct",
+    dep_name = _external_dep.name,
+    condition = _target_dep_condition,
+)
+_target_ref_with_condition = pkginfos.new_target_reference(
+    target_name = "Foo",
+    condition = _target_dep_condition,
+)
+_expected_platform_conditions = [
+    spm_platforms.label(p)
+    for p in _target_dep_condition.platforms
+]
 
 _pkg_info = pkginfos.new(
     name = "MyPackage",
@@ -85,40 +111,111 @@ _pkg_ctx = pkg_ctxs.new(
     deps_index_json = _deps_index_json,
 )
 
-def _bazel_label_strs_by_name_test(ctx):
+def _bazel_label_strs_test(ctx):
     env = unittest.begin(ctx)
 
-    target_dep = pkginfos.new_target_dependency(by_name = _by_name)
-
-    actual = pkginfo_target_deps.bazel_label_strs(_pkg_ctx, target_dep)
-    expected = [
-        bazel_labels.normalize("@swiftpkg_example_swift_package//:Source/Foo"),
-    ]
-    asserts.equals(env, expected, actual)
-
-    return unittest.end(env)
-
-bazel_label_by_name_test = unittest.make(_bazel_label_strs_by_name_test)
-
-def _bazel_label_strs_product_ref_test(ctx):
-    env = unittest.begin(ctx)
-
-    target_dep = pkginfos.new_target_dependency(product = _product_ref)
-    actual = pkginfo_target_deps.bazel_label_strs(_pkg_ctx, target_dep)
-    expected = [
-        bazel_labels.normalize(
-            "@swiftpkg_example_swift_package//:AwesomePackage",
+    tests = [
+        struct(
+            msg = "by name, no condition",
+            td = pkginfos.new_target_dependency(by_name = _by_name),
+            exp = [
+                bzl_selects.new(
+                    kind = pkginfo_target_deps.target_dep_kind,
+                    value = [
+                        bazel_labels.normalize(
+                            "@swiftpkg_example_swift_package//:Source/Foo",
+                        ),
+                    ],
+                ),
+            ],
+        ),
+        struct(
+            msg = "product ref, no condition",
+            td = pkginfos.new_target_dependency(product = _product_ref),
+            exp = [
+                bzl_selects.new(
+                    kind = pkginfo_target_deps.target_dep_kind,
+                    value = [
+                        bazel_labels.normalize(
+                            "@swiftpkg_example_swift_package//:AwesomePackage",
+                        ),
+                    ],
+                ),
+            ],
+        ),
+        struct(
+            msg = "target ref, no condition",
+            td = pkginfos.new_target_dependency(target = _target_ref),
+            exp = [
+                bzl_selects.new(
+                    kind = pkginfo_target_deps.target_dep_kind,
+                    value = [
+                        bazel_labels.normalize(
+                            "@swiftpkg_example_swift_package//:Source/Foo",
+                        ),
+                    ],
+                ),
+            ],
+        ),
+        struct(
+            msg = "by name, with condition",
+            td = pkginfos.new_target_dependency(by_name = _by_name_with_condition),
+            exp = [
+                bzl_selects.new(
+                    kind = pkginfo_target_deps.target_dep_kind,
+                    value = [
+                        bazel_labels.normalize(
+                            "@swiftpkg_example_swift_package//:Source/Foo",
+                        ),
+                    ],
+                    condition = c,
+                )
+                for c in _expected_platform_conditions
+            ],
+        ),
+        struct(
+            msg = "product ref, with condition",
+            td = pkginfos.new_target_dependency(product = _product_ref_with_condition),
+            exp = [
+                bzl_selects.new(
+                    kind = pkginfo_target_deps.target_dep_kind,
+                    value = [
+                        bazel_labels.normalize(
+                            "@swiftpkg_example_swift_package//:AwesomePackage",
+                        ),
+                    ],
+                    condition = c,
+                )
+                for c in _expected_platform_conditions
+            ],
+        ),
+        struct(
+            msg = "target ref, with condition",
+            td = pkginfos.new_target_dependency(target = _target_ref_with_condition),
+            exp = [
+                bzl_selects.new(
+                    kind = pkginfo_target_deps.target_dep_kind,
+                    value = [
+                        bazel_labels.normalize(
+                            "@swiftpkg_example_swift_package//:Source/Foo",
+                        ),
+                    ],
+                    condition = c,
+                )
+                for c in _expected_platform_conditions
+            ],
         ),
     ]
-    asserts.equals(env, expected, actual)
+    for t in tests:
+        actual = pkginfo_target_deps.bazel_label_strs(_pkg_ctx, t.td)
+        asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)
 
-bazel_label_strs_product_ref_test = unittest.make(_bazel_label_strs_product_ref_test)
+bazel_label_strs_test = unittest.make(_bazel_label_strs_test)
 
 def pkginfo_target_deps_test_suite():
     return unittest.suite(
         "pkginfo_target_deps_tests",
-        bazel_label_by_name_test,
-        bazel_label_strs_product_ref_test,
+        bazel_label_strs_test,
     )

@@ -32,12 +32,14 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
 # MARK: - Swift Target
 
 def _swift_target_build_file(repository_ctx, pkg_ctx, target):
+    # TODO(chuck): Update pkginfo_target_deps.bazel_label_strs to return a list of
+    # bazel labels with condition. This struct will then be passed to bzl_select.new_from_bazel_labels_with_condition.
     deps = lists.flatten([
         pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
         for td in target.dependencies
     ])
     attrs = {
-        "deps": deps,
+        "deps": bzl_selects.to_starlark(deps),
         "module_name": target.c99name,
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//visibility:public"],
@@ -195,7 +197,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     ])
 
     attrs = {
-        "deps": deps,
+        "deps": bzl_selects.to_starlark(deps),
         "tags": ["swift_module={}".format(target.c99name)],
         "visibility": ["//visibility:public"],
     }

@@ -296,6 +296,53 @@ def _new_kind_handler_test(ctx):
 
 new_kind_handler_test = unittest.make(_new_kind_handler_test)
 
+def _new_from_target_dependency_condition_test(ctx):
+    env = unittest.begin(ctx)
+
+    kind = "_foo"
+    labels = ["@baz//:apple", "@baz//:pear"]
+    tests = [
+        struct(
+            msg = "no condition",
+            c = None,
+            exp = [
+                bzl_selects.new(
+                    kind = kind,
+                    value = labels,
+                    condition = None,
+                ),
+            ],
+        ),
+        struct(
+            msg = "with condition",
+            c = pkginfos.new_target_dependency_condition(
+                platforms = ["ios", "tvos"],
+            ),
+            exp = [
+                bzl_selects.new(
+                    kind = kind,
+                    value = labels,
+                    condition = c,
+                )
+                for c in [
+                    spm_platforms.label("ios"),
+                    spm_platforms.label("tvos"),
+                ]
+            ],
+        ),
+    ]
+    for t in tests:
+        actual = bzl_selects.new_from_target_dependency_condition(
+            kind = kind,
+            labels = labels,
+            condition = t.c,
+        )
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+new_from_target_dependency_condition_test = unittest.make(_new_from_target_dependency_condition_test)
+
 def bzl_selects_test_suite():
     return unittest.suite(
         "bzl_selects_tests",
@@ -303,4 +350,5 @@ def bzl_selects_test_suite():
         new_from_build_setting_test,
         to_starlark_test,
         new_kind_handler_test,
+        new_from_target_dependency_condition_test,
     )

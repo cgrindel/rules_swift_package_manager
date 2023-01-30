@@ -1,8 +1,12 @@
 """Module for generating data from target dependencies created by `pkginfos`."""
 
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
+load(":bzl_selects.bzl", "bzl_selects")
 load(":deps_indexes.bzl", "deps_indexes")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
+
+# This value is used to group Bazel select conditions
+_target_dep_kind = "_target_dep"
 
 def make_pkginfo_target_deps(bazel_labels):
     def _bazel_label_strs(pkg_ctx, target_dep):
@@ -17,11 +21,11 @@ def make_pkginfo_target_deps(bazel_labels):
                 `pkginfos.new_target_dependency`.
 
         Returns:
-            A `list` of `string` values representing the labels for the target
-            dependency.
+            A `list` of `struct` values as returned by `conditional_labels.new`
+            representing the labels for the target dependency.
         """
-
         if target_dep.by_name:
+            condition = target_dep.by_name.condition
             labels = lists.compact([
                 deps_indexes.resolve_module_label_with_ctx(
                     pkg_ctx.deps_index_ctx,
@@ -40,6 +44,7 @@ def make_pkginfo_target_deps(bazel_labels):
                 pass
 
         elif target_dep.target:
+            condition = target_dep.target.condition
             labels = lists.compact([
                 deps_indexes.resolve_module_label_with_ctx(
                     pkg_ctx.deps_index_ctx,
@@ -52,6 +57,7 @@ Unable to resolve target reference target dependency for {module_name}.\
 """.format(module_name = target_dep.target.target_name))
 
         elif target_dep.product:
+            condition = target_dep.product.condition
             prod_ref = target_dep.product
             dep = pkginfo_dependencies.get_by_name(
                 pkg_ctx.pkg_info.dependencies,
@@ -79,13 +85,18 @@ Unable to resolve product reference target dependency for product {prod_name} pr
 Unrecognized target dependency while generating a Bazel dependency label.\
 """)
 
-        return [
-            bazel_labels.normalize(label)
-            for label in labels
-        ]
+        return bzl_selects.new_from_target_dependency_condition(
+            kind = _target_dep_kind,
+            labels = [
+                bazel_labels.normalize(label)
+                for label in labels
+            ],
+            condition = condition,
+        )
 
     return struct(
         bazel_label_strs = _bazel_label_strs,
+        target_dep_kind = _target_dep_kind,
     )
 
 pkginfo_target_deps = make_pkginfo_target_deps(

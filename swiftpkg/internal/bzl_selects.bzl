@@ -3,6 +3,7 @@ Module for transforming Swift package manifest conditionals to Bazel select \
 statements.\
 """
 
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(
     "//config_settings/spm/configuration:configurations.bzl",
     spm_configurations = "configurations",
@@ -74,6 +75,32 @@ Found a build setting condition that had no platforms or a configuration. {}\
         for c in conditions
     ]
 
+def _new_from_target_dependency_condition(kind, labels, condition = None):
+    """Create conditions from an SPM target dependency condition.
+
+    Args:
+        kind: A `string` that identifies how to group the conditions.
+        labels: A `list` of Bazel label `string` values.
+        condition: Optional. A `struct` as returned by
+            `pkginfos.new_target_dependency_condition`.
+
+    Returns:
+        A `list` of `struct` values as returned by `bzl_selects.new`.
+    """
+    if condition == None:
+        return [_new(kind = kind, value = labels)]
+    platforms_len = len(condition.platforms)
+    if platforms_len > 0:
+        conditions = [spm_platforms.label(p) for p in condition.platforms]
+    else:
+        fail("""\
+Found a target dependency condition that had no platforms. {}\
+""".format(condition))
+    return [
+        _new(kind = kind, value = labels, condition = c)
+        for c in conditions
+    ]
+
 def _new_kind_handler(transform = None, default = []):
     """Creates a struct that encapsulates the information needed to process a \
     condition.
@@ -105,38 +132,66 @@ def _to_starlark(values, kind_handlers = {}):
     kind handlers.
 
     Args:
-        values: A `list` of values that processed and added to the output.
+        values: A `list` of values that are processed and added to the output.
         kind_handlers: A `dict` of king handler `struct` values
             (`bzl_selects.new_kind_handler`).
 
     Returns:
         A `struct` as returned by `starlark_codegen.new_expr`.
     """
+    if len(values) == 0:
+        return scg.new_expr([])
+
+    # # The selects_by_kind has keys which are the kind and the value is a select
+    # # dict whose keys are the conditions and the value is the value for the
+    # # condition.
+    # selects_by_kind = {}
+    # no_condition_results = []
+    # for v in values:
+    #     # If it is not a struct, then we assume it needs no further handling.
+    #     if type(v) != "struct":
+    #         no_condition_results.append(v)
+    #         continue
+
+    #     kind_handler = kind_handlers.get(v.kind, default = _noop_kind_handler)
+    #     tv = kind_handler.transform(v.value)
+    #     if v.condition != None:
+    #         select_dict = selects_by_kind.get(v.kind, default = {})
+
+    #         # We are assuming that the select will always result in a list.
+    #         # Hence, we wrap the transformed value in a list.
+    #         select_dict[v.condition] = [tv]
+
+    #         # Save the select dict
+    #         selects_by_kind[v.kind] = select_dict
+    #     else:
+    #         no_condition_results.append(tv)
 
     # The selects_by_kind has keys which are the kind and the value is a select
     # dict whose keys are the conditions and the value is the value for the
     # condition.
     selects_by_kind = {}
     no_condition_results = []
+
     for v in values:
-        # If it is not a struct, then we assume it needs no further handling.
-        if type(v) != "struct":
-            no_condition_results.append(v)
+        v_type = type(v)
+        if v_type != "struct":
+            if v_type == "list":
+                no_condition_results.extend(v)
+            else:
+                no_condition_results.append(v)
             continue
 
+        # We are assuming that the select will always result in a list.
+        # Hence, we wrap the transformed value in a list.
         kind_handler = kind_handlers.get(v.kind, default = _noop_kind_handler)
-        tv = kind_handler.transform(v.value)
+        tv = lists.flatten(kind_handler.transform(v.value))
         if v.condition != None:
             select_dict = selects_by_kind.get(v.kind, default = {})
-
-            # We are assuming that the select will always result in a list.
-            # Hence, we wrap the transformed value in a list.
-            select_dict[v.condition] = [tv]
-
-            # Save the select dict
+            select_dict[v.condition] = tv
             selects_by_kind[v.kind] = select_dict
         else:
-            no_condition_results.append(tv)
+            no_condition_results.extend(tv)
 
     expr_members = []
     if len(no_condition_results) > 0:
@@ -155,14 +210,20 @@ def _to_starlark(values, kind_handlers = {}):
         select_fn = scg.new_fn_call("select", new_select_dict)
         expr_members.append(select_fn)
 
+    if len(expr_members) == 0:
+        fail("""\
+No Starlark expression members were generated for {}\
+""".format(values))
+
     return scg.new_expr(*expr_members)
 
 bzl_selects = struct(
-    new_kind_handler = _new_kind_handler,
+    default_condition = _bazel_select_default_condition,
     new = _new,
     new_from_build_setting = _new_from_build_setting,
+    new_from_target_dependency_condition = _new_from_target_dependency_condition,
+    new_kind_handler = _new_kind_handler,
     to_starlark = _to_starlark,
-    default_condition = _bazel_select_default_condition,
 )
 
 # NEED TO CONVERT:
