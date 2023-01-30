@@ -31,14 +31,13 @@ def swift_bazel_dependencies():
         ],
     )
 
-    # Post v0.28.0: Contains fix for passing test args to gazelle_generation_test.
     maybe(
         http_archive,
         name = "bazel_gazelle",
-        sha256 = "6ad7e61c11901ba93485719939e6532e49ffc29434667585125ae6c633f8331c",
-        strip_prefix = "bazel-gazelle-350e975e8999b784c6381d162b54252a7aa9cc4b",
+        sha256 = "ecba0f04f96b4960a5b250c8e8eeec42281035970aa8852dda73098274d14a1d",
         urls = [
-            "https://github.com/bazelbuild/bazel-gazelle/archive/350e975e8999b784c6381d162b54252a7aa9cc4b.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.29.0/bazel-gazelle-v0.29.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.29.0/bazel-gazelle-v0.29.0.tar.gz",
         ],
     )
 
