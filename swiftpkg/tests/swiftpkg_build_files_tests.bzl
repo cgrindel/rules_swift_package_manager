@@ -241,16 +241,68 @@ _pkg_info = pkginfos.new(
             public_hdrs_path = "include",
             dependencies = [],
         ),
+        pkginfos.new_target(
+            name = "SwiftLibraryWithConditionalDep",
+            type = "regular",
+            c99name = "SwiftLibraryWithConditionalDep",
+            module_type = "SwiftTarget",
+            path = "Source/SwiftLibraryWithConditionalDep",
+            sources = [
+                "SwiftLibraryWithConditionalDep.swift",
+            ],
+            dependencies = [
+                pkginfos.new_target_dependency(
+                    by_name = pkginfos.new_by_name_reference("ClangLibrary"),
+                ),
+                pkginfos.new_target_dependency(
+                    by_name = pkginfos.new_by_name_reference(
+                        "RegularSwiftTargetAsLibrary",
+                        condition = pkginfos.new_target_dependency_condition(
+                            platforms = ["ios", "tvos"],
+                        ),
+                    ),
+                ),
+            ],
+        ),
+        pkginfos.new_target(
+            name = "ClangLibraryWithConditionalDep",
+            type = "regular",
+            c99name = "SwiftLibraryWithConditionalDep",
+            module_type = "ClangTarget",
+            path = ".",
+            # NOTE: SPM does not report header files in the sources for clang
+            # targets. The `swift_package` code reads the filesystem to find
+            # the sources.
+            sources = [
+                "src/foo.cc",
+            ],
+            source_paths = [
+                "src/",
+            ],
+            public_hdrs_path = "include",
+            dependencies = [
+                pkginfos.new_target_dependency(
+                    by_name = pkginfos.new_by_name_reference(
+                        "ClangLibrary",
+                        condition = pkginfos.new_target_dependency_condition(
+                            platforms = ["ios", "tvos"],
+                        ),
+                    ),
+                ),
+            ],
+        ),
     ],
 )
 
 _deps_index_json = """
 {
   "modules": [
-    {"name": "RegularTargetForExec", "c99name": "RegularTargetForExec", "label": "@swiftpkg_mypackage//:Source_RegularTargetForExec"},
-    {"name": "RegularSwiftTargetAsLibrary", "c99name": "RegularSwiftTargetAsLibrary", "label": "@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"},
-    {"name": "RegularSwiftTargetAsLibraryTests", "c99name": "RegularSwiftTargetAsLibraryTests", "label": "@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibraryTests"},
-    {"name": "SwiftExecutableTarget", "c99name": "SwiftExecutableTarget", "label": "@swiftpkg_mypackage//:Source_SwiftLibraryTarget"}
+    {"name": "RegularTargetForExec", "c99name": "RegularTargetForExec", "src_type": "swift", "label": "@swiftpkg_mypackage//:Source_RegularTargetForExec"},
+    {"name": "RegularSwiftTargetAsLibrary", "c99name": "RegularSwiftTargetAsLibrary", "src_type": "swift", "label": "@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"},
+    {"name": "RegularSwiftTargetAsLibraryTests", "c99name": "RegularSwiftTargetAsLibraryTests", "src_type": "swift", "label": "@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibraryTests"},
+    {"name": "SwiftExecutableTarget", "c99name": "SwiftExecutableTarget", "src_type": "swift", "label": "@swiftpkg_mypackage//:Source_SwiftLibraryTarget"},
+    {"name": "ClangLibrary", "c99name": "ClangLibrary", "src_type": "clang", "label": "@swiftpkg_mypackage//:ClangLibrary"},
+    {"name": "ObjcLibrary", "c99name": "ObjcLibrary", "src_type": "objc", "label": "@swiftpkg_mypackage//:ObjcLibrary"}
   ],
   "products": [
   ]
@@ -454,6 +506,66 @@ swift_objc_module_alias(
     name = "ObjcLibrary",
     deps = [":ObjcLibrary_Objc"],
     module_names = ["ObjcLibrary"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Swift target with conditional dep",
+            name = "SwiftLibraryWithConditionalDep",
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "Source_SwiftLibraryWithConditionalDep",
+    defines = ["SWIFT_PACKAGE"],
+    deps = ["@swiftpkg_mypackage//:ClangLibrary"] + select({
+        "@cgrindel_swift_bazel//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
+        "@cgrindel_swift_bazel//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
+        "//conditions:default": [],
+    }),
+    module_name = "SwiftLibraryWithConditionalDep",
+    srcs = ["Source/SwiftLibraryWithConditionalDep/SwiftLibraryWithConditionalDep.swift"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Clang target with conditional dep",
+            name = "ClangLibraryWithConditionalDep",
+            find_results = {
+                "include": [
+                    "external.h",
+                ],
+                "src": [
+                    "foo.cc",
+                    "foo.h",
+                ],
+            },
+            exp = """\
+
+cc_library(
+    name = "ClangLibraryWithConditionalDep",
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-fmodule-name=SwiftLibraryWithConditionalDep",
+        "-Iexternal/swiftpkg_mypackage/src",
+    ],
+    defines = ["SWIFT_PACKAGE=1"],
+    deps = select({
+        "@cgrindel_swift_bazel//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:ClangLibrary"],
+        "@cgrindel_swift_bazel//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:ClangLibrary"],
+        "//conditions:default": [],
+    }),
+    hdrs = ["include/external.h"],
+    includes = ["include"],
+    srcs = [
+        "src/foo.cc",
+        "src/foo.h",
+    ],
+    tags = ["swift_module=SwiftLibraryWithConditionalDep"],
     visibility = ["//visibility:public"],
 )
 """,
