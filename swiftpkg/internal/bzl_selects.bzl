@@ -142,31 +142,6 @@ def _to_starlark(values, kind_handlers = {}):
     if len(values) == 0:
         return scg.new_expr([])
 
-    # # The selects_by_kind has keys which are the kind and the value is a select
-    # # dict whose keys are the conditions and the value is the value for the
-    # # condition.
-    # selects_by_kind = {}
-    # no_condition_results = []
-    # for v in values:
-    #     # If it is not a struct, then we assume it needs no further handling.
-    #     if type(v) != "struct":
-    #         no_condition_results.append(v)
-    #         continue
-
-    #     kind_handler = kind_handlers.get(v.kind, default = _noop_kind_handler)
-    #     tv = kind_handler.transform(v.value)
-    #     if v.condition != None:
-    #         select_dict = selects_by_kind.get(v.kind, default = {})
-
-    #         # We are assuming that the select will always result in a list.
-    #         # Hence, we wrap the transformed value in a list.
-    #         select_dict[v.condition] = [tv]
-
-    #         # Save the select dict
-    #         selects_by_kind[v.kind] = select_dict
-    #     else:
-    #         no_condition_results.append(tv)
-
     # The selects_by_kind has keys which are the kind and the value is a select
     # dict whose keys are the conditions and the value is the value for the
     # condition.
