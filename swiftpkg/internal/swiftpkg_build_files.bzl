@@ -32,8 +32,6 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
 # MARK: - Swift Target
 
 def _swift_target_build_file(repository_ctx, pkg_ctx, target):
-    # TODO(chuck): Update pkginfo_target_deps.bazel_label_strs to return a list of
-    # bazel labels with condition. This struct will then be passed to bzl_select.new_from_bazel_labels_with_condition.
     deps = lists.flatten([
         pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
         for td in target.dependencies
