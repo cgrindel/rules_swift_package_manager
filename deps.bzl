@@ -7,16 +7,13 @@ load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 def swift_bazel_dependencies():
     """Declare the Bazel workspace dependencies for the `swift_bazel` repository."""
 
-    # 2022-11-08: Retrieving the source archive so that I can use the gazelle
-    # plugin. Work is happening to include it in the distribution.
-    # https://github.com/bazelbuild/bazel-skylib/pull/400
     maybe(
         http_archive,
         name = "bazel_skylib",
-        sha256 = "4dd05f44200db3b78f72f56ebd8b102d5bcdc17c0299955d4eb20c38c6f07cd7",
-        strip_prefix = "bazel-skylib-1.4.0",
+        sha256 = "f24ab666394232f834f74d19e2ff142b0af17466ea0c69a3f4c276ee75f6efce",
         urls = [
-            "https://github.com/bazelbuild/bazel-skylib/archive/1.4.0.tar.gz",
+            "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.4.0/bazel-skylib-1.4.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.0/bazel-skylib-1.4.0.tar.gz",
         ],
     )
 
