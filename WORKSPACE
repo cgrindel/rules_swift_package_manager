@@ -36,10 +36,7 @@ swift_bazel_go_dependencies()
 
 go_rules_dependencies()
 
-go_register_toolchains(
-    nogo = "@//:nogo",
-    version = "1.19.5",
-)
+go_register_toolchains(version = "1.19.5")
 
 gazelle_dependencies()
 
