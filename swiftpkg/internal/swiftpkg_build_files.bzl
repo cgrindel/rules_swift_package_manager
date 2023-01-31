@@ -37,7 +37,7 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         for td in target.dependencies
     ])
     attrs = {
-        "deps": deps,
+        "deps": bzl_selects.to_starlark(deps),
         "module_name": target.c99name,
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//visibility:public"],
@@ -195,7 +195,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     ])
 
     attrs = {
-        "deps": deps,
+        "deps": bzl_selects.to_starlark(deps),
         "tags": ["swift_module={}".format(target.c99name)],
         "visibility": ["//visibility:public"],
     }

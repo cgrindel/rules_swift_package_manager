@@ -168,11 +168,149 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
 
 new_from_parsed_json_for_clang_targets_test = unittest.make(_new_from_parsed_json_for_clang_targets_test)
 
+def _target_dependency_from_json_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "byName, no condition",
+            json = """\
+{
+  "byName" : [
+    "MyLibrary",
+    null
+  ]
+}
+""",
+            exp = pkginfos.new_target_dependency(
+                by_name = pkginfos.new_by_name_reference(
+                    name = "MyLibrary",
+                ),
+            ),
+        ),
+        struct(
+            msg = "byName, with condition",
+            json = """\
+{
+  "byName" : [
+    "MyLibrary",
+    {
+      "platformNames" : [
+        "ios"
+      ]
+    }
+  ]
+}
+""",
+            exp = pkginfos.new_target_dependency(
+                by_name = pkginfos.new_by_name_reference(
+                    name = "MyLibrary",
+                    condition = pkginfos.new_target_dependency_condition(
+                        platforms = ["ios"],
+                    ),
+                ),
+            ),
+        ),
+        struct(
+            msg = "product, no condition",
+            json = """\
+{
+  "product" : [
+    "Logging",
+    "swift-log",
+    null,
+    null
+  ]
+}
+""",
+            exp = pkginfos.new_target_dependency(
+                product = pkginfos.new_product_reference(
+                    product_name = "Logging",
+                    dep_name = "swift-log",
+                ),
+            ),
+        ),
+        struct(
+            msg = "product, with condition",
+            json = """\
+{
+  "product" : [
+    "Logging",
+    "swift-log",
+    null,
+    {
+      "platformNames" : [
+        "ios"
+      ]
+    }
+  ]
+}
+""",
+            exp = pkginfos.new_target_dependency(
+                product = pkginfos.new_product_reference(
+                    product_name = "Logging",
+                    dep_name = "swift-log",
+                    condition = pkginfos.new_target_dependency_condition(
+                        platforms = ["ios"],
+                    ),
+                ),
+            ),
+        ),
+        struct(
+            msg = "target, no condition",
+            json = """\
+{
+  "target" : [
+    "MyLibrary",
+    null
+  ]
+}
+""",
+            exp = pkginfos.new_target_dependency(
+                target = pkginfos.new_target_reference(
+                    target_name = "MyLibrary",
+                ),
+            ),
+        ),
+        struct(
+            msg = "target, with condition",
+            json = """\
+{
+  "target" : [
+    "MyLibrary",
+    {
+      "platformNames" : [
+        "ios"
+      ]
+    }
+  ]
+}
+""",
+            exp = pkginfos.new_target_dependency(
+                target = pkginfos.new_target_reference(
+                    target_name = "MyLibrary",
+                    condition = pkginfos.new_target_dependency_condition(
+                        platforms = ["ios"],
+                    ),
+                ),
+            ),
+        ),
+    ]
+    for t in tests:
+        dump_map = json.decode(t.json)
+        actual = pkginfos.new_target_dependency_from_dump_json_map(dump_map)
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+target_dependency_from_json_test = unittest.make(_target_dependency_from_json_test)
+
 def pkginfos_test_suite():
     return unittest.suite(
         "pkginfos_tests",
         new_from_parsed_json_for_swift_targets_test,
         new_from_parsed_json_for_clang_targets_test,
+        target_dependency_from_json_test,
     )
 
 _swift_arg_parser_dump_json = """
