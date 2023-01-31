@@ -4,6 +4,8 @@ github.com/bazelbuild/bazel-gazelle v0.28.0 h1:sPdMMujcMt5jeSLGFko5yF1XBD5MDqm6Y
 github.com/bazelbuild/bazel-gazelle v0.28.0/go.mod h1:5Qer6FCMBeotA8eQYJEPxn2eAbHmTApPxyd7aD4A0S8=
 github.com/bazelbuild/buildtools v0.0.0-20230111132423-06e8e2436a75 h1:DraHsDqTYhf6w1369EEdFyA5hjJnGX88xNJRv1+20E0=
 github.com/bazelbuild/buildtools v0.0.0-20230111132423-06e8e2436a75/go.mod h1:689QdV3hBP7Vo9dJMmzhoYIyo/9iMhEmHkJcnaPRCbo=
+github.com/bazelbuild/buildtools v0.0.0-20230127124510-cf446296fb76 h1:DQ4RKicYtQ0KmtM6+PhBbMhd+qaazxi/8FuZoD7a1Zo=
+github.com/bazelbuild/buildtools v0.0.0-20230127124510-cf446296fb76/go.mod h1:689QdV3hBP7Vo9dJMmzhoYIyo/9iMhEmHkJcnaPRCbo=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/chzyer/logex v1.1.10/go.mod h1:+Ywpsq7O8HXn0nuIou7OrIPyXbp3wmkHB+jjWRnGsAI=
 github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e/go.mod h1:nSuG5e5PlCu98SY8svDHJxuZscDgtXS6KTTbou5AhLI=

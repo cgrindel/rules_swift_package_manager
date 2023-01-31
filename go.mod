@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/bazelbuild/bazel-gazelle v0.28.0
-	github.com/bazelbuild/buildtools v0.0.0-20230111132423-06e8e2436a75
+	github.com/bazelbuild/buildtools v0.0.0-20230127124510-cf446296fb76
 	github.com/stretchr/testify v1.8.1
 	golang.org/x/exp v0.0.0-20230118134722-a68e582fa157
 )
