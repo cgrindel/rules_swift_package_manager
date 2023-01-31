@@ -34,17 +34,30 @@ load("//:go_deps.bzl", "swift_bazel_go_dependencies")
 # gazelle:repository_macro go_deps.bzl%swift_bazel_go_dependencies
 swift_bazel_go_dependencies()
 
+# MARK: - Skylib Gazelle Extension
+
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+
+http_archive(
+    name = "bazel_skylib_gazelle_plugin",
+    sha256 = "04182233284fcb6545d36b94248fe28186b4d9d574c4131d6a511d5aeb278c46",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.4.0/bazel-skylib-gazelle-plugin-1.4.0.tar.gz",
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.0/bazel-skylib-gazelle-plugin-1.4.0.tar.gz",
+    ],
+)
+
+load("@bazel_skylib_gazelle_plugin//:workspace.bzl", "bazel_skylib_gazelle_plugin_workspace")
+
+bazel_skylib_gazelle_plugin_workspace()
+
 go_rules_dependencies()
 
 go_register_toolchains(version = "1.19.5")
 
 gazelle_dependencies()
 
-bazel_skylib_workspace()
-
 # MARK: - Bazel Integration Test
-
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "contrib_rules_bazel_integration_test",

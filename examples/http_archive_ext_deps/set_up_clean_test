@@ -24,7 +24,7 @@ tidy(
 gazelle_binary(
     name = "gazelle_bin",
     languages = [
-        "@bazel_skylib//gazelle/bzl",
+        "@bazel_skylib_gazelle_plugin//bzl",
         "@cgrindel_swift_bazel//gazelle",
     ],
 )
