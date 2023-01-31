@@ -41,6 +41,15 @@ tidy(
     ],
 )
 
+tidy(
+    name = "upgrade_go_deps",
+    targets = [
+        ":go_get_latest",
+        ":go_mod_tidy",
+        ":go_update_repos",
+    ],
+)
+
 # MARK: - nogo Code Analysis
 
 # https://github.com/bazelbuild/rules_go/blob/master/go/nogo.rst
@@ -85,6 +94,18 @@ execute_binary(
     arguments = [
         "mod",
         "tidy",
+    ],
+    binary = "@go_sdk//:bin/go",
+    execute_in_workspace = True,
+)
+
+execute_binary(
+    name = "go_get_latest",
+    arguments = [
+        "get",
+        "-t",
+        "-u",
+        "./...",
     ],
     binary = "@go_sdk//:bin/go",
     execute_in_workspace = True,
