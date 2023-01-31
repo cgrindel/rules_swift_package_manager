@@ -13,10 +13,10 @@ def swift_bazel_dependencies():
     maybe(
         http_archive,
         name = "bazel_skylib",
-        sha256 = "3b620033ca48fcd6f5ef2ac85e0f6ec5639605fa2f627968490e52fc91a9932f",
-        strip_prefix = "bazel-skylib-1.3.0",
+        sha256 = "4dd05f44200db3b78f72f56ebd8b102d5bcdc17c0299955d4eb20c38c6f07cd7",
+        strip_prefix = "bazel-skylib-1.4.0",
         urls = [
-            "https://github.com/bazelbuild/bazel-skylib/archive/1.3.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-skylib/archive/1.4.0.tar.gz",
         ],
     )
 
