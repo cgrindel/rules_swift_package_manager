@@ -46,7 +46,7 @@ def _index(load_stmts):
     index_by_location = {}
     for load_stmt in load_stmts:
         location = load_stmt.location
-        existing_values = index_by_location.get(location, default = [])
+        existing_values = index_by_location.get(location, [])
         existing_values.append(load_stmt)
         index_by_location[location] = existing_values
     return index_by_location

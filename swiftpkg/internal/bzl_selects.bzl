@@ -159,10 +159,10 @@ def _to_starlark(values, kind_handlers = {}):
 
         # We are assuming that the select will always result in a list.
         # Hence, we wrap the transformed value in a list.
-        kind_handler = kind_handlers.get(v.kind, default = _noop_kind_handler)
+        kind_handler = kind_handlers.get(v.kind, _noop_kind_handler)
         tv = lists.flatten(kind_handler.transform(v.value))
         if v.condition != None:
-            select_dict = selects_by_kind.get(v.kind, default = {})
+            select_dict = selects_by_kind.get(v.kind, {})
             select_dict[v.condition] = tv
             selects_by_kind[v.kind] = select_dict
         else:
@@ -179,7 +179,7 @@ def _to_starlark(values, kind_handlers = {}):
             k: select_dict[k]
             for k in sorted_keys
         }
-        kind_handler = kind_handlers.get(kind, default = _noop_kind_handler)
+        kind_handler = kind_handlers.get(kind, _noop_kind_handler)
         if kind_handler.default != None:
             new_select_dict[_bazel_select_default_condition] = kind_handler.default
         select_fn = scg.new_fn_call("select", new_select_dict)
