@@ -36,7 +36,7 @@ def new_exec_result(return_code = 0, stdout = "", stderr = ""):
 
 def new_stub_repository_ctx(repo_name, file_contents = {}, find_results = {}):
     def read(path):
-        return file_contents.get(path, default = "")
+        return file_contents.get(path, "")
 
     # buildifier: disable=unused-variable
     def execute(args, quiet = True):
@@ -44,7 +44,7 @@ def new_stub_repository_ctx(repo_name, file_contents = {}, find_results = {}):
         # See repository_files.list_files_under for details.
         if len(args) >= 4 and args[0] == "find":
             path = args[3]
-            results = find_results.get(path, default = [])
+            results = find_results.get(path, [])
             exec_result = new_exec_result(
                 stdout = "\n".join(results),
             )

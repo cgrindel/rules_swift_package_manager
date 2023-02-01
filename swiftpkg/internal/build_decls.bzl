@@ -57,7 +57,7 @@ def _uniq(decls):
             kind = decl.kind,
             name = decl.name,
         )
-        existing_values = index_by_type_name.get(key, default = [])
+        existing_values = index_by_type_name.get(key, [])
         existing_values.append(decl)
         index_by_type_name[key] = existing_values
 

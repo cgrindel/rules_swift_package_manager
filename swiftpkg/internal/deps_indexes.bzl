@@ -20,11 +20,11 @@ def _new_from_json(json_str):
 
     # buildifier: disable=uninitialized
     def _add_module(m):
-        entries = mi.get(m.name, default = [])
+        entries = mi.get(m.name, [])
         entries.append(m)
         mi[m.name] = entries
         if m.name != m.c99name:
-            entries = mi.get(m.c99name, default = [])
+            entries = mi.get(m.c99name, [])
             entries.append(m)
             mi[m.c99name] = entries
 
@@ -55,7 +55,7 @@ def _new_module_from_dict(mod_dict):
     return _new_module(
         name = mod_dict["name"],
         c99name = mod_dict["c99name"],
-        src_type = mod_dict.get("src_type", default = "unknown"),
+        src_type = mod_dict.get("src_type", "unknown"),
         label = bazel_labels.parse(mod_dict["label"]),
     )
 
@@ -109,7 +109,7 @@ def _resolve_module_label(
     Returns:
         A `struct` as returned by `bazel_labels.new`.
     """
-    modules = deps_index.modules.get(module_name, default = [])
+    modules = deps_index.modules.get(module_name, [])
     if len(modules) == 0:
         return None
     labels = [m.label for m in modules]

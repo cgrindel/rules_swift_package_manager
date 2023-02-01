@@ -65,10 +65,7 @@ sh_binary(
 [
     bazel_integration_tests(
         name = example + "_test",
-        timeout = _timeouts.get(
-            example,
-            default = _default_timeout,
-        ),
+        timeout = _timeouts.get(example, _default_timeout),
         bazel_versions = SUPPORTED_BAZEL_VERSIONS,
         test_runner = ":test_runner",
         workspace_files = integration_test_utils.glob_workspace_files(example) + [
@@ -85,10 +82,7 @@ sh_binary(
             example + "_test",
             CURRENT_BAZEL_VERSION,
         ),
-        timeout = _timeouts.get(
-            example,
-            default = _default_timeout,
-        ),
+        timeout = _timeouts.get(example, _default_timeout),
         bazel_version = CURRENT_BAZEL_VERSION,
         test_runner = ":test_runner",
         workspace_files = integration_test_utils.glob_workspace_files(example) + [
@@ -105,10 +99,7 @@ sh_binary(
             example + "_test",
             CURRENT_BAZEL_VERSION,
         ),
-        timeout = _timeouts.get(
-            example,
-            default = _default_timeout,
-        ),
+        timeout = _timeouts.get(example, _default_timeout),
         bazel_version = CURRENT_BAZEL_VERSION,
         target_compatible_with = ["@platforms//os:macos"],
         test_runner = ":test_runner",
@@ -126,10 +117,7 @@ sh_binary(
             example + "_test",
             CURRENT_BAZEL_VERSION,
         ),
-        timeout = _timeouts.get(
-            example,
-            default = _default_timeout,
-        ),
+        timeout = _timeouts.get(example, _default_timeout),
         bazel_version = CURRENT_BAZEL_VERSION,
         target_compatible_with = ["@platforms//os:linux"],
         test_runner = ":test_runner",
