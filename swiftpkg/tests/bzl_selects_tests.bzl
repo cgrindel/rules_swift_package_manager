@@ -251,6 +251,37 @@ def _to_starlark_test(ctx):
 })\
 """,
         ),
+        struct(
+            msg = "multiple of the same condition",
+            khs = {},
+            vals = [
+                bzl_selects.new(
+                    value = "a",
+                    kind = "mykind",
+                    condition = "//myconditions:alpha",
+                ),
+                bzl_selects.new(
+                    value = "b",
+                    kind = "mykind",
+                    condition = "//myconditions:beta",
+                ),
+                bzl_selects.new(
+                    value = "c",
+                    kind = "mykind",
+                    condition = "//myconditions:alpha",
+                ),
+            ],
+            exp = """\
+select({
+    "//myconditions:alpha": [
+        "a",
+        "c",
+    ],
+    "//myconditions:beta": ["b"],
+    "//conditions:default": [],
+})\
+""",
+        ),
     ]
     for t in tests:
         actual = scg.to_starlark(

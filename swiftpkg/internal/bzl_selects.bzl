@@ -162,8 +162,11 @@ def _to_starlark(values, kind_handlers = {}):
         kind_handler = kind_handlers.get(v.kind, _noop_kind_handler)
         tv = lists.flatten(kind_handler.transform(v.value))
         if v.condition != None:
+            # Collect all of the values associted with a condition.
             select_dict = selects_by_kind.get(v.kind, {})
-            select_dict[v.condition] = tv
+            condition_values = select_dict.get(v.condition, [])
+            condition_values.extend(tv)
+            select_dict[v.condition] = condition_values
             selects_by_kind[v.kind] = select_dict
         else:
             no_condition_results.extend(tv)
