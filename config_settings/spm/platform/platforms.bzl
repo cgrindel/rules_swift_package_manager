@@ -48,6 +48,7 @@ _PLATFORM_INFOS = [
 ] + [
     # Treat `maccatalyst` as an alias of sorts for macos. This will be handled
     # in the `platforms.label` function.
+    _platform_info(spm = "maccatalyst", bzl = None, os = None),
     # Not sure how to map driverkit
     _platform_info(spm = "driverkit", bzl = None, os = None),
 ]
