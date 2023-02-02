@@ -143,7 +143,7 @@ def _to_starlark_test(ctx):
         struct(
             msg = "string values",
             khs = {},
-            vals = ["first", "second"],
+            vals = ["first", "second", "first"],
             exp = """\
 [
     "first",
@@ -267,6 +267,11 @@ def _to_starlark_test(ctx):
                 ),
                 bzl_selects.new(
                     value = "c",
+                    kind = "mykind",
+                    condition = "//myconditions:alpha",
+                ),
+                bzl_selects.new(
+                    value = "a",
                     kind = "mykind",
                     condition = "//myconditions:alpha",
                 ),

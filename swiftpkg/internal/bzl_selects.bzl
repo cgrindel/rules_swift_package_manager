@@ -3,6 +3,7 @@ Module for transforming Swift package manifest conditionals to Bazel select \
 statements.\
 """
 
+load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(
     "//config_settings/spm/configuration:configurations.bzl",
@@ -146,40 +147,40 @@ def _to_starlark(values, kind_handlers = {}):
     # dict whose keys are the conditions and the value is the value for the
     # condition.
     selects_by_kind = {}
-    no_condition_results = []
+    no_condition_results = sets.make()
 
     for v in values:
         v_type = type(v)
         if v_type != "struct":
             if v_type == "list":
-                no_condition_results.extend(v)
+                no_condition_results = sets.union(no_condition_results, sets.make(v))
             else:
-                no_condition_results.append(v)
+                sets.insert(no_condition_results, v)
             continue
 
         # We are assuming that the select will always result in a list.
         # Hence, we wrap the transformed value in a list.
         kind_handler = kind_handlers.get(v.kind, _noop_kind_handler)
-        tv = lists.flatten(kind_handler.transform(v.value))
+        tvs_set = sets.make(lists.flatten(kind_handler.transform(v.value)))
         if v.condition != None:
             # Collect all of the values associted with a condition.
             select_dict = selects_by_kind.get(v.kind, {})
-            condition_values = select_dict.get(v.condition, [])
-            condition_values.extend(tv)
+            condition_values = select_dict.get(v.condition, sets.make())
+            condition_values = sets.union(condition_values, tvs_set)
             select_dict[v.condition] = condition_values
             selects_by_kind[v.kind] = select_dict
         else:
-            no_condition_results.extend(tv)
+            no_condition_results = sets.union(no_condition_results, tvs_set)
 
     expr_members = []
-    if len(no_condition_results) > 0:
-        expr_members.append(no_condition_results)
+    if sets.length(no_condition_results) > 0:
+        expr_members.append(sets.to_list(no_condition_results))
     for (kind, select_dict) in selects_by_kind.items():
         if len(expr_members) > 0:
             expr_members.append(scg.new_op("+"))
         sorted_keys = sorted(select_dict.keys())
         new_select_dict = {
-            k: select_dict[k]
+            k: sets.to_list(select_dict[k])
             for k in sorted_keys
         }
         kind_handler = kind_handlers.get(kind, _noop_kind_handler)
