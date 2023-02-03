@@ -21,7 +21,7 @@ def make_pkginfo_target_deps(bazel_labels):
                 `pkginfos.new_target_dependency`.
 
         Returns:
-            A `list` of `struct` values as returned by `conditional_labels.new`
+            A `list` of `struct` values as returned by `bzl_selects.new`
             representing the labels for the target dependency.
         """
         if target_dep.by_name:

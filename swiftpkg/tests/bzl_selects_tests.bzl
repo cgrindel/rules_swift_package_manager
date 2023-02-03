@@ -143,7 +143,7 @@ def _to_starlark_test(ctx):
         struct(
             msg = "string values",
             khs = {},
-            vals = ["first", "second"],
+            vals = ["first", "second", "first"],
             exp = """\
 [
     "first",
@@ -247,6 +247,42 @@ def _to_starlark_test(ctx):
 ["sqlite3"] + select({
     "//my_conditions:condition1": ["z"],
     "//my_conditions:condition2": ["c++"],
+    "//conditions:default": [],
+})\
+""",
+        ),
+        struct(
+            msg = "multiple of the same condition",
+            khs = {},
+            vals = [
+                bzl_selects.new(
+                    value = "a",
+                    kind = "mykind",
+                    condition = "//myconditions:alpha",
+                ),
+                bzl_selects.new(
+                    value = "b",
+                    kind = "mykind",
+                    condition = "//myconditions:beta",
+                ),
+                bzl_selects.new(
+                    value = "c",
+                    kind = "mykind",
+                    condition = "//myconditions:alpha",
+                ),
+                bzl_selects.new(
+                    value = "a",
+                    kind = "mykind",
+                    condition = "//myconditions:alpha",
+                ),
+            ],
+            exp = """\
+select({
+    "//myconditions:alpha": [
+        "a",
+        "c",
+    ],
+    "//myconditions:beta": ["b"],
     "//conditions:default": [],
 })\
 """,

@@ -427,6 +427,7 @@ def _apple_dynamic_xcframework_import_build_file(target):
             kind = apple_kinds.dynamic_xcframework_import,
             name = pkginfo_targets.bazel_label_name(target),
             attrs = {
+                "visibility": ["//visibility:public"],
                 "xcframework_imports": glob,
             },
         ),

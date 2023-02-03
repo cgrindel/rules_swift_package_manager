@@ -46,7 +46,9 @@ _PLATFORM_INFOS = [
     _platform_info(spm = p, bzl = None, os = p)
     for p in _NON_APPLE_PLATFORMS
 ] + [
-    _platform_info(spm = "maccatalyst", bzl = "macos", os = "macos"),
+    # Treat `maccatalyst` as an alias of sorts for macos. This will be handled
+    # in the `platforms.label` function.
+    _platform_info(spm = "maccatalyst", bzl = None, os = None),
     # Not sure how to map driverkit
     _platform_info(spm = "driverkit", bzl = None, os = None),
 ]
@@ -60,6 +62,8 @@ def _label(name):
     Returns:
         The condition label as a `string`.
     """
+    if name == "maccatalyst":
+        name = "macos"
     return "@cgrindel_swift_bazel//config_settings/spm/platform:{}".format(name)
 
 platforms = struct(
