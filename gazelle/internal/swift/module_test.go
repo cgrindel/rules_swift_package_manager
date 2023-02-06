@@ -12,7 +12,7 @@ import (
 func TestModule(t *testing.T) {
 	t.Run("label string", func(t *testing.T) {
 		l := label.New("my_repo", "path/to/pkg", "Foo")
-		m := swift.NewModule("Foo", "Foo", swiftpkg.SwiftSourceType, &l)
+		m := swift.NewModule("Foo", "Foo", swiftpkg.SwiftSourceType, &l, "my-repo", nil)
 		actual := m.LabelStr()
 		expected := swift.NewLabelStr(&l)
 		assert.Equal(t, expected, actual)

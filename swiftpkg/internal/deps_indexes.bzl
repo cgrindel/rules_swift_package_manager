@@ -231,11 +231,13 @@ src_types = struct(
     swift = "swift",
     clang = "clang",
     objc = "objc",
+    binary = "binary",
     all_values = [
         "unknown",
         "swift",
         "clang",
         "objc",
+        "binary",
     ],
 )
 

@@ -28,6 +28,7 @@ go_library(
 go_test(
     name = "swiftpkg_test",
     srcs = [
+        "dependency_test.go",
         "module_type_test.go",
         "package_info_test.go",
         "source_type_test.go",

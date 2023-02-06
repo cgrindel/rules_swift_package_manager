@@ -6,6 +6,7 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
+	mapset "github.com/deckarep/golang-set/v2"
 )
 
 type productJSONData struct {
@@ -153,4 +154,18 @@ func (p *Product) UnmarshalJSON(b []byte) error {
 	newp, err := newProductFromJSONData(&jd)
 	*p = *newp
 	return err
+}
+
+// Products
+
+type Products []*Product
+
+func (prds Products) Labels() mapset.Set[*label.Label] {
+	labels := mapset.NewSet[*label.Label]()
+	for _, p := range prds {
+		for _, l := range p.TargetLabels {
+			labels.Add(l)
+		}
+	}
+	return labels
 }

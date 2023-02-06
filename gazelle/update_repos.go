@@ -67,6 +67,9 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	di := swift.NewDependencyIndex()
 	sc.DependencyIndex = di
 
+	// Store the direct deps
+	di.AddDirectDependency(pi.Dependencies.Identities()...)
+
 	// Need to collect all of the direct deps and their transitive deps. These can be remote deps,
 	// which will have a spreso.Pin, and some will be local which will not have a spreso.Pin.
 	bzlReposByIdentity := make(map[string]*swift.BazelRepo)

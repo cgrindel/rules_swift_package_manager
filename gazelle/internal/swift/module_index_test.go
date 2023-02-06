@@ -11,11 +11,12 @@ import (
 )
 
 var fooM = swift.NewModuleFromLabelStruct(
-	"Foo", "Foo", swiftpkg.SwiftSourceType, label.New("", "Sources/Foo", "Foo"))
+	"Foo", "Foo", swiftpkg.SwiftSourceType, label.New("", "Sources/Foo", "Foo"), "", []string{})
 var barM = swift.NewModuleFromLabelStruct(
-	"Bar", "Bar", swiftpkg.SwiftSourceType, label.New("", "Sources/Bar", "Bar"))
+	"Bar", "Bar", swiftpkg.SwiftSourceType, label.New("", "Sources/Bar", "Bar"), "", []string{})
 var anotherRepoFooM = swift.NewModuleFromLabelStruct(
-	"Foo", "Foo", swiftpkg.SwiftSourceType, label.New("another_repo", "pkg/path", "Foo"))
+	"Foo", "Foo", swiftpkg.SwiftSourceType, label.New("another_repo", "pkg/path", "Foo"), "",
+	[]string{})
 var moduleIndex = make(swift.ModuleIndex)
 
 func init() {

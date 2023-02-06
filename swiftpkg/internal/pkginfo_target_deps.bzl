@@ -25,6 +25,9 @@ def make_pkginfo_target_deps(bazel_labels):
             representing the labels for the target dependency.
         """
         if target_dep.by_name:
+            # GH194: A byName reference can be a product or a module.
+            # This should look for a matching product first. Then, look for a
+            # module directly?
             condition = target_dep.by_name.condition
             labels = lists.compact([
                 deps_indexes.resolve_module_label_with_ctx(

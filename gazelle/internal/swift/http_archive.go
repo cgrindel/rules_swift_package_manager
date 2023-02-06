@@ -13,6 +13,7 @@ import (
 
 const buildFileContentAttrName = "build_file_content"
 const buildFileAttrName = "build_file"
+const HTTPArchivePkgIdentity = "__http_archive__"
 
 // A HTTPArchive represents Swift module information found in a Bazel `http_archive` declaration.
 type HTTPArchive struct {
@@ -54,7 +55,8 @@ func NewHTTPArchiveFromRule(r *rule.Rule, repoRoot string) (*HTTPArchive, error)
 		}
 		moduleName := ModuleName(br)
 		l := label.New(repoName, "", br.Name())
-		m := NewModule(moduleName, moduleName, swiftpkg.SwiftSourceType, &l)
+		m := NewModule(moduleName, moduleName, swiftpkg.SwiftSourceType, &l,
+			HTTPArchivePkgIdentity, nil)
 		modules = append(modules, m)
 	}
 

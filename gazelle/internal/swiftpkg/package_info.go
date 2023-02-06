@@ -18,7 +18,7 @@ type PackageInfo struct {
 	Targets      Targets
 	Platforms    []*Platform
 	Products     []*Product
-	Dependencies []*Dependency
+	Dependencies Dependencies
 }
 
 // NewPackageInfo returns the Swift package information from a Swift package on disk.
