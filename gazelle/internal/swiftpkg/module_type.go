@@ -7,6 +7,8 @@ const (
 	UnknownModuleType ModuleType = iota
 	SwiftModuleType
 	ClangModuleType
+	BinaryModuleType
+	PluginModuleType
 )
 
 var moduleTypeIDToStr map[ModuleType]string
@@ -18,6 +20,8 @@ func init() {
 		UnknownModuleType: "unknown",
 		SwiftModuleType:   "SwiftTarget",
 		ClangModuleType:   "ClangTarget",
+		BinaryModuleType:  "BinaryTarget",
+		PluginModuleType:  "PluginTarget",
 	}
 	moduleTypeStrToID = make(map[string]ModuleType)
 	for id, str := range moduleTypeIDToStr {

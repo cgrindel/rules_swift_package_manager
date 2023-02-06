@@ -3,6 +3,7 @@ package gazelle
 import (
 	"log"
 	"sort"
+	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/label"
@@ -38,33 +39,57 @@ func (l *swiftLang) Resolve(
 	imports interface{},
 	from label.Label) {
 
-	di := swiftcfg.GetSwiftConfig(c).DependencyIndex
+	sc := swiftcfg.GetSwiftConfig(c)
+	di := sc.DependencyIndex
+	pkgIdentities := di.DirectDepIdentities()
 	swiftImports := imports.([]string)
 
+	// Try to resolve to targets in this project.
 	var deps []string
+	addToDeps := func(lbl label.Label) {
+		l := normalizeLabel(c.RepoName, lbl)
+		deps = append(deps, l.String())
+	}
+	externalModules := make([]string, 0, len(swiftImports))
 	for _, imp := range swiftImports {
 		if swift.IsBuiltInModule(imp) {
 			continue
 		}
-
 		findResults := ix.FindRulesByImportWithConfig(
 			c, resolve.ImportSpec{Lang: swiftLangName, Imp: imp}, swiftLangName)
 		if len(findResults) > 0 {
-			l := normalizeLabel(c.RepoName, findResults[0].Label)
-			deps = append(deps, l.String())
-		} else if m := di.ModuleIndex.Resolve(c.RepoName, imp); m != nil {
-			l := normalizeLabel(c.RepoName, *m.Label)
-			deps = append(deps, l.String())
+			addToDeps(findResults[0].Label)
 		} else {
-			log.Printf("Unable to find dependency label for %v", imp)
+			externalModules = append(externalModules, imp)
 		}
+	}
+
+	// Try to resolve to external Swift pacakage products
+	resResult := di.ResolveModulesToProducts(externalModules, pkgIdentities)
+	for lbl := range resResult.Products.Labels().Iterator().C {
+		addToDeps(*lbl)
+	}
+
+	// If any module is still unresolved, look for modules defined in http_archive declarations.
+	var unresolved []string
+	for _, moduleName := range resResult.Unresolved {
+		haModules := di.FindModules(moduleName, []string{swift.HTTPArchivePkgIdentity})
+		if len(haModules) > 0 {
+			addToDeps(*haModules[0].Label)
+		} else {
+			unresolved = append(unresolved, moduleName)
+		}
+	}
+
+	if len(unresolved) > 0 {
+		log.Printf("Unable to find dependency labels for %v",
+			strings.Join(resResult.Unresolved, ", "))
 	}
 
 	sort.Strings(deps)
 	if len(deps) > 0 {
 		r.SetAttr("deps", deps)
 	}
-
 }
 
 // Adjusts the label to not include the repo value if they are in the same repo.

@@ -1,3052 +1,5502 @@
 {
+  "direct_dep_identities": [
+    "xcmetrics"
+  ],
   "modules": [
     {
       "name": "AsyncHTTPClient",
       "c99name": "AsyncHTTPClient",
       "src_type": "swift",
-      "label": "@swiftpkg_async_http_client//:Sources_AsyncHTTPClient"
+      "label": "@swiftpkg_async_http_client//:Sources_AsyncHTTPClient",
+      "package_identity": "async-http-client",
+      "product_memberships": [
+        "AsyncHTTPClient"
+      ]
     },
     {
       "name": "CAsyncHTTPClient",
       "c99name": "CAsyncHTTPClient",
       "src_type": "clang",
-      "label": "@swiftpkg_async_http_client//:Sources_CAsyncHTTPClient"
+      "label": "@swiftpkg_async_http_client//:Sources_CAsyncHTTPClient",
+      "package_identity": "async-http-client",
+      "product_memberships": [
+        "AsyncHTTPClient"
+      ]
     },
     {
       "name": "AsyncHTTPClientTests",
       "c99name": "AsyncHTTPClientTests",
       "src_type": "swift",
-      "label": "@swiftpkg_async_http_client//:Tests_AsyncHTTPClientTests"
+      "label": "@swiftpkg_async_http_client//:Tests_AsyncHTTPClientTests",
+      "package_identity": "async-http-client",
+      "product_memberships": []
     },
     {
       "name": "AsyncKit",
       "c99name": "AsyncKit",
       "src_type": "swift",
-      "label": "@swiftpkg_async_kit//:Sources_AsyncKit"
+      "label": "@swiftpkg_async_kit//:Sources_AsyncKit",
+      "package_identity": "async-kit",
+      "product_memberships": [
+        "AsyncKit"
+      ]
     },
     {
       "name": "AsyncKitTests",
       "c99name": "AsyncKitTests",
       "src_type": "swift",
-      "label": "@swiftpkg_async_kit//:Tests_AsyncKitTests"
+      "label": "@swiftpkg_async_kit//:Tests_AsyncKitTests",
+      "package_identity": "async-kit",
+      "product_memberships": []
     },
     {
       "name": "ConsoleKit",
       "c99name": "ConsoleKit",
       "src_type": "swift",
-      "label": "@swiftpkg_console_kit//:Sources_ConsoleKit"
+      "label": "@swiftpkg_console_kit//:Sources_ConsoleKit",
+      "package_identity": "console-kit",
+      "product_memberships": [
+        "ConsoleKit",
+        "ConsoleKitExample"
+      ]
     },
     {
       "name": "ConsoleKitAsyncExample",
       "c99name": "ConsoleKitAsyncExample",
       "src_type": "swift",
-      "label": "@swiftpkg_console_kit//:Sources_ConsoleKitAsyncExample"
+      "label": "@swiftpkg_console_kit//:Sources_ConsoleKitAsyncExample",
+      "package_identity": "console-kit",
+      "product_memberships": []
     },
     {
       "name": "ConsoleKitExample",
       "c99name": "ConsoleKitExample",
       "src_type": "swift",
-      "label": "@swiftpkg_console_kit//:Sources_ConsoleKitExample"
+      "label": "@swiftpkg_console_kit//:Sources_ConsoleKitExample",
+      "package_identity": "console-kit",
+      "product_memberships": [
+        "ConsoleKitExample"
+      ]
     },
     {
       "name": "AsyncConsoleKitTests",
       "c99name": "AsyncConsoleKitTests",
       "src_type": "swift",
-      "label": "@swiftpkg_console_kit//:Tests_AsyncConsoleKitTests"
+      "label": "@swiftpkg_console_kit//:Tests_AsyncConsoleKitTests",
+      "package_identity": "console-kit",
+      "product_memberships": []
     },
     {
       "name": "ConsoleKitTests",
       "c99name": "ConsoleKitTests",
       "src_type": "swift",
-      "label": "@swiftpkg_console_kit//:Tests_ConsoleKitTests"
+      "label": "@swiftpkg_console_kit//:Tests_ConsoleKitTests",
+      "package_identity": "console-kit",
+      "product_memberships": []
     },
     {
       "name": "CryptoSwift",
       "c99name": "CryptoSwift",
       "src_type": "swift",
-      "label": "@swiftpkg_cryptoswift//:Sources_CryptoSwift"
+      "label": "@swiftpkg_cryptoswift//:Sources_CryptoSwift",
+      "package_identity": "cryptoswift",
+      "product_memberships": [
+        "CryptoSwift"
+      ]
     },
     {
       "name": "CryptoSwiftTests",
       "c99name": "CryptoSwiftTests",
       "src_type": "swift",
-      "label": "@swiftpkg_cryptoswift//:Tests_CryptoSwiftTests"
+      "label": "@swiftpkg_cryptoswift//:Tests_CryptoSwiftTests",
+      "package_identity": "cryptoswift",
+      "product_memberships": []
     },
     {
       "name": "TestsPerformance",
       "c99name": "TestsPerformance",
       "src_type": "swift",
-      "label": "@swiftpkg_cryptoswift//:Tests_TestsPerformance"
+      "label": "@swiftpkg_cryptoswift//:Tests_TestsPerformance",
+      "package_identity": "cryptoswift",
+      "product_memberships": []
     },
     {
       "name": "Fluent",
       "c99name": "Fluent",
       "src_type": "swift",
-      "label": "@swiftpkg_fluent//:Sources_Fluent"
+      "label": "@swiftpkg_fluent//:Sources_Fluent",
+      "package_identity": "fluent",
+      "product_memberships": [
+        "Fluent"
+      ]
     },
     {
       "name": "FluentTests",
       "c99name": "FluentTests",
       "src_type": "swift",
-      "label": "@swiftpkg_fluent//:Tests_FluentTests"
+      "label": "@swiftpkg_fluent//:Tests_FluentTests",
+      "package_identity": "fluent",
+      "product_memberships": []
     },
     {
       "name": "FluentBenchmark",
       "c99name": "FluentBenchmark",
       "src_type": "swift",
-      "label": "@swiftpkg_fluent_kit//:Sources_FluentBenchmark"
+      "label": "@swiftpkg_fluent_kit//:Sources_FluentBenchmark",
+      "package_identity": "fluent-kit",
+      "product_memberships": [
+        "FluentBenchmark"
+      ]
     },
     {
       "name": "FluentKit",
       "c99name": "FluentKit",
       "src_type": "swift",
-      "label": "@swiftpkg_fluent_kit//:Sources_FluentKit"
+      "label": "@swiftpkg_fluent_kit//:Sources_FluentKit",
+      "package_identity": "fluent-kit",
+      "product_memberships": [
+        "FluentKit",
+        "FluentBenchmark",
+        "FluentSQL",
+        "XCTFluent"
+      ]
     },
     {
       "name": "FluentSQL",
       "c99name": "FluentSQL",
       "src_type": "swift",
-      "label": "@swiftpkg_fluent_kit//:Sources_FluentSQL"
+      "label": "@swiftpkg_fluent_kit//:Sources_FluentSQL",
+      "package_identity": "fluent-kit",
+      "product_memberships": [
+        "FluentBenchmark",
+        "FluentSQL"
+      ]
     },
     {
       "name": "XCTFluent",
       "c99name": "XCTFluent",
       "src_type": "swift",
-      "label": "@swiftpkg_fluent_kit//:Sources_XCTFluent"
+      "label": "@swiftpkg_fluent_kit//:Sources_XCTFluent",
+      "package_identity": "fluent-kit",
+      "product_memberships": [
+        "XCTFluent"
+      ]
     },
     {
       "name": "FluentKitTests",
       "c99name": "FluentKitTests",
       "src_type": "swift",
-      "label": "@swiftpkg_fluent_kit//:Tests_FluentKitTests"
+      "label": "@swiftpkg_fluent_kit//:Tests_FluentKitTests",
+      "package_identity": "fluent-kit",
+      "product_memberships": []
     },
     {
       "name": "FluentPostgresDriver",
       "c99name": "FluentPostgresDriver",
       "src_type": "swift",
-      "label": "@swiftpkg_fluent_postgres_driver//:Sources_FluentPostgresDriver"
+      "label": "@swiftpkg_fluent_postgres_driver//:Sources_FluentPostgresDriver",
+      "package_identity": "fluent-postgres-driver",
+      "product_memberships": [
+        "FluentPostgresDriver"
+      ]
     },
     {
       "name": "FluentPostgresDriverTests",
       "c99name": "FluentPostgresDriverTests",
       "src_type": "swift",
-      "label": "@swiftpkg_fluent_postgres_driver//:Tests_FluentPostgresDriverTests"
+      "label": "@swiftpkg_fluent_postgres_driver//:Tests_FluentPostgresDriverTests",
+      "package_identity": "fluent-postgres-driver",
+      "product_memberships": []
     },
     {
       "name": "Core",
       "c99name": "Core",
       "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:Core_Sources_Core"
+      "label": "@swiftpkg_google_cloud_kit//:Core_Sources_Core",
+      "package_identity": "google-cloud-kit",
+      "product_memberships": [
+        "GoogleCloudKit",
+        "GoogleCloudCore",
+        "GoogleCloudStorage",
+        "GoogleCloudDatastore",
+        "GoogleCloudSecretManager",
+        "GoogleCloudTranslation",
+        "GoogleCloudPubSub"
+      ]
     },
     {
       "name": "CoreTests",
       "c99name": "CoreTests",
       "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:Core_Tests_CoreTests"
+      "label": "@swiftpkg_google_cloud_kit//:Core_Tests_CoreTests",
+      "package_identity": "google-cloud-kit",
+      "product_memberships": []
     },
     {
       "name": "Datastore",
       "c99name": "Datastore",
       "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:Datastore_Sources_Datastore"
+      "label": "@swiftpkg_google_cloud_kit//:Datastore_Sources_Datastore",
+      "package_identity": "google-cloud-kit",
+      "product_memberships": [
+        "GoogleCloudKit",
+        "GoogleCloudDatastore"
+      ]
     },
     {
       "name": "DatastoreTests",
       "c99name": "DatastoreTests",
       "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:Datastore_Tests_DatastoreTests"
+      "label": "@swiftpkg_google_cloud_kit//:Datastore_Tests_DatastoreTests",
+      "package_identity": "google-cloud-kit",
+      "product_memberships": []
     },
     {
       "name": "PubSub",
       "c99name": "PubSub",
       "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:PubSub_Sources_PubSub"
+      "label": "@swiftpkg_google_cloud_kit//:PubSub_Sources_PubSub",
+      "package_identity": "google-cloud-kit",
+      "product_memberships": [
+        "GoogleCloudKit",
+        "GoogleCloudPubSub"
+      ]
     },
     {
       "name": "PubSubTests",
       "c99name": "PubSubTests",
       "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:PubSub_Tests_PubSubTests"
+      "label": "@swiftpkg_google_cloud_kit//:PubSub_Tests_PubSubTests",
+      "package_identity": "google-cloud-kit",
+      "product_memberships": []
     },
     {
       "name": "SecretManager",
       "c99name": "SecretManager",
       "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:SecretManager_Sources_SecretManager"
+      "label": "@swiftpkg_google_cloud_kit//:SecretManager_Sources_SecretManager",
+      "package_identity": "google-cloud-kit",
+      "product_memberships": [
+        "GoogleCloudKit",
+        "GoogleCloudSecretManager"
+      ]
     },
     {
       "name": "Storage",
       "c99name": "Storage",
       "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:Storage_Sources_Storage"
+      "label": "@swiftpkg_google_cloud_kit//:Storage_Sources_Storage",
+      "package_identity": "google-cloud-kit",
+      "product_memberships": [
+        "GoogleCloudKit",
+        "GoogleCloudStorage"
+      ]
     },
     {
       "name": "StorageTests",
       "c99name": "StorageTests",
       "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:Storage_Tests_StorageTests"
+      "label": "@swiftpkg_google_cloud_kit//:Storage_Tests_StorageTests",
+      "package_identity": "google-cloud-kit",
+      "product_memberships": []
     },
     {
       "name": "Translation",
       "c99name": "Translation",
       "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:Translation_Sources_Translation"
+      "label": "@swiftpkg_google_cloud_kit//:Translation_Sources_Translation",
+      "package_identity": "google-cloud-kit",
+      "product_memberships": [
+        "GoogleCloudTranslation"
+      ]
     },
     {
       "name": "TranslationTests",
       "c99name": "TranslationTests",
       "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:Translation_Tests_TranslationTests"
+      "label": "@swiftpkg_google_cloud_kit//:Translation_Tests_TranslationTests",
+      "package_identity": "google-cloud-kit",
+      "product_memberships": []
     },
     {
       "name": "EchoImplementation",
       "c99name": "EchoImplementation",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Implementation_EchoImplementation"
+      "label": "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Implementation_EchoImplementation",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "GRPCPerformanceTests",
+        "Echo"
+      ]
     },
     {
       "name": "EchoModel",
       "c99name": "EchoModel",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Model_EchoModel"
+      "label": "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Model_EchoModel",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "GRPCPerformanceTests",
+        "Echo"
+      ]
     },
     {
       "name": "Echo",
       "c99name": "Echo",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Runtime_Echo"
+      "label": "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Runtime_Echo",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "Echo"
+      ]
     },
     {
       "name": "HelloWorldClient",
       "c99name": "HelloWorldClient",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Client_HelloWorldClient"
+      "label": "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Client_HelloWorldClient",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "HelloWorldClient"
+      ]
     },
     {
       "name": "HelloWorldModel",
       "c99name": "HelloWorldModel",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Model_HelloWorldModel"
+      "label": "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Model_HelloWorldModel",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "HelloWorldServer",
+        "HelloWorldClient"
+      ]
     },
     {
       "name": "HelloWorldServer",
       "c99name": "HelloWorldServer",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Server_HelloWorldServer"
+      "label": "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Server_HelloWorldServer",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "HelloWorldServer"
+      ]
     },
     {
       "name": "RouteGuideClient",
       "c99name": "RouteGuideClient",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Client_RouteGuideClient"
+      "label": "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Client_RouteGuideClient",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "RouteGuideClient"
+      ]
     },
     {
       "name": "RouteGuideModel",
       "c99name": "RouteGuideModel",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Model_RouteGuideModel"
+      "label": "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Model_RouteGuideModel",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "RouteGuideServer",
+        "RouteGuideClient"
+      ]
     },
     {
       "name": "RouteGuideServer",
       "c99name": "RouteGuideServer",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Server_RouteGuideServer"
+      "label": "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Server_RouteGuideServer",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "RouteGuideServer"
+      ]
     },
     {
       "name": "GRPC",
       "c99name": "GRPC",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPC"
+      "label": "@swiftpkg_grpc_swift//:Sources_GRPC",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "GRPC",
+        "RouteGuideServer",
+        "RouteGuideClient",
+        "HelloWorldServer",
+        "HelloWorldClient",
+        "GRPCPerformanceTests",
+        "GRPCInteroperabilityTests",
+        "GRPCConnectionBackoffInteropTest",
+        "Echo"
+      ]
     },
     {
       "name": "GRPCConnectionBackoffInteropTest",
       "c99name": "GRPCConnectionBackoffInteropTest",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPCConnectionBackoffInteropTest"
+      "label": "@swiftpkg_grpc_swift//:Sources_GRPCConnectionBackoffInteropTest",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "GRPCConnectionBackoffInteropTest"
+      ]
     },
     {
       "name": "GRPCInteroperabilityTestModels",
       "c99name": "GRPCInteroperabilityTestModels",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTestModels"
+      "label": "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTestModels",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "GRPCInteroperabilityTests",
+        "GRPCConnectionBackoffInteropTest"
+      ]
     },
     {
       "name": "GRPCInteroperabilityTests",
       "c99name": "GRPCInteroperabilityTests",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTests"
+      "label": "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTests",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "GRPCInteroperabilityTests"
+      ]
     },
     {
       "name": "GRPCInteroperabilityTestsImplementation",
       "c99name": "GRPCInteroperabilityTestsImplementation",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTestsImplementation"
+      "label": "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTestsImplementation",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "GRPCInteroperabilityTests"
+      ]
     },
     {
       "name": "GRPCPerformanceTests",
       "c99name": "GRPCPerformanceTests",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPCPerformanceTests"
+      "label": "@swiftpkg_grpc_swift//:Sources_GRPCPerformanceTests",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "GRPCPerformanceTests"
+      ]
     },
     {
       "name": "GRPCSampleData",
       "c99name": "GRPCSampleData",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPCSampleData"
+      "label": "@swiftpkg_grpc_swift//:Sources_GRPCSampleData",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "Echo"
+      ]
     },
     {
       "name": "protoc-gen-grpc-swift",
       "c99name": "protoc_gen_grpc_swift",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_protoc-gen-grpc-swift"
+      "label": "@swiftpkg_grpc_swift//:Sources_protoc-gen-grpc-swift",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "protoc-gen-grpc-swift"
+      ]
     },
     {
       "name": "GRPCTests",
       "c99name": "GRPCTests",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Tests_GRPCTests"
+      "label": "@swiftpkg_grpc_swift//:Tests_GRPCTests",
+      "package_identity": "grpc-swift",
+      "product_memberships": []
     },
     {
       "name": "Gzip",
       "c99name": "Gzip",
       "src_type": "swift",
-      "label": "@swiftpkg_gzipswift//:Sources_Gzip"
+      "label": "@swiftpkg_gzipswift//:Sources_Gzip",
+      "package_identity": "gzipswift",
+      "product_memberships": [
+        "Gzip"
+      ]
     },
     {
       "name": "system-zlib",
       "c99name": "system_zlib",
       "src_type": "clang",
-      "label": "@swiftpkg_gzipswift//:Sources_system-zlib"
+      "label": "@swiftpkg_gzipswift//:Sources_system-zlib",
+      "package_identity": "gzipswift",
+      "product_memberships": [
+        "Gzip"
+      ]
     },
     {
       "name": "GzipTests",
       "c99name": "GzipTests",
       "src_type": "swift",
-      "label": "@swiftpkg_gzipswift//:Tests_GzipTests"
+      "label": "@swiftpkg_gzipswift//:Tests_GzipTests",
+      "package_identity": "gzipswift",
+      "product_memberships": []
     },
     {
       "name": "HypertextApplicationLanguage",
       "c99name": "HypertextApplicationLanguage",
       "src_type": "swift",
-      "label": "@swiftpkg_hypertextapplicationlanguage//:Sources_HypertextApplicationLanguage"
+      "label": "@swiftpkg_hypertextapplicationlanguage//:Sources_HypertextApplicationLanguage",
+      "package_identity": "hypertextapplicationlanguage",
+      "product_memberships": [
+        "HypertextApplicationLanguage"
+      ]
     },
     {
       "name": "HypertextApplicationLanguageTests",
       "c99name": "HypertextApplicationLanguageTests",
       "src_type": "swift",
-      "label": "@swiftpkg_hypertextapplicationlanguage//:Tests_HypertextApplicationLanguageTests"
+      "label": "@swiftpkg_hypertextapplicationlanguage//:Tests_HypertextApplicationLanguageTests",
+      "package_identity": "hypertextapplicationlanguage",
+      "product_memberships": []
     },
     {
       "name": "CJWTKitBoringSSL",
       "c99name": "CJWTKitBoringSSL",
       "src_type": "clang",
-      "label": "@swiftpkg_jwt_kit//:Sources_CJWTKitBoringSSL"
+      "label": "@swiftpkg_jwt_kit//:Sources_CJWTKitBoringSSL",
+      "package_identity": "jwt-kit",
+      "product_memberships": [
+        "JWTKit"
+      ]
     },
     {
       "name": "JWTKit",
       "c99name": "JWTKit",
       "src_type": "swift",
-      "label": "@swiftpkg_jwt_kit//:Sources_JWTKit"
+      "label": "@swiftpkg_jwt_kit//:Sources_JWTKit",
+      "package_identity": "jwt-kit",
+      "product_memberships": [
+        "JWTKit"
+      ]
     },
     {
       "name": "JWTKitTests",
       "c99name": "JWTKitTests",
       "src_type": "swift",
-      "label": "@swiftpkg_jwt_kit//:Tests_JWTKitTests"
+      "label": "@swiftpkg_jwt_kit//:Tests_JWTKitTests",
+      "package_identity": "jwt-kit",
+      "product_memberships": []
     },
     {
       "name": "MobiusCore",
       "c99name": "MobiusCore",
       "src_type": "swift",
-      "label": "@swiftpkg_mobius.swift//:MobiusCore_Source_MobiusCore"
+      "label": "@swiftpkg_mobius.swift//:MobiusCore_Source_MobiusCore",
+      "package_identity": "mobius.swift",
+      "product_memberships": [
+        "MobiusCore",
+        "MobiusExtras",
+        "MobiusNimble",
+        "MobiusTest"
+      ]
     },
     {
       "name": "MobiusCoreTests",
       "c99name": "MobiusCoreTests",
       "src_type": "swift",
-      "label": "@swiftpkg_mobius.swift//:MobiusCore_Test_MobiusCoreTests"
+      "label": "@swiftpkg_mobius.swift//:MobiusCore_Test_MobiusCoreTests",
+      "package_identity": "mobius.swift",
+      "product_memberships": []
     },
     {
       "name": "MobiusExtras",
       "c99name": "MobiusExtras",
       "src_type": "swift",
-      "label": "@swiftpkg_mobius.swift//:MobiusExtras_Source_MobiusExtras"
+      "label": "@swiftpkg_mobius.swift//:MobiusExtras_Source_MobiusExtras",
+      "package_identity": "mobius.swift",
+      "product_memberships": [
+        "MobiusExtras"
+      ]
     },
     {
       "name": "MobiusExtrasTests",
       "c99name": "MobiusExtrasTests",
       "src_type": "swift",
-      "label": "@swiftpkg_mobius.swift//:MobiusExtras_Test_MobiusExtrasTests"
+      "label": "@swiftpkg_mobius.swift//:MobiusExtras_Test_MobiusExtrasTests",
+      "package_identity": "mobius.swift",
+      "product_memberships": []
     },
     {
       "name": "MobiusNimble",
       "c99name": "MobiusNimble",
       "src_type": "swift",
-      "label": "@swiftpkg_mobius.swift//:MobiusNimble_Source_MobiusNimble"
+      "label": "@swiftpkg_mobius.swift//:MobiusNimble_Source_MobiusNimble",
+      "package_identity": "mobius.swift",
+      "product_memberships": [
+        "MobiusNimble"
+      ]
     },
     {
       "name": "MobiusNimbleTests",
       "c99name": "MobiusNimbleTests",
       "src_type": "swift",
-      "label": "@swiftpkg_mobius.swift//:MobiusNimble_Test_MobiusNimbleTests"
+      "label": "@swiftpkg_mobius.swift//:MobiusNimble_Test_MobiusNimbleTests",
+      "package_identity": "mobius.swift",
+      "product_memberships": []
     },
     {
       "name": "MobiusTest",
       "c99name": "MobiusTest",
       "src_type": "swift",
-      "label": "@swiftpkg_mobius.swift//:MobiusTest_Source_MobiusTest"
+      "label": "@swiftpkg_mobius.swift//:MobiusTest_Source_MobiusTest",
+      "package_identity": "mobius.swift",
+      "product_memberships": [
+        "MobiusNimble",
+        "MobiusTest"
+      ]
     },
     {
       "name": "MobiusTestTests",
       "c99name": "MobiusTestTests",
       "src_type": "swift",
-      "label": "@swiftpkg_mobius.swift//:MobiusTest_Test_MobiusTestTests"
+      "label": "@swiftpkg_mobius.swift//:MobiusTest_Test_MobiusTestTests",
+      "package_identity": "mobius.swift",
+      "product_memberships": []
     },
     {
       "name": "MobiusThrowableAssertion",
       "c99name": "MobiusThrowableAssertion",
       "src_type": "objc",
-      "label": "@swiftpkg_mobius.swift//:MobiusThrowableAssertion_Source_MobiusThrowableAssertion"
+      "label": "@swiftpkg_mobius.swift//:MobiusThrowableAssertion_Source_MobiusThrowableAssertion",
+      "package_identity": "mobius.swift",
+      "product_memberships": []
     },
     {
       "name": "MultipartKit",
       "c99name": "MultipartKit",
       "src_type": "swift",
-      "label": "@swiftpkg_multipart_kit//:Sources_MultipartKit"
+      "label": "@swiftpkg_multipart_kit//:Sources_MultipartKit",
+      "package_identity": "multipart-kit",
+      "product_memberships": [
+        "MultipartKit"
+      ]
     },
     {
       "name": "MultipartKitTests",
       "c99name": "MultipartKitTests",
       "src_type": "swift",
-      "label": "@swiftpkg_multipart_kit//:Tests_MultipartKitTests"
+      "label": "@swiftpkg_multipart_kit//:Tests_MultipartKitTests",
+      "package_identity": "multipart-kit",
+      "product_memberships": []
     },
     {
       "name": "NimbleCwlCatchExceptionSupport",
       "c99name": "NimbleCwlCatchExceptionSupport",
       "src_type": "objc",
-      "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Dependencies_CwlCatchException_Sources_CwlCatchExceptionSupport_NimbleCwlCatchExceptionSupport"
+      "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Dependencies_CwlCatchException_Sources_CwlCatchExceptionSupport_NimbleCwlCatchExceptionSupport",
+      "package_identity": "nimble",
+      "product_memberships": [
+        "Nimble"
+      ]
     },
     {
       "name": "NimbleCwlCatchException",
       "c99name": "NimbleCwlCatchException",
       "src_type": "swift",
-      "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Dependencies_CwlCatchException_Sources_CwlCatchException_NimbleCwlCatchException"
+      "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Dependencies_CwlCatchException_Sources_CwlCatchException_NimbleCwlCatchException",
+      "package_identity": "nimble",
+      "product_memberships": [
+        "Nimble"
+      ]
     },
     {
       "name": "NimbleCwlMachBadInstructionHandler",
       "c99name": "NimbleCwlMachBadInstructionHandler",
       "src_type": "objc",
-      "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Sources_CwlMachBadInstructionHandler_NimbleCwlMachBadInstructionHandler"
+      "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Sources_CwlMachBadInstructionHandler_NimbleCwlMachBadInstructionHandler",
+      "package_identity": "nimble",
+      "product_memberships": [
+        "Nimble"
+      ]
     },
     {
       "name": "NimbleCwlPreconditionTesting",
       "c99name": "NimbleCwlPreconditionTesting",
       "src_type": "swift",
-      "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Sources_CwlPreconditionTesting_NimbleCwlPreconditionTesting"
+      "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Sources_CwlPreconditionTesting_NimbleCwlPreconditionTesting",
+      "package_identity": "nimble",
+      "product_memberships": [
+        "Nimble"
+      ]
     },
     {
       "name": "Nimble",
       "c99name": "Nimble",
       "src_type": "swift",
-      "label": "@swiftpkg_nimble//:Sources_Nimble"
+      "label": "@swiftpkg_nimble//:Sources_Nimble",
+      "package_identity": "nimble",
+      "product_memberships": [
+        "Nimble"
+      ]
     },
     {
       "name": "NimbleTests",
       "c99name": "NimbleTests",
       "src_type": "swift",
-      "label": "@swiftpkg_nimble//:Tests_NimbleTests"
+      "label": "@swiftpkg_nimble//:Tests_NimbleTests",
+      "package_identity": "nimble",
+      "product_memberships": []
     },
     {
       "name": "PathKit",
       "c99name": "PathKit",
       "src_type": "swift",
-      "label": "@swiftpkg_pathkit//:Sources_PathKit"
+      "label": "@swiftpkg_pathkit//:Sources_PathKit",
+      "package_identity": "pathkit",
+      "product_memberships": [
+        "PathKit"
+      ]
     },
     {
       "name": "PathKitTests",
       "c99name": "PathKitTests",
       "src_type": "swift",
-      "label": "@swiftpkg_pathkit//:Tests_PathKitTests"
+      "label": "@swiftpkg_pathkit//:Tests_PathKitTests",
+      "package_identity": "pathkit",
+      "product_memberships": []
     },
     {
       "name": "INIParser",
       "c99name": "INIParser",
       "src_type": "swift",
-      "label": "@swiftpkg_perfect_iniparser//:Sources_INIParser"
+      "label": "@swiftpkg_perfect_iniparser//:Sources_INIParser",
+      "package_identity": "perfect-iniparser",
+      "product_memberships": [
+        "INIParser"
+      ]
     },
     {
       "name": "INIParserTests",
       "c99name": "INIParserTests",
       "src_type": "swift",
-      "label": "@swiftpkg_perfect_iniparser//:Tests_INIParserTests"
+      "label": "@swiftpkg_perfect_iniparser//:Tests_INIParserTests",
+      "package_identity": "perfect-iniparser",
+      "product_memberships": []
     },
     {
       "name": "PostgresKit",
       "c99name": "PostgresKit",
       "src_type": "swift",
-      "label": "@swiftpkg_postgres_kit//:Sources_PostgresKit"
+      "label": "@swiftpkg_postgres_kit//:Sources_PostgresKit",
+      "package_identity": "postgres-kit",
+      "product_memberships": [
+        "PostgresKit"
+      ]
     },
     {
       "name": "PostgresKitTests",
       "c99name": "PostgresKitTests",
       "src_type": "swift",
-      "label": "@swiftpkg_postgres_kit//:Tests_PostgresKitTests"
+      "label": "@swiftpkg_postgres_kit//:Tests_PostgresKitTests",
+      "package_identity": "postgres-kit",
+      "product_memberships": []
     },
     {
       "name": "PostgresNIO",
       "c99name": "PostgresNIO",
       "src_type": "swift",
-      "label": "@swiftpkg_postgres_nio//:Sources_PostgresNIO"
+      "label": "@swiftpkg_postgres_nio//:Sources_PostgresNIO",
+      "package_identity": "postgres-nio",
+      "product_memberships": [
+        "PostgresNIO"
+      ]
     },
     {
       "name": "IntegrationTests",
       "c99name": "IntegrationTests",
       "src_type": "swift",
-      "label": "@swiftpkg_postgres_nio//:Tests_IntegrationTests"
+      "label": "@swiftpkg_postgres_nio//:Tests_IntegrationTests",
+      "package_identity": "postgres-nio",
+      "product_memberships": []
     },
     {
       "name": "PostgresNIOTests",
       "c99name": "PostgresNIOTests",
       "src_type": "swift",
-      "label": "@swiftpkg_postgres_nio//:Tests_PostgresNIOTests"
+      "label": "@swiftpkg_postgres_nio//:Tests_PostgresNIOTests",
+      "package_identity": "postgres-nio",
+      "product_memberships": []
     },
     {
       "name": "Queues",
       "c99name": "Queues",
       "src_type": "swift",
-      "label": "@swiftpkg_queues//:Sources_Queues"
+      "label": "@swiftpkg_queues//:Sources_Queues",
+      "package_identity": "queues",
+      "product_memberships": [
+        "Queues",
+        "XCTQueues"
+      ]
     },
     {
       "name": "XCTQueues",
       "c99name": "XCTQueues",
       "src_type": "swift",
-      "label": "@swiftpkg_queues//:Sources_XCTQueues"
+      "label": "@swiftpkg_queues//:Sources_XCTQueues",
+      "package_identity": "queues",
+      "product_memberships": [
+        "XCTQueues"
+      ]
     },
     {
       "name": "QueuesTests",
       "c99name": "QueuesTests",
       "src_type": "swift",
-      "label": "@swiftpkg_queues//:Tests_QueuesTests"
+      "label": "@swiftpkg_queues//:Tests_QueuesTests",
+      "package_identity": "queues",
+      "product_memberships": []
     },
     {
       "name": "QueuesRedisDriver",
       "c99name": "QueuesRedisDriver",
       "src_type": "swift",
-      "label": "@swiftpkg_queues_redis_driver//:Sources_QueuesRedisDriver"
+      "label": "@swiftpkg_queues_redis_driver//:Sources_QueuesRedisDriver",
+      "package_identity": "queues-redis-driver",
+      "product_memberships": [
+        "QueuesRedisDriver"
+      ]
     },
     {
       "name": "QueuesRedisDriverTests",
       "c99name": "QueuesRedisDriverTests",
       "src_type": "swift",
-      "label": "@swiftpkg_queues_redis_driver//:Tests_QueuesRedisDriverTests"
+      "label": "@swiftpkg_queues_redis_driver//:Tests_QueuesRedisDriverTests",
+      "package_identity": "queues-redis-driver",
+      "product_memberships": []
     },
     {
       "name": "Quick",
       "c99name": "Quick",
       "src_type": "swift",
-      "label": "@swiftpkg_quick//:Sources_Quick"
+      "label": "@swiftpkg_quick//:Sources_Quick",
+      "package_identity": "quick",
+      "product_memberships": [
+        "Quick"
+      ]
     },
     {
       "name": "QuickObjCRuntime",
       "c99name": "QuickObjCRuntime",
       "src_type": "objc",
-      "label": "@swiftpkg_quick//:Sources_QuickObjCRuntime"
+      "label": "@swiftpkg_quick//:Sources_QuickObjCRuntime",
+      "package_identity": "quick",
+      "product_memberships": [
+        "Quick"
+      ]
     },
     {
       "name": "QuickIssue853RegressionTests",
       "c99name": "QuickIssue853RegressionTests",
       "src_type": "swift",
-      "label": "@swiftpkg_quick//:Tests_QuickIssue853RegressionTests"
+      "label": "@swiftpkg_quick//:Tests_QuickIssue853RegressionTests",
+      "package_identity": "quick",
+      "product_memberships": []
     },
     {
       "name": "QuickTests",
       "c99name": "QuickTests",
       "src_type": "swift",
-      "label": "@swiftpkg_quick//:Tests_QuickTests"
+      "label": "@swiftpkg_quick//:Tests_QuickTests",
+      "package_identity": "quick",
+      "product_memberships": []
     },
     {
       "name": "Redis",
       "c99name": "Redis",
       "src_type": "swift",
-      "label": "@swiftpkg_redis//:Sources_Redis"
+      "label": "@swiftpkg_redis//:Sources_Redis",
+      "package_identity": "redis",
+      "product_memberships": [
+        "Redis"
+      ]
     },
     {
       "name": "RedisTests",
       "c99name": "RedisTests",
       "src_type": "swift",
-      "label": "@swiftpkg_redis//:Tests_RedisTests"
+      "label": "@swiftpkg_redis//:Tests_RedisTests",
+      "package_identity": "redis",
+      "product_memberships": []
     },
     {
       "name": "RediStack",
       "c99name": "RediStack",
       "src_type": "swift",
-      "label": "@swiftpkg_redistack//:Sources_RediStack"
+      "label": "@swiftpkg_redistack//:Sources_RediStack",
+      "package_identity": "redistack",
+      "product_memberships": [
+        "RediStack",
+        "RediStackTestUtils",
+        "RedisTypes"
+      ]
     },
     {
       "name": "RediStackTestUtils",
       "c99name": "RediStackTestUtils",
       "src_type": "swift",
-      "label": "@swiftpkg_redistack//:Sources_RediStackTestUtils"
+      "label": "@swiftpkg_redistack//:Sources_RediStackTestUtils",
+      "package_identity": "redistack",
+      "product_memberships": [
+        "RediStackTestUtils"
+      ]
     },
     {
       "name": "RedisTypes",
       "c99name": "RedisTypes",
       "src_type": "swift",
-      "label": "@swiftpkg_redistack//:Sources_RedisTypes"
+      "label": "@swiftpkg_redistack//:Sources_RedisTypes",
+      "package_identity": "redistack",
+      "product_memberships": [
+        "RedisTypes"
+      ]
     },
     {
       "name": "RediStackIntegrationTests",
       "c99name": "RediStackIntegrationTests",
       "src_type": "swift",
-      "label": "@swiftpkg_redistack//:Tests_RediStackIntegrationTests"
+      "label": "@swiftpkg_redistack//:Tests_RediStackIntegrationTests",
+      "package_identity": "redistack",
+      "product_memberships": []
     },
     {
       "name": "RediStackTests",
       "c99name": "RediStackTests",
       "src_type": "swift",
-      "label": "@swiftpkg_redistack//:Tests_RediStackTests"
+      "label": "@swiftpkg_redistack//:Tests_RediStackTests",
+      "package_identity": "redistack",
+      "product_memberships": []
     },
     {
       "name": "RedisTypesTests",
       "c99name": "RedisTypesTests",
       "src_type": "swift",
-      "label": "@swiftpkg_redistack//:Tests_RedisTypesTests"
+      "label": "@swiftpkg_redistack//:Tests_RedisTypesTests",
+      "package_identity": "redistack",
+      "product_memberships": []
     },
     {
       "name": "RoutingKit",
       "c99name": "RoutingKit",
       "src_type": "swift",
-      "label": "@swiftpkg_routing_kit//:Sources_RoutingKit"
+      "label": "@swiftpkg_routing_kit//:Sources_RoutingKit",
+      "package_identity": "routing-kit",
+      "product_memberships": [
+        "RoutingKit"
+      ]
     },
     {
       "name": "RoutingKitTests",
       "c99name": "RoutingKitTests",
       "src_type": "swift",
-      "label": "@swiftpkg_routing_kit//:Tests_RoutingKitTests"
+      "label": "@swiftpkg_routing_kit//:Tests_RoutingKitTests",
+      "package_identity": "routing-kit",
+      "product_memberships": []
     },
     {
       "name": "APIGatewayMiddleware",
       "c99name": "APIGatewayMiddleware",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_APIGateway_APIGatewayMiddleware"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_APIGateway_APIGatewayMiddleware",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "APIGateway"
+      ]
     },
     {
       "name": "GlacierMiddleware",
       "c99name": "GlacierMiddleware",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_Glacier_GlacierMiddleware"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_Glacier_GlacierMiddleware",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Glacier"
+      ]
     },
     {
       "name": "S3ControlMiddleware",
       "c99name": "S3ControlMiddleware",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_S3Control_S3ControlMiddleware"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_S3Control_S3ControlMiddleware",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "S3Control"
+      ]
     },
     {
       "name": "S3Middleware",
       "c99name": "S3Middleware",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_S3_S3Middleware"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Middlewares_S3_S3Middleware",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "S3"
+      ]
     },
     {
       "name": "ACM",
       "c99name": "ACM",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ACM"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ACM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ACM"
+      ]
     },
     {
       "name": "ACMPCA",
       "c99name": "ACMPCA",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ACMPCA"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ACMPCA",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ACMPCA"
+      ]
     },
     {
       "name": "APIGateway",
       "c99name": "APIGateway",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_APIGateway"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_APIGateway",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "APIGateway"
+      ]
     },
     {
       "name": "AWSBackup",
       "c99name": "AWSBackup",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AWSBackup"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AWSBackup",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "AWSBackup"
+      ]
     },
     {
       "name": "AWSDirectoryService",
       "c99name": "AWSDirectoryService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AWSDirectoryService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AWSDirectoryService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "AWSDirectoryService"
+      ]
     },
     {
       "name": "AccessAnalyzer",
       "c99name": "AccessAnalyzer",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AccessAnalyzer"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AccessAnalyzer",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "AccessAnalyzer"
+      ]
     },
     {
       "name": "AlexaForBusiness",
       "c99name": "AlexaForBusiness",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AlexaForBusiness"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AlexaForBusiness",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "AlexaForBusiness"
+      ]
     },
     {
       "name": "Amplify",
       "c99name": "Amplify",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Amplify"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Amplify",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Amplify"
+      ]
     },
     {
       "name": "ApiGatewayManagementApi",
       "c99name": "ApiGatewayManagementApi",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApiGatewayManagementApi"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApiGatewayManagementApi",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ApiGatewayManagementApi"
+      ]
     },
     {
       "name": "ApiGatewayV2",
       "c99name": "ApiGatewayV2",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApiGatewayV2"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApiGatewayV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ApiGatewayV2"
+      ]
     },
     {
       "name": "AppConfig",
       "c99name": "AppConfig",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppConfig"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppConfig",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "AppConfig"
+      ]
     },
     {
       "name": "AppMesh",
       "c99name": "AppMesh",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppMesh"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppMesh",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "AppMesh"
+      ]
     },
     {
       "name": "AppStream",
       "c99name": "AppStream",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppStream"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppStream",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "AppStream"
+      ]
     },
     {
       "name": "AppSync",
       "c99name": "AppSync",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppSync"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AppSync",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "AppSync"
+      ]
     },
     {
       "name": "Appflow",
       "c99name": "Appflow",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Appflow"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Appflow",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Appflow"
+      ]
     },
     {
       "name": "ApplicationAutoScaling",
       "c99name": "ApplicationAutoScaling",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApplicationAutoScaling"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApplicationAutoScaling",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ApplicationAutoScaling"
+      ]
     },
     {
       "name": "ApplicationDiscoveryService",
       "c99name": "ApplicationDiscoveryService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApplicationDiscoveryService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApplicationDiscoveryService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ApplicationDiscoveryService"
+      ]
     },
     {
       "name": "ApplicationInsights",
       "c99name": "ApplicationInsights",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApplicationInsights"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ApplicationInsights",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ApplicationInsights"
+      ]
     },
     {
       "name": "Athena",
       "c99name": "Athena",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Athena"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Athena",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Athena"
+      ]
     },
     {
       "name": "AugmentedAIRuntime",
       "c99name": "AugmentedAIRuntime",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AugmentedAIRuntime"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AugmentedAIRuntime",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "AugmentedAIRuntime"
+      ]
     },
     {
       "name": "AutoScaling",
       "c99name": "AutoScaling",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AutoScaling"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AutoScaling",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "AutoScaling"
+      ]
     },
     {
       "name": "AutoScalingPlans",
       "c99name": "AutoScalingPlans",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AutoScalingPlans"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_AutoScalingPlans",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "AutoScalingPlans"
+      ]
     },
     {
       "name": "Batch",
       "c99name": "Batch",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Batch"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Batch",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Batch"
+      ]
     },
     {
       "name": "Braket",
       "c99name": "Braket",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Braket"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Braket",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Braket"
+      ]
     },
     {
       "name": "Budgets",
       "c99name": "Budgets",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Budgets"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Budgets",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Budgets"
+      ]
     },
     {
       "name": "Chime",
       "c99name": "Chime",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Chime"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Chime",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Chime"
+      ]
     },
     {
       "name": "Cloud9",
       "c99name": "Cloud9",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Cloud9"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Cloud9",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Cloud9"
+      ]
     },
     {
       "name": "CloudDirectory",
       "c99name": "CloudDirectory",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudDirectory"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudDirectory",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CloudDirectory"
+      ]
     },
     {
       "name": "CloudFormation",
       "c99name": "CloudFormation",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudFormation"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudFormation",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CloudFormation"
+      ]
     },
     {
       "name": "CloudFront",
       "c99name": "CloudFront",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudFront"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudFront",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CloudFront"
+      ]
     },
     {
       "name": "CloudHSM",
       "c99name": "CloudHSM",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudHSM"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudHSM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CloudHSM"
+      ]
     },
     {
       "name": "CloudHSMV2",
       "c99name": "CloudHSMV2",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudHSMV2"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudHSMV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CloudHSMV2"
+      ]
     },
     {
       "name": "CloudSearch",
       "c99name": "CloudSearch",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudSearch"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudSearch",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CloudSearch"
+      ]
     },
     {
       "name": "CloudSearchDomain",
       "c99name": "CloudSearchDomain",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudSearchDomain"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudSearchDomain",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CloudSearchDomain"
+      ]
     },
     {
       "name": "CloudTrail",
       "c99name": "CloudTrail",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudTrail"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudTrail",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CloudTrail"
+      ]
     },
     {
       "name": "CloudWatch",
       "c99name": "CloudWatch",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudWatch"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudWatch",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CloudWatch"
+      ]
     },
     {
       "name": "CloudWatchEvents",
       "c99name": "CloudWatchEvents",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudWatchEvents"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudWatchEvents",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CloudWatchEvents"
+      ]
     },
     {
       "name": "CloudWatchLogs",
       "c99name": "CloudWatchLogs",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudWatchLogs"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CloudWatchLogs",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CloudWatchLogs"
+      ]
     },
     {
       "name": "CodeArtifact",
       "c99name": "CodeArtifact",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeArtifact"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeArtifact",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CodeArtifact"
+      ]
     },
     {
       "name": "CodeBuild",
       "c99name": "CodeBuild",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeBuild"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeBuild",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CodeBuild"
+      ]
     },
     {
       "name": "CodeCommit",
       "c99name": "CodeCommit",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeCommit"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeCommit",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CodeCommit"
+      ]
     },
     {
       "name": "CodeDeploy",
       "c99name": "CodeDeploy",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeDeploy"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeDeploy",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CodeDeploy"
+      ]
     },
     {
       "name": "CodeGuruProfiler",
       "c99name": "CodeGuruProfiler",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeGuruProfiler"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeGuruProfiler",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CodeGuruProfiler"
+      ]
     },
     {
       "name": "CodeGuruReviewer",
       "c99name": "CodeGuruReviewer",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeGuruReviewer"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeGuruReviewer",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CodeGuruReviewer"
+      ]
     },
     {
       "name": "CodePipeline",
       "c99name": "CodePipeline",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodePipeline"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodePipeline",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CodePipeline"
+      ]
     },
     {
       "name": "CodeStar",
       "c99name": "CodeStar",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeStar"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeStar",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CodeStar"
+      ]
     },
     {
       "name": "CodeStarNotifications",
       "c99name": "CodeStarNotifications",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeStarNotifications"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeStarNotifications",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CodeStarNotifications"
+      ]
     },
     {
       "name": "CodeStarconnections",
       "c99name": "CodeStarconnections",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeStarconnections"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CodeStarconnections",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CodeStarconnections"
+      ]
     },
     {
       "name": "CognitoIdentity",
       "c99name": "CognitoIdentity",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CognitoIdentity"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CognitoIdentity",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CognitoIdentity"
+      ]
     },
     {
       "name": "CognitoIdentityProvider",
       "c99name": "CognitoIdentityProvider",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CognitoIdentityProvider"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CognitoIdentityProvider",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CognitoIdentityProvider"
+      ]
     },
     {
       "name": "CognitoSync",
       "c99name": "CognitoSync",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CognitoSync"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CognitoSync",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CognitoSync"
+      ]
     },
     {
       "name": "Comprehend",
       "c99name": "Comprehend",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Comprehend"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Comprehend",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Comprehend"
+      ]
     },
     {
       "name": "ComprehendMedical",
       "c99name": "ComprehendMedical",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ComprehendMedical"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ComprehendMedical",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ComprehendMedical"
+      ]
     },
     {
       "name": "ComputeOptimizer",
       "c99name": "ComputeOptimizer",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ComputeOptimizer"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ComputeOptimizer",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ComputeOptimizer"
+      ]
     },
     {
       "name": "ConfigService",
       "c99name": "ConfigService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ConfigService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ConfigService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ConfigService"
+      ]
     },
     {
       "name": "Connect",
       "c99name": "Connect",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Connect"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Connect",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Connect"
+      ]
     },
     {
       "name": "ConnectParticipant",
       "c99name": "ConnectParticipant",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ConnectParticipant"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ConnectParticipant",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ConnectParticipant"
+      ]
     },
     {
       "name": "CostExplorer",
       "c99name": "CostExplorer",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CostExplorer"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CostExplorer",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CostExplorer"
+      ]
     },
     {
       "name": "CostandUsageReportService",
       "c99name": "CostandUsageReportService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CostandUsageReportService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_CostandUsageReportService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "CostandUsageReportService"
+      ]
     },
     {
       "name": "DAX",
       "c99name": "DAX",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DAX"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DAX",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "DAX"
+      ]
     },
     {
       "name": "DLM",
       "c99name": "DLM",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DLM"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DLM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "DLM"
+      ]
     },
     {
       "name": "DataExchange",
       "c99name": "DataExchange",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DataExchange"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DataExchange",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "DataExchange"
+      ]
     },
     {
       "name": "DataPipeline",
       "c99name": "DataPipeline",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DataPipeline"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DataPipeline",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "DataPipeline"
+      ]
     },
     {
       "name": "DataSync",
       "c99name": "DataSync",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DataSync"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DataSync",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "DataSync"
+      ]
     },
     {
       "name": "DatabaseMigrationService",
       "c99name": "DatabaseMigrationService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DatabaseMigrationService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DatabaseMigrationService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "DatabaseMigrationService"
+      ]
     },
     {
       "name": "Detective",
       "c99name": "Detective",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Detective"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Detective",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Detective"
+      ]
     },
     {
       "name": "DeviceFarm",
       "c99name": "DeviceFarm",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DeviceFarm"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DeviceFarm",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "DeviceFarm"
+      ]
     },
     {
       "name": "DirectConnect",
       "c99name": "DirectConnect",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DirectConnect"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DirectConnect",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "DirectConnect"
+      ]
     },
     {
       "name": "DocDB",
       "c99name": "DocDB",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DocDB"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DocDB",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "DocDB"
+      ]
     },
     {
       "name": "DynamoDB",
       "c99name": "DynamoDB",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DynamoDB"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DynamoDB",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "DynamoDB"
+      ]
     },
     {
       "name": "DynamoDBStreams",
       "c99name": "DynamoDBStreams",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DynamoDBStreams"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_DynamoDBStreams",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "DynamoDBStreams"
+      ]
     },
     {
       "name": "EBS",
       "c99name": "EBS",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EBS"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EBS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "EBS"
+      ]
     },
     {
       "name": "EC2",
       "c99name": "EC2",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EC2"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EC2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "EC2"
+      ]
     },
     {
       "name": "EC2InstanceConnect",
       "c99name": "EC2InstanceConnect",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EC2InstanceConnect"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EC2InstanceConnect",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "EC2InstanceConnect"
+      ]
     },
     {
       "name": "ECR",
       "c99name": "ECR",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ECR"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ECR",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ECR"
+      ]
     },
     {
       "name": "ECS",
       "c99name": "ECS",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ECS"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ECS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ECS"
+      ]
     },
     {
       "name": "EFS",
       "c99name": "EFS",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EFS"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EFS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "EFS"
+      ]
     },
     {
       "name": "EKS",
       "c99name": "EKS",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EKS"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EKS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "EKS"
+      ]
     },
     {
       "name": "ELB",
       "c99name": "ELB",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ELB"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ELB",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ELB"
+      ]
     },
     {
       "name": "ELBV2",
       "c99name": "ELBV2",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ELBV2"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ELBV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ELBV2"
+      ]
     },
     {
       "name": "EMR",
       "c99name": "EMR",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EMR"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EMR",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "EMR"
+      ]
     },
     {
       "name": "ElastiCache",
       "c99name": "ElastiCache",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElastiCache"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElastiCache",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ElastiCache"
+      ]
     },
     {
       "name": "ElasticBeanstalk",
       "c99name": "ElasticBeanstalk",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticBeanstalk"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticBeanstalk",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ElasticBeanstalk"
+      ]
     },
     {
       "name": "ElasticInference",
       "c99name": "ElasticInference",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticInference"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticInference",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ElasticInference"
+      ]
     },
     {
       "name": "ElasticTranscoder",
       "c99name": "ElasticTranscoder",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticTranscoder"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticTranscoder",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ElasticTranscoder"
+      ]
     },
     {
       "name": "ElasticsearchService",
       "c99name": "ElasticsearchService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticsearchService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ElasticsearchService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ElasticsearchService"
+      ]
     },
     {
       "name": "EventBridge",
       "c99name": "EventBridge",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EventBridge"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_EventBridge",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "EventBridge"
+      ]
     },
     {
       "name": "FMS",
       "c99name": "FMS",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_FMS"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_FMS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "FMS"
+      ]
     },
     {
       "name": "FSx",
       "c99name": "FSx",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_FSx"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_FSx",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "FSx"
+      ]
     },
     {
       "name": "Firehose",
       "c99name": "Firehose",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Firehose"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Firehose",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Firehose"
+      ]
     },
     {
       "name": "ForecastQueryService",
       "c99name": "ForecastQueryService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ForecastQueryService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ForecastQueryService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ForecastQueryService"
+      ]
     },
     {
       "name": "ForecastService",
       "c99name": "ForecastService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ForecastService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ForecastService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ForecastService"
+      ]
     },
     {
       "name": "FraudDetector",
       "c99name": "FraudDetector",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_FraudDetector"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_FraudDetector",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "FraudDetector"
+      ]
     },
     {
       "name": "GameLift",
       "c99name": "GameLift",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GameLift"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GameLift",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "GameLift"
+      ]
     },
     {
       "name": "Glacier",
       "c99name": "Glacier",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Glacier"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Glacier",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Glacier"
+      ]
     },
     {
       "name": "GlobalAccelerator",
       "c99name": "GlobalAccelerator",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GlobalAccelerator"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GlobalAccelerator",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "GlobalAccelerator"
+      ]
     },
     {
       "name": "Glue",
       "c99name": "Glue",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Glue"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Glue",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Glue"
+      ]
     },
     {
       "name": "Greengrass",
       "c99name": "Greengrass",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Greengrass"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Greengrass",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Greengrass"
+      ]
     },
     {
       "name": "GroundStation",
       "c99name": "GroundStation",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GroundStation"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GroundStation",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "GroundStation"
+      ]
     },
     {
       "name": "GuardDuty",
       "c99name": "GuardDuty",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GuardDuty"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_GuardDuty",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "GuardDuty"
+      ]
     },
     {
       "name": "Health",
       "c99name": "Health",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Health"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Health",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Health"
+      ]
     },
     {
       "name": "Honeycode",
       "c99name": "Honeycode",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Honeycode"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Honeycode",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Honeycode"
+      ]
     },
     {
       "name": "IAM",
       "c99name": "IAM",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IAM"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IAM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "IAM"
+      ]
     },
     {
       "name": "IVS",
       "c99name": "IVS",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IVS"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IVS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "IVS"
+      ]
     },
     {
       "name": "IdentityStore",
       "c99name": "IdentityStore",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IdentityStore"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IdentityStore",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "IdentityStore"
+      ]
     },
     {
       "name": "Imagebuilder",
       "c99name": "Imagebuilder",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Imagebuilder"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Imagebuilder",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Imagebuilder"
+      ]
     },
     {
       "name": "ImportExport",
       "c99name": "ImportExport",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ImportExport"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ImportExport",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ImportExport"
+      ]
     },
     {
       "name": "Inspector",
       "c99name": "Inspector",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Inspector"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Inspector",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Inspector"
+      ]
     },
     {
       "name": "IoT",
       "c99name": "IoT",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoT"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoT",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "IoT"
+      ]
     },
     {
       "name": "IoT1ClickDevicesService",
       "c99name": "IoT1ClickDevicesService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoT1ClickDevicesService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoT1ClickDevicesService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "IoT1ClickDevicesService"
+      ]
     },
     {
       "name": "IoT1ClickProjects",
       "c99name": "IoT1ClickProjects",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoT1ClickProjects"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoT1ClickProjects",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "IoT1ClickProjects"
+      ]
     },
     {
       "name": "IoTAnalytics",
       "c99name": "IoTAnalytics",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTAnalytics"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTAnalytics",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "IoTAnalytics"
+      ]
     },
     {
       "name": "IoTDataPlane",
       "c99name": "IoTDataPlane",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTDataPlane"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTDataPlane",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "IoTDataPlane"
+      ]
     },
     {
       "name": "IoTEvents",
       "c99name": "IoTEvents",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTEvents"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTEvents",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "IoTEvents"
+      ]
     },
     {
       "name": "IoTEventsData",
       "c99name": "IoTEventsData",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTEventsData"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTEventsData",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "IoTEventsData"
+      ]
     },
     {
       "name": "IoTJobsDataPlane",
       "c99name": "IoTJobsDataPlane",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTJobsDataPlane"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTJobsDataPlane",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "IoTJobsDataPlane"
+      ]
     },
     {
       "name": "IoTSecureTunneling",
       "c99name": "IoTSecureTunneling",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTSecureTunneling"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTSecureTunneling",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "IoTSecureTunneling"
+      ]
     },
     {
       "name": "IoTSiteWise",
       "c99name": "IoTSiteWise",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTSiteWise"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTSiteWise",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "IoTSiteWise"
+      ]
     },
     {
       "name": "IoTThingsGraph",
       "c99name": "IoTThingsGraph",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTThingsGraph"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_IoTThingsGraph",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "IoTThingsGraph"
+      ]
     },
     {
       "name": "KMS",
       "c99name": "KMS",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KMS"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KMS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "KMS"
+      ]
     },
     {
       "name": "Kafka",
       "c99name": "Kafka",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Kafka"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Kafka",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Kafka"
+      ]
     },
     {
       "name": "Kendra",
       "c99name": "Kendra",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Kendra"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Kendra",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Kendra"
+      ]
     },
     {
       "name": "Kinesis",
       "c99name": "Kinesis",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Kinesis"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Kinesis",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Kinesis"
+      ]
     },
     {
       "name": "KinesisAnalytics",
       "c99name": "KinesisAnalytics",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisAnalytics"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisAnalytics",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "KinesisAnalytics"
+      ]
     },
     {
       "name": "KinesisAnalyticsV2",
       "c99name": "KinesisAnalyticsV2",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisAnalyticsV2"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisAnalyticsV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "KinesisAnalyticsV2"
+      ]
     },
     {
       "name": "KinesisVideo",
       "c99name": "KinesisVideo",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideo"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideo",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "KinesisVideo"
+      ]
     },
     {
       "name": "KinesisVideoArchivedMedia",
       "c99name": "KinesisVideoArchivedMedia",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideoArchivedMedia"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideoArchivedMedia",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "KinesisVideoArchivedMedia"
+      ]
     },
     {
       "name": "KinesisVideoMedia",
       "c99name": "KinesisVideoMedia",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideoMedia"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideoMedia",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "KinesisVideoMedia"
+      ]
     },
     {
       "name": "KinesisVideoSignalingChannels",
       "c99name": "KinesisVideoSignalingChannels",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideoSignalingChannels"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_KinesisVideoSignalingChannels",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "KinesisVideoSignalingChannels"
+      ]
     },
     {
       "name": "LakeFormation",
       "c99name": "LakeFormation",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LakeFormation"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LakeFormation",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "LakeFormation"
+      ]
     },
     {
       "name": "Lambda",
       "c99name": "Lambda",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Lambda"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Lambda",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Lambda"
+      ]
     },
     {
       "name": "LexModelBuildingService",
       "c99name": "LexModelBuildingService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LexModelBuildingService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LexModelBuildingService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "LexModelBuildingService"
+      ]
     },
     {
       "name": "LexRuntimeService",
       "c99name": "LexRuntimeService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LexRuntimeService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LexRuntimeService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "LexRuntimeService"
+      ]
     },
     {
       "name": "LicenseManager",
       "c99name": "LicenseManager",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LicenseManager"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_LicenseManager",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "LicenseManager"
+      ]
     },
     {
       "name": "Lightsail",
       "c99name": "Lightsail",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Lightsail"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Lightsail",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Lightsail"
+      ]
     },
     {
       "name": "MQ",
       "c99name": "MQ",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MQ"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MQ",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MQ"
+      ]
     },
     {
       "name": "MTurk",
       "c99name": "MTurk",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MTurk"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MTurk",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MTurk"
+      ]
     },
     {
       "name": "MachineLearning",
       "c99name": "MachineLearning",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MachineLearning"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MachineLearning",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MachineLearning"
+      ]
     },
     {
       "name": "Macie",
       "c99name": "Macie",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Macie"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Macie",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Macie"
+      ]
     },
     {
       "name": "Macie2",
       "c99name": "Macie2",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Macie2"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Macie2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Macie2"
+      ]
     },
     {
       "name": "ManagedBlockchain",
       "c99name": "ManagedBlockchain",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ManagedBlockchain"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ManagedBlockchain",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ManagedBlockchain"
+      ]
     },
     {
       "name": "MarketplaceCatalog",
       "c99name": "MarketplaceCatalog",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceCatalog"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceCatalog",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MarketplaceCatalog"
+      ]
     },
     {
       "name": "MarketplaceCommerceAnalytics",
       "c99name": "MarketplaceCommerceAnalytics",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceCommerceAnalytics"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceCommerceAnalytics",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MarketplaceCommerceAnalytics"
+      ]
     },
     {
       "name": "MarketplaceEntitlementService",
       "c99name": "MarketplaceEntitlementService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceEntitlementService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceEntitlementService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MarketplaceEntitlementService"
+      ]
     },
     {
       "name": "MarketplaceMetering",
       "c99name": "MarketplaceMetering",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceMetering"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MarketplaceMetering",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MarketplaceMetering"
+      ]
     },
     {
       "name": "MediaConnect",
       "c99name": "MediaConnect",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaConnect"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaConnect",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MediaConnect"
+      ]
     },
     {
       "name": "MediaConvert",
       "c99name": "MediaConvert",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaConvert"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaConvert",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MediaConvert"
+      ]
     },
     {
       "name": "MediaLive",
       "c99name": "MediaLive",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaLive"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaLive",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MediaLive"
+      ]
     },
     {
       "name": "MediaPackage",
       "c99name": "MediaPackage",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaPackage"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaPackage",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MediaPackage"
+      ]
     },
     {
       "name": "MediaPackageVod",
       "c99name": "MediaPackageVod",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaPackageVod"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaPackageVod",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MediaPackageVod"
+      ]
     },
     {
       "name": "MediaStore",
       "c99name": "MediaStore",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaStore"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaStore",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MediaStore"
+      ]
     },
     {
       "name": "MediaStoreData",
       "c99name": "MediaStoreData",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaStoreData"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaStoreData",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MediaStoreData"
+      ]
     },
     {
       "name": "MediaTailor",
       "c99name": "MediaTailor",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaTailor"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MediaTailor",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MediaTailor"
+      ]
     },
     {
       "name": "MigrationHub",
       "c99name": "MigrationHub",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MigrationHub"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MigrationHub",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MigrationHub"
+      ]
     },
     {
       "name": "MigrationHubConfig",
       "c99name": "MigrationHubConfig",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MigrationHubConfig"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MigrationHubConfig",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MigrationHubConfig"
+      ]
     },
     {
       "name": "Mobile",
       "c99name": "Mobile",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Mobile"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Mobile",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Mobile"
+      ]
     },
     {
       "name": "MobileAnalytics",
       "c99name": "MobileAnalytics",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MobileAnalytics"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_MobileAnalytics",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "MobileAnalytics"
+      ]
     },
     {
       "name": "Neptune",
       "c99name": "Neptune",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Neptune"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Neptune",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Neptune"
+      ]
     },
     {
       "name": "NetworkManager",
       "c99name": "NetworkManager",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_NetworkManager"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_NetworkManager",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "NetworkManager"
+      ]
     },
     {
       "name": "OpsWorks",
       "c99name": "OpsWorks",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_OpsWorks"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_OpsWorks",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "OpsWorks"
+      ]
     },
     {
       "name": "OpsWorksCM",
       "c99name": "OpsWorksCM",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_OpsWorksCM"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_OpsWorksCM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "OpsWorksCM"
+      ]
     },
     {
       "name": "Organizations",
       "c99name": "Organizations",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Organizations"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Organizations",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Organizations"
+      ]
     },
     {
       "name": "Outposts",
       "c99name": "Outposts",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Outposts"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Outposts",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Outposts"
+      ]
     },
     {
       "name": "PI",
       "c99name": "PI",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PI"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PI",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "PI"
+      ]
     },
     {
       "name": "Personalize",
       "c99name": "Personalize",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Personalize"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Personalize",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Personalize"
+      ]
     },
     {
       "name": "PersonalizeEvents",
       "c99name": "PersonalizeEvents",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PersonalizeEvents"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PersonalizeEvents",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "PersonalizeEvents"
+      ]
     },
     {
       "name": "PersonalizeRuntime",
       "c99name": "PersonalizeRuntime",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PersonalizeRuntime"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PersonalizeRuntime",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "PersonalizeRuntime"
+      ]
     },
     {
       "name": "Pinpoint",
       "c99name": "Pinpoint",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Pinpoint"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Pinpoint",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Pinpoint"
+      ]
     },
     {
       "name": "PinpointEmail",
       "c99name": "PinpointEmail",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PinpointEmail"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PinpointEmail",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "PinpointEmail"
+      ]
     },
     {
       "name": "PinpointSMSVoice",
       "c99name": "PinpointSMSVoice",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PinpointSMSVoice"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_PinpointSMSVoice",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "PinpointSMSVoice"
+      ]
     },
     {
       "name": "Polly",
       "c99name": "Polly",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Polly"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Polly",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Polly"
+      ]
     },
     {
       "name": "Pricing",
       "c99name": "Pricing",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Pricing"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Pricing",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Pricing"
+      ]
     },
     {
       "name": "QLDB",
       "c99name": "QLDB",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_QLDB"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_QLDB",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "QLDB"
+      ]
     },
     {
       "name": "QLDBSession",
       "c99name": "QLDBSession",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_QLDBSession"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_QLDBSession",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "QLDBSession"
+      ]
     },
     {
       "name": "QuickSight",
       "c99name": "QuickSight",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_QuickSight"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_QuickSight",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "QuickSight"
+      ]
     },
     {
       "name": "RAM",
       "c99name": "RAM",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RAM"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RAM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "RAM"
+      ]
     },
     {
       "name": "RDS",
       "c99name": "RDS",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RDS"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RDS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "RDS"
+      ]
     },
     {
       "name": "RDSDataService",
       "c99name": "RDSDataService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RDSDataService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RDSDataService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "RDSDataService"
+      ]
     },
     {
       "name": "Redshift",
       "c99name": "Redshift",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Redshift"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Redshift",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Redshift"
+      ]
     },
     {
       "name": "RedshiftDataAPIService",
       "c99name": "RedshiftDataAPIService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RedshiftDataAPIService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RedshiftDataAPIService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "RedshiftDataAPIService"
+      ]
     },
     {
       "name": "Rekognition",
       "c99name": "Rekognition",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Rekognition"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Rekognition",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Rekognition"
+      ]
     },
     {
       "name": "ResourceGroups",
       "c99name": "ResourceGroups",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ResourceGroups"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ResourceGroups",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ResourceGroups"
+      ]
     },
     {
       "name": "ResourceGroupsTaggingAPI",
       "c99name": "ResourceGroupsTaggingAPI",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ResourceGroupsTaggingAPI"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ResourceGroupsTaggingAPI",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ResourceGroupsTaggingAPI"
+      ]
     },
     {
       "name": "RoboMaker",
       "c99name": "RoboMaker",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RoboMaker"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_RoboMaker",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "RoboMaker"
+      ]
     },
     {
       "name": "Route53",
       "c99name": "Route53",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Route53"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Route53",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Route53"
+      ]
     },
     {
       "name": "Route53Domains",
       "c99name": "Route53Domains",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Route53Domains"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Route53Domains",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Route53Domains"
+      ]
     },
     {
       "name": "Route53Resolver",
       "c99name": "Route53Resolver",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Route53Resolver"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Route53Resolver",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Route53Resolver"
+      ]
     },
     {
       "name": "S3",
       "c99name": "S3",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_S3"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_S3",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "S3"
+      ]
     },
     {
       "name": "S3Control",
       "c99name": "S3Control",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_S3Control"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_S3Control",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "S3Control"
+      ]
     },
     {
       "name": "SES",
       "c99name": "SES",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SES"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SES",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SES"
+      ]
     },
     {
       "name": "SESV2",
       "c99name": "SESV2",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SESV2"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SESV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SESV2"
+      ]
     },
     {
       "name": "SFN",
       "c99name": "SFN",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SFN"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SFN",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SFN"
+      ]
     },
     {
       "name": "SMS",
       "c99name": "SMS",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SMS"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SMS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SMS"
+      ]
     },
     {
       "name": "SNS",
       "c99name": "SNS",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SNS"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SNS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SNS"
+      ]
     },
     {
       "name": "SQS",
       "c99name": "SQS",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SQS"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SQS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SQS"
+      ]
     },
     {
       "name": "SSM",
       "c99name": "SSM",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSM"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SSM"
+      ]
     },
     {
       "name": "SSO",
       "c99name": "SSO",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSO"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSO",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SSO"
+      ]
     },
     {
       "name": "SSOAdmin",
       "c99name": "SSOAdmin",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSOAdmin"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSOAdmin",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SSOAdmin"
+      ]
     },
     {
       "name": "SSOOIDC",
       "c99name": "SSOOIDC",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSOOIDC"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SSOOIDC",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SSOOIDC"
+      ]
     },
     {
       "name": "STS",
       "c99name": "STS",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_STS"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_STS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "STS"
+      ]
     },
     {
       "name": "SWF",
       "c99name": "SWF",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SWF"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SWF",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SWF"
+      ]
     },
     {
       "name": "SageMaker",
       "c99name": "SageMaker",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SageMaker"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SageMaker",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SageMaker"
+      ]
     },
     {
       "name": "SageMakerRuntime",
       "c99name": "SageMakerRuntime",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SageMakerRuntime"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SageMakerRuntime",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SageMakerRuntime"
+      ]
     },
     {
       "name": "SavingsPlans",
       "c99name": "SavingsPlans",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SavingsPlans"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SavingsPlans",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SavingsPlans"
+      ]
     },
     {
       "name": "Schemas",
       "c99name": "Schemas",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Schemas"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Schemas",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Schemas"
+      ]
     },
     {
       "name": "SecretsManager",
       "c99name": "SecretsManager",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SecretsManager"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SecretsManager",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SecretsManager"
+      ]
     },
     {
       "name": "SecurityHub",
       "c99name": "SecurityHub",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SecurityHub"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SecurityHub",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SecurityHub"
+      ]
     },
     {
       "name": "ServerlessApplicationRepository",
       "c99name": "ServerlessApplicationRepository",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServerlessApplicationRepository"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServerlessApplicationRepository",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ServerlessApplicationRepository"
+      ]
     },
     {
       "name": "ServiceCatalog",
       "c99name": "ServiceCatalog",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServiceCatalog"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServiceCatalog",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ServiceCatalog"
+      ]
     },
     {
       "name": "ServiceDiscovery",
       "c99name": "ServiceDiscovery",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServiceDiscovery"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServiceDiscovery",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ServiceDiscovery"
+      ]
     },
     {
       "name": "ServiceQuotas",
       "c99name": "ServiceQuotas",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServiceQuotas"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_ServiceQuotas",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "ServiceQuotas"
+      ]
     },
     {
       "name": "Shield",
       "c99name": "Shield",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Shield"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Shield",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Shield"
+      ]
     },
     {
       "name": "Signer",
       "c99name": "Signer",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Signer"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Signer",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Signer"
+      ]
     },
     {
       "name": "SimpleDB",
       "c99name": "SimpleDB",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SimpleDB"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_SimpleDB",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "SimpleDB"
+      ]
     },
     {
       "name": "Snowball",
       "c99name": "Snowball",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Snowball"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Snowball",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Snowball"
+      ]
     },
     {
       "name": "StorageGateway",
       "c99name": "StorageGateway",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_StorageGateway"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_StorageGateway",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "StorageGateway"
+      ]
     },
     {
       "name": "Support",
       "c99name": "Support",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Support"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Support",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Support"
+      ]
     },
     {
       "name": "Synthetics",
       "c99name": "Synthetics",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Synthetics"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Synthetics",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Synthetics"
+      ]
     },
     {
       "name": "Textract",
       "c99name": "Textract",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Textract"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Textract",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Textract"
+      ]
     },
     {
       "name": "TranscribeService",
       "c99name": "TranscribeService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_TranscribeService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_TranscribeService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "TranscribeService"
+      ]
     },
     {
       "name": "TranscribeStreamingService",
       "c99name": "TranscribeStreamingService",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_TranscribeStreamingService"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_TranscribeStreamingService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "TranscribeStreamingService"
+      ]
     },
     {
       "name": "Transfer",
       "c99name": "Transfer",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Transfer"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Transfer",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Transfer"
+      ]
     },
     {
       "name": "Translate",
       "c99name": "Translate",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Translate"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_Translate",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "Translate"
+      ]
     },
     {
       "name": "WAF",
       "c99name": "WAF",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WAF"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WAF",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "WAF"
+      ]
     },
     {
       "name": "WAFRegional",
       "c99name": "WAFRegional",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WAFRegional"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WAFRegional",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "WAFRegional"
+      ]
     },
     {
       "name": "WAFV2",
       "c99name": "WAFV2",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WAFV2"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WAFV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "WAFV2"
+      ]
     },
     {
       "name": "WorkDocs",
       "c99name": "WorkDocs",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkDocs"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkDocs",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "WorkDocs"
+      ]
     },
     {
       "name": "WorkLink",
       "c99name": "WorkLink",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkLink"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkLink",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "WorkLink"
+      ]
     },
     {
       "name": "WorkMail",
       "c99name": "WorkMail",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkMail"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkMail",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "WorkMail"
+      ]
     },
     {
       "name": "WorkMailMessageFlow",
       "c99name": "WorkMailMessageFlow",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkMailMessageFlow"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkMailMessageFlow",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "WorkMailMessageFlow"
+      ]
     },
     {
       "name": "WorkSpaces",
       "c99name": "WorkSpaces",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkSpaces"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_WorkSpaces",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "WorkSpaces"
+      ]
     },
     {
       "name": "XRay",
       "c99name": "XRay",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_XRay"
+      "label": "@swiftpkg_soto//:Sources_AWSSDKSwift_Services_XRay",
+      "package_identity": "soto",
+      "product_memberships": [
+        "AWSSDKSwift",
+        "XRay"
+      ]
     },
     {
       "name": "AWSSDKSwiftTests",
       "c99name": "AWSSDKSwiftTests",
       "src_type": "swift",
-      "label": "@swiftpkg_soto//:Tests_AWSSDKSwiftTests"
+      "label": "@swiftpkg_soto//:Tests_AWSSDKSwiftTests",
+      "package_identity": "soto",
+      "product_memberships": []
     },
     {
       "name": "AWSSDKSwiftCore",
       "c99name": "AWSSDKSwiftCore",
       "src_type": "swift",
-      "label": "@swiftpkg_soto_core//:Sources_AWSSDKSwiftCore"
+      "label": "@swiftpkg_soto_core//:Sources_AWSSDKSwiftCore",
+      "package_identity": "soto-core",
+      "product_memberships": [
+        "AWSSDKSwiftCore"
+      ]
     },
     {
       "name": "AWSSDKSwiftCoreTests",
       "c99name": "AWSSDKSwiftCoreTests",
       "src_type": "swift",
-      "label": "@swiftpkg_soto_core//:Tests_AWSSDKSwiftCoreTests"
+      "label": "@swiftpkg_soto_core//:Tests_AWSSDKSwiftCoreTests",
+      "package_identity": "soto-core",
+      "product_memberships": []
     },
     {
       "name": "Spectre",
       "c99name": "Spectre",
       "src_type": "swift",
-      "label": "@swiftpkg_spectre//:Sources_Spectre"
+      "label": "@swiftpkg_spectre//:Sources_Spectre",
+      "package_identity": "spectre",
+      "product_memberships": [
+        "Spectre"
+      ]
     },
     {
       "name": "SpectreTests",
       "c99name": "SpectreTests",
       "src_type": "swift",
-      "label": "@swiftpkg_spectre//:Tests_SpectreTests"
+      "label": "@swiftpkg_spectre//:Tests_SpectreTests",
+      "package_identity": "spectre",
+      "product_memberships": []
     },
     {
       "name": "SQLKit",
       "c99name": "SQLKit",
       "src_type": "swift",
-      "label": "@swiftpkg_sql_kit//:Sources_SQLKit"
+      "label": "@swiftpkg_sql_kit//:Sources_SQLKit",
+      "package_identity": "sql-kit",
+      "product_memberships": [
+        "SQLKit",
+        "SQLKitBenchmark"
+      ]
     },
     {
       "name": "SQLKitBenchmark",
       "c99name": "SQLKitBenchmark",
       "src_type": "swift",
-      "label": "@swiftpkg_sql_kit//:Sources_SQLKitBenchmark"
+      "label": "@swiftpkg_sql_kit//:Sources_SQLKitBenchmark",
+      "package_identity": "sql-kit",
+      "product_memberships": [
+        "SQLKitBenchmark"
+      ]
     },
     {
       "name": "SQLKitTests",
       "c99name": "SQLKitTests",
       "src_type": "swift",
-      "label": "@swiftpkg_sql_kit//:Tests_SQLKitTests"
+      "label": "@swiftpkg_sql_kit//:Tests_SQLKitTests",
+      "package_identity": "sql-kit",
+      "product_memberships": []
     },
     {
       "name": "Algorithms",
       "c99name": "Algorithms",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_algorithms//:Sources_Algorithms"
+      "label": "@swiftpkg_swift_algorithms//:Sources_Algorithms",
+      "package_identity": "swift-algorithms",
+      "product_memberships": [
+        "Algorithms"
+      ]
     },
     {
       "name": "SwiftAlgorithmsTests",
       "c99name": "SwiftAlgorithmsTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_algorithms//:Tests_SwiftAlgorithmsTests"
+      "label": "@swiftpkg_swift_algorithms//:Tests_SwiftAlgorithmsTests",
+      "package_identity": "swift-algorithms",
+      "product_memberships": []
     },
     {
       "name": "count-lines",
       "c99name": "count_lines",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_count-lines"
+      "label": "@swiftpkg_swift_argument_parser//:Examples_count-lines",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "count-lines"
+      ]
     },
     {
       "name": "math",
       "c99name": "math",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_math"
+      "label": "@swiftpkg_swift_argument_parser//:Examples_math",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "math"
+      ]
     },
     {
       "name": "repeat",
       "c99name": "repeat",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_repeat"
+      "label": "@swiftpkg_swift_argument_parser//:Examples_repeat",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "repeat"
+      ]
     },
     {
       "name": "roll",
       "c99name": "roll",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_roll"
+      "label": "@swiftpkg_swift_argument_parser//:Examples_roll",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "roll"
+      ]
     },
     {
       "name": "GenerateManual",
       "c99name": "GenerateManual",
       "src_type": "unknown",
-      "label": "@swiftpkg_swift_argument_parser//:Plugins_GenerateManual"
+      "label": "@swiftpkg_swift_argument_parser//:Plugins_GenerateManual",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "GenerateManual"
+      ]
     },
     {
       "name": "ArgumentParser",
       "c99name": "ArgumentParser",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser"
+      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "ArgumentParser",
+        "GenerateManual",
+        "roll",
+        "repeat",
+        "math",
+        "generate-manual",
+        "count-lines",
+        "changelog-authors"
+      ]
     },
     {
       "name": "ArgumentParserTestHelpers",
       "c99name": "ArgumentParserTestHelpers",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserTestHelpers"
+      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserTestHelpers",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": []
     },
     {
       "name": "ArgumentParserToolInfo",
       "c99name": "ArgumentParserToolInfo",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserToolInfo"
+      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserToolInfo",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "ArgumentParser",
+        "GenerateManual",
+        "roll",
+        "repeat",
+        "math",
+        "generate-manual",
+        "count-lines",
+        "changelog-authors"
+      ]
     },
     {
       "name": "ArgumentParserEndToEndTests",
       "c99name": "ArgumentParserEndToEndTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserEndToEndTests"
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserEndToEndTests",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": []
     },
     {
       "name": "ArgumentParserExampleTests",
       "c99name": "ArgumentParserExampleTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserExampleTests"
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserExampleTests",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": []
     },
     {
       "name": "ArgumentParserGenerateManualTests",
       "c99name": "ArgumentParserGenerateManualTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserGenerateManualTests"
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserGenerateManualTests",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": []
     },
     {
       "name": "ArgumentParserPackageManagerTests",
       "c99name": "ArgumentParserPackageManagerTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserPackageManagerTests"
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserPackageManagerTests",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": []
     },
     {
       "name": "ArgumentParserUnitTests",
       "c99name": "ArgumentParserUnitTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserUnitTests"
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserUnitTests",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": []
     },
     {
       "name": "changelog-authors",
       "c99name": "changelog_authors",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tools_changelog-authors"
+      "label": "@swiftpkg_swift_argument_parser//:Tools_changelog-authors",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "changelog-authors"
+      ]
     },
     {
       "name": "generate-manual",
       "c99name": "generate_manual",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tools_generate-manual"
+      "label": "@swiftpkg_swift_argument_parser//:Tools_generate-manual",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "GenerateManual",
+        "generate-manual"
+      ]
     },
     {
       "name": "Atomics",
       "c99name": "Atomics",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_atomics//:Sources_Atomics"
+      "label": "@swiftpkg_swift_atomics//:Sources_Atomics",
+      "package_identity": "swift-atomics",
+      "product_memberships": [
+        "Atomics"
+      ]
     },
     {
       "name": "_AtomicsShims",
       "c99name": "_AtomicsShims",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_atomics//:Sources__AtomicsShims"
+      "label": "@swiftpkg_swift_atomics//:Sources__AtomicsShims",
+      "package_identity": "swift-atomics",
+      "product_memberships": [
+        "Atomics"
+      ]
     },
     {
       "name": "AtomicsTests",
       "c99name": "AtomicsTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_atomics//:Tests_AtomicsTests"
+      "label": "@swiftpkg_swift_atomics//:Tests_AtomicsTests",
+      "package_identity": "swift-atomics",
+      "product_memberships": []
     },
     {
       "name": "Backtrace",
       "c99name": "Backtrace",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_backtrace//:Sources_Backtrace"
+      "label": "@swiftpkg_swift_backtrace//:Sources_Backtrace",
+      "package_identity": "swift-backtrace",
+      "product_memberships": [
+        "Backtrace",
+        "Sample"
+      ]
     },
     {
       "name": "CBacktrace",
       "c99name": "CBacktrace",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_backtrace//:Sources_CBacktrace"
+      "label": "@swiftpkg_swift_backtrace//:Sources_CBacktrace",
+      "package_identity": "swift-backtrace",
+      "product_memberships": [
+        "Backtrace",
+        "Sample"
+      ]
     },
     {
       "name": "Sample",
       "c99name": "Sample",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_backtrace//:Sources_Sample"
+      "label": "@swiftpkg_swift_backtrace//:Sources_Sample",
+      "package_identity": "swift-backtrace",
+      "product_memberships": [
+        "Sample"
+      ]
     },
     {
       "name": "BacktraceTests",
       "c99name": "BacktraceTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_backtrace//:Tests_BacktraceTests"
+      "label": "@swiftpkg_swift_backtrace//:Tests_BacktraceTests",
+      "package_identity": "swift-backtrace",
+      "product_memberships": []
     },
     {
       "name": "Collections",
       "c99name": "Collections",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Sources_Collections"
+      "label": "@swiftpkg_swift_collections//:Sources_Collections",
+      "package_identity": "swift-collections",
+      "product_memberships": [
+        "Collections"
+      ]
     },
     {
       "name": "DequeModule",
       "c99name": "DequeModule",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Sources_DequeModule"
+      "label": "@swiftpkg_swift_collections//:Sources_DequeModule",
+      "package_identity": "swift-collections",
+      "product_memberships": [
+        "Collections",
+        "DequeModule"
+      ]
     },
     {
       "name": "OrderedCollections",
       "c99name": "OrderedCollections",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Sources_OrderedCollections"
+      "label": "@swiftpkg_swift_collections//:Sources_OrderedCollections",
+      "package_identity": "swift-collections",
+      "product_memberships": [
+        "Collections",
+        "OrderedCollections"
+      ]
     },
     {
       "name": "_CollectionsTestSupport",
       "c99name": "_CollectionsTestSupport",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Sources__CollectionsTestSupport"
+      "label": "@swiftpkg_swift_collections//:Sources__CollectionsTestSupport",
+      "package_identity": "swift-collections",
+      "product_memberships": []
     },
     {
       "name": "CollectionsTestSupportTests",
       "c99name": "CollectionsTestSupportTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Tests_CollectionsTestSupportTests"
+      "label": "@swiftpkg_swift_collections//:Tests_CollectionsTestSupportTests",
+      "package_identity": "swift-collections",
+      "product_memberships": []
     },
     {
       "name": "DequeTests",
       "c99name": "DequeTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Tests_DequeTests"
+      "label": "@swiftpkg_swift_collections//:Tests_DequeTests",
+      "package_identity": "swift-collections",
+      "product_memberships": []
     },
     {
       "name": "OrderedCollectionsTests",
       "c99name": "OrderedCollectionsTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Tests_OrderedCollectionsTests"
+      "label": "@swiftpkg_swift_collections//:Tests_OrderedCollectionsTests",
+      "package_identity": "swift-collections",
+      "product_memberships": []
     },
     {
       "name": "CCryptoBoringSSL",
       "c99name": "CCryptoBoringSSL",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_crypto//:Sources_CCryptoBoringSSL"
+      "label": "@swiftpkg_swift_crypto//:Sources_CCryptoBoringSSL",
+      "package_identity": "swift-crypto",
+      "product_memberships": [
+        "Crypto",
+        "_CryptoExtras",
+        "crypto-shasum"
+      ]
     },
     {
       "name": "CCryptoBoringSSLShims",
       "c99name": "CCryptoBoringSSLShims",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_crypto//:Sources_CCryptoBoringSSLShims"
+      "label": "@swiftpkg_swift_crypto//:Sources_CCryptoBoringSSLShims",
+      "package_identity": "swift-crypto",
+      "product_memberships": [
+        "Crypto",
+        "_CryptoExtras",
+        "crypto-shasum"
+      ]
     },
     {
       "name": "Crypto",
       "c99name": "Crypto",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_crypto//:Sources_Crypto"
+      "label": "@swiftpkg_swift_crypto//:Sources_Crypto",
+      "package_identity": "swift-crypto",
+      "product_memberships": [
+        "Crypto",
+        "_CryptoExtras",
+        "crypto-shasum"
+      ]
     },
     {
       "name": "CryptoBoringWrapper",
       "c99name": "CryptoBoringWrapper",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_crypto//:Sources_CryptoBoringWrapper"
+      "label": "@swiftpkg_swift_crypto//:Sources_CryptoBoringWrapper",
+      "package_identity": "swift-crypto",
+      "product_memberships": [
+        "Crypto",
+        "_CryptoExtras",
+        "crypto-shasum"
+      ]
     },
     {
       "name": "_CryptoExtras",
       "c99name": "_CryptoExtras",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_crypto//:Sources__CryptoExtras"
+      "label": "@swiftpkg_swift_crypto//:Sources__CryptoExtras",
+      "package_identity": "swift-crypto",
+      "product_memberships": [
+        "_CryptoExtras"
+      ]
     },
     {
       "name": "crypto-shasum",
       "c99name": "crypto_shasum",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_crypto//:Sources_crypto-shasum"
+      "label": "@swiftpkg_swift_crypto//:Sources_crypto-shasum",
+      "package_identity": "swift-crypto",
+      "product_memberships": [
+        "crypto-shasum"
+      ]
     },
     {
       "name": "CryptoTests",
       "c99name": "CryptoTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_crypto//:Tests_CryptoTests"
+      "label": "@swiftpkg_swift_crypto//:Tests_CryptoTests",
+      "package_identity": "swift-crypto",
+      "product_memberships": []
     },
     {
       "name": "_CryptoExtrasTests",
       "c99name": "_CryptoExtrasTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_crypto//:Tests__CryptoExtrasTests"
+      "label": "@swiftpkg_swift_crypto//:Tests__CryptoExtrasTests",
+      "package_identity": "swift-crypto",
+      "product_memberships": []
     },
     {
       "name": "Logging",
       "c99name": "Logging",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_log//:Sources_Logging"
+      "label": "@swiftpkg_swift_log//:Sources_Logging",
+      "package_identity": "swift-log",
+      "product_memberships": [
+        "Logging"
+      ]
     },
     {
       "name": "LoggingTests",
       "c99name": "LoggingTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_log//:Tests_LoggingTests"
+      "label": "@swiftpkg_swift_log//:Tests_LoggingTests",
+      "package_identity": "swift-log",
+      "product_memberships": []
     },
     {
       "name": "CoreMetrics",
       "c99name": "CoreMetrics",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_metrics//:Sources_CoreMetrics"
+      "label": "@swiftpkg_swift_metrics//:Sources_CoreMetrics",
+      "package_identity": "swift-metrics",
+      "product_memberships": [
+        "CoreMetrics",
+        "Metrics",
+        "MetricsTestKit"
+      ]
     },
     {
       "name": "Metrics",
       "c99name": "Metrics",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_metrics//:Sources_Metrics"
+      "label": "@swiftpkg_swift_metrics//:Sources_Metrics",
+      "package_identity": "swift-metrics",
+      "product_memberships": [
+        "Metrics",
+        "MetricsTestKit"
+      ]
     },
     {
       "name": "MetricsTestKit",
       "c99name": "MetricsTestKit",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_metrics//:Sources_MetricsTestKit"
+      "label": "@swiftpkg_swift_metrics//:Sources_MetricsTestKit",
+      "package_identity": "swift-metrics",
+      "product_memberships": [
+        "MetricsTestKit"
+      ]
     },
     {
       "name": "MetricsTests",
       "c99name": "MetricsTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_metrics//:Tests_MetricsTests"
+      "label": "@swiftpkg_swift_metrics//:Tests_MetricsTests",
+      "package_identity": "swift-metrics",
+      "product_memberships": []
     },
     {
       "name": "CNIOAtomics",
       "c99name": "CNIOAtomics",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio//:Sources_CNIOAtomics"
+      "label": "@swiftpkg_swift_nio//:Sources_CNIOAtomics",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOConcurrencyHelpers",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOCrashTester",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo"
+      ]
     },
     {
       "name": "CNIODarwin",
       "c99name": "CNIODarwin",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio//:Sources_CNIODarwin"
+      "label": "@swiftpkg_swift_nio//:Sources_CNIODarwin",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIO",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOCrashTester",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo"
+      ]
     },
     {
       "name": "CNIOLLHTTP",
       "c99name": "CNIOLLHTTP",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio//:Sources_CNIOLLHTTP"
+      "label": "@swiftpkg_swift_nio//:Sources_CNIOLLHTTP",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOHTTP1",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOPerformanceTester",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOCrashTester",
+        "NIOAsyncAwaitDemo"
+      ]
     },
     {
       "name": "CNIOLinux",
       "c99name": "CNIOLinux",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio//:Sources_CNIOLinux"
+      "label": "@swiftpkg_swift_nio//:Sources_CNIOLinux",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOCrashTester",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo"
+      ]
     },
     {
       "name": "CNIOSHA1",
       "c99name": "CNIOSHA1",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio//:Sources_CNIOSHA1"
+      "label": "@swiftpkg_swift_nio//:Sources_CNIOSHA1",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOWebSocket",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOPerformanceTester",
+        "NIOCrashTester"
+      ]
     },
     {
       "name": "CNIOWindows",
       "c99name": "CNIOWindows",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio//:Sources_CNIOWindows"
+      "label": "@swiftpkg_swift_nio//:Sources_CNIOWindows",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOCrashTester",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo"
+      ]
     },
     {
       "name": "NIO",
       "c99name": "NIO",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIO"
+      "label": "@swiftpkg_swift_nio//:Sources_NIO",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIO",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOPerformanceTester",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOCrashTester",
+        "NIOAsyncAwaitDemo"
+      ]
     },
     {
       "name": "NIOAsyncAwaitDemo",
       "c99name": "NIOAsyncAwaitDemo",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOAsyncAwaitDemo"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOAsyncAwaitDemo",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOAsyncAwaitDemo"
+      ]
     },
     {
       "name": "NIOChatClient",
       "c99name": "NIOChatClient",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOChatClient"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOChatClient",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOChatClient"
+      ]
     },
     {
       "name": "NIOChatServer",
       "c99name": "NIOChatServer",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOChatServer"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOChatServer",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOChatServer"
+      ]
     },
     {
       "name": "NIOConcurrencyHelpers",
       "c99name": "NIOConcurrencyHelpers",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOConcurrencyHelpers"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOConcurrencyHelpers",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOConcurrencyHelpers",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOCrashTester",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo"
+      ]
     },
     {
       "name": "NIOCore",
       "c99name": "NIOCore",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOCore"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOCore",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOCrashTester",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo"
+      ]
     },
     {
       "name": "NIOCrashTester",
       "c99name": "NIOCrashTester",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOCrashTester"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOCrashTester",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOCrashTester"
+      ]
     },
     {
       "name": "NIOEchoClient",
       "c99name": "NIOEchoClient",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOEchoClient"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOEchoClient",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOEchoClient"
+      ]
     },
     {
       "name": "NIOEchoServer",
       "c99name": "NIOEchoServer",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOEchoServer"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOEchoServer",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOEchoServer"
+      ]
     },
     {
       "name": "NIOEmbedded",
       "c99name": "NIOEmbedded",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOEmbedded"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOEmbedded",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIO",
+        "NIOEmbedded",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOPerformanceTester",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOCrashTester",
+        "NIOAsyncAwaitDemo"
+      ]
     },
     {
       "name": "NIOFoundationCompat",
       "c99name": "NIOFoundationCompat",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOFoundationCompat"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOFoundationCompat",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOFoundationCompat",
+        "NIOPerformanceTester",
+        "NIOCrashTester"
+      ]
     },
     {
       "name": "NIOHTTP1",
       "c99name": "NIOHTTP1",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOHTTP1",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOPerformanceTester",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOCrashTester",
+        "NIOAsyncAwaitDemo"
+      ]
     },
     {
       "name": "NIOHTTP1Client",
       "c99name": "NIOHTTP1Client",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1Client"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1Client",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOHTTP1Client"
+      ]
     },
     {
       "name": "NIOHTTP1Server",
       "c99name": "NIOHTTP1Server",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1Server"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1Server",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOHTTP1Server"
+      ]
     },
     {
       "name": "NIOMulticastChat",
       "c99name": "NIOMulticastChat",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOMulticastChat"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOMulticastChat",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOMulticastChat"
+      ]
     },
     {
       "name": "NIOPerformanceTester",
       "c99name": "NIOPerformanceTester",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOPerformanceTester"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOPerformanceTester",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOPerformanceTester"
+      ]
     },
     {
       "name": "NIOPosix",
       "c99name": "NIOPosix",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOPosix"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOPosix",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIO",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOCrashTester",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo"
+      ]
     },
     {
       "name": "NIOTLS",
       "c99name": "NIOTLS",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOTLS"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOTLS",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOTLS"
+      ]
     },
     {
       "name": "NIOTestUtils",
       "c99name": "NIOTestUtils",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOTestUtils"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOTestUtils",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOTestUtils"
+      ]
     },
     {
       "name": "NIOUDPEchoClient",
       "c99name": "NIOUDPEchoClient",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOUDPEchoClient"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOUDPEchoClient",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOUDPEchoClient"
+      ]
     },
     {
       "name": "NIOUDPEchoServer",
       "c99name": "NIOUDPEchoServer",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOUDPEchoServer"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOUDPEchoServer",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOUDPEchoServer"
+      ]
     },
     {
       "name": "NIOWebSocket",
       "c99name": "NIOWebSocket",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocket"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocket",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOWebSocket",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOPerformanceTester",
+        "NIOCrashTester"
+      ]
     },
     {
       "name": "NIOWebSocketClient",
       "c99name": "NIOWebSocketClient",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocketClient"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocketClient",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOWebSocketClient"
+      ]
     },
     {
       "name": "NIOWebSocketServer",
       "c99name": "NIOWebSocketServer",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocketServer"
+      "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocketServer",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOWebSocketServer"
+      ]
     },
     {
       "name": "_NIOConcurrency",
       "c99name": "_NIOConcurrency",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources__NIOConcurrency"
+      "label": "@swiftpkg_swift_nio//:Sources__NIOConcurrency",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "_NIOConcurrency"
+      ]
     },
     {
       "name": "_NIODataStructures",
       "c99name": "_NIODataStructures",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources__NIODataStructures"
+      "label": "@swiftpkg_swift_nio//:Sources__NIODataStructures",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOCrashTester",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo"
+      ]
     },
     {
       "name": "NIOConcurrencyHelpersTests",
       "c99name": "NIOConcurrencyHelpersTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOConcurrencyHelpersTests"
+      "label": "@swiftpkg_swift_nio//:Tests_NIOConcurrencyHelpersTests",
+      "package_identity": "swift-nio",
+      "product_memberships": []
     },
     {
       "name": "NIOCoreTests",
       "c99name": "NIOCoreTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOCoreTests"
+      "label": "@swiftpkg_swift_nio//:Tests_NIOCoreTests",
+      "package_identity": "swift-nio",
+      "product_memberships": []
     },
     {
       "name": "NIODataStructuresTests",
       "c99name": "NIODataStructuresTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIODataStructuresTests"
+      "label": "@swiftpkg_swift_nio//:Tests_NIODataStructuresTests",
+      "package_identity": "swift-nio",
+      "product_memberships": []
     },
     {
       "name": "NIOEmbeddedTests",
       "c99name": "NIOEmbeddedTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOEmbeddedTests"
+      "label": "@swiftpkg_swift_nio//:Tests_NIOEmbeddedTests",
+      "package_identity": "swift-nio",
+      "product_memberships": []
     },
     {
       "name": "NIOFoundationCompatTests",
       "c99name": "NIOFoundationCompatTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOFoundationCompatTests"
+      "label": "@swiftpkg_swift_nio//:Tests_NIOFoundationCompatTests",
+      "package_identity": "swift-nio",
+      "product_memberships": []
     },
     {
       "name": "NIOHTTP1Tests",
       "c99name": "NIOHTTP1Tests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOHTTP1Tests"
+      "label": "@swiftpkg_swift_nio//:Tests_NIOHTTP1Tests",
+      "package_identity": "swift-nio",
+      "product_memberships": []
     },
     {
       "name": "NIOPosixTests",
       "c99name": "NIOPosixTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOPosixTests"
+      "label": "@swiftpkg_swift_nio//:Tests_NIOPosixTests",
+      "package_identity": "swift-nio",
+      "product_memberships": []
     },
     {
       "name": "NIOTLSTests",
       "c99name": "NIOTLSTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOTLSTests"
+      "label": "@swiftpkg_swift_nio//:Tests_NIOTLSTests",
+      "package_identity": "swift-nio",
+      "product_memberships": []
     },
     {
       "name": "NIOTestUtilsTests",
       "c99name": "NIOTestUtilsTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOTestUtilsTests"
+      "label": "@swiftpkg_swift_nio//:Tests_NIOTestUtilsTests",
+      "package_identity": "swift-nio",
+      "product_memberships": []
     },
     {
       "name": "NIOTests",
       "c99name": "NIOTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOTests"
+      "label": "@swiftpkg_swift_nio//:Tests_NIOTests",
+      "package_identity": "swift-nio",
+      "product_memberships": []
     },
     {
       "name": "NIOWebSocketTests",
       "c99name": "NIOWebSocketTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOWebSocketTests"
+      "label": "@swiftpkg_swift_nio//:Tests_NIOWebSocketTests",
+      "package_identity": "swift-nio",
+      "product_memberships": []
     },
     {
       "name": "CNIOExtrasZlib",
       "c99name": "CNIOExtrasZlib",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_CNIOExtrasZlib"
+      "label": "@swiftpkg_swift_nio_extras//:Sources_CNIOExtrasZlib",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": [
+        "NIOHTTPCompression"
+      ]
     },
     {
       "name": "HTTPServerWithQuiescingDemo",
       "c99name": "HTTPServerWithQuiescingDemo",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_HTTPServerWithQuiescingDemo"
+      "label": "@swiftpkg_swift_nio_extras//:Sources_HTTPServerWithQuiescingDemo",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": [
+        "HTTPServerWithQuiescingDemo"
+      ]
     },
     {
       "name": "NIOExtras",
       "c99name": "NIOExtras",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOExtras"
+      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOExtras",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": [
+        "NIOExtras",
+        "NIOWritePartialPCAPDemo",
+        "NIOWritePCAPDemo",
+        "NIOExtrasPerformanceTester",
+        "HTTPServerWithQuiescingDemo"
+      ]
     },
     {
       "name": "NIOExtrasPerformanceTester",
       "c99name": "NIOExtrasPerformanceTester",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOExtrasPerformanceTester"
+      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOExtrasPerformanceTester",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": [
+        "NIOExtrasPerformanceTester"
+      ]
     },
     {
       "name": "NIOHTTPCompression",
       "c99name": "NIOHTTPCompression",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPCompression"
+      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPCompression",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": [
+        "NIOHTTPCompression"
+      ]
     },
     {
       "name": "NIOSOCKS",
       "c99name": "NIOSOCKS",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKS"
+      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKS",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": [
+        "NIOSOCKS",
+        "NIOSOCKSClient"
+      ]
     },
     {
       "name": "NIOSOCKSClient",
       "c99name": "NIOSOCKSClient",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKSClient"
+      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKSClient",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": [
+        "NIOSOCKSClient"
+      ]
     },
     {
       "name": "NIOWritePCAPDemo",
       "c99name": "NIOWritePCAPDemo",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOWritePCAPDemo"
+      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOWritePCAPDemo",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": [
+        "NIOWritePCAPDemo"
+      ]
     },
     {
       "name": "NIOWritePartialPCAPDemo",
       "c99name": "NIOWritePartialPCAPDemo",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOWritePartialPCAPDemo"
+      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOWritePartialPCAPDemo",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": [
+        "NIOWritePartialPCAPDemo"
+      ]
     },
     {
       "name": "NIOExtrasTests",
       "c99name": "NIOExtrasTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Tests_NIOExtrasTests"
+      "label": "@swiftpkg_swift_nio_extras//:Tests_NIOExtrasTests",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": []
     },
     {
       "name": "NIOHTTPCompressionTests",
       "c99name": "NIOHTTPCompressionTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Tests_NIOHTTPCompressionTests"
+      "label": "@swiftpkg_swift_nio_extras//:Tests_NIOHTTPCompressionTests",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": []
     },
     {
       "name": "NIOSOCKSTests",
       "c99name": "NIOSOCKSTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Tests_NIOSOCKSTests"
+      "label": "@swiftpkg_swift_nio_extras//:Tests_NIOSOCKSTests",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": []
     },
     {
       "name": "NIOHPACK",
       "c99name": "NIOHPACK",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHPACK"
+      "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHPACK",
+      "package_identity": "swift-nio-http2",
+      "product_memberships": [
+        "NIOHTTP2",
+        "NIOHTTP2Server",
+        "NIOHTTP2PerformanceTester"
+      ]
     },
     {
       "name": "NIOHTTP2",
       "c99name": "NIOHTTP2",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2"
+      "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2",
+      "package_identity": "swift-nio-http2",
+      "product_memberships": [
+        "NIOHTTP2",
+        "NIOHTTP2Server",
+        "NIOHTTP2PerformanceTester"
+      ]
     },
     {
       "name": "NIOHTTP2PerformanceTester",
       "c99name": "NIOHTTP2PerformanceTester",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2PerformanceTester"
+      "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2PerformanceTester",
+      "package_identity": "swift-nio-http2",
+      "product_memberships": [
+        "NIOHTTP2PerformanceTester"
+      ]
     },
     {
       "name": "NIOHTTP2Server",
       "c99name": "NIOHTTP2Server",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2Server"
+      "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2Server",
+      "package_identity": "swift-nio-http2",
+      "product_memberships": [
+        "NIOHTTP2Server"
+      ]
     },
     {
       "name": "NIOHPACKTests",
       "c99name": "NIOHPACKTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_http2//:Tests_NIOHPACKTests"
+      "label": "@swiftpkg_swift_nio_http2//:Tests_NIOHPACKTests",
+      "package_identity": "swift-nio-http2",
+      "product_memberships": []
     },
     {
       "name": "NIOHTTP2Tests",
       "c99name": "NIOHTTP2Tests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_http2//:Tests_NIOHTTP2Tests"
+      "label": "@swiftpkg_swift_nio_http2//:Tests_NIOHTTP2Tests",
+      "package_identity": "swift-nio-http2",
+      "product_memberships": []
     },
     {
       "name": "CNIOBoringSSL",
       "c99name": "CNIOBoringSSL",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio_ssl//:Sources_CNIOBoringSSL"
+      "label": "@swiftpkg_swift_nio_ssl//:Sources_CNIOBoringSSL",
+      "package_identity": "swift-nio-ssl",
+      "product_memberships": [
+        "NIOSSL",
+        "NIOTLSServer",
+        "NIOSSLHTTP1Client",
+        "NIOSSLPerformanceTester"
+      ]
     },
     {
       "name": "CNIOBoringSSLShims",
       "c99name": "CNIOBoringSSLShims",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio_ssl//:Sources_CNIOBoringSSLShims"
+      "label": "@swiftpkg_swift_nio_ssl//:Sources_CNIOBoringSSLShims",
+      "package_identity": "swift-nio-ssl",
+      "product_memberships": [
+        "NIOSSL",
+        "NIOTLSServer",
+        "NIOSSLHTTP1Client",
+        "NIOSSLPerformanceTester"
+      ]
     },
     {
       "name": "NIOSSL",
       "c99name": "NIOSSL",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOSSL"
+      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOSSL",
+      "package_identity": "swift-nio-ssl",
+      "product_memberships": [
+        "NIOSSL",
+        "NIOTLSServer",
+        "NIOSSLHTTP1Client",
+        "NIOSSLPerformanceTester"
+      ]
     },
     {
       "name": "NIOSSLHTTP1Client",
       "c99name": "NIOSSLHTTP1Client",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLHTTP1Client"
+      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLHTTP1Client",
+      "package_identity": "swift-nio-ssl",
+      "product_memberships": [
+        "NIOSSLHTTP1Client"
+      ]
     },
     {
       "name": "NIOSSLPerformanceTester",
       "c99name": "NIOSSLPerformanceTester",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLPerformanceTester"
+      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLPerformanceTester",
+      "package_identity": "swift-nio-ssl",
+      "product_memberships": [
+        "NIOSSLPerformanceTester"
+      ]
     },
     {
       "name": "NIOTLSServer",
       "c99name": "NIOTLSServer",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOTLSServer"
+      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOTLSServer",
+      "package_identity": "swift-nio-ssl",
+      "product_memberships": [
+        "NIOTLSServer"
+      ]
     },
     {
       "name": "NIOSSLTests",
       "c99name": "NIOSSLTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_ssl//:Tests_NIOSSLTests"
+      "label": "@swiftpkg_swift_nio_ssl//:Tests_NIOSSLTests",
+      "package_identity": "swift-nio-ssl",
+      "product_memberships": []
     },
     {
       "name": "NIOTSHTTPClient",
       "c99name": "NIOTSHTTPClient",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_transport_services//:Sources_NIOTSHTTPClient"
+      "label": "@swiftpkg_swift_nio_transport_services//:Sources_NIOTSHTTPClient",
+      "package_identity": "swift-nio-transport-services",
+      "product_memberships": [
+        "NIOTSHTTPClient"
+      ]
     },
     {
       "name": "NIOTSHTTPServer",
       "c99name": "NIOTSHTTPServer",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_transport_services//:Sources_NIOTSHTTPServer"
+      "label": "@swiftpkg_swift_nio_transport_services//:Sources_NIOTSHTTPServer",
+      "package_identity": "swift-nio-transport-services",
+      "product_memberships": [
+        "NIOTSHTTPServer"
+      ]
     },
     {
       "name": "NIOTransportServices",
       "c99name": "NIOTransportServices",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_transport_services//:Sources_NIOTransportServices"
+      "label": "@swiftpkg_swift_nio_transport_services//:Sources_NIOTransportServices",
+      "package_identity": "swift-nio-transport-services",
+      "product_memberships": [
+        "NIOTransportServices",
+        "NIOTSHTTPServer",
+        "NIOTSHTTPClient"
+      ]
     },
     {
       "name": "NIOTransportServicesTests",
       "c99name": "NIOTransportServicesTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_transport_services//:Tests_NIOTransportServicesTests"
+      "label": "@swiftpkg_swift_nio_transport_services//:Tests_NIOTransportServicesTests",
+      "package_identity": "swift-nio-transport-services",
+      "product_memberships": []
     },
     {
       "name": "ComplexModule",
       "c99name": "ComplexModule",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_numerics//:Sources_ComplexModule"
+      "label": "@swiftpkg_swift_numerics//:Sources_ComplexModule",
+      "package_identity": "swift-numerics",
+      "product_memberships": [
+        "ComplexModule",
+        "Numerics",
+        "ComplexLog1p",
+        "ComplexLog"
+      ]
     },
     {
       "name": "Numerics",
       "c99name": "Numerics",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_numerics//:Sources_Numerics"
+      "label": "@swiftpkg_swift_numerics//:Sources_Numerics",
+      "package_identity": "swift-numerics",
+      "product_memberships": [
+        "Numerics",
+        "ComplexLog1p",
+        "ComplexLog"
+      ]
     },
     {
       "name": "RealModule",
       "c99name": "RealModule",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_numerics//:Sources_RealModule"
+      "label": "@swiftpkg_swift_numerics//:Sources_RealModule",
+      "package_identity": "swift-numerics",
+      "product_memberships": [
+        "ComplexModule",
+        "Numerics",
+        "RealModule",
+        "ComplexLog1p",
+        "ComplexLog"
+      ]
     },
     {
       "name": "_NumericsShims",
       "c99name": "_NumericsShims",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_numerics//:Sources__NumericsShims"
+      "label": "@swiftpkg_swift_numerics//:Sources__NumericsShims",
+      "package_identity": "swift-numerics",
+      "product_memberships": [
+        "ComplexModule",
+        "Numerics",
+        "RealModule",
+        "ComplexLog1p",
+        "ComplexLog"
+      ]
     },
     {
       "name": "_TestSupport",
       "c99name": "_TestSupport",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_numerics//:Sources__TestSupport"
+      "label": "@swiftpkg_swift_numerics//:Sources__TestSupport",
+      "package_identity": "swift-numerics",
+      "product_memberships": [
+        "ComplexLog1p",
+        "ComplexLog"
+      ]
     },
     {
       "name": "ComplexTests",
       "c99name": "ComplexTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_numerics//:Tests_ComplexTests"
+      "label": "@swiftpkg_swift_numerics//:Tests_ComplexTests",
+      "package_identity": "swift-numerics",
+      "product_memberships": []
     },
     {
       "name": "ComplexLog",
       "c99name": "ComplexLog",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_numerics//:Tests_Executable_ComplexLog"
+      "label": "@swiftpkg_swift_numerics//:Tests_Executable_ComplexLog",
+      "package_identity": "swift-numerics",
+      "product_memberships": [
+        "ComplexLog"
+      ]
     },
     {
       "name": "ComplexLog1p",
       "c99name": "ComplexLog1p",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_numerics//:Tests_Executable_ComplexLog1p"
+      "label": "@swiftpkg_swift_numerics//:Tests_Executable_ComplexLog1p",
+      "package_identity": "swift-numerics",
+      "product_memberships": [
+        "ComplexLog1p"
+      ]
     },
     {
       "name": "RealTests",
       "c99name": "RealTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_numerics//:Tests_RealTests"
+      "label": "@swiftpkg_swift_numerics//:Tests_RealTests",
+      "package_identity": "swift-numerics",
+      "product_memberships": []
     },
     {
       "name": "SwiftProtobufPlugin",
       "c99name": "SwiftProtobufPlugin",
       "src_type": "unknown",
-      "label": "@swiftpkg_swift_protobuf//:Plugins_SwiftProtobufPlugin"
+      "label": "@swiftpkg_swift_protobuf//:Plugins_SwiftProtobufPlugin",
+      "package_identity": "swift-protobuf",
+      "product_memberships": [
+        "SwiftProtobufPlugin"
+      ]
     },
     {
       "name": "Conformance",
       "c99name": "Conformance",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_protobuf//:Sources_Conformance"
+      "label": "@swiftpkg_swift_protobuf//:Sources_Conformance",
+      "package_identity": "swift-protobuf",
+      "product_memberships": [
+        "Conformance"
+      ]
     },
     {
       "name": "SwiftProtobuf",
       "c99name": "SwiftProtobuf",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_protobuf//:Sources_SwiftProtobuf"
+      "label": "@swiftpkg_swift_protobuf//:Sources_SwiftProtobuf",
+      "package_identity": "swift-protobuf",
+      "product_memberships": [
+        "protoc-gen-swift",
+        "SwiftProtobuf",
+        "SwiftProtobufPluginLibrary",
+        "SwiftProtobufPlugin",
+        "Conformance"
+      ]
     },
     {
       "name": "SwiftProtobufPluginLibrary",
       "c99name": "SwiftProtobufPluginLibrary",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_protobuf//:Sources_SwiftProtobufPluginLibrary"
+      "label": "@swiftpkg_swift_protobuf//:Sources_SwiftProtobufPluginLibrary",
+      "package_identity": "swift-protobuf",
+      "product_memberships": [
+        "protoc-gen-swift",
+        "SwiftProtobufPluginLibrary",
+        "SwiftProtobufPlugin"
+      ]
     },
     {
       "name": "protoc-gen-swift",
       "c99name": "protoc_gen_swift",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_protobuf//:Sources_protoc-gen-swift"
+      "label": "@swiftpkg_swift_protobuf//:Sources_protoc-gen-swift",
+      "package_identity": "swift-protobuf",
+      "product_memberships": [
+        "protoc-gen-swift",
+        "SwiftProtobufPlugin"
+      ]
     },
     {
       "name": "SwiftProtobufPluginLibraryTests",
       "c99name": "SwiftProtobufPluginLibraryTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_protobuf//:Tests_SwiftProtobufPluginLibraryTests"
+      "label": "@swiftpkg_swift_protobuf//:Tests_SwiftProtobufPluginLibraryTests",
+      "package_identity": "swift-protobuf",
+      "product_memberships": []
     },
     {
       "name": "SwiftProtobufTests",
       "c99name": "SwiftProtobufTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_protobuf//:Tests_SwiftProtobufTests"
+      "label": "@swiftpkg_swift_protobuf//:Tests_SwiftProtobufTests",
+      "package_identity": "swift-protobuf",
+      "product_memberships": []
     },
     {
       "name": "CVaporBcrypt",
       "c99name": "CVaporBcrypt",
       "src_type": "clang",
-      "label": "@swiftpkg_vapor//:Sources_CVaporBcrypt"
+      "label": "@swiftpkg_vapor//:Sources_CVaporBcrypt",
+      "package_identity": "vapor",
+      "product_memberships": [
+        "Vapor",
+        "XCTVapor",
+        "Development"
+      ]
     },
     {
       "name": "CVaporURLParser",
       "c99name": "CVaporURLParser",
       "src_type": "clang",
-      "label": "@swiftpkg_vapor//:Sources_CVaporURLParser"
+      "label": "@swiftpkg_vapor//:Sources_CVaporURLParser",
+      "package_identity": "vapor",
+      "product_memberships": [
+        "Vapor",
+        "XCTVapor",
+        "Development"
+      ]
     },
     {
       "name": "Development",
       "c99name": "Development",
       "src_type": "swift",
-      "label": "@swiftpkg_vapor//:Sources_Development"
+      "label": "@swiftpkg_vapor//:Sources_Development",
+      "package_identity": "vapor",
+      "product_memberships": [
+        "Development"
+      ]
     },
     {
       "name": "Vapor",
       "c99name": "Vapor",
       "src_type": "swift",
-      "label": "@swiftpkg_vapor//:Sources_Vapor"
+      "label": "@swiftpkg_vapor//:Sources_Vapor",
+      "package_identity": "vapor",
+      "product_memberships": [
+        "Vapor",
+        "XCTVapor",
+        "Development"
+      ]
     },
     {
       "name": "XCTVapor",
       "c99name": "XCTVapor",
       "src_type": "swift",
-      "label": "@swiftpkg_vapor//:Sources_XCTVapor"
+      "label": "@swiftpkg_vapor//:Sources_XCTVapor",
+      "package_identity": "vapor",
+      "product_memberships": [
+        "XCTVapor"
+      ]
     },
     {
       "name": "AsyncTests",
       "c99name": "AsyncTests",
       "src_type": "swift",
-      "label": "@swiftpkg_vapor//:Tests_AsyncTests"
+      "label": "@swiftpkg_vapor//:Tests_AsyncTests",
+      "package_identity": "vapor",
+      "product_memberships": []
     },
     {
       "name": "VaporTests",
       "c99name": "VaporTests",
       "src_type": "swift",
-      "label": "@swiftpkg_vapor//:Tests_VaporTests"
+      "label": "@swiftpkg_vapor//:Tests_VaporTests",
+      "package_identity": "vapor",
+      "product_memberships": []
     },
     {
       "name": "WebSocketKit",
       "c99name": "WebSocketKit",
       "src_type": "swift",
-      "label": "@swiftpkg_websocket_kit//:Sources_WebSocketKit"
+      "label": "@swiftpkg_websocket_kit//:Sources_WebSocketKit",
+      "package_identity": "websocket-kit",
+      "product_memberships": [
+        "WebSocketKit"
+      ]
     },
     {
       "name": "WebSocketKitTests",
       "c99name": "WebSocketKitTests",
       "src_type": "swift",
-      "label": "@swiftpkg_websocket_kit//:Tests_WebSocketKitTests"
+      "label": "@swiftpkg_websocket_kit//:Tests_WebSocketKitTests",
+      "package_identity": "websocket-kit",
+      "product_memberships": []
     },
     {
       "name": "XCLogParser",
       "c99name": "XCLogParser",
       "src_type": "swift",
-      "label": "@swiftpkg_xclogparser//:Sources_XCLogParser"
+      "label": "@swiftpkg_xclogparser//:Sources_XCLogParser",
+      "package_identity": "xclogparser",
+      "product_memberships": [
+        "xclogparser",
+        "XCLogParser"
+      ]
     },
     {
       "name": "XCLogParserApp",
       "c99name": "XCLogParserApp",
       "src_type": "swift",
-      "label": "@swiftpkg_xclogparser//:Sources_XCLogParserApp"
+      "label": "@swiftpkg_xclogparser//:Sources_XCLogParserApp",
+      "package_identity": "xclogparser",
+      "product_memberships": [
+        "xclogparser"
+      ]
     },
     {
       "name": "XcodeHasher",
       "c99name": "XcodeHasher",
       "src_type": "swift",
-      "label": "@swiftpkg_xclogparser//:Sources_XcodeHasher"
+      "label": "@swiftpkg_xclogparser//:Sources_XcodeHasher",
+      "package_identity": "xclogparser",
+      "product_memberships": [
+        "xclogparser",
+        "XCLogParser"
+      ]
     },
     {
       "name": "XCLogParserTests",
       "c99name": "XCLogParserTests",
       "src_type": "swift",
-      "label": "@swiftpkg_xclogparser//:Tests_XCLogParserTests"
+      "label": "@swiftpkg_xclogparser//:Tests_XCLogParserTests",
+      "package_identity": "xclogparser",
+      "product_memberships": []
     },
     {
       "name": "XCMetricsApp",
       "c99name": "XCMetricsApp",
       "src_type": "swift",
-      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsApp"
+      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsApp",
+      "package_identity": "xcmetrics",
+      "product_memberships": [
+        "XCMetrics"
+      ]
     },
     {
       "name": "XCMetricsBackend",
       "c99name": "XCMetricsBackend",
       "src_type": "swift",
-      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsBackend"
+      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsBackend",
+      "package_identity": "xcmetrics",
+      "product_memberships": [
+        "XCMetricsBackend"
+      ]
     },
     {
       "name": "XCMetricsBackendLib",
       "c99name": "XCMetricsBackendLib",
       "src_type": "swift",
-      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsBackendLib"
+      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsBackendLib",
+      "package_identity": "xcmetrics",
+      "product_memberships": [
+        "XCMetricsBackend"
+      ]
     },
     {
       "name": "XCMetricsClient",
       "c99name": "XCMetricsClient",
       "src_type": "swift",
-      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsClient"
+      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsClient",
+      "package_identity": "xcmetrics",
+      "product_memberships": [
+        "XCMetrics",
+        "XCMetricsClient",
+        "XCMetricsPlugins"
+      ]
     },
     {
       "name": "XCMetricsCommon",
       "c99name": "XCMetricsCommon",
       "src_type": "swift",
-      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsCommon"
+      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsCommon",
+      "package_identity": "xcmetrics",
+      "product_memberships": [
+        "XCMetrics",
+        "XCMetricsBackend",
+        "XCMetricsClient",
+        "XCMetricsPlugins"
+      ]
     },
     {
       "name": "XCMetricsPlugins",
       "c99name": "XCMetricsPlugins",
       "src_type": "swift",
-      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsPlugins"
+      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsPlugins",
+      "package_identity": "xcmetrics",
+      "product_memberships": [
+        "XCMetricsPlugins"
+      ]
     },
     {
       "name": "XCMetricsProto",
       "c99name": "XCMetricsProto",
       "src_type": "swift",
-      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsProto"
+      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsProto",
+      "package_identity": "xcmetrics",
+      "product_memberships": [
+        "XCMetrics",
+        "XCMetricsClient",
+        "XCMetricsPlugins"
+      ]
     },
     {
       "name": "XCMetricsUtils",
       "c99name": "XCMetricsUtils",
       "src_type": "swift",
-      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsUtils"
+      "label": "@swiftpkg_xcmetrics//:Sources_XCMetricsUtils",
+      "package_identity": "xcmetrics",
+      "product_memberships": [
+        "XCMetrics",
+        "XCMetricsClient",
+        "XCMetricsPlugins",
+        "XCMetricsUtils"
+      ]
     },
     {
       "name": "XCMetricsBackendLibTests",
       "c99name": "XCMetricsBackendLibTests",
       "src_type": "swift",
-      "label": "@swiftpkg_xcmetrics//:Tests_XCMetricsBackendLibTests"
+      "label": "@swiftpkg_xcmetrics//:Tests_XCMetricsBackendLibTests",
+      "package_identity": "xcmetrics",
+      "product_memberships": []
     },
     {
       "name": "XCMetricsPluginsTests",
       "c99name": "XCMetricsPluginsTests",
       "src_type": "swift",
-      "label": "@swiftpkg_xcmetrics//:Tests_XCMetricsPluginsTests"
+      "label": "@swiftpkg_xcmetrics//:Tests_XCMetricsPluginsTests",
+      "package_identity": "xcmetrics",
+      "product_memberships": []
     },
     {
       "name": "XCMetricsTests",
       "c99name": "XCMetricsTests",
       "src_type": "swift",
-      "label": "@swiftpkg_xcmetrics//:Tests_XCMetricsTests"
+      "label": "@swiftpkg_xcmetrics//:Tests_XCMetricsTests",
+      "package_identity": "xcmetrics",
+      "product_memberships": []
     },
     {
       "name": "CYaml",
       "c99name": "CYaml",
       "src_type": "clang",
-      "label": "@swiftpkg_yams//:Sources_CYaml"
+      "label": "@swiftpkg_yams//:Sources_CYaml",
+      "package_identity": "yams",
+      "product_memberships": [
+        "Yams"
+      ]
     },
     {
       "name": "Yams",
       "c99name": "Yams",
       "src_type": "swift",
-      "label": "@swiftpkg_yams//:Sources_Yams"
+      "label": "@swiftpkg_yams//:Sources_Yams",
+      "package_identity": "yams",
+      "product_memberships": [
+        "Yams"
+      ]
     },
     {
       "name": "YamsTests",
       "c99name": "YamsTests",
       "src_type": "swift",
-      "label": "@swiftpkg_yams//:Tests_YamsTests"
+      "label": "@swiftpkg_yams//:Tests_YamsTests",
+      "package_identity": "yams",
+      "product_memberships": []
     }
   ],
   "products": [

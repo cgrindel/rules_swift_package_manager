@@ -1,12 +1,18 @@
 package swift
 
 import (
-	"encoding/json"
 	"sort"
 )
 
 // A ModuleIndex represents an index organized by module name.
 type ModuleIndex map[string]Modules
+
+// NewModuleIndex creates a new module index populated with the provided modules.
+func NewModuleIndex(modules ...*Module) ModuleIndex {
+	mi := make(ModuleIndex)
+	mi.Add(modules...)
+	return mi
+}
 
 func (mi ModuleIndex) add(name string, m *Module) {
 	cur_modules := mi[name]
@@ -59,19 +65,4 @@ func (mi ModuleIndex) Modules() Modules {
 		result[idx] = byLabel[l]
 	}
 	return result
-}
-
-func (mi ModuleIndex) MarshalJSON() ([]byte, error) {
-	return json.Marshal(mi.Modules())
-}
-
-func (mi *ModuleIndex) UnmarshalJSON(b []byte) error {
-	var modules Modules
-	if err := json.Unmarshal(b, &modules); err != nil {
-		return err
-	}
-	newmi := make(ModuleIndex)
-	newmi.Add(modules...)
-	*mi = newmi
-	return nil
 }

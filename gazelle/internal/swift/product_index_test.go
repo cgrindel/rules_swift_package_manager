@@ -64,3 +64,10 @@ func TestProductIndex(t *testing.T) {
 		assert.Equal(t, productIndex, pi)
 	})
 }
+
+func TestProductIndexKey(t *testing.T) {
+	identity := "awesome-repo"
+	name := "Foo"
+	pik := swift.NewProductIndexKey(identity, name)
+	assert.Equal(t, identity, pik.Identity())
+}

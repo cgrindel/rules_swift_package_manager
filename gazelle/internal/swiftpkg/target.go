@@ -49,15 +49,16 @@ func (ts Targets) FindByPath(path string) *Target {
 
 // A Target represents a Swift target.
 type Target struct {
-	Name         string
-	C99name      string
-	Type         TargetType
-	ModuleType   ModuleType
-	Path         string
-	Sources      []string
-	Dependencies []*TargetDependency
-	CSettings    *ClangSettings
-	SrcType      SourceType
+	Name               string
+	C99name            string
+	Type               TargetType
+	ModuleType         ModuleType
+	Path               string
+	Sources            []string
+	Dependencies       []*TargetDependency
+	CSettings          *ClangSettings
+	SrcType            SourceType
+	ProductMemberships []string
 }
 
 // NewTargetFromManifestInfo returns a Swift target from manifest information.
@@ -99,15 +100,16 @@ func NewTargetFromManifestInfo(descT *spdesc.Target, dumpT *spdump.Target) (*Tar
 	moduleType := NewModuleType(descT.ModuleType)
 
 	return &Target{
-		Name:         descT.Name,
-		C99name:      descT.C99name,
-		Type:         targetType,
-		ModuleType:   moduleType,
-		Path:         descT.Path,
-		Sources:      descT.Sources,
-		Dependencies: tdeps,
-		CSettings:    cSettings,
-		SrcType:      NewSourceType(moduleType, descT.Sources),
+		Name:               descT.Name,
+		C99name:            descT.C99name,
+		Type:               targetType,
+		ModuleType:         moduleType,
+		Path:               descT.Path,
+		Sources:            descT.Sources,
+		Dependencies:       tdeps,
+		CSettings:          cSettings,
+		SrcType:            NewSourceType(moduleType, descT.Sources),
+		ProductMemberships: descT.ProductMemberships,
 	}, nil
 }
 

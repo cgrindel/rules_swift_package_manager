@@ -89,6 +89,13 @@ def swift_bazel_go_dependencies():
         sum = "h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=",
         version = "v1.1.1",
     )
+    go_repository(
+        name = "com_github_deckarep_golang_set_v2",
+        build_external = "external",
+        importpath = "github.com/deckarep/golang-set/v2",
+        sum = "h1:g47V4Or+DUdzbs8FxCCmgb6VYd+ptPAngjM6dtGktsI=",
+        version = "v2.1.0",
+    )
 
     go_repository(
         name = "com_github_envoyproxy_go_control_plane",

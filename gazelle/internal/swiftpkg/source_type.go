@@ -17,6 +17,7 @@ const (
 	SwiftSourceType
 	ClangSourceType
 	ObjcSourceType
+	BinarySourceType
 )
 
 var sourceTypeIDToStr map[SourceType]string
@@ -31,6 +32,7 @@ func init() {
 		SwiftSourceType:   "swift",
 		ClangSourceType:   "clang",
 		ObjcSourceType:    "objc",
+		BinarySourceType:  "binary",
 	}
 	sourceTypeStrToID = make(map[string]SourceType)
 	for id, str := range sourceTypeIDToStr {
@@ -54,6 +56,8 @@ func NewSourceType(moduleType ModuleType, srcPaths []string) SourceType {
 			}
 		}
 		return ClangSourceType
+	case BinaryModuleType:
+		return BinarySourceType
 	default:
 		return UnknownSourceType
 	}

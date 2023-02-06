@@ -271,7 +271,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 for bs in target.linker_settings.linked_libraries
             ]))
         if len(target.linker_settings.linked_frameworks) > 0:
-            copts.extend(lists.flatten([
+            # copts.extend(lists.flatten([
+            linkopts.extend(lists.flatten([
                 bzl_selects.new_from_build_setting(bs)
                 for bs in target.linker_settings.linked_frameworks
             ]))
@@ -331,6 +332,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 _condition_kinds.linked_library: bzl_selects.new_kind_handler(
                     transform = lambda ll: "-l{}".format(ll),
                 ),
+                _condition_kinds.linked_framework: bzl_selects.new_kind_handler(
+                    transform = lambda f: "-framework {}".format(f),
+                ),
             },
         )
 
@@ -351,9 +355,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 _condition_kinds.private_includes: bzl_selects.new_kind_handler(
                     transform = local_includes_transform,
                 ),
-                _condition_kinds.linked_framework: bzl_selects.new_kind_handler(
-                    transform = lambda f: "-framework {}".format(f),
-                ),
+                # _condition_kinds.linked_framework: bzl_selects.new_kind_handler(
+                #     transform = lambda f: "-framework {}".format(f),
+                # ),
             },
         )
 

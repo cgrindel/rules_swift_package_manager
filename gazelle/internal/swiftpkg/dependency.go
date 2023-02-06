@@ -6,6 +6,18 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
 )
 
+// A Dependencies represents a list of external dependencies.
+type Dependencies []*Dependency
+
+// Identities returns the identity values for the dependencies.
+func (deps Dependencies) Identities() []string {
+	ids := make([]string, len(deps))
+	for idx, d := range deps {
+		ids[idx] = d.Identity()
+	}
+	return ids
+}
+
 // A Dependency represents an external dependency.
 type Dependency struct {
 	SourceControl *SourceControl

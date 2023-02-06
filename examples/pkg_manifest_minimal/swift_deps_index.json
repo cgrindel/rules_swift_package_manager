@@ -1,148 +1,251 @@
 {
+  "direct_dep_identities": [
+    "swift-argument-parser",
+    "swift-log",
+    "swiftformat",
+    "my_local_package"
+  ],
   "modules": [
     {
       "name": "GreetingsFramework",
       "c99name": "GreetingsFramework",
       "src_type": "swift",
-      "label": "@swiftpkg_my_local_package//:Sources_GreetingsFramework"
+      "label": "@swiftpkg_my_local_package//:Sources_GreetingsFramework",
+      "package_identity": "my_local_package",
+      "product_memberships": [
+        "print-greeting",
+        "GreetingsFramework"
+      ]
     },
     {
       "name": "PrintGreeting",
       "c99name": "PrintGreeting",
       "src_type": "swift",
-      "label": "@swiftpkg_my_local_package//:Sources_PrintGreeting"
+      "label": "@swiftpkg_my_local_package//:Sources_PrintGreeting",
+      "package_identity": "my_local_package",
+      "product_memberships": [
+        "print-greeting"
+      ]
     },
     {
       "name": "GreetingsFrameworkTests",
       "c99name": "GreetingsFrameworkTests",
       "src_type": "swift",
-      "label": "@swiftpkg_my_local_package//:Tests_GreetingsFrameworkTests"
+      "label": "@swiftpkg_my_local_package//:Tests_GreetingsFrameworkTests",
+      "package_identity": "my_local_package",
+      "product_memberships": []
     },
     {
       "name": "count-lines",
       "c99name": "count_lines",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_count-lines"
+      "label": "@swiftpkg_swift_argument_parser//:Examples_count-lines",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "count-lines"
+      ]
     },
     {
       "name": "math",
       "c99name": "math",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_math"
+      "label": "@swiftpkg_swift_argument_parser//:Examples_math",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "math"
+      ]
     },
     {
       "name": "repeat",
       "c99name": "repeat",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_repeat"
+      "label": "@swiftpkg_swift_argument_parser//:Examples_repeat",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "repeat"
+      ]
     },
     {
       "name": "roll",
       "c99name": "roll",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_roll"
+      "label": "@swiftpkg_swift_argument_parser//:Examples_roll",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "roll"
+      ]
     },
     {
       "name": "GenerateManual",
       "c99name": "GenerateManual",
       "src_type": "unknown",
-      "label": "@swiftpkg_swift_argument_parser//:Plugins_GenerateManual"
+      "label": "@swiftpkg_swift_argument_parser//:Plugins_GenerateManual",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "GenerateManual"
+      ]
     },
     {
       "name": "ArgumentParser",
       "c99name": "ArgumentParser",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser"
+      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "ArgumentParser",
+        "GenerateManual",
+        "roll",
+        "repeat",
+        "math",
+        "generate-manual",
+        "count-lines",
+        "changelog-authors"
+      ]
     },
     {
       "name": "ArgumentParserTestHelpers",
       "c99name": "ArgumentParserTestHelpers",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserTestHelpers"
+      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserTestHelpers",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": []
     },
     {
       "name": "ArgumentParserToolInfo",
       "c99name": "ArgumentParserToolInfo",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserToolInfo"
+      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserToolInfo",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "ArgumentParser",
+        "GenerateManual",
+        "roll",
+        "repeat",
+        "math",
+        "generate-manual",
+        "count-lines",
+        "changelog-authors"
+      ]
     },
     {
       "name": "ArgumentParserEndToEndTests",
       "c99name": "ArgumentParserEndToEndTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserEndToEndTests"
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserEndToEndTests",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": []
     },
     {
       "name": "ArgumentParserExampleTests",
       "c99name": "ArgumentParserExampleTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserExampleTests"
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserExampleTests",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": []
     },
     {
       "name": "ArgumentParserGenerateManualTests",
       "c99name": "ArgumentParserGenerateManualTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserGenerateManualTests"
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserGenerateManualTests",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": []
     },
     {
       "name": "ArgumentParserPackageManagerTests",
       "c99name": "ArgumentParserPackageManagerTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserPackageManagerTests"
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserPackageManagerTests",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": []
     },
     {
       "name": "ArgumentParserUnitTests",
       "c99name": "ArgumentParserUnitTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserUnitTests"
+      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserUnitTests",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": []
     },
     {
       "name": "changelog-authors",
       "c99name": "changelog_authors",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tools_changelog-authors"
+      "label": "@swiftpkg_swift_argument_parser//:Tools_changelog-authors",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "changelog-authors"
+      ]
     },
     {
       "name": "generate-manual",
       "c99name": "generate_manual",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tools_generate-manual"
+      "label": "@swiftpkg_swift_argument_parser//:Tools_generate-manual",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "GenerateManual",
+        "generate-manual"
+      ]
     },
     {
       "name": "Logging",
       "c99name": "Logging",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_log//:Sources_Logging"
+      "label": "@swiftpkg_swift_log//:Sources_Logging",
+      "package_identity": "swift-log",
+      "product_memberships": [
+        "Logging"
+      ]
     },
     {
       "name": "LoggingTests",
       "c99name": "LoggingTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_log//:Tests_LoggingTests"
+      "label": "@swiftpkg_swift_log//:Tests_LoggingTests",
+      "package_identity": "swift-log",
+      "product_memberships": []
     },
     {
       "name": "CommandLineTool",
       "c99name": "CommandLineTool",
       "src_type": "swift",
-      "label": "@swiftpkg_swiftformat//:CommandLineTool"
+      "label": "@swiftpkg_swiftformat//:CommandLineTool",
+      "package_identity": "swiftformat",
+      "product_memberships": [
+        "swiftformat",
+        "SwiftFormatPlugin"
+      ]
     },
     {
       "name": "SwiftFormatPlugin",
       "c99name": "SwiftFormatPlugin",
       "src_type": "unknown",
-      "label": "@swiftpkg_swiftformat//:Plugins_SwiftFormatPlugin"
+      "label": "@swiftpkg_swiftformat//:Plugins_SwiftFormatPlugin",
+      "package_identity": "swiftformat",
+      "product_memberships": [
+        "SwiftFormatPlugin"
+      ]
     },
     {
       "name": "SwiftFormat",
       "c99name": "SwiftFormat",
       "src_type": "swift",
-      "label": "@swiftpkg_swiftformat//:Sources_SwiftFormat"
+      "label": "@swiftpkg_swiftformat//:Sources_SwiftFormat",
+      "package_identity": "swiftformat",
+      "product_memberships": [
+        "swiftformat",
+        "SwiftFormat",
+        "SwiftFormatPlugin"
+      ]
     },
     {
       "name": "SwiftFormatTests",
       "c99name": "SwiftFormatTests",
       "src_type": "swift",
-      "label": "@swiftpkg_swiftformat//:Tests_SwiftFormatTests"
+      "label": "@swiftpkg_swiftformat//:Tests_SwiftFormatTests",
+      "package_identity": "swiftformat",
+      "product_memberships": []
     }
   ],
   "products": [
