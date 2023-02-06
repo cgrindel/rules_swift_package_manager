@@ -27,10 +27,11 @@ _all_os_single_bazel_version_test_examples = [
 ]
 
 _macos_single_bazel_version_test_examples = [
+    "firebase_example",
+    "interesting_deps",
     "ios_sim",
     "objc_code",
     "xcmetrics_example",
-    "interesting_deps",
 ]
 
 # The default timeout is "long".
