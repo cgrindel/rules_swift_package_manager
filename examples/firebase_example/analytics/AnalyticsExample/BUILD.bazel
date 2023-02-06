@@ -1,0 +1,38 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "AnalyticsExample",
+    srcs = [
+        "AnalyticsView.swift",
+        "AnalyticsViewController.swift",
+        "AppDelegate.swift",
+        "BlogViewController.swift",
+        "SceneDelegate.swift",
+    ],
+    module_name = "AnalyticsExample",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+    deps = ["@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseAnalyticsWithoutAdIdSupportWrap_FirebaseAnalyticsWithoutAdIdSupportTarget"],
+)
+
+ios_application(
+    name = "iosapp",
+    bundle_id = "com.google.firebase.quickstart.AnalyticsExample",
+    families = [
+        "iphone",
+        "ipad",
+    ],
+    infoplists = [":Info.plist"],
+    launch_storyboard = "//analytics/AnalyticsExample:Base.lproj/LaunchScreen.storyboard",
+    minimum_os_version = "13.0",
+    deps = [":AnalyticsExample"],
+)
+
+build_test(
+    name = "iosapp_build_test",
+    targets = [
+        ":iosapp",
+    ],
+)
