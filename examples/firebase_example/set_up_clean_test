@@ -23,7 +23,6 @@ EOF
 cat > "${script_dir}/BUILD.bazel"  <<-EOF
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
 
@@ -63,21 +62,5 @@ bzl_library(
     srcs = ["swift_deps.bzl"],
     visibility = ["//visibility:public"],
     deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
-)
-
-build_test(
-    name = "xcode_metrics_package_targets",
-    targets = [
-        "@swiftpkg_xcmetrics//:XCMetrics",
-        "@swiftpkg_xcmetrics//:XCMetricsBackend",
-    ],
-)
-
-test_suite(
-    name = "xcode_metrics_package_build_tests",
-    tests = [
-        "@swiftpkg_xcmetrics//:XCMetricsClientBuildTest",
-        "@swiftpkg_xcmetrics//:XCMetricsUtilsBuildTest",
-    ],
 )
 EOF
