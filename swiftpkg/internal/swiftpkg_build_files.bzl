@@ -355,9 +355,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 _condition_kinds.private_includes: bzl_selects.new_kind_handler(
                     transform = local_includes_transform,
                 ),
-                # _condition_kinds.linked_framework: bzl_selects.new_kind_handler(
-                #     transform = lambda f: "-framework {}".format(f),
-                # ),
             },
         )
 
