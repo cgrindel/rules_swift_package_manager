@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-# TODO(chuck): Add some doc
-
-# script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
+# Generates a Go source file with the set of macOS and iOS framework names.
 
 # --- begin runfiles.bash initialization v2 ---
 # Copy-pasted from the Bazel Bash runfiles library v2.
