@@ -1,0 +1,18 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "SharedApp",
+    srcs = [
+        "ABTestingExampleApp.swift",
+        "AppConfig.swift",
+        "ContentView.swift",
+    ],
+    module_name = "SharedApp",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@swiftpkg_firebase_ios_sdk//:FirebaseInstallations_Source_Library_FirebaseInstallations",
+        "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfig_Sources_FirebaseRemoteConfig",
+        "@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseAnalyticsWrap_FirebaseAnalyticsTarget",
+    ],
+)
