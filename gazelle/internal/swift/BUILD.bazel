@@ -30,7 +30,6 @@ go_library(
         "rule_attr_string_dict.go",
         "rule_kinds.go",
         "rules_common.go",
-        "rules_from_manifest.go",
         "rules_from_srcs.go",
         "test_rules_common.go",
     ],

@@ -8,7 +8,6 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
 )
 
 const SwiftConfigName = "swift"
@@ -24,7 +23,6 @@ type SwiftConfig struct {
 	DependencyIndexRel string
 	// DependencyIndexPath is the full path to the dependency index
 	DependencyIndexPath string
-	PackageInfo         *swiftpkg.PackageInfo
 	UpdatePkgsToLatest  bool
 }
 
@@ -45,15 +43,8 @@ func (sc *SwiftConfig) SwiftBin() *swiftbin.SwiftBin {
 
 // GenerateRulesMode determines how the specified directory should be processed.
 func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRulesMode {
-	pi := sc.PackageInfo
-	if pi == nil {
-		return SrcFileGenRulesMode
-	} else if args.Dir == pi.Path {
-		return SwiftPkgGenRulesMode
-	} else if desct := pi.Targets.FindByPath(args.Rel); desct != nil {
-		return SwiftPkgGenRulesMode
-	}
-	return SkipGenRulesMode
+	// We only support source file generation in the Gazelle extension.
+	return SrcFileGenRulesMode
 }
 
 // LoadDependencyIndex reads the dependency index from disk.

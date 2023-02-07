@@ -16,8 +16,6 @@ import (
 func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateResult {
 	sc := swiftcfg.GetSwiftConfig(args.Config)
 	switch sc.GenerateRulesMode(args) {
-	case swiftcfg.SwiftPkgGenRulesMode:
-		return genRulesFromSwiftPkg(sc, args)
 	case swiftcfg.SrcFileGenRulesMode:
 		return genRulesFromSrcFiles(sc, args)
 	default:
@@ -88,27 +86,4 @@ func generateEmpty(args language.GenerateArgs, srcs []string) []*rule.Rule {
 		}
 	}
 	return empty
-}
-
-// Generate from Swift Package
-
-func genRulesFromSwiftPkg(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) language.GenerateResult {
-	result := language.GenerateResult{}
-
-	// If we are in the Swift product directory (package root), then generate rules for proudcts
-	if args.Dir == sc.PackageInfo.Path {
-		result.Gen = swift.RulesForSwiftProducts(args, sc.PackageInfo)
-		result.Imports = swift.Imports(result.Gen)
-	}
-
-	// Check if we are in a Swift target directory
-	pi := sc.PackageInfo
-	for _, t := range pi.Targets {
-		if t.Path == args.Rel {
-			result.Gen = swift.RulesForSwiftTarget(args, pi, t.Name)
-			result.Imports = swift.Imports(result.Gen)
-		}
-	}
-
-	return result
 }
