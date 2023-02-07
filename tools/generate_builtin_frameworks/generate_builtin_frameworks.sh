@@ -104,7 +104,7 @@ macos_frameworks="$(list_frameworks "${macos_frameworks_dir}")"
 ios_frameworks="$(list_frameworks "${ios_frameworks_dir}")"
 
 go_src="$(cat <<-EOF
-package "${go_package}"
+package ${go_package}
 
 import mapset "github.com/deckarep/golang-set/v2"
 
