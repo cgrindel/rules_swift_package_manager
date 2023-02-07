@@ -2,7 +2,9 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
     name = "SharedTest",
+    testonly = True,
     srcs = ["UITests.swift"],
     module_name = "SharedTest",
     tags = ["manual"],
+    visibility = ["//:__subpackages__"],
 )
