@@ -16,14 +16,3 @@ swift_library(
         "@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseAnalyticsWrap_FirebaseAnalyticsTarget",
     ],
 )
-
-# TODO(chuck): Add a directive that sets the type of swift_xxx to use? How can
-# we tell Gazelle extension to create a swift_library intead of a swift_binary.
-
-# TODO(chuck): When generating the declaration for the first time, the only
-# target that is selected is FirebaseRemoteConfig. It is missing
-# FirebaseInstallations and FirebaseAnalyticsTarget. Why?
-
-# TODO(chuck): After the declaration exists, I noticed that the deps were not
-# changed even though the Gazelle extension appears to be calculating the wrong
-# set of deps.
