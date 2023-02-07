@@ -8,6 +8,9 @@ sh_binary(
     args = [
         "gazelle/internal/swift/builtin_modules.go",
     ],
+    target_compatible_with = [
+        "@platforms//os:macos",
+    ],
     deps = [
         "@bazel_tools//tools/bash/runfiles",
         "@cgrindel_bazel_starlib//shlib/lib:env",
