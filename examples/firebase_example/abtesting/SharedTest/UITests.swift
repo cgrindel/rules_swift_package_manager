@@ -69,7 +69,6 @@ class UITests: XCTestCase {
     #endif
     for text in texts {
       let element = app.staticTexts[text]
-      // TODO: This if should be removed.
       #if targetEnvironment(macCatalyst)
         XCTAssertTrue(element.exists)
       #else
