@@ -1,0 +1,2 @@
+# Don't complain about paths that cannot be followed.
+disable=SC1090
