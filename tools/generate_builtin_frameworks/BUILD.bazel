@@ -5,6 +5,9 @@ bzlformat_pkg(name = "bzlformat")
 sh_binary(
     name = "generate_builtin_frameworks",
     srcs = ["generate_builtin_frameworks.sh"],
+    args = [
+        "gazelle/internal/swift/builtin_modules.go",
+    ],
     deps = [
         "@bazel_tools//tools/bash/runfiles",
         "@cgrindel_bazel_starlib//shlib/lib:env",
