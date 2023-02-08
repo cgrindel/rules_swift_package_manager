@@ -17,3 +17,15 @@ sh_binary(
         "@cgrindel_bazel_starlib//shlib/lib:fail",
     ],
 )
+
+sh_test(
+    name = "generate_builtin_frameworks_test",
+    srcs = ["generate_builtin_frameworks_test.sh"],
+    data = [
+        ":generate_builtin_frameworks",
+    ],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:assertions",
+    ],
+)
