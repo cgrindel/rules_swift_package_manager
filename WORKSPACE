@@ -31,6 +31,10 @@ load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_depe
 
 load("//:go_deps.bzl", "swift_bazel_go_dependencies")
 
+# Workaround for missing strict deps error as described here:
+# https://github.com/bazelbuild/bazel-gazelle/issues/1217#issuecomment-1152236735
+# gazelle:repository go_repository name=in_gopkg_alecthomas_kingpin_v2 importpath=gopkg.in/alecthomas/kingpin.v2
+
 # gazelle:repository_macro go_deps.bzl%swift_bazel_go_dependencies
 swift_bazel_go_dependencies()
 
