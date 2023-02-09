@@ -1,0 +1,21 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "AppDistributionTests",
+    testonly = True,
+    srcs = ["AppDistributionExampleTests.swift"],
+    module_name = "AppDistributionTests",
+    tags = ["manual"],
+    deps = ["//appdistribution/AppDistributionExample"],
+)
+
+ios_unit_test(
+    name = "FooTests",
+    minimum_os_version = "13.0",
+    # GH208: This fails due to an Objc module not being found by another Objc module.
+    # Marking as manual so that they do not run during CI.
+    tags = ["manual"],
+    visibility = ["//visibility:private"],
+    deps = [":AppDistributionTests"],
+)
