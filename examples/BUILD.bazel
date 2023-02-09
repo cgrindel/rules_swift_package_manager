@@ -38,6 +38,7 @@ _macos_single_bazel_version_test_examples = [
 _default_timeout = "long"
 
 _timeouts = {
+    "firebase_example": "eternal",
     "xcmetrics_example": "eternal",
 }
 
