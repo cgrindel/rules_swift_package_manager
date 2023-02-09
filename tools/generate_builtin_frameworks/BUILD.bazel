@@ -1,0 +1,31 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+bzlformat_pkg(name = "bzlformat")
+
+sh_binary(
+    name = "generate_builtin_frameworks",
+    srcs = ["generate_builtin_frameworks.sh"],
+    args = [
+        "gazelle/internal/swift/builtin_modules.go",
+    ],
+    target_compatible_with = [
+        "@platforms//os:macos",
+    ],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:env",
+        "@cgrindel_bazel_starlib//shlib/lib:fail",
+    ],
+)
+
+sh_test(
+    name = "generate_builtin_frameworks_test",
+    srcs = ["generate_builtin_frameworks_test.sh"],
+    data = [
+        ":generate_builtin_frameworks",
+    ],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:assertions",
+    ],
+)

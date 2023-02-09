@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 	"sort"
 
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -166,9 +165,15 @@ func (psrs productSetResults) Less(i, j int) bool {
 }
 
 func (di *DependencyIndex) products(piks ...ProductIndexKey) Products {
-	prds := make(Products, len(piks))
-	for idx, pik := range piks {
-		prds[idx] = di.productIndex[pik]
+	// It is possible to encounter a ProductIndexKey for which there is no product. This is due to
+	// phantom products (i.e., inferred by SPM). These phantom products appear in the description
+	// JSON, but do not appear in the dump JSON. We opt not to include these phantom products,
+	// because they were never specified in the original manifest.
+	prds := make(Products, 0, len(piks))
+	for _, pik := range piks {
+		if p, ok := di.productIndex[pik]; ok {
+			prds = append(prds, p)
+		}
 	}
 	return prds
 }
@@ -181,6 +186,16 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 ) *ModuleResolutionResult {
 	var result ModuleResolutionResult
 	pkgIdentsSet := mapset.NewSet[string](pkgIdentities...)
+	unresolved := mapset.NewSet[string]()
+
+	populateUnresolved := func() {
+		if unresolved.Cardinality() == 0 {
+			result.Unresolved = nil
+			return
+		}
+		result.Unresolved = unresolved.ToSlice()
+		sort.Strings(result.Unresolved)
+	}
 
 	// Find all of the products that contain a match for any of the modules
 	potentialPikSet := mapset.NewSet[ProductIndexKey]()
@@ -192,13 +207,14 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 				}
 			}
 		} else {
-			result.Unresolved = append(result.Unresolved, mname)
+			unresolved.Add(mname)
 		}
 	}
 
 	// If we found nothing or if we found only one prodcut, we are done.
 	if potentialPikSet.Cardinality() <= 1 {
 		result.Products = di.products(potentialPikSet.ToSlice()...)
+		populateUnresolved()
 		return &result
 	}
 
@@ -212,13 +228,11 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 	for modulesToResolve.Cardinality() > 0 {
 		pikSetCnt := potentialPikSet.Cardinality()
 		if pikSetCnt == 0 {
-			// Fail something is wrong
-			log.Printf(
-				"BUG: We have %d modules to resolve, but have no more products.",
-				modulesToResolve.Cardinality(),
-			)
+			// The only reason that we should get here is if we encounter a built-in module name
+			// that is not in our list of built-in modules.
 			result.Unresolved = append(result.Unresolved, modulesToResolve.ToSlice()...)
 			populateProducts()
+			populateUnresolved()
 			return &result
 		}
 		psrs := make(productSetResults, 0, pikSetCnt)
@@ -239,6 +253,7 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 	}
 
 	populateProducts()
+	populateUnresolved()
 	return &result
 }
 

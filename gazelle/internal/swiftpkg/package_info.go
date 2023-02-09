@@ -58,6 +58,11 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 		platforms[idx] = NewPlatfromFromManifestInfo(&p)
 	}
 
+	// We are purposefully only using the products from the dump JSON. The description JSON can
+	// include phantom products. These are products that were not explicilty defined in the manifest,
+	// but were inferred from targets. The swift-nio package manifest
+	// (https://github.com/apple/swift-nio/blob/main/Package.swift) in the ios_sim example
+	// demonstrates this behavior.
 	products := make([]*Product, len(dumpManifest.Products))
 	for idx, p := range dumpManifest.Products {
 		products[idx], err = NewProductFromManifestInfo(&p)
