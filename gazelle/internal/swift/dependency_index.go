@@ -181,6 +181,16 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 ) *ModuleResolutionResult {
 	var result ModuleResolutionResult
 	pkgIdentsSet := mapset.NewSet[string](pkgIdentities...)
+	unresolved := mapset.NewSet[string]()
+
+	populateUnresolved := func() {
+		if unresolved.Cardinality() == 0 {
+			result.Unresolved = nil
+			return
+		}
+		result.Unresolved = unresolved.ToSlice()
+		sort.Strings(result.Unresolved)
+	}
 
 	// Find all of the products that contain a match for any of the modules
 	potentialPikSet := mapset.NewSet[ProductIndexKey]()
@@ -192,13 +202,14 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 				}
 			}
 		} else {
-			result.Unresolved = append(result.Unresolved, mname)
+			unresolved.Add(mname)
 		}
 	}
 
 	// If we found nothing or if we found only one prodcut, we are done.
 	if potentialPikSet.Cardinality() <= 1 {
 		result.Products = di.products(potentialPikSet.ToSlice()...)
+		populateUnresolved()
 		return &result
 	}
 
@@ -219,6 +230,7 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 			)
 			result.Unresolved = append(result.Unresolved, modulesToResolve.ToSlice()...)
 			populateProducts()
+			populateUnresolved()
 			return &result
 		}
 		psrs := make(productSetResults, 0, pikSetCnt)
@@ -239,6 +251,7 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 	}
 
 	populateProducts()
+	populateUnresolved()
 	return &result
 }
 
