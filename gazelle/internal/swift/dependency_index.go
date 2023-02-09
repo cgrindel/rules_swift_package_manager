@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 	"sort"
 
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -229,11 +228,8 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 	for modulesToResolve.Cardinality() > 0 {
 		pikSetCnt := potentialPikSet.Cardinality()
 		if pikSetCnt == 0 {
-			// Fail something is wrong
-			log.Printf(
-				"BUG: We have %d modules to resolve, but have no more products.",
-				modulesToResolve.Cardinality(),
-			)
+			// The only reason that we should get here is if we encounter a built-in module name
+			// that is not in our list of built-in modules.
 			result.Unresolved = append(result.Unresolved, modulesToResolve.ToSlice()...)
 			populateProducts()
 			populateUnresolved()
