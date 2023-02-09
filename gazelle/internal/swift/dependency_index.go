@@ -166,9 +166,15 @@ func (psrs productSetResults) Less(i, j int) bool {
 }
 
 func (di *DependencyIndex) products(piks ...ProductIndexKey) Products {
-	prds := make(Products, len(piks))
-	for idx, pik := range piks {
-		prds[idx] = di.productIndex[pik]
+	// It is possible to encounter a ProductIndexKey for which there is no product. This is due to
+	// phantom products (i.e., inferred by SPM). These phantom products appear in the description
+	// JSON, but do not appear in the dump JSON. We opt not to include these phantom products,
+	// because they were never specified in the original manifest.
+	prds := make(Products, 0, len(piks))
+	for _, pik := range piks {
+		if p, ok := di.productIndex[pik]; ok {
+			prds = append(prds, p)
+		}
 	}
 	return prds
 }
