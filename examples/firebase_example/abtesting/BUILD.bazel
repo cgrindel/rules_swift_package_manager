@@ -18,6 +18,7 @@ ios_application(
 
 ios_ui_test(
     name = "iosapp_ui_test",
+    timeout = "eternal",
     minimum_os_version = "14.0",
     test_host = ":iosapp",
     deps = ["//abtesting/SharedTest"],
