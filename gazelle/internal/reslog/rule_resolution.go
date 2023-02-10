@@ -1,10 +1,13 @@
 package reslog
 
 import (
+	"sort"
+
 	"github.com/bazelbuild/bazel-gazelle/resolve"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	mapset "github.com/deckarep/golang-set/v2"
+	"golang.org/x/exp/slices"
 )
 
 type RuleResolution struct {
@@ -50,7 +53,36 @@ func (rr *RuleResolution) AddUnresolved(moduleName string) {
 	rr.UnresModuleNames.Add(moduleName)
 }
 
-func (rr *RuleResolution) String() string {
-	// TODO(chuck): IMPLEMENT ME!
-	return ""
+func (rr *RuleResolution) Summary() RuleResolutionSummary {
+	yd := RuleResolutionSummary{
+		Name:           rr.Rule.Name(),
+		Kind:           rr.Rule.Kind(),
+		Imports:        make([]string, len(rr.Imports)),
+		Builtins:       rr.Builtins.ToSlice(),
+		LocalRes:       make([]ModuleLabel, 0, len(rr.LocalRes)),
+		ExtRes:         nil,
+		HTTPArchiveRes: make([]ModuleLabel, 0, len(rr.HTTPArchiveRes)),
+		Unresolved:     rr.UnresModuleNames.ToSlice(),
+	}
+	copy(yd.Imports, rr.Imports)
+	for mname, frs := range rr.LocalRes {
+		mt := ModuleLabel{Module: mname, Label: frs[0].Label.String()}
+		yd.LocalRes = append(yd.LocalRes, mt)
+	}
+	yd.ExtRes = newExternalResolutionSummaryFromModuleResolutionResult(
+		rr.ExtResModuleNames,
+		rr.ExtResResult,
+	)
+	for mname, mods := range rr.HTTPArchiveRes {
+		mt := ModuleLabel{Module: mname, Label: mods[0].Label.String()}
+		yd.HTTPArchiveRes = append(yd.HTTPArchiveRes, mt)
+	}
+
+	sort.Strings(yd.Imports)
+	sort.Strings(yd.Builtins)
+	slices.SortFunc(yd.LocalRes, moduleLabelLess)
+	slices.SortFunc(yd.HTTPArchiveRes, moduleLabelLess)
+	sort.Strings(yd.Unresolved)
+
+	return yd
 }

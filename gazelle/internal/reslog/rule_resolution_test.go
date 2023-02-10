@@ -34,7 +34,7 @@ func TestRuleResolution(t *testing.T) {
 		{Label: label.New("", "path/to", "LocalA")},
 	})
 	rr.AddLocal("LocalB", []resolve.FindResult{
-		{Label: label.New("", "path/to", "LocalrB")},
+		{Label: label.New("", "path/to", "LocalB")},
 	})
 	rr.AddExternal([]string{"ExternalA", "ExternalB"}, &swift.ModuleResolutionResult{
 		Products: swift.Products{
@@ -62,7 +62,37 @@ func TestRuleResolution(t *testing.T) {
 	})
 	rr.AddUnresolved("Unresolved")
 
-	expStr := `
-`
-	assert.Equal(t, expStr, rr.String())
+	expected := reslog.RuleResolutionSummary{
+		Name: "Foo",
+		Kind: swift.LibraryRuleKind,
+		Imports: []string{
+			"Custom",
+			"ExternalA",
+			"ExternalB",
+			"LocalA",
+			"LocalB",
+			"UIKit",
+			"Unresolved",
+		},
+		Builtins: []string{"UIKit"},
+		LocalRes: []reslog.ModuleLabel{
+			{"LocalA", "//path/to:LocalA"},
+			{"LocalB", "//path/to:LocalB"},
+		},
+		ExtRes: &reslog.ExternalResolutionSummary{
+			Modules: []string{"ExternalA", "ExternalB"},
+			Products: []reslog.Product{
+				{"awesome-repo", "AwesomeProduct", []string{
+					"@swiftpkg_awesome_repo//path/to:ExternalA",
+					"@swiftpkg_awesome_repo//path/to:ExternalB",
+				}},
+			},
+			Unresolved: []string{"Custom", "Unresolved"},
+		},
+		HTTPArchiveRes: []reslog.ModuleLabel{
+			{"Custom", "@com_github_example_custom//:Custom"},
+		},
+		Unresolved: []string{"Unresolved"},
+	}
+	assert.Equal(t, expected, rr.Summary())
 }
