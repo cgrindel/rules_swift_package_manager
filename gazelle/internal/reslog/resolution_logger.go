@@ -1,7 +1,10 @@
 package reslog
 
 import (
-	"os"
+	"bufio"
+	"io"
+
+	"gopkg.in/yaml.v2"
 )
 
 // ResolutionLogger
@@ -10,33 +13,35 @@ type ResolutionLogger interface {
 	// Log the rule resolution
 	Log(rr *RuleResolution) error
 
-	// Close the log
-	Close() error
+	// Flush the log
+	Flush() error
 }
 
-// LogToFile
+// Log to Writer
 
-func LogToFile(path string) (ResolutionLogger, error) {
-	file, err := os.Create(path)
+func NewLoggerFromWriter(w io.Writer) ResolutionLogger {
+	bw := bufio.NewWriter(w)
+	return &writerLogger{writer: bw}
+}
+
+type writerLogger struct {
+	writer *bufio.Writer
+}
+
+func (wl *writerLogger) Log(rr *RuleResolution) error {
+	rrs := rr.Summary()
+	b, err := yaml.Marshal(&rrs)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return &fileLogger{
-		file: file,
-	}, nil
-}
-
-type fileLogger struct {
-	file *os.File
-}
-
-func (fl *fileLogger) Log(rr *RuleResolution) error {
-	// TODO(chuck): IMPLEMENT ME!
+	if _, err = wl.writer.Write(b); err != nil {
+		return err
+	}
 	return nil
 }
 
-func (fl *fileLogger) Close() error {
-	return fl.file.Close()
+func (wl *writerLogger) Flush() error {
+	return wl.writer.Flush()
 }
 
 // Noop Logger
@@ -52,6 +57,6 @@ func (nl *noopLogger) Log(rr *RuleResolution) error {
 	return nil
 }
 
-func (nl *noopLogger) Close() error {
+func (nl *noopLogger) Flush() error {
 	return nil
 }

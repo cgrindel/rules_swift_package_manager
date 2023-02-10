@@ -15,6 +15,7 @@ go_library(
         "@bazel_gazelle//resolve:go_default_library",
         "@bazel_gazelle//rule:go_default_library",
         "@com_github_deckarep_golang_set_v2//:golang-set",
+        "@in_gopkg_yaml_v2//:yaml_v2",
         "@org_golang_x_exp//slices",
     ],
 )
