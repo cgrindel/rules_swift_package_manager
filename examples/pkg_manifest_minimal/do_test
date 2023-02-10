@@ -27,3 +27,8 @@ assert_match "Good evening, Jim!" "${output}"
 
 # Buid and run the SwiftFormat alias
 bazel run //:swiftformat -- --version
+
+# Generate a resolution log file
+res_log_path="${script_dir}/res_log.yml"
+bazel run //:update_build_files --  "--resolution_log=${res_log_path}"
+[[ -e "${res_log_path}" ]] || (echo >&2 "Expected to find a resolution log file at ${res_log_path}" && exit 1)

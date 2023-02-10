@@ -6,6 +6,7 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/reslog"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
 )
@@ -24,12 +25,16 @@ type SwiftConfig struct {
 	// DependencyIndexPath is the full path to the dependency index
 	DependencyIndexPath string
 	UpdatePkgsToLatest  bool
+	ResolutionLogPath   string
+	ResolutionLogFile   *os.File
+	ResolutionLogger    reslog.ResolutionLogger
 }
 
 func NewSwiftConfig() *SwiftConfig {
 	return &SwiftConfig{
 		ModuleFilesCollector: NewModuleFilesCollector(),
 		DependencyIndex:      swift.NewDependencyIndex(),
+		ResolutionLogger:     reslog.NewNoopLogger(),
 	}
 }
 

@@ -2,9 +2,11 @@ package gazelle
 
 import (
 	"flag"
+	"os"
 	"path/filepath"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/reslog"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 )
@@ -23,6 +25,13 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 	)
 
 	switch cmd {
+	case "fix", "update":
+		fs.StringVar(
+			&sc.ResolutionLogPath,
+			"resolution_log",
+			"",
+			"the location of the resolution log file",
+		)
 	case "update-repos":
 		fs.BoolVar(
 			&sc.UpdatePkgsToLatest,
@@ -40,6 +49,14 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	sc := swiftcfg.GetSwiftConfig(c)
 
 	// GH021: Add flag so that the client can tell us which Swift to use.
+
+	if sc.ResolutionLogPath != "" {
+		sc.ResolutionLogFile, err = os.Create(sc.ResolutionLogPath)
+		if err != nil {
+			return err
+		}
+		sc.ResolutionLogger = reslog.NewLoggerFromWriter(sc.ResolutionLogFile)
+	}
 
 	// Find the Swift executable
 	if sc.SwiftBinPath, err = swiftbin.FindSwiftBinPath(); err != nil {
