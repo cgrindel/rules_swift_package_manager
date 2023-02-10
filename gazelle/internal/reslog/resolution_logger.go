@@ -34,6 +34,10 @@ func (wl *writerLogger) Log(rr *RuleResolution) error {
 	if err != nil {
 		return err
 	}
+	// Write a document separator
+	if _, err = wl.writer.WriteString("---\n"); err != nil {
+		return err
+	}
 	if _, err = wl.writer.Write(b); err != nil {
 		return err
 	}

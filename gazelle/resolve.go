@@ -44,7 +44,7 @@ func (l *swiftLang) Resolve(
 	di := sc.DependencyIndex
 	pkgIdentities := di.DirectDepIdentities()
 	swiftImports := imports.([]string)
-	rr := reslog.NewRuleResolution(r, swiftImports)
+	rr := reslog.NewRuleResolution(from, r, swiftImports)
 
 	// Try to resolve to targets in this project.
 	var deps []string
@@ -94,6 +94,7 @@ func (l *swiftLang) Resolve(
 	}
 
 	sort.Strings(deps)
+	rr.AddDep(deps...)
 	if len(deps) > 0 {
 		r.SetAttr("deps", deps)
 	}

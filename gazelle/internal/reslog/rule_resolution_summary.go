@@ -13,9 +13,10 @@ type RuleResolutionSummary struct {
 	Imports        []string                   `yaml:"imports"`
 	Builtins       []string                   `yaml:"builtins,omitempty"`
 	LocalRes       []ModuleLabel              `yaml:"local_resolution,omitempty"`
-	ExtRes         *ExternalResolutionSummary `yaml:external_resolution,omitempty`
+	ExtRes         *ExternalResolutionSummary `yaml:"external_resolution,omitempty"`
 	HTTPArchiveRes []ModuleLabel              `yaml:"http_archive_resolution,omitempty"`
 	Unresolved     []string                   `yaml:"unresolved,omitempty"`
+	Deps           []string                   `yaml:"deps"`
 }
 
 type ModuleLabel struct {

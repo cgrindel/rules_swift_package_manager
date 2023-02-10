@@ -18,7 +18,8 @@ func newLabel(repo, pkg, name string) *label.Label {
 }
 
 func TestRuleResolution(t *testing.T) {
-	r := rule.NewRule(swift.LibraryRuleKind, "Foo")
+	from := label.New("", "path/to", "Foo")
+	r := rule.NewRule(swift.LibraryRuleKind, from.Name)
 	swiftImports := []string{
 		"UIKit",
 		"LocalA",
@@ -28,7 +29,7 @@ func TestRuleResolution(t *testing.T) {
 		"Custom",
 		"Unresolved",
 	}
-	rr := reslog.NewRuleResolution(r, swiftImports)
+	rr := reslog.NewRuleResolution(from, r, swiftImports)
 	rr.AddBuiltin("UIKit")
 	rr.AddLocal("LocalA", []resolve.FindResult{
 		{Label: label.New("", "path/to", "LocalA")},
@@ -61,9 +62,16 @@ func TestRuleResolution(t *testing.T) {
 		),
 	})
 	rr.AddUnresolved("Unresolved")
+	rr.AddDep(
+		"//path/to:LocalA",
+		"//path/to:LocalB",
+		"@swiftpkg_awesome_repo//path/to:ExternalA",
+		"@swiftpkg_awesome_repo//path/to:ExternalB",
+		"@com_github_example_custom//:Custom",
+	)
 
 	expected := reslog.RuleResolutionSummary{
-		Name: "Foo",
+		Name: from.String(),
 		Kind: swift.LibraryRuleKind,
 		Imports: []string{
 			"Custom",
@@ -93,6 +101,13 @@ func TestRuleResolution(t *testing.T) {
 			{"Custom", "@com_github_example_custom//:Custom"},
 		},
 		Unresolved: []string{"Unresolved"},
+		Deps: []string{
+			"//path/to:LocalA",
+			"//path/to:LocalB",
+			"@com_github_example_custom//:Custom",
+			"@swiftpkg_awesome_repo//path/to:ExternalA",
+			"@swiftpkg_awesome_repo//path/to:ExternalB",
+		},
 	}
 	assert.Equal(t, expected, rr.Summary())
 }

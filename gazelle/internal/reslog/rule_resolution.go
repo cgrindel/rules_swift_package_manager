@@ -3,6 +3,7 @@ package reslog
 import (
 	"sort"
 
+	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/resolve"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
@@ -11,6 +12,7 @@ import (
 )
 
 type RuleResolution struct {
+	From              label.Label
 	Rule              *rule.Rule
 	Imports           []string
 	Builtins          mapset.Set[string]
@@ -19,16 +21,19 @@ type RuleResolution struct {
 	ExtResResult      *swift.ModuleResolutionResult
 	HTTPArchiveRes    map[string]swift.Modules
 	UnresModuleNames  mapset.Set[string]
+	Deps              mapset.Set[string]
 }
 
-func NewRuleResolution(r *rule.Rule, moduleNames []string) *RuleResolution {
+func NewRuleResolution(from label.Label, r *rule.Rule, moduleNames []string) *RuleResolution {
 	return &RuleResolution{
+		From:             from,
 		Rule:             r,
 		Imports:          moduleNames,
 		Builtins:         mapset.NewSet[string](),
 		LocalRes:         make(map[string][]resolve.FindResult),
 		HTTPArchiveRes:   make(map[string]swift.Modules),
 		UnresModuleNames: mapset.NewSet[string](),
+		Deps:             mapset.NewSet[string](),
 	}
 }
 
@@ -55,9 +60,15 @@ func (rr *RuleResolution) AddUnresolved(moduleNames ...string) {
 	}
 }
 
+func (rr *RuleResolution) AddDep(deps ...string) {
+	for _, d := range deps {
+		rr.Deps.Add(d)
+	}
+}
+
 func (rr *RuleResolution) Summary() RuleResolutionSummary {
 	yd := RuleResolutionSummary{
-		Name:           rr.Rule.Name(),
+		Name:           rr.From.String(),
 		Kind:           rr.Rule.Kind(),
 		Imports:        make([]string, len(rr.Imports)),
 		Builtins:       rr.Builtins.ToSlice(),
@@ -65,6 +76,7 @@ func (rr *RuleResolution) Summary() RuleResolutionSummary {
 		ExtRes:         nil,
 		HTTPArchiveRes: make([]ModuleLabel, 0, len(rr.HTTPArchiveRes)),
 		Unresolved:     rr.UnresModuleNames.ToSlice(),
+		Deps:           rr.Deps.ToSlice(),
 	}
 	copy(yd.Imports, rr.Imports)
 	for mname, frs := range rr.LocalRes {
@@ -85,6 +97,7 @@ func (rr *RuleResolution) Summary() RuleResolutionSummary {
 	slices.SortFunc(yd.LocalRes, moduleLabelLess)
 	slices.SortFunc(yd.HTTPArchiveRes, moduleLabelLess)
 	sort.Strings(yd.Unresolved)
+	sort.Strings(yd.Deps)
 
 	return yd
 }
