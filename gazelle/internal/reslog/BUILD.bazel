@@ -1,0 +1,37 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "reslog",
+    srcs = [
+        "resolution_logger.go",
+        "rule_resolution.go",
+    ],
+    importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/reslog",
+    visibility = ["//gazelle:__subpackages__"],
+    deps = [
+        "//gazelle/internal/swift",
+        "@bazel_gazelle//resolve:go_default_library",
+        "@bazel_gazelle//rule:go_default_library",
+        "@com_github_deckarep_golang_set_v2//:golang-set",
+    ],
+)
+
+go_test(
+    name = "reslog_test",
+    srcs = [
+        "resolution_logger_test.go",
+        "rule_resolution_test.go",
+    ],
+    deps = [
+        ":reslog",
+        "//gazelle/internal/swift",
+        "//gazelle/internal/swiftpkg",
+        "@bazel_gazelle//label:go_default_library",
+        "@bazel_gazelle//resolve:go_default_library",
+        "@bazel_gazelle//rule:go_default_library",
+        "@com_github_stretchr_testify//assert",
+    ],
+)
+
+bzlformat_pkg(name = "bzlformat")
