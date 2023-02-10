@@ -154,6 +154,7 @@ filegroup(
         "//gazelle:all_files",
         "//gazelle/internal/jsonutils:all_files",
         "//gazelle/internal/pathdistance:all_files",
+        "//gazelle/internal/reslog:all_files",
         "//gazelle/internal/spdesc:all_files",
         "//gazelle/internal/spdump:all_files",
         "//gazelle/internal/spreso:all_files",
