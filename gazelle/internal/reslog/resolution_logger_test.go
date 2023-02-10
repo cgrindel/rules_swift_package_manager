@@ -26,5 +26,12 @@ func TestWriterLogger(t *testing.T) {
 }
 
 func TestNoopLogger(t *testing.T) {
-	t.Error("IMPLEMENT ME!")
+	var err error
+	nl := reslog.NewNoopLogger()
+	err = nl.Log(reslog.NewRuleResolution(rule.NewRule("swift_library", "Foo"), []string{"Bar", "Baz"}))
+	assert.NoError(t, err)
+	err = nl.Log(reslog.NewRuleResolution(rule.NewRule("swift_library", "Bar"), []string{"Baz"}))
+	assert.NoError(t, err)
+	err = nl.Flush()
+	assert.NoError(t, err)
 }

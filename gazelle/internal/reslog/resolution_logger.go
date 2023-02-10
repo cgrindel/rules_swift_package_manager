@@ -46,7 +46,7 @@ func (wl *writerLogger) Flush() error {
 
 // Noop Logger
 
-func NoopLogger() ResolutionLogger {
+func NewNoopLogger() ResolutionLogger {
 	return &noopLogger{}
 }
 
