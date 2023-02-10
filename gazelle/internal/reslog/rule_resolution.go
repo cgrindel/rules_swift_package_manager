@@ -49,8 +49,10 @@ func (rr *RuleResolution) AddHTTPArchive(moduleName string, modules swift.Module
 	rr.HTTPArchiveRes[moduleName] = modules
 }
 
-func (rr *RuleResolution) AddUnresolved(moduleName string) {
-	rr.UnresModuleNames.Add(moduleName)
+func (rr *RuleResolution) AddUnresolved(moduleNames ...string) {
+	for _, mname := range moduleNames {
+		rr.UnresModuleNames.Add(mname)
+	}
 }
 
 func (rr *RuleResolution) Summary() RuleResolutionSummary {
