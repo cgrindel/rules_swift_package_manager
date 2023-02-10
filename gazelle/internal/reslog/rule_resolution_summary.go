@@ -8,15 +8,15 @@ import (
 )
 
 type RuleResolutionSummary struct {
-	Name           string                     `yaml:"name"`
-	Kind           string                     `yaml:"kind"`
-	Imports        []string                   `yaml:"imports"`
-	Builtins       []string                   `yaml:"builtins,omitempty"`
-	LocalRes       []ModuleLabel              `yaml:"local_resolution,omitempty"`
-	ExtRes         *ExternalResolutionSummary `yaml:"external_resolution,omitempty"`
-	HTTPArchiveRes []ModuleLabel              `yaml:"http_archive_resolution,omitempty"`
-	Unresolved     []string                   `yaml:"unresolved,omitempty"`
-	Deps           []string                   `yaml:"deps"`
+	Name           string                    `yaml:"name"`
+	Kind           string                    `yaml:"kind"`
+	Imports        []string                  `yaml:"imports"`
+	Builtins       []string                  `yaml:"builtins,omitempty"`
+	LocalRes       []ModuleLabel             `yaml:"local_resolution,omitempty"`
+	ExtRes         ExternalResolutionSummary `yaml:"external_resolution,omitempty"`
+	HTTPArchiveRes []ModuleLabel             `yaml:"http_archive_resolution,omitempty"`
+	Unresolved     []string                  `yaml:"unresolved,omitempty"`
+	Deps           []string                  `yaml:"deps"`
 }
 
 type ModuleLabel struct {
@@ -55,11 +55,11 @@ type ExternalResolutionSummary struct {
 func newExternalResolutionSummaryFromModuleResolutionResult(
 	modules []string,
 	mrr *swift.ModuleResolutionResult,
-) *ExternalResolutionSummary {
+) ExternalResolutionSummary {
 	if mrr == nil {
-		return nil
+		return ExternalResolutionSummary{}
 	}
-	ers := &ExternalResolutionSummary{
+	ers := ExternalResolutionSummary{
 		Modules:    modules,
 		Unresolved: mrr.Unresolved,
 		Products:   make([]Product, len(mrr.Products)),

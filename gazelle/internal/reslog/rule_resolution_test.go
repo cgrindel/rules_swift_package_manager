@@ -87,7 +87,7 @@ func TestRuleResolution(t *testing.T) {
 			{"LocalA", "//path/to:LocalA"},
 			{"LocalB", "//path/to:LocalB"},
 		},
-		ExtRes: &reslog.ExternalResolutionSummary{
+		ExtRes: reslog.ExternalResolutionSummary{
 			Modules: []string{"ExternalA", "ExternalB"},
 			Products: []reslog.Product{
 				{"awesome-repo", "AwesomeProduct", []string{
