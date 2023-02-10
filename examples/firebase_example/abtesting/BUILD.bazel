@@ -1,0 +1,32 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application", "ios_ui_test")
+
+ios_application(
+    name = "iosapp",
+    bundle_id = "com.firebase.ABTestingExample",
+    families = [
+        "iphone",
+        "ipad",
+    ],
+    infoplists = [":ABTestingExample-iOS-Info.plist"],
+    minimum_os_version = "14.0",
+    resources = [
+        ":GoogleService-Info.plist",
+    ],
+    deps = ["//abtesting/SharedApp"],
+)
+
+ios_ui_test(
+    name = "iosapp_ui_test",
+    timeout = "eternal",
+    minimum_os_version = "14.0",
+    test_host = ":iosapp",
+    deps = ["//abtesting/SharedTest"],
+)
+
+build_test(
+    name = "build_tests",
+    targets = [
+        ":iosapp",
+    ],
+)

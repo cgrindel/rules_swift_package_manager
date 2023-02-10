@@ -1,0 +1,41 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "AppDistributionExample",
+    srcs = [
+        "AppDelegate.swift",
+        "AppDistributionViewController.swift",
+        "SceneDelegate.swift",
+    ],
+    module_name = "AppDistributionExample",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+    # GH202: Incomplete deps are generated.
+    deps = [
+        "@swiftpkg_firebase_ios_sdk//:FirebaseAuth_Sources_FirebaseAuth",
+        "@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseAppDistributionWrap_FirebaseAppDistributionTarget",
+    ],
+)
+
+ios_application(
+    name = "iosapp",
+    app_icons = glob(["Assets.xcassets/AppIcon.appiconset/**"]),
+    bundle_id = "com.google.firebase.quickstart.AppDistributionExample",
+    families = [
+        "iphone",
+    ],
+    infoplists = [":Info.plist"],
+    launch_storyboard = ":Base.lproj/LaunchScreen.storyboard",
+    minimum_os_version = "13.0",
+    resources = glob(
+        ["Assets.xcassets/**"],
+        exclude = ["Assets.xcassets/AppIcon.appiconset/**"],
+    ) + [
+        ":GoogleService-Info.plist",
+    ],
+    # GH208: This fails due to an Objc module not being found by another Objc module.
+    # Marking as manual so that they do not run during CI.
+    tags = ["manual"],
+    deps = [":AppDistributionExample"],
+)
