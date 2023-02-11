@@ -1,0 +1,14 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "update_go_repos_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/cgrindel/swift_bazel/tools/update_go_repos",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "update_go_repos",
+    embed = [":update_go_repos_lib"],
+    visibility = ["//visibility:public"],
+)
