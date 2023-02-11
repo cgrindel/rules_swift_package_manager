@@ -70,8 +70,11 @@ gazelle_binary(
 )
 
 # gazelle:prefix github.com/cgrindel/swift_bazel
+# gazelle:go_naming_convention import
+# gazelle:go_naming_convention_external import
 gazelle(
     name = "gazelle",
+    command = "fix",
     gazelle = ":gazelle_bin",
 )
 
