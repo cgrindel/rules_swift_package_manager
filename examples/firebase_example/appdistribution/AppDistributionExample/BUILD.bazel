@@ -12,10 +12,7 @@ swift_library(
     tags = ["manual"],
     visibility = ["//visibility:public"],
     # GH202: Incomplete deps are generated.
-    deps = [
-        "@swiftpkg_firebase_ios_sdk//:FirebaseAuth_Sources_FirebaseAuth",
-        "@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseAppDistributionWrap_FirebaseAppDistributionTarget",
-    ],
+    deps = ["@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseAppDistributionWrap_FirebaseAppDistributionTarget"],
 )
 
 ios_application(
