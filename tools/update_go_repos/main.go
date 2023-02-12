@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"os/signal"
@@ -58,6 +59,22 @@ This utility updates the Go repositories for this repo wrapping them in 'maybe' 
 	_tmpBzl := "tmp.bzl"
 	tmpBzlPath := path.Join(repoRoot, _tmpBzl)
 
+	// Backup the workspace file
+	workspaceFile, err := findWorkspaceFile(repoRoot)
+	if err != nil {
+		return err
+	}
+	wsBackupFile, err := backUpWorkspaceFile(ctx, workspaceFile)
+	if err != nil {
+		return err
+	}
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK:  workspaceFile: %+#v", workspaceFile)
+	log.Printf("*** CHUCK:  wsBackupFile: %+#v", wsBackupFile)
+	// DEBUG END
+	defer restoreWorkspaceFile(ctx, workspaceFile, wsBackupFile)
+
+	// Update the repos
 	args := []string{
 		"run", gazelleBinTarget, "--", "update-repos",
 		fmt.Sprintf("-from_file=%s", fromFile),
@@ -66,13 +83,17 @@ This utility updates the Go repositories for this repo wrapping them in 'maybe' 
 	if buildExternal != "" {
 		args = append(args, fmt.Sprintf("-build_external=%s", buildExternal))
 	}
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK:  args: %+#v", args)
+	// DEBUG END
 	cmd := exec.CommandContext(ctx, "bazel", args...)
 	cmd.Dir = repoRoot
 	if out, err := cmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
 		return err
 	}
-	defer os.Remove(tmpBzlPath)
+	// TODO(chuck): Enable this defer
+	// defer os.Remove(tmpBzlPath)
 
 	// parse the resulting tmp.bzl for deps.bzl and WORKSPACE updates
 	maybeRules, err := readFromTmp(tmpBzlPath, macroName)
