@@ -4,7 +4,6 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"os/signal"
@@ -68,11 +67,12 @@ This utility updates the Go repositories for this repo wrapping them in 'maybe' 
 	if err != nil {
 		return err
 	}
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK:  workspaceFile: %+#v", workspaceFile)
-	log.Printf("*** CHUCK:  wsBackupFile: %+#v", wsBackupFile)
-	// DEBUG END
 	defer restoreWorkspaceFile(ctx, workspaceFile, wsBackupFile)
+	// The update-repos to the tmp.bzl will not work (i.e., the file will be created but will not
+	// have go_repository entries), if the gazelle:repository_macro directive is not removed.
+	if err := removeDirectivesFromWorkspace(workspaceFile); err != nil {
+		return err
+	}
 
 	// Update the repos
 	args := []string{
@@ -83,17 +83,13 @@ This utility updates the Go repositories for this repo wrapping them in 'maybe' 
 	if buildExternal != "" {
 		args = append(args, fmt.Sprintf("-build_external=%s", buildExternal))
 	}
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK:  args: %+#v", args)
-	// DEBUG END
 	cmd := exec.CommandContext(ctx, "bazel", args...)
 	cmd.Dir = repoRoot
 	if out, err := cmd.CombinedOutput(); err != nil {
 		fmt.Println(string(out))
 		return err
 	}
-	// TODO(chuck): Enable this defer
-	// defer os.Remove(tmpBzlPath)
+	defer os.Remove(tmpBzlPath)
 
 	// parse the resulting tmp.bzl for deps.bzl and WORKSPACE updates
 	maybeRules, err := readFromTmp(tmpBzlPath, macroName)
@@ -123,6 +119,10 @@ func readFromTmp(tmpBzlPath string, macroName string) ([]*rule.Rule, error) {
 		for _, k := range r.AttrKeys() {
 			maybeRule.SetAttr(k, r.Attr(k))
 		}
+		// This is a weird special case.
+		if r.Name() == "com_github_bazelbuild_buildtools" {
+			maybeRule.SetAttr("build_naming_convention", "go_default_library")
+		}
 		rules = append(rules, maybeRule)
 	}
 	return rules, nil
@@ -149,27 +149,6 @@ func updateDepsBzlWithRules(depsPath, macroName string, maybeRules []*rule.Rule)
 
 	return depsBzl.Save(depsPath)
 }
-
-// func getWorkspaceWithoutDirectives(workspace io.Reader) ([]byte, error) {
-// 	workspaceScanner := bufio.NewScanner(workspace)
-// 	var workspaceWithoutDirectives bytes.Buffer
-// 	for workspaceScanner.Scan() {
-// 		currentLine := workspaceScanner.Text()
-// 		if strings.HasPrefix(currentLine, "# gazelle:repository go_repository") {
-// 			continue
-// 		}
-// 		_, err := workspaceWithoutDirectives.WriteString(currentLine + "\n")
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 	}
-// 	// leave some buffering at the end of the bytes
-// 	_, err := workspaceWithoutDirectives.WriteString("\n\n")
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return workspaceWithoutDirectives.Bytes(), workspaceScanner.Err()
-// }
 
 // func readFromTmp(tmpBzlPath string) ([]*rule.Rule, []byte, error) {
 // 	workspaceDirectivesBuff := new(bytes.Buffer)

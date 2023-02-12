@@ -92,6 +92,9 @@ func getWorkspaceWithoutDirectives(workspace io.Reader) ([]byte, error) {
 		if strings.HasPrefix(currentLine, "# gazelle:repository go_repository") {
 			continue
 		}
+		if strings.HasPrefix(currentLine, "# gazelle:repository_macro ") {
+			continue
+		}
 		_, err := workspaceWithoutDirectives.WriteString(currentLine + "\n")
 		if err != nil {
 			return nil, err
