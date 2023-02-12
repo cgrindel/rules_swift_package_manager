@@ -44,7 +44,7 @@ go_library(
         "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//language:go_default_library",
         "@bazel_gazelle//rule:go_default_library",
-        "@com_github_bazelbuild_buildtools//build",
+        "@com_github_bazelbuild_buildtools//build:go_default_library",
         "@com_github_deckarep_golang_set_v2//:golang-set",
         "@org_golang_x_exp//slices",
     ],
