@@ -90,6 +90,18 @@ gazelle(
     gazelle = ":gazelle_bin",
 )
 
+execute_binary(
+    name = "new_go_update_repos",
+    arguments = [
+        "-gazelle_bin_target=//:gazelle_bin",
+        "-from_file=go.mod",
+        "-go_deps_file=go_deps.bzl",
+        "-macro_name=swift_bazel_go_dependencies",
+        "-build_external=external",
+    ],
+    binary = "//tools/update_go_repos",
+)
+
 # MARK: - Golang
 
 execute_binary(
