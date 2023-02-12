@@ -135,6 +135,9 @@ func updateDepsBzlWithRules(depsPath, macroName string, maybeRules []*rule.Rule)
 	}
 
 	for _, r := range depsBzl.Rules {
+		if r.Kind() == "go_repository" {
+			r.Delete()
+		}
 		if r.Kind() == maybeRuleKind && len(r.Args()) == 1 {
 			// We can't actually delete all maybe's because http_archive uses it too in here!
 			if ident, ok := r.Args()[0].(*bzl.Ident); ok && ident.Name == "go_repository" {
