@@ -150,6 +150,11 @@ func updateDepsBzlWithRules(depsPath, macroName string, maybeRules []*rule.Rule)
 		r.Insert(depsBzl)
 	}
 
+	// Add the load statement
+	maybeLoad := rule.NewLoad("@bazel_tools//tools/build_defs/repo:utils.bzl")
+	maybeLoad.Add("maybe")
+	maybeLoad.Insert(depsBzl, 0)
+
 	return depsBzl.Save(depsPath)
 }
 
