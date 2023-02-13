@@ -6,7 +6,6 @@ go_library(
     srcs = [
         "deps_file.go",
         "main.go",
-        "workspace_file.go",
     ],
     importpath = "github.com/cgrindel/swift_bazel/tools/update_go_repos",
     visibility = ["//visibility:private"],

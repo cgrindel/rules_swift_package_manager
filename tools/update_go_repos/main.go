@@ -53,16 +53,16 @@ This utility updates the Go repositories for this repo wrapping them in 'maybe' 
 
 	depsPath := path.Join(repoRoot, goDepsFile)
 
-	// Backup the workspace file
-	workspaceFile, err := findWorkspaceFile(repoRoot)
-	if err != nil {
-		return err
-	}
-	wsBackupFile, err := backUpWorkspaceFile(ctx, workspaceFile)
-	if err != nil {
-		return err
-	}
-	defer restoreWorkspaceFile(ctx, workspaceFile, wsBackupFile)
+	// // Backup the workspace file
+	// workspaceFile, err := findWorkspaceFile(repoRoot)
+	// if err != nil {
+	// 	return err
+	// }
+	// wsBackupFile, err := backUpWorkspaceFile(ctx, workspaceFile)
+	// if err != nil {
+	// 	return err
+	// }
+	// defer restoreWorkspaceFile(ctx, workspaceFile, wsBackupFile)
 
 	// // The update-repos to the tmp.bzl will not work (i.e., the file will be created but will not
 	// // have go_repository entries), if the gazelle:repository_macro directive is not removed.
