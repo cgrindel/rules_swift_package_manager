@@ -16,7 +16,7 @@ go_test(
     srcs = ["map_test.go"],
     deps = [
         ":stringslices",
-        "@com_github_stretchr_testify//assert",
+        "@com_github_stretchr_testify//assert:go_default_library",
     ],
 )
 
