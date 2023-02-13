@@ -3,6 +3,7 @@
 load("@bazel_gazelle//:deps.bzl", "go_repository")
 
 def swift_bazel_go_dependencies():
+    """Declare the Go dependencies for `swift_bazel`."""
     go_repository(
         name = "co_honnef_go_tools",
         build_external = "external",
