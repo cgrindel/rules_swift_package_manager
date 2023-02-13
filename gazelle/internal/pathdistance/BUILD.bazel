@@ -6,7 +6,7 @@ go_library(
     srcs = ["pathdistance.go"],
     importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/pathdistance",
     visibility = ["//visibility:public"],
-    deps = ["@org_golang_x_exp//slices"],
+    deps = ["@org_golang_x_exp//slices:go_default_library"],
 )
 
 go_test(
@@ -14,7 +14,7 @@ go_test(
     srcs = ["pathdistance_test.go"],
     deps = [
         ":pathdistance",
-        "@com_github_stretchr_testify//assert",
+        "@com_github_stretchr_testify//assert:go_default_library",
     ],
 )
 

@@ -23,7 +23,7 @@ go_test(
     srcs = ["manifest_test.go"],
     deps = [
         ":spdesc",
-        "@com_github_stretchr_testify//assert",
+        "@com_github_stretchr_testify//assert:go_default_library",
     ],
 )
 

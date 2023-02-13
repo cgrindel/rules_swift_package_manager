@@ -70,21 +70,23 @@ gazelle_binary(
 )
 
 # gazelle:prefix github.com/cgrindel/swift_bazel
+# gazelle:go_naming_convention import
 gazelle(
     name = "gazelle",
+    command = "fix",
     gazelle = ":gazelle_bin",
 )
 
-gazelle(
+execute_binary(
     name = "go_update_repos",
-    args = [
+    arguments = [
+        "-gazelle_bin_target=//:gazelle_bin",
         "-from_file=go.mod",
-        "-to_macro=go_deps.bzl%swift_bazel_go_dependencies",
+        "-go_deps_file=go_deps.bzl",
+        "-macro_name=swift_bazel_go_dependencies",
         "-build_external=external",
-        "-prune",
     ],
-    command = "update-repos",
-    gazelle = ":gazelle_bin",
+    binary = "//tools/update_go_repos",
 )
 
 # MARK: - Golang

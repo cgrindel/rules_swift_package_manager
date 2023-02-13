@@ -36,7 +36,7 @@ go_test(
     ],
     deps = [
         ":spdump",
-        "@com_github_stretchr_testify//assert",
+        "@com_github_stretchr_testify//assert:go_default_library",
     ],
 )
 
