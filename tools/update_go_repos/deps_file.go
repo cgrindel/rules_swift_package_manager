@@ -84,27 +84,6 @@ func updateDepsBzlWithRules(depsPath, macroName string) error {
 		}
 	}
 
-	// // We are assuming that the load list was already
-	// insertIndex = -1
-	// for _, load := range depsBzl.Loads {
-	// 	lname := load.Name()
-	// 	if lname == bazelToolsUtilsLoadName {
-	// 		if !slices.Contains(load.Symbols(), maybeSymbol) {
-	// 			load.Add(maybeSymbol)
-	// 		}
-	// 		insertIndex = -1
-	// 		break
-	// 	}
-	// 	if bazelToolsUtilsLoadName < lname {
-	// 		insertIndex = load.Index()
-	// 	}
-	// }
-
-	// // Add the load statement
-	// maybeLoad := rule.NewLoad("@bazel_tools//tools/build_defs/repo:utils.bzl")
-	// maybeLoad.Add("maybe")
-	// maybeLoad.Insert(depsBzl, len(depsBzl.Loads))
-
 	return depsBzl.Save(depsPath)
 }
 
