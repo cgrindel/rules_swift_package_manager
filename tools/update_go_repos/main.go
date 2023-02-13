@@ -8,9 +8,6 @@ import (
 	"os/exec"
 	"os/signal"
 	"path"
-
-	"github.com/bazelbuild/bazel-gazelle/rule"
-	bzl "github.com/bazelbuild/buildtools/build"
 )
 
 const maybeRuleKind = "maybe"
@@ -55,8 +52,6 @@ This utility updates the Go repositories for this repo wrapping them in 'maybe' 
 	}
 
 	depsPath := path.Join(repoRoot, goDepsFile)
-	_tmpBzl := "tmp.bzl"
-	tmpBzlPath := path.Join(repoRoot, _tmpBzl)
 
 	// Backup the workspace file
 	workspaceFile, err := findWorkspaceFile(repoRoot)
@@ -68,17 +63,23 @@ This utility updates the Go repositories for this repo wrapping them in 'maybe' 
 		return err
 	}
 	defer restoreWorkspaceFile(ctx, workspaceFile, wsBackupFile)
-	// The update-repos to the tmp.bzl will not work (i.e., the file will be created but will not
-	// have go_repository entries), if the gazelle:repository_macro directive is not removed.
-	if err := removeDirectivesFromWorkspace(workspaceFile); err != nil {
-		return err
+
+	// // The update-repos to the tmp.bzl will not work (i.e., the file will be created but will not
+	// // have go_repository entries), if the gazelle:repository_macro directive is not removed.
+	// if err := removeDirectivesFromWorkspace(workspaceFile); err != nil {
+	// 	return err
+	// }
+
+	// Remove the declarations from the macro file
+	if err := removeGoDeclarations(depsPath, macroName); err != nil {
+		return fmt.Errorf("failed removing Go declarations from deps file: %w", err)
 	}
 
 	// Update the repos
 	args := []string{
 		"run", gazelleBinTarget, "--", "update-repos",
 		fmt.Sprintf("-from_file=%s", fromFile),
-		fmt.Sprintf("-to_macro=%s%%%s", _tmpBzl, macroName),
+		fmt.Sprintf("-to_macro=%s%%%s", goDepsFile, macroName),
 	}
 	if buildExternal != "" {
 		args = append(args, fmt.Sprintf("-build_external=%s", buildExternal))
@@ -89,81 +90,26 @@ This utility updates the Go repositories for this repo wrapping them in 'maybe' 
 		fmt.Println(string(out))
 		return err
 	}
-	defer os.Remove(tmpBzlPath)
 
-	// parse the resulting tmp.bzl for deps.bzl and WORKSPACE updates
-	maybeRules, err := readFromTmp(tmpBzlPath, macroName)
-	if err != nil {
-		return err
-	}
+	// // parse the resulting tmp.bzl for deps.bzl and WORKSPACE updates
+	// maybeRules, err := readFromTmp(tmpBzlPath, macroName)
+	// if err != nil {
+	// 	return err
+	// }
 
 	// update deps
-	if err := updateDepsBzlWithRules(depsPath, macroName, maybeRules); err != nil {
-		return err
+	if err := updateDepsBzlWithRules(depsPath, macroName); err != nil {
+		return fmt.Errorf("failed updating deps file with maybe declarations: %w", err)
 	}
 
 	return nil
 }
 
-func readFromTmp(tmpBzlPath string, macroName string) ([]*rule.Rule, error) {
-	var rules []*rule.Rule
-	tmpBzl, err := rule.LoadMacroFile(tmpBzlPath, "tmp" /* pkg */, macroName /* DefName */)
-	if err != nil {
-		return nil, err
-	}
-	for _, r := range tmpBzl.Rules {
-		maybeRule := rule.NewRule(maybeRuleKind, r.Name())
-		maybeRule.AddArg(&bzl.Ident{
-			Name: r.Kind(),
-		})
-		for _, k := range r.AttrKeys() {
-			maybeRule.SetAttr(k, r.Attr(k))
-		}
-		// This is a weird special case.
-		if r.Name() == "com_github_bazelbuild_buildtools" {
-			maybeRule.SetAttr("build_naming_convention", "go_default_library")
-		}
-		rules = append(rules, maybeRule)
-	}
-	return rules, nil
-}
-
-func updateDepsBzlWithRules(depsPath, macroName string, maybeRules []*rule.Rule) error {
-	depsBzl, err := rule.LoadMacroFile(depsPath, "deps" /* pkg */, macroName /* DefName */)
-	if err != nil {
-		return err
-	}
-
-	for _, r := range depsBzl.Rules {
-		if r.Kind() == "go_repository" {
-			r.Delete()
-		}
-		if r.Kind() == maybeRuleKind && len(r.Args()) == 1 {
-			// We can't actually delete all maybe's because http_archive uses it too in here!
-			if ident, ok := r.Args()[0].(*bzl.Ident); ok && ident.Name == "go_repository" {
-				r.Delete()
-			}
-		}
-	}
-
-	for _, r := range maybeRules {
-		r.Insert(depsBzl)
-	}
-
-	// Add the load statement
-	maybeLoad := rule.NewLoad("@bazel_tools//tools/build_defs/repo:utils.bzl")
-	maybeLoad.Add("maybe")
-	maybeLoad.Insert(depsBzl, 0)
-
-	return depsBzl.Save(depsPath)
-}
-
-// func readFromTmp(tmpBzlPath string) ([]*rule.Rule, []byte, error) {
-// 	workspaceDirectivesBuff := new(bytes.Buffer)
+// func readFromTmp(tmpBzlPath string, macroName string) ([]*rule.Rule, error) {
 // 	var rules []*rule.Rule
 // 	tmpBzl, err := rule.LoadMacroFile(tmpBzlPath, "tmp" /* pkg */, macroName /* DefName */)
 // 	if err != nil {
-// 		return nil, nil, err
+// 		return nil, err
 // 	}
 // 	for _, r := range tmpBzl.Rules {
 // 		maybeRule := rule.NewRule(maybeRuleKind, r.Name())
@@ -173,19 +119,11 @@ func updateDepsBzlWithRules(depsPath, macroName string, maybeRules []*rule.Rule)
 // 		for _, k := range r.AttrKeys() {
 // 			maybeRule.SetAttr(k, r.Attr(k))
 // 		}
-// 		var suffix string
+// 		// This is a weird special case.
 // 		if r.Name() == "com_github_bazelbuild_buildtools" {
 // 			maybeRule.SetAttr("build_naming_convention", "go_default_library")
-// 			suffix = " build_naming_convention=go_default_library"
 // 		}
 // 		rules = append(rules, maybeRule)
-// 		// TODO(chuck): Do I need to do this directive stuff as I only have one today. This code
-// 		// will add one for each dep.
-// 		fmt.Fprintf(workspaceDirectivesBuff, "# gazelle:repository go_repository name=%s importpath=%s%s\n",
-// 			r.Name(),
-// 			r.AttrString("importpath"),
-// 			suffix,
-// 		)
 // 	}
-// 	return rules, workspaceDirectivesBuff.Bytes(), nil
+// 	return rules, nil
 // }
