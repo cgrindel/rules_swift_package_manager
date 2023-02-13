@@ -1,9 +1,12 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load(
     "@cgrindel_bazel_starlib//bzlrelease:defs.bzl",
     "create_release",
     "generate_release_notes",
     "generate_workspace_snippet",
+    "hash_sha256",
+    "release_archive",
     "update_readme",
 )
 
@@ -13,6 +16,7 @@ bzlformat_pkg(name = "bzlformat")
 
 generate_workspace_snippet(
     name = "generate_workspace_snippet",
+    sha256_file = ":archive_sha256",
     template = "workspace_snippet.tmpl",
 )
 
@@ -29,4 +33,24 @@ update_readme(
 create_release(
     name = "create",
     workflow_name = "Create Release",
+)
+
+release_archive(
+    name = "archive",
+    srcs = ["//:local_repository_files"],
+    out = "bazel-starlib.tar.gz",
+)
+
+hash_sha256(
+    name = "archive_sha256",
+    src = ":archive",
+    out = "bazel-starlib.tar.gz.sha256",
+)
+
+build_test(
+    name = "archive_build_test",
+    targets = [
+        ":archive",
+        ":archive_sha256",
+    ],
 )
