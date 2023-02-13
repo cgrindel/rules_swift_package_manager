@@ -38,13 +38,13 @@ create_release(
 release_archive(
     name = "archive",
     srcs = ["//:local_repository_files"],
-    out = "bazel-starlib.tar.gz",
+    out = "swift_bazel.tar.gz",
 )
 
 hash_sha256(
     name = "archive_sha256",
     src = ":archive",
-    out = "bazel-starlib.tar.gz.sha256",
+    out = "swift_bazel.tar.gz.sha256",
 )
 
 build_test(
