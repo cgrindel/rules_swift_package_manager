@@ -32,6 +32,6 @@ go_test(
     deps = [
         ":swiftbin",
         "//gazelle/internal/jsonutils",
-        "@com_github_stretchr_testify//assert",
+        "@com_github_stretchr_testify//assert:go_default_library",
     ],
 )

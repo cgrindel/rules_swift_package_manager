@@ -21,7 +21,7 @@ go_library(
         "//gazelle/internal/spdesc",
         "//gazelle/internal/spdump",
         "//gazelle/internal/swiftbin",
-        "@org_golang_x_exp//slices",
+        "@org_golang_x_exp//slices:go_default_library",
     ],
 )
 
@@ -39,7 +39,7 @@ go_test(
     deps = [
         ":swiftpkg",
         "//gazelle/internal/swiftbin",
-        "@com_github_stretchr_testify//assert",
+        "@com_github_stretchr_testify//assert:go_default_library",
     ],
 )
 

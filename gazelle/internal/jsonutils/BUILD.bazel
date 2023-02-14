@@ -22,7 +22,7 @@ go_test(
     ],
     deps = [
         ":jsonutils",
-        "@com_github_stretchr_testify//assert",
+        "@com_github_stretchr_testify//assert:go_default_library",
     ],
 )
 
