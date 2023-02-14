@@ -11,8 +11,12 @@ swift_library(
     tags = ["manual"],
     visibility = ["//visibility:public"],
     deps = [
-        "@swiftpkg_firebase_ios_sdk//:FirebaseInstallations_Source_Library_FirebaseInstallations",
         "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfig_Sources_FirebaseRemoteConfig",
+        # NOTE: In the Firebase setup instructions, they mention that you must
+        # include FirebaseAnalytics if you are using Google Analytics in your
+        # app. This example does not compile without it.
+        # https://firebase.google.com/docs/ios/setup#add-sdks
+        # keep
         "@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseAnalyticsWrap_FirebaseAnalyticsTarget",
     ],
 )

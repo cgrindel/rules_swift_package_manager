@@ -6,6 +6,7 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
+	mapset "github.com/deckarep/golang-set/v2"
 )
 
 // RulesFromSrcs returns the Bazel build rule declarations for the provided source files.
@@ -31,8 +32,11 @@ func RulesFromSrcs(args language.GenerateArgs, srcs []string) []*rule.Rule {
 	return rules
 }
 
+var guiModules = mapset.NewSet[string]("AppKit", "UIKit", "SwiftUI")
+
 // Returns the imports and the module typ
 func collectSwiftInfo(fileInfos []*FileInfo) ([]string, ModuleType) {
+	importsGUIModules := false
 	hasTestFiles := false
 	hasMain := false
 	moduleType := LibraryModuleType
@@ -45,6 +49,9 @@ func collectSwiftInfo(fileInfos []*FileInfo) ([]string, ModuleType) {
 				swiftImportsSet[imp] = true
 				swiftImports = append(swiftImports, imp)
 			}
+			if !importsGUIModules && guiModules.Contains(imp) {
+				importsGUIModules = true
+			}
 		}
 		if fi.IsTest {
 			hasTestFiles = true
@@ -56,9 +63,11 @@ func collectSwiftInfo(fileInfos []*FileInfo) ([]string, ModuleType) {
 
 	// Adjust the rule kind, if necessary
 	// Check for test files first. On Linux, a main.swift is necessary for swift_test rules.
+	// GUI applications can use the @main directive. So, we need to see if the module contains any
+	// of the GUI related modules. If no GUI modules and it has a main, then create a swift_binary.
 	if hasTestFiles {
 		moduleType = TestModuleType
-	} else if hasMain {
+	} else if hasMain && !importsGUIModules {
 		moduleType = BinaryModuleType
 	}
 
