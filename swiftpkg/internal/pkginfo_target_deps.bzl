@@ -1,6 +1,6 @@
 """Module for generating data from target dependencies created by `pkginfos`."""
 
-load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels")
 load(":bzl_selects.bzl", "bzl_selects")
 load(":deps_indexes.bzl", "deps_indexes")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
@@ -29,12 +29,10 @@ def make_pkginfo_target_deps(bazel_labels):
             # This should look for a matching product first. Then, look for a
             # module directly?
             condition = target_dep.by_name.condition
-            labels = lists.compact([
-                deps_indexes.resolve_module_label_with_ctx(
-                    pkg_ctx.deps_index_ctx,
-                    target_dep.by_name.name,
-                ),
-            ])
+            labels = deps_indexes.resolve_module_labels_with_ctx(
+                pkg_ctx.deps_index_ctx,
+                target_dep.by_name.name,
+            )
             if len(labels) == 0:
                 # Seeing Package.swift files with byName dependencies that
                 # cannot be resolved (i.e., they do not exist).
@@ -48,12 +46,10 @@ def make_pkginfo_target_deps(bazel_labels):
 
         elif target_dep.target:
             condition = target_dep.target.condition
-            labels = lists.compact([
-                deps_indexes.resolve_module_label_with_ctx(
-                    pkg_ctx.deps_index_ctx,
-                    target_dep.target.target_name,
-                ),
-            ])
+            labels = deps_indexes.resolve_module_labels_with_ctx(
+                pkg_ctx.deps_index_ctx,
+                target_dep.target.target_name,
+            )
             if len(labels) == 0:
                 fail("""\
 Unable to resolve target reference target dependency for {module_name}.\
