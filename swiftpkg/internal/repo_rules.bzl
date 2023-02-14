@@ -70,8 +70,9 @@ def _gen_build_files(repository_ctx, pkg_info):
     bld_files = []
     for target in pkg_info.targets:
         # Unfortunately, Package.resolved does not contain test-only external
-        # dependencies. So, we need to skip generating test targets.
-        if target.type == "test":
+        # dependencies. So, we need to skip generating test targets. If a target
+        # does not have any product memberships, it is a testonly
+        if target.type == "test" or len(target.product_memberships) == 0:
             continue
         if target.artifact_download_info != None:
             _download_artifact(repository_ctx, target.artifact_download_info, target.path)
