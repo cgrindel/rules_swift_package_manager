@@ -13,20 +13,22 @@ development inside a Bazel workspace.
 ## Table of Contents
 
 <!-- MARKDOWN TOC: BEGIN -->
-* [Documentation](#documentation)
-* [Prerequisites](#prerequisites)
-  * [Mac OS](#mac-os)
-  * [Linux](#linux)
-* [Quickstart](#quickstart)
-  * [1\. Configure your workspace to use <a href="https://github\.com/cgrindel/swift\_bazel">swift\_bazel</a>\.](#1-configure-your-workspace-to-use-swift_bazel)
-  * [2\. Create a minimal Package\.swift file\.](#2-create-a-minimal-packageswift-file)
-  * [3\. Add Gazelle targets to BUILD\.bazel at the root of your workspace\.](#3-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
-  * [4\. Resolve the external dependencies for your project\.](#4-resolve-the-external-dependencies-for-your-project)
-  * [5\. Create or update Bazel build files for your project\.](#5-create-or-update-bazel-build-files-for-your-project)
-  * [6\. Build and test your project\.](#6-build-and-test-your-project)
-  * [7\. Check in some generated files\.](#7-check-in-some-generated-files)
-* [Tips and Tricks](#tips-and-tricks)
-* [Future Work](#future-work)
+- [Gazelle Plugin for Swift and Swit Package Rules for Bazel](#gazelle-plugin-for-swift-and-swit-package-rules-for-bazel)
+  - [Table of Contents](#table-of-contents)
+  - [Documentation](#documentation)
+  - [Prerequisites](#prerequisites)
+    - [Mac OS](#mac-os)
+    - [Linux](#linux)
+  - [Quickstart](#quickstart)
+    - [1. Configure your workspace to use swift\_bazel.](#1-configure-your-workspace-to-use-swift_bazel)
+    - [2. Create a minimal `Package.swift` file.](#2-create-a-minimal-packageswift-file)
+    - [3. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.](#3-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
+    - [4. Resolve the external dependencies for your project.](#4-resolve-the-external-dependencies-for-your-project)
+    - [5. Create or update Bazel build files for your project.](#5-create-or-update-bazel-build-files-for-your-project)
+    - [6. Build and test your project.](#6-build-and-test-your-project)
+    - [7. Check in some generated files.](#7-check-in-some-generated-files)
+  - [Tips and Tricks](#tips-and-tricks)
+  - [Future Work](#future-work)
 <!-- MARKDOWN TOC: END -->
 
 ## Documentation
@@ -96,12 +98,24 @@ bazel_starlib_dependencies()
 
 # gazelle:repo bazel_gazelle
 
+http_archive(
+    name = "bazel_skylib_gazelle_plugin",
+    sha256 = "04182233284fcb6545d36b94248fe28186b4d9d574c4131d6a511d5aeb278c46",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.4.0/bazel-skylib-gazelle-plugin-1.4.0.tar.gz",
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.0/bazel-skylib-gazelle-plugin-1.4.0.tar.gz",
+    ],
+)
+
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+load("@bazel_skylib_gazelle_plugin//:workspace.bzl", "bazel_skylib_gazelle_plugin_workspace")
 load("@cgrindel_swift_bazel//:go_deps.bzl", "swift_bazel_go_dependencies")
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
 # Declare Go dependencies before calling go_rules_dependencies.
 swift_bazel_go_dependencies()
+
+bazel_skylib_gazelle_plugin_workspace()
 
 go_rules_dependencies()
 
@@ -196,7 +210,7 @@ load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
 gazelle_binary(
     name = "gazelle_bin",
     languages = [
-        "@bazel_skylib//gazelle/bzl",
+        "@bazel_skylib_gazelle_plugin//bzl",
         "@cgrindel_swift_bazel//gazelle",
     ],
 )
