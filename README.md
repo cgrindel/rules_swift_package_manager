@@ -13,22 +13,20 @@ development inside a Bazel workspace.
 ## Table of Contents
 
 <!-- MARKDOWN TOC: BEGIN -->
-- [Gazelle Plugin for Swift and Swit Package Rules for Bazel](#gazelle-plugin-for-swift-and-swit-package-rules-for-bazel)
-  - [Table of Contents](#table-of-contents)
-  - [Documentation](#documentation)
-  - [Prerequisites](#prerequisites)
-    - [Mac OS](#mac-os)
-    - [Linux](#linux)
-  - [Quickstart](#quickstart)
-    - [1. Configure your workspace to use swift\_bazel.](#1-configure-your-workspace-to-use-swift_bazel)
-    - [2. Create a minimal `Package.swift` file.](#2-create-a-minimal-packageswift-file)
-    - [3. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.](#3-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
-    - [4. Resolve the external dependencies for your project.](#4-resolve-the-external-dependencies-for-your-project)
-    - [5. Create or update Bazel build files for your project.](#5-create-or-update-bazel-build-files-for-your-project)
-    - [6. Build and test your project.](#6-build-and-test-your-project)
-    - [7. Check in some generated files.](#7-check-in-some-generated-files)
-  - [Tips and Tricks](#tips-and-tricks)
-  - [Future Work](#future-work)
+* [Documentation](#documentation)
+* [Prerequisites](#prerequisites)
+  * [Mac OS](#mac-os)
+  * [Linux](#linux)
+* [Quickstart](#quickstart)
+  * [1\. Configure your workspace to use <a href="https://github\.com/cgrindel/swift\_bazel">swift\_bazel</a>\.](#1-configure-your-workspace-to-use-swift_bazel)
+  * [2\. Create a minimal Package\.swift file\.](#2-create-a-minimal-packageswift-file)
+  * [3\. Add Gazelle targets to BUILD\.bazel at the root of your workspace\.](#3-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
+  * [4\. Resolve the external dependencies for your project\.](#4-resolve-the-external-dependencies-for-your-project)
+  * [5\. Create or update Bazel build files for your project\.](#5-create-or-update-bazel-build-files-for-your-project)
+  * [6\. Build and test your project\.](#6-build-and-test-your-project)
+  * [7\. Check in some generated files\.](#7-check-in-some-generated-files)
+* [Tips and Tricks](#tips-and-tricks)
+* [Future Work](#future-work)
 <!-- MARKDOWN TOC: END -->
 
 ## Documentation
