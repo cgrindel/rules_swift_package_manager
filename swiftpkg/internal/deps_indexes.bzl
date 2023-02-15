@@ -145,9 +145,16 @@ def _resolve_module_labels(
             for rn in restrict_to_repo_names
         ]
         repo_names = sets.make(restrict_to_repo_names)
-        labels = [l for l in labels if sets.contains(repo_names, l.repository_name)]
+        labels = [
+            lbl
+            for lbl in labels
+            if sets.contains(repo_names, lbl.repository_name)
+        ]
 
-    return labels
+    # Only return the first label.
+    if len(labels) == 0:
+        return []
+    return [labels[0]]
 
 def _new_product_index_key(identity, name):
     return identity.lower() + "|" + name
