@@ -13,7 +13,16 @@ generate_modulemap(
 
 objc_library(
     name = "Simple",
-    srcs = ["dummy.m"],
+    srcs = [
+        "dummy.m",
+    ],
     hdrs = ["Simple.h"],
+    copts = [
+        # "-fmodule-map-file=$(execpath //swiftpkg/tests/generate_modulemap_tests/Simple:Simple_modulemap)",
+        # "-fmodule-map-file=$(execpath :Simple_modulemap)",
+    ],
+    enable_modules = True,
+    module_map = ":Simple_modulemap",
+    # module_name = "Simple",
     visibility = ["//swiftpkg/tests/generate_modulemap_tests:__subpackages__"],
 )

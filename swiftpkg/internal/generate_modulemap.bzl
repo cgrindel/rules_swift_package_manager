@@ -14,7 +14,8 @@ def _generate_modulemap_impl(ctx):
         public_headers = ctx.files.public_hdrs,
     )
 
-    files = depset([out] + ctx.files.public_hdrs)
+    # files = depset([out] + ctx.files.public_hdrs)
+    files = depset([out])
     return DefaultInfo(files = files)
 
 generate_modulemap = rule(
