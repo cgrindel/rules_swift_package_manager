@@ -21,7 +21,7 @@ source "${assertions_sh}"
 
 # MARK - Locate
 
-Simple_modulemap_location=cgrindel_swift_bazel/swiftpkg/tests/generate_modulemap_tests/Simple.modulemap
+Simple_modulemap_location=cgrindel_swift_bazel/swiftpkg/tests/generate_modulemap_tests/Simple/Simple.modulemap
 Simple_modulemap="$(rlocation "${Simple_modulemap_location}")" || \
   (echo >&2 "Failed to locate ${Simple_modulemap_location}" && exit 1)
 
