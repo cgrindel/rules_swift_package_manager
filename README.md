@@ -96,12 +96,24 @@ bazel_starlib_dependencies()
 
 # gazelle:repo bazel_gazelle
 
+http_archive(
+    name = "bazel_skylib_gazelle_plugin",
+    sha256 = "04182233284fcb6545d36b94248fe28186b4d9d574c4131d6a511d5aeb278c46",
+    urls = [
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.4.0/bazel-skylib-gazelle-plugin-1.4.0.tar.gz",
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/1.4.0/bazel-skylib-gazelle-plugin-1.4.0.tar.gz",
+    ],
+)
+
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
+load("@bazel_skylib_gazelle_plugin//:workspace.bzl", "bazel_skylib_gazelle_plugin_workspace")
 load("@cgrindel_swift_bazel//:go_deps.bzl", "swift_bazel_go_dependencies")
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
 # Declare Go dependencies before calling go_rules_dependencies.
 swift_bazel_go_dependencies()
+
+bazel_skylib_gazelle_plugin_workspace()
 
 go_rules_dependencies()
 
@@ -196,7 +208,7 @@ load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
 gazelle_binary(
     name = "gazelle_bin",
     languages = [
-        "@bazel_skylib//gazelle/bzl",
+        "@bazel_skylib_gazelle_plugin//bzl",
         "@cgrindel_swift_bazel//gazelle",
     ],
 )
