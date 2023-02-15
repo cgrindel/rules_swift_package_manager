@@ -1,0 +1,22 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("//swiftpkg/internal:generate_modulemap.bzl", "generate_modulemap")
+
+bzlformat_pkg(name = "bzlformat")
+
+generate_modulemap(
+    name = "Simple_modulemap",
+    module_name = "Simple",
+    public_hdrs = ["Simple.h"],
+)
+
+sh_test(
+    name = "generate_modulemap_test",
+    srcs = ["generate_modulemap_test.sh"],
+    data = [
+        ":Simple_modulemap",
+    ],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:assertions",
+    ],
+)
