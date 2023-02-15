@@ -65,10 +65,10 @@ gazelle_dependencies()
 
 http_archive(
     name = "contrib_rules_bazel_integration_test",
-    sha256 = "a10fae360743bad8fa07b2a7ddd406297287374d3edc938c2dbae5fce6186ee0",
-    strip_prefix = "rules_bazel_integration_test-0.10.2",
+    sha256 = "6263b8d85a125e1877c463bf4d692bebc2b6479c924f64a3d45c81fbfbc495df",
+    strip_prefix = "rules_bazel_integration_test-0.10.3",
     urls = [
-        "http://github.com/bazel-contrib/rules_bazel_integration_test/archive/v0.10.2.tar.gz",
+        "http://github.com/bazel-contrib/rules_bazel_integration_test/archive/v0.10.3.tar.gz",
     ],
 )
 
