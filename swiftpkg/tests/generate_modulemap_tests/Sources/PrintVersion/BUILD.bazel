@@ -1,0 +1,13 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+bzlformat_pkg(name = "bzlformat")
+
+swift_binary(
+    name = "PrintVersion",
+    srcs = ["PrintVersion.swift"],
+    module_name = "PrintVersion",
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
