@@ -1,5 +1,10 @@
 """Implementation for `generate_modulemap`."""
 
+# The implementation of this rule was greatly inspired by the following:
+# https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/module_maps.bzl
+# https://github.com/bazel-xcode/PodToBUILD/blob/e9bbf68151caf6c8cd9b8ed2fa361b38e0f6a860/BazelExtensions/extensions.bzl#L113
+# https://github.com/bazel-xcode/xchammer/blob/master/sample/UrlGet/Vendor/rules_pods/BazelExtensions/extensions.bzl
+
 load(":module_maps.bzl", "write_module_map")
 
 ModuleMapInfo = provider(
