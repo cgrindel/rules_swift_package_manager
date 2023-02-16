@@ -60,19 +60,6 @@ generate_modulemap = rule(
         "module_name": attr.string(
             doc = "The name of the module.",
         ),
-        # "uses": attr.string_list(
-        #     doc = "The names of the modules that this module uses/depends upon.",
-        # ),
     },
     doc = "Generate a modulemap for an Objective-C module.",
 )
-
-# def _write_module_map(
-#         actions,
-#         module_map_file,
-#         module_name,
-#         dependent_module_names = [],
-#         public_headers = []):
-#     # Calculate these once
-#     relative_to_dir = module_map_file.dirname
-#     back_to_root_path = "../" * len(relative_to_dir.split("/"))

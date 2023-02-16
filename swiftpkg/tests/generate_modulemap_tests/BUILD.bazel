@@ -6,10 +6,6 @@ sh_test(
     name = "generate_modulemap_test",
     srcs = ["generate_modulemap_test.sh"],
     data = [
-        # "//swiftpkg/tests/generate_modulemap_tests/Simple",
-        # "//swiftpkg/tests/generate_modulemap_tests/Simple:Simple_modulemap",
-        # "//swiftpkg/tests/generate_modulemap_tests/SimpleCore",
-        # "//swiftpkg/tests/generate_modulemap_tests/SimpleCore:SimpleCore_modulemap",
         "//swiftpkg/tests/generate_modulemap_tests/Sources/PrintVersion",
     ],
     deps = [

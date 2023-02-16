@@ -23,18 +23,7 @@ PrintVersion_location=cgrindel_swift_bazel/swiftpkg/tests/generate_modulemap_tes
 PrintVersion="$(rlocation "${PrintVersion_location}")" || \
   (echo >&2 "Failed to locate ${PrintVersion_location}" && exit 1)
 
-# MARK - Locate
-
-# Simple_modulemap_location=cgrindel_swift_bazel/swiftpkg/tests/generate_modulemap_tests/Simple/Simple.modulemap
-# Simple_modulemap="$(rlocation "${Simple_modulemap_location}")" || \
-#   (echo >&2 "Failed to locate ${Simple_modulemap_location}" && exit 1)
-
 # MARK - Test
-
-# # DEBUG BEGIN
-# echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") Simple_modulemap: ${Simple_modulemap}" 
-# cat >&2 "${Simple_modulemap}"
-# # DEBUG END
 
 output="$("${PrintVersion}")"
 assert_equal "1.2.3" "${output}" "version check"
