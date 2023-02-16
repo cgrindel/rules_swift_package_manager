@@ -1,0 +1,17 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@rules_cc//cc:defs.bzl", "objc_library")
+
+bzlformat_pkg(name = "bzlformat")
+
+objc_library(
+    name = "Foo",
+    srcs = ["Foo.m"],
+    hdrs = ["Foo.h"],
+    enable_modules = True,
+    module_name = "Foo",
+    # module_map = ":Foo_modulemap",
+    visibility = ["//swiftpkg/tests/generate_modulemap_tests:__subpackages__"],
+    deps = [
+        "//swiftpkg/tests/generate_modulemap_tests/SimpleCore",
+    ],
+)
