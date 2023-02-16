@@ -6,28 +6,25 @@ bzlformat_pkg(name = "bzlformat")
 
 generate_modulemap(
     name = "Foo_modulemap",
+    hdrs = ["Foo.h"],
     module_name = "Foo",
-    public_hdrs = ["Foo.h"],
-    uses = [
-        "SimpleCore",
-    ],
     visibility = ["//swiftpkg/tests/generate_modulemap_tests:__subpackages__"],
+    deps = [
+        "//swiftpkg/tests/generate_modulemap_tests/SimpleCore:SimpleCore_modulemap",
+    ],
 )
 
 objc_library(
     name = "Foo",
     srcs = ["Foo.m"],
-    hdrs = ["Foo.h"],
-    copts = [
-        # Not sure why I had to add this manually. This should be added when
-        # enable_modules is True.
-        "-fmodules",
+    hdrs = [
+        "Foo.h",
     ],
     enable_modules = True,
-    # module_name = "Foo",
-    module_map = ":Foo_modulemap",
+    module_name = "Foo",
     visibility = ["//swiftpkg/tests/generate_modulemap_tests:__subpackages__"],
     deps = [
         "//swiftpkg/tests/generate_modulemap_tests/SimpleCore",
+        "//swiftpkg/tests/generate_modulemap_tests/SimpleCore:SimpleCore_modulemap",
     ],
 )

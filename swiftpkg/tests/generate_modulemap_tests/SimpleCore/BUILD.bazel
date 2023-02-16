@@ -6,20 +6,18 @@ bzlformat_pkg(name = "bzlformat")
 
 generate_modulemap(
     name = "SimpleCore_modulemap",
+    hdrs = ["SimpleCore.h"],
     module_name = "SimpleCore",
-    public_hdrs = ["SimpleCore.h"],
     visibility = ["//swiftpkg/tests/generate_modulemap_tests:__subpackages__"],
 )
 
 objc_library(
     name = "SimpleCore",
     srcs = ["SimpleCore.m"],
-    hdrs = ["SimpleCore.h"],
-    enable_modules = True,
-    # module_name = "SimpleCore",
-    module_map = ":SimpleCore_modulemap",
-    visibility = ["//swiftpkg/tests/generate_modulemap_tests:__subpackages__"],
-    deps = [
-        # "//swiftpkg/tests/generate_modulemap_tests/Simple",
+    hdrs = [
+        "SimpleCore.h",
     ],
+    enable_modules = True,
+    module_name = "SimpleCore",
+    visibility = ["//swiftpkg/tests/generate_modulemap_tests:__subpackages__"],
 )
