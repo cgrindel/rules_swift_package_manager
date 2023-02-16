@@ -8,6 +8,8 @@ sh_test(
     data = [
         "//swiftpkg/tests/generate_modulemap_tests/Simple",
         "//swiftpkg/tests/generate_modulemap_tests/Simple:Simple_modulemap",
+        "//swiftpkg/tests/generate_modulemap_tests/SimpleCore",
+        "//swiftpkg/tests/generate_modulemap_tests/SimpleCore:SimpleCore_modulemap",
     ],
     deps = [
         "@bazel_tools//tools/bash/runfiles",
