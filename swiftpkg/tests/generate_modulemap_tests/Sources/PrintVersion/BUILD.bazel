@@ -9,5 +9,6 @@ swift_binary(
     module_name = "PrintVersion",
     visibility = ["//visibility:public"],
     deps = [
+        "//swiftpkg/tests/generate_modulemap_tests/SimpleCore",
     ],
 )

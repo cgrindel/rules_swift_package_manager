@@ -13,11 +13,13 @@ generate_modulemap(
 
 objc_library(
     name = "SimpleCore",
-    srcs = [
-        "SimpleCore.m",
-    ],
+    srcs = ["SimpleCore.m"],
     hdrs = ["SimpleCore.h"],
     enable_modules = True,
-    module_map = ":SimpleCore_modulemap",
+    module_name = "SimpleCore",
+    # module_map = ":SimpleCore_modulemap",
     visibility = ["//swiftpkg/tests/generate_modulemap_tests:__subpackages__"],
+    deps = [
+        # "//swiftpkg/tests/generate_modulemap_tests/Simple",
+    ],
 )

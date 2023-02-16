@@ -1,7 +1,9 @@
+import SimpleCore
+
 @main
-enum MyExecutable {
+enum PrintVersion {
     static func main() {
-        let ver = "1.2.3"
-        print(ver)
+        let verInfo = VersionInfo()
+        print(verInfo.version)
     }
 }
