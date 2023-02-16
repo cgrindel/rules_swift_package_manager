@@ -5,12 +5,15 @@ load(":module_maps.bzl", "write_module_map")
 def _generate_modulemap_impl(ctx):
     module_name = ctx.attr.module_name
     out_filename = "{}.modulemap".format(module_name)
+
+    # out_filename = "module.modulemap"
     out = ctx.actions.declare_file(out_filename)
 
     write_module_map(
         actions = ctx.actions,
         module_map_file = out,
         module_name = module_name,
+        dependent_module_names = ctx.attr.uses,
         public_headers = ctx.files.public_hdrs,
     )
 
@@ -28,6 +31,9 @@ generate_modulemap = rule(
             mandatory = True,
             allow_files = True,
             doc = "The public headers for this module.",
+        ),
+        "uses": attr.string_list(
+            doc = "The names of the modules that this module uses/depends upon.",
         ),
     },
     doc = "Generate a modulemap for an Objective-C module.",

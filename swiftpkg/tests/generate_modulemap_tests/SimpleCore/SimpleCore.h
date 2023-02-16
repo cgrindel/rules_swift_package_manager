@@ -7,6 +7,8 @@ NS_SWIFT_NAME(VersionInfo)
 
 @property(nonatomic, copy, readonly) NSString *myVersion NS_SWIFT_NAME(version);
 
+/* - (instancetype)init; */
+
 @end
 
 
