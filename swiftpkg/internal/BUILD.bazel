@@ -226,8 +226,21 @@ bzl_library(
 )
 
 bzl_library(
+    name = "generate_modulemap",
+    srcs = ["generate_modulemap.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":module_maps"],
+)
+
+bzl_library(
     name = "bazel_repo_names",
     srcs = ["bazel_repo_names.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "module_maps",
+    srcs = ["module_maps.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
 
