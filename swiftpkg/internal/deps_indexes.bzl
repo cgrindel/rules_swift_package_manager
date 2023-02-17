@@ -91,6 +91,24 @@ def _new_product(identity, name, type, target_labels):
         target_labels = target_labels,
     )
 
+def _labels_for_module(module):
+    labels = [module.label]
+
+    # We found a match for the current/preferred repo. If the dep is an
+    # objc, return the real Objective-C target, not the Swift module
+    # alias. This is part of a workaround for Objective-C modules not
+    # being able to `@import` modules from other Objective-C modules.
+    # See `swiftpkg_build_files.bzl` for more information.
+    if module.src_type == src_types.objc:
+        labels.append(
+            bazel_labels.new(
+                name = pkginfo_targets.modulemap_label_name(module.label.name),
+                repository_name = module.label.repository_name,
+                package = module.label.package,
+            ),
+        )
+    return labels
+
 def _resolve_module_labels(
         deps_index,
         module_name,
@@ -112,7 +130,6 @@ def _resolve_module_labels(
     modules = deps_index.modules.get(module_name, [])
     if len(modules) == 0:
         return []
-    labels = [m.label for m in modules]
 
     # If a repo name is provided, prefer that over any other matches
     if preferred_repo_name != None:
@@ -122,21 +139,7 @@ def _resolve_module_labels(
             lambda m: m.label.repository_name == preferred_repo_name,
         )
         if module != None:
-            # We found a match for the current/preferred repo. If the dep is an
-            # objc, return the real Objective-C target, not the Swift module
-            # alias. This is part of a workaround for Objective-C modules not
-            # being able to `@import` modules from other Objective-C modules.
-            # See `swiftpkg_build_files.bzl` for more information.
-            if module.src_type == src_types.objc:
-                return [
-                    bazel_labels.new(
-                        name = pkginfo_targets.objc_label_name(module.label.name),
-                        repository_name = module.label.repository_name,
-                        package = module.label.package,
-                    ),
-                ]
-            else:
-                return [module.label]
+            return _labels_for_module(module)
 
     # If we are meant to only find a match in a set of repo names, then
     if len(restrict_to_repo_names) > 0:
@@ -145,16 +148,16 @@ def _resolve_module_labels(
             for rn in restrict_to_repo_names
         ]
         repo_names = sets.make(restrict_to_repo_names)
-        labels = [
-            lbl
-            for lbl in labels
-            if sets.contains(repo_names, lbl.repository_name)
+        modules = [
+            m
+            for m in modules
+            if sets.contains(repo_names, m.label.repository_name)
         ]
 
-    # Only return the first label.
-    if len(labels) == 0:
+    # Only labels for the first module.
+    if len(modules) == 0:
         return []
-    return [labels[0]]
+    return _labels_for_module(modules[0])
 
 def _new_product_index_key(identity, name):
     return identity.lower() + "|" + name

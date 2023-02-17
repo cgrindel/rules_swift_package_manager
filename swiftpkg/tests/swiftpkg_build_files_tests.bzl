@@ -223,6 +223,22 @@ _pkg_info = pkginfos.new(
             ]),
         ),
         pkginfos.new_target(
+            name = "ObjcLibraryDep",
+            type = "regular",
+            c99name = "ObjcLibraryDep",
+            module_type = "ClangTarget",
+            path = ".",
+            sources = [
+                "objc_dep/foo.m",
+                "objc_dep/foo.h",
+            ],
+            source_paths = [
+                "objc_dep/",
+            ],
+            public_hdrs_path = "include",
+            dependencies = [],
+        ),
+        pkginfos.new_target(
             name = "ObjcLibrary",
             type = "regular",
             c99name = "ObjcLibrary",
@@ -239,7 +255,11 @@ _pkg_info = pkginfos.new(
                 "src/",
             ],
             public_hdrs_path = "include",
-            dependencies = [],
+            dependencies = [
+                pkginfos.new_target_dependency(
+                    by_name = pkginfos.new_by_name_reference("ObjcLibraryDep"),
+                ),
+            ],
         ),
         pkginfos.new_target(
             name = "SwiftLibraryWithConditionalDep",
@@ -302,7 +322,8 @@ _deps_index_json = """
     {"name": "RegularSwiftTargetAsLibraryTests", "c99name": "RegularSwiftTargetAsLibraryTests", "src_type": "swift", "label": "@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibraryTests"},
     {"name": "SwiftExecutableTarget", "c99name": "SwiftExecutableTarget", "src_type": "swift", "label": "@swiftpkg_mypackage//:Source_SwiftLibraryTarget"},
     {"name": "ClangLibrary", "c99name": "ClangLibrary", "src_type": "clang", "label": "@swiftpkg_mypackage//:ClangLibrary"},
-    {"name": "ObjcLibrary", "c99name": "ObjcLibrary", "src_type": "objc", "label": "@swiftpkg_mypackage//:ObjcLibrary"}
+    {"name": "ObjcLibrary", "c99name": "ObjcLibrary", "src_type": "objc", "label": "@swiftpkg_mypackage//:ObjcLibrary"},
+    {"name": "ObjcLibraryDep", "c99name": "ObjcLibraryDep", "src_type": "objc", "label": "@swiftpkg_mypackage//:ObjcLibraryDep"}
   ],
   "products": [
   ]
@@ -489,7 +510,10 @@ objc_library(
         "-Iexternal/swiftpkg_mypackage/src",
     ],
     defines = ["SWIFT_PACKAGE=1"],
-    deps = [],
+    deps = [
+        "@swiftpkg_mypackage//:ObjcLibraryDep",
+        "@swiftpkg_mypackage//:ObjcLibraryDep_modulemap",
+    ],
     enable_modules = True,
     hdrs = ["include/external.h"],
     includes = ["include"],
@@ -504,7 +528,7 @@ objc_library(
 
 generate_modulemap(
     name = "ObjcLibrary_modulemap",
-    deps = [],
+    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
     hdrs = ["include/external.h"],
     module_name = "ObjcLibrary",
     visibility = ["//visibility:public"],

@@ -369,10 +369,15 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 
         modulemap_deps = []
         for dep in deps:
-            if not pkginfo_targets.is_modulemap_label(dep.value):
+            mm_values = [
+                v
+                for v in dep.value
+                if pkginfo_targets.is_modulemap_label(v)
+            ]
+            if len(mm_values) == 0:
                 continue
             mm_dep = bzl_selects.new(
-                value = dep.value,
+                value = mm_values,
                 kind = dep.kind,
                 condition = dep.condition,
             )
