@@ -91,7 +91,7 @@ def _new_product(identity, name, type, target_labels):
         target_labels = target_labels,
     )
 
-def _resolve_module_label(
+def _resolve_module_labels(
         deps_index,
         module_name,
         preferred_repo_name = None,
@@ -107,11 +107,11 @@ def _resolve_module_label(
             restrict the match.
 
     Returns:
-        A `struct` as returned by `bazel_labels.new`.
+        A `list` of `struct` values as returned by `bazel_labels.new`.
     """
     modules = deps_index.modules.get(module_name, [])
     if len(modules) == 0:
-        return None
+        return []
     labels = [m.label for m in modules]
 
     # If a repo name is provided, prefer that over any other matches
@@ -128,13 +128,15 @@ def _resolve_module_label(
             # being able to `@import` modules from other Objective-C modules.
             # See `swiftpkg_build_files.bzl` for more information.
             if module.src_type == src_types.objc:
-                return bazel_labels.new(
-                    name = pkginfo_targets.objc_label_name(module.label.name),
-                    repository_name = module.label.repository_name,
-                    package = module.label.package,
-                )
+                return [
+                    bazel_labels.new(
+                        name = pkginfo_targets.objc_label_name(module.label.name),
+                        repository_name = module.label.repository_name,
+                        package = module.label.package,
+                    ),
+                ]
             else:
-                return module.label
+                return [module.label]
 
     # If we are meant to only find a match in a set of repo names, then
     if len(restrict_to_repo_names) > 0:
@@ -143,14 +145,16 @@ def _resolve_module_label(
             for rn in restrict_to_repo_names
         ]
         repo_names = sets.make(restrict_to_repo_names)
-        label = lists.find(
-            labels,
-            lambda l: sets.contains(repo_names, l.repository_name),
-        )
-    else:
-        label = labels[0]
+        labels = [
+            lbl
+            for lbl in labels
+            if sets.contains(repo_names, lbl.repository_name)
+        ]
 
-    return label
+    # Only return the first label.
+    if len(labels) == 0:
+        return []
+    return [labels[0]]
 
 def _new_product_index_key(identity, name):
     return identity.lower() + "|" + name
@@ -209,7 +213,7 @@ def _new_ctx(deps_index, preferred_repo_name = None, restrict_to_repo_names = []
         restrict_to_repo_names = restrict_to_repo_names,
     )
 
-def _resolve_module_label_with_ctx(deps_index_ctx, module_name):
+def _resolve_module_labels_with_ctx(deps_index_ctx, module_name):
     """Finds a Bazel label that provides the specified module.
 
     Args:
@@ -217,9 +221,9 @@ def _resolve_module_label_with_ctx(deps_index_ctx, module_name):
         module_name: The name of the module as a `string`
 
     Returns:
-        A `struct` as returned by `bazel_labels.new`.
+        A `list` of `struct` values as returned by `bazel_labels.new`.
     """
-    return _resolve_module_label(
+    return _resolve_module_labels(
         deps_index = deps_index_ctx.deps_index,
         module_name = module_name,
         preferred_repo_name = deps_index_ctx.preferred_repo_name,
@@ -248,7 +252,7 @@ deps_indexes = struct(
     new_from_json = _new_from_json,
     new_module = _new_module,
     new_product = _new_product,
-    resolve_module_label = _resolve_module_label,
-    resolve_module_label_with_ctx = _resolve_module_label_with_ctx,
+    resolve_module_labels = _resolve_module_labels,
+    resolve_module_labels_with_ctx = _resolve_module_labels_with_ctx,
     resolve_product_labels = _resolve_product_labels,
 )

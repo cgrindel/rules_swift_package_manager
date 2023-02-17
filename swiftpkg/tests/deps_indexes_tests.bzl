@@ -51,78 +51,105 @@ def _new_from_json_test(ctx):
 
 new_from_json_test = unittest.make(_new_from_json_test)
 
-def _resolve_module_label_test(ctx):
+def _resolve_module_labels_test(ctx):
     env = unittest.begin(ctx)
 
-    # Find any label that provides Foo
-    actual = deps_indexes.resolve_module_label(_deps_index, "Foo")
-    asserts.equals(env, "@example_cool_repo", actual.repository_name)
-    asserts.equals(env, "Foo", actual.name)
-
-    # Module not in index
-    actual = deps_indexes.resolve_module_label(_deps_index, "Bar")
-    asserts.equals(env, None, actual)
-
-    # Preferred repo name exists
-    actual = deps_indexes.resolve_module_label(
-        _deps_index,
-        "Foo",
-        preferred_repo_name = "example_another_repo",
-    )
-    asserts.equals(env, "@example_another_repo", actual.repository_name)
-    asserts.equals(env, "Foo", actual.name)
-
-    # Preferred repo name not found
-    actual = deps_indexes.resolve_module_label(
-        _deps_index,
-        "ArgumentParser",
-        preferred_repo_name = "example_another_repo",
-    )
-    asserts.equals(env, "@apple_swift_argument_parser", actual.repository_name)
-    asserts.equals(env, "ArgumentParser", actual.name)
-
-    # Restrict to repos, found one
-    actual = deps_indexes.resolve_module_label(
-        _deps_index,
-        "Foo",
-        restrict_to_repo_names = ["some_other_repo", "example_another_repo"],
-    )
-    asserts.equals(env, "@example_another_repo", actual.repository_name)
-    asserts.equals(env, "Foo", actual.name)
-
-    # Restrict to repos, not found
-    actual = deps_indexes.resolve_module_label(
-        _deps_index,
-        "Foo",
-        restrict_to_repo_names = ["some_other_repo"],
-    )
-    asserts.equals(env, None, actual)
-
-    # Preferred repo and restrict to repos, found preferred
-    actual = deps_indexes.resolve_module_label(
-        _deps_index,
-        "Foo",
-        preferred_repo_name = "example_cool_repo",
-        restrict_to_repo_names = ["example_cool_repo", "example_another_repo"],
-    )
-    asserts.equals(env, "@example_cool_repo", actual.repository_name)
-    asserts.equals(env, "Foo", actual.name)
-
-    # Preferred repo and restrict to repos, found not preferred
-    actual = deps_indexes.resolve_module_label(
-        _deps_index,
-        "Foo",
-        preferred_repo_name = "some_other_repo",
-        restrict_to_repo_names = ["some_other_repo", "example_another_repo"],
-    )
-    asserts.equals(env, "@example_another_repo", actual.repository_name)
-    asserts.equals(env, "Foo", actual.name)
+    tests = [
+        struct(
+            msg = "Foo module",
+            module = "Foo",
+            preferred = None,
+            restrict_to = [],
+            exp = [bazel_labels.new(
+                repository_name = "@example_cool_repo",
+                package = "",
+                name = "Foo",
+            )],
+        ),
+        struct(
+            msg = "module not in index",
+            module = "Bar",
+            preferred = None,
+            restrict_to = [],
+            exp = [],
+        ),
+        struct(
+            msg = "preferred repo name exists",
+            module = "Foo",
+            preferred = "example_cool_repo",
+            restrict_to = [],
+            exp = [bazel_labels.new(
+                repository_name = "@example_cool_repo",
+                package = "",
+                name = "Foo",
+            )],
+        ),
+        struct(
+            msg = "preferred repo name not found",
+            module = "ArgumentParser",
+            preferred = "example_another_repo",
+            restrict_to = [],
+            exp = [bazel_labels.new(
+                repository_name = "@apple_swift_argument_parser",
+                package = "Sources/ArgumentParser",
+                name = "ArgumentParser",
+            )],
+        ),
+        struct(
+            msg = "restrict to repos, found one",
+            module = "Foo",
+            preferred = None,
+            restrict_to = ["some_other_repo", "example_another_repo"],
+            exp = [bazel_labels.new(
+                repository_name = "@example_another_repo",
+                package = "Sources/Foo",
+                name = "Foo",
+            )],
+        ),
+        struct(
+            msg = "restrict to repos, not found",
+            module = "Foo",
+            preferred = None,
+            restrict_to = ["some_other_repo"],
+            exp = [],
+        ),
+        struct(
+            msg = "preferred repo and restrict to repos, found preferred",
+            module = "Foo",
+            preferred = "example_cool_repo",
+            restrict_to = ["example_cool_repo", "example_another_repo"],
+            exp = [bazel_labels.new(
+                repository_name = "@example_cool_repo",
+                package = "",
+                name = "Foo",
+            )],
+        ),
+        struct(
+            msg = "preferred repo and restrict to repos, found not preferred",
+            module = "Foo",
+            preferred = "some_other_repo",
+            restrict_to = ["some_other_repo", "example_another_repo"],
+            exp = [bazel_labels.new(
+                repository_name = "@example_another_repo",
+                package = "Sources/Foo",
+                name = "Foo",
+            )],
+        ),
+    ]
+    for t in tests:
+        actual = deps_indexes.resolve_module_labels(
+            _deps_index,
+            module_name = t.module,
+            preferred_repo_name = t.preferred,
+            restrict_to_repo_names = t.restrict_to,
+        )
+        asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)
 
-resolve_module_label_test = unittest.make(_resolve_module_label_test)
+resolve_module_labels_test = unittest.make(_resolve_module_labels_test)
 
-def _resolve_module_label_with_ctx_test(ctx):
+def _resolve_module_labels_with_ctx_test(ctx):
     env = unittest.begin(ctx)
 
     deps_index_ctx = deps_indexes.new_ctx(
@@ -130,20 +157,22 @@ def _resolve_module_label_with_ctx_test(ctx):
         preferred_repo_name = "example_cool_repo",
         restrict_to_repo_names = ["example_cool_repo", "example_another_repo"],
     )
-    actual = deps_indexes.resolve_module_label_with_ctx(deps_index_ctx, "Foo")
+    actuals = deps_indexes.resolve_module_labels_with_ctx(deps_index_ctx, "Foo")
+    asserts.equals(env, 1, len(actuals))
+    actual = actuals[0]
     asserts.equals(env, "@example_cool_repo", actual.repository_name)
     asserts.equals(env, "Foo", actual.name)
 
     return unittest.end(env)
 
-resolve_module_label_with_ctx_test = unittest.make(_resolve_module_label_with_ctx_test)
+resolve_module_labels_with_ctx_test = unittest.make(_resolve_module_labels_with_ctx_test)
 
 def deps_indexes_test_suite():
     return unittest.suite(
         "deps_indexes_tests",
         new_from_json_test,
-        resolve_module_label_test,
-        resolve_module_label_with_ctx_test,
+        resolve_module_labels_test,
+        resolve_module_labels_with_ctx_test,
     )
 
 _deps_index_json = """
