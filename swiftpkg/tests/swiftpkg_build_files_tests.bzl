@@ -477,10 +477,10 @@ cc_library(
                 ],
             },
             exp = """\
-load("@cgrindel_swift_bazel//swiftpkg:build_defs.bzl", "swift_objc_module_alias")
+load("@cgrindel_swift_bazel//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 objc_library(
-    name = "ObjcLibrary_Objc",
+    name = "ObjcLibrary",
     copts = [
         "-fblocks",
         "-fobjc-arc",
@@ -502,10 +502,11 @@ objc_library(
     visibility = ["//visibility:public"],
 )
 
-swift_objc_module_alias(
-    name = "ObjcLibrary",
-    deps = [":ObjcLibrary_Objc"],
-    module_names = ["ObjcLibrary"],
+generate_modulemap(
+    name = "ObjcLibrary_modulemap",
+    deps = [],
+    hdrs = ["include/external.h"],
+    module_name = "ObjcLibrary",
     visibility = ["//visibility:public"],
 )
 """,
