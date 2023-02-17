@@ -3,6 +3,8 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels")
 
+_modulemap_suffix = "_modulemap"
+
 def _get(targets, name, fail_if_not_found = True):
     """Retrieves the target with the given name from a list of targets.
 
@@ -84,6 +86,29 @@ def _objc_label_name(target_name):
     """
     return target_name + "_Objc"
 
+def _modulemap_label_name(target_name):
+    """Returns the name of the related `generate_modulemap` target.
+
+    Args:
+        target_name: The publicly advertised name for the `objc_library` target.
+
+    Returns:
+        The name of the `generate_modulemap` target as a `string`.
+    """
+    return target_name + _modulemap_suffix
+
+def _is_modulemap_label(target_name):
+    """Determines whether the name is a `generate_modulemap` target name.
+
+    Args:
+        target_name: The name to be evaluated as a `string`.
+
+    Returns:
+        A `bool` representing whether the input name is a `generate_modulemap`
+        target.
+    """
+    return target_name.endswith(_modulemap_suffix)
+
 def make_pkginfo_targets(bazel_labels):
     """Create a `pkginfo_targets` module.
 
@@ -116,7 +141,9 @@ def make_pkginfo_targets(bazel_labels):
         bazel_label = _bazel_label,
         bazel_label_name = _bazel_label_name,
         get = _get,
+        is_modulemap_label = _is_modulemap_label,
         join_path = _join_path,
+        modulemap_label_name = _modulemap_label_name,
         objc_label_name = _objc_label_name,
         srcs = _srcs,
     )

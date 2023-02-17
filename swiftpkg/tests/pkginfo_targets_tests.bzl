@@ -144,6 +144,17 @@ def _join_path_test(ctx):
 
 join_path_test = unittest.make(_join_path_test)
 
+def _modulemap_label_names_test(ctx):
+    env = unittest.begin(ctx)
+
+    asserts.false(env, pkginfo_targets.is_modulemap_label("Foo"))
+    mm_label = pkginfo_targets.modulemap_label_name("Foo")
+    asserts.true(env, pkginfo_targets.is_modulemap_label(mm_label))
+
+    return unittest.end(env)
+
+modulemap_label_names_test = unittest.make(_modulemap_label_names_test)
+
 def pkginfo_targets_test_suite():
     return unittest.suite(
         "pkginfo_targets_tests",
