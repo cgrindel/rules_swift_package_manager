@@ -22,6 +22,9 @@ objc_library(
     ],
     enable_modules = True,
     module_name = "Foo",
+    target_compatible_with = [
+        "@platforms//os:macos",
+    ],
     visibility = ["//swiftpkg/tests/generate_modulemap_tests:__subpackages__"],
     deps = [
         "//swiftpkg/tests/generate_modulemap_tests/SimpleCore",
