@@ -38,6 +38,10 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     ])
     attrs = {
         "deps": bzl_selects.to_starlark(deps),
+        # "generated_header_name": "generated_header/{}-Swift.h".format(target.c99name),
+        # # TODO(chuck): Only enable this when we detect that a Swift module uses an Objc module.
+        # # Generate the bridge header to allow Objective-C code to import Swift modules.
+        # "generates_header": True,
         "module_name": target.c99name,
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//visibility:public"],
