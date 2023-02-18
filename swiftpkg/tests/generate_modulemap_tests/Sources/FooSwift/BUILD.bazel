@@ -1,0 +1,14 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+bzlformat_pkg(name = "bzlformat")
+
+swift_library(
+    name = "FooSwift",
+    srcs = ["FooSwiftVersionInfo.swift"],
+    module_name = "FooSwift",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//swiftpkg/tests/generate_modulemap_tests/SimpleCore",
+    ],
+)
