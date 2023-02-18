@@ -13,9 +13,9 @@ swift_library(
 ios_unit_test(
     name = "FooTests",
     minimum_os_version = "13.0",
-    # GH208: This fails due to an Objc module not being found by another Objc module.
-    # Marking as manual so that they do not run during CI.
-    tags = ["manual"],
+    # # GH208: This fails due to an Objc module not being found by another Objc module.
+    # # Marking as manual so that they do not run during CI.
+    # tags = ["manual"],
     visibility = ["//visibility:private"],
     deps = [":AppDistributionTests"],
 )
