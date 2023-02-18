@@ -1,0 +1,19 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@rules_cc//cc:defs.bzl", "objc_library")
+
+bzlformat_pkg(name = "bzlformat")
+
+objc_library(
+    name = "main",
+    srcs = ["main.m"],
+    enable_modules = True,
+    target_compatible_with = ["@platforms//os:macos"],
+    # deps = ["//swiftpkg/tests/generate_modulemap_tests/Sources/FooSwift"],
+)
+
+swift_binary(
+    name = "PrintVersionObjc",
+    visibility = ["//swiftpkg/tests/generate_modulemap_tests:__subpackages__"],
+    deps = [":main"],
+)
