@@ -1,11 +1,9 @@
+import Foundation
 import SimpleCore
 
-public struct FooSwiftVersionInfo {
-    public init() {}
-}
-
-public extension FooSwiftVersionInfo {
-    func version() -> String {
+@objc(OIFooSwiftVersionInfo)
+public class FooSwiftVersionInfo: NSObject {
+    @objc(myVersion) public func version() -> String {
         let verInfo = VersionInfo()
         return verInfo.version
     }

@@ -1,14 +1,26 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("//swiftpkg/internal:generate_modulemap.bzl", "generate_modulemap")
 
 bzlformat_pkg(name = "bzlformat")
 
 swift_library(
     name = "FooSwift",
     srcs = ["FooSwiftVersionInfo.swift"],
+    generates_header = True,
     module_name = "FooSwift",
     visibility = ["//visibility:public"],
     deps = [
         "//swiftpkg/tests/generate_modulemap_tests/SimpleCore",
+    ],
+)
+
+generate_modulemap(
+    name = "FooSwift_modulemap",
+    hdrs = [":FooSwift"],
+    module_name = "FooSwift",
+    visibility = ["//swiftpkg/tests/generate_modulemap_tests:__subpackages__"],
+    deps = [
+        "//swiftpkg/tests/generate_modulemap_tests/SimpleCore:SimpleCore_modulemap",
     ],
 )

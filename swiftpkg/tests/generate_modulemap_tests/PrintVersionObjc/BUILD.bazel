@@ -9,7 +9,10 @@ objc_library(
     srcs = ["main.m"],
     enable_modules = True,
     target_compatible_with = ["@platforms//os:macos"],
-    deps = ["//swiftpkg/tests/generate_modulemap_tests/Sources/FooSwift"],
+    deps = [
+        "//swiftpkg/tests/generate_modulemap_tests/Sources/FooSwift",
+        "//swiftpkg/tests/generate_modulemap_tests/Sources/FooSwift:FooSwift_modulemap",
+    ],
 )
 
 swift_binary(
