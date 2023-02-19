@@ -31,6 +31,9 @@ def _generate_modulemap_impl(ctx):
         if clang_files.is_hdr(f.path)
     ]
 
+    if len(hdrs) == 0:
+        fail("No header files were provided.")
+
     write_module_map(
         actions = ctx.actions,
         module_map_file = modulemap_file,
