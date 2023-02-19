@@ -12,6 +12,7 @@ load(":pkginfo_targets_tests.bzl", "pkginfo_targets_test_suite")
 load(":pkginfos_tests.bzl", "pkginfos_test_suite")
 load(":repository_files_tests.bzl", "repository_files_test_suite")
 load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
+load(":swift_files_tests.bzl", "swift_files_test_suite")
 load(":swiftpkg_build_files_tests.bzl", "swiftpkg_build_files_test_suite")
 load(":validations_tests.bzl", "validations_test_suite")
 
@@ -42,6 +43,8 @@ repository_files_test_suite()
 bzl_selects_test_suite()
 
 starlark_codegen_test_suite()
+
+swift_files_test_suite()
 
 swiftpkg_build_files_test_suite()
 
