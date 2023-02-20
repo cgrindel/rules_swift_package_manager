@@ -9,7 +9,7 @@ load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 _target_dep_kind = "_target_dep"
 
 def make_pkginfo_target_deps(bazel_labels):
-    def _bazel_label_strs(pkg_ctx, target_dep):
+    def _bzl_select_list(pkg_ctx, target_dep):
         """Return the Bazel labels associated with a target dependency.
 
         A module will resolve to a single label. A product can resolve to one
@@ -94,7 +94,7 @@ Unrecognized target dependency while generating a Bazel dependency label.\
         )
 
     return struct(
-        bazel_label_strs = _bazel_label_strs,
+        bzl_select_list = _bzl_select_list,
         target_dep_kind = _target_dep_kind,
     )
 

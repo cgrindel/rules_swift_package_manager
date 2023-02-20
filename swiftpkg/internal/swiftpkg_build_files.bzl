@@ -34,7 +34,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
 
 def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     deps = lists.flatten([
-        pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
+        pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
         for td in target.dependencies
     ])
     attrs = {
@@ -221,7 +221,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         relative_to = pkg_path,
     )
     deps = lists.flatten([
-        pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
+        pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
         for td in target.dependencies
     ])
 
