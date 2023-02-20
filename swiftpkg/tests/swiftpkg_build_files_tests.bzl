@@ -311,6 +311,21 @@ _pkg_info = pkginfos.new(
                 ),
             ],
         ),
+        pkginfos.new_target(
+            name = "SwiftForObjcTarget",
+            type = "regular",
+            c99name = "SwiftForObjcTarget",
+            module_type = "SwiftTarget",
+            path = "Source/SwiftForObjcTarget",
+            sources = [
+                "SwiftForObjcTarget.swift",
+            ],
+            dependencies = [
+                pkginfos.new_target_dependency(
+                    by_name = pkginfos.new_by_name_reference("ObjcLibraryDep"),
+                ),
+            ],
+        ),
     ],
 )
 
@@ -591,6 +606,47 @@ cc_library(
         "src/foo.h",
     ],
     tags = ["swift_module=SwiftLibraryWithConditionalDep"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Swift library target with @objc directives and Objc dep",
+            name = "SwiftForObjcTarget",
+            file_contents = {
+                "SwiftForObjcTarget.swift": """\
+import Foundation
+
+@objc(OIFooBar)
+public class FooBar: NSObject {
+    @objc public func doSomething() {
+        // Intentionally blank
+    }
+}
+""",
+            },
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@cgrindel_swift_bazel//swiftpkg:build_defs.bzl", "generate_modulemap")
+
+swift_library(
+    name = "Source_SwiftForObjcTarget",
+    defines = ["SWIFT_PACKAGE"],
+    deps = [
+        "@swiftpkg_mypackage//:ObjcLibraryDep",
+        "@swiftpkg_mypackage//:ObjcLibraryDep_modulemap",
+    ],
+    generates_header = True,
+    module_name = "SwiftForObjcTarget",
+    srcs = ["Source/SwiftForObjcTarget/SwiftForObjcTarget.swift"],
+    visibility = ["//visibility:public"],
+)
+
+generate_modulemap(
+    name = "Source_SwiftForObjcTarget_modulemap",
+    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
+    hdrs = [":Source_SwiftForObjcTarget"],
+    module_name = "SwiftForObjcTarget",
     visibility = ["//visibility:public"],
 )
 """,

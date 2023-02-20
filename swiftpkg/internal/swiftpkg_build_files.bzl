@@ -13,6 +13,7 @@ load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
 load(":repository_files.bzl", "repository_files")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
+load(":swift_files.bzl", "swift_files")
 
 # MARK: - Target Entry Point
 
@@ -38,10 +39,6 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     ])
     attrs = {
         "deps": bzl_selects.to_starlark(deps),
-        # "generated_header_name": "generated_header/{}-Swift.h".format(target.c99name),
-        # # TODO(chuck): Only enable this when we detect that a Swift module uses an Objc module.
-        # # Generate the bridge header to allow Objective-C code to import Swift modules.
-        # "generates_header": True,
         "module_name": target.c99name,
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//visibility:public"],
@@ -54,6 +51,15 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     copts = []
 
     # GH046: Support plugins.
+
+    # Check if any of the sources indicate that the module will be used by
+    # Objective-C code. If so, generate the bridge header file.
+    target_path = paths.join(pkg_ctx.pkg_info.path, target.path)
+    for src in target.sources:
+        path = paths.join(target_path, src)
+        if swift_files.has_objc_directive(repository_ctx, path):
+            attrs["generates_header"] = True
+            break
 
     # The rules_swift code links in developer libraries if the rule is marked testonly.
     # https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/compiling.bzl#L1312-L1319
@@ -90,10 +96,31 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     else:
         fail("Unrecognized target type for a Swift target. type:", target.type)
 
+    # Generate a modulemap for the Swift module.
+    if attrs.get("generates_header", False):
+        load_stmts.append(swiftpkg_generate_modulemap_load_stmt)
+        bzl_target_name = pkginfo_targets.bazel_label_name(target)
+        modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
+        modulemap_deps = _collect_modulemap_deps(deps)
+        decls.append(
+            build_decls.new(
+                kind = swiftpkg_kinds.generate_modulemap,
+                name = modulemap_target_name,
+                attrs = {
+                    "deps": bzl_selects.to_starlark(modulemap_deps),
+                    "hdrs": [":{}".format(bzl_target_name)],
+                    "module_name": target.c99name,
+                    "visibility": ["//visibility:public"],
+                },
+            ),
+        )
+
     return build_files.new(
         load_stmts = load_stmts,
         decls = decls,
     )
+
+# TODO(chuck): Move _imports_xctest to swift_files.
 
 def _imports_xctest(repository_ctx, pkg_ctx, target):
     target_path = paths.join(pkg_ctx.pkg_info.path, target.path)
@@ -570,6 +597,29 @@ def _swift_binary_from_product(product, dep_target, repo_name):
             "visibility": ["//visibility:public"],
         },
     )
+
+# MARK: - generate_modulemap Helpers
+
+# TODO(chuck): Update clang modulemap deps to use helper.
+# TODO(chuck): Can I DRY up the creation of the generate_modulemap?
+
+def _collect_modulemap_deps(deps):
+    modulemap_deps = []
+    for dep in deps:
+        mm_values = [
+            v
+            for v in dep.value
+            if pkginfo_targets.is_modulemap_label(v)
+        ]
+        if len(mm_values) == 0:
+            continue
+        mm_dep = bzl_selects.new(
+            value = mm_values,
+            kind = dep.kind,
+            condition = dep.condition,
+        )
+        modulemap_deps.append(mm_dep)
+    return modulemap_deps
 
 # MARK: - Constants and API Definition
 
