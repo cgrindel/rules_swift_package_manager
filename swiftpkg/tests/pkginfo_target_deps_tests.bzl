@@ -84,11 +84,13 @@ _deps_index_json = """\
     {
       "name": "AwesomePackage",
       "c99name": "AwesomePackage",
+      "src_type": "swift",
       "label": "@swiftpkg_example_swift_package//:AwesomePackage"
     },
     {
       "name": "Foo",
       "c99name": "Foo",
+      "src_type": "swift",
       "label": "@swiftpkg_example_swift_package//:Source/Foo"
     }
   ],
@@ -207,7 +209,7 @@ def _bzl_select_list_test(ctx):
         ),
     ]
     for t in tests:
-        actual = pkginfo_target_deps.bzl_select_list(_pkg_ctx, t.td)
+        actual = pkginfo_target_deps.bzl_select_list(_pkg_ctx, t.td, "Foo")
         asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)

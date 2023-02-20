@@ -9,7 +9,7 @@ load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 _target_dep_kind = "_target_dep"
 
 def make_pkginfo_target_deps(bazel_labels):
-    def _bzl_select_list(pkg_ctx, target_dep):
+    def _bzl_select_list(pkg_ctx, target_dep, depender_module_name):
         """Return the Bazel labels associated with a target dependency.
 
         A module will resolve to a single label. A product can resolve to one
@@ -19,6 +19,8 @@ def make_pkginfo_target_deps(bazel_labels):
             pkg_ctx: A `struct` as returned by `pkg_ctxs.new`.
             target_dep: A `struct` as returned by
                 `pkginfos.new_target_dependency`.
+            depender_module_name: The name of the module that depends on the
+                target dependency.
 
         Returns:
             A `list` of `struct` values as returned by `bzl_selects.new`
@@ -32,6 +34,7 @@ def make_pkginfo_target_deps(bazel_labels):
             labels = deps_indexes.resolve_module_labels_with_ctx(
                 pkg_ctx.deps_index_ctx,
                 target_dep.by_name.name,
+                depender_module_name,
             )
             if len(labels) == 0:
                 # Seeing Package.swift files with byName dependencies that
@@ -49,6 +52,7 @@ def make_pkginfo_target_deps(bazel_labels):
             labels = deps_indexes.resolve_module_labels_with_ctx(
                 pkg_ctx.deps_index_ctx,
                 target_dep.target.target_name,
+                depender_module_name,
             )
             if len(labels) == 0:
                 fail("""\

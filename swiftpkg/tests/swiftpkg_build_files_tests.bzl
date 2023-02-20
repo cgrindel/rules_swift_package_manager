@@ -287,7 +287,7 @@ _pkg_info = pkginfos.new(
         pkginfos.new_target(
             name = "ClangLibraryWithConditionalDep",
             type = "regular",
-            c99name = "SwiftLibraryWithConditionalDep",
+            c99name = "ClangLibraryWithConditionalDep",
             module_type = "ClangTarget",
             path = ".",
             # NOTE: SPM does not report header files in the sources for clang
@@ -338,7 +338,10 @@ _deps_index_json = """
     {"name": "SwiftExecutableTarget", "c99name": "SwiftExecutableTarget", "src_type": "swift", "label": "@swiftpkg_mypackage//:Source_SwiftLibraryTarget"},
     {"name": "ClangLibrary", "c99name": "ClangLibrary", "src_type": "clang", "label": "@swiftpkg_mypackage//:ClangLibrary"},
     {"name": "ObjcLibrary", "c99name": "ObjcLibrary", "src_type": "objc", "label": "@swiftpkg_mypackage//:ObjcLibrary"},
-    {"name": "ObjcLibraryDep", "c99name": "ObjcLibraryDep", "src_type": "objc", "label": "@swiftpkg_mypackage//:ObjcLibraryDep"}
+    {"name": "ObjcLibraryDep", "c99name": "ObjcLibraryDep", "src_type": "objc", "label": "@swiftpkg_mypackage//:ObjcLibraryDep"},
+    {"name": "SwiftLibraryWithConditionalDep", "c99name": "SwiftLibraryWithConditionalDep", "src_type": "swift", "label": "@swiftpkg_mypackage//:Source_SwiftLibraryWithConditionalDep"},
+    {"name": "ClangLibraryWithConditionalDep", "c99name": "ClangLibraryWithConditionalDep", "src_type": "clang", "label": "@swiftpkg_mypackage//:ClangLibraryWithConditionalDep"},
+    {"name": "SwiftForObjcTarget", "c99name": "SwiftForObjcTarget", "src_type": "swift", "label": "@swiftpkg_mypackage//:Source_SwiftForObjcTarget"}
   ],
   "products": [
   ]
@@ -590,7 +593,7 @@ cc_library(
         "-fblocks",
         "-fobjc-arc",
         "-fPIC",
-        "-fmodule-name=SwiftLibraryWithConditionalDep",
+        "-fmodule-name=ClangLibraryWithConditionalDep",
         "-Iexternal/swiftpkg_mypackage/src",
     ],
     defines = ["SWIFT_PACKAGE=1"],
@@ -605,7 +608,7 @@ cc_library(
         "src/foo.cc",
         "src/foo.h",
     ],
-    tags = ["swift_module=SwiftLibraryWithConditionalDep"],
+    tags = ["swift_module=ClangLibraryWithConditionalDep"],
     visibility = ["//visibility:public"],
 )
 """,
