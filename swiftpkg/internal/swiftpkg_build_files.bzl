@@ -402,6 +402,14 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["enable_modules"] = True
         attrs["module_name"] = target.c99name
 
+        # TODO(chuck): Remove/refine this HACK!
+        attrs["sdk_frameworks"] = [
+            "CoreTelephony",
+            "AuthenticationServices",
+            "SystemConfiguration",
+            "SafariServices",
+        ]
+
         modulemap_deps = []
         for dep in deps:
             mm_values = [
