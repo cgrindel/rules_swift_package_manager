@@ -54,13 +54,13 @@ get_usage() {
 Generates a Go source file with the current list of macOS and iOS frameworks.
 
 Usage:
-${utility} [OPTION]... [<output_path>]
+${utility} [OPTION]... [<go_output>]
 
 Options:
-  --go_package <go_pkg>  The name of the Go package. (Default: ${go_package})
-  <output_path>          The path where to write the Go source. If it is a 
-                         relative path, it is evaluated relative to the 
-                         workspace root.
+  --go_package <go_pkg>    The name of the Go package. (Default: ${go_package})
+  --go_output <go_output>  The path where to write the Go source. If it is a 
+                           relative path, it is evaluated relative to the 
+                           workspace root.
 EOF
 }
 
@@ -74,22 +74,23 @@ while (("$#")); do
       go_package="${2}"
       shift 2
       ;;
+    "--go_output")
+      go_output="${2}"
+      shift 2
+      ;;
     -*)
       usage_error "Unrecognized option. ${1}"
       ;;
     *)
-      if [[ -z "${output_path:-}" ]]; then
-        output_path="${1}"
-        shift 1
-      else
-        usage_error "Unexpected argument. ${1}"
-      fi
+      usage_error "Unexpected argument. ${1}"
       ;;
   esac
 done
 
 
 is_installed xcrun || usage_error "This utility requires that xcrun is available on the PATH."
+
+[[ -n "${go_output:-}" ]] || usage_error "Must specify an output path for the Go source file."
 
 sdk_path="$(xcrun --show-sdk-path)"
 macos_frameworks_dir="${sdk_path}/System/Library/Frameworks"
@@ -123,12 +124,8 @@ EOF
 )"
 
 # Ouptut the Go source
-output_cmd=( echo "${go_src}" )
-if [[ -n "${output_path:-}" ]]; then
-  if [[ ! "${output_path}" = /* ]]; then
-    output_path="${BUILD_WORKSPACE_DIRECTORY}/${output_path}"
-  fi
-  "${output_cmd[@]}" > "${output_path}"
-else
-  "${output_cmd[@]}"
+go_output_cmd=( echo "${go_src}" )
+if [[ ! "${go_output}" = /* ]]; then
+  go_output="${BUILD_WORKSPACE_DIRECTORY}/${go_output}"
 fi
+"${go_output_cmd[@]}" > "${go_output}"
