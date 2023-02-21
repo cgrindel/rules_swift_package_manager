@@ -232,14 +232,6 @@ def swift_bazel_go_dependencies():
     )
     maybe(
         go_repository,
-        name = "in_gopkg_yaml_v2",
-        build_external = "external",
-        importpath = "gopkg.in/yaml.v2",
-        sum = "h1:D8xgwECY7CYvx+Y2n4sBz93Jn9JRvxdiyyo8CTfuKaY=",
-        version = "v2.4.0",
-    )
-    maybe(
-        go_repository,
         name = "in_gopkg_yaml_v3",
         build_external = "external",
         importpath = "gopkg.in/yaml.v3",
