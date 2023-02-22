@@ -302,9 +302,9 @@ _ios = sets.make([
     "iAd",
 ])
 
-_all = sets.union(_macos_frameworks, _ios_frameworks)
+_all = sets.union(_macos, _ios)
 
-apple_builtin_frameworks(
+apple_builtin_frameworks = struct(
     all = _all,
     ios = _ios,
     macos = _macos,

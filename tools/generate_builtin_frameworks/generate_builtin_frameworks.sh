@@ -164,9 +164,9 @@ _ios = sets.make([
 $(echo "${ios_frameworks}" | format_as_bzl_list_item)
 ])
 
-_all = sets.union(_macos_frameworks, _ios_frameworks)
+_all = sets.union(_macos, _ios)
 
-apple_builtin_frameworks(
+apple_builtin_frameworks = struct(
     all = _all,
     ios = _ios,
     macos = _macos,
