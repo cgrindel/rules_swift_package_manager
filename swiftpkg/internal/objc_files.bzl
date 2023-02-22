@@ -76,7 +76,6 @@ def _parse_for_imported_framework(line):
             return None
 
     framework = _parse_pound_import(line)
-
     if framework != None:
         return _verify(framework)
     framework = _parse_at_import(line)
@@ -94,11 +93,11 @@ def _collect_frameworks_for_src(repository_ctx, src_path):
             frameworks.append(imported_framework)
     return frameworks
 
-def _collect_builtin_frameworks(repository_ctx, root_path, srcs):
+def _collect_builtin_frameworks(repository_ctx, target_path, srcs):
     frameworks = sets.make()
     for src in srcs:
-        src_path = paths.join(root_path, srcs)
-        src_frameworks = _collect_frameworks_for_src(src_path)
+        src_path = paths.join(target_path, src)
+        src_frameworks = _collect_frameworks_for_src(repository_ctx, src_path)
         for sf in src_frameworks:
             sets.insert(frameworks, sf)
     return sorted(sets.to_list(frameworks))
