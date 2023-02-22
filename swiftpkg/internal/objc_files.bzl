@@ -18,7 +18,7 @@ def _parse_pound_import(line):
 
     # Find the opening bracket
     open_bracket_idx = -1
-    for idx in range(start_idx, line_len - start_idx):
+    for idx in range(start_idx, line_len):
         char = line[idx]
         if char == " " or char == "\t":
             continue
@@ -33,7 +33,7 @@ def _parse_pound_import(line):
 
     # Find the first slash (/)
     slash_idx = -1
-    for idx in range(open_bracket_idx, line_len - open_bracket_idx):
+    for idx in range(open_bracket_idx, line_len):
         char = line[idx]
         if char == "/":
             slash_idx = idx
