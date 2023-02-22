@@ -259,6 +259,8 @@ def _collect_files(
         others = sorted(others),
     )
 
+# TODO(chuck): Move _has_objc_srcs to objc_files.
+
 def _has_objc_srcs(srcs):
     return lists.contains(srcs, lambda x: x.endswith(".m"))
 
