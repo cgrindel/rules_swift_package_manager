@@ -16,21 +16,10 @@ def _parse_pound_import(line):
     start_idx = import_idx + _pound_import_len
     line_len = len(line)
 
-    # DEBUG BEGIN
-    print("*** CHUCK line: ", line)
-    print("*** CHUCK start_idx: ", start_idx)
-    print("*** CHUCK line_len: ", line_len)
-    # DEBUG END
-
     # Find the opening bracket
     open_bracket_idx = -1
     for idx in range(start_idx, line_len - start_idx):
         char = line[idx]
-
-        # DEBUG BEGIN
-        print("*** CHUCK char: ", char)
-
-        # DEBUG END
         if char == " " or char == "\t":
             continue
         elif char == "<":
@@ -42,10 +31,6 @@ def _parse_pound_import(line):
         return None
     framework_start_idx = open_bracket_idx + 1
 
-    # DEBUG BEGIN
-    print("*** CHUCK framework_start_idx: ", framework_start_idx)
-    # DEBUG END
-
     # Find the first slash (/)
     slash_idx = -1
     for idx in range(open_bracket_idx, line_len - open_bracket_idx):
@@ -55,15 +40,30 @@ def _parse_pound_import(line):
     if slash_idx < 0:
         return None
 
-    # DEBUG BEGIN
-    print("*** CHUCK slash_idx: ", slash_idx)
-    # DEBUG END
-
     return line[framework_start_idx:slash_idx]
 
 def _parse_at_import(line):
-    # TODO(chuck): IMPLEMENT ME!
-    pass
+    import_idx = line.find(_at_import)
+    if import_idx < 0:
+        return None
+    start_idx = import_idx + _at_import_len
+    line_len = len(line)
+
+    framework_start_idx = -1
+    framework_end_idx = -1
+    for idx in range(start_idx, line_len):
+        char = line[idx]
+        if char == " " or char == "\t":
+            continue
+        elif char == ";":
+            framework_end_idx = idx
+            break
+        elif framework_start_idx < 0:
+            framework_start_idx = idx
+
+    if framework_start_idx < 0 or framework_end_idx < 0:
+        return None
+    return line[framework_start_idx:framework_end_idx]
 
 def _parse_for_imported_framework(line):
     if line == None or line == "":
@@ -77,10 +77,6 @@ def _parse_for_imported_framework(line):
 
     framework = _parse_pound_import(line)
 
-    # DEBUG BEGIN
-    print("*** CHUCK framework: ", framework)
-
-    # DEBUG END
     if framework != None:
         return _verify(framework)
     framework = _parse_at_import(line)

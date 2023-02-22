@@ -25,11 +25,18 @@ def _parse_for_imported_framework_test(ctx):
             exp = None,
         ),
         struct(
-            msg = "#import dir/header with brackets",
+            msg = "#import dir/header with brackets, is framework",
             line = """\
 #import <CoreTelephony/CTCarrier.h>
 """,
             exp = "CoreTelephony",
+        ),
+        struct(
+            msg = "#import dir/header with brackets, is not framework",
+            line = """\
+#import <Foo/Foo.h>
+""",
+            exp = None,
         ),
         struct(
             msg = "#import header with brackets",
@@ -42,6 +49,20 @@ def _parse_for_imported_framework_test(ctx):
             msg = "#import dir/header with quotes",
             line = """\
 #import "Interop/Analytics/Public/FIRAnalyticsInterop.h"
+""",
+            exp = None,
+        ),
+        struct(
+            msg = "@import, is framework",
+            line = """\
+@import UIKit;
+""",
+            exp = "UIKit",
+        ),
+        struct(
+            msg = "@import, is not framework",
+            line = """\
+@import FirebaseCore;
 """,
             exp = None,
         ),
