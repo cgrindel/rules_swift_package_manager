@@ -68,11 +68,6 @@ def _parse_for_imported_framework_test(ctx):
         ),
     ]
     for t in tests:
-        # DEBUG BEGIN
-        print("*** CHUCK =======")
-        print("*** CHUCK t.msg: ", t.msg)
-
-        # DEBUG END
         actual = objc_files.parse_for_imported_framework(t.line)
         asserts.equals(env, t.exp, actual, t.msg)
 
