@@ -87,7 +87,7 @@ def new_stub_repository_ctx(file_contents = {}):
 def _collect_builtin_frameworks_test(ctx):
     env = unittest.begin(ctx)
 
-    target_path = "/path/to/target"
+    root_path = "/path/to/target"
 
     tests = [
         struct(
@@ -122,13 +122,13 @@ def _collect_builtin_frameworks_test(ctx):
     for t in tests:
         stub_repository_ctx = new_stub_repository_ctx(
             file_contents = {
-                paths.normalize(paths.join(target_path, fname)): cnts
+                paths.normalize(paths.join(root_path, fname)): cnts
                 for fname, cnts in getattr(t, "file_contents", {}).items()
             },
         )
         actual = objc_files.collect_builtin_frameworks(
             repository_ctx = stub_repository_ctx,
-            target_path = target_path,
+            root_path = root_path,
             srcs = t.srcs,
         )
         asserts.equals(env, t.exp, actual, t.msg)

@@ -93,10 +93,10 @@ def _collect_frameworks_for_src(repository_ctx, src_path):
             frameworks.append(imported_framework)
     return frameworks
 
-def _collect_builtin_frameworks(repository_ctx, target_path, srcs):
+def _collect_builtin_frameworks(repository_ctx, root_path, srcs):
     frameworks = sets.make()
     for src in srcs:
-        src_path = paths.join(target_path, src)
+        src_path = paths.join(root_path, src)
         src_frameworks = _collect_frameworks_for_src(repository_ctx, src_path)
         for sf in src_frameworks:
             sets.insert(frameworks, sf)

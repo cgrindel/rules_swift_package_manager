@@ -8,6 +8,7 @@ load(":build_files.bzl", "build_files")
 load(":bzl_selects.bzl", "bzl_selects")
 load(":clang_files.bzl", "clang_files")
 load(":load_statements.bzl", "load_statements")
+load(":objc_files.bzl", "objc_files")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
@@ -402,13 +403,11 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["enable_modules"] = True
         attrs["module_name"] = target.c99name
 
-        # TODO(chuck): Remove/refine this HACK!
-        attrs["sdk_frameworks"] = [
-            "CoreTelephony",
-            "AuthenticationServices",
-            "SystemConfiguration",
-            "SafariServices",
-        ]
+        attrs["sdk_frameworks"] = objc_files.collect_builtin_frameworks(
+            repository_ctx = repository_ctx,
+            root_path = pkg_path,
+            srcs = attrs.get("srcs", []) + attrs.get("hdrs", []),
+        )
 
         modulemap_deps = []
         for dep in deps:

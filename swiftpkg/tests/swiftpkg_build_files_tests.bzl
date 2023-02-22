@@ -536,6 +536,7 @@ objc_library(
     hdrs = ["include/external.h"],
     includes = ["include"],
     module_name = "ObjcLibrary",
+    sdk_frameworks = [],
     srcs = [
         "src/foo.h",
         "src/foo.m",
