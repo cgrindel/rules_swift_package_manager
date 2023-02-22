@@ -99,9 +99,12 @@ done
 
 is_installed xcrun || usage_error "This utility requires that xcrun is available on the PATH."
 
-[[ -n "${go_output:-}" ]] || usage_error "Must specify an output path for the Go source file."
-[[ -n "${bzl_output:-}" ]] || \
+if [[ -z "${go_output:-}" ]]; then
+  usage_error "Must specify an output path for the Go source file." 
+fi
+if [[ -z "${bzl_output:-}" ]]; then
   usage_error "Must specify an output path for the Bazel Starlark source file."
+fi
 
 sdk_path="$(xcrun --show-sdk-path)"
 macos_frameworks_dir="${sdk_path}/System/Library/Frameworks"
