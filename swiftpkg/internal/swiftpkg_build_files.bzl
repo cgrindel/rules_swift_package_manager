@@ -413,21 +413,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             sdk_framework_bzl_selects,
         )
 
-        modulemap_deps = []
-        for dep in deps:
-            mm_values = [
-                v
-                for v in dep.value
-                if pkginfo_targets.is_modulemap_label(v)
-            ]
-            if len(mm_values) == 0:
-                continue
-            mm_dep = bzl_selects.new(
-                value = mm_values,
-                kind = dep.kind,
-                condition = dep.condition,
-            )
-            modulemap_deps.append(mm_dep)
+        modulemap_deps = _collect_modulemap_deps(deps)
 
         # There is a known issue with Objective-C library targets not
         # supporting the `@import` of modules defined in other Objective-C
@@ -614,8 +600,6 @@ def _swift_binary_from_product(product, dep_target, repo_name):
     )
 
 # MARK: - generate_modulemap Helpers
-
-# TODO(chuck): Update clang modulemap deps to use helper.
 
 def _collect_modulemap_deps(deps):
     modulemap_deps = []
