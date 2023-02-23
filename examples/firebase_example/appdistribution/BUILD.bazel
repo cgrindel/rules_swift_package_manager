@@ -1,0 +1,7 @@
+filegroup(
+    name = "shared_resources",
+    srcs = [
+        "GoogleService-Info.plist",
+    ],
+    visibility = ["//appdistribution:__subpackages__"],
+)

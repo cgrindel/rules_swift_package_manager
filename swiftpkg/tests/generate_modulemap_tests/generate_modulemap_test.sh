@@ -23,7 +23,16 @@ PrintVersion_location=cgrindel_swift_bazel/swiftpkg/tests/generate_modulemap_tes
 PrintVersion="$(rlocation "${PrintVersion_location}")" || \
   (echo >&2 "Failed to locate ${PrintVersion_location}" && exit 1)
 
+PrintVersionObjc_location=cgrindel_swift_bazel/swiftpkg/tests/generate_modulemap_tests/PrintVersionObjc/PrintVersionObjc
+PrintVersionObjc="$(rlocation "${PrintVersionObjc_location}")" || \
+  (echo >&2 "Failed to locate ${PrintVersionObjc_location}" && exit 1)
+
 # MARK - Test
 
+expected="1.2.3"
+
 output="$("${PrintVersion}")"
-assert_equal "1.2.3" "${output}" "version check"
+assert_equal "${expected}" "${output}" "version check"
+
+objc_output="$("${PrintVersionObjc}")"
+assert_equal "${expected}" "${output}" "version check"

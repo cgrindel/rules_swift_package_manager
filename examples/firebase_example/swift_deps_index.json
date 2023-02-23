@@ -48,7 +48,7 @@
       "product_memberships": [
         "FirebaseAnalytics",
         "FirebaseAnalyticsWithoutAdIdSupport",
-        "FirebaseAnalyticsSwift-Beta",
+        "FirebaseAnalyticsSwift",
         "FirebaseAuth",
         "FirebaseAppCheck",
         "FirebaseAppDistribution-Beta",
@@ -58,10 +58,10 @@
         "FirebaseStorageCombine-Community",
         "FirebaseCrashlytics",
         "FirebaseDatabase",
-        "FirebaseDatabaseSwift-Beta",
+        "FirebaseDatabaseSwift",
         "FirebaseDynamicLinks",
         "FirebaseFirestore",
-        "FirebaseFirestoreSwift-Beta",
+        "FirebaseFirestoreSwift",
         "FirebaseFunctions",
         "FirebaseInAppMessaging-Beta",
         "FirebaseInAppMessagingSwift-Beta",
@@ -70,8 +70,8 @@
         "FirebaseMLModelDownloader",
         "FirebasePerformance",
         "FirebaseRemoteConfig",
-        "FirebaseStorage",
-        "FirebaseStorageSwift-Beta"
+        "FirebaseRemoteConfigSwift",
+        "FirebaseStorage"
       ]
     },
     {
@@ -85,6 +85,14 @@
       ]
     },
     {
+      "name": "FirebaseCrashlyticsUnit",
+      "c99name": "FirebaseCrashlyticsUnit",
+      "src_type": "objc",
+      "label": "@swiftpkg_firebase_ios_sdk//:Crashlytics_UnitTests_FirebaseCrashlyticsUnit",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": []
+    },
+    {
       "name": "FirebaseABTesting",
       "c99name": "FirebaseABTesting",
       "src_type": "objc",
@@ -94,7 +102,8 @@
         "FirebaseInAppMessaging-Beta",
         "FirebaseInAppMessagingSwift-Beta",
         "FirebasePerformance",
-        "FirebaseRemoteConfig"
+        "FirebaseRemoteConfig",
+        "FirebaseRemoteConfigSwift"
       ]
     },
     {
@@ -106,13 +115,23 @@
       "product_memberships": []
     },
     {
+      "name": "FirebaseAnalyticsOnDeviceConversionTarget",
+      "c99name": "FirebaseAnalyticsOnDeviceConversionTarget",
+      "src_type": "objc",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseAnalyticsOnDeviceConversionWrapper_FirebaseAnalyticsOnDeviceConversionTarget",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseAnalyticsOnDeviceConversion"
+      ]
+    },
+    {
       "name": "FirebaseAnalyticsSwift",
       "c99name": "FirebaseAnalyticsSwift",
       "src_type": "swift",
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseAnalyticsSwift_Sources_FirebaseAnalyticsSwift",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
-        "FirebaseAnalyticsSwift-Beta"
+        "FirebaseAnalyticsSwift"
       ]
     },
     {
@@ -133,7 +152,20 @@
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseAnalytics",
-        "FirebaseAnalyticsSwift-Beta"
+        "FirebaseAnalyticsSwift"
+      ]
+    },
+    {
+      "name": "FirebaseAppCheckInterop",
+      "c99name": "FirebaseAppCheckInterop",
+      "src_type": "objc",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseAppCheck_Interop_FirebaseAppCheckInterop",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseStorageCombine-Community",
+        "FirebaseFunctions",
+        "FirebaseStorage"
       ]
     },
     {
@@ -179,6 +211,27 @@
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseAppDistribution_Tests_Unit_AppDistributionUnit",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": []
+    },
+    {
+      "name": "AppDistributionUnitSwift",
+      "c99name": "AppDistributionUnitSwift",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseAppDistribution_Tests_Unit_Swift_AppDistributionUnitSwift",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": []
+    },
+    {
+      "name": "FirebaseAuthInterop",
+      "c99name": "FirebaseAuthInterop",
+      "src_type": "objc",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseAuth_Interop_FirebaseAuthInterop",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseStorageCombine-Community",
+        "FirebaseFunctions",
+        "FirebaseStorage"
+      ]
     },
     {
       "name": "FirebaseAuth",
@@ -240,15 +293,30 @@
       ]
     },
     {
-      "name": "FirebaseCore",
-      "c99name": "FirebaseCore",
+      "name": "FirebaseCoreExtension",
+      "c99name": "FirebaseCoreExtension",
       "src_type": "objc",
-      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseCore_Sources_FirebaseCore",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseCore_Extension_FirebaseCoreExtension",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseStorageCombine-Community",
+        "FirebaseFirestoreSwift",
+        "FirebaseFunctions",
+        "FirebaseStorage"
+      ]
+    },
+    {
+      "name": "FirebaseCoreInternal",
+      "c99name": "FirebaseCoreInternal",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseCore_Internal_Sources_FirebaseCoreInternal",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseAnalytics",
         "FirebaseAnalyticsWithoutAdIdSupport",
-        "FirebaseAnalyticsSwift-Beta",
+        "FirebaseAnalyticsSwift",
         "FirebaseAuth",
         "FirebaseAppCheck",
         "FirebaseAppDistribution-Beta",
@@ -258,10 +326,10 @@
         "FirebaseStorageCombine-Community",
         "FirebaseCrashlytics",
         "FirebaseDatabase",
-        "FirebaseDatabaseSwift-Beta",
+        "FirebaseDatabaseSwift",
         "FirebaseDynamicLinks",
         "FirebaseFirestore",
-        "FirebaseFirestoreSwift-Beta",
+        "FirebaseFirestoreSwift",
         "FirebaseFunctions",
         "FirebaseInAppMessaging-Beta",
         "FirebaseInAppMessagingSwift-Beta",
@@ -270,8 +338,51 @@
         "FirebaseMLModelDownloader",
         "FirebasePerformance",
         "FirebaseRemoteConfig",
-        "FirebaseStorage",
-        "FirebaseStorageSwift-Beta"
+        "FirebaseRemoteConfigSwift",
+        "FirebaseStorage"
+      ]
+    },
+    {
+      "name": "FirebaseCoreInternalTests",
+      "c99name": "FirebaseCoreInternalTests",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseCore_Internal_Tests_FirebaseCoreInternalTests",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": []
+    },
+    {
+      "name": "FirebaseCore",
+      "c99name": "FirebaseCore",
+      "src_type": "objc",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseCore_Sources_FirebaseCore",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseAnalytics",
+        "FirebaseAnalyticsWithoutAdIdSupport",
+        "FirebaseAnalyticsSwift",
+        "FirebaseAuth",
+        "FirebaseAppCheck",
+        "FirebaseAppDistribution-Beta",
+        "FirebaseAuthCombine-Community",
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseStorageCombine-Community",
+        "FirebaseCrashlytics",
+        "FirebaseDatabase",
+        "FirebaseDatabaseSwift",
+        "FirebaseDynamicLinks",
+        "FirebaseFirestore",
+        "FirebaseFirestoreSwift",
+        "FirebaseFunctions",
+        "FirebaseInAppMessaging-Beta",
+        "FirebaseInAppMessagingSwift-Beta",
+        "FirebaseInstallations",
+        "FirebaseMessaging",
+        "FirebaseMLModelDownloader",
+        "FirebasePerformance",
+        "FirebaseRemoteConfig",
+        "FirebaseRemoteConfigSwift",
+        "FirebaseStorage"
       ]
     },
     {
@@ -289,7 +400,7 @@
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseDatabaseSwift_Sources_FirebaseDatabaseSwift",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
-        "FirebaseDatabaseSwift-Beta"
+        "FirebaseDatabaseSwift"
       ]
     },
     {
@@ -308,7 +419,7 @@
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseDatabase",
-        "FirebaseDatabaseSwift-Beta"
+        "FirebaseDatabaseSwift"
       ]
     },
     {
@@ -336,6 +447,49 @@
       "product_memberships": [
         "FirebaseDynamicLinks"
       ]
+    },
+    {
+      "name": "FirebaseFunctions",
+      "c99name": "FirebaseFunctions",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseFunctions_Sources_FirebaseFunctions",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseFunctions"
+      ]
+    },
+    {
+      "name": "FunctionsCombineUnit",
+      "c99name": "FunctionsCombineUnit",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseFunctions_Tests_CombineUnit_FunctionsCombineUnit",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": []
+    },
+    {
+      "name": "FirebaseFunctionsIntegration",
+      "c99name": "FirebaseFunctionsIntegration",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseFunctions_Tests_Integration_FirebaseFunctionsIntegration",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": []
+    },
+    {
+      "name": "FirebaseFunctionsObjCIntegration",
+      "c99name": "FirebaseFunctionsObjCIntegration",
+      "src_type": "objc",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseFunctions_Tests_ObjCIntegration_FirebaseFunctionsObjCIntegration",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": []
+    },
+    {
+      "name": "FirebaseFunctionsUnit",
+      "c99name": "FirebaseFunctionsUnit",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseFunctions_Tests_Unit_FirebaseFunctionsUnit",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": []
     },
     {
       "name": "FirebaseInAppMessaging",
@@ -378,7 +532,7 @@
       "product_memberships": [
         "FirebaseAnalytics",
         "FirebaseAnalyticsWithoutAdIdSupport",
-        "FirebaseAnalyticsSwift-Beta",
+        "FirebaseAnalyticsSwift",
         "FirebaseAppDistribution-Beta",
         "FirebaseCrashlytics",
         "FirebaseInAppMessaging-Beta",
@@ -387,7 +541,8 @@
         "FirebaseMessaging",
         "FirebaseMLModelDownloader",
         "FirebasePerformance",
-        "FirebaseRemoteConfig"
+        "FirebaseRemoteConfig",
+        "FirebaseRemoteConfigSwift"
       ]
     },
     {
@@ -407,6 +562,17 @@
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseMLModelDownloader_Tests_Unit_FirebaseMLModelDownloaderUnit",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": []
+    },
+    {
+      "name": "FirebaseMessagingInterop",
+      "c99name": "FirebaseMessagingInterop",
+      "src_type": "objc",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseMessaging_Interop_FirebaseMessagingInterop",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseFunctions"
+      ]
     },
     {
       "name": "FirebaseMessaging",
@@ -445,6 +611,32 @@
       "product_memberships": []
     },
     {
+      "name": "FirebaseRemoteConfigSwift",
+      "c99name": "FirebaseRemoteConfigSwift",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfigSwift_Sources_FirebaseRemoteConfigSwift",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseRemoteConfigSwift"
+      ]
+    },
+    {
+      "name": "RemoteConfigFakeConsoleObjC",
+      "c99name": "RemoteConfigFakeConsoleObjC",
+      "src_type": "objc",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfigSwift_Tests_ObjC_RemoteConfigFakeConsoleObjC",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": []
+    },
+    {
+      "name": "RemoteConfigFakeConsole",
+      "c99name": "RemoteConfigFakeConsole",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfigSwift_Tests_RemoteConfigFakeConsole",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": []
+    },
+    {
       "name": "FirebaseRemoteConfig",
       "c99name": "FirebaseRemoteConfig",
       "src_type": "objc",
@@ -452,7 +644,8 @@
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebasePerformance",
-        "FirebaseRemoteConfig"
+        "FirebaseRemoteConfig",
+        "FirebaseRemoteConfigSwift"
       ]
     },
     {
@@ -464,33 +657,76 @@
       "product_memberships": []
     },
     {
-      "name": "FirebaseStorageSwift",
-      "c99name": "FirebaseStorageSwift",
+      "name": "FirebaseSessionsObjC",
+      "c99name": "FirebaseSessionsObjC",
+      "src_type": "objc",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseSessions_FirebaseSessionsObjC",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": []
+    },
+    {
+      "name": "FirebaseSessions",
+      "c99name": "FirebaseSessions",
       "src_type": "swift",
-      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseStorageSwift_Sources_FirebaseStorageSwift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseSessions_Sources_FirebaseSessions",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": []
+    },
+    {
+      "name": "FirebaseSessionsUnit",
+      "c99name": "FirebaseSessionsUnit",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseSessions_Tests_Unit_FirebaseSessionsUnit",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": []
+    },
+    {
+      "name": "FirebaseSharedSwift",
+      "c99name": "FirebaseSharedSwift",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseSharedSwift_Sources_FirebaseSharedSwift",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
-        "FirebaseStorageCombine-Community",
-        "FirebaseStorageSwift-Beta"
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseDatabaseSwift",
+        "FirebaseFirestoreSwift",
+        "FirebaseFunctions",
+        "FirebaseRemoteConfigSwift"
       ]
+    },
+    {
+      "name": "FirebaseSharedSwiftTests",
+      "c99name": "FirebaseSharedSwiftTests",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseSharedSwift_Tests_FirebaseSharedSwiftTests",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": []
     },
     {
       "name": "FirebaseStorage",
       "c99name": "FirebaseStorage",
-      "src_type": "objc",
+      "src_type": "swift",
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseStorage_Sources_FirebaseStorage",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseStorageCombine-Community",
-        "FirebaseStorage",
-        "FirebaseStorageSwift-Beta"
+        "FirebaseStorage"
       ]
     },
     {
-      "name": "StorageUnit",
-      "c99name": "StorageUnit",
+      "name": "StorageObjCIntegration",
+      "c99name": "StorageObjCIntegration",
       "src_type": "objc",
-      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseStorage_Tests_Unit_StorageUnit",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseStorage_Tests_ObjCIntegration_StorageObjCIntegration",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": []
+    },
+    {
+      "name": "FirebaseStorageUnit",
+      "c99name": "FirebaseStorageUnit",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseStorage_Tests_Unit_FirebaseStorageUnit",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": []
     },
@@ -511,49 +747,6 @@
       "product_memberships": []
     },
     {
-      "name": "FirebaseFunctionsTestingSupport",
-      "c99name": "FirebaseFunctionsTestingSupport",
-      "src_type": "objc",
-      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseTestingSupport_Functions_Sources_FirebaseFunctionsTestingSupport",
-      "package_identity": "firebase-ios-sdk",
-      "product_memberships": []
-    },
-    {
-      "name": "FirebaseCoreDiagnostics",
-      "c99name": "FirebaseCoreDiagnostics",
-      "src_type": "objc",
-      "label": "@swiftpkg_firebase_ios_sdk//:Firebase_CoreDiagnostics_FIRCDLibrary_FirebaseCoreDiagnostics",
-      "package_identity": "firebase-ios-sdk",
-      "product_memberships": [
-        "FirebaseAnalytics",
-        "FirebaseAnalyticsWithoutAdIdSupport",
-        "FirebaseAnalyticsSwift-Beta",
-        "FirebaseAuth",
-        "FirebaseAppCheck",
-        "FirebaseAppDistribution-Beta",
-        "FirebaseAuthCombine-Community",
-        "FirebaseFirestoreCombine-Community",
-        "FirebaseFunctionsCombine-Community",
-        "FirebaseStorageCombine-Community",
-        "FirebaseCrashlytics",
-        "FirebaseDatabase",
-        "FirebaseDatabaseSwift-Beta",
-        "FirebaseDynamicLinks",
-        "FirebaseFirestore",
-        "FirebaseFirestoreSwift-Beta",
-        "FirebaseFunctions",
-        "FirebaseInAppMessaging-Beta",
-        "FirebaseInAppMessagingSwift-Beta",
-        "FirebaseInstallations",
-        "FirebaseMessaging",
-        "FirebaseMLModelDownloader",
-        "FirebasePerformance",
-        "FirebaseRemoteConfig",
-        "FirebaseStorage",
-        "FirebaseStorageSwift-Beta"
-      ]
-    },
-    {
       "name": "FirebaseFirestore",
       "c99name": "FirebaseFirestore",
       "src_type": "objc",
@@ -562,7 +755,7 @@
       "product_memberships": [
         "FirebaseFirestoreCombine-Community",
         "FirebaseFirestore",
-        "FirebaseFirestoreSwift-Beta"
+        "FirebaseFirestoreSwift"
       ]
     },
     {
@@ -573,41 +766,14 @@
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseFirestoreCombine-Community",
-        "FirebaseFirestoreSwift-Beta"
+        "FirebaseFirestoreSwift"
       ]
     },
     {
-      "name": "FunctionsUnit",
-      "c99name": "FunctionsUnit",
-      "src_type": "objc",
-      "label": "@swiftpkg_firebase_ios_sdk//:Functions_Example_Tests_FunctionsUnit",
-      "package_identity": "firebase-ios-sdk",
-      "product_memberships": []
-    },
-    {
-      "name": "FirebaseFunctions",
-      "c99name": "FirebaseFunctions",
-      "src_type": "objc",
-      "label": "@swiftpkg_firebase_ios_sdk//:Functions_FirebaseFunctions",
-      "package_identity": "firebase-ios-sdk",
-      "product_memberships": [
-        "FirebaseFunctionsCombine-Community",
-        "FirebaseFunctions"
-      ]
-    },
-    {
-      "name": "FunctionsCombineUnit",
-      "c99name": "FunctionsCombineUnit",
+      "name": "HeartbeatLoggingTestUtils",
+      "c99name": "HeartbeatLoggingTestUtils",
       "src_type": "swift",
-      "label": "@swiftpkg_firebase_ios_sdk//:Functions_Tests_CombineUnit_FunctionsCombineUnit",
-      "package_identity": "firebase-ios-sdk",
-      "product_memberships": []
-    },
-    {
-      "name": "FunctionsUnitSwift",
-      "c99name": "FunctionsUnitSwift",
-      "src_type": "swift",
-      "label": "@swiftpkg_firebase_ios_sdk//:Functions_Tests_Unit_Swift_FunctionsUnitSwift",
+      "label": "@swiftpkg_firebase_ios_sdk//:HeartbeatLoggingTestUtils_Sources_HeartbeatLoggingTestUtils",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": []
     },
@@ -626,7 +792,7 @@
       "label": "@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseAnalyticsSwiftWrap_FirebaseAnalyticsSwiftTarget",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
-        "FirebaseAnalyticsSwift-Beta"
+        "FirebaseAnalyticsSwift"
       ]
     },
     {
@@ -676,7 +842,7 @@
       "label": "@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseFirestoreSwiftWrap_FirebaseFirestoreSwiftTarget",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
-        "FirebaseFirestoreSwift-Beta"
+        "FirebaseFirestoreSwift"
       ]
     },
     {
@@ -750,7 +916,17 @@
       "product_memberships": [
         "FirebaseAnalytics",
         "FirebaseAnalyticsWithoutAdIdSupport",
-        "FirebaseAnalyticsSwift-Beta"
+        "FirebaseAnalyticsSwift"
+      ]
+    },
+    {
+      "name": "GoogleAppMeasurementOnDeviceConversionTarget",
+      "c99name": "GoogleAppMeasurementOnDeviceConversionTarget",
+      "src_type": "objc",
+      "label": "@swiftpkg_googleappmeasurement//:GoogleAppMeasurementOnDeviceConversionWrapper_GoogleAppMeasurementOnDeviceConversionTarget",
+      "package_identity": "googleappmeasurement",
+      "product_memberships": [
+        "GoogleAppMeasurementOnDeviceConversion"
       ]
     },
     {
@@ -792,6 +968,16 @@
       "package_identity": "googleappmeasurement",
       "product_memberships": [
         "GoogleAppMeasurement"
+      ]
+    },
+    {
+      "name": "GoogleAppMeasurementOnDeviceConversion",
+      "c99name": "GoogleAppMeasurementOnDeviceConversion",
+      "src_type": "binary",
+      "label": "@swiftpkg_googleappmeasurement//:remote_archive_GoogleAppMeasurementOnDeviceConversion.zip_GoogleAppMeasurementOnDeviceConversion",
+      "package_identity": "googleappmeasurement",
+      "product_memberships": [
+        "GoogleAppMeasurementOnDeviceConversion"
       ]
     },
     {
@@ -966,19 +1152,11 @@
       "product_memberships": []
     },
     {
-      "name": "build-test",
-      "c99name": "build_test",
-      "src_type": "clang",
-      "label": "@swiftpkg_grpc_swiftpm//:SwiftPMTests_build-test",
-      "package_identity": "grpc-swiftpm",
-      "product_memberships": []
-    },
-    {
       "name": "gRPC-Core",
       "c99name": "gRPC_Core",
       "src_type": "clang",
-      "label": "@swiftpkg_grpc_swiftpm//:gRPC-Core",
-      "package_identity": "grpc-swiftpm",
+      "label": "@swiftpkg_grpc_ios//:native_src_gRPC-Core",
+      "package_identity": "grpc-ios",
       "product_memberships": [
         "gRPC-Core",
         "gRPC-cpp"
@@ -988,17 +1166,25 @@
       "name": "gRPC-cpp",
       "c99name": "gRPC_cpp",
       "src_type": "clang",
-      "label": "@swiftpkg_grpc_swiftpm//:gRPC-cpp",
-      "package_identity": "grpc-swiftpm",
+      "label": "@swiftpkg_grpc_ios//:native_src_gRPC-cpp",
+      "package_identity": "grpc-ios",
       "product_memberships": [
         "gRPC-cpp"
       ]
     },
     {
+      "name": "build-test",
+      "c99name": "build_test",
+      "src_type": "clang",
+      "label": "@swiftpkg_grpc_ios//:native_src_test_spm_build_build-test",
+      "package_identity": "grpc-ios",
+      "product_memberships": []
+    },
+    {
       "name": "GTMSessionFetcherCore",
       "c99name": "GTMSessionFetcherCore",
       "src_type": "objc",
-      "label": "@swiftpkg_gtm_session_fetcher//:Source_GTMSessionFetcherCore",
+      "label": "@swiftpkg_gtm_session_fetcher//:Sources_Core_GTMSessionFetcherCore",
       "package_identity": "gtm-session-fetcher",
       "product_memberships": [
         "GTMSessionFetcher",
@@ -1011,7 +1197,7 @@
       "name": "GTMSessionFetcherFull",
       "c99name": "GTMSessionFetcherFull",
       "src_type": "objc",
-      "label": "@swiftpkg_gtm_session_fetcher//:Source_GTMSessionFetcherFull",
+      "label": "@swiftpkg_gtm_session_fetcher//:Sources_Full_GTMSessionFetcherFull",
       "package_identity": "gtm-session-fetcher",
       "product_memberships": [
         "GTMSessionFetcher",
@@ -1022,17 +1208,33 @@
       "name": "GTMSessionFetcherLogView",
       "c99name": "GTMSessionFetcherLogView",
       "src_type": "objc",
-      "label": "@swiftpkg_gtm_session_fetcher//:Source_GTMSessionFetcherLogView",
+      "label": "@swiftpkg_gtm_session_fetcher//:Sources_LogView_GTMSessionFetcherLogView",
       "package_identity": "gtm-session-fetcher",
       "product_memberships": [
         "GTMSessionFetcherLogView"
       ]
     },
     {
+      "name": "objc-import-test",
+      "c99name": "objc_import_test",
+      "src_type": "objc",
+      "label": "@swiftpkg_gtm_session_fetcher//:SwiftPMTests_ObjCImportTest_objc-import-test",
+      "package_identity": "gtm-session-fetcher",
+      "product_memberships": []
+    },
+    {
+      "name": "swift-test",
+      "c99name": "swift_test",
+      "src_type": "swift",
+      "label": "@swiftpkg_gtm_session_fetcher//:SwiftPMTests_SwiftImportTest_swift-test",
+      "package_identity": "gtm-session-fetcher",
+      "product_memberships": []
+    },
+    {
       "name": "GTMSessionFetcherCoreTests",
       "c99name": "GTMSessionFetcherCoreTests",
       "src_type": "objc",
-      "label": "@swiftpkg_gtm_session_fetcher//:Source_UnitTests_GTMSessionFetcherCoreTests",
+      "label": "@swiftpkg_gtm_session_fetcher//:UnitTests_GTMSessionFetcherCoreTests",
       "package_identity": "gtm-session-fetcher",
       "product_memberships": []
     },
@@ -1265,7 +1467,15 @@
     },
     {
       "identity": "firebase-ios-sdk",
-      "name": "FirebaseAnalyticsSwift-Beta",
+      "name": "FirebaseAnalyticsOnDeviceConversion",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_firebase_ios_sdk//:FirebaseAnalyticsOnDeviceConversionWrapper_FirebaseAnalyticsOnDeviceConversionTarget"
+      ]
+    },
+    {
+      "identity": "firebase-ios-sdk",
+      "name": "FirebaseAnalyticsSwift",
       "type": "library",
       "target_labels": [
         "@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseAnalyticsSwiftWrap_FirebaseAnalyticsSwiftTarget"
@@ -1329,7 +1539,7 @@
     },
     {
       "identity": "firebase-ios-sdk",
-      "name": "FirebaseDatabaseSwift-Beta",
+      "name": "FirebaseDatabaseSwift",
       "type": "library",
       "target_labels": [
         "@swiftpkg_firebase_ios_sdk//:FirebaseDatabaseSwift_Sources_FirebaseDatabaseSwift"
@@ -1361,7 +1571,7 @@
     },
     {
       "identity": "firebase-ios-sdk",
-      "name": "FirebaseFirestoreSwift-Beta",
+      "name": "FirebaseFirestoreSwift",
       "type": "library",
       "target_labels": [
         "@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseFirestoreSwiftWrap_FirebaseFirestoreSwiftTarget"
@@ -1372,7 +1582,7 @@
       "name": "FirebaseFunctions",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_firebase_ios_sdk//:Functions_FirebaseFunctions"
+        "@swiftpkg_firebase_ios_sdk//:FirebaseFunctions_Sources_FirebaseFunctions"
       ]
     },
     {
@@ -1441,6 +1651,14 @@
     },
     {
       "identity": "firebase-ios-sdk",
+      "name": "FirebaseRemoteConfigSwift",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfigSwift_Sources_FirebaseRemoteConfigSwift"
+      ]
+    },
+    {
+      "identity": "firebase-ios-sdk",
       "name": "FirebaseStorage",
       "type": "library",
       "target_labels": [
@@ -1456,19 +1674,19 @@
       ]
     },
     {
-      "identity": "firebase-ios-sdk",
-      "name": "FirebaseStorageSwift-Beta",
-      "type": "library",
-      "target_labels": [
-        "@swiftpkg_firebase_ios_sdk//:FirebaseStorageSwift_Sources_FirebaseStorageSwift"
-      ]
-    },
-    {
       "identity": "googleappmeasurement",
       "name": "GoogleAppMeasurement",
       "type": "library",
       "target_labels": [
         "@swiftpkg_googleappmeasurement//:GoogleAppMeasurementWrapper_GoogleAppMeasurementTarget"
+      ]
+    },
+    {
+      "identity": "googleappmeasurement",
+      "name": "GoogleAppMeasurementOnDeviceConversion",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_googleappmeasurement//:GoogleAppMeasurementOnDeviceConversionWrapper_GoogleAppMeasurementOnDeviceConversionTarget"
       ]
     },
     {
@@ -1568,19 +1786,19 @@
       ]
     },
     {
-      "identity": "grpc-swiftpm",
+      "identity": "grpc-ios",
       "name": "gRPC-Core",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_grpc_swiftpm//:gRPC-Core"
+        "@swiftpkg_grpc_ios//:native_src_gRPC-Core"
       ]
     },
     {
-      "identity": "grpc-swiftpm",
+      "identity": "grpc-ios",
       "name": "gRPC-cpp",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_grpc_swiftpm//:gRPC-cpp"
+        "@swiftpkg_grpc_ios//:native_src_gRPC-cpp"
       ]
     },
     {
@@ -1588,8 +1806,8 @@
       "name": "GTMSessionFetcher",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_gtm_session_fetcher//:Source_GTMSessionFetcherCore",
-        "@swiftpkg_gtm_session_fetcher//:Source_GTMSessionFetcherFull"
+        "@swiftpkg_gtm_session_fetcher//:Sources_Core_GTMSessionFetcherCore",
+        "@swiftpkg_gtm_session_fetcher//:Sources_Full_GTMSessionFetcherFull"
       ]
     },
     {
@@ -1597,7 +1815,7 @@
       "name": "GTMSessionFetcherCore",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_gtm_session_fetcher//:Source_GTMSessionFetcherCore"
+        "@swiftpkg_gtm_session_fetcher//:Sources_Core_GTMSessionFetcherCore"
       ]
     },
     {
@@ -1605,7 +1823,7 @@
       "name": "GTMSessionFetcherFull",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_gtm_session_fetcher//:Source_GTMSessionFetcherFull"
+        "@swiftpkg_gtm_session_fetcher//:Sources_Full_GTMSessionFetcherFull"
       ]
     },
     {
@@ -1613,7 +1831,7 @@
       "name": "GTMSessionFetcherLogView",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_gtm_session_fetcher//:Source_GTMSessionFetcherLogView"
+        "@swiftpkg_gtm_session_fetcher//:Sources_LogView_GTMSessionFetcherLogView"
       ]
     },
     {

@@ -6,6 +6,7 @@ sh_test(
     name = "generate_modulemap_test",
     srcs = ["generate_modulemap_test.sh"],
     data = [
+        "//swiftpkg/tests/generate_modulemap_tests/PrintVersionObjc",
         "//swiftpkg/tests/generate_modulemap_tests/Sources/PrintVersion",
     ],
     deps = [

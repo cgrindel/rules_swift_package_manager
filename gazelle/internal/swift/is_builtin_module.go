@@ -7,7 +7,22 @@ var otherBuiltinModules = mapset.NewSet[string](
 )
 
 // The list of frameworks is found in builtin_modules.go.
-var allBuiltInModules = otherBuiltinModules.Union(macosFrameworks.Union(iosFrameworks))
+var allBuiltInModuleSets = []mapset.Set[string]{
+	otherBuiltinModules,
+	macosFrameworks,
+	iosFrameworks,
+	tvosFrameworks,
+	watchosFrameworks,
+}
+
+var allBuiltInModules mapset.Set[string]
+
+func init() {
+	allBuiltInModules = mapset.NewSet[string]()
+	for _, mset := range allBuiltInModuleSets {
+		allBuiltInModules = allBuiltInModules.Union(mset)
+	}
+}
 
 // IsBuiltInModule determines if the module is built into the Swift standard library.
 func IsBuiltInModule(name string) bool {

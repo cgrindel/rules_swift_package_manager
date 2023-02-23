@@ -259,13 +259,9 @@ def _collect_files(
         others = sorted(others),
     )
 
-def _has_objc_srcs(srcs):
-    return lists.contains(srcs, lambda x: x.endswith(".m"))
-
 clang_files = struct(
     collect_files = _collect_files,
     get_hdr_paths_from_modulemap = _get_hdr_paths_from_modulemap,
-    has_objc_srcs = _has_objc_srcs,
     is_hdr = _is_hdr,
     is_include_hdr = _is_include_hdr,
     is_public_modulemap = _is_public_modulemap,

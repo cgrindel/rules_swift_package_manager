@@ -28,15 +28,45 @@ source "${env_sh}"
 
 # MARK - Functions
 
-list_frameworks() {
-  local dir="${1}"
+sdk_dirs() {
+  local platform_path="${1}"
+  local sdks_path="${platform_path}/Developer/SDKs"
+  find "${sdks_path}" -name "*.sdk" -depth 1 -type d -print0
+}
+
+list_frameworks_for_sdk() {
+  local sdk_path="${1}"
+  local dir="${sdk_path}/System/Library/Frameworks"
   find "${dir}" -name "*.framework" -depth 1 -not -name "_*" -exec basename -s .framework {} \; \
     | sort
 }
+export -f list_frameworks_for_sdk
 
-format_as_go_args() {
+list_frameworks_for_platform() {
+  local platform_path="${1}"
+
+  # Find the SDK paths for the platform
+  local sdk_paths=()
+  while IFS=  read -r -d $'\0'; do
+      sdk_paths+=("$REPLY")
+  done < <(sdk_dirs "${platform_path}")
+
+  local frameworks=""
+  for sdk_path in "${sdk_paths[@]}" ; do
+    frameworks+="$(list_frameworks_for_sdk "${sdk_path}")"
+  done
+
+  echo "${frameworks}" | sort -u
+}
+
+format_as_go_list_item() {
   sed -E -e 's/^(.*)/\t"\1",/g'
 }
+
+format_as_bzl_list_item() {
+  sed -E -e 's/^(.*)/    "\1",/g'
+}
+
 
 show_usage() {
   get_usage
@@ -54,13 +84,13 @@ get_usage() {
 Generates a Go source file with the current list of macOS and iOS frameworks.
 
 Usage:
-${utility} [OPTION]... [<output_path>]
+${utility} [OPTION]... [<go_output>]
 
 Options:
-  --go_package <go_pkg>  The name of the Go package. (Default: ${go_package})
-  <output_path>          The path where to write the Go source. If it is a 
-                         relative path, it is evaluated relative to the 
-                         workspace root.
+  --go_package <go_pkg>    The name of the Go package. (Default: ${go_package})
+  --go_output <go_output>  The path where to write the Go source. If it is a 
+                           relative path, it is evaluated relative to the 
+                           workspace root.
 EOF
 }
 
@@ -74,16 +104,19 @@ while (("$#")); do
       go_package="${2}"
       shift 2
       ;;
+    "--go_output")
+      go_output="${2}"
+      shift 2
+      ;;
+    "--bzl_output")
+      bzl_output="${2}"
+      shift 2
+      ;;
     -*)
       usage_error "Unrecognized option. ${1}"
       ;;
     *)
-      if [[ -z "${output_path:-}" ]]; then
-        output_path="${1}"
-        shift 1
-      else
-        usage_error "Unexpected argument. ${1}"
-      fi
+      usage_error "Unexpected argument. ${1}"
       ;;
   esac
 done
@@ -91,15 +124,28 @@ done
 
 is_installed xcrun || usage_error "This utility requires that xcrun is available on the PATH."
 
-sdk_path="$(xcrun --show-sdk-path)"
-macos_frameworks_dir="${sdk_path}/System/Library/Frameworks"
-ios_frameworks_dir="${sdk_path}/System/iOSSupport/System/Library/Frameworks"
+if [[ -z "${go_output:-}" ]]; then
+  usage_error "Must specify an output path for the Go source file." 
+fi
+if [[ -z "${bzl_output:-}" ]]; then
+  usage_error "Must specify an output path for the Bazel Starlark source file."
+fi
+
+
+
+# sdk_path="$(xcrun --show-sdk-path)"
+# macos_frameworks_dir="${sdk_path}/System/Library/Frameworks"
 
 sdk_version="$(xcrun --show-sdk-version)"
 sdk_build_version="$(xcrun --show-sdk-build-version)"
 
-macos_frameworks="$(list_frameworks "${macos_frameworks_dir}")"
-ios_frameworks="$(list_frameworks "${ios_frameworks_dir}")"
+platforms_path="$(dirname "$(xcrun --show-sdk-platform-path)")"
+macos_frameworks="$(list_frameworks_for_platform "${platforms_path}/MacOSX.platform")"
+ios_frameworks="$(list_frameworks_for_platform "${platforms_path}/iPhoneOS.platform")"
+tvos_frameworks="$(list_frameworks_for_platform "${platforms_path}/AppleTVOS.platform")"
+watchos_frameworks="$(list_frameworks_for_platform "${platforms_path}/WatchOS.platform")"
+
+# Go Source
 
 go_src="$(cat <<-EOF
 package ${go_package}
@@ -113,22 +159,74 @@ import mapset "github.com/deckarep/golang-set/v2"
 // SDK Build Version: ${sdk_build_version}
 
 var macosFrameworks = mapset.NewSet[string](
-$(echo "${macos_frameworks}" | format_as_go_args)
+$(echo "${macos_frameworks}" | format_as_go_list_item)
 )
 
 var iosFrameworks = mapset.NewSet[string](
-$(echo "${ios_frameworks}" | format_as_go_args)
+$(echo "${ios_frameworks}" | format_as_go_list_item)
+)
+
+var tvosFrameworks = mapset.NewSet[string](
+$(echo "${tvos_frameworks}" | format_as_go_list_item)
+)
+
+var watchosFrameworks = mapset.NewSet[string](
+$(echo "${watchos_frameworks}" | format_as_go_list_item)
 )
 EOF
 )"
 
 # Ouptut the Go source
-output_cmd=( echo "${go_src}" )
-if [[ -n "${output_path:-}" ]]; then
-  if [[ ! "${output_path}" = /* ]]; then
-    output_path="${BUILD_WORKSPACE_DIRECTORY}/${output_path}"
-  fi
-  "${output_cmd[@]}" > "${output_path}"
-else
-  "${output_cmd[@]}"
+go_output_cmd=( echo "${go_src}" )
+if [[ ! "${go_output}" = /* ]]; then
+  go_output="${BUILD_WORKSPACE_DIRECTORY}/${go_output}"
 fi
+"${go_output_cmd[@]}" > "${go_output}"
+
+# Starlark Source
+
+bzl_src="$(cat <<-EOF
+"""Module listing built-in Frameworks."""
+
+load("@bazel_skylib//lib:sets.bzl", "sets")
+
+# NOTE: This file is generated by running the following:
+# bazel run //tools/generate_builtin_frameworks
+#
+# SDK Version: ${sdk_version}
+# SDK Build Version: ${sdk_build_version}
+
+_macos = sets.make([
+$(echo "${macos_frameworks}" | format_as_bzl_list_item)
+])
+
+_ios = sets.make([
+$(echo "${ios_frameworks}" | format_as_bzl_list_item)
+])
+
+_tvos = sets.make([
+$(echo "${tvos_frameworks}" | format_as_bzl_list_item)
+])
+
+_watchos = sets.make([
+$(echo "${watchos_frameworks}" | format_as_bzl_list_item)
+])
+
+_all = sets.union(_macos, _ios, _tvos, _watchos)
+
+apple_builtin_frameworks = struct(
+    all = _all,
+    ios = _ios,
+    macos = _macos,
+    tvos = _tvos,
+    watchos = _watchos,
+)
+EOF
+)"
+
+# Ouptut the Starlark source
+bzl_output_cmd=( echo "${bzl_src}" )
+if [[ ! "${bzl_output}" = /* ]]; then
+  bzl_output="${BUILD_WORKSPACE_DIRECTORY}/${bzl_output}"
+fi
+"${bzl_output_cmd[@]}" > "${bzl_output}"
