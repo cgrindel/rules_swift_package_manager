@@ -66,6 +66,15 @@ def _parse_at_import(line):
     return line[framework_start_idx:framework_end_idx]
 
 def _parse_for_imported_framework(line):
+    """Parse a single line of text looking for a framework import.
+
+    Args:
+        line: The line to be parsed as a `string`.
+
+    Returns:
+        The name of the imported framework as a `string`, if a framework
+        import is found. Otherwise, it returns `None`.
+    """
     if line == None or line == "":
         return None
 
@@ -95,6 +104,17 @@ def _collect_frameworks_for_src(repository_ctx, src_path):
     return frameworks
 
 def _collect_builtin_frameworks(repository_ctx, root_path, srcs):
+    """Collect all of the Apple built-in frameworks imported by the specified \
+    source files.
+
+    Args:
+        repository_ctx: An instance of `repository_ctx`.
+        root_path: The parent path for the source files as a `string`.
+        srcs: A `list` of source file paths relative to the `root_path`.
+
+    Returns:
+        A `list` of the imported Apple built-in frameworks.
+    """
     frameworks = sets.make()
     for src in srcs:
         src_path = paths.join(root_path, src)
