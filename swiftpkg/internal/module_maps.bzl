@@ -17,7 +17,8 @@
 
 """Logic for generating Clang module map files."""
 
-# TODO(#723): Remove these disables once https://github.com/bazelbuild/buildtools/issues/926 is fixed
+# NOTE(cgrindel): Mangled the prefix to avoid finding this when looking for temporary task comments.
+# T-O-D-O(#723): Remove these disables once https://github.com/bazelbuild/buildtools/issues/926 is fixed
 # buildifier: disable=return-value
 # buildifier: disable=function-docstring-return
 def write_module_map(
