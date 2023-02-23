@@ -12,7 +12,9 @@ swift_library(
     tags = ["manual"],
     visibility = ["//visibility:public"],
     # GH202: Incomplete deps are generated.
-    deps = ["@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseAppDistributionWrap_FirebaseAppDistributionTarget"],
+    deps = [
+        "@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseAppDistributionWrap_FirebaseAppDistributionTarget",
+    ],
 )
 
 ios_application(
@@ -29,10 +31,7 @@ ios_application(
         ["Assets.xcassets/**"],
         exclude = ["Assets.xcassets/AppIcon.appiconset/**"],
     ) + [
-        ":GoogleService-Info.plist",
+        "//appdistribution:shared_resources",
     ],
-    # GH208: This fails due to an Objc module not being found by another Objc module.
-    # Marking as manual so that they do not run during CI.
-    tags = ["manual"],
     deps = [":AppDistributionExample"],
 )

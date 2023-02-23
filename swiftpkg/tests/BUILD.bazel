@@ -1,4 +1,5 @@
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load(":bazel_apple_platforms_tests.bzl", "bazel_apple_platforms_test_suite")
 load(":bazel_repo_names_tests.bzl", "bazel_repo_names_test_suite")
 load(":build_decls_tests.bzl", "build_decls_test_suite")
 load(":build_files_tests.bzl", "build_files_test_suite")
@@ -6,16 +7,20 @@ load(":bzl_selects_tests.bzl", "bzl_selects_test_suite")
 load(":clang_files_tests.bzl", "clang_files_test_suite")
 load(":deps_indexes_tests.bzl", "deps_indexes_test_suite")
 load(":load_statements_tests.bzl", "load_statements_test_suite")
+load(":objc_files_tests.bzl", "objc_files_test_suite")
 load(":pkginfo_ext_deps_tests.bzl", "pkginfo_ext_deps_test_suite")
 load(":pkginfo_target_deps_tests.bzl", "pkginfo_target_deps_test_suite")
 load(":pkginfo_targets_tests.bzl", "pkginfo_targets_test_suite")
 load(":pkginfos_tests.bzl", "pkginfos_test_suite")
 load(":repository_files_tests.bzl", "repository_files_test_suite")
 load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
+load(":swift_files_tests.bzl", "swift_files_test_suite")
 load(":swiftpkg_build_files_tests.bzl", "swiftpkg_build_files_test_suite")
 load(":validations_tests.bzl", "validations_test_suite")
 
 bzlformat_pkg(name = "bzlformat")
+
+bazel_apple_platforms_test_suite()
 
 bazel_repo_names_test_suite()
 
@@ -28,6 +33,8 @@ clang_files_test_suite()
 load_statements_test_suite()
 
 deps_indexes_test_suite()
+
+objc_files_test_suite()
 
 pkginfo_ext_deps_test_suite()
 
@@ -42,6 +49,8 @@ repository_files_test_suite()
 bzl_selects_test_suite()
 
 starlark_codegen_test_suite()
+
+swift_files_test_suite()
 
 swiftpkg_build_files_test_suite()
 

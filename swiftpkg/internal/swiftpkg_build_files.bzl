@@ -3,16 +3,19 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
+load(":bazel_apple_platforms.bzl", "bazel_apple_platforms")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":bzl_selects.bzl", "bzl_selects")
 load(":clang_files.bzl", "clang_files")
 load(":load_statements.bzl", "load_statements")
+load(":objc_files.bzl", "objc_files")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
 load(":repository_files.bzl", "repository_files")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
+load(":swift_files.bzl", "swift_files")
 
 # MARK: - Target Entry Point
 
@@ -33,7 +36,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
 
 def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     deps = lists.flatten([
-        pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
+        pkginfo_target_deps.bzl_select_list(pkg_ctx, td, depender_module_name = target.c99name)
         for td in target.dependencies
     ])
     attrs = {
@@ -51,9 +54,18 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
 
     # GH046: Support plugins.
 
+    # Check if any of the sources indicate that the module will be used by
+    # Objective-C code. If so, generate the bridge header file.
+    target_path = paths.join(pkg_ctx.pkg_info.path, target.path)
+    for src in target.sources:
+        path = paths.join(target_path, src)
+        if swift_files.has_objc_directive(repository_ctx, path):
+            attrs["generates_header"] = True
+            break
+
     # The rules_swift code links in developer libraries if the rule is marked testonly.
     # https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/compiling.bzl#L1312-L1319
-    is_test = _imports_xctest(repository_ctx, pkg_ctx, target)
+    is_test = swift_files.imports_xctest(repository_ctx, pkg_ctx, target)
 
     if target.swift_settings != None:
         if len(target.swift_settings.defines) > 0:
@@ -86,19 +98,29 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     else:
         fail("Unrecognized target type for a Swift target. type:", target.type)
 
+    # Generate a modulemap for the Swift module.
+    if attrs.get("generates_header", False):
+        load_stmts.append(swiftpkg_generate_modulemap_load_stmt)
+        bzl_target_name = pkginfo_targets.bazel_label_name(target)
+        modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
+        modulemap_deps = _collect_modulemap_deps(deps)
+        decls.append(
+            build_decls.new(
+                kind = swiftpkg_kinds.generate_modulemap,
+                name = modulemap_target_name,
+                attrs = {
+                    "deps": bzl_selects.to_starlark(modulemap_deps),
+                    "hdrs": [":{}".format(bzl_target_name)],
+                    "module_name": target.c99name,
+                    "visibility": ["//visibility:public"],
+                },
+            ),
+        )
+
     return build_files.new(
         load_stmts = load_stmts,
         decls = decls,
     )
-
-def _imports_xctest(repository_ctx, pkg_ctx, target):
-    target_path = paths.join(pkg_ctx.pkg_info.path, target.path)
-    for src in target.sources:
-        path = paths.join(target_path, src)
-        file_contents = repository_ctx.read(path)
-        if file_contents.find("import XCTest") > -1:
-            return True
-    return False
 
 def _swift_library_from_target(target, attrs):
     return build_decls.new(
@@ -190,7 +212,11 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         relative_to = pkg_path,
     )
     deps = lists.flatten([
-        pkginfo_target_deps.bazel_label_strs(pkg_ctx, td)
+        pkginfo_target_deps.bzl_select_list(
+            pkg_ctx,
+            td,
+            depender_module_name = target.c99name,
+        )
         for td in target.dependencies
     ])
 
@@ -271,7 +297,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 for bs in target.linker_settings.linked_libraries
             ]))
         if len(target.linker_settings.linked_frameworks) > 0:
-            # copts.extend(lists.flatten([
             linkopts.extend(lists.flatten([
                 bzl_selects.new_from_build_setting(bs)
                 for bs in target.linker_settings.linked_frameworks
@@ -362,35 +387,58 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["defines"] = bzl_selects.to_starlark(defines)
 
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
-    if clang_files.has_objc_srcs(srcs):
+    if objc_files.has_objc_srcs(srcs):
         # Enable clang module support.
         # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
         attrs["enable_modules"] = True
         attrs["module_name"] = target.c99name
 
+        sdk_frameworks = objc_files.collect_builtin_frameworks(
+            repository_ctx = repository_ctx,
+            root_path = pkg_path,
+            srcs = attrs.get("srcs", []) + attrs.get("hdrs", []),
+        )
+        sdk_framework_bzl_selects = []
+        for sf in sdk_frameworks:
+            platform_conditions = bazel_apple_platforms.for_framework(sf)
+            for pc in platform_conditions:
+                sdk_framework_bzl_selects.append(
+                    bzl_selects.new(
+                        value = sf,
+                        kind = _condition_kinds.sdk_frameworks,
+                        condition = pc,
+                    ),
+                )
+        attrs["sdk_frameworks"] = bzl_selects.to_starlark(
+            sdk_framework_bzl_selects,
+        )
+
+        modulemap_deps = _collect_modulemap_deps(deps)
+
         # There is a known issue with Objective-C library targets not
         # supporting the `@import` of modules defined in other Objective-C
         # targets. As a workaround, we will define two targets. One is the
-        # `objc_library` target.  The other is a `swift_objc_module_alias`
-        # target. This second target generates a Swift module that re-exports
-        # the modules defined in the Objective-C. Any internal targets that
-        # depend upon this module will reference the `objc_library`. Any
-        # external targets that depend upon this module will reference the
-        # `swift_library` generated by the `swift_objc_module_alias` macro.
+        # `objc_library` target.  The other is a `generate_modulemap`
+        # target. This second target generates a `module.modulemap` file and
+        # provides information about that generated file to `objc_library`
+        # targets.
         #
         # See `deps_indexes.bzl` for the logic that resolves the dependency
         # labels.
-        # See `swift_objc_module_alias.bzl` for details on the re-export macro.
-        load_stmts = [swiftpkg_objc_module_alias_load_stmt]
-        objc_target_name = pkginfo_targets.objc_label_name(bzl_target_name)
+        # See `generate_modulemap.bzl` for details on the modulemap generation.
+        # See `//swiftpkg/tests/generate_modulemap_tests` package for a usage
+        # example.
+        load_stmts = [swiftpkg_generate_modulemap_load_stmt]
+        modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
         decls = [
-            build_decls.new(objc_kinds.library, objc_target_name, attrs = attrs),
+            build_decls.new(objc_kinds.library, bzl_target_name, attrs = attrs),
             build_decls.new(
-                kind = swiftpkg_kinds.objc_module_alias,
-                name = bzl_target_name,
+                kind = swiftpkg_kinds.generate_modulemap,
+                name = modulemap_target_name,
                 attrs = {
-                    "deps": [":{}".format(objc_target_name)],
-                    "module_names": [target.c99name],
+                    "deps": bzl_selects.to_starlark(modulemap_deps),
+                    "hdrs": hdrs,
+                    "module_name": target.c99name,
                     "visibility": ["//visibility:public"],
                 },
             ),
@@ -551,6 +599,26 @@ def _swift_binary_from_product(product, dep_target, repo_name):
         },
     )
 
+# MARK: - generate_modulemap Helpers
+
+def _collect_modulemap_deps(deps):
+    modulemap_deps = []
+    for dep in deps:
+        mm_values = [
+            v
+            for v in dep.value
+            if pkginfo_targets.is_modulemap_label(v)
+        ]
+        if len(mm_values) == 0:
+            continue
+        mm_dep = bzl_selects.new(
+            value = mm_values,
+            kind = dep.kind,
+            condition = dep.condition,
+        )
+        modulemap_deps.append(mm_dep)
+    return modulemap_deps
+
 # MARK: - Constants and API Definition
 
 swift_location = "@build_bazel_rules_swift//swift:swift.bzl"
@@ -621,6 +689,7 @@ apple_dynamic_xcframework_import_load_stmt = load_statements.new(
 
 swiftpkg_kinds = struct(
     objc_module_alias = "swift_objc_module_alias",
+    generate_modulemap = "generate_modulemap",
 )
 
 swiftpkg_build_defs_location = "@cgrindel_swift_bazel//swiftpkg:build_defs.bzl"
@@ -630,8 +699,14 @@ swiftpkg_objc_module_alias_load_stmt = load_statements.new(
     swiftpkg_kinds.objc_module_alias,
 )
 
+swiftpkg_generate_modulemap_load_stmt = load_statements.new(
+    swiftpkg_build_defs_location,
+    swiftpkg_kinds.generate_modulemap,
+)
+
 _condition_kinds = struct(
     private_includes = "_privateIncludes",
+    sdk_frameworks = "_sdkFrameworks",
     header_search_path = build_setting_kinds.header_search_path,
     linked_framework = build_setting_kinds.linked_framework,
     linked_library = build_setting_kinds.linked_library,

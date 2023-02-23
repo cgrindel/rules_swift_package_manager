@@ -29,38 +29,47 @@ generate_builtin_frameworks_sh="$(rlocation "${generate_builtin_frameworks_sh_lo
 output="$("${generate_builtin_frameworks_sh}" --help)"
 assert_match "Usage:" "${output}"
 
-# Default output
-output="$("${generate_builtin_frameworks_sh}")"
-assert_match "package swift" "${output}"
-assert_match "var macosFrameworks =" "${output}"
-assert_match "AppKit" "${output}"
-assert_match "var iosFrameworks =" "${output}"
-assert_match "UIKit" "${output}"
-
-# Change the package
-output="$("${generate_builtin_frameworks_sh}" --go_package foobar)"
-assert_match "package foobar" "${output}"
-
 output_dir="${PWD}/output"
 rm -rf "${output_dir}"
 mkdir -p "${output_dir}"
 
-# Write to an absolute path
-absolute_path="${output_dir}/absolute.go"
-"${generate_builtin_frameworks_sh}" "${absolute_path}"
-[[ -e "${absolute_path}" ]] || fail "Expected the output file for the absolute path to exist."
-output="$(< "${absolute_path}")"
-assert_match "package swift" "${output}"
-assert_match "var macosFrameworks =" "${output}"
-assert_match "var iosFrameworks =" "${output}"
+# Write Go file to an absolute path and change the package
+go_abs_path="${output_dir}/absolute.go"
+bzl_abs_path="${output_dir}/absolute.bzl"
+"${generate_builtin_frameworks_sh}" \
+  --go_output "${go_abs_path}" \
+  --go_package foobar \
+  --bzl_output "${bzl_abs_path}"
+[[ -e "${go_abs_path}" ]] || \
+  fail "Expected the output file for the Go absolute path to exist."
+[[ -e "${bzl_abs_path}" ]] || \
+  fail "Expected the output file for the Starlark absolute path to exist."
+go_output="$(< "${go_abs_path}")"
+assert_match "package foobar" "${go_output}" "Go absolute path"
+assert_match "var macosFrameworks =" "${go_output}" "Go absolute path"
+assert_match "var iosFrameworks =" "${go_output}" "Go absolute path"
+bzl_output="$(< "${bzl_abs_path}")"
+assert_match "_macos = " "${bzl_output}" "Starlark absolute path"
+assert_match "_ios = " "${bzl_output}" "Starlark absolute path"
 
-# Write to a relative path
+# Write Go file to a relative path
 export BUILD_WORKSPACE_DIRECTORY="${output_dir}"
-relative_path="foo/relative.go"
-expected_output_path="${BUILD_WORKSPACE_DIRECTORY}/${relative_path}"
-mkdir -p "$(dirname "${expected_output_path}")"
-"${generate_builtin_frameworks_sh}" "${relative_path}"
-[[ -e "${expected_output_path}" ]] || fail "Expected the output file for the relative path to exist."
-assert_match "package swift" "${output}"
-assert_match "var macosFrameworks =" "${output}"
-assert_match "var iosFrameworks =" "${output}"
+go_rel_path="foo/relative.go"
+bzl_rel_path="foo/relative.bzl"
+exp_go_output_path="${BUILD_WORKSPACE_DIRECTORY}/${go_rel_path}"
+exp_bzl_output_path="${BUILD_WORKSPACE_DIRECTORY}/${bzl_rel_path}"
+mkdir -p "$(dirname "${exp_go_output_path}")"
+"${generate_builtin_frameworks_sh}" \
+  --go_output "${go_rel_path}" \
+  --bzl_output "${bzl_rel_path}"
+[[ -e "${exp_go_output_path}" ]] || \
+  fail "Expected the Go output file for the relative path to exist."
+[[ -e "${exp_bzl_output_path}" ]] || \
+  fail "Expected the Starlark output file for the relative path to exist."
+go_output="$(< "${exp_go_output_path}")"
+assert_match "package swift" "${go_output}" "Go relative path"
+assert_match "var macosFrameworks =" "${go_output}" "Go relative path"
+assert_match "var iosFrameworks =" "${go_output}" "Go relative path"
+bzl_output="$(< "${exp_bzl_output_path}")"
+assert_match "_macos = " "${bzl_output}" "Starlark relative path"
+assert_match "_ios = " "${bzl_output}" "Starlark relative path"

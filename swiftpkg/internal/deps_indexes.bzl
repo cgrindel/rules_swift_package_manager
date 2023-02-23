@@ -91,9 +91,45 @@ def _new_product(identity, name, type, target_labels):
         target_labels = target_labels,
     )
 
+def _modulemap_label_for_module(module):
+    return bazel_labels.new(
+        name = pkginfo_targets.modulemap_label_name(module.label.name),
+        repository_name = module.label.repository_name,
+        package = module.label.package,
+    )
+
+def _labels_for_module(module, depender_src_type):
+    """Returns the dep labels that should be used for a module.
+
+    Args:
+        module: The dependent module (`struct` as returned by
+            `dep_indexes.new_module`).
+        depender_src_type: The source type for the target (`string` value from
+            `src_types`) that will depend on the module.
+
+    Returns:
+        A `list` of Bazel label `struct` values as returned by `bazel_labels.new`,
+    """
+    labels = [module.label]
+
+    if module.src_type == src_types.objc:
+        # If the dep is an objc, return the real Objective-C target, not the Swift
+        # module alias. This is part of a workaround for Objective-C modules not
+        # being able to `@import` modules from other Objective-C modules.
+        # See `swiftpkg_build_files.bzl` for more information.
+        labels.append(_modulemap_label_for_module(module))
+
+    elif depender_src_type == src_types.objc and module.src_type == src_types.swift:
+        # If an Objc module wants to @import a Swift module, it will need the
+        # modulemap target.
+        labels.append(_modulemap_label_for_module(module))
+
+    return labels
+
 def _resolve_module_labels(
         deps_index,
         module_name,
+        depender_module_name,
         preferred_repo_name = None,
         restrict_to_repo_names = []):
     """Finds a Bazel label that provides the specified module.
@@ -101,6 +137,7 @@ def _resolve_module_labels(
     Args:
         deps_index: A `dict` as returned by `deps_indexes.new_from_json`.
         module_name: The name of the module as a `string`
+        depender_module_name: The name of the depender module as a `string`.
         preferred_repo_name: Optional. If a target in this repository provides
             the module, prefer it.
         restrict_to_repo_names: Optional. A `list` of repository names to
@@ -112,7 +149,10 @@ def _resolve_module_labels(
     modules = deps_index.modules.get(module_name, [])
     if len(modules) == 0:
         return []
-    labels = [m.label for m in modules]
+
+    depender_modules = deps_index.modules.get(depender_module_name, [])
+    if len(depender_modules) == 0:
+        fail("No depender modules found for {}.".format(depender_module_name))
 
     # If a repo name is provided, prefer that over any other matches
     if preferred_repo_name != None:
@@ -121,22 +161,14 @@ def _resolve_module_labels(
             modules,
             lambda m: m.label.repository_name == preferred_repo_name,
         )
+        depender_module = lists.find(
+            depender_modules,
+            lambda m: m.label.repository_name == preferred_repo_name,
+        )
+        if depender_module == None:
+            depender_module = depender_modules[0]
         if module != None:
-            # We found a match for the current/preferred repo. If the dep is an
-            # objc, return the real Objective-C target, not the Swift module
-            # alias. This is part of a workaround for Objective-C modules not
-            # being able to `@import` modules from other Objective-C modules.
-            # See `swiftpkg_build_files.bzl` for more information.
-            if module.src_type == src_types.objc:
-                return [
-                    bazel_labels.new(
-                        name = pkginfo_targets.objc_label_name(module.label.name),
-                        repository_name = module.label.repository_name,
-                        package = module.label.package,
-                    ),
-                ]
-            else:
-                return [module.label]
+            return _labels_for_module(module, depender_module.src_type)
 
     # If we are meant to only find a match in a set of repo names, then
     if len(restrict_to_repo_names) > 0:
@@ -145,16 +177,25 @@ def _resolve_module_labels(
             for rn in restrict_to_repo_names
         ]
         repo_names = sets.make(restrict_to_repo_names)
-        labels = [
-            lbl
-            for lbl in labels
-            if sets.contains(repo_names, lbl.repository_name)
+        modules = [
+            m
+            for m in modules
+            if sets.contains(repo_names, m.label.repository_name)
+        ]
+        depender_modules = [
+            m
+            for m in depender_modules
+            if sets.contains(repo_names, m.label.repository_name)
         ]
 
-    # Only return the first label.
-    if len(labels) == 0:
+    # Only labels for the first module.
+    if len(modules) == 0:
         return []
-    return [labels[0]]
+    if len(depender_modules) == 0:
+        fail("No depender modules found for {} in the restricted repos.".format(
+            depender_module_name,
+        ))
+    return _labels_for_module(modules[0], depender_modules[0].src_type)
 
 def _new_product_index_key(identity, name):
     return identity.lower() + "|" + name
@@ -213,12 +254,16 @@ def _new_ctx(deps_index, preferred_repo_name = None, restrict_to_repo_names = []
         restrict_to_repo_names = restrict_to_repo_names,
     )
 
-def _resolve_module_labels_with_ctx(deps_index_ctx, module_name):
+def _resolve_module_labels_with_ctx(
+        deps_index_ctx,
+        module_name,
+        depender_module_name):
     """Finds a Bazel label that provides the specified module.
 
     Args:
         deps_index_ctx: A `struct` as returned by `deps_indexes.new_ctx`.
         module_name: The name of the module as a `string`
+        depender_module_name: The name of the depender module as a `string`.
 
     Returns:
         A `list` of `struct` values as returned by `bazel_labels.new`.
@@ -226,6 +271,7 @@ def _resolve_module_labels_with_ctx(deps_index_ctx, module_name):
     return _resolve_module_labels(
         deps_index = deps_index_ctx.deps_index,
         module_name = module_name,
+        depender_module_name = depender_module_name,
         preferred_repo_name = deps_index_ctx.preferred_repo_name,
         restrict_to_repo_names = deps_index_ctx.restrict_to_repo_names,
     )

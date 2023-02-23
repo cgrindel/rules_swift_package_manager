@@ -84,11 +84,13 @@ _deps_index_json = """\
     {
       "name": "AwesomePackage",
       "c99name": "AwesomePackage",
+      "src_type": "swift",
       "label": "@swiftpkg_example_swift_package//:AwesomePackage"
     },
     {
       "name": "Foo",
       "c99name": "Foo",
+      "src_type": "swift",
       "label": "@swiftpkg_example_swift_package//:Source/Foo"
     }
   ],
@@ -111,7 +113,7 @@ _pkg_ctx = pkg_ctxs.new(
     deps_index_json = _deps_index_json,
 )
 
-def _bazel_label_strs_test(ctx):
+def _bzl_select_list_test(ctx):
     env = unittest.begin(ctx)
 
     tests = [
@@ -207,15 +209,15 @@ def _bazel_label_strs_test(ctx):
         ),
     ]
     for t in tests:
-        actual = pkginfo_target_deps.bazel_label_strs(_pkg_ctx, t.td)
+        actual = pkginfo_target_deps.bzl_select_list(_pkg_ctx, t.td, "Foo")
         asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)
 
-bazel_label_strs_test = unittest.make(_bazel_label_strs_test)
+bzl_select_list_test = unittest.make(_bzl_select_list_test)
 
 def pkginfo_target_deps_test_suite():
     return unittest.suite(
         "pkginfo_target_deps_tests",
-        bazel_label_strs_test,
+        bzl_select_list_test,
     )
