@@ -122,8 +122,6 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         decls = decls,
     )
 
-# TODO(chuck): Move _imports_xctest to swift_files.
-
 def _swift_library_from_target(target, attrs):
     return build_decls.new(
         kind = swift_kinds.library,
@@ -389,7 +387,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["defines"] = bzl_selects.to_starlark(defines)
 
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
-    if clang_files.has_objc_srcs(srcs):
+    if objc_files.has_objc_srcs(srcs):
         # Enable clang module support.
         # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
         attrs["enable_modules"] = True

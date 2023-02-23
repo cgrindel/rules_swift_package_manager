@@ -2,6 +2,7 @@
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(":apple_builtin_frameworks.bzl", "apple_builtin_frameworks")
 
 _pound_import = "#import "
@@ -124,8 +125,21 @@ def _collect_builtin_frameworks(repository_ctx, root_path, srcs):
             sets.insert(frameworks, sf)
     return sorted(sets.to_list(frameworks))
 
+def _has_objc_srcs(srcs):
+    """Determines whether any of the provide paths are Objective-C files.
+
+    Args:
+        srcs: A `list` of file paths (`string`).
+
+    Returns:
+        A `bool` indicating whether any of the source files are Objective-C
+        files.
+    """
+    return lists.contains(srcs, lambda x: x.endswith(".m"))
+
 objc_files = struct(
     collect_builtin_frameworks = _collect_builtin_frameworks,
+    has_objc_srcs = _has_objc_srcs,
     # Public for testing purposes
     parse_for_imported_framework = _parse_for_imported_framework,
 )
