@@ -1,4 +1,4 @@
-# Gazelle Plugin for Swift and Swit Package Rules for Bazel
+# Gazelle Plugin for Swift and Swift Package Rules for Bazel
 
 [![Build](https://github.com/cgrindel/swift_bazel/actions/workflows/ci.yml/badge.svg?event=schedule)](https://github.com/cgrindel/swift_bazel/actions/workflows/ci.yml)
 
