@@ -250,6 +250,13 @@ bzl_library(
 )
 
 bzl_library(
+    name = "bazel_apple_platforms",
+    srcs = ["bazel_apple_platforms.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":apple_builtin_frameworks"],
+)
+
+bzl_library(
     name = "bazel_repo_names",
     srcs = ["bazel_repo_names.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],

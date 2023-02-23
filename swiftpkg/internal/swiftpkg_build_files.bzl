@@ -3,6 +3,7 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
+load(":bazel_apple_platforms.bzl", "bazel_apple_platforms")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":bzl_selects.bzl", "bzl_selects")
@@ -403,10 +404,24 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["enable_modules"] = True
         attrs["module_name"] = target.c99name
 
-        attrs["sdk_frameworks"] = objc_files.collect_builtin_frameworks(
+        sdk_frameworks = objc_files.collect_builtin_frameworks(
             repository_ctx = repository_ctx,
             root_path = pkg_path,
             srcs = attrs.get("srcs", []) + attrs.get("hdrs", []),
+        )
+        sdk_framework_bzl_selects = []
+        for sf in sdk_frameworks:
+            platform_conditions = bazel_apple_platforms.for_framework(sf)
+            for pc in platform_conditions:
+                sdk_framework_bzl_selects.append(
+                    bzl_selects.new(
+                        value = sf,
+                        kind = _condition_kinds.sdk_frameworks,
+                        condition = pc,
+                    ),
+                )
+        attrs["sdk_frameworks"] = bzl_selects.to_starlark(
+            sdk_framework_bzl_selects,
         )
 
         modulemap_deps = []
@@ -719,6 +734,7 @@ swiftpkg_generate_modulemap_load_stmt = load_statements.new(
 
 _condition_kinds = struct(
     private_includes = "_privateIncludes",
+    sdk_frameworks = "_sdkFrameworks",
     header_search_path = build_setting_kinds.header_search_path,
     linked_framework = build_setting_kinds.linked_framework,
     linked_library = build_setting_kinds.linked_library,

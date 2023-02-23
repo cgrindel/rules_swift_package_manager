@@ -506,6 +506,12 @@ cc_library(
         struct(
             msg = "Objc target",
             name = "ObjcLibrary",
+            file_contents = {
+                "src/foo.h": """\
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+""",
+            },
             find_results = {
                 "include": [
                     "external.h",
@@ -536,7 +542,22 @@ objc_library(
     hdrs = ["include/external.h"],
     includes = ["include"],
     module_name = "ObjcLibrary",
-    sdk_frameworks = [],
+    sdk_frameworks = select({
+        "@cgrindel_swift_bazel//config_settings/spm/platform:ios": [
+            "Foundation",
+            "UIKit",
+        ],
+        "@cgrindel_swift_bazel//config_settings/spm/platform:macos": ["Foundation"],
+        "@cgrindel_swift_bazel//config_settings/spm/platform:tvos": [
+            "Foundation",
+            "UIKit",
+        ],
+        "@cgrindel_swift_bazel//config_settings/spm/platform:watchos": [
+            "Foundation",
+            "UIKit",
+        ],
+        "//conditions:default": [],
+    }),
     srcs = [
         "src/foo.h",
         "src/foo.m",

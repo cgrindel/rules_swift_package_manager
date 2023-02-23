@@ -86,6 +86,7 @@ def _parse_for_imported_framework(line):
 def _collect_frameworks_for_src(repository_ctx, src_path):
     frameworks = []
     contents = repository_ctx.read(src_path)
+
     lines = contents.splitlines()
     for line in lines:
         imported_framework = _parse_for_imported_framework(line)
@@ -98,6 +99,7 @@ def _collect_builtin_frameworks(repository_ctx, root_path, srcs):
     for src in srcs:
         src_path = paths.join(root_path, src)
         src_frameworks = _collect_frameworks_for_src(repository_ctx, src_path)
+
         for sf in src_frameworks:
             sets.insert(frameworks, sf)
     return sorted(sets.to_list(frameworks))

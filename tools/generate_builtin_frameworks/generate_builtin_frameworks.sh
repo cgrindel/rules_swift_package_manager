@@ -56,16 +56,6 @@ list_frameworks_for_platform() {
     frameworks+="$(list_frameworks_for_sdk "${sdk_path}")"
   done
 
-  # DEBUG BEGIN
-  echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") ======" 
-  echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") platform_path: ${platform_path}" 
-  echo >&2 "*** CHUCK  sdk_paths:"
-  for (( i = 0; i < ${#sdk_paths[@]}; i++ )); do
-    echo >&2 "*** CHUCK   ${i}: ${sdk_paths[${i}]}"
-  done
-  echo "${frameworks}" | sort -u >&2
-  # DEBUG END
-
   echo "${frameworks}" | sort -u
 }
 
