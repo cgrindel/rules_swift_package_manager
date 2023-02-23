@@ -33,8 +33,5 @@ ios_application(
     ) + [
         "//appdistribution:shared_resources",
     ],
-    # # GH208: This fails due to an Objc module not being found by another Objc module.
-    # # Marking as manual so that they do not run during CI.
-    # tags = ["manual"],
     deps = [":AppDistributionExample"],
 )
