@@ -28,10 +28,45 @@ source "${env_sh}"
 
 # MARK - Functions
 
-list_frameworks() {
-  local dir="${1}"
+sdk_dirs() {
+  local platform_path="${1}"
+  local sdks_path="${platform_path}/Developer/SDKs"
+  find "${sdks_path}" -name "*.sdk" -depth 1 -type d -print0
+}
+
+list_frameworks_for_sdk() {
+  local sdk_path="${1}"
+  local dir="${sdk_path}/System/Library/Frameworks"
   find "${dir}" -name "*.framework" -depth 1 -not -name "_*" -exec basename -s .framework {} \; \
     | sort
+}
+export -f list_frameworks_for_sdk
+
+list_frameworks_for_platform() {
+  local platform_path="${1}"
+
+  # Find the SDK paths for the platform
+  local sdk_paths=()
+  while IFS=  read -r -d $'\0'; do
+      sdk_paths+=("$REPLY")
+  done < <(sdk_dirs "${platform_path}")
+
+  local frameworks=""
+  for sdk_path in "${sdk_paths[@]}" ; do
+    frameworks+="$(list_frameworks_for_sdk "${sdk_path}")"
+  done
+
+  # DEBUG BEGIN
+  echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") ======" 
+  echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") platform_path: ${platform_path}" 
+  echo >&2 "*** CHUCK  sdk_paths:"
+  for (( i = 0; i < ${#sdk_paths[@]}; i++ )); do
+    echo >&2 "*** CHUCK   ${i}: ${sdk_paths[${i}]}"
+  done
+  echo "${frameworks}" | sort -u >&2
+  # DEBUG END
+
+  echo "${frameworks}" | sort -u
 }
 
 format_as_go_list_item() {
@@ -106,15 +141,19 @@ if [[ -z "${bzl_output:-}" ]]; then
   usage_error "Must specify an output path for the Bazel Starlark source file."
 fi
 
-sdk_path="$(xcrun --show-sdk-path)"
-macos_frameworks_dir="${sdk_path}/System/Library/Frameworks"
-ios_frameworks_dir="${sdk_path}/System/iOSSupport/System/Library/Frameworks"
+
+
+# sdk_path="$(xcrun --show-sdk-path)"
+# macos_frameworks_dir="${sdk_path}/System/Library/Frameworks"
 
 sdk_version="$(xcrun --show-sdk-version)"
 sdk_build_version="$(xcrun --show-sdk-build-version)"
 
-macos_frameworks="$(list_frameworks "${macos_frameworks_dir}")"
-ios_frameworks="$(list_frameworks "${ios_frameworks_dir}")"
+platforms_path="$(dirname "$(xcrun --show-sdk-platform-path)")"
+macos_frameworks="$(list_frameworks_for_platform "${platforms_path}/MacOSX.platform")"
+ios_frameworks="$(list_frameworks_for_platform "${platforms_path}/iPhoneOS.platform")"
+tvos_frameworks="$(list_frameworks_for_platform "${platforms_path}/AppleTVOS.platform")"
+watchos_frameworks="$(list_frameworks_for_platform "${platforms_path}/WatchOS.platform")"
 
 # Go Source
 
@@ -135,6 +174,14 @@ $(echo "${macos_frameworks}" | format_as_go_list_item)
 
 var iosFrameworks = mapset.NewSet[string](
 $(echo "${ios_frameworks}" | format_as_go_list_item)
+)
+
+var tvosFrameworks = mapset.NewSet[string](
+$(echo "${tvos_frameworks}" | format_as_go_list_item)
+)
+
+var watchosFrameworks = mapset.NewSet[string](
+$(echo "${watchos_frameworks}" | format_as_go_list_item)
 )
 EOF
 )"
@@ -167,12 +214,22 @@ _ios = sets.make([
 $(echo "${ios_frameworks}" | format_as_bzl_list_item)
 ])
 
-_all = sets.union(_macos, _ios)
+_tvos = sets.make([
+$(echo "${tvos_frameworks}" | format_as_bzl_list_item)
+])
+
+_watchos = sets.make([
+$(echo "${watchos_frameworks}" | format_as_bzl_list_item)
+])
+
+_all = sets.union(_macos, _ios, _tvos, _watchos)
 
 apple_builtin_frameworks = struct(
     all = _all,
     ios = _ios,
     macos = _macos,
+    tvos = _tvos,
+    watchos = _watchos,
 )
 EOF
 )"
