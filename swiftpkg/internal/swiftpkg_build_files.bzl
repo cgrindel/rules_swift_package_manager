@@ -65,7 +65,7 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
 
     # The rules_swift code links in developer libraries if the rule is marked testonly.
     # https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/compiling.bzl#L1312-L1319
-    is_test = _imports_xctest(repository_ctx, pkg_ctx, target)
+    is_test = swift_files.imports_xctest(repository_ctx, pkg_ctx, target)
 
     if target.swift_settings != None:
         if len(target.swift_settings.defines) > 0:
@@ -123,15 +123,6 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     )
 
 # TODO(chuck): Move _imports_xctest to swift_files.
-
-def _imports_xctest(repository_ctx, pkg_ctx, target):
-    target_path = paths.join(pkg_ctx.pkg_info.path, target.path)
-    for src in target.sources:
-        path = paths.join(target_path, src)
-        file_contents = repository_ctx.read(path)
-        if file_contents.find("import XCTest") > -1:
-            return True
-    return False
 
 def _swift_library_from_target(target, attrs):
     return build_decls.new(
@@ -627,7 +618,6 @@ def _swift_binary_from_product(product, dep_target, repo_name):
 # MARK: - generate_modulemap Helpers
 
 # TODO(chuck): Update clang modulemap deps to use helper.
-# TODO(chuck): Can I DRY up the creation of the generate_modulemap?
 
 def _collect_modulemap_deps(deps):
     modulemap_deps = []

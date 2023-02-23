@@ -278,6 +278,7 @@ bzl_library(
     name = "swift_files",
     srcs = ["swift_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
+    deps = ["@bazel_skylib//lib:paths"],
 )
 
 bzl_library(
