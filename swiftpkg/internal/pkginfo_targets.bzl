@@ -4,6 +4,7 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels")
 
 _modulemap_suffix = "_modulemap"
+_resource_suffix = "_resources"
 
 def _get(targets, name, fail_if_not_found = True):
     """Retrieves the target with the given name from a list of targets.
@@ -98,6 +99,17 @@ def _is_modulemap_label(target_name):
     """
     return target_name.endswith(_modulemap_suffix)
 
+def _resource_group_label_name(target_name):
+    """Returns the name of the related `apple_resource_group` target.
+
+    Args:
+        target_name: The publicly advertised name for the Swift target.
+
+    Returns:
+        The name of the `apple_resource_group` as a `string`.
+    """
+    return target_name + _resource_suffix
+
 def make_pkginfo_targets(bazel_labels):
     """Create a `pkginfo_targets` module.
 
@@ -133,6 +145,7 @@ def make_pkginfo_targets(bazel_labels):
         is_modulemap_label = _is_modulemap_label,
         join_path = _join_path,
         modulemap_label_name = _modulemap_label_name,
+        resource_group_label_name = _resource_group_label_name,
         srcs = _srcs,
     )
 

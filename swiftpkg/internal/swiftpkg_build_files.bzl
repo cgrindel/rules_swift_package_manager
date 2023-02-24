@@ -85,6 +85,12 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["defines"] = bzl_selects.to_starlark(defines)
     if len(copts) > 0:
         attrs["copts"] = bzl_selects.to_starlark(copts)
+    resource_build_file = None
+    if len(target.resources) > 0:
+        resource_build_file = _apple_resource_group(target)
+        attrs["data"] = [
+            ":{}".format(pkginfo_targets.resource_group_label_name(target.name)),
+        ]
 
     if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
@@ -116,11 +122,13 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
                 },
             ),
         )
-
-    return build_files.new(
+    build_file = build_files.new(
         load_stmts = load_stmts,
         decls = decls,
     )
+    if resource_build_file != None:
+        build_file = build_files.merge(build_file, resource_build_file)
+    return build_file
 
 def _swift_library_from_target(target, attrs):
     return build_decls.new(
@@ -486,6 +494,29 @@ def _apple_dynamic_xcframework_import_build_file(target):
         decls = decls,
     )
 
+# MARK: - Apple Resource Group
+
+def _apple_resource_group(target):
+    load_stmts = [apple_resource_group_load_stmt]
+    resources = [
+        r.path
+        for r in target.resources
+    ]
+    decls = [
+        build_decls.new(
+            kind = apple_kinds.resource_group,
+            name = pkginfo_targets.resource_group_label_name(target.name),
+            attrs = {
+                "structured_resources": resources,
+                "visibility": ["//visibility:public"],
+            },
+        ),
+    ]
+    return build_files.new(
+        load_stmts = load_stmts,
+        decls = decls,
+    )
+
 # MARK: - Products Entry Point
 
 def _new_for_products(pkg_info, repo_name):
@@ -678,6 +709,7 @@ swiftpkg_build_files = struct(
 
 apple_kinds = struct(
     dynamic_xcframework_import = "apple_dynamic_xcframework_import",
+    resource_group = "apple_resource_group",
 )
 
 apple_apple_location = "@build_bazel_rules_apple//apple:apple.bzl"
@@ -685,6 +717,11 @@ apple_apple_location = "@build_bazel_rules_apple//apple:apple.bzl"
 apple_dynamic_xcframework_import_load_stmt = load_statements.new(
     apple_apple_location,
     apple_kinds.dynamic_xcframework_import,
+)
+
+apple_resource_group_load_stmt = load_statements.new(
+    apple_apple_location,
+    apple_kinds.resource_group,
 )
 
 swiftpkg_kinds = struct(

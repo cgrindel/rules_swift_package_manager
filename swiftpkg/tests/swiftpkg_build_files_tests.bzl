@@ -326,6 +326,25 @@ _pkg_info = pkginfos.new(
                 ),
             ],
         ),
+        pkginfos.new_target(
+            name = "SwiftLibraryWithResources",
+            type = "regular",
+            c99name = "SwiftLibraryWithResources",
+            module_type = "SwiftTarget",
+            path = "Source/SwiftLibraryWithResources",
+            sources = [
+                "SwiftLibraryWithResources.swift",
+            ],
+            resources = [
+                pkginfos.new_resource(
+                    path = "Resources/chicken.json",
+                    rule = pkginfos.new_resource_rule(
+                        process = pkginfos.new_resource_rule_process(),
+                    ),
+                ),
+            ],
+            dependencies = [],
+        ),
     ],
 )
 
@@ -672,6 +691,30 @@ generate_modulemap(
     deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
     hdrs = [":Source_SwiftForObjcTarget"],
     module_name = "SwiftForObjcTarget",
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Swift library target with resources",
+            name = "SwiftLibraryWithResources",
+            exp = """\
+load("@build_bazel_rules_apple//apple:apple.bzl", "apple_resource_group")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+apple_resource_group(
+    name = "SwiftLibraryWithResources_resources",
+    structured_resources = ["Resources/chicken.json"],
+    visibility = ["//visibility:public"],
+)
+
+swift_library(
+    name = "Source_SwiftLibraryWithResources",
+    data = [":SwiftLibraryWithResources_resources"],
+    defines = ["SWIFT_PACKAGE"],
+    deps = [],
+    module_name = "SwiftLibraryWithResources",
+    srcs = ["Source/SwiftLibraryWithResources/SwiftLibraryWithResources.swift"],
     visibility = ["//visibility:public"],
 )
 """,
