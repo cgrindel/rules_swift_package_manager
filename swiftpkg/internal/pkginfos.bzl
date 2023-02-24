@@ -228,6 +228,7 @@ def _new_target_from_json_maps(dump_map, desc_map):
         public_hdrs_path = dump_map.get("publicHeadersPath"),
         artifact_download_info = artifact_download_info,
         product_memberships = desc_map.get("product_memberships", default = []),
+        resources = resources,
     )
 
 def _new_build_setting_condition_from_json(dump_map):
@@ -691,6 +692,8 @@ def _new_target(
             `pkginfos.new_artifact_download_info`.
         product_memberships: Optional. A `list` of product names that this
             target is referenced by.
+        resources: Optional. A `list` of resource `struct` values as returned
+            by `pkginfos.new_resource`.
 
     Returns:
         A `struct` representing a target in a Swift package.
@@ -940,7 +943,27 @@ def _new_resource_rule_process(localization = None):
     )
 
 def _new_resource_from_dump_json_map(dump_map):
-    pass
+    return _new_resource(
+        path = dump_map["path"],
+        rule = _new_resource_rule_from_dump_json_map(dump_map["rule"]),
+    )
+
+def _new_resource_rule_from_dump_json_map(dump_map):
+    process = _new_resource_rule_process_from_dump_json_map(
+        dump_map.get("process"),
+    )
+    copy = True if dump_map.get("copy") != None else None
+    embed_in_code = True if dump_map.get("embedInCode") != None else None
+    return _new_resource_rule(
+        process = process,
+        copy = copy,
+        embed_in_code = embed_in_code,
+    )
+
+def _new_resource_rule_process_from_dump_json_map(dump_map):
+    return _new_resource_rule_process(
+        localization = dump_map.get("localization"),
+    )
 
 # MARK: - Constants
 
@@ -1012,6 +1035,9 @@ pkginfos = struct(
     new_product = _new_product,
     new_product_reference = _new_product_reference,
     new_product_type = _new_product_type,
+    new_resource = _new_resource,
+    new_resource_rule = _new_resource_rule,
+    new_resource_rule_process = _new_resource_rule_process,
     new_swift_settings = _new_swift_settings,
     new_target = _new_target,
     new_target_dependency = _new_target_dependency,

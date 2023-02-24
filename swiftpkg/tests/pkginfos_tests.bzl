@@ -86,6 +86,14 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
                     ),
                 ]),
                 product_memberships = ["printstuff"],
+                resources = [
+                    pkginfos.new_resource(
+                        path = "Resources/chicken.json",
+                        rule = pkginfos.new_resource_rule(
+                            process = pkginfos.new_resource_rule_process(),
+                        ),
+                    ),
+                ],
             ),
             pkginfos.new_target(
                 name = "MySwiftPackageTests",
@@ -389,8 +397,11 @@ _swift_arg_parser_dump_json = """
 
       ],
       "name" : "MySwiftPackage",
-      "resources" : [
-
+      "resources": [
+        {
+          "path" : "Resources/chicken.json",
+          "rule" : { "process" : {} }
+        }
       ],
       "settings" : [
           {
