@@ -29,7 +29,8 @@ _external_dep = pkginfos.new_dependency(
         ],
     ),
 )
-_by_name = pkginfos.new_by_name_reference("Foo")
+_target_by_name = pkginfos.new_by_name_reference("Foo")
+_product_by_name = pkginfos.new_by_name_reference("AwesomeProduct")
 _product_ref = pkginfos.new_product_reference(
     product_name = "AwesomeProduct",
     dep_name = _external_dep.name,
@@ -92,6 +93,12 @@ _deps_index_json = """\
       "c99name": "Foo",
       "src_type": "swift",
       "label": "@swiftpkg_example_swift_package//:Source/Foo"
+    },
+    {
+      "name": "Baz",
+      "c99name": "Baz",
+      "src_type": "swift",
+      "label": "@swiftpkg_example_swift_package//:Source/Baz"
     }
   ],
   "products": [
@@ -100,7 +107,8 @@ _deps_index_json = """\
       "name": "AwesomeProduct",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_example_swift_package//:AwesomePackage"
+        "@swiftpkg_example_swift_package//:AwesomePackage",
+        "@swiftpkg_example_swift_package//:Source/Baz"
       ]
     }
   ]
@@ -118,14 +126,31 @@ def _bzl_select_list_test(ctx):
 
     tests = [
         struct(
-            msg = "by name, no condition",
-            td = pkginfos.new_target_dependency(by_name = _by_name),
+            msg = "by name for target, no condition",
+            td = pkginfos.new_target_dependency(by_name = _target_by_name),
             exp = [
                 bzl_selects.new(
                     kind = pkginfo_target_deps.target_dep_kind,
                     value = [
                         bazel_labels.normalize(
                             "@swiftpkg_example_swift_package//:Source/Foo",
+                        ),
+                    ],
+                ),
+            ],
+        ),
+        struct(
+            msg = "by name for product, no condition",
+            td = pkginfos.new_target_dependency(by_name = _product_by_name),
+            exp = [
+                bzl_selects.new(
+                    kind = pkginfo_target_deps.target_dep_kind,
+                    value = [
+                        bazel_labels.normalize(
+                            "@swiftpkg_example_swift_package//:AwesomePackage",
+                        ),
+                        bazel_labels.normalize(
+                            "@swiftpkg_example_swift_package//:Source/Baz",
                         ),
                     ],
                 ),
@@ -140,6 +165,9 @@ def _bzl_select_list_test(ctx):
                     value = [
                         bazel_labels.normalize(
                             "@swiftpkg_example_swift_package//:AwesomePackage",
+                        ),
+                        bazel_labels.normalize(
+                            "@swiftpkg_example_swift_package//:Source/Baz",
                         ),
                     ],
                 ),
@@ -184,6 +212,9 @@ def _bzl_select_list_test(ctx):
                     value = [
                         bazel_labels.normalize(
                             "@swiftpkg_example_swift_package//:AwesomePackage",
+                        ),
+                        bazel_labels.normalize(
+                            "@swiftpkg_example_swift_package//:Source/Baz",
                         ),
                     ],
                     condition = c,
