@@ -198,6 +198,10 @@ def _new_target_from_json_maps(dump_map, desc_map):
     linker_settings = _new_linker_settings_from_dump_json_list(
         dump_map["settings"],
     )
+    resources = [
+        _new_resource_from_dump_json_map(d)
+        for d in dump_map["resources"]
+    ]
     artifact_download_info = None
     url = dump_map.get("url")
     if url != None:
@@ -661,7 +665,8 @@ def _new_target(
         linker_settings = None,
         public_hdrs_path = None,
         artifact_download_info = None,
-        product_memberships = []):
+        product_memberships = [],
+        resources = []):
     """Creates a target.
 
     Args:
@@ -725,6 +730,7 @@ def _new_target(
         public_hdrs_path = public_hdrs_path,
         artifact_download_info = artifact_download_info,
         product_memberships = product_memberships,
+        resources = resources,
     )
 
 # MARK: - Build Settings
@@ -874,6 +880,67 @@ def _new_artifact_download_info(url, checksum):
         url = url,
         checksum = checksum,
     )
+
+# MARK: - Resources
+
+def _new_resource(path, rule):
+    """Create a resource.
+
+    Args:
+        path: The relative path to the resource as a `string`.
+        rule: A `struct` as returned by `pkginfos.new_resource_rule`.
+
+    Returns:
+        A `struct` representing a target resource.
+    """
+    return struct(
+        path = path,
+        rule = rule,
+    )
+
+def _new_resource_rule(process = None, copy = None, embed_in_code = None):
+    """Create a resource rule.
+
+    Args:
+        process: Optional. A `struct` as returned by `pkginfos.new_resource_rule_process`.
+        copy: Optional. A `bool` specifying whether it is a copy action.
+        embed_in_code: Optional. A `bool` specifying whether it is an embedInCode.
+
+    Returns:
+        A `struct` representing a resource rule.
+    """
+    arg_cnt = 0
+    if process != None:
+        arg_cnt += 1
+    if copy != None:
+        arg_cnt += 1
+    if embed_in_code != None:
+        arg_cnt += 1
+    if arg_cnt == 0:
+        fail("Must specify one of the following: process, copy, or embed_in_code.")
+    if arg_cnt > 1:
+        fail("Only one can be specified: process, copy, or embed_in_code.")
+    return struct(
+        process = process,
+        copy = copy,
+        embed_in_code = embed_in_code,
+    )
+
+def _new_resource_rule_process(localization = None):
+    """Create a resource rule process.
+
+    Args:
+        localization: Optional. The localization as a `string`.
+
+    Returns:
+        A `struct` representing a resource rule process.
+    """
+    return struct(
+        localization = localization,
+    )
+
+def _new_resource_from_dump_json_map(dump_map):
+    pass
 
 # MARK: - Constants
 
