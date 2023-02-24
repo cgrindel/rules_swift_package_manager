@@ -29,7 +29,9 @@ _external_dep = pkginfos.new_dependency(
         ],
     ),
 )
-_target_by_name = pkginfos.new_by_name_reference("Foo")
+
+# _target_by_name = pkginfos.new_by_name_reference("Foo")
+_target_by_name = pkginfos.new_by_name_reference("Baz")
 _product_by_name = pkginfos.new_by_name_reference("AwesomeProduct")
 _product_ref = pkginfos.new_product_reference(
     product_name = "AwesomeProduct",
@@ -99,6 +101,12 @@ _deps_index_json = """\
       "c99name": "Baz",
       "src_type": "swift",
       "label": "@swiftpkg_example_swift_package//:Source/Baz"
+    },
+    {
+      "name": "MoreBaz",
+      "c99name": "MoreBaz",
+      "src_type": "swift",
+      "label": "@swiftpkg_example_swift_package//:Source/MoreBaz"
     }
   ],
   "products": [
@@ -109,6 +117,15 @@ _deps_index_json = """\
       "target_labels": [
         "@swiftpkg_example_swift_package//:AwesomePackage",
         "@swiftpkg_example_swift_package//:Source/Baz"
+      ]
+    },
+    {
+      "identity": "example-swift-package",
+      "name": "Baz",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_example_swift_package//:Source/Baz",
+        "@swiftpkg_example_swift_package//:Source/MoreBaz"
       ]
     }
   ]
@@ -126,14 +143,14 @@ def _bzl_select_list_test(ctx):
 
     tests = [
         struct(
-            msg = "by name for target, no condition",
+            msg = "by name for target not the product with the same name, no condition",
             td = pkginfos.new_target_dependency(by_name = _target_by_name),
             exp = [
                 bzl_selects.new(
                     kind = pkginfo_target_deps.target_dep_kind,
                     value = [
                         bazel_labels.normalize(
-                            "@swiftpkg_example_swift_package//:Source/Foo",
+                            "@swiftpkg_example_swift_package//:Source/Baz",
                         ),
                     ],
                 ),
