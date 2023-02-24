@@ -31,6 +31,7 @@ def _new(modules = [], products = []):
     modules_by_name = {}
     modules_by_label = {}
     products_by_key = {}
+    products_by_name = {}
 
     # buildifier: disable=uninitialized
     def _add_module(m):
@@ -47,6 +48,9 @@ def _new(modules = [], products = []):
     def _add_product(p):
         key = _new_product_index_key(p.identity, p.name)
         products_by_key[key] = p
+        prds = products_by_name.get(p.name, [])
+        prds.append(p)
+        products_by_name[p.name] = prds
 
     for module in modules:
         _add_module(module)
@@ -57,6 +61,7 @@ def _new(modules = [], products = []):
         modules_by_name = modules_by_name,
         modules_by_label = modules_by_label,
         products_by_key = products_by_key,
+        products_by_name = products_by_name,
     )
 
 def _new_module_from_dict(mod_dict):

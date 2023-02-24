@@ -7,9 +7,11 @@ load("//swiftpkg/internal:deps_indexes.bzl", "deps_indexes")
 def _new_from_json_test(ctx):
     env = unittest.begin(ctx)
 
-    asserts.equals(env, 4, len(_deps_index.modules_by_name))
-    asserts.equals(env, 6, len(_deps_index.modules_by_label))
-    asserts.equals(env, 0, len(_deps_index.products_by_key))
+    asserts.equals(env, 4, len(_deps_index.modules_by_name), "modules_by_name len")
+    asserts.equals(env, 6, len(_deps_index.modules_by_label), "modules_by_label len")
+    asserts.equals(env, 2, len(_deps_index.products_by_key), "products_by_key len")
+    asserts.equals(env, 1, len(_deps_index.products_by_name), "products_by_name len")
+    asserts.equals(env, 2, len(_deps_index.products_by_name["Foo"]), "number of Foo products")
 
     return unittest.end(env)
 
@@ -218,7 +220,10 @@ _deps_index_json = """
     {"name": "Bar", "c99name": "Bar", "src_type": "swift", "label": "@example_another_repo//Sources/Bar"},
     {"name": "ObjcLibrary", "c99name": "ObjcLibrary", "src_type": "objc", "label": "@example_cool_repo//:ObjcLibrary"}
   ],
-  "products": []
+  "products": [
+    {"identity": "example_cool_repo", "name": "Foo", "type": "library", "target_labels": ["@example_cool_repo//:Foo", "@example_cool_repo//:Bar"]},
+    {"identity": "example_another_repo", "name": "Foo", "type": "library", "target_labels": ["@example_another_repo//Sources/Foo"]}
+  ]
 }
 """
 
