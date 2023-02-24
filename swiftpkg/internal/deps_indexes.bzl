@@ -15,40 +15,48 @@ def _new_from_json(json_str):
     Returns:
         A `struct` that contains indexes for external dependencies.
     """
-    mi = {}
+    orig_dict = json.decode(json_str)
+    return _new(
+        modules = [
+            _new_module_from_dict(mod_dict)
+            for mod_dict in orig_dict["modules"]
+        ],
+        products = [
+            _new_product_from_dict(prod_dict)
+            for prod_dict in orig_dict["products"]
+        ],
+    )
+
+def _new(modules = [], products = []):
+    modules_by_name = {}
+    modules_by_label = {}
     pi = {}
 
     # buildifier: disable=uninitialized
     def _add_module(m):
-        entries = mi.get(m.name, [])
+        entries = modules_by_name.get(m.name, [])
         entries.append(m)
-        mi[m.name] = entries
+        modules_by_name[m.name] = entries
+        modules_by_label[m.label] = m
         if m.name != m.c99name:
-            entries = mi.get(m.c99name, [])
+            entries = modules_by_name.get(m.c99name, [])
             entries.append(m)
-            mi[m.c99name] = entries
+            modules_by_name[m.c99name] = entries
 
     # buildifier: disable=uninitialized
     def _add_product(p):
         key = _new_product_index_key(p.identity, p.name)
         pi[key] = p
 
-    orig_dict = json.decode(json_str)
-    for mod_dict in orig_dict["modules"]:
-        m = _new_module_from_dict(mod_dict)
-        _add_module(m)
-    for prod_dict in orig_dict["products"]:
-        p = _new_product_from_dict(prod_dict)
-        _add_product(p)
-    return _new(
-        modules = mi,
-        products = pi,
-    )
+    for module in modules:
+        _add_module(module)
+    for product in products:
+        _add_product(product)
 
-def _new(modules = {}, products = {}):
     return struct(
-        modules = modules,
-        products = products,
+        modules_by_name = modules_by_name,
+        modules_by_label = modules_by_label,
+        products = pi,
     )
 
 def _new_module_from_dict(mod_dict):
@@ -126,10 +134,40 @@ def _labels_for_module(module, depender_src_type):
 
     return labels
 
-def _resolve_module_labels(
+def _get_module(deps_index, label):
+    """Return the module associated with the specified label.
+
+    Args:
+        deps_index: A `dict` as returned by `deps_indexes.new_from_json`.
+        label: A `struct` as returned by `bazel_labels.new` or a `string` value
+            that can be parsed into a Bazel label.
+
+    Returns:
+        If found, a module `struct` as returned by `deps_indexes.new_module`.
+        Otherwise, `None`.
+    """
+    if type(label) == "string":
+        label = bazel_labels.parse(label)
+    return deps_index.modules_by_label.get(label)
+
+def _modules_for_product(deps_index, product):
+    """Returns the modules associated with the product.
+
+    Args:
+        deps_index: A `dict` as returned by `deps_indexes.new_from_json`.
+        product: A `struct` as returned by `deps_indexes.new_product`.
+
+    Returns:
+        A `list` of the modules associated with the product.
+    """
+    return lists.flatten(lists.compact([
+        _get_module(deps_index, label)
+        for label in product.target_labels
+    ]))
+
+def _resolve_module(
         deps_index,
         module_name,
-        depender_module_name,
         preferred_repo_name = None,
         restrict_to_repo_names = []):
     """Finds a Bazel label that provides the specified module.
@@ -137,22 +175,18 @@ def _resolve_module_labels(
     Args:
         deps_index: A `dict` as returned by `deps_indexes.new_from_json`.
         module_name: The name of the module as a `string`
-        depender_module_name: The name of the depender module as a `string`.
         preferred_repo_name: Optional. If a target in this repository provides
             the module, prefer it.
         restrict_to_repo_names: Optional. A `list` of repository names to
             restrict the match.
 
     Returns:
-        A `list` of `struct` values as returned by `bazel_labels.new`.
+        If a module is found, a `struct` as returned by `bazel_labels.new`.
+        Otherwise, `None`.
     """
-    modules = deps_index.modules.get(module_name, [])
+    modules = deps_index.modules_by_name.get(module_name, [])
     if len(modules) == 0:
-        return []
-
-    depender_modules = deps_index.modules.get(depender_module_name, [])
-    if len(depender_modules) == 0:
-        fail("No depender modules found for {}.".format(depender_module_name))
+        return None
 
     # If a repo name is provided, prefer that over any other matches
     if preferred_repo_name != None:
@@ -161,14 +195,8 @@ def _resolve_module_labels(
             modules,
             lambda m: m.label.repository_name == preferred_repo_name,
         )
-        depender_module = lists.find(
-            depender_modules,
-            lambda m: m.label.repository_name == preferred_repo_name,
-        )
-        if depender_module == None:
-            depender_module = depender_modules[0]
         if module != None:
-            return _labels_for_module(module, depender_module.src_type)
+            return module
 
     # If we are meant to only find a match in a set of repo names, then
     if len(restrict_to_repo_names) > 0:
@@ -182,20 +210,11 @@ def _resolve_module_labels(
             for m in modules
             if sets.contains(repo_names, m.label.repository_name)
         ]
-        depender_modules = [
-            m
-            for m in depender_modules
-            if sets.contains(repo_names, m.label.repository_name)
-        ]
 
     # Only labels for the first module.
     if len(modules) == 0:
-        return []
-    if len(depender_modules) == 0:
-        fail("No depender modules found for {} in the restricted repos.".format(
-            depender_module_name,
-        ))
-    return _labels_for_module(modules[0], depender_modules[0].src_type)
+        return None
+    return modules[0]
 
 def _new_product_index_key(identity, name):
     return identity.lower() + "|" + name
@@ -254,24 +273,22 @@ def _new_ctx(deps_index, preferred_repo_name = None, restrict_to_repo_names = []
         restrict_to_repo_names = restrict_to_repo_names,
     )
 
-def _resolve_module_labels_with_ctx(
+def _resolve_module_with_ctx(
         deps_index_ctx,
-        module_name,
-        depender_module_name):
+        module_name):
     """Finds a Bazel label that provides the specified module.
 
     Args:
         deps_index_ctx: A `struct` as returned by `deps_indexes.new_ctx`.
         module_name: The name of the module as a `string`
-        depender_module_name: The name of the depender module as a `string`.
 
     Returns:
-        A `list` of `struct` values as returned by `bazel_labels.new`.
+        If a module is found, a `struct` as returned by `bazel_labels.new`.
+        Otherwise, `None`.
     """
-    return _resolve_module_labels(
+    return _resolve_module(
         deps_index = deps_index_ctx.deps_index,
         module_name = module_name,
-        depender_module_name = depender_module_name,
         preferred_repo_name = deps_index_ctx.preferred_repo_name,
         restrict_to_repo_names = deps_index_ctx.restrict_to_repo_names,
     )
@@ -293,12 +310,15 @@ src_types = struct(
 
 deps_indexes = struct(
     find_product = _find_product,
+    get_module = _get_module,
+    labels_for_module = _labels_for_module,
+    modules_for_product = _modules_for_product,
     new = _new,
     new_ctx = _new_ctx,
     new_from_json = _new_from_json,
     new_module = _new_module,
     new_product = _new_product,
-    resolve_module_labels = _resolve_module_labels,
-    resolve_module_labels_with_ctx = _resolve_module_labels_with_ctx,
+    resolve_module = _resolve_module,
+    resolve_module_with_ctx = _resolve_module_with_ctx,
     resolve_product_labels = _resolve_product_labels,
 )
