@@ -7,9 +7,12 @@ load("//swiftpkg/internal:deps_indexes.bzl", "deps_indexes")
 def _new_from_json_test(ctx):
     env = unittest.begin(ctx)
 
-    asserts.equals(env, 4, len(_deps_index.modules_by_name))
-    asserts.equals(env, 6, len(_deps_index.modules_by_label))
-    asserts.equals(env, 0, len(_deps_index.products))
+    asserts.equals(env, 4, len(_deps_index.modules_by_name), "modules_by_name len")
+    asserts.equals(env, 6, len(_deps_index.modules_by_label), "modules_by_label len")
+    asserts.equals(env, 3, len(_deps_index.products_by_key), "products_by_key len")
+    asserts.equals(env, 2, len(_deps_index.products_by_name), "products_by_name len")
+    asserts.equals(env, 1, len(_deps_index.products_by_name["ArgumentParser"]), "number of ArgumentParser products")
+    asserts.equals(env, 2, len(_deps_index.products_by_name["Foo"]), "number of Foo products")
 
     return unittest.end(env)
 
@@ -198,6 +201,109 @@ def _labels_for_module_test(ctx):
 
 labels_for_module_test = unittest.make(_labels_for_module_test)
 
+def _resolve_product_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "ArgumentParser product",
+            product = "ArgumentParser",
+            preferred = None,
+            restrict_to = [],
+            exp = deps_indexes.new_product_index_key(
+                "apple_swift_argument_parser",
+                "ArgumentParser",
+            ),
+        ),
+        struct(
+            msg = "product not in index",
+            product = "DoesNotExist",
+            preferred = None,
+            restrict_to = [],
+            exp = None,
+        ),
+        struct(
+            msg = "preferred repo name exists",
+            product = "Foo",
+            preferred = "example_cool_repo",
+            restrict_to = [],
+            exp = deps_indexes.new_product_index_key(
+                "example_cool_repo",
+                "Foo",
+            ),
+        ),
+        struct(
+            msg = "preferred repo name not found",
+            product = "ArgumentParser",
+            preferred = "example_another_repo",
+            restrict_to = [],
+            exp = deps_indexes.new_product_index_key(
+                "apple_swift_argument_parser",
+                "ArgumentParser",
+            ),
+        ),
+        struct(
+            msg = "restrict to repos, found one",
+            product = "Foo",
+            preferred = None,
+            restrict_to = ["some_other_repo", "example_another_repo"],
+            exp = deps_indexes.new_product_index_key(
+                "example_another_repo",
+                "Foo",
+            ),
+        ),
+        struct(
+            msg = "restrict to repos, not found",
+            product = "Foo",
+            preferred = None,
+            restrict_to = ["some_other_repo"],
+            exp = None,
+        ),
+        struct(
+            msg = "preferred repo and restrict to repos, found preferred",
+            product = "Foo",
+            preferred = "example_cool_repo",
+            restrict_to = ["example_cool_repo", "example_another_repo"],
+            exp = deps_indexes.new_product_index_key(
+                "example_cool_repo",
+                "Foo",
+            ),
+        ),
+    ]
+    for t in tests:
+        actual = deps_indexes.resolve_product(
+            _deps_index,
+            product_name = t.product,
+            preferred_repo_name = t.preferred,
+            restrict_to_repo_names = t.restrict_to,
+        )
+        actual_key = deps_indexes.new_product_index_key_for_product(actual)
+        asserts.equals(env, t.exp, actual_key, t.msg)
+
+    return unittest.end(env)
+
+resolve_product_test = unittest.make(_resolve_product_test)
+
+def _resolve_product_with_ctx_test(ctx):
+    env = unittest.begin(ctx)
+
+    deps_index_ctx = deps_indexes.new_ctx(
+        deps_index = _deps_index,
+        preferred_repo_name = "example_cool_repo",
+        restrict_to_repo_names = ["example_cool_repo", "example_another_repo"],
+    )
+    actual = deps_indexes.resolve_product_with_ctx(
+        deps_index_ctx = deps_index_ctx,
+        product_name = "Foo",
+    )
+    exp_key = deps_indexes.new_product_index_key("example_cool_repo", "Foo")
+    actual_key = deps_indexes.new_product_index_key_for_product(actual)
+    asserts.equals(env, exp_key, actual_key)
+
+    return unittest.end(env)
+
+resolve_product_with_ctx_test = unittest.make(_resolve_product_with_ctx_test)
+
 def deps_indexes_test_suite():
     return unittest.suite(
         "deps_indexes_tests",
@@ -205,6 +311,8 @@ def deps_indexes_test_suite():
         get_module_test,
         resolve_module_test,
         resolve_module_with_ctx_test,
+        resolve_product_test,
+        resolve_product_with_ctx_test,
         labels_for_module_test,
     )
 
@@ -218,7 +326,11 @@ _deps_index_json = """
     {"name": "Bar", "c99name": "Bar", "src_type": "swift", "label": "@example_another_repo//Sources/Bar"},
     {"name": "ObjcLibrary", "c99name": "ObjcLibrary", "src_type": "objc", "label": "@example_cool_repo//:ObjcLibrary"}
   ],
-  "products": []
+  "products": [
+    {"identity": "apple_swift_argument_parser", "name": "ArgumentParser", "type": "library", "target_labels": ["@apple_swift_argument_parser//Sources/ArgumentParser"]},
+    {"identity": "example_cool_repo", "name": "Foo", "type": "library", "target_labels": ["@example_cool_repo//:Foo", "@example_cool_repo//:Bar"]},
+    {"identity": "example_another_repo", "name": "Foo", "type": "library", "target_labels": ["@example_another_repo//Sources/Foo"]}
+  ]
 }
 """
 

@@ -26,21 +26,44 @@ def make_pkginfo_target_deps(bazel_labels):
             A `list` of `struct` values as returned by `bzl_selects.new`
             representing the labels for the target dependency.
         """
+
+        # Find the depender module
+        depender_module = deps_indexes.resolve_module_with_ctx(
+            pkg_ctx.deps_index_ctx,
+            depender_module_name,
+        )
+        if depender_module == None:
+            fail("Unable to find depender module named {}.".format(depender_module_name))
+
         if target_dep.by_name:
-            # GH194: A byName reference can be a product or a module.
-            # This should look for a matching product first. Then, look for a
-            # module directly?
             condition = target_dep.by_name.condition
+
+            # If we found a module in the depender's repo, then use it.
+            # Else if we found a product, use it.
+            # Else use whatever we found from the modules resolution.
             module = deps_indexes.resolve_module_with_ctx(
                 pkg_ctx.deps_index_ctx,
                 target_dep.by_name.name,
             )
-
-            # Seeing Package.swift files with byName dependencies that
-            # cannot be resolved (i.e., they do not exist).
-            # Example `protoc-gen-swift` in
-            # `https://github.com/grpc/grpc-swift.git`.
-            modules = [module] if module != None else []
+            if module != None and \
+               module.label.repository_name == depender_module.label.repository_name:
+                modules = [module]
+            else:
+                product = deps_indexes.resolve_product_with_ctx(
+                    pkg_ctx.deps_index_ctx,
+                    target_dep.by_name.name,
+                )
+                if product != None:
+                    modules = deps_indexes.modules_for_product(
+                        deps_index = pkg_ctx.deps_index_ctx.deps_index,
+                        product = product,
+                    )
+                else:
+                    # Seeing Package.swift files with byName dependencies that
+                    # cannot be resolved (i.e., they do not exist).
+                    # Example `protoc-gen-swift` in
+                    # `https://github.com/grpc/grpc-swift.git`.
+                    modules = [module] if module != None else []
 
         elif target_dep.target:
             condition = target_dep.target.condition
@@ -66,7 +89,7 @@ Unable to resolve target reference target dependency for {module_name}.\
 Did not find external dependency with name/identity {}.\
 """.format(prod_ref.dep_name))
 
-            product = deps_indexes.find_product(
+            product = deps_indexes.get_product(
                 deps_index = pkg_ctx.deps_index_ctx.deps_index,
                 identity = dep.identity,
                 name = prod_ref.product_name,
@@ -87,14 +110,6 @@ Unable to resolve product reference target dependency for product {prod_name} pr
             fail("""\
 Unrecognized target dependency while generating a Bazel dependency label.\
 """)
-
-        # Find the depender module
-        depender_module = deps_indexes.resolve_module_with_ctx(
-            pkg_ctx.deps_index_ctx,
-            depender_module_name,
-        )
-        if depender_module == None:
-            fail("Unable to find depender module named {}.".format(depender_module_name))
 
         labels = lists.flatten([
             deps_indexes.labels_for_module(module, depender_module.src_type)
