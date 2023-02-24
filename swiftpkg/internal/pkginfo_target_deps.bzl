@@ -66,7 +66,7 @@ Unable to resolve target reference target dependency for {module_name}.\
 Did not find external dependency with name/identity {}.\
 """.format(prod_ref.dep_name))
 
-            product = deps_indexes.find_product(
+            product = deps_indexes.get_product(
                 deps_index = pkg_ctx.deps_index_ctx.deps_index,
                 identity = dep.identity,
                 name = prod_ref.product_name,

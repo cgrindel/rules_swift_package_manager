@@ -219,7 +219,7 @@ def _resolve_module(
 def _new_product_index_key(identity, name):
     return identity.lower() + "|" + name
 
-def _find_product(deps_index, identity, name):
+def _get_product(deps_index, identity, name):
     """Retrieves the product based upon the identity and the name.
 
     Args:
@@ -291,7 +291,7 @@ src_types = struct(
 )
 
 deps_indexes = struct(
-    find_product = _find_product,
+    get_product = _get_product,
     get_module = _get_module,
     labels_for_module = _labels_for_module,
     modules_for_product = _modules_for_product,
