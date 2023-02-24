@@ -699,13 +699,12 @@ generate_modulemap(
             msg = "Swift library target with resources",
             name = "SwiftLibraryWithResources",
             exp = """\
-load("@build_bazel_rules_apple//apple:apple.bzl", "apple_resource_group")
+load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_group")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 apple_resource_group(
     name = "SwiftLibraryWithResources_resources",
     structured_resources = ["Resources/chicken.json"],
-    visibility = ["//visibility:public"],
 )
 
 swift_library(

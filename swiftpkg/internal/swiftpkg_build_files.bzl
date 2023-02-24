@@ -508,7 +508,6 @@ def _apple_resource_group(target):
             name = pkginfo_targets.resource_group_label_name(target.name),
             attrs = {
                 "structured_resources": resources,
-                "visibility": ["//visibility:public"],
             },
         ),
     ]
@@ -714,13 +713,15 @@ apple_kinds = struct(
 
 apple_apple_location = "@build_bazel_rules_apple//apple:apple.bzl"
 
+apple_resources_location = "@build_bazel_rules_apple//apple:resources.bzl"
+
 apple_dynamic_xcframework_import_load_stmt = load_statements.new(
     apple_apple_location,
     apple_kinds.dynamic_xcframework_import,
 )
 
 apple_resource_group_load_stmt = load_statements.new(
-    apple_apple_location,
+    apple_resources_location,
     apple_kinds.resource_group,
 )
 
