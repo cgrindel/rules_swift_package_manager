@@ -1,0 +1,8 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
+
+swift_test(
+    name = "PhoneNumberKitTests",
+    srcs = ["ParseTests.swift"],
+    module_name = "PhoneNumberKitTests",
+    deps = ["@swiftpkg_phonenumberkit//:PhoneNumberKit"],
+)
