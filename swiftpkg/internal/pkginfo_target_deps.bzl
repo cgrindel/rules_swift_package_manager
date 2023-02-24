@@ -27,20 +27,27 @@ def make_pkginfo_target_deps(bazel_labels):
             representing the labels for the target dependency.
         """
         if target_dep.by_name:
-            # GH194: A byName reference can be a product or a module.
-            # This should look for a matching product first. Then, look for a
-            # module directly?
             condition = target_dep.by_name.condition
-            module = deps_indexes.resolve_module_with_ctx(
+            product = deps_indexes.resolve_product_with_ctx(
                 pkg_ctx.deps_index_ctx,
                 target_dep.by_name.name,
             )
+            if product != None:
+                modules = deps_indexes.modules_for_product(
+                    deps_index = pkg_ctx.deps_index_ctx.deps_index,
+                    product = product,
+                )
+            else:
+                module = deps_indexes.resolve_module_with_ctx(
+                    pkg_ctx.deps_index_ctx,
+                    target_dep.by_name.name,
+                )
 
-            # Seeing Package.swift files with byName dependencies that
-            # cannot be resolved (i.e., they do not exist).
-            # Example `protoc-gen-swift` in
-            # `https://github.com/grpc/grpc-swift.git`.
-            modules = [module] if module != None else []
+                # Seeing Package.swift files with byName dependencies that
+                # cannot be resolved (i.e., they do not exist).
+                # Example `protoc-gen-swift` in
+                # `https://github.com/grpc/grpc-swift.git`.
+                modules = [module] if module != None else []
 
         elif target_dep.target:
             condition = target_dep.target.condition

@@ -30,7 +30,7 @@ def _new_from_json(json_str):
 def _new(modules = [], products = []):
     modules_by_name = {}
     modules_by_label = {}
-    pi = {}
+    products_by_key = {}
 
     # buildifier: disable=uninitialized
     def _add_module(m):
@@ -46,7 +46,7 @@ def _new(modules = [], products = []):
     # buildifier: disable=uninitialized
     def _add_product(p):
         key = _new_product_index_key(p.identity, p.name)
-        pi[key] = p
+        products_by_key[key] = p
 
     for module in modules:
         _add_module(module)
@@ -56,7 +56,7 @@ def _new(modules = [], products = []):
     return struct(
         modules_by_name = modules_by_name,
         modules_by_label = modules_by_label,
-        products = pi,
+        products_by_key = products_by_key,
     )
 
 def _new_module_from_dict(mod_dict):
@@ -216,6 +216,29 @@ def _resolve_module(
         return None
     return modules[0]
 
+def _resolve_product(
+        deps_index,
+        product_name,
+        preferred_repo_name = None,
+        restrict_to_repo_names = []):
+    """Finds a Bazel label that provides the specified product.
+
+    Args:
+        deps_index: A `dict` as returned by `deps_indexes.new_from_json`.
+        product_name: The name of the product as a `string`
+        preferred_repo_name: Optional. If a target in this repository provides
+            the product, prefer it.
+        restrict_to_repo_names: Optional. A `list` of repository names to
+            restrict the match.
+
+    Returns:
+        If a product is found, a `struct` as returned by `bazel_labels.new`.
+        Otherwise, `None`.
+    """
+
+    # TODO(chuck): IMPLEMENT ME!
+    return None
+
 def _new_product_index_key(identity, name):
     return identity.lower() + "|" + name
 
@@ -232,7 +255,7 @@ def _get_product(deps_index, identity, name):
         found, returns `None`.
     """
     key = _new_product_index_key(identity, name)
-    return deps_index.products.get(key)
+    return deps_index.products_by_key.get(key)
 
 def _new_ctx(deps_index, preferred_repo_name = None, restrict_to_repo_names = []):
     """Create a new context struct that encapsulates a dependency index along with \
@@ -275,6 +298,26 @@ def _resolve_module_with_ctx(
         restrict_to_repo_names = deps_index_ctx.restrict_to_repo_names,
     )
 
+def _resolve_product_with_ctx(
+        deps_index_ctx,
+        product_name):
+    """Finds a Bazel label that provides the specified product.
+
+    Args:
+        deps_index_ctx: A `struct` as returned by `deps_indexes.new_ctx`.
+        product_name: The name of the product as a `string`
+
+    Returns:
+        If a product is found, a `struct` as returned by `bazel_labels.new`.
+        Otherwise, `None`.
+    """
+    return _resolve_product(
+        deps_index = deps_index_ctx.deps_index,
+        product_name = product_name,
+        preferred_repo_name = deps_index_ctx.preferred_repo_name,
+        restrict_to_repo_names = deps_index_ctx.restrict_to_repo_names,
+    )
+
 src_types = struct(
     unknown = "unknown",
     swift = "swift",
@@ -302,4 +345,6 @@ deps_indexes = struct(
     new_product = _new_product,
     resolve_module = _resolve_module,
     resolve_module_with_ctx = _resolve_module_with_ctx,
+    resolve_product = _resolve_product,
+    resolve_product_with_ctx = _resolve_product_with_ctx,
 )

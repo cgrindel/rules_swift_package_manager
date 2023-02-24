@@ -9,7 +9,7 @@ def _new_from_json_test(ctx):
 
     asserts.equals(env, 4, len(_deps_index.modules_by_name))
     asserts.equals(env, 6, len(_deps_index.modules_by_label))
-    asserts.equals(env, 0, len(_deps_index.products))
+    asserts.equals(env, 0, len(_deps_index.products_by_key))
 
     return unittest.end(env)
 
