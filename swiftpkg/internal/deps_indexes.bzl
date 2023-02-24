@@ -30,7 +30,8 @@ def _new_from_json(json_str):
 def _new(modules = [], products = []):
     modules_by_name = {}
     modules_by_label = {}
-    pi = {}
+    products_by_key = {}
+    products_by_name = {}
 
     # buildifier: disable=uninitialized
     def _add_module(m):
@@ -46,7 +47,10 @@ def _new(modules = [], products = []):
     # buildifier: disable=uninitialized
     def _add_product(p):
         key = _new_product_index_key(p.identity, p.name)
-        pi[key] = p
+        products_by_key[key] = p
+        prds = products_by_name.get(p.name, [])
+        prds.append(p)
+        products_by_name[p.name] = prds
 
     for module in modules:
         _add_module(module)
@@ -56,7 +60,8 @@ def _new(modules = [], products = []):
     return struct(
         modules_by_name = modules_by_name,
         modules_by_label = modules_by_label,
-        products = pi,
+        products_by_key = products_by_key,
+        products_by_name = products_by_name,
     )
 
 def _new_module_from_dict(mod_dict):
@@ -181,7 +186,7 @@ def _resolve_module(
             restrict the match.
 
     Returns:
-        If a module is found, a `struct` as returned by `bazel_labels.new`.
+        If a module is found, a `struct` as returned by `deps_indexes.new_module`.
         Otherwise, `None`.
     """
     modules = deps_index.modules_by_name.get(module_name, [])
@@ -216,10 +221,71 @@ def _resolve_module(
         return None
     return modules[0]
 
+def _resolve_product(
+        deps_index,
+        product_name,
+        preferred_repo_name = None,
+        restrict_to_repo_names = []):
+    """Finds a Bazel label that provides the specified product.
+
+    Args:
+        deps_index: A `dict` as returned by `deps_indexes.new_from_json`.
+        product_name: The name of the product as a `string`
+        preferred_repo_name: Optional. If a target in this repository provides
+            the product, prefer it.
+        restrict_to_repo_names: Optional. A `list` of repository names to
+            restrict the match.
+
+    Returns:
+        If a product is found, a `struct` as returned by `deps_indexes.new_product`.
+        Otherwise, `None`.
+    """
+    products = deps_index.products_by_name.get(product_name, [])
+    if len(products) == 0:
+        return None
+
+    # If a repo name is provided, prefer that over any other matches
+    if preferred_repo_name != None:
+        preferred_repo_name = bazel_repo_names.normalize(preferred_repo_name)
+        product = lists.find(
+            products,
+            lambda p: lists.contains(
+                p.target_labels,
+                lambda tl: tl.repository_name == preferred_repo_name,
+            ),
+        )
+        if product != None:
+            return product
+
+    # If we are meant to only find a match in a set of repo names, then
+    if len(restrict_to_repo_names) > 0:
+        restrict_to_repo_names = [
+            bazel_repo_names.normalize(rn)
+            for rn in restrict_to_repo_names
+        ]
+        repo_names = sets.make(restrict_to_repo_names)
+        products = [
+            p
+            for p in products
+            if lists.contains(
+                p.target_labels,
+                lambda tl: sets.contains(repo_names, tl.repository_name),
+            )
+        ]
+
+    if len(products) == 0:
+        return None
+    return products[0]
+
 def _new_product_index_key(identity, name):
     return identity.lower() + "|" + name
 
-def _find_product(deps_index, identity, name):
+def _new_product_index_key_for_product(product):
+    if product == None:
+        return None
+    return _new_product_index_key(product.identity, product.name)
+
+def _get_product(deps_index, identity, name):
     """Retrieves the product based upon the identity and the name.
 
     Args:
@@ -232,25 +298,7 @@ def _find_product(deps_index, identity, name):
         found, returns `None`.
     """
     key = _new_product_index_key(identity, name)
-    return deps_index.products.get(key)
-
-def _resolve_product_labels(deps_index, identity, name):
-    """Returns the Bazel labels that represent the specified product.
-
-    Args:
-        deps_index: A `dict` as returned by `deps_indexes.new_from_json`.
-        identity: The dependency identity as a `string`.
-        name: The product name as a `string`.
-
-    Returns:
-        A `list` of Bazel label `struct` values as returned by
-        `bazel_labels.new`. If the product is not found, an empty `list` is
-        returned.
-    """
-    product = _find_product(deps_index, identity, name)
-    if product == None:
-        return []
-    return product.target_labels
+    return deps_index.products_by_key.get(key)
 
 def _new_ctx(deps_index, preferred_repo_name = None, restrict_to_repo_names = []):
     """Create a new context struct that encapsulates a dependency index along with \
@@ -293,6 +341,26 @@ def _resolve_module_with_ctx(
         restrict_to_repo_names = deps_index_ctx.restrict_to_repo_names,
     )
 
+def _resolve_product_with_ctx(
+        deps_index_ctx,
+        product_name):
+    """Finds a Bazel label that provides the specified product.
+
+    Args:
+        deps_index_ctx: A `struct` as returned by `deps_indexes.new_ctx`.
+        product_name: The name of the product as a `string`
+
+    Returns:
+        If a product is found, a `struct` as returned by `bazel_labels.new`.
+        Otherwise, `None`.
+    """
+    return _resolve_product(
+        deps_index = deps_index_ctx.deps_index,
+        product_name = product_name,
+        preferred_repo_name = deps_index_ctx.preferred_repo_name,
+        restrict_to_repo_names = deps_index_ctx.restrict_to_repo_names,
+    )
+
 src_types = struct(
     unknown = "unknown",
     swift = "swift",
@@ -309,7 +377,7 @@ src_types = struct(
 )
 
 deps_indexes = struct(
-    find_product = _find_product,
+    get_product = _get_product,
     get_module = _get_module,
     labels_for_module = _labels_for_module,
     modules_for_product = _modules_for_product,
@@ -318,7 +386,10 @@ deps_indexes = struct(
     new_from_json = _new_from_json,
     new_module = _new_module,
     new_product = _new_product,
+    new_product_index_key = _new_product_index_key,
+    new_product_index_key_for_product = _new_product_index_key_for_product,
     resolve_module = _resolve_module,
     resolve_module_with_ctx = _resolve_module_with_ctx,
-    resolve_product_labels = _resolve_product_labels,
+    resolve_product = _resolve_product,
+    resolve_product_with_ctx = _resolve_product_with_ctx,
 )
