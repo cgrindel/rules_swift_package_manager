@@ -7,218 +7,134 @@ load("//swiftpkg/internal:deps_indexes.bzl", "deps_indexes")
 def _new_from_json_test(ctx):
     env = unittest.begin(ctx)
 
-    actual = _deps_index
-    expected_modules = {
-        "ArgumentParser": [
-            deps_indexes.new_module(
-                name = "ArgumentParser",
-                c99name = "ArgumentParser",
-                src_type = "swift",
-                label = bazel_labels.new(
-                    repository_name = "@apple_swift_argument_parser",
-                    package = "Sources/ArgumentParser",
-                    name = "ArgumentParser",
-                ),
-            ),
-        ],
-        "Bar": [
-            deps_indexes.new_module(
-                name = "Bar",
-                c99name = "Bar",
-                src_type = "swift",
-                label = bazel_labels.new(
-                    repository_name = "@example_cool_repo",
-                    package = "",
-                    name = "Bar",
-                ),
-            ),
-            deps_indexes.new_module(
-                name = "Bar",
-                c99name = "Bar",
-                src_type = "swift",
-                label = bazel_labels.new(
-                    repository_name = "@example_another_repo",
-                    package = "Sources/Bar",
-                    name = "Bar",
-                ),
-            ),
-        ],
-        "Foo": [
-            deps_indexes.new_module(
-                name = "Foo",
-                c99name = "Foo",
-                src_type = "swift",
-                label = bazel_labels.new(
-                    repository_name = "@example_cool_repo",
-                    package = "",
-                    name = "Foo",
-                ),
-            ),
-            deps_indexes.new_module(
-                name = "Foo",
-                c99name = "Foo",
-                src_type = "swift",
-                label = bazel_labels.new(
-                    repository_name = "@example_another_repo",
-                    package = "Sources/Foo",
-                    name = "Foo",
-                ),
-            ),
-        ],
-        "ObjcLibrary": [
-            deps_indexes.new_module(
-                name = "ObjcLibrary",
-                c99name = "ObjcLibrary",
-                src_type = "objc",
-                label = bazel_labels.new(
-                    repository_name = "@example_cool_repo",
-                    package = "",
-                    name = "ObjcLibrary",
-                ),
-            ),
-        ],
-    }
-    expected = deps_indexes.new(modules = expected_modules)
-    asserts.equals(env, expected, actual)
+    asserts.equals(env, 4, len(_deps_index.modules_by_name))
+    asserts.equals(env, 6, len(_deps_index.modules_by_label))
+    asserts.equals(env, 0, len(_deps_index.products))
 
     return unittest.end(env)
 
 new_from_json_test = unittest.make(_new_from_json_test)
 
-def _resolve_module_labels_test(ctx):
+def _get_module_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "label is a string",
+            label = "@apple_swift_argument_parser//Sources/ArgumentParser",
+            exp_name = "ArgumentParser",
+        ),
+        struct(
+            msg = "label is a struct",
+            label = bazel_labels.parse(
+                "@apple_swift_argument_parser//Sources/ArgumentParser",
+            ),
+            exp_name = "ArgumentParser",
+        ),
+    ]
+    for t in tests:
+        actual = deps_indexes.get_module(_deps_index, t.label)
+        asserts.equals(
+            env,
+            bazel_labels.normalize(t.label),
+            bazel_labels.normalize(actual.label),
+            t.msg,
+        )
+        asserts.equals(env, t.exp_name, actual.name, t.msg)
+
+    return unittest.end(env)
+
+get_module_test = unittest.make(_get_module_test)
+
+def _resolve_module_test(ctx):
     env = unittest.begin(ctx)
 
     tests = [
         struct(
             msg = "Foo module",
             module = "Foo",
-            depender_module_name = "Bar",
             preferred = None,
             restrict_to = [],
-            exp = [bazel_labels.new(
+            exp = bazel_labels.new(
                 repository_name = "@example_cool_repo",
                 package = "",
                 name = "Foo",
-            )],
+            ),
         ),
         struct(
             msg = "module not in index",
             module = "DoesNotExist",
-            depender_module_name = "DoesNotExist",
             preferred = None,
             restrict_to = [],
-            exp = [],
+            exp = None,
         ),
         struct(
             msg = "preferred repo name exists",
             module = "Foo",
-            depender_module_name = "Bar",
             preferred = "example_cool_repo",
             restrict_to = [],
-            exp = [bazel_labels.new(
+            exp = bazel_labels.new(
                 repository_name = "@example_cool_repo",
                 package = "",
                 name = "Foo",
-            )],
+            ),
         ),
         struct(
             msg = "preferred repo name not found",
             module = "ArgumentParser",
-            depender_module_name = "Bar",
             preferred = "example_another_repo",
             restrict_to = [],
-            exp = [bazel_labels.new(
+            exp = bazel_labels.new(
                 repository_name = "@apple_swift_argument_parser",
                 package = "Sources/ArgumentParser",
                 name = "ArgumentParser",
-            )],
+            ),
         ),
         struct(
             msg = "restrict to repos, found one",
             module = "Foo",
-            depender_module_name = "Bar",
             preferred = None,
             restrict_to = ["some_other_repo", "example_another_repo"],
-            exp = [bazel_labels.new(
+            exp = bazel_labels.new(
                 repository_name = "@example_another_repo",
                 package = "Sources/Foo",
                 name = "Foo",
-            )],
+            ),
         ),
         struct(
             msg = "restrict to repos, not found",
             module = "Foo",
-            depender_module_name = "Bar",
             preferred = None,
             restrict_to = ["some_other_repo"],
-            exp = [],
+            exp = None,
         ),
         struct(
             msg = "preferred repo and restrict to repos, found preferred",
             module = "Foo",
-            depender_module_name = "Bar",
             preferred = "example_cool_repo",
             restrict_to = ["example_cool_repo", "example_another_repo"],
-            exp = [bazel_labels.new(
+            exp = bazel_labels.new(
                 repository_name = "@example_cool_repo",
                 package = "",
                 name = "Foo",
-            )],
-        ),
-        struct(
-            msg = "Swift library depends upon Objc library",
-            module = "ObjcLibrary",
-            depender_module_name = "Bar",
-            preferred = None,
-            restrict_to = [],
-            exp = [
-                bazel_labels.new(
-                    repository_name = "@example_cool_repo",
-                    package = "",
-                    name = "ObjcLibrary",
-                ),
-                bazel_labels.new(
-                    repository_name = "@example_cool_repo",
-                    package = "",
-                    name = "ObjcLibrary_modulemap",
-                ),
-            ],
-        ),
-        struct(
-            msg = "Objc library depends upon Swift library",
-            module = "Foo",
-            depender_module_name = "ObjcLibrary",
-            preferred = None,
-            restrict_to = [],
-            exp = [
-                bazel_labels.new(
-                    repository_name = "@example_cool_repo",
-                    package = "",
-                    name = "Foo",
-                ),
-                bazel_labels.new(
-                    repository_name = "@example_cool_repo",
-                    package = "",
-                    name = "Foo_modulemap",
-                ),
-            ],
+            ),
         ),
     ]
     for t in tests:
-        actual = deps_indexes.resolve_module_labels(
+        actual = deps_indexes.resolve_module(
             _deps_index,
             module_name = t.module,
-            depender_module_name = t.depender_module_name,
             preferred_repo_name = t.preferred,
             restrict_to_repo_names = t.restrict_to,
         )
-        asserts.equals(env, t.exp, actual, t.msg)
+        actual_label = actual.label if actual else None
+        asserts.equals(env, t.exp, actual_label, t.msg)
 
     return unittest.end(env)
 
-resolve_module_labels_test = unittest.make(_resolve_module_labels_test)
+resolve_module_test = unittest.make(_resolve_module_test)
 
-def _resolve_module_labels_with_ctx_test(ctx):
+def _resolve_module_with_ctx_test(ctx):
     env = unittest.begin(ctx)
 
     deps_index_ctx = deps_indexes.new_ctx(
@@ -226,26 +142,70 @@ def _resolve_module_labels_with_ctx_test(ctx):
         preferred_repo_name = "example_cool_repo",
         restrict_to_repo_names = ["example_cool_repo", "example_another_repo"],
     )
-    actuals = deps_indexes.resolve_module_labels_with_ctx(
+    actual = deps_indexes.resolve_module_with_ctx(
         deps_index_ctx = deps_index_ctx,
         module_name = "Foo",
-        depender_module_name = "Bar",
     )
-    asserts.equals(env, 1, len(actuals))
-    actual = actuals[0]
-    asserts.equals(env, "@example_cool_repo", actual.repository_name)
-    asserts.equals(env, "Foo", actual.name)
+    exp_label = bazel_labels.parse("@example_cool_repo//:Foo")
+    asserts.equals(env, exp_label, actual.label)
 
     return unittest.end(env)
 
-resolve_module_labels_with_ctx_test = unittest.make(_resolve_module_labels_with_ctx_test)
+resolve_module_with_ctx_test = unittest.make(_resolve_module_with_ctx_test)
+
+def _labels_for_module_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "Swift depend upon Swift",
+            dep_module = "@example_cool_repo//:Foo",
+            depender_module = "@example_cool_repo//:Bar",
+            exp = [
+                bazel_labels.parse("@example_cool_repo//:Foo"),
+            ],
+        ),
+        struct(
+            msg = "Swift library depends upon Objc library",
+            dep_module = "@example_cool_repo//:ObjcLibrary",
+            depender_module = "@example_cool_repo//:Bar",
+            exp = [
+                bazel_labels.parse("@example_cool_repo//:ObjcLibrary"),
+                bazel_labels.parse("@example_cool_repo//:ObjcLibrary_modulemap"),
+            ],
+        ),
+        struct(
+            msg = "Objc library depends upon Swift library",
+            dep_module = "@example_cool_repo//:Foo",
+            depender_module = "@example_cool_repo//:ObjcLibrary",
+            exp = [
+                bazel_labels.parse("@example_cool_repo//:Foo"),
+                bazel_labels.parse("@example_cool_repo//:Foo_modulemap"),
+            ],
+        ),
+    ]
+    for t in tests:
+        module = deps_indexes.get_module(_deps_index, t.dep_module)
+        depender = deps_indexes.get_module(_deps_index, t.depender_module)
+        if module == None:
+            fail("The module is `None` for {}.".format(t.label))
+        if depender == None:
+            fail("The depender module is `None` for {}.".format(t.depender_label))
+        actual = deps_indexes.labels_for_module(module, depender.src_type)
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+labels_for_module_test = unittest.make(_labels_for_module_test)
 
 def deps_indexes_test_suite():
     return unittest.suite(
         "deps_indexes_tests",
         new_from_json_test,
-        resolve_module_labels_test,
-        resolve_module_labels_with_ctx_test,
+        get_module_test,
+        resolve_module_test,
+        resolve_module_with_ctx_test,
+        labels_for_module_test,
     )
 
 _deps_index_json = """

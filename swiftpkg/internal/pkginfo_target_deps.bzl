@@ -1,6 +1,6 @@
 """Module for generating data from target dependencies created by `pkginfos`."""
 
-load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels")
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
 load(":bzl_selects.bzl", "bzl_selects")
 load(":deps_indexes.bzl", "deps_indexes")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
@@ -31,33 +31,28 @@ def make_pkginfo_target_deps(bazel_labels):
             # This should look for a matching product first. Then, look for a
             # module directly?
             condition = target_dep.by_name.condition
-            labels = deps_indexes.resolve_module_labels_with_ctx(
+            module = deps_indexes.resolve_module_with_ctx(
                 pkg_ctx.deps_index_ctx,
                 target_dep.by_name.name,
-                depender_module_name,
             )
-            if len(labels) == 0:
-                # Seeing Package.swift files with byName dependencies that
-                # cannot be resolved (i.e., they do not exist).
-                # Example `protoc-gen-swift` in
-                # `https://github.com/grpc/grpc-swift.git`.
-                # Printing warnings is discouraged. So, just keep moving
-                # print("""\
-                # Unable to resolve by_name target dependency for {module_name}.\
-                # """.format(module_name = target_dep.by_name.name))
-                pass
+
+            # Seeing Package.swift files with byName dependencies that
+            # cannot be resolved (i.e., they do not exist).
+            # Example `protoc-gen-swift` in
+            # `https://github.com/grpc/grpc-swift.git`.
+            modules = [module] if module != None else []
 
         elif target_dep.target:
             condition = target_dep.target.condition
-            labels = deps_indexes.resolve_module_labels_with_ctx(
+            module = deps_indexes.resolve_module_with_ctx(
                 pkg_ctx.deps_index_ctx,
                 target_dep.target.target_name,
-                depender_module_name,
             )
-            if len(labels) == 0:
+            if module == None:
                 fail("""\
 Unable to resolve target reference target dependency for {module_name}.\
 """.format(module_name = target_dep.target.target_name))
+            modules = [module]
 
         elif target_dep.product:
             condition = target_dep.product.condition
@@ -70,23 +65,41 @@ Unable to resolve target reference target dependency for {module_name}.\
                 fail("""\
 Did not find external dependency with name/identity {}.\
 """.format(prod_ref.dep_name))
-            labels = deps_indexes.resolve_product_labels(
+
+            product = deps_indexes.find_product(
                 deps_index = pkg_ctx.deps_index_ctx.deps_index,
                 identity = dep.identity,
                 name = prod_ref.product_name,
             )
-            if len(labels) == 0:
+            if product == None:
                 fail("""\
 Unable to resolve product reference target dependency for product {prod_name} provided by {dep_name}.
 """.format(
                     prod_name = prod_ref.product_name,
                     dep_name = prod_ref.dep_name,
                 ))
+            modules = deps_indexes.modules_for_product(
+                deps_index = pkg_ctx.deps_index_ctx.deps_index,
+                product = product,
+            )
 
         else:
             fail("""\
 Unrecognized target dependency while generating a Bazel dependency label.\
 """)
+
+        # Find the depender module
+        depender_module = deps_indexes.resolve_module_with_ctx(
+            pkg_ctx.deps_index_ctx,
+            depender_module_name,
+        )
+        if depender_module == None:
+            fail("Unable to find depender module named {}.".format(depender_module_name))
+
+        labels = lists.flatten([
+            deps_indexes.labels_for_module(module, depender_module.src_type)
+            for module in modules
+        ])
 
         return bzl_selects.new_from_target_dependency_condition(
             kind = _target_dep_kind,
