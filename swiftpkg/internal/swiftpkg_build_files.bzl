@@ -87,6 +87,9 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["copts"] = bzl_selects.to_starlark(copts)
     resource_build_file = None
     if len(target.resources) > 0:
+        # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
+        # https://stackoverflow.com/questions/63237395/generating-resource-bundle-accessor-type-bundle-has-no-member-module
+        attrs["srcs"].append(_resource_bundle_accesor_target)
         resource_build_file = _apple_resource_group(target)
         attrs["data"] = [
             ":{}".format(pkginfo_targets.resource_group_label_name(target.name)),
@@ -735,6 +738,8 @@ swiftpkg_generate_modulemap_load_stmt = load_statements.new(
     swiftpkg_build_defs_location,
     swiftpkg_kinds.generate_modulemap,
 )
+
+_resource_bundle_accesor_target = "@cgrindel_swift_bazel//swiftpkg/swift:resource_bundle_accessor"
 
 _condition_kinds = struct(
     private_includes = "_privateIncludes",

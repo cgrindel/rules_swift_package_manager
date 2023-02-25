@@ -713,7 +713,10 @@ swift_library(
     defines = ["SWIFT_PACKAGE"],
     deps = [],
     module_name = "SwiftLibraryWithResources",
-    srcs = ["Source/SwiftLibraryWithResources/SwiftLibraryWithResources.swift"],
+    srcs = [
+        "Source/SwiftLibraryWithResources/SwiftLibraryWithResources.swift",
+        "@cgrindel_swift_bazel//swiftpkg/swift:resource_bundle_accessor",
+    ],
     visibility = ["//visibility:public"],
 )
 """,
