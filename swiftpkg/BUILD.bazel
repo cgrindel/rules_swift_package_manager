@@ -29,5 +29,7 @@ bzl_library(
     name = "build_defs",
     srcs = ["build_defs.bzl"],
     visibility = ["//visibility:public"],
-    deps = ["//swiftpkg/internal:swift_objc_module_alias"],
+    deps = [
+        "//swiftpkg/internal:generate_modulemap",
+    ],
 )
