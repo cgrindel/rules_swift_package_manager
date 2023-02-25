@@ -2,7 +2,10 @@
 import XCTest
 
 class ParseTests: XCTestCase {
+    let phoneNumberKit = PhoneNumberKit()
+
     func test_parse() throws {
-        fail("IMPLEMENT ME!")
+        let phoneNumber = try phoneNumberKit.parse("+33 6 89 017383")
+        XCTAssertNotNil(phoneNumber)
     }
 }
