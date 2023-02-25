@@ -688,16 +688,10 @@ apple_dynamic_xcframework_import_load_stmt = load_statements.new(
 )
 
 swiftpkg_kinds = struct(
-    objc_module_alias = "swift_objc_module_alias",
     generate_modulemap = "generate_modulemap",
 )
 
 swiftpkg_build_defs_location = "@cgrindel_swift_bazel//swiftpkg:build_defs.bzl"
-
-swiftpkg_objc_module_alias_load_stmt = load_statements.new(
-    swiftpkg_build_defs_location,
-    swiftpkg_kinds.objc_module_alias,
-)
 
 swiftpkg_generate_modulemap_load_stmt = load_statements.new(
     swiftpkg_build_defs_location,
