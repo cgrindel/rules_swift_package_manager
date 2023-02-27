@@ -25,5 +25,7 @@ resource_bundle_accessor = rule(
             allow_single_file = True,
         ),
     },
-    doc = "",
+    doc = """\
+Generate a Swift file with an SPM-specific `Bundle.module` accessor.\
+""",
 )

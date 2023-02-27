@@ -90,13 +90,12 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     if len(target.resources) > 0:
         # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
         # https://stackoverflow.com/questions/63237395/generating-resource-bundle-accessor-type-bundle-has-no-member-module
-        all_build_files.append(_resource_bundle_accessor(target))
-        all_build_files.append(_apple_resource_group(target))
+        all_build_files.append(_apple_resource_bundle(target))
         attrs["srcs"].append(":{}".format(
             pkginfo_targets.resource_bundle_accessor_label_name(bzl_target_name),
         ))
         attrs["data"] = [
-            ":{}".format(pkginfo_targets.resource_group_label_name(bzl_target_name)),
+            ":{}".format(pkginfo_targets.resource_bundle_label_name(bzl_target_name)),
         ]
 
     if lists.contains([target_types.library, target_types.regular], target.type):
@@ -487,9 +486,22 @@ def _apple_dynamic_xcframework_import_build_file(target):
 
 # MARK: - Apple Resource Group
 
-def _resource_bundle_accessor(target):
+def _apple_resource_bundle(target):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
-    load_stmts = [swiftpkg_resource_bundle_accessor_load_stmt]
+    bundle_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
+    infoplist_name = pkginfo_targets.resource_bundle_infoplist_label_name(
+        bzl_target_name,
+    )
+
+    resources = [
+        pkginfo_targets.join_path(target, r.path)
+        for r in target.resources
+    ]
+    load_stmts = [
+        apple_resource_bundle_load_stmt,
+        swiftpkg_resource_bundle_infoplist_load_stmt,
+        swiftpkg_resource_bundle_accessor_load_stmt,
+    ]
     decls = [
         build_decls.new(
             kind = swiftpkg_kinds.resource_bundle_accessor,
@@ -497,28 +509,24 @@ def _resource_bundle_accessor(target):
                 bzl_target_name,
             ),
             attrs = {
-                "bundle_name": "{}Bundle".format(target.name),
+                "bundle_name": bundle_name,
             },
         ),
-    ]
-    return build_files.new(load_stmts = load_stmts, decls = decls)
-
-def _apple_resource_group(target):
-    bzl_target_name = pkginfo_targets.bazel_label_name(target)
-    load_stmts = [apple_resource_group_load_stmt]
-    resources = [
-        pkginfo_targets.join_path(target, r.path)
-        for r in target.resources
-    ]
-    decls = [
         build_decls.new(
-            kind = apple_kinds.resource_group,
-            name = pkginfo_targets.resource_group_label_name(bzl_target_name),
+            kind = swiftpkg_kinds.resource_bundle_infoplist,
+            name = infoplist_name,
+            attrs = {},
+        ),
+        build_decls.new(
+            kind = apple_kinds.resource_bundle,
+            name = bundle_name,
             attrs = {
+                "bundle_name": bundle_name,
+                "infoplists": [":{}".format(infoplist_name)],
                 # TODO(chuck): It is invalid for iOS resource bundles to have a
                 # directory called 'resources'.  By using the `resources`
                 # attribute, we are going to lose any structure. One option is
-                # to put the apple_resource_group in the common parent
+                # to put the apple_resource_bundle in the common parent
                 # directory for all of the resources listed. Then we can add
                 # them to `structured_resources`.
                 # "structured_resources": resources,
@@ -739,7 +747,7 @@ swiftpkg_build_files = struct(
 
 apple_kinds = struct(
     dynamic_xcframework_import = "apple_dynamic_xcframework_import",
-    resource_group = "apple_resource_group",
+    resource_bundle = "apple_resource_bundle",
 )
 
 apple_apple_location = "@build_bazel_rules_apple//apple:apple.bzl"
@@ -751,14 +759,15 @@ apple_dynamic_xcframework_import_load_stmt = load_statements.new(
     apple_kinds.dynamic_xcframework_import,
 )
 
-apple_resource_group_load_stmt = load_statements.new(
+apple_resource_bundle_load_stmt = load_statements.new(
     apple_resources_location,
-    apple_kinds.resource_group,
+    apple_kinds.resource_bundle,
 )
 
 swiftpkg_kinds = struct(
     generate_modulemap = "generate_modulemap",
     resource_bundle_accessor = "resource_bundle_accessor",
+    resource_bundle_infoplist = "resource_bundle_infoplist",
 )
 
 swiftpkg_build_defs_location = "@cgrindel_swift_bazel//swiftpkg:build_defs.bzl"
@@ -771,6 +780,11 @@ swiftpkg_generate_modulemap_load_stmt = load_statements.new(
 swiftpkg_resource_bundle_accessor_load_stmt = load_statements.new(
     swiftpkg_build_defs_location,
     swiftpkg_kinds.resource_bundle_accessor,
+)
+
+swiftpkg_resource_bundle_infoplist_load_stmt = load_statements.new(
+    swiftpkg_build_defs_location,
+    swiftpkg_kinds.resource_bundle_infoplist,
 )
 
 _condition_kinds = struct(

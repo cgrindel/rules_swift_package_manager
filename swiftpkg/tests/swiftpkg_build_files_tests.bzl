@@ -699,23 +699,29 @@ swift_library(
             msg = "Swift library target with resources",
             name = "SwiftLibraryWithResources",
             exp = """\
-load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_group")
+load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
-load("@cgrindel_swift_bazel//swiftpkg:build_defs.bzl", "resource_bundle_accessor")
+load("@cgrindel_swift_bazel//swiftpkg:build_defs.bzl", "resource_bundle_accessor", "resource_bundle_infoplist")
 
-apple_resource_group(
-    name = "Source_SwiftLibraryWithResources_resources",
-    structured_resources = ["Resources/chicken.json"],
+apple_resource_bundle(
+    name = "Source_SwiftLibraryWithResources_resource_bundle",
+    bundle_name = "Source_SwiftLibraryWithResources_resource_bundle",
+    infoplists = [":Source_SwiftLibraryWithResources_resource_bundle_infoplist"],
+    resources = ["Source/SwiftLibraryWithResources/Resources/chicken.json"],
 )
 
 resource_bundle_accessor(
     name = "Source_SwiftLibraryWithResources_resource_bundle_accessor",
-    bundle_name = "SwiftLibraryWithResourcesBundle",
+    bundle_name = "Source_SwiftLibraryWithResources_resource_bundle",
+)
+
+resource_bundle_infoplist(
+    name = "Source_SwiftLibraryWithResources_resource_bundle_infoplist",
 )
 
 swift_library(
     name = "Source_SwiftLibraryWithResources",
-    data = [":Source_SwiftLibraryWithResources_resources"],
+    data = [":Source_SwiftLibraryWithResources_resource_bundle"],
     defines = ["SWIFT_PACKAGE"],
     deps = [],
     module_name = "SwiftLibraryWithResources",

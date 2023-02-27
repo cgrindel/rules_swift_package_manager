@@ -4,8 +4,9 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels")
 
 _modulemap_suffix = "_modulemap"
-_resource_suffix = "_resources"
+_resource_bundle_suffix = "_resource_bundle"
 _resource_bundle_accessor_suffix = "_resource_bundle_accessor"
+_resource_bundle_infoplist_suffix = "_resource_bundle_infoplist"
 
 def _get(targets, name, fail_if_not_found = True):
     """Retrieves the target with the given name from a list of targets.
@@ -100,16 +101,16 @@ def _is_modulemap_label(target_name):
     """
     return target_name.endswith(_modulemap_suffix)
 
-def _resource_group_label_name(target_name):
-    """Returns the name of the related `apple_resource_group` target.
+def _resource_bundle_label_name(target_name):
+    """Returns the name of the related `apple_resource_bundle` target.
 
     Args:
         target_name: The publicly advertised name for the Swift target.
 
     Returns:
-        The name of the `apple_resource_group` as a `string`.
+        The name of the `apple_resource_bundle` as a `string`.
     """
-    return target_name + _resource_suffix
+    return target_name + _resource_bundle_suffix
 
 def _resource_bundle_accessor_label_name(target_name):
     """Returns the name of the related `resource_bundle_accessor` target.
@@ -118,9 +119,20 @@ def _resource_bundle_accessor_label_name(target_name):
         target_name: The publicly advertised name for the Swift target.
 
     Returns:
-        The name of the `apple_resource_group` as a `string`.
+        The name of the `resource_bundle_accessor` as a `string`.
     """
     return target_name + _resource_bundle_accessor_suffix
+
+def _resource_bundle_infoplist_label_name(target_name):
+    """Returns the name of the related `resource_bundle_infoplist` target.
+
+    Args:
+        target_name: The publicly advertised name for the Swift target.
+
+    Returns:
+        The name of the `resource_bundle_infoplist` as a `string`.
+    """
+    return target_name + _resource_bundle_infoplist_suffix
 
 def make_pkginfo_targets(bazel_labels):
     """Create a `pkginfo_targets` module.
@@ -158,7 +170,8 @@ def make_pkginfo_targets(bazel_labels):
         join_path = _join_path,
         modulemap_label_name = _modulemap_label_name,
         resource_bundle_accessor_label_name = _resource_bundle_accessor_label_name,
-        resource_group_label_name = _resource_group_label_name,
+        resource_bundle_infoplist_label_name = _resource_bundle_infoplist_label_name,
+        resource_bundle_label_name = _resource_bundle_label_name,
         srcs = _srcs,
     )
 
