@@ -961,6 +961,8 @@ def _new_resource_rule_from_dump_json_map(dump_map):
     )
 
 def _new_resource_rule_process_from_dump_json_map(dump_map):
+    if dump_map == None:
+        return None
     return _new_resource_rule_process(
         localization = dump_map.get("localization"),
     )
