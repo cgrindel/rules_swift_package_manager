@@ -1,9 +1,0 @@
-load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
-
-bzlformat_pkg(name = "bzlformat")
-
-filegroup(
-    name = "resource_bundle_accessor",
-    srcs = ["resource_bundle_accessor.swift"],
-    visibility = ["//visibility:public"],
-)

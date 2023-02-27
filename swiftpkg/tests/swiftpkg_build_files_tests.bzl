@@ -673,6 +673,14 @@ public class FooBar: NSObject {
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("@cgrindel_swift_bazel//swiftpkg:build_defs.bzl", "generate_modulemap")
 
+generate_modulemap(
+    name = "Source_SwiftForObjcTarget_modulemap",
+    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
+    hdrs = [":Source_SwiftForObjcTarget"],
+    module_name = "SwiftForObjcTarget",
+    visibility = ["//visibility:public"],
+)
+
 swift_library(
     name = "Source_SwiftForObjcTarget",
     defines = ["SWIFT_PACKAGE"],
@@ -685,14 +693,6 @@ swift_library(
     srcs = ["Source/SwiftForObjcTarget/SwiftForObjcTarget.swift"],
     visibility = ["//visibility:public"],
 )
-
-generate_modulemap(
-    name = "Source_SwiftForObjcTarget_modulemap",
-    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
-    hdrs = [":Source_SwiftForObjcTarget"],
-    module_name = "SwiftForObjcTarget",
-    visibility = ["//visibility:public"],
-)
 """,
         ),
         struct(
@@ -701,21 +701,27 @@ generate_modulemap(
             exp = """\
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_group")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@cgrindel_swift_bazel//swiftpkg:build_defs.bzl", "resource_bundle_accessor")
 
 apple_resource_group(
-    name = "SwiftLibraryWithResources_resources",
+    name = "Source_SwiftLibraryWithResources_resources",
     structured_resources = ["Resources/chicken.json"],
+)
+
+resource_bundle_accessor(
+    name = "Source_SwiftLibraryWithResources_resource_bundle_accessor",
+    bundle_name = "SwiftLibraryWithResourcesBundle",
 )
 
 swift_library(
     name = "Source_SwiftLibraryWithResources",
-    data = [":SwiftLibraryWithResources_resources"],
+    data = [":Source_SwiftLibraryWithResources_resources"],
     defines = ["SWIFT_PACKAGE"],
     deps = [],
     module_name = "SwiftLibraryWithResources",
     srcs = [
         "Source/SwiftLibraryWithResources/SwiftLibraryWithResources.swift",
-        "@cgrindel_swift_bazel//swiftpkg/swift:resource_bundle_accessor",
+        ":Source_SwiftLibraryWithResources_resource_bundle_accessor",
     ],
     visibility = ["//visibility:public"],
 )

@@ -35,6 +35,8 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
 # MARK: - Swift Target
 
 def _swift_target_build_file(repository_ctx, pkg_ctx, target):
+    all_build_files = []
+    bzl_target_name = pkginfo_targets.bazel_label_name(target)
     deps = lists.flatten([
         pkginfo_target_deps.bzl_select_list(pkg_ctx, td, depender_module_name = target.c99name)
         for td in target.dependencies
@@ -85,14 +87,16 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["defines"] = bzl_selects.to_starlark(defines)
     if len(copts) > 0:
         attrs["copts"] = bzl_selects.to_starlark(copts)
-    resource_build_file = None
     if len(target.resources) > 0:
         # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
         # https://stackoverflow.com/questions/63237395/generating-resource-bundle-accessor-type-bundle-has-no-member-module
-        attrs["srcs"].append(_resource_bundle_accesor_target)
-        resource_build_file = _apple_resource_group(target)
+        all_build_files.append(_resource_bundle_accessor(target))
+        all_build_files.append(_apple_resource_group(target))
+        attrs["srcs"].append(":{}".format(
+            pkginfo_targets.resource_bundle_accessor_label_name(bzl_target_name),
+        ))
         attrs["data"] = [
-            ":{}".format(pkginfo_targets.resource_group_label_name(target.name)),
+            ":{}".format(pkginfo_targets.resource_group_label_name(bzl_target_name)),
         ]
 
     if lists.contains([target_types.library, target_types.regular], target.type):
@@ -106,32 +110,16 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         decls = [_swift_test_from_target(target, attrs)]
     else:
         fail("Unrecognized target type for a Swift target. type:", target.type)
+    all_build_files.append(build_files.new(
+        load_stmts = load_stmts,
+        decls = decls,
+    ))
 
     # Generate a modulemap for the Swift module.
     if attrs.get("generates_header", False):
-        load_stmts.append(swiftpkg_generate_modulemap_load_stmt)
-        bzl_target_name = pkginfo_targets.bazel_label_name(target)
-        modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
-        modulemap_deps = _collect_modulemap_deps(deps)
-        decls.append(
-            build_decls.new(
-                kind = swiftpkg_kinds.generate_modulemap,
-                name = modulemap_target_name,
-                attrs = {
-                    "deps": bzl_selects.to_starlark(modulemap_deps),
-                    "hdrs": [":{}".format(bzl_target_name)],
-                    "module_name": target.c99name,
-                    "visibility": ["//visibility:public"],
-                },
-            ),
-        )
-    build_file = build_files.new(
-        load_stmts = load_stmts,
-        decls = decls,
-    )
-    if resource_build_file != None:
-        build_file = build_files.merge(build_file, resource_build_file)
-    return build_file
+        all_build_files.append(_generate_modulemap_for_swift_target(target, deps))
+
+    return build_files.merge(*all_build_files)
 
 def _swift_library_from_target(target, attrs):
     return build_decls.new(
@@ -499,25 +487,75 @@ def _apple_dynamic_xcframework_import_build_file(target):
 
 # MARK: - Apple Resource Group
 
-def _apple_resource_group(target):
-    load_stmts = [apple_resource_group_load_stmt]
-    resources = [
-        r.path
-        for r in target.resources
+def _resource_bundle_accessor(target):
+    bzl_target_name = pkginfo_targets.bazel_label_name(target)
+    load_stmts = [swiftpkg_resource_bundle_accessor_load_stmt]
+    decls = [
+        build_decls.new(
+            kind = swiftpkg_kinds.resource_bundle_accessor,
+            name = pkginfo_targets.resource_bundle_accessor_label_name(
+                bzl_target_name,
+            ),
+            attrs = {
+                "bundle_name": "{}Bundle".format(target.name),
+            },
+        ),
     ]
+    return build_files.new(load_stmts = load_stmts, decls = decls)
+
+def _apple_resource_group(target):
+    bzl_target_name = pkginfo_targets.bazel_label_name(target)
+    load_stmts = [apple_resource_group_load_stmt]
+    resources = [r.path for r in target.resources]
     decls = [
         build_decls.new(
             kind = apple_kinds.resource_group,
-            name = pkginfo_targets.resource_group_label_name(target.name),
+            name = pkginfo_targets.resource_group_label_name(bzl_target_name),
             attrs = {
                 "structured_resources": resources,
             },
         ),
     ]
-    return build_files.new(
-        load_stmts = load_stmts,
-        decls = decls,
-    )
+    return build_files.new(load_stmts = load_stmts, decls = decls)
+
+# MARK: - Modulemap Generation
+
+def _collect_modulemap_deps(deps):
+    modulemap_deps = []
+    for dep in deps:
+        mm_values = [
+            v
+            for v in dep.value
+            if pkginfo_targets.is_modulemap_label(v)
+        ]
+        if len(mm_values) == 0:
+            continue
+        mm_dep = bzl_selects.new(
+            value = mm_values,
+            kind = dep.kind,
+            condition = dep.condition,
+        )
+        modulemap_deps.append(mm_dep)
+    return modulemap_deps
+
+def _generate_modulemap_for_swift_target(target, deps):
+    load_stmts = [swiftpkg_generate_modulemap_load_stmt]
+    bzl_target_name = pkginfo_targets.bazel_label_name(target)
+    modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
+    modulemap_deps = _collect_modulemap_deps(deps)
+    decls = [
+        build_decls.new(
+            kind = swiftpkg_kinds.generate_modulemap,
+            name = modulemap_target_name,
+            attrs = {
+                "deps": bzl_selects.to_starlark(modulemap_deps),
+                "hdrs": [":{}".format(bzl_target_name)],
+                "module_name": target.c99name,
+                "visibility": ["//visibility:public"],
+            },
+        ),
+    ]
+    return build_files.new(load_stmts = load_stmts, decls = decls)
 
 # MARK: - Products Entry Point
 
@@ -632,26 +670,6 @@ def _swift_binary_from_product(product, dep_target, repo_name):
         },
     )
 
-# MARK: - generate_modulemap Helpers
-
-def _collect_modulemap_deps(deps):
-    modulemap_deps = []
-    for dep in deps:
-        mm_values = [
-            v
-            for v in dep.value
-            if pkginfo_targets.is_modulemap_label(v)
-        ]
-        if len(mm_values) == 0:
-            continue
-        mm_dep = bzl_selects.new(
-            value = mm_values,
-            kind = dep.kind,
-            condition = dep.condition,
-        )
-        modulemap_deps.append(mm_dep)
-    return modulemap_deps
-
 # MARK: - Constants and API Definition
 
 swift_location = "@build_bazel_rules_swift//swift:swift.bzl"
@@ -730,6 +748,7 @@ apple_resource_group_load_stmt = load_statements.new(
 
 swiftpkg_kinds = struct(
     generate_modulemap = "generate_modulemap",
+    resource_bundle_accessor = "resource_bundle_accessor",
 )
 
 swiftpkg_build_defs_location = "@cgrindel_swift_bazel//swiftpkg:build_defs.bzl"
@@ -739,7 +758,10 @@ swiftpkg_generate_modulemap_load_stmt = load_statements.new(
     swiftpkg_kinds.generate_modulemap,
 )
 
-_resource_bundle_accesor_target = "@cgrindel_swift_bazel//swiftpkg/swift:resource_bundle_accessor"
+swiftpkg_resource_bundle_accessor_load_stmt = load_statements.new(
+    swiftpkg_build_defs_location,
+    swiftpkg_kinds.resource_bundle_accessor,
+)
 
 _condition_kinds = struct(
     private_includes = "_privateIncludes",
