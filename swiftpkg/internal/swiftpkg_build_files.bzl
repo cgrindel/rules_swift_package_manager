@@ -512,7 +512,14 @@ def _apple_resource_group(target):
             kind = apple_kinds.resource_group,
             name = pkginfo_targets.resource_group_label_name(bzl_target_name),
             attrs = {
-                "structured_resources": resources,
+                # TODO(chuck): It is invalid for iOS resource bundles to have a
+                # directory called 'resources'.  By using the `resources`
+                # attribute, we are going to lose any structure. One option is
+                # to put the apple_resource_group in the common parent
+                # directory for all of the resources listed. Then we can add
+                # them to `structured_resources`.
+                # "structured_resources": resources,
+                "resources": resources,
             },
         ),
     ]
