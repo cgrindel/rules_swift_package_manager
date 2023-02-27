@@ -506,7 +506,10 @@ def _resource_bundle_accessor(target):
 def _apple_resource_group(target):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     load_stmts = [apple_resource_group_load_stmt]
-    resources = [r.path for r in target.resources]
+    resources = [
+        pkginfo_targets.join_path(target, r.path)
+        for r in target.resources
+    ]
     decls = [
         build_decls.new(
             kind = apple_kinds.resource_group,
