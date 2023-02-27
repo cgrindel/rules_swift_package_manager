@@ -523,13 +523,8 @@ def _apple_resource_bundle(target):
             attrs = {
                 "bundle_name": bundle_name,
                 "infoplists": [":{}".format(infoplist_name)],
-                # TODO(chuck): It is invalid for iOS resource bundles to have a
-                # directory called 'resources'.  By using the `resources`
-                # attribute, we are going to lose any structure. One option is
-                # to put the apple_resource_bundle in the common parent
-                # directory for all of the resources listed. Then we can add
-                # them to `structured_resources`.
-                # "structured_resources": resources,
+                # Based upon the code in SPM, it looks like they only support unstructured resources.
+                # https://github.com/apple/swift-package-manager/blob/main/Sources/PackageModel/Resource.swift#L25-L33
                 "resources": resources,
             },
         ),
