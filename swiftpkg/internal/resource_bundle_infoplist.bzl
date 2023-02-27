@@ -20,6 +20,8 @@ resource_bundle_infoplist = rule(
     implementation = _resource_bundle_infoplist_impl,
     attrs = {
         "region": attr.string(
+            # Not sure what a good default should be. A default localization or region is not
+            # emitted in the dump or description JSON for a Swift package manifest.
             default = "en",
             doc = """\
 The localization/region value that should be embedded in the Info.plist.\
