@@ -326,6 +326,25 @@ _pkg_info = pkginfos.new(
                 ),
             ],
         ),
+        pkginfos.new_target(
+            name = "SwiftLibraryWithResources",
+            type = "regular",
+            c99name = "SwiftLibraryWithResources",
+            module_type = "SwiftTarget",
+            path = "Source/SwiftLibraryWithResources",
+            sources = [
+                "SwiftLibraryWithResources.swift",
+            ],
+            resources = [
+                pkginfos.new_resource(
+                    path = "Resources/chicken.json",
+                    rule = pkginfos.new_resource_rule(
+                        process = pkginfos.new_resource_rule_process(),
+                    ),
+                ),
+            ],
+            dependencies = [],
+        ),
     ],
 )
 
@@ -654,6 +673,14 @@ public class FooBar: NSObject {
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("@cgrindel_swift_bazel//swiftpkg:build_defs.bzl", "generate_modulemap")
 
+generate_modulemap(
+    name = "Source_SwiftForObjcTarget_modulemap",
+    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
+    hdrs = [":Source_SwiftForObjcTarget"],
+    module_name = "SwiftForObjcTarget",
+    visibility = ["//visibility:public"],
+)
+
 swift_library(
     name = "Source_SwiftForObjcTarget",
     defines = ["SWIFT_PACKAGE"],
@@ -666,12 +693,42 @@ swift_library(
     srcs = ["Source/SwiftForObjcTarget/SwiftForObjcTarget.swift"],
     visibility = ["//visibility:public"],
 )
+""",
+        ),
+        struct(
+            msg = "Swift library target with resources",
+            name = "SwiftLibraryWithResources",
+            exp = """\
+load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@cgrindel_swift_bazel//swiftpkg:build_defs.bzl", "resource_bundle_accessor", "resource_bundle_infoplist")
 
-generate_modulemap(
-    name = "Source_SwiftForObjcTarget_modulemap",
-    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
-    hdrs = [":Source_SwiftForObjcTarget"],
-    module_name = "SwiftForObjcTarget",
+apple_resource_bundle(
+    name = "Source_SwiftLibraryWithResources_resource_bundle",
+    bundle_name = "Source_SwiftLibraryWithResources_resource_bundle",
+    infoplists = [":Source_SwiftLibraryWithResources_resource_bundle_infoplist"],
+    resources = ["Source/SwiftLibraryWithResources/Resources/chicken.json"],
+)
+
+resource_bundle_accessor(
+    name = "Source_SwiftLibraryWithResources_resource_bundle_accessor",
+    bundle_name = "Source_SwiftLibraryWithResources_resource_bundle",
+)
+
+resource_bundle_infoplist(
+    name = "Source_SwiftLibraryWithResources_resource_bundle_infoplist",
+)
+
+swift_library(
+    name = "Source_SwiftLibraryWithResources",
+    data = [":Source_SwiftLibraryWithResources_resource_bundle"],
+    defines = ["SWIFT_PACKAGE"],
+    deps = [],
+    module_name = "SwiftLibraryWithResources",
+    srcs = [
+        "Source/SwiftLibraryWithResources/SwiftLibraryWithResources.swift",
+        ":Source_SwiftLibraryWithResources_resource_bundle_accessor",
+    ],
     visibility = ["//visibility:public"],
 )
 """,
