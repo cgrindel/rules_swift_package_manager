@@ -1,0 +1,26 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
+
+swift_test(
+    name = "SwiftUICaseStudiesTests",
+    srcs = [
+        "01-GettingStarted-AlertsAndConfirmationDialogsTests.swift",
+        "01-GettingStarted-AnimationsTests.swift",
+        "01-GettingStarted-BindingBasicsTests.swift",
+        "01-GettingStarted-SharedStateTests.swift",
+        "02-Effects-BasicsTests.swift",
+        "02-Effects-CancellationTests.swift",
+        "02-Effects-LongLivingTests.swift",
+        "02-Effects-RefreshableTests.swift",
+        "02-Effects-TimersTests.swift",
+        "02-Effects-WebSocketTests.swift",
+        "04-HigherOrderReducers-LifecycleTests.swift",
+        "04-HigherOrderReducers-RecursionTests.swift",
+        "04-HigherOrderReducers-ReusableFavoritingTests.swift",
+        "04-HigherOrderReducers-ReusableOfflineDownloadsTests.swift",
+    ],
+    module_name = "SwiftUICaseStudiesTests",
+    deps = [
+        "//SwiftUICaseStudies",
+        "@swiftpkg_swift_composable_architecture//:Sources_ComposableArchitecture",
+    ],
+)

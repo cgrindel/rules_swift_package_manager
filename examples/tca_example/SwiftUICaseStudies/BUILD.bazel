@@ -1,0 +1,36 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "SwiftUICaseStudies",
+    srcs = glob(["**/*.swift"]),
+    module_name = "SwiftUICaseStudies",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+    deps = ["@swiftpkg_swift_composable_architecture//:Sources_ComposableArchitecture"],
+)
+
+ios_application(
+    name = "iosapp",
+    app_icons = glob(["Assets.xcassets/AppIcon.appiconset/**"]),
+    bundle_id = "co.pointfree.SwiftUICaseStudies",
+    families = [
+        "iphone",
+        "ipad",
+    ],
+    infoplists = [":Info.plist"],
+    minimum_os_version = "16.2",
+    resources = glob(
+        ["Assets.xcassets/**"],
+        exclude = ["Assets.xcassets/AppIcon.appiconset/**"],
+    ),
+    deps = [":SwiftUICaseStudies"],
+)
+
+build_test(
+    name = "build_tests",
+    targets = [
+        ":iosapp",
+    ],
+)
