@@ -7,6 +7,7 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdesc"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
+	mapset "github.com/deckarep/golang-set/v2"
 )
 
 // A PackageInfo encapsulates all of the information about a Swift package.
@@ -41,23 +42,6 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 		return nil, err
 	}
 
-	targets := make([]*Target, len(descManifest.Targets))
-	for idx, descT := range descManifest.Targets {
-		dumpT := dumpManifest.Targets.FindByName(descT.Name)
-		if dumpT == nil {
-			return nil, fmt.Errorf("dump manifest info for %s target not found", descT.Name)
-		}
-		targets[idx], err = NewTargetFromManifestInfo(&descT, dumpT)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create target for %s: %w", descT.Name, err)
-		}
-	}
-
-	platforms := make([]*Platform, len(descManifest.Platforms))
-	for idx, p := range descManifest.Platforms {
-		platforms[idx] = NewPlatfromFromManifestInfo(&p)
-	}
-
 	// We are purposefully only using the products from the dump JSON. The description JSON can
 	// include phantom products. These are products that were not explicilty defined in the manifest,
 	// but were inferred from targets. The swift-nio package manifest
@@ -69,6 +53,31 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 		if err != nil {
 			return nil, fmt.Errorf("failed to create product for %v: %w", p.Name, err)
 		}
+	}
+	prodNames := mapset.NewSet[string]()
+	for _, p := range products {
+		prodNames.Add(p.Name)
+	}
+
+	targets := make([]*Target, 0, len(descManifest.Targets))
+	for _, descT := range descManifest.Targets {
+		dumpT := dumpManifest.Targets.FindByName(descT.Name)
+		if dumpT == nil {
+			return nil, fmt.Errorf("dump manifest info for %s target not found", descT.Name)
+		}
+		t, err := NewTargetFromManifestInfo(&descT, dumpT, prodNames)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create target for %s: %w", descT.Name, err)
+		}
+		// Only index targets that have at least one product membership.
+		if len(t.ProductMemberships) > 0 {
+			targets = append(targets, t)
+		}
+	}
+
+	platforms := make([]*Platform, len(descManifest.Platforms))
+	for idx, p := range descManifest.Platforms {
+		platforms[idx] = NewPlatfromFromManifestInfo(&p)
 	}
 
 	deps := make([]*Dependency, len(dumpManifest.Dependencies))

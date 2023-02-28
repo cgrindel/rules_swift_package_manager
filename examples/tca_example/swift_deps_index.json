@@ -14,41 +14,14 @@
       ]
     },
     {
-      "name": "CombineSchedulersTests",
-      "c99name": "CombineSchedulersTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_combine_schedulers//:Tests_CombineSchedulersTests",
-      "package_identity": "combine-schedulers",
-      "product_memberships": []
-    },
-    {
       "name": "CasePaths",
       "c99name": "CasePaths",
       "src_type": "swift",
       "label": "@swiftpkg_swift_case_paths//:Sources_CasePaths",
       "package_identity": "swift-case-paths",
       "product_memberships": [
-        "CasePaths",
-        "swift-case-paths-benchmark"
+        "CasePaths"
       ]
-    },
-    {
-      "name": "swift-case-paths-benchmark",
-      "c99name": "swift_case_paths_benchmark",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_case_paths//:Sources_swift-case-paths-benchmark",
-      "package_identity": "swift-case-paths",
-      "product_memberships": [
-        "swift-case-paths-benchmark"
-      ]
-    },
-    {
-      "name": "CasePathsTests",
-      "c99name": "CasePathsTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_case_paths//:Tests_CasePathsTests",
-      "package_identity": "swift-case-paths",
-      "product_memberships": []
     },
     {
       "name": "Clocks",
@@ -59,14 +32,6 @@
       "product_memberships": [
         "Clocks"
       ]
-    },
-    {
-      "name": "ClocksTests",
-      "c99name": "ClocksTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_clocks//:Tests_ClocksTests",
-      "package_identity": "swift-clocks",
-      "product_memberships": []
     },
     {
       "name": "Collections",
@@ -101,73 +66,14 @@
       ]
     },
     {
-      "name": "_CollectionsTestSupport",
-      "c99name": "_CollectionsTestSupport",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Sources__CollectionsTestSupport",
-      "package_identity": "swift-collections",
-      "product_memberships": []
-    },
-    {
-      "name": "CollectionsTestSupportTests",
-      "c99name": "CollectionsTestSupportTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Tests_CollectionsTestSupportTests",
-      "package_identity": "swift-collections",
-      "product_memberships": []
-    },
-    {
-      "name": "DequeTests",
-      "c99name": "DequeTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Tests_DequeTests",
-      "package_identity": "swift-collections",
-      "product_memberships": []
-    },
-    {
-      "name": "OrderedCollectionsTests",
-      "c99name": "OrderedCollectionsTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Tests_OrderedCollectionsTests",
-      "package_identity": "swift-collections",
-      "product_memberships": []
-    },
-    {
       "name": "ComposableArchitecture",
       "c99name": "ComposableArchitecture",
       "src_type": "swift",
       "label": "@swiftpkg_swift_composable_architecture//:Sources_ComposableArchitecture",
       "package_identity": "swift-composable-architecture",
       "product_memberships": [
-        "ComposableArchitecture",
-        "swift-composable-architecture-benchmark"
+        "ComposableArchitecture"
       ]
-    },
-    {
-      "name": "_CAsyncSupport",
-      "c99name": "_CAsyncSupport",
-      "src_type": "unknown",
-      "label": "@swiftpkg_swift_composable_architecture//:Sources__CAsyncSupport",
-      "package_identity": "swift-composable-architecture",
-      "product_memberships": []
-    },
-    {
-      "name": "swift-composable-architecture-benchmark",
-      "c99name": "swift_composable_architecture_benchmark",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_composable_architecture//:Sources_swift-composable-architecture-benchmark",
-      "package_identity": "swift-composable-architecture",
-      "product_memberships": [
-        "swift-composable-architecture-benchmark"
-      ]
-    },
-    {
-      "name": "ComposableArchitectureTests",
-      "c99name": "ComposableArchitectureTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_composable_architecture//:Tests_ComposableArchitectureTests",
-      "package_identity": "swift-composable-architecture",
-      "product_memberships": []
     },
     {
       "name": "CustomDump",
@@ -180,41 +86,14 @@
       ]
     },
     {
-      "name": "CustomDumpTests",
-      "c99name": "CustomDumpTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_custom_dump//:Tests_CustomDumpTests",
-      "package_identity": "swift-custom-dump",
-      "product_memberships": []
-    },
-    {
       "name": "Dependencies",
       "c99name": "Dependencies",
       "src_type": "swift",
       "label": "@swiftpkg_swift_dependencies//:Sources_Dependencies",
       "package_identity": "swift-dependencies",
       "product_memberships": [
-        "Dependencies",
-        "swift-dependencies-benchmark"
+        "Dependencies"
       ]
-    },
-    {
-      "name": "swift-dependencies-benchmark",
-      "c99name": "swift_dependencies_benchmark",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_dependencies//:Sources_swift-dependencies-benchmark",
-      "package_identity": "swift-dependencies",
-      "product_memberships": [
-        "swift-dependencies-benchmark"
-      ]
-    },
-    {
-      "name": "DependenciesTests",
-      "c99name": "DependenciesTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_dependencies//:Tests_DependenciesTests",
-      "package_identity": "swift-dependencies",
-      "product_memberships": []
     },
     {
       "name": "IdentifiedCollections",
@@ -223,27 +102,8 @@
       "label": "@swiftpkg_swift_identified_collections//:Sources_IdentifiedCollections",
       "package_identity": "swift-identified-collections",
       "product_memberships": [
-        "IdentifiedCollections",
-        "swift-identified-collections-benchmark"
+        "IdentifiedCollections"
       ]
-    },
-    {
-      "name": "swift-identified-collections-benchmark",
-      "c99name": "swift_identified_collections_benchmark",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_identified_collections//:Sources_swift-identified-collections-benchmark",
-      "package_identity": "swift-identified-collections",
-      "product_memberships": [
-        "swift-identified-collections-benchmark"
-      ]
-    },
-    {
-      "name": "IdentifiedCollectionsTests",
-      "c99name": "IdentifiedCollectionsTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_identified_collections//:Tests_IdentifiedCollectionsTests",
-      "package_identity": "swift-identified-collections",
-      "product_memberships": []
     },
     {
       "name": "SwiftUINavigation",
@@ -267,14 +127,6 @@
       ]
     },
     {
-      "name": "SwiftUINavigationTests",
-      "c99name": "SwiftUINavigationTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swiftui_navigation//:Tests_SwiftUINavigationTests",
-      "package_identity": "swiftui-navigation",
-      "product_memberships": []
-    },
-    {
       "name": "XCTestDynamicOverlay",
       "c99name": "XCTestDynamicOverlay",
       "src_type": "swift",
@@ -283,14 +135,6 @@
       "product_memberships": [
         "XCTestDynamicOverlay"
       ]
-    },
-    {
-      "name": "XCTestDynamicOverlayTests",
-      "c99name": "XCTestDynamicOverlayTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_xctest_dynamic_overlay//:Tests_XCTestDynamicOverlayTests",
-      "package_identity": "xctest-dynamic-overlay",
-      "product_memberships": []
     }
   ],
   "products": [
