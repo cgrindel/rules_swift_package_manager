@@ -1,7 +1,9 @@
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
-swift_test(
-    name = "SwiftUICaseStudiesTests",
+swift_library(
+    name = "SwiftUICaseStudiesTestsLib",
+    testonly = True,
     srcs = [
         "01-GettingStarted-AlertsAndConfirmationDialogsTests.swift",
         "01-GettingStarted-AnimationsTests.swift",
@@ -23,4 +25,12 @@ swift_test(
         "//SwiftUICaseStudies",
         "@swiftpkg_swift_composable_architecture//:Sources_ComposableArchitecture",
     ],
+)
+
+ios_unit_test(
+    name = "SwiftUICaseStudiesTests",
+    minimum_os_version = "13.0",
+    test_host = "//SwiftUICaseStudies:iosapp",
+    visibility = ["//visibility:private"],
+    deps = [":SwiftUICaseStudiesTestsLib"],
 )
