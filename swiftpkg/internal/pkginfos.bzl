@@ -245,6 +245,7 @@ def _new_target_from_json_maps(dump_map, desc_map, repo_name, deps_index):
         public_hdrs_path = dump_map.get("publicHeadersPath"),
         artifact_download_info = artifact_download_info,
         product_memberships = product_memberships,
+        resources = resources,
     )
 
 def _new_build_setting_condition_from_json(dump_map):
