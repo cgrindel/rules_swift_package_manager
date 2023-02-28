@@ -975,7 +975,7 @@ target_types = struct(
     library = "library",
     plugin = "plugin",
     regular = "regular",
-    system = "system-target",
+    system = "system",
     test = "test",
     all_values = [
         "binary",
@@ -983,7 +983,7 @@ target_types = struct(
         "library",
         "plugin",
         "regular",
-        "system-target",
+        "system",
         "test",
     ],
 )
