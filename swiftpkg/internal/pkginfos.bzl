@@ -185,6 +185,9 @@ def _new_target_dependency_from_dump_json_map(dump_map):
     )
 
 def _new_target_from_json_maps(dump_map, desc_map):
+    product_memberships = desc_map.get("product_memberships", default = [])
+    if len(product_memberships) == 0:
+        return None
     dependencies = [
         _new_target_dependency_from_dump_json_map(d)
         for d in dump_map["dependencies"]
@@ -227,8 +230,7 @@ def _new_target_from_json_maps(dump_map, desc_map):
         linker_settings = linker_settings,
         public_hdrs_path = dump_map.get("publicHeadersPath"),
         artifact_download_info = artifact_download_info,
-        product_memberships = desc_map.get("product_memberships", default = []),
-        resources = resources,
+        product_memberships = product_memberships,
     )
 
 def _new_build_setting_condition_from_json(dump_map):
@@ -356,13 +358,13 @@ def _new_from_parsed_json(dump_manifest, desc_manifest):
         target_map["name"]: target_map
         for target_map in desc_manifest["targets"]
     }
-    targets = [
+    targets = lists.compact([
         _new_target_from_json_maps(
             dump_map = target_map,
             desc_map = desc_targets_by_name[target_map["name"]],
         )
         for target_map in dump_manifest["targets"]
-    ]
+    ])
     return _new(
         name = dump_manifest["name"],
         path = desc_manifest["path"],
