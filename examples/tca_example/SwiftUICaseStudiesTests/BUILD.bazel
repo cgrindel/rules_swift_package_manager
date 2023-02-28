@@ -21,6 +21,7 @@ swift_library(
         "04-HigherOrderReducers-ReusableOfflineDownloadsTests.swift",
     ],
     module_name = "SwiftUICaseStudiesTests",
+    tags = ["manual"],
     deps = [
         "//SwiftUICaseStudies",
         "@swiftpkg_swift_composable_architecture//:Sources_ComposableArchitecture",
@@ -29,7 +30,7 @@ swift_library(
 
 ios_unit_test(
     name = "SwiftUICaseStudiesTests",
-    minimum_os_version = "13.0",
+    minimum_os_version = "16.2",
     test_host = "//SwiftUICaseStudies:iosapp",
     visibility = ["//visibility:private"],
     deps = [":SwiftUICaseStudiesTestsLib"],

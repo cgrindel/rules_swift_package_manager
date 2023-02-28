@@ -24,5 +24,6 @@ ios_application(
         ["Assets.xcassets/**"],
         exclude = ["Assets.xcassets/AppIcon.appiconset/**"],
     ),
+    visibility = ["//visibility:public"],
     deps = [":SwiftUICaseStudies"],
 )
