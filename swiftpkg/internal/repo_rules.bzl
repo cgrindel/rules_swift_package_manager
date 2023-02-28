@@ -4,7 +4,6 @@ load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:versions.bzl", "versions")
 load(":build_files.bzl", "build_files")
-load(":pkg_ctxs.bzl", "pkg_ctxs")
 load(":spm_versions.bzl", "spm_versions")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
@@ -56,15 +55,8 @@ def _check_spm_version(repository_ctx, env = {}):
 higher. Found version %s installed.\
 """ % (min_spm_ver, spm_ver))
 
-def _gen_build_files(repository_ctx, pkg_info):
-    repo_name = repository_ctx.name
-    pkg_ctx = pkg_ctxs.new(
-        pkg_info = pkg_info,
-        repo_name = repo_name,
-        deps_index_json = repository_ctx.read(
-            repository_ctx.attr.dependencies_index,
-        ),
-    )
+def _gen_build_files(repository_ctx, pkg_ctx):
+    pkg_info = pkg_ctx.pkg_info
 
     # Create Bazel declarations for the Swift package targets
     bld_files = []
@@ -82,7 +74,7 @@ def _gen_build_files(repository_ctx, pkg_info):
         bld_files.append(bld_file)
 
     # Create Bazel declarations for the targets
-    bld_files.append(swiftpkg_build_files.new_for_products(pkg_info, repo_name))
+    bld_files.append(swiftpkg_build_files.new_for_products(pkg_info, pkg_ctx.repo_name))
 
     # Write the build file
     root_bld_file = build_files.merge(*bld_files)
