@@ -211,7 +211,7 @@ def _resolve_product_test(ctx):
             preferred = None,
             restrict_to = [],
             exp = deps_indexes.new_product_index_key(
-                "apple_swift_argument_parser",
+                "swift-argument-parser",
                 "ArgumentParser",
             ),
         ),
@@ -228,7 +228,7 @@ def _resolve_product_test(ctx):
             preferred = "example_cool_repo",
             restrict_to = [],
             exp = deps_indexes.new_product_index_key(
-                "example_cool_repo",
+                "example-cool-repo",
                 "Foo",
             ),
         ),
@@ -238,7 +238,7 @@ def _resolve_product_test(ctx):
             preferred = "example_another_repo",
             restrict_to = [],
             exp = deps_indexes.new_product_index_key(
-                "apple_swift_argument_parser",
+                "swift-argument-parser",
                 "ArgumentParser",
             ),
         ),
@@ -248,7 +248,7 @@ def _resolve_product_test(ctx):
             preferred = None,
             restrict_to = ["some_other_repo", "example_another_repo"],
             exp = deps_indexes.new_product_index_key(
-                "example_another_repo",
+                "example-another-repo",
                 "Foo",
             ),
         ),
@@ -265,7 +265,7 @@ def _resolve_product_test(ctx):
             preferred = "example_cool_repo",
             restrict_to = ["example_cool_repo", "example_another_repo"],
             exp = deps_indexes.new_product_index_key(
-                "example_cool_repo",
+                "example-cool-repo",
                 "Foo",
             ),
         ),
@@ -296,7 +296,7 @@ def _resolve_product_with_ctx_test(ctx):
         deps_index_ctx = deps_index_ctx,
         product_name = "Foo",
     )
-    exp_key = deps_indexes.new_product_index_key("example_cool_repo", "Foo")
+    exp_key = deps_indexes.new_product_index_key("example-cool-repo", "Foo")
     actual_key = deps_indexes.new_product_index_key_for_product(actual)
     asserts.equals(env, exp_key, actual_key)
 

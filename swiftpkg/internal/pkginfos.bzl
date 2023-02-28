@@ -62,9 +62,9 @@ def _get(repository_ctx, directory, deps_index, env = {}):
     Args:
         repository_ctx: A `repository_ctx`.
         directory: The path for the Swift package (`string`).
+        deps_index: A `struct` as returned by `deps_indexes.new`.
         env: A `dict` of environment variables that will be included in the
              command execution.
-
 
     Returns:
         A `struct` representing the package information as returned by
@@ -346,6 +346,9 @@ def _new_from_parsed_json(dump_manifest, desc_manifest, repo_name, deps_index):
             package dump-package`.
         desc_manifest: A `dict` representing the parsed JSON from `swift
             package describe`.
+        repo_name: The name of the current repository as returned by
+            `ctx_repository.name`.
+        deps_index: A `struct` as returned by `deps_indexes.new`.
 
     Returns:
         A `struct` representing the package information as returned by

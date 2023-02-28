@@ -1,6 +1,7 @@
 """Tests for `pkginfos` API"""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
+load("//swiftpkg/internal:deps_indexes.bzl", "deps_indexes")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 
 def _new_from_parsed_json_for_swift_targets_test(ctx):
@@ -11,6 +12,8 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
     actual = pkginfos.new_from_parsed_json(
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
+        repo_name = "swiftpkg_mypackage",
+        deps_index = deps_indexes.new_from_json(_swift_arg_parser_deps_index_json),
     )
     expected = pkginfos.new(
         name = "MySwiftPackage",
@@ -95,23 +98,6 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
                     ),
                 ],
             ),
-            pkginfos.new_target(
-                name = "MySwiftPackageTests",
-                type = "test",
-                c99name = "MySwiftPackageTests",
-                module_type = "SwiftTarget",
-                path = "Tests/MySwiftPackageTests",
-                sources = [
-                    "MySwiftPackageTests.swift",
-                ],
-                dependencies = [
-                    pkginfos.new_target_dependency(
-                        by_name = pkginfos.new_by_name_reference(
-                            name = "MySwiftPackage",
-                        ),
-                    ),
-                ],
-            ),
         ],
     )
     asserts.equals(env, expected, actual)
@@ -128,6 +114,8 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
     actual = pkginfos.new_from_parsed_json(
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
+        repo_name = "swiftpkg_libbar",
+        deps_index = deps_indexes.new_from_json(_clang_deps_index_json),
     )
 
     # The interesting features are in the libbar target.
@@ -550,6 +538,33 @@ _swift_arg_parser_desc_json = """
 }
 """
 
+_swift_arg_parser_deps_index_json = """
+{
+    "modules": [
+        {
+            "name": "MySwiftPackage",
+            "c99name": "MySwiftPackage",
+            "src_type": "swift",
+            "label": "@swiftpkg_mypackage//:Sources_MySwiftPackage",
+            "package_identity": "mypackage",
+            "product_memberships": [
+                "printstuff"
+            ]
+        }
+    ],
+    "products": [
+        {
+            "identity": "mypackage",
+            "name": "printstuff",
+            "type": "executable",
+            "target_labels": [
+                "@swiftpkg_mypackage//:Sources_MySwiftPackage"
+            ]
+        }
+    ]
+}
+"""
+
 _clang_dump_json = """
 {
   "cLanguageStandard" : null,
@@ -725,5 +740,32 @@ _clang_desc_json = """
     }
   ],
   "tools_version" : "5.5"
+}
+"""
+
+_clang_deps_index_json = """
+{
+    "modules": [
+        {
+            "name": "libbar",
+            "c99name": "libbar",
+            "src_type": "clang",
+            "label": "@swiftpkg_libbar//:libbar",
+            "package_identity": "mypackage",
+            "product_memberships": [
+                "libbar"
+            ]
+        }
+    ],
+    "products": [
+        {
+            "identity": "libbar",
+            "name": "libbar",
+            "type": "library",
+            "target_labels": [
+                "@swiftpkg_libbar//:libbar"
+            ]
+        }
+    ]
 }
 """
