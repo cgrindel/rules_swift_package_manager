@@ -318,19 +318,83 @@ def deps_indexes_test_suite():
 
 _deps_index_json = """
 {
-  "modules": [
-    {"name": "ArgumentParser", "c99name": "ArgumentParser", "src_type": "swift", "label": "@apple_swift_argument_parser//Sources/ArgumentParser"},
-    {"name": "Foo", "c99name": "Foo", "src_type": "swift", "label": "@example_cool_repo//:Foo"},
-    {"name": "Foo", "c99name": "Foo", "src_type": "swift", "label": "@example_another_repo//Sources/Foo"},
-    {"name": "Bar", "c99name": "Bar", "src_type": "swift", "label": "@example_cool_repo//:Bar"},
-    {"name": "Bar", "c99name": "Bar", "src_type": "swift", "label": "@example_another_repo//Sources/Bar"},
-    {"name": "ObjcLibrary", "c99name": "ObjcLibrary", "src_type": "objc", "label": "@example_cool_repo//:ObjcLibrary"}
-  ],
-  "products": [
-    {"identity": "apple_swift_argument_parser", "name": "ArgumentParser", "type": "library", "target_labels": ["@apple_swift_argument_parser//Sources/ArgumentParser"]},
-    {"identity": "example_cool_repo", "name": "Foo", "type": "library", "target_labels": ["@example_cool_repo//:Foo", "@example_cool_repo//:Bar"]},
-    {"identity": "example_another_repo", "name": "Foo", "type": "library", "target_labels": ["@example_another_repo//Sources/Foo"]}
-  ]
+    "modules": [
+        {
+            "name": "ArgumentParser",
+            "c99name": "ArgumentParser",
+            "src_type": "swift",
+            "label": "@apple_swift_argument_parser//Sources/ArgumentParser",
+            "package_identity": "swift-argument-parser",
+            "product_memberships": ["ArgumentParser"]
+        },
+        {
+            "name": "Foo",
+            "c99name": "Foo",
+            "src_type": "swift",
+            "label": "@example_cool_repo//:Foo",
+            "package_identity": "example-cool-repo",
+            "product_memberships": ["Foo"]
+        },
+        {
+            "name": "Foo",
+            "c99name": "Foo",
+            "src_type": "swift",
+            "label": "@example_another_repo//Sources/Foo",
+            "package_identity": "example-another-repo",
+            "product_memberships": ["Foo"]
+        },
+        {
+            "name": "Bar",
+            "c99name": "Bar",
+            "src_type": "swift",
+            "label": "@example_cool_repo//:Bar",
+            "package_identity": "example-cool-repo",
+            "product_memberships": ["Foo"]
+        },
+        {
+            "name": "Bar",
+            "c99name": "Bar",
+            "src_type": "swift",
+            "label": "@example_another_repo//Sources/Bar",
+            "package_identity": "example-another-repo",
+            "product_memberships": ["Foo"]
+        },
+        {
+            "name": "ObjcLibrary",
+            "c99name": "ObjcLibrary",
+            "src_type": "objc",
+            "label": "@example_cool_repo//:ObjcLibrary",
+            "package_identity": "example-cool-repo",
+            "product_memberships": ["Foo"]
+        }
+    ],
+    "products": [
+        {
+            "identity": "swift-argument-parser",
+            "name": "ArgumentParser",
+            "type": "library",
+            "target_labels": [
+                "@apple_swift_argument_parser//Sources/ArgumentParser"
+            ]
+        },
+        {
+            "identity": "example-cool-repo",
+            "name": "Foo",
+            "type": "library",
+            "target_labels": [
+                "@example_cool_repo//:Foo",
+                "@example_cool_repo//:Bar"
+            ]
+        },
+        {
+            "identity": "example-another-repo",
+            "name": "Foo",
+            "type": "library",
+            "target_labels": [
+                "@example_another_repo//Sources/Foo"
+            ]
+        }
+    ]
 }
 """
 

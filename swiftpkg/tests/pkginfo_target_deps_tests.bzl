@@ -4,6 +4,7 @@ load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "make_bazel_labels", "make_stub_workspace_name_resolvers")
 load("//config_settings/spm/platform:platforms.bzl", spm_platforms = "platforms")
 load("//swiftpkg/internal:bzl_selects.bzl", "bzl_selects")
+load("//swiftpkg/internal:deps_indexes.bzl", "deps_indexes")
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfo_target_deps.bzl", "make_pkginfo_target_deps")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
@@ -30,7 +31,6 @@ _external_dep = pkginfos.new_dependency(
     ),
 )
 
-# _target_by_name = pkginfos.new_by_name_reference("Foo")
 _target_by_name = pkginfos.new_by_name_reference("Baz")
 _product_by_name = pkginfos.new_by_name_reference("AwesomeProduct")
 _product_ref = pkginfos.new_product_reference(
@@ -88,25 +88,33 @@ _deps_index_json = """\
       "name": "AwesomePackage",
       "c99name": "AwesomePackage",
       "src_type": "swift",
-      "label": "@swiftpkg_example_swift_package//:AwesomePackage"
+      "label": "@swiftpkg_example_swift_package//:AwesomePackage",
+      "package_identity": "example-swift-example",
+      "product_memberships": ["AwesomeProduct"]
     },
     {
       "name": "Foo",
       "c99name": "Foo",
       "src_type": "swift",
-      "label": "@swiftpkg_example_swift_package//:Source/Foo"
+      "label": "@swiftpkg_example_swift_package//:Source/Foo",
+      "package_identity": "example-swift-example",
+      "product_memberships": []
     },
     {
       "name": "Baz",
       "c99name": "Baz",
       "src_type": "swift",
-      "label": "@swiftpkg_example_swift_package//:Source/Baz"
+      "label": "@swiftpkg_example_swift_package//:Source/Baz",
+      "package_identity": "example-swift-example",
+      "product_memberships": ["AwesomeProduct", "Baz"]
     },
     {
       "name": "MoreBaz",
       "c99name": "MoreBaz",
       "src_type": "swift",
-      "label": "@swiftpkg_example_swift_package//:Source/MoreBaz"
+      "label": "@swiftpkg_example_swift_package//:Source/MoreBaz",
+      "package_identity": "example-swift-example",
+      "product_memberships": ["Baz"]
     }
   ],
   "products": [
@@ -135,7 +143,7 @@ _deps_index_json = """\
 _pkg_ctx = pkg_ctxs.new(
     pkg_info = _pkg_info,
     repo_name = _repo_name,
-    deps_index_json = _deps_index_json,
+    deps_index = deps_indexes.new_from_json(_deps_index_json),
 )
 
 def _bzl_select_list_test(ctx):
