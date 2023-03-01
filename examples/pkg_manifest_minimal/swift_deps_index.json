@@ -28,54 +28,6 @@
       ]
     },
     {
-      "name": "GreetingsFrameworkTests",
-      "c99name": "GreetingsFrameworkTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_my_local_package//:Tests_GreetingsFrameworkTests",
-      "package_identity": "my_local_package",
-      "product_memberships": []
-    },
-    {
-      "name": "count-lines",
-      "c99name": "count_lines",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_count-lines",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": [
-        "count-lines"
-      ]
-    },
-    {
-      "name": "math",
-      "c99name": "math",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_math",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": [
-        "math"
-      ]
-    },
-    {
-      "name": "repeat",
-      "c99name": "repeat",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_repeat",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": [
-        "repeat"
-      ]
-    },
-    {
-      "name": "roll",
-      "c99name": "roll",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_roll",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": [
-        "roll"
-      ]
-    },
-    {
       "name": "GenerateManual",
       "c99name": "GenerateManual",
       "src_type": "unknown",
@@ -93,22 +45,8 @@
       "package_identity": "swift-argument-parser",
       "product_memberships": [
         "ArgumentParser",
-        "GenerateManual",
-        "roll",
-        "repeat",
-        "math",
-        "generate-manual",
-        "count-lines",
-        "changelog-authors"
+        "GenerateManual"
       ]
-    },
-    {
-      "name": "ArgumentParserTestHelpers",
-      "c99name": "ArgumentParserTestHelpers",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserTestHelpers",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": []
     },
     {
       "name": "ArgumentParserToolInfo",
@@ -118,63 +56,7 @@
       "package_identity": "swift-argument-parser",
       "product_memberships": [
         "ArgumentParser",
-        "GenerateManual",
-        "roll",
-        "repeat",
-        "math",
-        "generate-manual",
-        "count-lines",
-        "changelog-authors"
-      ]
-    },
-    {
-      "name": "ArgumentParserEndToEndTests",
-      "c99name": "ArgumentParserEndToEndTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserEndToEndTests",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": []
-    },
-    {
-      "name": "ArgumentParserExampleTests",
-      "c99name": "ArgumentParserExampleTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserExampleTests",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": []
-    },
-    {
-      "name": "ArgumentParserGenerateManualTests",
-      "c99name": "ArgumentParserGenerateManualTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserGenerateManualTests",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": []
-    },
-    {
-      "name": "ArgumentParserPackageManagerTests",
-      "c99name": "ArgumentParserPackageManagerTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserPackageManagerTests",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": []
-    },
-    {
-      "name": "ArgumentParserUnitTests",
-      "c99name": "ArgumentParserUnitTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserUnitTests",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": []
-    },
-    {
-      "name": "changelog-authors",
-      "c99name": "changelog_authors",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tools_changelog-authors",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": [
-        "changelog-authors"
+        "GenerateManual"
       ]
     },
     {
@@ -184,8 +66,7 @@
       "label": "@swiftpkg_swift_argument_parser//:Tools_generate-manual",
       "package_identity": "swift-argument-parser",
       "product_memberships": [
-        "GenerateManual",
-        "generate-manual"
+        "GenerateManual"
       ]
     },
     {
@@ -197,14 +78,6 @@
       "product_memberships": [
         "Logging"
       ]
-    },
-    {
-      "name": "LoggingTests",
-      "c99name": "LoggingTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_log//:Tests_LoggingTests",
-      "package_identity": "swift-log",
-      "product_memberships": []
     },
     {
       "name": "CommandLineTool",
@@ -238,14 +111,6 @@
         "SwiftFormat",
         "SwiftFormatPlugin"
       ]
-    },
-    {
-      "name": "SwiftFormatTests",
-      "c99name": "SwiftFormatTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swiftformat//:Tests_SwiftFormatTests",
-      "package_identity": "swiftformat",
-      "product_memberships": []
     }
   ],
   "products": [
