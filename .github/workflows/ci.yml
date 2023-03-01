@@ -72,33 +72,50 @@ jobs:
         example_name: ${{ matrix.example }}
         bazel_version: ${{ matrix.bazel_version }}
 
-  ubuntu_build:
+  ubuntu_tidy_and_test:
     runs-on: ubuntu-22.04
     env:
       CC: clang
     steps:
-    - uses: cgrindel/gha_install_swift_on_ubuntu@v1
-      with:
-        swift_release_tag: "swift-5.7.2-RELEASE"
-        ubuntu_version: "22.04"
     - uses: actions/checkout@v3
-    - name: Install required system packages
-      shell: bash
-      run: |
-        sudo apt update
-        # zlib headers
-        sudo apt -y install zlib1g-dev
-    - name: Update local.bazelrc with Linux Flags
-      shell: bash
-      run: |
-        cat >> "local.bazelrc" <<EOF
-        # Need to expose the PATH so that the Swift toolchain can be found
-        build --action_env=PATH
-        EOF
-    - uses: cgrindel/gha_set_up_bazel@v1
+    - uses: ./.github/actions/set_up_ubuntu
       with:
         repo_name: swift_bazel
-    - uses: ./.github/actions/build_and_test
+        ubuntu_version: "22.04"
+    - name: Ensure everything is tidy
+      shell: bash
+      run: |
+        bazelisk run //:tidy_check
+    - name: Execute Tests
+      shell: bash
+      run: |
+        bazelisk test //... 
+
+  ubuntu_int_test_matrix:
+    strategy:
+      matrix:
+        example: 
+        - "http_archive_ext_deps"
+        - "pkg_manifest_minimal"
+        bazel_version:
+        - ".bazelversion"
+        - "5_4_0"
+        include:
+        - example: vapor_example
+          bazel_version: ".bazelversion"
+    runs-on: ubuntu-22.04
+    env:
+      CC: clang
+    steps:
+    - uses: actions/checkout@v3
+    - uses: ./.github/actions/set_up_ubuntu
+      with:
+        repo_name: swift_bazel
+        ubuntu_version: "22.04"
+    - uses: ./.github/actions/test_example
+      with:
+        example_name: ${{ matrix.example }}
+        bazel_version: ${{ matrix.bazel_version }}
 
   all_ci_tests:
     runs-on: ubuntu-20.04
@@ -106,7 +123,8 @@ jobs:
     - macos_tidy_and_test
     - macos_single_bazel_ver_int_test_matrix
     - macos_multi_bazel_ver_int_test_matrix
-    - ubuntu_build
+    - ubuntu_tidy_and_test
+    - ubuntu_int_test_matrix
     if: ${{ always() }}
     steps:
       - uses: cgrindel/gha_join_jobs@v1
