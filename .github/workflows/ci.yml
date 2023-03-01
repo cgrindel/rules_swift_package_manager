@@ -26,32 +26,7 @@ jobs:
       run: |
         bazelisk test //... 
 
-
-  macos_single_bazel_ver_int_test_matrix:
-    strategy:
-      matrix:
-        example: 
-        - "firebase_example"
-        - "interesting_deps"
-        - "ios_sim"
-        - "objc_code"
-        - "phone_number_kit"
-        - "xcmetrics_example"
-        bazel_version:
-        - ".bazelversion"
-    runs-on: macos-12
-    steps:
-    - uses: actions/checkout@v3
-    - uses: ./.github/actions/set_up_macos
-      with:
-        xcode_version: '14.0.1'
-        repo_name: swift_bazel
-    - uses: ./.github/actions/test_example
-      with:
-        example_name: ${{ matrix.example }}
-        bazel_version: ${{ matrix.bazel_version }}
-
-  macos_multi_bazel_ver_int_test_matrix:
+  macos_int_test_matrix:
     strategy:
       matrix:
         example: 
@@ -60,6 +35,19 @@ jobs:
         bazel_version:
         - ".bazelversion"
         - "5_4_0"
+        include:
+        - example: "firebase_example"
+          bazel_version: ".bazelversion"
+        - example: "interesting_deps"
+          bazel_version: ".bazelversion"
+        - example: "ios_sim"
+          bazel_version: ".bazelversion"
+        - example: "objc_code"
+          bazel_version: ".bazelversion"
+        - example: "phone_number_kit"
+          bazel_version: ".bazelversion"
+        - example: "xcmetrics_example"
+          bazel_version: ".bazelversion"
     runs-on: macos-12
     steps:
     - uses: actions/checkout@v3
@@ -121,8 +109,7 @@ jobs:
     runs-on: ubuntu-20.04
     needs: 
     - macos_tidy_and_test
-    - macos_single_bazel_ver_int_test_matrix
-    - macos_multi_bazel_ver_int_test_matrix
+    - macos_int_test_matrix
     - ubuntu_tidy_and_test
     - ubuntu_int_test_matrix
     if: ${{ always() }}
