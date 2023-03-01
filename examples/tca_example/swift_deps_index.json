@@ -1,0 +1,246 @@
+{
+  "direct_dep_identities": [
+    "swift-composable-architecture"
+  ],
+  "modules": [
+    {
+      "name": "CombineSchedulers",
+      "c99name": "CombineSchedulers",
+      "src_type": "swift",
+      "label": "@swiftpkg_combine_schedulers//:Sources_CombineSchedulers",
+      "package_identity": "combine-schedulers",
+      "product_memberships": [
+        "CombineSchedulers"
+      ]
+    },
+    {
+      "name": "CasePaths",
+      "c99name": "CasePaths",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_case_paths//:Sources_CasePaths",
+      "package_identity": "swift-case-paths",
+      "product_memberships": [
+        "CasePaths"
+      ]
+    },
+    {
+      "name": "Clocks",
+      "c99name": "Clocks",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_clocks//:Sources_Clocks",
+      "package_identity": "swift-clocks",
+      "product_memberships": [
+        "Clocks"
+      ]
+    },
+    {
+      "name": "Collections",
+      "c99name": "Collections",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_collections//:Sources_Collections",
+      "package_identity": "swift-collections",
+      "product_memberships": [
+        "Collections"
+      ]
+    },
+    {
+      "name": "DequeModule",
+      "c99name": "DequeModule",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_collections//:Sources_DequeModule",
+      "package_identity": "swift-collections",
+      "product_memberships": [
+        "Collections",
+        "DequeModule"
+      ]
+    },
+    {
+      "name": "OrderedCollections",
+      "c99name": "OrderedCollections",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_collections//:Sources_OrderedCollections",
+      "package_identity": "swift-collections",
+      "product_memberships": [
+        "Collections",
+        "OrderedCollections"
+      ]
+    },
+    {
+      "name": "ComposableArchitecture",
+      "c99name": "ComposableArchitecture",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_composable_architecture//:Sources_ComposableArchitecture",
+      "package_identity": "swift-composable-architecture",
+      "product_memberships": [
+        "ComposableArchitecture"
+      ]
+    },
+    {
+      "name": "CustomDump",
+      "c99name": "CustomDump",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_custom_dump//:Sources_CustomDump",
+      "package_identity": "swift-custom-dump",
+      "product_memberships": [
+        "CustomDump"
+      ]
+    },
+    {
+      "name": "Dependencies",
+      "c99name": "Dependencies",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_dependencies//:Sources_Dependencies",
+      "package_identity": "swift-dependencies",
+      "product_memberships": [
+        "Dependencies"
+      ]
+    },
+    {
+      "name": "IdentifiedCollections",
+      "c99name": "IdentifiedCollections",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_identified_collections//:Sources_IdentifiedCollections",
+      "package_identity": "swift-identified-collections",
+      "product_memberships": [
+        "IdentifiedCollections"
+      ]
+    },
+    {
+      "name": "SwiftUINavigation",
+      "c99name": "SwiftUINavigation",
+      "src_type": "swift",
+      "label": "@swiftpkg_swiftui_navigation//:Sources_SwiftUINavigation",
+      "package_identity": "swiftui-navigation",
+      "product_memberships": [
+        "SwiftUINavigation"
+      ]
+    },
+    {
+      "name": "_SwiftUINavigationState",
+      "c99name": "_SwiftUINavigationState",
+      "src_type": "swift",
+      "label": "@swiftpkg_swiftui_navigation//:Sources__SwiftUINavigationState",
+      "package_identity": "swiftui-navigation",
+      "product_memberships": [
+        "SwiftUINavigation",
+        "_SwiftUINavigationState"
+      ]
+    },
+    {
+      "name": "XCTestDynamicOverlay",
+      "c99name": "XCTestDynamicOverlay",
+      "src_type": "swift",
+      "label": "@swiftpkg_xctest_dynamic_overlay//:Sources_XCTestDynamicOverlay",
+      "package_identity": "xctest-dynamic-overlay",
+      "product_memberships": [
+        "XCTestDynamicOverlay"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "identity": "combine-schedulers",
+      "name": "CombineSchedulers",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_combine_schedulers//:Sources_CombineSchedulers"
+      ]
+    },
+    {
+      "identity": "swift-case-paths",
+      "name": "CasePaths",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_case_paths//:Sources_CasePaths"
+      ]
+    },
+    {
+      "identity": "swift-clocks",
+      "name": "Clocks",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_clocks//:Sources_Clocks"
+      ]
+    },
+    {
+      "identity": "swift-collections",
+      "name": "Collections",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_collections//:Sources_Collections"
+      ]
+    },
+    {
+      "identity": "swift-collections",
+      "name": "DequeModule",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_collections//:Sources_DequeModule"
+      ]
+    },
+    {
+      "identity": "swift-collections",
+      "name": "OrderedCollections",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_collections//:Sources_OrderedCollections"
+      ]
+    },
+    {
+      "identity": "swift-composable-architecture",
+      "name": "ComposableArchitecture",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_composable_architecture//:Sources_ComposableArchitecture"
+      ]
+    },
+    {
+      "identity": "swift-custom-dump",
+      "name": "CustomDump",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_custom_dump//:Sources_CustomDump"
+      ]
+    },
+    {
+      "identity": "swift-dependencies",
+      "name": "Dependencies",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_dependencies//:Sources_Dependencies"
+      ]
+    },
+    {
+      "identity": "swift-identified-collections",
+      "name": "IdentifiedCollections",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_identified_collections//:Sources_IdentifiedCollections"
+      ]
+    },
+    {
+      "identity": "swiftui-navigation",
+      "name": "SwiftUINavigation",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swiftui_navigation//:Sources_SwiftUINavigation"
+      ]
+    },
+    {
+      "identity": "swiftui-navigation",
+      "name": "_SwiftUINavigationState",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swiftui_navigation//:Sources__SwiftUINavigationState"
+      ]
+    },
+    {
+      "identity": "xctest-dynamic-overlay",
+      "name": "XCTestDynamicOverlay",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_xctest_dynamic_overlay//:Sources_XCTestDynamicOverlay"
+      ]
+    }
+  ]
+}

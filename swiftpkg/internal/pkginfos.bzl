@@ -9,7 +9,9 @@ load(
     "//config_settings/spm/platform:platforms.bzl",
     spm_platforms = "platforms",
 )
+load(":deps_indexes.bzl", "deps_indexes")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
+load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":repository_utils.bzl", "repository_utils")
 load(":validations.bzl", "validations")
 
@@ -53,16 +55,16 @@ def _get_desc_manifest(repository_ctx, env = {}, working_directory = ""):
         debug_json_path = "desc.json",
     )
 
-def _get(repository_ctx, directory, env = {}):
+def _get(repository_ctx, directory, deps_index, env = {}):
     """Retrieves the package information for the Swift package defined at the \
     specified directory.
 
     Args:
         repository_ctx: A `repository_ctx`.
         directory: The path for the Swift package (`string`).
+        deps_index: A `struct` as returned by `deps_indexes.new`.
         env: A `dict` of environment variables that will be included in the
              command execution.
-
 
     Returns:
         A `struct` representing the package information as returned by
@@ -81,6 +83,8 @@ def _get(repository_ctx, directory, env = {}):
     return _new_from_parsed_json(
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
+        repo_name = repository_ctx.name,
+        deps_index = deps_index,
     )
 
 def _new_dependency_requirement_from_desc_json_map(req_map):
@@ -184,7 +188,20 @@ def _new_target_dependency_from_dump_json_map(dump_map):
         target = target,
     )
 
-def _new_target_from_json_maps(dump_map, desc_map):
+def _new_target_from_json_maps(dump_map, desc_map, repo_name, deps_index):
+    target_name = dump_map["name"]
+    target_path = desc_map["path"]
+    target_label = pkginfo_targets.bazel_label_from_parts(
+        target_path = target_path,
+        target_name = target_name,
+        repo_name = repo_name,
+    )
+    dep_module = deps_indexes.get_module(deps_index, target_label)
+    if dep_module == None:
+        return None
+    product_memberships = dep_module.product_memberships
+    if len(product_memberships) == 0:
+        return None
     dependencies = [
         _new_target_dependency_from_dump_json_map(d)
         for d in dump_map["dependencies"]
@@ -210,11 +227,11 @@ def _new_target_from_json_maps(dump_map, desc_map):
             checksum = dump_map.get("checksum"),
         )
     return _new_target(
-        name = dump_map["name"],
+        name = target_name,
         type = dump_map["type"],
         c99name = desc_map["c99name"],
         module_type = desc_map["module_type"],
-        path = desc_map["path"],
+        path = target_path,
         # List of sources provided by SPM
         sources = desc_map["sources"],
         # Exclude paths specified by the Swift package manifest author.
@@ -227,7 +244,7 @@ def _new_target_from_json_maps(dump_map, desc_map):
         linker_settings = linker_settings,
         public_hdrs_path = dump_map.get("publicHeadersPath"),
         artifact_download_info = artifact_download_info,
-        product_memberships = desc_map.get("product_memberships", default = []),
+        product_memberships = product_memberships,
         resources = resources,
     )
 
@@ -321,7 +338,7 @@ def _new_dependency_identity_to_name_map(dump_deps):
         result[identity] = name
     return result
 
-def _new_from_parsed_json(dump_manifest, desc_manifest):
+def _new_from_parsed_json(dump_manifest, desc_manifest, repo_name, deps_index):
     """Returns the package information from the provided Swift package JSON \
     structures.
 
@@ -330,6 +347,9 @@ def _new_from_parsed_json(dump_manifest, desc_manifest):
             package dump-package`.
         desc_manifest: A `dict` representing the parsed JSON from `swift
             package describe`.
+        repo_name: The name of the current repository as returned by
+            `ctx_repository.name`.
+        deps_index: A `struct` as returned by `deps_indexes.new`.
 
     Returns:
         A `struct` representing the package information as returned by
@@ -347,22 +367,27 @@ def _new_from_parsed_json(dump_manifest, desc_manifest):
         _new_dependency_from_desc_json_map(dep_names_by_id, dep_map)
         for dep_map in desc_manifest["dependencies"]
     ]
+
+    # Use the dump JSON to populate the products. This will avoid inclusion of
+    # phantom products.
     products = [
         _new_product_from_desc_json_map(prd_map)
-        for prd_map in desc_manifest["products"]
+        for prd_map in dump_manifest["products"]
     ]
 
     desc_targets_by_name = {
         target_map["name"]: target_map
         for target_map in desc_manifest["targets"]
     }
-    targets = [
+    targets = lists.compact([
         _new_target_from_json_maps(
             dump_map = target_map,
             desc_map = desc_targets_by_name[target_map["name"]],
+            repo_name = repo_name,
+            deps_index = deps_index,
         )
         for target_map in dump_manifest["targets"]
-    ]
+    ])
     return _new(
         name = dump_manifest["name"],
         path = desc_manifest["path"],
@@ -975,7 +1000,7 @@ target_types = struct(
     library = "library",
     plugin = "plugin",
     regular = "regular",
-    system = "system-target",
+    system = "system",
     test = "test",
     all_values = [
         "binary",
@@ -983,7 +1008,7 @@ target_types = struct(
         "library",
         "plugin",
         "regular",
-        "system-target",
+        "system",
         "test",
     ],
 )

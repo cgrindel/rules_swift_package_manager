@@ -70,9 +70,11 @@ def _new_module_from_dict(mod_dict):
         c99name = mod_dict["c99name"],
         src_type = mod_dict.get("src_type", "unknown"),
         label = bazel_labels.parse(mod_dict["label"]),
+        package_identity = mod_dict["package_identity"],
+        product_memberships = mod_dict["product_memberships"],
     )
 
-def _new_module(name, c99name, src_type, label):
+def _new_module(name, c99name, src_type, label, package_identity, product_memberships):
     validations.in_list(
         src_types.all_values,
         src_type,
@@ -83,6 +85,8 @@ def _new_module(name, c99name, src_type, label):
         c99name = c99name,
         src_type = src_type,
         label = label,
+        package_identity = package_identity,
+        product_memberships = product_memberships,
     )
 
 def _new_product_from_dict(prd_dict):

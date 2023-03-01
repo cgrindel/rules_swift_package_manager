@@ -7,7 +7,7 @@ load(
     "update_attrs",
 )
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
-load(":pkginfos.bzl", "pkginfos")
+load(":pkg_ctxs.bzl", "pkg_ctxs")
 load(":repo_rules.bzl", "repo_rules")
 
 # Ignore the .build directory because we will need to create our own
@@ -56,11 +56,9 @@ def _local_swift_package_impl(repository_ctx):
     # Create the WORKSPACE
     repo_rules.write_workspace_file(repository_ctx, repo_dir)
 
-    # Get the package info
-    pkg_info = pkginfos.get(repository_ctx, repo_dir, env = env)
-
     # Generate the build file
-    repo_rules.gen_build_files(repository_ctx, pkg_info)
+    pkg_ctx = pkg_ctxs.read(repository_ctx, repo_dir, env)
+    repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
     return update_attrs(repository_ctx.attr, _COMMON_ATTRS.keys(), {})
 

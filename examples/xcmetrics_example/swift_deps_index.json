@@ -24,14 +24,6 @@
       ]
     },
     {
-      "name": "AsyncHTTPClientTests",
-      "c99name": "AsyncHTTPClientTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_async_http_client//:Tests_AsyncHTTPClientTests",
-      "package_identity": "async-http-client",
-      "product_memberships": []
-    },
-    {
       "name": "AsyncKit",
       "c99name": "AsyncKit",
       "src_type": "swift",
@@ -42,57 +34,14 @@
       ]
     },
     {
-      "name": "AsyncKitTests",
-      "c99name": "AsyncKitTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_async_kit//:Tests_AsyncKitTests",
-      "package_identity": "async-kit",
-      "product_memberships": []
-    },
-    {
       "name": "ConsoleKit",
       "c99name": "ConsoleKit",
       "src_type": "swift",
       "label": "@swiftpkg_console_kit//:Sources_ConsoleKit",
       "package_identity": "console-kit",
       "product_memberships": [
-        "ConsoleKit",
-        "ConsoleKitExample"
+        "ConsoleKit"
       ]
-    },
-    {
-      "name": "ConsoleKitAsyncExample",
-      "c99name": "ConsoleKitAsyncExample",
-      "src_type": "swift",
-      "label": "@swiftpkg_console_kit//:Sources_ConsoleKitAsyncExample",
-      "package_identity": "console-kit",
-      "product_memberships": []
-    },
-    {
-      "name": "ConsoleKitExample",
-      "c99name": "ConsoleKitExample",
-      "src_type": "swift",
-      "label": "@swiftpkg_console_kit//:Sources_ConsoleKitExample",
-      "package_identity": "console-kit",
-      "product_memberships": [
-        "ConsoleKitExample"
-      ]
-    },
-    {
-      "name": "AsyncConsoleKitTests",
-      "c99name": "AsyncConsoleKitTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_console_kit//:Tests_AsyncConsoleKitTests",
-      "package_identity": "console-kit",
-      "product_memberships": []
-    },
-    {
-      "name": "ConsoleKitTests",
-      "c99name": "ConsoleKitTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_console_kit//:Tests_ConsoleKitTests",
-      "package_identity": "console-kit",
-      "product_memberships": []
     },
     {
       "name": "CryptoSwift",
@@ -105,22 +54,6 @@
       ]
     },
     {
-      "name": "CryptoSwiftTests",
-      "c99name": "CryptoSwiftTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_cryptoswift//:Tests_CryptoSwiftTests",
-      "package_identity": "cryptoswift",
-      "product_memberships": []
-    },
-    {
-      "name": "TestsPerformance",
-      "c99name": "TestsPerformance",
-      "src_type": "swift",
-      "label": "@swiftpkg_cryptoswift//:Tests_TestsPerformance",
-      "package_identity": "cryptoswift",
-      "product_memberships": []
-    },
-    {
       "name": "Fluent",
       "c99name": "Fluent",
       "src_type": "swift",
@@ -129,14 +62,6 @@
       "product_memberships": [
         "Fluent"
       ]
-    },
-    {
-      "name": "FluentTests",
-      "c99name": "FluentTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_fluent//:Tests_FluentTests",
-      "package_identity": "fluent",
-      "product_memberships": []
     },
     {
       "name": "FluentBenchmark",
@@ -183,14 +108,6 @@
       ]
     },
     {
-      "name": "FluentKitTests",
-      "c99name": "FluentKitTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_fluent_kit//:Tests_FluentKitTests",
-      "package_identity": "fluent-kit",
-      "product_memberships": []
-    },
-    {
       "name": "FluentPostgresDriver",
       "c99name": "FluentPostgresDriver",
       "src_type": "swift",
@@ -199,14 +116,6 @@
       "product_memberships": [
         "FluentPostgresDriver"
       ]
-    },
-    {
-      "name": "FluentPostgresDriverTests",
-      "c99name": "FluentPostgresDriverTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_fluent_postgres_driver//:Tests_FluentPostgresDriverTests",
-      "package_identity": "fluent-postgres-driver",
-      "product_memberships": []
     },
     {
       "name": "Core",
@@ -225,14 +134,6 @@
       ]
     },
     {
-      "name": "CoreTests",
-      "c99name": "CoreTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:Core_Tests_CoreTests",
-      "package_identity": "google-cloud-kit",
-      "product_memberships": []
-    },
-    {
       "name": "Datastore",
       "c99name": "Datastore",
       "src_type": "swift",
@@ -244,14 +145,6 @@
       ]
     },
     {
-      "name": "DatastoreTests",
-      "c99name": "DatastoreTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:Datastore_Tests_DatastoreTests",
-      "package_identity": "google-cloud-kit",
-      "product_memberships": []
-    },
-    {
       "name": "PubSub",
       "c99name": "PubSub",
       "src_type": "swift",
@@ -261,14 +154,6 @@
         "GoogleCloudKit",
         "GoogleCloudPubSub"
       ]
-    },
-    {
-      "name": "PubSubTests",
-      "c99name": "PubSubTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:PubSub_Tests_PubSubTests",
-      "package_identity": "google-cloud-kit",
-      "product_memberships": []
     },
     {
       "name": "SecretManager",
@@ -293,14 +178,6 @@
       ]
     },
     {
-      "name": "StorageTests",
-      "c99name": "StorageTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:Storage_Tests_StorageTests",
-      "package_identity": "google-cloud-kit",
-      "product_memberships": []
-    },
-    {
       "name": "Translation",
       "c99name": "Translation",
       "src_type": "swift",
@@ -311,184 +188,13 @@
       ]
     },
     {
-      "name": "TranslationTests",
-      "c99name": "TranslationTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_google_cloud_kit//:Translation_Tests_TranslationTests",
-      "package_identity": "google-cloud-kit",
-      "product_memberships": []
-    },
-    {
-      "name": "EchoImplementation",
-      "c99name": "EchoImplementation",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Implementation_EchoImplementation",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "GRPCPerformanceTests",
-        "Echo"
-      ]
-    },
-    {
-      "name": "EchoModel",
-      "c99name": "EchoModel",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Model_EchoModel",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "GRPCPerformanceTests",
-        "Echo"
-      ]
-    },
-    {
-      "name": "Echo",
-      "c99name": "Echo",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_Echo_Runtime_Echo",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "Echo"
-      ]
-    },
-    {
-      "name": "HelloWorldClient",
-      "c99name": "HelloWorldClient",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Client_HelloWorldClient",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "HelloWorldClient"
-      ]
-    },
-    {
-      "name": "HelloWorldModel",
-      "c99name": "HelloWorldModel",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Model_HelloWorldModel",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "HelloWorldServer",
-        "HelloWorldClient"
-      ]
-    },
-    {
-      "name": "HelloWorldServer",
-      "c99name": "HelloWorldServer",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_HelloWorld_Server_HelloWorldServer",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "HelloWorldServer"
-      ]
-    },
-    {
-      "name": "RouteGuideClient",
-      "c99name": "RouteGuideClient",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Client_RouteGuideClient",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "RouteGuideClient"
-      ]
-    },
-    {
-      "name": "RouteGuideModel",
-      "c99name": "RouteGuideModel",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Model_RouteGuideModel",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "RouteGuideServer",
-        "RouteGuideClient"
-      ]
-    },
-    {
-      "name": "RouteGuideServer",
-      "c99name": "RouteGuideServer",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_Examples_RouteGuide_Server_RouteGuideServer",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "RouteGuideServer"
-      ]
-    },
-    {
       "name": "GRPC",
       "c99name": "GRPC",
       "src_type": "swift",
       "label": "@swiftpkg_grpc_swift//:Sources_GRPC",
       "package_identity": "grpc-swift",
       "product_memberships": [
-        "GRPC",
-        "RouteGuideServer",
-        "RouteGuideClient",
-        "HelloWorldServer",
-        "HelloWorldClient",
-        "GRPCPerformanceTests",
-        "GRPCInteroperabilityTests",
-        "GRPCConnectionBackoffInteropTest",
-        "Echo"
-      ]
-    },
-    {
-      "name": "GRPCConnectionBackoffInteropTest",
-      "c99name": "GRPCConnectionBackoffInteropTest",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPCConnectionBackoffInteropTest",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "GRPCConnectionBackoffInteropTest"
-      ]
-    },
-    {
-      "name": "GRPCInteroperabilityTestModels",
-      "c99name": "GRPCInteroperabilityTestModels",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTestModels",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "GRPCInteroperabilityTests",
-        "GRPCConnectionBackoffInteropTest"
-      ]
-    },
-    {
-      "name": "GRPCInteroperabilityTests",
-      "c99name": "GRPCInteroperabilityTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTests",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "GRPCInteroperabilityTests"
-      ]
-    },
-    {
-      "name": "GRPCInteroperabilityTestsImplementation",
-      "c99name": "GRPCInteroperabilityTestsImplementation",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPCInteroperabilityTestsImplementation",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "GRPCInteroperabilityTests"
-      ]
-    },
-    {
-      "name": "GRPCPerformanceTests",
-      "c99name": "GRPCPerformanceTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPCPerformanceTests",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "GRPCPerformanceTests"
-      ]
-    },
-    {
-      "name": "GRPCSampleData",
-      "c99name": "GRPCSampleData",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPCSampleData",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "Echo"
+        "GRPC"
       ]
     },
     {
@@ -500,14 +206,6 @@
       "product_memberships": [
         "protoc-gen-grpc-swift"
       ]
-    },
-    {
-      "name": "GRPCTests",
-      "c99name": "GRPCTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Tests_GRPCTests",
-      "package_identity": "grpc-swift",
-      "product_memberships": []
     },
     {
       "name": "Gzip",
@@ -530,14 +228,6 @@
       ]
     },
     {
-      "name": "GzipTests",
-      "c99name": "GzipTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_gzipswift//:Tests_GzipTests",
-      "package_identity": "gzipswift",
-      "product_memberships": []
-    },
-    {
       "name": "HypertextApplicationLanguage",
       "c99name": "HypertextApplicationLanguage",
       "src_type": "swift",
@@ -546,14 +236,6 @@
       "product_memberships": [
         "HypertextApplicationLanguage"
       ]
-    },
-    {
-      "name": "HypertextApplicationLanguageTests",
-      "c99name": "HypertextApplicationLanguageTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_hypertextapplicationlanguage//:Tests_HypertextApplicationLanguageTests",
-      "package_identity": "hypertextapplicationlanguage",
-      "product_memberships": []
     },
     {
       "name": "CJWTKitBoringSSL",
@@ -576,14 +258,6 @@
       ]
     },
     {
-      "name": "JWTKitTests",
-      "c99name": "JWTKitTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_jwt_kit//:Tests_JWTKitTests",
-      "package_identity": "jwt-kit",
-      "product_memberships": []
-    },
-    {
       "name": "MobiusCore",
       "c99name": "MobiusCore",
       "src_type": "swift",
@@ -597,14 +271,6 @@
       ]
     },
     {
-      "name": "MobiusCoreTests",
-      "c99name": "MobiusCoreTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_mobius.swift//:MobiusCore_Test_MobiusCoreTests",
-      "package_identity": "mobius.swift",
-      "product_memberships": []
-    },
-    {
       "name": "MobiusExtras",
       "c99name": "MobiusExtras",
       "src_type": "swift",
@@ -615,14 +281,6 @@
       ]
     },
     {
-      "name": "MobiusExtrasTests",
-      "c99name": "MobiusExtrasTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_mobius.swift//:MobiusExtras_Test_MobiusExtrasTests",
-      "package_identity": "mobius.swift",
-      "product_memberships": []
-    },
-    {
       "name": "MobiusNimble",
       "c99name": "MobiusNimble",
       "src_type": "swift",
@@ -631,14 +289,6 @@
       "product_memberships": [
         "MobiusNimble"
       ]
-    },
-    {
-      "name": "MobiusNimbleTests",
-      "c99name": "MobiusNimbleTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_mobius.swift//:MobiusNimble_Test_MobiusNimbleTests",
-      "package_identity": "mobius.swift",
-      "product_memberships": []
     },
     {
       "name": "MobiusTest",
@@ -652,22 +302,6 @@
       ]
     },
     {
-      "name": "MobiusTestTests",
-      "c99name": "MobiusTestTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_mobius.swift//:MobiusTest_Test_MobiusTestTests",
-      "package_identity": "mobius.swift",
-      "product_memberships": []
-    },
-    {
-      "name": "MobiusThrowableAssertion",
-      "c99name": "MobiusThrowableAssertion",
-      "src_type": "objc",
-      "label": "@swiftpkg_mobius.swift//:MobiusThrowableAssertion_Source_MobiusThrowableAssertion",
-      "package_identity": "mobius.swift",
-      "product_memberships": []
-    },
-    {
       "name": "MultipartKit",
       "c99name": "MultipartKit",
       "src_type": "swift",
@@ -676,14 +310,6 @@
       "product_memberships": [
         "MultipartKit"
       ]
-    },
-    {
-      "name": "MultipartKitTests",
-      "c99name": "MultipartKitTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_multipart_kit//:Tests_MultipartKitTests",
-      "package_identity": "multipart-kit",
-      "product_memberships": []
     },
     {
       "name": "NimbleCwlCatchExceptionSupport",
@@ -736,14 +362,6 @@
       ]
     },
     {
-      "name": "NimbleTests",
-      "c99name": "NimbleTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_nimble//:Tests_NimbleTests",
-      "package_identity": "nimble",
-      "product_memberships": []
-    },
-    {
       "name": "PathKit",
       "c99name": "PathKit",
       "src_type": "swift",
@@ -752,14 +370,6 @@
       "product_memberships": [
         "PathKit"
       ]
-    },
-    {
-      "name": "PathKitTests",
-      "c99name": "PathKitTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_pathkit//:Tests_PathKitTests",
-      "package_identity": "pathkit",
-      "product_memberships": []
     },
     {
       "name": "INIParser",
@@ -772,14 +382,6 @@
       ]
     },
     {
-      "name": "INIParserTests",
-      "c99name": "INIParserTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_perfect_iniparser//:Tests_INIParserTests",
-      "package_identity": "perfect-iniparser",
-      "product_memberships": []
-    },
-    {
       "name": "PostgresKit",
       "c99name": "PostgresKit",
       "src_type": "swift",
@@ -790,14 +392,6 @@
       ]
     },
     {
-      "name": "PostgresKitTests",
-      "c99name": "PostgresKitTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_postgres_kit//:Tests_PostgresKitTests",
-      "package_identity": "postgres-kit",
-      "product_memberships": []
-    },
-    {
       "name": "PostgresNIO",
       "c99name": "PostgresNIO",
       "src_type": "swift",
@@ -806,22 +400,6 @@
       "product_memberships": [
         "PostgresNIO"
       ]
-    },
-    {
-      "name": "IntegrationTests",
-      "c99name": "IntegrationTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_postgres_nio//:Tests_IntegrationTests",
-      "package_identity": "postgres-nio",
-      "product_memberships": []
-    },
-    {
-      "name": "PostgresNIOTests",
-      "c99name": "PostgresNIOTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_postgres_nio//:Tests_PostgresNIOTests",
-      "package_identity": "postgres-nio",
-      "product_memberships": []
     },
     {
       "name": "Queues",
@@ -845,14 +423,6 @@
       ]
     },
     {
-      "name": "QueuesTests",
-      "c99name": "QueuesTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_queues//:Tests_QueuesTests",
-      "package_identity": "queues",
-      "product_memberships": []
-    },
-    {
       "name": "QueuesRedisDriver",
       "c99name": "QueuesRedisDriver",
       "src_type": "swift",
@@ -861,14 +431,6 @@
       "product_memberships": [
         "QueuesRedisDriver"
       ]
-    },
-    {
-      "name": "QueuesRedisDriverTests",
-      "c99name": "QueuesRedisDriverTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_queues_redis_driver//:Tests_QueuesRedisDriverTests",
-      "package_identity": "queues-redis-driver",
-      "product_memberships": []
     },
     {
       "name": "Quick",
@@ -891,22 +453,6 @@
       ]
     },
     {
-      "name": "QuickIssue853RegressionTests",
-      "c99name": "QuickIssue853RegressionTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_quick//:Tests_QuickIssue853RegressionTests",
-      "package_identity": "quick",
-      "product_memberships": []
-    },
-    {
-      "name": "QuickTests",
-      "c99name": "QuickTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_quick//:Tests_QuickTests",
-      "package_identity": "quick",
-      "product_memberships": []
-    },
-    {
       "name": "Redis",
       "c99name": "Redis",
       "src_type": "swift",
@@ -915,14 +461,6 @@
       "product_memberships": [
         "Redis"
       ]
-    },
-    {
-      "name": "RedisTests",
-      "c99name": "RedisTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_redis//:Tests_RedisTests",
-      "package_identity": "redis",
-      "product_memberships": []
     },
     {
       "name": "RediStack",
@@ -957,30 +495,6 @@
       ]
     },
     {
-      "name": "RediStackIntegrationTests",
-      "c99name": "RediStackIntegrationTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_redistack//:Tests_RediStackIntegrationTests",
-      "package_identity": "redistack",
-      "product_memberships": []
-    },
-    {
-      "name": "RediStackTests",
-      "c99name": "RediStackTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_redistack//:Tests_RediStackTests",
-      "package_identity": "redistack",
-      "product_memberships": []
-    },
-    {
-      "name": "RedisTypesTests",
-      "c99name": "RedisTypesTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_redistack//:Tests_RedisTypesTests",
-      "package_identity": "redistack",
-      "product_memberships": []
-    },
-    {
       "name": "RoutingKit",
       "c99name": "RoutingKit",
       "src_type": "swift",
@@ -989,14 +503,6 @@
       "product_memberships": [
         "RoutingKit"
       ]
-    },
-    {
-      "name": "RoutingKitTests",
-      "c99name": "RoutingKitTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_routing_kit//:Tests_RoutingKitTests",
-      "package_identity": "routing-kit",
-      "product_memberships": []
     },
     {
       "name": "APIGatewayMiddleware",
@@ -3595,14 +3101,6 @@
       ]
     },
     {
-      "name": "AWSSDKSwiftTests",
-      "c99name": "AWSSDKSwiftTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_soto//:Tests_AWSSDKSwiftTests",
-      "package_identity": "soto",
-      "product_memberships": []
-    },
-    {
       "name": "AWSSDKSwiftCore",
       "c99name": "AWSSDKSwiftCore",
       "src_type": "swift",
@@ -3613,14 +3111,6 @@
       ]
     },
     {
-      "name": "AWSSDKSwiftCoreTests",
-      "c99name": "AWSSDKSwiftCoreTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_soto_core//:Tests_AWSSDKSwiftCoreTests",
-      "package_identity": "soto-core",
-      "product_memberships": []
-    },
-    {
       "name": "Spectre",
       "c99name": "Spectre",
       "src_type": "swift",
@@ -3629,14 +3119,6 @@
       "product_memberships": [
         "Spectre"
       ]
-    },
-    {
-      "name": "SpectreTests",
-      "c99name": "SpectreTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_spectre//:Tests_SpectreTests",
-      "package_identity": "spectre",
-      "product_memberships": []
     },
     {
       "name": "SQLKit",
@@ -3660,14 +3142,6 @@
       ]
     },
     {
-      "name": "SQLKitTests",
-      "c99name": "SQLKitTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_sql_kit//:Tests_SQLKitTests",
-      "package_identity": "sql-kit",
-      "product_memberships": []
-    },
-    {
       "name": "Algorithms",
       "c99name": "Algorithms",
       "src_type": "swift",
@@ -3675,54 +3149,6 @@
       "package_identity": "swift-algorithms",
       "product_memberships": [
         "Algorithms"
-      ]
-    },
-    {
-      "name": "SwiftAlgorithmsTests",
-      "c99name": "SwiftAlgorithmsTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_algorithms//:Tests_SwiftAlgorithmsTests",
-      "package_identity": "swift-algorithms",
-      "product_memberships": []
-    },
-    {
-      "name": "count-lines",
-      "c99name": "count_lines",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_count-lines",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": [
-        "count-lines"
-      ]
-    },
-    {
-      "name": "math",
-      "c99name": "math",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_math",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": [
-        "math"
-      ]
-    },
-    {
-      "name": "repeat",
-      "c99name": "repeat",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_repeat",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": [
-        "repeat"
-      ]
-    },
-    {
-      "name": "roll",
-      "c99name": "roll",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Examples_roll",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": [
-        "roll"
       ]
     },
     {
@@ -3743,22 +3169,8 @@
       "package_identity": "swift-argument-parser",
       "product_memberships": [
         "ArgumentParser",
-        "GenerateManual",
-        "roll",
-        "repeat",
-        "math",
-        "generate-manual",
-        "count-lines",
-        "changelog-authors"
+        "GenerateManual"
       ]
-    },
-    {
-      "name": "ArgumentParserTestHelpers",
-      "c99name": "ArgumentParserTestHelpers",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserTestHelpers",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": []
     },
     {
       "name": "ArgumentParserToolInfo",
@@ -3768,63 +3180,7 @@
       "package_identity": "swift-argument-parser",
       "product_memberships": [
         "ArgumentParser",
-        "GenerateManual",
-        "roll",
-        "repeat",
-        "math",
-        "generate-manual",
-        "count-lines",
-        "changelog-authors"
-      ]
-    },
-    {
-      "name": "ArgumentParserEndToEndTests",
-      "c99name": "ArgumentParserEndToEndTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserEndToEndTests",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": []
-    },
-    {
-      "name": "ArgumentParserExampleTests",
-      "c99name": "ArgumentParserExampleTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserExampleTests",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": []
-    },
-    {
-      "name": "ArgumentParserGenerateManualTests",
-      "c99name": "ArgumentParserGenerateManualTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserGenerateManualTests",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": []
-    },
-    {
-      "name": "ArgumentParserPackageManagerTests",
-      "c99name": "ArgumentParserPackageManagerTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserPackageManagerTests",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": []
-    },
-    {
-      "name": "ArgumentParserUnitTests",
-      "c99name": "ArgumentParserUnitTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tests_ArgumentParserUnitTests",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": []
-    },
-    {
-      "name": "changelog-authors",
-      "c99name": "changelog_authors",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tools_changelog-authors",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": [
-        "changelog-authors"
+        "GenerateManual"
       ]
     },
     {
@@ -3834,8 +3190,7 @@
       "label": "@swiftpkg_swift_argument_parser//:Tools_generate-manual",
       "package_identity": "swift-argument-parser",
       "product_memberships": [
-        "GenerateManual",
-        "generate-manual"
+        "GenerateManual"
       ]
     },
     {
@@ -3859,22 +3214,13 @@
       ]
     },
     {
-      "name": "AtomicsTests",
-      "c99name": "AtomicsTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_atomics//:Tests_AtomicsTests",
-      "package_identity": "swift-atomics",
-      "product_memberships": []
-    },
-    {
       "name": "Backtrace",
       "c99name": "Backtrace",
       "src_type": "swift",
       "label": "@swiftpkg_swift_backtrace//:Sources_Backtrace",
       "package_identity": "swift-backtrace",
       "product_memberships": [
-        "Backtrace",
-        "Sample"
+        "Backtrace"
       ]
     },
     {
@@ -3884,27 +3230,8 @@
       "label": "@swiftpkg_swift_backtrace//:Sources_CBacktrace",
       "package_identity": "swift-backtrace",
       "product_memberships": [
-        "Backtrace",
-        "Sample"
+        "Backtrace"
       ]
-    },
-    {
-      "name": "Sample",
-      "c99name": "Sample",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_backtrace//:Sources_Sample",
-      "package_identity": "swift-backtrace",
-      "product_memberships": [
-        "Sample"
-      ]
-    },
-    {
-      "name": "BacktraceTests",
-      "c99name": "BacktraceTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_backtrace//:Tests_BacktraceTests",
-      "package_identity": "swift-backtrace",
-      "product_memberships": []
     },
     {
       "name": "Collections",
@@ -3939,38 +3266,6 @@
       ]
     },
     {
-      "name": "_CollectionsTestSupport",
-      "c99name": "_CollectionsTestSupport",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Sources__CollectionsTestSupport",
-      "package_identity": "swift-collections",
-      "product_memberships": []
-    },
-    {
-      "name": "CollectionsTestSupportTests",
-      "c99name": "CollectionsTestSupportTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Tests_CollectionsTestSupportTests",
-      "package_identity": "swift-collections",
-      "product_memberships": []
-    },
-    {
-      "name": "DequeTests",
-      "c99name": "DequeTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Tests_DequeTests",
-      "package_identity": "swift-collections",
-      "product_memberships": []
-    },
-    {
-      "name": "OrderedCollectionsTests",
-      "c99name": "OrderedCollectionsTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Tests_OrderedCollectionsTests",
-      "package_identity": "swift-collections",
-      "product_memberships": []
-    },
-    {
       "name": "CCryptoBoringSSL",
       "c99name": "CCryptoBoringSSL",
       "src_type": "clang",
@@ -3978,8 +3273,7 @@
       "package_identity": "swift-crypto",
       "product_memberships": [
         "Crypto",
-        "_CryptoExtras",
-        "crypto-shasum"
+        "_CryptoExtras"
       ]
     },
     {
@@ -3990,8 +3284,7 @@
       "package_identity": "swift-crypto",
       "product_memberships": [
         "Crypto",
-        "_CryptoExtras",
-        "crypto-shasum"
+        "_CryptoExtras"
       ]
     },
     {
@@ -4002,8 +3295,7 @@
       "package_identity": "swift-crypto",
       "product_memberships": [
         "Crypto",
-        "_CryptoExtras",
-        "crypto-shasum"
+        "_CryptoExtras"
       ]
     },
     {
@@ -4014,8 +3306,7 @@
       "package_identity": "swift-crypto",
       "product_memberships": [
         "Crypto",
-        "_CryptoExtras",
-        "crypto-shasum"
+        "_CryptoExtras"
       ]
     },
     {
@@ -4029,32 +3320,6 @@
       ]
     },
     {
-      "name": "crypto-shasum",
-      "c99name": "crypto_shasum",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_crypto//:Sources_crypto-shasum",
-      "package_identity": "swift-crypto",
-      "product_memberships": [
-        "crypto-shasum"
-      ]
-    },
-    {
-      "name": "CryptoTests",
-      "c99name": "CryptoTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_crypto//:Tests_CryptoTests",
-      "package_identity": "swift-crypto",
-      "product_memberships": []
-    },
-    {
-      "name": "_CryptoExtrasTests",
-      "c99name": "_CryptoExtrasTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_crypto//:Tests__CryptoExtrasTests",
-      "package_identity": "swift-crypto",
-      "product_memberships": []
-    },
-    {
       "name": "Logging",
       "c99name": "Logging",
       "src_type": "swift",
@@ -4063,14 +3328,6 @@
       "product_memberships": [
         "Logging"
       ]
-    },
-    {
-      "name": "LoggingTests",
-      "c99name": "LoggingTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_log//:Tests_LoggingTests",
-      "package_identity": "swift-log",
-      "product_memberships": []
     },
     {
       "name": "CoreMetrics",
@@ -4106,14 +3363,6 @@
       ]
     },
     {
-      "name": "MetricsTests",
-      "c99name": "MetricsTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_metrics//:Tests_MetricsTests",
-      "package_identity": "swift-metrics",
-      "product_memberships": []
-    },
-    {
       "name": "CNIOAtomics",
       "c99name": "CNIOAtomics",
       "src_type": "clang",
@@ -4130,21 +3379,7 @@
         "NIOConcurrencyHelpers",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils",
-        "NIOWebSocketServer",
-        "NIOWebSocketClient",
-        "NIOUDPEchoServer",
-        "NIOUDPEchoClient",
-        "NIOPerformanceTester",
-        "NIOMulticastChat",
-        "NIOHTTP1Server",
-        "NIOHTTP1Client",
-        "NIOEchoServer",
-        "NIOEchoClient",
-        "NIOCrashTester",
-        "NIOChatServer",
-        "NIOChatClient",
-        "NIOAsyncAwaitDemo"
+        "NIOTestUtils"
       ]
     },
     {
@@ -4161,21 +3396,7 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils",
-        "NIOWebSocketServer",
-        "NIOWebSocketClient",
-        "NIOUDPEchoServer",
-        "NIOUDPEchoClient",
-        "NIOPerformanceTester",
-        "NIOMulticastChat",
-        "NIOHTTP1Server",
-        "NIOHTTP1Client",
-        "NIOEchoServer",
-        "NIOEchoClient",
-        "NIOCrashTester",
-        "NIOChatServer",
-        "NIOChatClient",
-        "NIOAsyncAwaitDemo"
+        "NIOTestUtils"
       ]
     },
     {
@@ -4187,14 +3408,7 @@
       "product_memberships": [
         "NIOHTTP1",
         "NIOWebSocket",
-        "NIOTestUtils",
-        "NIOWebSocketServer",
-        "NIOWebSocketClient",
-        "NIOPerformanceTester",
-        "NIOHTTP1Server",
-        "NIOHTTP1Client",
-        "NIOCrashTester",
-        "NIOAsyncAwaitDemo"
+        "NIOTestUtils"
       ]
     },
     {
@@ -4213,21 +3427,7 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils",
-        "NIOWebSocketServer",
-        "NIOWebSocketClient",
-        "NIOUDPEchoServer",
-        "NIOUDPEchoClient",
-        "NIOPerformanceTester",
-        "NIOMulticastChat",
-        "NIOHTTP1Server",
-        "NIOHTTP1Client",
-        "NIOEchoServer",
-        "NIOEchoClient",
-        "NIOCrashTester",
-        "NIOChatServer",
-        "NIOChatClient",
-        "NIOAsyncAwaitDemo"
+        "NIOTestUtils"
       ]
     },
     {
@@ -4237,11 +3437,7 @@
       "label": "@swiftpkg_swift_nio//:Sources_CNIOSHA1",
       "package_identity": "swift-nio",
       "product_memberships": [
-        "NIOWebSocket",
-        "NIOWebSocketServer",
-        "NIOWebSocketClient",
-        "NIOPerformanceTester",
-        "NIOCrashTester"
+        "NIOWebSocket"
       ]
     },
     {
@@ -4260,21 +3456,7 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils",
-        "NIOWebSocketServer",
-        "NIOWebSocketClient",
-        "NIOUDPEchoServer",
-        "NIOUDPEchoClient",
-        "NIOPerformanceTester",
-        "NIOMulticastChat",
-        "NIOHTTP1Server",
-        "NIOHTTP1Client",
-        "NIOEchoServer",
-        "NIOEchoClient",
-        "NIOCrashTester",
-        "NIOChatServer",
-        "NIOChatClient",
-        "NIOAsyncAwaitDemo"
+        "NIOTestUtils"
       ]
     },
     {
@@ -4290,44 +3472,7 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils",
-        "NIOWebSocketServer",
-        "NIOWebSocketClient",
-        "NIOPerformanceTester",
-        "NIOHTTP1Server",
-        "NIOHTTP1Client",
-        "NIOCrashTester",
-        "NIOAsyncAwaitDemo"
-      ]
-    },
-    {
-      "name": "NIOAsyncAwaitDemo",
-      "c99name": "NIOAsyncAwaitDemo",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOAsyncAwaitDemo",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "NIOAsyncAwaitDemo"
-      ]
-    },
-    {
-      "name": "NIOChatClient",
-      "c99name": "NIOChatClient",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOChatClient",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "NIOChatClient"
-      ]
-    },
-    {
-      "name": "NIOChatServer",
-      "c99name": "NIOChatServer",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOChatServer",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "NIOChatServer"
+        "NIOTestUtils"
       ]
     },
     {
@@ -4347,21 +3492,7 @@
         "NIOConcurrencyHelpers",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils",
-        "NIOWebSocketServer",
-        "NIOWebSocketClient",
-        "NIOUDPEchoServer",
-        "NIOUDPEchoClient",
-        "NIOPerformanceTester",
-        "NIOMulticastChat",
-        "NIOHTTP1Server",
-        "NIOHTTP1Client",
-        "NIOEchoServer",
-        "NIOEchoClient",
-        "NIOCrashTester",
-        "NIOChatServer",
-        "NIOChatClient",
-        "NIOAsyncAwaitDemo"
+        "NIOTestUtils"
       ]
     },
     {
@@ -4380,51 +3511,7 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils",
-        "NIOWebSocketServer",
-        "NIOWebSocketClient",
-        "NIOUDPEchoServer",
-        "NIOUDPEchoClient",
-        "NIOPerformanceTester",
-        "NIOMulticastChat",
-        "NIOHTTP1Server",
-        "NIOHTTP1Client",
-        "NIOEchoServer",
-        "NIOEchoClient",
-        "NIOCrashTester",
-        "NIOChatServer",
-        "NIOChatClient",
-        "NIOAsyncAwaitDemo"
-      ]
-    },
-    {
-      "name": "NIOCrashTester",
-      "c99name": "NIOCrashTester",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOCrashTester",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "NIOCrashTester"
-      ]
-    },
-    {
-      "name": "NIOEchoClient",
-      "c99name": "NIOEchoClient",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOEchoClient",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "NIOEchoClient"
-      ]
-    },
-    {
-      "name": "NIOEchoServer",
-      "c99name": "NIOEchoServer",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOEchoServer",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "NIOEchoServer"
+        "NIOTestUtils"
       ]
     },
     {
@@ -4441,14 +3528,7 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils",
-        "NIOWebSocketServer",
-        "NIOWebSocketClient",
-        "NIOPerformanceTester",
-        "NIOHTTP1Server",
-        "NIOHTTP1Client",
-        "NIOCrashTester",
-        "NIOAsyncAwaitDemo"
+        "NIOTestUtils"
       ]
     },
     {
@@ -4458,9 +3538,7 @@
       "label": "@swiftpkg_swift_nio//:Sources_NIOFoundationCompat",
       "package_identity": "swift-nio",
       "product_memberships": [
-        "NIOFoundationCompat",
-        "NIOPerformanceTester",
-        "NIOCrashTester"
+        "NIOFoundationCompat"
       ]
     },
     {
@@ -4472,54 +3550,7 @@
       "product_memberships": [
         "NIOHTTP1",
         "NIOWebSocket",
-        "NIOTestUtils",
-        "NIOWebSocketServer",
-        "NIOWebSocketClient",
-        "NIOPerformanceTester",
-        "NIOHTTP1Server",
-        "NIOHTTP1Client",
-        "NIOCrashTester",
-        "NIOAsyncAwaitDemo"
-      ]
-    },
-    {
-      "name": "NIOHTTP1Client",
-      "c99name": "NIOHTTP1Client",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1Client",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "NIOHTTP1Client"
-      ]
-    },
-    {
-      "name": "NIOHTTP1Server",
-      "c99name": "NIOHTTP1Server",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1Server",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "NIOHTTP1Server"
-      ]
-    },
-    {
-      "name": "NIOMulticastChat",
-      "c99name": "NIOMulticastChat",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOMulticastChat",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "NIOMulticastChat"
-      ]
-    },
-    {
-      "name": "NIOPerformanceTester",
-      "c99name": "NIOPerformanceTester",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOPerformanceTester",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "NIOPerformanceTester"
+        "NIOTestUtils"
       ]
     },
     {
@@ -4536,21 +3567,7 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils",
-        "NIOWebSocketServer",
-        "NIOWebSocketClient",
-        "NIOUDPEchoServer",
-        "NIOUDPEchoClient",
-        "NIOPerformanceTester",
-        "NIOMulticastChat",
-        "NIOHTTP1Server",
-        "NIOHTTP1Client",
-        "NIOEchoServer",
-        "NIOEchoClient",
-        "NIOCrashTester",
-        "NIOChatServer",
-        "NIOChatClient",
-        "NIOAsyncAwaitDemo"
+        "NIOTestUtils"
       ]
     },
     {
@@ -4574,57 +3591,13 @@
       ]
     },
     {
-      "name": "NIOUDPEchoClient",
-      "c99name": "NIOUDPEchoClient",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOUDPEchoClient",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "NIOUDPEchoClient"
-      ]
-    },
-    {
-      "name": "NIOUDPEchoServer",
-      "c99name": "NIOUDPEchoServer",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOUDPEchoServer",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "NIOUDPEchoServer"
-      ]
-    },
-    {
       "name": "NIOWebSocket",
       "c99name": "NIOWebSocket",
       "src_type": "swift",
       "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocket",
       "package_identity": "swift-nio",
       "product_memberships": [
-        "NIOWebSocket",
-        "NIOWebSocketServer",
-        "NIOWebSocketClient",
-        "NIOPerformanceTester",
-        "NIOCrashTester"
-      ]
-    },
-    {
-      "name": "NIOWebSocketClient",
-      "c99name": "NIOWebSocketClient",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocketClient",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "NIOWebSocketClient"
-      ]
-    },
-    {
-      "name": "NIOWebSocketServer",
-      "c99name": "NIOWebSocketServer",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocketServer",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "NIOWebSocketServer"
+        "NIOWebSocket"
       ]
     },
     {
@@ -4652,110 +3625,8 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils",
-        "NIOWebSocketServer",
-        "NIOWebSocketClient",
-        "NIOUDPEchoServer",
-        "NIOUDPEchoClient",
-        "NIOPerformanceTester",
-        "NIOMulticastChat",
-        "NIOHTTP1Server",
-        "NIOHTTP1Client",
-        "NIOEchoServer",
-        "NIOEchoClient",
-        "NIOCrashTester",
-        "NIOChatServer",
-        "NIOChatClient",
-        "NIOAsyncAwaitDemo"
+        "NIOTestUtils"
       ]
-    },
-    {
-      "name": "NIOConcurrencyHelpersTests",
-      "c99name": "NIOConcurrencyHelpersTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOConcurrencyHelpersTests",
-      "package_identity": "swift-nio",
-      "product_memberships": []
-    },
-    {
-      "name": "NIOCoreTests",
-      "c99name": "NIOCoreTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOCoreTests",
-      "package_identity": "swift-nio",
-      "product_memberships": []
-    },
-    {
-      "name": "NIODataStructuresTests",
-      "c99name": "NIODataStructuresTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIODataStructuresTests",
-      "package_identity": "swift-nio",
-      "product_memberships": []
-    },
-    {
-      "name": "NIOEmbeddedTests",
-      "c99name": "NIOEmbeddedTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOEmbeddedTests",
-      "package_identity": "swift-nio",
-      "product_memberships": []
-    },
-    {
-      "name": "NIOFoundationCompatTests",
-      "c99name": "NIOFoundationCompatTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOFoundationCompatTests",
-      "package_identity": "swift-nio",
-      "product_memberships": []
-    },
-    {
-      "name": "NIOHTTP1Tests",
-      "c99name": "NIOHTTP1Tests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOHTTP1Tests",
-      "package_identity": "swift-nio",
-      "product_memberships": []
-    },
-    {
-      "name": "NIOPosixTests",
-      "c99name": "NIOPosixTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOPosixTests",
-      "package_identity": "swift-nio",
-      "product_memberships": []
-    },
-    {
-      "name": "NIOTLSTests",
-      "c99name": "NIOTLSTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOTLSTests",
-      "package_identity": "swift-nio",
-      "product_memberships": []
-    },
-    {
-      "name": "NIOTestUtilsTests",
-      "c99name": "NIOTestUtilsTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOTestUtilsTests",
-      "package_identity": "swift-nio",
-      "product_memberships": []
-    },
-    {
-      "name": "NIOTests",
-      "c99name": "NIOTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOTests",
-      "package_identity": "swift-nio",
-      "product_memberships": []
-    },
-    {
-      "name": "NIOWebSocketTests",
-      "c99name": "NIOWebSocketTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Tests_NIOWebSocketTests",
-      "package_identity": "swift-nio",
-      "product_memberships": []
     },
     {
       "name": "CNIOExtrasZlib",
@@ -4768,37 +3639,13 @@
       ]
     },
     {
-      "name": "HTTPServerWithQuiescingDemo",
-      "c99name": "HTTPServerWithQuiescingDemo",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_HTTPServerWithQuiescingDemo",
-      "package_identity": "swift-nio-extras",
-      "product_memberships": [
-        "HTTPServerWithQuiescingDemo"
-      ]
-    },
-    {
       "name": "NIOExtras",
       "c99name": "NIOExtras",
       "src_type": "swift",
       "label": "@swiftpkg_swift_nio_extras//:Sources_NIOExtras",
       "package_identity": "swift-nio-extras",
       "product_memberships": [
-        "NIOExtras",
-        "NIOWritePartialPCAPDemo",
-        "NIOWritePCAPDemo",
-        "NIOExtrasPerformanceTester",
-        "HTTPServerWithQuiescingDemo"
-      ]
-    },
-    {
-      "name": "NIOExtrasPerformanceTester",
-      "c99name": "NIOExtrasPerformanceTester",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOExtrasPerformanceTester",
-      "package_identity": "swift-nio-extras",
-      "product_memberships": [
-        "NIOExtrasPerformanceTester"
+        "NIOExtras"
       ]
     },
     {
@@ -4818,63 +3665,8 @@
       "label": "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKS",
       "package_identity": "swift-nio-extras",
       "product_memberships": [
-        "NIOSOCKS",
-        "NIOSOCKSClient"
+        "NIOSOCKS"
       ]
-    },
-    {
-      "name": "NIOSOCKSClient",
-      "c99name": "NIOSOCKSClient",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKSClient",
-      "package_identity": "swift-nio-extras",
-      "product_memberships": [
-        "NIOSOCKSClient"
-      ]
-    },
-    {
-      "name": "NIOWritePCAPDemo",
-      "c99name": "NIOWritePCAPDemo",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOWritePCAPDemo",
-      "package_identity": "swift-nio-extras",
-      "product_memberships": [
-        "NIOWritePCAPDemo"
-      ]
-    },
-    {
-      "name": "NIOWritePartialPCAPDemo",
-      "c99name": "NIOWritePartialPCAPDemo",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOWritePartialPCAPDemo",
-      "package_identity": "swift-nio-extras",
-      "product_memberships": [
-        "NIOWritePartialPCAPDemo"
-      ]
-    },
-    {
-      "name": "NIOExtrasTests",
-      "c99name": "NIOExtrasTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Tests_NIOExtrasTests",
-      "package_identity": "swift-nio-extras",
-      "product_memberships": []
-    },
-    {
-      "name": "NIOHTTPCompressionTests",
-      "c99name": "NIOHTTPCompressionTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Tests_NIOHTTPCompressionTests",
-      "package_identity": "swift-nio-extras",
-      "product_memberships": []
-    },
-    {
-      "name": "NIOSOCKSTests",
-      "c99name": "NIOSOCKSTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Tests_NIOSOCKSTests",
-      "package_identity": "swift-nio-extras",
-      "product_memberships": []
     },
     {
       "name": "NIOHPACK",
@@ -4883,9 +3675,7 @@
       "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHPACK",
       "package_identity": "swift-nio-http2",
       "product_memberships": [
-        "NIOHTTP2",
-        "NIOHTTP2Server",
-        "NIOHTTP2PerformanceTester"
+        "NIOHTTP2"
       ]
     },
     {
@@ -4895,46 +3685,8 @@
       "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2",
       "package_identity": "swift-nio-http2",
       "product_memberships": [
-        "NIOHTTP2",
-        "NIOHTTP2Server",
-        "NIOHTTP2PerformanceTester"
+        "NIOHTTP2"
       ]
-    },
-    {
-      "name": "NIOHTTP2PerformanceTester",
-      "c99name": "NIOHTTP2PerformanceTester",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2PerformanceTester",
-      "package_identity": "swift-nio-http2",
-      "product_memberships": [
-        "NIOHTTP2PerformanceTester"
-      ]
-    },
-    {
-      "name": "NIOHTTP2Server",
-      "c99name": "NIOHTTP2Server",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2Server",
-      "package_identity": "swift-nio-http2",
-      "product_memberships": [
-        "NIOHTTP2Server"
-      ]
-    },
-    {
-      "name": "NIOHPACKTests",
-      "c99name": "NIOHPACKTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_http2//:Tests_NIOHPACKTests",
-      "package_identity": "swift-nio-http2",
-      "product_memberships": []
-    },
-    {
-      "name": "NIOHTTP2Tests",
-      "c99name": "NIOHTTP2Tests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_http2//:Tests_NIOHTTP2Tests",
-      "package_identity": "swift-nio-http2",
-      "product_memberships": []
     },
     {
       "name": "CNIOBoringSSL",
@@ -4945,8 +3697,7 @@
       "product_memberships": [
         "NIOSSL",
         "NIOTLSServer",
-        "NIOSSLHTTP1Client",
-        "NIOSSLPerformanceTester"
+        "NIOSSLHTTP1Client"
       ]
     },
     {
@@ -4958,8 +3709,7 @@
       "product_memberships": [
         "NIOSSL",
         "NIOTLSServer",
-        "NIOSSLHTTP1Client",
-        "NIOSSLPerformanceTester"
+        "NIOSSLHTTP1Client"
       ]
     },
     {
@@ -4971,8 +3721,7 @@
       "product_memberships": [
         "NIOSSL",
         "NIOTLSServer",
-        "NIOSSLHTTP1Client",
-        "NIOSSLPerformanceTester"
+        "NIOSSLHTTP1Client"
       ]
     },
     {
@@ -4986,16 +3735,6 @@
       ]
     },
     {
-      "name": "NIOSSLPerformanceTester",
-      "c99name": "NIOSSLPerformanceTester",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLPerformanceTester",
-      "package_identity": "swift-nio-ssl",
-      "product_memberships": [
-        "NIOSSLPerformanceTester"
-      ]
-    },
-    {
       "name": "NIOTLSServer",
       "c99name": "NIOTLSServer",
       "src_type": "swift",
@@ -5006,52 +3745,14 @@
       ]
     },
     {
-      "name": "NIOSSLTests",
-      "c99name": "NIOSSLTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_ssl//:Tests_NIOSSLTests",
-      "package_identity": "swift-nio-ssl",
-      "product_memberships": []
-    },
-    {
-      "name": "NIOTSHTTPClient",
-      "c99name": "NIOTSHTTPClient",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_transport_services//:Sources_NIOTSHTTPClient",
-      "package_identity": "swift-nio-transport-services",
-      "product_memberships": [
-        "NIOTSHTTPClient"
-      ]
-    },
-    {
-      "name": "NIOTSHTTPServer",
-      "c99name": "NIOTSHTTPServer",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_transport_services//:Sources_NIOTSHTTPServer",
-      "package_identity": "swift-nio-transport-services",
-      "product_memberships": [
-        "NIOTSHTTPServer"
-      ]
-    },
-    {
       "name": "NIOTransportServices",
       "c99name": "NIOTransportServices",
       "src_type": "swift",
       "label": "@swiftpkg_swift_nio_transport_services//:Sources_NIOTransportServices",
       "package_identity": "swift-nio-transport-services",
       "product_memberships": [
-        "NIOTransportServices",
-        "NIOTSHTTPServer",
-        "NIOTSHTTPClient"
+        "NIOTransportServices"
       ]
-    },
-    {
-      "name": "NIOTransportServicesTests",
-      "c99name": "NIOTransportServicesTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_transport_services//:Tests_NIOTransportServicesTests",
-      "package_identity": "swift-nio-transport-services",
-      "product_memberships": []
     },
     {
       "name": "ComplexModule",
@@ -5061,9 +3762,7 @@
       "package_identity": "swift-numerics",
       "product_memberships": [
         "ComplexModule",
-        "Numerics",
-        "ComplexLog1p",
-        "ComplexLog"
+        "Numerics"
       ]
     },
     {
@@ -5073,9 +3772,7 @@
       "label": "@swiftpkg_swift_numerics//:Sources_Numerics",
       "package_identity": "swift-numerics",
       "product_memberships": [
-        "Numerics",
-        "ComplexLog1p",
-        "ComplexLog"
+        "Numerics"
       ]
     },
     {
@@ -5087,9 +3784,7 @@
       "product_memberships": [
         "ComplexModule",
         "Numerics",
-        "RealModule",
-        "ComplexLog1p",
-        "ComplexLog"
+        "RealModule"
       ]
     },
     {
@@ -5101,57 +3796,8 @@
       "product_memberships": [
         "ComplexModule",
         "Numerics",
-        "RealModule",
-        "ComplexLog1p",
-        "ComplexLog"
+        "RealModule"
       ]
-    },
-    {
-      "name": "_TestSupport",
-      "c99name": "_TestSupport",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_numerics//:Sources__TestSupport",
-      "package_identity": "swift-numerics",
-      "product_memberships": [
-        "ComplexLog1p",
-        "ComplexLog"
-      ]
-    },
-    {
-      "name": "ComplexTests",
-      "c99name": "ComplexTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_numerics//:Tests_ComplexTests",
-      "package_identity": "swift-numerics",
-      "product_memberships": []
-    },
-    {
-      "name": "ComplexLog",
-      "c99name": "ComplexLog",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_numerics//:Tests_Executable_ComplexLog",
-      "package_identity": "swift-numerics",
-      "product_memberships": [
-        "ComplexLog"
-      ]
-    },
-    {
-      "name": "ComplexLog1p",
-      "c99name": "ComplexLog1p",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_numerics//:Tests_Executable_ComplexLog1p",
-      "package_identity": "swift-numerics",
-      "product_memberships": [
-        "ComplexLog1p"
-      ]
-    },
-    {
-      "name": "RealTests",
-      "c99name": "RealTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_numerics//:Tests_RealTests",
-      "package_identity": "swift-numerics",
-      "product_memberships": []
     },
     {
       "name": "SwiftProtobufPlugin",
@@ -5164,16 +3810,6 @@
       ]
     },
     {
-      "name": "Conformance",
-      "c99name": "Conformance",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_protobuf//:Sources_Conformance",
-      "package_identity": "swift-protobuf",
-      "product_memberships": [
-        "Conformance"
-      ]
-    },
-    {
       "name": "SwiftProtobuf",
       "c99name": "SwiftProtobuf",
       "src_type": "swift",
@@ -5183,8 +3819,7 @@
         "protoc-gen-swift",
         "SwiftProtobuf",
         "SwiftProtobufPluginLibrary",
-        "SwiftProtobufPlugin",
-        "Conformance"
+        "SwiftProtobufPlugin"
       ]
     },
     {
@@ -5211,22 +3846,6 @@
       ]
     },
     {
-      "name": "SwiftProtobufPluginLibraryTests",
-      "c99name": "SwiftProtobufPluginLibraryTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_protobuf//:Tests_SwiftProtobufPluginLibraryTests",
-      "package_identity": "swift-protobuf",
-      "product_memberships": []
-    },
-    {
-      "name": "SwiftProtobufTests",
-      "c99name": "SwiftProtobufTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_protobuf//:Tests_SwiftProtobufTests",
-      "package_identity": "swift-protobuf",
-      "product_memberships": []
-    },
-    {
       "name": "CVaporBcrypt",
       "c99name": "CVaporBcrypt",
       "src_type": "clang",
@@ -5234,8 +3853,7 @@
       "package_identity": "vapor",
       "product_memberships": [
         "Vapor",
-        "XCTVapor",
-        "Development"
+        "XCTVapor"
       ]
     },
     {
@@ -5246,18 +3864,7 @@
       "package_identity": "vapor",
       "product_memberships": [
         "Vapor",
-        "XCTVapor",
-        "Development"
-      ]
-    },
-    {
-      "name": "Development",
-      "c99name": "Development",
-      "src_type": "swift",
-      "label": "@swiftpkg_vapor//:Sources_Development",
-      "package_identity": "vapor",
-      "product_memberships": [
-        "Development"
+        "XCTVapor"
       ]
     },
     {
@@ -5268,8 +3875,7 @@
       "package_identity": "vapor",
       "product_memberships": [
         "Vapor",
-        "XCTVapor",
-        "Development"
+        "XCTVapor"
       ]
     },
     {
@@ -5283,22 +3889,6 @@
       ]
     },
     {
-      "name": "AsyncTests",
-      "c99name": "AsyncTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_vapor//:Tests_AsyncTests",
-      "package_identity": "vapor",
-      "product_memberships": []
-    },
-    {
-      "name": "VaporTests",
-      "c99name": "VaporTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_vapor//:Tests_VaporTests",
-      "package_identity": "vapor",
-      "product_memberships": []
-    },
-    {
       "name": "WebSocketKit",
       "c99name": "WebSocketKit",
       "src_type": "swift",
@@ -5307,14 +3897,6 @@
       "product_memberships": [
         "WebSocketKit"
       ]
-    },
-    {
-      "name": "WebSocketKitTests",
-      "c99name": "WebSocketKitTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_websocket_kit//:Tests_WebSocketKitTests",
-      "package_identity": "websocket-kit",
-      "product_memberships": []
     },
     {
       "name": "XCLogParser",
@@ -5347,14 +3929,6 @@
         "xclogparser",
         "XCLogParser"
       ]
-    },
-    {
-      "name": "XCLogParserTests",
-      "c99name": "XCLogParserTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_xclogparser//:Tests_XCLogParserTests",
-      "package_identity": "xclogparser",
-      "product_memberships": []
     },
     {
       "name": "XCMetricsApp",
@@ -5447,30 +4021,6 @@
       ]
     },
     {
-      "name": "XCMetricsBackendLibTests",
-      "c99name": "XCMetricsBackendLibTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_xcmetrics//:Tests_XCMetricsBackendLibTests",
-      "package_identity": "xcmetrics",
-      "product_memberships": []
-    },
-    {
-      "name": "XCMetricsPluginsTests",
-      "c99name": "XCMetricsPluginsTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_xcmetrics//:Tests_XCMetricsPluginsTests",
-      "package_identity": "xcmetrics",
-      "product_memberships": []
-    },
-    {
-      "name": "XCMetricsTests",
-      "c99name": "XCMetricsTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_xcmetrics//:Tests_XCMetricsTests",
-      "package_identity": "xcmetrics",
-      "product_memberships": []
-    },
-    {
       "name": "CYaml",
       "c99name": "CYaml",
       "src_type": "clang",
@@ -5489,14 +4039,6 @@
       "product_memberships": [
         "Yams"
       ]
-    },
-    {
-      "name": "YamsTests",
-      "c99name": "YamsTests",
-      "src_type": "swift",
-      "label": "@swiftpkg_yams//:Tests_YamsTests",
-      "package_identity": "yams",
-      "product_memberships": []
     }
   ],
   "products": [

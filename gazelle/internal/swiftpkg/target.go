@@ -5,6 +5,7 @@ import (
 
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdesc"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
+	mapset "github.com/deckarep/golang-set/v2"
 )
 
 // TargetType
@@ -62,7 +63,11 @@ type Target struct {
 }
 
 // NewTargetFromManifestInfo returns a Swift target from manifest information.
-func NewTargetFromManifestInfo(descT *spdesc.Target, dumpT *spdump.Target) (*Target, error) {
+func NewTargetFromManifestInfo(
+	descT *spdesc.Target,
+	dumpT *spdump.Target,
+	prodNames mapset.Set[string],
+) (*Target, error) {
 	var targetType TargetType
 	switch dumpT.Type {
 	case spdump.UnknownTargetType:
@@ -99,6 +104,17 @@ func NewTargetFromManifestInfo(descT *spdesc.Target, dumpT *spdump.Target) (*Tar
 
 	moduleType := NewModuleType(descT.ModuleType)
 
+	// The description JSON can contain phantom products. These are products that are not declared
+	// in the original package manifest (e.g., executable target not associated with a product). We
+	// do not want to include these phantoms as SPM package resolution may not include all of the
+	// external dependencies for these products. (SPM only resolves non-test external dependencies.)
+	prodMemberships := make([]string, 0, len(descT.ProductMemberships))
+	for _, prodName := range descT.ProductMemberships {
+		if prodNames.Contains(prodName) {
+			prodMemberships = append(prodMemberships, prodName)
+		}
+	}
+
 	return &Target{
 		Name:               descT.Name,
 		C99name:            descT.C99name,
@@ -109,7 +125,7 @@ func NewTargetFromManifestInfo(descT *spdesc.Target, dumpT *spdump.Target) (*Tar
 		Dependencies:       tdeps,
 		CSettings:          cSettings,
 		SrcType:            NewSourceType(moduleType, descT.Sources),
-		ProductMemberships: descT.ProductMemberships,
+		ProductMemberships: prodMemberships,
 	}, nil
 }
 

@@ -7,7 +7,7 @@ load(
     "patch",
     "update_attrs",
 )
-load(":pkginfos.bzl", "pkginfos")
+load(":pkg_ctxs.bzl", "pkg_ctxs")
 load(":repo_rules.bzl", "repo_rules")
 load(":repository_files.bzl", "repository_files")
 
@@ -55,14 +55,12 @@ def _swift_package_impl(repository_ctx):
     # Remove any Bazel build files.
     _remove_bazel_files(repository_ctx, directory)
 
-    # Get the package info
-    pkg_info = pkginfos.get(repository_ctx, directory, env = env)
-
     # Generate the WORKSPACE file
     repo_rules.write_workspace_file(repository_ctx, directory)
 
     # Generate the build file
-    repo_rules.gen_build_files(repository_ctx, pkg_info)
+    pkg_ctx = pkg_ctxs.read(repository_ctx, directory, env)
+    repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
     # Apply any patches
     patch(repository_ctx)

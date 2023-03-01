@@ -67,7 +67,8 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
 
     # The rules_swift code links in developer libraries if the rule is marked testonly.
     # https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/compiling.bzl#L1312-L1319
-    is_test = swift_files.imports_xctest(repository_ctx, pkg_ctx, target)
+    if swift_files.imports_xctest(repository_ctx, pkg_ctx, target):
+        attrs["testonly"] = True
 
     if target.swift_settings != None:
         if len(target.swift_settings.defines) > 0:
@@ -81,8 +82,6 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
                 for bs in target.swift_settings.unsafe_flags
             ]))
 
-    if is_test:
-        attrs["testonly"] = True
     if len(defines) > 0:
         attrs["defines"] = bzl_selects.to_starlark(defines)
     if len(copts) > 0:
