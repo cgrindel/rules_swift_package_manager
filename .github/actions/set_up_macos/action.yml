@@ -1,0 +1,27 @@
+name: Set Up macOS Runner
+description: Prepare macOS runner to execute tests.
+
+inputs:
+  repo_name:
+    description: The name of the GitHub repo.
+    required: true
+  xcode_version:
+    description: The version of Xcode to use.
+    default: '14.0.1'
+
+runs:
+  using: composite
+  steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: ${{ inputs.xcode_version }}
+    - name: Confirm Xcode Version
+      shell: bash
+      run: |
+        # Print used xCode version
+        xcode-select -print-path
+        xcodebuild -version
+    - uses: cgrindel/gha_set_up_bazel@v1
+      with:
+        repo_name: ${{ inputs.repo_name }}
+
