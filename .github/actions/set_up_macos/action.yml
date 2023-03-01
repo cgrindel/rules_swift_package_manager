@@ -21,7 +21,6 @@ runs:
         # Print used xCode version
         xcode-select -print-path
         xcodebuild -version
-    - uses: actions/checkout@v3
     - uses: cgrindel/gha_set_up_bazel@v1
       with:
         repo_name: ${{ inputs.repo_name }}
