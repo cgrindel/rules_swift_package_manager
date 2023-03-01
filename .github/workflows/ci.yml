@@ -59,7 +59,7 @@ jobs:
         - "pkg_manifest_minimal"
         bazel_version:
         - ".bazelversion"
-        - "5.4.0"
+        - "5_4_0"
     runs-on: macos-12
     steps:
     - uses: actions/checkout@v3
