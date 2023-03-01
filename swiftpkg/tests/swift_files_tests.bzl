@@ -148,6 +148,19 @@ import XCTest
 """,
             exp = True,
         ),
+        struct(
+            msg = "inside conditional compilation",
+            imp = "XCTest",
+            content = """\
+#if DEBUG
+    #if !canImport(ObjectiveC)
+      import Chicken
+    #endif
+    import XCTest
+#endif
+""",
+            exp = False,
+        ),
     ]
     for t in tests:
         actual = swift_files.has_import(t.content, t.imp)

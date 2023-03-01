@@ -116,10 +116,34 @@ def _collect_multiline_comment(contents, idx):
         idx,
     ))
 
+def _collect_conditional_compilation(contents, idx):
+    # Conditional compilation blocks can be nested. We will process until
+    # block level is at 0.
+    block_level = 1
+
+    # We know that idx is pointing at #if
+    start_idx = idx + 3
+    for sidx in range(start_idx, len(contents)):
+        char = contents[sidx]
+        if char == "#":
+            if _look_ahead(contents, sidx, "#if") >= 0:
+                block_level += 1
+            else:
+                la_idx = _look_ahead(contents, sidx, "#endif")
+                if la_idx >= 0:
+                    block_level -= 1
+                    if block_level == 0:
+                        return la_idx
+
+    fail("""\
+Did not find the end of the conditional compilation block starting at {}.\
+""".format(idx))
+
 def _is_code(contents, target_idx):
     skip_to = -1
     for idx in range(0, len(contents)):
         if skip_to == idx:
+            # Need to reset the skip_to before the next check.
             skip_to = -1
         if idx == target_idx:
             # If we are not skipping ahead, then it is a valid code location.
@@ -139,6 +163,9 @@ def _is_code(contents, target_idx):
                 skip_to = _collect_single_line_comment(contents, idx)
             elif _look_ahead(contents, idx, "/*") >= 0:
                 skip_to = _collect_multiline_comment(contents, idx)
+        elif char == "#":
+            if _look_ahead(contents, idx, "#if") >= 0:
+                skip_to = _collect_conditional_compilation(contents, idx)
 
     return False
 
