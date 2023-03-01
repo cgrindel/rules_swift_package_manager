@@ -103,6 +103,51 @@ import XCTest
 """,
             exp = True,
         ),
+        struct(
+            msg = "import inside a single-line comment",
+            imp = "XCTest",
+            content = """\
+// import XCTest
+""",
+            exp = False,
+        ),
+        struct(
+            msg = "import inside a multi-line comment",
+            imp = "XCTest",
+            content = """\
+/* The following should be ignored:
+import XCTest
+*/
+""",
+            exp = False,
+        ),
+        struct(
+            msg = "import inside a single-line string",
+            imp = "XCTest",
+            content = """\
+let ignoreMe = " import XCTest "
+""",
+            exp = False,
+        ),
+        struct(
+            msg = "import inside a multi-line string",
+            imp = "XCTest",
+            content = '''\
+let ignoreMe = """
+import XCTest
+"""
+''',
+            exp = False,
+        ),
+        struct(
+            msg = "invalid import and valid import",
+            imp = "XCTest",
+            content = """\
+// import XCTest
+import XCTest
+""",
+            exp = True,
+        ),
     ]
     for t in tests:
         actual = swift_files.has_import(t.content, t.imp)
