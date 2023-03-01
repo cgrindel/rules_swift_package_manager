@@ -191,12 +191,10 @@ load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
 
 # This declaration builds a Gazelle binary that incorporates all of the Gazelle 
 # plugins for the languages that you use in your workspace. In this example, we 
-# are using the Gazelle plugin for Starlark from bazel_skylib and the Gazelle 
-# plugin for Swift from cgrindel_swift_bazel.
+# are only listing the Gazelle plugin for Swift from cgrindel_swift_bazel.
 gazelle_binary(
     name = "gazelle_bin",
     languages = [
-        "@bazel_skylib_gazelle_plugin//bzl",
         "@cgrindel_swift_bazel//gazelle",
     ],
 )
