@@ -16,6 +16,12 @@ name: Continuous Integration
 jobs:
   all_ci_tests:
     runs-on: ubuntu-20.04
+    needs:
+      - macos_tidy_and_test
+      - macos_int_test_matrix
+      - ubuntu_tidy_and_test
+      - ubuntu_int_test_matrix
+    if: ${{ always() }}
     steps:
       - uses: cgrindel/gha_join_jobs@v1
         with:
@@ -27,11 +33,11 @@ jobs:
           - example: http_archive_ext_deps
             bazel_version: .bazelversion
           - example: http_archive_ext_deps
-            bazel_version: 5.4.0
+            bazel_version: "5_4_0"
           - example: pkg_manifest_minimal
             bazel_version: .bazelversion
           - example: pkg_manifest_minimal
-            bazel_version: 5.4.0
+            bazel_version: "5_4_0"
           - example: vapor_example
             bazel_version: .bazelversion
           - example: firebase_example
@@ -79,11 +85,11 @@ jobs:
           - example: http_archive_ext_deps
             bazel_version: .bazelversion
           - example: http_archive_ext_deps
-            bazel_version: 5.4.0
+            bazel_version: "5_4_0"
           - example: pkg_manifest_minimal
             bazel_version: .bazelversion
           - example: pkg_manifest_minimal
-            bazel_version: 5.4.0
+            bazel_version: "5_4_0"
           - example: vapor_example
             bazel_version: .bazelversion
     runs-on: ubuntu-22.04

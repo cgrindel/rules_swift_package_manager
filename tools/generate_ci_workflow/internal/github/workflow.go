@@ -32,6 +32,8 @@ type Schedule struct {
 type Job struct {
 	Strategy Strategy          `yaml:"strategy,omitempty"`
 	RunsOn   string            `yaml:"runs-on"`
+	Needs    []string          `yaml:"needs,omitempty"`
+	If       string            `yaml:"if,omitempty"`
 	Env      map[string]string `yaml:"env,omitempty"`
 	Steps    []Step            `yaml:"steps"`
 }
