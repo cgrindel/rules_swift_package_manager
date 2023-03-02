@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"os"
 	"os/signal"
@@ -17,6 +18,18 @@ func main() {
 }
 
 func run(ctx context.Context, stderr *os.File) error {
-	fmt.Printf("MADE IT")
+	var (
+		templatePath string
+	)
+	flag.Usage = func() {
+		fmt.Fprint(flag.CommandLine.Output(), `usage: bazel run //tools/generate_ci_workflow -- -template <template_path>
+
+This utility generates a new GitHub actions workflow file for this project.
+
+`)
+		flag.PrintDefaults()
+	}
+	flag.StringVar(&templatePath, "template", "", "path to the template file")
+
 	return nil
 }
