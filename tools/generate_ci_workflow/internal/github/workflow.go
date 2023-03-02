@@ -37,11 +37,11 @@ type Job struct {
 }
 
 type Step struct {
-	Uses  string            `yaml:"uses"`
-	With  map[string]string `yaml:"with"`
-	Name  string            `yaml:"name"`
-	Shell string            `yaml:"shell"`
-	Run   string            `yaml:"run"`
+	Uses  string            `yaml:"uses,omitempty"`
+	With  map[string]string `yaml:"with,omitempty"`
+	Name  string            `yaml:"name,omitempty"`
+	Shell string            `yaml:"shell,omitempty"`
+	Run   string            `yaml:"run,omitempty"`
 }
 
 type Strategy struct {
@@ -49,8 +49,8 @@ type Strategy struct {
 }
 
 type SBMatrixStrategy struct {
-	Example      []string          `yaml:"example"`
-	BazelVersion []string          `yaml:"bazel_version"`
+	Example      []string          `yaml:"example,omitempty"`
+	BazelVersion []string          `yaml:"bazel_version,omitempty"`
 	Include      []SBMatrixInclude `yaml:"include,omitempty"`
 }
 

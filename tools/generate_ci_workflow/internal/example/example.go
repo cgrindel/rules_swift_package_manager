@@ -6,9 +6,10 @@ const MacOS = "macos"
 const LinuxOS = "linux"
 
 type Example struct {
-	Name     string   `json:"name"`
-	OSS      []string `json:"oss"`
-	Versions []string `json:"versions"`
+	Name          string   `json:"name"`
+	OSS           []string `json:"oss"`
+	Versions      []string `json:"versions"`
+	CleanVersions []string `json:"clean_versions"`
 }
 
 func NewExamplesFromJSON(b []byte) ([]Example, error) {

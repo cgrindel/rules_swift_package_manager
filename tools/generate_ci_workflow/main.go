@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"flag"
 	"fmt"
@@ -10,6 +11,7 @@ import (
 	"github.com/cgrindel/swift_bazel/tools/generate_ci_workflow/internal/example"
 	"github.com/cgrindel/swift_bazel/tools/generate_ci_workflow/internal/github"
 	"golang.org/x/exp/slices"
+	"gopkg.in/yaml.v3"
 )
 
 const macOSIntTestMatrixKey = "macos_int_test_matrix"
@@ -41,11 +43,12 @@ This utility generates a new GitHub actions workflow file for this project.
 `)
 		flag.PrintDefaults()
 	}
+	flag.Parse()
 
 	// Read the workflow YAML
 	workflowYAML, err := os.ReadFile(templatePath)
 	if err != nil {
-		return err
+		return fmt.Errorf("could not read template at '%s': %w", templatePath, err)
 	}
 	workflow, err := github.NewWorkflowFromYAML(workflowYAML)
 	if err != nil {
@@ -55,7 +58,7 @@ This utility generates a new GitHub actions workflow file for this project.
 	// Read the example JSON
 	exampleJSON, err := os.ReadFile(exampleJSONPath)
 	if err != nil {
-		return err
+		return fmt.Errorf("could not read example JSON at '%s': %w", exampleJSONPath, err)
 	}
 	examples, err := example.NewExamplesFromJSON(exampleJSON)
 	if err != nil {
@@ -63,20 +66,43 @@ This utility generates a new GitHub actions workflow file for this project.
 	}
 
 	// Set up the macOS matrix
-	macosIntTestMatrix, ok := workflow.Jobs[macOSIntTestMatrixKey]
-	if !ok {
-		return fmt.Errorf("Did not find '%' job.", macOSIntTestMatrixKey)
-	}
+	// macosIntTestMatrix, ok := workflow.Jobs[macOSIntTestMatrixKey]
+	// if !ok {
+	// 	return fmt.Errorf("Did not find '%' job.", macOSIntTestMatrixKey)
+	// }
+	// updateMatrix(&macosIntTestMatrix.Strategy.Matrix, macOSExamples)
 	macOSExamples := filterExamplesByOS(examples, example.MacOS)
-	updateMatrix(&macosIntTestMatrix, macOSExamples)
+	if err := updateJob(workflow.Jobs, macOSIntTestMatrixKey, macOSExamples); err != nil {
+		return err
+	}
 
 	// Set up the Ubuntu matrix
-	ubuntuIntTestMatrix, ok := workflow.Jobs[ubuntuIntTestMatrixKey]
-	if !ok {
-		return fmt.Errorf("Did not find '%' job.", ubuntuIntTestMatrixKey)
-	}
+	// ubuntuIntTestMatrix, ok := workflow.Jobs[ubuntuIntTestMatrixKey]
+	// if !ok {
+	// 	return fmt.Errorf("Did not find '%' job.", ubuntuIntTestMatrixKey)
+	// }
+	// ubuntuExamples := filterExamplesByOS(examples, example.LinuxOS)
+	// updateMatrix(&ubuntuIntTestMatrix.Strategy.Matrix, ubuntuExamples)
 	ubuntuExamples := filterExamplesByOS(examples, example.LinuxOS)
-	updateMatrix(&ubuntuIntTestMatrix, ubuntuExamples)
+	if err := updateJob(workflow.Jobs, ubuntuIntTestMatrixKey, ubuntuExamples); err != nil {
+		return err
+	}
+
+	// Write the output file
+	// outputYAML, err := yaml.Marshal(&workflow)
+	var outBuf bytes.Buffer
+	if _, err := outBuf.WriteString(hdrMsg); err != nil {
+		return err
+	}
+	yamlEncoder := yaml.NewEncoder(&outBuf)
+	yamlEncoder.SetIndent(2)
+	err = yamlEncoder.Encode(&workflow)
+	if err != nil {
+		return err
+	}
+	if err := os.WriteFile(outputPath, outBuf.Bytes(), 0666); err != nil {
+		return fmt.Errorf("failed to write output YAML to '%s': %w", outputPath, err)
+	}
 
 	return nil
 }
@@ -91,12 +117,36 @@ func filterExamplesByOS(examples []example.Example, os string) []example.Example
 	return result
 }
 
-func updateMatrix(j *github.Job, examples []example.Example) {
-	include := j.Strategy.Matrix.Include
+func updateJob(jobs map[string]github.Job, key string, examples []example.Example) error {
+	job, ok := jobs[key]
+	if !ok {
+		return fmt.Errorf("Did not find '%' job.", key)
+	}
+	matrix := job.Strategy.Matrix
+	updateMatrix(&matrix, examples)
+	job.Strategy.Matrix = matrix
+	jobs[key] = job
+
+	return nil
+}
+
+func updateMatrix(m *github.SBMatrixStrategy, examples []example.Example) {
+	newM := github.SBMatrixStrategy{}
 	for _, ex := range examples {
-		for _, ver := range ex.Versions {
+		for _, ver := range ex.CleanVersions {
 			inc := github.SBMatrixInclude{Example: ex.Name, BazelVersion: ver}
-			include = append(include, inc)
+			newM.Include = append(newM.Include, inc)
 		}
 	}
+	*m = newM
 }
+
+const hdrMsg = `# This file is processed by //tools/generate_ci_workflow.  Specifically, the
+# matrix strategy sections for the integration test matrix jobs are updated with
+# the values from //examples:json.
+#
+# Note:
+# - Modification to values outside of the matrix strategy sections should 
+#   persist.
+# - Comments and custom formatting will be lost.
+`

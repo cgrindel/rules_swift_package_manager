@@ -13,6 +13,7 @@ def _new(name, oss, versions):
         name = name,
         oss = oss,
         versions = versions,
+        clean_versions = [v.removeprefix("//:") for v in versions],
     )
 
 def _test_name(example_name, version):
@@ -59,13 +60,22 @@ def _bazel_integration_test(ei):
 
 def _write_json_impl(ctx):
     json_str = json.encode_indent(_all)
-    out = ctx.actions.declare_file("{}.json".format(ctx.label.name))
+    out_filename = ctx.attr.out
+    if out_filename == "":
+        out_filename = "{}.json".format(ctx.label.name)
+    out = ctx.actions.declare_file(out_filename)
     ctx.actions.write(out, json_str)
     return [DefaultInfo(files = depset([out]))]
 
 _write_json = rule(
     implementation = _write_json_impl,
-    attrs = {},
+    attrs = {
+        "out": attr.string(
+            doc = """\
+The name of the output file. If not specified, the label name is used.\
+""",
+        ),
+    },
     doc = """\
 Write the information about the example integration tests to a JSON file.\
 """,
