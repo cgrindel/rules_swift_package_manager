@@ -57,6 +57,20 @@ def _bazel_integration_test(ei):
             workspace_path = ei.name,
         )
 
+def _write_json_impl(ctx):
+    json_str = json.encode_indent(_all)
+    out = ctx.actions.declare_file("{}.json".format(ctx.label.name))
+    ctx.actions.write(out, json_str)
+    return [DefaultInfo(files = depset([out]))]
+
+_write_json = rule(
+    implementation = _write_json_impl,
+    attrs = {},
+    doc = """\
+Write the information about the example integration tests to a JSON file.\
+""",
+)
+
 # The default timeout is "long".
 _default_timeout = "long"
 
@@ -120,4 +134,5 @@ example_infos = struct(
     bazel_integration_test = _bazel_integration_test,
     new = _new,
     test_name = _test_name,
+    write_json = _write_json,
 )
