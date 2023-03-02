@@ -42,6 +42,12 @@ def _bazel_integration_test(ei):
         },
         {"//conditions:default": ["@platforms//:incompatible"]},
     ))
+    timeout = _timeouts.get(ei.name, _default_timeout)
+    test_runner = ":test_runner"
+    workspace_files = integration_test_utils.glob_workspace_files(ei.name) + [
+        "//:local_repository_files",
+    ]
+    workspace_path = ei.name
     if versions_len == 1:
         version = ei.versions[0]
         bazel_integration_test(
@@ -49,59 +55,22 @@ def _bazel_integration_test(ei):
                 ei.name,
                 version,
             ),
-            timeout = _timeouts.get(
-                ei.name,
-                _default_timeout,
-            ),
             bazel_version = version,
-            # target_compatible_with = [
-            #     "@platforms//os:{}".format(os)
-            #     for os in ei.oss
-            # ],
-            # target_compatible_with = select({
-            #     "@platforms//os:{}".format(os): []
-            #     for os in ei.oss
-            # } + {
-            #     "//conditions:default": ["@platforms//:incompatible"],
-            # }),
-            # target_compatible_with = select(dicts.add(
-            #     {
-            #         "@platforms//os:{}".format(os): []
-            #         for os in ei.oss
-            #     },
-            #     "//conditions:default" = ["@platforms//:incompatible"],
-            # )),
+            timeout = timeout,
             target_compatible_with = target_compatible_with,
-            test_runner = ":test_runner",
-            workspace_files = integration_test_utils.glob_workspace_files(ei.name) + [
-                "//:local_repository_files",
-            ],
-            workspace_path = ei.name,
+            test_runner = test_runner,
+            workspace_files = workspace_files,
+            workspace_path = workspace_path,
         )
     elif versions_len > 1:
         bazel_integration_tests(
             name = ei.name + "_test",
-            timeout = _timeouts.get(ei.name, _default_timeout),
             bazel_versions = ei.versions,
-            # target_compatible_with = select({
-            #     "@platforms//os:{}".format(os): []
-            #     for os in ei.oss
-            # } + {
-            #     "//conditions:default": ["@platforms//:incompatible"],
-            # }),
-            # target_compatible_with = select(dicts.add(
-            #     {
-            #         "@platforms//os:{}".format(os): []
-            #         for os in ei.oss
-            #     },
-            #     "//conditions:default" = ["@platforms//:incompatible"],
-            # )),
+            timeout = timeout,
             target_compatible_with = target_compatible_with,
-            test_runner = ":test_runner",
-            workspace_files = integration_test_utils.glob_workspace_files(ei.name) + [
-                "//:local_repository_files",
-            ],
-            workspace_path = ei.name,
+            test_runner = test_runner,
+            workspace_files = workspace_files,
+            workspace_path = workspace_path,
         )
 
 def _write_json_impl(ctx):
