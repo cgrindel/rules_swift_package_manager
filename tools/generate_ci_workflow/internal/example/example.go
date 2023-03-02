@@ -2,9 +2,12 @@ package example
 
 import "encoding/json"
 
+const MacOS = "macos"
+const LinuxOS = "linux"
+
 type Example struct {
 	Name     string   `json:"name"`
-	Oss      []string `json:"oss"`
+	OSS      []string `json:"oss"`
 	Versions []string `json:"versions"`
 }
 

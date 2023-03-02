@@ -55,6 +55,6 @@ type SBMatrixStrategy struct {
 }
 
 type SBMatrixInclude struct {
-	Example      string `yaml:"exampletype"`
+	Example      string `yaml:"example"`
 	BazelVersion string `yaml:"bazel_version"`
 }
