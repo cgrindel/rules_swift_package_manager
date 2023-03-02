@@ -1,0 +1,17 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+bzlformat_pkg(name = "bzlformat")
+
+go_library(
+    name = "generate_ci_workflow_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/cgrindel/swift_bazel/tools/generate_ci_workflow",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "generate_ci_workflow",
+    embed = [":generate_ci_workflow_lib"],
+    visibility = ["//visibility:public"],
+)
