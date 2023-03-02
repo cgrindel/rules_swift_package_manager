@@ -9,11 +9,21 @@ load(
 load("//:bazel_versions.bzl", "CURRENT_BAZEL_VERSION", "SUPPORTED_BAZEL_VERSIONS")
 
 def _new(name, oss, versions):
+    # Remove the Bazel label prefix if it exists.
+    # Replace periods (.) with underscore (_), after the first character
+    clean_versions = [
+        v.removeprefix("//:")
+        for v in versions
+    ]
+    clean_versions = [
+        v[0] + v[1:].replace(".", "_")
+        for v in clean_versions
+    ]
     return struct(
         name = name,
         oss = oss,
         versions = versions,
-        clean_versions = [v.removeprefix("//:") for v in versions],
+        clean_versions = clean_versions,
     )
 
 def _test_name(example_name, version):
