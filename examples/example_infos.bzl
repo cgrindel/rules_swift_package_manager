@@ -1,5 +1,6 @@
 """Module exposing information about the example integration tests."""
 
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load(
     "@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "bazel_integration_test",
@@ -34,6 +35,13 @@ def _test_name(example_name, version):
 
 def _bazel_integration_test(ei):
     versions_len = len(ei.versions)
+    target_compatible_with = select(dicts.add(
+        {
+            "@platforms//os:{}".format(os): []
+            for os in ei.oss
+        },
+        {"//conditions:default": ["@platforms//:incompatible"]},
+    ))
     if versions_len == 1:
         version = ei.versions[0]
         bazel_integration_test(
@@ -46,10 +54,24 @@ def _bazel_integration_test(ei):
                 _default_timeout,
             ),
             bazel_version = version,
-            target_compatible_with = [
-                "@platforms//os:{}".format(os)
-                for os in ei.oss
-            ],
+            # target_compatible_with = [
+            #     "@platforms//os:{}".format(os)
+            #     for os in ei.oss
+            # ],
+            # target_compatible_with = select({
+            #     "@platforms//os:{}".format(os): []
+            #     for os in ei.oss
+            # } + {
+            #     "//conditions:default": ["@platforms//:incompatible"],
+            # }),
+            # target_compatible_with = select(dicts.add(
+            #     {
+            #         "@platforms//os:{}".format(os): []
+            #         for os in ei.oss
+            #     },
+            #     "//conditions:default" = ["@platforms//:incompatible"],
+            # )),
+            target_compatible_with = target_compatible_with,
             test_runner = ":test_runner",
             workspace_files = integration_test_utils.glob_workspace_files(ei.name) + [
                 "//:local_repository_files",
@@ -61,6 +83,20 @@ def _bazel_integration_test(ei):
             name = ei.name + "_test",
             timeout = _timeouts.get(ei.name, _default_timeout),
             bazel_versions = ei.versions,
+            # target_compatible_with = select({
+            #     "@platforms//os:{}".format(os): []
+            #     for os in ei.oss
+            # } + {
+            #     "//conditions:default": ["@platforms//:incompatible"],
+            # }),
+            # target_compatible_with = select(dicts.add(
+            #     {
+            #         "@platforms//os:{}".format(os): []
+            #         for os in ei.oss
+            #     },
+            #     "//conditions:default" = ["@platforms//:incompatible"],
+            # )),
+            target_compatible_with = target_compatible_with,
             test_runner = ":test_runner",
             workspace_files = integration_test_utils.glob_workspace_files(ei.name) + [
                 "//:local_repository_files",
