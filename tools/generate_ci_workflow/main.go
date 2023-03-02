@@ -19,17 +19,19 @@ func main() {
 
 func run(ctx context.Context, stderr *os.File) error {
 	var (
-		templatePath string
+		templatePath    string
+		exampleJSONPath string
 	)
+	flag.StringVar(&templatePath, "template", "", "path to the template file")
+	flag.StringVar(&exampleJSONPath, "example_json", "", "path to the examples JSON file")
 	flag.Usage = func() {
-		fmt.Fprint(flag.CommandLine.Output(), `usage: bazel run //tools/generate_ci_workflow -- -template <template_path>
+		fmt.Fprint(flag.CommandLine.Output(), `usage: bazel run //tools/generate_ci_workflow -- -template <template_path> -example_json <example_json>
 
 This utility generates a new GitHub actions workflow file for this project.
 
 `)
 		flag.PrintDefaults()
 	}
-	flag.StringVar(&templatePath, "template", "", "path to the template file")
 
 	return nil
 }

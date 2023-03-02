@@ -1,0 +1,17 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "example",
+    srcs = ["example.go"],
+    importpath = "github.com/cgrindel/swift_bazel/tools/generate_ci_workflow/internal/example",
+    visibility = ["//tools/generate_ci_workflow:__subpackages__"],
+)
+
+go_test(
+    name = "example_test",
+    srcs = ["example_test.go"],
+    deps = [
+        ":example",
+        "@com_github_stretchr_testify//assert:go_default_library",
+    ],
+)
