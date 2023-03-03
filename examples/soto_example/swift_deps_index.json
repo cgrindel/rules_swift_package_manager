@@ -1,0 +1,6926 @@
+{
+  "direct_dep_identities": [
+    "soto"
+  ],
+  "modules": [
+    {
+      "name": "AsyncHTTPClient",
+      "c99name": "AsyncHTTPClient",
+      "src_type": "swift",
+      "label": "@swiftpkg_async_http_client//:Sources_AsyncHTTPClient",
+      "package_identity": "async-http-client",
+      "product_memberships": [
+        "AsyncHTTPClient"
+      ]
+    },
+    {
+      "name": "CAsyncHTTPClient",
+      "c99name": "CAsyncHTTPClient",
+      "src_type": "clang",
+      "label": "@swiftpkg_async_http_client//:Sources_CAsyncHTTPClient",
+      "package_identity": "async-http-client",
+      "product_memberships": [
+        "AsyncHTTPClient"
+      ]
+    },
+    {
+      "name": "JMESPath",
+      "c99name": "JMESPath",
+      "src_type": "swift",
+      "label": "@swiftpkg_jmespath.swift//:Sources_JMESPath",
+      "package_identity": "jmespath.swift",
+      "product_memberships": [
+        "JMESPath"
+      ]
+    },
+    {
+      "name": "SotoACMPCA",
+      "c99name": "SotoACMPCA",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ACMPCA_SotoACMPCA",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoACMPCA"
+      ]
+    },
+    {
+      "name": "SotoACM",
+      "c99name": "SotoACM",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ACM_SotoACM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoACM"
+      ]
+    },
+    {
+      "name": "SotoAPIGateway",
+      "c99name": "SotoAPIGateway",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_APIGateway_SotoAPIGateway",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAPIGateway"
+      ]
+    },
+    {
+      "name": "SotoARCZonalShift",
+      "c99name": "SotoARCZonalShift",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ARCZonalShift_SotoARCZonalShift",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoARCZonalShift"
+      ]
+    },
+    {
+      "name": "SotoAccessAnalyzer",
+      "c99name": "SotoAccessAnalyzer",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_AccessAnalyzer_SotoAccessAnalyzer",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAccessAnalyzer"
+      ]
+    },
+    {
+      "name": "SotoAccount",
+      "c99name": "SotoAccount",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Account_SotoAccount",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAccount"
+      ]
+    },
+    {
+      "name": "SotoAlexaForBusiness",
+      "c99name": "SotoAlexaForBusiness",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_AlexaForBusiness_SotoAlexaForBusiness",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAlexaForBusiness"
+      ]
+    },
+    {
+      "name": "SotoAmp",
+      "c99name": "SotoAmp",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Amp_SotoAmp",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAmp"
+      ]
+    },
+    {
+      "name": "SotoAmplifyBackend",
+      "c99name": "SotoAmplifyBackend",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_AmplifyBackend_SotoAmplifyBackend",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAmplifyBackend"
+      ]
+    },
+    {
+      "name": "SotoAmplifyUIBuilder",
+      "c99name": "SotoAmplifyUIBuilder",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_AmplifyUIBuilder_SotoAmplifyUIBuilder",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAmplifyUIBuilder"
+      ]
+    },
+    {
+      "name": "SotoAmplify",
+      "c99name": "SotoAmplify",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Amplify_SotoAmplify",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAmplify"
+      ]
+    },
+    {
+      "name": "SotoApiGatewayManagementApi",
+      "c99name": "SotoApiGatewayManagementApi",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ApiGatewayManagementApi_SotoApiGatewayManagementApi",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoApiGatewayManagementApi"
+      ]
+    },
+    {
+      "name": "SotoApiGatewayV2",
+      "c99name": "SotoApiGatewayV2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ApiGatewayV2_SotoApiGatewayV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoApiGatewayV2"
+      ]
+    },
+    {
+      "name": "SotoAppConfigData",
+      "c99name": "SotoAppConfigData",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_AppConfigData_SotoAppConfigData",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAppConfigData"
+      ]
+    },
+    {
+      "name": "SotoAppConfig",
+      "c99name": "SotoAppConfig",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_AppConfig_SotoAppConfig",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAppConfig"
+      ]
+    },
+    {
+      "name": "SotoAppIntegrations",
+      "c99name": "SotoAppIntegrations",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_AppIntegrations_SotoAppIntegrations",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAppIntegrations"
+      ]
+    },
+    {
+      "name": "SotoAppMesh",
+      "c99name": "SotoAppMesh",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_AppMesh_SotoAppMesh",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAppMesh"
+      ]
+    },
+    {
+      "name": "SotoAppRunner",
+      "c99name": "SotoAppRunner",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_AppRunner_SotoAppRunner",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAppRunner"
+      ]
+    },
+    {
+      "name": "SotoAppStream",
+      "c99name": "SotoAppStream",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_AppStream_SotoAppStream",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAppStream"
+      ]
+    },
+    {
+      "name": "SotoAppSync",
+      "c99name": "SotoAppSync",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_AppSync_SotoAppSync",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAppSync"
+      ]
+    },
+    {
+      "name": "SotoAppflow",
+      "c99name": "SotoAppflow",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Appflow_SotoAppflow",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAppflow"
+      ]
+    },
+    {
+      "name": "SotoApplicationAutoScaling",
+      "c99name": "SotoApplicationAutoScaling",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ApplicationAutoScaling_SotoApplicationAutoScaling",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoApplicationAutoScaling"
+      ]
+    },
+    {
+      "name": "SotoApplicationCostProfiler",
+      "c99name": "SotoApplicationCostProfiler",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ApplicationCostProfiler_SotoApplicationCostProfiler",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoApplicationCostProfiler"
+      ]
+    },
+    {
+      "name": "SotoApplicationDiscoveryService",
+      "c99name": "SotoApplicationDiscoveryService",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ApplicationDiscoveryService_SotoApplicationDiscoveryService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoApplicationDiscoveryService"
+      ]
+    },
+    {
+      "name": "SotoApplicationInsights",
+      "c99name": "SotoApplicationInsights",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ApplicationInsights_SotoApplicationInsights",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoApplicationInsights"
+      ]
+    },
+    {
+      "name": "SotoAthena",
+      "c99name": "SotoAthena",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Athena_SotoAthena",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAthena"
+      ]
+    },
+    {
+      "name": "SotoAuditManager",
+      "c99name": "SotoAuditManager",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_AuditManager_SotoAuditManager",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAuditManager"
+      ]
+    },
+    {
+      "name": "SotoAutoScalingPlans",
+      "c99name": "SotoAutoScalingPlans",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_AutoScalingPlans_SotoAutoScalingPlans",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAutoScalingPlans"
+      ]
+    },
+    {
+      "name": "SotoAutoScaling",
+      "c99name": "SotoAutoScaling",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_AutoScaling_SotoAutoScaling",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAutoScaling"
+      ]
+    },
+    {
+      "name": "SotoBackupGateway",
+      "c99name": "SotoBackupGateway",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_BackupGateway_SotoBackupGateway",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoBackupGateway"
+      ]
+    },
+    {
+      "name": "SotoBackupStorage",
+      "c99name": "SotoBackupStorage",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_BackupStorage_SotoBackupStorage",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoBackupStorage"
+      ]
+    },
+    {
+      "name": "SotoBackup",
+      "c99name": "SotoBackup",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Backup_SotoBackup",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoBackup"
+      ]
+    },
+    {
+      "name": "SotoBatch",
+      "c99name": "SotoBatch",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Batch_SotoBatch",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoBatch"
+      ]
+    },
+    {
+      "name": "SotoBillingconductor",
+      "c99name": "SotoBillingconductor",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Billingconductor_SotoBillingconductor",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoBillingconductor"
+      ]
+    },
+    {
+      "name": "SotoBraket",
+      "c99name": "SotoBraket",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Braket_SotoBraket",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoBraket"
+      ]
+    },
+    {
+      "name": "SotoBudgets",
+      "c99name": "SotoBudgets",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Budgets_SotoBudgets",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoBudgets"
+      ]
+    },
+    {
+      "name": "SotoChimeSDKIdentity",
+      "c99name": "SotoChimeSDKIdentity",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ChimeSDKIdentity_SotoChimeSDKIdentity",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoChimeSDKIdentity"
+      ]
+    },
+    {
+      "name": "SotoChimeSDKMediaPipelines",
+      "c99name": "SotoChimeSDKMediaPipelines",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ChimeSDKMediaPipelines_SotoChimeSDKMediaPipelines",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoChimeSDKMediaPipelines"
+      ]
+    },
+    {
+      "name": "SotoChimeSDKMeetings",
+      "c99name": "SotoChimeSDKMeetings",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ChimeSDKMeetings_SotoChimeSDKMeetings",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoChimeSDKMeetings"
+      ]
+    },
+    {
+      "name": "SotoChimeSDKMessaging",
+      "c99name": "SotoChimeSDKMessaging",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ChimeSDKMessaging_SotoChimeSDKMessaging",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoChimeSDKMessaging"
+      ]
+    },
+    {
+      "name": "SotoChimeSDKVoice",
+      "c99name": "SotoChimeSDKVoice",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ChimeSDKVoice_SotoChimeSDKVoice",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoChimeSDKVoice"
+      ]
+    },
+    {
+      "name": "SotoChime",
+      "c99name": "SotoChime",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Chime_SotoChime",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoChime"
+      ]
+    },
+    {
+      "name": "SotoCleanRooms",
+      "c99name": "SotoCleanRooms",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CleanRooms_SotoCleanRooms",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCleanRooms"
+      ]
+    },
+    {
+      "name": "SotoCloud9",
+      "c99name": "SotoCloud9",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Cloud9_SotoCloud9",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCloud9"
+      ]
+    },
+    {
+      "name": "SotoCloudControl",
+      "c99name": "SotoCloudControl",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CloudControl_SotoCloudControl",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCloudControl"
+      ]
+    },
+    {
+      "name": "SotoCloudDirectory",
+      "c99name": "SotoCloudDirectory",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CloudDirectory_SotoCloudDirectory",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCloudDirectory"
+      ]
+    },
+    {
+      "name": "SotoCloudFormation",
+      "c99name": "SotoCloudFormation",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CloudFormation_SotoCloudFormation",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCloudFormation"
+      ]
+    },
+    {
+      "name": "SotoCloudFront",
+      "c99name": "SotoCloudFront",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CloudFront_SotoCloudFront",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCloudFront"
+      ]
+    },
+    {
+      "name": "SotoCloudHSMV2",
+      "c99name": "SotoCloudHSMV2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CloudHSMV2_SotoCloudHSMV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCloudHSMV2"
+      ]
+    },
+    {
+      "name": "SotoCloudHSM",
+      "c99name": "SotoCloudHSM",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CloudHSM_SotoCloudHSM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCloudHSM"
+      ]
+    },
+    {
+      "name": "SotoCloudSearchDomain",
+      "c99name": "SotoCloudSearchDomain",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CloudSearchDomain_SotoCloudSearchDomain",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCloudSearchDomain"
+      ]
+    },
+    {
+      "name": "SotoCloudSearch",
+      "c99name": "SotoCloudSearch",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CloudSearch_SotoCloudSearch",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCloudSearch"
+      ]
+    },
+    {
+      "name": "SotoCloudTrail",
+      "c99name": "SotoCloudTrail",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CloudTrail_SotoCloudTrail",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCloudTrail"
+      ]
+    },
+    {
+      "name": "SotoCloudWatchEvents",
+      "c99name": "SotoCloudWatchEvents",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CloudWatchEvents_SotoCloudWatchEvents",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCloudWatchEvents"
+      ]
+    },
+    {
+      "name": "SotoCloudWatchLogs",
+      "c99name": "SotoCloudWatchLogs",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CloudWatchLogs_SotoCloudWatchLogs",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCloudWatchLogs"
+      ]
+    },
+    {
+      "name": "SotoCloudWatch",
+      "c99name": "SotoCloudWatch",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CloudWatch_SotoCloudWatch",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCloudWatch"
+      ]
+    },
+    {
+      "name": "SotoCodeArtifact",
+      "c99name": "SotoCodeArtifact",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CodeArtifact_SotoCodeArtifact",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCodeArtifact"
+      ]
+    },
+    {
+      "name": "SotoCodeBuild",
+      "c99name": "SotoCodeBuild",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CodeBuild_SotoCodeBuild",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCodeBuild"
+      ]
+    },
+    {
+      "name": "SotoCodeCatalyst",
+      "c99name": "SotoCodeCatalyst",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CodeCatalyst_SotoCodeCatalyst",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCodeCatalyst"
+      ]
+    },
+    {
+      "name": "SotoCodeCommit",
+      "c99name": "SotoCodeCommit",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CodeCommit_SotoCodeCommit",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCodeCommit"
+      ]
+    },
+    {
+      "name": "SotoCodeDeploy",
+      "c99name": "SotoCodeDeploy",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CodeDeploy_SotoCodeDeploy",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCodeDeploy"
+      ]
+    },
+    {
+      "name": "SotoCodeGuruProfiler",
+      "c99name": "SotoCodeGuruProfiler",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CodeGuruProfiler_SotoCodeGuruProfiler",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCodeGuruProfiler"
+      ]
+    },
+    {
+      "name": "SotoCodeGuruReviewer",
+      "c99name": "SotoCodeGuruReviewer",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CodeGuruReviewer_SotoCodeGuruReviewer",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCodeGuruReviewer"
+      ]
+    },
+    {
+      "name": "SotoCodePipeline",
+      "c99name": "SotoCodePipeline",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CodePipeline_SotoCodePipeline",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCodePipeline"
+      ]
+    },
+    {
+      "name": "SotoCodeStarConnections",
+      "c99name": "SotoCodeStarConnections",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CodeStarConnections_SotoCodeStarConnections",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCodeStarConnections"
+      ]
+    },
+    {
+      "name": "SotoCodeStarNotifications",
+      "c99name": "SotoCodeStarNotifications",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CodeStarNotifications_SotoCodeStarNotifications",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCodeStarNotifications"
+      ]
+    },
+    {
+      "name": "SotoCodeStar",
+      "c99name": "SotoCodeStar",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CodeStar_SotoCodeStar",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCodeStar"
+      ]
+    },
+    {
+      "name": "SotoCognitoIdentityProvider",
+      "c99name": "SotoCognitoIdentityProvider",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CognitoIdentityProvider_SotoCognitoIdentityProvider",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCognitoIdentityProvider"
+      ]
+    },
+    {
+      "name": "SotoCognitoSync",
+      "c99name": "SotoCognitoSync",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CognitoSync_SotoCognitoSync",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCognitoSync"
+      ]
+    },
+    {
+      "name": "SotoComprehendMedical",
+      "c99name": "SotoComprehendMedical",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ComprehendMedical_SotoComprehendMedical",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoComprehendMedical"
+      ]
+    },
+    {
+      "name": "SotoComprehend",
+      "c99name": "SotoComprehend",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Comprehend_SotoComprehend",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoComprehend"
+      ]
+    },
+    {
+      "name": "SotoComputeOptimizer",
+      "c99name": "SotoComputeOptimizer",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ComputeOptimizer_SotoComputeOptimizer",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoComputeOptimizer"
+      ]
+    },
+    {
+      "name": "SotoConfigService",
+      "c99name": "SotoConfigService",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ConfigService_SotoConfigService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoConfigService"
+      ]
+    },
+    {
+      "name": "SotoConnectCampaigns",
+      "c99name": "SotoConnectCampaigns",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ConnectCampaigns_SotoConnectCampaigns",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoConnectCampaigns"
+      ]
+    },
+    {
+      "name": "SotoConnectCases",
+      "c99name": "SotoConnectCases",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ConnectCases_SotoConnectCases",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoConnectCases"
+      ]
+    },
+    {
+      "name": "SotoConnectContactLens",
+      "c99name": "SotoConnectContactLens",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ConnectContactLens_SotoConnectContactLens",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoConnectContactLens"
+      ]
+    },
+    {
+      "name": "SotoConnectParticipant",
+      "c99name": "SotoConnectParticipant",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ConnectParticipant_SotoConnectParticipant",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoConnectParticipant"
+      ]
+    },
+    {
+      "name": "SotoConnect",
+      "c99name": "SotoConnect",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Connect_SotoConnect",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoConnect"
+      ]
+    },
+    {
+      "name": "SotoControlTower",
+      "c99name": "SotoControlTower",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ControlTower_SotoControlTower",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoControlTower"
+      ]
+    },
+    {
+      "name": "SotoCostAndUsageReportService",
+      "c99name": "SotoCostAndUsageReportService",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CostAndUsageReportService_SotoCostAndUsageReportService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCostAndUsageReportService"
+      ]
+    },
+    {
+      "name": "SotoCostExplorer",
+      "c99name": "SotoCostExplorer",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CostExplorer_SotoCostExplorer",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCostExplorer"
+      ]
+    },
+    {
+      "name": "SotoCustomerProfiles",
+      "c99name": "SotoCustomerProfiles",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CustomerProfiles_SotoCustomerProfiles",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCustomerProfiles"
+      ]
+    },
+    {
+      "name": "SotoDAX",
+      "c99name": "SotoDAX",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_DAX_SotoDAX",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDAX"
+      ]
+    },
+    {
+      "name": "SotoDLM",
+      "c99name": "SotoDLM",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_DLM_SotoDLM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDLM"
+      ]
+    },
+    {
+      "name": "SotoDataBrew",
+      "c99name": "SotoDataBrew",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_DataBrew_SotoDataBrew",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDataBrew"
+      ]
+    },
+    {
+      "name": "SotoDataExchange",
+      "c99name": "SotoDataExchange",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_DataExchange_SotoDataExchange",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDataExchange"
+      ]
+    },
+    {
+      "name": "SotoDataPipeline",
+      "c99name": "SotoDataPipeline",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_DataPipeline_SotoDataPipeline",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDataPipeline"
+      ]
+    },
+    {
+      "name": "SotoDataSync",
+      "c99name": "SotoDataSync",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_DataSync_SotoDataSync",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDataSync"
+      ]
+    },
+    {
+      "name": "SotoDatabaseMigrationService",
+      "c99name": "SotoDatabaseMigrationService",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_DatabaseMigrationService_SotoDatabaseMigrationService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDatabaseMigrationService"
+      ]
+    },
+    {
+      "name": "SotoDetective",
+      "c99name": "SotoDetective",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Detective_SotoDetective",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDetective"
+      ]
+    },
+    {
+      "name": "SotoDevOpsGuru",
+      "c99name": "SotoDevOpsGuru",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_DevOpsGuru_SotoDevOpsGuru",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDevOpsGuru"
+      ]
+    },
+    {
+      "name": "SotoDeviceFarm",
+      "c99name": "SotoDeviceFarm",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_DeviceFarm_SotoDeviceFarm",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDeviceFarm"
+      ]
+    },
+    {
+      "name": "SotoDirectConnect",
+      "c99name": "SotoDirectConnect",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_DirectConnect_SotoDirectConnect",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDirectConnect"
+      ]
+    },
+    {
+      "name": "SotoDirectoryService",
+      "c99name": "SotoDirectoryService",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_DirectoryService_SotoDirectoryService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDirectoryService"
+      ]
+    },
+    {
+      "name": "SotoDocDBElastic",
+      "c99name": "SotoDocDBElastic",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_DocDBElastic_SotoDocDBElastic",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDocDBElastic"
+      ]
+    },
+    {
+      "name": "SotoDocDB",
+      "c99name": "SotoDocDB",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_DocDB_SotoDocDB",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDocDB"
+      ]
+    },
+    {
+      "name": "SotoDrs",
+      "c99name": "SotoDrs",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Drs_SotoDrs",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDrs"
+      ]
+    },
+    {
+      "name": "SotoDynamoDBStreams",
+      "c99name": "SotoDynamoDBStreams",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_DynamoDBStreams_SotoDynamoDBStreams",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDynamoDBStreams"
+      ]
+    },
+    {
+      "name": "SotoEBS",
+      "c99name": "SotoEBS",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_EBS_SotoEBS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoEBS"
+      ]
+    },
+    {
+      "name": "SotoEC2InstanceConnect",
+      "c99name": "SotoEC2InstanceConnect",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_EC2InstanceConnect_SotoEC2InstanceConnect",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoEC2InstanceConnect"
+      ]
+    },
+    {
+      "name": "SotoEC2",
+      "c99name": "SotoEC2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_EC2_SotoEC2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoEC2"
+      ]
+    },
+    {
+      "name": "SotoECRPublic",
+      "c99name": "SotoECRPublic",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ECRPublic_SotoECRPublic",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoECRPublic"
+      ]
+    },
+    {
+      "name": "SotoECR",
+      "c99name": "SotoECR",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ECR_SotoECR",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoECR"
+      ]
+    },
+    {
+      "name": "SotoECS",
+      "c99name": "SotoECS",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ECS_SotoECS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoECS"
+      ]
+    },
+    {
+      "name": "SotoEFS",
+      "c99name": "SotoEFS",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_EFS_SotoEFS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoEFS"
+      ]
+    },
+    {
+      "name": "SotoEKS",
+      "c99name": "SotoEKS",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_EKS_SotoEKS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoEKS"
+      ]
+    },
+    {
+      "name": "SotoEMRContainers",
+      "c99name": "SotoEMRContainers",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_EMRContainers_SotoEMRContainers",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoEMRContainers"
+      ]
+    },
+    {
+      "name": "SotoEMRServerless",
+      "c99name": "SotoEMRServerless",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_EMRServerless_SotoEMRServerless",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoEMRServerless"
+      ]
+    },
+    {
+      "name": "SotoEMR",
+      "c99name": "SotoEMR",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_EMR_SotoEMR",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoEMR"
+      ]
+    },
+    {
+      "name": "SotoElastiCache",
+      "c99name": "SotoElastiCache",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ElastiCache_SotoElastiCache",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoElastiCache"
+      ]
+    },
+    {
+      "name": "SotoElasticBeanstalk",
+      "c99name": "SotoElasticBeanstalk",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ElasticBeanstalk_SotoElasticBeanstalk",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoElasticBeanstalk"
+      ]
+    },
+    {
+      "name": "SotoElasticInference",
+      "c99name": "SotoElasticInference",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ElasticInference_SotoElasticInference",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoElasticInference"
+      ]
+    },
+    {
+      "name": "SotoElasticLoadBalancingV2",
+      "c99name": "SotoElasticLoadBalancingV2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ElasticLoadBalancingV2_SotoElasticLoadBalancingV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoElasticLoadBalancingV2"
+      ]
+    },
+    {
+      "name": "SotoElasticLoadBalancing",
+      "c99name": "SotoElasticLoadBalancing",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ElasticLoadBalancing_SotoElasticLoadBalancing",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoElasticLoadBalancing"
+      ]
+    },
+    {
+      "name": "SotoElasticTranscoder",
+      "c99name": "SotoElasticTranscoder",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ElasticTranscoder_SotoElasticTranscoder",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoElasticTranscoder"
+      ]
+    },
+    {
+      "name": "SotoElasticsearchService",
+      "c99name": "SotoElasticsearchService",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ElasticsearchService_SotoElasticsearchService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoElasticsearchService"
+      ]
+    },
+    {
+      "name": "SotoEventBridge",
+      "c99name": "SotoEventBridge",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_EventBridge_SotoEventBridge",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoEventBridge"
+      ]
+    },
+    {
+      "name": "SotoEvidently",
+      "c99name": "SotoEvidently",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Evidently_SotoEvidently",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoEvidently"
+      ]
+    },
+    {
+      "name": "SotoFIS",
+      "c99name": "SotoFIS",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_FIS_SotoFIS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoFIS"
+      ]
+    },
+    {
+      "name": "SotoFMS",
+      "c99name": "SotoFMS",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_FMS_SotoFMS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoFMS"
+      ]
+    },
+    {
+      "name": "SotoFSx",
+      "c99name": "SotoFSx",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_FSx_SotoFSx",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoFSx"
+      ]
+    },
+    {
+      "name": "SotoFinspaceData",
+      "c99name": "SotoFinspaceData",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_FinspaceData_SotoFinspaceData",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoFinspaceData"
+      ]
+    },
+    {
+      "name": "SotoFinspace",
+      "c99name": "SotoFinspace",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Finspace_SotoFinspace",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoFinspace"
+      ]
+    },
+    {
+      "name": "SotoFirehose",
+      "c99name": "SotoFirehose",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Firehose_SotoFirehose",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoFirehose"
+      ]
+    },
+    {
+      "name": "SotoForecast",
+      "c99name": "SotoForecast",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Forecast_SotoForecast",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoForecast"
+      ]
+    },
+    {
+      "name": "SotoForecastquery",
+      "c99name": "SotoForecastquery",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Forecastquery_SotoForecastquery",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoForecastquery"
+      ]
+    },
+    {
+      "name": "SotoFraudDetector",
+      "c99name": "SotoFraudDetector",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_FraudDetector_SotoFraudDetector",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoFraudDetector"
+      ]
+    },
+    {
+      "name": "SotoGameLift",
+      "c99name": "SotoGameLift",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_GameLift_SotoGameLift",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoGameLift"
+      ]
+    },
+    {
+      "name": "SotoGameSparks",
+      "c99name": "SotoGameSparks",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_GameSparks_SotoGameSparks",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoGameSparks"
+      ]
+    },
+    {
+      "name": "SotoGlacier",
+      "c99name": "SotoGlacier",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Glacier_SotoGlacier",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoGlacier"
+      ]
+    },
+    {
+      "name": "SotoGlobalAccelerator",
+      "c99name": "SotoGlobalAccelerator",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_GlobalAccelerator_SotoGlobalAccelerator",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoGlobalAccelerator"
+      ]
+    },
+    {
+      "name": "SotoGlue",
+      "c99name": "SotoGlue",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Glue_SotoGlue",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoGlue"
+      ]
+    },
+    {
+      "name": "SotoGrafana",
+      "c99name": "SotoGrafana",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Grafana_SotoGrafana",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoGrafana"
+      ]
+    },
+    {
+      "name": "SotoGreengrassV2",
+      "c99name": "SotoGreengrassV2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_GreengrassV2_SotoGreengrassV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoGreengrassV2"
+      ]
+    },
+    {
+      "name": "SotoGreengrass",
+      "c99name": "SotoGreengrass",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Greengrass_SotoGreengrass",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoGreengrass"
+      ]
+    },
+    {
+      "name": "SotoGroundStation",
+      "c99name": "SotoGroundStation",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_GroundStation_SotoGroundStation",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoGroundStation"
+      ]
+    },
+    {
+      "name": "SotoGuardDuty",
+      "c99name": "SotoGuardDuty",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_GuardDuty_SotoGuardDuty",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoGuardDuty"
+      ]
+    },
+    {
+      "name": "SotoHealthLake",
+      "c99name": "SotoHealthLake",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_HealthLake_SotoHealthLake",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoHealthLake"
+      ]
+    },
+    {
+      "name": "SotoHealth",
+      "c99name": "SotoHealth",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Health_SotoHealth",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoHealth"
+      ]
+    },
+    {
+      "name": "SotoHoneycode",
+      "c99name": "SotoHoneycode",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Honeycode_SotoHoneycode",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoHoneycode"
+      ]
+    },
+    {
+      "name": "SotoIAM",
+      "c99name": "SotoIAM",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IAM_SotoIAM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIAM"
+      ]
+    },
+    {
+      "name": "SotoIVS",
+      "c99name": "SotoIVS",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IVS_SotoIVS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIVS"
+      ]
+    },
+    {
+      "name": "SotoIdentityStore",
+      "c99name": "SotoIdentityStore",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IdentityStore_SotoIdentityStore",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIdentityStore"
+      ]
+    },
+    {
+      "name": "SotoImagebuilder",
+      "c99name": "SotoImagebuilder",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Imagebuilder_SotoImagebuilder",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoImagebuilder"
+      ]
+    },
+    {
+      "name": "SotoInspector2",
+      "c99name": "SotoInspector2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Inspector2_SotoInspector2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoInspector2"
+      ]
+    },
+    {
+      "name": "SotoInspector",
+      "c99name": "SotoInspector",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Inspector_SotoInspector",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoInspector"
+      ]
+    },
+    {
+      "name": "SotoIoT1ClickDevicesService",
+      "c99name": "SotoIoT1ClickDevicesService",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoT1ClickDevicesService_SotoIoT1ClickDevicesService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoT1ClickDevicesService"
+      ]
+    },
+    {
+      "name": "SotoIoT1ClickProjects",
+      "c99name": "SotoIoT1ClickProjects",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoT1ClickProjects_SotoIoT1ClickProjects",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoT1ClickProjects"
+      ]
+    },
+    {
+      "name": "SotoIoTAnalytics",
+      "c99name": "SotoIoTAnalytics",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoTAnalytics_SotoIoTAnalytics",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoTAnalytics"
+      ]
+    },
+    {
+      "name": "SotoIoTDataPlane",
+      "c99name": "SotoIoTDataPlane",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoTDataPlane_SotoIoTDataPlane",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoTDataPlane"
+      ]
+    },
+    {
+      "name": "SotoIoTDeviceAdvisor",
+      "c99name": "SotoIoTDeviceAdvisor",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoTDeviceAdvisor_SotoIoTDeviceAdvisor",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoTDeviceAdvisor"
+      ]
+    },
+    {
+      "name": "SotoIoTEventsData",
+      "c99name": "SotoIoTEventsData",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoTEventsData_SotoIoTEventsData",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoTEventsData"
+      ]
+    },
+    {
+      "name": "SotoIoTEvents",
+      "c99name": "SotoIoTEvents",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoTEvents_SotoIoTEvents",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoTEvents"
+      ]
+    },
+    {
+      "name": "SotoIoTFleetHub",
+      "c99name": "SotoIoTFleetHub",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoTFleetHub_SotoIoTFleetHub",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoTFleetHub"
+      ]
+    },
+    {
+      "name": "SotoIoTFleetWise",
+      "c99name": "SotoIoTFleetWise",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoTFleetWise_SotoIoTFleetWise",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoTFleetWise"
+      ]
+    },
+    {
+      "name": "SotoIoTJobsDataPlane",
+      "c99name": "SotoIoTJobsDataPlane",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoTJobsDataPlane_SotoIoTJobsDataPlane",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoTJobsDataPlane"
+      ]
+    },
+    {
+      "name": "SotoIoTRoboRunner",
+      "c99name": "SotoIoTRoboRunner",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoTRoboRunner_SotoIoTRoboRunner",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoTRoboRunner"
+      ]
+    },
+    {
+      "name": "SotoIoTSecureTunneling",
+      "c99name": "SotoIoTSecureTunneling",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoTSecureTunneling_SotoIoTSecureTunneling",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoTSecureTunneling"
+      ]
+    },
+    {
+      "name": "SotoIoTSiteWise",
+      "c99name": "SotoIoTSiteWise",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoTSiteWise_SotoIoTSiteWise",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoTSiteWise"
+      ]
+    },
+    {
+      "name": "SotoIoTThingsGraph",
+      "c99name": "SotoIoTThingsGraph",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoTThingsGraph_SotoIoTThingsGraph",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoTThingsGraph"
+      ]
+    },
+    {
+      "name": "SotoIoTTwinMaker",
+      "c99name": "SotoIoTTwinMaker",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoTTwinMaker_SotoIoTTwinMaker",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoTTwinMaker"
+      ]
+    },
+    {
+      "name": "SotoIoTWireless",
+      "c99name": "SotoIoTWireless",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoTWireless_SotoIoTWireless",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoTWireless"
+      ]
+    },
+    {
+      "name": "SotoIoT",
+      "c99name": "SotoIoT",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IoT_SotoIoT",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIoT"
+      ]
+    },
+    {
+      "name": "SotoIvschat",
+      "c99name": "SotoIvschat",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Ivschat_SotoIvschat",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIvschat"
+      ]
+    },
+    {
+      "name": "SotoKMS",
+      "c99name": "SotoKMS",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_KMS_SotoKMS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoKMS"
+      ]
+    },
+    {
+      "name": "SotoKafkaConnect",
+      "c99name": "SotoKafkaConnect",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_KafkaConnect_SotoKafkaConnect",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoKafkaConnect"
+      ]
+    },
+    {
+      "name": "SotoKafka",
+      "c99name": "SotoKafka",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Kafka_SotoKafka",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoKafka"
+      ]
+    },
+    {
+      "name": "SotoKendraRanking",
+      "c99name": "SotoKendraRanking",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_KendraRanking_SotoKendraRanking",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoKendraRanking"
+      ]
+    },
+    {
+      "name": "SotoKendra",
+      "c99name": "SotoKendra",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Kendra_SotoKendra",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoKendra"
+      ]
+    },
+    {
+      "name": "SotoKeyspaces",
+      "c99name": "SotoKeyspaces",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Keyspaces_SotoKeyspaces",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoKeyspaces"
+      ]
+    },
+    {
+      "name": "SotoKinesisAnalyticsV2",
+      "c99name": "SotoKinesisAnalyticsV2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_KinesisAnalyticsV2_SotoKinesisAnalyticsV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoKinesisAnalyticsV2"
+      ]
+    },
+    {
+      "name": "SotoKinesisAnalytics",
+      "c99name": "SotoKinesisAnalytics",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_KinesisAnalytics_SotoKinesisAnalytics",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoKinesisAnalytics"
+      ]
+    },
+    {
+      "name": "SotoKinesisVideoArchivedMedia",
+      "c99name": "SotoKinesisVideoArchivedMedia",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_KinesisVideoArchivedMedia_SotoKinesisVideoArchivedMedia",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoKinesisVideoArchivedMedia"
+      ]
+    },
+    {
+      "name": "SotoKinesisVideoMedia",
+      "c99name": "SotoKinesisVideoMedia",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_KinesisVideoMedia_SotoKinesisVideoMedia",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoKinesisVideoMedia"
+      ]
+    },
+    {
+      "name": "SotoKinesisVideoSignaling",
+      "c99name": "SotoKinesisVideoSignaling",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_KinesisVideoSignaling_SotoKinesisVideoSignaling",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoKinesisVideoSignaling"
+      ]
+    },
+    {
+      "name": "SotoKinesisVideoWebRTCStorage",
+      "c99name": "SotoKinesisVideoWebRTCStorage",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_KinesisVideoWebRTCStorage_SotoKinesisVideoWebRTCStorage",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoKinesisVideoWebRTCStorage"
+      ]
+    },
+    {
+      "name": "SotoKinesisVideo",
+      "c99name": "SotoKinesisVideo",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_KinesisVideo_SotoKinesisVideo",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoKinesisVideo"
+      ]
+    },
+    {
+      "name": "SotoKinesis",
+      "c99name": "SotoKinesis",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Kinesis_SotoKinesis",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoKinesis"
+      ]
+    },
+    {
+      "name": "SotoLakeFormation",
+      "c99name": "SotoLakeFormation",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_LakeFormation_SotoLakeFormation",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoLakeFormation"
+      ]
+    },
+    {
+      "name": "SotoLambda",
+      "c99name": "SotoLambda",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Lambda_SotoLambda",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoLambda"
+      ]
+    },
+    {
+      "name": "SotoLexModelBuildingService",
+      "c99name": "SotoLexModelBuildingService",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_LexModelBuildingService_SotoLexModelBuildingService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoLexModelBuildingService"
+      ]
+    },
+    {
+      "name": "SotoLexModelsV2",
+      "c99name": "SotoLexModelsV2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_LexModelsV2_SotoLexModelsV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoLexModelsV2"
+      ]
+    },
+    {
+      "name": "SotoLexRuntimeService",
+      "c99name": "SotoLexRuntimeService",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_LexRuntimeService_SotoLexRuntimeService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoLexRuntimeService"
+      ]
+    },
+    {
+      "name": "SotoLexRuntimeV2",
+      "c99name": "SotoLexRuntimeV2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_LexRuntimeV2_SotoLexRuntimeV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoLexRuntimeV2"
+      ]
+    },
+    {
+      "name": "SotoLicenseManagerLinuxSubscriptions",
+      "c99name": "SotoLicenseManagerLinuxSubscriptions",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_LicenseManagerLinuxSubscriptions_SotoLicenseManagerLinuxSubscriptions",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoLicenseManagerLinuxSubscriptions"
+      ]
+    },
+    {
+      "name": "SotoLicenseManagerUserSubscriptions",
+      "c99name": "SotoLicenseManagerUserSubscriptions",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_LicenseManagerUserSubscriptions_SotoLicenseManagerUserSubscriptions",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoLicenseManagerUserSubscriptions"
+      ]
+    },
+    {
+      "name": "SotoLicenseManager",
+      "c99name": "SotoLicenseManager",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_LicenseManager_SotoLicenseManager",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoLicenseManager"
+      ]
+    },
+    {
+      "name": "SotoLightsail",
+      "c99name": "SotoLightsail",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Lightsail_SotoLightsail",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoLightsail"
+      ]
+    },
+    {
+      "name": "SotoLocation",
+      "c99name": "SotoLocation",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Location_SotoLocation",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoLocation"
+      ]
+    },
+    {
+      "name": "SotoLookoutEquipment",
+      "c99name": "SotoLookoutEquipment",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_LookoutEquipment_SotoLookoutEquipment",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoLookoutEquipment"
+      ]
+    },
+    {
+      "name": "SotoLookoutMetrics",
+      "c99name": "SotoLookoutMetrics",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_LookoutMetrics_SotoLookoutMetrics",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoLookoutMetrics"
+      ]
+    },
+    {
+      "name": "SotoLookoutVision",
+      "c99name": "SotoLookoutVision",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_LookoutVision_SotoLookoutVision",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoLookoutVision"
+      ]
+    },
+    {
+      "name": "SotoM2",
+      "c99name": "SotoM2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_M2_SotoM2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoM2"
+      ]
+    },
+    {
+      "name": "SotoMQ",
+      "c99name": "SotoMQ",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MQ_SotoMQ",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMQ"
+      ]
+    },
+    {
+      "name": "SotoMTurk",
+      "c99name": "SotoMTurk",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MTurk_SotoMTurk",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMTurk"
+      ]
+    },
+    {
+      "name": "SotoMWAA",
+      "c99name": "SotoMWAA",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MWAA_SotoMWAA",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMWAA"
+      ]
+    },
+    {
+      "name": "SotoMachineLearning",
+      "c99name": "SotoMachineLearning",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MachineLearning_SotoMachineLearning",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMachineLearning"
+      ]
+    },
+    {
+      "name": "SotoMacie2",
+      "c99name": "SotoMacie2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Macie2_SotoMacie2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMacie2"
+      ]
+    },
+    {
+      "name": "SotoMacie",
+      "c99name": "SotoMacie",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Macie_SotoMacie",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMacie"
+      ]
+    },
+    {
+      "name": "SotoManagedBlockchain",
+      "c99name": "SotoManagedBlockchain",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ManagedBlockchain_SotoManagedBlockchain",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoManagedBlockchain"
+      ]
+    },
+    {
+      "name": "SotoMarketplaceCatalog",
+      "c99name": "SotoMarketplaceCatalog",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MarketplaceCatalog_SotoMarketplaceCatalog",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMarketplaceCatalog"
+      ]
+    },
+    {
+      "name": "SotoMarketplaceCommerceAnalytics",
+      "c99name": "SotoMarketplaceCommerceAnalytics",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MarketplaceCommerceAnalytics_SotoMarketplaceCommerceAnalytics",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMarketplaceCommerceAnalytics"
+      ]
+    },
+    {
+      "name": "SotoMarketplaceEntitlementService",
+      "c99name": "SotoMarketplaceEntitlementService",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MarketplaceEntitlementService_SotoMarketplaceEntitlementService",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMarketplaceEntitlementService"
+      ]
+    },
+    {
+      "name": "SotoMarketplaceMetering",
+      "c99name": "SotoMarketplaceMetering",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MarketplaceMetering_SotoMarketplaceMetering",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMarketplaceMetering"
+      ]
+    },
+    {
+      "name": "SotoMediaConnect",
+      "c99name": "SotoMediaConnect",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MediaConnect_SotoMediaConnect",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMediaConnect"
+      ]
+    },
+    {
+      "name": "SotoMediaConvert",
+      "c99name": "SotoMediaConvert",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MediaConvert_SotoMediaConvert",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMediaConvert"
+      ]
+    },
+    {
+      "name": "SotoMediaLive",
+      "c99name": "SotoMediaLive",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MediaLive_SotoMediaLive",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMediaLive"
+      ]
+    },
+    {
+      "name": "SotoMediaPackageVod",
+      "c99name": "SotoMediaPackageVod",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MediaPackageVod_SotoMediaPackageVod",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMediaPackageVod"
+      ]
+    },
+    {
+      "name": "SotoMediaPackage",
+      "c99name": "SotoMediaPackage",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MediaPackage_SotoMediaPackage",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMediaPackage"
+      ]
+    },
+    {
+      "name": "SotoMediaStoreData",
+      "c99name": "SotoMediaStoreData",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MediaStoreData_SotoMediaStoreData",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMediaStoreData"
+      ]
+    },
+    {
+      "name": "SotoMediaStore",
+      "c99name": "SotoMediaStore",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MediaStore_SotoMediaStore",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMediaStore"
+      ]
+    },
+    {
+      "name": "SotoMediaTailor",
+      "c99name": "SotoMediaTailor",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MediaTailor_SotoMediaTailor",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMediaTailor"
+      ]
+    },
+    {
+      "name": "SotoMemoryDB",
+      "c99name": "SotoMemoryDB",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MemoryDB_SotoMemoryDB",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMemoryDB"
+      ]
+    },
+    {
+      "name": "SotoMgn",
+      "c99name": "SotoMgn",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Mgn_SotoMgn",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMgn"
+      ]
+    },
+    {
+      "name": "SotoMigrationHubConfig",
+      "c99name": "SotoMigrationHubConfig",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MigrationHubConfig_SotoMigrationHubConfig",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMigrationHubConfig"
+      ]
+    },
+    {
+      "name": "SotoMigrationHubOrchestrator",
+      "c99name": "SotoMigrationHubOrchestrator",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MigrationHubOrchestrator_SotoMigrationHubOrchestrator",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMigrationHubOrchestrator"
+      ]
+    },
+    {
+      "name": "SotoMigrationHubRefactorSpaces",
+      "c99name": "SotoMigrationHubRefactorSpaces",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MigrationHubRefactorSpaces_SotoMigrationHubRefactorSpaces",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMigrationHubRefactorSpaces"
+      ]
+    },
+    {
+      "name": "SotoMigrationHubStrategy",
+      "c99name": "SotoMigrationHubStrategy",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MigrationHubStrategy_SotoMigrationHubStrategy",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMigrationHubStrategy"
+      ]
+    },
+    {
+      "name": "SotoMigrationHub",
+      "c99name": "SotoMigrationHub",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MigrationHub_SotoMigrationHub",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMigrationHub"
+      ]
+    },
+    {
+      "name": "SotoMobile",
+      "c99name": "SotoMobile",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Mobile_SotoMobile",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMobile"
+      ]
+    },
+    {
+      "name": "SotoNeptune",
+      "c99name": "SotoNeptune",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Neptune_SotoNeptune",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoNeptune"
+      ]
+    },
+    {
+      "name": "SotoNetworkFirewall",
+      "c99name": "SotoNetworkFirewall",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_NetworkFirewall_SotoNetworkFirewall",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoNetworkFirewall"
+      ]
+    },
+    {
+      "name": "SotoNetworkManager",
+      "c99name": "SotoNetworkManager",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_NetworkManager_SotoNetworkManager",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoNetworkManager"
+      ]
+    },
+    {
+      "name": "SotoNimble",
+      "c99name": "SotoNimble",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Nimble_SotoNimble",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoNimble"
+      ]
+    },
+    {
+      "name": "SotoOAM",
+      "c99name": "SotoOAM",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_OAM_SotoOAM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoOAM"
+      ]
+    },
+    {
+      "name": "SotoOmics",
+      "c99name": "SotoOmics",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Omics_SotoOmics",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoOmics"
+      ]
+    },
+    {
+      "name": "SotoOpenSearchServerless",
+      "c99name": "SotoOpenSearchServerless",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_OpenSearchServerless_SotoOpenSearchServerless",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoOpenSearchServerless"
+      ]
+    },
+    {
+      "name": "SotoOpenSearch",
+      "c99name": "SotoOpenSearch",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_OpenSearch_SotoOpenSearch",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoOpenSearch"
+      ]
+    },
+    {
+      "name": "SotoOpsWorksCM",
+      "c99name": "SotoOpsWorksCM",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_OpsWorksCM_SotoOpsWorksCM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoOpsWorksCM"
+      ]
+    },
+    {
+      "name": "SotoOpsWorks",
+      "c99name": "SotoOpsWorks",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_OpsWorks_SotoOpsWorks",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoOpsWorks"
+      ]
+    },
+    {
+      "name": "SotoOrganizations",
+      "c99name": "SotoOrganizations",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Organizations_SotoOrganizations",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoOrganizations"
+      ]
+    },
+    {
+      "name": "SotoOutposts",
+      "c99name": "SotoOutposts",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Outposts_SotoOutposts",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoOutposts"
+      ]
+    },
+    {
+      "name": "SotoPI",
+      "c99name": "SotoPI",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_PI_SotoPI",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPI"
+      ]
+    },
+    {
+      "name": "SotoPanorama",
+      "c99name": "SotoPanorama",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Panorama_SotoPanorama",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPanorama"
+      ]
+    },
+    {
+      "name": "SotoPersonalizeEvents",
+      "c99name": "SotoPersonalizeEvents",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_PersonalizeEvents_SotoPersonalizeEvents",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPersonalizeEvents"
+      ]
+    },
+    {
+      "name": "SotoPersonalizeRuntime",
+      "c99name": "SotoPersonalizeRuntime",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_PersonalizeRuntime_SotoPersonalizeRuntime",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPersonalizeRuntime"
+      ]
+    },
+    {
+      "name": "SotoPersonalize",
+      "c99name": "SotoPersonalize",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Personalize_SotoPersonalize",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPersonalize"
+      ]
+    },
+    {
+      "name": "SotoPinpointEmail",
+      "c99name": "SotoPinpointEmail",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_PinpointEmail_SotoPinpointEmail",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPinpointEmail"
+      ]
+    },
+    {
+      "name": "SotoPinpointSMSVoiceV2",
+      "c99name": "SotoPinpointSMSVoiceV2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_PinpointSMSVoiceV2_SotoPinpointSMSVoiceV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPinpointSMSVoiceV2"
+      ]
+    },
+    {
+      "name": "SotoPinpointSMSVoice",
+      "c99name": "SotoPinpointSMSVoice",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_PinpointSMSVoice_SotoPinpointSMSVoice",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPinpointSMSVoice"
+      ]
+    },
+    {
+      "name": "SotoPinpoint",
+      "c99name": "SotoPinpoint",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Pinpoint_SotoPinpoint",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPinpoint"
+      ]
+    },
+    {
+      "name": "SotoPipes",
+      "c99name": "SotoPipes",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Pipes_SotoPipes",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPipes"
+      ]
+    },
+    {
+      "name": "SotoPolly",
+      "c99name": "SotoPolly",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Polly_SotoPolly",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPolly"
+      ]
+    },
+    {
+      "name": "SotoPricing",
+      "c99name": "SotoPricing",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Pricing_SotoPricing",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPricing"
+      ]
+    },
+    {
+      "name": "SotoPrivateNetworks",
+      "c99name": "SotoPrivateNetworks",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_PrivateNetworks_SotoPrivateNetworks",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPrivateNetworks"
+      ]
+    },
+    {
+      "name": "SotoProton",
+      "c99name": "SotoProton",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Proton_SotoProton",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoProton"
+      ]
+    },
+    {
+      "name": "SotoQLDBSession",
+      "c99name": "SotoQLDBSession",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_QLDBSession_SotoQLDBSession",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoQLDBSession"
+      ]
+    },
+    {
+      "name": "SotoQLDB",
+      "c99name": "SotoQLDB",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_QLDB_SotoQLDB",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoQLDB"
+      ]
+    },
+    {
+      "name": "SotoQuickSight",
+      "c99name": "SotoQuickSight",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_QuickSight_SotoQuickSight",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoQuickSight"
+      ]
+    },
+    {
+      "name": "SotoRAM",
+      "c99name": "SotoRAM",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_RAM_SotoRAM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRAM"
+      ]
+    },
+    {
+      "name": "SotoRDSData",
+      "c99name": "SotoRDSData",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_RDSData_SotoRDSData",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRDSData"
+      ]
+    },
+    {
+      "name": "SotoRDS",
+      "c99name": "SotoRDS",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_RDS_SotoRDS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRDS"
+      ]
+    },
+    {
+      "name": "SotoRUM",
+      "c99name": "SotoRUM",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_RUM_SotoRUM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRUM"
+      ]
+    },
+    {
+      "name": "SotoRbin",
+      "c99name": "SotoRbin",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Rbin_SotoRbin",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRbin"
+      ]
+    },
+    {
+      "name": "SotoRedshiftData",
+      "c99name": "SotoRedshiftData",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_RedshiftData_SotoRedshiftData",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRedshiftData"
+      ]
+    },
+    {
+      "name": "SotoRedshiftServerless",
+      "c99name": "SotoRedshiftServerless",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_RedshiftServerless_SotoRedshiftServerless",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRedshiftServerless"
+      ]
+    },
+    {
+      "name": "SotoRedshift",
+      "c99name": "SotoRedshift",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Redshift_SotoRedshift",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRedshift"
+      ]
+    },
+    {
+      "name": "SotoRekognition",
+      "c99name": "SotoRekognition",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Rekognition_SotoRekognition",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRekognition"
+      ]
+    },
+    {
+      "name": "SotoResiliencehub",
+      "c99name": "SotoResiliencehub",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Resiliencehub_SotoResiliencehub",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoResiliencehub"
+      ]
+    },
+    {
+      "name": "SotoResourceExplorer2",
+      "c99name": "SotoResourceExplorer2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ResourceExplorer2_SotoResourceExplorer2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoResourceExplorer2"
+      ]
+    },
+    {
+      "name": "SotoResourceGroupsTaggingAPI",
+      "c99name": "SotoResourceGroupsTaggingAPI",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ResourceGroupsTaggingAPI_SotoResourceGroupsTaggingAPI",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoResourceGroupsTaggingAPI"
+      ]
+    },
+    {
+      "name": "SotoResourceGroups",
+      "c99name": "SotoResourceGroups",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ResourceGroups_SotoResourceGroups",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoResourceGroups"
+      ]
+    },
+    {
+      "name": "SotoRoboMaker",
+      "c99name": "SotoRoboMaker",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_RoboMaker_SotoRoboMaker",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRoboMaker"
+      ]
+    },
+    {
+      "name": "SotoRolesAnywhere",
+      "c99name": "SotoRolesAnywhere",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_RolesAnywhere_SotoRolesAnywhere",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRolesAnywhere"
+      ]
+    },
+    {
+      "name": "SotoRoute53Domains",
+      "c99name": "SotoRoute53Domains",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Route53Domains_SotoRoute53Domains",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRoute53Domains"
+      ]
+    },
+    {
+      "name": "SotoRoute53RecoveryCluster",
+      "c99name": "SotoRoute53RecoveryCluster",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Route53RecoveryCluster_SotoRoute53RecoveryCluster",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRoute53RecoveryCluster"
+      ]
+    },
+    {
+      "name": "SotoRoute53RecoveryControlConfig",
+      "c99name": "SotoRoute53RecoveryControlConfig",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Route53RecoveryControlConfig_SotoRoute53RecoveryControlConfig",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRoute53RecoveryControlConfig"
+      ]
+    },
+    {
+      "name": "SotoRoute53RecoveryReadiness",
+      "c99name": "SotoRoute53RecoveryReadiness",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Route53RecoveryReadiness_SotoRoute53RecoveryReadiness",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRoute53RecoveryReadiness"
+      ]
+    },
+    {
+      "name": "SotoRoute53Resolver",
+      "c99name": "SotoRoute53Resolver",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Route53Resolver_SotoRoute53Resolver",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRoute53Resolver"
+      ]
+    },
+    {
+      "name": "SotoRoute53",
+      "c99name": "SotoRoute53",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Route53_SotoRoute53",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoRoute53"
+      ]
+    },
+    {
+      "name": "SotoS3Control",
+      "c99name": "SotoS3Control",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_S3Control_SotoS3Control",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoS3Control"
+      ]
+    },
+    {
+      "name": "SotoS3Outposts",
+      "c99name": "SotoS3Outposts",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_S3Outposts_SotoS3Outposts",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoS3Outposts"
+      ]
+    },
+    {
+      "name": "SotoSES",
+      "c99name": "SotoSES",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SES_SotoSES",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSES"
+      ]
+    },
+    {
+      "name": "SotoSESv2",
+      "c99name": "SotoSESv2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SESv2_SotoSESv2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSESv2"
+      ]
+    },
+    {
+      "name": "SotoSFN",
+      "c99name": "SotoSFN",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SFN_SotoSFN",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSFN"
+      ]
+    },
+    {
+      "name": "SotoSMS",
+      "c99name": "SotoSMS",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SMS_SotoSMS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSMS"
+      ]
+    },
+    {
+      "name": "SotoSNS",
+      "c99name": "SotoSNS",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SNS_SotoSNS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSNS"
+      ]
+    },
+    {
+      "name": "SotoSQS",
+      "c99name": "SotoSQS",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SQS_SotoSQS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSQS"
+      ]
+    },
+    {
+      "name": "SotoSSMContacts",
+      "c99name": "SotoSSMContacts",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SSMContacts_SotoSSMContacts",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSSMContacts"
+      ]
+    },
+    {
+      "name": "SotoSSMIncidents",
+      "c99name": "SotoSSMIncidents",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SSMIncidents_SotoSSMIncidents",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSSMIncidents"
+      ]
+    },
+    {
+      "name": "SotoSSM",
+      "c99name": "SotoSSM",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SSM_SotoSSM",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSSM"
+      ]
+    },
+    {
+      "name": "SotoSSOAdmin",
+      "c99name": "SotoSSOAdmin",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SSOAdmin_SotoSSOAdmin",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSSOAdmin"
+      ]
+    },
+    {
+      "name": "SotoSSOOIDC",
+      "c99name": "SotoSSOOIDC",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SSOOIDC_SotoSSOOIDC",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSSOOIDC"
+      ]
+    },
+    {
+      "name": "SotoSSO",
+      "c99name": "SotoSSO",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SSO_SotoSSO",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSSO"
+      ]
+    },
+    {
+      "name": "SotoSWF",
+      "c99name": "SotoSWF",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SWF_SotoSWF",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSWF"
+      ]
+    },
+    {
+      "name": "SotoSageMakerA2IRuntime",
+      "c99name": "SotoSageMakerA2IRuntime",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SageMakerA2IRuntime_SotoSageMakerA2IRuntime",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSageMakerA2IRuntime"
+      ]
+    },
+    {
+      "name": "SotoSageMakerFeatureStoreRuntime",
+      "c99name": "SotoSageMakerFeatureStoreRuntime",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SageMakerFeatureStoreRuntime_SotoSageMakerFeatureStoreRuntime",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSageMakerFeatureStoreRuntime"
+      ]
+    },
+    {
+      "name": "SotoSageMakerGeospatial",
+      "c99name": "SotoSageMakerGeospatial",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SageMakerGeospatial_SotoSageMakerGeospatial",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSageMakerGeospatial"
+      ]
+    },
+    {
+      "name": "SotoSageMakerMetrics",
+      "c99name": "SotoSageMakerMetrics",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SageMakerMetrics_SotoSageMakerMetrics",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSageMakerMetrics"
+      ]
+    },
+    {
+      "name": "SotoSageMakerRuntime",
+      "c99name": "SotoSageMakerRuntime",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SageMakerRuntime_SotoSageMakerRuntime",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSageMakerRuntime"
+      ]
+    },
+    {
+      "name": "SotoSageMaker",
+      "c99name": "SotoSageMaker",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SageMaker_SotoSageMaker",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSageMaker"
+      ]
+    },
+    {
+      "name": "SotoSagemakerEdge",
+      "c99name": "SotoSagemakerEdge",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SagemakerEdge_SotoSagemakerEdge",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSagemakerEdge"
+      ]
+    },
+    {
+      "name": "SotoSavingsPlans",
+      "c99name": "SotoSavingsPlans",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SavingsPlans_SotoSavingsPlans",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSavingsPlans"
+      ]
+    },
+    {
+      "name": "SotoScheduler",
+      "c99name": "SotoScheduler",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Scheduler_SotoScheduler",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoScheduler"
+      ]
+    },
+    {
+      "name": "SotoSchemas",
+      "c99name": "SotoSchemas",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Schemas_SotoSchemas",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSchemas"
+      ]
+    },
+    {
+      "name": "SotoSecretsManager",
+      "c99name": "SotoSecretsManager",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SecretsManager_SotoSecretsManager",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSecretsManager"
+      ]
+    },
+    {
+      "name": "SotoSecurityHub",
+      "c99name": "SotoSecurityHub",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SecurityHub_SotoSecurityHub",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSecurityHub"
+      ]
+    },
+    {
+      "name": "SotoSecurityLake",
+      "c99name": "SotoSecurityLake",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SecurityLake_SotoSecurityLake",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSecurityLake"
+      ]
+    },
+    {
+      "name": "SotoServerlessApplicationRepository",
+      "c99name": "SotoServerlessApplicationRepository",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ServerlessApplicationRepository_SotoServerlessApplicationRepository",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoServerlessApplicationRepository"
+      ]
+    },
+    {
+      "name": "SotoServiceCatalogAppRegistry",
+      "c99name": "SotoServiceCatalogAppRegistry",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ServiceCatalogAppRegistry_SotoServiceCatalogAppRegistry",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoServiceCatalogAppRegistry"
+      ]
+    },
+    {
+      "name": "SotoServiceCatalog",
+      "c99name": "SotoServiceCatalog",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ServiceCatalog_SotoServiceCatalog",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoServiceCatalog"
+      ]
+    },
+    {
+      "name": "SotoServiceDiscovery",
+      "c99name": "SotoServiceDiscovery",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ServiceDiscovery_SotoServiceDiscovery",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoServiceDiscovery"
+      ]
+    },
+    {
+      "name": "SotoServiceQuotas",
+      "c99name": "SotoServiceQuotas",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_ServiceQuotas_SotoServiceQuotas",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoServiceQuotas"
+      ]
+    },
+    {
+      "name": "SotoShield",
+      "c99name": "SotoShield",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Shield_SotoShield",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoShield"
+      ]
+    },
+    {
+      "name": "SotoSigner",
+      "c99name": "SotoSigner",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Signer_SotoSigner",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSigner"
+      ]
+    },
+    {
+      "name": "SotoSimSpaceWeaver",
+      "c99name": "SotoSimSpaceWeaver",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SimSpaceWeaver_SotoSimSpaceWeaver",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSimSpaceWeaver"
+      ]
+    },
+    {
+      "name": "SotoSnowDeviceManagement",
+      "c99name": "SotoSnowDeviceManagement",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SnowDeviceManagement_SotoSnowDeviceManagement",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSnowDeviceManagement"
+      ]
+    },
+    {
+      "name": "SotoSnowball",
+      "c99name": "SotoSnowball",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Snowball_SotoSnowball",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSnowball"
+      ]
+    },
+    {
+      "name": "SotoSsmSap",
+      "c99name": "SotoSsmSap",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SsmSap_SotoSsmSap",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSsmSap"
+      ]
+    },
+    {
+      "name": "SotoStorageGateway",
+      "c99name": "SotoStorageGateway",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_StorageGateway_SotoStorageGateway",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoStorageGateway"
+      ]
+    },
+    {
+      "name": "SotoSupportApp",
+      "c99name": "SotoSupportApp",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_SupportApp_SotoSupportApp",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSupportApp"
+      ]
+    },
+    {
+      "name": "SotoSupport",
+      "c99name": "SotoSupport",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Support_SotoSupport",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSupport"
+      ]
+    },
+    {
+      "name": "SotoSynthetics",
+      "c99name": "SotoSynthetics",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Synthetics_SotoSynthetics",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSynthetics"
+      ]
+    },
+    {
+      "name": "SotoTextract",
+      "c99name": "SotoTextract",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Textract_SotoTextract",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoTextract"
+      ]
+    },
+    {
+      "name": "SotoTimestreamQuery",
+      "c99name": "SotoTimestreamQuery",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_TimestreamQuery_SotoTimestreamQuery",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoTimestreamQuery"
+      ]
+    },
+    {
+      "name": "SotoTimestreamWrite",
+      "c99name": "SotoTimestreamWrite",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_TimestreamWrite_SotoTimestreamWrite",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoTimestreamWrite"
+      ]
+    },
+    {
+      "name": "SotoTranscribeStreaming",
+      "c99name": "SotoTranscribeStreaming",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_TranscribeStreaming_SotoTranscribeStreaming",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoTranscribeStreaming"
+      ]
+    },
+    {
+      "name": "SotoTranscribe",
+      "c99name": "SotoTranscribe",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Transcribe_SotoTranscribe",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoTranscribe"
+      ]
+    },
+    {
+      "name": "SotoTransfer",
+      "c99name": "SotoTransfer",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Transfer_SotoTransfer",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoTransfer"
+      ]
+    },
+    {
+      "name": "SotoTranslate",
+      "c99name": "SotoTranslate",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Translate_SotoTranslate",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoTranslate"
+      ]
+    },
+    {
+      "name": "SotoVoiceID",
+      "c99name": "SotoVoiceID",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_VoiceID_SotoVoiceID",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoVoiceID"
+      ]
+    },
+    {
+      "name": "SotoWAFRegional",
+      "c99name": "SotoWAFRegional",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_WAFRegional_SotoWAFRegional",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoWAFRegional"
+      ]
+    },
+    {
+      "name": "SotoWAFV2",
+      "c99name": "SotoWAFV2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_WAFV2_SotoWAFV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoWAFV2"
+      ]
+    },
+    {
+      "name": "SotoWAF",
+      "c99name": "SotoWAF",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_WAF_SotoWAF",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoWAF"
+      ]
+    },
+    {
+      "name": "SotoWellArchitected",
+      "c99name": "SotoWellArchitected",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_WellArchitected_SotoWellArchitected",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoWellArchitected"
+      ]
+    },
+    {
+      "name": "SotoWisdom",
+      "c99name": "SotoWisdom",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Wisdom_SotoWisdom",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoWisdom"
+      ]
+    },
+    {
+      "name": "SotoWorkDocs",
+      "c99name": "SotoWorkDocs",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_WorkDocs_SotoWorkDocs",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoWorkDocs"
+      ]
+    },
+    {
+      "name": "SotoWorkLink",
+      "c99name": "SotoWorkLink",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_WorkLink_SotoWorkLink",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoWorkLink"
+      ]
+    },
+    {
+      "name": "SotoWorkMailMessageFlow",
+      "c99name": "SotoWorkMailMessageFlow",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_WorkMailMessageFlow_SotoWorkMailMessageFlow",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoWorkMailMessageFlow"
+      ]
+    },
+    {
+      "name": "SotoWorkMail",
+      "c99name": "SotoWorkMail",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_WorkMail_SotoWorkMail",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoWorkMail"
+      ]
+    },
+    {
+      "name": "SotoWorkSpacesWeb",
+      "c99name": "SotoWorkSpacesWeb",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_WorkSpacesWeb_SotoWorkSpacesWeb",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoWorkSpacesWeb"
+      ]
+    },
+    {
+      "name": "SotoWorkSpaces",
+      "c99name": "SotoWorkSpaces",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_WorkSpaces_SotoWorkSpaces",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoWorkSpaces"
+      ]
+    },
+    {
+      "name": "SotoXRay",
+      "c99name": "SotoXRay",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_XRay_SotoXRay",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoXRay"
+      ]
+    },
+    {
+      "name": "SotoCognitoIdentity",
+      "c99name": "SotoCognitoIdentity",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_SotoCognitoIdentity",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCognitoIdentity"
+      ]
+    },
+    {
+      "name": "SotoDynamoDB",
+      "c99name": "SotoDynamoDB",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_SotoDynamoDB",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoDynamoDB"
+      ]
+    },
+    {
+      "name": "SotoS3",
+      "c99name": "SotoS3",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_SotoS3",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoS3"
+      ]
+    },
+    {
+      "name": "SotoSTS",
+      "c99name": "SotoSTS",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_SotoSTS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoSTS"
+      ]
+    },
+    {
+      "name": "CSotoExpat",
+      "c99name": "CSotoExpat",
+      "src_type": "clang",
+      "label": "@swiftpkg_soto_core//:Sources_CSotoExpat",
+      "package_identity": "soto-core",
+      "product_memberships": [
+        "SotoCore",
+        "SotoTestUtils"
+      ]
+    },
+    {
+      "name": "INIParser",
+      "c99name": "INIParser",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto_core//:Sources_INIParser",
+      "package_identity": "soto-core",
+      "product_memberships": [
+        "SotoCore",
+        "SotoTestUtils"
+      ]
+    },
+    {
+      "name": "SotoCore",
+      "c99name": "SotoCore",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto_core//:Sources_SotoCore",
+      "package_identity": "soto-core",
+      "product_memberships": [
+        "SotoCore",
+        "SotoTestUtils"
+      ]
+    },
+    {
+      "name": "SotoCrypto",
+      "c99name": "SotoCrypto",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto_core//:Sources_SotoCrypto",
+      "package_identity": "soto-core",
+      "product_memberships": [
+        "SotoCore",
+        "SotoTestUtils",
+        "SotoSignerV4"
+      ]
+    },
+    {
+      "name": "SotoSignerV4",
+      "c99name": "SotoSignerV4",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto_core//:Sources_SotoSignerV4",
+      "package_identity": "soto-core",
+      "product_memberships": [
+        "SotoCore",
+        "SotoTestUtils",
+        "SotoSignerV4"
+      ]
+    },
+    {
+      "name": "SotoTestUtils",
+      "c99name": "SotoTestUtils",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto_core//:Sources_SotoTestUtils",
+      "package_identity": "soto-core",
+      "product_memberships": [
+        "SotoTestUtils"
+      ]
+    },
+    {
+      "name": "SotoXML",
+      "c99name": "SotoXML",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto_core//:Sources_SotoXML",
+      "package_identity": "soto-core",
+      "product_memberships": [
+        "SotoCore",
+        "SotoTestUtils"
+      ]
+    },
+    {
+      "name": "Atomics",
+      "c99name": "Atomics",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_atomics//:Sources_Atomics",
+      "package_identity": "swift-atomics",
+      "product_memberships": [
+        "Atomics"
+      ]
+    },
+    {
+      "name": "_AtomicsShims",
+      "c99name": "_AtomicsShims",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_atomics//:Sources__AtomicsShims",
+      "package_identity": "swift-atomics",
+      "product_memberships": [
+        "Atomics"
+      ]
+    },
+    {
+      "name": "Collections",
+      "c99name": "Collections",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_collections//:Sources_Collections",
+      "package_identity": "swift-collections",
+      "product_memberships": [
+        "Collections"
+      ]
+    },
+    {
+      "name": "DequeModule",
+      "c99name": "DequeModule",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_collections//:Sources_DequeModule",
+      "package_identity": "swift-collections",
+      "product_memberships": [
+        "Collections",
+        "DequeModule"
+      ]
+    },
+    {
+      "name": "OrderedCollections",
+      "c99name": "OrderedCollections",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_collections//:Sources_OrderedCollections",
+      "package_identity": "swift-collections",
+      "product_memberships": [
+        "Collections",
+        "OrderedCollections"
+      ]
+    },
+    {
+      "name": "Logging",
+      "c99name": "Logging",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_log//:Sources_Logging",
+      "package_identity": "swift-log",
+      "product_memberships": [
+        "Logging"
+      ]
+    },
+    {
+      "name": "CoreMetrics",
+      "c99name": "CoreMetrics",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_metrics//:Sources_CoreMetrics",
+      "package_identity": "swift-metrics",
+      "product_memberships": [
+        "CoreMetrics",
+        "Metrics",
+        "MetricsTestKit"
+      ]
+    },
+    {
+      "name": "Metrics",
+      "c99name": "Metrics",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_metrics//:Sources_Metrics",
+      "package_identity": "swift-metrics",
+      "product_memberships": [
+        "Metrics",
+        "MetricsTestKit"
+      ]
+    },
+    {
+      "name": "MetricsTestKit",
+      "c99name": "MetricsTestKit",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_metrics//:Sources_MetricsTestKit",
+      "package_identity": "swift-metrics",
+      "product_memberships": [
+        "MetricsTestKit"
+      ]
+    },
+    {
+      "name": "CNIOAtomics",
+      "c99name": "CNIOAtomics",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_nio//:Sources_CNIOAtomics",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOConcurrencyHelpers",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils"
+      ]
+    },
+    {
+      "name": "CNIODarwin",
+      "c99name": "CNIODarwin",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_nio//:Sources_CNIODarwin",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIO",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils"
+      ]
+    },
+    {
+      "name": "CNIOLLHTTP",
+      "c99name": "CNIOLLHTTP",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_nio//:Sources_CNIOLLHTTP",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOHTTP1",
+        "NIOWebSocket",
+        "NIOTestUtils"
+      ]
+    },
+    {
+      "name": "CNIOLinux",
+      "c99name": "CNIOLinux",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_nio//:Sources_CNIOLinux",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils"
+      ]
+    },
+    {
+      "name": "CNIOSHA1",
+      "c99name": "CNIOSHA1",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_nio//:Sources_CNIOSHA1",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOWebSocket"
+      ]
+    },
+    {
+      "name": "CNIOWindows",
+      "c99name": "CNIOWindows",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_nio//:Sources_CNIOWindows",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils"
+      ]
+    },
+    {
+      "name": "NIO",
+      "c99name": "NIO",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources_NIO",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIO",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils"
+      ]
+    },
+    {
+      "name": "NIOConcurrencyHelpers",
+      "c99name": "NIOConcurrencyHelpers",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources_NIOConcurrencyHelpers",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOConcurrencyHelpers",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils"
+      ]
+    },
+    {
+      "name": "NIOCore",
+      "c99name": "NIOCore",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources_NIOCore",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils"
+      ]
+    },
+    {
+      "name": "NIOEmbedded",
+      "c99name": "NIOEmbedded",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources_NIOEmbedded",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIO",
+        "NIOEmbedded",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils"
+      ]
+    },
+    {
+      "name": "NIOFoundationCompat",
+      "c99name": "NIOFoundationCompat",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources_NIOFoundationCompat",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOFoundationCompat"
+      ]
+    },
+    {
+      "name": "NIOHTTP1",
+      "c99name": "NIOHTTP1",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOHTTP1",
+        "NIOWebSocket",
+        "NIOTestUtils"
+      ]
+    },
+    {
+      "name": "NIOPosix",
+      "c99name": "NIOPosix",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources_NIOPosix",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIO",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils"
+      ]
+    },
+    {
+      "name": "NIOTLS",
+      "c99name": "NIOTLS",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources_NIOTLS",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOTLS"
+      ]
+    },
+    {
+      "name": "NIOTestUtils",
+      "c99name": "NIOTestUtils",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources_NIOTestUtils",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOTestUtils"
+      ]
+    },
+    {
+      "name": "NIOWebSocket",
+      "c99name": "NIOWebSocket",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocket",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOWebSocket"
+      ]
+    },
+    {
+      "name": "_NIOConcurrency",
+      "c99name": "_NIOConcurrency",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources__NIOConcurrency",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "_NIOConcurrency"
+      ]
+    },
+    {
+      "name": "_NIODataStructures",
+      "c99name": "_NIODataStructures",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources__NIODataStructures",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils"
+      ]
+    },
+    {
+      "name": "CNIOExtrasZlib",
+      "c99name": "CNIOExtrasZlib",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_nio_extras//:Sources_CNIOExtrasZlib",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": [
+        "NIOHTTPCompression"
+      ]
+    },
+    {
+      "name": "NIOExtras",
+      "c99name": "NIOExtras",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOExtras",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": [
+        "NIOExtras"
+      ]
+    },
+    {
+      "name": "NIOHTTPCompression",
+      "c99name": "NIOHTTPCompression",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPCompression",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": [
+        "NIOHTTPCompression"
+      ]
+    },
+    {
+      "name": "NIOSOCKS",
+      "c99name": "NIOSOCKS",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKS",
+      "package_identity": "swift-nio-extras",
+      "product_memberships": [
+        "NIOSOCKS"
+      ]
+    },
+    {
+      "name": "NIOHPACK",
+      "c99name": "NIOHPACK",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHPACK",
+      "package_identity": "swift-nio-http2",
+      "product_memberships": [
+        "NIOHTTP2"
+      ]
+    },
+    {
+      "name": "NIOHTTP2",
+      "c99name": "NIOHTTP2",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2",
+      "package_identity": "swift-nio-http2",
+      "product_memberships": [
+        "NIOHTTP2"
+      ]
+    },
+    {
+      "name": "CNIOBoringSSL",
+      "c99name": "CNIOBoringSSL",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_nio_ssl//:Sources_CNIOBoringSSL",
+      "package_identity": "swift-nio-ssl",
+      "product_memberships": [
+        "NIOSSL",
+        "NIOTLSServer",
+        "NIOSSLHTTP1Client"
+      ]
+    },
+    {
+      "name": "CNIOBoringSSLShims",
+      "c99name": "CNIOBoringSSLShims",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_nio_ssl//:Sources_CNIOBoringSSLShims",
+      "package_identity": "swift-nio-ssl",
+      "product_memberships": [
+        "NIOSSL",
+        "NIOTLSServer",
+        "NIOSSLHTTP1Client"
+      ]
+    },
+    {
+      "name": "NIOSSL",
+      "c99name": "NIOSSL",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOSSL",
+      "package_identity": "swift-nio-ssl",
+      "product_memberships": [
+        "NIOSSL",
+        "NIOTLSServer",
+        "NIOSSLHTTP1Client"
+      ]
+    },
+    {
+      "name": "NIOSSLHTTP1Client",
+      "c99name": "NIOSSLHTTP1Client",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLHTTP1Client",
+      "package_identity": "swift-nio-ssl",
+      "product_memberships": [
+        "NIOSSLHTTP1Client"
+      ]
+    },
+    {
+      "name": "NIOTLSServer",
+      "c99name": "NIOTLSServer",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOTLSServer",
+      "package_identity": "swift-nio-ssl",
+      "product_memberships": [
+        "NIOTLSServer"
+      ]
+    },
+    {
+      "name": "NIOTransportServices",
+      "c99name": "NIOTransportServices",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio_transport_services//:Sources_NIOTransportServices",
+      "package_identity": "swift-nio-transport-services",
+      "product_memberships": [
+        "NIOTransportServices"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "identity": "async-http-client",
+      "name": "AsyncHTTPClient",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_async_http_client//:Sources_AsyncHTTPClient"
+      ]
+    },
+    {
+      "identity": "jmespath.swift",
+      "name": "JMESPath",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_jmespath.swift//:Sources_JMESPath"
+      ]
+    },
+    {
+      "identity": "soto-core",
+      "name": "SotoCore",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto_core//:Sources_SotoCore"
+      ]
+    },
+    {
+      "identity": "soto-core",
+      "name": "SotoSignerV4",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto_core//:Sources_SotoSignerV4"
+      ]
+    },
+    {
+      "identity": "soto-core",
+      "name": "SotoTestUtils",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto_core//:Sources_SotoTestUtils"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoACM",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ACM_SotoACM"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoACMPCA",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ACMPCA_SotoACMPCA"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAPIGateway",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_APIGateway_SotoAPIGateway"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoARCZonalShift",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ARCZonalShift_SotoARCZonalShift"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAccessAnalyzer",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_AccessAnalyzer_SotoAccessAnalyzer"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAccount",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Account_SotoAccount"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAlexaForBusiness",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_AlexaForBusiness_SotoAlexaForBusiness"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAmp",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Amp_SotoAmp"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAmplify",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Amplify_SotoAmplify"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAmplifyBackend",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_AmplifyBackend_SotoAmplifyBackend"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAmplifyUIBuilder",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_AmplifyUIBuilder_SotoAmplifyUIBuilder"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoApiGatewayManagementApi",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ApiGatewayManagementApi_SotoApiGatewayManagementApi"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoApiGatewayV2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ApiGatewayV2_SotoApiGatewayV2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAppConfig",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_AppConfig_SotoAppConfig"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAppConfigData",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_AppConfigData_SotoAppConfigData"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAppIntegrations",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_AppIntegrations_SotoAppIntegrations"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAppMesh",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_AppMesh_SotoAppMesh"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAppRunner",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_AppRunner_SotoAppRunner"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAppStream",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_AppStream_SotoAppStream"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAppSync",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_AppSync_SotoAppSync"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAppflow",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Appflow_SotoAppflow"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoApplicationAutoScaling",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ApplicationAutoScaling_SotoApplicationAutoScaling"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoApplicationCostProfiler",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ApplicationCostProfiler_SotoApplicationCostProfiler"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoApplicationDiscoveryService",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ApplicationDiscoveryService_SotoApplicationDiscoveryService"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoApplicationInsights",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ApplicationInsights_SotoApplicationInsights"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAthena",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Athena_SotoAthena"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAuditManager",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_AuditManager_SotoAuditManager"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAutoScaling",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_AutoScaling_SotoAutoScaling"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoAutoScalingPlans",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_AutoScalingPlans_SotoAutoScalingPlans"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoBackup",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Backup_SotoBackup"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoBackupGateway",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_BackupGateway_SotoBackupGateway"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoBackupStorage",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_BackupStorage_SotoBackupStorage"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoBatch",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Batch_SotoBatch"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoBillingconductor",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Billingconductor_SotoBillingconductor"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoBraket",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Braket_SotoBraket"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoBudgets",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Budgets_SotoBudgets"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoChime",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Chime_SotoChime"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoChimeSDKIdentity",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ChimeSDKIdentity_SotoChimeSDKIdentity"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoChimeSDKMediaPipelines",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ChimeSDKMediaPipelines_SotoChimeSDKMediaPipelines"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoChimeSDKMeetings",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ChimeSDKMeetings_SotoChimeSDKMeetings"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoChimeSDKMessaging",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ChimeSDKMessaging_SotoChimeSDKMessaging"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoChimeSDKVoice",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ChimeSDKVoice_SotoChimeSDKVoice"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCleanRooms",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CleanRooms_SotoCleanRooms"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCloud9",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Cloud9_SotoCloud9"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCloudControl",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CloudControl_SotoCloudControl"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCloudDirectory",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CloudDirectory_SotoCloudDirectory"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCloudFormation",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CloudFormation_SotoCloudFormation"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCloudFront",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CloudFront_SotoCloudFront"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCloudHSM",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CloudHSM_SotoCloudHSM"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCloudHSMV2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CloudHSMV2_SotoCloudHSMV2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCloudSearch",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CloudSearch_SotoCloudSearch"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCloudSearchDomain",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CloudSearchDomain_SotoCloudSearchDomain"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCloudTrail",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CloudTrail_SotoCloudTrail"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCloudWatch",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CloudWatch_SotoCloudWatch"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCloudWatchEvents",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CloudWatchEvents_SotoCloudWatchEvents"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCloudWatchLogs",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CloudWatchLogs_SotoCloudWatchLogs"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCodeArtifact",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CodeArtifact_SotoCodeArtifact"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCodeBuild",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CodeBuild_SotoCodeBuild"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCodeCatalyst",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CodeCatalyst_SotoCodeCatalyst"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCodeCommit",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CodeCommit_SotoCodeCommit"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCodeDeploy",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CodeDeploy_SotoCodeDeploy"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCodeGuruProfiler",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CodeGuruProfiler_SotoCodeGuruProfiler"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCodeGuruReviewer",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CodeGuruReviewer_SotoCodeGuruReviewer"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCodePipeline",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CodePipeline_SotoCodePipeline"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCodeStar",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CodeStar_SotoCodeStar"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCodeStarConnections",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CodeStarConnections_SotoCodeStarConnections"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCodeStarNotifications",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CodeStarNotifications_SotoCodeStarNotifications"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCognitoIdentity",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_SotoCognitoIdentity"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCognitoIdentityProvider",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CognitoIdentityProvider_SotoCognitoIdentityProvider"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCognitoSync",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CognitoSync_SotoCognitoSync"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoComprehend",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Comprehend_SotoComprehend"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoComprehendMedical",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ComprehendMedical_SotoComprehendMedical"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoComputeOptimizer",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ComputeOptimizer_SotoComputeOptimizer"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoConfigService",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ConfigService_SotoConfigService"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoConnect",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Connect_SotoConnect"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoConnectCampaigns",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ConnectCampaigns_SotoConnectCampaigns"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoConnectCases",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ConnectCases_SotoConnectCases"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoConnectContactLens",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ConnectContactLens_SotoConnectContactLens"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoConnectParticipant",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ConnectParticipant_SotoConnectParticipant"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoControlTower",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ControlTower_SotoControlTower"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCostAndUsageReportService",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CostAndUsageReportService_SotoCostAndUsageReportService"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCostExplorer",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CostExplorer_SotoCostExplorer"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCustomerProfiles",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CustomerProfiles_SotoCustomerProfiles"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDAX",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_DAX_SotoDAX"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDLM",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_DLM_SotoDLM"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDataBrew",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_DataBrew_SotoDataBrew"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDataExchange",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_DataExchange_SotoDataExchange"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDataPipeline",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_DataPipeline_SotoDataPipeline"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDataSync",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_DataSync_SotoDataSync"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDatabaseMigrationService",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_DatabaseMigrationService_SotoDatabaseMigrationService"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDetective",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Detective_SotoDetective"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDevOpsGuru",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_DevOpsGuru_SotoDevOpsGuru"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDeviceFarm",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_DeviceFarm_SotoDeviceFarm"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDirectConnect",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_DirectConnect_SotoDirectConnect"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDirectoryService",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_DirectoryService_SotoDirectoryService"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDocDB",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_DocDB_SotoDocDB"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDocDBElastic",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_DocDBElastic_SotoDocDBElastic"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDrs",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Drs_SotoDrs"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDynamoDB",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_SotoDynamoDB"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoDynamoDBStreams",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_DynamoDBStreams_SotoDynamoDBStreams"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoEBS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_EBS_SotoEBS"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoEC2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_EC2_SotoEC2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoEC2InstanceConnect",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_EC2InstanceConnect_SotoEC2InstanceConnect"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoECR",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ECR_SotoECR"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoECRPublic",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ECRPublic_SotoECRPublic"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoECS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ECS_SotoECS"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoEFS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_EFS_SotoEFS"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoEKS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_EKS_SotoEKS"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoEMR",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_EMR_SotoEMR"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoEMRContainers",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_EMRContainers_SotoEMRContainers"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoEMRServerless",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_EMRServerless_SotoEMRServerless"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoElastiCache",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ElastiCache_SotoElastiCache"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoElasticBeanstalk",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ElasticBeanstalk_SotoElasticBeanstalk"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoElasticInference",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ElasticInference_SotoElasticInference"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoElasticLoadBalancing",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ElasticLoadBalancing_SotoElasticLoadBalancing"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoElasticLoadBalancingV2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ElasticLoadBalancingV2_SotoElasticLoadBalancingV2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoElasticTranscoder",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ElasticTranscoder_SotoElasticTranscoder"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoElasticsearchService",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ElasticsearchService_SotoElasticsearchService"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoEventBridge",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_EventBridge_SotoEventBridge"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoEvidently",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Evidently_SotoEvidently"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoFIS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_FIS_SotoFIS"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoFMS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_FMS_SotoFMS"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoFSx",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_FSx_SotoFSx"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoFinspace",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Finspace_SotoFinspace"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoFinspaceData",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_FinspaceData_SotoFinspaceData"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoFirehose",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Firehose_SotoFirehose"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoForecast",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Forecast_SotoForecast"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoForecastquery",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Forecastquery_SotoForecastquery"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoFraudDetector",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_FraudDetector_SotoFraudDetector"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoGameLift",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_GameLift_SotoGameLift"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoGameSparks",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_GameSparks_SotoGameSparks"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoGlacier",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Glacier_SotoGlacier"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoGlobalAccelerator",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_GlobalAccelerator_SotoGlobalAccelerator"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoGlue",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Glue_SotoGlue"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoGrafana",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Grafana_SotoGrafana"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoGreengrass",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Greengrass_SotoGreengrass"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoGreengrassV2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_GreengrassV2_SotoGreengrassV2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoGroundStation",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_GroundStation_SotoGroundStation"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoGuardDuty",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_GuardDuty_SotoGuardDuty"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoHealth",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Health_SotoHealth"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoHealthLake",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_HealthLake_SotoHealthLake"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoHoneycode",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Honeycode_SotoHoneycode"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIAM",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IAM_SotoIAM"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIVS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IVS_SotoIVS"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIdentityStore",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IdentityStore_SotoIdentityStore"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoImagebuilder",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Imagebuilder_SotoImagebuilder"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoInspector",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Inspector_SotoInspector"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoInspector2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Inspector2_SotoInspector2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoT",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoT_SotoIoT"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoT1ClickDevicesService",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoT1ClickDevicesService_SotoIoT1ClickDevicesService"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoT1ClickProjects",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoT1ClickProjects_SotoIoT1ClickProjects"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoTAnalytics",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoTAnalytics_SotoIoTAnalytics"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoTDataPlane",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoTDataPlane_SotoIoTDataPlane"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoTDeviceAdvisor",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoTDeviceAdvisor_SotoIoTDeviceAdvisor"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoTEvents",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoTEvents_SotoIoTEvents"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoTEventsData",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoTEventsData_SotoIoTEventsData"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoTFleetHub",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoTFleetHub_SotoIoTFleetHub"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoTFleetWise",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoTFleetWise_SotoIoTFleetWise"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoTJobsDataPlane",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoTJobsDataPlane_SotoIoTJobsDataPlane"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoTRoboRunner",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoTRoboRunner_SotoIoTRoboRunner"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoTSecureTunneling",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoTSecureTunneling_SotoIoTSecureTunneling"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoTSiteWise",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoTSiteWise_SotoIoTSiteWise"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoTThingsGraph",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoTThingsGraph_SotoIoTThingsGraph"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoTTwinMaker",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoTTwinMaker_SotoIoTTwinMaker"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIoTWireless",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IoTWireless_SotoIoTWireless"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoIvschat",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Ivschat_SotoIvschat"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoKMS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_KMS_SotoKMS"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoKafka",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Kafka_SotoKafka"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoKafkaConnect",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_KafkaConnect_SotoKafkaConnect"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoKendra",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Kendra_SotoKendra"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoKendraRanking",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_KendraRanking_SotoKendraRanking"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoKeyspaces",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Keyspaces_SotoKeyspaces"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoKinesis",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Kinesis_SotoKinesis"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoKinesisAnalytics",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_KinesisAnalytics_SotoKinesisAnalytics"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoKinesisAnalyticsV2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_KinesisAnalyticsV2_SotoKinesisAnalyticsV2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoKinesisVideo",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_KinesisVideo_SotoKinesisVideo"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoKinesisVideoArchivedMedia",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_KinesisVideoArchivedMedia_SotoKinesisVideoArchivedMedia"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoKinesisVideoMedia",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_KinesisVideoMedia_SotoKinesisVideoMedia"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoKinesisVideoSignaling",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_KinesisVideoSignaling_SotoKinesisVideoSignaling"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoKinesisVideoWebRTCStorage",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_KinesisVideoWebRTCStorage_SotoKinesisVideoWebRTCStorage"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoLakeFormation",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_LakeFormation_SotoLakeFormation"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoLambda",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Lambda_SotoLambda"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoLexModelBuildingService",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_LexModelBuildingService_SotoLexModelBuildingService"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoLexModelsV2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_LexModelsV2_SotoLexModelsV2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoLexRuntimeService",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_LexRuntimeService_SotoLexRuntimeService"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoLexRuntimeV2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_LexRuntimeV2_SotoLexRuntimeV2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoLicenseManager",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_LicenseManager_SotoLicenseManager"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoLicenseManagerLinuxSubscriptions",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_LicenseManagerLinuxSubscriptions_SotoLicenseManagerLinuxSubscriptions"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoLicenseManagerUserSubscriptions",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_LicenseManagerUserSubscriptions_SotoLicenseManagerUserSubscriptions"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoLightsail",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Lightsail_SotoLightsail"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoLocation",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Location_SotoLocation"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoLookoutEquipment",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_LookoutEquipment_SotoLookoutEquipment"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoLookoutMetrics",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_LookoutMetrics_SotoLookoutMetrics"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoLookoutVision",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_LookoutVision_SotoLookoutVision"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoM2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_M2_SotoM2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMQ",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MQ_SotoMQ"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMTurk",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MTurk_SotoMTurk"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMWAA",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MWAA_SotoMWAA"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMachineLearning",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MachineLearning_SotoMachineLearning"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMacie",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Macie_SotoMacie"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMacie2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Macie2_SotoMacie2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoManagedBlockchain",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ManagedBlockchain_SotoManagedBlockchain"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMarketplaceCatalog",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MarketplaceCatalog_SotoMarketplaceCatalog"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMarketplaceCommerceAnalytics",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MarketplaceCommerceAnalytics_SotoMarketplaceCommerceAnalytics"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMarketplaceEntitlementService",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MarketplaceEntitlementService_SotoMarketplaceEntitlementService"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMarketplaceMetering",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MarketplaceMetering_SotoMarketplaceMetering"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMediaConnect",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MediaConnect_SotoMediaConnect"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMediaConvert",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MediaConvert_SotoMediaConvert"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMediaLive",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MediaLive_SotoMediaLive"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMediaPackage",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MediaPackage_SotoMediaPackage"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMediaPackageVod",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MediaPackageVod_SotoMediaPackageVod"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMediaStore",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MediaStore_SotoMediaStore"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMediaStoreData",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MediaStoreData_SotoMediaStoreData"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMediaTailor",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MediaTailor_SotoMediaTailor"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMemoryDB",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MemoryDB_SotoMemoryDB"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMgn",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Mgn_SotoMgn"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMigrationHub",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MigrationHub_SotoMigrationHub"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMigrationHubConfig",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MigrationHubConfig_SotoMigrationHubConfig"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMigrationHubOrchestrator",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MigrationHubOrchestrator_SotoMigrationHubOrchestrator"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMigrationHubRefactorSpaces",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MigrationHubRefactorSpaces_SotoMigrationHubRefactorSpaces"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMigrationHubStrategy",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MigrationHubStrategy_SotoMigrationHubStrategy"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoMobile",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Mobile_SotoMobile"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoNeptune",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Neptune_SotoNeptune"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoNetworkFirewall",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_NetworkFirewall_SotoNetworkFirewall"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoNetworkManager",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_NetworkManager_SotoNetworkManager"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoNimble",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Nimble_SotoNimble"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoOAM",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_OAM_SotoOAM"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoOmics",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Omics_SotoOmics"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoOpenSearch",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_OpenSearch_SotoOpenSearch"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoOpenSearchServerless",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_OpenSearchServerless_SotoOpenSearchServerless"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoOpsWorks",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_OpsWorks_SotoOpsWorks"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoOpsWorksCM",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_OpsWorksCM_SotoOpsWorksCM"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoOrganizations",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Organizations_SotoOrganizations"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoOutposts",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Outposts_SotoOutposts"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPI",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_PI_SotoPI"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPanorama",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Panorama_SotoPanorama"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPersonalize",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Personalize_SotoPersonalize"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPersonalizeEvents",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_PersonalizeEvents_SotoPersonalizeEvents"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPersonalizeRuntime",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_PersonalizeRuntime_SotoPersonalizeRuntime"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPinpoint",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Pinpoint_SotoPinpoint"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPinpointEmail",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_PinpointEmail_SotoPinpointEmail"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPinpointSMSVoice",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_PinpointSMSVoice_SotoPinpointSMSVoice"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPinpointSMSVoiceV2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_PinpointSMSVoiceV2_SotoPinpointSMSVoiceV2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPipes",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Pipes_SotoPipes"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPolly",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Polly_SotoPolly"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPricing",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Pricing_SotoPricing"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPrivateNetworks",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_PrivateNetworks_SotoPrivateNetworks"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoProton",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Proton_SotoProton"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoQLDB",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_QLDB_SotoQLDB"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoQLDBSession",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_QLDBSession_SotoQLDBSession"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoQuickSight",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_QuickSight_SotoQuickSight"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRAM",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_RAM_SotoRAM"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRDS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_RDS_SotoRDS"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRDSData",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_RDSData_SotoRDSData"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRUM",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_RUM_SotoRUM"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRbin",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Rbin_SotoRbin"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRedshift",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Redshift_SotoRedshift"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRedshiftData",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_RedshiftData_SotoRedshiftData"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRedshiftServerless",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_RedshiftServerless_SotoRedshiftServerless"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRekognition",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Rekognition_SotoRekognition"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoResiliencehub",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Resiliencehub_SotoResiliencehub"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoResourceExplorer2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ResourceExplorer2_SotoResourceExplorer2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoResourceGroups",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ResourceGroups_SotoResourceGroups"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoResourceGroupsTaggingAPI",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ResourceGroupsTaggingAPI_SotoResourceGroupsTaggingAPI"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRoboMaker",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_RoboMaker_SotoRoboMaker"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRolesAnywhere",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_RolesAnywhere_SotoRolesAnywhere"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRoute53",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Route53_SotoRoute53"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRoute53Domains",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Route53Domains_SotoRoute53Domains"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRoute53RecoveryCluster",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Route53RecoveryCluster_SotoRoute53RecoveryCluster"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRoute53RecoveryControlConfig",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Route53RecoveryControlConfig_SotoRoute53RecoveryControlConfig"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRoute53RecoveryReadiness",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Route53RecoveryReadiness_SotoRoute53RecoveryReadiness"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoRoute53Resolver",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Route53Resolver_SotoRoute53Resolver"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoS3",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_SotoS3"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoS3Control",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_S3Control_SotoS3Control"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoS3Outposts",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_S3Outposts_SotoS3Outposts"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSES",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SES_SotoSES"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSESv2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SESv2_SotoSESv2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSFN",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SFN_SotoSFN"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSMS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SMS_SotoSMS"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSNS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SNS_SotoSNS"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSQS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SQS_SotoSQS"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSSM",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SSM_SotoSSM"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSSMContacts",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SSMContacts_SotoSSMContacts"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSSMIncidents",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SSMIncidents_SotoSSMIncidents"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSSO",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SSO_SotoSSO"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSSOAdmin",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SSOAdmin_SotoSSOAdmin"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSSOOIDC",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SSOOIDC_SotoSSOOIDC"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSTS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_SotoSTS"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSWF",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SWF_SotoSWF"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSageMaker",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SageMaker_SotoSageMaker"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSageMakerA2IRuntime",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SageMakerA2IRuntime_SotoSageMakerA2IRuntime"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSageMakerFeatureStoreRuntime",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SageMakerFeatureStoreRuntime_SotoSageMakerFeatureStoreRuntime"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSageMakerGeospatial",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SageMakerGeospatial_SotoSageMakerGeospatial"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSageMakerMetrics",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SageMakerMetrics_SotoSageMakerMetrics"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSageMakerRuntime",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SageMakerRuntime_SotoSageMakerRuntime"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSagemakerEdge",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SagemakerEdge_SotoSagemakerEdge"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSavingsPlans",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SavingsPlans_SotoSavingsPlans"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoScheduler",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Scheduler_SotoScheduler"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSchemas",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Schemas_SotoSchemas"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSecretsManager",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SecretsManager_SotoSecretsManager"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSecurityHub",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SecurityHub_SotoSecurityHub"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSecurityLake",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SecurityLake_SotoSecurityLake"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoServerlessApplicationRepository",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ServerlessApplicationRepository_SotoServerlessApplicationRepository"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoServiceCatalog",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ServiceCatalog_SotoServiceCatalog"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoServiceCatalogAppRegistry",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ServiceCatalogAppRegistry_SotoServiceCatalogAppRegistry"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoServiceDiscovery",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ServiceDiscovery_SotoServiceDiscovery"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoServiceQuotas",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_ServiceQuotas_SotoServiceQuotas"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoShield",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Shield_SotoShield"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSigner",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Signer_SotoSigner"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSimSpaceWeaver",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SimSpaceWeaver_SotoSimSpaceWeaver"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSnowDeviceManagement",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SnowDeviceManagement_SotoSnowDeviceManagement"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSnowball",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Snowball_SotoSnowball"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSsmSap",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SsmSap_SotoSsmSap"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoStorageGateway",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_StorageGateway_SotoStorageGateway"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSupport",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Support_SotoSupport"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSupportApp",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_SupportApp_SotoSupportApp"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoSynthetics",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Synthetics_SotoSynthetics"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoTextract",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Textract_SotoTextract"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoTimestreamQuery",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_TimestreamQuery_SotoTimestreamQuery"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoTimestreamWrite",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_TimestreamWrite_SotoTimestreamWrite"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoTranscribe",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Transcribe_SotoTranscribe"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoTranscribeStreaming",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_TranscribeStreaming_SotoTranscribeStreaming"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoTransfer",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Transfer_SotoTransfer"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoTranslate",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Translate_SotoTranslate"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoVoiceID",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_VoiceID_SotoVoiceID"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoWAF",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_WAF_SotoWAF"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoWAFRegional",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_WAFRegional_SotoWAFRegional"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoWAFV2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_WAFV2_SotoWAFV2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoWellArchitected",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_WellArchitected_SotoWellArchitected"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoWisdom",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Wisdom_SotoWisdom"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoWorkDocs",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_WorkDocs_SotoWorkDocs"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoWorkLink",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_WorkLink_SotoWorkLink"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoWorkMail",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_WorkMail_SotoWorkMail"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoWorkMailMessageFlow",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_WorkMailMessageFlow_SotoWorkMailMessageFlow"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoWorkSpaces",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_WorkSpaces_SotoWorkSpaces"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoWorkSpacesWeb",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_WorkSpacesWeb_SotoWorkSpacesWeb"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoXRay",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_XRay_SotoXRay"
+      ]
+    },
+    {
+      "identity": "swift-atomics",
+      "name": "Atomics",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_atomics//:Sources_Atomics"
+      ]
+    },
+    {
+      "identity": "swift-collections",
+      "name": "Collections",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_collections//:Sources_Collections"
+      ]
+    },
+    {
+      "identity": "swift-collections",
+      "name": "DequeModule",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_collections//:Sources_DequeModule"
+      ]
+    },
+    {
+      "identity": "swift-collections",
+      "name": "OrderedCollections",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_collections//:Sources_OrderedCollections"
+      ]
+    },
+    {
+      "identity": "swift-log",
+      "name": "Logging",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_log//:Sources_Logging"
+      ]
+    },
+    {
+      "identity": "swift-metrics",
+      "name": "CoreMetrics",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_metrics//:Sources_CoreMetrics"
+      ]
+    },
+    {
+      "identity": "swift-metrics",
+      "name": "Metrics",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_metrics//:Sources_Metrics"
+      ]
+    },
+    {
+      "identity": "swift-metrics",
+      "name": "MetricsTestKit",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_metrics//:Sources_MetricsTestKit"
+      ]
+    },
+    {
+      "identity": "swift-nio-extras",
+      "name": "NIOExtras",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio_extras//:Sources_NIOExtras"
+      ]
+    },
+    {
+      "identity": "swift-nio-extras",
+      "name": "NIOHTTPCompression",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPCompression"
+      ]
+    },
+    {
+      "identity": "swift-nio-extras",
+      "name": "NIOSOCKS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKS"
+      ]
+    },
+    {
+      "identity": "swift-nio-http2",
+      "name": "NIOHTTP2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2"
+      ]
+    },
+    {
+      "identity": "swift-nio-ssl",
+      "name": "NIOSSL",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio_ssl//:Sources_NIOSSL"
+      ]
+    },
+    {
+      "identity": "swift-nio-ssl",
+      "name": "NIOSSLHTTP1Client",
+      "type": "executable",
+      "target_labels": [
+        "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLHTTP1Client"
+      ]
+    },
+    {
+      "identity": "swift-nio-ssl",
+      "name": "NIOTLSServer",
+      "type": "executable",
+      "target_labels": [
+        "@swiftpkg_swift_nio_ssl//:Sources_NIOTLSServer"
+      ]
+    },
+    {
+      "identity": "swift-nio-transport-services",
+      "name": "NIOTransportServices",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio_transport_services//:Sources_NIOTransportServices"
+      ]
+    },
+    {
+      "identity": "swift-nio",
+      "name": "NIO",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio//:Sources_NIO"
+      ]
+    },
+    {
+      "identity": "swift-nio",
+      "name": "NIOConcurrencyHelpers",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio//:Sources_NIOConcurrencyHelpers"
+      ]
+    },
+    {
+      "identity": "swift-nio",
+      "name": "NIOCore",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio//:Sources_NIOCore"
+      ]
+    },
+    {
+      "identity": "swift-nio",
+      "name": "NIOEmbedded",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio//:Sources_NIOEmbedded"
+      ]
+    },
+    {
+      "identity": "swift-nio",
+      "name": "NIOFoundationCompat",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio//:Sources_NIOFoundationCompat"
+      ]
+    },
+    {
+      "identity": "swift-nio",
+      "name": "NIOHTTP1",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio//:Sources_NIOHTTP1"
+      ]
+    },
+    {
+      "identity": "swift-nio",
+      "name": "NIOPosix",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio//:Sources_NIOPosix"
+      ]
+    },
+    {
+      "identity": "swift-nio",
+      "name": "NIOTLS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio//:Sources_NIOTLS"
+      ]
+    },
+    {
+      "identity": "swift-nio",
+      "name": "NIOTestUtils",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio//:Sources_NIOTestUtils"
+      ]
+    },
+    {
+      "identity": "swift-nio",
+      "name": "NIOWebSocket",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio//:Sources_NIOWebSocket"
+      ]
+    },
+    {
+      "identity": "swift-nio",
+      "name": "_NIOConcurrency",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio//:Sources__NIOConcurrency"
+      ]
+    }
+  ]
+}
