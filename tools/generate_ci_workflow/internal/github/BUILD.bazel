@@ -1,0 +1,21 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "github",
+    srcs = ["workflow.go"],
+    importpath = "github.com/cgrindel/swift_bazel/tools/generate_ci_workflow/internal/github",
+    visibility = ["//tools/generate_ci_workflow:__subpackages__"],
+    deps = ["@in_gopkg_yaml_v3//:go_default_library"],
+)
+
+go_test(
+    name = "github_test",
+    srcs = ["workflow_test.go"],
+    deps = [
+        ":github",
+        "@com_github_stretchr_testify//assert:go_default_library",
+    ],
+)
+
+bzlformat_pkg(name = "bzlformat")

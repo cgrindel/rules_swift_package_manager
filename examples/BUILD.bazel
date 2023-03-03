@@ -1,14 +1,11 @@
-load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(
     "@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl",
-    "bazel_integration_test",
-    "bazel_integration_tests",
     "integration_test_utils",
 )
-load("//:bazel_versions.bzl", "CURRENT_BAZEL_VERSION", "SUPPORTED_BAZEL_VERSIONS")
-load(":test_utils.bzl", "test_utils")
+load("//:bazel_versions.bzl", "CURRENT_BAZEL_VERSION")
+load(":example_infos.bzl", "example_infos")
 
 bzlformat_pkg(name = "bzlformat")
 
@@ -17,38 +14,11 @@ bzlformat_pkg(name = "bzlformat")
 # repository.
 # gazelle:exclude **
 
-_all_os_all_bazel_versions_test_examples = [
-    "http_archive_ext_deps",
-    "pkg_manifest_minimal",
-]
-
-_all_os_single_bazel_version_test_examples = [
-    "vapor_example",
-]
-
-_macos_single_bazel_version_test_examples = [
-    "firebase_example",
-    "interesting_deps",
-    "ios_sim",
-    "objc_code",
-    "phone_number_kit",
-    "xcmetrics_example",
-]
-
-# The default timeout is "long".
-_default_timeout = "long"
-
-_timeouts = {
-    "firebase_example": "eternal",
-    "xcmetrics_example": "eternal",
-}
-
-_linux_single_bazel_version_test_examples = []
-
-_all_single_bazel_version_test_examples = \
-    _all_os_single_bazel_version_test_examples + \
-    _macos_single_bazel_version_test_examples + \
-    _linux_single_bazel_version_test_examples
+example_infos.write_json(
+    name = "json",
+    out = "examples.json",
+    visibility = ["//:__subpackages__"],
+)
 
 sh_binary(
     name = "test_runner",
@@ -66,98 +36,28 @@ sh_binary(
 # MARK: - Integration Tests
 
 [
-    bazel_integration_tests(
-        name = example + "_test",
-        timeout = _timeouts.get(example, _default_timeout),
-        bazel_versions = SUPPORTED_BAZEL_VERSIONS,
-        test_runner = ":test_runner",
-        workspace_files = integration_test_utils.glob_workspace_files(example) + [
-            "//:local_repository_files",
-        ],
-        workspace_path = example,
-    )
-    for example in _all_os_all_bazel_versions_test_examples
+    example_infos.bazel_integration_test(ei)
+    for ei in example_infos.all
 ]
-
-[
-    bazel_integration_test(
-        name = integration_test_utils.bazel_integration_test_name(
-            example + "_test",
-            CURRENT_BAZEL_VERSION,
-        ),
-        timeout = _timeouts.get(example, _default_timeout),
-        bazel_version = CURRENT_BAZEL_VERSION,
-        test_runner = ":test_runner",
-        workspace_files = integration_test_utils.glob_workspace_files(example) + [
-            "//:local_repository_files",
-        ],
-        workspace_path = example,
-    )
-    for example in _all_os_single_bazel_version_test_examples
-]
-
-[
-    bazel_integration_test(
-        name = integration_test_utils.bazel_integration_test_name(
-            example + "_test",
-            CURRENT_BAZEL_VERSION,
-        ),
-        timeout = _timeouts.get(example, _default_timeout),
-        bazel_version = CURRENT_BAZEL_VERSION,
-        target_compatible_with = ["@platforms//os:macos"],
-        test_runner = ":test_runner",
-        workspace_files = integration_test_utils.glob_workspace_files(example) + [
-            "//:local_repository_files",
-        ],
-        workspace_path = example,
-    )
-    for example in _macos_single_bazel_version_test_examples
-]
-
-[
-    bazel_integration_test(
-        name = integration_test_utils.bazel_integration_test_name(
-            example + "_test",
-            CURRENT_BAZEL_VERSION,
-        ),
-        timeout = _timeouts.get(example, _default_timeout),
-        bazel_version = CURRENT_BAZEL_VERSION,
-        target_compatible_with = ["@platforms//os:linux"],
-        test_runner = ":test_runner",
-        workspace_files = integration_test_utils.glob_workspace_files(example) + [
-            "//:local_repository_files",
-        ],
-        workspace_path = example,
-    )
-    for example in _linux_single_bazel_version_test_examples
-]
-
-# MARK: - Test Suites
-
-_smoke_test_examples = _all_os_all_bazel_versions_test_examples + \
-                       _all_single_bazel_version_test_examples
 
 _smoke_test_names = sorted([
-    integration_test_utils.bazel_integration_test_name(
-        example + "_test",
+    example_infos.test_name(
+        ei.name,
         CURRENT_BAZEL_VERSION,
     )
-    for example in _smoke_test_examples
+    for ei in example_infos.all
 ])
 
-_all_os_all_bazel_versions_test_names = lists.flatten([
-    test_utils.integration_test_names(
-        base_names = [
-            example + "_test"
-            for example in _all_os_all_bazel_versions_test_examples
-        ],
-        versions = SUPPORTED_BAZEL_VERSIONS,
-    ),
-])
-
-_all_test_names = sorted(sets.to_list(
-    sets.make(_all_os_all_bazel_versions_test_names + _smoke_test_names),
-))
+_all_test_names = sorted(lists.flatten([
+    [
+        example_infos.test_name(
+            ei.name,
+            version,
+        )
+        for version in ei.versions
+    ]
+    for ei in example_infos.all
+]))
 
 test_suite(
     name = "smoke_integration_tests",

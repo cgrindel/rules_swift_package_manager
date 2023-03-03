@@ -1,119 +1,124 @@
+# This file is processed by //tools/generate_ci_workflow.  Specifically, the
+# matrix strategy sections for the integration test matrix jobs are updated with
+# the values from //examples:json.
+#
+# Note:
+# - Modification to values outside of the matrix strategy sections should 
+#   persist.
+# - Comments and custom formatting will be lost.
 name: Continuous Integration
-
-on:
+"on":
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
   schedule:
-    # Every day at 11:14 UTC.
-    - cron: '14 11 * * *'
-
+    - cron: 14 11 * * *
 jobs:
-
-  macos_tidy_and_test:
-    runs-on: macos-12
-    steps:
-    - uses: actions/checkout@v3
-    - uses: ./.github/actions/set_up_macos
-      with:
-        xcode_version: '14.0.1'
-        repo_name: swift_bazel
-    - name: Ensure everything is tidy
-      shell: bash
-      run: |
-        bazelisk run //:tidy_check
-    - name: Execute Tests
-      shell: bash
-      run: |
-        bazelisk test //... 
-
-  macos_int_test_matrix:
-    strategy:
-      matrix:
-        example: 
-        - "http_archive_ext_deps"
-        - "pkg_manifest_minimal"
-        bazel_version:
-        - ".bazelversion"
-        - "5_4_0"
-        include:
-        - example: "firebase_example"
-          bazel_version: ".bazelversion"
-        - example: "interesting_deps"
-          bazel_version: ".bazelversion"
-        - example: "ios_sim"
-          bazel_version: ".bazelversion"
-        - example: "objc_code"
-          bazel_version: ".bazelversion"
-        - example: "phone_number_kit"
-          bazel_version: ".bazelversion"
-        - example: "xcmetrics_example"
-          bazel_version: ".bazelversion"
-    runs-on: macos-12
-    steps:
-    - uses: actions/checkout@v3
-    - uses: ./.github/actions/set_up_macos
-      with:
-        xcode_version: '14.0.1'
-        repo_name: swift_bazel
-    - uses: ./.github/actions/test_example
-      with:
-        example_name: ${{ matrix.example }}
-        bazel_version: ${{ matrix.bazel_version }}
-
-  ubuntu_tidy_and_test:
-    runs-on: ubuntu-22.04
-    env:
-      CC: clang
-    steps:
-    - uses: actions/checkout@v3
-    - uses: ./.github/actions/set_up_ubuntu
-      with:
-        repo_name: swift_bazel
-        ubuntu_version: "22.04"
-    - name: Ensure everything is tidy
-      shell: bash
-      run: |
-        bazelisk run //:tidy_check
-    - name: Execute Tests
-      shell: bash
-      run: |
-        bazelisk test //... 
-
-  ubuntu_int_test_matrix:
-    strategy:
-      matrix:
-        example: 
-        - "http_archive_ext_deps"
-        - "pkg_manifest_minimal"
-        bazel_version:
-        - ".bazelversion"
-        - "5_4_0"
-        include:
-        - example: vapor_example
-          bazel_version: ".bazelversion"
-    runs-on: ubuntu-22.04
-    env:
-      CC: clang
-    steps:
-    - uses: actions/checkout@v3
-    - uses: ./.github/actions/set_up_ubuntu
-      with:
-        repo_name: swift_bazel
-        ubuntu_version: "22.04"
-    - uses: ./.github/actions/test_example
-      with:
-        example_name: ${{ matrix.example }}
-        bazel_version: ${{ matrix.bazel_version }}
-
   all_ci_tests:
     runs-on: ubuntu-20.04
-    needs: 
-    - macos_tidy_and_test
-    - macos_int_test_matrix
-    - ubuntu_tidy_and_test
-    - ubuntu_int_test_matrix
+    needs:
+      - macos_tidy_and_test
+      - macos_int_test_matrix
+      - ubuntu_tidy_and_test
+      - ubuntu_int_test_matrix
     if: ${{ always() }}
     steps:
       - uses: cgrindel/gha_join_jobs@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+  macos_int_test_matrix:
+    strategy:
+      matrix:
+        include:
+          - example: http_archive_ext_deps
+            bazel_version: .bazelversion
+          - example: http_archive_ext_deps
+            bazel_version: "5_4_0"
+          - example: pkg_manifest_minimal
+            bazel_version: .bazelversion
+          - example: pkg_manifest_minimal
+            bazel_version: "5_4_0"
+          - example: vapor_example
+            bazel_version: .bazelversion
+          - example: firebase_example
+            bazel_version: .bazelversion
+          - example: interesting_deps
+            bazel_version: .bazelversion
+          - example: ios_sim
+            bazel_version: .bazelversion
+          - example: objc_code
+            bazel_version: .bazelversion
+          - example: phone_number_kit
+            bazel_version: .bazelversion
+          - example: xcmetrics_example
+            bazel_version: .bazelversion
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/set_up_macos
+        with:
+          repo_name: swift_bazel
+          xcode_version: 14.0.1
+      - uses: ./.github/actions/test_example
+        with:
+          bazel_version: ${{ matrix.bazel_version }}
+          example_name: ${{ matrix.example }}
+  macos_tidy_and_test:
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/set_up_macos
+        with:
+          repo_name: swift_bazel
+          xcode_version: 14.0.1
+      - name: Ensure everything is tidy
+        shell: bash
+        run: |
+          bazelisk run //:tidy_check
+      - name: Execute Tests
+        shell: bash
+        run: "bazelisk test //... \n"
+  ubuntu_int_test_matrix:
+    strategy:
+      matrix:
+        include:
+          - example: http_archive_ext_deps
+            bazel_version: .bazelversion
+          - example: http_archive_ext_deps
+            bazel_version: "5_4_0"
+          - example: pkg_manifest_minimal
+            bazel_version: .bazelversion
+          - example: pkg_manifest_minimal
+            bazel_version: "5_4_0"
+          - example: vapor_example
+            bazel_version: .bazelversion
+    runs-on: ubuntu-22.04
+    env:
+      CC: clang
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/set_up_ubuntu
+        with:
+          repo_name: swift_bazel
+          ubuntu_version: "22.04"
+      - uses: ./.github/actions/test_example
+        with:
+          bazel_version: ${{ matrix.bazel_version }}
+          example_name: ${{ matrix.example }}
+  ubuntu_tidy_and_test:
+    runs-on: ubuntu-22.04
+    env:
+      CC: clang
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/set_up_ubuntu
+        with:
+          repo_name: swift_bazel
+          ubuntu_version: "22.04"
+      - name: Ensure everything is tidy
+        shell: bash
+        run: |
+          bazelisk run //:tidy_check
+      - name: Execute Tests
+        shell: bash
+        run: "bazelisk test //... \n"

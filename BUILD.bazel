@@ -1,10 +1,11 @@
 load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@bazel_skylib//rules:run_binary.bzl", "run_binary")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_missing_pkgs", "bzlformat_pkg")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 load("@cgrindel_bazel_starlib//markdown:defs.bzl", "markdown_pkg")
 load("@cgrindel_bazel_starlib//shlib/rules:execute_binary.bzl", "execute_binary")
-load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_update_all")
+load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_diff_and_update", "updatesrc_update_all")
 load(
     "@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "integration_test_utils",
@@ -188,6 +189,36 @@ test_suite(
         "//examples:all_integration_tests",
     ],
     visibility = ["//:__subpackages__"],
+)
+
+# MARK: - CI Workflow
+
+run_binary(
+    name = "ci_workflow",
+    srcs = [
+        ".github/workflows/ci.yml",
+        "//examples:json",
+    ],
+    outs = ["ci.yml"],
+    args = [
+        "-template",
+        "$(location .github/workflows/ci.yml)",
+        "-example_json",
+        "$(location //examples:json)",
+        "-output",
+        "$(location ci.yml)",
+    ],
+    tool = "//tools/generate_ci_workflow",
+)
+
+updatesrc_diff_and_update(
+    name = "update",
+    srcs = [
+        ".github/workflows/ci.yml",
+    ],
+    outs = [
+        ":ci_workflow",
+    ],
 )
 
 bzl_library(
