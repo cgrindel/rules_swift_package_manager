@@ -1,6 +1,8 @@
 package github
 
-import "gopkg.in/yaml.v3"
+import (
+	"gopkg.in/yaml.v3"
+)
 
 type Workflow struct {
 	Name string           `yaml:"name"`
@@ -47,8 +49,32 @@ type Step struct {
 }
 
 type Strategy struct {
-	Matrix SBMatrixStrategy `yaml:"matrix,omitempty"`
+	FailFast FailFast         `yaml:"fail-fast,omitempty"`
+	Matrix   SBMatrixStrategy `yaml:"matrix,omitempty"`
 }
+
+func (s *Strategy) SetDefaults() {
+	s.FailFast = true
+}
+
+func (s *Strategy) UnmarshalYAML(node *yaml.Node) error {
+	// Set defaults on Strategy
+	s.SetDefaults()
+
+	// Define a type so that we can unmarshal into the struct without a recursion error.
+	type fake Strategy
+	if err := node.Decode((*fake)(s)); err != nil {
+		return err
+	}
+	return nil
+}
+
+type FailFast bool
+
+// func (ff FailFast) IsZero() bool {
+// 	// The FailFast defaults to true
+// 	return bool(ff)
+// }
 
 type SBMatrixStrategy struct {
 	Example      []string          `yaml:"example,omitempty"`
