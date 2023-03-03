@@ -1,7 +1,6 @@
 package github_test
 
 import (
-	"log"
 	"testing"
 
 	"github.com/cgrindel/swift_bazel/tools/generate_ci_workflow/internal/github"
@@ -9,11 +8,24 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+func TestFailFast(t *testing.T) {
+	t.Run("is zero", func(t *testing.T) {
+		tests := []struct {
+			msg string
+			in  github.FailFast
+			exp bool
+		}{
+			{msg: "true", in: github.FailFast(true), exp: true},
+			{msg: "false", in: github.FailFast(false), exp: false},
+		}
+		for _, tt := range tests {
+			actual := tt.in.IsZero()
+			assert.Equal(t, tt.exp, actual, tt.msg)
+		}
+	})
+}
+
 func TestStrategy(t *testing.T) {
-	// t.Run("zero value is true", func(t *testing.T) {
-	// 	s := github.Strategy{FailFast: true}
-	// 	assert.True(t, s.FailFast.IsZero(), "FailFast zero value is true")
-	// })
 	t.Run("decode YAML", func(t *testing.T) {
 		tests := []struct {
 			msg string
@@ -28,19 +40,23 @@ matrix:
 				exp: github.Strategy{FailFast: true},
 			},
 			{
-				msg: "with fail-fast",
+				msg: "with fail-fast false",
 				in: `
 fail-fast: false
 matrix:
 `,
 				exp: github.Strategy{FailFast: false},
 			},
+			{
+				msg: "with fail-fast true",
+				in: `
+fail-fast: true
+matrix:
+`,
+				exp: github.Strategy{FailFast: true},
+			},
 		}
 		for _, tt := range tests {
-			// DEBUG BEGIN
-			log.Printf("*** CHUCK: ==========")
-			log.Printf("*** CHUCK:  tt.msg: %+#v", tt.msg)
-			// DEBUG END
 			var actual github.Strategy
 			err := yaml.Unmarshal([]byte(tt.in), &actual)
 			assert.NoError(t, err)
@@ -48,16 +64,6 @@ matrix:
 		}
 	})
 }
-
-// const strategyWithoutFailFastYAML = `
-// matrix:
-//   include: []
-// `
-// const strategyWithFailFastYAML = `
-// fail-fast: false
-// matrix:
-//   include: []
-// `
 
 func TestNewWorkflowFromYAML(t *testing.T) {
 	workflow, err := github.NewWorkflowFromYAML([]byte(workflowYAML))
