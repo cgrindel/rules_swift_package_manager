@@ -101,6 +101,7 @@ _default_timeout = "long"
 
 _timeouts = {
     "firebase_example": "eternal",
+    "vapor_example": "eternal",
     "xcmetrics_example": "eternal",
 }
 
