@@ -2,7 +2,10 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
 
 swift_test(
     name = "SotoTests",
-    srcs = ["SotoTests.swift"],
+    srcs = [
+        "SotoTests.swift",
+        "main.swift",
+    ],
     module_name = "SotoTests",
     deps = ["@swiftpkg_soto//:Sources_Soto_SotoS3"],
 )
