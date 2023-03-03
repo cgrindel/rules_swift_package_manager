@@ -588,6 +588,7 @@ cc_library(
         "src/foo.h",
     ],
     tags = ["swift_module=ClangLibrary"],
+    textual_hdrs = ["src/foo.cc"],
     visibility = ["//visibility:public"],
 )
 """,
@@ -652,6 +653,7 @@ objc_library(
         "src/foo.m",
     ],
     tags = ["swift_module=ObjcLibrary"],
+    textual_hdrs = ["src/foo.m"],
     visibility = ["//visibility:public"],
 )
 
@@ -720,6 +722,7 @@ cc_library(
         "src/foo.h",
     ],
     tags = ["swift_module=ClangLibraryWithConditionalDep"],
+    textual_hdrs = ["src/foo.cc"],
     visibility = ["//visibility:public"],
 )
 """,

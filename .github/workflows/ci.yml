@@ -38,6 +38,8 @@ jobs:
             bazel_version: .bazelversion
           - example: pkg_manifest_minimal
             bazel_version: "5_4_0"
+          - example: soto_example
+            bazel_version: .bazelversion
           - example: vapor_example
             bazel_version: .bazelversion
           - example: firebase_example
@@ -90,6 +92,8 @@ jobs:
             bazel_version: .bazelversion
           - example: pkg_manifest_minimal
             bazel_version: "5_4_0"
+          - example: soto_example
+            bazel_version: .bazelversion
           - example: vapor_example
             bazel_version: .bazelversion
     runs-on: ubuntu-22.04

@@ -101,6 +101,7 @@ _default_timeout = "long"
 
 _timeouts = {
     "firebase_example": "eternal",
+    "soto_example": "eternal",
     "vapor_example": "eternal",
     "xcmetrics_example": "eternal",
 }
@@ -111,6 +112,7 @@ _all_os_all_bazel_versions_test_examples = [
 ]
 
 _all_os_single_bazel_version_test_examples = [
+    "soto_example",
     "vapor_example",
 ]
 
