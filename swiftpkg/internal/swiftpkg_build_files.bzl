@@ -241,6 +241,13 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "-fmodule-name={}".format(target.c99name),
     ]
 
+    # The `cc_library` rule compiles each source file (.c, .cc) separately only providing the
+    # headers. There are some clang modules (e.g.,
+    # https://github.com/soto-project/soto-core/tree/main/Sources/CSotoExpat) that include
+    # non-header files (e.g. `#include "xmltok_impl.c"`). The ensure that all of the files are
+    # present for compilation, we add any non-header source files to the `textual_hdrs`.
+    # Related to GH252.
+    textual_hdrs = organized_files.textual_hdrs
     linkopts = []
     hdrs = []
     srcs = []
@@ -346,6 +353,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     if sets.length(srcs_set) > 0:
         srcs = sets.to_list(srcs_set)
         attrs["srcs"] = srcs
+
+    if len(textual_hdrs) > 0:
+        attrs["textual_hdrs"] = textual_hdrs
 
     if len(linkopts) > 0:
         attrs["linkopts"] = bzl_selects.to_starlark(
