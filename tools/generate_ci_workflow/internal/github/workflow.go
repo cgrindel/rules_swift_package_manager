@@ -1,17 +1,21 @@
 package github
 
 import (
+	"github.com/creasty/defaults"
 	"gopkg.in/yaml.v3"
 )
 
 type Workflow struct {
 	Name string           `yaml:"name"`
 	On   WorkflowTriggers `yaml:"on"`
-	Jobs map[string]Job   `yaml:"jobs"`
+	Jobs map[string]Job   `yaml:"jobs" default:"{}"`
 }
 
 func NewWorkflowFromYAML(b []byte) (*Workflow, error) {
 	var workflow Workflow
+	if err := defaults.Set(&workflow); err != nil {
+		return nil, err
+	}
 	if err := yaml.Unmarshal(b, &workflow); err != nil {
 		return nil, err
 	}
@@ -32,12 +36,24 @@ type Schedule struct {
 }
 
 type Job struct {
-	Strategy Strategy          `yaml:"strategy,omitempty"`
+	Strategy Strategy          `yaml:"strategy,omitempty" default:"{}"`
 	RunsOn   string            `yaml:"runs-on"`
 	Needs    []string          `yaml:"needs,omitempty"`
 	If       string            `yaml:"if,omitempty"`
 	Env      map[string]string `yaml:"env,omitempty"`
 	Steps    []Step            `yaml:"steps"`
+}
+
+func (j *Job) UnmarshalYAML(node *yaml.Node) error {
+	if err := defaults.Set(j); err != nil {
+		return nil
+	}
+	// Define a type so that we can unmarshal into the struct without a recursion error.
+	type fake Job
+	if err := node.Decode((*fake)(j)); err != nil {
+		return err
+	}
+	return nil
 }
 
 type Step struct {
@@ -49,17 +65,20 @@ type Step struct {
 }
 
 type Strategy struct {
-	FailFast FailFast         `yaml:"fail-fast,omitempty"`
+	FailFast FailFast         `yaml:"fail-fast,omitempty" default:"true"`
 	Matrix   SBMatrixStrategy `yaml:"matrix,omitempty"`
 }
 
-func (s *Strategy) SetDefaults() {
-	s.FailFast = true
-}
+// func (s *Strategy) SetDefaults() {
+// 	s.FailFast = true
+// }
 
 func (s *Strategy) UnmarshalYAML(node *yaml.Node) error {
 	// Set defaults on Strategy
-	s.SetDefaults()
+	// s.SetDefaults()
+	if err := defaults.Set(s); err != nil {
+		return nil
+	}
 	// Define a type so that we can unmarshal into the struct without a recursion error.
 	type fake Strategy
 	if err := node.Decode((*fake)(s)); err != nil {

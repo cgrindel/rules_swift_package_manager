@@ -1,6 +1,7 @@
 package github_test
 
 import (
+	"log"
 	"testing"
 
 	"github.com/cgrindel/swift_bazel/tools/generate_ci_workflow/internal/github"
@@ -74,6 +75,13 @@ func TestNewWorkflowFromYAML(t *testing.T) {
 	assert.True(t, ok, "`macos_int_test_matrix` job was not found")
 	assert.True(t, bool(macosIntTestMatrix.Strategy.FailFast),
 		"expected strategy fail-fast to default to true")
+
+	// DEBUG BEGIN
+	b, err := yaml.Marshal(&workflow)
+	assert.NoError(t, err)
+	log.Printf("*** CHUCK:  string(b):\n%s", string(b))
+	t.Error("STOP!")
+	// DEBUG END
 }
 
 const workflowYAML = `

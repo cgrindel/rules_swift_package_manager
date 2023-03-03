@@ -6,7 +6,10 @@ go_library(
     srcs = ["workflow.go"],
     importpath = "github.com/cgrindel/swift_bazel/tools/generate_ci_workflow/internal/github",
     visibility = ["//tools/generate_ci_workflow:__subpackages__"],
-    deps = ["@in_gopkg_yaml_v3//:go_default_library"],
+    deps = [
+        "@com_github_creasty_defaults//:go_default_library",
+        "@in_gopkg_yaml_v3//:go_default_library",
+    ],
 )
 
 go_test(
