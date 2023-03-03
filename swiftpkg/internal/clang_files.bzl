@@ -249,6 +249,12 @@ def _collect_files(
     public_includes = sets.to_list(public_includes_set)
     private_includes = sets.to_list(private_includes_set)
 
+    # Textual headers
+    textual_hdrs = []
+    for src in srcs:
+        if not _is_hdr(src):
+            textual_hdrs.append(src)
+
     # Remove the prefixes before returning the results
     return struct(
         hdrs = sorted(hdrs),
@@ -257,6 +263,7 @@ def _collect_files(
         private_includes = sorted(private_includes),
         modulemap = modulemap,
         others = sorted(others),
+        textual_hdrs = sorted(textual_hdrs),
     )
 
 clang_files = struct(
