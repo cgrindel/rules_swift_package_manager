@@ -6,6 +6,7 @@ class SotoTests: XCTestCase {
         let bucketName = "soto-getting-started-bucket"
         let createBucketRequest = S3.CreateBucketRequest(bucket: bucketName)
         XCTAssertEqual(createBucketRequest.bucket, bucketName)
+        XCTFail("STOP!")
     }
 
     static var allTests = [
