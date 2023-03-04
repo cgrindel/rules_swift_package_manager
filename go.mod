@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/bazelbuild/bazel-gazelle v0.29.0
-	github.com/bazelbuild/buildtools v0.0.0-20230127124510-cf446296fb76
+	github.com/bazelbuild/buildtools v0.0.0-20230302165817-a6ca93fd072d
 	github.com/creasty/defaults v1.6.0
 	github.com/deckarep/golang-set/v2 v2.2.0
 	github.com/stretchr/testify v1.8.2
