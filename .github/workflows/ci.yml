@@ -28,6 +28,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
   macos_int_test_matrix:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - example: http_archive_ext_deps
@@ -82,6 +83,7 @@ jobs:
         run: "bazelisk test //... \n"
   ubuntu_int_test_matrix:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - example: http_archive_ext_deps

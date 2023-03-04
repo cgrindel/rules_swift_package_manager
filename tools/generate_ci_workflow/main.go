@@ -66,30 +66,18 @@ This utility generates a new GitHub actions workflow file for this project.
 	}
 
 	// Set up the macOS matrix
-	// macosIntTestMatrix, ok := workflow.Jobs[macOSIntTestMatrixKey]
-	// if !ok {
-	// 	return fmt.Errorf("Did not find '%' job.", macOSIntTestMatrixKey)
-	// }
-	// updateMatrix(&macosIntTestMatrix.Strategy.Matrix, macOSExamples)
 	macOSExamples := filterExamplesByOS(examples, example.MacOS)
 	if err := updateJob(workflow.Jobs, macOSIntTestMatrixKey, macOSExamples); err != nil {
 		return err
 	}
 
 	// Set up the Ubuntu matrix
-	// ubuntuIntTestMatrix, ok := workflow.Jobs[ubuntuIntTestMatrixKey]
-	// if !ok {
-	// 	return fmt.Errorf("Did not find '%' job.", ubuntuIntTestMatrixKey)
-	// }
-	// ubuntuExamples := filterExamplesByOS(examples, example.LinuxOS)
-	// updateMatrix(&ubuntuIntTestMatrix.Strategy.Matrix, ubuntuExamples)
 	ubuntuExamples := filterExamplesByOS(examples, example.LinuxOS)
 	if err := updateJob(workflow.Jobs, ubuntuIntTestMatrixKey, ubuntuExamples); err != nil {
 		return err
 	}
 
 	// Write the output file
-	// outputYAML, err := yaml.Marshal(&workflow)
 	var outBuf bytes.Buffer
 	if _, err := outBuf.WriteString(hdrMsg); err != nil {
 		return err

@@ -96,6 +96,14 @@ def swift_bazel_go_dependencies():
     )
     maybe(
         go_repository,
+        name = "com_github_creasty_defaults",
+        build_external = "external",
+        importpath = "github.com/creasty/defaults",
+        sum = "h1:ltuE9cfphUtlrBeomuu8PEyISTXnxqkBIoQfXgv7BSc=",
+        version = "v1.6.0",
+    )
+    maybe(
+        go_repository,
         name = "com_github_davecgh_go_spew",
         build_external = "external",
         importpath = "github.com/davecgh/go-spew",

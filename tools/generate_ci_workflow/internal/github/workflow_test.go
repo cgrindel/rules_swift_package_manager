@@ -5,12 +5,82 @@ import (
 
 	"github.com/cgrindel/swift_bazel/tools/generate_ci_workflow/internal/github"
 	"github.com/stretchr/testify/assert"
+	"gopkg.in/yaml.v3"
 )
+
+func TestFailFast(t *testing.T) {
+	t.Run("is zero", func(t *testing.T) {
+		tests := []struct {
+			msg string
+			in  github.FailFast
+			exp bool
+		}{
+			{msg: "true", in: github.FailFast(true), exp: true},
+			{msg: "false", in: github.FailFast(false), exp: false},
+		}
+		for _, tt := range tests {
+			actual := tt.in.IsZero()
+			assert.Equal(t, tt.exp, actual, tt.msg)
+		}
+	})
+}
+
+func TestStrategy(t *testing.T) {
+	t.Run("decode YAML", func(t *testing.T) {
+		tests := []struct {
+			msg string
+			in  string
+			exp github.Strategy
+		}{
+			{
+				msg: "without fail-fast",
+				in: `
+matrix:
+`,
+				exp: github.Strategy{FailFast: true},
+			},
+			{
+				msg: "with fail-fast false",
+				in: `
+fail-fast: false
+matrix:
+`,
+				exp: github.Strategy{FailFast: false},
+			},
+			{
+				msg: "with fail-fast true",
+				in: `
+fail-fast: true
+matrix:
+`,
+				exp: github.Strategy{FailFast: true},
+			},
+		}
+		for _, tt := range tests {
+			var actual github.Strategy
+			err := yaml.Unmarshal([]byte(tt.in), &actual)
+			assert.NoError(t, err)
+			assert.Equal(t, tt.exp, actual, tt.msg)
+		}
+	})
+}
 
 func TestNewWorkflowFromYAML(t *testing.T) {
 	workflow, err := github.NewWorkflowFromYAML([]byte(workflowYAML))
 	assert.NoError(t, err)
 	assert.Equal(t, "Continuous Integration", workflow.Name)
+
+	// Example with strategy
+	macosIntTestMatrix, ok := workflow.Jobs["macos_int_test_matrix"]
+	assert.True(t, ok, "`macos_int_test_matrix` job was not found")
+	assert.True(t, bool(macosIntTestMatrix.Strategy.FailFast),
+		"expected strategy fail-fast to default to true")
+
+	// Example with no strategy
+	macosTidyAndTest, ok := workflow.Jobs["macos_tidy_and_test"]
+	assert.True(t, ok, "`macos_tidy_and_test` job was not found")
+	assert.True(t, bool(macosTidyAndTest.Strategy.FailFast),
+		"expected strategy fail-fast to default to true")
 }
 
 const workflowYAML = `
