@@ -36,7 +36,7 @@ type Schedule struct {
 }
 
 type Job struct {
-	Strategy Strategy          `yaml:"strategy,omitempty" default:"{}"`
+	Strategy Strategy          `yaml:"strategy,omitempty"`
 	RunsOn   string            `yaml:"runs-on"`
 	Needs    []string          `yaml:"needs,omitempty"`
 	If       string            `yaml:"if,omitempty"`
@@ -45,6 +45,8 @@ type Job struct {
 }
 
 func (j *Job) UnmarshalYAML(node *yaml.Node) error {
+	// Need to set defaults on Job, because they are stored in a map. The Strategy defaults will not
+	// be set unless we do it from here.
 	if err := defaults.Set(j); err != nil {
 		return nil
 	}
@@ -69,13 +71,8 @@ type Strategy struct {
 	Matrix   SBMatrixStrategy `yaml:"matrix,omitempty"`
 }
 
-// func (s *Strategy) SetDefaults() {
-// 	s.FailFast = true
-// }
-
 func (s *Strategy) UnmarshalYAML(node *yaml.Node) error {
 	// Set defaults on Strategy
-	// s.SetDefaults()
 	if err := defaults.Set(s); err != nil {
 		return nil
 	}
