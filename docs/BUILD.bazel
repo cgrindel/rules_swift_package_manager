@@ -6,6 +6,7 @@ load(
 )
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load("@cgrindel_bazel_starlib//markdown:defs.bzl", "markdown_pkg")
+load(":doc_infos.bzl", "doc_infos")
 
 bzlformat_pkg(name = "bzlformat")
 
@@ -13,32 +14,46 @@ markdown_pkg(name = "markdown")
 
 # MARK: - Documentation Declarations
 
+_DOC_INFOS = [
+    doc_infos.new(
+        name = "internal_rules_and_macros",
+        label = "//swiftpkg:build_defs",
+        symbols = [
+            "generate_modulemap",
+            "resource_bundle_accessor",
+            "resource_bundle_infoplist",
+        ],
+    ),
+    doc_infos.new(
+        name = "repository_rules",
+        label = "//swiftpkg:defs",
+        symbols = [
+            "local_swift_package",
+            "swift_package",
+        ],
+    ),
+    doc_infos.new(
+        name = "rules_and_macros",
+        label = "//swiftpkg:defs",
+        symbols = [
+            "swift_update_packages",
+        ],
+    ),
+]
+
 _DOC_WITH_SYMBOLS = {
-    "internal_rules_and_macros": [
-        "generate_modulemap",
-        "resource_bundle_accessor",
-        "resource_bundle_infoplist",
-    ],
-    "repository_rules": [
-        "local_swift_package",
-        "swift_package",
-    ],
-    "rules_and_macros": [
-        "swift_update_packages",
-    ],
+    di.name: di
+    for di in _DOC_INFOS
 }
 
 _ALL_DOC_PROVIDERS = [
     doc_providers.create(
-        name = name + "_overview",
-        stardoc_input = "//swiftpkg:defs.bzl",
-        symbols = symbols,
-        deps = ["//swiftpkg:defs"],
+        name = di.name + "_overview",
+        stardoc_input = "{}.bzl".format(di.label),
+        symbols = di.symbols,
+        deps = [di.label],
     )
-    for [
-        name,
-        symbols,
-    ] in _DOC_WITH_SYMBOLS.items()
+    for di in _DOC_INFOS
 ]
 
 # MARK: - Headers
@@ -53,7 +68,7 @@ The rules described below are used to build Swift packages and make their
 products and targets available as Bazel targets.
 """,
     ],
-    symbols = _DOC_WITH_SYMBOLS["repository_rules"],
+    symbols = _DOC_WITH_SYMBOLS["repository_rules"].symbols,
 )
 
 write_header(
@@ -66,7 +81,7 @@ The rules and macros described below are used to define Gazelle targets to aid \
 in the generation and maintenance of Swift package dependencies.
 """,
     ],
-    symbols = _DOC_WITH_SYMBOLS["rules_and_macros"],
+    symbols = _DOC_WITH_SYMBOLS["rules_and_macros"].symbols,
 )
 
 write_header(
@@ -79,7 +94,7 @@ The rules and macros described below are used by `swift_bazel` to build the \
 external Swift packages.
 """,
     ],
-    symbols = _DOC_WITH_SYMBOLS["internal_rules_and_macros"],
+    symbols = _DOC_WITH_SYMBOLS["internal_rules_and_macros"].symbols,
 )
 
 doc_for_provs(doc_provs = _ALL_DOC_PROVIDERS)
