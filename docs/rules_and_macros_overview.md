@@ -1,5 +1,5 @@
 <!-- Generated with Stardoc, Do Not Edit! -->
-# Macros
+# Rules and Macros
 
 
 The rules and macros described below are used to define Gazelle targets to aid in the generation and maintenance of Swift package dependencies.
