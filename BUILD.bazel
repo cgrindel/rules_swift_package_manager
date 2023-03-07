@@ -38,7 +38,17 @@ tidy(
         # Run go_mod_tidy before go_update_repos
         ":go_mod_tidy",
         ":go_update_repos",
-        ":gazelle",
+        ":update_build_files",
+    ],
+)
+
+# This is meant to be fast and convenient to quickly update the source files
+# with the latest.
+tidy(
+    name = "update_files",
+    targets = [
+        ":update_all",
+        ":update_build_files",
     ],
 )
 
@@ -73,7 +83,7 @@ gazelle_binary(
 # gazelle:prefix github.com/cgrindel/swift_bazel
 # gazelle:go_naming_convention import
 gazelle(
-    name = "gazelle",
+    name = "update_build_files",
     command = "fix",
     gazelle = ":gazelle_bin",
 )

@@ -27,13 +27,25 @@ def swift_bazel_dependencies():
         ],
     )
 
+    # GH143: Waiting for bazel-gazelle release with dep fix:
+    # https://github.com/bazelbuild/bazel-gazelle/pull/1413
+    # maybe(
+    #     http_archive,
+    #     name = "bazel_gazelle",
+    #     sha256 = "ecba0f04f96b4960a5b250c8e8eeec42281035970aa8852dda73098274d14a1d",
+    #     urls = [
+    #         "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.29.0/bazel-gazelle-v0.29.0.tar.gz",
+    #         "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.29.0/bazel-gazelle-v0.29.0.tar.gz",
+    #     ],
+    # )
+
     maybe(
         http_archive,
         name = "bazel_gazelle",
-        sha256 = "ecba0f04f96b4960a5b250c8e8eeec42281035970aa8852dda73098274d14a1d",
+        sha256 = "daa8c57c4a71485d4d0a3dd33605a2cc31a7dff5ceb5b2fa354eaa0e61ce9935",
+        strip_prefix = "bazel-gazelle-39aa39511f59223b242453d60e4e3f6f89ebf204",
         urls = [
-            "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.29.0/bazel-gazelle-v0.29.0.tar.gz",
-            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.29.0/bazel-gazelle-v0.29.0.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/archive/39aa39511f59223b242453d60e4e3f6f89ebf204.tar.gz",
         ],
     )
 
