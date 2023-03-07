@@ -42,6 +42,16 @@ tidy(
     ],
 )
 
+# This is meant to be fast and convenient to quickly update the source files
+# with the latest.
+tidy(
+    name = "update_files",
+    targets = [
+        ":update_all",
+        ":update_build_files",
+    ],
+)
+
 tidy(
     name = "upgrade_go_deps",
     targets = [
