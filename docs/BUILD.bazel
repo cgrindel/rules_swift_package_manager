@@ -1,3 +1,4 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load(
     "@cgrindel_bazel_starlib//bazeldoc:defs.bzl",
     "doc_for_provs",
@@ -98,3 +99,9 @@ external Swift packages.
 )
 
 doc_for_provs(doc_provs = _ALL_DOC_PROVIDERS)
+
+bzl_library(
+    name = "doc_infos",
+    srcs = ["doc_infos.bzl"],
+    visibility = ["//visibility:public"],
+)

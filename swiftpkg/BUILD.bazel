@@ -31,5 +31,7 @@ bzl_library(
     visibility = ["//visibility:public"],
     deps = [
         "//swiftpkg/internal:generate_modulemap",
+        "//swiftpkg/internal:resource_bundle_accessor",
+        "//swiftpkg/internal:resource_bundle_infoplist",
     ],
 )

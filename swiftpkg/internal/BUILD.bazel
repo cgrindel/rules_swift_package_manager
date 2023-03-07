@@ -237,7 +237,10 @@ bzl_library(
     name = "generate_modulemap",
     srcs = ["generate_modulemap.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
-    deps = [":module_maps"],
+    deps = [
+        ":clang_files",
+        ":module_maps",
+    ],
 )
 
 bzl_library(
