@@ -2,7 +2,7 @@
 # Repository Rules
 
 
-The rules described below are used to build Swift packages and make their 
+The rules described below are used to build Swift packages and make their
 products and targets available as Bazel targets.
 
 

@@ -14,12 +14,12 @@ markdown_pkg(name = "markdown")
 # MARK: - Documentation Declarations
 
 _DOC_WITH_SYMBOLS = {
-    "macros": [
-        "swift_update_packages",
-    ],
     "repository_rules": [
         "local_swift_package",
         "swift_package",
+    ],
+    "rules_and_macros": [
+        "swift_update_packages",
     ],
 }
 
@@ -52,16 +52,16 @@ products and targets available as Bazel targets.
 )
 
 write_header(
-    name = "macros_overview_header",
+    name = "rules_and_macros_overview_header",
     header_content = [
         "# Macros",
         "",
         """
-The macros described below are used to define Gazelle targets to aid in the \
-generation and maintenance of Swift package dependencies.
+The rules and macros described below are used to define Gazelle targets to aid \
+in the generation and maintenance of Swift package dependencies.
 """,
     ],
-    symbols = _DOC_WITH_SYMBOLS["macros"],
+    symbols = _DOC_WITH_SYMBOLS["rules_and_macros"],
 )
 
 doc_for_provs(doc_provs = _ALL_DOC_PROVIDERS)
