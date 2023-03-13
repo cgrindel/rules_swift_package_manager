@@ -99,8 +99,8 @@ def swift_bazel_go_dependencies():
         name = "com_github_creasty_defaults",
         build_external = "external",
         importpath = "github.com/creasty/defaults",
-        sum = "h1:ltuE9cfphUtlrBeomuu8PEyISTXnxqkBIoQfXgv7BSc=",
-        version = "v1.6.0",
+        sum = "h1:eNdqZvc5B509z18lD8yc212CAqJNvfT1Jq6L8WowdBA=",
+        version = "v1.7.0",
     )
     maybe(
         go_repository,
