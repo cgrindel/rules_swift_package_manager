@@ -6,9 +6,9 @@ require (
 	github.com/bazelbuild/bazel-gazelle v0.29.0
 	github.com/bazelbuild/buildtools v0.0.0-20230302165817-a6ca93fd072d
 	github.com/creasty/defaults v1.7.0
-	github.com/deckarep/golang-set/v2 v2.2.0
+	github.com/deckarep/golang-set/v2 v2.3.0
 	github.com/stretchr/testify v1.8.2
-	golang.org/x/exp v0.0.0-20230304125523-9ff063c70017
+	golang.org/x/exp v0.0.0-20230314175356-6c0aa0d7709a
 	gopkg.in/yaml.v3 v3.0.1
 )
 
