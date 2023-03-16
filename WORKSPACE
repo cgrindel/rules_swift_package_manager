@@ -64,19 +64,19 @@ gazelle_dependencies()
 # MARK: - Bazel Integration Test
 
 http_archive(
-    name = "contrib_rules_bazel_integration_test",
-    sha256 = "6263b8d85a125e1877c463bf4d692bebc2b6479c924f64a3d45c81fbfbc495df",
-    strip_prefix = "rules_bazel_integration_test-0.10.3",
+    name = "rules_bazel_integration_test",
+    sha256 = "f17cdb678a15d5d0f10be3b10cb83b555f47870235625e9a919cb7deded3bbb3",
+    strip_prefix = "rules_bazel_integration_test-0.11.1",
     urls = [
-        "http://github.com/bazel-contrib/rules_bazel_integration_test/archive/v0.10.3.tar.gz",
+        "http://github.com/bazel-contrib/rules_bazel_integration_test/archive/v0.11.1.tar.gz",
     ],
 )
 
-load("@contrib_rules_bazel_integration_test//bazel_integration_test:deps.bzl", "bazel_integration_test_rules_dependencies")
+load("@rules_bazel_integration_test//bazel_integration_test:deps.bzl", "bazel_integration_test_rules_dependencies")
 
 bazel_integration_test_rules_dependencies()
 
-load("@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl", "bazel_binaries")
+load("@rules_bazel_integration_test//bazel_integration_test:defs.bzl", "bazel_binaries")
 load("//:bazel_versions.bzl", "SUPPORTED_BAZEL_VERSIONS")
 
 bazel_binaries(versions = SUPPORTED_BAZEL_VERSIONS)
