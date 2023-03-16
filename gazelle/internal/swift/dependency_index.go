@@ -17,7 +17,7 @@ type DependencyIndex struct {
 	productIndex        ProductIndex
 	modToPrdsIndex      ModuleToProductsIndex
 	prdToModsIndex      ProductMembershipsIndex
-	directDepIdentities mapset.Set[string]
+	directDepIdentities []string
 }
 
 // NewDependencyIndex creates an empty dependency index.
@@ -25,7 +25,7 @@ func NewDependencyIndex() *DependencyIndex {
 	di := &DependencyIndex{
 		moduleIndex:         make(ModuleIndex),
 		productIndex:        make(ProductIndex),
-		directDepIdentities: mapset.NewSet[string](),
+		directDepIdentities: []string{},
 	}
 	di.init()
 	return di
@@ -64,14 +64,13 @@ func (di *DependencyIndex) indexHTTPArchive(r *rule.Rule, repoRoot string) error
 	return nil
 }
 
-func (di DependencyIndex) AddDirectDependency(identities ...string) {
-	for _, id := range identities {
-		di.directDepIdentities.Add(id)
-	}
+func (di *DependencyIndex) AddDirectDependency(identities ...string) {
+	di.directDepIdentities = mapset.NewSet(append(di.directDepIdentities, identities...)...).ToSlice()
+	sort.Strings(di.directDepIdentities)
 }
 
-func (di DependencyIndex) DirectDepIdentities() []string {
-	return di.directDepIdentities.ToSlice()
+func (di *DependencyIndex) DirectDepIdentities() []string {
+	return di.directDepIdentities
 }
 
 // AddModule adds one or more modules to the underlying indexes.
@@ -302,7 +301,7 @@ func (di *DependencyIndex) jsonData() *dependencyIndexJSONData {
 
 func newFromJSONData(jd *dependencyIndexJSONData) *DependencyIndex {
 	di := &DependencyIndex{
-		directDepIdentities: mapset.NewSet[string](jd.DirectDepIdentities...),
+		directDepIdentities: mapset.NewSet(jd.DirectDepIdentities...).ToSlice(),
 		moduleIndex:         NewModuleIndex(jd.Modules...),
 		productIndex:        NewProductIndex(jd.Products...),
 	}
