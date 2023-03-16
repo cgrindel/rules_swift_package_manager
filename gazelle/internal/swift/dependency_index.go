@@ -184,7 +184,7 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 	pkgIdentities []string,
 ) *ModuleResolutionResult {
 	var result ModuleResolutionResult
-	pkgIdentsSet := mapset.NewSet[string](pkgIdentities...)
+	pkgIdentsSet := mapset.NewSet(pkgIdentities...)
 	unresolved := mapset.NewSet[string]()
 
 	populateUnresolved := func() {
@@ -223,7 +223,7 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 		result.Products = di.products(selectedPiks...)
 	}
 
-	modulesToResolve := mapset.NewSet[string](moduleNames...)
+	modulesToResolve := mapset.NewSet(moduleNames...)
 	for modulesToResolve.Cardinality() > 0 {
 		pikSetCnt := potentialPikSet.Cardinality()
 		if pikSetCnt == 0 {
@@ -272,7 +272,7 @@ func (di *DependencyIndex) FindModules(moduleName string, pkgIdentities []string
 		slices.SortFunc(results, lessFn)
 		return results
 	}
-	piSet := mapset.NewSet[string](pkgIdentities...)
+	piSet := mapset.NewSet(pkgIdentities...)
 	results := make(Modules, 0, len(modules))
 	for _, m := range modules {
 		if piSet.Contains(m.PkgIdentity) {
