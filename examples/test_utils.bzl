@@ -1,7 +1,7 @@
 """Module containing helpers for defining integration tests."""
 
 load(
-    "@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl",
+    "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "integration_test_utils",
 )
 

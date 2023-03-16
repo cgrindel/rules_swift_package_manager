@@ -19,7 +19,7 @@ assertions_sh="$(rlocation "${assertions_sh_location}")" || \
   (echo >&2 "Failed to locate ${assertions_sh_location}" && exit 1)
 source "${assertions_sh}"
 
-create_scratch_dir_sh_location=contrib_rules_bazel_integration_test/tools/create_scratch_dir.sh
+create_scratch_dir_sh_location=rules_bazel_integration_test/tools/create_scratch_dir.sh
 create_scratch_dir_sh="$(rlocation "${create_scratch_dir_sh_location}")" || \
   (echo >&2 "Failed to locate ${create_scratch_dir_sh_location}" && exit 1)
 

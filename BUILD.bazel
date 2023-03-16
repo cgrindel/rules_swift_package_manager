@@ -6,11 +6,11 @@ load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 load("@cgrindel_bazel_starlib//markdown:defs.bzl", "markdown_pkg")
 load("@cgrindel_bazel_starlib//shlib/rules:execute_binary.bzl", "execute_binary")
 load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_diff_and_update", "updatesrc_update_all")
+load("@io_bazel_rules_go//go:def.bzl", "TOOLS_NOGO", "nogo")
 load(
-    "@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl",
+    "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "integration_test_utils",
 )
-load("@io_bazel_rules_go//go:def.bzl", "TOOLS_NOGO", "nogo")
 
 # MARK: - Bazel Starlark Lint and Formatting
 
@@ -29,10 +29,10 @@ tidy(
     targets = [
         # Remove the child workspace symlinks before doing some of the other
         # operations that my experience infinite symlink expansion errors.
-        "@contrib_rules_bazel_integration_test//tools:remove_child_wksp_bazel_symlinks",
+        "@rules_bazel_integration_test//tools:remove_child_wksp_bazel_symlinks",
         # Remove any Swift .build directories
         "//tools/remove_swift_build_dirs",
-        "@contrib_rules_bazel_integration_test//tools:update_deleted_packages",
+        "@rules_bazel_integration_test//tools:update_deleted_packages",
         ":bzlformat_missing_pkgs_fix",
         ":update_all",
         # Run go_mod_tidy before go_update_repos
