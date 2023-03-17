@@ -69,7 +69,7 @@ def _swift_package_impl(repository_ctx):
     repository_ctx.delete(repository_ctx.path(".git"))
 
     # Return attributes that make this reproducible
-    return _update_git_attrs(repository_ctx.attr, _COMMON_ATTRS.keys(), update)
+    return _update_git_attrs(repository_ctx.attr, _ALL_ATTRS.keys(), update)
 
 _GIT_ATTRS = {
     "branch": attr.string(
@@ -155,7 +155,7 @@ _PATCH_ATTRS = {
     ),
 }
 
-_COMMON_ATTRS = dicts.add(
+_ALL_ATTRS = dicts.add(
     _PATCH_ATTRS,
     _GIT_ATTRS,
     repo_rules.env_attrs,
@@ -164,7 +164,7 @@ _COMMON_ATTRS = dicts.add(
 
 swift_package = repository_rule(
     implementation = _swift_package_impl,
-    attrs = _COMMON_ATTRS,
+    attrs = _ALL_ATTRS,
     doc = """\
 Used to download and build an external Swift package.
 """,

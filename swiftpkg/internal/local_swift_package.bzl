@@ -60,7 +60,7 @@ def _local_swift_package_impl(repository_ctx):
     pkg_ctx = pkg_ctxs.read(repository_ctx, repo_dir, env)
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
-    return update_attrs(repository_ctx.attr, _COMMON_ATTRS.keys(), {})
+    return update_attrs(repository_ctx.attr, _ALL_ATTRS.keys(), {})
 
 _PATH_ATTRS = {
     "path": attr.string(
@@ -69,7 +69,7 @@ _PATH_ATTRS = {
     ),
 }
 
-_COMMON_ATTRS = dicts.add(
+_ALL_ATTRS = dicts.add(
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
     _PATH_ATTRS,
@@ -77,6 +77,6 @@ _COMMON_ATTRS = dicts.add(
 
 local_swift_package = repository_rule(
     implementation = _local_swift_package_impl,
-    attrs = _COMMON_ATTRS,
+    attrs = _ALL_ATTRS,
     doc = "Used to build a local Swift package.",
 )

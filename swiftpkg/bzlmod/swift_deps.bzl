@@ -10,6 +10,7 @@ def _declare_pkg_from_package(package, deps_index_label):
     if package.remote_pkg != None:
         swift_package(
             name = package.name,
+            bazel_package_name = package.name,
             commit = package.remote_pkg.commit,
             remote = package.remote_pkg.remote,
             dependencies_index = deps_index_label,
@@ -17,6 +18,7 @@ def _declare_pkg_from_package(package, deps_index_label):
     elif package.local_pkg != None:
         local_swift_package(
             name = package.name,
+            bazel_package_name = package.name,
             path = package.local_pkg.path,
             dependencies_index = deps_index_label,
         )

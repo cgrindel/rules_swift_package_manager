@@ -4,11 +4,13 @@ load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:versions.bzl", "versions")
 load(":build_files.bzl", "build_files")
-load(":repository_utils.bzl", "repository_utils")
 load(":spm_versions.bzl", "spm_versions")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
 _swift_attrs = {
+    "bazel_package_name": attr.string(
+        doc = "The short name for the Swift package's Bazel repository.",
+    ),
     "dependencies_index": attr.label(
         doc = """\
 A JSON file that contains a mapping of Swift products and Swift modules.\
@@ -83,7 +85,7 @@ def _gen_build_files(repository_ctx, pkg_ctx):
 
 def _write_workspace_file(repository_ctx, repoDir):
     path = paths.join(repoDir, "WORKSPACE")
-    repo_name = repository_utils.repo_name(repository_ctx)
+    repo_name = repository_ctx.name
     content = """\
 workspace(name = "{}")
 """.format(repo_name)

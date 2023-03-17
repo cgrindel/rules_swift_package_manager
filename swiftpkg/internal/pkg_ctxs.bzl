@@ -18,7 +18,7 @@ def _read(repository_ctx, repo_dir, env):
     )
     return _new(
         pkg_info = pkg_info,
-        repo_name = repository_utils.repo_name(repository_ctx),
+        repo_name = repository_utils.package_name(repository_ctx),
         deps_index = deps_index,
     )
 

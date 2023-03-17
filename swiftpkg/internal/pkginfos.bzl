@@ -83,7 +83,7 @@ def _get(repository_ctx, directory, deps_index, env = {}):
     return _new_from_parsed_json(
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
-        repo_name = repository_utils.repo_name(repository_ctx),
+        repo_name = repository_utils.package_name(repository_ctx),
         deps_index = deps_index,
     )
 
