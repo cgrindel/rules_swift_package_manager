@@ -11,6 +11,15 @@ import (
 
 func TestDependencyIndex(t *testing.T) {
 	awesomeRepoId := "awesome-repo"
+	awesomePkg := &swift.Package{
+		Name:     swift.RepoNameFromIdentity(awesomeRepoId),
+		Identity: awesomeRepoId,
+		Remote: &swift.RemotePackage{
+			Commit: "12345",
+			Remote: "https://github.com/example/awesome-repo",
+		},
+	}
+
 	fooPrdName := "Foo"
 	barPrdName := "Bar"
 	bazPrdName := "Baz"
@@ -97,6 +106,13 @@ func TestDependencyIndex(t *testing.T) {
 
 	// Looks similar to Foo in awesome-repo.
 	anotherRepoID := "another-repo"
+	anotherPkg := &swift.Package{
+		Name:     swift.RepoNameFromIdentity(anotherRepoID),
+		Identity: anotherRepoID,
+		Local: &swift.LocalPackage{
+			Path: "path/to/another",
+		},
+	}
 	anotherFooM := swift.NewModuleFromLabelStruct(
 		"Foo",
 		"Foo",
@@ -118,6 +134,7 @@ func TestDependencyIndex(t *testing.T) {
 	di.AddModule(fooCoreM, fooM, barM, bazM, otherM, anotherFooM)
 	// Puprosefully put bazPrd before fooPrd. Need to ensure that overalp affinity is accounted for.
 	di.AddProduct(bazPrd, barPrd, otherPrd, fooPrd, anotherFooPrd)
+	di.AddPackage(awesomePkg, anotherPkg)
 
 	t.Run("resolve module names to products", func(t *testing.T) {
 		tests := []struct {
