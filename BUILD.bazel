@@ -222,6 +222,13 @@ updatesrc_diff_and_update(
 )
 
 bzl_library(
+    name = "extensions",
+    srcs = ["extensions.bzl"],
+    visibility = ["//visibility:public"],
+    deps = ["//swiftpkg/bzlmod:swift_deps"],
+)
+
+bzl_library(
     name = "bazel_versions",
     srcs = ["bazel_versions.bzl"],
     visibility = ["//visibility:public"],
