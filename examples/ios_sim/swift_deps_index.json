@@ -357,5 +357,16 @@
         "@swiftpkg_swift_nio//:Sources__NIOConcurrency"
       ]
     }
+  ],
+  "packages": [
+    {
+      "name": "swiftpkg_swift_nio",
+      "identity": "swift-nio",
+      "remote": {
+        "commit": "51c3fc2e4a0fcdf4a25089b288dd65b73df1b0ef",
+        "remote": "https://github.com/apple/swift-nio.git",
+        "version": "2.37.0"
+      }
+    }
   ]
 }
