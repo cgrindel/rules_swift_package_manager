@@ -1,6 +1,6 @@
 module github.com/cgrindel/swift_bazel
 
-go 1.19
+go 1.18
 
 require (
 	github.com/bazelbuild/bazel-gazelle v0.29.0
