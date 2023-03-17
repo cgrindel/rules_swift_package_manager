@@ -25,13 +25,18 @@ def _new_from_json(json_str):
             _new_product_from_dict(prod_dict)
             for prod_dict in orig_dict["products"]
         ],
+        packages = [
+            _new_package_from_dict(pkg_dict)
+            for pkg_dict in orig_dict.get("packages", [])
+        ],
     )
 
-def _new(modules = [], products = []):
+def _new(modules = [], products = [], packages = []):
     modules_by_name = {}
     modules_by_label = {}
     products_by_key = {}
     products_by_name = {}
+    packages_by_id = {}
 
     # buildifier: disable=uninitialized
     def _add_module(m):
@@ -52,16 +57,22 @@ def _new(modules = [], products = []):
         prds.append(p)
         products_by_name[p.name] = prds
 
+    def _add_package(p):
+        packages_by_id[p.identity] = p
+
     for module in modules:
         _add_module(module)
     for product in products:
         _add_product(product)
+    for package in packages:
+        _add_package(package)
 
     return struct(
         modules_by_name = modules_by_name,
         modules_by_label = modules_by_label,
         products_by_key = products_by_key,
         products_by_name = products_by_name,
+        packages_by_id = packages_by_id,
     )
 
 def _new_module_from_dict(mod_dict):
@@ -106,6 +117,48 @@ def _new_product(identity, name, type, target_labels):
         name = name,
         type = type,
         target_labels = target_labels,
+    )
+
+def _new_package(identity, name, remote_pkg = None, local_pkg = None):
+    return struct(
+        identity = identity,
+        name = name,
+        remote_pkg = remote_pkg,
+        local_pkg = local_pkg,
+    )
+
+def _new_remote_package(remote, commit, version = None, branch = None):
+    return struct(
+        remote = remote,
+        commit = commit,
+        version = version,
+        branch = branch,
+    )
+
+def _new_local_package(path):
+    return struct(
+        path = path,
+    )
+
+def _new_package_from_dict(pkg_dict):
+    remote_pkg = None
+    remote_dict = pkg_dict.get("remote")
+    if remote_dict != None:
+        remote_pkg = _new_remote_package(
+            remote = remote_dict["remote"],
+            commit = remote_dict["commit"],
+            version = remote_dict.get("version"),
+            branch = remote_dict.get("branch"),
+        )
+    local_pkg = None
+    local_dict = pkg_dict.get("local")
+    if local_dict != None:
+        local_pkg = _new_local_package(path = local_dict["path"])
+    return _new_package(
+        identity = pkg_dict["identity"],
+        name = pkg_dict["name"],
+        remote_pkg = remote_pkg,
+        local_pkg = local_pkg,
     )
 
 def _modulemap_label_for_module(module):
