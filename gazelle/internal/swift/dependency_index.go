@@ -73,7 +73,9 @@ func (di DependencyIndex) AddDirectDependency(identities ...string) {
 }
 
 func (di DependencyIndex) DirectDepIdentities() []string {
-	return di.directDepIdentities.ToSlice()
+	result := di.directDepIdentities.ToSlice()
+	slices.Sort(result)
+	return result
 }
 
 // AddModule adds one or more modules to the underlying indexes.
