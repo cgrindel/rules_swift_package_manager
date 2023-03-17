@@ -4,6 +4,7 @@ load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:versions.bzl", "versions")
 load(":build_files.bzl", "build_files")
+load(":repository_utils.bzl", "repository_utils")
 load(":spm_versions.bzl", "spm_versions")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
@@ -82,9 +83,10 @@ def _gen_build_files(repository_ctx, pkg_ctx):
 
 def _write_workspace_file(repository_ctx, repoDir):
     path = paths.join(repoDir, "WORKSPACE")
+    repo_name = repository_utils.repo_name(repository_ctx)
     content = """\
 workspace(name = "{}")
-""".format(repository_ctx.name)
+""".format(repo_name)
     repository_ctx.file(path, content = content, executable = False)
 
 def _download_artifact(repository_ctx, artifact_download_info, path):

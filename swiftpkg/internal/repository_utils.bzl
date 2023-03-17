@@ -76,8 +76,24 @@ def _parsed_json_from_spm_command(
         repository_ctx.file(debug_json_path, content = json_str, executable = False)
     return json.decode(json_str)
 
+def _repo_name(repository_ctx):
+    """Extracts the repository name without a parent repository prefix as can \
+    be added by bzlmod.
+
+    Args:
+        repository_ctx: An instance of `repository_ctx`.
+
+    Returns:
+        The repository name without a parent repoitory prefix.
+    """
+    name = repository_ctx.name
+    if name.find("~") < 0:
+        return name
+    return name.split("~")[-1]
+
 repository_utils = struct(
-    is_macos = _is_macos,
     exec_spm_command = _execute_spm_command,
+    is_macos = _is_macos,
     parsed_json_from_spm_command = _parsed_json_from_spm_command,
+    repo_name = _repo_name,
 )

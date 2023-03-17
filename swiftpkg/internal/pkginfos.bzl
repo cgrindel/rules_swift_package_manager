@@ -83,7 +83,7 @@ def _get(repository_ctx, directory, deps_index, env = {}):
     return _new_from_parsed_json(
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
-        repo_name = repository_ctx.name,
+        repo_name = repository_utils.repo_name(repository_ctx),
         deps_index = deps_index,
     )
 
@@ -379,6 +379,7 @@ def _new_from_parsed_json(dump_manifest, desc_manifest, repo_name, deps_index):
         target_map["name"]: target_map
         for target_map in desc_manifest["targets"]
     }
+
     targets = lists.compact([
         _new_target_from_json_maps(
             dump_map = target_map,
@@ -388,6 +389,7 @@ def _new_from_parsed_json(dump_manifest, desc_manifest, repo_name, deps_index):
         )
         for target_map in dump_manifest["targets"]
     ])
+
     return _new(
         name = dump_manifest["name"],
         path = desc_manifest["path"],

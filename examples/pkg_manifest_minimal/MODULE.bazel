@@ -31,11 +31,6 @@ swift_deps = use_extension(
     "@cgrindel_swift_bazel//:extensions.bzl",
     "swift_deps",
 )
-
-# DEBUG BEGIN
-print("*** CHUCK Before to call from_file")
-
-# DEBUG END
 swift_deps.from_file(
     deps_index = "//:swift_deps_index.json",
 )
