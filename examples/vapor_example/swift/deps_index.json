@@ -1,8 +1,8 @@
 {
   "direct_dep_identities": [
-    "vapor",
     "fluent",
-    "fluent-sqlite-driver"
+    "fluent-sqlite-driver",
+    "vapor"
   ],
   "modules": [
     {
