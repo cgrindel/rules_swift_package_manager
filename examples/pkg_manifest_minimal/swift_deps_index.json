@@ -1,9 +1,9 @@
 {
   "direct_dep_identities": [
+    "my_local_package",
     "swift-argument-parser",
     "swift-log",
-    "swiftformat",
-    "my_local_package"
+    "swiftformat"
   ],
   "modules": [
     {
