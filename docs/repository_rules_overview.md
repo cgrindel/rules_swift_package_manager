@@ -17,7 +17,7 @@ On this page:
 ## local_swift_package
 
 <pre>
-local_swift_package(<a href="#local_swift_package-name">name</a>, <a href="#local_swift_package-dependencies_index">dependencies_index</a>, <a href="#local_swift_package-env">env</a>, <a href="#local_swift_package-path">path</a>, <a href="#local_swift_package-repo_mapping">repo_mapping</a>)
+local_swift_package(<a href="#local_swift_package-name">name</a>, <a href="#local_swift_package-bazel_package_name">bazel_package_name</a>, <a href="#local_swift_package-dependencies_index">dependencies_index</a>, <a href="#local_swift_package-env">env</a>, <a href="#local_swift_package-path">path</a>, <a href="#local_swift_package-repo_mapping">repo_mapping</a>)
 </pre>
 
 Used to build a local Swift package.
@@ -28,6 +28,7 @@ Used to build a local Swift package.
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="local_swift_package-name"></a>name |  A unique name for this repository.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="local_swift_package-bazel_package_name"></a>bazel_package_name |  The short name for the Swift package's Bazel repository.   | String | optional | <code>""</code> |
 | <a id="local_swift_package-dependencies_index"></a>dependencies_index |  A JSON file that contains a mapping of Swift products and Swift modules.   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
 | <a id="local_swift_package-env"></a>env |  Environment variables that will be passed to the execution environments for this repository rule. (e.g. SPM version check, SPM dependency resolution, SPM package description generation)   | <a href="https://bazel.build/rules/lib/dict">Dictionary: String -> String</a> | optional | <code>{}</code> |
 | <a id="local_swift_package-path"></a>path |  The path to the local Swift package directory.   | String | required |  |
@@ -39,9 +40,9 @@ Used to build a local Swift package.
 ## swift_package
 
 <pre>
-swift_package(<a href="#swift_package-name">name</a>, <a href="#swift_package-branch">branch</a>, <a href="#swift_package-commit">commit</a>, <a href="#swift_package-dependencies_index">dependencies_index</a>, <a href="#swift_package-env">env</a>, <a href="#swift_package-init_submodules">init_submodules</a>, <a href="#swift_package-patch_args">patch_args</a>,
-              <a href="#swift_package-patch_cmds">patch_cmds</a>, <a href="#swift_package-patch_cmds_win">patch_cmds_win</a>, <a href="#swift_package-patch_tool">patch_tool</a>, <a href="#swift_package-patches">patches</a>, <a href="#swift_package-recursive_init_submodules">recursive_init_submodules</a>, <a href="#swift_package-remote">remote</a>,
-              <a href="#swift_package-repo_mapping">repo_mapping</a>, <a href="#swift_package-shallow_since">shallow_since</a>, <a href="#swift_package-tag">tag</a>, <a href="#swift_package-verbose">verbose</a>)
+swift_package(<a href="#swift_package-name">name</a>, <a href="#swift_package-bazel_package_name">bazel_package_name</a>, <a href="#swift_package-branch">branch</a>, <a href="#swift_package-commit">commit</a>, <a href="#swift_package-dependencies_index">dependencies_index</a>, <a href="#swift_package-env">env</a>, <a href="#swift_package-init_submodules">init_submodules</a>,
+              <a href="#swift_package-patch_args">patch_args</a>, <a href="#swift_package-patch_cmds">patch_cmds</a>, <a href="#swift_package-patch_cmds_win">patch_cmds_win</a>, <a href="#swift_package-patch_tool">patch_tool</a>, <a href="#swift_package-patches">patches</a>, <a href="#swift_package-recursive_init_submodules">recursive_init_submodules</a>,
+              <a href="#swift_package-remote">remote</a>, <a href="#swift_package-repo_mapping">repo_mapping</a>, <a href="#swift_package-shallow_since">shallow_since</a>, <a href="#swift_package-tag">tag</a>, <a href="#swift_package-verbose">verbose</a>)
 </pre>
 
 Used to download and build an external Swift package.
@@ -53,6 +54,7 @@ Used to download and build an external Swift package.
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="swift_package-name"></a>name |  A unique name for this repository.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="swift_package-bazel_package_name"></a>bazel_package_name |  The short name for the Swift package's Bazel repository.   | String | optional | <code>""</code> |
 | <a id="swift_package-branch"></a>branch |  branch in the remote repository to checked out. Precisely one of branch, tag, or commit must be specified.   | String | optional | <code>""</code> |
 | <a id="swift_package-commit"></a>commit |  The commit or revision to download from version control.   | String | required |  |
 | <a id="swift_package-dependencies_index"></a>dependencies_index |  A JSON file that contains a mapping of Swift products and Swift modules.   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
