@@ -6,7 +6,6 @@ load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 load("@cgrindel_bazel_starlib//markdown:defs.bzl", "markdown_pkg")
 load("@cgrindel_bazel_starlib//shlib/rules:execute_binary.bzl", "execute_binary")
 load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_diff_and_update", "updatesrc_update_all")
-load("@io_bazel_rules_go//go:def.bzl", "TOOLS_NOGO", "nogo")
 load(
     "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "integration_test_utils",
@@ -59,16 +58,6 @@ tidy(
         ":go_mod_tidy",
         ":go_update_repos",
     ],
-)
-
-# MARK: - nogo Code Analysis
-
-# https://github.com/bazelbuild/rules_go/blob/master/go/nogo.rst
-nogo(
-    name = "nogo",
-    config = "nogo_config.json",
-    visibility = ["//visibility:public"],
-    deps = TOOLS_NOGO,
 )
 
 # MARK: - Gazelle
@@ -154,6 +143,7 @@ filegroup(
     srcs = [
         ".bazelrc",
         "BUILD.bazel",
+        "MODULE.bazel",
         "WORKSPACE",
         "ci.bazelrc",
         "shared.bazelrc",
@@ -229,6 +219,13 @@ updatesrc_diff_and_update(
     outs = [
         ":ci_workflow",
     ],
+)
+
+bzl_library(
+    name = "extensions",
+    srcs = ["extensions.bzl"],
+    visibility = ["//visibility:public"],
+    deps = ["//swiftpkg/bzlmod:swift_deps"],
 )
 
 bzl_library(

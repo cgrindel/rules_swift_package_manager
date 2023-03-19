@@ -8,6 +8,9 @@ load(":spm_versions.bzl", "spm_versions")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
 _swift_attrs = {
+    "bazel_package_name": attr.string(
+        doc = "The short name for the Swift package's Bazel repository.",
+    ),
     "dependencies_index": attr.label(
         doc = """\
 A JSON file that contains a mapping of Swift products and Swift modules.\
@@ -82,9 +85,10 @@ def _gen_build_files(repository_ctx, pkg_ctx):
 
 def _write_workspace_file(repository_ctx, repoDir):
     path = paths.join(repoDir, "WORKSPACE")
+    repo_name = repository_ctx.name
     content = """\
 workspace(name = "{}")
-""".format(repository_ctx.name)
+""".format(repo_name)
     repository_ctx.file(path, content = content, executable = False)
 
 def _download_artifact(repository_ctx, artifact_download_info, path):

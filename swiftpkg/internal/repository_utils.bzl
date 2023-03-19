@@ -76,8 +76,25 @@ def _parsed_json_from_spm_command(
         repository_ctx.file(debug_json_path, content = json_str, executable = False)
     return json.decode(json_str)
 
+def _package_name(repository_ctx):
+    """The name used to declare the Bazel repository.
+
+    This name can be different from the `repository_ctx.name` when using
+    bzlmod. This value is used for lookups in the Swift deps index.
+
+    Args:
+        repository_ctx: An instance of `repository_ctx`.
+
+    Returns:
+        The original repository name unmolested by bzlmod stuff.
+    """
+    if repository_ctx.attr.bazel_package_name != "":
+        return repository_ctx.attr.bazel_package_name
+    return repository_ctx.name
+
 repository_utils = struct(
-    is_macos = _is_macos,
     exec_spm_command = _execute_spm_command,
+    is_macos = _is_macos,
+    package_name = _package_name,
     parsed_json_from_spm_command = _parsed_json_from_spm_command,
 )

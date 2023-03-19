@@ -33,12 +33,8 @@ jobs:
         include:
           - example: http_archive_ext_deps
             bazel_version: .bazelversion
-          - example: http_archive_ext_deps
-            bazel_version: "5_4_0"
           - example: pkg_manifest_minimal
             bazel_version: .bazelversion
-          - example: pkg_manifest_minimal
-            bazel_version: "5_4_0"
           - example: soto_example
             bazel_version: .bazelversion
           - example: vapor_example
@@ -88,12 +84,8 @@ jobs:
         include:
           - example: http_archive_ext_deps
             bazel_version: .bazelversion
-          - example: http_archive_ext_deps
-            bazel_version: "5_4_0"
           - example: pkg_manifest_minimal
             bazel_version: .bazelversion
-          - example: pkg_manifest_minimal
-            bazel_version: "5_4_0"
           - example: soto_example
             bazel_version: .bazelversion
           - example: vapor_example
