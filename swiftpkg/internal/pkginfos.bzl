@@ -166,7 +166,7 @@ def _new_target_dependency_from_dump_json_map(dump_map):
     if product_list:
         product = _new_product_reference(
             product_name = product_list[0],
-            dep_name = product_list[1],
+            dep_name = product_list[1] or product_list[0],
             condition = _new_target_dependency_condition_from_dump_json_map(
                 product_list[3],
             ),

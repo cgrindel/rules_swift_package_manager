@@ -45,7 +45,7 @@ func (pr *ProductReference) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	if pr.DependencyName, err = jsonutils.StringAtIndex(raw, 1); err != nil {
-		return err
+		pr.DependencyName = pr.ProductName
 	}
 	return nil
 }
