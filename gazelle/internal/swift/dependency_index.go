@@ -126,6 +126,22 @@ func (di *DependencyIndex) AddPackage(packages ...*Package) {
 	di.packageIndex.Add(packages...)
 }
 
+func (di *DependencyIndex) GetPackage(identity string) *Package {
+	if pkg, ok := di.packageIndex[identity]; ok {
+		return pkg
+	}
+	return nil
+}
+
+func (di *DependencyIndex) DirectDepPackages() []*Package {
+	directDepIdentities := di.DirectDepIdentities()
+	results := make([]*Package, len(directDepIdentities))
+	for idx, identity := range directDepIdentities {
+		results[idx] = di.GetPackage(identity)
+	}
+	return results
+}
+
 // Resolve
 
 type ModuleResolutionResult struct {
