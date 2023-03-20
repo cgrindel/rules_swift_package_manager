@@ -42,10 +42,10 @@ def swift_bazel_dependencies():
     maybe(
         http_archive,
         name = "bazel_gazelle",
-        sha256 = "aff911e9b2af537260614635a3b8891dd00e2f9897f47bf71dd8dacdc925a525",
-        strip_prefix = "bazel-gazelle-71032ca2aaea3c15e5c943eee2c171248005b0a4",
+        sha256 = "2591fe5c9ff639317c5144665f2b97f3e45dac7ebb0b9357f8ddb3533b60a16f",
+        strip_prefix = "bazel-gazelle-97a754c6e45848828b27152fa64ca5dd3003d832",
         urls = [
-            "https://github.com/bazelbuild/bazel-gazelle/archive/71032ca2aaea3c15e5c943eee2c171248005b0a4.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/archive/97a754c6e45848828b27152fa64ca5dd3003d832.tar.gz",
         ],
     )
 
@@ -56,11 +56,4 @@ def swift_bazel_dependencies():
         urls = [
             "https://github.com/cgrindel/bazel-starlib/releases/download/v0.14.9/bazel-starlib.v0.14.9.tar.gz",
         ],
-    )
-
-    maybe(
-        http_archive,
-        name = "build_bazel_rules_swift",
-        sha256 = "d25a3f11829d321e0afb78b17a06902321c27b83376b31e3481f0869c28e1660",
-        url = "https://github.com/bazelbuild/rules_swift/releases/download/1.6.0/rules_swift.1.6.0.tar.gz",
     )

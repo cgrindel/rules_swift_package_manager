@@ -242,5 +242,97 @@
         "@swiftpkg_xctest_dynamic_overlay//:Sources_XCTestDynamicOverlay"
       ]
     }
+  ],
+  "packages": [
+    {
+      "name": "swiftpkg_combine_schedulers",
+      "identity": "combine-schedulers",
+      "remote": {
+        "commit": "882ac01eb7ef9e36d4467eb4b1151e74fcef85ab",
+        "remote": "https://github.com/pointfreeco/combine-schedulers",
+        "version": "0.9.1"
+      }
+    },
+    {
+      "name": "swiftpkg_swift_case_paths",
+      "identity": "swift-case-paths",
+      "remote": {
+        "commit": "f623901b4bcc97f59c36704f81583f169b228e51",
+        "remote": "https://github.com/pointfreeco/swift-case-paths",
+        "version": "0.13.0"
+      }
+    },
+    {
+      "name": "swiftpkg_swift_clocks",
+      "identity": "swift-clocks",
+      "remote": {
+        "commit": "20b25ca0dd88ebfb9111ec937814ddc5a8880172",
+        "remote": "https://github.com/pointfreeco/swift-clocks",
+        "version": "0.2.0"
+      }
+    },
+    {
+      "name": "swiftpkg_swift_collections",
+      "identity": "swift-collections",
+      "remote": {
+        "commit": "937e904258d22af6e447a0b72c0bc67583ef64a2",
+        "remote": "https://github.com/apple/swift-collections",
+        "version": "1.0.4"
+      }
+    },
+    {
+      "name": "swiftpkg_swift_composable_architecture",
+      "identity": "swift-composable-architecture",
+      "remote": {
+        "commit": "cd22f6a1b3a6210e1e365cbfa8706dbb1736ca27",
+        "remote": "https://github.com/pointfreeco/swift-composable-architecture",
+        "version": "0.51.0"
+      }
+    },
+    {
+      "name": "swiftpkg_swift_custom_dump",
+      "identity": "swift-custom-dump",
+      "remote": {
+        "commit": "dd86159e25c749873f144577e5d18309bf57534f",
+        "remote": "https://github.com/pointfreeco/swift-custom-dump",
+        "version": "0.8.0"
+      }
+    },
+    {
+      "name": "swiftpkg_swift_dependencies",
+      "identity": "swift-dependencies",
+      "remote": {
+        "commit": "8282b0c59662eb38946afe30eb403663fc2ecf76",
+        "remote": "https://github.com/pointfreeco/swift-dependencies",
+        "version": "0.1.4"
+      }
+    },
+    {
+      "name": "swiftpkg_swift_identified_collections",
+      "identity": "swift-identified-collections",
+      "remote": {
+        "commit": "ad3932d28c2e0a009a0167089619526709ef6497",
+        "remote": "https://github.com/pointfreeco/swift-identified-collections",
+        "version": "0.7.0"
+      }
+    },
+    {
+      "name": "swiftpkg_swiftui_navigation",
+      "identity": "swiftui-navigation",
+      "remote": {
+        "commit": "270a754308f5440be52fc295242eb7031638bd15",
+        "remote": "https://github.com/pointfreeco/swiftui-navigation",
+        "version": "0.6.1"
+      }
+    },
+    {
+      "name": "swiftpkg_xctest_dynamic_overlay",
+      "identity": "xctest-dynamic-overlay",
+      "remote": {
+        "commit": "62041e6016a30f56952f5d7d3f12a3fd7029e1cd",
+        "remote": "https://github.com/pointfreeco/xctest-dynamic-overlay",
+        "version": "0.8.3"
+      }
+    }
   ]
 }

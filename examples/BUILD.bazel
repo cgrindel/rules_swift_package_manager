@@ -1,7 +1,7 @@
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(
-    "@contrib_rules_bazel_integration_test//bazel_integration_test:defs.bzl",
+    "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "integration_test_utils",
 )
 load("//:bazel_versions.bzl", "CURRENT_BAZEL_VERSION")
@@ -25,7 +25,7 @@ sh_binary(
     testonly = True,
     srcs = ["test_runner.sh"],
     data = [
-        "@contrib_rules_bazel_integration_test//tools:create_scratch_dir",
+        "@rules_bazel_integration_test//tools:create_scratch_dir",
     ],
     deps = [
         "@bazel_tools//tools/bash/runfiles",

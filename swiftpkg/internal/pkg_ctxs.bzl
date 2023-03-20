@@ -3,6 +3,7 @@
 load(":deps_indexes.bzl", "deps_indexes")
 load(":pkginfo_ext_deps.bzl", "pkginfo_ext_deps")
 load(":pkginfos.bzl", "pkginfos")
+load(":repository_utils.bzl", "repository_utils")
 
 def _read(repository_ctx, repo_dir, env):
     deps_index_json = repository_ctx.read(
@@ -17,7 +18,7 @@ def _read(repository_ctx, repo_dir, env):
     )
     return _new(
         pkg_info = pkg_info,
-        repo_name = repository_ctx.name,
+        repo_name = repository_utils.package_name(repository_ctx),
         deps_index = deps_index,
     )
 

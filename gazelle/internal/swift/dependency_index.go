@@ -18,6 +18,7 @@ type DependencyIndex struct {
 	modToPrdsIndex      ModuleToProductsIndex
 	prdToModsIndex      ProductMembershipsIndex
 	directDepIdentities []string
+	packageIndex        PackageIndex
 }
 
 // NewDependencyIndex creates an empty dependency index.
@@ -26,6 +27,7 @@ func NewDependencyIndex() *DependencyIndex {
 		moduleIndex:         make(ModuleIndex),
 		productIndex:        make(ProductIndex),
 		directDepIdentities: []string{},
+		packageIndex:        NewPackageIndex(),
 	}
 	di.init()
 	return di
@@ -69,8 +71,10 @@ func (di *DependencyIndex) AddDirectDependency(identities ...string) {
 	sort.Strings(di.directDepIdentities)
 }
 
-func (di *DependencyIndex) DirectDepIdentities() []string {
-	return di.directDepIdentities
+func (di DependencyIndex) DirectDepIdentities() []string {
+	result := di.directDepIdentities.ToSlice()
+	slices.Sort(result)
+	return result
 }
 
 // AddModule adds one or more modules to the underlying indexes.
@@ -115,6 +119,10 @@ func (di *DependencyIndex) IndexBazelRepo(bzlRepo *BazelRepo) error {
 	}
 
 	return nil
+}
+
+func (di *DependencyIndex) AddPackage(packages ...*Package) {
+	di.packageIndex.Add(packages...)
 }
 
 // Resolve
@@ -289,6 +297,7 @@ type dependencyIndexJSONData struct {
 	DirectDepIdentities []string   `json:"direct_dep_identities"`
 	Modules             []*Module  `json:"modules"`
 	Products            []*Product `json:"products"`
+	Packages            []*Package `json:"packages,omitempty"`
 }
 
 func (di *DependencyIndex) jsonData() *dependencyIndexJSONData {
@@ -296,6 +305,7 @@ func (di *DependencyIndex) jsonData() *dependencyIndexJSONData {
 		DirectDepIdentities: di.DirectDepIdentities(),
 		Modules:             di.moduleIndex.Modules(),
 		Products:            di.productIndex.Products(),
+		Packages:            di.packageIndex.Packages(),
 	}
 }
 
@@ -304,6 +314,7 @@ func newFromJSONData(jd *dependencyIndexJSONData) *DependencyIndex {
 		directDepIdentities: mapset.NewSet(jd.DirectDepIdentities...).ToSlice(),
 		moduleIndex:         NewModuleIndex(jd.Modules...),
 		productIndex:        NewProductIndex(jd.Products...),
+		packageIndex:        NewPackageIndex(jd.Packages...),
 	}
 	di.init()
 	return di

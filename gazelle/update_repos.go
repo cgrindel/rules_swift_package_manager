@@ -116,6 +116,12 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 			result.Error = err
 			return result
 		}
+		pkg, err := swift.NewPackageFromBazelRepo(bzlRepo, sc.DependencyIndexRel, pkgDir)
+		if err != nil {
+			result.Error = err
+			return result
+		}
+		di.AddPackage(pkg)
 	}
 
 	// Write the module index to a JSON file

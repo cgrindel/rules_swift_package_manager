@@ -394,6 +394,31 @@ _deps_index_json = """
                 "@example_another_repo//Sources/Foo"
             ]
         }
+    ],
+    "packages": [
+        {
+            "name": "swiftpkg_swift_argument_parser",
+            "identity": "swift-argument-parser",
+            "remote": {
+                "commit": "4ad606ba5d7673ea60679a61ff867cc1ff8c8e86",
+                "remote": "https://github.com/apple/swift-argument-parser",
+                "version": "1.2.1"
+            }
+        },
+        {
+            "name": "swiftpkg_example_cool_repo",
+            "identity": "example-cool-repo",
+            "local": {
+                "path": "third_party/example_cool_repo"
+            }
+        },
+        {
+            "name": "swiftpkg_example_another_repo",
+            "identity": "example-another-repo",
+            "local": {
+                "path": "third_party/example_another_repo"
+            }
+        }
     ]
 }
 """
