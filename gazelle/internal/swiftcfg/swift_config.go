@@ -29,6 +29,8 @@ type SwiftConfig struct {
 	ResolutionLogFile   *os.File
 	ResolutionLogger    reslog.ResolutionLogger
 	PrintBzlmodStanzas  bool
+	UpdateBzlmodStanzas bool
+	BazelModulePath     string
 }
 
 func NewSwiftConfig() *SwiftConfig {

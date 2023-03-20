@@ -37,12 +37,22 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 			&sc.UpdatePkgsToLatest,
 			"swift_update_packages_to_latest",
 			false,
-			"Determines whether to update the Swift packages to their latest eligible version.")
+			"determines whether to update the Swift packages to their latest eligible version.")
 		fs.BoolVar(
 			&sc.PrintBzlmodStanzas,
 			"print_bzlmod_stanzas",
 			false,
-			"Determines whether to print the bzlmod stanzas to add to a MODULE.bazel file.")
+			"determines whether to print the bzlmod stanzas to add to a MODULE.bazel file.")
+		fs.BoolVar(
+			&sc.UpdateBzlmodStanzas,
+			"update_bzlmod_stanzas",
+			false,
+			"determines whether to update your MODULE.bazel file with the appropriate stanzas.")
+		fs.StringVar(
+			&sc.BazelModulePath,
+			"bazel_module",
+			"MODULE.bazel",
+			"the location of the MODULE.bazel file")
 	}
 
 	// Store the config for later steps
