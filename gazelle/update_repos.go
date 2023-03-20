@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -12,7 +11,6 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
-	"golang.org/x/exp/slices"
 )
 
 // language.RepoImporter Implementation
@@ -186,45 +184,12 @@ func readResolvedPkgPins(resolvedPkgPath string) (map[string]*spreso.Pin, error)
 }
 
 func writeBzlmodStanzas(di *swift.DependencyIndex) error {
-	directDepPkgs := di.DirectDepPackages()
-	directDepNames := make([]string, len(directDepPkgs))
-	for idx, pkg := range directDepPkgs {
-		directDepNames[idx] = pkg.Name
-	}
-	slices.Sort(directDepNames)
-
-	var b strings.Builder
-	if _, err := fmt.Fprint(&b, bzlmodPrefix); err != nil {
+	bzlmodStanzas, err := swift.BzlmodStanzas(di)
+	if err != nil {
 		return err
 	}
-	for _, name := range directDepNames {
-		if _, err := fmt.Fprintf(&b, bzlmodNameTmpl, name); err != nil {
-			return err
-		}
-	}
-	if _, err := fmt.Fprint(&b, bzlmodSuffix); err != nil {
+	if _, err = fmt.Print(bzlmodStanzas); err != nil {
 		return err
 	}
-
-	fmt.Print(b.String())
-
 	return nil
 }
-
-const bzlmodPrefix = `
-swift_deps = use_extension(
-    "@cgrindel_swift_bazel//:extensions.bzl",
-    "swift_deps",
-)
-swift_deps.from_file(
-    deps_index = "//:swift_deps_index.json",
-)
-use_repo(
-    swift_deps,
-`
-
-const bzlmodNameTmpl = "    \"%s\", \n"
-
-const bzlmodSuffix = `
-)
-`

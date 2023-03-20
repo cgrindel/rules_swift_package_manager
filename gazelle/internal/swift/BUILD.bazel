@@ -8,6 +8,7 @@ go_library(
         "bazel_repo.go",
         "bazel_repo_name.go",
         "builtin_modules.go",
+        "bzlmod.go",
         "code_dir.go",
         "dependency_index.go",
         "doc.go",
@@ -57,6 +58,7 @@ go_test(
     srcs = [
         "bazel_label_test.go",
         "bazel_repo_name_test.go",
+        "bzlmod_test.go",
         "code_dir_test.go",
         "dependency_index_test.go",
         "file_info_test.go",
