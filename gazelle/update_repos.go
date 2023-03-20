@@ -125,7 +125,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	}
 
 	// Output a use_repo stanza for bzlmod.
-	if err := writeBzlmodStanzas(di); err != nil {
+	if err := writeBzlmodStanzas(di, sc); err != nil {
 		result.Error = err
 		return result
 	}
@@ -183,13 +183,19 @@ func readResolvedPkgPins(resolvedPkgPath string) (map[string]*spreso.Pin, error)
 	return pinsByIdentity, nil
 }
 
-func writeBzlmodStanzas(di *swift.DependencyIndex) error {
+func writeBzlmodStanzas(di *swift.DependencyIndex, sc *swiftcfg.SwiftConfig) error {
+	if !sc.PrintBzlmodStanzas {
+		return nil
+	}
 	bzlmodStanzas, err := swift.BzlmodStanzas(di)
 	if err != nil {
 		return err
 	}
-	if _, err = fmt.Print(bzlmodStanzas); err != nil {
+	if _, err = fmt.Printf("%s\n%s", bzlmodInstructions, bzlmodStanzas); err != nil {
 		return err
 	}
 	return nil
 }
+
+const bzlmodInstructions = `If you have enabled bzlmod, add the following to your 'MODULE.bazel' file to 
+load your Swift dependencies:`

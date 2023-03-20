@@ -32,6 +32,7 @@ gazelle(
 swift_update_packages(
     name = "swift_update_pkgs",
     gazelle = ":gazelle_bin",
+    print_bzlmod_stanzas = True,
 )
 
 bzl_library(

@@ -9,6 +9,7 @@ def swift_update_packages(
         swift_deps = "swift_deps.bzl",
         swift_deps_fn = "swift_dependencies",
         swift_deps_index = "swift_deps_index.json",
+        print_bzlmod_stanzas = False,
         **kwargs):
     """Defines gazelle update-repos targets that are used to resolve and update \
     Swift package dependencies.
@@ -29,6 +30,9 @@ def swift_update_packages(
         swift_deps_index: Optional. The relative path to the Swift
             dependencies index JSON file. This path is relative to the
             repository root, not the location of this declaration.
+        print_bzlmod_stanzas: Optional. Determines whether the Gazelle
+            extension prints out bzlmod Starlark code that can be pasted into
+            your `MODULE.bazel`.
         **kwargs: Attributes that are passed along to the gazelle declarations.
     """
     _SWIFT_UPDATE_REPOS_ARGS = [
@@ -40,6 +44,8 @@ def swift_update_packages(
         "-prune",
         "-swift_dependency_index={}".format(swift_deps_index),
     ]
+    if print_bzlmod_stanzas:
+        _SWIFT_UPDATE_REPOS_ARGS.append("-print_bzlmod_stanzas")
 
     _gazelle(
         name = name,
