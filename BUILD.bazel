@@ -166,6 +166,7 @@ filegroup(
         "//gazelle/internal/swiftbin:all_files",
         "//gazelle/internal/swiftcfg:all_files",
         "//gazelle/internal/swiftpkg:all_files",
+        "//gazelle/internal/updmarker:all_files",
         "//swiftpkg:all_files",
         "//swiftpkg/internal:all_files",
         "//swiftpkg/internal/modulemap_parser:all_files",

@@ -37,7 +37,22 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 			&sc.UpdatePkgsToLatest,
 			"swift_update_packages_to_latest",
 			false,
-			"Determines whether to update the Swift packages to their latest eligible version.")
+			"determines whether to update the Swift packages to their latest eligible version.")
+		fs.BoolVar(
+			&sc.PrintBzlmodStanzas,
+			"print_bzlmod_stanzas",
+			false,
+			"determines whether to print the bzlmod stanzas to add to a MODULE.bazel file.")
+		fs.BoolVar(
+			&sc.UpdateBzlmodStanzas,
+			"update_bzlmod_stanzas",
+			false,
+			"determines whether to update your MODULE.bazel file with the appropriate stanzas.")
+		fs.StringVar(
+			&sc.BazelModuleRel,
+			"bazel_module",
+			"MODULE.bazel",
+			"the location of the MODULE.bazel file")
 	}
 
 	// Store the config for later steps
@@ -67,6 +82,10 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	// CheckFlags.
 	if sc.DependencyIndexPath == "" {
 		sc.DependencyIndexPath = filepath.Join(c.RepoRoot, sc.DependencyIndexRel)
+	}
+
+	if sc.BazelModulePath == "" {
+		sc.BazelModulePath = filepath.Join(c.RepoRoot, sc.BazelModuleRel)
 	}
 
 	// Attempt to load the module index. This is created by update-repos if the client is using

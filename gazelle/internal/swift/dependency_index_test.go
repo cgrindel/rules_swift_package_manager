@@ -135,6 +135,7 @@ func TestDependencyIndex(t *testing.T) {
 	// Puprosefully put bazPrd before fooPrd. Need to ensure that overalp affinity is accounted for.
 	di.AddProduct(bazPrd, barPrd, otherPrd, fooPrd, anotherFooPrd)
 	di.AddPackage(awesomePkg, anotherPkg)
+	di.AddDirectDependency(directIdentities...)
 
 	t.Run("resolve module names to products", func(t *testing.T) {
 		tests := []struct {
@@ -249,5 +250,32 @@ func TestDependencyIndex(t *testing.T) {
 		newMI, err := swift.NewDependencyIndexFromJSON(data)
 		assert.NoError(t, err)
 		assert.Equal(t, di, newMI)
+	})
+	t.Run("get package", func(t *testing.T) {
+		tests := []struct {
+			msg      string
+			identity string
+			exp      *swift.Package
+		}{
+			{
+				msg:      "exists",
+				identity: awesomeRepoId,
+				exp:      awesomePkg,
+			},
+			{
+				msg:      "does not exist",
+				identity: "does-not-exist",
+				exp:      nil,
+			},
+		}
+		for _, tt := range tests {
+			actual := di.GetPackage(tt.identity)
+			assert.Equal(t, tt.exp, actual, tt.msg)
+		}
+	})
+	t.Run("get direct packages", func(t *testing.T) {
+		actual := di.DirectDepPackages()
+		expected := []*swift.Package{awesomePkg}
+		assert.Equal(t, expected, actual)
 	})
 }

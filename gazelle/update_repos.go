@@ -11,6 +11,7 @@ import (
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
+	"github.com/cgrindel/swift_bazel/gazelle/internal/updmarker"
 )
 
 // language.RepoImporter Implementation
@@ -124,6 +125,12 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 		di.AddPackage(pkg)
 	}
 
+	// Output a use_repo stanza for bzlmod.
+	if err := writeBzlmodStanzas(di, sc); err != nil {
+		result.Error = err
+		return result
+	}
+
 	// Write the module index to a JSON file
 	if err := sc.WriteDependencyIndex(); err != nil {
 		result.Error = err
@@ -176,3 +183,45 @@ func readResolvedPkgPins(resolvedPkgPath string) (map[string]*spreso.Pin, error)
 	}
 	return pinsByIdentity, nil
 }
+
+func writeBzlmodStanzas(di *swift.DependencyIndex, sc *swiftcfg.SwiftConfig) error {
+	bzlmodStanzas, err := swift.BzlmodStanzas(di)
+	if err != nil {
+		return err
+	}
+	if sc.PrintBzlmodStanzas {
+		if _, err = fmt.Printf("%s\n%s", bzlmodInstructions, bzlmodStanzas); err != nil {
+			return err
+		}
+	}
+	if sc.UpdateBzlmodStanzas {
+		if err := updateBzlmodStanzas(bzlmodStanzas, sc.BazelModulePath); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func updateBzlmodStanzas(bzlmodStanzas, bazelModulePath string) error {
+	finfo, err := os.Stat(bazelModulePath)
+	if err != nil {
+		return err
+	}
+
+	data, err := os.ReadFile(bazelModulePath)
+	if err != nil {
+		return err
+	}
+	updater := updmarker.NewUpdater(swiftDepsUpdMarkerStart, swiftDepsUpdMarkerEnd)
+	newContent, err := updater.UpdateString(string(data), bzlmodStanzas)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(bazelModulePath, []byte(newContent), finfo.Mode())
+}
+
+const swiftDepsUpdMarkerStart = "# swift_deps START\n"
+const swiftDepsUpdMarkerEnd = "# swift_deps END\n"
+
+const bzlmodInstructions = `If you have enabled bzlmod, add the following to your 'MODULE.bazel' file to 
+load your Swift dependencies:`
