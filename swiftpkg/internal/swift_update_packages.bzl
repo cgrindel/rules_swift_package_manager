@@ -35,6 +35,9 @@ def swift_update_packages(
         print_bzlmod_stanzas: Optional. Determines whether the Gazelle
             extension prints out bzlmod Starlark code that can be pasted into
             your `MODULE.bazel`.
+        update_bzlmod_stanzas: Optional. Determines whether the Gazelle
+            extension adds/updates the bzlmod Starlark code to MODULE.bazel.
+        bazel_module: Optional. The relative path to the `MODULE.bazel` file.
         **kwargs: Attributes that are passed along to the gazelle declarations.
     """
     _SWIFT_UPDATE_REPOS_ARGS = [

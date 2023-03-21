@@ -33,8 +33,8 @@ Defines gazelle update-repos targets that are used to resolve and update     Swi
 | <a id="swift_update_packages-swift_deps_fn"></a>swift_deps_fn |  Optional. The name of the Starlark function in the <code>swift_deps</code> file that should be updated with the Swift package dependencies as a <code>string</code>.   |  <code>"swift_dependencies"</code> |
 | <a id="swift_update_packages-swift_deps_index"></a>swift_deps_index |  Optional. The relative path to the Swift dependencies index JSON file. This path is relative to the repository root, not the location of this declaration.   |  <code>"swift_deps_index.json"</code> |
 | <a id="swift_update_packages-print_bzlmod_stanzas"></a>print_bzlmod_stanzas |  Optional. Determines whether the Gazelle extension prints out bzlmod Starlark code that can be pasted into your <code>MODULE.bazel</code>.   |  <code>False</code> |
-| <a id="swift_update_packages-update_bzlmod_stanzas"></a>update_bzlmod_stanzas |  <p align="center"> - </p>   |  <code>False</code> |
-| <a id="swift_update_packages-bazel_module"></a>bazel_module |  <p align="center"> - </p>   |  <code>"MODULE.bazel"</code> |
+| <a id="swift_update_packages-update_bzlmod_stanzas"></a>update_bzlmod_stanzas |  Optional. Determines whether the Gazelle extension adds/updates the bzlmod Starlark code to MODULE.bazel.   |  <code>False</code> |
+| <a id="swift_update_packages-bazel_module"></a>bazel_module |  Optional. The relative path to the <code>MODULE.bazel</code> file.   |  <code>"MODULE.bazel"</code> |
 | <a id="swift_update_packages-kwargs"></a>kwargs |  Attributes that are passed along to the gazelle declarations.   |  none |
 
 

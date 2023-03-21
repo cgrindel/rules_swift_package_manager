@@ -32,8 +32,7 @@ func TestBzlmodStanzas(t *testing.T) {
 
 	actual, err := swift.BzlmodStanzas(di)
 	assert.NoError(t, err)
-	expected := `
-swift_deps = use_extension(
+	expected := `swift_deps = use_extension(
     "@cgrindel_swift_bazel//:extensions.bzl",
     "swift_deps",
 )
