@@ -20,14 +20,16 @@ Snippet Second line
 		tests := []struct {
 			msg string
 			in  string
+			app bool
 			exp string
 		}{
 			{
-				msg: "no markers in the input",
+				msg: "no markers in the input, append is true",
 				in: `
 Content First Line
 Content Second Line
 `,
+				app: true,
 				exp: `
 Content First Line
 Content Second Line
@@ -39,6 +41,18 @@ Snippet Second line
 `,
 			},
 			{
+				msg: "no markers in the input, append is false",
+				in: `
+Content First Line
+Content Second Line
+`,
+				app: false,
+				exp: `
+Content First Line
+Content Second Line
+`,
+			},
+			{
 				msg: "markers in the middle of the input",
 				in: `
 Content First Line
@@ -46,6 +60,7 @@ Content First Line
 # foo_bar END
 Content Second Line
 `,
+				app: true,
 				exp: `
 Content First Line
 # foo_bar START
@@ -63,6 +78,7 @@ Content Second Line
 Content First Line
 Content Second Line
 `,
+				app: true,
 				exp: `# foo_bar START
 Snippet First line
 🙂
@@ -80,6 +96,7 @@ Content Second Line
 # foo_bar START
 # foo_bar END
 `,
+				app: true,
 				exp: `
 Content First Line
 Content Second Line
@@ -92,7 +109,7 @@ Snippet Second line
 			},
 		}
 		for _, tt := range tests {
-			actual, err := updater.UpdateString(tt.in, snippet)
+			actual, err := updater.UpdateString(tt.in, snippet, tt.app)
 			assert.NoError(t, err, tt.msg)
 			assert.Equal(t, tt.exp, actual, tt.msg)
 		}
