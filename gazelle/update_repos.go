@@ -258,8 +258,8 @@ func updateBzlmodStanzas(bzlmodStanzas, bazelModulePath string) error {
 const bzlmodUseRepoNamesUpdMarkerStart = "    # swift_deps bzlmod use_repo START\n"
 const bzlmodUseRepoNamesUpdMarkerEnd = "    # swift_deps bzlmod use_repo END\n"
 
-const bzlmodStanzasUpdMarkerStart = "    # swift_deps START\n"
-const bzlmodStanzasUpdMarkerEnd = "    # swift_deps END\n"
+const bzlmodStanzasUpdMarkerStart = "# swift_deps START\n"
+const bzlmodStanzasUpdMarkerEnd = "# swift_deps END\n"
 
 const bzlmodInstructions = `If you have enabled bzlmod, add the following to your 'MODULE.bazel' file to 
 load your Swift dependencies:`
