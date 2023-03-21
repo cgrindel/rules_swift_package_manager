@@ -53,36 +53,3 @@ func (u *Updater) UpdateString(original, snippet string) (string, error) {
 	newContent = string(newRunes)
 	return newContent, nil
 }
-
-// func (u *Updater) UpdateString(original, snippet string) (string, error) {
-// 	var newContent string
-// 	startIdx := strings.Index(original, u.StartMarker)
-// 	endIdx := strings.Index(original, u.EndMarker)
-// 	if startIdx < 0 && endIdx < 0 {
-// 		// Append to end of file
-// 		newContent = fmt.Sprintf(
-// 			"%s%s%s%s",
-// 			original,
-// 			u.StartMarker,
-// 			snippet,
-// 			u.EndMarker,
-// 		)
-// 	} else if startIdx >= 0 && endIdx >= 0 {
-// 		endIdx += len(u.EndMarker)
-// 		// Replace the existing markers
-// 		runes := []rune(original)
-// 		newRunes := runes[0:startIdx]
-// 		newRunes = append(newRunes, []rune(u.StartMarker)...)
-// 		newRunes = append(newRunes, []rune(snippet)...)
-// 		newRunes = append(newRunes, []rune(u.EndMarker)...)
-// 		newRunes = append(newRunes, []rune(runes[endIdx:len(original)])...)
-// 		newContent = string(newRunes)
-// 	} else if startIdx > endIdx {
-// 		return "", fmt.Errorf("the start and end markers appear to be out of order")
-// 	} else if startIdx < 0 {
-// 		return "", fmt.Errorf("found the end marker, but did not find the start marker")
-// 	} else if endIdx < 0 {
-// 		return "", fmt.Errorf("found the start marker, but did not find the end marker")
-// 	}
-// 	return newContent, nil
-// }
