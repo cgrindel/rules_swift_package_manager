@@ -49,7 +49,7 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 			false,
 			"determines whether to update your MODULE.bazel file with the appropriate stanzas.")
 		fs.StringVar(
-			&sc.BazelModulePath,
+			&sc.BazelModuleRel,
 			"bazel_module",
 			"MODULE.bazel",
 			"the location of the MODULE.bazel file")
@@ -82,6 +82,10 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	// CheckFlags.
 	if sc.DependencyIndexPath == "" {
 		sc.DependencyIndexPath = filepath.Join(c.RepoRoot, sc.DependencyIndexRel)
+	}
+
+	if sc.BazelModulePath == "" {
+		sc.BazelModulePath = filepath.Join(c.RepoRoot, sc.BazelModuleRel)
 	}
 
 	// Attempt to load the module index. This is created by update-repos if the client is using

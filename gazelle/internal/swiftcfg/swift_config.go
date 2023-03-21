@@ -30,7 +30,9 @@ type SwiftConfig struct {
 	ResolutionLogger    reslog.ResolutionLogger
 	PrintBzlmodStanzas  bool
 	UpdateBzlmodStanzas bool
-	BazelModulePath     string
+	BazelModuleRel      string
+	// BazelModulePath is the full path to the MODULE.bazel
+	BazelModulePath string
 }
 
 func NewSwiftConfig() *SwiftConfig {

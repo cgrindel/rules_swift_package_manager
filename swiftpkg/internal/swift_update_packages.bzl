@@ -10,6 +10,8 @@ def swift_update_packages(
         swift_deps_fn = "swift_dependencies",
         swift_deps_index = "swift_deps_index.json",
         print_bzlmod_stanzas = False,
+        update_bzlmod_stanzas = False,
+        bazel_module = "MODULE.bazel",
         **kwargs):
     """Defines gazelle update-repos targets that are used to resolve and update \
     Swift package dependencies.
@@ -43,9 +45,12 @@ def swift_update_packages(
         ),
         "-prune",
         "-swift_dependency_index={}".format(swift_deps_index),
+        "-bazel_module={}".format(bazel_module),
     ]
     if print_bzlmod_stanzas:
         _SWIFT_UPDATE_REPOS_ARGS.append("-print_bzlmod_stanzas")
+    if update_bzlmod_stanzas:
+        _SWIFT_UPDATE_REPOS_ARGS.append("-update_bzlmod_stanzas")
 
     _gazelle(
         name = name,

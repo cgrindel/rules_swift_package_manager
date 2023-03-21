@@ -27,6 +27,7 @@ bazel_dep(
     repo_name = "bazel_gazelle",
 )
 
+# swift_deps START
 swift_deps = use_extension(
     "@cgrindel_swift_bazel//:extensions.bzl",
     "swift_deps",
@@ -41,6 +42,4 @@ use_repo(
     "swiftpkg_swift_log",
     "swiftpkg_swiftformat",
 )
-
-# IDEA
-# use_repo(swift_deps, "swift_deps")
+# swift_deps END
