@@ -1,7 +1,7 @@
 {
   "direct_dep_identities": [
-    "swift-log",
-    "libwebp-xcode"
+    "libwebp-xcode",
+    "swift-log"
   ],
   "modules": [
     {
