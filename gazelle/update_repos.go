@@ -220,8 +220,8 @@ func updateBzlmodStanzas(bzlmodStanzas, bazelModulePath string) error {
 	return os.WriteFile(bazelModulePath, []byte(newContent), finfo.Mode())
 }
 
-const swiftDepsUpdMarkerStart = "# swift_deps START\n"
-const swiftDepsUpdMarkerEnd = "# swift_deps END\n"
+const swiftDepsUpdMarkerStart = "    # swift_deps START\n"
+const swiftDepsUpdMarkerEnd = "    # swift_deps END\n"
 
 const bzlmodInstructions = `If you have enabled bzlmod, add the following to your 'MODULE.bazel' file to 
 load your Swift dependencies:`

@@ -16,32 +16,32 @@ func BzlmodStanzas(di *DependencyIndex) (string, error) {
 	slices.Sort(directDepNames)
 
 	var b strings.Builder
-	if _, err := fmt.Fprint(&b, bzlmodPrefix); err != nil {
-		return "", err
-	}
+	// if _, err := fmt.Fprint(&b, bzlmodPrefix); err != nil {
+	// 	return "", err
+	// }
 	for _, name := range directDepNames {
 		if _, err := fmt.Fprintf(&b, bzlmodNameTmpl, name); err != nil {
 			return "", err
 		}
 	}
-	if _, err := fmt.Fprint(&b, bzlmodSuffix); err != nil {
-		return "", err
-	}
+	// if _, err := fmt.Fprint(&b, bzlmodSuffix); err != nil {
+	// 	return "", err
+	// }
 
 	return b.String(), nil
 }
 
-const bzlmodPrefix = `swift_deps = use_extension(
-    "@cgrindel_swift_bazel//:extensions.bzl",
-    "swift_deps",
-)
-swift_deps.from_file(
-    deps_index = "//:swift_deps_index.json",
-)
-use_repo(
-    swift_deps,
-`
+// const bzlmodPrefix = `swift_deps = use_extension(
+//     "@cgrindel_swift_bazel//:extensions.bzl",
+//     "swift_deps",
+// )
+// swift_deps.from_file(
+//     deps_index = "//:swift_deps_index.json",
+// )
+// use_repo(
+//     swift_deps,
+// `
 
 const bzlmodNameTmpl = "    \"%s\",\n"
 
-const bzlmodSuffix = ")\n"
+// const bzlmodSuffix = ")\n"
