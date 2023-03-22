@@ -13,16 +13,19 @@ type Updater struct {
 func NewUpdater(startMarker, endMarker string) *Updater {
 	return &Updater{
 		StartMarker: startMarker,
-		EndMarker: endMarker,
+		EndMarker:   endMarker,
 	}
 }
 
-func (u *Updater) UpdateString(original, snippet string) (string, error) {
+func (u *Updater) UpdateString(original, snippet string, appendIfNotFound bool) (string, error) {
 	var newContent string
 	origLen := len(original)
 	startIdx := strings.Index(original, u.StartMarker)
 	endIdx := strings.Index(original, u.EndMarker)
 	if startIdx < 0 && endIdx < 0 {
+		if !appendIfNotFound {
+			return original, nil
+		}
 		startIdx = origLen
 	} else if startIdx >= 0 && endIdx >= 0 {
 		endIdx += len(u.EndMarker)
@@ -39,13 +42,13 @@ func (u *Updater) UpdateString(original, snippet string) (string, error) {
 		runes = append(runes, []rune(u.EndMarker)...)
 		return runes
 	}
-	newRunes := make([]rune, 0, origLen + len(snippet))
+	newRunes := make([]rune, 0, origLen+len(snippet))
 	for byteIdx, r := range original {
-		if byteIdx < startIdx || (endIdx >=0 && byteIdx >= endIdx) {
+		if byteIdx < startIdx || (endIdx >= 0 && byteIdx >= endIdx) {
 			newRunes = append(newRunes, r)
 		} else if byteIdx == startIdx {
 			newRunes = appendSnippet(newRunes)
-		} 
+		}
 	}
 	if startIdx == origLen {
 		newRunes = appendSnippet(newRunes)

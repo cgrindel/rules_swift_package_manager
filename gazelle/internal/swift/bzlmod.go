@@ -7,7 +7,7 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-func BzlmodStanzas(di *DependencyIndex) (string, error) {
+func UseRepoNames(di *DependencyIndex) (string, error) {
 	directDepPkgs := di.DirectDepPackages()
 	directDepNames := make([]string, len(directDepPkgs))
 	for idx, pkg := range directDepPkgs {
@@ -16,13 +16,25 @@ func BzlmodStanzas(di *DependencyIndex) (string, error) {
 	slices.Sort(directDepNames)
 
 	var b strings.Builder
-	if _, err := fmt.Fprint(&b, bzlmodPrefix); err != nil {
-		return "", err
-	}
 	for _, name := range directDepNames {
 		if _, err := fmt.Fprintf(&b, bzlmodNameTmpl, name); err != nil {
 			return "", err
 		}
+	}
+	return b.String(), nil
+}
+
+func BzlmodStanzas(di *DependencyIndex) (string, error) {
+	var b strings.Builder
+	if _, err := fmt.Fprint(&b, bzlmodPrefix); err != nil {
+		return "", err
+	}
+	useRepoNames, err := UseRepoNames(di)
+	if err != nil {
+		return "", err
+	}
+	if _, err := fmt.Fprint(&b, useRepoNames); err != nil {
+		return "", err
 	}
 	if _, err := fmt.Fprint(&b, bzlmodSuffix); err != nil {
 		return "", err

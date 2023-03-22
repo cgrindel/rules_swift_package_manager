@@ -125,7 +125,13 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 		di.AddPackage(pkg)
 	}
 
-	// Output a use_repo stanza for bzlmod.
+	// Output a use_repo names for bzlmod.
+	if err := writeBzlmodUseRepoNames(di, sc); err != nil {
+		result.Error = err
+		return result
+	}
+
+	// Output a bzlmod stanzas for bzlmod.
 	if err := writeBzlmodStanzas(di, sc); err != nil {
 		result.Error = err
 		return result
@@ -184,7 +190,37 @@ func readResolvedPkgPins(resolvedPkgPath string) (map[string]*spreso.Pin, error)
 	return pinsByIdentity, nil
 }
 
+func writeBzlmodUseRepoNames(di *swift.DependencyIndex, sc *swiftcfg.SwiftConfig) error {
+	if !sc.UpdateBzlmodUseRepoNames {
+		return nil
+	}
+	useRepoNames, err := swift.UseRepoNames(di)
+	if err != nil {
+		return err
+	}
+	finfo, err := os.Stat(sc.BazelModulePath)
+	if err != nil {
+		return err
+	}
+	data, err := os.ReadFile(sc.BazelModulePath)
+	if err != nil {
+		return err
+	}
+	updater := updmarker.NewUpdater(
+		bzlmodUseRepoNamesUpdMarkerStart,
+		bzlmodUseRepoNamesUpdMarkerEnd,
+	)
+	newContent, err := updater.UpdateString(string(data), useRepoNames, false)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(sc.BazelModulePath, []byte(newContent), finfo.Mode())
+}
+
 func writeBzlmodStanzas(di *swift.DependencyIndex, sc *swiftcfg.SwiftConfig) error {
+	if !sc.PrintBzlmodStanzas && !sc.UpdateBzlmodStanzas {
+		return nil
+	}
 	bzlmodStanzas, err := swift.BzlmodStanzas(di)
 	if err != nil {
 		return err
@@ -207,21 +243,23 @@ func updateBzlmodStanzas(bzlmodStanzas, bazelModulePath string) error {
 	if err != nil {
 		return err
 	}
-
 	data, err := os.ReadFile(bazelModulePath)
 	if err != nil {
 		return err
 	}
-	updater := updmarker.NewUpdater(swiftDepsUpdMarkerStart, swiftDepsUpdMarkerEnd)
-	newContent, err := updater.UpdateString(string(data), bzlmodStanzas)
+	updater := updmarker.NewUpdater(bzlmodStanzasUpdMarkerStart, bzlmodStanzasUpdMarkerEnd)
+	newContent, err := updater.UpdateString(string(data), bzlmodStanzas, true)
 	if err != nil {
 		return err
 	}
 	return os.WriteFile(bazelModulePath, []byte(newContent), finfo.Mode())
 }
 
-const swiftDepsUpdMarkerStart = "# swift_deps START\n"
-const swiftDepsUpdMarkerEnd = "# swift_deps END\n"
+const bzlmodUseRepoNamesUpdMarkerStart = "    # swift_deps bzlmod use_repo START\n"
+const bzlmodUseRepoNamesUpdMarkerEnd = "    # swift_deps bzlmod use_repo END\n"
+
+const bzlmodStanzasUpdMarkerStart = "# swift_deps START\n"
+const bzlmodStanzasUpdMarkerEnd = "# swift_deps END\n"
 
 const bzlmodInstructions = `If you have enabled bzlmod, add the following to your 'MODULE.bazel' file to 
 load your Swift dependencies:`

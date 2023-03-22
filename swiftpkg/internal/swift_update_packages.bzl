@@ -9,6 +9,7 @@ def swift_update_packages(
         swift_deps = "swift_deps.bzl",
         swift_deps_fn = "swift_dependencies",
         swift_deps_index = "swift_deps_index.json",
+        update_bzlmod_use_repo_names = False,
         print_bzlmod_stanzas = False,
         update_bzlmod_stanzas = False,
         bazel_module = "MODULE.bazel",
@@ -32,6 +33,8 @@ def swift_update_packages(
         swift_deps_index: Optional. The relative path to the Swift
             dependencies index JSON file. This path is relative to the
             repository root, not the location of this declaration.
+        update_bzlmod_use_repo_names: Optional. Determines whether the Gazelle
+            extension updates the use_repo names to MODULE.bazel.
         print_bzlmod_stanzas: Optional. Determines whether the Gazelle
             extension prints out bzlmod Starlark code that can be pasted into
             your `MODULE.bazel`.
@@ -50,6 +53,8 @@ def swift_update_packages(
         "-swift_dependency_index={}".format(swift_deps_index),
         "-bazel_module={}".format(bazel_module),
     ]
+    if update_bzlmod_use_repo_names:
+        _SWIFT_UPDATE_REPOS_ARGS.append("-update_bzlmod_use_repo_names")
     if print_bzlmod_stanzas:
         _SWIFT_UPDATE_REPOS_ARGS.append("-print_bzlmod_stanzas")
     if update_bzlmod_stanzas:

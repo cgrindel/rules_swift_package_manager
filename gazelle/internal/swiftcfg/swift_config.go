@@ -23,14 +23,15 @@ type SwiftConfig struct {
 	// DependencyIndexRel is the path relative to the RepoRoot to the dependency index
 	DependencyIndexRel string
 	// DependencyIndexPath is the full path to the dependency index
-	DependencyIndexPath string
-	UpdatePkgsToLatest  bool
-	ResolutionLogPath   string
-	ResolutionLogFile   *os.File
-	ResolutionLogger    reslog.ResolutionLogger
-	PrintBzlmodStanzas  bool
-	UpdateBzlmodStanzas bool
-	BazelModuleRel      string
+	DependencyIndexPath      string
+	UpdatePkgsToLatest       bool
+	ResolutionLogPath        string
+	ResolutionLogFile        *os.File
+	ResolutionLogger         reslog.ResolutionLogger
+	UpdateBzlmodUseRepoNames bool
+	PrintBzlmodStanzas       bool
+	UpdateBzlmodStanzas      bool
+	BazelModuleRel           string
 	// BazelModulePath is the full path to the MODULE.bazel
 	BazelModulePath string
 }

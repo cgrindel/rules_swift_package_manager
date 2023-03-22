@@ -68,6 +68,8 @@ swift_update_packages(
     package_manifest = "swift/Package.swift",
     swift_deps = "swift/deps.bzl",
     swift_deps_index = "swift/deps_index.json",
+    update_bzlmod_use_repo_names = True,
+    visibility = ["//:__subpackages__"],
 )
 
 bzl_library(
