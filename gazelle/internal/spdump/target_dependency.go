@@ -45,9 +45,9 @@ func (pr *ProductReference) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	if pr.DependencyName, err = jsonutils.StringAtIndex(raw, 1); err != nil {
-                // Per SPM code, a single name implies that the product, 
-                // package, and target all have the same name.
-                pr.DependencyName = pr.ProductName
+		// Per SPM code, a single name implies that the product,
+		// package, and target all have the same name.
+		pr.DependencyName = pr.ProductName
 	}
 	return nil
 }
