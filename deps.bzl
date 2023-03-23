@@ -52,8 +52,8 @@ def swift_bazel_dependencies():
     maybe(
         http_archive,
         name = "cgrindel_bazel_starlib",
-        sha256 = "00ea5182b75330de5934d0e5fdcfdaa22c2452227153b67278bb0389326ebcba",
+        sha256 = "52102a2022624a18587ec32ecf12cf174b5fbf06d97f9787597cd3f1aca4cd0d",
         urls = [
-            "https://github.com/cgrindel/bazel-starlib/releases/download/v0.14.9/bazel-starlib.v0.14.9.tar.gz",
+            "https://github.com/cgrindel/bazel-starlib/releases/download/v0.15.0/bazel-starlib.v0.15.0.tar.gz",
         ],
     )
