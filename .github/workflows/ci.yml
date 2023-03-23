@@ -28,6 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        runner: [macos-12, ubuntu-22.04]
         enable_bzlmod: [true, false]
         include:
           - example: http_archive_ext_deps
