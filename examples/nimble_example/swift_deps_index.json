@@ -1,0 +1,169 @@
+{
+  "direct_dep_identities": [
+    "nimble",
+    "quick"
+  ],
+  "modules": [
+    {
+      "name": "CwlCatchException",
+      "c99name": "CwlCatchException",
+      "src_type": "swift",
+      "label": "@swiftpkg_cwlcatchexception//:Sources_CwlCatchException",
+      "package_identity": "cwlcatchexception",
+      "product_memberships": [
+        "CwlCatchException"
+      ]
+    },
+    {
+      "name": "CwlCatchExceptionSupport",
+      "c99name": "CwlCatchExceptionSupport",
+      "src_type": "objc",
+      "label": "@swiftpkg_cwlcatchexception//:Sources_CwlCatchExceptionSupport",
+      "package_identity": "cwlcatchexception",
+      "product_memberships": [
+        "CwlCatchException"
+      ]
+    },
+    {
+      "name": "CwlMachBadInstructionHandler",
+      "c99name": "CwlMachBadInstructionHandler",
+      "src_type": "objc",
+      "label": "@swiftpkg_cwlpreconditiontesting//:Sources_CwlMachBadInstructionHandler",
+      "package_identity": "cwlpreconditiontesting",
+      "product_memberships": [
+        "CwlPreconditionTesting"
+      ]
+    },
+    {
+      "name": "CwlPosixPreconditionTesting",
+      "c99name": "CwlPosixPreconditionTesting",
+      "src_type": "swift",
+      "label": "@swiftpkg_cwlpreconditiontesting//:Sources_CwlPosixPreconditionTesting",
+      "package_identity": "cwlpreconditiontesting",
+      "product_memberships": [
+        "CwlPosixPreconditionTesting"
+      ]
+    },
+    {
+      "name": "CwlPreconditionTesting",
+      "c99name": "CwlPreconditionTesting",
+      "src_type": "swift",
+      "label": "@swiftpkg_cwlpreconditiontesting//:Sources_CwlPreconditionTesting",
+      "package_identity": "cwlpreconditiontesting",
+      "product_memberships": [
+        "CwlPreconditionTesting"
+      ]
+    },
+    {
+      "name": "Nimble",
+      "c99name": "Nimble",
+      "src_type": "swift",
+      "label": "@swiftpkg_nimble//:Sources_Nimble",
+      "package_identity": "nimble",
+      "product_memberships": [
+        "Nimble"
+      ]
+    },
+    {
+      "name": "Quick",
+      "c99name": "Quick",
+      "src_type": "swift",
+      "label": "@swiftpkg_quick//:Sources_Quick",
+      "package_identity": "quick",
+      "product_memberships": [
+        "Quick"
+      ]
+    },
+    {
+      "name": "QuickObjCRuntime",
+      "c99name": "QuickObjCRuntime",
+      "src_type": "objc",
+      "label": "@swiftpkg_quick//:Sources_QuickObjCRuntime",
+      "package_identity": "quick",
+      "product_memberships": [
+        "Quick"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "identity": "cwlcatchexception",
+      "name": "CwlCatchException",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_cwlcatchexception//:Sources_CwlCatchException"
+      ]
+    },
+    {
+      "identity": "cwlpreconditiontesting",
+      "name": "CwlPosixPreconditionTesting",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_cwlpreconditiontesting//:Sources_CwlPosixPreconditionTesting"
+      ]
+    },
+    {
+      "identity": "cwlpreconditiontesting",
+      "name": "CwlPreconditionTesting",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_cwlpreconditiontesting//:Sources_CwlPreconditionTesting",
+        "@swiftpkg_cwlpreconditiontesting//:Sources_CwlMachBadInstructionHandler"
+      ]
+    },
+    {
+      "identity": "nimble",
+      "name": "Nimble",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_nimble//:Sources_Nimble"
+      ]
+    },
+    {
+      "identity": "quick",
+      "name": "Quick",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_quick//:Sources_Quick"
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "name": "swiftpkg_cwlcatchexception",
+      "identity": "cwlcatchexception",
+      "remote": {
+        "commit": "35f9e770f54ce62dd8526470f14c6e137cef3eea",
+        "remote": "https://github.com/mattgallagher/CwlCatchException.git",
+        "version": "2.1.1"
+      }
+    },
+    {
+      "name": "swiftpkg_cwlpreconditiontesting",
+      "identity": "cwlpreconditiontesting",
+      "remote": {
+        "commit": "c21f7bab5ca8eee0a9998bbd17ca1d0eb45d4688",
+        "remote": "https://github.com/mattgallagher/CwlPreconditionTesting.git",
+        "version": "2.1.0"
+      }
+    },
+    {
+      "name": "swiftpkg_nimble",
+      "identity": "nimble",
+      "remote": {
+        "commit": "1f3bde57bde12f5e7b07909848c071e9b73d6edc",
+        "remote": "https://github.com/Quick/Nimble",
+        "version": "10.0.0"
+      }
+    },
+    {
+      "name": "swiftpkg_quick",
+      "identity": "quick",
+      "remote": {
+        "commit": "f9d519828bb03dfc8125467d8f7b93131951124c",
+        "remote": "https://github.com/Quick/Quick",
+        "version": "5.0.1"
+      }
+    }
+  ]
+}
