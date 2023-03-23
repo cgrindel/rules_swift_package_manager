@@ -9,7 +9,7 @@ load(
 )
 load("//:bazel_versions.bzl", "CURRENT_BAZEL_VERSION", "SUPPORTED_BAZEL_VERSIONS")
 
-def _new(name, oss, versions):
+def _new(name, oss, versions, enable_bzlmods):
     # Remove the Bazel label prefix if it exists.
     # Replace periods (.) with underscore (_), after the first character
     clean_versions = [
@@ -25,6 +25,7 @@ def _new(name, oss, versions):
         oss = oss,
         versions = versions,
         clean_versions = clean_versions,
+        enable_bzlmods = enable_bzlmods,
     )
 
 def _test_name(example_name, version):
@@ -106,6 +107,12 @@ _timeouts = {
     "xcmetrics_example": "eternal",
 }
 
+_default_enable_bzlmods = [True]
+
+_enable_bzlmods = {
+    "vapor_example": [True, False],
+}
+
 _all_os_all_bazel_versions_test_examples = [
     "http_archive_ext_deps",
     "pkg_manifest_minimal",
@@ -132,6 +139,7 @@ _all = [
         name = name,
         oss = ["macos", "linux"],
         versions = SUPPORTED_BAZEL_VERSIONS,
+        enable_bzlmods = _enable_bzlmods.get(name, _default_enable_bzlmods),
     )
     for name in _all_os_all_bazel_versions_test_examples
 ] + [
@@ -139,6 +147,7 @@ _all = [
         name = name,
         oss = ["macos", "linux"],
         versions = [CURRENT_BAZEL_VERSION],
+        enable_bzlmods = _enable_bzlmods.get(name, _default_enable_bzlmods),
     )
     for name in _all_os_single_bazel_version_test_examples
 ] + [
@@ -146,6 +155,7 @@ _all = [
         name = name,
         oss = ["macos"],
         versions = [CURRENT_BAZEL_VERSION],
+        enable_bzlmods = _enable_bzlmods.get(name, _default_enable_bzlmods),
     )
     for name in _macos_single_bazel_version_test_examples
 ] + [
@@ -153,6 +163,7 @@ _all = [
         name = name,
         oss = ["linux"],
         versions = [CURRENT_BAZEL_VERSION],
+        enable_bzlmods = _enable_bzlmods.get(name, _default_enable_bzlmods),
     )
     for name in _linux_single_bazel_version_test_examples
 ]

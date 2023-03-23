@@ -111,7 +111,7 @@ func updateMatrix(m *github.SBMatrixStrategy, examples []example.Example) {
 				runner = "ubuntu-22.04"
 			}
 			for _, ver := range ex.CleanVersions {
-				for _, enableBzlmod := range []bool{true, false} {
+				for _, enableBzlmod := range ex.EnableBzlmods {
 					inc := github.SBMatrixInclude{
 						Example:      ex.Name,
 						BazelVersion: ver,

@@ -15,7 +15,7 @@ func TestNewExamplesFromJSON(t *testing.T) {
 
 const examplesJSON = `
 [
-  {"name": "foo_example", "oss": ["macos", "linux"], "versions": [".bazelversion", "5_4_0"]},
-  {"name": "bar_example", "oss": ["macos"], "versions": [".bazelversion"]}
+  {"name": "foo_example", "oss": ["macos", "linux"], "versions": [".bazelversion", "5_4_0"], "enable_bzlmods": [true, false]},
+  {"name": "bar_example", "oss": ["macos"], "versions": [".bazelversion"], "enable_bzlmods": [true]}
 ]
 `
