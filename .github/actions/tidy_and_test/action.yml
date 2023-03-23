@@ -1,5 +1,4 @@
 name: Tidy and Test
-# inputs: []
 
 runs:
   using: composite

@@ -15,9 +15,6 @@ import (
 
 const intTestMatrixKey = "integration_test_matrix"
 
-// const macOSIntTestMatrixKey = "macos_int_test_matrix"
-// const ubuntuIntTestMatrixKey = "ubuntu_int_test_matrix"
-
 func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
@@ -71,18 +68,6 @@ This utility generates a new GitHub actions workflow file for this project.
 		return err
 	}
 
-	// // Set up the macOS matrix
-	// macOSExamples := filterExamplesByOS(examples, example.MacOS)
-	// if err := updateJob(workflow.Jobs, macOSIntTestMatrixKey, macOSExamples); err != nil {
-	// 	return err
-	// }
-
-	// // Set up the Ubuntu matrix
-	// ubuntuExamples := filterExamplesByOS(examples, example.LinuxOS)
-	// if err := updateJob(workflow.Jobs, ubuntuIntTestMatrixKey, ubuntuExamples); err != nil {
-	// 	return err
-	// }
-
 	// Write the output file
 	var outBuf bytes.Buffer
 	if _, err := outBuf.WriteString(hdrMsg); err != nil {
@@ -100,16 +85,6 @@ This utility generates a new GitHub actions workflow file for this project.
 
 	return nil
 }
-
-// func filterExamplesByOS(examples []example.Example, os string) []example.Example {
-// 	result := make([]example.Example, 0, len(examples))
-// 	for _, ex := range examples {
-// 		if slices.Contains(ex.OSS, os) {
-// 			result = append(result, ex)
-// 		}
-// 	}
-// 	return result
-// }
 
 func updateJob(jobs map[string]github.Job, key string, examples []example.Example) error {
 	job, ok := jobs[key]
