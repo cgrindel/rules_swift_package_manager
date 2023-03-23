@@ -17,9 +17,8 @@ jobs:
   all_ci_tests:
     runs-on: ubuntu-20.04
     needs:
-      - macos_tidy_and_test
+      - tidy_and_test_matrix
       - macos_int_test_matrix
-      - ubuntu_tidy_and_test
       - ubuntu_int_test_matrix
     if: ${{ always() }}
     steps:
@@ -62,21 +61,6 @@ jobs:
         with:
           bazel_version: ${{ matrix.bazel_version }}
           example_name: ${{ matrix.example }}
-  macos_tidy_and_test:
-    runs-on: macos-12
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/set_up_macos
-        with:
-          repo_name: swift_bazel
-          xcode_version: 14.0.1
-      - name: Ensure everything is tidy
-        shell: bash
-        run: |
-          bazelisk run //:tidy_check
-      - name: Execute Tests
-        shell: bash
-        run: "bazelisk test //... \n"
   ubuntu_int_test_matrix:
     strategy:
       fail-fast: false
@@ -103,20 +87,63 @@ jobs:
         with:
           bazel_version: ${{ matrix.bazel_version }}
           example_name: ${{ matrix.example }}
-  ubuntu_tidy_and_test:
-    runs-on: ubuntu-22.04
-    env:
-      CC: clang
+
+  tidy_and_test_matrix:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-12, ubuntu-22.04]
+        enable_bzlmod: [true, false]
+    runs-on: ${{ matrix.runner }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/set_up_ubuntu
-        with:
-          repo_name: swift_bazel
-          ubuntu_version: "22.04"
-      - name: Ensure everything is tidy
-        shell: bash
-        run: |
-          bazelisk run //:tidy_check
-      - name: Execute Tests
-        shell: bash
-        run: "bazelisk test //... \n"
+    - uses: actions/checkout@v3
+    - uses: ./.github/actions/set_up_ubuntu
+      if: ${{ startsWith(matrix.runner, 'ubuntu') }}
+      with:
+        repo_name: swift_bazel
+        ubuntu_version: "22.04"
+    - uses: ./.github/actions/set_up_macos
+      if: ${{ startsWith(matrix.runner, 'macos') }}
+      with:
+        repo_name: swift_bazel
+        xcode_version: 14.0.1
+    - uses: ./.github/actions/configure_bzlmod
+      with:
+        enabled: ${{ matrix.enable_bzlmod }}
+    - uses: ./.github/actions/tidy_and_test
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+
+
+  # ubuntu_tidy_and_test:
+  #   runs-on: ubuntu-22.04
+  #   env:
+  #     CC: clang
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: ./.github/actions/set_up_ubuntu
+  #       with:
+  #         repo_name: swift_bazel
+  #         ubuntu_version: "22.04"
+  #     - name: Ensure everything is tidy
+  #       shell: bash
+  #       run: |
+  #         bazelisk run //:tidy_check
+  #     - name: Execute Tests
+  #       shell: bash
+  #       run: "bazelisk test //... \n"
+  # macos_tidy_and_test:
+  #   runs-on: macos-12
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: ./.github/actions/set_up_macos
+  #       with:
+  #         repo_name: swift_bazel
+  #         xcode_version: 14.0.1
+  #     - name: Ensure everything is tidy
+  #       shell: bash
+  #       run: |
+  #         bazelisk run //:tidy_check
+  #     - name: Execute Tests
+  #       shell: bash
+  #       run: "bazelisk test //... \n"

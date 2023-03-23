@@ -1,0 +1,15 @@
+name: Tidy and Test
+# inputs: []
+
+runs:
+  using: composite
+  steps:
+    - name: Ensure everything is tidy
+      shell: bash
+      run: |
+        bazelisk run //:tidy_check
+
+    - name: Execute Tests
+      shell: bash
+      run: |
+        bazelisk test //... 
