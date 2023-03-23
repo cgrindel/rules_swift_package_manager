@@ -18,63 +18,61 @@ jobs:
     runs-on: ubuntu-20.04
     needs:
       - tidy_and_test_matrix
-      - macos_int_test_matrix
-      - ubuntu_int_test_matrix
+      - integration_test_matrix
     if: ${{ always() }}
     steps:
       - uses: cgrindel/gha_join_jobs@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-  macos_int_test_matrix:
+  integration_test_matrix:
     strategy:
       fail-fast: false
       matrix:
+        enable_bzlmod: [true, false]
         include:
           - example: http_archive_ext_deps
             bazel_version: .bazelversion
+            runner: macos-12
           - example: pkg_manifest_minimal
             bazel_version: .bazelversion
+            runner: macos-12
           - example: soto_example
             bazel_version: .bazelversion
+            runner: macos-12
           - example: vapor_example
             bazel_version: .bazelversion
+            runner: macos-12
           - example: firebase_example
             bazel_version: .bazelversion
+            runner: macos-12
           - example: interesting_deps
             bazel_version: .bazelversion
+            runner: macos-12
           - example: ios_sim
             bazel_version: .bazelversion
+            runner: macos-12
           - example: objc_code
             bazel_version: .bazelversion
+            runner: macos-12
           - example: phone_number_kit
             bazel_version: .bazelversion
+            runner: macos-12
           - example: xcmetrics_example
             bazel_version: .bazelversion
-    runs-on: macos-12
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/set_up_macos
-        with:
-          repo_name: swift_bazel
-          xcode_version: 14.0.1
-      - uses: ./.github/actions/test_example
-        with:
-          bazel_version: ${{ matrix.bazel_version }}
-          example_name: ${{ matrix.example }}
-  ubuntu_int_test_matrix:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
+            runner: macos-12
           - example: http_archive_ext_deps
             bazel_version: .bazelversion
+            runner: ubuntu-22.04
           - example: pkg_manifest_minimal
             bazel_version: .bazelversion
+            runner: ubuntu-22.04
           - example: soto_example
             bazel_version: .bazelversion
+            runner: ubuntu-22.04
           - example: vapor_example
             bazel_version: .bazelversion
-    runs-on: ubuntu-22.04
+            runner: ubuntu-22.04
+    runs-on: ${{ matrix.runner }}
     env:
       CC: clang
     steps:
@@ -83,11 +81,15 @@ jobs:
         with:
           repo_name: swift_bazel
           ubuntu_version: "22.04"
+      - uses: ./.github/actions/set_up_macos
+        if: ${{ startsWith(matrix.runner, 'macos') }}
+        with:
+          repo_name: swift_bazel
+          xcode_version: 14.0.1
       - uses: ./.github/actions/test_example
         with:
           bazel_version: ${{ matrix.bazel_version }}
           example_name: ${{ matrix.example }}
-
   tidy_and_test_matrix:
     strategy:
       fail-fast: false
@@ -95,6 +97,8 @@ jobs:
         runner: [macos-12, ubuntu-22.04]
         enable_bzlmod: [true, false]
     runs-on: ${{ matrix.runner }}
+    env:
+      CC: clang
     steps:
     - uses: actions/checkout@v3
     - uses: ./.github/actions/set_up_ubuntu
