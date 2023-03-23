@@ -95,6 +95,8 @@ func (ff FailFast) IsZero() bool {
 type SBMatrixStrategy struct {
 	Example      []string          `yaml:"example,omitempty"`
 	BazelVersion []string          `yaml:"bazel_version,omitempty"`
+	Runner       []string          `yaml:"runner,omitempty"`
+	EnableBzlmod []bool            `yaml:"enable_bzlmod,omitempty"`
 	Include      []SBMatrixInclude `yaml:"include,omitempty"`
 }
 
