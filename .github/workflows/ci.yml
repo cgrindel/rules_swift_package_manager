@@ -79,6 +79,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/set_up_ubuntu
+        if: ${{ startsWith(matrix.runner, 'ubuntu') }}
         with:
           repo_name: swift_bazel
           ubuntu_version: "22.04"
