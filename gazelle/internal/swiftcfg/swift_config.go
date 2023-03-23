@@ -34,6 +34,8 @@ type SwiftConfig struct {
 	BazelModuleRel           string
 	// BazelModulePath is the full path to the MODULE.bazel
 	BazelModulePath string
+
+	GenerateSwiftDepsForWorkspace bool
 }
 
 func NewSwiftConfig() *SwiftConfig {

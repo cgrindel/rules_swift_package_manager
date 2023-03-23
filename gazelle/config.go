@@ -47,7 +47,7 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 			&sc.PrintBzlmodStanzas,
 			"print_bzlmod_stanzas",
 			false,
-			"determines whether to print the bzlmod stanzas to add to a MODULE.bazel file.")
+			"determines whether to print the bzlmod stanzas to stdout.")
 		fs.BoolVar(
 			&sc.UpdateBzlmodStanzas,
 			"update_bzlmod_stanzas",
@@ -58,6 +58,11 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 			"bazel_module",
 			"MODULE.bazel",
 			"the location of the MODULE.bazel file")
+		fs.BoolVar(
+			&sc.GenerateSwiftDepsForWorkspace,
+			"generate_swift_deps_for_workspace",
+			true,
+			"determines whether to generate swift deps for workspace (e.g. swift_deps.bzl).")
 	}
 
 	// Store the config for later steps
