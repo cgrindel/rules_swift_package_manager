@@ -10,12 +10,13 @@ import (
 
 	"github.com/cgrindel/swift_bazel/tools/generate_ci_workflow/internal/example"
 	"github.com/cgrindel/swift_bazel/tools/generate_ci_workflow/internal/github"
-	"golang.org/x/exp/slices"
 	"gopkg.in/yaml.v3"
 )
 
-const macOSIntTestMatrixKey = "macos_int_test_matrix"
-const ubuntuIntTestMatrixKey = "ubuntu_int_test_matrix"
+const intTestMatrixKey = "integration_test_matrix"
+
+// const macOSIntTestMatrixKey = "macos_int_test_matrix"
+// const ubuntuIntTestMatrixKey = "ubuntu_int_test_matrix"
 
 func main() {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
@@ -66,16 +67,21 @@ This utility generates a new GitHub actions workflow file for this project.
 	}
 
 	// Set up the macOS matrix
-	macOSExamples := filterExamplesByOS(examples, example.MacOS)
-	if err := updateJob(workflow.Jobs, macOSIntTestMatrixKey, macOSExamples); err != nil {
+	if err := updateJob(workflow.Jobs, intTestMatrixKey, examples); err != nil {
 		return err
 	}
 
-	// Set up the Ubuntu matrix
-	ubuntuExamples := filterExamplesByOS(examples, example.LinuxOS)
-	if err := updateJob(workflow.Jobs, ubuntuIntTestMatrixKey, ubuntuExamples); err != nil {
-		return err
-	}
+	// // Set up the macOS matrix
+	// macOSExamples := filterExamplesByOS(examples, example.MacOS)
+	// if err := updateJob(workflow.Jobs, macOSIntTestMatrixKey, macOSExamples); err != nil {
+	// 	return err
+	// }
+
+	// // Set up the Ubuntu matrix
+	// ubuntuExamples := filterExamplesByOS(examples, example.LinuxOS)
+	// if err := updateJob(workflow.Jobs, ubuntuIntTestMatrixKey, ubuntuExamples); err != nil {
+	// 	return err
+	// }
 
 	// Write the output file
 	var outBuf bytes.Buffer
@@ -95,20 +101,20 @@ This utility generates a new GitHub actions workflow file for this project.
 	return nil
 }
 
-func filterExamplesByOS(examples []example.Example, os string) []example.Example {
-	result := make([]example.Example, 0, len(examples))
-	for _, ex := range examples {
-		if slices.Contains(ex.OSS, os) {
-			result = append(result, ex)
-		}
-	}
-	return result
-}
+// func filterExamplesByOS(examples []example.Example, os string) []example.Example {
+// 	result := make([]example.Example, 0, len(examples))
+// 	for _, ex := range examples {
+// 		if slices.Contains(ex.OSS, os) {
+// 			result = append(result, ex)
+// 		}
+// 	}
+// 	return result
+// }
 
 func updateJob(jobs map[string]github.Job, key string, examples []example.Example) error {
 	job, ok := jobs[key]
 	if !ok {
-		return fmt.Errorf("Did not find '%' job.", key)
+		return fmt.Errorf("did not find '%s' job", key)
 	}
 	matrix := job.Strategy.Matrix
 	updateMatrix(&matrix, examples)
@@ -121,9 +127,25 @@ func updateJob(jobs map[string]github.Job, key string, examples []example.Exampl
 func updateMatrix(m *github.SBMatrixStrategy, examples []example.Example) {
 	newM := github.SBMatrixStrategy{}
 	for _, ex := range examples {
-		for _, ver := range ex.CleanVersions {
-			inc := github.SBMatrixInclude{Example: ex.Name, BazelVersion: ver}
-			newM.Include = append(newM.Include, inc)
+		for _, os := range ex.OSS {
+			var runner string
+			switch os {
+			case "macos":
+				runner = "macos-12"
+			case "linux":
+				runner = "ubuntu-22.04"
+			}
+			for _, ver := range ex.CleanVersions {
+				for _, enableBzlmod := range []bool{true, false} {
+					inc := github.SBMatrixInclude{
+						Example:      ex.Name,
+						BazelVersion: ver,
+						Runner:       runner,
+						EnableBzlmod: enableBzlmod,
+					}
+					newM.Include = append(newM.Include, inc)
+				}
+			}
 		}
 	}
 	*m = newM
