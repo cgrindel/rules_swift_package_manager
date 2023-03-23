@@ -1,7 +1,6 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
-# load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 
 tidy(
     name = "tidy",
@@ -36,13 +35,6 @@ swift_update_packages(
     print_bzlmod_stanzas = True,
     update_bzlmod_stanzas = True,
 )
-
-# bzl_library(
-#     name = "swift_deps",
-#     srcs = ["swift_deps.bzl"],
-#     visibility = ["//visibility:public"],
-#     deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
-# )
 
 alias(
     name = "swiftformat",
