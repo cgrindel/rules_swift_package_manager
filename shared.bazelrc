@@ -7,7 +7,6 @@ build --incompatible_strict_action_env=true
 # Test output information
 test --test_output=errors --test_summary=detailed
 
-# GH276: Enable bzlmod
-# # Enable bzlmod
-# common --enable_bzlmod
-# build --@cgrindel_bazel_starlib//bzlmod:enabled
+# Enable bzlmod
+common --enable_bzlmod
+build --@cgrindel_bazel_starlib//bzlmod:enabled
