@@ -61,7 +61,7 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 		fs.BoolVar(
 			&sc.GenerateSwiftDepsForWorkspace,
 			"generate_swift_deps_for_workspace",
-			true,
+			false,
 			"determines whether to generate swift deps for workspace (e.g. swift_deps.bzl).")
 	}
 

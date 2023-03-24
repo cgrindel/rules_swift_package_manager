@@ -52,17 +52,15 @@ def swift_update_packages(
         "-prune",
         "-swift_dependency_index={}".format(swift_deps_index),
         "-bazel_module={}".format(bazel_module),
-        "-generate_swift_deps_for_workspace={}".format(
-            generate_swift_deps_for_workspace,
-        ),
     ]
     if generate_swift_deps_for_workspace:
-        _swift_update_repos_args.append(
+        _swift_update_repos_args.extend([
+            "-generate_swift_deps_for_workspace",
             "-to_macro={swift_deps}%{swift_deps_fn}".format(
                 swift_deps = swift_deps,
                 swift_deps_fn = swift_deps_fn,
             ),
-        )
+        ])
     if update_bzlmod_use_repo_names:
         _swift_update_repos_args.append("-update_bzlmod_use_repo_names")
     if print_bzlmod_stanzas:
