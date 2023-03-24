@@ -13,12 +13,6 @@ find "${script_dir}" \
 # Remove the SPM build folder
 rm -rf .build
 
-# Replace the swift_deps.bzl with no declarations.
-cat > "${script_dir}/swift_deps.bzl"  <<-EOF
-def swift_dependencies():
-    pass
-EOF
-
 # Add back a minimal build file at the root
 cat > "${script_dir}/BUILD.bazel"  <<-EOF
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
