@@ -171,12 +171,12 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 		}
 	}
 
-	// If we are not generating the legacy dependency declarations, return an empty result.
-	if !sc.GenerateSwiftDepsForWorkspace {
-		return language.ImportReposResult{}
+	// If we are generating the legacy dependency declarations, return the result.
+	// Otherwise, return an empty result.
+	if sc.GenerateSwiftDepsForWorkspace {
+		return result
 	}
-
-	return result
+	return language.ImportReposResult{}
 }
 
 func readResolvedPkgPins(resolvedPkgPath string) (map[string]*spreso.Pin, error) {

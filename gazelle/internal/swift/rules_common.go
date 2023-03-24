@@ -59,14 +59,6 @@ func setCommonSwiftAttrs(r *rule.Rule, moduleName string, srcs []string, swiftIm
 	r.SetPrivateAttr(config.GazelleImportsKey, swiftImports)
 }
 
-// Alias
-
-func aliasRule(name, actual string) *rule.Rule {
-	r := rule.NewRule(AliasRuleKind, name)
-	r.SetAttr("actual", actual)
-	return r
-}
-
 // Visibility
 
 func shouldSetVisibility(args language.GenerateArgs) bool {
