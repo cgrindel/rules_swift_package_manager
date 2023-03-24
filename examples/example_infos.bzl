@@ -110,6 +110,7 @@ _timeouts = {
 _default_enable_bzlmods = [True]
 
 _enable_bzlmods = {
+    "http_archive_ext_deps": [True, False],
     "vapor_example": [True, False],
 }
 
