@@ -1,5 +1,6 @@
 """Module exposing information about the example integration tests."""
 
+load("@bazel_binaries//:defs.bzl", "bazel_binaries")
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load(
     "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
@@ -56,6 +57,7 @@ def _bazel_integration_test(ei):
                 ei.name,
                 version,
             ),
+            bazel_binaries = bazel_binaries,
             bazel_version = version,
             timeout = timeout,
             target_compatible_with = target_compatible_with,
@@ -66,6 +68,7 @@ def _bazel_integration_test(ei):
     elif versions_len > 1:
         bazel_integration_tests(
             name = ei.name + "_test",
+            bazel_binaries = bazel_binaries,
             bazel_versions = ei.versions,
             timeout = timeout,
             target_compatible_with = target_compatible_with,

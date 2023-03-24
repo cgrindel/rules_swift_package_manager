@@ -71,9 +71,7 @@ bazel_dep(
 bazel_binaries = use_extension(
     "@rules_bazel_integration_test//:extensions.bzl",
     "bazel_binaries",
+    dev_dependency = True,
 )
 bazel_binaries.download(version_file = "//:.bazelversion")
-use_repo(
-    bazel_binaries,
-    "build_bazel_bazel_.bazelversion",
-)
+use_repo(bazel_binaries, "bazel_binaries")
