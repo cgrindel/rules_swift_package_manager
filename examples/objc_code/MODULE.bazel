@@ -1,5 +1,5 @@
 module(
-    name = "trustkit_example",
+    name = "objc_code",
     version = "0.0.0",
 )
 

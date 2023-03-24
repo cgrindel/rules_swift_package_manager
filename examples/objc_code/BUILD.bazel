@@ -37,7 +37,7 @@ swift_update_packages(
 )
 
 swift_binary(
-    name = "trustkit_example",
+    name = "objc_code",
     srcs = ["main.swift"],
     visibility = ["//swift:__subpackages__"],
     deps = [
@@ -46,8 +46,8 @@ swift_binary(
 )
 
 sh_test(
-    name = "trustkit_example_test",
-    srcs = ["trustkit_test.sh"],
-    data = [":trustkit_example"],
+    name = "objc_code_test",
+    srcs = ["objc_code_test.sh"],
+    data = [":objc_code"],
     deps = ["@bazel_tools//tools/bash/runfiles"],
 )

@@ -17,8 +17,9 @@ err_msg() {
   exit 1
 }
 
-workspace="trustkit_example"
-binary="$(rlocation "${workspace}/trustkit_example")"
+objc_code_location=objc_code/objc_code
+objc_code="$(rlocation "${objc_code_location}")" || \
+  (echo >&2 "Failed to locate ${objc_code_location}" && exit 1)
 
 expected="Successfully initialized with configuration"
-"${binary}" | grep "${expected}" || err_msg "Failed to find expected output. ${expected}"
+"${objc_code}" | grep "${expected}" || err_msg "Failed to find expected output. ${expected}"
