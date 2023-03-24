@@ -60,6 +60,7 @@ func (j *Job) UnmarshalYAML(node *yaml.Node) error {
 
 type Step struct {
 	Uses  string            `yaml:"uses,omitempty"`
+	If    string            `yaml:"if,omitempty"`
 	With  map[string]string `yaml:"with,omitempty"`
 	Name  string            `yaml:"name,omitempty"`
 	Shell string            `yaml:"shell,omitempty"`
@@ -94,10 +95,14 @@ func (ff FailFast) IsZero() bool {
 type SBMatrixStrategy struct {
 	Example      []string          `yaml:"example,omitempty"`
 	BazelVersion []string          `yaml:"bazel_version,omitempty"`
+	Runner       []string          `yaml:"runner,omitempty"`
+	EnableBzlmod []bool            `yaml:"enable_bzlmod,omitempty"`
 	Include      []SBMatrixInclude `yaml:"include,omitempty"`
 }
 
 type SBMatrixInclude struct {
 	Example      string `yaml:"example"`
 	BazelVersion string `yaml:"bazel_version"`
+	Runner       string `yaml:"runner"`
+	EnableBzlmod bool   `yaml:"enable_bzlmod"`
 }
