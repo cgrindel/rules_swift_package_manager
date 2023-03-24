@@ -18,6 +18,12 @@ func RulesFromSrcs(args language.GenerateArgs, srcs []string) []*rule.Rule {
 	if moduleName == "." {
 		moduleName = args.Config.RepoName
 	}
+	if moduleName == "" {
+		moduleName = filepath.Base(args.Config.WorkDir)
+	}
+	if moduleName == "" {
+		moduleName = "main"
+	}
 	shouldSetVis := shouldSetVisibility(args)
 
 	var rules []*rule.Rule
