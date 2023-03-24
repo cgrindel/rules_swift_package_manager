@@ -35,8 +35,16 @@ jobs:
             enable_bzlmod: true
           - example: http_archive_ext_deps
             bazel_version: .bazelversion
+            runner: macos-12
+            enable_bzlmod: false
+          - example: http_archive_ext_deps
+            bazel_version: .bazelversion
             runner: ubuntu-22.04
             enable_bzlmod: true
+          - example: http_archive_ext_deps
+            bazel_version: .bazelversion
+            runner: ubuntu-22.04
+            enable_bzlmod: false
           - example: pkg_manifest_minimal
             bazel_version: .bazelversion
             runner: macos-12
