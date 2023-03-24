@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
+	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/reslog"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
 	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
@@ -111,4 +112,22 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	}
 
 	return nil
+}
+
+// Directives
+
+const defaultModuleNameDirective = "swift_default_module_name"
+
+func (*swiftLang) KnownDirectives() []string {
+	return []string{defaultModuleNameDirective}
+}
+
+func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
+	sc := swiftcfg.GetSwiftConfig(c)
+	for _, d := range f.Directives {
+		switch d.Key {
+		case defaultModuleNameDirective:
+			sc.DefaultModuleNames[rel] = d.Value
+		}
+	}
 }

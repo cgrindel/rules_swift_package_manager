@@ -36,6 +36,10 @@ type SwiftConfig struct {
 	BazelModulePath string
 
 	GenerateSwiftDepsForWorkspace bool
+
+	// Mapping of relative path to default module name. These values are populated from directives
+	// that can be applied to 
+	DefaultModuleNames map[string]string
 }
 
 func NewSwiftConfig() *SwiftConfig {
@@ -43,6 +47,7 @@ func NewSwiftConfig() *SwiftConfig {
 		ModuleFilesCollector: NewModuleFilesCollector(),
 		DependencyIndex:      swift.NewDependencyIndex(),
 		ResolutionLogger:     reslog.NewNoopLogger(),
+		DefaultModuleNames:   make(map[string]string),
 	}
 }
 
