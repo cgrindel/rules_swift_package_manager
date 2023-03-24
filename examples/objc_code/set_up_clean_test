@@ -59,9 +59,9 @@ swift_update_packages(
 )
 
 sh_test(
-    name = "trustkit_example_test",
-    srcs = ["trustkit_test.sh"],
-    data = [":trustkit_example"],
+    name = "objc_code_test",
+    srcs = ["objc_code_test.sh"],
+    data = [":objc_code"],
     deps = ["@bazel_tools//tools/bash/runfiles"],
 )
 EOF
