@@ -31,6 +31,7 @@ bazel_dep(
     dev_dependency = True,
     repo_name = "bazel_gazelle",
 )
+
 # swift_deps START
 swift_deps = use_extension(
     "@cgrindel_swift_bazel//:extensions.bzl",
