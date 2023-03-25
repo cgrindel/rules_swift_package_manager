@@ -1,21 +1,22 @@
 package swift
 
 import (
-	"path/filepath"
 	"sort"
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
 	mapset "github.com/deckarep/golang-set/v2"
 )
 
 // RulesFromSrcs returns the Bazel build rule declarations for the provided source files.
-func RulesFromSrcs(args language.GenerateArgs, srcs []string) []*rule.Rule {
+func RulesFromSrcs(
+	args language.GenerateArgs,
+	srcs []string,
+	defaultModuleName string,
+) []*rule.Rule {
 	fileInfos := NewFileInfosFromRelPaths(args.Dir, srcs)
 	swiftImports, moduleType := collectSwiftInfo(fileInfos)
 
-	defaultModuleName := defaultModuleName(args)
 	shouldSetVis := shouldSetVisibility(args)
 
 	var rules []*rule.Rule
@@ -28,28 +29,6 @@ func RulesFromSrcs(args language.GenerateArgs, srcs []string) []*rule.Rule {
 		rules = rulesForTestModule(defaultModuleName, srcs, swiftImports, shouldSetVis, args.File)
 	}
 	return rules
-}
-
-func defaultModuleName(args language.GenerateArgs) string {
-	// Order of names to use
-	// 1. Value specified via directive.
-	// 2. Directory name.
-	// 3. Repository name.
-	// 4. "DefaultModule"
-
-	// Check for a value configured via directive
-	sc := swiftcfg.GetSwiftConfig(args.Config)
-	if defaultModuleName, ok := sc.DefaultModuleNames[args.Rel]; ok {
-		return defaultModuleName
-	}
-	defaultModuleName := filepath.Base(args.Config.WorkDir)
-	if defaultModuleName == "." || defaultModuleName == "" {
-		defaultModuleName = args.Config.RepoName
-	}
-	if defaultModuleName == "" {
-		defaultModuleName = "DefaultModule"
-	}
-	return defaultModuleName
 }
 
 var guiModules = mapset.NewSet[string]("AppKit", "UIKit", "SwiftUI")
