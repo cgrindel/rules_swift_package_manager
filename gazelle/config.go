@@ -123,6 +123,9 @@ func (*swiftLang) KnownDirectives() []string {
 }
 
 func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
+	if f == nil {
+		return
+	}
 	sc := swiftcfg.GetSwiftConfig(c)
 	for _, d := range f.Directives {
 		switch d.Key {
