@@ -74,10 +74,16 @@ func defaultModuleName(args language.GenerateArgs) string {
 
 	// Check for a value configured via directive
 	sc := swiftcfg.GetSwiftConfig(args.Config)
-	if defaultModuleName, ok := sc.DefaultModuleNames[args.Rel]; ok {
+	var defaultModuleName string
+	var ok bool
+	if defaultModuleName, ok = sc.DefaultModuleNames[args.Rel]; ok {
 		return defaultModuleName
 	}
-	defaultModuleName := filepath.Base(args.Config.WorkDir)
+	if args.Rel == "" {
+		defaultModuleName = filepath.Base(args.Config.WorkDir)
+	} else {
+		defaultModuleName = filepath.Base(args.Rel)
+	}
 	if ext := filepath.Ext(defaultModuleName); ext != "" {
 		defaultModuleName = strings.TrimSuffix(defaultModuleName, ext)
 	}
