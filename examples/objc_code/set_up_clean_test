@@ -32,6 +32,8 @@ tidy(
 # Ignore the Swift build folder
 # gazelle:exclude .build
 
+# gazelle:swift_module_name objc_code
+#
 gazelle_binary(
     name = "gazelle_bin",
     languages = [
