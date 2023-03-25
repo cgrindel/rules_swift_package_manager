@@ -4,6 +4,7 @@ import (
 	"log"
 	"path/filepath"
 	"sort"
+	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -77,6 +78,9 @@ func defaultModuleName(args language.GenerateArgs) string {
 		return defaultModuleName
 	}
 	defaultModuleName := filepath.Base(args.Config.WorkDir)
+	if ext := filepath.Ext(defaultModuleName); ext != "" {
+		defaultModuleName = strings.TrimSuffix(defaultModuleName, ext)
+	}
 	if defaultModuleName == "." || defaultModuleName == "" {
 		defaultModuleName = args.Config.RepoName
 	}
