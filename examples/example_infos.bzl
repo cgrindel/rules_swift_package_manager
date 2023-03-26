@@ -8,13 +8,13 @@ load(
     "bazel_integration_tests",
     "integration_test_utils",
 )
-load("//:bazel_versions.bzl", "CURRENT_BAZEL_VERSION", "SUPPORTED_BAZEL_VERSIONS")
 
 def _new(name, oss, versions, enable_bzlmods):
     # Remove the Bazel label prefix if it exists.
+    # Depending upon the whether bzmlod is enabled, the prefix could be `@@//:`
     # Replace periods (.) with underscore (_), after the first character
     clean_versions = [
-        v.removeprefix("//:")
+        v.removeprefix("//:").removeprefix("@@//:")
         for v in versions
     ]
     clean_versions = [
@@ -142,7 +142,7 @@ _all = [
     _new(
         name = name,
         oss = ["macos", "linux"],
-        versions = SUPPORTED_BAZEL_VERSIONS,
+        versions = bazel_binaries.versions.all,
         enable_bzlmods = _enable_bzlmods.get(name, _default_enable_bzlmods),
     )
     for name in _all_os_all_bazel_versions_test_examples
@@ -150,7 +150,7 @@ _all = [
     _new(
         name = name,
         oss = ["macos", "linux"],
-        versions = [CURRENT_BAZEL_VERSION],
+        versions = [bazel_binaries.versions.current],
         enable_bzlmods = _enable_bzlmods.get(name, _default_enable_bzlmods),
     )
     for name in _all_os_single_bazel_version_test_examples
@@ -158,7 +158,7 @@ _all = [
     _new(
         name = name,
         oss = ["macos"],
-        versions = [CURRENT_BAZEL_VERSION],
+        versions = [bazel_binaries.versions.current],
         enable_bzlmods = _enable_bzlmods.get(name, _default_enable_bzlmods),
     )
     for name in _macos_single_bazel_version_test_examples
@@ -166,7 +166,7 @@ _all = [
     _new(
         name = name,
         oss = ["linux"],
-        versions = [CURRENT_BAZEL_VERSION],
+        versions = [bazel_binaries.versions.current],
         enable_bzlmods = _enable_bzlmods.get(name, _default_enable_bzlmods),
     )
     for name in _linux_single_bazel_version_test_examples

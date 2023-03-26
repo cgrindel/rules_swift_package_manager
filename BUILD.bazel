@@ -250,9 +250,3 @@ bzl_library(
     visibility = ["//visibility:public"],
     deps = ["//swiftpkg/bzlmod:swift_deps"],
 )
-
-bzl_library(
-    name = "bazel_versions",
-    srcs = ["bazel_versions.bzl"],
-    visibility = ["//visibility:public"],
-)

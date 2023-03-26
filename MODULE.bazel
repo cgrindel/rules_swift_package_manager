@@ -75,3 +75,8 @@ bazel_binaries = use_extension(
 )
 bazel_binaries.download(version_file = "//:.bazelversion")
 use_repo(bazel_binaries, "bazel_binaries")
+
+local_path_override(
+    module_name = "rules_bazel_integration_test",
+    path = "/Users/chuck/code/bazel-contrib/rules_bazel_integration_test/main",
+)
