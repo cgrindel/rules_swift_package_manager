@@ -59,7 +59,7 @@ use_repo(
 
 bazel_dep(
     name = "rules_bazel_integration_test",
-    version = "0.11.1",
+    version = "0.12.0",
     dev_dependency = True,
 )
 bazel_dep(
@@ -75,8 +75,3 @@ bazel_binaries = use_extension(
 )
 bazel_binaries.download(version_file = "//:.bazelversion")
 use_repo(bazel_binaries, "bazel_binaries")
-
-local_path_override(
-    module_name = "rules_bazel_integration_test",
-    path = "/Users/chuck/code/bazel-contrib/rules_bazel_integration_test/main",
-)
