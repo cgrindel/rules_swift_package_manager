@@ -51,32 +51,16 @@ jobs:
             enable_bzlmod: true
           - example: pkg_manifest_minimal
             bazel_version: .bazelversion
-            runner: macos-12
-            enable_bzlmod: false
-          - example: pkg_manifest_minimal
-            bazel_version: .bazelversion
             runner: ubuntu-22.04
             enable_bzlmod: true
-          - example: pkg_manifest_minimal
-            bazel_version: .bazelversion
-            runner: ubuntu-22.04
-            enable_bzlmod: false
           - example: soto_example
             bazel_version: .bazelversion
             runner: macos-12
             enable_bzlmod: true
           - example: soto_example
             bazel_version: .bazelversion
-            runner: macos-12
-            enable_bzlmod: false
-          - example: soto_example
-            bazel_version: .bazelversion
             runner: ubuntu-22.04
             enable_bzlmod: true
-          - example: soto_example
-            bazel_version: .bazelversion
-            runner: ubuntu-22.04
-            enable_bzlmod: false
           - example: vapor_example
             bazel_version: .bazelversion
             runner: macos-12
@@ -97,50 +81,26 @@ jobs:
             bazel_version: .bazelversion
             runner: macos-12
             enable_bzlmod: true
-          - example: firebase_example
-            bazel_version: .bazelversion
-            runner: macos-12
-            enable_bzlmod: false
           - example: interesting_deps
-            bazel_version: .bazelversion
-            runner: macos-12
-            enable_bzlmod: true
-          - example: interesting_deps
-            bazel_version: .bazelversion
-            runner: macos-12
-            enable_bzlmod: false
-          - example: ios_sim
             bazel_version: .bazelversion
             runner: macos-12
             enable_bzlmod: true
           - example: ios_sim
             bazel_version: .bazelversion
             runner: macos-12
-            enable_bzlmod: false
-          - example: objc_code
-            bazel_version: .bazelversion
-            runner: macos-12
             enable_bzlmod: true
           - example: objc_code
-            bazel_version: .bazelversion
-            runner: macos-12
-            enable_bzlmod: false
-          - example: phone_number_kit
             bazel_version: .bazelversion
             runner: macos-12
             enable_bzlmod: true
           - example: phone_number_kit
             bazel_version: .bazelversion
             runner: macos-12
-            enable_bzlmod: false
-          - example: xcmetrics_example
-            bazel_version: .bazelversion
-            runner: macos-12
             enable_bzlmod: true
           - example: xcmetrics_example
             bazel_version: .bazelversion
             runner: macos-12
-            enable_bzlmod: false
+            enable_bzlmod: true
     runs-on: ${{ matrix.runner }}
     env:
       CC: clang

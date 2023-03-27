@@ -1,5 +1,4 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
 
@@ -32,15 +31,9 @@ gazelle(
 swift_update_packages(
     name = "swift_update_pkgs",
     gazelle = ":gazelle_bin",
+    generate_swift_deps_for_workspace = False,
     print_bzlmod_stanzas = True,
     update_bzlmod_stanzas = True,
-)
-
-bzl_library(
-    name = "swift_deps",
-    srcs = ["swift_deps.bzl"],
-    visibility = ["//visibility:public"],
-    deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
 )
 
 alias(

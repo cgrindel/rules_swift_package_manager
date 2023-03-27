@@ -10,6 +10,7 @@ type Example struct {
 	OSS           []string `json:"oss"`
 	Versions      []string `json:"versions"`
 	CleanVersions []string `json:"clean_versions"`
+	EnableBzlmods []bool   `json:"enable_bzlmods"`
 }
 
 func NewExamplesFromJSON(b []byte) ([]Example, error) {

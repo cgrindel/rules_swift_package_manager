@@ -9,3 +9,9 @@ bzl_library(
     visibility = ["//visibility:public"],
     deps = ["//swiftpkg/internal:deps_indexes"],
 )
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)

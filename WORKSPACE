@@ -76,9 +76,8 @@ load("@rules_bazel_integration_test//bazel_integration_test:deps.bzl", "bazel_in
 bazel_integration_test_rules_dependencies()
 
 load("@rules_bazel_integration_test//bazel_integration_test:defs.bzl", "bazel_binaries")
-load("//:bazel_versions.bzl", "SUPPORTED_BAZEL_VERSIONS")
 
-bazel_binaries(versions = SUPPORTED_BAZEL_VERSIONS)
+bazel_binaries(versions = ["//:.bazelversion"])
 
 # Go Deps for bazel-starlib
 

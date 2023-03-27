@@ -13,6 +13,7 @@ def swift_update_packages(
         print_bzlmod_stanzas = False,
         update_bzlmod_stanzas = False,
         bazel_module = "MODULE.bazel",
+        generate_swift_deps_for_workspace = True,
         **kwargs):
     """Defines gazelle update-repos targets that are used to resolve and update \
     Swift package dependencies.
@@ -41,28 +42,35 @@ def swift_update_packages(
         update_bzlmod_stanzas: Optional. Determines whether the Gazelle
             extension adds/updates the bzlmod Starlark code to MODULE.bazel.
         bazel_module: Optional. The relative path to the `MODULE.bazel` file.
+        generate_swift_deps_for_workspace: Optional. Determines whether to
+            generate the swift dependencies for clients using legacy/WORKSPACE
+            loaded dependencies.
         **kwargs: Attributes that are passed along to the gazelle declarations.
     """
-    _SWIFT_UPDATE_REPOS_ARGS = [
+    _swift_update_repos_args = [
         "-from_file={}".format(package_manifest),
-        "-to_macro={swift_deps}%{swift_deps_fn}".format(
-            swift_deps = swift_deps,
-            swift_deps_fn = swift_deps_fn,
-        ),
         "-prune",
         "-swift_dependency_index={}".format(swift_deps_index),
         "-bazel_module={}".format(bazel_module),
     ]
+    if generate_swift_deps_for_workspace:
+        _swift_update_repos_args.extend([
+            "-generate_swift_deps_for_workspace",
+            "-to_macro={swift_deps}%{swift_deps_fn}".format(
+                swift_deps = swift_deps,
+                swift_deps_fn = swift_deps_fn,
+            ),
+        ])
     if update_bzlmod_use_repo_names:
-        _SWIFT_UPDATE_REPOS_ARGS.append("-update_bzlmod_use_repo_names")
+        _swift_update_repos_args.append("-update_bzlmod_use_repo_names")
     if print_bzlmod_stanzas:
-        _SWIFT_UPDATE_REPOS_ARGS.append("-print_bzlmod_stanzas")
+        _swift_update_repos_args.append("-print_bzlmod_stanzas")
     if update_bzlmod_stanzas:
-        _SWIFT_UPDATE_REPOS_ARGS.append("-update_bzlmod_stanzas")
+        _swift_update_repos_args.append("-update_bzlmod_stanzas")
 
     _gazelle(
         name = name,
-        args = _SWIFT_UPDATE_REPOS_ARGS,
+        args = _swift_update_repos_args,
         command = "update-repos",
         gazelle = gazelle,
         **kwargs
@@ -70,7 +78,7 @@ def swift_update_packages(
 
     _gazelle(
         name = name + "_to_latest",
-        args = _SWIFT_UPDATE_REPOS_ARGS + [
+        args = _swift_update_repos_args + [
             "-swift_update_packages_to_latest",
         ],
         command = "update-repos",

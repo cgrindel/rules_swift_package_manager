@@ -4,6 +4,7 @@ import (
 	"log"
 	"path/filepath"
 	"sort"
+	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -56,11 +57,43 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 	sort.Strings(srcs)
 
 	// Generate the rules and imports
-	result.Gen = swift.RulesFromSrcs(args, srcs)
+	defaultModuleName := defaultModuleName(args)
+	result.Gen = swift.RulesFromSrcs(args, srcs, defaultModuleName)
 	result.Imports = swift.Imports(result.Gen)
 	result.Empty = generateEmpty(args, srcs)
 
 	return result
+}
+
+func defaultModuleName(args language.GenerateArgs) string {
+	// Order of names to use
+	// 1. Value specified via directive.
+	// 2. Directory name.
+	// 3. Repository name.
+	// 4. "DefaultModule"
+
+	// Check for a value configured via directive
+	sc := swiftcfg.GetSwiftConfig(args.Config)
+	var defaultModuleName string
+	var ok bool
+	if defaultModuleName, ok = sc.DefaultModuleNames[args.Rel]; ok {
+		return defaultModuleName
+	}
+	if args.Rel == "" {
+		defaultModuleName = filepath.Base(args.Config.WorkDir)
+	} else {
+		defaultModuleName = filepath.Base(args.Rel)
+	}
+	if ext := filepath.Ext(defaultModuleName); ext != "" {
+		defaultModuleName = strings.TrimSuffix(defaultModuleName, ext)
+	}
+	if defaultModuleName == "." || defaultModuleName == "" {
+		defaultModuleName = args.Config.RepoName
+	}
+	if defaultModuleName == "" {
+		defaultModuleName = "DefaultModule"
+	}
+	return defaultModuleName
 }
 
 // Look for any rules in the existing BUILD file that do not reference one of the source files. If

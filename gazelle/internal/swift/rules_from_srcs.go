@@ -1,7 +1,6 @@
 package swift
 
 import (
-	"path/filepath"
 	"sort"
 
 	"github.com/bazelbuild/bazel-gazelle/language"
@@ -10,24 +9,24 @@ import (
 )
 
 // RulesFromSrcs returns the Bazel build rule declarations for the provided source files.
-func RulesFromSrcs(args language.GenerateArgs, srcs []string) []*rule.Rule {
+func RulesFromSrcs(
+	args language.GenerateArgs,
+	srcs []string,
+	defaultModuleName string,
+) []*rule.Rule {
 	fileInfos := NewFileInfosFromRelPaths(args.Dir, srcs)
 	swiftImports, moduleType := collectSwiftInfo(fileInfos)
 
-	moduleName := filepath.Base(args.Rel)
-	if moduleName == "." {
-		moduleName = args.Config.RepoName
-	}
 	shouldSetVis := shouldSetVisibility(args)
 
 	var rules []*rule.Rule
 	switch moduleType {
 	case LibraryModuleType:
-		rules = rulesForLibraryModule(moduleName, srcs, swiftImports, shouldSetVis, args.File)
+		rules = rulesForLibraryModule(defaultModuleName, srcs, swiftImports, shouldSetVis, args.File)
 	case BinaryModuleType:
-		rules = rulesForBinaryModule(moduleName, srcs, swiftImports, shouldSetVis, args.File)
+		rules = rulesForBinaryModule(defaultModuleName, srcs, swiftImports, shouldSetVis, args.File)
 	case TestModuleType:
-		rules = rulesForTestModule(moduleName, srcs, swiftImports, shouldSetVis, args.File)
+		rules = rulesForTestModule(defaultModuleName, srcs, swiftImports, shouldSetVis, args.File)
 	}
 	return rules
 }

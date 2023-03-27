@@ -1,10 +1,10 @@
+load("@bazel_binaries//:defs.bzl", "bazel_binaries")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(
     "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "integration_test_utils",
 )
-load("//:bazel_versions.bzl", "CURRENT_BAZEL_VERSION")
 load(":example_infos.bzl", "example_infos")
 
 bzlformat_pkg(name = "bzlformat")
@@ -43,7 +43,7 @@ sh_binary(
 _smoke_test_names = sorted([
     example_infos.test_name(
         ei.name,
-        CURRENT_BAZEL_VERSION,
+        bazel_binaries.versions.current,
     )
     for ei in example_infos.all
 ])
