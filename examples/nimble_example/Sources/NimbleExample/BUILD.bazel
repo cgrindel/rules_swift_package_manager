@@ -1,0 +1,11 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
+
+swift_test(
+    name = "NimbleExample",
+    srcs = ["NimbleExampleTests/CounterSpec.swift"],
+    module_name = "NimbleExample",
+    deps = [
+        "@swiftpkg_nimble//:Sources_Nimble",
+        "@swiftpkg_quick//:Sources_Quick",
+    ],
+)
