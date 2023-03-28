@@ -3,7 +3,6 @@ load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load(
     "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "bazel_integration_test",
-    "default_test_runner",
     "integration_test_utils",
 )
 
@@ -11,32 +10,32 @@ bzlformat_pkg(name = "bzlformat")
 
 filegroup(
     name = "all_files",
-    srcs = glob(["*"]),
+    # Include the workspace directory and its children
+    srcs = glob(["**"]),
     visibility = ["//:__subpackages__"],
 )
 
-# sh_binary(
-#     name = "e2e_test_runner",
-#     testonly = True,
-#     srcs = ["e2e_test_runner.sh"],
-#     deps = [
-#         "@bazel_tools//tools/bash/runfiles",
-#         "@cgrindel_bazel_starlib//shlib/lib:assertions",
-#     ],
-# )
-
-default_test_runner(name = "e2e_test_runner")
+sh_binary(
+    name = "e2e_test_runner",
+    testonly = True,
+    srcs = ["e2e_test_runner.sh"],
+    data = [
+        "@rules_bazel_integration_test//tools:create_scratch_dir",
+    ],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:assertions",
+    ],
+)
 
 # This test exists to be run as part of the BCR presubmit.
 bazel_integration_test(
     name = "e2e_test",
     bazel_binaries = bazel_binaries,
     bazel_version = bazel_binaries.versions.current,
-    # Override the default tags. Let this run with bazel test //...
-    tags = [],
     test_runner = ":e2e_test_runner",
     workspace_files = integration_test_utils.glob_workspace_files("workspace") + [
-        "//:shared_bazelrc_files",
+        "//:runtime_files",
     ],
     workspace_path = "workspace",
 )

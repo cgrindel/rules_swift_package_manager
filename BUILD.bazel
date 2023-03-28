@@ -136,6 +136,8 @@ markdown_pkg(name = "markdown")
 
 # MARK: - Integration Test
 
+# TODO(chuck): Remove shared_bazelrc_files.
+
 # Provides the *.bazlerc files for the example workspace integration tests.
 filegroup(
     name = "shared_bazelrc_files",
@@ -155,21 +157,46 @@ filegroup(
     visibility = ["//:__subpackages__"],
 )
 
-# This target collects all of the parent workspace files needed by the child workspaces.
+# # This target collects all of the parent workspace files needed by the child workspaces.
+# filegroup(
+#     name = "local_repository_files",
+#     # Include every package that is required by the child workspaces.
+#     srcs = [
+#         ":all_files",
+#         ":shared_bazelrc_files",
+#         "//bzlmod:all_files",
+#         "//config_settings/bazel/apple_platform_type:all_files",
+#         "//config_settings/bazel/compilation_mode:all_files",
+#         "//config_settings/spm/configuration:all_files",
+#         "//config_settings/spm/platform:all_files",
+#         "//config_settings/spm/platform_configuration:all_files",
+#         "//gazelle:all_files",
+#         "//gazelle/internal/jsonutils:all_files",
+#         "//gazelle/internal/pathdistance:all_files",
+#         "//gazelle/internal/reslog:all_files",
+#         "//gazelle/internal/spdesc:all_files",
+#         "//gazelle/internal/spdump:all_files",
+#         "//gazelle/internal/spreso:all_files",
+#         "//gazelle/internal/stringslices:all_files",
+#         "//gazelle/internal/swift:all_files",
+#         "//gazelle/internal/swiftbin:all_files",
+#         "//gazelle/internal/swiftcfg:all_files",
+#         "//gazelle/internal/swiftpkg:all_files",
+#         "//gazelle/internal/updmarker:all_files",
+#         "//swiftpkg:all_files",
+#         "//swiftpkg/bzlmod:all_files",
+#         "//swiftpkg/internal:all_files",
+#         "//swiftpkg/internal/modulemap_parser:all_files",
+#     ],
+#     visibility = ["//:__subpackages__"],
+# )
+
+# Files needed at runtime
 filegroup(
-    name = "local_repository_files",
+    name = "runtime_files",
     # Include every package that is required by the child workspaces.
     srcs = [
-        # ".bazelrc",
-        # "BUILD.bazel",
-        # "MODULE.bazel",
-        # "WORKSPACE",
-        # "ci.bazelrc",
-        # "shared.bazelrc",
-        # ":deps.bzl",
-        # ":go_deps.bzl",
         ":all_files",
-        ":shared_bazelrc_files",
         "//config_settings/bazel/apple_platform_type:all_files",
         "//config_settings/bazel/compilation_mode:all_files",
         "//config_settings/spm/configuration:all_files",
@@ -196,10 +223,20 @@ filegroup(
     visibility = ["//:__subpackages__"],
 )
 
+# Files included in the release archive
+filegroup(
+    name = "release_files",
+    srcs = [
+        ":runtime_files",
+        "//bzlmod:all_files",
+    ],
+)
+
 test_suite(
     name = "all_smoke_integration_tests",
     tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
     tests = [
+        "//bzlmod:e2e_test",
         "//examples:smoke_integration_tests",
     ],
     visibility = ["//:__subpackages__"],
@@ -209,6 +246,7 @@ test_suite(
     name = "all_integration_tests",
     tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
     tests = [
+        "//bzlmod:e2e_test",
         "//examples:all_integration_tests",
     ],
     visibility = ["//:__subpackages__"],
