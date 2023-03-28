@@ -47,7 +47,7 @@ def _bazel_integration_test(ei):
     timeout = _timeouts.get(ei.name, _default_timeout)
     test_runner = ":test_runner"
     workspace_files = integration_test_utils.glob_workspace_files(ei.name) + [
-        "//:local_repository_files",
+        "//:runtime_files",
     ]
     workspace_path = ei.name
     if versions_len == 1:

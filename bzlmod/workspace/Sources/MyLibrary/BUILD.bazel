@@ -1,0 +1,11 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+swift_library(
+    name = "MyLibrary",
+    srcs = ["World.swift"],
+    module_name = "MyLibrary",
+    visibility = ["//visibility:public"],
+)
+
+bzlformat_pkg(name = "bzlformat")

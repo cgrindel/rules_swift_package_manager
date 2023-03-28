@@ -136,13 +136,6 @@ markdown_pkg(name = "markdown")
 
 # MARK: - Integration Test
 
-# Provides the *.bazlerc files for the example workspace integration tests.
-filegroup(
-    name = "shared_bazelrc_files",
-    srcs = glob(["*.bazelrc"]),
-    visibility = ["//:__subpackages__"],
-)
-
 filegroup(
     name = "all_files",
     srcs = glob(
@@ -155,21 +148,13 @@ filegroup(
     visibility = ["//:__subpackages__"],
 )
 
-# This target collects all of the parent workspace files needed by the child workspaces.
+# Files needed at runtime. Do not include any bzlmod e2e test files here. They
+# should only be added to the release archive (//release:archive).
 filegroup(
-    name = "local_repository_files",
+    name = "runtime_files",
     # Include every package that is required by the child workspaces.
     srcs = [
-        # ".bazelrc",
-        # "BUILD.bazel",
-        # "MODULE.bazel",
-        # "WORKSPACE",
-        # "ci.bazelrc",
-        # "shared.bazelrc",
-        # ":deps.bzl",
-        # ":go_deps.bzl",
         ":all_files",
-        ":shared_bazelrc_files",
         "//config_settings/bazel/apple_platform_type:all_files",
         "//config_settings/bazel/compilation_mode:all_files",
         "//config_settings/spm/configuration:all_files",
@@ -200,7 +185,9 @@ test_suite(
     name = "all_smoke_integration_tests",
     tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
     tests = [
+        "//bzlmod:e2e_test",
         "//examples:smoke_integration_tests",
+        "//release:archive_test",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -209,6 +196,7 @@ test_suite(
     name = "all_integration_tests",
     tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
     tests = [
+        ":all_smoke_integration_tests",
         "//examples:all_integration_tests",
     ],
     visibility = ["//:__subpackages__"],
