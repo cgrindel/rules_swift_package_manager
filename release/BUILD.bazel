@@ -15,6 +15,7 @@ load(
     "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "bazel_integration_test",
 )
+load("//ci:ci_integration_test_params.bzl", "ci_integration_test_params")
 
 bzlformat_pkg(name = "bzlformat")
 
@@ -87,5 +88,16 @@ bazel_integration_test(
     bazel_binaries = bazel_binaries,
     bazel_version = bazel_binaries.versions.current,
     test_runner = ":archive_test_runner",
+    visibility = ["//:__subpackages__"],
+)
+
+ci_integration_test_params(
+    name = "archive_test_ci_params",
+    bzlmod_modes = ["enabled"],
+    oss = [
+        "macos",
+        "linux",
+    ],
+    test_names = [":archive_test"],
     visibility = ["//:__subpackages__"],
 )

@@ -5,6 +5,7 @@ load(
     "bazel_integration_test",
     "integration_test_utils",
 )
+load("//ci:ci_integration_test_params.bzl", "ci_integration_test_params")
 
 bzlformat_pkg(name = "bzlformat")
 
@@ -38,4 +39,15 @@ bazel_integration_test(
         "//:runtime_files",
     ],
     workspace_path = "workspace",
+)
+
+ci_integration_test_params(
+    name = "e2e_test_ci_params",
+    bzlmod_modes = ["enabled"],
+    oss = [
+        "macos",
+        "linux",
+    ],
+    test_names = [":e2e_test"],
+    visibility = ["//:__subpackages__"],
 )
