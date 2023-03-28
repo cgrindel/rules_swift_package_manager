@@ -50,7 +50,10 @@ create_release(
 
 release_archive(
     name = "archive",
-    srcs = ["//:release_files"],
+    srcs = [
+        "//:runtime_files",
+        "//bzlmod:all_files",
+    ],
     out = "swift_bazel.tar.gz",
 )
 
