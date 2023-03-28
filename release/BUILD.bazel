@@ -1,18 +1,29 @@
+load("@bazel_binaries//:defs.bzl", "bazel_binaries")
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load(
     "@cgrindel_bazel_starlib//bzlrelease:defs.bzl",
     "create_release",
+    "generate_module_snippet",
     "generate_release_notes",
     "generate_workspace_snippet",
     "hash_sha256",
     "release_archive",
     "update_readme",
 )
+load(
+    "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
+    "bazel_integration_test",
+)
 
 bzlformat_pkg(name = "bzlformat")
 
 # MARK: - Release
+
+generate_module_snippet(
+    name = "generate_module_snippet",
+    module_name = "cgrindel_swift_bazel",
+)
 
 generate_workspace_snippet(
     name = "generate_workspace_snippet",
@@ -22,11 +33,13 @@ generate_workspace_snippet(
 
 generate_release_notes(
     name = "generate_release_notes",
+    generate_module_snippet = ":generate_module_snippet",
     generate_workspace_snippet = ":generate_workspace_snippet",
 )
 
 update_readme(
     name = "update_readme",
+    generate_module_snippet = ":generate_module_snippet",
     generate_workspace_snippet = ":generate_workspace_snippet",
 )
 
@@ -53,4 +66,23 @@ build_test(
         ":archive",
         ":archive_sha256",
     ],
+)
+
+sh_binary(
+    name = "archive_test_runner",
+    testonly = True,
+    srcs = ["archive_test_runner.sh"],
+    data = [":archive"],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:assertions",
+    ],
+)
+
+bazel_integration_test(
+    name = "archive_test",
+    bazel_binaries = bazel_binaries,
+    bazel_version = bazel_binaries.versions.current,
+    test_runner = ":archive_test_runner",
+    visibility = ["//:__subpackages__"],
 )
