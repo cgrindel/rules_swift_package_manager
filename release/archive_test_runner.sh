@@ -42,12 +42,12 @@ done
 
 # MARK - Create a HOME directory
 
-# Not sure why, but the download and extract for the Bazel binaries was
-# experiencing a permission denied when trying to use the local repository
-# cache.
-home_dir="${PWD}/home"
-mkdir -p "${home_dir}"
-export HOME="${home_dir}"
+# # Not sure why, but the download and extract for the Bazel binaries was
+# # experiencing a permission denied when trying to use the local repository
+# # cache.
+# home_dir="${PWD}/home"
+# mkdir -p "${home_dir}"
+# export HOME="${home_dir}"
 
 # MARK - Create a WORKSPACE
 
@@ -56,4 +56,4 @@ tar -xf "${swift_bazel_tar_gz}" -C "${workspace_dir}"
 
 # Test the extracted contents
 cd "${workspace_dir}"
-"${bazel}" test //bzlmod/...
+"${bazel}" test //bzlmod:e2e_test

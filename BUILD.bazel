@@ -230,6 +230,7 @@ filegroup(
         ":runtime_files",
         "//bzlmod:all_files",
     ],
+    visibility = ["//:__subpackages__"],
 )
 
 test_suite(
@@ -238,6 +239,7 @@ test_suite(
     tests = [
         "//bzlmod:e2e_test",
         "//examples:smoke_integration_tests",
+        "//release:archive_test",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -246,7 +248,8 @@ test_suite(
     name = "all_integration_tests",
     tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
     tests = [
-        "//bzlmod:e2e_test",
+        # "//bzlmod:e2e_test",
+        ":all_smoke_integration_tests",
         "//examples:all_integration_tests",
     ],
     visibility = ["//:__subpackages__"],
