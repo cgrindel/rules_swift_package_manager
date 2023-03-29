@@ -1,0 +1,56 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+bzlformat_pkg(name = "bzlformat")
+
+bzl_library(
+    name = "ci_integration_test_params",
+    srcs = ["ci_integration_test_params.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [":providers"],
+)
+
+bzl_library(
+    name = "ci_workflow",
+    srcs = ["ci_workflow.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":providers",
+        "@cgrindel_bazel_starlib//updatesrc:defs",
+    ],
+)
+
+bzl_library(
+    name = "ci_test_params",
+    srcs = ["ci_test_params.bzl"],
+    visibility = ["//ci:__subpackages__"],
+    deps = [":providers"],
+)
+
+bzl_library(
+    name = "ci_test_params_suite",
+    srcs = ["ci_test_params_suite.bzl"],
+    visibility = ["//ci:__subpackages__"],
+    deps = [
+        ":ci_test_params",
+        ":providers",
+    ],
+)
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "bzlmod_modes",
+    srcs = ["bzlmod_modes.bzl"],
+    visibility = ["//ci:__subpackages__"],
+)
+
+bzl_library(
+    name = "providers",
+    srcs = ["providers.bzl"],
+    visibility = ["//ci:__subpackages__"],
+)

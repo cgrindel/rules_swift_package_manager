@@ -9,8 +9,8 @@ go_library(
     importpath = "github.com/cgrindel/swift_bazel/tools/generate_ci_workflow",
     visibility = ["//visibility:private"],
     deps = [
-        "//tools/generate_ci_workflow/internal/example",
         "//tools/generate_ci_workflow/internal/github",
+        "//tools/generate_ci_workflow/internal/testparams",
         "@in_gopkg_yaml_v3//:go_default_library",
     ],
 )

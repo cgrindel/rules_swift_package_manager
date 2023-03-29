@@ -1,0 +1,9 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load(":bzlmod_modes_tests.bzl", "bzlmod_modes_test_suite")
+load(":ci_test_params_tests.bzl", "ci_test_params_test_suite")
+
+bzlformat_pkg(name = "bzlformat")
+
+bzlmod_modes_test_suite()
+
+ci_test_params_test_suite()

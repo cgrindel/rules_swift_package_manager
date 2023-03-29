@@ -5,6 +5,7 @@ load(
     "bazel_integration_test",
     "integration_test_utils",
 )
+load("//ci:defs.bzl", "ci_integration_test_params")
 
 bzlformat_pkg(name = "bzlformat")
 
@@ -34,8 +35,20 @@ bazel_integration_test(
     bazel_binaries = bazel_binaries,
     bazel_version = bazel_binaries.versions.current,
     test_runner = ":e2e_test_runner",
+    visibility = ["//:__subpackages__"],
     workspace_files = integration_test_utils.glob_workspace_files("workspace") + [
         "//:runtime_files",
     ],
     workspace_path = "workspace",
+)
+
+ci_integration_test_params(
+    name = "e2e_test_params",
+    bzlmod_modes = ["enabled"],
+    oss = [
+        "macos",
+        "linux",
+    ],
+    test_names = ["e2e_test"],
+    visibility = ["//:__subpackages__"],
 )

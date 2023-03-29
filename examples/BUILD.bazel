@@ -14,12 +14,6 @@ bzlformat_pkg(name = "bzlformat")
 # repository.
 # gazelle:exclude **
 
-example_infos.write_json(
-    name = "json",
-    out = "examples.json",
-    visibility = ["//:__subpackages__"],
-)
-
 sh_binary(
     name = "test_runner",
     testonly = True,
@@ -39,6 +33,11 @@ sh_binary(
     example_infos.bazel_integration_test(ei)
     for ei in example_infos.all
 ]
+
+example_infos.ci_test_params_suite(
+    name = "all_example_test_params",
+    example_infos = example_infos.all,
+)
 
 _smoke_test_names = sorted([
     example_infos.test_name(
