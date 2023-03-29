@@ -210,36 +210,8 @@ ci_workflow(
         "//bzlmod:e2e_test_ci_params",
         "//release:archive_test_ci_params",
     ],
-    workflow_yml = ".github/worklfows/ci.yml",
+    workflow_yml = ".github/workflows/ci.yml",
 )
-
-# run_binary(
-#     name = "ci_workflow",
-#     srcs = [
-#         ".github/workflows/ci.yml",
-#         "//examples:json",
-#     ],
-#     outs = ["ci.yml"],
-#     args = [
-#         "-template",
-#         "$(location .github/workflows/ci.yml)",
-#         "-example_json",
-#         "$(location //examples:json)",
-#         "-output",
-#         "$(location ci.yml)",
-#     ],
-#     tool = "//tools/generate_ci_workflow",
-# )
-
-# updatesrc_diff_and_update(
-#     name = "update",
-#     srcs = [
-#         ".github/workflows/ci.yml",
-#     ],
-#     outs = [
-#         ":ci_workflow",
-#     ],
-# )
 
 bzl_library(
     name = "extensions",

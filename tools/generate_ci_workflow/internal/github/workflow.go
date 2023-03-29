@@ -101,8 +101,9 @@ type SBMatrixStrategy struct {
 }
 
 type SBMatrixInclude struct {
-	Example      string `yaml:"example"`
-	BazelVersion string `yaml:"bazel_version"`
+	Example      string `yaml:"example,omitempty"`
+	BazelVersion string `yaml:"bazel_version,omitempty"`
+	Test         string `yaml:"test"`
 	Runner       string `yaml:"runner"`
 	EnableBzlmod bool   `yaml:"enable_bzlmod"`
 }

@@ -29,22 +29,28 @@ def _ci_workflow_impl(ctx):
                         enable_bzlmod = _enable_bzlmod(bzlmod_mode),
                     ))
 
-    # DEBUG BEGIN
-    print("*** CHUCK test_params: ")
-    for idx, item in enumerate(test_params):
-        print("*** CHUCK", idx, ":", item)
-
-    # DEBUG END
-
     # Generate JSON describing all of the integration tests
-    json_file = ctx.actions.declare_file("{}_test_params.json")
+    json_file = ctx.actions.declare_file("{}_test_params.json".format(ctx.label.name))
     json_str = json.encode_indent(test_params)
     ctx.actions.write(json_file, json_str)
 
     # Generate the CI workflow
+    workflow_out = ctx.actions.declare_file("{}.yml".format(ctx.label.name))
     args = ctx.actions.args()
+    args.add("-template", ctx.file.template)
+    args.add("-int_test_params_json", json_file)
+    args.add("-output", workflow_out)
 
-    pass
+    ctx.actions.run(
+        outputs = [workflow_out],
+        inputs = [json_file, ctx.file.template],
+        executable = ctx.executable._workflow_generator,
+        arguments = [args],
+    )
+
+    return [
+        DefaultInfo(files = depset([workflow_out])),
+    ]
 
 _ci_workflow = rule(
     implementation = _ci_workflow_impl,
@@ -55,12 +61,16 @@ _ci_workflow = rule(
             doc = "The integration tests that should be included in the CI workflow.",
         ),
         "template": attr.label(
-            allow_single_file = [".yml", ".yaml"],
+            # allow_single_file = [".yml", ".yaml"],
+            allow_single_file = True,
             mandatory = True,
-            doc = "The worklfow yaml file that should be j",
+            doc = "The current worklfow yaml file.",
         ),
-        "_worflow_generator": attr.label(
-            default = "//tools/generate_ci_workflow",
+        "_workflow_generator": attr.label(
+            default = Label("//tools/generate_ci_workflow"),
+            allow_files = True,
+            executable = True,
+            cfg = "exec",
         ),
     },
     doc = "",

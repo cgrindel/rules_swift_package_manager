@@ -116,10 +116,9 @@ jobs:
         with:
           repo_name: swift_bazel
           xcode_version: 14.0.1
-      - uses: ./.github/actions/test_example
-        with:
-          bazel_version: ${{ matrix.bazel_version }}
-          example_name: ${{ matrix.example }}
+      - shell: bash
+        run: |
+          bazelisk test ${{ matrix.test }}
   tidy_and_test_matrix:
     strategy:
       fail-fast: false
