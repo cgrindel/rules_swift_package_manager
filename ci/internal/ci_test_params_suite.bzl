@@ -1,5 +1,8 @@
 """Implementation for `ci_test_params_suite` rule."""
 
+load(":ci_test_params.bzl", "ci_test_params")
+load(":providers.bzl", "CITestParamsInfo")
+
 def _ci_test_params_suite_impl(ctx):
     tp_info = ci_test_params.collect_from_deps(ctx.attr.test_params)
     return [tp_info]

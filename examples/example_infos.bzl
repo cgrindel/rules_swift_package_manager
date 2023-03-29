@@ -2,13 +2,19 @@
 
 load("@bazel_binaries//:defs.bzl", "bazel_binaries")
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(
     "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "bazel_integration_test",
     "bazel_integration_tests",
     "integration_test_utils",
 )
-load("//ci:defs.bzl", "bzlmod_modes", "ci_integration_test_params")
+load(
+    "//ci:defs.bzl",
+    "bzlmod_modes",
+    "ci_integration_test_params",
+    "ci_test_params_suite",
+)
 
 def _new(name, oss, versions, enable_bzlmods):
     # Remove the Bazel label prefix if it exists.
@@ -79,16 +85,36 @@ def _bazel_integration_test(ei):
         for version in ei.versions:
             _ci_integration_test_params(ei, version)
 
+def _test_params_name(ei, version):
+    test_name = example_infos.test_name(ei.name, version)
+    return _test_params_name_from_test_name(test_name)
+
+def _test_params_name_from_test_name(test_name):
+    return "{}_params".format(test_name)
+
 def _ci_integration_test_params(ei, version):
     test_name = example_infos.test_name(ei.name, version)
     ci_integration_test_params(
-        name = "{}_params".format(test_name),
+        name = _test_params_name_from_test_name(test_name),
         bzlmod_modes = [
             bzlmod_modes.from_bool(enable_bzlmod)
             for enable_bzlmod in ei.enable_bzlmods
         ],
         oss = ei.oss,
         test_names = [test_name],
+        visibility = ["//:__subpackages__"],
+    )
+
+def _ci_test_params_suite(name, example_infos):
+    ci_test_params_suite(
+        name = name,
+        test_params = lists.flatten([
+            [
+                _test_params_name(ei, v)
+                for v in ei.versions
+            ]
+            for ei in example_infos
+        ]),
         visibility = ["//:__subpackages__"],
     )
 
@@ -167,6 +193,7 @@ _all = [
 example_infos = struct(
     all = _all,
     bazel_integration_test = _bazel_integration_test,
+    ci_test_params_suite = _ci_test_params_suite,
     new = _new,
     test_name = _test_name,
 )

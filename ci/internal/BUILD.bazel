@@ -37,6 +37,10 @@ bzl_library(
     name = "ci_test_params_suite",
     srcs = ["ci_test_params_suite.bzl"],
     visibility = ["//ci:__subpackages__"],
+    deps = [
+        ":ci_test_params",
+        ":providers",
+    ],
 )
 
 bzl_library(

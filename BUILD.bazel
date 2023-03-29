@@ -209,6 +209,7 @@ ci_workflow(
     test_params = [
         "//bzlmod:e2e_test_params",
         "//release:archive_test_params",
+        "//examples:all_example_test_params",
     ],
     workflow_yml = ".github/workflows/ci.yml",
 )
