@@ -8,10 +8,3 @@ A `depset` of `struct` values as created by `ci_test_params.new_integration_test
 """,
     },
 )
-
-# CIIntegrationTestParamsSuiteInfo = provider(
-#     doc = "Passes along collected `CIIntegrationTestParamsInfo` instances."
-#     fields = {
-#         "test_params": "A `depset` of `CIIntegrationTestParamsInfo` instances."
-#     },
-# )
