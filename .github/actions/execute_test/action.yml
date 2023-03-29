@@ -1,0 +1,24 @@
+name: Execute Test
+
+inputs:
+  test_target:
+    description: The test target to execute.
+    required: true
+  bzlmod_enabled:
+    description: Boolean value that specifies whether bzlmod should be enabled.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Execute Test
+      shell: bash
+      env:
+        TEST_TARGET: ${{ inputs.test_target }}
+        BZLMOD_ENABLED: ${{ inputs.bzlmod_enabled }}
+      run: |
+        if [[ "${BZLMOD_ENABLED}" == "false" ]] && [[ "${TEST_TARGET}" =~ ^@@ ]]; then
+          # Strip the first @ from test target
+          TEST_TARGET="${TEST_TARGET#@}"
+        fi
+        bazelisk test "${TEST_TARGET}"
