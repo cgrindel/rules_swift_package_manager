@@ -1,6 +1,7 @@
 """Implementation for the `ci_workflow` rule."""
 
 load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_diff_and_update")
+load(":bzlmod_modes.bzl", "bzlmod_modes")
 load(":providers.bzl", "CIIntegrationTestParamsInfo")
 
 def _integration_test_params(test, os, enable_bzlmod):
@@ -9,13 +10,6 @@ def _integration_test_params(test, os, enable_bzlmod):
         os = os,
         enable_bzlmod = enable_bzlmod,
     )
-
-def _enable_bzlmod(bzlmod_mode):
-    if bzlmod_mode == "enabled":
-        return True
-    elif bzlmod_mode == "disabled":
-        return False
-    fail("Unrecognized bzlmod_mode: {}".format(bzlmod_mode))
 
 def _ci_workflow_impl(ctx):
     # Collect all of the tests
@@ -28,7 +22,7 @@ def _ci_workflow_impl(ctx):
                     test_params.append(_integration_test_params(
                         test = test,
                         os = os,
-                        enable_bzlmod = _enable_bzlmod(bzlmod_mode),
+                        enable_bzlmod = bzlmod_modes.to_bool(bzlmod_mode),
                     ))
 
     # Generate JSON describing all of the integration tests

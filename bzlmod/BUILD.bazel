@@ -42,12 +42,12 @@ bazel_integration_test(
 )
 
 ci_integration_test_params(
-    name = "e2e_test_ci_params",
+    name = "e2e_test_params",
     bzlmod_modes = ["enabled"],
     oss = [
         "macos",
         "linux",
     ],
-    test_names = [":e2e_test"],
+    test_names = ["e2e_test"],
     visibility = ["//:__subpackages__"],
 )

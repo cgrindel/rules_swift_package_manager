@@ -14,12 +14,6 @@ bzlformat_pkg(name = "bzlformat")
 # repository.
 # gazelle:exclude **
 
-example_infos.write_json(
-    name = "json",
-    out = "examples.json",
-    visibility = ["//:__subpackages__"],
-)
-
 sh_binary(
     name = "test_runner",
     testonly = True,

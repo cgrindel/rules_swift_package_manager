@@ -8,6 +8,8 @@ load(
     "bazel_integration_tests",
     "integration_test_utils",
 )
+load("//ci:bzlmod_modes.bzl", "bzlmod_modes")
+load("//ci:ci_integration_test_params.bzl", "ci_integration_test_params")
 
 def _new(name, oss, versions, enable_bzlmods):
     # Remove the Bazel label prefix if it exists.
@@ -52,11 +54,9 @@ def _bazel_integration_test(ei):
     workspace_path = ei.name
     if versions_len == 1:
         version = ei.versions[0]
+        test_name = example_infos.test_name(ei.name, version)
         bazel_integration_test(
-            name = example_infos.test_name(
-                ei.name,
-                version,
-            ),
+            name = test_name,
             bazel_binaries = bazel_binaries,
             bazel_version = version,
             timeout = timeout,
@@ -65,6 +65,7 @@ def _bazel_integration_test(ei):
             workspace_files = workspace_files,
             workspace_path = workspace_path,
         )
+        _ci_integration_test_params(ei, version)
     elif versions_len > 1:
         bazel_integration_tests(
             name = ei.name + "_test",
@@ -76,29 +77,21 @@ def _bazel_integration_test(ei):
             workspace_files = workspace_files,
             workspace_path = workspace_path,
         )
+        for version in ei.versions:
+            _ci_integration_test_params(ei, version)
 
-def _write_json_impl(ctx):
-    json_str = json.encode_indent(_all)
-    out_filename = ctx.attr.out
-    if out_filename == "":
-        out_filename = "{}.json".format(ctx.label.name)
-    out = ctx.actions.declare_file(out_filename)
-    ctx.actions.write(out, json_str)
-    return [DefaultInfo(files = depset([out]))]
-
-_write_json = rule(
-    implementation = _write_json_impl,
-    attrs = {
-        "out": attr.string(
-            doc = """\
-The name of the output file. If not specified, the label name is used.\
-""",
-        ),
-    },
-    doc = """\
-Write the information about the example integration tests to a JSON file.\
-""",
-)
+def _ci_integration_test_params(ei, version):
+    test_name = example_infos.test_name(ei.name, version)
+    ci_integration_test_params(
+        name = "{}_params".format(test_name),
+        bzlmod_modes = [
+            bzlmod_modes.from_bool(enable_bzlmod)
+            for enable_bzlmod in ei.enable_bzlmods
+        ],
+        oss = ei.oss,
+        test_names = [test_name],
+        visibility = ["//:__subpackages__"],
+    )
 
 # The default timeout is "long".
 _default_timeout = "long"
@@ -177,5 +170,4 @@ example_infos = struct(
     bazel_integration_test = _bazel_integration_test,
     new = _new,
     test_name = _test_name,
-    write_json = _write_json,
 )
