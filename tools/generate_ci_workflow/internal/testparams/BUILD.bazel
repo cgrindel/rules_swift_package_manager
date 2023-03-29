@@ -14,7 +14,7 @@ go_test(
     name = "testparams_test",
     srcs = ["int_test_params_test.go"],
     deps = [
-        "//tools/generate_ci_workflow/internal/example",
+        ":testparams",
         "@com_github_stretchr_testify//assert:go_default_library",
     ],
 )
