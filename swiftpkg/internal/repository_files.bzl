@@ -123,10 +123,36 @@ def _copy_directory(repository_ctx, src, dest):
         ],
     )
 
+def _is_directory(repository_ctx, path):
+    """Determine if the provided path is a directory.
+
+    Args:
+        repository_ctx: An instance of `repository_ctx`.
+        path: The path to test as a `string`.
+
+    Returns:
+        A `bool` specifying whether the path is a directory.
+    """
+    args = ["bash", "-c", "if [[ -d ${TARGET_PATH} ]]; then echo TRUE; else echo FALSE; fi"]
+    exec_result = repository_ctx.execute(
+        args,
+        environment = {"TARGET_PATH": path},
+        quiet = True,
+    )
+    if exec_result.return_code != 0:
+        fail("Failed while checking if '{path}' is a directory. stderr:\n{stderr}".format(
+            path = path,
+            stderr = exec_result.stderr,
+        ))
+    if exec_result.stdout.find("TRUE") >= 0:
+        return True
+    return False
+
 repository_files = struct(
     copy_directory = _copy_directory,
     exclude_paths = _exclude_paths,
     find_and_delete_files = _find_and_delete_files,
+    is_directory = _is_directory,
     list_directories_under = _list_directories_under,
     list_files_under = _list_files_under,
 )
