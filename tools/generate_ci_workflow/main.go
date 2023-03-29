@@ -106,17 +106,10 @@ func updateJob(jobs map[string]github.Job, key string, intTestParams []testparam
 func updateMatrix(m *github.SBMatrixStrategy, intTestParams []testparams.IntTestParams) {
 	newM := github.SBMatrixStrategy{}
 	for _, itp := range intTestParams {
-		var runner string
-		switch itp.OS {
-		case testparams.MacOS:
-			runner = "macos-12"
-		case testparams.LinuxOS:
-			runner = "ubuntu-22.04"
-		}
 		inc := github.SBMatrixInclude{
 			Test:         itp.Test,
-			Runner:       runner,
-			EnableBzlmod: itp.EnableBzlmod,
+			Runner:       itp.Runner(),
+			EnableBzlmod: itp.EnableBzlmod(),
 		}
 		newM.Include = append(newM.Include, inc)
 	}
