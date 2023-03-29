@@ -93,9 +93,38 @@ def _collect_from_deps_test(ctx):
 
 collect_from_deps_test = unittest.make(_collect_from_deps_test)
 
+def _label_str_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "bzlmod label",
+            inp = "@@//foo:bar",
+            exp = "@@//foo:bar",
+        ),
+        struct(
+            msg = "old-style label",
+            inp = "@//foo:bar",
+            exp = "@@//foo:bar",
+        ),
+        struct(
+            msg = "no prefix",
+            inp = "//foo:bar",
+            exp = "@@//foo:bar",
+        ),
+    ]
+    for t in tests:
+        actual = ci_test_params.label_str(t.inp)
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+label_str_test = unittest.make(_label_str_test)
+
 def ci_test_params_test_suite(name = "ci_test_params_tests"):
     return unittest.suite(
         name,
         sort_integration_test_params_test,
         collect_from_deps_test,
+        label_str_test,
     )
