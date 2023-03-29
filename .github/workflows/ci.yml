@@ -110,8 +110,8 @@ jobs:
           xcode_version: 14.0.1
       - uses: ./.github/actions/execute_test
         with:
-          test_target: ${{ matrix.test }}
           bzlmod_enabled: ${{ matrix.bzlmod_enabled }}
+          test_target: ${{ matrix.test }}
   tidy_and_test_matrix:
     strategy:
       fail-fast: false
