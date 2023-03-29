@@ -9,7 +9,7 @@ load(
     "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "integration_test_utils",
 )
-load("//ci:ci_workflow.bzl", "ci_workflow")
+load("//ci:defs.bzl", "ci_workflow")
 
 # MARK: - Bazel Starlark Lint and Formatting
 

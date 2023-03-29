@@ -8,8 +8,7 @@ load(
     "bazel_integration_tests",
     "integration_test_utils",
 )
-load("//ci:bzlmod_modes.bzl", "bzlmod_modes")
-load("//ci:ci_integration_test_params.bzl", "ci_integration_test_params")
+load("//ci:defs.bzl", "bzlmod_modes", "ci_integration_test_params")
 
 def _new(name, oss, versions, enable_bzlmods):
     # Remove the Bazel label prefix if it exists.

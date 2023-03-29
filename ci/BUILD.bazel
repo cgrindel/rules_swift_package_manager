@@ -4,30 +4,13 @@ load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 bzlformat_pkg(name = "bzlformat")
 
 bzl_library(
-    name = "ci_integration_test_params",
-    srcs = ["ci_integration_test_params.bzl"],
-    visibility = ["//visibility:public"],
-    deps = [":providers"],
-)
-
-bzl_library(
-    name = "ci_workflow",
-    srcs = ["ci_workflow.bzl"],
+    name = "defs",
+    srcs = ["defs.bzl"],
     visibility = ["//visibility:public"],
     deps = [
-        ":providers",
-        "@cgrindel_bazel_starlib//updatesrc:defs",
+        "//ci/internal:bzlmod_modes",
+        "//ci/internal:ci_integration_test_params",
+        "//ci/internal:ci_workflow",
+        "//ci/internal:providers",
     ],
-)
-
-bzl_library(
-    name = "bzlmod_modes",
-    srcs = ["bzlmod_modes.bzl"],
-    visibility = ["//visibility:public"],
-)
-
-bzl_library(
-    name = "providers",
-    srcs = ["providers.bzl"],
-    visibility = ["//visibility:public"],
 )

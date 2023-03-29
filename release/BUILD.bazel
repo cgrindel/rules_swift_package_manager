@@ -15,7 +15,7 @@ load(
     "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "bazel_integration_test",
 )
-load("//ci:ci_integration_test_params.bzl", "ci_integration_test_params")
+load("//ci:defs.bzl", "ci_integration_test_params")
 
 bzlformat_pkg(name = "bzlformat")
 
