@@ -35,6 +35,7 @@ bazel_integration_test(
     bazel_binaries = bazel_binaries,
     bazel_version = bazel_binaries.versions.current,
     test_runner = ":e2e_test_runner",
+    visibility = ["//:__subpackages__"],
     workspace_files = integration_test_utils.glob_workspace_files("workspace") + [
         "//:runtime_files",
     ],
