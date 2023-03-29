@@ -1,3 +1,5 @@
+"""Implementation for the `ci_workflow` rule."""
+
 load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_diff_and_update")
 load(":providers.bzl", "CIIntegrationTestParamsInfo")
 
@@ -61,8 +63,7 @@ _ci_workflow = rule(
             doc = "The integration tests that should be included in the CI workflow.",
         ),
         "template": attr.label(
-            # allow_single_file = [".yml", ".yaml"],
-            allow_single_file = True,
+            allow_single_file = [".yml", ".yaml"],
             mandatory = True,
             doc = "The current worklfow yaml file.",
         ),
@@ -73,10 +74,31 @@ _ci_workflow = rule(
             cfg = "exec",
         ),
     },
-    doc = "",
+    doc = """\
+Generate a GitHub workflow file with jobs for each of the integration test \
+parameter permutations.\
+""",
 )
 
 def ci_workflow(name, workflow_yml, integration_test_params, **kwargs):
+    """Generates a GitHub workflow file with jobs for each of the listed \
+    integration test parameter permutations.
+
+    In addition to building the worklfow YAML file, it also defines a target
+    that compares the generated file with the version in the source tree. If
+    they do not match, the test will fail. This macro also provides a runnable
+    target for updating the source tree with the generated workflow file.
+
+    Args:
+        name: The name of the build target as a `string`.
+        workflow_yml: The path to the GitHub workflow file in the source tree.
+            This can be a `string` or a `Label`.
+        integration_test_params: A `sequence` of labels that provide
+            `CIIntegrationTestParamsInfo` (e.g., `ci_integration_test_params`).
+        **kwargs: Common attributes that are passed to the build target.
+
+    Returns:
+    """
     _ci_workflow(
         name = name,
         template = workflow_yml,

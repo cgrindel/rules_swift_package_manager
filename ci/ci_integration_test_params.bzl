@@ -1,3 +1,5 @@
+"""Implementation for the `ci_integration_test_params` rule."""
+
 load(":providers.bzl", "CIIntegrationTestParamsInfo")
 
 def _ci_integration_test_params_impl(ctx):
@@ -44,21 +46,8 @@ ci_integration_test_params = rule(
 A list of the test names in this package that should use these parameters.\
 """,
         ),
-        # "tests": attr.label_list(
-        #     mandatory = True,
-        #     doc = "The test labels.",
-        # ),
     },
     doc = """\
 Describe how one or more integration tests should be executed in CI.\
 """,
 )
-
-# def ci_integration_test_params(name, bzlmod_modes, oss, tests, **kwargs):
-#     _ci_integration_test_params(
-#         name = name,
-#         bzlmod_modes = bzlmod_modes,
-#         oss = oss,
-#         tests = tests,
-#         **kwargs
-#     )

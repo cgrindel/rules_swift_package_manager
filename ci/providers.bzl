@@ -1,3 +1,5 @@
+"""Provider definitions for the GitHub CI workflow generation."""
+
 CIIntegrationTestParamsInfo = provider(
     doc = "Describes the CI conditions for running a list of integration tests.",
     fields = {
