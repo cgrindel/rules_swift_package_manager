@@ -5,8 +5,10 @@ load(":ci_test_params.bzl", "ci_test_params")
 load(":providers.bzl", "CITestParamsInfo")
 
 def _ci_workflow_impl(ctx):
-    itp_depset = ci_test_params.collect_from_deps(ctx.attr.test_params)
-    itps = ci_test_params.sort_integration_test_params(itp_depset.to_list())
+    tp_info = ci_test_params.collect_from_deps(ctx.attr.test_params)
+    itps = ci_test_params.sort_integration_test_params(
+        tp_info.integration_test_params.to_list(),
+    )
 
     # Generate JSON describing all of the integration tests
     json_file = ctx.actions.declare_file("{}_int_test_params.json".format(ctx.label.name))

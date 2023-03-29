@@ -14,7 +14,9 @@ def _collect_from_deps(deps):
     for dep in deps:
         if CITestParamsInfo in dep:
             itp_depsets.append(dep[CITestParamsInfo].integration_test_params)
-    return depset([], transitive = itp_depsets)
+    return CITestParamsInfo(
+        integration_test_params = depset([], transitive = itp_depsets),
+    )
 
 def _sort_integration_test_params(itps):
     return sorted(
