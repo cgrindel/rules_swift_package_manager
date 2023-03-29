@@ -27,70 +27,70 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - test: '@@//bzlmod:e2e_test'
+          - test: '@//bzlmod:e2e_test'
             runner: ubuntu-22.04
             enable_bzlmod: true
-          - test: '@@//bzlmod:e2e_test'
+          - test: '@//bzlmod:e2e_test'
             runner: macos-12
             enable_bzlmod: true
-          - test: '@@//examples:firebase_example_test_bazel_.bazelversion'
+          - test: '@//examples:firebase_example_test_bazel_.bazelversion'
             runner: macos-12
             enable_bzlmod: true
-          - test: '@@//examples:http_archive_ext_deps_test_bazel_.bazelversion'
-            runner: ubuntu-22.04
-            enable_bzlmod: false
-          - test: '@@//examples:http_archive_ext_deps_test_bazel_.bazelversion'
-            runner: ubuntu-22.04
-            enable_bzlmod: true
-          - test: '@@//examples:http_archive_ext_deps_test_bazel_.bazelversion'
-            runner: macos-12
-            enable_bzlmod: false
-          - test: '@@//examples:http_archive_ext_deps_test_bazel_.bazelversion'
-            runner: macos-12
-            enable_bzlmod: true
-          - test: '@@//examples:interesting_deps_test_bazel_.bazelversion'
-            runner: macos-12
-            enable_bzlmod: true
-          - test: '@@//examples:ios_sim_test_bazel_.bazelversion'
-            runner: macos-12
-            enable_bzlmod: true
-          - test: '@@//examples:objc_code_test_bazel_.bazelversion'
-            runner: macos-12
-            enable_bzlmod: true
-          - test: '@@//examples:phone_number_kit_test_bazel_.bazelversion'
-            runner: macos-12
-            enable_bzlmod: true
-          - test: '@@//examples:pkg_manifest_minimal_test_bazel_.bazelversion'
-            runner: ubuntu-22.04
-            enable_bzlmod: true
-          - test: '@@//examples:pkg_manifest_minimal_test_bazel_.bazelversion'
-            runner: macos-12
-            enable_bzlmod: true
-          - test: '@@//examples:soto_example_test_bazel_.bazelversion'
-            runner: ubuntu-22.04
-            enable_bzlmod: true
-          - test: '@@//examples:soto_example_test_bazel_.bazelversion'
-            runner: macos-12
-            enable_bzlmod: true
-          - test: '@@//examples:vapor_example_test_bazel_.bazelversion'
+          - test: '@//examples:http_archive_ext_deps_test_bazel_.bazelversion'
             runner: ubuntu-22.04
             enable_bzlmod: false
-          - test: '@@//examples:vapor_example_test_bazel_.bazelversion'
+          - test: '@//examples:http_archive_ext_deps_test_bazel_.bazelversion'
             runner: ubuntu-22.04
             enable_bzlmod: true
-          - test: '@@//examples:vapor_example_test_bazel_.bazelversion'
+          - test: '@//examples:http_archive_ext_deps_test_bazel_.bazelversion'
             runner: macos-12
             enable_bzlmod: false
-          - test: '@@//examples:vapor_example_test_bazel_.bazelversion'
+          - test: '@//examples:http_archive_ext_deps_test_bazel_.bazelversion'
             runner: macos-12
             enable_bzlmod: true
-          - test: '@@//examples:xcmetrics_example_test_bazel_.bazelversion'
+          - test: '@//examples:interesting_deps_test_bazel_.bazelversion'
             runner: macos-12
             enable_bzlmod: true
-          - test: '@@//release:archive_test'
+          - test: '@//examples:ios_sim_test_bazel_.bazelversion'
+            runner: macos-12
+            enable_bzlmod: true
+          - test: '@//examples:objc_code_test_bazel_.bazelversion'
+            runner: macos-12
+            enable_bzlmod: true
+          - test: '@//examples:phone_number_kit_test_bazel_.bazelversion'
+            runner: macos-12
+            enable_bzlmod: true
+          - test: '@//examples:pkg_manifest_minimal_test_bazel_.bazelversion'
             runner: ubuntu-22.04
             enable_bzlmod: true
-          - test: '@@//release:archive_test'
+          - test: '@//examples:pkg_manifest_minimal_test_bazel_.bazelversion'
+            runner: macos-12
+            enable_bzlmod: true
+          - test: '@//examples:soto_example_test_bazel_.bazelversion'
+            runner: ubuntu-22.04
+            enable_bzlmod: true
+          - test: '@//examples:soto_example_test_bazel_.bazelversion'
+            runner: macos-12
+            enable_bzlmod: true
+          - test: '@//examples:vapor_example_test_bazel_.bazelversion'
+            runner: ubuntu-22.04
+            enable_bzlmod: false
+          - test: '@//examples:vapor_example_test_bazel_.bazelversion'
+            runner: ubuntu-22.04
+            enable_bzlmod: true
+          - test: '@//examples:vapor_example_test_bazel_.bazelversion'
+            runner: macos-12
+            enable_bzlmod: false
+          - test: '@//examples:vapor_example_test_bazel_.bazelversion'
+            runner: macos-12
+            enable_bzlmod: true
+          - test: '@//examples:xcmetrics_example_test_bazel_.bazelversion'
+            runner: macos-12
+            enable_bzlmod: true
+          - test: '@//release:archive_test'
+            runner: ubuntu-22.04
+            enable_bzlmod: true
+          - test: '@//release:archive_test'
             runner: macos-12
             enable_bzlmod: true
     runs-on: ${{ matrix.runner }}
