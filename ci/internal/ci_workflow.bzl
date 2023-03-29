@@ -1,33 +1,16 @@
 """Implementation for the `ci_workflow` rule."""
 
 load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_diff_and_update")
-load(":bzlmod_modes.bzl", "bzlmod_modes")
-load(":providers.bzl", "CIIntegrationTestParamsInfo")
-
-def _integration_test_params(test, os, enable_bzlmod):
-    return struct(
-        test = str(test),
-        os = os,
-        enable_bzlmod = enable_bzlmod,
-    )
+load(":ci_test_params.bzl", "ci_test_params")
+load(":providers.bzl", "CITestParamsInfo")
 
 def _ci_workflow_impl(ctx):
-    # Collect all of the tests
-    test_params = []
-    for itp in ctx.attr.integration_test_params:
-        test_params_info = itp[CIIntegrationTestParamsInfo]
-        for test in test_params_info.tests:
-            for os in test_params_info.oss:
-                for bzlmod_mode in test_params_info.bzlmod_modes:
-                    test_params.append(_integration_test_params(
-                        test = test,
-                        os = os,
-                        enable_bzlmod = bzlmod_modes.to_bool(bzlmod_mode),
-                    ))
+    itp_depset = ci_test_params.collect_from_deps(ctx.attr.test_params)
+    itps = ci_test_params.sort_integration_test_params(itp_depset.to_list())
 
     # Generate JSON describing all of the integration tests
-    json_file = ctx.actions.declare_file("{}_test_params.json".format(ctx.label.name))
-    json_str = json.encode_indent(test_params)
+    json_file = ctx.actions.declare_file("{}_int_test_params.json".format(ctx.label.name))
+    json_str = json.encode_indent(itps)
     ctx.actions.write(json_file, json_str)
 
     # Generate the CI workflow
@@ -51,15 +34,15 @@ def _ci_workflow_impl(ctx):
 _ci_workflow = rule(
     implementation = _ci_workflow_impl,
     attrs = {
-        "integration_test_params": attr.label_list(
-            mandatory = True,
-            providers = [[CIIntegrationTestParamsInfo]],
-            doc = "The integration tests that should be included in the CI workflow.",
-        ),
         "template": attr.label(
             allow_single_file = [".yml", ".yaml"],
             mandatory = True,
             doc = "The current worklfow yaml file.",
+        ),
+        "test_params": attr.label_list(
+            mandatory = True,
+            providers = [[CITestParamsInfo]],
+            doc = "The test parameters.",
         ),
         "_workflow_generator": attr.label(
             default = Label("//tools/generate_ci_workflow"),
@@ -74,7 +57,7 @@ parameter permutations.\
 """,
 )
 
-def ci_workflow(name, workflow_yml, integration_test_params, **kwargs):
+def ci_workflow(name, workflow_yml, test_params, **kwargs):
     """Generates a GitHub workflow file with jobs for each of the listed \
     integration test parameter permutations.
 
@@ -87,8 +70,8 @@ def ci_workflow(name, workflow_yml, integration_test_params, **kwargs):
         name: The name of the build target as a `string`.
         workflow_yml: The path to the GitHub workflow file in the source tree.
             This can be a `string` or a `Label`.
-        integration_test_params: A `sequence` of labels that provide
-            `CIIntegrationTestParamsInfo` (e.g., `ci_integration_test_params`).
+        test_params: A `sequence` of labels that provide
+            `CITestParamsInfo` (e.g., `ci_integration_test_params`).
         **kwargs: Common attributes that are passed to the build target.
 
     Returns:
@@ -96,7 +79,7 @@ def ci_workflow(name, workflow_yml, integration_test_params, **kwargs):
     _ci_workflow(
         name = name,
         template = workflow_yml,
-        integration_test_params = integration_test_params,
+        test_params = test_params,
         **kwargs
     )
     updatesrc_diff_and_update(

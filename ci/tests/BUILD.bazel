@@ -1,0 +1,6 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load(":ci_test_params_tests.bzl", "ci_test_params_test_suite")
+
+bzlformat_pkg(name = "bzlformat")
+
+ci_test_params_test_suite()

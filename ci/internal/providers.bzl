@@ -1,10 +1,17 @@
 """Provider definitions for the GitHub CI workflow generation."""
 
-CIIntegrationTestParamsInfo = provider(
-    doc = "Describes the CI conditions for running a list of integration tests.",
+CITestParamsInfo = provider(
+    doc = "Collects the test parameters for running CI tests.",
     fields = {
-        "bzlmod_modes": "A `list` of bzlmod modes.",
-        "oss": "A `list` of operating systems.",
-        "tests": "A `list` of integration test labels.",
+        "integration_test_params": """\
+A `depset` of `struct` values as created by `ci_test_params.new_integration_test_params`.\
+""",
     },
 )
+
+# CIIntegrationTestParamsSuiteInfo = provider(
+#     doc = "Passes along collected `CIIntegrationTestParamsInfo` instances."
+#     fields = {
+#         "test_params": "A `depset` of `CIIntegrationTestParamsInfo` instances."
+#     },
+# )

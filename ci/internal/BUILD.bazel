@@ -21,8 +21,21 @@ bzl_library(
 )
 
 bzl_library(
+    name = "ci_test_params",
+    srcs = ["ci_test_params.bzl"],
+    visibility = ["//ci:__subpackages__"],
+    deps = [":providers"],
+)
+
+bzl_library(
     name = "bzlmod_modes",
     srcs = ["bzlmod_modes.bzl"],
+    visibility = ["//ci:__subpackages__"],
+)
+
+bzl_library(
+    name = "ci_test_params_suite",
+    srcs = ["ci_test_params_suite.bzl"],
     visibility = ["//ci:__subpackages__"],
 )
 

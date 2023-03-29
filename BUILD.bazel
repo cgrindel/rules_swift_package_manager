@@ -206,7 +206,7 @@ test_suite(
 
 ci_workflow(
     name = "ci_workflow",
-    integration_test_params = [
+    test_params = [
         "//bzlmod:e2e_test_params",
         "//release:archive_test_params",
     ],

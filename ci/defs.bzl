@@ -8,7 +8,7 @@ load(
 load("//ci/internal:ci_workflow.bzl", _ci_workflow = "ci_workflow")
 load(
     "//ci/internal:providers.bzl",
-    _CIIntegrationTestParamsInfo = "CIIntegrationTestParamsInfo",
+    _CITestParamsInfo = "CITestParamsInfo",
 )
 
 # Modules
@@ -19,4 +19,4 @@ ci_integration_test_params = _ci_integration_test_params
 ci_workflow = _ci_workflow
 
 # Providers
-CIIntegrationTestParamsInfo = _CIIntegrationTestParamsInfo
+CITestParamsInfo = _CITestParamsInfo
