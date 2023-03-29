@@ -155,6 +155,8 @@ filegroup(
     # Include every package that is required by the child workspaces.
     srcs = [
         ":all_files",
+        "//ci:all_files",
+        "//ci/internal:all_files",
         "//config_settings/bazel/apple_platform_type:all_files",
         "//config_settings/bazel/compilation_mode:all_files",
         "//config_settings/spm/configuration:all_files",

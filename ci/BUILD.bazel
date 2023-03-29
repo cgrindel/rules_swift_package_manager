@@ -14,3 +14,9 @@ bzl_library(
         "//ci/internal:providers",
     ],
 )
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
