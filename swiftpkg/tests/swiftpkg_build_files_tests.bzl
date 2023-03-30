@@ -40,7 +40,7 @@ def new_stub_repository_ctx(repo_name, file_contents = {}, find_results = {}):
         return file_contents.get(path, "")
 
     # buildifier: disable=unused-variable
-    def execute(args, quiet = True):
+    def execute(args, environment = {}, quiet = True):
         # The find command that we expect is `find -H -L path`.
         # See repository_files.list_files_under for details.
         if len(args) >= 4 and args[0] == "find":
@@ -780,7 +780,7 @@ apple_resource_bundle(
     name = "Source_SwiftLibraryWithResources_resource_bundle",
     bundle_name = "Source_SwiftLibraryWithResources_resource_bundle",
     infoplists = [":Source_SwiftLibraryWithResources_resource_bundle_infoplist"],
-    resources = ["Source/SwiftLibraryWithResources/Resources/chicken.json"],
+    resources = glob(["Source/SwiftLibraryWithResources/Resources/chicken.json"]),
 )
 
 resource_bundle_accessor(
@@ -790,6 +790,7 @@ resource_bundle_accessor(
 
 resource_bundle_infoplist(
     name = "Source_SwiftLibraryWithResources_resource_bundle_infoplist",
+    region = "en",
 )
 
 swift_library(

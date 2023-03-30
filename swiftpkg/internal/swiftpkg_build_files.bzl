@@ -89,7 +89,11 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     if len(target.resources) > 0:
         # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
         # https://stackoverflow.com/questions/63237395/generating-resource-bundle-accessor-type-bundle-has-no-member-module
-        all_build_files.append(_apple_resource_bundle(repository_ctx, target))
+        all_build_files.append(_apple_resource_bundle(
+            repository_ctx,
+            target,
+            pkg_ctx.pkg_info.default_localization,
+        ))
         attrs["srcs"].append(":{}".format(
             pkginfo_targets.resource_bundle_accessor_label_name(bzl_target_name),
         ))
@@ -495,27 +499,12 @@ def _apple_dynamic_xcframework_import_build_file(target):
 
 # MARK: - Apple Resource Group
 
-def _apple_resource_bundle(repository_ctx, target):
+def _apple_resource_bundle(repository_ctx, target, default_localization):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     bundle_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
     infoplist_name = pkginfo_targets.resource_bundle_infoplist_label_name(
         bzl_target_name,
     )
-
-    # resources = [
-    #     pkginfo_targets.join_path(target, r.path)
-    #     for r in target.resources
-    # ]
-
-    # resources = []
-    # for r in target.resources:
-    #     path = pkginfo_targets.join_path(target, r.path)
-    #     if repository_files.is_directory(repository_ctx, path):
-    #         resources.append(
-    #             scg.new_fn_call("glob", ["{}/**".format(path)]),
-    #         )
-    #     else:
-    #         resources.append(path)
 
     glob_paths = []
     for r in target.resources:
@@ -544,7 +533,9 @@ def _apple_resource_bundle(repository_ctx, target):
         build_decls.new(
             kind = swiftpkg_kinds.resource_bundle_infoplist,
             name = infoplist_name,
-            attrs = {},
+            attrs = {
+                "region": default_localization,
+            },
         ),
         build_decls.new(
             kind = apple_kinds.resource_bundle,
