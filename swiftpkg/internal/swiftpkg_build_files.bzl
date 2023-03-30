@@ -506,15 +506,25 @@ def _apple_resource_bundle(repository_ctx, target):
     #     pkginfo_targets.join_path(target, r.path)
     #     for r in target.resources
     # ]
-    resources = []
+
+    # resources = []
+    # for r in target.resources:
+    #     path = pkginfo_targets.join_path(target, r.path)
+    #     if repository_files.is_directory(repository_ctx, path):
+    #         resources.append(
+    #             scg.new_fn_call("glob", ["{}/**".format(path)]),
+    #         )
+    #     else:
+    #         resources.append(path)
+
+    glob_paths = []
     for r in target.resources:
         path = pkginfo_targets.join_path(target, r.path)
         if repository_files.is_directory(repository_ctx, path):
-            resources.append(
-                scg.new_fn_call("glob", ["{}/**".format(path)]),
-            )
+            glob_paths.append("{}/**".format(path))
         else:
-            resources.append(path)
+            glob_paths.append(path)
+    resources = scg.new_fn_call("glob", glob_paths)
 
     load_stmts = [
         apple_resource_bundle_load_stmt,
