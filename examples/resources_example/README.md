@@ -1,6 +1,5 @@
-# Firebase iOS SDK Example
+# Resources in External Package
 
-The targets in this example were copied/inspired by the [Firebase iOS quickstart examples](https://github.com/firebase/quickstart-ios).
-
-The [Firebase iOS SDK](https://github.com/firebase/firebase-ios-sdk) is interesting as it directly
-and indirectly exercises unique Swift package manifests.
+This example demonstrates using an external package that has its resources under a directory. The
+generated Bazel build files should ensure that the resources are found and made available in a
+resource bundle.
