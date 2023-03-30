@@ -6,13 +6,11 @@ bzlformat_pkg(name = "bzlformat")
 
 swift_library(
     name = "MyApp",
-    srcs = glob(["**/*.swift"]),
+    srcs = ["MyApp.swift"],
     module_name = "MyApp",
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
-    deps = [
-        "@swiftpkg_package_with_resources//:Sources_CoolUI",
-    ],
+    deps = ["@swiftpkg_package_with_resources//:Sources_CoolUI"],
 )
 
 ios_application(
