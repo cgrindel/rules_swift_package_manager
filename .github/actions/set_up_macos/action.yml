@@ -13,8 +13,9 @@ runs:
   using: composite
   steps:
     - name: Set default Xamarin SDK versions
+      shell: bash
       run: |
-        select-xamarin-sdk-v2.sh --mono=6.12 --ios=16.2
+        $VM_ASSETS/select-xamarin-sdk-v2.sh --mono=6.12 --ios=16.2
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: ${{ inputs.xcode_version }}
