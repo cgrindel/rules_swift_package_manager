@@ -12,6 +12,11 @@ inputs:
 runs:
   using: composite
   steps:
+    # https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-xamarin-applications
+    # https://github.com/actions/runner-images/issues/6949#issuecomment-1399642705
+    - name: Set default Xamarin SDK versions
+      run: |
+        $VM_ASSETS/select-xamarin-sdk-v2.sh --mono=6.12 --ios=16.2
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: ${{ inputs.xcode_version }}
