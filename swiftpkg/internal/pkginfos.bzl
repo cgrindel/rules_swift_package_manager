@@ -15,6 +15,8 @@ load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":repository_utils.bzl", "repository_utils")
 load(":validations.bzl", "validations")
 
+_DEFAULT_LOCALIZATION = "en"
+
 def _get_dump_manifest(repository_ctx, env = {}, working_directory = ""):
     """Returns a dict representing the package dump for an SPM package.
 
@@ -395,6 +397,10 @@ def _new_from_parsed_json(dump_manifest, desc_manifest, repo_name, deps_index):
     return _new(
         name = dump_manifest["name"],
         path = desc_manifest["path"],
+        default_localization = desc_manifest.get(
+            "default_localization",
+            _DEFAULT_LOCALIZATION,
+        ),
         tools_version = tools_version,
         platforms = platforms,
         dependencies = dependencies,
@@ -407,6 +413,7 @@ def _new_from_parsed_json(dump_manifest, desc_manifest, repo_name, deps_index):
 def _new(
         name,
         path,
+        default_localization = _DEFAULT_LOCALIZATION,
         tools_version = None,
         platforms = [],
         dependencies = [],
@@ -417,6 +424,7 @@ def _new(
     Args:
         name: The name of the Swift package (`string`).
         path: The path to the Swift package (`string`).
+        default_localization: Optional. The default localization region.
         tools_version: Optional. The semantic version for Swift from which the
             package was created (`string`).
         platforms: A `list` of platform structs as created by
@@ -434,6 +442,7 @@ def _new(
     return struct(
         name = name,
         path = path,
+        default_localization = default_localization,
         tools_version = tools_version,
         platforms = platforms,
         dependencies = dependencies,

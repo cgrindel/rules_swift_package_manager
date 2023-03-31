@@ -180,6 +180,13 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 }
 
 func readResolvedPkgPins(resolvedPkgPath string) (map[string]*spreso.Pin, error) {
+	pinsByIdentity := make(map[string]*spreso.Pin)
+	// Check if the resolved file exists. This can happen if there are no pinned dependencies. In
+	// other words, this can happen when there are no dependencies or only local package
+	// dependencies.
+	if _, err := os.Stat(resolvedPkgPath); err != nil {
+		return pinsByIdentity, nil
+	}
 	b, err := os.ReadFile(resolvedPkgPath)
 	if err != nil {
 		return nil, err
@@ -188,7 +195,6 @@ func readResolvedPkgPins(resolvedPkgPath string) (map[string]*spreso.Pin, error)
 	if err != nil {
 		return nil, err
 	}
-	pinsByIdentity := make(map[string]*spreso.Pin)
 	for _, p := range pins {
 		pinsByIdentity[p.PkgRef.Identity] = p
 	}

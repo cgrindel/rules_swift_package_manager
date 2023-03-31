@@ -151,6 +151,7 @@ _macos_single_bazel_version_test_examples = [
     "ios_sim",
     "objc_code",
     "phone_number_kit",
+    "resources_example",
     "xcmetrics_example",
 ]
 
