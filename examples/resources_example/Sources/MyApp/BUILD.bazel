@@ -21,7 +21,7 @@ ios_application(
         "ipad",
     ],
     infoplists = [":Info.plist"],
-    minimum_os_version = "16.2",
+    minimum_os_version = "16.0",
     visibility = ["//visibility:public"],
     deps = [":MyApp"],
 )

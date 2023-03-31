@@ -19,7 +19,7 @@ ios_application(
         "ipad",
     ],
     infoplists = [":Info.plist"],
-    minimum_os_version = "16.2",
+    minimum_os_version = "16.0",
     resources = glob(
         ["Assets.xcassets/**"],
         exclude = ["Assets.xcassets/AppIcon.appiconset/**"],

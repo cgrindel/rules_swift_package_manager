@@ -30,7 +30,7 @@ swift_library(
 
 ios_unit_test(
     name = "SwiftUICaseStudiesTests",
-    minimum_os_version = "16.2",
+    minimum_os_version = "16.0",
     test_host = "//SwiftUICaseStudies:iosapp",
     visibility = ["//visibility:private"],
     deps = [":SwiftUICaseStudiesTestsLib"],
