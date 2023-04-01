@@ -55,13 +55,13 @@ release_archive(
         "//:runtime_files",
         "//bzlmod:all_files",
     ],
-    out = "swift_bazel.tar.gz",
+    out = "rules_swift_package_manager.tar.gz",
 )
 
 hash_sha256(
     name = "archive_sha256",
     src = ":archive",
-    out = "swift_bazel.tar.gz.sha256",
+    out = "rules_swift_package_manager.tar.gz.sha256",
 )
 
 build_test(

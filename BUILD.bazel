@@ -69,7 +69,7 @@ gazelle_binary(
     ],
 )
 
-# gazelle:prefix github.com/cgrindel/swift_bazel
+# gazelle:prefix github.com/cgrindel/rules_swift_package_manager
 # gazelle:go_naming_convention import
 gazelle(
     name = "update_build_files",

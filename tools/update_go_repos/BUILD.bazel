@@ -7,7 +7,7 @@ go_library(
         "deps_file.go",
         "main.go",
     ],
-    importpath = "github.com/cgrindel/swift_bazel/tools/update_go_repos",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/update_go_repos",
     visibility = ["//visibility:private"],
     deps = [
         "@bazel_gazelle//rule:go_default_library",

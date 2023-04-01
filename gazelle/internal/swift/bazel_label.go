@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/label"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftpkg"
 )
 
 // BazelLabelFromTarget creates a Bazel label from a Swift target.

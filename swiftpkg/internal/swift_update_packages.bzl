@@ -22,7 +22,7 @@ def swift_update_packages(
         name: The name of the `resolve` target as a `string`. The target name
             for the `update` target is derived from this value by appending
             `_to_latest`.
-        gazelle: The label to `gazelle_binary` that includes the `swift_bazel`
+        gazelle: The label to `gazelle_binary` that includes the `rules_swift_package_manager`
             Gazelle extension.
         package_manifest: Optional. The name of the Swift package manifest file
             as a `string`.

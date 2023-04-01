@@ -17,7 +17,7 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
     )
     expected = pkginfos.new(
         name = "MySwiftPackage",
-        path = "/Users/chuck/code/cgrindel/swift_bazel/gh009_update_repos_new/examples/pkg_manifest",
+        path = "/Users/chuck/code/cgrindel/rules_swift_package_manager/gh009_update_repos_new/examples/pkg_manifest",
         tools_version = "5.7.0",
         platforms = [
             pkginfos.new_platform(name = "macos", version = "10.15"),
@@ -340,7 +340,7 @@ _swift_arg_parser_dump_json = """
   "name" : "MySwiftPackage",
   "packageKind" : {
     "root" : [
-      "/Users/chuck/code/cgrindel/swift_bazel/gh009_update_repos_new/examples/pkg_manifest"
+      "/Users/chuck/code/cgrindel/rules_swift_package_manager/gh009_update_repos_new/examples/pkg_manifest"
     ]
   },
   "pkgConfig" : null,
@@ -485,7 +485,7 @@ _swift_arg_parser_desc_json = """
   ],
   "manifest_display_name" : "MySwiftPackage",
   "name" : "MySwiftPackage",
-  "path" : "/Users/chuck/code/cgrindel/swift_bazel/gh009_update_repos_new/examples/pkg_manifest",
+  "path" : "/Users/chuck/code/cgrindel/rules_swift_package_manager/gh009_update_repos_new/examples/pkg_manifest",
   "platforms" : [
     {
       "name" : "macos",

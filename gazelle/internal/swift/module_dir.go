@@ -1,6 +1,6 @@
 package swift
 
-import "github.com/cgrindel/swift_bazel/gazelle/internal/pathdistance"
+import "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/pathdistance"
 
 var moduleParentDirNames = []string{
 	"Sources",

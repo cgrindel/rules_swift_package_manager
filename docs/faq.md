@@ -59,9 +59,9 @@ features and improvements:
 - Build the external dependencies with [rules_swift].
 - Pin the exact versions for the direct and transitive dependencies.
 
-## Can I migrate from [rules_spm] to `swift_bazel`?
+## Can I migrate from [rules_spm] to `rules_swift_package_manager`?
 
-Absolutely. A [migration guide from rules_spm](https://github.com/cgrindel/swift_bazel/issues/99) is
+Absolutely. A [migration guide from rules_spm](https://github.com/cgrindel/rules_swift_package_manager/issues/99) is
 on the roadmap.
 
 ## Can I just manage my external Swift packages and not generate Bazel build files for my project?
@@ -91,7 +91,7 @@ Yes. The [vapor example] demonstrates storing the Swift dependency files in a su
 
 
 [loading phase]: https://bazel.build/run/build#loading 
-[quickstart]: https://github.com/cgrindel/swift_bazel/blob/main/README.md#quickstart
+[quickstart]: https://github.com/cgrindel/rules_swift_package_manager/blob/main/README.md#quickstart
 [rules_spm]: https://github.com/cgrindel/rules_spm/
 [rules_swift]: https://github.com/bazelbuild/rules_swift
 [Gazelle framework]: https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md

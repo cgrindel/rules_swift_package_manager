@@ -6,7 +6,7 @@ bzlformat_pkg(name = "bzlformat")
 go_library(
     name = "generate_ci_workflow_lib",
     srcs = ["main.go"],
-    importpath = "github.com/cgrindel/swift_bazel/tools/generate_ci_workflow",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/generate_ci_workflow",
     visibility = ["//visibility:private"],
     deps = [
         "//tools/generate_ci_workflow/internal/github",

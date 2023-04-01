@@ -3,7 +3,7 @@ package github_test
 import (
 	"testing"
 
-	"github.com/cgrindel/swift_bazel/tools/generate_ci_workflow/internal/github"
+	"github.com/cgrindel/rules_swift_package_manager/tools/generate_ci_workflow/internal/github"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/yaml.v3"
 )
@@ -102,7 +102,7 @@ jobs:
     - uses: ./.github/actions/set_up_macos
       with:
         xcode_version: '14.0.1'
-        repo_name: swift_bazel
+        repo_name: rules_swift_package_manager
     - name: Ensure everything is tidy
       shell: bash
       run: |
@@ -124,7 +124,7 @@ jobs:
     - uses: ./.github/actions/set_up_macos
       with:
         xcode_version: '14.0.1'
-        repo_name: swift_bazel
+        repo_name: rules_swift_package_manager
     - uses: ./.github/actions/test_example
       with:
         example_name: ${{ matrix.example }}
@@ -138,7 +138,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: ./.github/actions/set_up_ubuntu
       with:
-        repo_name: swift_bazel
+        repo_name: rules_swift_package_manager
         ubuntu_version: "22.04"
     - name: Ensure everything is tidy
       shell: bash
@@ -162,7 +162,7 @@ jobs:
     - uses: actions/checkout@v3
     - uses: ./.github/actions/set_up_ubuntu
       with:
-        repo_name: swift_bazel
+        repo_name: rules_swift_package_manager
         ubuntu_version: "22.04"
     - uses: ./.github/actions/test_example
       with:

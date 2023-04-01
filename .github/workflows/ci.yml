@@ -104,12 +104,12 @@ jobs:
       - uses: ./.github/actions/set_up_ubuntu
         if: ${{ startsWith(matrix.runner, 'ubuntu') }}
         with:
-          repo_name: swift_bazel
+          repo_name: rules_swift_package_manager
           ubuntu_version: "22.04"
       - uses: ./.github/actions/set_up_macos
         if: ${{ startsWith(matrix.runner, 'macos') }}
         with:
-          repo_name: swift_bazel
+          repo_name: rules_swift_package_manager
           xcode_version: 14.0.1
       - uses: ./.github/actions/execute_test
         with:
@@ -133,12 +133,12 @@ jobs:
       - uses: ./.github/actions/set_up_ubuntu
         if: ${{ startsWith(matrix.runner, 'ubuntu') }}
         with:
-          repo_name: swift_bazel
+          repo_name: rules_swift_package_manager
           ubuntu_version: "22.04"
       - uses: ./.github/actions/set_up_macos
         if: ${{ startsWith(matrix.runner, 'macos') }}
         with:
-          repo_name: swift_bazel
+          repo_name: rules_swift_package_manager
           xcode_version: 14.0.1
       - uses: ./.github/actions/configure_bzlmod
         with:

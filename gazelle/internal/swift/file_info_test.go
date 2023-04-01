@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
 	"github.com/stretchr/testify/assert"
 )
 

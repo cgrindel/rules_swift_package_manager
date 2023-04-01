@@ -3,7 +3,7 @@ package spdesc_test
 import (
 	"testing"
 
-	"github.com/cgrindel/swift_bazel/gazelle/internal/spdesc"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdesc"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -11,7 +11,7 @@ func TestNewManifestFromJSON(t *testing.T) {
 	expected := &spdesc.Manifest{
 		Name:                "MySwiftPackage",
 		ManifestDisplayName: "MySwiftPackage",
-		Path:                "/Users/chuck/code/cgrindel/swift_bazel/gh008_incorporate_describe/examples/MySwiftPackage",
+		Path:                "/Users/chuck/code/cgrindel/rules_swift_package_manager/gh008_incorporate_describe/examples/MySwiftPackage",
 		ToolsVersion:        "5.7",
 		Dependencies: []spdesc.Dependency{
 			{
@@ -141,7 +141,7 @@ const swiftPackageJSONStr = `
   ],
   "manifest_display_name" : "MySwiftPackage",
   "name" : "MySwiftPackage",
-  "path" : "/Users/chuck/code/cgrindel/swift_bazel/gh008_incorporate_describe/examples/MySwiftPackage",
+  "path" : "/Users/chuck/code/cgrindel/rules_swift_package_manager/gh008_incorporate_describe/examples/MySwiftPackage",
   "platforms" : [
     {
       "name" : "macos",

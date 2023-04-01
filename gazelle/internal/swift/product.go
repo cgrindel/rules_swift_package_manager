@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/bazelbuild/bazel-gazelle/label"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftpkg"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftpkg"
 	mapset "github.com/deckarep/golang-set/v2"
 )
 

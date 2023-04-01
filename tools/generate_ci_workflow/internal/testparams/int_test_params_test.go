@@ -3,7 +3,7 @@ package testparams_test
 import (
 	"testing"
 
-	"github.com/cgrindel/swift_bazel/tools/generate_ci_workflow/internal/testparams"
+	"github.com/cgrindel/rules_swift_package_manager/tools/generate_ci_workflow/internal/testparams"
 	"github.com/stretchr/testify/assert"
 )
 

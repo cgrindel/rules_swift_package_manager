@@ -3,7 +3,7 @@ package gazelle
 import (
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
 )
 
 const swiftLangName = "swift"

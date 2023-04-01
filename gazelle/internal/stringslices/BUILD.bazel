@@ -7,7 +7,7 @@ go_library(
         "doc.go",
         "map.go",
     ],
-    importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/stringslices",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/stringslices",
     visibility = ["//gazelle:__subpackages__"],
 )
 

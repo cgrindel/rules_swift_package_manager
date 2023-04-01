@@ -6,9 +6,9 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/reslog"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftbin"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/reslog"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftbin"
 )
 
 const SwiftConfigName = "swift"
@@ -38,7 +38,7 @@ type SwiftConfig struct {
 	GenerateSwiftDepsForWorkspace bool
 
 	// Mapping of relative path to default module name. These values are populated from directives
-	// that can be applied to 
+	// that can be applied to
 	DefaultModuleNames map[string]string
 }
 

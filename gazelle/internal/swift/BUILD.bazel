@@ -37,7 +37,7 @@ go_library(
         "rules_from_srcs.go",
         "test_rules_common.go",
     ],
-    importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/swift",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift",
     visibility = ["//gazelle:__subpackages__"],
     deps = [
         "//gazelle/internal/pathdistance",
