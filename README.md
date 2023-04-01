@@ -18,7 +18,7 @@ development inside a Bazel workspace.
   * [Mac OS](#mac-os)
   * [Linux](#linux)
 * [Quickstart](#quickstart)
-  * [1\. Configure your workspace to use <a href="https://github\.com/cgrindel/swift\_bazel">swift\_bazel</a>\.](#1-configure-your-workspace-to-use-swift_bazel)
+  * [1\. Configure your workspace to use <a href="https://github\.com/cgrindel/rules\_swift\_package\_manager">rules\_swift\_package\_manager</a>\.](#1-configure-your-workspace-to-use-rules_swift_package_manager)
   * [2\. Create a minimal Package\.swift file\.](#2-create-a-minimal-packageswift-file)
   * [3\. Add Gazelle targets to BUILD\.bazel at the root of your workspace\.](#3-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
   * [4\. Resolve the external dependencies for your project\.](#4-resolve-the-external-dependencies-for-your-project)
