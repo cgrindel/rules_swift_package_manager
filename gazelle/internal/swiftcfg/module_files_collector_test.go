@@ -3,7 +3,7 @@ package swiftcfg_test
 import (
 	"testing"
 
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftcfg"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -8,7 +8,7 @@ go_library(
         "rule_resolution.go",
         "rule_resolution_summary.go",
     ],
-    importpath = "github.com/cgrindel/swift_bazel/gazelle/internal/reslog",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/reslog",
     visibility = ["//gazelle:__subpackages__"],
     deps = [
         "//gazelle/internal/swift",

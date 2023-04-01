@@ -1,6 +1,6 @@
 # Gazelle Plugin for Swift and Swift Package Rules for Bazel
 
-[![Build](https://github.com/cgrindel/swift_bazel/actions/workflows/ci.yml/badge.svg?event=schedule)](https://github.com/cgrindel/swift_bazel/actions/workflows/ci.yml)
+[![Build](https://github.com/cgrindel/rules_swift_package_manager/actions/workflows/ci.yml/badge.svg?event=schedule)](https://github.com/cgrindel/rules_swift_package_manager/actions/workflows/ci.yml)
 
 This repository contains a [Gazelle plugin] and Bazel repository rules that can be used to download,
 build, and consume Swift packages. The rules in this repository build the external Swift packages
@@ -18,7 +18,7 @@ development inside a Bazel workspace.
   * [Mac OS](#mac-os)
   * [Linux](#linux)
 * [Quickstart](#quickstart)
-  * [1\. Configure your workspace to use <a href="https://github\.com/cgrindel/swift\_bazel">swift\_bazel</a>\.](#1-configure-your-workspace-to-use-swift_bazel)
+  * [1\. Configure your workspace to use <a href="https://github\.com/cgrindel/rules\_swift\_package\_manager">rules\_swift\_package\_manager</a>\.](#1-configure-your-workspace-to-use-rules_swift_package_manager)
   * [2\. Create a minimal Package\.swift file\.](#2-create-a-minimal-packageswift-file)
   * [3\. Add Gazelle targets to BUILD\.bazel at the root of your workspace\.](#3-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
   * [4\. Resolve the external dependencies for your project\.](#4-resolve-the-external-dependencies-for-your-project)
@@ -50,7 +50,7 @@ Don't forget that `rules_swift` [expects the use of
 `clang`](https://github.com/bazelbuild/rules_swift#3-additional-configuration-linux-only). Hence,
 you will need to specify `CC=clang` before running Bazel.
 
-Finally, help [rules_swift] and [swift_bazel] find the Swift toolchain by ensuring that a `PATH`
+Finally, help [rules_swift] and [rules_swift_package_manager] find the Swift toolchain by ensuring that a `PATH`
 that includes the Swift binary is available in the Bazel actions.
 
 ```sh
@@ -68,23 +68,23 @@ actions. See the [CI GitHub workflow] for more details.
 The following provides a quick introduction on how to set up and use the features in this
 repository. Also, check out the [examples] for more information.
 
-### 1. Configure your workspace to use [swift_bazel].
+### 1. Configure your workspace to use [rules_swift_package_manager].
 
-Update the `WORKSPACE` file to load the dependencies for [swift_bazel], [rules_swift] and [Gazelle].
+Update the `WORKSPACE` file to load the dependencies for [rules_swift_package_manager], [rules_swift] and [Gazelle].
 
 <!-- BEGIN WORKSPACE SNIPPET -->
 ```python
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
-    name = "cgrindel_swift_bazel",
+    name = "rules_swift_package_manager",
     sha256 = "40bf17727804121e54e470e464fb9fd85d6cd3d71007139c33bf1f37675b7fad",
     urls = [
-        "https://github.com/cgrindel/swift_bazel/releases/download/v0.3.3/swift_bazel.v0.3.3.tar.gz",
+        "https://github.com/cgrindel/rules_swift_package_manager/releases/download/v0.3.3/rules_swift_package_manager.v0.3.3.tar.gz",
     ],
 )
 
-load("@cgrindel_swift_bazel//:deps.bzl", "swift_bazel_dependencies")
+load("@rules_swift_package_manager//:deps.bzl", "swift_bazel_dependencies")
 
 swift_bazel_dependencies()
 
@@ -97,7 +97,7 @@ bazel_starlib_dependencies()
 # gazelle:repo bazel_gazelle
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
-load("@cgrindel_swift_bazel//:go_deps.bzl", "swift_bazel_go_dependencies")
+load("@rules_swift_package_manager//:go_deps.bzl", "swift_bazel_go_dependencies")
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
 # Declare Go dependencies before calling go_rules_dependencies.
@@ -167,7 +167,7 @@ let package = Package(
 ```
 
 The name of the package can be whatever you like. It is required for the manifest, but it is not
-used by [swift_bazel]. If your proejct is published and consumed as a Swift package, feel free to
+used by [rules_swift_package_manager]. If your proejct is published and consumed as a Swift package, feel free to
 populate the rest of the manifest so that your package works properly by Swift package manager. Just
 note that the Swift Gazelle plugin does not use the manifest to generate Bazel build files, at this
 time.
@@ -178,7 +178,7 @@ Add the following to the `BUILD.bazel` file at the root of your workspace.
 
 ```python
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
-load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
 
 # Ignore the `.build` folder that is created by running Swift package manager 
 # commands. The Swift Gazelle plugin executes some Swift package manager 
@@ -191,11 +191,11 @@ load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
 
 # This declaration builds a Gazelle binary that incorporates all of the Gazelle 
 # plugins for the languages that you use in your workspace. In this example, we 
-# are only listing the Gazelle plugin for Swift from cgrindel_swift_bazel.
+# are only listing the Gazelle plugin for Swift from rules_swift_package_manager.
 gazelle_binary(
     name = "gazelle_bin",
     languages = [
-        "@cgrindel_swift_bazel//gazelle",
+        "@rules_swift_package_manager//gazelle",
     ],
 )
 
@@ -295,5 +295,5 @@ The following are a few tips to consider as you work with your repository:
 [examples]: examples/
 [rules_spm]: https://github.com/cgrindel/rules_spm
 [rules_swift]: https://github.com/bazelbuild/rules_swift
-[swift_bazel]: https://github.com/cgrindel/swift_bazel
+[rules_swift_package_manager]: https://github.com/cgrindel/rules_swift_package_manager
 [tidy]: https://github.com/cgrindel/bazel-starlib/blob/main/doc/bzltidy/rules_and_macros_overview.md#tidy

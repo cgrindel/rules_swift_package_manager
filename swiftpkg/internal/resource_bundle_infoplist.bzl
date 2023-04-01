@@ -28,7 +28,7 @@ The localization/region value that should be embedded in the Info.plist.\
 """,
         ),
         "_template": attr.label(
-            default = "@cgrindel_swift_bazel//swiftpkg/internal:resource_bundle_info.plist.tmpl",
+            default = "@rules_swift_package_manager//swiftpkg/internal:resource_bundle_info.plist.tmpl",
             allow_single_file = True,
         ),
     },

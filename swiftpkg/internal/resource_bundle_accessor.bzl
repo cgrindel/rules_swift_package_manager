@@ -21,7 +21,7 @@ resource_bundle_accessor = rule(
             doc = "The name of the resource bundle.",
         ),
         "_template": attr.label(
-            default = "@cgrindel_swift_bazel//swiftpkg/internal:ResourceBundleAccessor.swift.tmpl",
+            default = "@rules_swift_package_manager//swiftpkg/internal:ResourceBundleAccessor.swift.tmpl",
             allow_single_file = True,
         ),
     },

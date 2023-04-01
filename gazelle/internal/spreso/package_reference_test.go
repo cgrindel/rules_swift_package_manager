@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/cgrindel/swift_bazel/gazelle/internal/spreso"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spreso"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -44,7 +44,7 @@ func BzlmodStanzas(di *DependencyIndex) (string, error) {
 }
 
 const bzlmodPrefix = `swift_deps = use_extension(
-    "@cgrindel_swift_bazel//:extensions.bzl",
+    "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
 )
 swift_deps.from_file(

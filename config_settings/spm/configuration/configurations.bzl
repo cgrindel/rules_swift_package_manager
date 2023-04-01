@@ -9,7 +9,7 @@ def _label(name):
     Returns:
         The condition label as a `string`.
     """
-    return "@cgrindel_swift_bazel//config_settings/spm/configuration:{}".format(name)
+    return "@rules_swift_package_manager//config_settings/spm/configuration:{}".format(name)
 
 # Derived from BuildConfiguration values
 # https://github.com/apple/swift-package-manager/blob/main/Sources/PackageDescription/BuildSettings.swift

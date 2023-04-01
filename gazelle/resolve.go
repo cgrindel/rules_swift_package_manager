@@ -10,9 +10,9 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/repo"
 	"github.com/bazelbuild/bazel-gazelle/resolve"
 	"github.com/bazelbuild/bazel-gazelle/rule"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/reslog"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/reslog"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftcfg"
 )
 
 func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {

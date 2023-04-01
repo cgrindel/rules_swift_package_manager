@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/bazelbuild/bazel-gazelle/language"
-	"github.com/cgrindel/swift_bazel/gazelle"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle"
 	"github.com/stretchr/testify/assert"
 )
 

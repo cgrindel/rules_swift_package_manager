@@ -8,7 +8,7 @@
   * [How does the Gazelle plugin for Go handle this?](#how-does-the-gazelle-plugin-for-go-handle-this)
 * [Is the same build file generation logic used for the Go/Gazelle and Starlark implementations?](#is-the-same-build-file-generation-logic-used-for-the-gogazelle-and-starlark-implementations)
 * [Does this replace <a href="https://github\.com/cgrindel/rules\_spm/">rules\_spm</a>?](#does-this-replace-rules_spm)
-* [Can I migrate from <a href="https://github\.com/cgrindel/rules\_spm/">rules\_spm</a> to swift\_bazel?](#can-i-migrate-from-rules_spm-to-swift_bazel)
+* [Can I migrate from <a href="https://github\.com/cgrindel/rules\_spm/">rules\_spm</a> to rules\_swift\_package\_manager?](#can-i-migrate-from-rules_spm-to-rules_swift_package_manager)
 * [Can I just manage my external Swift packages and not generate Bazel build files for my project?](#can-i-just-manage-my-external-swift-packages-and-not-generate-bazel-build-files-for-my-project)
 * [After running //:swift\_update\_pkgs, I see a \.build directory\. What is it? Do I need it?](#after-running-swift_update_pkgs-i-see-a-build-directory-what-is-it-do-i-need-it)
 * [Does the Gazelle plugin run Swift package manager with every execution?](#does-the-gazelle-plugin-run-swift-package-manager-with-every-execution)
@@ -59,9 +59,9 @@ features and improvements:
 - Build the external dependencies with [rules_swift].
 - Pin the exact versions for the direct and transitive dependencies.
 
-## Can I migrate from [rules_spm] to `swift_bazel`?
+## Can I migrate from [rules_spm] to `rules_swift_package_manager`?
 
-Absolutely. A [migration guide from rules_spm](https://github.com/cgrindel/swift_bazel/issues/99) is
+Absolutely. A [migration guide from rules_spm](https://github.com/cgrindel/rules_swift_package_manager/issues/99) is
 on the roadmap.
 
 ## Can I just manage my external Swift packages and not generate Bazel build files for my project?
@@ -91,7 +91,7 @@ Yes. The [vapor example] demonstrates storing the Swift dependency files in a su
 
 
 [loading phase]: https://bazel.build/run/build#loading 
-[quickstart]: https://github.com/cgrindel/swift_bazel/blob/main/README.md#quickstart
+[quickstart]: https://github.com/cgrindel/rules_swift_package_manager/blob/main/README.md#quickstart
 [rules_spm]: https://github.com/cgrindel/rules_spm/
 [rules_swift]: https://github.com/bazelbuild/rules_swift
 [Gazelle framework]: https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md

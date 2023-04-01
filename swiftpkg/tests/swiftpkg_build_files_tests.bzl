@@ -511,12 +511,12 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 swift_binary(
     name = "Source_SwiftExecutableTarget",
     copts = select({
-        "@cgrindel_swift_bazel//config_settings/spm/configuration:release": ["-cross-module-optimization"],
+        "@rules_swift_package_manager//config_settings/spm/configuration:release": ["-cross-module-optimization"],
         "//conditions:default": [],
     }),
     defines = ["SWIFT_PACKAGE"] + select({
-        "@cgrindel_swift_bazel//config_settings/spm/platform:ios": ["FOOBAR"],
-        "@cgrindel_swift_bazel//config_settings/spm/platform:tvos": ["FOOBAR"],
+        "@rules_swift_package_manager//config_settings/spm/platform:ios": ["FOOBAR"],
+        "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["FOOBAR"],
         "//conditions:default": [],
     }),
     deps = [],
@@ -573,7 +573,7 @@ cc_library(
         "-Iexternal/swiftpkg_mypackage/src",
         "-Iexternal/swiftpkg_mypackage",
     ] + select({
-        "@cgrindel_swift_bazel//config_settings/spm/configuration:release": ["-danger"],
+        "@rules_swift_package_manager//config_settings/spm/configuration:release": ["-danger"],
         "//conditions:default": [],
     }),
     defines = [
@@ -612,7 +612,7 @@ cc_library(
                 ],
             },
             exp = """\
-load("@cgrindel_swift_bazel//swiftpkg:build_defs.bzl", "generate_modulemap")
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 objc_library(
     name = "ObjcLibrary",
@@ -633,16 +633,16 @@ objc_library(
     includes = ["include"],
     module_name = "ObjcLibrary",
     sdk_frameworks = select({
-        "@cgrindel_swift_bazel//config_settings/spm/platform:ios": [
+        "@rules_swift_package_manager//config_settings/spm/platform:ios": [
             "Foundation",
             "UIKit",
         ],
-        "@cgrindel_swift_bazel//config_settings/spm/platform:macos": ["Foundation"],
-        "@cgrindel_swift_bazel//config_settings/spm/platform:tvos": [
+        "@rules_swift_package_manager//config_settings/spm/platform:macos": ["Foundation"],
+        "@rules_swift_package_manager//config_settings/spm/platform:tvos": [
             "Foundation",
             "UIKit",
         ],
-        "@cgrindel_swift_bazel//config_settings/spm/platform:watchos": [
+        "@rules_swift_package_manager//config_settings/spm/platform:watchos": [
             "Foundation",
             "UIKit",
         ],
@@ -676,8 +676,8 @@ swift_library(
     name = "Source_SwiftLibraryWithConditionalDep",
     defines = ["SWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:ClangLibrary"] + select({
-        "@cgrindel_swift_bazel//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
-        "@cgrindel_swift_bazel//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
+        "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
+        "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
         "//conditions:default": [],
     }),
     module_name = "SwiftLibraryWithConditionalDep",
@@ -711,8 +711,8 @@ cc_library(
     ],
     defines = ["SWIFT_PACKAGE=1"],
     deps = select({
-        "@cgrindel_swift_bazel//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:ClangLibrary"],
-        "@cgrindel_swift_bazel//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:ClangLibrary"],
+        "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:ClangLibrary"],
+        "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:ClangLibrary"],
         "//conditions:default": [],
     }),
     hdrs = ["include/external.h"],
@@ -744,7 +744,7 @@ public class FooBar: NSObject {
             },
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
-load("@cgrindel_swift_bazel//swiftpkg:build_defs.bzl", "generate_modulemap")
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 generate_modulemap(
     name = "Source_SwiftForObjcTarget_modulemap",
@@ -774,7 +774,7 @@ swift_library(
             exp = """\
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
-load("@cgrindel_swift_bazel//swiftpkg:build_defs.bzl", "resource_bundle_accessor", "resource_bundle_infoplist")
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_accessor", "resource_bundle_infoplist")
 
 apple_resource_bundle(
     name = "Source_SwiftLibraryWithResources_resource_bundle",

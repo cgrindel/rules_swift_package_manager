@@ -2,7 +2,7 @@
 # Internal Rules and Macros
 
 
-The rules and macros described below are used by `swift_bazel` to build the external Swift packages.
+The rules and macros described below are used by `rules_swift_package_manager` to build the external Swift packages.
 
 
 On this page:

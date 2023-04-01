@@ -19,7 +19,7 @@ assertions_sh="$(rlocation "${assertions_sh_location}")" || \
   (echo >&2 "Failed to locate ${assertions_sh_location}" && exit 1)
 source "${assertions_sh}"
 
-remove_swift_build_dirs_sh_location=cgrindel_swift_bazel/tools/remove_swift_build_dirs/remove_swift_build_dirs.sh
+remove_swift_build_dirs_sh_location=rules_swift_package_manager/tools/remove_swift_build_dirs/remove_swift_build_dirs.sh
 remove_swift_build_dirs_sh="$(rlocation "${remove_swift_build_dirs_sh_location}")" || \
   (echo >&2 "Failed to locate ${remove_swift_build_dirs_sh_location}" && exit 1)
 

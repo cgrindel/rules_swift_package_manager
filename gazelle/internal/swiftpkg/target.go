@@ -3,8 +3,8 @@ package swiftpkg
 import (
 	"fmt"
 
-	"github.com/cgrindel/swift_bazel/gazelle/internal/spdesc"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/spdump"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdesc"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdump"
 	mapset "github.com/deckarep/golang-set/v2"
 )
 

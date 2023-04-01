@@ -1,4 +1,4 @@
-module github.com/cgrindel/swift_bazel
+module github.com/cgrindel/rules_swift_package_manager
 
 go 1.18
 

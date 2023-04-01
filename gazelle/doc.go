@@ -3,5 +3,5 @@
 //
 // [Bazel Gazelle]: https://github.com/bazelbuild/bazel-gazelle
 // [Swift]: https://www.swift.org/
-// [Swift Bazel documentation]: https://github.com/cgrindel/swift_bazel
+// [Swift Bazel documentation]: https://github.com/cgrindel/rules_swift_package_manager
 package gazelle

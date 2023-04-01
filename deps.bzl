@@ -1,11 +1,11 @@
-"""Specifies the workspace dependencies for the `swift_bazel` repository."""
+"""Specifies the workspace dependencies for the `rules_swift_package_manager` repository."""
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
 
 # buildifier: disable=unnamed-macro
 def swift_bazel_dependencies():
-    """Declare the Bazel workspace dependencies for the `swift_bazel` repository."""
+    """Declare the Bazel workspace dependencies for the `rules_swift_package_manager` repository."""
 
     maybe(
         http_archive,

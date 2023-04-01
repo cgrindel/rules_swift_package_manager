@@ -8,9 +8,9 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/stringslices"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swift"
-	"github.com/cgrindel/swift_bazel/gazelle/internal/swiftcfg"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/stringslices"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftcfg"
 	"golang.org/x/exp/slices"
 )
 

@@ -54,7 +54,7 @@ def _check_spm_version(repository_ctx, env = {}):
     spm_ver = spm_versions.get(repository_ctx, env = env)
     if not versions.is_at_least(threshold = min_spm_ver, version = spm_ver):
         fail("""\
-`swift_bazel` requires that Swift Package Manager be version %s or \
+`rules_swift_package_manager` requires that Swift Package Manager be version %s or \
 higher. Found version %s installed.\
 """ % (min_spm_ver, spm_ver))
 

@@ -19,7 +19,7 @@ assertions_sh="$(rlocation "${assertions_sh_location}")" || \
   (echo >&2 "Failed to locate ${assertions_sh_location}" && exit 1)
 source "${assertions_sh}"
 
-swift_bazel_tar_gz_location=cgrindel_swift_bazel/release/swift_bazel.tar.gz
+swift_bazel_tar_gz_location=rules_swift_package_manager/release/rules_swift_package_manager.tar.gz
 swift_bazel_tar_gz="$(rlocation "${swift_bazel_tar_gz_location}")" || \
   (echo >&2 "Failed to locate ${swift_bazel_tar_gz_location}" && exit 1)
 

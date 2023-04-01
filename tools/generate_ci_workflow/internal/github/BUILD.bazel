@@ -4,7 +4,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 go_library(
     name = "github",
     srcs = ["workflow.go"],
-    importpath = "github.com/cgrindel/swift_bazel/tools/generate_ci_workflow/internal/github",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/generate_ci_workflow/internal/github",
     visibility = ["//tools/generate_ci_workflow:__subpackages__"],
     deps = [
         "@com_github_creasty_defaults//:go_default_library",

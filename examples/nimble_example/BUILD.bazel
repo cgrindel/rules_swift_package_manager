@@ -1,7 +1,7 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
-load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
 
 tidy(
     name = "tidy",
@@ -20,7 +20,7 @@ gazelle_binary(
     name = "gazelle_bin",
     languages = [
         "@bazel_skylib_gazelle_plugin//bzl",
-        "@cgrindel_swift_bazel//gazelle",
+        "@rules_swift_package_manager//gazelle",
     ],
 )
 
@@ -38,5 +38,5 @@ bzl_library(
     name = "swift_deps",
     srcs = ["swift_deps.bzl"],
     visibility = ["//visibility:public"],
-    deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
+    deps = ["@rules_swift_package_manager//swiftpkg:defs"],
 )

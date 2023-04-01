@@ -11,26 +11,26 @@ def _for_framework_test(ctx):
             msg = "all platforms",
             framework = "Foundation",
             exp = [
-                "@cgrindel_swift_bazel//config_settings/spm/platform:ios",
-                "@cgrindel_swift_bazel//config_settings/spm/platform:macos",
-                "@cgrindel_swift_bazel//config_settings/spm/platform:tvos",
-                "@cgrindel_swift_bazel//config_settings/spm/platform:watchos",
+                "@rules_swift_package_manager//config_settings/spm/platform:ios",
+                "@rules_swift_package_manager//config_settings/spm/platform:macos",
+                "@rules_swift_package_manager//config_settings/spm/platform:tvos",
+                "@rules_swift_package_manager//config_settings/spm/platform:watchos",
             ],
         ),
         struct(
             msg = "single platform",
             framework = "AppKit",
             exp = [
-                "@cgrindel_swift_bazel//config_settings/spm/platform:macos",
+                "@rules_swift_package_manager//config_settings/spm/platform:macos",
             ],
         ),
         struct(
             msg = "several platformis",
             framework = "UIKit",
             exp = [
-                "@cgrindel_swift_bazel//config_settings/spm/platform:ios",
-                "@cgrindel_swift_bazel//config_settings/spm/platform:tvos",
-                "@cgrindel_swift_bazel//config_settings/spm/platform:watchos",
+                "@rules_swift_package_manager//config_settings/spm/platform:ios",
+                "@rules_swift_package_manager//config_settings/spm/platform:tvos",
+                "@rules_swift_package_manager//config_settings/spm/platform:watchos",
             ],
         ),
     ]

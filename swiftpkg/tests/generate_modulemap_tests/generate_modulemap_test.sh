@@ -19,11 +19,11 @@ assertions_sh="$(rlocation "${assertions_sh_location}")" || \
   (echo >&2 "Failed to locate ${assertions_sh_location}" && exit 1)
 source "${assertions_sh}"
 
-PrintVersion_location=cgrindel_swift_bazel/swiftpkg/tests/generate_modulemap_tests/Sources/PrintVersion/PrintVersion
+PrintVersion_location=rules_swift_package_manager/swiftpkg/tests/generate_modulemap_tests/Sources/PrintVersion/PrintVersion
 PrintVersion="$(rlocation "${PrintVersion_location}")" || \
   (echo >&2 "Failed to locate ${PrintVersion_location}" && exit 1)
 
-PrintVersionObjc_location=cgrindel_swift_bazel/swiftpkg/tests/generate_modulemap_tests/PrintVersionObjc/PrintVersionObjc
+PrintVersionObjc_location=rules_swift_package_manager/swiftpkg/tests/generate_modulemap_tests/PrintVersionObjc/PrintVersionObjc
 PrintVersionObjc="$(rlocation "${PrintVersionObjc_location}")" || \
   (echo >&2 "Failed to locate ${PrintVersionObjc_location}" && exit 1)
 

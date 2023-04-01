@@ -3,7 +3,7 @@ package jsonutils_test
 import (
 	"testing"
 
-	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/jsonutils"
 	"github.com/stretchr/testify/assert"
 )
 

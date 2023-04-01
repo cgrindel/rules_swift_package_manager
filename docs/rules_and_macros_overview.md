@@ -28,7 +28,7 @@ Defines gazelle update-repos targets that are used to resolve and update     Swi
 | Name  | Description | Default Value |
 | :------------- | :------------- | :------------- |
 | <a id="swift_update_packages-name"></a>name |  The name of the <code>resolve</code> target as a <code>string</code>. The target name for the <code>update</code> target is derived from this value by appending <code>_to_latest</code>.   |  none |
-| <a id="swift_update_packages-gazelle"></a>gazelle |  The label to <code>gazelle_binary</code> that includes the <code>swift_bazel</code> Gazelle extension.   |  none |
+| <a id="swift_update_packages-gazelle"></a>gazelle |  The label to <code>gazelle_binary</code> that includes the <code>rules_swift_package_manager</code> Gazelle extension.   |  none |
 | <a id="swift_update_packages-package_manifest"></a>package_manifest |  Optional. The name of the Swift package manifest file as a <code>string</code>.   |  <code>"Package.swift"</code> |
 | <a id="swift_update_packages-swift_deps"></a>swift_deps |  Optional. The name of the Starlark file that should be updated with the Swift package dependencies as a <code>string</code>.   |  <code>"swift_deps.bzl"</code> |
 | <a id="swift_update_packages-swift_deps_fn"></a>swift_deps_fn |  Optional. The name of the Starlark function in the <code>swift_deps</code> file that should be updated with the Swift package dependencies as a <code>string</code>.   |  <code>"swift_dependencies"</code> |

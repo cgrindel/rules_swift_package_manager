@@ -3,7 +3,7 @@ package spdump
 import (
 	"encoding/json"
 
-	"github.com/cgrindel/swift_bazel/gazelle/internal/jsonutils"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/jsonutils"
 )
 
 // A Dependency represents an external dependency.

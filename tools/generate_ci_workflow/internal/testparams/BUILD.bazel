@@ -6,7 +6,7 @@ bzlformat_pkg(name = "bzlformat")
 go_library(
     name = "testparams",
     srcs = ["int_test_params.go"],
-    importpath = "github.com/cgrindel/swift_bazel/tools/generate_ci_workflow/internal/testparams",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/generate_ci_workflow/internal/testparams",
     visibility = ["//tools/generate_ci_workflow:__subpackages__"],
 )
 
