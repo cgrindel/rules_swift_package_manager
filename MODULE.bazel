@@ -1,5 +1,5 @@
 module(
-    name = "cgrindel_swift_bazel",
+    name = "rules_swift_package_manager",
     version = "0.0.0",
 )
 

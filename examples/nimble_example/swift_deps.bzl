@@ -1,4 +1,4 @@
-load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_package")
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package")
 
 def swift_dependencies():
     # version: 2.1.1

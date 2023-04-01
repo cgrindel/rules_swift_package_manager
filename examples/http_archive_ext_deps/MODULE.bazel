@@ -1,9 +1,9 @@
 bazel_dep(
-    name = "cgrindel_swift_bazel",
+    name = "rules_swift_package_manager",
     version = "0.0.0",
 )
 local_path_override(
-    module_name = "cgrindel_swift_bazel",
+    module_name = "rules_swift_package_manager",
     path = "../..",
 )
 

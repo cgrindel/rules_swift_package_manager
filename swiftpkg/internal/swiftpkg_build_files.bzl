@@ -785,7 +785,7 @@ swiftpkg_kinds = struct(
     resource_bundle_infoplist = "resource_bundle_infoplist",
 )
 
-swiftpkg_build_defs_location = "@cgrindel_swift_bazel//swiftpkg:build_defs.bzl"
+swiftpkg_build_defs_location = "@rules_swift_package_manager//swiftpkg:build_defs.bzl"
 
 swiftpkg_generate_modulemap_load_stmt = load_statements.new(
     swiftpkg_build_defs_location,

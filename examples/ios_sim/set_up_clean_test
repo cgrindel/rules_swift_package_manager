@@ -17,7 +17,7 @@ rm -rf .build
 cat > "${script_dir}/BUILD.bazel"  <<-EOF
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
-load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
 
 tidy(
     name = "tidy",
@@ -36,7 +36,7 @@ gazelle_binary(
     name = "gazelle_bin",
     languages = [
         "@bazel_skylib_gazelle_plugin//bzl",
-        "@cgrindel_swift_bazel//gazelle",
+        "@rules_swift_package_manager//gazelle",
     ],
 )
 

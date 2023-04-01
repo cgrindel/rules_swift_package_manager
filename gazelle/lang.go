@@ -18,7 +18,7 @@ var loads = []rule.LoadInfo{
 		},
 	},
 	{
-		Name: "@cgrindel_swift_bazel//swiftpkg:defs.bzl",
+		Name: "@rules_swift_package_manager//swiftpkg:defs.bzl",
 		Symbols: []string{
 			swift.SwiftPkgRuleKind,
 			swift.LocalSwiftPkgRuleKind,

@@ -11,7 +11,7 @@ _platform_sets = {
     spm_platforms.watchos: apple_builtin_frameworks.watchos,
 }
 
-_condition_tmpl = "@cgrindel_swift_bazel//config_settings/spm/platform:{}"
+_condition_tmpl = "@rules_swift_package_manager//config_settings/spm/platform:{}"
 
 def _for_framework(framework):
     """Returns the platform condition labels for an Apple built-in framework.

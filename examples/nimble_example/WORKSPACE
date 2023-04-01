@@ -1,11 +1,11 @@
 workspace(name = "nimble_example")
 
 local_repository(
-    name = "cgrindel_swift_bazel",
+    name = "rules_swift_package_manager",
     path = "../..",
 )
 
-load("@cgrindel_swift_bazel//:deps.bzl", "swift_bazel_dependencies")
+load("@rules_swift_package_manager//:deps.bzl", "swift_bazel_dependencies")
 
 swift_bazel_dependencies()
 
@@ -30,7 +30,7 @@ http_archive(
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 load("@bazel_skylib_gazelle_plugin//:workspace.bzl", "bazel_skylib_gazelle_plugin_workspace")
-load("@cgrindel_swift_bazel//:go_deps.bzl", "swift_bazel_go_dependencies")
+load("@rules_swift_package_manager//:go_deps.bzl", "swift_bazel_go_dependencies")
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
 # Declare Go dependencies before calling go_rules_dependencies.

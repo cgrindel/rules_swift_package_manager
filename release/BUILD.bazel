@@ -23,7 +23,7 @@ bzlformat_pkg(name = "bzlformat")
 
 generate_module_snippet(
     name = "generate_module_snippet",
-    module_name = "cgrindel_swift_bazel",
+    module_name = "rules_swift_package_manager",
 )
 
 generate_workspace_snippet(

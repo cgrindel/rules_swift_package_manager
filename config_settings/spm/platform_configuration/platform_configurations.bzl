@@ -27,7 +27,7 @@ def _label(platform, configuration):
     """
     name = _new_name(platform, configuration)
     return """\
-@cgrindel_swift_bazel//config_settings/spm/platform_configuration:{}\
+@rules_swift_package_manager//config_settings/spm/platform_configuration:{}\
 """.format(name)
 
 _ALL_VALUES = [

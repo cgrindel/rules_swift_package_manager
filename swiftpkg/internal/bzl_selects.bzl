@@ -243,8 +243,8 @@ bzl_selects = struct(
 #   }
 # TO:
 #   ["-framework Foo"] + select({
-#       "@cgrindel_swift_bazel//config_settings/platform_types:macos": ["-framework AppKit"],
-#       "@cgrindel_swift_bazel//config_settings/platform_types:ios": ["-framework UIKit"],
-#       "@cgrindel_swift_bazel//config_settings/platform_types:tvos": ["-framework UIKit"],
+#       "@rules_swift_package_manager//config_settings/platform_types:macos": ["-framework AppKit"],
+#       "@rules_swift_package_manager//config_settings/platform_types:ios": ["-framework UIKit"],
+#       "@rules_swift_package_manager//config_settings/platform_types:tvos": ["-framework UIKit"],
 #       "//conditions:default": [],
 #   })

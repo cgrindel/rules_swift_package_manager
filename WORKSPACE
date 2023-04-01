@@ -1,4 +1,4 @@
-workspace(name = "cgrindel_swift_bazel")
+workspace(name = "rules_swift_package_manager")
 
 load("//:deps.bzl", "swift_bazel_dependencies")
 

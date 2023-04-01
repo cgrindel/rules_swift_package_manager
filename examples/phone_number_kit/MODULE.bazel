@@ -1,9 +1,9 @@
 bazel_dep(
-    name = "cgrindel_swift_bazel",
+    name = "rules_swift_package_manager",
     version = "0.0.0",
 )
 local_path_override(
-    module_name = "cgrindel_swift_bazel",
+    module_name = "rules_swift_package_manager",
     path = "../..",
 )
 
@@ -34,7 +34,7 @@ bazel_dep(
 
 # swift_deps START
 swift_deps = use_extension(
-    "@cgrindel_swift_bazel//:extensions.bzl",
+    "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
 )
 swift_deps.from_file(

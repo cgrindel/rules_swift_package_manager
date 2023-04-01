@@ -77,14 +77,14 @@ Update the `WORKSPACE` file to load the dependencies for [swift_bazel], [rules_s
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
-    name = "cgrindel_swift_bazel",
+    name = "rules_swift_package_manager",
     sha256 = "40bf17727804121e54e470e464fb9fd85d6cd3d71007139c33bf1f37675b7fad",
     urls = [
         "https://github.com/cgrindel/swift_bazel/releases/download/v0.3.3/swift_bazel.v0.3.3.tar.gz",
     ],
 )
 
-load("@cgrindel_swift_bazel//:deps.bzl", "swift_bazel_dependencies")
+load("@rules_swift_package_manager//:deps.bzl", "swift_bazel_dependencies")
 
 swift_bazel_dependencies()
 
@@ -97,7 +97,7 @@ bazel_starlib_dependencies()
 # gazelle:repo bazel_gazelle
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
-load("@cgrindel_swift_bazel//:go_deps.bzl", "swift_bazel_go_dependencies")
+load("@rules_swift_package_manager//:go_deps.bzl", "swift_bazel_go_dependencies")
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
 
 # Declare Go dependencies before calling go_rules_dependencies.
@@ -178,7 +178,7 @@ Add the following to the `BUILD.bazel` file at the root of your workspace.
 
 ```python
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
-load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
 
 # Ignore the `.build` folder that is created by running Swift package manager 
 # commands. The Swift Gazelle plugin executes some Swift package manager 
@@ -191,11 +191,11 @@ load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
 
 # This declaration builds a Gazelle binary that incorporates all of the Gazelle 
 # plugins for the languages that you use in your workspace. In this example, we 
-# are only listing the Gazelle plugin for Swift from cgrindel_swift_bazel.
+# are only listing the Gazelle plugin for Swift from rules_swift_package_manager.
 gazelle_binary(
     name = "gazelle_bin",
     languages = [
-        "@cgrindel_swift_bazel//gazelle",
+        "@rules_swift_package_manager//gazelle",
     ],
 )
 

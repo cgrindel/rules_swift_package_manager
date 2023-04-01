@@ -19,7 +19,7 @@ assertions_sh="$(rlocation "${assertions_sh_location}")" || \
   (echo >&2 "Failed to locate ${assertions_sh_location}" && exit 1)
 source "${assertions_sh}"
 
-generate_builtin_frameworks_sh_location=cgrindel_swift_bazel/tools/generate_builtin_frameworks/generate_builtin_frameworks.sh
+generate_builtin_frameworks_sh_location=rules_swift_package_manager/tools/generate_builtin_frameworks/generate_builtin_frameworks.sh
 generate_builtin_frameworks_sh="$(rlocation "${generate_builtin_frameworks_sh_location}")" || \
   (echo >&2 "Failed to locate ${generate_builtin_frameworks_sh_location}" && exit 1)
 

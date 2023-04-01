@@ -64,7 +64,7 @@ def _label(name):
     """
     if name == "maccatalyst":
         name = "macos"
-    return "@cgrindel_swift_bazel//config_settings/spm/platform:{}".format(name)
+    return "@rules_swift_package_manager//config_settings/spm/platform:{}".format(name)
 
 platforms = struct(
     macos = "macos",

@@ -1,5 +1,5 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-load("@cgrindel_swift_bazel//swiftpkg:defs.bzl", "swift_update_packages")
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
 
 # NOTE: If you decide to move the Swift dependency files like this example, do
 # not forget to update the `gazelle` declaration `//:update_build_files` to
@@ -23,5 +23,5 @@ bzl_library(
     name = "deps",
     srcs = ["deps.bzl"],
     visibility = ["//visibility:public"],
-    deps = ["@cgrindel_swift_bazel//swiftpkg:defs"],
+    deps = ["@rules_swift_package_manager//swiftpkg:defs"],
 )
