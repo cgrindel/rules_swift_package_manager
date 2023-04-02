@@ -335,8 +335,8 @@ The following are a few tips to consider as you work with your repository:
 - When you add or remove source files, run `bazel run //:update_build_files`. This will
   create/update the Bazel build files in your project. It is designed to be fast and unobtrusive.
 - When you add or remove an external dependency, run `bazel run //:swift_update_pkgs`. This
-  will resolve the changes to your transitive dependencies and regenerate your `Package.resolved`
-  and `module_index.json`.
+  will resolve the changes to your transitive dependencies and regenerate your `Package.resolved`,
+  `swift_deps_index.json`, and `swift_deps.bzl` (only if you are using legacy `WORKSPACE` mode).
 - If things do not appear to be working properly, run the following in this order:
   - `bazel run //:swift_update_pkgs`
   - `bazel run //:update_build_files`
