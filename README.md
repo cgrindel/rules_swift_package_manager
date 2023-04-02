@@ -21,7 +21,7 @@ development inside a Bazel workspace.
   * [1\. Enable bzlmod](#1-enable-bzlmod)
   * [2\. Configure your workspace to use <a href="https://github\.com/cgrindel/rules\_swift\_package\_manager">rules\_swift\_package\_manager</a>\.](#2-configure-your-workspace-to-use-rules_swift_package_manager)
     * [Bzlmod: Configure your MODULE\.bazel](#bzlmod-configure-your-modulebazel)
-    * [Legacy: Add declarations to WORKSPACE file](#legacy-add-declarations-to-workspace-file)
+    * [Legacy: Add declarations to your WORKSPACE file](#legacy-add-declarations-to-your-workspace-file)
   * [3\. Create a minimal Package\.swift file\.](#3-create-a-minimal-packageswift-file)
   * [4\. Add Gazelle targets to BUILD\.bazel at the root of your workspace\.](#4-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
     * [Legacy: Modify the swift\_update\_packages declaration\.](#legacy-modify-the-swift_update_packages-declaration)
