@@ -18,13 +18,20 @@ development inside a Bazel workspace.
   * [Mac OS](#mac-os)
   * [Linux](#linux)
 * [Quickstart](#quickstart)
-  * [1\. Configure your workspace to use <a href="https://github\.com/cgrindel/rules\_swift\_package\_manager">rules\_swift\_package\_manager</a>\.](#1-configure-your-workspace-to-use-rules_swift_package_manager)
-  * [2\. Create a minimal Package\.swift file\.](#2-create-a-minimal-packageswift-file)
-  * [3\. Add Gazelle targets to BUILD\.bazel at the root of your workspace\.](#3-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
-  * [4\. Resolve the external dependencies for your project\.](#4-resolve-the-external-dependencies-for-your-project)
-  * [5\. Create or update Bazel build files for your project\.](#5-create-or-update-bazel-build-files-for-your-project)
-  * [6\. Build and test your project\.](#6-build-and-test-your-project)
-  * [7\. Check in some generated files\.](#7-check-in-some-generated-files)
+  * [1\. Enable bzlmod](#1-enable-bzlmod)
+  * [2\. Configure your workspace to use <a href="https://github\.com/cgrindel/rules\_swift\_package\_manager">rules\_swift\_package\_manager</a>\.](#2-configure-your-workspace-to-use-rules_swift_package_manager)
+    * [Bzlmod: Configure your MODULE\.bazel](#bzlmod-configure-your-modulebazel)
+    * [Legacy: Add declarations to your WORKSPACE file](#legacy-add-declarations-to-your-workspace-file)
+  * [3\. Create a minimal Package\.swift file\.](#3-create-a-minimal-packageswift-file)
+  * [4\. Add Gazelle targets to BUILD\.bazel at the root of your workspace\.](#4-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
+    * [Legacy: Modify the swift\_update\_packages declaration\.](#legacy-modify-the-swift_update_packages-declaration)
+  * [5\. Resolve the external dependencies for your project\.](#5-resolve-the-external-dependencies-for-your-project)
+  * [6\. Create or update Bazel build files for your project\.](#6-create-or-update-bazel-build-files-for-your-project)
+  * [7\. Build and test your project\.](#7-build-and-test-your-project)
+  * [8\. Check in some generated files\.](#8-check-in-some-generated-files)
+    * [Bzlmod: Check\-in Package\.resolved, swift\_deps\_index\.json, and MODULE\.bazel\.](#bzlmod-check-in-packageresolved-swift_deps_indexjson-and-modulebazel)
+    * [Legacy: Check\-in Package\.resolved, swift\_deps\_index\.json, and swift\_deps\.bzl\.](#legacy-check-in-packageresolved-swift_deps_indexjson-and-swift_depsbzl)
+  * [9\. Start coding](#9-start-coding)
 * [Tips and Tricks](#tips-and-tricks)
 * [Future Work](#future-work)
 <!-- MARKDOWN TOC: END -->
@@ -68,7 +75,42 @@ actions. See the [CI GitHub workflow] for more details.
 The following provides a quick introduction on how to set up and use the features in this
 repository. Also, check out the [examples] for more information.
 
-### 1. Configure your workspace to use [rules_swift_package_manager].
+### 1. Enable bzlmod
+
+This repository supports [bzlmod] as well as [legacy `WORKSPACE` dependencies]. If you
+are starting a new project, it is highly recommended to use [bzlmod]. To enable bzlmod, add the
+following to your `.bazelrc`.
+
+```
+common --enable_bzlmod
+```
+
+### 2. Configure your workspace to use [rules_swift_package_manager].
+
+#### Bzlmod: Configure your `MODULE.bazel` 
+
+Add a dependency on `rules_swift_package_manager`.
+
+<!-- BEGIN MODULE SNIPPET -->
+```python
+bazel_dep(name = "rules_swift_package_manager", version = "0.4.2")
+```
+<!-- END MODULE SNIPPET -->
+
+You will also need to add a dependency on Gazelle, `rules_swift`, and possibly `rules_apple`. Follow
+the links below to get the latest bzlmod snippets to insert into your `MODULE.bazel`.
+- [gazelle](https://registry.bazel.build/modules/gazelle)
+- [rules_swift](https://registry.bazel.build/modules/rules_swift)
+- [rules_apple](https://registry.bazel.build/modules/rules_apple)
+
+NOTE: Only some projects require the inclusion of [rules_apple]. Some Swift package manager features
+(e.g., resources) use rules from [rules_apple]. While your project may not require these rules, one
+of your Swift package dependencies might require this ruleset. If you just want things to work, add
+[rules_apple] as a dependency. Otherwise, try building without [rules_apple] and be on the lookout
+for missing depdency errors.
+
+
+#### Legacy: Add declarations to your `WORKSPACE` file
 
 Update the `WORKSPACE` file to load the dependencies for [rules_swift_package_manager], [rules_swift] and [Gazelle].
 
@@ -146,10 +188,10 @@ def swift_dependencies():
     pass
 ```
 
-### 2. Create a minimal `Package.swift` file.
+### 3. Create a minimal `Package.swift` file.
 
 Create a minimal `Package.swift` file that only contains the external dependencies that are directly
-used by the Bazel workspace.
+used by your Bazel workspace.
 
 ```swift
 // swift-tools-version: 5.7
@@ -172,7 +214,7 @@ populate the rest of the manifest so that your package works properly by Swift p
 note that the Swift Gazelle plugin does not use the manifest to generate Bazel build files, at this
 time.
 
-### 3. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.
+### 4. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.
 
 Add the following to the `BUILD.bazel` file at the root of your workspace.
 
@@ -212,6 +254,8 @@ gazelle_binary(
 swift_update_packages(
     name = "swift_update_pkgs",
     gazelle = ":gazelle_bin",
+    generate_swift_deps_for_workspace = False,
+    update_bzlmod_stanzas = True,
 )
 
 # This target updates the Bazel build files for your project. Run this target 
@@ -222,7 +266,21 @@ gazelle(
 )
 ```
 
-### 4. Resolve the external dependencies for your project.
+#### Legacy: Modify the `swift_update_packages` declaration.
+
+The configuration for the `swift_update_packages` declaration is a little differnet for the legacy
+`WORKSPACE` mode.
+
+```python
+swift_update_packages(
+    name = "swift_update_pkgs",
+    gazelle = ":gazelle_bin",
+    generate_swift_deps_for_workspace = True,
+    update_bzlmod_stanzas = False,
+)
+```
+
+### 5. Resolve the external dependencies for your project.
 
 Resolve the external dependencies for your project by running the following:
 
@@ -230,7 +288,7 @@ Resolve the external dependencies for your project by running the following:
 $ bazel run //:swift_update_pkgs
 ```
 
-### 5. Create or update Bazel build files for your project.
+### 6. Create or update Bazel build files for your project.
 
 Generate/update the Bazel build files for your project by running the following:
 
@@ -238,7 +296,7 @@ Generate/update the Bazel build files for your project by running the following:
 $ bazel run //:update_build_files
 ```
 
-### 6. Build and test your project.
+### 7. Build and test your project.
 
 Build and test your project.
 
@@ -246,20 +304,29 @@ Build and test your project.
 $ bazel test //...
 ```
 
-### 7. Check in some generated files.
+### 8. Check in some generated files.
 
-Check in the `Package.resolved`, `swift_deps.bzl`, and the `module_index.json` files that were
-generated for you.
+#### Bzlmod: Check-in `Package.resolved`, `swift_deps_index.json`, and `MODULE.bazel`.
 
 - The `Package.resolved` file specifies that exact versions of the dependencies that were
-  identified. If you do not keep the `Package.resolved` file, the dependencies written to the
-  `swift_deps.bzl` could change when you execute `//:swift_update_pkgs`.
-- The `swift_deps.bzl` contains the Bazel repository rule declarations that load your external
-  dependencies for the Bazel build.
-- The `module_index.json` maps module names to targets that provide a module with that name. This
-  file is used by `swift_package` and the Gazelle plugin to resolve dependencies.
+  identified. 
+- The `swift_deps_index.json` file contains information that is used by the Gazelle plugin and the
+  respository rules. 
+- In addition to the declarations that you added to the `MODULE.bazel` file, executing
+  `//:swift_update_pkgs` adds declarations to the end of the file related to the Swift packages that
+  are used by your workspace.
+
+#### Legacy: Check-in `Package.resolved`, `swift_deps_index.json`, and `swift_deps.bzl`.
+
+In the legacy `WORKSPACE` mode, you will not have a `MODULE.bazel` file, but you will have a
+`swift_deps.bzl` file. The `swift_deps.bzl` file contains the repository rule declarations that are
+required to download and prepare the external Swift packages that are used by your workspace.
+
+
+### 9. Start coding
 
 You are ready to start coding.
+
 
 ## Tips and Tricks
 
@@ -268,8 +335,8 @@ The following are a few tips to consider as you work with your repository:
 - When you add or remove source files, run `bazel run //:update_build_files`. This will
   create/update the Bazel build files in your project. It is designed to be fast and unobtrusive.
 - When you add or remove an external dependency, run `bazel run //:swift_update_pkgs`. This
-  will resolve the changes to your transitive dependencies and regenerate your `Package.resolved`
-  and `module_index.json`.
+  will resolve the changes to your transitive dependencies and regenerate your `Package.resolved`,
+  `swift_deps_index.json`, and `swift_deps.bzl` (only if you are using legacy `WORKSPACE` mode).
 - If things do not appear to be working properly, run the following in this order:
   - `bazel run //:swift_update_pkgs`
   - `bazel run //:update_build_files`
@@ -289,10 +356,13 @@ The following are a few tips to consider as you work with your repository:
   about other common patterns to make the Gazelle plugin more robust.
 
 
+[bzlmod]: https://bazel.build/external/overview#bzlmod
+[legacy `WORKSPACE` dependencies]: https://bazel.build/external/overview#workspace-system
 [CI GitHub workflow]: .github/workflows/ci.yml
 [Gazelle plugin]: https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md
 [Gazelle]: https://github.com/bazelbuild/bazel-gazelle
 [examples]: examples/
+[rules_apple]: https://github.com/bazelbuild/rules_apple
 [rules_spm]: https://github.com/cgrindel/rules_spm
 [rules_swift]: https://github.com/bazelbuild/rules_swift
 [rules_swift_package_manager]: https://github.com/cgrindel/rules_swift_package_manager
