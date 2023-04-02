@@ -110,7 +110,7 @@ of your Swift package dependencies might require this ruleset. If you just want 
 for missing depdency errors.
 
 
-#### Legacy: Add declarations to `WORKSPACE` file
+#### Legacy: Add declarations to your `WORKSPACE` file
 
 Update the `WORKSPACE` file to load the dependencies for [rules_swift_package_manager], [rules_swift] and [Gazelle].
 
