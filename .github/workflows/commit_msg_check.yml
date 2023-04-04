@@ -9,4 +9,4 @@ jobs:
   conventional_commit_check:
     runs-on: ubuntu-latest
     steps:
-      - uses: agenthunt/conventional-commit-checker-action@v1
+      - uses: agenthunt/conventional-commit-checker-action@v1.0.0
