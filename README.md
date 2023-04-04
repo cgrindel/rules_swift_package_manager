@@ -119,7 +119,7 @@ Update the `WORKSPACE` file to load the dependencies for [rules_swift_package_ma
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
-    name = "cgrindel_rules_swift_package_manager",
+    name = "rules_swift_package_manager",
     sha256 = "e26967e8f76a654b4b15c05d8d6af30dfa4bd463bc7731ec180cd19bddc6273d",
     urls = [
         "https://github.com/cgrindel/rules_swift_package_manager/releases/download/v0.4.2/rules_swift_package_manager.v0.4.2.tar.gz",
