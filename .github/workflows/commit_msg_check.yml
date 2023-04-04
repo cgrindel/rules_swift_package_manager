@@ -1,0 +1,12 @@
+name: Commit Message Check
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, edited, synchronize]
+
+jobs:
+  conventional_commit_check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: agenthunt/conventional-commit-checker-action@v1

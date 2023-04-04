@@ -17,16 +17,11 @@ jobs:
     needs:
       - tidy_and_test_matrix
       - integration_test_matrix
-      - conventional_commit_check
     if: ${{ always() }}
     steps:
       - uses: cgrindel/gha_join_jobs@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-  conventional_commit_check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: agenthunt/conventional-commit-checker-action@v1.0.0
   integration_test_matrix:
     strategy:
       fail-fast: false
