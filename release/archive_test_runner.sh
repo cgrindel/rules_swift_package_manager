@@ -32,7 +32,7 @@ workspace_dir="${BIT_WORKSPACE_DIR:-}"
 while (("$#")); do
   case "${1}" in
     *)
-      fail "Unrecognized argument. ${@}"
+      fail "Unrecognized argument. ${1}"
       ;;
   esac
 done

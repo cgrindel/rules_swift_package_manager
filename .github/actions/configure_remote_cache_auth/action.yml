@@ -1,0 +1,19 @@
+name: Configure Remote Cache
+
+inputs:
+  buildbuddy_api_key:
+    description: The BuildBuddy API key.
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Write the BuildBuddy API Auth
+      shell: bash
+      env:
+        BUILDBUDDY_API_KEY: ${{ inputs.BUILDBUDDY_API_KEY }}
+      run: |
+        cat >> "shared.bazelrc" <<EOF
+        build:cache --remote_header=x-buildbuddy-api-key=${BUILDBUDDY_API_KEY}
+        build --config=cache
+        EOF

@@ -11,3 +11,6 @@ bazel-*
 **/.swiftpm/config/registries.json
 **/.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
 **/.netrc
+
+# Ignore the local.bazelrc
+local.bazelrc

@@ -1,12 +1,32 @@
 # Verbose Failures
 build --verbose_failures
 
+# Test output information
+test --test_output=errors --test_summary=detailed
+
 # Strict PATH. Helps prevent build cache invalidation due to PATH differences.
 build --incompatible_strict_action_env=true
 
-# Test output information
-test --test_output=errors --test_summary=detailed
+# GH349: Enable --incompatible_disallow_empty_glob.
+# # Don't allow empty glob patterns by default
+# build --incompatible_disallow_empty_glob
 
 # Enable bzlmod
 common --enable_bzlmod
 build --@cgrindel_bazel_starlib//bzlmod:enabled
+
+# Remote Cache
+build:cache --bes_results_url=https://app.buildbuddy.io/invocation/
+build:cache --bes_backend=grpcs://remote.buildbuddy.io
+build:cache --remote_cache=grpcs://remote.buildbuddy.io
+build:cache --remote_download_toplevel # Helps remove network bottleneck if caching is enabled
+build:cache --remote_timeout=3600
+build:cache --experimental_remote_cache_async
+build:cache --experimental_remote_cache_compression
+
+# Recommended by BuildBuddy
+build --experimental_remote_build_event_upload=minimal
+build --noslim_profile 
+build --experimental_profile_include_target_label 
+build --experimental_profile_include_primary_output 
+build --nolegacy_important_outputs
