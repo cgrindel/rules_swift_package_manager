@@ -153,5 +153,3 @@ jobs:
         with:
           buildbuddy_api_key: ${{  secrets.BUILDBUDDY_API_KEY }}
       - uses: ./.github/actions/tidy_and_test
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
