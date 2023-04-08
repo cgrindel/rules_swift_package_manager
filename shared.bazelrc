@@ -7,8 +7,9 @@ test --test_output=errors --test_summary=detailed
 # Strict PATH. Helps prevent build cache invalidation due to PATH differences.
 build --incompatible_strict_action_env=true
 
-# Don't allow empty glob patterns by default
-build --incompatible_disallow_empty_glob
+# GH349: Enable --incompatible_disallow_empty_glob.
+# # Don't allow empty glob patterns by default
+# build --incompatible_disallow_empty_glob
 
 # Enable bzlmod
 common --enable_bzlmod
