@@ -65,9 +65,9 @@ gazelle_dependencies()
 
 http_archive(
     name = "rules_bazel_integration_test",
-    sha256 = "0a1edb5ceb2797e463d40c0ae1c1b0de2c12104304ce07930a43ba4c9a314f85",
+    sha256 = "1ea55655cc9d69d1995c58c980774b1c0793529694542e74fb4bc943c80bfcad",
     urls = [
-        "https://github.com/bazel-contrib/rules_bazel_integration_test/releases/download/v0.12.0/rules_bazel_integration_test.v0.12.0.tar.gz",
+        "https://github.com/bazel-contrib/rules_bazel_integration_test/releases/download/v0.13.0/rules_bazel_integration_test.v0.13.0.tar.gz",
     ],
 )
 
