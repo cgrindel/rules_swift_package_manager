@@ -31,7 +31,7 @@ Used to build a local Swift package.
 | <a id="local_swift_package-bazel_package_name"></a>bazel_package_name |  The short name for the Swift package's Bazel repository.   | String | optional | <code>""</code> |
 | <a id="local_swift_package-dependencies_index"></a>dependencies_index |  A JSON file that contains a mapping of Swift products and Swift modules.   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
 | <a id="local_swift_package-env"></a>env |  Environment variables that will be passed to the execution environments for this repository rule. (e.g. SPM version check, SPM dependency resolution, SPM package description generation)   | <a href="https://bazel.build/rules/lib/dict">Dictionary: String -> String</a> | optional | <code>{}</code> |
-| <a id="local_swift_package-path"></a>path |  The path to the local Swift package directory.   | String | required |  |
+| <a id="local_swift_package-path"></a>path |  The path to the local Swift package directory. This can be an absolute path or a relative path to the workspace root.   | String | required |  |
 | <a id="local_swift_package-repo_mapping"></a>repo_mapping |  A dictionary from local repository name to global repository name. This allows controls over workspace dependency resolution for dependencies of this repository.&lt;p&gt;For example, an entry <code>"@foo": "@bar"</code> declares that, for any time this repository depends on <code>@foo</code> (such as a dependency on <code>@foo//some:target</code>, it should actually resolve that dependency within globally-declared <code>@bar</code> (<code>@bar//some:target</code>).   | <a href="https://bazel.build/rules/lib/dict">Dictionary: String -> String</a> | required |  |
 
 
