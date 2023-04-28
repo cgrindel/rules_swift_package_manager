@@ -64,7 +64,7 @@ def _local_swift_package_impl(repository_ctx):
 
 _PATH_ATTRS = {
     "path": attr.string(
-        doc = "The path to the local Swift package directory.",
+        doc = "The path to the local Swift package directory. This can be an absolute path or a relative path to the workspace root.",
         mandatory = True,
     ),
 }

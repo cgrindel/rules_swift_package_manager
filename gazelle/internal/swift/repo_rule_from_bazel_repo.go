@@ -15,7 +15,7 @@ type commitProvider interface {
 
 // RepoRuleFromBazelRepo returns a repository rule declaration for a Swift Bazel repository.
 // The pkgDir is the path to the Swift package that is referencing this Bazel repository.
-func RepoRuleFromBazelRepo(bzlRepo *BazelRepo, diRel string, pkgDir string) (*rule.Rule, error) {
+func RepoRuleFromBazelRepo(bzlRepo *BazelRepo, diRel string, pkgDir string, repoDir string) (*rule.Rule, error) {
 	var r *rule.Rule
 	var err error
 	if bzlRepo.Pin != nil {
@@ -24,10 +24,19 @@ func RepoRuleFromBazelRepo(bzlRepo *BazelRepo, diRel string, pkgDir string) (*ru
 			return nil, err
 		}
 	} else {
-		relPath, err := filepath.Rel(pkgDir, bzlRepo.PkgInfo.Path)
+		// For local packages, the `path` attribute must be relative to the WORKSPACE file.
+		// However, since the Package.swift can exist anywhere in the repository, we need to
+		// resolve the relative path from the package directory and then get the relative path from the WORKSPACE.
+		relPathFromPkgDir, err := filepath.Rel(pkgDir, bzlRepo.PkgInfo.Path)
 		if err != nil {
 			return nil, err
 		}
+		absPathFromPkgDir := filepath.Join(pkgDir, relPathFromPkgDir)
+		relPath, err := filepath.Rel(repoDir, absPathFromPkgDir)
+		if err != nil {
+			return nil, err
+		}
+
 		r = repoRuleForLocalPackage(bzlRepo.Name, relPath)
 	}
 

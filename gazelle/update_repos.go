@@ -150,7 +150,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	for _, bzlRepo := range bzlReposByIdentity {
 		repoUsage[bzlRepo.Name] = true
 		var err error
-		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, sc.DependencyIndexRel, pkgDir)
+		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, sc.DependencyIndexRel, pkgDir, c.RepoRoot)
 		if err != nil {
 			result.Error = err
 			return result

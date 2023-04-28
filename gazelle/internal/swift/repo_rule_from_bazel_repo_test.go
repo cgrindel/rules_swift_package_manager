@@ -13,7 +13,8 @@ import (
 )
 
 func TestRepoRuleFromBazelRepo(t *testing.T) {
-	pkgDir := "/path/to/package"
+	repoDir := "/path/to/repo"
+	pkgDir := "/path/to/repo"
 	diBasename := "swift_deps_index.json"
 
 	t.Run("with pin (source control dep)", func(t *testing.T) {
@@ -35,7 +36,7 @@ func TestRepoRuleFromBazelRepo(t *testing.T) {
 			Name: repoName,
 			Pin:  p,
 		}
-		actual, err := swift.RepoRuleFromBazelRepo(br, diBasename, pkgDir)
+		actual, err := swift.RepoRuleFromBazelRepo(br, diBasename, pkgDir, repoDir)
 		assert.NoError(t, err)
 
 		expected := rule.NewRule(swift.SwiftPkgRuleKind, repoName)
@@ -46,7 +47,8 @@ func TestRepoRuleFromBazelRepo(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	})
 	t.Run("without pin (local Swift package)", func(t *testing.T) {
-		pkgDir := "/path/to/package"
+		repoDir := "/path/to/repo"
+		pkgDir := "/path/to/repo"
 		relLocalPkgDir := "third_party/cool_local_package"
 		localPkgDir := filepath.Join(pkgDir, relLocalPkgDir)
 		repoName := "swiftpkg_cool_local_package"
@@ -58,11 +60,33 @@ func TestRepoRuleFromBazelRepo(t *testing.T) {
 				Path: localPkgDir,
 			},
 		}
-		actual, err := swift.RepoRuleFromBazelRepo(br, diBasename, pkgDir)
+		actual, err := swift.RepoRuleFromBazelRepo(br, diBasename, pkgDir, repoDir)
 		assert.NoError(t, err)
 
 		expected := rule.NewRule(swift.LocalSwiftPkgRuleKind, repoName)
 		expected.SetAttr("path", relLocalPkgDir)
+		expected.SetAttr("dependencies_index", fmt.Sprintf("@//:%s", diBasename))
+		assert.Equal(t, expected, actual)
+	})
+	t.Run("without pin (local Swift package with relative path)", func(t *testing.T) {
+		repoDir := "/path/to/repo"
+		pkgDir := "/path/to/repo/third_party"
+		relLocalPkgDir := "../cool_local_package"
+		localPkgDir := filepath.Clean(filepath.Join(pkgDir, relLocalPkgDir))
+		repoName := "swiftpkg_cool_local_package"
+
+		br := &swift.BazelRepo{
+			Name: repoName,
+			PkgInfo: &swiftpkg.PackageInfo{
+				Name: "cool-local-package",
+				Path: localPkgDir,
+			},
+		}
+		actual, err := swift.RepoRuleFromBazelRepo(br, diBasename, pkgDir, repoDir)
+		assert.NoError(t, err)
+
+		expected := rule.NewRule(swift.LocalSwiftPkgRuleKind, repoName)
+		expected.SetAttr("path", "cool_local_package")
 		expected.SetAttr("dependencies_index", fmt.Sprintf("@//:%s", diBasename))
 		assert.Equal(t, expected, actual)
 	})
