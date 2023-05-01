@@ -42,10 +42,10 @@ def swift_bazel_dependencies():
     maybe(
         http_archive,
         name = "bazel_gazelle",
-        sha256 = "608c46de3a9217113d8ba6bebf6c4d6739fa51d76e0d7a8024b1f2c210f96ced",
-        strip_prefix = "bazel-gazelle-824d01b6b9b6d029f8e961593a11cc430d6913bc",
+        sha256 = "6c086489f7717cc4ddb7fe845689a2b1fae2e63572fb836bb394da145f9cdcec",
+        strip_prefix = "bazel-gazelle-6637ea8eaf275a9a1192a765bfa5f87b8b1dc852",
         urls = [
-            "https://github.com/bazelbuild/bazel-gazelle/archive/824d01b6b9b6d029f8e961593a11cc430d6913bc.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/archive/6637ea8eaf275a9a1192a765bfa5f87b8b1dc852.tar.gz",
         ],
     )
 
