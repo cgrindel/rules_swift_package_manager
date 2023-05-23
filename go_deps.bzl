@@ -18,8 +18,8 @@ def swift_bazel_go_dependencies():
         name = "com_github_bazelbuild_bazel_gazelle",
         build_external = "external",
         importpath = "github.com/bazelbuild/bazel-gazelle",
-        sum = "h1:uFYs0rkVtEwZ6PlVQAXkBrIvWtIljMG8YR67LGiopeY=",
-        version = "v0.29.0",
+        sum = "h1:q9XLWQSCA5NZPJ98WFqicHkq6fxrDPnfvMO1XycQBMg=",
+        version = "v0.30.0",
     )
     maybe(
         go_repository,
@@ -27,16 +27,16 @@ def swift_bazel_go_dependencies():
         build_external = "external",
         build_naming_convention = "go_default_library",
         importpath = "github.com/bazelbuild/buildtools",
-        sum = "h1:mviZmTQsep3vTImmjUCqkeMHNgzOX+4IpzTY94yUSG8=",
-        version = "v0.0.0-20230330150744-7ca77e139856",
+        sum = "h1:Fl1FfItZp34QIQmmDTbZXHB5XA6JfbNNfH7tRRGWvQo=",
+        version = "v0.0.0-20230510134650-37bd1811516d",
     )
     maybe(
         go_repository,
         name = "com_github_bazelbuild_rules_go",
         build_external = "external",
         importpath = "github.com/bazelbuild/rules_go",
-        sum = "h1:vbnESGv/t2WgGEbXatwbXAS95dTx93Lv6Uh5QkVF13s=",
-        version = "v0.37.0",
+        sum = "h1:YWJ+hbwEOB/PtIFCRMDnvWVSpwPFFGEpdIB6E3bt8X4=",
+        version = "v0.39.0",
     )
     maybe(
         go_repository,
@@ -211,8 +211,8 @@ def swift_bazel_go_dependencies():
         name = "com_github_stretchr_testify",
         build_external = "external",
         importpath = "github.com/stretchr/testify",
-        sum = "h1:+h33VjcLVPDHtOdpUCuF+7gSuG3yGIftsP1YvFihtJ8=",
-        version = "v1.8.2",
+        sum = "h1:RP3t2pwF7cMEbC1dqtB6poj3niw/9gnV4Cjg5oW5gtY=",
+        version = "v1.8.3",
     )
     maybe(
         go_repository,
@@ -315,16 +315,16 @@ def swift_bazel_go_dependencies():
         name = "org_golang_x_mod",
         build_external = "external",
         importpath = "golang.org/x/mod",
-        sum = "h1:LapD9S96VoQRhi/GrNTqeBJFrUjs5UHCAtTlgwA5oZA=",
-        version = "v0.7.0",
+        sum = "h1:lFO9qtOdlre5W1jxS3r/4szv2/6iXxScdzjoBMXNhYk=",
+        version = "v0.10.0",
     )
     maybe(
         go_repository,
         name = "org_golang_x_net",
         build_external = "external",
         importpath = "golang.org/x/net",
-        sum = "h1:GyT4nK/YDHSqa1c4753ouYCDajOYKTja9Xb/OHtgvSw=",
-        version = "v0.5.0",
+        sum = "h1:X2//UzNDwYmtCLn7To6G58Wr6f5ahEAQgKNzv9Y951M=",
+        version = "v0.10.0",
     )
     maybe(
         go_repository,
@@ -339,16 +339,16 @@ def swift_bazel_go_dependencies():
         name = "org_golang_x_sync",
         build_external = "external",
         importpath = "golang.org/x/sync",
-        sum = "h1:wsuoTGHzEhffawBOhz5CYhcrV4IdKZbEyZjBMuTp12o=",
-        version = "v0.1.0",
+        sum = "h1:PUR+T4wwASmuSTYdKjYHI5TD22Wy5ogLU5qZCOLxBrI=",
+        version = "v0.2.0",
     )
     maybe(
         go_repository,
         name = "org_golang_x_sys",
         build_external = "external",
         importpath = "golang.org/x/sys",
-        sum = "h1:Zr2JFtRQNX3BCZ8YtxRE9hNJYC8J6I1MVbMg6owUp18=",
-        version = "v0.4.0",
+        sum = "h1:EBmGv8NaZBZTWvrbjNoL6HVt+IVy3QDQpJs7VRIw3tU=",
+        version = "v0.8.0",
     )
     maybe(
         go_repository,
@@ -363,8 +363,8 @@ def swift_bazel_go_dependencies():
         name = "org_golang_x_tools",
         build_external = "external",
         importpath = "golang.org/x/tools",
-        sum = "h1:+bSpV5HIeWkuvgaMfI3UmKRThoTA5ODJTUd8T17NO+4=",
-        version = "v0.5.0",
+        sum = "h1:8WMNJAz3zrtPmnYC7ISf5dEn3MT0gY7jBJfw27yrrLo=",
+        version = "v0.9.1",
     )
     maybe(
         go_repository,
