@@ -110,7 +110,7 @@ jobs:
         if: ${{ startsWith(matrix.runner, 'macos') }}
         with:
           repo_name: rules_swift_package_manager
-          xcode_version: 14.2
+          xcode_version: "14.2"
       - uses: ./.github/actions/configure_bzlmod
         with:
           enabled: ${{ matrix.enable_bzlmod }}
@@ -145,7 +145,7 @@ jobs:
         if: ${{ startsWith(matrix.runner, 'macos') }}
         with:
           repo_name: rules_swift_package_manager
-          xcode_version: 14.2
+          xcode_version: "14.2"
       - uses: ./.github/actions/configure_bzlmod
         with:
           enabled: ${{ matrix.enable_bzlmod }}
