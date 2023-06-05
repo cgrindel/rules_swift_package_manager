@@ -12,26 +12,6 @@ name: Continuous Integration
   schedule:
     - cron: 14 11 * * *
 jobs:
-  chuck_debug:
-    strategy:
-      fail-fast: false
-      matrix:
-        runner:
-          - macos-13
-          - macos-12
-    runs-on: ${{ matrix.runner }}
-    steps:
-      - uses: actions/checkout@v3
-      - uses: ./.github/actions/set_up_macos
-        if: ${{ startsWith(matrix.runner, 'macos') }}
-        with:
-          repo_name: rules_swift_package_manager
-          xcode_version: "14.2"
-      - name: Chuck Debug
-        shell: bash
-        run: |
-          which go || echo "Did not find go!"
-          bazelisk run //:go_update_repos
   all_ci_tests:
     runs-on: ubuntu-latest
     needs:
