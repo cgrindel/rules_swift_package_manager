@@ -13,14 +13,15 @@ name: Continuous Integration
     - cron: 14 11 * * *
 jobs:
   chuck_debug:
-    runs-on: macos-13
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - macos-13
+          - macos-12
+    runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/set_up_ubuntu
-        if: ${{ startsWith(matrix.runner, 'ubuntu') }}
-        with:
-          repo_name: rules_swift_package_manager
-          ubuntu_version: "22.04"
       - uses: ./.github/actions/set_up_macos
         if: ${{ startsWith(matrix.runner, 'macos') }}
         with:
