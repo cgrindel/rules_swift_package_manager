@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"os/signal"
@@ -67,6 +68,18 @@ This utility updates the Go repositories for this repo wrapping them in 'maybe' 
 	if buildExternal != "" {
 		args = append(args, fmt.Sprintf("-build_external=%s", buildExternal))
 	}
+	// DEBUG BEGIN
+	dbgCmd := exec.CommandContext(ctx, "env")
+	if dbgOut, err := dbgCmd.CombinedOutput(); err != nil {
+		log.Printf("*** CHUCK:  err: %+#v", err)
+	} else {
+		log.Printf("*** CHUCK:  dbgOut:\n%s", string(dbgOut))
+	}
+	log.Printf("*** CHUCK: bazel args: ")
+	for idx, item := range args {
+		log.Printf("*** CHUCK %d: %+#v", idx, item)
+	}
+	// DEBUG END
 	cmd := exec.CommandContext(ctx, "bazel", args...)
 	cmd.Dir = repoRoot
 	if out, err := cmd.CombinedOutput(); err != nil {
