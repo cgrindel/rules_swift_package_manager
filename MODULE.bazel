@@ -27,12 +27,9 @@ bazel_dep(
     version = "2.1.0",
     repo_name = "build_bazel_rules_apple",
 )
-
-# TODO(chuck): FIX ME! Gazelle needs a new release to get the following fix:
-# https://github.com/bazelbuild/bazel-gazelle/pull/1413
 bazel_dep(
     name = "gazelle",
-    version = "0.29.0",
+    version = "0.31.0",
     repo_name = "bazel_gazelle",
 )
 
@@ -52,7 +49,6 @@ use_repo(
     "com_github_stretchr_testify",
     "in_gopkg_yaml_v3",
     "org_golang_x_exp",
-    "org_golang_x_tools",
 )
 
 # MARK: - Dev Dependencies
