@@ -30,6 +30,7 @@ jobs:
       - name: Chuck Debug
         shell: bash
         run: |
+          which go || echo "Did not find go!"
           bazelisk run //:go_update_repos
   all_ci_tests:
     runs-on: ubuntu-latest
