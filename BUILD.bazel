@@ -87,6 +87,7 @@ execute_binary(
         "-build_external=external",
     ],
     binary = "//tools/update_go_repos",
+    execute_in_workspace = True,
 )
 
 # MARK: - Golang
