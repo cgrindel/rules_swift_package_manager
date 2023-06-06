@@ -67,14 +67,23 @@ def _join_path(target, path):
 
 def _bazel_label_name_from_parts(target_path, target_name):
     basename = paths.basename(target_path)
-    if basename == target_name:
+    dirname = paths.dirname(target_path)
+
+    # We are trying to construct the shortest, unique target name. We need to
+    # be sure that a target label does not conflict with a product label with
+    # the same name.
+    if basename == target_name and dirname != "":
         name = target_path
     else:
         name = _join_path_from_parts(target_path, target_name)
+
     return name.replace("/", "_")
 
 def _bazel_label_name(target):
     """Returns the name of the Bazel label for the specified target.
+
+    The logic in this function must stay in sync with BazelLabelFromTarget() in
+    bazel_label.go.
 
     Args:
         target: A `struct` as returned from `pkginfos.new_target`.
