@@ -63,7 +63,8 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 	for _, descT := range descManifest.Targets {
 		dumpT := dumpManifest.Targets.FindByName(descT.Name)
 		if dumpT == nil {
-			return nil, fmt.Errorf("dump manifest info for %s target not found", descT.Name)
+			// Ignore phantom targets (i.e., appear in description but not in the dump)
+			continue
 		}
 		t, err := NewTargetFromManifestInfo(&descT, dumpT, prodNames)
 		if err != nil {
