@@ -42,6 +42,7 @@ swift_deps.from_file(
 )
 use_repo(
     swift_deps,
+    "swiftpkg_swift_markdown",
     "swiftpkg_swift_nio",
 )
 # swift_deps END

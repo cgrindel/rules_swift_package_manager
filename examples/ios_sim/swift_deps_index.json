@@ -1,8 +1,74 @@
 {
   "direct_dep_identities": [
+    "swift-markdown",
     "swift-nio"
   ],
   "modules": [
+    {
+      "name": "api_test",
+      "c99name": "api_test",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_cmark//:api_test_api_test",
+      "package_identity": "swift-cmark",
+      "product_memberships": [
+        "api_test"
+      ]
+    },
+    {
+      "name": "cmark-gfm-bin",
+      "c99name": "cmark_gfm_bin",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_cmark//:bin_cmark-gfm-bin",
+      "package_identity": "swift-cmark",
+      "product_memberships": [
+        "cmark-gfm-bin"
+      ]
+    },
+    {
+      "name": "cmark-gfm-extensions",
+      "c99name": "cmark_gfm_extensions",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_cmark//:extensions_cmark-gfm-extensions",
+      "package_identity": "swift-cmark",
+      "product_memberships": [
+        "cmark-gfm-extensions",
+        "cmark-gfm-bin",
+        "api_test"
+      ]
+    },
+    {
+      "name": "cmark-gfm",
+      "c99name": "cmark_gfm",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_cmark//:src_cmark-gfm",
+      "package_identity": "swift-cmark",
+      "product_memberships": [
+        "cmark-gfm",
+        "cmark-gfm-extensions",
+        "cmark-gfm-bin",
+        "api_test"
+      ]
+    },
+    {
+      "name": "CAtomic",
+      "c99name": "CAtomic",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_markdown//:Sources_CAtomic",
+      "package_identity": "swift-markdown",
+      "product_memberships": [
+        "Markdown"
+      ]
+    },
+    {
+      "name": "Markdown",
+      "c99name": "Markdown",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_markdown//:Sources_Markdown",
+      "package_identity": "swift-markdown",
+      "product_memberships": [
+        "Markdown"
+      ]
+    },
     {
       "name": "CNIOAtomics",
       "c99name": "CNIOAtomics",
@@ -270,6 +336,46 @@
   ],
   "products": [
     {
+      "identity": "swift-cmark",
+      "name": "api_test",
+      "type": "executable",
+      "target_labels": [
+        "@swiftpkg_swift_cmark//:api_test_api_test"
+      ]
+    },
+    {
+      "identity": "swift-cmark",
+      "name": "cmark-gfm",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_cmark//:src_cmark-gfm"
+      ]
+    },
+    {
+      "identity": "swift-cmark",
+      "name": "cmark-gfm-bin",
+      "type": "executable",
+      "target_labels": [
+        "@swiftpkg_swift_cmark//:bin_cmark-gfm-bin"
+      ]
+    },
+    {
+      "identity": "swift-cmark",
+      "name": "cmark-gfm-extensions",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_cmark//:extensions_cmark-gfm-extensions"
+      ]
+    },
+    {
+      "identity": "swift-markdown",
+      "name": "Markdown",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_markdown//:Sources_Markdown"
+      ]
+    },
+    {
       "identity": "swift-nio",
       "name": "NIO",
       "type": "library",
@@ -359,6 +465,24 @@
     }
   ],
   "packages": [
+    {
+      "name": "swiftpkg_swift_cmark",
+      "identity": "swift-cmark",
+      "remote": {
+        "commit": "29d9c97e6310b87c4799268eaa2fc76164b2dbd8",
+        "remote": "https://github.com/apple/swift-cmark.git",
+        "version": "0.2.0"
+      }
+    },
+    {
+      "name": "swiftpkg_swift_markdown",
+      "identity": "swift-markdown",
+      "remote": {
+        "commit": "68b2fed9fb12fb71ac81e537f08bed430b189e35",
+        "remote": "https://github.com/apple/swift-markdown.git",
+        "version": "0.2.0"
+      }
+    },
     {
       "name": "swiftpkg_swift_nio",
       "identity": "swift-nio",
