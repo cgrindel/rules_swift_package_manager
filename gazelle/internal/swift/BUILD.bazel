@@ -27,6 +27,7 @@ go_library(
         "module_type.go",
         "package.go",
         "packages_index.go",
+        "patch.go",
         "product.go",
         "product_index.go",
         "product_memberships_index.go",
@@ -49,6 +50,7 @@ go_library(
         "@bazel_gazelle//rule:go_default_library",
         "@com_github_bazelbuild_buildtools//build:go_default_library",
         "@com_github_deckarep_golang_set_v2//:go_default_library",
+        "@in_gopkg_yaml_v3//:go_default_library",
         "@org_golang_x_exp//slices:go_default_library",
     ],
 )
@@ -73,6 +75,7 @@ go_test(
         "module_to_products_index_test.go",
         "package_test.go",
         "packages_index_test.go",
+        "patch_test.go",
         "product_index_test.go",
         "product_memberships_index_test.go",
         "product_test.go",

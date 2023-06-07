@@ -40,6 +40,10 @@ type SwiftConfig struct {
 	// Mapping of relative path to default module name. These values are populated from directives
 	// that can be applied to
 	DefaultModuleNames map[string]string
+
+	// Mapping of patches to apply to remote Swift packages. The keys are the package identity and
+	// the values are swift.Patch.
+	PackagePatches map[string]*swift.Patch
 }
 
 func NewSwiftConfig() *SwiftConfig {

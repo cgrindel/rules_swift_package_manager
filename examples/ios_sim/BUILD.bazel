@@ -34,3 +34,5 @@ swift_update_packages(
     generate_swift_deps_for_workspace = False,
     update_bzlmod_stanzas = True,
 )
+
+# gazelle:swift_package_patch {identity: swift-cmark, args: ['-p1'], patches: ['@@//third-party/swift-cmark:0001-foo.patch']}
