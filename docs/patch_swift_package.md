@@ -5,12 +5,13 @@ hope is not lost. You can patch the Swift package. This document will expalin ho
 
 ## Fix the Issue and Generate a Patch File
 
-First, you will need to figure out why the build is failing and fix it. Once you have the fix create
-a patch file using your favorite tool. For instance, if you are using `git`, you can create a patch
-file by running the following:
+First, you will need to figure out why the build is failing and fix it. Once you have the fix,
+create a patch file using your favorite tool. For instance, if you are using `git`, you can create a
+patch file by running the following:
 
 ```sh
-# Assuming that your fix is in commit 33c0229, you can run the following to generate a patch file.
+# Assuming that your fix is in commit 33c0229, you can run the following to 
+# generate a patch file.
 $ git format-patch -1 33c0229
 ```
 
@@ -48,8 +49,7 @@ The key (e.g. `swift-cmark`) is the Swift package's identity. The supported fiel
 | YAML Field | Description |
 | ---------- | ----------- |
 | `files` | A list of patch files to apply. |
-| `args` | Optional. A list of arguments that should be passed to the patch tool. If you are using a
-git patch file, be sure to include `-p1`. |
+| `args` | Optional. A list of arguments that should be passed to the patch tool. If you are using a git patch file, be sure to include `-p1`. |
 | `cmds` | Optional. A list of Bash commands (Mac/Linux) to be applied after patches are applied. |
 | `win_cmds` | Optional. A list of Powershell commands (Windows) to applied after patches are
 applied. |
