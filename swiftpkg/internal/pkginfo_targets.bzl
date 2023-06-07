@@ -66,6 +66,18 @@ def _join_path(target, path):
     return _join_path_from_parts(target.path, path)
 
 def _bazel_label_name_from_parts(target_path, target_name):
+    """Create a Bazel label name from a target path and name.
+
+    The logic in this function must stay in sync with BazelLabelFromTarget() in
+    bazel_label.go.
+
+    Args:
+        target_path: The target's path as a `string`.
+        target_name: The target's name as a `string`.
+
+    Returns:
+        A Bazel label name as a `string`.
+    """
     basename = paths.basename(target_path)
     dirname = paths.dirname(target_path)
 
@@ -81,9 +93,6 @@ def _bazel_label_name_from_parts(target_path, target_name):
 
 def _bazel_label_name(target):
     """Returns the name of the Bazel label for the specified target.
-
-    The logic in this function must stay in sync with BazelLabelFromTarget() in
-    bazel_label.go.
 
     Args:
         target: A `struct` as returned from `pkginfos.new_target`.
