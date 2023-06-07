@@ -15,11 +15,17 @@ type commitProvider interface {
 
 // RepoRuleFromBazelRepo returns a repository rule declaration for a Swift Bazel repository.
 // The pkgDir is the path to the Swift package that is referencing this Bazel repository.
-func RepoRuleFromBazelRepo(bzlRepo *BazelRepo, diRel string, pkgDir string, repoDir string) (*rule.Rule, error) {
+func RepoRuleFromBazelRepo(
+	bzlRepo *BazelRepo,
+	diRel string,
+	pkgDir string,
+	repoDir string,
+	patch *Patch,
+) (*rule.Rule, error) {
 	var r *rule.Rule
 	var err error
 	if bzlRepo.Pin != nil {
-		r, err = repoRuleFromPin(bzlRepo.Name, bzlRepo.Pin)
+		r, err = repoRuleFromPin(bzlRepo.Name, bzlRepo.Pin, patch)
 		if err != nil {
 			return nil, err
 		}
@@ -54,7 +60,7 @@ func RepoRuleFromBazelRepo(bzlRepo *BazelRepo, diRel string, pkgDir string, repo
 }
 
 // The modules parameter is a map of the module name (key) to the relative Bazel label (value).
-func repoRuleFromPin(repoName string, p *spreso.Pin) (*rule.Rule, error) {
+func repoRuleFromPin(repoName string, p *spreso.Pin, patch *Patch) (*rule.Rule, error) {
 	cp, ok := p.State.(commitProvider)
 	if !ok {
 		return nil, fmt.Errorf("expected pin state to provide a commit hash %T", p.State)
@@ -63,6 +69,21 @@ func repoRuleFromPin(repoName string, p *spreso.Pin) (*rule.Rule, error) {
 	r := rule.NewRule(SwiftPkgRuleKind, repoName)
 	r.SetAttr("commit", cp.Commit())
 	r.SetAttr("remote", p.PkgRef.Remote())
+	if patch != nil {
+		r.SetAttr("patches", patch.Files)
+		if len(patch.Args) > 0 {
+			r.SetAttr("patch_args", patch.Args)
+		}
+		if len(patch.Cmds) > 0 {
+			r.SetAttr("patch_cmds", patch.Cmds)
+		}
+		if len(patch.WinCmds) > 0 {
+			r.SetAttr("patch_cmds_win", patch.WinCmds)
+		}
+		if patch.Tool != "" {
+			r.SetAttr("patch_tool", patch.Tool)
+		}
+	}
 
 	switch t := p.State.(type) {
 	case *spreso.VersionPinState:

@@ -17,6 +17,8 @@ func TestRepoRuleFromBazelRepo(t *testing.T) {
 	pkgDir := "/path/to/repo"
 	diBasename := "swift_deps_index.json"
 
+	// TODO(chuck): Add test with patch
+
 	t.Run("with pin (source control dep)", func(t *testing.T) {
 		repoName := "swiftpkg_swift_argument_parser"
 		remote := "https://github.com/apple/swift-argument-parser"
@@ -36,7 +38,7 @@ func TestRepoRuleFromBazelRepo(t *testing.T) {
 			Name: repoName,
 			Pin:  p,
 		}
-		actual, err := swift.RepoRuleFromBazelRepo(br, diBasename, pkgDir, repoDir)
+		actual, err := swift.RepoRuleFromBazelRepo(br, diBasename, pkgDir, repoDir, nil)
 		assert.NoError(t, err)
 
 		expected := rule.NewRule(swift.SwiftPkgRuleKind, repoName)
@@ -60,7 +62,7 @@ func TestRepoRuleFromBazelRepo(t *testing.T) {
 				Path: localPkgDir,
 			},
 		}
-		actual, err := swift.RepoRuleFromBazelRepo(br, diBasename, pkgDir, repoDir)
+		actual, err := swift.RepoRuleFromBazelRepo(br, diBasename, pkgDir, repoDir, nil)
 		assert.NoError(t, err)
 
 		expected := rule.NewRule(swift.LocalSwiftPkgRuleKind, repoName)
@@ -82,7 +84,7 @@ func TestRepoRuleFromBazelRepo(t *testing.T) {
 				Path: localPkgDir,
 			},
 		}
-		actual, err := swift.RepoRuleFromBazelRepo(br, diBasename, pkgDir, repoDir)
+		actual, err := swift.RepoRuleFromBazelRepo(br, diBasename, pkgDir, repoDir, nil)
 		assert.NoError(t, err)
 
 		expected := rule.NewRule(swift.LocalSwiftPkgRuleKind, repoName)
