@@ -471,7 +471,11 @@
       "remote": {
         "commit": "29d9c97e6310b87c4799268eaa2fc76164b2dbd8",
         "remote": "https://github.com/apple/swift-cmark.git",
-        "version": "0.2.0"
+        "version": "0.2.0",
+        "patch": {
+          "args": ["-p1"],
+          "files": ["@@//third-party/swift-cmark:0001-Do-not-exclude-files-that-are-needed-for-compilation.patch"]
+        }
       }
     },
     {

@@ -8,19 +8,39 @@ load("//swiftpkg/internal:swift_package.bzl", "swift_package")
 
 def _declare_pkg_from_package(package, deps_index_label, config_pkg):
     if package.remote_pkg != None:
+        remote_pkg = package.remote_pkg
         init_submodules = None
         recursive_init_submodules = None
         if config_pkg:
             init_submodules = config_pkg.init_submodules
             recursive_init_submodules = config_pkg.recursive_init_submodules
+
+        patch_args = None
+        patch_cmds = None
+        patch_cmds_win = None
+        patch_tool = None
+        patches = None
+        patch = remote_pkg.patch
+        if patch != None:
+            patch_args = patch.args
+            patch_cmds = patch.cmds
+            patch_cmds_win = patch.win_cmds
+            patch_tool = patch.tool
+            patches = patch.files
+
         swift_package(
             name = package.name,
             bazel_package_name = package.name,
-            commit = package.remote_pkg.commit,
-            remote = package.remote_pkg.remote,
+            commit = remote_pkg.commit,
+            remote = remote_pkg.remote,
             dependencies_index = deps_index_label,
             init_submodules = init_submodules,
             recursive_init_submodules = recursive_init_submodules,
+            patch_args = patch_args,
+            patch_cmds = patch_cmds,
+            patch_cmds_win = patch_cmds_win,
+            patch_tool = patch_tool,
+            patches = patches,
         )
     elif package.local_pkg != None:
         local_swift_package(

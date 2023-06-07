@@ -127,17 +127,38 @@ def _new_package(identity, name, remote_pkg = None, local_pkg = None):
         local_pkg = local_pkg,
     )
 
-def _new_remote_package(remote, commit, version = None, branch = None):
+def _new_remote_package(remote, commit, version = None, branch = None, patch = None):
     return struct(
         remote = remote,
         commit = commit,
         version = version,
         branch = branch,
+        patch = patch,
     )
 
 def _new_local_package(path):
     return struct(
         path = path,
+    )
+
+def _new_patch(files, args = None, cmds = None, win_cmds = None, tool = None):
+    return struct(
+        files = files,
+        args = args,
+        cmds = cmds,
+        win_cmds = win_cmds,
+        tool = tool,
+    )
+
+def _new_patch_from_dict(patch_dict):
+    if patch_dict == None:
+        return None
+    return _new_patch(
+        files = patch_dict.get("files"),
+        args = patch_dict.get("args"),
+        cmds = patch_dict.get("cmds"),
+        win_cmds = patch_dict.get("win_cmds"),
+        tool = patch_dict.get("tool"),
     )
 
 def _new_package_from_dict(pkg_dict):
@@ -149,6 +170,7 @@ def _new_package_from_dict(pkg_dict):
             commit = remote_dict["commit"],
             version = remote_dict.get("version"),
             branch = remote_dict.get("branch"),
+            patch = _new_patch_from_dict(remote_dict.get("patch")),
         )
     local_pkg = None
     local_dict = pkg_dict.get("local")

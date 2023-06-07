@@ -18,11 +18,20 @@ type LocalPackage struct {
 	Path string `json:"path"`
 }
 
+type Patch struct {
+	Args    []string `json:"args"`
+	Cmds    []string `json:"cmds"`
+	WinCmds []string `json:"win_cmds"`
+	Tool    string   `json:"tool"`
+	Files   []string `json:"files"`
+}
+
 type RemotePackage struct {
 	Commit  string `json:"commit"`
 	Remote  string `json:"remote"`
 	Version string `json:"version,omitempty"`
 	Branch  string `json:"branch,omitempty"`
+	Patch   *Patch `json:patch,omitempty`
 }
 
 func NewPackageFromBazelRepo(bzlRepo *BazelRepo, diRel string, pkgDir string) (*Package, error) {
