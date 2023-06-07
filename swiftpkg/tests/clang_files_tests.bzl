@@ -12,7 +12,6 @@ def _is_hdr_test(ctx):
         struct(path = "foo.hh", exp = True, msg = ".hh"),
         struct(path = "foo.hpp", exp = True, msg = ".hpp"),
         struct(path = "foo.hxx", exp = True, msg = ".hxx"),
-        struct(path = "foo.inc", exp = True, msg = ".inc"),
         struct(path = "foo.inl", exp = True, msg = ".inl"),
         struct(path = "foo.H", exp = True, msg = ".H"),
         struct(path = "foo", exp = False, msg = "no extension"),
