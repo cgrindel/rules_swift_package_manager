@@ -52,6 +52,9 @@ def _swift_package_impl(repository_ctx):
     # Download the repo
     update = _clone_or_update_repo(repository_ctx, directory)
 
+    # Apply any patches
+    patch(repository_ctx)
+
     # Remove any Bazel build files.
     _remove_bazel_files(repository_ctx, directory)
 
@@ -61,9 +64,6 @@ def _swift_package_impl(repository_ctx):
     # Generate the build file
     pkg_ctx = pkg_ctxs.read(repository_ctx, directory, env)
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
-
-    # Apply any patches
-    patch(repository_ctx)
 
     # Remove the git stuff
     repository_ctx.delete(repository_ctx.path(".git"))
