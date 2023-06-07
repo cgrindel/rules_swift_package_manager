@@ -13,3 +13,4 @@ https://github.com/apple/swift-cmark. These dependencies exercise
   JSON.
 - Generating unique Bazel target names for SPM targets that store their source code in a path with
   the same name as the target.
+- Applying a patch to a Swift package.
