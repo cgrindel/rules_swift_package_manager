@@ -41,7 +41,6 @@ _chocolate_target = pkginfos.new_target(
     sources = [],
     dependencies = [],
 )
-
 _dot_path_target = pkginfos.new_target(
     name = "DotPath",
     type = target_types.library,
@@ -49,6 +48,15 @@ _dot_path_target = pkginfos.new_target(
     module_type = module_types.swift,
     path = ".",
     sources = ["Chicken.swift", "Smidgen/Hello.swift"],
+    dependencies = [],
+)
+_simple_path_target = pkginfos.new_target(
+    name = "simple_path",
+    type = target_types.library,
+    c99name = "simple_path",
+    module_type = module_types.swift,
+    path = "simple_path",
+    sources = ["Simple.swift"],
     dependencies = [],
 )
 
@@ -123,6 +131,10 @@ def _bazel_label_name_test(ctx):
 
     actual = pkginfo_targets.bazel_label_name(_dot_path_target)
     expected = "DotPath"
+    asserts.equals(env, expected, actual)
+
+    actual = pkginfo_targets.bazel_label_name(_simple_path_target)
+    expected = "simple_path_simple_path"
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)

@@ -82,12 +82,18 @@ def _get(repository_ctx, directory, deps_index, env = {}):
         env = env,
         working_directory = directory,
     )
-    return _new_from_parsed_json(
+    pkg_info = _new_from_parsed_json(
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
         repo_name = repository_utils.package_name(repository_ctx),
         deps_index = deps_index,
     )
+
+    # Dump the merged pkg_info for debug purposes
+    json_str = json.encode_indent(pkg_info, indent = "  ")
+    repository_ctx.file("pkg_info.json", content = json_str, executable = False)
+
+    return pkg_info
 
 def _new_dependency_requirement_from_desc_json_map(req_map):
     ranges = req_map.get("range")
@@ -204,6 +210,7 @@ def _new_target_from_json_maps(dump_map, desc_map, repo_name, deps_index):
     if dep_module == None:
         return None
     product_memberships = dep_module.product_memberships
+
     if len(product_memberships) == 0:
         return None
     dependencies = [
