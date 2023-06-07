@@ -113,6 +113,4 @@ func TestNewPackageFromBazelRepo(t *testing.T) {
 		}
 		assert.Equal(t, expected, actual)
 	})
-
-	// TODO(chuck): Add test passing a patch
 }
