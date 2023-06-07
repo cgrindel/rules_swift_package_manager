@@ -11,12 +11,14 @@ _PUBLIC_HDR_DIRNAMES = ["include", "public"]
 
 # Supported header extensions
 # https://bazel.build/reference/be/c-cpp#cc_library.srcs
-_HEADER_EXTS = [".h", ".hh", ".hpp", ".hxx", ".inc", ".inl", ".H"]
+_HEADER_EXTS = [".h", ".hh", ".hpp", ".hxx", ".inl", ".H"]
 
 # Acceptable sources clang and objc:
 # https://bazel.build/reference/be/c-cpp#cc_library.srcs
 # https://bazel.build/reference/be/objective-c#objc_library.srcs
-_SRC_EXTS = [".c", ".cc", ".S", ".so", ".o", ".m"]
+# NOTE: From examples found so far, .inc files tend to include source, not
+# header declarations.
+_SRC_EXTS = [".c", ".cc", ".S", ".so", ".o", ".m", ".inc"]
 
 def _is_hdr(path):
     _root, ext = paths.split_extension(path)
