@@ -14,6 +14,7 @@ def swift_update_packages(
         update_bzlmod_stanzas = False,
         bazel_module = "MODULE.bazel",
         generate_swift_deps_for_workspace = True,
+        patches_yaml = None,
         **kwargs):
     """Defines gazelle update-repos targets that are used to resolve and update \
     Swift package dependencies.
@@ -45,6 +46,10 @@ def swift_update_packages(
         generate_swift_deps_for_workspace: Optional. Determines whether to
             generate the swift dependencies for clients using legacy/WORKSPACE
             loaded dependencies.
+        patches_yaml: Optional. The path to a YAML file with patch information
+            for the Swift packages. The keys are the Swift package identity
+            and the values are the patch parameters (see
+            `gazelle/internal/swift/patch.go` for details on the fields).
         **kwargs: Attributes that are passed along to the gazelle declarations.
     """
     _swift_update_repos_args = [
@@ -67,6 +72,8 @@ def swift_update_packages(
         _swift_update_repos_args.append("-print_bzlmod_stanzas")
     if update_bzlmod_stanzas:
         _swift_update_repos_args.append("-update_bzlmod_stanzas")
+    if patches_yaml:
+        _swift_update_repos_args.extend(["-swift_patches", patches_yaml])
 
     _gazelle(
         name = name,

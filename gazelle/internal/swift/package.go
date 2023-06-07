@@ -23,10 +23,15 @@ type RemotePackage struct {
 	Remote  string `json:"remote"`
 	Version string `json:"version,omitempty"`
 	Branch  string `json:"branch,omitempty"`
-	Patch   *Patch `json:patch,omitempty`
+	Patch   *Patch `json:"patch,omitempty"`
 }
 
-func NewPackageFromBazelRepo(bzlRepo *BazelRepo, diRel string, pkgDir string) (*Package, error) {
+func NewPackageFromBazelRepo(
+	bzlRepo *BazelRepo,
+	diRel string,
+	pkgDir string,
+	patch *Patch,
+) (*Package, error) {
 	var err error
 	p := Package{Name: bzlRepo.Name, Identity: bzlRepo.Identity}
 	if bzlRepo.Pin != nil {
@@ -34,6 +39,7 @@ func NewPackageFromBazelRepo(bzlRepo *BazelRepo, diRel string, pkgDir string) (*
 		if err != nil {
 			return nil, err
 		}
+		p.Remote.Patch = patch
 	} else {
 		relPath, err := filepath.Rel(pkgDir, bzlRepo.PkgInfo.Path)
 		if err != nil {

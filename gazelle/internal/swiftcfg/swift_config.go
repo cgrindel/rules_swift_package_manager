@@ -41,9 +41,8 @@ type SwiftConfig struct {
 	// that can be applied to
 	DefaultModuleNames map[string]string
 
-	// Mapping of patches to apply to remote Swift packages. The keys are the package identity and
-	// the values are swift.Patch.
-	PackagePatches map[string]*swift.Patch
+	// Path to the YAML file that contains the patch information
+	PatchesPath string
 }
 
 func NewSwiftConfig() *SwiftConfig {

@@ -2,14 +2,12 @@ package gazelle
 
 import (
 	"flag"
-	"log"
 	"os"
 	"path/filepath"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/reslog"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftbin"
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftcfg"
 )
@@ -66,6 +64,11 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 			"generate_swift_deps_for_workspace",
 			false,
 			"determines whether to generate swift deps for workspace (e.g. swift_deps.bzl).")
+		fs.StringVar(
+			&sc.PatchesPath,
+			"swift_patches",
+			"",
+			"the location of a YAML file with Swift package patch info")
 	}
 
 	// Store the config for later steps
@@ -101,6 +104,10 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 		sc.BazelModulePath = filepath.Join(c.RepoRoot, sc.BazelModuleRel)
 	}
 
+	if sc.PatchesPath != "" && !filepath.IsAbs(sc.PatchesPath) {
+		sc.PatchesPath = filepath.Join(c.RepoRoot, sc.PatchesPath)
+	}
+
 	// Attempt to load the module index. This is created by update-repos if the client is using
 	// external Swift packages (e.g. swift_pacakge).
 	if err = sc.LoadDependencyIndex(); err != nil {
@@ -119,7 +126,6 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 // Directives
 
 const defaultModuleNameDirective = "swift_default_module_name"
-const swiftPackagePatchDirective = "swift_package_patch"
 
 func (*swiftLang) KnownDirectives() []string {
 	return []string{defaultModuleNameDirective}
@@ -134,14 +140,6 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 		switch d.Key {
 		case defaultModuleNameDirective:
 			sc.DefaultModuleNames[rel] = d.Value
-		case swiftPackagePatchDirective:
-			patchDir, err := swift.NewPatchDirectiveFromYAML(d.Value)
-			if err != nil {
-				log.Printf("A '%s' directive is malformed. err: %s, value: %s",
-					swiftPackagePatchDirective, err, d.Value)
-				continue
-			}
-			sc.PackagePatches[patchDir.Identity] = &patchDir.Patch
 		}
 	}
 }

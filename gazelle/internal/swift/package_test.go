@@ -35,7 +35,7 @@ func TestNewPackageFromBazelRepo(t *testing.T) {
 			Identity: identity,
 			Pin:      p,
 		}
-		actual, err := swift.NewPackageFromBazelRepo(br, diBasename, pkgDir)
+		actual, err := swift.NewPackageFromBazelRepo(br, diBasename, pkgDir, nil)
 		assert.NoError(t, err)
 		expected := &swift.Package{
 			Name:     repoName,
@@ -63,7 +63,7 @@ func TestNewPackageFromBazelRepo(t *testing.T) {
 				Path: localPkgDir,
 			},
 		}
-		actual, err := swift.NewPackageFromBazelRepo(br, diBasename, pkgDir)
+		actual, err := swift.NewPackageFromBazelRepo(br, diBasename, pkgDir, nil)
 		assert.NoError(t, err)
 		expected := &swift.Package{
 			Name:     repoName,
@@ -74,4 +74,6 @@ func TestNewPackageFromBazelRepo(t *testing.T) {
 		}
 		assert.Equal(t, expected, actual)
 	})
+
+	// TODO(chuck): Add test passing a patch
 }
