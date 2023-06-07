@@ -11,21 +11,6 @@ type Patch struct {
 	Tool    string   `json:"tool,omitempty" yaml:"tool,omitempty"`
 }
 
-// // PatchDirective represents the patch information for a Swift package.
-// type PatchDirective struct {
-// 	Identity string `yaml:"identity"`
-// 	Patch    `yaml:",inline"`
-// }
-
-// func NewPatchDirectiveFromYAML(yamlStr string) (*PatchDirective, error) {
-// 	var patchDir PatchDirective
-// 	err := yaml.Unmarshal([]byte(yamlStr), &patchDir)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return &patchDir, nil
-// }
-
 // NewPatchesFromYAML reads the provided YAML returning a map of patches organized by Swift package
 // identity.
 func NewPatchesFromYAML(b []byte) (map[string]*Patch, error) {
@@ -36,12 +21,3 @@ func NewPatchesFromYAML(b []byte) (map[string]*Patch, error) {
 	}
 	return patches, nil
 }
-
-// func NewPatchDirectivesFromYAML(b []byte) ([]*PatchDirective, error) {
-// 	var patches []*PatchDirective
-// 	err := yaml.Unmarshal(b, &patches)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return patches, nil
-// }
