@@ -56,6 +56,9 @@ applied. |
 | `tool` | Optional. The tool to use to apply the patch. |
 
 
+_REMINDER: If you are using bzlmod, use `@@` as the prefix for your patch files. Otherwise, use
+`@`._
+
 ## Update the `swift_update_packages` Declaration
 
 Next, update the `swift_update_packages` declaration in the `BUILD.bazel` file at the root of your
