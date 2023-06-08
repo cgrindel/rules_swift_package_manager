@@ -18,8 +18,8 @@ def swift_bazel_go_dependencies():
         name = "com_github_bazelbuild_bazel_gazelle",
         build_external = "external",
         importpath = "github.com/bazelbuild/bazel-gazelle",
-        sum = "h1:q9XLWQSCA5NZPJ98WFqicHkq6fxrDPnfvMO1XycQBMg=",
-        version = "v0.30.0",
+        sum = "h1:D5oumrfJODIy/6jMxx8Aq4LtmXeyvqhsZ136NySl3fQ=",
+        version = "v0.31.0",
     )
     maybe(
         go_repository,
@@ -35,8 +35,8 @@ def swift_bazel_go_dependencies():
         name = "com_github_bazelbuild_rules_go",
         build_external = "external",
         importpath = "github.com/bazelbuild/rules_go",
-        sum = "h1:YWJ+hbwEOB/PtIFCRMDnvWVSpwPFFGEpdIB6E3bt8X4=",
-        version = "v0.39.0",
+        sum = "h1:wkJLUDx59dntWMghuL8++GteoU1To6sRoKJXuyFtmf8=",
+        version = "v0.39.1",
     )
     maybe(
         go_repository,
@@ -173,14 +173,6 @@ def swift_bazel_go_dependencies():
         importpath = "github.com/google/go-cmp",
         sum = "h1:O2Tfq5qg4qc4AmwVlvv0oLiVAGB7enBSJ2x2DqQFi38=",
         version = "v0.5.9",
-    )
-    maybe(
-        go_repository,
-        name = "com_github_pelletier_go_toml",
-        build_external = "external",
-        importpath = "github.com/pelletier/go-toml",
-        sum = "h1:4yBQzkHv+7BHq2PQUZF3Mx0IYxG7LsP222s7Agd3ve8=",
-        version = "v1.9.5",
     )
     maybe(
         go_repository,
