@@ -211,8 +211,8 @@ def swift_bazel_go_dependencies():
         name = "com_github_stretchr_testify",
         build_external = "external",
         importpath = "github.com/stretchr/testify",
-        sum = "h1:RP3t2pwF7cMEbC1dqtB6poj3niw/9gnV4Cjg5oW5gtY=",
-        version = "v1.8.3",
+        sum = "h1:CcVxjf3Q8PM0mHUKJCdn+eZZtm5yQwehR5yeSVQQcUk=",
+        version = "v1.8.4",
     )
     maybe(
         go_repository,
