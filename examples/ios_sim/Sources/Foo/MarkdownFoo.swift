@@ -1,10 +1,11 @@
-@testable import Markdown
-import XCTest
+import Markdown
+import NIO
 
-class MarkdownTests: XCTestCase {
+class MarkdownExample {
     func test_parsing() throws {
         let source = "This is a markup *document*."
         let document = Document(parsing: source)
-        XCTAssertNotEqual(document.debugDescription(), "")
+        document.isEmpty
+        print(document)
     }
 }
