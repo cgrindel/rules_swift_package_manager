@@ -71,6 +71,7 @@ gazelle_binary(
 
 # gazelle:prefix github.com/cgrindel/rules_swift_package_manager
 # gazelle:go_naming_convention import
+# gazelle:go_naming_convention_external go_default_library
 gazelle(
     name = "update_build_files",
     command = "fix",
