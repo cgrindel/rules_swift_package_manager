@@ -27,8 +27,8 @@ $ mkdir -p third-party/swift-cmark
 # Copy the patch file
 $ cp /path/to/0001-fix.patch third-party/swift-cmark
 
-# Create an empty BUILD.bazel file
-$ touch third-party/swift-cmark/BUILD.bazel
+# Create a BUILD.bazel file that exports the patch file
+$ echo 'exports_files(["0001-Do-not-exclude-files-that-are-needed-for-compilation.patch"])' > third-party/swift-cmark/BUILD.bazel
 ```
 
 ## Create a Patches YAML File
