@@ -46,3 +46,5 @@ use_repo(
     "swiftpkg_swift_nio",
 )
 # swift_deps END
+
+bazel_dep(name = "rules_xcodeproj", version = "1.7.0", dev_dependency = True)
