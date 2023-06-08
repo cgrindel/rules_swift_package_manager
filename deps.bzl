@@ -27,25 +27,12 @@ def swift_bazel_dependencies():
         ],
     )
 
-    # GH143: Waiting for bazel-gazelle release with dep fix:
-    # https://github.com/bazelbuild/bazel-gazelle/pull/1413
-    # maybe(
-    #     http_archive,
-    #     name = "bazel_gazelle",
-    #     sha256 = "ecba0f04f96b4960a5b250c8e8eeec42281035970aa8852dda73098274d14a1d",
-    #     urls = [
-    #         "https://mirror.bazel.build/github.com/bazelbuild/bazel-gazelle/releases/download/v0.29.0/bazel-gazelle-v0.29.0.tar.gz",
-    #         "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.29.0/bazel-gazelle-v0.29.0.tar.gz",
-    #     ],
-    # )
-
     maybe(
         http_archive,
         name = "bazel_gazelle",
-        sha256 = "f143a62d6207c783ab2b07904e96d3d51427a2f68d58afa04995420b6adc33dc",
-        strip_prefix = "bazel-gazelle-7feffe17f56e2b76eae8a4f2933215d6c5924176",
+        sha256 = "29d5dafc2a5582995488c6735115d1d366fcd6a0fc2e2a153f02988706349825",
         urls = [
-            "https://github.com/bazelbuild/bazel-gazelle/archive/7feffe17f56e2b76eae8a4f2933215d6c5924176.tar.gz",
+            "https://github.com/bazelbuild/bazel-gazelle/releases/download/v0.31.0/bazel-gazelle-v0.31.0.tar.gz",
         ],
     )
 
