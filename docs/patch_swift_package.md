@@ -56,8 +56,7 @@ The key (e.g. `swift-cmark`) is the Swift package's identity. The supported fiel
 | `files` | A list of patch files to apply. |
 | `args` | Optional. A list of arguments that should be passed to the patch tool. If you are using a git patch file, be sure to include `-p1`. |
 | `cmds` | Optional. A list of Bash commands (Mac/Linux) to be applied after patches are applied. |
-| `win_cmds` | Optional. A list of Powershell commands (Windows) to applied after patches are
-applied. |
+| `win_cmds` | Optional. A list of Powershell commands (Windows) to applied after patches are applied. |
 | `tool` | Optional. The tool to use to apply the patch. |
 
 

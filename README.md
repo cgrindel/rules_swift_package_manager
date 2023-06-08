@@ -360,7 +360,7 @@ The following are a few tips to consider as you work with your repository:
 
 [bzlmod]: https://bazel.build/external/overview#bzlmod
 [legacy `WORKSPACE` dependencies]: https://bazel.build/external/overview#workspace-system
-[our document on patching Swift packages]: docs/patch_swift_package.mddocs/
+[our document on patching Swift packages]: docs/patch_swift_package.md
 [CI GitHub workflow]: .github/workflows/ci.yml
 [Gazelle plugin]: https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md
 [Gazelle]: https://github.com/bazelbuild/bazel-gazelle
