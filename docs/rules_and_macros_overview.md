@@ -17,7 +17,7 @@ On this page:
 <pre>
 swift_update_packages(<a href="#swift_update_packages-name">name</a>, <a href="#swift_update_packages-gazelle">gazelle</a>, <a href="#swift_update_packages-package_manifest">package_manifest</a>, <a href="#swift_update_packages-swift_deps">swift_deps</a>, <a href="#swift_update_packages-swift_deps_fn">swift_deps_fn</a>, <a href="#swift_update_packages-swift_deps_index">swift_deps_index</a>,
                       <a href="#swift_update_packages-update_bzlmod_use_repo_names">update_bzlmod_use_repo_names</a>, <a href="#swift_update_packages-print_bzlmod_stanzas">print_bzlmod_stanzas</a>, <a href="#swift_update_packages-update_bzlmod_stanzas">update_bzlmod_stanzas</a>,
-                      <a href="#swift_update_packages-bazel_module">bazel_module</a>, <a href="#swift_update_packages-generate_swift_deps_for_workspace">generate_swift_deps_for_workspace</a>, <a href="#swift_update_packages-kwargs">kwargs</a>)
+                      <a href="#swift_update_packages-bazel_module">bazel_module</a>, <a href="#swift_update_packages-generate_swift_deps_for_workspace">generate_swift_deps_for_workspace</a>, <a href="#swift_update_packages-patches_yaml">patches_yaml</a>, <a href="#swift_update_packages-kwargs">kwargs</a>)
 </pre>
 
 Defines gazelle update-repos targets that are used to resolve and update     Swift package dependencies.
@@ -38,6 +38,7 @@ Defines gazelle update-repos targets that are used to resolve and update     Swi
 | <a id="swift_update_packages-update_bzlmod_stanzas"></a>update_bzlmod_stanzas |  Optional. Determines whether the Gazelle extension adds/updates the bzlmod Starlark code to MODULE.bazel.   |  <code>False</code> |
 | <a id="swift_update_packages-bazel_module"></a>bazel_module |  Optional. The relative path to the <code>MODULE.bazel</code> file.   |  <code>"MODULE.bazel"</code> |
 | <a id="swift_update_packages-generate_swift_deps_for_workspace"></a>generate_swift_deps_for_workspace |  Optional. Determines whether to generate the swift dependencies for clients using legacy/WORKSPACE loaded dependencies.   |  <code>True</code> |
+| <a id="swift_update_packages-patches_yaml"></a>patches_yaml |  Optional. The path to a YAML file with patch information for the Swift packages. The keys are the Swift package identity and the values are the patch parameters (see <code>gazelle/internal/swift/patch.go</code> for details on the fields).   |  <code>None</code> |
 | <a id="swift_update_packages-kwargs"></a>kwargs |  Attributes that are passed along to the gazelle declarations.   |  none |
 
 

@@ -64,6 +64,11 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 			"generate_swift_deps_for_workspace",
 			false,
 			"determines whether to generate swift deps for workspace (e.g. swift_deps.bzl).")
+		fs.StringVar(
+			&sc.PatchesPath,
+			"swift_patches",
+			"",
+			"the location of a YAML file with Swift package patch info")
 	}
 
 	// Store the config for later steps
@@ -97,6 +102,10 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 	if sc.BazelModulePath == "" {
 		sc.BazelModulePath = filepath.Join(c.RepoRoot, sc.BazelModuleRel)
+	}
+
+	if sc.PatchesPath != "" && !filepath.IsAbs(sc.PatchesPath) {
+		sc.PatchesPath = filepath.Join(c.RepoRoot, sc.PatchesPath)
 	}
 
 	// Attempt to load the module index. This is created by update-repos if the client is using

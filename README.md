@@ -344,6 +344,8 @@ The following are a few tips to consider as you work with your repository:
   maintenance targets (e.g., `//:swift_update_pkgs`, `//:update_build_files`, formatting utilities) 
   in the proper order.  If you are looking for an easy way to set this up, check out the 
   [`//:tidy` declaration in this repository](BUILD.bazel) and the documentation for the [tidy] macro. 
+- Are you trying to use a Swift package and it just won't build under Bazel? If you can figure out
+  how to fix it, you can patch the Swift package. Check out [our document on patching Swift packages].
 
 
 ## Future Work
@@ -358,6 +360,7 @@ The following are a few tips to consider as you work with your repository:
 
 [bzlmod]: https://bazel.build/external/overview#bzlmod
 [legacy `WORKSPACE` dependencies]: https://bazel.build/external/overview#workspace-system
+[our document on patching Swift packages]: docs/patch_swift_package.mddocs/
 [CI GitHub workflow]: .github/workflows/ci.yml
 [Gazelle plugin]: https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md
 [Gazelle]: https://github.com/bazelbuild/bazel-gazelle

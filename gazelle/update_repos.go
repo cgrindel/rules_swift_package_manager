@@ -64,6 +64,23 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 		return result
 	}
 
+	// Read the patches file
+	var patches map[string]*swift.Patch
+	if sc.PatchesPath != "" {
+		patchesYAML, err := os.ReadFile(sc.PatchesPath)
+		if err != nil {
+			result.Error = err
+			return result
+		}
+		patches, err = swift.NewPatchesFromYAML(patchesYAML)
+		if err != nil {
+			result.Error = err
+			return result
+		}
+	} else {
+		patches = make(map[string]*swift.Patch)
+	}
+
 	// Create a new module index on the swift config and populate it from the dependencies.
 	di := swift.NewDependencyIndex()
 	sc.DependencyIndex = di
@@ -117,7 +134,8 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 			result.Error = err
 			return result
 		}
-		pkg, err := swift.NewPackageFromBazelRepo(bzlRepo, sc.DependencyIndexRel, pkgDir)
+		pkg, err := swift.NewPackageFromBazelRepo(
+			bzlRepo, sc.DependencyIndexRel, pkgDir, patches[bzlRepo.Identity])
 		if err != nil {
 			result.Error = err
 			return result
@@ -150,7 +168,13 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	for _, bzlRepo := range bzlReposByIdentity {
 		repoUsage[bzlRepo.Name] = true
 		var err error
-		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(bzlRepo, sc.DependencyIndexRel, pkgDir, c.RepoRoot)
+		result.Gen[idx], err = swift.RepoRuleFromBazelRepo(
+			bzlRepo,
+			sc.DependencyIndexRel,
+			pkgDir,
+			c.RepoRoot,
+			patches[bzlRepo.Identity],
+		)
 		if err != nil {
 			result.Error = err
 			return result
