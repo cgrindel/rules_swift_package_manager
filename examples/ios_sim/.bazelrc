@@ -6,6 +6,3 @@ import %workspace%/../../ci.bazelrc
 
 # Try to import a local.rc file; typically, written by CI
 try-import %workspace%/../../local.bazelrc
-
-build --host_macos_minimum_os=12.0
-build --host_macos_minimum_os=12.0
