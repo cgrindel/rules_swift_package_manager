@@ -27,9 +27,14 @@ $ mkdir -p third-party/swift-cmark
 # Copy the patch file
 $ cp /path/to/0001-fix.patch third-party/swift-cmark
 
-# Create a BUILD.bazel file that exports the patch file
-$ echo 'exports_files(["0001-Do-not-exclude-files-that-are-needed-for-compilation.patch"])' > third-party/swift-cmark/BUILD.bazel
+# Create a BUILD file that exports the patch file
+$ echo 'exports_files(["0001-Do-not-exclude-files-that-are-needed-for-compilation.patch"])' \
+    > third-party/swift-cmark/BUILD
 ```
+
+_NOTE: Even if you use BUILD.bazel as your preferred build file name, be sure to name this build 
+file BUILD. In Bazel 6.2.1 testing under `rules_bazel_integration_test`, Bazel would not recognize
+the package if the file was named BUILD.bazel._
 
 ## Create a Patches YAML File
 
