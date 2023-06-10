@@ -71,6 +71,7 @@ gazelle_binary(
 
 # gazelle:prefix github.com/cgrindel/rules_swift_package_manager
 # gazelle:go_naming_convention import
+# gazelle:go_naming_convention_external go_default_library
 gazelle(
     name = "update_build_files",
     command = "fix",
@@ -98,7 +99,7 @@ execute_binary(
         "mod",
         "tidy",
     ],
-    binary = "@go_sdk//:bin/go",
+    binary = "@io_bazel_rules_go//go",
     execute_in_workspace = True,
 )
 
@@ -110,7 +111,7 @@ execute_binary(
         "-u",
         "./...",
     ],
-    binary = "@go_sdk//:bin/go",
+    binary = "@io_bazel_rules_go//go",
     execute_in_workspace = True,
 )
 
