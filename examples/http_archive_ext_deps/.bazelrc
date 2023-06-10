@@ -6,3 +6,7 @@ import %workspace%/../../ci.bazelrc
 
 # Try to import a local.rc file; typically, written by CI
 try-import %workspace%/../../local.bazelrc
+
+# GH411: Disable bzlmod for http_archive_ext_deps example.
+common --noenable_bzlmod
+build --no@cgrindel_bazel_starlib//bzlmod:enabled

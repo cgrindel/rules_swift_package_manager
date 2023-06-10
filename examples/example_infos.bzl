@@ -131,7 +131,8 @@ _timeouts = {
 _default_enable_bzlmods = [True]
 
 _enable_bzlmods = {
-    "http_archive_ext_deps": [True, False],
+    # GH411: Enable bzlmod for http_archive_ext_deps.
+    "http_archive_ext_deps": [False],
     "vapor_example": [True, False],
 }
 
