@@ -1,30 +1,14 @@
 package gazelle
 
 import (
+	"fmt"
+
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
 )
 
 const swiftLangName = "swift"
-
-var loads = []rule.LoadInfo{
-	{
-		Name: "@build_bazel_rules_swift//swift:swift.bzl",
-		Symbols: []string{
-			swift.LibraryRuleKind,
-			swift.BinaryRuleKind,
-			swift.TestRuleKind,
-		},
-	},
-	{
-		Name: "@rules_swift_package_manager//swiftpkg:defs.bzl",
-		Symbols: []string{
-			swift.SwiftPkgRuleKind,
-			swift.LocalSwiftPkgRuleKind,
-		},
-	},
-}
 
 type swiftLang struct {
 	language.BaseLang
@@ -38,5 +22,34 @@ func NewLanguage() language.Language {
 func (*swiftLang) Name() string { return swiftLangName }
 
 func (*swiftLang) Loads() []rule.LoadInfo {
-	return loads
+	panic("ApparentLoads should be called instead")
+}
+
+func (*swiftLang) ApparentLoads(moduleToApparentName func(string) string) []rule.LoadInfo {
+	rulesSPM := moduleToApparentName("rules_swift_package_manager")
+	if rulesSPM == "" {
+		rulesSPM = "rules_swift_package_manager"
+	}
+	rulesSwift := moduleToApparentName("rules_swift")
+	if rulesSwift == "" {
+		rulesSwift = "build_bazel_rules_swift"
+	}
+	return []rule.LoadInfo{
+		{
+			Name: fmt.Sprintf("@%s//swift:swift.bzl", rulesSwift),
+			Symbols: []string{
+				swift.LibraryRuleKind,
+				swift.BinaryRuleKind,
+				swift.TestRuleKind,
+			},
+		},
+		{
+			// Name: "@rules_swift_package_manager//swiftpkg:defs.bzl",
+			Name: fmt.Sprintf("@%s//swiftpkg:defs.bzl", rulesSPM),
+			Symbols: []string{
+				swift.SwiftPkgRuleKind,
+				swift.LocalSwiftPkgRuleKind,
+			},
+		},
+	}
 }
