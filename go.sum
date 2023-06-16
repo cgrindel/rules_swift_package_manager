@@ -1,7 +1,5 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/bazelbuild/bazel-gazelle v0.31.0 h1:D5oumrfJODIy/6jMxx8Aq4LtmXeyvqhsZ136NySl3fQ=
-github.com/bazelbuild/bazel-gazelle v0.31.0/go.mod h1:Ul0pqz50f5wxz0QNzsZ+mrEu4AVAVJZEB5xLnHgIG9c=
 github.com/bazelbuild/bazel-gazelle v0.31.1 h1:ROyUyUHzoEdvoOs1e0haxJx1l5EjZX6AOqiKdVlaBbg=
 github.com/bazelbuild/bazel-gazelle v0.31.1/go.mod h1:Ul0pqz50f5wxz0QNzsZ+mrEu4AVAVJZEB5xLnHgIG9c=
 github.com/bazelbuild/buildtools v0.0.0-20230510134650-37bd1811516d h1:Fl1FfItZp34QIQmmDTbZXHB5XA6JfbNNfH7tRRGWvQo=
