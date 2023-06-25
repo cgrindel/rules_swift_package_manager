@@ -22,6 +22,7 @@ _bar_target = pkginfos.new_target(
     path = "Sources/Bar",
     sources = ["Chicken.swift", "Smidgen/Hello.swift"],
     dependencies = [],
+    repo_name = _repo_name,
 )
 _foo_target = pkginfos.new_target(
     name = "Foo",
@@ -31,6 +32,7 @@ _foo_target = pkginfos.new_target(
     path = "Sources/Foo",
     sources = [],
     dependencies = [],
+    repo_name = _repo_name,
 )
 _chocolate_target = pkginfos.new_target(
     name = "Chocolate",
@@ -40,6 +42,7 @@ _chocolate_target = pkginfos.new_target(
     path = "Sources/Bar",
     sources = [],
     dependencies = [],
+    repo_name = _repo_name,
 )
 _dot_path_target = pkginfos.new_target(
     name = "DotPath",
@@ -49,6 +52,7 @@ _dot_path_target = pkginfos.new_target(
     path = ".",
     sources = ["Chicken.swift", "Smidgen/Hello.swift"],
     dependencies = [],
+    repo_name = _repo_name,
 )
 _simple_path_target = pkginfos.new_target(
     name = "simple_path",
@@ -58,6 +62,7 @@ _simple_path_target = pkginfos.new_target(
     path = "simple_path",
     sources = ["Simple.swift"],
     dependencies = [],
+    repo_name = _repo_name,
 )
 
 def _get_test(ctx):
