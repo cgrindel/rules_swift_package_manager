@@ -253,7 +253,9 @@ def _new_target_from_json_maps(repository_ctx, dump_map, desc_map, deps_index):
             sources,
         )
 
-    # TODO(chuck): FINISH ME
+    # GH425: Implement clang_src_info.
+
+    # GH425: Implement objc_src_info
     # elif module_type == module_types.clang and objc_files.has_objc_srcs(sources):
     #     objc_src_info = _new_objc_src_info_from_sources(gT)
 
