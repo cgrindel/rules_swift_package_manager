@@ -276,6 +276,7 @@ def _new_target_from_json_maps(
             source_paths = source_paths,
             public_hdrs_path = public_hdrs_path,
             exclude_paths = exclude_paths,
+            clang_settings = clang_settings,
         )
         if objc_files.has_objc_srcs(sources):
             objc_src_info = _new_objc_src_info_from_sources(
@@ -776,7 +777,8 @@ def _new_clang_src_info_from_sources(
         target_path,
         source_paths,
         public_hdrs_path,
-        exclude_paths):
+        exclude_paths,
+        clang_settings):
     # Absolute path to the target. This is typically used for filesystem
     # actions, not for values added to the cc_library or objc_library.
     abs_target_path = paths.normalize(
@@ -854,6 +856,11 @@ def _new_clang_src_info_from_sources(
 
     # Look for header files that are not under the target path
     extra_hdr_dirs = []
+    if clang_settings != None:
+        extra_hdr_dirs.extend(lists.flatten([
+            [paths.join(target_path, path) for path in bs.values]
+            for bs in clang_settings.hdr_srch_paths
+        ]))
     if target_path != ".":
         for pi in private_includes:
             normalized_pi = paths.normalize(pi)
