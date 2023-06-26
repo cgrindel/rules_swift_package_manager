@@ -1,6 +1,7 @@
 """API for creating and loading Swift package information."""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(
     "//config_settings/spm/configuration:configurations.bzl",
@@ -10,9 +11,12 @@ load(
     "//config_settings/spm/platform:platforms.bzl",
     spm_platforms = "platforms",
 )
+load(":clang_files.bzl", "clang_files")
 load(":deps_indexes.bzl", "deps_indexes")
+load(":objc_files.bzl", "objc_files")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
+load(":repository_files.bzl", "repository_files")
 load(":repository_utils.bzl", "repository_utils")
 load(":swift_files.bzl", "swift_files")
 load(":validations.bzl", "validations")
@@ -200,7 +204,12 @@ def _new_target_dependency_from_dump_json_map(dump_map):
         target = target,
     )
 
-def _new_target_from_json_maps(repository_ctx, dump_map, desc_map, deps_index):
+def _new_target_from_json_maps(
+        repository_ctx,
+        dump_map,
+        desc_map,
+        deps_index,
+        pkg_path):
     repo_name = repository_ctx.attr.bazel_package_name
     if repo_name == "":
         repo_name = repository_ctx.name
@@ -242,10 +251,15 @@ def _new_target_from_json_maps(repository_ctx, dump_map, desc_map, deps_index):
             url = url,
             checksum = dump_map.get("checksum"),
         )
+    c99name = desc_map["c99name"]
     module_type = desc_map["module_type"]
     sources = desc_map["sources"]
+    source_paths = dump_map.get("sources")
+    public_hdrs_path = dump_map.get("publicHeadersPath")
+    exclude_paths = dump_map.get("exclude", default = [])
 
     swift_src_info = None
+    clang_src_info = None
     objc_src_info = None
     if module_type == module_types.swift:
         swift_src_info = _new_swift_src_info_from_sources(
@@ -253,35 +267,46 @@ def _new_target_from_json_maps(repository_ctx, dump_map, desc_map, deps_index):
             target_path,
             sources,
         )
-
-    # GH425: Implement clang_src_info.
-
-    # GH425: Implement objc_src_info
-    # elif module_type == module_types.clang and objc_files.has_objc_srcs(sources):
-    #     objc_src_info = _new_objc_src_info_from_sources(gT)
+    elif module_type == module_types.clang:
+        clang_src_info = _new_clang_src_info_from_sources(
+            repository_ctx = repository_ctx,
+            pkg_path = pkg_path,
+            c99name = c99name,
+            target_path = target_path,
+            source_paths = source_paths,
+            public_hdrs_path = public_hdrs_path,
+            exclude_paths = exclude_paths,
+        )
+        if objc_files.has_objc_srcs(sources):
+            objc_src_info = _new_objc_src_info_from_sources(
+                repository_ctx,
+                target_path,
+                sources,
+            )
 
     return _new_target(
         name = target_name,
         type = dump_map["type"],
-        c99name = desc_map["c99name"],
+        c99name = c99name,
         module_type = module_type,
         path = target_path,
         label = target_label,
         # List of sources provided by SPM
         sources = sources,
         # Exclude paths specified by the Swift package manifest author.
-        exclude_paths = dump_map.get("exclude", default = []),
+        exclude_paths = exclude_paths,
         # Source paths specified by the Swift package manifest author.
-        source_paths = dump_map.get("sources"),
+        source_paths = source_paths,
         dependencies = dependencies,
         clang_settings = clang_settings,
         swift_settings = swift_settings,
         linker_settings = linker_settings,
-        public_hdrs_path = dump_map.get("publicHeadersPath"),
+        public_hdrs_path = public_hdrs_path,
         artifact_download_info = artifact_download_info,
         product_memberships = product_memberships,
         resources = resources,
         swift_src_info = swift_src_info,
+        clang_src_info = clang_src_info,
         objc_src_info = objc_src_info,
     )
 
@@ -416,19 +441,21 @@ def _new_from_parsed_json(repository_ctx, dump_manifest, desc_manifest, deps_ind
         for target_map in desc_manifest["targets"]
     }
 
+    pkg_path = desc_manifest["path"]
     targets = lists.compact([
         _new_target_from_json_maps(
             repository_ctx = repository_ctx,
             dump_map = target_map,
             desc_map = desc_targets_by_name[target_map["name"]],
             deps_index = deps_index,
+            pkg_path = pkg_path,
         )
         for target_map in dump_manifest["targets"]
     ])
 
     return _new(
         name = dump_manifest["name"],
-        path = desc_manifest["path"],
+        path = pkg_path,
         default_localization = desc_manifest.get(
             "default_localization",
             _DEFAULT_LOCALIZATION,
@@ -733,9 +760,146 @@ def _new_swift_src_info_from_sources(repository_ctx, target_path, sources):
         has_objc_directive = has_objc_directive,
     )
 
+# TODO(chuck): Add XCTest check to swift_src_info
+
 def _new_swift_src_info(has_objc_directive = False):
     return struct(
         has_objc_directive = has_objc_directive,
+    )
+
+# MARK: - Clang Source Info
+
+def _new_clang_src_info_from_sources(
+        repository_ctx,
+        pkg_path,
+        c99name,
+        target_path,
+        source_paths,
+        public_hdrs_path,
+        exclude_paths):
+    # Absolute path to the target. This is typically used for filesystem
+    # actions, not for values added to the cc_library or objc_library.
+    abs_target_path = paths.normalize(
+        paths.join(pkg_path, target_path),
+    )
+
+    public_includes = []
+    if public_hdrs_path != None:
+        public_includes.append(
+            paths.normalize(paths.join(abs_target_path, public_hdrs_path)),
+        )
+
+    # If the Swift package manifest has explicit source paths, respect them.
+    # (Be sure to include any explicitly specified include directories.)
+    # Otherwise, use all of the source files under the target path.
+    if source_paths != None:
+        src_paths = [
+            paths.normalize(paths.join(abs_target_path, sp))
+            for sp in source_paths
+        ]
+
+        # The public includes are already relative to the abs_target_path.
+        src_paths.extend([
+            paths.normalize(paths.join(pkg_path, pi))
+            for pi in public_includes
+        ])
+        src_paths = sets.to_list(sets.make(src_paths))
+    else:
+        src_paths = [abs_target_path]
+
+    abs_exclude_paths = [
+        paths.normalize(paths.join(abs_target_path, ep))
+        for ep in exclude_paths
+    ]
+
+    # Get a list of all of the source files
+    all_srcs = []
+    for sp in src_paths:
+        all_srcs.extend(repository_files.list_files_under(
+            repository_ctx,
+            sp,
+            exclude = abs_exclude_paths,
+        ))
+
+    # Organize the source files
+    # Be sure that the all_srcs and the public_includes that are passed to
+    # `collect_files` are all absolute paths.  The relative_to option will
+    # ensure that the output values are relative to the package path.
+    organized_files = clang_files.collect_files(
+        repository_ctx,
+        all_srcs,
+        c99name,
+        public_includes = [
+            paths.normalize(paths.join(pkg_path, pi))
+            for pi in public_includes
+        ],
+        relative_to = pkg_path,
+    )
+
+    # The `cc_library` rule compiles each source file (.c, .cc) separately only providing the
+    # headers. There are some clang modules (e.g.,
+    # https://github.com/soto-project/soto-core/tree/main/Sources/CSotoExpat) that include
+    # non-header files (e.g. `#include "xmltok_impl.c"`). The ensure that all of the files are
+    # present for compilation, we add any non-header source files to the `textual_hdrs`.
+    # Related to GH252.
+    textual_hdrs = organized_files.textual_hdrs
+    hdrs = []
+    srcs = []
+    public_includes = organized_files.public_includes
+    private_includes = organized_files.private_includes
+    if len(organized_files.srcs) > 0:
+        srcs.extend(organized_files.srcs)
+    if len(organized_files.hdrs) > 0:
+        hdrs.extend(organized_files.hdrs)
+
+    # public_includes_set = sets.make(public_includes)
+    # srcs_set = sets.make(srcs)
+    # if len(hdrs) > 0:
+    #     attrs["hdrs"] = hdrs
+    #     hdrs_set = sets.make(hdrs)
+    #     srcs_set = sets.difference(srcs_set, hdrs_set)
+    # if sets.length(public_includes_set) > 0:
+    #     attrs["includes"] = sets.to_list(public_includes_set)
+
+    return _new_clang_src_info(
+        srcs = srcs,
+        hdrs = hdrs,
+        textual_hdrs = textual_hdrs,
+        public_includes = public_includes,
+        private_includes = private_includes,
+    )
+
+def _new_clang_src_info(
+        srcs = [],
+        hdrs = [],
+        textual_hdrs = [],
+        public_includes = [],
+        private_includes = []):
+    return struct(
+        srcs = srcs,
+        hdrs = hdrs,
+        textual_hdrs = textual_hdrs,
+        public_includes = public_includes,
+        private_includes = private_includes,
+    )
+
+# MARK: - Objc Source Info
+
+def _new_objc_src_info_from_sources(repository_ctx, target_path, sources):
+    srcs = lists.map(sources, lambda s: paths.join(target_path, s))
+    builtin_frameworks = objc_files.collect_builtin_frameworks(
+        repository_ctx = repository_ctx,
+        # root_path = pkg_path,
+        root_path = target_path,
+        srcs = srcs,
+    )
+    return _new_objc_src_info(
+        builtin_frameworks = builtin_frameworks,
+    )
+
+def _new_objc_src_info(builtin_frameworks = []):
+    return struct(
+        builtin_frameworks = builtin_frameworks,
     )
 
 # MARK: - Target
@@ -760,6 +924,7 @@ def _new_target(
         product_memberships = [],
         resources = [],
         swift_src_info = None,
+        clang_src_info = None,
         objc_src_info = None):
     """Creates a target.
 
@@ -794,6 +959,9 @@ def _new_target(
             by `pkginfos.new_resource`.
         swift_src_info: Optional. A `struct` as returned by
             `pkginfos.new_swift_src_info`. If the target is a Swift target, this
+            will not be `None`.
+        clang_src_info: Optional. A `struct` as returned by
+            `pkginfos.new_clang_src_info`. If the target is a clang target, this
             will not be `None`.
         objc_src_info: Optional. A `struct` as returned by
             `pkginfos.new_objc_src_info`. If the target is an Objc target, this
@@ -848,6 +1016,7 @@ def _new_target(
         product_memberships = product_memberships,
         resources = resources,
         swift_src_info = swift_src_info,
+        clang_src_info = clang_src_info,
         objc_src_info = objc_src_info,
     )
 
@@ -1143,11 +1312,13 @@ pkginfos = struct(
     new_build_setting_condition = _new_build_setting_condition,
     new_by_name_reference = _new_by_name_reference,
     new_clang_settings = _new_clang_settings,
+    new_clang_src_info = _new_clang_src_info,
     new_dependency = _new_dependency,
     new_dependency_requirement = _new_dependency_requirement,
     new_from_parsed_json = _new_from_parsed_json,
     new_library_type = _new_library_type,
     new_linker_settings = _new_linker_settings,
+    new_objc_src_info = _new_objc_src_info,
     new_platform = _new_platform,
     new_product = _new_product,
     new_product_reference = _new_product_reference,
@@ -1156,11 +1327,11 @@ pkginfos = struct(
     new_resource_rule = _new_resource_rule,
     new_resource_rule_process = _new_resource_rule_process,
     new_swift_settings = _new_swift_settings,
+    new_swift_src_info = _new_swift_src_info,
     new_target = _new_target,
     new_target_dependency = _new_target_dependency,
     new_target_dependency_condition = _new_target_dependency_condition,
     new_target_dependency_from_dump_json_map = _new_target_dependency_from_dump_json_map,
     new_target_reference = _new_target_reference,
     new_version_range = _new_version_range,
-    new_swift_src_info = _new_swift_src_info,
 )

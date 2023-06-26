@@ -398,6 +398,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["defines"] = bzl_selects.to_starlark(defines)
 
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
+
+    # TODO(chuck): FIX ME!
+    # if target.objc_src_info != None:
     if objc_files.has_objc_srcs(srcs):
         # Enable clang module support.
         # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
