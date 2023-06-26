@@ -11,6 +11,9 @@ name: Continuous Integration
       - main
   schedule:
     - cron: 14 11 * * *
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
   all_ci_tests:
     runs-on: ubuntu-latest
