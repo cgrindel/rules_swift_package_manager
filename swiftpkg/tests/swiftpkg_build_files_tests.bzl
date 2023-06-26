@@ -88,6 +88,7 @@ _pkg_info = pkginfos.new(
                 ),
             ],
             repo_name = _repo_name,
+            swift_src_info = pkginfos.new_swift_src_info(),
         ),
         pkginfos.new_target(
             name = "RegularSwiftTargetAsLibrary",
@@ -100,6 +101,7 @@ _pkg_info = pkginfos.new(
             ],
             dependencies = [],
             repo_name = _repo_name,
+            swift_src_info = pkginfos.new_swift_src_info(),
         ),
         pkginfos.new_target(
             name = "RegularSwiftTargetAsLibraryTests",
@@ -118,6 +120,7 @@ _pkg_info = pkginfos.new(
                 ),
             ],
             repo_name = _repo_name,
+            swift_src_info = pkginfos.new_swift_src_info(),
         ),
         pkginfos.new_target(
             name = "SwiftExecutableTarget",
@@ -147,6 +150,7 @@ _pkg_info = pkginfos.new(
                 ),
             ]),
             repo_name = _repo_name,
+            swift_src_info = pkginfos.new_swift_src_info(),
         ),
         pkginfos.new_target(
             name = "SwiftLibraryUsesXCTest",
@@ -159,6 +163,7 @@ _pkg_info = pkginfos.new(
             ],
             dependencies = [],
             repo_name = _repo_name,
+            swift_src_info = pkginfos.new_swift_src_info(),
         ),
         pkginfos.new_target(
             name = "ClangLibrary",
@@ -198,6 +203,16 @@ _pkg_info = pkginfos.new(
                 ),
             ]),
             repo_name = _repo_name,
+            clang_src_info = pkginfos.new_clang_src_info(
+                hdrs = ["include/external.h"],
+                srcs = [
+                    "src/foo.cc",
+                    "src/foo.h",
+                ],
+                public_includes = ["include"],
+                private_includes = ["src"],
+                textual_hdrs = ["src/foo.cc"],
+            ),
         ),
         pkginfos.new_target(
             name = "ObjcLibraryDep",
@@ -215,6 +230,14 @@ _pkg_info = pkginfos.new(
             public_hdrs_path = "include",
             dependencies = [],
             repo_name = _repo_name,
+            clang_src_info = pkginfos.new_clang_src_info(
+                hdrs = ["include/external.h"],
+                srcs = [
+                    "src/foo.m",
+                    "src/foo.h",
+                ],
+            ),
+            objc_src_info = pkginfos.new_objc_src_info(),
         ),
         pkginfos.new_target(
             name = "ObjcLibrary",
@@ -239,6 +262,22 @@ _pkg_info = pkginfos.new(
                 ),
             ],
             repo_name = _repo_name,
+            clang_src_info = pkginfos.new_clang_src_info(
+                hdrs = ["include/external.h"],
+                srcs = [
+                    "src/foo.h",
+                    "src/foo.m",
+                ],
+                public_includes = ["include"],
+                private_includes = ["src"],
+                textual_hdrs = ["src/foo.m"],
+            ),
+            objc_src_info = pkginfos.new_objc_src_info(
+                builtin_frameworks = [
+                    "Foundation",
+                    "UIKit",
+                ],
+            ),
         ),
         pkginfos.new_target(
             name = "SwiftLibraryWithConditionalDep",
@@ -263,6 +302,7 @@ _pkg_info = pkginfos.new(
                 ),
             ],
             repo_name = _repo_name,
+            swift_src_info = pkginfos.new_swift_src_info(),
         ),
         pkginfos.new_target(
             name = "ClangLibraryWithConditionalDep",
@@ -291,6 +331,16 @@ _pkg_info = pkginfos.new(
                 ),
             ],
             repo_name = _repo_name,
+            clang_src_info = pkginfos.new_clang_src_info(
+                hdrs = ["include/external.h"],
+                srcs = [
+                    "src/foo.cc",
+                    "src/foo.h",
+                ],
+                public_includes = ["include"],
+                private_includes = ["src"],
+                textual_hdrs = ["src/foo.cc"],
+            ),
         ),
         pkginfos.new_target(
             name = "SwiftForObjcTarget",
@@ -307,6 +357,7 @@ _pkg_info = pkginfos.new(
                 ),
             ],
             repo_name = _repo_name,
+            swift_src_info = pkginfos.new_swift_src_info(has_objc_directive = True),
         ),
         pkginfos.new_target(
             name = "SwiftLibraryWithResources",
@@ -327,6 +378,7 @@ _pkg_info = pkginfos.new(
             ],
             dependencies = [],
             repo_name = _repo_name,
+            swift_src_info = pkginfos.new_swift_src_info(),
         ),
     ],
 )
@@ -531,16 +583,6 @@ swift_library(
         struct(
             msg = "simple clang target",
             name = "ClangLibrary",
-            find_results = {
-                "include": [
-                    "external.h",
-                ],
-                "src": [
-                    "foo.cc",
-                    "foo.h",
-                    "do_not_include_me.cc",
-                ],
-            },
             exp = """\
 
 cc_library(
@@ -560,7 +602,6 @@ cc_library(
         "SWIFT_PACKAGE=1",
         "PLATFORM_POSIX=1",
     ],
-    deps = [],
     hdrs = ["include/external.h"],
     includes = ["include"],
     srcs = [
@@ -576,21 +617,6 @@ cc_library(
         struct(
             msg = "Objc target",
             name = "ObjcLibrary",
-            file_contents = {
-                "src/foo.h": """\
-#import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
-""",
-            },
-            find_results = {
-                "include": [
-                    "external.h",
-                ],
-                "src": [
-                    "foo.m",
-                    "foo.h",
-                ],
-            },
             exp = """\
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
@@ -669,15 +695,6 @@ swift_library(
         struct(
             msg = "Clang target with conditional dep",
             name = "ClangLibraryWithConditionalDep",
-            find_results = {
-                "include": [
-                    "external.h",
-                ],
-                "src": [
-                    "foo.cc",
-                    "foo.h",
-                ],
-            },
             exp = """\
 
 cc_library(
@@ -710,18 +727,6 @@ cc_library(
         struct(
             msg = "Swift library target with @objc directives and Objc dep",
             name = "SwiftForObjcTarget",
-            file_contents = {
-                "SwiftForObjcTarget.swift": """\
-import Foundation
-
-@objc(OIFooBar)
-public class FooBar: NSObject {
-    @objc public func doSomething() {
-        // Intentionally blank
-    }
-}
-""",
-            },
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")

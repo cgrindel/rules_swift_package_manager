@@ -1,15 +1,12 @@
 """Module for creating Bazel declarations to build a Swift package."""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
 load(":bazel_apple_platforms.bzl", "bazel_apple_platforms")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":bzl_selects.bzl", "bzl_selects")
-load(":clang_files.bzl", "clang_files")
 load(":load_statements.bzl", "load_statements")
-load(":objc_files.bzl", "objc_files")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
@@ -35,12 +32,17 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
 # MARK: - Swift Target
 
 def _swift_target_build_file(repository_ctx, pkg_ctx, target):
+    if target.swift_src_info == None:
+        fail("Expected a `swift_src_info`. name: ", target.name)
+
     all_build_files = []
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     deps = lists.flatten([
         pkginfo_target_deps.bzl_select_list(pkg_ctx, td, depender_module_name = target.c99name)
         for td in target.dependencies
     ])
+
+    # TODO(chuck): Conditionally add deps
     attrs = {
         "deps": bzl_selects.to_starlark(deps),
         "module_name": target.c99name,
@@ -58,12 +60,8 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
 
     # Check if any of the sources indicate that the module will be used by
     # Objective-C code. If so, generate the bridge header file.
-    target_path = paths.join(pkg_ctx.pkg_info.path, target.path)
-    for src in target.sources:
-        path = paths.join(target_path, src)
-        if swift_files.has_objc_directive(repository_ctx, path):
-            attrs["generates_header"] = True
-            break
+    if target.swift_src_info.has_objc_directive:
+        attrs["generates_header"] = True
 
     # The rules_swift code links in developer libraries if the rule is marked testonly.
     # https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/compiling.bzl#L1312-L1319
@@ -147,71 +145,10 @@ def _swift_test_from_target(target, attrs):
 # MARK: - Clang Targets
 
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
-    repo_name = repository_ctx.name
-    pkg_path = pkg_ctx.pkg_info.path
+    clang_src_info = target.clang_src_info
+    if clang_src_info == None:
+        fail("Expected `clang_src_info` to not be None.")
 
-    # Absolute path to the target. This is typically used for filesystem
-    # actions, not for values added to the cc_library or objc_library.
-    target_path = paths.normalize(
-        paths.join(pkg_path, target.path),
-    )
-
-    # Short path relative to Bazel output base. This is typically used when
-    # adding a path to a copt or linkeropt.
-    ext_repo_path = paths.join("external", repo_name)
-
-    public_includes = []
-    if target.public_hdrs_path != None:
-        public_includes.append(
-            paths.normalize(paths.join(target.path, target.public_hdrs_path)),
-        )
-
-    # If the Swift package manifest has explicit source paths, respect them.
-    # (Be sure to include any explicitly specified include directories.)
-    # Otherwise, use all of the source files under the target path.
-    if target.source_paths != None:
-        src_paths = [
-            paths.normalize(paths.join(target_path, sp))
-            for sp in target.source_paths
-        ]
-
-        # The public includes are already relative to the target.path.
-        src_paths.extend([
-            paths.normalize(paths.join(pkg_path, pi))
-            for pi in public_includes
-        ])
-        src_paths = sets.to_list(sets.make(src_paths))
-    else:
-        src_paths = [target_path]
-
-    exclude_paths = [
-        paths.normalize(paths.join(target_path, ep))
-        for ep in target.exclude_paths
-    ]
-
-    # Get a list of all of the source files
-    all_srcs = []
-    for sp in src_paths:
-        all_srcs.extend(repository_files.list_files_under(
-            repository_ctx,
-            sp,
-            exclude = exclude_paths,
-        ))
-
-    # Organize the source files
-    # Be sure that the all_srcs and the public_includes that are passed to
-    # `collect_files` are all absolute paths.  The relative_to option will
-    # ensure that the output values are relative to the package path.
-    organized_files = clang_files.collect_files(
-        repository_ctx,
-        all_srcs,
-        target.c99name,
-        public_includes = [
-            paths.normalize(paths.join(pkg_path, pi))
-            for pi in public_includes
-        ],
-        relative_to = pkg_path,
-    )
     deps = lists.flatten([
         pkginfo_target_deps.bzl_select_list(
             pkg_ctx,
@@ -222,10 +159,19 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     ])
 
     attrs = {
-        "deps": bzl_selects.to_starlark(deps),
         "tags": ["swift_module={}".format(target.c99name)],
         "visibility": ["//visibility:public"],
     }
+
+    def _set_if_not_empty(attr, list, transform_fn = None):
+        if len(list) > 0:
+            attrs[attr] = transform_fn(list) if transform_fn else list
+
+    _set_if_not_empty("deps", deps, bzl_selects.to_starlark)
+    _set_if_not_empty("hdrs", clang_src_info.hdrs)
+    _set_if_not_empty("srcs", clang_src_info.srcs)
+    _set_if_not_empty("includes", clang_src_info.public_includes)
+    _set_if_not_empty("textual_hdrs", clang_src_info.textual_hdrs)
 
     defines = [
         # The SWIFT_PACKAGE define is a magical value that SPM uses when it
@@ -245,121 +191,51 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "-fmodule-name={}".format(target.c99name),
     ]
 
-    # The `cc_library` rule compiles each source file (.c, .cc) separately only providing the
-    # headers. There are some clang modules (e.g.,
-    # https://github.com/soto-project/soto-core/tree/main/Sources/CSotoExpat) that include
-    # non-header files (e.g. `#include "xmltok_impl.c"`). The ensure that all of the files are
-    # present for compilation, we add any non-header source files to the `textual_hdrs`.
-    # Related to GH252.
-    textual_hdrs = organized_files.textual_hdrs
-    linkopts = []
-    hdrs = []
-    srcs = []
-    extra_hdr_dirs = []
-    public_includes = organized_files.public_includes
-    local_includes = []
-    if len(organized_files.srcs) > 0:
-        srcs.extend(organized_files.srcs)
-    if len(organized_files.hdrs) > 0:
-        hdrs.extend(organized_files.hdrs)
-    if len(organized_files.private_includes) > 0:
-        local_includes.extend([
-            bzl_selects.new(value = p, kind = _condition_kinds.private_includes)
-            for p in organized_files.private_includes
-        ])
+    local_includes = [
+        bzl_selects.new(value = p, kind = _condition_kinds.private_includes)
+        for p in clang_src_info.private_includes
+    ]
+
     if target.clang_settings != None:
-        if len(target.clang_settings.defines) > 0:
-            defines.extend(lists.flatten([
-                bzl_selects.new_from_build_setting(bs)
-                for bs in target.clang_settings.defines
-            ]))
-        if len(target.clang_settings.hdr_srch_paths) > 0:
-            # Need to convert the headerSearchPaths to be relative to the
-            # target path. We also do not want to lose any conditions that may
-            # be attached.
-            hsp_bss = [
-                pkginfos.new_build_setting(
-                    kind = bs.kind,
-                    values = [
-                        paths.join(target.path, p)
-                        for p in bs.values
-                    ],
-                    condition = bs.condition,
-                )
-                for bs in target.clang_settings.hdr_srch_paths
-            ]
-            local_includes.extend(lists.flatten([
-                bzl_selects.new_from_build_setting(bs)
-                for bs in hsp_bss
-            ]))
-        if len(target.clang_settings.unsafe_flags) > 0:
-            copts.extend(lists.flatten([
-                bzl_selects.new_from_build_setting(bs)
-                for bs in target.clang_settings.unsafe_flags
-            ]))
+        defines.extend(lists.flatten([
+            bzl_selects.new_from_build_setting(bs)
+            for bs in target.clang_settings.defines
+        ]))
 
-    if target.linker_settings != None:
-        if len(target.linker_settings.linked_libraries) > 0:
-            linkopts.extend(lists.flatten([
-                bzl_selects.new_from_build_setting(bs)
-                for bs in target.linker_settings.linked_libraries
-            ]))
-        if len(target.linker_settings.linked_frameworks) > 0:
-            linkopts.extend(lists.flatten([
-                bzl_selects.new_from_build_setting(bs)
-                for bs in target.linker_settings.linked_frameworks
-            ]))
-
-    if len(local_includes) > 0:
-        copts.extend(local_includes)
-
-        # If the target path is not everything (i.e., dot), then check for
-        # local includes that are outside the target path. We need to add them
-        # to the srcs so that they can be found.
-        if target.path != ".":
-            # Ensure that any header files that are outside of the target path are
-            # included in the srcs.
-            local_include_values = []
-            for li in local_includes:
-                li_type = type(li)
-                if li_type == "string":
-                    local_include_values.append(li)
-                elif li_type == "struct" and hasattr(li, "value"):
-                    local_include_values.append(li.value)
-                else:
-                    fail("Unrecognized local include value.", li)
-            for li in local_include_values:
-                normalized_li = paths.normalize(li)
-                if clang_files.is_under_path(normalized_li, target.path):
-                    continue
-                extra_hdr_dirs.append(normalized_li)
-
-    for ehd in extra_hdr_dirs:
-        abs_ehd = paths.normalize(paths.join(pkg_path, ehd))
-        hdr_paths = repository_files.list_files_under(repository_ctx, abs_ehd)
-        hdr_paths = [
-            clang_files.relativize(hp, pkg_path)
-            for hp in hdr_paths
-            if clang_files.is_hdr(hp)
+        # Need to convert the headerSearchPaths to be relative to the
+        # target path. We also do not want to lose any conditions that may
+        # be attached.
+        hsp_bss = [
+            pkginfos.new_build_setting(
+                kind = bs.kind,
+                values = [
+                    paths.join(target.path, p)
+                    for p in bs.values
+                ],
+                condition = bs.condition,
+            )
+            for bs in target.clang_settings.hdr_srch_paths
         ]
-        srcs.extend(hdr_paths)
+        local_includes.extend(lists.flatten([
+            bzl_selects.new_from_build_setting(bs)
+            for bs in hsp_bss
+        ]))
 
-    public_includes_set = sets.make(public_includes)
-    srcs_set = sets.make(srcs)
-    if len(hdrs) > 0:
-        attrs["hdrs"] = hdrs
-        hdrs_set = sets.make(hdrs)
-        srcs_set = sets.difference(srcs_set, hdrs_set)
+        copts.extend(lists.flatten([
+            bzl_selects.new_from_build_setting(bs)
+            for bs in target.clang_settings.unsafe_flags
+        ]))
 
-    if sets.length(public_includes_set) > 0:
-        attrs["includes"] = sets.to_list(public_includes_set)
-
-    if sets.length(srcs_set) > 0:
-        srcs = sets.to_list(srcs_set)
-        attrs["srcs"] = srcs
-
-    if len(textual_hdrs) > 0:
-        attrs["textual_hdrs"] = textual_hdrs
+    linkopts = []
+    if target.linker_settings != None:
+        linkopts.extend(lists.flatten([
+            bzl_selects.new_from_build_setting(bs)
+            for bs in target.linker_settings.linked_libraries
+        ]))
+        linkopts.extend(lists.flatten([
+            bzl_selects.new_from_build_setting(bs)
+            for bs in target.linker_settings.linked_frameworks
+        ]))
 
     if len(linkopts) > 0:
         attrs["linkopts"] = bzl_selects.to_starlark(
@@ -374,46 +250,43 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             },
         )
 
-    if len(copts) > 0:
-        # The `includes` attribute adds includes as -isystem which propagates
-        # to cc_XXX that depend upon the library.  Providing includes as -I
-        # only provides the includes for this target.
-        # https://bazel.build/reference/be/c-cpp#cc_library.includes
-        local_includes_transform = lambda p: "-I{}".format(
-            paths.normalize(paths.join(ext_repo_path, p)),
-        )
-        attrs["copts"] = bzl_selects.to_starlark(
-            copts,
-            kind_handlers = {
-                _condition_kinds.header_search_path: bzl_selects.new_kind_handler(
-                    transform = local_includes_transform,
-                ),
-                _condition_kinds.private_includes: bzl_selects.new_kind_handler(
-                    transform = local_includes_transform,
-                ),
-            },
-        )
+    # Short path relative to Bazel output base. This is typically used when
+    # adding a path to a copt or linkeropt.
+    ext_repo_path = paths.join("external", repository_ctx.name)
 
-    if len(defines) > 0:
-        attrs["defines"] = bzl_selects.to_starlark(defines)
+    copts.extend(local_includes)
 
-    bzl_target_name = pkginfo_targets.bazel_label_name(target)
+    # The `includes` attribute adds includes as -isystem which propagates
+    # to cc_XXX that depend upon the library.  Providing includes as -I
+    # only provides the includes for this target.
+    # https://bazel.build/reference/be/c-cpp#cc_library.includes
+    local_includes_transform = lambda p: "-I{}".format(
+        paths.normalize(paths.join(ext_repo_path, p)),
+    )
+    attrs["copts"] = bzl_selects.to_starlark(
+        copts,
+        kind_handlers = {
+            _condition_kinds.header_search_path: bzl_selects.new_kind_handler(
+                transform = local_includes_transform,
+            ),
+            _condition_kinds.private_includes: bzl_selects.new_kind_handler(
+                transform = local_includes_transform,
+            ),
+        },
+    )
 
-    # TODO(chuck): FIX ME!
-    # if target.objc_src_info != None:
-    if objc_files.has_objc_srcs(srcs):
+    attrs["defines"] = bzl_selects.to_starlark(defines)
+
+    bzl_target_name = target.label.name
+
+    if target.objc_src_info != None:
         # Enable clang module support.
         # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
         attrs["enable_modules"] = True
         attrs["module_name"] = target.c99name
 
-        sdk_frameworks = objc_files.collect_builtin_frameworks(
-            repository_ctx = repository_ctx,
-            root_path = pkg_path,
-            srcs = attrs.get("srcs", []) + attrs.get("hdrs", []),
-        )
         sdk_framework_bzl_selects = []
-        for sf in sdk_frameworks:
+        for sf in target.objc_src_info.builtin_frameworks:
             platform_conditions = bazel_apple_platforms.for_framework(sf)
             for pc in platform_conditions:
                 sdk_framework_bzl_selects.append(
@@ -451,7 +324,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 name = modulemap_target_name,
                 attrs = {
                     "deps": bzl_selects.to_starlark(modulemap_deps),
-                    "hdrs": hdrs,
+                    "hdrs": clang_src_info.hdrs,
                     "module_name": target.c99name,
                     "visibility": ["//visibility:public"],
                 },
@@ -467,6 +340,328 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         load_stmts = load_stmts,
         decls = decls,
     )
+
+#def _clang_target_build_file(repository_ctx, pkg_ctx, target):
+#    repo_name = repository_ctx.name
+#    pkg_path = pkg_ctx.pkg_info.path
+
+#    # Absolute path to the target. This is typically used for filesystem
+#    # actions, not for values added to the cc_library or objc_library.
+#    target_path = paths.normalize(
+#        paths.join(pkg_path, target.path),
+#    )
+
+#    # Short path relative to Bazel output base. This is typically used when
+#    # adding a path to a copt or linkeropt.
+#    ext_repo_path = paths.join("external", repo_name)
+
+#    public_includes = []
+#    if target.public_hdrs_path != None:
+#        public_includes.append(
+#            paths.normalize(paths.join(target.path, target.public_hdrs_path)),
+#        )
+
+#    # If the Swift package manifest has explicit source paths, respect them.
+#    # (Be sure to include any explicitly specified include directories.)
+#    # Otherwise, use all of the source files under the target path.
+#    if target.source_paths != None:
+#        src_paths = [
+#            paths.normalize(paths.join(target_path, sp))
+#            for sp in target.source_paths
+#        ]
+
+#        # The public includes are already relative to the target.path.
+#        src_paths.extend([
+#            paths.normalize(paths.join(pkg_path, pi))
+#            for pi in public_includes
+#        ])
+#        src_paths = sets.to_list(sets.make(src_paths))
+#    else:
+#        src_paths = [target_path]
+
+#    exclude_paths = [
+#        paths.normalize(paths.join(target_path, ep))
+#        for ep in target.exclude_paths
+#    ]
+
+#    # Get a list of all of the source files
+#    all_srcs = []
+#    for sp in src_paths:
+#        all_srcs.extend(repository_files.list_files_under(
+#            repository_ctx,
+#            sp,
+#            exclude = exclude_paths,
+#        ))
+
+#    # Organize the source files
+#    # Be sure that the all_srcs and the public_includes that are passed to
+#    # `collect_files` are all absolute paths.  The relative_to option will
+#    # ensure that the output values are relative to the package path.
+#    organized_files = clang_files.collect_files(
+#        repository_ctx,
+#        all_srcs,
+#        target.c99name,
+#        public_includes = [
+#            paths.normalize(paths.join(pkg_path, pi))
+#            for pi in public_includes
+#        ],
+#        relative_to = pkg_path,
+#    )
+#    deps = lists.flatten([
+#        pkginfo_target_deps.bzl_select_list(
+#            pkg_ctx,
+#            td,
+#            depender_module_name = target.c99name,
+#        )
+#        for td in target.dependencies
+#    ])
+
+#    attrs = {
+#        "deps": bzl_selects.to_starlark(deps),
+#        "tags": ["swift_module={}".format(target.c99name)],
+#        "visibility": ["//visibility:public"],
+#    }
+
+#    defines = [
+#        # The SWIFT_PACKAGE define is a magical value that SPM uses when it
+#        # builds clang libraries that will be used as Swift modules.
+#        "SWIFT_PACKAGE=1",
+#    ]
+
+#    # These flags are used by SPM when compiling clang modules.
+#    copts = [
+#        # Enable 'blocks' language feature
+#        "-fblocks",
+#        # Synthesize retain and release calls for Objective-C pointers
+#        "-fobjc-arc",
+#        # Enable support for PIC macros
+#        "-fPIC",
+#        # Module name
+#        "-fmodule-name={}".format(target.c99name),
+#    ]
+
+#    # The `cc_library` rule compiles each source file (.c, .cc) separately only providing the
+#    # headers. There are some clang modules (e.g.,
+#    # https://github.com/soto-project/soto-core/tree/main/Sources/CSotoExpat) that include
+#    # non-header files (e.g. `#include "xmltok_impl.c"`). The ensure that all of the files are
+#    # present for compilation, we add any non-header source files to the `textual_hdrs`.
+#    # Related to GH252.
+#    textual_hdrs = organized_files.textual_hdrs
+#    linkopts = []
+#    hdrs = []
+#    srcs = []
+#    extra_hdr_dirs = []
+#    public_includes = organized_files.public_includes
+#    local_includes = []
+#    if len(organized_files.srcs) > 0:
+#        srcs.extend(organized_files.srcs)
+#    if len(organized_files.hdrs) > 0:
+#        hdrs.extend(organized_files.hdrs)
+#    if len(organized_files.private_includes) > 0:
+#        local_includes.extend([
+#            bzl_selects.new(value = p, kind = _condition_kinds.private_includes)
+#            for p in organized_files.private_includes
+#        ])
+#    if target.clang_settings != None:
+#        if len(target.clang_settings.defines) > 0:
+#            defines.extend(lists.flatten([
+#                bzl_selects.new_from_build_setting(bs)
+#                for bs in target.clang_settings.defines
+#            ]))
+#        if len(target.clang_settings.hdr_srch_paths) > 0:
+#            # Need to convert the headerSearchPaths to be relative to the
+#            # target path. We also do not want to lose any conditions that may
+#            # be attached.
+#            hsp_bss = [
+#                pkginfos.new_build_setting(
+#                    kind = bs.kind,
+#                    values = [
+#                        paths.join(target.path, p)
+#                        for p in bs.values
+#                    ],
+#                    condition = bs.condition,
+#                )
+#                for bs in target.clang_settings.hdr_srch_paths
+#            ]
+#            local_includes.extend(lists.flatten([
+#                bzl_selects.new_from_build_setting(bs)
+#                for bs in hsp_bss
+#            ]))
+#        if len(target.clang_settings.unsafe_flags) > 0:
+#            copts.extend(lists.flatten([
+#                bzl_selects.new_from_build_setting(bs)
+#                for bs in target.clang_settings.unsafe_flags
+#            ]))
+
+#    if target.linker_settings != None:
+#        if len(target.linker_settings.linked_libraries) > 0:
+#            linkopts.extend(lists.flatten([
+#                bzl_selects.new_from_build_setting(bs)
+#                for bs in target.linker_settings.linked_libraries
+#            ]))
+#        if len(target.linker_settings.linked_frameworks) > 0:
+#            linkopts.extend(lists.flatten([
+#                bzl_selects.new_from_build_setting(bs)
+#                for bs in target.linker_settings.linked_frameworks
+#            ]))
+
+#    if len(local_includes) > 0:
+#        copts.extend(local_includes)
+
+#        # If the target path is not everything (i.e., dot), then check for
+#        # local includes that are outside the target path. We need to add them
+#        # to the srcs so that they can be found.
+#        if target.path != ".":
+#            # Ensure that any header files that are outside of the target path are
+#            # included in the srcs.
+#            local_include_values = []
+#            for li in local_includes:
+#                li_type = type(li)
+#                if li_type == "string":
+#                    local_include_values.append(li)
+#                elif li_type == "struct" and hasattr(li, "value"):
+#                    local_include_values.append(li.value)
+#                else:
+#                    fail("Unrecognized local include value.", li)
+#            for li in local_include_values:
+#                normalized_li = paths.normalize(li)
+#                if clang_files.is_under_path(normalized_li, target.path):
+#                    continue
+#                extra_hdr_dirs.append(normalized_li)
+
+#    for ehd in extra_hdr_dirs:
+#        abs_ehd = paths.normalize(paths.join(pkg_path, ehd))
+#        hdr_paths = repository_files.list_files_under(repository_ctx, abs_ehd)
+#        hdr_paths = [
+#            clang_files.relativize(hp, pkg_path)
+#            for hp in hdr_paths
+#            if clang_files.is_hdr(hp)
+#        ]
+#        srcs.extend(hdr_paths)
+
+#    public_includes_set = sets.make(public_includes)
+#    srcs_set = sets.make(srcs)
+#    if len(hdrs) > 0:
+#        attrs["hdrs"] = hdrs
+#        hdrs_set = sets.make(hdrs)
+#        srcs_set = sets.difference(srcs_set, hdrs_set)
+
+#    if sets.length(public_includes_set) > 0:
+#        attrs["includes"] = sets.to_list(public_includes_set)
+
+#    if sets.length(srcs_set) > 0:
+#        srcs = sets.to_list(srcs_set)
+#        attrs["srcs"] = srcs
+
+#    if len(textual_hdrs) > 0:
+#        attrs["textual_hdrs"] = textual_hdrs
+
+#    if len(linkopts) > 0:
+#        attrs["linkopts"] = bzl_selects.to_starlark(
+#            linkopts,
+#            kind_handlers = {
+#                _condition_kinds.linked_library: bzl_selects.new_kind_handler(
+#                    transform = lambda ll: "-l{}".format(ll),
+#                ),
+#                _condition_kinds.linked_framework: bzl_selects.new_kind_handler(
+#                    transform = lambda f: "-framework {}".format(f),
+#                ),
+#            },
+#        )
+
+#    if len(copts) > 0:
+#        # The `includes` attribute adds includes as -isystem which propagates
+#        # to cc_XXX that depend upon the library.  Providing includes as -I
+#        # only provides the includes for this target.
+#        # https://bazel.build/reference/be/c-cpp#cc_library.includes
+#        local_includes_transform = lambda p: "-I{}".format(
+#            paths.normalize(paths.join(ext_repo_path, p)),
+#        )
+#        attrs["copts"] = bzl_selects.to_starlark(
+#            copts,
+#            kind_handlers = {
+#                _condition_kinds.header_search_path: bzl_selects.new_kind_handler(
+#                    transform = local_includes_transform,
+#                ),
+#                _condition_kinds.private_includes: bzl_selects.new_kind_handler(
+#                    transform = local_includes_transform,
+#                ),
+#            },
+#        )
+
+#    if len(defines) > 0:
+#        attrs["defines"] = bzl_selects.to_starlark(defines)
+
+#    bzl_target_name = pkginfo_targets.bazel_label_name(target)
+
+#    # TODO(chuck): FIX ME!
+#    # if target.objc_src_info != None:
+#    if objc_files.has_objc_srcs(srcs):
+#        # Enable clang module support.
+#        # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
+#        attrs["enable_modules"] = True
+#        attrs["module_name"] = target.c99name
+
+#        sdk_frameworks = objc_files.collect_builtin_frameworks(
+#            repository_ctx = repository_ctx,
+#            root_path = pkg_path,
+#            srcs = attrs.get("srcs", []) + attrs.get("hdrs", []),
+#        )
+#        sdk_framework_bzl_selects = []
+#        for sf in sdk_frameworks:
+#            platform_conditions = bazel_apple_platforms.for_framework(sf)
+#            for pc in platform_conditions:
+#                sdk_framework_bzl_selects.append(
+#                    bzl_selects.new(
+#                        value = sf,
+#                        kind = _condition_kinds.sdk_frameworks,
+#                        condition = pc,
+#                    ),
+#                )
+#        attrs["sdk_frameworks"] = bzl_selects.to_starlark(
+#            sdk_framework_bzl_selects,
+#        )
+
+#        modulemap_deps = _collect_modulemap_deps(deps)
+
+#        # There is a known issue with Objective-C library targets not
+#        # supporting the `@import` of modules defined in other Objective-C
+#        # targets. As a workaround, we will define two targets. One is the
+#        # `objc_library` target.  The other is a `generate_modulemap`
+#        # target. This second target generates a `module.modulemap` file and
+#        # provides information about that generated file to `objc_library`
+#        # targets.
+#        #
+#        # See `deps_indexes.bzl` for the logic that resolves the dependency
+#        # labels.
+#        # See `generate_modulemap.bzl` for details on the modulemap generation.
+#        # See `//swiftpkg/tests/generate_modulemap_tests` package for a usage
+#        # example.
+#        load_stmts = [swiftpkg_generate_modulemap_load_stmt]
+#        modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
+#        decls = [
+#            build_decls.new(objc_kinds.library, bzl_target_name, attrs = attrs),
+#            build_decls.new(
+#                kind = swiftpkg_kinds.generate_modulemap,
+#                name = modulemap_target_name,
+#                attrs = {
+#                    "deps": bzl_selects.to_starlark(modulemap_deps),
+#                    "hdrs": hdrs,
+#                    "module_name": target.c99name,
+#                    "visibility": ["//visibility:public"],
+#                },
+#            ),
+#        ]
+#    else:
+#        load_stmts = []
+#        decls = [
+#            build_decls.new(clang_kinds.library, bzl_target_name, attrs = attrs),
+#        ]
+
+#    return build_files.new(
+#        load_stmts = load_stmts,
+#        decls = decls,
+#    )
 
 # MARK: - System Library Targets
 
