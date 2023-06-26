@@ -1,3 +1,4 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load(":bazel_apple_platforms_tests.bzl", "bazel_apple_platforms_test_suite")
 load(":bazel_repo_names_tests.bzl", "bazel_repo_names_test_suite")
@@ -55,3 +56,9 @@ swift_files_test_suite()
 swiftpkg_build_files_test_suite()
 
 validations_test_suite()
+
+bzl_library(
+    name = "testutils",
+    srcs = ["testutils.bzl"],
+    visibility = ["//visibility:public"],
+)

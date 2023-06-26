@@ -77,6 +77,7 @@ _pkg_info = pkginfos.new(
                 "Bar.swift",
             ],
             dependencies = [],
+            repo_name = _repo_name,
         ),
     ],
 )

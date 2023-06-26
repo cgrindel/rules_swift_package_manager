@@ -1,5 +1,6 @@
 """API for creating and loading Swift package information."""
 
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(
     "//config_settings/spm/configuration:configurations.bzl",
@@ -13,6 +14,7 @@ load(":deps_indexes.bzl", "deps_indexes")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":repository_utils.bzl", "repository_utils")
+load(":swift_files.bzl", "swift_files")
 load(":validations.bzl", "validations")
 
 _DEFAULT_LOCALIZATION = "en"
@@ -83,9 +85,9 @@ def _get(repository_ctx, directory, deps_index, env = {}):
         working_directory = directory,
     )
     pkg_info = _new_from_parsed_json(
+        repository_ctx = repository_ctx,
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
-        repo_name = repository_utils.package_name(repository_ctx),
         deps_index = deps_index,
     )
 
@@ -198,7 +200,10 @@ def _new_target_dependency_from_dump_json_map(dump_map):
         target = target,
     )
 
-def _new_target_from_json_maps(dump_map, desc_map, repo_name, deps_index):
+def _new_target_from_json_maps(repository_ctx, dump_map, desc_map, deps_index):
+    repo_name = repository_ctx.attr.bazel_package_name
+    if repo_name == "":
+        repo_name = repository_ctx.name
     target_name = dump_map["name"]
     target_path = desc_map["path"]
     target_label = pkginfo_targets.bazel_label_from_parts(
@@ -237,14 +242,33 @@ def _new_target_from_json_maps(dump_map, desc_map, repo_name, deps_index):
             url = url,
             checksum = dump_map.get("checksum"),
         )
+    module_type = desc_map["module_type"]
+    sources = desc_map["sources"]
+
+    swift_src_info = None
+    objc_src_info = None
+    if module_type == module_types.swift:
+        swift_src_info = _new_swift_src_info_from_sources(
+            repository_ctx,
+            target_path,
+            sources,
+        )
+
+    # GH425: Implement clang_src_info.
+
+    # GH425: Implement objc_src_info
+    # elif module_type == module_types.clang and objc_files.has_objc_srcs(sources):
+    #     objc_src_info = _new_objc_src_info_from_sources(gT)
+
     return _new_target(
         name = target_name,
         type = dump_map["type"],
         c99name = desc_map["c99name"],
-        module_type = desc_map["module_type"],
+        module_type = module_type,
         path = target_path,
+        label = target_label,
         # List of sources provided by SPM
-        sources = desc_map["sources"],
+        sources = sources,
         # Exclude paths specified by the Swift package manifest author.
         exclude_paths = dump_map.get("exclude", default = []),
         # Source paths specified by the Swift package manifest author.
@@ -257,6 +281,8 @@ def _new_target_from_json_maps(dump_map, desc_map, repo_name, deps_index):
         artifact_download_info = artifact_download_info,
         product_memberships = product_memberships,
         resources = resources,
+        swift_src_info = swift_src_info,
+        objc_src_info = objc_src_info,
     )
 
 def _new_build_setting_condition_from_json(dump_map):
@@ -349,17 +375,16 @@ def _new_dependency_identity_to_name_map(dump_deps):
         result[identity] = name
     return result
 
-def _new_from_parsed_json(dump_manifest, desc_manifest, repo_name, deps_index):
+def _new_from_parsed_json(repository_ctx, dump_manifest, desc_manifest, deps_index):
     """Returns the package information from the provided Swift package JSON \
     structures.
 
     Args:
+        repository_ctx: A `repository_ctx`.
         dump_manifest: A `dict` representing the parsed JSON from `swift
             package dump-package`.
         desc_manifest: A `dict` representing the parsed JSON from `swift
             package describe`.
-        repo_name: The name of the current repository as returned by
-            `ctx_repository.name`.
         deps_index: A `struct` as returned by `deps_indexes.new`.
 
     Returns:
@@ -393,9 +418,9 @@ def _new_from_parsed_json(dump_manifest, desc_manifest, repo_name, deps_index):
 
     targets = lists.compact([
         _new_target_from_json_maps(
+            repository_ctx = repository_ctx,
             dump_map = target_map,
             desc_map = desc_targets_by_name[target_map["name"]],
-            repo_name = repo_name,
             deps_index = deps_index,
         )
         for target_map in dump_manifest["targets"]
@@ -694,6 +719,25 @@ A target dependency must have one of the following: `by_name`, `product`, `targe
         target = target,
     )
 
+# MARK: - Swift Source Info
+
+def _new_swift_src_info_from_sources(repository_ctx, target_path, sources):
+    # Check for any @objc directives in the source files
+    has_objc_directive = False
+    for src in sources:
+        path = paths.join(target_path, src)
+        if swift_files.has_objc_directive(repository_ctx, path):
+            has_objc_directive = True
+            break
+    return _new_swift_src_info(
+        has_objc_directive = has_objc_directive,
+    )
+
+def _new_swift_src_info(has_objc_directive = False):
+    return struct(
+        has_objc_directive = has_objc_directive,
+    )
+
 # MARK: - Target
 
 def _new_target(
@@ -704,6 +748,8 @@ def _new_target(
         path,
         sources,
         dependencies,
+        label = None,
+        repo_name = None,
         exclude_paths = [],
         source_paths = None,
         clang_settings = None,
@@ -712,7 +758,9 @@ def _new_target(
         public_hdrs_path = None,
         artifact_download_info = None,
         product_memberships = [],
-        resources = []):
+        resources = [],
+        swift_src_info = None,
+        objc_src_info = None):
     """Creates a target.
 
     Args:
@@ -725,6 +773,11 @@ def _new_target(
             to the `path`.
         dependencies: A `list` of target dependency values as returned by
             `pkginfos.new_target_dependency()`.
+        label: Optional. The Bazel label `struct` for the target as returned by
+            `bazel_labels.new`. Either this or `repo_name` needs to be
+            specified.
+        repo_name: Optional. The repository name as a `string`. Either this or
+            `label` need to be speicified.
         exclude_paths: Optional. A `list` of paths that should be excluded as
             specified by the Swift package manifest author.
         source_paths: Optional. A `list` of paths (`string` values) specified by
@@ -739,6 +792,12 @@ def _new_target(
             target is referenced by.
         resources: Optional. A `list` of resource `struct` values as returned
             by `pkginfos.new_resource`.
+        swift_src_info: Optional. A `struct` as returned by
+            `pkginfos.new_swift_src_info`. If the target is a Swift target, this
+            will not be `None`.
+        objc_src_info: Optional. A `struct` as returned by
+            `pkginfos.new_objc_src_info`. If the target is an Objc target, this
+            will not be `None`.
 
     Returns:
         A `struct` representing a target in a Swift package.
@@ -762,6 +821,14 @@ def _new_target(
             sp[:-1] if sp.endswith("/") else sp
             for sp in source_paths
         ]
+    if label == None and repo_name == None:
+        fail("Need to specify `label` or `repo_name`.")
+    if label == None:
+        label = pkginfo_targets.bazel_label_from_parts(
+            target_path = path,
+            target_name = name,
+            repo_name = repo_name,
+        )
     return struct(
         name = name,
         type = type,
@@ -770,6 +837,7 @@ def _new_target(
         path = path,
         sources = sources,
         dependencies = dependencies,
+        label = label,
         exclude_paths = exclude_paths,
         source_paths = normalized_src_paths,
         clang_settings = clang_settings,
@@ -779,6 +847,8 @@ def _new_target(
         artifact_download_info = artifact_download_info,
         product_memberships = product_memberships,
         resources = resources,
+        swift_src_info = swift_src_info,
+        objc_src_info = objc_src_info,
     )
 
 # MARK: - Build Settings
@@ -1092,4 +1162,5 @@ pkginfos = struct(
     new_target_dependency_from_dump_json_map = _new_target_dependency_from_dump_json_map,
     new_target_reference = _new_target_reference,
     new_version_range = _new_version_range,
+    new_swift_src_info = _new_swift_src_info,
 )
