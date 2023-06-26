@@ -3,16 +3,20 @@
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:deps_indexes.bzl", "deps_indexes")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
+load(":testutils.bzl", "testutils")
+
+# MARK: - Tests
 
 def _new_from_parsed_json_for_swift_targets_test(ctx):
     env = unittest.begin(ctx)
 
+    repo_name = "swiftpkg_mypackage"
     dump_manifest = json.decode(_swift_arg_parser_dump_json)
     desc_manifest = json.decode(_swift_arg_parser_desc_json)
     actual = pkginfos.new_from_parsed_json(
+        repository_ctx = testutils.new_stub_repository_ctx(repo_name),
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
-        repo_name = "swiftpkg_mypackage",
         deps_index = deps_indexes.new_from_json(_swift_arg_parser_deps_index_json),
     )
     expected = pkginfos.new(
@@ -60,6 +64,7 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
                         ),
                     ),
                 ],
+                repo_name = repo_name,
                 clang_settings = pkginfos.new_clang_settings([
                     pkginfos.new_build_setting(
                         kind = "headerSearchPath",
@@ -97,6 +102,7 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
                         ),
                     ),
                 ],
+                swift_src_info = pkginfos.new_swift_src_info(),
             ),
         ],
     )
@@ -109,12 +115,13 @@ new_from_parsed_json_for_swift_targets_test = unittest.make(_new_from_parsed_jso
 def _new_from_parsed_json_for_clang_targets_test(ctx):
     env = unittest.begin(ctx)
 
+    repo_name = "swiftpkg_libbar"
     dump_manifest = json.decode(_clang_dump_json)
     desc_manifest = json.decode(_clang_desc_json)
     actual = pkginfos.new_from_parsed_json(
+        repository_ctx = testutils.new_stub_repository_ctx(repo_name),
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
-        repo_name = "swiftpkg_libbar",
         deps_index = deps_indexes.new_from_json(_clang_deps_index_json),
     )
 
@@ -135,6 +142,7 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
             "libbar/sharpyuv/sharpyuv_sse2.c",
         ],
         dependencies = [],
+        repo_name = repo_name,
         source_paths = [
             "libbar/src",
             "libbar/sharpyuv",

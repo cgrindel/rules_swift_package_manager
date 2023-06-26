@@ -29,6 +29,27 @@ def _get(targets, name, fail_if_not_found = True):
         fail("Failed to find target. name:", name)
     return None
 
+def _get_by_label(targets, label, fail_if_not_found = True):
+    """Retrieves the target with the given name from a list of targets.
+
+    Args:
+        targets: A `list` of target `struct` values as returned by
+            `pkginfos.new_target`.
+        label: The Bazel label of a target as a `string`.
+        fail_if_not_found: Optional. A `bool` that determines whether to fail
+            (True) or return `None` (False) if a target is not found.
+
+    Returns:
+        A target `struct` if a match is found. Otherwise, it fails or returns
+        `None` depending upon the value of `fail_if_not_found`.
+    """
+    for target in targets:
+        if target.label == label:
+            return target
+    if fail_if_not_found:
+        fail("Failed to find target. label:", label)
+    return None
+
 def _srcs(target):
     """Returns the sources formatted for inclusion in a Bazel target's `srcs` attribute.
 
@@ -210,6 +231,7 @@ def make_pkginfo_targets(bazel_labels):
         bazel_label_from_parts = _bazel_label_from_parts,
         bazel_label_name = _bazel_label_name,
         get = _get,
+        get_by_label = _get_by_label,
         is_modulemap_label = _is_modulemap_label,
         join_path = _join_path,
         modulemap_label_name = _modulemap_label_name,

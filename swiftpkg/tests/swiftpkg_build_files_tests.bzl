@@ -25,41 +25,11 @@ load(
     "//swiftpkg/internal:swiftpkg_build_files.bzl",
     "swiftpkg_build_files",
 )
-
-# MARK: - Repository CTX Stub
-
-def new_exec_result(return_code = 0, stdout = "", stderr = ""):
-    return struct(
-        return_code = return_code,
-        stdout = stdout,
-        stderr = stderr,
-    )
-
-def new_stub_repository_ctx(repo_name, file_contents = {}, find_results = {}):
-    def read(path):
-        return file_contents.get(path, "")
-
-    # buildifier: disable=unused-variable
-    def execute(args, environment = {}, quiet = True):
-        # The find command that we expect is `find -H -L path`.
-        # See repository_files.list_files_under for details.
-        if len(args) >= 4 and args[0] == "find":
-            path = args[3]
-            results = find_results.get(path, [])
-            exec_result = new_exec_result(
-                stdout = "\n".join(results),
-            )
-        else:
-            exec_result = new_exec_result()
-        return exec_result
-
-    return struct(
-        name = repo_name,
-        read = read,
-        execute = execute,
-    )
+load(":testutils.bzl", "testutils")
 
 # MARK: - Test Data
+
+_repo_name = "@swiftpkg_mypackage"
 
 _pkg_info = pkginfos.new(
     name = "MyPackage",
@@ -117,6 +87,7 @@ _pkg_info = pkginfos.new(
                     ),
                 ),
             ],
+            repo_name = _repo_name,
         ),
         pkginfos.new_target(
             name = "RegularSwiftTargetAsLibrary",
@@ -128,6 +99,7 @@ _pkg_info = pkginfos.new(
                 "RegularSwiftTargetAsLibrary.swift",
             ],
             dependencies = [],
+            repo_name = _repo_name,
         ),
         pkginfos.new_target(
             name = "RegularSwiftTargetAsLibraryTests",
@@ -145,6 +117,7 @@ _pkg_info = pkginfos.new(
                     ),
                 ),
             ],
+            repo_name = _repo_name,
         ),
         pkginfos.new_target(
             name = "SwiftExecutableTarget",
@@ -173,6 +146,7 @@ _pkg_info = pkginfos.new(
                     ),
                 ),
             ]),
+            repo_name = _repo_name,
         ),
         pkginfos.new_target(
             name = "SwiftLibraryUsesXCTest",
@@ -184,6 +158,7 @@ _pkg_info = pkginfos.new(
                 "SwiftLibraryUsesXCTest.swift",
             ],
             dependencies = [],
+            repo_name = _repo_name,
         ),
         pkginfos.new_target(
             name = "ClangLibrary",
@@ -222,6 +197,7 @@ _pkg_info = pkginfos.new(
                     ),
                 ),
             ]),
+            repo_name = _repo_name,
         ),
         pkginfos.new_target(
             name = "ObjcLibraryDep",
@@ -238,6 +214,7 @@ _pkg_info = pkginfos.new(
             ],
             public_hdrs_path = "include",
             dependencies = [],
+            repo_name = _repo_name,
         ),
         pkginfos.new_target(
             name = "ObjcLibrary",
@@ -261,6 +238,7 @@ _pkg_info = pkginfos.new(
                     by_name = pkginfos.new_by_name_reference("ObjcLibraryDep"),
                 ),
             ],
+            repo_name = _repo_name,
         ),
         pkginfos.new_target(
             name = "SwiftLibraryWithConditionalDep",
@@ -284,6 +262,7 @@ _pkg_info = pkginfos.new(
                     ),
                 ),
             ],
+            repo_name = _repo_name,
         ),
         pkginfos.new_target(
             name = "ClangLibraryWithConditionalDep",
@@ -311,6 +290,7 @@ _pkg_info = pkginfos.new(
                     ),
                 ),
             ],
+            repo_name = _repo_name,
         ),
         pkginfos.new_target(
             name = "SwiftForObjcTarget",
@@ -326,6 +306,7 @@ _pkg_info = pkginfos.new(
                     by_name = pkginfos.new_by_name_reference("ObjcLibraryDep"),
                 ),
             ],
+            repo_name = _repo_name,
         ),
         pkginfos.new_target(
             name = "SwiftLibraryWithResources",
@@ -345,6 +326,7 @@ _pkg_info = pkginfos.new(
                 ),
             ],
             dependencies = [],
+            repo_name = _repo_name,
         ),
     ],
 )
@@ -436,8 +418,6 @@ _deps_index_json = """
     "products": []
 }
 """
-
-_repo_name = "@swiftpkg_mypackage"
 
 _pkg_ctx = pkg_ctxs.new(
     pkg_info = _pkg_info,
@@ -570,8 +550,8 @@ cc_library(
         "-fobjc-arc",
         "-fPIC",
         "-fmodule-name=ClangLibrary",
-        "-Iexternal/swiftpkg_mypackage/src",
-        "-Iexternal/swiftpkg_mypackage",
+        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
+        "-Iexternal/bzlmodmangled~swiftpkg_mypackage",
     ] + select({
         "@rules_swift_package_manager//config_settings/spm/configuration:release": ["-danger"],
         "//conditions:default": [],
@@ -621,7 +601,7 @@ objc_library(
         "-fobjc-arc",
         "-fPIC",
         "-fmodule-name=ObjcLibrary",
-        "-Iexternal/swiftpkg_mypackage/src",
+        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
     ],
     defines = ["SWIFT_PACKAGE=1"],
     deps = [
@@ -707,7 +687,7 @@ cc_library(
         "-fobjc-arc",
         "-fPIC",
         "-fmodule-name=ClangLibraryWithConditionalDep",
-        "-Iexternal/swiftpkg_mypackage/src",
+        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
     ],
     defines = ["SWIFT_PACKAGE=1"],
     deps = select({
@@ -810,7 +790,7 @@ swift_library(
     ]
     for t in tests:
         target = pkginfo_targets.get(_pkg_info.targets, t.name)
-        repository_ctx = new_stub_repository_ctx(
+        repository_ctx = testutils.new_stub_repository_ctx(
             repo_name = _repo_name[1:],
             file_contents = {
                 paths.normalize(paths.join(_pkg_info.path, target.path, fname)): cnts
