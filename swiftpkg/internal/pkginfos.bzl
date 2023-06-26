@@ -280,7 +280,7 @@ def _new_target_from_json_maps(
         if objc_files.has_objc_srcs(sources):
             objc_src_info = _new_objc_src_info_from_sources(
                 repository_ctx = repository_ctx,
-                target_path = target_path,
+                pkg_path = pkg_path,
                 sources = clang_src_info.srcs + clang_src_info.hdrs,
             )
 
@@ -901,12 +901,11 @@ def _new_clang_src_info(
 
 # MARK: - Objc Source Info
 
-def _new_objc_src_info_from_sources(repository_ctx, target_path, sources):
-    srcs = lists.map(sources, lambda s: paths.join(target_path, s))
+def _new_objc_src_info_from_sources(repository_ctx, pkg_path, sources):
+    srcs = lists.map(sources, lambda s: paths.join(pkg_path, s))
     builtin_frameworks = objc_files.collect_builtin_frameworks(
         repository_ctx = repository_ctx,
-        # root_path = pkg_path,
-        root_path = target_path,
+        root_path = pkg_path,
         srcs = srcs,
     )
     return _new_objc_src_info(
