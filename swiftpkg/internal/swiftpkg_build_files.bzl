@@ -42,7 +42,6 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         for td in target.dependencies
     ])
 
-    # TODO(chuck): Conditionally add deps
     attrs = {
         "deps": bzl_selects.to_starlark(deps),
         "module_name": target.c99name,
