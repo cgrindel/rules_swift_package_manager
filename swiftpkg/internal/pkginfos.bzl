@@ -202,6 +202,8 @@ def _new_target_dependency_from_dump_json_map(dump_map):
 
 def _new_target_from_json_maps(repository_ctx, dump_map, desc_map, deps_index):
     repo_name = repository_ctx.attr.bazel_package_name
+    if repo_name == "":
+        repo_name = repository_ctx.name
     target_name = dump_map["name"]
     target_path = desc_map["path"]
     target_label = pkginfo_targets.bazel_label_from_parts(
