@@ -163,7 +163,7 @@ _pkg_info = pkginfos.new(
             ],
             dependencies = [],
             repo_name = _repo_name,
-            swift_src_info = pkginfos.new_swift_src_info(),
+            swift_src_info = pkginfos.new_swift_src_info(imports_xctest = True),
         ),
         pkginfos.new_target(
             name = "ClangLibrary",

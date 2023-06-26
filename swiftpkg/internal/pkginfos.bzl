@@ -752,20 +752,26 @@ A target dependency must have one of the following: `by_name`, `product`, `targe
 def _new_swift_src_info_from_sources(repository_ctx, target_path, sources):
     # Check for any @objc directives in the source files
     has_objc_directive = False
+    imports_xctest = False
     for src in sources:
         path = paths.join(target_path, src)
-        if swift_files.has_objc_directive(repository_ctx, path):
+        contents = repository_ctx.read(path)
+        if swift_files.has_objc_directive(contents):
             has_objc_directive = True
+        if swift_files.has_import(contents, "XCTest"):
+            imports_xctest = True
+        if has_objc_directive and imports_xctest:
             break
+
     return _new_swift_src_info(
         has_objc_directive = has_objc_directive,
+        imports_xctest = imports_xctest,
     )
 
-# TODO(chuck): Add XCTest check to swift_src_info
-
-def _new_swift_src_info(has_objc_directive = False):
+def _new_swift_src_info(has_objc_directive = False, imports_xctest = False):
     return struct(
         has_objc_directive = has_objc_directive,
+        imports_xctest = imports_xctest,
     )
 
 # MARK: - Clang Source Info

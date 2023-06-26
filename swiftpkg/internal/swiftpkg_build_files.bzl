@@ -12,7 +12,6 @@ load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
 load(":repository_files.bzl", "repository_files")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
-load(":swift_files.bzl", "swift_files")
 
 # MARK: - Target Entry Point
 
@@ -64,7 +63,7 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
 
     # The rules_swift code links in developer libraries if the rule is marked testonly.
     # https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/compiling.bzl#L1312-L1319
-    if swift_files.imports_xctest(repository_ctx, pkg_ctx, target):
+    if target.swift_src_info.imports_xctest:
         attrs["testonly"] = True
 
     if target.swift_settings != None:
