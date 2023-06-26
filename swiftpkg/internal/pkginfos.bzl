@@ -279,9 +279,9 @@ def _new_target_from_json_maps(
         )
         if objc_files.has_objc_srcs(sources):
             objc_src_info = _new_objc_src_info_from_sources(
-                repository_ctx,
-                target_path,
-                sources,
+                repository_ctx = repository_ctx,
+                target_path = target_path,
+                sources = clang_src_info.srcs + clang_src_info.hdrs,
             )
 
     return _new_target(
