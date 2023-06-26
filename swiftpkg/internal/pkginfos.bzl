@@ -852,14 +852,30 @@ def _new_clang_src_info_from_sources(
     if len(organized_files.hdrs) > 0:
         hdrs.extend(organized_files.hdrs)
 
-    # public_includes_set = sets.make(public_includes)
-    # srcs_set = sets.make(srcs)
-    # if len(hdrs) > 0:
-    #     attrs["hdrs"] = hdrs
-    #     hdrs_set = sets.make(hdrs)
-    #     srcs_set = sets.difference(srcs_set, hdrs_set)
-    # if sets.length(public_includes_set) > 0:
-    #     attrs["includes"] = sets.to_list(public_includes_set)
+    # Look for header files that are not under the target path
+    extra_hdr_dirs = []
+    if target_path != ".":
+        for pi in private_includes:
+            normalized_pi = paths.normalize(pi)
+            if clang_files.is_under_path(normalized_pi, target_path):
+                continue
+            extra_hdr_dirs.append(normalized_pi)
+    for ehd in extra_hdr_dirs:
+        abs_ehd = paths.normalize(paths.join(pkg_path, ehd))
+        hdr_paths = repository_files.list_files_under(repository_ctx, abs_ehd)
+        hdr_paths = [
+            clang_files.relativize(hp, pkg_path)
+            for hp in hdr_paths
+            if clang_files.is_hdr(hp)
+        ]
+        srcs.extend(hdr_paths)
+
+    # Remove any hdrs from the srcs
+    srcs_set = sets.make(srcs)
+    hdrs_set = sets.make(hdrs)
+    srcs_set = sets.difference(srcs_set, hdrs_set)
+    hdrs = sets.to_list(hdrs_set)
+    srcs = sets.to_list(srcs_set)
 
     return _new_clang_src_info(
         srcs = srcs,
