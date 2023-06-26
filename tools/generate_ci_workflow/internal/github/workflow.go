@@ -5,6 +5,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// Trivial Change
+
 // Workflow is a GitHub Actions workflow
 type Workflow struct {
 	Name        string           `yaml:"name"`
