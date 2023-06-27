@@ -165,6 +165,9 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
         ]),
         public_hdrs_path = "include",
         product_memberships = ["libbar"],
+        clang_src_info = pkginfos.new_clang_src_info(
+            public_includes = ["include"],
+        ),
     )
     asserts.equals(env, expected, libbar_target)
 

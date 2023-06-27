@@ -6,8 +6,6 @@ load("//swiftpkg/internal:swift_files.bzl", "swift_files")
 def _has_objc_directive_test(ctx):
     env = unittest.begin(ctx)
 
-    path = "path/to/File.swift"
-
     tests = [
         struct(
             msg = "has @objc",
@@ -48,10 +46,7 @@ public class FooSwiftVersionInfo: NSObject {
         ),
     ]
     for t in tests:
-        stub_repository_ctx = struct(
-            read = lambda p: t.contents,
-        )
-        actual = swift_files.has_objc_directive(stub_repository_ctx, path)
+        actual = swift_files.has_objc_directive(t.contents)
         asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)
