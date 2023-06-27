@@ -13,11 +13,12 @@ import (
 
 // FileInfo represents source file information that is pertinent for Swift build file generation.
 type FileInfo struct {
-	Rel          string
-	Abs          string
-	Imports      []string
-	IsTest       bool
-	ContainsMain bool
+	Rel              string
+	Abs              string
+	Imports          []string
+	IsTest           bool
+	ContainsMain     bool
+	HasObjcDirective bool
 }
 
 // NewFileInfoFromReader returns file info for a source file.
@@ -45,6 +46,8 @@ func NewFileInfoFromReader(rel, abs string, reader io.Reader) *FileInfo {
 				fi.ContainsMain = true
 			case match[mainFnReSubexpIdx] != nil:
 				fi.ContainsMain = true
+			case match[objcDirReSubexpIdx] != nil:
+				fi.HasObjcDirective = true
 			}
 		}
 	}
@@ -90,7 +93,11 @@ func buildSwiftRegexp() *regexp.Regexp {
 	importStmt := `\bimport\s*(?P<import>` + ident + `)\b`
 	mainAnnotation := `^\s*(?P<mainanno>@main\b)`
 	mainFnDecl := `(?P<mainfn>\bstatic\s+func\s+main\b)`
-	swiftReSrc := strings.Join([]string{commentLine, importStmt, mainAnnotation, mainFnDecl}, "|")
+	objcDirective := `(?P<objcdir>@objc\b)`
+	swiftReSrc := strings.Join(
+		[]string{commentLine, importStmt, mainAnnotation, mainFnDecl, objcDirective},
+		"|",
+	)
 	return regexp.MustCompile(swiftReSrc)
 }
 
@@ -100,6 +107,7 @@ const (
 	importReSubexpIdx         = 2
 	mainAnnotationReSubexpIdx = 3
 	mainFnReSubexpIdx         = 4
+	objcDirReSubexpIdx        = 5
 )
 
 type fileSuffixes []string

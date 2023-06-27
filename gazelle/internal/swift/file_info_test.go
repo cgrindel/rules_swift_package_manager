@@ -59,6 +59,18 @@ func TestNewFileInfoFromSrc(t *testing.T) {
 		}
 		assert.Equal(t, expected, actual)
 	})
+	t.Run("test file", func(t *testing.T) {
+		rel := "Foo/Hello.swift"
+		abs := filepath.Join("Sources", rel)
+		actual := swift.NewFileInfoFromSrc(rel, abs, objcDirective)
+		expected := &swift.FileInfo{
+			Rel:              rel,
+			Abs:              abs,
+			Imports:          []string{"Foundation"},
+			HasObjcDirective: true,
+		}
+		assert.Equal(t, expected, actual)
+	})
 }
 
 func TestDirSuffixes(t *testing.T) {
@@ -128,5 +140,16 @@ import XCTest
 XCTMain([
     testCase(AppTests.allTests),
 ])
+#endif
+`
+
+const objcDirective = `
+#if canImport(Combine) && swift(>=5.0)
+
+  import Foundation
+
+  // Make this class discoverable from Objective-C. Don't instantiate directly.
+  @objc(FIRCombineFirestoreLibrary) private class __CombineFirestoreLibrary: NSObject {}
+
 #endif
 `
