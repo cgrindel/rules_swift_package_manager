@@ -123,8 +123,10 @@ func (fs fileSuffixes) HasSuffix(path string) bool {
 
 var testSuffixes = fileSuffixes{"Tests.swift", "Test.swift"}
 
+// DirSuffixes provides a means for testing a path having one of the listed suffixes.
 type DirSuffixes []string
 
+// HasSuffix checks if the path has one of the suffixes.
 func (ds DirSuffixes) HasSuffix(path string) bool {
 	for _, suffix := range ds {
 		if strings.HasSuffix(path, suffix) {
@@ -134,6 +136,7 @@ func (ds DirSuffixes) HasSuffix(path string) bool {
 	return false
 }
 
+// IsUnderDirWithSuffix checks if the path has a directory that includes one of the suffixes.
 func (ds DirSuffixes) IsUnderDirWithSuffix(path string) bool {
 	if path == "." || path == "" || path == "/" {
 		return false
@@ -145,4 +148,5 @@ func (ds DirSuffixes) IsUnderDirWithSuffix(path string) bool {
 	return ds.IsUnderDirWithSuffix(dir)
 }
 
+// TestDirSuffixes lists the suffixes used for Swift test directories.
 var TestDirSuffixes = DirSuffixes{"Tests", "Test"}
