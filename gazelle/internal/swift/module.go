@@ -83,7 +83,7 @@ type moduleJSONData struct {
 	C99name            string              `json:"c99name"`
 	SrcType            swiftpkg.SourceType `json:"src_type"`
 	Label              string              `json:"label"`
-	ModulemapLabel     string              `json:"modulemap_label"`
+	ModulemapLabel     string              `json:"modulemap_label,omitempty"`
 	PkgIdentity        string              `json:"package_identity"`
 	ProductMemberships []string            `json:"product_memberships"`
 }
