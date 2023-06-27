@@ -59,7 +59,8 @@ func TestWriteAndReadDependencyIndex(t *testing.T) {
 	origsc.DependencyIndexPath = filepath.Join(dir, swiftcfg.DefaultDependencyIndexBasename)
 
 	lbl := label.New("cool_repo", "Sources/Foo", "Foo")
-	m := swift.NewModule("Foo", "Foo", swiftpkg.SwiftSourceType, &lbl, "", []string{"ProductA"})
+	m := swift.NewModule("Foo", "Foo", swiftpkg.SwiftSourceType, &lbl, nil, "",
+		[]string{"ProductA"})
 	origsc.DependencyIndex.AddModule(m)
 
 	// Write the index
