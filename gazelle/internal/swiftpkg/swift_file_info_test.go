@@ -1,21 +1,21 @@
-package swift_test
+package swiftpkg_test
 
 import (
 	"path/filepath"
 	"testing"
 
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftpkg"
 	"github.com/stretchr/testify/assert"
 )
 
 const fileInfoRel = "Foo/Hello.swift"
 const fileInfoAbs = "/path/to/workspace/Foo/Hello.swift"
 
-func TestNewFileInfoFromSrc(t *testing.T) {
+func TestNewSwiftFileInfoFromSrc(t *testing.T) {
 	t.Run("main function without imports", func(t *testing.T) {
-		actual := swift.NewFileInfoFromSrc(
+		actual := swiftpkg.NewSwiftFileInfoFromSrc(
 			fileInfoRel, fileInfoAbs, mainFnWithoutImports)
-		expected := &swift.FileInfo{
+		expected := &swiftpkg.SwiftFileInfo{
 			Rel:          fileInfoRel,
 			Abs:          fileInfoAbs,
 			ContainsMain: true,
@@ -23,9 +23,9 @@ func TestNewFileInfoFromSrc(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	})
 	t.Run("main annotation with imports", func(t *testing.T) {
-		actual := swift.NewFileInfoFromSrc(
+		actual := swiftpkg.NewSwiftFileInfoFromSrc(
 			fileInfoRel, fileInfoAbs, mainAnnotationWithImports)
-		expected := &swift.FileInfo{
+		expected := &swiftpkg.SwiftFileInfo{
 			Rel:          fileInfoRel,
 			Abs:          fileInfoAbs,
 			Imports:      []string{"ArgumentParser", "Foundation"},
@@ -36,8 +36,8 @@ func TestNewFileInfoFromSrc(t *testing.T) {
 	t.Run("test file", func(t *testing.T) {
 		rel := "FooTests/HelloTests.swift"
 		abs := filepath.Join("Tests", rel)
-		actual := swift.NewFileInfoFromSrc(rel, abs, testFile)
-		expected := &swift.FileInfo{
+		actual := swiftpkg.NewSwiftFileInfoFromSrc(rel, abs, testFile)
+		expected := &swiftpkg.SwiftFileInfo{
 			Rel:          rel,
 			Abs:          abs,
 			Imports:      []string{"DateUtils", "XCTest"},
@@ -49,8 +49,8 @@ func TestNewFileInfoFromSrc(t *testing.T) {
 	t.Run("main under test directory", func(t *testing.T) {
 		rel := "FooTests/main.swift"
 		abs := filepath.Join("Tests", rel)
-		actual := swift.NewFileInfoFromSrc(rel, abs, mainForTest)
-		expected := &swift.FileInfo{
+		actual := swiftpkg.NewSwiftFileInfoFromSrc(rel, abs, mainForTest)
+		expected := &swiftpkg.SwiftFileInfo{
 			Rel:          rel,
 			Abs:          abs,
 			Imports:      []string{"XCTest"},
@@ -62,8 +62,8 @@ func TestNewFileInfoFromSrc(t *testing.T) {
 	t.Run("test file", func(t *testing.T) {
 		rel := "Foo/Hello.swift"
 		abs := filepath.Join("Sources", rel)
-		actual := swift.NewFileInfoFromSrc(rel, abs, objcDirective)
-		expected := &swift.FileInfo{
+		actual := swiftpkg.NewSwiftFileInfoFromSrc(rel, abs, objcDirective)
+		expected := &swiftpkg.SwiftFileInfo{
 			Rel:              rel,
 			Abs:              abs,
 			Imports:          []string{"Foundation"},
@@ -74,16 +74,16 @@ func TestNewFileInfoFromSrc(t *testing.T) {
 }
 
 func TestDirSuffixes(t *testing.T) {
-	actual := swift.TestDirSuffixes.IsUnderDirWithSuffix("Sources/Foo/Bar.swift")
+	actual := swiftpkg.TestDirSuffixes.IsUnderDirWithSuffix("Sources/Foo/Bar.swift")
 	assert.False(t, actual)
 
-	actual = swift.TestDirSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Bar.swift")
+	actual = swiftpkg.TestDirSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Bar.swift")
 	assert.True(t, actual)
 
-	actual = swift.TestDirSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Chicken/Bar.swift")
+	actual = swiftpkg.TestDirSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Chicken/Bar.swift")
 	assert.True(t, actual)
 
-	actual = swift.TestDirSuffixes.IsUnderDirWithSuffix("Tests/Bar.swift")
+	actual = swiftpkg.TestDirSuffixes.IsUnderDirWithSuffix("Tests/Bar.swift")
 	assert.True(t, actual)
 }
 
@@ -99,7 +99,7 @@ public struct Hello {
 `
 
 const mainAnnotationWithImports = `
-// Intentionally not sorted to ensure that FileInfo imports is sorted
+// Intentionally not sorted to ensure that SwiftFileInfo imports is sorted
 import Foundation
 import ArgumentParser
 

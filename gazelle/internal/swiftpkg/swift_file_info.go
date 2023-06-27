@@ -1,4 +1,4 @@
-package swift
+package swiftpkg
 
 import (
 	"bufio"
@@ -11,8 +11,8 @@ import (
 	"strings"
 )
 
-// FileInfo represents source file information that is pertinent for Swift build file generation.
-type FileInfo struct {
+// SwiftFileInfo represents source file information that is pertinent for Swift build file generation.
+type SwiftFileInfo struct {
 	Rel              string
 	Abs              string
 	Imports          []string
@@ -21,9 +21,9 @@ type FileInfo struct {
 	HasObjcDirective bool
 }
 
-// NewFileInfoFromReader returns file info for a source file.
-func NewFileInfoFromReader(rel, abs string, reader io.Reader) *FileInfo {
-	fi := FileInfo{
+// NewSwiftFileInfoFromReader returns file info for a source file.
+func NewSwiftFileInfoFromReader(rel, abs string, reader io.Reader) *SwiftFileInfo {
+	fi := SwiftFileInfo{
 		Rel:    rel,
 		Abs:    abs,
 		IsTest: testSuffixes.HasSuffix(rel) || TestDirSuffixes.IsUnderDirWithSuffix(rel),
@@ -56,28 +56,28 @@ func NewFileInfoFromReader(rel, abs string, reader io.Reader) *FileInfo {
 	return &fi
 }
 
-// NewFileInfoFromSrc returns file info for source file's contents as a string.
-func NewFileInfoFromSrc(rel, abs, src string) *FileInfo {
-	return NewFileInfoFromReader(rel, abs, strings.NewReader(src))
+// NewSwiftFileInfoFromSrc returns file info for source file's contents as a string.
+func NewSwiftFileInfoFromSrc(rel, abs, src string) *SwiftFileInfo {
+	return NewSwiftFileInfoFromReader(rel, abs, strings.NewReader(src))
 }
 
-// NewFileInfoFromPath returns file info from a filesystem path.
-func NewFileInfoFromPath(rel, abs string) (*FileInfo, error) {
+// NewSwiftFileInfoFromPath returns file info from a filesystem path.
+func NewSwiftFileInfoFromPath(rel, abs string) (*SwiftFileInfo, error) {
 	file, err := os.Open(abs)
 	if err != nil {
 		return nil, err
 	}
-	return NewFileInfoFromReader(rel, abs, file), nil
+	return NewSwiftFileInfoFromReader(rel, abs, file), nil
 }
 
-// NewFileInfosFromRelPaths returns a slice of file information for the source files in a directory.
-func NewFileInfosFromRelPaths(dir string, srcs []string) []*FileInfo {
-	fileInfos := make([]*FileInfo, len(srcs))
+// NewSwiftFileInfosFromRelPaths returns a slice of file information for the source files in a directory.
+func NewSwiftFileInfosFromRelPaths(dir string, srcs []string) []*SwiftFileInfo {
+	fileInfos := make([]*SwiftFileInfo, len(srcs))
 	for idx, src := range srcs {
 		abs := filepath.Join(dir, src)
-		fi, err := NewFileInfoFromPath(src, abs)
+		fi, err := NewSwiftFileInfoFromPath(src, abs)
 		if err != nil {
-			log.Printf("failed to create swift.FileInfo for %s. %s", abs, err)
+			log.Printf("failed to create swift.SwiftFileInfo for %s. %s", abs, err)
 			continue
 		}
 		fileInfos[idx] = fi
