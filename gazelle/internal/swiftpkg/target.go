@@ -2,6 +2,7 @@ package swiftpkg
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdesc"
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdump"
@@ -60,10 +61,13 @@ type Target struct {
 	CSettings          *ClangSettings
 	SrcType            SourceType
 	ProductMemberships []string
+	// SwiftFileInfos will only be populated if the target is a Swift target.
+	SwiftFileInfos []*SwiftFileInfo
 }
 
 // NewTargetFromManifestInfo returns a Swift target from manifest information.
 func NewTargetFromManifestInfo(
+	pkgPath string,
 	descT *spdesc.Target,
 	dumpT *spdump.Target,
 	prodNames mapset.Set[string],
@@ -84,6 +88,14 @@ func NewTargetFromManifestInfo(
 		return nil, fmt.Errorf(
 			"unrecognized spdump.TargetType %v for %s target", dumpT.Type, dumpT.Name)
 	}
+	moduleType := NewModuleType(descT.ModuleType)
+	srcType := NewSourceType(moduleType, descT.Sources)
+
+	var swiftFileInfos []*SwiftFileInfo
+	if srcType == SwiftSourceType {
+		targetPath := filepath.Join(pkgPath, descT.Path)
+		swiftFileInfos = NewSwiftFileInfosFromRelPaths(targetPath, descT.Sources)
+	}
 
 	// GH046: A Swift plugin can have a dependency on an executable target. In this case, we
 	// want to add the target as a data dependency.
@@ -101,8 +113,6 @@ func NewTargetFromManifestInfo(
 	if err != nil {
 		return nil, err
 	}
-
-	moduleType := NewModuleType(descT.ModuleType)
 
 	// The description JSON can contain phantom products. These are products that are not declared
 	// in the original package manifest (e.g., executable target not associated with a product). We
@@ -124,8 +134,9 @@ func NewTargetFromManifestInfo(
 		Sources:            descT.Sources,
 		Dependencies:       tdeps,
 		CSettings:          cSettings,
-		SrcType:            NewSourceType(moduleType, descT.Sources),
+		SrcType:            srcType,
 		ProductMemberships: prodMemberships,
+		SwiftFileInfos:     swiftFileInfos,
 	}, nil
 }
 
