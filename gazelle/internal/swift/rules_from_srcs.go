@@ -32,7 +32,7 @@ func RulesFromSrcs(
 	return rules
 }
 
-var guiModules = mapset.NewSet[string]("AppKit", "UIKit", "SwiftUI")
+var guiModules = mapset.NewSet("AppKit", "UIKit", "SwiftUI")
 
 // Returns the imports and the module typ
 func collectSwiftInfo(fileInfos []*swiftpkg.SwiftFileInfo) ([]string, ModuleType) {
