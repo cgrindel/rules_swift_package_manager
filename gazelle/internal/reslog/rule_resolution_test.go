@@ -57,6 +57,7 @@ func TestRuleResolution(t *testing.T) {
 			"Custom",
 			swiftpkg.SwiftSourceType,
 			newLabel("com_github_example_custom", "", "Custom"),
+			nil,
 			swift.HTTPArchivePkgIdentity,
 			nil,
 		),

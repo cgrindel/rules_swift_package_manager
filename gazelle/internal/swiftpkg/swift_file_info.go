@@ -1,4 +1,4 @@
-package swift
+package swiftpkg
 
 import (
 	"bufio"
@@ -11,18 +11,19 @@ import (
 	"strings"
 )
 
-// FileInfo represents source file information that is pertinent for Swift build file generation.
-type FileInfo struct {
-	Rel          string
-	Abs          string
-	Imports      []string
-	IsTest       bool
-	ContainsMain bool
+// SwiftFileInfo represents source file information that is pertinent for Swift build file generation.
+type SwiftFileInfo struct {
+	Rel              string
+	Abs              string
+	Imports          []string
+	IsTest           bool
+	ContainsMain     bool
+	HasObjcDirective bool
 }
 
-// NewFileInfoFromReader returns file info for a source file.
-func NewFileInfoFromReader(rel, abs string, reader io.Reader) *FileInfo {
-	fi := FileInfo{
+// NewSwiftFileInfoFromReader returns file info for a source file.
+func NewSwiftFileInfoFromReader(rel, abs string, reader io.Reader) *SwiftFileInfo {
+	fi := SwiftFileInfo{
 		Rel:    rel,
 		Abs:    abs,
 		IsTest: testSuffixes.HasSuffix(rel) || TestDirSuffixes.IsUnderDirWithSuffix(rel),
@@ -45,6 +46,8 @@ func NewFileInfoFromReader(rel, abs string, reader io.Reader) *FileInfo {
 				fi.ContainsMain = true
 			case match[mainFnReSubexpIdx] != nil:
 				fi.ContainsMain = true
+			case match[objcDirReSubexpIdx] != nil:
+				fi.HasObjcDirective = true
 			}
 		}
 	}
@@ -53,28 +56,28 @@ func NewFileInfoFromReader(rel, abs string, reader io.Reader) *FileInfo {
 	return &fi
 }
 
-// NewFileInfoFromSrc returns file info for source file's contents as a string.
-func NewFileInfoFromSrc(rel, abs, src string) *FileInfo {
-	return NewFileInfoFromReader(rel, abs, strings.NewReader(src))
+// NewSwiftFileInfoFromSrc returns file info for source file's contents as a string.
+func NewSwiftFileInfoFromSrc(rel, abs, src string) *SwiftFileInfo {
+	return NewSwiftFileInfoFromReader(rel, abs, strings.NewReader(src))
 }
 
-// NewFileInfoFromPath returns file info from a filesystem path.
-func NewFileInfoFromPath(rel, abs string) (*FileInfo, error) {
+// NewSwiftFileInfoFromPath returns file info from a filesystem path.
+func NewSwiftFileInfoFromPath(rel, abs string) (*SwiftFileInfo, error) {
 	file, err := os.Open(abs)
 	if err != nil {
 		return nil, err
 	}
-	return NewFileInfoFromReader(rel, abs, file), nil
+	return NewSwiftFileInfoFromReader(rel, abs, file), nil
 }
 
-// NewFileInfosFromRelPaths returns a slice of file information for the source files in a directory.
-func NewFileInfosFromRelPaths(dir string, srcs []string) []*FileInfo {
-	fileInfos := make([]*FileInfo, len(srcs))
+// NewSwiftFileInfosFromRelPaths returns a slice of file information for the source files in a directory.
+func NewSwiftFileInfosFromRelPaths(dir string, srcs []string) SwiftFileInfos {
+	fileInfos := make(SwiftFileInfos, len(srcs))
 	for idx, src := range srcs {
 		abs := filepath.Join(dir, src)
-		fi, err := NewFileInfoFromPath(src, abs)
+		fi, err := NewSwiftFileInfoFromPath(src, abs)
 		if err != nil {
-			log.Printf("failed to create swift.FileInfo for %s. %s", abs, err)
+			log.Printf("failed to create swift.SwiftFileInfo for %s. %s", abs, err)
 			continue
 		}
 		fileInfos[idx] = fi
@@ -90,7 +93,11 @@ func buildSwiftRegexp() *regexp.Regexp {
 	importStmt := `\bimport\s*(?P<import>` + ident + `)\b`
 	mainAnnotation := `^\s*(?P<mainanno>@main\b)`
 	mainFnDecl := `(?P<mainfn>\bstatic\s+func\s+main\b)`
-	swiftReSrc := strings.Join([]string{commentLine, importStmt, mainAnnotation, mainFnDecl}, "|")
+	objcDirective := `(?P<objcdir>@objc\b)`
+	swiftReSrc := strings.Join(
+		[]string{commentLine, importStmt, mainAnnotation, mainFnDecl, objcDirective},
+		"|",
+	)
 	return regexp.MustCompile(swiftReSrc)
 }
 
@@ -100,6 +107,7 @@ const (
 	importReSubexpIdx         = 2
 	mainAnnotationReSubexpIdx = 3
 	mainFnReSubexpIdx         = 4
+	objcDirReSubexpIdx        = 5
 )
 
 type fileSuffixes []string
@@ -115,8 +123,10 @@ func (fs fileSuffixes) HasSuffix(path string) bool {
 
 var testSuffixes = fileSuffixes{"Tests.swift", "Test.swift"}
 
+// DirSuffixes provides a means for testing a path having one of the listed suffixes.
 type DirSuffixes []string
 
+// HasSuffix checks if the path has one of the suffixes.
 func (ds DirSuffixes) HasSuffix(path string) bool {
 	for _, suffix := range ds {
 		if strings.HasSuffix(path, suffix) {
@@ -126,6 +136,7 @@ func (ds DirSuffixes) HasSuffix(path string) bool {
 	return false
 }
 
+// IsUnderDirWithSuffix checks if the path has a directory that includes one of the suffixes.
 func (ds DirSuffixes) IsUnderDirWithSuffix(path string) bool {
 	if path == "." || path == "" || path == "/" {
 		return false
@@ -137,4 +148,18 @@ func (ds DirSuffixes) IsUnderDirWithSuffix(path string) bool {
 	return ds.IsUnderDirWithSuffix(dir)
 }
 
+// TestDirSuffixes lists the suffixes used for Swift test directories.
 var TestDirSuffixes = DirSuffixes{"Tests", "Test"}
+
+// SwiftFileInfos represents a collection of SwiftFileInfo instances.
+type SwiftFileInfos []*SwiftFileInfo
+
+// RequiresModulemap determines whether a modulemap target will be generated for this target.
+func (sfis SwiftFileInfos) RequiresModulemap() bool {
+	for _, sfi := range sfis {
+		if sfi.HasObjcDirective {
+			return true
+		}
+	}
+	return false
+}

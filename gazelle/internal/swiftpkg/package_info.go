@@ -66,7 +66,7 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 			// Ignore phantom targets (i.e., appear in description but not in the dump)
 			continue
 		}
-		t, err := NewTargetFromManifestInfo(&descT, dumpT, prodNames)
+		t, err := NewTargetFromManifestInfo(dir, &descT, dumpT, prodNames)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create target for %s: %w", descT.Name, err)
 		}

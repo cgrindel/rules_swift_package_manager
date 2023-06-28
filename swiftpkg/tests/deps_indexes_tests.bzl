@@ -2,7 +2,7 @@
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels")
-load("//swiftpkg/internal:deps_indexes.bzl", "deps_indexes")
+load("//swiftpkg/internal:deps_indexes.bzl", "deps_indexes", "src_types")
 
 def _new_from_json_test(ctx):
     env = unittest.begin(ctx)
@@ -178,12 +178,21 @@ def _labels_for_module_test(ctx):
             ],
         ),
         struct(
-            msg = "Objc library depends upon Swift library",
+            msg = "Objc library depends upon Swift library without modulemap",
             dep_module = "@example_cool_repo//:Foo",
             depender_module = "@example_cool_repo//:ObjcLibrary",
             exp = [
                 bazel_labels.parse("@example_cool_repo//:Foo"),
-                bazel_labels.parse("@example_cool_repo//:Foo_modulemap"),
+                # bazel_labels.parse("@example_cool_repo//:Foo_modulemap"),
+            ],
+        ),
+        struct(
+            msg = "Objc library depends upon Swift library with modulemap",
+            dep_module = "@example_another_repo//Sources/Foo",
+            depender_module = "@example_cool_repo//:ObjcLibrary",
+            exp = [
+                bazel_labels.parse("@example_another_repo//Sources/Foo"),
+                bazel_labels.parse("@example_another_repo//Sources/Foo:Foo_modulemap"),
             ],
         ),
     ]
@@ -304,6 +313,48 @@ def _resolve_product_with_ctx_test(ctx):
 
 resolve_product_with_ctx_test = unittest.make(_resolve_product_with_ctx_test)
 
+def _new_module_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "no modulemap_label",
+            modulemap_label = None,
+        ),
+        struct(
+            msg = "with modulemap_label",
+            modulemap_label = bazel_labels.parse(
+                "@example_cool_repo//:Foo_modulemap",
+            ),
+        ),
+    ]
+    for t in tests:
+        actual = deps_indexes.new_module(
+            name = "Foo",
+            c99name = "Foo",
+            src_type = src_types.swift,
+            label = bazel_labels.parse("@example_cool_repo//:Foo"),
+            package_identity = "example_cool_repo",
+            product_memberships = ["Bar"],
+            modulemap_label = t.modulemap_label,
+        )
+        asserts.equals(env, "Foo", actual.name, t.msg)
+        asserts.equals(env, "Foo", actual.c99name, t.msg)
+        asserts.equals(env, src_types.swift, actual.src_type, t.msg)
+        asserts.equals(
+            env,
+            bazel_labels.parse("@example_cool_repo//:Foo"),
+            actual.label,
+            t.msg,
+        )
+        asserts.equals(env, "example_cool_repo", actual.package_identity, t.msg)
+        asserts.equals(env, ["Bar"], actual.product_memberships, t.msg)
+        asserts.equals(env, t.modulemap_label, actual.modulemap_label, t.msg)
+
+    return unittest.end(env)
+
+new_module_test = unittest.make(_new_module_test)
+
 def deps_indexes_test_suite():
     return unittest.suite(
         "deps_indexes_tests",
@@ -314,6 +365,7 @@ def deps_indexes_test_suite():
         resolve_product_test,
         resolve_product_with_ctx_test,
         labels_for_module_test,
+        new_module_test,
     )
 
 _deps_index_json = """
@@ -340,6 +392,7 @@ _deps_index_json = """
             "c99name": "Foo",
             "src_type": "swift",
             "label": "@example_another_repo//Sources/Foo",
+            "modulemap_label": "@example_another_repo//Sources/Foo:Foo_modulemap",
             "package_identity": "example-another-repo",
             "product_memberships": ["Foo"]
         },

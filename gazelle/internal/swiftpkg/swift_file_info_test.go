@@ -1,21 +1,21 @@
-package swift_test
+package swiftpkg_test
 
 import (
 	"path/filepath"
 	"testing"
 
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftpkg"
 	"github.com/stretchr/testify/assert"
 )
 
 const fileInfoRel = "Foo/Hello.swift"
 const fileInfoAbs = "/path/to/workspace/Foo/Hello.swift"
 
-func TestNewFileInfoFromSrc(t *testing.T) {
+func TestNewSwiftFileInfoFromSrc(t *testing.T) {
 	t.Run("main function without imports", func(t *testing.T) {
-		actual := swift.NewFileInfoFromSrc(
+		actual := swiftpkg.NewSwiftFileInfoFromSrc(
 			fileInfoRel, fileInfoAbs, mainFnWithoutImports)
-		expected := &swift.FileInfo{
+		expected := &swiftpkg.SwiftFileInfo{
 			Rel:          fileInfoRel,
 			Abs:          fileInfoAbs,
 			ContainsMain: true,
@@ -23,9 +23,9 @@ func TestNewFileInfoFromSrc(t *testing.T) {
 		assert.Equal(t, expected, actual)
 	})
 	t.Run("main annotation with imports", func(t *testing.T) {
-		actual := swift.NewFileInfoFromSrc(
+		actual := swiftpkg.NewSwiftFileInfoFromSrc(
 			fileInfoRel, fileInfoAbs, mainAnnotationWithImports)
-		expected := &swift.FileInfo{
+		expected := &swiftpkg.SwiftFileInfo{
 			Rel:          fileInfoRel,
 			Abs:          fileInfoAbs,
 			Imports:      []string{"ArgumentParser", "Foundation"},
@@ -36,8 +36,8 @@ func TestNewFileInfoFromSrc(t *testing.T) {
 	t.Run("test file", func(t *testing.T) {
 		rel := "FooTests/HelloTests.swift"
 		abs := filepath.Join("Tests", rel)
-		actual := swift.NewFileInfoFromSrc(rel, abs, testFile)
-		expected := &swift.FileInfo{
+		actual := swiftpkg.NewSwiftFileInfoFromSrc(rel, abs, testFile)
+		expected := &swiftpkg.SwiftFileInfo{
 			Rel:          rel,
 			Abs:          abs,
 			Imports:      []string{"DateUtils", "XCTest"},
@@ -49,8 +49,8 @@ func TestNewFileInfoFromSrc(t *testing.T) {
 	t.Run("main under test directory", func(t *testing.T) {
 		rel := "FooTests/main.swift"
 		abs := filepath.Join("Tests", rel)
-		actual := swift.NewFileInfoFromSrc(rel, abs, mainForTest)
-		expected := &swift.FileInfo{
+		actual := swiftpkg.NewSwiftFileInfoFromSrc(rel, abs, mainForTest)
+		expected := &swiftpkg.SwiftFileInfo{
 			Rel:          rel,
 			Abs:          abs,
 			Imports:      []string{"XCTest"},
@@ -59,20 +59,63 @@ func TestNewFileInfoFromSrc(t *testing.T) {
 		}
 		assert.Equal(t, expected, actual)
 	})
+	t.Run("test file", func(t *testing.T) {
+		rel := "Foo/Hello.swift"
+		abs := filepath.Join("Sources", rel)
+		actual := swiftpkg.NewSwiftFileInfoFromSrc(rel, abs, objcDirective)
+		expected := &swiftpkg.SwiftFileInfo{
+			Rel:              rel,
+			Abs:              abs,
+			Imports:          []string{"Foundation"},
+			HasObjcDirective: true,
+		}
+		assert.Equal(t, expected, actual)
+	})
 }
 
 func TestDirSuffixes(t *testing.T) {
-	actual := swift.TestDirSuffixes.IsUnderDirWithSuffix("Sources/Foo/Bar.swift")
+	actual := swiftpkg.TestDirSuffixes.IsUnderDirWithSuffix("Sources/Foo/Bar.swift")
 	assert.False(t, actual)
 
-	actual = swift.TestDirSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Bar.swift")
+	actual = swiftpkg.TestDirSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Bar.swift")
 	assert.True(t, actual)
 
-	actual = swift.TestDirSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Chicken/Bar.swift")
+	actual = swiftpkg.TestDirSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Chicken/Bar.swift")
 	assert.True(t, actual)
 
-	actual = swift.TestDirSuffixes.IsUnderDirWithSuffix("Tests/Bar.swift")
+	actual = swiftpkg.TestDirSuffixes.IsUnderDirWithSuffix("Tests/Bar.swift")
 	assert.True(t, actual)
+}
+
+func TestSwiftFileInfos(t *testing.T) {
+	tests := []struct {
+	    msg string
+	    fileInfos swiftpkg.SwiftFileInfos
+	    exp bool
+	}{
+		{
+			msg: "no files have objc directive",
+			fileInfos: swiftpkg.SwiftFileInfos{
+				{HasObjcDirective: false},
+				{HasObjcDirective: false},
+				{HasObjcDirective: false},
+			},
+			exp: false,
+		},
+		{
+			msg: "a file has an objc directive",
+			fileInfos: swiftpkg.SwiftFileInfos{
+				{HasObjcDirective: false},
+				{HasObjcDirective: true},
+				{HasObjcDirective: false},
+			},
+			exp: true,
+		},
+	}
+	for _, tt := range tests {
+		actual := tt.fileInfos.RequiresModulemap()
+		assert.Equal(t, tt.exp, actual, tt.msg)
+	}
 }
 
 const mainFnWithoutImports = `
@@ -87,7 +130,7 @@ public struct Hello {
 `
 
 const mainAnnotationWithImports = `
-// Intentionally not sorted to ensure that FileInfo imports is sorted
+// Intentionally not sorted to ensure that SwiftFileInfo imports is sorted
 import Foundation
 import ArgumentParser
 
@@ -128,5 +171,16 @@ import XCTest
 XCTMain([
     testCase(AppTests.allTests),
 ])
+#endif
+`
+
+const objcDirective = `
+#if canImport(Combine) && swift(>=5.0)
+
+  import Foundation
+
+  // Make this class discoverable from Objective-C. Don't instantiate directly.
+  @objc(FIRCombineFirestoreLibrary) private class __CombineFirestoreLibrary: NSObject {}
+
 #endif
 `

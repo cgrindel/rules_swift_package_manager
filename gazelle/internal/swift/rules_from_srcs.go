@@ -5,6 +5,7 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftpkg"
 	mapset "github.com/deckarep/golang-set/v2"
 )
 
@@ -14,7 +15,7 @@ func RulesFromSrcs(
 	srcs []string,
 	defaultModuleName string,
 ) []*rule.Rule {
-	fileInfos := NewFileInfosFromRelPaths(args.Dir, srcs)
+	fileInfos := swiftpkg.NewSwiftFileInfosFromRelPaths(args.Dir, srcs)
 	swiftImports, moduleType := collectSwiftInfo(fileInfos)
 
 	shouldSetVis := shouldSetVisibility(args)
@@ -31,10 +32,10 @@ func RulesFromSrcs(
 	return rules
 }
 
-var guiModules = mapset.NewSet[string]("AppKit", "UIKit", "SwiftUI")
+var guiModules = mapset.NewSet("AppKit", "UIKit", "SwiftUI")
 
 // Returns the imports and the module typ
-func collectSwiftInfo(fileInfos []*FileInfo) ([]string, ModuleType) {
+func collectSwiftInfo(fileInfos []*swiftpkg.SwiftFileInfo) ([]string, ModuleType) {
 	importsGUIModules := false
 	hasTestFiles := false
 	hasMain := false
