@@ -10,7 +10,11 @@ try-import %workspace%/../../local.bazelrc
 # The CNIOBoringSSL uses C++14 features like 'enable_if_t' macro support.
 # For more details on how to enable this in Bazel: 
 # https://stackoverflow.com/questions/40260242/how-to-set-c-standard-version-when-build-with-bazel/43388168#43388168
-build --cxxopt='-std=c++14'
+# build --cxxopt='-std=c++14'
+
+# Per https://github.com/firebase/firebase-ios-sdk/blob/master/Package.swift#L1322-L1323
+build --cxxopt='-std=gnu++14'
+build --copt='--std=c99'
 
 # Firebase SPM support requires `-ObjC` linker option.
 # https://github.com/firebase/firebase-ios-sdk/blob/master/SwiftPackageManager.md#requirements
