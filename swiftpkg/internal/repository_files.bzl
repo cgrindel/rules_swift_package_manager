@@ -2,6 +2,22 @@
 
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 
+def _path_exists(repository_ctx, path):
+    """Determines if the specified path exists.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+        path: A path `string` value.
+
+    Returns:
+        A `bool` indicating whether the path exists.
+    """
+    exec_result = repository_ctx.execute(
+        ["test", "-e", path],
+        quiet = True,
+    )
+    return exec_result.return_code == 0
+
 def _list_files_under(repository_ctx, path, exclude = []):
     """Retrieves the list of files under the specified path.
 
@@ -155,4 +171,5 @@ repository_files = struct(
     is_directory = _is_directory,
     list_directories_under = _list_directories_under,
     list_files_under = _list_files_under,
+    path_exists = _path_exists,
 )
