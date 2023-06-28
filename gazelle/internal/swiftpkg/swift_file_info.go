@@ -71,8 +71,8 @@ func NewSwiftFileInfoFromPath(rel, abs string) (*SwiftFileInfo, error) {
 }
 
 // NewSwiftFileInfosFromRelPaths returns a slice of file information for the source files in a directory.
-func NewSwiftFileInfosFromRelPaths(dir string, srcs []string) []*SwiftFileInfo {
-	fileInfos := make([]*SwiftFileInfo, len(srcs))
+func NewSwiftFileInfosFromRelPaths(dir string, srcs []string) SwiftFileInfos {
+	fileInfos := make(SwiftFileInfos, len(srcs))
 	for idx, src := range srcs {
 		abs := filepath.Join(dir, src)
 		fi, err := NewSwiftFileInfoFromPath(src, abs)

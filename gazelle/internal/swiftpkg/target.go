@@ -91,7 +91,7 @@ func NewTargetFromManifestInfo(
 	moduleType := NewModuleType(descT.ModuleType)
 	srcType := NewSourceType(moduleType, descT.Sources)
 
-	var swiftFileInfos []*SwiftFileInfo
+	var swiftFileInfos SwiftFileInfos
 	if srcType == SwiftSourceType {
 		targetPath := filepath.Join(pkgPath, descT.Path)
 		swiftFileInfos = NewSwiftFileInfosFromRelPaths(targetPath, descT.Sources)
