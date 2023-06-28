@@ -106,7 +106,7 @@
       "name": "FirebaseAnalyticsWithoutAdIdSupportWrapper",
       "c99name": "FirebaseAnalyticsWithoutAdIdSupportWrapper",
       "src_type": "objc",
-      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseAnalyticsWithoutAdIdSupportWrapper",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseAnalyticsWithoutAdIdSupportWrapper_FirebaseAnalyticsWithoutAdIdSupportWrapper",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseAnalyticsWithoutAdIdSupport"
@@ -116,7 +116,7 @@
       "name": "FirebaseAnalyticsWrapper",
       "c99name": "FirebaseAnalyticsWrapper",
       "src_type": "objc",
-      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseAnalyticsWrapper",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseAnalyticsWrapper_FirebaseAnalyticsWrapper",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseAnalytics",
@@ -185,6 +185,7 @@
       "c99name": "FirebaseAuthCombineSwift",
       "src_type": "swift",
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseCombineSwift_Sources_Auth_FirebaseAuthCombineSwift",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseCombineSwift_Sources_Auth_FirebaseAuthCombineSwift_modulemap",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseAuthCombine-Community"
@@ -195,6 +196,7 @@
       "c99name": "FirebaseFirestoreCombineSwift",
       "src_type": "swift",
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseCombineSwift_Sources_Firestore_FirebaseFirestoreCombineSwift",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseCombineSwift_Sources_Firestore_FirebaseFirestoreCombineSwift_modulemap",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseFirestoreCombine-Community"
@@ -205,6 +207,7 @@
       "c99name": "FirebaseFunctionsCombineSwift",
       "src_type": "swift",
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseCombineSwift_Sources_Functions_FirebaseFunctionsCombineSwift",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseCombineSwift_Sources_Functions_FirebaseFunctionsCombineSwift_modulemap",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseFunctionsCombine-Community"
@@ -215,6 +218,7 @@
       "c99name": "FirebaseStorageCombineSwift",
       "src_type": "swift",
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseCombineSwift_Sources_Storage_FirebaseStorageCombineSwift",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseCombineSwift_Sources_Storage_FirebaseStorageCombineSwift_modulemap",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseStorageCombine-Community"
@@ -240,6 +244,7 @@
       "c99name": "FirebaseCoreInternal",
       "src_type": "swift",
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseCore_Internal_Sources_FirebaseCoreInternal",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseCore_Internal_Sources_FirebaseCoreInternal_modulemap",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseAnalytics",
@@ -341,6 +346,7 @@
       "c99name": "FirebaseFunctions",
       "src_type": "swift",
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseFunctions_Sources_FirebaseFunctions",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseFunctions_Sources_FirebaseFunctions_modulemap",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseFunctionsCombine-Community",
@@ -406,6 +412,7 @@
       "c99name": "FirebaseMLModelDownloader",
       "src_type": "swift",
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseMLModelDownloader_Sources_FirebaseMLModelDownloader",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseMLModelDownloader_Sources_FirebaseMLModelDownloader_modulemap",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseMLModelDownloader"
@@ -447,6 +454,7 @@
       "c99name": "FirebaseRemoteConfigSwift",
       "src_type": "swift",
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfigSwift_Sources_FirebaseRemoteConfigSwift",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfigSwift_Sources_FirebaseRemoteConfigSwift_modulemap",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseRemoteConfigSwift"
@@ -484,6 +492,7 @@
       "c99name": "FirebaseStorage",
       "src_type": "swift",
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseStorage_Sources_FirebaseStorage",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseStorage_Sources_FirebaseStorage_modulemap",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseStorageCombine-Community",
@@ -680,7 +689,7 @@
       "name": "GoogleDataTransport",
       "c99name": "GoogleDataTransport",
       "src_type": "objc",
-      "label": "@swiftpkg_googledatatransport//:GoogleDataTransport",
+      "label": "@swiftpkg_googledatatransport//:GoogleDataTransport_GoogleDataTransport",
       "package_identity": "googledatatransport",
       "product_memberships": [
         "GoogleDataTransport"
@@ -921,6 +930,7 @@
       "c99name": "PromisesTestHelpers",
       "src_type": "swift",
       "label": "@swiftpkg_promises//:Sources_PromisesTestHelpers",
+      "modulemap_label": "@swiftpkg_promises//:Sources_PromisesTestHelpers_modulemap",
       "package_identity": "promises",
       "product_memberships": [
         "PromisesTestHelpers"
@@ -1235,7 +1245,7 @@
       "name": "GoogleDataTransport",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_googledatatransport//:GoogleDataTransport"
+        "@swiftpkg_googledatatransport//:GoogleDataTransport_GoogleDataTransport"
       ]
     },
     {
