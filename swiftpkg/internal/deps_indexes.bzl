@@ -76,16 +76,29 @@ def _new(modules = [], products = [], packages = []):
     )
 
 def _new_module_from_dict(mod_dict):
+    modulemap_label = None
+    modulemap_label_str = mod_dict.get("modulemap_label", "")
+    if modulemap_label_str != "":
+        modulemap_label = bazel_labels.parse(modulemap_label_str)
+
     return _new_module(
         name = mod_dict["name"],
         c99name = mod_dict["c99name"],
         src_type = mod_dict.get("src_type", "unknown"),
         label = bazel_labels.parse(mod_dict["label"]),
+        modulemap_label = modulemap_label,
         package_identity = mod_dict["package_identity"],
         product_memberships = mod_dict["product_memberships"],
     )
 
-def _new_module(name, c99name, src_type, label, package_identity, product_memberships):
+def _new_module(
+        name,
+        c99name,
+        src_type,
+        label,
+        package_identity,
+        product_memberships,
+        modulemap_label = None):
     validations.in_list(
         src_types.all_values,
         src_type,
@@ -96,6 +109,7 @@ def _new_module(name, c99name, src_type, label, package_identity, product_member
         c99name = c99name,
         src_type = src_type,
         label = label,
+        modulemap_label = modulemap_label,
         package_identity = package_identity,
         product_memberships = product_memberships,
     )
@@ -211,10 +225,12 @@ def _labels_for_module(module, depender_src_type):
         # See `swiftpkg_build_files.bzl` for more information.
         labels.append(_modulemap_label_for_module(module))
 
-    elif depender_src_type == src_types.objc and module.src_type == src_types.swift:
+    elif (depender_src_type == src_types.objc and
+          module.src_type == src_types.swift and
+          module.modulemap_label != None):
         # If an Objc module wants to @import a Swift module, it will need the
         # modulemap target.
-        labels.append(_modulemap_label_for_module(module))
+        labels.append(module.modulemap_label)
 
     return labels
 
