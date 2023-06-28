@@ -36,6 +36,7 @@ func NewModule(
 		Label:              bzlLabel,
 		PkgIdentity:        pkgIdentity,
 		ProductMemberships: pms,
+		ModulemapLabel:     modulemapLabel,
 	}
 }
 
