@@ -43,3 +43,10 @@ func TestBazelLabelFromTarget(t *testing.T) {
 		assert.Equal(t, &expected, actual, tt.msg)
 	}
 }
+
+func TestModulemapBazelLabelFromTargetLabel(t *testing.T) {
+	targetLabel := label.New("example_cool_repo", "bzlpkg", "foo")
+	actual := swift.ModulemapBazelLabelFromTargetLabel(&targetLabel)
+	expected := label.New("example_cool_repo", "bzlpkg", "foo_modulemap")
+	assert.Equal(t, &expected, actual)
+}

@@ -53,10 +53,20 @@ func NewModuleFromLabelStruct(
 
 // NewModuleFromTarget returns a module from the specified Swift target.
 func NewModuleFromTarget(repoName, pkgIdentity string, t *swiftpkg.Target) (*Module, error) {
-	// TODO(chuck): Add logic for whether a module will have a corresponding modulemap target.
-	var modulemapLabel *label.Label
 	lbl := BazelLabelFromTarget(repoName, t)
-	return NewModule(t.Name, t.C99name, t.SrcType, lbl, modulemapLabel, pkgIdentity, t.ProductMemberships), nil
+	var mml *label.Label
+	if t.SwiftFileInfos.RequiresModulemap() {
+		mml = ModulemapBazelLabelFromTargetLabel(lbl)
+	}
+	return NewModule(
+		t.Name,
+		t.C99name,
+		t.SrcType,
+		lbl,
+		mml,
+		pkgIdentity,
+		t.ProductMemberships,
+	), nil
 }
 
 // LabelStr returns the label string for module.

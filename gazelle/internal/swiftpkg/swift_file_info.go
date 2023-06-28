@@ -150,3 +150,16 @@ func (ds DirSuffixes) IsUnderDirWithSuffix(path string) bool {
 
 // TestDirSuffixes lists the suffixes used for Swift test directories.
 var TestDirSuffixes = DirSuffixes{"Tests", "Test"}
+
+// SwiftFileInfos represents a collection of SwiftFileInfo instances.
+type SwiftFileInfos []*SwiftFileInfo
+
+// RequiresModulemap determines whether a modulemap target will be generated for this target.
+func (sfis SwiftFileInfos) RequiresModulemap() bool {
+	for _, sfi := range sfis {
+		if sfi.HasObjcDirective {
+			return true
+		}
+	}
+	return false
+}

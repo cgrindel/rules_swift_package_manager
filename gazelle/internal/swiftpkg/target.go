@@ -62,7 +62,7 @@ type Target struct {
 	SrcType            SourceType
 	ProductMemberships []string
 	// SwiftFileInfos will only be populated if the target is a Swift target.
-	SwiftFileInfos []*SwiftFileInfo
+	SwiftFileInfos SwiftFileInfos
 }
 
 // NewTargetFromManifestInfo returns a Swift target from manifest information.

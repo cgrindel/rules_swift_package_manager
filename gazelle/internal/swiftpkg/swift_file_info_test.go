@@ -87,6 +87,37 @@ func TestDirSuffixes(t *testing.T) {
 	assert.True(t, actual)
 }
 
+func TestSwiftFileInfos(t *testing.T) {
+	tests := []struct {
+	    msg string
+	    fileInfos swiftpkg.SwiftFileInfos
+	    exp bool
+	}{
+		{
+			msg: "no files have objc directive",
+			fileInfos: swiftpkg.SwiftFileInfos{
+				{HasObjcDirective: false},
+				{HasObjcDirective: false},
+				{HasObjcDirective: false},
+			},
+			exp: false,
+		},
+		{
+			msg: "a file has an objc directive",
+			fileInfos: swiftpkg.SwiftFileInfos{
+				{HasObjcDirective: false},
+				{HasObjcDirective: true},
+				{HasObjcDirective: false},
+			},
+			exp: true,
+		},
+	}
+	for _, tt := range tests {
+		actual := tt.fileInfos.RequiresModulemap()
+		assert.Equal(t, tt.exp, actual, tt.msg)
+	}
+}
+
 const mainFnWithoutImports = `
 @main
 public struct Hello {
