@@ -1,6 +1,7 @@
 {
   "direct_dep_identities": [
-    "firebase-ios-sdk"
+    "firebase-ios-sdk",
+    "reachability.swift"
   ],
   "modules": [
     {
@@ -937,6 +938,16 @@
       ]
     },
     {
+      "name": "Reachability",
+      "c99name": "Reachability",
+      "src_type": "swift",
+      "label": "@swiftpkg_reachability.swift//:Sources_Reachability",
+      "package_identity": "reachability.swift",
+      "product_memberships": [
+        "Reachability"
+      ]
+    },
+    {
       "name": "SwiftProtobufPlugin",
       "c99name": "SwiftProtobufPlugin",
       "src_type": "unknown",
@@ -1426,6 +1437,14 @@
       ]
     },
     {
+      "identity": "reachability.swift",
+      "name": "Reachability",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_reachability.swift//:Sources_Reachability"
+      ]
+    },
+    {
       "identity": "swift-protobuf",
       "name": "SwiftProtobuf",
       "type": "library",
@@ -1556,6 +1575,15 @@
         "commit": "3e4e743631e86c8c70dbc6efdc7beaa6e90fd3bb",
         "remote": "https://github.com/google/promises.git",
         "version": "2.1.1"
+      }
+    },
+    {
+      "name": "swiftpkg_reachability.swift",
+      "identity": "reachability.swift",
+      "remote": {
+        "commit": "c01bbdf2d633cf049ae1ed1a68a2020a8bda32e2",
+        "remote": "https://github.com/ashleymills/Reachability.swift.git",
+        "version": "5.1.0"
       }
     },
     {
