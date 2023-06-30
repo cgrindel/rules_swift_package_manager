@@ -62,8 +62,11 @@ def _label(name):
     Returns:
         The condition label as a `string`.
     """
+
+    # There is currently no support Mac Catalyst in Bazel. These are Mac apps
+    # that use iOS frameworks. Treat it like iOS for now.
     if name == "maccatalyst":
-        name = "macos"
+        name = "ios"
     return "@rules_swift_package_manager//config_settings/spm/platform:{}".format(name)
 
 platforms = struct(
