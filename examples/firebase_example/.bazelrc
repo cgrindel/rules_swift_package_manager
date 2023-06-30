@@ -14,7 +14,7 @@ try-import %workspace%/../../local.bazelrc
 
 # Per https://github.com/firebase/firebase-ios-sdk/blob/master/Package.swift#L1322-L1323
 build --cxxopt='-std=gnu++14'
-build --copt='--std=c99'
+build --copt='-std=c99'
 
 # Firebase SPM support requires `-ObjC` linker option.
 # https://github.com/firebase/firebase-ios-sdk/blob/master/SwiftPackageManager.md#requirements
