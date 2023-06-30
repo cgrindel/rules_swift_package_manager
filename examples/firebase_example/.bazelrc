@@ -7,26 +7,12 @@ import %workspace%/../../ci.bazelrc
 # Try to import a local.rc file; typically, written by CI
 try-import %workspace%/../../local.bazelrc
 
-# The CNIOBoringSSL uses C++14 features like 'enable_if_t' macro support.
-# For more details on how to enable this in Bazel: 
-# https://stackoverflow.com/questions/40260242/how-to-set-c-standard-version-when-build-with-bazel/43388168#43388168
-# build --cxxopt='-std=c++14'
-
 # Per https://github.com/firebase/firebase-ios-sdk/blob/master/Package.swift#L1322-L1323
 # NOTE: Puposefully not specifying --copt='-std=c99' as it is applied to 
 # objc_library targets that contain Objective-C++ files. Tried using 
 # --per_file_copt to exclude .mm files, but did not have success.
+# https://stackoverflow.com/questions/40260242/how-to-set-c-standard-version-when-build-with-bazel/43388168#43388168
 build --cxxopt='-std=gnu++14'
-
-# TODO: CLEAN UP
-# build --copt='-std=c99'
-# build --per_file_copt=.*\.(h|c|cc|cpp|m)$@-std=c99
-# build --per_file_copt=-.*\.mm$@-std=c99
-# build --per_file_copt="-\\.mm$@-std=c99"
-# build --per_file_copt="-\\.(mm)$@-std=c99"
-# build --per_file_copt=-\.mm$@-std=c99
-# build --per_file_copt=+.*,-\.mm$@-std=c99
-# build --per_file_copt=+\.(h|c|cc|cpp|m)$@-std=c99
 
 # Firebase SPM support requires `-ObjC` linker option.
 # https://github.com/firebase/firebase-ios-sdk/blob/master/SwiftPackageManager.md#requirements
