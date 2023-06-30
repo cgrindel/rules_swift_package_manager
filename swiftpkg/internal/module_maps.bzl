@@ -118,6 +118,13 @@ def write_module_map(
 
     # Write a `use` declaration for each of the module's dependencies.
     content.add_all(dependent_module_names, format_each = '    use "%s"')
+
+    # Export all of the modules referenced by the headers
+    # This was needed to allow the firebase Crashlytics example to build.
+    content.add("")
+    content.add("    export *")
+
+    # Close out the module
     content.add("}")
 
     actions.write(
