@@ -39,20 +39,27 @@ def _new(value, kind = None, condition = None):
         value = value,
     )
 
-def _new_from_build_setting(build_setting):
+def _new_from_build_setting(build_setting, values_map_fn = None):
     """Create conditions from an SPM build setting.
 
     Args:
         build_setting: A `struct` as returned by `pkginfos.new_build_setting`.
+        values_map_fn: Optional. A `function` that is applied to each value
+            before being added to condition struct.
 
     Returns:
         A `list` of condition `struct` values (`bzl_selects.new`).
     """
+    if values_map_fn == None:
+        values = build_setting.values
+    else:
+        values = lists.map(build_setting.values, values_map_fn)
+
     bsc = build_setting.condition
     if bsc == None:
         return [
             _new(kind = build_setting.kind, value = v)
-            for v in build_setting.values
+            for v in values
         ]
 
     platforms_len = len(bsc.platforms)
@@ -72,7 +79,7 @@ Found a build setting condition that had no platforms or a configuration. {}\
 
     return [
         _new(kind = build_setting.kind, value = v, condition = c)
-        for v in build_setting.values
+        for v in values
         for c in conditions
     ]
 

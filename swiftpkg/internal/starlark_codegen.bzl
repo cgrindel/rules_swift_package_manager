@@ -289,6 +289,20 @@ def _expr_to_starlark_parts(expr, indent):
             parts.append(" ")
     return parts
 
+# MARK: - Escape String
+
+def _normalize_define_value(value):
+    """Ensures that the specified value is properly formatted as a `defines` \
+    value.
+
+    Args:
+        value: The `string` to normalize.
+
+    Returns:
+        A `string` that is formatted properly to be a `defines` value.
+    """
+    return value.replace(" ", "\\ ")
+
 # MARK: - API Definition
 
 starlark_codegen = struct(
@@ -300,4 +314,5 @@ starlark_codegen = struct(
     normalize = _normalize,
     to_starlark = _to_starlark,
     with_indent = _with_indent,
+    normalize_define_value = _normalize_define_value,
 )
