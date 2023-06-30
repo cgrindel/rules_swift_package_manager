@@ -137,9 +137,43 @@ def _collect_builtin_frameworks_test(ctx):
 
 collect_builtin_frameworks_test = unittest.make(_collect_builtin_frameworks_test)
 
+def _has_objc_srcs_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "has entries",
+            srcs = [],
+            exp = False,
+        ),
+        struct(
+            msg = "has .m file",
+            srcs = ["foo.h", "foo.m"],
+            exp = True,
+        ),
+        struct(
+            msg = "has .mm file",
+            srcs = ["foo.h", "foo.mm"],
+            exp = True,
+        ),
+        struct(
+            msg = "has no objc srcs",
+            srcs = ["foo.h", "foo.c"],
+            exp = False,
+        ),
+    ]
+    for t in tests:
+        actual = objc_files.has_objc_srcs(t.srcs)
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+has_objc_srcs_test = unittest.make(_has_objc_srcs_test)
+
 def objc_files_test_suite():
     return unittest.suite(
         "objc_files_tests",
         parse_for_imported_framework_test,
         collect_builtin_frameworks_test,
+        has_objc_srcs_test,
     )

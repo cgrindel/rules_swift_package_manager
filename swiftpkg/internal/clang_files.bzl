@@ -18,7 +18,7 @@ _HEADER_EXTS = [".h", ".hh", ".hpp", ".hxx", ".inl", ".H"]
 # https://bazel.build/reference/be/objective-c#objc_library.srcs
 # NOTE: From examples found so far, .inc files tend to include source, not
 # header declarations.
-_SRC_EXTS = [".c", ".cc", ".S", ".so", ".o", ".m", ".inc"]
+_SRC_EXTS = [".c", ".cc", ".S", ".so", ".o", ".m", ".mm", ".inc"]
 
 def _is_hdr(path):
     _root, ext = paths.split_extension(path)

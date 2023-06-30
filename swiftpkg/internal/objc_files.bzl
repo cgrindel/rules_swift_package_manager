@@ -135,7 +135,7 @@ def _has_objc_srcs(srcs):
         A `bool` indicating whether any of the source files are Objective-C
         files.
     """
-    return lists.contains(srcs, lambda x: x.endswith(".m"))
+    return lists.contains(srcs, lambda x: x.endswith(".m") or x.endswith(".mm"))
 
 objc_files = struct(
     collect_builtin_frameworks = _collect_builtin_frameworks,
