@@ -127,9 +127,24 @@ def _new_from_build_setting_test(ctx):
                 ),
             ],
         ),
+        struct(
+            msg = "with values_map_fn",
+            bs = pkginfos.new_build_setting(
+                kind = "define",
+                values = ["CHICKEN=Foo"],
+            ),
+            values_map_fn = lambda x: x + "Bar",
+            exp = [
+                bzl_selects.new(value = "CHICKEN=FooBar", kind = "define"),
+            ],
+        ),
     ]
     for t in tests:
-        actual = bzl_selects.new_from_build_setting(t.bs)
+        values_map_fn = getattr(t, "values_map_fn", None)
+        actual = bzl_selects.new_from_build_setting(
+            t.bs,
+            values_map_fn = values_map_fn,
+        )
         asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)

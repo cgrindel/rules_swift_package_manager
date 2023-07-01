@@ -332,6 +332,29 @@ foo(
 
 expr_to_starlark_parts_test = unittest.make(_expr_to_starlark_parts_test)
 
+def _normalize_define_value_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "no spaces",
+            val = "CHICKEN=foo",
+            exp = "CHICKEN=foo",
+        ),
+        struct(
+            msg = "with spaces",
+            val = "CHICKEN=Foo iOS SDK",
+            exp = "CHICKEN=Foo\\ iOS\\ SDK",
+        ),
+    ]
+    for t in tests:
+        actual = scg.normalize_define_value(t.val)
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+normalize_define_value_test = unittest.make(_normalize_define_value_test)
+
 def starlark_codegen_test_suite():
     return unittest.suite(
         "starlark_codegen_tests",
@@ -342,4 +365,5 @@ def starlark_codegen_test_suite():
         op_to_starlark_parts_test,
         new_expr_test,
         expr_to_starlark_parts_test,
+        normalize_define_value_test,
     )

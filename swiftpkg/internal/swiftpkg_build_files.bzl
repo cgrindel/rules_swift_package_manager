@@ -196,7 +196,12 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 
     if target.clang_settings != None:
         defines.extend(lists.flatten([
-            bzl_selects.new_from_build_setting(bs)
+            bzl_selects.new_from_build_setting(
+                bs,
+                # Define values can contain spaces. Bazel requires that they
+                # are already escaped.
+                values_map_fn = scg.normalize_define_value,
+            )
             for bs in target.clang_settings.defines
         ]))
 

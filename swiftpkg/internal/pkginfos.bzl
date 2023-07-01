@@ -875,6 +875,9 @@ def _new_clang_src_info_from_sources(
             extra_hdr_dirs.append(normalized_pi)
     for ehd in extra_hdr_dirs:
         abs_ehd = paths.normalize(paths.join(pkg_path, ehd))
+        if not repository_files.path_exists(repository_ctx, abs_ehd):
+            # Do not fail if the path does not exist.
+            continue
         hdr_paths = repository_files.list_files_under(repository_ctx, abs_ehd)
         hdr_paths = [
             clang_files.relativize(hp, pkg_path)
