@@ -35,7 +35,7 @@ ios_application(
     minimum_os_version = "15.0",
     resources = glob(
         ["CrashlyticsSwiftUIExample/Assets.xcassets/**"],
-        exclude = ["CrashlyticsSwiftUIExample/Assets.xcassets/App Icon & Top Shelf Image.brandassets/**"],
+        exclude = ["CrashlyticsSwiftUIExample/Assets.xcassets/AppIconTopShelfImage.brandassets/**"],
     ),
     deps = [":CrashlyticsSwiftUIExample"],
 )
@@ -48,7 +48,7 @@ macos_application(
     minimum_os_version = "11.0",
     resources = glob(
         ["CrashlyticsSwiftUIExample/Assets.xcassets/**"],
-        exclude = ["CrashlyticsSwiftUIExample/Assets.xcassets/App Icon & Top Shelf Image.brandassets/**"],
+        exclude = ["CrashlyticsSwiftUIExample/Assets.xcassets/AppIconTopShelfImage.brandassets/**"],
     ),
     deps = [":CrashlyticsSwiftUIExample"],
 )
