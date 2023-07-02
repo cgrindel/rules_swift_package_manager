@@ -93,7 +93,7 @@ Add a dependency on `rules_swift_package_manager`.
 
 <!-- BEGIN MODULE SNIPPET -->
 ```python
-bazel_dep(name = "rules_swift_package_manager", version = "0.5.0")
+bazel_dep(name = "rules_swift_package_manager", version = "0.6.0")
 ```
 <!-- END MODULE SNIPPET -->
 
@@ -120,9 +120,9 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 http_archive(
     name = "rules_swift_package_manager",
-    sha256 = "85b87264639ec8459e665954ad4309a127ef4d44b290b32a8eefaf6ce86b4e03",
+    sha256 = "0becadbc71e99caf5502b696f8065acc165db9f7eef25708cfb7adec81c2e565",
     urls = [
-        "https://github.com/cgrindel/rules_swift_package_manager/releases/download/v0.5.0/rules_swift_package_manager.v0.5.0.tar.gz",
+        "https://github.com/cgrindel/rules_swift_package_manager/releases/download/v0.6.0/rules_swift_package_manager.v0.6.0.tar.gz",
     ],
 )
 
