@@ -1,4 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>cgrindel/renovate_presets"]
+  "extends": [
+    "github>cgrindel/renovate_presets:ruleset_base",
+    "github>cgrindel/renovate_presets:cgrindel_default"
+  ]
 }
