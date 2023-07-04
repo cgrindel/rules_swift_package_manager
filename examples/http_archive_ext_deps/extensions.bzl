@@ -27,9 +27,9 @@ swift_library(
     visibility = ["//visibility:public"],
 )
 """,
-        sha256 = "f2c3a7f20e6dede610e7bd7e6cc9e352df54070769bc5b7f5d4bb2868e3c10ae",
-        strip_prefix = "swift-argument-parser-1.2.0",
-        url = "https://github.com/apple/swift-argument-parser/archive/1.2.0.tar.gz",
+        sha256 = "44782ba7180f924f72661b8f457c268929ccd20441eac17301f18eff3b91ce0c",
+        strip_prefix = "swift-argument-parser-1.2.2",
+        url = "https://github.com/apple/swift-argument-parser/archive/1.2.2.tar.gz",
     )
 
 non_module_deps = module_extension(implementation = _non_module_deps_impl)
