@@ -7,7 +7,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/Quick/Quick",
-            from: "5.0.1"
+            from: "v7.1.0"
         ),
        .package(
             url: "https://github.com/Quick/Nimble",
