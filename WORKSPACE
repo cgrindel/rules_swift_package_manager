@@ -89,8 +89,8 @@ bazel_starlib_go_dependencies()
 
 http_archive(
     name = "build_bazel_rules_swift",
-    sha256 = "7929b4fd6d9f7c44ed5734a15004bfc2046146ba5ea269f0568d9efe2f405ef3",
-    url = "https://github.com/bazelbuild/rules_swift/releases/download/1.9.0/rules_swift.1.9.0.tar.gz",
+    sha256 = "b3b6c5c9f2a589150f71e79dec1e1ed0eb974dbd49e9317df4e09e08ff6e83df",
+    url = "https://github.com/bazelbuild/rules_swift/releases/download/1.9.1/rules_swift.1.9.1.tar.gz",
 )
 
 load(
