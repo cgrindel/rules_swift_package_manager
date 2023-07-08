@@ -18,6 +18,10 @@ tidy(
 # Ignore the Swift build folder
 # gazelle:exclude .build
 
+# The example code has a strange layout. Do not generate swift_xxx for this
+# example.
+# gazelle:exclude **
+
 gazelle_binary(
     name = "gazelle_bin",
     languages = [
