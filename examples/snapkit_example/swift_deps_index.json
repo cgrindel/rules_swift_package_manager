@@ -1,0 +1,47 @@
+{
+  "direct_dep_identities": [
+    "snapkit"
+  ],
+  "modules": [
+    {
+      "name": "SnapKit",
+      "c99name": "SnapKit",
+      "src_type": "swift",
+      "label": "@swiftpkg_snapkit//:Sources_SnapKit",
+      "package_identity": "snapkit",
+      "product_memberships": [
+        "SnapKit",
+        "SnapKit-Dynamic"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "identity": "snapkit",
+      "name": "SnapKit",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_snapkit//:Sources_SnapKit"
+      ]
+    },
+    {
+      "identity": "snapkit",
+      "name": "SnapKit-Dynamic",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_snapkit//:Sources_SnapKit"
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "name": "swiftpkg_snapkit",
+      "identity": "snapkit",
+      "remote": {
+        "commit": "f222cbdf325885926566172f6f5f06af95473158",
+        "remote": "https://github.com/SnapKit/SnapKit.git",
+        "version": "5.6.0"
+      }
+    }
+  ]
+}
