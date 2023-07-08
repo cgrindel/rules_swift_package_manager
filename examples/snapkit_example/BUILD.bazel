@@ -1,4 +1,7 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
 
@@ -33,4 +36,42 @@ swift_update_packages(
     gazelle = ":gazelle_bin",
     generate_swift_deps_for_workspace = False,
     update_bzlmod_stanzas = True,
+)
+
+swift_library(
+    name = "SnapkitExample",
+    srcs = [
+        "AppDelegate.swift",
+        "ListViewController.swift",
+        "demos/BasicUIScrollViewController.swift",
+        "demos/SimpleLayoutViewController.swift",
+    ],
+    module_name = "SnapkitExample",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+    deps = ["@swiftpkg_snapkit//:Sources_SnapKit"],
+)
+
+ios_application(
+    name = "iosapp",
+    app_icons = glob(["Assets.xcassets/AppIcon.appiconset/**"]),
+    bundle_id = "io.snapkit.Example-iOS",
+    families = [
+        "iphone",
+    ],
+    infoplists = [":Info.plist"],
+    launch_storyboard = ":Base.lproj/LaunchScreen.storyboard",
+    minimum_os_version = "11.0",
+    resources = glob(
+        ["Assets.xcassets/**"],
+        exclude = ["Assets.xcassets/AppIcon.appiconset/**"],
+    ),
+    deps = [":SnapkitExample"],
+)
+
+build_test(
+    name = "build_test",
+    targets = [
+        ":iosapp",
+    ],
 )
