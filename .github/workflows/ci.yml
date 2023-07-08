@@ -66,6 +66,9 @@ jobs:
           - test: '@@//examples:resources_example_test_bazel_.bazelversion'
             runner: macos-13
             enable_bzlmod: true
+          - test: '@@//examples:snapkit_example_test_bazel_.bazelversion'
+            runner: macos-13
+            enable_bzlmod: true
           - test: '@@//examples:soto_example_test_bazel_.bazelversion'
             runner: ubuntu-22.04
             enable_bzlmod: true

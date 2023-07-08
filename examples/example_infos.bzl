@@ -153,6 +153,7 @@ _macos_single_bazel_version_test_examples = [
     "objc_code",
     "phone_number_kit",
     "resources_example",
+    "snapkit_example",
     "xcmetrics_example",
 ]
 
