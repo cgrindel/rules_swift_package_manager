@@ -2,7 +2,10 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
     name = "Foo",
-    srcs = glob(["*.swift"]),
+    srcs = [
+        "Bar.swift",
+        "MarkdownFoo.swift",
+    ],
     module_name = "Foo",
     visibility = ["//:__subpackages__"],
     deps = [
