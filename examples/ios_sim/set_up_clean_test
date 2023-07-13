@@ -52,4 +52,15 @@ swift_update_packages(
     patches_yaml = "swift_pkg_patches.yaml",
     update_bzlmod_stanzas = True,
 )
+
+# Xcodeproj
+
+xcodeproj(
+    name = "xcodeproj",
+    project_name = "App",
+    tags = ["manual"],
+    top_level_targets = [
+        "//Tests/FooTests",
+    ],
+)
 EOF
