@@ -18,6 +18,10 @@ cat > "${script_dir}/BUILD.bazel"  <<-EOF
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
+load(
+    "@rules_xcodeproj//xcodeproj:defs.bzl",
+    "xcodeproj",
+)
 
 tidy(
     name = "tidy",
