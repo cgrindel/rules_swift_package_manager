@@ -47,13 +47,6 @@ xcodeproj(
     project_name = "App",
     tags = ["manual"],
     top_level_targets = [
-        # top_level_target(
-        #     "//Sources/Foo",
-        #     target_environments = [
-        #         "device",
-        #         "simulator",
-        #     ],
-        # ),
         "//Tests/FooTests",
     ],
 )

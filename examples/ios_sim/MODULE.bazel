@@ -36,10 +36,6 @@ bazel_dep(
     version = "1.7.0",
     dev_dependency = True,
 )
-# local_path_override(
-#     module_name = "rules_xcodeproj",
-#     path = "/Users/chuck/code/MobileNativeFoundation/rules_xcodeproj",
-# )
 
 # swift_deps START
 swift_deps = use_extension(
