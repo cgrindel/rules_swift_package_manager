@@ -5,5 +5,12 @@ set -o errexit -o nounset -o pipefail
 # Generate Swift external deps and update build files
 bazel run //:tidy
 
+# Generate the Xcode project
+bazel run //:xcodeproj
+
+# Build the FooTests scheme in the Xcode project
+xcodebuild -project App.xcodeproj -scheme FooTests
+
 # Ensure that it builds and tests pass
 bazel test //...
+
