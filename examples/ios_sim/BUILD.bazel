@@ -1,6 +1,10 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
+load(
+    "@rules_xcodeproj//xcodeproj:defs.bzl",
+    "xcodeproj",
+)
 
 tidy(
     name = "tidy",
@@ -34,4 +38,15 @@ swift_update_packages(
     generate_swift_deps_for_workspace = False,
     patches_yaml = "swift_pkg_patches.yaml",
     update_bzlmod_stanzas = True,
+)
+
+# Xcodeproj
+
+xcodeproj(
+    name = "xcodeproj",
+    project_name = "App",
+    tags = ["manual"],
+    top_level_targets = [
+        "//Tests/FooTests",
+    ],
 )

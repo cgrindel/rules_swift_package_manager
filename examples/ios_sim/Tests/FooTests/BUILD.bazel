@@ -19,6 +19,6 @@ swift_library(
 ios_unit_test(
     name = "FooTests",
     minimum_os_version = "14.0",
-    visibility = ["//visibility:private"],
+    visibility = ["//visibility:public"],
     deps = [":FooTestsLib"],
 )

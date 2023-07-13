@@ -31,6 +31,11 @@ bazel_dep(
     dev_dependency = True,
     repo_name = "bazel_gazelle",
 )
+bazel_dep(
+    name = "rules_xcodeproj",
+    version = "1.7.0",
+    dev_dependency = True,
+)
 
 # swift_deps START
 swift_deps = use_extension(

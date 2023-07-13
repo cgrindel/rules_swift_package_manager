@@ -1,5 +1,6 @@
 """Defintion for repository utility functions."""
 
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 
 def _is_macos(repository_ctx):
@@ -41,9 +42,18 @@ def _execute_spm_command(
     if _is_macos(repository_ctx):
         exec_args.append("xcrun")
     exec_args.extend(arguments)
+
+    # It is critical that the SPM commands execute using the host's default
+    # SDK. This is typically MacOS.  If the SDKROOT is set to iOS for example,
+    # the SPM command will fail because it cannot compile the package manifest.
+    # Example: rules_xcodeproj sets the SDKROOT before executing
+    # generate_bazel_dependencies.sh.
+    env_overrides = {"SDKROOT": ""}
+    exec_env = dicts.add(env, env_overrides)
+
     exec_result = repository_ctx.execute(
         exec_args,
-        environment = env,
+        environment = exec_env,
         working_directory = working_directory,
     )
     if exec_result.return_code != 0:
