@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/bazelbuild/bazel-gazelle v0.31.1
-	github.com/bazelbuild/buildtools v0.0.0-20230510134650-37bd1811516d
+	github.com/bazelbuild/buildtools/v6 v6.1.2
 	github.com/creasty/defaults v1.7.0
 	github.com/deckarep/golang-set/v2 v2.3.0
 	github.com/stretchr/testify v1.8.4
