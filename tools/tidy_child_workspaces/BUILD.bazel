@@ -1,0 +1,8 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+bzlformat_pkg(name = "bzlformat")
+
+sh_binary(
+    name = "tidy_child_workspaces",
+    srcs = ["tidy_child_workspaces.sh"],
+)
