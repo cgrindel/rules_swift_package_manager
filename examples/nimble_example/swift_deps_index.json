@@ -49,6 +49,7 @@
       "c99name": "CwlPreconditionTesting",
       "src_type": "swift",
       "label": "@swiftpkg_cwlpreconditiontesting//:Sources_CwlPreconditionTesting",
+      "modulemap_label": "@swiftpkg_cwlpreconditiontesting//:Sources_CwlPreconditionTesting_modulemap",
       "package_identity": "cwlpreconditiontesting",
       "product_memberships": [
         "CwlPreconditionTesting"
@@ -59,6 +60,17 @@
       "c99name": "Nimble",
       "src_type": "swift",
       "label": "@swiftpkg_nimble//:Sources_Nimble",
+      "modulemap_label": "@swiftpkg_nimble//:Sources_Nimble_modulemap",
+      "package_identity": "nimble",
+      "product_memberships": [
+        "Nimble"
+      ]
+    },
+    {
+      "name": "NimbleObjectiveC",
+      "c99name": "NimbleObjectiveC",
+      "src_type": "objc",
+      "label": "@swiftpkg_nimble//:Sources_NimbleObjectiveC",
       "package_identity": "nimble",
       "product_memberships": [
         "Nimble"
@@ -69,6 +81,7 @@
       "c99name": "Quick",
       "src_type": "swift",
       "label": "@swiftpkg_quick//:Sources_Quick",
+      "modulemap_label": "@swiftpkg_quick//:Sources_Quick_modulemap",
       "package_identity": "quick",
       "product_memberships": [
         "Quick"
@@ -116,7 +129,8 @@
       "name": "Nimble",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_nimble//:Sources_Nimble"
+        "@swiftpkg_nimble//:Sources_Nimble",
+        "@swiftpkg_nimble//:Sources_NimbleObjectiveC"
       ]
     },
     {
@@ -151,18 +165,18 @@
       "name": "swiftpkg_nimble",
       "identity": "nimble",
       "remote": {
-        "commit": "1f3bde57bde12f5e7b07909848c071e9b73d6edc",
+        "commit": "831000dd1939bc2096df572c5fd156f41d858bfa",
         "remote": "https://github.com/Quick/Nimble",
-        "version": "10.0.0"
+        "version": "12.1.0"
       }
     },
     {
       "name": "swiftpkg_quick",
       "identity": "quick",
       "remote": {
-        "commit": "f9d519828bb03dfc8125467d8f7b93131951124c",
+        "commit": "9913828ef3554e6cc1a57797c9f8dfd136c6c9d6",
         "remote": "https://github.com/Quick/Quick",
-        "version": "5.0.1"
+        "version": "7.1.0"
       }
     }
   ]

@@ -7,7 +7,7 @@ swift_library(
     srcs = ["ParseTests.swift"],
     module_name = "PhoneNumberKitTests",
     tags = ["manual"],
-    deps = ["@swiftpkg_phonenumberkit//:PhoneNumberKit"],
+    deps = ["@swiftpkg_phonenumberkit//:PhoneNumberKit_PhoneNumberKit"],
 )
 
 ios_unit_test(

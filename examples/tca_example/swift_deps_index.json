@@ -8,6 +8,7 @@
       "c99name": "CombineSchedulers",
       "src_type": "swift",
       "label": "@swiftpkg_combine_schedulers//:Sources_CombineSchedulers",
+      "modulemap_label": "@swiftpkg_combine_schedulers//:Sources_CombineSchedulers_modulemap",
       "package_identity": "combine-schedulers",
       "product_memberships": [
         "CombineSchedulers"
@@ -76,6 +77,16 @@
       ]
     },
     {
+      "name": "ConcurrencyExtras",
+      "c99name": "ConcurrencyExtras",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_concurrency_extras//:Sources_ConcurrencyExtras",
+      "package_identity": "swift-concurrency-extras",
+      "product_memberships": [
+        "ConcurrencyExtras"
+      ]
+    },
+    {
       "name": "CustomDump",
       "c99name": "CustomDump",
       "src_type": "swift",
@@ -116,14 +127,14 @@
       ]
     },
     {
-      "name": "_SwiftUINavigationState",
-      "c99name": "_SwiftUINavigationState",
+      "name": "SwiftUINavigationCore",
+      "c99name": "SwiftUINavigationCore",
       "src_type": "swift",
-      "label": "@swiftpkg_swiftui_navigation//:Sources__SwiftUINavigationState",
+      "label": "@swiftpkg_swiftui_navigation//:Sources_SwiftUINavigationCore",
       "package_identity": "swiftui-navigation",
       "product_memberships": [
         "SwiftUINavigation",
-        "_SwiftUINavigationState"
+        "SwiftUINavigationCore"
       ]
     },
     {
@@ -195,6 +206,14 @@
       ]
     },
     {
+      "identity": "swift-concurrency-extras",
+      "name": "ConcurrencyExtras",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_concurrency_extras//:Sources_ConcurrencyExtras"
+      ]
+    },
+    {
       "identity": "swift-custom-dump",
       "name": "CustomDump",
       "type": "library",
@@ -228,10 +247,10 @@
     },
     {
       "identity": "swiftui-navigation",
-      "name": "_SwiftUINavigationState",
+      "name": "SwiftUINavigationCore",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_swiftui_navigation//:Sources__SwiftUINavigationState"
+        "@swiftpkg_swiftui_navigation//:Sources_SwiftUINavigationCore"
       ]
     },
     {
@@ -248,27 +267,27 @@
       "name": "swiftpkg_combine_schedulers",
       "identity": "combine-schedulers",
       "remote": {
-        "commit": "882ac01eb7ef9e36d4467eb4b1151e74fcef85ab",
+        "commit": "ec62f32d21584214a4b27c8cee2b2ad70ab2c38a",
         "remote": "https://github.com/pointfreeco/combine-schedulers",
-        "version": "0.9.1"
+        "version": "0.11.0"
       }
     },
     {
       "name": "swiftpkg_swift_case_paths",
       "identity": "swift-case-paths",
       "remote": {
-        "commit": "f623901b4bcc97f59c36704f81583f169b228e51",
+        "commit": "fc45e7b2cfece9dd80b5a45e6469ffe67fe67984",
         "remote": "https://github.com/pointfreeco/swift-case-paths",
-        "version": "0.13.0"
+        "version": "0.14.1"
       }
     },
     {
       "name": "swiftpkg_swift_clocks",
       "identity": "swift-clocks",
       "remote": {
-        "commit": "20b25ca0dd88ebfb9111ec937814ddc5a8880172",
+        "commit": "0fbaebfc013715dab44d715a4d350ba37f297e4d",
         "remote": "https://github.com/pointfreeco/swift-clocks",
-        "version": "0.2.0"
+        "version": "0.4.0"
       }
     },
     {
@@ -284,27 +303,36 @@
       "name": "swiftpkg_swift_composable_architecture",
       "identity": "swift-composable-architecture",
       "remote": {
-        "commit": "cd22f6a1b3a6210e1e365cbfa8706dbb1736ca27",
+        "commit": "17add0fba71aa18f3f50c08e63c5a9b1f9449f2f",
         "remote": "https://github.com/pointfreeco/swift-composable-architecture",
-        "version": "0.51.0"
+        "version": "0.56.0"
+      }
+    },
+    {
+      "name": "swiftpkg_swift_concurrency_extras",
+      "identity": "swift-concurrency-extras",
+      "remote": {
+        "commit": "479750bd98fac2e813fffcf2af0728b5b0085795",
+        "remote": "https://github.com/pointfreeco/swift-concurrency-extras",
+        "version": "0.1.1"
       }
     },
     {
       "name": "swiftpkg_swift_custom_dump",
       "identity": "swift-custom-dump",
       "remote": {
-        "commit": "dd86159e25c749873f144577e5d18309bf57534f",
+        "commit": "4a87bb75be70c983a9548597e8783236feb3401e",
         "remote": "https://github.com/pointfreeco/swift-custom-dump",
-        "version": "0.8.0"
+        "version": "0.11.1"
       }
     },
     {
       "name": "swiftpkg_swift_dependencies",
       "identity": "swift-dependencies",
       "remote": {
-        "commit": "8282b0c59662eb38946afe30eb403663fc2ecf76",
+        "commit": "16fd42ae04c6e7f74a6a86395d04722c641cccee",
         "remote": "https://github.com/pointfreeco/swift-dependencies",
-        "version": "0.1.4"
+        "version": "0.6.0"
       }
     },
     {
@@ -320,18 +348,18 @@
       "name": "swiftpkg_swiftui_navigation",
       "identity": "swiftui-navigation",
       "remote": {
-        "commit": "270a754308f5440be52fc295242eb7031638bd15",
+        "commit": "2aa885e719087ee19df251c08a5980ad3e787f12",
         "remote": "https://github.com/pointfreeco/swiftui-navigation",
-        "version": "0.6.1"
+        "version": "0.8.0"
       }
     },
     {
       "name": "swiftpkg_xctest_dynamic_overlay",
       "identity": "xctest-dynamic-overlay",
       "remote": {
-        "commit": "62041e6016a30f56952f5d7d3f12a3fd7029e1cd",
+        "commit": "50843cbb8551db836adec2290bb4bc6bac5c1865",
         "remote": "https://github.com/pointfreeco/xctest-dynamic-overlay",
-        "version": "0.8.3"
+        "version": "0.9.0"
       }
     }
   ]

@@ -20,7 +20,7 @@ def swift_dependencies():
     # version: 10.0.0
     swift_package(
         name = "swiftpkg_nimble",
-        commit = "1f3bde57bde12f5e7b07909848c071e9b73d6edc",
+        commit = "831000dd1939bc2096df572c5fd156f41d858bfa",
         dependencies_index = "@//:swift_deps_index.json",
         remote = "https://github.com/Quick/Nimble",
     )
@@ -28,7 +28,7 @@ def swift_dependencies():
     # version: 5.0.1
     swift_package(
         name = "swiftpkg_quick",
-        commit = "f9d519828bb03dfc8125467d8f7b93131951124c",
+        commit = "9913828ef3554e6cc1a57797c9f8dfd136c6c9d6",
         dependencies_index = "@//:swift_deps_index.json",
         remote = "https://github.com/Quick/Quick",
     )

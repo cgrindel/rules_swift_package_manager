@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/soto-project/soto.git",
       "state" : {
-        "revision" : "26bd91a43a3e569956b99b7f15aa2709a1a6ff23",
-        "version" : "6.5.0"
+        "revision" : "939e61467a9adfd78520b46eddf756a09291f7e1",
+        "version" : "6.7.0"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/soto-project/soto-core.git",
       "state" : {
-        "revision" : "cf1c872126e4874144ed2f91aa2124e72388abe0",
-        "version" : "6.4.1"
+        "revision" : "1ddc6a9d21fa129e24886a0085e8b6091777f924",
+        "version" : "6.5.1"
       }
     },
     {
@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-atomics.git",
       "state" : {
-        "revision" : "ff3d2212b6b093db7f177d0855adbc4ef9c5f036",
-        "version" : "1.0.3"
+        "revision" : "6c89474e62719ddcc1e9614989fff2f68208fe10",
+        "version" : "1.1.0"
       }
     },
     {

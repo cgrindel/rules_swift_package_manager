@@ -7,7 +7,7 @@
       "name": "TrustKit",
       "c99name": "TrustKit",
       "src_type": "objc",
-      "label": "@swiftpkg_trustkit//:TrustKit",
+      "label": "@swiftpkg_trustkit//:TrustKit_TrustKit",
       "package_identity": "trustkit",
       "product_memberships": [
         "TrustKit",
@@ -22,7 +22,7 @@
       "name": "TrustKit",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_trustkit//:TrustKit"
+        "@swiftpkg_trustkit//:TrustKit_TrustKit"
       ]
     },
     {
@@ -30,7 +30,7 @@
       "name": "TrustKitDynamic",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_trustkit//:TrustKit"
+        "@swiftpkg_trustkit//:TrustKit_TrustKit"
       ]
     },
     {
@@ -38,7 +38,7 @@
       "name": "TrustKitStatic",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_trustkit//:TrustKit"
+        "@swiftpkg_trustkit//:TrustKit_TrustKit"
       ]
     }
   ],
@@ -47,9 +47,9 @@
       "name": "swiftpkg_trustkit",
       "identity": "trustkit",
       "remote": {
-        "commit": "65d573e0e2687ea91ab0b1be377f9dd3eb1c2785",
+        "commit": "e3a11e01d937e187cef45ad88f162d1892147aa3",
         "remote": "https://github.com/datatheorem/TrustKit.git",
-        "version": "2.0.1"
+        "version": "3.0.2"
       }
     }
   ]
