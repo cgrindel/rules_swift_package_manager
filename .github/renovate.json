@@ -3,5 +3,12 @@
   "extends": [
     "github>cgrindel/renovate_presets:ruleset_base",
     "github>cgrindel/renovate_presets:cgrindel_default"
-  ]
+  ],
+  "postUpgradeTasks": {
+    "commands": [
+      "npm install -g @bazel/bazelisk",
+      "bazelisk run //:tidy_modified"
+    ],
+    "executionMode": "branch"
+  }
 }
