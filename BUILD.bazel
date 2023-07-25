@@ -193,7 +193,7 @@ filegroup(
 )
 
 test_suite(
-    name = "all_smoke_integration_tests",
+    name = "smoke_integration_tests",
     tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
     tests = [
         "//bzlmod:e2e_test",
@@ -207,7 +207,7 @@ test_suite(
     name = "all_integration_tests",
     tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
     tests = [
-        ":all_smoke_integration_tests",
+        ":smoke_integration_tests",
         "//examples:all_integration_tests",
     ],
     visibility = ["//:__subpackages__"],
