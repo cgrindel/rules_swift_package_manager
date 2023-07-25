@@ -1,6 +1,20 @@
 #!/usr/bin/env bash
 
+# This script is called by Renovate as a post-upgrade task. It installs
+# Bazelisk and then executes tidy in workspaces that have modifications from
+# the Renovate upgrade process.
+
 set -o errexit -o nounset -o pipefail
 
+# Install Bazelisk, if not found
+if which &>/dev/null bazelisk; then
+  echo "Bazelisk was found."
+else
+  echo "Bazelisk was not found. Installing..."
+  npm install -g @bazel/bazelisk
+fi
+
+# Execute tidy for workspaces with modifications The export of CC and the
+# --action_env=PATH are specific to running this repository on Linux.
 export CC=clang
 bazelisk run --action_env=PATH //:tidy_modified
