@@ -19,7 +19,7 @@ if which &>/dev/null clang; then
   echo "clang was found."
 else
   echo "clang was not found. Installing build-essential..."
-  install-tool clang
+  install-tool clang 12.0.0
 fi
 
 # Execute tidy for workspaces with modifications The export of CC and the
