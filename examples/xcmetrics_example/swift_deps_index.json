@@ -346,6 +346,7 @@
       "c99name": "NimbleCwlPreconditionTesting",
       "src_type": "swift",
       "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Sources_CwlPreconditionTesting_NimbleCwlPreconditionTesting",
+      "modulemap_label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Sources_CwlPreconditionTesting_NimbleCwlPreconditionTesting_modulemap",
       "package_identity": "nimble",
       "product_memberships": [
         "Nimble"
@@ -356,6 +357,7 @@
       "c99name": "Nimble",
       "src_type": "swift",
       "label": "@swiftpkg_nimble//:Sources_Nimble",
+      "modulemap_label": "@swiftpkg_nimble//:Sources_Nimble_modulemap",
       "package_identity": "nimble",
       "product_memberships": [
         "Nimble"
@@ -437,6 +439,7 @@
       "c99name": "Quick",
       "src_type": "swift",
       "label": "@swiftpkg_quick//:Sources_Quick",
+      "modulemap_label": "@swiftpkg_quick//:Sources_Quick_modulemap",
       "package_identity": "quick",
       "product_memberships": [
         "Quick"

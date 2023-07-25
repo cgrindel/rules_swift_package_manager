@@ -7,7 +7,8 @@
       "name": "PhoneNumberKit",
       "c99name": "PhoneNumberKit",
       "src_type": "swift",
-      "label": "@swiftpkg_phonenumberkit//:PhoneNumberKit",
+      "label": "@swiftpkg_phonenumberkit//:PhoneNumberKit_PhoneNumberKit",
+      "modulemap_label": "@swiftpkg_phonenumberkit//:PhoneNumberKit_PhoneNumberKit_modulemap",
       "package_identity": "phonenumberkit",
       "product_memberships": [
         "PhoneNumberKit",
@@ -22,7 +23,7 @@
       "name": "PhoneNumberKit",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_phonenumberkit//:PhoneNumberKit"
+        "@swiftpkg_phonenumberkit//:PhoneNumberKit_PhoneNumberKit"
       ]
     },
     {
@@ -30,7 +31,7 @@
       "name": "PhoneNumberKit-Dynamic",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_phonenumberkit//:PhoneNumberKit"
+        "@swiftpkg_phonenumberkit//:PhoneNumberKit_PhoneNumberKit"
       ]
     },
     {
@@ -38,7 +39,7 @@
       "name": "PhoneNumberKit-Static",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_phonenumberkit//:PhoneNumberKit"
+        "@swiftpkg_phonenumberkit//:PhoneNumberKit_PhoneNumberKit"
       ]
     }
   ],
@@ -47,9 +48,9 @@
       "name": "swiftpkg_phonenumberkit",
       "identity": "phonenumberkit",
       "remote": {
-        "commit": "434a7432cceca19829bc6e34bdcfc0b0ee4c6801",
+        "commit": "9bc965a326df8d5115f0b7bb77f09c542b8ec417",
         "remote": "https://github.com/marmelroy/PhoneNumberKit",
-        "version": "3.5.7"
+        "version": "3.6.6"
       }
     }
   ]

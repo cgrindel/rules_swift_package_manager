@@ -554,6 +554,16 @@
       ]
     },
     {
+      "name": "SotoCloudTrailData",
+      "c99name": "SotoCloudTrailData",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CloudTrailData_SotoCloudTrailData",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCloudTrailData"
+      ]
+    },
+    {
       "name": "SotoCloudTrail",
       "c99name": "SotoCloudTrail",
       "src_type": "swift",
@@ -661,6 +671,16 @@
       "package_identity": "soto",
       "product_memberships": [
         "SotoCodeGuruReviewer"
+      ]
+    },
+    {
+      "name": "SotoCodeGuruSecurity",
+      "c99name": "SotoCodeGuruSecurity",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_CodeGuruSecurity_SotoCodeGuruSecurity",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoCodeGuruSecurity"
       ]
     },
     {
@@ -1444,6 +1464,16 @@
       ]
     },
     {
+      "name": "SotoIVSRealTime",
+      "c99name": "SotoIVSRealTime",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_IVSRealTime_SotoIVSRealTime",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoIVSRealTime"
+      ]
+    },
+    {
       "name": "SotoIVS",
       "c99name": "SotoIVS",
       "src_type": "swift",
@@ -1491,6 +1521,16 @@
       "package_identity": "soto",
       "product_memberships": [
         "SotoInspector"
+      ]
+    },
+    {
+      "name": "SotoInternetMonitor",
+      "c99name": "SotoInternetMonitor",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_InternetMonitor_SotoInternetMonitor",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoInternetMonitor"
       ]
     },
     {
@@ -2104,6 +2144,16 @@
       ]
     },
     {
+      "name": "SotoMediaPackageV2",
+      "c99name": "SotoMediaPackageV2",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_MediaPackageV2_SotoMediaPackageV2",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMediaPackageV2"
+      ]
+    },
+    {
       "name": "SotoMediaPackageVod",
       "c99name": "SotoMediaPackageVod",
       "src_type": "swift",
@@ -2284,6 +2334,16 @@
       ]
     },
     {
+      "name": "SotoOSIS",
+      "c99name": "SotoOSIS",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_OSIS_SotoOSIS",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoOSIS"
+      ]
+    },
+    {
       "name": "SotoOmics",
       "c99name": "SotoOmics",
       "src_type": "swift",
@@ -2371,6 +2431,26 @@
       "package_identity": "soto",
       "product_memberships": [
         "SotoPanorama"
+      ]
+    },
+    {
+      "name": "SotoPaymentCryptographyData",
+      "c99name": "SotoPaymentCryptographyData",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_PaymentCryptographyData_SotoPaymentCryptographyData",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPaymentCryptographyData"
+      ]
+    },
+    {
+      "name": "SotoPaymentCryptography",
+      "c99name": "SotoPaymentCryptography",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_PaymentCryptography_SotoPaymentCryptography",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPaymentCryptography"
       ]
     },
     {
@@ -3194,6 +3274,16 @@
       ]
     },
     {
+      "name": "SotoTnb",
+      "c99name": "SotoTnb",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_Tnb_SotoTnb",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoTnb"
+      ]
+    },
+    {
       "name": "SotoTranscribeStreaming",
       "c99name": "SotoTranscribeStreaming",
       "src_type": "swift",
@@ -3231,6 +3321,26 @@
       "package_identity": "soto",
       "product_memberships": [
         "SotoTranslate"
+      ]
+    },
+    {
+      "name": "SotoVPCLattice",
+      "c99name": "SotoVPCLattice",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_VPCLattice_SotoVPCLattice",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoVPCLattice"
+      ]
+    },
+    {
+      "name": "SotoVerifiedPermissions",
+      "c99name": "SotoVerifiedPermissions",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:Sources_Soto_Services_VerifiedPermissions_SotoVerifiedPermissions",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoVerifiedPermissions"
       ]
     },
     {
@@ -4436,6 +4546,14 @@
     },
     {
       "identity": "soto",
+      "name": "SotoCloudTrailData",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CloudTrailData_SotoCloudTrailData"
+      ]
+    },
+    {
+      "identity": "soto",
       "name": "SotoCloudWatch",
       "type": "library",
       "target_labels": [
@@ -4512,6 +4630,14 @@
       "type": "library",
       "target_labels": [
         "@swiftpkg_soto//:Sources_Soto_Services_CodeGuruReviewer_SotoCodeGuruReviewer"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoCodeGuruSecurity",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_CodeGuruSecurity_SotoCodeGuruSecurity"
       ]
     },
     {
@@ -5164,6 +5290,14 @@
     },
     {
       "identity": "soto",
+      "name": "SotoIVSRealTime",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_IVSRealTime_SotoIVSRealTime"
+      ]
+    },
+    {
+      "identity": "soto",
       "name": "SotoIdentityStore",
       "type": "library",
       "target_labels": [
@@ -5192,6 +5326,14 @@
       "type": "library",
       "target_labels": [
         "@swiftpkg_soto//:Sources_Soto_Services_Inspector2_SotoInspector2"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoInternetMonitor",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_InternetMonitor_SotoInternetMonitor"
       ]
     },
     {
@@ -5692,6 +5834,14 @@
     },
     {
       "identity": "soto",
+      "name": "SotoMediaPackageV2",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_MediaPackageV2_SotoMediaPackageV2"
+      ]
+    },
+    {
+      "identity": "soto",
       "name": "SotoMediaPackageVod",
       "type": "library",
       "target_labels": [
@@ -5828,6 +5978,14 @@
     },
     {
       "identity": "soto",
+      "name": "SotoOSIS",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_OSIS_SotoOSIS"
+      ]
+    },
+    {
+      "identity": "soto",
       "name": "SotoOmics",
       "type": "library",
       "target_labels": [
@@ -5896,6 +6054,22 @@
       "type": "library",
       "target_labels": [
         "@swiftpkg_soto//:Sources_Soto_Services_Panorama_SotoPanorama"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPaymentCryptography",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_PaymentCryptography_SotoPaymentCryptography"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPaymentCryptographyData",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_PaymentCryptographyData_SotoPaymentCryptographyData"
       ]
     },
     {
@@ -6572,6 +6746,14 @@
     },
     {
       "identity": "soto",
+      "name": "SotoTnb",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_Tnb_SotoTnb"
+      ]
+    },
+    {
+      "identity": "soto",
       "name": "SotoTranscribe",
       "type": "library",
       "target_labels": [
@@ -6600,6 +6782,22 @@
       "type": "library",
       "target_labels": [
         "@swiftpkg_soto//:Sources_Soto_Services_Translate_SotoTranslate"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoVPCLattice",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_VPCLattice_SotoVPCLattice"
+      ]
+    },
+    {
+      "identity": "soto",
+      "name": "SotoVerifiedPermissions",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_soto//:Sources_Soto_Services_VerifiedPermissions_SotoVerifiedPermissions"
       ]
     },
     {
@@ -6946,27 +7144,27 @@
       "name": "swiftpkg_soto",
       "identity": "soto",
       "remote": {
-        "commit": "26bd91a43a3e569956b99b7f15aa2709a1a6ff23",
+        "commit": "939e61467a9adfd78520b46eddf756a09291f7e1",
         "remote": "https://github.com/soto-project/soto.git",
-        "version": "6.5.0"
+        "version": "6.7.0"
       }
     },
     {
       "name": "swiftpkg_soto_core",
       "identity": "soto-core",
       "remote": {
-        "commit": "cf1c872126e4874144ed2f91aa2124e72388abe0",
+        "commit": "1ddc6a9d21fa129e24886a0085e8b6091777f924",
         "remote": "https://github.com/soto-project/soto-core.git",
-        "version": "6.4.1"
+        "version": "6.5.1"
       }
     },
     {
       "name": "swiftpkg_swift_atomics",
       "identity": "swift-atomics",
       "remote": {
-        "commit": "ff3d2212b6b093db7f177d0855adbc4ef9c5f036",
+        "commit": "6c89474e62719ddcc1e9614989fff2f68208fe10",
         "remote": "https://github.com/apple/swift-atomics.git",
-        "version": "1.0.3"
+        "version": "1.1.0"
       }
     },
     {

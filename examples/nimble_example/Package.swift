@@ -7,21 +7,21 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/Quick/Quick",
-            from: "v7.1.0"
+            from: "7.1.0"
         ),
-       .package(
+        .package(
             url: "https://github.com/Quick/Nimble",
-            from: "v12.1.0"
-        )
+            from: "12.1.0"
+        ),
     ],
     targets: [
         .testTarget(
             name: "CounterTests",
             dependencies: [
                 "Quick",
-                "Nimble"
+                "Nimble",
             ],
             path: "./Sources/NimbleExample/NimbleExampleTests"
-        )
+        ),
     ]
 )

@@ -1,7 +1,7 @@
 load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_missing_pkgs", "bzlformat_pkg")
-load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
+load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy", "tidy_all")
 load("@cgrindel_bazel_starlib//markdown:defs.bzl", "markdown_pkg")
 load("@cgrindel_bazel_starlib//shlib/rules:execute_binary.bzl", "execute_binary")
 load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_update_all")
@@ -58,6 +58,13 @@ tidy(
         ":go_mod_tidy",
         ":go_update_repos",
     ],
+)
+
+tidy_all(name = "tidy_all")
+
+tidy_all(
+    name = "tidy_modified",
+    mode = "modified",
 )
 
 # MARK: - Gazelle
@@ -186,7 +193,7 @@ filegroup(
 )
 
 test_suite(
-    name = "all_smoke_integration_tests",
+    name = "smoke_integration_tests",
     tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
     tests = [
         "//bzlmod:e2e_test",
@@ -200,7 +207,7 @@ test_suite(
     name = "all_integration_tests",
     tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
     tests = [
-        ":all_smoke_integration_tests",
+        ":smoke_integration_tests",
         "//examples:all_integration_tests",
     ],
     visibility = ["//:__subpackages__"],
