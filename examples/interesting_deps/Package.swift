@@ -6,6 +6,6 @@ let package = Package(
     name: "MySwiftPackage",
     dependencies: [
         .package(url: "https://github.com/apple/swift-log", from: "1.5.2"),
-        .package(url: "https://github.com/SDWebImage/libwebp-Xcode.git", from: "1.2.4"),
+        .package(url: "https://github.com/SDWebImage/libwebp-Xcode.git", from: "1.3.1"),
     ]
 )
