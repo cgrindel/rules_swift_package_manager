@@ -44,6 +44,7 @@ use_repo(
     swift_deps,
     "swiftpkg_libwebp_xcode",
     "swiftpkg_swift_log",
+    "swiftpkg_swift_porter_stemmer_2",
 )
 # swift_deps END
 swift_deps.configure_package(
