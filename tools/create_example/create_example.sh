@@ -218,3 +218,19 @@ bazelisk build //...
 
 echo "Running simple Swift binary..."
 bazelisk run "//:${example_dirname}"
+
+cat <<-EOF
+All appears to be working!
+
+Be sure to add the new example to one of the following lists in 'examples/example_infos.bzl',
+as is appropriate for the requirements of the example. In preferred order, the lists are
+
+1. _all_os_single_bazel_version_test_examples
+2. _macos_single_bazel_version_test_examples
+3. _all_os_all_bazel_versions_test_examples
+
+You will need to run the following from the parent workspace once you have made the changes to
+'examples/example_infos.bzl':
+
+$ bazel run //:tidy
+EOF
