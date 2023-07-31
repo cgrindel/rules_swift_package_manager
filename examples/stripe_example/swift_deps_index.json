@@ -1,0 +1,38 @@
+{
+  "direct_dep_identities": [
+    "swift-log"
+  ],
+  "modules": [
+    {
+      "name": "Logging",
+      "c99name": "Logging",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_log//:Sources_Logging",
+      "package_identity": "swift-log",
+      "product_memberships": [
+        "Logging"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "identity": "swift-log",
+      "name": "Logging",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_log//:Sources_Logging"
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "name": "swiftpkg_swift_log",
+      "identity": "swift-log",
+      "remote": {
+        "commit": "32e8d724467f8fe623624570367e3d50c5638e46",
+        "remote": "https://github.com/apple/swift-log",
+        "version": "1.5.2"
+      }
+    }
+  ]
+}
