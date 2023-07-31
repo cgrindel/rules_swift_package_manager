@@ -43,7 +43,8 @@ swift_binary(
     deps = [
         "@swiftpkg_libwebp_xcode//:libwebp",
         "@swiftpkg_swift_log//:Sources_Logging",
-        "@swiftpkg_swift_porter_stemmer_2//:PorterStemmer2_Classes_Swift_PorterStemmer2"
+        "@swiftpkg_swift_porter_stemmer_2//:PorterStemmer2_Classes_Stemmer_libstemmer",
+        "@swiftpkg_swift_porter_stemmer_2//:PorterStemmer2_Classes_Swift_PorterStemmer2",
     ],
 )
 

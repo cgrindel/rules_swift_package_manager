@@ -96,9 +96,8 @@
       "name": "swiftpkg_swift_porter_stemmer_2",
       "identity": "swift-porter-stemmer-2",
       "remote": {
-        "commit": "9a8055c8dfd8301eaa9104ba0c939f37847dbeb0",
-        "remote": "https://github.com/scaraux/Swift-Porter-Stemmer-2.git",
-        "version": "0.1.1"
+        "commit": "5e90cdbc3700a1bf0b8083ba1117c8c4e48669a6",
+        "remote": "https://github.com/scaraux/Swift-Porter-Stemmer-2.git"
       }
     }
   ]
