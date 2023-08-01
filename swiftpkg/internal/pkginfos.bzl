@@ -210,6 +210,12 @@ def _new_target_from_json_maps(
         desc_map,
         deps_index,
         pkg_path):
+    # DEBUG BEGIN
+    print("*** CHUCK repository_ctx.name: ", repository_ctx.name)
+    print("*** CHUCK repository_ctx.workspace_root: ", repository_ctx.workspace_root)
+    print("*** CHUCK pkg_path: ", pkg_path)
+
+    # DEBUG END
     repo_name = repository_ctx.attr.bazel_package_name
     if repo_name == "":
         repo_name = repository_ctx.name
@@ -240,9 +246,12 @@ def _new_target_from_json_maps(
     linker_settings = _new_linker_settings_from_dump_json_list(
         dump_map["settings"],
     )
+    resources_map = dump_map.get("resources", [])
+    if len(resources_map) == 0:
+        resources_map = desc_map.get("resources", [])
     resources = [
-        _new_resource_from_dump_json_map(d)
-        for d in dump_map["resources"]
+        _new_resource_from_dump_json_map(d, pkg_path)
+        for d in resources_map
     ]
     artifact_download_info = None
     url = dump_map.get("url")
@@ -1257,9 +1266,12 @@ def _new_resource_rule_process(localization = None):
         localization = localization,
     )
 
-def _new_resource_from_dump_json_map(dump_map):
+def _new_resource_from_dump_json_map(dump_map, pkg_path):
+    path = dump_map["path"]
+    if paths.is_absolute(path):
+        path = paths.relativize(path, pkg_path)
     return _new_resource(
-        path = dump_map["path"],
+        path = path,
         rule = _new_resource_rule_from_dump_json_map(dump_map["rule"]),
     )
 
