@@ -1,4 +1,3 @@
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
@@ -15,6 +14,7 @@ tidy(
 
 # Ignore the Swift build folder
 # gazelle:exclude .build
+# gazelle:exclude PaymentSheet
 
 gazelle_binary(
     name = "gazelle_bin",
@@ -34,12 +34,4 @@ swift_update_packages(
     gazelle = ":gazelle_bin",
     generate_swift_deps_for_workspace = False,
     update_bzlmod_stanzas = True,
-)
-
-swift_binary(
-    name = "stripe_example",
-    srcs = ["main.swift"],
-    module_name = "stripe_example",
-    visibility = ["//visibility:public"],
-    deps = ["@swiftpkg_swift_log//:Sources_Logging"],
 )

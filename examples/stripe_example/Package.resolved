@@ -1,12 +1,12 @@
 {
   "pins" : [
     {
-      "identity" : "swift-log",
+      "identity" : "stripe-ios",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-log",
+      "location" : "https://github.com/stripe/stripe-ios",
       "state" : {
-        "revision" : "32e8d724467f8fe623624570367e3d50c5638e46",
-        "version" : "1.5.2"
+        "revision" : "6612d90a5fd3fe44ff501ca07a964d5aeb39a7cd",
+        "version" : "23.11.2"
       }
     }
   ],

@@ -1,0 +1,31 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "PaymentSheetExample",
+    srcs = glob("*.swift"),
+    module_name = "PaymentSheetExample",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+    deps = [
+    ],
+)
+
+ios_application(
+    name = "iosapp",
+    app_icons = glob(["Resources/Assets.xcassets/AppIcon.appiconset/**"]),
+    bundle_id = "/Users/chuck/code/stripe/stripe-ios",
+    families = [
+        "iphone",
+    ],
+    infoplists = [":Info.plist"],
+    launch_storyboard = ":Base.lproj/LaunchScreen.storyboard",
+    minimum_os_version = "13.0",
+    resources = glob(
+        ["Resources/Assets.xcassets/**"],
+        exclude = ["Resources/Assets.xcassets/AppIcon.appiconset/**"],
+    ) + [
+        "//appdistribution:shared_resources",
+    ],
+    deps = [":AppDistributionExample"],
+)
