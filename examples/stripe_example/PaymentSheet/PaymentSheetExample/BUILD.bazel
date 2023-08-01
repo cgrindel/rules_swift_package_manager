@@ -3,29 +3,46 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
     name = "PaymentSheetExample",
-    srcs = glob("*.swift"),
+    srcs = [
+        "AppDelegate.swift",
+        "AppearancePlaygroundView.swift",
+        "CustomerSheetTestPlayground.swift",
+        "CustomerSheetTestPlaygroundController.swift",
+        "CustomerSheetTestPlaygroundSettings.swift",
+        "EndpointSelectorViewController.swift",
+        "ExampleCheckoutDeferredViewController.swift",
+        "ExampleCheckoutViewController.swift",
+        "ExampleCustomCheckoutViewController.swift",
+        "ExampleCustomDeferredCheckoutViewController.swift",
+        "ExampleLinkPaymentCheckoutViewController.swift",
+        "ExampleSwiftUICustomPaymentFlow.swift",
+        "ExampleSwiftUIPaymentSheet.swift",
+        "ExampleSwiftUIViews.swift",
+        "PaymentSheetTestPlayground.swift",
+        "PaymentSheetTestPlaygroundSettings.swift",
+        "PlaygroundController.swift",
+        "SceneDelegate.swift",
+        "ViewController.swift",
+    ],
     module_name = "PaymentSheetExample",
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = [
-    ],
+    deps = ["@swiftpkg_stripe_ios//:StripePaymentSheet_StripePaymentSheet"],
 )
 
 ios_application(
     name = "iosapp",
     app_icons = glob(["Resources/Assets.xcassets/AppIcon.appiconset/**"]),
-    bundle_id = "/Users/chuck/code/stripe/stripe-ios",
+    bundle_id = "com.stripe.PaymentSheet-Example",
     families = [
         "iphone",
     ],
     infoplists = [":Info.plist"],
-    launch_storyboard = ":Base.lproj/LaunchScreen.storyboard",
+    launch_storyboard = ":Resources/Base.lproj/LaunchScreen.storyboard",
     minimum_os_version = "13.0",
     resources = glob(
         ["Resources/Assets.xcassets/**"],
         exclude = ["Resources/Assets.xcassets/AppIcon.appiconset/**"],
-    ) + [
-        "//appdistribution:shared_resources",
-    ],
-    deps = [":AppDistributionExample"],
+    ),
+    deps = [":PaymentSheetExample"],
 )

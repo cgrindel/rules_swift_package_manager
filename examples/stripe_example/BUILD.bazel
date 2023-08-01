@@ -14,7 +14,6 @@ tidy(
 
 # Ignore the Swift build folder
 # gazelle:exclude .build
-# gazelle:exclude PaymentSheet
 
 gazelle_binary(
     name = "gazelle_bin",
