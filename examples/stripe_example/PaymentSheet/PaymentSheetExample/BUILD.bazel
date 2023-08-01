@@ -41,8 +41,12 @@ ios_application(
     launch_storyboard = ":Resources/Base.lproj/LaunchScreen.storyboard",
     minimum_os_version = "13.0",
     resources = glob(
-        ["Resources/Assets.xcassets/**"],
+        [
+            "Resources/Assets.xcassets/**",
+            "Resources/Base.lproj/**",
+        ],
         exclude = ["Resources/Assets.xcassets/AppIcon.appiconset/**"],
     ),
+    strings = glob(["Resources/**/*.strings"]),
     deps = [":PaymentSheetExample"],
 )
