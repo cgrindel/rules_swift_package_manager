@@ -34,19 +34,16 @@ ios_application(
     name = "iosapp",
     app_icons = glob(["Resources/Assets.xcassets/AppIcon.appiconset/**"]),
     bundle_id = "com.stripe.PaymentSheet-Example",
+    entitlements = "PaymentSheetExample.entitlements",
     families = [
         "iphone",
     ],
     infoplists = [":Info.plist"],
     launch_storyboard = ":Resources/Base.lproj/LaunchScreen.storyboard",
     minimum_os_version = "13.0",
-    resources = glob(
-        [
-            "Resources/Assets.xcassets/**",
-            "Resources/Base.lproj/**",
-        ],
-        exclude = ["Resources/Assets.xcassets/AppIcon.appiconset/**"],
-    ),
-    strings = glob(["Resources/**/*.strings"]),
+    resources = glob([
+        "Resources/Base.lproj/**",
+    ]),
+    strings = glob(["Resources/*.lproj/*.strings"]),
     deps = [":PaymentSheetExample"],
 )

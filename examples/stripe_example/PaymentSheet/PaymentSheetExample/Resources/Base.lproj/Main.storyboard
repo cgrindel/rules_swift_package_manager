@@ -12,7 +12,7 @@
         <!--View Controller-->
         <scene sceneID="I21-Mc-1Od">
             <objects>
-                <viewController id="agk-7F-36z" customClass="ViewController" customModule="PaymentSheetExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="agk-7F-36z" customClass="ViewController" customModule="PaymentSheetExample" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="b5P-T2-Y1v">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -131,7 +131,7 @@
         <!--Checkout (Complete)-->
         <scene sceneID="fm7-ai-ZPG">
             <objects>
-                <viewController id="ViG-Ud-ejY" userLabel="Checkout (Complete)" customClass="ExampleCheckoutViewController" customModule="PaymentSheetExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ViG-Ud-ejY" userLabel="Checkout (Complete)" customClass="ExampleCheckoutViewController" customModule="PaymentSheetExample" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HhX-SV-zhW">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -431,7 +431,7 @@
         <!--Checkout (Custom)-->
         <scene sceneID="QR4-jL-qym">
             <objects>
-                <viewController id="My4-RU-qnC" userLabel="Checkout (Custom)" customClass="ExampleCustomCheckoutViewController" customModule="PaymentSheetExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="My4-RU-qnC" userLabel="Checkout (Custom)" customClass="ExampleCustomCheckoutViewController" customModule="PaymentSheetExample" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="0zh-P5-QSM">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -794,7 +794,7 @@
         <!--PaymentSheet.FlowController (Deferred)-->
         <scene sceneID="ejG-PH-rfd">
             <objects>
-                <viewController id="Gh7-vw-dR9" userLabel="PaymentSheet.FlowController (Deferred)" customClass="ExampleCustomDeferredCheckoutViewController" customModule="PaymentSheetExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Gh7-vw-dR9" userLabel="PaymentSheet.FlowController (Deferred)" customClass="ExampleCustomDeferredCheckoutViewController" customModule="PaymentSheetExample" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vbN-l1-Fy9">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1180,7 +1180,7 @@
         <!--PaymentSheet (Deferred)-->
         <scene sceneID="mO0-22-dTC">
             <objects>
-                <viewController id="Rd2-MU-RV5" userLabel="PaymentSheet (Deferred)" customClass="ExampleDeferredCheckoutViewController" customModule="PaymentSheetExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="Rd2-MU-RV5" userLabel="PaymentSheet (Deferred)" customClass="ExampleDeferredCheckoutViewController" customModule="PaymentSheetExample" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HA4-PB-bqH">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1529,7 +1529,7 @@
         <!--Checkout (Custom)-->
         <scene sceneID="r8R-dv-x3u">
             <objects>
-                <viewController id="jqF-43-4W3" userLabel="Checkout (Custom)" customClass="ExampleLinkPaymentCheckoutViewController" customModule="PaymentSheetExample" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="jqF-43-4W3" userLabel="Checkout (Custom)" customClass="ExampleLinkPaymentCheckoutViewController" customModule="PaymentSheetExample" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vNl-rj-Cqk">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
