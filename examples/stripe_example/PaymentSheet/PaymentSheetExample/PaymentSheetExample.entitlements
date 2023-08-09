@@ -12,5 +12,9 @@
 	<true/>
 	<key>com.apple.security.network.client</key>
 	<true/>
+  <key>com.apple.developer.team-identifier</key>
+  <string>TEAMID</string>
+  <key>application-identifier</key>
+  <string>TEAMID.com.stripe.PaymentSheet-Example</string>
 </dict>
 </plist>

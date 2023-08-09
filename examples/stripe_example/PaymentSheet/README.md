@@ -32,9 +32,3 @@ The view controllers correspond to different ways to integrate PaymentSheet into
 
 - `ExampleSwiftUIPaymentSheet.swift`: ["one-step" integration](https://stripe.com/docs/payments/accept-a-payment?platform=ios&ui=payment-sheet&uikit-swiftui=swiftui)
 - `ExampleSwiftUICustomPaymentFlow.swift`: ["multi-step" integration](https://stripe.com/docs/payments/accept-a-payment?platform=ios&ui=payment-sheet-custom&uikit-swiftui=swiftui)
-
-## Bazel Integration Notes
-
-- Had to remove `customModuleProvider="target"` from the `Main.storyboard`.
-  - See [this article](https://forums.swift.org/t/can-a-swift-package-include-a-table-view/40498/6)
-    for details.
