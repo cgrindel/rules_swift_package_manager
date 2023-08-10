@@ -1,0 +1,24 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_ui_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "UITest",
+    testonly = True,
+    srcs = [
+        "CustomerSheetTestPlaygroundSettings.swift",  # keep
+        "PaymentSheetTestPlaygroundSettings.swift",  # keep
+        "PaymentSheetUITest.swift",
+        "XCUITest+Utilities.swift",
+    ],
+    module_name = "PaymentSheetUITest",
+    tags = ["manual"],
+)
+
+ios_ui_test(
+    name = "PaymentSheetUITest",
+    size = "enormous",
+    minimum_os_version = "13.0",
+    runner = "@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_ordered_runner",
+    test_host = "//PaymentSheet/PaymentSheetExample:iosapp",
+    deps = [":UITest"],
+)
