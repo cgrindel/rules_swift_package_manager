@@ -5,8 +5,8 @@ swift_library(
     name = "UITest",
     testonly = True,
     srcs = [
-        "CustomerSheetTestPlaygroundSettings.swift",  # keep
-        "PaymentSheetTestPlaygroundSettings.swift",  # keep
+        "CustomerSheetTestPlaygroundSettings.swift",  # keep: symlink
+        "PaymentSheetTestPlaygroundSettings.swift",  # keep: symlink
         "PaymentSheetUITest.swift",
         "XCUITest+Utilities.swift",
     ],
