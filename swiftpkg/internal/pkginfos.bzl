@@ -210,12 +210,6 @@ def _new_target_from_json_maps(
         desc_map,
         deps_index,
         pkg_path):
-    # DEBUG BEGIN
-    print("*** CHUCK repository_ctx.name: ", repository_ctx.name)
-    print("*** CHUCK repository_ctx.workspace_root: ", repository_ctx.workspace_root)
-    print("*** CHUCK pkg_path: ", pkg_path)
-
-    # DEBUG END
     repo_name = repository_ctx.attr.bazel_package_name
     if repo_name == "":
         repo_name = repository_ctx.name
