@@ -45,5 +45,6 @@ ios_application(
         "Resources/Base.lproj/**",
     ]),
     strings = glob(["Resources/*.lproj/*.strings"]),
+    visibility = ["//PaymentSheet:__subpackages__"],
     deps = [":PaymentSheetExample"],
 )

@@ -1,1 +1,1 @@
-../PaymentSheet Example/PaymentSheetTestPlaygroundSettings.swift
+../PaymentSheetExample/PaymentSheetTestPlaygroundSettings.swift
