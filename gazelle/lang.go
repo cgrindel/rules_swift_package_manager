@@ -39,6 +39,8 @@ func (*swiftLang) ApparentLoads(moduleToApparentName func(string) string) []rule
 			Name: fmt.Sprintf("@%s//swift:swift.bzl", rulesSwift),
 			Symbols: []string{
 				swift.LibraryRuleKind,
+				swift.ProtoLibraryRuleKind,
+				swift.GRPCLibraryRuleKind,
 				swift.BinaryRuleKind,
 				swift.TestRuleKind,
 			},

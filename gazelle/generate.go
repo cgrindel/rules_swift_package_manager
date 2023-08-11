@@ -6,7 +6,9 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
+	"github.com/bazelbuild/bazel-gazelle/language/proto"
 	"github.com/bazelbuild/bazel-gazelle/rule"
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/stringslices"
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
@@ -26,6 +28,32 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 
 func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) language.GenerateResult {
 	result := language.GenerateResult{}
+
+	// Extract information about proto files.
+	// We need this to exclude .pb.go files and generate swift_proto_library rules.
+	// This is a collection of proto_library rule names that have a corresponding
+	// swift_proto_library rule already generated.
+	swiftProtoRules := make(map[string]struct{})
+	protoPackages := make(map[string]proto.Package)
+	for _, r := range args.OtherGen {
+		if r.Kind() == "swift_proto_library" {
+			if deps := r.AttrStrings("deps"); len(deps) > 0 {
+				swiftProtoRules[deps[0]] = struct{}{}
+			}
+		}
+		if r.Kind() != "proto_library" {
+			continue
+		}
+		pkg := r.PrivateAttr(proto.PackageKey).(proto.Package)
+		protoPackages[r.Name()] = pkg
+	}
+
+	// Generate the rules from proto packages:
+	for protoPackageName, protoPackage := range protoPackages {
+		rules := generateRuleFromProtoPackage(protoPackageName, protoPackage)
+		result.Gen = append(result.Gen, rules...)
+		result.Imports = swift.Imports(result.Gen)
+	}
 
 	// Collect Swift files
 	swiftFiles := swift.FilterFiles(append(args.RegularFiles, args.GenFiles...))
@@ -56,9 +84,10 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 	}
 	sort.Strings(srcs)
 
-	// Generate the rules and imports
+	// Generate the rules from sources:
 	defaultModuleName := defaultModuleName(args)
-	result.Gen = swift.RulesFromSrcs(args, srcs, defaultModuleName)
+	rules := swift.RulesFromSrcs(args, srcs, defaultModuleName)
+	result.Gen = append(result.Gen, rules...)
 	result.Imports = swift.Imports(result.Gen)
 	result.Empty = generateEmpty(args, srcs)
 
@@ -94,6 +123,26 @@ func defaultModuleName(args language.GenerateArgs) string {
 		defaultModuleName = "DefaultModule"
 	}
 	return defaultModuleName
+}
+
+func generateRuleFromProtoPackage(protoPackageName string, protoPackage proto.Package) []*rule.Rule {
+	swiftProtoLibraryName := strings.TrimSuffix(protoPackageName, "_proto") + swiftProtoSuffix
+	swiftProtoLibrary := rule.NewRule("swift_proto_library", swiftProtoLibraryName)
+	swiftProtoLibrary.SetAttr("deps", []string{":" + protoPackageName})
+	swiftProtoLibrary.SetPrivateAttr(config.GazelleImportsKey, []string{})
+	rules := []*rule.Rule{swiftProtoLibrary}
+
+	if protoPackage.HasServices {
+		swiftGRPCLibraryName := strings.TrimSuffix(protoPackageName, "_proto") + swiftGRPCSuffix
+		swiftGRPCLibrary := rule.NewRule("swift_grpc_library", swiftGRPCLibraryName)
+		swiftGRPCLibrary.SetAttr("srcs", []string{":" + protoPackageName})
+		swiftGRPCLibrary.SetAttr("deps", []string{":" + swiftProtoLibraryName})
+		swiftGRPCLibrary.SetAttr("flavor", "server") // TODO: Use a config to determine which to create.
+		swiftGRPCLibrary.SetPrivateAttr(config.GazelleImportsKey, []string{})
+		rules = append(rules, swiftGRPCLibrary)
+	}
+
+	return rules
 }
 
 // Look for any rules in the existing BUILD file that do not reference one of the source files. If
