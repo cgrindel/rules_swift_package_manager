@@ -19,8 +19,8 @@ go_library(
     name = "gazelle",
     srcs = [
         "config.go",
-        "doc.go",
         "constants.go",
+        "doc.go",
         "generate.go",
         "kinds.go",
         "lang.go",

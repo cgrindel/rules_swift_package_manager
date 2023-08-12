@@ -144,6 +144,7 @@ _all_os_all_bazel_versions_test_examples = [
 _all_os_single_bazel_version_test_examples = [
     "soto_example",
     "vapor_example",
+    "grpc_example",
 ]
 
 _macos_single_bazel_version_test_examples = [

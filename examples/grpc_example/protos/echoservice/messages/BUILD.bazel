@@ -1,0 +1,14 @@
+load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_proto_library")
+
+proto_library(
+    name = "messages_proto",
+    srcs = ["echo_messages.proto"],
+    visibility = ["//visibility:public"],
+    deps = ["@com_google_protobuf//:any_proto"],
+)
+
+swift_proto_library(
+    name = "messages_swift_proto",
+    deps = [":messages_proto"],
+)
