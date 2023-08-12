@@ -126,17 +126,20 @@ func defaultModuleName(args language.GenerateArgs) string {
 }
 
 func generateRuleFromProtoPackage(protoPackageName string, protoPackage proto.Package) []*rule.Rule {
-	swiftProtoLibraryName := strings.TrimSuffix(protoPackageName, "_proto") + swiftProtoSuffix
+	protoPrefix := strings.TrimSuffix(protoPackageName, "_proto")
+
+	// Generate the swift_proto_library:
+	swiftProtoLibraryName := protoPrefix + swiftProtoSuffix
 	swiftProtoLibrary := rule.NewRule("swift_proto_library", swiftProtoLibraryName)
 	swiftProtoLibrary.SetAttr("deps", []string{":" + protoPackageName})
 	swiftProtoLibrary.SetPrivateAttr(config.GazelleImportsKey, []string{})
 	rules := []*rule.Rule{swiftProtoLibrary}
 
 	if protoPackage.HasServices {
-		// TODO: Should we add a config to selectively generate specific flavors?
+		// TODO: Github Issue #509 -- Add a configuration to selectively generate specific flavors.
 
 		// Generate the client flavor:
-		clientSwiftGRPCLibraryName := strings.TrimSuffix(protoPackageName, "_proto") + "_client" + swiftGRPCSuffix
+		clientSwiftGRPCLibraryName := protoPrefix + "_client" + swiftGRPCSuffix
 		clientSwiftGRPCLibrary := rule.NewRule("swift_grpc_library", clientSwiftGRPCLibraryName)
 		clientSwiftGRPCLibrary.SetAttr("srcs", []string{":" + protoPackageName})
 		clientSwiftGRPCLibrary.SetAttr("deps", []string{":" + swiftProtoLibraryName})
@@ -145,7 +148,7 @@ func generateRuleFromProtoPackage(protoPackageName string, protoPackage proto.Pa
 		rules = append(rules, clientSwiftGRPCLibrary)
 
 		// Generate the client_stubs flavor:
-		clientStubsSwiftGRPCLibraryName := strings.TrimSuffix(protoPackageName, "_proto") + "_client_stubs" + swiftGRPCSuffix
+		clientStubsSwiftGRPCLibraryName := protoPrefix + "_client_stubs" + swiftGRPCSuffix
 		clientStubsSwiftGRPCLibrary := rule.NewRule("swift_grpc_library", clientStubsSwiftGRPCLibraryName)
 		clientStubsSwiftGRPCLibrary.SetAttr("srcs", []string{":" + protoPackageName})
 		clientStubsSwiftGRPCLibrary.SetAttr("deps", []string{":" + clientSwiftGRPCLibraryName})
