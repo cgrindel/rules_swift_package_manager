@@ -3,12 +3,9 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_grpc_library", "swift_p
 
 proto_library(
     name = "echoservice_proto",
-    srcs = ["echo.proto"],
+    srcs = ["echoservice.proto"],
     visibility = ["//visibility:public"],
-    deps = [
-        "//protos/echoservice/messages:messages_proto",
-        "@com_google_protobuf//:any_proto",
-    ],
+    deps = ["//protos/echoservice/messages:messages_proto"],
 )
 
 swift_proto_library(

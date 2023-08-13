@@ -10,6 +10,7 @@ go_library(
         "builtin_modules.go",
         "bzlmod.go",
         "code_dir.go",
+        "constants.go",
         "dependency_index.go",
         "doc.go",
         "files.go",

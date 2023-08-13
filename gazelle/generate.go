@@ -50,7 +50,7 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 
 	// Generate the rules from proto packages:
 	for protoPackageName, protoPackage := range protoPackages {
-		rules := generateRuleFromProtoPackage(protoPackageName, protoPackage)
+		rules := generateRuleFromProtoPackage(args, protoPackageName, protoPackage)
 		result.Gen = append(result.Gen, rules...)
 		result.Imports = swift.Imports(result.Gen)
 	}
@@ -125,14 +125,17 @@ func defaultModuleName(args language.GenerateArgs) string {
 	return defaultModuleName
 }
 
-func generateRuleFromProtoPackage(protoPackageName string, protoPackage proto.Package) []*rule.Rule {
+func generateRuleFromProtoPackage(args language.GenerateArgs, protoPackageName string, protoPackage proto.Package) []*rule.Rule {
 	protoPrefix := strings.TrimSuffix(protoPackageName, "_proto")
+	protoPackagePrefix := strings.ReplaceAll(args.Rel, "/", "_")
 
 	// Generate the swift_proto_library:
 	swiftProtoLibraryName := protoPrefix + swiftProtoSuffix
+	swiftProtoLibraryModuleName := protoPackagePrefix + "_" + protoPackageName
 	swiftProtoLibrary := rule.NewRule("swift_proto_library", swiftProtoLibraryName)
 	swiftProtoLibrary.SetAttr("deps", []string{":" + protoPackageName})
 	swiftProtoLibrary.SetPrivateAttr(config.GazelleImportsKey, []string{})
+	swiftProtoLibrary.SetPrivateAttr(swift.SwiftProtoModuleNameKey, swiftProtoLibraryModuleName)
 	rules := []*rule.Rule{swiftProtoLibrary}
 
 	if protoPackage.HasServices {
@@ -140,29 +143,35 @@ func generateRuleFromProtoPackage(protoPackageName string, protoPackage proto.Pa
 
 		// Generate the client flavor:
 		clientSwiftGRPCLibraryName := protoPrefix + "_client" + swiftGRPCSuffix
+		clientSwiftGRPCLibraryModuleName := protoPackagePrefix + "_" + clientSwiftGRPCLibraryName
 		clientSwiftGRPCLibrary := rule.NewRule("swift_grpc_library", clientSwiftGRPCLibraryName)
 		clientSwiftGRPCLibrary.SetAttr("srcs", []string{":" + protoPackageName})
 		clientSwiftGRPCLibrary.SetAttr("deps", []string{":" + swiftProtoLibraryName})
 		clientSwiftGRPCLibrary.SetAttr("flavor", "client")
 		clientSwiftGRPCLibrary.SetPrivateAttr(config.GazelleImportsKey, []string{})
+		clientSwiftGRPCLibrary.SetPrivateAttr(swift.SwiftProtoModuleNameKey, clientSwiftGRPCLibraryModuleName)
 		rules = append(rules, clientSwiftGRPCLibrary)
 
 		// Generate the client_stubs flavor:
 		clientStubsSwiftGRPCLibraryName := protoPrefix + "_client_stubs" + swiftGRPCSuffix
+		clientStubsSwiftGRPCLibraryModuleName := protoPackagePrefix + "_" + clientStubsSwiftGRPCLibraryName
 		clientStubsSwiftGRPCLibrary := rule.NewRule("swift_grpc_library", clientStubsSwiftGRPCLibraryName)
 		clientStubsSwiftGRPCLibrary.SetAttr("srcs", []string{":" + protoPackageName})
 		clientStubsSwiftGRPCLibrary.SetAttr("deps", []string{":" + clientSwiftGRPCLibraryName})
 		clientStubsSwiftGRPCLibrary.SetAttr("flavor", "client_stubs")
 		clientStubsSwiftGRPCLibrary.SetPrivateAttr(config.GazelleImportsKey, []string{})
+		clientStubsSwiftGRPCLibrary.SetPrivateAttr(swift.SwiftProtoModuleNameKey, clientStubsSwiftGRPCLibraryModuleName)
 		rules = append(rules, clientStubsSwiftGRPCLibrary)
 
 		// Generate the server flavor:
-		serverSwiftGRPCLibraryName := strings.TrimSuffix(protoPackageName, "_proto") + "_server" + swiftGRPCSuffix
+		serverSwiftGRPCLibraryName := protoPrefix + "_server" + swiftGRPCSuffix
+		serverSwiftGRPCLibraryModuleName := protoPackagePrefix + "_" + serverSwiftGRPCLibraryName
 		serverSwiftGRPCLibrary := rule.NewRule("swift_grpc_library", serverSwiftGRPCLibraryName)
 		serverSwiftGRPCLibrary.SetAttr("srcs", []string{":" + protoPackageName})
 		serverSwiftGRPCLibrary.SetAttr("deps", []string{":" + swiftProtoLibraryName})
 		serverSwiftGRPCLibrary.SetAttr("flavor", "server")
 		serverSwiftGRPCLibrary.SetPrivateAttr(config.GazelleImportsKey, []string{})
+		serverSwiftGRPCLibrary.SetPrivateAttr(swift.SwiftProtoModuleNameKey, serverSwiftGRPCLibraryModuleName)
 		rules = append(rules, serverSwiftGRPCLibrary)
 	}
 

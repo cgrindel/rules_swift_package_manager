@@ -17,6 +17,7 @@ import GRPC
 import NIOCore
 import NIOPosix
 import protos_echoservice_messages_messages_proto
+import protos_echoservice_echoservice_proto
 import protos_echoservice_echoservice_server_swift_grpc
 
 // /// Concrete implementation of the `EchoService` service definition.
