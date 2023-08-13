@@ -47,6 +47,5 @@ swift_deps.from_file(
 )
 use_repo(
     swift_deps,
-    "swiftpkg_swift_log",
 )
 # swift_deps END

@@ -10,6 +10,7 @@ proto_library(
 
 swift_proto_library(
     name = "echoservice_swift_proto",
+    visibility = ["//visibility:public"],
     deps = [":echoservice_proto"],
 )
 
@@ -17,6 +18,7 @@ swift_grpc_library(
     name = "echoservice_client_swift_grpc",
     srcs = [":echoservice_proto"],
     flavor = "client",
+    visibility = ["//visibility:public"],
     deps = [":echoservice_swift_proto"],
 )
 
@@ -24,6 +26,7 @@ swift_grpc_library(
     name = "echoservice_client_stubs_swift_grpc",
     srcs = [":echoservice_proto"],
     flavor = "client_stubs",
+    visibility = ["//visibility:public"],
     deps = [":echoservice_client_swift_grpc"],
 )
 
@@ -31,5 +34,6 @@ swift_grpc_library(
     name = "echoservice_server_swift_grpc",
     srcs = [":echoservice_proto"],
     flavor = "server",
+    visibility = ["//visibility:public"],
     deps = [":echoservice_swift_proto"],
 )

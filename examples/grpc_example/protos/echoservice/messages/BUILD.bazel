@@ -10,5 +10,6 @@ proto_library(
 
 swift_proto_library(
     name = "messages_swift_proto",
+    visibility = ["//visibility:public"],
     deps = [":messages_proto"],
 )
