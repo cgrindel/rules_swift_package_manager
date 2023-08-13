@@ -14,6 +14,21 @@ bazel_dep(
     version = "1.9.1",
     repo_name = "build_bazel_rules_swift",
 )
+
+non_module_deps = use_extension("@build_bazel_rules_swift//swift:extensions.bzl", "non_module_deps")
+use_repo(
+    non_module_deps,
+    "build_bazel_rules_swift_index_import",
+    "build_bazel_rules_swift_local_config",
+    "com_github_apple_swift_log",
+    "com_github_apple_swift_nio",
+    "com_github_apple_swift_nio_extras",
+    "com_github_apple_swift_nio_http2",
+    "com_github_apple_swift_nio_transport_services",
+    "com_github_apple_swift_protobuf",
+    "com_github_grpc_grpc_swift",
+)
+
 bazel_dep(
     name = "rules_apple",
     version = "2.5.0",
