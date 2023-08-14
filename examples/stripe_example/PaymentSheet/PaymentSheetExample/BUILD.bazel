@@ -1,0 +1,50 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "PaymentSheetExample",
+    srcs = [
+        "AppDelegate.swift",
+        "AppearancePlaygroundView.swift",
+        "CustomerSheetTestPlayground.swift",
+        "CustomerSheetTestPlaygroundController.swift",
+        "CustomerSheetTestPlaygroundSettings.swift",
+        "EndpointSelectorViewController.swift",
+        "ExampleCheckoutDeferredViewController.swift",
+        "ExampleCheckoutViewController.swift",
+        "ExampleCustomCheckoutViewController.swift",
+        "ExampleCustomDeferredCheckoutViewController.swift",
+        "ExampleLinkPaymentCheckoutViewController.swift",
+        "ExampleSwiftUICustomPaymentFlow.swift",
+        "ExampleSwiftUIPaymentSheet.swift",
+        "ExampleSwiftUIViews.swift",
+        "PaymentSheetTestPlayground.swift",
+        "PaymentSheetTestPlaygroundSettings.swift",
+        "PlaygroundController.swift",
+        "SceneDelegate.swift",
+        "ViewController.swift",
+    ],
+    module_name = "PaymentSheetExample",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+    deps = ["@swiftpkg_stripe_ios//:StripePaymentSheet_StripePaymentSheet"],
+)
+
+ios_application(
+    name = "iosapp",
+    app_icons = glob(["Resources/Assets.xcassets/AppIcon.appiconset/**"]),
+    bundle_id = "com.stripe.PaymentSheet-Example",
+    entitlements = "PaymentSheetExample.entitlements",
+    families = [
+        "iphone",
+    ],
+    infoplists = [":Info.plist"],
+    launch_storyboard = ":Resources/Base.lproj/LaunchScreen.storyboard",
+    minimum_os_version = "13.0",
+    resources = glob([
+        "Resources/Base.lproj/**",
+    ]),
+    strings = glob(["Resources/*.lproj/*.strings"]),
+    visibility = ["//PaymentSheet:__subpackages__"],
+    deps = [":PaymentSheetExample"],
+)

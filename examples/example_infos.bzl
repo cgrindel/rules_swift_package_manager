@@ -154,6 +154,7 @@ _macos_single_bazel_version_test_examples = [
     "phone_number_kit",
     "resources_example",
     "snapkit_example",
+    "stripe_example",
     "xcmetrics_example",
 ]
 
