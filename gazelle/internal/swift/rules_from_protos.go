@@ -57,7 +57,7 @@ func generateRuleFromProtoPackage(args language.GenerateArgs, protoPackageName s
 	rules := []*rule.Rule{swiftProtoLibrary}
 
 	if protoPackage.HasServices {
-		// TODO: Github Issue #509 -- Add a configuration to selectively generate specific flavors.
+		// GH509: Add a configuration to selectively generate specific flavors.
 
 		// Generate the client flavor:
 		clientSwiftGRPCLibraryName := protoPrefix + "_client" + swiftGRPCSuffix

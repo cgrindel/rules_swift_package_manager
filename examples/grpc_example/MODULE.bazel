@@ -46,9 +46,10 @@ bazel_dep(
     dev_dependency = True,
     repo_name = "bazel_gazelle",
 )
+
 bazel_dep(name = "rules_proto", version = "5.3.0-21.7")
 
-# TODO: Gazelle currently needs protobuf to be named com_google_protobuf.
+# Gazelle currently needs protobuf to be named com_google_protobuf.
 # If they fix this, we can remove the repo_name argument.
 bazel_dep(name = "protobuf", version = "21.7", repo_name = "com_google_protobuf")
 
