@@ -115,8 +115,8 @@ def swift_bazel_go_dependencies():
         name = "com_github_deckarep_golang_set_v2",
         build_external = "external",
         importpath = "github.com/deckarep/golang-set/v2",
-        sum = "h1:qs18EKUfHm2X9fA50Mr/M5hccg2tNnVqsiBImnyDs0g=",
-        version = "v2.3.0",
+        sum = "h1:vjmkvJt/IV27WXPyYQpAh4bRyWJc5Y435D17XQ9QU5A=",
+        version = "v2.3.1",
     )
     maybe(
         go_repository,
