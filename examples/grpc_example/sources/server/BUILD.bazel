@@ -9,5 +9,7 @@ swift_library(
         "//protos/echoservice:echoservice_server_swift_grpc",
         "//protos/echoservice:echoservice_swift_proto",
         "//protos/echoservice/messages:messages_swift_proto",
+        # "@swiftpkg_grpc_swift//:Sources_GRPC",
+        "@com_github_grpc_grpc_swift//:GRPC",
     ],
 )

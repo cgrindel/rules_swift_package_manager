@@ -63,5 +63,6 @@ swift_deps.from_file(
 )
 use_repo(
     swift_deps,
+    "swiftpkg_grpc_swift",
 )
 # swift_deps END
