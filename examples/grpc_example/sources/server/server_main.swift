@@ -20,46 +20,46 @@ import protos_echoservice_messages_messages_proto
 import protos_echoservice_echoservice_proto
 import protos_echoservice_echoservice_server_swift_grpc
 
-// /// Concrete implementation of the `EchoService` service definition.
-// class EchoProvider: RulesSwift_Examples_Grpc_EchoServiceProvider {
-//   var interceptors: RulesSwift_Examples_Grpc_EchoServiceServerInterceptorFactoryProtocol?
+/// Concrete implementation of the `EchoService` service definition.
+class EchoProvider: Echoservice_EchoServiceProvider {
+  var interceptors: Echoservice_EchoServiceServerInterceptorFactoryProtocol?
 
-//   /// Called when the server receives a request for the `EchoService.Echo` method.
-//   ///
-//   /// - Parameters:
-//   ///   - request: The message containing the request parameters.
-//   ///   - context: Information about the current session.
-//   /// - Returns: The response that will be sent back to the client.
-//   func echo(request: RulesSwift_Examples_Grpc_EchoRequest,
-//             context: StatusOnlyCallContext) -> EventLoopFuture<RulesSwift_Examples_Grpc_EchoResponse> {
-//     return context.eventLoop.makeSucceededFuture(RulesSwift_Examples_Grpc_EchoResponse.with {
-//       $0.contents = "You sent: \(request.contents)"
-//     })
-//   }
-// }
+  /// Called when the server receives a request for the `EchoService.Echo` method.
+  ///
+  /// - Parameters:
+  ///   - request: The message containing the request parameters.
+  ///   - context: Information about the current session.
+  /// - Returns: The response that will be sent back to the client.
+  func echo(request: Messages_EchoRequest,
+            context: StatusOnlyCallContext) -> EventLoopFuture<Messages_EchoResponse> {
+    return context.eventLoop.makeSucceededFuture(Messages_EchoResponse.with {
+      $0.contents = "You sent: \(request.contents)"
+    })
+  }
+}
 
 @main
 struct ServerMain {
   static func main() throws {
-//     let group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
-//     defer {
-//       try! group.syncShutdownGracefully()
-//     }
+    let group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
+    defer {
+      try! group.syncShutdownGracefully()
+    }
 
-//     // Initialize and start the service.
-//     let server = Server.insecure(group: group)
-//       .withServiceProviders([EchoProvider()])
-//       .bind(host: "0.0.0.0", port: 9000)
+    // Initialize and start the service.
+    let server = Server.insecure(group: group)
+      .withServiceProviders([EchoProvider()])
+      .bind(host: "0.0.0.0", port: 9000)
 
-//     server.map {
-//       $0.channel.localAddress
-//     }.whenSuccess { address in
-//       print("server started on port \(address!.port!)")
-//     }
+    server.map {
+      $0.channel.localAddress
+    }.whenSuccess { address in
+      print("server started on port \(address!.port!)")
+    }
 
-//     // Wait on the server's `onClose` future to stop the program from exiting.
-//     _ = try server.flatMap {
-//       $0.onClose
-//     }.wait()
+    // Wait on the server's `onClose` future to stop the program from exiting.
+    _ = try server.flatMap {
+      $0.onClose
+    }.wait()
   }
 }
