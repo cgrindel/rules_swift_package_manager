@@ -97,9 +97,9 @@
       "name": "swiftpkg_swift_log",
       "identity": "swift-log",
       "remote": {
-        "commit": "32e8d724467f8fe623624570367e3d50c5638e46",
+        "commit": "532d8b529501fb73a2455b179e0bbb6d49b652ed",
         "remote": "https://github.com/apple/swift-log",
-        "version": "1.5.2"
+        "version": "1.5.3"
       }
     }
   ]
