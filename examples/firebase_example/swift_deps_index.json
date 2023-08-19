@@ -1530,18 +1530,18 @@
       "name": "swiftpkg_firebase_ios_sdk",
       "identity": "firebase-ios-sdk",
       "remote": {
-        "commit": "a580250a9ff49ec38da5430cef20f88ddc831db2",
+        "commit": "df2171b0c6afb9e9d4f7e07669d558c510b9f6be",
         "remote": "https://github.com/firebase/firebase-ios-sdk",
-        "version": "10.12.0"
+        "version": "10.13.0"
       }
     },
     {
       "name": "swiftpkg_googleappmeasurement",
       "identity": "googleappmeasurement",
       "remote": {
-        "commit": "0a226a8c50494c4cb877fbde27ab6374520a3354",
+        "commit": "03b9beee1a61f62d32c521e172e192a1663a5e8b",
         "remote": "https://github.com/google/GoogleAppMeasurement.git",
-        "version": "10.12.0"
+        "version": "10.13.0"
       }
     },
     {
