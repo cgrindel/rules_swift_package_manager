@@ -38,9 +38,9 @@ import protos_echoservice_echoservice_server_swift_grpc
 //   }
 // }
 
-// @main
-// struct ServerMain {
-//   static func main() throws {
+@main
+struct ServerMain {
+  static func main() throws {
 //     let group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
 //     defer {
 //       try! group.syncShutdownGracefully()
@@ -61,5 +61,5 @@ import protos_echoservice_echoservice_server_swift_grpc
 //     _ = try server.flatMap {
 //       $0.onClose
 //     }.wait()
-//   }
-// }
+  }
+}
