@@ -48,18 +48,18 @@
       "name": "swiftpkg_libwebp_xcode",
       "identity": "libwebp-xcode",
       "remote": {
-        "commit": "4f52fc9b29600a03de6e05af16df0d694cb44301",
+        "commit": "1cdddb80ccef6d30e869c4abe1f9f3d3871a25b5",
         "remote": "https://github.com/SDWebImage/libwebp-Xcode.git",
-        "version": "1.2.4"
+        "version": "1.3.1"
       }
     },
     {
       "name": "swiftpkg_swift_log",
       "identity": "swift-log",
       "remote": {
-        "commit": "32e8d724467f8fe623624570367e3d50c5638e46",
+        "commit": "532d8b529501fb73a2455b179e0bbb6d49b652ed",
         "remote": "https://github.com/apple/swift-log",
-        "version": "1.5.2"
+        "version": "1.5.3"
       }
     }
   ]
