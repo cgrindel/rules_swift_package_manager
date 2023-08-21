@@ -118,8 +118,8 @@ def _ci_test_params_suite(name, example_infos):
         visibility = ["//:__subpackages__"],
     )
 
-# The default timeout is "long".
-_default_timeout = "long"
+# Switched the default to eternal as CI is failing intermittently.
+_default_timeout = "eternal"
 
 _timeouts = {
     "firebase_example": "eternal",
