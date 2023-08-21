@@ -24,8 +24,14 @@ type ModuleLabel struct {
 	Label  string
 }
 
-func moduleLabelLess(a, b ModuleLabel) bool {
-	return a.Module < b.Module
+func moduleLabelCmp(a, b ModuleLabel) int {
+	if a.Module < b.Module {
+		return -1
+	}
+	if a.Module == b.Module {
+		return 0
+	}
+	return 1
 }
 
 type Product struct {
@@ -69,10 +75,16 @@ func newExternalResolutionSummaryFromModuleResolutionResult(
 	}
 	sort.Strings(ers.Modules)
 	sort.Strings(ers.Unresolved)
-	slices.SortFunc(ers.Products, func(a, b Product) bool {
+	slices.SortFunc(ers.Products, func(a, b Product) int {
 		akey := a.Identity + a.Name
 		bkey := b.Identity + b.Name
-		return akey < bkey
+		if akey < bkey {
+			return -1
+		}
+		if akey == bkey {
+			return 0
+		}
+		return 1
 	})
 	return ers
 }

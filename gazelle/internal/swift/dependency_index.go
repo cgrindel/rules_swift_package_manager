@@ -282,8 +282,14 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 }
 
 func (di *DependencyIndex) FindModules(moduleName string, pkgIdentities []string) Modules {
-	lessFn := func(a, b *Module) bool {
-		return a.PkgIdentity < b.PkgIdentity
+	cmpFn := func(a, b *Module) int {
+		if a.PkgIdentity < b.PkgIdentity {
+			return -1
+		}
+		if a.PkgIdentity == b.PkgIdentity {
+			return 0
+		}
+		return 1
 	}
 	modules, ok := di.moduleIndex[moduleName]
 	if !ok {
@@ -294,7 +300,7 @@ func (di *DependencyIndex) FindModules(moduleName string, pkgIdentities []string
 		// slice.
 		results := make(Modules, len(modules))
 		copy(results, modules)
-		slices.SortFunc(results, lessFn)
+		slices.SortFunc(results, cmpFn)
 		return results
 	}
 	piSet := mapset.NewSet[string](pkgIdentities...)
@@ -304,7 +310,7 @@ func (di *DependencyIndex) FindModules(moduleName string, pkgIdentities []string
 			results = append(results, m)
 		}
 	}
-	slices.SortFunc(results, lessFn)
+	slices.SortFunc(results, cmpFn)
 	return results
 }
 
