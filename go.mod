@@ -3,7 +3,7 @@ module github.com/cgrindel/rules_swift_package_manager
 go 1.18
 
 require (
-	github.com/bazelbuild/bazel-gazelle v0.31.1
+	github.com/bazelbuild/bazel-gazelle v0.32.0
 	github.com/bazelbuild/buildtools v0.0.0-20230510134650-37bd1811516d
 	github.com/creasty/defaults v1.7.0
 	github.com/deckarep/golang-set/v2 v2.3.1
