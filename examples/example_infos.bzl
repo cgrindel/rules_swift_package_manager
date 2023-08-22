@@ -139,6 +139,7 @@ _macos_single_bazel_version_test_examples = [
     "ios_sim",
     "lottie_ios_example",
     "messagekit_example",
+    "nimble_example",
     "objc_code",
     "phone_number_kit",
     "resources_example",
