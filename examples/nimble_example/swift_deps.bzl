@@ -17,7 +17,7 @@ def swift_dependencies():
         remote = "https://github.com/mattgallagher/CwlPreconditionTesting.git",
     )
 
-    # version: 10.0.0
+    # version: 12.1.0
     swift_package(
         name = "swiftpkg_nimble",
         commit = "edaedc1ec86f14ac6e2ca495b94f0ff7150d98d0",
@@ -25,7 +25,7 @@ def swift_dependencies():
         remote = "https://github.com/Quick/Nimble",
     )
 
-    # version: 5.0.1
+    # version: 7.1.0
     swift_package(
         name = "swiftpkg_quick",
         commit = "ef9aaf3f634b3a1ab6f54f1173fe2400b36e7cb8",
