@@ -39,6 +39,12 @@ jobs:
           - test: '@@//examples:firebase_example_test_bazel_.bazelversion'
             runner: macos-13
             enable_bzlmod: true
+          - test: '@@//examples:grpc_example_test_bazel_.bazelversion'
+            runner: ubuntu-22.04
+            enable_bzlmod: true
+          - test: '@@//examples:grpc_example_test_bazel_.bazelversion'
+            runner: macos-13
+            enable_bzlmod: true
           - test: '@@//examples:http_archive_ext_deps_test_bazel_.bazelversion'
             runner: ubuntu-22.04
             enable_bzlmod: false

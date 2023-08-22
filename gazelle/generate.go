@@ -27,6 +27,11 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) language.GenerateResult {
 	result := language.GenerateResult{}
 
+	// Generate the rules from the protos (if any):
+	rules := swift.RulesFromProtos(args)
+	result.Gen = append(result.Gen, rules...)
+	result.Imports = swift.Imports(result.Gen)
+
 	// Collect Swift files
 	swiftFiles := swift.FilterFiles(append(args.RegularFiles, args.GenFiles...))
 
@@ -56,9 +61,10 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 	}
 	sort.Strings(srcs)
 
-	// Generate the rules and imports
+	// Generate the rules from sources:
 	defaultModuleName := defaultModuleName(args)
-	result.Gen = swift.RulesFromSrcs(args, srcs, defaultModuleName)
+	rules = swift.RulesFromSrcs(args, srcs, defaultModuleName)
+	result.Gen = append(result.Gen, rules...)
 	result.Imports = swift.Imports(result.Gen)
 	result.Empty = generateEmpty(args, srcs)
 

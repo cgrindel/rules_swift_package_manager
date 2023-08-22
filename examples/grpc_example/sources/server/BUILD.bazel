@@ -1,0 +1,13 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+
+swift_binary(
+    name = "server",
+    srcs = ["server_main.swift"],
+    module_name = "server",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//protos/echoservice:echoservice_server_swift_grpc",
+        "//protos/echoservice:echoservice_swift_proto",
+        "//protos/echoservice/messages:messages_swift_proto",
+    ],
+)
