@@ -303,9 +303,9 @@
       "name": "swiftpkg_swift_composable_architecture",
       "identity": "swift-composable-architecture",
       "remote": {
-        "commit": "3a2b7d7c748eb83882aaecfe5008e84964ae1796",
+        "commit": "9f4202ab5b8422aa90f0ed983bf7652c3af7abf0",
         "remote": "https://github.com/pointfreeco/swift-composable-architecture",
-        "version": "0.58.2"
+        "version": "0.59.0"
       }
     },
     {
