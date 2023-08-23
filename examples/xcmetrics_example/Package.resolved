@@ -370,6 +370,15 @@
       }
     },
     {
+      "identity" : "swift-nio-ssl-support",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-nio-ssl-support.git",
+      "state" : {
+        "revision" : "c02eec4e0e6d351cd092938cf44195a8e669f555",
+        "version" : "1.0.0"
+      }
+    },
+    {
       "identity" : "swift-nio-transport-services",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio-transport-services.git",
@@ -428,8 +437,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/spotify/XCMetrics",
       "state" : {
-        "revision" : "1a85cbe9d9bb47e15623952812bd8c64ce57125e",
-        "version" : "0.0.12"
+        "revision" : "e2ceaebc789134ec2786b4fc766a1c3c925231b2",
+        "version" : "0.0.13"
       }
     },
     {
