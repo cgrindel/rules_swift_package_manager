@@ -28,7 +28,7 @@ def swift_dependencies():
     # version: 4.6.0
     swift_package(
         name = "swiftpkg_fluent",
-        commit = "2da106f46b093885f77fa03e3c719ab5bb8cfab4",
+        commit = "4b4d8bf15a06fd60137e9c543e5503c4b842654e",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/fluent.git",
     )
@@ -36,7 +36,7 @@ def swift_dependencies():
     # version: 1.36.1
     swift_package(
         name = "swiftpkg_fluent_kit",
-        commit = "be7912ee4991bcc8a5390fac0424d1d08221dcc6",
+        commit = "2d7dce5cb04156eecdb17e7349f4eac4206e8a17",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/fluent-kit.git",
     )
@@ -68,7 +68,7 @@ def swift_dependencies():
     # version: 3.23.0
     swift_package(
         name = "swiftpkg_sql_kit",
-        commit = "dcf10a00d7d5df987b7948e6fd5596fb65f6d0c2",
+        commit = "b2f128cb62a3abfbb1e3b2893ff3ee69e70f4f0f",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/sql-kit.git",
     )
