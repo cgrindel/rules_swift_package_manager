@@ -13,6 +13,7 @@ import (
 func RulesFromSrcs(
 	args language.GenerateArgs,
 	srcs []string,
+	defaultName string,
 	defaultModuleName string,
 ) []*rule.Rule {
 	fileInfos := swiftpkg.NewSwiftFileInfosFromRelPaths(args.Dir, srcs)
@@ -23,16 +24,17 @@ func RulesFromSrcs(
 	var rules []*rule.Rule
 	switch moduleType {
 	case LibraryModuleType:
-		rules = rulesForLibraryModule(defaultModuleName, srcs, swiftImports, shouldSetVis, args.File)
+		rules = rulesForLibraryModule(defaultName, defaultModuleName, srcs, swiftImports, shouldSetVis, args.File)
 	case BinaryModuleType:
-		rules = rulesForBinaryModule(defaultModuleName, srcs, swiftImports, shouldSetVis, args.File)
+		rules = rulesForBinaryModule(defaultName, defaultModuleName, srcs, swiftImports, shouldSetVis, args.File)
 	case TestModuleType:
-		rules = rulesForTestModule(defaultModuleName, srcs, swiftImports, shouldSetVis, args.File)
+		rules = rulesForTestModule(defaultName, defaultModuleName, srcs, swiftImports, shouldSetVis, args.File)
 	}
 	return rules
 }
 
 var guiModules = mapset.NewSet("AppKit", "UIKit", "SwiftUI")
+var testModules = mapset.NewSet("XCTest", "XCUITest")
 
 // Returns the imports and the module typ
 func collectSwiftInfo(fileInfos []*swiftpkg.SwiftFileInfo) ([]string, ModuleType) {
@@ -61,10 +63,14 @@ func collectSwiftInfo(fileInfos []*swiftpkg.SwiftFileInfo) ([]string, ModuleType
 		}
 	}
 
-	// Adjust the rule kind, if necessary
-	// Check for test files first. On Linux, a main.swift is necessary for swift_test rules.
-	// GUI applications can use the @main directive. So, we need to see if the module contains any
-	// of the GUI related modules. If no GUI modules and it has a main, then create a swift_binary.
+	// Adjust the rule kind, if necessary.
+	// Check if this is a test module first. On Linux, a main.swift is necessary for swift_test rules.
+	// rules_swift_package_manager does not currently support generating rules_apple targets.
+	// However, applications using Apple's UI frameworks can use the @main directive.
+	// To build these with rules_apple, we must first compile a swift_library target,
+	// and then pass this as a dependency to the application or extension target.
+	// So, we need to see if the module contains a main function and imports any of the GUI related modules.
+	// If it does not import any GUI modules and it has a main, then create a swift_binary.
 	if hasTestFiles {
 		moduleType = TestModuleType
 	} else if hasMain && !importsGUIModules {

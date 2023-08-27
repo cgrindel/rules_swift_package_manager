@@ -9,10 +9,10 @@ import (
 
 // Determines which Swift rule should be used to build the sources. If the build file contains a
 // rule kind that ends in _test except swift_test, we assume that it will consume a swift_library.
-func buildRuleForTestSrcs(buildFile *rule.File, moduleName string) *rule.Rule {
+func buildRuleForTestSrcs(buildFile *rule.File, name, moduleName string) *rule.Rule {
 	var libName string
 	testKind := TestRuleKind
-	testName := moduleName
+	testName := name
 
 	// Look for existing test rules and libraries
 	if buildFile != nil {

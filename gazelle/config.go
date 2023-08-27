@@ -125,10 +125,14 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 // Directives
 
+const moduleNamingConventionDirective = "swift_module_naming_convention"
 const defaultModuleNameDirective = "swift_default_module_name"
 
 func (*swiftLang) KnownDirectives() []string {
-	return []string{defaultModuleNameDirective}
+	return []string{
+		moduleNamingConventionDirective,
+		defaultModuleNameDirective,
+	}
 }
 
 func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
@@ -138,6 +142,12 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 	sc := swiftcfg.GetSwiftConfig(c)
 	for _, d := range f.Directives {
 		switch d.Key {
+		case moduleNamingConventionDirective:
+			if d.Value == swiftcfg.PascalCaseModuleNamingConvention {
+				sc.ModuleNamingConvention = swiftcfg.PascalCaseModuleNamingConvention
+			} else {
+				sc.ModuleNamingConvention = swiftcfg.MatchCaseModuleNamingConvention
+			}
 		case defaultModuleNameDirective:
 			sc.DefaultModuleNames[rel] = d.Value
 		}

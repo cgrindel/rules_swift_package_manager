@@ -6,8 +6,7 @@ swift_test(
         "client_unit_test.swift",
         "main.swift",
     ],
-    module_name = "test",
-    visibility = ["//visibility:public"],
+    module_name = "Test",
     deps = [
         "//protos/echoservice:echoservice_client_swift_grpc",
         "//protos/echoservice:echoservice_server_swift_grpc",

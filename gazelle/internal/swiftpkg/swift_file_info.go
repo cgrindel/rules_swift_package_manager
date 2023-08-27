@@ -23,10 +23,11 @@ type SwiftFileInfo struct {
 
 // NewSwiftFileInfoFromReader returns file info for a source file.
 func NewSwiftFileInfoFromReader(rel, abs string, reader io.Reader) *SwiftFileInfo {
+	lowercaseRelativePath := strings.ToLower(rel)
 	fi := SwiftFileInfo{
 		Rel:    rel,
 		Abs:    abs,
-		IsTest: testSuffixes.HasSuffix(rel) || TestDirSuffixes.IsUnderDirWithSuffix(rel),
+		IsTest: TestFilePathSuffixes.HasSuffix(lowercaseRelativePath) || TestDirectoryPathSuffixes.IsUnderDirWithSuffix(lowercaseRelativePath),
 		// There are several ways to detect a main.
 		// 1. A file named "main.swift"
 		// 2. @main annotation
@@ -110,24 +111,11 @@ const (
 	objcDirReSubexpIdx        = 5
 )
 
-type fileSuffixes []string
-
-func (fs fileSuffixes) HasSuffix(path string) bool {
-	for _, suffix := range fs {
-		if strings.HasSuffix(path, suffix) {
-			return true
-		}
-	}
-	return false
-}
-
-var testSuffixes = fileSuffixes{"Tests.swift", "Test.swift"}
-
-// DirSuffixes provides a means for testing a path having one of the listed suffixes.
-type DirSuffixes []string
+// PathSuffixes provides a means for testing a path having one of the listed suffixes.
+type PathSuffixes []string
 
 // HasSuffix checks if the path has one of the suffixes.
-func (ds DirSuffixes) HasSuffix(path string) bool {
+func (ds PathSuffixes) HasSuffix(path string) bool {
 	for _, suffix := range ds {
 		if strings.HasSuffix(path, suffix) {
 			return true
@@ -137,19 +125,23 @@ func (ds DirSuffixes) HasSuffix(path string) bool {
 }
 
 // IsUnderDirWithSuffix checks if the path has a directory that includes one of the suffixes.
-func (ds DirSuffixes) IsUnderDirWithSuffix(path string) bool {
+func (ds PathSuffixes) IsUnderDirWithSuffix(path string) bool {
 	if path == "." || path == "" || path == "/" {
 		return false
 	}
 	dir := filepath.Dir(path)
+	dir = strings.ToLower(dir)
 	if ds.HasSuffix(dir) {
 		return true
 	}
 	return ds.IsUnderDirWithSuffix(dir)
 }
 
-// TestDirSuffixes lists the suffixes used for Swift test directories.
-var TestDirSuffixes = DirSuffixes{"Tests", "Test"}
+// TestFilePathSuffixes lists the suffixes used for Swift test files.
+var TestFilePathSuffixes = PathSuffixes{"tests.swift", "test.swift"}
+
+// TestDirectoryPathSuffixes lists the suffixes used for Swift test directories.
+var TestDirectoryPathSuffixes = PathSuffixes{"tests", "test"}
 
 // SwiftFileInfos represents a collection of SwiftFileInfo instances.
 type SwiftFileInfos []*SwiftFileInfo
