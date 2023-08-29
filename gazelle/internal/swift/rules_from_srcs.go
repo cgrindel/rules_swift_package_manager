@@ -34,7 +34,6 @@ func RulesFromSrcs(
 }
 
 var guiModules = mapset.NewSet("AppKit", "UIKit", "SwiftUI")
-var testModules = mapset.NewSet("XCTest", "XCUITest")
 
 // Returns the imports and the module typ
 func collectSwiftInfo(fileInfos []*swiftpkg.SwiftFileInfo) ([]string, ModuleType) {
