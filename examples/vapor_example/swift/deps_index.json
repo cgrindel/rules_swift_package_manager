@@ -386,7 +386,9 @@
       "label": "@swiftpkg_swift_nio//:Sources_CNIODarwin",
       "package_identity": "swift-nio",
       "product_memberships": [
+        "NIOCore",
         "NIO",
+        "NIOEmbedded",
         "NIOPosix",
         "_NIOConcurrency",
         "NIOTLS",
@@ -1273,18 +1275,18 @@
       "name": "swiftpkg_async_http_client",
       "identity": "async-http-client",
       "remote": {
-        "commit": "7f05a8da46cc2a4ab43218722298b81ac7a08031",
+        "commit": "16f7e62c08c6969899ce6cc277041e868364e5cf",
         "remote": "https://github.com/swift-server/async-http-client.git",
-        "version": "1.13.2"
+        "version": "1.19.0"
       }
     },
     {
       "name": "swiftpkg_async_kit",
       "identity": "async-kit",
       "remote": {
-        "commit": "9acea4c92f51a5885c149904f0d11db4712dda80",
+        "commit": "eab9edff78e8ace20bd7cb6e792ab46d54f59ab9",
         "remote": "https://github.com/vapor/async-kit.git",
-        "version": "1.16.0"
+        "version": "1.18.0"
       }
     },
     {
@@ -1300,27 +1302,27 @@
       "name": "swiftpkg_fluent",
       "identity": "fluent",
       "remote": {
-        "commit": "2da106f46b093885f77fa03e3c719ab5bb8cfab4",
+        "commit": "4b4d8bf15a06fd60137e9c543e5503c4b842654e",
         "remote": "https://github.com/vapor/fluent.git",
-        "version": "4.6.0"
+        "version": "4.8.0"
       }
     },
     {
       "name": "swiftpkg_fluent_kit",
       "identity": "fluent-kit",
       "remote": {
-        "commit": "be7912ee4991bcc8a5390fac0424d1d08221dcc6",
+        "commit": "ccea9820fe31076f994f7c1c1d584009cad6bdb2",
         "remote": "https://github.com/vapor/fluent-kit.git",
-        "version": "1.36.1"
+        "version": "1.44.1"
       }
     },
     {
       "name": "swiftpkg_fluent_sqlite_driver",
       "identity": "fluent-sqlite-driver",
       "remote": {
-        "commit": "7f2a0b105e9cd22141dee220848d8739da6b7232",
+        "commit": "138a546e3b7e33efa5362e05da2a0dec3a30534f",
         "remote": "https://github.com/vapor/fluent-sqlite-driver.git",
-        "version": "4.3.0"
+        "version": "4.5.0"
       }
     },
     {
@@ -1345,18 +1347,18 @@
       "name": "swiftpkg_sql_kit",
       "identity": "sql-kit",
       "remote": {
-        "commit": "dcf10a00d7d5df987b7948e6fd5596fb65f6d0c2",
+        "commit": "b2f128cb62a3abfbb1e3b2893ff3ee69e70f4f0f",
         "remote": "https://github.com/vapor/sql-kit.git",
-        "version": "3.23.0"
+        "version": "3.28.0"
       }
     },
     {
       "name": "swiftpkg_sqlite_kit",
       "identity": "sqlite-kit",
       "remote": {
-        "commit": "c07d53044727db7edf8550c2e8ccfe1fa40177d2",
+        "commit": "2b20fc0f4f6574f59dae402ccf0ed050c6790b43",
         "remote": "https://github.com/vapor/sqlite-kit.git",
-        "version": "4.2.0"
+        "version": "4.3.1"
       }
     },
     {
@@ -1381,9 +1383,9 @@
       "name": "swiftpkg_swift_atomics",
       "identity": "swift-atomics",
       "remote": {
-        "commit": "ff3d2212b6b093db7f177d0855adbc4ef9c5f036",
+        "commit": "6c89474e62719ddcc1e9614989fff2f68208fe10",
         "remote": "https://github.com/apple/swift-atomics.git",
-        "version": "1.0.3"
+        "version": "1.1.0"
       }
     },
     {
@@ -1417,9 +1419,9 @@
       "name": "swiftpkg_swift_log",
       "identity": "swift-log",
       "remote": {
-        "commit": "3e3ef75109d6801b2c44504e73f55f0dce6662c9",
+        "commit": "532d8b529501fb73a2455b179e0bbb6d49b652ed",
         "remote": "https://github.com/apple/swift-log.git",
-        "version": "1.5.1"
+        "version": "1.5.3"
       }
     },
     {
@@ -1435,18 +1437,18 @@
       "name": "swiftpkg_swift_nio",
       "identity": "swift-nio",
       "remote": {
-        "commit": "4ad2c3733845abd9ee8892a323b0fa0d80f37e34",
+        "commit": "cf281631ff10ec6111f2761052aa81896a83a007",
         "remote": "https://github.com/apple/swift-nio.git",
-        "version": "2.47.0"
+        "version": "2.58.0"
       }
     },
     {
       "name": "swiftpkg_swift_nio_extras",
       "identity": "swift-nio-extras",
       "remote": {
-        "commit": "91dd2d61fb772e1311bb5f13b59266b579d77e42",
+        "commit": "0e0d0aab665ff1a0659ce75ac003081f2b1c8997",
         "remote": "https://github.com/apple/swift-nio-extras.git",
-        "version": "1.15.0"
+        "version": "1.19.0"
       }
     },
     {
@@ -1462,18 +1464,18 @@
       "name": "swiftpkg_swift_nio_ssl",
       "identity": "swift-nio-ssl",
       "remote": {
-        "commit": "4fb7ead803e38949eb1d6fabb849206a72c580f3",
+        "commit": "320bd978cceb8e88c125dcbb774943a92f6286e9",
         "remote": "https://github.com/apple/swift-nio-ssl.git",
-        "version": "2.23.0"
+        "version": "2.25.0"
       }
     },
     {
       "name": "swiftpkg_swift_nio_transport_services",
       "identity": "swift-nio-transport-services",
       "remote": {
-        "commit": "c0d9a144cfaec8d3d596aadde3039286a266c15c",
+        "commit": "e7403c35ca6bb539a7ca353b91cc2d8ec0362d58",
         "remote": "https://github.com/apple/swift-nio-transport-services.git",
-        "version": "1.15.0"
+        "version": "1.19.0"
       }
     },
     {
@@ -1489,18 +1491,18 @@
       "name": "swiftpkg_vapor",
       "identity": "vapor",
       "remote": {
-        "commit": "eb2da0d749e185789970c32f7fd9c114a339fa13",
+        "commit": "1bb4a2ed94bec7a92f92e82896408c785d068f5c",
         "remote": "https://github.com/vapor/vapor.git",
-        "version": "4.67.5"
+        "version": "4.79.0"
       }
     },
     {
       "name": "swiftpkg_websocket_kit",
       "identity": "websocket-kit",
       "remote": {
-        "commit": "2d9d2188a08eef4a869d368daab21b3c08510991",
+        "commit": "53fe0639a98903858d0196b699720decb42aee7b",
         "remote": "https://github.com/vapor/websocket-kit.git",
-        "version": "2.6.1"
+        "version": "2.14.0"
       }
     }
   ]
