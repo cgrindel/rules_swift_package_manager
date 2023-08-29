@@ -9,13 +9,14 @@ import (
 // Rule Creation
 
 func rulesForLibraryModule(
+	defaultName string,
 	defaultModuleName string,
 	srcs []string,
 	swiftImports []string,
 	shouldSetVis bool,
 	buildFile *rule.File,
 ) []*rule.Rule {
-	name, moduleName := ruleNameAndModuleName(buildFile, LibraryRuleKind, defaultModuleName)
+	name, moduleName := ruleNameAndModuleName(buildFile, LibraryRuleKind, defaultName, defaultModuleName)
 	r := rule.NewRule(LibraryRuleKind, name)
 	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
 	setVisibilityAttr(r, shouldSetVis, []string{"//visibility:public"})
@@ -23,13 +24,14 @@ func rulesForLibraryModule(
 }
 
 func rulesForBinaryModule(
+	defaultName string,
 	defaultModuleName string,
 	srcs []string,
 	swiftImports []string,
 	shouldSetVis bool,
 	buildFile *rule.File,
 ) []*rule.Rule {
-	name, moduleName := ruleNameAndModuleName(buildFile, BinaryRuleKind, defaultModuleName)
+	name, moduleName := ruleNameAndModuleName(buildFile, BinaryRuleKind, defaultName, defaultModuleName)
 	r := rule.NewRule(BinaryRuleKind, name)
 	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
 	setVisibilityAttr(r, shouldSetVis, []string{"//visibility:public"})
@@ -37,6 +39,7 @@ func rulesForBinaryModule(
 }
 
 func rulesForTestModule(
+	defaultName string,
 	defaultModuleName string,
 	srcs []string,
 	swiftImports []string,
@@ -44,7 +47,7 @@ func rulesForTestModule(
 	buildFile *rule.File,
 ) []*rule.Rule {
 	// Detect the type of rule that should be used to build the Swift sources.
-	r := buildRuleForTestSrcs(buildFile, defaultModuleName)
+	r := buildRuleForTestSrcs(buildFile, defaultName, defaultModuleName)
 	setCommonSwiftAttrs(r, defaultModuleName, srcs, swiftImports)
 	return []*rule.Rule{r}
 }
@@ -79,7 +82,7 @@ func setVisibilityAttr(r *rule.Rule, shouldSetVis bool, visibility []string) {
 // Name and Module Name
 
 // Determine the rule name and module name from existing rules
-func ruleNameAndModuleName(buildFile *rule.File, kind, defaultModuleName string) (string, string) {
+func ruleNameAndModuleName(buildFile *rule.File, kind, defaultName, defaultModuleName string) (string, string) {
 	var existingRules []*rule.Rule
 	if buildFile != nil {
 		existingRules = findRulesByKind(buildFile.Rules, kind)
@@ -91,7 +94,7 @@ func ruleNameAndModuleName(buildFile *rule.File, kind, defaultModuleName string)
 		name = first.Name()
 		moduleName = first.AttrString(ModuleNameAttrName)
 	} else {
-		name = defaultModuleName
+		name = defaultName
 		moduleName = defaultModuleName
 	}
 	return name, moduleName
