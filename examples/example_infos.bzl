@@ -59,7 +59,7 @@ def _bazel_integration_test(ei):
     workspace_path = ei.name
     if versions_len == 1:
         version = ei.versions[0]
-        test_name = example_infos.test_name(ei.name, version)
+        test_name = _test_name(ei.name, version)
         bazel_integration_test(
             name = test_name,
             bazel_binaries = bazel_binaries,
@@ -86,14 +86,14 @@ def _bazel_integration_test(ei):
             _ci_integration_test_params(ei, version)
 
 def _test_params_name(ei, version):
-    test_name = example_infos.test_name(ei.name, version)
+    test_name = _test_name(ei.name, version)
     return _test_params_name_from_test_name(test_name)
 
 def _test_params_name_from_test_name(test_name):
     return "{}_params".format(test_name)
 
 def _ci_integration_test_params(ei, version):
-    test_name = example_infos.test_name(ei.name, version)
+    test_name = _test_name(ei.name, version)
     ci_integration_test_params(
         name = _test_params_name_from_test_name(test_name),
         bzlmod_modes = [
