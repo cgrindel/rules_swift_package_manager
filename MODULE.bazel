@@ -5,7 +5,7 @@ module(
 
 # MARK: - Runtime Dependencies
 
-bazel_dep(name = "cgrindel_bazel_starlib", version = "0.16.2")
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.17.0")
 bazel_dep(name = "bazel_skylib", version = "1.4.2")
 bazel_dep(
     name = "rules_go",
@@ -66,3 +66,10 @@ bazel_binaries = use_extension(
 )
 bazel_binaries.download(version_file = "//:.bazelversion")
 use_repo(bazel_binaries, "bazel_binaries")
+
+# DEBUG BEGIN
+local_path_override(
+    module_name = "cgrindel_bazel_starlib",
+    path = "/Users/chuck/code/cgrindel/bazel-starlib/debug_stardoc",
+)
+# DEBUG END
