@@ -1,6 +1,7 @@
 load("@bazel_binaries//:defs.bzl", "bazel_binaries")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
+load("@cgrindel_bazel_starlib//shlib/rules:execute_binary.bzl", "execute_binary")
 load(
     "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "integration_test_utils",
@@ -27,6 +28,13 @@ sh_binary(
     ],
 )
 
+execute_binary(
+    name = "legacy_test_runner",
+    testonly = True,
+    arguments = ["--legacy"],
+    binary = ":test_runner",
+)
+
 # MARK: - Integration Tests
 
 [
@@ -39,20 +47,28 @@ example_infos.ci_test_params_suite(
     example_infos = example_infos.all,
 )
 
-_smoke_test_names = sorted([
-    example_infos.test_name(
-        ei.name,
-        bazel_binaries.versions.current,
-    )
-    for ei in example_infos.all
-])
-
-_all_test_names = sorted(lists.flatten([
+_smoke_test_names = sorted(lists.flatten([
     [
         example_infos.test_name(
             ei.name,
-            version,
+            enable_bzlmod,
+            bazel_binaries.versions.current,
         )
+        for enable_bzlmod in ei.enable_bzlmods
+    ]
+    for ei in example_infos.all
+]))
+
+_all_test_names = sorted(lists.flatten([
+    [
+        [
+            example_infos.test_name(
+                ei.name,
+                enable_bzlmod,
+                version,
+            )
+            for enable_bzlmod in ei.enable_bzlmods
+        ]
         for version in ei.versions
     ]
     for ei in example_infos.all

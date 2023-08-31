@@ -41,3 +41,6 @@ build --bes_upload_mode=fully_async
 run --bes_backend=
 run --bes_results_url=
 
+# Configuration group to run using legacy WORKSPACE
+common:legacy --noenable_bzlmod
+build:legacy --no@cgrindel_bazel_starlib//bzlmod:enabled

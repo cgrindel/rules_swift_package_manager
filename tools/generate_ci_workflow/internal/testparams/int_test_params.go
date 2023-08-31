@@ -6,20 +6,8 @@ const MacOS = "macos"
 const LinuxOS = "linux"
 
 type IntTestParams struct {
-	Test       string `json:"test"`
-	OS         string `json:"os"`
-	BzlmodMode string `json:"bzlmod_mode"`
-}
-
-func (itp *IntTestParams) EnableBzlmod() bool {
-	switch itp.BzlmodMode {
-	case "enabled":
-		return true
-	case "disabled":
-		return false
-	default:
-		return false
-	}
+	Test string `json:"test"`
+	OS   string `json:"os"`
 }
 
 func (itp *IntTestParams) Runner() string {
