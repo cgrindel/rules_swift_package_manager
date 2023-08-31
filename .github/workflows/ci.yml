@@ -32,79 +32,54 @@ jobs:
         include:
           - test: '@@//bzlmod:e2e_test'
             runner: ubuntu-22.04
-            enable_bzlmod: true
           - test: '@@//bzlmod:e2e_test'
             runner: macos-13
-            enable_bzlmod: true
           - test: '@@//examples:firebase_example_test_bazel_.bazelversion'
             runner: macos-13
-            enable_bzlmod: true
           - test: '@@//examples:grpc_example_test_bazel_.bazelversion'
             runner: ubuntu-22.04
-            enable_bzlmod: true
           - test: '@@//examples:grpc_example_test_bazel_.bazelversion'
             runner: macos-13
-            enable_bzlmod: true
-          - test: '@@//examples:http_archive_ext_deps_test_bazel_.bazelversion'
+          - test: '@@//examples:http_archive_ext_deps_legacy_test_bazel_.bazelversion'
             runner: ubuntu-22.04
-            enable_bzlmod: false
-          - test: '@@//examples:http_archive_ext_deps_test_bazel_.bazelversion'
+          - test: '@@//examples:http_archive_ext_deps_legacy_test_bazel_.bazelversion'
             runner: macos-13
-            enable_bzlmod: false
           - test: '@@//examples:interesting_deps_test_bazel_.bazelversion'
             runner: macos-13
-            enable_bzlmod: true
           - test: '@@//examples:ios_sim_test_bazel_.bazelversion'
             runner: macos-13
-            enable_bzlmod: true
           - test: '@@//examples:objc_code_test_bazel_.bazelversion'
             runner: macos-13
-            enable_bzlmod: true
           - test: '@@//examples:phone_number_kit_test_bazel_.bazelversion'
             runner: macos-13
-            enable_bzlmod: true
           - test: '@@//examples:pkg_manifest_minimal_test_bazel_.bazelversion'
             runner: ubuntu-22.04
-            enable_bzlmod: true
           - test: '@@//examples:pkg_manifest_minimal_test_bazel_.bazelversion'
             runner: macos-13
-            enable_bzlmod: true
           - test: '@@//examples:resources_example_test_bazel_.bazelversion'
             runner: macos-13
-            enable_bzlmod: true
           - test: '@@//examples:snapkit_example_test_bazel_.bazelversion'
             runner: macos-13
-            enable_bzlmod: true
           - test: '@@//examples:soto_example_test_bazel_.bazelversion'
             runner: ubuntu-22.04
-            enable_bzlmod: true
           - test: '@@//examples:soto_example_test_bazel_.bazelversion'
             runner: macos-13
-            enable_bzlmod: true
           - test: '@@//examples:stripe_example_test_bazel_.bazelversion'
             runner: macos-13
-            enable_bzlmod: true
+          - test: '@@//examples:vapor_example_legacy_test_bazel_.bazelversion'
+            runner: ubuntu-22.04
+          - test: '@@//examples:vapor_example_legacy_test_bazel_.bazelversion'
+            runner: macos-13
           - test: '@@//examples:vapor_example_test_bazel_.bazelversion'
             runner: ubuntu-22.04
-            enable_bzlmod: false
-          - test: '@@//examples:vapor_example_test_bazel_.bazelversion'
-            runner: ubuntu-22.04
-            enable_bzlmod: true
           - test: '@@//examples:vapor_example_test_bazel_.bazelversion'
             runner: macos-13
-            enable_bzlmod: false
-          - test: '@@//examples:vapor_example_test_bazel_.bazelversion'
-            runner: macos-13
-            enable_bzlmod: true
           - test: '@@//examples:xcmetrics_example_test_bazel_.bazelversion'
             runner: macos-13
-            enable_bzlmod: true
           - test: '@@//release:archive_test'
             runner: ubuntu-22.04
-            enable_bzlmod: true
           - test: '@@//release:archive_test'
             runner: macos-13
-            enable_bzlmod: true
     runs-on: ${{ matrix.runner }}
     env:
       CC: clang
@@ -120,9 +95,6 @@ jobs:
         with:
           repo_name: rules_swift_package_manager
           xcode_version: "14.2"
-      - uses: ./.github/actions/configure_bzlmod
-        with:
-          enabled: ${{ matrix.enable_bzlmod }}
       - uses: ./.github/actions/configure_remote_cache_auth
         with:
           buildbuddy_api_key: ${{  secrets.BUILDBUDDY_API_KEY }}
@@ -137,9 +109,6 @@ jobs:
         runner:
           - macos-13
           - ubuntu-22.04
-        enable_bzlmod:
-          - true
-          - false
     runs-on: ${{ matrix.runner }}
     env:
       CC: clang
@@ -155,9 +124,6 @@ jobs:
         with:
           repo_name: rules_swift_package_manager
           xcode_version: "14.2"
-      - uses: ./.github/actions/configure_bzlmod
-        with:
-          enabled: ${{ matrix.enable_bzlmod }}
       - uses: ./.github/actions/configure_remote_cache_auth
         with:
           buildbuddy_api_key: ${{  secrets.BUILDBUDDY_API_KEY }}
