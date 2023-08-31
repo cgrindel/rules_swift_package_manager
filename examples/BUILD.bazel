@@ -1,6 +1,7 @@
 load("@bazel_binaries//:defs.bzl", "bazel_binaries")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
+load("@cgrindel_bazel_starlib//shlib/rules:execute_binary.bzl", "execute_binary")
 load(
     "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
     "integration_test_utils",
@@ -25,6 +26,13 @@ sh_binary(
         "@bazel_tools//tools/bash/runfiles",
         "@cgrindel_bazel_starlib//shlib/lib:assertions",
     ],
+)
+
+execute_binary(
+    name = "legacy_test_runner",
+    testonly = True,
+    arguments = ["--legacy"],
+    binary = ":test_runner",
 )
 
 # MARK: - Integration Tests

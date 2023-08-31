@@ -25,6 +25,24 @@ create_scratch_dir_sh="$(rlocation "${create_scratch_dir_sh_location}")" || \
 
 # MARK - Process Arguments
 
+legacy_mode=false
+while (("$#")); do
+  case "${1}" in
+    "--legacy")
+      legacy_mode=true
+      shift 1
+      ;;
+    "--nolegacy")
+      legacy_mode=false
+      shift 1
+      ;;
+    *)
+      args+=("${1}")
+      shift 1
+      ;;
+  esac
+done
+
 bazel="${BIT_BAZEL_BINARY:-}"
 workspace_dir="${BIT_WORKSPACE_DIR:-}"
 
@@ -36,6 +54,10 @@ workspace_dir="${BIT_WORKSPACE_DIR:-}"
 scratch_dir="$("${create_scratch_dir_sh}" --workspace "${workspace_dir}")"
 cd "${scratch_dir}"
 
+if [[ "${legacy_mode}" == "true" ]]; then
+  echo "build --config=legacy" >> .bazelrc
+fi
+
 # Dump Bazel info
 bazel info
 
@@ -45,5 +67,8 @@ do_test
 
 # MARK - Clean Test
 
-set_up_clean_test
-do_test
+if [[ -f set_up_clean_test ]]; then
+  set_up_clean_test
+  do_test
+fi
+

@@ -34,21 +34,9 @@ def _new(name, oss, versions, enable_bzlmods):
         enable_bzlmods = enable_bzlmods,
     )
 
-# def _test_name(example_name, version, enable_bzlmod = True):
-#     tmpl = "{name}_{version}_test"
-#     if not enable_bzlmod:
-#         tmpl = "{name}_{version}_legacy_test"
-#     return tmpl.format(name = example_name, version = version)
-
 def _test_name_prefix(name, enable_bzlmod = True):
     suffix = "_test" if enable_bzlmod else "_legacy_test"
     return name + suffix
-
-# def _test_name(example_name, version):
-#     return integration_test_utils.bazel_integration_test_name(
-#         example_name + "_test",
-#         version,
-#     )
 
 def _test_name(example_name, enable_bzlmod, version):
     return integration_test_utils.bazel_integration_test_name(
@@ -65,12 +53,12 @@ def _bazel_integration_test(ei):
         {"//conditions:default": ["@platforms//:incompatible"]},
     ))
     timeout = _timeouts.get(ei.name, _default_timeout)
-    test_runner = ":test_runner"
     workspace_files = integration_test_utils.glob_workspace_files(ei.name) + [
         "//:runtime_files",
     ]
     workspace_path = ei.name
     for enable_bzlmod in ei.enable_bzlmods:
+        test_runner = ":test_runner" if enable_bzlmod else ":legacy_test_runner"
         bazel_integration_tests(
             name = _test_name_prefix(ei.name, enable_bzlmod = enable_bzlmod),
             bazel_binaries = bazel_binaries,
@@ -99,19 +87,6 @@ def _ci_integration_test_params(ei, enable_bzlmod, version):
         test_names = [test_name],
         visibility = ["//:__subpackages__"],
     )
-
-# def _ci_integration_test_params(ei, version):
-#     test_name = _test_name(ei.name, version)
-#     ci_integration_test_params(
-#         name = _test_params_name_from_test_name(test_name),
-#         bzlmod_modes = [
-#             bzlmod_modes.from_bool(enable_bzlmod)
-#             for enable_bzlmod in ei.enable_bzlmods
-#         ],
-#         oss = ei.oss,
-#         test_names = [test_name],
-#         visibility = ["//:__subpackages__"],
-#     )
 
 def _ci_test_params_suite(name, example_infos):
     ci_test_params_suite(
