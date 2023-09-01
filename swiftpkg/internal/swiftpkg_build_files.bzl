@@ -23,7 +23,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
     elif target.module_type == module_types.binary:
-        # return _apple_dynamic_xcframework_import_build_file(target)
+        # GH559: Allow client to control how binary targets are exposed.
         return _apple_static_xcframework_import_build_file(target)
 
     # GH046: Support plugins.
@@ -356,27 +356,6 @@ def _system_library_build_file(target):
 
 # MARK: - Apple xcframework Targets
 
-def _apple_dynamic_xcframework_import_build_file(target):
-    load_stmts = [apple_dynamic_xcframework_import_load_stmt]
-    glob = scg.new_fn_call(
-        "glob",
-        ["{tpath}/*.xcframework/**".format(tpath = target.path)],
-    )
-    decls = [
-        build_decls.new(
-            kind = apple_kinds.dynamic_xcframework_import,
-            name = pkginfo_targets.bazel_label_name(target),
-            attrs = {
-                "visibility": ["//visibility:public"],
-                "xcframework_imports": glob,
-            },
-        ),
-    ]
-    return build_files.new(
-        load_stmts = load_stmts,
-        decls = decls,
-    )
-
 def _apple_static_xcframework_import_build_file(target):
     load_stmts = [apple_static_xcframework_import_load_stmt]
     glob = scg.new_fn_call(
@@ -662,7 +641,6 @@ swiftpkg_build_files = struct(
 )
 
 apple_kinds = struct(
-    dynamic_xcframework_import = "apple_dynamic_xcframework_import",
     static_xcframework_import = "apple_static_xcframework_import",
     resource_bundle = "apple_resource_bundle",
 )
@@ -670,11 +648,6 @@ apple_kinds = struct(
 apple_apple_location = "@build_bazel_rules_apple//apple:apple.bzl"
 
 apple_resources_location = "@build_bazel_rules_apple//apple:resources.bzl"
-
-apple_dynamic_xcframework_import_load_stmt = load_statements.new(
-    apple_apple_location,
-    apple_kinds.dynamic_xcframework_import,
-)
 
 apple_static_xcframework_import_load_stmt = load_statements.new(
     apple_apple_location,
