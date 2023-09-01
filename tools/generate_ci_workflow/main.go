@@ -107,9 +107,8 @@ func updateMatrix(m *github.SBMatrixStrategy, intTestParams []testparams.IntTest
 	newM := github.SBMatrixStrategy{}
 	for _, itp := range intTestParams {
 		inc := github.SBMatrixInclude{
-			Test:         itp.Test,
-			Runner:       itp.Runner(),
-			EnableBzlmod: itp.EnableBzlmod(),
+			Test:   itp.Test,
+			Runner: itp.Runner(),
 		}
 		newM.Include = append(newM.Include, inc)
 	}

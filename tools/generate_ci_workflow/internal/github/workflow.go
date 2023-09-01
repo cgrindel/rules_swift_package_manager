@@ -113,18 +113,14 @@ func (ff FailFast) IsZero() bool {
 
 // SBMatrixStrategy is the job execution matrix.
 type SBMatrixStrategy struct {
-	Example      []string          `yaml:"example,omitempty"`
-	BazelVersion []string          `yaml:"bazel_version,omitempty"`
-	Runner       []string          `yaml:"runner,omitempty"`
-	EnableBzlmod []bool            `yaml:"enable_bzlmod,omitempty"`
-	Include      []SBMatrixInclude `yaml:"include,omitempty"`
+	Example []string          `yaml:"example,omitempty"`
+	Runner  []string          `yaml:"runner,omitempty"`
+	Include []SBMatrixInclude `yaml:"include,omitempty"`
 }
 
 // SBMatrixInclude is the include for the job execution matrix.
 type SBMatrixInclude struct {
-	Example      string `yaml:"example,omitempty"`
-	BazelVersion string `yaml:"bazel_version,omitempty"`
-	Test         string `yaml:"test"`
-	Runner       string `yaml:"runner"`
-	EnableBzlmod bool   `yaml:"enable_bzlmod"`
+	Example string `yaml:"example,omitempty"`
+	Test    string `yaml:"test"`
+	Runner  string `yaml:"runner"`
 }
