@@ -920,6 +920,16 @@
       ]
     },
     {
+      "name": "RecaptchaInterop",
+      "c99name": "RecaptchaInterop",
+      "src_type": "objc",
+      "label": "@swiftpkg_interop_ios_for_google_sdks//:RecaptchaEnterprise_RecaptchaInterop",
+      "package_identity": "interop-ios-for-google-sdks",
+      "product_memberships": [
+        "RecaptchaInterop"
+      ]
+    },
+    {
       "name": "leveldb",
       "c99name": "leveldb",
       "src_type": "clang",
@@ -1428,6 +1438,14 @@
       ]
     },
     {
+      "identity": "interop-ios-for-google-sdks",
+      "name": "RecaptchaInterop",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_interop_ios_for_google_sdks//:RecaptchaEnterprise_RecaptchaInterop"
+      ]
+    },
+    {
       "identity": "leveldb",
       "name": "leveldb",
       "type": "library",
@@ -1530,18 +1548,18 @@
       "name": "swiftpkg_firebase_ios_sdk",
       "identity": "firebase-ios-sdk",
       "remote": {
-        "commit": "a580250a9ff49ec38da5430cef20f88ddc831db2",
+        "commit": "2bfe6abe1014aafe5cf28401708f7d39f9926a76",
         "remote": "https://github.com/firebase/firebase-ios-sdk",
-        "version": "10.12.0"
+        "version": "10.14.0"
       }
     },
     {
       "name": "swiftpkg_googleappmeasurement",
       "identity": "googleappmeasurement",
       "remote": {
-        "commit": "0a226a8c50494c4cb877fbde27ab6374520a3354",
+        "commit": "03b9beee1a61f62d32c521e172e192a1663a5e8b",
         "remote": "https://github.com/google/GoogleAppMeasurement.git",
-        "version": "10.12.0"
+        "version": "10.13.0"
       }
     },
     {
@@ -1578,6 +1596,15 @@
         "commit": "5ccda3981422a84186387dbb763ba739178b529c",
         "remote": "https://github.com/google/gtm-session-fetcher.git",
         "version": "2.3.0"
+      }
+    },
+    {
+      "name": "swiftpkg_interop_ios_for_google_sdks",
+      "identity": "interop-ios-for-google-sdks",
+      "remote": {
+        "commit": "2d12673670417654f08f5f90fdd62926dc3a2648",
+        "remote": "https://github.com/google/interop-ios-for-google-sdks.git",
+        "version": "100.0.0"
       }
     },
     {

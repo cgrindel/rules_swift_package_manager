@@ -192,27 +192,27 @@
       "name": "swiftpkg_swift_argument_parser",
       "identity": "swift-argument-parser",
       "remote": {
-        "commit": "fee6933f37fde9a5e12a1e4aeaa93fe60116ff2a",
+        "commit": "8f4d2753f0e4778c76d5f05ad16c74f707390531",
         "remote": "https://github.com/apple/swift-argument-parser",
-        "version": "1.2.2"
+        "version": "1.2.3"
       }
     },
     {
       "name": "swiftpkg_swift_log",
       "identity": "swift-log",
       "remote": {
-        "commit": "32e8d724467f8fe623624570367e3d50c5638e46",
+        "commit": "532d8b529501fb73a2455b179e0bbb6d49b652ed",
         "remote": "https://github.com/apple/swift-log",
-        "version": "1.5.2"
+        "version": "1.5.3"
       }
     },
     {
       "name": "swiftpkg_swiftformat",
       "identity": "swiftformat",
       "remote": {
-        "commit": "8ab626fdcf7cd5b300856bd5de28964604022572",
+        "commit": "1780bcdc3237633a50e4aaa97422de37e77130bd",
         "remote": "https://github.com/nicklockwood/SwiftFormat",
-        "version": "0.51.13"
+        "version": "0.52.2"
       }
     }
   ]

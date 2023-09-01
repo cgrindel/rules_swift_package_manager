@@ -67,31 +67,11 @@
       ]
     },
     {
-      "name": "NimbleObjectiveC",
-      "c99name": "NimbleObjectiveC",
-      "src_type": "objc",
-      "label": "@swiftpkg_nimble//:Sources_NimbleObjectiveC",
-      "package_identity": "nimble",
-      "product_memberships": [
-        "Nimble"
-      ]
-    },
-    {
       "name": "Quick",
       "c99name": "Quick",
       "src_type": "swift",
       "label": "@swiftpkg_quick//:Sources_Quick",
       "modulemap_label": "@swiftpkg_quick//:Sources_Quick_modulemap",
-      "package_identity": "quick",
-      "product_memberships": [
-        "Quick"
-      ]
-    },
-    {
-      "name": "QuickObjCRuntime",
-      "c99name": "QuickObjCRuntime",
-      "src_type": "objc",
-      "label": "@swiftpkg_quick//:Sources_QuickObjCRuntime",
       "package_identity": "quick",
       "product_memberships": [
         "Quick"
@@ -129,8 +109,7 @@
       "name": "Nimble",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_nimble//:Sources_Nimble",
-        "@swiftpkg_nimble//:Sources_NimbleObjectiveC"
+        "@swiftpkg_nimble//:Sources_Nimble"
       ]
     },
     {
@@ -165,18 +144,18 @@
       "name": "swiftpkg_nimble",
       "identity": "nimble",
       "remote": {
-        "commit": "831000dd1939bc2096df572c5fd156f41d858bfa",
+        "commit": "f552a16f434eef1f18b62985172489f41d37a18e",
         "remote": "https://github.com/Quick/Nimble",
-        "version": "12.1.0"
+        "version": "12.2.0"
       }
     },
     {
       "name": "swiftpkg_quick",
       "identity": "quick",
       "remote": {
-        "commit": "9913828ef3554e6cc1a57797c9f8dfd136c6c9d6",
+        "commit": "494eff9ad74a37047782b0d5d8d84c7ff49a60e4",
         "remote": "https://github.com/Quick/Quick",
-        "version": "7.1.0"
+        "version": "7.2.0"
       }
     }
   ]

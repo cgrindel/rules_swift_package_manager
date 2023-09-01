@@ -9,5 +9,12 @@
       "./do_renovate_post_upgrade"
     ],
     "executionMode": "branch"
-  }
+  },
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["buildtools"],
+      "matchManagers": ["gomod"],
+      "enabled": false
+    }
+  ]
 }

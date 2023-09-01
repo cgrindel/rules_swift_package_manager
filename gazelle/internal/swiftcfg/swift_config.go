@@ -15,6 +15,11 @@ const SwiftConfigName = "swift"
 const DefaultDependencyIndexBasename = "swift_deps_index.json"
 const dependencyIndexPerms = 0666
 
+const (
+	MatchCaseModuleNamingConvention  string = "match_case"
+	PascalCaseModuleNamingConvention string = "pascal_case"
+)
+
 // A SwiftConfig represents the Swift-specific configuration for the Gazelle extension.
 type SwiftConfig struct {
 	SwiftBinPath         string
@@ -36,6 +41,8 @@ type SwiftConfig struct {
 	BazelModulePath string
 
 	GenerateSwiftDepsForWorkspace bool
+
+	ModuleNamingConvention string
 
 	// Mapping of relative path to default module name. These values are populated from directives
 	// that can be applied to

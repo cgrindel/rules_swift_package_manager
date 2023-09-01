@@ -4,7 +4,7 @@ def swift_dependencies():
     # version: 1.13.2
     swift_package(
         name = "swiftpkg_async_http_client",
-        commit = "7f05a8da46cc2a4ab43218722298b81ac7a08031",
+        commit = "16f7e62c08c6969899ce6cc277041e868364e5cf",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/swift-server/async-http-client.git",
     )
@@ -12,7 +12,7 @@ def swift_dependencies():
     # version: 1.16.0
     swift_package(
         name = "swiftpkg_async_kit",
-        commit = "9acea4c92f51a5885c149904f0d11db4712dda80",
+        commit = "eab9edff78e8ace20bd7cb6e792ab46d54f59ab9",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/async-kit.git",
     )
@@ -28,7 +28,7 @@ def swift_dependencies():
     # version: 4.6.0
     swift_package(
         name = "swiftpkg_fluent",
-        commit = "2da106f46b093885f77fa03e3c719ab5bb8cfab4",
+        commit = "4b4d8bf15a06fd60137e9c543e5503c4b842654e",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/fluent.git",
     )
@@ -36,7 +36,7 @@ def swift_dependencies():
     # version: 1.36.1
     swift_package(
         name = "swiftpkg_fluent_kit",
-        commit = "be7912ee4991bcc8a5390fac0424d1d08221dcc6",
+        commit = "ccea9820fe31076f994f7c1c1d584009cad6bdb2",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/fluent-kit.git",
     )
@@ -44,7 +44,7 @@ def swift_dependencies():
     # version: 4.3.0
     swift_package(
         name = "swiftpkg_fluent_sqlite_driver",
-        commit = "7f2a0b105e9cd22141dee220848d8739da6b7232",
+        commit = "138a546e3b7e33efa5362e05da2a0dec3a30534f",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/fluent-sqlite-driver.git",
     )
@@ -68,7 +68,7 @@ def swift_dependencies():
     # version: 3.23.0
     swift_package(
         name = "swiftpkg_sql_kit",
-        commit = "dcf10a00d7d5df987b7948e6fd5596fb65f6d0c2",
+        commit = "b2f128cb62a3abfbb1e3b2893ff3ee69e70f4f0f",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/sql-kit.git",
     )
@@ -76,7 +76,7 @@ def swift_dependencies():
     # version: 4.2.0
     swift_package(
         name = "swiftpkg_sqlite_kit",
-        commit = "c07d53044727db7edf8550c2e8ccfe1fa40177d2",
+        commit = "2b20fc0f4f6574f59dae402ccf0ed050c6790b43",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/sqlite-kit.git",
     )
@@ -100,7 +100,7 @@ def swift_dependencies():
     # version: 1.0.3
     swift_package(
         name = "swiftpkg_swift_atomics",
-        commit = "ff3d2212b6b093db7f177d0855adbc4ef9c5f036",
+        commit = "6c89474e62719ddcc1e9614989fff2f68208fe10",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/apple/swift-atomics.git",
     )
@@ -132,7 +132,7 @@ def swift_dependencies():
     # version: 1.5.1
     swift_package(
         name = "swiftpkg_swift_log",
-        commit = "3e3ef75109d6801b2c44504e73f55f0dce6662c9",
+        commit = "532d8b529501fb73a2455b179e0bbb6d49b652ed",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/apple/swift-log.git",
     )
@@ -148,7 +148,7 @@ def swift_dependencies():
     # version: 2.47.0
     swift_package(
         name = "swiftpkg_swift_nio",
-        commit = "4ad2c3733845abd9ee8892a323b0fa0d80f37e34",
+        commit = "cf281631ff10ec6111f2761052aa81896a83a007",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/apple/swift-nio.git",
     )
@@ -156,7 +156,7 @@ def swift_dependencies():
     # version: 1.15.0
     swift_package(
         name = "swiftpkg_swift_nio_extras",
-        commit = "91dd2d61fb772e1311bb5f13b59266b579d77e42",
+        commit = "0e0d0aab665ff1a0659ce75ac003081f2b1c8997",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/apple/swift-nio-extras.git",
     )
@@ -172,7 +172,7 @@ def swift_dependencies():
     # version: 2.23.0
     swift_package(
         name = "swiftpkg_swift_nio_ssl",
-        commit = "4fb7ead803e38949eb1d6fabb849206a72c580f3",
+        commit = "320bd978cceb8e88c125dcbb774943a92f6286e9",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/apple/swift-nio-ssl.git",
     )
@@ -180,7 +180,7 @@ def swift_dependencies():
     # version: 1.15.0
     swift_package(
         name = "swiftpkg_swift_nio_transport_services",
-        commit = "c0d9a144cfaec8d3d596aadde3039286a266c15c",
+        commit = "e7403c35ca6bb539a7ca353b91cc2d8ec0362d58",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/apple/swift-nio-transport-services.git",
     )
@@ -196,7 +196,7 @@ def swift_dependencies():
     # version: 4.67.5
     swift_package(
         name = "swiftpkg_vapor",
-        commit = "eb2da0d749e185789970c32f7fd9c114a339fa13",
+        commit = "d53f7fdbf6bdaaa4568dc9bf3847aafeaea6c489",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/vapor.git",
     )
@@ -204,7 +204,7 @@ def swift_dependencies():
     # version: 2.6.1
     swift_package(
         name = "swiftpkg_websocket_kit",
-        commit = "2d9d2188a08eef4a869d368daab21b3c08510991",
+        commit = "53fe0639a98903858d0196b699720decb42aee7b",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/websocket-kit.git",
     )

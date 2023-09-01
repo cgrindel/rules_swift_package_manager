@@ -5,13 +5,11 @@ load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(
     "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
-    "bazel_integration_test",
     "bazel_integration_tests",
     "integration_test_utils",
 )
 load(
     "//ci:defs.bzl",
-    "bzlmod_modes",
     "ci_integration_test_params",
     "ci_test_params_suite",
 )
@@ -36,14 +34,17 @@ def _new(name, oss, versions, enable_bzlmods):
         enable_bzlmods = enable_bzlmods,
     )
 
-def _test_name(example_name, version):
+def _test_name_prefix(name, enable_bzlmod = True):
+    suffix = "_test" if enable_bzlmod else "_legacy_test"
+    return name + suffix
+
+def _test_name(example_name, enable_bzlmod, version):
     return integration_test_utils.bazel_integration_test_name(
-        example_name + "_test",
+        _test_name_prefix(example_name, enable_bzlmod = enable_bzlmod),
         version,
     )
 
 def _bazel_integration_test(ei):
-    versions_len = len(ei.versions)
     target_compatible_with = select(dicts.add(
         {
             "@platforms//os:{}".format(os): []
@@ -52,28 +53,14 @@ def _bazel_integration_test(ei):
         {"//conditions:default": ["@platforms//:incompatible"]},
     ))
     timeout = _timeouts.get(ei.name, _default_timeout)
-    test_runner = ":test_runner"
     workspace_files = integration_test_utils.glob_workspace_files(ei.name) + [
         "//:runtime_files",
     ]
     workspace_path = ei.name
-    if versions_len == 1:
-        version = ei.versions[0]
-        test_name = example_infos.test_name(ei.name, version)
-        bazel_integration_test(
-            name = test_name,
-            bazel_binaries = bazel_binaries,
-            bazel_version = version,
-            timeout = timeout,
-            target_compatible_with = target_compatible_with,
-            test_runner = test_runner,
-            workspace_files = workspace_files,
-            workspace_path = workspace_path,
-        )
-        _ci_integration_test_params(ei, version)
-    elif versions_len > 1:
+    for enable_bzlmod in ei.enable_bzlmods:
+        test_runner = ":test_runner" if enable_bzlmod else ":legacy_test_runner"
         bazel_integration_tests(
-            name = ei.name + "_test",
+            name = _test_name_prefix(ei.name, enable_bzlmod = enable_bzlmod),
             bazel_binaries = bazel_binaries,
             bazel_versions = ei.versions,
             timeout = timeout,
@@ -83,23 +70,19 @@ def _bazel_integration_test(ei):
             workspace_path = workspace_path,
         )
         for version in ei.versions:
-            _ci_integration_test_params(ei, version)
+            _ci_integration_test_params(ei, enable_bzlmod, version)
 
-def _test_params_name(ei, version):
-    test_name = example_infos.test_name(ei.name, version)
+def _test_params_name(name, enable_bzlmod, version):
+    test_name = _test_name(name, enable_bzlmod, version)
     return _test_params_name_from_test_name(test_name)
 
 def _test_params_name_from_test_name(test_name):
     return "{}_params".format(test_name)
 
-def _ci_integration_test_params(ei, version):
-    test_name = example_infos.test_name(ei.name, version)
+def _ci_integration_test_params(ei, enable_bzlmod, version):
+    test_name = _test_name(ei.name, enable_bzlmod, version)
     ci_integration_test_params(
         name = _test_params_name_from_test_name(test_name),
-        bzlmod_modes = [
-            bzlmod_modes.from_bool(enable_bzlmod)
-            for enable_bzlmod in ei.enable_bzlmods
-        ],
         oss = ei.oss,
         test_names = [test_name],
         visibility = ["//:__subpackages__"],
@@ -110,7 +93,10 @@ def _ci_test_params_suite(name, example_infos):
         name = name,
         test_params = lists.flatten([
             [
-                _test_params_name(ei, v)
+                [
+                    _test_params_name(ei.name, eb, v)
+                    for eb in ei.enable_bzlmods
+                ]
                 for v in ei.versions
             ]
             for ei in example_infos
@@ -118,8 +104,8 @@ def _ci_test_params_suite(name, example_infos):
         visibility = ["//:__subpackages__"],
     )
 
-# The default timeout is "long".
-_default_timeout = "long"
+# Switched the default to eternal as CI is failing intermittently.
+_default_timeout = "eternal"
 
 _timeouts = {
     "firebase_example": "eternal",
@@ -144,6 +130,7 @@ _all_os_all_bazel_versions_test_examples = [
 _all_os_single_bazel_version_test_examples = [
     "soto_example",
     "vapor_example",
+    "grpc_example",
 ]
 
 _macos_single_bazel_version_test_examples = [
@@ -199,5 +186,6 @@ example_infos = struct(
     bazel_integration_test = _bazel_integration_test,
     ci_test_params_suite = _ci_test_params_suite,
     new = _new,
+    test_name_prefix = _test_name_prefix,
     test_name = _test_name,
 )

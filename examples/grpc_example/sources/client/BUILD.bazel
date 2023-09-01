@@ -1,0 +1,13 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+
+swift_binary(
+    name = "client",
+    srcs = ["client_main.swift"],
+    module_name = "Client",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//protos/echoservice:echoservice_client_swift_grpc",
+        "//protos/echoservice:echoservice_swift_proto",
+        "//protos/echoservice/messages:messages_swift_proto",
+    ],
+)

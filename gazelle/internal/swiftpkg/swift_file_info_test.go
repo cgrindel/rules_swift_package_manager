@@ -73,25 +73,63 @@ func TestNewSwiftFileInfoFromSrc(t *testing.T) {
 	})
 }
 
-func TestDirSuffixes(t *testing.T) {
-	actual := swiftpkg.TestDirSuffixes.IsUnderDirWithSuffix("Sources/Foo/Bar.swift")
+func TestDirectoryPathSuffixes(t *testing.T) {
+	actual := swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("Sources/Foo/Bar.swift")
 	assert.False(t, actual)
 
-	actual = swiftpkg.TestDirSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Bar.swift")
+	actual = swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("sources/foo/bar.swift")
+	assert.False(t, actual)
+
+	actual = swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Bar.swift")
 	assert.True(t, actual)
 
-	actual = swiftpkg.TestDirSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Chicken/Bar.swift")
+	actual = swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("tests/foo_tests/bar.swift")
 	assert.True(t, actual)
 
-	actual = swiftpkg.TestDirSuffixes.IsUnderDirWithSuffix("Tests/Bar.swift")
+	actual = swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Chicken/Bar.swift")
+	assert.True(t, actual)
+
+	actual = swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("tests/foo_tests/chicken/bar.swift")
+	assert.True(t, actual)
+
+	actual = swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("Tests/Bar.swift")
+	assert.True(t, actual)
+
+	actual = swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("tests/bar.swift")
+	assert.True(t, actual)
+}
+
+func TestFilePathSuffixes(t *testing.T) {
+	actual := swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("Sources/Foo/Bar.swift")
+	assert.False(t, actual)
+
+	actual = swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("sources/foo/bar.swift")
+	assert.False(t, actual)
+
+	actual = swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Bar.swift")
+	assert.True(t, actual)
+
+	actual = swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("tests/foo_tests/bar.swift")
+	assert.True(t, actual)
+
+	actual = swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("Tests/FooTests/Chicken/Bar.swift")
+	assert.True(t, actual)
+
+	actual = swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("tests/foo_tests/chicken/bar.swift")
+	assert.True(t, actual)
+
+	actual = swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("Tests/Bar.swift")
+	assert.True(t, actual)
+
+	actual = swiftpkg.TestDirectoryPathSuffixes.IsUnderDirWithSuffix("tests/bar.swift")
 	assert.True(t, actual)
 }
 
 func TestSwiftFileInfos(t *testing.T) {
 	tests := []struct {
-	    msg string
-	    fileInfos swiftpkg.SwiftFileInfos
-	    exp bool
+		msg       string
+		fileInfos swiftpkg.SwiftFileInfos
+		exp       bool
 	}{
 		{
 			msg: "no files have objc directive",

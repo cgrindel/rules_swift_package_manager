@@ -12,6 +12,8 @@ import (
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftcfg"
 	"golang.org/x/exp/slices"
+	"golang.org/x/text/cases"
+	lang "golang.org/x/text/language"
 )
 
 func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateResult {
@@ -26,6 +28,11 @@ func (l *swiftLang) GenerateRules(args language.GenerateArgs) language.GenerateR
 
 func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) language.GenerateResult {
 	result := language.GenerateResult{}
+
+	// Generate the rules from the protos (if any):
+	rules := swift.RulesFromProtos(args)
+	result.Gen = append(result.Gen, rules...)
+	result.Imports = swift.Imports(result.Gen)
 
 	// Collect Swift files
 	swiftFiles := swift.FilterFiles(append(args.RegularFiles, args.GenFiles...))
@@ -56,44 +63,57 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 	}
 	sort.Strings(srcs)
 
-	// Generate the rules and imports
-	defaultModuleName := defaultModuleName(args)
-	result.Gen = swift.RulesFromSrcs(args, srcs, defaultModuleName)
+	// Generate the rules from sources:
+	defaultName, defaultModuleName := defaultNameAndModuleName(args)
+	rules = swift.RulesFromSrcs(args, srcs, defaultName, defaultModuleName)
+	result.Gen = append(result.Gen, rules...)
 	result.Imports = swift.Imports(result.Gen)
 	result.Empty = generateEmpty(args, srcs)
 
 	return result
 }
 
-func defaultModuleName(args language.GenerateArgs) string {
-	// Order of names to use
-	// 1. Value specified via directive.
-	// 2. Directory name.
-	// 3. Repository name.
-	// 4. "DefaultModule"
+func defaultNameAndModuleName(args language.GenerateArgs) (string, string) {
 
-	// Check for a value configured via directive
+	// If the name is specified by a directive, short cirucit and return that:
 	sc := swiftcfg.GetSwiftConfig(args.Config)
-	var defaultModuleName string
-	var ok bool
-	if defaultModuleName, ok = sc.DefaultModuleNames[args.Rel]; ok {
-		return defaultModuleName
+	if defaultModuleName, ok := sc.DefaultModuleNames[args.Rel]; ok {
+		return defaultModuleName, defaultModuleName
 	}
+
+	// Otherwise, derive the name from the:
+	// 1. Directory name.
+	// 2. Repository name.
+	// 3. "DefaultModule"
+	var defaultName string
 	if args.Rel == "" {
-		defaultModuleName = filepath.Base(args.Config.WorkDir)
+		defaultName = filepath.Base(args.Config.WorkDir)
 	} else {
-		defaultModuleName = filepath.Base(args.Rel)
+		defaultName = filepath.Base(args.Rel)
 	}
-	if ext := filepath.Ext(defaultModuleName); ext != "" {
-		defaultModuleName = strings.TrimSuffix(defaultModuleName, ext)
+	if ext := filepath.Ext(defaultName); ext != "" {
+		defaultName = strings.TrimSuffix(defaultName, ext)
 	}
-	if defaultModuleName == "." || defaultModuleName == "" {
-		defaultModuleName = args.Config.RepoName
+	if defaultName == "." || defaultName == "" {
+		defaultName = args.Config.RepoName
 	}
-	if defaultModuleName == "" {
-		defaultModuleName = "DefaultModule"
+	if defaultName == "" {
+		defaultName = "DefaultModule"
 	}
-	return defaultModuleName
+
+	// If configured to use PascalCase for module names, convert to that naming convention:
+	defaultModuleName := defaultName
+	if sc.ModuleNamingConvention == swiftcfg.PascalCaseModuleNamingConvention {
+		moduleNameComponents := strings.Split(defaultModuleName, "_")
+		caser := cases.Title(lang.English)
+		pascalCaseModuleName := ""
+		for _, component := range moduleNameComponents {
+			pascalCaseModuleName += caser.String(component)
+		}
+		defaultModuleName = pascalCaseModuleName
+	}
+
+	return defaultName, defaultModuleName
 }
 
 // Look for any rules in the existing BUILD file that do not reference one of the source files. If

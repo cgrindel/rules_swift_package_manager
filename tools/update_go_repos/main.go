@@ -63,6 +63,10 @@ This utility updates the Go repositories for this repo wrapping them in 'maybe' 
 		"run", gazelleBinTarget, "--", "update-repos",
 		fmt.Sprintf("-from_file=%s", fromFile),
 		fmt.Sprintf("-to_macro=%s%%%s", goDepsFile, macroName),
+		// Need to tell Gazelle to run as if it is in bzlmod mode. It does not figure it out
+		// properly when we run it from inside this binary.
+		// Related to https://github.com/bazelbuild/bazel-gazelle/pull/1589.
+		"-bzlmod",
 	}
 	if buildExternal != "" {
 		args = append(args, fmt.Sprintf("-build_external=%s", buildExternal))
@@ -77,6 +81,15 @@ This utility updates the Go repositories for this repo wrapping them in 'maybe' 
 	// update deps
 	if err := updateDepsBzlWithRules(depsPath, macroName); err != nil {
 		return fmt.Errorf("failed updating deps file with maybe declarations: %w", err)
+	}
+
+	// GH557: HACK Revert changes made to the WORKSPACE.
+	// This hack can be removed post v0.32.0. We are waiting for the following fix to be released:
+	// https://github.com/bazelbuild/bazel-gazelle/pull/1589
+	wkspFile := path.Join(repoRoot, "WORKSPACE")
+	wkspContents := "# Intentionally blank: use bzlmod\n"
+	if err := os.WriteFile(wkspFile, []byte(wkspContents), 0666); err != nil {
+		return fmt.Errorf("failed reverting changes to the WORKSPACE file: %w", err)
 	}
 
 	return nil

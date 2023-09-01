@@ -312,47 +312,6 @@
       ]
     },
     {
-      "name": "NimbleCwlCatchExceptionSupport",
-      "c99name": "NimbleCwlCatchExceptionSupport",
-      "src_type": "objc",
-      "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Dependencies_CwlCatchException_Sources_CwlCatchExceptionSupport_NimbleCwlCatchExceptionSupport",
-      "package_identity": "nimble",
-      "product_memberships": [
-        "Nimble"
-      ]
-    },
-    {
-      "name": "NimbleCwlCatchException",
-      "c99name": "NimbleCwlCatchException",
-      "src_type": "swift",
-      "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Dependencies_CwlCatchException_Sources_CwlCatchException_NimbleCwlCatchException",
-      "package_identity": "nimble",
-      "product_memberships": [
-        "Nimble"
-      ]
-    },
-    {
-      "name": "NimbleCwlMachBadInstructionHandler",
-      "c99name": "NimbleCwlMachBadInstructionHandler",
-      "src_type": "objc",
-      "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Sources_CwlMachBadInstructionHandler_NimbleCwlMachBadInstructionHandler",
-      "package_identity": "nimble",
-      "product_memberships": [
-        "Nimble"
-      ]
-    },
-    {
-      "name": "NimbleCwlPreconditionTesting",
-      "c99name": "NimbleCwlPreconditionTesting",
-      "src_type": "swift",
-      "label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Sources_CwlPreconditionTesting_NimbleCwlPreconditionTesting",
-      "modulemap_label": "@swiftpkg_nimble//:Carthage_Checkouts_CwlPreconditionTesting_Sources_CwlPreconditionTesting_NimbleCwlPreconditionTesting_modulemap",
-      "package_identity": "nimble",
-      "product_memberships": [
-        "Nimble"
-      ]
-    },
-    {
       "name": "Nimble",
       "c99name": "Nimble",
       "src_type": "swift",
@@ -440,16 +399,6 @@
       "src_type": "swift",
       "label": "@swiftpkg_quick//:Sources_Quick",
       "modulemap_label": "@swiftpkg_quick//:Sources_Quick_modulemap",
-      "package_identity": "quick",
-      "product_memberships": [
-        "Quick"
-      ]
-    },
-    {
-      "name": "QuickObjCRuntime",
-      "c99name": "QuickObjCRuntime",
-      "src_type": "objc",
-      "label": "@swiftpkg_quick//:Sources_QuickObjCRuntime",
       "package_identity": "quick",
       "product_memberships": [
         "Quick"
@@ -3114,6 +3063,16 @@
       ]
     },
     {
+      "name": "CAWSSDKOpenSSL",
+      "c99name": "CAWSSDKOpenSSL",
+      "src_type": "clang",
+      "label": "@swiftpkg_soto_core//:Sources_CAWSSDKOpenSSL",
+      "package_identity": "soto-core",
+      "product_memberships": [
+        "AWSSDKSwiftCore"
+      ]
+    },
+    {
       "name": "Spectre",
       "c99name": "Spectre",
       "src_type": "swift",
@@ -3745,6 +3704,16 @@
       "package_identity": "swift-nio-ssl",
       "product_memberships": [
         "NIOTLSServer"
+      ]
+    },
+    {
+      "name": "swift-nio-ssl-support",
+      "c99name": "swift_nio_ssl_support",
+      "src_type": "unknown",
+      "label": "@swiftpkg_swift_nio_ssl_support//:swift-nio-ssl-support",
+      "package_identity": "swift-nio-ssl-support",
+      "product_memberships": [
+        "swift-nio-ssl-support"
       ]
     },
     {
@@ -6653,6 +6622,14 @@
       ]
     },
     {
+      "identity": "swift-nio-ssl-support",
+      "name": "swift-nio-ssl-support",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio_ssl_support//:swift-nio-ssl-support"
+      ]
+    },
+    {
       "identity": "swift-nio-ssl",
       "name": "NIOSSL",
       "type": "library",
@@ -7288,6 +7265,15 @@
       }
     },
     {
+      "name": "swiftpkg_swift_nio_ssl_support",
+      "identity": "swift-nio-ssl-support",
+      "remote": {
+        "commit": "c02eec4e0e6d351cd092938cf44195a8e669f555",
+        "remote": "https://github.com/apple/swift-nio-ssl-support.git",
+        "version": "1.0.0"
+      }
+    },
+    {
       "name": "swiftpkg_swift_nio_transport_services",
       "identity": "swift-nio-transport-services",
       "remote": {
@@ -7345,9 +7331,9 @@
       "name": "swiftpkg_xcmetrics",
       "identity": "xcmetrics",
       "remote": {
-        "commit": "1a85cbe9d9bb47e15623952812bd8c64ce57125e",
+        "commit": "e2ceaebc789134ec2786b4fc766a1c3c925231b2",
         "remote": "https://github.com/spotify/XCMetrics",
-        "version": "0.0.12"
+        "version": "0.0.13"
       }
     },
     {

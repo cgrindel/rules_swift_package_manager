@@ -5,7 +5,7 @@ module(
 
 # MARK: - Runtime Dependencies
 
-bazel_dep(name = "cgrindel_bazel_starlib", version = "0.16.2")
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.17.0")
 bazel_dep(name = "bazel_skylib", version = "1.4.2")
 bazel_dep(
     name = "rules_go",
@@ -29,7 +29,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "gazelle",
-    version = "0.31.1",
+    version = "0.32.0",
     repo_name = "bazel_gazelle",
 )
 
@@ -43,6 +43,7 @@ use_repo(
     "com_github_stretchr_testify",
     "in_gopkg_yaml_v3",
     "org_golang_x_exp",
+    "org_golang_x_text",
 )
 
 # MARK: - Dev Dependencies
