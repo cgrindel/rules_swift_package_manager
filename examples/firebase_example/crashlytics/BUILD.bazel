@@ -4,7 +4,6 @@ load("@build_bazel_rules_apple//apple:macos.bzl", "macos_application")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 # gazelle:swift_default_module_name CrashlyticsSwiftUIExample
-# gazelle:exclude Shared/UITests.swift
 
 swift_library(
     name = "CrashlyticsSwiftUIExample",
