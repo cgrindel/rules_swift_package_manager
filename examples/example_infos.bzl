@@ -137,6 +137,7 @@ _macos_single_bazel_version_test_examples = [
     "firebase_example",
     "interesting_deps",
     "ios_sim",
+    "messagekit_example",
     "objc_code",
     "phone_number_kit",
     "resources_example",
