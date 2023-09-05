@@ -61,6 +61,14 @@ func NewSwiftConfig() *SwiftConfig {
 	}
 }
 
+func (sc *SwiftConfig) ConfigModulePaths() []string {
+	modPaths := make([]string, 0, len(sc.DefaultModuleNames))
+	for modPath := range sc.DefaultModuleNames {
+		modPaths = append(modPaths, modPath)
+	}
+	return modPaths
+}
+
 // SwiftBin returns the Swift binary.
 func (sc *SwiftConfig) SwiftBin() *swiftbin.SwiftBin {
 	if sc.SwiftBinPath == "" {

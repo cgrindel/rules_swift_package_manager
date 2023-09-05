@@ -1,6 +1,12 @@
 package swift
 
-import "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/pathdistance"
+import (
+	"log"
+	"path/filepath"
+	"strings"
+
+	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/pathdistance"
+)
 
 var moduleParentDirNames = []string{
 	"Sources",
@@ -9,7 +15,36 @@ var moduleParentDirNames = []string{
 }
 
 // ModuleDir returns the module root directory.
-func ModuleDir(path string) string {
+// The defaultModuleNames map:
+//   - keys: relative paths to module directories defined by swift_default_module_name directives.
+//   - values: module name
+func ModuleDir(configModPaths []string, path string) string {
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK: ================")
+	log.Printf("*** CHUCK:  configModPaths: %+#v", configModPaths)
+	log.Printf("*** CHUCK:  path: %+#v", path)
+	// DEBUG END
+	// Check if the path is a child of any of the directive paths
+	for _, modPath := range configModPaths {
+		if modPath == path {
+			// DEBUG BEGIN
+			log.Printf("*** CHUCK: FOUND IT")
+			// DEBUG END
+			return modPath
+		}
+		// modPathWithSlash := filepath.Join(modPath, "")
+		modPathWithSlash := modPath + string(filepath.Separator)
+		// DEBUG BEGIN
+		log.Printf("*** CHUCK:  modPathWithSlash: %+#v", modPathWithSlash)
+		// DEBUG END
+		if strings.HasPrefix(path, modPathWithSlash) {
+			// DEBUG BEGIN
+			log.Printf("*** CHUCK: FOUND IT")
+			// DEBUG END
+			return modPath
+		}
+	}
+
 	// If we do not see the module parent in the path, we could be a Swift module
 	moduleParentDistance := pathdistance.DistanceFrom(moduleParentDirNames, path)
 	switch moduleParentDistance {
