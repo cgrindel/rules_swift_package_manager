@@ -3,6 +3,7 @@ package swiftcfg
 import (
 	"errors"
 	"os"
+	"sort"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
@@ -59,6 +60,20 @@ func NewSwiftConfig() *SwiftConfig {
 		ResolutionLogger:     reslog.NewNoopLogger(),
 		DefaultModuleNames:   make(map[string]string),
 	}
+}
+
+func (sc *SwiftConfig) ConfigModulePaths() []string {
+	dmnLen := len(sc.DefaultModuleNames)
+	if dmnLen == 0 {
+		return nil
+	}
+	modPaths := make([]string, 0, dmnLen)
+	for modPath := range sc.DefaultModuleNames {
+		modPaths = append(modPaths, modPath)
+	}
+	// Ensure that the results are consistent
+	sort.Strings(modPaths)
+	return modPaths
 }
 
 // SwiftBin returns the Swift binary.

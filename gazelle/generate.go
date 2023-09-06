@@ -42,7 +42,7 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 
 	// Be sure to use args.Rel when determining whether this is a module directory. We do not want
 	// to check directories that are outside of the workspace.
-	moduleDir := swift.ModuleDir(args.Rel)
+	moduleDir := swift.ModuleDir(sc.ConfigModulePaths(), args.Rel)
 	if args.Rel != moduleDir {
 		relDir, err := filepath.Rel(moduleDir, args.Rel)
 		if err != nil {

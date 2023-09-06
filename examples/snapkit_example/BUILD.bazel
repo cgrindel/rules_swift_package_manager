@@ -18,10 +18,6 @@ tidy(
 # Ignore the Swift build folder
 # gazelle:exclude .build
 
-# The example code has a strange layout. Do not generate swift_xxx for this
-# example.
-# gazelle:exclude **
-
 gazelle_binary(
     name = "gazelle_bin",
     languages = [
@@ -41,6 +37,8 @@ swift_update_packages(
     generate_swift_deps_for_workspace = False,
     update_bzlmod_stanzas = True,
 )
+
+# gazelle:swift_default_module_name SnapkitExample
 
 swift_library(
     name = "SnapkitExample",

@@ -78,3 +78,34 @@ func TestWriteAndReadDependencyIndex(t *testing.T) {
 	// Ensure that the indexes are that same
 	assert.Equal(t, origsc.DependencyIndex, newsc.DependencyIndex)
 }
+
+func TestConfigModulePaths(t *testing.T) {
+	tests := []struct {
+		msg string
+		dmn map[string]string
+		exp []string
+	}{
+		{
+			msg: "no default module names",
+			dmn: nil,
+			exp: nil,
+		},
+		{
+			msg: "with default module names",
+			dmn: map[string]string{
+				"path/to/foo": "Foo",
+				"bar":         "Bar",
+			},
+			exp: []string{
+				"bar",
+				"path/to/foo",
+			},
+		},
+	}
+	for _, tt := range tests {
+		sc := swiftcfg.NewSwiftConfig()
+		sc.DefaultModuleNames = tt.dmn
+		actual := sc.ConfigModulePaths()
+		assert.Equal(t, tt.exp, actual, tt.msg)
+	}
+}
