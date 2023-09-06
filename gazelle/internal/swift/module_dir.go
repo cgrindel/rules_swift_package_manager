@@ -14,16 +14,14 @@ var moduleParentDirNames = []string{
 }
 
 // ModuleDir returns the module root directory.
-// The defaultModuleNames map:
-//   - keys: relative paths to module directories defined by swift_default_module_name directives.
-//   - values: module name
+// The configModPaths is a list of relative paths to module directories defined by
+// swift_default_module_name directives.
 func ModuleDir(configModPaths []string, path string) string {
 	// Check if the path is a child of any of the directive paths
 	for _, modPath := range configModPaths {
 		if modPath == path {
 			return modPath
 		}
-		// modPathWithSlash := filepath.Join(modPath, "")
 		modPathWithSlash := modPath + string(filepath.Separator)
 		if strings.HasPrefix(path, modPathWithSlash) {
 			return modPath
