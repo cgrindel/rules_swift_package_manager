@@ -9,18 +9,57 @@ import (
 
 func TestModuleRootDir(t *testing.T) {
 	tests := []struct {
-		path string
-		wval string
+		msg       string
+		cModPaths []string
+		path      string
+		wval      string
 	}{
-		{path: "Sources/Chicken", wval: "Sources/Chicken"},
-		{path: "foo/Source/Chicken", wval: "foo/Source/Chicken"},
-		{path: "foo/Sources/Chicken/Panther", wval: "foo/Sources/Chicken"},
-		{path: "Tests/ChickenTests/PantherTests", wval: "Tests/ChickenTests"},
-		// path does not contain module directory
-		{path: "foo/Chicken", wval: "foo/Chicken"},
+		{
+			msg:  "path is module, Sources at root",
+			path: "Sources/Chicken",
+			wval: "Sources/Chicken",
+		},
+		{
+			msg:  "path is module, Sources in sub-dir",
+			path: "foo/Source/Chicken",
+			wval: "foo/Source/Chicken",
+		},
+		{
+			msg:  "path is under a module path",
+			path: "foo/Sources/Chicken/Panther",
+			wval: "foo/Sources/Chicken",
+		},
+		{
+			msg:  "path is under a test module path",
+			path: "Tests/ChickenTests/PantherTests",
+			wval: "Tests/ChickenTests",
+		},
+		{
+			msg:  "path does not contain module directory",
+			path: "foo/Chicken",
+			wval: "foo/Chicken",
+		},
+		{
+			msg:       "path is module, config module paths provided",
+			cModPaths: []string{"foo", "bar"},
+			path:      "Sources/Chicken",
+			wval:      "Sources/Chicken",
+		},
+		{
+			msg:       "path is under config module path",
+			cModPaths: []string{"foo", "bar"},
+			path:      "foo/Chicken",
+			wval:      "foo",
+		},
+		{
+			msg:       "path is not a child of standard module dir, not in config module paths",
+			cModPaths: []string{"bar"},
+			path:      "foo/Chicken",
+			wval:      "foo/Chicken",
+		},
 	}
 	for _, tc := range tests {
-		actual := swift.ModuleDir(tc.path)
-		assert.Equal(t, tc.wval, actual)
+		actual := swift.ModuleDir(tc.cModPaths, tc.path)
+		assert.Equal(t, tc.wval, actual, tc.msg)
 	}
 }

@@ -1,7 +1,6 @@
 package swift
 
 import (
-	"log"
 	"path/filepath"
 	"strings"
 
@@ -19,28 +18,14 @@ var moduleParentDirNames = []string{
 //   - keys: relative paths to module directories defined by swift_default_module_name directives.
 //   - values: module name
 func ModuleDir(configModPaths []string, path string) string {
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK: ================")
-	log.Printf("*** CHUCK:  configModPaths: %+#v", configModPaths)
-	log.Printf("*** CHUCK:  path: %+#v", path)
-	// DEBUG END
 	// Check if the path is a child of any of the directive paths
 	for _, modPath := range configModPaths {
 		if modPath == path {
-			// DEBUG BEGIN
-			log.Printf("*** CHUCK: FOUND IT")
-			// DEBUG END
 			return modPath
 		}
 		// modPathWithSlash := filepath.Join(modPath, "")
 		modPathWithSlash := modPath + string(filepath.Separator)
-		// DEBUG BEGIN
-		log.Printf("*** CHUCK:  modPathWithSlash: %+#v", modPathWithSlash)
-		// DEBUG END
 		if strings.HasPrefix(path, modPathWithSlash) {
-			// DEBUG BEGIN
-			log.Printf("*** CHUCK: FOUND IT")
-			// DEBUG END
 			return modPath
 		}
 	}
