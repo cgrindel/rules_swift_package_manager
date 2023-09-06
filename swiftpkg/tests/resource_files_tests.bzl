@@ -3,7 +3,7 @@
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:resource_files.bzl", "resource_files")
 
-def _is_resource_test(ctx):
+def _is_auto_discovered_resource_test(ctx):
     env = unittest.begin(ctx)
 
     tests = [
@@ -19,15 +19,15 @@ def _is_resource_test(ctx):
         struct(msg = "swift", path = "foo.swift", exp = False),
     ]
     for t in tests:
-        actual = resource_files.is_resource(t.path)
+        actual = resource_files.is_auto_discovered_resource(t.path)
         asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)
 
-is_resource_test = unittest.make(_is_resource_test)
+is_auto_discovered_resource_test = unittest.make(_is_auto_discovered_resource_test)
 
 def resource_files_test_suite(name = "resource_files_tests"):
     return unittest.suite(
         name,
-        is_resource_test,
+        is_auto_discovered_resource_test,
     )
