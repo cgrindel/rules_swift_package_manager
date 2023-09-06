@@ -1,0 +1,48 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+# gazelle:swift_default_module_name ChatExample
+
+swift_library(
+    name = "ChatExample",
+    srcs = [
+        "AppDelegate.swift",
+        "AudioController/BasicAudioController.swift",
+        "Data Generation/Lorem.swift",
+        "Data Generation/SampleData.swift",
+        "Extensions/AlertService.swift",
+        "Extensions/Settings+UserDefaults.swift",
+        "Extensions/UIColor+Extensions.swift",
+        "Extensions/UIViewController+Extensions.swift",
+        "Layout/CustomMessageFlowLayout.swift",
+        "Models/CustomLayoutSizeCalculator.swift",
+        "Models/CustomTextLayoutSizeCalculator.swift",
+        "Models/MockMessage.swift",
+        "Models/MockSocket.swift",
+        "Models/MockUser.swift",
+        "View Controllers/AdvancedExampleViewController.swift",
+        "View Controllers/AutocompleteExampleViewController.swift",
+        "View Controllers/BasicExampleViewController.swift",
+        "View Controllers/ChatViewController.swift",
+        "View Controllers/CustomInputBarExampleViewController.swift",
+        "View Controllers/CustomLayoutExampleViewController.swift",
+        "View Controllers/LaunchViewController.swift",
+        "View Controllers/MessageContainerController.swift",
+        "View Controllers/MessageSubviewContainerViewController.swift",
+        "View Controllers/MessageSubviewViewController.swift",
+        "View Controllers/SettingsViewController.swift",
+        "Views/CameraInputBarAccessoryView.swift",
+        "Views/CustomCell.swift",
+        "Views/CustomMessageContentCell.swift",
+        "Views/CustomTextMessageContentCell.swift",
+        "Views/SwiftUI/MessagesView.swift",
+        "Views/SwiftUI/SwiftUIExampleView.swift",
+        "Views/TableViewCells.swift",
+    ],
+    module_name = "ChatExample",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@swiftpkg_kingfisher//:Sources_Kingfisher",
+        "@swiftpkg_kingfisher//:Sources_KingfisherSwiftUI",
+        "@swiftpkg_messagekit//:Sources_MessageKit",
+    ],
+)
