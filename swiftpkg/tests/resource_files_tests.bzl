@@ -10,7 +10,12 @@ def _is_auto_discovered_resource_test(ctx):
         struct(msg = "nib", path = "foo.nib", exp = True),
         struct(msg = "xib", path = "foo.xib", exp = True),
         struct(msg = "storyboard", path = "foo.storyboard", exp = True),
-        struct(msg = "xcassets", path = "foo.xcassets", exp = True),
+        struct(msg = "xcassets dir", path = "foo.xcassets", exp = True),
+        struct(
+            msg = "file under xcassets dir",
+            path = "foo.xcassets/bar.png",
+            exp = True,
+        ),
         struct(msg = "xcstrings", path = "foo.xcstrings", exp = True),
         struct(msg = "xcdatamodeld", path = "foo.xcdatamodeld", exp = True),
         struct(msg = "xcdatamodel", path = "foo.xcdatamodel", exp = True),
