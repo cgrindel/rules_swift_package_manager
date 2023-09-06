@@ -97,8 +97,8 @@ func TestConfigModulePaths(t *testing.T) {
 				"bar":         "Bar",
 			},
 			exp: []string{
-				"path/to/foo",
 				"bar",
+				"path/to/foo",
 			},
 		},
 	}

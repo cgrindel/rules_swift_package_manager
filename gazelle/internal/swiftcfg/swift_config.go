@@ -3,6 +3,7 @@ package swiftcfg
 import (
 	"errors"
 	"os"
+	"sort"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
@@ -70,6 +71,8 @@ func (sc *SwiftConfig) ConfigModulePaths() []string {
 	for modPath := range sc.DefaultModuleNames {
 		modPaths = append(modPaths, modPath)
 	}
+	// Ensure that the results are consistent
+	sort.Strings(modPaths)
 	return modPaths
 }
 
