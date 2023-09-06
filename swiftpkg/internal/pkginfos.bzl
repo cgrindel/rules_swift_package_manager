@@ -18,6 +18,7 @@ load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":repository_files.bzl", "repository_files")
 load(":repository_utils.bzl", "repository_utils")
+load(":resource_files.bzl", "resource_files")
 load(":swift_files.bzl", "swift_files")
 load(":validations.bzl", "validations")
 
@@ -766,15 +767,28 @@ def _new_swift_src_info_from_sources(repository_ctx, target_path, sources):
         if has_objc_directive and imports_xctest:
             break
 
+    # Find any
+    all_target_files = repository_files.list_files_under(
+        repository_ctx,
+        target_path,
+    )
+    discovered_res_files = [
+        f
+        for f in all_target_files
+        if resource_files.is_auto_discovered_resource(f)
+    ]
+
     return _new_swift_src_info(
         has_objc_directive = has_objc_directive,
         imports_xctest = imports_xctest,
+        discovered_res_files = discovered_res_files,
     )
 
-def _new_swift_src_info(has_objc_directive = False, imports_xctest = False):
+def _new_swift_src_info(has_objc_directive = False, imports_xctest = False, discovered_res_files = []):
     return struct(
         has_objc_directive = has_objc_directive,
         imports_xctest = imports_xctest,
+        discovered_res_files = discovered_res_files,
     )
 
 # MARK: - Clang Source Info

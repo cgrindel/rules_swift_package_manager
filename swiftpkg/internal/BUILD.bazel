@@ -41,6 +41,7 @@ bzl_library(
         ":pkginfo_dependencies",
         ":pkginfo_targets",
         ":repository_utils",
+        ":resource_files",
         ":validations",
         "//config_settings/spm/configuration:configurations",
         "//config_settings/spm/platform:platforms",
