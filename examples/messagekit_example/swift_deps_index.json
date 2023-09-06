@@ -44,6 +44,26 @@
       ]
     },
     {
+      "name": "SwiftFormatPlugin",
+      "c99name": "SwiftFormatPlugin",
+      "src_type": "unknown",
+      "label": "@swiftpkg_messagekit//:Plugins_SwiftFormatPlugin",
+      "package_identity": "messagekit",
+      "product_memberships": [
+        "SwiftFormatPlugin"
+      ]
+    },
+    {
+      "name": "SwiftLintPlugin",
+      "c99name": "SwiftLintPlugin",
+      "src_type": "unknown",
+      "label": "@swiftpkg_messagekit//:Plugins_SwiftLintPlugin",
+      "package_identity": "messagekit",
+      "product_memberships": [
+        "SwiftLintPlugin"
+      ]
+    },
+    {
       "name": "MessageKit",
       "c99name": "MessageKit",
       "src_type": "swift",
@@ -52,6 +72,26 @@
       "package_identity": "messagekit",
       "product_memberships": [
         "MessageKit"
+      ]
+    },
+    {
+      "name": "SwiftLintBinary",
+      "c99name": "SwiftLintBinary",
+      "src_type": "binary",
+      "label": "@swiftpkg_messagekit//:remote_archive_SwiftLintBinary-macos.artifactbundle.zip_SwiftLintBinary",
+      "package_identity": "messagekit",
+      "product_memberships": [
+        "SwiftLintPlugin"
+      ]
+    },
+    {
+      "name": "swiftformat",
+      "c99name": "swiftformat",
+      "src_type": "binary",
+      "label": "@swiftpkg_messagekit//:remote_archive_swiftformat.artifactbundle.zip_swiftformat",
+      "package_identity": "messagekit",
+      "product_memberships": [
+        "SwiftFormatPlugin"
       ]
     }
   ],
@@ -119,6 +159,22 @@
       "target_labels": [
         "@swiftpkg_messagekit//:Sources_MessageKit"
       ]
+    },
+    {
+      "identity": "messagekit",
+      "name": "SwiftFormatPlugin",
+      "type": "plugin",
+      "target_labels": [
+        "@swiftpkg_messagekit//:Plugins_SwiftFormatPlugin"
+      ]
+    },
+    {
+      "identity": "messagekit",
+      "name": "SwiftLintPlugin",
+      "type": "plugin",
+      "target_labels": [
+        "@swiftpkg_messagekit//:Plugins_SwiftLintPlugin"
+      ]
     }
   ],
   "packages": [
@@ -126,9 +182,9 @@
       "name": "swiftpkg_inputbaraccessoryview",
       "identity": "inputbaraccessoryview",
       "remote": {
-        "commit": "2843b4454cfb6de5b4d1e5939fef2dd6257b69ee",
+        "commit": "17ced92a5dccb36512b408b6276353631d7cbe57",
         "remote": "https://github.com/nathantannar4/InputBarAccessoryView",
-        "version": "5.5.0"
+        "version": "6.3.0"
       }
     },
     {
@@ -144,9 +200,9 @@
       "name": "swiftpkg_messagekit",
       "identity": "messagekit",
       "remote": {
-        "commit": "84236d91ac5783e3ecbefc15b82d854476720115",
+        "commit": "1993e8e90d4e9a61b8d9bc8ceb733964ce943376",
         "remote": "https://github.com/MessageKit/MessageKit",
-        "version": "3.8.0"
+        "version": "4.2.0"
       }
     }
   ]
