@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "messagekit_example",
     dependencies: [
-        // TODO: Replace this dependency with your dependencies.
-        .package(url: "https://github.com/apple/swift-log", from: "1.5.2"),
+        .package(url: "https://github.com/MessageKit/MessageKit", from: "3.7.0"),
+        .package(url: "https://github.com/onevcat/Kingfisher", from: "5.15.8"),
     ]
 )
