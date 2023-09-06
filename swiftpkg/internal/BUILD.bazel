@@ -302,6 +302,16 @@ bzl_library(
 )
 
 bzl_library(
+    name = "resource_files",
+    srcs = ["resource_files.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        "@bazel_skylib//lib:paths",
+        "@bazel_skylib//lib:sets",
+    ],
+)
+
+bzl_library(
     name = "starlark_codegen",
     srcs = ["starlark_codegen.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],

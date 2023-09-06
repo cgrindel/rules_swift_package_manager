@@ -14,6 +14,7 @@ load(":pkginfo_target_deps_tests.bzl", "pkginfo_target_deps_test_suite")
 load(":pkginfo_targets_tests.bzl", "pkginfo_targets_test_suite")
 load(":pkginfos_tests.bzl", "pkginfos_test_suite")
 load(":repository_files_tests.bzl", "repository_files_test_suite")
+load(":resource_files_tests.bzl", "resource_files_test_suite")
 load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
 load(":swift_files_tests.bzl", "swift_files_test_suite")
 load(":swiftpkg_build_files_tests.bzl", "swiftpkg_build_files_test_suite")
@@ -46,6 +47,8 @@ pkginfo_targets_test_suite()
 pkginfos_test_suite()
 
 repository_files_test_suite()
+
+resource_files_test_suite()
 
 bzl_selects_test_suite()
 
