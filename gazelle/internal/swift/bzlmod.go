@@ -2,6 +2,7 @@ package swift
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 
 	"golang.org/x/exp/slices"
@@ -24,9 +25,25 @@ func UseRepoNames(di *DependencyIndex) (string, error) {
 	return b.String(), nil
 }
 
-func BzlmodStanzas(di *DependencyIndex) (string, error) {
+func BzlmodStanzas(di *DependencyIndex, moduleDir string, pkgPath string, diPath string) (string, error) {
+	// get the relative path to the package containing the dependency index file
+	relPkgPath, err := filepath.Rel(moduleDir, pkgPath)
+	if err != nil {
+		return "", err
+	}
+	if relPkgPath == "." {
+		relPkgPath = ""
+	}
+
+	// get the index file name and construct the Bazel label for it
+	diName := filepath.Base(diPath)
+	diLabel := fmt.Sprintf("//%s:%s", relPkgPath, diName)
+
+	// construct the bzlmod stanza prefix
+	prefix := fmt.Sprintf(bzlmodPrefix, diLabel)
+
 	var b strings.Builder
-	if _, err := fmt.Fprint(&b, bzlmodPrefix); err != nil {
+	if _, err := fmt.Fprint(&b, prefix); err != nil {
 		return "", err
 	}
 	useRepoNames, err := UseRepoNames(di)
@@ -48,7 +65,7 @@ const bzlmodPrefix = `swift_deps = use_extension(
     "swift_deps",
 )
 swift_deps.from_file(
-    deps_index = "//:swift_deps_index.json",
+    deps_index = "%s",
 )
 use_repo(
     swift_deps,

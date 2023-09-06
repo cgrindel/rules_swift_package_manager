@@ -150,7 +150,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	}
 
 	// Output a bzlmod stanzas for bzlmod.
-	if err := writeBzlmodStanzas(di, sc); err != nil {
+	if err := writeBzlmodStanzas(pkgDir, di, sc); err != nil {
 		result.Error = err
 		return result
 	}
@@ -252,11 +252,14 @@ func writeBzlmodUseRepoNames(di *swift.DependencyIndex, sc *swiftcfg.SwiftConfig
 	return os.WriteFile(sc.BazelModulePath, []byte(newContent), finfo.Mode())
 }
 
-func writeBzlmodStanzas(di *swift.DependencyIndex, sc *swiftcfg.SwiftConfig) error {
+func writeBzlmodStanzas(pkgPath string, di *swift.DependencyIndex, sc *swiftcfg.SwiftConfig) error {
 	if !sc.PrintBzlmodStanzas && !sc.UpdateBzlmodStanzas {
 		return nil
 	}
-	bzlmodStanzas, err := swift.BzlmodStanzas(di)
+
+	moduleDir := filepath.Dir(sc.BazelModulePath)
+	bzlmodStanzas, err := swift.BzlmodStanzas(di, moduleDir, pkgPath, sc.DependencyIndexPath)
+
 	if err != nil {
 		return err
 	}
@@ -296,5 +299,5 @@ const bzlmodUseRepoNamesUpdMarkerEnd = "    # swift_deps bzlmod use_repo END\n"
 const bzlmodStanzasUpdMarkerStart = "# swift_deps START\n"
 const bzlmodStanzasUpdMarkerEnd = "# swift_deps END\n"
 
-const bzlmodInstructions = `If you have enabled bzlmod, add the following to your 'MODULE.bazel' file to 
+const bzlmodInstructions = `If you have enabled bzlmod, add the following to your 'MODULE.bazel' file to
 load your Swift dependencies:`

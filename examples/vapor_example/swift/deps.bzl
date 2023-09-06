@@ -1,7 +1,7 @@
 load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package")
 
 def swift_dependencies():
-    # version: 1.13.2
+    # version: 1.19.0
     swift_package(
         name = "swiftpkg_async_http_client",
         commit = "16f7e62c08c6969899ce6cc277041e868364e5cf",
@@ -9,7 +9,7 @@ def swift_dependencies():
         remote = "https://github.com/swift-server/async-http-client.git",
     )
 
-    # version: 1.16.0
+    # version: 1.18.0
     swift_package(
         name = "swiftpkg_async_kit",
         commit = "eab9edff78e8ace20bd7cb6e792ab46d54f59ab9",
@@ -25,7 +25,7 @@ def swift_dependencies():
         remote = "https://github.com/vapor/console-kit.git",
     )
 
-    # version: 4.6.0
+    # version: 4.8.0
     swift_package(
         name = "swiftpkg_fluent",
         commit = "4b4d8bf15a06fd60137e9c543e5503c4b842654e",
@@ -33,7 +33,7 @@ def swift_dependencies():
         remote = "https://github.com/vapor/fluent.git",
     )
 
-    # version: 1.36.1
+    # version: 1.44.1
     swift_package(
         name = "swiftpkg_fluent_kit",
         commit = "ccea9820fe31076f994f7c1c1d584009cad6bdb2",
@@ -41,7 +41,7 @@ def swift_dependencies():
         remote = "https://github.com/vapor/fluent-kit.git",
     )
 
-    # version: 4.3.0
+    # version: 4.5.0
     swift_package(
         name = "swiftpkg_fluent_sqlite_driver",
         commit = "138a546e3b7e33efa5362e05da2a0dec3a30534f",
@@ -65,7 +65,7 @@ def swift_dependencies():
         remote = "https://github.com/vapor/routing-kit.git",
     )
 
-    # version: 3.23.0
+    # version: 3.28.0
     swift_package(
         name = "swiftpkg_sql_kit",
         commit = "b2f128cb62a3abfbb1e3b2893ff3ee69e70f4f0f",
@@ -73,7 +73,7 @@ def swift_dependencies():
         remote = "https://github.com/vapor/sql-kit.git",
     )
 
-    # version: 4.2.0
+    # version: 4.3.1
     swift_package(
         name = "swiftpkg_sqlite_kit",
         commit = "2b20fc0f4f6574f59dae402ccf0ed050c6790b43",
@@ -97,7 +97,7 @@ def swift_dependencies():
         remote = "https://github.com/apple/swift-algorithms.git",
     )
 
-    # version: 1.0.3
+    # version: 1.1.0
     swift_package(
         name = "swiftpkg_swift_atomics",
         commit = "6c89474e62719ddcc1e9614989fff2f68208fe10",
@@ -129,7 +129,7 @@ def swift_dependencies():
         remote = "https://github.com/apple/swift-crypto.git",
     )
 
-    # version: 1.5.1
+    # version: 1.5.3
     swift_package(
         name = "swiftpkg_swift_log",
         commit = "532d8b529501fb73a2455b179e0bbb6d49b652ed",
@@ -145,7 +145,7 @@ def swift_dependencies():
         remote = "https://github.com/apple/swift-metrics.git",
     )
 
-    # version: 2.47.0
+    # version: 2.58.0
     swift_package(
         name = "swiftpkg_swift_nio",
         commit = "cf281631ff10ec6111f2761052aa81896a83a007",
@@ -153,7 +153,7 @@ def swift_dependencies():
         remote = "https://github.com/apple/swift-nio.git",
     )
 
-    # version: 1.15.0
+    # version: 1.19.0
     swift_package(
         name = "swiftpkg_swift_nio_extras",
         commit = "0e0d0aab665ff1a0659ce75ac003081f2b1c8997",
@@ -169,7 +169,7 @@ def swift_dependencies():
         remote = "https://github.com/apple/swift-nio-http2.git",
     )
 
-    # version: 2.23.0
+    # version: 2.25.0
     swift_package(
         name = "swiftpkg_swift_nio_ssl",
         commit = "320bd978cceb8e88c125dcbb774943a92f6286e9",
@@ -177,7 +177,7 @@ def swift_dependencies():
         remote = "https://github.com/apple/swift-nio-ssl.git",
     )
 
-    # version: 1.15.0
+    # version: 1.19.0
     swift_package(
         name = "swiftpkg_swift_nio_transport_services",
         commit = "e7403c35ca6bb539a7ca353b91cc2d8ec0362d58",
@@ -193,7 +193,7 @@ def swift_dependencies():
         remote = "https://github.com/apple/swift-numerics",
     )
 
-    # version: 4.67.5
+    # version: 4.81.0
     swift_package(
         name = "swiftpkg_vapor",
         commit = "03a08f6e88d5ca8c1cfd84f8367b21dfe050d082",
@@ -201,7 +201,7 @@ def swift_dependencies():
         remote = "https://github.com/vapor/vapor.git",
     )
 
-    # version: 2.6.1
+    # version: 2.14.0
     swift_package(
         name = "swiftpkg_websocket_kit",
         commit = "53fe0639a98903858d0196b699720decb42aee7b",

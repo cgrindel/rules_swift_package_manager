@@ -16,6 +16,7 @@ swift_update_packages(
     swift_deps = "swift/deps.bzl",
     swift_deps_index = "swift/deps_index.json",
     update_bzlmod_use_repo_names = True,
+    update_bzlmod_stanzas = True,
     visibility = ["//:__subpackages__"],
 )
 
