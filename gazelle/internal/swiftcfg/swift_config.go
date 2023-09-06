@@ -62,7 +62,11 @@ func NewSwiftConfig() *SwiftConfig {
 }
 
 func (sc *SwiftConfig) ConfigModulePaths() []string {
-	modPaths := make([]string, 0, len(sc.DefaultModuleNames))
+	dmnLen := len(sc.DefaultModuleNames)
+	if dmnLen == 0 {
+		return nil
+	}
+	modPaths := make([]string, 0, dmnLen)
 	for modPath := range sc.DefaultModuleNames {
 		modPaths = append(modPaths, modPath)
 	}
