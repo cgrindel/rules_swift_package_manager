@@ -57,6 +57,12 @@ func TestModuleRootDir(t *testing.T) {
 			path:      "foo/Chicken",
 			wval:      "foo/Chicken",
 		},
+		{
+			msg:       "module path is set to root of the workspace",
+			cModPaths: []string{""},
+			path:      "foo/Chicken",
+			wval:      "",
+		},
 	}
 	for _, tc := range tests {
 		actual := swift.ModuleDir(tc.cModPaths, tc.path)

@@ -19,7 +19,9 @@ var moduleParentDirNames = []string{
 func ModuleDir(configModPaths []string, path string) string {
 	// Check if the path is a child of any of the directive paths
 	for _, modPath := range configModPaths {
-		if modPath == path {
+		// If modPath is empty string, then the module is set at the root of the workspace. So
+		// everything under the workspace is in this module.
+		if modPath == "" || modPath == path {
 			return modPath
 		}
 		modPathWithSlash := modPath + string(filepath.Separator)
