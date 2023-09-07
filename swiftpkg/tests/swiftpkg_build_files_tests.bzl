@@ -380,6 +380,27 @@ _pkg_info = pkginfos.new(
             repo_name = _repo_name,
             swift_src_info = pkginfos.new_swift_src_info(),
         ),
+        pkginfos.new_target(
+            name = "SwiftLibraryWithDirResource",
+            type = "regular",
+            c99name = "SwiftLibraryWithDirResource",
+            module_type = "SwiftTarget",
+            path = "Source/SwiftLibraryWithDirResource",
+            sources = [
+                "SwiftLibraryWithDirResource.swift",
+            ],
+            resources = [
+                pkginfos.new_resource(
+                    path = "Resources/Assets.xcassets",
+                    rule = pkginfos.new_resource_rule(
+                        process = pkginfos.new_resource_rule_process(),
+                    ),
+                ),
+            ],
+            dependencies = [],
+            repo_name = _repo_name,
+            swift_src_info = pkginfos.new_swift_src_info(),
+        ),
     ],
 )
 
@@ -759,7 +780,7 @@ swift_library(
 """,
         ),
         struct(
-            msg = "Swift library target with resources",
+            msg = "Swift library target with file path resource",
             name = "SwiftLibraryWithFilePathResource",
             exp = """\
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
@@ -798,6 +819,13 @@ swift_library(
 )
 """,
         ),
+        struct(
+            msg = "Swift library target with directory resource",
+            name = "SwiftLibraryWithDirResource",
+            is_directory = {"Resources/Assets.xcassets": True},
+            exp = """\
+""",
+        ),
     ]
     for t in tests:
         target = pkginfo_targets.get(_pkg_info.targets, t.name)
@@ -813,6 +841,10 @@ swift_library(
                     for fp in file_paths
                 ]
                 for dirname, file_paths in getattr(t, "find_results", {}).items()
+            },
+            is_directory_results = {
+                paths.normalize(paths.join(target.path, path)): result
+                for path, result in getattr(t, "is_directory", {}).items()
             },
         )
         actual = scg.to_starlark(
