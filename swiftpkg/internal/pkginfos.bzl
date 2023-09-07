@@ -780,11 +780,13 @@ def _new_swift_src_info_from_sources(repository_ctx, target_path, sources):
     )
 
     # The paths should be relative to the target not the root of the workspace.
+    # Do not include directories in the output.
     tp_prefix = target_path + "/"
     discovered_res_files = [
         f.removeprefix(tp_prefix)
         for f in all_target_files
-        if resource_files.is_auto_discovered_resource(f)
+        if not repository_files.is_directory(repository_ctx, f) and
+           resource_files.is_auto_discovered_resource(f)
     ]
 
     return _new_swift_src_info(
