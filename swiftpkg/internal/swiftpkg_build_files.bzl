@@ -390,6 +390,8 @@ def _apple_resource_bundle(repository_ctx, target, default_localization):
         bzl_target_name,
     )
 
+    # TODO(chuck): Rethink using the glob patterns!
+
     glob_paths = []
     for r in target.resources:
         path = pkginfo_targets.join_path(target, r.path)
