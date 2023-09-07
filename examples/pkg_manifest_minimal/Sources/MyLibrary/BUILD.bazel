@@ -4,6 +4,7 @@ swift_library(
     name = "MyLibrary",
     srcs = ["World.swift"],
     module_name = "MyLibrary",
+    tags = ["manual"],
     visibility = ["//visibility:public"],
     deps = ["@swiftpkg_my_local_package//:Sources_GreetingsFramework"],
 )

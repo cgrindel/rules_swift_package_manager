@@ -370,15 +370,6 @@
       }
     },
     {
-      "identity" : "swift-nio-ssl-support",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-nio-ssl-support.git",
-      "state" : {
-        "revision" : "c02eec4e0e6d351cd092938cf44195a8e669f555",
-        "version" : "1.0.0"
-      }
-    },
-    {
       "identity" : "swift-nio-transport-services",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio-transport-services.git",

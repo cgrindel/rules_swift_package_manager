@@ -8,6 +8,7 @@ swift_library(
         "ReusableComponents-Download.swift",
     ],
     module_name = "04-HigherOrderReducers-ResuableOfflineDownloads",
+    tags = ["manual"],
     visibility = ["//visibility:public"],
     deps = ["@swiftpkg_swift_composable_architecture//:Sources_ComposableArchitecture"],
 )

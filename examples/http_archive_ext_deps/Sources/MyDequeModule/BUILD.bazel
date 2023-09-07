@@ -4,6 +4,7 @@ swift_library(
     name = "MyDequeModule",
     srcs = ["Create.swift"],
     module_name = "MyDequeModule",
+    tags = ["manual"],
     visibility = ["//visibility:public"],
     deps = ["@com_github_apple_swift_collections//:DequeModule"],
 )
