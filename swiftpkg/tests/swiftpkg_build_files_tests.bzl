@@ -495,6 +495,7 @@ swift_library(
     deps = [],
     module_name = "RegularSwiftTargetAsLibrary",
     srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
+    tags = ["manual"],
     visibility = ["//visibility:public"],
 )
 """,
@@ -514,6 +515,7 @@ swift_library(
     deps = ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
     module_name = "RegularTargetForExec",
     srcs = ["Source/RegularTargetForExec/main.swift"],
+    tags = ["manual"],
     visibility = ["//visibility:public"],
 )
 """,
@@ -575,6 +577,7 @@ swift_library(
     deps = [],
     module_name = "SwiftLibraryUsesXCTest",
     srcs = ["Source/SwiftLibraryUsesXCTest/SwiftLibraryUsesXCTest.swift"],
+    tags = ["manual"],
     testonly = True,
     visibility = ["//visibility:public"],
 )
@@ -688,6 +691,7 @@ swift_library(
     }),
     module_name = "SwiftLibraryWithConditionalDep",
     srcs = ["Source/SwiftLibraryWithConditionalDep/SwiftLibraryWithConditionalDep.swift"],
+    tags = ["manual"],
     visibility = ["//visibility:public"],
 )
 """,
@@ -749,6 +753,7 @@ swift_library(
     generates_header = True,
     module_name = "SwiftForObjcTarget",
     srcs = ["Source/SwiftForObjcTarget/SwiftForObjcTarget.swift"],
+    tags = ["manual"],
     visibility = ["//visibility:public"],
 )
 """,
@@ -788,6 +793,7 @@ swift_library(
         "Source/SwiftLibraryWithResources/SwiftLibraryWithResources.swift",
         ":Source_SwiftLibraryWithResources_resource_bundle_accessor",
     ],
+    tags = ["manual"],
     visibility = ["//visibility:public"],
 )
 """,
