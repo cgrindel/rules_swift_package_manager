@@ -394,13 +394,14 @@ def _apple_resource_bundle(repository_ctx, target, default_localization):
     # file paths using a list.
 
     glob_paths = []
+    file_paths = []
     for r in target.resources:
         path = pkginfo_targets.join_path(target, r.path)
         if repository_files.is_directory(repository_ctx, path):
             glob_paths.append("{}/**".format(path))
         else:
-            glob_paths.append(path)
-    resources = scg.new_fn_call("glob", glob_paths)
+            file_paths.append(path)
+    resources = scg.new_fn_call("glob", glob_paths + file_paths)
 
     load_stmts = [
         apple_resource_bundle_load_stmt,
