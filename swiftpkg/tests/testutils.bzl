@@ -17,8 +17,8 @@ def _new_stub_repository_ctx(
 
     # buildifier: disable=unused-variable
     def execute(args, environment = {}, quiet = True):
-        argsLen = len(args)
-        if argsLen == 3 and args[2].startswith("if [[ -d ") and environment["TARGET_PATH"]:
+        args_len = len(args)
+        if args_len == 3 and args[2].startswith("if [[ -d ") and environment["TARGET_PATH"]:
             # Look for the is_directory check.
             path = environment["TARGET_PATH"]
             result = is_directory_results.get(path, False)
@@ -26,7 +26,7 @@ def _new_stub_repository_ctx(
             stdout += "\n"
             exec_result = _new_exec_result(stdout = stdout)
 
-        elif argsLen >= 4 and args[0] == "find":
+        elif args_len >= 4 and args[0] == "find":
             # The find command that we expect is `find -H -L path`.
             # See repository_files.list_files_under for details.
             path = args[3]

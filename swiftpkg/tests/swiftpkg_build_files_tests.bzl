@@ -824,6 +824,39 @@ swift_library(
             name = "SwiftLibraryWithDirResource",
             is_directory = {"Resources/Assets.xcassets": True},
             exp = """\
+load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_accessor", "resource_bundle_infoplist")
+
+apple_resource_bundle(
+    name = "Source_SwiftLibraryWithDirResource_resource_bundle",
+    bundle_name = "Source_SwiftLibraryWithDirResource_resource_bundle",
+    infoplists = [":Source_SwiftLibraryWithDirResource_resource_bundle_infoplist"],
+    resources = glob(["Source/SwiftLibraryWithDirResource/Resources/Assets.xcassets/**"]),
+)
+
+resource_bundle_accessor(
+    name = "Source_SwiftLibraryWithDirResource_resource_bundle_accessor",
+    bundle_name = "Source_SwiftLibraryWithDirResource_resource_bundle",
+)
+
+resource_bundle_infoplist(
+    name = "Source_SwiftLibraryWithDirResource_resource_bundle_infoplist",
+    region = "en",
+)
+
+swift_library(
+    name = "Source_SwiftLibraryWithDirResource",
+    data = [":Source_SwiftLibraryWithDirResource_resource_bundle"],
+    defines = ["SWIFT_PACKAGE"],
+    deps = [],
+    module_name = "SwiftLibraryWithDirResource",
+    srcs = [
+        "Source/SwiftLibraryWithDirResource/SwiftLibraryWithDirResource.swift",
+        ":Source_SwiftLibraryWithDirResource_resource_bundle_accessor",
+    ],
+    visibility = ["//visibility:public"],
+)
 """,
         ),
     ]
