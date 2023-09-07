@@ -60,7 +60,10 @@ ios_application(
     launch_storyboard = ":Resources/Base.lproj/LaunchScreen.storyboard",
     minimum_os_version = "13.0",
     resources = glob(
-        ["Resources/**"],
+        [
+            "Resources/**",
+            "Sounds/**",
+        ],
         exclude = [
             "Resources/Assets.xcassets/AppIcon.appiconset/**",
         ],
