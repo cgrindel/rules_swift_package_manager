@@ -791,7 +791,7 @@ apple_resource_bundle(
     name = "Source_SwiftLibraryWithFilePathResource_resource_bundle",
     bundle_name = "Source_SwiftLibraryWithFilePathResource_resource_bundle",
     infoplists = [":Source_SwiftLibraryWithFilePathResource_resource_bundle_infoplist"],
-    resources = glob(["Source/SwiftLibraryWithFilePathResource/Resources/chicken.json"]),
+    resources = ["Source/SwiftLibraryWithFilePathResource/Resources/chicken.json"],
 )
 
 resource_bundle_accessor(

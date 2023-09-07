@@ -401,7 +401,26 @@ def _apple_resource_bundle(repository_ctx, target, default_localization):
             glob_paths.append("{}/**".format(path))
         else:
             file_paths.append(path)
-    resources = scg.new_fn_call("glob", glob_paths + file_paths)
+
+    resource_parts = []
+    if len(glob_paths) > 0:
+        resource_parts.append(scg.new_fn_call("glob", glob_paths))
+    if len(file_paths) > 0:
+        resource_parts.append(file_paths)
+
+    rp_len = len(resource_parts)
+    if rp_len == 0:
+        fail("""\
+We were asked to create an apple_resource_bundle, but no resources were specified.\
+""")
+    elif rp_len == 1:
+        resources = resource_parts[0]
+    else:
+        resources = scg.new_expr(
+            resource_parts[0],
+            scg.new_op("+"),
+            resource_parts[1],
+        )
 
     load_stmts = [
         apple_resource_bundle_load_stmt,
