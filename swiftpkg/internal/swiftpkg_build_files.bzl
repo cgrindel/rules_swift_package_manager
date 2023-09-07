@@ -390,7 +390,8 @@ def _apple_resource_bundle(repository_ctx, target, default_localization):
         bzl_target_name,
     )
 
-    # TODO(chuck): Rethink using the glob patterns!
+    # GH575: Refactor the resources into glob patterns and file paths. Add
+    # file paths using a list.
 
     glob_paths = []
     for r in target.resources:
