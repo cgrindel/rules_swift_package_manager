@@ -390,6 +390,9 @@ def _apple_resource_bundle(repository_ctx, target, default_localization):
         bzl_target_name,
     )
 
+    # GH575: Refactor the resources into glob patterns and file paths. Add
+    # file paths using a list.
+
     glob_paths = []
     for r in target.resources:
         path = pkginfo_targets.join_path(target, r.path)

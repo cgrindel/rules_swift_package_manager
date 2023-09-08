@@ -1,0 +1,209 @@
+{
+  "direct_dep_identities": [
+    "kingfisher",
+    "messagekit"
+  ],
+  "modules": [
+    {
+      "name": "InputBarAccessoryView",
+      "c99name": "InputBarAccessoryView",
+      "src_type": "swift",
+      "label": "@swiftpkg_inputbaraccessoryview//:Sources_InputBarAccessoryView",
+      "modulemap_label": "@swiftpkg_inputbaraccessoryview//:Sources_InputBarAccessoryView_modulemap",
+      "package_identity": "inputbaraccessoryview",
+      "product_memberships": [
+        "InputBarAccessoryView"
+      ]
+    },
+    {
+      "name": "Kingfisher",
+      "c99name": "Kingfisher",
+      "src_type": "swift",
+      "label": "@swiftpkg_kingfisher//:Sources_Kingfisher",
+      "modulemap_label": "@swiftpkg_kingfisher//:Sources_Kingfisher_modulemap",
+      "package_identity": "kingfisher",
+      "product_memberships": [
+        "Kingfisher",
+        "KingfisherSwiftUI",
+        "KingfisherDynamic",
+        "KingfisherSwiftUIDynamic",
+        "KingfisherStatic",
+        "KingfisherSwiftUIStatic"
+      ]
+    },
+    {
+      "name": "KingfisherSwiftUI",
+      "c99name": "KingfisherSwiftUI",
+      "src_type": "swift",
+      "label": "@swiftpkg_kingfisher//:Sources_KingfisherSwiftUI",
+      "package_identity": "kingfisher",
+      "product_memberships": [
+        "KingfisherSwiftUI",
+        "KingfisherSwiftUIDynamic",
+        "KingfisherSwiftUIStatic"
+      ]
+    },
+    {
+      "name": "SwiftFormatPlugin",
+      "c99name": "SwiftFormatPlugin",
+      "src_type": "unknown",
+      "label": "@swiftpkg_messagekit//:Plugins_SwiftFormatPlugin",
+      "package_identity": "messagekit",
+      "product_memberships": [
+        "SwiftFormatPlugin"
+      ]
+    },
+    {
+      "name": "SwiftLintPlugin",
+      "c99name": "SwiftLintPlugin",
+      "src_type": "unknown",
+      "label": "@swiftpkg_messagekit//:Plugins_SwiftLintPlugin",
+      "package_identity": "messagekit",
+      "product_memberships": [
+        "SwiftLintPlugin"
+      ]
+    },
+    {
+      "name": "MessageKit",
+      "c99name": "MessageKit",
+      "src_type": "swift",
+      "label": "@swiftpkg_messagekit//:Sources_MessageKit",
+      "modulemap_label": "@swiftpkg_messagekit//:Sources_MessageKit_modulemap",
+      "package_identity": "messagekit",
+      "product_memberships": [
+        "MessageKit"
+      ]
+    },
+    {
+      "name": "SwiftLintBinary",
+      "c99name": "SwiftLintBinary",
+      "src_type": "binary",
+      "label": "@swiftpkg_messagekit//:remote_archive_SwiftLintBinary-macos.artifactbundle.zip_SwiftLintBinary",
+      "package_identity": "messagekit",
+      "product_memberships": [
+        "SwiftLintPlugin"
+      ]
+    },
+    {
+      "name": "swiftformat",
+      "c99name": "swiftformat",
+      "src_type": "binary",
+      "label": "@swiftpkg_messagekit//:remote_archive_swiftformat.artifactbundle.zip_swiftformat",
+      "package_identity": "messagekit",
+      "product_memberships": [
+        "SwiftFormatPlugin"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "identity": "inputbaraccessoryview",
+      "name": "InputBarAccessoryView",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_inputbaraccessoryview//:Sources_InputBarAccessoryView"
+      ]
+    },
+    {
+      "identity": "kingfisher",
+      "name": "Kingfisher",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_kingfisher//:Sources_Kingfisher"
+      ]
+    },
+    {
+      "identity": "kingfisher",
+      "name": "KingfisherDynamic",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_kingfisher//:Sources_Kingfisher"
+      ]
+    },
+    {
+      "identity": "kingfisher",
+      "name": "KingfisherStatic",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_kingfisher//:Sources_Kingfisher"
+      ]
+    },
+    {
+      "identity": "kingfisher",
+      "name": "KingfisherSwiftUI",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_kingfisher//:Sources_KingfisherSwiftUI"
+      ]
+    },
+    {
+      "identity": "kingfisher",
+      "name": "KingfisherSwiftUIDynamic",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_kingfisher//:Sources_KingfisherSwiftUI"
+      ]
+    },
+    {
+      "identity": "kingfisher",
+      "name": "KingfisherSwiftUIStatic",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_kingfisher//:Sources_KingfisherSwiftUI"
+      ]
+    },
+    {
+      "identity": "messagekit",
+      "name": "MessageKit",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_messagekit//:Sources_MessageKit"
+      ]
+    },
+    {
+      "identity": "messagekit",
+      "name": "SwiftFormatPlugin",
+      "type": "plugin",
+      "target_labels": [
+        "@swiftpkg_messagekit//:Plugins_SwiftFormatPlugin"
+      ]
+    },
+    {
+      "identity": "messagekit",
+      "name": "SwiftLintPlugin",
+      "type": "plugin",
+      "target_labels": [
+        "@swiftpkg_messagekit//:Plugins_SwiftLintPlugin"
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "name": "swiftpkg_inputbaraccessoryview",
+      "identity": "inputbaraccessoryview",
+      "remote": {
+        "commit": "17ced92a5dccb36512b408b6276353631d7cbe57",
+        "remote": "https://github.com/nathantannar4/InputBarAccessoryView",
+        "version": "6.3.0"
+      }
+    },
+    {
+      "name": "swiftpkg_kingfisher",
+      "identity": "kingfisher",
+      "remote": {
+        "commit": "1a0c2df04b31ed7aa318354f3583faea24f006fc",
+        "remote": "https://github.com/onevcat/Kingfisher",
+        "version": "5.15.8"
+      }
+    },
+    {
+      "name": "swiftpkg_messagekit",
+      "identity": "messagekit",
+      "remote": {
+        "commit": "1993e8e90d4e9a61b8d9bc8ceb733964ce943376",
+        "remote": "https://github.com/MessageKit/MessageKit",
+        "version": "4.2.0"
+      }
+    }
+  ]
+}

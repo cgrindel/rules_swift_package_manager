@@ -18,6 +18,7 @@ load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":repository_files.bzl", "repository_files")
 load(":repository_utils.bzl", "repository_utils")
+load(":resource_files.bzl", "resource_files")
 load(":swift_files.bzl", "swift_files")
 load(":validations.bzl", "validations")
 
@@ -270,6 +271,12 @@ def _new_target_from_json_maps(
             target_path,
             sources,
         )
+        if swift_src_info.discovered_res_files != []:
+            resources += [
+                _new_resource_from_discovered_resource(p)
+                for p in swift_src_info.discovered_res_files
+            ]
+
     elif module_type == module_types.clang:
         clang_src_info = _new_clang_src_info_from_sources(
             repository_ctx = repository_ctx,
@@ -766,15 +773,33 @@ def _new_swift_src_info_from_sources(repository_ctx, target_path, sources):
         if has_objc_directive and imports_xctest:
             break
 
+    # Find any auto-discoverable resources under the target
+    all_target_files = repository_files.list_files_under(
+        repository_ctx,
+        target_path,
+    )
+
+    # The paths should be relative to the target not the root of the workspace.
+    # Do not include directories in the output.
+    tp_prefix = target_path + "/"
+    discovered_res_files = [
+        f.removeprefix(tp_prefix)
+        for f in all_target_files
+        if not repository_files.is_directory(repository_ctx, f) and
+           resource_files.is_auto_discovered_resource(f)
+    ]
+
     return _new_swift_src_info(
         has_objc_directive = has_objc_directive,
         imports_xctest = imports_xctest,
+        discovered_res_files = discovered_res_files,
     )
 
-def _new_swift_src_info(has_objc_directive = False, imports_xctest = False):
+def _new_swift_src_info(has_objc_directive = False, imports_xctest = False, discovered_res_files = []):
     return struct(
         has_objc_directive = has_objc_directive,
         imports_xctest = imports_xctest,
+        discovered_res_files = discovered_res_files,
     )
 
 # MARK: - Clang Source Info
@@ -1286,6 +1311,16 @@ def _new_resource_rule_process_from_dump_json_map(dump_map):
         return None
     return _new_resource_rule_process(
         localization = dump_map.get("localization"),
+    )
+
+def _new_resource_from_discovered_resource(path):
+    # Building the resource to look like the structures defined in
+    # https://github.com/apple/swift-package-manager/blob/main/Sources/PackageLoading/TargetSourcesBuilder.swift#L634-L677
+    return _new_resource(
+        path = path,
+        rule = _new_resource_rule(
+            process = _new_resource_rule_process(),
+        ),
     )
 
 # MARK: - Constants

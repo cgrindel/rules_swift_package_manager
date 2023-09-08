@@ -41,6 +41,7 @@ bzl_library(
         ":pkginfo_dependencies",
         ":pkginfo_targets",
         ":repository_utils",
+        ":resource_files",
         ":validations",
         "//config_settings/spm/configuration:configurations",
         "//config_settings/spm/platform:platforms",
@@ -275,6 +276,16 @@ bzl_library(
     srcs = ["swift_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = ["@bazel_skylib//lib:paths"],
+)
+
+bzl_library(
+    name = "resource_files",
+    srcs = ["resource_files.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        "@bazel_skylib//lib:paths",
+        "@bazel_skylib//lib:sets",
+    ],
 )
 
 bzl_library(
