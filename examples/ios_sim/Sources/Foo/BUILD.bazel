@@ -4,6 +4,7 @@ swift_library(
     name = "Foo",
     srcs = ["Bar.swift"],
     module_name = "Foo",
+    tags = ["manual"],
     visibility = ["//:__subpackages__"],
     deps = ["@swiftpkg_swift_nio//:Sources_NIO"],
 )

@@ -9,6 +9,7 @@ swift_library(
         "Models/Foo.swift",
     ],
     module_name = "App",
+    tags = ["manual"],
     visibility = ["//visibility:public"],
     deps = [
         "@swiftpkg_fluent//:Sources_Fluent",

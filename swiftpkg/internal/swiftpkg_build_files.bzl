@@ -121,6 +121,10 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     return build_files.merge(*all_build_files)
 
 def _swift_library_from_target(target, attrs):
+    # Mark swift_library targets as manual. We do this so that they are always
+    # built from a leaf node which can provide critical configuration
+    # information.
+    attrs["tags"] = ["manual"]
     return build_decls.new(
         kind = swift_kinds.library,
         name = pkginfo_targets.bazel_label_name(target),
