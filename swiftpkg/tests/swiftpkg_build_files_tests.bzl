@@ -922,6 +922,7 @@ swift_library(
         "Source/SwiftLibraryWithFileAndDirResources/SwiftLibraryWithFileAndDirResources.swift",
         ":Source_SwiftLibraryWithFileAndDirResources_resource_bundle_accessor",
     ],
+    tags = ["manual"],
     visibility = ["//visibility:public"],
 )
 """,
