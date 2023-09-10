@@ -18,7 +18,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
     if target.module_type == module_types.clang:
         return _clang_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.swift:
-        return _swift_target_build_file(repository_ctx, pkg_ctx, target)
+        return _swift_target_build_file(pkg_ctx, target)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
     elif target.module_type == module_types.binary:
@@ -30,7 +30,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
 
 # MARK: - Swift Target
 
-def _swift_target_build_file(repository_ctx, pkg_ctx, target):
+def _swift_target_build_file(pkg_ctx, target):
     if target.swift_src_info == None:
         fail("Expected a `swift_src_info`. name: ", target.name)
 
@@ -86,7 +86,6 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
         # https://stackoverflow.com/questions/63237395/generating-resource-bundle-accessor-type-bundle-has-no-member-module
         all_build_files.append(_apple_resource_bundle(
-            repository_ctx,
             target,
             pkg_ctx.pkg_info.default_localization,
         ))
@@ -382,7 +381,7 @@ def _apple_static_xcframework_import_build_file(target):
 
 # MARK: - Apple Resource Group
 
-def _apple_resource_bundle(repository_ctx, target, default_localization):
+def _apple_resource_bundle(target, default_localization):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     bundle_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
     infoplist_name = pkginfo_targets.resource_bundle_infoplist_label_name(
@@ -393,35 +392,6 @@ def _apple_resource_bundle(repository_ctx, target, default_localization):
         r.path
         for r in target.resources
     ]
-
-    # glob_paths = []
-    # file_paths = []
-    # for r in target.resources:
-    #     path = r.path
-    #     if repository_files.is_directory(repository_ctx, path):
-    #         glob_paths.append("{}/**".format(path))
-    #     else:
-    #         file_paths.append(path)
-
-    # resource_parts = []
-    # if len(glob_paths) > 0:
-    #     resource_parts.append(scg.new_fn_call("glob", glob_paths))
-    # if len(file_paths) > 0:
-    #     resource_parts.append(file_paths)
-
-    # rp_len = len(resource_parts)
-    # if rp_len == 0:
-    #     fail("""\
-    # We were asked to create an apple_resource_bundle, but no resources were specified.\
-    # """)
-    # elif rp_len == 1:
-    #     resources = resource_parts[0]
-    # else:
-    #     resources = scg.new_expr(
-    #         resource_parts[0],
-    #         scg.new_op("+"),
-    #         resource_parts[1],
-    #     )
 
     load_stmts = [
         apple_resource_bundle_load_stmt,
