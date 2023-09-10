@@ -44,7 +44,6 @@ swift_library(
     visibility = ["//visibility:public"],
     deps = [
         "@swiftpkg_kingfisher//:Sources_Kingfisher",
-        "@swiftpkg_kingfisher//:Sources_KingfisherSwiftUI",
         "@swiftpkg_messagekit//:Sources_MessageKit",
     ],
 )
