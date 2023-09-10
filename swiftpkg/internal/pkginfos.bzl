@@ -249,29 +249,6 @@ def _new_target_from_json_maps(
         for r in desc_map.get("resources", [])
     ]
 
-    # desc_resources = desc_map.get("resources", [])
-    # if desc_resources != []:
-    #     resources = [
-    #         _new_resource_from_desc_map(repository_ctx, d, pkg_path)
-    #         for d in desc_resources
-    #     ]
-    # else:
-    #     resources = [
-    #         _new_resource_from_desc_map(repository_ctx, d, pkg_path)
-    #         for d in dump_map.get("resources", [])
-    #     ]
-
-    # resources_map = dump_map.get("resources", [])
-    # if len(resources_map) == 0:
-    #     resources_map = desc_map.get("resources", [])
-    # resources_map = desc_map.get("resources", [])
-    # if len(resources_map) == 0:
-    #     resources_map = dump_map.get("resources", [])
-    # resources = [
-    #     _new_resource_from_json_map(repository_ctx, d, pkg_path)
-    #     for d in resources_map
-    # ]
-
     artifact_download_info = None
     url = dump_map.get("url")
     if url != None:
@@ -814,13 +791,6 @@ def _new_swift_src_info_from_sources(repository_ctx, target_path, sources):
            resource_files.is_auto_discovered_resource(f)
     ]
 
-    # DEBUG BEGIN
-    print("*** CHUCK discovered_res_files: ")
-    for idx, item in enumerate(discovered_res_files):
-        print("*** CHUCK", idx, ":", item)
-
-    # DEBUG END
-
     return _new_swift_src_info(
         has_objc_directive = has_objc_directive,
         imports_xctest = imports_xctest,
@@ -1321,14 +1291,6 @@ def _new_resource_from_desc_map(desc_map, pkg_path):
     path = desc_map["path"]
     if paths.is_absolute(path):
         path = paths.relativize(path, pkg_path)
-
-    # DEBUG BEGIN
-    print("*** CHUCK ---------")
-    print("*** CHUCK desc_map[\"path\"]: ", desc_map["path"])
-    print("*** CHUCK pkg_path: ", pkg_path)
-    print("*** CHUCK path: ", path)
-
-    # DEBUG END
     return _new_resource(
         path = path,
         rule = _new_resource_rule_from_dump_json_map(desc_map["rule"]),

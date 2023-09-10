@@ -10,7 +10,6 @@ load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
-load(":repository_files.bzl", "repository_files")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
 # MARK: - Target Entry Point
@@ -390,42 +389,39 @@ def _apple_resource_bundle(repository_ctx, target, default_localization):
         bzl_target_name,
     )
 
-    glob_paths = []
-    file_paths = []
-    for r in target.resources:
-        # path = pkginfo_targets.join_path(target, r.path)
-        path = r.path
+    resources = [
+        r.path
+        for r in target.resources
+    ]
 
-        # DEBUG BEGIN
-        print("*** CHUCK --------")
-        print("*** CHUCK target.path: ", target.path)
-        print("*** CHUCK r.path: ", r.path)
+    # glob_paths = []
+    # file_paths = []
+    # for r in target.resources:
+    #     path = r.path
+    #     if repository_files.is_directory(repository_ctx, path):
+    #         glob_paths.append("{}/**".format(path))
+    #     else:
+    #         file_paths.append(path)
 
-        # DEBUG END
-        if repository_files.is_directory(repository_ctx, path):
-            glob_paths.append("{}/**".format(path))
-        else:
-            file_paths.append(path)
+    # resource_parts = []
+    # if len(glob_paths) > 0:
+    #     resource_parts.append(scg.new_fn_call("glob", glob_paths))
+    # if len(file_paths) > 0:
+    #     resource_parts.append(file_paths)
 
-    resource_parts = []
-    if len(glob_paths) > 0:
-        resource_parts.append(scg.new_fn_call("glob", glob_paths))
-    if len(file_paths) > 0:
-        resource_parts.append(file_paths)
-
-    rp_len = len(resource_parts)
-    if rp_len == 0:
-        fail("""\
-We were asked to create an apple_resource_bundle, but no resources were specified.\
-""")
-    elif rp_len == 1:
-        resources = resource_parts[0]
-    else:
-        resources = scg.new_expr(
-            resource_parts[0],
-            scg.new_op("+"),
-            resource_parts[1],
-        )
+    # rp_len = len(resource_parts)
+    # if rp_len == 0:
+    #     fail("""\
+    # We were asked to create an apple_resource_bundle, but no resources were specified.\
+    # """)
+    # elif rp_len == 1:
+    #     resources = resource_parts[0]
+    # else:
+    #     resources = scg.new_expr(
+    #         resource_parts[0],
+    #         scg.new_op("+"),
+    #         resource_parts[1],
+    #     )
 
     load_stmts = [
         apple_resource_bundle_load_stmt,
