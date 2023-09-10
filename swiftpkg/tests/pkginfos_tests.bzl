@@ -96,7 +96,7 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
                 product_memberships = ["printstuff"],
                 resources = [
                     pkginfos.new_resource(
-                        path = "Resources/chicken.json",
+                        path = "Sources/MySwiftPackage/Resources/chicken.json",
                         rule = pkginfos.new_resource_rule(
                             process = pkginfos.new_resource_rule_process(),
                         ),
@@ -538,6 +538,12 @@ _swift_arg_parser_desc_json = """
       ],
       "product_memberships" : [
         "printstuff"
+      ],
+      "resources": [
+        {
+          "path" : "/Users/chuck/code/cgrindel/rules_swift_package_manager/gh009_update_repos_new/examples/pkg_manifest/Sources/MySwiftPackage/Resources/chicken.json",
+          "rule" : { "process" : {} }
+        }
       ],
       "sources" : [
         "MySwiftPackage.swift"

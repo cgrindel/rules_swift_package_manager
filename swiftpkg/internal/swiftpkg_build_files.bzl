@@ -10,7 +10,6 @@ load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
-load(":repository_files.bzl", "repository_files")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
 # MARK: - Target Entry Point
@@ -19,7 +18,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
     if target.module_type == module_types.clang:
         return _clang_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.swift:
-        return _swift_target_build_file(repository_ctx, pkg_ctx, target)
+        return _swift_target_build_file(pkg_ctx, target)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
     elif target.module_type == module_types.binary:
@@ -31,7 +30,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
 
 # MARK: - Swift Target
 
-def _swift_target_build_file(repository_ctx, pkg_ctx, target):
+def _swift_target_build_file(pkg_ctx, target):
     if target.swift_src_info == None:
         fail("Expected a `swift_src_info`. name: ", target.name)
 
@@ -87,7 +86,6 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
         # https://stackoverflow.com/questions/63237395/generating-resource-bundle-accessor-type-bundle-has-no-member-module
         all_build_files.append(_apple_resource_bundle(
-            repository_ctx,
             target,
             pkg_ctx.pkg_info.default_localization,
         ))
@@ -383,24 +381,17 @@ def _apple_static_xcframework_import_build_file(target):
 
 # MARK: - Apple Resource Group
 
-def _apple_resource_bundle(repository_ctx, target, default_localization):
+def _apple_resource_bundle(target, default_localization):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     bundle_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
     infoplist_name = pkginfo_targets.resource_bundle_infoplist_label_name(
         bzl_target_name,
     )
 
-    # GH575: Refactor the resources into glob patterns and file paths. Add
-    # file paths using a list.
-
-    glob_paths = []
-    for r in target.resources:
-        path = pkginfo_targets.join_path(target, r.path)
-        if repository_files.is_directory(repository_ctx, path):
-            glob_paths.append("{}/**".format(path))
-        else:
-            glob_paths.append(path)
-    resources = scg.new_fn_call("glob", glob_paths)
+    resources = [
+        r.path
+        for r in target.resources
+    ]
 
     load_stmts = [
         apple_resource_bundle_load_stmt,

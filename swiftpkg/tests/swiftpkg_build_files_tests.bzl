@@ -360,17 +360,17 @@ _pkg_info = pkginfos.new(
             swift_src_info = pkginfos.new_swift_src_info(has_objc_directive = True),
         ),
         pkginfos.new_target(
-            name = "SwiftLibraryWithResources",
+            name = "SwiftLibraryWithFilePathResource",
             type = "regular",
-            c99name = "SwiftLibraryWithResources",
+            c99name = "SwiftLibraryWithFilePathResource",
             module_type = "SwiftTarget",
-            path = "Source/SwiftLibraryWithResources",
+            path = "Source/SwiftLibraryWithFilePathResource",
             sources = [
-                "SwiftLibraryWithResources.swift",
+                "SwiftLibraryWithFilePathResource.swift",
             ],
             resources = [
                 pkginfos.new_resource(
-                    path = "Resources/chicken.json",
+                    path = "Source/SwiftLibraryWithFilePathResource/Resources/chicken.json",
                     rule = pkginfos.new_resource_rule(
                         process = pkginfos.new_resource_rule_process(),
                     ),
@@ -759,39 +759,39 @@ swift_library(
 """,
         ),
         struct(
-            msg = "Swift library target with resources",
-            name = "SwiftLibraryWithResources",
+            msg = "Swift library target with file path resource",
+            name = "SwiftLibraryWithFilePathResource",
             exp = """\
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_accessor", "resource_bundle_infoplist")
 
 apple_resource_bundle(
-    name = "Source_SwiftLibraryWithResources_resource_bundle",
-    bundle_name = "Source_SwiftLibraryWithResources_resource_bundle",
-    infoplists = [":Source_SwiftLibraryWithResources_resource_bundle_infoplist"],
-    resources = glob(["Source/SwiftLibraryWithResources/Resources/chicken.json"]),
+    name = "Source_SwiftLibraryWithFilePathResource_resource_bundle",
+    bundle_name = "Source_SwiftLibraryWithFilePathResource_resource_bundle",
+    infoplists = [":Source_SwiftLibraryWithFilePathResource_resource_bundle_infoplist"],
+    resources = ["Source/SwiftLibraryWithFilePathResource/Resources/chicken.json"],
 )
 
 resource_bundle_accessor(
-    name = "Source_SwiftLibraryWithResources_resource_bundle_accessor",
-    bundle_name = "Source_SwiftLibraryWithResources_resource_bundle",
+    name = "Source_SwiftLibraryWithFilePathResource_resource_bundle_accessor",
+    bundle_name = "Source_SwiftLibraryWithFilePathResource_resource_bundle",
 )
 
 resource_bundle_infoplist(
-    name = "Source_SwiftLibraryWithResources_resource_bundle_infoplist",
+    name = "Source_SwiftLibraryWithFilePathResource_resource_bundle_infoplist",
     region = "en",
 )
 
 swift_library(
-    name = "Source_SwiftLibraryWithResources",
-    data = [":Source_SwiftLibraryWithResources_resource_bundle"],
+    name = "Source_SwiftLibraryWithFilePathResource",
+    data = [":Source_SwiftLibraryWithFilePathResource_resource_bundle"],
     defines = ["SWIFT_PACKAGE"],
     deps = [],
-    module_name = "SwiftLibraryWithResources",
+    module_name = "SwiftLibraryWithFilePathResource",
     srcs = [
-        "Source/SwiftLibraryWithResources/SwiftLibraryWithResources.swift",
-        ":Source_SwiftLibraryWithResources_resource_bundle_accessor",
+        "Source/SwiftLibraryWithFilePathResource/SwiftLibraryWithFilePathResource.swift",
+        ":Source_SwiftLibraryWithFilePathResource_resource_bundle_accessor",
     ],
     tags = ["manual"],
     visibility = ["//visibility:public"],
@@ -813,6 +813,10 @@ swift_library(
                     for fp in file_paths
                 ]
                 for dirname, file_paths in getattr(t, "find_results", {}).items()
+            },
+            is_directory_results = {
+                paths.normalize(paths.join(target.path, path)): result
+                for path, result in getattr(t, "is_directory", {}).items()
             },
         )
         actual = scg.to_starlark(
