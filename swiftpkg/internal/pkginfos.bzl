@@ -780,8 +780,6 @@ def _new_swift_src_info_from_sources(repository_ctx, target_path, sources):
         target_path,
     )
 
-    # TODO(chuck): Remove is_directory check.
-
     # The paths should be relative to the target not the root of the workspace.
     # Do not include directories in the output.
     discovered_res_files = [
