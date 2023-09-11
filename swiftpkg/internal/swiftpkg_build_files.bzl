@@ -369,13 +369,6 @@ def _xcframework_import_build_file(target, artifact_infos):
         fail("No xcframeworks were found for the target, {}.".format(
             target.name,
         ))
-
-    # DEBUG BEGIN
-    print("*** CHUCK =============")
-    print("*** CHUCK target.name: ", target.name)
-    print("*** CHUCK xcframework_ai: ", xcframework_ai)
-
-    # DEBUG END
     if xcframework_ai.link_type == link_types.static:
         load_stmts = [apple_static_xcframework_import_load_stmt]
         kind = apple_kinds.static_xcframework_import
@@ -409,27 +402,6 @@ Unexpected link type for target. target: {}, link_type: {}\
         load_stmts = load_stmts,
         decls = decls,
     )
-
-# def _apple_static_xcframework_import_build_file(target):
-#     load_stmts = [apple_static_xcframework_import_load_stmt]
-#     glob = scg.new_fn_call(
-#         "glob",
-#         ["{tpath}/*.xcframework/**".format(tpath = target.path)],
-#     )
-#     decls = [
-#         build_decls.new(
-#             kind = apple_kinds.static_xcframework_import,
-#             name = pkginfo_targets.bazel_label_name(target),
-#             attrs = {
-#                 "visibility": ["//visibility:public"],
-#                 "xcframework_imports": glob,
-#             },
-#         ),
-#     ]
-#     return build_files.new(
-#         load_stmts = load_stmts,
-#         decls = decls,
-#     )
 
 # MARK: - Apple Resource Group
 
