@@ -92,23 +92,6 @@ workspace(name = "{}")
 """.format(repo_name)
     repository_ctx.file(path, content = content, executable = False)
 
-# TODO(chuck): Remove _new_file_info.
-
-def _new_file_info(path, file_output):
-    """Create a `struct` representing info about a file.
-
-    Args:
-        path: The path to the file as a `string`. This could be relative or
-            absolute depending upon the context.
-        file_output: The output of running `file <path>` as a `string`.
-
-    Returns:
-    """
-    return struct(
-        path = path,
-        file_output = file_output,
-    )
-
 def _new_framework_info(path, link_type):
     """Create a `struct` representing an Apple framework.
 
@@ -121,52 +104,7 @@ def _new_framework_info(path, link_type):
         A `struct` representing an Apple framework.
     """
     return struct(
-        path = path,
-        link_type = link_type,
-    )
-
-def _framework_name_from_path(path):
-    basename = paths.basename(path)
-    (name, _ext) = paths.split_extension(basename)
-    return name
-
-def _new_framework_info_from_files(repository_ctx, path):
-    framework_name = _framework_name_from_path(path)
-
-    # Frameworks have a structure like the following:
-    # XXX.framework
-    #   └─ Headers (dir)
-    #   └─ Modules (dir)
-    #   └─ XXX (binary file)
-    #   └─ Info.plist (XML file)
-    binary_files = repository_files.list_files_under(
-        repository_ctx,
-        path,
-        by_name = framework_name,
-        depth = 1,
-    )
-
-    # DEBUG BEGIN
-    print("*** CHUCK binary_files: ")
-    for idx, item in enumerate(binary_files):
-        print("*** CHUCK", idx, ":", item)
-
-    # DEBUG END
-    if len(binary_files) == 0:
-        fail("No binary files were found for framework at {}".format(path))
-    file_type = repository_files.file_type(repository_ctx, binary_files[0])
-
-    # DEBUG BEGIN
-    print("*** CHUCK file_type:\n", file_type)
-
-    # DEBUG END
-    if file_type.find("ar archive random library") > 0:
-        link_type = link_types.static
-    elif file_type.find("dynamically linked shared library"):
-        link_type = link_types.dynamic
-    else:
-        link_type = link_types.unknown
-    return _new_framework_info(
+        artifiact_type = artifact_types.xcframework,
         path = path,
         link_type = link_type,
     )
@@ -184,12 +122,80 @@ def _new_xcframework_info(path, framework_infos):
         A `struct` representing an xcframework.
     """
     return struct(
-        artifiact_type = "xcframework",
+        artifiact_type = artifact_types.framework,
         path = path,
         framework_infos = framework_infos,
     )
 
+def _framework_name_from_path(path):
+    """Determine the framework name from the provided path.
+
+    Args:
+        path: The path to the `XXX.framework` directory as a `string`.
+
+    Returns:
+        The framework name as a `string`.
+    """
+    basename = paths.basename(path)
+    (name, ext) = paths.split_extension(basename)
+    if ext != ".framework":
+        fail("The path does not point to an Apple framework. path: {}".format(path))
+    return name
+
+def _new_framework_info_from_files(repository_ctx, path):
+    """Create a `struct` representing an Apple framework from the files at the \
+    specified path.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+        path: The path to the expanded `XXX.framework` directory as a `string`.
+
+    Returns:
+        A `struct` representing an Apple framework as returned by
+        `repo_rules.new_framework_info()`.
+    """
+    framework_name = _framework_name_from_path(path)
+
+    # Frameworks have a structure like the following:
+    # XXX.framework
+    #   └─ Headers (dir)
+    #   └─ Modules (dir)
+    #   └─ XXX (binary file)
+    #   └─ Info.plist (XML file)
+    binary_files = repository_files.list_files_under(
+        repository_ctx,
+        path,
+        by_name = framework_name,
+        depth = 1,
+    )
+    if len(binary_files) == 0:
+        fail("No binary files were found for framework at {}".format(path))
+    file_type = repository_files.file_type(repository_ctx, binary_files[0])
+    if file_type.find("ar archive random library") > 0:
+        link_type = link_types.static
+    elif file_type.find("dynamically linked shared library"):
+        link_type = link_types.dynamic
+    else:
+        link_type = link_types.unknown
+    return _new_framework_info(
+        path = path,
+        link_type = link_type,
+    )
+
 def _new_xcframework_info_from_files(repository_ctx, path):
+    """Return a `struct` descrbing an xcframework from the files at the \
+    specified path.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+        path: The path to the expanded `XXX.xcframework` directory as a
+            `string`.
+
+    Returns:
+        A `struct` describing the xcframework as returned by
+        `repo_rules.new_xcframework_info()`.
+    """
+
     # XC Frameworks have a structure like the following:
     # XXX.xcframework
     #   └─ ios-arm64/XXX.framework
@@ -222,15 +228,6 @@ def _download_artifact(repository_ctx, artifact_download_info, path):
             sha256 = artifact_download_info.checksum,
         ))
 
-    # DEBUG BEGIN
-    print("*** CHUCK ==============")
-    print("*** CHUCK repository_ctx.name: ", repository_ctx.name)
-    print("*** CHUCK artifact_download_info.url: ", artifact_download_info.url)
-    print("*** CHUCK path: ", path)
-    print("*** CHUCK result: ", result)
-
-    # DEBUG END
-
     # Collect artifact info about contents of the downloaded artifact
     xcframework_dirs = repository_files.list_directories_under(
         repository_ctx,
@@ -238,37 +235,28 @@ def _download_artifact(repository_ctx, artifact_download_info, path):
         max_depth = 1,
         by_name = "*.xcframework",
     )
-
-    # DEBUG BEGIN
-    print("*** CHUCK xcframework_dirs: ")
-    for idx, item in enumerate(xcframework_dirs):
-        print("*** CHUCK", idx, ":", item)
-
-    # DEBUG END
-
     return [
         _new_xcframework_info_from_files(repository_ctx, xf)
         for xf in xcframework_dirs
     ]
-
-    # Check for XXX.xcframework under path
-    # Look for files names XXX under the path/XXX.xcframework directory.
-    # Execute `file` on the files that are found.
-    # Return struct OR list of structs with location of XXX.xcframework and `file` info for each of the XXX files.
 
 repo_rules = struct(
     check_spm_version = _check_spm_version,
     env_attrs = _env_attrs,
     gen_build_files = _gen_build_files,
     get_exec_env = _get_exec_env,
-    new_file_info = _new_file_info,
     new_xcframework_info = _new_xcframework_info,
     swift_attrs = _swift_attrs,
     write_workspace_file = _write_workspace_file,
 )
 
 link_types = struct(
-    unknown = "unknown",
-    static = "static",
     dynamic = "dynamic",
+    static = "static",
+    unknown = "unknown",
+)
+
+artifact_types = struct(
+    framework = "framework",
+    xcframework = "xcframework",
 )
