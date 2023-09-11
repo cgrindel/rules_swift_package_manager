@@ -3,6 +3,7 @@
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:versions.bzl", "versions")
+load(":artifact_infos.bzl", "artifact_infos")
 load(":build_files.bzl", "build_files")
 load(":repository_files.bzl", "repository_files")
 load(":spm_versions.bzl", "spm_versions")
@@ -70,9 +71,19 @@ def _gen_build_files(repository_ctx, pkg_ctx):
         # does not have any product memberships, it is a testonly
         if target.type == "test" or len(target.product_memberships) == 0:
             continue
+        artifact_infos = []
         if target.artifact_download_info != None:
-            _download_artifact(repository_ctx, target.artifact_download_info, target.path)
-        bld_file = swiftpkg_build_files.new_for_target(repository_ctx, pkg_ctx, target)
+            artifact_infos = _download_artifact(
+                repository_ctx,
+                target.artifact_download_info,
+                target.path,
+            )
+        bld_file = swiftpkg_build_files.new_for_target(
+            repository_ctx,
+            pkg_ctx,
+            target,
+            artifact_infos,
+        )
         if bld_file == None:
             continue
         bld_files.append(bld_file)
@@ -91,130 +102,6 @@ def _write_workspace_file(repository_ctx, repoDir):
 workspace(name = "{}")
 """.format(repo_name)
     repository_ctx.file(path, content = content, executable = False)
-
-def _new_framework_info(path, link_type):
-    """Create a `struct` representing an Apple framework.
-
-    Args:
-        path: The path to the `XXX.framework` directory as a `string`.
-        link_type: A `string` specifying whether the framework should be
-            dynamically linked (`dynamic`) or statically linked (`static`).
-
-    Returns:
-        A `struct` representing an Apple framework.
-    """
-    return struct(
-        artifiact_type = artifact_types.xcframework,
-        path = path,
-        link_type = link_type,
-    )
-
-def _new_xcframework_info(path, framework_infos):
-    """Create a `struct` representing an Apple xcframework.
-
-    Args:
-        path: The path to the expanded `XXX.xcframework` directory as a
-            `string`.
-        framework_infos: A `list` of framework info `struct` values as created by
-            `repo_rules.new_framework_info`.
-
-    Returns:
-        A `struct` representing an xcframework.
-    """
-    return struct(
-        artifiact_type = artifact_types.framework,
-        path = path,
-        framework_infos = framework_infos,
-    )
-
-def _framework_name_from_path(path):
-    """Determine the framework name from the provided path.
-
-    Args:
-        path: The path to the `XXX.framework` directory as a `string`.
-
-    Returns:
-        The framework name as a `string`.
-    """
-    basename = paths.basename(path)
-    (name, ext) = paths.split_extension(basename)
-    if ext != ".framework":
-        fail("The path does not point to an Apple framework. path: {}".format(path))
-    return name
-
-def _new_framework_info_from_files(repository_ctx, path):
-    """Create a `struct` representing an Apple framework from the files at the \
-    specified path.
-
-    Args:
-        repository_ctx: A `repository_ctx` instance.
-        path: The path to the expanded `XXX.framework` directory as a `string`.
-
-    Returns:
-        A `struct` representing an Apple framework as returned by
-        `repo_rules.new_framework_info()`.
-    """
-    framework_name = _framework_name_from_path(path)
-
-    # Frameworks have a structure like the following:
-    # XXX.framework
-    #   └─ Headers (dir)
-    #   └─ Modules (dir)
-    #   └─ XXX (binary file)
-    #   └─ Info.plist (XML file)
-    binary_files = repository_files.list_files_under(
-        repository_ctx,
-        path,
-        by_name = framework_name,
-        depth = 1,
-    )
-    if len(binary_files) == 0:
-        fail("No binary files were found for framework at {}".format(path))
-    file_type = repository_files.file_type(repository_ctx, binary_files[0])
-    if file_type.find("ar archive random library") > 0:
-        link_type = link_types.static
-    elif file_type.find("dynamically linked shared library"):
-        link_type = link_types.dynamic
-    else:
-        link_type = link_types.unknown
-    return _new_framework_info(
-        path = path,
-        link_type = link_type,
-    )
-
-def _new_xcframework_info_from_files(repository_ctx, path):
-    """Return a `struct` descrbing an xcframework from the files at the \
-    specified path.
-
-    Args:
-        repository_ctx: A `repository_ctx` instance.
-        path: The path to the expanded `XXX.xcframework` directory as a
-            `string`.
-
-    Returns:
-        A `struct` describing the xcframework as returned by
-        `repo_rules.new_xcframework_info()`.
-    """
-
-    # XC Frameworks have a structure like the following:
-    # XXX.xcframework
-    #   └─ ios-arm64/XXX.framework
-    #   └─ ios-arm64_x86_64-maccatalyst/XXX.framework
-    #   └─ macos-arm64_x86_64/XXX.framework
-    framework_paths = repository_files.list_directories_under(
-        repository_ctx,
-        path,
-        by_name = "*.framework",
-        depth = 2,
-    )
-    framework_infos = [
-        _new_framework_info_from_files(repository_ctx, fp)
-        for fp in framework_paths
-    ]
-    return _new_xcframework_info(
-        path = path,
-        framework_infos = framework_infos,
-    )
 
 def _download_artifact(repository_ctx, artifact_download_info, path):
     result = repository_ctx.download_and_extract(
@@ -236,7 +123,7 @@ def _download_artifact(repository_ctx, artifact_download_info, path):
         by_name = "*.xcframework",
     )
     return [
-        _new_xcframework_info_from_files(repository_ctx, xf)
+        artifact_infos.new_xcframework_info_from_files(repository_ctx, xf)
         for xf in xcframework_dirs
     ]
 
@@ -245,18 +132,6 @@ repo_rules = struct(
     env_attrs = _env_attrs,
     gen_build_files = _gen_build_files,
     get_exec_env = _get_exec_env,
-    new_xcframework_info = _new_xcframework_info,
     swift_attrs = _swift_attrs,
     write_workspace_file = _write_workspace_file,
-)
-
-link_types = struct(
-    dynamic = "dynamic",
-    static = "static",
-    unknown = "unknown",
-)
-
-artifact_types = struct(
-    framework = "framework",
-    xcframework = "xcframework",
 )

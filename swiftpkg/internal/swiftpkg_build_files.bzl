@@ -2,6 +2,7 @@
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
+load(":artifact_infos.bzl", "artifact_types", "link_types")
 load(":bazel_apple_platforms.bzl", "bazel_apple_platforms")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
@@ -14,7 +15,7 @@ load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
 # MARK: - Target Entry Point
 
-def _new_for_target(repository_ctx, pkg_ctx, target):
+def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
     if target.module_type == module_types.clang:
         return _clang_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.swift:
@@ -23,7 +24,8 @@ def _new_for_target(repository_ctx, pkg_ctx, target):
         return _system_library_build_file(target)
     elif target.module_type == module_types.binary:
         # GH559: Allow client to control how binary targets are exposed.
-        return _apple_static_xcframework_import_build_file(target)
+        # return _apple_static_xcframework_import_build_file(target)
+        return _xcframework_import_build_file(target, artifact_infos)
 
     # GH046: Support plugins.
     return None
@@ -358,15 +360,44 @@ def _system_library_build_file(target):
 
 # MARK: - Apple xcframework Targets
 
-def _apple_static_xcframework_import_build_file(target):
-    load_stmts = [apple_static_xcframework_import_load_stmt]
+def _xcframework_import_build_file(target, artifact_infos):
+    xcframework_ai = lists.find(
+        artifact_infos,
+        lambda ai: ai.artifiact_type == artifact_types.xcframework,
+    )
+    if xcframework_ai == None:
+        fail("No xcframeworks were found for the target, {}.".format(
+            target.name,
+        ))
+
+    # DEBUG BEGIN
+    print("*** CHUCK =============")
+    print("*** CHUCK target.name: ", target.name)
+    print("*** CHUCK xcframework_ai: ", xcframework_ai)
+
+    # DEBUG END
+    if xcframework_ai.link_type == link_types.static:
+        load_stmts = [apple_static_xcframework_import_load_stmt]
+        kind = apple_kinds.static_xcframework_import
+    elif xcframework_ai.link_type == link_types.dynamic:
+        load_stmts = [apple_dynamic_xcframework_import_load_stmt]
+        kind = apple_kinds.dynamic_xcframework_import
+    else:
+        fail(
+            """\
+Unexpected link type for target. target: {}, link_type: {}\
+""".format(
+                target.name,
+                xcframework_ai.link_type,
+            ),
+        )
     glob = scg.new_fn_call(
         "glob",
         ["{tpath}/*.xcframework/**".format(tpath = target.path)],
     )
     decls = [
         build_decls.new(
-            kind = apple_kinds.static_xcframework_import,
+            kind = kind,
             name = pkginfo_targets.bazel_label_name(target),
             attrs = {
                 "visibility": ["//visibility:public"],
@@ -378,6 +409,27 @@ def _apple_static_xcframework_import_build_file(target):
         load_stmts = load_stmts,
         decls = decls,
     )
+
+# def _apple_static_xcframework_import_build_file(target):
+#     load_stmts = [apple_static_xcframework_import_load_stmt]
+#     glob = scg.new_fn_call(
+#         "glob",
+#         ["{tpath}/*.xcframework/**".format(tpath = target.path)],
+#     )
+#     decls = [
+#         build_decls.new(
+#             kind = apple_kinds.static_xcframework_import,
+#             name = pkginfo_targets.bazel_label_name(target),
+#             attrs = {
+#                 "visibility": ["//visibility:public"],
+#                 "xcframework_imports": glob,
+#             },
+#         ),
+#     ]
+#     return build_files.new(
+#         load_stmts = load_stmts,
+#         decls = decls,
+#     )
 
 # MARK: - Apple Resource Group
 
@@ -640,6 +692,7 @@ swiftpkg_build_files = struct(
 
 apple_kinds = struct(
     static_xcframework_import = "apple_static_xcframework_import",
+    dynamic_xcframework_import = "apple_dynamic_xcframework_import",
     resource_bundle = "apple_resource_bundle",
 )
 
@@ -650,6 +703,11 @@ apple_resources_location = "@build_bazel_rules_apple//apple:resources.bzl"
 apple_static_xcframework_import_load_stmt = load_statements.new(
     apple_apple_location,
     apple_kinds.static_xcframework_import,
+)
+
+apple_dynamic_xcframework_import_load_stmt = load_statements.new(
+    apple_apple_location,
+    apple_kinds.dynamic_xcframework_import,
 )
 
 apple_resource_bundle_load_stmt = load_statements.new(
