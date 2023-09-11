@@ -190,6 +190,7 @@ bzl_library(
     deps = [
         ":build_files",
         ":pkg_ctxs",
+        ":repository_files",
         ":swiftpkg_build_files",
     ],
 )

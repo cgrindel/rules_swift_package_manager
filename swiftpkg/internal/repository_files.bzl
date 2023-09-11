@@ -18,7 +18,12 @@ def _path_exists(repository_ctx, path):
     )
     return exec_result.return_code == 0
 
-def _list_files_under(repository_ctx, path, exclude = []):
+def _list_files_under(
+        repository_ctx,
+        path,
+        exclude = [],
+        by_name = None,
+        depth = None):
     """Retrieves the list of files under the specified path.
 
     This function returns paths for all of the files under the specified path.
@@ -28,15 +33,21 @@ def _list_files_under(repository_ctx, path, exclude = []):
         path: A path `string` value.
         exclude: Optional. A `list` of path `string` values that should be
             excluded from the result.
+        by_name: Optional. The name pattern that must be matched.
+        depth: Optional. The depth as an `int` at which the directory must
+            live from the starting path.
 
     Returns:
         A `list` of path `string` values.
     """
-    exec_result = repository_ctx.execute(
-        # Follow symlinks and report on the actual files.
-        ["find", "-H", "-L", path],
-        quiet = True,
-    )
+
+    # Follow symlinks and report on the actual files.
+    find_args = ["find", "-H", "-L", path]
+    if by_name != None:
+        find_args.extend(["-name", by_name])
+    if depth != None:
+        find_args.extend(["-depth", "{}".format(depth)])
+    exec_result = repository_ctx.execute(find_args, quiet = True)
     if exec_result.return_code != 0:
         fail("Failed to list files in %s. stderr:\n%s" % (path, exec_result.stderr))
     path_list = exec_result.stdout.splitlines()
@@ -80,13 +91,21 @@ def _exclude_paths(path_list, exclude):
 
     return results
 
-def _list_directories_under(repository_ctx, path, max_depth = None):
+def _list_directories_under(
+        repository_ctx,
+        path,
+        max_depth = None,
+        by_name = None,
+        depth = None):
     """Retrieves the list of directories under the specified path.
 
     Args:
         repository_ctx: A `repository_ctx` instance.
         path: A path `string` value.
-        max_depth: Optional. The depth for the directory search.
+        max_depth: Optional. The maximum depth for the directory search.
+        by_name: Optional. The name pattern that must be matched.
+        depth: Optional. The depth as an `int` at which the directory must
+            live from the starting path.
 
     Returns:
         A `list` of path `string` values.
@@ -94,6 +113,10 @@ def _list_directories_under(repository_ctx, path, max_depth = None):
     find_args = ["find", path, "-type", "d"]
     if max_depth != None:
         find_args.extend(["-maxdepth", "%d" % (max_depth)])
+    if by_name != None:
+        find_args.extend(["-name", by_name])
+    if depth != None:
+        find_args.extend(["-depth", "{}".format(depth)])
     exec_result = repository_ctx.execute(find_args, quiet = True)
     if exec_result.return_code != 0:
         fail("Failed to list directories under %s. stderr:\n%s" % (path, exec_result.stderr))
@@ -139,6 +162,8 @@ def _copy_directory(repository_ctx, src, dest):
         ],
     )
 
+# GH582: Refactor _is_directory to be like _path_exists.
+
 def _is_directory(repository_ctx, path):
     """Determine if the provided path is a directory.
 
@@ -164,9 +189,30 @@ def _is_directory(repository_ctx, path):
         return True
     return False
 
+def _file_type(repository_ctx, path):
+    """Output the file type.
+
+    Args:
+        repository_ctx: An instance of `repository_ctx`.
+        path: The path to test as a `string`.
+
+    Returns:
+        A `string` representing the file type for the path as returned by the
+        `file` utility.
+    """
+    file_args = ["file", "--brief", path]
+    exec_result = repository_ctx.execute(file_args, quiet = True)
+    if exec_result.return_code != 0:
+        fail("Failed to determine the file type for {path}. stderr:\n{stderr}".format(
+            path = path,
+            stderr = exec_result.stderr,
+        ))
+    return exec_result.stdout.removesuffix("\n")
+
 repository_files = struct(
     copy_directory = _copy_directory,
     exclude_paths = _exclude_paths,
+    file_type = _file_type,
     find_and_delete_files = _find_and_delete_files,
     is_directory = _is_directory,
     list_directories_under = _list_directories_under,
