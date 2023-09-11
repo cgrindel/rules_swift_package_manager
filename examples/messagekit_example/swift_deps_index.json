@@ -23,24 +23,7 @@
       "modulemap_label": "@swiftpkg_kingfisher//:Sources_Kingfisher_modulemap",
       "package_identity": "kingfisher",
       "product_memberships": [
-        "Kingfisher",
-        "KingfisherSwiftUI",
-        "KingfisherDynamic",
-        "KingfisherSwiftUIDynamic",
-        "KingfisherStatic",
-        "KingfisherSwiftUIStatic"
-      ]
-    },
-    {
-      "name": "KingfisherSwiftUI",
-      "c99name": "KingfisherSwiftUI",
-      "src_type": "swift",
-      "label": "@swiftpkg_kingfisher//:Sources_KingfisherSwiftUI",
-      "package_identity": "kingfisher",
-      "product_memberships": [
-        "KingfisherSwiftUI",
-        "KingfisherSwiftUIDynamic",
-        "KingfisherSwiftUIStatic"
+        "Kingfisher"
       ]
     },
     {
@@ -113,46 +96,6 @@
       ]
     },
     {
-      "identity": "kingfisher",
-      "name": "KingfisherDynamic",
-      "type": "library",
-      "target_labels": [
-        "@swiftpkg_kingfisher//:Sources_Kingfisher"
-      ]
-    },
-    {
-      "identity": "kingfisher",
-      "name": "KingfisherStatic",
-      "type": "library",
-      "target_labels": [
-        "@swiftpkg_kingfisher//:Sources_Kingfisher"
-      ]
-    },
-    {
-      "identity": "kingfisher",
-      "name": "KingfisherSwiftUI",
-      "type": "library",
-      "target_labels": [
-        "@swiftpkg_kingfisher//:Sources_KingfisherSwiftUI"
-      ]
-    },
-    {
-      "identity": "kingfisher",
-      "name": "KingfisherSwiftUIDynamic",
-      "type": "library",
-      "target_labels": [
-        "@swiftpkg_kingfisher//:Sources_KingfisherSwiftUI"
-      ]
-    },
-    {
-      "identity": "kingfisher",
-      "name": "KingfisherSwiftUIStatic",
-      "type": "library",
-      "target_labels": [
-        "@swiftpkg_kingfisher//:Sources_KingfisherSwiftUI"
-      ]
-    },
-    {
       "identity": "messagekit",
       "name": "MessageKit",
       "type": "library",
@@ -191,9 +134,9 @@
       "name": "swiftpkg_kingfisher",
       "identity": "kingfisher",
       "remote": {
-        "commit": "1a0c2df04b31ed7aa318354f3583faea24f006fc",
+        "commit": "b6f62758f21a8c03cd64f4009c037cfa580a256e",
         "remote": "https://github.com/onevcat/Kingfisher",
-        "version": "5.15.8"
+        "version": "7.9.1"
       }
     },
     {
