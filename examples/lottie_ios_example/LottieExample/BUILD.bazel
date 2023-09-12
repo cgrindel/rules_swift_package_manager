@@ -41,6 +41,6 @@ ios_application(
     ) + [
         "LottieLogo1.json",
     ],
-    visibility = ["//PaymentSheet:__subpackages__"],
+    visibility = ["//:__subpackages__"],
     deps = [":LottieExample"],
 )
