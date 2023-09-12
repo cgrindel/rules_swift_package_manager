@@ -23,8 +23,6 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
     elif target.module_type == module_types.binary:
-        # GH559: Allow client to control how binary targets are exposed.
-        # return _apple_static_xcframework_import_build_file(target)
         return _xcframework_import_build_file(target, artifact_infos)
 
     # GH046: Support plugins.
