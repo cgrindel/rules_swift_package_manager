@@ -1,0 +1,49 @@
+{
+  "direct_dep_identities": [
+    "lottie-spm"
+  ],
+  "modules": [
+    {
+      "name": "_LottieStub",
+      "c99name": "_LottieStub",
+      "src_type": "swift",
+      "label": "@swiftpkg_lottie_spm//:Sources__LottieStub",
+      "package_identity": "lottie-spm",
+      "product_memberships": [
+        "Lottie"
+      ]
+    },
+    {
+      "name": "Lottie",
+      "c99name": "Lottie",
+      "src_type": "binary",
+      "label": "@swiftpkg_lottie_spm//:remote_archive_Lottie.xcframework.zip_Lottie",
+      "package_identity": "lottie-spm",
+      "product_memberships": [
+        "Lottie"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "identity": "lottie-spm",
+      "name": "Lottie",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_lottie_spm//:remote_archive_Lottie.xcframework.zip_Lottie",
+        "@swiftpkg_lottie_spm//:Sources__LottieStub"
+      ]
+    }
+  ],
+  "packages": [
+    {
+      "name": "swiftpkg_lottie_spm",
+      "identity": "lottie-spm",
+      "remote": {
+        "commit": "60ea4f82fba8b4cb21a75665a889e86ed4d81c6e",
+        "remote": "https://github.com/airbnb/lottie-spm",
+        "version": "4.2.0"
+      }
+    }
+  ]
+}
