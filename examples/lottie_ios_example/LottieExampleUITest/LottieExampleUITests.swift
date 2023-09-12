@@ -20,7 +20,7 @@ final class LottieExampleUITests: XCTestCase {
         // Extremely simple UI test which is designed to run and display the example project
         // This should show if there are any very obvious crashes on render
         let app = XCUIApplication()
-        // // Just make sure that the app does not crash
-        // app.tables.staticTexts["Basic Example"].tap()
+        let running = app.wait(for: .runningForeground, timeout: 300)
+        XCTAssertEqual(running, true, "app is running in the foreground")
     }
 }
