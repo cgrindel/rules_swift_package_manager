@@ -376,10 +376,12 @@ def _xcframework_import_build_file(target, artifact_infos):
     else:
         fail(
             """\
-Unexpected link type for target. target: {}, link_type: {}\
+Unexpected link type for target. target: {target}, link_type: {link_type}, \
+expected: {expected}\
 """.format(
-                target.name,
-                xcframework_ai.link_type,
+                target = target.name,
+                link_type = xcframework_ai.link_type,
+                expected = ", ".join([link_types.static, link_types.dynamic]),
             ),
         )
     glob = scg.new_fn_call(
