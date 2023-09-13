@@ -55,7 +55,10 @@ def _framework_name_from_path(path):
     basename = paths.basename(path)
     (name, ext) = paths.split_extension(basename)
     if ext != ".framework":
-        fail("The path does not point to an Apple framework. path: {}".format(path))
+        fail("""\
+The path does not point to an Apple framework. Please file a bug at \
+https://github.com/cgrindel/rules_swift_package_manager/issues/new/choose. path: {}\
+""".format(path))
     return name
 
 def _new_framework_info_from_files(repository_ctx, path):
