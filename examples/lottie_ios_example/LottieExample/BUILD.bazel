@@ -23,7 +23,7 @@ ios_application(
     name = "iosapp",
     app_icons = glob(["Assets.xcassets/AppIcon.appiconset/**"]),
     bundle_id = "com.airbnb.lottie.Example",
-    entitlements = "Example (iOS).entitlements",
+    entitlements = "Example-iOS.entitlements",
     families = [
         "iphone",
     ],
