@@ -93,8 +93,8 @@ func (rr *RuleResolution) Summary() RuleResolutionSummary {
 
 	sort.Strings(yd.Imports)
 	sort.Strings(yd.Builtins)
-	slices.SortFunc(yd.LocalRes, moduleLabelLess)
-	slices.SortFunc(yd.HTTPArchiveRes, moduleLabelLess)
+	slices.SortFunc(yd.LocalRes, moduleLabelCompare)
+	slices.SortFunc(yd.HTTPArchiveRes, moduleLabelCompare)
 	sort.Strings(yd.Unresolved)
 	sort.Strings(yd.Deps)
 
