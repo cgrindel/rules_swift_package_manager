@@ -23,7 +23,13 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
     elif target.module_type == module_types.binary:
-        return _xcframework_import_build_file(target, artifact_infos)
+        # GH558: Support artifactBundle.
+        xcf_artifact_info = lists.find(
+            artifact_infos,
+            lambda ai: ai.artifiact_type == artifact_types.xcframework,
+        )
+        if xcf_artifact_info != None:
+            return _xcframework_import_build_file(target, xcf_artifact_info)
 
     # GH046: Support plugins.
     return None
@@ -358,19 +364,11 @@ def _system_library_build_file(target):
 
 # MARK: - Apple xcframework Targets
 
-def _xcframework_import_build_file(target, artifact_infos):
-    xcframework_ai = lists.find(
-        artifact_infos,
-        lambda ai: ai.artifiact_type == artifact_types.xcframework,
-    )
-    if xcframework_ai == None:
-        fail("No xcframeworks were found for the target, {}.".format(
-            target.name,
-        ))
-    if xcframework_ai.link_type == link_types.static:
+def _xcframework_import_build_file(target, artifact_info):
+    if artifact_info.link_type == link_types.static:
         load_stmts = [apple_static_xcframework_import_load_stmt]
         kind = apple_kinds.static_xcframework_import
-    elif xcframework_ai.link_type == link_types.dynamic:
+    elif artifact_info.link_type == link_types.dynamic:
         load_stmts = [apple_dynamic_xcframework_import_load_stmt]
         kind = apple_kinds.dynamic_xcframework_import
     else:
@@ -380,7 +378,7 @@ Unexpected link type for target. target: {target}, link_type: {link_type}, \
 expected: {expected}\
 """.format(
                 target = target.name,
-                link_type = xcframework_ai.link_type,
+                link_type = artifact_info.link_type,
                 expected = ", ".join([link_types.static, link_types.dynamic]),
             ),
         )
