@@ -3,7 +3,9 @@
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:versions.bzl", "versions")
+load(":artifact_infos.bzl", "artifact_infos")
 load(":build_files.bzl", "build_files")
+load(":repository_files.bzl", "repository_files")
 load(":spm_versions.bzl", "spm_versions")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
@@ -69,9 +71,19 @@ def _gen_build_files(repository_ctx, pkg_ctx):
         # does not have any product memberships, it is a testonly
         if target.type == "test" or len(target.product_memberships) == 0:
             continue
+        artifact_infos = []
         if target.artifact_download_info != None:
-            _download_artifact(repository_ctx, target.artifact_download_info, target.path)
-        bld_file = swiftpkg_build_files.new_for_target(repository_ctx, pkg_ctx, target)
+            artifact_infos = _download_artifact(
+                repository_ctx,
+                target.artifact_download_info,
+                target.path,
+            )
+        bld_file = swiftpkg_build_files.new_for_target(
+            repository_ctx,
+            pkg_ctx,
+            target,
+            artifact_infos,
+        )
         if bld_file == None:
             continue
         bld_files.append(bld_file)
@@ -102,6 +114,18 @@ def _download_artifact(repository_ctx, artifact_download_info, path):
             url = artifact_download_info.url,
             sha256 = artifact_download_info.checksum,
         ))
+
+    # Collect artifact info about contents of the downloaded artifact
+    xcframework_dirs = repository_files.list_directories_under(
+        repository_ctx,
+        path,
+        max_depth = 1,
+        by_name = "*.xcframework",
+    )
+    return [
+        artifact_infos.new_xcframework_info_from_files(repository_ctx, xf)
+        for xf in xcframework_dirs
+    ]
 
 repo_rules = struct(
     check_spm_version = _check_spm_version,

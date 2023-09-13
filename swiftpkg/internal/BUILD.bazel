@@ -188,8 +188,10 @@ bzl_library(
     srcs = ["repo_rules.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":artifact_infos",
         ":build_files",
         ":pkg_ctxs",
+        ":repository_files",
         ":swiftpkg_build_files",
     ],
 )
@@ -285,6 +287,16 @@ bzl_library(
     deps = [
         "@bazel_skylib//lib:paths",
         "@bazel_skylib//lib:sets",
+    ],
+)
+
+bzl_library(
+    name = "artifact_infos",
+    srcs = ["artifact_infos.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":repository_files",
+        "@bazel_skylib//lib:paths",
     ],
 )
 

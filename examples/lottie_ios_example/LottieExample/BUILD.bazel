@@ -1,0 +1,46 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+# gazelle:swift_default_module_name LottieExample
+
+swift_library(
+    name = "LottieExample",
+    srcs = [
+        "AppDelegate.swift",
+        "SceneDelegate.swift",
+        "ViewController.swift",
+    ],
+    module_name = "LottieExample",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@swiftpkg_lottie_spm//:Sources__LottieStub",
+        "@swiftpkg_lottie_spm//:remote_archive_Lottie.xcframework.zip_Lottie",
+    ],
+)
+
+ios_application(
+    name = "iosapp",
+    app_icons = glob(["Assets.xcassets/AppIcon.appiconset/**"]),
+    bundle_id = "com.airbnb.lottie.Example",
+    entitlements = "Example-iOS.entitlements",
+    families = [
+        "iphone",
+    ],
+    infoplists = [":Info.plist"],
+    launch_storyboard = ":Base.lproj/LaunchScreen.storyboard",
+    minimum_os_version = "13.0",
+    resources = glob(
+        [
+            "Base.lproj/**",
+            "Assets.xcassets/**",
+        ],
+        exclude = [
+            "Assets.xcassets/AppIcon.appiconset/**",
+        ],
+    ) + [
+        "LottieLogo1.json",
+    ],
+    visibility = ["//:__subpackages__"],
+    deps = [":LottieExample"],
+)

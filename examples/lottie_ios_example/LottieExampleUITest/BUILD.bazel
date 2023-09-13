@@ -1,0 +1,22 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_ui_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+# gazelle:swift_default_module_name UITests
+
+swift_library(
+    name = "UITestsLib",
+    testonly = True,
+    srcs = ["LottieExampleUITests.swift"],
+    module_name = "UITests",
+    tags = ["manual"],
+    deps = ["//LottieExample"],
+)
+
+ios_ui_test(
+    name = "LottieExampleUITests",
+    size = "enormous",
+    minimum_os_version = "13.0",
+    runner = "@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_ordered_runner",
+    test_host = "//LottieExample:iosapp",
+    deps = [":UITestsLib"],
+)
