@@ -80,6 +80,6 @@ use_repo(bazel_binaries, "bazel_binaries")
 # DEBUG BEGIN
 local_path_override(
     module_name = "gazelle",
-    path = "/Users/chuck/code/cgrindel/bazel-gazelle/fix_missing_starlark_dep",
+    path = "/Users/chuck/code/cgrindel/bazel-gazelle/master",
 )
 # DEBUG END
