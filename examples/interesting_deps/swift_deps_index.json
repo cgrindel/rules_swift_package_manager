@@ -48,9 +48,9 @@
       "name": "swiftpkg_libwebp_xcode",
       "identity": "libwebp-xcode",
       "remote": {
-        "commit": "1cdddb80ccef6d30e869c4abe1f9f3d3871a25b5",
+        "commit": "b2b1d20a90b14d11f6ef4241da6b81c1d3f171e4",
         "remote": "https://github.com/SDWebImage/libwebp-Xcode.git",
-        "version": "1.3.1"
+        "version": "1.3.2"
       }
     },
     {
