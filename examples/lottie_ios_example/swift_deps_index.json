@@ -40,9 +40,9 @@
       "name": "swiftpkg_lottie_spm",
       "identity": "lottie-spm",
       "remote": {
-        "commit": "60ea4f82fba8b4cb21a75665a889e86ed4d81c6e",
+        "commit": "2ae19d3c4f1603b45e551e6bebf02f523ca22a2e",
         "remote": "https://github.com/airbnb/lottie-spm",
-        "version": "4.2.0"
+        "version": "4.3.0"
       }
     }
   ]
