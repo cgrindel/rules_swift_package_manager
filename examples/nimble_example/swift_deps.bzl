@@ -28,7 +28,7 @@ def swift_dependencies():
     # version: 5.0.1
     swift_package(
         name = "swiftpkg_quick",
-        commit = "494eff9ad74a37047782b0d5d8d84c7ff49a60e4",
+        commit = "ef9aaf3f634b3a1ab6f54f1173fe2400b36e7cb8",
         dependencies_index = "@//:swift_deps_index.json",
         remote = "https://github.com/Quick/Quick",
     )
