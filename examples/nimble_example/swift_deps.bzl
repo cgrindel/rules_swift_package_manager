@@ -20,7 +20,7 @@ def swift_dependencies():
     # version: 10.0.0
     swift_package(
         name = "swiftpkg_nimble",
-        commit = "f552a16f434eef1f18b62985172489f41d37a18e",
+        commit = "edaedc1ec86f14ac6e2ca495b94f0ff7150d98d0",
         dependencies_index = "@//:swift_deps_index.json",
         remote = "https://github.com/Quick/Nimble",
     )
