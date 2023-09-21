@@ -1491,9 +1491,9 @@
       "name": "swiftpkg_vapor",
       "identity": "vapor",
       "remote": {
-        "commit": "03a08f6e88d5ca8c1cfd84f8367b21dfe050d082",
+        "commit": "b70d50470ecf21a2880d125cae2b00f2726699ba",
         "remote": "https://github.com/vapor/vapor.git",
-        "version": "4.81.0"
+        "version": "4.81.1"
       }
     },
     {
