@@ -3,16 +3,17 @@
 ## Table of Contents
 
 <!-- MARKDOWN TOC: BEGIN -->
-* [Why use Gazelle and Go?](#why-use-gazelle-and-go)
-* [Why split the implementation between Go and Starlark?](#why-split-the-implementation-between-go-and-starlark)
-  * [How does the Gazelle plugin for Go handle this?](#how-does-the-gazelle-plugin-for-go-handle-this)
-* [Is the same build file generation logic used for the Go/Gazelle and Starlark implementations?](#is-the-same-build-file-generation-logic-used-for-the-gogazelle-and-starlark-implementations)
-* [Does this replace rules\_spm ?](https://github.com/cgrindel/rules_spm/)
-* [Can I migrate from rules\_spm to rules\_swift\_package\_manager ?](https://github.com/cgrindel/rules_spm/)
-* [Can I just manage my external Swift packages and not generate Bazel build files for my project?](#can-i-just-manage-my-external-swift-packages-and-not-generate-bazel-build-files-for-my-project)
-* [After running //:swift\_update\_pkgs , I see a \.build directory\. What is it? Do I need it?](#after-running-swift_update_pkgs-i-see-a-build-directory-what-is-it-do-i-need-it)
-* [Does the Gazelle plugin run Swift package manager with every execution?](#does-the-gazelle-plugin-run-swift-package-manager-with-every-execution)
-* [Can I store the Swift dependency files in a sub\-package (i\.e\., not in the root of the workspace)?](#can-i-store-the-swift-dependency-files-in-a-sub-package-ie-not-in-the-root-of-the-workspace)
+* [](#table-of-contents)
+* [](#why-use-gazelle-and-go)
+* [](#why-split-the-implementation-between-go-and-starlark)
+  * [](#how-does-the-gazelle-plugin-for-go-handle-this)
+* [](#is-the-same-build-file-generation-logic-used-for-the-gogazelle-and-starlark-implementations)
+* [rules\_spm ?](https://github.com/cgrindel/rules_spm/)
+* [rules\_spm to rules\_swift\_package\_manager ?](https://github.com/cgrindel/rules_spm/)
+* [](#can-i-just-manage-my-external-swift-packages-and-not-generate-bazel-build-files-for-my-project)
+* [](#after-running-swift_update_pkgs-i-see-a-build-directory-what-is-it-do-i-need-it)
+* [](#does-the-gazelle-plugin-run-swift-package-manager-with-every-execution)
+* [](#can-i-store-the-swift-dependency-files-in-a-sub-package-ie-not-in-the-root-of-the-workspace)
 <!-- MARKDOWN TOC: END -->
 
 ## Why use Gazelle and Go?
