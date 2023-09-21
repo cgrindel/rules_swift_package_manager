@@ -6,10 +6,11 @@ by the Swift Bazel repository.
 ## Table of Contents
 
 <!-- MARKDOWN TOC: BEGIN -->
-* [Goals](#goals)
-* [Implementation](#implementation)
-  * [Gazelle Plugin](#gazelle-plugin)
-  * [Repository Rules: swift\_package and local\_swift\_package](#repository-rules-swift_package-and-local_swift_package)
+* [](#table-of-contents)
+* [](#goals)
+* [](#implementation)
+  * [](#gazelle-plugin)
+  * [](#repository-rules-swift_package-and-local_swift_package)
 <!-- MARKDOWN TOC: END -->
 
 ## Goals
