@@ -362,6 +362,25 @@
       ]
     },
     {
+      "name": "_NIOBase64",
+      "c99name": "_NIOBase64",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources__NIOBase64",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils"
+      ]
+    },
+    {
       "name": "_NIOConcurrency",
       "c99name": "_NIOConcurrency",
       "src_type": "swift",
@@ -601,9 +620,9 @@
       "name": "swiftpkg_swift_nio",
       "identity": "swift-nio",
       "remote": {
-        "commit": "cf281631ff10ec6111f2761052aa81896a83a007",
+        "commit": "3db5c4aeee8100d2db6f1eaf3864afdad5dc68fd",
         "remote": "https://github.com/apple/swift-nio.git",
-        "version": "2.58.0"
+        "version": "2.59.0"
       }
     }
   ]
