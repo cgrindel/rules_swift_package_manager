@@ -382,9 +382,16 @@ expected: {expected}\
                 expected = ", ".join([link_types.static, link_types.dynamic]),
             ),
         )
+        
+    target_path = target.path
+    if target.artifact_download_info == None:
+    # Hardcoding "Sources" is obviously unacceptable,
+    # I'm just not sure how to handle it properly 
+        target_path = "Sources"
+
     glob = scg.new_fn_call(
         "glob",
-        ["{tpath}/*.xcframework/**".format(tpath = target.path)],
+        ["{tpath}/*.xcframework/**".format(tpath = target_path)],
     )
     decls = [
         build_decls.new(

@@ -71,18 +71,22 @@ def _gen_build_files(repository_ctx, pkg_ctx):
         # does not have any product memberships, it is a testonly
         if target.type == "test" or len(target.product_memberships) == 0:
             continue
-        artifact_infos = []
+        loaded_artifact_infos = []
         if target.artifact_download_info != None:
-            artifact_infos = _download_artifact(
+            loaded_artifact_infos = _download_artifact(
                 repository_ctx,
                 target.artifact_download_info,
                 target.path,
             )
+        elif target.path != None:
+            loaded_artifact_infos = [
+                artifact_infos.new_xcframework_info_from_files(repository_ctx, target.path)
+            ]
         bld_file = swiftpkg_build_files.new_for_target(
             repository_ctx,
             pkg_ctx,
             target,
-            artifact_infos,
+            loaded_artifact_infos,
         )
         if bld_file == None:
             continue
