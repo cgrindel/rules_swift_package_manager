@@ -1,9 +1,52 @@
 {
   "direct_dep_identities": [
+    "cocoalumberjack",
     "libwebp-xcode",
     "swift-log"
   ],
   "modules": [
+    {
+      "name": "CocoaLumberjack",
+      "c99name": "CocoaLumberjack",
+      "src_type": "objc",
+      "label": "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjack",
+      "package_identity": "cocoalumberjack",
+      "product_memberships": [
+        "CocoaLumberjack",
+        "CocoaLumberjackSwift",
+        "CocoaLumberjackSwiftLogBackend"
+      ]
+    },
+    {
+      "name": "CocoaLumberjackSwift",
+      "c99name": "CocoaLumberjackSwift",
+      "src_type": "swift",
+      "label": "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjackSwift",
+      "package_identity": "cocoalumberjack",
+      "product_memberships": [
+        "CocoaLumberjackSwift"
+      ]
+    },
+    {
+      "name": "CocoaLumberjackSwiftLogBackend",
+      "c99name": "CocoaLumberjackSwiftLogBackend",
+      "src_type": "swift",
+      "label": "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjackSwiftLogBackend",
+      "package_identity": "cocoalumberjack",
+      "product_memberships": [
+        "CocoaLumberjackSwiftLogBackend"
+      ]
+    },
+    {
+      "name": "CocoaLumberjackSwiftSupport",
+      "c99name": "CocoaLumberjackSwiftSupport",
+      "src_type": "clang",
+      "label": "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjackSwiftSupport",
+      "package_identity": "cocoalumberjack",
+      "product_memberships": [
+        "CocoaLumberjackSwift"
+      ]
+    },
     {
       "name": "libwebp",
       "c99name": "libwebp",
@@ -27,6 +70,30 @@
   ],
   "products": [
     {
+      "identity": "cocoalumberjack",
+      "name": "CocoaLumberjack",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjack"
+      ]
+    },
+    {
+      "identity": "cocoalumberjack",
+      "name": "CocoaLumberjackSwift",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjackSwift"
+      ]
+    },
+    {
+      "identity": "cocoalumberjack",
+      "name": "CocoaLumberjackSwiftLogBackend",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjackSwiftLogBackend"
+      ]
+    },
+    {
       "identity": "libwebp-xcode",
       "name": "libwebp",
       "type": "library",
@@ -44,6 +111,15 @@
     }
   ],
   "packages": [
+    {
+      "name": "swiftpkg_cocoalumberjack",
+      "identity": "cocoalumberjack",
+      "remote": {
+        "commit": "67ec5818a757aba4d7c534e21a905d878d128dbf",
+        "remote": "https://github.com/CocoaLumberjack/CocoaLumberjack.git",
+        "version": "3.8.1"
+      }
+    },
     {
       "name": "swiftpkg_libwebp_xcode",
       "identity": "libwebp-xcode",
