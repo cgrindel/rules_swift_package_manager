@@ -42,6 +42,7 @@ swift_deps.from_file(
 )
 use_repo(
     swift_deps,
+    "swiftpkg_cocoalumberjack",
     "swiftpkg_libwebp_xcode",
     "swiftpkg_swift_log",
 )
