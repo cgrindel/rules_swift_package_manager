@@ -1,0 +1,19 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "ShakeIOSExampleTestsLib",
+    testonly = True,
+    srcs = ["ShakeIOSExampleTests.swift"],
+    module_name = "ShakeIOSExampleTests",
+    tags = ["manual"],
+    deps = ["//ShakeIOSExample:ShakeIOSExampleLib"],
+)
+
+ios_unit_test(
+    name = "ShakeIOSExampleTests",
+    size = "enormous",
+    minimum_os_version = "16.0",
+    test_host = "//ShakeIOSExample",
+    deps = [":ShakeIOSExampleTestsLib"],
+)
