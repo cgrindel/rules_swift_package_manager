@@ -1,0 +1,29 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "ShakeIOSExampleLib",
+    srcs = [
+        "ContentView.swift",
+        "ShakeIOSExampleApp.swift",
+    ],
+    module_name = "ShakeIOSExample",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+)
+
+ios_application(
+    name = "App",
+    app_icons = glob(["Assets.xcassets/AppIcon.appiconset/**"]),
+    bundle_id = "com.exampel.ShakeIOSExample",
+    families = [
+        "iphone",
+    ],
+    infoplists = [":Info.plist"],
+    minimum_os_version = "16.0",
+    resources = glob(
+        ["Assets.xcassets/**"],
+        exclude = ["Assets.xcassets/AppIcon.appiconset/**"],
+    ),
+    deps = [":ShakeIOSExampleLib"],
+)
