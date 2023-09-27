@@ -61,6 +61,7 @@ def _find_magical_public_hdr_dir(path):
 
     def _extract_dir(sub, index):
         # The -1 is to exclude the trailing slash.
+        # buildifier: disable=uninitialized
         end_idx = index + len(sub) - 1
         return path[:end_idx]
 
