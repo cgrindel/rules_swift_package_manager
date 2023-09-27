@@ -1,0 +1,22 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_ui_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "ShakeIOSExampleUITestsLib",
+    testonly = True,
+    srcs = [
+        "ShakeIOSExampleUITests.swift",
+        "ShakeIOSExampleUITestsLaunchTests.swift",
+    ],
+    module_name = "ShakeIOSExampleUITests",
+    tags = ["manual"],
+)
+
+ios_ui_test(
+    name = "ShakeIOSExampleUITests",
+    size = "enormous",
+    minimum_os_version = "16.0",
+    runner = "@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_ordered_runner",
+    test_host = "//ShakeIOSExample",
+    deps = [":ShakeIOSExampleUITestsLib"],
+)
