@@ -1,14 +1,12 @@
-//
-//  ShakeIOSExampleApp.swift
-//  ShakeIOSExample
-//
-//  Created by Chuck Grindel on 9/27/23.
-//
-
+import Shake
 import SwiftUI
 
 @main
 struct ShakeIOSExampleApp: App {
+    init() {
+        Shake.start(clientId: "_client_id_", clientSecret: "_client_secret_")
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()
