@@ -272,17 +272,20 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     # to cc_XXX that depend upon the library.  Providing includes as -I
     # only provides the includes for this target.
     # https://bazel.build/reference/be/c-cpp#cc_library.includes
-    local_includes_transform = lambda p: "-I{}".format(
-        paths.normalize(paths.join(ext_repo_path, p)),
-    )
+    def _local_includes_transform(p):
+        # Normalize the path and replace spaces with an escape sequence.
+        normalized = paths.normalize(paths.join(ext_repo_path, p))
+        normalized = normalized.replace(" ", "\\ ")
+        return "-I{}".format(normalized)
+
     attrs["copts"] = bzl_selects.to_starlark(
         copts,
         kind_handlers = {
             _condition_kinds.header_search_path: bzl_selects.new_kind_handler(
-                transform = local_includes_transform,
+                transform = _local_includes_transform,
             ),
             _condition_kinds.private_includes: bzl_selects.new_kind_handler(
-                transform = local_includes_transform,
+                transform = _local_includes_transform,
             ),
         },
     )

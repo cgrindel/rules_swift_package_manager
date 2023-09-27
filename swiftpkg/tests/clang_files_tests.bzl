@@ -134,6 +134,49 @@ def _is_under_path_test(ctx):
 
 is_under_path_test = unittest.make(_is_under_path_test)
 
+def _find_magical_public_hdr_dir_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "include at beginning",
+            path = "include/",
+            exp = "include",
+        ),
+        struct(
+            msg = "include in the middle",
+            path = "path/to/include/foo",
+            exp = "path/to/include",
+        ),
+        struct(
+            msg = "include part of name",
+            path = "path/to/bar_include/foo",
+            exp = None,
+        ),
+        struct(
+            msg = "public at beginning",
+            path = "public/",
+            exp = "public",
+        ),
+        struct(
+            msg = "public in the middle",
+            path = "path/to/public/foo",
+            exp = "path/to/public",
+        ),
+        struct(
+            msg = "public part of name",
+            path = "path/to/bar_public/foo",
+            exp = None,
+        ),
+    ]
+    for t in tests:
+        actual = clang_files.find_magical_public_hdr_dir(t.path)
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+find_magical_public_hdr_dir_test = unittest.make(_find_magical_public_hdr_dir_test)
+
 def clang_files_test_suite():
     return unittest.suite(
         "clang_files_tests",
@@ -142,4 +185,5 @@ def clang_files_test_suite():
         is_public_modulemap_test,
         relativize_test,
         is_under_path_test,
+        find_magical_public_hdr_dir_test,
     )

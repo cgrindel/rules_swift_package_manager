@@ -12,7 +12,7 @@ local_path_override(
     path = "../..",
 )
 
-bazel_dep(name = "cgrindel_bazel_starlib", version = "0.17.0")
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.18.0")
 bazel_dep(name = "bazel_skylib", version = "1.4.2")
 bazel_dep(
     name = "rules_swift",
@@ -42,6 +42,7 @@ swift_deps.from_file(
 )
 use_repo(
     swift_deps,
+    "swiftpkg_cocoalumberjack",
     "swiftpkg_libwebp_xcode",
     "swiftpkg_swift_log",
 )

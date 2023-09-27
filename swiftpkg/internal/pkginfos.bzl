@@ -843,8 +843,16 @@ def _new_clang_src_info_from_sources(
     else:
         src_paths = [abs_target_path]
 
+    def _format_exclude_path(ep):
+        abs_path = paths.normalize(paths.join(abs_target_path, ep))
+        if repository_files.is_directory(repository_ctx, abs_path):
+            # The trailing slash tells repository_files.list_files_under() to
+            # exclude any files that start with the path.
+            abs_path += "/"
+        return abs_path
+
     abs_exclude_paths = [
-        paths.normalize(paths.join(abs_target_path, ep))
+        _format_exclude_path(ep)
         for ep in exclude_paths
     ]
 
