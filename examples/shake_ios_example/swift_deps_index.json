@@ -1,7 +1,6 @@
 {
   "direct_dep_identities": [
-    "shake-ios",
-    "swift-log"
+    "shake-ios"
   ],
   "modules": [
     {
@@ -13,16 +12,6 @@
       "product_memberships": [
         "Shake"
       ]
-    },
-    {
-      "name": "Logging",
-      "c99name": "Logging",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_log//:Sources_Logging",
-      "package_identity": "swift-log",
-      "product_memberships": [
-        "Logging"
-      ]
     }
   ],
   "products": [
@@ -32,14 +21,6 @@
       "type": "library",
       "target_labels": [
         "@swiftpkg_shake_ios//:Sources_Shake.xcframework_Shake"
-      ]
-    },
-    {
-      "identity": "swift-log",
-      "name": "Logging",
-      "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_log//:Sources_Logging"
       ]
     }
   ],
@@ -51,15 +32,6 @@
         "commit": "d733778c5b5d98adea1a0cd61ef96dcac8374132",
         "remote": "https://github.com/shakebugs/shake-ios",
         "version": "16.2.2"
-      }
-    },
-    {
-      "name": "swiftpkg_swift_log",
-      "identity": "swift-log",
-      "remote": {
-        "commit": "532d8b529501fb73a2455b179e0bbb6d49b652ed",
-        "remote": "https://github.com/apple/swift-log",
-        "version": "1.5.3"
       }
     }
   ]

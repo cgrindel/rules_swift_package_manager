@@ -42,6 +42,5 @@ swift_deps.from_file(
 use_repo(
     swift_deps,
     "swiftpkg_shake_ios",
-    "swiftpkg_swift_log",
 )
 # swift_deps END
