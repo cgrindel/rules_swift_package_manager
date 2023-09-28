@@ -62,6 +62,8 @@ jobs:
             runner: macos-13
           - test: '@@//examples:resources_example_test_bazel_.bazelversion'
             runner: macos-13
+          - test: '@@//examples:shake_ios_example_test_bazel_.bazelversion'
+            runner: macos-13
           - test: '@@//examples:snapkit_example_test_bazel_.bazelversion'
             runner: macos-13
           - test: '@@//examples:soto_example_test_bazel_.bazelversion'

@@ -5,6 +5,7 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:versions.bzl", "versions")
 load(":artifact_infos.bzl", "artifact_infos")
 load(":build_files.bzl", "build_files")
+load(":pkginfos.bzl", "target_types")
 load(":repository_files.bzl", "repository_files")
 load(":spm_versions.bzl", "spm_versions")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
@@ -71,13 +72,21 @@ def _gen_build_files(repository_ctx, pkg_ctx):
         # does not have any product memberships, it is a testonly
         if target.type == "test" or len(target.product_memberships) == 0:
             continue
+
         artifact_infos = []
-        if target.artifact_download_info != None:
-            artifact_infos = _download_artifact(
-                repository_ctx,
-                target.artifact_download_info,
-                target.path,
-            )
+        if target.type == target_types.binary:
+            if target.artifact_download_info != None:
+                artifact_infos = _download_artifact(
+                    repository_ctx,
+                    target.artifact_download_info,
+                    target.path,
+                )
+            else:
+                artifact_infos = _artifact_infos_from_path(
+                    repository_ctx,
+                    target.path,
+                )
+
         bld_file = swiftpkg_build_files.new_for_target(
             repository_ctx,
             pkg_ctx,
@@ -103,6 +112,22 @@ workspace(name = "{}")
 """.format(repo_name)
     repository_ctx.file(path, content = content, executable = False)
 
+def _artifact_infos_from_path(repository_ctx, path):
+    if path.endswith(".xcframework"):
+        xcframework_dirs = [path]
+    else:
+        # Collect artifact info about contents of the downloaded artifact
+        xcframework_dirs = repository_files.list_directories_under(
+            repository_ctx,
+            path,
+            max_depth = 1,
+            by_name = "*.xcframework",
+        )
+    return [
+        artifact_infos.new_xcframework_info_from_files(repository_ctx, xf)
+        for xf in xcframework_dirs
+    ]
+
 def _download_artifact(repository_ctx, artifact_download_info, path):
     result = repository_ctx.download_and_extract(
         url = artifact_download_info.url,
@@ -114,18 +139,7 @@ def _download_artifact(repository_ctx, artifact_download_info, path):
             url = artifact_download_info.url,
             sha256 = artifact_download_info.checksum,
         ))
-
-    # Collect artifact info about contents of the downloaded artifact
-    xcframework_dirs = repository_files.list_directories_under(
-        repository_ctx,
-        path,
-        max_depth = 1,
-        by_name = "*.xcframework",
-    )
-    return [
-        artifact_infos.new_xcframework_info_from_files(repository_ctx, xf)
-        for xf in xcframework_dirs
-    ]
+    return _artifact_infos_from_path(repository_ctx, path)
 
 repo_rules = struct(
     check_spm_version = _check_spm_version,
