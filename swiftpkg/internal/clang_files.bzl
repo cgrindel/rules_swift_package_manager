@@ -45,11 +45,36 @@ def _is_include_hdr(path, public_includes = None):
                 include_path += "/"
             if path.startswith(include_path):
                 return True
-    else:
-        for dirname in _PUBLIC_HDR_DIRNAMES:
-            if (path.find("/%s/" % dirname) > -1) or path.startswith("%s/" % dirname):
-                return True
+    elif _find_magical_public_hdr_dir(path) != None:
+        return True
     return False
+
+def _find_magical_public_hdr_dir(path):
+    """Returns the magical public header path, if found.
+
+    Args:
+        path: A path `string` value.
+
+    Returns:
+        The magical public header path, if found. Otherwise, returns None.
+    """
+
+    def _extract_dir(sub, index):
+        # The -1 is to exclude the trailing slash.
+        # buildifier: disable=uninitialized
+        end_idx = index + len(sub) - 1
+        return path[:end_idx]
+
+    for dirname in _PUBLIC_HDR_DIRNAMES:
+        embedded_dir_sub = "/{}/".format(dirname)
+        index = path.rfind(embedded_dir_sub)
+        if index > -1:
+            return _extract_dir(embedded_dir_sub, index)
+        starts_dir_sub = "{}/".format(dirname)
+        if path.startswith(starts_dir_sub):
+            return _extract_dir(starts_dir_sub, 0)
+
+    return None
 
 def _is_public_modulemap(path):
     """Determines whether the specified path is to a public `module.modulemap` file.
@@ -231,9 +256,16 @@ def _collect_files(
         srcs_set = sets.difference(srcs_set, hdrs_set)
 
     # If public includes were specified, then use them. Otherwise, add every
-    # directory that holds a public header file
+    # directory that holds a public header file and add any magical public
+    # header directories that we find.
     if len(public_includes) == 0:
         public_includes = [paths.dirname(hdr) for hdr in sets.to_list(hdrs_set)]
+        magical_public_hdr_dirs = []
+        for pi in public_includes:
+            magical_public_hdr_dir = clang_files.find_magical_public_hdr_dir(pi)
+            if magical_public_hdr_dir != None:
+                magical_public_hdr_dirs.append(magical_public_hdr_dir)
+        public_includes.extend(magical_public_hdr_dirs)
 
     public_includes = _relativize_paths(public_includes, relative_to)
     public_includes_set = sets.make(public_includes)
@@ -270,6 +302,7 @@ def _collect_files(
 
 clang_files = struct(
     collect_files = _collect_files,
+    find_magical_public_hdr_dir = _find_magical_public_hdr_dir,
     get_hdr_paths_from_modulemap = _get_hdr_paths_from_modulemap,
     is_hdr = _is_hdr,
     is_include_hdr = _is_include_hdr,

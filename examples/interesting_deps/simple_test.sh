@@ -21,7 +21,7 @@ print_location=interesting_deps_example/print
 binary="$(rlocation "${print_location}")" || \
   (echo >&2 "Failed to locate ${print_location}" && exit 1)
 
-output="$( "${binary}" )"
+output="$( "${binary}" 2>&1 )"
 
 expected="Hello World"
 echo "${output}" | grep "${expected}" || err_msg "Failed to find expected output. ${expected}"
