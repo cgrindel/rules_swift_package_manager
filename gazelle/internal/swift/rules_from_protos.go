@@ -9,7 +9,7 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/rule"
 )
 
-// RulesFromSrcs returns the Bazel build rule declarations for the provided source files.
+// RulesFromProtos returns the Bazel build rule declarations for the provided source files.
 func RulesFromProtos(args language.GenerateArgs) []*rule.Rule {
 
 	// Extract information about proto files.

@@ -127,11 +127,13 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 const moduleNamingConventionDirective = "swift_module_naming_convention"
 const defaultModuleNameDirective = "swift_default_module_name"
+const swiftLibraryManualTag = "swift_library_manual_tag"
 
 func (*swiftLang) KnownDirectives() []string {
 	return []string{
 		moduleNamingConventionDirective,
 		defaultModuleNameDirective,
+		swiftLibraryManualTag,
 	}
 }
 
@@ -148,6 +150,8 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 			} else {
 				sc.ModuleNamingConvention = swiftcfg.MatchCaseModuleNamingConvention
 			}
+		case swiftLibraryManualTag:
+			sc.SwiftLibraryManualTagDisabled = d.Value == "disabled"
 		case defaultModuleNameDirective:
 			sc.DefaultModuleNames[rel] = d.Value
 		}

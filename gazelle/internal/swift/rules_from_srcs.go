@@ -15,6 +15,7 @@ func RulesFromSrcs(
 	srcs []string,
 	defaultName string,
 	defaultModuleName string,
+	swiftLibraryManualTagDisabled bool,
 ) []*rule.Rule {
 	fileInfos := swiftpkg.NewSwiftFileInfosFromRelPaths(args.Dir, srcs)
 	swiftImports, moduleType := collectSwiftInfo(fileInfos)
@@ -24,7 +25,7 @@ func RulesFromSrcs(
 	var rules []*rule.Rule
 	switch moduleType {
 	case LibraryModuleType:
-		rules = rulesForLibraryModule(defaultName, defaultModuleName, srcs, swiftImports, shouldSetVis, args.File)
+		rules = rulesForLibraryModule(defaultName, defaultModuleName, srcs, swiftImports, shouldSetVis, swiftLibraryManualTagDisabled, args.File)
 	case BinaryModuleType:
 		rules = rulesForBinaryModule(defaultName, defaultModuleName, srcs, swiftImports, shouldSetVis, args.File)
 	case TestModuleType:
