@@ -60,11 +60,11 @@ func (sc *SourceControl) UnmarshalJSON(b []byte) error {
 	return nil
 }
 
-type sourceControlLocationXcode15 struct {
+type sourceControlLocationSwift59 struct {
 	Remote []*RemoteLocation
 }
 
-type sourceControlLocationXcode14 struct {
+type sourceControlLocationSwift58 struct {
 	Remote *RemoteLocation
 }
 
@@ -75,25 +75,25 @@ type SourceControlLocation struct {
 
 func (scl *SourceControlLocation) UnmarshalJSON(b []byte) error {
 
-	// Try the Xcode 15 format first:
-	var sclx15 sourceControlLocationXcode15
-	err := json.Unmarshal(b, &sclx15)
+	// Try the Swift 5.9 format first:
+	var scls59 sourceControlLocationSwift59
+	err := json.Unmarshal(b, &scls59)
 	if err == nil {
-		if len(sclx15.Remote) == 0 {
+		if len(scls59.Remote) == 0 {
 			return errors.New("source control location missing remote")
 		}
-		scl.Remote = sclx15.Remote[0]
+		scl.Remote = scls59.Remote[0]
 		return nil
 	}
 	err = nil
 
-	// Failing that, try the Xcode 14 format:
-	var sclx14 sourceControlLocationXcode14
-	err = json.Unmarshal(b, &sclx14)
+	// Failing that, try the Swift 5.8 format:
+	var scls58 sourceControlLocationSwift58
+	err = json.Unmarshal(b, &scls58)
 	if err != nil {
 		return err
 	}
-	scl.Remote = sclx14.Remote
+	scl.Remote = scls58.Remote
 
 	return nil
 }
@@ -103,14 +103,14 @@ type RemoteLocation struct {
 	URL string
 }
 
-type remoteLocationXcode15 struct {
+type remoteLocationSwift59 struct {
 	URLString string `json:"urlString"`
 }
 
 func (rl *RemoteLocation) UnmarshalJSON(b []byte) error {
 
-	// Try the Xcode 15 format first:
-	var x15 remoteLocationXcode15
+	// Try the Swift 5.9 format first:
+	var x15 remoteLocationSwift59
 	err := json.Unmarshal(b, &x15)
 	if err == nil {
 		rl.URL = x15.URLString
@@ -118,7 +118,7 @@ func (rl *RemoteLocation) UnmarshalJSON(b []byte) error {
 	}
 	err = nil
 
-	// Fall back to the Xcode 14 format if that failed:
+	// Fall back to the Swift 5.8 format if that failed:
 	var raw []any
 	err = json.Unmarshal(b, &raw)
 	if err != nil {
