@@ -4,6 +4,7 @@ import (
 	"flag"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -127,13 +128,13 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 const moduleNamingConventionDirective = "swift_module_naming_convention"
 const defaultModuleNameDirective = "swift_default_module_name"
-const swiftLibraryManualTag = "swift_library_manual_tag"
+const swiftLibraryTags = "swift_library_tags"
 
 func (*swiftLang) KnownDirectives() []string {
 	return []string{
 		moduleNamingConventionDirective,
 		defaultModuleNameDirective,
-		swiftLibraryManualTag,
+		swiftLibraryTags,
 	}
 }
 
@@ -150,8 +151,16 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 			} else {
 				sc.ModuleNamingConvention = swiftcfg.MatchCaseModuleNamingConvention
 			}
-		case swiftLibraryManualTag:
-			sc.SwiftLibraryManualTagDisabled = d.Value == "disabled"
+		case swiftLibraryTags:
+			var tags []string
+			if d.Value == "" {
+				tags = []string{"manual"}
+			} else if d.Value == "-" {
+				tags = nil
+			} else {
+				tags = strings.Split(d.Value, ",")
+			}
+			sc.SwiftLibraryTags = tags
 		case defaultModuleNameDirective:
 			sc.DefaultModuleNames[rel] = d.Value
 		}

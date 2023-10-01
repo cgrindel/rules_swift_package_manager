@@ -14,18 +14,15 @@ func rulesForLibraryModule(
 	srcs []string,
 	swiftImports []string,
 	shouldSetVis bool,
-	swiftLibraryManualTagDisabled bool,
+	swiftLibraryTags []string,
 	buildFile *rule.File,
 ) []*rule.Rule {
 	name, moduleName := ruleNameAndModuleName(buildFile, LibraryRuleKind, defaultName, defaultModuleName)
 	r := rule.NewRule(LibraryRuleKind, name)
 	setCommonSwiftAttrs(r, moduleName, srcs, swiftImports)
 	setVisibilityAttr(r, shouldSetVis, []string{"//visibility:public"})
-	if !swiftLibraryManualTagDisabled {
-		// Mark swift_library targets as manual. We do this so that they are always
-		// built from a leaf node which can provide critical configuration
-		// information.
-		r.SetAttr("tags", []string{"manual"})
+	if len(swiftLibraryTags) > 0 {
+		r.SetAttr("tags", swiftLibraryTags)
 	}
 
 	return []*rule.Rule{r}
