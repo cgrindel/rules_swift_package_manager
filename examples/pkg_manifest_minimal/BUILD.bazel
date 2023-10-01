@@ -14,6 +14,7 @@ tidy(
 
 # Ignore the Swift build folder
 # gazelle:exclude .build
+# gazelle:swift_library_tags -
 
 gazelle_binary(
     name = "gazelle_bin",
