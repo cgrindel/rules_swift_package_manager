@@ -33,6 +33,13 @@ def _parse_for_imported_framework_test(ctx):
             exp = "CoreTelephony",
         ),
         struct(
+            msg = "#    import, the pound is not adjacent to import ",
+            line = """\
+#    import <SystemConfiguration/SystemConfiguration.h>
+""",
+            exp = "SystemConfiguration",
+        ),
+        struct(
             msg = "#import dir/header with brackets, is not framework",
             line = """\
 #import <Foo/Foo.h>

@@ -5,17 +5,32 @@ load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load(":apple_builtin_frameworks.bzl", "apple_builtin_frameworks")
 
-_pound_import = "#import "
-_pound_import_len = len(_pound_import)
 _at_import = "@import "
 _at_import_len = len(_at_import)
 
 def _parse_pound_import(line):
-    import_idx = line.find(_pound_import)
-    if import_idx < 0:
-        return None
-    start_idx = import_idx + _pound_import_len
     line_len = len(line)
+
+    # Find the pound sign
+    pound_idx = line.find("#")
+    if pound_idx < 0:
+        return None
+    start_idx = pound_idx + 1
+
+    # Find import
+    begin_of_import_idx = -1
+    for idx in range(start_idx, line_len):
+        char = line[idx]
+        if char == " " or char == "\t":
+            continue
+        elif char == "i":
+            begin_of_import_idx = idx
+            break
+        else:
+            return None
+    if not line[begin_of_import_idx:].startswith("import"):
+        return None
+    start_idx = begin_of_import_idx + len("import")
 
     # Find the opening bracket
     open_bracket_idx = -1
