@@ -14,6 +14,8 @@ tidy(
 
 # Ignore the Swift build folder
 # gazelle:exclude .build
+
+# Omit tags = ["manual"] from the generated swift library targets
 # gazelle:swift_library_tags -
 
 gazelle_binary(

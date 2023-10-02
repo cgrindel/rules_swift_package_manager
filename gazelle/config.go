@@ -154,6 +154,9 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 		case swiftLibraryTags:
 			var tags []string
 			if d.Value == "" {
+				// Mark swift_library targets as manual.
+				// We do this so that they are always built as a dependency of a target
+				// which can provide critical configuration information.
 				tags = []string{"manual"}
 			} else if d.Value == "-" {
 				tags = nil
