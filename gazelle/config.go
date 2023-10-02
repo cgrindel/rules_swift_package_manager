@@ -4,6 +4,7 @@ import (
 	"flag"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -127,11 +128,13 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 const moduleNamingConventionDirective = "swift_module_naming_convention"
 const defaultModuleNameDirective = "swift_default_module_name"
+const swiftLibraryTags = "swift_library_tags"
 
 func (*swiftLang) KnownDirectives() []string {
 	return []string{
 		moduleNamingConventionDirective,
 		defaultModuleNameDirective,
+		swiftLibraryTags,
 	}
 }
 
@@ -148,6 +151,19 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 			} else {
 				sc.ModuleNamingConvention = swiftcfg.MatchCaseModuleNamingConvention
 			}
+		case swiftLibraryTags:
+			var tags []string
+			if d.Value == "" {
+				// Mark swift_library targets as manual.
+				// We do this so that they are always built as a dependency of a target
+				// which can provide critical configuration information.
+				tags = []string{"manual"}
+			} else if d.Value == "-" {
+				tags = nil
+			} else {
+				tags = strings.Split(d.Value, ",")
+			}
+			sc.SwiftLibraryTags = tags
 		case defaultModuleNameDirective:
 			sc.DefaultModuleNames[rel] = d.Value
 		}

@@ -65,7 +65,7 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 
 	// Generate the rules from sources:
 	defaultName, defaultModuleName := defaultNameAndModuleName(args)
-	rules = swift.RulesFromSrcs(args, srcs, defaultName, defaultModuleName)
+	rules = swift.RulesFromSrcs(args, srcs, defaultName, defaultModuleName, sc.SwiftLibraryTags)
 	result.Gen = append(result.Gen, rules...)
 	result.Imports = swift.Imports(result.Gen)
 	result.Empty = generateEmpty(args, srcs)

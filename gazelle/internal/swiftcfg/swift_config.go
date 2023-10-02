@@ -43,7 +43,13 @@ type SwiftConfig struct {
 
 	GenerateSwiftDepsForWorkspace bool
 
+	// The naming convention to apply to the module names derived from the directory names.
+	// The default behavior uses the name verbatim while PascalCase will convert snake_case to PascalCase.
 	ModuleNamingConvention string
+
+	// The set of tags to apply to generated swift library targets.
+	// Defaults to ["manual"]
+	SwiftLibraryTags []string
 
 	// Mapping of relative path to default module name. These values are populated from directives
 	// that can be applied to
