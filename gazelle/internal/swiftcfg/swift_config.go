@@ -48,7 +48,7 @@ type SwiftConfig struct {
 	ModuleNamingConvention string
 
 	// The set of tags to apply to generated swift library targets.
-	// Defailts to ["manual"]
+	// Defaults to ["manual"]
 	SwiftLibraryTags []string
 
 	// Mapping of relative path to default module name. These values are populated from directives
