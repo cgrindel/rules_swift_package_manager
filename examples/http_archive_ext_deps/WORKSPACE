@@ -72,9 +72,9 @@ swift_rules_extra_dependencies()
 http_archive(
     name = "com_github_apple_swift_collections",
     build_file = "@//third_party:swift_collections.BUILD.bazel",
-    sha256 = "d9e4c8a91c60fb9c92a04caccbb10ded42f4cb47b26a212bc6b39cc390a4b096",
-    strip_prefix = "swift-collections-1.0.4",
-    url = "https://github.com/apple/swift-collections/archive/refs/tags/1.0.4.tar.gz",
+    sha256 = "d0f584b197860db26fd939175c9d1a7badfe7b89949b4bd52d4f626089776e0a",
+    strip_prefix = "swift-collections-1.0.5",
+    url = "https://github.com/apple/swift-collections/archive/refs/tags/1.0.5.tar.gz",
 )
 
 # Example of defining Swift targets inline.
