@@ -780,12 +780,19 @@ def _new_swift_src_info_from_sources(repository_ctx, target_path, sources):
         target_path,
     )
 
+    # Identify the directories
+    directories = repository_files.list_directories_under(
+        repository_ctx,
+        target_path,
+    )
+    dirs_set = sets.make(directories)
+
     # The paths should be relative to the target not the root of the workspace.
     # Do not include directories in the output.
     discovered_res_files = [
         f
         for f in all_target_files
-        if not repository_files.is_directory(repository_ctx, f) and
+        if not sets.contains(dirs_set, f) and
            resource_files.is_auto_discovered_resource(f)
     ]
 
