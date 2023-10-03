@@ -162,8 +162,6 @@ def _copy_directory(repository_ctx, src, dest):
         ],
     )
 
-# GH582: Refactor _is_directory to be like _path_exists.
-
 def _is_directory(repository_ctx, path):
     """Determine if the provided path is a directory.
 
@@ -174,20 +172,11 @@ def _is_directory(repository_ctx, path):
     Returns:
         A `bool` specifying whether the path is a directory.
     """
-    args = ["bash", "-c", "if [[ -d ${TARGET_PATH} ]]; then echo TRUE; else echo FALSE; fi"]
     exec_result = repository_ctx.execute(
-        args,
-        environment = {"TARGET_PATH": path},
+        ["test", "-d", path],
         quiet = True,
     )
-    if exec_result.return_code != 0:
-        fail("Failed while checking if '{path}' is a directory. stderr:\n{stderr}".format(
-            path = path,
-            stderr = exec_result.stderr,
-        ))
-    if exec_result.stdout.find("TRUE") >= 0:
-        return True
-    return False
+    return exec_result.return_code == 0
 
 def _file_type(repository_ctx, path):
     """Output the file type.
