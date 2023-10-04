@@ -10,5 +10,8 @@ try-import %workspace%/../../local.bazelrc
 # The CNIOBoringSSL uses C++14 features like 'enable_if_t' macro support.
 # For more details on how to enable this in Bazel: 
 # https://stackoverflow.com/questions/40260242/how-to-set-c-standard-version-when-build-with-bazel/43388168#43388168
+#
+# # Required by swift-crypto
+# build --cxxopt='-std=c++11'
+# Required by swift-nio-ssl
 build --cxxopt='-std=c++14'
-
