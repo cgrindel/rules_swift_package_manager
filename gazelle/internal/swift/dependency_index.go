@@ -142,6 +142,10 @@ func (di *DependencyIndex) DirectDepPackages() []*Package {
 	return results
 }
 
+func (di *DependencyIndex) Packages() []*Package {
+	return di.packageIndex.Packages()
+}
+
 // Resolve
 
 type ModuleResolutionResult struct {
