@@ -121,8 +121,11 @@
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseAppCheck_Interop_FirebaseAppCheckInterop",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
+        "FirebaseAppCheck",
         "FirebaseFunctionsCombine-Community",
         "FirebaseStorageCombine-Community",
+        "FirebaseDatabase",
+        "FirebaseDatabaseSwift",
         "FirebaseFunctions",
         "FirebaseStorage"
       ]
@@ -1548,18 +1551,18 @@
       "name": "swiftpkg_firebase_ios_sdk",
       "identity": "firebase-ios-sdk",
       "remote": {
-        "commit": "8a8ec57a272e0d31480fb0893dda0cf4f769b57e",
+        "commit": "837d4af6ead57cec1fc38007892500d3139c7556",
         "remote": "https://github.com/firebase/firebase-ios-sdk",
-        "version": "10.15.0"
+        "version": "10.16.0"
       }
     },
     {
       "name": "swiftpkg_googleappmeasurement",
       "identity": "googleappmeasurement",
       "remote": {
-        "commit": "03b9beee1a61f62d32c521e172e192a1663a5e8b",
+        "commit": "56f681586ff006a7982b53dc94082eea31971acf",
         "remote": "https://github.com/google/GoogleAppMeasurement.git",
-        "version": "10.13.0"
+        "version": "10.16.0"
       }
     },
     {
@@ -1584,9 +1587,9 @@
       "name": "swiftpkg_grpc_binary",
       "identity": "grpc-binary",
       "remote": {
-        "commit": "f1b366129d1125be7db83247e003fc333104b569",
+        "commit": "a673bc2937fbe886dd1f99c401b01b6d977a9c98",
         "remote": "https://github.com/google/grpc-binary.git",
-        "version": "1.50.2"
+        "version": "1.49.1"
       }
     },
     {
