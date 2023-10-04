@@ -35,11 +35,17 @@ func NewPackageFromBazelRepo(
 	patch *Patch,
 ) (*Package, error) {
 	var err error
+	cLangStd := ""
+	cxxLangStd := ""
+	if bzlRepo.PkgInfo != nil {
+		cLangStd = bzlRepo.PkgInfo.CLanguageStandard
+		cxxLangStd = bzlRepo.PkgInfo.CxxLanguageStandard
+	}
 	p := Package{
 		Name:                bzlRepo.Name,
 		Identity:            bzlRepo.Identity,
-		CLanguageStandard:   bzlRepo.PkgInfo.CLanguageStandard,
-		CxxLanguageStandard: bzlRepo.PkgInfo.CxxLanguageStandard,
+		CLanguageStandard:   cLangStd,
+		CxxLanguageStandard: cxxLangStd,
 	}
 	if bzlRepo.Pin != nil {
 		p.Remote, err = remotePackageFromPin(bzlRepo.Name, bzlRepo.Pin)
