@@ -1432,7 +1432,8 @@
         "commit": "75ec60b8b4cc0f085c3ac414f3dca5625fa3588e",
         "remote": "https://github.com/apple/swift-crypto.git",
         "version": "2.2.4"
-      }
+      },
+      "cxxLanguageStandard": "c++11"
     },
     {
       "name": "swiftpkg_swift_log",
@@ -1486,7 +1487,8 @@
         "commit": "320bd978cceb8e88c125dcbb774943a92f6286e9",
         "remote": "https://github.com/apple/swift-nio-ssl.git",
         "version": "2.25.0"
-      }
+      },
+      "cxxLanguageStandard": "c++14"
     },
     {
       "name": "swiftpkg_swift_nio_transport_services",

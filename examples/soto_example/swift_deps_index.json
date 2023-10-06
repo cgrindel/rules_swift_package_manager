@@ -7228,7 +7228,8 @@
         "commit": "4fb7ead803e38949eb1d6fabb849206a72c580f3",
         "remote": "https://github.com/apple/swift-nio-ssl.git",
         "version": "2.23.0"
-      }
+      },
+      "cxxLanguageStandard": "c++14"
     },
     {
       "name": "swiftpkg_swift_nio_transport_services",

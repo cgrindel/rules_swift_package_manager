@@ -7,11 +7,14 @@ import %workspace%/../../ci.bazelrc
 # Try to import a local.rc file; typically, written by CI
 try-import %workspace%/../../local.bazelrc
 
-# Per https://github.com/firebase/firebase-ios-sdk/blob/master/Package.swift#L1322-L1323
 # NOTE: Puposefully not specifying --copt='-std=c99' as it is applied to 
 # objc_library targets that contain Objective-C++ files. Tried using 
 # --per_file_copt to exclude .mm files, but did not have success.
 # https://stackoverflow.com/questions/40260242/how-to-set-c-standard-version-when-build-with-bazel/43388168#43388168
+#
+# # Required by firebase-ios-sdk, googleappmeasurement, googledatatransport, googleutilities
+# build --copt='-std=c99'
+# Required by firebase-ios-sdk, googleappmeasurement, googledatatransport, googleutilities, leveldb
 build --cxxopt='-std=gnu++14'
 
 # Firebase SPM support requires `-ObjC` linker option.

@@ -8,10 +8,12 @@ import (
 )
 
 type Package struct {
-	Name     string         `json:"name"`
-	Identity string         `json:"identity"`
-	Local    *LocalPackage  `json:"local,omitempty"`
-	Remote   *RemotePackage `json:"remote,omitempty"`
+	Name                string         `json:"name"`
+	Identity            string         `json:"identity"`
+	Local               *LocalPackage  `json:"local,omitempty"`
+	Remote              *RemotePackage `json:"remote,omitempty"`
+	CLanguageStandard   string         `json:"cLanguageStandard,omitempty"`
+	CxxLanguageStandard string         `json:"cxxLanguageStandard,omitempty"`
 }
 
 type LocalPackage struct {
@@ -33,7 +35,18 @@ func NewPackageFromBazelRepo(
 	patch *Patch,
 ) (*Package, error) {
 	var err error
-	p := Package{Name: bzlRepo.Name, Identity: bzlRepo.Identity}
+	cLangStd := ""
+	cxxLangStd := ""
+	if bzlRepo.PkgInfo != nil {
+		cLangStd = bzlRepo.PkgInfo.CLanguageStandard
+		cxxLangStd = bzlRepo.PkgInfo.CxxLanguageStandard
+	}
+	p := Package{
+		Name:                bzlRepo.Name,
+		Identity:            bzlRepo.Identity,
+		CLanguageStandard:   cLangStd,
+		CxxLanguageStandard: cxxLangStd,
+	}
 	if bzlRepo.Pin != nil {
 		p.Remote, err = remotePackageFromPin(bzlRepo.Name, bzlRepo.Pin)
 		if err != nil {

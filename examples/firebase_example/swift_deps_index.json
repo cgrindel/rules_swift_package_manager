@@ -1554,7 +1554,9 @@
         "commit": "837d4af6ead57cec1fc38007892500d3139c7556",
         "remote": "https://github.com/firebase/firebase-ios-sdk",
         "version": "10.16.0"
-      }
+      },
+      "cLanguageStandard": "c99",
+      "cxxLanguageStandard": "gnu++14"
     },
     {
       "name": "swiftpkg_googleappmeasurement",
@@ -1563,7 +1565,9 @@
         "commit": "56f681586ff006a7982b53dc94082eea31971acf",
         "remote": "https://github.com/google/GoogleAppMeasurement.git",
         "version": "10.16.0"
-      }
+      },
+      "cLanguageStandard": "c99",
+      "cxxLanguageStandard": "gnu++14"
     },
     {
       "name": "swiftpkg_googledatatransport",
@@ -1572,7 +1576,9 @@
         "commit": "5056b15c5acbb90cd214fe4d6138bdf5a740e5a8",
         "remote": "https://github.com/google/GoogleDataTransport.git",
         "version": "9.2.0"
-      }
+      },
+      "cLanguageStandard": "c99",
+      "cxxLanguageStandard": "gnu++14"
     },
     {
       "name": "swiftpkg_googleutilities",
@@ -1581,7 +1587,9 @@
         "commit": "0543562f85620b5b7c510c6bcbef75b562a5127b",
         "remote": "https://github.com/google/GoogleUtilities.git",
         "version": "7.11.0"
-      }
+      },
+      "cLanguageStandard": "c99",
+      "cxxLanguageStandard": "gnu++14"
     },
     {
       "name": "swiftpkg_grpc_binary",
@@ -1617,7 +1625,8 @@
         "commit": "0706abcc6b0bd9cedfbb015ba840e4a780b5159b",
         "remote": "https://github.com/firebase/leveldb.git",
         "version": "1.22.2"
-      }
+      },
+      "cxxLanguageStandard": "gnu++14"
     },
     {
       "name": "swiftpkg_nanopb",

@@ -7024,7 +7024,8 @@
         "commit": "dcd78f07e092ac9138327e2bfbb0687a55a80850",
         "remote": "https://github.com/vapor/jwt-kit.git",
         "version": "4.8.0"
-      }
+      },
+      "cxxLanguageStandard": "c++11"
     },
     {
       "name": "swiftpkg_mobius.swift",
@@ -7231,7 +7232,8 @@
         "commit": "75ec60b8b4cc0f085c3ac414f3dca5625fa3588e",
         "remote": "https://github.com/apple/swift-crypto.git",
         "version": "2.2.4"
-      }
+      },
+      "cxxLanguageStandard": "c++11"
     },
     {
       "name": "swiftpkg_swift_log",
@@ -7285,7 +7287,8 @@
         "commit": "4fb7ead803e38949eb1d6fabb849206a72c580f3",
         "remote": "https://github.com/apple/swift-nio-ssl.git",
         "version": "2.23.0"
-      }
+      },
+      "cxxLanguageStandard": "c++14"
     },
     {
       "name": "swiftpkg_swift_nio_transport_services",

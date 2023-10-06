@@ -12,14 +12,16 @@ import (
 
 // A PackageInfo encapsulates all of the information about a Swift package.
 type PackageInfo struct {
-	Name         string
-	DisplayName  string
-	Path         string
-	ToolsVersion string
-	Targets      Targets
-	Platforms    []*Platform
-	Products     []*Product
-	Dependencies Dependencies
+	Name                string
+	DisplayName         string
+	Path                string
+	ToolsVersion        string
+	Targets             Targets
+	Platforms           []*Platform
+	Products            []*Product
+	Dependencies        Dependencies
+	CLanguageStandard   string
+	CxxLanguageStandard string
 }
 
 // NewPackageInfo returns the Swift package information from a Swift package on disk.
@@ -90,14 +92,16 @@ func NewPackageInfo(sw swiftbin.Executor, dir string) (*PackageInfo, error) {
 	}
 
 	return &PackageInfo{
-		Name:         descManifest.Name,
-		DisplayName:  descManifest.ManifestDisplayName,
-		Path:         descManifest.Path,
-		ToolsVersion: descManifest.ToolsVersion,
-		Targets:      targets,
-		Platforms:    platforms,
-		Products:     products,
-		Dependencies: deps,
+		Name:                descManifest.Name,
+		DisplayName:         descManifest.ManifestDisplayName,
+		Path:                descManifest.Path,
+		ToolsVersion:        descManifest.ToolsVersion,
+		Targets:             targets,
+		Platforms:           platforms,
+		Products:            products,
+		Dependencies:        deps,
+		CLanguageStandard:   dumpManifest.CLanguageStandard,
+		CxxLanguageStandard: dumpManifest.CxxLanguageStandard,
 	}, nil
 }
 
