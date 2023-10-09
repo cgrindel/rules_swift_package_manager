@@ -2,6 +2,7 @@ package gazelle
 
 import (
 	"flag"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -128,13 +129,14 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 const moduleNamingConventionDirective = "swift_module_naming_convention"
 const defaultModuleNameDirective = "swift_default_module_name"
-const swiftLibraryTags = "swift_library_tags"
+const swiftLibraryTagsDirective = "swift_library_tags"
+const swiftGRPCFlavorsDirective = "swift_grpc_flavors"
 
 func (*swiftLang) KnownDirectives() []string {
 	return []string{
 		moduleNamingConventionDirective,
 		defaultModuleNameDirective,
-		swiftLibraryTags,
+		swiftLibraryTagsDirective,
 	}
 }
 
@@ -147,11 +149,13 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 		switch d.Key {
 		case moduleNamingConventionDirective:
 			if d.Value == swiftcfg.PascalCaseModuleNamingConvention {
+				log.Println("module naming convention ", swiftcfg.PascalCaseModuleNamingConvention)
 				sc.ModuleNamingConvention = swiftcfg.PascalCaseModuleNamingConvention
 			} else {
+				log.Println("module naming convention ", swiftcfg.MatchCaseModuleNamingConvention)
 				sc.ModuleNamingConvention = swiftcfg.MatchCaseModuleNamingConvention
 			}
-		case swiftLibraryTags:
+		case swiftLibraryTagsDirective:
 			var tags []string
 			if d.Value == "" {
 				// Mark swift_library targets as manual.
@@ -164,6 +168,17 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 				tags = strings.Split(d.Value, ",")
 			}
 			sc.SwiftLibraryTags = tags
+		case swiftGRPCFlavorsDirective:
+			var flavors []string
+			if d.Value == "" {
+				// By default we generate all flavors for compatibility with existing behavior.
+				flavors = []string{"client,client_stubs,server"}
+			} else if d.Value == "-" {
+				flavors = nil
+			} else {
+				flavors = strings.Split(d.Value, ",")
+			}
+			sc.SwiftGRPCFlavors = flavors
 		case defaultModuleNameDirective:
 			sc.DefaultModuleNames[rel] = d.Value
 		}
