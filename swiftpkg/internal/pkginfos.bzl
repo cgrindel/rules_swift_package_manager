@@ -802,7 +802,10 @@ def _new_swift_src_info_from_sources(repository_ctx, target_path, sources):
         discovered_res_files = discovered_res_files,
     )
 
-def _new_swift_src_info(has_objc_directive = False, imports_xctest = False, discovered_res_files = []):
+def _new_swift_src_info(
+        has_objc_directive = False,
+        imports_xctest = False,
+        discovered_res_files = []):
     return struct(
         has_objc_directive = has_objc_directive,
         imports_xctest = imports_xctest,
@@ -962,18 +965,32 @@ def _new_clang_src_info(
 
 def _new_objc_src_info_from_sources(repository_ctx, pkg_path, sources):
     srcs = lists.map(sources, lambda s: paths.join(pkg_path, s))
-    builtin_frameworks = objc_files.collect_builtin_frameworks(
+    src_info = objc_files.collect_src_info(
         repository_ctx = repository_ctx,
         root_path = pkg_path,
         srcs = srcs,
     )
     return _new_objc_src_info(
-        builtin_frameworks = builtin_frameworks,
+        builtin_frameworks = src_info.frameworks,
+        imports_xctest = lists.contains(src_info.other_imports, "XCTest"),
     )
 
-def _new_objc_src_info(builtin_frameworks = []):
+# def _new_objc_src_info_from_sources(repository_ctx, pkg_path, sources):
+#     srcs = lists.map(sources, lambda s: paths.join(pkg_path, s))
+#     builtin_frameworks = objc_files.collect_builtin_frameworks(
+#         repository_ctx = repository_ctx,
+#         root_path = pkg_path,
+#         srcs = srcs,
+#     )
+#     return _new_objc_src_info(
+#         builtin_frameworks = builtin_frameworks,
+#         impo
+#     )
+
+def _new_objc_src_info(builtin_frameworks = [], imports_xctest = False):
     return struct(
         builtin_frameworks = builtin_frameworks,
+        imports_xctest = imports_xctest,
     )
 
 # MARK: - Target

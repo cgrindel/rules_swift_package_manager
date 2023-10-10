@@ -81,7 +81,34 @@ def _parse_at_import(line):
         return None
     return line[framework_start_idx:framework_end_idx]
 
-def _parse_for_imported_framework(line):
+# def _parse_for_imported_framework(line):
+#     """Parse a single line of text looking for a framework import.
+
+#     Args:
+#         line: The line to be parsed as a `string`.
+
+#     Returns:
+#         The name of the imported framework as a `string`, if a framework
+#         import is found. Otherwise, it returns `None`.
+#     """
+#     if line == None or line == "":
+#         return None
+
+#     def _verify(name):
+#         if sets.contains(apple_builtin_frameworks.all, name):
+#             return name
+#         else:
+#             return None
+
+#     framework = _parse_pound_import(line)
+#     if framework != None:
+#         return _verify(framework)
+#     framework = _parse_at_import(line)
+#     if framework != None:
+#         return _verify(framework)
+#     return None
+
+def _parse_for_import(line):
     """Parse a single line of text looking for a framework import.
 
     Args:
@@ -93,33 +120,36 @@ def _parse_for_imported_framework(line):
     """
     if line == None or line == "":
         return None
-
-    def _verify(name):
-        if sets.contains(apple_builtin_frameworks.all, name):
-            return name
-        else:
-            return None
-
     framework = _parse_pound_import(line)
     if framework != None:
-        return _verify(framework)
+        return framework
     framework = _parse_at_import(line)
     if framework != None:
-        return _verify(framework)
+        return framework
     return None
 
-def _collect_frameworks_for_src(repository_ctx, src_path):
-    frameworks = []
+def _collect_imports_for_src(repository_ctx, src_path):
+    imports = []
     contents = repository_ctx.read(src_path)
-
     lines = contents.splitlines()
     for line in lines:
-        imported_framework = _parse_for_imported_framework(line)
-        if imported_framework != None:
-            frameworks.append(imported_framework)
-    return frameworks
+        imp = _parse_for_import(line)
+        if imp != None:
+            imports.append(imp)
+    return imports
 
-def _collect_builtin_frameworks(repository_ctx, root_path, srcs):
+# def _collect_frameworks_for_src(repository_ctx, src_path):
+#     frameworks = []
+#     contents = repository_ctx.read(src_path)
+
+#     lines = contents.splitlines()
+#     for line in lines:
+#         imported_framework = _parse_for_imported_framework(line)
+#         if imported_framework != None:
+#             frameworks.append(imported_framework)
+#     return frameworks
+
+def _collect_src_info(repository_ctx, root_path, srcs):
     """Collect all of the Apple built-in frameworks imported by the specified \
     source files.
 
@@ -132,13 +162,40 @@ def _collect_builtin_frameworks(repository_ctx, root_path, srcs):
         A `list` of the imported Apple built-in frameworks.
     """
     frameworks = sets.make()
+    other_imports = sets.make()
     for src in srcs:
         src_path = paths.join(root_path, src)
-        src_frameworks = _collect_frameworks_for_src(repository_ctx, src_path)
+        imports = _collect_imports_for_src(repository_ctx, src_path)
+        for imp in imports:
+            if sets.contains(apple_builtin_frameworks.all, imp):
+                sets.insert(frameworks, imp)
+            else:
+                sets.insert(other_imports, imp)
+    return struct(
+        frameworks = sorted(sets.to_list(frameworks)),
+        other_imports = sorted(sets.to_list(other_imports)),
+    )
 
-        for sf in src_frameworks:
-            sets.insert(frameworks, sf)
-    return sorted(sets.to_list(frameworks))
+# def _collect_builtin_frameworks(repository_ctx, root_path, srcs):
+#     """Collect all of the Apple built-in frameworks imported by the specified \
+#     source files.
+
+#     Args:
+#         repository_ctx: An instance of `repository_ctx`.
+#         root_path: The parent path for the source files as a `string`.
+#         srcs: A `list` of source file paths relative to the `root_path`.
+
+#     Returns:
+#         A `list` of the imported Apple built-in frameworks.
+#     """
+#     frameworks = sets.make()
+#     for src in srcs:
+#         src_path = paths.join(root_path, src)
+#         src_frameworks = _collect_frameworks_for_src(repository_ctx, src_path)
+
+#         for sf in src_frameworks:
+#             sets.insert(frameworks, sf)
+#     return sorted(sets.to_list(frameworks))
 
 def _has_objc_srcs(srcs):
     """Determines whether any of the provide paths are Objective-C files.
@@ -153,8 +210,9 @@ def _has_objc_srcs(srcs):
     return lists.contains(srcs, lambda x: x.endswith(".m") or x.endswith(".mm"))
 
 objc_files = struct(
-    collect_builtin_frameworks = _collect_builtin_frameworks,
+    # collect_builtin_frameworks = _collect_builtin_frameworks,
+    collect_src_info = _collect_src_info,
     has_objc_srcs = _has_objc_srcs,
     # Public for testing purposes
-    parse_for_imported_framework = _parse_for_imported_framework,
+    # parse_for_imported_framework = _parse_for_imported_framework,
 )
