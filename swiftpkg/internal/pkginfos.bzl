@@ -975,18 +975,6 @@ def _new_objc_src_info_from_sources(repository_ctx, pkg_path, sources):
         imports_xctest = lists.contains(src_info.other_imports, "XCTest"),
     )
 
-# def _new_objc_src_info_from_sources(repository_ctx, pkg_path, sources):
-#     srcs = lists.map(sources, lambda s: paths.join(pkg_path, s))
-#     builtin_frameworks = objc_files.collect_builtin_frameworks(
-#         repository_ctx = repository_ctx,
-#         root_path = pkg_path,
-#         srcs = srcs,
-#     )
-#     return _new_objc_src_info(
-#         builtin_frameworks = builtin_frameworks,
-#         impo
-#     )
-
 def _new_objc_src_info(builtin_frameworks = [], imports_xctest = False):
     return struct(
         builtin_frameworks = builtin_frameworks,

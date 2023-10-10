@@ -179,25 +179,6 @@ def _resource_bundle_infoplist_label_name(target_name):
     """
     return target_name + _resource_bundle_infoplist_suffix
 
-# def _is_testonly(target):
-#     """Determines whether the target should be marked `testonly`.
-
-#     Args:
-#         target: A `struct` as returned by `pkginfos.new_target`
-
-#     Returns:
-#         A `bool` indicating whether the target should be marked
-#     """
-#     result = False
-#     if target.swift_src_info != None and target.swift_src_info.imports_xctest:
-#         result = True
-#     elif target.objc_src_info != None and target.objc_src_info.imports_xctest:
-#         result = True
-#     return result
-#     # if target.swift_src_info == None:
-#     #     return False
-#     # return target.swift_src_info.imports_xctest
-
 def make_pkginfo_targets(bazel_labels):
     """Create a `pkginfo_targets` module.
 
@@ -252,7 +233,6 @@ def make_pkginfo_targets(bazel_labels):
         get = _get,
         get_by_label = _get_by_label,
         is_modulemap_label = _is_modulemap_label,
-        # is_testonly = _is_testonly,
         join_path = _join_path,
         modulemap_label_name = _modulemap_label_name,
         resource_bundle_accessor_label_name = _resource_bundle_accessor_label_name,
