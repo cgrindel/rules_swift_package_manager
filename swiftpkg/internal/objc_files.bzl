@@ -141,11 +141,6 @@ def _collect_src_info(repository_ctx, root_path, srcs):
             if sets.contains(apple_builtin_frameworks.all, imp):
                 sets.insert(frameworks, imp)
 
-    # return _new_src_info(
-    #     frameworks = sorted(sets.to_list(frameworks)),
-    #     # other_imports = sorted(sets.to_list(other_imports)),
-    #     other_imports = sorted(other_imports.keys()),
-    # )
     return _new_src_info(
         frameworks = sorted(sets.to_list(frameworks)),
         all_imports = all_imports,

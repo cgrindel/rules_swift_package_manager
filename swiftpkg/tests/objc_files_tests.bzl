@@ -98,7 +98,11 @@ def _collect_src_info_test(ctx):
             },
             exp = objc_files.new_src_info(
                 frameworks = ["CoreTelephony", "Foundation"],
-                other_imports = ["XCTest"],
+                all_imports = {
+                    "CoreTelephony": ["Foo.h"],
+                    "Foundation": ["Foo.h", "Bar.h"],
+                    "XCTest": ["Bar.h"],
+                },
             ),
         ),
         struct(
@@ -115,6 +119,10 @@ def _collect_src_info_test(ctx):
             },
             exp = objc_files.new_src_info(
                 frameworks = ["CoreTelephony", "Foundation"],
+                all_imports = {
+                    "CoreTelephony": ["Foo.h"],
+                    "Foundation": ["Foo.h", "Bar.h"],
+                },
             ),
         ),
     ]

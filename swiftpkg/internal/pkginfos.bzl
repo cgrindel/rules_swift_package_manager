@@ -290,20 +290,9 @@ def _new_target_from_json_maps(
             clang_settings = clang_settings,
         )
         if objc_files.has_objc_srcs(sources):
-            # # DEBUG BEGIN
-            # if target_path == "FirebaseCore/Sources":
-            #     print("*** CHUCK clang_src_info.srcs: ")
-            #     for idx, item in enumerate(clang_src_info.srcs):
-            #         print("*** CHUCK", idx, ":", item)
-            #     print("*** CHUCK clang_src_info.hdrs: ")
-            #     for idx, item in enumerate(clang_src_info.hdrs):
-            #         print("*** CHUCK", idx, ":", item)
-            # # DEBUG END
             objc_src_info = _new_objc_src_info_from_sources(
                 repository_ctx = repository_ctx,
                 pkg_path = pkg_path,
-                target_path = target_path,
-                # sources = clang_src_info.srcs + clang_src_info.hdrs,
                 sources = clang_src_info.explicit_srcs + clang_src_info.hdrs,
             )
 
@@ -877,15 +866,6 @@ def _new_clang_src_info_from_sources(
         for ep in exclude_paths
     ]
 
-    # # DEBUG BEGIN
-    # if target_path == "FirebaseCore/Sources":
-    #     print("*** CHUCK --------")
-    #     print("*** CHUCK c99name: ", c99name)
-    #     print("*** CHUCK src_paths: ")
-    #     for idx, item in enumerate(src_paths):
-    #         print("*** CHUCK", idx, ":", item)
-    # # DEBUG END
-
     # Get a list of all of the source files
     all_srcs = []
     for sp in src_paths:
@@ -894,14 +874,6 @@ def _new_clang_src_info_from_sources(
             sp,
             exclude = abs_exclude_paths,
         ))
-
-    # # DEBUG BEGIN
-    # if target_path == "FirebaseCore/Sources":
-    #     print("*** CHUCK all_srcs: ")
-    #     for idx, item in enumerate(all_srcs):
-    #         print("*** CHUCK", idx, ":", item)
-    #     print("*** CHUCK public_includes: ", public_includes)
-    # # DEBUG END
 
     # Organize the source files
     # Be sure that the all_srcs and the public_includes that are passed to
@@ -917,11 +889,6 @@ def _new_clang_src_info_from_sources(
         ],
         relative_to = pkg_path,
     )
-
-    # # DEBUG BEGIN
-    # if target_path == "FirebaseCore/Sources":
-    #     print("*** CHUCK organized_files: ", organized_files)
-    # # DEBUG END
 
     # The `cc_library` rule compiles each source file (.c, .cc) separately only providing the
     # headers. There are some clang modules (e.g.,
@@ -955,13 +922,6 @@ def _new_clang_src_info_from_sources(
                 continue
             extra_hdr_dirs.append(normalized_pi)
 
-    # DEBUG BEGIN
-    if target_path == "FirebaseCore/Sources":
-        print("*** CHUCK extra_hdr_dirs: ")
-        for idx, item in enumerate(extra_hdr_dirs):
-            print("*** CHUCK", idx, ":", item)
-
-    # DEBUG END
     for ehd in extra_hdr_dirs:
         abs_ehd = paths.normalize(paths.join(pkg_path, ehd))
         if not repository_files.path_exists(repository_ctx, abs_ehd):
@@ -982,6 +942,7 @@ def _new_clang_src_info_from_sources(
     srcs_set = sets.difference(srcs_set, hdrs_set)
     hdrs = sets.to_list(hdrs_set)
     srcs = sets.to_list(srcs_set)
+    explicit_srcs = sets.to_list(explicit_srcs_set)
 
     return _new_clang_src_info(
         srcs = srcs,
@@ -1010,7 +971,7 @@ def _new_clang_src_info(
 
 # MARK: - Objc Source Info
 
-def _new_objc_src_info_from_sources(repository_ctx, pkg_path, target_path, sources):
+def _new_objc_src_info_from_sources(repository_ctx, pkg_path, sources):
     srcs = lists.map(sources, lambda s: paths.join(pkg_path, s))
     src_info = objc_files.collect_src_info(
         repository_ctx = repository_ctx,
@@ -1024,18 +985,6 @@ def _new_objc_src_info_from_sources(repository_ctx, pkg_path, target_path, sourc
     if xctest_srcs != []:
         imports_xctest = True
 
-    # DEBUG BEGIN
-    print("*** CHUCK =========")
-    print("*** CHUCK repository_ctx.name: ", repository_ctx.name)
-    print("*** CHUCK pkg_path: ", pkg_path)
-    print("*** CHUCK target_path: ", target_path)
-    print("*** CHUCK imports_xctest: ", imports_xctest)
-    if target_path == "FirebaseCore/Sources":
-        print("*** CHUCK xctest_srcs: ")
-        for idx, item in enumerate(xctest_srcs):
-            print("*** CHUCK", idx, ":", item)
-
-    # DEBUG END
     return _new_objc_src_info(
         builtin_frameworks = src_info.frameworks,
         imports_xctest = imports_xctest,
