@@ -125,25 +125,36 @@ def _collect_src_info(repository_ctx, root_path, srcs):
     Returns:
         A `struct` as returned by `objc_files.new_src_info()`.
     """
+
+    def _add_to_dict(target_dict, key, value):
+        values = target_dict.get(key, [])
+        values.append(value)
+        target_dict[key] = values
+
     frameworks = sets.make()
-    other_imports = sets.make()
+    all_imports = {}
     for src in srcs:
         src_path = paths.join(root_path, src)
         imports = _collect_imports_for_src(repository_ctx, src_path)
         for imp in imports:
+            _add_to_dict(all_imports, imp, src)
             if sets.contains(apple_builtin_frameworks.all, imp):
                 sets.insert(frameworks, imp)
-            else:
-                sets.insert(other_imports, imp)
+
+    # return _new_src_info(
+    #     frameworks = sorted(sets.to_list(frameworks)),
+    #     # other_imports = sorted(sets.to_list(other_imports)),
+    #     other_imports = sorted(other_imports.keys()),
+    # )
     return _new_src_info(
         frameworks = sorted(sets.to_list(frameworks)),
-        other_imports = sorted(sets.to_list(other_imports)),
+        all_imports = all_imports,
     )
 
-def _new_src_info(frameworks = [], other_imports = []):
+def _new_src_info(frameworks = [], all_imports = {}):
     return struct(
         frameworks = frameworks,
-        other_imports = other_imports,
+        all_imports = all_imports,
     )
 
 def _has_objc_srcs(srcs):
