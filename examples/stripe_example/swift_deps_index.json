@@ -227,9 +227,9 @@
       "name": "swiftpkg_stripe_ios",
       "identity": "stripe-ios",
       "remote": {
-        "commit": "fa342c5e1b0f8e0aba5001191821f99f5de23231",
+        "commit": "66ef4519ac8e0d434fd2e48d0292337779dbc5e8",
         "remote": "https://github.com/stripe/stripe-ios",
-        "version": "23.17.0"
+        "version": "23.17.1"
       }
     }
   ]
