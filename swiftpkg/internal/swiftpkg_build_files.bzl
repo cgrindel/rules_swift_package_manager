@@ -46,7 +46,6 @@ def _swift_target_build_file(pkg_ctx, target):
         pkginfo_target_deps.bzl_select_list(pkg_ctx, td, depender_module_name = target.c99name)
         for td in target.dependencies
     ])
-
     attrs = {
         "deps": bzl_selects.to_starlark(deps),
         "module_name": target.c99name,
@@ -300,6 +299,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["enable_modules"] = True
         attrs["module_name"] = target.c99name
 
+        if target.objc_src_info.imports_xctest:
+            attrs["testonly"] = True
+
         sdk_framework_bzl_selects = []
         for sf in target.objc_src_info.builtin_frameworks:
             platform_conditions = bazel_apple_platforms.for_framework(sf)
@@ -332,17 +334,18 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # example.
         load_stmts = [swiftpkg_generate_modulemap_load_stmt]
         modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
+        modulemap_attrs = {
+            "deps": bzl_selects.to_starlark(modulemap_deps),
+            "hdrs": clang_src_info.hdrs,
+            "module_name": target.c99name,
+            "visibility": ["//visibility:public"],
+        }
         decls = [
             build_decls.new(objc_kinds.library, bzl_target_name, attrs = attrs),
             build_decls.new(
                 kind = swiftpkg_kinds.generate_modulemap,
                 name = modulemap_target_name,
-                attrs = {
-                    "deps": bzl_selects.to_starlark(modulemap_deps),
-                    "hdrs": clang_src_info.hdrs,
-                    "module_name": target.c99name,
-                    "visibility": ["//visibility:public"],
-                },
+                attrs = modulemap_attrs,
             ),
         ]
     else:
@@ -485,16 +488,22 @@ def _generate_modulemap_for_swift_target(target, deps):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
     modulemap_deps = _collect_modulemap_deps(deps)
+    attrs = {
+        "deps": bzl_selects.to_starlark(modulemap_deps),
+        "hdrs": [":{}".format(bzl_target_name)],
+        "module_name": target.c99name,
+        "visibility": ["//visibility:public"],
+    }
+
+    # The modulemap target needs to match the testonly state for its related
+    # Swift target.
+    if target.swift_src_info != None and target.swift_src_info.imports_xctest:
+        attrs["testonly"] = True
     decls = [
         build_decls.new(
             kind = swiftpkg_kinds.generate_modulemap,
             name = modulemap_target_name,
-            attrs = {
-                "deps": bzl_selects.to_starlark(modulemap_deps),
-                "hdrs": [":{}".format(bzl_target_name)],
-                "module_name": target.c99name,
-                "visibility": ["//visibility:public"],
-            },
+            attrs = attrs,
         ),
     ]
     return build_files.new(load_stmts = load_stmts, decls = decls)

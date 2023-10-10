@@ -293,7 +293,7 @@ def _new_target_from_json_maps(
             objc_src_info = _new_objc_src_info_from_sources(
                 repository_ctx = repository_ctx,
                 pkg_path = pkg_path,
-                sources = clang_src_info.srcs + clang_src_info.hdrs,
+                sources = clang_src_info.explicit_srcs + clang_src_info.hdrs,
             )
 
     return _new_target(
@@ -802,7 +802,10 @@ def _new_swift_src_info_from_sources(repository_ctx, target_path, sources):
         discovered_res_files = discovered_res_files,
     )
 
-def _new_swift_src_info(has_objc_directive = False, imports_xctest = False, discovered_res_files = []):
+def _new_swift_src_info(
+        has_objc_directive = False,
+        imports_xctest = False,
+        discovered_res_files = []):
     return struct(
         has_objc_directive = has_objc_directive,
         imports_xctest = imports_xctest,
@@ -896,9 +899,11 @@ def _new_clang_src_info_from_sources(
     textual_hdrs = organized_files.textual_hdrs
     hdrs = []
     srcs = []
+    explicit_srcs = []
     public_includes = organized_files.public_includes
     private_includes = organized_files.private_includes
     if len(organized_files.srcs) > 0:
+        explicit_srcs.extend(organized_files.srcs)
         srcs.extend(organized_files.srcs)
     if len(organized_files.hdrs) > 0:
         hdrs.extend(organized_files.hdrs)
@@ -916,6 +921,7 @@ def _new_clang_src_info_from_sources(
             if clang_files.is_under_path(normalized_pi, target_path):
                 continue
             extra_hdr_dirs.append(normalized_pi)
+
     for ehd in extra_hdr_dirs:
         abs_ehd = paths.normalize(paths.join(pkg_path, ehd))
         if not repository_files.path_exists(repository_ctx, abs_ehd):
@@ -931,13 +937,16 @@ def _new_clang_src_info_from_sources(
 
     # Remove any hdrs from the srcs
     srcs_set = sets.make(srcs)
+    explicit_srcs_set = sets.make(explicit_srcs)
     hdrs_set = sets.make(hdrs)
     srcs_set = sets.difference(srcs_set, hdrs_set)
     hdrs = sets.to_list(hdrs_set)
     srcs = sets.to_list(srcs_set)
+    explicit_srcs = sets.to_list(explicit_srcs_set)
 
     return _new_clang_src_info(
         srcs = srcs,
+        explicit_srcs = explicit_srcs,
         hdrs = hdrs,
         textual_hdrs = textual_hdrs,
         public_includes = public_includes,
@@ -946,12 +955,14 @@ def _new_clang_src_info_from_sources(
 
 def _new_clang_src_info(
         srcs = [],
+        explicit_srcs = [],
         hdrs = [],
         textual_hdrs = [],
         public_includes = [],
         private_includes = []):
     return struct(
         srcs = srcs,
+        explicit_srcs = explicit_srcs,
         hdrs = hdrs,
         textual_hdrs = textual_hdrs,
         public_includes = public_includes,
@@ -962,18 +973,27 @@ def _new_clang_src_info(
 
 def _new_objc_src_info_from_sources(repository_ctx, pkg_path, sources):
     srcs = lists.map(sources, lambda s: paths.join(pkg_path, s))
-    builtin_frameworks = objc_files.collect_builtin_frameworks(
+    src_info = objc_files.collect_src_info(
         repository_ctx = repository_ctx,
         root_path = pkg_path,
         srcs = srcs,
     )
+
+    # imports_xctest = lists.contains(src_info.other_imports, "XCTest")
+    imports_xctest = False
+    xctest_srcs = src_info.all_imports.get("XCTest", [])
+    if xctest_srcs != []:
+        imports_xctest = True
+
     return _new_objc_src_info(
-        builtin_frameworks = builtin_frameworks,
+        builtin_frameworks = src_info.frameworks,
+        imports_xctest = imports_xctest,
     )
 
-def _new_objc_src_info(builtin_frameworks = []):
+def _new_objc_src_info(builtin_frameworks = [], imports_xctest = False):
     return struct(
         builtin_frameworks = builtin_frameworks,
+        imports_xctest = imports_xctest,
     )
 
 # MARK: - Target
