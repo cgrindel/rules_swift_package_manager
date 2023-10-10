@@ -46,12 +46,6 @@ def _swift_target_build_file(pkg_ctx, target):
         pkginfo_target_deps.bzl_select_list(pkg_ctx, td, depender_module_name = target.c99name)
         for td in target.dependencies
     ])
-    dep_labels = [bs.value for bs in deps]
-
-    # DEBUG BEGIN
-    print("*** CHUCK dep_labels: ", dep_labels)
-    # DEBUG END
-
     attrs = {
         "deps": bzl_selects.to_starlark(deps),
         "module_name": target.c99name,
@@ -74,7 +68,6 @@ def _swift_target_build_file(pkg_ctx, target):
 
     # The rules_swift code links in developer libraries if the rule is marked testonly.
     # https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/compiling.bzl#L1312-L1319
-    # dep_targets = lists.filter(target.dependencies, lambda t: lists.contains(dep_labels, ))
     if target.swift_src_info.imports_xctest:
         attrs["testonly"] = True
 
