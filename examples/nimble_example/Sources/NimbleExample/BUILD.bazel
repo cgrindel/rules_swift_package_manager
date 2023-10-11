@@ -1,12 +1,26 @@
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
-swift_test(
-    name = "NimbleExample",
+# NOTE: We are using ios_unit_test so that the correct platform is selected. If
+# you use swift_test and specify Nimble and NimbleObjectiveC, a build error
+# will occur regarding duplicate definitions from fast darwin and applebin
+# outputs.
+
+swift_library(
+    name = "NimbleExampleLib",
+    testonly = True,
     srcs = ["NimbleExampleTests/CounterSpec.swift"],
     module_name = "NimbleExample",
+    tags = ["manual"],
     deps = [
         "@swiftpkg_nimble//:Sources_Nimble",
         "@swiftpkg_nimble//:Sources_NimbleObjectiveC",
         "@swiftpkg_quick//:Sources_Quick",
     ],
+)
+
+ios_unit_test(
+    name = "NimbleExample",
+    minimum_os_version = "15.0",
+    deps = [":NimbleExampleLib"],
 )

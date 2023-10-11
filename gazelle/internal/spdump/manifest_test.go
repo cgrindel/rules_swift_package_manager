@@ -21,7 +21,7 @@ func TestNewManifestFromJSON(t *testing.T) {
 					},
 					Requirement: &spdump.DependencyRequirement{
 						Ranges: []*spdump.VersionRange{
-							&spdump.VersionRange{LowerBound: "1.2.0", UpperBound: "2.0.0"},
+							{LowerBound: "1.2.0", UpperBound: "2.0.0"},
 						},
 					},
 				},
@@ -68,6 +68,8 @@ func TestNewManifestFromJSON(t *testing.T) {
 				Settings: []spdump.TargetSetting{},
 			},
 		},
+		CLanguageStandard:   "c99",
+		CxxLanguageStandard: "gnu++14",
 	}
 	manifest, err := spdump.NewManifestFromJSON([]byte(swiftPackageJSONStr))
 	assert.NoError(t, err)
@@ -76,8 +78,8 @@ func TestNewManifestFromJSON(t *testing.T) {
 
 const swiftPackageJSONStr = `
 {
-  "cLanguageStandard" : null,
-  "cxxLanguageStandard" : null,
+  "cLanguageStandard" : "c99",
+  "cxxLanguageStandard" : "gnu++14",
   "dependencies" : [
     {
       "sourceControl" : [

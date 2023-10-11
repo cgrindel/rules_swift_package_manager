@@ -52,6 +52,8 @@ jobs:
             runner: macos-13
           - test: '@@//examples:messagekit_example_test_bazel_.bazelversion'
             runner: macos-13
+          - test: '@@//examples:nimble_example_test_bazel_.bazelversion'
+            runner: macos-13
           - test: '@@//examples:objc_code_test_bazel_.bazelversion'
             runner: macos-13
           - test: '@@//examples:phone_number_kit_test_bazel_.bazelversion'

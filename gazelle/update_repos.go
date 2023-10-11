@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -143,6 +144,9 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 		di.AddPackage(pkg)
 	}
 
+	// Print information about language standards
+	printLanguageStandardInfo(di.Packages())
+
 	// Output a use_repo names for bzlmod.
 	if err := writeBzlmodUseRepoNames(di, sc); err != nil {
 		result.Error = err
@@ -223,6 +227,48 @@ func readResolvedPkgPins(resolvedPkgPath string) (map[string]*spreso.Pin, error)
 		pinsByIdentity[p.PkgRef.Identity] = p
 	}
 	return pinsByIdentity, nil
+}
+
+func printLanguageStandardInfo(pkgs []*swift.Package) {
+	cLangStds := make(map[string][]string)
+	cxxLangStds := make(map[string][]string)
+	for _, pkg := range pkgs {
+		if pkg.CLanguageStandard != "" {
+			idents := cLangStds[pkg.CLanguageStandard]
+			idents = append(idents, pkg.Identity)
+			cLangStds[pkg.CLanguageStandard] = idents
+		}
+		if pkg.CxxLanguageStandard != "" {
+			idents := cxxLangStds[pkg.CxxLanguageStandard]
+			idents = append(idents, pkg.Identity)
+			cxxLangStds[pkg.CxxLanguageStandard] = idents
+		}
+	}
+	var outputLines []string
+	if len(cLangStds) > 0 {
+		for std, idents := range cLangStds {
+			outputLines = append(outputLines,
+				fmt.Sprintf("# Required by %s", strings.Join(idents, ", ")),
+				fmt.Sprintf("build --copt='-std=%s'", std),
+			)
+		}
+	}
+	if len(cxxLangStds) > 0 {
+		for std, idents := range cxxLangStds {
+			outputLines = append(outputLines,
+				fmt.Sprintf("# Required by %s", strings.Join(idents, ", ")),
+				fmt.Sprintf("build --cxxopt='-std=%s'", std),
+			)
+		}
+	}
+
+	if len(outputLines) > 0 {
+		preamble := `One or more of your Swift packages has defined language standard requirements.
+Consider adding the following to your .bazelrc file:
+
+`
+		fmt.Println(preamble + strings.Join(outputLines, "\n"))
+	}
 }
 
 func writeBzlmodUseRepoNames(di *swift.DependencyIndex, sc *swiftcfg.SwiftConfig) error {

@@ -20,9 +20,11 @@ func NewManifestFromJSON(bytes []byte) (*Manifest, error) {
 
 // A Manifest represents a Swift manifest as serialized by `swift package dump-package`.
 type Manifest struct {
-	Name         string
-	Dependencies []Dependency
-	Platforms    []Platform
-	Products     []Product
-	Targets      Targets
+	Name                string
+	Dependencies        []Dependency
+	Platforms           []Platform
+	Products            []Product
+	Targets             Targets
+	CLanguageStandard   string `json:"cLanguageStandard"`
+	CxxLanguageStandard string `json:"cxxLanguageStandard"`
 }

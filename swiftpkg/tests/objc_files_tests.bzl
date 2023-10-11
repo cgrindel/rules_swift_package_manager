@@ -4,7 +4,7 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:objc_files.bzl", "objc_files")
 
-def _parse_for_imported_framework_test(ctx):
+def _parse_for_import_test(ctx):
     env = unittest.begin(ctx)
 
     tests = [
@@ -40,13 +40,6 @@ def _parse_for_imported_framework_test(ctx):
             exp = "SystemConfiguration",
         ),
         struct(
-            msg = "#import dir/header with brackets, is not framework",
-            line = """\
-#import <Foo/Foo.h>
-""",
-            exp = None,
-        ),
-        struct(
             msg = "#import header with brackets",
             line = """\
 #import <TargetConditionals.h>
@@ -67,21 +60,14 @@ def _parse_for_imported_framework_test(ctx):
 """,
             exp = "UIKit",
         ),
-        struct(
-            msg = "@import, is not framework",
-            line = """\
-@import FirebaseCore;
-""",
-            exp = None,
-        ),
     ]
     for t in tests:
-        actual = objc_files.parse_for_imported_framework(t.line)
+        actual = objc_files.parse_for_import(t.line)
         asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)
 
-parse_for_imported_framework_test = unittest.make(_parse_for_imported_framework_test)
+parse_for_import_test = unittest.make(_parse_for_import_test)
 
 def new_stub_repository_ctx(file_contents = {}):
     def read(path):
@@ -91,7 +77,7 @@ def new_stub_repository_ctx(file_contents = {}):
         read = read,
     )
 
-def _collect_builtin_frameworks_test(ctx):
+def _collect_src_info_test(ctx):
     env = unittest.begin(ctx)
 
     root_path = "/path/to/target"
@@ -103,13 +89,21 @@ def _collect_builtin_frameworks_test(ctx):
             file_contents = {
                 "Bar.h": """\
 #import <Foundation/Foundation.h>
+#import <XCTest/XCTest.h>
 """,
                 "Foo.h": """\
 #import <Foundation/Foundation.h>
 #import <CoreTelephony/CTCarrier.h>
 """,
             },
-            exp = ["CoreTelephony", "Foundation"],
+            exp = objc_files.new_src_info(
+                frameworks = ["CoreTelephony", "Foundation"],
+                all_imports = {
+                    "CoreTelephony": ["Foo.h"],
+                    "Foundation": ["Foo.h", "Bar.h"],
+                    "XCTest": ["Bar.h"],
+                },
+            ),
         ),
         struct(
             msg = "target with @imports",
@@ -123,7 +117,13 @@ def _collect_builtin_frameworks_test(ctx):
 @import CoreTelephony;
 """,
             },
-            exp = ["CoreTelephony", "Foundation"],
+            exp = objc_files.new_src_info(
+                frameworks = ["CoreTelephony", "Foundation"],
+                all_imports = {
+                    "CoreTelephony": ["Foo.h"],
+                    "Foundation": ["Foo.h", "Bar.h"],
+                },
+            ),
         ),
     ]
     for t in tests:
@@ -133,7 +133,7 @@ def _collect_builtin_frameworks_test(ctx):
                 for fname, cnts in getattr(t, "file_contents", {}).items()
             },
         )
-        actual = objc_files.collect_builtin_frameworks(
+        actual = objc_files.collect_src_info(
             repository_ctx = stub_repository_ctx,
             root_path = root_path,
             srcs = t.srcs,
@@ -142,7 +142,7 @@ def _collect_builtin_frameworks_test(ctx):
 
     return unittest.end(env)
 
-collect_builtin_frameworks_test = unittest.make(_collect_builtin_frameworks_test)
+collect_src_info_test = unittest.make(_collect_src_info_test)
 
 def _has_objc_srcs_test(ctx):
     env = unittest.begin(ctx)
@@ -180,7 +180,7 @@ has_objc_srcs_test = unittest.make(_has_objc_srcs_test)
 def objc_files_test_suite():
     return unittest.suite(
         "objc_files_tests",
-        parse_for_imported_framework_test,
-        collect_builtin_frameworks_test,
+        parse_for_import_test,
+        collect_src_info_test,
         has_objc_srcs_test,
     )

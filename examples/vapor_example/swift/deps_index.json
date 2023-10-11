@@ -1432,7 +1432,8 @@
         "commit": "75ec60b8b4cc0f085c3ac414f3dca5625fa3588e",
         "remote": "https://github.com/apple/swift-crypto.git",
         "version": "2.2.4"
-      }
+      },
+      "cxxLanguageStandard": "c++11"
     },
     {
       "name": "swiftpkg_swift_log",
@@ -1474,9 +1475,9 @@
       "name": "swiftpkg_swift_nio_http2",
       "identity": "swift-nio-http2",
       "remote": {
-        "commit": "d6656967f33ed8b368b38e4b198631fc7c484a40",
+        "commit": "9c22e4f810ce780453f563fba98e1a1039f83d56",
         "remote": "https://github.com/apple/swift-nio-http2.git",
-        "version": "1.23.1"
+        "version": "1.28.1"
       }
     },
     {
@@ -1486,7 +1487,8 @@
         "commit": "320bd978cceb8e88c125dcbb774943a92f6286e9",
         "remote": "https://github.com/apple/swift-nio-ssl.git",
         "version": "2.25.0"
-      }
+      },
+      "cxxLanguageStandard": "c++14"
     },
     {
       "name": "swiftpkg_swift_nio_transport_services",
@@ -1510,9 +1512,9 @@
       "name": "swiftpkg_vapor",
       "identity": "vapor",
       "remote": {
-        "commit": "036d67e4da46126810f56c6a6ce813bcf259a745",
+        "commit": "288d73a368ac0d0e228dd9b81eecc576b50b9d6d",
         "remote": "https://github.com/vapor/vapor.git",
-        "version": "4.84.1"
+        "version": "4.84.6"
       }
     },
     {
