@@ -10,7 +10,11 @@ import (
 )
 
 // RulesFromProtos returns the Bazel build rule declarations for the provided source files.
-func RulesFromProtos(args language.GenerateArgs, grpcFlavors []string) []*rule.Rule {
+func RulesFromProtos(
+	args language.GenerateArgs,
+	generateProtoLibraries bool,
+	generateGRPCLibraryFlavors []string,
+) []*rule.Rule {
 
 	// Extract information about proto files.
 	// We need this to exclude .pb.go files and generate swift_proto_library rules.
@@ -34,7 +38,13 @@ func RulesFromProtos(args language.GenerateArgs, grpcFlavors []string) []*rule.R
 	// Generate the rules from proto packages:
 	var rules []*rule.Rule
 	for protoPackageName, protoPackage := range protoPackages {
-		rs := generateRuleFromProtoPackage(args, protoPackageName, protoPackage, grpcFlavors)
+		rs := generateRuleFromProtoPackage(
+			args,
+			protoPackageName,
+			protoPackage,
+			generateProtoLibraries,
+			generateGRPCLibraryFlavors,
+		)
 		rules = append(rules, rs...)
 	}
 
@@ -45,29 +55,33 @@ func generateRuleFromProtoPackage(
 	args language.GenerateArgs,
 	protoPackageName string,
 	protoPackage proto.Package,
-	grpcFlavors []string,
+	generateProtoLibraries bool,
+	generateGRPCLibraryFlavors []string,
 ) []*rule.Rule {
 	protoPrefix := strings.TrimSuffix(protoPackageName, "_proto")
 	protoPackagePrefix := strings.ReplaceAll(args.Rel, "/", "_")
 	shouldSetVis := shouldSetVisibility(args)
 
 	// Generate the swift_proto_library:
+	rules := []*rule.Rule{}
 	swiftProtoLibraryName := protoPrefix + swiftProtoSuffix
-	swiftProtoLibraryModuleName := protoPackagePrefix + "_" + protoPackageName
-	swiftProtoLibrary := rule.NewRule("swift_proto_library", swiftProtoLibraryName)
-	swiftProtoLibrary.SetAttr("deps", []string{":" + protoPackageName})
-	swiftProtoLibrary.SetPrivateAttr(config.GazelleImportsKey, []string{})
-	swiftProtoLibrary.SetPrivateAttr(SwiftProtoModuleNameKey, swiftProtoLibraryModuleName)
-	setVisibilityAttr(swiftProtoLibrary, shouldSetVis, []string{"//visibility:public"})
-	rules := []*rule.Rule{swiftProtoLibrary}
+	if generateProtoLibraries {
+		swiftProtoLibraryModuleName := protoPackagePrefix + "_" + protoPackageName
+		swiftProtoLibrary := rule.NewRule("swift_proto_library", swiftProtoLibraryName)
+		swiftProtoLibrary.SetAttr("deps", []string{":" + protoPackageName})
+		swiftProtoLibrary.SetPrivateAttr(config.GazelleImportsKey, []string{})
+		swiftProtoLibrary.SetPrivateAttr(SwiftProtoModuleNameKey, swiftProtoLibraryModuleName)
+		setVisibilityAttr(swiftProtoLibrary, shouldSetVis, []string{"//visibility:public"})
+		rules = append(rules, swiftProtoLibrary)
+	}
 
 	if protoPackage.HasServices {
 
-		// Determine which flavors should be generated:
+		// Determine which swift_grpc_library flavors should be generated:
 		var shouldGenerateClientFlavor bool
 		var shouldGenerateClientStubsFlavor bool
 		var shouldGenerateServerFlavor bool
-		for _, flavor := range grpcFlavors {
+		for _, flavor := range generateGRPCLibraryFlavors {
 			switch flavor {
 			case "client":
 				shouldGenerateClientFlavor = true

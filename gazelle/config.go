@@ -129,13 +129,16 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 const moduleNamingConventionDirective = "swift_module_naming_convention"
 const defaultModuleNameDirective = "swift_default_module_name"
 const swiftLibraryTagsDirective = "swift_library_tags"
-const swiftGRPCFlavorsDirective = "swift_grpc_flavors"
+const swiftGenerateProtoLibrariesDirective = "swift_generate_proto_libraries"
+const swiftGenerateGRPCLibrariesWithFlavorsDirective = "swift_generate_grpc_libraries_with_flavors"
 
 func (*swiftLang) KnownDirectives() []string {
 	return []string{
 		moduleNamingConventionDirective,
 		defaultModuleNameDirective,
 		swiftLibraryTagsDirective,
+		swiftGenerateProtoLibrariesDirective,
+		swiftGenerateGRPCLibrariesWithFlavorsDirective,
 	}
 }
 
@@ -165,7 +168,14 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 				tags = strings.Split(d.Value, ",")
 			}
 			sc.SwiftLibraryTags = tags
-		case swiftGRPCFlavorsDirective:
+		case swiftGenerateProtoLibrariesDirective:
+			if d.Value == "" {
+				// By default we generate proto libraries for compatibility with existing behavior.
+				sc.GenerateProtoLibraries = true
+			} else {
+				sc.GenerateProtoLibraries = d.Value == "true"
+			}
+		case swiftGenerateGRPCLibrariesWithFlavorsDirective:
 			var flavors []string
 			if d.Value == "" {
 				// By default we generate all flavors for compatibility with existing behavior.
@@ -175,7 +185,7 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 			} else {
 				flavors = strings.Split(d.Value, ",")
 			}
-			sc.SwiftGRPCFlavors = flavors
+			sc.GenerateGRPCLibraryFlavors = flavors
 		case defaultModuleNameDirective:
 			sc.DefaultModuleNames[rel] = d.Value
 		}

@@ -51,9 +51,12 @@ type SwiftConfig struct {
 	// Defaults to ["manual"]
 	SwiftLibraryTags []string
 
+	// Whether or not to generate swift proto library targets.
+	GenerateProtoLibraries bool
+
 	// The set of GRPC flavors for which swift grpc library targets will be generated.
 	// Defaults to ["client,client_stubs,server"]
-	SwiftGRPCFlavors []string
+	GenerateGRPCLibraryFlavors []string
 
 	// Mapping of relative path to default module name. These values are populated from directives
 	// that can be applied to
