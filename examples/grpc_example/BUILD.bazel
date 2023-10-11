@@ -15,7 +15,8 @@ tidy(
 # Ignore the Swift build folder
 # gazelle:exclude .build
 # gazelle:swift_module_naming_convention pascal_case
-# gazelle:swift_grpc_flavors client,client_stubs,server
+# gazelle:swift_generate_proto_libraries true
+# gazelle:swift_generate_grpc_libraries_with_flavors client,client_stubs,server
 
 gazelle_binary(
     name = "gazelle_bin",
