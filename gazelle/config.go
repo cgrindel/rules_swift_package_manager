@@ -2,7 +2,6 @@ package gazelle
 
 import (
 	"flag"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -149,10 +148,8 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 		switch d.Key {
 		case moduleNamingConventionDirective:
 			if d.Value == swiftcfg.PascalCaseModuleNamingConvention {
-				log.Println("module naming convention ", swiftcfg.PascalCaseModuleNamingConvention)
 				sc.ModuleNamingConvention = swiftcfg.PascalCaseModuleNamingConvention
 			} else {
-				log.Println("module naming convention ", swiftcfg.MatchCaseModuleNamingConvention)
 				sc.ModuleNamingConvention = swiftcfg.MatchCaseModuleNamingConvention
 			}
 		case swiftLibraryTagsDirective:
