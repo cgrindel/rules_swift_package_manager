@@ -164,7 +164,7 @@ def swift_dependencies():
     # version: 1.23.1
     swift_package(
         name = "swiftpkg_swift_nio_http2",
-        commit = "d6656967f33ed8b368b38e4b198631fc7c484a40",
+        commit = "9c22e4f810ce780453f563fba98e1a1039f83d56",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/apple/swift-nio-http2.git",
     )
@@ -196,7 +196,7 @@ def swift_dependencies():
     # version: 4.81.0
     swift_package(
         name = "swiftpkg_vapor",
-        commit = "e38dfe4877cd376e2af84e5a35c163cf73f41bb8",
+        commit = "288d73a368ac0d0e228dd9b81eecc576b50b9d6d",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/vapor.git",
     )
