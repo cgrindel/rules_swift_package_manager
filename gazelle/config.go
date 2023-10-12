@@ -128,13 +128,17 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 const moduleNamingConventionDirective = "swift_module_naming_convention"
 const defaultModuleNameDirective = "swift_default_module_name"
-const swiftLibraryTags = "swift_library_tags"
+const swiftLibraryTagsDirective = "swift_library_tags"
+const swiftGenerateProtoLibrariesDirective = "swift_generate_proto_libraries"
+const swiftGenerateGRPCLibrariesWithFlavorsDirective = "swift_generate_grpc_libraries_with_flavors"
 
 func (*swiftLang) KnownDirectives() []string {
 	return []string{
 		moduleNamingConventionDirective,
 		defaultModuleNameDirective,
-		swiftLibraryTags,
+		swiftLibraryTagsDirective,
+		swiftGenerateProtoLibrariesDirective,
+		swiftGenerateGRPCLibrariesWithFlavorsDirective,
 	}
 }
 
@@ -151,7 +155,7 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 			} else {
 				sc.ModuleNamingConvention = swiftcfg.MatchCaseModuleNamingConvention
 			}
-		case swiftLibraryTags:
+		case swiftLibraryTagsDirective:
 			var tags []string
 			if d.Value == "" {
 				// Mark swift_library targets as manual.
@@ -164,6 +168,24 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 				tags = strings.Split(d.Value, ",")
 			}
 			sc.SwiftLibraryTags = tags
+		case swiftGenerateProtoLibrariesDirective:
+			if d.Value == "" {
+				// By default we generate proto libraries for compatibility with existing behavior.
+				sc.GenerateProtoLibraries = true
+			} else {
+				sc.GenerateProtoLibraries = d.Value == "true"
+			}
+		case swiftGenerateGRPCLibrariesWithFlavorsDirective:
+			var flavors []string
+			if d.Value == "" {
+				// By default we generate all flavors for compatibility with existing behavior.
+				flavors = []string{"client,client_stubs,server"}
+			} else if d.Value == "-" {
+				flavors = nil
+			} else {
+				flavors = strings.Split(d.Value, ",")
+			}
+			sc.GenerateGRPCLibraryFlavors = flavors
 		case defaultModuleNameDirective:
 			sc.DefaultModuleNames[rel] = d.Value
 		}

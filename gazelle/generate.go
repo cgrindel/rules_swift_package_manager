@@ -30,7 +30,7 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 	result := language.GenerateResult{}
 
 	// Generate the rules from the protos (if any):
-	rules := swift.RulesFromProtos(args)
+	rules := swift.RulesFromProtos(args, sc.GenerateProtoLibraries, sc.GenerateGRPCLibraryFlavors)
 	result.Gen = append(result.Gen, rules...)
 	result.Imports = swift.Imports(result.Gen)
 
