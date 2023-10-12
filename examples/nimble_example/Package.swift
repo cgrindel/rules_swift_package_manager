@@ -11,7 +11,7 @@ let package = Package(
         ),
         .package(
             url: "https://github.com/Quick/Nimble",
-            from: "12.3.0"
+            from: "13.0.0"
         ),
     ],
     targets: [
