@@ -82,6 +82,10 @@ def _swift_target_build_file(pkg_ctx, target):
                 bzl_selects.new_from_build_setting(bs)
                 for bs in target.swift_settings.unsafe_flags
             ]))
+        if len(target.swift_settings.experimental_features) > 0:
+            for bs in target.swift_settings.experimental_features:
+                copts.append("-enable-experimental-feature")
+                copts.extend(lists.flatten(bzl_selects.new_from_build_setting(bs)))
 
     if len(defines) > 0:
         attrs["defines"] = bzl_selects.to_starlark(defines)
