@@ -142,6 +142,10 @@ _pkg_info = pkginfos.new(
                     ),
                 ),
                 pkginfos.new_build_setting(
+                    kind = build_setting_kinds.experimental_features,
+                    values = ["BuiltinModule"],
+                ),
+                pkginfos.new_build_setting(
                     kind = build_setting_kinds.unsafe_flags,
                     values = ["-cross-module-optimization"],
                     condition = pkginfos.new_build_setting_condition(
@@ -544,7 +548,10 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 
 swift_binary(
     name = "Source_SwiftExecutableTarget",
-    copts = select({
+    copts = [
+        "-enable-experimental-feature",
+        "BuiltinModule",
+    ] + select({
         "@rules_swift_package_manager//config_settings/spm/configuration:release": ["-cross-module-optimization"],
         "//conditions:default": [],
     }),
