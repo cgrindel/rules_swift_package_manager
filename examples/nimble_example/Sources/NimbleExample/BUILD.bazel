@@ -14,7 +14,6 @@ swift_library(
     tags = ["manual"],
     deps = [
         "@swiftpkg_nimble//:Sources_Nimble",
-        "@swiftpkg_nimble//:Sources_NimbleObjectiveC",
         "@swiftpkg_quick//:Sources_Quick",
     ],
 )
