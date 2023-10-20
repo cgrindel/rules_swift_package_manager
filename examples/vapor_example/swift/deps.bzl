@@ -36,7 +36,7 @@ def swift_dependencies():
     # version: 1.44.1
     swift_package(
         name = "swiftpkg_fluent_kit",
-        commit = "ccea9820fe31076f994f7c1c1d584009cad6bdb2",
+        commit = "e0bb2b060249b7a501249b1612807b2eaaec28c6",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/fluent-kit.git",
     )
@@ -44,7 +44,7 @@ def swift_dependencies():
     # version: 4.5.0
     swift_package(
         name = "swiftpkg_fluent_sqlite_driver",
-        commit = "138a546e3b7e33efa5362e05da2a0dec3a30534f",
+        commit = "d76674f9ec744c773c4126384abe6e74bea68bab",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/fluent-sqlite-driver.git",
     )
@@ -76,7 +76,7 @@ def swift_dependencies():
     # version: 4.3.1
     swift_package(
         name = "swiftpkg_sqlite_kit",
-        commit = "2b20fc0f4f6574f59dae402ccf0ed050c6790b43",
+        commit = "b4766692f2b3e26e4809aeb9f298c9811fdfe4ed",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/sqlite-kit.git",
     )
@@ -84,7 +84,7 @@ def swift_dependencies():
     # version: 1.3.0
     swift_package(
         name = "swiftpkg_sqlite_nio",
-        commit = "3b93e0a58643cc02a8bc42014fe462e1532df62d",
+        commit = "f46b6db58333b1dbff012c9030b8dcd455c2f645",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/sqlite-nio.git",
     )

@@ -7,6 +7,6 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/vapor/vapor.git", exact: "4.84.6"),
         .package(url: "https://github.com/vapor/fluent.git", exact: "4.8.0"),
-        .package(url: "https://github.com/vapor/fluent-sqlite-driver.git", exact: "4.5.0"),
+        .package(url: "https://github.com/vapor/fluent-sqlite-driver.git", exact: "4.6.0"),
     ]
 )
