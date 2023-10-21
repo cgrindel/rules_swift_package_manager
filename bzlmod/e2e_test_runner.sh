@@ -37,7 +37,7 @@ scratch_dir="$("${create_scratch_dir_sh}" --workspace "${workspace_dir}")"
 cd "${scratch_dir}"
 
 # Dump Bazel info
-bazel info
+"${bazel}" info
 
 # MARK - Test As Is
 

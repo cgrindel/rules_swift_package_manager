@@ -4,6 +4,10 @@ set -o errexit -o nounset -o pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 
+# Use the Bazel binary specified by the integration test. Otherise, fall back 
+# to bazel.
+bazel="${BIT_BAZEL_BINARY:-bazel}"
+
 assert_match() {
   local pattern=${1}
   local actual="${2}"
@@ -12,11 +16,11 @@ assert_match() {
 }
 
 # Generate Swift external deps and update build files
-bazel run //:tidy
+"${bazel}" run //:tidy
 
 # Ensure that it builds and tests pass
-bazel test //...
+"${bazel}" test //...
 
 # Run MyExecutable target
-output="$(bazel run //Sources/MyExecutable)"
+output="$("${bazel}" run //Sources/MyExecutable)"
 assert_match "Hello, World!" "${output}"
