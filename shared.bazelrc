@@ -15,10 +15,6 @@ build --incompatible_strict_action_env=true
 common --enable_bzlmod
 build --@cgrindel_bazel_starlib//bzlmod:enabled
 
-# Disable lockfiles until it works properly.
-# https://github.com/bazelbuild/bazel/issues/19068
-common --lockfile_mode=off
-
 # Remote Cache
 build:cache --bes_results_url=https://app.buildbuddy.io/invocation/
 build:cache --bes_backend=grpcs://remote.buildbuddy.io
@@ -44,3 +40,10 @@ run --bes_results_url=
 # Configuration group to run using legacy WORKSPACE
 common:legacy --noenable_bzlmod
 build:legacy --no@cgrindel_bazel_starlib//bzlmod:enabled
+
+# Configure Apple CC toolchain
+# https://github.com/bazelbuild/apple_support#toolchain-setup
+build --enable_platform_specific_config
+build:macos --apple_crosstool_top=@local_config_apple_cc//:toolchain
+build:macos --crosstool_top=@local_config_apple_cc//:toolchain
+build:macos --host_crosstool_top=@local_config_apple_cc//:toolchain
