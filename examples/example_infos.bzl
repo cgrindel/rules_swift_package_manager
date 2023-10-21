@@ -63,6 +63,12 @@ def _bazel_integration_test(ei):
             name = _test_name_prefix(ei.name, enable_bzlmod = enable_bzlmod),
             bazel_binaries = bazel_binaries,
             bazel_versions = ei.versions,
+            tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS + [
+                # Avoid file permssion error when using disk and repository cache after
+                # 7.0.0rc2 upgrade.
+                # https://github.com/bazelbuild/bazel/issues/19908
+                "no-sandbox",
+            ],
             timeout = timeout,
             target_compatible_with = target_compatible_with,
             test_runner = test_runner,
