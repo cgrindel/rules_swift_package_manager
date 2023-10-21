@@ -4,18 +4,15 @@ set -o errexit -o nounset -o pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 
-assert_match() {
-  local pattern=${1}
-  local actual="${2}"
-  local err_msg="Expected to match. pattern: ${pattern}, actual: ${actual}"
-  [[ "${actual}" =~ ${pattern} ]] || (echo >&2 "${err_msg}" && exit 1)
-}
+# Use the Bazel binary specified by the integration test. Otherise, fall back 
+# to bazel.
+bazel="${BIT_BAZEL_BINARY:-bazel}"
 
 # GH249: Do not update build files until the Gazelle extension supports the
 # shape of this example.
 # # Generate Swift external deps and update build files
 # bazel run //:tidy
-bazel run //:swift_update_pkgs
+"${bazel}" run //:swift_update_pkgs
 
 # Ensure that it builds and tests pass
-bazel test //...
+"${bazel}" test //...
