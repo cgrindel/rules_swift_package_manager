@@ -105,14 +105,6 @@ def swift_dependencies():
         remote = "https://github.com/apple/swift-atomics.git",
     )
 
-    # version: 1.3.3
-    swift_package(
-        name = "swiftpkg_swift_backtrace",
-        commit = "f25620d5d05e2f1ba27154b40cafea2b67566956",
-        dependencies_index = "@//swift:deps_index.json",
-        remote = "https://github.com/swift-server/swift-backtrace.git",
-    )
-
     # version: 1.0.4
     swift_package(
         name = "swiftpkg_swift_collections",
