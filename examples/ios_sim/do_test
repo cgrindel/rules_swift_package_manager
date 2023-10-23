@@ -9,6 +9,12 @@ bazel="${BIT_BAZEL_BINARY:-bazel}"
 # Generate Swift external deps and update build files
 "${bazel}" run //:tidy
 
+# rules_xcodeproj executes some Bazel commands. We need to tell it which
+# version to use. Ideally, we would pass the path to the binary.  For now, we
+# will count on the fact that we are using bazelisk.
+USE_BAZEL_VERSION="$( "${bazel}" info release | cut -d ' ' -f 2 )"
+export USE_BAZEL_VERSION
+
 # Generate the Xcode project
 "${bazel}" run //:xcodeproj
 
