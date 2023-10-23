@@ -2,18 +2,28 @@
 
 set -o errexit -o nounset -o pipefail
 
-# Use the Bazel binary specified by the integration test. Otherise, fall back 
-# to bazel.
-bazel="${BIT_BAZEL_BINARY:-bazel}"
-
-# Generate Swift external deps and update build files
-"${bazel}" run //:tidy
-
 # rules_xcodeproj executes some Bazel commands. We need to tell it which
 # version to use. Ideally, we would pass the path to the binary.  For now, we
 # will count on the fact that we are using bazelisk.
-USE_BAZEL_VERSION="$( "${bazel}" info release | cut -d ' ' -f 2 )"
-export USE_BAZEL_VERSION
+if [[ -n "${BIT_BAZEL_BINARY:-}" ]]; then
+  bazel="${BIT_BAZEL_BINARY}"
+  tmp_dir="$( mktemp -d )"
+  ln -s "${BIT_BAZEL_BINARY}" "${tmp_dir}/bazel"
+  export PATH="${tmp_dir}:${PATH}"
+else
+  bazel="bazel"
+fi
+
+# Remove the temp directory if we created it.
+cleanup() {
+  if [[ -n "${tmp_dir:-}" ]]; then
+    rm -rf "${tmp_dir}"
+  fi
+}
+trap cleanup EXIT
+
+# Generate Swift external deps and update build files
+"${bazel}" run //:tidy
 
 # Generate the Xcode project
 "${bazel}" run //:xcodeproj
