@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-set -o errexit -o nounset -o pipefail
-
-# Once we added xcodeproj to this repo. It became difficult to support the clean test.

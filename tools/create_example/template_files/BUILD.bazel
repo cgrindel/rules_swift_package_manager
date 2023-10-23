@@ -8,7 +8,6 @@ filegroup(
         ".bazelrc",
         "MODULE.bazel",
         "do_test",
-        "set_up_clean_test",
     ],
     visibility = ["//tools/create_example:__subpackages__"],
 )

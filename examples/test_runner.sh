@@ -59,7 +59,7 @@ if [[ "${legacy_mode}" == "true" ]]; then
 fi
 
 # Dump Bazel info
-bazel info
+"${bazel}" info
 
 # MARK - Test As Is
 

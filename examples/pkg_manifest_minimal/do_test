@@ -4,6 +4,10 @@ set -o errexit -o nounset -o pipefail
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 
+# Use the Bazel binary specified by the integration test. Otherise, fall back 
+# to bazel.
+bazel="${BIT_BAZEL_BINARY:-bazel}"
+
 assert_match() {
   local pattern=${1}
   local actual="${2}"
@@ -12,23 +16,23 @@ assert_match() {
 }
 
 # Generate Swift external deps and update build files
-bazel run //:tidy
+"${bazel}" run //:tidy
 
 # Ensure that it builds and tests pass
-bazel test //...
+"${bazel}" test //...
 
 # Run MyExecutable target
-output="$(bazel run //Sources/MyExecutable)"
+output="$("${bazel}" run //Sources/MyExecutable)"
 assert_match "Good morning, World!" "${output}"
 
 # Run old-style executable in my_local_package
-output="$(bazel run @swiftpkg_my_local_package//:print-greeting)"
+output="$("${bazel}" run @swiftpkg_my_local_package//:print-greeting)"
 assert_match "Good evening, Jim!" "${output}"
 
 # Buid and run the SwiftFormat alias
-bazel run //:swiftformat -- --version
+"${bazel}" run //:swiftformat -- --version
 
 # Generate a resolution log file
 res_log_path="${script_dir}/res_log.yml"
-bazel run //:update_build_files --  "--resolution_log=${res_log_path}"
+"${bazel}" run //:update_build_files --  "--resolution_log=${res_log_path}"
 [[ -e "${res_log_path}" ]] || (echo >&2 "Expected to find a resolution log file at ${res_log_path}" && exit 1)
