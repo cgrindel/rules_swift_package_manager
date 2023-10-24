@@ -177,6 +177,61 @@ def _find_magical_public_hdr_dir_test(ctx):
 
 find_magical_public_hdr_dir_test = unittest.make(_find_magical_public_hdr_dir_test)
 
+def _reduce_paths_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "empty paths",
+            paths = [],
+            exp = [],
+        ),
+        struct(
+            msg = "single path",
+            paths = ["Sources/geos/include"],
+            exp = ["Sources/geos/include"],
+        ),
+        struct(
+            msg = "duplicate paths",
+            paths = [
+                "Sources/geos/include",
+                "Sources/geos/include",
+            ],
+            exp = ["Sources/geos/include"],
+        ),
+        struct(
+            msg = "consolidate paths",
+            paths = [
+                "Sources/geos/include/geos/geomgraph",
+                "Sources/geos/include/geos/geomgraph/index",
+                "Sources/geos/include/geos/operation",
+                "Sources/geos/include",
+            ],
+            exp = ["Sources/geos/include"],
+        ),
+        struct(
+            msg = "consolidate paths, multiple results",
+            paths = [
+                "Sources/geos/include/geos/geomgraph",
+                "Sources/geos/include/geos/geomgraph/index",
+                "Sources/geos/include/geos/operation",
+                "Sources/geos/include",
+                "Sources/geos/src/deps/ryu",
+            ],
+            exp = [
+                "Sources/geos/include",
+                "Sources/geos/src/deps/ryu",
+            ],
+        ),
+    ]
+    for t in tests:
+        actual = clang_files.reduce_paths(t.paths)
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+reduce_paths_test = unittest.make(_reduce_paths_test)
+
 def clang_files_test_suite():
     return unittest.suite(
         "clang_files_tests",
@@ -186,4 +241,5 @@ def clang_files_test_suite():
         relativize_test,
         is_under_path_test,
         find_magical_public_hdr_dir_test,
+        reduce_paths_test,
     )
