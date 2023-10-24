@@ -8,6 +8,7 @@ objc_library(
     name = "main",
     srcs = ["main.m"],
     enable_modules = True,
+    tags = ["manual"],
     target_compatible_with = ["@platforms//os:macos"],
     deps = [
         "//swiftpkg/tests/generate_modulemap_tests/Sources/FooSwift",
@@ -17,6 +18,9 @@ objc_library(
 
 swift_binary(
     name = "PrintVersionObjc",
+    target_compatible_with = [
+        "@platforms//os:macos",
+    ],
     visibility = ["//swiftpkg/tests/generate_modulemap_tests:__subpackages__"],
     deps = [":main"],
 )

@@ -19,6 +19,7 @@ objc_library(
     ],
     enable_modules = True,
     module_name = "SimpleCore",
+    tags = ["manual"],
     target_compatible_with = [
         "@platforms//os:macos",
     ],
