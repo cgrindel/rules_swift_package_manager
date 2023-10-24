@@ -9,11 +9,13 @@ apple_platform_types = struct(
     macos = "macos",
     ios = "ios",
     tvos = "tvos",
+    visionos = "visionos",
     watchos = "watchos",
     all_values = [
         "macos",
         "ios",
         "tvos",
+        "visionos",
         "watchos",
     ],
 )
