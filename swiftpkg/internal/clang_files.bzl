@@ -189,6 +189,7 @@ def _reduce_paths(path_list):
     path_list = sorted(path_list)
     result_set = sets.make()
 
+    # buildifier: disable=uninitialized
     def _starts_with_any_in_result(path):
         for rpath in sets.to_list(result_set):
             if path.startswith(rpath):
