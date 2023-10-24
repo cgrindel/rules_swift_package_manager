@@ -206,7 +206,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         for p in clang_src_info.private_includes
     ]
 
-    if target.clang_settings != None:
+    all_settings = lists.compact([target.clang_settings, target.cxx_settings])
+    for settings in all_settings:
         defines.extend(lists.flatten([
             bzl_selects.new_from_build_setting(
                 bs,
@@ -214,7 +215,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 # are already escaped.
                 values_map_fn = scg.normalize_define_value,
             )
-            for bs in target.clang_settings.defines
+            for bs in settings.defines
         ]))
 
         # Need to convert the headerSearchPaths to be relative to the
@@ -229,7 +230,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 ],
                 condition = bs.condition,
             )
-            for bs in target.clang_settings.hdr_srch_paths
+            for bs in settings.hdr_srch_paths
         ]
         local_includes.extend(lists.flatten([
             bzl_selects.new_from_build_setting(bs)
@@ -238,7 +239,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 
         copts.extend(lists.flatten([
             bzl_selects.new_from_build_setting(bs)
-            for bs in target.clang_settings.unsafe_flags
+            for bs in settings.unsafe_flags
         ]))
 
     linkopts = []

@@ -235,6 +235,9 @@ def _new_target_from_json_maps(
     clang_settings = _new_clang_settings_from_dump_json_list(
         dump_map["settings"],
     )
+    cxx_settings = _new_cxx_settings_from_dump_json_list(
+        dump_map["settings"],
+    )
     swift_settings = _new_swift_settings_from_dump_json_list(
         dump_map["settings"],
     )
@@ -279,6 +282,13 @@ def _new_target_from_json_maps(
             ]
 
     elif module_type == module_types.clang:
+        # other_hdr_srch_paths = clang_settings.hdr_srch_paths + \
+        #                        cxx_settings.hdr_srch_paths
+        other_hdr_srch_paths = []
+        if clang_settings != None:
+            other_hdr_srch_paths.extend(clang_settings.hdr_srch_paths)
+        if cxx_settings != None:
+            other_hdr_srch_paths.extend(cxx_settings.hdr_srch_paths)
         clang_src_info = _new_clang_src_info_from_sources(
             repository_ctx = repository_ctx,
             pkg_path = pkg_path,
@@ -287,7 +297,7 @@ def _new_target_from_json_maps(
             source_paths = source_paths,
             public_hdrs_path = public_hdrs_path,
             exclude_paths = exclude_paths,
-            clang_settings = clang_settings,
+            other_hdr_srch_paths = other_hdr_srch_paths,
         )
         if objc_files.has_objc_srcs(sources):
             objc_src_info = _new_objc_src_info_from_sources(
@@ -311,6 +321,7 @@ def _new_target_from_json_maps(
         source_paths = source_paths,
         dependencies = dependencies,
         clang_settings = clang_settings,
+        cxx_settings = cxx_settings,
         swift_settings = swift_settings,
         linker_settings = linker_settings,
         public_hdrs_path = public_hdrs_path,
@@ -374,6 +385,14 @@ def _new_clang_settings_from_dump_json_list(dump_list):
     build_settings = []
     for setting in dump_list:
         if setting["tool"] != "c":
+            continue
+        build_settings.extend(_new_build_settings_from_json(setting))
+    return _new_clang_settings(build_settings)
+
+def _new_cxx_settings_from_dump_json_list(dump_list):
+    build_settings = []
+    for setting in dump_list:
+        if setting["tool"] != "cxx":
             continue
         build_settings.extend(_new_build_settings_from_json(setting))
     return _new_clang_settings(build_settings)
@@ -822,7 +841,7 @@ def _new_clang_src_info_from_sources(
         source_paths,
         public_hdrs_path,
         exclude_paths,
-        clang_settings):
+        other_hdr_srch_paths = []):
     # Absolute path to the target. This is typically used for filesystem
     # actions, not for values added to the cc_library or objc_library.
     abs_target_path = paths.normalize(
@@ -910,11 +929,16 @@ def _new_clang_src_info_from_sources(
 
     # Look for header files that are not under the target path
     extra_hdr_dirs = []
-    if clang_settings != None:
-        extra_hdr_dirs.extend(lists.flatten([
-            [paths.join(target_path, path) for path in bs.values]
-            for bs in clang_settings.hdr_srch_paths
-        ]))
+
+    # if clang_settings != None:
+    #     extra_hdr_dirs.extend(lists.flatten([
+    #         [paths.join(target_path, path) for path in bs.values]
+    #         for bs in clang_settings.hdr_srch_paths
+    #     ]))
+    extra_hdr_dirs.extend(lists.flatten([
+        [paths.join(target_path, path) for path in bs.values]
+        for bs in other_hdr_srch_paths
+    ]))
     if target_path != ".":
         for pi in private_includes:
             normalized_pi = paths.normalize(pi)
@@ -1011,6 +1035,7 @@ def _new_target(
         exclude_paths = [],
         source_paths = None,
         clang_settings = None,
+        cxx_settings = None,
         swift_settings = None,
         linker_settings = None,
         public_hdrs_path = None,
@@ -1042,6 +1067,7 @@ def _new_target(
         source_paths: Optional. A `list` of paths (`string` values) specified by
             the Swift package manfiest author.
         clang_settings: Optional. A `struct` as returned by `pkginfos.new_clang_settings`.
+        cxx_settings: Optional. A `struct` as returned by `pkginfos.new_clang_settings`.
         swift_settings: Optional. A `struct` as returned by `pkginfos.new_swift_settings`.
         linker_settings: Optional. A `struct` as returned by `pkginfos.new_linker_settings`.
         public_hdrs_path: Optional. A `string`.
@@ -1103,6 +1129,7 @@ def _new_target(
         exclude_paths = exclude_paths,
         source_paths = normalized_src_paths,
         clang_settings = clang_settings,
+        cxx_settings = cxx_settings,
         swift_settings = swift_settings,
         linker_settings = linker_settings,
         public_hdrs_path = public_hdrs_path,
@@ -1168,7 +1195,7 @@ def _new_build_setting(kind, values, condition = None):
     )
 
 def _new_clang_settings(build_settings):
-    """Create a clang setting data struct.
+    """Create a clang/cxx setting data struct.
 
     Args:
         build_settings: A `list` of `struct` values as returned by
