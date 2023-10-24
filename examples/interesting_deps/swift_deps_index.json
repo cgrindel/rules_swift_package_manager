@@ -1,6 +1,7 @@
 {
   "direct_dep_identities": [
     "cocoalumberjack",
+    "geoswift",
     "libwebp-xcode",
     "opencombine",
     "swift-log"
@@ -46,6 +47,26 @@
       "package_identity": "cocoalumberjack",
       "product_memberships": [
         "CocoaLumberjackSwift"
+      ]
+    },
+    {
+      "name": "geos",
+      "c99name": "geos",
+      "src_type": "clang",
+      "label": "@swiftpkg_geos//:Sources_geos",
+      "package_identity": "geos",
+      "product_memberships": [
+        "geos"
+      ]
+    },
+    {
+      "name": "GEOSwift",
+      "c99name": "GEOSwift",
+      "src_type": "swift",
+      "label": "@swiftpkg_geoswift//:Sources_GEOSwift",
+      "package_identity": "geoswift",
+      "product_memberships": [
+        "GEOSwift"
       ]
     },
     {
@@ -153,6 +174,22 @@
       ]
     },
     {
+      "identity": "geoswift",
+      "name": "GEOSwift",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_geoswift//:Sources_GEOSwift"
+      ]
+    },
+    {
+      "identity": "geos",
+      "name": "geos",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_geos//:Sources_geos"
+      ]
+    },
+    {
       "identity": "libwebp-xcode",
       "name": "libwebp",
       "type": "library",
@@ -209,6 +246,25 @@
         "commit": "67ec5818a757aba4d7c534e21a905d878d128dbf",
         "remote": "https://github.com/CocoaLumberjack/CocoaLumberjack.git",
         "version": "3.8.1"
+      }
+    },
+    {
+      "name": "swiftpkg_geos",
+      "identity": "geos",
+      "remote": {
+        "commit": "f510e634c822116fca615064d889300dba40d761",
+        "remote": "https://github.com/GEOSwift/geos.git",
+        "version": "8.1.0"
+      },
+      "cxxLanguageStandard": "c++11"
+    },
+    {
+      "name": "swiftpkg_geoswift",
+      "identity": "geoswift",
+      "remote": {
+        "commit": "2d23ede8c82c067655d3a9f0221bc73f08cd399a",
+        "remote": "https://github.com/GEOSwift/GEOSwift",
+        "version": "10.1.0"
       }
     },
     {
