@@ -9,6 +9,10 @@ swift_library(
     srcs = ["FooSwiftVersionInfo.swift"],
     generates_header = True,
     module_name = "FooSwift",
+    tags = ["manual"],
+    target_compatible_with = [
+        "@platforms//os:macos",
+    ],
     visibility = ["//visibility:public"],
     deps = [
         "//swiftpkg/tests/generate_modulemap_tests/SimpleCore",
