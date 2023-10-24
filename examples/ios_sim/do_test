@@ -4,7 +4,7 @@ set -o errexit -o nounset -o pipefail
 
 # rules_xcodeproj executes some Bazel commands. We need to tell it which
 # version to use. Ideally, we would pass the path to the binary.  For now, we
-# will count on the fact that we are using bazelisk.
+# will count on the fact that it expects to find `bazel` in the PATH.
 if [[ -n "${BIT_BAZEL_BINARY:-}" ]]; then
   bazel="${BIT_BAZEL_BINARY}"
   tmp_dir="$( mktemp -d )"
