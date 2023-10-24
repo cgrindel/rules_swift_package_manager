@@ -2,6 +2,7 @@
   "direct_dep_identities": [
     "cocoalumberjack",
     "libwebp-xcode",
+    "opencombine",
     "swift-log"
   ],
   "modules": [
@@ -58,6 +59,64 @@
       ]
     },
     {
+      "name": "COpenCombineHelpers",
+      "c99name": "COpenCombineHelpers",
+      "src_type": "clang",
+      "label": "@swiftpkg_opencombine//:Sources_COpenCombineHelpers",
+      "package_identity": "opencombine",
+      "product_memberships": [
+        "OpenCombine",
+        "OpenCombineDispatch",
+        "OpenCombineFoundation",
+        "OpenCombineShim"
+      ]
+    },
+    {
+      "name": "OpenCombine",
+      "c99name": "OpenCombine",
+      "src_type": "swift",
+      "label": "@swiftpkg_opencombine//:Sources_OpenCombine",
+      "package_identity": "opencombine",
+      "product_memberships": [
+        "OpenCombine",
+        "OpenCombineDispatch",
+        "OpenCombineFoundation",
+        "OpenCombineShim"
+      ]
+    },
+    {
+      "name": "OpenCombineDispatch",
+      "c99name": "OpenCombineDispatch",
+      "src_type": "swift",
+      "label": "@swiftpkg_opencombine//:Sources_OpenCombineDispatch",
+      "package_identity": "opencombine",
+      "product_memberships": [
+        "OpenCombineDispatch",
+        "OpenCombineShim"
+      ]
+    },
+    {
+      "name": "OpenCombineFoundation",
+      "c99name": "OpenCombineFoundation",
+      "src_type": "swift",
+      "label": "@swiftpkg_opencombine//:Sources_OpenCombineFoundation",
+      "package_identity": "opencombine",
+      "product_memberships": [
+        "OpenCombineFoundation",
+        "OpenCombineShim"
+      ]
+    },
+    {
+      "name": "OpenCombineShim",
+      "c99name": "OpenCombineShim",
+      "src_type": "swift",
+      "label": "@swiftpkg_opencombine//:Sources_OpenCombineShim",
+      "package_identity": "opencombine",
+      "product_memberships": [
+        "OpenCombineShim"
+      ]
+    },
+    {
       "name": "Logging",
       "c99name": "Logging",
       "src_type": "swift",
@@ -102,6 +161,38 @@
       ]
     },
     {
+      "identity": "opencombine",
+      "name": "OpenCombine",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_opencombine//:Sources_OpenCombine"
+      ]
+    },
+    {
+      "identity": "opencombine",
+      "name": "OpenCombineDispatch",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_opencombine//:Sources_OpenCombineDispatch"
+      ]
+    },
+    {
+      "identity": "opencombine",
+      "name": "OpenCombineFoundation",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_opencombine//:Sources_OpenCombineFoundation"
+      ]
+    },
+    {
+      "identity": "opencombine",
+      "name": "OpenCombineShim",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_opencombine//:Sources_OpenCombineShim"
+      ]
+    },
+    {
       "identity": "swift-log",
       "name": "Logging",
       "type": "library",
@@ -128,6 +219,16 @@
         "remote": "https://github.com/SDWebImage/libwebp-Xcode.git",
         "version": "1.3.2"
       }
+    },
+    {
+      "name": "swiftpkg_opencombine",
+      "identity": "opencombine",
+      "remote": {
+        "commit": "8576f0d579b27020beccbccc3ea6844f3ddfc2c2",
+        "remote": "https://github.com/OpenCombine/OpenCombine",
+        "version": "0.14.0"
+      },
+      "cxxLanguageStandard": "c++17"
     },
     {
       "name": "swiftpkg_swift_log",
