@@ -301,19 +301,9 @@ def _collect_files(
     srcs = sets.to_list(srcs_set)
     others = sets.to_list(others_set)
     public_includes = sets.to_list(public_includes_set)
-
-    # TODO(chuck): FIX ME!
-    private_includes = sets.to_list(private_includes_set)
-    # private_includes = _reduce_paths(
-    #     path_list = sets.to_list(private_includes_set),
-    # )
-
-    # DEBUG BEGIN
-    print("*** CHUCK private_includes: ")
-    for idx, item in enumerate(private_includes):
-        print("*** CHUCK", idx, ":", item)
-
-    # DEBUG END
+    private_includes = _reduce_paths(
+        path_list = sets.to_list(private_includes_set),
+    )
 
     # Textual headers
     textual_hdrs = []
