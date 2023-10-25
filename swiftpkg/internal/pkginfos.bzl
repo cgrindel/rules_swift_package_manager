@@ -247,10 +247,10 @@ def _new_target_from_json_maps(
 
     # The description JSON should have a list with all of the resources with
     # their absolute paths.
-    resources = [
+    resources_set = sets.make([
         _new_resource_from_desc_map(r, pkg_path)
         for r in desc_map.get("resources", [])
-    ]
+    ])
 
     artifact_download_info = None
     url = dump_map.get("url")
@@ -275,11 +275,9 @@ def _new_target_from_json_maps(
             target_path,
             sources,
         )
-        if swift_src_info.discovered_res_files != []:
-            resources += [
-                _new_resource_from_discovered_resource(p)
-                for p in swift_src_info.discovered_res_files
-            ]
+        for p in swift_src_info.discovered_res_files:
+            res = _new_resource_from_discovered_resource(p)
+            sets.insert(resources_set, res)
 
     elif module_type == module_types.clang:
         other_hdr_srch_paths = []
@@ -325,7 +323,7 @@ def _new_target_from_json_maps(
         public_hdrs_path = public_hdrs_path,
         artifact_download_info = artifact_download_info,
         product_memberships = product_memberships,
-        resources = resources,
+        resources = sets.to_list(resources_set),
         swift_src_info = swift_src_info,
         clang_src_info = clang_src_info,
         objc_src_info = objc_src_info,
@@ -1351,22 +1349,22 @@ def _new_resource_from_desc_map(desc_map, pkg_path):
         path = paths.relativize(path, pkg_path)
     return _new_resource(
         path = path,
-        rule = _new_resource_rule_from_dump_json_map(desc_map["rule"]),
+        rule = _new_resource_rule_from_desc_json_map(desc_map["rule"]),
     )
 
-def _new_resource_rule_from_dump_json_map(dump_map):
-    process = _new_resource_rule_process_from_dump_json_map(
-        dump_map.get("process"),
+def _new_resource_rule_from_desc_json_map(desc_map):
+    process = _new_resource_rule_process_from_desc_json_map(
+        desc_map.get("process"),
     )
-    copy = True if dump_map.get("copy") != None else None
-    embed_in_code = True if dump_map.get("embedInCode") != None else None
+    copy = True if desc_map.get("copy") != None else None
+    embed_in_code = True if desc_map.get("embedInCode") != None else None
     return _new_resource_rule(
         process = process,
         copy = copy,
         embed_in_code = embed_in_code,
     )
 
-def _new_resource_rule_process_from_dump_json_map(dump_map):
+def _new_resource_rule_process_from_desc_json_map(dump_map):
     if dump_map == None:
         return None
     return _new_resource_rule_process(

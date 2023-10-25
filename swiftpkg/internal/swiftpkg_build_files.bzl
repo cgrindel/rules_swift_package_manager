@@ -426,7 +426,6 @@ def _apple_resource_bundle(target, default_localization):
     infoplist_name = pkginfo_targets.resource_bundle_infoplist_label_name(
         bzl_target_name,
     )
-
     resources = [
         r.path
         for r in target.resources

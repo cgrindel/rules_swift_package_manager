@@ -10,7 +10,10 @@ swift_library(
     module_name = "MyApp",
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
-    deps = ["@swiftpkg_package_with_resources//:Sources_CoolUI"],
+    deps = [
+        "@swiftpkg_another_package_with_resources//:MoreCoolUI",
+        "@swiftpkg_package_with_resources//:Sources_CoolUI",
+    ],
 )
 
 ios_application(

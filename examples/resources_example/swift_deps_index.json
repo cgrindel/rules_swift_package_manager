@@ -1,8 +1,19 @@
 {
   "direct_dep_identities": [
+    "another_package_with_resources",
     "package_with_resources"
   ],
   "modules": [
+    {
+      "name": "MoreCoolUI",
+      "c99name": "MoreCoolUI",
+      "src_type": "swift",
+      "label": "@swiftpkg_another_package_with_resources//:MoreCoolUI",
+      "package_identity": "another_package_with_resources",
+      "product_memberships": [
+        "MoreCoolUI"
+      ]
+    },
     {
       "name": "CoolUI",
       "c99name": "CoolUI",
@@ -16,6 +27,14 @@
   ],
   "products": [
     {
+      "identity": "another_package_with_resources",
+      "name": "MoreCoolUI",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_another_package_with_resources//:MoreCoolUI"
+      ]
+    },
+    {
       "identity": "package_with_resources",
       "name": "CoolUI",
       "type": "library",
@@ -25,6 +44,13 @@
     }
   ],
   "packages": [
+    {
+      "name": "swiftpkg_another_package_with_resources",
+      "identity": "another_package_with_resources",
+      "local": {
+        "path": "third_party/another_package_with_resources"
+      }
+    },
     {
       "name": "swiftpkg_package_with_resources",
       "identity": "package_with_resources",

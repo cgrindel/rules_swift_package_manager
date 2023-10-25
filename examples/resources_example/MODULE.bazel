@@ -42,6 +42,7 @@ swift_deps.from_file(
 )
 use_repo(
     swift_deps,
+    "swiftpkg_another_package_with_resources",
     "swiftpkg_package_with_resources",
 )
 # swift_deps END
