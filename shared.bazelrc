@@ -25,7 +25,7 @@ build:cache --experimental_remote_cache_async
 build:cache --experimental_remote_cache_compression
 
 # Recommended by BuildBuddy
-build --remote_build_event_upload=minimal
+build --experimental_remote_build_event_upload=minimal
 build --noslim_profile 
 build --experimental_profile_include_target_label 
 build --experimental_profile_include_primary_output 
