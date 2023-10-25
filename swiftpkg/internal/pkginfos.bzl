@@ -282,8 +282,6 @@ def _new_target_from_json_maps(
             ]
 
     elif module_type == module_types.clang:
-        # other_hdr_srch_paths = clang_settings.hdr_srch_paths + \
-        #                        cxx_settings.hdr_srch_paths
         other_hdr_srch_paths = []
         if clang_settings != None:
             other_hdr_srch_paths.extend(clang_settings.hdr_srch_paths)
@@ -929,12 +927,6 @@ def _new_clang_src_info_from_sources(
 
     # Look for header files that are not under the target path
     extra_hdr_dirs = []
-
-    # if clang_settings != None:
-    #     extra_hdr_dirs.extend(lists.flatten([
-    #         [paths.join(target_path, path) for path in bs.values]
-    #         for bs in clang_settings.hdr_srch_paths
-    #     ]))
     extra_hdr_dirs.extend(lists.flatten([
         [paths.join(target_path, path) for path in bs.values]
         for bs in other_hdr_srch_paths
