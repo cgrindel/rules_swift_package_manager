@@ -183,6 +183,27 @@ def _relativize_paths(paths_list, relative_to):
         for path in paths_list
     ]
 
+def _reduce_paths(path_list):
+    # Reduce the paths to the smallest number of paths with a common parent.
+    # By sorting the paths, the shortest paths should be first.
+    path_list = sorted(path_list)
+    result_set = sets.make()
+
+    # buildifier: disable=uninitialized
+    def _starts_with_any_in_result(path):
+        for rpath in sets.to_list(result_set):
+            if path.startswith(rpath):
+                return True
+        return False
+
+    for path in path_list:
+        if sets.contains(result_set, path):
+            continue
+        if _starts_with_any_in_result(path):
+            continue
+        sets.insert(result_set, path)
+    return sorted(sets.to_list(result_set))
+
 def _collect_files(
         repository_ctx,
         all_srcs,
@@ -281,7 +302,9 @@ def _collect_files(
     srcs = sets.to_list(srcs_set)
     others = sets.to_list(others_set)
     public_includes = sets.to_list(public_includes_set)
-    private_includes = sets.to_list(private_includes_set)
+    private_includes = _reduce_paths(
+        path_list = sets.to_list(private_includes_set),
+    )
 
     # Textual headers
     textual_hdrs = []
@@ -308,5 +331,6 @@ clang_files = struct(
     is_include_hdr = _is_include_hdr,
     is_public_modulemap = _is_public_modulemap,
     is_under_path = _is_under_path,
+    reduce_paths = _reduce_paths,
     relativize = _relativize,
 )

@@ -1,5 +1,6 @@
 import CocoaLumberjack
 import CocoaLumberjackSwiftLogBackend
+import GEOSwift
 import libwebp
 import Logging
 import OpenCombine
