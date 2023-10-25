@@ -1,4 +1,5 @@
 import CoolUI
+import MoreCoolUI
 import SwiftUI
 
 @main
@@ -8,6 +9,8 @@ struct MyApp: App {
             VStack {
                 CoolStuff.title()
                 CoolStuff.image().resizable()
+                MoreCoolStuff.title()
+                MoreCoolStuff.image().resizable()
             }
         }
     }

@@ -51,6 +51,10 @@ def _list_files_under(
     if exec_result.return_code != 0:
         fail("Failed to list files in %s. stderr:\n%s" % (path, exec_result.stderr))
     path_list = exec_result.stdout.splitlines()
+
+    # The starting path will be prefixed to the results. If the starting path is dot (.),
+    # the prefix for the results will be `./`. We will remove it before returning the results.
+    path_list = [p.removeprefix("./") for p in path_list]
     path_list = _exclude_paths(path_list, exclude)
     return path_list
 
