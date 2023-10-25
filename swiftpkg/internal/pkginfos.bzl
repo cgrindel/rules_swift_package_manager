@@ -1364,11 +1364,11 @@ def _new_resource_rule_from_desc_json_map(desc_map):
         embed_in_code = embed_in_code,
     )
 
-def _new_resource_rule_process_from_desc_json_map(dump_map):
-    if dump_map == None:
+def _new_resource_rule_process_from_desc_json_map(desc_map):
+    if desc_map == None:
         return None
     return _new_resource_rule_process(
-        localization = dump_map.get("localization"),
+        localization = desc_map.get("localization"),
     )
 
 def _new_resource_from_discovered_resource(path):
