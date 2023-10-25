@@ -48,9 +48,9 @@ use_repo(
     swift_deps,
     "swiftpkg_cocoalumberjack",
     "swiftpkg_libwebp_xcode",
+    "swiftpkg_opencombine",
     "swiftpkg_swift_log",
 )
-
 # swift_deps END
 swift_deps.configure_package(
     name = "swiftpkg_libwebp_xcode",

@@ -43,6 +43,7 @@ swift_binary(
     deps = [
         "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjackSwiftLogBackend",
         "@swiftpkg_libwebp_xcode//:libwebp",
+        "@swiftpkg_opencombine//:Sources_OpenCombine",
         "@swiftpkg_swift_log//:Sources_Logging",
     ],
 )

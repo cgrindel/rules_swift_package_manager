@@ -2,6 +2,7 @@ import CocoaLumberjack
 import CocoaLumberjackSwiftLogBackend
 import libwebp
 import Logging
+import OpenCombine
 
 // Configure DDLog to be the backend for the swift-log.
 DDLog.add(DDTTYLogger.sharedInstance!)
