@@ -27,6 +27,12 @@ bazel_dep(
     repo_name = "bazel_gazelle",
 )
 
+apple_cc_configure = use_extension(
+    "@apple_support//crosstool:setup.bzl",
+    "apple_cc_configure_extension",
+)
+use_repo(apple_cc_configure, "local_config_apple_cc")
+
 non_module_deps = use_extension("//:extensions.bzl", "non_module_deps")
 use_repo(
     non_module_deps,
