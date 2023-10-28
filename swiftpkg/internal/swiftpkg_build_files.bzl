@@ -144,6 +144,7 @@ def _swift_test_from_target(target, attrs):
 # MARK: - Clang Targets
 
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
+    all_build_files = []
     clang_src_info = target.clang_src_info
     if clang_src_info == None:
         fail("Expected `clang_src_info` to not be None.")
@@ -162,15 +163,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "visibility": ["//visibility:public"],
     }
 
-    # DEBUG BEGIN
-    if len(target.resources) > 0:
-        print("*** CHUCK target.label: ", target.label)
-        print("*** CHUCK target.resources: ")
-        for idx, item in enumerate(target.resources):
-            print("*** CHUCK", idx, ":", item)
-
-    # DEBUG END
-
     def _set_if_not_empty(attr, list, transform_fn = None):
         if len(list) > 0:
             attrs[attr] = transform_fn(list) if transform_fn else list
@@ -180,6 +172,15 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     _set_if_not_empty("srcs", clang_src_info.srcs)
     _set_if_not_empty("includes", clang_src_info.public_includes)
     _set_if_not_empty("textual_hdrs", clang_src_info.textual_hdrs)
+
+    res_build_file = _handle_target_resources(
+        pkg_ctx,
+        target,
+        attrs,
+        include_accessor = False,
+    )
+    if res_build_file:
+        all_build_files.append(res_build_file)
 
     defines = [
         # The SWIFT_PACKAGE define is a magical value that SPM uses when it
@@ -356,11 +357,12 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         decls = [
             build_decls.new(clang_kinds.library, bzl_target_name, attrs = attrs),
         ]
-
-    return build_files.new(
+    all_build_files.append(build_files.new(
         load_stmts = load_stmts,
         decls = decls,
-    )
+    ))
+
+    return build_files.merge(*all_build_files)
 
 # MARK: - System Library Targets
 
@@ -418,26 +420,35 @@ expected: {expected}\
 
 # MARK: - Apple Resource Group
 
-def _handle_target_resources(pkg_ctx, target, attrs):
+def _handle_target_resources(pkg_ctx, target, attrs, include_accessor = True):
     if len(target.resources) == 0:
         return None
 
-    # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
-    # https://stackoverflow.com/questions/63237395/generating-resource-bundle-accessor-type-bundle-has-no-member-module
-    build_file = _apple_resource_bundle(
+    def _update_attr_list(name, value):
+        # We need to create a new list, because the retrieved list could be
+        # frozen.
+        attr_list = list(attrs.get(name, []))
+        attr_list.append(value)
+        attrs[name] = attr_list
+
+    bzl_target_name = pkginfo_targets.bazel_label_name(target)
+    _update_attr_list("data", ":{}".format(
+        pkginfo_targets.resource_bundle_label_name(bzl_target_name),
+    ))
+    if include_accessor:
+        # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
+        # https://stackoverflow.com/questions/63237395/generating-resource-bundle-accessor-type-bundle-has-no-member-module
+        _update_attr_list("srcs", ":{}".format(
+            pkginfo_targets.resource_bundle_accessor_label_name(bzl_target_name),
+        ))
+
+    return _apple_resource_bundle(
         target,
         pkg_ctx.pkg_info.default_localization,
+        include_accessor = include_accessor,
     )
-    bzl_target_name = pkginfo_targets.bazel_label_name(target)
-    attrs["srcs"].append(":{}".format(
-        pkginfo_targets.resource_bundle_accessor_label_name(bzl_target_name),
-    ))
-    attrs["data"] = [
-        ":{}".format(pkginfo_targets.resource_bundle_label_name(bzl_target_name)),
-    ]
-    return build_file
 
-def _apple_resource_bundle(target, default_localization):
+def _apple_resource_bundle(target, default_localization, include_accessor = True):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     bundle_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
     infoplist_name = pkginfo_targets.resource_bundle_infoplist_label_name(
@@ -452,18 +463,18 @@ def _apple_resource_bundle(target, default_localization):
     load_stmts = [
         apple_resource_bundle_load_stmt,
         swiftpkg_resource_bundle_infoplist_load_stmt,
-        swiftpkg_resource_bundle_accessor_load_stmt,
+        # swiftpkg_resource_bundle_accessor_load_stmt,
     ]
     decls = [
-        build_decls.new(
-            kind = swiftpkg_kinds.resource_bundle_accessor,
-            name = pkginfo_targets.resource_bundle_accessor_label_name(
-                bzl_target_name,
-            ),
-            attrs = {
-                "bundle_name": bundle_name,
-            },
-        ),
+        # build_decls.new(
+        #     kind = swiftpkg_kinds.resource_bundle_accessor,
+        #     name = pkginfo_targets.resource_bundle_accessor_label_name(
+        #         bzl_target_name,
+        #     ),
+        #     attrs = {
+        #         "bundle_name": bundle_name,
+        #     },
+        # ),
         build_decls.new(
             kind = swiftpkg_kinds.resource_bundle_infoplist,
             name = infoplist_name,
@@ -483,6 +494,19 @@ def _apple_resource_bundle(target, default_localization):
             },
         ),
     ]
+    if include_accessor:
+        load_stmts.append(swiftpkg_resource_bundle_accessor_load_stmt)
+        decls.append(
+            build_decls.new(
+                kind = swiftpkg_kinds.resource_bundle_accessor,
+                name = pkginfo_targets.resource_bundle_accessor_label_name(
+                    bzl_target_name,
+                ),
+                attrs = {
+                    "bundle_name": bundle_name,
+                },
+            ),
+        )
     return build_files.new(load_stmts = load_stmts, decls = decls)
 
 # MARK: - Modulemap Generation
