@@ -41,7 +41,6 @@ def _swift_target_build_file(pkg_ctx, target):
         fail("Expected a `swift_src_info`. name: ", target.name)
 
     all_build_files = []
-    bzl_target_name = pkginfo_targets.bazel_label_name(target)
     deps = lists.flatten([
         pkginfo_target_deps.bzl_select_list(pkg_ctx, td, depender_module_name = target.c99name)
         for td in target.dependencies
@@ -91,20 +90,10 @@ def _swift_target_build_file(pkg_ctx, target):
         attrs["defines"] = bzl_selects.to_starlark(defines)
     if len(copts) > 0:
         attrs["copts"] = bzl_selects.to_starlark(copts)
-    if len(target.resources) > 0:
-        # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
-        # https://stackoverflow.com/questions/63237395/generating-resource-bundle-accessor-type-bundle-has-no-member-module
-        all_build_files.append(_apple_resource_bundle(
-            target,
-            pkg_ctx.pkg_info.default_localization,
-        ))
-        attrs["srcs"].append(":{}".format(
-            pkginfo_targets.resource_bundle_accessor_label_name(bzl_target_name),
-        ))
-        attrs["data"] = [
-            ":{}".format(pkginfo_targets.resource_bundle_label_name(bzl_target_name)),
-        ]
 
+    res_build_file = _handle_target_resources(pkg_ctx, target, attrs)
+    if res_build_file:
+        all_build_files.append(res_build_file)
     if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(target, attrs)]
@@ -172,6 +161,15 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "tags": ["swift_module={}".format(target.c99name)],
         "visibility": ["//visibility:public"],
     }
+
+    # DEBUG BEGIN
+    if len(target.resources) > 0:
+        print("*** CHUCK target.label: ", target.label)
+        print("*** CHUCK target.resources: ")
+        for idx, item in enumerate(target.resources):
+            print("*** CHUCK", idx, ":", item)
+
+    # DEBUG END
 
     def _set_if_not_empty(attr, list, transform_fn = None):
         if len(list) > 0:
@@ -419,6 +417,25 @@ expected: {expected}\
     )
 
 # MARK: - Apple Resource Group
+
+def _handle_target_resources(pkg_ctx, target, attrs):
+    if len(target.resources) == 0:
+        return None
+
+    # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
+    # https://stackoverflow.com/questions/63237395/generating-resource-bundle-accessor-type-bundle-has-no-member-module
+    build_file = _apple_resource_bundle(
+        target,
+        pkg_ctx.pkg_info.default_localization,
+    )
+    bzl_target_name = pkginfo_targets.bazel_label_name(target)
+    attrs["srcs"].append(":{}".format(
+        pkginfo_targets.resource_bundle_accessor_label_name(bzl_target_name),
+    ))
+    attrs["data"] = [
+        ":{}".format(pkginfo_targets.resource_bundle_label_name(bzl_target_name)),
+    ]
+    return build_file
 
 def _apple_resource_bundle(target, default_localization):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
