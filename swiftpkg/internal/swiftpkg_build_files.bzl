@@ -455,10 +455,10 @@ def _apple_resource_bundle(target, default_localization, include_accessor = True
         bzl_target_name,
     )
 
-    resources = [
+    resources = sorted([
         r.path
         for r in target.resources
-    ]
+    ])
 
     load_stmts = [
         apple_resource_bundle_load_stmt,
