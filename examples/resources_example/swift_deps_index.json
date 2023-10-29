@@ -1,6 +1,7 @@
 {
   "direct_dep_identities": [
     "another_package_with_resources",
+    "googlesignin-ios",
     "package_with_resources"
   ],
   "modules": [
@@ -12,6 +13,103 @@
       "package_identity": "another_package_with_resources",
       "product_memberships": [
         "MoreCoolUI"
+      ]
+    },
+    {
+      "name": "AppAuth",
+      "c99name": "AppAuth",
+      "src_type": "objc",
+      "label": "@swiftpkg_appauth_ios//:Source_AppAuth",
+      "package_identity": "appauth-ios",
+      "product_memberships": [
+        "AppAuth"
+      ]
+    },
+    {
+      "name": "AppAuthCore",
+      "c99name": "AppAuthCore",
+      "src_type": "objc",
+      "label": "@swiftpkg_appauth_ios//:Source_AppAuthCore",
+      "package_identity": "appauth-ios",
+      "product_memberships": [
+        "AppAuthCore",
+        "AppAuth",
+        "AppAuthTV"
+      ]
+    },
+    {
+      "name": "AppAuthTV",
+      "c99name": "AppAuthTV",
+      "src_type": "objc",
+      "label": "@swiftpkg_appauth_ios//:Source_AppAuthTV",
+      "package_identity": "appauth-ios",
+      "product_memberships": [
+        "AppAuthTV"
+      ]
+    },
+    {
+      "name": "GoogleSignInSwift",
+      "c99name": "GoogleSignInSwift",
+      "src_type": "swift",
+      "label": "@swiftpkg_googlesignin_ios//:GoogleSignInSwift_Sources_GoogleSignInSwift",
+      "package_identity": "googlesignin-ios",
+      "product_memberships": [
+        "GoogleSignInSwift"
+      ]
+    },
+    {
+      "name": "GoogleSignIn",
+      "c99name": "GoogleSignIn",
+      "src_type": "objc",
+      "label": "@swiftpkg_googlesignin_ios//:GoogleSignIn_Sources_GoogleSignIn",
+      "package_identity": "googlesignin-ios",
+      "product_memberships": [
+        "GoogleSignIn",
+        "GoogleSignInSwift"
+      ]
+    },
+    {
+      "name": "GTMSessionFetcherCore",
+      "c99name": "GTMSessionFetcherCore",
+      "src_type": "objc",
+      "label": "@swiftpkg_gtm_session_fetcher//:Sources_Core_GTMSessionFetcherCore",
+      "package_identity": "gtm-session-fetcher",
+      "product_memberships": [
+        "GTMSessionFetcher",
+        "GTMSessionFetcherCore",
+        "GTMSessionFetcherFull",
+        "GTMSessionFetcherLogView"
+      ]
+    },
+    {
+      "name": "GTMSessionFetcherFull",
+      "c99name": "GTMSessionFetcherFull",
+      "src_type": "objc",
+      "label": "@swiftpkg_gtm_session_fetcher//:Sources_Full_GTMSessionFetcherFull",
+      "package_identity": "gtm-session-fetcher",
+      "product_memberships": [
+        "GTMSessionFetcher",
+        "GTMSessionFetcherFull"
+      ]
+    },
+    {
+      "name": "GTMSessionFetcherLogView",
+      "c99name": "GTMSessionFetcherLogView",
+      "src_type": "objc",
+      "label": "@swiftpkg_gtm_session_fetcher//:Sources_LogView_GTMSessionFetcherLogView",
+      "package_identity": "gtm-session-fetcher",
+      "product_memberships": [
+        "GTMSessionFetcherLogView"
+      ]
+    },
+    {
+      "name": "GTMAppAuth",
+      "c99name": "GTMAppAuth",
+      "src_type": "objc",
+      "label": "@swiftpkg_gtmappauth//:GTMAppAuth_Sources_GTMAppAuth",
+      "package_identity": "gtmappauth",
+      "product_memberships": [
+        "GTMAppAuth"
       ]
     },
     {
@@ -35,6 +133,87 @@
       ]
     },
     {
+      "identity": "appauth-ios",
+      "name": "AppAuth",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_appauth_ios//:Source_AppAuth"
+      ]
+    },
+    {
+      "identity": "appauth-ios",
+      "name": "AppAuthCore",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_appauth_ios//:Source_AppAuthCore"
+      ]
+    },
+    {
+      "identity": "appauth-ios",
+      "name": "AppAuthTV",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_appauth_ios//:Source_AppAuthTV"
+      ]
+    },
+    {
+      "identity": "googlesignin-ios",
+      "name": "GoogleSignIn",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_googlesignin_ios//:GoogleSignIn_Sources_GoogleSignIn"
+      ]
+    },
+    {
+      "identity": "googlesignin-ios",
+      "name": "GoogleSignInSwift",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_googlesignin_ios//:GoogleSignInSwift_Sources_GoogleSignInSwift"
+      ]
+    },
+    {
+      "identity": "gtm-session-fetcher",
+      "name": "GTMSessionFetcher",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_gtm_session_fetcher//:Sources_Core_GTMSessionFetcherCore",
+        "@swiftpkg_gtm_session_fetcher//:Sources_Full_GTMSessionFetcherFull"
+      ]
+    },
+    {
+      "identity": "gtm-session-fetcher",
+      "name": "GTMSessionFetcherCore",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_gtm_session_fetcher//:Sources_Core_GTMSessionFetcherCore"
+      ]
+    },
+    {
+      "identity": "gtm-session-fetcher",
+      "name": "GTMSessionFetcherFull",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_gtm_session_fetcher//:Sources_Full_GTMSessionFetcherFull"
+      ]
+    },
+    {
+      "identity": "gtm-session-fetcher",
+      "name": "GTMSessionFetcherLogView",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_gtm_session_fetcher//:Sources_LogView_GTMSessionFetcherLogView"
+      ]
+    },
+    {
+      "identity": "gtmappauth",
+      "name": "GTMAppAuth",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_gtmappauth//:GTMAppAuth_Sources_GTMAppAuth"
+      ]
+    },
+    {
       "identity": "package_with_resources",
       "name": "CoolUI",
       "type": "library",
@@ -49,6 +228,42 @@
       "identity": "another_package_with_resources",
       "local": {
         "path": "third_party/another_package_with_resources"
+      }
+    },
+    {
+      "name": "swiftpkg_appauth_ios",
+      "identity": "appauth-ios",
+      "remote": {
+        "commit": "71cde449f13d453227e687458144bde372d30fc7",
+        "remote": "https://github.com/openid/AppAuth-iOS.git",
+        "version": "1.6.2"
+      }
+    },
+    {
+      "name": "swiftpkg_googlesignin_ios",
+      "identity": "googlesignin-ios",
+      "remote": {
+        "commit": "7932d33686c1dc4d7df7a919aae47361d1cdfda4",
+        "remote": "https://github.com/google/GoogleSignIn-iOS",
+        "version": "7.0.0"
+      }
+    },
+    {
+      "name": "swiftpkg_gtm_session_fetcher",
+      "identity": "gtm-session-fetcher",
+      "remote": {
+        "commit": "d415594121c9e8a4f9d79cecee0965cf35e74dbd",
+        "remote": "https://github.com/google/gtm-session-fetcher.git",
+        "version": "3.1.1"
+      }
+    },
+    {
+      "name": "swiftpkg_gtmappauth",
+      "identity": "gtmappauth",
+      "remote": {
+        "commit": "cee3c709307912d040bd1e06ca919875a92339c6",
+        "remote": "https://github.com/google/GTMAppAuth.git",
+        "version": "2.0.0"
       }
     },
     {
