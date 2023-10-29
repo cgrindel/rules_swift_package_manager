@@ -819,14 +819,15 @@ load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_a
 
 apple_resource_bundle(
     name = "Source_SwiftLibraryWithFilePathResource_resource_bundle",
-    bundle_name = "Source_SwiftLibraryWithFilePathResource_resource_bundle",
+    bundle_name = "SwiftLibraryWithFilePathResource_SwiftLibraryWithFilePathResource",
     infoplists = [":Source_SwiftLibraryWithFilePathResource_resource_bundle_infoplist"],
     resources = ["Source/SwiftLibraryWithFilePathResource/Resources/chicken.json"],
+    visibility = ["//visibility:public"],
 )
 
 resource_bundle_accessor(
     name = "Source_SwiftLibraryWithFilePathResource_resource_bundle_accessor",
-    bundle_name = "Source_SwiftLibraryWithFilePathResource_resource_bundle",
+    bundle_name = "SwiftLibraryWithFilePathResource_SwiftLibraryWithFilePathResource",
 )
 
 resource_bundle_infoplist(
@@ -858,9 +859,10 @@ load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulema
 
 apple_resource_bundle(
     name = "ObjcLibraryWithResources_resource_bundle",
-    bundle_name = "ObjcLibraryWithResources_resource_bundle",
+    bundle_name = "ObjcLibraryWithResources_ObjcLibraryWithResources",
     infoplists = [":ObjcLibraryWithResources_resource_bundle_infoplist"],
     resources = ["Source/ObjcLibraryWithResources/Resources/chicken.json"],
+    visibility = ["//visibility:public"],
 )
 
 generate_modulemap(

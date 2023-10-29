@@ -450,7 +450,8 @@ def _handle_target_resources(pkg_ctx, target, attrs, include_accessor = True):
 
 def _apple_resource_bundle(target, default_localization, include_accessor = True):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
-    bundle_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
+    bundle_label_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
+    bundle_name = pkginfo_targets.resource_bundle_name(target.c99name)
     infoplist_name = pkginfo_targets.resource_bundle_infoplist_label_name(
         bzl_target_name,
     )
@@ -463,18 +464,8 @@ def _apple_resource_bundle(target, default_localization, include_accessor = True
     load_stmts = [
         apple_resource_bundle_load_stmt,
         swiftpkg_resource_bundle_infoplist_load_stmt,
-        # swiftpkg_resource_bundle_accessor_load_stmt,
     ]
     decls = [
-        # build_decls.new(
-        #     kind = swiftpkg_kinds.resource_bundle_accessor,
-        #     name = pkginfo_targets.resource_bundle_accessor_label_name(
-        #         bzl_target_name,
-        #     ),
-        #     attrs = {
-        #         "bundle_name": bundle_name,
-        #     },
-        # ),
         build_decls.new(
             kind = swiftpkg_kinds.resource_bundle_infoplist,
             name = infoplist_name,
@@ -484,13 +475,14 @@ def _apple_resource_bundle(target, default_localization, include_accessor = True
         ),
         build_decls.new(
             kind = apple_kinds.resource_bundle,
-            name = bundle_name,
+            name = bundle_label_name,
             attrs = {
                 "bundle_name": bundle_name,
                 "infoplists": [":{}".format(infoplist_name)],
                 # Based upon the code in SPM, it looks like they only support unstructured resources.
                 # https://github.com/apple/swift-package-manager/blob/main/Sources/PackageModel/Resource.swift#L25-L33
                 "resources": resources,
+                "visibility": ["//visibility:public"],
             },
         ),
     ]
