@@ -1,0 +1,20 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_ui_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "MyAppUITestsLib",
+    testonly = True,
+    srcs = ["MyAppUITests.swift"],
+    module_name = "MyAppUITests",
+    tags = ["manual"],
+    deps = ["//Sources/MyApp"],
+)
+
+ios_ui_test(
+    name = "MyAppUITests",
+    size = "enormous",
+    minimum_os_version = "14.0",
+    runner = "@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_ordered_runner",
+    test_host = "//Sources/MyApp:iosapp",
+    deps = [":MyAppUITestsLib"],
+)
