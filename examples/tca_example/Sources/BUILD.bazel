@@ -2,9 +2,9 @@ load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "SwiftUICaseStudies",
+    name = "TCAExample",
     srcs = glob(["**/*.swift"]),
-    module_name = "SwiftUICaseStudies",
+    module_name = "TCAExample",
     tags = ["manual"],
     visibility = ["//visibility:public"],
     deps = ["@swiftpkg_swift_composable_architecture//:Sources_ComposableArchitecture"],
@@ -13,7 +13,7 @@ swift_library(
 ios_application(
     name = "iosapp",
     app_icons = glob(["Assets.xcassets/AppIcon.appiconset/**"]),
-    bundle_id = "co.pointfree.SwiftUICaseStudies",
+    bundle_id = "co.pointfree.TCAExample",
     families = [
         "iphone",
         "ipad",
@@ -25,5 +25,5 @@ ios_application(
         exclude = ["Assets.xcassets/AppIcon.appiconset/**"],
     ),
     visibility = ["//visibility:public"],
-    deps = [":SwiftUICaseStudies"],
+    deps = [":TCAExample"],
 )
