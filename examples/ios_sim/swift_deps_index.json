@@ -621,9 +621,9 @@
       "name": "swiftpkg_swift_nio",
       "identity": "swift-nio",
       "remote": {
-        "commit": "54c85cb26308b89846d4671f23954dce088da2b0",
+        "commit": "9497e442486aab515c8486ef8153a506f93a5032",
         "remote": "https://github.com/apple/swift-nio.git",
-        "version": "2.60.0"
+        "version": "2.61.0"
       }
     }
   ]
