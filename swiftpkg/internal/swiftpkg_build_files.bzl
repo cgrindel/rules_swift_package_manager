@@ -41,7 +41,6 @@ def _swift_target_build_file(pkg_ctx, target):
         fail("Expected a `swift_src_info`. name: ", target.name)
 
     all_build_files = []
-    bzl_target_name = pkginfo_targets.bazel_label_name(target)
     deps = lists.flatten([
         pkginfo_target_deps.bzl_select_list(pkg_ctx, td, depender_module_name = target.c99name)
         for td in target.dependencies
@@ -91,20 +90,10 @@ def _swift_target_build_file(pkg_ctx, target):
         attrs["defines"] = bzl_selects.to_starlark(defines)
     if len(copts) > 0:
         attrs["copts"] = bzl_selects.to_starlark(copts)
-    if len(target.resources) > 0:
-        # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
-        # https://stackoverflow.com/questions/63237395/generating-resource-bundle-accessor-type-bundle-has-no-member-module
-        all_build_files.append(_apple_resource_bundle(
-            target,
-            pkg_ctx.pkg_info.default_localization,
-        ))
-        attrs["srcs"].append(":{}".format(
-            pkginfo_targets.resource_bundle_accessor_label_name(bzl_target_name),
-        ))
-        attrs["data"] = [
-            ":{}".format(pkginfo_targets.resource_bundle_label_name(bzl_target_name)),
-        ]
 
+    res_build_file = _handle_target_resources(pkg_ctx, target, attrs)
+    if res_build_file:
+        all_build_files.append(res_build_file)
     if lists.contains([target_types.library, target_types.regular], target.type):
         load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(target, attrs)]
@@ -155,6 +144,7 @@ def _swift_test_from_target(target, attrs):
 # MARK: - Clang Targets
 
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
+    all_build_files = []
     clang_src_info = target.clang_src_info
     if clang_src_info == None:
         fail("Expected `clang_src_info` to not be None.")
@@ -182,6 +172,15 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     _set_if_not_empty("srcs", clang_src_info.srcs)
     _set_if_not_empty("includes", clang_src_info.public_includes)
     _set_if_not_empty("textual_hdrs", clang_src_info.textual_hdrs)
+
+    res_build_file = _handle_target_resources(
+        pkg_ctx,
+        target,
+        attrs,
+        include_accessor = False,
+    )
+    if res_build_file:
+        all_build_files.append(res_build_file)
 
     defines = [
         # The SWIFT_PACKAGE define is a magical value that SPM uses when it
@@ -358,11 +357,12 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         decls = [
             build_decls.new(clang_kinds.library, bzl_target_name, attrs = attrs),
         ]
-
-    return build_files.new(
+    all_build_files.append(build_files.new(
         load_stmts = load_stmts,
         decls = decls,
-    )
+    ))
+
+    return build_files.merge(*all_build_files)
 
 # MARK: - System Library Targets
 
@@ -420,33 +420,52 @@ expected: {expected}\
 
 # MARK: - Apple Resource Group
 
-def _apple_resource_bundle(target, default_localization):
+def _handle_target_resources(pkg_ctx, target, attrs, include_accessor = True):
+    if len(target.resources) == 0:
+        return None
+
+    def _update_attr_list(name, value):
+        # We need to create a new list, because the retrieved list could be
+        # frozen.
+        attr_list = list(attrs.get(name, []))
+        attr_list.append(value)
+        attrs[name] = attr_list
+
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
-    bundle_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
+    _update_attr_list("data", ":{}".format(
+        pkginfo_targets.resource_bundle_label_name(bzl_target_name),
+    ))
+    if include_accessor:
+        # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
+        # https://stackoverflow.com/questions/63237395/generating-resource-bundle-accessor-type-bundle-has-no-member-module
+        _update_attr_list("srcs", ":{}".format(
+            pkginfo_targets.resource_bundle_accessor_label_name(bzl_target_name),
+        ))
+
+    return _apple_resource_bundle(
+        target,
+        pkg_ctx.pkg_info.default_localization,
+        include_accessor = include_accessor,
+    )
+
+def _apple_resource_bundle(target, default_localization, include_accessor = True):
+    bzl_target_name = pkginfo_targets.bazel_label_name(target)
+    bundle_label_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
+    bundle_name = pkginfo_targets.resource_bundle_name(target.c99name)
     infoplist_name = pkginfo_targets.resource_bundle_infoplist_label_name(
         bzl_target_name,
     )
 
-    resources = [
+    resources = sorted([
         r.path
         for r in target.resources
-    ]
+    ])
 
     load_stmts = [
         apple_resource_bundle_load_stmt,
         swiftpkg_resource_bundle_infoplist_load_stmt,
-        swiftpkg_resource_bundle_accessor_load_stmt,
     ]
     decls = [
-        build_decls.new(
-            kind = swiftpkg_kinds.resource_bundle_accessor,
-            name = pkginfo_targets.resource_bundle_accessor_label_name(
-                bzl_target_name,
-            ),
-            attrs = {
-                "bundle_name": bundle_name,
-            },
-        ),
         build_decls.new(
             kind = swiftpkg_kinds.resource_bundle_infoplist,
             name = infoplist_name,
@@ -456,16 +475,30 @@ def _apple_resource_bundle(target, default_localization):
         ),
         build_decls.new(
             kind = apple_kinds.resource_bundle,
-            name = bundle_name,
+            name = bundle_label_name,
             attrs = {
                 "bundle_name": bundle_name,
                 "infoplists": [":{}".format(infoplist_name)],
                 # Based upon the code in SPM, it looks like they only support unstructured resources.
                 # https://github.com/apple/swift-package-manager/blob/main/Sources/PackageModel/Resource.swift#L25-L33
                 "resources": resources,
+                "visibility": ["//visibility:public"],
             },
         ),
     ]
+    if include_accessor:
+        load_stmts.append(swiftpkg_resource_bundle_accessor_load_stmt)
+        decls.append(
+            build_decls.new(
+                kind = swiftpkg_kinds.resource_bundle_accessor,
+                name = pkginfo_targets.resource_bundle_accessor_label_name(
+                    bzl_target_name,
+                ),
+                attrs = {
+                    "bundle_name": bundle_name,
+                },
+            ),
+        )
     return build_files.new(load_stmts = load_stmts, decls = decls)
 
 # MARK: - Modulemap Generation

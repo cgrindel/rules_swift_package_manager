@@ -384,6 +384,50 @@ _pkg_info = pkginfos.new(
             repo_name = _repo_name,
             swift_src_info = pkginfos.new_swift_src_info(),
         ),
+        pkginfos.new_target(
+            name = "ObjcLibraryWithResources",
+            type = "regular",
+            c99name = "ObjcLibraryWithResources",
+            module_type = "ClangTarget",
+            path = ".",
+            # NOTE: SPM does not report header files in the sources for clang
+            # targets. The `swift_package` code reads the filesystem to find
+            # the sources.
+            sources = [
+                "src/foo.m",
+                "src/foo.h",
+            ],
+            source_paths = [
+                "src/",
+            ],
+            public_hdrs_path = "include",
+            resources = [
+                pkginfos.new_resource(
+                    path = "Source/ObjcLibraryWithResources/Resources/chicken.json",
+                    rule = pkginfos.new_resource_rule(
+                        process = pkginfos.new_resource_rule_process(),
+                    ),
+                ),
+            ],
+            dependencies = [],
+            repo_name = _repo_name,
+            clang_src_info = pkginfos.new_clang_src_info(
+                hdrs = ["include/external.h"],
+                srcs = [
+                    "src/foo.h",
+                    "src/foo.m",
+                ],
+                public_includes = ["include"],
+                private_includes = ["src"],
+                textual_hdrs = ["src/foo.m"],
+            ),
+            objc_src_info = pkginfos.new_objc_src_info(
+                builtin_frameworks = [
+                    "Foundation",
+                    "UIKit",
+                ],
+            ),
+        ),
     ],
 )
 
@@ -630,6 +674,14 @@ cc_library(
             exp = """\
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
+generate_modulemap(
+    name = "ObjcLibrary_modulemap",
+    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
+    hdrs = ["include/external.h"],
+    module_name = "ObjcLibrary",
+    visibility = ["//visibility:public"],
+)
+
 objc_library(
     name = "ObjcLibrary",
     copts = [
@@ -670,14 +722,6 @@ objc_library(
     ],
     tags = ["swift_module=ObjcLibrary"],
     textual_hdrs = ["src/foo.m"],
-    visibility = ["//visibility:public"],
-)
-
-generate_modulemap(
-    name = "ObjcLibrary_modulemap",
-    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
-    hdrs = ["include/external.h"],
-    module_name = "ObjcLibrary",
     visibility = ["//visibility:public"],
 )
 """,
@@ -775,14 +819,15 @@ load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_a
 
 apple_resource_bundle(
     name = "Source_SwiftLibraryWithFilePathResource_resource_bundle",
-    bundle_name = "Source_SwiftLibraryWithFilePathResource_resource_bundle",
+    bundle_name = "SwiftLibraryWithFilePathResource_SwiftLibraryWithFilePathResource",
     infoplists = [":Source_SwiftLibraryWithFilePathResource_resource_bundle_infoplist"],
     resources = ["Source/SwiftLibraryWithFilePathResource/Resources/chicken.json"],
+    visibility = ["//visibility:public"],
 )
 
 resource_bundle_accessor(
     name = "Source_SwiftLibraryWithFilePathResource_resource_bundle_accessor",
-    bundle_name = "Source_SwiftLibraryWithFilePathResource_resource_bundle",
+    bundle_name = "SwiftLibraryWithFilePathResource_SwiftLibraryWithFilePathResource",
 )
 
 resource_bundle_infoplist(
@@ -802,6 +847,75 @@ swift_library(
     ],
     tags = ["manual"],
     visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Objc target with resources",
+            name = "ObjcLibraryWithResources",
+            exp = """\
+load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap", "resource_bundle_infoplist")
+
+apple_resource_bundle(
+    name = "ObjcLibraryWithResources_resource_bundle",
+    bundle_name = "ObjcLibraryWithResources_ObjcLibraryWithResources",
+    infoplists = [":ObjcLibraryWithResources_resource_bundle_infoplist"],
+    resources = ["Source/ObjcLibraryWithResources/Resources/chicken.json"],
+    visibility = ["//visibility:public"],
+)
+
+generate_modulemap(
+    name = "ObjcLibraryWithResources_modulemap",
+    deps = [],
+    hdrs = ["include/external.h"],
+    module_name = "ObjcLibraryWithResources",
+    visibility = ["//visibility:public"],
+)
+
+objc_library(
+    name = "ObjcLibraryWithResources",
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-fmodule-name=ObjcLibraryWithResources",
+        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
+    ],
+    data = [":ObjcLibraryWithResources_resource_bundle"],
+    defines = ["SWIFT_PACKAGE=1"],
+    enable_modules = True,
+    hdrs = ["include/external.h"],
+    includes = ["include"],
+    module_name = "ObjcLibraryWithResources",
+    sdk_frameworks = select({
+        "@rules_swift_package_manager//config_settings/spm/platform:ios": [
+            "Foundation",
+            "UIKit",
+        ],
+        "@rules_swift_package_manager//config_settings/spm/platform:macos": ["Foundation"],
+        "@rules_swift_package_manager//config_settings/spm/platform:tvos": [
+            "Foundation",
+            "UIKit",
+        ],
+        "@rules_swift_package_manager//config_settings/spm/platform:watchos": [
+            "Foundation",
+            "UIKit",
+        ],
+        "//conditions:default": [],
+    }),
+    srcs = [
+        "src/foo.h",
+        "src/foo.m",
+    ],
+    tags = ["swift_module=ObjcLibraryWithResources"],
+    textual_hdrs = ["src/foo.m"],
+    visibility = ["//visibility:public"],
+)
+
+resource_bundle_infoplist(
+    name = "ObjcLibraryWithResources_resource_bundle_infoplist",
+    region = "en",
 )
 """,
         ),
