@@ -74,6 +74,11 @@ def swift_update_packages(
         _swift_update_repos_args.append("-update_bzlmod_stanzas")
     if patches_yaml:
         _swift_update_repos_args.extend(["-swift_patches", patches_yaml])
+    if _is_bzlmod_enabled():
+        # Need to tell Gazelle to run as if it is in bzlmod mode. It does not figure it out
+        # properly when we run it from inside this binary.
+        # Related to https://github.com/bazelbuild/bazel-gazelle/pull/1589.
+        _swift_update_repos_args.append("-bzlmod")
 
     _gazelle(
         name = name,
@@ -92,3 +97,9 @@ def swift_update_packages(
         gazelle = gazelle,
         **kwargs
     )
+
+def _is_bzlmod_enabled():
+    """Determines if currently running under bzlmod."""
+
+    # Taken from: https://github.com/aspect-build/bazel-lib/blob/main/lib/private/utils.bzl
+    return str(Label("@//:BUILD.bazel")).startswith("@@")
