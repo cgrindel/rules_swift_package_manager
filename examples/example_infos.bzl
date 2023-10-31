@@ -153,6 +153,7 @@ _macos_single_bazel_version_test_examples = [
     "snapkit_example",
     "stripe_example",
     "xcmetrics_example",
+    "tca_example",
 ]
 
 _linux_single_bazel_version_test_examples = []

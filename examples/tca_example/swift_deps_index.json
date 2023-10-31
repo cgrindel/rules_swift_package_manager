@@ -294,9 +294,9 @@
       "name": "swiftpkg_swift_collections",
       "identity": "swift-collections",
       "remote": {
-        "commit": "937e904258d22af6e447a0b72c0bc67583ef64a2",
+        "commit": "a902f1823a7ff3c9ab2fba0f992396b948eda307",
         "remote": "https://github.com/apple/swift-collections",
-        "version": "1.0.4"
+        "version": "1.0.5"
       }
     },
     {
@@ -312,18 +312,18 @@
       "name": "swiftpkg_swift_concurrency_extras",
       "identity": "swift-concurrency-extras",
       "remote": {
-        "commit": "ea631ce892687f5432a833312292b80db238186a",
+        "commit": "6155400cb15b0d99b2c257d57603d61d03a817a8",
         "remote": "https://github.com/pointfreeco/swift-concurrency-extras",
-        "version": "1.0.0"
+        "version": "1.0.1"
       }
     },
     {
       "name": "swiftpkg_swift_custom_dump",
       "identity": "swift-custom-dump",
       "remote": {
-        "commit": "edd66cace818e1b1c6f1b3349bb1d8e00d6f8b01",
+        "commit": "3efbfba0e4e56c7187cc19137ee16b7c95346b79",
         "remote": "https://github.com/pointfreeco/swift-custom-dump",
-        "version": "1.0.0"
+        "version": "1.1.0"
       }
     },
     {
@@ -348,9 +348,9 @@
       "name": "swiftpkg_swiftui_navigation",
       "identity": "swiftui-navigation",
       "remote": {
-        "commit": "f5bcdac5b6bb3f826916b14705f37a3937c2fd34",
+        "commit": "6eb293c49505d86e9e24232cb6af6be7fff93bd5",
         "remote": "https://github.com/pointfreeco/swiftui-navigation",
-        "version": "1.0.0"
+        "version": "1.0.2"
       }
     },
     {
