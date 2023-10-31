@@ -586,9 +586,9 @@
       "name": "swiftpkg_swift_cmark",
       "identity": "swift-cmark",
       "remote": {
-        "commit": "29d9c97e6310b87c4799268eaa2fc76164b2dbd8",
+        "commit": "f218e5d7691f78b55bfa39b367763f4612486c35",
         "remote": "https://github.com/apple/swift-cmark.git",
-        "version": "0.2.0",
+        "version": "0.3.0",
         "patch": {
           "files": [
             "@@//third-party/swift-cmark:0001-Do-not-exclude-files-that-are-needed-for-compilation.patch"
@@ -612,9 +612,9 @@
       "name": "swiftpkg_swift_markdown",
       "identity": "swift-markdown",
       "remote": {
-        "commit": "68b2fed9fb12fb71ac81e537f08bed430b189e35",
+        "commit": "e4f95e2dc23097a1a9a1dfdfe3fe3ee44de77378",
         "remote": "https://github.com/apple/swift-markdown.git",
-        "version": "0.2.0"
+        "version": "0.3.0"
       }
     },
     {
