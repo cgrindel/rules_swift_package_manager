@@ -21,7 +21,7 @@ def _path_exists(repository_ctx, path):
 def _list_files_under(
         repository_ctx,
         path,
-        exclude = [],
+        exclude_paths = [],
         by_name = None,
         depth = None):
     """Retrieves the list of files under the specified path.
@@ -31,7 +31,7 @@ def _list_files_under(
     Args:
         repository_ctx: A `repository_ctx` instance.
         path: A path `string` value.
-        exclude: Optional. A `list` of path `string` values that should be
+        exclude_paths: Optional. A `list` of path `string` values that should be
             excluded from the result.
         by_name: Optional. The name pattern that must be matched.
         depth: Optional. The depth as an `int` at which the directory must
@@ -50,13 +50,60 @@ def _list_files_under(
     exec_result = repository_ctx.execute(find_args, quiet = True)
     if exec_result.return_code != 0:
         fail("Failed to list files in %s. stderr:\n%s" % (path, exec_result.stderr))
-    path_list = exec_result.stdout.splitlines()
+
+    # path_list = exec_result.stdout.splitlines()
+    # # The starting path will be prefixed to the results. If the starting path is dot (.),
+    # # the prefix for the results will be `./`. We will remove it before returning the results.
+    # path_list = [p.removeprefix("./") for p in path_list]
+    # path_list = _exclude_paths(path_list, exclude)
+    # return path_list
+    return _process_find_results(exec_result.stdout, exclude_paths = exclude_paths)
+
+def _list_directories_under(
+        repository_ctx,
+        path,
+        max_depth = None,
+        by_name = None,
+        depth = None,
+        exclude_paths = []):
+    """Retrieves the list of directories under the specified path.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+        path: A path `string` value.
+        max_depth: Optional. The maximum depth for the directory search.
+        by_name: Optional. The name pattern that must be matched.
+        depth: Optional. The depth as an `int` at which the directory must
+            live from the starting path.
+        exclude_paths: Optional. A `list` of path `string` values that should be
+            excluded from the result.
+
+    Returns:
+        A `list` of path `string` values.
+    """
+    find_args = ["find", path, "-type", "d"]
+    if max_depth != None:
+        find_args.extend(["-maxdepth", "%d" % (max_depth)])
+    if by_name != None:
+        find_args.extend(["-name", by_name])
+    if depth != None:
+        find_args.extend(["-depth", "{}".format(depth)])
+    exec_result = repository_ctx.execute(find_args, quiet = True)
+    if exec_result.return_code != 0:
+        fail("Failed to list directories under %s. stderr:\n%s" % (path, exec_result.stderr))
+
+    # paths = exec_result.stdout.splitlines()
+    # return [p for p in paths if p != path]
+    paths = _process_find_results(exec_result.stdout, exclude_paths = exclude_paths)
+    return [p for p in paths if p != path]
+
+def _process_find_results(raw_output, exclude_paths):
+    path_list = raw_output.splitlines()
 
     # The starting path will be prefixed to the results. If the starting path is dot (.),
     # the prefix for the results will be `./`. We will remove it before returning the results.
     path_list = [p.removeprefix("./") for p in path_list]
-    path_list = _exclude_paths(path_list, exclude)
-    return path_list
+    return _exclude_paths(path_list, exclude_paths)
 
 def _exclude_paths(path_list, exclude):
     """Filter the list of paths using the provided exclude list.
@@ -94,38 +141,6 @@ def _exclude_paths(path_list, exclude):
             results.append(path)
 
     return results
-
-def _list_directories_under(
-        repository_ctx,
-        path,
-        max_depth = None,
-        by_name = None,
-        depth = None):
-    """Retrieves the list of directories under the specified path.
-
-    Args:
-        repository_ctx: A `repository_ctx` instance.
-        path: A path `string` value.
-        max_depth: Optional. The maximum depth for the directory search.
-        by_name: Optional. The name pattern that must be matched.
-        depth: Optional. The depth as an `int` at which the directory must
-            live from the starting path.
-
-    Returns:
-        A `list` of path `string` values.
-    """
-    find_args = ["find", path, "-type", "d"]
-    if max_depth != None:
-        find_args.extend(["-maxdepth", "%d" % (max_depth)])
-    if by_name != None:
-        find_args.extend(["-name", by_name])
-    if depth != None:
-        find_args.extend(["-depth", "{}".format(depth)])
-    exec_result = repository_ctx.execute(find_args, quiet = True)
-    if exec_result.return_code != 0:
-        fail("Failed to list directories under %s. stderr:\n%s" % (path, exec_result.stderr))
-    paths = exec_result.stdout.splitlines()
-    return [p for p in paths if p != path]
 
 def _find_and_delete_files(repository_ctx, path, name):
     """Finds files with the specified name under the specified path and deletes them.
