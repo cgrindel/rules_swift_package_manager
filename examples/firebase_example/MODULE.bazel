@@ -25,6 +25,11 @@ bazel_dep(
 )
 
 bazel_dep(
+    name = "rules_xcodeproj",
+    version = "1.12.1",
+    dev_dependency = True,
+)
+bazel_dep(
     name = "bazel_skylib_gazelle_plugin",
     version = "1.4.2",
     dev_dependency = True,

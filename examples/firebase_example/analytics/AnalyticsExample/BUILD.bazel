@@ -1,6 +1,10 @@
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load(
+    "@rules_xcodeproj//xcodeproj:defs.bzl",
+    "xcodeproj",
+)
 
 swift_library(
     name = "AnalyticsExample",
@@ -27,12 +31,22 @@ ios_application(
     infoplists = [":Info.plist"],
     launch_storyboard = "//analytics/AnalyticsExample:Base.lproj/LaunchScreen.storyboard",
     minimum_os_version = "13.0",
+    visibility = ["//visibility:public"],
     deps = [":AnalyticsExample"],
 )
 
 build_test(
     name = "iosapp_build_test",
     targets = [
+        ":iosapp",
+    ],
+)
+
+xcodeproj(
+    name = "xcodeproj",
+    project_name = "AnalyticsExample",
+    tags = ["manual"],
+    top_level_targets = [
         ":iosapp",
     ],
 )
