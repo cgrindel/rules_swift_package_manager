@@ -50,14 +50,11 @@ def _list_files_under(
     exec_result = repository_ctx.execute(find_args, quiet = True)
     if exec_result.return_code != 0:
         fail("Failed to list files in %s. stderr:\n%s" % (path, exec_result.stderr))
-
-    # path_list = exec_result.stdout.splitlines()
-    # # The starting path will be prefixed to the results. If the starting path is dot (.),
-    # # the prefix for the results will be `./`. We will remove it before returning the results.
-    # path_list = [p.removeprefix("./") for p in path_list]
-    # path_list = _exclude_paths(path_list, exclude)
-    # return path_list
-    return _process_find_results(exec_result.stdout, exclude_paths = exclude_paths)
+    return _process_find_results(
+        exec_result.stdout,
+        find_path = path,
+        exclude_paths = exclude_paths,
+    )
 
 def _list_directories_under(
         repository_ctx,
@@ -91,14 +88,17 @@ def _list_directories_under(
     exec_result = repository_ctx.execute(find_args, quiet = True)
     if exec_result.return_code != 0:
         fail("Failed to list directories under %s. stderr:\n%s" % (path, exec_result.stderr))
+    return _process_find_results(
+        exec_result.stdout,
+        find_path = path,
+        exclude_paths = exclude_paths,
+    )
 
-    # paths = exec_result.stdout.splitlines()
-    # return [p for p in paths if p != path]
-    paths = _process_find_results(exec_result.stdout, exclude_paths = exclude_paths)
-    return [p for p in paths if p != path]
-
-def _process_find_results(raw_output, exclude_paths):
+def _process_find_results(raw_output, find_path, exclude_paths):
     path_list = raw_output.splitlines()
+
+    # Do not include the find path
+    path_list = [p for p in path_list if p != find_path]
 
     # The starting path will be prefixed to the results. If the starting path is dot (.),
     # the prefix for the results will be `./`. We will remove it before returning the results.
@@ -226,4 +226,6 @@ repository_files = struct(
     list_directories_under = _list_directories_under,
     list_files_under = _list_files_under,
     path_exists = _path_exists,
+    # Exposed for testing purposes only.
+    process_find_results = _process_find_results,
 )
