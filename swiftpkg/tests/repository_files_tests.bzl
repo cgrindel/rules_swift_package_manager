@@ -6,61 +6,57 @@ load("//swiftpkg/internal:repository_files.bzl", "repository_files")
 def _exclude_paths_test(ctx):
     env = unittest.begin(ctx)
 
-    abs_path_list = [
-        "/foo/chicken.txt",
-        "/foo/smidgen.txt",
-        "/bar/hello",
-        "/bar/goodbye",
-        "/bar/smile/big",
-    ]
     rel_path_list = [
-        "foo/chicken.txt",
-        "foo/smidgen.txt",
+        "foo/bar.txt",
         "bar/hello",
+        "bar/hello/README.md",
+        "bar/hello.txt",
         "bar/goodbye",
-        "bar/smile/big",
     ]
 
     tests = [
         struct(
-            msg = "absolute paths, no excludes",
+            msg = "no exlcudes",
             exclude = [],
-            path_list = abs_path_list,
-            expected = abs_path_list,
+            path_list = rel_path_list,
+            expected = rel_path_list,
         ),
         struct(
-            msg = "absolute paths, dir specified as file",
-            exclude = ["/foo"],
-            path_list = abs_path_list,
-            expected = abs_path_list,
-        ),
-        struct(
-            msg = "absolute paths, exclude foo dir",
-            exclude = ["/foo/"],
-            path_list = abs_path_list,
-            expected = [
-                "/bar/hello",
-                "/bar/goodbye",
-                "/bar/smile/big",
-            ],
-        ),
-        struct(
-            msg = "absolute paths, exclude foo dir and a file under bar",
-            exclude = ["/foo/", "/bar/smile/big"],
-            path_list = abs_path_list,
-            expected = [
-                "/bar/hello",
-                "/bar/goodbye",
-            ],
-        ),
-        struct(
-            msg = "relative paths, dir specified as file",
-            exclude = ["foo"],
+            msg = "exclude bar directory",
+            exclude = ["bar"],
             path_list = rel_path_list,
             expected = [
-                "bar/hello",
+                "foo/bar.txt",
+            ],
+        ),
+        struct(
+            msg = "exclude bar/hello directory",
+            exclude = ["bar/hello"],
+            path_list = rel_path_list,
+            expected = [
+                "foo/bar.txt",
+                "bar/hello.txt",  # This should not be filtered out
                 "bar/goodbye",
-                "bar/smile/big",
+            ],
+        ),
+        struct(
+            msg = "exclude bar/hello.txt file",
+            exclude = ["bar/hello.txt"],
+            path_list = rel_path_list,
+            expected = [
+                "foo/bar.txt",
+                "bar/hello",
+                "bar/hello/README.md",
+                "bar/goodbye",
+            ],
+        ),
+        struct(
+            msg = "multiple excludes",
+            exclude = ["bar/hello", "foo"],
+            path_list = rel_path_list,
+            expected = [
+                "bar/hello.txt",
+                "bar/goodbye",
             ],
         ),
     ]

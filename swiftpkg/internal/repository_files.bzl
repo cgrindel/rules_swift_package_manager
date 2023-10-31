@@ -105,41 +105,40 @@ def _process_find_results(raw_output, find_path, exclude_paths):
     path_list = [p.removeprefix("./") for p in path_list]
     return _exclude_paths(path_list, exclude_paths)
 
-def _exclude_paths(path_list, exclude):
+def _exclude_paths(path_list, exclude_paths):
     """Filter the list of paths using the provided exclude list.
-
-    An exclude list item can be a file or a directory. An entry is considered a
-    directory if it has a trailing slash (`/`). If a path equals a file entry,
-    it is excluded. If a path starts with a directory entry, it is excluded.
 
     Args:
         path_list: A `list` of paths as `string` values.
-        exclude: A `list` of files and directories to exclude from the provided
-            paths.
+        exclude_paths: A `list` of paths to files or directories to exclude from
+            the provided paths.
 
     Returns:
         The input `list` with the files and directories excluded.
     """
-    exclude_files = []
-    exclude_dirs = []
-    for ex in exclude:
-        if ex.endswith("/"):
-            exclude_dirs.append(ex)
-        else:
-            exclude_files.append(ex)
+    if len(exclude_paths) == 0:
+        return path_list
+
+    # The exclude path could be a directory.
+    excludes_as_dirs = lists.map(
+        exclude_paths,
+        lambda ex: ex if ex.endswith("/") else ex + "/",
+    )
+
+    # If someone added a slash at the end, then it is a directory
+    excludes_as_files = lists.filter(
+        exclude_paths,
+        lambda ex: not ex.endswith("/"),
+    )
 
     results = []
     for path in path_list:
-        if lists.contains(exclude_files, path):
+        if lists.contains(excludes_as_files, path):
             continue
-        keep = True
-        for exd in exclude_dirs:
-            if path.startswith(exd):
-                keep = False
-                break
-        if keep:
-            results.append(path)
-
+        match = lists.find(excludes_as_dirs, lambda ex: path.startswith(ex))
+        if match != None:
+            continue
+        results.append(path)
     return results
 
 def _find_and_delete_files(repository_ctx, path, name):
