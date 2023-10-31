@@ -54,6 +54,7 @@ def _list_files_under(
         exec_result.stdout,
         find_path = path,
         exclude_paths = exclude_paths,
+        remove_find_path = False,
     )
 
 def _list_directories_under(
@@ -92,13 +93,15 @@ def _list_directories_under(
         exec_result.stdout,
         find_path = path,
         exclude_paths = exclude_paths,
+        remove_find_path = True,
     )
 
-def _process_find_results(raw_output, find_path, exclude_paths):
+def _process_find_results(raw_output, find_path, exclude_paths = [], remove_find_path = False):
     path_list = raw_output.splitlines()
 
     # Do not include the find path
-    path_list = [p for p in path_list if p != find_path]
+    if remove_find_path:
+        path_list = [p for p in path_list if p != find_path]
 
     # The starting path will be prefixed to the results. If the starting path is dot (.),
     # the prefix for the results will be `./`. We will remove it before returning the results.
@@ -139,6 +142,7 @@ def _exclude_paths(path_list, exclude_paths):
         if match != None:
             continue
         results.append(path)
+
     return results
 
 def _find_and_delete_files(repository_ctx, path, name):

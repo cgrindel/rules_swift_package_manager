@@ -96,11 +96,13 @@ output/chicken/smidgen/hello.txt
 
     tests = [
         struct(
-            msg = "find output: no excludes, no prefix cleanup",
+            msg = "no excludes, no prefix cleanup, no remove_find_path",
             raw = raw_no_dot_prefix,
             find_path = "output",
             exclude_paths = [],
+            remove_find_path = False,
             exp = [
+                "output",
                 "output/foo",
                 "output/foo/baz",
                 "output/foo/baz/elephant.txt",
@@ -112,10 +114,11 @@ output/chicken/smidgen/hello.txt
             ],
         ),
         struct(
-            msg = "find .: no excludes, with prefix cleanup",
+            msg = "no excludes, with prefix cleanup, no remove_find_path",
             raw = raw_with_dot_prefix,
             find_path = ".",
             exclude_paths = [],
+            remove_find_path = False,
             exp = [
                 "foo",
                 "foo/baz",
@@ -128,14 +131,45 @@ output/chicken/smidgen/hello.txt
             ],
         ),
         struct(
-            msg = "find output: with excludes, no prefix cleanup",
+            msg = "with excludes, no prefix cleanup, no remove_find_path",
             raw = raw_no_dot_prefix,
             find_path = "output",
             exclude_paths = ["output/foo/baz", "output/chicken"],
+            remove_find_path = False,
             exp = [
+                "output",
                 "output/foo",
                 "output/foo/bar",
                 "output/foo/bar/monkey.txt",
+            ],
+        ),
+        struct(
+            msg = "no excludes, no prefix cleanup, with remove_find_path",
+            raw = raw_no_dot_prefix,
+            find_path = "output",
+            exclude_paths = [],
+            remove_find_path = True,
+            exp = [
+                "output/foo",
+                "output/foo/baz",
+                "output/foo/baz/elephant.txt",
+                "output/foo/bar",
+                "output/foo/bar/monkey.txt",
+                "output/chicken",
+                "output/chicken/smidgen",
+                "output/chicken/smidgen/hello.txt",
+            ],
+        ),
+        struct(
+            msg = "with excludes, no prefix cleanup, with remove_find_path",
+            raw = raw_no_dot_prefix,
+            find_path = "output",
+            exclude_paths = ["output/foo"],
+            remove_find_path = True,
+            exp = [
+                "output/chicken",
+                "output/chicken/smidgen",
+                "output/chicken/smidgen/hello.txt",
             ],
         ),
     ]
@@ -144,6 +178,7 @@ output/chicken/smidgen/hello.txt
             t.raw,
             find_path = t.find_path,
             exclude_paths = t.exclude_paths,
+            remove_find_path = t.remove_find_path,
         )
         asserts.equals(env, t.exp, actual, t.msg)
 
