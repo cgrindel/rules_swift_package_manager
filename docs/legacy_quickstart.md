@@ -7,6 +7,13 @@ use [the quickstart instructions in the `README.md`](/README.md#quickstart).
 ## Table of Contents
 
 <!-- MARKDOWN TOC: BEGIN -->
+* [Add declarations to your `WORKSPACE` file](#add-declarations-to-your-workspace-file)
+* [Create a minimal `Package.swift` file.](#create-a-minimal-packageswift-file)
+* [Add Gazelle targets to `BUILD.bazel` at the root of your workspace.](#add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
+* [Resolve the external dependencies for your project.](#resolve-the-external-dependencies-for-your-project)
+* [Create or update Bazel build files for your project.](#create-or-update-bazel-build-files-for-your-project)
+* [Build and test your project.](#build-and-test-your-project)
+* [Check-in `Package.resolved`, `swift_deps_index.json`, and `swift_deps.bzl`.](#check-in-packageresolved-swift_deps_indexjson-and-swift_depsbzl)
 <!-- MARKDOWN TOC: END -->
 
 ## Add declarations to your `WORKSPACE` file
