@@ -121,11 +121,16 @@
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseAppCheck_Interop_FirebaseAppCheckInterop",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
+        "FirebaseAuth",
         "FirebaseAppCheck",
+        "FirebaseAuthCombine-Community",
+        "FirebaseFirestoreCombine-Community",
         "FirebaseFunctionsCombine-Community",
         "FirebaseStorageCombine-Community",
         "FirebaseDatabase",
         "FirebaseDatabaseSwift",
+        "FirebaseFirestore",
+        "FirebaseFirestoreSwift",
         "FirebaseFunctions",
         "FirebaseStorage"
       ]
@@ -229,6 +234,7 @@
         "FirebaseFunctionsCombine-Community",
         "FirebaseStorageCombine-Community",
         "FirebaseCrashlytics",
+        "FirebaseFirestore",
         "FirebaseFirestoreSwift",
         "FirebaseFunctions",
         "FirebasePerformance",
@@ -317,10 +323,22 @@
       ]
     },
     {
+      "name": "FirebaseDatabaseInternal",
+      "c99name": "FirebaseDatabaseInternal",
+      "src_type": "objc",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseDatabase_Sources_FirebaseDatabaseInternal",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseDatabase",
+        "FirebaseDatabaseSwift"
+      ]
+    },
+    {
       "name": "FirebaseDatabase",
       "c99name": "FirebaseDatabase",
-      "src_type": "objc",
-      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseDatabase_Sources_FirebaseDatabase",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseDatabase_Swift_Sources_FirebaseDatabase",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseDatabase_Swift_Sources_FirebaseDatabase_modulemap",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseDatabase",
@@ -338,6 +356,29 @@
       ]
     },
     {
+      "name": "FirebaseFirestoreInternalWrapper",
+      "c99name": "FirebaseFirestoreInternalWrapper",
+      "src_type": "objc",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseFirestoreInternal_FirebaseFirestoreInternalWrapper",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFirestore",
+        "FirebaseFirestoreSwift"
+      ]
+    },
+    {
+      "name": "FirebaseFirestoreSwift",
+      "c99name": "FirebaseFirestoreSwift",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseFirestoreSwift_Sources_FirebaseFirestoreSwift",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFirestoreSwift"
+      ]
+    },
+    {
       "name": "FirebaseFunctions",
       "c99name": "FirebaseFunctions",
       "src_type": "swift",
@@ -350,10 +391,20 @@
       ]
     },
     {
-      "name": "FirebaseInAppMessaging",
-      "c99name": "FirebaseInAppMessaging",
+      "name": "FirebaseInAppMessagingSwift",
+      "c99name": "FirebaseInAppMessagingSwift",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseInAppMessagingSwift_Sources_FirebaseInAppMessagingSwift",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseInAppMessagingSwift-Beta"
+      ]
+    },
+    {
+      "name": "FirebaseInAppMessagingInternal",
+      "c99name": "FirebaseInAppMessagingInternal",
       "src_type": "objc",
-      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseInAppMessaging_Sources_FirebaseInAppMessaging",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseInAppMessaging_Sources_FirebaseInAppMessagingInternal",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseInAppMessaging-Beta",
@@ -361,12 +412,14 @@
       ]
     },
     {
-      "name": "FirebaseInAppMessagingSwift",
-      "c99name": "FirebaseInAppMessagingSwift",
+      "name": "FirebaseInAppMessaging",
+      "c99name": "FirebaseInAppMessaging",
       "src_type": "swift",
-      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseInAppMessaging_Swift_Source_FirebaseInAppMessagingSwift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseInAppMessaging_Swift_Source_FirebaseInAppMessaging",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseInAppMessaging_Swift_Source_FirebaseInAppMessaging_modulemap",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
+        "FirebaseInAppMessaging-Beta",
         "FirebaseInAppMessagingSwift-Beta"
       ]
     },
@@ -450,20 +503,31 @@
       "c99name": "FirebaseRemoteConfigSwift",
       "src_type": "swift",
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfigSwift_Sources_FirebaseRemoteConfigSwift",
-      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfigSwift_Sources_FirebaseRemoteConfigSwift_modulemap",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseRemoteConfigSwift"
       ]
     },
     {
-      "name": "FirebaseRemoteConfig",
-      "c99name": "FirebaseRemoteConfig",
+      "name": "FirebaseRemoteConfigInternal",
+      "c99name": "FirebaseRemoteConfigInternal",
       "src_type": "objc",
-      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfig_Sources_FirebaseRemoteConfig",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfig_Sources_FirebaseRemoteConfigInternal",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebasePerformance",
+        "FirebaseRemoteConfig",
+        "FirebaseRemoteConfigSwift"
+      ]
+    },
+    {
+      "name": "FirebaseRemoteConfig",
+      "c99name": "FirebaseRemoteConfig",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfig_Swift_FirebaseRemoteConfig",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfig_Swift_FirebaseRemoteConfig_modulemap",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
         "FirebaseRemoteConfig",
         "FirebaseRemoteConfigSwift"
       ]
@@ -500,9 +564,12 @@
       "product_memberships": [
         "FirebaseFirestoreCombine-Community",
         "FirebaseFunctionsCombine-Community",
+        "FirebaseDatabase",
         "FirebaseDatabaseSwift",
+        "FirebaseFirestore",
         "FirebaseFirestoreSwift",
         "FirebaseFunctions",
+        "FirebaseRemoteConfig",
         "FirebaseRemoteConfigSwift"
       ]
     },
@@ -519,13 +586,15 @@
       ]
     },
     {
-      "name": "FirebaseFirestoreSwift",
-      "c99name": "FirebaseFirestoreSwift",
+      "name": "FirebaseFirestore",
+      "c99name": "FirebaseFirestore",
       "src_type": "swift",
-      "label": "@swiftpkg_firebase_ios_sdk//:Firestore_FirebaseFirestoreSwift",
+      "label": "@swiftpkg_firebase_ios_sdk//:Firestore_Swift_Source_FirebaseFirestore",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:Firestore_Swift_Source_FirebaseFirestore_modulemap",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseFirestoreCombine-Community",
+        "FirebaseFirestore",
         "FirebaseFirestoreSwift"
       ]
     },
@@ -634,10 +703,10 @@
       ]
     },
     {
-      "name": "FirebaseFirestore",
-      "c99name": "FirebaseFirestore",
+      "name": "FirebaseFirestoreInternal",
+      "c99name": "FirebaseFirestoreInternal",
       "src_type": "binary",
-      "label": "@swiftpkg_firebase_ios_sdk//:remote_archive_FirebaseFirestore.zip_FirebaseFirestore",
+      "label": "@swiftpkg_firebase_ios_sdk//:remote_archive_FirebaseFirestoreInternal.zip_FirebaseFirestoreInternal",
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseFirestoreCombine-Community",
@@ -1140,7 +1209,7 @@
       "name": "FirebaseDatabase",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_firebase_ios_sdk//:FirebaseDatabase_Sources_FirebaseDatabase"
+        "@swiftpkg_firebase_ios_sdk//:FirebaseDatabase_Swift_Sources_FirebaseDatabase"
       ]
     },
     {
@@ -1212,7 +1281,7 @@
       "name": "FirebaseInAppMessagingSwift-Beta",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_firebase_ios_sdk//:FirebaseInAppMessaging_Swift_Source_FirebaseInAppMessagingSwift"
+        "@swiftpkg_firebase_ios_sdk//:FirebaseInAppMessagingSwift_Sources_FirebaseInAppMessagingSwift"
       ]
     },
     {
@@ -1252,7 +1321,7 @@
       "name": "FirebaseRemoteConfig",
       "type": "library",
       "target_labels": [
-        "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfig_Sources_FirebaseRemoteConfig"
+        "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfig_Swift_FirebaseRemoteConfig"
       ]
     },
     {
@@ -1551,9 +1620,9 @@
       "name": "swiftpkg_firebase_ios_sdk",
       "identity": "firebase-ios-sdk",
       "remote": {
-        "commit": "837d4af6ead57cec1fc38007892500d3139c7556",
+        "commit": "8872dbd7d947acf757abab933da10e83c1842280",
         "remote": "https://github.com/firebase/firebase-ios-sdk",
-        "version": "10.16.0"
+        "version": "10.17.0"
       },
       "cLanguageStandard": "c99",
       "cxxLanguageStandard": "gnu++14"
@@ -1562,9 +1631,9 @@
       "name": "swiftpkg_googleappmeasurement",
       "identity": "googleappmeasurement",
       "remote": {
-        "commit": "56f681586ff006a7982b53dc94082eea31971acf",
+        "commit": "6b332152355c372ace9966d8ee76ed191f97025e",
         "remote": "https://github.com/google/GoogleAppMeasurement.git",
-        "version": "10.16.0"
+        "version": "10.17.0"
       },
       "cLanguageStandard": "c99",
       "cxxLanguageStandard": "gnu++14"
