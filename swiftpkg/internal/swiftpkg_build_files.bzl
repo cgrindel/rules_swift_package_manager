@@ -321,8 +321,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             sdk_framework_bzl_selects,
         )
 
-        modulemap_deps = _collect_modulemap_deps(deps)
-
         # There is a known issue with Objective-C library targets not
         # supporting the `@import` of modules defined in other Objective-C
         # targets. As a workaround, we will define two targets. One is the
@@ -336,12 +334,22 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # See `generate_modulemap.bzl` for details on the modulemap generation.
         # See `//swiftpkg/tests/generate_modulemap_tests` package for a usage
         # example.
+        modulemap_deps = _collect_modulemap_deps(deps)
         load_stmts = [swiftpkg_generate_modulemap_load_stmt]
         modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
+        public_modulemap = clang_src_info.modulemap_path == None
+
+        # DEBUG BEGIN
+        print("*** CHUCK ----------------")
+        print("*** CHUCK target.c99name: ", target.c99name)
+        print("*** CHUCK public_modulemap: ", public_modulemap)
+
+        # DEBUG END
         modulemap_attrs = {
             "deps": bzl_selects.to_starlark(modulemap_deps),
             "hdrs": clang_src_info.hdrs,
             "module_name": target.c99name,
+            "public": public_modulemap,
             "visibility": ["//visibility:public"],
         }
         decls = [
