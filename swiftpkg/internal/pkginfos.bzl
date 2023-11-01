@@ -274,6 +274,7 @@ def _new_target_from_json_maps(
             repository_ctx,
             target_path,
             sources,
+            exclude_paths = exclude_paths,
         )
         for p in swift_src_info.discovered_res_files:
             res = _new_resource_from_discovered_resource(p)
@@ -775,7 +776,11 @@ A target dependency must have one of the following: `by_name`, `product`, `targe
 
 # MARK: - Swift Source Info
 
-def _new_swift_src_info_from_sources(repository_ctx, target_path, sources):
+def _new_swift_src_info_from_sources(
+        repository_ctx,
+        target_path,
+        sources,
+        exclude_paths = []):
     # Check for any @objc directives in the source files
     has_objc_directive = False
     imports_xctest = False
@@ -793,12 +798,14 @@ def _new_swift_src_info_from_sources(repository_ctx, target_path, sources):
     all_target_files = repository_files.list_files_under(
         repository_ctx,
         target_path,
+        exclude_paths = exclude_paths,
     )
 
     # Identify the directories
     directories = repository_files.list_directories_under(
         repository_ctx,
         target_path,
+        exclude_paths = exclude_paths,
     )
     dirs_set = sets.make(directories)
 
@@ -887,7 +894,7 @@ def _new_clang_src_info_from_sources(
         all_srcs.extend(repository_files.list_files_under(
             repository_ctx,
             sp,
-            exclude = abs_exclude_paths,
+            exclude_paths = abs_exclude_paths,
         ))
 
     # Organize the source files

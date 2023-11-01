@@ -21,7 +21,7 @@ def _path_exists(repository_ctx, path):
 def _list_files_under(
         repository_ctx,
         path,
-        exclude = [],
+        exclude_paths = [],
         by_name = None,
         depth = None):
     """Retrieves the list of files under the specified path.
@@ -31,7 +31,7 @@ def _list_files_under(
     Args:
         repository_ctx: A `repository_ctx` instance.
         path: A path `string` value.
-        exclude: Optional. A `list` of path `string` values that should be
+        exclude_paths: Optional. A `list` of path `string` values that should be
             excluded from the result.
         by_name: Optional. The name pattern that must be matched.
         depth: Optional. The depth as an `int` at which the directory must
@@ -50,57 +50,20 @@ def _list_files_under(
     exec_result = repository_ctx.execute(find_args, quiet = True)
     if exec_result.return_code != 0:
         fail("Failed to list files in %s. stderr:\n%s" % (path, exec_result.stderr))
-    path_list = exec_result.stdout.splitlines()
-
-    # The starting path will be prefixed to the results. If the starting path is dot (.),
-    # the prefix for the results will be `./`. We will remove it before returning the results.
-    path_list = [p.removeprefix("./") for p in path_list]
-    path_list = _exclude_paths(path_list, exclude)
-    return path_list
-
-def _exclude_paths(path_list, exclude):
-    """Filter the list of paths using the provided exclude list.
-
-    An exclude list item can be a file or a directory. An entry is considered a
-    directory if it has a trailing slash (`/`). If a path equals a file entry,
-    it is excluded. If a path starts with a directory entry, it is excluded.
-
-    Args:
-        path_list: A `list` of paths as `string` values.
-        exclude: A `list` of files and directories to exclude from the provided
-            paths.
-
-    Returns:
-        The input `list` with the files and directories excluded.
-    """
-    exclude_files = []
-    exclude_dirs = []
-    for ex in exclude:
-        if ex.endswith("/"):
-            exclude_dirs.append(ex)
-        else:
-            exclude_files.append(ex)
-
-    results = []
-    for path in path_list:
-        if lists.contains(exclude_files, path):
-            continue
-        keep = True
-        for exd in exclude_dirs:
-            if path.startswith(exd):
-                keep = False
-                break
-        if keep:
-            results.append(path)
-
-    return results
+    return _process_find_results(
+        exec_result.stdout,
+        find_path = path,
+        exclude_paths = exclude_paths,
+        remove_find_path = False,
+    )
 
 def _list_directories_under(
         repository_ctx,
         path,
         max_depth = None,
         by_name = None,
-        depth = None):
+        depth = None,
+        exclude_paths = []):
     """Retrieves the list of directories under the specified path.
 
     Args:
@@ -110,6 +73,8 @@ def _list_directories_under(
         by_name: Optional. The name pattern that must be matched.
         depth: Optional. The depth as an `int` at which the directory must
             live from the starting path.
+        exclude_paths: Optional. A `list` of path `string` values that should be
+            excluded from the result.
 
     Returns:
         A `list` of path `string` values.
@@ -124,8 +89,61 @@ def _list_directories_under(
     exec_result = repository_ctx.execute(find_args, quiet = True)
     if exec_result.return_code != 0:
         fail("Failed to list directories under %s. stderr:\n%s" % (path, exec_result.stderr))
-    paths = exec_result.stdout.splitlines()
-    return [p for p in paths if p != path]
+    return _process_find_results(
+        exec_result.stdout,
+        find_path = path,
+        exclude_paths = exclude_paths,
+        remove_find_path = True,
+    )
+
+def _process_find_results(raw_output, find_path, exclude_paths = [], remove_find_path = False):
+    path_list = raw_output.splitlines()
+
+    # Do not include the find path
+    if remove_find_path:
+        path_list = [p for p in path_list if p != find_path]
+
+    # The starting path will be prefixed to the results. If the starting path is dot (.),
+    # the prefix for the results will be `./`. We will remove it before returning the results.
+    path_list = [p.removeprefix("./") for p in path_list]
+    return _exclude_paths(path_list, exclude_paths)
+
+def _exclude_paths(path_list, exclude_paths):
+    """Filter the list of paths using the provided exclude list.
+
+    Args:
+        path_list: A `list` of paths as `string` values.
+        exclude_paths: A `list` of paths to files or directories to exclude from
+            the provided paths.
+
+    Returns:
+        The input `list` with the files and directories excluded.
+    """
+    if len(exclude_paths) == 0:
+        return path_list
+
+    # The exclude path could be a directory.
+    excludes_as_dirs = lists.map(
+        exclude_paths,
+        lambda ex: ex if ex.endswith("/") else ex + "/",
+    )
+
+    # If someone added a slash at the end, then it is a directory
+    excludes_as_files = lists.filter(
+        exclude_paths,
+        lambda ex: not ex.endswith("/"),
+    )
+
+    results = []
+    for path in path_list:
+        if lists.contains(excludes_as_files, path):
+            continue
+        match = lists.find(excludes_as_dirs, lambda ex: path.startswith(ex))
+        if match != None:
+            continue
+        results.append(path)
+
+    return results
 
 def _find_and_delete_files(repository_ctx, path, name):
     """Finds files with the specified name under the specified path and deletes them.
@@ -211,4 +229,6 @@ repository_files = struct(
     list_directories_under = _list_directories_under,
     list_files_under = _list_files_under,
     path_exists = _path_exists,
+    # Exposed for testing purposes only.
+    process_find_results = _process_find_results,
 )
