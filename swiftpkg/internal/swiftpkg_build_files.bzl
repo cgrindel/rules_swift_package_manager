@@ -327,7 +327,13 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # `objc_library` target.  The other is a `generate_modulemap`
         # target. This second target generates a `module.modulemap` file and
         # provides information about that generated file to `objc_library`
-        # targets.
+        # targets, if `noop` is `False`. If `noop` is `True`, the target
+        # generates nothing and returns "empty" providers.
+        #
+        # Why not skip adding the `generate_modulemap` if `noop` is `True`?
+        # The logic that assigns dependencies for other targets has no way to
+        # know whether the modulemap target exists. Hence, we ensure that it
+        # always exists but does nothing.
         #
         # See `deps_indexes.bzl` for the logic that resolves the dependency
         # labels.
@@ -337,19 +343,12 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         modulemap_deps = _collect_modulemap_deps(deps)
         load_stmts = [swiftpkg_generate_modulemap_load_stmt]
         modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
-        public_modulemap = clang_src_info.modulemap_path == None
-
-        # DEBUG BEGIN
-        print("*** CHUCK ----------------")
-        print("*** CHUCK target.c99name: ", target.c99name)
-        print("*** CHUCK public_modulemap: ", public_modulemap)
-
-        # DEBUG END
+        noop_modulemap = clang_src_info.modulemap_path != None
         modulemap_attrs = {
             "deps": bzl_selects.to_starlark(modulemap_deps),
             "hdrs": clang_src_info.hdrs,
             "module_name": target.c99name,
-            "public": public_modulemap,
+            "noop": noop_modulemap,
             "visibility": ["//visibility:public"],
         }
         decls = [

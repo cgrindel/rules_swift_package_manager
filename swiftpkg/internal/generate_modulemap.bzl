@@ -19,8 +19,9 @@ ModuleMapInfo = provider(
 def _generate_modulemap_impl(ctx):
     module_name = ctx.attr.module_name
 
-    # Decide whether we should generate the modulemap.
-    if not ctx.attr.public:
+    # Decide whether we should generate the modulemap. If we do not generate
+    # the modulemap, we still need to return expected providers.
+    if ctx.attr.noop:
         return [
             DefaultInfo(files = depset([])),
             ModuleMapInfo(
@@ -43,12 +44,6 @@ def _generate_modulemap_impl(ctx):
         for dep in ctx.attr.deps
         if ModuleMapInfo in dep
     ]
-
-    # out_filename = "{}/module.private.modulemap".format(module_name)
-    # out_filename_template = "{}/module.modulemap"
-    # if not ctx.attr.public:
-    #     out_filename_template = "{}/module.private.modulemap"
-    # out_filename = out_filename_template.format(module_name)
 
     out_filename = "{}/module.modulemap".format(module_name)
     modulemap_file = ctx.actions.declare_file(out_filename)
@@ -103,14 +98,13 @@ generate_modulemap = rule(
         "module_name": attr.string(
             doc = "The name of the module.",
         ),
-        "public": attr.bool(
-            doc = "Designates whether this modulemap should be public/visible.",
-            default = True,
+        "noop": attr.bool(
+            doc = """\
+Designates whether this should generate a modulemap. If `False`, a modulemap \
+file is not generated and the returned providers are empty.\
+""",
+            default = False,
         ),
-        # "modulemap": attr.label(
-        #     doc = "",
-        #     allow_single_file = True,
-        # ),
     },
     doc = "Generate a modulemap for an Objective-C module.",
 )
