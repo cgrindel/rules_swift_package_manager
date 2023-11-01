@@ -100,8 +100,9 @@ generate_modulemap = rule(
         ),
         "noop": attr.bool(
             doc = """\
-Designates whether this should generate a modulemap. If `False`, a modulemap \
-file is not generated and the returned providers are empty.\
+Designates whether a modulemap should be generated. If `True`, a modulemap is \
+generated. If `False`, a modulemap file is not generated and the returned \
+providers are empty.\
 """,
             default = False,
         ),
