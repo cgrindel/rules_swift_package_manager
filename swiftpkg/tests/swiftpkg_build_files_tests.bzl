@@ -679,6 +679,7 @@ generate_modulemap(
     deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
     hdrs = ["include/external.h"],
     module_name = "ObjcLibrary",
+    noop = False,
     visibility = ["//visibility:public"],
 )
 
@@ -870,6 +871,7 @@ generate_modulemap(
     deps = [],
     hdrs = ["include/external.h"],
     module_name = "ObjcLibraryWithResources",
+    noop = False,
     visibility = ["//visibility:public"],
 )
 
