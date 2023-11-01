@@ -20,3 +20,16 @@ assert_match() {
 
 # Ensure that it builds and tests pass
 "${bazel}" test //...
+
+# The analytics/AnalyticsExample generates an Xcode project using
+# rules_xcodeproj. The following ensures that the project generates properly
+# and that the project builds as rules_xcodeproj executes the build.
+# Related:
+# https://github.com/MobileNativeFoundation/rules_xcodeproj/issues/2703
+
+# Generate the Xcode project
+"${bazel}" run //analytics/AnalyticsExample:xcodeproj
+
+# Build the workspace
+bazel run //analytics/AnalyticsExample:xcodeproj -- \
+  --generator_output_groups=all_targets 'build --remote_download_minimal'
