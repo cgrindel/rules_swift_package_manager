@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections",
       "state" : {
-        "revision" : "937e904258d22af6e447a0b72c0bc67583ef64a2",
-        "version" : "1.0.4"
+        "revision" : "a902f1823a7ff3c9ab2fba0f992396b948eda307",
+        "version" : "1.0.5"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-concurrency-extras",
       "state" : {
-        "revision" : "ea631ce892687f5432a833312292b80db238186a",
-        "version" : "1.0.0"
+        "revision" : "6155400cb15b0d99b2c257d57603d61d03a817a8",
+        "version" : "1.0.1"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-custom-dump",
       "state" : {
-        "revision" : "edd66cace818e1b1c6f1b3349bb1d8e00d6f8b01",
-        "version" : "1.0.0"
+        "revision" : "3efbfba0e4e56c7187cc19137ee16b7c95346b79",
+        "version" : "1.1.0"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swiftui-navigation",
       "state" : {
-        "revision" : "f5bcdac5b6bb3f826916b14705f37a3937c2fd34",
-        "version" : "1.0.0"
+        "revision" : "6eb293c49505d86e9e24232cb6af6be7fff93bd5",
+        "version" : "1.0.2"
       }
     },
     {

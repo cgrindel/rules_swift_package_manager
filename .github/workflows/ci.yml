@@ -74,6 +74,8 @@ jobs:
             runner: macos-13
           - test: '@@//examples:stripe_example_test_bazel_.bazelversion'
             runner: macos-13
+          - test: '@@//examples:tca_example_test_bazel_.bazelversion'
+            runner: macos-13
           - test: '@@//examples:vapor_example_legacy_test_bazel_.bazelversion'
             runner: ubuntu-22.04
           - test: '@@//examples:vapor_example_legacy_test_bazel_.bazelversion'
