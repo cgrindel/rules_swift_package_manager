@@ -31,5 +31,5 @@ assert_match() {
 "${bazel}" run //analytics/AnalyticsExample:xcodeproj
 
 # Build the workspace
-bazel run //analytics/AnalyticsExample:xcodeproj -- \
+"${bazel}" run //analytics/AnalyticsExample:xcodeproj -- \
   --generator_output_groups=all_targets 'build --remote_download_minimal'
