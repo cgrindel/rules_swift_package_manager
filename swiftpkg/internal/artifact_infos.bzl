@@ -110,21 +110,16 @@ def _link_type(repository_ctx, path):
     file_type = repository_files.file_type(repository_ctx, path)
 
     # static Examples:
-    # current ar archive random library
-    # current ar archive
-    if file_type.find("ar archive") > 0:
+    #   current ar archive random library
+    #   current ar archive
+    # dynamic Examples:
+    #   dynamically linked shared library
+    if file_type.find("ar archive") >= 0:
         link_type = link_types.static
-    elif file_type.find("dynamically linked shared library") > 0:
+    elif file_type.find("dynamic") >= 0:
         link_type = link_types.dynamic
     else:
         link_type = link_types.unknown
-
-    # DEBUG BEGIN
-    print("*** CHUCK ===================")
-    print("*** CHUCK path: ", path)
-    print("*** CHUCK link_type: ", link_type)
-
-    # DEBUG END
     return link_type
 
 def _new_xcframework_info_from_files(repository_ctx, path):

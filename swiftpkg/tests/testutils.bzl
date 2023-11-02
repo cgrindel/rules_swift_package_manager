@@ -11,7 +11,8 @@ def _new_stub_repository_ctx(
         repo_name,
         file_contents = {},
         find_results = {},
-        is_directory_results = {}):
+        is_directory_results = {},
+        file_type_results = {}):
     def read(path):
         return file_contents.get(path, "")
 
@@ -34,6 +35,11 @@ def _new_stub_repository_ctx(
             exec_result = _new_exec_result(
                 stdout = "\n".join(results),
             )
+        elif args_len == 3 and args[0] == "file" and args[1] == "--brief":
+            # Expected command: `file --brief path`
+            path = args[2]
+            results = file_type_results.get(path, "")
+            exec_result = _new_exec_result(stdout = results)
         else:
             exec_result = _new_exec_result()
         return exec_result
