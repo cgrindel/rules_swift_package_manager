@@ -89,17 +89,43 @@ def _new_framework_info_from_files(repository_ctx, path):
     )
     if len(binary_files) == 0:
         fail("No binary files were found for framework at {}".format(path))
-    file_type = repository_files.file_type(repository_ctx, binary_files[0])
-    if file_type.find("ar archive random library") > 0:
-        link_type = link_types.static
-    elif file_type.find("dynamically linked shared library"):
-        link_type = link_types.dynamic
-    else:
-        link_type = link_types.unknown
+    link_type = _link_type(repository_ctx, binary_files[0])
+
     return _new_framework_info(
         path = path,
         link_type = link_type,
     )
+
+def _link_type(repository_ctx, path):
+    """Determine the link type for the framework binary file.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+        path: The path to a framework binary file under a `XXX.framework`
+            directory as a `string`.
+
+    Returns:
+        The link type for the framework as a `string`.
+    """
+    file_type = repository_files.file_type(repository_ctx, path)
+
+    # static Examples:
+    # current ar archive random library
+    # current ar archive
+    if file_type.find("ar archive") > 0:
+        link_type = link_types.static
+    elif file_type.find("dynamically linked shared library") > 0:
+        link_type = link_types.dynamic
+    else:
+        link_type = link_types.unknown
+
+    # DEBUG BEGIN
+    print("*** CHUCK ===================")
+    print("*** CHUCK path: ", path)
+    print("*** CHUCK link_type: ", link_type)
+
+    # DEBUG END
+    return link_type
 
 def _new_xcframework_info_from_files(repository_ctx, path):
     """Return a `struct` descrbing an xcframework from the files at the \
@@ -139,6 +165,7 @@ artifact_infos = struct(
     new_framework_info = _new_framework_info,
     new_xcframework_info = _new_xcframework_info,
     new_xcframework_info_from_files = _new_xcframework_info_from_files,
+    link_type = _link_type,
 )
 
 link_types = struct(
