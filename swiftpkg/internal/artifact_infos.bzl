@@ -115,12 +115,10 @@ def _link_type(repository_ctx, path):
     # dynamic Examples:
     #   dynamically linked shared library
     if file_type.find("ar archive") >= 0:
-        link_type = link_types.static
+        return link_types.static
     elif file_type.find("dynamic") >= 0:
-        link_type = link_types.dynamic
-    else:
-        link_type = link_types.unknown
-    return link_type
+        return link_types.dynamic
+    return link_types.unknown
 
 def _new_xcframework_info_from_files(repository_ctx, path):
     """Return a `struct` descrbing an xcframework from the files at the \
