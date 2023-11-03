@@ -321,27 +321,34 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             sdk_framework_bzl_selects,
         )
 
-        modulemap_deps = _collect_modulemap_deps(deps)
-
         # There is a known issue with Objective-C library targets not
         # supporting the `@import` of modules defined in other Objective-C
         # targets. As a workaround, we will define two targets. One is the
         # `objc_library` target.  The other is a `generate_modulemap`
         # target. This second target generates a `module.modulemap` file and
         # provides information about that generated file to `objc_library`
-        # targets.
+        # targets, if `noop` is `False`. If `noop` is `True`, the target
+        # generates nothing and returns "empty" providers.
+        #
+        # Why not skip adding the `generate_modulemap` if `noop` is `True`?
+        # The logic that assigns dependencies for other targets has no way to
+        # know whether the modulemap target exists. Hence, we ensure that it
+        # always exists but does nothing.
         #
         # See `deps_indexes.bzl` for the logic that resolves the dependency
         # labels.
         # See `generate_modulemap.bzl` for details on the modulemap generation.
         # See `//swiftpkg/tests/generate_modulemap_tests` package for a usage
         # example.
+        modulemap_deps = _collect_modulemap_deps(deps)
         load_stmts = [swiftpkg_generate_modulemap_load_stmt]
         modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
+        noop_modulemap = clang_src_info.modulemap_path != None
         modulemap_attrs = {
             "deps": bzl_selects.to_starlark(modulemap_deps),
             "hdrs": clang_src_info.hdrs,
             "module_name": target.c99name,
+            "noop": noop_modulemap,
             "visibility": ["//visibility:public"],
         }
         decls = [

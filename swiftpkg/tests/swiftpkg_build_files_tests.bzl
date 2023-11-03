@@ -284,6 +284,47 @@ _pkg_info = pkginfos.new(
             ),
         ),
         pkginfos.new_target(
+            name = "ObjcLibraryWithModulemap",
+            type = "regular",
+            c99name = "ObjcLibraryWithModulemap",
+            module_type = "ClangTarget",
+            path = ".",
+            # NOTE: SPM does not report header files in the sources for clang
+            # targets. The `swift_package` code reads the filesystem to find
+            # the sources.
+            sources = [
+                "src/foo.m",
+                "src/foo.h",
+            ],
+            source_paths = [
+                "src/",
+            ],
+            public_hdrs_path = "include",
+            dependencies = [
+                pkginfos.new_target_dependency(
+                    by_name = pkginfos.new_by_name_reference("ObjcLibraryDep"),
+                ),
+            ],
+            repo_name = _repo_name,
+            clang_src_info = pkginfos.new_clang_src_info(
+                hdrs = ["include/external.h"],
+                srcs = [
+                    "src/foo.h",
+                    "src/foo.m",
+                ],
+                public_includes = ["include"],
+                private_includes = ["src"],
+                textual_hdrs = ["src/foo.m"],
+                modulemap_path = "include/module.modulemap",
+            ),
+            objc_src_info = pkginfos.new_objc_src_info(
+                builtin_frameworks = [
+                    "Foundation",
+                    "UIKit",
+                ],
+            ),
+        ),
+        pkginfos.new_target(
             name = "SwiftLibraryWithConditionalDep",
             type = "regular",
             c99name = "SwiftLibraryWithConditionalDep",
@@ -491,6 +532,14 @@ _deps_index_json = """
             "product_memberships": []
         },
         {
+            "name": "ObjcLibraryWithModulemap",
+            "c99name": "ObjcLibraryWithModulemap",
+            "src_type": "objc",
+            "label": "@swiftpkg_mypackage//:ObjcLibraryWithModulemap",
+            "package_identity": "mypackage",
+            "product_memberships": []
+        },
+        {
             "name": "SwiftLibraryWithConditionalDep",
             "c99name": "SwiftLibraryWithConditionalDep",
             "src_type": "swift",
@@ -679,6 +728,7 @@ generate_modulemap(
     deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
     hdrs = ["include/external.h"],
     module_name = "ObjcLibrary",
+    noop = False,
     visibility = ["//visibility:public"],
 )
 
@@ -721,6 +771,65 @@ objc_library(
         "src/foo.m",
     ],
     tags = ["swift_module=ObjcLibrary"],
+    textual_hdrs = ["src/foo.m"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Objc target with a modulemap",
+            name = "ObjcLibraryWithModulemap",
+            exp = """\
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
+
+generate_modulemap(
+    name = "ObjcLibraryWithModulemap_modulemap",
+    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
+    hdrs = ["include/external.h"],
+    module_name = "ObjcLibraryWithModulemap",
+    noop = True,
+    visibility = ["//visibility:public"],
+)
+
+objc_library(
+    name = "ObjcLibraryWithModulemap",
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-fmodule-name=ObjcLibraryWithModulemap",
+        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
+    ],
+    defines = ["SWIFT_PACKAGE=1"],
+    deps = [
+        "@swiftpkg_mypackage//:ObjcLibraryDep",
+        "@swiftpkg_mypackage//:ObjcLibraryDep_modulemap",
+    ],
+    enable_modules = True,
+    hdrs = ["include/external.h"],
+    includes = ["include"],
+    module_name = "ObjcLibraryWithModulemap",
+    sdk_frameworks = select({
+        "@rules_swift_package_manager//config_settings/spm/platform:ios": [
+            "Foundation",
+            "UIKit",
+        ],
+        "@rules_swift_package_manager//config_settings/spm/platform:macos": ["Foundation"],
+        "@rules_swift_package_manager//config_settings/spm/platform:tvos": [
+            "Foundation",
+            "UIKit",
+        ],
+        "@rules_swift_package_manager//config_settings/spm/platform:watchos": [
+            "Foundation",
+            "UIKit",
+        ],
+        "//conditions:default": [],
+    }),
+    srcs = [
+        "src/foo.h",
+        "src/foo.m",
+    ],
+    tags = ["swift_module=ObjcLibraryWithModulemap"],
     textual_hdrs = ["src/foo.m"],
     visibility = ["//visibility:public"],
 )
@@ -870,6 +979,7 @@ generate_modulemap(
     deps = [],
     hdrs = ["include/external.h"],
     module_name = "ObjcLibraryWithResources",
+    noop = False,
     visibility = ["//visibility:public"],
 )
 

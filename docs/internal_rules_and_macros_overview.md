@@ -17,7 +17,7 @@ On this page:
 ## generate_modulemap
 
 <pre>
-generate_modulemap(<a href="#generate_modulemap-name">name</a>, <a href="#generate_modulemap-deps">deps</a>, <a href="#generate_modulemap-hdrs">hdrs</a>, <a href="#generate_modulemap-module_name">module_name</a>)
+generate_modulemap(<a href="#generate_modulemap-name">name</a>, <a href="#generate_modulemap-deps">deps</a>, <a href="#generate_modulemap-hdrs">hdrs</a>, <a href="#generate_modulemap-module_name">module_name</a>, <a href="#generate_modulemap-noop">noop</a>)
 </pre>
 
 Generate a modulemap for an Objective-C module.
@@ -31,6 +31,7 @@ Generate a modulemap for an Objective-C module.
 | <a id="generate_modulemap-deps"></a>deps |  The module maps that this module uses.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional | <code>[]</code> |
 | <a id="generate_modulemap-hdrs"></a>hdrs |  The public headers for this module.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | required |  |
 | <a id="generate_modulemap-module_name"></a>module_name |  The name of the module.   | String | optional | <code>""</code> |
+| <a id="generate_modulemap-noop"></a>noop |  Designates whether a modulemap should be generated. If <code>False</code>, a modulemap is generated. If <code>True</code>, a modulemap file is not generated and the returned providers are empty.   | Boolean | optional | <code>False</code> |
 
 
 <a id="resource_bundle_accessor"></a>
