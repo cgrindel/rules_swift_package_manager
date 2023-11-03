@@ -87,11 +87,9 @@ common --enable_bzlmod
 Add a dependency on `rules_swift_package_manager`.
 
 <!-- BEGIN MODULE SNIPPET -->
-
 ```python
-bazel_dep(name = "rules_swift_package_manager", version = "0.19.0")
+bazel_dep(name = "rules_swift_package_manager", version = "0.20.0")
 ```
-
 <!-- END MODULE SNIPPET -->
 
 You will also need to add a dependency on Gazelle, `rules_swift`, and possibly `rules_apple`. Follow
