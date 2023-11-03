@@ -972,6 +972,7 @@ def _new_clang_src_info_from_sources(
         textual_hdrs = textual_hdrs,
         public_includes = public_includes,
         private_includes = private_includes,
+        modulemap_path = organized_files.modulemap,
     )
 
 def _new_clang_src_info(
@@ -980,7 +981,8 @@ def _new_clang_src_info(
         hdrs = [],
         textual_hdrs = [],
         public_includes = [],
-        private_includes = []):
+        private_includes = [],
+        modulemap_path = None):
     return struct(
         srcs = srcs,
         explicit_srcs = explicit_srcs,
@@ -988,6 +990,7 @@ def _new_clang_src_info(
         textual_hdrs = textual_hdrs,
         public_includes = public_includes,
         private_includes = private_includes,
+        modulemap_path = modulemap_path,
     )
 
 # MARK: - Objc Source Info
