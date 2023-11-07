@@ -211,26 +211,6 @@
       ]
     },
     {
-      "name": "Backtrace",
-      "c99name": "Backtrace",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_backtrace//:Sources_Backtrace",
-      "package_identity": "swift-backtrace",
-      "product_memberships": [
-        "Backtrace"
-      ]
-    },
-    {
-      "name": "CBacktrace",
-      "c99name": "CBacktrace",
-      "src_type": "clang",
-      "label": "@swiftpkg_swift_backtrace//:Sources_CBacktrace",
-      "package_identity": "swift-backtrace",
-      "product_memberships": [
-        "Backtrace"
-      ]
-    },
-    {
       "name": "Collections",
       "c99name": "Collections",
       "src_type": "swift",
@@ -1009,14 +989,6 @@
       ]
     },
     {
-      "identity": "swift-backtrace",
-      "name": "Backtrace",
-      "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_backtrace//:Sources_Backtrace"
-      ]
-    },
-    {
       "identity": "swift-collections",
       "name": "Collections",
       "type": "library",
@@ -1405,15 +1377,6 @@
         "commit": "6c89474e62719ddcc1e9614989fff2f68208fe10",
         "remote": "https://github.com/apple/swift-atomics.git",
         "version": "1.1.0"
-      }
-    },
-    {
-      "name": "swiftpkg_swift_backtrace",
-      "identity": "swift-backtrace",
-      "remote": {
-        "commit": "80746bdd0ac8a7d83aad5d89dac3cbf15de652e6",
-        "remote": "https://github.com/swift-server/swift-backtrace.git",
-        "version": "1.3.4"
       }
     },
     {
