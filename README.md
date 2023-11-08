@@ -87,7 +87,7 @@ common --enable_bzlmod
 Add a dependency on `rules_swift_package_manager`.
 
 <!-- BEGIN MODULE SNIPPET -->
-```python
+```bzl
 bazel_dep(name = "rules_swift_package_manager", version = "0.20.0")
 ```
 <!-- END MODULE SNIPPET -->
@@ -135,7 +135,7 @@ time.
 
 Add the following to the `BUILD.bazel` file at the root of your workspace.
 
-```python
+```bzl
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
 
@@ -188,7 +188,7 @@ gazelle(
 Resolve the external dependencies for your project by running the following:
 
 ```sh
-$ bazel run //:swift_update_pkgs
+bazel run //:swift_update_pkgs
 ```
 
 ### 6. Create or update Bazel build files for your project.
@@ -196,7 +196,7 @@ $ bazel run //:swift_update_pkgs
 Generate/update the Bazel build files for your project by running the following:
 
 ```sh
-$ bazel run //:update_build_files
+bazel run //:update_build_files
 ```
 
 ### 7. Build and test your project.
@@ -204,7 +204,7 @@ $ bazel run //:update_build_files
 Build and test your project.
 
 ```sh
-$ bazel test //...
+bazel test //...
 ```
 
 ### 8. Check-in `Package.resolved`, `swift_deps_index.json`, and `MODULE.bazel`.
