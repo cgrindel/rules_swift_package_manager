@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "64809ce3032b0801eb5b0070148fa31a12aa4f4a743dbd2dc32920006c71f45c",
+  "moduleFileHash": "b664ae85fc242106f9304bd2d2bab72742c0c150783535fb93111878bfcc81bd",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -3152,10 +3152,34 @@
       }
     },
 <<<<<<< HEAD
+<<<<<<< HEAD
     "@@rules_go~0.41.0//go:extensions.bzl%go_sdk": {
       "general": {
         "bzlTransitiveDigest": "QaU0mhA+aom4ENV5sBUAEDa9IQt53GtspLCjl89277c=",
 =======
+=======
+    "@rules_apple~3.1.1//apple:extensions.bzl%non_module_deps": {
+      "general": {
+        "bzlTransitiveDigest": "uwhqDX4GF8QI88xKO4mq20E4ngTqRQpnFWU01LjFTys=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "xctestrunner": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_apple~3.1.1~non_module_deps~xctestrunner",
+              "urls": [
+                "https://github.com/google/xctestrunner/archive/b7698df3d435b6491b4b4c0f9fc7a63fbed5e3a6.tar.gz"
+              ],
+              "strip_prefix": "xctestrunner-b7698df3d435b6491b4b4c0f9fc7a63fbed5e3a6",
+              "sha256": "ae3a063c985a8633cb7eb566db21656f8db8eb9a0edb8c182312c7f0db53730d"
+            }
+          }
+        }
+      }
+    },
+>>>>>>> 0ae142a (chore(deps): update dependency gazelle to v0.34.0)
     "@rules_go~0.42.0//go:extensions.bzl%go_sdk": {
       "os:osx,arch:x86_64": {
         "bzlTransitiveDigest": "KKVHBbgvOrifeQKSb0QMwzPRH/EtbEk+ua9ldFfZ4eo=",
@@ -4165,6 +4189,436 @@
             "attributes": {
               "name": "rules_java~7.1.0~toolchains~remotejdk21_win_toolchain_config_repo",
               "build_file": "\nconfig_setting(\n    name = \"prefix_version_setting\",\n    values = {\"java_runtime_version\": \"remotejdk_21\"},\n    visibility = [\"//visibility:private\"],\n)\nconfig_setting(\n    name = \"version_setting\",\n    values = {\"java_runtime_version\": \"21\"},\n    visibility = [\"//visibility:private\"],\n)\nalias(\n    name = \"version_or_prefix_version_setting\",\n    actual = select({\n        \":version_setting\": \":version_setting\",\n        \"//conditions:default\": \":prefix_version_setting\",\n    }),\n    visibility = [\"//visibility:private\"],\n)\ntoolchain(\n    name = \"toolchain\",\n    target_compatible_with = [\"@platforms//os:windows\", \"@platforms//cpu:x86_64\"],\n    target_settings = [\":version_or_prefix_version_setting\"],\n    toolchain_type = \"@bazel_tools//tools/jdk:runtime_toolchain_type\",\n    toolchain = \"@remotejdk21_win//:jdk\",\n)\ntoolchain(\n    name = \"bootstrap_runtime_toolchain\",\n    # These constraints are not required for correctness, but prevent fetches of remote JDK for\n    # different architectures. As every Java compilation toolchain depends on a bootstrap runtime in\n    # the same configuration, this constraint will not result in toolchain resolution failures.\n    exec_compatible_with = [\"@platforms//os:windows\", \"@platforms//cpu:x86_64\"],\n    target_settings = [\":version_or_prefix_version_setting\"],\n    toolchain_type = \"@bazel_tools//tools/jdk:bootstrap_runtime_toolchain_type\",\n    toolchain = \"@remotejdk21_win//:jdk\",\n)\n"
+            }
+          }
+        }
+      }
+    },
+    "@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
+      "general": {
+        "bzlTransitiveDigest": "KQ7c9htqJNJXfoX4CNwG1DU7e44c/7WM14CQyR1fNug=",
+        "accumulatedFileDigests": {
+          "@@//:swift_deps_index.json": "b8d2a418ae330ef08ee04e768650b266210154ffdfa6763872a21b76f61f793d"
+        },
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "swiftpkg_grpc_binary": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_grpc_binary",
+              "bazel_package_name": "swiftpkg_grpc_binary",
+              "commit": "a673bc2937fbe886dd1f99c401b01b6d977a9c98",
+              "remote": "https://github.com/google/grpc-binary.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_promises": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_promises",
+              "bazel_package_name": "swiftpkg_promises",
+              "commit": "3e4e743631e86c8c70dbc6efdc7beaa6e90fd3bb",
+              "remote": "https://github.com/google/promises.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_googleappmeasurement": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_googleappmeasurement",
+              "bazel_package_name": "swiftpkg_googleappmeasurement",
+              "commit": "6b332152355c372ace9966d8ee76ed191f97025e",
+              "remote": "https://github.com/google/GoogleAppMeasurement.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_abseil_cpp_binary": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_abseil_cpp_binary",
+              "bazel_package_name": "swiftpkg_abseil_cpp_binary",
+              "commit": "bfc0b6f81adc06ce5121eb23f628473638d67c5c",
+              "remote": "https://github.com/google/abseil-cpp-binary.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_googledatatransport": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_googledatatransport",
+              "bazel_package_name": "swiftpkg_googledatatransport",
+              "commit": "5056b15c5acbb90cd214fe4d6138bdf5a740e5a8",
+              "remote": "https://github.com/google/GoogleDataTransport.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_firebase_ios_sdk": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_firebase_ios_sdk",
+              "bazel_package_name": "swiftpkg_firebase_ios_sdk",
+              "commit": "8872dbd7d947acf757abab933da10e83c1842280",
+              "remote": "https://github.com/firebase/firebase-ios-sdk",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_interop_ios_for_google_sdks": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_interop_ios_for_google_sdks",
+              "bazel_package_name": "swiftpkg_interop_ios_for_google_sdks",
+              "commit": "2d12673670417654f08f5f90fdd62926dc3a2648",
+              "remote": "https://github.com/google/interop-ios-for-google-sdks.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_leveldb": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_leveldb",
+              "bazel_package_name": "swiftpkg_leveldb",
+              "commit": "0706abcc6b0bd9cedfbb015ba840e4a780b5159b",
+              "remote": "https://github.com/firebase/leveldb.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_gtm_session_fetcher": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_gtm_session_fetcher",
+              "bazel_package_name": "swiftpkg_gtm_session_fetcher",
+              "commit": "5ccda3981422a84186387dbb763ba739178b529c",
+              "remote": "https://github.com/google/gtm-session-fetcher.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_protobuf": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_protobuf",
+              "bazel_package_name": "swiftpkg_swift_protobuf",
+              "commit": "ab3a58b7209a17d781c0d1dbb3e1ff3da306bae8",
+              "remote": "https://github.com/apple/swift-protobuf.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_nanopb": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_nanopb",
+              "bazel_package_name": "swiftpkg_nanopb",
+              "commit": "819d0a2173aff699fb8c364b6fb906f7cdb1a692",
+              "remote": "https://github.com/firebase/nanopb.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_reachability.swift": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_reachability.swift",
+              "bazel_package_name": "swiftpkg_reachability.swift",
+              "commit": "c01bbdf2d633cf049ae1ed1a68a2020a8bda32e2",
+              "remote": "https://github.com/ashleymills/Reachability.swift.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_googleutilities": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_googleutilities",
+              "bazel_package_name": "swiftpkg_googleutilities",
+              "commit": "0543562f85620b5b7c510c6bcbef75b562a5127b",
+              "remote": "https://github.com/google/GoogleUtilities.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          }
+        }
+      }
+    },
+    "@rules_swift~1.13.0//swift:extensions.bzl%non_module_deps": {
+      "general": {
+        "bzlTransitiveDigest": "m0s797FpdD2ZOGrVZH7a6ZjcTaJbIFa4Wou6d9HLB/A=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "com_github_grpc_grpc_swift": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_grpc_grpc_swift",
+              "urls": [
+                "https://github.com/grpc/grpc-swift/archive/1.16.0.tar.gz"
+              ],
+              "sha256": "58b60431d0064969f9679411264b82e40a217ae6bd34e17096d92cc4e47556a5",
+              "strip_prefix": "grpc-swift-1.16.0/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_grpc_grpc_swift/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_nio_extras": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_nio_extras",
+              "urls": [
+                "https://github.com/apple/swift-nio-extras/archive/1.4.0.tar.gz"
+              ],
+              "sha256": "4684b52951d9d9937bb3e8ccd6b5daedd777021ef2519ea2f18c4c922843b52b",
+              "strip_prefix": "swift-nio-extras-1.4.0/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_nio_extras/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_protobuf": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_protobuf",
+              "urls": [
+                "https://github.com/apple/swift-protobuf/archive/1.20.2.tar.gz"
+              ],
+              "sha256": "3fb50bd4d293337f202d917b6ada22f9548a0a0aed9d9a4d791e6fbd8a246ebb",
+              "strip_prefix": "swift-protobuf-1.20.2/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_protobuf/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_nio_ssl": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_nio_ssl",
+              "urls": [
+                "https://github.com/apple/swift-nio-ssl/archive/2.23.0.tar.gz"
+              ],
+              "sha256": "4787c63f61dd04d99e498adc3d1a628193387e41efddf8de19b8db04544d016d",
+              "strip_prefix": "swift-nio-ssl-2.23.0/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_nio_ssl/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_atomics": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_atomics",
+              "urls": [
+                "https://github.com/apple/swift-atomics/archive/1.1.0.tar.gz"
+              ],
+              "sha256": "1bee7f469f7e8dc49f11cfa4da07182fbc79eab000ec2c17bfdce468c5d276fb",
+              "strip_prefix": "swift-atomics-1.1.0/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_atomics/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_nio_http2": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_nio_http2",
+              "urls": [
+                "https://github.com/apple/swift-nio-http2/archive/1.26.0.tar.gz"
+              ],
+              "sha256": "f0edfc9d6a7be1d587e5b403f2d04264bdfae59aac1d74f7d974a9022c6d2b25",
+              "strip_prefix": "swift-nio-http2-1.26.0/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_nio_http2/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_nio_transport_services": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_nio_transport_services",
+              "urls": [
+                "https://github.com/apple/swift-nio-transport-services/archive/1.15.0.tar.gz"
+              ],
+              "sha256": "f3498dafa633751a52b9b7f741f7ac30c42bcbeb3b9edca6d447e0da8e693262",
+              "strip_prefix": "swift-nio-transport-services-1.15.0/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_nio_transport_services/BUILD.overlay"
+            }
+          },
+          "build_bazel_rules_swift_index_import": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~build_bazel_rules_swift_index_import",
+              "build_file": "@@rules_swift~1.13.0//third_party:build_bazel_rules_swift_index_import/BUILD.overlay",
+              "canonical_id": "index-import-5.8",
+              "urls": [
+                "https://github.com/MobileNativeFoundation/index-import/releases/download/5.8.0.1/index-import.tar.gz"
+              ],
+              "sha256": "28c1ffa39d99e74ed70623899b207b41f79214c498c603915aef55972a851a15"
+            }
+          },
+          "com_github_apple_swift_nio": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_nio",
+              "urls": [
+                "https://github.com/apple/swift-nio/archive/2.42.0.tar.gz"
+              ],
+              "sha256": "e3304bc3fb53aea74a3e54bd005ede11f6dc357117d9b1db642d03aea87194a0",
+              "strip_prefix": "swift-nio-2.42.0/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_nio/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_log": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_log",
+              "urls": [
+                "https://github.com/apple/swift-log/archive/1.4.4.tar.gz"
+              ],
+              "sha256": "48fe66426c784c0c20031f15dc17faf9f4c9037c192bfac2f643f65cb2321ba0",
+              "strip_prefix": "swift-log-1.4.4/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_log/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_collections": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_collections",
+              "urls": [
+                "https://github.com/apple/swift-collections/archive/1.0.4.tar.gz"
+              ],
+              "sha256": "d9e4c8a91c60fb9c92a04caccbb10ded42f4cb47b26a212bc6b39cc390a4b096",
+              "strip_prefix": "swift-collections-1.0.4/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_collections/BUILD.overlay"
+            }
+          },
+          "build_bazel_rules_swift_local_config": {
+            "bzlFile": "@@rules_swift~1.13.0//swift/internal:swift_autoconfiguration.bzl",
+            "ruleClassName": "swift_autoconfiguration",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~build_bazel_rules_swift_local_config"
             }
           }
         }
