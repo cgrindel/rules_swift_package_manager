@@ -9,7 +9,7 @@ bazel_dep(name = "cgrindel_bazel_starlib", version = "0.18.1")
 bazel_dep(name = "bazel_skylib", version = "1.4.2")
 bazel_dep(
     name = "rules_go",
-    version = "0.41.0",
+    version = "0.42.0",
     repo_name = "io_bazel_rules_go",
 )
 
@@ -76,10 +76,3 @@ bazel_binaries = use_extension(
 )
 bazel_binaries.download(version_file = "//:.bazelversion")
 use_repo(bazel_binaries, "bazel_binaries")
-
-# DEBUG BEGIN
-local_path_override(
-    module_name = "gazelle",
-    path = "/Users/chuck/code/cgrindel/bazel-gazelle/master",
-)
-# DEBUG END
