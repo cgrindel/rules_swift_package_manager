@@ -3,6 +3,7 @@ package swift
 import mapset "github.com/deckarep/golang-set/v2"
 
 var otherBuiltinModules = mapset.NewSet[string](
+	"RegexBuilder", // TODO: not included in System/Library/Frameworks for some reason
 	"XCTest",
 )
 
