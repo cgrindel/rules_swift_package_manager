@@ -210,9 +210,9 @@
       "name": "swiftpkg_swiftformat",
       "identity": "swiftformat",
       "remote": {
-        "commit": "4c8386a35e6a287387da041794b71b85d0858760",
+        "commit": "d37a477177d5d4ff2a3ae6328eaaab5bf793e702",
         "remote": "https://github.com/nicklockwood/SwiftFormat",
-        "version": "0.52.8"
+        "version": "0.52.9"
       }
     }
   ]
