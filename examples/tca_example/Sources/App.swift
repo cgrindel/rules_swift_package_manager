@@ -10,6 +10,7 @@ struct Feature: Reducer {
         var numberFactAlert: String?
     }
 
+    @CasePathable
     enum Action: Equatable {
         case factAlertDismissed
         case decrementButtonTapped
