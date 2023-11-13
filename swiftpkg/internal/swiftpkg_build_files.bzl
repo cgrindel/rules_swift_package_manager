@@ -52,9 +52,14 @@ def _swift_target_build_file(pkg_ctx, target):
         "visibility": ["//visibility:public"],
     }
 
-    # TODO: Derive this from the package graph instead of hardcoding
-    if target.c99name == "CasePaths":
-        attrs["plugins"] = ["@swiftpkg_swift_case_paths//:Sources_CasePathsMacros"]
+    # Add macros as plugins
+    macro_target_labels = [target.label.repository_name + "//:" + target.label.name for target in pkg_ctx.pkg_info.targets if target.type == "macro"]
+    if macro_target_labels:
+        plugins = [target_label for target_label in macro_target_labels for dep in deps if target_label in dep.value[0]]
+        if plugins:
+            attrs["plugins"] = plugins
+            deps_without_plugins = [dep for dep in deps if dep.value[0] not in plugins]
+            attrs["deps"] = bzl_selects.to_starlark(deps_without_plugins)
 
     defines = [
         # SPM directive instructing the code to build as if a Swift package.
