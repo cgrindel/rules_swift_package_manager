@@ -51,6 +51,11 @@ def _swift_target_build_file(pkg_ctx, target):
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//visibility:public"],
     }
+
+    # TODO: Derive this from the package graph instead of hardcoding
+    if target.c99name == "CasePaths":
+        attrs["plugins"] = ["@swiftpkg_swift_case_paths//:Sources_CasePathsMacros"]
+
     defines = [
         # SPM directive instructing the code to build as if a Swift package.
         # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
