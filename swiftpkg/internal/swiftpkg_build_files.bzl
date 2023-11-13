@@ -103,6 +103,9 @@ def _swift_target_build_file(pkg_ctx, target):
     elif target.type == target_types.test:
         load_stmts = [swift_test_load_stmt]
         decls = [_swift_test_from_target(target, attrs)]
+    elif target.type == target_types.macro:
+        load_stmts = [swift_compiler_plugin_load_stmt]
+        decls = [_swift_compiler_plugin_from_target(target, attrs)]
     else:
         fail("Unrecognized target type for a Swift target. type:", target.type)
     all_build_files.append(build_files.new(
@@ -137,6 +140,13 @@ def _swift_binary_from_target(target, attrs):
 def _swift_test_from_target(target, attrs):
     return build_decls.new(
         kind = swift_kinds.test,
+        name = pkginfo_targets.bazel_label_name(target),
+        attrs = attrs,
+    )
+
+def _swift_compiler_plugin_from_target(target, attrs):
+    return build_decls.new(
+        kind = swift_kinds.compiler_plugin,
         name = pkginfo_targets.bazel_label_name(target),
         attrs = attrs,
     )
@@ -675,6 +685,7 @@ swift_kinds = struct(
     binary = "swift_binary",
     test = "swift_test",
     c_module = "swift_c_module",
+    compiler_plugin = "swift_compiler_plugin",
 )
 
 swift_library_load_stmt = load_statements.new(
@@ -690,6 +701,11 @@ swift_binary_load_stmt = load_statements.new(
 swift_c_module_load_stmt = load_statements.new(
     swift_location,
     swift_kinds.c_module,
+)
+
+swift_compiler_plugin_load_stmt = load_statements.new(
+    swift_location,
+    swift_kinds.compiler_plugin,
 )
 
 swift_test_load_stmt = load_statements.new(swift_location, swift_kinds.test)
