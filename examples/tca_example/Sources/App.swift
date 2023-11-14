@@ -10,6 +10,7 @@ struct Feature {
         var count = 0
         var numberFactAlert: String?
     }
+
     enum Action {
         case factAlertDismissed
         case decrementButtonTapped
@@ -52,7 +53,7 @@ struct Feature {
 }
 
 struct FeatureView: View {
-  let store: StoreOf<Feature>
+    let store: StoreOf<Feature>
 
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
@@ -83,13 +84,13 @@ struct FactAlert: Identifiable {
 
 @main
 struct MyApp: App {
-  var body: some Scene {
-    WindowGroup {
-      FeatureView(
-        store: Store(initialState: Feature.State()) {
-          Feature()
+    var body: some Scene {
+        WindowGroup {
+            FeatureView(
+                store: Store(initialState: Feature.State()) {
+                    Feature()
+                }
+            )
         }
-      )
     }
-  }
 }
