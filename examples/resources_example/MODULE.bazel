@@ -50,6 +50,7 @@ swift_deps.from_file(
 use_repo(
     swift_deps,
     "swiftpkg_another_package_with_resources",
+    "swiftpkg_dropdown",
     "swiftpkg_googlesignin_ios",
     "swiftpkg_package_with_resources",
 )

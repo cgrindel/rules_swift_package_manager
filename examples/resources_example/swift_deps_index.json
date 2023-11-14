@@ -1,6 +1,7 @@
 {
   "direct_dep_identities": [
     "another_package_with_resources",
+    "dropdown",
     "googlesignin-ios",
     "package_with_resources"
   ],
@@ -45,6 +46,17 @@
       "package_identity": "appauth-ios",
       "product_memberships": [
         "AppAuthTV"
+      ]
+    },
+    {
+      "name": "DropDown",
+      "c99name": "DropDown",
+      "src_type": "swift",
+      "label": "@swiftpkg_dropdown//:DropDown_DropDown",
+      "modulemap_label": "@swiftpkg_dropdown//:DropDown_DropDown_modulemap",
+      "package_identity": "dropdown",
+      "product_memberships": [
+        "DropDown"
       ]
     },
     {
@@ -157,6 +169,14 @@
       ]
     },
     {
+      "identity": "dropdown",
+      "name": "DropDown",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_dropdown//:DropDown_DropDown"
+      ]
+    },
+    {
       "identity": "googlesignin-ios",
       "name": "GoogleSignIn",
       "type": "library",
@@ -237,6 +257,15 @@
         "commit": "71cde449f13d453227e687458144bde372d30fc7",
         "remote": "https://github.com/openid/AppAuth-iOS.git",
         "version": "1.6.2"
+      }
+    },
+    {
+      "name": "swiftpkg_dropdown",
+      "identity": "dropdown",
+      "remote": {
+        "commit": "2ab6f6ce19f0117d1a76ea043ef8f57722c65d16",
+        "remote": "https://github.com/AssistoLab/DropDown.git",
+        "branch": "2ab6f6c"
       }
     },
     {
