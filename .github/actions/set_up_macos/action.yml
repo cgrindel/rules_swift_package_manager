@@ -7,7 +7,7 @@ inputs:
     required: true
   xcode_version:
     description: The version of Xcode to use.
-    default: '14.3.1'
+    default: '15.0.1'
 
 runs:
   using: composite
