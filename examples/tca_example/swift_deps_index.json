@@ -276,9 +276,9 @@
       "name": "swiftpkg_swift_case_paths",
       "identity": "swift-case-paths",
       "remote": {
-        "commit": "5da6989aae464f324eef5c5b52bdb7974725ab81",
+        "commit": "ed7facdd4a361514b46e3bbc6238cd41c84be4ec",
         "remote": "https://github.com/pointfreeco/swift-case-paths",
-        "version": "1.0.0"
+        "version": "1.1.1"
       }
     },
     {
@@ -303,18 +303,18 @@
       "name": "swiftpkg_swift_composable_architecture",
       "identity": "swift-composable-architecture",
       "remote": {
-        "commit": "9b0f600253f467f61cbd53f60ccc243cc4ff27cd",
+        "commit": "eddc1869b37ce42e3b34e72b1e1355d049e73970",
         "remote": "https://github.com/pointfreeco/swift-composable-architecture",
-        "version": "1.3.0"
+        "version": "1.4.2"
       }
     },
     {
       "name": "swiftpkg_swift_concurrency_extras",
       "identity": "swift-concurrency-extras",
       "remote": {
-        "commit": "6155400cb15b0d99b2c257d57603d61d03a817a8",
+        "commit": "bb5059bde9022d69ac516803f4f227d8ac967f71",
         "remote": "https://github.com/pointfreeco/swift-concurrency-extras",
-        "version": "1.0.1"
+        "version": "1.1.0"
       }
     },
     {
@@ -348,9 +348,9 @@
       "name": "swiftpkg_swiftui_navigation",
       "identity": "swiftui-navigation",
       "remote": {
-        "commit": "6eb293c49505d86e9e24232cb6af6be7fff93bd5",
+        "commit": "a3aa5d46e8bf174d773d23b030f1c103999398ac",
         "remote": "https://github.com/pointfreeco/swiftui-navigation",
-        "version": "1.0.2"
+        "version": "1.1.0"
       }
     },
     {
