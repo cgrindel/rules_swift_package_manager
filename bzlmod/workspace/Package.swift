@@ -4,6 +4,9 @@ import PackageDescription
 
 let package = Package(
     name: "MySwiftPackage",
+    platforms: [
+        .macOS(.v12),
+    ],
     products: [
         .executable(name: "my-executable", targets: ["MyExecutable"]),
     ],
@@ -20,6 +23,12 @@ let package = Package(
                 "MyLibrary",
             ],
             path: "Sources/MyExecutable",
+            exclude: ["BUILD.bazel"]
+        ),
+        .testTarget(
+            name: "MyExecutableTests",
+            dependencies: ["MyExecutable"],
+            path: "Tests/MyExecutableTests",
             exclude: ["BUILD.bazel"]
         ),
         .target(
