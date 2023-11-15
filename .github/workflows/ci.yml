@@ -104,7 +104,7 @@ jobs:
         if: ${{ startsWith(matrix.runner, 'macos') }}
         with:
           repo_name: rules_swift_package_manager
-          xcode_version: "14.2"
+          xcode_version: "15.0.1"
       - uses: ./.github/actions/configure_remote_cache_auth
         with:
           buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
@@ -133,7 +133,7 @@ jobs:
         if: ${{ startsWith(matrix.runner, 'macos') }}
         with:
           repo_name: rules_swift_package_manager
-          xcode_version: "14.2"
+          xcode_version: "15.0.1"
       - uses: ./.github/actions/configure_remote_cache_auth
         with:
           buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}

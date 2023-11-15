@@ -7,7 +7,7 @@ inputs:
     required: true
   xcode_version:
     description: The version of Xcode to use.
-    default: '14.3.1'
+    default: '15.0.1'
 
 runs:
   using: composite
@@ -18,7 +18,7 @@ runs:
     - name: Confirm Xcode Version
       shell: bash
       run: |
-        # Print used xCode version
+        # Print used Xcode version
         xcode-select -print-path
         xcodebuild -version
     - uses: cgrindel/gha_set_up_bazel@v1
