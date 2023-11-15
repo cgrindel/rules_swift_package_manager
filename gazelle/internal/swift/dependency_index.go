@@ -275,8 +275,15 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 		}
 		sort.Sort(sort.Reverse(psrs))
 		selectedPsr := psrs[0]
-		selectedPiks = append(selectedPiks, selectedPsr.pik)
-		modulesToResolve = modulesToResolve.Difference(selectedPsr.intersect)
+
+		if selectedPsr.intersectCnt > 0 {
+			// We found a product that contains at least one of the modules that we are trying to
+			// resolve. Add it to the list of selected products and remove the modules that it
+			// contains from the list of modules that we are trying to resolve.
+			selectedPiks = append(selectedPiks, selectedPsr.pik)
+			modulesToResolve = modulesToResolve.Difference(selectedPsr.intersect)
+		}
+
 		potentialPikSet.Remove(selectedPsr.pik)
 	}
 
