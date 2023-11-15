@@ -250,8 +250,8 @@ bzl_library(
 )
 
 bzl_library(
-    name = "apple_builtin_frameworks",
-    srcs = ["apple_builtin_frameworks.bzl"],
+    name = "apple_builtin",
+    srcs = ["apple_builtin.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = ["@bazel_skylib//lib:sets"],
 )
@@ -261,7 +261,7 @@ bzl_library(
     srcs = ["objc_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
-        ":apple_builtin_frameworks",
+        ":apple_builtin",
         "@bazel_skylib//lib:sets",
     ],
 )
@@ -270,7 +270,7 @@ bzl_library(
     name = "bazel_apple_platforms",
     srcs = ["bazel_apple_platforms.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
-    deps = [":apple_builtin_frameworks"],
+    deps = [":apple_builtin"],
 )
 
 bzl_library(

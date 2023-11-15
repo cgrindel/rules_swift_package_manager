@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestIsBuiltInModule(t *testing.T) {
+func TestIsBuiltInFramework(t *testing.T) {
 	tests := []struct {
 		msg  string
 		name string
@@ -21,7 +21,22 @@ func TestIsBuiltInModule(t *testing.T) {
 		{msg: "does not exist", name: "DoesNotExist", exp: false},
 	}
 	for _, tt := range tests {
-		actual := swift.IsBuiltInModule(tt.name)
+		actual := swift.IsBuiltInFramework(tt.name)
+		assert.Equal(t, tt.exp, actual, tt.msg)
+	}
+}
+
+func TestIsBuiltInSwiftModule(t *testing.T) {
+	tests := []struct {
+		msg  string
+		name string
+		exp  bool
+	}{
+		{msg: "os", name: "os", exp: true},
+		{msg: "does not exist", name: "DoesNotExist", exp: false},
+	}
+	for _, tt := range tests {
+		actual := swift.IsBuiltInSwiftModule(tt.name)
 		assert.Equal(t, tt.exp, actual, tt.msg)
 	}
 }

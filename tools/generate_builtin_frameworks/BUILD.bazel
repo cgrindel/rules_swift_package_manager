@@ -9,7 +9,7 @@ sh_binary(
         "--go_output",
         "gazelle/internal/swift/builtin_modules.go",
         "--bzl_output",
-        "swiftpkg/internal/apple_builtin_frameworks.bzl",
+        "swiftpkg/internal/apple_builtin.bzl",
     ],
     target_compatible_with = [
         "@platforms//os:macos",
