@@ -107,7 +107,7 @@ jobs:
           xcode_version: "14.2"
       - uses: ./.github/actions/configure_remote_cache_auth
         with:
-          buildbuddy_api_key: ${{  secrets.BUILDBUDDY_API_KEY }}
+          buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
       - uses: ./.github/actions/execute_test
         with:
           bzlmod_enabled: ${{ matrix.bzlmod_enabled }}
@@ -136,5 +136,5 @@ jobs:
           xcode_version: "14.2"
       - uses: ./.github/actions/configure_remote_cache_auth
         with:
-          buildbuddy_api_key: ${{  secrets.BUILDBUDDY_API_KEY }}
+          buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
       - uses: ./.github/actions/tidy_and_test
