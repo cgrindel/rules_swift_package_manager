@@ -9,6 +9,7 @@ runs:
   using: composite
   steps:
     - name: Write the BuildBuddy API Auth
+      if: ${{ inputs.buildbuddy_api_key != '' }}
       shell: bash
       env:
         BUILDBUDDY_API_KEY: ${{ inputs.BUILDBUDDY_API_KEY }}
