@@ -15,6 +15,16 @@
       ]
     },
     {
+      "name": "AppCheckCore",
+      "c99name": "AppCheckCore",
+      "src_type": "objc",
+      "label": "@swiftpkg_app_check//:AppCheckCore_Sources_AppCheckCore",
+      "package_identity": "app-check",
+      "product_memberships": [
+        "AppCheckCore"
+      ]
+    },
+    {
       "name": "Firebase",
       "c99name": "Firebase",
       "src_type": "objc",
@@ -907,6 +917,24 @@
       ]
     },
     {
+      "name": "third-party-IsAppEncrypted",
+      "c99name": "third_party_IsAppEncrypted",
+      "src_type": "objc",
+      "label": "@swiftpkg_googleutilities//:third_party_IsAppEncrypted_third-party-IsAppEncrypted",
+      "package_identity": "googleutilities",
+      "product_memberships": [
+        "GULAppDelegateSwizzler",
+        "GULEnvironment",
+        "GULLogger",
+        "GULISASwizzler",
+        "GULMethodSwizzler",
+        "GULNetwork",
+        "GULReachability",
+        "GULSwizzlerTestHelpers",
+        "GULUserDefaults"
+      ]
+    },
+    {
       "name": "gRPC-CXX-Target",
       "c99name": "gRPC_CXX_Target",
       "src_type": "objc",
@@ -1130,6 +1158,14 @@
       "type": "library",
       "target_labels": [
         "@swiftpkg_abseil_cpp_binary//:remote_archive_abseil.zip_abseil"
+      ]
+    },
+    {
+      "identity": "app-check",
+      "name": "AppCheckCore",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_app_check//:AppCheckCore_Sources_AppCheckCore"
       ]
     },
     {
@@ -1617,12 +1653,21 @@
       }
     },
     {
+      "name": "swiftpkg_app_check",
+      "identity": "app-check",
+      "remote": {
+        "commit": "5746b2d35c91c50581590ed97abe4c06b5037274",
+        "remote": "https://github.com/google/app-check.git",
+        "version": "10.18.0"
+      }
+    },
+    {
       "name": "swiftpkg_firebase_ios_sdk",
       "identity": "firebase-ios-sdk",
       "remote": {
-        "commit": "8872dbd7d947acf757abab933da10e83c1842280",
+        "commit": "5de0369ee79ad096c164eb3afeb7921d92a43b58",
         "remote": "https://github.com/firebase/firebase-ios-sdk",
-        "version": "10.17.0"
+        "version": "10.18.0"
       },
       "cLanguageStandard": "c99",
       "cxxLanguageStandard": "gnu++14"
@@ -1653,9 +1698,9 @@
       "name": "swiftpkg_googleutilities",
       "identity": "googleutilities",
       "remote": {
-        "commit": "0543562f85620b5b7c510c6bcbef75b562a5127b",
+        "commit": "bc27fad73504f3d4af235de451f02ee22586ebd3",
         "remote": "https://github.com/google/GoogleUtilities.git",
-        "version": "7.11.0"
+        "version": "7.12.1"
       },
       "cLanguageStandard": "c99",
       "cxxLanguageStandard": "gnu++14"
@@ -1710,9 +1755,9 @@
       "name": "swiftpkg_promises",
       "identity": "promises",
       "remote": {
-        "commit": "3e4e743631e86c8c70dbc6efdc7beaa6e90fd3bb",
+        "commit": "e70e889c0196c76d22759eb50d6a0270ca9f1d9e",
         "remote": "https://github.com/google/promises.git",
-        "version": "2.1.1"
+        "version": "2.3.1"
       }
     },
     {
