@@ -15,3 +15,6 @@ try-import %workspace%/../../local.bazelrc
 # build --cxxopt='-std=c++11'
 # Required by swift-nio-ssl
 build --cxxopt='-std=c++14'
+
+# Set minimum macOS version
+build --macos_minimum_os=10.15 --host_macos_minimum_os=10.15
