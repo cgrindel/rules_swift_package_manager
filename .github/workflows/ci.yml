@@ -106,7 +106,6 @@ jobs:
           repo_name: rules_swift_package_manager
           xcode_version: 15.0.1
       - uses: ./.github/actions/configure_remote_cache_auth
-        if: ${{ secrets.BUILDBUDDY_API_KEY != '' }}
         with:
           buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
       - uses: ./.github/actions/execute_test
@@ -136,7 +135,6 @@ jobs:
           repo_name: rules_swift_package_manager
           xcode_version: 15.0.1
       - uses: ./.github/actions/configure_remote_cache_auth
-        if: ${{ secrets.BUILDBUDDY_API_KEY != '' }}
         with:
           buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
       - uses: ./.github/actions/tidy_and_test
