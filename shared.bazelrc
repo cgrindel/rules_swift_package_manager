@@ -15,9 +15,6 @@ build --incompatible_strict_action_env=true
 common --enable_bzlmod
 build --@cgrindel_bazel_starlib//bzlmod:enabled
 
-# Set minimum macOS version
-build --macos_minimum_os=10.15 --host_macos_minimum_os=10.15
-
 # Remote Cache
 build:cache --bes_results_url=https://app.buildbuddy.io/invocation/
 build:cache --bes_backend=grpcs://remote.buildbuddy.io
