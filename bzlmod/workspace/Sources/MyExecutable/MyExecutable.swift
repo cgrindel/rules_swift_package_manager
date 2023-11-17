@@ -2,6 +2,7 @@ import ArgumentParser
 import Logging
 import MyLibrary
 import RegexBuilder
+import System
 
 // Because we build on macos/linux this needs to be conditionally imported to test an edge case
 #if canImport(os)
@@ -19,5 +20,7 @@ struct MyExecutable: AsyncParsableCommand {
         #if canImport(os)
         os_log("This is a debug message.", log: OSLog.default, type: .debug)
         #endif
+
+        MySystem.hello()
     }
 }

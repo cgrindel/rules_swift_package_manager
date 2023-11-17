@@ -18,6 +18,7 @@ let package = Package(
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Logging", package: "swift-log"),
                 "MyLibrary",
+                "System",
             ],
             path: "Sources/MyExecutable",
             exclude: ["BUILD.bazel"]
@@ -33,6 +34,15 @@ let package = Package(
             dependencies: ["MyLibrary"],
             path: "Tests/MyLibraryTests",
             exclude: ["BUILD.bazel"]
-        )
+        ),
+        .target(
+            name: "System",
+            dependencies: [],
+            path: "Sources/System",
+            exclude: [
+                "BUILD.bazel",
+                "README.md",
+            ]
+        ),
     ]
 )
