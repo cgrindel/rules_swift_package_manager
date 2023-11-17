@@ -1665,7 +1665,7 @@
     }
   },
   "moduleExtensions": {
-    "@apple_support~1.11.1//crosstool:setup.bzl%apple_cc_configure_extension": {
+    "@@apple_support~1.11.1//crosstool:setup.bzl%apple_cc_configure_extension": {
       "general": {
         "bzlTransitiveDigest": "FOTImXZOLQw+EqKi3u13A1a5Wff22EtyCed2Cz1AiW0=",
         "accumulatedFileDigests": {},
@@ -1688,7 +1688,7 @@
         }
       }
     },
-    "@bazel_tools//tools/cpp:cc_configure.bzl%cc_configure_extension": {
+    "@@bazel_tools//tools/cpp:cc_configure.bzl%cc_configure_extension": {
       "general": {
         "bzlTransitiveDigest": "O9sf6ilKWU9Veed02jG9o2HM/xgV/UAyciuFBuxrFRY=",
         "accumulatedFileDigests": {},
@@ -1711,7 +1711,7 @@
         }
       }
     },
-    "@bazel_tools//tools/osx:xcode_configure.bzl%xcode_configure_extension": {
+    "@@bazel_tools//tools/osx:xcode_configure.bzl%xcode_configure_extension": {
       "general": {
         "bzlTransitiveDigest": "Qh2bWTU6QW6wkrd87qrU4YeY+SG37Nvw3A0PR4Y0L2Y=",
         "accumulatedFileDigests": {},
@@ -1729,7 +1729,7 @@
         }
       }
     },
-    "@bazel_tools//tools/sh:sh_configure.bzl%sh_configure_extension": {
+    "@@bazel_tools//tools/sh:sh_configure.bzl%sh_configure_extension": {
       "general": {
         "bzlTransitiveDigest": "hp4NgmNjEg5+xgvzfh6L83bt9/aiiWETuNpwNuF1MSU=",
         "accumulatedFileDigests": {},
@@ -1745,9 +1745,9 @@
         }
       }
     },
-    "@buildifier_prebuilt~6.0.0.1//:defs.bzl%buildifier_prebuilt_deps_extension": {
+    "@@buildifier_prebuilt~6.0.0.1//:defs.bzl%buildifier_prebuilt_deps_extension": {
       "general": {
-        "bzlTransitiveDigest": "YqU/p1evGwVfmjGWRWMh2A2ufdYX2RglvtJlMQW4aV0=",
+        "bzlTransitiveDigest": "rw0w83IFOd+utieoxefELpxmQT7CxmI9Bd1pKxwbgZE=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -1866,7 +1866,7 @@
         }
       }
     },
-    "@gazelle~0.32.0//:extensions.bzl%go_deps": {
+    "@@gazelle~0.32.0//:extensions.bzl%go_deps": {
       "general": {
         "bzlTransitiveDigest": "YrW3LfmthaiuxDs+yU7jeVnkxHvRzUiEdu3bZung8pg=",
         "accumulatedFileDigests": {
@@ -2297,7 +2297,7 @@
         }
       }
     },
-    "@gazelle~0.32.0//internal/bzlmod:non_module_deps.bzl%non_module_deps": {
+    "@@gazelle~0.32.0//internal/bzlmod:non_module_deps.bzl%non_module_deps": {
       "general": {
         "bzlTransitiveDigest": "Bp38I6OO2Uxk82ttCDtNtgYSQwwG4qQ9eexnd38xQxU=",
         "accumulatedFileDigests": {},
@@ -2323,9 +2323,9 @@
         }
       }
     },
-    "@rules_go~0.41.0//go:extensions.bzl%go_sdk": {
+    "@@rules_go~0.41.0//go:extensions.bzl%go_sdk": {
       "general": {
-        "bzlTransitiveDigest": "AaWHRBD/gHkNT2tZ68M6uuVkR6o8sNfgmBp5kia672Y=",
+        "bzlTransitiveDigest": "QaU0mhA+aom4ENV5sBUAEDa9IQt53GtspLCjl89277c=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2379,9 +2379,9 @@
         }
       }
     },
-    "@rules_go~0.41.0//go/private:extensions.bzl%non_module_dependencies": {
+    "@@rules_go~0.41.0//go/private:extensions.bzl%non_module_dependencies": {
       "general": {
-        "bzlTransitiveDigest": "cRMB/4H6g4I4ZyFmTSuuNj5604ce5nBLmfQee36lvL8=",
+        "bzlTransitiveDigest": "CZeQbYwfBEc0H27WqrnwfsnHiarm8whm1PFFxE1fMl4=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2582,9 +2582,9 @@
         }
       }
     },
-    "@rules_java~7.1.0//java:extensions.bzl%toolchains": {
+    "@@rules_java~7.1.0//java:extensions.bzl%toolchains": {
       "general": {
-        "bzlTransitiveDigest": "EXsxSX2vQjCcI8jYez/O+Yb9H5reAMhLL3WXGPD6Scw=",
+        "bzlTransitiveDigest": "iUIRqCK7tkhvcDJCAfPPqSd06IHG0a8HQD0xeQyVAqw=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
