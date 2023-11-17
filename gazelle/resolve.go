@@ -46,18 +46,15 @@ func (l *swiftLang) Resolve(
 	swiftImports := imports.([]string)
 	rr := reslog.NewRuleResolution(from, r, swiftImports)
 
-	// Try to resolve to targets in this project.
 	var deps []string
 	addToDeps := func(lbl label.Label) {
 		l := normalizeLabel(c.RepoName, lbl)
 		deps = append(deps, l.String())
 	}
+
+	// Try to resolve to targets in this project.
 	externalModules := make([]string, 0, len(swiftImports))
 	for _, imp := range swiftImports {
-		if swift.IsBuiltInModule(imp) {
-			rr.AddBuiltin(imp)
-			continue
-		}
 		findResults := ix.FindRulesByImportWithConfig(
 			c, resolve.ImportSpec{Lang: swiftLangName, Imp: imp}, swiftLangName)
 		if len(findResults) > 0 {
@@ -75,13 +72,15 @@ func (l *swiftLang) Resolve(
 		addToDeps(*lbl)
 	}
 
-	// If any module is still unresolved, look for modules defined in http_archive declarations.
+	// If any module is still unresolved, look for modules defined in http_archive declarations or built-in modules.
 	var unresolved []string
 	for _, moduleName := range resResult.Unresolved {
 		haModules := di.FindModules(moduleName, []string{swift.HTTPArchivePkgIdentity})
 		if len(haModules) > 0 {
 			addToDeps(*haModules[0].Label)
 			rr.AddHTTPArchive(moduleName, haModules)
+		} else if swift.IsBuiltInModule(moduleName) {
+			rr.AddBuiltin(moduleName)
 		} else {
 			unresolved = append(unresolved, moduleName)
 		}
@@ -90,7 +89,7 @@ func (l *swiftLang) Resolve(
 	if len(unresolved) > 0 {
 		rr.AddUnresolved(unresolved...)
 		log.Printf("Unable to find dependency labels for %v",
-			strings.Join(resResult.Unresolved, ", "))
+			strings.Join(unresolved, ", "))
 	}
 
 	sort.Strings(deps)

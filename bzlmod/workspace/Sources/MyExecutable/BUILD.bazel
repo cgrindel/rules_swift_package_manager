@@ -8,6 +8,7 @@ swift_binary(
     visibility = ["//visibility:public"],
     deps = [
         "//Sources/MyLibrary",
+        "//Sources/System",
         "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser",
         "@swiftpkg_swift_log//:Sources_Logging",
     ],
