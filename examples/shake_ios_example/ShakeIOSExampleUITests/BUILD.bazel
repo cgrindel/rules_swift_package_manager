@@ -15,6 +15,9 @@ swift_library(
 ios_ui_test(
     name = "ShakeIOSExampleUITests",
     size = "enormous",
+    env = {
+        "STARTUP_TIMEOUT_SEC": 300,
+    },
     minimum_os_version = "16.0",
     runner = "@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_ordered_runner",
     test_host = "//ShakeIOSExample",
