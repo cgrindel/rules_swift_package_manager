@@ -3,7 +3,7 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
-load(":apple_builtin_frameworks.bzl", "apple_builtin_frameworks")
+load(":apple_builtin.bzl", "apple_builtin")
 
 _at_import = "@import "
 _at_import_len = len(_at_import)
@@ -138,7 +138,7 @@ def _collect_src_info(repository_ctx, root_path, srcs):
         imports = _collect_imports_for_src(repository_ctx, src_path)
         for imp in imports:
             _add_to_dict(all_imports, imp, src)
-            if sets.contains(apple_builtin_frameworks.all, imp):
+            if sets.contains(apple_builtin.frameworks.all, imp):
                 sets.insert(frameworks, imp)
 
     return _new_src_info(

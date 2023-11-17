@@ -2,13 +2,13 @@
 
 load("@bazel_skylib//lib:sets.bzl", "sets")
 load("//config_settings/spm/platform:platforms.bzl", spm_platforms = "platforms")
-load(":apple_builtin_frameworks.bzl", "apple_builtin_frameworks")
+load(":apple_builtin.bzl", "apple_builtin")
 
-_platform_sets = {
-    spm_platforms.macos: apple_builtin_frameworks.macos,
-    spm_platforms.ios: apple_builtin_frameworks.ios,
-    spm_platforms.tvos: apple_builtin_frameworks.tvos,
-    spm_platforms.watchos: apple_builtin_frameworks.watchos,
+_framework_platform_sets = {
+    spm_platforms.macos: apple_builtin.frameworks.macos,
+    spm_platforms.ios: apple_builtin.frameworks.ios,
+    spm_platforms.tvos: apple_builtin.frameworks.tvos,
+    spm_platforms.watchos: apple_builtin.frameworks.watchos,
 }
 
 _condition_tmpl = "@rules_swift_package_manager//config_settings/spm/platform:{}"
@@ -23,7 +23,7 @@ def _for_framework(framework):
         A `list` of the platform condition labels.
     """
     platforms = []
-    for (platform, pset) in _platform_sets.items():
+    for (platform, pset) in _framework_platform_sets.items():
         if sets.contains(pset, framework):
             platforms.append(_condition_tmpl.format(platform))
     return sorted(platforms)

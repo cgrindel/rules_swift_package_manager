@@ -79,7 +79,7 @@ func (l *swiftLang) Resolve(
 		if len(haModules) > 0 {
 			addToDeps(*haModules[0].Label)
 			rr.AddHTTPArchive(moduleName, haModules)
-		} else if swift.IsBuiltInModule(moduleName) {
+		} else if swift.IsBuiltInFramework(moduleName) || swift.IsBuiltInSwiftModule(moduleName) {
 			rr.AddBuiltin(moduleName)
 		} else {
 			unresolved = append(unresolved, moduleName)
