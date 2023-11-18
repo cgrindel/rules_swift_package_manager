@@ -2321,10 +2321,6 @@
         }
       }
     },
-<<<<<<< HEAD
-    "@@rules_go~0.41.0//go:extensions.bzl%go_sdk": {
-      "general": {
-=======
     "@@rules_apple~3.1.1//apple:extensions.bzl%non_module_deps": {
       "general": {
         "bzlTransitiveDigest": "qtprNaNQs1t4snJ9OPZii/Sk3Rw9CZ96CeXalzhUxZE=",
@@ -2348,7 +2344,6 @@
     },
     "@@rules_go~0.41.0//go:extensions.bzl%go_sdk": {
       "general": {
->>>>>>> e14a0f2 (Update lock file.)
         "bzlTransitiveDigest": "QaU0mhA+aom4ENV5sBUAEDa9IQt53GtspLCjl89277c=",
         "accumulatedFileDigests": {},
         "envVariables": {},
@@ -3148,9 +3143,9 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "KQ7c9htqJNJXfoX4CNwG1DU7e44c/7WM14CQyR1fNug=",
+        "bzlTransitiveDigest": "aB+RZi7Ljbudlo83JT7pFY6fixXiYOh2DW5yJ3BfRso=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "9fc29ec6824de3b4ed5559f78123f283996c2da15caf9d775713e6d9bd62e916"
+          "@@//:swift_deps_index.json": "d361df463c11779fbdc9b12eb8973a1aaf494084f39a277e25a848c232ad01a0"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3202,6 +3197,26 @@
               "bazel_package_name": "swiftpkg_swift_composable_architecture",
               "commit": "eddc1869b37ce42e3b34e72b1e1355d049e73970",
               "remote": "https://github.com/pointfreeco/swift-composable-architecture",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_syntax": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_syntax",
+              "bazel_package_name": "swiftpkg_swift_syntax",
+              "commit": "6ad4ea24b01559dde0773e3d091f1b9e36175036",
+              "remote": "https://github.com/apple/swift-syntax",
               "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
