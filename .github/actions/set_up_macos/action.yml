@@ -18,7 +18,7 @@ runs:
     - name: Override Xcode Version
       shell: bash
       run: |
-        # TODO: Investigate why these examples fail on CI with Xcode 15
+        # GH762: Investigate why these examples fail on CI with Xcode 15
         if [[ "${{ inputs.test_target }}" = "@@//examples:shake_ios_example_test_bazel_.bazelversion" ]] || 
            [[ "${{ inputs.test_target }}" = "@@//examples:stripe_example_test_bazel_.bazelversion" ]]; then
           sudo xcode-select -s /Applications/Xcode_14.3.1.app/Contents/Developer
