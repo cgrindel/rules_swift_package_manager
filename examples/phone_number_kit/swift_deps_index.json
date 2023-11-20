@@ -48,9 +48,9 @@
       "name": "swiftpkg_phonenumberkit",
       "identity": "phonenumberkit",
       "remote": {
-        "commit": "b456f2f9be10c1d183158220b831afd22697dd68",
+        "commit": "736e333d28c85fa4411e5210ded8c48a402b9300",
         "remote": "https://github.com/marmelroy/PhoneNumberKit",
-        "version": "3.7.4"
+        "version": "3.7.5"
       }
     }
   ]
