@@ -211,6 +211,26 @@
       ]
     },
     {
+      "name": "Backtrace",
+      "c99name": "Backtrace",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_backtrace//:Sources_Backtrace",
+      "package_identity": "swift-backtrace",
+      "product_memberships": [
+        "Backtrace"
+      ]
+    },
+    {
+      "name": "CBacktrace",
+      "c99name": "CBacktrace",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_backtrace//:Sources_CBacktrace",
+      "package_identity": "swift-backtrace",
+      "product_memberships": [
+        "Backtrace"
+      ]
+    },
+    {
       "name": "Collections",
       "c99name": "Collections",
       "src_type": "swift",
@@ -615,6 +635,7 @@
       "label": "@swiftpkg_swift_nio//:Sources__NIODataStructures",
       "package_identity": "swift-nio",
       "product_memberships": [
+        "NIOCore",
         "NIO",
         "NIOEmbedded",
         "NIOPosix",
@@ -986,6 +1007,14 @@
       "type": "library",
       "target_labels": [
         "@swiftpkg_swift_atomics//:Sources_Atomics"
+      ]
+    },
+    {
+      "identity": "swift-backtrace",
+      "name": "Backtrace",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_backtrace//:Sources_Backtrace"
       ]
     },
     {
@@ -1380,6 +1409,15 @@
       }
     },
     {
+      "name": "swiftpkg_swift_backtrace",
+      "identity": "swift-backtrace",
+      "remote": {
+        "commit": "80746bdd0ac8a7d83aad5d89dac3cbf15de652e6",
+        "remote": "https://github.com/swift-server/swift-backtrace.git",
+        "version": "1.3.4"
+      }
+    },
+    {
       "name": "swiftpkg_swift_collections",
       "identity": "swift-collections",
       "remote": {
@@ -1420,9 +1458,9 @@
       "name": "swiftpkg_swift_nio",
       "identity": "swift-nio",
       "remote": {
-        "commit": "3db5c4aeee8100d2db6f1eaf3864afdad5dc68fd",
+        "commit": "702cd7c56d5d44eeba73fdf83918339b26dc855c",
         "remote": "https://github.com/apple/swift-nio.git",
-        "version": "2.59.0"
+        "version": "2.62.0"
       }
     },
     {
@@ -1475,9 +1513,9 @@
       "name": "swiftpkg_vapor",
       "identity": "vapor",
       "remote": {
-        "commit": "d682e05fdb64c9f7da01af096a73cd11bb7ab755",
+        "commit": "da9c2805b1b93751b1922bbbf343aa120e9942c8",
         "remote": "https://github.com/vapor/vapor.git",
-        "version": "4.86.2"
+        "version": "4.87.1"
       }
     },
     {
