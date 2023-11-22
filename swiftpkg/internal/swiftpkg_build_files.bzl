@@ -79,9 +79,11 @@ def _swift_target_build_file(pkg_ctx, target):
 
     # GH046: Support plugins.
 
+    is_library_target = lists.contains([target_types.library, target_types.regular], target.type)
+
     # Check if any of the sources indicate that the module will be used by
     # Objective-C code. If so, generate the bridge header file.
-    if target.swift_src_info.has_objc_directive:
+    if target.swift_src_info.has_objc_directive and is_library_target:
         attrs["generates_header"] = True
 
     # The rules_swift code links in developer libraries if the rule is marked testonly.
@@ -113,7 +115,7 @@ def _swift_target_build_file(pkg_ctx, target):
     res_build_file = _handle_target_resources(pkg_ctx, target, attrs)
     if res_build_file:
         all_build_files.append(res_build_file)
-    if lists.contains([target_types.library, target_types.regular], target.type):
+    if is_library_target:
         load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(target, attrs)]
     elif target.type == target_types.executable:
