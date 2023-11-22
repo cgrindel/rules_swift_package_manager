@@ -1900,9 +1900,9 @@
       "general": {
         "bzlTransitiveDigest": "YrW3LfmthaiuxDs+yU7jeVnkxHvRzUiEdu3bZung8pg=",
         "accumulatedFileDigests": {
-          "@@//:go.mod": "e1a9a11c38e989296b4998de2301103156c0c249ee7ca4dd8b93ab8e7f140113",
+          "@@//:go.mod": "c20776294011da7feda8d95eb7ad3a033c7ee8700b30d772a3a785f411d4a49a",
           "@@gazelle~0.32.0//:go.sum": "7491cc4ce7c344c149d512167d9e580be4d3c1dcd6fbb334e677ead2c2951b3d",
-          "@@//:go.sum": "29853410c2f8b17d0e2d1a18958e7619a699b17daedb4373096b772191874090",
+          "@@//:go.sum": "deae8e3182d026dd4cf7b9d1844f6e8e2d15c1413011fb6591f68f1ac1ce84bb",
           "@@rules_go~0.41.0//:go.mod": "a7143f329c2a3e0b983ce74a96c0c25b0d0c59d236d75f7e1b069aadd988d55e",
           "@@cgrindel_bazel_starlib~0.18.1//:go.sum": "c50d75994c714e6fddfc6eb0cb8da5d2c40ff0ca816fa655ed0cf397cf16a27b",
           "@@gazelle~0.32.0//:go.mod": "bba4cfc2ab0f927f85f142b92843ab4dfb3c0be11aec9c663203a6543c0cde9b",
@@ -1962,9 +1962,9 @@
             "attributes": {
               "name": "gazelle~0.32.0~go_deps~com_github_deckarep_golang_set_v2",
               "importpath": "github.com/deckarep/golang-set/v2",
-              "sum": "h1:vjmkvJt/IV27WXPyYQpAh4bRyWJc5Y435D17XQ9QU5A=",
+              "sum": "h1:DnfgWKdhvHM8Kihdw9fKWXd08EdsPiyoHsk5bfsmkNI=",
               "replace": "",
-              "version": "v2.3.1",
+              "version": "v2.4.0",
               "build_directives": [],
               "build_file_generation": "auto",
               "patches": [],
