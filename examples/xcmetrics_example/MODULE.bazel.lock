@@ -3281,6 +3281,1156 @@
           }
         }
       }
+    },
+    "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
+      "general": {
+        "bzlTransitiveDigest": "a13Oc0hXT+L5cvojiIZIfzIFXt+8RemLnU6Rf/kkLXI=",
+        "accumulatedFileDigests": {
+          "@@//:swift_deps_index.json": "1607efd86b370bca5f35bc3ed6d9395009d7297f89cfb50ced0e3e5b89c522b2"
+        },
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "swiftpkg_fluent_kit": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_fluent_kit",
+              "bazel_package_name": "swiftpkg_fluent_kit",
+              "commit": "be7912ee4991bcc8a5390fac0424d1d08221dcc6",
+              "remote": "https://github.com/vapor/fluent-kit.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_backtrace": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_backtrace",
+              "bazel_package_name": "swiftpkg_swift_backtrace",
+              "commit": "f25620d5d05e2f1ba27154b40cafea2b67566956",
+              "remote": "https://github.com/swift-server/swift-backtrace.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_console_kit": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_console_kit",
+              "bazel_package_name": "swiftpkg_console_kit",
+              "commit": "a7e67a1719933318b5ab7eaaed355cde020465b1",
+              "remote": "https://github.com/vapor/console-kit.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_jwt_kit": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_jwt_kit",
+              "bazel_package_name": "swiftpkg_jwt_kit",
+              "commit": "dcd78f07e092ac9138327e2bfbb0687a55a80850",
+              "remote": "https://github.com/vapor/jwt-kit.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_fluent": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_fluent",
+              "bazel_package_name": "swiftpkg_fluent",
+              "commit": "2da106f46b093885f77fa03e3c719ab5bb8cfab4",
+              "remote": "https://github.com/vapor/fluent.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_soto": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_soto",
+              "bazel_package_name": "swiftpkg_soto",
+              "commit": "b402b8a434ca39f24d189289ab93fbee96664502",
+              "remote": "https://github.com/soto-project/soto.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_nio": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_nio",
+              "bazel_package_name": "swiftpkg_swift_nio",
+              "commit": "4ad2c3733845abd9ee8892a323b0fa0d80f37e34",
+              "remote": "https://github.com/apple/swift-nio.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_quick": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_quick",
+              "bazel_package_name": "swiftpkg_quick",
+              "commit": "09b3becb37cb2163919a3842a4c5fa6ec7130792",
+              "remote": "https://github.com/Quick/Quick",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_nio_ssl": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_nio_ssl",
+              "bazel_package_name": "swiftpkg_swift_nio_ssl",
+              "commit": "4fb7ead803e38949eb1d6fabb849206a72c580f3",
+              "remote": "https://github.com/apple/swift-nio-ssl.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_gzipswift": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_gzipswift",
+              "bazel_package_name": "swiftpkg_gzipswift",
+              "commit": "7a7f17761c76a932662ab77028a4329f67d645a4",
+              "remote": "https://github.com/1024jp/GzipSwift",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_fluent_postgres_driver": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_fluent_postgres_driver",
+              "bazel_package_name": "swiftpkg_fluent_postgres_driver",
+              "commit": "4808c539f08306ae6002f6106813a9350baa141b",
+              "remote": "https://github.com/vapor/fluent-postgres-driver.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_sql_kit": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_sql_kit",
+              "bazel_package_name": "swiftpkg_sql_kit",
+              "commit": "dcf10a00d7d5df987b7948e6fd5596fb65f6d0c2",
+              "remote": "https://github.com/vapor/sql-kit.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_redis": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_redis",
+              "bazel_package_name": "swiftpkg_redis",
+              "commit": "e955843b08064071f465a6b1ca9e04bebad8623a",
+              "remote": "https://github.com/vapor/redis.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_argument_parser": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_argument_parser",
+              "bazel_package_name": "swiftpkg_swift_argument_parser",
+              "commit": "4ad606ba5d7673ea60679a61ff867cc1ff8c8e86",
+              "remote": "https://github.com/apple/swift-argument-parser",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_collections": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_collections",
+              "bazel_package_name": "swiftpkg_swift_collections",
+              "commit": "937e904258d22af6e447a0b72c0bc67583ef64a2",
+              "remote": "https://github.com/apple/swift-collections.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_perfect_iniparser": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_perfect_iniparser",
+              "bazel_package_name": "swiftpkg_perfect_iniparser",
+              "commit": "42de0efc7a01105e19b80d533d3d282a98277f6c",
+              "remote": "https://github.com/swift-aws/Perfect-INIParser.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_postgres_kit": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_postgres_kit",
+              "bazel_package_name": "swiftpkg_postgres_kit",
+              "commit": "1174d9bc57798aba7a99451e5380c0eb0fb796d8",
+              "remote": "https://github.com/vapor/postgres-kit.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_queues": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_queues",
+              "bazel_package_name": "swiftpkg_queues",
+              "commit": "c95c891c3c04817eac1165587fb02457c749523a",
+              "remote": "https://github.com/vapor/queues.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_yams": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_yams",
+              "bazel_package_name": "swiftpkg_yams",
+              "commit": "81a65c4069c28011ee432f2858ba0de49b086677",
+              "remote": "https://github.com/jpsim/Yams.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_routing_kit": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_routing_kit",
+              "bazel_package_name": "swiftpkg_routing_kit",
+              "commit": "ffac7b3a127ce1e85fb232f1a6271164628809ad",
+              "remote": "https://github.com/vapor/routing-kit.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_vapor": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_vapor",
+              "bazel_package_name": "swiftpkg_vapor",
+              "commit": "a7d88181e68f03d1aeb7ecb80269ab3da9e5d155",
+              "remote": "https://github.com/vapor/vapor.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_xcmetrics": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_xcmetrics",
+              "bazel_package_name": "swiftpkg_xcmetrics",
+              "commit": "e2ceaebc789134ec2786b4fc766a1c3c925231b2",
+              "remote": "https://github.com/spotify/XCMetrics",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_crypto": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_crypto",
+              "bazel_package_name": "swiftpkg_swift_crypto",
+              "commit": "75ec60b8b4cc0f085c3ac414f3dca5625fa3588e",
+              "remote": "https://github.com/apple/swift-crypto.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_redistack": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_redistack",
+              "bazel_package_name": "swiftpkg_redistack",
+              "commit": "5458d6476e05d5f1b43097f1bc9b599e936b5f2f",
+              "remote": "https://gitlab.com/mordil/RediStack.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_queues_redis_driver": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_queues_redis_driver",
+              "bazel_package_name": "swiftpkg_queues_redis_driver",
+              "commit": "2728477b50e24be82f5bc0bd0722c35656e1c5b1",
+              "remote": "https://github.com/vapor/queues-redis-driver.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_websocket_kit": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_websocket_kit",
+              "bazel_package_name": "swiftpkg_websocket_kit",
+              "commit": "2d9d2188a08eef4a869d368daab21b3c08510991",
+              "remote": "https://github.com/vapor/websocket-kit.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_cryptoswift": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_cryptoswift",
+              "bazel_package_name": "swiftpkg_cryptoswift",
+              "commit": "e2bc81be54d71d566a52ca17c3983d141c30aa70",
+              "remote": "https://github.com/krzyzanowskim/CryptoSwift.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_async_http_client": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_async_http_client",
+              "bazel_package_name": "swiftpkg_async_http_client",
+              "commit": "7f05a8da46cc2a4ab43218722298b81ac7a08031",
+              "remote": "https://github.com/swift-server/async-http-client.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_google_cloud_kit": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_google_cloud_kit",
+              "bazel_package_name": "swiftpkg_google_cloud_kit",
+              "commit": "17b2eec3df26c6535a90b5650dee53670494f4d9",
+              "remote": "https://github.com/vapor-community/google-cloud-kit.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_xclogparser": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_xclogparser",
+              "bazel_package_name": "swiftpkg_xclogparser",
+              "commit": "1abc5b96080da8f678b77d11c0a93cdcb614642b",
+              "remote": "https://github.com/MobileNativeFoundation/XCLogParser",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_grpc_swift": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_grpc_swift",
+              "bazel_package_name": "swiftpkg_grpc_swift",
+              "commit": "be70633c91d722496e5fcb225f822edbd5c36a5a",
+              "remote": "https://github.com/grpc/grpc-swift.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_nio_http2": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_nio_http2",
+              "bazel_package_name": "swiftpkg_swift_nio_http2",
+              "commit": "d6656967f33ed8b368b38e4b198631fc7c484a40",
+              "remote": "https://github.com/apple/swift-nio-http2.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_soto_core": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_soto_core",
+              "bazel_package_name": "swiftpkg_soto_core",
+              "commit": "856a7df0c15763de4f9f3e3d7baea4a8aa009d22",
+              "remote": "https://github.com/soto-project/soto-core.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_log": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_log",
+              "bazel_package_name": "swiftpkg_swift_log",
+              "commit": "3e3ef75109d6801b2c44504e73f55f0dce6662c9",
+              "remote": "https://github.com/apple/swift-log",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_metrics": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_metrics",
+              "bazel_package_name": "swiftpkg_swift_metrics",
+              "commit": "9b39d811a83cf18b79d7d5513b06f8b290198b10",
+              "remote": "https://github.com/apple/swift-metrics.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_nio_extras": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_nio_extras",
+              "bazel_package_name": "swiftpkg_swift_nio_extras",
+              "commit": "91dd2d61fb772e1311bb5f13b59266b579d77e42",
+              "remote": "https://github.com/apple/swift-nio-extras.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_multipart_kit": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_multipart_kit",
+              "bazel_package_name": "swiftpkg_multipart_kit",
+              "commit": "0d55c35e788451ee27222783c7d363cb88092fab",
+              "remote": "https://github.com/vapor/multipart-kit.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_protobuf": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_protobuf",
+              "bazel_package_name": "swiftpkg_swift_protobuf",
+              "commit": "ab3a58b7209a17d781c0d1dbb3e1ff3da306bae8",
+              "remote": "https://github.com/apple/swift-protobuf.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_nio_transport_services": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_nio_transport_services",
+              "bazel_package_name": "swiftpkg_swift_nio_transport_services",
+              "commit": "c0d9a144cfaec8d3d596aadde3039286a266c15c",
+              "remote": "https://github.com/apple/swift-nio-transport-services.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_postgres_nio": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_postgres_nio",
+              "bazel_package_name": "swiftpkg_postgres_nio",
+              "commit": "7daf026e145de2c07d6e37f4171b1acb4b5f22b1",
+              "remote": "https://github.com/vapor/postgres-nio.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_hypertextapplicationlanguage": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_hypertextapplicationlanguage",
+              "bazel_package_name": "swiftpkg_hypertextapplicationlanguage",
+              "commit": "aa2c9141d491682f17b2310aed17b9adfc006256",
+              "remote": "https://github.com/swift-aws/HypertextApplicationLanguage.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_numerics": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_numerics",
+              "bazel_package_name": "swiftpkg_swift_numerics",
+              "commit": "0a5bc04095a675662cf24757cc0640aa2204253b",
+              "remote": "https://github.com/apple/swift-numerics",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_nimble": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_nimble",
+              "bazel_package_name": "swiftpkg_nimble",
+              "commit": "7a46a5fc86cb917f69e3daf79fcb045283d8f008",
+              "remote": "https://github.com/Quick/Nimble",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_atomics": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_atomics",
+              "bazel_package_name": "swiftpkg_swift_atomics",
+              "commit": "ff3d2212b6b093db7f177d0855adbc4ef9c5f036",
+              "remote": "https://github.com/apple/swift-atomics.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_spectre": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_spectre",
+              "bazel_package_name": "swiftpkg_spectre",
+              "commit": "26cc5e9ae0947092c7139ef7ba612e34646086c7",
+              "remote": "https://github.com/kylef/Spectre.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_pathkit": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_pathkit",
+              "bazel_package_name": "swiftpkg_pathkit",
+              "commit": "3bfd2737b700b9a36565a8c94f4ad2b050a5e574",
+              "remote": "https://github.com/kylef/PathKit.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_mobius.swift": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_mobius.swift",
+              "bazel_package_name": "swiftpkg_mobius.swift",
+              "commit": "afe23c2a66ea1fd52fb9fe76fa051d9a7b789845",
+              "remote": "https://github.com/Spotify/Mobius.swift",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_swift_algorithms": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_algorithms",
+              "bazel_package_name": "swiftpkg_swift_algorithms",
+              "commit": "b14b7f4c528c942f121c8b860b9410b2bf57825e",
+              "remote": "https://github.com/apple/swift-algorithms.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
+          "swiftpkg_async_kit": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_async_kit",
+              "bazel_package_name": "swiftpkg_async_kit",
+              "commit": "9acea4c92f51a5885c149904f0d11db4712dda80",
+              "remote": "https://github.com/vapor/async-kit.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          }
+        }
+      }
+    },
+    "@@rules_swift~1.13.0//swift:extensions.bzl%non_module_deps": {
+      "general": {
+        "bzlTransitiveDigest": "3sh3cKY22C10PM2p2txmWVMqDfTn01dNChD4902k5jA=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "com_github_grpc_grpc_swift": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_grpc_grpc_swift",
+              "urls": [
+                "https://github.com/grpc/grpc-swift/archive/1.16.0.tar.gz"
+              ],
+              "sha256": "58b60431d0064969f9679411264b82e40a217ae6bd34e17096d92cc4e47556a5",
+              "strip_prefix": "grpc-swift-1.16.0/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_grpc_grpc_swift/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_nio_extras": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_nio_extras",
+              "urls": [
+                "https://github.com/apple/swift-nio-extras/archive/1.4.0.tar.gz"
+              ],
+              "sha256": "4684b52951d9d9937bb3e8ccd6b5daedd777021ef2519ea2f18c4c922843b52b",
+              "strip_prefix": "swift-nio-extras-1.4.0/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_nio_extras/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_protobuf": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_protobuf",
+              "urls": [
+                "https://github.com/apple/swift-protobuf/archive/1.20.2.tar.gz"
+              ],
+              "sha256": "3fb50bd4d293337f202d917b6ada22f9548a0a0aed9d9a4d791e6fbd8a246ebb",
+              "strip_prefix": "swift-protobuf-1.20.2/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_protobuf/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_nio_ssl": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_nio_ssl",
+              "urls": [
+                "https://github.com/apple/swift-nio-ssl/archive/2.23.0.tar.gz"
+              ],
+              "sha256": "4787c63f61dd04d99e498adc3d1a628193387e41efddf8de19b8db04544d016d",
+              "strip_prefix": "swift-nio-ssl-2.23.0/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_nio_ssl/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_atomics": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_atomics",
+              "urls": [
+                "https://github.com/apple/swift-atomics/archive/1.1.0.tar.gz"
+              ],
+              "sha256": "1bee7f469f7e8dc49f11cfa4da07182fbc79eab000ec2c17bfdce468c5d276fb",
+              "strip_prefix": "swift-atomics-1.1.0/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_atomics/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_nio_http2": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_nio_http2",
+              "urls": [
+                "https://github.com/apple/swift-nio-http2/archive/1.26.0.tar.gz"
+              ],
+              "sha256": "f0edfc9d6a7be1d587e5b403f2d04264bdfae59aac1d74f7d974a9022c6d2b25",
+              "strip_prefix": "swift-nio-http2-1.26.0/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_nio_http2/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_nio_transport_services": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_nio_transport_services",
+              "urls": [
+                "https://github.com/apple/swift-nio-transport-services/archive/1.15.0.tar.gz"
+              ],
+              "sha256": "f3498dafa633751a52b9b7f741f7ac30c42bcbeb3b9edca6d447e0da8e693262",
+              "strip_prefix": "swift-nio-transport-services-1.15.0/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_nio_transport_services/BUILD.overlay"
+            }
+          },
+          "build_bazel_rules_swift_index_import": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~build_bazel_rules_swift_index_import",
+              "build_file": "@@rules_swift~1.13.0//third_party:build_bazel_rules_swift_index_import/BUILD.overlay",
+              "canonical_id": "index-import-5.8",
+              "urls": [
+                "https://github.com/MobileNativeFoundation/index-import/releases/download/5.8.0.1/index-import.tar.gz"
+              ],
+              "sha256": "28c1ffa39d99e74ed70623899b207b41f79214c498c603915aef55972a851a15"
+            }
+          },
+          "com_github_apple_swift_nio": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_nio",
+              "urls": [
+                "https://github.com/apple/swift-nio/archive/2.42.0.tar.gz"
+              ],
+              "sha256": "e3304bc3fb53aea74a3e54bd005ede11f6dc357117d9b1db642d03aea87194a0",
+              "strip_prefix": "swift-nio-2.42.0/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_nio/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_log": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_log",
+              "urls": [
+                "https://github.com/apple/swift-log/archive/1.4.4.tar.gz"
+              ],
+              "sha256": "48fe66426c784c0c20031f15dc17faf9f4c9037c192bfac2f643f65cb2321ba0",
+              "strip_prefix": "swift-log-1.4.4/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_log/BUILD.overlay"
+            }
+          },
+          "com_github_apple_swift_collections": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~com_github_apple_swift_collections",
+              "urls": [
+                "https://github.com/apple/swift-collections/archive/1.0.4.tar.gz"
+              ],
+              "sha256": "d9e4c8a91c60fb9c92a04caccbb10ded42f4cb47b26a212bc6b39cc390a4b096",
+              "strip_prefix": "swift-collections-1.0.4/",
+              "build_file": "@@rules_swift~1.13.0//third_party:com_github_apple_swift_collections/BUILD.overlay"
+            }
+          },
+          "build_bazel_rules_swift_local_config": {
+            "bzlFile": "@@rules_swift~1.13.0//swift/internal:swift_autoconfiguration.bzl",
+            "ruleClassName": "swift_autoconfiguration",
+            "attributes": {
+              "name": "rules_swift~1.13.0~non_module_deps~build_bazel_rules_swift_local_config"
+            }
+          }
+        }
+      }
     }
   }
 }
