@@ -15,6 +15,11 @@ inputs:
 runs:
   using: composite
   steps:
+    # Related to https://github.com/bazelbuild/bazel-gazelle/issues/1671
+    - uses: actions/setup-go@v4
+      with:
+        # go-verison: '1.21.4'
+        go-version-file: go.mod
     - uses: cgrindel/gha_install_swift_on_ubuntu@v1
       with:
         swift_release_tag: ${{ inputs.swift_release_tag }}
