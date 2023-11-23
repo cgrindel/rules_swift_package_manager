@@ -21,6 +21,14 @@ func (pi PackageIndex) Packages() []*Package {
 	for _, p := range pi {
 		results = append(results, p)
 	}
-	slices.SortFunc(results, func(a, b *Package) bool { return a.Name < b.Name })
+	slices.SortFunc(results, func(a, b *Package) int {
+		if a.Name < b.Name {
+			return -1
+		}
+		if a.Name == b.Name {
+			return 0
+		}
+		return 1
+	})
 	return results
 }
