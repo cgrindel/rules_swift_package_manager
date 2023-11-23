@@ -15,10 +15,13 @@ inputs:
 runs:
   using: composite
   steps:
+    # When running gazelle update-repos, gazelle looks for the Go tool on the
+    # system. The default version that is installed on the GH Linux runner is
+    # not compatible with the version in rules_go 0.43.0. As a workaround, the 
+    # following installs the version of Go that is listed in the go.mod file.
     # Related to https://github.com/bazelbuild/bazel-gazelle/issues/1671
     - uses: actions/setup-go@v4
       with:
-        # go-verison: '1.21.4'
         go-version-file: go.mod
     - uses: cgrindel/gha_install_swift_on_ubuntu@v1
       with:
