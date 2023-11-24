@@ -2,7 +2,8 @@
   "direct_dep_identities": [
     "another_package_with_resources",
     "googlesignin-ios",
-    "package_with_resources"
+    "package_with_resources",
+    "swiftuiflow"
   ],
   "modules": [
     {
@@ -121,6 +122,16 @@
       "product_memberships": [
         "CoolUI"
       ]
+    },
+    {
+      "name": "SwiftUIFlow",
+      "c99name": "SwiftUIFlow",
+      "src_type": "swift",
+      "label": "@swiftpkg_swiftuiflow//:Sources_SwiftUIFlow",
+      "package_identity": "swiftuiflow",
+      "product_memberships": [
+        "SwiftUIFlow"
+      ]
     }
   ],
   "products": [
@@ -220,6 +231,14 @@
       "target_labels": [
         "@swiftpkg_package_with_resources//:Sources_CoolUI"
       ]
+    },
+    {
+      "identity": "swiftuiflow",
+      "name": "SwiftUIFlow",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swiftuiflow//:Sources_SwiftUIFlow"
+      ]
     }
   ],
   "packages": [
@@ -271,6 +290,14 @@
       "identity": "package_with_resources",
       "local": {
         "path": "third_party/package_with_resources"
+      }
+    },
+    {
+      "name": "swiftpkg_swiftuiflow",
+      "identity": "swiftuiflow",
+      "remote": {
+        "commit": "b300d3c0110116f3520066dfb8dcf3006cf593c3",
+        "remote": "https://github.com/ciaranrobrien/SwiftUIFlow.git"
       }
     }
   ]

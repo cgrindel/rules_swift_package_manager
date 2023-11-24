@@ -35,6 +35,14 @@
         "revision" : "cee3c709307912d040bd1e06ca919875a92339c6",
         "version" : "2.0.0"
       }
+    },
+    {
+      "identity" : "swiftuiflow",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ciaranrobrien/SwiftUIFlow.git",
+      "state" : {
+        "revision" : "b300d3c0110116f3520066dfb8dcf3006cf593c3"
+      }
     }
   ],
   "version" : 2

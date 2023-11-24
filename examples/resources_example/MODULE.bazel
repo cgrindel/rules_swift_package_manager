@@ -52,5 +52,6 @@ use_repo(
     "swiftpkg_another_package_with_resources",
     "swiftpkg_googlesignin_ios",
     "swiftpkg_package_with_resources",
+    "swiftpkg_swiftuiflow",
 )
 # swift_deps END
