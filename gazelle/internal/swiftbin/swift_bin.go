@@ -96,7 +96,3 @@ func appendBuildPath(args []string, buildDir string) []string {
 	}
 	return append(args, "--build-path", buildDir)
 }
-
-// func spmBuildPathFlag(buildDir string) string {
-// 	return fmt.Sprintf("--build-path=%s", buildDir)
-// }
