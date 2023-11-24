@@ -43,15 +43,23 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	sc := swiftcfg.GetSwiftConfig(c)
 	sb := sc.SwiftBin()
 
+	// Create a build directory
+	buildDir, err := os.MkdirTemp("", "rspm_build_dir")
+	if err != nil {
+		result.Error = err
+		return result
+	}
+	defer os.RemoveAll(buildDir)
+
 	// Ensure that we have resolved and fetched the Swift package dependencies
 	pkgDir := filepath.Dir(args.Path)
-	if err := sb.ResolvePackage(pkgDir, sc.UpdatePkgsToLatest); err != nil {
+	if err := sb.ResolvePackage(pkgDir, buildDir, sc.UpdatePkgsToLatest); err != nil {
 		result.Error = err
 		return result
 	}
 
 	// Get the package info for the workspace's Swift package
-	pi, pierr := swiftpkg.NewPackageInfo(sb, pkgDir)
+	pi, pierr := swiftpkg.NewPackageInfo(sb, pkgDir, buildDir)
 	if pierr != nil {
 		result.Error = pierr
 		return result
@@ -94,7 +102,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	bzlReposByIdentity := make(map[string]*swift.BazelRepo)
 	for identity, pin := range pinsByIdentity {
 		depDir := swift.CodeDirForRemotePackage(pkgDir, pin.PkgRef.Remote())
-		depPkgInfo, dpierr := swiftpkg.NewPackageInfo(sb, depDir)
+		depPkgInfo, dpierr := swiftpkg.NewPackageInfo(sb, "", depDir)
 		if dpierr != nil {
 			result.Error = dpierr
 			return result
@@ -116,7 +124,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 			return result
 		}
 		depDir := swift.CodeDirForLocalPackage(pkgDir, dep.FileSystem.Path)
-		depPkgInfo, err := swiftpkg.NewPackageInfo(sb, depDir)
+		depPkgInfo, err := swiftpkg.NewPackageInfo(sb, "", depDir)
 		if err != nil {
 			result.Error = err
 			return result

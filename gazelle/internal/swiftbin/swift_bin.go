@@ -9,7 +9,7 @@ import (
 // An Executor represents commands provided by the Swift binary.
 type Executor interface {
 	InitPackage(dir, name, pkgType string) error
-	DumpPackage(dir string) ([]byte, error)
+	DumpPackage(dir, buildDir string) ([]byte, error)
 	DescribePackage(dir string) ([]byte, error)
 }
 
@@ -34,10 +34,12 @@ func (sb *SwiftBin) InitPackage(dir, name, pkgType string) error {
 }
 
 // DumpPackage returns the `swift package dump-package` JSON for a Swift package.
-func (sb *SwiftBin) DumpPackage(dir string) ([]byte, error) {
+func (sb *SwiftBin) DumpPackage(dir, buildDir string) ([]byte, error) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
-	cmd := exec.Command(sb.BinPath, "package", "dump-package")
+	args := []string{"package", "dump-package"}
+	args = appendBuildPath(args, buildDir)
+	cmd := exec.Command(sb.BinPath, args...)
 	cmd.Dir = dir
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
@@ -55,7 +57,8 @@ func (sb *SwiftBin) DumpPackage(dir string) ([]byte, error) {
 func (sb *SwiftBin) DescribePackage(dir string) ([]byte, error) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
-	cmd := exec.Command(sb.BinPath, "package", "describe", "--type", "json")
+	args := []string{"package", "describe", "--type", "json"}
+	cmd := exec.Command(sb.BinPath, args...)
 	cmd.Dir = dir
 	cmd.Stdout = &stdout
 	cmd.Stderr = &stderr
@@ -70,7 +73,7 @@ func (sb *SwiftBin) DescribePackage(dir string) ([]byte, error) {
 }
 
 // ResolvePackage executes Swift package dependency resolution for a Swift package.
-func (sb *SwiftBin) ResolvePackage(dir string, updateToLatest bool) error {
+func (sb *SwiftBin) ResolvePackage(dir, buildDir string, updateToLatest bool) error {
 	var pkgCmd string
 	if updateToLatest {
 		pkgCmd = "update"
@@ -78,6 +81,7 @@ func (sb *SwiftBin) ResolvePackage(dir string, updateToLatest bool) error {
 		pkgCmd = "resolve"
 	}
 	args := []string{"package", pkgCmd}
+	args = appendBuildPath(args, buildDir)
 	cmd := exec.Command(sb.BinPath, args...)
 	cmd.Dir = dir
 	if out, err := cmd.CombinedOutput(); err != nil {
@@ -85,3 +89,14 @@ func (sb *SwiftBin) ResolvePackage(dir string, updateToLatest bool) error {
 	}
 	return nil
 }
+
+func appendBuildPath(args []string, buildDir string) []string {
+	if buildDir == "" {
+		return args
+	}
+	return append(args, "--build-path", buildDir)
+}
+
+// func spmBuildPathFlag(buildDir string) string {
+// 	return fmt.Sprintf("--build-path=%s", buildDir)
+// }
