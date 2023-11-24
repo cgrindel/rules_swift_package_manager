@@ -1961,9 +1961,9 @@
         "accumulatedFileDigests": {
           "@@gazelle~0.34.0//:go.mod": "9ae159a385b2f244bbe964b9f91dbea6e7bd534e0b22e846655f241c65de2c49",
           "@@rules_go~0.43.0//:go.mod": "58f9901703af412a1a8771d283721ef391c0ca1cc6ef3c141334311965535676",
-          "@@rules_swift_package_manager~override//:go.sum": "c85b0d1ec5614ff0c37e27a67300af5107287c4e819355fb16b0bab87dde13a4",
+          "@@rules_swift_package_manager~override//:go.sum": "edb6ce4a22ba3af81dd135478e4f84c2095e81b302ed4fd9d55b6323f6e88546",
           "@@cgrindel_bazel_starlib~0.18.1//:go.sum": "c50d75994c714e6fddfc6eb0cb8da5d2c40ff0ca816fa655ed0cf397cf16a27b",
-          "@@rules_swift_package_manager~override//:go.mod": "2f0b3aa86bc21dfb1034f63c67495d43b37d182dc7c1a7d79d44c8d9e241c37a",
+          "@@rules_swift_package_manager~override//:go.mod": "a1321d4ce9b5710fa8883becbe4981e479e6b7792386175f1aaa1a6d49478d2d",
           "@@gazelle~0.34.0//:go.sum": "7469786f3930030c430969cedae951e6947cb40f4a563dac94a350659c0fedc4",
           "@@rules_go~0.43.0//:go.sum": "c6368ec1da45691f9148115d7317e740c3b32313b624b8f6545ef36b2ab4d781",
           "@@cgrindel_bazel_starlib~0.18.1//:go.mod": "2a988325920be786451553b4c7e4251b65cf3de0a1bd8a7917ff742cd33a278e"
