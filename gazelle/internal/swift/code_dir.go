@@ -6,16 +6,14 @@ import (
 	"strings"
 )
 
-const swiftPkgBuildDirname = ".build"
 const swiftPkgCheckoutsDirname = "checkouts"
 
 // CodeDirForRemotePackage returns the path to the dependency's code. For source control
 // dependencies, it is the checkout directory.
-func CodeDirForRemotePackage(pkgDir string, url string) string {
+func CodeDirForRemotePackage(buildDir string, url string) string {
 	// Return the checkout directory
 	return filepath.Join(
-		pkgDir,
-		swiftPkgBuildDirname,
+		buildDir,
 		swiftPkgCheckoutsDirname,
 		spmCheckoutDirname(url),
 	)
