@@ -26,7 +26,7 @@ go_library(
         "module_to_products_index.go",
         "module_type.go",
         "package.go",
-        "packages_index.go",
+        "package_index.go",
         "patch.go",
         "product.go",
         "product_index.go",
