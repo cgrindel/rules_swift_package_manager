@@ -101,7 +101,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	// which will have a spreso.Pin, and some will be local which will not have a spreso.Pin.
 	bzlReposByIdentity := make(map[string]*swift.BazelRepo)
 	for identity, pin := range pinsByIdentity {
-		depDir := swift.CodeDirForRemotePackage(pkgDir, pin.PkgRef.Remote())
+		depDir := swift.CodeDirForRemotePackage(buildDir, pin.PkgRef.Remote())
 		depPkgInfo, dpierr := swiftpkg.NewPackageInfo(sb, depDir, "")
 		if dpierr != nil {
 			result.Error = dpierr
