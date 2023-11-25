@@ -8,6 +8,7 @@ import (
 )
 
 const pkgDir = "/path/to/pkg"
+const buildDir = "/path/to/build"
 
 func TestCodeDirForRemotePackage(t *testing.T) {
 	tests := []struct {
@@ -16,19 +17,19 @@ func TestCodeDirForRemotePackage(t *testing.T) {
 	}{
 		{
 			url:  "https://github.com/nicklockwood/SwiftFormat",
-			wval: "/path/to/pkg/.build/checkouts/SwiftFormat",
+			wval: "/path/to/build/checkouts/SwiftFormat",
 		},
 		{
 			url:  "https://github.com/nicklockwood/SwiftFormat.git",
-			wval: "/path/to/pkg/.build/checkouts/SwiftFormat",
+			wval: "/path/to/build/checkouts/SwiftFormat",
 		},
 		{
 			url:  "https://github.com/nicklockwood/SwiftFormat.swift",
-			wval: "/path/to/pkg/.build/checkouts/SwiftFormat.swift",
+			wval: "/path/to/build/checkouts/SwiftFormat.swift",
 		},
 	}
 	for _, tc := range tests {
-		actual := swift.CodeDirForRemotePackage(pkgDir, tc.url)
+		actual := swift.CodeDirForRemotePackage(buildDir, tc.url)
 		assert.Equal(t, tc.wval, actual)
 	}
 }
