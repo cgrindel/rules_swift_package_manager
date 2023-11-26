@@ -16,6 +16,11 @@ func TestPackageInfo(t *testing.T) {
 		assert.NoError(t, err)
 		defer os.RemoveAll(dir)
 
+		// Create a build directory
+		buildDir, err := os.MkdirTemp("", "builddir")
+		assert.NoError(t, err)
+		defer os.RemoveAll(buildDir)
+
 		// Find Swift
 		binPath, err := swiftbin.FindSwiftBinPath()
 		assert.NoError(t, err)
@@ -26,7 +31,7 @@ func TestPackageInfo(t *testing.T) {
 		err = sb.InitPackage(dir, pkgName, "library")
 		assert.NoError(t, err)
 
-		pi, err := swiftpkg.NewPackageInfo(sb, dir)
+		pi, err := swiftpkg.NewPackageInfo(sb, dir, buildDir)
 		assert.NoError(t, err)
 		assert.Equal(t, pkgName, pi.Name)
 	})

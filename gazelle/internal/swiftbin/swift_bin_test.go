@@ -18,6 +18,11 @@ func TestSwiftBin(t *testing.T) {
 		assert.NoError(t, err)
 		defer os.RemoveAll(dir)
 
+		// Create a build directory
+		buildDir, err := os.MkdirTemp("", "builddir")
+		assert.NoError(t, err)
+		defer os.RemoveAll(buildDir)
+
 		// Find Swift
 		binPath, err := swiftbin.FindSwiftBinPath()
 		assert.NoError(t, err)
@@ -29,7 +34,7 @@ func TestSwiftBin(t *testing.T) {
 		assert.NoError(t, err)
 
 		// Dump the package
-		out, err := sb.DumpPackage(dir)
+		out, err := sb.DumpPackage(dir, buildDir)
 		assert.NoError(t, err)
 		var dumpMap map[string]any
 		err = json.Unmarshal(out, &dumpMap)
@@ -56,6 +61,11 @@ func TestSwiftBin(t *testing.T) {
 		assert.NoError(t, err)
 		defer os.RemoveAll(dir)
 
+		// Create a build directory
+		buildDir, err := os.MkdirTemp("", "builddir")
+		assert.NoError(t, err)
+		defer os.RemoveAll(buildDir)
+
 		// Find Swift
 		binPath, err := swiftbin.FindSwiftBinPath()
 		assert.NoError(t, err)
@@ -72,13 +82,13 @@ func TestSwiftBin(t *testing.T) {
 		assert.NoError(t, err)
 
 		// Resolve the package
-		err = sb.ResolvePackage(dir, false)
+		err = sb.ResolvePackage(dir, buildDir, false)
 		assert.NoError(t, err)
 		resolvedPkgPath := filepath.Join(dir, "Package.resolved")
 		assert.FileExists(t, resolvedPkgPath)
 
 		// Resolve the package to their latest eligible version
-		err = sb.ResolvePackage(dir, true)
+		err = sb.ResolvePackage(dir, buildDir, true)
 		assert.NoError(t, err)
 	})
 }
