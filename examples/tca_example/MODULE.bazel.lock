@@ -2540,6 +2540,64 @@
             }
           }
         }
+      },
+      "os:linux,arch:amd64": {
+        "bzlTransitiveDigest": "DxK0nMASwRegWLWhVWg+2X1n1p0dFhyjuZYEXDfm0Xo=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "go_default_sdk": {
+            "bzlFile": "@@rules_go~0.43.0//go/private:sdk.bzl",
+            "ruleClassName": "go_download_sdk_rule",
+            "attributes": {
+              "name": "rules_go~0.43.0~go_sdk~go_default_sdk",
+              "goos": "",
+              "goarch": "",
+              "sdks": {},
+              "experiments": [],
+              "patches": [],
+              "patch_strip": 0,
+              "urls": [
+                "https://dl.google.com/go/{}"
+              ],
+              "version": "1.21.1",
+              "strip_prefix": "go"
+            }
+          },
+          "go_host_compatible_sdk_label": {
+            "bzlFile": "@@rules_go~0.43.0//go/private:extensions.bzl",
+            "ruleClassName": "host_compatible_toolchain",
+            "attributes": {
+              "name": "rules_go~0.43.0~go_sdk~go_host_compatible_sdk_label",
+              "toolchain": "@go_default_sdk//:ROOT"
+            }
+          },
+          "go_toolchains": {
+            "bzlFile": "@@rules_go~0.43.0//go/private:sdk.bzl",
+            "ruleClassName": "go_multiple_toolchains",
+            "attributes": {
+              "name": "rules_go~0.43.0~go_sdk~go_toolchains",
+              "prefixes": [
+                "_0000_go_default_sdk_"
+              ],
+              "geese": [
+                ""
+              ],
+              "goarchs": [
+                ""
+              ],
+              "sdk_repos": [
+                "go_default_sdk"
+              ],
+              "sdk_types": [
+                "remote"
+              ],
+              "sdk_versions": [
+                "1.21.1"
+              ]
+            }
+          }
+        }
       }
     },
     "@@rules_go~0.43.0//go/private:extensions.bzl%non_module_dependencies": {
