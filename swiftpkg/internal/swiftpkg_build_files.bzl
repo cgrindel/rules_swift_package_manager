@@ -112,7 +112,12 @@ def _swift_target_build_file(pkg_ctx, target):
     if len(copts) > 0:
         attrs["copts"] = bzl_selects.to_starlark(copts)
 
-    res_build_file = _handle_target_resources(pkg_ctx, target, attrs)
+    res_build_file = _handle_target_resources(
+        pkg_ctx,
+        target,
+        attrs,
+        include_swift_accessor = True,
+    )
     if res_build_file:
         all_build_files.append(res_build_file)
     if is_library_target:
@@ -458,7 +463,7 @@ expected: {expected}\
 
 # MARK: - Apple Resource Group
 
-def _handle_target_resources(pkg_ctx, target, attrs, include_swift_accessor = True):
+def _handle_target_resources(pkg_ctx, target, attrs, include_swift_accessor):
     if len(target.resources) == 0:
         return None
 
