@@ -9,7 +9,10 @@ swift_library(
     ],
     module_name = "MyAppTests",
     tags = ["manual"],
-    deps = ["@swiftpkg_package_with_resources//:Sources_CoolUI"],
+    deps = [
+        "@swiftpkg_applovin_max_swift_package//:Sources_AppLovinSDKResources",
+        "@swiftpkg_package_with_resources//:Sources_CoolUI",
+    ],
 )
 
 ios_unit_test(

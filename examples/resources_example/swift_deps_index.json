@@ -1,6 +1,7 @@
 {
   "direct_dep_identities": [
     "another_package_with_resources",
+    "applovin-max-swift-package",
     "googlesignin-ios",
     "package_with_resources"
   ],
@@ -45,6 +46,26 @@
       "package_identity": "appauth-ios",
       "product_memberships": [
         "AppAuthTV"
+      ]
+    },
+    {
+      "name": "AppLovinSDKResources",
+      "c99name": "AppLovinSDKResources",
+      "src_type": "objc",
+      "label": "@swiftpkg_applovin_max_swift_package//:Sources_AppLovinSDKResources",
+      "package_identity": "applovin-max-swift-package",
+      "product_memberships": [
+        "AppLovinSDK"
+      ]
+    },
+    {
+      "name": "AppLovinSDK",
+      "c99name": "AppLovinSDK",
+      "src_type": "binary",
+      "label": "@swiftpkg_applovin_max_swift_package//:remote_archive_AppLovinSDK-12.0.0.xcframework.zip_AppLovinSDK",
+      "package_identity": "applovin-max-swift-package",
+      "product_memberships": [
+        "AppLovinSDK"
       ]
     },
     {
@@ -157,6 +178,14 @@
       ]
     },
     {
+      "identity": "applovin-max-swift-package",
+      "name": "AppLovinSDK",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_applovin_max_swift_package//:Sources_AppLovinSDKResources"
+      ]
+    },
+    {
       "identity": "googlesignin-ios",
       "name": "GoogleSignIn",
       "type": "library",
@@ -237,6 +266,15 @@
         "commit": "71cde449f13d453227e687458144bde372d30fc7",
         "remote": "https://github.com/openid/AppAuth-iOS.git",
         "version": "1.6.2"
+      }
+    },
+    {
+      "name": "swiftpkg_applovin_max_swift_package",
+      "identity": "applovin-max-swift-package",
+      "remote": {
+        "commit": "ef3d2fd34380552067c834afad3c8b732e62569b",
+        "remote": "https://github.com/AppLovin/AppLovin-MAX-Swift-Package.git",
+        "version": "12.0.0"
       }
     },
     {
