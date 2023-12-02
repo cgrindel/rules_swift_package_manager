@@ -50,7 +50,7 @@ swift_deps.from_file(
 use_repo(
     swift_deps,
     "swiftpkg_another_package_with_resources",
-    "swiftpkg_applovin_max_swift_package",
+    "swiftpkg_fix_init_return",
     "swiftpkg_googlesignin_ios",
     "swiftpkg_package_with_resources",
 )

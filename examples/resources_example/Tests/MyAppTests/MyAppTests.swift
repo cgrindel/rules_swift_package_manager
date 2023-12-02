@@ -10,8 +10,7 @@ class MyAppTests: XCTestCase {
     }
 
     func test_AppLovinSDKResources() throws {
-        let resMgr = ALResourceManager()
-        let url = resMgr.resourceBundleURL
+        let url = ALResourceManager.resourceBundleURL
         XCTAssertNotNil(url)
     }
 }
