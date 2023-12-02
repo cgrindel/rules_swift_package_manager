@@ -2,7 +2,8 @@
   "direct_dep_identities": [
     "another_package_with_resources",
     "googlesignin-ios",
-    "package_with_resources"
+    "package_with_resources",
+    "pocketsvg"
   ],
   "modules": [
     {
@@ -121,6 +122,16 @@
       "product_memberships": [
         "CoolUI"
       ]
+    },
+    {
+      "name": "PocketSVG",
+      "c99name": "PocketSVG",
+      "src_type": "objc",
+      "label": "@swiftpkg_pocketsvg//:Sources_PocketSVG",
+      "package_identity": "pocketsvg",
+      "product_memberships": [
+        "PocketSVG"
+      ]
     }
   ],
   "products": [
@@ -220,6 +231,14 @@
       "target_labels": [
         "@swiftpkg_package_with_resources//:Sources_CoolUI"
       ]
+    },
+    {
+      "identity": "pocketsvg",
+      "name": "PocketSVG",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_pocketsvg//:Sources_PocketSVG"
+      ]
     }
   ],
   "packages": [
@@ -272,6 +291,16 @@
       "local": {
         "path": "third_party/package_with_resources"
       }
+    },
+    {
+      "name": "swiftpkg_pocketsvg",
+      "identity": "pocketsvg",
+      "remote": {
+        "commit": "10c6885e427e88d35fbb64010fbd6385cb58fef7",
+        "remote": "https://github.com/pocketsvg/PocketSVG",
+        "version": "2.7.3"
+      },
+      "cxxLanguageStandard": "c++14"
     }
   ]
 }

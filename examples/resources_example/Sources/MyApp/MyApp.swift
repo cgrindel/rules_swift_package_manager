@@ -1,6 +1,7 @@
 import CoolUI
 import GoogleSignInSwift
 import MoreCoolUI
+import PocketSVG
 import SwiftUI
 
 @main
@@ -12,6 +13,8 @@ struct MyApp: App {
                 CoolStuff.image().resizable()
                 MoreCoolStuff.title()
                 MoreCoolStuff.image().resizable()
+                Text("PocketSVG Image")
+                Image("tiger", bundle: .module).resizable()
                 // Ensure that Google sign-in can find its resources.
                 GoogleSignInButton {
                     print("Signing in")

@@ -1,12 +1,40 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
+load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_accessor", "resource_bundle_infoplist")
 
 bzlformat_pkg(name = "bzlformat")
 
+resource_bundle_infoplist(
+    name = "MyApp_resource_bundle_infoplist",
+    region = "en",
+)
+
+apple_resource_bundle(
+    name = "MyApp_resource_bundle",
+    bundle_name = "MyApp_MyApp",
+    infoplists = [":MyApp_resource_bundle_infoplist"],
+    resources = [
+        "Resources/tiger.svg",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+resource_bundle_accessor(
+    name = "MyApp_resource_bundle_accessor",
+    bundle_name = "MyApp_MyApp",
+)
+
 swift_library(
     name = "MyApp",
-    srcs = ["MyApp.swift"],
+    srcs = [
+        "MyApp.swift",
+        ":MyApp_resource_bundle_accessor",
+    ],
+    data = [
+        ":MyApp_resource_bundle",
+    ],
     module_name = "MyApp",
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
@@ -14,6 +42,7 @@ swift_library(
         "@swiftpkg_another_package_with_resources//:MoreCoolUI",
         "@swiftpkg_googlesignin_ios//:GoogleSignInSwift_Sources_GoogleSignInSwift",
         "@swiftpkg_package_with_resources//:Sources_CoolUI",
+        "@swiftpkg_pocketsvg//:Sources_PocketSVG",
     ],
 )
 

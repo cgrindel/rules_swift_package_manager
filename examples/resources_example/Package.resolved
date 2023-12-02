@@ -35,6 +35,15 @@
         "revision" : "cee3c709307912d040bd1e06ca919875a92339c6",
         "version" : "2.0.0"
       }
+    },
+    {
+      "identity" : "pocketsvg",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/pocketsvg/PocketSVG",
+      "state" : {
+        "revision" : "10c6885e427e88d35fbb64010fbd6385cb58fef7",
+        "version" : "2.7.3"
+      }
     }
   ],
   "version" : 2
