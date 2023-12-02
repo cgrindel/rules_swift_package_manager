@@ -208,7 +208,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         pkg_ctx,
         target,
         attrs,
-        include_accessor = False,
+        include_swift_accessor = False,
     )
     if res_build_file:
         all_build_files.append(res_build_file)
@@ -458,7 +458,7 @@ expected: {expected}\
 
 # MARK: - Apple Resource Group
 
-def _handle_target_resources(pkg_ctx, target, attrs, include_accessor = True):
+def _handle_target_resources(pkg_ctx, target, attrs, include_swift_accessor = True):
     if len(target.resources) == 0:
         return None
 
@@ -473,7 +473,7 @@ def _handle_target_resources(pkg_ctx, target, attrs, include_accessor = True):
     _update_attr_list("data", ":{}".format(
         pkginfo_targets.resource_bundle_label_name(bzl_target_name),
     ))
-    if include_accessor:
+    if include_swift_accessor:
         # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
         # https://stackoverflow.com/questions/63237395/generating-resource-bundle-accessor-type-bundle-has-no-member-module
         _update_attr_list("srcs", ":{}".format(
@@ -483,10 +483,10 @@ def _handle_target_resources(pkg_ctx, target, attrs, include_accessor = True):
     return _apple_resource_bundle(
         target,
         pkg_ctx.pkg_info.default_localization,
-        include_accessor = include_accessor,
+        include_swift_accessor = include_swift_accessor,
     )
 
-def _apple_resource_bundle(target, default_localization, include_accessor = True):
+def _apple_resource_bundle(target, default_localization, include_swift_accessor = True):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     bundle_label_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
     bundle_name = pkginfo_targets.resource_bundle_name(target.c99name)
@@ -524,7 +524,7 @@ def _apple_resource_bundle(target, default_localization, include_accessor = True
             },
         ),
     ]
-    if include_accessor:
+    if include_swift_accessor:
         load_stmts.append(swiftpkg_resource_bundle_accessor_load_stmt)
         decls.append(
             build_decls.new(
