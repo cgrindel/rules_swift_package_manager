@@ -30,7 +30,8 @@ swift_library(
     name = "MyApp",
     srcs = [
         "MyApp.swift",
-        ":MyApp_resource_bundle_accessor",
+        "SVGImageWrapper.swift",
+        ":MyApp_resource_bundle_accessor",  # keep
     ],
     data = [
         ":MyApp_resource_bundle",
