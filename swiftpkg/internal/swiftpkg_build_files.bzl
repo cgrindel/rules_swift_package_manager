@@ -495,8 +495,6 @@ def _handle_target_resources(
         _update_attr_list("srcs", ":{}".format(
             pkginfo_targets.resource_bundle_accessor_label_name(bzl_target_name),
         ))
-
-    # TODO(chuck): Add unit test for this!
     if include_objc_accessor:
         # SPM provides a SWIFTPM_MODULE_BUNDLE macro to access the bundle for
         # ObjC code.  The header file contains the macro definition. It needs
