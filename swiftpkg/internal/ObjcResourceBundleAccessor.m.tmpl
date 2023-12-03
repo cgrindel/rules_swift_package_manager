@@ -1,0 +1,12 @@
+#import <Foundation/Foundation.h>
+
+NSBundle* {MODULE_NAME}_SWIFTPM_MODULE_BUNDLE() {
+    NSURL *bundleURL = [[[NSBundle mainBundle] bundleURL] URLByAppendingPathComponent:@"{BUNDLE_NAME}"];
+
+    NSBundle *preferredBundle = [NSBundle bundleWithURL:bundleURL];
+    if (preferredBundle == nil) {
+        return [NSBundle bundleWithPath:@"{BUNDLE_PATH}"];
+    }
+
+    return preferredBundle;
+}

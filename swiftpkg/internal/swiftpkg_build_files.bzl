@@ -117,6 +117,7 @@ def _swift_target_build_file(pkg_ctx, target):
         target,
         attrs,
         include_swift_accessor = True,
+        include_objc_accessor = False,
     )
     if res_build_file:
         all_build_files.append(res_build_file)
@@ -214,7 +215,16 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         target,
         attrs,
         include_swift_accessor = False,
+        include_objc_accessor = (target.objc_src_info != None),
     )
+
+    # DEBUG BEGIN
+    print("*** CHUCK ---------------")
+    print("*** CHUCK target.name: ", target.name)
+    debug_srcs = attrs.get("srcs", [])
+    print("*** CHUCK debug_srcs: ", debug_srcs)
+    # DEBUG END
+
     if res_build_file:
         all_build_files.append(res_build_file)
 
@@ -463,7 +473,12 @@ expected: {expected}\
 
 # MARK: - Apple Resource Group
 
-def _handle_target_resources(pkg_ctx, target, attrs, include_swift_accessor):
+def _handle_target_resources(
+        pkg_ctx,
+        target,
+        attrs,
+        include_swift_accessor,
+        include_objc_accessor):
     if len(target.resources) == 0:
         return None
 
@@ -485,13 +500,28 @@ def _handle_target_resources(pkg_ctx, target, attrs, include_swift_accessor):
             pkginfo_targets.resource_bundle_accessor_label_name(bzl_target_name),
         ))
 
+    # DEBUG BEGIN
+    print("*** CHUCK ================")
+    print("*** CHUCK target.name: ", target.name)
+    print("*** CHUCK include_swift_accessor: ", include_swift_accessor)
+    print("*** CHUCK include_objc_accessor: ", include_objc_accessor)
+
+    # DEBUG END
+    if include_objc_accessor:
+        # SPM provides a SWIFTPM_MODULE_BUNDLE macro to access the bundle for ObjC code.
+        # https://github.com/apple/swift-package-manager/blob/8387798811c6cc43761c5e1b48df2d3412dc5de4/Sources/Build/BuildDescription/ClangTargetBuildDescription.swift#L390
+        _update_attr_list("srcs", ":{}".format(
+            pkginfo_targets.objc_resource_bundle_accessor_label_name(bzl_target_name),
+        ))
+
     return _apple_resource_bundle(
         target,
         pkg_ctx.pkg_info.default_localization,
         include_swift_accessor = include_swift_accessor,
+        include_objc_accessor = include_objc_accessor,
     )
 
-def _apple_resource_bundle(target, default_localization, include_swift_accessor = True):
+def _apple_resource_bundle(target, default_localization, include_swift_accessor, include_objc_accessor):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     bundle_label_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
     bundle_name = pkginfo_targets.resource_bundle_name(target.c99name)
@@ -539,6 +569,21 @@ def _apple_resource_bundle(target, default_localization, include_swift_accessor 
                 ),
                 attrs = {
                     "bundle_name": bundle_name,
+                },
+            ),
+        )
+    if include_objc_accessor:
+        load_stmts.append(swiftpkg_objc_resource_bundle_accessor_load_stmt)
+        decls.append(
+            build_decls.new(
+                kind = swiftpkg_kinds.objc_resource_bundle_accessor,
+                name = pkginfo_targets.objc_resource_bundle_accessor_label_name(
+                    bzl_target_name,
+                ),
+                attrs = {
+                    "bundle": ":" + bundle_label_name,
+                    "bundle_name": bundle_name,
+                    "module_name": target.c99name,
                 },
             ),
         )
@@ -792,6 +837,7 @@ apple_resource_bundle_load_stmt = load_statements.new(
 
 swiftpkg_kinds = struct(
     generate_modulemap = "generate_modulemap",
+    objc_resource_bundle_accessor = "objc_resource_bundle_accessor",
     resource_bundle_accessor = "resource_bundle_accessor",
     resource_bundle_infoplist = "resource_bundle_infoplist",
 )
@@ -801,6 +847,11 @@ swiftpkg_build_defs_location = "@rules_swift_package_manager//swiftpkg:build_def
 swiftpkg_generate_modulemap_load_stmt = load_statements.new(
     swiftpkg_build_defs_location,
     swiftpkg_kinds.generate_modulemap,
+)
+
+swiftpkg_objc_resource_bundle_accessor_load_stmt = load_statements.new(
+    swiftpkg_build_defs_location,
+    swiftpkg_kinds.objc_resource_bundle_accessor,
 )
 
 swiftpkg_resource_bundle_accessor_load_stmt = load_statements.new(
