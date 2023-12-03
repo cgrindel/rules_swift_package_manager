@@ -241,18 +241,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     # point. Use whatever has been set.
     copts = attrs.get("copts", [])
 
-    # # These flags are used by SPM when compiling clang modules.
-    # copts = [
-    #     # Enable 'blocks' language feature
-    #     "-fblocks",
-    #     # Synthesize retain and release calls for Objective-C pointers
-    #     "-fobjc-arc",
-    #     # Enable support for PIC macros
-    #     "-fPIC",
-    #     # Module name
-    #     "-fmodule-name={}".format(target.c99name),
-    # ]
-
     local_includes = [
         bzl_selects.new(value = p, kind = _condition_kinds.private_includes)
         for p in clang_src_info.private_includes
@@ -507,7 +495,10 @@ def _handle_target_resources(
             pkginfo_targets.resource_bundle_accessor_label_name(bzl_target_name),
         ))
     if include_objc_accessor:
-        # SPM provides a SWIFTPM_MODULE_BUNDLE macro to access the bundle for ObjC code.
+        # SPM provides a SWIFTPM_MODULE_BUNDLE macro to access the bundle for
+        # ObjC code.  The header file contains the macro definition. It needs
+        # to be available in every Objc source file. So, we specify the
+        # -include flag specifying the header path.
         # https://github.com/apple/swift-package-manager/blob/8387798811c6cc43761c5e1b48df2d3412dc5de4/Sources/Build/BuildDescription/ClangTargetBuildDescription.swift#L390
         _update_attr_list("srcs", ":{}".format(
             pkginfo_targets.objc_resource_bundle_accessor_hdr_label_name(bzl_target_name),
