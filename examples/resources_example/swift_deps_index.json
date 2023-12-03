@@ -1,7 +1,7 @@
 {
   "direct_dep_identities": [
     "another_package_with_resources",
-    "fix_init_return",
+    "app_lovin_sdk",
     "googlesignin-ios",
     "package_with_resources"
   ],
@@ -14,6 +14,26 @@
       "package_identity": "another_package_with_resources",
       "product_memberships": [
         "MoreCoolUI"
+      ]
+    },
+    {
+      "name": "AppLovinSDKResources",
+      "c99name": "AppLovinSDKResources",
+      "src_type": "objc",
+      "label": "@swiftpkg_app_lovin_sdk//:Sources_AppLovinSDKResources",
+      "package_identity": "app_lovin_sdk",
+      "product_memberships": [
+        "AppLovinSDK"
+      ]
+    },
+    {
+      "name": "AppLovinSDK",
+      "c99name": "AppLovinSDK",
+      "src_type": "binary",
+      "label": "@swiftpkg_app_lovin_sdk//:remote_archive_AppLovinSDK-12.0.0.xcframework.zip_AppLovinSDK",
+      "package_identity": "app_lovin_sdk",
+      "product_memberships": [
+        "AppLovinSDK"
       ]
     },
     {
@@ -46,26 +66,6 @@
       "package_identity": "appauth-ios",
       "product_memberships": [
         "AppAuthTV"
-      ]
-    },
-    {
-      "name": "AppLovinSDKResources",
-      "c99name": "AppLovinSDKResources",
-      "src_type": "objc",
-      "label": "@swiftpkg_fix_init_return//:Sources_AppLovinSDKResources",
-      "package_identity": "fix_init_return",
-      "product_memberships": [
-        "AppLovinSDK"
-      ]
-    },
-    {
-      "name": "AppLovinSDK",
-      "c99name": "AppLovinSDK",
-      "src_type": "binary",
-      "label": "@swiftpkg_fix_init_return//:remote_archive_AppLovinSDK-12.0.0.xcframework.zip_AppLovinSDK",
-      "package_identity": "fix_init_return",
-      "product_memberships": [
-        "AppLovinSDK"
       ]
     },
     {
@@ -154,6 +154,14 @@
       ]
     },
     {
+      "identity": "app_lovin_sdk",
+      "name": "AppLovinSDK",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_app_lovin_sdk//:Sources_AppLovinSDKResources"
+      ]
+    },
+    {
       "identity": "appauth-ios",
       "name": "AppAuth",
       "type": "library",
@@ -175,14 +183,6 @@
       "type": "library",
       "target_labels": [
         "@swiftpkg_appauth_ios//:Source_AppAuthTV"
-      ]
-    },
-    {
-      "identity": "fix_init_return",
-      "name": "AppLovinSDK",
-      "type": "library",
-      "target_labels": [
-        "@swiftpkg_fix_init_return//:Sources_AppLovinSDKResources"
       ]
     },
     {
@@ -260,19 +260,19 @@
       }
     },
     {
+      "name": "swiftpkg_app_lovin_sdk",
+      "identity": "app_lovin_sdk",
+      "local": {
+        "path": "third_party/app_lovin_sdk"
+      }
+    },
+    {
       "name": "swiftpkg_appauth_ios",
       "identity": "appauth-ios",
       "remote": {
         "commit": "71cde449f13d453227e687458144bde372d30fc7",
         "remote": "https://github.com/openid/AppAuth-iOS.git",
         "version": "1.6.2"
-      }
-    },
-    {
-      "name": "swiftpkg_fix_init_return",
-      "identity": "fix_init_return",
-      "local": {
-        "path": "../../../../AppLovin-MAX-Swift-Package/fix_init_return"
       }
     },
     {

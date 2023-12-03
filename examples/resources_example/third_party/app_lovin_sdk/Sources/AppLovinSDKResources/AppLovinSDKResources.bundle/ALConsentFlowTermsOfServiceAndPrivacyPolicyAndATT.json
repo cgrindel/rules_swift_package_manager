@@ -1,0 +1,36 @@
+{
+    "states": [{
+        "id": 1,
+        "is_initial_state": true,
+        "type": "alert",
+        "title": {
+            "key": "PP_AND_TOS_TITLE",
+            "key_unified_flow": "PP_AND_TOS_TITLE_UNIFIED_FLOW",
+            "replacements": ["<APP_NAME>"]
+        },
+        "message": {
+            "key": "AGREE_MESSAGE",
+            "key_unified_flow": "AGREE_MESSAGE_UNIFIED_FLOW"
+        },
+        "transitions": [{
+            "title": {
+                "key": "AGREE_TO_TERMS_BUTTON_TITLE",
+                "key_unified_flow": "CONTINUE_BUTTON_TITLE_UNIFIED_FLOW"
+            },
+            "style": "default",
+            "destination_state_id": 12
+        }]
+    }, {
+        "id": 12,
+        "type": "event",
+        "name": "tos_ok",
+        "destination_state_id": 14
+    }, {
+        "id": 14,
+        "type": "att",
+        "destination_state_id": 99
+    }, {
+        "id": 99,
+        "type": "reinit"
+    }]
+}

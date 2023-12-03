@@ -1,0 +1,11 @@
+{
+    "states": [{
+        "id": 14,
+        "is_initial_state": true,
+        "type": "att",
+        "destination_state_id": 99
+    }, {
+        "id": 99,
+        "type": "reinit"
+    }]
+}

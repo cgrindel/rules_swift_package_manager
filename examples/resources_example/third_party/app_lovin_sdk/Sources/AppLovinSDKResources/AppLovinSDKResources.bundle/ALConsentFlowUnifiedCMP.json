@@ -1,0 +1,46 @@
+{
+    "states": [{
+        "is_initial_state": true,
+        "id": 1000,
+        "type": "decision",
+        "decision_type": "is_al_gdpr",
+        "destination_state_id_true": 20,
+        "destination_state_id_false": 500
+    }, {
+        "id": 20,
+        "type": "cmp_load",
+        "decision_type": "cmp_load_success",
+        "destination_state_id_true": 21,
+        "destination_state_id_false": 500
+    }, {
+        "id": 21,
+        "type": "cmp_show",
+        "destination_state_id": 13
+    }, {
+        "id": 13,
+        "type": "event",
+        "name": "gdpr_ok",
+        "destination_state_id": 1001
+    }, {
+        "id": 1001,
+        "type": "decision",
+        "decision_type": "is_user_eligible_for_att_alert",
+        "destination_state_id_true": 14,
+        "destination_state_id_false": 99
+    }, {
+        "id": 14,
+        "type": "att",
+        "destination_state_id": 99
+    }, {
+        "id": 500,
+        "type": "terms_flow"
+    }, {
+        "id": 12,
+        "type": "event",
+        "name": "tos_ok",
+        "destination_state_id": 99
+    }, {
+        "id": 99,
+        "type": "reinit"
+    }]
+}
