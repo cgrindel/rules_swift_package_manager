@@ -594,7 +594,6 @@ def _apple_resource_bundle(target, default_localization, include_swift_accessor,
                 attrs = {
                     "bundle": ":" + bundle_label_name,
                     "bundle_name": bundle_name,
-                    "hdr": ":" + hdr_label_name,
                     "module_name": target.c99name,
                 },
             ),

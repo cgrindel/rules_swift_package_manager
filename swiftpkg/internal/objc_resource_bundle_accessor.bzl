@@ -97,12 +97,17 @@ def _objc_resource_bundle_accessor_impl_impl(ctx):
     accessor_impl = ctx.actions.declare_file("{}_ObjcResourceBundleAccessor.m".format(
         ctx.label.name,
     ))
+
+    # DEBUG BEGIN
+    print("*** CHUCK ==============")
+    print("*** CHUCK ctx.files.bundle: ", ctx.files.bundle)
+
+    # DEBUG END
     ctx.actions.expand_template(
         template = ctx.file._impl_template,
         output = accessor_impl,
         substitutions = {
             "{BUNDLE_NAME}": ctx.attr.bundle_name,
-            "{HDR_NAME}": ctx.file.hdr.basename,
             # TODO(chuck): FIX ME!
             # "{BUNDLE_PATH}": ctx.file.bundle.path,
             "{MODULE_NAME}": ctx.attr.module_name,
@@ -116,15 +121,12 @@ objc_resource_bundle_accessor_impl = rule(
         "bundle": attr.label(
             mandatory = True,
             doc = "The name of the module.",
-            providers = [[CcInfo]],
+            # providers = [[CcInfo]],
+            # allow_single_file = True,
         ),
         "bundle_name": attr.string(
             mandatory = True,
             doc = "The name of the resource bundle.",
-        ),
-        "hdr": attr.label(
-            mandatory = True,
-            allow_single_file = True,
         ),
         "module_name": attr.string(
             mandatory = True,
