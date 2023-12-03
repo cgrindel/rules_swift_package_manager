@@ -964,7 +964,7 @@ swift_library(
             name = "ObjcLibraryWithResources",
             exp = """\
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
-load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap", "resource_bundle_infoplist")
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap", "objc_resource_bundle_accessor_hdr", "objc_resource_bundle_accessor_impl", "resource_bundle_infoplist")
 
 apple_resource_bundle(
     name = "ObjcLibraryWithResources_resource_bundle",
@@ -990,6 +990,7 @@ objc_library(
         "-fobjc-arc",
         "-fPIC",
         "-fmodule-name=ObjcLibraryWithResources",
+        "-include$(location :ObjcLibraryWithResources_objc_resource_bundle_accessor_hdr)",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
     ],
     data = [":ObjcLibraryWithResources_resource_bundle"],
@@ -1017,10 +1018,23 @@ objc_library(
     srcs = [
         "src/foo.h",
         "src/foo.m",
+        ":ObjcLibraryWithResources_objc_resource_bundle_accessor_hdr",
+        ":ObjcLibraryWithResources_objc_resource_bundle_accessor_impl",
     ],
     tags = ["swift_module=ObjcLibraryWithResources"],
     textual_hdrs = ["src/foo.m"],
     visibility = ["//visibility:public"],
+)
+
+objc_resource_bundle_accessor_hdr(
+    name = "ObjcLibraryWithResources_objc_resource_bundle_accessor_hdr",
+    module_name = "ObjcLibraryWithResources",
+)
+
+objc_resource_bundle_accessor_impl(
+    name = "ObjcLibraryWithResources_objc_resource_bundle_accessor_impl",
+    bundle_name = "ObjcLibraryWithResources_ObjcLibraryWithResources",
+    module_name = "ObjcLibraryWithResources",
 )
 
 resource_bundle_infoplist(
