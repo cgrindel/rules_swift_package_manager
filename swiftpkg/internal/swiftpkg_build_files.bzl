@@ -196,6 +196,16 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     ])
 
     attrs = {
+        "copts": [
+            # Enable 'blocks' language feature
+            "-fblocks",
+            # Synthesize retain and release calls for Objective-C pointers
+            "-fobjc-arc",
+            # Enable support for PIC macros
+            "-fPIC",
+            # Module name
+            "-fmodule-name={}".format(target.c99name),
+        ],
         "tags": ["swift_module={}".format(target.c99name)],
         "visibility": ["//visibility:public"],
     }
@@ -227,17 +237,21 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "SWIFT_PACKAGE=1",
     ]
 
-    # These flags are used by SPM when compiling clang modules.
-    copts = [
-        # Enable 'blocks' language feature
-        "-fblocks",
-        # Synthesize retain and release calls for Objective-C pointers
-        "-fobjc-arc",
-        # Enable support for PIC macros
-        "-fPIC",
-        # Module name
-        "-fmodule-name={}".format(target.c99name),
-    ]
+    # The copts may be updated by functions that were executed before this
+    # point. Use whatever has been set.
+    copts = attrs.get("copts", [])
+
+    # # These flags are used by SPM when compiling clang modules.
+    # copts = [
+    #     # Enable 'blocks' language feature
+    #     "-fblocks",
+    #     # Synthesize retain and release calls for Objective-C pointers
+    #     "-fobjc-arc",
+    #     # Enable support for PIC macros
+    #     "-fPIC",
+    #     # Module name
+    #     "-fmodule-name={}".format(target.c99name),
+    # ]
 
     local_includes = [
         bzl_selects.new(value = p, kind = _condition_kinds.private_includes)
@@ -495,7 +509,10 @@ def _handle_target_resources(
     if include_objc_accessor:
         # SPM provides a SWIFTPM_MODULE_BUNDLE macro to access the bundle for ObjC code.
         # https://github.com/apple/swift-package-manager/blob/8387798811c6cc43761c5e1b48df2d3412dc5de4/Sources/Build/BuildDescription/ClangTargetBuildDescription.swift#L390
-        _update_attr_list("hdrs", ":{}".format(
+        _update_attr_list("srcs", ":{}".format(
+            pkginfo_targets.objc_resource_bundle_accessor_hdr_label_name(bzl_target_name),
+        ))
+        _update_attr_list("copts", "-include$(location :{})".format(
             pkginfo_targets.objc_resource_bundle_accessor_hdr_label_name(bzl_target_name),
         ))
         _update_attr_list("srcs", ":{}".format(
