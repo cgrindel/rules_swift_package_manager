@@ -6,7 +6,8 @@ load(
 )
 load(
     "//swiftpkg/internal:objc_resource_bundle_accessor.bzl",
-    _objc_resource_bundle_accessor = "objc_resource_bundle_accessor",
+    _objc_resource_bundle_accessor_hdr = "objc_resource_bundle_accessor_hdr",
+    _objc_resource_bundle_accessor_impl = "objc_resource_bundle_accessor_impl",
 )
 load(
     "//swiftpkg/internal:resource_bundle_accessor.bzl",
@@ -18,6 +19,7 @@ load(
 )
 
 generate_modulemap = _generate_modulemap
-objc_resource_bundle_accessor = _objc_resource_bundle_accessor
+objc_resource_bundle_accessor_hdr = _objc_resource_bundle_accessor_hdr
+objc_resource_bundle_accessor_impl = _objc_resource_bundle_accessor_impl
 resource_bundle_accessor = _resource_bundle_accessor
 resource_bundle_infoplist = _resource_bundle_infoplist
