@@ -196,6 +196,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     ])
 
     attrs = {
+        # These flags are used by SPM when compiling clang modules.
         "copts": [
             # Enable 'blocks' language feature
             "-fblocks",
