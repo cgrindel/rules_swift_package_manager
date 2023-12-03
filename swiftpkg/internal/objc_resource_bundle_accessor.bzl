@@ -109,7 +109,7 @@ def _objc_resource_bundle_accessor_impl_impl(ctx):
         substitutions = {
             "{BUNDLE_NAME}": ctx.attr.bundle_name,
             # TODO(chuck): FIX ME!
-            # "{BUNDLE_PATH}": ctx.file.bundle.path,
+            "{BUNDLE_PATH}": ctx.attr.bundle_name + ".bundle",
             "{MODULE_NAME}": ctx.attr.module_name,
         },
     )
