@@ -48,10 +48,6 @@ def _objc_resource_bundle_accessor_impl_impl(ctx):
 objc_resource_bundle_accessor_impl = rule(
     implementation = _objc_resource_bundle_accessor_impl_impl,
     attrs = {
-        "bundle": attr.label(
-            mandatory = True,
-            doc = "The name of the module.",
-        ),
         "bundle_name": attr.string(
             mandatory = True,
             doc = "The name of the resource bundle.",

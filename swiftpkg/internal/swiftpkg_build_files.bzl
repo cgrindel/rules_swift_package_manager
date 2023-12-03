@@ -592,7 +592,6 @@ def _apple_resource_bundle(target, default_localization, include_swift_accessor,
                     bzl_target_name,
                 ),
                 attrs = {
-                    "bundle": ":" + bundle_label_name,
                     "bundle_name": bundle_name,
                     "module_name": target.c99name,
                 },
