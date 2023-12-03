@@ -1,58 +1,23 @@
 #import <Foundation/Foundation.h>
 
-@interface CurrentBundleFinder: NSObject
+@interface __CurrentBundleFinder : NSObject
 @end
 
-@implementation CurrentBundleFinder
+@implementation __CurrentBundleFinder
 @end
 
 NSBundle* {MODULE_NAME}_SWIFTPM_MODULE_BUNDLE() {
     NSArray *candidates = @[
         [[NSBundle mainBundle] bundleURL],
-        [[NSBundle bundleForClass:[CurrentBundleFinder class]] bundleURL],
+        [[NSBundle bundleForClass:[__CurrentBundleFinder class]] bundleURL],
     ];
-    // DEBUG BEGIN
-    NSLog(@"=================");
-    // DEBUG END
     for (id obj in candidates) {
         NSURL *baseURL = obj;
         NSURL *bundleURL = [baseURL URLByAppendingPathComponent:@"{BUNDLE_NAME}.bundle"];
         NSBundle *foundBundle = [NSBundle bundleWithURL:bundleURL];
-        // DEBUG BEGIN
-        NSLog(@"BUNDLE URL");
-        NSLog(@"%@", bundleURL);
-        NSLog(@"FOUND BUNDLE");
-        NSLog(@"%@", foundBundle);
-        NSLog(@"---");
-        // DEBUG END
         if (foundBundle != nil) {
             return foundBundle;
         }
     };
     return nil;
 }
-
-// NSBundle* {MODULE_NAME}_SWIFTPM_MODULE_BUNDLE() {
-//     // NSURL *bundleURL = [[[NSBundle mainBundle] bundleURL] URLByAppendingPathComponent:@"{BUNDLE_NAME}"];
-//     NSURL *bundleURL = [[[NSBundle mainBundle] bundleURL] URLByAppendingPathComponent:@"{BUNDLE_NAME}.bundle"];
-// 
-//     // DEBUG BEGIN
-//     NSLog(@"CHUCK");
-//     NSLog(@"%@", bundleURL);
-//     NSLog(@"MAIN");
-//     NSLog(@"%@", [NSBundle mainBundle]);
-//     NSLog(@"CLASS BUNDLE");
-//     NSLog(@"%@", [NSBundle bundleForClass:[CurrentBundleFinder class]]);
-//     NSLog(@"ALL BUNDLES");
-//     for (id obj in [NSBundle allBundles]) {
-//         NSLog(@"Bundle Data= %@",obj);
-//     };
-//     // DEBUG END
-// 
-//     NSBundle *preferredBundle = [NSBundle bundleWithURL:bundleURL];
-//     if (preferredBundle == nil) {
-//         return [NSBundle bundleWithPath:@"{BUNDLE_PATH}"];
-//     }
-// 
-//     return preferredBundle;
-// }
