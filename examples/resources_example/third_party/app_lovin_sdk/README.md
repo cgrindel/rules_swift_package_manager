@@ -1,3 +1,10 @@
+NOTE: This is a vendored verision of https://github.com/AppLovin/AppLovin-MAX-Swift-Package.
+Unfortunatley, the code in the repository had [a bug in an
+init](https://github.com/AppLovin/AppLovin-MAX-Swift-Package/blob/ef3d2fd34380552067c834afad3c8b732e62569b/Sources/AppLovinSDKResources/ALResourceManager.m#L22)
+that prevented us from depending upon it directly. This vendored code has applied a fix.
+
+===
+
 # AppLovin MAX iOS SDK
 
 AppLovin MAX iOS SDK for Swift Package Manager.
