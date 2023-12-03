@@ -4,8 +4,8 @@ load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 bzlformat_pkg(name = "bzlformat")
 
 exports_files([
-    "ObjcResourceBundleAccessor.m.tmpl",
     "ObjcResourceBundleAccessor.h.tmpl",
+    "ObjcResourceBundleAccessor.m.tmpl",
     "ResourceBundleAccessor.swift.tmpl",
     "resource_bundle_info.plist.tmpl",
 ])
