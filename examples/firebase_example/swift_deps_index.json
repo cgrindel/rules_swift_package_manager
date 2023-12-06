@@ -1665,9 +1665,9 @@
       "name": "swiftpkg_firebase_ios_sdk",
       "identity": "firebase-ios-sdk",
       "remote": {
-        "commit": "5de0369ee79ad096c164eb3afeb7921d92a43b58",
+        "commit": "d9bcd141c3e4ad48a9500e6faeebb073f43cbcbd",
         "remote": "https://github.com/firebase/firebase-ios-sdk",
-        "version": "10.18.0"
+        "version": "10.19.0"
       },
       "cLanguageStandard": "c99",
       "cxxLanguageStandard": "gnu++14"
@@ -1687,9 +1687,9 @@
       "name": "swiftpkg_googledatatransport",
       "identity": "googledatatransport",
       "remote": {
-        "commit": "5056b15c5acbb90cd214fe4d6138bdf5a740e5a8",
+        "commit": "a732a4b47f59e4f725a2ea10f0c77e93a7131117",
         "remote": "https://github.com/google/GoogleDataTransport.git",
-        "version": "9.2.0"
+        "version": "9.3.0"
       },
       "cLanguageStandard": "c99",
       "cxxLanguageStandard": "gnu++14"
