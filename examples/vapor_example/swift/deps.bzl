@@ -20,7 +20,7 @@ def swift_dependencies():
     # version: 4.5.0
     swift_package(
         name = "swiftpkg_console_kit",
-        commit = "18262d24c98c4b76aed2d6def3544b58d0cbad63",
+        commit = "a7dd7001196d39b758e4990ec0f26f80162f4c84",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/console-kit.git",
     )
@@ -196,7 +196,7 @@ def swift_dependencies():
     # version: 4.81.0
     swift_package(
         name = "swiftpkg_vapor",
-        commit = "c710b8f4412aaa69ab03e77b4be27ce799f5fc1e",
+        commit = "3d62c0c3a42d155c2129682432863f4bd7a642b0",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/vapor.git",
     )

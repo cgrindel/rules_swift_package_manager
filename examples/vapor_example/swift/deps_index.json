@@ -1352,9 +1352,9 @@
       "name": "swiftpkg_console_kit",
       "identity": "console-kit",
       "remote": {
-        "commit": "18262d24c98c4b76aed2d6def3544b58d0cbad63",
+        "commit": "a7dd7001196d39b758e4990ec0f26f80162f4c84",
         "remote": "https://github.com/vapor/console-kit.git",
-        "version": "4.13.0"
+        "version": "4.14.0"
       }
     },
     {
@@ -1552,9 +1552,9 @@
       "name": "swiftpkg_vapor",
       "identity": "vapor",
       "remote": {
-        "commit": "c710b8f4412aaa69ab03e77b4be27ce799f5fc1e",
+        "commit": "3d62c0c3a42d155c2129682432863f4bd7a642b0",
         "remote": "https://github.com/vapor/vapor.git",
-        "version": "4.88.0"
+        "version": "4.89.0"
       }
     },
     {
