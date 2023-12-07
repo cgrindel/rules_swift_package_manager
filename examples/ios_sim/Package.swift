@@ -7,5 +7,6 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-nio.git", exact: "2.62.0"),
         .package(url: "https://github.com/apple/swift-markdown.git", exact: "0.3.0"),
+        .package(url: "https://github.com/ReactiveX/RxSwift.git", exact: "6.6.0"),
     ]
 )

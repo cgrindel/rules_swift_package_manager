@@ -11,6 +11,7 @@ swift_library(
     module_name = "FooTests",
     deps = [
         "//Sources/Foo",
+        "@swiftpkg_rxswift//:Sources_RxTest",
         "@swiftpkg_swift_markdown//:Sources_Markdown",
         "@swiftpkg_swift_nio//:Sources_NIO",
     ],

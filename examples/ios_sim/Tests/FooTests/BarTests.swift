@@ -1,5 +1,6 @@
 @testable import Foo
 import NIO
+import RxTest
 import XCTest
 
 class BarTests: XCTestCase {

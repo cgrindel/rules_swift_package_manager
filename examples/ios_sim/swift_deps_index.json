@@ -1,9 +1,87 @@
 {
   "direct_dep_identities": [
+    "rxswift",
     "swift-markdown",
     "swift-nio"
   ],
   "modules": [
+    {
+      "name": "RxBlocking",
+      "c99name": "RxBlocking",
+      "src_type": "swift",
+      "label": "@swiftpkg_rxswift//:Sources_RxBlocking",
+      "package_identity": "rxswift",
+      "product_memberships": [
+        "RxBlocking",
+        "RxBlocking-Dynamic"
+      ]
+    },
+    {
+      "name": "RxCocoa",
+      "c99name": "RxCocoa",
+      "src_type": "swift",
+      "label": "@swiftpkg_rxswift//:Sources_RxCocoa",
+      "modulemap_label": "@swiftpkg_rxswift//:Sources_RxCocoa_modulemap",
+      "package_identity": "rxswift",
+      "product_memberships": [
+        "RxCocoa",
+        "RxCocoa-Dynamic"
+      ]
+    },
+    {
+      "name": "RxCocoaRuntime",
+      "c99name": "RxCocoaRuntime",
+      "src_type": "objc",
+      "label": "@swiftpkg_rxswift//:Sources_RxCocoaRuntime",
+      "package_identity": "rxswift",
+      "product_memberships": [
+        "RxCocoa",
+        "RxCocoa-Dynamic"
+      ]
+    },
+    {
+      "name": "RxRelay",
+      "c99name": "RxRelay",
+      "src_type": "swift",
+      "label": "@swiftpkg_rxswift//:Sources_RxRelay",
+      "package_identity": "rxswift",
+      "product_memberships": [
+        "RxCocoa",
+        "RxRelay",
+        "RxCocoa-Dynamic",
+        "RxRelay-Dynamic"
+      ]
+    },
+    {
+      "name": "RxSwift",
+      "c99name": "RxSwift",
+      "src_type": "swift",
+      "label": "@swiftpkg_rxswift//:Sources_RxSwift",
+      "package_identity": "rxswift",
+      "product_memberships": [
+        "RxSwift",
+        "RxCocoa",
+        "RxRelay",
+        "RxBlocking",
+        "RxTest",
+        "RxSwift-Dynamic",
+        "RxCocoa-Dynamic",
+        "RxRelay-Dynamic",
+        "RxBlocking-Dynamic",
+        "RxTest-Dynamic"
+      ]
+    },
+    {
+      "name": "RxTest",
+      "c99name": "RxTest",
+      "src_type": "swift",
+      "label": "@swiftpkg_rxswift//:Sources_RxTest",
+      "package_identity": "rxswift",
+      "product_memberships": [
+        "RxTest",
+        "RxTest-Dynamic"
+      ]
+    },
     {
       "name": "Atomics",
       "c99name": "Atomics",
@@ -412,6 +490,86 @@
   ],
   "products": [
     {
+      "identity": "rxswift",
+      "name": "RxBlocking",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_rxswift//:Sources_RxBlocking"
+      ]
+    },
+    {
+      "identity": "rxswift",
+      "name": "RxBlocking-Dynamic",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_rxswift//:Sources_RxBlocking"
+      ]
+    },
+    {
+      "identity": "rxswift",
+      "name": "RxCocoa",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_rxswift//:Sources_RxCocoa"
+      ]
+    },
+    {
+      "identity": "rxswift",
+      "name": "RxCocoa-Dynamic",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_rxswift//:Sources_RxCocoa"
+      ]
+    },
+    {
+      "identity": "rxswift",
+      "name": "RxRelay",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_rxswift//:Sources_RxRelay"
+      ]
+    },
+    {
+      "identity": "rxswift",
+      "name": "RxRelay-Dynamic",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_rxswift//:Sources_RxRelay"
+      ]
+    },
+    {
+      "identity": "rxswift",
+      "name": "RxSwift",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_rxswift//:Sources_RxSwift"
+      ]
+    },
+    {
+      "identity": "rxswift",
+      "name": "RxSwift-Dynamic",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_rxswift//:Sources_RxSwift"
+      ]
+    },
+    {
+      "identity": "rxswift",
+      "name": "RxTest",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_rxswift//:Sources_RxTest"
+      ]
+    },
+    {
+      "identity": "rxswift",
+      "name": "RxTest-Dynamic",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_rxswift//:Sources_RxTest"
+      ]
+    },
+    {
       "identity": "swift-atomics",
       "name": "Atomics",
       "type": "library",
@@ -573,6 +731,15 @@
     }
   ],
   "packages": [
+    {
+      "name": "swiftpkg_rxswift",
+      "identity": "rxswift",
+      "remote": {
+        "commit": "9dcaa4b333db437b0fbfaf453fad29069044a8b4",
+        "remote": "https://github.com/ReactiveX/RxSwift.git",
+        "version": "6.6.0"
+      }
+    },
     {
       "name": "swiftpkg_swift_atomics",
       "identity": "swift-atomics",
