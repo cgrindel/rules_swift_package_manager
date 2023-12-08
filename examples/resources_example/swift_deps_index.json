@@ -1,6 +1,7 @@
 {
   "direct_dep_identities": [
     "another_package_with_resources",
+    "app_lovin_sdk",
     "googlesignin-ios",
     "package_with_resources"
   ],
@@ -13,6 +14,26 @@
       "package_identity": "another_package_with_resources",
       "product_memberships": [
         "MoreCoolUI"
+      ]
+    },
+    {
+      "name": "AppLovinSDKResources",
+      "c99name": "AppLovinSDKResources",
+      "src_type": "objc",
+      "label": "@swiftpkg_app_lovin_sdk//:Sources_AppLovinSDKResources",
+      "package_identity": "app_lovin_sdk",
+      "product_memberships": [
+        "AppLovinSDK"
+      ]
+    },
+    {
+      "name": "AppLovinSDK",
+      "c99name": "AppLovinSDK",
+      "src_type": "binary",
+      "label": "@swiftpkg_app_lovin_sdk//:remote_archive_AppLovinSDK-12.0.0.xcframework.zip_AppLovinSDK",
+      "package_identity": "app_lovin_sdk",
+      "product_memberships": [
+        "AppLovinSDK"
       ]
     },
     {
@@ -133,6 +154,14 @@
       ]
     },
     {
+      "identity": "app_lovin_sdk",
+      "name": "AppLovinSDK",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_app_lovin_sdk//:Sources_AppLovinSDKResources"
+      ]
+    },
+    {
       "identity": "appauth-ios",
       "name": "AppAuth",
       "type": "library",
@@ -228,6 +257,13 @@
       "identity": "another_package_with_resources",
       "local": {
         "path": "third_party/another_package_with_resources"
+      }
+    },
+    {
+      "name": "swiftpkg_app_lovin_sdk",
+      "identity": "app_lovin_sdk",
+      "local": {
+        "path": "third_party/app_lovin_sdk"
       }
     },
     {

@@ -1,0 +1,23 @@
+#import <Foundation/Foundation.h>
+
+@interface __CurrentBundleFinder : NSObject
+@end
+
+@implementation __CurrentBundleFinder
+@end
+
+NSBundle* {MODULE_NAME}_SWIFTPM_MODULE_BUNDLE() {
+    NSArray *candidates = @[
+        [[NSBundle mainBundle] bundleURL],
+        [[NSBundle bundleForClass:[__CurrentBundleFinder class]] bundleURL],
+    ];
+    for (id obj in candidates) {
+        NSURL *baseURL = obj;
+        NSURL *bundleURL = [baseURL URLByAppendingPathComponent:@"{BUNDLE_NAME}.bundle"];
+        NSBundle *foundBundle = [NSBundle bundleWithURL:bundleURL];
+        if (foundBundle != nil) {
+            return foundBundle;
+        }
+    };
+    return nil;
+}

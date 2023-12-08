@@ -5,6 +5,8 @@ load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels")
 
 _modulemap_suffix = "_modulemap"
 _resource_bundle_suffix = "_resource_bundle"
+_objc_resource_bundle_accessor_hdr_suffix = "_objc_resource_bundle_accessor_hdr"
+_objc_resource_bundle_accessor_impl_suffix = "_objc_resource_bundle_accessor_impl"
 _resource_bundle_accessor_suffix = "_resource_bundle_accessor"
 _resource_bundle_infoplist_suffix = "_resource_bundle_infoplist"
 
@@ -171,6 +173,28 @@ def _resource_bundle_label_name(target_name):
     """
     return target_name + _resource_bundle_suffix
 
+def _objc_resource_bundle_accessor_hdr_label_name(target_name):
+    """Returns the name of the related `objc_resource_bundle_accessor` target.
+
+    Args:
+        target_name: The publicly advertised name for the Swift target.
+
+    Returns:
+        The name of the `resource_bundle_accessor` as a `string`.
+    """
+    return target_name + _objc_resource_bundle_accessor_hdr_suffix
+
+def _objc_resource_bundle_accessor_impl_label_name(target_name):
+    """Returns the name of the related `objc_resource_bundle_accessor` target.
+
+    Args:
+        target_name: The publicly advertised name for the Swift target.
+
+    Returns:
+        The name of the `resource_bundle_accessor` as a `string`.
+    """
+    return target_name + _objc_resource_bundle_accessor_impl_suffix
+
 def _resource_bundle_accessor_label_name(target_name):
     """Returns the name of the related `resource_bundle_accessor` target.
 
@@ -249,6 +273,8 @@ def make_pkginfo_targets(bazel_labels):
         is_modulemap_label = _is_modulemap_label,
         join_path = _join_path,
         modulemap_label_name = _modulemap_label_name,
+        objc_resource_bundle_accessor_hdr_label_name = _objc_resource_bundle_accessor_hdr_label_name,
+        objc_resource_bundle_accessor_impl_label_name = _objc_resource_bundle_accessor_impl_label_name,
         resource_bundle_accessor_label_name = _resource_bundle_accessor_label_name,
         resource_bundle_infoplist_label_name = _resource_bundle_infoplist_label_name,
         resource_bundle_label_name = _resource_bundle_label_name,

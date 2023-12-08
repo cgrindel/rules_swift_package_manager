@@ -4,6 +4,8 @@ load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 bzlformat_pkg(name = "bzlformat")
 
 exports_files([
+    "ObjcResourceBundleAccessor.h.tmpl",
+    "ObjcResourceBundleAccessor.m.tmpl",
     "ResourceBundleAccessor.swift.tmpl",
     "resource_bundle_info.plist.tmpl",
 ])
@@ -309,6 +311,12 @@ bzl_library(
 bzl_library(
     name = "module_maps",
     srcs = ["module_maps.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "objc_resource_bundle_accessor",
+    srcs = ["objc_resource_bundle_accessor.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
 

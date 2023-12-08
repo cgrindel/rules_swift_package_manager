@@ -112,7 +112,13 @@ def _swift_target_build_file(pkg_ctx, target):
     if len(copts) > 0:
         attrs["copts"] = bzl_selects.to_starlark(copts)
 
-    res_build_file = _handle_target_resources(pkg_ctx, target, attrs)
+    res_build_file = _handle_target_resources(
+        pkg_ctx,
+        target,
+        attrs,
+        include_swift_accessor = True,
+        include_objc_accessor = False,
+    )
     if res_build_file:
         all_build_files.append(res_build_file)
     if is_library_target:
@@ -190,6 +196,17 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     ])
 
     attrs = {
+        # These flags are used by SPM when compiling clang modules.
+        "copts": [
+            # Enable 'blocks' language feature
+            "-fblocks",
+            # Synthesize retain and release calls for Objective-C pointers
+            "-fobjc-arc",
+            # Enable support for PIC macros
+            "-fPIC",
+            # Module name
+            "-fmodule-name={}".format(target.c99name),
+        ],
         "tags": ["swift_module={}".format(target.c99name)],
         "visibility": ["//visibility:public"],
     }
@@ -208,8 +225,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         pkg_ctx,
         target,
         attrs,
-        include_accessor = False,
+        include_swift_accessor = False,
+        include_objc_accessor = (target.objc_src_info != None),
     )
+
     if res_build_file:
         all_build_files.append(res_build_file)
 
@@ -219,17 +238,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "SWIFT_PACKAGE=1",
     ]
 
-    # These flags are used by SPM when compiling clang modules.
-    copts = [
-        # Enable 'blocks' language feature
-        "-fblocks",
-        # Synthesize retain and release calls for Objective-C pointers
-        "-fobjc-arc",
-        # Enable support for PIC macros
-        "-fPIC",
-        # Module name
-        "-fmodule-name={}".format(target.c99name),
-    ]
+    # The copts may be updated by functions that were executed before this
+    # point. Use whatever has been set.
+    copts = attrs.get("copts", [])
 
     local_includes = [
         bzl_selects.new(value = p, kind = _condition_kinds.private_includes)
@@ -458,7 +469,12 @@ expected: {expected}\
 
 # MARK: - Apple Resource Group
 
-def _handle_target_resources(pkg_ctx, target, attrs, include_accessor = True):
+def _handle_target_resources(
+        pkg_ctx,
+        target,
+        attrs,
+        include_swift_accessor,
+        include_objc_accessor):
     if len(target.resources) == 0:
         return None
 
@@ -473,20 +489,36 @@ def _handle_target_resources(pkg_ctx, target, attrs, include_accessor = True):
     _update_attr_list("data", ":{}".format(
         pkginfo_targets.resource_bundle_label_name(bzl_target_name),
     ))
-    if include_accessor:
+    if include_swift_accessor:
         # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
         # https://stackoverflow.com/questions/63237395/generating-resource-bundle-accessor-type-bundle-has-no-member-module
         _update_attr_list("srcs", ":{}".format(
             pkginfo_targets.resource_bundle_accessor_label_name(bzl_target_name),
         ))
+    if include_objc_accessor:
+        # SPM provides a SWIFTPM_MODULE_BUNDLE macro to access the bundle for
+        # ObjC code.  The header file contains the macro definition. It needs
+        # to be available in every Objc source file. So, we specify the
+        # -include flag specifying the header path.
+        # https://github.com/apple/swift-package-manager/blob/8387798811c6cc43761c5e1b48df2d3412dc5de4/Sources/Build/BuildDescription/ClangTargetBuildDescription.swift#L390
+        _update_attr_list("srcs", ":{}".format(
+            pkginfo_targets.objc_resource_bundle_accessor_hdr_label_name(bzl_target_name),
+        ))
+        _update_attr_list("copts", "-include$(location :{})".format(
+            pkginfo_targets.objc_resource_bundle_accessor_hdr_label_name(bzl_target_name),
+        ))
+        _update_attr_list("srcs", ":{}".format(
+            pkginfo_targets.objc_resource_bundle_accessor_impl_label_name(bzl_target_name),
+        ))
 
     return _apple_resource_bundle(
         target,
         pkg_ctx.pkg_info.default_localization,
-        include_accessor = include_accessor,
+        include_swift_accessor = include_swift_accessor,
+        include_objc_accessor = include_objc_accessor,
     )
 
-def _apple_resource_bundle(target, default_localization, include_accessor = True):
+def _apple_resource_bundle(target, default_localization, include_swift_accessor, include_objc_accessor):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     bundle_label_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
     bundle_name = pkginfo_targets.resource_bundle_name(target.c99name)
@@ -524,7 +556,7 @@ def _apple_resource_bundle(target, default_localization, include_accessor = True
             },
         ),
     ]
-    if include_accessor:
+    if include_swift_accessor:
         load_stmts.append(swiftpkg_resource_bundle_accessor_load_stmt)
         decls.append(
             build_decls.new(
@@ -534,6 +566,33 @@ def _apple_resource_bundle(target, default_localization, include_accessor = True
                 ),
                 attrs = {
                     "bundle_name": bundle_name,
+                },
+            ),
+        )
+    if include_objc_accessor:
+        load_stmts.append(swiftpkg_objc_resource_bundle_accessor_hdr_load_stmt)
+        load_stmts.append(swiftpkg_objc_resource_bundle_accessor_impl_load_stmt)
+        hdr_label_name = pkginfo_targets.objc_resource_bundle_accessor_hdr_label_name(
+            bzl_target_name,
+        )
+        decls.append(
+            build_decls.new(
+                kind = swiftpkg_kinds.objc_resource_bundle_accessor_hdr,
+                name = hdr_label_name,
+                attrs = {
+                    "module_name": target.c99name,
+                },
+            ),
+        )
+        decls.append(
+            build_decls.new(
+                kind = swiftpkg_kinds.objc_resource_bundle_accessor_impl,
+                name = pkginfo_targets.objc_resource_bundle_accessor_impl_label_name(
+                    bzl_target_name,
+                ),
+                attrs = {
+                    "bundle_name": bundle_name,
+                    "module_name": target.c99name,
                 },
             ),
         )
@@ -787,6 +846,8 @@ apple_resource_bundle_load_stmt = load_statements.new(
 
 swiftpkg_kinds = struct(
     generate_modulemap = "generate_modulemap",
+    objc_resource_bundle_accessor_hdr = "objc_resource_bundle_accessor_hdr",
+    objc_resource_bundle_accessor_impl = "objc_resource_bundle_accessor_impl",
     resource_bundle_accessor = "resource_bundle_accessor",
     resource_bundle_infoplist = "resource_bundle_infoplist",
 )
@@ -796,6 +857,16 @@ swiftpkg_build_defs_location = "@rules_swift_package_manager//swiftpkg:build_def
 swiftpkg_generate_modulemap_load_stmt = load_statements.new(
     swiftpkg_build_defs_location,
     swiftpkg_kinds.generate_modulemap,
+)
+
+swiftpkg_objc_resource_bundle_accessor_hdr_load_stmt = load_statements.new(
+    swiftpkg_build_defs_location,
+    swiftpkg_kinds.objc_resource_bundle_accessor_hdr,
+)
+
+swiftpkg_objc_resource_bundle_accessor_impl_load_stmt = load_statements.new(
+    swiftpkg_build_defs_location,
+    swiftpkg_kinds.objc_resource_bundle_accessor_impl,
 )
 
 swiftpkg_resource_bundle_accessor_load_stmt = load_statements.new(
