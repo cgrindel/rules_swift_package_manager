@@ -20,7 +20,7 @@ def swift_dependencies():
     # version: 4.5.0
     swift_package(
         name = "swiftpkg_console_kit",
-        commit = "f4ef965dadd999f7e4687053153c97b8b320819c",
+        commit = "a7dd7001196d39b758e4990ec0f26f80162f4c84",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/console-kit.git",
     )
@@ -103,6 +103,14 @@ def swift_dependencies():
         commit = "6c89474e62719ddcc1e9614989fff2f68208fe10",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/apple/swift-atomics.git",
+    )
+
+    # version: 1.3.4
+    swift_package(
+        name = "swiftpkg_swift_backtrace",
+        commit = "80746bdd0ac8a7d83aad5d89dac3cbf15de652e6",
+        dependencies_index = "@//swift:deps_index.json",
+        remote = "https://github.com/swift-server/swift-backtrace.git",
     )
 
     # version: 1.0.4
@@ -188,7 +196,7 @@ def swift_dependencies():
     # version: 4.81.0
     swift_package(
         name = "swiftpkg_vapor",
-        commit = "da9c2805b1b93751b1922bbbf343aa120e9942c8",
+        commit = "3d62c0c3a42d155c2129682432863f4bd7a642b0",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/vapor.git",
     )
