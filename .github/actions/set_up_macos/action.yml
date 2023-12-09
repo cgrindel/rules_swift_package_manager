@@ -37,6 +37,6 @@ runs:
         repo_name: ${{ inputs.repo_name }}
     # As of macos-13 runner, go was not on the PATH. This resulted in bazel run 
     # //:go_update_repos failing.
-    - uses: actions/setup-go@v4
+    - uses: actions/setup-go@v5
       with:
         go-version: ">=1.20.0"
