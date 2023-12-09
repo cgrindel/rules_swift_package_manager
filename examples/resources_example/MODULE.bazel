@@ -51,6 +51,7 @@ use_repo(
     swift_deps,
     "swiftpkg_another_package_with_resources",
     "swiftpkg_app_lovin_sdk",
+    "swiftpkg_dd_sdk_ios",
     "swiftpkg_googlesignin_ios",
     "swiftpkg_package_with_resources",
 )

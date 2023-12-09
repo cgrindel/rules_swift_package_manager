@@ -2,6 +2,7 @@
   "direct_dep_identities": [
     "another_package_with_resources",
     "app_lovin_sdk",
+    "dd-sdk-ios",
     "googlesignin-ios",
     "package_with_resources"
   ],
@@ -66,6 +67,124 @@
       "package_identity": "appauth-ios",
       "product_memberships": [
         "AppAuthTV"
+      ]
+    },
+    {
+      "name": "DatadogPrivate",
+      "c99name": "DatadogPrivate",
+      "src_type": "objc",
+      "label": "@swiftpkg_dd_sdk_ios//:DatadogCore_Private_DatadogPrivate",
+      "package_identity": "dd-sdk-ios",
+      "product_memberships": [
+        "DatadogCore",
+        "DatadogObjc"
+      ]
+    },
+    {
+      "name": "DatadogCore",
+      "c99name": "DatadogCore",
+      "src_type": "swift",
+      "label": "@swiftpkg_dd_sdk_ios//:DatadogCore_Sources_DatadogCore",
+      "modulemap_label": "@swiftpkg_dd_sdk_ios//:DatadogCore_Sources_DatadogCore_modulemap",
+      "package_identity": "dd-sdk-ios",
+      "product_memberships": [
+        "DatadogCore",
+        "DatadogObjc"
+      ]
+    },
+    {
+      "name": "DatadogCrashReporting",
+      "c99name": "DatadogCrashReporting",
+      "src_type": "swift",
+      "label": "@swiftpkg_dd_sdk_ios//:DatadogCrashReporting_Sources_DatadogCrashReporting",
+      "modulemap_label": "@swiftpkg_dd_sdk_ios//:DatadogCrashReporting_Sources_DatadogCrashReporting_modulemap",
+      "package_identity": "dd-sdk-ios",
+      "product_memberships": [
+        "DatadogCrashReporting"
+      ]
+    },
+    {
+      "name": "DatadogInternal",
+      "c99name": "DatadogInternal",
+      "src_type": "swift",
+      "label": "@swiftpkg_dd_sdk_ios//:DatadogInternal_Sources_DatadogInternal",
+      "modulemap_label": "@swiftpkg_dd_sdk_ios//:DatadogInternal_Sources_DatadogInternal_modulemap",
+      "package_identity": "dd-sdk-ios",
+      "product_memberships": [
+        "DatadogCore",
+        "DatadogObjc",
+        "DatadogLogs",
+        "DatadogTrace",
+        "DatadogRUM",
+        "DatadogSessionReplay",
+        "DatadogCrashReporting",
+        "DatadogWebViewTracking"
+      ]
+    },
+    {
+      "name": "DatadogLogs",
+      "c99name": "DatadogLogs",
+      "src_type": "swift",
+      "label": "@swiftpkg_dd_sdk_ios//:DatadogLogs_Sources_DatadogLogs",
+      "package_identity": "dd-sdk-ios",
+      "product_memberships": [
+        "DatadogObjc",
+        "DatadogLogs"
+      ]
+    },
+    {
+      "name": "DatadogObjc",
+      "c99name": "DatadogObjc",
+      "src_type": "swift",
+      "label": "@swiftpkg_dd_sdk_ios//:DatadogObjc_Sources_DatadogObjc",
+      "modulemap_label": "@swiftpkg_dd_sdk_ios//:DatadogObjc_Sources_DatadogObjc_modulemap",
+      "package_identity": "dd-sdk-ios",
+      "product_memberships": [
+        "DatadogObjc"
+      ]
+    },
+    {
+      "name": "DatadogRUM",
+      "c99name": "DatadogRUM",
+      "src_type": "swift",
+      "label": "@swiftpkg_dd_sdk_ios//:DatadogRUM_Sources_DatadogRUM",
+      "modulemap_label": "@swiftpkg_dd_sdk_ios//:DatadogRUM_Sources_DatadogRUM_modulemap",
+      "package_identity": "dd-sdk-ios",
+      "product_memberships": [
+        "DatadogObjc",
+        "DatadogRUM"
+      ]
+    },
+    {
+      "name": "DatadogSessionReplay",
+      "c99name": "DatadogSessionReplay",
+      "src_type": "swift",
+      "label": "@swiftpkg_dd_sdk_ios//:DatadogSessionReplay_Sources_DatadogSessionReplay",
+      "package_identity": "dd-sdk-ios",
+      "product_memberships": [
+        "DatadogObjc",
+        "DatadogSessionReplay"
+      ]
+    },
+    {
+      "name": "DatadogTrace",
+      "c99name": "DatadogTrace",
+      "src_type": "swift",
+      "label": "@swiftpkg_dd_sdk_ios//:DatadogTrace_Sources_DatadogTrace",
+      "package_identity": "dd-sdk-ios",
+      "product_memberships": [
+        "DatadogObjc",
+        "DatadogTrace"
+      ]
+    },
+    {
+      "name": "DatadogWebViewTracking",
+      "c99name": "DatadogWebViewTracking",
+      "src_type": "swift",
+      "label": "@swiftpkg_dd_sdk_ios//:DatadogWebViewTracking_Sources_DatadogWebViewTracking",
+      "package_identity": "dd-sdk-ios",
+      "product_memberships": [
+        "DatadogWebViewTracking"
       ]
     },
     {
@@ -142,6 +261,16 @@
       "product_memberships": [
         "CoolUI"
       ]
+    },
+    {
+      "name": "CrashReporter",
+      "c99name": "CrashReporter",
+      "src_type": "objc",
+      "label": "@swiftpkg_plcrashreporter//:CrashReporter",
+      "package_identity": "plcrashreporter",
+      "product_memberships": [
+        "CrashReporter"
+      ]
     }
   ],
   "products": [
@@ -183,6 +312,70 @@
       "type": "library",
       "target_labels": [
         "@swiftpkg_appauth_ios//:Source_AppAuthTV"
+      ]
+    },
+    {
+      "identity": "dd-sdk-ios",
+      "name": "DatadogCore",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_dd_sdk_ios//:DatadogCore_Sources_DatadogCore"
+      ]
+    },
+    {
+      "identity": "dd-sdk-ios",
+      "name": "DatadogCrashReporting",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_dd_sdk_ios//:DatadogCrashReporting_Sources_DatadogCrashReporting"
+      ]
+    },
+    {
+      "identity": "dd-sdk-ios",
+      "name": "DatadogLogs",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_dd_sdk_ios//:DatadogLogs_Sources_DatadogLogs"
+      ]
+    },
+    {
+      "identity": "dd-sdk-ios",
+      "name": "DatadogObjc",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_dd_sdk_ios//:DatadogObjc_Sources_DatadogObjc"
+      ]
+    },
+    {
+      "identity": "dd-sdk-ios",
+      "name": "DatadogRUM",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_dd_sdk_ios//:DatadogRUM_Sources_DatadogRUM"
+      ]
+    },
+    {
+      "identity": "dd-sdk-ios",
+      "name": "DatadogSessionReplay",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_dd_sdk_ios//:DatadogSessionReplay_Sources_DatadogSessionReplay"
+      ]
+    },
+    {
+      "identity": "dd-sdk-ios",
+      "name": "DatadogTrace",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_dd_sdk_ios//:DatadogTrace_Sources_DatadogTrace"
+      ]
+    },
+    {
+      "identity": "dd-sdk-ios",
+      "name": "DatadogWebViewTracking",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_dd_sdk_ios//:DatadogWebViewTracking_Sources_DatadogWebViewTracking"
       ]
     },
     {
@@ -249,6 +442,14 @@
       "target_labels": [
         "@swiftpkg_package_with_resources//:Sources_CoolUI"
       ]
+    },
+    {
+      "identity": "plcrashreporter",
+      "name": "CrashReporter",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_plcrashreporter//:CrashReporter"
+      ]
     }
   ],
   "packages": [
@@ -273,6 +474,15 @@
         "commit": "71cde449f13d453227e687458144bde372d30fc7",
         "remote": "https://github.com/openid/AppAuth-iOS.git",
         "version": "1.6.2"
+      }
+    },
+    {
+      "name": "swiftpkg_dd_sdk_ios",
+      "identity": "dd-sdk-ios",
+      "remote": {
+        "commit": "aa66234cbac49c8df07a2a64f44f656d2412108d",
+        "remote": "https://github.com/Datadog/dd-sdk-ios.git",
+        "version": "2.5.0"
       }
     },
     {
@@ -307,6 +517,15 @@
       "identity": "package_with_resources",
       "local": {
         "path": "third_party/package_with_resources"
+      }
+    },
+    {
+      "name": "swiftpkg_plcrashreporter",
+      "identity": "plcrashreporter",
+      "remote": {
+        "commit": "1aed8f7dc79ce8e674c61e430ef51ca3db18cea9",
+        "remote": "https://github.com/microsoft/plcrashreporter.git",
+        "version": "1.11.1"
       }
     }
   ]

@@ -9,5 +9,6 @@ let package = Package(
         .package(path: "third_party/app_lovin_sdk"),
         .package(path: "third_party/package_with_resources"),
         .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "7.0.0"),
+        .package(url: "https://github.com/Datadog/dd-sdk-ios.git", exact: "2.5.0"),
     ]
 )

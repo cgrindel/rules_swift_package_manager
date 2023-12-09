@@ -1,4 +1,6 @@
 import CoolUI
+import DatadogCore
+import DatadogLogs
 import GoogleSignInSwift
 import MoreCoolUI
 import SwiftUI
