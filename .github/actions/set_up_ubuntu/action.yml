@@ -20,7 +20,7 @@ runs:
     # not compatible with the version in rules_go 0.43.0. As a workaround, the 
     # following installs the version of Go that is listed in the go.mod file.
     # Related to https://github.com/bazelbuild/bazel-gazelle/issues/1671
-    - uses: actions/setup-go@v4
+    - uses: actions/setup-go@v5
       with:
         go-version-file: go.mod
     - uses: cgrindel/gha_install_swift_on_ubuntu@v1
