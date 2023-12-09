@@ -134,9 +134,9 @@
       "name": "swiftpkg_kingfisher",
       "identity": "kingfisher",
       "remote": {
-        "commit": "277f1ab2c6664b19b4a412e32b094b201e2d5757",
+        "commit": "add0a87ec4e31e2ca2a0b2085f0559201e4f5918",
         "remote": "https://github.com/onevcat/Kingfisher",
-        "version": "7.10.0"
+        "version": "7.10.1"
       }
     },
     {
