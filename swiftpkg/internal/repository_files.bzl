@@ -43,10 +43,15 @@ def _list_files_under(
 
     # Follow symlinks and report on the actual files.
     find_args = ["find", "-H", "-L", path]
+
+    # For GNU find, it is important for the global options (e.g. -maxdepth) to be
+    # specified BEFORE other options like -type. Also, GNU find does not support -depth <level>.
+    # So, we approximate it by using -mindepth and -maxdepth.
+    if depth != None:
+        depth_str = "{}".format(depth)
+        find_args.extend(["-mindepth", depth_str, "-maxdepth", depth_str])
     if by_name != None:
         find_args.extend(["-name", by_name])
-    if depth != None:
-        find_args.extend(["-depth", "{}".format(depth)])
     exec_result = repository_ctx.execute(find_args, quiet = True)
     if exec_result.return_code != 0:
         fail("Failed to list files in %s. stderr:\n%s" % (path, exec_result.stderr))
@@ -79,13 +84,22 @@ def _list_directories_under(
     Returns:
         A `list` of path `string` values.
     """
-    find_args = ["find", path, "-type", "d"]
+    find_args = ["find", path]
+
+    # For GNU find, it is important for the global options (e.g. -maxdepth) to be
+    # specified BEFORE other options like -type. Also, GNU find does not support -depth <level>.
+    # So, we approximate it by using -mindepth and -maxdepth.
+    if depth != None:
+        depth_str = "{}".format(depth)
+        find_args.extend(["-mindepth", depth_str])
+        if max_depth == None:
+            find_args.extend(["-maxdepth", depth_str])
     if max_depth != None:
         find_args.extend(["-maxdepth", "%d" % (max_depth)])
+    find_args.extend(["-type", "d"])
     if by_name != None:
         find_args.extend(["-name", by_name])
-    if depth != None:
-        find_args.extend(["-depth", "{}".format(depth)])
+
     exec_result = repository_ctx.execute(find_args, quiet = True)
     if exec_result.return_code != 0:
         fail("Failed to list directories under %s. stderr:\n%s" % (path, exec_result.stderr))
