@@ -95,6 +95,9 @@ jobs:
       CC: clang
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-go
+        with:
+          go-version: ">=1.21.0"
       - uses: ./.github/actions/set_up_ubuntu
         if: ${{ startsWith(matrix.runner, 'ubuntu') }}
         with:
