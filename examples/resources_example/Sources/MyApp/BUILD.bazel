@@ -14,6 +14,7 @@ swift_library(
         "@swiftpkg_another_package_with_resources//:MoreCoolUI",
         "@swiftpkg_googlesignin_ios//:GoogleSignInSwift_Sources_GoogleSignInSwift",
         "@swiftpkg_package_with_resources//:Sources_CoolUI",
+        "@swiftpkg_sdwebimageswiftui//:SDWebImageSwiftUI_Classes_SDWebImageSwiftUI",
     ],
 )
 

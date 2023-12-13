@@ -3,7 +3,8 @@
     "another_package_with_resources",
     "app_lovin_sdk",
     "googlesignin-ios",
-    "package_with_resources"
+    "package_with_resources",
+    "sdwebimageswiftui"
   ],
   "modules": [
     {
@@ -142,6 +143,37 @@
       "product_memberships": [
         "CoolUI"
       ]
+    },
+    {
+      "name": "SDWebImageMapKit",
+      "c99name": "SDWebImageMapKit",
+      "src_type": "objc",
+      "label": "@swiftpkg_sdwebimage//:SDWebImageMapKit_SDWebImageMapKit",
+      "package_identity": "sdwebimage",
+      "product_memberships": [
+        "SDWebImageMapKit"
+      ]
+    },
+    {
+      "name": "SDWebImage",
+      "c99name": "SDWebImage",
+      "src_type": "objc",
+      "label": "@swiftpkg_sdwebimage//:SDWebImage_SDWebImage",
+      "package_identity": "sdwebimage",
+      "product_memberships": [
+        "SDWebImage",
+        "SDWebImageMapKit"
+      ]
+    },
+    {
+      "name": "SDWebImageSwiftUI",
+      "c99name": "SDWebImageSwiftUI",
+      "src_type": "swift",
+      "label": "@swiftpkg_sdwebimageswiftui//:SDWebImageSwiftUI_Classes_SDWebImageSwiftUI",
+      "package_identity": "sdwebimageswiftui",
+      "product_memberships": [
+        "SDWebImageSwiftUI"
+      ]
     }
   ],
   "products": [
@@ -249,6 +281,30 @@
       "target_labels": [
         "@swiftpkg_package_with_resources//:Sources_CoolUI"
       ]
+    },
+    {
+      "identity": "sdwebimageswiftui",
+      "name": "SDWebImageSwiftUI",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_sdwebimageswiftui//:SDWebImageSwiftUI_Classes_SDWebImageSwiftUI"
+      ]
+    },
+    {
+      "identity": "sdwebimage",
+      "name": "SDWebImage",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_sdwebimage//:SDWebImage_SDWebImage"
+      ]
+    },
+    {
+      "identity": "sdwebimage",
+      "name": "SDWebImageMapKit",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_sdwebimage//:SDWebImageMapKit_SDWebImageMapKit"
+      ]
     }
   ],
   "packages": [
@@ -307,6 +363,24 @@
       "identity": "package_with_resources",
       "local": {
         "path": "third_party/package_with_resources"
+      }
+    },
+    {
+      "name": "swiftpkg_sdwebimage",
+      "identity": "sdwebimage",
+      "remote": {
+        "commit": "e278c13e46e8d20c895c221e922c6ac6b72aaca9",
+        "remote": "https://github.com/SDWebImage/SDWebImage",
+        "version": "5.18.7"
+      }
+    },
+    {
+      "name": "swiftpkg_sdwebimageswiftui",
+      "identity": "sdwebimageswiftui",
+      "remote": {
+        "commit": "aee64ef39b570c44ccf0f884c440fc6494a23c76",
+        "remote": "https://github.com/SDWebImage/SDWebImageSwiftUI.git",
+        "version": "2.2.5"
       }
     }
   ]
