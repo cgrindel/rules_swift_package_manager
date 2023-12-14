@@ -95,7 +95,7 @@ jobs:
       CC: clang
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go
+      - uses: actions/setup-go@v5
         with:
           go-version: ">=1.21.0"
       - uses: ./.github/actions/set_up_ubuntu
