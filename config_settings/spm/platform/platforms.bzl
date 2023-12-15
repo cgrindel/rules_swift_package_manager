@@ -65,7 +65,7 @@ def _label(name):
     """
 
     # There is currently no support Mac Catalyst in Bazel. These are Mac apps
-    # that use iOS frameworks. Treat it like iOS for now.
+    # that use iOS frameworks.
     if name == "maccatalyst":
         name = "macos"
     if name == "driverkit":
