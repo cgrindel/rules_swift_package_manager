@@ -1993,7 +1993,7 @@
         "accumulatedFileDigests": {
           "@@rules_go~0.43.0//:go.mod": "58f9901703af412a1a8771d283721ef391c0ca1cc6ef3c141334311965535676",
           "@@gazelle~0.34.0//:go.mod": "9ae159a385b2f244bbe964b9f91dbea6e7bd534e0b22e846655f241c65de2c49",
-          "@@//:go.mod": "c5d7c1ff5f62765be59991d2b25d67c176b23af792a3b9df2f08badb10c68bc5",
+          "@@//:go.mod": "dcdd7a776a5b8788107c7cdb0a9af144e345e5b71421b85ca0f409b12fb32be3",
           "@@//:go.sum": "4dd91654fde2d17abc9d3abd475589de6a8d3f5fbef108dafb24441c70218360",
           "@@cgrindel_bazel_starlib~0.18.1//:go.sum": "c50d75994c714e6fddfc6eb0cb8da5d2c40ff0ca816fa655ed0cf397cf16a27b",
           "@@rules_go~0.43.0//:go.sum": "c6368ec1da45691f9148115d7317e740c3b32313b624b8f6545ef36b2ab4d781",
@@ -2529,7 +2529,7 @@
     },
     "@@rules_go~0.43.0//go:extensions.bzl%go_sdk": {
       "os:osx,arch:x86_64": {
-        "bzlTransitiveDigest": "DxK0nMASwRegWLWhVWg+2X1n1p0dFhyjuZYEXDfm0Xo=",
+        "bzlTransitiveDigest": "X7FY+0kUDFpsa3ulS9IPEJAqEW8vwFdmD7u4epims+M=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2647,7 +2647,7 @@
     },
     "@@rules_go~0.43.0//go/private:extensions.bzl%non_module_dependencies": {
       "general": {
-        "bzlTransitiveDigest": "gnpETFcNVSTO3tqr9qBCDduv4jazWcJG6yxAZP3MW0A=",
+        "bzlTransitiveDigest": "YUftLGAPWeJ7VDs/ZX2BI5W5qF/Q4UMGXucg1L0abgo=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
