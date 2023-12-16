@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "aac00500dc68f46dca7f406bf7fb061fcc57ab1c841508d8e3464957dbd9b5fb",
+  "moduleFileHash": "ed2eb9c4cff8c780fd40d0de7da036b108bb0d41b6a2ac2c2813e66efc65929f",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -53,8 +53,10 @@
           },
           "imports": {
             "swiftpkg_another_package_with_resources": "swiftpkg_another_package_with_resources",
+            "swiftpkg_app_lovin_sdk": "swiftpkg_app_lovin_sdk",
             "swiftpkg_googlesignin_ios": "swiftpkg_googlesignin_ios",
-            "swiftpkg_package_with_resources": "swiftpkg_package_with_resources"
+            "swiftpkg_package_with_resources": "swiftpkg_package_with_resources",
+            "swiftpkg_sdwebimageswiftui": "swiftpkg_sdwebimageswiftui"
           },
           "devImports": [],
           "tags": [
@@ -1963,9 +1965,9 @@
         "accumulatedFileDigests": {
           "@@gazelle~0.34.0//:go.mod": "9ae159a385b2f244bbe964b9f91dbea6e7bd534e0b22e846655f241c65de2c49",
           "@@rules_go~0.43.0//:go.mod": "58f9901703af412a1a8771d283721ef391c0ca1cc6ef3c141334311965535676",
-          "@@rules_swift_package_manager~override//:go.sum": "edb6ce4a22ba3af81dd135478e4f84c2095e81b302ed4fd9d55b6323f6e88546",
+          "@@rules_swift_package_manager~override//:go.sum": "4dd91654fde2d17abc9d3abd475589de6a8d3f5fbef108dafb24441c70218360",
           "@@cgrindel_bazel_starlib~0.18.1//:go.sum": "c50d75994c714e6fddfc6eb0cb8da5d2c40ff0ca816fa655ed0cf397cf16a27b",
-          "@@rules_swift_package_manager~override//:go.mod": "a1321d4ce9b5710fa8883becbe4981e479e6b7792386175f1aaa1a6d49478d2d",
+          "@@rules_swift_package_manager~override//:go.mod": "c5d7c1ff5f62765be59991d2b25d67c176b23af792a3b9df2f08badb10c68bc5",
           "@@gazelle~0.34.0//:go.sum": "7469786f3930030c430969cedae951e6947cb40f4a563dac94a350659c0fedc4",
           "@@rules_go~0.43.0//:go.sum": "c6368ec1da45691f9148115d7317e740c3b32313b624b8f6545ef36b2ab4d781",
           "@@cgrindel_bazel_starlib~0.18.1//:go.mod": "2a988325920be786451553b4c7e4251b65cf3de0a1bd8a7917ff742cd33a278e"
@@ -2047,9 +2049,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:DnfgWKdhvHM8Kihdw9fKWXd08EdsPiyoHsk5bfsmkNI=",
+              "sum": "h1:hn6cEZtQ0h3J8kFrHR/NrzyOoTnjgW1+FmNJzQ7y/sA=",
               "replace": "",
-              "version": "v2.4.0"
+              "version": "v2.5.0"
             }
           },
           "com_github_davecgh_go_spew": {
@@ -2486,7 +2488,7 @@
     },
     "@@rules_go~0.43.0//go:extensions.bzl%go_sdk": {
       "os:osx,arch:x86_64": {
-        "bzlTransitiveDigest": "DxK0nMASwRegWLWhVWg+2X1n1p0dFhyjuZYEXDfm0Xo=",
+        "bzlTransitiveDigest": "X7FY+0kUDFpsa3ulS9IPEJAqEW8vwFdmD7u4epims+M=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2546,7 +2548,7 @@
     },
     "@@rules_go~0.43.0//go/private:extensions.bzl%non_module_dependencies": {
       "general": {
-        "bzlTransitiveDigest": "gnpETFcNVSTO3tqr9qBCDduv4jazWcJG6yxAZP3MW0A=",
+        "bzlTransitiveDigest": "YUftLGAPWeJ7VDs/ZX2BI5W5qF/Q4UMGXucg1L0abgo=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3308,12 +3310,42 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "a13Oc0hXT+L5cvojiIZIfzIFXt+8RemLnU6Rf/kkLXI=",
+        "bzlTransitiveDigest": "Vm4X7iDGbtDxE8+1O6z+gzJQOsRyKvrfkO2LFiU6K30=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "ac437b0af21ed1c4237523ade840b2a516d1a0416e42e85428ca916c3b8fc315"
+          "@@//:swift_deps_index.json": "80db817f01480a09af48e2fed9a70284ebdff86384494d5390bb07538d42e680"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
+          "swiftpkg_app_lovin_sdk": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:local_swift_package.bzl",
+            "ruleClassName": "local_swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_app_lovin_sdk",
+              "bazel_package_name": "swiftpkg_app_lovin_sdk",
+              "path": "third_party/app_lovin_sdk",
+              "dependencies_index": "@@//:swift_deps_index.json"
+            }
+          },
+          "swiftpkg_sdwebimageswiftui": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_sdwebimageswiftui",
+              "bazel_package_name": "swiftpkg_sdwebimageswiftui",
+              "commit": "aee64ef39b570c44ccf0f884c440fc6494a23c76",
+              "remote": "https://github.com/SDWebImage/SDWebImageSwiftUI.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
           "swiftpkg_googlesignin_ios": {
             "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
             "ruleClassName": "swift_package",
@@ -3382,6 +3414,26 @@
               "bazel_package_name": "swiftpkg_package_with_resources",
               "path": "third_party/package_with_resources",
               "dependencies_index": "@@//:swift_deps_index.json"
+            }
+          },
+          "swiftpkg_sdwebimage": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_sdwebimage",
+              "bazel_package_name": "swiftpkg_sdwebimage",
+              "commit": "e278c13e46e8d20c895c221e922c6ac6b72aaca9",
+              "remote": "https://github.com/SDWebImage/SDWebImage",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
             }
           },
           "swiftpkg_gtm_session_fetcher": {

@@ -1,15 +1,15 @@
 #import <Foundation/Foundation.h>
 
-@interface __CurrentBundleFinder : NSObject
+@interface __{MODULE_NAME}_CurrentBundleFinder : NSObject
 @end
 
-@implementation __CurrentBundleFinder
+@implementation __{MODULE_NAME}_CurrentBundleFinder
 @end
 
 NSBundle* {MODULE_NAME}_SWIFTPM_MODULE_BUNDLE() {
     NSArray *candidates = @[
         [[NSBundle mainBundle] bundleURL],
-        [[NSBundle bundleForClass:[__CurrentBundleFinder class]] bundleURL],
+        [[NSBundle bundleForClass:[__{MODULE_NAME}_CurrentBundleFinder class]] bundleURL],
     ];
     for (id obj in candidates) {
         NSURL *baseURL = obj;
