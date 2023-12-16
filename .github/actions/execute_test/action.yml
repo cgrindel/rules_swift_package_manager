@@ -11,6 +11,7 @@ inputs:
 runs:
   using: composite
   steps:
+    # DEBUG BEGIN
     - name: DEBUG
       shell: bash
       run: |
@@ -19,6 +20,7 @@ runs:
         else
           echo "NO GO"
         fi
+    # DEBUG END
     - name: Execute Test
       shell: bash
       env:
