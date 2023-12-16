@@ -11,6 +11,14 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: DEBUG
+      shell: bash
+      run: |
+        if which go; then
+          go version
+        else
+          echo "NO GO"
+        fi
     - name: Execute Test
       shell: bash
       env:
