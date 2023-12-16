@@ -1665,9 +1665,9 @@
       "name": "swiftpkg_firebase_ios_sdk",
       "identity": "firebase-ios-sdk",
       "remote": {
-        "commit": "d9bcd141c3e4ad48a9500e6faeebb073f43cbcbd",
+        "commit": "c60c958e707c50a9cf8bcb7cfd7d51c566d726c5",
         "remote": "https://github.com/firebase/firebase-ios-sdk",
-        "version": "10.19.0"
+        "version": "10.19.1"
       },
       "cLanguageStandard": "c99",
       "cxxLanguageStandard": "gnu++14"
