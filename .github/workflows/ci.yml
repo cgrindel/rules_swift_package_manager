@@ -9,6 +9,7 @@ name: Continuous Integration
   pull_request:
     branches:
       - main
+  merge_group:
   schedule:
     - cron: 14 11 * * *
 concurrency:
