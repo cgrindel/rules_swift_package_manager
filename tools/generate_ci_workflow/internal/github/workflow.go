@@ -28,6 +28,7 @@ func NewWorkflowFromYAML(b []byte) (*Workflow, error) {
 // WorkflowTriggers represents the triggers for a workflow.
 type WorkflowTriggers struct {
 	PullRequest PullRequestEvent `yaml:"pull_request"`
+	MergeGroup  string           `yaml:"merge_group"`
 	Schedule    []Schedule       `yaml:"schedule,omitempty"`
 }
 
