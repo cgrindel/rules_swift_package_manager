@@ -89,6 +89,7 @@ name: Continuous Integration
 on:
   pull_request:
     branches: [ main ]
+  merge_group:
   schedule:
     # Every day at 11:14 UTC.
     - cron: '14 11 * * *'
