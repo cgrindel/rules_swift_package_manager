@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "12239eccb76b8347c819442783713cbd541035e4f0bd9182a8129c6a822db419",
+  "moduleFileHash": "eede87ea387c10a17d089ba5c6a3376e79dec8594211c6a88d916a8583d1f63a",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -76,7 +76,7 @@
       ],
       "deps": {
         "rules_swift_package_manager": "rules_swift_package_manager@_",
-        "cgrindel_bazel_starlib": "cgrindel_bazel_starlib@0.18.1",
+        "cgrindel_bazel_starlib": "cgrindel_bazel_starlib@0.19.0",
         "bazel_skylib": "bazel_skylib@1.5.0",
         "apple_support": "apple_support@1.11.1",
         "build_bazel_rules_swift": "rules_swift@1.13.0",
@@ -150,7 +150,7 @@
         }
       ],
       "deps": {
-        "cgrindel_bazel_starlib": "cgrindel_bazel_starlib@0.18.1",
+        "cgrindel_bazel_starlib": "cgrindel_bazel_starlib@0.19.0",
         "bazel_skylib": "bazel_skylib@1.5.0",
         "io_bazel_rules_go": "rules_go@0.43.0",
         "apple_support": "apple_support@1.11.1",
@@ -163,10 +163,10 @@
         "local_config_platform": "local_config_platform@_"
       }
     },
-    "cgrindel_bazel_starlib@0.18.1": {
+    "cgrindel_bazel_starlib@0.19.0": {
       "name": "cgrindel_bazel_starlib",
-      "version": "0.18.1",
-      "key": "cgrindel_bazel_starlib@0.18.1",
+      "version": "0.19.0",
+      "key": "cgrindel_bazel_starlib@0.19.0",
       "repoName": "cgrindel_bazel_starlib",
       "executionPlatformsToRegister": [],
       "toolchainsToRegister": [],
@@ -174,9 +174,9 @@
         {
           "extensionBzlFile": "@bazel_gazelle//:extensions.bzl",
           "extensionName": "go_deps",
-          "usingModule": "cgrindel_bazel_starlib@0.18.1",
+          "usingModule": "cgrindel_bazel_starlib@0.19.0",
           "location": {
-            "file": "https://bcr.bazel.build/modules/cgrindel_bazel_starlib/0.18.1/MODULE.bazel",
+            "file": "https://bcr.bazel.build/modules/cgrindel_bazel_starlib/0.19.0/MODULE.bazel",
             "line": 31,
             "column": 24
           },
@@ -195,7 +195,7 @@
               },
               "devDependency": false,
               "location": {
-                "file": "https://bcr.bazel.build/modules/cgrindel_bazel_starlib/0.18.1/MODULE.bazel",
+                "file": "https://bcr.bazel.build/modules/cgrindel_bazel_starlib/0.19.0/MODULE.bazel",
                 "line": 32,
                 "column": 18
               }
@@ -219,14 +219,14 @@
         "bzlFile": "@bazel_tools//tools/build_defs/repo:http.bzl",
         "ruleClassName": "http_archive",
         "attributes": {
-          "name": "cgrindel_bazel_starlib~0.18.1",
+          "name": "cgrindel_bazel_starlib~0.19.0",
           "urls": [
-            "https://github.com/cgrindel/bazel-starlib/releases/download/v0.18.1/bazel-starlib.v0.18.1.tar.gz"
+            "https://github.com/cgrindel/bazel-starlib/releases/download/v0.19.0/bazel-starlib.v0.19.0.tar.gz"
           ],
-          "integrity": "sha256-kJAoCpz/cyLnwiBiUGsyc6LogMpGTlILXHf9++1OiAU=",
+          "integrity": "sha256-uciKxRzKoGNWIRETCLhf27JgatuGRZb5hCql90gM/jo=",
           "strip_prefix": "",
           "remote_patches": {
-            "https://bcr.bazel.build/modules/cgrindel_bazel_starlib/0.18.1/patches/module_dot_bazel_version.patch": "sha256-WtSjgE6E5kutwVATDsDKpxMYRwO2KUSA8sIQ2mQ5IJQ="
+            "https://bcr.bazel.build/modules/cgrindel_bazel_starlib/0.19.0/patches/module_dot_bazel_version.patch": "sha256-pb5tO/2x/wK3GXprOpkpTyglh7RmVOIbXJl1F0TVFrQ="
           },
           "remote_patch_strip": 1
         }
@@ -1962,12 +1962,12 @@
         "accumulatedFileDigests": {
           "@@gazelle~0.34.0//:go.mod": "9ae159a385b2f244bbe964b9f91dbea6e7bd534e0b22e846655f241c65de2c49",
           "@@rules_go~0.43.0//:go.mod": "58f9901703af412a1a8771d283721ef391c0ca1cc6ef3c141334311965535676",
+          "@@cgrindel_bazel_starlib~0.19.0//:go.sum": "0727e3bd41e30d078e0f0a4cecc353769997a0708df9eb6cbc7852d1b354c796",
           "@@rules_swift_package_manager~override//:go.sum": "4dd91654fde2d17abc9d3abd475589de6a8d3f5fbef108dafb24441c70218360",
-          "@@cgrindel_bazel_starlib~0.18.1//:go.sum": "c50d75994c714e6fddfc6eb0cb8da5d2c40ff0ca816fa655ed0cf397cf16a27b",
-          "@@rules_swift_package_manager~override//:go.mod": "c5d7c1ff5f62765be59991d2b25d67c176b23af792a3b9df2f08badb10c68bc5",
+          "@@cgrindel_bazel_starlib~0.19.0//:go.mod": "db78d7d0340190c786236e901b5c792022ae8da223e42910dfcc5f6a2df577bf",
+          "@@rules_swift_package_manager~override//:go.mod": "dcdd7a776a5b8788107c7cdb0a9af144e345e5b71421b85ca0f409b12fb32be3",
           "@@gazelle~0.34.0//:go.sum": "7469786f3930030c430969cedae951e6947cb40f4a563dac94a350659c0fedc4",
-          "@@rules_go~0.43.0//:go.sum": "c6368ec1da45691f9148115d7317e740c3b32313b624b8f6545ef36b2ab4d781",
-          "@@cgrindel_bazel_starlib~0.18.1//:go.mod": "2a988325920be786451553b4c7e4251b65cf3de0a1bd8a7917ff742cd33a278e"
+          "@@rules_go~0.43.0//:go.sum": "c6368ec1da45691f9148115d7317e740c3b32313b624b8f6545ef36b2ab4d781"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2338,9 +2338,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:EcQR3gusLHN46TAD+G+EbaaqJArt5vHhNpXAa12PQf4=",
+              "sum": "h1:PppHBegd3uPZ3Y/Iax/2mlCFJm1w4Qf/zP1MdW4ju2o=",
               "replace": "",
-              "version": "v0.0.0-20230922112808-5421fefb8386"
+              "version": "v0.0.0-20231115200524-a660076da3fd"
             }
           },
           "com_github_golang_protobuf": {
@@ -2393,11 +2393,11 @@
                 "org_golang_google_genproto": "google.golang.org/genproto",
                 "org_golang_google_grpc": "google.golang.org/grpc",
                 "@rules_swift_package_manager~override": "github.com/cgrindel/rules_swift_package_manager",
-                "@cgrindel_bazel_starlib~0.18.1": "github.com/cgrindel/bazel-starlib"
+                "@cgrindel_bazel_starlib~0.19.0": "github.com/cgrindel/bazel-starlib"
               },
               "module_names": {
                 "@rules_swift_package_manager~override": "rules_swift_package_manager",
-                "@cgrindel_bazel_starlib~0.18.1": "cgrindel_bazel_starlib",
+                "@cgrindel_bazel_starlib~0.19.0": "cgrindel_bazel_starlib",
                 "@gazelle~0.34.0": "gazelle",
                 "@rules_go~0.43.0": "rules_go"
               },
@@ -2522,7 +2522,7 @@
         }
       },
       "os:linux,arch:amd64": {
-        "bzlTransitiveDigest": "DxK0nMASwRegWLWhVWg+2X1n1p0dFhyjuZYEXDfm0Xo=",
+        "bzlTransitiveDigest": "X7FY+0kUDFpsa3ulS9IPEJAqEW8vwFdmD7u4epims+M=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2582,7 +2582,7 @@
     },
     "@@rules_go~0.43.0//go/private:extensions.bzl%non_module_dependencies": {
       "general": {
-        "bzlTransitiveDigest": "gnpETFcNVSTO3tqr9qBCDduv4jazWcJG6yxAZP3MW0A=",
+        "bzlTransitiveDigest": "YUftLGAPWeJ7VDs/ZX2BI5W5qF/Q4UMGXucg1L0abgo=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
