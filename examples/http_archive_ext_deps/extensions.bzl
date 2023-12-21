@@ -5,9 +5,9 @@ def _non_module_deps_impl(_):
     http_archive(
         name = "com_github_apple_swift_collections",
         build_file = "@//third_party:swift_collections.BUILD.bazel",
-        sha256 = "d0f584b197860db26fd939175c9d1a7badfe7b89949b4bd52d4f626089776e0a",
-        strip_prefix = "swift-collections-1.0.5",
-        url = "https://github.com/apple/swift-collections/archive/refs/tags/1.0.5.tar.gz",
+        sha256 = "876353021246d0b5a131236400ee723ed783e75c853dcc49640576df83779b54",
+        strip_prefix = "swift-collections-1.0.6",
+        url = "https://github.com/apple/swift-collections/archive/refs/tags/1.0.6.tar.gz",
     )
 
     # Example of defining Swift targets inline.
