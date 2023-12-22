@@ -2125,9 +2125,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:VUHCI4QRifAGYsbVJYqJndLf7YqV12YthB+PLFsEKqo=",
+              "sum": "h1:2Gc2Q6hVR1SJ8bBI9Ybzoggp8u/ED2WkM4MfvEIn9+c=",
               "replace": "",
-              "version": "v0.0.0-20231017121127-23aa65d4e117"
+              "version": "v0.0.0-20231115204819-d4c9dccdfbb1"
             }
           },
           "org_golang_x_exp": {
@@ -2294,6 +2294,22 @@
               "version": "v0.14.0"
             }
           },
+          "com_github_bazelbuild_bazel_gazelle": {
+            "bzlFile": "@@gazelle~0.34.0//internal:go_repository.bzl",
+            "ruleClassName": "go_repository",
+            "attributes": {
+              "name": "gazelle~0.34.0~go_deps~com_github_bazelbuild_bazel_gazelle",
+              "importpath": "github.com/bazelbuild/bazel-gazelle",
+              "build_directives": [],
+              "build_file_generation": "auto",
+              "build_extra_args": [],
+              "patches": [],
+              "patch_args": [],
+              "sum": "h1:Bvg+zEHWYwWrhJT4WxyvcU3y1DEJpT/XlPYEfIn9lUI=",
+              "replace": "",
+              "version": "v0.35.0"
+            }
+          },
           "org_golang_google_protobuf": {
             "bzlFile": "@@gazelle~0.34.0//internal:go_repository.bzl",
             "ruleClassName": "go_repository",
@@ -2337,9 +2353,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:I/DsJXRlw/8l/0c24sM9yb0T4z9liZTduXvdAWYiysY=",
+              "sum": "h1:dGoOF9QVLYng8IHTm7BAyWqCqSheQ5pYWGhzW00YJr0=",
               "replace": "",
-              "version": "v0.13.0"
+              "version": "v0.14.0"
             }
           },
           "in_gopkg_yaml_v3": {
@@ -2396,7 +2412,7 @@
             "attributes": {
               "name": "gazelle~0.34.0~go_deps~bazel_gazelle_go_repository_config",
               "importpaths": {
-                "@gazelle~0.34.0": "github.com/bazelbuild/bazel-gazelle",
+                "com_github_bazelbuild_bazel_gazelle": "github.com/bazelbuild/bazel-gazelle",
                 "com_github_bazelbuild_buildtools": "github.com/bazelbuild/buildtools",
                 "com_github_creasty_defaults": "github.com/creasty/defaults",
                 "com_github_deckarep_golang_set_v2": "github.com/deckarep/golang-set/v2",
@@ -2444,14 +2460,15 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:Af8nKPmuFypiUBjVoU9V20FiaFXOcuZI21p0ycVYYGE=",
+              "sum": "h1:h48lPFYpsTvQJZF4EKyI4aLHaev3CxivZmv7yZig9pc=",
               "replace": "",
-              "version": "v0.13.0"
+              "version": "v0.15.0"
             }
           }
         },
         "moduleExtensionMetadata": {
           "explicitRootModuleDirectDeps": [
+            "com_github_bazelbuild_bazel_gazelle",
             "com_github_bazelbuild_buildtools",
             "com_github_creasty_defaults",
             "com_github_deckarep_golang_set_v2",
