@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "09262b43a96399d0d537ac21091678b861670fe805264d7f36f47756b09ed5ba",
+  "moduleFileHash": "9d071ffb4a7f81fe767b6352996ba2a43acc474cf4afef752fe61673df8aa451",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -14,7 +14,7 @@
   },
   "localOverrideHashes": {
     "bazel_tools": "922ea6752dc9105de5af957f7a99a6933c0a6a712d23df6aad16a9c399f7e787",
-    "rules_swift_package_manager": "a14d3497e73bf72f98246a88f297a0a35e5c025fe6906089a13d626d7a2d7691"
+    "rules_swift_package_manager": "39bad23dbde8d8607c8c381455c961d16e76dee2591e0d760988d744b9ffa5d6"
   },
   "moduleDepGraph": {
     "<root>": {

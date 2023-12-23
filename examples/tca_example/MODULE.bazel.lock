@@ -14,7 +14,7 @@
   },
   "localOverrideHashes": {
     "bazel_tools": "922ea6752dc9105de5af957f7a99a6933c0a6a712d23df6aad16a9c399f7e787",
-    "rules_swift_package_manager": "a14d3497e73bf72f98246a88f297a0a35e5c025fe6906089a13d626d7a2d7691"
+    "rules_swift_package_manager": "39bad23dbde8d8607c8c381455c961d16e76dee2591e0d760988d744b9ffa5d6"
   },
   "moduleDepGraph": {
     "<root>": {
@@ -1934,13 +1934,13 @@
         "bzlTransitiveDigest": "zP01muRk4s4xWGK3gNPXOyDMQkOPsIhu99akeKWFFQ0=",
         "accumulatedFileDigests": {
           "@@cgrindel_bazel_starlib~0.19.0//:go.sum": "0727e3bd41e30d078e0f0a4cecc353769997a0708df9eb6cbc7852d1b354c796",
-          "@@rules_swift_package_manager~override//:go.sum": "4dd91654fde2d17abc9d3abd475589de6a8d3f5fbef108dafb24441c70218360",
+          "@@rules_swift_package_manager~override//:go.sum": "26d85447420d2aeff401835f5acca869ac4c9f188e27a89728a03f283a43370f",
           "@@cgrindel_bazel_starlib~0.19.0//:go.mod": "db78d7d0340190c786236e901b5c792022ae8da223e42910dfcc5f6a2df577bf",
           "@@rules_go~0.44.0//:go.mod": "15454724af1504c4ce1782c2a7f423d596a1d8490125eb7c5bd9c95fea1991f0",
           "@@gazelle~0.35.0//:go.mod": "48dc6e771c3028ee1c18b9ffc81e596fd5f6d7e0016c5ef280e30f2821f60473",
           "@@gazelle~0.35.0//:go.sum": "7c4460e8ecb5dd8691a51d4fa2e9e4751108b933636497ce46db499fc2e7a88d",
           "@@rules_go~0.44.0//:go.sum": "b5938730bf7d3581421928b0385d99648dd9634becead96fca0594ac491b2f49",
-          "@@rules_swift_package_manager~override//:go.mod": "dcdd7a776a5b8788107c7cdb0a9af144e345e5b71421b85ca0f409b12fb32be3"
+          "@@rules_swift_package_manager~override//:go.mod": "0bdd6998c3e441738a67ef04860770b475669363fd7328827fcdd5c177edc656"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
