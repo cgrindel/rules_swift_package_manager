@@ -76,21 +76,6 @@ def _new_from_build_setting(build_setting, values_map_fn = None):
     else:
         return []
 
-    # platforms_len = len(bsc.platforms)
-    # if platforms_len > 0 and bsc.configuration != None:
-    #     conditions = [
-    #         spm_platform_configurations.label(p, bsc.configuration)
-    #         for p in bsc.platforms
-    #     ]
-    # elif platforms_len > 0:
-    #     conditions = [spm_platforms.label(p) for p in bsc.platforms]
-    # elif bsc.configuration != None:
-    #     conditions = [spm_configurations.label(bsc.configuration)]
-    # else:
-    #     fail("""\
-    # Found a build setting condition that had no platforms or a configuration. {}\
-    # """.format(build_setting))
-
     return [
         _new(kind = build_setting.kind, value = v, condition = c)
         for v in values
@@ -117,13 +102,6 @@ def _new_from_target_dependency_condition(kind, labels, condition = None):
         for p in spm_platforms.supported(condition.platforms)
     ]
 
-    # platforms_len = len(condition.platforms)
-    # if platforms_len > 0:
-    #     conditions = [spm_platforms.label(p) for p in condition.platforms]
-    # else:
-    #     fail("""\
-    # Found a target dependency condition that had no platforms. {}\
-    # """.format(condition))
     return [
         _new(kind = kind, value = labels, condition = c)
         for c in conditions
