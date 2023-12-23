@@ -46,9 +46,6 @@ _PLATFORM_INFOS = [
     _platform_info(spm = p, bzl = None, os = p)
     for p in _NON_APPLE_PLATFORMS
 ] + [
-    # # Treat `maccatalyst` as an alias of sorts for macos. This will be handled
-    # # in the `platforms.label` function.
-    # _platform_info(spm = "maccatalyst", bzl = None, os = None),
     # Map `driverkit` as `macos`. This will be handled in the
     # `platforms.label()` function.
     _platform_info(spm = "driverkit", bzl = None, os = None),
@@ -72,8 +69,6 @@ def _label(name):
     if name == "driverkit":
         name = "macos"
     return "@rules_swift_package_manager//config_settings/spm/platform:{}".format(name)
-
-# TODO(chuck): Add unit tests
 
 def _is_supported(name):
     return name != "maccatalyst"
