@@ -1158,13 +1158,6 @@ def _new_build_setting_condition(platforms = [], configuration = None):
         return None
 
     platforms = spm_platforms.supported(platforms)
-    # for platform in platforms:
-    #     validations.in_list(
-    #         spm_platforms.all_values,
-    #         platform,
-    #         "Unrecognized platform. platform:",
-    #     )
-
     if configuration != None:
         validations.in_list(
             spm_configurations.all_values,
