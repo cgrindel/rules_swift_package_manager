@@ -3870,9 +3870,9 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "a13Oc0hXT+L5cvojiIZIfzIFXt+8RemLnU6Rf/kkLXI=",
+        "bzlTransitiveDigest": "t/yVS4ZpkoDsgehxpfo1Yf+75r2Ca2oamGJRN5b3wMs=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "f1aecd2c87eee351e25949d68bbcd3dfd375e06f44c4e81c2b2a193ecb17e9d2"
+          "@@//:swift_deps_index.json": "33407860e1c821371bc07952746aee8e1db5cbdfc53a5804fd2abf0da6877cc9"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3982,7 +3982,7 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_googledatatransport",
               "bazel_package_name": "swiftpkg_googledatatransport",
-              "commit": "5056b15c5acbb90cd214fe4d6138bdf5a740e5a8",
+              "commit": "a732a4b47f59e4f725a2ea10f0c77e93a7131117",
               "remote": "https://github.com/google/GoogleDataTransport.git",
               "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
@@ -4002,7 +4002,7 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_firebase_ios_sdk",
               "bazel_package_name": "swiftpkg_firebase_ios_sdk",
-              "commit": "5de0369ee79ad096c164eb3afeb7921d92a43b58",
+              "commit": "c60c958e707c50a9cf8bcb7cfd7d51c566d726c5",
               "remote": "https://github.com/firebase/firebase-ios-sdk",
               "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
