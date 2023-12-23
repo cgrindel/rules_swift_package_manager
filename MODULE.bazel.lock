@@ -1994,7 +1994,7 @@
           "@@rules_go~0.43.0//:go.mod": "58f9901703af412a1a8771d283721ef391c0ca1cc6ef3c141334311965535676",
           "@@gazelle~0.34.0//:go.mod": "9ae159a385b2f244bbe964b9f91dbea6e7bd534e0b22e846655f241c65de2c49",
           "@@//:go.mod": "0bdd6998c3e441738a67ef04860770b475669363fd7328827fcdd5c177edc656",
-          "@@//:go.sum": "36319506044679a0a60a3f78fb8e76b36e7acc27ff5826122aa711e1c4b0f45b",
+          "@@//:go.sum": "26d85447420d2aeff401835f5acca869ac4c9f188e27a89728a03f283a43370f",
           "@@cgrindel_bazel_starlib~0.18.1//:go.sum": "c50d75994c714e6fddfc6eb0cb8da5d2c40ff0ca816fa655ed0cf397cf16a27b",
           "@@rules_go~0.43.0//:go.sum": "c6368ec1da45691f9148115d7317e740c3b32313b624b8f6545ef36b2ab4d781",
           "@@gazelle~0.34.0//:go.sum": "7469786f3930030c430969cedae951e6947cb40f4a563dac94a350659c0fedc4",
