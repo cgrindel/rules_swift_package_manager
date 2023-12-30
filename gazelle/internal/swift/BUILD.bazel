@@ -37,6 +37,7 @@ go_library(
         "rules_common.go",
         "rules_from_protos.go",
         "rules_from_srcs.go",
+        "swift_proto_package.go",
         "test_rules_common.go",
     ],
     importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift",

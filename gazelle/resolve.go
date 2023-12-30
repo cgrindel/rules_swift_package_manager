@@ -2,6 +2,7 @@ package gazelle
 
 import (
 	"log"
+	"path/filepath"
 	"sort"
 	"strings"
 
@@ -21,17 +22,33 @@ func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolv
 		return nil
 	}
 
-	moduleName := swift.ModuleName(r)
-	log.Printf("Resolving imports for rule: %v kind: %v, module_name: %v", r.Name(), r.Kind(), moduleName)
-	if moduleName == "" {
-		// Returning an empty list will cause the rule to be indexed
-		return []resolve.ImportSpec{}
+	importSpecs := []resolve.ImportSpec{}
+
+	// If this is a swift_proto_library, create a swift import spec for each proto path
+	// supplied by the library.
+	if r.Kind() == swift.ProtoLibraryRuleKind {
+		swiftProtoPackage := r.PrivateAttr(swift.SwiftProtoPackageKey).(swift.SwiftProtoPackage)
+		for protoFileName := range swiftProtoPackage.ProtoPackage.Files {
+			protoPath := filepath.Join(swiftProtoPackage.Rel, protoFileName)
+			importSpecs = append(importSpecs, resolve.ImportSpec{
+				Lang: swiftLangName,
+				Imp:  protoPath,
+			})
+		}
 	}
 
-	return []resolve.ImportSpec{{
+	// Create the module name import spec if it was set:
+	moduleName := swift.ModuleName(r)
+	if moduleName == "" {
+		// Returning an empty list will cause the rule to be indexed
+		return importSpecs
+	}
+	importSpecs = append(importSpecs, resolve.ImportSpec{
 		Lang: swiftLangName,
 		Imp:  moduleName,
-	}}
+	})
+
+	return importSpecs
 }
 
 func (l *swiftLang) Resolve(

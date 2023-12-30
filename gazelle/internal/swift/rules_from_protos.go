@@ -1,7 +1,6 @@
 package swift
 
 import (
-	"log"
 	"sort"
 	"strings"
 
@@ -129,17 +128,23 @@ func generateRuleFromProtoPackage(
 	// Determine whether we should set visibility on the target:
 	shouldSetVisibility := shouldSetVisibility(args)
 
+	// Create the swift proto package:
+	swiftProtoPackage := SwiftProtoPackage{
+		Dir:          args.Dir,
+		Rel:          args.Rel,
+		ProtoPackage: protoPackage,
+	}
+
 	// Build the list of protos imported by the proto package which we need to resolve:
 	gazelleImports := []string{}
 	for protoImport := range protoPackage.Imports {
 		if isWellKnownTypeProtoImport(protoImport) {
 			// Skip these protos because they're statically linked into SwiftProtobuf.
-			log.Printf("Found well known type proto: %v", protoImport)
+			continue
 		} else {
 			// These are just the paths to the specific protos to import, e.g.:
 			// "protos/echoservice/messages/echo_messages.proto"
 			// We need to defer resolving these to swift_proto_library targets until initial generation is complete.
-			log.Printf("Found imported proto: %v", protoImport)
 			gazelleImports = append(gazelleImports, protoImport)
 		}
 	}
@@ -165,6 +170,7 @@ func generateRuleFromProtoPackage(
 			swiftProtoLibrary.SetAttr("protos", []string{":" + protoLibraryTargetName})
 			swiftProtoLibrary.SetAttr("compilers", []string{swiftProtoCompilers[protoFlavor]})
 			swiftProtoLibrary.SetPrivateAttr(config.GazelleImportsKey, gazelleImports)
+			swiftProtoLibrary.SetPrivateAttr(SwiftProtoPackageKey, swiftProtoPackage)
 			setVisibilityAttr(swiftProtoLibrary, shouldSetVisibility, []string{"//visibility:public"})
 			rules = append(rules, swiftProtoLibrary)
 		}
@@ -184,6 +190,7 @@ func generateRuleFromProtoPackage(
 		swiftProtoLibrary.SetAttr("protos", []string{":" + protoLibraryTargetName})
 		swiftProtoLibrary.SetAttr("compilers", []string{swiftProtoCompilers["swift_proto"]})
 		swiftProtoLibrary.SetPrivateAttr(config.GazelleImportsKey, gazelleImports)
+		swiftProtoLibrary.SetPrivateAttr(SwiftProtoPackageKey, swiftProtoPackage)
 		setVisibilityAttr(swiftProtoLibrary, shouldSetVisibility, []string{"//visibility:public"})
 		rules = append(rules, swiftProtoLibrary)
 	}

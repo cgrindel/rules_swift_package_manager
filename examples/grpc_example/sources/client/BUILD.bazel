@@ -5,4 +5,8 @@ swift_binary(
     srcs = ["client_main.swift"],
     module_name = "Client",
     visibility = ["//visibility:public"],
+    deps = [
+        "//protos/echo_service:echo_service_swift_client_proto",
+        "//protos/echo_service/echo_service_messages:echo_service_messages_swift_proto",
+    ],
 )

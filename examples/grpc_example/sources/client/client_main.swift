@@ -17,9 +17,8 @@ import SwiftProtobuf
 import GRPC
 import NIOCore
 import NIOPosix
-import protos_echoservice_messages_messages_proto
-import protos_echoservice_echoservice_proto
-import protos_echoservice_echoservice_client_swift_grpc
+import EchoServiceMessages
+import EchoServiceClient
 
 @main
 struct ClientMain {
@@ -42,10 +41,10 @@ struct ClientMain {
     )
 
     // Initialize the client using the same address the server is started on.
-    let client = Echoservice_EchoServiceNIOClient(channel: channel)
+    let client = EchoService_EchoNIOClient(channel: channel)
 
     // Construct a request to the echo service.
-    let request = Messages_EchoRequest.with {
+    let request = EchoServiceMessages_EchoRequest.with {
       $0.contents = "Hello, world!"
       let timestamp = Google_Protobuf_Timestamp(date: Date())
       $0.extra = try! Google_Protobuf_Any(message: timestamp)

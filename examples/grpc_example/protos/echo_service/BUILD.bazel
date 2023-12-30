@@ -14,6 +14,7 @@ swift_proto_library(
     module_name = "EchoServiceClient",
     protos = [":echo_service_proto"],
     visibility = ["//visibility:public"],
+    deps = ["//protos/echo_service/echo_service_messages:echo_service_messages_swift_proto"],
 )
 
 swift_proto_library(
@@ -22,4 +23,5 @@ swift_proto_library(
     module_name = "EchoServiceServer",
     protos = [":echo_service_proto"],
     visibility = ["//visibility:public"],
+    deps = ["//protos/echo_service/echo_service_messages:echo_service_messages_swift_proto"],
 )
