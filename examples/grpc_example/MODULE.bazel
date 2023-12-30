@@ -1,3 +1,7 @@
+"""
+Example module for grpc + proto target generation.
+"""
+
 bazel_dep(
     name = "rules_swift_package_manager",
     version = "0.0.0",
