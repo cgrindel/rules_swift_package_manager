@@ -27,10 +27,12 @@ bazel_dep(
     repo_name = "build_bazel_rules_swift",
 )
 # TODO: Once https://github.com/bazelbuild/rules_swift/pull/1140 merges, remove override.
-local_path_override(
+git_override(
     module_name = "rules_swift",
-    path = "../rules_swift",
+    commit = "c7d111d63fa75f849aafde4d6bf5118daf80eca3",
+    remote = "https://github.com/bazelbuild/rules_swift",
 )
+
 bazel_dep(
     name = "rules_apple",
     version = "3.1.1",

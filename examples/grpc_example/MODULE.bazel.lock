@@ -31,7 +31,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 27,
+            "line": 32,
             "column": 32
           },
           "imports": {
@@ -50,7 +50,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 59,
+            "line": 64,
             "column": 35
           },
           "imports": {
@@ -67,7 +67,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 66,
+            "line": 71,
             "column": 27
           },
           "imports": {
@@ -84,7 +84,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 70,
+                "line": 75,
                 "column": 21
               }
             }
@@ -122,7 +122,7 @@
           "usingModule": "rules_swift_package_manager@_",
           "location": {
             "file": "@@rules_swift_package_manager~override//:MODULE.bazel",
-            "line": 45,
+            "line": 47,
             "column": 35
           },
           "imports": {
@@ -139,7 +139,7 @@
           "usingModule": "rules_swift_package_manager@_",
           "location": {
             "file": "@@rules_swift_package_manager~override//:MODULE.bazel",
-            "line": 51,
+            "line": 53,
             "column": 24
           },
           "imports": {
@@ -161,7 +161,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@rules_swift_package_manager~override//:MODULE.bazel",
-                "line": 52,
+                "line": 54,
                 "column": 18
               }
             }
