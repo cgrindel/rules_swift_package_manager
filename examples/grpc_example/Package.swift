@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "grpc_example",
     dependencies: [
-        // NOTE: The https://github.com/grpc/grpc-swift are currently coming from rules_swift.
-        // Related Slack thread: https://bazelbuild.slack.com/archives/CD3QY5C2X/p1692055426375909
+        .package(url: "https://github.com/grpc/grpc-swift.git", from: "1.15.0"),
+        .package(url: "https://github.com/apple/swift-protobuf.git", from: "1.25.2"),
     ]
 )

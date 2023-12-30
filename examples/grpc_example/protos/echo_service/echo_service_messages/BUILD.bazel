@@ -10,7 +10,7 @@ proto_library(
 
 swift_proto_library(
     name = "echo_service_messages_swift_proto",
-    compilers = ["@build_bazel_rules_swift//proto/compilers:swift_proto"],
+    compilers = ["//compilers:swift_proto"],
     module_name = "EchoServiceMessages",
     protos = [":echo_service_messages_proto"],
     visibility = ["//visibility:public"],

@@ -37,13 +37,7 @@
           "imports": {
             "build_bazel_rules_swift_index_import": "build_bazel_rules_swift_index_import",
             "build_bazel_rules_swift_local_config": "build_bazel_rules_swift_local_config",
-            "com_github_apple_swift_log": "com_github_apple_swift_log",
-            "com_github_apple_swift_nio": "com_github_apple_swift_nio",
-            "com_github_apple_swift_nio_extras": "com_github_apple_swift_nio_extras",
-            "com_github_apple_swift_nio_http2": "com_github_apple_swift_nio_http2",
-            "com_github_apple_swift_nio_transport_services": "com_github_apple_swift_nio_transport_services",
-            "com_github_apple_swift_protobuf": "com_github_apple_swift_protobuf",
-            "com_github_grpc_grpc_swift": "com_github_grpc_grpc_swift"
+            "com_github_apple_swift_log": "com_github_apple_swift_log"
           },
           "devImports": [],
           "tags": [],
@@ -56,7 +50,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 65,
+            "line": 59,
             "column": 35
           },
           "imports": {
@@ -73,10 +67,13 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 72,
+            "line": 66,
             "column": 27
           },
-          "imports": {},
+          "imports": {
+            "swiftpkg_grpc_swift": "swiftpkg_grpc_swift",
+            "swiftpkg_swift_protobuf": "swiftpkg_swift_protobuf"
+          },
           "devImports": [],
           "tags": [
             {
@@ -87,7 +84,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 76,
+                "line": 70,
                 "column": 21
               }
             }

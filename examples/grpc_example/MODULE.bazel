@@ -30,12 +30,6 @@ use_repo(
     "build_bazel_rules_swift_index_import",
     "build_bazel_rules_swift_local_config",
     "com_github_apple_swift_log",
-    "com_github_apple_swift_nio",
-    "com_github_apple_swift_nio_extras",
-    "com_github_apple_swift_nio_http2",
-    "com_github_apple_swift_nio_transport_services",
-    "com_github_apple_swift_protobuf",
-    "com_github_grpc_grpc_swift",
 )
 
 bazel_dep(
@@ -78,5 +72,7 @@ swift_deps.from_file(
 )
 use_repo(
     swift_deps,
+    "swiftpkg_grpc_swift",
+    "swiftpkg_swift_protobuf",
 )
 # swift_deps END

@@ -134,7 +134,7 @@ const defaultModuleNameDirective = "swift_default_module_name"
 const swiftLibraryTagsDirective = "swift_library_tags"
 const swiftGenerateProtoLibrariesDirective = "swift_generate_proto_libraries"
 const swiftGenerateGRPCLibrariesWithFlavorsDirective = "swift_generate_grpc_libraries_with_flavors"
-const swiftProtoCompilersDirective = "swift_proto_compilers"
+const swiftProtoCompilerDirective = "swift_proto_compiler"
 
 func (*swiftLang) KnownDirectives() []string {
 	return []string{
@@ -143,7 +143,7 @@ func (*swiftLang) KnownDirectives() []string {
 		swiftLibraryTagsDirective,
 		swiftGenerateProtoLibrariesDirective,
 		swiftGenerateGRPCLibrariesWithFlavorsDirective,
-		swiftProtoCompilersDirective,
+		swiftProtoCompilerDirective,
 	}
 }
 
@@ -195,22 +195,17 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 				flavors = strings.Split(d.Value, ",")
 			}
 			sc.GenerateSwiftProtoLibraryGRPCFlavors = flavors
-		case swiftProtoCompilersDirective:
+		case swiftProtoCompilerDirective:
 			if d.Value == "" {
 				// If unset, leave the default intact.
 				break
 			}
 
 			// Otherwise, parse the compilers:
-			compilers := map[string]string{}
-			components := strings.Split(d.Value, ",")
-			for _, component := range components {
-				subcomponents := strings.Split(component, "=")
-				flavor := subcomponents[0]
-				compiler := subcomponents[1]
-				compilers[flavor] = compiler
-			}
-			sc.SwiftProtoCompilers = compilers
+			subcomponents := strings.Split(d.Value, "=")
+			flavor := subcomponents[0]
+			compiler := subcomponents[1]
+			sc.SwiftProtoCompilers[flavor] = compiler
 		case defaultModuleNameDirective:
 			sc.DefaultModuleNames[rel] = d.Value
 		}

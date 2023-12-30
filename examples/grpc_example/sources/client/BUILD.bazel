@@ -8,5 +8,7 @@ swift_binary(
     deps = [
         "//protos/echo_service:echo_service_swift_client_proto",
         "//protos/echo_service/echo_service_messages:echo_service_messages_swift_proto",
+        "@swiftpkg_grpc_swift//:Sources_GRPC",
+        "@swiftpkg_swift_protobuf//:Sources_SwiftProtobuf",
     ],
 )
