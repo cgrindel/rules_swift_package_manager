@@ -13,8 +13,7 @@
     "compatibilityMode": "ERROR"
   },
   "localOverrideHashes": {
-    "bazel_tools": "922ea6752dc9105de5af957f7a99a6933c0a6a712d23df6aad16a9c399f7e787",
-    "rules_swift": "3b3c18492a2c09b265b602c6278950c43f2a517b7d31a2cb93f08a445227eca8"
+    "bazel_tools": "922ea6752dc9105de5af957f7a99a6933c0a6a712d23df6aad16a9c399f7e787"
   },
   "moduleDepGraph": {
     "<root>": {
@@ -31,7 +30,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 45,
+            "line": 47,
             "column": 35
           },
           "imports": {
@@ -48,7 +47,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 51,
+            "line": 53,
             "column": 24
           },
           "imports": {
@@ -70,7 +69,7 @@
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 52,
+                "line": 54,
                 "column": 18
               }
             }
@@ -84,7 +83,7 @@
           "usingModule": "<root>",
           "location": {
             "file": "@@//:MODULE.bazel",
-            "line": 77,
+            "line": 79,
             "column": 31
           },
           "imports": {
@@ -102,7 +101,7 @@
               "devDependency": true,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 82,
+                "line": 84,
                 "column": 24
               }
             }
