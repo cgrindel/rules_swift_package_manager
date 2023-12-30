@@ -20,7 +20,9 @@ func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolv
 		// Do not index
 		return nil
 	}
+
 	moduleName := swift.ModuleName(r)
+	log.Printf("Resolving imports for rule: %v kind: %v, module_name: %v", r.Name(), r.Kind(), moduleName)
 	if moduleName == "" {
 		// Returning an empty list will cause the rule to be indexed
 		return []resolve.ImportSpec{}

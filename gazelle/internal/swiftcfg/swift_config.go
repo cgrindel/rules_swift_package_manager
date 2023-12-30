@@ -52,12 +52,27 @@ type SwiftConfig struct {
 	// Defaults to ["manual"]
 	SwiftLibraryTags []string
 
-	// Whether or not to generate swift proto library targets.
-	GenerateProtoLibraries bool
+	// Whether or not to generate swift_proto_library targets for proto_library targets without services.
+	// Defaults to true.
+	GenerateSwiftProtoLibraries bool
 
-	// The set of GRPC flavors for which swift grpc library targets will be generated.
-	// Defaults to ["client,client_stubs,server"]
-	GenerateGRPCLibraryFlavors []string
+	// The set of GRPC flavors for which swift_proto_library targets will be generated from proto libraries with services.
+	// Defaults to:
+	// [
+	//  "swift_client_proto",
+	//  "swift_server_proto"
+	// ]
+	GenerateSwiftProtoLibraryGRPCFlavors []string
+
+	// The swift_proto_compiler targets to use for generated swift_proto_library targets.
+	// The keys should match the GRPC flavors above, or "proto" for the base proto compiler.
+	// Defaults to:
+	// {
+	// 	"swift_proto":       "@build_bazel_rules_swift//proto/compilers:swift_proto",
+	// 	"swift_client_proto": "@build_bazel_rules_swift//proto/compilers:swift_client_proto",
+	// 	"swift_server_proto": "@build_bazel_rules_swift//proto/compilers:swift_server_proto",
+	// }
+	SwiftProtoCompilers map[string]string
 
 	// Mapping of relative path to default module name. These values are populated from directives
 	// that can be applied to
@@ -69,10 +84,20 @@ type SwiftConfig struct {
 
 func NewSwiftConfig() *SwiftConfig {
 	return &SwiftConfig{
-		ModuleFilesCollector: NewModuleFilesCollector(),
-		DependencyIndex:      swift.NewDependencyIndex(),
-		ResolutionLogger:     reslog.NewNoopLogger(),
-		DefaultModuleNames:   make(map[string]string),
+		ModuleFilesCollector:        NewModuleFilesCollector(),
+		DependencyIndex:             swift.NewDependencyIndex(),
+		ResolutionLogger:            reslog.NewNoopLogger(),
+		DefaultModuleNames:          make(map[string]string),
+		GenerateSwiftProtoLibraries: true,
+		GenerateSwiftProtoLibraryGRPCFlavors: []string{
+			"swift_client_proto",
+			"swift_server_proto",
+		},
+		SwiftProtoCompilers: map[string]string{
+			"swift_proto":        "@build_bazel_rules_swift//proto/compilers:swift_proto",
+			"swift_client_proto": "@build_bazel_rules_swift//proto/compilers:swift_client_proto",
+			"swift_server_proto": "@build_bazel_rules_swift//proto/compilers:swift_server_proto",
+		},
 	}
 }
 

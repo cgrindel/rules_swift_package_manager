@@ -18,6 +18,11 @@ bazel_dep(
     version = "1.16.0",
     repo_name = "build_bazel_rules_swift",
 )
+# TODO: Once https://github.com/bazelbuild/rules_swift/pull/1140 merges, remove override.
+local_path_override(
+    module_name = "rules_swift",
+    path = "../../../rules_swift",
+)
 
 non_module_deps = use_extension("@build_bazel_rules_swift//swift:extensions.bzl", "non_module_deps")
 use_repo(
