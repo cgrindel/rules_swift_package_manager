@@ -21,7 +21,6 @@ tidy(
 # gazelle:swift_proto_compiler swift_server_proto=//compilers:swift_server_proto
 # gazelle:swift_generate_grpc_libraries_with_flavors swift_client_proto,swift_server_proto
 # gazelle:exclude .build
-# gazelle:exclude bazel-*
 
 gazelle_binary(
     name = "gazelle_bin",
