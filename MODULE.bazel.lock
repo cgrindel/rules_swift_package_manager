@@ -1965,10 +1965,10 @@
       "general": {
         "bzlTransitiveDigest": "zP01muRk4s4xWGK3gNPXOyDMQkOPsIhu99akeKWFFQ0=",
         "accumulatedFileDigests": {
-          "@@rules_go~0.43.0//:go.mod": "58f9901703af412a1a8771d283721ef391c0ca1cc6ef3c141334311965535676",
-          "@@gazelle~0.34.0//:go.mod": "9ae159a385b2f244bbe964b9f91dbea6e7bd534e0b22e846655f241c65de2c49",
-          "@@//:go.mod": "76ba27dc3baf878101c0a0fcfa7092e69f107287847ca6f35aaaefe7c4f97f28",
-          "@@//:go.sum": "1e73267d0e48296a4a9b6014dcfe76111e107073b236f213e8860c3d383bfb2b",
+          "@@//:go.mod": "83b9681e4fbae80c42b81016536229ff999b07d877ff6d2cadd7e932655d593c",
+          "@@rules_go~0.44.0//:go.mod": "15454724af1504c4ce1782c2a7f423d596a1d8490125eb7c5bd9c95fea1991f0",
+          "@@//:go.sum": "af3ca06e91b4025fb562dfd27139fad12c69bddd4383bdd9104a34fde64b11d5",
+          "@@gazelle~0.35.0//:go.mod": "48dc6e771c3028ee1c18b9ffc81e596fd5f6d7e0016c5ef280e30f2821f60473",
           "@@cgrindel_bazel_starlib~0.18.1//:go.sum": "c50d75994c714e6fddfc6eb0cb8da5d2c40ff0ca816fa655ed0cf397cf16a27b",
           "@@rules_go~0.44.0//:go.sum": "b5938730bf7d3581421928b0385d99648dd9634becead96fca0594ac491b2f49",
           "@@gazelle~0.35.0//:go.sum": "7c4460e8ecb5dd8691a51d4fa2e9e4751108b933636497ce46db499fc2e7a88d",
