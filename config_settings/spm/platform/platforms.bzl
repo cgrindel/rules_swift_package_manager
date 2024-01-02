@@ -46,9 +46,6 @@ _PLATFORM_INFOS = [
     _platform_info(spm = p, bzl = None, os = p)
     for p in _NON_APPLE_PLATFORMS
 ] + [
-    # Treat `maccatalyst` as an alias of sorts for macos. This will be handled
-    # in the `platforms.label` function.
-    _platform_info(spm = "maccatalyst", bzl = None, os = None),
     # Map `driverkit` as `macos`. This will be handled in the
     # `platforms.label()` function.
     _platform_info(spm = "driverkit", bzl = None, os = None),
@@ -67,10 +64,16 @@ def _label(name):
     # There is currently no support Mac Catalyst in Bazel. These are Mac apps
     # that use iOS frameworks. Treat it like iOS for now.
     if name == "maccatalyst":
-        name = "ios"
+        fail("Unsupported swift package manager platform: maccatalyst.")
     if name == "driverkit":
         name = "macos"
     return "@rules_swift_package_manager//config_settings/spm/platform:{}".format(name)
+
+def _is_supported(name):
+    return name != "maccatalyst"
+
+def _supported(names):
+    return [n for n in names if _is_supported(n)]
 
 platforms = struct(
     macos = "macos",
@@ -86,4 +89,6 @@ platforms = struct(
     all_values = [pi.spm for pi in _PLATFORM_INFOS],
     all_platform_infos = _PLATFORM_INFOS,
     label = _label,
+    is_supported = _is_supported,
+    supported = _supported,
 )
