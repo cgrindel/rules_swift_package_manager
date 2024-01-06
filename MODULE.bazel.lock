@@ -1965,7 +1965,7 @@
       "general": {
         "bzlTransitiveDigest": "zP01muRk4s4xWGK3gNPXOyDMQkOPsIhu99akeKWFFQ0=",
         "accumulatedFileDigests": {
-          "@@//:go.mod": "2867058571b92dd6d47f4646f5a07c6eb3e1d3a308ac3e05da257f6bebc271f6",
+          "@@//:go.mod": "83b9681e4fbae80c42b81016536229ff999b07d877ff6d2cadd7e932655d593c",
           "@@rules_go~0.44.0//:go.mod": "15454724af1504c4ce1782c2a7f423d596a1d8490125eb7c5bd9c95fea1991f0",
           "@@//:go.sum": "af3ca06e91b4025fb562dfd27139fad12c69bddd4383bdd9104a34fde64b11d5",
           "@@gazelle~0.35.0//:go.mod": "48dc6e771c3028ee1c18b9ffc81e596fd5f6d7e0016c5ef280e30f2821f60473",
