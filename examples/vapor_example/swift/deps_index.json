@@ -833,17 +833,6 @@
       ]
     },
     {
-      "name": "CVaporURLParser",
-      "c99name": "CVaporURLParser",
-      "src_type": "clang",
-      "label": "@swiftpkg_vapor//:Sources_CVaporURLParser",
-      "package_identity": "vapor",
-      "product_memberships": [
-        "Vapor",
-        "XCTVapor"
-      ]
-    },
-    {
       "name": "Vapor",
       "c99name": "Vapor",
       "src_type": "swift",
@@ -1515,9 +1504,9 @@
       "name": "swiftpkg_vapor",
       "identity": "vapor",
       "remote": {
-        "commit": "67fe736c37b0ad958b9d248f010cff6c1baa5c3a",
+        "commit": "6db3d917b5ce5024a84eb265ef65691383305d70",
         "remote": "https://github.com/vapor/vapor.git",
-        "version": "4.89.3"
+        "version": "4.90.0"
       }
     },
     {
