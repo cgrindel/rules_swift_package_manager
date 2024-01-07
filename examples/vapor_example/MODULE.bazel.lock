@@ -3185,9 +3185,9 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "a13Oc0hXT+L5cvojiIZIfzIFXt+8RemLnU6Rf/kkLXI=",
+        "bzlTransitiveDigest": "OmiOT7B3ywH2LEV4ZCse+/mCMxCmJzCfvuAzIaohDpc=",
         "accumulatedFileDigests": {
-          "@@//swift:deps_index.json": "185697fc5d42574d07c898656821dfc01e59c49d5f48a4f5bae40f9417f40e47"
+          "@@//swift:deps_index.json": "1d87139fbfc14e12b8599f4453b056634ba2112882099c915ac8cd3a90c7e837"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3237,7 +3237,7 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_console_kit",
               "bazel_package_name": "swiftpkg_console_kit",
-              "commit": "f4ef965dadd999f7e4687053153c97b8b320819c",
+              "commit": "a7dd7001196d39b758e4990ec0f26f80162f4c84",
               "remote": "https://github.com/vapor/console-kit.git",
               "dependencies_index": "@@//swift:deps_index.json",
               "init_submodules": false,
@@ -3497,7 +3497,7 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_vapor",
               "bazel_package_name": "swiftpkg_vapor",
-              "commit": "da9c2805b1b93751b1922bbbf343aa120e9942c8",
+              "commit": "6db3d917b5ce5024a84eb265ef65691383305d70",
               "remote": "https://github.com/vapor/vapor.git",
               "dependencies_index": "@@//swift:deps_index.json",
               "init_submodules": false,
