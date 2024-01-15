@@ -30,8 +30,8 @@ http_archive(
 
 load("@bazel_gazelle//:deps.bzl", "gazelle_dependencies")
 load("@bazel_skylib_gazelle_plugin//:workspace.bzl", "bazel_skylib_gazelle_plugin_workspace")
-load("@rules_swift_package_manager//:go_deps.bzl", "swift_bazel_go_dependencies")
 load("@io_bazel_rules_go//go:deps.bzl", "go_register_toolchains", "go_rules_dependencies")
+load("@rules_swift_package_manager//:go_deps.bzl", "swift_bazel_go_dependencies")
 
 # Declare Go dependencies before calling go_rules_dependencies.
 swift_bazel_go_dependencies()
@@ -40,7 +40,7 @@ bazel_skylib_gazelle_plugin_workspace()
 
 go_rules_dependencies()
 
-go_register_toolchains(version = "1.19.5")
+go_register_toolchains(version = "1.21.1")
 
 gazelle_dependencies()
 
