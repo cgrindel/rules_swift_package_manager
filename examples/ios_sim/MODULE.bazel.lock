@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "294537f485a65818616457441772bc83cb5ec5bdf1f6af0f4f8cdc58a0d8e07f",
+  "moduleFileHash": "e85bd1c42e23b2999f8b875e0f9e9e218e3ef56bf2325dfb5c8c1e1bc4c5f4cd",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -52,6 +52,7 @@
             "column": 27
           },
           "imports": {
+            "swiftpkg_rxswift": "swiftpkg_rxswift",
             "swiftpkg_swift_markdown": "swiftpkg_swift_markdown",
             "swiftpkg_swift_nio": "swiftpkg_swift_nio"
           },
@@ -3870,12 +3871,32 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "a13Oc0hXT+L5cvojiIZIfzIFXt+8RemLnU6Rf/kkLXI=",
+        "bzlTransitiveDigest": "Y8ckz+OYIxdrElO/RaUEkSoBbDPbzAWU3jxJtO+cq0w=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "ca3d3f04faa5448d1f8359590d3bf246c9e50ae01395712912e7b281df986854"
+          "@@//:swift_deps_index.json": "dafe909d52a0a1b03c3533d3f1c56e565ad68fab371c0a7cd477fecf4240e72d"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
+          "swiftpkg_rxswift": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
+            "ruleClassName": "swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_rxswift",
+              "bazel_package_name": "swiftpkg_rxswift",
+              "commit": "9dcaa4b333db437b0fbfaf453fad29069044a8b4",
+              "remote": "https://github.com/ReactiveX/RxSwift.git",
+              "dependencies_index": "@@//:swift_deps_index.json",
+              "init_submodules": false,
+              "recursive_init_submodules": false,
+              "patch_args": [
+                "-p0"
+              ],
+              "patch_cmds": [],
+              "patch_cmds_win": [],
+              "patch_tool": "",
+              "patches": []
+            }
+          },
           "swiftpkg_swift_markdown": {
             "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
             "ruleClassName": "swift_package",
@@ -4135,6 +4156,41 @@
             "ruleClassName": "swift_autoconfiguration",
             "attributes": {
               "name": "rules_swift~1.13.0~non_module_deps~build_bazel_rules_swift_local_config"
+            }
+          }
+        }
+      }
+    },
+    "@@rules_xcodeproj~1.15.0//xcodeproj:extensions.bzl%internal": {
+      "general": {
+        "bzlTransitiveDigest": "SSk2tc0T++1ic+3iwwPdiccTs6C+43dMisXSSrMFBkM=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "rules_xcodeproj_generated": {
+            "bzlFile": "@@rules_xcodeproj~1.15.0//xcodeproj:repositories.bzl",
+            "ruleClassName": "generated_files_repo",
+            "attributes": {
+              "name": "rules_xcodeproj~1.15.0~internal~rules_xcodeproj_generated"
+            }
+          }
+        }
+      }
+    },
+    "@@rules_xcodeproj~1.15.0//xcodeproj:extensions.bzl%non_module_deps": {
+      "general": {
+        "bzlTransitiveDigest": "SSk2tc0T++1ic+3iwwPdiccTs6C+43dMisXSSrMFBkM=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "rules_xcodeproj_index_import": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_xcodeproj~1.15.0~non_module_deps~rules_xcodeproj_index_import",
+              "build_file_content": "load(\"@bazel_skylib//rules:native_binary.bzl\", \"native_binary\")\n\nnative_binary(\n    name = \"index_import\",\n    src = \"index-import\",\n    out = \"index-import\",\n    visibility = [\"//visibility:public\"],\n)\n",
+              "sha256": "28c1ffa39d99e74ed70623899b207b41f79214c498c603915aef55972a851a15",
+              "url": "https://github.com/MobileNativeFoundation/index-import/releases/download/5.8.0.1/index-import.tar.gz"
             }
           }
         }
