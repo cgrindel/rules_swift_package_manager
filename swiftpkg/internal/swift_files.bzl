@@ -135,6 +135,9 @@ def _collect_conditional_compilation(contents, idx):
 Did not find the end of the conditional compilation block starting at {}.\
 """.format(idx))
 
+# Then length of `#if` plus a single space
+_POUND_IF_OFFSET = 4
+
 def _is_code(contents, target_idx):
     skip_to = -1
     for idx in range(0, len(contents)):
@@ -160,7 +163,8 @@ def _is_code(contents, target_idx):
             elif _look_ahead(contents, idx, "/*") >= 0:
                 skip_to = _collect_multiline_comment(contents, idx)
         elif char == "#":
-            if _look_ahead(contents, idx, "#if") >= 0:
+            if _look_ahead(contents, idx, "#if") >= 0 and \
+               _look_ahead(contents, idx + _POUND_IF_OFFSET, "DEBUG") >= 0:
                 skip_to = _collect_conditional_compilation(contents, idx)
 
     return False

@@ -144,7 +144,7 @@ import XCTest
             exp = True,
         ),
         struct(
-            msg = "inside conditional compilation",
+            msg = "inside DEBUG conditional compilation",
             imp = "XCTest",
             content = """\
 #if DEBUG
@@ -152,6 +152,28 @@ import XCTest
       import Chicken
     #endif
     import XCTest
+#endif
+""",
+            exp = False,
+        ),
+        struct(
+            msg = "inside non-DEBUG conditional compilation",
+            imp = "XCTest",
+            content = """\
+#if !os(watchOS)
+    import XCTest
+#endif
+""",
+            exp = True,
+        ),
+        struct(
+            msg = "inside multi-level non-DEBUG conditional compilation",
+            imp = "XCTest",
+            content = """\
+#if !os(watchOS)
+    #if DEBUG
+        import XCTest
+    #endif
 #endif
 """,
             exp = False,
