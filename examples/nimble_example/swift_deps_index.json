@@ -144,9 +144,9 @@
       "name": "swiftpkg_nimble",
       "identity": "nimble",
       "remote": {
-        "commit": "437d2a6d35b835adaae2a0cac49efe02ef4e0f35",
+        "commit": "c1f3dd66222d5e7a1a20afc237f7e7bc432c564f",
         "remote": "https://github.com/Quick/Nimble",
-        "version": "13.1.2"
+        "version": "13.2.0"
       }
     },
     {
