@@ -853,17 +853,6 @@
       ]
     },
     {
-      "name": "CVaporURLParser",
-      "c99name": "CVaporURLParser",
-      "src_type": "clang",
-      "label": "@swiftpkg_vapor//:Sources_CVaporURLParser",
-      "package_identity": "vapor",
-      "product_memberships": [
-        "Vapor",
-        "XCTVapor"
-      ]
-    },
-    {
       "name": "Vapor",
       "c99name": "Vapor",
       "src_type": "swift",
@@ -1361,9 +1350,9 @@
       "name": "swiftpkg_fluent",
       "identity": "fluent",
       "remote": {
-        "commit": "4b4d8bf15a06fd60137e9c543e5503c4b842654e",
+        "commit": "a586a5d4164f23a0ee4e02e1f467b9bbef0c9f1c",
         "remote": "https://github.com/vapor/fluent.git",
-        "version": "4.8.0"
+        "version": "4.9.0"
       }
     },
     {
@@ -1397,9 +1386,9 @@
       "name": "swiftpkg_routing_kit",
       "identity": "routing-kit",
       "remote": {
-        "commit": "ffac7b3a127ce1e85fb232f1a6271164628809ad",
+        "commit": "2a92a7eac411a82fb3a03731be5e76773ebe1b3e",
         "remote": "https://github.com/vapor/routing-kit.git",
-        "version": "4.6.0"
+        "version": "4.9.0"
       }
     },
     {
@@ -1552,9 +1541,9 @@
       "name": "swiftpkg_vapor",
       "identity": "vapor",
       "remote": {
-        "commit": "67fe736c37b0ad958b9d248f010cff6c1baa5c3a",
+        "commit": "0680f9f6bfab7100cd585b3186740ee7860c983e",
         "remote": "https://github.com/vapor/vapor.git",
-        "version": "4.89.3"
+        "version": "4.91.1"
       }
     },
     {

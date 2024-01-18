@@ -3355,9 +3355,9 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "a13Oc0hXT+L5cvojiIZIfzIFXt+8RemLnU6Rf/kkLXI=",
+        "bzlTransitiveDigest": "OmiOT7B3ywH2LEV4ZCse+/mCMxCmJzCfvuAzIaohDpc=",
         "accumulatedFileDigests": {
-          "@@//swift:deps_index.json": "185697fc5d42574d07c898656821dfc01e59c49d5f48a4f5bae40f9417f40e47"
+          "@@//swift:deps_index.json": "086d9d6eae312680fac6f4e0748521893bfb281fc5871d93ebc72efa19260f90"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3407,7 +3407,7 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_console_kit",
               "bazel_package_name": "swiftpkg_console_kit",
-              "commit": "f4ef965dadd999f7e4687053153c97b8b320819c",
+              "commit": "a7dd7001196d39b758e4990ec0f26f80162f4c84",
               "remote": "https://github.com/vapor/console-kit.git",
               "dependencies_index": "@@//swift:deps_index.json",
               "init_submodules": false,
@@ -3487,7 +3487,7 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_fluent",
               "bazel_package_name": "swiftpkg_fluent",
-              "commit": "4b4d8bf15a06fd60137e9c543e5503c4b842654e",
+              "commit": "a586a5d4164f23a0ee4e02e1f467b9bbef0c9f1c",
               "remote": "https://github.com/vapor/fluent.git",
               "dependencies_index": "@@//swift:deps_index.json",
               "init_submodules": false,
@@ -3647,7 +3647,7 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_routing_kit",
               "bazel_package_name": "swiftpkg_routing_kit",
-              "commit": "ffac7b3a127ce1e85fb232f1a6271164628809ad",
+              "commit": "2a92a7eac411a82fb3a03731be5e76773ebe1b3e",
               "remote": "https://github.com/vapor/routing-kit.git",
               "dependencies_index": "@@//swift:deps_index.json",
               "init_submodules": false,
@@ -3667,7 +3667,7 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_vapor",
               "bazel_package_name": "swiftpkg_vapor",
-              "commit": "da9c2805b1b93751b1922bbbf343aa120e9942c8",
+              "commit": "0680f9f6bfab7100cd585b3186740ee7860c983e",
               "remote": "https://github.com/vapor/vapor.git",
               "dependencies_index": "@@//swift:deps_index.json",
               "init_submodules": false,

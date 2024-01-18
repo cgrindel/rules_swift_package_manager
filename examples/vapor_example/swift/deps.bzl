@@ -28,7 +28,7 @@ def swift_dependencies():
     # version: 4.8.0
     swift_package(
         name = "swiftpkg_fluent",
-        commit = "4b4d8bf15a06fd60137e9c543e5503c4b842654e",
+        commit = "a586a5d4164f23a0ee4e02e1f467b9bbef0c9f1c",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/fluent.git",
     )
@@ -60,7 +60,7 @@ def swift_dependencies():
     # version: 4.6.0
     swift_package(
         name = "swiftpkg_routing_kit",
-        commit = "ffac7b3a127ce1e85fb232f1a6271164628809ad",
+        commit = "2a92a7eac411a82fb3a03731be5e76773ebe1b3e",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/routing-kit.git",
     )
@@ -196,7 +196,7 @@ def swift_dependencies():
     # version: 4.81.0
     swift_package(
         name = "swiftpkg_vapor",
-        commit = "67fe736c37b0ad958b9d248f010cff6c1baa5c3a",
+        commit = "0680f9f6bfab7100cd585b3186740ee7860c983e",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/vapor.git",
     )
