@@ -794,6 +794,11 @@ def _new_swift_src_info_from_sources(
         if has_objc_directive and imports_xctest:
             break
 
+    # DEBUG BEGIN
+    imports_xctest = False
+
+    # DEBUG END
+
     # Find any auto-discoverable resources under the target
     all_target_files = repository_files.list_files_under(
         repository_ctx,
