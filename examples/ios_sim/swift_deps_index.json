@@ -138,7 +138,9 @@
         "NIOConcurrencyHelpers",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils"
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat"
       ]
     },
     {
@@ -157,7 +159,9 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils"
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat"
       ]
     },
     {
@@ -188,7 +192,9 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils"
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat"
       ]
     },
     {
@@ -217,7 +223,9 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils"
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat"
       ]
     },
     {
@@ -253,7 +261,9 @@
         "NIOConcurrencyHelpers",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils"
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat"
       ]
     },
     {
@@ -272,7 +282,9 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils"
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat"
       ]
     },
     {
@@ -290,6 +302,27 @@
         "NIOFoundationCompat",
         "NIOWebSocket",
         "NIOTestUtils"
+      ]
+    },
+    {
+      "name": "NIOFileSystem",
+      "c99name": "NIOFileSystem",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources_NIOFileSystem",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat"
+      ]
+    },
+    {
+      "name": "NIOFileSystemFoundationCompat",
+      "c99name": "NIOFileSystemFoundationCompat",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:Sources_NIOFileSystemFoundationCompat",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "_NIOFileSystemFoundationCompat"
       ]
     },
     {
@@ -377,7 +410,9 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils"
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat"
       ]
     },
     {
@@ -406,7 +441,29 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils"
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat"
+      ]
+    },
+    {
+      "name": "CSystem",
+      "c99name": "CSystem",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_system//:Sources_CSystem",
+      "package_identity": "swift-system",
+      "product_memberships": [
+        "SystemPackage"
+      ]
+    },
+    {
+      "name": "SystemPackage",
+      "c99name": "SystemPackage",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_system//:Sources_System_SystemPackage",
+      "package_identity": "swift-system",
+      "product_memberships": [
+        "SystemPackage"
       ]
     }
   ],
@@ -570,6 +627,30 @@
       "target_labels": [
         "@swiftpkg_swift_nio//:Sources__NIOConcurrency"
       ]
+    },
+    {
+      "identity": "swift-nio",
+      "name": "_NIOFileSystem",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio//:Sources_NIOFileSystem"
+      ]
+    },
+    {
+      "identity": "swift-nio",
+      "name": "_NIOFileSystemFoundationCompat",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_nio//:Sources_NIOFileSystemFoundationCompat"
+      ]
+    },
+    {
+      "identity": "swift-system",
+      "name": "SystemPackage",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_swift_system//:Sources_System_SystemPackage"
+      ]
     }
   ],
   "packages": [
@@ -621,9 +702,18 @@
       "name": "swiftpkg_swift_nio",
       "identity": "swift-nio",
       "remote": {
-        "commit": "702cd7c56d5d44eeba73fdf83918339b26dc855c",
+        "commit": "635b2589494c97e48c62514bc8b37ced762e0a62",
         "remote": "https://github.com/apple/swift-nio.git",
-        "version": "2.62.0"
+        "version": "2.63.0"
+      }
+    },
+    {
+      "name": "swiftpkg_swift_system",
+      "identity": "swift-system",
+      "remote": {
+        "commit": "025bcb1165deab2e20d4eaba79967ce73013f496",
+        "remote": "https://github.com/apple/swift-system.git",
+        "version": "1.2.1"
       }
     }
   ]
