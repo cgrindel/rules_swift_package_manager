@@ -15,7 +15,7 @@ swift_library(
     visibility = ["//visibility:public"],
     deps = [
         "@swiftpkg_lottie_spm//:Sources__LottieStub",
-        "@swiftpkg_lottie_spm//:remote_archive_Lottie.xcframework.zip_Lottie",
+        "@swiftpkg_lottie_spm//:remote_archive_Lottie-Xcode-14.1.xcframework.zip_Lottie",
     ],
 )
 

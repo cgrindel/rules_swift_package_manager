@@ -5,6 +5,6 @@ import PackageDescription
 let package = Package(
     name: "lottie_ios_example",
     dependencies: [
-        .package(url: "https://github.com/airbnb/lottie-spm", from: "4.3.4"),
+        .package(url: "https://github.com/airbnb/lottie-spm", from: "4.4.0"),
     ]
 )
