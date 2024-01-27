@@ -9,5 +9,6 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-log", from: "1.5.4"),
         .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.53.1"),
         .package(path: "third_party/my_local_package"),
+        .package(path: "third_party/NotThatAmazingModule"),
     ]
 )
