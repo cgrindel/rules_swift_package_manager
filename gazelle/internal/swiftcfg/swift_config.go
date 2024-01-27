@@ -23,9 +23,10 @@ const (
 
 // A SwiftConfig represents the Swift-specific configuration for the Gazelle extension.
 type SwiftConfig struct {
-	SwiftBinPath         string
-	ModuleFilesCollector ModuleFilesCollector
-	DependencyIndex      *swift.DependencyIndex
+	SwiftBinPath              string
+	ModuleFilesCollector      ModuleFilesCollector
+	ShouldLoadDependencyIndex bool
+	DependencyIndex           *swift.DependencyIndex
 	// DependencyIndexRel is the path relative to the RepoRoot to the dependency index
 	DependencyIndexRel string
 	// DependencyIndexPath is the full path to the dependency index
