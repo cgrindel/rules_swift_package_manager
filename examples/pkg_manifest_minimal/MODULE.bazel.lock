@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "b5c7d18c8ee3075b2c71eb05f521692974d9f33cdeb7746aa8cd40885c200c65",
+  "moduleFileHash": "67cd70034750757a69bec989047d2ede8216726dd50017306f97fbc0fe9eda10",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -53,6 +53,7 @@
           },
           "imports": {
             "swiftpkg_my_local_package": "swiftpkg_my_local_package",
+            "swiftpkg_notthatamazingmodule": "swiftpkg_notthatamazingmodule",
             "swiftpkg_swift_argument_parser": "swiftpkg_swift_argument_parser",
             "swiftpkg_swift_log": "swiftpkg_swift_log",
             "swiftpkg_swiftformat": "swiftpkg_swiftformat"
@@ -3429,10 +3430,20 @@
       "general": {
         "bzlTransitiveDigest": "OmiOT7B3ywH2LEV4ZCse+/mCMxCmJzCfvuAzIaohDpc=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "6edcfdfc2ce965f354e705f600ffc24b2022f1796fa7af2ea12ecf04389d635b"
+          "@@//:swift_deps_index.json": "c325e7c044577736ef25aa200a361e2ad69c90a5c134d95ba76b4ebaac42cbc3"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
+          "swiftpkg_notthatamazingmodule": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:local_swift_package.bzl",
+            "ruleClassName": "local_swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_notthatamazingmodule",
+              "bazel_package_name": "swiftpkg_notthatamazingmodule",
+              "path": "third_party/NotThatAmazingModule",
+              "dependencies_index": "@@//:swift_deps_index.json"
+            }
+          },
           "swiftpkg_swiftformat": {
             "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:swift_package.bzl",
             "ruleClassName": "swift_package",

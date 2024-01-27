@@ -1,11 +1,15 @@
 import ArgumentParser
 import GreetingsFramework
+import MyAmazingModule
 import MyLibrary
 
 @main
 struct MyExecutable: AsyncParsableCommand {
     mutating func run() async throws {
-        let ng = NamedGreeting(MorningGreeting(), World())
-        print(ng.value)
+        let namedGreeting = NamedGreeting(MorningGreeting(), World())
+        print(namedGreeting.value)
+
+        let complexClass = ComplexClass(name: "Olivia", age: 30, favoriteColors: ["blue"])
+        print(complexClass.greet())
     }
 }

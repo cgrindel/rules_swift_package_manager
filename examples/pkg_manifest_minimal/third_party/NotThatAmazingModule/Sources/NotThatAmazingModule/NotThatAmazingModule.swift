@@ -1,25 +1,24 @@
 import MyAmazingModule
 
-
 public class ComplexClass {
     var name: String
     var age: Int
     var favoriteColors: [String]
-    
+
     public init(name: String, age: Int, favoriteColors: [String]) {
         self.name = name
         self.age = age
         self.favoriteColors = favoriteColors
     }
-    
+
     public func greet() {
         print("Hello, my name is \(name) and I'm \(age) years old.")
     }
-    
+
     public func addFavoriteColor(color: String) {
         favoriteColors.append(color)
     }
-    
+
     public func removeFavoriteColor(color: String) {
         favoriteColors.removeAll { $0 == color }
     }
