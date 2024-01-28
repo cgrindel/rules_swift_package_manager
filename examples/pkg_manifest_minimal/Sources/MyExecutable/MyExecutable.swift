@@ -1,7 +1,7 @@
 import ArgumentParser
 import GreetingsFramework
-import MyAmazingModule
 import MyLibrary
+import NotThatAmazingModule
 
 @main
 struct MyExecutable: AsyncParsableCommand {
