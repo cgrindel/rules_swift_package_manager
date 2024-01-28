@@ -102,20 +102,6 @@ def _get(repository_ctx, directory, deps_index, env = {}):
 
     return pkg_info
 
-def _new_dependency_requirement_from_desc_json_map(req_map):
-    ranges = req_map.get("range")
-    if ranges != None:
-        return _new_dependency_requirement(
-            ranges = [
-                _new_version_range(
-                    lower = rangeMap["lower_bound"],
-                    upper = rangeMap["upper_bound"],
-                )
-                for rangeMap in ranges
-            ],
-        )
-    return None
-
 def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map):
     identity = dep_map["identity"]
     name = dep_names_by_id.get(identity)
@@ -127,9 +113,6 @@ def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map):
     return _new_dependency(
         identity = identity,
         name = name,
-        type = dep_map["type"],
-        url = dep_map["url"],
-        requirement = _new_dependency_requirement_from_desc_json_map(dep_map["requirement"]),
     )
 
 def _new_product_from_desc_json_map(prd_map):
@@ -413,15 +396,17 @@ def _new_linker_settings_from_dump_json_list(dump_list):
 def _new_dependency_identity_to_name_map(dump_deps):
     result = {}
     for dep in dump_deps:
-        src_ctrl_list = dep.get("sourceControl")
-        if src_ctrl_list == None or len(src_ctrl_list) == 0:
+        identity_provider_list = (
+            dep.get("sourceControl") or dep.get("fileSystem")
+        )
+        if not identity_provider_list:
             continue
-        src_ctrl = src_ctrl_list[0]
-        identity = src_ctrl["identity"]
+        identity_provider = identity_provider_list[0]
+        identity = identity_provider["identity"]
 
         # If a dependency has been given a name in the manifest, use it.
         # Otherwise, match on the identity.
-        name = src_ctrl.get(
+        name = identity_provider.get(
             "nameForTargetDependencyResolutionOnly",
             default = identity,
         )
@@ -556,17 +541,13 @@ def _new_platform(name, version):
 
 # MARK: - External Dependency
 
-def _new_dependency(identity, name, type, url, requirement):
+def _new_dependency(identity, name):
     """Creates a `struct` representing an external dependency for a Swift \
     package.
 
     Args:
         identity: The identifier for the external depdendency (`string`).
         name: The name used for package reference resolution (`string`).
-        type: Type type of external dependency (`string`).
-        url: The URL of the external dependency (`string`).
-        requirement: A `struct` as returned by \
-            `pkginfos.new_dependency_requirement()`.
 
     Returns:
         A `struct` representing an external dependency.
@@ -574,9 +555,6 @@ def _new_dependency(identity, name, type, url, requirement):
     return struct(
         identity = identity,
         name = pkginfo_dependencies.normalize_name(name),
-        type = type,
-        url = url,
-        requirement = requirement,
     )
 
 def _new_dependency_requirement(ranges = None):
