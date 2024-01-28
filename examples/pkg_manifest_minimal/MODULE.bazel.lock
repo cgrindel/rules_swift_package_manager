@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "67cd70034750757a69bec989047d2ede8216726dd50017306f97fbc0fe9eda10",
+  "moduleFileHash": "ddb5bd14cb1859d2c02f2222fad02c0186ff9394b112ee8b41bc6a9a155cda46",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -53,6 +53,7 @@
           },
           "imports": {
             "swiftpkg_my_local_package": "swiftpkg_my_local_package",
+            "swiftpkg_myamazingmodule": "swiftpkg_myamazingmodule",
             "swiftpkg_notthatamazingmodule": "swiftpkg_notthatamazingmodule",
             "swiftpkg_swift_argument_parser": "swiftpkg_swift_argument_parser",
             "swiftpkg_swift_log": "swiftpkg_swift_log",
@@ -3428,9 +3429,9 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "fQ4QEnw7wUS6PjXU5ISPiiwkZtsVlfcYdYom95RfGx8=",
+        "bzlTransitiveDigest": "RAXmIOdYeEgAIU2uKKJFxO3Uqo7xvnGxHmOD276y14c=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "c325e7c044577736ef25aa200a361e2ad69c90a5c134d95ba76b4ebaac42cbc3"
+          "@@//:swift_deps_index.json": "b64b8be73263a8636a1cdf9c75ba7e82bb94c3f0b4d42b6c981eb3afa2afac67"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3471,6 +3472,16 @@
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_my_local_package",
               "bazel_package_name": "swiftpkg_my_local_package",
               "path": "third_party/my_local_package",
+              "dependencies_index": "@@//:swift_deps_index.json"
+            }
+          },
+          "swiftpkg_myamazingmodule": {
+            "bzlFile": "@@rules_swift_package_manager~override//swiftpkg/internal:local_swift_package.bzl",
+            "ruleClassName": "local_swift_package",
+            "attributes": {
+              "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_myamazingmodule",
+              "bazel_package_name": "swiftpkg_myamazingmodule",
+              "path": "third_party/MyAmazingModule",
               "dependencies_index": "@@//:swift_deps_index.json"
             }
           },
