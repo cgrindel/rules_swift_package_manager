@@ -11,6 +11,7 @@ import (
 )
 
 func TestNewPackageFromBazelRepo(t *testing.T) {
+	repoRoot := "/path/to/package"
 	pkgDir := "/path/to/package"
 	diBasename := "swift_deps_index.json"
 
@@ -35,7 +36,7 @@ func TestNewPackageFromBazelRepo(t *testing.T) {
 			Identity: identity,
 			Pin:      p,
 		}
-		actual, err := swift.NewPackageFromBazelRepo(br, diBasename, pkgDir, nil)
+		actual, err := swift.NewPackageFromBazelRepo(br, diBasename, pkgDir, repoRoot, nil)
 		assert.NoError(t, err)
 		expected := &swift.Package{
 			Name:     repoName,
@@ -73,7 +74,7 @@ func TestNewPackageFromBazelRepo(t *testing.T) {
 			Args:  []string{"-p1"},
 			Files: []string{"@@//third-party/foo:0001-fix.patch"},
 		}
-		actual, err := swift.NewPackageFromBazelRepo(br, diBasename, pkgDir, patch)
+		actual, err := swift.NewPackageFromBazelRepo(br, diBasename, pkgDir, repoRoot, patch)
 		assert.NoError(t, err)
 		expected := &swift.Package{
 			Name:     repoName,
@@ -102,7 +103,7 @@ func TestNewPackageFromBazelRepo(t *testing.T) {
 				Path: localPkgDir,
 			},
 		}
-		actual, err := swift.NewPackageFromBazelRepo(br, diBasename, pkgDir, nil)
+		actual, err := swift.NewPackageFromBazelRepo(br, diBasename, pkgDir, repoRoot, nil)
 		assert.NoError(t, err)
 		expected := &swift.Package{
 			Name:     repoName,
