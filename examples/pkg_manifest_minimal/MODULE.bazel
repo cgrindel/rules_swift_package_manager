@@ -48,6 +48,8 @@ swift_deps.from_file(
 use_repo(
     swift_deps,
     "swiftpkg_my_local_package",
+    "swiftpkg_myamazingmodule",
+    "swiftpkg_notthatamazingmodule",
     "swiftpkg_swift_argument_parser",
     "swiftpkg_swift_log",
     "swiftpkg_swiftformat",

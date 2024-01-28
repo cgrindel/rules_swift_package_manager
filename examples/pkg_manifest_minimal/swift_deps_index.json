@@ -1,6 +1,8 @@
 {
   "direct_dep_identities": [
     "my_local_package",
+    "myamazingmodule",
+    "notthatamazingmodule",
     "swift-argument-parser",
     "swift-log",
     "swiftformat"
@@ -25,6 +27,26 @@
       "package_identity": "my_local_package",
       "product_memberships": [
         "print-greeting"
+      ]
+    },
+    {
+      "name": "MyAmazingModule",
+      "c99name": "MyAmazingModule",
+      "src_type": "swift",
+      "label": "@swiftpkg_myamazingmodule//:Sources_MyAmazingModule",
+      "package_identity": "myamazingmodule",
+      "product_memberships": [
+        "MyAmazingModule"
+      ]
+    },
+    {
+      "name": "NotThatAmazingModule",
+      "c99name": "NotThatAmazingModule",
+      "src_type": "swift",
+      "label": "@swiftpkg_notthatamazingmodule//:Sources_NotThatAmazingModule",
+      "package_identity": "notthatamazingmodule",
+      "product_memberships": [
+        "NotThatAmazingModule"
       ]
     },
     {
@@ -132,6 +154,22 @@
       ]
     },
     {
+      "identity": "myamazingmodule",
+      "name": "MyAmazingModule",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_myamazingmodule//:Sources_MyAmazingModule"
+      ]
+    },
+    {
+      "identity": "notthatamazingmodule",
+      "name": "NotThatAmazingModule",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_notthatamazingmodule//:Sources_NotThatAmazingModule"
+      ]
+    },
+    {
       "identity": "swift-argument-parser",
       "name": "ArgumentParser",
       "type": "library",
@@ -186,6 +224,20 @@
       "identity": "my_local_package",
       "local": {
         "path": "third_party/my_local_package"
+      }
+    },
+    {
+      "name": "swiftpkg_myamazingmodule",
+      "identity": "myamazingmodule",
+      "local": {
+        "path": "third_party/MyAmazingModule"
+      }
+    },
+    {
+      "name": "swiftpkg_notthatamazingmodule",
+      "identity": "notthatamazingmodule",
+      "local": {
+        "path": "third_party/NotThatAmazingModule"
       }
     },
     {

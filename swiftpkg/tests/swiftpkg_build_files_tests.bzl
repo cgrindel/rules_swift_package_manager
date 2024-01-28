@@ -38,13 +38,6 @@ _pkg_info = pkginfos.new(
         pkginfos.new_dependency(
             identity = "swift-argument-parser",
             name = "SwiftArgumentParser",
-            type = "sourceControl",
-            url = "https://github.com/apple/swift-argument-parser.git",
-            requirement = pkginfos.new_dependency_requirement(
-                ranges = [
-                    pkginfos.new_version_range("0.3.1", "0.4.0"),
-                ],
-            ),
         ),
     ],
     products = [

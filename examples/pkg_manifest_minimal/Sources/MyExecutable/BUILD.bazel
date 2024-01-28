@@ -8,6 +8,7 @@ swift_binary(
     deps = [
         "//Sources/MyLibrary",
         "@swiftpkg_my_local_package//:Sources_GreetingsFramework",
+        "@swiftpkg_notthatamazingmodule//:Sources_NotThatAmazingModule",
         "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser",
     ],
 )

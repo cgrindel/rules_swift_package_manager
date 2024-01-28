@@ -30,13 +30,6 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
             pkginfos.new_dependency(
                 identity = "swift-argument-parser",
                 name = "SwiftArgumentParser",
-                type = "sourceControl",
-                url = "https://github.com/apple/swift-argument-parser",
-                requirement = pkginfos.new_dependency_requirement(
-                    ranges = [
-                        pkginfos.new_version_range("1.2.0", "2.0.0"),
-                    ],
-                ),
             ),
         ],
         products = [
