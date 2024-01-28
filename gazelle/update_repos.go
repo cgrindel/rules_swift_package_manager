@@ -162,7 +162,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 	}
 
 	// Output a bzlmod stanzas for bzlmod.
-	if err := writeBzlmodStanzas(pkgDir, di, sc); err != nil {
+	if err := writeBzlmodStanzas(di, sc); err != nil {
 		result.Error = err
 		return result
 	}
@@ -306,13 +306,13 @@ func writeBzlmodUseRepoNames(di *swift.DependencyIndex, sc *swiftcfg.SwiftConfig
 	return os.WriteFile(sc.BazelModulePath, []byte(newContent), finfo.Mode())
 }
 
-func writeBzlmodStanzas(pkgPath string, di *swift.DependencyIndex, sc *swiftcfg.SwiftConfig) error {
+func writeBzlmodStanzas(di *swift.DependencyIndex, sc *swiftcfg.SwiftConfig) error {
 	if !sc.PrintBzlmodStanzas && !sc.UpdateBzlmodStanzas {
 		return nil
 	}
 
 	moduleDir := filepath.Dir(sc.BazelModulePath)
-	bzlmodStanzas, err := swift.BzlmodStanzas(di, moduleDir, pkgPath, sc.DependencyIndexPath)
+	bzlmodStanzas, err := swift.BzlmodStanzas(di, moduleDir, sc.DependencyIndexPath)
 
 	if err != nil {
 		return err
