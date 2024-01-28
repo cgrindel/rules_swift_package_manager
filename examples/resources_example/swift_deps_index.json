@@ -312,14 +312,14 @@
       "name": "swiftpkg_another_package_with_resources",
       "identity": "another_package_with_resources",
       "local": {
-        "path": "../third_party/another_package_with_resources"
+        "path": "third_party/another_package_with_resources"
       }
     },
     {
       "name": "swiftpkg_app_lovin_sdk",
       "identity": "app_lovin_sdk",
       "local": {
-        "path": "../third_party/app_lovin_sdk"
+        "path": "third_party/app_lovin_sdk"
       }
     },
     {
@@ -362,7 +362,7 @@
       "name": "swiftpkg_package_with_resources",
       "identity": "package_with_resources",
       "local": {
-        "path": "../third_party/package_with_resources"
+        "path": "third_party/package_with_resources"
       }
     },
     {

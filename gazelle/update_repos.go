@@ -144,7 +144,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 			return result
 		}
 		pkg, err := swift.NewPackageFromBazelRepo(
-			bzlRepo, sc.DependencyIndexRel, pkgDir, patches[bzlRepo.Identity])
+			bzlRepo, sc.DependencyIndexRel, pkgDir, c.RepoRoot, patches[bzlRepo.Identity])
 		if err != nil {
 			result.Error = err
 			return result

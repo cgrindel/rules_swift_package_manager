@@ -3288,7 +3288,7 @@
       "general": {
         "bzlTransitiveDigest": "OmiOT7B3ywH2LEV4ZCse+/mCMxCmJzCfvuAzIaohDpc=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "851f786f9d7aa3ff14c49603b5d1884ca62d2448253a45ddb85d41eeef233ce3"
+          "@@//:swift_deps_index.json": "3be7742c44abf40672933dc1220e8ada77e4cf88cd3117e01fa449d128cec021"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3298,7 +3298,7 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_app_lovin_sdk",
               "bazel_package_name": "swiftpkg_app_lovin_sdk",
-              "path": "../third_party/app_lovin_sdk",
+              "path": "third_party/app_lovin_sdk",
               "dependencies_index": "@@//:swift_deps_index.json"
             }
           },
@@ -3388,7 +3388,7 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_package_with_resources",
               "bazel_package_name": "swiftpkg_package_with_resources",
-              "path": "../third_party/package_with_resources",
+              "path": "third_party/package_with_resources",
               "dependencies_index": "@@//:swift_deps_index.json"
             }
           },
@@ -3438,7 +3438,7 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_another_package_with_resources",
               "bazel_package_name": "swiftpkg_another_package_with_resources",
-              "path": "../third_party/another_package_with_resources",
+              "path": "third_party/another_package_with_resources",
               "dependencies_index": "@@//:swift_deps_index.json"
             }
           }

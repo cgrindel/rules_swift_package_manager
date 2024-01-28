@@ -32,6 +32,7 @@ func NewPackageFromBazelRepo(
 	bzlRepo *BazelRepo,
 	diRel string,
 	pkgDir string,
+	repoRoot string,
 	patch *Patch,
 ) (*Package, error) {
 	var err error
@@ -54,7 +55,7 @@ func NewPackageFromBazelRepo(
 		}
 		p.Remote.Patch = patch
 	} else {
-		relPath, err := filepath.Rel(pkgDir, bzlRepo.PkgInfo.Path)
+		relPath, err := filepath.Rel(repoRoot, bzlRepo.PkgInfo.Path)
 		if err != nil {
 			return nil, err
 		}
