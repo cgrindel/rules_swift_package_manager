@@ -2,7 +2,6 @@ package gazelle
 
 import (
 	"flag"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -102,9 +101,6 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	if sc.DependencyIndexPath == "" {
 		sc.DependencyIndexPath = filepath.Join(c.RepoRoot, sc.DependencyIndexRel)
 	}
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK:  sc.DependencyIndexPath: %+#v", sc.DependencyIndexPath)
-	// DEBUG END
 
 	if sc.BazelModulePath == "" {
 		sc.BazelModulePath = filepath.Join(c.RepoRoot, sc.BazelModuleRel)

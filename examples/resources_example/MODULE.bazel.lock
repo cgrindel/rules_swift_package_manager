@@ -3286,7 +3286,7 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "OmiOT7B3ywH2LEV4ZCse+/mCMxCmJzCfvuAzIaohDpc=",
+        "bzlTransitiveDigest": "RAXmIOdYeEgAIU2uKKJFxO3Uqo7xvnGxHmOD276y14c=",
         "accumulatedFileDigests": {
           "@@//:swift_deps_index.json": "3be7742c44abf40672933dc1220e8ada77e4cf88cd3117e01fa449d128cec021"
         },
