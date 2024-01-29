@@ -87,15 +87,15 @@ def _bazel_label_test(ctx):
     env = unittest.begin(ctx)
 
     actual = pkginfo_targets.bazel_label(_bar_target)
-    expected = bazel_labels.parse("@example_cool_repo//:Sources_Bar")
+    expected = bazel_labels.parse("@example_cool_repo//:Bar.rspm")
     asserts.equals(env, expected, actual)
 
     actual = pkginfo_targets.bazel_label(_foo_target, "@another_repo")
-    expected = bazel_labels.parse("@another_repo//:Sources_Foo")
+    expected = bazel_labels.parse("@another_repo//:Foo.rspm")
     asserts.equals(env, expected, actual)
 
     actual = pkginfo_targets.bazel_label(_chocolate_target)
-    expected = bazel_labels.parse("@example_cool_repo//:Sources_Bar_Chocolate")
+    expected = bazel_labels.parse("@example_cool_repo//:Chocolate.rspm")
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)
@@ -127,19 +127,19 @@ def _bazel_label_name_test(ctx):
     env = unittest.begin(ctx)
 
     actual = pkginfo_targets.bazel_label_name(_bar_target)
-    expected = "Sources_Bar"
+    expected = "Bar.rspm"
     asserts.equals(env, expected, actual)
 
     actual = pkginfo_targets.bazel_label_name(_chocolate_target)
-    expected = "Sources_Bar_Chocolate"
+    expected = "Chocolate.rspm"
     asserts.equals(env, expected, actual)
 
     actual = pkginfo_targets.bazel_label_name(_dot_path_target)
-    expected = "DotPath"
+    expected = "DotPath.rspm"
     asserts.equals(env, expected, actual)
 
     actual = pkginfo_targets.bazel_label_name(_simple_path_target)
-    expected = "simple_path_simple_path"
+    expected = "simple_path.rspm"
     asserts.equals(env, expected, actual)
 
     return unittest.end(env)

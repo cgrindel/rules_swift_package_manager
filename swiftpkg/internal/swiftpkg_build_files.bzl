@@ -7,6 +7,7 @@ load(":bazel_apple_platforms.bzl", "bazel_apple_platforms")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":bzl_selects.bzl", "bzl_selects")
+load(":deps_indexes.bzl", "deps_indexes", "src_types")
 load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
@@ -49,7 +50,7 @@ def _swift_target_build_file(pkg_ctx, target):
         "deps": bzl_selects.to_starlark(deps),
         "module_name": target.c99name,
         "srcs": pkginfo_targets.srcs(target),
-        "visibility": ["//visibility:public"],
+        "visibility": ["//:__subpackages__"],
     }
 
     # Add macros as plugins
@@ -208,7 +209,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             "-fmodule-name={}".format(target.c99name),
         ],
         "tags": ["swift_module={}".format(target.c99name)],
-        "visibility": ["//visibility:public"],
+        "visibility": ["//:__subpackages__"],
     }
 
     def _set_if_not_empty(attr, list, transform_fn = None):
@@ -388,7 +389,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             "hdrs": clang_src_info.hdrs,
             "module_name": target.c99name,
             "noop": noop_modulemap,
-            "visibility": ["//visibility:public"],
+            "visibility": ["//:__subpackages__"],
         }
         decls = [
             build_decls.new(objc_kinds.library, bzl_target_name, attrs = attrs),
@@ -454,7 +455,7 @@ expected: {expected}\
             kind = kind,
             name = pkginfo_targets.bazel_label_name(target),
             attrs = {
-                "visibility": ["//visibility:public"],
+                "visibility": ["//:__subpackages__"],
                 "xcframework_imports": glob,
             },
         ),
@@ -549,7 +550,7 @@ def _apple_resource_bundle(target, default_localization, include_swift_accessor,
                 # Based upon the code in SPM, it looks like they only support unstructured resources.
                 # https://github.com/apple/swift-package-manager/blob/main/Sources/PackageModel/Resource.swift#L25-L33
                 "resources": resources,
-                "visibility": ["//visibility:public"],
+                "visibility": ["//:__subpackages__"],
             },
         ),
     ]
@@ -624,7 +625,7 @@ def _generate_modulemap_for_swift_target(target, deps):
         "deps": bzl_selects.to_starlark(modulemap_deps),
         "hdrs": [":{}".format(bzl_target_name)],
         "module_name": target.c99name,
-        "visibility": ["//visibility:public"],
+        "visibility": ["//:__subpackages__"],
     }
     decls = [
         build_decls.new(
@@ -637,10 +638,10 @@ def _generate_modulemap_for_swift_target(target, deps):
 
 # MARK: - Products Entry Point
 
-def _new_for_products(pkg_info, repo_name):
+def _new_for_products(pkg_ctx):
     bld_files = lists.compact([
-        _new_for_product(pkg_info, prod, repo_name)
-        for prod in pkg_info.products
+        _new_for_product(pkg_ctx, prod)
+        for prod in pkg_ctx.pkg_info.products
     ])
 
     # If we did not generate any build files, return an empty one.
@@ -648,12 +649,16 @@ def _new_for_products(pkg_info, repo_name):
         return build_files.new()
     return build_files.merge(*bld_files)
 
-def _new_for_product(pkg_info, product, repo_name):
+def _new_for_product(pkg_ctx, product):
     prod_type = product.type
     if prod_type.is_executable:
-        return _executable_product_build_file(pkg_info, product, repo_name)
+        return _executable_product_build_file(
+            pkg_ctx.pkg_info,
+            product,
+            pkg_ctx.repo_name,
+        )
     elif prod_type.is_library:
-        return _library_product_build_file(pkg_info, product, repo_name)
+        return _library_product_build_file(pkg_ctx.deps_index_ctx, product)
 
     # GH046: Check for plugin product
     return None
@@ -700,36 +705,35 @@ def _executable_product_build_file(pkg_info, product, repo_name):
     else:
         fail("Did not find any targets associated with product. name:", product.name)
 
-def _library_product_build_file(pkg_info, product, repo_name):
+def _library_product_build_file(deps_index_ctx, product):
     # A library product can reference one or more Swift targets. Hence a
     # dependency on a library product is a shorthand for depend upon all of the
-    # Swift targets that is associated with the product. There is no good
-    # corollary for this in Bazel. A `filegroup` supports this concept for
-    # `srcs` and `data`, but not `deps`. It would require a rule to provide
-    # multiple providers possibly of the same type.
-    #
-    # To allow someone to ensure that the associated targets do build, we will
-    # generate a build_test.
+    # Swift targets that is associated with the product. We use a
+    # `swift_library_group` to represent this.
 
     # Retrieve the targets
-    targets = [
-        pkginfo_targets.get(pkg_info.targets, tname)
+    modules = [
+        deps_indexes.resolve_module_with_ctx(deps_index_ctx, tname)
         for tname in product.targets
     ]
-    if len(targets) == 0:
-        fail("No targets specified for a library product. name:", product.name)
+    label_infos = lists.flatten([
+        deps_indexes.labels_for_module(module, src_types.swift)
+        for module in modules
+    ])
     target_labels = [
-        bazel_labels.normalize(pkginfo_targets.bazel_label(target, repo_name))
-        for target in targets
+        bazel_labels.normalize(label_info)
+        for label_info in label_infos
     ]
+    if len(target_labels) == 0:
+        fail("No targets specified for a library product. name:", product.name)
     return build_files.new(
-        load_stmts = [skylib_build_test_load_stmt],
+        load_stmts = [swift_library_group_load_stmt],
         decls = [
             build_decls.new(
-                skylib_kinds.build_test,
-                product.name + "BuildTest",
+                swift_kinds.library_group,
+                product.name,
                 attrs = {
-                    "targets": target_labels,
+                    "deps": target_labels,
                     "visibility": ["//visibility:public"],
                 },
             ),
@@ -754,6 +758,7 @@ swift_location = "@build_bazel_rules_swift//swift:swift.bzl"
 
 swift_kinds = struct(
     library = "swift_library",
+    library_group = "swift_library_group",
     binary = "swift_binary",
     test = "swift_test",
     c_module = "swift_c_module",
@@ -763,6 +768,11 @@ swift_kinds = struct(
 swift_library_load_stmt = load_statements.new(
     swift_location,
     swift_kinds.library,
+)
+
+swift_library_group_load_stmt = load_statements.new(
+    swift_location,
+    swift_kinds.library_group,
 )
 
 swift_binary_load_stmt = load_statements.new(

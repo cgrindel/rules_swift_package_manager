@@ -8,7 +8,7 @@
       "name": "CwlCatchException",
       "c99name": "CwlCatchException",
       "src_type": "swift",
-      "label": "@swiftpkg_cwlcatchexception//:Sources_CwlCatchException",
+      "label": "@swiftpkg_cwlcatchexception//:CwlCatchException.rspm",
       "package_identity": "cwlcatchexception",
       "product_memberships": [
         "CwlCatchException"
@@ -18,7 +18,7 @@
       "name": "CwlCatchExceptionSupport",
       "c99name": "CwlCatchExceptionSupport",
       "src_type": "objc",
-      "label": "@swiftpkg_cwlcatchexception//:Sources_CwlCatchExceptionSupport",
+      "label": "@swiftpkg_cwlcatchexception//:CwlCatchExceptionSupport.rspm",
       "package_identity": "cwlcatchexception",
       "product_memberships": [
         "CwlCatchException"
@@ -28,7 +28,7 @@
       "name": "CwlMachBadInstructionHandler",
       "c99name": "CwlMachBadInstructionHandler",
       "src_type": "objc",
-      "label": "@swiftpkg_cwlpreconditiontesting//:Sources_CwlMachBadInstructionHandler",
+      "label": "@swiftpkg_cwlpreconditiontesting//:CwlMachBadInstructionHandler.rspm",
       "package_identity": "cwlpreconditiontesting",
       "product_memberships": [
         "CwlPreconditionTesting"
@@ -38,7 +38,7 @@
       "name": "CwlPosixPreconditionTesting",
       "c99name": "CwlPosixPreconditionTesting",
       "src_type": "swift",
-      "label": "@swiftpkg_cwlpreconditiontesting//:Sources_CwlPosixPreconditionTesting",
+      "label": "@swiftpkg_cwlpreconditiontesting//:CwlPosixPreconditionTesting.rspm",
       "package_identity": "cwlpreconditiontesting",
       "product_memberships": [
         "CwlPosixPreconditionTesting"
@@ -48,8 +48,8 @@
       "name": "CwlPreconditionTesting",
       "c99name": "CwlPreconditionTesting",
       "src_type": "swift",
-      "label": "@swiftpkg_cwlpreconditiontesting//:Sources_CwlPreconditionTesting",
-      "modulemap_label": "@swiftpkg_cwlpreconditiontesting//:Sources_CwlPreconditionTesting_modulemap",
+      "label": "@swiftpkg_cwlpreconditiontesting//:CwlPreconditionTesting.rspm",
+      "modulemap_label": "@swiftpkg_cwlpreconditiontesting//:CwlPreconditionTesting.rspm_modulemap",
       "package_identity": "cwlpreconditiontesting",
       "product_memberships": [
         "CwlPreconditionTesting"
@@ -59,8 +59,8 @@
       "name": "Nimble",
       "c99name": "Nimble",
       "src_type": "swift",
-      "label": "@swiftpkg_nimble//:Sources_Nimble",
-      "modulemap_label": "@swiftpkg_nimble//:Sources_Nimble_modulemap",
+      "label": "@swiftpkg_nimble//:Nimble.rspm",
+      "modulemap_label": "@swiftpkg_nimble//:Nimble.rspm_modulemap",
       "package_identity": "nimble",
       "product_memberships": [
         "Nimble"
@@ -70,7 +70,7 @@
       "name": "NimbleObjectiveC",
       "c99name": "NimbleObjectiveC",
       "src_type": "objc",
-      "label": "@swiftpkg_nimble//:Sources_NimbleObjectiveC",
+      "label": "@swiftpkg_nimble//:NimbleObjectiveC.rspm",
       "package_identity": "nimble",
       "product_memberships": [
         "Nimble"
@@ -80,8 +80,8 @@
       "name": "Quick",
       "c99name": "Quick",
       "src_type": "swift",
-      "label": "@swiftpkg_quick//:Sources_Quick",
-      "modulemap_label": "@swiftpkg_quick//:Sources_Quick_modulemap",
+      "label": "@swiftpkg_quick//:Quick.rspm",
+      "modulemap_label": "@swiftpkg_quick//:Quick.rspm_modulemap",
       "package_identity": "quick",
       "product_memberships": [
         "Quick"
@@ -91,7 +91,7 @@
       "name": "QuickObjCRuntime",
       "c99name": "QuickObjCRuntime",
       "src_type": "objc",
-      "label": "@swiftpkg_quick//:Sources_QuickObjCRuntime",
+      "label": "@swiftpkg_quick//:QuickObjCRuntime.rspm",
       "package_identity": "quick",
       "product_memberships": [
         "Quick"
@@ -103,43 +103,31 @@
       "identity": "cwlcatchexception",
       "name": "CwlCatchException",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_cwlcatchexception//:Sources_CwlCatchException"
-      ]
+      "label": "@swiftpkg_cwlcatchexception//:CwlCatchException"
     },
     {
       "identity": "cwlpreconditiontesting",
       "name": "CwlPosixPreconditionTesting",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_cwlpreconditiontesting//:Sources_CwlPosixPreconditionTesting"
-      ]
+      "label": "@swiftpkg_cwlpreconditiontesting//:CwlPosixPreconditionTesting"
     },
     {
       "identity": "cwlpreconditiontesting",
       "name": "CwlPreconditionTesting",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_cwlpreconditiontesting//:Sources_CwlPreconditionTesting",
-        "@swiftpkg_cwlpreconditiontesting//:Sources_CwlMachBadInstructionHandler"
-      ]
+      "label": "@swiftpkg_cwlpreconditiontesting//:CwlPreconditionTesting"
     },
     {
       "identity": "nimble",
       "name": "Nimble",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_nimble//:Sources_Nimble",
-        "@swiftpkg_nimble//:Sources_NimbleObjectiveC"
-      ]
+      "label": "@swiftpkg_nimble//:Nimble"
     },
     {
       "identity": "quick",
       "name": "Quick",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_quick//:Sources_Quick"
-      ]
+      "label": "@swiftpkg_quick//:Quick"
     }
   ],
   "packages": [

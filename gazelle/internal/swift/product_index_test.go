@@ -9,21 +9,20 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var farmPoultryChickenLabel = label.New("farm", "poultry", "Chicken")
-var farmPoultryHenLabel = label.New("farm", "poultry", "Hen")
+var farmPoultryLabel = label.New("farm", "poultry", "Poultry")
 var zooPoultryLabel = label.New("zoo", "", "Poultry")
 
 var poultryP = swift.NewProduct(
 	"farm",
 	"Poultry",
 	swift.LibraryProductType,
-	[]*label.Label{&farmPoultryChickenLabel, &farmPoultryHenLabel},
+	&farmPoultryLabel,
 )
 var anotherPoultryP = swift.NewProduct(
 	"zoo",
 	"Poultry",
 	swift.LibraryProductType,
-	[]*label.Label{&zooPoultryLabel},
+	&zooPoultryLabel,
 )
 var productIndex = make(swift.ProductIndex)
 

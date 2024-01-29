@@ -7,7 +7,7 @@
       "name": "SnapKit",
       "c99name": "SnapKit",
       "src_type": "swift",
-      "label": "@swiftpkg_snapkit//:Sources_SnapKit",
+      "label": "@swiftpkg_snapkit//:SnapKit.rspm",
       "package_identity": "snapkit",
       "product_memberships": [
         "SnapKit",
@@ -20,17 +20,13 @@
       "identity": "snapkit",
       "name": "SnapKit",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_snapkit//:Sources_SnapKit"
-      ]
+      "label": "@swiftpkg_snapkit//:SnapKit"
     },
     {
       "identity": "snapkit",
       "name": "SnapKit-Dynamic",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_snapkit//:Sources_SnapKit"
-      ]
+      "label": "@swiftpkg_snapkit//:SnapKit-Dynamic"
     }
   ],
   "packages": [

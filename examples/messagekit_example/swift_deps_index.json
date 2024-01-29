@@ -8,8 +8,8 @@
       "name": "InputBarAccessoryView",
       "c99name": "InputBarAccessoryView",
       "src_type": "swift",
-      "label": "@swiftpkg_inputbaraccessoryview//:Sources_InputBarAccessoryView",
-      "modulemap_label": "@swiftpkg_inputbaraccessoryview//:Sources_InputBarAccessoryView_modulemap",
+      "label": "@swiftpkg_inputbaraccessoryview//:InputBarAccessoryView.rspm",
+      "modulemap_label": "@swiftpkg_inputbaraccessoryview//:InputBarAccessoryView.rspm_modulemap",
       "package_identity": "inputbaraccessoryview",
       "product_memberships": [
         "InputBarAccessoryView"
@@ -19,49 +19,49 @@
       "name": "Kingfisher",
       "c99name": "Kingfisher",
       "src_type": "swift",
-      "label": "@swiftpkg_kingfisher//:Sources_Kingfisher",
-      "modulemap_label": "@swiftpkg_kingfisher//:Sources_Kingfisher_modulemap",
+      "label": "@swiftpkg_kingfisher//:Kingfisher.rspm",
+      "modulemap_label": "@swiftpkg_kingfisher//:Kingfisher.rspm_modulemap",
       "package_identity": "kingfisher",
       "product_memberships": [
         "Kingfisher"
       ]
     },
     {
-      "name": "SwiftFormatPlugin",
-      "c99name": "SwiftFormatPlugin",
-      "src_type": "unknown",
-      "label": "@swiftpkg_messagekit//:Plugins_SwiftFormatPlugin",
-      "package_identity": "messagekit",
-      "product_memberships": [
-        "SwiftFormatPlugin"
-      ]
-    },
-    {
-      "name": "SwiftLintPlugin",
-      "c99name": "SwiftLintPlugin",
-      "src_type": "unknown",
-      "label": "@swiftpkg_messagekit//:Plugins_SwiftLintPlugin",
-      "package_identity": "messagekit",
-      "product_memberships": [
-        "SwiftLintPlugin"
-      ]
-    },
-    {
       "name": "MessageKit",
       "c99name": "MessageKit",
       "src_type": "swift",
-      "label": "@swiftpkg_messagekit//:Sources_MessageKit",
-      "modulemap_label": "@swiftpkg_messagekit//:Sources_MessageKit_modulemap",
+      "label": "@swiftpkg_messagekit//:MessageKit.rspm",
+      "modulemap_label": "@swiftpkg_messagekit//:MessageKit.rspm_modulemap",
       "package_identity": "messagekit",
       "product_memberships": [
         "MessageKit"
       ]
     },
     {
+      "name": "SwiftFormatPlugin",
+      "c99name": "SwiftFormatPlugin",
+      "src_type": "unknown",
+      "label": "@swiftpkg_messagekit//:SwiftFormatPlugin.rspm",
+      "package_identity": "messagekit",
+      "product_memberships": [
+        "SwiftFormatPlugin"
+      ]
+    },
+    {
       "name": "SwiftLintBinary",
       "c99name": "SwiftLintBinary",
       "src_type": "binary",
-      "label": "@swiftpkg_messagekit//:remote_archive_SwiftLintBinary-macos.artifactbundle.zip_SwiftLintBinary",
+      "label": "@swiftpkg_messagekit//:SwiftLintBinary.rspm",
+      "package_identity": "messagekit",
+      "product_memberships": [
+        "SwiftLintPlugin"
+      ]
+    },
+    {
+      "name": "SwiftLintPlugin",
+      "c99name": "SwiftLintPlugin",
+      "src_type": "unknown",
+      "label": "@swiftpkg_messagekit//:SwiftLintPlugin.rspm",
       "package_identity": "messagekit",
       "product_memberships": [
         "SwiftLintPlugin"
@@ -71,7 +71,7 @@
       "name": "swiftformat",
       "c99name": "swiftformat",
       "src_type": "binary",
-      "label": "@swiftpkg_messagekit//:remote_archive_swiftformat.artifactbundle.zip_swiftformat",
+      "label": "@swiftpkg_messagekit//:swiftformat.rspm",
       "package_identity": "messagekit",
       "product_memberships": [
         "SwiftFormatPlugin"
@@ -83,41 +83,31 @@
       "identity": "inputbaraccessoryview",
       "name": "InputBarAccessoryView",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_inputbaraccessoryview//:Sources_InputBarAccessoryView"
-      ]
+      "label": "@swiftpkg_inputbaraccessoryview//:InputBarAccessoryView"
     },
     {
       "identity": "kingfisher",
       "name": "Kingfisher",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_kingfisher//:Sources_Kingfisher"
-      ]
+      "label": "@swiftpkg_kingfisher//:Kingfisher"
     },
     {
       "identity": "messagekit",
       "name": "MessageKit",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_messagekit//:Sources_MessageKit"
-      ]
+      "label": "@swiftpkg_messagekit//:MessageKit"
     },
     {
       "identity": "messagekit",
       "name": "SwiftFormatPlugin",
       "type": "plugin",
-      "target_labels": [
-        "@swiftpkg_messagekit//:Plugins_SwiftFormatPlugin"
-      ]
+      "label": "@swiftpkg_messagekit//:SwiftFormatPlugin"
     },
     {
       "identity": "messagekit",
       "name": "SwiftLintPlugin",
       "type": "plugin",
-      "target_labels": [
-        "@swiftpkg_messagekit//:Plugins_SwiftLintPlugin"
-      ]
+      "label": "@swiftpkg_messagekit//:SwiftLintPlugin"
     }
   ],
   "packages": [

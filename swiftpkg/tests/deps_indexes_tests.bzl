@@ -426,26 +426,19 @@ _deps_index_json = """
             "identity": "swift-argument-parser",
             "name": "ArgumentParser",
             "type": "library",
-            "target_labels": [
-                "@apple_swift_argument_parser//Sources/ArgumentParser"
-            ]
+            "label": "@apple_swift_argument_parser//ArgumentParser"
         },
         {
             "identity": "example-cool-repo",
             "name": "Foo",
             "type": "library",
-            "target_labels": [
-                "@example_cool_repo//:Foo",
-                "@example_cool_repo//:Bar"
-            ]
+            "label": "@example_cool_repo//:Foo"
         },
         {
             "identity": "example-another-repo",
             "name": "Foo",
             "type": "library",
-            "target_labels": [
-                "@example_another_repo//Sources/Foo"
-            ]
+            "label": "@example_another_repo//Sources/Foo"
         }
     ],
     "packages": [

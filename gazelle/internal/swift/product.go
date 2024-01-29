@@ -2,7 +2,6 @@ package swift
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftpkg"
@@ -10,10 +9,10 @@ import (
 )
 
 type productJSONData struct {
-	Identity     string    `json:"identity"`
-	Name         string    `json:"name"`
-	Type         string    `json:"type"`
-	TargetLabels LabelStrs `json:"target_labels"`
+	Identity string   `json:"identity"`
+	Name     string   `json:"name"`
+	Type     string   `json:"type"`
+	Label    LabelStr `json:"label"`
 }
 
 // A ProductType is an enum for a Swift product type.
@@ -35,18 +34,18 @@ const (
 
 // A Product represents a Swift package product.
 type Product struct {
-	Identity     string
-	Name         string
-	Type         ProductType
-	TargetLabels []*label.Label
+	Identity string
+	Name     string
+	Type     ProductType
+	Label    *label.Label
 }
 
-func NewProduct(identity, name string, ptype ProductType, targetLabels []*label.Label) *Product {
+func NewProduct(identity, name string, ptype ProductType, label *label.Label) *Product {
 	return &Product{
-		Identity:     identity,
-		Name:         name,
-		Type:         ptype,
-		TargetLabels: targetLabels,
+		Identity: identity,
+		Name:     name,
+		Type:     ptype,
+		Label:    label,
 	}
 }
 
@@ -67,19 +66,9 @@ func NewProductFromPkgInfoProduct(
 		ptype = UnknownProductType
 	}
 
-	pi := bzlRepo.PkgInfo
-	targetLabels := make([]*label.Label, len(prd.Targets))
-	for idx, tname := range prd.Targets {
-		t := pi.Targets.FindByName(tname)
-		if t == nil {
-			return nil, fmt.Errorf(
-				"did not find target %v for product %v in repo %v",
-				tname, prd.Name, bzlRepo.Identity)
-		}
-		targetLabels[idx] = BazelLabelFromTarget(bzlRepo.Name, t)
-	}
+	label := label.New(bzlRepo.Name, "", prd.Name)
 
-	return NewProduct(bzlRepo.Identity, prd.Name, ptype, targetLabels), nil
+	return NewProduct(bzlRepo.Identity, prd.Name, ptype, &label), nil
 }
 
 // IndexKey returns a unique key for the product.
@@ -102,16 +91,11 @@ func (p *Product) jsonData() *productJSONData {
 		ptype = UnknownProductTypeStr
 	}
 
-	targetLabels := make(LabelStrs, len(p.TargetLabels))
-	for idx, tl := range p.TargetLabels {
-		targetLabels[idx] = NewLabelStr(tl)
-	}
-
 	return &productJSONData{
-		Identity:     p.Identity,
-		Name:         p.Name,
-		Type:         ptype,
-		TargetLabels: targetLabels,
+		Identity: p.Identity,
+		Name:     p.Name,
+		Type:     ptype,
+		Label:    NewLabelStr(p.Label),
 	}
 }
 
@@ -130,15 +114,12 @@ func newProductFromJSONData(jd *productJSONData) (*Product, error) {
 		ptype = UnknownProductType
 	}
 
-	targetLabels := make([]*label.Label, len(jd.TargetLabels))
-	for idx, tl := range jd.TargetLabels {
-		targetLabels[idx], err = NewLabel(tl)
-		if err != nil {
-			return nil, err
-		}
+	plabel, err := NewLabel(jd.Label)
+	if err != nil {
+		return nil, err
 	}
 
-	return NewProduct(jd.Identity, jd.Name, ptype, targetLabels), nil
+	return NewProduct(jd.Identity, jd.Name, ptype, plabel), nil
 }
 
 func (p *Product) MarshalJSON() ([]byte, error) {
@@ -163,9 +144,7 @@ type Products []*Product
 func (prds Products) Labels() mapset.Set[*label.Label] {
 	labels := mapset.NewSet[*label.Label]()
 	for _, p := range prds {
-		for _, l := range p.TargetLabels {
-			labels.Add(l)
-		}
+		labels.Add(p.Label)
 	}
 	return labels
 }

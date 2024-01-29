@@ -13,7 +13,7 @@ swift_library(
     visibility = ["//visibility:public"],
     # GH202: Incomplete deps are generated.
     deps = [
-        "@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseAppDistributionWrap_FirebaseAppDistributionTarget",
+        "@swiftpkg_firebase_ios_sdk//:FirebaseAppDistribution-Beta",
     ],
 )
 

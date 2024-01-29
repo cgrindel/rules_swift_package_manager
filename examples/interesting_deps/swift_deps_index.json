@@ -11,7 +11,7 @@
       "name": "CocoaLumberjack",
       "c99name": "CocoaLumberjack",
       "src_type": "objc",
-      "label": "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjack",
+      "label": "@swiftpkg_cocoalumberjack//:CocoaLumberjack.rspm",
       "package_identity": "cocoalumberjack",
       "product_memberships": [
         "CocoaLumberjack",
@@ -23,7 +23,7 @@
       "name": "CocoaLumberjackSwift",
       "c99name": "CocoaLumberjackSwift",
       "src_type": "swift",
-      "label": "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjackSwift",
+      "label": "@swiftpkg_cocoalumberjack//:CocoaLumberjackSwift.rspm",
       "package_identity": "cocoalumberjack",
       "product_memberships": [
         "CocoaLumberjackSwift"
@@ -33,7 +33,7 @@
       "name": "CocoaLumberjackSwiftLogBackend",
       "c99name": "CocoaLumberjackSwiftLogBackend",
       "src_type": "swift",
-      "label": "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjackSwiftLogBackend",
+      "label": "@swiftpkg_cocoalumberjack//:CocoaLumberjackSwiftLogBackend.rspm",
       "package_identity": "cocoalumberjack",
       "product_memberships": [
         "CocoaLumberjackSwiftLogBackend"
@@ -43,7 +43,7 @@
       "name": "CocoaLumberjackSwiftSupport",
       "c99name": "CocoaLumberjackSwiftSupport",
       "src_type": "clang",
-      "label": "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjackSwiftSupport",
+      "label": "@swiftpkg_cocoalumberjack//:CocoaLumberjackSwiftSupport.rspm",
       "package_identity": "cocoalumberjack",
       "product_memberships": [
         "CocoaLumberjackSwift"
@@ -53,7 +53,7 @@
       "name": "geos",
       "c99name": "geos",
       "src_type": "clang",
-      "label": "@swiftpkg_geos//:Sources_geos",
+      "label": "@swiftpkg_geos//:geos.rspm",
       "package_identity": "geos",
       "product_memberships": [
         "geos"
@@ -63,7 +63,7 @@
       "name": "GEOSwift",
       "c99name": "GEOSwift",
       "src_type": "swift",
-      "label": "@swiftpkg_geoswift//:Sources_GEOSwift",
+      "label": "@swiftpkg_geoswift//:GEOSwift.rspm",
       "package_identity": "geoswift",
       "product_memberships": [
         "GEOSwift"
@@ -73,7 +73,7 @@
       "name": "libwebp",
       "c99name": "libwebp",
       "src_type": "clang",
-      "label": "@swiftpkg_libwebp_xcode//:libwebp",
+      "label": "@swiftpkg_libwebp_xcode//:libwebp.rspm",
       "package_identity": "libwebp-xcode",
       "product_memberships": [
         "libwebp"
@@ -83,7 +83,7 @@
       "name": "COpenCombineHelpers",
       "c99name": "COpenCombineHelpers",
       "src_type": "clang",
-      "label": "@swiftpkg_opencombine//:Sources_COpenCombineHelpers",
+      "label": "@swiftpkg_opencombine//:COpenCombineHelpers.rspm",
       "package_identity": "opencombine",
       "product_memberships": [
         "OpenCombine",
@@ -96,7 +96,7 @@
       "name": "OpenCombine",
       "c99name": "OpenCombine",
       "src_type": "swift",
-      "label": "@swiftpkg_opencombine//:Sources_OpenCombine",
+      "label": "@swiftpkg_opencombine//:OpenCombine.rspm",
       "package_identity": "opencombine",
       "product_memberships": [
         "OpenCombine",
@@ -109,7 +109,7 @@
       "name": "OpenCombineDispatch",
       "c99name": "OpenCombineDispatch",
       "src_type": "swift",
-      "label": "@swiftpkg_opencombine//:Sources_OpenCombineDispatch",
+      "label": "@swiftpkg_opencombine//:OpenCombineDispatch.rspm",
       "package_identity": "opencombine",
       "product_memberships": [
         "OpenCombineDispatch",
@@ -120,7 +120,7 @@
       "name": "OpenCombineFoundation",
       "c99name": "OpenCombineFoundation",
       "src_type": "swift",
-      "label": "@swiftpkg_opencombine//:Sources_OpenCombineFoundation",
+      "label": "@swiftpkg_opencombine//:OpenCombineFoundation.rspm",
       "package_identity": "opencombine",
       "product_memberships": [
         "OpenCombineFoundation",
@@ -131,7 +131,7 @@
       "name": "OpenCombineShim",
       "c99name": "OpenCombineShim",
       "src_type": "swift",
-      "label": "@swiftpkg_opencombine//:Sources_OpenCombineShim",
+      "label": "@swiftpkg_opencombine//:OpenCombineShim.rspm",
       "package_identity": "opencombine",
       "product_memberships": [
         "OpenCombineShim"
@@ -141,7 +141,7 @@
       "name": "Logging",
       "c99name": "Logging",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_log//:Sources_Logging",
+      "label": "@swiftpkg_swift_log//:Logging.rspm",
       "package_identity": "swift-log",
       "product_memberships": [
         "Logging"
@@ -153,89 +153,67 @@
       "identity": "cocoalumberjack",
       "name": "CocoaLumberjack",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjack"
-      ]
+      "label": "@swiftpkg_cocoalumberjack//:CocoaLumberjack"
     },
     {
       "identity": "cocoalumberjack",
       "name": "CocoaLumberjackSwift",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjackSwift"
-      ]
+      "label": "@swiftpkg_cocoalumberjack//:CocoaLumberjackSwift"
     },
     {
       "identity": "cocoalumberjack",
       "name": "CocoaLumberjackSwiftLogBackend",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjackSwiftLogBackend"
-      ]
+      "label": "@swiftpkg_cocoalumberjack//:CocoaLumberjackSwiftLogBackend"
     },
     {
       "identity": "geoswift",
       "name": "GEOSwift",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_geoswift//:Sources_GEOSwift"
-      ]
+      "label": "@swiftpkg_geoswift//:GEOSwift"
     },
     {
       "identity": "geos",
       "name": "geos",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_geos//:Sources_geos"
-      ]
+      "label": "@swiftpkg_geos//:geos"
     },
     {
       "identity": "libwebp-xcode",
       "name": "libwebp",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_libwebp_xcode//:libwebp"
-      ]
+      "label": "@swiftpkg_libwebp_xcode//:libwebp"
     },
     {
       "identity": "opencombine",
       "name": "OpenCombine",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_opencombine//:Sources_OpenCombine"
-      ]
+      "label": "@swiftpkg_opencombine//:OpenCombine"
     },
     {
       "identity": "opencombine",
       "name": "OpenCombineDispatch",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_opencombine//:Sources_OpenCombineDispatch"
-      ]
+      "label": "@swiftpkg_opencombine//:OpenCombineDispatch"
     },
     {
       "identity": "opencombine",
       "name": "OpenCombineFoundation",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_opencombine//:Sources_OpenCombineFoundation"
-      ]
+      "label": "@swiftpkg_opencombine//:OpenCombineFoundation"
     },
     {
       "identity": "opencombine",
       "name": "OpenCombineShim",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_opencombine//:Sources_OpenCombineShim"
-      ]
+      "label": "@swiftpkg_opencombine//:OpenCombineShim"
     },
     {
       "identity": "swift-log",
       "name": "Logging",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_log//:Sources_Logging"
-      ]
+      "label": "@swiftpkg_swift_log//:Logging"
     }
   ],
   "packages": [

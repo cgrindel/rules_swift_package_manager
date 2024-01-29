@@ -22,14 +22,14 @@ func TestBazelLabelFromTarget(t *testing.T) {
 			repoName:   "example_cool_repo",
 			targetName: "Foo",
 			targetPath: "Sources/Foo",
-			exp:        "@example_cool_repo//:Sources_Foo",
+			exp:        "@example_cool_repo//:Foo.rspm",
 		},
 		{
 			msg:        "simple path",
 			repoName:   "example_cool_repo",
 			targetName: "simple_path",
 			targetPath: "simple_path",
-			exp:        "@example_cool_repo//:simple_path_simple_path",
+			exp:        "@example_cool_repo//:simple_path.rspm",
 		},
 	}
 	for _, tt := range tests {

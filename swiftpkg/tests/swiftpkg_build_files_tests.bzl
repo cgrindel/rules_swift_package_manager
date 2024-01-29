@@ -56,6 +56,15 @@ _pkg_info = pkginfos.new(
             targets = ["RegularSwiftTargetAsLibrary"],
         ),
         pkginfos.new_product(
+            name = "ObjcLibraryWithModulemap",
+            type = pkginfos.new_product_type(
+                library = pkginfos.new_library_type(
+                    library_type_kinds.automatic,
+                ),
+            ),
+            targets = ["ObjcLibraryWithModulemap"],
+        ),
+        pkginfos.new_product(
             name = "swiftexec",
             type = pkginfos.new_product_type(executable = True),
             targets = ["SwiftExecutableTarget"],
@@ -459,7 +468,7 @@ _deps_index_json = """
             "name": "RegularTargetForExec",
             "c99name": "RegularTargetForExec",
             "src_type": "swift",
-            "label": "@swiftpkg_mypackage//:Source_RegularTargetForExec",
+            "label": "@swiftpkg_mypackage//:RegularTargetForExec.rspm",
             "package_identity": "mypackage",
             "product_memberships": []
         },
@@ -467,7 +476,7 @@ _deps_index_json = """
             "name": "RegularSwiftTargetAsLibrary",
             "c99name": "RegularSwiftTargetAsLibrary",
             "src_type": "swift",
-            "label": "@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary",
+            "label": "@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm",
             "package_identity": "mypackage",
             "product_memberships": []
         },
@@ -475,7 +484,7 @@ _deps_index_json = """
             "name": "RegularSwiftTargetAsLibraryTests",
             "c99name": "RegularSwiftTargetAsLibraryTests",
             "src_type": "swift",
-            "label": "@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibraryTests",
+            "label": "@swiftpkg_mypackage//:RegularSwiftTargetAsLibraryTests.rspm",
             "package_identity": "mypackage",
             "product_memberships": []
         },
@@ -483,7 +492,7 @@ _deps_index_json = """
             "name": "SwiftExecutableTarget",
             "c99name": "SwiftExecutableTarget",
             "src_type": "swift",
-            "label": "@swiftpkg_mypackage//:Source_SwiftLibraryTarget",
+            "label": "@swiftpkg_mypackage//:SwiftLibraryTarget.rspm",
             "package_identity": "mypackage",
             "product_memberships": []
         },
@@ -491,7 +500,7 @@ _deps_index_json = """
             "name": "ClangLibrary",
             "c99name": "ClangLibrary",
             "src_type": "clang",
-            "label": "@swiftpkg_mypackage//:ClangLibrary",
+            "label": "@swiftpkg_mypackage//:ClangLibrary.rspm",
             "package_identity": "mypackage",
             "product_memberships": []
         },
@@ -499,7 +508,7 @@ _deps_index_json = """
             "name": "ObjcLibrary",
             "c99name": "ObjcLibrary",
             "src_type": "objc",
-            "label": "@swiftpkg_mypackage//:ObjcLibrary",
+            "label": "@swiftpkg_mypackage//:ObjcLibrary.rspm",
             "package_identity": "mypackage",
             "product_memberships": []
         },
@@ -507,7 +516,7 @@ _deps_index_json = """
             "name": "ObjcLibraryDep",
             "c99name": "ObjcLibraryDep",
             "src_type": "objc",
-            "label": "@swiftpkg_mypackage//:ObjcLibraryDep",
+            "label": "@swiftpkg_mypackage//:ObjcLibraryDep.rspm",
             "package_identity": "mypackage",
             "product_memberships": []
         },
@@ -515,7 +524,7 @@ _deps_index_json = """
             "name": "ObjcLibraryWithModulemap",
             "c99name": "ObjcLibraryWithModulemap",
             "src_type": "objc",
-            "label": "@swiftpkg_mypackage//:ObjcLibraryWithModulemap",
+            "label": "@swiftpkg_mypackage//:ObjcLibraryWithModulemap.rspm",
             "package_identity": "mypackage",
             "product_memberships": []
         },
@@ -523,7 +532,7 @@ _deps_index_json = """
             "name": "SwiftLibraryWithConditionalDep",
             "c99name": "SwiftLibraryWithConditionalDep",
             "src_type": "swift",
-            "label": "@swiftpkg_mypackage//:Source_SwiftLibraryWithConditionalDep",
+            "label": "@swiftpkg_mypackage//:SwiftLibraryWithConditionalDep.rspm",
             "package_identity": "mypackage",
             "product_memberships": []
         },
@@ -531,7 +540,7 @@ _deps_index_json = """
             "name": "ClangLibraryWithConditionalDep",
             "c99name": "ClangLibraryWithConditionalDep",
             "src_type": "clang",
-            "label": "@swiftpkg_mypackage//:ClangLibraryWithConditionalDep",
+            "label": "@swiftpkg_mypackage//:ClangLibraryWithConditionalDep.rspm",
             "package_identity": "mypackage",
             "product_memberships": []
         },
@@ -539,7 +548,7 @@ _deps_index_json = """
             "name": "SwiftForObjcTarget",
             "c99name": "SwiftForObjcTarget",
             "src_type": "swift",
-            "label": "@swiftpkg_mypackage//:Source_SwiftForObjcTarget",
+            "label": "@swiftpkg_mypackage//:SwiftForObjcTarget.rspm",
             "package_identity": "mypackage",
             "product_memberships": []
         }
@@ -567,14 +576,14 @@ def _target_generation_test(ctx):
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "Source_RegularSwiftTargetAsLibrary",
+    name = "RegularSwiftTargetAsLibrary.rspm",
     always_include_developer_search_paths = True,
     defines = ["SWIFT_PACKAGE"],
     deps = [],
     module_name = "RegularSwiftTargetAsLibrary",
     srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
     tags = ["manual"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
@@ -588,14 +597,14 @@ swift_library(
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "Source_RegularTargetForExec",
+    name = "RegularTargetForExec.rspm",
     always_include_developer_search_paths = True,
     defines = ["SWIFT_PACKAGE"],
-    deps = ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
+    deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
     module_name = "RegularTargetForExec",
     srcs = ["Source/RegularTargetForExec/main.swift"],
     tags = ["manual"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
@@ -606,12 +615,12 @@ swift_library(
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
 
 swift_test(
-    name = "Tests_RegularSwiftTargetAsLibraryTests",
+    name = "RegularSwiftTargetAsLibraryTests.rspm",
     defines = ["SWIFT_PACKAGE"],
-    deps = ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
+    deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
     module_name = "RegularSwiftTargetAsLibraryTests",
     srcs = ["Tests/RegularSwiftTargetAsLibraryTests/RegularSwiftTargetAsLibraryTests.swift"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
@@ -622,7 +631,7 @@ swift_test(
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 
 swift_binary(
-    name = "Source_SwiftExecutableTarget",
+    name = "SwiftExecutableTarget.rspm",
     copts = [
         "-enable-experimental-feature",
         "BuiltinModule",
@@ -638,7 +647,7 @@ swift_binary(
     deps = [],
     module_name = "SwiftExecutableTarget",
     srcs = ["Source/SwiftExecutableTarget/main.swift"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
@@ -648,7 +657,7 @@ swift_binary(
             exp = """\
 
 cc_library(
-    name = "ClangLibrary",
+    name = "ClangLibrary.rspm",
     copts = [
         "-fblocks",
         "-fobjc-arc",
@@ -672,7 +681,7 @@ cc_library(
     ],
     tags = ["swift_module=ClangLibrary"],
     textual_hdrs = ["src/foo.cc"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
@@ -683,16 +692,16 @@ cc_library(
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 generate_modulemap(
-    name = "ObjcLibrary_modulemap",
-    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
+    name = "ObjcLibrary.rspm_modulemap",
+    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap"],
     hdrs = ["include/external.h"],
     module_name = "ObjcLibrary",
     noop = False,
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 
 objc_library(
-    name = "ObjcLibrary",
+    name = "ObjcLibrary.rspm",
     copts = [
         "-fblocks",
         "-fobjc-arc",
@@ -702,8 +711,8 @@ objc_library(
     ],
     defines = ["SWIFT_PACKAGE=1"],
     deps = [
-        "@swiftpkg_mypackage//:ObjcLibraryDep",
-        "@swiftpkg_mypackage//:ObjcLibraryDep_modulemap",
+        "@swiftpkg_mypackage//:ObjcLibraryDep.rspm",
+        "@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap",
     ],
     enable_modules = True,
     hdrs = ["include/external.h"],
@@ -731,7 +740,7 @@ objc_library(
     ],
     tags = ["swift_module=ObjcLibrary"],
     textual_hdrs = ["src/foo.m"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
@@ -742,16 +751,16 @@ objc_library(
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 generate_modulemap(
-    name = "ObjcLibraryWithModulemap_modulemap",
-    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
+    name = "ObjcLibraryWithModulemap.rspm_modulemap",
+    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap"],
     hdrs = ["include/external.h"],
     module_name = "ObjcLibraryWithModulemap",
     noop = True,
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 
 objc_library(
-    name = "ObjcLibraryWithModulemap",
+    name = "ObjcLibraryWithModulemap.rspm",
     copts = [
         "-fblocks",
         "-fobjc-arc",
@@ -761,8 +770,8 @@ objc_library(
     ],
     defines = ["SWIFT_PACKAGE=1"],
     deps = [
-        "@swiftpkg_mypackage//:ObjcLibraryDep",
-        "@swiftpkg_mypackage//:ObjcLibraryDep_modulemap",
+        "@swiftpkg_mypackage//:ObjcLibraryDep.rspm",
+        "@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap",
     ],
     enable_modules = True,
     hdrs = ["include/external.h"],
@@ -790,7 +799,7 @@ objc_library(
     ],
     tags = ["swift_module=ObjcLibraryWithModulemap"],
     textual_hdrs = ["src/foo.m"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
@@ -801,18 +810,18 @@ objc_library(
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
-    name = "Source_SwiftLibraryWithConditionalDep",
+    name = "SwiftLibraryWithConditionalDep.rspm",
     always_include_developer_search_paths = True,
     defines = ["SWIFT_PACKAGE"],
-    deps = ["@swiftpkg_mypackage//:ClangLibrary"] + select({
-        "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
-        "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
+    deps = ["@swiftpkg_mypackage//:ClangLibrary.rspm"] + select({
+        "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
+        "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
         "//conditions:default": [],
     }),
     module_name = "SwiftLibraryWithConditionalDep",
     srcs = ["Source/SwiftLibraryWithConditionalDep/SwiftLibraryWithConditionalDep.swift"],
     tags = ["manual"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
@@ -822,7 +831,7 @@ swift_library(
             exp = """\
 
 cc_library(
-    name = "ClangLibraryWithConditionalDep",
+    name = "ClangLibraryWithConditionalDep.rspm",
     copts = [
         "-fblocks",
         "-fobjc-arc",
@@ -832,8 +841,8 @@ cc_library(
     ],
     defines = ["SWIFT_PACKAGE=1"],
     deps = select({
-        "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:ClangLibrary"],
-        "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:ClangLibrary"],
+        "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:ClangLibrary.rspm"],
+        "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:ClangLibrary.rspm"],
         "//conditions:default": [],
     }),
     hdrs = ["include/external.h"],
@@ -844,7 +853,7 @@ cc_library(
     ],
     tags = ["swift_module=ClangLibraryWithConditionalDep"],
     textual_hdrs = ["src/foo.cc"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
@@ -856,26 +865,26 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 generate_modulemap(
-    name = "Source_SwiftForObjcTarget_modulemap",
-    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep_modulemap"],
-    hdrs = [":Source_SwiftForObjcTarget"],
+    name = "SwiftForObjcTarget.rspm_modulemap",
+    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap"],
+    hdrs = [":SwiftForObjcTarget.rspm"],
     module_name = "SwiftForObjcTarget",
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 
 swift_library(
-    name = "Source_SwiftForObjcTarget",
+    name = "SwiftForObjcTarget.rspm",
     always_include_developer_search_paths = True,
     defines = ["SWIFT_PACKAGE"],
     deps = [
-        "@swiftpkg_mypackage//:ObjcLibraryDep",
-        "@swiftpkg_mypackage//:ObjcLibraryDep_modulemap",
+        "@swiftpkg_mypackage//:ObjcLibraryDep.rspm",
+        "@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap",
     ],
     generates_header = True,
     module_name = "SwiftForObjcTarget",
     srcs = ["Source/SwiftForObjcTarget/SwiftForObjcTarget.swift"],
     tags = ["manual"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
@@ -888,36 +897,36 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_accessor", "resource_bundle_infoplist")
 
 apple_resource_bundle(
-    name = "Source_SwiftLibraryWithFilePathResource_resource_bundle",
+    name = "SwiftLibraryWithFilePathResource.rspm_resource_bundle",
     bundle_name = "SwiftLibraryWithFilePathResource_SwiftLibraryWithFilePathResource",
-    infoplists = [":Source_SwiftLibraryWithFilePathResource_resource_bundle_infoplist"],
+    infoplists = [":SwiftLibraryWithFilePathResource.rspm_resource_bundle_infoplist"],
     resources = ["Source/SwiftLibraryWithFilePathResource/Resources/chicken.json"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 
 resource_bundle_accessor(
-    name = "Source_SwiftLibraryWithFilePathResource_resource_bundle_accessor",
+    name = "SwiftLibraryWithFilePathResource.rspm_resource_bundle_accessor",
     bundle_name = "SwiftLibraryWithFilePathResource_SwiftLibraryWithFilePathResource",
 )
 
 resource_bundle_infoplist(
-    name = "Source_SwiftLibraryWithFilePathResource_resource_bundle_infoplist",
+    name = "SwiftLibraryWithFilePathResource.rspm_resource_bundle_infoplist",
     region = "en",
 )
 
 swift_library(
-    name = "Source_SwiftLibraryWithFilePathResource",
+    name = "SwiftLibraryWithFilePathResource.rspm",
     always_include_developer_search_paths = True,
-    data = [":Source_SwiftLibraryWithFilePathResource_resource_bundle"],
+    data = [":SwiftLibraryWithFilePathResource.rspm_resource_bundle"],
     defines = ["SWIFT_PACKAGE"],
     deps = [],
     module_name = "SwiftLibraryWithFilePathResource",
     srcs = [
         "Source/SwiftLibraryWithFilePathResource/SwiftLibraryWithFilePathResource.swift",
-        ":Source_SwiftLibraryWithFilePathResource_resource_bundle_accessor",
+        ":SwiftLibraryWithFilePathResource.rspm_resource_bundle_accessor",
     ],
     tags = ["manual"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
@@ -929,33 +938,33 @@ load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap", "objc_resource_bundle_accessor_hdr", "objc_resource_bundle_accessor_impl", "resource_bundle_infoplist")
 
 apple_resource_bundle(
-    name = "ObjcLibraryWithResources_resource_bundle",
+    name = "ObjcLibraryWithResources.rspm_resource_bundle",
     bundle_name = "ObjcLibraryWithResources_ObjcLibraryWithResources",
-    infoplists = [":ObjcLibraryWithResources_resource_bundle_infoplist"],
+    infoplists = [":ObjcLibraryWithResources.rspm_resource_bundle_infoplist"],
     resources = ["Source/ObjcLibraryWithResources/Resources/chicken.json"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 
 generate_modulemap(
-    name = "ObjcLibraryWithResources_modulemap",
+    name = "ObjcLibraryWithResources.rspm_modulemap",
     deps = [],
     hdrs = ["include/external.h"],
     module_name = "ObjcLibraryWithResources",
     noop = False,
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 
 objc_library(
-    name = "ObjcLibraryWithResources",
+    name = "ObjcLibraryWithResources.rspm",
     copts = [
         "-fblocks",
         "-fobjc-arc",
         "-fPIC",
         "-fmodule-name=ObjcLibraryWithResources",
-        "-include$(location :ObjcLibraryWithResources_objc_resource_bundle_accessor_hdr)",
+        "-include$(location :ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr)",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
     ],
-    data = [":ObjcLibraryWithResources_resource_bundle"],
+    data = [":ObjcLibraryWithResources.rspm_resource_bundle"],
     defines = ["SWIFT_PACKAGE=1"],
     enable_modules = True,
     hdrs = ["include/external.h"],
@@ -980,27 +989,27 @@ objc_library(
     srcs = [
         "src/foo.h",
         "src/foo.m",
-        ":ObjcLibraryWithResources_objc_resource_bundle_accessor_hdr",
-        ":ObjcLibraryWithResources_objc_resource_bundle_accessor_impl",
+        ":ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr",
+        ":ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_impl",
     ],
     tags = ["swift_module=ObjcLibraryWithResources"],
     textual_hdrs = ["src/foo.m"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 
 objc_resource_bundle_accessor_hdr(
-    name = "ObjcLibraryWithResources_objc_resource_bundle_accessor_hdr",
+    name = "ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr",
     module_name = "ObjcLibraryWithResources",
 )
 
 objc_resource_bundle_accessor_impl(
-    name = "ObjcLibraryWithResources_objc_resource_bundle_accessor_impl",
+    name = "ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_impl",
     bundle_name = "ObjcLibraryWithResources_ObjcLibraryWithResources",
     module_name = "ObjcLibraryWithResources",
 )
 
 resource_bundle_infoplist(
-    name = "ObjcLibraryWithResources_resource_bundle_infoplist",
+    name = "ObjcLibraryWithResources.rspm_resource_bundle_infoplist",
     region = "en",
 )
 """,
@@ -1047,7 +1056,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 
 swift_binary(
     name = "oldstyleexec",
-    deps = ["@swiftpkg_mypackage//:Source_RegularTargetForExec"],
+    deps = ["@swiftpkg_mypackage//:RegularTargetForExec.rspm"],
     visibility = ["//visibility:public"],
 )
 """,
@@ -1056,11 +1065,27 @@ swift_binary(
             msg = "Swift library product",
             name = "RegularSwiftTargetAsLibrary",
             exp = """\
-load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library_group")
 
-build_test(
-    name = "RegularSwiftTargetAsLibraryBuildTest",
-    targets = ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
+swift_library_group(
+    name = "RegularSwiftTargetAsLibrary",
+    deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "ObjC library with modulemap product",
+            name = "ObjcLibraryWithModulemap",
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library_group")
+
+swift_library_group(
+    name = "ObjcLibraryWithModulemap",
+    deps = [
+        "@swiftpkg_mypackage//:ObjcLibraryWithModulemap.rspm",
+        "@swiftpkg_mypackage//:ObjcLibraryWithModulemap.rspm_modulemap",
+    ],
     visibility = ["//visibility:public"],
 )
 """,
@@ -1072,7 +1097,7 @@ build_test(
 
 alias(
     name = "swiftexec",
-    actual = "@swiftpkg_mypackage//:Source_SwiftExecutableTarget",
+    actual = "@swiftpkg_mypackage//:SwiftExecutableTarget.rspm",
     visibility = ["//visibility:public"],
 )
 """,
@@ -1082,9 +1107,8 @@ alias(
         product = lists.find(_pkg_info.products, lambda p: p.name == t.name)
         actual = scg.to_starlark(
             swiftpkg_build_files.new_for_product(
-                pkg_info = _pkg_ctx.pkg_info,
+                pkg_ctx = _pkg_ctx,
                 product = product,
-                repo_name = _pkg_ctx.repo_name,
             ),
         )
         asserts.equals(env, t.exp, actual, t.msg)

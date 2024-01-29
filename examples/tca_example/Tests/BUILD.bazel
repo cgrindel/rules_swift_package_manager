@@ -9,7 +9,7 @@ swift_library(
     tags = ["manual"],
     deps = [
         "//Sources:TCAExample",
-        "@swiftpkg_swift_composable_architecture//:Sources_ComposableArchitecture",
+        "@swiftpkg_swift_composable_architecture//:ComposableArchitecture",
     ],
 )
 

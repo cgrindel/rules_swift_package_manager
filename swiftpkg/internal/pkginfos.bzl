@@ -200,7 +200,6 @@ def _new_target_from_json_maps(
     target_name = dump_map["name"]
     target_path = desc_map["path"]
     target_label = pkginfo_targets.bazel_label_from_parts(
-        target_path = target_path,
         target_name = target_name,
         repo_name = repo_name,
     )
@@ -1077,7 +1076,6 @@ def _new_target(
         fail("Need to specify `label` or `repo_name`.")
     if label == None:
         label = pkginfo_targets.bazel_label_from_parts(
-            target_path = path,
             target_name = name,
             repo_name = repo_name,
         )

@@ -37,17 +37,14 @@ func moduleLabelCompare(a, b ModuleLabel) int {
 type Product struct {
 	Identity string
 	Name     string
-	Labels   []string
+	Label    string
 }
 
 func newProductFromSwiftProduct(p *swift.Product) Product {
 	prd := Product{
 		Identity: p.Identity,
 		Name:     p.Name,
-		Labels:   make([]string, len(p.TargetLabels)),
-	}
-	for idx, l := range p.TargetLabels {
-		prd.Labels[idx] = l.String()
+		Label:    p.Label.String(),
 	}
 	return prd
 }

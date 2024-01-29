@@ -18,7 +18,7 @@ swift_library(
     module_name = "AnalyticsExample",
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = ["@swiftpkg_firebase_ios_sdk//:SwiftPM-PlatformExclude_FirebaseAnalyticsWithoutAdIdSupportWrap_FirebaseAnalyticsWithoutAdIdSupportTarget"],
+    deps = ["@swiftpkg_firebase_ios_sdk//:FirebaseAnalyticsWithoutAdIdSupport"],
 )
 
 ios_application(
