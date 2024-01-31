@@ -25,9 +25,10 @@ func UseRepoNames(di *DependencyIndex) (string, error) {
 	return b.String(), nil
 }
 
-func BzlmodStanzas(di *DependencyIndex, moduleDir string, pkgPath string, diPath string) (string, error) {
+func BzlmodStanzas(di *DependencyIndex, moduleDir string, diPath string) (string, error) {
 	// get the relative path to the package containing the dependency index file
-	relPkgPath, err := filepath.Rel(moduleDir, pkgPath)
+	diDir := filepath.Dir(diPath)
+	relPkgPath, err := filepath.Rel(moduleDir, diDir)
 	if err != nil {
 		return "", err
 	}

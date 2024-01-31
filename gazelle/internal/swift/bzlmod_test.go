@@ -30,7 +30,7 @@ func TestBzlmodStanzas(t *testing.T) {
 	di.AddPackage(awesomePkg, anotherPkg)
 	di.AddDirectDependency(awesomeRepoId, anotherRepoID)
 
-	actual, err := swift.BzlmodStanzas(di, "path/to/root", "path/to/root", "path/to/root/swift_deps_index.json")
+	actual, err := swift.BzlmodStanzas(di, "path/to/root", "path/to/root/swift_deps_index.json")
 	assert.NoError(t, err)
 	expected := `swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
@@ -71,7 +71,7 @@ func TestBzlmodStanzasWithCustomDepsIndex(t *testing.T) {
 	di.AddPackage(awesomePkg, anotherPkg)
 	di.AddDirectDependency(awesomeRepoId, anotherRepoID)
 
-	actual, err := swift.BzlmodStanzas(di, "path/to/root", "path/to/root/swift", "path/to/root/swift/deps_index.json")
+	actual, err := swift.BzlmodStanzas(di, "path/to/root", "path/to/root/swift/deps_index.json")
 	assert.NoError(t, err)
 	expected := `swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
