@@ -37,7 +37,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_xcodeproj",
-    version = "1.15.0",
+    version = "1.16.0",
     dev_dependency = True,
 )
 

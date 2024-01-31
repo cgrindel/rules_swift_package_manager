@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "6f349b03755f07daa737879e3da5c8c086d5fd4d3ec59b53e193d4f9af1b1d76",
+  "moduleFileHash": "9a4176c0c141fd5fcb9d47f3621f21a10e28cd9de11df049997b8557f288c28a",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -81,7 +81,7 @@
         "apple_support": "apple_support@1.11.1",
         "build_bazel_rules_swift": "rules_swift@1.15.1",
         "build_bazel_rules_apple": "rules_apple@3.2.1",
-        "rules_xcodeproj": "rules_xcodeproj@1.15.0",
+        "rules_xcodeproj": "rules_xcodeproj@1.16.0",
         "bazel_skylib_gazelle_plugin": "bazel_skylib_gazelle_plugin@1.5.0",
         "bazel_gazelle": "gazelle@0.35.0",
         "bazel_tools": "bazel_tools@_",
@@ -481,10 +481,10 @@
         }
       }
     },
-    "rules_xcodeproj@1.15.0": {
+    "rules_xcodeproj@1.16.0": {
       "name": "rules_xcodeproj",
-      "version": "1.15.0",
-      "key": "rules_xcodeproj@1.15.0",
+      "version": "1.16.0",
+      "key": "rules_xcodeproj@1.16.0",
       "repoName": "rules_xcodeproj",
       "executionPlatformsToRegister": [],
       "toolchainsToRegister": [],
@@ -492,9 +492,9 @@
         {
           "extensionBzlFile": "@rules_xcodeproj//xcodeproj:extensions.bzl",
           "extensionName": "internal",
-          "usingModule": "rules_xcodeproj@1.15.0",
+          "usingModule": "rules_xcodeproj@1.16.0",
           "location": {
-            "file": "https://bcr.bazel.build/modules/rules_xcodeproj/1.15.0/MODULE.bazel",
+            "file": "https://bcr.bazel.build/modules/rules_xcodeproj/1.16.0/MODULE.bazel",
             "line": 22,
             "column": 25
           },
@@ -509,9 +509,9 @@
         {
           "extensionBzlFile": "@rules_xcodeproj//xcodeproj:extensions.bzl",
           "extensionName": "non_module_deps",
-          "usingModule": "rules_xcodeproj@1.15.0",
+          "usingModule": "rules_xcodeproj@1.16.0",
           "location": {
-            "file": "https://bcr.bazel.build/modules/rules_xcodeproj/1.15.0/MODULE.bazel",
+            "file": "https://bcr.bazel.build/modules/rules_xcodeproj/1.16.0/MODULE.bazel",
             "line": 25,
             "column": 32
           },
@@ -537,14 +537,14 @@
         "bzlFile": "@bazel_tools//tools/build_defs/repo:http.bzl",
         "ruleClassName": "http_archive",
         "attributes": {
-          "name": "rules_xcodeproj~1.15.0",
+          "name": "rules_xcodeproj~1.16.0",
           "urls": [
-            "https://github.com/MobileNativeFoundation/rules_xcodeproj/releases/download/1.15.0/release.tar.gz"
+            "https://github.com/MobileNativeFoundation/rules_xcodeproj/releases/download/1.16.0/release.tar.gz"
           ],
-          "integrity": "sha256-d3W+uh+d2zy84gnKHtDRF//ii5LYW/qOZZ+zwXatpWU=",
+          "integrity": "sha256-zMcZhRqZQsU7k1mYQQbp+lxcl9liGzRiQ7Y4sY7Al/k=",
           "strip_prefix": "",
           "remote_patches": {
-            "https://bcr.bazel.build/modules/rules_xcodeproj/1.15.0/patches/module_dot_bazel_version.patch": "sha256-9yaIDGdXdBAAFFZhwREc6JAdCcsNfI9hXHjSzOMkc1w="
+            "https://bcr.bazel.build/modules/rules_xcodeproj/1.16.0/patches/module_dot_bazel_version.patch": "sha256-VJb2E9XWHV3ZXLFleJrxY6rBZhzisQ2sC9QtRo+J5o4="
           },
           "remote_patch_strip": 1
         }
