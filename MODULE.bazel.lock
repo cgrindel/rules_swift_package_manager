@@ -1752,7 +1752,8 @@
               "name": "apple_support~1.11.1~apple_cc_configure_extension~local_config_apple_cc_toolchains"
             }
           }
-        }
+        },
+        "recordedRepoMappingEntries": []
       }
     },
     "@@bazel_features~1.1.1//private:extensions.bzl%version_extension": {
@@ -1780,12 +1781,13 @@
               }
             }
           }
-        }
+        },
+        "recordedRepoMappingEntries": []
       }
     },
     "@@bazel_tools//tools/cpp:cc_configure.bzl%cc_configure_extension": {
       "general": {
-        "bzlTransitiveDigest": "O9sf6ilKWU9Veed02jG9o2HM/xgV/UAyciuFBuxrFRY=",
+        "bzlTransitiveDigest": "mcsWHq3xORJexV5/4eCvNOLxFOQKV6eli3fkr+tEaqE=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -1803,7 +1805,14 @@
               "name": "bazel_tools~cc_configure_extension~local_config_cc_toolchains"
             }
           }
-        }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "bazel_tools",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
       }
     },
     "@@bazel_tools//tools/osx:xcode_configure.bzl%xcode_configure_extension": {
@@ -1821,7 +1830,8 @@
               "remote_xcode": ""
             }
           }
-        }
+        },
+        "recordedRepoMappingEntries": []
       }
     },
     "@@bazel_tools//tools/sh:sh_configure.bzl%sh_configure_extension": {
@@ -1837,12 +1847,13 @@
               "name": "bazel_tools~sh_configure_extension~local_config_sh"
             }
           }
-        }
+        },
+        "recordedRepoMappingEntries": []
       }
     },
     "@@buildifier_prebuilt~6.0.0.1//:defs.bzl%buildifier_prebuilt_deps_extension": {
       "general": {
-        "bzlTransitiveDigest": "rw0w83IFOd+utieoxefELpxmQT7CxmI9Bd1pKxwbgZE=",
+        "bzlTransitiveDigest": "e/ywZz1v92DyiMnlC9hasz8Co0tsLhzEkfjuKBqw0WY=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -1958,7 +1969,19 @@
               "sha256": "9ffa62ea1f55f420c36eeef1427f71a34a5d24332cb861753b2b59c66d6343e2"
             }
           }
-        }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "buildifier_prebuilt~6.0.0.1",
+            "bazel_skylib",
+            "bazel_skylib~1.5.0"
+          ],
+          [
+            "buildifier_prebuilt~6.0.0.1",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
       }
     },
     "@@gazelle~0.35.0//:extensions.bzl%go_deps": {
@@ -2470,7 +2493,8 @@
           ],
           "explicitRootModuleDirectDevDeps": [],
           "useAllRepos": "NO"
-        }
+        },
+        "recordedRepoMappingEntries": []
       }
     },
     "@@gazelle~0.35.0//internal/bzlmod:non_module_deps.bzl%non_module_deps": {
@@ -2504,7 +2528,8 @@
               "go_env": {}
             }
           }
-        }
+        },
+        "recordedRepoMappingEntries": []
       }
     },
     "@@rules_bazel_integration_test~0.14.1//:extensions.bzl%bazel_binaries": {
@@ -2532,7 +2557,8 @@
               "current_version": "'@@//:.bazelversion'"
             }
           }
-        }
+        },
+        "recordedRepoMappingEntries": []
       }
     },
     "@@rules_go~0.44.0//go:extensions.bzl%go_sdk": {
@@ -2704,10 +2730,11 @@
               "version": "1.21.1"
             }
           }
-        }
+        },
+        "recordedRepoMappingEntries": []
       },
       "os:linux,arch:amd64": {
-        "bzlTransitiveDigest": "HOJ7KCV+gzdiDP50kTBrioqp+Vdoj42MzmZF65s69fg=",
+        "bzlTransitiveDigest": "kiXC3G4aNMCaNAvq0fd7s1GPHmEkVu6lBR94QAFV6DY=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2874,12 +2901,39 @@
               "version": "1.21.1"
             }
           }
-        }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "bazel_features~1.1.1",
+            "bazel_features_globals",
+            "bazel_features~1.1.1~version_extension~bazel_features_globals"
+          ],
+          [
+            "bazel_features~1.1.1",
+            "bazel_features_version",
+            "bazel_features~1.1.1~version_extension~bazel_features_version"
+          ],
+          [
+            "rules_go~0.44.0",
+            "bazel_features",
+            "bazel_features~1.1.1"
+          ],
+          [
+            "rules_go~0.44.0",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "rules_go~0.44.0",
+            "io_bazel_rules_go",
+            "rules_go~0.44.0"
+          ]
+        ]
       }
     },
     "@@rules_java~7.1.0//java:extensions.bzl%toolchains": {
       "general": {
-        "bzlTransitiveDigest": "iUIRqCK7tkhvcDJCAfPPqSd06IHG0a8HQD0xeQyVAqw=",
+        "bzlTransitiveDigest": "D02GmifxnV/IhYgspsJMDZ/aE8HxAjXgek5gi6FSto4=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3414,7 +3468,19 @@
               "build_file": "\nconfig_setting(\n    name = \"prefix_version_setting\",\n    values = {\"java_runtime_version\": \"remotejdk_21\"},\n    visibility = [\"//visibility:private\"],\n)\nconfig_setting(\n    name = \"version_setting\",\n    values = {\"java_runtime_version\": \"21\"},\n    visibility = [\"//visibility:private\"],\n)\nalias(\n    name = \"version_or_prefix_version_setting\",\n    actual = select({\n        \":version_setting\": \":version_setting\",\n        \"//conditions:default\": \":prefix_version_setting\",\n    }),\n    visibility = [\"//visibility:private\"],\n)\ntoolchain(\n    name = \"toolchain\",\n    target_compatible_with = [\"@platforms//os:windows\", \"@platforms//cpu:x86_64\"],\n    target_settings = [\":version_or_prefix_version_setting\"],\n    toolchain_type = \"@bazel_tools//tools/jdk:runtime_toolchain_type\",\n    toolchain = \"@remotejdk21_win//:jdk\",\n)\ntoolchain(\n    name = \"bootstrap_runtime_toolchain\",\n    # These constraints are not required for correctness, but prevent fetches of remote JDK for\n    # different architectures. As every Java compilation toolchain depends on a bootstrap runtime in\n    # the same configuration, this constraint will not result in toolchain resolution failures.\n    exec_compatible_with = [\"@platforms//os:windows\", \"@platforms//cpu:x86_64\"],\n    target_settings = [\":version_or_prefix_version_setting\"],\n    toolchain_type = \"@bazel_tools//tools/jdk:bootstrap_runtime_toolchain_type\",\n    toolchain = \"@remotejdk21_win//:jdk\",\n)\n"
             }
           }
-        }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_java~7.1.0",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "rules_java~7.1.0",
+            "remote_java_tools",
+            "rules_java~7.1.0~toolchains~remote_java_tools"
+          ]
+        ]
       }
     },
     "@@rules_swift~1.13.0//swift:extensions.bzl%non_module_deps": {
@@ -3573,7 +3639,8 @@
               "name": "rules_swift~1.13.0~non_module_deps~build_bazel_rules_swift_local_config"
             }
           }
-        }
+        },
+        "recordedRepoMappingEntries": []
       }
     }
   }
