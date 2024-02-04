@@ -2563,7 +2563,7 @@
     },
     "@@rules_go~0.44.0//go:extensions.bzl%go_sdk": {
       "os:osx,arch:x86_64": {
-        "bzlTransitiveDigest": "HOJ7KCV+gzdiDP50kTBrioqp+Vdoj42MzmZF65s69fg=",
+        "bzlTransitiveDigest": "kiXC3G4aNMCaNAvq0fd7s1GPHmEkVu6lBR94QAFV6DY=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2731,7 +2731,33 @@
             }
           }
         },
-        "recordedRepoMappingEntries": []
+        "recordedRepoMappingEntries": [
+          [
+            "bazel_features~1.1.1",
+            "bazel_features_globals",
+            "bazel_features~1.1.1~version_extension~bazel_features_globals"
+          ],
+          [
+            "bazel_features~1.1.1",
+            "bazel_features_version",
+            "bazel_features~1.1.1~version_extension~bazel_features_version"
+          ],
+          [
+            "rules_go~0.44.0",
+            "bazel_features",
+            "bazel_features~1.1.1"
+          ],
+          [
+            "rules_go~0.44.0",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "rules_go~0.44.0",
+            "io_bazel_rules_go",
+            "rules_go~0.44.0"
+          ]
+        ]
       },
       "os:linux,arch:amd64": {
         "bzlTransitiveDigest": "kiXC3G4aNMCaNAvq0fd7s1GPHmEkVu6lBR94QAFV6DY=",
@@ -3485,7 +3511,7 @@
     },
     "@@rules_swift~1.13.0//swift:extensions.bzl%non_module_deps": {
       "general": {
-        "bzlTransitiveDigest": "3sh3cKY22C10PM2p2txmWVMqDfTn01dNChD4902k5jA=",
+        "bzlTransitiveDigest": "xfQktNHikf4AhgsOUSmEtDlmb7BEKW/Y8HKuydWpVsg=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3640,7 +3666,18 @@
             }
           }
         },
-        "recordedRepoMappingEntries": []
+        "recordedRepoMappingEntries": [
+          [
+            "rules_swift~1.13.0",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "rules_swift~1.13.0",
+            "build_bazel_rules_swift",
+            "rules_swift~1.13.0"
+          ]
+        ]
       }
     }
   }
