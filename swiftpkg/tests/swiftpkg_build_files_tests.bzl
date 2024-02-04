@@ -150,19 +150,6 @@ _pkg_info = pkginfos.new(
             swift_src_info = pkginfos.new_swift_src_info(),
         ),
         pkginfos.new_target(
-            name = "SwiftLibraryUsesXCTest",
-            type = "regular",
-            c99name = "SwiftLibraryUsesXCTest",
-            module_type = "SwiftTarget",
-            path = "Source/SwiftLibraryUsesXCTest",
-            sources = [
-                "SwiftLibraryUsesXCTest.swift",
-            ],
-            dependencies = [],
-            repo_name = _repo_name,
-            swift_src_info = pkginfos.new_swift_src_info(imports_xctest = True),
-        ),
-        pkginfos.new_target(
             name = "ClangLibrary",
             type = "regular",
             c99name = "ClangLibrary",
@@ -649,29 +636,6 @@ swift_binary(
     deps = [],
     module_name = "SwiftExecutableTarget",
     srcs = ["Source/SwiftExecutableTarget/main.swift"],
-    visibility = ["//visibility:public"],
-)
-""",
-        ),
-        struct(
-            msg = "Swift library that uses XCTest should have testonly = True",
-            name = "SwiftLibraryUsesXCTest",
-            file_contents = {
-                "SwiftLibraryUsesXCTest.swift": """\
-import XCTest
-""",
-            },
-            exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
-
-swift_library(
-    name = "Source_SwiftLibraryUsesXCTest",
-    defines = ["SWIFT_PACKAGE"],
-    deps = [],
-    module_name = "SwiftLibraryUsesXCTest",
-    srcs = ["Source/SwiftLibraryUsesXCTest/SwiftLibraryUsesXCTest.swift"],
-    tags = ["manual"],
-    testonly = True,
     visibility = ["//visibility:public"],
 )
 """,

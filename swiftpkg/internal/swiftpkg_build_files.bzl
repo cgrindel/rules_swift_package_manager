@@ -86,11 +86,6 @@ def _swift_target_build_file(pkg_ctx, target):
     if target.swift_src_info.has_objc_directive and is_library_target:
         attrs["generates_header"] = True
 
-    # The rules_swift code links in developer libraries if the rule is marked testonly.
-    # https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/compiling.bzl#L1312-L1319
-    if target.swift_src_info.imports_xctest:
-        attrs["testonly"] = True
-
     if target.swift_settings != None:
         if len(target.swift_settings.defines) > 0:
             defines.extend(lists.flatten([
@@ -629,11 +624,6 @@ def _generate_modulemap_for_swift_target(target, deps):
         "module_name": target.c99name,
         "visibility": ["//visibility:public"],
     }
-
-    # The modulemap target needs to match the testonly state for its related
-    # Swift target.
-    if target.swift_src_info != None and target.swift_src_info.imports_xctest:
-        attrs["testonly"] = True
     decls = [
         build_decls.new(
             kind = swiftpkg_kinds.generate_modulemap,
