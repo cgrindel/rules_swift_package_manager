@@ -1990,7 +1990,7 @@
         "accumulatedFileDigests": {
           "@@//:go.mod": "948db7237b4c72de4e224f20c6eb5630afe940fff1212f32d0fe556349f57598",
           "@@rules_go~0.44.0//:go.mod": "15454724af1504c4ce1782c2a7f423d596a1d8490125eb7c5bd9c95fea1991f0",
-          "@@//:go.sum": "8041d32335e7cc884b324093118f3ce5df5f98d13fc55562e59f393ca20966ff",
+          "@@//:go.sum": "d4edd30cacfea3691acf8373bc83b3a643ccae5284085a8cbce6d3933586b35c",
           "@@gazelle~0.35.0//:go.mod": "48dc6e771c3028ee1c18b9ffc81e596fd5f6d7e0016c5ef280e30f2821f60473",
           "@@cgrindel_bazel_starlib~0.18.1//:go.sum": "c50d75994c714e6fddfc6eb0cb8da5d2c40ff0ca816fa655ed0cf397cf16a27b",
           "@@rules_go~0.44.0//:go.sum": "b5938730bf7d3581421928b0385d99648dd9634becead96fca0594ac491b2f49",
