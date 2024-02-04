@@ -146,6 +146,11 @@ def _swift_library_from_target(target, attrs):
     # built from a leaf node which can provide critical configuration
     # information.
     attrs["tags"] = ["manual"]
+
+    # SPM always includes the developer search paths when compiling Swift
+    # library targets. So, we do too.
+    attrs["always_include_developer_search_paths"] = True
+
     return build_decls.new(
         kind = swift_kinds.library,
         name = pkginfo_targets.bazel_label_name(target),

@@ -568,6 +568,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
     name = "Source_RegularSwiftTargetAsLibrary",
+    always_include_developer_search_paths = True,
     defines = ["SWIFT_PACKAGE"],
     deps = [],
     module_name = "RegularSwiftTargetAsLibrary",
@@ -588,6 +589,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
     name = "Source_RegularTargetForExec",
+    always_include_developer_search_paths = True,
     defines = ["SWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
     module_name = "RegularTargetForExec",
@@ -800,6 +802,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
     name = "Source_SwiftLibraryWithConditionalDep",
+    always_include_developer_search_paths = True,
     defines = ["SWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:ClangLibrary"] + select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
@@ -862,6 +865,7 @@ generate_modulemap(
 
 swift_library(
     name = "Source_SwiftForObjcTarget",
+    always_include_developer_search_paths = True,
     defines = ["SWIFT_PACKAGE"],
     deps = [
         "@swiftpkg_mypackage//:ObjcLibraryDep",
@@ -903,6 +907,7 @@ resource_bundle_infoplist(
 
 swift_library(
     name = "Source_SwiftLibraryWithFilePathResource",
+    always_include_developer_search_paths = True,
     data = [":Source_SwiftLibraryWithFilePathResource_resource_bundle"],
     defines = ["SWIFT_PACKAGE"],
     deps = [],
