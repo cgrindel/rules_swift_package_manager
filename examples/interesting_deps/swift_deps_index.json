@@ -243,9 +243,9 @@
       "name": "swiftpkg_cocoalumberjack",
       "identity": "cocoalumberjack",
       "remote": {
-        "commit": "363ed23d19a931809ea834a7d722da830353806a",
+        "commit": "ae8e475260b978299134d42d739f0ec8241d9af0",
         "remote": "https://github.com/CocoaLumberjack/CocoaLumberjack.git",
-        "version": "3.8.2"
+        "version": "3.8.3"
       }
     },
     {
