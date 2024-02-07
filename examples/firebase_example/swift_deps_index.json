@@ -1665,9 +1665,9 @@
       "name": "swiftpkg_firebase_ios_sdk",
       "identity": "firebase-ios-sdk",
       "remote": {
-        "commit": "b880ec8ec927a838c51c12862c6222c30d7097d7",
+        "commit": "f91c8167141d0279726c6f6d9d4a47c026785cbc",
         "remote": "https://github.com/firebase/firebase-ios-sdk",
-        "version": "10.20.0"
+        "version": "10.21.0"
       },
       "cLanguageStandard": "c99",
       "cxxLanguageStandard": "gnu++14"
@@ -1676,9 +1676,9 @@
       "name": "swiftpkg_googleappmeasurement",
       "identity": "googleappmeasurement",
       "remote": {
-        "commit": "ceec9f28dea12b7cf3dabf18b5ed7621c88fd4aa",
+        "commit": "cb8617fab75d181270a1d8f763f26b15c73e2e1e",
         "remote": "https://github.com/google/GoogleAppMeasurement.git",
-        "version": "10.20.0"
+        "version": "10.21.0"
       },
       "cLanguageStandard": "c99",
       "cxxLanguageStandard": "gnu++14"
