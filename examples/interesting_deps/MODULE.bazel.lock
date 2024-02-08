@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "3799709dbea7ee4285950a51c85759f07883dc20734a20dd90881c198b2cbac0",
+  "moduleFileHash": "7d61a6f59771fdec555c395d28579e462bcff6ad8676c4c81fe9596c00144155",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -95,7 +95,7 @@
         "cgrindel_bazel_starlib": "cgrindel_bazel_starlib@0.19.0",
         "bazel_skylib": "bazel_skylib@1.5.0",
         "apple_support": "apple_support@1.11.1",
-        "build_bazel_rules_swift": "rules_swift@1.15.1",
+        "build_bazel_rules_swift": "rules_swift@1.16.0",
         "bazel_skylib_gazelle_plugin": "bazel_skylib_gazelle_plugin@1.5.0",
         "bazel_gazelle": "gazelle@0.35.0",
         "bazel_tools": "bazel_tools@_",
@@ -171,7 +171,7 @@
         "apple_support": "apple_support@1.11.1",
         "rules_cc": "rules_cc@0.0.9",
         "platforms": "platforms@0.0.7",
-        "build_bazel_rules_swift": "rules_swift@1.15.1",
+        "build_bazel_rules_swift": "rules_swift@1.16.0",
         "build_bazel_rules_apple": "rules_apple@3.1.1",
         "bazel_gazelle": "gazelle@0.35.0",
         "bazel_tools": "bazel_tools@_",
@@ -330,10 +330,10 @@
         }
       }
     },
-    "rules_swift@1.15.1": {
+    "rules_swift@1.16.0": {
       "name": "rules_swift",
-      "version": "1.15.1",
-      "key": "rules_swift@1.15.1",
+      "version": "1.16.0",
+      "key": "rules_swift@1.16.0",
       "repoName": "build_bazel_rules_swift",
       "executionPlatformsToRegister": [],
       "toolchainsToRegister": [],
@@ -341,9 +341,9 @@
         {
           "extensionBzlFile": "@build_bazel_rules_swift//swift:extensions.bzl",
           "extensionName": "non_module_deps",
-          "usingModule": "rules_swift@1.15.1",
+          "usingModule": "rules_swift@1.16.0",
           "location": {
-            "file": "https://bcr.bazel.build/modules/rules_swift/1.15.1/MODULE.bazel",
+            "file": "https://bcr.bazel.build/modules/rules_swift/1.16.0/MODULE.bazel",
             "line": 18,
             "column": 32
           },
@@ -366,9 +366,9 @@
         {
           "extensionBzlFile": "@build_bazel_apple_support//crosstool:setup.bzl",
           "extensionName": "apple_cc_configure_extension",
-          "usingModule": "rules_swift@1.15.1",
+          "usingModule": "rules_swift@1.16.0",
           "location": {
-            "file": "https://bcr.bazel.build/modules/rules_swift/1.15.1/MODULE.bazel",
+            "file": "https://bcr.bazel.build/modules/rules_swift/1.16.0/MODULE.bazel",
             "line": 32,
             "column": 35
           },
@@ -397,14 +397,14 @@
         "bzlFile": "@bazel_tools//tools/build_defs/repo:http.bzl",
         "ruleClassName": "http_archive",
         "attributes": {
-          "name": "rules_swift~1.15.1",
+          "name": "rules_swift~1.16.0",
           "urls": [
-            "https://github.com/bazelbuild/rules_swift/releases/download/1.15.1/rules_swift.1.15.1.tar.gz"
+            "https://github.com/bazelbuild/rules_swift/releases/download/1.16.0/rules_swift.1.16.0.tar.gz"
           ],
-          "integrity": "sha256-4u7kY4OUg9/hsFzkBqTy+z/XSN3KoxHMh2j6fwQa8P8=",
+          "integrity": "sha256-eqvju++NLgfJ7gess4bwole9L3bqjiEAVoi1BtyNpns=",
           "strip_prefix": "",
           "remote_patches": {
-            "https://bcr.bazel.build/modules/rules_swift/1.15.1/patches/module_dot_bazel_version.patch": "sha256-rMxzgZs1JKbQr3jJYCgiTGhj7zN0SOZurnW50gFgONA="
+            "https://bcr.bazel.build/modules/rules_swift/1.16.0/patches/module_dot_bazel_version.patch": "sha256-66B/4JaIUXEe4yUstQpgvRbYzXLR9nJ+Z7AlzEkxLE4="
           },
           "remote_patch_strip": 1
         }
@@ -991,7 +991,7 @@
         "build_bazel_apple_support": "apple_support@1.11.1",
         "bazel_skylib": "bazel_skylib@1.5.0",
         "platforms": "platforms@0.0.7",
-        "build_bazel_rules_swift": "rules_swift@1.15.1",
+        "build_bazel_rules_swift": "rules_swift@1.16.0",
         "bazel_tools": "bazel_tools@_",
         "local_config_platform": "local_config_platform@_"
       },
