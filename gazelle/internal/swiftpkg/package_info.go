@@ -83,12 +83,45 @@ func NewPackageInfo(sw swiftbin.Executor, dir, buildDir string) (*PackageInfo, e
 		platforms[idx] = NewPlatfromFromManifestInfo(&p)
 	}
 
-	deps := make([]*Dependency, len(dumpManifest.Dependencies))
-	for idx, d := range dumpManifest.Dependencies {
-		deps[idx], err = NewDependencyFromManifestInfo(&d)
+	// Collect a unique set of dependencies by dependency Identity.
+	depsByID := make(map[string]*Dependency)
+	for _, d := range dumpManifest.Dependencies {
+		dep, err := NewDependencyFromManifestInfo(&d)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create dependency: %w", err)
 		}
+		depID := dep.Identity()
+		if _, ok := depsByID[depID]; !ok {
+			depsByID[depID] = dep
+		}
+	}
+
+	// A file system dep may have its own file system deps. We need to find those, as well and add
+	// them to our set of dependencies. We recursively check for other file system deps in a
+	// separate loop so that the top-level package's definition for the dependency takes precedence.
+	for _, dep := range depsByID {
+		if dep.FileSystem == nil {
+			continue
+		}
+		depPkgInfo, err := NewPackageInfo(sw, dep.FileSystem.Path, buildDir)
+		if err != nil {
+			return nil, err
+		}
+		for _, depDep := range depPkgInfo.Dependencies {
+			if depDep.FileSystem == nil {
+				continue
+			}
+			depID := depDep.Identity()
+			if _, ok := depsByID[depID]; !ok {
+				depsByID[depID] = depDep
+			}
+		}
+	}
+
+	// Create a slice of the depdencies that were found.
+	deps := make([]*Dependency, 0, len(depsByID))
+	for _, dep := range depsByID {
+		deps = append(deps, dep)
 	}
 
 	return &PackageInfo{

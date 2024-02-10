@@ -1,6 +1,8 @@
 {
   "direct_dep_identities": [
     "my_local_package",
+    "myamazingmodule",
+    "notthatamazingmodule",
     "swift-argument-parser",
     "swift-log",
     "swiftformat"
@@ -25,6 +27,26 @@
       "package_identity": "my_local_package",
       "product_memberships": [
         "print-greeting"
+      ]
+    },
+    {
+      "name": "MyAmazingModule",
+      "c99name": "MyAmazingModule",
+      "src_type": "swift",
+      "label": "@swiftpkg_myamazingmodule//:Sources_MyAmazingModule",
+      "package_identity": "myamazingmodule",
+      "product_memberships": [
+        "MyAmazingModule"
+      ]
+    },
+    {
+      "name": "NotThatAmazingModule",
+      "c99name": "NotThatAmazingModule",
+      "src_type": "swift",
+      "label": "@swiftpkg_notthatamazingmodule//:Sources_NotThatAmazingModule",
+      "package_identity": "notthatamazingmodule",
+      "product_memberships": [
+        "NotThatAmazingModule"
       ]
     },
     {
@@ -132,6 +154,22 @@
       ]
     },
     {
+      "identity": "myamazingmodule",
+      "name": "MyAmazingModule",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_myamazingmodule//:Sources_MyAmazingModule"
+      ]
+    },
+    {
+      "identity": "notthatamazingmodule",
+      "name": "NotThatAmazingModule",
+      "type": "library",
+      "target_labels": [
+        "@swiftpkg_notthatamazingmodule//:Sources_NotThatAmazingModule"
+      ]
+    },
+    {
       "identity": "swift-argument-parser",
       "name": "ArgumentParser",
       "type": "library",
@@ -189,6 +227,20 @@
       }
     },
     {
+      "name": "swiftpkg_myamazingmodule",
+      "identity": "myamazingmodule",
+      "local": {
+        "path": "third_party/MyAmazingModule"
+      }
+    },
+    {
+      "name": "swiftpkg_notthatamazingmodule",
+      "identity": "notthatamazingmodule",
+      "local": {
+        "path": "third_party/NotThatAmazingModule"
+      }
+    },
+    {
       "name": "swiftpkg_swift_argument_parser",
       "identity": "swift-argument-parser",
       "remote": {
@@ -210,9 +262,9 @@
       "name": "swiftpkg_swiftformat",
       "identity": "swiftformat",
       "remote": {
-        "commit": "fef156a6135e584985ed26713dd2e9ee41f952cb",
+        "commit": "402367fbe91d6a453bc608bfc0d93b14a301a519",
         "remote": "https://github.com/nicklockwood/SwiftFormat",
-        "version": "0.53.0"
+        "version": "0.53.1"
       }
     }
   ]

@@ -48,8 +48,8 @@ gazelle_dependencies()
 
 http_archive(
     name = "build_bazel_rules_swift",
-    sha256 = "e2eee463839483dfe1b05ce406a4f2fb3fd748ddcaa311cc8768fa7f041af0ff",
-    url = "https://github.com/bazelbuild/rules_swift/releases/download/1.15.1/rules_swift.1.15.1.tar.gz",
+    sha256 = "7aabe3bbef8d2e07c9ee07acb386f0a257bd2f76ea8e21005688b506dc8da67b",
+    url = "https://github.com/bazelbuild/rules_swift/releases/download/1.16.0/rules_swift.1.16.0.tar.gz",
 )
 
 load(
@@ -72,9 +72,9 @@ swift_rules_extra_dependencies()
 http_archive(
     name = "com_github_apple_swift_collections",
     build_file = "@//third_party:swift_collections.BUILD.bazel",
-    sha256 = "876353021246d0b5a131236400ee723ed783e75c853dcc49640576df83779b54",
-    strip_prefix = "swift-collections-1.0.6",
-    url = "https://github.com/apple/swift-collections/archive/refs/tags/1.0.6.tar.gz",
+    sha256 = "59ca5676b2662021f3046becb7824747c002637677b953fc059ee555f1e0b438",
+    strip_prefix = "swift-collections-1.1.0",
+    url = "https://github.com/apple/swift-collections/archive/refs/tags/1.1.0.tar.gz",
 )
 
 # Example of defining Swift targets inline.

@@ -102,20 +102,6 @@ def _get(repository_ctx, directory, deps_index, env = {}):
 
     return pkg_info
 
-def _new_dependency_requirement_from_desc_json_map(req_map):
-    ranges = req_map.get("range")
-    if ranges != None:
-        return _new_dependency_requirement(
-            ranges = [
-                _new_version_range(
-                    lower = rangeMap["lower_bound"],
-                    upper = rangeMap["upper_bound"],
-                )
-                for rangeMap in ranges
-            ],
-        )
-    return None
-
 def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map):
     identity = dep_map["identity"]
     name = dep_names_by_id.get(identity)
@@ -127,9 +113,6 @@ def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map):
     return _new_dependency(
         identity = identity,
         name = name,
-        type = dep_map["type"],
-        url = dep_map["url"],
-        requirement = _new_dependency_requirement_from_desc_json_map(dep_map["requirement"]),
     )
 
 def _new_product_from_desc_json_map(prd_map):
@@ -413,15 +396,17 @@ def _new_linker_settings_from_dump_json_list(dump_list):
 def _new_dependency_identity_to_name_map(dump_deps):
     result = {}
     for dep in dump_deps:
-        src_ctrl_list = dep.get("sourceControl")
-        if src_ctrl_list == None or len(src_ctrl_list) == 0:
+        identity_provider_list = (
+            dep.get("sourceControl") or dep.get("fileSystem")
+        )
+        if not identity_provider_list:
             continue
-        src_ctrl = src_ctrl_list[0]
-        identity = src_ctrl["identity"]
+        identity_provider = identity_provider_list[0]
+        identity = identity_provider["identity"]
 
         # If a dependency has been given a name in the manifest, use it.
         # Otherwise, match on the identity.
-        name = src_ctrl.get(
+        name = identity_provider.get(
             "nameForTargetDependencyResolutionOnly",
             default = identity,
         )
@@ -556,17 +541,13 @@ def _new_platform(name, version):
 
 # MARK: - External Dependency
 
-def _new_dependency(identity, name, type, url, requirement):
+def _new_dependency(identity, name):
     """Creates a `struct` representing an external dependency for a Swift \
     package.
 
     Args:
         identity: The identifier for the external depdendency (`string`).
         name: The name used for package reference resolution (`string`).
-        type: Type type of external dependency (`string`).
-        url: The URL of the external dependency (`string`).
-        requirement: A `struct` as returned by \
-            `pkginfos.new_dependency_requirement()`.
 
     Returns:
         A `struct` representing an external dependency.
@@ -574,9 +555,6 @@ def _new_dependency(identity, name, type, url, requirement):
     return struct(
         identity = identity,
         name = pkginfo_dependencies.normalize_name(name),
-        type = type,
-        url = url,
-        requirement = requirement,
     )
 
 def _new_dependency_requirement(ranges = None):
@@ -783,15 +761,12 @@ def _new_swift_src_info_from_sources(
         exclude_paths = []):
     # Check for any @objc directives in the source files
     has_objc_directive = False
-    imports_xctest = False
     for src in sources:
         path = paths.join(target_path, src)
         contents = repository_ctx.read(path)
         if swift_files.has_objc_directive(contents):
             has_objc_directive = True
-        if swift_files.has_import(contents, "XCTest"):
-            imports_xctest = True
-        if has_objc_directive and imports_xctest:
+        if has_objc_directive:
             break
 
     # Find any auto-discoverable resources under the target
@@ -820,17 +795,14 @@ def _new_swift_src_info_from_sources(
 
     return _new_swift_src_info(
         has_objc_directive = has_objc_directive,
-        imports_xctest = imports_xctest,
         discovered_res_files = discovered_res_files,
     )
 
 def _new_swift_src_info(
         has_objc_directive = False,
-        imports_xctest = False,
         discovered_res_files = []):
     return struct(
         has_objc_directive = has_objc_directive,
-        imports_xctest = imports_xctest,
         discovered_res_files = discovered_res_files,
     )
 
@@ -1003,21 +975,13 @@ def _new_objc_src_info_from_sources(repository_ctx, pkg_path, sources):
         srcs = srcs,
     )
 
-    # imports_xctest = lists.contains(src_info.other_imports, "XCTest")
-    imports_xctest = False
-    xctest_srcs = src_info.all_imports.get("XCTest", [])
-    if xctest_srcs != []:
-        imports_xctest = True
-
     return _new_objc_src_info(
         builtin_frameworks = src_info.frameworks,
-        imports_xctest = imports_xctest,
     )
 
-def _new_objc_src_info(builtin_frameworks = [], imports_xctest = False):
+def _new_objc_src_info(builtin_frameworks = []):
     return struct(
         builtin_frameworks = builtin_frameworks,
-        imports_xctest = imports_xctest,
     )
 
 # MARK: - Target
