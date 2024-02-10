@@ -345,9 +345,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["enable_modules"] = True
         attrs["module_name"] = target.c99name
 
-        if target.objc_src_info.imports_xctest:
-            attrs["testonly"] = True
-
         sdk_framework_bzl_selects = []
         for sf in target.objc_src_info.builtin_frameworks:
             platform_conditions = bazel_apple_platforms.for_framework(sf)
