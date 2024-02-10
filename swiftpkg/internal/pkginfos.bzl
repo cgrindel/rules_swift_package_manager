@@ -975,20 +975,13 @@ def _new_objc_src_info_from_sources(repository_ctx, pkg_path, sources):
         srcs = srcs,
     )
 
-    imports_xctest = False
-    xctest_srcs = src_info.all_imports.get("XCTest", [])
-    if xctest_srcs != []:
-        imports_xctest = True
-
     return _new_objc_src_info(
         builtin_frameworks = src_info.frameworks,
-        imports_xctest = imports_xctest,
     )
 
-def _new_objc_src_info(builtin_frameworks = [], imports_xctest = False):
+def _new_objc_src_info(builtin_frameworks = []):
     return struct(
         builtin_frameworks = builtin_frameworks,
-        imports_xctest = imports_xctest,
     )
 
 # MARK: - Target
