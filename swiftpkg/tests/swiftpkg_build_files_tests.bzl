@@ -150,19 +150,6 @@ _pkg_info = pkginfos.new(
             swift_src_info = pkginfos.new_swift_src_info(),
         ),
         pkginfos.new_target(
-            name = "SwiftLibraryUsesXCTest",
-            type = "regular",
-            c99name = "SwiftLibraryUsesXCTest",
-            module_type = "SwiftTarget",
-            path = "Source/SwiftLibraryUsesXCTest",
-            sources = [
-                "SwiftLibraryUsesXCTest.swift",
-            ],
-            dependencies = [],
-            repo_name = _repo_name,
-            swift_src_info = pkginfos.new_swift_src_info(imports_xctest = True),
-        ),
-        pkginfos.new_target(
             name = "ClangLibrary",
             type = "regular",
             c99name = "ClangLibrary",
@@ -581,6 +568,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
     name = "Source_RegularSwiftTargetAsLibrary",
+    always_include_developer_search_paths = True,
     defines = ["SWIFT_PACKAGE"],
     deps = [],
     module_name = "RegularSwiftTargetAsLibrary",
@@ -601,6 +589,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
     name = "Source_RegularTargetForExec",
+    always_include_developer_search_paths = True,
     defines = ["SWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
     module_name = "RegularTargetForExec",
@@ -649,29 +638,6 @@ swift_binary(
     deps = [],
     module_name = "SwiftExecutableTarget",
     srcs = ["Source/SwiftExecutableTarget/main.swift"],
-    visibility = ["//visibility:public"],
-)
-""",
-        ),
-        struct(
-            msg = "Swift library that uses XCTest should have testonly = True",
-            name = "SwiftLibraryUsesXCTest",
-            file_contents = {
-                "SwiftLibraryUsesXCTest.swift": """\
-import XCTest
-""",
-            },
-            exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
-
-swift_library(
-    name = "Source_SwiftLibraryUsesXCTest",
-    defines = ["SWIFT_PACKAGE"],
-    deps = [],
-    module_name = "SwiftLibraryUsesXCTest",
-    srcs = ["Source/SwiftLibraryUsesXCTest/SwiftLibraryUsesXCTest.swift"],
-    tags = ["manual"],
-    testonly = True,
     visibility = ["//visibility:public"],
 )
 """,
@@ -836,6 +802,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
     name = "Source_SwiftLibraryWithConditionalDep",
+    always_include_developer_search_paths = True,
     defines = ["SWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:ClangLibrary"] + select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:Source_RegularSwiftTargetAsLibrary"],
@@ -898,6 +865,7 @@ generate_modulemap(
 
 swift_library(
     name = "Source_SwiftForObjcTarget",
+    always_include_developer_search_paths = True,
     defines = ["SWIFT_PACKAGE"],
     deps = [
         "@swiftpkg_mypackage//:ObjcLibraryDep",
@@ -939,6 +907,7 @@ resource_bundle_infoplist(
 
 swift_library(
     name = "Source_SwiftLibraryWithFilePathResource",
+    always_include_developer_search_paths = True,
     data = [":Source_SwiftLibraryWithFilePathResource_resource_bundle"],
     defines = ["SWIFT_PACKAGE"],
     deps = [],

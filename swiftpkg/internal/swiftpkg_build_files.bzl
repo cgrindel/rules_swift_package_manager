@@ -86,11 +86,6 @@ def _swift_target_build_file(pkg_ctx, target):
     if target.swift_src_info.has_objc_directive and is_library_target:
         attrs["generates_header"] = True
 
-    # The rules_swift code links in developer libraries if the rule is marked testonly.
-    # https://github.com/bazelbuild/rules_swift/blob/master/swift/internal/compiling.bzl#L1312-L1319
-    if target.swift_src_info.imports_xctest:
-        attrs["testonly"] = True
-
     if target.swift_settings != None:
         if len(target.swift_settings.defines) > 0:
             defines.extend(lists.flatten([
@@ -151,6 +146,11 @@ def _swift_library_from_target(target, attrs):
     # built from a leaf node which can provide critical configuration
     # information.
     attrs["tags"] = ["manual"]
+
+    # SPM always includes the developer search paths when compiling Swift
+    # library targets. So, we do too.
+    attrs["always_include_developer_search_paths"] = True
+
     return build_decls.new(
         kind = swift_kinds.library,
         name = pkginfo_targets.bazel_label_name(target),
@@ -344,9 +344,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
         attrs["enable_modules"] = True
         attrs["module_name"] = target.c99name
-
-        if target.objc_src_info.imports_xctest:
-            attrs["testonly"] = True
 
         sdk_framework_bzl_selects = []
         for sf in target.objc_src_info.builtin_frameworks:
@@ -629,11 +626,6 @@ def _generate_modulemap_for_swift_target(target, deps):
         "module_name": target.c99name,
         "visibility": ["//visibility:public"],
     }
-
-    # The modulemap target needs to match the testonly state for its related
-    # Swift target.
-    if target.swift_src_info != None and target.swift_src_info.imports_xctest:
-        attrs["testonly"] = True
     decls = [
         build_decls.new(
             kind = swiftpkg_kinds.generate_modulemap,
