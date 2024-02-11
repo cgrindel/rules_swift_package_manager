@@ -5,20 +5,10 @@
   ],
   "modules": [
     {
-      "name": "GRPCSwiftPlugin",
-      "c99name": "GRPCSwiftPlugin",
-      "src_type": "unknown",
-      "label": "@swiftpkg_grpc_swift//:Plugins_GRPCSwiftPlugin",
-      "package_identity": "grpc-swift",
-      "product_memberships": [
-        "GRPCSwiftPlugin"
-      ]
-    },
-    {
       "name": "CGRPCZlib",
       "c99name": "CGRPCZlib",
       "src_type": "clang",
-      "label": "@swiftpkg_grpc_swift//:Sources_CGRPCZlib",
+      "label": "@swiftpkg_grpc_swift//:CGRPCZlib.rspm",
       "package_identity": "grpc-swift",
       "product_memberships": [
         "GRPC",
@@ -30,7 +20,7 @@
       "name": "GRPC",
       "c99name": "GRPC",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPC",
+      "label": "@swiftpkg_grpc_swift//:GRPC.rspm",
       "package_identity": "grpc-swift",
       "product_memberships": [
         "GRPC",
@@ -41,7 +31,7 @@
       "name": "GRPCCore",
       "c99name": "GRPCCore",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPCCore",
+      "label": "@swiftpkg_grpc_swift//:GRPCCore.rspm",
       "package_identity": "grpc-swift",
       "product_memberships": [
         "_GRPCCore"
@@ -51,17 +41,27 @@
       "name": "GRPCReflectionService",
       "c99name": "GRPCReflectionService",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_GRPCReflectionService",
+      "label": "@swiftpkg_grpc_swift//:GRPCReflectionService.rspm",
       "package_identity": "grpc-swift",
       "product_memberships": [
         "GRPCReflectionService"
       ]
     },
     {
+      "name": "GRPCSwiftPlugin",
+      "c99name": "GRPCSwiftPlugin",
+      "src_type": "unknown",
+      "label": "@swiftpkg_grpc_swift//:GRPCSwiftPlugin.rspm",
+      "package_identity": "grpc-swift",
+      "product_memberships": [
+        "GRPCSwiftPlugin"
+      ]
+    },
+    {
       "name": "protoc-gen-grpc-swift",
       "c99name": "protoc_gen_grpc_swift",
       "src_type": "swift",
-      "label": "@swiftpkg_grpc_swift//:Sources_protoc-gen-grpc-swift",
+      "label": "@swiftpkg_grpc_swift//:protoc-gen-grpc-swift.rspm",
       "package_identity": "grpc-swift",
       "product_memberships": [
         "protoc-gen-grpc-swift",
@@ -72,7 +72,7 @@
       "name": "Atomics",
       "c99name": "Atomics",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_atomics//:Sources_Atomics",
+      "label": "@swiftpkg_swift_atomics//:Atomics.rspm",
       "package_identity": "swift-atomics",
       "product_memberships": [
         "Atomics"
@@ -82,7 +82,7 @@
       "name": "_AtomicsShims",
       "c99name": "_AtomicsShims",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_atomics//:Sources__AtomicsShims",
+      "label": "@swiftpkg_swift_atomics//:_AtomicsShims.rspm",
       "package_identity": "swift-atomics",
       "product_memberships": [
         "Atomics"
@@ -92,7 +92,7 @@
       "name": "Collections",
       "c99name": "Collections",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Sources_Collections",
+      "label": "@swiftpkg_swift_collections//:Collections.rspm",
       "package_identity": "swift-collections",
       "product_memberships": [
         "Collections"
@@ -102,7 +102,7 @@
       "name": "DequeModule",
       "c99name": "DequeModule",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Sources_DequeModule",
+      "label": "@swiftpkg_swift_collections//:DequeModule.rspm",
       "package_identity": "swift-collections",
       "product_memberships": [
         "Collections",
@@ -113,7 +113,7 @@
       "name": "OrderedCollections",
       "c99name": "OrderedCollections",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_collections//:Sources_OrderedCollections",
+      "label": "@swiftpkg_swift_collections//:OrderedCollections.rspm",
       "package_identity": "swift-collections",
       "product_memberships": [
         "Collections",
@@ -124,7 +124,7 @@
       "name": "HTTPTypes",
       "c99name": "HTTPTypes",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_http_types//:Sources_HTTPTypes",
+      "label": "@swiftpkg_swift_http_types//:HTTPTypes.rspm",
       "package_identity": "swift-http-types",
       "product_memberships": [
         "HTTPTypes",
@@ -135,7 +135,7 @@
       "name": "HTTPTypesFoundation",
       "c99name": "HTTPTypesFoundation",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_http_types//:Sources_HTTPTypesFoundation",
+      "label": "@swiftpkg_swift_http_types//:HTTPTypesFoundation.rspm",
       "package_identity": "swift-http-types",
       "product_memberships": [
         "HTTPTypesFoundation"
@@ -145,7 +145,7 @@
       "name": "Logging",
       "c99name": "Logging",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_log//:Sources_Logging",
+      "label": "@swiftpkg_swift_log//:Logging.rspm",
       "package_identity": "swift-log",
       "product_memberships": [
         "Logging"
@@ -155,7 +155,7 @@
       "name": "CNIOAtomics",
       "c99name": "CNIOAtomics",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio//:Sources_CNIOAtomics",
+      "label": "@swiftpkg_swift_nio//:CNIOAtomics.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOCore",
@@ -175,7 +175,7 @@
       "name": "CNIODarwin",
       "c99name": "CNIODarwin",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio//:Sources_CNIODarwin",
+      "label": "@swiftpkg_swift_nio//:CNIODarwin.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOCore",
@@ -194,7 +194,7 @@
       "name": "CNIOLLHTTP",
       "c99name": "CNIOLLHTTP",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio//:Sources_CNIOLLHTTP",
+      "label": "@swiftpkg_swift_nio//:CNIOLLHTTP.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOHTTP1",
@@ -206,7 +206,7 @@
       "name": "CNIOLinux",
       "c99name": "CNIOLinux",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio//:Sources_CNIOLinux",
+      "label": "@swiftpkg_swift_nio//:CNIOLinux.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOCore",
@@ -225,7 +225,7 @@
       "name": "CNIOSHA1",
       "c99name": "CNIOSHA1",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio//:Sources_CNIOSHA1",
+      "label": "@swiftpkg_swift_nio//:CNIOSHA1.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOWebSocket"
@@ -235,7 +235,7 @@
       "name": "CNIOWindows",
       "c99name": "CNIOWindows",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio//:Sources_CNIOWindows",
+      "label": "@swiftpkg_swift_nio//:CNIOWindows.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOCore",
@@ -254,7 +254,7 @@
       "name": "NIO",
       "c99name": "NIO",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIO",
+      "label": "@swiftpkg_swift_nio//:NIO.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIO",
@@ -270,7 +270,7 @@
       "name": "NIOConcurrencyHelpers",
       "c99name": "NIOConcurrencyHelpers",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOConcurrencyHelpers",
+      "label": "@swiftpkg_swift_nio//:NIOConcurrencyHelpers.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOCore",
@@ -290,7 +290,7 @@
       "name": "NIOCore",
       "c99name": "NIOCore",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOCore",
+      "label": "@swiftpkg_swift_nio//:NIOCore.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOCore",
@@ -309,7 +309,7 @@
       "name": "NIOEmbedded",
       "c99name": "NIOEmbedded",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOEmbedded",
+      "label": "@swiftpkg_swift_nio//:NIOEmbedded.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIO",
@@ -326,7 +326,7 @@
       "name": "NIOFoundationCompat",
       "c99name": "NIOFoundationCompat",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOFoundationCompat",
+      "label": "@swiftpkg_swift_nio//:NIOFoundationCompat.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOFoundationCompat"
@@ -336,7 +336,7 @@
       "name": "NIOHTTP1",
       "c99name": "NIOHTTP1",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOHTTP1",
+      "label": "@swiftpkg_swift_nio//:NIOHTTP1.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOHTTP1",
@@ -348,7 +348,7 @@
       "name": "NIOPosix",
       "c99name": "NIOPosix",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOPosix",
+      "label": "@swiftpkg_swift_nio//:NIOPosix.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIO",
@@ -365,7 +365,7 @@
       "name": "NIOTLS",
       "c99name": "NIOTLS",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOTLS",
+      "label": "@swiftpkg_swift_nio//:NIOTLS.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOTLS"
@@ -375,7 +375,7 @@
       "name": "NIOTestUtils",
       "c99name": "NIOTestUtils",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOTestUtils",
+      "label": "@swiftpkg_swift_nio//:NIOTestUtils.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOTestUtils"
@@ -385,7 +385,7 @@
       "name": "NIOWebSocket",
       "c99name": "NIOWebSocket",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources_NIOWebSocket",
+      "label": "@swiftpkg_swift_nio//:NIOWebSocket.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOWebSocket"
@@ -395,7 +395,7 @@
       "name": "_NIOBase64",
       "c99name": "_NIOBase64",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources__NIOBase64",
+      "label": "@swiftpkg_swift_nio//:_NIOBase64.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOCore",
@@ -414,7 +414,7 @@
       "name": "_NIOConcurrency",
       "c99name": "_NIOConcurrency",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources__NIOConcurrency",
+      "label": "@swiftpkg_swift_nio//:_NIOConcurrency.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "_NIOConcurrency"
@@ -424,7 +424,7 @@
       "name": "_NIODataStructures",
       "c99name": "_NIODataStructures",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:Sources__NIODataStructures",
+      "label": "@swiftpkg_swift_nio//:_NIODataStructures.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
         "NIOCore",
@@ -443,7 +443,7 @@
       "name": "CNIOExtrasZlib",
       "c99name": "CNIOExtrasZlib",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_CNIOExtrasZlib",
+      "label": "@swiftpkg_swift_nio_extras//:CNIOExtrasZlib.rspm",
       "package_identity": "swift-nio-extras",
       "product_memberships": [
         "NIOHTTPCompression"
@@ -453,7 +453,7 @@
       "name": "NIOExtras",
       "c99name": "NIOExtras",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOExtras",
+      "label": "@swiftpkg_swift_nio_extras//:NIOExtras.rspm",
       "package_identity": "swift-nio-extras",
       "product_memberships": [
         "NIOExtras"
@@ -463,7 +463,7 @@
       "name": "NIOHTTPCompression",
       "c99name": "NIOHTTPCompression",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPCompression",
+      "label": "@swiftpkg_swift_nio_extras//:NIOHTTPCompression.rspm",
       "package_identity": "swift-nio-extras",
       "product_memberships": [
         "NIOHTTPCompression"
@@ -473,7 +473,7 @@
       "name": "NIOHTTPTypes",
       "c99name": "NIOHTTPTypes",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPTypes",
+      "label": "@swiftpkg_swift_nio_extras//:NIOHTTPTypes.rspm",
       "package_identity": "swift-nio-extras",
       "product_memberships": [
         "NIOHTTPTypes",
@@ -485,7 +485,7 @@
       "name": "NIOHTTPTypesHTTP1",
       "c99name": "NIOHTTPTypesHTTP1",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPTypesHTTP1",
+      "label": "@swiftpkg_swift_nio_extras//:NIOHTTPTypesHTTP1.rspm",
       "package_identity": "swift-nio-extras",
       "product_memberships": [
         "NIOHTTPTypesHTTP1"
@@ -495,7 +495,7 @@
       "name": "NIOHTTPTypesHTTP2",
       "c99name": "NIOHTTPTypesHTTP2",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPTypesHTTP2",
+      "label": "@swiftpkg_swift_nio_extras//:NIOHTTPTypesHTTP2.rspm",
       "package_identity": "swift-nio-extras",
       "product_memberships": [
         "NIOHTTPTypesHTTP2"
@@ -505,7 +505,7 @@
       "name": "NIOSOCKS",
       "c99name": "NIOSOCKS",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKS",
+      "label": "@swiftpkg_swift_nio_extras//:NIOSOCKS.rspm",
       "package_identity": "swift-nio-extras",
       "product_memberships": [
         "NIOSOCKS"
@@ -515,7 +515,7 @@
       "name": "NIOHPACK",
       "c99name": "NIOHPACK",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHPACK",
+      "label": "@swiftpkg_swift_nio_http2//:NIOHPACK.rspm",
       "package_identity": "swift-nio-http2",
       "product_memberships": [
         "NIOHTTP2"
@@ -525,7 +525,7 @@
       "name": "NIOHTTP2",
       "c99name": "NIOHTTP2",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2",
+      "label": "@swiftpkg_swift_nio_http2//:NIOHTTP2.rspm",
       "package_identity": "swift-nio-http2",
       "product_memberships": [
         "NIOHTTP2"
@@ -535,7 +535,7 @@
       "name": "CNIOBoringSSL",
       "c99name": "CNIOBoringSSL",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio_ssl//:Sources_CNIOBoringSSL",
+      "label": "@swiftpkg_swift_nio_ssl//:CNIOBoringSSL.rspm",
       "package_identity": "swift-nio-ssl",
       "product_memberships": [
         "NIOSSL",
@@ -547,7 +547,7 @@
       "name": "CNIOBoringSSLShims",
       "c99name": "CNIOBoringSSLShims",
       "src_type": "clang",
-      "label": "@swiftpkg_swift_nio_ssl//:Sources_CNIOBoringSSLShims",
+      "label": "@swiftpkg_swift_nio_ssl//:CNIOBoringSSLShims.rspm",
       "package_identity": "swift-nio-ssl",
       "product_memberships": [
         "NIOSSL",
@@ -559,7 +559,7 @@
       "name": "NIOSSL",
       "c99name": "NIOSSL",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOSSL",
+      "label": "@swiftpkg_swift_nio_ssl//:NIOSSL.rspm",
       "package_identity": "swift-nio-ssl",
       "product_memberships": [
         "NIOSSL",
@@ -571,7 +571,7 @@
       "name": "NIOSSLHTTP1Client",
       "c99name": "NIOSSLHTTP1Client",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLHTTP1Client",
+      "label": "@swiftpkg_swift_nio_ssl//:NIOSSLHTTP1Client.rspm",
       "package_identity": "swift-nio-ssl",
       "product_memberships": [
         "NIOSSLHTTP1Client"
@@ -581,7 +581,7 @@
       "name": "NIOTLSServer",
       "c99name": "NIOTLSServer",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_ssl//:Sources_NIOTLSServer",
+      "label": "@swiftpkg_swift_nio_ssl//:NIOTLSServer.rspm",
       "package_identity": "swift-nio-ssl",
       "product_memberships": [
         "NIOTLSServer"
@@ -591,27 +591,17 @@
       "name": "NIOTransportServices",
       "c99name": "NIOTransportServices",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_nio_transport_services//:Sources_NIOTransportServices",
+      "label": "@swiftpkg_swift_nio_transport_services//:NIOTransportServices.rspm",
       "package_identity": "swift-nio-transport-services",
       "product_memberships": [
         "NIOTransportServices"
       ]
     },
     {
-      "name": "SwiftProtobufPlugin",
-      "c99name": "SwiftProtobufPlugin",
-      "src_type": "unknown",
-      "label": "@swiftpkg_swift_protobuf//:Plugins_SwiftProtobufPlugin",
-      "package_identity": "swift-protobuf",
-      "product_memberships": [
-        "SwiftProtobufPlugin"
-      ]
-    },
-    {
       "name": "SwiftProtobuf",
       "c99name": "SwiftProtobuf",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_protobuf//:Sources_SwiftProtobuf",
+      "label": "@swiftpkg_swift_protobuf//:SwiftProtobuf.rspm",
       "package_identity": "swift-protobuf",
       "product_memberships": [
         "protoc-gen-swift",
@@ -621,10 +611,20 @@
       ]
     },
     {
+      "name": "SwiftProtobufPlugin",
+      "c99name": "SwiftProtobufPlugin",
+      "src_type": "unknown",
+      "label": "@swiftpkg_swift_protobuf//:SwiftProtobufPlugin.rspm",
+      "package_identity": "swift-protobuf",
+      "product_memberships": [
+        "SwiftProtobufPlugin"
+      ]
+    },
+    {
       "name": "SwiftProtobufPluginLibrary",
       "c99name": "SwiftProtobufPluginLibrary",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_protobuf//:Sources_SwiftProtobufPluginLibrary",
+      "label": "@swiftpkg_swift_protobuf//:SwiftProtobufPluginLibrary.rspm",
       "package_identity": "swift-protobuf",
       "product_memberships": [
         "protoc-gen-swift",
@@ -636,7 +636,7 @@
       "name": "protoc-gen-swift",
       "c99name": "protoc_gen_swift",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_protobuf//:Sources_protoc-gen-swift",
+      "label": "@swiftpkg_swift_protobuf//:protoc-gen-swift.rspm",
       "package_identity": "swift-protobuf",
       "product_memberships": [
         "protoc-gen-swift",
@@ -649,313 +649,235 @@
       "identity": "grpc-swift",
       "name": "CGRPCZlib",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_grpc_swift//:Sources_CGRPCZlib"
-      ]
+      "label": "@swiftpkg_grpc_swift//:CGRPCZlib"
     },
     {
       "identity": "grpc-swift",
       "name": "GRPC",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_grpc_swift//:Sources_GRPC"
-      ]
+      "label": "@swiftpkg_grpc_swift//:GRPC"
     },
     {
       "identity": "grpc-swift",
       "name": "GRPCReflectionService",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_grpc_swift//:Sources_GRPCReflectionService"
-      ]
+      "label": "@swiftpkg_grpc_swift//:GRPCReflectionService"
     },
     {
       "identity": "grpc-swift",
       "name": "GRPCSwiftPlugin",
       "type": "plugin",
-      "target_labels": [
-        "@swiftpkg_grpc_swift//:Plugins_GRPCSwiftPlugin"
-      ]
+      "label": "@swiftpkg_grpc_swift//:GRPCSwiftPlugin"
     },
     {
       "identity": "grpc-swift",
       "name": "_GRPCCore",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_grpc_swift//:Sources_GRPCCore"
-      ]
+      "label": "@swiftpkg_grpc_swift//:_GRPCCore"
     },
     {
       "identity": "grpc-swift",
       "name": "protoc-gen-grpc-swift",
       "type": "executable",
-      "target_labels": [
-        "@swiftpkg_grpc_swift//:Sources_protoc-gen-grpc-swift"
-      ]
+      "label": "@swiftpkg_grpc_swift//:protoc-gen-grpc-swift"
     },
     {
       "identity": "swift-atomics",
       "name": "Atomics",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_atomics//:Sources_Atomics"
-      ]
+      "label": "@swiftpkg_swift_atomics//:Atomics"
     },
     {
       "identity": "swift-collections",
       "name": "Collections",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_collections//:Sources_Collections"
-      ]
+      "label": "@swiftpkg_swift_collections//:Collections"
     },
     {
       "identity": "swift-collections",
       "name": "DequeModule",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_collections//:Sources_DequeModule"
-      ]
+      "label": "@swiftpkg_swift_collections//:DequeModule"
     },
     {
       "identity": "swift-collections",
       "name": "OrderedCollections",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_collections//:Sources_OrderedCollections"
-      ]
+      "label": "@swiftpkg_swift_collections//:OrderedCollections"
     },
     {
       "identity": "swift-http-types",
       "name": "HTTPTypes",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_http_types//:Sources_HTTPTypes"
-      ]
+      "label": "@swiftpkg_swift_http_types//:HTTPTypes"
     },
     {
       "identity": "swift-http-types",
       "name": "HTTPTypesFoundation",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_http_types//:Sources_HTTPTypesFoundation"
-      ]
+      "label": "@swiftpkg_swift_http_types//:HTTPTypesFoundation"
     },
     {
       "identity": "swift-log",
       "name": "Logging",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_log//:Sources_Logging"
-      ]
+      "label": "@swiftpkg_swift_log//:Logging"
     },
     {
       "identity": "swift-nio-extras",
       "name": "NIOExtras",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio_extras//:Sources_NIOExtras"
-      ]
+      "label": "@swiftpkg_swift_nio_extras//:NIOExtras"
     },
     {
       "identity": "swift-nio-extras",
       "name": "NIOHTTPCompression",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPCompression"
-      ]
+      "label": "@swiftpkg_swift_nio_extras//:NIOHTTPCompression"
     },
     {
       "identity": "swift-nio-extras",
       "name": "NIOHTTPTypes",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPTypes"
-      ]
+      "label": "@swiftpkg_swift_nio_extras//:NIOHTTPTypes"
     },
     {
       "identity": "swift-nio-extras",
       "name": "NIOHTTPTypesHTTP1",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPTypesHTTP1"
-      ]
+      "label": "@swiftpkg_swift_nio_extras//:NIOHTTPTypesHTTP1"
     },
     {
       "identity": "swift-nio-extras",
       "name": "NIOHTTPTypesHTTP2",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio_extras//:Sources_NIOHTTPTypesHTTP2"
-      ]
+      "label": "@swiftpkg_swift_nio_extras//:NIOHTTPTypesHTTP2"
     },
     {
       "identity": "swift-nio-extras",
       "name": "NIOSOCKS",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio_extras//:Sources_NIOSOCKS"
-      ]
+      "label": "@swiftpkg_swift_nio_extras//:NIOSOCKS"
     },
     {
       "identity": "swift-nio-http2",
       "name": "NIOHTTP2",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio_http2//:Sources_NIOHTTP2"
-      ]
+      "label": "@swiftpkg_swift_nio_http2//:NIOHTTP2"
     },
     {
       "identity": "swift-nio-ssl",
       "name": "NIOSSL",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio_ssl//:Sources_NIOSSL"
-      ]
+      "label": "@swiftpkg_swift_nio_ssl//:NIOSSL"
     },
     {
       "identity": "swift-nio-ssl",
       "name": "NIOSSLHTTP1Client",
       "type": "executable",
-      "target_labels": [
-        "@swiftpkg_swift_nio_ssl//:Sources_NIOSSLHTTP1Client"
-      ]
+      "label": "@swiftpkg_swift_nio_ssl//:NIOSSLHTTP1Client"
     },
     {
       "identity": "swift-nio-ssl",
       "name": "NIOTLSServer",
       "type": "executable",
-      "target_labels": [
-        "@swiftpkg_swift_nio_ssl//:Sources_NIOTLSServer"
-      ]
+      "label": "@swiftpkg_swift_nio_ssl//:NIOTLSServer"
     },
     {
       "identity": "swift-nio-transport-services",
       "name": "NIOTransportServices",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio_transport_services//:Sources_NIOTransportServices"
-      ]
+      "label": "@swiftpkg_swift_nio_transport_services//:NIOTransportServices"
     },
     {
       "identity": "swift-nio",
       "name": "NIO",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio//:Sources_NIO"
-      ]
+      "label": "@swiftpkg_swift_nio//:NIO"
     },
     {
       "identity": "swift-nio",
       "name": "NIOConcurrencyHelpers",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio//:Sources_NIOConcurrencyHelpers"
-      ]
+      "label": "@swiftpkg_swift_nio//:NIOConcurrencyHelpers"
     },
     {
       "identity": "swift-nio",
       "name": "NIOCore",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio//:Sources_NIOCore"
-      ]
+      "label": "@swiftpkg_swift_nio//:NIOCore"
     },
     {
       "identity": "swift-nio",
       "name": "NIOEmbedded",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio//:Sources_NIOEmbedded"
-      ]
+      "label": "@swiftpkg_swift_nio//:NIOEmbedded"
     },
     {
       "identity": "swift-nio",
       "name": "NIOFoundationCompat",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio//:Sources_NIOFoundationCompat"
-      ]
+      "label": "@swiftpkg_swift_nio//:NIOFoundationCompat"
     },
     {
       "identity": "swift-nio",
       "name": "NIOHTTP1",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio//:Sources_NIOHTTP1"
-      ]
+      "label": "@swiftpkg_swift_nio//:NIOHTTP1"
     },
     {
       "identity": "swift-nio",
       "name": "NIOPosix",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio//:Sources_NIOPosix"
-      ]
+      "label": "@swiftpkg_swift_nio//:NIOPosix"
     },
     {
       "identity": "swift-nio",
       "name": "NIOTLS",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio//:Sources_NIOTLS"
-      ]
+      "label": "@swiftpkg_swift_nio//:NIOTLS"
     },
     {
       "identity": "swift-nio",
       "name": "NIOTestUtils",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio//:Sources_NIOTestUtils"
-      ]
+      "label": "@swiftpkg_swift_nio//:NIOTestUtils"
     },
     {
       "identity": "swift-nio",
       "name": "NIOWebSocket",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio//:Sources_NIOWebSocket"
-      ]
+      "label": "@swiftpkg_swift_nio//:NIOWebSocket"
     },
     {
       "identity": "swift-nio",
       "name": "_NIOConcurrency",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_nio//:Sources__NIOConcurrency"
-      ]
+      "label": "@swiftpkg_swift_nio//:_NIOConcurrency"
     },
     {
       "identity": "swift-protobuf",
       "name": "SwiftProtobuf",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_protobuf//:Sources_SwiftProtobuf"
-      ]
+      "label": "@swiftpkg_swift_protobuf//:SwiftProtobuf"
     },
     {
       "identity": "swift-protobuf",
       "name": "SwiftProtobufPlugin",
       "type": "plugin",
-      "target_labels": [
-        "@swiftpkg_swift_protobuf//:Plugins_SwiftProtobufPlugin"
-      ]
+      "label": "@swiftpkg_swift_protobuf//:SwiftProtobufPlugin"
     },
     {
       "identity": "swift-protobuf",
       "name": "SwiftProtobufPluginLibrary",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_protobuf//:Sources_SwiftProtobufPluginLibrary"
-      ]
+      "label": "@swiftpkg_swift_protobuf//:SwiftProtobufPluginLibrary"
     },
     {
       "identity": "swift-protobuf",
       "name": "protoc-gen-swift",
       "type": "executable",
-      "target_labels": [
-        "@swiftpkg_swift_protobuf//:Sources_protoc-gen-swift"
-      ]
+      "label": "@swiftpkg_swift_protobuf//:protoc-gen-swift"
     }
   ],
   "packages": [
