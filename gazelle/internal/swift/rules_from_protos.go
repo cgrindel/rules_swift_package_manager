@@ -168,7 +168,10 @@ func generateRuleFromProtoPackage(
 			swiftProtoLibrary := rule.NewRule("swift_proto_library", swiftProtoLibraryTargetName)
 			swiftProtoLibrary.SetAttr(ModuleNameAttrName, swiftProtoLibraryModuleName)
 			swiftProtoLibrary.SetAttr("protos", []string{":" + protoLibraryTargetName})
-			swiftProtoLibrary.SetAttr("compilers", []string{swiftProtoCompilers[protoFlavor]})
+			swiftProtoLibrary.SetAttr("compilers", []string{
+				swiftProtoCompilers["swift_proto"],
+				swiftProtoCompilers[protoFlavor],
+			})
 			swiftProtoLibrary.SetPrivateAttr(config.GazelleImportsKey, gazelleImports)
 			swiftProtoLibrary.SetPrivateAttr(SwiftProtoPackageKey, swiftProtoPackage)
 			setVisibilityAttr(swiftProtoLibrary, shouldSetVisibility, []string{"//visibility:public"})
