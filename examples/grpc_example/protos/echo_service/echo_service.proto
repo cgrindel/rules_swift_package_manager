@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package echo_service;
 
-import "protos/echo_service/echo_service_messages/echo_service_messages.proto";
+import "protos/echo_service/echo_service_messages.proto";
 
 service Echo {
-  rpc Echo(echo_service_messages.EchoRequest) returns (echo_service_messages.EchoResponse);
+  rpc Echo(EchoRequest) returns (EchoResponse);
 }

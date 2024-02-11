@@ -17,7 +17,6 @@ import SwiftProtobuf
 import GRPC
 import NIOCore
 import NIOPosix
-import EchoServiceMessages
 import EchoServiceClient
 
 @main
@@ -44,7 +43,7 @@ struct ClientMain {
     let client = EchoService_EchoNIOClient(channel: channel)
 
     // Construct a request to the echo service.
-    let request = EchoServiceMessages_EchoRequest.with {
+    let request = EchoService_EchoRequest.with {
       $0.contents = "Hello, world!"
       let timestamp = Google_Protobuf_Timestamp(date: Date())
       $0.extra = try! Google_Protobuf_Any(message: timestamp)
