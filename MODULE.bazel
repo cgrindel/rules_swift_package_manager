@@ -29,7 +29,7 @@ bazel_dep(
 # TODO: Once https://github.com/bazelbuild/rules_swift/pull/1140 merges, remove override.
 git_override(
     module_name = "rules_swift",
-    commit = "c7d111d63fa75f849aafde4d6bf5118daf80eca3",
+    commit = "d4c3a9c73e321885130cb530cf0137a6af2590a7",
     remote = "https://github.com/bazelbuild/rules_swift",
 )
 
