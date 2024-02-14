@@ -74,7 +74,7 @@ def _join_path_from_parts(target_path, path):
     return paths.join(target_path, path)
 
 def _join_path(target, path):
-    """Joins the provide path with that target.path. 
+    """Joins the provide path with that target.path.
 
     If the target path is `.`, then the path input is returned without
     modification.
@@ -88,31 +88,19 @@ def _join_path(target, path):
     """
     return _join_path_from_parts(target.path, path)
 
-def _bazel_label_name_from_parts(target_path, target_name):
-    """Create a Bazel label name from a target path and name.
+def _bazel_label_name_from_parts(target_name):
+    """Create a Bazel label name from a target name.
 
     The logic in this function must stay in sync with BazelLabelFromTarget() in
     bazel_label.go.
 
     Args:
-        target_path: The target's path as a `string`.
         target_name: The target's name as a `string`.
 
     Returns:
         A Bazel label name as a `string`.
     """
-    basename = paths.basename(target_path)
-    dirname = paths.dirname(target_path)
-
-    # We are trying to construct the shortest, unique target name. We need to
-    # be sure that a target label does not conflict with a product label with
-    # the same name.
-    if basename == target_name and dirname != "":
-        name = target_path
-    else:
-        name = _join_path_from_parts(target_path, target_name)
-
-    return name.replace("/", "_")
+    return target_name + ".rspm"
 
 def _bazel_label_name(target):
     """Returns the name of the Bazel label for the specified target.
@@ -123,7 +111,7 @@ def _bazel_label_name(target):
     Returns:
         A `string` representing the Bazel label name.
     """
-    return _bazel_label_name_from_parts(target.path, target.name)
+    return _bazel_label_name_from_parts(target.name)
 
 def _modulemap_label_name(target_name):
     """Returns the name of the related `generate_modulemap` target.
@@ -227,11 +215,10 @@ def make_pkginfo_targets(bazel_labels):
         A `struct` representing the `pkginfo_targets` module.
     """
 
-    def _bazel_label_from_parts(target_path, target_name, repo_name = None):
+    def _bazel_label_from_parts(target_name, repo_name = None):
         """Create a Bazel label string from a target information.
 
         Args:
-            target_path: The target's path as a `string`.
             target_name: The target's name as a `string`.
             repo_name: The name of the repository as a `string`. This must be
                 provided if the module is being used outside of a BUILD thread.
@@ -243,7 +230,7 @@ def make_pkginfo_targets(bazel_labels):
         return bazel_labels.new(
             repository_name = repo_name,
             package = "",
-            name = _bazel_label_name_from_parts(target_path, target_name),
+            name = _bazel_label_name_from_parts(target_name),
         )
 
     def _bazel_label(target, repo_name = None):

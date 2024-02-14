@@ -6,5 +6,5 @@ swift_library(
     module_name = "Foo",
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
-    deps = ["@swiftpkg_swift_nio//:Sources_NIO"],
+    deps = ["@swiftpkg_swift_nio//:NIO"],
 )

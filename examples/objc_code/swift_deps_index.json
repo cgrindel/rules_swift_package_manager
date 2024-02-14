@@ -7,7 +7,7 @@
       "name": "TrustKit",
       "c99name": "TrustKit",
       "src_type": "objc",
-      "label": "@swiftpkg_trustkit//:TrustKit_TrustKit",
+      "label": "@swiftpkg_trustkit//:TrustKit.rspm",
       "package_identity": "trustkit",
       "product_memberships": [
         "TrustKit",
@@ -21,25 +21,19 @@
       "identity": "trustkit",
       "name": "TrustKit",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_trustkit//:TrustKit_TrustKit"
-      ]
+      "label": "@swiftpkg_trustkit//:TrustKit"
     },
     {
       "identity": "trustkit",
       "name": "TrustKitDynamic",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_trustkit//:TrustKit_TrustKit"
-      ]
+      "label": "@swiftpkg_trustkit//:TrustKitDynamic"
     },
     {
       "identity": "trustkit",
       "name": "TrustKitStatic",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_trustkit//:TrustKit_TrustKit"
-      ]
+      "label": "@swiftpkg_trustkit//:TrustKitStatic"
     }
   ],
   "packages": [

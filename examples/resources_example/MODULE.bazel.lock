@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "8eac54fb1e06f43d170844678240d92b9083ba2c7e90d5fc2032acc549992d4b",
+  "moduleFileHash": "078db646d204a7aa0a2afef07e118c77cfa8baa5251c18f804998b0cd1fcfe71",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -81,8 +81,8 @@
         "rules_swift_package_manager": "rules_swift_package_manager@_",
         "cgrindel_bazel_starlib": "cgrindel_bazel_starlib@0.19.0",
         "bazel_skylib": "bazel_skylib@1.5.0",
-        "apple_support": "apple_support@1.11.1",
-        "build_bazel_rules_swift": "rules_swift@1.15.1",
+        "apple_support": "apple_support@1.12.0",
+        "build_bazel_rules_swift": "rules_swift@1.16.0",
         "build_bazel_rules_apple": "rules_apple@3.2.1",
         "bazel_skylib_gazelle_plugin": "bazel_skylib_gazelle_plugin@1.5.0",
         "bazel_gazelle": "gazelle@0.35.0",
@@ -156,10 +156,10 @@
         "cgrindel_bazel_starlib": "cgrindel_bazel_starlib@0.19.0",
         "bazel_skylib": "bazel_skylib@1.5.0",
         "io_bazel_rules_go": "rules_go@0.44.0",
-        "apple_support": "apple_support@1.11.1",
+        "apple_support": "apple_support@1.12.0",
         "rules_cc": "rules_cc@0.0.9",
         "platforms": "platforms@0.0.7",
-        "build_bazel_rules_swift": "rules_swift@1.15.1",
+        "build_bazel_rules_swift": "rules_swift@1.16.0",
         "build_bazel_rules_apple": "rules_apple@3.2.1",
         "bazel_gazelle": "gazelle@0.35.0",
         "bazel_tools": "bazel_tools@_",
@@ -266,10 +266,10 @@
         }
       }
     },
-    "apple_support@1.11.1": {
+    "apple_support@1.12.0": {
       "name": "apple_support",
-      "version": "1.11.1",
-      "key": "apple_support@1.11.1",
+      "version": "1.12.0",
+      "key": "apple_support@1.12.0",
       "repoName": "build_bazel_apple_support",
       "executionPlatformsToRegister": [],
       "toolchainsToRegister": [
@@ -279,9 +279,9 @@
         {
           "extensionBzlFile": "@build_bazel_apple_support//crosstool:setup.bzl",
           "extensionName": "apple_cc_configure_extension",
-          "usingModule": "apple_support@1.11.1",
+          "usingModule": "apple_support@1.12.0",
           "location": {
-            "file": "https://bcr.bazel.build/modules/apple_support/1.11.1/MODULE.bazel",
+            "file": "https://bcr.bazel.build/modules/apple_support/1.12.0/MODULE.bazel",
             "line": 19,
             "column": 35
           },
@@ -305,23 +305,23 @@
         "bzlFile": "@bazel_tools//tools/build_defs/repo:http.bzl",
         "ruleClassName": "http_archive",
         "attributes": {
-          "name": "apple_support~1.11.1",
+          "name": "apple_support~1.12.0",
           "urls": [
-            "https://github.com/bazelbuild/apple_support/releases/download/1.11.1/apple_support.1.11.1.tar.gz"
+            "https://github.com/bazelbuild/apple_support/releases/download/1.12.0/apple_support.1.12.0.tar.gz"
           ],
-          "integrity": "sha256-z01j85x7qQWfcOmVv1/hAZJn0/dzecIChWGl12Re9nw=",
+          "integrity": "sha256-EA0SYXqE68fuehDs87Pi/a2uvBZ62Toh+CCmy2AVjq0=",
           "strip_prefix": "",
           "remote_patches": {
-            "https://bcr.bazel.build/modules/apple_support/1.11.1/patches/module_dot_bazel_version.patch": "sha256-G9CcKWR97sA/vnt8STjg1YRdFBMHHLHVmUwuHe6f+bs="
+            "https://bcr.bazel.build/modules/apple_support/1.12.0/patches/module_dot_bazel_version.patch": "sha256-3XmsovSEa1wpKpWGFSDAhBawIG5gQBNKF221WV0Qzks="
           },
           "remote_patch_strip": 1
         }
       }
     },
-    "rules_swift@1.15.1": {
+    "rules_swift@1.16.0": {
       "name": "rules_swift",
-      "version": "1.15.1",
-      "key": "rules_swift@1.15.1",
+      "version": "1.16.0",
+      "key": "rules_swift@1.16.0",
       "repoName": "build_bazel_rules_swift",
       "executionPlatformsToRegister": [],
       "toolchainsToRegister": [],
@@ -329,9 +329,9 @@
         {
           "extensionBzlFile": "@build_bazel_rules_swift//swift:extensions.bzl",
           "extensionName": "non_module_deps",
-          "usingModule": "rules_swift@1.15.1",
+          "usingModule": "rules_swift@1.16.0",
           "location": {
-            "file": "https://bcr.bazel.build/modules/rules_swift/1.15.1/MODULE.bazel",
+            "file": "https://bcr.bazel.build/modules/rules_swift/1.16.0/MODULE.bazel",
             "line": 18,
             "column": 32
           },
@@ -354,9 +354,9 @@
         {
           "extensionBzlFile": "@build_bazel_apple_support//crosstool:setup.bzl",
           "extensionName": "apple_cc_configure_extension",
-          "usingModule": "rules_swift@1.15.1",
+          "usingModule": "rules_swift@1.16.0",
           "location": {
-            "file": "https://bcr.bazel.build/modules/rules_swift/1.15.1/MODULE.bazel",
+            "file": "https://bcr.bazel.build/modules/rules_swift/1.16.0/MODULE.bazel",
             "line": 32,
             "column": 35
           },
@@ -372,7 +372,7 @@
       "deps": {
         "bazel_features": "bazel_features@1.3.0",
         "bazel_skylib": "bazel_skylib@1.5.0",
-        "build_bazel_apple_support": "apple_support@1.11.1",
+        "build_bazel_apple_support": "apple_support@1.12.0",
         "rules_cc": "rules_cc@0.0.9",
         "platforms": "platforms@0.0.7",
         "com_google_protobuf": "protobuf@21.7",
@@ -385,14 +385,14 @@
         "bzlFile": "@bazel_tools//tools/build_defs/repo:http.bzl",
         "ruleClassName": "http_archive",
         "attributes": {
-          "name": "rules_swift~1.15.1",
+          "name": "rules_swift~1.16.0",
           "urls": [
-            "https://github.com/bazelbuild/rules_swift/releases/download/1.15.1/rules_swift.1.15.1.tar.gz"
+            "https://github.com/bazelbuild/rules_swift/releases/download/1.16.0/rules_swift.1.16.0.tar.gz"
           ],
-          "integrity": "sha256-4u7kY4OUg9/hsFzkBqTy+z/XSN3KoxHMh2j6fwQa8P8=",
+          "integrity": "sha256-eqvju++NLgfJ7gess4bwole9L3bqjiEAVoi1BtyNpns=",
           "strip_prefix": "",
           "remote_patches": {
-            "https://bcr.bazel.build/modules/rules_swift/1.15.1/patches/module_dot_bazel_version.patch": "sha256-rMxzgZs1JKbQr3jJYCgiTGhj7zN0SOZurnW50gFgONA="
+            "https://bcr.bazel.build/modules/rules_swift/1.16.0/patches/module_dot_bazel_version.patch": "sha256-66B/4JaIUXEe4yUstQpgvRbYzXLR9nJ+Z7AlzEkxLE4="
           },
           "remote_patch_strip": 1
         }
@@ -459,10 +459,10 @@
         }
       ],
       "deps": {
-        "build_bazel_apple_support": "apple_support@1.11.1",
+        "build_bazel_apple_support": "apple_support@1.12.0",
         "bazel_skylib": "bazel_skylib@1.5.0",
         "platforms": "platforms@0.0.7",
-        "build_bazel_rules_swift": "rules_swift@1.15.1",
+        "build_bazel_rules_swift": "rules_swift@1.16.0",
         "bazel_tools": "bazel_tools@_",
         "local_config_platform": "local_config_platform@_"
       },
@@ -799,7 +799,7 @@
         "platforms": "platforms@0.0.7",
         "com_google_protobuf": "protobuf@21.7",
         "zlib": "zlib@1.3",
-        "build_bazel_apple_support": "apple_support@1.11.1",
+        "build_bazel_apple_support": "apple_support@1.12.0",
         "local_config_platform": "local_config_platform@_"
       }
     },
@@ -1705,30 +1705,30 @@
     }
   },
   "moduleExtensions": {
-    "@@apple_support~1.11.1//crosstool:setup.bzl%apple_cc_configure_extension": {
+    "@@apple_support~1.12.0//crosstool:setup.bzl%apple_cc_configure_extension": {
       "general": {
-        "bzlTransitiveDigest": "FOTImXZOLQw+EqKi3u13A1a5Wff22EtyCed2Cz1AiW0=",
+        "bzlTransitiveDigest": "TMkUP4/N3ZORvZrcDg9FxSoW9r/7+uDVH/SI2biRyJg=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
           "local_config_apple_cc": {
-            "bzlFile": "@@apple_support~1.11.1//crosstool:setup.bzl",
+            "bzlFile": "@@apple_support~1.12.0//crosstool:setup.bzl",
             "ruleClassName": "_apple_cc_autoconf",
             "attributes": {
-              "name": "apple_support~1.11.1~apple_cc_configure_extension~local_config_apple_cc"
+              "name": "apple_support~1.12.0~apple_cc_configure_extension~local_config_apple_cc"
             }
           },
           "local_config_apple_cc_toolchains": {
-            "bzlFile": "@@apple_support~1.11.1//crosstool:setup.bzl",
+            "bzlFile": "@@apple_support~1.12.0//crosstool:setup.bzl",
             "ruleClassName": "_apple_cc_autoconf_toolchains",
             "attributes": {
-              "name": "apple_support~1.11.1~apple_cc_configure_extension~local_config_apple_cc_toolchains"
+              "name": "apple_support~1.12.0~apple_cc_configure_extension~local_config_apple_cc_toolchains"
             }
           }
         },
         "recordedRepoMappingEntries": [
           [
-            "apple_support~1.11.1",
+            "apple_support~1.12.0",
             "bazel_tools",
             "bazel_tools"
           ]
@@ -1968,13 +1968,13 @@
         "bzlTransitiveDigest": "zP01muRk4s4xWGK3gNPXOyDMQkOPsIhu99akeKWFFQ0=",
         "accumulatedFileDigests": {
           "@@cgrindel_bazel_starlib~0.19.0//:go.sum": "0727e3bd41e30d078e0f0a4cecc353769997a0708df9eb6cbc7852d1b354c796",
-          "@@rules_swift_package_manager~override//:go.sum": "af3ca06e91b4025fb562dfd27139fad12c69bddd4383bdd9104a34fde64b11d5",
+          "@@rules_swift_package_manager~override//:go.sum": "d4edd30cacfea3691acf8373bc83b3a643ccae5284085a8cbce6d3933586b35c",
           "@@cgrindel_bazel_starlib~0.19.0//:go.mod": "db78d7d0340190c786236e901b5c792022ae8da223e42910dfcc5f6a2df577bf",
           "@@rules_go~0.44.0//:go.mod": "15454724af1504c4ce1782c2a7f423d596a1d8490125eb7c5bd9c95fea1991f0",
           "@@gazelle~0.35.0//:go.mod": "48dc6e771c3028ee1c18b9ffc81e596fd5f6d7e0016c5ef280e30f2821f60473",
           "@@gazelle~0.35.0//:go.sum": "7c4460e8ecb5dd8691a51d4fa2e9e4751108b933636497ce46db499fc2e7a88d",
           "@@rules_go~0.44.0//:go.sum": "b5938730bf7d3581421928b0385d99648dd9634becead96fca0594ac491b2f49",
-          "@@rules_swift_package_manager~override//:go.mod": "83b9681e4fbae80c42b81016536229ff999b07d877ff6d2cadd7e932655d593c"
+          "@@rules_swift_package_manager~override//:go.mod": "948db7237b4c72de4e224f20c6eb5630afe940fff1212f32d0fe556349f57598"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2133,9 +2133,9 @@
               "build_extra_args": [],
               "patches": [],
               "patch_args": [],
-              "sum": "h1:GoHiUyI/Tp2nVkLI2mCxVkOjsbSXD66ic0XW0js0R9g=",
+              "sum": "h1:Q8/wZp0KX97QFTc2ywcOE0YRjZPVIx+MXInMzdvQqcA=",
               "replace": "",
-              "version": "v0.0.0-20230905200255-921286631fa9"
+              "version": "v0.0.0-20240119083558-1b970713d09a"
             }
           },
           "org_golang_x_net": {
@@ -2467,7 +2467,13 @@
           "explicitRootModuleDirectDevDeps": [],
           "useAllRepos": "NO"
         },
-        "recordedRepoMappingEntries": []
+        "recordedRepoMappingEntries": [
+          [
+            "gazelle~0.35.0",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
       }
     },
     "@@gazelle~0.35.0//internal/bzlmod:non_module_deps.bzl%non_module_deps": {
@@ -2665,6 +2671,203 @@
               "sdk_repos": [
                 "go_default_sdk",
                 "rules_go__download_0_darwin_arm64",
+                "rules_go__download_0_linux_amd64",
+                "rules_go__download_0_linux_arm64",
+                "rules_go__download_0_windows_amd64",
+                "rules_go__download_0_windows_arm64"
+              ],
+              "sdk_types": [
+                "remote",
+                "remote",
+                "remote",
+                "remote",
+                "remote",
+                "remote"
+              ],
+              "sdk_versions": [
+                "1.21.1",
+                "1.21.1",
+                "1.21.1",
+                "1.21.1",
+                "1.21.1",
+                "1.21.1"
+              ]
+            }
+          },
+          "rules_go__download_0_windows_amd64": {
+            "bzlFile": "@@rules_go~0.44.0//go/private:sdk.bzl",
+            "ruleClassName": "go_download_sdk_rule",
+            "attributes": {
+              "name": "rules_go~0.44.0~go_sdk~rules_go__download_0_windows_amd64",
+              "goos": "",
+              "goarch": "",
+              "sdks": {},
+              "urls": [
+                "https://dl.google.com/go/{}"
+              ],
+              "version": "1.21.1"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "bazel_features~1.3.0",
+            "bazel_features_globals",
+            "bazel_features~1.3.0~version_extension~bazel_features_globals"
+          ],
+          [
+            "bazel_features~1.3.0",
+            "bazel_features_version",
+            "bazel_features~1.3.0~version_extension~bazel_features_version"
+          ],
+          [
+            "rules_go~0.44.0",
+            "bazel_features",
+            "bazel_features~1.3.0"
+          ],
+          [
+            "rules_go~0.44.0",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "rules_go~0.44.0",
+            "io_bazel_rules_go",
+            "rules_go~0.44.0"
+          ]
+        ]
+      },
+      "os:osx,arch:aarch64": {
+        "bzlTransitiveDigest": "GI6yMOM2hDU7hVAHmfnV90TgIqJguaDlemn2az5C07E=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "io_bazel_rules_nogo": {
+            "bzlFile": "@@rules_go~0.44.0//go/private:nogo.bzl",
+            "ruleClassName": "go_register_nogo",
+            "attributes": {
+              "name": "rules_go~0.44.0~go_sdk~io_bazel_rules_nogo",
+              "nogo": "@io_bazel_rules_go//:default_nogo",
+              "includes": [
+                "'@@//:__subpackages__'"
+              ],
+              "excludes": []
+            }
+          },
+          "rules_go__download_0_windows_arm64": {
+            "bzlFile": "@@rules_go~0.44.0//go/private:sdk.bzl",
+            "ruleClassName": "go_download_sdk_rule",
+            "attributes": {
+              "name": "rules_go~0.44.0~go_sdk~rules_go__download_0_windows_arm64",
+              "goos": "",
+              "goarch": "",
+              "sdks": {},
+              "urls": [
+                "https://dl.google.com/go/{}"
+              ],
+              "version": "1.21.1"
+            }
+          },
+          "rules_go__download_0_linux_arm64": {
+            "bzlFile": "@@rules_go~0.44.0//go/private:sdk.bzl",
+            "ruleClassName": "go_download_sdk_rule",
+            "attributes": {
+              "name": "rules_go~0.44.0~go_sdk~rules_go__download_0_linux_arm64",
+              "goos": "",
+              "goarch": "",
+              "sdks": {},
+              "urls": [
+                "https://dl.google.com/go/{}"
+              ],
+              "version": "1.21.1"
+            }
+          },
+          "go_default_sdk": {
+            "bzlFile": "@@rules_go~0.44.0//go/private:sdk.bzl",
+            "ruleClassName": "go_download_sdk_rule",
+            "attributes": {
+              "name": "rules_go~0.44.0~go_sdk~go_default_sdk",
+              "goos": "",
+              "goarch": "",
+              "sdks": {},
+              "experiments": [],
+              "patches": [],
+              "patch_strip": 0,
+              "urls": [
+                "https://dl.google.com/go/{}"
+              ],
+              "version": "1.21.1",
+              "strip_prefix": "go"
+            }
+          },
+          "go_host_compatible_sdk_label": {
+            "bzlFile": "@@rules_go~0.44.0//go/private:extensions.bzl",
+            "ruleClassName": "host_compatible_toolchain",
+            "attributes": {
+              "name": "rules_go~0.44.0~go_sdk~go_host_compatible_sdk_label",
+              "toolchain": "@go_default_sdk//:ROOT"
+            }
+          },
+          "rules_go__download_0_linux_amd64": {
+            "bzlFile": "@@rules_go~0.44.0//go/private:sdk.bzl",
+            "ruleClassName": "go_download_sdk_rule",
+            "attributes": {
+              "name": "rules_go~0.44.0~go_sdk~rules_go__download_0_linux_amd64",
+              "goos": "",
+              "goarch": "",
+              "sdks": {},
+              "urls": [
+                "https://dl.google.com/go/{}"
+              ],
+              "version": "1.21.1"
+            }
+          },
+          "rules_go__download_0_darwin_amd64": {
+            "bzlFile": "@@rules_go~0.44.0//go/private:sdk.bzl",
+            "ruleClassName": "go_download_sdk_rule",
+            "attributes": {
+              "name": "rules_go~0.44.0~go_sdk~rules_go__download_0_darwin_amd64",
+              "goos": "",
+              "goarch": "",
+              "sdks": {},
+              "urls": [
+                "https://dl.google.com/go/{}"
+              ],
+              "version": "1.21.1"
+            }
+          },
+          "go_toolchains": {
+            "bzlFile": "@@rules_go~0.44.0//go/private:sdk.bzl",
+            "ruleClassName": "go_multiple_toolchains",
+            "attributes": {
+              "name": "rules_go~0.44.0~go_sdk~go_toolchains",
+              "prefixes": [
+                "_0000_go_default_sdk_",
+                "_0001_rules_go__download_0_darwin_amd64_",
+                "_0002_rules_go__download_0_linux_amd64_",
+                "_0003_rules_go__download_0_linux_arm64_",
+                "_0004_rules_go__download_0_windows_amd64_",
+                "_0005_rules_go__download_0_windows_arm64_"
+              ],
+              "geese": [
+                "",
+                "darwin",
+                "linux",
+                "linux",
+                "windows",
+                "windows"
+              ],
+              "goarchs": [
+                "",
+                "amd64",
+                "amd64",
+                "arm64",
+                "amd64",
+                "arm64"
+              ],
+              "sdk_repos": [
+                "go_default_sdk",
+                "rules_go__download_0_darwin_amd64",
                 "rules_go__download_0_linux_amd64",
                 "rules_go__download_0_linux_arm64",
                 "rules_go__download_0_windows_amd64",
@@ -3286,9 +3489,9 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "RAXmIOdYeEgAIU2uKKJFxO3Uqo7xvnGxHmOD276y14c=",
+        "bzlTransitiveDigest": "as4eezfsKxYRPI/SCDwyVkNTkS1/5QeaOQDknddac6Q=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "3be7742c44abf40672933dc1220e8ada77e4cf88cd3117e01fa449d128cec021"
+          "@@//:swift_deps_index.json": "e4d9172b140ed339681c9778ef026e7eb354db69e4b2d5abceb39cf44b0ab6ec"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3462,7 +3665,7 @@
         ]
       }
     },
-    "@@rules_swift~1.15.1//swift:extensions.bzl%non_module_deps": {
+    "@@rules_swift~1.16.0//swift:extensions.bzl%non_module_deps": {
       "general": {
         "bzlTransitiveDigest": "JXT9csgB0VHkXU94H+OROIY4q5dpOW0Di+C2YoFqVTM=",
         "accumulatedFileDigests": {},
@@ -3472,99 +3675,99 @@
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "name": "rules_swift~1.15.1~non_module_deps~com_github_grpc_grpc_swift",
+              "name": "rules_swift~1.16.0~non_module_deps~com_github_grpc_grpc_swift",
               "urls": [
                 "https://github.com/grpc/grpc-swift/archive/1.16.0.tar.gz"
               ],
               "sha256": "58b60431d0064969f9679411264b82e40a217ae6bd34e17096d92cc4e47556a5",
               "strip_prefix": "grpc-swift-1.16.0/",
-              "build_file": "@@rules_swift~1.15.1//third_party:com_github_grpc_grpc_swift/BUILD.overlay"
+              "build_file": "@@rules_swift~1.16.0//third_party:com_github_grpc_grpc_swift/BUILD.overlay"
             }
           },
           "com_github_apple_swift_nio_extras": {
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "name": "rules_swift~1.15.1~non_module_deps~com_github_apple_swift_nio_extras",
+              "name": "rules_swift~1.16.0~non_module_deps~com_github_apple_swift_nio_extras",
               "urls": [
                 "https://github.com/apple/swift-nio-extras/archive/1.4.0.tar.gz"
               ],
               "sha256": "4684b52951d9d9937bb3e8ccd6b5daedd777021ef2519ea2f18c4c922843b52b",
               "strip_prefix": "swift-nio-extras-1.4.0/",
-              "build_file": "@@rules_swift~1.15.1//third_party:com_github_apple_swift_nio_extras/BUILD.overlay"
+              "build_file": "@@rules_swift~1.16.0//third_party:com_github_apple_swift_nio_extras/BUILD.overlay"
             }
           },
           "com_github_apple_swift_protobuf": {
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "name": "rules_swift~1.15.1~non_module_deps~com_github_apple_swift_protobuf",
+              "name": "rules_swift~1.16.0~non_module_deps~com_github_apple_swift_protobuf",
               "urls": [
                 "https://github.com/apple/swift-protobuf/archive/1.20.2.tar.gz"
               ],
               "sha256": "3fb50bd4d293337f202d917b6ada22f9548a0a0aed9d9a4d791e6fbd8a246ebb",
               "strip_prefix": "swift-protobuf-1.20.2/",
-              "build_file": "@@rules_swift~1.15.1//third_party:com_github_apple_swift_protobuf/BUILD.overlay"
+              "build_file": "@@rules_swift~1.16.0//third_party:com_github_apple_swift_protobuf/BUILD.overlay"
             }
           },
           "com_github_apple_swift_nio_ssl": {
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "name": "rules_swift~1.15.1~non_module_deps~com_github_apple_swift_nio_ssl",
+              "name": "rules_swift~1.16.0~non_module_deps~com_github_apple_swift_nio_ssl",
               "urls": [
                 "https://github.com/apple/swift-nio-ssl/archive/2.23.0.tar.gz"
               ],
               "sha256": "4787c63f61dd04d99e498adc3d1a628193387e41efddf8de19b8db04544d016d",
               "strip_prefix": "swift-nio-ssl-2.23.0/",
-              "build_file": "@@rules_swift~1.15.1//third_party:com_github_apple_swift_nio_ssl/BUILD.overlay"
+              "build_file": "@@rules_swift~1.16.0//third_party:com_github_apple_swift_nio_ssl/BUILD.overlay"
             }
           },
           "com_github_apple_swift_atomics": {
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "name": "rules_swift~1.15.1~non_module_deps~com_github_apple_swift_atomics",
+              "name": "rules_swift~1.16.0~non_module_deps~com_github_apple_swift_atomics",
               "urls": [
                 "https://github.com/apple/swift-atomics/archive/1.1.0.tar.gz"
               ],
               "sha256": "1bee7f469f7e8dc49f11cfa4da07182fbc79eab000ec2c17bfdce468c5d276fb",
               "strip_prefix": "swift-atomics-1.1.0/",
-              "build_file": "@@rules_swift~1.15.1//third_party:com_github_apple_swift_atomics/BUILD.overlay"
+              "build_file": "@@rules_swift~1.16.0//third_party:com_github_apple_swift_atomics/BUILD.overlay"
             }
           },
           "com_github_apple_swift_nio_http2": {
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "name": "rules_swift~1.15.1~non_module_deps~com_github_apple_swift_nio_http2",
+              "name": "rules_swift~1.16.0~non_module_deps~com_github_apple_swift_nio_http2",
               "urls": [
                 "https://github.com/apple/swift-nio-http2/archive/1.26.0.tar.gz"
               ],
               "sha256": "f0edfc9d6a7be1d587e5b403f2d04264bdfae59aac1d74f7d974a9022c6d2b25",
               "strip_prefix": "swift-nio-http2-1.26.0/",
-              "build_file": "@@rules_swift~1.15.1//third_party:com_github_apple_swift_nio_http2/BUILD.overlay"
+              "build_file": "@@rules_swift~1.16.0//third_party:com_github_apple_swift_nio_http2/BUILD.overlay"
             }
           },
           "com_github_apple_swift_nio_transport_services": {
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "name": "rules_swift~1.15.1~non_module_deps~com_github_apple_swift_nio_transport_services",
+              "name": "rules_swift~1.16.0~non_module_deps~com_github_apple_swift_nio_transport_services",
               "urls": [
                 "https://github.com/apple/swift-nio-transport-services/archive/1.15.0.tar.gz"
               ],
               "sha256": "f3498dafa633751a52b9b7f741f7ac30c42bcbeb3b9edca6d447e0da8e693262",
               "strip_prefix": "swift-nio-transport-services-1.15.0/",
-              "build_file": "@@rules_swift~1.15.1//third_party:com_github_apple_swift_nio_transport_services/BUILD.overlay"
+              "build_file": "@@rules_swift~1.16.0//third_party:com_github_apple_swift_nio_transport_services/BUILD.overlay"
             }
           },
           "build_bazel_rules_swift_index_import": {
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "name": "rules_swift~1.15.1~non_module_deps~build_bazel_rules_swift_index_import",
-              "build_file": "@@rules_swift~1.15.1//third_party:build_bazel_rules_swift_index_import/BUILD.overlay",
+              "name": "rules_swift~1.16.0~non_module_deps~build_bazel_rules_swift_index_import",
+              "build_file": "@@rules_swift~1.16.0//third_party:build_bazel_rules_swift_index_import/BUILD.overlay",
               "canonical_id": "index-import-5.8",
               "urls": [
                 "https://github.com/MobileNativeFoundation/index-import/releases/download/5.8.0.1/index-import.tar.gz"
@@ -3576,59 +3779,59 @@
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "name": "rules_swift~1.15.1~non_module_deps~com_github_apple_swift_nio",
+              "name": "rules_swift~1.16.0~non_module_deps~com_github_apple_swift_nio",
               "urls": [
                 "https://github.com/apple/swift-nio/archive/2.42.0.tar.gz"
               ],
               "sha256": "e3304bc3fb53aea74a3e54bd005ede11f6dc357117d9b1db642d03aea87194a0",
               "strip_prefix": "swift-nio-2.42.0/",
-              "build_file": "@@rules_swift~1.15.1//third_party:com_github_apple_swift_nio/BUILD.overlay"
+              "build_file": "@@rules_swift~1.16.0//third_party:com_github_apple_swift_nio/BUILD.overlay"
             }
           },
           "com_github_apple_swift_log": {
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "name": "rules_swift~1.15.1~non_module_deps~com_github_apple_swift_log",
+              "name": "rules_swift~1.16.0~non_module_deps~com_github_apple_swift_log",
               "urls": [
                 "https://github.com/apple/swift-log/archive/1.4.4.tar.gz"
               ],
               "sha256": "48fe66426c784c0c20031f15dc17faf9f4c9037c192bfac2f643f65cb2321ba0",
               "strip_prefix": "swift-log-1.4.4/",
-              "build_file": "@@rules_swift~1.15.1//third_party:com_github_apple_swift_log/BUILD.overlay"
+              "build_file": "@@rules_swift~1.16.0//third_party:com_github_apple_swift_log/BUILD.overlay"
             }
           },
           "com_github_apple_swift_collections": {
             "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
             "ruleClassName": "http_archive",
             "attributes": {
-              "name": "rules_swift~1.15.1~non_module_deps~com_github_apple_swift_collections",
+              "name": "rules_swift~1.16.0~non_module_deps~com_github_apple_swift_collections",
               "urls": [
                 "https://github.com/apple/swift-collections/archive/1.0.4.tar.gz"
               ],
               "sha256": "d9e4c8a91c60fb9c92a04caccbb10ded42f4cb47b26a212bc6b39cc390a4b096",
               "strip_prefix": "swift-collections-1.0.4/",
-              "build_file": "@@rules_swift~1.15.1//third_party:com_github_apple_swift_collections/BUILD.overlay"
+              "build_file": "@@rules_swift~1.16.0//third_party:com_github_apple_swift_collections/BUILD.overlay"
             }
           },
           "build_bazel_rules_swift_local_config": {
-            "bzlFile": "@@rules_swift~1.15.1//swift/internal:swift_autoconfiguration.bzl",
+            "bzlFile": "@@rules_swift~1.16.0//swift/internal:swift_autoconfiguration.bzl",
             "ruleClassName": "swift_autoconfiguration",
             "attributes": {
-              "name": "rules_swift~1.15.1~non_module_deps~build_bazel_rules_swift_local_config"
+              "name": "rules_swift~1.16.0~non_module_deps~build_bazel_rules_swift_local_config"
             }
           }
         },
         "recordedRepoMappingEntries": [
           [
-            "rules_swift~1.15.1",
+            "rules_swift~1.16.0",
             "bazel_tools",
             "bazel_tools"
           ],
           [
-            "rules_swift~1.15.1",
+            "rules_swift~1.16.0",
             "build_bazel_rules_swift",
-            "rules_swift~1.15.1"
+            "rules_swift~1.16.0"
           ]
         ]
       }

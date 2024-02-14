@@ -7,7 +7,7 @@ swift_library(
     module_name = "TCAExample",
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = ["@swiftpkg_swift_composable_architecture//:Sources_ComposableArchitecture"],
+    deps = ["@swiftpkg_swift_composable_architecture//:ComposableArchitecture"],
 )
 
 ios_application(

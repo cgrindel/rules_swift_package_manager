@@ -7,6 +7,6 @@ swift_binary(
     visibility = ["//visibility:public"],
     deps = [
         "//Sources/App",
-        "@swiftpkg_vapor//:Sources_Vapor",
+        "@swiftpkg_vapor//:Vapor",
     ],
 )

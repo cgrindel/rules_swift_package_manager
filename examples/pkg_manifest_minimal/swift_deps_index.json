@@ -12,7 +12,7 @@
       "name": "GreetingsFramework",
       "c99name": "GreetingsFramework",
       "src_type": "swift",
-      "label": "@swiftpkg_my_local_package//:Sources_GreetingsFramework",
+      "label": "@swiftpkg_my_local_package//:GreetingsFramework.rspm",
       "package_identity": "my_local_package",
       "product_memberships": [
         "print-greeting",
@@ -23,7 +23,7 @@
       "name": "PrintGreeting",
       "c99name": "PrintGreeting",
       "src_type": "swift",
-      "label": "@swiftpkg_my_local_package//:Sources_PrintGreeting",
+      "label": "@swiftpkg_my_local_package//:PrintGreeting.rspm",
       "package_identity": "my_local_package",
       "product_memberships": [
         "print-greeting"
@@ -33,7 +33,7 @@
       "name": "MyAmazingModule",
       "c99name": "MyAmazingModule",
       "src_type": "swift",
-      "label": "@swiftpkg_myamazingmodule//:Sources_MyAmazingModule",
+      "label": "@swiftpkg_myamazingmodule//:MyAmazingModule.rspm",
       "package_identity": "myamazingmodule",
       "product_memberships": [
         "MyAmazingModule"
@@ -43,27 +43,17 @@
       "name": "NotThatAmazingModule",
       "c99name": "NotThatAmazingModule",
       "src_type": "swift",
-      "label": "@swiftpkg_notthatamazingmodule//:Sources_NotThatAmazingModule",
+      "label": "@swiftpkg_notthatamazingmodule//:NotThatAmazingModule.rspm",
       "package_identity": "notthatamazingmodule",
       "product_memberships": [
         "NotThatAmazingModule"
       ]
     },
     {
-      "name": "GenerateManual",
-      "c99name": "GenerateManual",
-      "src_type": "unknown",
-      "label": "@swiftpkg_swift_argument_parser//:Plugins_GenerateManual",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": [
-        "GenerateManual"
-      ]
-    },
-    {
       "name": "ArgumentParser",
       "c99name": "ArgumentParser",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser",
+      "label": "@swiftpkg_swift_argument_parser//:ArgumentParser.rspm",
       "package_identity": "swift-argument-parser",
       "product_memberships": [
         "ArgumentParser",
@@ -74,7 +64,7 @@
       "name": "ArgumentParserToolInfo",
       "c99name": "ArgumentParserToolInfo",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserToolInfo",
+      "label": "@swiftpkg_swift_argument_parser//:ArgumentParserToolInfo.rspm",
       "package_identity": "swift-argument-parser",
       "product_memberships": [
         "ArgumentParser",
@@ -82,10 +72,20 @@
       ]
     },
     {
+      "name": "GenerateManual",
+      "c99name": "GenerateManual",
+      "src_type": "unknown",
+      "label": "@swiftpkg_swift_argument_parser//:GenerateManual.rspm",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "GenerateManual"
+      ]
+    },
+    {
       "name": "generate-manual",
       "c99name": "generate_manual",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tools_generate-manual",
+      "label": "@swiftpkg_swift_argument_parser//:generate-manual.rspm",
       "package_identity": "swift-argument-parser",
       "product_memberships": [
         "GenerateManual"
@@ -95,7 +95,7 @@
       "name": "Logging",
       "c99name": "Logging",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_log//:Sources_Logging",
+      "label": "@swiftpkg_swift_log//:Logging.rspm",
       "package_identity": "swift-log",
       "product_memberships": [
         "Logging"
@@ -105,20 +105,10 @@
       "name": "CommandLineTool",
       "c99name": "CommandLineTool",
       "src_type": "swift",
-      "label": "@swiftpkg_swiftformat//:CommandLineTool_CommandLineTool",
+      "label": "@swiftpkg_swiftformat//:CommandLineTool.rspm",
       "package_identity": "swiftformat",
       "product_memberships": [
         "swiftformat",
-        "SwiftFormatPlugin"
-      ]
-    },
-    {
-      "name": "SwiftFormatPlugin",
-      "c99name": "SwiftFormatPlugin",
-      "src_type": "unknown",
-      "label": "@swiftpkg_swiftformat//:Plugins_SwiftFormatPlugin",
-      "package_identity": "swiftformat",
-      "product_memberships": [
         "SwiftFormatPlugin"
       ]
     },
@@ -126,12 +116,22 @@
       "name": "SwiftFormat",
       "c99name": "SwiftFormat",
       "src_type": "swift",
-      "label": "@swiftpkg_swiftformat//:Sources_SwiftFormat",
-      "modulemap_label": "@swiftpkg_swiftformat//:Sources_SwiftFormat_modulemap",
+      "label": "@swiftpkg_swiftformat//:SwiftFormat.rspm",
+      "modulemap_label": "@swiftpkg_swiftformat//:SwiftFormat.rspm_modulemap",
       "package_identity": "swiftformat",
       "product_memberships": [
         "swiftformat",
         "SwiftFormat",
+        "SwiftFormatPlugin"
+      ]
+    },
+    {
+      "name": "SwiftFormatPlugin",
+      "c99name": "SwiftFormatPlugin",
+      "src_type": "unknown",
+      "label": "@swiftpkg_swiftformat//:SwiftFormatPlugin.rspm",
+      "package_identity": "swiftformat",
+      "product_memberships": [
         "SwiftFormatPlugin"
       ]
     }
@@ -141,81 +141,61 @@
       "identity": "my_local_package",
       "name": "GreetingsFramework",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_my_local_package//:Sources_GreetingsFramework"
-      ]
+      "label": "@swiftpkg_my_local_package//:GreetingsFramework"
     },
     {
       "identity": "my_local_package",
       "name": "print-greeting",
       "type": "executable",
-      "target_labels": [
-        "@swiftpkg_my_local_package//:Sources_PrintGreeting"
-      ]
+      "label": "@swiftpkg_my_local_package//:print-greeting"
     },
     {
       "identity": "myamazingmodule",
       "name": "MyAmazingModule",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_myamazingmodule//:Sources_MyAmazingModule"
-      ]
+      "label": "@swiftpkg_myamazingmodule//:MyAmazingModule"
     },
     {
       "identity": "notthatamazingmodule",
       "name": "NotThatAmazingModule",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_notthatamazingmodule//:Sources_NotThatAmazingModule"
-      ]
+      "label": "@swiftpkg_notthatamazingmodule//:NotThatAmazingModule"
     },
     {
       "identity": "swift-argument-parser",
       "name": "ArgumentParser",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser"
-      ]
+      "label": "@swiftpkg_swift_argument_parser//:ArgumentParser"
     },
     {
       "identity": "swift-argument-parser",
       "name": "GenerateManual",
       "type": "plugin",
-      "target_labels": [
-        "@swiftpkg_swift_argument_parser//:Plugins_GenerateManual"
-      ]
+      "label": "@swiftpkg_swift_argument_parser//:GenerateManual"
     },
     {
       "identity": "swift-log",
       "name": "Logging",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_log//:Sources_Logging"
-      ]
+      "label": "@swiftpkg_swift_log//:Logging"
     },
     {
       "identity": "swiftformat",
       "name": "SwiftFormat",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swiftformat//:Sources_SwiftFormat"
-      ]
+      "label": "@swiftpkg_swiftformat//:SwiftFormat"
     },
     {
       "identity": "swiftformat",
       "name": "SwiftFormatPlugin",
       "type": "plugin",
-      "target_labels": [
-        "@swiftpkg_swiftformat//:Plugins_SwiftFormatPlugin"
-      ]
+      "label": "@swiftpkg_swiftformat//:SwiftFormatPlugin"
     },
     {
       "identity": "swiftformat",
       "name": "swiftformat",
       "type": "executable",
-      "target_labels": [
-        "@swiftpkg_swiftformat//:CommandLineTool_CommandLineTool"
-      ]
+      "label": "@swiftpkg_swiftformat//:swiftformat"
     }
   ],
   "packages": [

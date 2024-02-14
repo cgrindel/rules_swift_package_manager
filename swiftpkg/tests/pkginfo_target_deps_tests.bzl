@@ -116,19 +116,13 @@ _deps_index_json = """\
       "identity": "example-swift-package",
       "name": "AwesomeProduct",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_example_swift_package//:AwesomePackage",
-        "@swiftpkg_example_swift_package//:Source/Baz"
-      ]
+      "label": "@swiftpkg_example_swift_package//:AwesomePackage"
     },
     {
       "identity": "example-swift-package",
       "name": "Baz",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_example_swift_package//:Source/Baz",
-        "@swiftpkg_example_swift_package//:Source/MoreBaz"
-      ]
+      "label": "@swiftpkg_example_swift_package//:Source/Baz"
     }
   ]
 }
@@ -168,9 +162,6 @@ def _bzl_select_list_test(ctx):
                         bazel_labels.normalize(
                             "@swiftpkg_example_swift_package//:AwesomePackage",
                         ),
-                        bazel_labels.normalize(
-                            "@swiftpkg_example_swift_package//:Source/Baz",
-                        ),
                     ],
                 ),
             ],
@@ -184,9 +175,6 @@ def _bzl_select_list_test(ctx):
                     value = [
                         bazel_labels.normalize(
                             "@swiftpkg_example_swift_package//:AwesomePackage",
-                        ),
-                        bazel_labels.normalize(
-                            "@swiftpkg_example_swift_package//:Source/Baz",
                         ),
                     ],
                 ),
@@ -231,9 +219,6 @@ def _bzl_select_list_test(ctx):
                     value = [
                         bazel_labels.normalize(
                             "@swiftpkg_example_swift_package//:AwesomePackage",
-                        ),
-                        bazel_labels.normalize(
-                            "@swiftpkg_example_swift_package//:Source/Baz",
                         ),
                     ],
                     condition = c,

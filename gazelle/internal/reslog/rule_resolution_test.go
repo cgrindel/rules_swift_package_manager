@@ -25,7 +25,6 @@ func TestRuleResolution(t *testing.T) {
 		"LocalA",
 		"LocalB",
 		"ExternalA",
-		"ExternalB",
 		"Custom",
 		"Unresolved",
 	}
@@ -43,10 +42,7 @@ func TestRuleResolution(t *testing.T) {
 				"awesome-repo",
 				"AwesomeProduct",
 				swift.LibraryProductType,
-				[]*label.Label{
-					newLabel("swiftpkg_awesome_repo", "path/to", "ExternalA"),
-					newLabel("swiftpkg_awesome_repo", "path/to", "ExternalB"),
-				},
+				newLabel("swiftpkg_awesome_repo", "path/to", "ExternalA"),
 			),
 		},
 		Unresolved: []string{"Custom", "Unresolved"},
@@ -67,7 +63,6 @@ func TestRuleResolution(t *testing.T) {
 		"//path/to:LocalA",
 		"//path/to:LocalB",
 		"@swiftpkg_awesome_repo//path/to:ExternalA",
-		"@swiftpkg_awesome_repo//path/to:ExternalB",
 		"@com_github_example_custom//:Custom",
 	)
 
@@ -77,7 +72,6 @@ func TestRuleResolution(t *testing.T) {
 		Imports: []string{
 			"Custom",
 			"ExternalA",
-			"ExternalB",
 			"LocalA",
 			"LocalB",
 			"UIKit",
@@ -91,10 +85,7 @@ func TestRuleResolution(t *testing.T) {
 		ExtRes: reslog.ExternalResolutionSummary{
 			Modules: []string{"ExternalA", "ExternalB"},
 			Products: []reslog.Product{
-				{"awesome-repo", "AwesomeProduct", []string{
-					"@swiftpkg_awesome_repo//path/to:ExternalA",
-					"@swiftpkg_awesome_repo//path/to:ExternalB",
-				}},
+				{"awesome-repo", "AwesomeProduct", "@swiftpkg_awesome_repo//path/to:ExternalA"},
 			},
 			Unresolved: []string{"Custom", "Unresolved"},
 		},
@@ -107,7 +98,6 @@ func TestRuleResolution(t *testing.T) {
 			"//path/to:LocalB",
 			"@com_github_example_custom//:Custom",
 			"@swiftpkg_awesome_repo//path/to:ExternalA",
-			"@swiftpkg_awesome_repo//path/to:ExternalB",
 		},
 	}
 	assert.Equal(t, expected, rr.Summary())

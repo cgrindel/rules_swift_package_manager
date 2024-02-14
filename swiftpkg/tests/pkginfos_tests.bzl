@@ -555,7 +555,7 @@ _swift_arg_parser_deps_index_json = """
             "name": "MySwiftPackage",
             "c99name": "MySwiftPackage",
             "src_type": "swift",
-            "label": "@swiftpkg_mypackage//:Sources_MySwiftPackage",
+            "label": "@swiftpkg_mypackage//:MySwiftPackage.rspm",
             "package_identity": "mypackage",
             "product_memberships": [
                 "printstuff"
@@ -567,9 +567,7 @@ _swift_arg_parser_deps_index_json = """
             "identity": "mypackage",
             "name": "printstuff",
             "type": "executable",
-            "target_labels": [
-                "@swiftpkg_mypackage//:Sources_MySwiftPackage"
-            ]
+            "label": "@swiftpkg_mypackage//:MySwiftPackage"
         }
     ]
 }
@@ -760,7 +758,7 @@ _clang_deps_index_json = """
             "name": "libbar",
             "c99name": "libbar",
             "src_type": "clang",
-            "label": "@swiftpkg_libbar//:libbar",
+            "label": "@swiftpkg_libbar//:libbar.rspm",
             "package_identity": "mypackage",
             "product_memberships": [
                 "libbar"
@@ -772,9 +770,7 @@ _clang_deps_index_json = """
             "identity": "libbar",
             "name": "libbar",
             "type": "library",
-            "target_labels": [
-                "@swiftpkg_libbar//:libbar"
-            ]
+            "label": "@swiftpkg_libbar//:libbar"
         }
     ]
 }

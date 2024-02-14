@@ -41,11 +41,11 @@ swift_binary(
     srcs = ["main.swift"],
     visibility = ["//swift:__subpackages__"],
     deps = [
-        "@swiftpkg_cocoalumberjack//:Sources_CocoaLumberjackSwiftLogBackend",
-        "@swiftpkg_geoswift//:Sources_GEOSwift",
+        "@swiftpkg_cocoalumberjack//:CocoaLumberjackSwiftLogBackend",
+        "@swiftpkg_geoswift//:GEOSwift",
         "@swiftpkg_libwebp_xcode//:libwebp",
-        "@swiftpkg_opencombine//:Sources_OpenCombine",
-        "@swiftpkg_swift_log//:Sources_Logging",
+        "@swiftpkg_opencombine//:OpenCombine",
+        "@swiftpkg_swift_log//:Logging",
     ],
 )
 

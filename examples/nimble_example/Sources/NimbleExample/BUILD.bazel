@@ -13,9 +13,8 @@ swift_library(
     module_name = "NimbleExample",
     tags = ["manual"],
     deps = [
-        "@swiftpkg_nimble//:Sources_Nimble",
-        "@swiftpkg_nimble//:Sources_NimbleObjectiveC",
-        "@swiftpkg_quick//:Sources_Quick",
+        "@swiftpkg_nimble//:Nimble",
+        "@swiftpkg_quick//:Quick",
     ],
 )
 
