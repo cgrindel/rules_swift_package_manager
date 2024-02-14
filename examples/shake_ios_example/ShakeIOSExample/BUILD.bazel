@@ -10,7 +10,7 @@ swift_library(
     module_name = "ShakeIOSExample",
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
-    deps = ["@swiftpkg_shake_ios//:Sources_Shake.xcframework_Shake"],
+    deps = ["@swiftpkg_shake_ios//:Shake"],
 )
 
 ios_application(

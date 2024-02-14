@@ -26,25 +26,24 @@ func TestProducts(t *testing.T) {
 	awesomeRepoId := "awesome-repo"
 	fooPrdName := "Foo"
 	barPrdName := "Bar"
-	fooCoreLabel := label.New("swiftpkg_awesome_repo", "", "Sources_FooCore")
-	fooLabel := label.New("swiftpkg_awesome_repo", "", "Sources_Foo")
-	barLabel := label.New("swiftpkg_awesome_repo", "", "Sources_Bar")
+	fooLabel := label.New("swiftpkg_awesome_repo", "", "Foo")
+	barLabel := label.New("swiftpkg_awesome_repo", "", "Bar")
 	fooPrd := swift.NewProduct(
 		awesomeRepoId,
 		fooPrdName,
 		swift.LibraryProductType,
-		[]*label.Label{&fooCoreLabel, &fooLabel},
+		&fooLabel,
 	)
 	barPrd := swift.NewProduct(
 		awesomeRepoId,
 		barPrdName,
 		swift.LibraryProductType,
-		[]*label.Label{&fooCoreLabel, &barLabel},
+		&barLabel,
 	)
 	products := swift.Products{fooPrd, barPrd}
 
 	t.Run("labels", func(t *testing.T) {
-		expected := mapset.NewSet[*label.Label](&barLabel, &fooLabel, &fooCoreLabel)
+		expected := mapset.NewSet[*label.Label](&fooLabel, &barLabel)
 		assert.Equal(t, expected, products.Labels())
 	})
 }

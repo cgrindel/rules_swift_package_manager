@@ -10,8 +10,8 @@ swift_library(
     module_name = "MyAppTests",
     tags = ["manual"],
     deps = [
-        "@swiftpkg_app_lovin_sdk//:Sources_AppLovinSDKResources",
-        "@swiftpkg_package_with_resources//:Sources_CoolUI",
+        "@swiftpkg_app_lovin_sdk//:AppLovinSDK",
+        "@swiftpkg_package_with_resources//:CoolUI",
     ],
 )
 

@@ -7,7 +7,7 @@
       "name": "Shake",
       "c99name": "Shake",
       "src_type": "binary",
-      "label": "@swiftpkg_shake_ios//:Sources_Shake.xcframework_Shake",
+      "label": "@swiftpkg_shake_ios//:Shake.rspm",
       "package_identity": "shake-ios",
       "product_memberships": [
         "Shake"
@@ -19,9 +19,7 @@
       "identity": "shake-ios",
       "name": "Shake",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_shake_ios//:Sources_Shake.xcframework_Shake"
-      ]
+      "label": "@swiftpkg_shake_ios//:Shake"
     }
   ],
   "packages": [

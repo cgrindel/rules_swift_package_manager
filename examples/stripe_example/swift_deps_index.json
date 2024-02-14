@@ -4,10 +4,21 @@
   ],
   "modules": [
     {
+      "name": "Stripe",
+      "c99name": "Stripe",
+      "src_type": "swift",
+      "label": "@swiftpkg_stripe_ios//:Stripe.rspm",
+      "modulemap_label": "@swiftpkg_stripe_ios//:Stripe.rspm_modulemap",
+      "package_identity": "stripe-ios",
+      "product_memberships": [
+        "Stripe"
+      ]
+    },
+    {
       "name": "Stripe3DS2",
       "c99name": "Stripe3DS2",
       "src_type": "objc",
-      "label": "@swiftpkg_stripe_ios//:Stripe3DS2_Stripe3DS2",
+      "label": "@swiftpkg_stripe_ios//:Stripe3DS2.rspm",
       "package_identity": "stripe-ios",
       "product_memberships": [
         "Stripe",
@@ -20,8 +31,8 @@
       "name": "StripeApplePay",
       "c99name": "StripeApplePay",
       "src_type": "swift",
-      "label": "@swiftpkg_stripe_ios//:StripeApplePay_StripeApplePay",
-      "modulemap_label": "@swiftpkg_stripe_ios//:StripeApplePay_StripeApplePay_modulemap",
+      "label": "@swiftpkg_stripe_ios//:StripeApplePay.rspm",
+      "modulemap_label": "@swiftpkg_stripe_ios//:StripeApplePay.rspm_modulemap",
       "package_identity": "stripe-ios",
       "product_memberships": [
         "Stripe",
@@ -33,8 +44,8 @@
       "name": "StripeCameraCore",
       "c99name": "StripeCameraCore",
       "src_type": "swift",
-      "label": "@swiftpkg_stripe_ios//:StripeCameraCore_StripeCameraCore",
-      "modulemap_label": "@swiftpkg_stripe_ios//:StripeCameraCore_StripeCameraCore_modulemap",
+      "label": "@swiftpkg_stripe_ios//:StripeCameraCore.rspm",
+      "modulemap_label": "@swiftpkg_stripe_ios//:StripeCameraCore.rspm_modulemap",
       "package_identity": "stripe-ios",
       "product_memberships": [
         "StripeIdentity"
@@ -44,8 +55,8 @@
       "name": "StripeCardScan",
       "c99name": "StripeCardScan",
       "src_type": "swift",
-      "label": "@swiftpkg_stripe_ios//:StripeCardScan_StripeCardScan",
-      "modulemap_label": "@swiftpkg_stripe_ios//:StripeCardScan_StripeCardScan_modulemap",
+      "label": "@swiftpkg_stripe_ios//:StripeCardScan.rspm",
+      "modulemap_label": "@swiftpkg_stripe_ios//:StripeCardScan.rspm_modulemap",
       "package_identity": "stripe-ios",
       "product_memberships": [
         "StripeCardScan"
@@ -55,8 +66,8 @@
       "name": "StripeCore",
       "c99name": "StripeCore",
       "src_type": "swift",
-      "label": "@swiftpkg_stripe_ios//:StripeCore_StripeCore",
-      "modulemap_label": "@swiftpkg_stripe_ios//:StripeCore_StripeCore_modulemap",
+      "label": "@swiftpkg_stripe_ios//:StripeCore.rspm",
+      "modulemap_label": "@swiftpkg_stripe_ios//:StripeCore.rspm_modulemap",
       "package_identity": "stripe-ios",
       "product_memberships": [
         "Stripe",
@@ -73,8 +84,8 @@
       "name": "StripeFinancialConnections",
       "c99name": "StripeFinancialConnections",
       "src_type": "swift",
-      "label": "@swiftpkg_stripe_ios//:StripeFinancialConnections_StripeFinancialConnections",
-      "modulemap_label": "@swiftpkg_stripe_ios//:StripeFinancialConnections_StripeFinancialConnections_modulemap",
+      "label": "@swiftpkg_stripe_ios//:StripeFinancialConnections.rspm",
+      "modulemap_label": "@swiftpkg_stripe_ios//:StripeFinancialConnections.rspm_modulemap",
       "package_identity": "stripe-ios",
       "product_memberships": [
         "StripeFinancialConnections"
@@ -84,8 +95,8 @@
       "name": "StripeIdentity",
       "c99name": "StripeIdentity",
       "src_type": "swift",
-      "label": "@swiftpkg_stripe_ios//:StripeIdentity_StripeIdentity",
-      "modulemap_label": "@swiftpkg_stripe_ios//:StripeIdentity_StripeIdentity_modulemap",
+      "label": "@swiftpkg_stripe_ios//:StripeIdentity.rspm",
+      "modulemap_label": "@swiftpkg_stripe_ios//:StripeIdentity.rspm_modulemap",
       "package_identity": "stripe-ios",
       "product_memberships": [
         "StripeIdentity"
@@ -95,23 +106,10 @@
       "name": "StripePaymentSheet",
       "c99name": "StripePaymentSheet",
       "src_type": "swift",
-      "label": "@swiftpkg_stripe_ios//:StripePaymentSheet_StripePaymentSheet",
-      "modulemap_label": "@swiftpkg_stripe_ios//:StripePaymentSheet_StripePaymentSheet_modulemap",
+      "label": "@swiftpkg_stripe_ios//:StripePaymentSheet.rspm",
+      "modulemap_label": "@swiftpkg_stripe_ios//:StripePaymentSheet.rspm_modulemap",
       "package_identity": "stripe-ios",
       "product_memberships": [
-        "StripePaymentSheet"
-      ]
-    },
-    {
-      "name": "StripePaymentsUI",
-      "c99name": "StripePaymentsUI",
-      "src_type": "swift",
-      "label": "@swiftpkg_stripe_ios//:StripePaymentsUI_StripePaymentsUI",
-      "modulemap_label": "@swiftpkg_stripe_ios//:StripePaymentsUI_StripePaymentsUI_modulemap",
-      "package_identity": "stripe-ios",
-      "product_memberships": [
-        "Stripe",
-        "StripePaymentsUI",
         "StripePaymentSheet"
       ]
     },
@@ -119,8 +117,8 @@
       "name": "StripePayments",
       "c99name": "StripePayments",
       "src_type": "swift",
-      "label": "@swiftpkg_stripe_ios//:StripePayments_StripePayments",
-      "modulemap_label": "@swiftpkg_stripe_ios//:StripePayments_StripePayments_modulemap",
+      "label": "@swiftpkg_stripe_ios//:StripePayments.rspm",
+      "modulemap_label": "@swiftpkg_stripe_ios//:StripePayments.rspm_modulemap",
       "package_identity": "stripe-ios",
       "product_memberships": [
         "Stripe",
@@ -130,11 +128,24 @@
       ]
     },
     {
+      "name": "StripePaymentsUI",
+      "c99name": "StripePaymentsUI",
+      "src_type": "swift",
+      "label": "@swiftpkg_stripe_ios//:StripePaymentsUI.rspm",
+      "modulemap_label": "@swiftpkg_stripe_ios//:StripePaymentsUI.rspm_modulemap",
+      "package_identity": "stripe-ios",
+      "product_memberships": [
+        "Stripe",
+        "StripePaymentsUI",
+        "StripePaymentSheet"
+      ]
+    },
+    {
       "name": "StripeUICore",
       "c99name": "StripeUICore",
       "src_type": "swift",
-      "label": "@swiftpkg_stripe_ios//:StripeUICore_StripeUICore",
-      "modulemap_label": "@swiftpkg_stripe_ios//:StripeUICore_StripeUICore_modulemap",
+      "label": "@swiftpkg_stripe_ios//:StripeUICore.rspm",
+      "modulemap_label": "@swiftpkg_stripe_ios//:StripeUICore.rspm_modulemap",
       "package_identity": "stripe-ios",
       "product_memberships": [
         "Stripe",
@@ -143,17 +154,6 @@
         "StripeIdentity",
         "StripeFinancialConnections"
       ]
-    },
-    {
-      "name": "Stripe",
-      "c99name": "Stripe",
-      "src_type": "swift",
-      "label": "@swiftpkg_stripe_ios//:Stripe_StripeiOS_Stripe",
-      "modulemap_label": "@swiftpkg_stripe_ios//:Stripe_StripeiOS_Stripe_modulemap",
-      "package_identity": "stripe-ios",
-      "product_memberships": [
-        "Stripe"
-      ]
     }
   ],
   "products": [
@@ -161,65 +161,49 @@
       "identity": "stripe-ios",
       "name": "Stripe",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_stripe_ios//:Stripe_StripeiOS_Stripe"
-      ]
+      "label": "@swiftpkg_stripe_ios//:Stripe"
     },
     {
       "identity": "stripe-ios",
       "name": "StripeApplePay",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_stripe_ios//:StripeApplePay_StripeApplePay"
-      ]
+      "label": "@swiftpkg_stripe_ios//:StripeApplePay"
     },
     {
       "identity": "stripe-ios",
       "name": "StripeCardScan",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_stripe_ios//:StripeCardScan_StripeCardScan"
-      ]
+      "label": "@swiftpkg_stripe_ios//:StripeCardScan"
     },
     {
       "identity": "stripe-ios",
       "name": "StripeFinancialConnections",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_stripe_ios//:StripeFinancialConnections_StripeFinancialConnections"
-      ]
+      "label": "@swiftpkg_stripe_ios//:StripeFinancialConnections"
     },
     {
       "identity": "stripe-ios",
       "name": "StripeIdentity",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_stripe_ios//:StripeIdentity_StripeIdentity"
-      ]
+      "label": "@swiftpkg_stripe_ios//:StripeIdentity"
     },
     {
       "identity": "stripe-ios",
       "name": "StripePaymentSheet",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_stripe_ios//:StripePaymentSheet_StripePaymentSheet"
-      ]
+      "label": "@swiftpkg_stripe_ios//:StripePaymentSheet"
     },
     {
       "identity": "stripe-ios",
       "name": "StripePayments",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_stripe_ios//:StripePayments_StripePayments"
-      ]
+      "label": "@swiftpkg_stripe_ios//:StripePayments"
     },
     {
       "identity": "stripe-ios",
       "name": "StripePaymentsUI",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_stripe_ios//:StripePaymentsUI_StripePaymentsUI"
-      ]
+      "label": "@swiftpkg_stripe_ios//:StripePaymentsUI"
     }
   ],
   "packages": [

@@ -1,6 +1,6 @@
 """Module for generating data from target dependencies created by `pkginfos`."""
 
-load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels")
 load(":bzl_selects.bzl", "bzl_selects")
 load(":deps_indexes.bzl", "deps_indexes")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
@@ -35,6 +35,8 @@ def make_pkginfo_target_deps(bazel_labels):
         if depender_module == None:
             fail("Unable to find depender module named {}.".format(depender_module_name))
 
+        module = None
+        product = None
         if target_dep.by_name:
             condition = target_dep.by_name.condition
 
@@ -45,25 +47,12 @@ def make_pkginfo_target_deps(bazel_labels):
                 pkg_ctx.deps_index_ctx,
                 target_dep.by_name.name,
             )
-            if module != None and \
-               module.label.repository_name == depender_module.label.repository_name:
-                modules = [module]
-            else:
+            if module == None or \
+               module.label.repository_name != depender_module.label.repository_name:
                 product = deps_indexes.resolve_product_with_ctx(
                     pkg_ctx.deps_index_ctx,
                     target_dep.by_name.name,
                 )
-                if product != None:
-                    modules = deps_indexes.modules_for_product(
-                        deps_index = pkg_ctx.deps_index_ctx.deps_index,
-                        product = product,
-                    )
-                else:
-                    # Seeing Package.swift files with byName dependencies that
-                    # cannot be resolved (i.e., they do not exist).
-                    # Example `protoc-gen-swift` in
-                    # `https://github.com/grpc/grpc-swift.git`.
-                    modules = [module] if module != None else []
 
         elif target_dep.target:
             condition = target_dep.target.condition
@@ -75,7 +64,6 @@ def make_pkginfo_target_deps(bazel_labels):
                 fail("""\
 Unable to resolve target reference target dependency for {module_name}.\
 """.format(module_name = target_dep.target.target_name))
-            modules = [module]
 
         elif target_dep.product:
             condition = target_dep.product.condition
@@ -101,20 +89,20 @@ Unable to resolve product reference target dependency for product {prod_name} pr
                     prod_name = prod_ref.product_name,
                     dep_name = prod_ref.dep_name,
                 ))
-            modules = deps_indexes.modules_for_product(
-                deps_index = pkg_ctx.deps_index_ctx.deps_index,
-                product = product,
-            )
 
         else:
             fail("""\
 Unrecognized target dependency while generating a Bazel dependency label.\
 """)
 
-        labels = lists.flatten([
-            deps_indexes.labels_for_module(module, depender_module.src_type)
-            for module in modules
-        ])
+        if product:
+            labels = [product.label]
+        elif module:
+            labels = (
+                deps_indexes.labels_for_module(module, depender_module.src_type)
+            )
+        else:
+            labels = []
 
         return bzl_selects.new_from_target_dependency_condition(
             kind = _target_dep_kind,

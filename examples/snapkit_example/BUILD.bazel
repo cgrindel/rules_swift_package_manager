@@ -51,7 +51,7 @@ swift_library(
     module_name = "SnapkitExample",
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = ["@swiftpkg_snapkit//:Sources_SnapKit"],
+    deps = ["@swiftpkg_snapkit//:SnapKit-Dynamic"],
 )
 
 ios_application(

@@ -43,8 +43,8 @@ swift_library(
     tags = ["manual"],
     visibility = ["//visibility:public"],
     deps = [
-        "@swiftpkg_kingfisher//:Sources_Kingfisher",
-        "@swiftpkg_messagekit//:Sources_MessageKit",
+        "@swiftpkg_kingfisher//:Kingfisher",
+        "@swiftpkg_messagekit//:MessageKit",
     ],
 )
 

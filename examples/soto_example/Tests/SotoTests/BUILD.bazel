@@ -7,5 +7,5 @@ swift_test(
         "main.swift",
     ],
     module_name = "SotoTests",
-    deps = ["@swiftpkg_soto//:Sources_Soto_SotoS3"],
+    deps = ["@swiftpkg_soto//:SotoS3"],
 )

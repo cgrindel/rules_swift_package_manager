@@ -7,8 +7,8 @@
       "name": "PhoneNumberKit",
       "c99name": "PhoneNumberKit",
       "src_type": "swift",
-      "label": "@swiftpkg_phonenumberkit//:PhoneNumberKit_PhoneNumberKit",
-      "modulemap_label": "@swiftpkg_phonenumberkit//:PhoneNumberKit_PhoneNumberKit_modulemap",
+      "label": "@swiftpkg_phonenumberkit//:PhoneNumberKit.rspm",
+      "modulemap_label": "@swiftpkg_phonenumberkit//:PhoneNumberKit.rspm_modulemap",
       "package_identity": "phonenumberkit",
       "product_memberships": [
         "PhoneNumberKit",
@@ -22,25 +22,19 @@
       "identity": "phonenumberkit",
       "name": "PhoneNumberKit",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_phonenumberkit//:PhoneNumberKit_PhoneNumberKit"
-      ]
+      "label": "@swiftpkg_phonenumberkit//:PhoneNumberKit"
     },
     {
       "identity": "phonenumberkit",
       "name": "PhoneNumberKit-Dynamic",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_phonenumberkit//:PhoneNumberKit_PhoneNumberKit"
-      ]
+      "label": "@swiftpkg_phonenumberkit//:PhoneNumberKit-Dynamic"
     },
     {
       "identity": "phonenumberkit",
       "name": "PhoneNumberKit-Static",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_phonenumberkit//:PhoneNumberKit_PhoneNumberKit"
-      ]
+      "label": "@swiftpkg_phonenumberkit//:PhoneNumberKit-Static"
     }
   ],
   "packages": [

@@ -11,27 +11,27 @@
       "name": "MoreCoolUI",
       "c99name": "MoreCoolUI",
       "src_type": "swift",
-      "label": "@swiftpkg_another_package_with_resources//:MoreCoolUI",
+      "label": "@swiftpkg_another_package_with_resources//:MoreCoolUI.rspm",
       "package_identity": "another_package_with_resources",
       "product_memberships": [
         "MoreCoolUI"
       ]
     },
     {
-      "name": "AppLovinSDKResources",
-      "c99name": "AppLovinSDKResources",
-      "src_type": "objc",
-      "label": "@swiftpkg_app_lovin_sdk//:Sources_AppLovinSDKResources",
+      "name": "AppLovinSDK",
+      "c99name": "AppLovinSDK",
+      "src_type": "binary",
+      "label": "@swiftpkg_app_lovin_sdk//:AppLovinSDK.rspm",
       "package_identity": "app_lovin_sdk",
       "product_memberships": [
         "AppLovinSDK"
       ]
     },
     {
-      "name": "AppLovinSDK",
-      "c99name": "AppLovinSDK",
-      "src_type": "binary",
-      "label": "@swiftpkg_app_lovin_sdk//:remote_archive_AppLovinSDK-12.0.0.xcframework.zip_AppLovinSDK",
+      "name": "AppLovinSDKResources",
+      "c99name": "AppLovinSDKResources",
+      "src_type": "objc",
+      "label": "@swiftpkg_app_lovin_sdk//:AppLovinSDKResources.rspm",
       "package_identity": "app_lovin_sdk",
       "product_memberships": [
         "AppLovinSDK"
@@ -41,7 +41,7 @@
       "name": "AppAuth",
       "c99name": "AppAuth",
       "src_type": "objc",
-      "label": "@swiftpkg_appauth_ios//:Source_AppAuth",
+      "label": "@swiftpkg_appauth_ios//:AppAuth.rspm",
       "package_identity": "appauth-ios",
       "product_memberships": [
         "AppAuth"
@@ -51,7 +51,7 @@
       "name": "AppAuthCore",
       "c99name": "AppAuthCore",
       "src_type": "objc",
-      "label": "@swiftpkg_appauth_ios//:Source_AppAuthCore",
+      "label": "@swiftpkg_appauth_ios//:AppAuthCore.rspm",
       "package_identity": "appauth-ios",
       "product_memberships": [
         "AppAuthCore",
@@ -63,27 +63,17 @@
       "name": "AppAuthTV",
       "c99name": "AppAuthTV",
       "src_type": "objc",
-      "label": "@swiftpkg_appauth_ios//:Source_AppAuthTV",
+      "label": "@swiftpkg_appauth_ios//:AppAuthTV.rspm",
       "package_identity": "appauth-ios",
       "product_memberships": [
         "AppAuthTV"
       ]
     },
     {
-      "name": "GoogleSignInSwift",
-      "c99name": "GoogleSignInSwift",
-      "src_type": "swift",
-      "label": "@swiftpkg_googlesignin_ios//:GoogleSignInSwift_Sources_GoogleSignInSwift",
-      "package_identity": "googlesignin-ios",
-      "product_memberships": [
-        "GoogleSignInSwift"
-      ]
-    },
-    {
       "name": "GoogleSignIn",
       "c99name": "GoogleSignIn",
       "src_type": "objc",
-      "label": "@swiftpkg_googlesignin_ios//:GoogleSignIn_Sources_GoogleSignIn",
+      "label": "@swiftpkg_googlesignin_ios//:GoogleSignIn.rspm",
       "package_identity": "googlesignin-ios",
       "product_memberships": [
         "GoogleSignIn",
@@ -91,10 +81,20 @@
       ]
     },
     {
+      "name": "GoogleSignInSwift",
+      "c99name": "GoogleSignInSwift",
+      "src_type": "swift",
+      "label": "@swiftpkg_googlesignin_ios//:GoogleSignInSwift.rspm",
+      "package_identity": "googlesignin-ios",
+      "product_memberships": [
+        "GoogleSignInSwift"
+      ]
+    },
+    {
       "name": "GTMSessionFetcherCore",
       "c99name": "GTMSessionFetcherCore",
       "src_type": "objc",
-      "label": "@swiftpkg_gtm_session_fetcher//:Sources_Core_GTMSessionFetcherCore",
+      "label": "@swiftpkg_gtm_session_fetcher//:GTMSessionFetcherCore.rspm",
       "package_identity": "gtm-session-fetcher",
       "product_memberships": [
         "GTMSessionFetcher",
@@ -107,7 +107,7 @@
       "name": "GTMSessionFetcherFull",
       "c99name": "GTMSessionFetcherFull",
       "src_type": "objc",
-      "label": "@swiftpkg_gtm_session_fetcher//:Sources_Full_GTMSessionFetcherFull",
+      "label": "@swiftpkg_gtm_session_fetcher//:GTMSessionFetcherFull.rspm",
       "package_identity": "gtm-session-fetcher",
       "product_memberships": [
         "GTMSessionFetcher",
@@ -118,7 +118,7 @@
       "name": "GTMSessionFetcherLogView",
       "c99name": "GTMSessionFetcherLogView",
       "src_type": "objc",
-      "label": "@swiftpkg_gtm_session_fetcher//:Sources_LogView_GTMSessionFetcherLogView",
+      "label": "@swiftpkg_gtm_session_fetcher//:GTMSessionFetcherLogView.rspm",
       "package_identity": "gtm-session-fetcher",
       "product_memberships": [
         "GTMSessionFetcherLogView"
@@ -128,7 +128,7 @@
       "name": "GTMAppAuth",
       "c99name": "GTMAppAuth",
       "src_type": "objc",
-      "label": "@swiftpkg_gtmappauth//:GTMAppAuth_Sources_GTMAppAuth",
+      "label": "@swiftpkg_gtmappauth//:GTMAppAuth.rspm",
       "package_identity": "gtmappauth",
       "product_memberships": [
         "GTMAppAuth"
@@ -138,27 +138,17 @@
       "name": "CoolUI",
       "c99name": "CoolUI",
       "src_type": "swift",
-      "label": "@swiftpkg_package_with_resources//:Sources_CoolUI",
+      "label": "@swiftpkg_package_with_resources//:CoolUI.rspm",
       "package_identity": "package_with_resources",
       "product_memberships": [
         "CoolUI"
       ]
     },
     {
-      "name": "SDWebImageMapKit",
-      "c99name": "SDWebImageMapKit",
-      "src_type": "objc",
-      "label": "@swiftpkg_sdwebimage//:SDWebImageMapKit_SDWebImageMapKit",
-      "package_identity": "sdwebimage",
-      "product_memberships": [
-        "SDWebImageMapKit"
-      ]
-    },
-    {
       "name": "SDWebImage",
       "c99name": "SDWebImage",
       "src_type": "objc",
-      "label": "@swiftpkg_sdwebimage//:SDWebImage_SDWebImage",
+      "label": "@swiftpkg_sdwebimage//:SDWebImage.rspm",
       "package_identity": "sdwebimage",
       "product_memberships": [
         "SDWebImage",
@@ -166,10 +156,20 @@
       ]
     },
     {
+      "name": "SDWebImageMapKit",
+      "c99name": "SDWebImageMapKit",
+      "src_type": "objc",
+      "label": "@swiftpkg_sdwebimage//:SDWebImageMapKit.rspm",
+      "package_identity": "sdwebimage",
+      "product_memberships": [
+        "SDWebImageMapKit"
+      ]
+    },
+    {
       "name": "SDWebImageSwiftUI",
       "c99name": "SDWebImageSwiftUI",
       "src_type": "swift",
-      "label": "@swiftpkg_sdwebimageswiftui//:SDWebImageSwiftUI_Classes_SDWebImageSwiftUI",
+      "label": "@swiftpkg_sdwebimageswiftui//:SDWebImageSwiftUI.rspm",
       "package_identity": "sdwebimageswiftui",
       "product_memberships": [
         "SDWebImageSwiftUI"
@@ -181,130 +181,97 @@
       "identity": "another_package_with_resources",
       "name": "MoreCoolUI",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_another_package_with_resources//:MoreCoolUI"
-      ]
+      "label": "@swiftpkg_another_package_with_resources//:MoreCoolUI"
     },
     {
       "identity": "app_lovin_sdk",
       "name": "AppLovinSDK",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_app_lovin_sdk//:Sources_AppLovinSDKResources"
-      ]
+      "label": "@swiftpkg_app_lovin_sdk//:AppLovinSDK"
     },
     {
       "identity": "appauth-ios",
       "name": "AppAuth",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_appauth_ios//:Source_AppAuth"
-      ]
+      "label": "@swiftpkg_appauth_ios//:AppAuth"
     },
     {
       "identity": "appauth-ios",
       "name": "AppAuthCore",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_appauth_ios//:Source_AppAuthCore"
-      ]
+      "label": "@swiftpkg_appauth_ios//:AppAuthCore"
     },
     {
       "identity": "appauth-ios",
       "name": "AppAuthTV",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_appauth_ios//:Source_AppAuthTV"
-      ]
+      "label": "@swiftpkg_appauth_ios//:AppAuthTV"
     },
     {
       "identity": "googlesignin-ios",
       "name": "GoogleSignIn",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_googlesignin_ios//:GoogleSignIn_Sources_GoogleSignIn"
-      ]
+      "label": "@swiftpkg_googlesignin_ios//:GoogleSignIn"
     },
     {
       "identity": "googlesignin-ios",
       "name": "GoogleSignInSwift",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_googlesignin_ios//:GoogleSignInSwift_Sources_GoogleSignInSwift"
-      ]
+      "label": "@swiftpkg_googlesignin_ios//:GoogleSignInSwift"
     },
     {
       "identity": "gtm-session-fetcher",
       "name": "GTMSessionFetcher",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_gtm_session_fetcher//:Sources_Core_GTMSessionFetcherCore",
-        "@swiftpkg_gtm_session_fetcher//:Sources_Full_GTMSessionFetcherFull"
-      ]
+      "label": "@swiftpkg_gtm_session_fetcher//:GTMSessionFetcher"
     },
     {
       "identity": "gtm-session-fetcher",
       "name": "GTMSessionFetcherCore",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_gtm_session_fetcher//:Sources_Core_GTMSessionFetcherCore"
-      ]
+      "label": "@swiftpkg_gtm_session_fetcher//:GTMSessionFetcherCore"
     },
     {
       "identity": "gtm-session-fetcher",
       "name": "GTMSessionFetcherFull",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_gtm_session_fetcher//:Sources_Full_GTMSessionFetcherFull"
-      ]
+      "label": "@swiftpkg_gtm_session_fetcher//:GTMSessionFetcherFull"
     },
     {
       "identity": "gtm-session-fetcher",
       "name": "GTMSessionFetcherLogView",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_gtm_session_fetcher//:Sources_LogView_GTMSessionFetcherLogView"
-      ]
+      "label": "@swiftpkg_gtm_session_fetcher//:GTMSessionFetcherLogView"
     },
     {
       "identity": "gtmappauth",
       "name": "GTMAppAuth",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_gtmappauth//:GTMAppAuth_Sources_GTMAppAuth"
-      ]
+      "label": "@swiftpkg_gtmappauth//:GTMAppAuth"
     },
     {
       "identity": "package_with_resources",
       "name": "CoolUI",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_package_with_resources//:Sources_CoolUI"
-      ]
+      "label": "@swiftpkg_package_with_resources//:CoolUI"
     },
     {
       "identity": "sdwebimageswiftui",
       "name": "SDWebImageSwiftUI",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_sdwebimageswiftui//:SDWebImageSwiftUI_Classes_SDWebImageSwiftUI"
-      ]
+      "label": "@swiftpkg_sdwebimageswiftui//:SDWebImageSwiftUI"
     },
     {
       "identity": "sdwebimage",
       "name": "SDWebImage",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_sdwebimage//:SDWebImage_SDWebImage"
-      ]
+      "label": "@swiftpkg_sdwebimage//:SDWebImage"
     },
     {
       "identity": "sdwebimage",
       "name": "SDWebImageMapKit",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_sdwebimage//:SDWebImageMapKit_SDWebImageMapKit"
-      ]
+      "label": "@swiftpkg_sdwebimage//:SDWebImageMapKit"
     }
   ],
   "packages": [

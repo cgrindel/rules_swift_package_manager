@@ -74,7 +74,7 @@ func TestDependencyIndex(t *testing.T) {
 		awesomeRepoId,
 		fooPrdName,
 		swift.LibraryProductType,
-		[]*label.Label{fooM.Label},
+		fooM.Label,
 	)
 	// Product: Bar
 	// Label: BarM
@@ -83,7 +83,7 @@ func TestDependencyIndex(t *testing.T) {
 		awesomeRepoId,
 		barPrdName,
 		swift.LibraryProductType,
-		[]*label.Label{barM.Label},
+		barM.Label,
 	)
 	// Product: Baz
 	// Label: BazM
@@ -92,7 +92,7 @@ func TestDependencyIndex(t *testing.T) {
 		awesomeRepoId,
 		bazPrdName,
 		swift.LibraryProductType,
-		[]*label.Label{bazM.Label, fooM.Label},
+		bazM.Label,
 	)
 	// Product: Other
 	// Label: OtherM
@@ -101,7 +101,7 @@ func TestDependencyIndex(t *testing.T) {
 		awesomeRepoId,
 		otherPrdName,
 		swift.LibraryProductType,
-		[]*label.Label{otherM.Label},
+		otherM.Label,
 	)
 
 	// Looks similar to Foo in awesome-repo.
@@ -125,7 +125,7 @@ func TestDependencyIndex(t *testing.T) {
 		anotherRepoID,
 		fooPrdName,
 		swift.LibraryProductType,
-		[]*label.Label{anotherFooM.Label},
+		anotherFooM.Label,
 	)
 
 	directIdentities := []string{awesomeRepoId}

@@ -119,18 +119,15 @@ def _new_product_from_dict(prd_dict):
         identity = prd_dict["identity"],
         name = prd_dict["name"],
         type = prd_dict["type"],
-        target_labels = [
-            bazel_labels.parse(lbl_str)
-            for lbl_str in prd_dict["target_labels"]
-        ],
+        label = bazel_labels.parse(prd_dict["label"]),
     )
 
-def _new_product(identity, name, type, target_labels):
+def _new_product(identity, name, type, label):
     return struct(
         identity = identity,
         name = name,
         type = type,
-        target_labels = target_labels,
+        label = label,
     )
 
 def _new_package(identity, name, remote_pkg = None, local_pkg = None):
@@ -261,8 +258,7 @@ def _modules_for_product(deps_index, product):
         A `list` of the modules associated with the product.
     """
     return lists.flatten(lists.compact([
-        _get_module(deps_index, label)
-        for label in product.target_labels
+        _get_module(deps_index, product.label),
     ]))
 
 def _resolve_module(
@@ -344,10 +340,7 @@ def _resolve_product(
         preferred_repo_name = bazel_repo_names.normalize(preferred_repo_name)
         product = lists.find(
             products,
-            lambda p: lists.contains(
-                p.target_labels,
-                lambda tl: tl.repository_name == preferred_repo_name,
-            ),
+            lambda p: p.label.repository_name == preferred_repo_name,
         )
         if product != None:
             return product
@@ -362,10 +355,7 @@ def _resolve_product(
         products = [
             p
             for p in products
-            if lists.contains(
-                p.target_labels,
-                lambda tl: sets.contains(repo_names, tl.repository_name),
-            )
+            if sets.contains(repo_names, p.label.repository_name)
         ]
 
     if len(products) == 0:

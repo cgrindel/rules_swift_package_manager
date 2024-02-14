@@ -13,10 +13,7 @@ swift_library(
     module_name = "LottieExample",
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = [
-        "@swiftpkg_lottie_spm//:Sources__LottieStub",
-        "@swiftpkg_lottie_spm//:remote_archive_Lottie-Xcode-14.1.xcframework.zip_Lottie",
-    ],
+    deps = ["@swiftpkg_lottie_spm//:Lottie"],
 )
 
 ios_application(

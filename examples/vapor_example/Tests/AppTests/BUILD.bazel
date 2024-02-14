@@ -9,6 +9,6 @@ swift_test(
     module_name = "AppTests",
     deps = [
         "//Sources/App",
-        "@swiftpkg_vapor//:Sources_XCTVapor",
+        "@swiftpkg_vapor//:XCTVapor",
     ],
 )

@@ -17,8 +17,8 @@ swift_library(
     tags = ["manual"],
     visibility = ["//visibility:public"],
     deps = [
-        "@swiftpkg_firebase_ios_sdk//:Crashlytics_FirebaseCrashlytics",
-        "@swiftpkg_reachability.swift//:Sources_Reachability",
+        "@swiftpkg_firebase_ios_sdk//:FirebaseCrashlytics",
+        "@swiftpkg_reachability.swift//:Reachability",
     ],
 )
 
