@@ -32,6 +32,7 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 	// Generate the rules from the protos (if any):
 	rules := swift.RulesFromProtos(
 		args,
+		sc.SwiftProtoGenerationMode,
 		sc.GenerateSwiftProtoLibraries,
 		sc.GenerateSwiftProtoLibraryGRPCFlavors,
 		sc.SwiftProtoCompilers,

@@ -52,6 +52,17 @@ type SwiftConfig struct {
 	// Defaults to ["manual"]
 	SwiftLibraryTags []string
 
+	// The mode to use when generating swift_proto_library targets in a BUILD file with multiple proto_library targets.
+	//
+	// match: One swift_proto_library per proto_library target in the BUILD file. This is the default.
+	// Its module name will be derived from the proto library name.
+	//
+	// package: If multiple proto_library targets share the same proto package,
+	// they will be merged into a single swift_proto_library target.
+	// Its module name will be derived from the proto package name.
+	//
+	SwiftProtoGenerationMode string
+
 	// Whether or not to generate swift_proto_library targets for proto_library targets without services.
 	// Defaults to true.
 	GenerateSwiftProtoLibraries bool

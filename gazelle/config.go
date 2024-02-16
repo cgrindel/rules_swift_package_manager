@@ -129,6 +129,7 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 // Directives
 
+const swiftProtoGenerationModeDirective = "swift_proto_generation_mode"
 const moduleNamingConventionDirective = "swift_module_naming_convention"
 const defaultModuleNameDirective = "swift_default_module_name"
 const swiftLibraryTagsDirective = "swift_library_tags"
@@ -138,6 +139,7 @@ const swiftProtoCompilerDirective = "swift_proto_compiler"
 
 func (*swiftLang) KnownDirectives() []string {
 	return []string{
+		swiftProtoGenerationModeDirective,
 		moduleNamingConventionDirective,
 		defaultModuleNameDirective,
 		swiftLibraryTagsDirective,
@@ -159,6 +161,12 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 				sc.ModuleNamingConvention = swiftcfg.PascalCaseModuleNamingConvention
 			} else {
 				sc.ModuleNamingConvention = swiftcfg.MatchCaseModuleNamingConvention
+			}
+		case swiftProtoGenerationModeDirective:
+			if d.Value == "" {
+				sc.SwiftProtoGenerationMode = "match"
+			} else {
+				sc.SwiftProtoGenerationMode = d.Value
 			}
 		case swiftLibraryTagsDirective:
 			var tags []string

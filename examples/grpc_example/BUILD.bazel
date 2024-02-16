@@ -13,7 +13,8 @@ tidy(
 # MARK: - Gazelle
 
 # Ignore the Swift build folder
-# gazelle:proto package
+# gazelle:proto file
+# gazelle:swift_proto_generation_mode package
 # gazelle:swift_module_naming_convention pascal_case
 # gazelle:swift_generate_proto_libraries true
 # gazelle:swift_proto_compiler swift_proto=//compilers:swift_proto
