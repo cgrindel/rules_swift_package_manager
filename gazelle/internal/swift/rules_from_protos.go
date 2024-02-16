@@ -1,6 +1,7 @@
 package swift
 
 import (
+	"path/filepath"
 	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
@@ -177,11 +178,21 @@ func generateRuleFromProtoPackage(
 		ProtoPackage: protoPackage,
 	}
 
+	// Build a map of proto paths provided by this package:
+	providedImports := map[string]struct{}{}
+	for protoFileName := range swiftProtoPackage.ProtoPackage.Files {
+		protoPath := filepath.Join(swiftProtoPackage.Rel, protoFileName)
+		providedImports[protoPath] = struct{}{}
+	}
+
 	// Build the list of protos imported by the proto package which we need to resolve:
 	gazelleImports := []string{}
 	for protoImport := range protoPackage.Imports {
 		if isWellKnownTypeProtoImport(protoImport) {
 			// Skip these protos because they're statically linked into SwiftProtobuf.
+			continue
+		} else if _, ok := providedImports[protoImport]; ok {
+			// Skip these protos because they are provided by the current package.
 			continue
 		} else {
 			// These are just the paths to the specific protos to import, e.g.:

@@ -37,7 +37,6 @@ swift_proto_library(
         ":echo_service_proto",
     ],
     visibility = ["//visibility:public"],
-    deps = ["//protos/echo_service:echo_service_swift_client_proto"],
 )
 
 swift_proto_library(
@@ -53,5 +52,4 @@ swift_proto_library(
         ":echo_service_proto",
     ],
     visibility = ["//visibility:public"],
-    deps = ["//protos/echo_service:echo_service_swift_client_proto"],
 )
