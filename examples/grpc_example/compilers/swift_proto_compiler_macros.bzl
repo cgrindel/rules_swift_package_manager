@@ -72,14 +72,14 @@ def make_grpc_swift_proto_compiler(
     swift_proto_compiler(
         name = name,
         protoc = "@com_google_protobuf//:protoc",
-        plugin = "@swiftpkg_grpc_swift//:Sources_protoc-gen-grpc-swift",
+        plugin = "@swiftpkg_grpc_swift//:protoc-gen-grpc-swift",
         plugin_name = name.removesuffix("_proto"),
         plugin_option_allowlist = GRPC_PLUGIN_OPTION_ALLOWLIST,
         plugin_options = merged_plugin_options,
         suffixes = [".grpc.swift"],
         deps = [
-            "@swiftpkg_swift_protobuf//:Sources_SwiftProtobuf",
-            "@swiftpkg_grpc_swift//:Sources_GRPC",
+            "@swiftpkg_swift_protobuf//:SwiftProtobuf",
+            "@swiftpkg_grpc_swift//:GRPC",
         ],
         visibility = ["//visibility:public"],
     )

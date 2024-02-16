@@ -17,7 +17,7 @@ load(
 
 swift_proto_compiler(
     name = "swift_proto",
-    plugin = "@swiftpkg_swift_protobuf//:Sources_protoc-gen-swift",
+    plugin = "@swiftpkg_swift_protobuf//:protoc-gen-swift",
     plugin_name = "swift",
     plugin_option_allowlist = PROTO_PLUGIN_OPTION_ALLOWLIST,
     plugin_options = PROTO_PLUGIN_OPTIONS,
@@ -25,7 +25,7 @@ swift_proto_compiler(
     suffixes = [".pb.swift"],
     visibility = ["//visibility:public"],
     deps = [
-        "@swiftpkg_swift_protobuf//:Sources_SwiftProtobuf",
+        "@swiftpkg_swift_protobuf//:SwiftProtobuf",
     ],
 )
 

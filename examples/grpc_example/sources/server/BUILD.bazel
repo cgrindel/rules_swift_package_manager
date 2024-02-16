@@ -7,6 +7,6 @@ swift_binary(
     visibility = ["//visibility:public"],
     deps = [
         "//protos/echo_service:echo_service_swift_server_proto",
-        "@swiftpkg_grpc_swift//:Sources_GRPC",
+        "@swiftpkg_grpc_swift//:GRPC",
     ],
 )
