@@ -2509,7 +2509,7 @@
     },
     "@@rules_go~0.44.0//go:extensions.bzl%go_sdk": {
       "os:osx,arch:x86_64": {
-        "bzlTransitiveDigest": "HOJ7KCV+gzdiDP50kTBrioqp+Vdoj42MzmZF65s69fg=",
+        "bzlTransitiveDigest": "GI6yMOM2hDU7hVAHmfnV90TgIqJguaDlemn2az5C07E=",
         "accumulatedFileDigests": {},
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -2677,7 +2677,33 @@
             }
           }
         },
-        "recordedRepoMappingEntries": []
+        "recordedRepoMappingEntries": [
+          [
+            "bazel_features~1.3.0",
+            "bazel_features_globals",
+            "bazel_features~1.3.0~version_extension~bazel_features_globals"
+          ],
+          [
+            "bazel_features~1.3.0",
+            "bazel_features_version",
+            "bazel_features~1.3.0~version_extension~bazel_features_version"
+          ],
+          [
+            "rules_go~0.44.0",
+            "bazel_features",
+            "bazel_features~1.3.0"
+          ],
+          [
+            "rules_go~0.44.0",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "rules_go~0.44.0",
+            "io_bazel_rules_go",
+            "rules_go~0.44.0"
+          ]
+        ]
       },
       "os:linux,arch:amd64": {
         "bzlTransitiveDigest": "GI6yMOM2hDU7hVAHmfnV90TgIqJguaDlemn2az5C07E=",
@@ -3431,9 +3457,9 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "RAXmIOdYeEgAIU2uKKJFxO3Uqo7xvnGxHmOD276y14c=",
+        "bzlTransitiveDigest": "L7RHn5ghSAuhk0jfjVY+57L1oZW1Xwlfez30WCMMdZM=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "bd7932021dd2b162f02d046f5f315e1bfcaef4f192383ae373b35e7952a26f74"
+          "@@//:swift_deps_index.json": "8a8c32ef1455cec6f0491d5453d8d0257185af9649f9d4eceed8d3d794e78e03"
         },
         "envVariables": {},
         "generatedRepoSpecs": {

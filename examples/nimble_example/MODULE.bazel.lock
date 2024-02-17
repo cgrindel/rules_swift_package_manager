@@ -3486,9 +3486,9 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "vZtOh7Hqv5kuRtMyW/AVHtgik9HENMZMtdkoAIS6qOQ=",
+        "bzlTransitiveDigest": "L7RHn5ghSAuhk0jfjVY+57L1oZW1Xwlfez30WCMMdZM=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "067537104205b90104f3c55a95a502dd9878812433e3d2b4c9542abd2cd3cb76"
+          "@@//:swift_deps_index.json": "324f8e43e8db59d822fd2ac6736001a029aa6958a6c3a8948ebedf9b8578c77d"
         },
         "envVariables": {},
         "generatedRepoSpecs": {

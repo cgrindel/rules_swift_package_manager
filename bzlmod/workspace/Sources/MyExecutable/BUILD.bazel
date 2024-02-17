@@ -9,8 +9,8 @@ swift_binary(
     deps = [
         "//Sources/MyLibrary",
         "//Sources/System",
-        "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser",
-        "@swiftpkg_swift_log//:Sources_Logging",
+        "@swiftpkg_swift_argument_parser//:ArgumentParser",
+        "@swiftpkg_swift_log//:Logging",
     ],
 )
 
