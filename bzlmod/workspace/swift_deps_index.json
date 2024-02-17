@@ -5,20 +5,10 @@
   ],
   "modules": [
     {
-      "name": "GenerateManual",
-      "c99name": "GenerateManual",
-      "src_type": "unknown",
-      "label": "@swiftpkg_swift_argument_parser//:Plugins_GenerateManual",
-      "package_identity": "swift-argument-parser",
-      "product_memberships": [
-        "GenerateManual"
-      ]
-    },
-    {
       "name": "ArgumentParser",
       "c99name": "ArgumentParser",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser",
+      "label": "@swiftpkg_swift_argument_parser//:ArgumentParser.rspm",
       "package_identity": "swift-argument-parser",
       "product_memberships": [
         "ArgumentParser",
@@ -29,7 +19,7 @@
       "name": "ArgumentParserToolInfo",
       "c99name": "ArgumentParserToolInfo",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Sources_ArgumentParserToolInfo",
+      "label": "@swiftpkg_swift_argument_parser//:ArgumentParserToolInfo.rspm",
       "package_identity": "swift-argument-parser",
       "product_memberships": [
         "ArgumentParser",
@@ -37,10 +27,20 @@
       ]
     },
     {
+      "name": "GenerateManual",
+      "c99name": "GenerateManual",
+      "src_type": "unknown",
+      "label": "@swiftpkg_swift_argument_parser//:GenerateManual.rspm",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "GenerateManual"
+      ]
+    },
+    {
       "name": "generate-manual",
       "c99name": "generate_manual",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_argument_parser//:Tools_generate-manual",
+      "label": "@swiftpkg_swift_argument_parser//:generate-manual.rspm",
       "package_identity": "swift-argument-parser",
       "product_memberships": [
         "GenerateManual"
@@ -50,7 +50,7 @@
       "name": "Logging",
       "c99name": "Logging",
       "src_type": "swift",
-      "label": "@swiftpkg_swift_log//:Sources_Logging",
+      "label": "@swiftpkg_swift_log//:Logging.rspm",
       "package_identity": "swift-log",
       "product_memberships": [
         "Logging"
@@ -62,25 +62,19 @@
       "identity": "swift-argument-parser",
       "name": "ArgumentParser",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_argument_parser//:Sources_ArgumentParser"
-      ]
+      "label": "@swiftpkg_swift_argument_parser//:ArgumentParser"
     },
     {
       "identity": "swift-argument-parser",
       "name": "GenerateManual",
       "type": "plugin",
-      "target_labels": [
-        "@swiftpkg_swift_argument_parser//:Plugins_GenerateManual"
-      ]
+      "label": "@swiftpkg_swift_argument_parser//:GenerateManual"
     },
     {
       "identity": "swift-log",
       "name": "Logging",
       "type": "library",
-      "target_labels": [
-        "@swiftpkg_swift_log//:Sources_Logging"
-      ]
+      "label": "@swiftpkg_swift_log//:Logging"
     }
   ],
   "packages": [
