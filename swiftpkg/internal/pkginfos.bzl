@@ -569,16 +569,19 @@ def _new_from_parsed_json(
     }
 
     pkg_path = desc_manifest["path"]
-    targets = lists.compact([
-        _new_target_from_json_maps(
-            repository_ctx = repository_ctx,
-            dump_map = target_map,
-            desc_map = desc_targets_by_name[target_map["name"]],
-            deps_index = deps_index,
-            pkg_path = pkg_path,
-        )
-        for target_map in dump_manifest["targets"]
-    ])
+    if deps_index:
+        targets = lists.compact([
+            _new_target_from_json_maps(
+                repository_ctx = repository_ctx,
+                dump_map = target_map,
+                desc_map = desc_targets_by_name[target_map["name"]],
+                deps_index = deps_index,
+                pkg_path = pkg_path,
+            )
+            for target_map in dump_manifest["targets"]
+        ])
+    else:
+        targets = []
 
     return _new(
         name = dump_manifest["name"],
