@@ -24,7 +24,11 @@ load(":validations.bzl", "validations")
 
 _DEFAULT_LOCALIZATION = "en"
 
-def _get_dump_manifest(repository_ctx, env = {}, working_directory = ""):
+def _get_dump_manifest(
+        repository_ctx,
+        env = {},
+        working_directory = "",
+        debug_path = None):
     """Returns a dict representing the package dump for an SPM package.
 
     Args:
@@ -32,19 +36,28 @@ def _get_dump_manifest(repository_ctx, env = {}, working_directory = ""):
         env: A `dict` of environment variables that will be included in the
              command execution.
         working_directory: A `string` specifying the directory for the SPM package.
+        debug_path: A `string` specifying the directory path where to  write the
+            JSON file.
 
     Returns:
         A `dict` representing an SPM package dump.
     """
+    debug_json_path = "dump.json"
+    if debug_path:
+        debug_json_path = paths.join(debug_path, debug_json_path)
     return repository_utils.parsed_json_from_spm_command(
         repository_ctx,
         ["swift", "package", "dump-package"],
         env = env,
         working_directory = working_directory,
-        debug_json_path = "dump.json",
+        debug_json_path = debug_json_path,
     )
 
-def _get_desc_manifest(repository_ctx, env = {}, working_directory = ""):
+def _get_desc_manifest(
+        repository_ctx,
+        env = {},
+        working_directory = "",
+        debug_path = None):
     """Returns a dict representing the package description for an SPM package.
 
     Args:
@@ -52,19 +65,30 @@ def _get_desc_manifest(repository_ctx, env = {}, working_directory = ""):
         env: A `dict` of environment variables that will be included in the
              command execution.
         working_directory: A `string` specifying the directory for the SPM package.
+        debug_path: A `string` specifying the directory path where to  write the
+            JSON file.
 
     Returns:
         A `dict` representing an SPM package description.
     """
+    debug_json_path = "desc.json"
+    if debug_path:
+        debug_json_path = paths.join(debug_path, debug_json_path)
     return repository_utils.parsed_json_from_spm_command(
         repository_ctx,
         ["swift", "package", "describe", "--type", "json"],
         env = env,
         working_directory = working_directory,
-        debug_json_path = "desc.json",
+        debug_json_path = debug_json_path,
     )
 
-def _get(repository_ctx, directory, deps_index, env = {}):
+def _get(
+        repository_ctx,
+        directory,
+        deps_index = None,
+        env = {},
+        debug_path = None,
+        resolved_pkg_map = None):
     """Retrieves the package information for the Swift package defined at the \
     specified directory.
 
@@ -73,27 +97,38 @@ def _get(repository_ctx, directory, deps_index, env = {}):
         directory: The path for the Swift package (`string`).
         deps_index: A `struct` as returned by `deps_indexes.new`.
         env: A `dict` of environment variables that will be included in the
-             command execution.
+            command execution.
+        debug_path: Optional. The path where to write debug files (e.g. JSON)
+            as a `string`.
+        resolved_pkg_map: Optional. A `dict` of representing the
+            `Package.resolved` JSON.
 
     Returns:
         A `struct` representing the package information as returned by
         `pkginfos.new()`.
     """
+    if debug_path:
+        if not paths.is_absolute(debug_path):
+            # For backwards compatibility, resolve relative to the working directory.
+            debug_path = paths.join(directory, debug_path)
     dump_manifest = _get_dump_manifest(
         repository_ctx,
         env = env,
         working_directory = directory,
+        debug_path = debug_path,
     )
     desc_manifest = _get_desc_manifest(
         repository_ctx,
         env = env,
         working_directory = directory,
+        debug_path = debug_path,
     )
     pkg_info = _new_from_parsed_json(
         repository_ctx = repository_ctx,
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
         deps_index = deps_index,
+        resolved_pkg_map = resolved_pkg_map,
     )
 
     # Dump the merged pkg_info for debug purposes
@@ -102,17 +137,57 @@ def _get(repository_ctx, directory, deps_index, env = {}):
 
     return pkg_info
 
-def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map):
+def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map, resolved_dep_map = None):
     identity = dep_map["identity"]
+    type = dep_map["type"]
     name = dep_names_by_id.get(identity)
     if name == None:
         fail("Did not find dependency name for {identity}".format(
             identity = identity,
         ))
 
+    # DEBUG BEGIN
+    print("*** CHUCK -------------")
+    print("*** CHUCK dep_map: ", dep_map)
+    print("*** CHUCK type: ", type)
+    # DEBUG END
+
+    source_control = None
+    file_system = None
+    if type == "sourceControl":
+        source_control = _new_source_control(
+            pin = _new_pin_from_resolved_dep_map(resolved_dep_map),
+        )
+    elif type == "fileSystem":
+        file_system = _new_file_system(path = dep_map["path"])
+    else:
+        fail("Unrecognized dependency type {type} for {identity}.".format(
+            type = type,
+            identity = identity,
+        ))
+
+    # DEBUG BEGIN
+    print("*** CHUCK source_control: ", source_control)
+    print("*** CHUCK file_system: ", file_system)
+    # DEBUG END
+
     return _new_dependency(
         identity = identity,
         name = name,
+        source_control = source_control,
+        file_system = file_system,
+    )
+
+def _new_pin_from_resolved_dep_map(resolved_dep_map):
+    state_map = resolved_dep_map["state"]
+    return _new_pin(
+        identity = resolved_dep_map["identity"],
+        kind = resolved_dep_map["kind"],
+        location = resolved_dep_map["location"],
+        state = _new_pin_state(
+            revision = state_map["revision"],
+            version = state_map.get("version"),
+        ),
     )
 
 def _new_product_from_desc_json_map(prd_map):
@@ -447,7 +522,12 @@ def _new_dependency_identity_to_name_map(dump_deps):
         result[identity] = name
     return result
 
-def _new_from_parsed_json(repository_ctx, dump_manifest, desc_manifest, deps_index):
+def _new_from_parsed_json(
+        repository_ctx,
+        dump_manifest,
+        desc_manifest,
+        deps_index,
+        resolved_pkg_map = None):
     """Returns the package information from the provided Swift package JSON \
     structures.
 
@@ -458,6 +538,8 @@ def _new_from_parsed_json(repository_ctx, dump_manifest, desc_manifest, deps_ind
         desc_manifest: A `dict` representing the parsed JSON from `swift
             package describe`.
         deps_index: A `struct` as returned by `deps_indexes.new`.
+        resolved_pkg_map: Optional. A `dict` of representing the
+            `Package.resolved` JSON.
 
     Returns:
         A `struct` representing the package information as returned by
@@ -471,8 +553,21 @@ def _new_from_parsed_json(repository_ctx, dump_manifest, desc_manifest, deps_ind
     dep_names_by_id = _new_dependency_identity_to_name_map(
         dump_manifest["dependencies"],
     )
+    resolved_deps_by_id = {}
+    if resolved_pkg_map:
+        pins = resolved_pkg_map.get("pins", [])
+        resolved_deps_by_id = {pin["identity"]: pin for pin in pins}
+
+    # DEBUG BEGIN
+    print("*** CHUCK resolved_deps_by_id: ", resolved_deps_by_id)
+
+    # DEBUG END
     dependencies = [
-        _new_dependency_from_desc_json_map(dep_names_by_id, dep_map)
+        _new_dependency_from_desc_json_map(
+            dep_names_by_id,
+            dep_map,
+            resolved_dep_map = resolved_deps_by_id.get(dep_map["identity"]),
+        )
         for dep_map in desc_manifest["dependencies"]
     ]
 
@@ -575,7 +670,7 @@ def _new_platform(name, version):
 
 # MARK: - External Dependency
 
-def _new_dependency(identity, name):
+def _new_dependency(identity, name, source_control = None, file_system = None):
     """Creates a `struct` representing an external dependency for a Swift \
     package.
 
@@ -589,6 +684,69 @@ def _new_dependency(identity, name):
     return struct(
         identity = identity,
         name = pkginfo_dependencies.normalize_name(name),
+        source_control = source_control,
+        file_system = file_system,
+    )
+
+def _new_source_control(pin):
+    """Create a `struct` representing source control info for a dependency.
+
+    Args:
+        pin: A `struct` as returned by `pkginfos.new_pin()`.
+
+    Returns:
+        A `struct` representing source control info for a dependency.
+    """
+    return struct(
+        pin = pin,
+    )
+
+def _new_pin(identity, kind, location, state):
+    """Create a `struct` representing the pin for a resolved Swift package \
+    (i.e., remote, sourceControl).
+
+    Args:
+        identity: The identity for the dependency as a `string`.
+        kind: The kind as a `string` (e.g., `remoteSourceControl`).
+        location:  The URL as a `string`.
+        state: The state `struct` as returned by `pkginfos.new_pin_state()`.
+
+    Returns:
+        A `struct` representing the pin for a resolved Swift package.
+    """
+    return struct(
+        identity = identity,
+        kind = kind,
+        location = location,
+        state = state,
+    )
+
+def _new_pin_state(revision, version = None):
+    """Create a `struct` representing the state for a pin.
+
+    Args:
+        revision: The commit hash as a `string`.
+        version: Optional. The version string for the commit as a `string`.
+
+    Returns:
+        A `struct` representing a pin state.
+    """
+    return struct(
+        revision = revision,
+        version = version,
+    )
+
+def _new_file_system(path):
+    """Create a `struct` representing fileSystem dependency (i.e., local Swift package).
+
+    Args:
+        path: The path to the Swift package as a `string`.
+
+    Returns:
+        A `struct` representing a fileSystem dependency.
+    """
+    return struct(
+        path = path,
     )
 
 def _new_dependency_requirement(ranges = None):
