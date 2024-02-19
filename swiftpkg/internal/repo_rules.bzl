@@ -19,7 +19,6 @@ _swift_attrs = {
         doc = """\
 A JSON file that contains a mapping of Swift products and Swift modules.\
 """,
-        mandatory = True,
     ),
 }
 
