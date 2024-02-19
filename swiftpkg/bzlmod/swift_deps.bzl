@@ -137,13 +137,6 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
 
 def _declare_pkg_from_dependency(dep, config_pkg):
     name = bazel_repo_names.from_identity(dep.identity)
-
-    # DEBUG BEGIN
-    print("*** CHUCK ----------")
-    print("*** CHUCK name: ", name)
-    print("*** CHUCK dep: ", dep)
-
-    # DEBUG END
     if dep.source_control:
         init_submodules = None
         recursive_init_submodules = None
