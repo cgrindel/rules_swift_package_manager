@@ -74,10 +74,6 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
     resolved_pkg_json = module_ctx.read(pkg_resolved)
     resolved_pkg_map = json.decode(resolved_pkg_json)
 
-    # DEBUG BEGIN
-    print("*** CHUCK resolved_pkg_map: ", resolved_pkg_map)
-    # DEBUG END
-
     # Get the package info
     pkg_swift = module_ctx.path(from_package.swift)
     debug_path = module_ctx.path(".")
@@ -88,10 +84,6 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
         resolved_pkg_map = resolved_pkg_map,
     )
 
-    # DEBUG BEGIN
-    print("*** CHUCK pkg_info: ", pkg_info)
-
-    # DEBUG END
     pass
 
 def _swift_deps_impl(module_ctx):
