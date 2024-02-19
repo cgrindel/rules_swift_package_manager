@@ -1,5 +1,6 @@
 """Implementation for `swift_deps` bzlmod extension."""
 
+load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
 load("//swiftpkg/internal:deps_indexes.bzl", "deps_indexes")
 load("//swiftpkg/internal:local_swift_package.bzl", "local_swift_package")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
@@ -70,11 +71,13 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
         from_package: The data from the `from_package` tag.
         config_pkgs: The data from the `configure_package` tag.
     """
+
+    # Read Package.resolved.
     pkg_resolved = module_ctx.path(from_package.resolved)
     resolved_pkg_json = module_ctx.read(pkg_resolved)
     resolved_pkg_map = json.decode(resolved_pkg_json)
 
-    # Get the package info
+    # Get the package info.
     pkg_swift = module_ctx.path(from_package.swift)
     debug_path = module_ctx.path(".")
     pkg_info = pkginfos.get(
@@ -84,7 +87,69 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
         resolved_pkg_map = resolved_pkg_map,
     )
 
-    pass
+    # Declare the Bazel repositories.
+    for dep in pkg_info.dependencies:
+        config_pkg = config_pkgs.get(dep.name)
+        _declare_pkg_from_dependency(dep, config_pkg)
+
+def _declare_pkg_from_dependency(dep, config_pkg):
+    name = bazel_repo_names.from_identity(dep.identity)
+
+    # DEBUG BEGIN
+    print("*** CHUCK ----------")
+    print("*** CHUCK name: ", name)
+    print("*** CHUCK dep: ", dep)
+
+    # DEBUG END
+    if dep.source_control:
+        init_submodules = None
+        recursive_init_submodules = None
+        if config_pkg:
+            init_submodules = config_pkg.init_submodules
+            recursive_init_submodules = config_pkg.recursive_init_submodules
+
+        # TODO(chuck): Figure out how to plumb patch args.
+        patch_args = None
+        patch_cmds = None
+        patch_cmds_win = None
+        patch_tool = None
+        patches = None
+
+        # patch = remote_pkg.patch
+        patch = None
+        if patch != None:
+            patch_args = patch.args
+            patch_cmds = patch.cmds
+            patch_cmds_win = patch.win_cmds
+            patch_tool = patch.tool
+            patches = patch.files
+
+        pin = dep.source_control.pin
+        swift_package(
+            name = name,
+            bazel_package_name = name,
+            commit = pin.state.revision,
+            remote = pin.location,
+            dependencies_index = None,
+            init_submodules = init_submodules,
+            recursive_init_submodules = recursive_init_submodules,
+            patch_args = patch_args,
+            patch_cmds = patch_cmds,
+            patch_cmds_win = patch_cmds_win,
+            patch_tool = patch_tool,
+            patches = patches,
+        )
+
+    elif dep.file_system:
+        local_swift_package(
+            name = name,
+            bazel_package_name = name,
+            path = dep.file_system.path,
+            dependencies_index = None,
+        )
+
+    else:
+        fail("Unrecognized dependency type for {}.".format(dep.identity))
 
 def _swift_deps_impl(module_ctx):
     config_pkgs = {}
