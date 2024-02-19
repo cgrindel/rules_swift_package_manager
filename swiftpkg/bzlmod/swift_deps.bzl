@@ -85,10 +85,52 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
         directory = str(pkg_swift.dirname),
         debug_path = str(debug_path),
         resolved_pkg_map = resolved_pkg_map,
+        # repo_name = "",
     )
 
+    # Collect all of the deps by identity
+    all_deps_by_id = {
+        dep.identity: dep
+        for dep in pkg_info.dependencies
+    }
+
+    # Find all of the local Swift packages and add them to the all_deps_by_id.
+    # A local Swift package can reference other local Swift packages. Hence, we
+    # need to check all of the transitive local Swift packages, not just the
+    # direct local packages. We do not need to worry about the source control
+    # deps because they are already listed in the Package.resolved.
+    to_process = [
+        dep
+        for dep in all_deps_by_id.values()
+        if dep.file_system
+    ]
+    for _ in range(100):
+        if len(to_process) == 0:
+            break
+        processing = to_process
+        to_process = []
+        for dep in processing:
+            dep_pkg_info = pkginfos.get(
+                module_ctx,
+                directory = dep.file_system.path,
+                debug_path = None,
+                resolved_pkg_map = None,
+                # repo_name = bazel_repo_names.from_identity(dep.identity),
+            )
+            fs_deps = [
+                d
+                for d in dep_pkg_info.dependencies
+                if d.file_system
+            ]
+            for fs_dep in fs_deps:
+                # Add any local Swift packages that we have not already found.
+                # Be sure to process them, as well.
+                if all_deps_by_id.get(fs_dep.identity) == None:
+                    all_deps_by_id[fs_dep.identity] = fs_dep
+                    to_process.append(fs_dep)
+
     # Declare the Bazel repositories.
-    for dep in pkg_info.dependencies:
+    for dep in all_deps_by_id.values():
         config_pkg = config_pkgs.get(dep.name)
         _declare_pkg_from_dependency(dep, config_pkg)
 
