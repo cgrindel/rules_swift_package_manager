@@ -42,9 +42,9 @@ def _get_dump_manifest(
     Returns:
         A `dict` representing an SPM package dump.
     """
-    debug_json_path = "dump.json"
+    debug_json_path = None
     if debug_path:
-        debug_json_path = paths.join(debug_path, debug_json_path)
+        debug_json_path = paths.join(debug_path, "dump.json")
     return repository_utils.parsed_json_from_spm_command(
         repository_ctx,
         ["swift", "package", "dump-package"],
@@ -71,9 +71,9 @@ def _get_desc_manifest(
     Returns:
         A `dict` representing an SPM package description.
     """
-    debug_json_path = "desc.json"
+    debug_json_path = None
     if debug_path:
-        debug_json_path = paths.join(debug_path, debug_json_path)
+        debug_json_path = paths.join(debug_path, "desc.json")
     return repository_utils.parsed_json_from_spm_command(
         repository_ctx,
         ["swift", "package", "describe", "--type", "json"],
