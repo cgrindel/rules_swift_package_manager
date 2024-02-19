@@ -85,7 +85,7 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
         directory = str(pkg_swift.dirname),
         debug_path = str(debug_path),
         resolved_pkg_map = resolved_pkg_map,
-        # repo_name = "",
+        collect_src_info = False,
     )
 
     # Collect all of the deps by identity
@@ -116,6 +116,7 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
                 debug_path = None,
                 resolved_pkg_map = None,
                 # repo_name = bazel_repo_names.from_identity(dep.identity),
+                collect_src_info = False,
             )
             fs_deps = [
                 d

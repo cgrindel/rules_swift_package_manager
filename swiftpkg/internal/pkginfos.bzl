@@ -12,7 +12,6 @@ load(
     spm_platforms = "platforms",
 )
 load(":clang_files.bzl", "clang_files")
-load(":deps_indexes.bzl", "deps_indexes")
 load(":objc_files.bzl", "objc_files")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
@@ -88,7 +87,8 @@ def _get(
         deps_index = None,
         env = {},
         debug_path = None,
-        resolved_pkg_map = None):
+        resolved_pkg_map = None,
+        collect_src_info = True):
     """Retrieves the package information for the Swift package defined at the \
     specified directory.
 
@@ -127,7 +127,7 @@ def _get(
         repository_ctx = repository_ctx,
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
-        deps_index = deps_index,
+        collect_src_info = collect_src_info,
         resolved_pkg_map = resolved_pkg_map,
     )
 
@@ -256,24 +256,17 @@ def _new_target_from_json_maps(
         repository_ctx,
         dump_map,
         desc_map,
-        deps_index,
-        pkg_path):
-    repo_name = repository_ctx.attr.bazel_package_name
-    if repo_name == "":
-        repo_name = repository_ctx.name
+        pkg_path,
+        collect_src_info):
     target_name = dump_map["name"]
     target_path = desc_map["path"]
     target_label = pkginfo_targets.bazel_label_from_parts(
         target_name = target_name,
-        repo_name = repo_name,
+        repo_name = "",
     )
-    dep_module = deps_indexes.get_module(deps_index, target_label)
-    if dep_module == None:
-        return None
-    product_memberships = dep_module.product_memberships
 
-    if len(product_memberships) == 0:
-        return None
+    product_memberships = []
+
     dependencies = [
         _new_target_dependency_from_dump_json_map(d)
         for d in dump_map["dependencies"]
@@ -338,7 +331,10 @@ def _new_target_from_json_maps(
     swift_src_info = None
     clang_src_info = None
     objc_src_info = None
-    if module_type == module_types.swift:
+    if not collect_src_info:
+        # Do not collect any source info
+        pass
+    elif module_type == module_types.swift:
         swift_src_info = _new_swift_src_info_from_sources(
             repository_ctx,
             target_path,
@@ -515,7 +511,7 @@ def _new_from_parsed_json(
         repository_ctx,
         dump_manifest,
         desc_manifest,
-        deps_index,
+        collect_src_info,
         resolved_pkg_map = None):
     """Returns the package information from the provided Swift package JSON \
     structures.
@@ -526,7 +522,6 @@ def _new_from_parsed_json(
             package dump-package`.
         desc_manifest: A `dict` representing the parsed JSON from `swift
             package describe`.
-        deps_index: A `struct` as returned by `deps_indexes.new`.
         resolved_pkg_map: Optional. A `dict` of representing the
             `Package.resolved` JSON.
 
@@ -569,19 +564,16 @@ def _new_from_parsed_json(
     }
 
     pkg_path = desc_manifest["path"]
-    if deps_index:
-        targets = lists.compact([
-            _new_target_from_json_maps(
-                repository_ctx = repository_ctx,
-                dump_map = target_map,
-                desc_map = desc_targets_by_name[target_map["name"]],
-                deps_index = deps_index,
-                pkg_path = pkg_path,
-            )
-            for target_map in dump_manifest["targets"]
-        ])
-    else:
-        targets = []
+    targets = lists.compact([
+        _new_target_from_json_maps(
+            repository_ctx = repository_ctx,
+            dump_map = target_map,
+            desc_map = desc_targets_by_name[target_map["name"]],
+            pkg_path = pkg_path,
+            collect_src_info = collect_src_info,
+        )
+        for target_map in dump_manifest["targets"]
+    ])
 
     return _new(
         name = dump_manifest["name"],
