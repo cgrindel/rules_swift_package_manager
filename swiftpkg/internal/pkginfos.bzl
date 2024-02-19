@@ -146,12 +146,6 @@ def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map, resolved_dep_ma
             identity = identity,
         ))
 
-    # DEBUG BEGIN
-    print("*** CHUCK -------------")
-    print("*** CHUCK dep_map: ", dep_map)
-    print("*** CHUCK type: ", type)
-    # DEBUG END
-
     source_control = None
     file_system = None
     if type == "sourceControl":
@@ -165,11 +159,6 @@ def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map, resolved_dep_ma
             type = type,
             identity = identity,
         ))
-
-    # DEBUG BEGIN
-    print("*** CHUCK source_control: ", source_control)
-    print("*** CHUCK file_system: ", file_system)
-    # DEBUG END
 
     return _new_dependency(
         identity = identity,
@@ -558,10 +547,6 @@ def _new_from_parsed_json(
         pins = resolved_pkg_map.get("pins", [])
         resolved_deps_by_id = {pin["identity"]: pin for pin in pins}
 
-    # DEBUG BEGIN
-    print("*** CHUCK resolved_deps_by_id: ", resolved_deps_by_id)
-
-    # DEBUG END
     dependencies = [
         _new_dependency_from_desc_json_map(
             dep_names_by_id,
