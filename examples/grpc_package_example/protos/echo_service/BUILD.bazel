@@ -1,5 +1,5 @@
-load("@build_bazel_rules_swift//proto:proto.bzl", "swift_proto_library")
 load("@rules_proto//proto:defs.bzl", "proto_library")
+load("@build_bazel_rules_swift//proto:proto.bzl", "swift_proto_library")
 
 proto_library(
     name = "echo_request_proto",
@@ -31,12 +31,12 @@ swift_proto_library(
         "//compilers:swift_client_proto",
     ],
     module_name = "EchoServiceClient",
-    protos = [":echo_service_proto"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//protos/echo_service:echo_request_swift_proto",
-        "//protos/echo_service:echo_response_swift_proto",
+    protos = [
+        ":echo_request_proto",
+        ":echo_response_proto",
+        ":echo_service_proto",
     ],
+    visibility = ["//visibility:public"],
 )
 
 swift_proto_library(
@@ -46,26 +46,10 @@ swift_proto_library(
         "//compilers:swift_server_proto",
     ],
     module_name = "EchoServiceServer",
-    protos = [":echo_service_proto"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "//protos/echo_service:echo_request_swift_proto",
-        "//protos/echo_service:echo_response_swift_proto",
+    protos = [
+        ":echo_request_proto",
+        ":echo_response_proto",
+        ":echo_service_proto",
     ],
-)
-
-swift_proto_library(
-    name = "echo_request_swift_proto",
-    compilers = ["//compilers:swift_proto"],
-    module_name = "EchoRequest",
-    protos = [":echo_request_proto"],
-    visibility = ["//visibility:public"],
-)
-
-swift_proto_library(
-    name = "echo_response_swift_proto",
-    compilers = ["//compilers:swift_proto"],
-    module_name = "EchoResponse",
-    protos = [":echo_response_proto"],
     visibility = ["//visibility:public"],
 )

@@ -19,6 +19,8 @@ const dependencyIndexPerms = 0666
 const (
 	MatchCaseModuleNamingConvention  string = "match_case"
 	PascalCaseModuleNamingConvention string = "pascal_case"
+	MatchProtoGenerationMode         string = "match"
+	PackageProtoGenerationMode       string = "package"
 )
 
 // A SwiftConfig represents the Swift-specific configuration for the Gazelle extension.
@@ -47,6 +49,9 @@ type SwiftConfig struct {
 	// The naming convention to apply to the module names derived from the directory names.
 	// The default behavior uses the name verbatim while PascalCase will convert snake_case to PascalCase.
 	ModuleNamingConvention string
+
+	// Whether or not the generated proto targets should omit the "Proto" suffix from their module names.
+	OmitProtoSuffixFromModuleNames bool
 
 	// The set of tags to apply to generated swift library targets.
 	// Defaults to ["manual"]
@@ -95,11 +100,14 @@ type SwiftConfig struct {
 
 func NewSwiftConfig() *SwiftConfig {
 	return &SwiftConfig{
-		ModuleFilesCollector:        NewModuleFilesCollector(),
-		DependencyIndex:             swift.NewDependencyIndex(),
-		ResolutionLogger:            reslog.NewNoopLogger(),
-		DefaultModuleNames:          make(map[string]string),
-		GenerateSwiftProtoLibraries: true,
+		ModuleFilesCollector:           NewModuleFilesCollector(),
+		DependencyIndex:                swift.NewDependencyIndex(),
+		ResolutionLogger:               reslog.NewNoopLogger(),
+		DefaultModuleNames:             make(map[string]string),
+		ModuleNamingConvention:         "match_case",
+		OmitProtoSuffixFromModuleNames: true,
+		SwiftProtoGenerationMode:       "match",
+		GenerateSwiftProtoLibraries:    true,
 		GenerateSwiftProtoLibraryGRPCFlavors: []string{
 			"swift_client_proto",
 			"swift_server_proto",

@@ -27,13 +27,17 @@ func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolv
 	// If this is a swift_proto_library, create a swift import spec for each proto path
 	// supplied by the library.
 	if r.Kind() == swift.ProtoLibraryRuleKind {
-		swiftProtoPackage := r.PrivateAttr(swift.SwiftProtoPackageKey).(swift.SwiftProtoPackage)
-		for protoFileName := range swiftProtoPackage.ProtoPackage.Files {
-			protoPath := filepath.Join(swiftProtoPackage.Rel, protoFileName)
-			importSpecs = append(importSpecs, resolve.ImportSpec{
-				Lang: swiftLangName,
-				Imp:  protoPath,
-			})
+		swiftProtoPackage, ok := r.PrivateAttr(swift.SwiftProtoPackageKey).(swift.SwiftProtoPackage)
+		if ok {
+			for protoFileName := range swiftProtoPackage.ProtoPackage.Files {
+				protoPath := filepath.Join(swiftProtoPackage.Rel, protoFileName)
+				importSpecs = append(importSpecs, resolve.ImportSpec{
+					Lang: swiftLangName,
+					Imp:  protoPath,
+				})
+			}
+		} else {
+			log.Printf("Rule was missing private attribute for swift.SwiftProtoPackageKey: %v", r)
 		}
 	}
 

@@ -16,8 +16,6 @@ import Foundation
 import GRPC
 import NIOCore
 import NIOPosix
-import EchoRequest
-import EchoResponse
 import EchoServiceServer
 
 /// Concrete implementation of the `EchoService` service definition.

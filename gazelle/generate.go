@@ -37,6 +37,7 @@ func genRulesFromSrcFiles(sc *swiftcfg.SwiftConfig, args language.GenerateArgs) 
 		sc.GenerateSwiftProtoLibraryGRPCFlavors,
 		sc.SwiftProtoCompilers,
 		sc.ModuleNamingConvention == swiftcfg.PascalCaseModuleNamingConvention,
+		sc.OmitProtoSuffixFromModuleNames,
 	)
 	result.Gen = append(result.Gen, rules...)
 	result.Imports = swift.Imports(result.Gen)
