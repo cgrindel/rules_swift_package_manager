@@ -154,7 +154,7 @@ var wellKnownTypeProtoImports map[string]struct{} = map[string]struct{}{
 	"google/protobuf/any.proto":            {},
 	"google/protobuf/type.proto":           {},
 	"google/protobuf/empty.proto":          {},
-	"google/protobuf/descriptor.pro":       {},
+	"google/protobuf/descriptor.proto":     {},
 }
 
 func isWellKnownTypeProtoImport(protoImport string) bool {
