@@ -2,6 +2,7 @@ package gazelle
 
 import (
 	"log"
+	"path/filepath"
 	"sort"
 	"strings"
 
@@ -20,16 +21,38 @@ func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolv
 		// Do not index
 		return nil
 	}
+
+	importSpecs := []resolve.ImportSpec{}
+
+	// If this is a swift_proto_library, create a swift import spec for each proto path
+	// supplied by the library.
+	if r.Kind() == swift.ProtoLibraryRuleKind {
+		swiftProtoPackage, ok := r.PrivateAttr(swift.SwiftProtoPackageKey).(swift.SwiftProtoPackage)
+		if ok {
+			for protoFileName := range swiftProtoPackage.ProtoPackage.Files {
+				protoPath := filepath.Join(swiftProtoPackage.Rel, protoFileName)
+				importSpecs = append(importSpecs, resolve.ImportSpec{
+					Lang: swiftLangName,
+					Imp:  protoPath,
+				})
+			}
+		} else {
+			log.Printf("Rule was missing private attribute for swift.SwiftProtoPackageKey: %v", r)
+		}
+	}
+
+	// Create the module name import spec if it was set:
 	moduleName := swift.ModuleName(r)
 	if moduleName == "" {
 		// Returning an empty list will cause the rule to be indexed
-		return []resolve.ImportSpec{}
+		return importSpecs
 	}
-
-	return []resolve.ImportSpec{{
+	importSpecs = append(importSpecs, resolve.ImportSpec{
 		Lang: swiftLangName,
 		Imp:  moduleName,
-	}}
+	})
+
+	return importSpecs
 }
 
 func (l *swiftLang) Resolve(
@@ -55,8 +78,19 @@ func (l *swiftLang) Resolve(
 	// Try to resolve to targets in this project.
 	externalModules := make([]string, 0, len(swiftImports))
 	for _, imp := range swiftImports {
+		importSpec := resolve.ImportSpec{Lang: swiftLangName, Imp: imp}
+		if l, ok := resolve.FindRuleWithOverride(c, importSpec, "swift"); ok {
+			addToDeps(l)
+			rr.AddLocal(imp, []resolve.FindResult{
+				{
+					Label:  l,
+					Embeds: nil, // TODO: This might be broken -- not sure what to put here.
+				}},
+			)
+			continue
+		}
 		findResults := ix.FindRulesByImportWithConfig(
-			c, resolve.ImportSpec{Lang: swiftLangName, Imp: imp}, swiftLangName)
+			c, importSpec, swiftLangName)
 		if len(findResults) > 0 {
 			addToDeps(findResults[0].Label)
 			rr.AddLocal(imp, findResults)

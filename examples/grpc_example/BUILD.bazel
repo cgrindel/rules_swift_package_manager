@@ -13,10 +13,15 @@ tidy(
 # MARK: - Gazelle
 
 # Ignore the Swift build folder
-# gazelle:exclude .build
+# gazelle:proto file
+# test gazelle:resolve swift protos/echo_service/echo_request.proto //protos/echo_service:echo_response_swift_proto
 # gazelle:swift_module_naming_convention pascal_case
 # gazelle:swift_generate_proto_libraries true
-# gazelle:swift_generate_grpc_libraries_with_flavors client,client_stubs,server
+# gazelle:swift_proto_compiler swift_proto=//compilers:swift_proto
+# gazelle:swift_proto_compiler swift_client_proto=//compilers:swift_client_proto
+# gazelle:swift_proto_compiler swift_server_proto=//compilers:swift_server_proto
+# gazelle:swift_generate_grpc_libraries_with_flavors swift_client_proto,swift_server_proto
+# gazelle:exclude .build
 
 gazelle_binary(
     name = "gazelle_bin",

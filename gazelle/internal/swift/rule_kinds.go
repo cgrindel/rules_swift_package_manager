@@ -3,7 +3,6 @@ package swift
 const (
 	LibraryRuleKind      = "swift_library"
 	ProtoLibraryRuleKind = "swift_proto_library"
-	GRPCLibraryRuleKind  = "swift_grpc_library"
 	BinaryRuleKind       = "swift_binary"
 	TestRuleKind         = "swift_test"
 
@@ -18,7 +17,7 @@ const (
 // IsSwiftRuleKind determines whether to provided rule kind is a Swift rule.
 func IsSwiftRuleKind(ruleKind string) bool {
 	switch ruleKind {
-	case LibraryRuleKind, ProtoLibraryRuleKind, GRPCLibraryRuleKind, BinaryRuleKind, TestRuleKind:
+	case LibraryRuleKind, ProtoLibraryRuleKind, BinaryRuleKind, TestRuleKind:
 		return true
 	default:
 		return false

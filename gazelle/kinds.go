@@ -53,19 +53,6 @@ var kinds = map[string]rule.KindInfo{
 		// This ensures that the deps attribute is updated properly if a dependency disappears.
 		ResolveAttrs: map[string]bool{"deps": true},
 	},
-	swift.GRPCLibraryRuleKind: rule.KindInfo{
-		MatchAttrs: []string{"module_name"},
-		NonEmptyAttrs: map[string]bool{
-			"srcs":   true,
-			"deps":   true,
-			"flavor": true,
-		},
-		MergeableAttrs: map[string]bool{
-			"srcs": true,
-		},
-		// This ensures that the deps attribute is updated properly if a dependency disappears.
-		ResolveAttrs: map[string]bool{"deps": true},
-	},
 	swift.TestRuleKind: rule.KindInfo{
 		MatchAny: true,
 		NonEmptyAttrs: map[string]bool{

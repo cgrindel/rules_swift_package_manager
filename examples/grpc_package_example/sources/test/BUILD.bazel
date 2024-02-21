@@ -1,0 +1,15 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
+
+swift_test(
+    name = "test",
+    srcs = [
+        "client_unit_test.swift",
+        "main.swift",
+    ],
+    module_name = "Test",
+    deps = [
+        "//protos/echo_service:echo_service_swift_client_proto",
+        "//protos/echo_service:echo_service_swift_server_proto",
+        "@swiftpkg_grpc_swift//:GRPC",
+    ],
+)

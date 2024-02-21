@@ -16,13 +16,13 @@ import Foundation
 import GRPC
 import NIOCore
 import NIOPosix
-import protos_echoservice_messages_messages_proto
-import protos_echoservice_echoservice_proto
-import protos_echoservice_echoservice_server_swift_grpc
+import EchoRequest
+import EchoResponse
+import EchoServiceServer
 
 /// Concrete implementation of the `EchoService` service definition.
-class EchoProvider: Echoservice_EchoServiceProvider {
-  var interceptors: Echoservice_EchoServiceServerInterceptorFactoryProtocol?
+class EchoProvider: EchoService_EchoProvider {
+  var interceptors: EchoService_EchoServerInterceptorFactoryProtocol?
 
   /// Called when the server receives a request for the `EchoService.Echo` method.
   ///
@@ -30,9 +30,9 @@ class EchoProvider: Echoservice_EchoServiceProvider {
   ///   - request: The message containing the request parameters.
   ///   - context: Information about the current session.
   /// - Returns: The response that will be sent back to the client.
-  func echo(request: Messages_EchoRequest,
-            context: StatusOnlyCallContext) -> EventLoopFuture<Messages_EchoResponse> {
-    return context.eventLoop.makeSucceededFuture(Messages_EchoResponse.with {
+  func echo(request: EchoService_EchoRequest,
+            context: StatusOnlyCallContext) -> EventLoopFuture<EchoService_EchoResponse> {
+    return context.eventLoop.makeSucceededFuture(EchoService_EchoResponse.with {
       $0.contents = "You sent: \(request.contents)"
     })
   }

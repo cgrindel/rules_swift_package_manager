@@ -129,19 +129,23 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 // Directives
 
-const moduleNamingConventionDirective = "swift_module_naming_convention"
+const swiftProtoGenerationModeDirective = "swift_proto_generation_mode"
+const swiftModuleNamingConventionDirective = "swift_module_naming_convention"
 const defaultModuleNameDirective = "swift_default_module_name"
 const swiftLibraryTagsDirective = "swift_library_tags"
 const swiftGenerateProtoLibrariesDirective = "swift_generate_proto_libraries"
 const swiftGenerateGRPCLibrariesWithFlavorsDirective = "swift_generate_grpc_libraries_with_flavors"
+const swiftProtoCompilerDirective = "swift_proto_compiler"
 
 func (*swiftLang) KnownDirectives() []string {
 	return []string{
-		moduleNamingConventionDirective,
+		swiftProtoGenerationModeDirective,
+		swiftModuleNamingConventionDirective,
 		defaultModuleNameDirective,
 		swiftLibraryTagsDirective,
 		swiftGenerateProtoLibrariesDirective,
 		swiftGenerateGRPCLibrariesWithFlavorsDirective,
+		swiftProtoCompilerDirective,
 	}
 }
 
@@ -152,12 +156,20 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 	sc := swiftcfg.GetSwiftConfig(c)
 	for _, d := range f.Directives {
 		switch d.Key {
-		case moduleNamingConventionDirective:
-			if d.Value == swiftcfg.PascalCaseModuleNamingConvention {
-				sc.ModuleNamingConvention = swiftcfg.PascalCaseModuleNamingConvention
-			} else {
-				sc.ModuleNamingConvention = swiftcfg.MatchCaseModuleNamingConvention
+		case swiftModuleNamingConventionDirective:
+			if d.Value == "" {
+				// If unset, leave the default intact.
+				break
 			}
+
+			sc.ModuleNamingConvention = d.Value
+		case swiftProtoGenerationModeDirective:
+			if d.Value == "" {
+				// If unset, leave the default intact.
+				break
+			}
+
+			sc.SwiftProtoGenerationMode = d.Value
 		case swiftLibraryTagsDirective:
 			var tags []string
 			if d.Value == "" {
@@ -173,22 +185,37 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 			sc.SwiftLibraryTags = tags
 		case swiftGenerateProtoLibrariesDirective:
 			if d.Value == "" {
-				// By default we generate proto libraries for compatibility with existing behavior.
-				sc.GenerateProtoLibraries = true
-			} else {
-				sc.GenerateProtoLibraries = d.Value == "true"
+				// If unset, leave the default intact.
+				break
 			}
+
+			// Otherwise, check if the directive was set to true:
+			sc.GenerateSwiftProtoLibraries = d.Value == "true"
 		case swiftGenerateGRPCLibrariesWithFlavorsDirective:
-			var flavors []string
 			if d.Value == "" {
-				// By default we generate all flavors for compatibility with existing behavior.
-				flavors = []string{"client,client_stubs,server"}
-			} else if d.Value == "-" {
+				// If unset, leave the default intact.
+				break
+			}
+
+			// Otherwise, parse the flavors:
+			var flavors []string
+			if d.Value == "-" {
 				flavors = nil
 			} else {
 				flavors = strings.Split(d.Value, ",")
 			}
-			sc.GenerateGRPCLibraryFlavors = flavors
+			sc.GenerateSwiftProtoLibraryGRPCFlavors = flavors
+		case swiftProtoCompilerDirective:
+			if d.Value == "" {
+				// If unset, leave the default intact.
+				break
+			}
+
+			// Otherwise, parse the compilers:
+			subcomponents := strings.Split(d.Value, "=")
+			flavor := subcomponents[0]
+			compiler := subcomponents[1]
+			sc.SwiftProtoCompilers[flavor] = compiler
 		case defaultModuleNameDirective:
 			sc.DefaultModuleNames[rel] = d.Value
 		}

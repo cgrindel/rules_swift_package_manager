@@ -16,24 +16,24 @@ import GRPC
 import NIOCore
 import NIOPosix
 import XCTest
-import protos_echoservice_messages_messages_proto
-import protos_echoservice_echoservice_proto
-import protos_echoservice_echoservice_client_swift_grpc
-import protos_echoservice_echoservice_server_swift_grpc
+import EchoRequest
+import EchoResponse
+import EchoServiceClient
+import EchoServiceServer
 
-public class EchoServiceProvider: Echoservice_EchoServiceProvider {
-  public let interceptors: Echoservice_EchoServiceServerInterceptorFactoryProtocol?
+public class EchoProvider: EchoService_EchoProvider {
+  public var interceptors: EchoService_EchoServerInterceptorFactoryProtocol?
 
-  public init(interceptors: Echoservice_EchoServiceServerInterceptorFactoryProtocol? = nil) {
+  public init(interceptors: EchoService_EchoServerInterceptorFactoryProtocol? = nil) {
     self.interceptors = interceptors
   }
 
   public func echo(
-    request: Messages_EchoRequest, 
+    request: EchoService_EchoRequest, 
     context: StatusOnlyCallContext) 
-    -> EventLoopFuture<Messages_EchoResponse> 
+    -> EventLoopFuture<EchoService_EchoResponse> 
   {
-    let response = Messages_EchoResponse.with {
+    let response = EchoService_EchoResponse.with {
       $0.contents = request.contents
     }
     return context.eventLoop.makeSucceededFuture(response)
@@ -51,7 +51,7 @@ class ClientUnitTest: XCTestCase {
     self.group = group
 
     let server = try Server.insecure(group: group)
-      .withServiceProviders([EchoServiceProvider()])
+      .withServiceProviders([EchoProvider()])
       .bind(host: "127.0.0.1", port: 0)
       .wait()
 
@@ -81,11 +81,11 @@ class ClientUnitTest: XCTestCase {
 
   func testGetWithRealClientAndServer() throws {
     let channel = try self.setUpServerAndChannel()
-    let client = Echoservice_EchoServiceNIOClient(channel: channel)
+    let client = EchoService_EchoNIOClient(channel: channel)
 
     let completed = self.expectation(description: "'Get' completed")
 
-    let call = client.echo(.with { $0.contents = "Hello" })
+    let call = client.echo(EchoService_EchoRequest.with { $0.contents = "Hello" })
     call.response.whenComplete { result in
       switch result {
       case let .success(response):
