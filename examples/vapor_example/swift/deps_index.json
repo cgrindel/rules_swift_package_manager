@@ -234,6 +234,26 @@
       ]
     },
     {
+      "name": "Backtrace",
+      "c99name": "Backtrace",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_backtrace//:Backtrace.rspm",
+      "package_identity": "swift-backtrace",
+      "product_memberships": [
+        "Backtrace"
+      ]
+    },
+    {
+      "name": "CBacktrace",
+      "c99name": "CBacktrace",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_backtrace//:CBacktrace.rspm",
+      "package_identity": "swift-backtrace",
+      "product_memberships": [
+        "Backtrace"
+      ]
+    },
+    {
       "name": "Collections",
       "c99name": "Collections",
       "src_type": "swift",
@@ -980,6 +1000,12 @@
       "label": "@swiftpkg_swift_atomics//:Atomics"
     },
     {
+      "identity": "swift-backtrace",
+      "name": "Backtrace",
+      "type": "library",
+      "label": "@swiftpkg_swift_backtrace//:Backtrace"
+    },
+    {
       "identity": "swift-collections",
       "name": "Collections",
       "type": "library",
@@ -1303,6 +1329,15 @@
       }
     },
     {
+      "name": "swiftpkg_swift_backtrace",
+      "identity": "swift-backtrace",
+      "remote": {
+        "commit": "80746bdd0ac8a7d83aad5d89dac3cbf15de652e6",
+        "remote": "https://github.com/swift-server/swift-backtrace.git",
+        "version": "1.3.4"
+      }
+    },
+    {
       "name": "swiftpkg_swift_collections",
       "identity": "swift-collections",
       "remote": {
@@ -1398,9 +1433,9 @@
       "name": "swiftpkg_vapor",
       "identity": "vapor",
       "remote": {
-        "commit": "9da9d14f43bc1b32b384f0b4eb231b8a5a851dee",
+        "commit": "3a7da193a2937472b252b8db210897e7abf37b47",
         "remote": "https://github.com/vapor/vapor.git",
-        "version": "4.92.3"
+        "version": "4.92.4"
       }
     },
     {
