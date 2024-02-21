@@ -78,8 +78,19 @@ func (l *swiftLang) Resolve(
 	// Try to resolve to targets in this project.
 	externalModules := make([]string, 0, len(swiftImports))
 	for _, imp := range swiftImports {
+		importSpec := resolve.ImportSpec{Lang: swiftLangName, Imp: imp}
+		if l, ok := resolve.FindRuleWithOverride(c, importSpec, "swift"); ok {
+			addToDeps(l)
+			rr.AddLocal(imp, []resolve.FindResult{
+				{
+					Label:  l,
+					Embeds: nil, // TODO: This might be broken -- not sure what to put here.
+				}},
+			)
+			continue
+		}
 		findResults := ix.FindRulesByImportWithConfig(
-			c, resolve.ImportSpec{Lang: swiftLangName, Imp: imp}, swiftLangName)
+			c, importSpec, swiftLangName)
 		if len(findResults) > 0 {
 			addToDeps(findResults[0].Label)
 			rr.AddLocal(imp, findResults)

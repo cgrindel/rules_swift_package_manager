@@ -14,6 +14,7 @@ tidy(
 
 # Ignore the Swift build folder
 # gazelle:proto file
+# test gazelle:resolve swift protos/echo_service/echo_request.proto //protos/echo_service:echo_response_swift_proto
 # gazelle:swift_module_naming_convention pascal_case
 # gazelle:swift_generate_proto_libraries true
 # gazelle:swift_proto_compiler swift_proto=//compilers:swift_proto
