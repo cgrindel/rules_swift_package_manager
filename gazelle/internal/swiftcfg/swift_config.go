@@ -96,6 +96,16 @@ type SwiftConfig struct {
 
 	// Path to the YAML file that contains the patch information
 	PatchesPath string
+
+	// StripImportPrefix The prefix to strip from the paths of the .proto files.
+	// If set, Gazelle will apply this value to the strip_import_prefix attribute
+	// within the proto_library_rule.
+	StripImportPrefix string
+
+	// ImportPrefix The prefix to add to the paths of the .proto files.
+	// If set, Gazelle will apply this value to the import_prefix attribute
+	// within the proto_library_rule.
+	ImportPrefix string
 }
 
 func NewSwiftConfig() *SwiftConfig {

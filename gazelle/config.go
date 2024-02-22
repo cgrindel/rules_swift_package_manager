@@ -129,6 +129,9 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 // Directives
 
+const protoStripImportPrefix = "proto_strip_import_prefix"
+const protoImportPrefix = "proto_import_prefix"
+
 const swiftProtoGenerationModeDirective = "swift_proto_generation_mode"
 const swiftModuleNamingConventionDirective = "swift_module_naming_convention"
 const defaultModuleNameDirective = "swift_default_module_name"
@@ -139,6 +142,8 @@ const swiftProtoCompilerDirective = "swift_proto_compiler"
 
 func (*swiftLang) KnownDirectives() []string {
 	return []string{
+		protoStripImportPrefix,
+		protoImportPrefix,
 		swiftProtoGenerationModeDirective,
 		swiftModuleNamingConventionDirective,
 		defaultModuleNameDirective,
@@ -156,6 +161,10 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 	sc := swiftcfg.GetSwiftConfig(c)
 	for _, d := range f.Directives {
 		switch d.Key {
+		case "proto_strip_import_prefix":
+			sc.StripImportPrefix = d.Value
+		case "proto_import_prefix":
+			sc.ImportPrefix = d.Value
 		case swiftModuleNamingConventionDirective:
 			if d.Value == "" {
 				// If unset, leave the default intact.

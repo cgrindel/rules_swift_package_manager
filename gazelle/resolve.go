@@ -2,12 +2,14 @@ package gazelle
 
 import (
 	"log"
+	"path"
 	"path/filepath"
 	"sort"
 	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/label"
+	"github.com/bazelbuild/bazel-gazelle/pathtools"
 	"github.com/bazelbuild/bazel-gazelle/repo"
 	"github.com/bazelbuild/bazel-gazelle/resolve"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -16,12 +18,13 @@ import (
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftcfg"
 )
 
-func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {
+func (*swiftLang) Imports(c *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {
 	if !swift.IsSwiftRuleKind(r.Kind()) {
 		// Do not index
 		return nil
 	}
 
+	sc := swiftcfg.GetSwiftConfig(c)
 	importSpecs := []resolve.ImportSpec{}
 
 	// If this is a swift_proto_library, create a swift import spec for each proto path
@@ -29,8 +32,24 @@ func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolv
 	if r.Kind() == swift.ProtoLibraryRuleKind {
 		swiftProtoPackage, ok := r.PrivateAttr(swift.SwiftProtoPackageKey).(swift.SwiftProtoPackage)
 		if ok {
-			for protoFileName := range swiftProtoPackage.ProtoPackage.Files {
-				protoPath := filepath.Join(swiftProtoPackage.Rel, protoFileName)
+			// Modify the prefix if necessary:
+			prefix := swiftProtoPackage.Rel
+			if sc.StripImportPrefix != "" {
+				// If strip_import_prefix starts with a /, it's interpreted as being
+				// relative to the repository root. Otherwise, it's interpreted as being
+				// relative to the package directory.
+				if strings.HasPrefix(sc.StripImportPrefix, "/") {
+					prefix = pathtools.TrimPrefix(prefix, sc.StripImportPrefix[len("/"):])
+				} else {
+					prefix = pathtools.TrimPrefix(prefix, path.Join(prefix, sc.StripImportPrefix))
+				}
+			}
+			if sc.ImportPrefix != "" {
+				prefix = path.Join(sc.ImportPrefix, prefix)
+			}
+
+			for protoSourcePath := range swiftProtoPackage.ProtoPackage.Files {
+				protoPath := filepath.Join(prefix, protoSourcePath)
 				importSpecs = append(importSpecs, resolve.ImportSpec{
 					Lang: swiftLangName,
 					Imp:  protoPath,
