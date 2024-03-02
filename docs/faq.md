@@ -3,17 +3,18 @@
 ## Table of Contents
 
 <!-- MARKDOWN TOC: BEGIN -->
-* [Why use Gazelle and Go?](#why-use-gazelle-and-go)
-* [Why split the implementation between Go and Starlark?](#why-split-the-implementation-between-go-and-starlark)
-  * [How does the Gazelle plugin for Go handle this?](#how-does-the-gazelle-plugin-for-go-handle-this)
-* [Is the same build file generation logic used for the Go/Gazelle and Starlark implementations?](#is-the-same-build-file-generation-logic-used-for-the-gogazelle-and-starlark-implementations)
-* [Does this replace rules_spm?](#does-this-replace-rules_spm)
-* [Can I migrate from rules_spm to `rules_swift_package_manager`?](#can-i-migrate-from-rules_spm-to-rules_swift_package_manager)
-* [Can I just manage my external Swift packages and not generate Bazel build files for my project?](#can-i-just-manage-my-external-swift-packages-and-not-generate-bazel-build-files-for-my-project)
-* [After running `//:swift_update_pkgs`, I see a `.build` directory. What is it? Do I need it?](#after-running-swift_update_pkgs-i-see-a-build-directory-what-is-it-do-i-need-it)
-* [Does the Gazelle plugin run Swift package manager with every execution?](#does-the-gazelle-plugin-run-swift-package-manager-with-every-execution)
-* [Can I store the Swift dependency files in a sub-package (i.e., not in the root of the workspace)?](#can-i-store-the-swift-dependency-files-in-a-sub-package-ie-not-in-the-root-of-the-workspace)
-* [My project builds successfully with `bazel build ...`, but it does not build when using `rules_xcodeproj`. How can I fix this?](#my-project-builds-successfully-with-bazel-build--but-it-does-not-build-when-using-rules_xcodeproj-how-can-i-fix-this)
+
+- [Why use Gazelle and Go?](#why-use-gazelle-and-go)
+- [Why split the implementation between Go and Starlark?](#why-split-the-implementation-between-go-and-starlark)
+  - [How does the Gazelle plugin for Go handle this?](#how-does-the-gazelle-plugin-for-go-handle-this)
+- [Is the same build file generation logic used for the Go/Gazelle and Starlark implementations?](#is-the-same-build-file-generation-logic-used-for-the-gogazelle-and-starlark-implementations)
+- [Does this replace rules_spm?](#does-this-replace-rules_spm)
+- [Can I migrate from rules_spm to `rules_swift_package_manager`?](#can-i-migrate-from-rules_spm-to-rules_swift_package_manager)
+- [Can I just manage my external Swift packages and not generate Bazel build files for my project?](#can-i-just-manage-my-external-swift-packages-and-not-generate-bazel-build-files-for-my-project)
+- [After running `//:swift_update_pkgs`, I see a `.build` directory. What is it? Do I need it?](#after-running-swift_update_pkgs-i-see-a-build-directory-what-is-it-do-i-need-it)
+- [Does the Gazelle plugin run Swift package manager with every execution?](#does-the-gazelle-plugin-run-swift-package-manager-with-every-execution)
+- [Can I store the Swift dependency files in a sub-package (i.e., not in the root of the workspace)?](#can-i-store-the-swift-dependency-files-in-a-sub-package-ie-not-in-the-root-of-the-workspace)
+- [My project builds successfully with `bazel build ...`, but it does not build when using `rules_xcodeproj`. How can I fix this?](#my-project-builds-successfully-with-bazel-build--but-it-does-not-build-when-using-rules_xcodeproj-how-can-i-fix-this)
 <!-- MARKDOWN TOC: END -->
 
 ## Why use Gazelle and Go?
@@ -97,8 +98,15 @@ tl;dr Add the following to your `.bazelrc`.
 ```
 # Ensure that sandboxed is added to the spawn strategy list when building with
 # rules_xcodeproj.
-build:rules_xcodeproj --spawn_strategy=sandboxed,remote,worker,local
+build:rules_xcodeproj --spawn_strategy=remote,worker,sandboxed,local
 ```
+
+Alternatively, you can use the [--strategy_regexp] flag to target the relevant targets. For
+instance, if `Sources/BranchSDK/BNCContentDiscoveryManager.m` is not building properly, you can
+specify `--strategy_regexp=Compiling Sources/BranchSDK/.*=sandboxed` to use the `sandboxed` strategy
+for that file. The regular expression matches on the _description_ for the action.
+
+### Why does this happen?
 
 This can happen with some Swift packages (e.g. `firebase-ios-sdk`). [rules_xcodeproj removes the
 `sandboxed` spawn
@@ -107,9 +115,10 @@ in their default build configuration due to slow performance of the MacOS sandbo
 stanza adds it back. [An issue](https://github.com/cgrindel/rules_swift_package_manager/issues/712)
 exists tracking the work to allow these Swift packages to be built using the `local` spawn strategy.
 
+[--strategy_regexp]: https://bazel.build/reference/command-line-reference#flag--strategy_regexp
+[Gazelle framework]: https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md
 [loading phase]: https://bazel.build/run/build#loading
 [quickstart]: https://github.com/cgrindel/rules_swift_package_manager/blob/main/README.md#quickstart
 [rules_spm]: https://github.com/cgrindel/rules_spm/
 [rules_swift]: https://github.com/bazelbuild/rules_swift
-[Gazelle framework]: https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md
 [vapor example]: /examples/vapor_example
