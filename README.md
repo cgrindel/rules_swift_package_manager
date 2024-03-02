@@ -136,7 +136,7 @@ time.
 Add the following to the `BUILD.bazel` file at the root of your workspace.
 
 ```bzl
-load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
 
 # Ignore the `.build` folder that is created by running Swift package manager
