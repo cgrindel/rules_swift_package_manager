@@ -103,7 +103,7 @@ build:rules_xcodeproj --spawn_strategy=remote,worker,sandboxed,local
 
 Alternatively, you can use the [--strategy_regexp] flag to target the relevant targets. For
 instance, if `Sources/BranchSDK/BNCContentDiscoveryManager.m` is not building properly, you can
-specify `--strategy_regexp=Compiling Sources/BranchSDK/.*=sandboxed` to use the `sandboxed` strategy
+specify `--strategy_regexp="Compiling Sources/BranchSDK/.*=sandboxed"` to use the `sandboxed` strategy
 for that file. The regular expression matches on the _description_ for the action.
 
 ### Why does this happen?
