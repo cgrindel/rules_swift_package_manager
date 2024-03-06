@@ -149,7 +149,12 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 	if f == nil {
 		return
 	}
-	sc := swiftcfg.GetSwiftConfig(c)
+
+	// Clone the config and set the new value to the clone
+	sc := &swiftcfg.SwiftConfig{}
+	*sc = *swiftcfg.GetSwiftConfig(c)
+	swiftcfg.SetSwiftConfig(c, sc)
+
 	for _, d := range f.Directives {
 		switch d.Key {
 		case moduleNamingConventionDirective:
