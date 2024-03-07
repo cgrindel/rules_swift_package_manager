@@ -142,9 +142,9 @@
       "name": "swiftpkg_quick",
       "identity": "quick",
       "remote": {
-        "commit": "a9e6c24033a25e158384d523a556c0b96c44a839",
+        "commit": "6d01974d236f598633cac58280372c0c8cfea5bc",
         "remote": "https://github.com/Quick/Quick",
-        "version": "7.4.0"
+        "version": "7.4.1"
       }
     }
   ]

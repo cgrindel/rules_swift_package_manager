@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Quick/Quick",
       "state" : {
-        "revision" : "a9e6c24033a25e158384d523a556c0b96c44a839",
-        "version" : "7.4.0"
+        "revision" : "6d01974d236f598633cac58280372c0c8cfea5bc",
+        "version" : "7.4.1"
       }
     }
   ],
