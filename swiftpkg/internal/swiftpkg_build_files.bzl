@@ -7,7 +7,6 @@ load(":bazel_apple_platforms.bzl", "bazel_apple_platforms")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":bzl_selects.bzl", "bzl_selects")
-load(":deps_indexes.bzl", "deps_indexes")
 load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
@@ -43,9 +42,10 @@ def _swift_target_build_file(pkg_ctx, target):
 
     all_build_files = []
     deps = lists.flatten([
-        pkginfo_target_deps.bzl_select_list(pkg_ctx, td, depender_module_name = target.c99name)
+        pkginfo_target_deps.bzl_select_list(pkg_ctx, td, depender_target = target)
         for td in target.dependencies
     ])
+
     attrs = {
         "deps": bzl_selects.to_starlark(deps),
         "module_name": target.c99name,
@@ -202,7 +202,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         pkginfo_target_deps.bzl_select_list(
             pkg_ctx,
             td,
-            depender_module_name = target.c99name,
+            depender_target = target,
         )
         for td in target.dependencies
     ])
@@ -721,19 +721,15 @@ def _library_product_build_file(deps_index_ctx, product):
     # dependency on a library product is a shorthand for depend upon all of the
     # Swift targets that is associated with the product. We use a
     # `swift_library_group` to represent this.
-
-    # Retrieve the targets
-    modules = [
-        deps_indexes.resolve_module_with_ctx(deps_index_ctx, tname)
-        for tname in product.targets
-    ]
-    label_infos = lists.flatten([
-        deps_indexes.labels_for_module(module)
-        for module in modules
-    ])
     target_labels = [
-        bazel_labels.normalize(label_info)
-        for label_info in label_infos
+        bazel_labels.normalize(
+            # pkginfo_targets.bazel_label_from_parts(tname, repo_name = ""),
+            pkginfo_targets.bazel_label_from_parts(
+                target_name = tname,
+                repo_name = deps_index_ctx.preferred_repo_name,
+            ),
+        )
+        for tname in product.targets
     ]
 
     if len(target_labels) == 0:
@@ -751,6 +747,35 @@ def _library_product_build_file(deps_index_ctx, product):
             ),
         ],
     )
+
+    # # Retrieve the targets
+    # modules = [
+    #     deps_indexes.resolve_module_with_ctx(deps_index_ctx, tname)
+    #     for tname in product.targets
+    # ]
+    # label_infos = lists.flatten([
+    #     deps_indexes.labels_for_module(module, src_types.swift)
+    #     for module in modules
+    # ])
+    # target_labels = [
+    #     bazel_labels.normalize(label_info)
+    #     for label_info in label_infos
+    # ]
+    # if len(target_labels) == 0:
+    #     fail("No targets specified for a library product. name:", product.name)
+    # return build_files.new(
+    #     load_stmts = [swift_library_group_load_stmt],
+    #     decls = [
+    #         build_decls.new(
+    #             swift_kinds.library_group,
+    #             product.name,
+    #             attrs = {
+    #                 "deps": target_labels,
+    #                 "visibility": ["//visibility:public"],
+    #             },
+    #         ),
+    #     ],
+    # )
 
 def _swift_binary_from_product(product, dep_target, repo_name):
     return build_decls.new(
