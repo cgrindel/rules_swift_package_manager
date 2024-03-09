@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "43995b7d520930dfa1d925a32ecb4ae8c77f56f573b7647fbb15001218ebaf4a",
+  "moduleFileHash": "b6d47eba15834a57aec53052bacd0572dd281821ef8e57780c6a936d8505f8dc",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -62,15 +62,16 @@
           "devImports": [],
           "tags": [
             {
-              "tagName": "from_file",
+              "tagName": "from_package",
               "attributeValues": {
-                "deps_index": "//:swift_deps_index.json"
+                "resolved": "//:Package.resolved",
+                "swift": "//:Package.swift"
               },
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
-                "line": 45,
-                "column": 21
+                "line": 50,
+                "column": 24
               }
             }
           ],
@@ -3461,9 +3462,10 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "L7RHn5ghSAuhk0jfjVY+57L1oZW1Xwlfez30WCMMdZM=",
+        "bzlTransitiveDigest": "/0X03svbVWL7rouuLJ63cHbELYtZeMX6qBOjOyEvNvs=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "a970f3e1ebdf2c4e2a004db54c509ca83fe9a9338b4af9a7672040dfc2cfbb90"
+          "@@//:Package.resolved": "cf59d56d2b6fdbe984e828dc59d2cabba2a1eee1e71913e14848106b6d9be5d5",
+          "@@//:Package.swift": "007ace886d08207876ee74f54c81dd471bafb248acff03c1f4ac7f9c110da474"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3473,8 +3475,7 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_notthatamazingmodule",
               "bazel_package_name": "swiftpkg_notthatamazingmodule",
-              "path": "third_party/NotThatAmazingModule",
-              "dependencies_index": "@@//:swift_deps_index.json"
+              "path": "/Users/chuck/code/cgrindel/rules_swift_package_manager/gh924_no_swift_index/examples/pkg_manifest_minimal/third_party/NotThatAmazingModule"
             }
           },
           "swiftpkg_swiftformat": {
@@ -3485,7 +3486,6 @@
               "bazel_package_name": "swiftpkg_swiftformat",
               "commit": "607c7057e55cf008e3841696ea7083622e36164f",
               "remote": "https://github.com/nicklockwood/SwiftFormat",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -3503,8 +3503,7 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_my_local_package",
               "bazel_package_name": "swiftpkg_my_local_package",
-              "path": "third_party/my_local_package",
-              "dependencies_index": "@@//:swift_deps_index.json"
+              "path": "/Users/chuck/code/cgrindel/rules_swift_package_manager/gh924_no_swift_index/examples/pkg_manifest_minimal/third_party/my_local_package"
             }
           },
           "swiftpkg_myamazingmodule": {
@@ -3513,8 +3512,7 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_myamazingmodule",
               "bazel_package_name": "swiftpkg_myamazingmodule",
-              "path": "third_party/MyAmazingModule",
-              "dependencies_index": "@@//:swift_deps_index.json"
+              "path": "/Users/chuck/code/cgrindel/rules_swift_package_manager/gh924_no_swift_index/examples/pkg_manifest_minimal/third_party/MyAmazingModule"
             }
           },
           "swiftpkg_swift_argument_parser": {
@@ -3525,7 +3523,6 @@
               "bazel_package_name": "swiftpkg_swift_argument_parser",
               "commit": "c8ed701b513cf5177118a175d85fbbbcd707ab41",
               "remote": "https://github.com/apple/swift-argument-parser",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -3545,7 +3542,6 @@
               "bazel_package_name": "swiftpkg_swift_log",
               "commit": "e97a6fcb1ab07462881ac165fdbb37f067e205d5",
               "remote": "https://github.com/apple/swift-log",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
