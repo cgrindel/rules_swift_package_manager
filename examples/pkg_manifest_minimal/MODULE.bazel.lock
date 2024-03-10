@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "521bfb301eceeb20bbf0abbaae34b957759df8a86bb1df4f492e95574b13ab7e",
+  "moduleFileHash": "70d58be8ec47cededb8dc388a31191d483633243dcf4483d8ec920a30d182e74",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -3462,7 +3462,7 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "KYUKrBbHaz/gE3FuPpvDQ1CSeisb+voxHSlZsG+bna8=",
+        "bzlTransitiveDigest": "e+S2chCQmUY3VTqdKDOOtdU+9WPYo6o0sRBkoJgDxaY=",
         "accumulatedFileDigests": {
           "@@//:Package.resolved": "cf59d56d2b6fdbe984e828dc59d2cabba2a1eee1e71913e14848106b6d9be5d5",
           "@@//:Package.swift": "007ace886d08207876ee74f54c81dd471bafb248acff03c1f4ac7f9c110da474"
