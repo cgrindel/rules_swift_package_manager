@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "5269936e9bd3b33b3eca5e10ca14532a594fe59e689d0b79c5146316638c3aff",
+  "moduleFileHash": "a350c12849e67e8bfca26c8de6e851aa15272a674036bf1c1b516a82ddf1eda0",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -58,15 +58,34 @@
           "devImports": [],
           "tags": [
             {
-              "tagName": "from_file",
+              "tagName": "from_package",
               "attributeValues": {
-                "deps_index": "//:swift_deps_index.json"
+                "resolved": "//:Package.resolved",
+                "swift": "//:Package.swift"
               },
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
                 "line": 55,
-                "column": 21
+                "column": 24
+              }
+            },
+            {
+              "tagName": "configure_package",
+              "attributeValues": {
+                "name": "swift-cmark",
+                "patch_args": [
+                  "-p1"
+                ],
+                "patches": [
+                  "//third-party/swift-cmark:0001-Do-not-exclude-files-that-are-needed-for-compilation.patch"
+                ]
+              },
+              "devDependency": false,
+              "location": {
+                "file": "@@//:MODULE.bazel",
+                "line": 59,
+                "column": 29
               }
             }
           ],
@@ -2632,6 +2651,34 @@
         "recordedRepoMappingEntries": []
       }
     },
+    "@@rules_apple~3.3.0//apple:extensions.bzl%non_module_deps": {
+      "general": {
+        "bzlTransitiveDigest": "a00EFHN/p/xXCg32KLOwrTkOGjTNydR9sx7g/PmrDy8=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "xctestrunner": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_apple~3.3.0~non_module_deps~xctestrunner",
+              "urls": [
+                "https://github.com/google/xctestrunner/archive/b7698df3d435b6491b4b4c0f9fc7a63fbed5e3a6.tar.gz"
+              ],
+              "strip_prefix": "xctestrunner-b7698df3d435b6491b4b4c0f9fc7a63fbed5e3a6",
+              "sha256": "ae3a063c985a8633cb7eb566db21656f8db8eb9a0edb8c182312c7f0db53730d"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_apple~3.3.0",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
     "@@rules_go~0.44.0//go:extensions.bzl%go_sdk": {
       "os:osx,arch:x86_64": {
         "bzlTransitiveDigest": "GI6yMOM2hDU7hVAHmfnV90TgIqJguaDlemn2az5C07E=",
@@ -3967,9 +4014,10 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "L7RHn5ghSAuhk0jfjVY+57L1oZW1Xwlfez30WCMMdZM=",
+        "bzlTransitiveDigest": "WHMbrnuHq2ouIrR+7rtAaZcJgNNPBH/54H53Isd+1Oo=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "36cd4ccf962592c3fb12002375f4c3498cc157b79292795af4143ee5c5332c1d"
+          "@@//:Package.resolved": "6ebeb22409b5164ad004bd3098bac429520ff33c716f12ad7751007a44a75f92",
+          "@@//:Package.swift": "da226829be91edb280fa9cbe2f22119590dc51a2a9a297d5611b222416530e17"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3981,7 +4029,6 @@
               "bazel_package_name": "swiftpkg_swift_system",
               "commit": "025bcb1165deab2e20d4eaba79967ce73013f496",
               "remote": "https://github.com/apple/swift-system.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4001,7 +4048,6 @@
               "bazel_package_name": "swiftpkg_swift_markdown",
               "commit": "e4f95e2dc23097a1a9a1dfdfe3fe3ee44de77378",
               "remote": "https://github.com/apple/swift-markdown.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4021,7 +4067,6 @@
               "bazel_package_name": "swiftpkg_swift_cmark",
               "commit": "f218e5d7691f78b55bfa39b367763f4612486c35",
               "remote": "https://github.com/apple/swift-cmark.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4043,7 +4088,6 @@
               "bazel_package_name": "swiftpkg_swift_collections",
               "commit": "937e904258d22af6e447a0b72c0bc67583ef64a2",
               "remote": "https://github.com/apple/swift-collections.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4061,9 +4105,8 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_swift_nio",
               "bazel_package_name": "swiftpkg_swift_nio",
-              "commit": "635b2589494c97e48c62514bc8b37ced762e0a62",
+              "commit": "fc63f0cf4e55a4597407a9fc95b16a2bc44b4982",
               "remote": "https://github.com/apple/swift-nio.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4083,7 +4126,6 @@
               "bazel_package_name": "swiftpkg_swift_atomics",
               "commit": "6c89474e62719ddcc1e9614989fff2f68208fe10",
               "remote": "https://github.com/apple/swift-atomics.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
