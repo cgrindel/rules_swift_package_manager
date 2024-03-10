@@ -86,6 +86,22 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
         for dep in pkg_info.dependencies
     }
 
+    # Ensure that we add all of the transitive source control deps from the
+    # resolved file.
+    for pin_map in resolved_pkg_map.get("pins", []):
+        pin = pkginfos.new_pin_from_resolved_dep_map(pin_map)
+        dep = all_deps_by_id.get(pin.identity)
+        if dep != None:
+            continue
+        dep = pkginfos.new_dependency(
+            identity = pin.identity,
+            # Just use the identity for the name as it we just need this to
+            # set up the repositories.
+            name = pin.identity,
+            source_control = pkginfos.new_source_control(pin = pin),
+        )
+        all_deps_by_id[dep.identity] = dep
+
     # Find all of the local Swift packages and add them to the all_deps_by_id.
     # A local Swift package can reference other local Swift packages. Hence, we
     # need to check all of the transitive local Swift packages, not just the
