@@ -142,6 +142,10 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
     # Declare the Bazel repositories.
     for dep in all_deps_by_id.values():
         config_pkg = config_pkgs.get(dep.name)
+        if config_pkg == None:
+            config_pkg = config_pkgs.get(
+                bazel_repo_names.from_identity(dep.identity),
+            )
         _declare_pkg_from_dependency(dep, config_pkg)
 
 def _declare_pkg_from_dependency(dep, config_pkg):
