@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "434abb450c0a0e3b411e0c2ab365ec4242ef0d62686da3ba3c82a1678de66d05",
+  "moduleFileHash": "9d8e5a36025c879c6453a69df3cc621c5bc8214f6520a89fd5018bdcee87e757",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -64,34 +64,6 @@
           },
           "devImports": [],
           "tags": [],
-          "hasDevUseExtension": false,
-          "hasNonDevUseExtension": true
-        },
-        {
-          "extensionBzlFile": "@rules_swift_package_manager//:extensions.bzl",
-          "extensionName": "swift_deps",
-          "usingModule": "<root>",
-          "location": {
-            "file": "@@//:MODULE.bazel",
-            "line": 67,
-            "column": 27
-          },
-          "imports": {},
-          "devImports": [],
-          "tags": [
-            {
-              "tagName": "from_file",
-              "attributeValues": {
-                "deps_index": "//:swift_deps_index.json"
-              },
-              "devDependency": false,
-              "location": {
-                "file": "@@//:MODULE.bazel",
-                "line": 71,
-                "column": 21
-              }
-            }
-          ],
           "hasDevUseExtension": false,
           "hasNonDevUseExtension": true
         }
