@@ -11,7 +11,6 @@ load(
     "//config_settings/spm/platform:platforms.bzl",
     spm_platforms = "platforms",
 )
-load("//swiftpkg/internal:deps_indexes.bzl", "deps_indexes")
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
 load(
@@ -561,7 +560,6 @@ _deps_index_json = """
 _pkg_ctx = pkg_ctxs.new(
     pkg_info = _pkg_info,
     repo_name = _repo_name,
-    deps_index = deps_indexes.new_from_json(_deps_index_json),
 )
 
 # MARK: - Tests

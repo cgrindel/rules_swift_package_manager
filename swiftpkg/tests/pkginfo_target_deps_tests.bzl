@@ -4,7 +4,6 @@ load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "make_bazel_labels", "make_stub_workspace_name_resolvers")
 load("//config_settings/spm/platform:platforms.bzl", spm_platforms = "platforms")
 load("//swiftpkg/internal:bzl_selects.bzl", "bzl_selects")
-load("//swiftpkg/internal:deps_indexes.bzl", "deps_indexes")
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfo_target_deps.bzl", "make_pkginfo_target_deps")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
@@ -75,63 +74,9 @@ _pkg_info = pkginfos.new(
     ],
 )
 
-_deps_index_json = """\
-{
-  "modules": [
-    {
-      "name": "AwesomePackage",
-      "c99name": "AwesomePackage",
-      "src_type": "swift",
-      "label": "@swiftpkg_example_swift_package//:AwesomePackage",
-      "package_identity": "example-swift-example",
-      "product_memberships": ["AwesomeProduct"]
-    },
-    {
-      "name": "Foo",
-      "c99name": "Foo",
-      "src_type": "swift",
-      "label": "@swiftpkg_example_swift_package//:Source/Foo",
-      "package_identity": "example-swift-example",
-      "product_memberships": []
-    },
-    {
-      "name": "Baz",
-      "c99name": "Baz",
-      "src_type": "swift",
-      "label": "@swiftpkg_example_swift_package//:Source/Baz",
-      "package_identity": "example-swift-example",
-      "product_memberships": ["AwesomeProduct", "Baz"]
-    },
-    {
-      "name": "MoreBaz",
-      "c99name": "MoreBaz",
-      "src_type": "swift",
-      "label": "@swiftpkg_example_swift_package//:Source/MoreBaz",
-      "package_identity": "example-swift-example",
-      "product_memberships": ["Baz"]
-    }
-  ],
-  "products": [
-    {
-      "identity": "example-swift-package",
-      "name": "AwesomeProduct",
-      "type": "library",
-      "label": "@swiftpkg_example_swift_package//:AwesomePackage"
-    },
-    {
-      "identity": "example-swift-package",
-      "name": "Baz",
-      "type": "library",
-      "label": "@swiftpkg_example_swift_package//:Source/Baz"
-    }
-  ]
-}
-"""
-
 _pkg_ctx = pkg_ctxs.new(
     pkg_info = _pkg_info,
     repo_name = _repo_name,
-    deps_index = deps_indexes.new_from_json(_deps_index_json),
 )
 
 def _bzl_select_list_test(ctx):

@@ -386,8 +386,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # know whether the modulemap target exists. Hence, we ensure that it
         # always exists but does nothing.
         #
-        # See `deps_indexes.bzl` for the logic that resolves the dependency
-        # labels.
+        # See `pkginfo_target_deps.bzl` for the logic that resolves the
+        # dependency labels.
         # See `generate_modulemap.bzl` for details on the modulemap generation.
         # See `//swiftpkg/tests/generate_modulemap_tests` package for a usage
         # example.
@@ -669,7 +669,7 @@ def _new_for_product(pkg_ctx, product):
             pkg_ctx.repo_name,
         )
     elif prod_type.is_library:
-        return _library_product_build_file(pkg_ctx.deps_index_ctx, product)
+        return _library_product_build_file(pkg_ctx, product)
 
     # GH046: Check for plugin product
     return None
@@ -716,17 +716,16 @@ def _executable_product_build_file(pkg_info, product, repo_name):
     else:
         fail("Did not find any targets associated with product. name:", product.name)
 
-def _library_product_build_file(deps_index_ctx, product):
+def _library_product_build_file(pkg_ctx, product):
     # A library product can reference one or more Swift targets. Hence a
     # dependency on a library product is a shorthand for depend upon all of the
     # Swift targets that is associated with the product. We use a
     # `swift_library_group` to represent this.
     target_labels = [
         bazel_labels.normalize(
-            # pkginfo_targets.bazel_label_from_parts(tname, repo_name = ""),
             pkginfo_targets.bazel_label_from_parts(
                 target_name = tname,
-                repo_name = deps_index_ctx.preferred_repo_name,
+                repo_name = pkg_ctx.repo_name,
             ),
         )
         for tname in product.targets
@@ -747,35 +746,6 @@ def _library_product_build_file(deps_index_ctx, product):
             ),
         ],
     )
-
-    # # Retrieve the targets
-    # modules = [
-    #     deps_indexes.resolve_module_with_ctx(deps_index_ctx, tname)
-    #     for tname in product.targets
-    # ]
-    # label_infos = lists.flatten([
-    #     deps_indexes.labels_for_module(module, src_types.swift)
-    #     for module in modules
-    # ])
-    # target_labels = [
-    #     bazel_labels.normalize(label_info)
-    #     for label_info in label_infos
-    # ]
-    # if len(target_labels) == 0:
-    #     fail("No targets specified for a library product. name:", product.name)
-    # return build_files.new(
-    #     load_stmts = [swift_library_group_load_stmt],
-    #     decls = [
-    #         build_decls.new(
-    #             swift_kinds.library_group,
-    #             product.name,
-    #             attrs = {
-    #                 "deps": target_labels,
-    #                 "visibility": ["//visibility:public"],
-    #             },
-    #         ),
-    #     ],
-    # )
 
 def _swift_binary_from_product(product, dep_target, repo_name):
     return build_decls.new(
