@@ -47,8 +47,9 @@ swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
 )
-swift_deps.from_file(
-    deps_index = "//:swift_deps_index.json",
+swift_deps.from_package(
+    resolved = "//:Package.resolved",
+    swift = "//:Package.swift",
 )
 use_repo(
     swift_deps,
@@ -58,4 +59,5 @@ use_repo(
     "swiftpkg_opencombine",
     "swiftpkg_swift_log",
 )
+
 # swift_deps END
