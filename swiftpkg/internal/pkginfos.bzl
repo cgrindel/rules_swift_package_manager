@@ -147,8 +147,11 @@ def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map, resolved_dep_ma
     source_control = None
     file_system = None
     if type == "sourceControl":
+        pin = None
+        if resolved_dep_map:
+            pin = _new_pin_from_resolved_dep_map(resolved_dep_map)
         source_control = _new_source_control(
-            pin = _new_pin_from_resolved_dep_map(resolved_dep_map),
+            pin = pin,
         )
     elif type == "fileSystem":
         file_system = _new_file_system(path = dep_map["path"])
@@ -539,6 +542,14 @@ def _new_from_parsed_json(
     if resolved_pkg_map:
         pins = resolved_pkg_map.get("pins", [])
         resolved_deps_by_id = {pin["identity"]: pin for pin in pins}
+
+    # DEBUG BEGIN
+    print("*** CHUCK ========================")
+    print("*** CHUCK resolved_deps_by_id: ")
+    for key in resolved_deps_by_id:
+        print("*** CHUCK", key, ":", resolved_deps_by_id[key])
+
+    # DEBUG END
 
     dependencies = [
         _new_dependency_from_desc_json_map(
@@ -1589,6 +1600,7 @@ pkginfos = struct(
     new_library_type = _new_library_type,
     new_linker_settings = _new_linker_settings,
     new_objc_src_info = _new_objc_src_info,
+    new_pin_from_resolved_dep_map = _new_pin_from_resolved_dep_map,
     new_platform = _new_platform,
     new_product = _new_product,
     new_product_reference = _new_product_reference,
@@ -1596,6 +1608,7 @@ pkginfos = struct(
     new_resource = _new_resource,
     new_resource_rule = _new_resource_rule,
     new_resource_rule_process = _new_resource_rule_process,
+    new_source_control = _new_source_control,
     new_swift_settings = _new_swift_settings,
     new_swift_src_info = _new_swift_src_info,
     new_target = _new_target,

@@ -16,7 +16,7 @@ def _src_type_for_target(target):
         return src_types.clang
     elif target.objc_src_info:
         return src_types.objc
-    fail("Unknown source type for target {}.".format(target.name))
+    return src_types.unknown
 
 def _modulemap_label_for_target(repo_name, target):
     return bazel_labels.new(
@@ -26,7 +26,6 @@ def _modulemap_label_for_target(repo_name, target):
     )
 
 def _labels_for_target(repo_name, target, depender_target):
-    # labels = [target.label]
     labels = [
         bazel_labels.new(
             name = target.label.name,
@@ -122,7 +121,7 @@ def make_pkginfo_target_deps(bazel_labels):
                 fail("""\
 Unable to resolve target reference target dependency for {module_name}.\
 """.format(module_name = target_dep.target.target_name))
-            labels = _labels_for_target(target, depender_target)
+            labels = _labels_for_target(pkg_ctx.repo_name, target, depender_target)
 
         elif target_dep.product:
             condition = target_dep.product.condition
