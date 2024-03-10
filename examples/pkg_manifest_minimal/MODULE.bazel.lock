@@ -3462,7 +3462,7 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "e+S2chCQmUY3VTqdKDOOtdU+9WPYo6o0sRBkoJgDxaY=",
+        "bzlTransitiveDigest": "eeMYTtmX36fw9UHWZckTn8krdW2xBDE0RFUc0paqX34=",
         "accumulatedFileDigests": {
           "@@//:Package.resolved": "cf59d56d2b6fdbe984e828dc59d2cabba2a1eee1e71913e14848106b6d9be5d5",
           "@@//:Package.swift": "007ace886d08207876ee74f54c81dd471bafb248acff03c1f4ac7f9c110da474"
