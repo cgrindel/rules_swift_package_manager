@@ -1,3 +1,0 @@
-swift-cmark:
-  args: ['-p1']
-  files: ['@@//third-party/swift-cmark:0001-Do-not-exclude-files-that-are-needed-for-compilation.patch']
