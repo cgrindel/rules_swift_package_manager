@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "025dd899bb3fc8eb454e7e274f9c6fa2397f4b4618f5038add7002dc7582373d",
+  "moduleFileHash": "c7e87030e79cff81921ff049c6aca73adc4d90ba56264a9eee4800eca19aee9e",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -57,15 +57,16 @@
           "devImports": [],
           "tags": [
             {
-              "tagName": "from_file",
+              "tagName": "from_package",
               "attributeValues": {
-                "deps_index": "//:swift_deps_index.json"
+                "resolved": "//:Package.resolved",
+                "swift": "//:Package.swift"
               },
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
                 "line": 47,
-                "column": 21
+                "column": 24
               }
             }
           ],
@@ -2507,6 +2508,34 @@
         "recordedRepoMappingEntries": []
       }
     },
+    "@@rules_apple~3.3.0//apple:extensions.bzl%non_module_deps": {
+      "general": {
+        "bzlTransitiveDigest": "a00EFHN/p/xXCg32KLOwrTkOGjTNydR9sx7g/PmrDy8=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "xctestrunner": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_apple~3.3.0~non_module_deps~xctestrunner",
+              "urls": [
+                "https://github.com/google/xctestrunner/archive/b7698df3d435b6491b4b4c0f9fc7a63fbed5e3a6.tar.gz"
+              ],
+              "strip_prefix": "xctestrunner-b7698df3d435b6491b4b4c0f9fc7a63fbed5e3a6",
+              "sha256": "ae3a063c985a8633cb7eb566db21656f8db8eb9a0edb8c182312c7f0db53730d"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_apple~3.3.0",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
     "@@rules_go~0.44.0//go:extensions.bzl%go_sdk": {
       "os:osx,arch:x86_64": {
         "bzlTransitiveDigest": "GI6yMOM2hDU7hVAHmfnV90TgIqJguaDlemn2az5C07E=",
@@ -3457,9 +3486,10 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "L7RHn5ghSAuhk0jfjVY+57L1oZW1Xwlfez30WCMMdZM=",
+        "bzlTransitiveDigest": "rvRWgSWSvrKeXVGNwAQYf5FN0pEA2rXfeXnDkNsCeNc=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "105c42fa84d7cc361680030e82a4c703a01eff59438e4772bcb44c02f4666d9a"
+          "@@//:Package.resolved": "1335190a6da99b6db7127f797dc5897a45cfc822bf713cd51ac12d94b13c2162",
+          "@@//:Package.swift": "075842793579eb8ad4e7b7498c77d04a9e3d519de0d207375e840daa4907574e"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3469,9 +3499,8 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_phonenumberkit",
               "bazel_package_name": "swiftpkg_phonenumberkit",
-              "commit": "301e2c1931ab294aa7c1bbabf2ed5fe7a78f1549",
+              "commit": "a8d72d9c90f8336aff6fd6002976d7e36f4fbe8c",
               "remote": "https://github.com/marmelroy/PhoneNumberKit",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
