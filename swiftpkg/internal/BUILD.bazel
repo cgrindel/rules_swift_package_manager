@@ -39,7 +39,6 @@ bzl_library(
     srcs = ["pkginfos.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
-        ":deps_indexes",
         ":pkginfo_dependencies",
         ":pkginfo_targets",
         ":repository_utils",
@@ -159,7 +158,6 @@ bzl_library(
     srcs = ["pkg_ctxs.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
-        ":deps_indexes",
         ":pkginfo_ext_deps",
     ],
 )
