@@ -1,0 +1,21 @@
+commit 6641c0883da54c70d3515fc969337052081155de
+Author: Chuck Grindel <chuck.grindel@gmail.com>
+Date:   Sun Mar 10 12:38:34 2024 -0600
+
+    Use explicit dep references.
+
+diff --git a/Package.swift b/Package.swift
+index f6515e8..09e80b3 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -39,8 +39,8 @@ let package = Package(
+         .target(
+             name: "GTMAppAuth",
+             dependencies: [
+-                "GTMSessionFetcherCore",
+-                "AppAuthCore"
++                .product(name: "GTMSessionFetcherCore", package: "gtm-session-fetcher"),
++                .product(name: "AppAuthCore", package: "AppAuth-iOS")
+             ],
+             path: "GTMAppAuth/Sources",
+             publicHeadersPath: "Public",

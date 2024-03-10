@@ -2,3 +2,5 @@
 # want the local packages under this directory to be processed by
 # local_swift_package not the Gazelle plugin.
 # gazelle:exclude **
+
+exports_files(["gtmappauth.patch"])
