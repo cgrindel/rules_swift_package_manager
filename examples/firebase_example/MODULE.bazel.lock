@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "cf1357925cd6c905ea1ad9c75d38317c277b0e99fc2b3c02d7dafc2ae00b5042",
+  "moduleFileHash": "e10ecc830f6f39fac156b47a493a2193b1e2ecd200251b0bf941d49e541553f9",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -58,15 +58,16 @@
           "devImports": [],
           "tags": [
             {
-              "tagName": "from_file",
+              "tagName": "from_package",
               "attributeValues": {
-                "deps_index": "//:swift_deps_index.json"
+                "resolved": "//:Package.resolved",
+                "swift": "//:Package.swift"
               },
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
                 "line": 55,
-                "column": 21
+                "column": 24
               }
             }
           ],
@@ -2632,6 +2633,34 @@
         "recordedRepoMappingEntries": []
       }
     },
+    "@@rules_apple~3.3.0//apple:extensions.bzl%non_module_deps": {
+      "general": {
+        "bzlTransitiveDigest": "a00EFHN/p/xXCg32KLOwrTkOGjTNydR9sx7g/PmrDy8=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "xctestrunner": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_apple~3.3.0~non_module_deps~xctestrunner",
+              "urls": [
+                "https://github.com/google/xctestrunner/archive/b7698df3d435b6491b4b4c0f9fc7a63fbed5e3a6.tar.gz"
+              ],
+              "strip_prefix": "xctestrunner-b7698df3d435b6491b4b4c0f9fc7a63fbed5e3a6",
+              "sha256": "ae3a063c985a8633cb7eb566db21656f8db8eb9a0edb8c182312c7f0db53730d"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_apple~3.3.0",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
     "@@rules_go~0.44.0//go:extensions.bzl%go_sdk": {
       "os:osx,arch:x86_64": {
         "bzlTransitiveDigest": "GI6yMOM2hDU7hVAHmfnV90TgIqJguaDlemn2az5C07E=",
@@ -3967,9 +3996,10 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "L7RHn5ghSAuhk0jfjVY+57L1oZW1Xwlfez30WCMMdZM=",
+        "bzlTransitiveDigest": "Un1DxfVixaedEyL0k5Wm2jc0j6JQWUeK3GOuOHE9A+k=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "12458a19b342767fca38571c33cc068a743bade32b833d44de7aec77cab7f406"
+          "@@//:Package.resolved": "de4868a511b2d12082019d1226a041b983bd48df36b009c5da860a56160e8066",
+          "@@//:Package.swift": "32fa47e754a90c17c47591e51983721efe7fa815ebb91a259fe9e0d822cafbf0"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3981,7 +4011,6 @@
               "bazel_package_name": "swiftpkg_grpc_binary",
               "commit": "a673bc2937fbe886dd1f99c401b01b6d977a9c98",
               "remote": "https://github.com/google/grpc-binary.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4001,7 +4030,6 @@
               "bazel_package_name": "swiftpkg_promises",
               "commit": "e70e889c0196c76d22759eb50d6a0270ca9f1d9e",
               "remote": "https://github.com/google/promises.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4021,7 +4049,6 @@
               "bazel_package_name": "swiftpkg_googleappmeasurement",
               "commit": "cb8617fab75d181270a1d8f763f26b15c73e2e1e",
               "remote": "https://github.com/google/GoogleAppMeasurement.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4041,7 +4068,6 @@
               "bazel_package_name": "swiftpkg_app_check",
               "commit": "5746b2d35c91c50581590ed97abe4c06b5037274",
               "remote": "https://github.com/google/app-check.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4061,7 +4087,6 @@
               "bazel_package_name": "swiftpkg_abseil_cpp_binary",
               "commit": "bfc0b6f81adc06ce5121eb23f628473638d67c5c",
               "remote": "https://github.com/google/abseil-cpp-binary.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4081,7 +4106,6 @@
               "bazel_package_name": "swiftpkg_googledatatransport",
               "commit": "a732a4b47f59e4f725a2ea10f0c77e93a7131117",
               "remote": "https://github.com/google/GoogleDataTransport.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4101,7 +4125,6 @@
               "bazel_package_name": "swiftpkg_firebase_ios_sdk",
               "commit": "f91c8167141d0279726c6f6d9d4a47c026785cbc",
               "remote": "https://github.com/firebase/firebase-ios-sdk",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4121,7 +4144,6 @@
               "bazel_package_name": "swiftpkg_interop_ios_for_google_sdks",
               "commit": "2d12673670417654f08f5f90fdd62926dc3a2648",
               "remote": "https://github.com/google/interop-ios-for-google-sdks.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4141,7 +4163,6 @@
               "bazel_package_name": "swiftpkg_leveldb",
               "commit": "0706abcc6b0bd9cedfbb015ba840e4a780b5159b",
               "remote": "https://github.com/firebase/leveldb.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4161,7 +4182,6 @@
               "bazel_package_name": "swiftpkg_gtm_session_fetcher",
               "commit": "5ccda3981422a84186387dbb763ba739178b529c",
               "remote": "https://github.com/google/gtm-session-fetcher.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4181,7 +4201,6 @@
               "bazel_package_name": "swiftpkg_swift_protobuf",
               "commit": "ab3a58b7209a17d781c0d1dbb3e1ff3da306bae8",
               "remote": "https://github.com/apple/swift-protobuf.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4201,7 +4220,6 @@
               "bazel_package_name": "swiftpkg_nanopb",
               "commit": "819d0a2173aff699fb8c364b6fb906f7cdb1a692",
               "remote": "https://github.com/firebase/nanopb.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4221,7 +4239,6 @@
               "bazel_package_name": "swiftpkg_reachability.swift",
               "commit": "c01127cb51f591045696128effe43c16840d08bf",
               "remote": "https://github.com/ashleymills/Reachability.swift.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -4241,7 +4258,6 @@
               "bazel_package_name": "swiftpkg_googleutilities",
               "commit": "bc27fad73504f3d4af235de451f02ee22586ebd3",
               "remote": "https://github.com/google/GoogleUtilities.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [

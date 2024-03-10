@@ -10,12 +10,13 @@ load(":pkginfo_targets.bzl", "pkginfo_targets")
 _target_dep_kind = "_target_dep"
 
 def _src_type_for_target(target):
+    # Check Objc first. It will have a clang_src_info and an objc_src_info.
     if target.swift_src_info:
         return src_types.swift
-    elif target.clang_src_info:
-        return src_types.clang
     elif target.objc_src_info:
         return src_types.objc
+    elif target.clang_src_info:
+        return src_types.clang
     return src_types.unknown
 
 def _modulemap_label_for_target(repo_name, target):
@@ -36,6 +37,7 @@ def _labels_for_target(repo_name, target, depender_target):
 
     src_type = _src_type_for_target(target)
     depender_src_type = _src_type_for_target(depender_target)
+
     if src_type == src_types.objc:
         # If the dep is an objc, return the real Objective-C target, not the Swift
         # module alias. This is part of a workaround for Objective-C modules not
