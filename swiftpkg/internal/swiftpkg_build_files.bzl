@@ -721,15 +721,35 @@ def _library_product_build_file(pkg_ctx, product):
     # dependency on a library product is a shorthand for depend upon all of the
     # Swift targets that is associated with the product. We use a
     # `swift_library_group` to represent this.
-    target_labels = [
-        bazel_labels.normalize(
-            pkginfo_targets.bazel_label_from_parts(
-                target_name = tname,
-                repo_name = pkg_ctx.repo_name,
+    target_labels = []
+    for tname in product.targets:
+        # Add the target label
+        target_labels.append(
+            bazel_labels.normalize(
+                pkginfo_targets.bazel_label_from_parts(
+                    target_name = tname,
+                    repo_name = pkg_ctx.repo_name,
+                ),
             ),
         )
-        for tname in product.targets
-    ]
+        target = lists.find(pkg_ctx.pkg_info.targets, lambda t: t.name == tname)
+        if target == None:
+            fail("Did not find a target named {}.".format(tname))
+
+        # If the target is ObjC, add its modulemap target.
+        if target.objc_src_info == None:
+            continue
+        target_labels.append(
+            bazel_labels.normalize(
+                bazel_labels.new(
+                    name = pkginfo_targets.modulemap_label_name(
+                        target.label.name,
+                    ),
+                    repository_name = pkg_ctx.repo_name,
+                    package = "",
+                ),
+            ),
+        )
 
     if len(target_labels) == 0:
         fail("No targets specified for a library product. name:", product.name)
