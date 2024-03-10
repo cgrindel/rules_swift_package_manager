@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "136feb04d7643e4fb0c2fabb5629bc6a176b8fa522accf99bd2f4b965e208c8d",
+  "moduleFileHash": "fc8ceb9bed1c664e84feaaee42a21be14de82c2b934e60653a5be6ead49df9f1",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -57,15 +57,16 @@
           "devImports": [],
           "tags": [
             {
-              "tagName": "from_file",
+              "tagName": "from_package",
               "attributeValues": {
-                "deps_index": "//:swift_deps_index.json"
+                "resolved": "//:Package.resolved",
+                "swift": "//:Package.swift"
               },
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
                 "line": 47,
-                "column": 21
+                "column": 24
               }
             }
           ],
@@ -3457,9 +3458,10 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "L7RHn5ghSAuhk0jfjVY+57L1oZW1Xwlfez30WCMMdZM=",
+        "bzlTransitiveDigest": "WHMbrnuHq2ouIrR+7rtAaZcJgNNPBH/54H53Isd+1Oo=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "bf38e864a3703c7848d8cd2b178edfc4688cf0a7b7bb17bf6f2d20c2e7d583d1"
+          "@@//:Package.resolved": "d8867d6afaa73911ffae8a573bf4705868489ab00e5abfa772685da82d73a8a8",
+          "@@//:Package.swift": "96f00144c3f3b87e3e8fd870e4f360458d3d0d17f80ad5655037b54a63cff2f4"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3471,7 +3473,6 @@
               "bazel_package_name": "swiftpkg_lottie_spm",
               "commit": "26d84192430ed5b104d64b8086872bb4979d65a4",
               "remote": "https://github.com/airbnb/lottie-spm",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
