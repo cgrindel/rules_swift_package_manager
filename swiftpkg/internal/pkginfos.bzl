@@ -543,14 +543,6 @@ def _new_from_parsed_json(
         pins = resolved_pkg_map.get("pins", [])
         resolved_deps_by_id = {pin["identity"]: pin for pin in pins}
 
-    # DEBUG BEGIN
-    print("*** CHUCK ========================")
-    print("*** CHUCK resolved_deps_by_id: ")
-    for key in resolved_deps_by_id:
-        print("*** CHUCK", key, ":", resolved_deps_by_id[key])
-
-    # DEBUG END
-
     dependencies = [
         _new_dependency_from_desc_json_map(
             dep_names_by_id,
