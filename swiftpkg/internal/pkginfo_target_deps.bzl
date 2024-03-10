@@ -57,9 +57,19 @@ def _labels_for_target(repo_name, target, depender_target):
 def _resolve_by_name(pkg_ctx, name, depender_target):
     repo_name = bazel_repo_names.normalize(pkg_ctx.repo_name)
 
-    # Per the SPM code for >=5.2, look for a product in the same
-    # package, else a target in the same package, else product in a
-    # package with the same name. Otherwise, fail.
+    # By name resolution logic:
+    # 1. Check for target in this package.
+    # 2. Check for product in this package.
+    # 3. Check for a package with the same name as a dependent package.
+    #
+    # NOTE: This is different from what the SPM code seems to have coded.
+    # However, if we do not check for a local target first, we can end up with
+    # a circular dependency error in Bazel in the nimble_example.
+
+    target = lists.find(pkg_ctx.pkg_info.targets, lambda t: t.name == name)
+    if target != None:
+        return _labels_for_target(repo_name, target, depender_target)
+
     product = lists.find(pkg_ctx.pkg_info.products, lambda p: p.name == name)
     if product != None:
         return [
@@ -69,10 +79,6 @@ def _resolve_by_name(pkg_ctx, name, depender_target):
                 package = "",
             ),
         ]
-
-    target = lists.find(pkg_ctx.pkg_info.targets, lambda t: t.name == name)
-    if target != None:
-        return _labels_for_target(repo_name, target, depender_target)
 
     normalized_name = pkginfo_dependencies.normalize_name(name)
     ext_dep = lists.find(

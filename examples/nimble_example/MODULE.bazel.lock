@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 3,
-  "moduleFileHash": "7dbd508b79d47ba227d5a30fb549daa1e9e1188a342fea88299539044e0d66d6",
+  "moduleFileHash": "4ddd6a641bbd6edbce2324176e49a2b2b222fca552bfbee337b6a148e467d635",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -58,15 +58,16 @@
           "devImports": [],
           "tags": [
             {
-              "tagName": "from_file",
+              "tagName": "from_package",
               "attributeValues": {
-                "deps_index": "//:swift_deps_index.json"
+                "resolved": "//:Package.resolved",
+                "swift": "//:Package.swift"
               },
               "devDependency": false,
               "location": {
                 "file": "@@//:MODULE.bazel",
                 "line": 47,
-                "column": 21
+                "column": 24
               }
             }
           ],
@@ -2508,6 +2509,34 @@
         "recordedRepoMappingEntries": []
       }
     },
+    "@@rules_apple~3.3.0//apple:extensions.bzl%non_module_deps": {
+      "general": {
+        "bzlTransitiveDigest": "a00EFHN/p/xXCg32KLOwrTkOGjTNydR9sx7g/PmrDy8=",
+        "accumulatedFileDigests": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "xctestrunner": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "name": "rules_apple~3.3.0~non_module_deps~xctestrunner",
+              "urls": [
+                "https://github.com/google/xctestrunner/archive/b7698df3d435b6491b4b4c0f9fc7a63fbed5e3a6.tar.gz"
+              ],
+              "strip_prefix": "xctestrunner-b7698df3d435b6491b4b4c0f9fc7a63fbed5e3a6",
+              "sha256": "ae3a063c985a8633cb7eb566db21656f8db8eb9a0edb8c182312c7f0db53730d"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_apple~3.3.0",
+            "bazel_tools",
+            "bazel_tools"
+          ]
+        ]
+      }
+    },
     "@@rules_go~0.44.0//go:extensions.bzl%go_sdk": {
       "os:osx,arch:x86_64": {
         "bzlTransitiveDigest": "GI6yMOM2hDU7hVAHmfnV90TgIqJguaDlemn2az5C07E=",
@@ -3458,9 +3487,10 @@
     },
     "@@rules_swift_package_manager~override//:extensions.bzl%swift_deps": {
       "general": {
-        "bzlTransitiveDigest": "L7RHn5ghSAuhk0jfjVY+57L1oZW1Xwlfez30WCMMdZM=",
+        "bzlTransitiveDigest": "rvRWgSWSvrKeXVGNwAQYf5FN0pEA2rXfeXnDkNsCeNc=",
         "accumulatedFileDigests": {
-          "@@//:swift_deps_index.json": "324f8e43e8db59d822fd2ac6736001a029aa6958a6c3a8948ebedf9b8578c77d"
+          "@@//:Package.resolved": "0f98bd077265d136f9deef3c9e762187df1830dd0d7dbf5c2b99af15e032ad69",
+          "@@//:Package.swift": "7dcfad42d81a03a9564585ae3e96ca6acb57b416b53c3a4c34a1b1b652f73af8"
         },
         "envVariables": {},
         "generatedRepoSpecs": {
@@ -3472,7 +3502,6 @@
               "bazel_package_name": "swiftpkg_cwlpreconditiontesting",
               "commit": "dc9af4781f2afdd1e68e90f80b8603be73ea7abc",
               "remote": "https://github.com/mattgallagher/CwlPreconditionTesting.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -3492,7 +3521,6 @@
               "bazel_package_name": "swiftpkg_cwlcatchexception",
               "commit": "3b123999de19bf04905bc1dfdb76f817b0f2cc00",
               "remote": "https://github.com/mattgallagher/CwlCatchException.git",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -3510,9 +3538,8 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_nimble",
               "bazel_package_name": "swiftpkg_nimble",
-              "commit": "c1f3dd66222d5e7a1a20afc237f7e7bc432c564f",
+              "commit": "efe11bbca024b57115260709b5c05e01131470d0",
               "remote": "https://github.com/Quick/Nimble",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
@@ -3530,9 +3557,8 @@
             "attributes": {
               "name": "rules_swift_package_manager~override~swift_deps~swiftpkg_quick",
               "bazel_package_name": "swiftpkg_quick",
-              "commit": "a9e6c24033a25e158384d523a556c0b96c44a839",
+              "commit": "6d01974d236f598633cac58280372c0c8cfea5bc",
               "remote": "https://github.com/Quick/Quick",
-              "dependencies_index": "@@//:swift_deps_index.json",
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
