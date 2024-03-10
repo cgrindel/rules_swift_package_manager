@@ -84,7 +84,6 @@ def _get_desc_manifest(
 def _get(
         repository_ctx,
         directory,
-        deps_index = None,
         env = {},
         debug_path = None,
         resolved_pkg_map = None,
@@ -95,7 +94,6 @@ def _get(
     Args:
         repository_ctx: A `repository_ctx`.
         directory: The path for the Swift package (`string`).
-        deps_index: A `struct` as returned by `deps_indexes.new`.
         env: A `dict` of environment variables that will be included in the
             command execution.
         debug_path: Optional. The path where to write debug files (e.g. JSON)

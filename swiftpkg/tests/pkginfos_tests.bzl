@@ -1,7 +1,6 @@
 """Tests for `pkginfos` API"""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
-load("//swiftpkg/internal:deps_indexes.bzl", "deps_indexes")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 load(":testutils.bzl", "testutils")
 
@@ -17,7 +16,6 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
         repository_ctx = testutils.new_stub_repository_ctx(repo_name),
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
-        deps_index = deps_indexes.new_from_json(_swift_arg_parser_deps_index_json),
     )
     expected = pkginfos.new(
         name = "MySwiftPackage",
@@ -115,7 +113,6 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
         repository_ctx = testutils.new_stub_repository_ctx(repo_name),
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
-        deps_index = deps_indexes.new_from_json(_clang_deps_index_json),
     )
 
     # The interesting features are in the libbar target.
