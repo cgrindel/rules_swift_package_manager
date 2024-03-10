@@ -6,13 +6,7 @@ load(":pkginfos.bzl", "pkginfos")
 load(":repository_utils.bzl", "repository_utils")
 
 def _read(repository_ctx, repo_dir, env):
-    if repository_ctx.attr.dependencies_index:
-        deps_index_json = repository_ctx.read(
-            repository_ctx.attr.dependencies_index,
-        )
-        deps_index = deps_indexes.new_from_json(deps_index_json)
-    else:
-        deps_index = deps_indexes.new()
+    deps_index = deps_indexes.new()
     pkg_info = pkginfos.get(
         repository_ctx = repository_ctx,
         directory = repo_dir,
