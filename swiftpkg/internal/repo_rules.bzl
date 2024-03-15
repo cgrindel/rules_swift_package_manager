@@ -18,7 +18,6 @@ _swift_attrs = {
         doc = """\
 A JSON file that contains a mapping of Swift products and Swift modules.\
 """,
-        mandatory = True,
     ),
 }
 
@@ -70,7 +69,8 @@ def _gen_build_files(repository_ctx, pkg_ctx):
         # Unfortunately, Package.resolved does not contain test-only external
         # dependencies. So, we need to skip generating test targets. If a target
         # does not have any product memberships, it is a testonly
-        if target.type == "test" or len(target.product_memberships) == 0:
+        # if target.type == "test" or len(target.product_memberships) == 0:
+        if target.type == "test":
             continue
 
         artifact_infos = []
@@ -93,6 +93,7 @@ def _gen_build_files(repository_ctx, pkg_ctx):
             target,
             artifact_infos,
         )
+
         if bld_file == None:
             continue
         bld_files.append(bld_file)
