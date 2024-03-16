@@ -68,6 +68,13 @@ def _swift_target_build_file(pkg_ctx, target):
         for target in pkg_ctx.pkg_info.targets
         if target.type == "macro"
     ]
+
+    # DEBUG BEGIN
+    print("*** CHUCK macro_target_labels: ")
+    for idx, item in enumerate(macro_target_labels):
+        print("*** CHUCK", idx, ":", item)
+
+    # DEBUG END
     if macro_target_labels:
         plugins = [
             target_label
@@ -75,6 +82,13 @@ def _swift_target_build_file(pkg_ctx, target):
             for dep in deps
             if target_label in dep.value[0]
         ]
+
+        # DEBUG BEGIN
+        print("*** CHUCK plugins: ")
+        for idx, item in enumerate(plugins):
+            print("*** CHUCK", idx, ":", item)
+
+        # DEBUG END
         if plugins:
             attrs["plugins"] = plugins
             deps_without_plugins = [dep for dep in deps if dep.value[0] not in plugins]
@@ -184,6 +198,9 @@ def _swift_test_from_target(target, attrs):
     )
 
 def _swift_compiler_plugin_from_target(target, attrs):
+    # Macros are set up as compiler plugins. We expose macro products as an
+    # alias to the swift_compiler_plugin target.
+    attrs["visibility"] = ["//visibility:public"]
     return build_decls.new(
         kind = swift_kinds.compiler_plugin,
         name = pkginfo_targets.bazel_label_name(target),
@@ -670,6 +687,8 @@ def _new_for_product(pkg_ctx, product):
         )
     elif prod_type.is_library:
         return _library_product_build_file(pkg_ctx, product)
+    elif prod_type.is_macro:
+        return _alias_for_macro_build_file(pkg_ctx, product)
 
     # GH046: Check for plugin product
     return None
@@ -777,6 +796,29 @@ def _swift_binary_from_product(product, dep_target, repo_name):
             )],
             "visibility": ["//visibility:public"],
         },
+    )
+
+def _alias_for_macro_build_file(pkg_ctx, product):
+    if len(product.targets) != 1:
+        fail("""\
+Expected only one target for the macro product {name} but received {count}.\
+""".format(
+            name = product.name,
+            count = len(product.targets),
+        ))
+    target = pkginfo_targets.get(pkg_ctx.pkg_info.targets, product.targets[0])
+    label_name = pkginfo_targets.bazel_label_name(target)
+    return build_files.new(
+        decls = [
+            build_decls.new(
+                native_kinds.alias,
+                product.name,
+                attrs = {
+                    "actual": ":{}".format(label_name),
+                    "visibility": ["//visibility:public"],
+                },
+            ),
+        ],
     )
 
 # MARK: - Constants and API Definition

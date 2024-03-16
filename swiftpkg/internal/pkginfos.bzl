@@ -186,16 +186,15 @@ def _new_pin_from_resolved_dep_map(resolved_dep_map):
 def _new_product_from_desc_json_map(prd_map):
     does_not_exist = struct(exists = False)
 
-    # DEBUG BEGIN
-    print("*** CHUCK prd_map: ", prd_map)
-    # DEBUG END
-
     prd_type_map = prd_map["type"]
     executable = (
         prd_type_map.get("executable", default = does_not_exist) != does_not_exist
     )
     plugin = (
         prd_type_map.get("plugin", default = does_not_exist) != does_not_exist
+    )
+    macro = (
+        prd_type_map.get("macro", default = does_not_exist) != does_not_exist
     )
     library = None
     lib_list = prd_type_map.get("library")
@@ -205,6 +204,7 @@ def _new_product_from_desc_json_map(prd_map):
         executable = executable,
         library = library,
         plugin = plugin,
+        macro = macro,
     )
 
     return _new_product(
@@ -772,13 +772,14 @@ def _new_version_range(lower, upper):
 
 # MARK: - Product
 
-def _new_product_type(executable = False, library = None, plugin = False):
+def _new_product_type(executable = False, library = None, plugin = False, macro = False):
     """Creates a product type.
 
     Args:
         executable: A `bool` specifying whether the product is an executable.
         library: A `struct` as returned by `pkginfos.new_library_type`.
         plugin: A `bool` specifying whether the product is a plugin.
+        macro: A `bool` speckfying whether the product is a macro.
 
     Returns:
         A `struct` representing a product type.
@@ -786,13 +787,14 @@ def _new_product_type(executable = False, library = None, plugin = False):
     is_executable = executable
     is_library = (library != None)
     is_plugin = plugin
-    type_bools = [is_executable, is_library, is_plugin]
+    is_macro = macro
+    type_bools = [is_executable, is_library, is_plugin, is_macro]
     true_cnt = 0
     for bt in type_bools:
         if bt:
             true_cnt = true_cnt + 1
     if true_cnt == 0:
-        fail("A product type must be one of the following: executable, library, plugin.")
+        fail("A product type must be one of the following: executable, library, plugin, macro.")
     elif true_cnt > 1:
         fail("Multiple args provided to `pkginfos.new_product_type`.")
 
@@ -803,6 +805,7 @@ def _new_product_type(executable = False, library = None, plugin = False):
         is_executable = is_executable,
         is_library = is_library,
         is_plugin = is_plugin,
+        is_macro = is_macro,
     )
 
 def _new_library_type(kind):
