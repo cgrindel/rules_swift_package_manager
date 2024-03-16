@@ -53,6 +53,20 @@ swift_deps.configure_package(
         "//:third_party/grpc-swift.patch",
     ],
 )
+swift_deps.configure_package(
+    name = "soto",
+    patch_args = ["-p1"],
+    patches = [
+        "//:third_party/soto.patch",
+    ],
+)
+swift_deps.configure_package(
+    name = "soto-core",
+    patch_args = ["-p1"],
+    patches = [
+        "//:third_party/soto-core.patch",
+    ],
+)
 use_repo(
     swift_deps,
     "swiftpkg_xcmetrics",

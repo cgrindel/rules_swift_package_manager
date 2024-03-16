@@ -1,0 +1,31 @@
+commit c735669f168ca34a0b1edcfca44e5fca13e19e08
+Author: Chuck Grindel <chuck.grindel@gmail.com>
+Date:   Sat Mar 16 11:18:16 2024 -0600
+
+    Explicit references.
+
+diff --git a/Package.swift b/Package.swift
+index 9f6a7081..551f5f66 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -18,13 +18,13 @@ let package = Package(
+         .target(
+             name: "AWSSDKSwiftCore",
+             dependencies: [
+-                "HypertextApplicationLanguage",
+-                "NIO",
+-                "NIOHTTP1",
+-                "NIOSSL",
+-                "NIOTransportServices",
+-                "NIOFoundationCompat",
+-                "INIParser"
++                .product(name: "HypertextApplicationLanguage", package: "HypertextApplicationLanguage"),
++                .product(name: "NIO", package: "swift-nio"),
++                .product(name: "NIOHTTP1", package: "swift-nio"),
++                .product(name: "NIOSSL", package: "swift-nio-ssl"),
++                .product(name: "NIOTransportServices", package: "swift-nio-transport-services"),
++                .product(name: "NIOFoundationCompat", package: "swift-nio"),
++                .product(name: "INIParser", package: "Perfect-INIParser"),
+             ]),
+         .testTarget(name: "AWSSDKSwiftCoreTests", dependencies: ["AWSSDKSwiftCore", "NIOTestUtils"])
+     ]

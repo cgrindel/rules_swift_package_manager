@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "254b667bf4bfcf1e441db7b10926c19711e75ff394d8fa66fe0e21a7da7d6b00",
+  "moduleFileHash": "b97d5eb346cde1ff24e3d13d28f0d8bd908fbf03bcbd105f3415e625f49713d7",
   "flags": {
     "cmdRegistries": [
       "https://bcr.bazel.build/"
@@ -84,6 +84,42 @@
               "location": {
                 "file": "@@//:MODULE.bazel",
                 "line": 49,
+                "column": 29
+              }
+            },
+            {
+              "tagName": "configure_package",
+              "attributeValues": {
+                "name": "soto",
+                "patch_args": [
+                  "-p1"
+                ],
+                "patches": [
+                  "//:third_party/soto.patch"
+                ]
+              },
+              "devDependency": false,
+              "location": {
+                "file": "@@//:MODULE.bazel",
+                "line": 56,
+                "column": 29
+              }
+            },
+            {
+              "tagName": "configure_package",
+              "attributeValues": {
+                "name": "soto-core",
+                "patch_args": [
+                  "-p1"
+                ],
+                "patches": [
+                  "//:third_party/soto-core.patch"
+                ]
+              },
+              "devDependency": false,
+              "location": {
+                "file": "@@//:MODULE.bazel",
+                "line": 63,
                 "column": 29
               }
             }
@@ -3395,12 +3431,14 @@
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
-                "-p0"
+                "-p1"
               ],
               "patch_cmds": [],
               "patch_cmds_win": [],
               "patch_tool": "",
-              "patches": []
+              "patches": [
+                "@@//:third_party/soto.patch"
+              ]
             }
           },
           "swiftpkg_swift_service_lifecycle": {
@@ -3919,12 +3957,14 @@
               "init_submodules": false,
               "recursive_init_submodules": false,
               "patch_args": [
-                "-p0"
+                "-p1"
               ],
               "patch_cmds": [],
               "patch_cmds_win": [],
               "patch_tool": "",
-              "patches": []
+              "patches": [
+                "@@//:third_party/soto-core.patch"
+              ]
             }
           },
           "swiftpkg_swift_log": {
