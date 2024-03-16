@@ -42,8 +42,16 @@ swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
 )
-swift_deps.from_file(
-    deps_index = "//:swift_deps_index.json",
+swift_deps.from_package(
+    resolved = "//:Package.resolved",
+    swift = "//:Package.swift",
+)
+swift_deps.configure_package(
+    name = "grpc-swift",
+    patch_args = ["-p1"],
+    patches = [
+        "//:third_party/grpc-swift.patch",
+    ],
 )
 use_repo(
     swift_deps,
