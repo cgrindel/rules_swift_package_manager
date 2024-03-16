@@ -42,8 +42,10 @@ def _get_dump_manifest(
         A `dict` representing an SPM package dump.
     """
     debug_json_path = None
-    if debug_path:
-        debug_json_path = paths.join(debug_path, "dump.json")
+    if debug_path == None:
+        debug_path = str(repository_ctx.path("."))
+    debug_json_path = paths.join(debug_path, "dump.json")
+
     return repository_utils.parsed_json_from_spm_command(
         repository_ctx,
         ["swift", "package", "dump-package"],
@@ -71,8 +73,9 @@ def _get_desc_manifest(
         A `dict` representing an SPM package description.
     """
     debug_json_path = None
-    if debug_path:
-        debug_json_path = paths.join(debug_path, "desc.json")
+    if debug_path == None:
+        debug_path = str(repository_ctx.path("."))
+    debug_json_path = paths.join(debug_path, "desc.json")
     return repository_utils.parsed_json_from_spm_command(
         repository_ctx,
         ["swift", "package", "describe", "--type", "json"],
@@ -182,6 +185,10 @@ def _new_pin_from_resolved_dep_map(resolved_dep_map):
 
 def _new_product_from_desc_json_map(prd_map):
     does_not_exist = struct(exists = False)
+
+    # DEBUG BEGIN
+    print("*** CHUCK prd_map: ", prd_map)
+    # DEBUG END
 
     prd_type_map = prd_map["type"]
     executable = (
@@ -552,11 +559,10 @@ def _new_from_parsed_json(
         for dep_map in desc_manifest["dependencies"]
     ]
 
-    # Use the dump JSON to populate the products. This will avoid inclusion of
-    # phantom products.
+    # Need to use the
     products = [
         _new_product_from_desc_json_map(prd_map)
-        for prd_map in dump_manifest["products"]
+        for prd_map in desc_manifest["products"]
     ]
 
     desc_targets_by_name = {
