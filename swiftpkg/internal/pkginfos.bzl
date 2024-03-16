@@ -559,10 +559,11 @@ def _new_from_parsed_json(
         for dep_map in desc_manifest["dependencies"]
     ]
 
-    # Need to use the
+    # Use the dump JSON to populate the products. This will avoid inclusion of
+    # phantom products.
     products = [
         _new_product_from_desc_json_map(prd_map)
-        for prd_map in desc_manifest["products"]
+        for prd_map in dump_manifest["products"]
     ]
 
     desc_targets_by_name = {
