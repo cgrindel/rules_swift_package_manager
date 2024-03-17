@@ -113,8 +113,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ashleymills/Reachability.swift.git",
       "state" : {
-        "revision" : "c01127cb51f591045696128effe43c16840d08bf",
-        "version" : "5.2.0"
+        "revision" : "7b7018a69c84ea94ac2a38dff626e16ea81d1db9",
+        "version" : "5.2.1"
       }
     },
     {
