@@ -14,6 +14,7 @@ swift_library(
         "@swiftpkg_another_package_with_resources//:MoreCoolUI",
         "@swiftpkg_googlesignin_ios//:GoogleSignInSwift",
         "@swiftpkg_package_with_resources//:CoolUI",
+        "@swiftpkg_recaptcha_enterprise_mobile_sdk//:RecaptchaEnterprise",
         "@swiftpkg_sdwebimageswiftui//:SDWebImageSwiftUI",
     ],
 )

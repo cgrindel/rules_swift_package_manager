@@ -4,6 +4,7 @@
     "app_lovin_sdk",
     "googlesignin-ios",
     "package_with_resources",
+    "recaptcha-enterprise-mobile-sdk",
     "sdwebimageswiftui"
   ],
   "modules": [
@@ -135,6 +136,16 @@
       ]
     },
     {
+      "name": "RecaptchaInterop",
+      "c99name": "RecaptchaInterop",
+      "src_type": "objc",
+      "label": "@swiftpkg_interop_ios_for_google_sdks//:RecaptchaInterop.rspm",
+      "package_identity": "interop-ios-for-google-sdks",
+      "product_memberships": [
+        "RecaptchaInterop"
+      ]
+    },
+    {
       "name": "CoolUI",
       "c99name": "CoolUI",
       "src_type": "swift",
@@ -142,6 +153,26 @@
       "package_identity": "package_with_resources",
       "product_memberships": [
         "CoolUI"
+      ]
+    },
+    {
+      "name": "RecaptchaEnterprise",
+      "c99name": "RecaptchaEnterprise",
+      "src_type": "binary",
+      "label": "@swiftpkg_recaptcha_enterprise_mobile_sdk//:RecaptchaEnterprise.rspm",
+      "package_identity": "recaptcha-enterprise-mobile-sdk",
+      "product_memberships": [
+        "RecaptchaEnterprise"
+      ]
+    },
+    {
+      "name": "recaptcha-enterprise",
+      "c99name": "recaptcha_enterprise",
+      "src_type": "clang",
+      "label": "@swiftpkg_recaptcha_enterprise_mobile_sdk//:recaptcha-enterprise.rspm",
+      "package_identity": "recaptcha-enterprise-mobile-sdk",
+      "product_memberships": [
+        "RecaptchaEnterprise"
       ]
     },
     {
@@ -250,10 +281,22 @@
       "label": "@swiftpkg_gtmappauth//:GTMAppAuth"
     },
     {
+      "identity": "interop-ios-for-google-sdks",
+      "name": "RecaptchaInterop",
+      "type": "library",
+      "label": "@swiftpkg_interop_ios_for_google_sdks//:RecaptchaInterop"
+    },
+    {
       "identity": "package_with_resources",
       "name": "CoolUI",
       "type": "library",
       "label": "@swiftpkg_package_with_resources//:CoolUI"
+    },
+    {
+      "identity": "recaptcha-enterprise-mobile-sdk",
+      "name": "RecaptchaEnterprise",
+      "type": "library",
+      "label": "@swiftpkg_recaptcha_enterprise_mobile_sdk//:RecaptchaEnterprise"
     },
     {
       "identity": "sdwebimageswiftui",
@@ -326,10 +369,28 @@
       }
     },
     {
+      "name": "swiftpkg_interop_ios_for_google_sdks",
+      "identity": "interop-ios-for-google-sdks",
+      "remote": {
+        "commit": "2d12673670417654f08f5f90fdd62926dc3a2648",
+        "remote": "https://github.com/google/interop-ios-for-google-sdks.git",
+        "version": "100.0.0"
+      }
+    },
+    {
       "name": "swiftpkg_package_with_resources",
       "identity": "package_with_resources",
       "local": {
         "path": "third_party/package_with_resources"
+      }
+    },
+    {
+      "name": "swiftpkg_recaptcha_enterprise_mobile_sdk",
+      "identity": "recaptcha-enterprise-mobile-sdk",
+      "remote": {
+        "commit": "54f4584f85144cac8288210da556a10b32067081",
+        "remote": "https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk",
+        "version": "18.4.2"
       }
     },
     {
