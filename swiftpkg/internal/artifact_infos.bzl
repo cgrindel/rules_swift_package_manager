@@ -61,7 +61,7 @@ https://github.com/cgrindel/rules_swift_package_manager/issues/new/choose. path:
 """.format(path))
     return name
 
-def _new_framework_info_from_files(repository_ctx, path):
+def _new_framework_info_from_framework_dir(repository_ctx, path):
     """Create a `struct` representing an Apple framework from the files at the \
     specified path.
 
@@ -96,6 +96,14 @@ def _new_framework_info_from_files(repository_ctx, path):
         link_type = link_type,
     )
 
+def _new_framework_info_from_framework_a_file(repository_ctx, framework_a_file):
+    path = paths.dirname(framework_a_file)
+    link_type = _link_type(repository_ctx, framework_a_file)
+    return _new_framework_info(
+        path = path,
+        link_type = link_type,
+    )
+
 def _link_type(repository_ctx, path):
     """Determine the link type for the framework binary file.
 
@@ -108,6 +116,12 @@ def _link_type(repository_ctx, path):
         The link type for the framework as a `string`.
     """
     file_type = repository_files.file_type(repository_ctx, path)
+
+    # # DEBUG BEGIN
+    # print("*** CHUCK _link_type --------------")
+    # print("*** CHUCK path: ", path)
+    # print("*** CHUCK file_type: ", file_type)
+    # # DEBUG END
 
     # static Examples:
     #   current ar archive random library
@@ -145,10 +159,48 @@ def _new_xcframework_info_from_files(repository_ctx, path):
         by_name = "*.framework",
         depth = 2,
     )
-    framework_infos = [
-        _new_framework_info_from_files(repository_ctx, fp)
-        for fp in framework_paths
-    ]
+
+    if framework_paths:
+        framework_infos = [
+            _new_framework_info_from_framework_dir(repository_ctx, fp)
+            for fp in framework_paths
+        ]
+    else:
+        framework_a_files = repository_files.list_files_under(
+            repository_ctx,
+            path,
+            by_name = "*.a",
+            depth = 2,
+        )
+
+        # DEBUG BEGIN
+        print("*** CHUCK framework_a_files: ")
+        for idx, item in enumerate(framework_a_files):
+            print("*** CHUCK", idx, ":", item)
+
+        # DEBUG END
+        framework_infos = [
+            _new_framework_info_from_framework_a_file(repository_ctx, faf)
+            for faf in framework_a_files
+        ]
+
+    # if not framework_paths:
+    #     framework_paths = repository_files.list_directories_under(
+    #         repository_ctx,
+    #         path,
+    #         by_name = "*.framework",
+    #         depth = 2,
+    #     )
+
+    # DEBUG BEGIN
+    print("*** CHUCK _new_xcframework_info_from_files -------------")
+    print("*** CHUCK path: ", path)
+    print("*** CHUCK framework_paths: ", framework_paths)
+    print("*** CHUCK framework_infos: ")
+    for idx, item in enumerate(framework_infos):
+        print("*** CHUCK", idx, ":", item)
+
+    # DEBUG END
     return _new_xcframework_info(
         path = path,
         framework_infos = framework_infos,
