@@ -37,6 +37,24 @@
       }
     },
     {
+      "identity" : "interop-ios-for-google-sdks",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/interop-ios-for-google-sdks.git",
+      "state" : {
+        "revision" : "2d12673670417654f08f5f90fdd62926dc3a2648",
+        "version" : "100.0.0"
+      }
+    },
+    {
+      "identity" : "recaptcha-enterprise-mobile-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk",
+      "state" : {
+        "revision" : "54f4584f85144cac8288210da556a10b32067081",
+        "version" : "18.4.2"
+      }
+    },
+    {
       "identity" : "sdwebimage",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SDWebImage/SDWebImage",

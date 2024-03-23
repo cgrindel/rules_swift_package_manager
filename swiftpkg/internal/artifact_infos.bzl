@@ -61,7 +61,7 @@ https://github.com/cgrindel/rules_swift_package_manager/issues/new/choose. path:
 """.format(path))
     return name
 
-def _new_framework_info_from_files(repository_ctx, path):
+def _new_framework_info_from_framework_dir(repository_ctx, path):
     """Create a `struct` representing an Apple framework from the files at the \
     specified path.
 
@@ -91,6 +91,25 @@ def _new_framework_info_from_files(repository_ctx, path):
         fail("No binary files were found for framework at {}".format(path))
     link_type = _link_type(repository_ctx, binary_files[0])
 
+    return _new_framework_info(
+        path = path,
+        link_type = link_type,
+    )
+
+def _new_framework_info_from_framework_a_file(repository_ctx, framework_a_file):
+    """Create a `struct` representing an Apple framework from an archive file \
+    (XXX.a).
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+        framework_a_file: The path to a `XXX.a` file as a `string`.
+
+    Returns:
+        A `struct` representing an Apple framework as returned by
+        `artifact_infos.new_framework_info()`.
+    """
+    path = paths.dirname(framework_a_file)
+    link_type = _link_type(repository_ctx, framework_a_file)
     return _new_framework_info(
         path = path,
         link_type = link_type,
@@ -134,21 +153,46 @@ def _new_xcframework_info_from_files(repository_ctx, path):
         `artifact_infos.new_xcframework_info()`.
     """
 
-    # XC Frameworks have a structure like the following:
+    # XC Frameworks have one of two layouts:
+    #
+    # Layout: XXX.framework directory
     # XXX.xcframework
     #   └─ ios-arm64/XXX.framework
     #   └─ ios-arm64_x86_64-maccatalyst/XXX.framework
     #   └─ macos-arm64_x86_64/XXX.framework
+    #
+    # Layout: XXX.a file
+    # XXX.xcframework
+    #   └─ ios-arm64/XXX.a
+    #   └─ ios-arm64_x86_64-maccatalyst/XXX.a
+    #   └─ macos-arm64_x86_64/XXX.a
+    #
+    # We check for the XXX.framework layout first. If we do not find anything,
+    # we look for the XXX.a layout.
     framework_paths = repository_files.list_directories_under(
         repository_ctx,
         path,
         by_name = "*.framework",
         depth = 2,
     )
-    framework_infos = [
-        _new_framework_info_from_files(repository_ctx, fp)
-        for fp in framework_paths
-    ]
+
+    if framework_paths:
+        framework_infos = [
+            _new_framework_info_from_framework_dir(repository_ctx, fp)
+            for fp in framework_paths
+        ]
+    else:
+        framework_a_files = repository_files.list_files_under(
+            repository_ctx,
+            path,
+            by_name = "*.a",
+            depth = 2,
+        )
+        framework_infos = [
+            _new_framework_info_from_framework_a_file(repository_ctx, faf)
+            for faf in framework_a_files
+        ]
+
     return _new_xcframework_info(
         path = path,
         framework_infos = framework_infos,
