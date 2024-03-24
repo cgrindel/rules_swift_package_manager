@@ -103,6 +103,8 @@ def _get(
             as a `string`.
         resolved_pkg_map: Optional. A `dict` of representing the
             `Package.resolved` JSON.
+        collect_src_info: Optional. A `bool` specifying whether source
+            information should be collected for the package.
 
     Returns:
         A `struct` representing the package information as returned by
@@ -532,6 +534,8 @@ def _new_from_parsed_json(
             package describe`.
         resolved_pkg_map: Optional. A `dict` of representing the
             `Package.resolved` JSON.
+        collect_src_info: A `bool` specifying whether source information
+            should be collected for the package.
 
     Returns:
         A `struct` representing the package information as returned by
@@ -665,10 +669,20 @@ def _new_dependency(identity, name, source_control = None, file_system = None):
     Args:
         identity: The identifier for the external depdendency (`string`).
         name: The name used for package reference resolution (`string`).
+        source_control: Optional. A `struct` as returned by
+            `pkginfos.new_source_control()`. If present, it identifies the
+            dependency as being loaded from a source control system.
+        file_system: Optional. A `struct` as returned by
+            `pkginfos.new_file_system()`. If present, it identifies the
+            dependency as being loaded from a local file system.
 
     Returns:
         A `struct` representing an external dependency.
     """
+    if not source_control and not file_system:
+        fail("""\
+A dependency must have either a source_control or file_system arg.\
+""")
     return struct(
         identity = identity,
         name = pkginfo_dependencies.normalize_name(name),
@@ -1598,11 +1612,14 @@ pkginfos = struct(
     new_clang_src_info = _new_clang_src_info,
     new_dependency = _new_dependency,
     new_dependency_requirement = _new_dependency_requirement,
+    new_file_system = _new_file_system,
     new_from_parsed_json = _new_from_parsed_json,
     new_library_type = _new_library_type,
     new_linker_settings = _new_linker_settings,
     new_objc_src_info = _new_objc_src_info,
+    new_pin = _new_pin,
     new_pin_from_resolved_dep_map = _new_pin_from_resolved_dep_map,
+    new_pin_state = _new_pin_state,
     new_platform = _new_platform,
     new_product = _new_product,
     new_product_reference = _new_product_reference,

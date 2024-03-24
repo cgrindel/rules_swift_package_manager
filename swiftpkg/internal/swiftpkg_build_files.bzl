@@ -68,13 +68,6 @@ def _swift_target_build_file(pkg_ctx, target):
         for target in pkg_ctx.pkg_info.targets
         if target.type == "macro"
     ]
-
-    # DEBUG BEGIN
-    print("*** CHUCK macro_target_labels: ")
-    for idx, item in enumerate(macro_target_labels):
-        print("*** CHUCK", idx, ":", item)
-
-    # DEBUG END
     if macro_target_labels:
         plugins = [
             target_label
@@ -82,13 +75,6 @@ def _swift_target_build_file(pkg_ctx, target):
             for dep in deps
             if target_label in dep.value[0]
         ]
-
-        # DEBUG BEGIN
-        print("*** CHUCK plugins: ")
-        for idx, item in enumerate(plugins):
-            print("*** CHUCK", idx, ":", item)
-
-        # DEBUG END
         if plugins:
             attrs["plugins"] = plugins
             deps_without_plugins = [dep for dep in deps if dep.value[0] not in plugins]

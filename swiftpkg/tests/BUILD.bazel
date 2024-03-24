@@ -7,7 +7,6 @@ load(":build_decls_tests.bzl", "build_decls_test_suite")
 load(":build_files_tests.bzl", "build_files_test_suite")
 load(":bzl_selects_tests.bzl", "bzl_selects_test_suite")
 load(":clang_files_tests.bzl", "clang_files_test_suite")
-load(":deps_indexes_tests.bzl", "deps_indexes_test_suite")
 load(":load_statements_tests.bzl", "load_statements_test_suite")
 load(":objc_files_tests.bzl", "objc_files_test_suite")
 load(":pkginfo_ext_deps_tests.bzl", "pkginfo_ext_deps_test_suite")
@@ -36,8 +35,6 @@ build_files_test_suite()
 clang_files_test_suite()
 
 load_statements_test_suite()
-
-deps_indexes_test_suite()
 
 objc_files_test_suite()
 

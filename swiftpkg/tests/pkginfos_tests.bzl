@@ -16,6 +16,7 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
         repository_ctx = testutils.new_stub_repository_ctx(repo_name),
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
+        collect_src_info = False,
     )
     expected = pkginfos.new(
         name = "MySwiftPackage",
@@ -28,6 +29,17 @@ def _new_from_parsed_json_for_swift_targets_test(ctx):
             pkginfos.new_dependency(
                 identity = "swift-argument-parser",
                 name = "SwiftArgumentParser",
+                source_control = pkginfos.new_source_control(
+                    pin = pkginfos.new_pin(
+                        identity = "swift-argument-parser",
+                        kind = "remoteSourceControl",
+                        location = "https://github.com/apple/swift-argument-parser",
+                        state = pkginfos.new_pin_state(
+                            revision = "6c89474e62719ddcc1e9614989fff2f68208fe10",
+                            version = "1.0.0",
+                        ),
+                    ),
+                ),
             ),
         ],
         products = [
@@ -113,6 +125,7 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
         repository_ctx = testutils.new_stub_repository_ctx(repo_name),
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
+        collect_src_info = False,
     )
 
     # The interesting features are in the libbar target.
@@ -545,31 +558,6 @@ _swift_arg_parser_desc_json = """
 }
 """
 
-_swift_arg_parser_deps_index_json = """
-{
-    "modules": [
-        {
-            "name": "MySwiftPackage",
-            "c99name": "MySwiftPackage",
-            "src_type": "swift",
-            "label": "@swiftpkg_mypackage//:MySwiftPackage.rspm",
-            "package_identity": "mypackage",
-            "product_memberships": [
-                "printstuff"
-            ]
-        }
-    ],
-    "products": [
-        {
-            "identity": "mypackage",
-            "name": "printstuff",
-            "type": "executable",
-            "label": "@swiftpkg_mypackage//:MySwiftPackage"
-        }
-    ]
-}
-"""
-
 _clang_dump_json = """
 {
   "cLanguageStandard" : null,
@@ -745,30 +733,5 @@ _clang_desc_json = """
     }
   ],
   "tools_version" : "5.5"
-}
-"""
-
-_clang_deps_index_json = """
-{
-    "modules": [
-        {
-            "name": "libbar",
-            "c99name": "libbar",
-            "src_type": "clang",
-            "label": "@swiftpkg_libbar//:libbar.rspm",
-            "package_identity": "mypackage",
-            "product_memberships": [
-                "libbar"
-            ]
-        }
-    ],
-    "products": [
-        {
-            "identity": "libbar",
-            "name": "libbar",
-            "type": "library",
-            "label": "@swiftpkg_libbar//:libbar"
-        }
-    ]
 }
 """

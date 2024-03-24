@@ -7,11 +7,25 @@ load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 _swift_arg_parser = pkginfos.new_dependency(
     identity = "swift-argument-parser",
     name = "SwiftArgumentParser",
+    source_control = pkginfos.new_source_control(
+        pin = pkginfos.new_pin(
+            identity = "swift-argument-parser",
+            kind = "remoteSourceControl",
+            location = "https://github.com/apple/swift-argument-parser",
+            state = pkginfos.new_pin_state(
+                revision = "6c89474e62719ddcc1e9614989fff2f68208fe10",
+                version = "1.0.0",
+            ),
+        ),
+    ),
 )
 
 _super_cool_pkg = pkginfos.new_dependency(
     identity = "super-cool-package",
     name = "SuperCoolPackage",
+    file_system = pkginfos.new_file_system(
+        path = "/path/to/super-cool-package",
+    ),
 )
 
 _ext_deps = [_swift_arg_parser, _super_cool_pkg]

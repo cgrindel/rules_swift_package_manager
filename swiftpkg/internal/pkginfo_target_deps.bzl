@@ -81,11 +81,11 @@ def _resolve_by_name(pkg_ctx, name, depender_target):
         ]
 
     normalized_name = pkginfo_dependencies.normalize_name(name)
+
     ext_dep = lists.find(
         pkg_ctx.pkg_info.dependencies,
-        lambda d: d.name == normalized_name,
+        lambda d: d.identity == normalized_name,
     )
-
     if ext_dep != None:
         return [bazel_labels.new(
             name,
@@ -133,29 +133,38 @@ Unable to resolve target reference target dependency for {module_name}.\
 
         elif target_dep.product:
             condition = target_dep.product.condition
-
             prod_ref = target_dep.product
-            dep = pkginfo_dependencies.get_by_name(
-                pkg_ctx.pkg_info.dependencies,
-                prod_ref.dep_name,
-            )
-            if dep == None:
+            repository_name = None
+            if prod_ref.dep_name == pkg_ctx.pkg_info.name:
+                repository_name = pkg_ctx.repo_name
+            else:
+                dep = pkginfo_dependencies.get_by_name(
+                    pkg_ctx.pkg_info.dependencies,
+                    prod_ref.dep_name,
+                )
+                if dep:
+                    repository_name = bazel_repo_names.from_identity(dep.identity)
+            if not repository_name:
                 fail("""\
-Did not find external dependency with name/identity {}.\
-""".format(prod_ref.dep_name))
+Did not find external dependency with product name {prod_name} and package \
+name {pkg_name}.\
+""".format(
+                    pkg_name = prod_ref.dep_name,
+                    prod_name = prod_ref.product_name,
+                ))
 
             labels = [
                 bazel_labels.new(
                     name = prod_ref.product_name,
-                    repository_name = bazel_repo_names.from_identity(dep.identity),
+                    repository_name = repository_name,
                     package = "",
                 ),
             ]
 
         else:
             fail("""\
-Unrecognized target dependency while generating a Bazel dependency label.\
-""")
+Unrecognized target dependency while generating a Bazel dependency label: {}.\
+""".format(target_dep))
 
         return bzl_selects.new_from_target_dependency_condition(
             kind = _target_dep_kind,
