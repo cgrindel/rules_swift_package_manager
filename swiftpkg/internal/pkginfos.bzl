@@ -246,7 +246,11 @@ def _new_target_from_json_maps(
     sources = desc_map["sources"]
     source_paths = dump_map.get("sources")
     public_hdrs_path = dump_map.get("publicHeadersPath")
-    exclude_paths = dump_map.get("exclude", default = [])
+    # Exclude paths are relative to the target path
+    exclude_paths = [
+        paths.join(target_path, path)
+        for path in dump_map.get("exclude", default = [])
+    ]
 
     swift_src_info = None
     clang_src_info = None
