@@ -3,6 +3,7 @@
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:versions.bzl", "versions")
+load("@bazel_tools//tools/build_defs/repo:utils.bzl", "read_netrc", "read_user_netrc", "use_netrc")
 load(":artifact_infos.bzl", "artifact_infos")
 load(":build_files.bzl", "build_files")
 load(":pkginfos.bzl", "target_types")
@@ -129,10 +130,14 @@ def _artifact_infos_from_path(repository_ctx, path):
     ]
 
 def _download_artifact(repository_ctx, artifact_download_info, path):
+    url = artifact_download_info.url
+    auth = _get_auth(repository_ctx, [url])
+
     result = repository_ctx.download_and_extract(
-        url = artifact_download_info.url,
+        url = url,
         output = path,
         sha256 = artifact_download_info.checksum,
+        auth = auth,
     )
     if not result.success:
         fail("Failed to download artifact. url: {url}, sha256: {sha256}".format(
@@ -140,6 +145,31 @@ def _download_artifact(repository_ctx, artifact_download_info, path):
             sha256 = artifact_download_info.checksum,
         ))
     return _artifact_infos_from_path(repository_ctx, path)
+
+# Copied from "@bazel_tools//tools/build_defs/repo:utils.bzl". Availaible starting with 7.1.0
+def _get_auth(ctx, urls):
+    """Utility function to obtain the correct auth dict for a list of urls from .netrc file.
+
+    Support optional netrc and auth_patterns attributes if available.
+
+    Args:
+      ctx: The repository context of the repository rule calling this utility
+        function.
+      urls: the list of urls to read
+
+    Returns:
+      the auth dict which can be passed to repository_ctx.download
+    """
+    if hasattr(ctx.attr, "netrc") and ctx.attr.netrc:
+        netrc = read_netrc(ctx, ctx.attr.netrc)
+    elif "NETRC" in ctx.os.environ:
+        netrc = read_netrc(ctx, ctx.os.environ["NETRC"])
+    else:
+        netrc = read_user_netrc(ctx)
+    auth_patterns = {}
+    if hasattr(ctx.attr, "auth_patterns") and ctx.attr.auth_patterns:
+        auth_patterns = ctx.attr.auth_patterns
+    return use_netrc(netrc, urls, auth_patterns)
 
 repo_rules = struct(
     check_spm_version = _check_spm_version,
