@@ -184,6 +184,16 @@
       ]
     },
     {
+      "name": "SotoAppFabric",
+      "c99name": "SotoAppFabric",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:SotoAppFabric.rspm",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoAppFabric"
+      ]
+    },
+    {
       "name": "SotoAppIntegrations",
       "c99name": "SotoAppIntegrations",
       "src_type": "swift",
@@ -361,6 +371,26 @@
       "package_identity": "soto",
       "product_memberships": [
         "SotoBatch"
+      ]
+    },
+    {
+      "name": "SotoBedrock",
+      "c99name": "SotoBedrock",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:SotoBedrock.rspm",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoBedrock"
+      ]
+    },
+    {
+      "name": "SotoBedrockRuntime",
+      "c99name": "SotoBedrockRuntime",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:SotoBedrockRuntime.rspm",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoBedrockRuntime"
       ]
     },
     {
@@ -1234,6 +1264,16 @@
       ]
     },
     {
+      "name": "SotoEntityResolution",
+      "c99name": "SotoEntityResolution",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:SotoEntityResolution.rspm",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoEntityResolution"
+      ]
+    },
+    {
       "name": "SotoEventBridge",
       "c99name": "SotoEventBridge",
       "src_type": "swift",
@@ -2094,6 +2134,16 @@
       ]
     },
     {
+      "name": "SotoManagedBlockchainQuery",
+      "c99name": "SotoManagedBlockchainQuery",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:SotoManagedBlockchainQuery.rspm",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoManagedBlockchainQuery"
+      ]
+    },
+    {
       "name": "SotoMarketplaceCatalog",
       "c99name": "SotoMarketplaceCatalog",
       "src_type": "swift",
@@ -2224,6 +2274,16 @@
       ]
     },
     {
+      "name": "SotoMedicalImaging",
+      "c99name": "SotoMedicalImaging",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:SotoMedicalImaging.rspm",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoMedicalImaging"
+      ]
+    },
+    {
       "name": "SotoMemoryDB",
       "c99name": "SotoMemoryDB",
       "src_type": "swift",
@@ -2311,6 +2371,16 @@
       "package_identity": "soto",
       "product_memberships": [
         "SotoNeptune"
+      ]
+    },
+    {
+      "name": "SotoNeptunedata",
+      "c99name": "SotoNeptunedata",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:SotoNeptunedata.rspm",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoNeptunedata"
       ]
     },
     {
@@ -2471,6 +2541,16 @@
       "package_identity": "soto",
       "product_memberships": [
         "SotoPaymentCryptographyData"
+      ]
+    },
+    {
+      "name": "SotoPcaConnectorAd",
+      "c99name": "SotoPcaConnectorAd",
+      "src_type": "swift",
+      "label": "@swiftpkg_soto//:SotoPcaConnectorAd.rspm",
+      "package_identity": "soto",
+      "product_memberships": [
+        "SotoPcaConnectorAd"
       ]
     },
     {
@@ -3644,6 +3724,60 @@
       ]
     },
     {
+      "name": "CCryptoBoringSSL",
+      "c99name": "CCryptoBoringSSL",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_crypto//:CCryptoBoringSSL.rspm",
+      "package_identity": "swift-crypto",
+      "product_memberships": [
+        "Crypto",
+        "_CryptoExtras"
+      ]
+    },
+    {
+      "name": "CCryptoBoringSSLShims",
+      "c99name": "CCryptoBoringSSLShims",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_crypto//:CCryptoBoringSSLShims.rspm",
+      "package_identity": "swift-crypto",
+      "product_memberships": [
+        "Crypto",
+        "_CryptoExtras"
+      ]
+    },
+    {
+      "name": "Crypto",
+      "c99name": "Crypto",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_crypto//:Crypto.rspm",
+      "package_identity": "swift-crypto",
+      "product_memberships": [
+        "Crypto",
+        "_CryptoExtras"
+      ]
+    },
+    {
+      "name": "CryptoBoringWrapper",
+      "c99name": "CryptoBoringWrapper",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_crypto//:CryptoBoringWrapper.rspm",
+      "package_identity": "swift-crypto",
+      "product_memberships": [
+        "Crypto",
+        "_CryptoExtras"
+      ]
+    },
+    {
+      "name": "_CryptoExtras",
+      "c99name": "_CryptoExtras",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_crypto//:_CryptoExtras.rspm",
+      "package_identity": "swift-crypto",
+      "product_memberships": [
+        "_CryptoExtras"
+      ]
+    },
+    {
       "name": "Logging",
       "c99name": "Logging",
       "src_type": "swift",
@@ -4202,6 +4336,12 @@
     },
     {
       "identity": "soto",
+      "name": "SotoAppFabric",
+      "type": "library",
+      "label": "@swiftpkg_soto//:SotoAppFabric"
+    },
+    {
+      "identity": "soto",
       "name": "SotoAppIntegrations",
       "type": "library",
       "label": "@swiftpkg_soto//:SotoAppIntegrations"
@@ -4307,6 +4447,18 @@
       "name": "SotoBatch",
       "type": "library",
       "label": "@swiftpkg_soto//:SotoBatch"
+    },
+    {
+      "identity": "soto",
+      "name": "SotoBedrock",
+      "type": "library",
+      "label": "@swiftpkg_soto//:SotoBedrock"
+    },
+    {
+      "identity": "soto",
+      "name": "SotoBedrockRuntime",
+      "type": "library",
+      "label": "@swiftpkg_soto//:SotoBedrockRuntime"
     },
     {
       "identity": "soto",
@@ -4832,6 +4984,12 @@
     },
     {
       "identity": "soto",
+      "name": "SotoEntityResolution",
+      "type": "library",
+      "label": "@swiftpkg_soto//:SotoEntityResolution"
+    },
+    {
+      "identity": "soto",
       "name": "SotoEventBridge",
       "type": "library",
       "label": "@swiftpkg_soto//:SotoEventBridge"
@@ -5348,6 +5506,12 @@
     },
     {
       "identity": "soto",
+      "name": "SotoManagedBlockchainQuery",
+      "type": "library",
+      "label": "@swiftpkg_soto//:SotoManagedBlockchainQuery"
+    },
+    {
+      "identity": "soto",
       "name": "SotoMarketplaceCatalog",
       "type": "library",
       "label": "@swiftpkg_soto//:SotoMarketplaceCatalog"
@@ -5426,6 +5590,12 @@
     },
     {
       "identity": "soto",
+      "name": "SotoMedicalImaging",
+      "type": "library",
+      "label": "@swiftpkg_soto//:SotoMedicalImaging"
+    },
+    {
+      "identity": "soto",
       "name": "SotoMemoryDB",
       "type": "library",
       "label": "@swiftpkg_soto//:SotoMemoryDB"
@@ -5477,6 +5647,12 @@
       "name": "SotoNeptune",
       "type": "library",
       "label": "@swiftpkg_soto//:SotoNeptune"
+    },
+    {
+      "identity": "soto",
+      "name": "SotoNeptunedata",
+      "type": "library",
+      "label": "@swiftpkg_soto//:SotoNeptunedata"
     },
     {
       "identity": "soto",
@@ -5573,6 +5749,12 @@
       "name": "SotoPaymentCryptographyData",
       "type": "library",
       "label": "@swiftpkg_soto//:SotoPaymentCryptographyData"
+    },
+    {
+      "identity": "soto",
+      "name": "SotoPcaConnectorAd",
+      "type": "library",
+      "label": "@swiftpkg_soto//:SotoPcaConnectorAd"
     },
     {
       "identity": "soto",
@@ -6223,6 +6405,18 @@
       "label": "@swiftpkg_swift_collections//:OrderedCollections"
     },
     {
+      "identity": "swift-crypto",
+      "name": "Crypto",
+      "type": "library",
+      "label": "@swiftpkg_swift_crypto//:Crypto"
+    },
+    {
+      "identity": "swift-crypto",
+      "name": "_CryptoExtras",
+      "type": "library",
+      "label": "@swiftpkg_swift_crypto//:_CryptoExtras"
+    },
+    {
       "identity": "swift-log",
       "name": "Logging",
       "type": "library",
@@ -6384,9 +6578,9 @@
       "name": "swiftpkg_soto",
       "identity": "soto",
       "remote": {
-        "commit": "939e61467a9adfd78520b46eddf756a09291f7e1",
+        "commit": "c28c3efa72e6beceae6f38f8c8fe18e7c57e3418",
         "remote": "https://github.com/soto-project/soto.git",
-        "version": "6.7.0"
+        "version": "6.8.0"
       }
     },
     {
@@ -6415,6 +6609,16 @@
         "remote": "https://github.com/apple/swift-collections.git",
         "version": "1.0.4"
       }
+    },
+    {
+      "name": "swiftpkg_swift_crypto",
+      "identity": "swift-crypto",
+      "remote": {
+        "commit": "60f13f60c4d093691934dc6cfdf5f508ada1f894",
+        "remote": "https://github.com/apple/swift-crypto.git",
+        "version": "2.6.0"
+      },
+      "cxxLanguageStandard": "c++11"
     },
     {
       "name": "swiftpkg_swift_log",
