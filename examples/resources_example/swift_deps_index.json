@@ -128,8 +128,9 @@
     {
       "name": "GTMAppAuth",
       "c99name": "GTMAppAuth",
-      "src_type": "objc",
+      "src_type": "swift",
       "label": "@swiftpkg_gtmappauth//:GTMAppAuth.rspm",
+      "modulemap_label": "@swiftpkg_gtmappauth//:GTMAppAuth.rspm_modulemap",
       "package_identity": "gtmappauth",
       "product_memberships": [
         "GTMAppAuth"
@@ -336,36 +337,36 @@
       "name": "swiftpkg_appauth_ios",
       "identity": "appauth-ios",
       "remote": {
-        "commit": "71cde449f13d453227e687458144bde372d30fc7",
+        "commit": "7e2c09cbeb3bb799f26c268dbedb26325ea722a9",
         "remote": "https://github.com/openid/AppAuth-iOS.git",
-        "version": "1.6.2"
+        "version": "1.7.3"
       }
     },
     {
       "name": "swiftpkg_googlesignin_ios",
       "identity": "googlesignin-ios",
       "remote": {
-        "commit": "7932d33686c1dc4d7df7a919aae47361d1cdfda4",
+        "commit": "a7965d134c5d3567026c523e0a8a583f73b62b0d",
         "remote": "https://github.com/google/GoogleSignIn-iOS",
-        "version": "7.0.0"
+        "version": "7.1.0"
       }
     },
     {
       "name": "swiftpkg_gtm_session_fetcher",
       "identity": "gtm-session-fetcher",
       "remote": {
-        "commit": "d415594121c9e8a4f9d79cecee0965cf35e74dbd",
+        "commit": "9534039303015a84837090d20fa21cae6e5eadb6",
         "remote": "https://github.com/google/gtm-session-fetcher.git",
-        "version": "3.1.1"
+        "version": "3.3.2"
       }
     },
     {
       "name": "swiftpkg_gtmappauth",
       "identity": "gtmappauth",
       "remote": {
-        "commit": "cee3c709307912d040bd1e06ca919875a92339c6",
+        "commit": "5d7d66f647400952b1758b230e019b07c0b4b22a",
         "remote": "https://github.com/google/GTMAppAuth.git",
-        "version": "2.0.0"
+        "version": "4.1.1"
       }
     },
     {
