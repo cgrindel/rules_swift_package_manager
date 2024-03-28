@@ -41,9 +41,9 @@
       "name": "swiftpkg_trustkit",
       "identity": "trustkit",
       "remote": {
-        "commit": "5718ba8720b4dafc5360aebfbc9762e2d5f2615e",
+        "commit": "2fb6ce731fd51f745f6cc3393462865b95c3df3c",
         "remote": "https://github.com/datatheorem/TrustKit.git",
-        "version": "3.0.3"
+        "version": "3.0.4"
       }
     }
   ]
