@@ -717,13 +717,16 @@ def _library_product_build_file(deps_index_ctx, product):
         for tname in product.targets
     ]
     label_infos = lists.flatten([
-        deps_indexes.labels_for_module(module, src_types.swift)
+        # TODO(chuck): Clean this up if it works!!!
+        # Always include the modulemap targets in the products.
+        deps_indexes.labels_for_module(module, src_types.objc)
         for module in modules
     ])
     target_labels = [
         bazel_labels.normalize(label_info)
         for label_info in label_infos
     ]
+
     if len(target_labels) == 0:
         fail("No targets specified for a library product. name:", product.name)
     return build_files.new(
