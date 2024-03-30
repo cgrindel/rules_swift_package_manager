@@ -708,6 +708,7 @@ objc_library(
         "-fPIC",
         "-fmodule-name=ObjcLibrary",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
+        "-ObjC",
     ],
     defines = ["SWIFT_PACKAGE=1"],
     deps = [
@@ -767,6 +768,7 @@ objc_library(
         "-fPIC",
         "-fmodule-name=ObjcLibraryWithModulemap",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
+        "-ObjC",
     ],
     defines = ["SWIFT_PACKAGE=1"],
     deps = [
@@ -963,6 +965,7 @@ objc_library(
         "-fmodule-name=ObjcLibraryWithResources",
         "-include$(location :ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr)",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
+        "-ObjC",
     ],
     data = [":ObjcLibraryWithResources.rspm_resource_bundle"],
     defines = ["SWIFT_PACKAGE=1"],
