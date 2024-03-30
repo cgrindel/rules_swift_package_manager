@@ -99,7 +99,7 @@ Unrecognized target dependency while generating a Bazel dependency label.\
             labels = [product.label]
         elif module:
             labels = (
-                deps_indexes.labels_for_module(module, depender_module.src_type)
+                deps_indexes.labels_for_module(module)
             )
         else:
             labels = []
