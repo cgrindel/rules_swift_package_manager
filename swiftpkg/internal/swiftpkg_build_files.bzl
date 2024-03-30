@@ -314,6 +314,12 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 
     copts.extend(local_includes)
 
+    if target.objc_src_info != None:
+        # As of 2024-03-30, objc_library does not add the `-ObjC` flag during
+        # compilation. We need to add it for the ObjC resource bundle accessor
+        # to work properly.
+        copts.append("-ObjC")
+
     # The `includes` attribute adds includes as -isystem which propagates
     # to cc_XXX that depend upon the library.  Providing includes as -I
     # only provides the includes for this target.
