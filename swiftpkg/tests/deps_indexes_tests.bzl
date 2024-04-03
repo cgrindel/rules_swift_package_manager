@@ -163,7 +163,6 @@ def _labels_for_module_test(ctx):
         struct(
             msg = "Swift depend upon Swift",
             dep_module = "@example_cool_repo//:Foo",
-            depender_module = "@example_cool_repo//:Bar",
             exp = [
                 bazel_labels.parse("@example_cool_repo//:Foo"),
             ],
@@ -171,7 +170,6 @@ def _labels_for_module_test(ctx):
         struct(
             msg = "Swift library depends upon Objc library",
             dep_module = "@example_cool_repo//:ObjcLibrary",
-            depender_module = "@example_cool_repo//:Bar",
             exp = [
                 bazel_labels.parse("@example_cool_repo//:ObjcLibrary"),
                 bazel_labels.parse("@example_cool_repo//:ObjcLibrary_modulemap"),
@@ -180,16 +178,13 @@ def _labels_for_module_test(ctx):
         struct(
             msg = "Objc library depends upon Swift library without modulemap",
             dep_module = "@example_cool_repo//:Foo",
-            depender_module = "@example_cool_repo//:ObjcLibrary",
             exp = [
                 bazel_labels.parse("@example_cool_repo//:Foo"),
-                # bazel_labels.parse("@example_cool_repo//:Foo_modulemap"),
             ],
         ),
         struct(
             msg = "Objc library depends upon Swift library with modulemap",
             dep_module = "@example_another_repo//Sources/Foo",
-            depender_module = "@example_cool_repo//:ObjcLibrary",
             exp = [
                 bazel_labels.parse("@example_another_repo//Sources/Foo"),
                 bazel_labels.parse("@example_another_repo//Sources/Foo:Foo_modulemap"),
@@ -198,12 +193,9 @@ def _labels_for_module_test(ctx):
     ]
     for t in tests:
         module = deps_indexes.get_module(_deps_index, t.dep_module)
-        depender = deps_indexes.get_module(_deps_index, t.depender_module)
         if module == None:
             fail("The module is `None` for {}.".format(t.label))
-        if depender == None:
-            fail("The depender module is `None` for {}.".format(t.depender_label))
-        actual = deps_indexes.labels_for_module(module, depender.src_type)
+        actual = deps_indexes.labels_for_module(module)
         asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)

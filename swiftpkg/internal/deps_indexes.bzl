@@ -201,14 +201,12 @@ def _modulemap_label_for_module(module):
         package = module.label.package,
     )
 
-def _labels_for_module(module, depender_src_type):
+def _labels_for_module(module):
     """Returns the dep labels that should be used for a module.
 
     Args:
         module: The dependent module (`struct` as returned by
             `dep_indexes.new_module`).
-        depender_src_type: The source type for the target (`string` value from
-            `src_types`) that will depend on the module.
 
     Returns:
         A `list` of Bazel label `struct` values as returned by `bazel_labels.new`,
@@ -222,8 +220,7 @@ def _labels_for_module(module, depender_src_type):
         # See `swiftpkg_build_files.bzl` for more information.
         labels.append(_modulemap_label_for_module(module))
 
-    elif (depender_src_type == src_types.objc and
-          module.src_type == src_types.swift and
+    elif (module.src_type == src_types.swift and
           module.modulemap_label != None):
         # If an Objc module wants to @import a Swift module, it will need the
         # modulemap target.
