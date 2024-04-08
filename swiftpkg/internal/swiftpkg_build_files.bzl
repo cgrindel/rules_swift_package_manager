@@ -7,7 +7,7 @@ load(":bazel_apple_platforms.bzl", "bazel_apple_platforms")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":bzl_selects.bzl", "bzl_selects")
-load(":deps_indexes.bzl", "deps_indexes", "src_types")
+load(":deps_indexes.bzl", "deps_indexes")
 load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
@@ -717,13 +717,14 @@ def _library_product_build_file(deps_index_ctx, product):
         for tname in product.targets
     ]
     label_infos = lists.flatten([
-        deps_indexes.labels_for_module(module, src_types.swift)
+        deps_indexes.labels_for_module(module)
         for module in modules
     ])
     target_labels = [
         bazel_labels.normalize(label_info)
         for label_info in label_infos
     ]
+
     if len(target_labels) == 0:
         fail("No targets specified for a library product. name:", product.name)
     return build_files.new(
