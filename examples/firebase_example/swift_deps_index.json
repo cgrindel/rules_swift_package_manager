@@ -5,10 +5,20 @@
   ],
   "modules": [
     {
-      "name": "abseil",
-      "c99name": "abseil",
+      "name": "absl",
+      "c99name": "absl",
       "src_type": "binary",
-      "label": "@swiftpkg_abseil_cpp_binary//:abseil.rspm",
+      "label": "@swiftpkg_abseil_cpp_binary//:absl.rspm",
+      "package_identity": "abseil-cpp-binary",
+      "product_memberships": [
+        "abseil"
+      ]
+    },
+    {
+      "name": "abslWrapper",
+      "c99name": "abslWrapper",
+      "src_type": "objc",
+      "label": "@swiftpkg_abseil_cpp_binary//:abslWrapper.rspm",
       "package_identity": "abseil-cpp-binary",
       "product_memberships": [
         "abseil"
@@ -342,6 +352,17 @@
       ]
     },
     {
+      "name": "FirebaseCrashlyticsSwift",
+      "c99name": "FirebaseCrashlyticsSwift",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseCrashlyticsSwift.rspm",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseCrashlyticsSwift.rspm_modulemap",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseCrashlytics"
+      ]
+    },
+    {
       "name": "FirebaseDatabase",
       "c99name": "FirebaseDatabase",
       "src_type": "swift",
@@ -651,6 +672,20 @@
       ]
     },
     {
+      "name": "FirebaseRemoteConfigInterop",
+      "c99name": "FirebaseRemoteConfigInterop",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfigInterop.rspm",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfigInterop.rspm_modulemap",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseCrashlytics",
+        "FirebasePerformance",
+        "FirebaseRemoteConfig",
+        "FirebaseRemoteConfigSwift"
+      ]
+    },
+    {
       "name": "FirebaseRemoteConfigSwift",
       "c99name": "FirebaseRemoteConfigSwift",
       "src_type": "swift",
@@ -935,53 +970,64 @@
       ]
     },
     {
-      "name": "BoringSSL-GRPC",
-      "c99name": "BoringSSL_GRPC",
+      "name": "grpc",
+      "c99name": "grpc",
       "src_type": "binary",
-      "label": "@swiftpkg_grpc_binary//:BoringSSL-GRPC.rspm",
-      "package_identity": "grpc-binary",
-      "product_memberships": [
-        "gRPC-C++"
-      ]
-    },
-    {
-      "name": "gRPC-C++",
-      "c99name": "gRPC_C__",
-      "src_type": "binary",
-      "label": "@swiftpkg_grpc_binary//:gRPC-C++.rspm",
-      "package_identity": "grpc-binary",
-      "product_memberships": [
-        "gRPC-C++"
-      ]
-    },
-    {
-      "name": "gRPC-CXX-Target",
-      "c99name": "gRPC_CXX_Target",
-      "src_type": "objc",
-      "label": "@swiftpkg_grpc_binary//:gRPC-CXX-Target.rspm",
-      "package_identity": "grpc-binary",
-      "product_memberships": [
-        "gRPC-C++"
-      ]
-    },
-    {
-      "name": "gRPC-CXX-Wrapper",
-      "c99name": "gRPC_CXX_Wrapper",
-      "src_type": "objc",
-      "label": "@swiftpkg_grpc_binary//:gRPC-CXX-Wrapper.rspm",
-      "package_identity": "grpc-binary",
-      "product_memberships": [
-        "gRPC-C++"
-      ]
-    },
-    {
-      "name": "gRPC-Core",
-      "c99name": "gRPC_Core",
-      "src_type": "binary",
-      "label": "@swiftpkg_grpc_binary//:gRPC-Core.rspm",
+      "label": "@swiftpkg_grpc_binary//:grpc.rspm",
       "package_identity": "grpc-binary",
       "product_memberships": [
         "gRPC-Core",
+        "gRPC-C++"
+      ]
+    },
+    {
+      "name": "grpcWrapper",
+      "c99name": "grpcWrapper",
+      "src_type": "objc",
+      "label": "@swiftpkg_grpc_binary//:grpcWrapper.rspm",
+      "package_identity": "grpc-binary",
+      "product_memberships": [
+        "gRPC-Core",
+        "gRPC-C++"
+      ]
+    },
+    {
+      "name": "grpcpp",
+      "c99name": "grpcpp",
+      "src_type": "binary",
+      "label": "@swiftpkg_grpc_binary//:grpcpp.rspm",
+      "package_identity": "grpc-binary",
+      "product_memberships": [
+        "gRPC-C++"
+      ]
+    },
+    {
+      "name": "grpcppWrapper",
+      "c99name": "grpcppWrapper",
+      "src_type": "objc",
+      "label": "@swiftpkg_grpc_binary//:grpcppWrapper.rspm",
+      "package_identity": "grpc-binary",
+      "product_memberships": [
+        "gRPC-C++"
+      ]
+    },
+    {
+      "name": "opensslWrapper",
+      "c99name": "opensslWrapper",
+      "src_type": "objc",
+      "label": "@swiftpkg_grpc_binary//:opensslWrapper.rspm",
+      "package_identity": "grpc-binary",
+      "product_memberships": [
+        "gRPC-C++"
+      ]
+    },
+    {
+      "name": "openssl_grpc",
+      "c99name": "openssl_grpc",
+      "src_type": "binary",
+      "label": "@swiftpkg_grpc_binary//:openssl_grpc.rspm",
+      "package_identity": "grpc-binary",
+      "product_memberships": [
         "gRPC-C++"
       ]
     },
@@ -1524,9 +1570,9 @@
       "name": "swiftpkg_abseil_cpp_binary",
       "identity": "abseil-cpp-binary",
       "remote": {
-        "commit": "bfc0b6f81adc06ce5121eb23f628473638d67c5c",
+        "commit": "748c7837511d0e6a507737353af268484e1745e2",
         "remote": "https://github.com/google/abseil-cpp-binary.git",
-        "version": "1.2022062300.0"
+        "version": "1.2024011601.1"
       }
     },
     {
@@ -1542,9 +1588,9 @@
       "name": "swiftpkg_firebase_ios_sdk",
       "identity": "firebase-ios-sdk",
       "remote": {
-        "commit": "f91c8167141d0279726c6f6d9d4a47c026785cbc",
+        "commit": "888f0b6026e2441a69e3ee2ad5293c7a92031e62",
         "remote": "https://github.com/firebase/firebase-ios-sdk",
-        "version": "10.21.0"
+        "version": "10.23.1"
       },
       "cLanguageStandard": "c99",
       "cxxLanguageStandard": "gnu++14"
@@ -1553,9 +1599,9 @@
       "name": "swiftpkg_googleappmeasurement",
       "identity": "googleappmeasurement",
       "remote": {
-        "commit": "cb8617fab75d181270a1d8f763f26b15c73e2e1e",
+        "commit": "c7a5917ebe48d69f421aadf154ef3969c8b7f12d",
         "remote": "https://github.com/google/GoogleAppMeasurement.git",
-        "version": "10.21.0"
+        "version": "10.23.1"
       },
       "cLanguageStandard": "c99",
       "cxxLanguageStandard": "gnu++14"
@@ -1586,9 +1632,9 @@
       "name": "swiftpkg_grpc_binary",
       "identity": "grpc-binary",
       "remote": {
-        "commit": "a673bc2937fbe886dd1f99c401b01b6d977a9c98",
+        "commit": "e9fad491d0673bdda7063a0341fb6b47a30c5359",
         "remote": "https://github.com/google/grpc-binary.git",
-        "version": "1.49.1"
+        "version": "1.62.2"
       }
     },
     {
