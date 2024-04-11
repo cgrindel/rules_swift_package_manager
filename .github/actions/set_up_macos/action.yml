@@ -25,6 +25,10 @@ runs:
            [[ "${{ inputs.test_target }}" = "@@//examples:shake_ios_example_test_bazel_.bazelversion" ]]; then
           sudo xcode-select -s /Applications/Xcode_14.3.1.app/Contents/Developer
         fi
+        # TODO: Migrate all CI jobs to Xcode 15.2
+        if [[ "${{ inputs.test_target }}" = "@@//examples:stripe_example_test_bazel_.bazelversion" ]]; then
+          sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+        fi
     - name: Confirm Xcode Version
       shell: bash
       run: |
