@@ -4,13 +4,13 @@
 //
 //  ⚠️🏗 This is a playground for internal Stripe engineers to help us test things, and isn't
 //  an example of what you should do in a real app!
-//  Note: Do not import Stripe using `@_spi(STP)` or @_spi(PrivateBetaCustomerSheet) in production.
+//  Note: Do not import Stripe using `@_spi(STP)` in production.
 //  This exposes internal functionality which may cause unexpected behavior if used directly.
 
 import Contacts
 import Foundation
 import PassKit
-@_spi(PrivateBetaCustomerSheet) import StripePaymentSheet
+import StripePaymentSheet
 import SwiftUI
 import UIKit
 
@@ -38,6 +38,7 @@ struct CustomerSheetTestPlayground: View {
                             }.buttonStyle(.bordered)
                         }
                         SettingView(setting: $playgroundController.settings.customerMode)
+                        SettingView(setting: customerKeyTypeBinding)
                         TextField("CustomerId", text: customerIdBinding)
                     }
                     Group {
@@ -50,11 +51,24 @@ struct CustomerSheetTestPlayground: View {
                                 Text("Appearance").font(.callout.smallCaps())
                             }.buttonStyle(.bordered)
                         }
-                        SettingView(setting: $playgroundController.settings.paymentMethodMode)
+                        SettingPickerView(setting: merchantCountryBinding)
+                        SettingView(setting: paymentMethodModeBinding)
                         SettingView(setting: $playgroundController.settings.applePay)
                         SettingView(setting: $playgroundController.settings.defaultBillingAddress)
+                        SettingView(setting: $playgroundController.settings.preferredNetworksEnabled)
                         SettingView(setting: $playgroundController.settings.autoreload)
                         TextField("headerTextForSelectionScreen", text: headerTextForSelectionScreenBinding)
+                        SettingView(setting: $playgroundController.settings.allowsRemovalOfLastSavedPaymentMethod)
+                        HStack {
+                            Text("Macros").font(.headline)
+                            Spacer()
+                            Button {
+                                playgroundController.didTapSetToUnsupported()
+                            } label: {
+                                Text("SetPMLink")
+                                    .font(.callout.smallCaps())
+                            }.buttonStyle(.bordered)
+                        }
                     }
                     Divider()
                     Group {
@@ -75,6 +89,39 @@ struct CustomerSheetTestPlayground: View {
             Divider()
             CustomerSheetButtons()
                 .environmentObject(playgroundController)
+        }
+    }
+    var customerKeyTypeBinding: Binding<CustomerSheetTestPlaygroundSettings.CustomerKeyType> {
+        Binding<CustomerSheetTestPlaygroundSettings.CustomerKeyType> {
+            return playgroundController.settings.customerKeyType
+        } set: { newKeyType in
+            // If switching to customerSession preselect setupIntent
+            if playgroundController.settings.customerKeyType.rawValue != newKeyType.rawValue && newKeyType == .customerSession {
+                playgroundController.settings.paymentMethodMode = .setupIntent
+            }
+            playgroundController.settings.customerKeyType = newKeyType
+        }
+    }
+    var paymentMethodModeBinding: Binding<CustomerSheetTestPlaygroundSettings.PaymentMethodMode> {
+        Binding<CustomerSheetTestPlaygroundSettings.PaymentMethodMode> {
+            return playgroundController.settings.paymentMethodMode
+        } set: { newPaymentMethodMode in
+            // If switching to createAndAttach, ensure using legacy customer ephemeralKey
+            if playgroundController.settings.paymentMethodMode.rawValue != newPaymentMethodMode.rawValue && newPaymentMethodMode == .createAndAttach {
+                playgroundController.settings.customerKeyType = .legacy
+            }
+            playgroundController.settings.paymentMethodMode = newPaymentMethodMode
+        }
+    }
+    var merchantCountryBinding: Binding<CustomerSheetTestPlaygroundSettings.MerchantCountry> {
+        Binding<CustomerSheetTestPlaygroundSettings.MerchantCountry> {
+            return playgroundController.settings.merchantCountryCode
+        } set: { newCountry in
+            // Reset customer id if country changes
+            if playgroundController.settings.merchantCountryCode.rawValue != newCountry.rawValue {
+                playgroundController.settings.customerMode = .new
+            }
+            playgroundController.settings.merchantCountryCode = newCountry
         }
     }
 
@@ -170,6 +217,7 @@ struct CustomerSheetPaymentOptionView: View {
                 .foregroundColor(.black)
             Text(paymentOptionDisplayData?.displayData().label ?? "None")
                 .accessibility(identifier: "Payment method")
+                .foregroundColor(.primary)
         }.padding()
             .foregroundColor(.black)
             .cornerRadius(6)
