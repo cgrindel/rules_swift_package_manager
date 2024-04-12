@@ -41,13 +41,7 @@ def _swift_target_build_file(pkg_ctx, target):
         fail("Expected a `swift_src_info`. name: ", target.name)
 
     all_build_files = []
-    deps = lists.flatten([
-        pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
-        for td in target.dependencies
-    ])
-
     attrs = {
-        "deps": bzl_selects.to_starlark(deps),
         "module_name": target.c99name,
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//:__subpackages__"],
@@ -75,10 +69,13 @@ def _swift_target_build_file(pkg_ctx, target):
             for dep in deps
             if target_label in dep.value[0]
         ]
-        if plugins:
-            attrs["plugins"] = plugins
-            deps_without_plugins = [dep for dep in deps if dep.value[0] not in plugins]
-            attrs["deps"] = bzl_selects.to_starlark(deps_without_plugins)
+    deps = []
+    if target_deps:
+        deps = lists.flatten([
+            pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
+            for td in target_deps
+        ])
+        attrs["deps"] = bzl_selects.to_starlark(deps)
 
     # NOTE: We specify defines using copts so that they stay local to the
     # target. Specifying them using the defines attribute will propagate them.
