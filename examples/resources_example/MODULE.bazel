@@ -48,13 +48,6 @@ swift_deps.from_package(
     resolved = "//:swift/Package.resolved",
     swift = "//:swift/Package.swift",
 )
-swift_deps.configure_package(
-    name = "gtmappauth",
-    patch_args = ["-p1"],
-    patches = [
-        "//third_party:gtmappauth.patch",
-    ],
-)
 use_repo(
     swift_deps,
     "swiftpkg_another_package_with_resources",
