@@ -1,8 +1,16 @@
 """Tests for `pkginfos` API"""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "make_bazel_labels", "make_stub_workspace_name_resolvers")
+load("//swiftpkg/internal:pkginfo_targets.bzl", "make_pkginfo_targets")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 load(":testutils.bzl", "testutils")
+
+workspace_name_resolovers = make_stub_workspace_name_resolvers(
+    repo_name = "",
+)
+bazel_labels = make_bazel_labels(workspace_name_resolovers)
+pkginfo_targets = make_pkginfo_targets(bazel_labels)
 
 # MARK: - Tests
 
@@ -145,7 +153,10 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
             "libbar/sharpyuv/sharpyuv_sse2.c",
         ],
         dependencies = [],
-        repo_name = repo_name,
+        label = pkginfo_targets.bazel_label_from_parts(
+            target_name = "libbar",
+            repo_name = "",
+        ),
         source_paths = [
             "libbar/src",
             "libbar/sharpyuv",
@@ -167,10 +178,6 @@ def _new_from_parsed_json_for_clang_targets_test(ctx):
             ),
         ]),
         public_hdrs_path = "include",
-        product_memberships = ["libbar"],
-        clang_src_info = pkginfos.new_clang_src_info(
-            public_includes = ["include"],
-        ),
     )
     asserts.equals(env, expected, libbar_target)
 
