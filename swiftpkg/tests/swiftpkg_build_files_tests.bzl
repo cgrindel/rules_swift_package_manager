@@ -561,7 +561,6 @@ swift_binary(
         "@rules_swift_package_manager//config_settings/spm/configuration:release": ["-cross-module-optimization"],
         "//conditions:default": [],
     }),
-    deps = [],
     module_name = "SwiftExecutableTarget",
     package_name = "swiftpkg_mypackage.rspm",
     srcs = ["Source/SwiftExecutableTarget/main.swift"],
