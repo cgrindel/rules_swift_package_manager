@@ -246,7 +246,7 @@ def _bzl_select_list_test(ctx):
         ),
     ]
     for t in tests:
-        actual = pkginfo_target_deps.bzl_select_list(_pkg_ctx, t.td, _bar_target)
+        actual = pkginfo_target_deps.bzl_select_list(_pkg_ctx, t.td)
         asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)

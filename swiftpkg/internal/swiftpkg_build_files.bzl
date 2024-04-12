@@ -42,7 +42,7 @@ def _swift_target_build_file(pkg_ctx, target):
 
     all_build_files = []
     deps = lists.flatten([
-        pkginfo_target_deps.bzl_select_list(pkg_ctx, td, depender_target = target)
+        pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
         for td in target.dependencies
     ])
 
@@ -202,11 +202,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         fail("Expected `clang_src_info` to not be None.")
 
     deps = lists.flatten([
-        pkginfo_target_deps.bzl_select_list(
-            pkg_ctx,
-            td,
-            depender_target = target,
-        )
+        pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
         for td in target.dependencies
     ])
 
@@ -728,33 +724,40 @@ def _library_product_build_file(pkg_ctx, product):
     # `swift_library_group` to represent this.
     target_labels = []
     for tname in product.targets:
-        # Add the target label
-        target_labels.append(
-            bazel_labels.normalize(
-                pkginfo_targets.bazel_label_from_parts(
-                    target_name = tname,
-                    repo_name = pkg_ctx.repo_name,
-                ),
-            ),
-        )
         target = lists.find(pkg_ctx.pkg_info.targets, lambda t: t.name == tname)
         if target == None:
             fail("Did not find a target named {}.".format(tname))
-
-        # If the target is ObjC, add its modulemap target.
-        if target.objc_src_info == None:
-            continue
-        target_labels.append(
-            bazel_labels.normalize(
-                bazel_labels.new(
-                    name = pkginfo_targets.modulemap_label_name(
-                        target.label.name,
-                    ),
-                    repository_name = pkg_ctx.repo_name,
-                    package = "",
-                ),
-            ),
+        target_labels.extend(
+            pkginfo_target_deps.labels_for_target(pkg_ctx.repo_name, target),
         )
+
+        # # Add the target label
+        # target_labels.append(
+        #     bazel_labels.normalize(
+        #         pkginfo_targets.bazel_label_from_parts(
+        #             target_name = tname,
+        #             repo_name = pkg_ctx.repo_name,
+        #         ),
+        #     ),
+        # )
+        # target = lists.find(pkg_ctx.pkg_info.targets, lambda t: t.name == tname)
+        # if target == None:
+        #     fail("Did not find a target named {}.".format(tname))
+
+        # # If the target is ObjC, add its modulemap target.
+        # if target.objc_src_info == None:
+        #     continue
+        # target_labels.append(
+        #     bazel_labels.normalize(
+        #         bazel_labels.new(
+        #             name = pkginfo_targets.modulemap_label_name(
+        #                 target.label.name,
+        #             ),
+        #             repository_name = pkg_ctx.repo_name,
+        #             package = "",
+        #         ),
+        #     ),
+        # )
 
     if len(target_labels) == 0:
         fail("No targets specified for a library product. name:", product.name)
@@ -765,7 +768,10 @@ def _library_product_build_file(pkg_ctx, product):
                 swift_kinds.library_group,
                 product.name,
                 attrs = {
-                    "deps": target_labels,
+                    "deps": [
+                        bazel_labels.normalize(label)
+                        for label in target_labels
+                    ],
                     "visibility": ["//visibility:public"],
                 },
             ),

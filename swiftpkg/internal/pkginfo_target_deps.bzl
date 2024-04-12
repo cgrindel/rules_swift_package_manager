@@ -26,7 +26,7 @@ def _modulemap_label_for_target(repo_name, target):
         package = target.label.package,
     )
 
-def _labels_for_target(repo_name, target, depender_target):
+def _labels_for_target(repo_name, target):
     labels = [
         bazel_labels.new(
             name = target.label.name,
@@ -36,8 +36,6 @@ def _labels_for_target(repo_name, target, depender_target):
     ]
 
     src_type = _src_type_for_target(target)
-    depender_src_type = _src_type_for_target(depender_target)
-
     if src_type == src_types.objc:
         # If the dep is an objc, return the real Objective-C target, not the Swift
         # module alias. This is part of a workaround for Objective-C modules not
@@ -45,8 +43,7 @@ def _labels_for_target(repo_name, target, depender_target):
         # See `swiftpkg_build_files.bzl` for more information.
         labels.append(_modulemap_label_for_target(repo_name, target))
 
-    elif (depender_src_type == src_types.objc and
-          src_type == src_types.swift and
+    elif (src_type == src_types.swift and
           target.swift_src_info.has_objc_directive):
         # If an Objc module wants to @import a Swift module, it will need the
         # modulemap target.
@@ -54,7 +51,7 @@ def _labels_for_target(repo_name, target, depender_target):
 
     return labels
 
-def _resolve_by_name(pkg_ctx, name, depender_target):
+def _resolve_by_name(pkg_ctx, name):
     repo_name = bazel_repo_names.normalize(pkg_ctx.repo_name)
 
     # By name resolution logic:
@@ -68,7 +65,7 @@ def _resolve_by_name(pkg_ctx, name, depender_target):
 
     target = lists.find(pkg_ctx.pkg_info.targets, lambda t: t.name == name)
     if target != None:
-        return _labels_for_target(repo_name, target, depender_target)
+        return _labels_for_target(repo_name, target)
 
     product = lists.find(pkg_ctx.pkg_info.products, lambda p: p.name == name)
     if product != None:
@@ -98,7 +95,7 @@ def _resolve_by_name(pkg_ctx, name, depender_target):
     ))
 
 def make_pkginfo_target_deps(bazel_labels):
-    def _bzl_select_list(pkg_ctx, target_dep, depender_target):
+    def _bzl_select_list(pkg_ctx, target_dep):
         """Return the Bazel labels associated with a target dependency.
 
         A module will resolve to a single label. A product can resolve to one
@@ -108,8 +105,6 @@ def make_pkginfo_target_deps(bazel_labels):
             pkg_ctx: A `struct` as returned by `pkg_ctxs.new`.
             target_dep: A `struct` as returned by
                 `pkginfos.new_target_dependency`.
-            depender_target: The target that depends on the dependency as a
-                `struct` (`pkginfos.new_target()`).
 
         Returns:
             A `list` of `struct` values as returned by `bzl_selects.new`
@@ -117,7 +112,7 @@ def make_pkginfo_target_deps(bazel_labels):
         """
         if target_dep.by_name:
             condition = target_dep.by_name.condition
-            labels = _resolve_by_name(pkg_ctx, target_dep.by_name.name, depender_target)
+            labels = _resolve_by_name(pkg_ctx, target_dep.by_name.name)
 
         elif target_dep.target:
             condition = target_dep.target.condition
@@ -129,7 +124,7 @@ def make_pkginfo_target_deps(bazel_labels):
                 fail("""\
 Unable to resolve target reference target dependency for {module_name}.\
 """.format(module_name = target_dep.target.target_name))
-            labels = _labels_for_target(pkg_ctx.repo_name, target, depender_target)
+            labels = _labels_for_target(pkg_ctx.repo_name, target)
 
         elif target_dep.product:
             condition = target_dep.product.condition
@@ -175,6 +170,7 @@ Unrecognized target dependency while generating a Bazel dependency label: {}.\
     return struct(
         bzl_select_list = _bzl_select_list,
         target_dep_kind = _target_dep_kind,
+        labels_for_target = _labels_for_target,
     )
 
 pkginfo_target_deps = make_pkginfo_target_deps(
