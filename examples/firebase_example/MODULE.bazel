@@ -20,13 +20,13 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_apple",
-    version = "3.5.0",
+    version = "3.5.1",
     repo_name = "build_bazel_rules_apple",
 )
 
 bazel_dep(
     name = "rules_xcodeproj",
-    version = "2.0.0",
+    version = "2.1.1",
     dev_dependency = True,
 )
 bazel_dep(
