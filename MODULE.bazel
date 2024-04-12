@@ -76,10 +76,3 @@ bazel_binaries = use_extension(
 )
 bazel_binaries.download(version_file = "//:.bazelversion")
 use_repo(bazel_binaries, "bazel_binaries")
-
-# DEBUG BEGIN
-local_path_override(
-    module_name = "rules_swift",
-    path = "/Users/chuck/code/bazelbuild/rules_swift",
-)
-# DEBUG END
