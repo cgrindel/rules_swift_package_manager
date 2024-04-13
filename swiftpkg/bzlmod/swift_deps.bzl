@@ -4,6 +4,7 @@ load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
 load("//swiftpkg/internal:local_swift_package.bzl", "local_swift_package")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
+load("//swiftpkg/internal:swift_deps_info.bzl", "swift_deps_info")
 load("//swiftpkg/internal:swift_package.bzl", "PATCH_ATTRS", "swift_package")
 
 # MARK: - swift_deps bzlmod Extension
@@ -44,6 +45,14 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
         bazel_repo_names.from_identity(dep.identity)
         for dep in pkg_info.dependencies
     ]
+
+    # Write info about the Swift deps that may be used by external tooling.
+    swift_deps_info_repo_name = "swift_deps_info"
+    swift_deps_info(
+        name = swift_deps_info_repo_name,
+        direct_dep_repo_names = direct_dep_repo_names,
+    )
+    direct_dep_repo_names.append(swift_deps_info_repo_name)
 
     # Ensure that we add all of the transitive source control deps from the
     # resolved file.
