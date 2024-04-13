@@ -37,7 +37,6 @@ apple_cc_configure = use_extension(
 )
 use_repo(apple_cc_configure, "local_config_apple_cc")
 
-# swift_deps START
 swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
@@ -50,4 +49,3 @@ use_repo(
     "swiftpkg_swift_argument_parser",
     "swiftpkg_swift_log",
 )
-# swift_deps END
