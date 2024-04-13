@@ -87,6 +87,12 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
         for dep in pkg_info.dependencies
     }
 
+    # Collect the direct dep repo names
+    direct_dep_repo_names = [
+        bazel_repo_names.from_identity(dep.identity)
+        for dep in pkg_info.dependencies
+    ]
+
     # Ensure that we add all of the transitive source control deps from the
     # resolved file.
     for pin_map in resolved_pkg_map.get("pins", []):
@@ -148,6 +154,8 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
             )
         _declare_pkg_from_dependency(dep, config_pkg)
 
+    return direct_dep_repo_names
+
 def _declare_pkg_from_dependency(dep, config_pkg):
     name = bazel_repo_names.from_identity(dep.identity)
     if dep.source_control:
@@ -199,9 +207,20 @@ def _swift_deps_impl(module_ctx):
     for mod in module_ctx.modules:
         for config_pkg in mod.tags.configure_package:
             config_pkgs[config_pkg.name] = config_pkg
+    direct_dep_repo_names = []
     for mod in module_ctx.modules:
         for from_package in mod.tags.from_package:
-            _declare_pkgs_from_package(module_ctx, from_package, config_pkgs)
+            direct_dep_repo_names.extend(
+                _declare_pkgs_from_package(
+                    module_ctx,
+                    from_package,
+                    config_pkgs,
+                ),
+            )
+    return module_ctx.extension_metadata(
+        root_module_direct_deps = direct_dep_repo_names,
+        root_module_direct_dev_deps = [],
+    )
 
 _from_package_tag = tag_class(
     attrs = {
