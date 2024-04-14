@@ -1,7 +1,7 @@
 package swiftcfg
 
 import (
-	"errors"
+	"log"
 	"os"
 	"sort"
 
@@ -97,15 +97,8 @@ type SwiftConfig struct {
 	// Path to the YAML file that contains the patch information
 	PatchesPath string
 
-	// StripImportPrefix The prefix to strip from the paths of the .proto files.
-	// If set, Gazelle will apply this value to the strip_import_prefix attribute
-	// within the proto_library_rule.
-	StripImportPrefix string
-
-	// ImportPrefix The prefix to add to the paths of the .proto files.
-	// If set, Gazelle will apply this value to the import_prefix attribute
-	// within the proto_library_rule.
-	ImportPrefix string
+	// SwiftDepsInfoPath is the path for the Swift dependencies info JSON file.
+	SwiftDepsInfoPath string
 }
 
 func NewSwiftConfig() *SwiftConfig {
@@ -158,21 +151,51 @@ func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRul
 	return SrcFileGenRulesMode
 }
 
+func (sc *SwiftConfig) LoadSwiftDepsInfo() (*swift.DepsInfo, error) {
+	if sc.SwiftDepsInfoPath == "" {
+		return nil, nil
+	}
+	data, err := os.ReadFile(sc.SwiftDepsInfoPath)
+	if err != nil {
+		return nil, err
+	}
+	return swift.NewDepsInfoFromJSON(data)
+}
+
 // LoadDependencyIndex reads the dependency index from disk.
 func (sc *SwiftConfig) LoadDependencyIndex() error {
-	if sc.DependencyIndexPath == "" {
-		return nil
-	}
-	if _, err := os.Stat(sc.DependencyIndexPath); errors.Is(err, os.ErrNotExist) {
-		return nil
-	}
-	data, err := os.ReadFile(sc.DependencyIndexPath)
+	swiftDepsInfo, err := sc.LoadSwiftDepsInfo()
 	if err != nil {
 		return err
 	}
-	sc.DependencyIndex, err = swift.NewDependencyIndexFromJSON(data)
-	return err
+	if swiftDepsInfo == nil {
+		return nil
+	}
+
+	// Read the pkg_info.json for each of the
+
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK:  swiftDepsInfo: %+#v", swiftDepsInfo)
+	// DEBUG END
+
+	// TODO: IMPLEMENT ME!
+	return nil
 }
+
+// func (sc *SwiftConfig) LoadDependencyIndex() error {
+// 	if sc.DependencyIndexPath == "" {
+// 		return nil
+// 	}
+// 	if _, err := os.Stat(sc.DependencyIndexPath); errors.Is(err, os.ErrNotExist) {
+// 		return nil
+// 	}
+// 	data, err := os.ReadFile(sc.DependencyIndexPath)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	sc.DependencyIndex, err = swift.NewDependencyIndexFromJSON(data)
+// 	return err
+// }
 
 // WriteDependencyIndex writes the dependency index to disk.
 func (sc *SwiftConfig) WriteDependencyIndex() error {

@@ -11,6 +11,7 @@ go_library(
         "bzlmod.go",
         "code_dir.go",
         "dependency_index.go",
+        "deps_info.go",
         "doc.go",
         "files.go",
         "find_rules.go",
@@ -42,6 +43,7 @@ go_library(
     importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift",
     visibility = ["//gazelle:__subpackages__"],
     deps = [
+        "//gazelle/internal/jsonutils",
         "//gazelle/internal/pathdistance",
         "//gazelle/internal/spreso",
         "//gazelle/internal/swiftpkg",
