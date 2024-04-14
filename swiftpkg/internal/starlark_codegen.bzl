@@ -211,6 +211,9 @@ def _new_fn_call(fn_name, *args, **kwargs):
         args = args,
         kwargs = kwargs,
         to_starlark_parts = _fn_call_to_starlark_parts,
+        # Support being used as a declaration (e.g. exports_files)
+        kind = "_function",
+        name = fn_name,
     )
 
 def _fn_call_to_starlark_parts(fn_call, indent):

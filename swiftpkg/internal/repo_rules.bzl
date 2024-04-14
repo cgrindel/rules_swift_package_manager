@@ -9,6 +9,7 @@ load(":build_files.bzl", "build_files")
 load(":pkginfos.bzl", "target_types")
 load(":repository_files.bzl", "repository_files")
 load(":spm_versions.bzl", "spm_versions")
+load(":starlark_codegen.bzl", scg = "starlark_codegen")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
 _swift_attrs = {
@@ -101,6 +102,10 @@ def _gen_build_files(repository_ctx, pkg_ctx):
 
     # Create Bazel declarations for the targets
     bld_files.append(swiftpkg_build_files.new_for_products(pkg_ctx))
+
+    # Export the pkg_info.json
+    exports_files = scg.new_fn_call("exports_files", ["pkg_info.json"])
+    bld_files.append(build_files.new(decls = [exports_files]))
 
     # Write the build file
     root_bld_file = build_files.merge(*bld_files)
