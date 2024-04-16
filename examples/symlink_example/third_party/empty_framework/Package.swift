@@ -8,6 +8,6 @@ let package = Package(
         .library(name: "EmptyFramework", targets: ["EmptyFramework"])
     ],
     targets: [
-        .binaryTarget(name: "EmptyFramework", path: "Framework/EmptyFramework.xcframework")
+        .binaryTarget(name: "EmptyFramework", path: "EmptyFramework.xcframework")
     ]
 )
