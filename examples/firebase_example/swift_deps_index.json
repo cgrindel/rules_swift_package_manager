@@ -1687,9 +1687,9 @@
       "name": "swiftpkg_reachability.swift",
       "identity": "reachability.swift",
       "remote": {
-        "commit": "7b7018a69c84ea94ac2a38dff626e16ea81d1db9",
+        "commit": "57da4b1270cab7c2228919eabc0e4e1bf93e48ea",
         "remote": "https://github.com/ashleymills/Reachability.swift.git",
-        "version": "5.2.1"
+        "version": "5.2.2"
       }
     },
     {
