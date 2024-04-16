@@ -1,0 +1,18 @@
+load("@build_bazel_rules_swift//proto:proto.bzl", "swift_proto_library")
+load("@rules_proto//proto:defs.bzl", "proto_library")
+
+proto_library(
+    name = "echo_response_proto",
+    srcs = ["echo_response.proto"],
+    import_prefix = "example",
+    strip_import_prefix = "/protos",
+    visibility = ["//visibility:public"],
+)
+
+swift_proto_library(
+    name = "echo_response_swift_proto",
+    compilers = ["@build_bazel_rules_swift//proto/compilers:swift_proto"],
+    module_name = "EchoResponse",
+    protos = [":echo_response_proto"],
+    visibility = ["//visibility:public"],
+)

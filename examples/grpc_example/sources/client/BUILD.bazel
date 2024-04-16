@@ -6,8 +6,8 @@ swift_binary(
     module_name = "Client",
     visibility = ["//visibility:public"],
     deps = [
-        "//protos/echoservice:echoservice_client_swift_grpc",
-        "//protos/echoservice:echoservice_swift_proto",
-        "//protos/echoservice/messages:messages_swift_proto",
+        "//protos/echo_service:echo_service_swift_client_proto",
+        "//protos/echo_service/requests:echo_request_swift_proto",
+        "//protos/echo_service/responses:echo_response_swift_proto",
     ],
 )

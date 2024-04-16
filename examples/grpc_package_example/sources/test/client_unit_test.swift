@@ -16,8 +16,6 @@ import GRPC
 import NIOCore
 import NIOPosix
 import XCTest
-import EchoRequest
-import EchoResponse
 import EchoServiceClient
 import EchoServiceServer
 
@@ -29,11 +27,11 @@ public class EchoProvider: EchoService_EchoProvider {
   }
 
   public func echo(
-    request: EchoService_EchoRequest, 
+    request: EchoServiceServer.EchoService_EchoRequest, 
     context: StatusOnlyCallContext) 
-    -> EventLoopFuture<EchoService_EchoResponse> 
+    -> EventLoopFuture<EchoServiceServer.EchoService_EchoResponse> 
   {
-    let response = EchoService_EchoResponse.with {
+    let response = EchoServiceServer.EchoService_EchoResponse.with {
       $0.contents = request.contents
     }
     return context.eventLoop.makeSucceededFuture(response)
@@ -85,7 +83,7 @@ class ClientUnitTest: XCTestCase {
 
     let completed = self.expectation(description: "'Get' completed")
 
-    let call = client.echo(EchoService_EchoRequest.with { $0.contents = "Hello" })
+    let call = client.echo(EchoServiceClient.EchoService_EchoRequest.with { $0.contents = "Hello" })
     call.response.whenComplete { result in
       switch result {
       case let .success(response):
