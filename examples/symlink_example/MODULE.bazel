@@ -49,5 +49,6 @@ swift_deps.from_file(
 )
 use_repo(
     swift_deps,
+    "swiftpkg_empty_framework",
 )
 # swift_deps END
