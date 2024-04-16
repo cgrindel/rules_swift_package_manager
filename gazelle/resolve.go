@@ -2,11 +2,14 @@ package gazelle
 
 import (
 	"log"
+	"path"
+	"path/filepath"
 	"sort"
 	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/label"
+	"github.com/bazelbuild/bazel-gazelle/pathtools"
 	"github.com/bazelbuild/bazel-gazelle/repo"
 	"github.com/bazelbuild/bazel-gazelle/resolve"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -15,21 +18,60 @@ import (
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftcfg"
 )
 
-func (*swiftLang) Imports(_ *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {
+func (*swiftLang) Imports(c *config.Config, r *rule.Rule, f *rule.File) []resolve.ImportSpec {
 	if !swift.IsSwiftRuleKind(r.Kind()) {
 		// Do not index
 		return nil
 	}
+
+	sc := swiftcfg.GetSwiftConfig(c)
+	importSpecs := []resolve.ImportSpec{}
+
+	// If this is a swift_proto_library, create a swift import spec for each proto path
+	// supplied by the library.
+	if r.Kind() == swift.ProtoLibraryRuleKind {
+		swiftProtoPackage, ok := r.PrivateAttr(swift.SwiftProtoPackageKey).(swift.SwiftProtoPackage)
+		if ok {
+			// Modify the prefix if necessary:
+			prefix := swiftProtoPackage.Rel
+			if sc.StripImportPrefix != "" {
+				// If strip_import_prefix starts with a /, it's interpreted as being
+				// relative to the repository root. Otherwise, it's interpreted as being
+				// relative to the package directory.
+				if strings.HasPrefix(sc.StripImportPrefix, "/") {
+					prefix = pathtools.TrimPrefix(prefix, sc.StripImportPrefix[len("/"):])
+				} else {
+					prefix = pathtools.TrimPrefix(prefix, path.Join(prefix, sc.StripImportPrefix))
+				}
+			}
+			if sc.ImportPrefix != "" {
+				prefix = path.Join(sc.ImportPrefix, prefix)
+			}
+
+			for protoSourcePath := range swiftProtoPackage.ProtoPackage.Files {
+				protoPath := filepath.Join(prefix, protoSourcePath)
+				importSpecs = append(importSpecs, resolve.ImportSpec{
+					Lang: swiftLangName,
+					Imp:  protoPath,
+				})
+			}
+		} else {
+			log.Printf("Rule was missing private attribute for swift.SwiftProtoPackageKey: %v", r)
+		}
+	}
+
+	// Create the module name import spec if it was set:
 	moduleName := swift.ModuleName(r)
 	if moduleName == "" {
 		// Returning an empty list will cause the rule to be indexed
-		return []resolve.ImportSpec{}
+		return importSpecs
 	}
-
-	return []resolve.ImportSpec{{
+	importSpecs = append(importSpecs, resolve.ImportSpec{
 		Lang: swiftLangName,
 		Imp:  moduleName,
-	}}
+	})
+
+	return importSpecs
 }
 
 func (l *swiftLang) Resolve(
@@ -55,8 +97,19 @@ func (l *swiftLang) Resolve(
 	// Try to resolve to targets in this project.
 	externalModules := make([]string, 0, len(swiftImports))
 	for _, imp := range swiftImports {
+		importSpec := resolve.ImportSpec{Lang: swiftLangName, Imp: imp}
+		if l, ok := resolve.FindRuleWithOverride(c, importSpec, "swift"); ok {
+			addToDeps(l)
+			rr.AddLocal(imp, []resolve.FindResult{
+				{
+					Label:  l,
+					Embeds: nil, // TODO: This might be broken -- not sure what to put here.
+				}},
+			)
+			continue
+		}
 		findResults := ix.FindRulesByImportWithConfig(
-			c, resolve.ImportSpec{Lang: swiftLangName, Imp: imp}, swiftLangName)
+			c, importSpec, swiftLangName)
 		if len(findResults) > 0 {
 			addToDeps(findResults[0].Label)
 			rr.AddLocal(imp, findResults)

@@ -19,6 +19,8 @@ const dependencyIndexPerms = 0666
 const (
 	MatchCaseModuleNamingConvention  string = "match_case"
 	PascalCaseModuleNamingConvention string = "pascal_case"
+	MatchProtoGenerationMode         string = "match"
+	PackageProtoGenerationMode       string = "package"
 )
 
 // A SwiftConfig represents the Swift-specific configuration for the Gazelle extension.
@@ -48,16 +50,45 @@ type SwiftConfig struct {
 	// The default behavior uses the name verbatim while PascalCase will convert snake_case to PascalCase.
 	ModuleNamingConvention string
 
+	// Whether or not the generated proto targets should omit the "Proto" suffix from their module names.
+	OmitProtoSuffixFromModuleNames bool
+
 	// The set of tags to apply to generated swift library targets.
 	// Defaults to ["manual"]
 	SwiftLibraryTags []string
 
-	// Whether or not to generate swift proto library targets.
-	GenerateProtoLibraries bool
+	// The mode to use when generating swift_proto_library targets in a BUILD file with multiple proto_library targets.
+	//
+	// match: One swift_proto_library per proto_library target in the BUILD file. This is the default.
+	// Its module name will be derived from the proto library name.
+	//
+	// package: If multiple proto_library targets share the same proto package,
+	// they will be merged into a single swift_proto_library target.
+	// Its module name will be derived from the proto package name.
+	//
+	SwiftProtoGenerationMode string
 
-	// The set of GRPC flavors for which swift grpc library targets will be generated.
-	// Defaults to ["client,client_stubs,server"]
-	GenerateGRPCLibraryFlavors []string
+	// Whether or not to generate swift_proto_library targets for proto_library targets without services.
+	// Defaults to true.
+	GenerateSwiftProtoLibraries bool
+
+	// The set of GRPC flavors for which swift_proto_library targets will be generated from proto libraries with services.
+	// Defaults to:
+	// [
+	//  "swift_client_proto",
+	//  "swift_server_proto"
+	// ]
+	GenerateSwiftProtoLibraryGRPCFlavors []string
+
+	// The swift_proto_compiler targets to use for generated swift_proto_library targets.
+	// The keys should match the GRPC flavors above, or "proto" for the base proto compiler.
+	// Defaults to:
+	// {
+	// 	"swift_proto":       "@build_bazel_rules_swift//proto/compilers:swift_proto",
+	// 	"swift_client_proto": "@build_bazel_rules_swift//proto/compilers:swift_client_proto",
+	// 	"swift_server_proto": "@build_bazel_rules_swift//proto/compilers:swift_server_proto",
+	// }
+	SwiftProtoCompilers map[string]string
 
 	// Mapping of relative path to default module name. These values are populated from directives
 	// that can be applied to
@@ -65,14 +96,37 @@ type SwiftConfig struct {
 
 	// Path to the YAML file that contains the patch information
 	PatchesPath string
+
+	// StripImportPrefix The prefix to strip from the paths of the .proto files.
+	// If set, Gazelle will apply this value to the strip_import_prefix attribute
+	// within the proto_library_rule.
+	StripImportPrefix string
+
+	// ImportPrefix The prefix to add to the paths of the .proto files.
+	// If set, Gazelle will apply this value to the import_prefix attribute
+	// within the proto_library_rule.
+	ImportPrefix string
 }
 
 func NewSwiftConfig() *SwiftConfig {
 	return &SwiftConfig{
-		ModuleFilesCollector: NewModuleFilesCollector(),
-		DependencyIndex:      swift.NewDependencyIndex(),
-		ResolutionLogger:     reslog.NewNoopLogger(),
-		DefaultModuleNames:   make(map[string]string),
+		ModuleFilesCollector:           NewModuleFilesCollector(),
+		DependencyIndex:                swift.NewDependencyIndex(),
+		ResolutionLogger:               reslog.NewNoopLogger(),
+		DefaultModuleNames:             make(map[string]string),
+		ModuleNamingConvention:         "match_case",
+		OmitProtoSuffixFromModuleNames: true,
+		SwiftProtoGenerationMode:       "match",
+		GenerateSwiftProtoLibraries:    true,
+		GenerateSwiftProtoLibraryGRPCFlavors: []string{
+			"swift_client_proto",
+			"swift_server_proto",
+		},
+		SwiftProtoCompilers: map[string]string{
+			"swift_proto":        "@build_bazel_rules_swift//proto/compilers:swift_proto",
+			"swift_client_proto": "@build_bazel_rules_swift//proto/compilers:swift_client_proto",
+			"swift_server_proto": "@build_bazel_rules_swift//proto/compilers:swift_server_proto",
+		},
 	}
 }
 
