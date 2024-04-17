@@ -84,6 +84,7 @@ def _list_directories_under(
     Returns:
         A `list` of path `string` values.
     """
+
     # Follow symlinks and report on the actual directories.
     find_args = ["find", "-H", "-L", path]
 
