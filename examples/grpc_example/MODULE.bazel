@@ -71,5 +71,7 @@ swift_deps.from_file(
 )
 use_repo(
     swift_deps,
+    "swiftpkg_grpc_swift",
+    "swiftpkg_swift_protobuf",
 )
 # swift_deps END
