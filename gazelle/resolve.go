@@ -101,10 +101,7 @@ func (l *swiftLang) Resolve(
 		if l, ok := resolve.FindRuleWithOverride(c, importSpec, "swift"); ok {
 			addToDeps(l)
 			rr.AddLocal(imp, []resolve.FindResult{
-				{
-					Label:  l,
-					Embeds: nil, // TODO: This might be broken -- not sure what to put here.
-				}},
+				{Label: l}},
 			)
 			continue
 		}
