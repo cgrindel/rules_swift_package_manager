@@ -27,9 +27,9 @@
       "name": "swiftpkg_shake_ios",
       "identity": "shake-ios",
       "remote": {
-        "commit": "5ae067621d4f1f7ac2255c252afcc510fbe38326",
+        "commit": "d56181f87e01a483aba6f4e17a93315937e351cd",
         "remote": "https://github.com/shakebugs/shake-ios",
-        "version": "16.2.3"
+        "version": "16.2.4"
       }
     }
   ]
