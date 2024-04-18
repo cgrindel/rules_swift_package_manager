@@ -17,8 +17,6 @@ import SwiftProtobuf
 import GRPC
 import NIOCore
 import NIOPosix
-import EchoRequest
-import EchoResponse
 import EchoServiceClient
 
 @main

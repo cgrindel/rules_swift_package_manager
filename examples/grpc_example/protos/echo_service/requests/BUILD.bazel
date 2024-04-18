@@ -1,0 +1,19 @@
+load("@build_bazel_rules_swift//proto:proto.bzl", "swift_proto_library")
+load("@rules_proto//proto:defs.bzl", "proto_library")
+
+proto_library(
+    name = "echo_request_proto",
+    srcs = ["echo_request.proto"],
+    import_prefix = "example",
+    strip_import_prefix = "/protos",
+    visibility = ["//visibility:public"],
+    deps = ["@com_google_protobuf//:any_proto"],
+)
+
+swift_proto_library(
+    name = "echo_request_swift_proto",
+    compilers = ["@build_bazel_rules_swift//proto/compilers:swift_proto"],
+    module_name = "EchoRequest",
+    protos = [":echo_request_proto"],
+    visibility = ["//visibility:public"],
+)

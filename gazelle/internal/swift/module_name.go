@@ -14,9 +14,5 @@ func ModuleName(r *rule.Rule) string {
 	if moduleName != "" {
 		return moduleName
 	}
-	moduleName, _ = r.PrivateAttr(SwiftProtoModuleNameKey).(string)
-	if moduleName != "" {
-		return moduleName
-	}
 	return r.Name()
 }

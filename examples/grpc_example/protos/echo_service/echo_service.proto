@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package echo_service;
+
+import "example/echo_service/requests/echo_request.proto";
+import "example/echo_service/responses/echo_response.proto";
+
+service Echo {
+  rpc Echo(EchoRequest) returns (EchoResponse);
+}

@@ -14,8 +14,7 @@ tidy(
 
 # Ignore the Swift build folder
 # gazelle:proto file
-# gazelle:proto_strip_import_prefix /protos
-# gazelle:proto_import_prefix example
+# gazelle:swift_proto_generation_mode package
 # gazelle:swift_module_naming_convention pascal_case
 # gazelle:swift_generate_proto_libraries true
 # gazelle:swift_generate_grpc_libraries_with_flavors swift_client_proto,swift_server_proto
