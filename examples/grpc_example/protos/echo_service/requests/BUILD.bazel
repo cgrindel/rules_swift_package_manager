@@ -12,7 +12,7 @@ proto_library(
 
 swift_proto_library(
     name = "echo_request_swift_proto",
-    compilers = ["@build_bazel_rules_swift//proto/compilers:swift_proto"],
+    compilers = ["//compilers:swift_proto"],
     module_name = "EchoRequest",
     protos = [":echo_request_proto"],
     visibility = ["//visibility:public"],
