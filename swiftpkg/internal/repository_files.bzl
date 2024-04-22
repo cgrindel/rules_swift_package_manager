@@ -84,7 +84,9 @@ def _list_directories_under(
     Returns:
         A `list` of path `string` values.
     """
-    find_args = ["find", path]
+
+    # Follow symlinks and report on the actual directories.
+    find_args = ["find", "-H", "-L", path]
 
     # For GNU find, it is important for the global options (e.g. -maxdepth) to be
     # specified BEFORE other options like -type. Also, GNU find does not support -depth <level>.

@@ -1,0 +1,9 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "ImportFramework",
+    srcs = ["Import.swift"],
+    module_name = "ImportFramework",
+    visibility = ["//visibility:public"],
+    deps = ["@swiftpkg_empty_framework//:EmptyFramework"],
+)
