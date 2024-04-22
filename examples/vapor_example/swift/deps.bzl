@@ -196,7 +196,7 @@ def swift_dependencies():
     # version: 4.81.0
     swift_package(
         name = "swiftpkg_vapor",
-        commit = "8409c3c296e7f8965df14e906dbcd44eb68f54a9",
+        commit = "526a000bb082a261566b6adea3c1a1ddbed98a19",
         dependencies_index = "@//swift:deps_index.json",
         remote = "https://github.com/vapor/vapor.git",
     )
