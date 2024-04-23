@@ -311,18 +311,7 @@
       "label": "@swiftpkg_swift_nio//:NIOFileSystem.rspm",
       "package_identity": "swift-nio",
       "product_memberships": [
-        "_NIOFileSystem",
-        "_NIOFileSystemFoundationCompat"
-      ]
-    },
-    {
-      "name": "NIOFileSystemFoundationCompat",
-      "c99name": "NIOFileSystemFoundationCompat",
-      "src_type": "swift",
-      "label": "@swiftpkg_swift_nio//:NIOFileSystemFoundationCompat.rspm",
-      "package_identity": "swift-nio",
-      "product_memberships": [
-        "_NIOFileSystemFoundationCompat"
+        "_NIOFileSystem"
       ]
     },
     {
@@ -361,7 +350,9 @@
         "NIOHTTP1",
         "NIOFoundationCompat",
         "NIOWebSocket",
-        "NIOTestUtils"
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat"
       ]
     },
     {
@@ -443,6 +434,27 @@
         "NIOWebSocket",
         "NIOTestUtils",
         "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat"
+      ]
+    },
+    {
+      "name": "_NIOFileSystem",
+      "c99name": "_NIOFileSystem",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:_NIOFileSystem.rspm",
+      "package_identity": "swift-nio",
+      "product_memberships": [
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat"
+      ]
+    },
+    {
+      "name": "_NIOFileSystemFoundationCompat",
+      "c99name": "_NIOFileSystemFoundationCompat",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_nio//:_NIOFileSystemFoundationCompat.rspm",
+      "package_identity": "swift-nio",
+      "product_memberships": [
         "_NIOFileSystemFoundationCompat"
       ]
     },
@@ -656,9 +668,9 @@
       "name": "swiftpkg_swift_nio",
       "identity": "swift-nio",
       "remote": {
-        "commit": "fc63f0cf4e55a4597407a9fc95b16a2bc44b4982",
+        "commit": "359c461e5561d22c6334828806cc25d759ca7aa6",
         "remote": "https://github.com/apple/swift-nio.git",
-        "version": "2.64.0"
+        "version": "2.65.0"
       }
     },
     {
