@@ -229,9 +229,11 @@ def _new_target_from_json_maps(
 
     # The description JSON should have a list with all of the resources with
     # their absolute paths.
+    # Do not include directories in the output.
     resources_set = sets.make([
         _new_resource_from_desc_map(r, pkg_path)
         for r in desc_map.get("resources", [])
+        if not repository_files.is_directory(repository_ctx, r["path"])
     ])
 
     artifact_download_info = None
