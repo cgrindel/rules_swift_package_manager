@@ -40,3 +40,9 @@ func CodeDirForLocalPackage(pkgDir string, localPkgPath string) string {
 	// Return the local path
 	return filepath.Clean(path)
 }
+
+func CodeDirForRegistryPackage(buildDir string, registryIdentity string, version string) string {
+	split := strings.Split(registryIdentity, ".")
+	scope, name := split[0], split[1]
+	return filepath.Join(buildDir, "registry", "downloads", scope, name, version)
+}

@@ -11,12 +11,16 @@ import (
 type Dependency struct {
 	SourceControl *SourceControl `json:"sourceControl"`
 	FileSystem    *FileSystem    `json:"fileSystem"`
+	Registry      *Registry      `json:"registry"`
 }
 
 // Identity returns the value that identifies the external dependency in the manifest.
 func (d *Dependency) Identity() string {
 	if d.SourceControl != nil {
 		return d.SourceControl.Identity
+	}
+	if d.Registry != nil {
+		return d.Registry.Identity
 	}
 	return ""
 }
@@ -165,5 +169,24 @@ func (fs *FileSystem) UnmarshalJSON(b []byte) error {
 	rawFS := raw[0]
 	fs.Identity = rawFS.Identity
 	fs.Path = rawFS.Path
+	return nil
+}
+
+type reg struct {
+	Identity string
+}
+
+type Registry struct {
+	Identity string
+}
+
+func (r *Registry) UnmarshalJSON(b []byte) error {
+	var raw []*reg
+	err := json.Unmarshal(b, &raw)
+	if err != nil {
+		return err
+	}
+	rawRegistry := raw[0]
+	r.Identity = rawRegistry.Identity
 	return nil
 }

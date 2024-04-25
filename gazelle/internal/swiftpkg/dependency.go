@@ -22,6 +22,7 @@ func (deps Dependencies) Identities() []string {
 type Dependency struct {
 	SourceControl *SourceControl
 	FileSystem    *FileSystem
+	Registry      *Registry
 }
 
 // NewDependencyFromManifestInfo returns an external dependency based upon the manifest information.
@@ -34,9 +35,14 @@ func NewDependencyFromManifestInfo(dumpD *spdump.Dependency) (*Dependency, error
 	if dumpD.FileSystem != nil {
 		fSys = NewFileSystemFromManifestInfo(dumpD.FileSystem)
 	}
+	var registry *Registry
+	if dumpD.Registry != nil {
+		registry = NewRegistryFromManifestInfo(dumpD.Registry)
+	}
 	return &Dependency{
 		SourceControl: srcCtrl,
 		FileSystem:    fSys,
+		Registry:      registry,
 	}, nil
 }
 
@@ -47,6 +53,9 @@ func (d *Dependency) Identity() string {
 	}
 	if d.FileSystem != nil {
 		return d.FileSystem.Identity
+	}
+	if d.Registry != nil {
+		return d.Registry.Identity
 	}
 	log.Fatalf("Identity could not be determined.")
 	return ""
@@ -145,5 +154,15 @@ func NewFileSystemFromManifestInfo(fs *spdump.FileSystem) *FileSystem {
 	return &FileSystem{
 		Identity: fs.Identity,
 		Path:     fs.Path,
+	}
+}
+
+type Registry struct {
+	Identity string
+}
+
+func NewRegistryFromManifestInfo(r *spdump.Registry) *Registry {
+	return &Registry{
+		Identity: r.Identity,
 	}
 }

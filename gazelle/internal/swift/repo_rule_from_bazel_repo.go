@@ -3,6 +3,7 @@ package swift
 import (
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -25,9 +26,13 @@ func RepoRuleFromBazelRepo(
 	var r *rule.Rule
 	var err error
 	if bzlRepo.Pin != nil {
-		r, err = repoRuleFromPin(bzlRepo.Name, bzlRepo.Pin, patch)
-		if err != nil {
-			return nil, err
+		if bzlRepo.Pin.PkgRef.Kind == spreso.RegistryPkgRefKind {
+			r = repoRuleForRegistryPackage(bzlRepo.Name, bzlRepo.Pin)
+		} else {
+			r, err = repoRuleFromPin(bzlRepo.Name, bzlRepo.Pin, patch)
+			if err != nil {
+				return nil, err
+			}
 		}
 	} else {
 		// For local packages, the `path` attribute must be relative to the WORKSPACE file.
@@ -98,5 +103,20 @@ func repoRuleFromPin(repoName string, p *spreso.Pin, patch *Patch) (*rule.Rule, 
 func repoRuleForLocalPackage(repoName string, path string) *rule.Rule {
 	r := rule.NewRule(LocalSwiftPkgRuleKind, repoName)
 	r.SetAttr("path", path)
+	return r
+}
+
+func repoRuleForRegistryPackage(repoName string, pin *spreso.Pin) *rule.Rule {
+	identity := pin.PkgRef.Identity
+	split := strings.Split(identity, ".")
+	scope, name := split[0], split[1]
+	version := pin.State.PinVersion()
+
+	// TODO: read registries from config
+	registryUrl := "https://artifactory.global.square/artifactory/api/swift/swift-test"
+	packageUrl := fmt.Sprintf("%s/%s/%s/%s.zip", registryUrl, scope, name, version)
+
+	r := rule.NewRule(RegistrySwiftPkgRuleKind, repoName)
+	r.SetAttr("url", packageUrl)
 	return r
 }
