@@ -1,0 +1,35 @@
+load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
+
+
+# MARK: - Gazelle
+
+# Ignore the Swift build folder
+# gazelle:exclude .build
+
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = [
+        "@rules_swift_package_manager//gazelle",
+    ],
+)
+
+swift_update_packages(
+    name = "swift_update_pkgs",
+    gazelle = ":gazelle_bin",
+    swift_deps_index = "swift_packages_index.json",
+    generate_swift_deps_for_workspace = True,
+    update_bzlmod_stanzas = False,
+    update_bzlmod_use_repo_names = False,
+)
+
+swift_binary(
+    name = "registry_example",
+    srcs = ["main.swift"],
+    module_name = "registry_example",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@swiftpkg_apple.swift_collections//:Collections",
+    ]
+)
