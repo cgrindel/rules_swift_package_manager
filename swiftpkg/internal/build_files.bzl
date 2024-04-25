@@ -65,6 +65,7 @@ def _write(repository_ctx, build_file, path):
         bld_file_path,
         content = scg.to_starlark(build_file),
         executable = False,
+        legacy_utf8 = False,
     )
 
 build_files = struct(
