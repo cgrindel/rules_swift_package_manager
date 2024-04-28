@@ -43,7 +43,6 @@ go_library(
     importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift",
     visibility = ["//gazelle:__subpackages__"],
     deps = [
-        "//gazelle/internal/jsonutils",
         "//gazelle/internal/pathdistance",
         "//gazelle/internal/spreso",
         "//gazelle/internal/swiftpkg",
