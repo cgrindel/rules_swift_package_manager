@@ -1,0 +1,9 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "cmd",
+    srcs = ["root.go"],
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/cmd",
+    visibility = ["//visibility:public"],
+    deps = ["@com_github_spf13_cobra//:go_default_library"],
+)
