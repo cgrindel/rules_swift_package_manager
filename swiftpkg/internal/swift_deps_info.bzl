@@ -1,3 +1,5 @@
+"""Implementation for `swift_deps_info` module."""
+
 def _new(direct_dep_repo_names = []):
     return struct(
         direct_dep_repo_names = direct_dep_repo_names,

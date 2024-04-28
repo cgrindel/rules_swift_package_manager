@@ -19,6 +19,13 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 	// Initialize location for custom configuration
 	sc := swiftcfg.NewSwiftConfig()
 
+	fs.StringVar(
+		&sc.DependencyIndexRel,
+		"swift_dependency_index",
+		swiftcfg.DefaultDependencyIndexBasename,
+		"the location of the dependency index JSON file",
+	)
+
 	switch cmd {
 	case "fix", "update":
 		sc.ShouldLoadDependencyIndex = true

@@ -1,7 +1,7 @@
 package swiftcfg
 
 import (
-	"log"
+	"errors"
 	"os"
 	"sort"
 
@@ -99,6 +99,16 @@ type SwiftConfig struct {
 
 	// SwiftDepsInfoPath is the path for the Swift dependencies info JSON file.
 	SwiftDepsInfoPath string
+
+	// StripImportPrefix The prefix to strip from the paths of the .proto files.
+	// If set, Gazelle will apply this value to the strip_import_prefix attribute
+	// within the proto_library_rule.
+	StripImportPrefix string
+
+	// ImportPrefix The prefix to add to the paths of the .proto files.
+	// If set, Gazelle will apply this value to the import_prefix attribute
+	// within the proto_library_rule.
+	ImportPrefix string
 }
 
 func NewSwiftConfig() *SwiftConfig {
@@ -164,38 +174,19 @@ func (sc *SwiftConfig) LoadSwiftDepsInfo() (*swift.DepsInfo, error) {
 
 // LoadDependencyIndex reads the dependency index from disk.
 func (sc *SwiftConfig) LoadDependencyIndex() error {
-	swiftDepsInfo, err := sc.LoadSwiftDepsInfo()
+	if sc.DependencyIndexPath == "" {
+		return nil
+	}
+	if _, err := os.Stat(sc.DependencyIndexPath); errors.Is(err, os.ErrNotExist) {
+		return nil
+	}
+	data, err := os.ReadFile(sc.DependencyIndexPath)
 	if err != nil {
 		return err
 	}
-	if swiftDepsInfo == nil {
-		return nil
-	}
-
-	// Read the pkg_info.json for each of the
-
-	// DEBUG BEGIN
-	log.Printf("*** CHUCK:  swiftDepsInfo: %+#v", swiftDepsInfo)
-	// DEBUG END
-
-	// TODO: IMPLEMENT ME!
-	return nil
+	sc.DependencyIndex, err = swift.NewDependencyIndexFromJSON(data)
+	return err
 }
-
-// func (sc *SwiftConfig) LoadDependencyIndex() error {
-// 	if sc.DependencyIndexPath == "" {
-// 		return nil
-// 	}
-// 	if _, err := os.Stat(sc.DependencyIndexPath); errors.Is(err, os.ErrNotExist) {
-// 		return nil
-// 	}
-// 	data, err := os.ReadFile(sc.DependencyIndexPath)
-// 	if err != nil {
-// 		return err
-// 	}
-// 	sc.DependencyIndex, err = swift.NewDependencyIndexFromJSON(data)
-// 	return err
-// }
 
 // WriteDependencyIndex writes the dependency index to disk.
 func (sc *SwiftConfig) WriteDependencyIndex() error {
