@@ -1,36 +1,25 @@
-"""Implementation for `swift_deps_info` module."""
-
-def _new(direct_dep_repo_names = []):
-    return struct(
-        direct_dep_repo_names = direct_dep_repo_names,
-    )
-
-def _write(module_or_repository_ctx, swift_deps_info, path = "swift_deps_info.json"):
-    module_or_repository_ctx.file(
-        path,
-        executable = False,
-        content = json.encode_indent(
-            swift_deps_info,
-            indent = "  ",
-        ),
-    )
-
-swift_deps_infos = struct(
-    new = _new,
-    write = _write,
-)
+"""Implementation for `swift_deps_info` repository rule."""
 
 def _swift_deps_info_impl(repository_ctx):
-    swift_deps_info = swift_deps_infos.new(
-        direct_dep_repo_names = repository_ctx.attr.direct_dep_repo_names,
-    )
-    swift_deps_infos.write(repository_ctx, swift_deps_info)
+    ddp_labels = "\n".join([
+        "        \"{}\",".format(ddpi)
+        for ddpi in repository_ctx.attr.direct_dep_pkg_infos
+    ])
     repository_ctx.file(
         "BUILD.bazel",
         executable = False,
         content = """
-exports_files(["swift_deps_info.json"])
-""",
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_deps_index")
+
+swift_deps_index(
+    name = "swift_deps_index",
+    direct_dep_pkg_infos = [
+{ddp_labels}
+    ],
+)
+""".format(
+            ddp_labels = ddp_labels,
+        ),
     )
 
 # TODO(chuck): Remove direct_dep_repo_names and replace with
@@ -41,15 +30,16 @@ exports_files(["swift_deps_info.json"])
 swift_deps_info = repository_rule(
     implementation = _swift_deps_info_impl,
     attrs = {
-        "direct_dep_repo_names": attr.string_list(
-            mandatory = True,
+        # This must be a string_list, not a label_list for the labels to be
+        # written properly when called from bzlmod/swift_deps.
+        "direct_dep_pkg_infos": attr.string_list(
             doc = """\
-The repository names for the Swift direct dependencies for the Bazel workspace.\
+The `pkg_info.json` files for the direct dependencies.
 """,
         ),
     },
     doc = """\
-Stores information about the Swift dependencies for a workspace. It is used by \
-other tooling (e.g., Swift Gazelle plugin).\
+Defines a repository that contains information about the Swift dependencies \
+for a workspace.  It is used by other tooling (e.g., Swift Gazelle plugin).\
 """,
 )
