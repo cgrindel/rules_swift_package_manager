@@ -29,11 +29,11 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 	switch cmd {
 	case "fix", "update":
 		sc.ShouldLoadDependencyIndex = true
-		fs.StringVar(
-			&sc.SwiftDepsInfoPath,
-			"swift_deps_info",
-			"",
-			"the path for the the Swift dependencies information JSON file.")
+		// fs.StringVar(
+		// 	&sc.SwiftDepsInfoPath,
+		// 	"swift_deps_info",
+		// 	"",
+		// 	"the path for the the Swift dependencies information JSON file.")
 		fs.StringVar(
 			&sc.ResolutionLogPath,
 			"resolution_log",

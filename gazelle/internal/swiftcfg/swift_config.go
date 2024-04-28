@@ -97,8 +97,8 @@ type SwiftConfig struct {
 	// Path to the YAML file that contains the patch information
 	PatchesPath string
 
-	// SwiftDepsInfoPath is the path for the Swift dependencies info JSON file.
-	SwiftDepsInfoPath string
+	// // SwiftDepsInfoPath is the path for the Swift dependencies info JSON file.
+	// SwiftDepsInfoPath string
 
 	// StripImportPrefix The prefix to strip from the paths of the .proto files.
 	// If set, Gazelle will apply this value to the strip_import_prefix attribute
@@ -161,16 +161,16 @@ func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRul
 	return SrcFileGenRulesMode
 }
 
-func (sc *SwiftConfig) LoadSwiftDepsInfo() (*swift.DepsInfo, error) {
-	if sc.SwiftDepsInfoPath == "" {
-		return nil, nil
-	}
-	data, err := os.ReadFile(sc.SwiftDepsInfoPath)
-	if err != nil {
-		return nil, err
-	}
-	return swift.NewDepsInfoFromJSON(data)
-}
+// func (sc *SwiftConfig) LoadSwiftDepsInfo() (*swift.DepsInfo, error) {
+// 	if sc.SwiftDepsInfoPath == "" {
+// 		return nil, nil
+// 	}
+// 	data, err := os.ReadFile(sc.SwiftDepsInfoPath)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return swift.NewDepsInfoFromJSON(data)
+// }
 
 // LoadDependencyIndex reads the dependency index from disk.
 func (sc *SwiftConfig) LoadDependencyIndex() error {

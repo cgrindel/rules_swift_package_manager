@@ -11,7 +11,6 @@ go_library(
         "bzlmod.go",
         "code_dir.go",
         "dependency_index.go",
-        "deps_info.go",
         "doc.go",
         "files.go",
         "find_rules.go",

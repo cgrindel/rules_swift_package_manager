@@ -1,6 +1,7 @@
 """Implementation for `swift_deps_index` rule."""
 
-def _swift_deps_index_impl(ctx):
+# def _swift_deps_index_impl(ctx):
+def _swift_deps_index_impl(_):
     # TODO(chuck): Need to call a tool that generates the swift index.
     pass
 
