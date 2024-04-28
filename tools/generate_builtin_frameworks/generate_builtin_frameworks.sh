@@ -188,6 +188,13 @@ sdk_build_version="$(xcrun --show-sdk-build-version)"
 
 platforms_path="$(dirname "$(xcrun --show-sdk-platform-path)")"
 
+# DEBUG BEGIN
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") =========================" 
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") sdk_version: ${sdk_version}" 
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") sdk_build_version: ${sdk_build_version}" 
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") platforms_path: ${platforms_path}" 
+# DEBUG END
+
 macos_frameworks="$(list_frameworks_for_platform "${platforms_path}/MacOSX.platform")"
 ios_frameworks="$(list_frameworks_for_platform "${platforms_path}/iPhoneOS.platform")"
 tvos_frameworks="$(list_frameworks_for_platform "${platforms_path}/AppleTVOS.platform")"
