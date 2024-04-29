@@ -407,9 +407,9 @@
       "name": "swiftpkg_sdwebimageswiftui",
       "identity": "sdwebimageswiftui",
       "remote": {
-        "commit": "22423b017b99ab8ac44e29e6372f571f782af6e4",
+        "commit": "b7af5e6bd9c2987e41730400d1baad13d74a141a",
         "remote": "https://github.com/SDWebImage/SDWebImageSwiftUI.git",
-        "version": "3.0.2"
+        "version": "3.0.4"
       }
     }
   ]
