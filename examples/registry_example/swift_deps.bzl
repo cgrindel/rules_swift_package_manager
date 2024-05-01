@@ -4,5 +4,6 @@ def swift_dependencies():
     swift_registry_package(
         name = "swiftpkg_apple.swift_collections",
         dependencies_index = "@//:swift_packages_index.json",
-        url = "https://artifactory.global.square/artifactory/api/swift/swift-test/apple/swift-collections/1.1.0.zip",
+        id = "apple.swift-collections",
+        version = "1.1.0",
     )

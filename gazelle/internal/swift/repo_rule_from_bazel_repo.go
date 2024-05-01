@@ -3,7 +3,6 @@ package swift
 import (
 	"fmt"
 	"path/filepath"
-	"strings"
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -108,15 +107,11 @@ func repoRuleForLocalPackage(repoName string, path string) *rule.Rule {
 
 func repoRuleForRegistryPackage(repoName string, pin *spreso.Pin) *rule.Rule {
 	identity := pin.PkgRef.Identity
-	split := strings.Split(identity, ".")
-	scope, name := split[0], split[1]
 	version := pin.State.PinVersion()
 
-	// TODO: read registries from config
-	registryUrl := "https://artifactory.global.square/artifactory/api/swift/swift-test"
-	packageUrl := fmt.Sprintf("%s/%s/%s/%s.zip", registryUrl, scope, name, version)
-
 	r := rule.NewRule(RegistrySwiftPkgRuleKind, repoName)
-	r.SetAttr("url", packageUrl)
+	r.SetAttr("id", identity)
+	r.SetAttr("version", version)
+
 	return r
 }
