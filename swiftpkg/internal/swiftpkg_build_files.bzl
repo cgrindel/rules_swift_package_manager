@@ -106,7 +106,7 @@ def _swift_target_build_file(pkg_ctx, target):
     if len(defines) > 0:
         attrs["defines"] = bzl_selects.to_starlark(defines)
     if len(copts) > 0:
-        attrs["copts"] = bzl_selects.to_starlark(copts)
+        attrs["copts"] = bzl_selects.to_starlark(copts, preserve_ordering = True)
 
     res_build_file = _handle_target_resources(
         pkg_ctx,
