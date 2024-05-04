@@ -1,6 +1,7 @@
 package swiftpkg
 
 import (
+	"encoding/json"
 	"fmt"
 	"sort"
 
@@ -12,16 +13,25 @@ import (
 
 // A PackageInfo encapsulates all of the information about a Swift package.
 type PackageInfo struct {
-	Name                string
-	DisplayName         string
-	Path                string
-	ToolsVersion        string
-	Targets             Targets
-	Platforms           []*Platform
-	Products            []*Product
-	Dependencies        Dependencies
-	CLanguageStandard   string
-	CxxLanguageStandard string
+	Name                string       `json:"name"`
+	DisplayName         string       `json:"-"`
+	Path                string       `json:"path"`
+	ToolsVersion        string       `json:"tools_version"`
+	Targets             Targets      `json:"targets"`
+	Platforms           []*Platform  `json:"platforms"`
+	Products            []*Product   `json:"products"`
+	Dependencies        Dependencies `json:"dependencies"`
+	CLanguageStandard   string       `json:"-"`
+	CxxLanguageStandard string       `json:"-"`
+}
+
+func NewPackageInfoFromJSON(bytes []byte) (*PackageInfo, error) {
+	var pi PackageInfo
+	err := json.Unmarshal(bytes, &pi)
+	if err != nil {
+		return nil, err
+	}
+	return &pi, nil
 }
 
 // NewPackageInfo returns the Swift package information from a Swift package on disk.

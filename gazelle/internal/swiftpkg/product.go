@@ -6,15 +6,14 @@ import (
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdump"
 )
 
-// A ProductType is an enum for the type of Swift product.
-type ProductType int
-
-const (
-	UnknownProductType ProductType = iota
-	ExecutableProductType
-	LibraryProductType
-	PluginProductType
-)
+type ProductType struct {
+	Executable   bool              `json:"executable"`
+	IsExecutable bool              `json:"is_executable"`
+	IsLibrary    bool              `json:"is_library"`
+	IsMacro      bool              `json:"is_macro"`
+	IsPlugin     bool              `json:"is_plugin"`
+	Library      map[string]string `json:"library"`
+}
 
 // A Product represents a Swift product.
 type Product struct {
@@ -28,13 +27,16 @@ func NewProductFromManifestInfo(dumpP *spdump.Product) (*Product, error) {
 	var prdType ProductType
 	switch dumpP.Type {
 	case spdump.UnknownProductType:
-		prdType = UnknownProductType
 	case spdump.ExecutableProductType:
-		prdType = ExecutableProductType
+		prdType.Executable = true
+		prdType.IsExecutable = true
 	case spdump.LibraryProductType:
-		prdType = LibraryProductType
+		prdType.IsLibrary = true
+		prdType.Library = map[string]string{
+			"kind": "automatic",
+		}
 	case spdump.PluginProductType:
-		prdType = PluginProductType
+		prdType.IsPlugin = true
 	default:
 		return nil, fmt.Errorf(
 			"unrecognized product type %v for %s product", dumpP.Type, dumpP.Name)

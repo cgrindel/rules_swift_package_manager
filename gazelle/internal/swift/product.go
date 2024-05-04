@@ -55,14 +55,13 @@ func NewProductFromPkgInfoProduct(
 	prd *swiftpkg.Product,
 ) (*Product, error) {
 	var ptype ProductType
-	switch prd.Type {
-	case swiftpkg.ExecutableProductType:
+	if prd.Type.IsExecutable {
 		ptype = ExecutableProductType
-	case swiftpkg.LibraryProductType:
+	} else if prd.Type.IsLibrary {
 		ptype = LibraryProductType
-	case swiftpkg.PluginProductType:
+	} else if prd.Type.IsPlugin {
 		ptype = PluginProductType
-	default:
+	} else {
 		ptype = UnknownProductType
 	}
 
