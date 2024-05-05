@@ -175,7 +175,7 @@ func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRul
 // LoadDependencyIndex reads the dependency index from disk.
 func (sc *SwiftConfig) LoadDependencyIndex() error {
 	if sc.DependencyIndexPath == "" {
-		return nil
+		return errors.New("a path to the Swift dependency index was not provided")
 	}
 	if _, err := os.Stat(sc.DependencyIndexPath); errors.Is(err, os.ErrNotExist) {
 		return nil

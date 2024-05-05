@@ -23,11 +23,6 @@ swift_deps_index(
         ),
     )
 
-# TODO(chuck): Remove direct_dep_repo_names and replace with
-# direct_dep_pkg_infos. This will take labels to pkg_info.json for each direct
-# dependency.  The repo rule will combine the pkg_info to a JSON list and write
-# to a file.
-
 swift_deps_info = repository_rule(
     implementation = _swift_deps_info_impl,
     attrs = {

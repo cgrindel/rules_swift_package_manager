@@ -35,6 +35,11 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 		// 	"",
 		// 	"the path for the the Swift dependencies information JSON file.")
 		fs.StringVar(
+			&sc.DependencyIndexPath,
+			"swift_deps_index",
+			"",
+			"the path for the the Swift dependencies information JSON file.")
+		fs.StringVar(
 			&sc.ResolutionLogPath,
 			"resolution_log",
 			"",
@@ -99,12 +104,6 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	// Find the Swift executable
 	if sc.SwiftBinPath, err = swiftbin.FindSwiftBinPath(); err != nil {
 		return err
-	}
-
-	// Initialize the module index path. We cannot initialize this path until we get into
-	// CheckFlags.
-	if sc.DependencyIndexPath == "" {
-		sc.DependencyIndexPath = filepath.Join(c.RepoRoot, sc.DependencyIndexRel)
 	}
 
 	if sc.BazelModulePath == "" {
