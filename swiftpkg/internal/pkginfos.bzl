@@ -275,7 +275,8 @@ def _new_target_from_json_maps(
         repo_name = "",
     )
 
-    product_memberships = []
+    # Some targets (e.g. test targets) do not have a product membership.
+    product_memberships = desc_map.get("product_memberships", [])
 
     dependencies = [
         _new_target_dependency_from_dump_json_map(d)

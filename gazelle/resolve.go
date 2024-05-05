@@ -115,6 +115,11 @@ func (l *swiftLang) Resolve(
 		}
 	}
 
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK: ===================")
+	log.Printf("*** CHUCK:  r: %+#v", r)
+	// DEBUG END
+
 	// Try to resolve to external Swift pacakage products
 	resResult := di.ResolveModulesToProducts(externalModules, pkgIdentities)
 	rr.AddExternal(externalModules, resResult)

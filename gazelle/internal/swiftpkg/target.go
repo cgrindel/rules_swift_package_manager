@@ -82,7 +82,7 @@ type Target struct {
 	Dependencies       []*TargetDependency
 	CSettings          *ClangSettings
 	SrcType            SourceType
-	ProductMemberships []string
+	ProductMemberships []string `json:"product_memberships"`
 	// SwiftFileInfos will only be populated if the target is a Swift target.
 	SwiftFileInfos SwiftFileInfos
 }

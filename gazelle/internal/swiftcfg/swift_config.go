@@ -177,9 +177,6 @@ func (sc *SwiftConfig) LoadDependencyIndex() error {
 	if sc.DependencyIndexPath == "" {
 		return errors.New("a path to the Swift dependency index was not provided")
 	}
-	if _, err := os.Stat(sc.DependencyIndexPath); errors.Is(err, os.ErrNotExist) {
-		return nil
-	}
 	data, err := os.ReadFile(sc.DependencyIndexPath)
 	if err != nil {
 		return err

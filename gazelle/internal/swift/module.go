@@ -2,6 +2,7 @@ package swift
 
 import (
 	"encoding/json"
+	"log"
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftpkg"
@@ -59,6 +60,11 @@ func NewModuleFromTarget(repoName, pkgIdentity string, t *swiftpkg.Target) (*Mod
 	if t.SwiftFileInfos.RequiresModulemap() {
 		mml = ModulemapBazelLabelFromTargetLabel(lbl)
 	}
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK: NewModuleFromTarget")
+	log.Printf("*** CHUCK:  t.Name: %+#v", t.Name)
+	log.Printf("*** CHUCK:  t.ProductMemberships: %+#v", t.ProductMemberships)
+	// DEBUG END
 	return NewModule(
 		t.Name,
 		t.C99name,

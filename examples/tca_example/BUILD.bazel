@@ -29,7 +29,7 @@ gazelle(
         "@swift_deps_info//:swift_deps_index",
     ],
     extra_args = [
-        "-swift_deps_index=$(location @swift_deps_info//:swift_deps_index)",
+        "-swift_dependency_index=$(location @swift_deps_info//:swift_deps_index)",
     ],
     gazelle = ":gazelle_bin",
 )

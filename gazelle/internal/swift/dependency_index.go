@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"sort"
 
 	"github.com/bazelbuild/bazel-gazelle/rule"
@@ -34,6 +35,13 @@ func NewDependencyIndex() *DependencyIndex {
 }
 
 func (di *DependencyIndex) init() {
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK: DependencyIndex.init()")
+	log.Printf("*** CHUCK: di.productIndex: ")
+	for k, item := range di.productIndex {
+		log.Printf("*** CHUCK %v: %+#v", k, item)
+	}
+	// DEBUG END
 	di.modToPrdsIndex = make(ModuleToProductsIndex)
 	di.prdToModsIndex = make(ProductMembershipsIndex)
 	for _, m := range di.moduleIndex.Modules() {
@@ -212,6 +220,22 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 	moduleNames []string,
 	pkgIdentities []string,
 ) *ModuleResolutionResult {
+	// DEBUG BEGIN
+	log.Printf("*** CHUCK: -----------")
+	log.Printf("*** CHUCK: moduleNames: ")
+	for idx, item := range moduleNames {
+		log.Printf("*** CHUCK %d: %+#v", idx, item)
+	}
+	log.Printf("*** CHUCK: pkgIdentities: ")
+	for idx, item := range pkgIdentities {
+		log.Printf("*** CHUCK %d: %+#v", idx, item)
+	}
+	log.Printf("*** CHUCK: di.modToPrdsIndex: ")
+	for k, item := range di.modToPrdsIndex {
+		log.Printf("*** CHUCK %v: %+#v", k, item)
+	}
+	// DEBUG END
+
 	var result ModuleResolutionResult
 	pkgIdentsSet := mapset.NewSet[string](pkgIdentities...)
 	unresolved := mapset.NewSet[string]()
@@ -228,8 +252,14 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 	// Find all of the products that contain a match for any of the modules
 	potentialPikSet := mapset.NewSet[ProductIndexKey]()
 	for _, mname := range moduleNames {
+		// DEBUG BEGIN
+		log.Printf("*** CHUCK:  mname: %+#v", mname)
+		// DEBUG END
 		if piks, ok := di.modToPrdsIndex[mname]; ok {
 			for _, pik := range piks {
+				// DEBUG BEGIN
+				log.Printf("*** CHUCK:  pik: %+#v", pik)
+				// DEBUG END
 				if pkgIdentsSet.Contains(pik.Identity()) {
 					potentialPikSet.Add(pik)
 				}
