@@ -32,19 +32,11 @@ type SwiftConfig struct {
 	// DependencyIndexRel is the path relative to the RepoRoot to the dependency index
 	DependencyIndexRel string
 	// DependencyIndexPath is the full path to the dependency index
-	DependencyIndexPath      string
-	UpdatePkgsToLatest       bool
-	ResolutionLogPath        string
-	ResolutionLogFile        *os.File
-	ResolutionLogger         reslog.ResolutionLogger
-	UpdateBzlmodUseRepoNames bool
-	PrintBzlmodStanzas       bool
-	UpdateBzlmodStanzas      bool
-	BazelModuleRel           string
-	// BazelModulePath is the full path to the MODULE.bazel
-	BazelModulePath string
+	DependencyIndexPath string
 
-	GenerateSwiftDepsForWorkspace bool
+	ResolutionLogPath string
+	ResolutionLogFile *os.File
+	ResolutionLogger  reslog.ResolutionLogger
 
 	// The naming convention to apply to the module names derived from the directory names.
 	// The default behavior uses the name verbatim while PascalCase will convert snake_case to PascalCase.
@@ -93,9 +85,6 @@ type SwiftConfig struct {
 	// Mapping of relative path to default module name. These values are populated from directives
 	// that can be applied to
 	DefaultModuleNames map[string]string
-
-	// Path to the YAML file that contains the patch information
-	PatchesPath string
 
 	// // SwiftDepsInfoPath is the path for the Swift dependencies info JSON file.
 	// SwiftDepsInfoPath string

@@ -29,58 +29,12 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 	switch cmd {
 	case "fix", "update":
 		sc.ShouldLoadDependencyIndex = true
-		// fs.StringVar(
-		// 	&sc.SwiftDepsInfoPath,
-		// 	"swift_deps_info",
-		// 	"",
-		// 	"the path for the the Swift dependencies information JSON file.")
-		// fs.StringVar(
-		// 	&sc.DependencyIndexPath,
-		// 	"swift_deps_index",
-		// 	"",
-		// 	"the path for the the Swift dependencies information JSON file.")
 		fs.StringVar(
 			&sc.ResolutionLogPath,
 			"resolution_log",
 			"",
 			"the location of the resolution log file",
 		)
-	case "update-repos":
-		fs.BoolVar(
-			&sc.UpdatePkgsToLatest,
-			"swift_update_packages_to_latest",
-			false,
-			"determines whether to update the Swift packages to their latest eligible version.")
-		fs.BoolVar(
-			&sc.UpdateBzlmodUseRepoNames,
-			"update_bzlmod_use_repo_names",
-			false,
-			"determines whether to update the use_repo names in your MODULE.bazel file with the appropriate stanzas.")
-		fs.BoolVar(
-			&sc.PrintBzlmodStanzas,
-			"print_bzlmod_stanzas",
-			false,
-			"determines whether to print the bzlmod stanzas to stdout.")
-		fs.BoolVar(
-			&sc.UpdateBzlmodStanzas,
-			"update_bzlmod_stanzas",
-			false,
-			"determines whether to update your MODULE.bazel file with the appropriate stanzas.")
-		fs.StringVar(
-			&sc.BazelModuleRel,
-			"bazel_module",
-			"MODULE.bazel",
-			"the location of the MODULE.bazel file")
-		fs.BoolVar(
-			&sc.GenerateSwiftDepsForWorkspace,
-			"generate_swift_deps_for_workspace",
-			false,
-			"determines whether to generate swift deps for workspace (e.g. swift_deps.bzl).")
-		fs.StringVar(
-			&sc.PatchesPath,
-			"swift_patches",
-			"",
-			"the location of a YAML file with Swift package patch info")
 	}
 
 	// Store the config for later steps
@@ -110,14 +64,6 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 	// CheckFlags.
 	if sc.DependencyIndexPath == "" && sc.DependencyIndexRel != "" {
 		sc.DependencyIndexPath = filepath.Join(c.RepoRoot, sc.DependencyIndexRel)
-	}
-
-	if sc.BazelModulePath == "" {
-		sc.BazelModulePath = filepath.Join(c.RepoRoot, sc.BazelModuleRel)
-	}
-
-	if sc.PatchesPath != "" && !filepath.IsAbs(sc.PatchesPath) {
-		sc.PatchesPath = filepath.Join(c.RepoRoot, sc.PatchesPath)
 	}
 
 	// Attempt to load the module index. This is created by update-repos if the client is using

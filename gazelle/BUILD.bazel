@@ -1,5 +1,5 @@
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
-load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_path", "go_test")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_path")
 
 package_group(
     name = "go_packages",
@@ -32,19 +32,15 @@ go_library(
         "kinds.go",
         "lang.go",
         "resolve.go",
-        "update_repos.go",
     ],
     importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle",
     visibility = ["//visibility:public"],
     deps = [
         "//gazelle/internal/reslog",
-        "//gazelle/internal/spreso",
         "//gazelle/internal/stringslices",
         "//gazelle/internal/swift",
         "//gazelle/internal/swiftbin",
         "//gazelle/internal/swiftcfg",
-        "//gazelle/internal/swiftpkg",
-        "//gazelle/internal/updmarker",
         "@bazel_gazelle//config:go_default_library",
         "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//language:go_default_library",
@@ -55,16 +51,6 @@ go_library(
         "@org_golang_x_exp//slices:go_default_library",
         "@org_golang_x_text//cases:go_default_library",
         "@org_golang_x_text//language:go_default_library",
-    ],
-)
-
-go_test(
-    name = "gazelle_test",
-    srcs = ["update_repos_test.go"],
-    deps = [
-        ":gazelle",
-        "@bazel_gazelle//language:go_default_library",
-        "@com_github_stretchr_testify//assert:go_default_library",
     ],
 )
 
