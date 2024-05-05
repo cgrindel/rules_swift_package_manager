@@ -22,23 +22,13 @@ gazelle_binary(
 
 gazelle(
     name = "update_build_files",
-    args = [
-        "-swift_dependency_index=swift/deps_index.json",
+    data = [
+        "@swift_deps_info//:swift_deps_index",
+    ],
+    extra_args = [
+        "-swift_dependency_index=$(location @swift_deps_info//:swift_deps_index)",
     ],
     gazelle = ":gazelle_bin",
-)
-
-# These aliases do not need to be replicated in your workspace.
-# They are here to aid with upkeep of the example.
-
-alias(
-    name = "swift_update_pkgs",
-    actual = "//swift:update_pkgs",
-)
-
-alias(
-    name = "swift_update_pkgs_to_latest",
-    actual = "//swift:update_pkgs_to_latest",
 )
 
 # Vapor was not happy building under 13.2.1. Fix the version for now.

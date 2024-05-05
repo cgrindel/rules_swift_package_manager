@@ -41,15 +41,22 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
     }
 
     # Collect the direct dep repo names
-    direct_dep_repo_names = [
-        bazel_repo_names.from_identity(dep.identity)
-        for dep in pkg_info.dependencies
-    ]
-    direct_dep_pkg_infos = [
-        "@{}//:pkg_info.json".format(rname)
-        # Label("@{}//:pkg_info.json".format(rname))
-        for rname in direct_dep_repo_names
-    ]
+    direct_dep_repo_names = []
+    direct_dep_pkg_infos = {}
+    for dep in pkg_info.dependencies:
+        bazel_repo_name = bazel_repo_names.from_identity(dep.identity)
+        direct_dep_repo_names.append(bazel_repo_name)
+        pkg_info_label = "@{}//:pkg_info.json".format(bazel_repo_name)
+        direct_dep_pkg_infos[pkg_info_label] = dep.identity
+
+    # direct_dep_repo_names = [
+    #     bazel_repo_names.from_identity(dep.identity)
+    #     for dep in pkg_info.dependencies
+    # ]
+    # direct_dep_pkg_infos = [
+    #     "@{}//:pkg_info.json".format(rname)
+    #     for rname in direct_dep_repo_names
+    # ]
 
     # Write info about the Swift deps that may be used by external tooling.
     swift_deps_info_repo_name = "swift_deps_info"
