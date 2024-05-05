@@ -1,12 +1,10 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
-load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
 
 tidy(
     name = "tidy",
     targets = [
-        ":swift_update_pkgs",
         ":update_build_files",
     ],
 )
@@ -27,13 +25,6 @@ gazelle_binary(
 gazelle(
     name = "update_build_files",
     gazelle = ":gazelle_bin",
-)
-
-swift_update_packages(
-    name = "swift_update_pkgs",
-    gazelle = ":gazelle_bin",
-    generate_swift_deps_for_workspace = False,
-    update_bzlmod_stanzas = True,
 )
 
 build_test(

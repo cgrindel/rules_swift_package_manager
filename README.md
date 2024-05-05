@@ -87,9 +87,11 @@ common --enable_bzlmod
 Add a dependency on `rules_swift_package_manager`.
 
 <!-- BEGIN MODULE SNIPPET -->
+
 ```python
 bazel_dep(name = "rules_swift_package_manager", version = "0.33.0")
 ```
+
 <!-- END MODULE SNIPPET -->
 
 You will also need to add a dependency on Gazelle, `rules_swift`, and possibly `rules_apple`. Follow
@@ -137,7 +139,6 @@ Add the following to the `BUILD.bazel` file at the root of your workspace.
 
 ```bzl
 load("@gazelle//:def.bzl", "gazelle", "gazelle_binary")
-load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
 
 # Ignore the `.build` folder that is created by running Swift package manager
 # commands. The Swift Gazelle plugin executes some Swift package manager
@@ -158,23 +159,6 @@ gazelle_binary(
     ],
 )
 
-# This macro defines two targets: `swift_update_pkgs` and
-# `swift_update_pkgs_to_latest`.
-#
-# The `swift_update_pkgs` target should be run whenever the list of external
-# dependencies is updated in the `Package.swift`. Running this target will
-# populate the `swift_deps.bzl` with `swift_package` declarations for all of
-# the direct and transitive Swift packages that your project uses.
-#
-# The `swift_update_pkgs_to_latest` target should be run when you want to
-# update your Swift dependencies to their latest eligible version.
-swift_update_packages(
-    name = "swift_update_pkgs",
-    gazelle = ":gazelle_bin",
-    generate_swift_deps_for_workspace = False,
-    update_bzlmod_stanzas = True,
-)
-
 # This target updates the Bazel build files for your project. Run this target
 # whenever you add or remove source files from your project.
 gazelle(
@@ -182,6 +166,8 @@ gazelle(
     gazelle = ":gazelle_bin",
 )
 ```
+
+<!-- TODO: Remove swift_update_pkgs stuff and fix doc. -->
 
 ### 5. Resolve the external dependencies for your project.
 

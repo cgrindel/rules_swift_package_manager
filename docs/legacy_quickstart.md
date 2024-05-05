@@ -61,6 +61,8 @@ files, at this time.
 
 Add the following to the `BUILD.bazel` file at the root of your workspace.
 
+<!-- TODO: Remove swift_update_pkgs stuff and update doc. -->
+
 ```python
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
