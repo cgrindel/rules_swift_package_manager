@@ -1,6 +1,14 @@
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_path", "go_test")
 
+package_group(
+    name = "go_packages",
+    packages = [
+        "//gazelle/...",
+        "//tools/swift_deps_index/...",
+    ],
+)
+
 # MARK: - Starlark
 
 bzlformat_pkg(name = "bzlformat")

@@ -18,11 +18,11 @@ func NewBazelRepo(
 	identity string,
 	pkgInfo *swiftpkg.PackageInfo,
 	pin *spreso.Pin,
-) (*BazelRepo, error) {
+) *BazelRepo {
 	return &BazelRepo{
 		Name:     RepoNameFromIdentity(identity),
 		Identity: identity,
 		PkgInfo:  pkgInfo,
 		Pin:      pin,
-	}, nil
+	}
 }

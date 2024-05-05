@@ -40,7 +40,7 @@ go_library(
         "test_rules_common.go",
     ],
     importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift",
-    visibility = ["//gazelle:__subpackages__"],
+    visibility = ["//gazelle:go_packages"],
     deps = [
         "//gazelle/internal/pathdistance",
         "//gazelle/internal/spreso",

@@ -5,7 +5,7 @@ go_library(
     name = "pathdistance",
     srcs = ["pathdistance.go"],
     importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/pathdistance",
-    visibility = ["//visibility:public"],
+    visibility = ["//gazelle:go_packages"],
     deps = ["@org_golang_x_exp//slices:go_default_library"],
 )
 

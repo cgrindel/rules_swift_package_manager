@@ -23,7 +23,7 @@ go_library(
         "target_dependency.go",
     ],
     importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdump",
-    visibility = ["//gazelle:__subpackages__"],
+    visibility = ["//gazelle:go_packages"],
     deps = ["//gazelle/internal/jsonutils"],
 )
 

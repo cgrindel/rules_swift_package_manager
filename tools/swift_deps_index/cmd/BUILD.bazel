@@ -9,7 +9,11 @@ go_library(
     ],
     importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/cmd",
     visibility = ["//visibility:public"],
-    deps = ["@com_github_spf13_cobra//:go_default_library"],
+    deps = [
+        "//gazelle/internal/swift",
+        "//gazelle/internal/swiftpkg",
+        "@com_github_spf13_cobra//:go_default_library",
+    ],
 )
 
 bzlformat_pkg(name = "bzlformat")

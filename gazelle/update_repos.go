@@ -107,11 +107,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 			result.Error = dpierr
 			return result
 		}
-		bzlRepo, brerr := swift.NewBazelRepo(identity, depPkgInfo, pin)
-		if brerr != nil {
-			result.Error = brerr
-			return result
-		}
+		bzlRepo := swift.NewBazelRepo(identity, depPkgInfo, pin)
 		bzlReposByIdentity[bzlRepo.Identity] = bzlRepo
 	}
 	for _, dep := range pi.Dependencies {
@@ -129,11 +125,7 @@ func importReposFromPackageManifest(args language.ImportReposArgs) language.Impo
 			result.Error = err
 			return result
 		}
-		bzlRepo, err := swift.NewBazelRepo(identity, depPkgInfo, nil)
-		if err != nil {
-			result.Error = err
-			return result
-		}
+		bzlRepo := swift.NewBazelRepo(identity, depPkgInfo, nil)
 		bzlReposByIdentity[bzlRepo.Identity] = bzlRepo
 	}
 

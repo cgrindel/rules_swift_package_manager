@@ -15,7 +15,7 @@ go_library(
     name = "spdesc",
     srcs = ["manifest.go"],
     importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdesc",
-    visibility = ["//gazelle:__subpackages__"],
+    visibility = ["//gazelle:go_packages"],
 )
 
 go_test(

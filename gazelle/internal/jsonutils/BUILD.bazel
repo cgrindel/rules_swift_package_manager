@@ -10,7 +10,7 @@ go_library(
         "json_slice.go",
     ],
     importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/jsonutils",
-    visibility = ["//gazelle:__subpackages__"],
+    visibility = ["//gazelle:go_packages"],
 )
 
 go_test(
