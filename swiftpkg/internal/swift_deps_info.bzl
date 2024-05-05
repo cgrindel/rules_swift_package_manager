@@ -16,6 +16,7 @@ swift_deps_index(
     direct_dep_pkg_infos = [
 {ddp_labels}
     ],
+    visibility = ["//visibility:public"],
 )
 """.format(
             ddp_labels = ddp_labels,
