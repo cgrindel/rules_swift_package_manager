@@ -52,6 +52,7 @@ swift_deps.from_package(
 )
 use_repo(
     swift_deps,
+    "swift_deps_info",
     "swiftpkg_fluent",
     "swiftpkg_fluent_sqlite_driver",
     "swiftpkg_vapor",

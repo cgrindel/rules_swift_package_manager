@@ -68,5 +68,6 @@ swift_deps.configure_package(
 )
 use_repo(
     swift_deps,
+    "swift_deps_info",
     "swiftpkg_xcmetrics",
 )

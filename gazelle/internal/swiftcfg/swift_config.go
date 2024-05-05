@@ -1,7 +1,6 @@
 package swiftcfg
 
 import (
-	"errors"
 	"os"
 	"sort"
 
@@ -13,7 +12,6 @@ import (
 )
 
 const SwiftConfigName = "swift"
-const DefaultDependencyIndexBasename = "swift_deps_index.json"
 const dependencyIndexPerms = 0666
 
 const (
@@ -25,10 +23,9 @@ const (
 
 // A SwiftConfig represents the Swift-specific configuration for the Gazelle extension.
 type SwiftConfig struct {
-	SwiftBinPath              string
-	ModuleFilesCollector      ModuleFilesCollector
-	ShouldLoadDependencyIndex bool
-	DependencyIndex           *swift.DependencyIndex
+	SwiftBinPath         string
+	ModuleFilesCollector ModuleFilesCollector
+	DependencyIndex      *swift.DependencyIndex
 	// DependencyIndexRel is the path relative to the RepoRoot to the dependency index
 	DependencyIndexRel string
 	// DependencyIndexPath is the full path to the dependency index
@@ -164,7 +161,7 @@ func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRul
 // LoadDependencyIndex reads the dependency index from disk.
 func (sc *SwiftConfig) LoadDependencyIndex() error {
 	if sc.DependencyIndexPath == "" {
-		return errors.New("a path to the Swift dependency index was not provided")
+		return nil
 	}
 	data, err := os.ReadFile(sc.DependencyIndexPath)
 	if err != nil {

@@ -47,6 +47,7 @@ swift_deps.from_package(
 )
 use_repo(
     swift_deps,
+    "swift_deps_info",
     "swiftpkg_my_local_package",
     "swiftpkg_myamazingmodule",
     "swiftpkg_notthatamazingmodule",

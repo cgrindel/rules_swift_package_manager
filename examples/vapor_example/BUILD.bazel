@@ -4,7 +4,6 @@ load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 tidy(
     name = "tidy",
     targets = [
-        "//swift:update_pkgs",
         ":update_build_files",
     ],
 )

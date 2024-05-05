@@ -22,13 +22,12 @@ func (*swiftLang) RegisterFlags(fs *flag.FlagSet, cmd string, c *config.Config) 
 	fs.StringVar(
 		&sc.DependencyIndexRel,
 		"swift_dependency_index",
-		swiftcfg.DefaultDependencyIndexBasename,
+		"",
 		"the location of the dependency index JSON file",
 	)
 
 	switch cmd {
 	case "fix", "update":
-		sc.ShouldLoadDependencyIndex = true
 		fs.StringVar(
 			&sc.ResolutionLogPath,
 			"resolution_log",
@@ -68,10 +67,8 @@ func (sl *swiftLang) CheckFlags(fs *flag.FlagSet, c *config.Config) error {
 
 	// Attempt to load the module index. This is created by update-repos if the client is using
 	// external Swift packages (e.g. swift_pacakge).
-	if sc.ShouldLoadDependencyIndex {
-		if err = sc.LoadDependencyIndex(); err != nil {
-			return err
-		}
+	if err = sc.LoadDependencyIndex(); err != nil {
+		return err
 	}
 	// Index any of repository rules (e.g. http_archive) that may contain Swift targets.
 	for _, r := range c.Repos {
