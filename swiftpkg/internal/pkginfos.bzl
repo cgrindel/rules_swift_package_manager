@@ -253,7 +253,7 @@ def _new_target_from_json_maps(
         ]
 
         for p in resource_files:
-            res = _new_resource_from_discovered_resource(p) # TODO: Use a more accurate function name
+            res = _new_resource_from_discovered_resource(p)
             sets.insert(resources_set, res)
 
     artifact_download_info = None
@@ -339,6 +339,7 @@ def _should_expand_resource(repository_ctx, resource):
     if not repository_files.is_directory(repository_ctx, path):
         return False
     
+    # xcassets and xcdatamodeld folders should be expanded in-place rather than copied directly.
     if path.endswith(".xcassets") or path.endswith(".xcdatamodeld"):
         return True
 
