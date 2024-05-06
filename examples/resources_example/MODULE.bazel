@@ -55,5 +55,6 @@ use_repo(
     "swiftpkg_package_with_resources",
     "swiftpkg_recaptcha_enterprise_mobile_sdk",
     "swiftpkg_sdwebimageswiftui",
+    "swiftpkg_swift_sdk",
 )
 # swift_deps END
