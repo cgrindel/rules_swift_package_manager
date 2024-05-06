@@ -237,14 +237,16 @@ def _new_target_from_json_maps(
 
     # Replace specific resource directories from the desc_map with a list of their contents
     resource_directories = [
-        r for r in sets.to_list(resources_set)
+        r
+        for r in sets.to_list(resources_set)
         if _should_expand_resource(repository_ctx, r)
     ]
     for directory in resource_directories:
         sets.remove(resources_set, directory)
 
         resource_files = [
-            p for p in repository_files.list_files_under(
+            p
+            for p in repository_files.list_files_under(
                 repository_ctx,
                 directory.path,
                 exclude_paths = exclude_paths,
@@ -338,7 +340,7 @@ def _should_expand_resource(repository_ctx, resource):
 
     if not repository_files.is_directory(repository_ctx, path):
         return False
-    
+
     # xcassets and xcdatamodeld folders should be expanded in-place rather than copied directly.
     if path.endswith(".xcassets") or path.endswith(".xcdatamodeld"):
         return True
