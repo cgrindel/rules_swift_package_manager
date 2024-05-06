@@ -1,6 +1,7 @@
 import AppLovinSDKResources
 import CoolUI
-import IterableSDK
+import CoreData
+@testable import IterableSDK
 import SwiftUI
 import XCTest
 
@@ -16,12 +17,32 @@ class MyAppTests: XCTestCase {
     }
     
     func test_IterableDataModel() throws {
-        let dataModelLoaded = expectation("Iterable CoreData model loaded")
-        
-        let container = NSPersistentContainer(name: "IterableDataModel")
-        container.loadPersistentStores { _, error in
-            XCTAssertNil(error, "Loading persistence stores generated an error: \(error!)")
-            dataModelLoaded.fulfill()
+        // Log Iterable messages to an array
+        class LogDelegate: IterableLogDelegate {
+            var messages: [String] = []
+            
+            func log(level: LogLevel, message: String) {
+                messages.append(message)
+            }
         }
+        
+        let logDelegate = LogDelegate()
+        IterableLogUtil.sharedInstance = IterableLogUtil(
+            dateProvider: SystemDateProvider(),
+            logDelegate: logDelegate
+        )
+
+        // Create the persistence container from the bundled CoreData model
+        let container: PersistentContainer? = PersistentContainer.initialize()
+        XCTAssertNotNil(container)
+        
+        // Assert that the persistence container was successfully created
+        let lastMessage = try XCTUnwrap(logDelegate.messages.last)
+        XCTAssert(
+            lastMessage.contains("Successfully loaded persistent store at:"),
+            "Expected success log message. Found: \(logDelegate.messages.last ?? "nil")"
+        )
+        
+        IterableLogUtil.sharedInstance = nil
     }
 }
