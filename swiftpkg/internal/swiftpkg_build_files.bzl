@@ -49,6 +49,7 @@ def _swift_target_build_file(pkg_ctx, target):
     attrs = {
         "deps": bzl_selects.to_starlark(deps),
         "module_name": target.c99name,
+        "package_name": "rspm." + target.label.repository_name,
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//:__subpackages__"],
     }
