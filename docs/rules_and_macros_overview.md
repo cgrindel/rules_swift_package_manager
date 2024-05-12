@@ -26,6 +26,6 @@ Generates a Swift dependencies index file that is used by other tooling (e.g., S
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="swift_deps_index-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
-| <a id="swift_deps_index-direct_dep_pkg_infos"></a>direct_dep_pkg_infos |  The <code>pkg_info.json</code> files for the direct dependencies.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional | <code>[]</code> |
+| <a id="swift_deps_index-direct_dep_pkg_infos"></a>direct_dep_pkg_infos |  A <code>dict</code> where the key is the label for a Swift package's <code>pkg_info.json</code> file and the value is the Swift package's identity value.   | <a href="https://bazel.build/rules/lib/dict">Dictionary: Label -> String</a> | optional | <code>{}</code> |
 
 
