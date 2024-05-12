@@ -266,6 +266,7 @@ def _new_target_from_json_maps(
         repository_ctx,
         dump_map,
         desc_map,
+        product_memberships,
         pkg_path,
         collect_src_info):
     target_name = dump_map["name"]
@@ -274,10 +275,6 @@ def _new_target_from_json_maps(
         target_name = target_name,
         repo_name = "",
     )
-
-    # Some targets (e.g. test targets) do not have a product membership.
-    product_memberships = desc_map.get("product_memberships", [])
-
     dependencies = [
         _new_target_dependency_from_dump_json_map(d)
         for d in dump_map["dependencies"]
@@ -577,16 +574,23 @@ def _new_from_parsed_json(
     }
 
     pkg_path = desc_manifest["path"]
-    targets = lists.compact([
-        _new_target_from_json_maps(
+    targets = []
+    for target_map in dump_manifest["targets"]:
+        tname = target_map["name"]
+        product_memberships = [
+            product.name
+            for product in products
+            if lists.contains(product.targets, tname)
+        ]
+        target = _new_target_from_json_maps(
             repository_ctx = repository_ctx,
             dump_map = target_map,
-            desc_map = desc_targets_by_name[target_map["name"]],
+            desc_map = desc_targets_by_name[tname],
+            product_memberships = product_memberships,
             pkg_path = pkg_path,
             collect_src_info = collect_src_info,
         )
-        for target_map in dump_manifest["targets"]
-    ])
+        targets.append(target)
 
     return _new(
         name = dump_manifest["name"],
