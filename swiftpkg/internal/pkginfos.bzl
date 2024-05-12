@@ -226,6 +226,7 @@ def _new_target_from_json_maps(
     linker_settings = _new_linker_settings_from_dump_json_list(
         dump_map["settings"],
     )
+    exclude_paths = dump_map.get("exclude", default = [])
 
     # The description JSON should have a list with all of the resources with
     # their absolute paths.
@@ -233,6 +234,29 @@ def _new_target_from_json_maps(
         _new_resource_from_desc_map(r, pkg_path)
         for r in desc_map.get("resources", [])
     ])
+
+    # Replace specific resource directories from the desc_map with a list of their contents
+    resource_directories = [
+        r
+        for r in sets.to_list(resources_set)
+        if _should_expand_resource(repository_ctx, r)
+    ]
+    for directory in resource_directories:
+        sets.remove(resources_set, directory)
+
+        resource_files = [
+            p
+            for p in repository_files.list_files_under(
+                repository_ctx,
+                directory.path,
+                exclude_paths = exclude_paths,
+            )
+            if not repository_files.is_directory(repository_ctx, p)
+        ]
+
+        for p in resource_files:
+            res = _new_resource_from_discovered_resource(p)
+            sets.insert(resources_set, res)
 
     artifact_download_info = None
     url = dump_map.get("url")
@@ -246,7 +270,6 @@ def _new_target_from_json_maps(
     sources = desc_map["sources"]
     source_paths = dump_map.get("sources")
     public_hdrs_path = dump_map.get("publicHeadersPath")
-    exclude_paths = dump_map.get("exclude", default = [])
 
     swift_src_info = None
     clang_src_info = None
@@ -311,6 +334,18 @@ def _new_target_from_json_maps(
         clang_src_info = clang_src_info,
         objc_src_info = objc_src_info,
     )
+
+def _should_expand_resource(repository_ctx, resource):
+    path = resource.path
+
+    if not repository_files.is_directory(repository_ctx, path):
+        return False
+
+    # xcassets and xcdatamodeld folders should be expanded in-place rather than copied directly.
+    if path.endswith(".xcassets") or path.endswith(".xcdatamodeld"):
+        return True
+
+    return False
 
 def _new_build_setting_condition_from_json(dump_map):
     if dump_map == None:

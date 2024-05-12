@@ -5,7 +5,8 @@
     "googlesignin-ios",
     "package_with_resources",
     "recaptcha-enterprise-mobile-sdk",
-    "sdwebimageswiftui"
+    "sdwebimageswiftui",
+    "swift-sdk"
   ],
   "modules": [
     {
@@ -206,6 +207,28 @@
       "product_memberships": [
         "SDWebImageSwiftUI"
       ]
+    },
+    {
+      "name": "IterableAppExtensions",
+      "c99name": "IterableAppExtensions",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_sdk//:IterableAppExtensions.rspm",
+      "modulemap_label": "@swiftpkg_swift_sdk//:IterableAppExtensions.rspm_modulemap",
+      "package_identity": "swift-sdk",
+      "product_memberships": [
+        "IterableAppExtensions"
+      ]
+    },
+    {
+      "name": "IterableSDK",
+      "c99name": "IterableSDK",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_sdk//:IterableSDK.rspm",
+      "modulemap_label": "@swiftpkg_swift_sdk//:IterableSDK.rspm_modulemap",
+      "package_identity": "swift-sdk",
+      "product_memberships": [
+        "IterableSDK"
+      ]
     }
   ],
   "products": [
@@ -316,6 +339,18 @@
       "name": "SDWebImageMapKit",
       "type": "library",
       "label": "@swiftpkg_sdwebimage//:SDWebImageMapKit"
+    },
+    {
+      "identity": "swift-sdk",
+      "name": "IterableAppExtensions",
+      "type": "library",
+      "label": "@swiftpkg_swift_sdk//:IterableAppExtensions"
+    },
+    {
+      "identity": "swift-sdk",
+      "name": "IterableSDK",
+      "type": "library",
+      "label": "@swiftpkg_swift_sdk//:IterableSDK"
     }
   ],
   "packages": [
@@ -410,6 +445,15 @@
         "commit": "b7af5e6bd9c2987e41730400d1baad13d74a141a",
         "remote": "https://github.com/SDWebImage/SDWebImageSwiftUI.git",
         "version": "3.0.4"
+      }
+    },
+    {
+      "name": "swiftpkg_swift_sdk",
+      "identity": "swift-sdk",
+      "remote": {
+        "commit": "cb64b4d1717f309dee72a9c71f886888ce3328c3",
+        "remote": "https://github.com/Iterable/swift-sdk",
+        "version": "6.5.2"
       }
     }
   ]
