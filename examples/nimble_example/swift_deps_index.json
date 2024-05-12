@@ -67,6 +67,46 @@
       ]
     },
     {
+      "name": "DefocusCommandPlugin",
+      "c99name": "DefocusCommandPlugin",
+      "src_type": "unknown",
+      "label": "@swiftpkg_quick//:DefocusCommandPlugin.rspm",
+      "package_identity": "quick",
+      "product_memberships": [
+        "DefocusCommandPlugin"
+      ]
+    },
+    {
+      "name": "LintCommandPlugin",
+      "c99name": "LintCommandPlugin",
+      "src_type": "unknown",
+      "label": "@swiftpkg_quick//:LintCommandPlugin.rspm",
+      "package_identity": "quick",
+      "product_memberships": [
+        "LintCommandPlugin"
+      ]
+    },
+    {
+      "name": "LintError",
+      "c99name": "LintError",
+      "src_type": "unknown",
+      "label": "@swiftpkg_quick//:LintError.rspm",
+      "package_identity": "quick",
+      "product_memberships": [
+        "LintError"
+      ]
+    },
+    {
+      "name": "LintWarning",
+      "c99name": "LintWarning",
+      "src_type": "unknown",
+      "label": "@swiftpkg_quick//:LintWarning.rspm",
+      "package_identity": "quick",
+      "product_memberships": [
+        "LintWarning"
+      ]
+    },
+    {
       "name": "Quick",
       "c99name": "Quick",
       "src_type": "swift",
@@ -75,6 +115,117 @@
       "package_identity": "quick",
       "product_memberships": [
         "Quick"
+      ]
+    },
+    {
+      "name": "QuickLint",
+      "c99name": "QuickLint",
+      "src_type": "swift",
+      "label": "@swiftpkg_quick//:QuickLint.rspm",
+      "package_identity": "quick",
+      "product_memberships": [
+        "quicklint",
+        "DefocusCommandPlugin",
+        "LintError",
+        "LintWarning",
+        "LintCommandPlugin"
+      ]
+    },
+    {
+      "name": "Algorithms",
+      "c99name": "Algorithms",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_algorithms//:Algorithms.rspm",
+      "package_identity": "swift-algorithms",
+      "product_memberships": [
+        "Algorithms"
+      ]
+    },
+    {
+      "name": "ArgumentParser",
+      "c99name": "ArgumentParser",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_argument_parser//:ArgumentParser.rspm",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "ArgumentParser",
+        "GenerateManual"
+      ]
+    },
+    {
+      "name": "ArgumentParserToolInfo",
+      "c99name": "ArgumentParserToolInfo",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_argument_parser//:ArgumentParserToolInfo.rspm",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "ArgumentParser",
+        "GenerateManual"
+      ]
+    },
+    {
+      "name": "GenerateManual",
+      "c99name": "GenerateManual",
+      "src_type": "unknown",
+      "label": "@swiftpkg_swift_argument_parser//:GenerateManual.rspm",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "GenerateManual"
+      ]
+    },
+    {
+      "name": "generate-manual",
+      "c99name": "generate_manual",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_argument_parser//:generate-manual.rspm",
+      "package_identity": "swift-argument-parser",
+      "product_memberships": [
+        "GenerateManual"
+      ]
+    },
+    {
+      "name": "ComplexModule",
+      "c99name": "ComplexModule",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_numerics//:ComplexModule.rspm",
+      "package_identity": "swift-numerics",
+      "product_memberships": [
+        "ComplexModule",
+        "Numerics"
+      ]
+    },
+    {
+      "name": "Numerics",
+      "c99name": "Numerics",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_numerics//:Numerics.rspm",
+      "package_identity": "swift-numerics",
+      "product_memberships": [
+        "Numerics"
+      ]
+    },
+    {
+      "name": "RealModule",
+      "c99name": "RealModule",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_numerics//:RealModule.rspm",
+      "package_identity": "swift-numerics",
+      "product_memberships": [
+        "ComplexModule",
+        "Numerics",
+        "RealModule"
+      ]
+    },
+    {
+      "name": "_NumericsShims",
+      "c99name": "_NumericsShims",
+      "src_type": "clang",
+      "label": "@swiftpkg_swift_numerics//:_NumericsShims.rspm",
+      "package_identity": "swift-numerics",
+      "product_memberships": [
+        "ComplexModule",
+        "Numerics",
+        "RealModule"
       ]
     }
   ],
@@ -105,9 +256,75 @@
     },
     {
       "identity": "quick",
+      "name": "DefocusCommandPlugin",
+      "type": "plugin",
+      "label": "@swiftpkg_quick//:DefocusCommandPlugin"
+    },
+    {
+      "identity": "quick",
+      "name": "LintCommandPlugin",
+      "type": "plugin",
+      "label": "@swiftpkg_quick//:LintCommandPlugin"
+    },
+    {
+      "identity": "quick",
+      "name": "LintError",
+      "type": "plugin",
+      "label": "@swiftpkg_quick//:LintError"
+    },
+    {
+      "identity": "quick",
+      "name": "LintWarning",
+      "type": "plugin",
+      "label": "@swiftpkg_quick//:LintWarning"
+    },
+    {
+      "identity": "quick",
       "name": "Quick",
       "type": "library",
       "label": "@swiftpkg_quick//:Quick"
+    },
+    {
+      "identity": "quick",
+      "name": "quicklint",
+      "type": "executable",
+      "label": "@swiftpkg_quick//:quicklint"
+    },
+    {
+      "identity": "swift-algorithms",
+      "name": "Algorithms",
+      "type": "library",
+      "label": "@swiftpkg_swift_algorithms//:Algorithms"
+    },
+    {
+      "identity": "swift-argument-parser",
+      "name": "ArgumentParser",
+      "type": "library",
+      "label": "@swiftpkg_swift_argument_parser//:ArgumentParser"
+    },
+    {
+      "identity": "swift-argument-parser",
+      "name": "GenerateManual",
+      "type": "plugin",
+      "label": "@swiftpkg_swift_argument_parser//:GenerateManual"
+    },
+    {
+      "identity": "swift-numerics",
+      "name": "ComplexModule",
+      "type": "library",
+      "label": "@swiftpkg_swift_numerics//:ComplexModule"
+    },
+    {
+      "identity": "swift-numerics",
+      "name": "Numerics",
+      "type": "library",
+      "label": "@swiftpkg_swift_numerics//:Numerics"
+    },
+    {
+      "identity": "swift-numerics",
+      "name": "RealModule",
+      "type": "library",
+      "label": "@swiftpkg_swift_numerics//:RealModule"
     }
   ],
   "packages": [
@@ -142,9 +359,36 @@
       "name": "swiftpkg_quick",
       "identity": "quick",
       "remote": {
-        "commit": "26529ff2209c40ae50fd642b031f930d9d68ea02",
+        "commit": "288859c2a5b3f9ce97063f742185eac92efea2dc",
         "remote": "https://github.com/Quick/Quick",
-        "version": "7.5.0"
+        "version": "7.6.0"
+      }
+    },
+    {
+      "name": "swiftpkg_swift_algorithms",
+      "identity": "swift-algorithms",
+      "remote": {
+        "commit": "f6919dfc309e7f1b56224378b11e28bab5bccc42",
+        "remote": "https://github.com/apple/swift-algorithms.git",
+        "version": "1.2.0"
+      }
+    },
+    {
+      "name": "swiftpkg_swift_argument_parser",
+      "identity": "swift-argument-parser",
+      "remote": {
+        "commit": "46989693916f56d1186bd59ac15124caef896560",
+        "remote": "https://github.com/apple/swift-argument-parser.git",
+        "version": "1.3.1"
+      }
+    },
+    {
+      "name": "swiftpkg_swift_numerics",
+      "identity": "swift-numerics",
+      "remote": {
+        "commit": "0a5bc04095a675662cf24757cc0640aa2204253b",
+        "remote": "https://github.com/apple/swift-numerics.git",
+        "version": "1.0.2"
       }
     }
   ]
