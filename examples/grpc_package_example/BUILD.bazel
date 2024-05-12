@@ -27,13 +27,9 @@ gazelle_binary(
     ],
 )
 
+# There is not reference to swift_deps_index, because there are no SPM
+# external dependencies.
 gazelle(
     name = "update_build_files",
-    data = [
-        "@swift_deps_info//:swift_deps_index",
-    ],
-    extra_args = [
-        "-swift_dependency_index=$(location @swift_deps_info//:swift_deps_index)",
-    ],
     gazelle = ":gazelle_bin",
 )
