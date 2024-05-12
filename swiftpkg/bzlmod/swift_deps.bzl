@@ -19,9 +19,12 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
     """
 
     # Read Package.resolved.
-    pkg_resolved = module_ctx.path(from_package.resolved)
-    resolved_pkg_json = module_ctx.read(pkg_resolved)
-    resolved_pkg_map = json.decode(resolved_pkg_json)
+    if from_package.resolved:
+        pkg_resolved = module_ctx.path(from_package.resolved)
+        resolved_pkg_json = module_ctx.read(pkg_resolved)
+        resolved_pkg_map = json.decode(resolved_pkg_json)
+    else:
+        resolved_pkg_map = dict()
 
     # Get the package info.
     pkg_swift = module_ctx.path(from_package.swift)
@@ -198,7 +201,6 @@ def _swift_deps_impl(module_ctx):
 _from_package_tag = tag_class(
     attrs = {
         "resolved": attr.label(
-            mandatory = True,
             allow_files = [".resolved"],
             doc = "A `Package.resolved`.",
         ),

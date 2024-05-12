@@ -44,7 +44,6 @@ swift_deps = use_extension(
     "swift_deps",
 )
 swift_deps.from_package(
-    resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )
 use_repo(

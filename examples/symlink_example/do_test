@@ -10,7 +10,6 @@ bazel="${BIT_BAZEL_BINARY:-bazel}"
 
 # Generate Swift external deps and update build files
 "${bazel}" run //:tidy
-"${bazel}" run //:swift_update_pkgs
 
 # Ensure that it builds and tests pass
 "${bazel}" test //...
