@@ -62,23 +62,6 @@ The key (e.g. `swift-cmark`) is the Swift package's identity. The supported fiel
 _REMINDER: If you are using bzlmod, use `@@` as the prefix for your patch files. Otherwise, use
 `@`._
 
-<!-- TODO: Remove swift_update_pkgs stuff and update doc. -->
-
-## Update the `swift_update_packages` Declaration
-
-Next, update the `swift_update_packages` declaration in the `BUILD.bazel` file at the root of your
-workspace to include the `patches_yaml` attribute pointing to your patches YAML file.
-
-```python
-swift_update_packages(
-    name = "swift_update_pkgs",
-    gazelle = ":gazelle_bin",
-    generate_swift_deps_for_workspace = False,
-    patches_yaml = "swift_pkg_patches.yaml",    # <== Add this!
-    update_bzlmod_stanzas = True,
-)
-```
-
 ## Update Your Swift Packages and Build
 
 Now, it is time to generate some files and build.

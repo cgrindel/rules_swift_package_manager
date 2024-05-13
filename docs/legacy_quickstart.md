@@ -7,13 +7,14 @@ use [the quickstart instructions in the `README.md`](/README.md#quickstart).
 ## Table of Contents
 
 <!-- MARKDOWN TOC: BEGIN -->
-* [Add declarations to your `WORKSPACE` file](#add-declarations-to-your-workspace-file)
-* [Create a minimal `Package.swift` file.](#create-a-minimal-packageswift-file)
-* [Add Gazelle targets to `BUILD.bazel` at the root of your workspace.](#add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
-* [Resolve the external dependencies for your project.](#resolve-the-external-dependencies-for-your-project)
-* [Create or update Bazel build files for your project.](#create-or-update-bazel-build-files-for-your-project)
-* [Build and test your project.](#build-and-test-your-project)
-* [Check-in `Package.resolved`, `swift_deps_index.json`, and `swift_deps.bzl`.](#check-in-packageresolved-swift_deps_indexjson-and-swift_depsbzl)
+
+- [Add declarations to your `WORKSPACE` file](#add-declarations-to-your-workspace-file)
+- [Create a minimal `Package.swift` file.](#create-a-minimal-packageswift-file)
+- [Add Gazelle targets to `BUILD.bazel` at the root of your workspace.](#add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
+- [Resolve the external dependencies for your project.](#resolve-the-external-dependencies-for-your-project)
+- [Create or update Bazel build files for your project.](#create-or-update-bazel-build-files-for-your-project)
+- [Build and test your project.](#build-and-test-your-project)
+- [Check-in `Package.resolved`, `swift_deps_index.json`, and `swift_deps.bzl`.](#check-in-packageresolved-swift_deps_indexjson-and-swift_depsbzl)
 <!-- MARKDOWN TOC: END -->
 
 ## Add declarations to your `WORKSPACE` file
@@ -61,8 +62,6 @@ files, at this time.
 
 Add the following to the `BUILD.bazel` file at the root of your workspace.
 
-<!-- TODO: Remove swift_update_pkgs stuff and update doc. -->
-
 ```python
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_update_packages")
@@ -86,27 +85,16 @@ gazelle_binary(
     ],
 )
 
-# This macro defines two targets: `swift_update_pkgs` and
-# `swift_update_pkgs_to_latest`.
-#
-# The `swift_update_pkgs` target should be run whenever the list of external
-# dependencies is updated in the `Package.swift`. Running this target will
-# populate the `swift_deps.bzl` with `swift_package` declarations for all of
-# the direct and transitive Swift packages that your project uses.
-#
-# The `swift_update_pkgs_to_latest` target should be run when you want to
-# update your Swift dependencies to their latest eligible version.
-swift_update_packages(
-    name = "swift_update_pkgs",
-    gazelle = ":gazelle_bin",
-    generate_swift_deps_for_workspace = True,
-    update_bzlmod_stanzas = False,
-)
-
 # This target updates the Bazel build files for your project. Run this target
 # whenever you add or remove source files from your project.
 gazelle(
     name = "update_build_files",
+    data = [
+        "@swift_deps_info//:swift_deps_index",
+    ],
+    extra_args = [
+        "-swift_dependency_index=$(location @swift_deps_info//:swift_deps_index)",
+    ],
     gazelle = ":gazelle_bin",
 )
 ```
