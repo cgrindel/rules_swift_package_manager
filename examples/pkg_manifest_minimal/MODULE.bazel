@@ -49,7 +49,6 @@ use_repo(
     swift_deps,
     "swift_deps_info",
     "swiftpkg_my_local_package",
-    "swiftpkg_myamazingmodule",
     "swiftpkg_notthatamazingmodule",
     "swiftpkg_swift_argument_parser",
     "swiftpkg_swift_log",
