@@ -577,15 +577,21 @@ def _new_from_parsed_json(
     targets = []
     for target_map in dump_manifest["targets"]:
         tname = target_map["name"]
+        tdesc_map = desc_targets_by_name[tname]
+
+        # Use the product_memberships from the desc_map, but only include
+        # product names that actually exist in the dump products list. The
+        # product_memberships from the desc JSON includes product inclusion that
+        # we cannot determine using the conservative dump JSON.
         product_memberships = [
-            product.name
-            for product in products
-            if lists.contains(product.targets, tname)
+            prod_name
+            for prod_name in tdesc_map.get("product_memberships", [])
+            if lists.contains(products, lambda p: p.name == prod_name)
         ]
         target = _new_target_from_json_maps(
             repository_ctx = repository_ctx,
             dump_map = target_map,
-            desc_map = desc_targets_by_name[tname],
+            desc_map = tdesc_map,
             product_memberships = product_memberships,
             pkg_path = pkg_path,
             collect_src_info = collect_src_info,
