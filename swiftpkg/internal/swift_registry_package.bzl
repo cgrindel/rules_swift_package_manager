@@ -23,22 +23,41 @@ def _swift_registry_package_impl(repository_ctx):
 
     url = "{}/{}/{}/{}.zip".format(registry_url, scope, name, version)
 
-    # TODO:
-    # Works for my case, but the prefix can actually be anything, so this is not sufficient for general use.
-    # See `archive-source` command docs:
-    # https://github.com/apple/swift-evolution/blob/main/proposals/0292-package-registry-service.md#archive-source-subcommand
-    prefix = "{}.{}".format(scope, name)
-
-    headers = { 
+    headers = {
         "Accept": "application/vnd.swift.registry.v1+zip",
     }
 
+    # Swift registry package archives have a single directory at the root, but
+    # the directory name is not known in advance. We'll extract the archive to a
+    # temporary directory and then move the contents back to this directory.
+    tmp_dir = "rspm_tmp_" + repository_ctx.name
+
     repository_ctx.download_and_extract(
         url = url,
+        output = tmp_dir,
         # requires bazel 7.1
         headers = headers,
-        stripPrefix = prefix,
     )
+
+    # Move the contents of the unarchived directory back to the root of the repository
+    exec_result = repository_ctx.execute([
+        "find",
+        tmp_dir,
+        "-mindepth",
+        "2",
+        "-maxdepth",
+        "2",
+        "-exec",
+        "mv",
+        "{}",
+        ".",
+        ";",
+    ])
+    if exec_result.return_code != 0:
+        fail("Failed to move unarchived files. stderr:\n%s" % (exec_result.stderr))
+
+    # Remove the temp directory
+    repository_ctx.delete(tmp_dir)
 
     # Remove any Bazel build files.
     repository_files.remove_bazel_files(repository_ctx, directory)
