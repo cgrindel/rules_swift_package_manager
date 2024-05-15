@@ -75,15 +75,16 @@ def _swift_registry_package_impl(repository_ctx):
 _REGISTRY_ATTRS = {
     "id": attr.string(
         mandatory = True,
-        doc = """\
-The package identifier.\
-""",
+        doc = "The package identifier.",
     ),
     "version": attr.string(
         mandatory = True,
-        doc = """\
-The package version.\
-""",
+        doc = "The package version.",
+    ),
+    "registry_config": attr.label(
+        default = Label("@//:.swiftpm/configuration/registries.json"),
+        allow_single_file = True,
+        doc = "Path to the project-level Swift registry config JSON file.",
     ),
 }
 

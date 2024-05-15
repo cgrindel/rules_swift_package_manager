@@ -2,7 +2,7 @@
 
 def _read(repository_ctx):
     registry_config_json = repository_ctx.read(
-        Label("@//:.swiftpm/configuration/registries.json"),
+        repository_ctx.attr.registry_config,
     )
     registry_config = _new_from_json(registry_config_json)
     return registry_config
