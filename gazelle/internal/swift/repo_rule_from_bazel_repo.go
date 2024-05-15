@@ -24,14 +24,12 @@ func RepoRuleFromBazelRepo(
 ) (*rule.Rule, error) {
 	var r *rule.Rule
 	var err error
-	if bzlRepo.Pin != nil {
-		if bzlRepo.Pin.PkgRef.Kind == spreso.RegistryPkgRefKind {
-			r = repoRuleForRegistryPackage(bzlRepo.Name, bzlRepo.Pin)
-		} else {
-			r, err = repoRuleFromPin(bzlRepo.Name, bzlRepo.Pin, patch)
-			if err != nil {
-				return nil, err
-			}
+	if bzlRepo.Pin != nil && bzlRepo.Pin.PkgRef.Kind == spreso.RegistryPkgRefKind {
+		r = repoRuleForRegistryPackage(bzlRepo.Name, bzlRepo.Pin)
+	} else if bzlRepo.Pin != nil {
+		r, err = repoRuleFromPin(bzlRepo.Name, bzlRepo.Pin, patch)
+		if err != nil {
+			return nil, err
 		}
 	} else {
 		// For local packages, the `path` attribute must be relative to the WORKSPACE file.

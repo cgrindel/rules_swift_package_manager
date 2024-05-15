@@ -7,11 +7,6 @@ load(":registry_configs.bzl", "registry_configs")
 load(":repo_rules.bzl", "repo_rules")
 load(":repository_files.bzl", "repository_files")
 
-def _remove_bazel_files(repository_ctx, directory):
-    files = ["BUILD.bazel", "BUILD", "WORKSPACE", "WORKSPACE.bazel"]
-    for file in files:
-        repository_files.find_and_delete_files(repository_ctx, directory, file)
-
 def _swift_registry_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))
     env = repo_rules.get_exec_env(repository_ctx)
@@ -45,17 +40,17 @@ def _swift_registry_package_impl(repository_ctx):
         stripPrefix = prefix,
     )
 
-    # # Remove any Bazel build files.
-    _remove_bazel_files(repository_ctx, directory)
+    # Remove any Bazel build files.
+    repository_files.remove_bazel_files(repository_ctx, directory)
 
-    # # Generate the WORKSPACE file
+    # Generate the WORKSPACE file
     repo_rules.write_workspace_file(repository_ctx, directory)
 
-    # # Generate the build file
+    # Generate the build file
     pkg_ctx = pkg_ctxs.read(repository_ctx, directory, env)
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
-    # # Return attributes that make this reproducible
+    # Return attributes that make this reproducible
     return update_attrs(repository_ctx.attr, _ALL_ATTRS.keys(), {})
 
 _REGISTRY_ATTRS = {

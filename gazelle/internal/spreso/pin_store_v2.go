@@ -2,7 +2,7 @@ package spreso
 
 import (
 	"encoding/json"
-	// "fmt"
+	"fmt"
 )
 
 // V2
@@ -100,12 +100,11 @@ func NewPkgRefFromV2Pin(v2p *V2Pin) (*PackageReference, error) {
 }
 
 func NewPinStateFromV2PinState(ps *V2PinState) (PinState, error) {
-	// revision is empty for registry pins
-	// if ps.Revision == "" {
-	// 	return nil, fmt.Errorf("revision cannot be empty %+v", ps)
-	// }
 	if ps.Version != "" {
 		return NewVersionPinState(ps.Version, ps.Revision), nil
+	}
+	if ps.Revision == "" {
+		return nil, fmt.Errorf("revision cannot be empty %+v", ps)
 	}
 	if ps.Branch != "" {
 		return NewBranchPinState(ps.Branch, ps.Revision), nil

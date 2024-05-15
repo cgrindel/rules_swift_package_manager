@@ -176,6 +176,7 @@ type reg struct {
 	Identity string
 }
 
+// Registry represents the identity of an external dependency in a package registry.
 type Registry struct {
 	Identity string
 }

@@ -234,6 +234,11 @@ def _file_type(repository_ctx, path):
         ))
     return exec_result.stdout.removesuffix("\n")
 
+def _remove_bazel_files(repository_ctx, directory):
+    files = ["BUILD.bazel", "BUILD", "WORKSPACE", "WORKSPACE.bazel"]
+    for file in files:
+        _find_and_delete_files(repository_ctx, directory, file)
+
 repository_files = struct(
     copy_directory = _copy_directory,
     exclude_paths = _exclude_paths,
@@ -243,6 +248,7 @@ repository_files = struct(
     list_directories_under = _list_directories_under,
     list_files_under = _list_files_under,
     path_exists = _path_exists,
+    remove_bazel_files = _remove_bazel_files,
     # Exposed for testing purposes only.
     process_find_results = _process_find_results,
 )

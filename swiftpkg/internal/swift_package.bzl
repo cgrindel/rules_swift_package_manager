@@ -39,11 +39,6 @@ def _update_git_attrs(orig, keys, override):
         result.pop("branch", None)
     return result
 
-def _remove_bazel_files(repository_ctx, directory):
-    files = ["BUILD.bazel", "BUILD", "WORKSPACE", "WORKSPACE.bazel"]
-    for file in files:
-        repository_files.find_and_delete_files(repository_ctx, directory, file)
-
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))
     env = repo_rules.get_exec_env(repository_ctx)
@@ -56,7 +51,7 @@ def _swift_package_impl(repository_ctx):
     patch(repository_ctx)
 
     # Remove any Bazel build files.
-    _remove_bazel_files(repository_ctx, directory)
+    repository_files.remove_bazel_files(repository_ctx, directory)
 
     # Generate the WORKSPACE file
     repo_rules.write_workspace_file(repository_ctx, directory)

@@ -41,6 +41,8 @@ func CodeDirForLocalPackage(pkgDir string, localPkgPath string) string {
 	return filepath.Clean(path)
 }
 
+// CodeDirForRegistryPackage returns the path to the dependency's code. For registry dependencies,
+// it is the path to the package downloaded from the registry.
 func CodeDirForRegistryPackage(buildDir string, registryIdentity string, version string) string {
 	split := strings.Split(registryIdentity, ".")
 	scope, name := split[0], split[1]
