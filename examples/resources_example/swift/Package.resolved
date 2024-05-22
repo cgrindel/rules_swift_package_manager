@@ -77,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Iterable/swift-sdk",
       "state" : {
-        "revision" : "cb64b4d1717f309dee72a9c71f886888ce3328c3",
-        "version" : "6.5.2"
+        "revision" : "f984ed63ce9924e5cf33f828a7da53db975b3737",
+        "version" : "6.5.3"
       }
     }
   ],
