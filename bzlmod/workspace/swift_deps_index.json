@@ -82,9 +82,9 @@
       "name": "swiftpkg_swift_argument_parser",
       "identity": "swift-argument-parser",
       "remote": {
-        "commit": "46989693916f56d1186bd59ac15124caef896560",
+        "commit": "0fbc8848e389af3bb55c182bc19ca9d5dc2f255b",
         "remote": "https://github.com/apple/swift-argument-parser",
-        "version": "1.3.1"
+        "version": "1.4.0"
       }
     },
     {
