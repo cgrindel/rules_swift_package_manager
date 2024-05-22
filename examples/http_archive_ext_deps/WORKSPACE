@@ -94,7 +94,7 @@ swift_library(
     visibility = ["//visibility:public"],
 )
 """,
-    sha256 = "4d964f874b251abc280ee28f0f187de3c13a6122a9561524f66a10768ca2d837",
-    strip_prefix = "swift-argument-parser-1.3.1",
-    url = "https://github.com/apple/swift-argument-parser/archive/1.3.1.tar.gz",
+    sha256 = "d5bad3a1da66d9f4ceb0a347a197b8fdd243a91ff6b2d72b78efb052b9d6dd33",
+    strip_prefix = "swift-argument-parser-1.4.0",
+    url = "https://github.com/apple/swift-argument-parser/archive/1.4.0.tar.gz",
 )
