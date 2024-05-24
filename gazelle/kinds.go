@@ -106,6 +106,14 @@ var kinds = map[string]rule.KindInfo{
 			"dependencies_index": true,
 		},
 	},
+	swift.RegistrySwiftPkgRuleKind: rule.KindInfo{
+		MatchAttrs: []string{
+			"url",
+		},
+		MergeableAttrs: map[string]bool{
+			"dependencies_index": true,
+		},
+	},
 }
 
 func (*swiftLang) Kinds() map[string]rule.KindInfo {

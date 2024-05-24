@@ -55,6 +55,7 @@ func (*swiftLang) ApparentLoads(moduleToApparentName func(string) string) []rule
 			Symbols: []string{
 				swift.SwiftPkgRuleKind,
 				swift.LocalSwiftPkgRuleKind,
+				swift.RegistrySwiftPkgRuleKind,
 			},
 		},
 	}

@@ -61,6 +61,7 @@ const (
 // A PinState is the interface that all underlying pin state representations must implement.
 type PinState interface {
 	PinStateType() PinStateType
+	PinVersion() string
 }
 
 // BranchPinState
@@ -82,6 +83,10 @@ func NewBranchPinState(name, revision string) *BranchPinState {
 // PinStateType returns the type of pin state.
 func (bps *BranchPinState) PinStateType() PinStateType {
 	return BranchPinStateType
+}
+
+func (bps *BranchPinState) PinVersion() string {
+	return ""
 }
 
 // Commit returns the source control commit value (e.g., hash).
@@ -110,6 +115,10 @@ func (vps *VersionPinState) PinStateType() PinStateType {
 	return VersionPinStateType
 }
 
+func (vps *VersionPinState) PinVersion() string {
+	return vps.Version
+}
+
 // Commit returns the source control commit value (e.g., hash).
 func (vps *VersionPinState) Commit() string {
 	return vps.Revision
@@ -130,6 +139,10 @@ func NewRevisionPinState(revision string) *RevisionPinState {
 // PinStateType returns the type of pin state.
 func (rps *RevisionPinState) PinStateType() PinStateType {
 	return RevisionPinStateType
+}
+
+func (rps *RevisionPinState) PinVersion() string {
+	return ""
 }
 
 // Commit returns the source control commit value (e.g., hash).

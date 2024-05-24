@@ -24,7 +24,9 @@ func RepoRuleFromBazelRepo(
 ) (*rule.Rule, error) {
 	var r *rule.Rule
 	var err error
-	if bzlRepo.Pin != nil {
+	if bzlRepo.Pin != nil && bzlRepo.Pin.PkgRef.Kind == spreso.RegistryPkgRefKind {
+		r = repoRuleForRegistryPackage(bzlRepo.Name, bzlRepo.Pin)
+	} else if bzlRepo.Pin != nil {
 		r, err = repoRuleFromPin(bzlRepo.Name, bzlRepo.Pin, patch)
 		if err != nil {
 			return nil, err
@@ -98,5 +100,16 @@ func repoRuleFromPin(repoName string, p *spreso.Pin, patch *Patch) (*rule.Rule, 
 func repoRuleForLocalPackage(repoName string, path string) *rule.Rule {
 	r := rule.NewRule(LocalSwiftPkgRuleKind, repoName)
 	r.SetAttr("path", path)
+	return r
+}
+
+func repoRuleForRegistryPackage(repoName string, pin *spreso.Pin) *rule.Rule {
+	identity := pin.PkgRef.Identity
+	version := pin.State.PinVersion()
+
+	r := rule.NewRule(RegistrySwiftPkgRuleKind, repoName)
+	r.SetAttr("id", identity)
+	r.SetAttr("version", version)
+
 	return r
 }
