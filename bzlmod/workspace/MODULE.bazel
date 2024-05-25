@@ -8,7 +8,7 @@ local_path_override(
 )
 
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.20.2")
-bazel_dep(name = "bazel_skylib", version = "1.5.0")
+bazel_dep(name = "bazel_skylib", version = "1.6.1")
 
 # The apple_support bazel_dep must come before the rules_cc.
 # https://github.com/bazelbuild/apple_support#incompatible-toolchain-resolution
@@ -21,7 +21,7 @@ bazel_dep(
 
 bazel_dep(
     name = "bazel_skylib_gazelle_plugin",
-    version = "1.5.0",
+    version = "1.6.1",
     dev_dependency = True,
 )
 bazel_dep(

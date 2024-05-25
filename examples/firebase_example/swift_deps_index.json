@@ -66,7 +66,8 @@
         "FirebasePerformance",
         "FirebaseRemoteConfig",
         "FirebaseRemoteConfigSwift",
-        "FirebaseStorage"
+        "FirebaseStorage",
+        "FirebaseVertexAI-Preview"
       ]
     },
     {
@@ -194,7 +195,8 @@
         "FirebaseFirestore",
         "FirebaseFirestoreSwift",
         "FirebaseFunctions",
-        "FirebaseStorage"
+        "FirebaseStorage",
+        "FirebaseVertexAI-Preview"
       ]
     },
     {
@@ -249,7 +251,8 @@
         "FirebaseFunctionsCombine-Community",
         "FirebaseStorageCombine-Community",
         "FirebaseFunctions",
-        "FirebaseStorage"
+        "FirebaseStorage",
+        "FirebaseVertexAI-Preview"
       ]
     },
     {
@@ -284,7 +287,8 @@
         "FirebasePerformance",
         "FirebaseRemoteConfig",
         "FirebaseRemoteConfigSwift",
-        "FirebaseStorage"
+        "FirebaseStorage",
+        "FirebaseVertexAI-Preview"
       ]
     },
     {
@@ -302,7 +306,8 @@
         "FirebaseFirestoreSwift",
         "FirebaseFunctions",
         "FirebasePerformance",
-        "FirebaseStorage"
+        "FirebaseStorage",
+        "FirebaseVertexAI-Preview"
       ]
     },
     {
@@ -338,7 +343,8 @@
         "FirebasePerformance",
         "FirebaseRemoteConfig",
         "FirebaseRemoteConfigSwift",
-        "FirebaseStorage"
+        "FirebaseStorage",
+        "FirebaseVertexAI-Preview"
       ]
     },
     {
@@ -757,6 +763,17 @@
       "package_identity": "firebase-ios-sdk",
       "product_memberships": [
         "FirebaseStorageCombine-Community"
+      ]
+    },
+    {
+      "name": "FirebaseVertexAI",
+      "c99name": "FirebaseVertexAI",
+      "src_type": "swift",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseVertexAI.rspm",
+      "modulemap_label": "@swiftpkg_firebase_ios_sdk//:FirebaseVertexAI.rspm_modulemap",
+      "package_identity": "firebase-ios-sdk",
+      "product_memberships": [
+        "FirebaseVertexAI-Preview"
       ]
     },
     {
@@ -1373,6 +1390,12 @@
       "label": "@swiftpkg_firebase_ios_sdk//:FirebaseStorageCombine-Community"
     },
     {
+      "identity": "firebase-ios-sdk",
+      "name": "FirebaseVertexAI-Preview",
+      "type": "library",
+      "label": "@swiftpkg_firebase_ios_sdk//:FirebaseVertexAI-Preview"
+    },
+    {
       "identity": "googleappmeasurement",
       "name": "GoogleAppMeasurement",
       "type": "library",
@@ -1579,18 +1602,18 @@
       "name": "swiftpkg_app_check",
       "identity": "app-check",
       "remote": {
-        "commit": "5746b2d35c91c50581590ed97abe4c06b5037274",
+        "commit": "7d2688de038d5484866d835acb47b379722d610e",
         "remote": "https://github.com/google/app-check.git",
-        "version": "10.18.0"
+        "version": "10.19.0"
       }
     },
     {
       "name": "swiftpkg_firebase_ios_sdk",
       "identity": "firebase-ios-sdk",
       "remote": {
-        "commit": "42eae77a0af79e9c3f41df04a23c76f05cfdda77",
+        "commit": "9d17b500cd98d9a7009751ad62f802e152e97021",
         "remote": "https://github.com/firebase/firebase-ios-sdk",
-        "version": "10.24.0"
+        "version": "10.26.0"
       },
       "cLanguageStandard": "c99",
       "cxxLanguageStandard": "gnu++14"
@@ -1599,9 +1622,9 @@
       "name": "swiftpkg_googleappmeasurement",
       "identity": "googleappmeasurement",
       "remote": {
-        "commit": "51ba746a9d51a4bd0774b68499b0c73ef6e8570d",
+        "commit": "16244d177c4e989f87b25e9db1012b382cfedc55",
         "remote": "https://github.com/google/GoogleAppMeasurement.git",
-        "version": "10.24.0"
+        "version": "10.25.0"
       },
       "cLanguageStandard": "c99",
       "cxxLanguageStandard": "gnu++14"
@@ -1687,9 +1710,9 @@
       "name": "swiftpkg_reachability.swift",
       "identity": "reachability.swift",
       "remote": {
-        "commit": "57da4b1270cab7c2228919eabc0e4e1bf93e48ea",
+        "commit": "7cbd73f46a7dfaeca079e18df7324c6de6d1834a",
         "remote": "https://github.com/ashleymills/Reachability.swift.git",
-        "version": "5.2.2"
+        "version": "5.2.3"
       }
     },
     {
