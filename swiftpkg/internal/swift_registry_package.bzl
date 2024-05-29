@@ -84,7 +84,13 @@ _REGISTRY_ATTRS = {
     "registry_config": attr.label(
         default = Label("@//:.swiftpm/configuration/registries.json"),
         allow_single_file = True,
-        doc = "Path to the project-level Swift registry config JSON file.",
+        doc = """\
+Path to the project-level Swift registry config JSON file.
+
+This file is used to determine the registry to download a package from based on its scope, and can be managed with the `swift package-registry set` and `swift package-registry unset` commands.
+
+By default, this is `.swiftpm/configuration/registries.json`. Since this location is not configurable to `swift`, you should not change it.
+""",
     ),
 }
 
