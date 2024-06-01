@@ -59,7 +59,3 @@ use_repo(
     "swiftpkg_swift_log",
 )
 # swift_deps END
-swift_deps.configure_package(
-    name = "swiftpkg_libwebp_xcode",
-    init_submodules = True,
-)
