@@ -91,7 +91,7 @@ _configure_package_tag = tag_class(
             mandatory = True,
         ),
         "recursive_init_submodules": attr.bool(
-            default = False,
+            default = True,
             doc = "Whether to clone submodules recursively in the repository.",
         ),
     },

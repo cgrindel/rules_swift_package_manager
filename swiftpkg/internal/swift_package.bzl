@@ -109,7 +109,7 @@ The commit or revision to download from version control.\
         doc = "Whether to clone submodules in the repository.",
     ),
     "recursive_init_submodules": attr.bool(
-        default = False,
+        default = True,
         doc = "Whether to clone submodules recursively in the repository.",
     ),
     "remote": attr.string(
