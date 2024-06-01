@@ -52,15 +52,6 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
         pkg_info_label = "@{}//:pkg_info.json".format(bazel_repo_name)
         direct_dep_pkg_infos[pkg_info_label] = dep.identity
 
-    # direct_dep_repo_names = [
-    #     bazel_repo_names.from_identity(dep.identity)
-    #     for dep in pkg_info.dependencies
-    # ]
-    # direct_dep_pkg_infos = [
-    #     "@{}//:pkg_info.json".format(rname)
-    #     for rname in direct_dep_repo_names
-    # ]
-
     # Write info about the Swift deps that may be used by external tooling.
     swift_deps_info_repo_name = "swift_deps_info"
     swift_deps_info(
@@ -78,8 +69,8 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
             continue
         dep = pkginfos.new_dependency(
             identity = pin.identity,
-            # Just use the identity for the name as it we just need this to
-            # set up the repositories.
+            # Just use the identity for the name as we just need this to set
+            # up the repositories.
             name = pin.identity,
             source_control = pkginfos.new_source_control(pin = pin),
         )
