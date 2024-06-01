@@ -13,22 +13,20 @@ development inside a Bazel workspace.
 ## Table of Contents
 
 <!-- MARKDOWN TOC: BEGIN -->
-
-- [Documentation](#documentation)
-- [Prerequisites](#prerequisites)
-  - [Mac OS](#mac-os)
-  - [Linux](#linux)
-- [Quickstart](#quickstart)
-  - [1. Enable bzlmod](#1-enable-bzlmod)
-  - [2. Configure your `MODULE.bazel` to use rules_swift_package_manager.](#2-configure-your-modulebazel-to-use-rules_swift_package_manager)
-  - [3. Create a minimal `Package.swift` file.](#3-create-a-minimal-packageswift-file)
-  - [4. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.](#4-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
-  - [5. Resolve the external dependencies for your project.](#5-resolve-the-external-dependencies-for-your-project)
-  - [6. Create or update Bazel build files for your project.](#6-create-or-update-bazel-build-files-for-your-project)
-  - [7. Build and test your project.](#7-build-and-test-your-project)
-  - [8. Check-in `Package.resolved`, `swift_deps_index.json`, and `MODULE.bazel`.](#8-check-in-packageresolved-swift_deps_indexjson-and-modulebazel)
-  - [9. Start coding](#9-start-coding)
-- [Tips and Tricks](#tips-and-tricks)
+* [Documentation](#documentation)
+* [Prerequisites](#prerequisites)
+  * [Mac OS](#mac-os)
+  * [Linux](#linux)
+* [Quickstart](#quickstart)
+  * [1. Enable bzlmod](#1-enable-bzlmod)
+  * [2. Configure your `MODULE.bazel` to use rules_swift_package_manager.](#2-configure-your-modulebazel-to-use-rules_swift_package_manager)
+  * [3. Create a minimal `Package.swift` file.](#3-create-a-minimal-packageswift-file)
+  * [4. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.](#4-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
+  * [5. Create or update Bazel build files for your project.](#5-create-or-update-bazel-build-files-for-your-project)
+  * [6. Build and test your project.](#6-build-and-test-your-project)
+  * [7. Check-in `Package.resolved`, `swift_deps_index.json`, and `MODULE.bazel`.](#7-check-in-packageresolved-swift_deps_indexjson-and-modulebazel)
+  * [8. Start coding](#8-start-coding)
+* [Tips and Tricks](#tips-and-tricks)
 <!-- MARKDOWN TOC: END -->
 
 ## Documentation
