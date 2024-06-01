@@ -669,12 +669,12 @@ cc_library(
         "@rules_swift_package_manager//config_settings/spm/configuration:release": ["-danger"],
         "//conditions:default": [],
     }),
-    defines = [
+    hdrs = ["include/external.h"],
+    includes = ["include"],
+    local_defines = [
         "SWIFT_PACKAGE=1",
         "PLATFORM_POSIX=1",
     ],
-    hdrs = ["include/external.h"],
-    includes = ["include"],
     srcs = [
         "src/foo.cc",
         "src/foo.h",
@@ -839,7 +839,6 @@ cc_library(
         "-fmodule-name=ClangLibraryWithConditionalDep",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
     ],
-    defines = ["SWIFT_PACKAGE=1"],
     deps = select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:ClangLibrary.rspm"],
         "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:ClangLibrary.rspm"],
@@ -847,6 +846,7 @@ cc_library(
     }),
     hdrs = ["include/external.h"],
     includes = ["include"],
+    local_defines = ["SWIFT_PACKAGE=1"],
     srcs = [
         "src/foo.cc",
         "src/foo.h",

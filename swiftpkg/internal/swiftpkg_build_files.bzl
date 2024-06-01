@@ -336,7 +336,11 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         },
     )
 
-    attrs["defines"] = bzl_selects.to_starlark(defines)
+    # Add the defines as local so that they do not propagate.
+    # objc_library does not have local_defines. See the following for more details
+    # https://github.com/bazelbuild/bazel/issues/17482.
+    defines_attrib_name = "defines" if target.objc_src_info else "local_defines"
+    attrs[defines_attrib_name] = bzl_selects.to_starlark(defines)
 
     bzl_target_name = target.label.name
 
