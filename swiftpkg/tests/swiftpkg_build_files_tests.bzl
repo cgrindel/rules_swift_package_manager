@@ -34,6 +34,7 @@ _repo_name = "@swiftpkg_mypackage"
 _pkg_info = pkginfos.new(
     name = "MyPackage",
     path = "/path/to/my-package",
+    tools_version = "5.9",
     dependencies = [
         pkginfos.new_dependency(
             identity = "swift-argument-parser",

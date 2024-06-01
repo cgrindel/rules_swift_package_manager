@@ -49,10 +49,18 @@ def _swift_target_build_file(pkg_ctx, target):
     attrs = {
         "deps": bzl_selects.to_starlark(deps),
         "module_name": target.c99name,
-        "package_name": target.label.repository_name.lstrip("@") + ".rspm",
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//:__subpackages__"],
     }
+
+    # Naively parse the tools semver.
+    tools_version = pkg_ctx.pkg_info.tools_version or "0.0.0"
+    tools_version_components = tools_version.split(".") + ["0", "0"]
+    tools_version_major, tools_version_minor = [int(x if x.isdigit() else "0") for x in tools_version_components[0:2]]
+
+    # Gate package_name behind swift tools version 5.9
+    if tools_version_major >= 6 or (tools_version_major == 5 and tools_version_minor >= 9):
+        attrs["package_name"] = target.label.repository_name.lstrip("@") + ".rspm"
 
     # Add macros as plugins
     macro_target_labels = [
