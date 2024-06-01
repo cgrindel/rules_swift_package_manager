@@ -578,7 +578,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 swift_library(
     name = "RegularSwiftTargetAsLibrary.rspm",
     always_include_developer_search_paths = True,
-    defines = ["SWIFT_PACKAGE"],
+    copts = ["-DSWIFT_PACKAGE"],
     deps = [],
     module_name = "RegularSwiftTargetAsLibrary",
     srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
@@ -599,7 +599,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 swift_library(
     name = "RegularTargetForExec.rspm",
     always_include_developer_search_paths = True,
-    defines = ["SWIFT_PACKAGE"],
+    copts = ["-DSWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
     module_name = "RegularTargetForExec",
     srcs = ["Source/RegularTargetForExec/main.swift"],
@@ -616,7 +616,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
 
 swift_test(
     name = "RegularSwiftTargetAsLibraryTests.rspm",
-    defines = ["SWIFT_PACKAGE"],
+    copts = ["-DSWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
     module_name = "RegularSwiftTargetAsLibraryTests",
     srcs = ["Tests/RegularSwiftTargetAsLibraryTests/RegularSwiftTargetAsLibraryTests.swift"],
@@ -633,15 +633,15 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 swift_binary(
     name = "SwiftExecutableTarget.rspm",
     copts = [
+        "-DSWIFT_PACKAGE",
         "-enable-experimental-feature",
         "BuiltinModule",
     ] + select({
-        "@rules_swift_package_manager//config_settings/spm/configuration:release": ["-cross-module-optimization"],
+        "@rules_swift_package_manager//config_settings/spm/platform:ios": ["-DFOOBAR"],
+        "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["-DFOOBAR"],
         "//conditions:default": [],
-    }),
-    defines = ["SWIFT_PACKAGE"] + select({
-        "@rules_swift_package_manager//config_settings/spm/platform:ios": ["FOOBAR"],
-        "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["FOOBAR"],
+    }) + select({
+        "@rules_swift_package_manager//config_settings/spm/configuration:release": ["-cross-module-optimization"],
         "//conditions:default": [],
     }),
     deps = [],
@@ -663,6 +663,8 @@ cc_library(
         "-fobjc-arc",
         "-fPIC",
         "-fmodule-name=ClangLibrary",
+        "-DSWIFT_PACKAGE=1",
+        "-DPLATFORM_POSIX=1",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage",
     ] + select({
@@ -671,10 +673,6 @@ cc_library(
     }),
     hdrs = ["include/external.h"],
     includes = ["include"],
-    local_defines = [
-        "SWIFT_PACKAGE=1",
-        "PLATFORM_POSIX=1",
-    ],
     srcs = [
         "src/foo.cc",
         "src/foo.h",
@@ -707,9 +705,9 @@ objc_library(
         "-fobjc-arc",
         "-fPIC",
         "-fmodule-name=ObjcLibrary",
+        "-DSWIFT_PACKAGE=1",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
     ],
-    defines = ["SWIFT_PACKAGE=1"],
     deps = [
         "@swiftpkg_mypackage//:ObjcLibraryDep.rspm",
         "@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap",
@@ -766,9 +764,9 @@ objc_library(
         "-fobjc-arc",
         "-fPIC",
         "-fmodule-name=ObjcLibraryWithModulemap",
+        "-DSWIFT_PACKAGE=1",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
     ],
-    defines = ["SWIFT_PACKAGE=1"],
     deps = [
         "@swiftpkg_mypackage//:ObjcLibraryDep.rspm",
         "@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap",
@@ -812,7 +810,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 swift_library(
     name = "SwiftLibraryWithConditionalDep.rspm",
     always_include_developer_search_paths = True,
-    defines = ["SWIFT_PACKAGE"],
+    copts = ["-DSWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:ClangLibrary.rspm"] + select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
         "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
@@ -837,6 +835,7 @@ cc_library(
         "-fobjc-arc",
         "-fPIC",
         "-fmodule-name=ClangLibraryWithConditionalDep",
+        "-DSWIFT_PACKAGE=1",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
     ],
     deps = select({
@@ -846,7 +845,6 @@ cc_library(
     }),
     hdrs = ["include/external.h"],
     includes = ["include"],
-    local_defines = ["SWIFT_PACKAGE=1"],
     srcs = [
         "src/foo.cc",
         "src/foo.h",
@@ -875,7 +873,7 @@ generate_modulemap(
 swift_library(
     name = "SwiftForObjcTarget.rspm",
     always_include_developer_search_paths = True,
-    defines = ["SWIFT_PACKAGE"],
+    copts = ["-DSWIFT_PACKAGE"],
     deps = [
         "@swiftpkg_mypackage//:ObjcLibraryDep.rspm",
         "@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap",
@@ -917,8 +915,8 @@ resource_bundle_infoplist(
 swift_library(
     name = "SwiftLibraryWithFilePathResource.rspm",
     always_include_developer_search_paths = True,
+    copts = ["-DSWIFT_PACKAGE"],
     data = [":SwiftLibraryWithFilePathResource.rspm_resource_bundle"],
-    defines = ["SWIFT_PACKAGE"],
     deps = [],
     module_name = "SwiftLibraryWithFilePathResource",
     srcs = [
@@ -962,10 +960,10 @@ objc_library(
         "-fPIC",
         "-fmodule-name=ObjcLibraryWithResources",
         "-include$(location :ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr)",
+        "-DSWIFT_PACKAGE=1",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
     ],
     data = [":ObjcLibraryWithResources.rspm_resource_bundle"],
-    defines = ["SWIFT_PACKAGE=1"],
     enable_modules = True,
     hdrs = ["include/external.h"],
     includes = ["include"],

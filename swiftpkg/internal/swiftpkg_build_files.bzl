@@ -71,12 +71,13 @@ def _swift_target_build_file(pkg_ctx, target):
             deps_without_plugins = [dep for dep in deps if dep.value[0] not in plugins]
             attrs["deps"] = bzl_selects.to_starlark(deps_without_plugins)
 
-    defines = [
+    # NOTE: We specify defines using copts so that they stay local to the
+    # target. Specifying them using the defines attribute will propagate them.
+    copts = [
         # SPM directive instructing the code to build as if a Swift package.
         # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
-        "SWIFT_PACKAGE",
+        "-DSWIFT_PACKAGE",
     ]
-    copts = []
 
     # GH046: Support plugins.
 
@@ -89,8 +90,11 @@ def _swift_target_build_file(pkg_ctx, target):
 
     if target.swift_settings != None:
         if len(target.swift_settings.defines) > 0:
-            defines.extend(lists.flatten([
-                bzl_selects.new_from_build_setting(bs)
+            copts.extend(lists.flatten([
+                bzl_selects.new_from_build_setting(
+                    bs,
+                    values_map_fn = lambda v: "-D" + v,
+                )
                 for bs in target.swift_settings.defines
             ]))
         if len(target.swift_settings.unsafe_flags) > 0:
@@ -103,8 +107,6 @@ def _swift_target_build_file(pkg_ctx, target):
                 copts.append("-enable-experimental-feature")
                 copts.extend(lists.flatten(bzl_selects.new_from_build_setting(bs)))
 
-    if len(defines) > 0:
-        attrs["defines"] = bzl_selects.to_starlark(defines)
     if len(copts) > 0:
         attrs["copts"] = bzl_selects.to_starlark(copts)
 
@@ -233,29 +235,31 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     if res_build_file:
         all_build_files.append(res_build_file)
 
-    defines = [
-        # The SWIFT_PACKAGE define is a magical value that SPM uses when it
-        # builds clang libraries that will be used as Swift modules.
-        "SWIFT_PACKAGE=1",
-    ]
-
     # The copts may be updated by functions that were executed before this
     # point. Use whatever has been set.
     copts = attrs.get("copts", [])
+
+    # The SWIFT_PACKAGE define is a magical value that SPM uses when it
+    # builds clang libraries that will be used as Swift modules.
+    copts.append("-DSWIFT_PACKAGE=1")
 
     local_includes = [
         bzl_selects.new(value = p, kind = _condition_kinds.private_includes)
         for p in clang_src_info.private_includes
     ]
 
+    def _normalize_and_create_copt_define(value):
+        normalized = scg.normalize_define_value(value)
+        return "-D" + normalized
+
     all_settings = lists.compact([target.clang_settings, target.cxx_settings])
     for settings in all_settings:
-        defines.extend(lists.flatten([
+        copts.extend(lists.flatten([
             bzl_selects.new_from_build_setting(
                 bs,
                 # Define values can contain spaces. Bazel requires that they
                 # are already escaped.
-                values_map_fn = scg.normalize_define_value,
+                values_map_fn = _normalize_and_create_copt_define,
             )
             for bs in settings.defines
         ]))
@@ -335,12 +339,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             ),
         },
     )
-
-    # Add the defines as local so that they do not propagate.
-    # objc_library does not have local_defines. See the following for more details
-    # https://github.com/bazelbuild/bazel/issues/17482.
-    defines_attrib_name = "defines" if target.objc_src_info else "local_defines"
-    attrs[defines_attrib_name] = bzl_selects.to_starlark(defines)
 
     bzl_target_name = target.label.name
 
