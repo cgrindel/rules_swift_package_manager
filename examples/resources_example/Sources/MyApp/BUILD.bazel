@@ -16,6 +16,7 @@ swift_library(
         "@swiftpkg_package_with_resources//:CoolUI",
         "@swiftpkg_recaptcha_enterprise_mobile_sdk//:RecaptchaEnterprise",
         "@swiftpkg_sdwebimageswiftui//:SDWebImageSwiftUI",
+        "@swiftpkg_swift_sdk//:IterableSDK",
     ],
 )
 

@@ -84,7 +84,9 @@ def _list_directories_under(
     Returns:
         A `list` of path `string` values.
     """
-    find_args = ["find", path]
+
+    # Follow symlinks and report on the actual directories.
+    find_args = ["find", "-H", "-L", path]
 
     # For GNU find, it is important for the global options (e.g. -maxdepth) to be
     # specified BEFORE other options like -type. Also, GNU find does not support -depth <level>.
@@ -159,17 +161,23 @@ def _exclude_paths(path_list, exclude_paths):
 
     return results
 
-def _find_and_delete_files(repository_ctx, path, name):
+def _find_and_delete_files(repository_ctx, path, name, exclude_paths = []):
     """Finds files with the specified name under the specified path and deletes them.
 
     Args:
         repository_ctx: A `repository_ctx` instance.
         path: A path `string` value.
         name: A file basename as a `string`.
+        exclude_paths: Optional. A `list` of path `string` values to exclude
+            from the search.
     """
     find_args = ["find", path, "-type", "f", "-name", name]
+    exclude_args = lists.flatten([
+        ["-not", "-path", path + "/" + exclude_path]
+        for exclude_path in exclude_paths
+    ])
     rm_args = ["-delete"]
-    all_args = find_args + rm_args
+    all_args = find_args + exclude_args + rm_args
     exec_result = repository_ctx.execute(all_args, quiet = True)
     if exec_result.return_code != 0:
         fail("Failed to remove files named {name} under {path}. stderr:\n{stderr}".format(

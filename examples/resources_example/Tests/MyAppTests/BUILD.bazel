@@ -12,6 +12,7 @@ swift_library(
     deps = [
         "@swiftpkg_app_lovin_sdk//:AppLovinSDK",
         "@swiftpkg_package_with_resources//:CoolUI",
+        "@swiftpkg_swift_sdk//:IterableSDK",
     ],
 )
 

@@ -154,6 +154,7 @@ _macos_single_bazel_version_test_examples = [
     "stripe_example",
     "xcmetrics_example",
     "tca_example",
+    "symlink_example",
 ]
 
 _linux_single_bazel_version_test_examples = []

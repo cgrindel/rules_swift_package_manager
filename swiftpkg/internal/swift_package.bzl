@@ -44,6 +44,23 @@ def _remove_bazel_files(repository_ctx, directory):
     for file in files:
         repository_files.find_and_delete_files(repository_ctx, directory, file)
 
+def _remove_modulemaps(repository_ctx, directory, targets):
+    repository_files.find_and_delete_files(
+        repository_ctx,
+        directory,
+        "module.modulemap",
+        exclude_paths = [
+            # Framework modulemaps don't cause issues, and are needed
+            "**/*.framework/*",
+        ] + [
+            # We need to leave any modulemaps that we are passing into
+            # `objc_library`
+            target.clang_src_info.modulemap_path
+            for target in targets
+            if target.clang_src_info and target.clang_src_info.modulemap_path
+        ],
+    )
+
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))
     env = repo_rules.get_exec_env(repository_ctx)
@@ -68,6 +85,9 @@ def _swift_package_impl(repository_ctx):
     # Remove the git stuff
     repository_ctx.delete(repository_ctx.path(".git"))
 
+    # Remove unused modulemaps to prevent module redefinition errors
+    _remove_modulemaps(repository_ctx, directory, pkg_ctx.pkg_info.targets)
+
     # Return attributes that make this reproducible
     return _update_git_attrs(repository_ctx.attr, _ALL_ATTRS.keys(), update)
 
@@ -89,7 +109,7 @@ The commit or revision to download from version control.\
         doc = "Whether to clone submodules in the repository.",
     ),
     "recursive_init_submodules": attr.bool(
-        default = False,
+        default = True,
         doc = "Whether to clone submodules recursively in the repository.",
     ),
     "remote": attr.string(

@@ -35,6 +35,17 @@
       ]
     },
     {
+      "name": "BitCollections",
+      "c99name": "BitCollections",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_collections//:BitCollections.rspm",
+      "package_identity": "swift-collections",
+      "product_memberships": [
+        "BitCollections",
+        "Collections"
+      ]
+    },
+    {
       "name": "Collections",
       "c99name": "Collections",
       "src_type": "swift",
@@ -51,8 +62,30 @@
       "label": "@swiftpkg_swift_collections//:DequeModule.rspm",
       "package_identity": "swift-collections",
       "product_memberships": [
-        "Collections",
-        "DequeModule"
+        "DequeModule",
+        "Collections"
+      ]
+    },
+    {
+      "name": "HashTreeCollections",
+      "c99name": "HashTreeCollections",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_collections//:HashTreeCollections.rspm",
+      "package_identity": "swift-collections",
+      "product_memberships": [
+        "HashTreeCollections",
+        "Collections"
+      ]
+    },
+    {
+      "name": "HeapModule",
+      "c99name": "HeapModule",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_collections//:HeapModule.rspm",
+      "package_identity": "swift-collections",
+      "product_memberships": [
+        "HeapModule",
+        "Collections"
       ]
     },
     {
@@ -62,8 +95,35 @@
       "label": "@swiftpkg_swift_collections//:OrderedCollections.rspm",
       "package_identity": "swift-collections",
       "product_memberships": [
-        "Collections",
-        "OrderedCollections"
+        "OrderedCollections",
+        "Collections"
+      ]
+    },
+    {
+      "name": "_CollectionsUtilities",
+      "c99name": "_CollectionsUtilities",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_collections//:_CollectionsUtilities.rspm",
+      "package_identity": "swift-collections",
+      "product_memberships": [
+        "BitCollections",
+        "DequeModule",
+        "HashTreeCollections",
+        "HeapModule",
+        "OrderedCollections",
+        "_RopeModule",
+        "Collections"
+      ]
+    },
+    {
+      "name": "_RopeModule",
+      "c99name": "_RopeModule",
+      "src_type": "swift",
+      "label": "@swiftpkg_swift_collections//:_RopeModule.rspm",
+      "package_identity": "swift-collections",
+      "product_memberships": [
+        "_RopeModule",
+        "Collections"
       ]
     },
     {
@@ -169,6 +229,12 @@
     },
     {
       "identity": "swift-collections",
+      "name": "BitCollections",
+      "type": "library",
+      "label": "@swiftpkg_swift_collections//:BitCollections"
+    },
+    {
+      "identity": "swift-collections",
       "name": "Collections",
       "type": "library",
       "label": "@swiftpkg_swift_collections//:Collections"
@@ -181,9 +247,27 @@
     },
     {
       "identity": "swift-collections",
+      "name": "HashTreeCollections",
+      "type": "library",
+      "label": "@swiftpkg_swift_collections//:HashTreeCollections"
+    },
+    {
+      "identity": "swift-collections",
+      "name": "HeapModule",
+      "type": "library",
+      "label": "@swiftpkg_swift_collections//:HeapModule"
+    },
+    {
+      "identity": "swift-collections",
       "name": "OrderedCollections",
       "type": "library",
       "label": "@swiftpkg_swift_collections//:OrderedCollections"
+    },
+    {
+      "identity": "swift-collections",
+      "name": "_RopeModule",
+      "type": "library",
+      "label": "@swiftpkg_swift_collections//:_RopeModule"
     },
     {
       "identity": "swift-composable-architecture",
@@ -266,18 +350,18 @@
       "name": "swiftpkg_swift_collections",
       "identity": "swift-collections",
       "remote": {
-        "commit": "a902f1823a7ff3c9ab2fba0f992396b948eda307",
+        "commit": "94cf62b3ba8d4bed62680a282d4c25f9c63c2efb",
         "remote": "https://github.com/apple/swift-collections",
-        "version": "1.0.5"
+        "version": "1.1.0"
       }
     },
     {
       "name": "swiftpkg_swift_composable_architecture",
       "identity": "swift-composable-architecture",
       "remote": {
-        "commit": "115fe5af41d333b6156d4924d7c7058bc77fd580",
+        "commit": "433a23118f739078644ebeb4009e23d307af694a",
         "remote": "https://github.com/pointfreeco/swift-composable-architecture",
-        "version": "1.9.2"
+        "version": "1.10.4"
       }
     },
     {
@@ -293,9 +377,9 @@
       "name": "swiftpkg_swift_custom_dump",
       "identity": "swift-custom-dump",
       "remote": {
-        "commit": "3efbfba0e4e56c7187cc19137ee16b7c95346b79",
+        "commit": "f01efb26f3a192a0e88dcdb7c3c391ec2fc25d9c",
         "remote": "https://github.com/pointfreeco/swift-custom-dump",
-        "version": "1.1.0"
+        "version": "1.3.0"
       }
     },
     {

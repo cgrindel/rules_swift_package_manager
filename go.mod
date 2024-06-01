@@ -6,20 +6,20 @@ go 1.21.4
 // toolchain go1.21.5
 
 require (
-	github.com/bazelbuild/bazel-gazelle v0.35.0
-	github.com/bazelbuild/buildtools v0.0.0-20231115204819-d4c9dccdfbb1
+	github.com/bazelbuild/bazel-gazelle v0.36.0
+	github.com/bazelbuild/buildtools v0.0.0-20240422193413-1429e15ae755
 	github.com/creasty/defaults v1.7.0
 	github.com/deckarep/golang-set/v2 v2.6.0
 	github.com/stretchr/testify v1.9.0
-	golang.org/x/exp v0.0.0-20240119083558-1b970713d09a
-	golang.org/x/text v0.14.0
+	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842
+	golang.org/x/text v0.15.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/mod v0.14.0 // indirect
-	golang.org/x/sys v0.15.0 // indirect
+	golang.org/x/mod v0.17.0 // indirect
+	golang.org/x/sys v0.19.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
 )

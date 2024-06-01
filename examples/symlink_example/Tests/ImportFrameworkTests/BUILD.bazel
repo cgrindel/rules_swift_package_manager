@@ -1,0 +1,17 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "ImportFrameworkTestsLib",
+    testonly = True,
+    srcs = ["ImportFrameworkTests.swift"],
+    module_name = "ImportFrameworkTests",
+    tags = ["manual"],
+    deps = ["//Sources/ImportFramework"],
+)
+
+ios_unit_test(
+    name = "ImportFrameworkTests",
+    minimum_os_version = "15.0",
+    deps = [":ImportFrameworkTestsLib"],
+)

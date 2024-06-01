@@ -166,9 +166,9 @@ func (*swiftLang) Configure(c *config.Config, rel string, f *rule.File) {
 
 	for _, d := range f.Directives {
 		switch d.Key {
-		case "proto_strip_import_prefix":
+		case protoStripImportPrefix:
 			sc.StripImportPrefix = d.Value
-		case "proto_import_prefix":
+		case protoImportPrefix:
 			sc.ImportPrefix = d.Value
 		case swiftModuleNamingConventionDirective:
 			if d.Value == "" {
