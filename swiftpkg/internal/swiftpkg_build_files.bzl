@@ -56,18 +56,34 @@ def _swift_target_build_file(pkg_ctx, target):
     if tools_version_major >= 6 or (tools_version_major == 5 and tools_version_minor >= 9):
         attrs["package_name"] = target.label.repository_name.lstrip("@") + ".rspm"
 
-    # Add macros as plugins
-    macro_target_labels = [
-        target.label.repository_name + "//:" + target.label.name
-        for target in pkg_ctx.pkg_info.targets
-        if target.type == "macro"
-    ]
-    if macro_target_labels:
-        plugins = [
-            target_label
-            for target_label in macro_target_labels
-            for dep in deps
-            if target_label in dep.value[0]
+    target_deps = []
+    macro_targets = []
+    for target_dep in target.dependencies:
+        dep_target_name = None
+        if target_dep.target:
+            dep_target_name = target_dep.target.target_name
+        elif target_dep.by_name:
+            dep_target_name = target_dep.by_name.name
+        if not dep_target_name:
+            target_deps.append(target_dep)
+            continue
+        dep_target = pkginfo_targets.get(
+            targets = pkg_ctx.pkg_info.targets,
+            name = dep_target_name,
+            fail_if_not_found = False,
+        )
+
+        if not dep_target or dep_target.type != target_types.macro:
+            target_deps.append(target_dep)
+            continue
+        macro_targets.append(dep_target)
+
+    if macro_targets:
+        attrs["plugins"] = [
+            # The targets will be local to this repo. We do not want the '@'
+            # prefix that can be added during normalization.
+            bazel_labels.normalize(t.label).removeprefix("@")
+            for t in macro_targets
         ]
     deps = []
     if target_deps:

@@ -493,7 +493,6 @@ swift_library(
     name = "RegularSwiftTargetAsLibrary.rspm",
     always_include_developer_search_paths = True,
     copts = ["-DSWIFT_PACKAGE"],
-    deps = [],
     module_name = "RegularSwiftTargetAsLibrary",
     package_name = "swiftpkg_mypackage.rspm",
     srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
@@ -836,7 +835,6 @@ swift_library(
     always_include_developer_search_paths = True,
     copts = ["-DSWIFT_PACKAGE"],
     data = [":SwiftLibraryWithFilePathResource.rspm_resource_bundle"],
-    deps = [],
     module_name = "SwiftLibraryWithFilePathResource",
     package_name = "swiftpkg_mypackage.rspm",
     srcs = [
