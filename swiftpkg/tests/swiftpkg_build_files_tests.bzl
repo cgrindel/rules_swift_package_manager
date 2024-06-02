@@ -34,6 +34,7 @@ _repo_name = "@swiftpkg_mypackage"
 _pkg_info = pkginfos.new(
     name = "MyPackage",
     path = "/path/to/my-package",
+    tools_version = "5.9",
     dependencies = [
         pkginfos.new_dependency(
             identity = "swift-argument-parser",
@@ -581,6 +582,7 @@ swift_library(
     copts = ["-DSWIFT_PACKAGE"],
     deps = [],
     module_name = "RegularSwiftTargetAsLibrary",
+    package_name = "swiftpkg_mypackage.rspm",
     srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
@@ -602,6 +604,7 @@ swift_library(
     copts = ["-DSWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
     module_name = "RegularTargetForExec",
+    package_name = "swiftpkg_mypackage.rspm",
     srcs = ["Source/RegularTargetForExec/main.swift"],
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
@@ -619,6 +622,7 @@ swift_test(
     copts = ["-DSWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
     module_name = "RegularSwiftTargetAsLibraryTests",
+    package_name = "swiftpkg_mypackage.rspm",
     srcs = ["Tests/RegularSwiftTargetAsLibraryTests/RegularSwiftTargetAsLibraryTests.swift"],
     visibility = ["//:__subpackages__"],
 )
@@ -646,6 +650,7 @@ swift_binary(
     }),
     deps = [],
     module_name = "SwiftExecutableTarget",
+    package_name = "swiftpkg_mypackage.rspm",
     srcs = ["Source/SwiftExecutableTarget/main.swift"],
     visibility = ["//:__subpackages__"],
 )
@@ -817,6 +822,7 @@ swift_library(
         "//conditions:default": [],
     }),
     module_name = "SwiftLibraryWithConditionalDep",
+    package_name = "swiftpkg_mypackage.rspm",
     srcs = ["Source/SwiftLibraryWithConditionalDep/SwiftLibraryWithConditionalDep.swift"],
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
@@ -880,6 +886,7 @@ swift_library(
     ],
     generates_header = True,
     module_name = "SwiftForObjcTarget",
+    package_name = "swiftpkg_mypackage.rspm",
     srcs = ["Source/SwiftForObjcTarget/SwiftForObjcTarget.swift"],
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
@@ -919,6 +926,7 @@ swift_library(
     data = [":SwiftLibraryWithFilePathResource.rspm_resource_bundle"],
     deps = [],
     module_name = "SwiftLibraryWithFilePathResource",
+    package_name = "swiftpkg_mypackage.rspm",
     srcs = [
         "Source/SwiftLibraryWithFilePathResource/SwiftLibraryWithFilePathResource.swift",
         ":SwiftLibraryWithFilePathResource.rspm_resource_bundle_accessor",
