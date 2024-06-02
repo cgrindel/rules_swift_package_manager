@@ -30,6 +30,9 @@ tidy(
 # Ignore the Swift build folder
 # gazelle:exclude .build
 
+# Omit tags = ["manual"] from the generated swift library targets
+# gazelle:swift_library_tags -
+
 gazelle_binary(
     name = "gazelle_bin",
     languages = [
@@ -40,6 +43,12 @@ gazelle_binary(
 
 gazelle(
     name = "update_build_files",
+    data = [
+        "@swift_deps_info//:swift_deps_index",
+    ],
+    extra_args = [
+        "-swift_dependency_index=\$(location @swift_deps_info//:swift_deps_index)",
+    ],
     gazelle = ":gazelle_bin",
 )
 
