@@ -59,16 +59,19 @@ if [[ "${legacy_mode}" == "true" ]]; then
 fi
 
 # Dump Bazel info
+echo "=== Output Bazel info ==="
 "${bazel}" info
 
 # MARK - Test As Is
 
+echo "=== Do Test ==="
 do_test
 
 # MARK - Clean Test
 
 if [[ -f set_up_clean_test ]]; then
-  set_up_clean_test
+  echo "=== Set Up Clean Test ==="
+  ./set_up_clean_test
+  echo "=== Do Clean Test ==="
   do_test
 fi
-
