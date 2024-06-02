@@ -147,17 +147,6 @@ func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRul
 	return SrcFileGenRulesMode
 }
 
-// func (sc *SwiftConfig) LoadSwiftDepsInfo() (*swift.DepsInfo, error) {
-// 	if sc.SwiftDepsInfoPath == "" {
-// 		return nil, nil
-// 	}
-// 	data, err := os.ReadFile(sc.SwiftDepsInfoPath)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return swift.NewDepsInfoFromJSON(data)
-// }
-
 // LoadDependencyIndex reads the dependency index from disk.
 func (sc *SwiftConfig) LoadDependencyIndex() error {
 	if sc.DependencyIndexPath == "" {
