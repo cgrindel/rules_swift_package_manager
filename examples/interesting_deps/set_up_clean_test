@@ -41,6 +41,12 @@ gazelle_binary(
 
 gazelle(
     name = "update_build_files",
+    data = [
+        "@swift_deps_info//:swift_deps_index",
+    ],
+    extra_args = [
+        "-swift_dependency_index=\$(location @swift_deps_info//:swift_deps_index)",
+    ],
     gazelle = ":gazelle_bin",
 )
 
@@ -49,8 +55,11 @@ swift_binary(
     srcs = ["main.swift"],
     visibility = ["//swift:__subpackages__"],
     deps = [
+        "@swiftpkg_cocoalumberjack//:CocoaLumberjackSwiftLogBackend",
+        "@swiftpkg_geoswift//:GEOSwift",
         "@swiftpkg_libwebp_xcode//:libwebp",
-        "@swiftpkg_swift_log//:Sources_Logging",
+        "@swiftpkg_opencombine//:OpenCombine",
+        "@swiftpkg_swift_log//:Logging",
     ],
 )
 

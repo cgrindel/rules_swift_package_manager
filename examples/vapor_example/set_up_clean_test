@@ -22,7 +22,6 @@ EOF
 # Add back a minimal build file at the root
 cat > "${script_dir}/BUILD.bazel"  <<-EOF
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 
 tidy(
@@ -45,12 +44,14 @@ gazelle_binary(
 
 gazelle(
     name = "update_build_files",
-    args = [
-        "-swift_dependency_index=swift/deps_index.json",
+    data = [
+        "@swift_deps_info//:swift_deps_index",
+    ],
+    extra_args = [
+        "-swift_dependency_index=\$(location @swift_deps_info//:swift_deps_index)",
     ],
     gazelle = ":gazelle_bin",
 )
-
 EOF
 
 cat > "${script_dir}/swift/BUILD.bazel"  <<-EOF
