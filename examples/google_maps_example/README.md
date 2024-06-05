@@ -5,5 +5,6 @@ maps-sdk-for-ios-samples](https://github.com/googlemaps-samples/maps-sdk-for-ios
 
 ## Why is this interesting?
 
-The [lottie-spm](https://github.com/airbnb/lottie-spm) downloads a dynamic xcframework. This
-exercises the xcframework detection logic in `rules_swift_package_manager`.
+The Google [ios-maps-sdk](https://github.com/googlemaps/ios-maps-sdk) downloads a static xcframework. This
+exercises the xcframework static library detection logic in `rules_swift_package_manager`.  
+Additionally, the SDK is patched in order to remove an additional `import` that would otherwise prevent it from compiling using `rules_swift_package_manager`.

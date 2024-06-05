@@ -15,7 +15,7 @@
   "localOverrideHashes": {
     "rules_apple": "507816e2efb5fba9f8d625fa5572fd6a0a3adbc9ad2921020543aa5c99c5dd89",
     "bazel_tools": "1ae69322ac3823527337acf02016e8ee95813d8d356f47060255b8956fa642f0",
-    "rules_swift_package_manager": "e5de284f9bc067767e7e0d981fb3c801b45f40e87edbe03d95a31a16050cadf4"
+    "rules_swift_package_manager": "25c4b7f12bc31a37567961499e6046e47d2b48878641c281c7e39aad18da032a"
   },
   "moduleDepGraph": {
     "<root>": {
