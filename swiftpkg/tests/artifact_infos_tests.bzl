@@ -14,6 +14,7 @@ def _link_type_test(ctx):
 path/to/framework/binary/FooBar (for architecture x86_64):	current ar archive
 path/to/framework/binary/FooBar (for architecture arm64):	current ar archive
 """,
+            load_commands = None,
             exp = link_types.static,
         ),
         struct(
@@ -23,17 +24,76 @@ Mach-O universal binary with 2 architectures: [x86_64:current ar archive random 
 path/to/framework/binary/FooBar (for architecture x86_64):	current ar archive random library
 path/to/framework/binary/FooBar (for architecture arm64):	current ar archive random library
 """,
+            load_commands = None,
             exp = link_types.static,
         ),
         struct(
-            msg = "dynamically linked shared library",
-            file_type = "dynamically linked shared library",
+            msg = "macho-o static library",
+            file_type = "Mach-O 64-bit object arm64",
+            load_commands = """\
+Load command 1
+     cmd LC_SYMTAB
+Load command 2
+      cmd LC_BUILD_VERSION
+Load command 3
+      cmd LC_DATA_IN_CODE
+Load command 4
+      cmd LC_LINKER_OPTIMIZATION_HINT
+""",
+            exp = link_types.static,
+        ),
+        struct(
+            msg = "mach-o static universal library",
+            file_type = """\
+Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit object x86_64] [arm64]
+path/to/framework/binary/FooBar (for architecture x86_64):	Mach-O 64-bit object x86_64
+path/to/framework/binary/FooBar (for architecture arm64):	Mach-O 64-bit object arm64
+""",
+            load_commands = """\
+Load command 0
+      cmd LC_SEGMENT_64
+Load command 1
+     cmd LC_SYMTAB
+Load command 2
+      cmd LC_BUILD_VERSION
+Load command 3
+      cmd LC_DATA_IN_CODE
+""",
+            exp = link_types.static,
+        ),
+        struct(
+            msg = "mach-o dynamic library",
+            file_type = "Mach-O 64-bit object arm64",
+            load_commands = """\
+Load command 0
+      cmd LC_SEGMENT_64
+Load command 1
+      cmd LC_SEGMENT_64
+Load command 2
+      cmd LC_SEGMENT_64
+Load command 3
+      cmd LC_ID_DYLIB
+""",
             exp = link_types.dynamic,
         ),
         struct(
-            msg = "unknown",
-            file_type = "no idea what this is",
-            exp = link_types.unknown,
+            msg = "mach-o universal dynamic library",
+            file_type = """\
+Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit object x86_64] [arm64]
+path/to/framework/binary/FooBar (for architecture x86_64):	Mach-O 64-bit object x86_64
+path/to/framework/binary/FooBar (for architecture arm64):	Mach-O 64-bit object arm64
+""",
+            load_commands = """\
+Load command 0
+      cmd LC_SEGMENT_64
+Load command 1
+      cmd LC_SEGMENT_64
+Load command 2
+      cmd LC_SEGMENT_64
+Load command 3
+      cmd LC_ID_DYLIB
+""",
+            exp = link_types.dynamic,
         ),
     ]
     for t in tests:
@@ -41,6 +101,7 @@ path/to/framework/binary/FooBar (for architecture arm64):	current ar archive ran
         stub_repository_ctx = testutils.new_stub_repository_ctx(
             repo_name = "chicken",
             file_type_results = {path: t.file_type},
+            load_commands_results = {path: t.load_commands},
         )
         actual = artifact_infos.link_type(stub_repository_ctx, "path/to/framework/binary/FooBar")
         asserts.equals(env, t.exp, actual, t.msg)

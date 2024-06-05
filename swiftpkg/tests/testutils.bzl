@@ -12,7 +12,8 @@ def _new_stub_repository_ctx(
         file_contents = {},
         find_results = {},
         is_directory_results = {},
-        file_type_results = {}):
+        file_type_results = {},
+        load_commands_results = {}):
     def read(path):
         return file_contents.get(path, "")
 
@@ -39,6 +40,11 @@ def _new_stub_repository_ctx(
             # Expected command: `file --brief path`
             path = args[2]
             results = file_type_results.get(path, "")
+            exec_result = _new_exec_result(stdout = results)
+        elif args_len == 3 and args[0] == "otool" and args[1] == "-l":
+            # Expected command: `otool -l path`
+            path = args[2]
+            results = load_commands_results.get(path, "")
             exec_result = _new_exec_result(stdout = results)
         else:
             exec_result = _new_exec_result()
