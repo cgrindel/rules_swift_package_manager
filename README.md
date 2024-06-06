@@ -126,7 +126,7 @@ let package = Package(
 ```
 
 The name of the package can be whatever you like. It is required for the manifest, but it is not
-used by [rules_swift_package_manager]. If your proejct is published and consumed as a Swift package, feel free to
+used by [rules_swift_package_manager]. If your project is published and consumed as a Swift package, feel free to
 populate the rest of the manifest so that your package works properly by Swift package manager. Just
 note that the Swift Gazelle plugin does not use the manifest to generate Bazel build files, at this
 time.
