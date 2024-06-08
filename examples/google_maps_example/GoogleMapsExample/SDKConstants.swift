@@ -15,7 +15,7 @@ import CoreLocation
 
 enum SDKConstants {
 
-  #error("Register for API Key and insert here. Then delete this line.")
+  #warning("Register for API Key and insert here. Then delete this line.")
   static let apiKey = ""
 }
 
