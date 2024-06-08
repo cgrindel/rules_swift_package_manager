@@ -6,10 +6,6 @@ local_path_override(
     module_name = "rules_swift_package_manager",
     path = "../..",
 )
-local_path_override(
-    module_name = "rules_apple",
-    path = "/Users/stephane/Documents/Perso/rules_apple",
-)
 
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.18.1")
 bazel_dep(name = "bazel_skylib", version = "1.5.0")
