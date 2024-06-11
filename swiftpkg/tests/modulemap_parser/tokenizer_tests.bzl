@@ -82,6 +82,28 @@ def _tokenize_test(ctx):
     result = tokenizer.tokenize(text)
     asserts.equals(env, expected, result, "consume string literals")
 
+    text = "// single line comment 1\n/* single line comment 2 */"
+    expected = tokenizer.result(
+        tokens = [
+            tokens.comment("// single line comment 1"),
+            tokens.newline(),
+            tokens.comment("/* single line comment 2 */"),
+        ],
+    )
+    result = tokenizer.tokenize(text)
+    asserts.equals(env, expected, result, "consume single line comments")
+
+    text = "/*\nmulti line comment\nline 1\n // line 2\n*/\n// single line comment"
+    expected = tokenizer.result(
+        tokens = [
+            tokens.comment("/*\nmulti line comment\nline 1\n // line 2\n*/"),
+            tokens.newline(),
+            tokens.comment("// single line comment"),
+        ],
+    )
+    result = tokenizer.tokenize(text)
+    asserts.equals(env, expected, result, "consume multi line comments")
+
     return unittest.end(env)
 
 tokenize_test = unittest.make(_tokenize_test)

@@ -26,7 +26,7 @@ def _parse(text):
         collect_result = None
         err = None
 
-        if token.type == tts.newline:
+        if token.type == tts.newline or token.type == tts.comment:
             pass
 
         elif token.type == tts.reserved:

@@ -36,6 +36,41 @@ def _error(char, msg):
         msg = msg,
     )
 
+def _collect_single_line_comment(chars):
+    collected_chars = []
+
+    for char in chars:
+        if char == "\n":
+            break
+        collected_chars.append(char)
+
+    return _collection_result(
+        chars = collected_chars,
+    )
+
+def _collect_multi_line_comment(chars):
+    chars = chars[2:]
+    collected_chars = ["/", "*"]
+    terminated = False
+
+    for idx, char in enumerate(chars):
+        collected_chars.append(char)
+
+        if char == "*" and idx + 1 < len(chars) and chars[idx + 1] == "/":
+            collected_chars.append("/")
+            terminated = True
+            break
+
+    if not terminated:
+        return _collection_result(
+            chars = collected_chars,
+            errors = [_error("".join(collected_chars), "Unclosed multi-line comment")],
+        )
+    else:
+        return _collection_result(
+            chars = collected_chars,
+        )
+
 def _collect_chars_in_set(chars, target_set):
     collected_chars = []
     for char in chars:
@@ -113,6 +148,14 @@ def _tokenize(text):
 
         elif sets.contains(character_sets.whitespaces, char):
             pass
+
+        elif char == "/":
+            if idx + 1 < chars_len and chars[idx + 1] == "*":
+                collect_result = _collect_multi_line_comment(chars[idx:])
+            else:
+                collect_result = _collect_single_line_comment(chars[idx:])
+
+            collected_tokens.append(tokens.comment(collect_result.value))
 
         elif sets.contains(character_sets.newlines, char):
             collect_result = _collect_chars_in_set(chars[idx:], character_sets.newlines)
