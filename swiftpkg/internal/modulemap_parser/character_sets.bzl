@@ -116,6 +116,11 @@ _c99_number_characters = sets.union(
     sets.make(["x", "X", "."]),
 )
 
+_c99_comment_characters = sets.make([
+    "/",
+    "*",
+])
+
 character_sets = struct(
     whitespaces = _whitespaces,
     newlines = _newlines,
@@ -129,4 +134,5 @@ character_sets = struct(
     c99_identifier_characters = _c99_identifier_characters,
     c99_hexadecimal_characters = _c99_hexadecimal_characters,
     c99_number_characters = _c99_number_characters,
+    c99_comment_characters = _c99_comment_characters,
 )
