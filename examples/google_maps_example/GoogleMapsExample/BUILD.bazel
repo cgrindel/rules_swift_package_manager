@@ -37,3 +37,10 @@ ios_application(
     visibility = ["//:__subpackages__"],
     deps = [":GoogleMapsExample"],
 )
+
+build_test(
+    name = "iosapp_build_test",
+    targets = [
+        ":iosapp",
+    ],
+)
