@@ -7,8 +7,4 @@ class SotoTests: XCTestCase {
         let createBucketRequest = S3.CreateBucketRequest(bucket: bucketName)
         XCTAssertEqual(createBucketRequest.bucket, bucketName)
     }
-
-    static var allTests = [
-        ("testSomething", testSomething),
-    ]
 }

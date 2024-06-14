@@ -231,7 +231,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             # Module name
             "-fmodule-name={}".format(target.c99name),
         ],
-        "tags": ["swift_module={}".format(target.c99name)],
         "visibility": ["//:__subpackages__"],
     }
 
@@ -423,9 +422,19 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             ),
         ]
     else:
-        load_stmts = []
+        load_stmts = [swift_interop_hint_load_stmt]
+        aspect_hint_target_name = pkginfo_targets.swift_hint_label_name(
+            bzl_target_name,
+        )
+        attrs["aspect_hints"] = [":{}".format(aspect_hint_target_name)]
+        aspect_hint_attrs = {"module_name": target.c99name}
         decls = [
             build_decls.new(clang_kinds.library, bzl_target_name, attrs = attrs),
+            build_decls.new(
+                kind = swift_kinds.interop_hint,
+                name = aspect_hint_target_name,
+                attrs = aspect_hint_attrs,
+            ),
         ]
     all_build_files.append(build_files.new(
         load_stmts = load_stmts,
@@ -809,6 +818,7 @@ swift_kinds = struct(
     test = "swift_test",
     c_module = "swift_c_module",
     compiler_plugin = "swift_compiler_plugin",
+    interop_hint = "swift_interop_hint",
 )
 
 swift_library_load_stmt = load_statements.new(
@@ -834,6 +844,11 @@ swift_c_module_load_stmt = load_statements.new(
 swift_compiler_plugin_load_stmt = load_statements.new(
     swift_location,
     swift_kinds.compiler_plugin,
+)
+
+swift_interop_hint_load_stmt = load_statements.new(
+    swift_location,
+    swift_kinds.interop_hint,
 )
 
 swift_test_load_stmt = load_statements.new(swift_location, swift_kinds.test)

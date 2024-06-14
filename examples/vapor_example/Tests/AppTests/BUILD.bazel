@@ -4,7 +4,6 @@ swift_test(
     name = "AppTests",
     srcs = [
         "AppTests.swift",
-        "main.swift",
     ],
     module_name = "AppTests",
     deps = [
