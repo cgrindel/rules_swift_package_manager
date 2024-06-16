@@ -129,7 +129,6 @@ _all_os_all_bazel_versions_test_examples = [
 ]
 
 _all_os_single_bazel_version_test_examples = [
-    "soto_example",
     "vapor_example",
     "grpc_example",
 ]
@@ -144,6 +143,7 @@ _macos_single_bazel_version_test_examples = [
     "nimble_example",
     "objc_code",
     "phone_number_kit",
+    "soto_example",  # Soto supports Linux and MacOS. However, the resolved package is different.
     "resources_example",
     "shake_ios_example",
     "snapkit_example",
