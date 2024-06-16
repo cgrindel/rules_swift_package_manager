@@ -43,10 +43,6 @@ jobs:
             runner: ubuntu-22.04
           - test: '@@//examples:grpc_example_test_bazel_.bazelversion'
             runner: macos-13
-          - test: '@@//examples:http_archive_ext_deps_legacy_test_bazel_.bazelversion'
-            runner: ubuntu-22.04
-          - test: '@@//examples:http_archive_ext_deps_legacy_test_bazel_.bazelversion'
-            runner: macos-13
           - test: '@@//examples:interesting_deps_test_bazel_.bazelversion'
             runner: macos-13
           - test: '@@//examples:ios_sim_test_bazel_.bazelversion'
@@ -80,10 +76,6 @@ jobs:
           - test: '@@//examples:symlink_example_test_bazel_.bazelversion'
             runner: macos-13
           - test: '@@//examples:tca_example_test_bazel_.bazelversion'
-            runner: macos-13
-          - test: '@@//examples:vapor_example_legacy_test_bazel_.bazelversion'
-            runner: ubuntu-22.04
-          - test: '@@//examples:vapor_example_legacy_test_bazel_.bazelversion'
             runner: macos-13
           - test: '@@//examples:vapor_example_test_bazel_.bazelversion'
             runner: ubuntu-22.04

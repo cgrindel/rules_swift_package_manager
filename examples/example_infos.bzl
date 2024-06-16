@@ -125,7 +125,6 @@ _default_enable_bzlmods = [True]
 _enable_bzlmods = {}
 
 _all_os_all_bazel_versions_test_examples = [
-    "http_archive_ext_deps",
     "pkg_manifest_minimal",
 ]
 
