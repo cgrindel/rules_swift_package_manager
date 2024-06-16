@@ -14,7 +14,7 @@ runs:
   steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: '15.0.1'
+        xcode-version: '15.2.0'
     - name: Override Xcode Version
       shell: bash
       run: |
