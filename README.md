@@ -156,7 +156,11 @@ feel free to populate the rest of the manifest so that your package works proper
 manager. Just note that the Swift Gazelle plugin does not use the manifest to generate Bazel build
 files, at this time.
 
-### 4. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.
+### 4. Run `bazel mod tidy`.
+
+This will update your `MODULE.bazel` with the correct `use_repo` declaration.
+
+### 5. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.
 
 Add the following to the `BUILD.bazel` file at the root of your workspace.
 
@@ -196,7 +200,7 @@ gazelle(
 )
 ```
 
-### 5. Create or update Bazel build files for your project.
+### 6. Create or update Bazel build files for your project.
 
 Generate/update the Bazel build files for your project by running the following:
 
@@ -204,7 +208,7 @@ Generate/update the Bazel build files for your project by running the following:
 bazel run //:update_build_files
 ```
 
-### 6. Build and test your project.
+### 7. Build and test your project.
 
 Build and test your project.
 
@@ -212,14 +216,14 @@ Build and test your project.
 bazel test //...
 ```
 
-### 7. Check-in `Package.resolved`, `swift_deps_index.json`, and `MODULE.bazel`.
+### 8. Check-in `Package.resolved`, `swift_deps_index.json`, and `MODULE.bazel`.
 
 - The `Package.resolved` file specifies that exact versions of the dependencies that were
   identified.
 - The `swift_deps_index.json` file contains information that is used by the Gazelle plugin and the
   respository rules.
 
-### 8. Start coding
+### 9. Start coding
 
 You are ready to start coding.
 
