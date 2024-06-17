@@ -33,7 +33,7 @@ func NewPinsFromResolvedPackageJSON(b []byte) ([]*Pin, error) {
 			return nil, err
 		}
 		return NewPinsFromV1PinStore(&v1ps)
-	case 2:
+	case 2, 3:
 		var v2ps V2PinStore
 		if err := json.Unmarshal(b, &v2ps); err != nil {
 			return nil, err
