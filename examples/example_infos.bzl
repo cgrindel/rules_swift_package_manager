@@ -141,6 +141,7 @@ _all_os_single_bazel_version_test_examples = [
 
 _macos_single_bazel_version_test_examples = [
     "firebase_example",
+    "google_maps_example",
     "interesting_deps",
     "ios_sim",
     "lottie_ios_example",

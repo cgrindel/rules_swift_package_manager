@@ -1,0 +1,47 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+# gazelle:swift_default_module_name GoogleMapsExample
+
+swift_library(
+    name = "GoogleMapsExample",
+    srcs = [
+        "AppDelegate.swift",
+        "SDKConstants.swift",
+        "SceneDelegate.swift",
+        "ViewController.swift",
+    ],
+    module_name = "GoogleMapsExample",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+    deps = ["@swiftpkg_ios_maps_sdk//:GoogleMaps"],
+)
+
+ios_application(
+    name = "iosapp",
+    app_icons = glob(["Assets.xcassets/AppIcon.appiconset/**"]),
+    bundle_id = "com.example.GoogleMapsDemos",
+    families = [
+        "iphone",
+    ],
+    infoplists = [":Info.plist"],
+    minimum_os_version = "13.0",
+    resources = glob(
+        [
+            "Assets.xcassets/**",
+        ],
+        exclude = [
+            "Assets.xcassets/AppIcon.appiconset/**",
+        ],
+    ),
+    visibility = ["//:__subpackages__"],
+    deps = [":GoogleMapsExample"],
+)
+
+build_test(
+    name = "iosapp_build_test",
+    targets = [
+        ":iosapp",
+    ],
+)
