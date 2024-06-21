@@ -9,6 +9,8 @@ load("//swiftpkg/internal:swift_package.bzl", "PATCH_ATTRS", "swift_package")
 
 # MARK: - swift_deps bzlmod Extension
 
+_DO_WHILE_RANGE = range(1000)
+
 def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
     """Declare Swift packages from `Package.swift` and `Package.resolved`.
 
@@ -86,8 +88,8 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
         for dep in all_deps_by_id.values()
         if dep.file_system
     ]
-    for _ in range(100):
-        if len(to_process) == 0:
+    for _ in _DO_WHILE_RANGE:
+        if not to_process:
             break
         processing = to_process
         to_process = []
@@ -110,6 +112,8 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
                 if all_deps_by_id.get(fs_dep.identity) == None:
                     all_deps_by_id[fs_dep.identity] = fs_dep
                     to_process.append(fs_dep)
+    if to_process:
+        fail("Expected no more items to process, but found some.")
 
     # Declare the Bazel repositories.
     for dep in all_deps_by_id.values():
