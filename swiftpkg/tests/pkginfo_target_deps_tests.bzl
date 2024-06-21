@@ -100,10 +100,6 @@ _internal_target_ref_with_condition = pkginfos.new_target_reference(
     condition = _target_dep_condition,
 )
 
-# NOTE: Not sure if we need to support this. May products have a target
-# with the same name. We prioritize finding the target.
-# _internal_product_by_name = pkginfos.new_by_name_reference(_bar_product.name)
-
 _internal_product_ref = pkginfos.new_product_reference(
     product_name = _bar_product.name,
     dep_name = _pkg_name,
@@ -220,22 +216,6 @@ def _bzl_select_list_test(ctx):
                 for c in _expected_platform_conditions
             ],
         ),
-        # NOTE: Not sure if we need to support this. May products have a target
-        # with the same name. We prioritize finding the target.
-        # struct(
-        #     msg = "internal product by name, no condition",
-        #     td = pkginfos.new_target_dependency(by_name = _internal_product_by_name),
-        #     exp = [
-        #         bzl_selects.new(
-        #             kind = pkginfo_target_deps.target_dep_kind,
-        #             value = [
-        #                 bazel_labels.normalize(
-        #                     "@swiftpkg_mypackage//:Bar",
-        #                 ),
-        #             ],
-        #         ),
-        #     ],
-        # ),
         struct(
             msg = "internal product ref, no condition",
             td = pkginfos.new_target_dependency(product = _internal_product_ref),
