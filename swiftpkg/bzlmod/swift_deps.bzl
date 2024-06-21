@@ -97,7 +97,6 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
                 directory = dep.file_system.path,
                 debug_path = None,
                 resolved_pkg_map = None,
-                # repo_name = bazel_repo_names.from_identity(dep.identity),
                 collect_src_info = False,
             )
             fs_deps = [
