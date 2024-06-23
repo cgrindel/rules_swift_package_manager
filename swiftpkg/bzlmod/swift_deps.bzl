@@ -55,12 +55,13 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
         direct_dep_pkg_infos[pkg_info_label] = dep.identity
 
     # Write info about the Swift deps that may be used by external tooling.
-    swift_deps_info_repo_name = "swift_deps_info"
-    swift_deps_info(
-        name = swift_deps_info_repo_name,
-        direct_dep_pkg_infos = direct_dep_pkg_infos,
-    )
-    direct_dep_repo_names.append(swift_deps_info_repo_name)
+    if from_package.declare_swift_deps_info:
+        swift_deps_info_repo_name = "swift_deps_info"
+        swift_deps_info(
+            name = swift_deps_info_repo_name,
+            direct_dep_pkg_infos = direct_dep_pkg_infos,
+        )
+        direct_dep_repo_names.append(swift_deps_info_repo_name)
 
     # Ensure that we add all of the transitive source control deps from the
     # resolved file.
@@ -194,6 +195,12 @@ def _swift_deps_impl(module_ctx):
 
 _from_package_tag = tag_class(
     attrs = {
+        "declare_swift_deps_info": attr.bool(
+            doc = """\
+Declare a `swift_deps_info` repository that is used by external tooling (e.g. \
+Swift Gazelle plugin).\
+""",
+        ),
         "resolved": attr.label(
             allow_files = [".resolved"],
             doc = "A `Package.resolved`.",

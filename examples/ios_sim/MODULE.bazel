@@ -52,6 +52,7 @@ swift_deps = use_extension(
     "swift_deps",
 )
 swift_deps.from_package(
+    declare_swift_deps_info = True,
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )
