@@ -48,7 +48,15 @@ swift_deps.from_package(
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )
+swift_deps.configure_package(
+    name = "ios-maps-sdk",
+    patch_args = ["-p1"],
+    patches = [
+        "//third-party/google-maps-ios-sdk:0001-Remove-import-GoogleMaps.patch",
+    ],
+)
 use_repo(
     swift_deps,
+    "swift_deps_info",
     "swiftpkg_ios_maps_sdk",
 )
