@@ -1,6 +1,5 @@
 """Implementation for `swift_deps` bzlmod extension."""
 
-load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
 load("//swiftpkg/internal:local_swift_package.bzl", "local_swift_package")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
@@ -211,11 +210,11 @@ Swift Gazelle plugin).\
             doc = "A `Package.swift`.",
         ),
     },
-    doc = "Load Swift packages from a `Package.swift` and `Package.resolved`.",
+    doc = "Load Swift packages from `Package.swift` and `Package.resolved` files.",
 )
 
 _configure_package_tag = tag_class(
-    attrs = dicts.add({
+    attrs = {
         "init_submodules": attr.bool(
             default = False,
             doc = "Whether to clone submodules in the repository.",
@@ -225,10 +224,10 @@ _configure_package_tag = tag_class(
             mandatory = True,
         ),
         "recursive_init_submodules": attr.bool(
-            default = False,
+            default = True,
             doc = "Whether to clone submodules recursively in the repository.",
         ),
-    }, PATCH_ATTRS),
+    } | PATCH_ATTRS,
     doc = "Used to add or override settings for a particular Swift package.",
 )
 
