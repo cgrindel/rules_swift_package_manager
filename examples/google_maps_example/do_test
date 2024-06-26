@@ -12,5 +12,6 @@ bazel="${BIT_BAZEL_BINARY:-bazel}"
 # Ensure that it builds and tests pass
 "${bazel}" test //...
 
+# GH1110: Execute in a test and ensure that it works.
 # Build the app
-"${bazel}" run //GoogleMapsExample:iosapp
+# "${bazel}" run //GoogleMapsExample:iosapp

@@ -5,7 +5,7 @@ go_library(
     name = "updmarker",
     srcs = ["updater.go"],
     importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/updmarker",
-    visibility = ["//gazelle:__subpackages__"],
+    visibility = ["//gazelle:go_packages"],
 )
 
 go_test(

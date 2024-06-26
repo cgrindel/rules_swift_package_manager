@@ -84,27 +84,16 @@ gazelle_binary(
     ],
 )
 
-# This macro defines two targets: `swift_update_pkgs` and
-# `swift_update_pkgs_to_latest`.
-#
-# The `swift_update_pkgs` target should be run whenever the list of external
-# dependencies is updated in the `Package.swift`. Running this target will
-# populate the `swift_deps.bzl` with `swift_package` declarations for all of
-# the direct and transitive Swift packages that your project uses.
-#
-# The `swift_update_pkgs_to_latest` target should be run when you want to
-# update your Swift dependencies to their latest eligible version.
-swift_update_packages(
-    name = "swift_update_pkgs",
-    gazelle = ":gazelle_bin",
-    generate_swift_deps_for_workspace = True,
-    update_bzlmod_stanzas = False,
-)
-
 # This target updates the Bazel build files for your project. Run this target
 # whenever you add or remove source files from your project.
 gazelle(
     name = "update_build_files",
+    data = [
+        "@swift_deps_info//:swift_deps_index",
+    ],
+    extra_args = [
+        "-swift_dependency_index=$(location @swift_deps_info//:swift_deps_index)",
+    ],
     gazelle = ":gazelle_bin",
 )
 ```

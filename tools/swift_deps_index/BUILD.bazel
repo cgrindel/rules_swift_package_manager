@@ -1,0 +1,24 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library")
+
+go_library(
+    name = "swift_deps_index_lib",
+    srcs = ["main.go"],
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index",
+    visibility = ["//visibility:private"],
+    deps = ["//tools/swift_deps_index/cmd"],
+)
+
+go_binary(
+    name = "swift_deps_index",
+    embed = [":swift_deps_index_lib"],
+    visibility = ["//visibility:public"],
+)
+
+bzlformat_pkg(name = "bzlformat")
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)

@@ -37,7 +37,7 @@ _DOC_INFOS = [
         name = "rules_and_macros",
         label = "//swiftpkg:defs",
         symbols = [
-            "swift_update_packages",
+            "swift_deps_index",
         ],
     ),
 ]

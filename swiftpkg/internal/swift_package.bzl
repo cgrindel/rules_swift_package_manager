@@ -137,7 +137,7 @@ The version control location from where the repository should be downloaded.\
     "verbose": attr.bool(default = False),
 }
 
-_PATCH_ATTRS = {
+PATCH_ATTRS = {
     "patch_args": attr.string_list(
         default = ["-p0"],
         doc =
@@ -176,7 +176,7 @@ _PATCH_ATTRS = {
 }
 
 _ALL_ATTRS = dicts.add(
-    _PATCH_ATTRS,
+    PATCH_ATTRS,
     _GIT_ATTRS,
     repo_rules.env_attrs,
     repo_rules.swift_attrs,

@@ -3,15 +3,21 @@ load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 
 bzlformat_pkg(name = "bzlformat")
 
-bzl_library(
-    name = "swift_deps",
-    srcs = ["swift_deps.bzl"],
-    visibility = ["//visibility:public"],
-    deps = ["//swiftpkg/internal:deps_indexes"],
-)
-
 filegroup(
     name = "all_files",
     srcs = glob(["*"]),
     visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "swift_deps",
+    srcs = ["swift_deps.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//swiftpkg/internal:bazel_repo_names",
+        "//swiftpkg/internal:local_swift_package",
+        "//swiftpkg/internal:pkginfos",
+        "//swiftpkg/internal:swift_package",
+        "@bazel_skylib//lib:dicts",
+    ],
 )

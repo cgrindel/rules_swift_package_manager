@@ -12,7 +12,6 @@ load(
     spm_platforms = "platforms",
 )
 load(":clang_files.bzl", "clang_files")
-load(":deps_indexes.bzl", "deps_indexes")
 load(":objc_files.bzl", "objc_files")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
@@ -24,7 +23,11 @@ load(":validations.bzl", "validations")
 
 _DEFAULT_LOCALIZATION = "en"
 
-def _get_dump_manifest(repository_ctx, env = {}, working_directory = ""):
+def _get_dump_manifest(
+        repository_ctx,
+        env = {},
+        working_directory = "",
+        debug_path = None):
     """Returns a dict representing the package dump for an SPM package.
 
     Args:
@@ -32,19 +35,30 @@ def _get_dump_manifest(repository_ctx, env = {}, working_directory = ""):
         env: A `dict` of environment variables that will be included in the
              command execution.
         working_directory: A `string` specifying the directory for the SPM package.
+        debug_path: A `string` specifying the directory path where to  write the
+            JSON file.
 
     Returns:
         A `dict` representing an SPM package dump.
     """
+    debug_json_path = None
+    if debug_path == None:
+        debug_path = str(repository_ctx.path("."))
+    debug_json_path = paths.join(debug_path, "dump.json")
+
     return repository_utils.parsed_json_from_spm_command(
         repository_ctx,
         ["swift", "package", "dump-package"],
         env = env,
         working_directory = working_directory,
-        debug_json_path = "dump.json",
+        debug_json_path = debug_json_path,
     )
 
-def _get_desc_manifest(repository_ctx, env = {}, working_directory = ""):
+def _get_desc_manifest(
+        repository_ctx,
+        env = {},
+        working_directory = "",
+        debug_path = None):
     """Returns a dict representing the package description for an SPM package.
 
     Args:
@@ -52,48 +66,72 @@ def _get_desc_manifest(repository_ctx, env = {}, working_directory = ""):
         env: A `dict` of environment variables that will be included in the
              command execution.
         working_directory: A `string` specifying the directory for the SPM package.
+        debug_path: A `string` specifying the directory path where to  write the
+            JSON file.
 
     Returns:
         A `dict` representing an SPM package description.
     """
+    debug_json_path = None
+    if debug_path == None:
+        debug_path = str(repository_ctx.path("."))
+    debug_json_path = paths.join(debug_path, "desc.json")
     return repository_utils.parsed_json_from_spm_command(
         repository_ctx,
         ["swift", "package", "describe", "--type", "json"],
         env = env,
         working_directory = working_directory,
-        debug_json_path = "desc.json",
+        debug_json_path = debug_json_path,
     )
 
-def _get(repository_ctx, directory, deps_index, env = {}):
+def _get(
+        repository_ctx,
+        directory,
+        env = {},
+        debug_path = None,
+        resolved_pkg_map = None,
+        collect_src_info = True):
     """Retrieves the package information for the Swift package defined at the \
     specified directory.
 
     Args:
         repository_ctx: A `repository_ctx`.
         directory: The path for the Swift package (`string`).
-        deps_index: A `struct` as returned by `deps_indexes.new`.
         env: A `dict` of environment variables that will be included in the
-             command execution.
+            command execution.
+        debug_path: Optional. The path where to write debug files (e.g. JSON)
+            as a `string`.
+        resolved_pkg_map: Optional. A `dict` of representing the
+            `Package.resolved` JSON.
+        collect_src_info: Optional. A `bool` specifying whether source
+            information should be collected for the package.
 
     Returns:
         A `struct` representing the package information as returned by
         `pkginfos.new()`.
     """
+    if debug_path:
+        if not paths.is_absolute(debug_path):
+            # For backwards compatibility, resolve relative to the working directory.
+            debug_path = paths.join(directory, debug_path)
     dump_manifest = _get_dump_manifest(
         repository_ctx,
         env = env,
         working_directory = directory,
+        debug_path = debug_path,
     )
     desc_manifest = _get_desc_manifest(
         repository_ctx,
         env = env,
         working_directory = directory,
+        debug_path = debug_path,
     )
     pkg_info = _new_from_parsed_json(
         repository_ctx = repository_ctx,
         dump_manifest = dump_manifest,
         desc_manifest = desc_manifest,
-        deps_index = deps_index,
+        collect_src_info = collect_src_info,
+        resolved_pkg_map = resolved_pkg_map,
     )
 
     # Dump the merged pkg_info for debug purposes
@@ -102,17 +140,49 @@ def _get(repository_ctx, directory, deps_index, env = {}):
 
     return pkg_info
 
-def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map):
+def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map, resolved_dep_map = None):
     identity = dep_map["identity"]
+    type = dep_map["type"]
     name = dep_names_by_id.get(identity)
     if name == None:
         fail("Did not find dependency name for {identity}".format(
             identity = identity,
         ))
 
+    source_control = None
+    file_system = None
+    if type == "sourceControl":
+        pin = None
+        if resolved_dep_map:
+            pin = _new_pin_from_resolved_dep_map(resolved_dep_map)
+        source_control = _new_source_control(
+            pin = pin,
+        )
+    elif type == "fileSystem":
+        file_system = _new_file_system(path = dep_map["path"])
+    else:
+        fail("Unrecognized dependency type {type} for {identity}.".format(
+            type = type,
+            identity = identity,
+        ))
+
     return _new_dependency(
         identity = identity,
         name = name,
+        source_control = source_control,
+        file_system = file_system,
+    )
+
+def _new_pin_from_resolved_dep_map(resolved_dep_map):
+    state_map = resolved_dep_map["state"]
+    return _new_pin(
+        identity = resolved_dep_map["identity"],
+        kind = resolved_dep_map["kind"],
+        location = resolved_dep_map["location"],
+        state = _new_pin_state(
+            revision = state_map["revision"],
+            version = state_map.get("version"),
+        ),
     )
 
 def _new_product_from_desc_json_map(prd_map):
@@ -125,6 +195,9 @@ def _new_product_from_desc_json_map(prd_map):
     plugin = (
         prd_type_map.get("plugin", default = does_not_exist) != does_not_exist
     )
+    macro = (
+        prd_type_map.get("macro", default = does_not_exist) != does_not_exist
+    )
     library = None
     lib_list = prd_type_map.get("library")
     if lib_list != None and len(lib_list) > 0:
@@ -133,6 +206,7 @@ def _new_product_from_desc_json_map(prd_map):
         executable = executable,
         library = library,
         plugin = plugin,
+        macro = macro,
     )
 
     return _new_product(
@@ -192,24 +266,15 @@ def _new_target_from_json_maps(
         repository_ctx,
         dump_map,
         desc_map,
-        deps_index,
-        pkg_path):
-    repo_name = repository_ctx.attr.bazel_package_name
-    if repo_name == "":
-        repo_name = repository_ctx.name
+        product_memberships,
+        pkg_path,
+        collect_src_info):
     target_name = dump_map["name"]
     target_path = desc_map["path"]
     target_label = pkginfo_targets.bazel_label_from_parts(
         target_name = target_name,
-        repo_name = repo_name,
+        repo_name = "",
     )
-    dep_module = deps_indexes.get_module(deps_index, target_label)
-    if dep_module == None:
-        return None
-    product_memberships = dep_module.product_memberships
-
-    if len(product_memberships) == 0:
-        return None
     dependencies = [
         _new_target_dependency_from_dump_json_map(d)
         for d in dump_map["dependencies"]
@@ -274,7 +339,10 @@ def _new_target_from_json_maps(
     swift_src_info = None
     clang_src_info = None
     objc_src_info = None
-    if module_type == module_types.swift:
+    if not collect_src_info:
+        # Do not collect any source info
+        pass
+    elif module_type == module_types.swift:
         swift_src_info = _new_swift_src_info_from_sources(
             repository_ctx,
             target_path,
@@ -447,7 +515,12 @@ def _new_dependency_identity_to_name_map(dump_deps):
         result[identity] = name
     return result
 
-def _new_from_parsed_json(repository_ctx, dump_manifest, desc_manifest, deps_index):
+def _new_from_parsed_json(
+        repository_ctx,
+        dump_manifest,
+        desc_manifest,
+        collect_src_info,
+        resolved_pkg_map = None):
     """Returns the package information from the provided Swift package JSON \
     structures.
 
@@ -457,7 +530,10 @@ def _new_from_parsed_json(repository_ctx, dump_manifest, desc_manifest, deps_ind
             package dump-package`.
         desc_manifest: A `dict` representing the parsed JSON from `swift
             package describe`.
-        deps_index: A `struct` as returned by `deps_indexes.new`.
+        resolved_pkg_map: Optional. A `dict` of representing the
+            `Package.resolved` JSON.
+        collect_src_info: A `bool` specifying whether source information
+            should be collected for the package.
 
     Returns:
         A `struct` representing the package information as returned by
@@ -471,8 +547,17 @@ def _new_from_parsed_json(repository_ctx, dump_manifest, desc_manifest, deps_ind
     dep_names_by_id = _new_dependency_identity_to_name_map(
         dump_manifest["dependencies"],
     )
+    resolved_deps_by_id = {}
+    if resolved_pkg_map:
+        pins = resolved_pkg_map.get("pins", [])
+        resolved_deps_by_id = {pin["identity"]: pin for pin in pins}
+
     dependencies = [
-        _new_dependency_from_desc_json_map(dep_names_by_id, dep_map)
+        _new_dependency_from_desc_json_map(
+            dep_names_by_id,
+            dep_map,
+            resolved_dep_map = resolved_deps_by_id.get(dep_map["identity"]),
+        )
         for dep_map in desc_manifest["dependencies"]
     ]
 
@@ -489,16 +574,29 @@ def _new_from_parsed_json(repository_ctx, dump_manifest, desc_manifest, deps_ind
     }
 
     pkg_path = desc_manifest["path"]
-    targets = lists.compact([
-        _new_target_from_json_maps(
+    targets = []
+    for target_map in dump_manifest["targets"]:
+        tname = target_map["name"]
+        tdesc_map = desc_targets_by_name[tname]
+
+        # Use the product_memberships from the desc_map, but only include
+        # product names that actually exist in the dump products list. The
+        # product_memberships from the desc JSON includes product inclusion that
+        # we cannot determine using the conservative dump JSON.
+        product_memberships = [
+            prod_name
+            for prod_name in tdesc_map.get("product_memberships", [])
+            if lists.contains(products, lambda p: p.name == prod_name)
+        ]
+        target = _new_target_from_json_maps(
             repository_ctx = repository_ctx,
             dump_map = target_map,
-            desc_map = desc_targets_by_name[target_map["name"]],
-            deps_index = deps_index,
+            desc_map = tdesc_map,
+            product_memberships = product_memberships,
             pkg_path = pkg_path,
+            collect_src_info = collect_src_info,
         )
-        for target_map in dump_manifest["targets"]
-    ])
+        targets.append(target)
 
     return _new(
         name = dump_manifest["name"],
@@ -575,20 +673,93 @@ def _new_platform(name, version):
 
 # MARK: - External Dependency
 
-def _new_dependency(identity, name):
+def _new_dependency(identity, name, source_control = None, file_system = None):
     """Creates a `struct` representing an external dependency for a Swift \
     package.
 
     Args:
         identity: The identifier for the external depdendency (`string`).
         name: The name used for package reference resolution (`string`).
+        source_control: Optional. A `struct` as returned by
+            `pkginfos.new_source_control()`. If present, it identifies the
+            dependency as being loaded from a source control system.
+        file_system: Optional. A `struct` as returned by
+            `pkginfos.new_file_system()`. If present, it identifies the
+            dependency as being loaded from a local file system.
 
     Returns:
         A `struct` representing an external dependency.
     """
+    if not source_control and not file_system:
+        fail("""\
+A dependency must have either a source_control or file_system arg.\
+""")
     return struct(
         identity = identity,
         name = pkginfo_dependencies.normalize_name(name),
+        source_control = source_control,
+        file_system = file_system,
+    )
+
+def _new_source_control(pin):
+    """Create a `struct` representing source control info for a dependency.
+
+    Args:
+        pin: A `struct` as returned by `pkginfos.new_pin()`.
+
+    Returns:
+        A `struct` representing source control info for a dependency.
+    """
+    return struct(
+        pin = pin,
+    )
+
+def _new_pin(identity, kind, location, state):
+    """Create a `struct` representing the pin for a resolved Swift package \
+    (i.e., remote, sourceControl).
+
+    Args:
+        identity: The identity for the dependency as a `string`.
+        kind: The kind as a `string` (e.g., `remoteSourceControl`).
+        location:  The URL as a `string`.
+        state: The state `struct` as returned by `pkginfos.new_pin_state()`.
+
+    Returns:
+        A `struct` representing the pin for a resolved Swift package.
+    """
+    return struct(
+        identity = identity,
+        kind = kind,
+        location = location,
+        state = state,
+    )
+
+def _new_pin_state(revision, version = None):
+    """Create a `struct` representing the state for a pin.
+
+    Args:
+        revision: The commit hash as a `string`.
+        version: Optional. The version string for the commit as a `string`.
+
+    Returns:
+        A `struct` representing a pin state.
+    """
+    return struct(
+        revision = revision,
+        version = version,
+    )
+
+def _new_file_system(path):
+    """Create a `struct` representing fileSystem dependency (i.e., local Swift package).
+
+    Args:
+        path: The path to the Swift package as a `string`.
+
+    Returns:
+        A `struct` representing a fileSystem dependency.
+    """
+    return struct(
+        path = path,
     )
 
 def _new_dependency_requirement(ranges = None):
@@ -627,13 +798,14 @@ def _new_version_range(lower, upper):
 
 # MARK: - Product
 
-def _new_product_type(executable = False, library = None, plugin = False):
+def _new_product_type(executable = False, library = None, plugin = False, macro = False):
     """Creates a product type.
 
     Args:
         executable: A `bool` specifying whether the product is an executable.
         library: A `struct` as returned by `pkginfos.new_library_type`.
         plugin: A `bool` specifying whether the product is a plugin.
+        macro: A `bool` speckfying whether the product is a macro.
 
     Returns:
         A `struct` representing a product type.
@@ -641,13 +813,14 @@ def _new_product_type(executable = False, library = None, plugin = False):
     is_executable = executable
     is_library = (library != None)
     is_plugin = plugin
-    type_bools = [is_executable, is_library, is_plugin]
+    is_macro = macro
+    type_bools = [is_executable, is_library, is_plugin, is_macro]
     true_cnt = 0
     for bt in type_bools:
         if bt:
             true_cnt = true_cnt + 1
     if true_cnt == 0:
-        fail("A product type must be one of the following: executable, library, plugin.")
+        fail("A product type must be one of the following: executable, library, plugin, macro.")
     elif true_cnt > 1:
         fail("Multiple args provided to `pkginfos.new_product_type`.")
 
@@ -658,6 +831,7 @@ def _new_product_type(executable = False, library = None, plugin = False):
         is_executable = is_executable,
         is_library = is_library,
         is_plugin = is_plugin,
+        is_macro = is_macro,
     )
 
 def _new_library_type(kind):
@@ -1449,10 +1623,14 @@ pkginfos = struct(
     new_clang_src_info = _new_clang_src_info,
     new_dependency = _new_dependency,
     new_dependency_requirement = _new_dependency_requirement,
+    new_file_system = _new_file_system,
     new_from_parsed_json = _new_from_parsed_json,
     new_library_type = _new_library_type,
     new_linker_settings = _new_linker_settings,
     new_objc_src_info = _new_objc_src_info,
+    new_pin = _new_pin,
+    new_pin_from_resolved_dep_map = _new_pin_from_resolved_dep_map,
+    new_pin_state = _new_pin_state,
     new_platform = _new_platform,
     new_product = _new_product,
     new_product_reference = _new_product_reference,
@@ -1460,6 +1638,7 @@ pkginfos = struct(
     new_resource = _new_resource,
     new_resource_rule = _new_resource_rule,
     new_resource_rule_process = _new_resource_rule_process,
+    new_source_control = _new_source_control,
     new_swift_settings = _new_swift_settings,
     new_swift_src_info = _new_swift_src_info,
     new_target = _new_target,

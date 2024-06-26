@@ -47,17 +47,25 @@ apple_cc_configure = use_extension(
 )
 use_repo(apple_cc_configure, "local_config_apple_cc")
 
-# swift_deps START
 swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
 )
-swift_deps.from_file(
-    deps_index = "//:swift_deps_index.json",
+swift_deps.from_package(
+    declare_swift_deps_info = True,
+    resolved = "//:Package.resolved",
+    swift = "//:Package.swift",
+)
+swift_deps.configure_package(
+    name = "swift-cmark",
+    patch_args = ["-p1"],
+    patches = [
+        "//third-party/swift-cmark:0001-Do-not-exclude-files-that-are-needed-for-compilation.patch",
+    ],
 )
 use_repo(
     swift_deps,
+    "swift_deps_info",
     "swiftpkg_swift_markdown",
     "swiftpkg_swift_nio",
 )
-# swift_deps END

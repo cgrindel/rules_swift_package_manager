@@ -7,38 +7,25 @@ The rules and macros described below are used to define Gazelle targets to aid i
 
 On this page:
 
-  * [swift_update_packages](#swift_update_packages)
+  * [swift_deps_index](#swift_deps_index)
 
 
-<a id="swift_update_packages"></a>
+<a id="swift_deps_index"></a>
 
-## swift_update_packages
+## swift_deps_index
 
 <pre>
-swift_update_packages(<a href="#swift_update_packages-name">name</a>, <a href="#swift_update_packages-gazelle">gazelle</a>, <a href="#swift_update_packages-package_manifest">package_manifest</a>, <a href="#swift_update_packages-swift_deps">swift_deps</a>, <a href="#swift_update_packages-swift_deps_fn">swift_deps_fn</a>, <a href="#swift_update_packages-swift_deps_index">swift_deps_index</a>,
-                      <a href="#swift_update_packages-update_bzlmod_use_repo_names">update_bzlmod_use_repo_names</a>, <a href="#swift_update_packages-print_bzlmod_stanzas">print_bzlmod_stanzas</a>, <a href="#swift_update_packages-update_bzlmod_stanzas">update_bzlmod_stanzas</a>,
-                      <a href="#swift_update_packages-bazel_module">bazel_module</a>, <a href="#swift_update_packages-generate_swift_deps_for_workspace">generate_swift_deps_for_workspace</a>, <a href="#swift_update_packages-patches_yaml">patches_yaml</a>, <a href="#swift_update_packages-kwargs">kwargs</a>)
+swift_deps_index(<a href="#swift_deps_index-name">name</a>, <a href="#swift_deps_index-direct_dep_pkg_infos">direct_dep_pkg_infos</a>)
 </pre>
 
-Defines gazelle update-repos targets that are used to resolve and update     Swift package dependencies.
+Generates a Swift dependencies index file that is used by other tooling (e.g., Swift Gazelle plugin).
 
-**PARAMETERS**
+**ATTRIBUTES**
 
 
-| Name  | Description | Default Value |
-| :------------- | :------------- | :------------- |
-| <a id="swift_update_packages-name"></a>name |  The name of the <code>resolve</code> target as a <code>string</code>. The target name for the <code>update</code> target is derived from this value by appending <code>_to_latest</code>.   |  none |
-| <a id="swift_update_packages-gazelle"></a>gazelle |  The label to <code>gazelle_binary</code> that includes the <code>rules_swift_package_manager</code> Gazelle extension.   |  none |
-| <a id="swift_update_packages-package_manifest"></a>package_manifest |  Optional. The name of the Swift package manifest file as a <code>string</code>.   |  <code>"Package.swift"</code> |
-| <a id="swift_update_packages-swift_deps"></a>swift_deps |  Optional. The name of the Starlark file that should be updated with the Swift package dependencies as a <code>string</code>.   |  <code>"swift_deps.bzl"</code> |
-| <a id="swift_update_packages-swift_deps_fn"></a>swift_deps_fn |  Optional. The name of the Starlark function in the <code>swift_deps</code> file that should be updated with the Swift package dependencies as a <code>string</code>.   |  <code>"swift_dependencies"</code> |
-| <a id="swift_update_packages-swift_deps_index"></a>swift_deps_index |  Optional. The relative path to the Swift dependencies index JSON file. This path is relative to the repository root, not the location of this declaration.   |  <code>"swift_deps_index.json"</code> |
-| <a id="swift_update_packages-update_bzlmod_use_repo_names"></a>update_bzlmod_use_repo_names |  Optional. Determines whether the Gazelle extension updates the use_repo names to MODULE.bazel.   |  <code>False</code> |
-| <a id="swift_update_packages-print_bzlmod_stanzas"></a>print_bzlmod_stanzas |  Optional. Determines whether the Gazelle extension prints out bzlmod Starlark code that can be pasted into your <code>MODULE.bazel</code>.   |  <code>False</code> |
-| <a id="swift_update_packages-update_bzlmod_stanzas"></a>update_bzlmod_stanzas |  Optional. Determines whether the Gazelle extension adds/updates the bzlmod Starlark code to MODULE.bazel.   |  <code>False</code> |
-| <a id="swift_update_packages-bazel_module"></a>bazel_module |  Optional. The relative path to the <code>MODULE.bazel</code> file.   |  <code>"MODULE.bazel"</code> |
-| <a id="swift_update_packages-generate_swift_deps_for_workspace"></a>generate_swift_deps_for_workspace |  Optional. Determines whether to generate the swift dependencies for clients using legacy/WORKSPACE loaded dependencies.   |  <code>True</code> |
-| <a id="swift_update_packages-patches_yaml"></a>patches_yaml |  Optional. The path to a YAML file with patch information for the Swift packages. The keys are the Swift package identity and the values are the patch parameters (see <code>gazelle/internal/swift/patch.go</code> for details on the fields).   |  <code>None</code> |
-| <a id="swift_update_packages-kwargs"></a>kwargs |  Attributes that are passed along to the gazelle declarations.   |  none |
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="swift_deps_index-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="swift_deps_index-direct_dep_pkg_infos"></a>direct_dep_pkg_infos |  A <code>dict</code> where the key is the label for a Swift package's <code>pkg_info.json</code> file and the value is the Swift package's identity value.   | <a href="https://bazel.build/rules/lib/dict">Dictionary: Label -> String</a> | optional | <code>{}</code> |
 
 

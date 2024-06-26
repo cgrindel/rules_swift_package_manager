@@ -6,3 +6,6 @@ import %workspace%/../../ci.bazelrc
 
 # Try to import a local.rc file; typically, written by CI
 try-import %workspace%/../../local.bazelrc
+
+# Prevent hang retrieving external repositories in Bazel 7.1.1.
+build --experimental_worker_for_repo_fetching=off

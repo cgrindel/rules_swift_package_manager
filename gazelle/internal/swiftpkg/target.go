@@ -1,6 +1,7 @@
 package swiftpkg
 
 import (
+	"encoding/json"
 	"fmt"
 	"path/filepath"
 
@@ -21,6 +22,27 @@ const (
 	TestTargetType
 	PluginTargetType
 )
+
+func (tt *TargetType) UnmarshalJSON(b []byte) error {
+	var ttStr string
+	err := json.Unmarshal(b, &ttStr)
+	if err != nil {
+		return err
+	}
+	switch ttStr {
+	case "executable":
+		*tt = ExecutableTargetType
+	case "test":
+		*tt = TestTargetType
+	case "library", "regular":
+		*tt = LibraryTargetType
+	case "plugin":
+		*tt = PluginTargetType
+	default:
+		*tt = UnknownTargetType
+	}
+	return nil
+}
 
 // Targets
 
@@ -60,7 +82,7 @@ type Target struct {
 	Dependencies       []*TargetDependency
 	CSettings          *ClangSettings
 	SrcType            SourceType
-	ProductMemberships []string
+	ProductMemberships []string `json:"product_memberships"`
 	// SwiftFileInfos will only be populated if the target is a Swift target.
 	SwiftFileInfos SwiftFileInfos
 }

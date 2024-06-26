@@ -186,6 +186,8 @@ filegroup(
         "//swiftpkg/bzlmod:all_files",
         "//swiftpkg/internal:all_files",
         "//swiftpkg/internal/modulemap_parser:all_files",
+        "//tools/swift_deps_index:all_files",
+        "//tools/swift_deps_index/cmd:all_files",
     ],
     visibility = ["//:__subpackages__"],
 )

@@ -212,6 +212,7 @@ func (di *DependencyIndex) ResolveModulesToProducts(
 	moduleNames []string,
 	pkgIdentities []string,
 ) *ModuleResolutionResult {
+
 	var result ModuleResolutionResult
 	pkgIdentsSet := mapset.NewSet[string](pkgIdentities...)
 	unresolved := mapset.NewSet[string]()

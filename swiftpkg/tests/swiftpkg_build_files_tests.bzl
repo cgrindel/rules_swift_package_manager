@@ -11,7 +11,6 @@ load(
     "//config_settings/spm/platform:platforms.bzl",
     spm_platforms = "platforms",
 )
-load("//swiftpkg/internal:deps_indexes.bzl", "deps_indexes")
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
 load(
@@ -39,6 +38,17 @@ _pkg_info = pkginfos.new(
         pkginfos.new_dependency(
             identity = "swift-argument-parser",
             name = "SwiftArgumentParser",
+            source_control = pkginfos.new_source_control(
+                pin = pkginfos.new_pin(
+                    identity = "swift-argument-parser",
+                    kind = "remoteSourceControl",
+                    location = "https://github.com/apple/swift-argument-parser",
+                    state = pkginfos.new_pin_state(
+                        revision = "6c89474e62719ddcc1e9614989fff2f68208fe10",
+                        version = "1.0.0",
+                    ),
+                ),
+            ),
         ),
     ],
     products = [
@@ -462,106 +472,9 @@ _pkg_info = pkginfos.new(
     ],
 )
 
-_deps_index_json = """
-{
-    "modules": [
-        {
-            "name": "RegularTargetForExec",
-            "c99name": "RegularTargetForExec",
-            "src_type": "swift",
-            "label": "@swiftpkg_mypackage//:RegularTargetForExec.rspm",
-            "package_identity": "mypackage",
-            "product_memberships": []
-        },
-        {
-            "name": "RegularSwiftTargetAsLibrary",
-            "c99name": "RegularSwiftTargetAsLibrary",
-            "src_type": "swift",
-            "label": "@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm",
-            "package_identity": "mypackage",
-            "product_memberships": []
-        },
-        {
-            "name": "RegularSwiftTargetAsLibraryTests",
-            "c99name": "RegularSwiftTargetAsLibraryTests",
-            "src_type": "swift",
-            "label": "@swiftpkg_mypackage//:RegularSwiftTargetAsLibraryTests.rspm",
-            "package_identity": "mypackage",
-            "product_memberships": []
-        },
-        {
-            "name": "SwiftExecutableTarget",
-            "c99name": "SwiftExecutableTarget",
-            "src_type": "swift",
-            "label": "@swiftpkg_mypackage//:SwiftLibraryTarget.rspm",
-            "package_identity": "mypackage",
-            "product_memberships": []
-        },
-        {
-            "name": "ClangLibrary",
-            "c99name": "ClangLibrary",
-            "src_type": "clang",
-            "label": "@swiftpkg_mypackage//:ClangLibrary.rspm",
-            "package_identity": "mypackage",
-            "product_memberships": []
-        },
-        {
-            "name": "ObjcLibrary",
-            "c99name": "ObjcLibrary",
-            "src_type": "objc",
-            "label": "@swiftpkg_mypackage//:ObjcLibrary.rspm",
-            "package_identity": "mypackage",
-            "product_memberships": []
-        },
-        {
-            "name": "ObjcLibraryDep",
-            "c99name": "ObjcLibraryDep",
-            "src_type": "objc",
-            "label": "@swiftpkg_mypackage//:ObjcLibraryDep.rspm",
-            "package_identity": "mypackage",
-            "product_memberships": []
-        },
-        {
-            "name": "ObjcLibraryWithModulemap",
-            "c99name": "ObjcLibraryWithModulemap",
-            "src_type": "objc",
-            "label": "@swiftpkg_mypackage//:ObjcLibraryWithModulemap.rspm",
-            "package_identity": "mypackage",
-            "product_memberships": []
-        },
-        {
-            "name": "SwiftLibraryWithConditionalDep",
-            "c99name": "SwiftLibraryWithConditionalDep",
-            "src_type": "swift",
-            "label": "@swiftpkg_mypackage//:SwiftLibraryWithConditionalDep.rspm",
-            "package_identity": "mypackage",
-            "product_memberships": []
-        },
-        {
-            "name": "ClangLibraryWithConditionalDep",
-            "c99name": "ClangLibraryWithConditionalDep",
-            "src_type": "clang",
-            "label": "@swiftpkg_mypackage//:ClangLibraryWithConditionalDep.rspm",
-            "package_identity": "mypackage",
-            "product_memberships": []
-        },
-        {
-            "name": "SwiftForObjcTarget",
-            "c99name": "SwiftForObjcTarget",
-            "src_type": "swift",
-            "label": "@swiftpkg_mypackage//:SwiftForObjcTarget.rspm",
-            "package_identity": "mypackage",
-            "product_memberships": []
-        }
-    ],
-    "products": []
-}
-"""
-
 _pkg_ctx = pkg_ctxs.new(
     pkg_info = _pkg_info,
     repo_name = _repo_name,
-    deps_index = deps_indexes.new_from_json(_deps_index_json),
 )
 
 # MARK: - Tests
@@ -580,7 +493,6 @@ swift_library(
     name = "RegularSwiftTargetAsLibrary.rspm",
     always_include_developer_search_paths = True,
     copts = ["-DSWIFT_PACKAGE"],
-    deps = [],
     module_name = "RegularSwiftTargetAsLibrary",
     package_name = "swiftpkg_mypackage.rspm",
     srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
@@ -648,7 +560,6 @@ swift_binary(
         "@rules_swift_package_manager//config_settings/spm/configuration:release": ["-cross-module-optimization"],
         "//conditions:default": [],
     }),
-    deps = [],
     module_name = "SwiftExecutableTarget",
     package_name = "swiftpkg_mypackage.rspm",
     srcs = ["Source/SwiftExecutableTarget/main.swift"],
@@ -924,7 +835,6 @@ swift_library(
     always_include_developer_search_paths = True,
     copts = ["-DSWIFT_PACKAGE"],
     data = [":SwiftLibraryWithFilePathResource.rspm_resource_bundle"],
-    deps = [],
     module_name = "SwiftLibraryWithFilePathResource",
     package_name = "swiftpkg_mypackage.rspm",
     srcs = [

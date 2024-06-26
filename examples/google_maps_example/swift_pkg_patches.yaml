@@ -1,3 +1,0 @@
-ios-maps-sdk:
-  args: ['-p1']
-  files: ['@@//third-party/google-maps-ios-sdk:0001-Remove-import-GoogleMaps.patch']

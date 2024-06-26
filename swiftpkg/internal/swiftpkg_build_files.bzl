@@ -7,7 +7,6 @@ load(":bazel_apple_platforms.bzl", "bazel_apple_platforms")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":bzl_selects.bzl", "bzl_selects")
-load(":deps_indexes.bzl", "deps_indexes")
 load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
@@ -42,12 +41,7 @@ def _swift_target_build_file(pkg_ctx, target):
         fail("Expected a `swift_src_info`. name: ", target.name)
 
     all_build_files = []
-    deps = lists.flatten([
-        pkginfo_target_deps.bzl_select_list(pkg_ctx, td, depender_module_name = target.c99name)
-        for td in target.dependencies
-    ])
     attrs = {
-        "deps": bzl_selects.to_starlark(deps),
         "module_name": target.c99name,
         "srcs": pkginfo_targets.srcs(target),
         "visibility": ["//:__subpackages__"],
@@ -62,23 +56,42 @@ def _swift_target_build_file(pkg_ctx, target):
     if tools_version_major >= 6 or (tools_version_major == 5 and tools_version_minor >= 9):
         attrs["package_name"] = target.label.repository_name.lstrip("@") + ".rspm"
 
-    # Add macros as plugins
-    macro_target_labels = [
-        target.label.repository_name + "//:" + target.label.name
-        for target in pkg_ctx.pkg_info.targets
-        if target.type == "macro"
-    ]
-    if macro_target_labels:
-        plugins = [
-            target_label
-            for target_label in macro_target_labels
-            for dep in deps
-            if target_label in dep.value[0]
+    target_deps = []
+    macro_targets = []
+    for target_dep in target.dependencies:
+        dep_target_name = None
+        if target_dep.target:
+            dep_target_name = target_dep.target.target_name
+        elif target_dep.by_name:
+            dep_target_name = target_dep.by_name.name
+        if not dep_target_name:
+            target_deps.append(target_dep)
+            continue
+        dep_target = pkginfo_targets.get(
+            targets = pkg_ctx.pkg_info.targets,
+            name = dep_target_name,
+            fail_if_not_found = False,
+        )
+
+        if not dep_target or dep_target.type != target_types.macro:
+            target_deps.append(target_dep)
+            continue
+        macro_targets.append(dep_target)
+
+    if macro_targets:
+        attrs["plugins"] = [
+            # The targets will be local to this repo. We do not want the '@'
+            # prefix that can be added during normalization.
+            bazel_labels.normalize(t.label).removeprefix("@")
+            for t in macro_targets
         ]
-        if plugins:
-            attrs["plugins"] = plugins
-            deps_without_plugins = [dep for dep in deps if dep.value[0] not in plugins]
-            attrs["deps"] = bzl_selects.to_starlark(deps_without_plugins)
+    deps = []
+    if target_deps:
+        deps = lists.flatten([
+            pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
+            for td in target_deps
+        ])
+        attrs["deps"] = bzl_selects.to_starlark(deps)
 
     # NOTE: We specify defines using copts so that they stay local to the
     # target. Specifying them using the defines attribute will propagate them.
@@ -184,6 +197,9 @@ def _swift_test_from_target(target, attrs):
     )
 
 def _swift_compiler_plugin_from_target(target, attrs):
+    # Macros are set up as compiler plugins. We expose macro products as an
+    # alias to the swift_compiler_plugin target.
+    attrs["visibility"] = ["//visibility:public"]
     return build_decls.new(
         kind = swift_kinds.compiler_plugin,
         name = pkginfo_targets.bazel_label_name(target),
@@ -199,11 +215,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         fail("Expected `clang_src_info` to not be None.")
 
     deps = lists.flatten([
-        pkginfo_target_deps.bzl_select_list(
-            pkg_ctx,
-            td,
-            depender_module_name = target.c99name,
-        )
+        pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
         for td in target.dependencies
     ])
 
@@ -386,8 +398,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # know whether the modulemap target exists. Hence, we ensure that it
         # always exists but does nothing.
         #
-        # See `deps_indexes.bzl` for the logic that resolves the dependency
-        # labels.
+        # See `pkginfo_target_deps.bzl` for the logic that resolves the
+        # dependency labels.
         # See `generate_modulemap.bzl` for details on the modulemap generation.
         # See `//swiftpkg/tests/generate_modulemap_tests` package for a usage
         # example.
@@ -669,7 +681,9 @@ def _new_for_product(pkg_ctx, product):
             pkg_ctx.repo_name,
         )
     elif prod_type.is_library:
-        return _library_product_build_file(pkg_ctx.deps_index_ctx, product)
+        return _library_product_build_file(pkg_ctx, product)
+    elif prod_type.is_macro:
+        return _alias_for_macro_build_file(pkg_ctx, product)
 
     # GH046: Check for plugin product
     return None
@@ -716,25 +730,19 @@ def _executable_product_build_file(pkg_info, product, repo_name):
     else:
         fail("Did not find any targets associated with product. name:", product.name)
 
-def _library_product_build_file(deps_index_ctx, product):
+def _library_product_build_file(pkg_ctx, product):
     # A library product can reference one or more Swift targets. Hence a
     # dependency on a library product is a shorthand for depend upon all of the
     # Swift targets that is associated with the product. We use a
     # `swift_library_group` to represent this.
-
-    # Retrieve the targets
-    modules = [
-        deps_indexes.resolve_module_with_ctx(deps_index_ctx, tname)
-        for tname in product.targets
-    ]
-    label_infos = lists.flatten([
-        deps_indexes.labels_for_module(module)
-        for module in modules
-    ])
-    target_labels = [
-        bazel_labels.normalize(label_info)
-        for label_info in label_infos
-    ]
+    target_labels = []
+    for tname in product.targets:
+        target = lists.find(pkg_ctx.pkg_info.targets, lambda t: t.name == tname)
+        if target == None:
+            fail("Did not find a target named {}.".format(tname))
+        target_labels.extend(
+            pkginfo_target_deps.labels_for_target(pkg_ctx.repo_name, target),
+        )
 
     if len(target_labels) == 0:
         fail("No targets specified for a library product. name:", product.name)
@@ -745,7 +753,10 @@ def _library_product_build_file(deps_index_ctx, product):
                 swift_kinds.library_group,
                 product.name,
                 attrs = {
-                    "deps": target_labels,
+                    "deps": [
+                        bazel_labels.normalize(label)
+                        for label in target_labels
+                    ],
                     "visibility": ["//visibility:public"],
                 },
             ),
@@ -762,6 +773,29 @@ def _swift_binary_from_product(product, dep_target, repo_name):
             )],
             "visibility": ["//visibility:public"],
         },
+    )
+
+def _alias_for_macro_build_file(pkg_ctx, product):
+    if len(product.targets) != 1:
+        fail("""\
+Expected only one target for the macro product {name} but received {count}.\
+""".format(
+            name = product.name,
+            count = len(product.targets),
+        ))
+    target = pkginfo_targets.get(pkg_ctx.pkg_info.targets, product.targets[0])
+    label_name = pkginfo_targets.bazel_label_name(target)
+    return build_files.new(
+        decls = [
+            build_decls.new(
+                native_kinds.alias,
+                product.name,
+                attrs = {
+                    "actual": ":{}".format(label_name),
+                    "visibility": ["//visibility:public"],
+                },
+            ),
+        ],
     )
 
 # MARK: - Constants and API Definition

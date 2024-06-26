@@ -49,6 +49,7 @@ func TestGetSetSwiftConfig(t *testing.T) {
 }
 
 func TestWriteAndReadDependencyIndex(t *testing.T) {
+	basename := "swift_deps_index.json"
 	// Create temp dir
 	dir, err := os.MkdirTemp("", "swiftcfg")
 	assert.NoError(t, err)
@@ -56,7 +57,7 @@ func TestWriteAndReadDependencyIndex(t *testing.T) {
 
 	// Create swift config
 	origsc := swiftcfg.NewSwiftConfig()
-	origsc.DependencyIndexPath = filepath.Join(dir, swiftcfg.DefaultDependencyIndexBasename)
+	origsc.DependencyIndexPath = filepath.Join(dir, basename)
 
 	lbl := label.New("cool_repo", "Sources/Foo", "Foo")
 	m := swift.NewModule("Foo", "Foo", swiftpkg.SwiftSourceType, &lbl, nil, "",
@@ -69,7 +70,7 @@ func TestWriteAndReadDependencyIndex(t *testing.T) {
 
 	// Create a new swift config
 	newsc := swiftcfg.NewSwiftConfig()
-	newsc.DependencyIndexPath = filepath.Join(dir, swiftcfg.DefaultDependencyIndexBasename)
+	newsc.DependencyIndexPath = filepath.Join(dir, basename)
 
 	// Read the index
 	err = newsc.LoadDependencyIndex()

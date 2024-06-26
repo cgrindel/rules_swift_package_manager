@@ -1,7 +1,6 @@
 package swiftcfg
 
 import (
-	"errors"
 	"os"
 	"sort"
 
@@ -13,7 +12,6 @@ import (
 )
 
 const SwiftConfigName = "swift"
-const DefaultDependencyIndexBasename = "swift_deps_index.json"
 const dependencyIndexPerms = 0666
 
 const (
@@ -25,26 +23,17 @@ const (
 
 // A SwiftConfig represents the Swift-specific configuration for the Gazelle extension.
 type SwiftConfig struct {
-	SwiftBinPath              string
-	ModuleFilesCollector      ModuleFilesCollector
-	ShouldLoadDependencyIndex bool
-	DependencyIndex           *swift.DependencyIndex
+	SwiftBinPath         string
+	ModuleFilesCollector ModuleFilesCollector
+	DependencyIndex      *swift.DependencyIndex
 	// DependencyIndexRel is the path relative to the RepoRoot to the dependency index
 	DependencyIndexRel string
 	// DependencyIndexPath is the full path to the dependency index
-	DependencyIndexPath      string
-	UpdatePkgsToLatest       bool
-	ResolutionLogPath        string
-	ResolutionLogFile        *os.File
-	ResolutionLogger         reslog.ResolutionLogger
-	UpdateBzlmodUseRepoNames bool
-	PrintBzlmodStanzas       bool
-	UpdateBzlmodStanzas      bool
-	BazelModuleRel           string
-	// BazelModulePath is the full path to the MODULE.bazel
-	BazelModulePath string
+	DependencyIndexPath string
 
-	GenerateSwiftDepsForWorkspace bool
+	ResolutionLogPath string
+	ResolutionLogFile *os.File
+	ResolutionLogger  reslog.ResolutionLogger
 
 	// The naming convention to apply to the module names derived from the directory names.
 	// The default behavior uses the name verbatim while PascalCase will convert snake_case to PascalCase.
@@ -94,8 +83,8 @@ type SwiftConfig struct {
 	// that can be applied to
 	DefaultModuleNames map[string]string
 
-	// Path to the YAML file that contains the patch information
-	PatchesPath string
+	// // SwiftDepsInfoPath is the path for the Swift dependencies info JSON file.
+	// SwiftDepsInfoPath string
 
 	// StripImportPrefix The prefix to strip from the paths of the .proto files.
 	// If set, Gazelle will apply this value to the strip_import_prefix attribute
@@ -161,9 +150,6 @@ func (sc *SwiftConfig) GenerateRulesMode(args language.GenerateArgs) GenerateRul
 // LoadDependencyIndex reads the dependency index from disk.
 func (sc *SwiftConfig) LoadDependencyIndex() error {
 	if sc.DependencyIndexPath == "" {
-		return nil
-	}
-	if _, err := os.Stat(sc.DependencyIndexPath); errors.Is(err, os.ErrNotExist) {
 		return nil
 	}
 	data, err := os.ReadFile(sc.DependencyIndexPath)

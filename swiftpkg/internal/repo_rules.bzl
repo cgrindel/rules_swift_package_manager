@@ -9,6 +9,7 @@ load(":build_files.bzl", "build_files")
 load(":pkginfos.bzl", "target_types")
 load(":repository_files.bzl", "repository_files")
 load(":spm_versions.bzl", "spm_versions")
+load(":starlark_codegen.bzl", scg = "starlark_codegen")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
 _swift_attrs = {
@@ -19,7 +20,6 @@ _swift_attrs = {
         doc = """\
 A JSON file that contains a mapping of Swift products and Swift modules.\
 """,
-        mandatory = True,
     ),
 }
 
@@ -69,9 +69,8 @@ def _gen_build_files(repository_ctx, pkg_ctx):
     bld_files = []
     for target in pkg_info.targets:
         # Unfortunately, Package.resolved does not contain test-only external
-        # dependencies. So, we need to skip generating test targets. If a target
-        # does not have any product memberships, it is a testonly
-        if target.type == "test" or len(target.product_memberships) == 0:
+        # dependencies. So, we need to skip generating test targets.
+        if target.type == "test":
             continue
 
         artifact_infos = []
@@ -94,12 +93,17 @@ def _gen_build_files(repository_ctx, pkg_ctx):
             target,
             artifact_infos,
         )
+
         if bld_file == None:
             continue
         bld_files.append(bld_file)
 
     # Create Bazel declarations for the targets
     bld_files.append(swiftpkg_build_files.new_for_products(pkg_ctx))
+
+    # Export the pkg_info.json
+    exports_files = scg.new_fn_call("exports_files", ["pkg_info.json"])
+    bld_files.append(build_files.new(decls = [exports_files]))
 
     # Write the build file
     root_bld_file = build_files.merge(*bld_files)

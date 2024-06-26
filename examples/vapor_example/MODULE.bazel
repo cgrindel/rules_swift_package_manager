@@ -42,18 +42,19 @@ apple_cc_configure = use_extension(
 )
 use_repo(apple_cc_configure, "local_config_apple_cc")
 
-# swift_deps START
 swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
 )
-swift_deps.from_file(
-    deps_index = "//swift:deps_index.json",
+swift_deps.from_package(
+    declare_swift_deps_info = True,
+    resolved = "//swift:Package.resolved",
+    swift = "//swift:Package.swift",
 )
 use_repo(
     swift_deps,
+    "swift_deps_info",
     "swiftpkg_fluent",
     "swiftpkg_fluent_sqlite_driver",
     "swiftpkg_vapor",
 )
-# swift_deps END
