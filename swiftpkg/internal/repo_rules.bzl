@@ -65,8 +65,19 @@ higher. Found version %s installed.\
 def _gen_build_files(repository_ctx, pkg_ctx):
     pkg_info = pkg_ctx.pkg_info
 
-    # Create Bazel declarations for the Swift package targets
     bld_files = []
+
+    licenses = repository_files.find_license_files(repository_ctx)
+    bld_files.append(
+        # Pick the shortest name, in order to prefer `LICENSE` over
+        # `LICENSE.md`
+        swiftpkg_build_files.new_for_license(
+            pkg_info,
+            sorted(licenses, key = len)[0] if licenses else None,
+        ),
+    )
+
+    # Create Bazel declarations for the Swift package targets
     for target in pkg_info.targets:
         # Unfortunately, Package.resolved does not contain test-only external
         # dependencies. So, we need to skip generating test targets.
