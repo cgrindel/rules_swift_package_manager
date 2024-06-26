@@ -25,7 +25,7 @@ _target_dep_condition = pkginfos.new_target_dependency_condition(
 # AwesomePackage (external dependency)
 
 _external_dep = pkginfos.new_dependency(
-    identity = "awesomepackage",
+    identity = "awesomepackage-identity",
     name = "AwesomePackage",
     file_system = pkginfos.new_file_system(
         path = "/path/to/AwesomePackage",
@@ -134,7 +134,7 @@ def _bzl_select_list_test(ctx):
                     kind = pkginfo_target_deps.target_dep_kind,
                     value = [
                         bazel_labels.normalize(
-                            "@swiftpkg_awesomepackage//:AwesomePackage",
+                            "@swiftpkg_awesomepackage_identity//:AwesomePackage",
                         ),
                     ],
                 ),
@@ -148,7 +148,7 @@ def _bzl_select_list_test(ctx):
                     kind = pkginfo_target_deps.target_dep_kind,
                     value = [
                         bazel_labels.normalize(
-                            "@swiftpkg_awesomepackage//:AwesomeProduct",
+                            "@swiftpkg_awesomepackage_identity//:AwesomeProduct",
                         ),
                     ],
                 ),
@@ -162,7 +162,7 @@ def _bzl_select_list_test(ctx):
                     kind = pkginfo_target_deps.target_dep_kind,
                     value = [
                         bazel_labels.normalize(
-                            "@swiftpkg_awesomepackage//:AwesomeProduct",
+                            "@swiftpkg_awesomepackage_identity//:AwesomeProduct",
                         ),
                     ],
                     condition = c,
