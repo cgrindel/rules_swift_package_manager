@@ -81,7 +81,7 @@ def _resolve_by_name(pkg_ctx, name):
 
     ext_dep = lists.find(
         pkg_ctx.pkg_info.dependencies,
-        lambda d: d.identity == normalized_name,
+        lambda d: d.name == normalized_name,
     )
     if ext_dep != None:
         return [bazel_labels.new(
