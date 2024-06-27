@@ -10,7 +10,7 @@ require (
 	github.com/bazelbuild/buildtools v0.0.0-20240422193413-1429e15ae755
 	github.com/creasty/defaults v1.7.0
 	github.com/deckarep/golang-set/v2 v2.6.0
-	github.com/spf13/cobra v1.8.0
+	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/exp v0.0.0-20240613232115-7f521ea00fb8
 	golang.org/x/text v0.15.0

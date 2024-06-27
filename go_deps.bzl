@@ -99,8 +99,8 @@ def swift_bazel_go_dependencies():
         name = "com_github_cpuguy83_go_md2man_v2",
         build_external = "external",
         importpath = "github.com/cpuguy83/go-md2man/v2",
-        sum = "h1:qMCsGGgs+MAzDFyp9LpAe1Lqy/fY/qCovCm0qnXZOBM=",
-        version = "v2.0.3",
+        sum = "h1:wfIWP927BUkWJb2NmU/kNDYIBTh/ziUX91+lVfRxZq4=",
+        version = "v2.0.4",
     )
     maybe(
         go_repository,
@@ -219,8 +219,8 @@ def swift_bazel_go_dependencies():
         name = "com_github_spf13_cobra",
         build_external = "external",
         importpath = "github.com/spf13/cobra",
-        sum = "h1:7aJaZx1B85qltLMc546zn58BxxfZdR/W22ej9CFoEf0=",
-        version = "v1.8.0",
+        sum = "h1:e5/vxKd/rZsfSJMUX1agtjeTDf+qv1/JdBF8gg5k9ZM=",
+        version = "v1.8.1",
     )
     maybe(
         go_repository,
