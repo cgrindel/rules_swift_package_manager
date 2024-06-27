@@ -21,13 +21,13 @@ development inside a Bazel workspace.
   * [1. Enable bzlmod](#1-enable-bzlmod)
   * [2. Configure your `MODULE.bazel` to use rules_swift_package_manager.](#2-configure-your-modulebazel-to-use-rules_swift_package_manager)
   * [3. Create a minimal `Package.swift` file.](#3-create-a-minimal-packageswift-file)
-  * [4. Run `swift package resolve`
-  * [5. Run `bazel mod tidy`.](#4-run-bazel-mod-tidy)
-  * [6. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.](#5-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
-  * [7. Create or update Bazel build files for your project.](#6-create-or-update-bazel-build-files-for-your-project)
-  * [8. Build and test your project.](#7-build-and-test-your-project)
-  * [9. Check in `Package.swift`, `Package.resolved`, and `MODULE.bazel`.](#8-check-in-packageswift-packageresolved-and-modulebazel)
-  * [10. Start coding](#9-start-coding)
+  * [4. Run `swift package resolve`](#4-run-swift-package-resolve)
+  * [5. Run `bazel mod tidy`.](#5-run-bazel-mod-tidy)
+  * [6. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.](#6-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
+  * [7. Create or update Bazel build files for your project.](#7-create-or-update-bazel-build-files-for-your-project)
+  * [8. Build and test your project.](#8-build-and-test-your-project)
+  * [9. Check in `Package.swift`, `Package.resolved`, and `MODULE.bazel`.](#9-check-in-packageswift-packageresolved-and-modulebazel)
+  * [10. Start coding](#10-start-coding)
 * [Tips and Tricks](#tips-and-tricks)
 <!-- MARKDOWN TOC: END -->
 
