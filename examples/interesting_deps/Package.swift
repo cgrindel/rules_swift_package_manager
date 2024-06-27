@@ -9,6 +9,6 @@ let package = Package(
         .package(url: "https://github.com/GEOSwift/GEOSwift", from: "10.1.0"),
         .package(url: "https://github.com/OpenCombine/OpenCombine", from: "0.14.0"),
         .package(url: "https://github.com/SDWebImage/libwebp-Xcode.git", from: "1.3.2"),
-        .package(url: "https://github.com/apple/swift-log", from: "1.5.4"),
+        .package(url: "https://github.com/apple/swift-log", from: "1.6.1"),
     ]
 )
