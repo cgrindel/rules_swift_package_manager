@@ -21,7 +21,7 @@ development inside a Bazel workspace.
   * [1. Enable bzlmod](#1-enable-bzlmod)
   * [2. Configure your `MODULE.bazel` to use rules_swift_package_manager.](#2-configure-your-modulebazel-to-use-rules_swift_package_manager)
   * [3. Create a minimal `Package.swift` file.](#3-create-a-minimal-packageswift-file)
-  * [4. Run `swift package resolve`](#4-run-swift-package-resolve)
+  * [4. Run `swift package update`](#4-run-swift-package-update)
   * [5. Run `bazel mod tidy`.](#5-run-bazel-mod-tidy)
   * [6. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.](#6-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
   * [7. Create or update Bazel build files for your project.](#7-create-or-update-bazel-build-files-for-your-project)
@@ -153,7 +153,7 @@ feel free to populate the rest of the manifest so that your package works proper
 manager. Just note that the Swift Gazelle plugin does not use the manifest to generate Bazel build
 files, at this time.
 
-### 4. Run `swift package resolve`
+### 4. Run `swift package update`
 
 This will invoke Swift Package Manager and resolve all dependencies resulting in creation of Package.resolved file.
 
