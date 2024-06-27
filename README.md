@@ -21,12 +21,13 @@ development inside a Bazel workspace.
   * [1. Enable bzlmod](#1-enable-bzlmod)
   * [2. Configure your `MODULE.bazel` to use rules_swift_package_manager.](#2-configure-your-modulebazel-to-use-rules_swift_package_manager)
   * [3. Create a minimal `Package.swift` file.](#3-create-a-minimal-packageswift-file)
-  * [4. Run `bazel mod tidy`.](#4-run-bazel-mod-tidy)
-  * [5. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.](#5-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
-  * [6. Create or update Bazel build files for your project.](#6-create-or-update-bazel-build-files-for-your-project)
-  * [7. Build and test your project.](#7-build-and-test-your-project)
-  * [8. Check in `Package.swift`, `Package.resolved`, and `MODULE.bazel`.](#8-check-in-packageswift-packageresolved-and-modulebazel)
-  * [9. Start coding](#9-start-coding)
+  * [4. Run `swift package resolve`
+  * [5. Run `bazel mod tidy`.](#4-run-bazel-mod-tidy)
+  * [6. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.](#5-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
+  * [7. Create or update Bazel build files for your project.](#6-create-or-update-bazel-build-files-for-your-project)
+  * [8. Build and test your project.](#7-build-and-test-your-project)
+  * [9. Check in `Package.swift`, `Package.resolved`, and `MODULE.bazel`.](#8-check-in-packageswift-packageresolved-and-modulebazel)
+  * [10. Start coding](#9-start-coding)
 * [Tips and Tricks](#tips-and-tricks)
 <!-- MARKDOWN TOC: END -->
 
@@ -152,11 +153,15 @@ feel free to populate the rest of the manifest so that your package works proper
 manager. Just note that the Swift Gazelle plugin does not use the manifest to generate Bazel build
 files, at this time.
 
-### 4. Run `bazel mod tidy`.
+### 4. Run `swift package resolve`
+
+This will invoke Swift Package Manager and resolve all dependencies resulting in creation of Package.resolved file.
+
+### 5. Run `bazel mod tidy`.
 
 This will update your `MODULE.bazel` with the correct `use_repo` declaration.
 
-### 5. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.
+### 6. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.
 
 Add the following to the `BUILD.bazel` file at the root of your workspace.
 
@@ -196,7 +201,7 @@ gazelle(
 )
 ```
 
-### 6. Create or update Bazel build files for your project.
+### 7. Create or update Bazel build files for your project.
 
 Generate/update the Bazel build files for your project by running the following:
 
@@ -204,7 +209,7 @@ Generate/update the Bazel build files for your project by running the following:
 bazel run //:update_build_files
 ```
 
-### 7. Build and test your project.
+### 8. Build and test your project.
 
 Build and test your project.
 
@@ -212,7 +217,7 @@ Build and test your project.
 bazel test //...
 ```
 
-### 8. Check in `Package.swift`, `Package.resolved`, and `MODULE.bazel`.
+### 9. Check in `Package.swift`, `Package.resolved`, and `MODULE.bazel`.
 
 - The `Package.swift` file is used by `rules_swift_package_manager` to generate information about
   your project's dependencies.
@@ -220,7 +225,7 @@ bazel test //...
   identified.
 - The `MODULE.bazel` contains the declarations for your external dependencies.
 
-### 9. Start coding
+### 10. Start coding
 
 You are ready to start coding.
 
