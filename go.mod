@@ -6,7 +6,7 @@ go 1.21.4
 // toolchain go1.21.5
 
 require (
-	github.com/bazelbuild/bazel-gazelle v0.36.0
+	github.com/bazelbuild/bazel-gazelle v0.37.0
 	github.com/bazelbuild/buildtools v0.0.0-20240422193413-1429e15ae755
 	github.com/creasty/defaults v1.7.0
 	github.com/deckarep/golang-set/v2 v2.6.0
