@@ -33,7 +33,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "gazelle",
-    version = "0.36.0",
+    version = "0.37.0",
     repo_name = "bazel_gazelle",
 )
 
@@ -47,7 +47,6 @@ go_deps = use_extension("@bazel_gazelle//:extensions.bzl", "go_deps")
 go_deps.from_file(go_mod = "//:go.mod")
 use_repo(
     go_deps,
-    "com_github_bazelbuild_bazel_gazelle",
     "com_github_bazelbuild_buildtools",
     "com_github_creasty_defaults",
     "com_github_deckarep_golang_set_v2",
