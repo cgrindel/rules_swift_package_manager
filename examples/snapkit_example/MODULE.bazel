@@ -23,7 +23,7 @@ bazel_dep(
 
 bazel_dep(
     name = "bazel_skylib_gazelle_plugin",
-    version = "1.6.1",
+    version = "1.7.1",
     dev_dependency = True,
 )
 bazel_dep(
