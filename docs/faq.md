@@ -193,7 +193,7 @@ the new architecture:
 - During the loading phase, there is no mechanism for one external repository to peak into another
   external repository. In other words, a Swift package cannot query another Swift package to
   determine all of the available products.
-- So, when `rules_swift_package_manager` generates a BUILD.bazel file for a Swift package external
+- So, when `rules_swift_package_manager` generates a `BUILD.bazel` file for a Swift package external
   repo, it only has the information that is returned by calling `swift package description` and
   `swift package dump-package`. The output from these calls only provides the identity and the type
   of the Swift package (e.g., remote, file system).
