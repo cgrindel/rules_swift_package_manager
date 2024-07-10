@@ -5,7 +5,6 @@ swift_test(
     name = "MyLibraryTests",
     srcs = [
         "MyLibraryTests.swift",
-        "main.swift",
     ],
     module_name = "MyLibraryTests",
     deps = ["//Sources/MyLibrary"],

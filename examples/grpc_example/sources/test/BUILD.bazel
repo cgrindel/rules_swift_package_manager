@@ -4,7 +4,6 @@ swift_test(
     name = "test",
     srcs = [
         "client_unit_test.swift",
-        "main.swift",
     ],
     module_name = "Test",
     deps = [
