@@ -130,7 +130,7 @@ def _swift_target_build_file(pkg_ctx, target):
                 copts.extend(lists.flatten(bzl_selects.new_from_build_setting(bs)))
 
     if len(copts) > 0:
-        attrs["copts"] = bzl_selects.to_starlark(copts)
+        attrs["copts"] = bzl_selects.to_multiple_starlark(copts)
 
     res_build_file = _handle_target_resources(
         pkg_ctx,
