@@ -28,10 +28,10 @@ Generate a modulemap for an Objective-C module.
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="generate_modulemap-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
-| <a id="generate_modulemap-deps"></a>deps |  The module maps that this module uses.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional | <code>[]</code> |
+| <a id="generate_modulemap-deps"></a>deps |  The module maps that this module uses.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
 | <a id="generate_modulemap-hdrs"></a>hdrs |  The public headers for this module.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | required |  |
-| <a id="generate_modulemap-module_name"></a>module_name |  The name of the module.   | String | optional | <code>""</code> |
-| <a id="generate_modulemap-noop"></a>noop |  Designates whether a modulemap should be generated. If <code>False</code>, a modulemap is generated. If <code>True</code>, a modulemap file is not generated and the returned providers are empty.   | Boolean | optional | <code>False</code> |
+| <a id="generate_modulemap-module_name"></a>module_name |  The name of the module.   | String | optional |  `""`  |
+| <a id="generate_modulemap-noop"></a>noop |  Designates whether a modulemap should be generated. If `False`, a modulemap is generated. If `True`, a modulemap file is not generated and the returned providers are empty.   | Boolean | optional |  `False`  |
 
 
 <a id="resource_bundle_accessor"></a>
@@ -69,6 +69,6 @@ Generate an Info.plist for an SPM resource bundle.
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="resource_bundle_infoplist-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
-| <a id="resource_bundle_infoplist-region"></a>region |  The localization/region value that should be embedded in the Info.plist.   | String | optional | <code>"en"</code> |
+| <a id="resource_bundle_infoplist-region"></a>region |  The localization/region value that should be embedded in the Info.plist.   | String | optional |  `"en"`  |
 
 

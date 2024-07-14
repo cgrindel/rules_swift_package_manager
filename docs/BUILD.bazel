@@ -40,6 +40,13 @@ _DOC_INFOS = [
             "swift_deps_index",
         ],
     ),
+    # doc_infos.new(
+    #     name = "bzlmod_extensions",
+    #     label = "//:extensions",
+    #     symbols = [
+    #         "swift_deps",
+    #     ],
+    # ),
 ]
 
 _DOC_WITH_SYMBOLS = {
@@ -97,6 +104,19 @@ external Swift packages.
     ],
     symbols = _DOC_WITH_SYMBOLS["internal_rules_and_macros"].symbols,
 )
+
+# write_header(
+#     name = "bzlmod_extensions_header",
+#     header_content = [
+#         "# Bazel Modules (bzlmod) Extensions",
+#         "",
+#         """
+# The bzlmod extensions described below are used by `rules_swift_package_manager` \
+# to customize the build of the external Swift packages.\
+# """,
+#     ],
+#     symbols = _DOC_WITH_SYMBOLS["bzlmod_extensions"].symbols,
+# )
 
 doc_for_provs(doc_provs = _ALL_DOC_PROVIDERS)
 
