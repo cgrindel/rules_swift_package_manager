@@ -220,7 +220,9 @@ _configure_package_tag = tag_class(
             doc = "Whether to clone submodules in the repository.",
         ),
         "name": attr.string(
-            doc = "The Bazel repository name for the Swift package.",
+            doc = """\
+The identity (i.e., name in the package's manifest) for the Swift package.\
+""",
             mandatory = True,
         ),
         "recursive_init_submodules": attr.bool(
