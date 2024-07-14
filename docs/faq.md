@@ -15,7 +15,10 @@
 * [Can I store the Swift dependency files in a sub-package (i.e., not in the root of the workspace)?](#can-i-store-the-swift-dependency-files-in-a-sub-package-ie-not-in-the-root-of-the-workspace)
 * [My project builds successfully with `bazel build ...`, but it does not build when using `rules_xcodeproj`. How can I fix this?](#my-project-builds-successfully-with-bazel-build--but-it-does-not-build-when-using-rules_xcodeproj-how-can-i-fix-this)
   * [Why does this happen?](#why-does-this-happen)
-<!-- MARKDOWN TOC: END -->
+* [How do I handle the error `Unable to resolve byName reference XXX in @swiftpkg_yyy.`?](#how-do-i-handle-the-error-unable-to-resolve-byname-reference-xxx-in-swiftpkg_yyy)
+  * [How do I fix this issue?](#how-do-i-fix-this-issue)
+  * [What is the cause of the error? Why can't `rules_swift_package_manager` handle this situation?](#what-is-the-cause-of-the-error-why-cant-rules_swift_package_manager-handle-this-situation)
+  <!-- MARKDOWN TOC: END -->
 
 ## Why use Gazelle and Go?
 
@@ -115,9 +118,80 @@ in their default build configuration due to slow performance of the MacOS sandbo
 stanza adds it back. [An issue](https://github.com/cgrindel/rules_swift_package_manager/issues/712)
 exists tracking the work to allow these Swift packages to be built using the `local` spawn strategy.
 
+## How do I handle the error `Unable to resolve byName reference XXX in @swiftpkg_yyy.`?
+
+tl;dr A transitive dependency uses a by-name product reference format that was deprecated in Swift
+5.2. You need to patch the Swift package to use a more explicit product reference.
+
+### How do I fix this issue?
+
+[Patch the Swift package] to use a fully-qualified product reference.
+
+Let's look at an example. At the time of this writing, the [pusher-websocket-swift Package.swift]
+refers to the `TweetNacl` product in the `tweetnacl-swiftwrap` package using just the name of the
+product.
+
+```swift
+// Parts of the definition have been omitted for brevity.
+let package = Package(
+    name: "PusherSwift",
+    dependencies: [
+        .package(url: "https://github.com/pusher/NWWebSocket.git", .upToNextMajor(from: "0.5.4")),
+        .package(url: "https://github.com/bitmark-inc/tweetnacl-swiftwrap", .upToNextMajor(from: "1.0.0")),
+    ],
+    targets: [
+        .target(
+            name: "PusherSwift",
+            dependencies: [
+                "NWWebSocket",
+                "TweetNacl",   // <=== byName reference to product in tweetnacl-swiftwrap
+            ],
+            path: "Sources"
+        ),
+    ],
+)
+```
+
+To make this work with `rules_swift_package_manager`, you need to [patch this file] so that the
+reference is the following:
+
+```swift
+        .target(
+            name: "PusherSwift",
+            dependencies: [
+                "NWWebSocket",
+                .product(name: "TweetNacl", package: "tweetnacl-swiftwrap"),  // <=== Explicit ref
+            ],
+            path: "Sources"
+        ),
+```
+
+### What is the cause of the error? Why can't `rules_swift_package_manager` handle this situation?
+
+This specific case is the reason that previous versions of `rules_swift_package_manager`
+pre-processed the transitive Swift dependencies using the Gazelle plugin’s `update-repos` action and
+stored the results in a JSON file that was checked into source control.
+
+Here is a quick explainer of why `rules_swift_package_manager` cannot resolve this dependency with
+the new architecture:
+
+- Each Swift package is declared as an external Bazel repository.
+- During the loading phase, there is no mechanism for one external repository to peak into another
+  external repository. In other words, a Swift package cannot query another Swift package to
+  determine all of the available products.
+- So, when `rules_swift_package_manager` generates a `BUILD.bazel` file for a Swift package external
+  repo, it only has the information that is returned by calling `swift package description` and
+  `swift package dump-package`. The output from these calls only provides the identity and the type
+  of the Swift package (e.g., remote, file system).
+- As a result, `byName` lookups can only be resolved to the targets/products in the current package
+  and to products in Swift packages where the identity exactly matches the product name.
+
 [--strategy_regexp]: https://bazel.build/reference/command-line-reference#flag--strategy_regexp
 [Gazelle framework]: https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md
+[Patch the Swift package]: /docs/patch_swift_package.md
 [loading phase]: https://bazel.build/run/build#loading
+[patch this file]: /docs/patch_swift_package.md
+[pusher-websocket-swift Package.swift]: https://github.com/pusher/pusher-websocket-swift/blob/886341f9dad453c9822f2525136ee2006a6c3c9e/Package.swift
 [quickstart]: https://github.com/cgrindel/rules_swift_package_manager/blob/main/README.md#quickstart
 [rules_spm]: https://github.com/cgrindel/rules_spm/
 [rules_swift]: https://github.com/bazelbuild/rules_swift
