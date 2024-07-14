@@ -16,7 +16,7 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
     Args:
         module_ctx: An instance of `module_ctx`.
         from_package: The data from the `from_package` tag.
-        config_pkgs: The data from the `configure_package` tag.
+        docs: update patch instructions for bzlmod
     """
 
     # Read Package.resolved.
@@ -220,7 +220,9 @@ _configure_package_tag = tag_class(
             doc = "Whether to clone submodules in the repository.",
         ),
         "name": attr.string(
-            doc = "The Bazel repository name for the Swift package.",
+            doc = """\
+The identity (i.e., name in the package's manifest) for the Swift package.\
+""",
             mandatory = True,
         ),
         "recursive_init_submodules": attr.bool(

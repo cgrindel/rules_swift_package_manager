@@ -38,7 +38,8 @@ the package if the file was named BUILD.bazel._
 
 ## Update your `MODULE.bazel` to Apply the Patch
 
-Finally, configure `rules_swift_package_manager` to apply the patch to the package.
+Finally, configure `rules_swift_package_manager` to apply the patch to the package. The `name`
+should be the identity for the Swift package (i.e., the name in the package's manifest).
 
 ```bazel
 swift_deps.configure_package(
