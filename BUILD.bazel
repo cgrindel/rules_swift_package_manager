@@ -11,6 +11,9 @@ load(
 )
 load("//ci:defs.bzl", "ci_workflow")
 
+# Allow docs to access the extensions.bzl
+exports_files(["extensions.bzl"])
+
 # MARK: - Bazel Starlark Lint and Formatting
 
 bzlformat_pkg(name = "bzlformat")
