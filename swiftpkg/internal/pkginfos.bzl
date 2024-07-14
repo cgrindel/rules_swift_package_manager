@@ -624,6 +624,8 @@ def _new_from_parsed_json(
         targets = targets,
         url = url,
         version = version,
+        c_language_standard = dump_manifest.get("cLanguageStandard"),
+        cxx_language_standard = dump_manifest.get("cxxLanguageStandard"),
     )
 
 # MARK: - Swift Package
@@ -638,7 +640,9 @@ def _new(
         products = [],
         targets = [],
         url = None,
-        version = None):
+        version = None,
+        c_language_standard = None,
+        cxx_language_standard = None):
     """Returns a `struct` representing information about a Swift package.
 
     Args:
@@ -657,6 +661,10 @@ def _new(
             `pkginfos.new_target()`.
         url: Optional. The url of the package (`string`).
         version: Optional. The semantic version of the package (`string`).
+        c_language_standard: Optional. The c language standard (e.g. `c99`,
+            `gnu99`, `c11`).
+        cxx_language_standard: Optional. The c++ language standard (e.g.
+            `c++11`, `c++20`).
 
     Returns:
         A `struct` representing information about a Swift package.
@@ -672,6 +680,8 @@ def _new(
         targets = targets,
         url = url,
         version = version,
+        c_language_standard = c_language_standard,
+        cxx_language_standard = cxx_language_standard,
     )
 
 # MARK: - Platform
