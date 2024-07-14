@@ -36,45 +36,25 @@ _NOTE: Even if you use BUILD.bazel as your preferred build file name, be sure to
 file BUILD. In Bazel 6.2.1 testing under `rules_bazel_integration_test`, Bazel would not recognize
 the package if the file was named BUILD.bazel._
 
-## Create a Patches YAML File
+## Update your `MODULE.bazel` to Apply the Patch
 
-The Gazelle plugin provided by `rules_swift_package_manager` can read in a YAML file that describes
-the patches that should be applied for one or more Swift packages.
+Finally, configure `rules_swift_package_manager` to apply the patch to the package.
 
-Continuing our example, create a file called `swift_pkgs_patches.yml` with the following contents:
-
-```yaml
-swift-cmark:
-  args: ["-p1"]
-  files: ["@@//third-party/swift-cmark:0001-fix.patch"]
+```bazel
+swift_deps.configure_package(
+    name = "swift-cmark",
+    patch_args = ["-p1"],
+    patches = [
+        "//third-party/swift-cmark:0001-Do-not-exclude-files-that-are-needed-for-compilation.patch",
+    ],
+)
 ```
 
-The key (e.g. `swift-cmark`) is the Swift package's identity. The supported fields are:
+## Test the Patch
 
-| YAML Field | Description                                                                                                                         |
-| ---------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `files`    | A list of patch files to apply.                                                                                                     |
-| `args`     | Optional. A list of arguments that should be passed to the patch tool. If you are using a git patch file, be sure to include `-p1`. |
-| `cmds`     | Optional. A list of Bash commands (Mac/Linux) to be applied after patches are applied.                                              |
-| `win_cmds` | Optional. A list of Powershell commands (Windows) to applied after patches are applied.                                             |
-| `tool`     | Optional. The tool to use to apply the patch.                                                                                       |
-
-_REMINDER: If you are using bzlmod, use `@@` as the prefix for your patch files. Otherwise, use
-`@`._
-
-## Update Your Swift Packages and Build
-
-Now, it is time to generate some files and build.
+Now, it is time to test your patch.
 
 ```sh
-# Resolves your Package.swift and updates the index JSON.
-$ bazel run //:swift_update_pkgs
-
 # Build/Test
 $ bazel test //...
 ```
-
-## Check In Your Changes
-
-Be sure to check-in the patch file(s), patches YAML file, and any of the files that were updated by
-running `//:swift_update_pkgs`.
