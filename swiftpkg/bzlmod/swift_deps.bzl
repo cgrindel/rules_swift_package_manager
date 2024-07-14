@@ -16,7 +16,7 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
     Args:
         module_ctx: An instance of `module_ctx`.
         from_package: The data from the `from_package` tag.
-        docs: update patch instructions for bzlmod
+        config_pkgs: The data from the `configure_package` tag.
     """
 
     # Read Package.resolved.
