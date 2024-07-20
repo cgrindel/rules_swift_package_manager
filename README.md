@@ -155,7 +155,8 @@ files, at this time.
 
 ### 4. Run `swift package update`
 
-This will invoke Swift Package Manager and resolve all dependencies resulting in creation of Package.resolved file.
+This will invoke Swift Package Manager and resolve all dependencies resulting in creation of
+`Package.resolved` file.
 
 ### 5. Run `bazel mod tidy`.
 
