@@ -68,17 +68,14 @@ actions. See the [CI GitHub workflow] for more details.
 
 The following provides a quick introduction on how to set up and use the features in this
 repository. These instructions assume that you are using [Bazel modules] to load your external
-dependencies. If you are using Bazel's legacy external dependency management, please review the
-[legacy quickstart], instead.
+dependencies. If you are using Bazel's legacy external dependency management, we recommend using
+[Bazel's hybrid mode], then follow the steps in this quickstart guide.
 
 Also, check out the [examples] for more information.
 
 ### 1. Enable bzlmod
 
-This repository supports [bzlmod]. While you can use this ruleset with [legacy `WORKSPACE`
-dependencies], some of the automation will not be available in this mode. If you are starting a new
-project, it is highly recommended to use [bzlmod]. To enable bzlmod, add the following to your
-`.bazelrc`.
+This repository supports [bzlmod].
 
 ```
 common --enable_bzlmod
@@ -89,9 +86,11 @@ common --enable_bzlmod
 Add a dependency on `rules_swift_package_manager`.
 
 <!-- BEGIN MODULE SNIPPET -->
+
 ```python
 bazel_dep(name = "rules_swift_package_manager", version = "0.35.1")
 ```
+
 <!-- END MODULE SNIPPET -->
 
 In addition, add the following to load the external dependencies described in your `Package.swift`
@@ -155,7 +154,8 @@ files, at this time.
 
 ### 4. Run `swift package update`
 
-This will invoke Swift Package Manager and resolve all dependencies resulting in creation of Package.resolved file.
+This will invoke Swift Package Manager and resolve all dependencies resulting in creation of
+`Package.resolved` file.
 
 ### 5. Run `bazel mod tidy`.
 
@@ -247,9 +247,8 @@ The following are a few tips to consider as you work with your repository:
 <!-- Links -->
 
 [Bazel modules]: https://bazel.build/external/module
+[Bazel's hybrid mode]: https://bazel.build/external/migration#hybrid-mode
 [bzlmod]: https://bazel.build/external/overview#bzlmod
-[legacy `WORKSPACE` dependencies]: https://bazel.build/external/overview#workspace-system
-[legacy quickstart]: /docs/legacy_quickstart.md
 [our document on patching Swift packages]: docs/patch_swift_package.md
 [CI GitHub workflow]: .github/workflows/ci.yml
 [Gazelle plugin]: https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md
