@@ -13,12 +13,15 @@ _PUBLIC_HDR_DIRNAMES = ["include", "public"]
 # https://bazel.build/reference/be/c-cpp#cc_library.srcs
 _HEADER_EXTS = [".h", ".hh", ".hpp", ".hxx", ".inl", ".H"]
 
+# C++ source extensions
+_CXX_SRCS_EXTS = [".cc", ".cpp"]
+
 # Acceptable sources clang and objc:
 # https://bazel.build/reference/be/c-cpp#cc_library.srcs
 # https://bazel.build/reference/be/objective-c#objc_library.srcs
 # NOTE: From examples found so far, .inc files tend to include source, not
 # header declarations.
-_SRC_EXTS = [".c", ".cc", ".cpp", ".S", ".so", ".o", ".m", ".mm", ".inc"]
+_SRC_EXTS = [".c", ".S", ".so", ".o", ".m", ".mm", ".inc"] + _CXX_SRCS_EXTS
 
 def _is_hdr(path):
     _root, ext = paths.split_extension(path)
@@ -323,10 +326,15 @@ def _collect_files(
         textual_hdrs = sorted(textual_hdrs),
     )
 
+def _is_cxx_src(path):
+    _root, ext = paths.split_extension(path)
+    return ext in _CXX_SRCS_EXTS
+
 clang_files = struct(
     collect_files = _collect_files,
     find_magical_public_hdr_dir = _find_magical_public_hdr_dir,
     get_hdr_paths_from_modulemap = _get_hdr_paths_from_modulemap,
+    is_cxx_src = _is_cxx_src,
     is_hdr = _is_hdr,
     is_include_hdr = _is_include_hdr,
     is_public_modulemap = _is_public_modulemap,
