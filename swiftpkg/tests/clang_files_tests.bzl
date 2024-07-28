@@ -232,9 +232,27 @@ def _reduce_paths_test(ctx):
 
 reduce_paths_test = unittest.make(_reduce_paths_test)
 
+def _is_cxx_src_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(path = "foo.cc", exp = True, msg = ".cc"),
+        struct(path = "foo.cpp", exp = True, msg = ".cpp"),
+        struct(path = "foo", exp = False, msg = "no extension"),
+        struct(path = "foo.c", exp = False, msg = "wrong extension"),
+    ]
+    for t in tests:
+        actual = clang_files.is_cxx_src(t.path)
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+is_cxx_src_test = unittest.make(_is_cxx_src_test)
+
 def clang_files_test_suite():
     return unittest.suite(
         "clang_files_tests",
+        is_cxx_src_test,
         is_hdr_test,
         is_include_hdr_test,
         is_public_modulemap_test,
