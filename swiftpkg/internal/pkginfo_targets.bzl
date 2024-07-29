@@ -148,19 +148,20 @@ def _swift_hint_label_name(target_name):
     """
     return target_name + _swift_hint_suffix
 
-def _resource_bundle_name(module_name):
+def _resource_bundle_name(package_name, module_name):
     """Returns the `bundle_name` for the module.
 
     For Swift packages, it appears the bundle name is of the format
-    `<module_name>_<module_name>`.
+    `<package_name>_<module_name>`.
 
     Args:
+        package_name: The package name.
         module_name: The module name.
 
     Returns:
         The `bundle_name` of the `apple_resource_bundle` as a `string`.
     """
-    return module_name + "_" + module_name
+    return package_name + "_" + module_name
 
 def _resource_bundle_label_name(target_name):
     """Returns the name of the related `apple_resource_bundle` target.

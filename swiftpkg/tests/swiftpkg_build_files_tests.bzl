@@ -824,7 +824,7 @@ load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_a
 
 apple_resource_bundle(
     name = "SwiftLibraryWithFilePathResource.rspm_resource_bundle",
-    bundle_name = "SwiftLibraryWithFilePathResource_SwiftLibraryWithFilePathResource",
+    bundle_name = "MyPackage_SwiftLibraryWithFilePathResource",
     infoplists = [":SwiftLibraryWithFilePathResource.rspm_resource_bundle_infoplist"],
     resources = ["Source/SwiftLibraryWithFilePathResource/Resources/chicken.json"],
     visibility = ["//:__subpackages__"],
@@ -832,7 +832,7 @@ apple_resource_bundle(
 
 resource_bundle_accessor(
     name = "SwiftLibraryWithFilePathResource.rspm_resource_bundle_accessor",
-    bundle_name = "SwiftLibraryWithFilePathResource_SwiftLibraryWithFilePathResource",
+    bundle_name = "MyPackage_SwiftLibraryWithFilePathResource",
 )
 
 resource_bundle_infoplist(
@@ -865,7 +865,7 @@ load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulema
 
 apple_resource_bundle(
     name = "ObjcLibraryWithResources.rspm_resource_bundle",
-    bundle_name = "ObjcLibraryWithResources_ObjcLibraryWithResources",
+    bundle_name = "MyPackage_ObjcLibraryWithResources",
     infoplists = [":ObjcLibraryWithResources.rspm_resource_bundle_infoplist"],
     resources = ["Source/ObjcLibraryWithResources/Resources/chicken.json"],
     visibility = ["//:__subpackages__"],
@@ -929,7 +929,7 @@ objc_resource_bundle_accessor_hdr(
 
 objc_resource_bundle_accessor_impl(
     name = "ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_impl",
-    bundle_name = "ObjcLibraryWithResources_ObjcLibraryWithResources",
+    bundle_name = "MyPackage_ObjcLibraryWithResources",
     module_name = "ObjcLibraryWithResources",
 )
 
