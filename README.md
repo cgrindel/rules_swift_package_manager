@@ -124,7 +124,7 @@ NOTE: Some Swift package manager features (e.g., resources) use rules from [rule
 dependency for `rules_swift_package_manager`. However, you do not need to declare it unless you use
 any of the rules in your project.
 
-#### (Optional) Enable `swit_deps_info` generation for the Gazelle plugin
+#### (Optional) Enable `swift_deps_info` generation for the Gazelle plugin
 
 If you will be using the Gazelle plugin for Swift, you will need to enable the generation of
 the `swift_deps_info` repository by enabling `declare_swift_deps_info`.
