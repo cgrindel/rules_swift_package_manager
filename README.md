@@ -87,11 +87,9 @@ common --enable_bzlmod
 Add a dependency on `rules_swift_package_manager`.
 
 <!-- BEGIN MODULE SNIPPET -->
-
 ```python
-bazel_dep(name = "rules_swift_package_manager", version = "0.35.1")
+bazel_dep(name = "rules_swift_package_manager", version = "0.36.0")
 ```
-
 <!-- END MODULE SNIPPET -->
 
 In addition, add the following to load the external dependencies described in your `Package.swift`
