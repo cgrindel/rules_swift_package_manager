@@ -531,7 +531,7 @@ expected: {expected}\
 
 # MARK: - Apple Resource Group
 
-def _apple_resource_bundle(target, default_localization):
+def _apple_resource_bundle(target, package_name, default_localization):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     bundle_label_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
     bundle_name = pkginfo_targets.resource_bundle_name(package_name, target.c99name)
@@ -578,6 +578,7 @@ def _apple_resource_bundle(target, default_localization):
 def _apple_resource_bundle_for_swift(pkg_ctx, target):
     apple_res_bundle_info = _apple_resource_bundle(
         target,
+        pkg_ctx.pkg_info.name,
         pkg_ctx.pkg_info.default_localization,
     )
 
@@ -609,6 +610,7 @@ def _apple_resource_bundle_for_swift(pkg_ctx, target):
 def _apple_resource_bundle_for_clang(pkg_ctx, target):
     apple_res_bundle_info = _apple_resource_bundle(
         target,
+        pkg_ctx.pkg_info.name,
         pkg_ctx.pkg_info.default_localization,
     )
     all_build_files = [apple_res_bundle_info.build_file]
