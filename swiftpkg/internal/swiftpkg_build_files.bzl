@@ -543,15 +543,16 @@ def _handle_target_resources(
 
     return _apple_resource_bundle(
         target,
+        pkg_ctx.pkg_info.name,
         pkg_ctx.pkg_info.default_localization,
         include_swift_accessor = include_swift_accessor,
         include_objc_accessor = include_objc_accessor,
     )
 
-def _apple_resource_bundle(target, default_localization, include_swift_accessor, include_objc_accessor):
+def _apple_resource_bundle(target, package_name, default_localization, include_swift_accessor, include_objc_accessor):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     bundle_label_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
-    bundle_name = pkginfo_targets.resource_bundle_name(target.c99name)
+    bundle_name = pkginfo_targets.resource_bundle_name(package_name, target.c99name)
     infoplist_name = pkginfo_targets.resource_bundle_infoplist_label_name(
         bzl_target_name,
     )
