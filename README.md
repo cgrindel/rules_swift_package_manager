@@ -20,6 +20,7 @@ development inside a Bazel workspace.
 * [Quickstart](#quickstart)
   * [1. Enable bzlmod](#1-enable-bzlmod)
   * [2. Configure your `MODULE.bazel` to use rules_swift_package_manager.](#2-configure-your-modulebazel-to-use-rules_swift_package_manager)
+    * [(Optional) Enable `swift_deps_info` generation for the Gazelle plugin](#optional-enable-swift_deps_info-generation-for-the-gazelle-plugin)
   * [3. Create a minimal `Package.swift` file.](#3-create-a-minimal-packageswift-file)
   * [4. Run `swift package update`](#4-run-swift-package-update)
   * [5. Run `bazel mod tidy`.](#5-run-bazel-mod-tidy)
@@ -116,15 +117,26 @@ use_repo(
 )
 ```
 
-You will also need to add a dependency on Gazelle and `rules_swift`. Follow
-the links below to get the latest bzlmod snippets to insert into your `MODULE.bazel`.
-
-- [gazelle](https://registry.bazel.build/modules/gazelle)
-- [rules_swift](https://registry.bazel.build/modules/rules_swift)
+You will also need to add a dependency on [rules_swift].
 
 NOTE: Some Swift package manager features (e.g., resources) use rules from [rules_apple]. It is a
 dependency for `rules_swift_package_manager`. However, you do not need to declare it unless you use
 any of the rules in your project.
+
+#### (Optional) Enable `swift_deps_info` generation for the Gazelle plugin
+
+If you will be using the Gazelle plugin for Swift, you will need to enable the generation of
+the `swift_deps_info` repository by enabling `declare_swift_deps_info`.
+
+```bazel
+swift_deps.from_package(
+    declare_swift_deps_info = True, # <=== Enable swift_deps_info generation for the Gazelle plugin
+    resolved = "//:Package.resolved",
+    swift = "//:Package.swift",
+)
+```
+
+You will also need to add a dependency on [Gazelle](https://registry.bazel.build/modules/gazelle).
 
 ### 3. Create a minimal `Package.swift` file.
 
