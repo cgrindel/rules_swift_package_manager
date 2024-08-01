@@ -5,7 +5,7 @@ _single_indent_str = "    "
 # MARK: - Simple Type Detection
 
 _simple_starlark_types = [
-    "None",
+    "NoneType",
     "bool",
     "int",
     "string",

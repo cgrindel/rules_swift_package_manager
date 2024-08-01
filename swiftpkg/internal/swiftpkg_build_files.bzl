@@ -835,6 +835,44 @@ Expected only one target for the macro product {name} but received {count}.\
         ],
     )
 
+# MARK: - License
+
+def _new_for_license(pkg_info, license):
+    packageinfo_target_name = "package_info.rspm"
+    decls = [
+        build_decls.new(
+            rules_license_kinds.package_info,
+            packageinfo_target_name,
+            attrs = {
+                "package_name": pkg_info.name,
+                "package_url": pkg_info.url,
+                "package_version": pkg_info.version,
+            },
+        ),
+    ]
+    default_package_metadata = [":{}".format(packageinfo_target_name)]
+    load_stmts = [rules_license_package_info_load_stmt]
+
+    if license:
+        license_target_name = "license.rspm"
+        decls.append(
+            build_decls.new(
+                rules_license_kinds.license,
+                license_target_name,
+                attrs = {
+                    "license_text": license,
+                },
+            ),
+        )
+        load_stmts.append(rules_license_license_load_stmt)
+        default_package_metadata.insert(0, ":{}".format(license_target_name))
+
+    return build_files.new(
+        load_stmts = load_stmts,
+        package_attrs = {"default_package_metadata": default_package_metadata},
+        decls = decls,
+    )
+
 # MARK: - Constants and API Definition
 
 swift_location = "@build_bazel_rules_swift//swift:swift.bzl"
@@ -893,6 +931,24 @@ native_kinds = struct(
     alias = "alias",
 )
 
+rules_license_license_location = "@rules_license//rules:license.bzl"
+rules_license_package_info_location = "@rules_license//rules:package_info.bzl"
+
+rules_license_kinds = struct(
+    license = "license",
+    package_info = "package_info",
+)
+
+rules_license_license_load_stmt = load_statements.new(
+    rules_license_license_location,
+    rules_license_kinds.license,
+)
+
+rules_license_package_info_load_stmt = load_statements.new(
+    rules_license_package_info_location,
+    rules_license_kinds.package_info,
+)
+
 skylib_build_test_location = "@bazel_skylib//rules:build_test.bzl"
 
 skylib_kinds = struct(
@@ -905,6 +961,7 @@ skylib_build_test_load_stmt = load_statements.new(
 )
 
 swiftpkg_build_files = struct(
+    new_for_license = _new_for_license,
     new_for_target = _new_for_target,
     new_for_products = _new_for_products,
     new_for_product = _new_for_product,
