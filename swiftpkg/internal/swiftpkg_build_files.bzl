@@ -1,5 +1,6 @@
 """Module for creating Bazel declarations to build a Swift package."""
 
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
 load(":artifact_infos.bzl", "artifact_types", "link_types")
@@ -220,47 +221,36 @@ def _swift_compiler_plugin_from_target(target, attrs):
 # MARK: - Clang Targets
 
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
-    all_build_files = []
     clang_src_info = target.clang_src_info
     if clang_src_info == None:
         fail("Expected `clang_src_info` to not be None.")
+    all_build_files = []
 
-    deps = lists.flatten([
-        pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
-        for td in target.dependencies
-    ])
+    # These flags are used by SPM when compiling clang modules.
+    copts = [
+        # Enable 'blocks' language feature
+        "-fblocks",
+        # Synthesize retain and release calls for Objective-C pointers
+        "-fobjc-arc",
+        # Enable support for PIC macros
+        "-fPIC",
+        # # Module name
+        # "-fmodule-name={}".format(target.c99name),
+        # The SWIFT_PACKAGE define is a magical value that SPM uses when it
+        # builds clang libraries that will be used as Swift modules.
+        "-DSWIFT_PACKAGE=1",
+    ]
 
-    attrs = {
-        # These flags are used by SPM when compiling clang modules.
-        "copts": [
-            # Enable 'blocks' language feature
-            "-fblocks",
-            # Synthesize retain and release calls for Objective-C pointers
-            "-fobjc-arc",
-            # Enable support for PIC macros
-            "-fPIC",
-            # Module name
-            "-fmodule-name={}".format(target.c99name),
-        ],
-        "visibility": ["//:__subpackages__"],
-    }
+    def _if_not_empty(list_value, transform_fn = None):
+        if not list_value:
+            return None
+        return transform_fn(list_value) if transform_fn else list_value
 
-    def _set_if_not_empty(attr, list, transform_fn = None):
-        if len(list) > 0:
-            attrs[attr] = transform_fn(list) if transform_fn else list
-
-    def _update_attr_list(name, value):
-        # We need to create a new list, because the retrieved list could be
-        # frozen.
-        attr_list = list(attrs.get(name, []))
-        attr_list.append(value)
-        attrs[name] = attr_list
-
-    _set_if_not_empty("deps", deps, bzl_selects.to_starlark)
-    _set_if_not_empty("hdrs", clang_src_info.hdrs)
-    _set_if_not_empty("srcs", clang_src_info.srcs)
-    _set_if_not_empty("includes", clang_src_info.public_includes)
-    _set_if_not_empty("textual_hdrs", clang_src_info.textual_hdrs)
+    # Do not add the srcs from the clang_src_info, yet. We will do that at the
+    # end of this function where we will create separate targets based upon the
+    # type of source file.
+    srcs = []
+    data = []
 
     if target.resources:
         clang_apple_res_bundle_info = _apple_resource_bundle_for_clang(
@@ -268,7 +258,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             target,
         )
         all_build_files.append(clang_apple_res_bundle_info.build_file)
-        _update_attr_list("data", ":{}".format(
+        data.append(":{}".format(
             clang_apple_res_bundle_info.bundle_label_name,
         ))
         if clang_apple_res_bundle_info.objc_accessor_hdr_label_name:
@@ -277,23 +267,17 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             # to be available in every Objc source file. So, we specify the
             # -include flag specifying the header path.
             # https://github.com/apple/swift-package-manager/blob/8387798811c6cc43761c5e1b48df2d3412dc5de4/Sources/Build/BuildDescription/ClangTargetBuildDescription.swift#L390
-            _update_attr_list("srcs", ":{}".format(
+            srcs.extend([
+                ":{}".format(
+                    clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
+                ),
+                ":{}".format(
+                    clang_apple_res_bundle_info.objc_accessor_impl_label_name,
+                ),
+            ])
+            copts.append("-include$(location :{})".format(
                 clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
             ))
-            _update_attr_list("copts", "-include$(location :{})".format(
-                clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
-            ))
-            _update_attr_list("srcs", ":{}".format(
-                clang_apple_res_bundle_info.objc_accessor_impl_label_name,
-            ))
-
-    # The copts may be updated by functions that were executed before this
-    # point. Use whatever has been set.
-    copts = attrs.get("copts", [])
-
-    # The SWIFT_PACKAGE define is a magical value that SPM uses when it
-    # builds clang libraries that will be used as Swift modules.
-    copts.append("-DSWIFT_PACKAGE=1")
 
     local_includes = [
         bzl_selects.new(value = p, kind = _condition_kinds.private_includes)
@@ -340,6 +324,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             for bs in settings.unsafe_flags
         ]))
 
+    copts.extend(local_includes)
+
     linkopts = []
     if target.linker_settings != None:
         linkopts.extend(lists.flatten([
@@ -351,46 +337,24 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             for bs in target.linker_settings.linked_frameworks
         ]))
 
-    if len(linkopts) > 0:
-        attrs["linkopts"] = bzl_selects.to_starlark(
-            linkopts,
-            kind_handlers = {
-                _condition_kinds.linked_library: bzl_selects.new_kind_handler(
-                    transform = lambda ll: "-l{}".format(ll),
-                ),
-                _condition_kinds.linked_framework: bzl_selects.new_kind_handler(
-                    transform = lambda f: "-framework {}".format(f),
-                ),
-            },
-        )
+    # Assemble attributes
 
-    # Short path relative to Bazel output base. This is typically used when
-    # adding a path to a copt or linkeropt.
-    ext_repo_path = paths.join("external", repository_ctx.name)
+    attrs = {
+        "copts": copts,
+        "hdrs": _if_not_empty(clang_src_info.hdrs),
+        "includes": _if_not_empty(clang_src_info.public_includes),
+        "srcs": srcs,
+        "textual_hdrs": _if_not_empty(clang_src_info.textual_hdrs),
+        "visibility": ["//:__subpackages__"],
+    }
+    deps = lists.flatten([
+        pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
+        for td in target.dependencies
+    ])
+    if deps:
+        attrs["deps"] = deps
 
-    copts.extend(local_includes)
-
-    # The `includes` attribute adds includes as -isystem which propagates
-    # to cc_XXX that depend upon the library.  Providing includes as -I
-    # only provides the includes for this target.
-    # https://bazel.build/reference/be/c-cpp#cc_library.includes
-    def _local_includes_transform(p):
-        # Normalize the path and replace spaces with an escape sequence.
-        normalized = paths.normalize(paths.join(ext_repo_path, p))
-        normalized = normalized.replace(" ", "\\ ")
-        return "-I{}".format(normalized)
-
-    attrs["copts"] = bzl_selects.to_starlark(
-        copts,
-        kind_handlers = {
-            _condition_kinds.header_search_path: bzl_selects.new_kind_handler(
-                transform = _local_includes_transform,
-            ),
-            _condition_kinds.private_includes: bzl_selects.new_kind_handler(
-                transform = _local_includes_transform,
-            ),
-        },
-    )
+    # Generate cc_xxx and objc_xxx targets.
 
     bzl_target_name = target.label.name
 
@@ -399,6 +363,12 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
         attrs["enable_modules"] = True
         attrs["module_name"] = target.c99name
+
+        attrs["srcs"] = lists.flatten([
+            clang_src_info.organized_srcs.objc_srcs,
+            clang_src_info.organized_srcs.other_srcs,
+            attrs.get("srcs", []),
+        ])
 
         sdk_framework_bzl_selects = []
         for sf in target.objc_src_info.builtin_frameworks:
@@ -411,9 +381,12 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                         condition = pc,
                     ),
                 )
-        attrs["sdk_frameworks"] = bzl_selects.to_starlark(
-            sdk_framework_bzl_selects,
-        )
+        attrs["sdk_frameworks"] = sdk_framework_bzl_selects
+        # attrs["sdk_frameworks"] = bzl_selects.to_starlark(
+        #     sdk_framework_bzl_selects,
+        # )
+
+        attrs["copts"].append("-fmodule-name={}".format(target.c99name))
 
         # There is a known issue with Objective-C library targets not
         # supporting the `@import` of modules defined in other Objective-C
@@ -434,7 +407,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # See `generate_modulemap.bzl` for details on the modulemap generation.
         # See `//swiftpkg/tests/generate_modulemap_tests` package for a usage
         # example.
-        modulemap_deps = _collect_modulemap_deps(deps)
+        modulemap_deps = _collect_modulemap_deps(attrs.get("deps", []))
         load_stmts = [swiftpkg_generate_modulemap_load_stmt]
         modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
         noop_modulemap = clang_src_info.modulemap_path != None
@@ -446,7 +419,11 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             "visibility": ["//:__subpackages__"],
         }
         decls = [
-            build_decls.new(objc_kinds.library, bzl_target_name, attrs = attrs),
+            build_decls.new(
+                objc_kinds.library,
+                bzl_target_name,
+                attrs = _starlarkify_clang_attrs(repository_ctx, attrs),
+            ),
             build_decls.new(
                 kind = swiftpkg_kinds.generate_modulemap,
                 name = modulemap_target_name,
@@ -454,26 +431,403 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             ),
         ]
     else:
-        load_stmts = [swift_interop_hint_load_stmt]
         aspect_hint_target_name = pkginfo_targets.swift_hint_label_name(
             bzl_target_name,
         )
-        attrs["aspect_hints"] = [":{}".format(aspect_hint_target_name)]
         aspect_hint_attrs = {"module_name": target.c99name}
+
+        load_stmts = [swift_interop_hint_load_stmt]
         decls = [
-            build_decls.new(clang_kinds.library, bzl_target_name, attrs = attrs),
             build_decls.new(
                 kind = swift_kinds.interop_hint,
                 name = aspect_hint_target_name,
                 attrs = aspect_hint_attrs,
             ),
         ]
+
+        child_dep_names = []
+        if clang_src_info.organized_srcs.c_srcs:
+            c_name = "{}_c".format(bzl_target_name)
+            child_dep_names.append(c_name)
+            c_attrs = dict(**attrs)
+            c_attrs["srcs"] = lists.flatten([
+                clang_src_info.organized_srcs.c_srcs,
+                clang_src_info.organized_srcs.other_srcs,
+                attrs.get("srcs", []),
+            ])
+            decls.append(
+                build_decls.new(
+                    clang_kinds.library,
+                    c_name,
+                    attrs = _starlarkify_clang_attrs(repository_ctx, c_attrs),
+                ),
+            )
+
+        if clang_src_info.organized_srcs.cxx_srcs:
+            cxx_name = "{}_cxx".format(bzl_target_name)
+            child_dep_names.append(cxx_name)
+            cxx_attrs = dict(**attrs)
+            cxx_attrs["srcs"] = lists.flatten([
+                clang_src_info.organized_srcs.cxx_srcs,
+                clang_src_info.organized_srcs.other_srcs,
+                attrs.get("srcs", []),
+            ])
+            decls.append(
+                build_decls.new(
+                    clang_kinds.library,
+                    cxx_name,
+                    attrs = _starlarkify_clang_attrs(repository_ctx, cxx_attrs),
+                ),
+            )
+
+        if clang_src_info.organized_srcs.assembly_srcs:
+            assembly_name = "{}_assembly".format(bzl_target_name)
+            child_dep_names.append(assembly_name)
+            assembly_attrs = dict(**attrs)
+            assembly_attrs["srcs"] = lists.flatten([
+                clang_src_info.organized_srcs.assembly_srcs,
+                clang_src_info.organized_srcs.other_srcs,
+                attrs.get("srcs", []),
+            ])
+            decls.append(
+                build_decls.new(
+                    clang_kinds.library,
+                    assembly_name,
+                    attrs = _starlarkify_clang_attrs(repository_ctx, assembly_attrs),
+                ),
+            )
+
+        # Add the cc_library that brings all of the child targets together.
+        uber_attrs = dicts.omit(attrs, ["srcs"]) | {
+            "aspect_hints": [":{}".format(aspect_hint_target_name)],
+            "deps": [
+                ":{}".format(dname)
+                for dname in child_dep_names
+            ],
+        }
+        copts = uber_attrs.get("copts", [])
+        copts.append("-fmodule-name={}".format(target.c99name))
+        uber_attrs["copts"] = copts
+        decls.append(
+            build_decls.new(
+                clang_kinds.library,
+                bzl_target_name,
+                attrs = _starlarkify_clang_attrs(repository_ctx, uber_attrs),
+            ),
+        )
+
     all_build_files.append(build_files.new(
         load_stmts = load_stmts,
         decls = decls,
     ))
 
     return build_files.merge(*all_build_files)
+
+def _starlarkify_clang_attrs(repository_ctx, attrs):
+    attrs = dict(**attrs)
+
+    deps = attrs.get("deps")
+    if deps:
+        attrs["deps"] = bzl_selects.to_starlark(deps)
+
+    # Short path relative to Bazel output base. This is typically used when
+    # adding a path to a copt or linkeropt.
+    ext_repo_path = paths.join("external", repository_ctx.name)
+
+    # The `includes` attribute adds includes as -isystem which propagates
+    # to cc_XXX that depend upon the library.  Providing includes as -I
+    # only provides the includes for this target.
+    # https://bazel.build/reference/be/c-cpp#cc_library.includes
+    def _local_includes_transform(p):
+        # Normalize the path and replace spaces with an escape sequence.
+        normalized = paths.normalize(paths.join(ext_repo_path, p))
+        normalized = normalized.replace(" ", "\\ ")
+        return "-I{}".format(normalized)
+
+    copts = attrs.get("copts")
+    if copts:
+        attrs["copts"] = bzl_selects.to_starlark(
+            copts,
+            kind_handlers = {
+                _condition_kinds.header_search_path: bzl_selects.new_kind_handler(
+                    transform = _local_includes_transform,
+                ),
+                _condition_kinds.private_includes: bzl_selects.new_kind_handler(
+                    transform = _local_includes_transform,
+                ),
+            },
+        )
+
+    linkopts = attrs.get("linkopts")
+    if linkopts:
+        attrs["linkopts"] = bzl_selects.to_starlark(
+            linkopts,
+            kind_handlers = {
+                _condition_kinds.linked_library: bzl_selects.new_kind_handler(
+                    transform = lambda ll: "-l{}".format(ll),
+                ),
+                _condition_kinds.linked_framework: bzl_selects.new_kind_handler(
+                    transform = lambda f: "-framework {}".format(f),
+                ),
+            },
+        )
+
+    sdk_frameworks = attrs.get("sdk_frameworks")
+    if sdk_frameworks:
+        attrs["sdk_frameworks"] = bzl_selects.to_starlark(
+            sdk_frameworks,
+        )
+
+    return attrs
+
+#def _clang_target_build_file(repository_ctx, pkg_ctx, target):
+#    all_build_files = []
+#    clang_src_info = target.clang_src_info
+#    if clang_src_info == None:
+#        fail("Expected `clang_src_info` to not be None.")
+
+#    deps = lists.flatten([
+#        pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
+#        for td in target.dependencies
+#    ])
+
+#    attrs = {
+#        # These flags are used by SPM when compiling clang modules.
+#        "copts": [
+#            # Enable 'blocks' language feature
+#            "-fblocks",
+#            # Synthesize retain and release calls for Objective-C pointers
+#            "-fobjc-arc",
+#            # Enable support for PIC macros
+#            "-fPIC",
+#            # Module name
+#            "-fmodule-name={}".format(target.c99name),
+#        ],
+#        "visibility": ["//:__subpackages__"],
+#    }
+
+#    def _set_if_not_empty(attr, list, transform_fn = None):
+#        if len(list) > 0:
+#            attrs[attr] = transform_fn(list) if transform_fn else list
+
+#    _set_if_not_empty("deps", deps, bzl_selects.to_starlark)
+#    _set_if_not_empty("hdrs", clang_src_info.hdrs)
+#    _set_if_not_empty("srcs", clang_src_info.srcs)
+#    _set_if_not_empty("includes", clang_src_info.public_includes)
+#    _set_if_not_empty("textual_hdrs", clang_src_info.textual_hdrs)
+
+#    res_build_file = _handle_target_resources(
+#        pkg_ctx,
+#        target,
+#        attrs,
+#        include_swift_accessor = False,
+#        include_objc_accessor = (target.objc_src_info != None),
+#    )
+
+#    if res_build_file:
+#        all_build_files.append(res_build_file)
+
+#    # The copts may be updated by functions that were executed before this
+#    # point. Use whatever has been set.
+#    copts = attrs.get("copts", [])
+
+#    # The SWIFT_PACKAGE define is a magical value that SPM uses when it
+#    # builds clang libraries that will be used as Swift modules.
+#    copts.append("-DSWIFT_PACKAGE=1")
+
+#    # DEBUG BEGIN
+#    print("*** CHUCK ===================")
+#    print("*** CHUCK target.name: ", target.name)
+#    print("*** CHUCK pkg_ctx.pkg_info.c_language_standard: ", pkg_ctx.pkg_info.c_language_standard)
+#    print("*** CHUCK pkg_ctx.pkg_info.cxx_language_standard: ", pkg_ctx.pkg_info.cxx_language_standard)
+#    # print("*** CHUCK clang_src_info.is_cxx: ", clang_src_info.is_cxx)
+#    # DEBUG END
+
+#    # pkg_info = pkg_ctx.pkg_info
+#    # if pkg_info.cxx_language_standard and clang_src_info.is_cxx:
+#    #     copts.append("-std={}".format(pkg_info.cxx_language_standard))
+#    # elif pkg_info.c_language_standard and not clang_src_info.is_cxx:
+#    #     copts.append("-std={}".format(pkg_info.c_language_standard))
+
+#    local_includes = [
+#        bzl_selects.new(value = p, kind = _condition_kinds.private_includes)
+#        for p in clang_src_info.private_includes
+#    ]
+
+#    def _normalize_and_create_copt_define(value):
+#        normalized = scg.normalize_define_value(value)
+#        return "-D" + normalized
+
+#    all_settings = lists.compact([target.clang_settings, target.cxx_settings])
+#    for settings in all_settings:
+#        copts.extend(lists.flatten([
+#            bzl_selects.new_from_build_setting(
+#                bs,
+#                # Define values can contain spaces. Bazel requires that they
+#                # are already escaped.
+#                values_map_fn = _normalize_and_create_copt_define,
+#            )
+#            for bs in settings.defines
+#        ]))
+
+#        # Need to convert the headerSearchPaths to be relative to the
+#        # target path. We also do not want to lose any conditions that may
+#        # be attached.
+#        hsp_bss = [
+#            pkginfos.new_build_setting(
+#                kind = bs.kind,
+#                values = [
+#                    paths.join(target.path, p)
+#                    for p in bs.values
+#                ],
+#                condition = bs.condition,
+#            )
+#            for bs in settings.hdr_srch_paths
+#        ]
+#        local_includes.extend(lists.flatten([
+#            bzl_selects.new_from_build_setting(bs)
+#            for bs in hsp_bss
+#        ]))
+
+#        copts.extend(lists.flatten([
+#            bzl_selects.new_from_build_setting(bs)
+#            for bs in settings.unsafe_flags
+#        ]))
+
+#    linkopts = []
+#    if target.linker_settings != None:
+#        linkopts.extend(lists.flatten([
+#            bzl_selects.new_from_build_setting(bs)
+#            for bs in target.linker_settings.linked_libraries
+#        ]))
+#        linkopts.extend(lists.flatten([
+#            bzl_selects.new_from_build_setting(bs)
+#            for bs in target.linker_settings.linked_frameworks
+#        ]))
+
+#    if len(linkopts) > 0:
+#        attrs["linkopts"] = bzl_selects.to_starlark(
+#            linkopts,
+#            kind_handlers = {
+#                _condition_kinds.linked_library: bzl_selects.new_kind_handler(
+#                    transform = lambda ll: "-l{}".format(ll),
+#                ),
+#                _condition_kinds.linked_framework: bzl_selects.new_kind_handler(
+#                    transform = lambda f: "-framework {}".format(f),
+#                ),
+#            },
+#        )
+
+#    # Short path relative to Bazel output base. This is typically used when
+#    # adding a path to a copt or linkeropt.
+#    ext_repo_path = paths.join("external", repository_ctx.name)
+
+#    copts.extend(local_includes)
+
+#    # The `includes` attribute adds includes as -isystem which propagates
+#    # to cc_XXX that depend upon the library.  Providing includes as -I
+#    # only provides the includes for this target.
+#    # https://bazel.build/reference/be/c-cpp#cc_library.includes
+#    def _local_includes_transform(p):
+#        # Normalize the path and replace spaces with an escape sequence.
+#        normalized = paths.normalize(paths.join(ext_repo_path, p))
+#        normalized = normalized.replace(" ", "\\ ")
+#        return "-I{}".format(normalized)
+
+#    attrs["copts"] = bzl_selects.to_starlark(
+#        copts,
+#        kind_handlers = {
+#            _condition_kinds.header_search_path: bzl_selects.new_kind_handler(
+#                transform = _local_includes_transform,
+#            ),
+#            _condition_kinds.private_includes: bzl_selects.new_kind_handler(
+#                transform = _local_includes_transform,
+#            ),
+#        },
+#    )
+
+#    bzl_target_name = target.label.name
+
+#    if target.objc_src_info != None:
+#        # Enable clang module support.
+#        # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
+#        attrs["enable_modules"] = True
+#        attrs["module_name"] = target.c99name
+
+#        sdk_framework_bzl_selects = []
+#        for sf in target.objc_src_info.builtin_frameworks:
+#            platform_conditions = bazel_apple_platforms.for_framework(sf)
+#            for pc in platform_conditions:
+#                sdk_framework_bzl_selects.append(
+#                    bzl_selects.new(
+#                        value = sf,
+#                        kind = _condition_kinds.sdk_frameworks,
+#                        condition = pc,
+#                    ),
+#                )
+#        attrs["sdk_frameworks"] = bzl_selects.to_starlark(
+#            sdk_framework_bzl_selects,
+#        )
+
+#        # There is a known issue with Objective-C library targets not
+#        # supporting the `@import` of modules defined in other Objective-C
+#        # targets. As a workaround, we will define two targets. One is the
+#        # `objc_library` target.  The other is a `generate_modulemap`
+#        # target. This second target generates a `module.modulemap` file and
+#        # provides information about that generated file to `objc_library`
+#        # targets, if `noop` is `False`. If `noop` is `True`, the target
+#        # generates nothing and returns "empty" providers.
+#        #
+#        # Why not skip adding the `generate_modulemap` if `noop` is `True`?
+#        # The logic that assigns dependencies for other targets has no way to
+#        # know whether the modulemap target exists. Hence, we ensure that it
+#        # always exists but does nothing.
+#        #
+#        # See `pkginfo_target_deps.bzl` for the logic that resolves the
+#        # dependency labels.
+#        # See `generate_modulemap.bzl` for details on the modulemap generation.
+#        # See `//swiftpkg/tests/generate_modulemap_tests` package for a usage
+#        # example.
+#        modulemap_deps = _collect_modulemap_deps(deps)
+#        load_stmts = [swiftpkg_generate_modulemap_load_stmt]
+#        modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
+#        noop_modulemap = clang_src_info.modulemap_path != None
+#        modulemap_attrs = {
+#            "deps": bzl_selects.to_starlark(modulemap_deps),
+#            "hdrs": clang_src_info.hdrs,
+#            "module_name": target.c99name,
+#            "noop": noop_modulemap,
+#            "visibility": ["//:__subpackages__"],
+#        }
+#        decls = [
+#            build_decls.new(objc_kinds.library, bzl_target_name, attrs = attrs),
+#            build_decls.new(
+#                kind = swiftpkg_kinds.generate_modulemap,
+#                name = modulemap_target_name,
+#                attrs = modulemap_attrs,
+#            ),
+#        ]
+#    else:
+#        load_stmts = [swift_interop_hint_load_stmt]
+#        aspect_hint_target_name = pkginfo_targets.swift_hint_label_name(
+#            bzl_target_name,
+#        )
+#        attrs["aspect_hints"] = [":{}".format(aspect_hint_target_name)]
+#        aspect_hint_attrs = {"module_name": target.c99name}
+#        decls = [
+#            build_decls.new(clang_kinds.library, bzl_target_name, attrs = attrs),
+#            build_decls.new(
+#                kind = swift_kinds.interop_hint,
+#                name = aspect_hint_target_name,
+#                attrs = aspect_hint_attrs,
+#            ),
+#        ]
+#    all_build_files.append(build_files.new(
+#        load_stmts = load_stmts,
+#        decls = decls,
+#    ))
+
+#    return build_files.merge(*all_build_files)
 
 # MARK: - System Library Targets
 
