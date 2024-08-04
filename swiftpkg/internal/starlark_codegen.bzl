@@ -97,16 +97,28 @@ def _to_starlark(val):
     fail("Failed to finish processing starlark for value: {}".format(val))
 
 def _process_complex_types(out):
+    def _fail_with_orig_out(msg):
+        def _pad_str(width, value):
+            value = str(value)
+            val_len = len(value)
+            if val_len >= width:
+                return value
+            padding = width - val_len
+            return " " * padding + value
+
+        # buildifier: disable=print
+        print("*** DEBUG _process_complet_types out: ")
+        for idx, item in enumerate(out):
+            # buildifier: disable=print
+            print("*** DEBUG", _pad_str(3, idx), ":", _pad_str(7, type(item)), ":", item)
+        fail(msg)
+
     finished = True
     new_out = []
-    for v in out:
-        v_type = type(v)
 
-        # # DEBUG BEGIN
-        # print("*** CHUCK ----")
-        # print("*** CHUCK v: ", v)
-        # print("*** CHUCK v_type: ", v_type)
-        # # DEBUG END
+    # for v in out:
+    for idx, v in enumerate(out):
+        v_type = type(v)
 
         # Check for a with_indent struct and get its indent value and process
         # its wrapped value
@@ -133,10 +145,24 @@ def _process_complex_types(out):
         elif v_type == "struct":
             to_starlark_fn = getattr(v, "to_starlark_parts", None)
             if to_starlark_fn == None:
-                fail("Starlark code gen received a struct without a to_starlark_parts function.", v)
+                _fail_with_orig_out(
+                    """\
+Starlark code gen received a struct without a to_starlark_parts function. \
+idx: {idx}, v: {v}\
+""".format(
+                        idx = idx,
+                        v = v,
+                    ),
+                )
             new_out.extend(to_starlark_fn(v, current_indent))
         else:
-            fail("Starlark code gen received an unsupported type.", v_type, v)
+            _fail_with_orig_out("""\
+Starlark code gen received an unsupported type. idx: {idx}, v_type: {v_type}, v: {v}\
+""".format(
+                idx = idx,
+                v_type = v_type,
+                v = v,
+            ))
 
     return new_out, finished
 
