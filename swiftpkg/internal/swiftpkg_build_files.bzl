@@ -226,6 +226,11 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         fail("Expected `clang_src_info` to not be None.")
     all_build_files = []
 
+    # # DEBUG BEGIN
+    # print("*** CHUCK ===================")
+    # print("*** CHUCK target.name: ", target.name)
+    # # DEBUG END
+
     # These flags are used by SPM when compiling clang modules.
     copts = [
         # Enable 'blocks' language feature
@@ -341,18 +346,23 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 
     attrs = {
         "copts": copts,
-        "hdrs": _if_not_empty(clang_src_info.hdrs),
-        "includes": _if_not_empty(clang_src_info.public_includes),
         "srcs": srcs,
-        "textual_hdrs": _if_not_empty(clang_src_info.textual_hdrs),
         "visibility": ["//:__subpackages__"],
     }
+    if clang_src_info.hdrs:
+        attrs["hdrs"] = clang_src_info.hdrs
+    if clang_src_info.public_includes:
+        attrs["includes"] = clang_src_info.public_includes
+    if clang_src_info.textual_hdrs:
+        attrs["textual_hdrs"] = clang_src_info.textual_hdrs
     deps = lists.flatten([
         pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
         for td in target.dependencies
     ])
     if deps:
         attrs["deps"] = deps
+    if data:
+        attrs["data"] = data
 
     # Generate cc_xxx and objc_xxx targets.
 
@@ -382,9 +392,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                     ),
                 )
         attrs["sdk_frameworks"] = sdk_framework_bzl_selects
-        # attrs["sdk_frameworks"] = bzl_selects.to_starlark(
-        #     sdk_framework_bzl_selects,
-        # )
 
         attrs["copts"].append("-fmodule-name={}".format(target.c99name))
 
