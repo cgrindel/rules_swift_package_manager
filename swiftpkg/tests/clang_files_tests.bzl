@@ -232,27 +232,37 @@ def _reduce_paths_test(ctx):
 
 reduce_paths_test = unittest.make(_reduce_paths_test)
 
-def _is_cxx_src_test(ctx):
+def _organize_srcs_test(ctx):
     env = unittest.begin(ctx)
 
-    tests = [
-        struct(path = "foo.cc", exp = True, msg = ".cc"),
-        struct(path = "foo.cpp", exp = True, msg = ".cpp"),
-        struct(path = "foo", exp = False, msg = "no extension"),
-        struct(path = "foo.c", exp = False, msg = "wrong extension"),
+    srcs = [
+        "foo.cc",
+        "foo.c",
+        "foo.inc",
+        "foo.cpp",
+        "foo.m",
+        "foo.so",
+        "foo.mm",
+        "foo.o",
+        "foo.S",
     ]
-    for t in tests:
-        actual = clang_files.is_cxx_src(t.path)
-        asserts.equals(env, t.exp, actual, t.msg)
+    actual = clang_files.organize_srcs(srcs)
+    expected = struct(
+        c_srcs = ["foo.c"],
+        cxx_srcs = ["foo.cc", "foo.cpp"],
+        objc_srcs = ["foo.m", "foo.mm"],
+        other_srcs = ["foo.inc", "foo.so", "foo.o", "foo.S"],
+    )
+    asserts.equals(env, expected, actual)
 
     return unittest.end(env)
 
-is_cxx_src_test = unittest.make(_is_cxx_src_test)
+organize_srcs_test = unittest.make(_organize_srcs_test)
 
 def clang_files_test_suite():
     return unittest.suite(
         "clang_files_tests",
-        is_cxx_src_test,
+        organize_srcs_test,
         is_hdr_test,
         is_include_hdr_test,
         is_public_modulemap_test,

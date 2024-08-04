@@ -964,6 +964,12 @@ resource_bundle_infoplist(
                 for path, result in getattr(t, "is_directory", {}).items()
             },
         )
+
+        # DEBUG BEGIN
+        print("*** CHUCK =======================")
+        print("*** CHUCK t.name: ", t.name)
+
+        # DEBUG END
         actual = scg.to_starlark(
             swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target),
         )

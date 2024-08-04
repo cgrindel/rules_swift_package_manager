@@ -102,6 +102,12 @@ def _process_complex_types(out):
     for v in out:
         v_type = type(v)
 
+        # # DEBUG BEGIN
+        # print("*** CHUCK ----")
+        # print("*** CHUCK v: ", v)
+        # print("*** CHUCK v_type: ", v_type)
+        # # DEBUG END
+
         # Check for a with_indent struct and get its indent value and process
         # its wrapped value
         current_indent = 0
