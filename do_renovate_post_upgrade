@@ -6,12 +6,27 @@
 
 set -o errexit -o nounset -o pipefail
 
+# DEBUG BEGIN
+set -x
+# DEBUG END
+
 # Install Bazelisk, if not found
 if which &>/dev/null bazelisk; then
   echo "Bazelisk was found."
 else
   echo "Bazelisk was not found. Installing..."
   npm install -g @bazel/bazelisk
+
+  # DEBUG BEGIN
+  
+  if which &>/dev/null bazelisk; then
+    echo >&2 "Bazelisk was found after install."
+  else
+    echo >&2 "Bazelisk was not found after install."
+    exit 1
+  fi
+  # DEBUG END
+
 fi
 
 # Install build tools
