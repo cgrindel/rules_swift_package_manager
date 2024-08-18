@@ -6,27 +6,14 @@
 
 set -o errexit -o nounset -o pipefail
 
-# DEBUG BEGIN
-set -x
-# DEBUG END
-
 # Install Bazelisk, if not found
 if which &>/dev/null bazelisk; then
   echo "Bazelisk was found."
+  bazelisk="bazelisk"
 else
   echo "Bazelisk was not found. Installing..."
   npm install -g @bazel/bazelisk
-
-  # DEBUG BEGIN
-  
-  if which &>/dev/null bazelisk; then
-    echo >&2 "Bazelisk was found after install."
-  else
-    echo >&2 "Bazelisk was not found after install."
-    exit 1
-  fi
-  # DEBUG END
-
+  bazelisk="$HOME/node_modules/@bazel/bazelisk/bazelisk-linux_amd64"
 fi
 
 # Install build tools
@@ -41,4 +28,4 @@ fi
 # Execute tidy for workspaces with modifications The export of CC and the
 # --action_env=PATH are specific to running this repository on Linux.
 export CC=clang
-bazelisk run --action_env=PATH //:tidy_modified
+"${bazelisk}" run --action_env=PATH //:tidy_modified
