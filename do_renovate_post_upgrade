@@ -14,9 +14,6 @@ else
   echo "Bazelisk was not found. Installing..."
   npm install -g @bazel/bazelisk
   npm_root="$(npm root -g)"
-  # DEBUG BEGIN
-  ls -l "${npm_root}" >&2
-  # DEBUG END
   bazelisk="${npm_root}/@bazel/bazelisk/bazelisk-linux_amd64"
 fi
 
