@@ -13,7 +13,7 @@ if which &>/dev/null bazelisk; then
 else
   echo "Bazelisk was not found. Installing..."
   npm install -g @bazel/bazelisk
-  npm_root="$(npm root)"
+  npm_root="$(npm root -g)"
   # DEBUG BEGIN
   ls -l "${npm_root}" >&2
   # DEBUG END
