@@ -137,7 +137,7 @@ def _swift_target_build_file(pkg_ctx, target):
                 copts.extend(lists.flatten(bzl_selects.new_from_build_setting(bs)))
 
     if len(copts) > 0:
-        attrs["copts"] = bzl_selects.to_starlark(copts)
+        attrs["copts"] = bzl_selects.to_starlark(copts, preserve_ordering = True)
 
     if target.resources:
         swift_apple_res_bundle_info = _apple_resource_bundle_for_swift(

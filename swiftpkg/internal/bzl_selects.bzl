@@ -133,7 +133,7 @@ _noop_kind_handler = _new_kind_handler(
     transform = lambda v: v,
 )
 
-def _to_starlark(values, kind_handlers = {}):
+def _to_starlark(values, kind_handlers = {}, preserve_ordering = False):
     """Converts the provied values into Starlark using the information in the \
     kind handlers.
 
@@ -141,6 +141,8 @@ def _to_starlark(values, kind_handlers = {}):
         values: A `list` of values that are processed and added to the output.
         kind_handlers: A `dict` of king handler `struct` values
             (`bzl_selects.new_kind_handler`).
+        preserve_ordering: A `bool` for keeping the processing as lists instead of
+            sets that deduplicate entries.
 
     Returns:
         A `struct` as returned by `starlark_codegen.new_expr`.
@@ -152,40 +154,45 @@ def _to_starlark(values, kind_handlers = {}):
     # dict whose keys are the conditions and the value is the value for the
     # condition.
     selects_by_kind = {}
-    no_condition_results = sets.make()
+    no_condition_results = []
+
+    def process_list(input):
+        if preserve_ordering:
+            return input
+        return sets.to_list(sets.make(input))
 
     for v in values:
         v_type = type(v)
         if v_type != "struct":
             if v_type == "list":
-                no_condition_results = sets.union(no_condition_results, sets.make(v))
+                no_condition_results.extend(v)
             else:
-                sets.insert(no_condition_results, v)
+                no_condition_results.append(v)
             continue
 
         # We are assuming that the select will always result in a list.
         # Hence, we wrap the transformed value in a list.
         kind_handler = kind_handlers.get(v.kind, _noop_kind_handler)
-        tvs_set = sets.make(lists.flatten(kind_handler.transform(v.value)))
+        tvs_set = lists.flatten(kind_handler.transform(v.value))
         if v.condition != None:
             # Collect all of the values associted with a condition.
             select_dict = selects_by_kind.get(v.kind, {})
-            condition_values = select_dict.get(v.condition, sets.make())
-            condition_values = sets.union(condition_values, tvs_set)
+            condition_values = sets.to_list(select_dict.get(v.condition, sets.make()))
+            condition_values = condition_values.extend(tvs_set)
             select_dict[v.condition] = condition_values
             selects_by_kind[v.kind] = select_dict
         else:
-            no_condition_results = sets.union(no_condition_results, tvs_set)
+            no_condition_results.extend(tvs_set)
 
     expr_members = []
-    if sets.length(no_condition_results) > 0:
-        expr_members.append(sets.to_list(no_condition_results))
+    if len(no_condition_results) > 0:
+        expr_members.append(process_list(no_condition_results))
     for (kind, select_dict) in selects_by_kind.items():
         if len(expr_members) > 0:
             expr_members.append(scg.new_op("+"))
         sorted_keys = sorted(select_dict.keys())
         new_select_dict = {
-            k: sets.to_list(select_dict[k])
+            k: process_list(select_dict[k])
             for k in sorted_keys
         }
         kind_handler = kind_handlers.get(kind, _noop_kind_handler)
