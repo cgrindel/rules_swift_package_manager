@@ -188,7 +188,7 @@ def _to_starlark(values, kind_handlers = {}, mutually_inclusive = False):
         if mutually_inclusive:
             # Generate multiple select expressions for each condition.
             for k in sorted_keys:
-                if len(expr_members) > 2:
+                if len(expr_members) > 0:
                     expr_members.append(scg.new_op("+"))
                 new_dict = {
                     k: sets.to_list(select_dict[k]),
