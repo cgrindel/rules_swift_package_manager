@@ -141,7 +141,9 @@ def _to_starlark(values, kind_handlers = {}, mutually_inclusive = False):
         values: A `list` of values that are processed and added to the output.
         kind_handlers: A `dict` of king handler `struct` values
             (`bzl_selects.new_kind_handler`).
-        mutually_inclusive: A `bool` that determines if multiple select expressions should be generated so that the conditions are mutually inclusive.
+        mutually_inclusive: A `bool` that determines if multiple select
+            expressions should be generated so that the conditions
+            are mutually inclusive.
 
     Returns:
         A `struct` as returned by `starlark_codegen.new_expr`.
