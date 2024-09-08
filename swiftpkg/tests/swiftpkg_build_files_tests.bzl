@@ -554,6 +554,8 @@ swift_binary(
         "BuiltinModule",
     ] + select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": ["-DFOOBAR"],
+        "//conditions:default": [],
+    }) + select({
         "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["-DFOOBAR"],
         "//conditions:default": [],
     }) + select({
