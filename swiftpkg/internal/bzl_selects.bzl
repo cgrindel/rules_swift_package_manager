@@ -190,27 +190,17 @@ def _to_starlark(values, kind_handlers = {}, mutually_inclusive = False):
         if mutually_inclusive:
             # Generate multiple select expressions for each condition.
             for k in sorted_keys:
-                if len(expr_members) > 0:
-                    expr_members.append(scg.new_op("+"))
                 new_dict = {
                     k: sets.to_list(select_dict[k]),
                 }
-                if kind_handler.default != None:
-                    new_dict[_bazel_select_default_condition] = kind_handler.default
-                select_fn = scg.new_fn_call("select", new_dict)
-                expr_members.append(select_fn)
+                _append_select(expr_members, kind_handler, new_dict)
         else:
             # Combine all conditions of the same kind into one select expression.
-            if len(expr_members) > 0:
-                expr_members.append(scg.new_op("+"))
-            new_select_dict = {
+            new_dict = {
                 k: sets.to_list(select_dict[k])
                 for k in sorted_keys
             }
-            if kind_handler.default != None:
-                new_select_dict[_bazel_select_default_condition] = kind_handler.default
-            select_fn = scg.new_fn_call("select", new_select_dict)
-            expr_members.append(select_fn)
+            _append_select(expr_members, kind_handler, new_dict)
 
     if len(expr_members) == 0:
         fail("""\
@@ -218,6 +208,14 @@ No Starlark expression members were generated for {}\
 """.format(values))
 
     return scg.new_expr(*expr_members)
+
+def _append_select(expr_members, kind_handler, select_dict):
+    if len(expr_members) > 0:
+        expr_members.append(scg.new_op("+"))
+    if kind_handler.default != None:
+        select_dict[_bazel_select_default_condition] = kind_handler.default
+    select_fn = scg.new_fn_call("select", select_dict)
+    expr_members.append(select_fn)
 
 bzl_selects = struct(
     default_condition = _bazel_select_default_condition,
