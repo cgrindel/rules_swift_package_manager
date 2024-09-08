@@ -61,7 +61,7 @@ def _swift_target_build_file(pkg_ctx, target):
 
     # Gate package_name behind swift tools version 5.9
     if tools_version_major >= 6 or (tools_version_major == 5 and tools_version_minor >= 9):
-        attrs["package_name"] = target.label.repository_name.lstrip("@") + ".rspm"
+        attrs["package_name"] = pkg_ctx.pkg_info.name
 
     target_deps = []
     macro_targets = []
