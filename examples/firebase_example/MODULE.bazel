@@ -20,7 +20,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_apple",
-    version = "3.6.0",
+    version = "3.8.0",
     repo_name = "build_bazel_rules_apple",
 )
 
