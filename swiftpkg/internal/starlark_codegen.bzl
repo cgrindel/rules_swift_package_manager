@@ -107,7 +107,7 @@ def _process_complex_types(out):
             return " " * padding + value
 
         # buildifier: disable=print
-        print("*** DEBUG _process_complet_types out: ")
+        print("*** DEBUG _process_complex_types out: ")
         for idx, item in enumerate(out):
             # buildifier: disable=print
             print("*** DEBUG", _pad_str(3, idx), ":", _pad_str(7, type(item)), ":", item)
