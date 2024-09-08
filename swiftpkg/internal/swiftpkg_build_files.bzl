@@ -241,11 +241,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "-DSWIFT_PACKAGE=1",
     ]
 
-    def _if_not_empty(list_value, transform_fn = None):
-        if not list_value:
-            return None
-        return transform_fn(list_value) if transform_fn else list_value
-
     # Do not add the srcs from the clang_src_info, yet. We will do that at the
     # end of this function where we will create separate targets based upon the
     # type of source file.
@@ -457,6 +452,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 clang_src_info.organized_srcs.other_srcs,
                 attrs.get("srcs", []),
             ])
+            if pkg_ctx.pkg_info.c_language_standard:
+                copts = c_attrs.get("copts", [])
+                copts.append("-std={}".format(pkg_ctx.pkg_info.c_language_standard))
+                c_attrs["copts"] = copts
             decls.append(
                 build_decls.new(
                     clang_kinds.library,
@@ -474,6 +473,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 clang_src_info.organized_srcs.other_srcs,
                 attrs.get("srcs", []),
             ])
+            if pkg_ctx.pkg_info.cxx_language_standard:
+                copts = cxx_attrs.get("copts", [])
+                copts.append("-std={}".format(pkg_ctx.pkg_info.cxx_language_standard))
+                cxx_attrs["copts"] = copts
             decls.append(
                 build_decls.new(
                     clang_kinds.library,
