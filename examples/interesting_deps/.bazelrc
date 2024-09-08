@@ -6,6 +6,3 @@ import %workspace%/../../ci.bazelrc
 
 # Try to import a local.rc file; typically, written by CI
 try-import %workspace%/../../local.bazelrc
-
-# # Required by geos
-# build --cxxopt='-std=c++11'
