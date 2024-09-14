@@ -1,0 +1,74 @@
+load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_build_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
+
+tidy(
+    name = "tidy",
+    targets = [
+        ":update_build_files",
+    ],
+)
+
+# MARK: - Gazelle
+
+# Ignore the Swift build folder
+# gazelle:exclude .build
+
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = [
+        "@bazel_skylib_gazelle_plugin//bzl",
+        "@rules_swift_package_manager//gazelle",
+    ],
+)
+
+gazelle(
+    name = "update_build_files",
+    data = [
+        "@swift_deps_info//:swift_deps_index",
+    ],
+    extra_args = [
+        "-swift_dependency_index=$(location @swift_deps_info//:swift_deps_index)",
+    ],
+    gazelle = ":gazelle_bin",
+)
+
+swift_library(
+    name = "build_packages_lib",
+    srcs = ["BuildPackages.swift"],
+    deps = [
+        "@swiftpkg_adyen_ios//:Adyen",
+        "@swiftpkg_adyen_networking_ios//:AdyenNetworking",
+        "@swiftpkg_appsflyerframework//:AppsFlyerLib",
+        "@swiftpkg_cwlcatchexception//:CwlCatchException",
+        "@swiftpkg_datacompression//:DataCompression",
+        "@swiftpkg_dd_sdk_ios//:DatadogCore",
+        "@swiftpkg_fetchrequests//:FetchRequests",
+        "@swiftpkg_glob//:Glob",
+        "@swiftpkg_listable//:ListableUI",
+        "@swiftpkg_nuke//:Nuke",
+        "@swiftpkg_ocmock//:OCMock",
+        "@swiftpkg_paralayout//:Paralayout",
+        "@swiftpkg_plaid_link_ios//:LinkKit",
+        "@swiftpkg_rxswift//:RxSwift",
+        "@swiftpkg_stripe_ios//:Stripe",
+        "@swiftpkg_swift_async_algorithms//:AsyncAlgorithms",
+        "@swiftpkg_swift_collections//:Collections",
+        "@swiftpkg_swift_custom_dump//:CustomDump",
+        "@swiftpkg_swift_dependencies//:Dependencies",
+        "@swiftpkg_swift_log//:Logging",
+        "@swiftpkg_swift_perception//:Perception",
+        "@swiftpkg_swift_url_routing//:URLRouting",
+        "@swiftpkg_workflow_swift//:Workflow",
+        "@swiftpkg_xcresultparser//:XcresultparserLib",
+        "@swiftpkg_xmlcoder//:XMLCoder",
+    ],
+    tags = ["manual"],
+)
+
+ios_build_test(
+    name = "build_packages_test",
+    targets = [":build_packages_lib"],
+    minimum_os_version = "14.0",
+)
