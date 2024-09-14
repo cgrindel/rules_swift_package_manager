@@ -9,6 +9,7 @@ _objc_resource_bundle_accessor_hdr_suffix = "_objc_resource_bundle_accessor_hdr"
 _objc_resource_bundle_accessor_impl_suffix = "_objc_resource_bundle_accessor_impl"
 _resource_bundle_accessor_suffix = "_resource_bundle_accessor"
 _resource_bundle_infoplist_suffix = "_resource_bundle_infoplist"
+_swift_hint_suffix = "_swift_hint"
 
 def _get(targets, name, fail_if_not_found = True):
     """Retrieves the target with the given name from a list of targets.
@@ -136,19 +137,31 @@ def _is_modulemap_label(target_name):
     """
     return target_name.endswith(_modulemap_suffix)
 
-def _resource_bundle_name(module_name):
+def _swift_hint_label_name(target_name):
+    """Returns the name of the related `swift_interopt_hint` target.
+
+    Args:
+        target_name: The publicly advertised name for the `cc_library` target.
+
+    Returns:
+        The name of the `swift_interopt_hint` target as a `string`.
+    """
+    return target_name + _swift_hint_suffix
+
+def _resource_bundle_name(package_name, module_name):
     """Returns the `bundle_name` for the module.
 
     For Swift packages, it appears the bundle name is of the format
-    `<module_name>_<module_name>`.
+    `<package_name>_<module_name>`.
 
     Args:
+        package_name: The package name.
         module_name: The module name.
 
     Returns:
         The `bundle_name` of the `apple_resource_bundle` as a `string`.
     """
-    return module_name + "_" + module_name
+    return package_name + "_" + module_name
 
 def _resource_bundle_label_name(target_name):
     """Returns the name of the related `apple_resource_bundle` target.
@@ -267,6 +280,7 @@ def make_pkginfo_targets(bazel_labels):
         resource_bundle_label_name = _resource_bundle_label_name,
         resource_bundle_name = _resource_bundle_name,
         srcs = _srcs,
+        swift_hint_label_name = _swift_hint_label_name,
     )
 
 pkginfo_targets = make_pkginfo_targets(bazel_labels = bazel_labels)

@@ -15,5 +15,9 @@ let package = Package(
             name: "CoolUI",
             resources: [.process("Resources")]
         ),
+        .testTarget(
+            name: "CoolUITests",
+            dependencies: ["CoolUI"]
+        )
     ]
 )

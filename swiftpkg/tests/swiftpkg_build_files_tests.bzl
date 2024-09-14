@@ -494,7 +494,7 @@ swift_library(
     always_include_developer_search_paths = True,
     copts = ["-DSWIFT_PACKAGE"],
     module_name = "RegularSwiftTargetAsLibrary",
-    package_name = "swiftpkg_mypackage.rspm",
+    package_name = "MyPackage",
     srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
@@ -516,7 +516,7 @@ swift_library(
     copts = ["-DSWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
     module_name = "RegularTargetForExec",
-    package_name = "swiftpkg_mypackage.rspm",
+    package_name = "MyPackage",
     srcs = ["Source/RegularTargetForExec/main.swift"],
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
@@ -534,7 +534,7 @@ swift_test(
     copts = ["-DSWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
     module_name = "RegularSwiftTargetAsLibraryTests",
-    package_name = "swiftpkg_mypackage.rspm",
+    package_name = "MyPackage",
     srcs = ["Tests/RegularSwiftTargetAsLibraryTests/RegularSwiftTargetAsLibraryTests.swift"],
     visibility = ["//:__subpackages__"],
 )
@@ -563,7 +563,7 @@ swift_binary(
         "//conditions:default": [],
     }),
     module_name = "SwiftExecutableTarget",
-    package_name = "swiftpkg_mypackage.rspm",
+    package_name = "MyPackage",
     srcs = ["Source/SwiftExecutableTarget/main.swift"],
     visibility = ["//:__subpackages__"],
 )
@@ -573,9 +573,11 @@ swift_binary(
             msg = "simple clang target",
             name = "ClangLibrary",
             exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 
 cc_library(
     name = "ClangLibrary.rspm",
+    aspect_hints = [":ClangLibrary.rspm_swift_hint"],
     copts = [
         "-fblocks",
         "-fobjc-arc",
@@ -595,9 +597,13 @@ cc_library(
         "src/foo.cc",
         "src/foo.h",
     ],
-    tags = ["swift_module=ClangLibrary"],
     textual_hdrs = ["src/foo.cc"],
     visibility = ["//:__subpackages__"],
+)
+
+swift_interop_hint(
+    name = "ClangLibrary.rspm_swift_hint",
+    module_name = "ClangLibrary",
 )
 """,
         ),
@@ -654,7 +660,6 @@ objc_library(
         "src/foo.h",
         "src/foo.m",
     ],
-    tags = ["swift_module=ObjcLibrary"],
     textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
 )
@@ -713,7 +718,6 @@ objc_library(
         "src/foo.h",
         "src/foo.m",
     ],
-    tags = ["swift_module=ObjcLibraryWithModulemap"],
     textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
 )
@@ -735,7 +739,7 @@ swift_library(
         "//conditions:default": [],
     }),
     module_name = "SwiftLibraryWithConditionalDep",
-    package_name = "swiftpkg_mypackage.rspm",
+    package_name = "MyPackage",
     srcs = ["Source/SwiftLibraryWithConditionalDep/SwiftLibraryWithConditionalDep.swift"],
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
@@ -746,9 +750,11 @@ swift_library(
             msg = "Clang target with conditional dep",
             name = "ClangLibraryWithConditionalDep",
             exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 
 cc_library(
     name = "ClangLibraryWithConditionalDep.rspm",
+    aspect_hints = [":ClangLibraryWithConditionalDep.rspm_swift_hint"],
     copts = [
         "-fblocks",
         "-fobjc-arc",
@@ -768,9 +774,13 @@ cc_library(
         "src/foo.cc",
         "src/foo.h",
     ],
-    tags = ["swift_module=ClangLibraryWithConditionalDep"],
     textual_hdrs = ["src/foo.cc"],
     visibility = ["//:__subpackages__"],
+)
+
+swift_interop_hint(
+    name = "ClangLibraryWithConditionalDep.rspm_swift_hint",
+    module_name = "ClangLibraryWithConditionalDep",
 )
 """,
         ),
@@ -799,7 +809,7 @@ swift_library(
     ],
     generates_header = True,
     module_name = "SwiftForObjcTarget",
-    package_name = "swiftpkg_mypackage.rspm",
+    package_name = "MyPackage",
     srcs = ["Source/SwiftForObjcTarget/SwiftForObjcTarget.swift"],
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
@@ -816,7 +826,7 @@ load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_a
 
 apple_resource_bundle(
     name = "SwiftLibraryWithFilePathResource.rspm_resource_bundle",
-    bundle_name = "SwiftLibraryWithFilePathResource_SwiftLibraryWithFilePathResource",
+    bundle_name = "MyPackage_SwiftLibraryWithFilePathResource",
     infoplists = [":SwiftLibraryWithFilePathResource.rspm_resource_bundle_infoplist"],
     resources = ["Source/SwiftLibraryWithFilePathResource/Resources/chicken.json"],
     visibility = ["//:__subpackages__"],
@@ -824,7 +834,7 @@ apple_resource_bundle(
 
 resource_bundle_accessor(
     name = "SwiftLibraryWithFilePathResource.rspm_resource_bundle_accessor",
-    bundle_name = "SwiftLibraryWithFilePathResource_SwiftLibraryWithFilePathResource",
+    bundle_name = "MyPackage_SwiftLibraryWithFilePathResource",
 )
 
 resource_bundle_infoplist(
@@ -838,7 +848,7 @@ swift_library(
     copts = ["-DSWIFT_PACKAGE"],
     data = [":SwiftLibraryWithFilePathResource.rspm_resource_bundle"],
     module_name = "SwiftLibraryWithFilePathResource",
-    package_name = "swiftpkg_mypackage.rspm",
+    package_name = "MyPackage",
     srcs = [
         "Source/SwiftLibraryWithFilePathResource/SwiftLibraryWithFilePathResource.swift",
         ":SwiftLibraryWithFilePathResource.rspm_resource_bundle_accessor",
@@ -857,7 +867,7 @@ load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulema
 
 apple_resource_bundle(
     name = "ObjcLibraryWithResources.rspm_resource_bundle",
-    bundle_name = "ObjcLibraryWithResources_ObjcLibraryWithResources",
+    bundle_name = "MyPackage_ObjcLibraryWithResources",
     infoplists = [":ObjcLibraryWithResources.rspm_resource_bundle_infoplist"],
     resources = ["Source/ObjcLibraryWithResources/Resources/chicken.json"],
     visibility = ["//:__subpackages__"],
@@ -910,7 +920,6 @@ objc_library(
         ":ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr",
         ":ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_impl",
     ],
-    tags = ["swift_module=ObjcLibraryWithResources"],
     textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
 )
@@ -922,7 +931,7 @@ objc_resource_bundle_accessor_hdr(
 
 objc_resource_bundle_accessor_impl(
     name = "ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_impl",
-    bundle_name = "ObjcLibraryWithResources_ObjcLibraryWithResources",
+    bundle_name = "MyPackage_ObjcLibraryWithResources",
     module_name = "ObjcLibraryWithResources",
 )
 

@@ -20,13 +20,15 @@ development inside a Bazel workspace.
 * [Quickstart](#quickstart)
   * [1. Enable bzlmod](#1-enable-bzlmod)
   * [2. Configure your `MODULE.bazel` to use rules_swift_package_manager.](#2-configure-your-modulebazel-to-use-rules_swift_package_manager)
+    * [(Optional) Enable `swift_deps_info` generation for the Gazelle plugin](#optional-enable-swift_deps_info-generation-for-the-gazelle-plugin)
   * [3. Create a minimal `Package.swift` file.](#3-create-a-minimal-packageswift-file)
-  * [4. Run `bazel mod tidy`.](#4-run-bazel-mod-tidy)
-  * [5. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.](#5-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
-  * [6. Create or update Bazel build files for your project.](#6-create-or-update-bazel-build-files-for-your-project)
-  * [7. Build and test your project.](#7-build-and-test-your-project)
-  * [8. Check in `Package.swift`, `Package.resolved`, and `MODULE.bazel`.](#8-check-in-packageswift-packageresolved-and-modulebazel)
-  * [9. Start coding](#9-start-coding)
+  * [4. Run `swift package update`](#4-run-swift-package-update)
+  * [5. Run `bazel mod tidy`.](#5-run-bazel-mod-tidy)
+  * [6. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.](#6-add-gazelle-targets-to-buildbazel-at-the-root-of-your-workspace)
+  * [7. Create or update Bazel build files for your project.](#7-create-or-update-bazel-build-files-for-your-project)
+  * [8. Build and test your project.](#8-build-and-test-your-project)
+  * [9. Check in `Package.swift`, `Package.resolved`, and `MODULE.bazel`.](#9-check-in-packageswift-packageresolved-and-modulebazel)
+  * [10. Start coding](#10-start-coding)
 * [Tips and Tricks](#tips-and-tricks)
 <!-- MARKDOWN TOC: END -->
 
@@ -67,17 +69,14 @@ actions. See the [CI GitHub workflow] for more details.
 
 The following provides a quick introduction on how to set up and use the features in this
 repository. These instructions assume that you are using [Bazel modules] to load your external
-dependencies. If you are using Bazel's legacy external dependency management, please review the
-[legacy quickstart], instead.
+dependencies. If you are using Bazel's legacy external dependency management, we recommend using
+[Bazel's hybrid mode], then follow the steps in this quickstart guide.
 
 Also, check out the [examples] for more information.
 
 ### 1. Enable bzlmod
 
-This repository supports [bzlmod]. While you can use this ruleset with [legacy `WORKSPACE`
-dependencies], some of the automation will not be available in this mode. If you are starting a new
-project, it is highly recommended to use [bzlmod]. To enable bzlmod, add the following to your
-`.bazelrc`.
+This repository supports [bzlmod].
 
 ```
 common --enable_bzlmod
@@ -89,7 +88,7 @@ Add a dependency on `rules_swift_package_manager`.
 
 <!-- BEGIN MODULE SNIPPET -->
 ```python
-bazel_dep(name = "rules_swift_package_manager", version = "0.34.0")
+bazel_dep(name = "rules_swift_package_manager", version = "0.37.0")
 ```
 <!-- END MODULE SNIPPET -->
 
@@ -116,15 +115,26 @@ use_repo(
 )
 ```
 
-You will also need to add a dependency on Gazelle and `rules_swift`. Follow
-the links below to get the latest bzlmod snippets to insert into your `MODULE.bazel`.
-
-- [gazelle](https://registry.bazel.build/modules/gazelle)
-- [rules_swift](https://registry.bazel.build/modules/rules_swift)
+You will also need to add a dependency on [rules_swift].
 
 NOTE: Some Swift package manager features (e.g., resources) use rules from [rules_apple]. It is a
 dependency for `rules_swift_package_manager`. However, you do not need to declare it unless you use
 any of the rules in your project.
+
+#### (Optional) Enable `swift_deps_info` generation for the Gazelle plugin
+
+If you will be using the Gazelle plugin for Swift, you will need to enable the generation of
+the `swift_deps_info` repository by enabling `declare_swift_deps_info`.
+
+```bazel
+swift_deps.from_package(
+    declare_swift_deps_info = True, # <=== Enable swift_deps_info generation for the Gazelle plugin
+    resolved = "//:Package.resolved",
+    swift = "//:Package.swift",
+)
+```
+
+You will also need to add a dependency on [Gazelle](https://registry.bazel.build/modules/gazelle).
 
 ### 3. Create a minimal `Package.swift` file.
 
@@ -152,11 +162,16 @@ feel free to populate the rest of the manifest so that your package works proper
 manager. Just note that the Swift Gazelle plugin does not use the manifest to generate Bazel build
 files, at this time.
 
-### 4. Run `bazel mod tidy`.
+### 4. Run `swift package update`
+
+This will invoke Swift Package Manager and resolve all dependencies resulting in creation of
+`Package.resolved` file.
+
+### 5. Run `bazel mod tidy`.
 
 This will update your `MODULE.bazel` with the correct `use_repo` declaration.
 
-### 5. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.
+### 6. Add Gazelle targets to `BUILD.bazel` at the root of your workspace.
 
 Add the following to the `BUILD.bazel` file at the root of your workspace.
 
@@ -196,7 +211,7 @@ gazelle(
 )
 ```
 
-### 6. Create or update Bazel build files for your project.
+### 7. Create or update Bazel build files for your project.
 
 Generate/update the Bazel build files for your project by running the following:
 
@@ -204,7 +219,7 @@ Generate/update the Bazel build files for your project by running the following:
 bazel run //:update_build_files
 ```
 
-### 7. Build and test your project.
+### 8. Build and test your project.
 
 Build and test your project.
 
@@ -212,7 +227,7 @@ Build and test your project.
 bazel test //...
 ```
 
-### 8. Check in `Package.swift`, `Package.resolved`, and `MODULE.bazel`.
+### 9. Check in `Package.swift`, `Package.resolved`, and `MODULE.bazel`.
 
 - The `Package.swift` file is used by `rules_swift_package_manager` to generate information about
   your project's dependencies.
@@ -220,7 +235,7 @@ bazel test //...
   identified.
 - The `MODULE.bazel` contains the declarations for your external dependencies.
 
-### 9. Start coding
+### 10. Start coding
 
 You are ready to start coding.
 
@@ -242,9 +257,8 @@ The following are a few tips to consider as you work with your repository:
 <!-- Links -->
 
 [Bazel modules]: https://bazel.build/external/module
+[Bazel's hybrid mode]: https://bazel.build/external/migration#hybrid-mode
 [bzlmod]: https://bazel.build/external/overview#bzlmod
-[legacy `WORKSPACE` dependencies]: https://bazel.build/external/overview#workspace-system
-[legacy quickstart]: /docs/legacy_quickstart.md
 [our document on patching Swift packages]: docs/patch_swift_package.md
 [CI GitHub workflow]: .github/workflows/ci.yml
 [Gazelle plugin]: https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md

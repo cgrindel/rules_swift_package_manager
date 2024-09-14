@@ -60,13 +60,13 @@ def _execute_spm_command(
         if err_msg_tpl == None:
             err_msg_tpl = """\
 Failed to execute SPM command. \
-name: {repo_name}, \
+working_directory: {working_directory}, \
 args: {exec_args}, \
 return_code: {return_code}\
 \n{stderr}.\
 """
         fail(err_msg_tpl.format(
-            repo_name = repository_ctx.attr.name,
+            working_directory = working_directory,
             exec_args = exec_args,
             stderr = exec_result.stderr,
             return_code = exec_result.return_code,

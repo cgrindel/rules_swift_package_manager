@@ -34,13 +34,12 @@ def _new(name, oss, versions, enable_bzlmods):
         enable_bzlmods = enable_bzlmods,
     )
 
-def _test_name_prefix(name, enable_bzlmod = True):
-    suffix = "_test" if enable_bzlmod else "_legacy_test"
-    return name + suffix
+def _test_name_prefix(name):
+    return name + "_test"
 
-def _test_name(example_name, enable_bzlmod, version):
+def _test_name(example_name, version):
     return integration_test_utils.bazel_integration_test_name(
-        _test_name_prefix(example_name, enable_bzlmod = enable_bzlmod),
+        _test_name_prefix(example_name),
         version,
     )
 
@@ -58,9 +57,11 @@ def _bazel_integration_test(ei):
     ]
     workspace_path = ei.name
     for enable_bzlmod in ei.enable_bzlmods:
-        test_runner = ":test_runner" if enable_bzlmod else ":legacy_test_runner"
+        if not enable_bzlmod:
+            fail("The {name} example still has legacy test enabled.".format(name = ei.name))
+        test_runner = ":test_runner"
         bazel_integration_tests(
-            name = _test_name_prefix(ei.name, enable_bzlmod = enable_bzlmod),
+            name = _test_name_prefix(ei.name),
             bazel_binaries = bazel_binaries,
             bazel_versions = ei.versions,
             tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS + [
@@ -76,17 +77,17 @@ def _bazel_integration_test(ei):
             workspace_path = workspace_path,
         )
         for version in ei.versions:
-            _ci_integration_test_params(ei, enable_bzlmod, version)
+            _ci_integration_test_params(ei, version)
 
-def _test_params_name(name, enable_bzlmod, version):
-    test_name = _test_name(name, enable_bzlmod, version)
+def _test_params_name(name, version):
+    test_name = _test_name(name, version)
     return _test_params_name_from_test_name(test_name)
 
 def _test_params_name_from_test_name(test_name):
     return "{}_params".format(test_name)
 
-def _ci_integration_test_params(ei, enable_bzlmod, version):
-    test_name = _test_name(ei.name, enable_bzlmod, version)
+def _ci_integration_test_params(ei, version):
+    test_name = _test_name(ei.name, version)
     ci_integration_test_params(
         name = _test_params_name_from_test_name(test_name),
         oss = ei.oss,
@@ -99,10 +100,7 @@ def _ci_test_params_suite(name, example_infos):
         name = name,
         test_params = lists.flatten([
             [
-                [
-                    _test_params_name(ei.name, eb, v)
-                    for eb in ei.enable_bzlmods
-                ]
+                _test_params_name(ei.name, v)
                 for v in ei.versions
             ]
             for ei in example_infos

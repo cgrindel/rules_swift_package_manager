@@ -89,7 +89,11 @@ def _resolve_by_name(pkg_ctx, name):
             repository_name = bazel_repo_names.from_identity(ext_dep.identity),
             package = "",
         )]
-    fail("Unable to resolve byName reference {name} in {repo_name}.".format(
+    fail("""\
+Unable to resolve byName reference {name} in {repo_name}. For more information \
+and to learn how to resolve the issue, please read \
+https://github.com/cgrindel/rules_swift_package_manager/blob/main/docs/faq.md#how-do-i-handle-the-error-unable-to-resolve-byname-reference-xxx-in-swiftpkg_yyy.\
+""".format(
         name = name,
         repo_name = repo_name,
     ))
