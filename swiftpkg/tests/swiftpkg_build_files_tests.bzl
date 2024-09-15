@@ -494,7 +494,7 @@ swift_library(
     always_include_developer_search_paths = True,
     copts = ["-DSWIFT_PACKAGE"],
     module_name = "RegularSwiftTargetAsLibrary",
-    package_name = "swiftpkg_mypackage.rspm",
+    package_name = "MyPackage",
     srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
@@ -516,7 +516,7 @@ swift_library(
     copts = ["-DSWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
     module_name = "RegularTargetForExec",
-    package_name = "swiftpkg_mypackage.rspm",
+    package_name = "MyPackage",
     srcs = ["Source/RegularTargetForExec/main.swift"],
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
@@ -534,7 +534,7 @@ swift_test(
     copts = ["-DSWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
     module_name = "RegularSwiftTargetAsLibraryTests",
-    package_name = "swiftpkg_mypackage.rspm",
+    package_name = "MyPackage",
     srcs = ["Tests/RegularSwiftTargetAsLibraryTests/RegularSwiftTargetAsLibraryTests.swift"],
     visibility = ["//:__subpackages__"],
 )
@@ -554,6 +554,8 @@ swift_binary(
         "BuiltinModule",
     ] + select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": ["-DFOOBAR"],
+        "//conditions:default": [],
+    }) + select({
         "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["-DFOOBAR"],
         "//conditions:default": [],
     }) + select({
@@ -561,7 +563,7 @@ swift_binary(
         "//conditions:default": [],
     }),
     module_name = "SwiftExecutableTarget",
-    package_name = "swiftpkg_mypackage.rspm",
+    package_name = "MyPackage",
     srcs = ["Source/SwiftExecutableTarget/main.swift"],
     visibility = ["//:__subpackages__"],
 )
@@ -737,7 +739,7 @@ swift_library(
         "//conditions:default": [],
     }),
     module_name = "SwiftLibraryWithConditionalDep",
-    package_name = "swiftpkg_mypackage.rspm",
+    package_name = "MyPackage",
     srcs = ["Source/SwiftLibraryWithConditionalDep/SwiftLibraryWithConditionalDep.swift"],
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
@@ -807,7 +809,7 @@ swift_library(
     ],
     generates_header = True,
     module_name = "SwiftForObjcTarget",
-    package_name = "swiftpkg_mypackage.rspm",
+    package_name = "MyPackage",
     srcs = ["Source/SwiftForObjcTarget/SwiftForObjcTarget.swift"],
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
@@ -846,7 +848,7 @@ swift_library(
     copts = ["-DSWIFT_PACKAGE"],
     data = [":SwiftLibraryWithFilePathResource.rspm_resource_bundle"],
     module_name = "SwiftLibraryWithFilePathResource",
-    package_name = "swiftpkg_mypackage.rspm",
+    package_name = "MyPackage",
     srcs = [
         "Source/SwiftLibraryWithFilePathResource/SwiftLibraryWithFilePathResource.swift",
         ":SwiftLibraryWithFilePathResource.rspm_resource_bundle_accessor",
