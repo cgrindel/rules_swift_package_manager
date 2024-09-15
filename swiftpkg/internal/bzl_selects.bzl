@@ -133,7 +133,7 @@ _noop_kind_handler = _new_kind_handler(
     transform = lambda v: v,
 )
 
-def _to_starlark(values, kind_handlers = {}):
+def _to_starlark(values, kind_handlers = {}, mutually_inclusive = False):
     """Converts the provied values into Starlark using the information in the \
     kind handlers.
 
@@ -141,6 +141,9 @@ def _to_starlark(values, kind_handlers = {}):
         values: A `list` of values that are processed and added to the output.
         kind_handlers: A `dict` of king handler `struct` values
             (`bzl_selects.new_kind_handler`).
+        mutually_inclusive: A `bool` that determines if multiple select
+            expressions should be generated so that the conditions
+            are mutually inclusive.
 
     Returns:
         A `struct` as returned by `starlark_codegen.new_expr`.
@@ -181,18 +184,23 @@ def _to_starlark(values, kind_handlers = {}):
     if sets.length(no_condition_results) > 0:
         expr_members.append(sets.to_list(no_condition_results))
     for (kind, select_dict) in selects_by_kind.items():
-        if len(expr_members) > 0:
-            expr_members.append(scg.new_op("+"))
-        sorted_keys = sorted(select_dict.keys())
-        new_select_dict = {
-            k: sets.to_list(select_dict[k])
-            for k in sorted_keys
-        }
         kind_handler = kind_handlers.get(kind, _noop_kind_handler)
-        if kind_handler.default != None:
-            new_select_dict[_bazel_select_default_condition] = kind_handler.default
-        select_fn = scg.new_fn_call("select", new_select_dict)
-        expr_members.append(select_fn)
+        sorted_keys = sorted(select_dict.keys())
+
+        if mutually_inclusive:
+            # Generate multiple select expressions for each condition.
+            for k in sorted_keys:
+                new_dict = {
+                    k: sets.to_list(select_dict[k]),
+                }
+                _append_select(expr_members, kind_handler, new_dict)
+        else:
+            # Combine all conditions of the same kind into one select expression.
+            new_dict = {
+                k: sets.to_list(select_dict[k])
+                for k in sorted_keys
+            }
+            _append_select(expr_members, kind_handler, new_dict)
 
     if len(expr_members) == 0:
         fail("""\
@@ -200,6 +208,14 @@ No Starlark expression members were generated for {}\
 """.format(values))
 
     return scg.new_expr(*expr_members)
+
+def _append_select(expr_members, kind_handler, select_dict):
+    if len(expr_members) > 0:
+        expr_members.append(scg.new_op("+"))
+    if kind_handler.default != None:
+        select_dict[_bazel_select_default_condition] = kind_handler.default
+    select_fn = scg.new_fn_call("select", select_dict)
+    expr_members.append(select_fn)
 
 bzl_selects = struct(
     default_condition = _bazel_select_default_condition,
