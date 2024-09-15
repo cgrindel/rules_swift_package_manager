@@ -4,6 +4,7 @@ import GEOSwift
 import libwebp
 import Logging
 import OpenCombine
+import SwiftFormat
 
 // Configure DDLog to be the backend for the swift-log.
 DDLog.add(DDTTYLogger.sharedInstance!)

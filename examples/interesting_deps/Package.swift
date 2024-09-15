@@ -10,5 +10,6 @@ let package = Package(
         .package(url: "https://github.com/OpenCombine/OpenCombine", from: "0.14.0"),
         .package(url: "https://github.com/SDWebImage/libwebp-Xcode.git", from: "1.3.2"),
         .package(url: "https://github.com/apple/swift-log", from: "1.6.1"),
+        .package(url: "https://github.com/swiftlang/swift-format.git", from: "600.0.0"),
     ]
 )

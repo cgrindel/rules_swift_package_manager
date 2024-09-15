@@ -58,5 +58,6 @@ use_repo(
     "swiftpkg_geoswift",
     "swiftpkg_libwebp_xcode",
     "swiftpkg_opencombine",
+    "swiftpkg_swift_format",
     "swiftpkg_swift_log",
 )

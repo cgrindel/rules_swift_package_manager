@@ -42,6 +42,7 @@ swift_binary(
         "@swiftpkg_geoswift//:GEOSwift",
         "@swiftpkg_libwebp_xcode//:libwebp",
         "@swiftpkg_opencombine//:OpenCombine",
+        "@swiftpkg_swift_format//:SwiftFormat",
         "@swiftpkg_swift_log//:Logging",
     ],
 )
