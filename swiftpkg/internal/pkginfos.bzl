@@ -690,10 +690,7 @@ def _new_dependency(identity, name, source_control = None, file_system = None):
     Returns:
         A `struct` representing an external dependency.
     """
-    if not source_control and not file_system:
-        fail("""\
-A dependency must have either a source_control or file_system arg.\
-""")
+
     return struct(
         identity = identity,
         name = pkginfo_dependencies.normalize_name(name),
@@ -710,6 +707,9 @@ def _new_source_control(pin):
     Returns:
         A `struct` representing source control info for a dependency.
     """
+    if not pin:
+        return None
+
     return struct(
         pin = pin,
     )

@@ -323,8 +323,8 @@ def swift_bazel_go_dependencies():
         name = "org_golang_x_exp",
         build_external = "external",
         importpath = "golang.org/x/exp",
-        sum = "h1:uLDX+AfeFCct3a2C7uIWBKMJIR3CJMhcgfrUAqjRK6w=",
-        version = "v0.0.0-20240707233637-46b078467d37",
+        sum = "h1:ELnwvuAXPNtPk1TJRuGkI9fDTwym6AYBu0qzT8AcHdI=",
+        version = "v0.0.0-20240808152545-0cdaa3abc0fa",
     )
     maybe(
         go_repository,
@@ -339,8 +339,8 @@ def swift_bazel_go_dependencies():
         name = "org_golang_x_mod",
         build_external = "external",
         importpath = "golang.org/x/mod",
-        sum = "h1:fEdghXQSo20giMthA7cd28ZC+jts4amQ3YMXiP5oMQ8=",
-        version = "v0.19.0",
+        sum = "h1:utOm6MM3R3dnawAiJgn0y+xvuYRsm1RKM/4giyfDgV0=",
+        version = "v0.20.0",
     )
     maybe(
         go_repository,
@@ -363,8 +363,8 @@ def swift_bazel_go_dependencies():
         name = "org_golang_x_sync",
         build_external = "external",
         importpath = "golang.org/x/sync",
-        sum = "h1:YsImfSBoP9QPYL0xyKJPq0gcaJdG3rInoqxTWbfQu9M=",
-        version = "v0.7.0",
+        sum = "h1:3NFvSEYkUoMifnESzZl15y791HH1qU2xm6eCJU5ZPXQ=",
+        version = "v0.8.0",
     )
     maybe(
         go_repository,
@@ -387,8 +387,8 @@ def swift_bazel_go_dependencies():
         name = "org_golang_x_tools",
         build_external = "external",
         importpath = "golang.org/x/tools",
-        sum = "h1:SGsXPZ+2l4JsgaCKkx+FQ9YZ5XEtA1GZYuoDjenLjvg=",
-        version = "v0.23.0",
+        sum = "h1:J1shsA93PJUEVaUSaay7UXAyE8aimq3GW0pjlolpa24=",
+        version = "v0.24.0",
     )
     maybe(
         go_repository,
