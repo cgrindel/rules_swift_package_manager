@@ -1,9 +1,11 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/bazelbuild/bazel-gazelle v0.37.0 h1:vCNhz75HxeeLUkDMhDkNeDSJfjUROMswex+NyYLPY6A=
-github.com/bazelbuild/bazel-gazelle v0.37.0/go.mod h1:5wGHbkRpDUdz4LxREtPYwXstrWfnkV+oDmOuxNAxW1s=
+github.com/bazelbuild/bazel-gazelle v0.38.0 h1:7SABASdzy94tbvklgX8ThG+1y7ZNl2eFYRVevjOXpgw=
+github.com/bazelbuild/bazel-gazelle v0.38.0/go.mod h1:hspieDFb3FIjjhQV/dZjqq8qiVxsQ4rtRiWNZMihEXg=
 github.com/bazelbuild/buildtools v0.0.0-20240626162158-92a716d768c0 h1:tVa7swb7n+9X2nS9XsCqOQ7ZGm0t+t11vWYTKoFiWB8=
 github.com/bazelbuild/buildtools v0.0.0-20240626162158-92a716d768c0/go.mod h1:689QdV3hBP7Vo9dJMmzhoYIyo/9iMhEmHkJcnaPRCbo=
+github.com/bazelbuild/rules_go v0.46.0 h1:CTefzjN/D3Cdn3rkrM6qMWuQj59OBcuOjyIp3m4hZ7s=
+github.com/bazelbuild/rules_go v0.46.0/go.mod h1:Dhcz716Kqg1RHNWos+N6MlXNkjNP2EwZQ0LukRKJfMs=
 github.com/bmatcuk/doublestar/v4 v4.6.1 h1:FH9SifrbvJhnlQpztAx++wlkk70QBf0iBWDwNy7PA4I=
 github.com/bmatcuk/doublestar/v4 v4.6.1/go.mod h1:xBQ8jztBU6kakFMg+8WGxn0c6z1fTSPVIjEY1Wr7jzc=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
