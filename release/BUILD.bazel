@@ -6,7 +6,6 @@ load(
     "create_release",
     "generate_module_snippet",
     "generate_release_notes",
-    "generate_workspace_snippet",
     "hash_sha256",
     "release_archive",
     "update_readme",
@@ -27,23 +26,14 @@ generate_module_snippet(
     module_name = "rules_swift_package_manager",
 )
 
-generate_workspace_snippet(
-    name = "generate_workspace_snippet",
-    sha256_file = ":archive_sha256",
-    template = "workspace_snippet.tmpl",
-    workspace_name = "rules_swift_package_manager",
-)
-
 generate_release_notes(
     name = "generate_release_notes",
     generate_module_snippet = ":generate_module_snippet",
-    generate_workspace_snippet = ":generate_workspace_snippet",
 )
 
 update_readme(
     name = "update_readme",
     generate_module_snippet = ":generate_module_snippet",
-    generate_workspace_snippet = ":generate_workspace_snippet",
 )
 
 create_release(
