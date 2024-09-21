@@ -6,14 +6,14 @@ go 1.21.4
 // toolchain go1.21.5
 
 require (
-	github.com/bazelbuild/bazel-gazelle v0.37.0
+	github.com/bazelbuild/bazel-gazelle v0.38.0
 	github.com/bazelbuild/buildtools v0.0.0-20240626162158-92a716d768c0
 	github.com/creasty/defaults v1.8.0
 	github.com/deckarep/golang-set/v2 v2.6.0
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/exp v0.0.0-20240808152545-0cdaa3abc0fa
-	golang.org/x/text v0.16.0
+	golang.org/x/text v0.18.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
