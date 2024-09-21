@@ -20,7 +20,9 @@ _C_SRC_EXTS = [".c"]
 _CXX_SRC_EXTS = [".cc", ".cpp"]
 
 # Objective-C source extensions
-_OBJC_SRC_EXTS = [".m", ".mm"]
+_OBJC_SRC_EXTS = [".m"]
+
+_OBJCXX_SRC_EXTS = [".mm"]
 
 # Assembly source extensions
 _ASSEMBLY_SRC_EXTS = [".S"]
@@ -33,7 +35,8 @@ _OTHER_SRC_EXTS = [".so", ".o", ".inc"]
 # https://bazel.build/reference/be/objective-c#objc_library.srcs
 # NOTE: From examples found so far, .inc files tend to include source, not
 # header declarations.
-_SRC_EXTS = _C_SRC_EXTS + _CXX_SRC_EXTS + _OBJC_SRC_EXTS + _ASSEMBLY_SRC_EXTS + _OTHER_SRC_EXTS
+_SRC_EXTS = _C_SRC_EXTS + _CXX_SRC_EXTS + _OBJC_SRC_EXTS + _OBJCXX_SRC_EXTS + \
+            _ASSEMBLY_SRC_EXTS + _OTHER_SRC_EXTS
 
 def _is_hdr(path):
     _root, ext = paths.split_extension(path)
@@ -342,6 +345,7 @@ def _organize_srcs(srcs):
     c_srcs = []
     cxx_srcs = []
     objc_srcs = []
+    objcxx_srcs = []
     assembly_srcs = []
     other_srcs = []
     for src in srcs:
@@ -352,6 +356,8 @@ def _organize_srcs(srcs):
             cxx_srcs.append(src)
         elif ext in _OBJC_SRC_EXTS:
             objc_srcs.append(src)
+        elif ext in _OBJCXX_SRC_EXTS:
+            objcxx_srcs.append(src)
         elif ext in _ASSEMBLY_SRC_EXTS:
             assembly_srcs.append(src)
         else:
@@ -360,6 +366,7 @@ def _organize_srcs(srcs):
         c_srcs = c_srcs,
         cxx_srcs = cxx_srcs,
         objc_srcs = objc_srcs,
+        objcxx_srcs = objcxx_srcs,
         assembly_srcs = assembly_srcs,
         other_srcs = other_srcs,
     )
