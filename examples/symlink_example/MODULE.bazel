@@ -9,7 +9,7 @@ local_path_override(
 
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.21.0")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
-bazel_dep(name = "apple_support", version = "1.16.0")
+bazel_dep(name = "apple_support", version = "1.17.0")
 bazel_dep(
     name = "rules_swift",
     version = "2.1.1",
