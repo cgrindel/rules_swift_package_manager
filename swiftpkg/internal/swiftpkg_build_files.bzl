@@ -247,6 +247,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     srcs = []
     data = []
 
+    res_copts = []
     if target.resources:
         clang_apple_res_bundle_info = _apple_resource_bundle_for_clang(
             pkg_ctx,
@@ -270,7 +271,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                     clang_apple_res_bundle_info.objc_accessor_impl_label_name,
                 ),
             ])
-            copts.append("-include$(location :{})".format(
+            res_copts.append("-include$(location :{})".format(
                 clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
             ))
 
@@ -349,6 +350,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
         for td in target.dependencies
     ])
+    if linkopts:
+        attrs["linkopts"] = linkopts
     if deps:
         attrs["deps"] = deps
     if data:
@@ -362,13 +365,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # Enable clang module support.
         # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
         attrs["enable_modules"] = True
-        attrs["module_name"] = target.c99name
-
-        attrs["srcs"] = lists.flatten([
-            clang_src_info.organized_srcs.objc_srcs,
-            clang_src_info.organized_srcs.other_srcs,
-            attrs.get("srcs", []),
-        ])
+        # attrs["module_name"] = target.c99name
 
         sdk_framework_bzl_selects = []
         for sf in target.objc_src_info.builtin_frameworks:
@@ -381,9 +378,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                         condition = pc,
                     ),
                 )
-        attrs["sdk_frameworks"] = sdk_framework_bzl_selects
-
-        attrs["copts"].append("-fmodule-name={}".format(target.c99name))
+        if sdk_framework_bzl_selects:
+            attrs["sdk_frameworks"] = sdk_framework_bzl_selects
 
         # There is a known issue with Objective-C library targets not
         # supporting the `@import` of modules defined in other Objective-C
@@ -417,16 +413,88 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         }
         decls = [
             build_decls.new(
-                objc_kinds.library,
-                bzl_target_name,
-                attrs = _starlarkify_clang_attrs(repository_ctx, attrs),
-            ),
-            build_decls.new(
                 kind = swiftpkg_kinds.generate_modulemap,
                 name = modulemap_target_name,
                 attrs = modulemap_attrs,
             ),
         ]
+
+        child_dep_names = []
+        if clang_src_info.organized_srcs.objc_srcs:
+            objc_name = "{}_objc".format(bzl_target_name)
+            child_dep_names.append(objc_name)
+            objc_attrs = dict(**attrs)
+            child_copts = list(objc_attrs.get("copts", []))
+            if res_copts:
+                child_copts.extend(res_copts)
+            objc_attrs["srcs"] = lists.flatten([
+                clang_src_info.organized_srcs.objc_srcs,
+                clang_src_info.organized_srcs.other_srcs,
+                attrs.get("srcs", []),
+            ])
+            if pkg_ctx.pkg_info.c_language_standard:
+                child_copts.append("-std={}".format(
+                    pkg_ctx.pkg_info.c_language_standard,
+                ))
+            objc_attrs["copts"] = child_copts
+            decls.append(
+                build_decls.new(
+                    objc_kinds.library,
+                    objc_name,
+                    attrs = _starlarkify_clang_attrs(
+                        repository_ctx,
+                        objc_attrs,
+                    ),
+                ),
+            )
+
+        if clang_src_info.organized_srcs.objcxx_srcs:
+            objcxx_name = "{}_objcxx".format(bzl_target_name)
+            child_dep_names.append(objcxx_name)
+            objcxx_attrs = dict(**attrs)
+            child_copts = list(objcxx_attrs.get("copts", []))
+            if res_copts:
+                child_copts.extend(res_copts)
+            objcxx_attrs["srcs"] = lists.flatten([
+                clang_src_info.organized_srcs.objcxx_srcs,
+                clang_src_info.organized_srcs.other_srcs,
+                attrs.get("srcs", []),
+            ])
+            if pkg_ctx.pkg_info.cxx_language_standard:
+                child_copts.append("-std={}".format(
+                    pkg_ctx.pkg_info.cxx_language_standard,
+                ))
+            objcxx_attrs["copts"] = child_copts
+            decls.append(
+                build_decls.new(
+                    objc_kinds.library,
+                    objcxx_name,
+                    attrs = _starlarkify_clang_attrs(
+                        repository_ctx,
+                        objcxx_attrs,
+                    ),
+                ),
+            )
+
+        # Add the cc_library that brings all of the child targets together.
+        uber_attrs = dicts.omit(attrs, ["srcs"]) | {
+            "deps": [
+                ":{}".format(dname)
+                for dname in child_dep_names
+            ],
+        }
+        uber_attrs["module_name"] = target.c99name
+        copts = uber_attrs.get("copts", [])
+        copts.append("-fmodule-name={}".format(target.c99name))
+        uber_attrs["copts"] = copts
+        decls.append(
+            build_decls.new(
+                objc_kinds.library,
+                bzl_target_name,
+                attrs = _starlarkify_clang_attrs(repository_ctx, uber_attrs),
+            ),
+        )
+
     else:
         aspect_hint_target_name = pkginfo_targets.swift_hint_label_name(
             bzl_target_name,
@@ -453,9 +521,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 attrs.get("srcs", []),
             ])
             if pkg_ctx.pkg_info.c_language_standard:
-                copts = c_attrs.get("copts", [])
-                copts.append("-std={}".format(pkg_ctx.pkg_info.c_language_standard))
-                c_attrs["copts"] = copts
+                c_attrs["copts"].append("-std={}".format(
+                    pkg_ctx.pkg_info.c_language_standard,
+                ))
             decls.append(
                 build_decls.new(
                     clang_kinds.library,
@@ -474,9 +542,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 attrs.get("srcs", []),
             ])
             if pkg_ctx.pkg_info.cxx_language_standard:
-                copts = cxx_attrs.get("copts", [])
-                copts.append("-std={}".format(pkg_ctx.pkg_info.cxx_language_standard))
-                cxx_attrs["copts"] = copts
+                cxx_attrs["copts"].append("-std={}".format(
+                    pkg_ctx.pkg_info.cxx_language_standard,
+                ))
             decls.append(
                 build_decls.new(
                     clang_kinds.library,
@@ -629,6 +697,9 @@ expected: {expected}\
             kind = kind,
             name = pkginfo_targets.bazel_label_name(target),
             attrs = {
+                # Firebase example requires that GoogleAppMeasurement symbols
+                # are passed along.
+                "alwayslink": True,
                 "visibility": ["//:__subpackages__"],
                 "xcframework_imports": glob,
             },
