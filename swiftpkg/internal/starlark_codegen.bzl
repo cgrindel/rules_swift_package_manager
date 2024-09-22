@@ -116,7 +116,6 @@ def _process_complex_types(out):
     finished = True
     new_out = []
 
-    # for v in out:
     for idx, v in enumerate(out):
         v_type = type(v)
 
