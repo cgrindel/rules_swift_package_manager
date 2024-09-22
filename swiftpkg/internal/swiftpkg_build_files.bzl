@@ -246,6 +246,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     # type of source file.
     srcs = []
     data = []
+    deps = []
 
     res_copts = []
     clang_apple_res_bundle_info = None
@@ -259,26 +260,23 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             clang_apple_res_bundle_info.bundle_label_name,
         ))
         if clang_apple_res_bundle_info.objc_accessor_hdr_label_name:
-            # SPM provides a SWIFTPM_MODULE_BUNDLE macro to access the bundle for
-            # ObjC code.  The header file contains the macro definition. It needs
-            # to be available in every Objc source file. So, we specify the
-            # -include flag specifying the header path.
-            # https://github.com/apple/swift-package-manager/blob/8387798811c6cc43761c5e1b48df2d3412dc5de4/Sources/Build/BuildDescription/ClangTargetBuildDescription.swift#L390
-            srcs.extend([
-                ":{}".format(
-                    clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
-                ),
+            # srcs.extend([
+            #     ":{}".format(
+            #         clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
+            #     ),
+            #     # NOTE: We add the implementation below based upon what
+            #     # type of target is using the implementation.
+            # ])
+            deps.append(":" + clang_apple_res_bundle_info.objc_accessor_library_label_name)
 
-                # NOTE: We will add the implementation below based upon what
-                # type of target is using the implementation.
-
-                # ":{}".format(
-                #     clang_apple_res_bundle_info.objc_accessor_impl_label_name,
-                # ),
-            ])
-            res_copts.append("-include$(location :{})".format(
-                clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
-            ))
+            # # SPM provides a SWIFTPM_MODULE_BUNDLE macro to access the bundle for
+            # # ObjC code.  The header file contains the macro definition. It needs
+            # # to be available in every Objc source file. So, we specify the
+            # # -include flag specifying the header path.
+            # # https://github.com/apple/swift-package-manager/blob/8387798811c6cc43761c5e1b48df2d3412dc5de4/Sources/Build/BuildDescription/ClangTargetBuildDescription.swift#L390
+            # res_copts.append("-include$(location :{})".format(
+            #     clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
+            # ))
 
     local_includes = [
         bzl_selects.new(value = p, kind = _condition_kinds.private_includes)
@@ -351,10 +349,19 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         attrs["includes"] = clang_src_info.public_includes
     if clang_src_info.textual_hdrs:
         attrs["textual_hdrs"] = clang_src_info.textual_hdrs
-    deps = lists.flatten([
-        pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
-        for td in target.dependencies
-    ])
+
+    # deps = lists.flatten([
+    #     pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
+    #     for td in target.dependencies
+    #     # for td in target.dependencies + deps
+    # ])
+
+    deps.extend(
+        lists.flatten([
+            pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
+            for td in target.dependencies
+        ]),
+    )
     if linkopts:
         attrs["linkopts"] = linkopts
     if deps:
@@ -370,7 +377,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         # Enable clang module support.
         # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
         attrs["enable_modules"] = True
-        # attrs["module_name"] = target.c99name
 
         sdk_framework_bzl_selects = []
         for sf in target.objc_src_info.builtin_frameworks:
@@ -432,18 +438,19 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             child_copts = list(objc_attrs.get("copts", []))
             if res_copts:
                 child_copts.extend(res_copts)
-            res_srcs = []
-            if clang_apple_res_bundle_info and \
-               clang_apple_res_bundle_info.objc_accessor_impl_label_name:
-                res_srcs.append(
-                    ":" + clang_apple_res_bundle_info.objc_accessor_impl_label_name,
-                )
+
+            # res_srcs = []
+            # if clang_apple_res_bundle_info and \
+            #    clang_apple_res_bundle_info.objc_accessor_impl_label_name:
+            #     res_srcs.append(
+            #         ":" + clang_apple_res_bundle_info.objc_accessor_impl_label_name,
+            #     )
             objc_attrs["srcs"] = lists.flatten([
                 # There could be C sources mixed in.
                 clang_src_info.organized_srcs.c_srcs,
                 clang_src_info.organized_srcs.objc_srcs,
                 clang_src_info.organized_srcs.other_srcs,
-                res_srcs,
+                # res_srcs,
                 attrs.get("srcs", []),
             ])
             if pkg_ctx.pkg_info.c_language_standard:
@@ -469,18 +476,19 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             child_copts = list(objcxx_attrs.get("copts", []))
             if res_copts:
                 child_copts.extend(res_copts)
-            res_srcs = []
-            if clang_apple_res_bundle_info and \
-               clang_apple_res_bundle_info.objcxx_accessor_impl_label_name:
-                res_srcs.append(
-                    ":" + clang_apple_res_bundle_info.objcxx_accessor_impl_label_name,
-                )
+
+            # res_srcs = []
+            # if clang_apple_res_bundle_info and \
+            #    clang_apple_res_bundle_info.objcxx_accessor_impl_label_name:
+            #     res_srcs.append(
+            #         ":" + clang_apple_res_bundle_info.objcxx_accessor_impl_label_name,
+            #     )
             objcxx_attrs["srcs"] = lists.flatten([
                 # There could be C++ sources mixed in.
                 clang_src_info.organized_srcs.cxx_srcs,
                 clang_src_info.organized_srcs.objcxx_srcs,
                 clang_src_info.organized_srcs.other_srcs,
-                res_srcs,
+                # res_srcs,
                 attrs.get("srcs", []),
             ])
             if pkg_ctx.pkg_info.cxx_language_standard:
@@ -820,7 +828,7 @@ def _apple_resource_bundle_for_clang(pkg_ctx, target):
     all_build_files = [apple_res_bundle_info.build_file]
     objc_accessor_hdr_label_name = None
     objc_accessor_impl_label_name = None
-    objcxx_accessor_impl_label_name = None
+    objc_accessor_library_label_name = None
     if target.objc_src_info:
         bzl_target_name = pkginfo_targets.bazel_label_name(target)
         objc_accessor_hdr_label_name = pkginfo_targets.objc_resource_bundle_accessor_hdr_label_name(
@@ -829,7 +837,7 @@ def _apple_resource_bundle_for_clang(pkg_ctx, target):
         objc_accessor_impl_label_name = pkginfo_targets.objc_resource_bundle_accessor_impl_label_name(
             bzl_target_name,
         )
-        objcxx_accessor_impl_label_name = pkginfo_targets.objcxx_resource_bundle_accessor_impl_label_name(
+        objc_accessor_library_label_name = pkginfo_targets.objc_resource_bundle_accessor_library_label_name(
             bzl_target_name,
         )
         all_build_files.append(
@@ -856,12 +864,11 @@ def _apple_resource_bundle_for_clang(pkg_ctx, target):
                         },
                     ),
                     build_decls.new(
-                        kind = swiftpkg_kinds.objc_resource_bundle_accessor_impl,
-                        name = objcxx_accessor_impl_label_name,
+                        kind = objc_kinds.library,
+                        name = objc_accessor_library_label_name,
                         attrs = {
-                            "bundle_name": apple_res_bundle_info.bundle_name,
-                            "extension": "mm",
-                            "module_name": target.c99name,
+                            "hdrs": [":" + objc_accessor_hdr_label_name],
+                            "srcs": [":" + objc_accessor_impl_label_name],
                         },
                     ),
                 ],
@@ -870,8 +877,7 @@ def _apple_resource_bundle_for_clang(pkg_ctx, target):
     return struct(
         bundle_label_name = apple_res_bundle_info.bundle_label_name,
         objc_accessor_hdr_label_name = objc_accessor_hdr_label_name,
-        objc_accessor_impl_label_name = objc_accessor_impl_label_name,
-        objcxx_accessor_impl_label_name = objcxx_accessor_impl_label_name,
+        objc_accessor_library_label_name = objc_accessor_library_label_name,
         build_file = build_files.merge(*all_build_files),
     )
 
@@ -880,6 +886,8 @@ def _apple_resource_bundle_for_clang(pkg_ctx, target):
 def _collect_modulemap_deps(deps):
     modulemap_deps = []
     for dep in deps:
+        if type(dep) == type(""):
+            continue
         mm_values = [
             v
             for v in dep.value
