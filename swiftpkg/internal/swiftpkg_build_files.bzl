@@ -439,6 +439,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                     ":" + clang_apple_res_bundle_info.objc_accessor_impl_label_name,
                 )
             objc_attrs["srcs"] = lists.flatten([
+                # There could be C sources mixed in.
+                clang_src_info.organized_srcs.c_srcs,
                 clang_src_info.organized_srcs.objc_srcs,
                 clang_src_info.organized_srcs.other_srcs,
                 res_srcs,
@@ -474,6 +476,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                     ":" + clang_apple_res_bundle_info.objcxx_accessor_impl_label_name,
                 )
             objcxx_attrs["srcs"] = lists.flatten([
+                # There could be C++ sources mixed in.
+                clang_src_info.organized_srcs.cxx_srcs,
                 clang_src_info.organized_srcs.objcxx_srcs,
                 clang_src_info.organized_srcs.other_srcs,
                 res_srcs,
