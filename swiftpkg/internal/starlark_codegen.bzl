@@ -108,8 +108,12 @@ def _process_complex_types(out):
 
         # buildifier: disable=print
         print("*** DEBUG _process_complex_types out: ")
+
+        # Not sure why buildifier is complaining about idx not being initialized.
+        # buildifier: disable=uninitialized
         for idx, item in enumerate(out):
             # buildifier: disable=print
+            # buildifier: disable=uninitialized
             print("*** DEBUG", _pad_str(3, idx), ":", _pad_str(7, type(item)), ":", item)
         fail(msg)
 
