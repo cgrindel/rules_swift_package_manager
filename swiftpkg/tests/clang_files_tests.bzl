@@ -250,8 +250,10 @@ def _organize_srcs_test(ctx):
     expected = struct(
         c_srcs = ["foo.c"],
         cxx_srcs = ["foo.cc", "foo.cpp"],
-        objc_srcs = ["foo.m", "foo.mm"],
-        other_srcs = ["foo.inc", "foo.so", "foo.o", "foo.S"],
+        objc_srcs = ["foo.m"],
+        objcxx_srcs = ["foo.mm"],
+        assembly_srcs = ["foo.S"],
+        other_srcs = ["foo.inc", "foo.so", "foo.o"],
     )
     asserts.equals(env, expected, actual)
 
