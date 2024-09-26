@@ -43,6 +43,8 @@ swift_binary(
         "@swiftpkg_libwebp_xcode//:libwebp",
         "@swiftpkg_opencombine//:OpenCombine",
         "@swiftpkg_swift_log//:Logging",
+        "@swiftpkg_swift_package_defines_example//:Foo",
+        "@swiftpkg_swift_package_defines_example//:FooSwift",
     ],
 )
 

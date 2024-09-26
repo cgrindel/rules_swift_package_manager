@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/GEOSwift/GEOSwift",
       "state" : {
-        "revision" : "2d23ede8c82c067655d3a9f0221bc73f08cd399a",
-        "version" : "10.1.0"
+        "revision" : "1fee0146ee06ca2d1e83070320b95526f3690f9d",
+        "version" : "10.2.0"
       }
     },
     {
@@ -50,8 +50,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log",
       "state" : {
-        "revision" : "e97a6fcb1ab07462881ac165fdbb37f067e205d5",
-        "version" : "1.5.4"
+        "revision" : "9cb486020ebf03bfa5b5df985387a14a98744537",
+        "version" : "1.6.1"
+      }
+    },
+    {
+      "identity" : "swift-package-defines-example",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/luispadron/swift-package-defines-example",
+      "state" : {
+        "revision" : "58e32880dc2b5e1ac677a7e8dcf5b9f8e874b260",
+        "version" : "1.0.0"
       }
     }
   ],
