@@ -34,6 +34,8 @@ _pkg_info = pkginfos.new(
     name = "MyPackage",
     path = "/path/to/my-package",
     tools_version = "5.9",
+    url = "https://github.com/my/package",
+    version = "0.4.2",
     dependencies = [
         pkginfos.new_dependency(
             identity = "swift-argument-parser",
@@ -1044,9 +1046,100 @@ alias(
 
 product_generation_test = unittest.make(_product_generation_test)
 
+def _license_generation_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "No license",
+            license = None,
+            exp = """\
+load("@rules_license//rules:package_info.bzl", "package_info")
+
+package(
+    default_package_metadata = [":package_info.rspm"],
+)
+
+package_info(
+    name = "package_info.rspm",
+    package_name = "MyPackage",
+    package_url = "https://github.com/my/package",
+    package_version = "0.4.2",
+)
+""",
+        ),
+        struct(
+            msg = "Markdown license",
+            license = "LICENSE.md",
+            exp = """\
+load("@rules_license//rules:package_info.bzl", "package_info")
+load("@rules_license//rules:license.bzl", "license")
+
+package(
+    default_package_metadata = [
+        ":license.rspm",
+        ":package_info.rspm",
+    ],
+)
+
+package_info(
+    name = "package_info.rspm",
+    package_name = "MyPackage",
+    package_url = "https://github.com/my/package",
+    package_version = "0.4.2",
+)
+
+license(
+    name = "license.rspm",
+    license_text = "LICENSE.md",
+)
+""",
+        ),
+        struct(
+            msg = "License",
+            license = "LICENSE",
+            exp = """\
+load("@rules_license//rules:package_info.bzl", "package_info")
+load("@rules_license//rules:license.bzl", "license")
+
+package(
+    default_package_metadata = [
+        ":license.rspm",
+        ":package_info.rspm",
+    ],
+)
+
+package_info(
+    name = "package_info.rspm",
+    package_name = "MyPackage",
+    package_url = "https://github.com/my/package",
+    package_version = "0.4.2",
+)
+
+license(
+    name = "license.rspm",
+    license_text = "LICENSE",
+)
+""",
+        ),
+    ]
+    for t in tests:
+        actual = scg.to_starlark(
+            swiftpkg_build_files.new_for_license(
+                pkg_info = _pkg_info,
+                license = t.license,
+            ),
+        )
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+license_generation_test = unittest.make(_license_generation_test)
+
 def swiftpkg_build_files_test_suite():
     return unittest.suite(
         "swiftpkg_build_files_tests",
         target_generation_test,
         product_generation_test,
+        license_generation_test,
     )

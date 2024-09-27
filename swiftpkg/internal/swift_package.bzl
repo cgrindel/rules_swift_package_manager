@@ -180,6 +180,7 @@ _ALL_ATTRS = dicts.add(
     _GIT_ATTRS,
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
+    {"version": attr.string(doc = "The resolved version of the package.")},
 )
 
 swift_package = repository_rule(

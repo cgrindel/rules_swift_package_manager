@@ -598,6 +598,18 @@ def _new_from_parsed_json(
         )
         targets.append(target)
 
+    url = None
+    version = None
+    if hasattr(repository_ctx, "attr"):
+        # We only want to try to collect url and version when called from
+        # `swift_package`
+        url = getattr(repository_ctx.attr, "remote", None)
+        version = getattr(
+            repository_ctx.attr,
+            "version",
+            getattr(repository_ctx.attr, "commit", None),
+        )
+
     return _new(
         name = dump_manifest["name"],
         path = pkg_path,
@@ -610,6 +622,8 @@ def _new_from_parsed_json(
         dependencies = dependencies,
         products = products,
         targets = targets,
+        url = url,
+        version = version,
     )
 
 # MARK: - Swift Package
@@ -622,7 +636,9 @@ def _new(
         platforms = [],
         dependencies = [],
         products = [],
-        targets = []):
+        targets = [],
+        url = None,
+        version = None):
     """Returns a `struct` representing information about a Swift package.
 
     Args:
@@ -639,6 +655,8 @@ def _new(
             `pkginfos.new_product()`.
         targets: A `list` of target structs as created by
             `pkginfos.new_target()`.
+        url: Optional. The url of the package (`string`).
+        version: Optional. The semantic version of the package (`string`).
 
     Returns:
         A `struct` representing information about a Swift package.
@@ -652,6 +670,8 @@ def _new(
         dependencies = dependencies,
         products = products,
         targets = targets,
+        url = url,
+        version = version,
     )
 
 # MARK: - Platform

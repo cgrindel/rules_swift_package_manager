@@ -18,6 +18,49 @@ def _path_exists(repository_ctx, path):
     )
     return exec_result.return_code == 0
 
+def _find_license_files(repository_ctx):
+    """Retrieves all license files at the root of the package.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+
+    Returns:
+        A `list` of path `string` values.
+    """
+
+    find_args = [
+        "find",
+        # Follow symlinks and report on the actual files.
+        "-H",
+        "-L",
+        ".",
+        # For GNU find, it is important for the global options (e.g. -maxdepth)
+        # to be specified BEFORE other options like -type. Also, GNU find does
+        # not support -depth <level>. So, we approximate it by using -mindepth
+        # and -maxdepth.
+        "-mindepth",
+        "1",
+        "-maxdepth",
+        "1",
+        "-type",
+        "f",
+        "(",
+        "-name",
+        "LICENSE",
+        "-o",
+        "-name",
+        "LICENSE.*",
+        ")",
+    ]
+
+    exec_result = repository_ctx.execute(find_args, quiet = True)
+    if exec_result.return_code != 0:
+        fail("Failed to find license files. stderr:\n%s" % exec_result.stderr)
+    return _process_find_results(
+        exec_result.stdout,
+        find_path = ".",
+    )
+
 def _list_files_under(
         repository_ctx,
         path,
@@ -247,6 +290,7 @@ repository_files = struct(
     exclude_paths = _exclude_paths,
     file_type = _file_type,
     find_and_delete_files = _find_and_delete_files,
+    find_license_files = _find_license_files,
     is_directory = _is_directory,
     list_directories_under = _list_directories_under,
     list_files_under = _list_files_under,
