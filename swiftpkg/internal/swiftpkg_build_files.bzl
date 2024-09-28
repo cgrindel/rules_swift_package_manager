@@ -260,23 +260,23 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             clang_apple_res_bundle_info.bundle_label_name,
         ))
         if clang_apple_res_bundle_info.objc_accessor_hdr_label_name:
-            # srcs.extend([
-            #     ":{}".format(
-            #         clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
-            #     ),
-            #     # NOTE: We add the implementation below based upon what
-            #     # type of target is using the implementation.
-            # ])
+            srcs.extend([
+                ":{}".format(
+                    clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
+                ),
+                # NOTE: We add the implementation as a dependency on a target
+                # that compiles the implementation.
+            ])
             deps.append(":" + clang_apple_res_bundle_info.objc_accessor_library_label_name)
 
-            # # SPM provides a SWIFTPM_MODULE_BUNDLE macro to access the bundle for
-            # # ObjC code.  The header file contains the macro definition. It needs
-            # # to be available in every Objc source file. So, we specify the
-            # # -include flag specifying the header path.
-            # # https://github.com/apple/swift-package-manager/blob/8387798811c6cc43761c5e1b48df2d3412dc5de4/Sources/Build/BuildDescription/ClangTargetBuildDescription.swift#L390
-            # res_copts.append("-include$(location :{})".format(
-            #     clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
-            # ))
+            # SPM provides a SWIFTPM_MODULE_BUNDLE macro to access the bundle for
+            # ObjC code.  The header file contains the macro definition. It needs
+            # to be available in every Objc source file. So, we specify the
+            # -include flag specifying the header path.
+            # https://github.com/apple/swift-package-manager/blob/8387798811c6cc43761c5e1b48df2d3412dc5de4/Sources/Build/BuildDescription/ClangTargetBuildDescription.swift#L390
+            res_copts.append("-include$(location :{})".format(
+                clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
+            ))
 
     local_includes = [
         bzl_selects.new(value = p, kind = _condition_kinds.private_includes)
