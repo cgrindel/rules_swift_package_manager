@@ -696,9 +696,14 @@ def _system_library_build_file(target):
 # MARK: - Apple xcframework Targets
 
 def _xcframework_import_build_file(target, artifact_info):
+    attrs = {}
     if artifact_info.link_type == link_types.static:
         load_stmts = [apple_static_xcframework_import_load_stmt]
         kind = apple_kinds.static_xcframework_import
+
+        # Firebase example requires that GoogleAppMeasurement symbols are
+        # passed along.
+        attrs["alwayslink"] = True
     elif artifact_info.link_type == link_types.dynamic:
         load_stmts = [apple_dynamic_xcframework_import_load_stmt]
         kind = apple_kinds.dynamic_xcframework_import
@@ -727,10 +732,7 @@ expected: {expected}\
         build_decls.new(
             kind = kind,
             name = pkginfo_targets.bazel_label_name(target),
-            attrs = {
-                # Firebase example requires that GoogleAppMeasurement symbols
-                # are passed along.
-                "alwayslink": True,
+            attrs = attrs | {
                 "visibility": ["//:__subpackages__"],
                 "xcframework_imports": glob,
             },
