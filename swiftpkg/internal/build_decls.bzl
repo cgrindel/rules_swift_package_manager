@@ -29,7 +29,10 @@ def _to_starlark_parts(decl, indent):
     for c in decl.comments:
         parts.append(scg.indent(indent, "{}\n".format(c)))
     parts.append(scg.indent(indent, "{}(\n".format(decl.kind)))
-    parts.extend(scg.new_attr("name", decl.name, indent + 1))
+
+    # Name won't be set for `package` declarations
+    if decl.name:
+        parts.extend(scg.new_attr("name", decl.name, indent + 1))
 
     # Sort the keys to ensure that we have a consistent output. It would be
     # ideal to output them in a manner that matches Buildifier output rules.

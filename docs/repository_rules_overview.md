@@ -42,7 +42,7 @@ Used to build a local Swift package.
 <pre>
 swift_package(<a href="#swift_package-name">name</a>, <a href="#swift_package-bazel_package_name">bazel_package_name</a>, <a href="#swift_package-branch">branch</a>, <a href="#swift_package-commit">commit</a>, <a href="#swift_package-dependencies_index">dependencies_index</a>, <a href="#swift_package-env">env</a>, <a href="#swift_package-init_submodules">init_submodules</a>,
               <a href="#swift_package-patch_args">patch_args</a>, <a href="#swift_package-patch_cmds">patch_cmds</a>, <a href="#swift_package-patch_cmds_win">patch_cmds_win</a>, <a href="#swift_package-patch_tool">patch_tool</a>, <a href="#swift_package-patches">patches</a>, <a href="#swift_package-recursive_init_submodules">recursive_init_submodules</a>,
-              <a href="#swift_package-remote">remote</a>, <a href="#swift_package-repo_mapping">repo_mapping</a>, <a href="#swift_package-shallow_since">shallow_since</a>, <a href="#swift_package-tag">tag</a>, <a href="#swift_package-verbose">verbose</a>)
+              <a href="#swift_package-remote">remote</a>, <a href="#swift_package-repo_mapping">repo_mapping</a>, <a href="#swift_package-shallow_since">shallow_since</a>, <a href="#swift_package-tag">tag</a>, <a href="#swift_package-verbose">verbose</a>, <a href="#swift_package-version">version</a>)
 </pre>
 
 Used to download and build an external Swift package.
@@ -70,5 +70,6 @@ Used to download and build an external Swift package.
 | <a id="swift_package-shallow_since"></a>shallow_since |  an optional date, not after the specified commit; the argument is not allowed if a tag is specified (which allows cloning with depth 1). Setting such a date close to the specified commit allows for a more shallow clone of the repository, saving bandwidth and wall-clock time.   | String | optional |  `""`  |
 | <a id="swift_package-tag"></a>tag |  tag in the remote repository to checked out. Precisely one of branch, tag, or commit must be specified.   | String | optional |  `""`  |
 | <a id="swift_package-verbose"></a>verbose |  -   | Boolean | optional |  `False`  |
+| <a id="swift_package-version"></a>version |  The resolved version of the package.   | String | optional |  `""`  |
 
 

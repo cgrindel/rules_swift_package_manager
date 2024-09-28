@@ -164,6 +164,7 @@ def _declare_pkg_from_dependency(dep, config_pkg):
             bazel_package_name = name,
             commit = pin.state.revision,
             remote = pin.location,
+            version = pin.state.version,
             dependencies_index = None,
             init_submodules = init_submodules,
             recursive_init_submodules = recursive_init_submodules,
