@@ -435,6 +435,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             objc_name = "{}_objc".format(bzl_target_name)
             child_dep_names.append(objc_name)
             objc_attrs = dict(**attrs)
+            objc_attrs["module_map"] = ":{}".format(modulemap_target_name)
             child_copts = list(objc_attrs.get("copts", []))
             if res_copts:
                 child_copts.extend(res_copts)
@@ -473,6 +474,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             objcxx_name = "{}_objcxx".format(bzl_target_name)
             child_dep_names.append(objcxx_name)
             objcxx_attrs = dict(**attrs)
+            objcxx_attrs["module_map"] = ":{}".format(modulemap_target_name)
             child_copts = list(objcxx_attrs.get("copts", []))
             if res_copts:
                 child_copts.extend(res_copts)
