@@ -657,7 +657,6 @@ objc_library(
     ],
     deps = [":ObjcLibrary.rspm_objc"],
     enable_modules = True,
-    hdrs = ["include/external.h"],
     includes = ["include"],
     module_name = "ObjcLibrary",
     sdk_frameworks = select({
@@ -676,7 +675,6 @@ objc_library(
         ],
         "//conditions:default": [],
     }),
-    textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
 )
 
@@ -748,7 +746,6 @@ objc_library(
     ],
     deps = [":ObjcLibraryWithModulemap.rspm_objc"],
     enable_modules = True,
-    hdrs = ["include/external.h"],
     includes = ["include"],
     module_name = "ObjcLibraryWithModulemap",
     sdk_frameworks = select({
@@ -767,7 +764,6 @@ objc_library(
         ],
         "//conditions:default": [],
     }),
-    textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
 )
 
@@ -1000,7 +996,6 @@ objc_library(
     data = [":ObjcLibraryWithResources.rspm_resource_bundle"],
     deps = [":ObjcLibraryWithResources.rspm_objc"],
     enable_modules = True,
-    hdrs = ["include/external.h"],
     includes = ["include"],
     module_name = "ObjcLibraryWithResources",
     sdk_frameworks = select({
@@ -1019,7 +1014,6 @@ objc_library(
         ],
         "//conditions:default": [],
     }),
-    textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
 )
 
@@ -1031,6 +1025,7 @@ objc_library(
         "-fPIC",
         "-DSWIFT_PACKAGE=1",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
+        "-include$(location :ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr)",
     ],
     data = [":ObjcLibraryWithResources.rspm_resource_bundle"],
     deps = [":ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_library"],
@@ -1056,6 +1051,7 @@ objc_library(
     srcs = [
         "src/foo.m",
         "src/foo.h",
+        ":ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr",
     ],
     textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
