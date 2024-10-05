@@ -125,16 +125,6 @@ execute_binary(
 )
 
 bzl_library(
-    name = "deps",
-    srcs = ["deps.bzl"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "@bazel_tools//tools/build_defs/repo:http.bzl",
-        "@bazel_tools//tools/build_defs/repo:utils.bzl",
-    ],
-)
-
-bzl_library(
     name = "go_deps",
     srcs = ["go_deps.bzl"],
     visibility = ["//visibility:public"],
