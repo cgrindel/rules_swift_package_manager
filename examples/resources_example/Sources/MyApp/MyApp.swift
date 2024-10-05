@@ -1,4 +1,5 @@
 import CoolUI
+import EmbraceIO
 import GoogleSignInSwift
 import IterableSDK
 import MoreCoolUI
@@ -8,6 +9,16 @@ import SwiftUI
 
 @main
 struct MyApp: App {
+    init() {
+        do {
+            try Embrace
+                .setup(options: embraceOptions)
+                .start()
+        } catch let err {
+            print("Error starting Embrace \(err.localizedDescription)")
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
             VStack {
