@@ -10,6 +10,7 @@ let package = Package(
         .package(path: "../third_party/package_with_resources"),
         .package(url: "https://github.com/Iterable/swift-sdk", from: "6.5.7"),
         .package(url: "https://github.com/SDWebImage/SDWebImageSwiftUI.git", from: "3.1.2"),
+        .package(url: "https://github.com/embrace-io/embrace-apple-sdk", from: "6.4.2"),
         .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "8.0.0"),
         .package(
             url: "https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk",
