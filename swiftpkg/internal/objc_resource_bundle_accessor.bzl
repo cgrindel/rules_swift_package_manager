@@ -31,9 +31,12 @@ Generate an ObjC header file with an SPM-specific `SWIFTPM_MODULE_BUNDLE` macro.
 )
 
 def _objc_resource_bundle_accessor_impl_impl(ctx):
-    accessor_impl = ctx.actions.declare_file("{}_ObjcResourceBundleAccessor.m".format(
-        ctx.label.name,
-    ))
+    accessor_impl = ctx.actions.declare_file(
+        "{label}_ObjcResourceBundleAccessor.{ext}".format(
+            ext = ctx.attr.extension,
+            label = ctx.label.name,
+        ),
+    )
     ctx.actions.expand_template(
         template = ctx.file._impl_template,
         output = accessor_impl,
@@ -51,6 +54,10 @@ objc_resource_bundle_accessor_impl = rule(
         "bundle_name": attr.string(
             mandatory = True,
             doc = "The name of the resource bundle.",
+        ),
+        "extension": attr.string(
+            default = "m",
+            doc = "The extension for the accessor implementation file.",
         ),
         "module_name": attr.string(
             mandatory = True,
