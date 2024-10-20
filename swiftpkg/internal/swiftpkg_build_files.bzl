@@ -234,8 +234,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "-fobjc-arc",
         # Enable support for PIC macros
         "-fPIC",
-        # # Module name
-        # "-fmodule-name={}".format(target.c99name),
         # The SWIFT_PACKAGE define is a magical value that SPM uses when it
         # builds clang libraries that will be used as Swift modules.
         "-DSWIFT_PACKAGE=1",
@@ -350,12 +348,6 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     if clang_src_info.textual_hdrs:
         attrs["textual_hdrs"] = clang_src_info.textual_hdrs
 
-    # deps = lists.flatten([
-    #     pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
-    #     for td in target.dependencies
-    #     # for td in target.dependencies + deps
-    # ])
-
     deps.extend(
         lists.flatten([
             pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
@@ -439,18 +431,11 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             if res_copts:
                 child_copts.extend(res_copts)
 
-            # res_srcs = []
-            # if clang_apple_res_bundle_info and \
-            #    clang_apple_res_bundle_info.objc_accessor_impl_label_name:
-            #     res_srcs.append(
-            #         ":" + clang_apple_res_bundle_info.objc_accessor_impl_label_name,
-            #     )
             objc_attrs["srcs"] = lists.flatten([
                 # There could be C sources mixed in.
                 clang_src_info.organized_srcs.c_srcs,
                 clang_src_info.organized_srcs.objc_srcs,
                 clang_src_info.organized_srcs.other_srcs,
-                # res_srcs,
                 attrs.get("srcs", []),
             ])
             if pkg_ctx.pkg_info.c_language_standard:
@@ -477,18 +462,11 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             if res_copts:
                 child_copts.extend(res_copts)
 
-            # res_srcs = []
-            # if clang_apple_res_bundle_info and \
-            #    clang_apple_res_bundle_info.objcxx_accessor_impl_label_name:
-            #     res_srcs.append(
-            #         ":" + clang_apple_res_bundle_info.objcxx_accessor_impl_label_name,
-            #     )
             objcxx_attrs["srcs"] = lists.flatten([
                 # There could be C++ sources mixed in.
                 clang_src_info.organized_srcs.cxx_srcs,
                 clang_src_info.organized_srcs.objcxx_srcs,
                 clang_src_info.organized_srcs.other_srcs,
-                # res_srcs,
                 attrs.get("srcs", []),
             ])
             if pkg_ctx.pkg_info.cxx_language_standard:
