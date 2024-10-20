@@ -519,48 +519,98 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             ),
         ]
 
-        child_dep_names = []
-        if clang_src_info.organized_srcs.c_srcs:
-            c_name = "{}_c".format(bzl_target_name)
-            child_dep_names.append(c_name)
-            c_attrs = dict(**attrs)
-            c_attrs["srcs"] = lists.flatten([
-                clang_src_info.organized_srcs.c_srcs,
-                clang_src_info.organized_srcs.other_srcs,
+        def _c_child_library(
+                name,
+                attrs,
+                lib_kind,
+                organized_srcs,
+                lib_specific_srcs,
+                language_standard):
+            if not lib_specific_srcs:
+                return
+            child_attrs = dict(**attrs)
+            child_attrs["srcs"] = lists.flatten([
+                lib_specific_srcs,
+                organized_srcs.other_srcs,
                 attrs.get("srcs", []),
             ])
-            if pkg_ctx.pkg_info.c_language_standard:
-                c_attrs["copts"].append("-std={}".format(
-                    pkg_ctx.pkg_info.c_language_standard,
+            if language_standard:
+                child_attrs["copts"].append("-std={}".format(
+                    language_standard,
                 ))
             decls.append(
                 build_decls.new(
-                    clang_kinds.library,
-                    c_name,
-                    attrs = _starlarkify_clang_attrs(repository_ctx, c_attrs),
+                    lib_kind,
+                    name,
+                    attrs = _starlarkify_clang_attrs(repository_ctx, child_attrs),
                 ),
             )
 
-        if clang_src_info.organized_srcs.cxx_srcs:
-            cxx_name = "{}_cxx".format(bzl_target_name)
-            child_dep_names.append(cxx_name)
-            cxx_attrs = dict(**attrs)
-            cxx_attrs["srcs"] = lists.flatten([
-                clang_src_info.organized_srcs.cxx_srcs,
-                clang_src_info.organized_srcs.other_srcs,
-                attrs.get("srcs", []),
-            ])
-            if pkg_ctx.pkg_info.cxx_language_standard:
-                cxx_attrs["copts"].append("-std={}".format(
-                    pkg_ctx.pkg_info.cxx_language_standard,
-                ))
-            decls.append(
-                build_decls.new(
-                    clang_kinds.library,
-                    cxx_name,
-                    attrs = _starlarkify_clang_attrs(repository_ctx, cxx_attrs),
-                ),
+        child_dep_names = []
+        if clang_src_info.organized_srcs.c_srcs:
+            child_name = "{}_c".format(bzl_target_name)
+            child_dep_names.append(child_name)
+            _c_child_library(
+                name = child_name,
+                attrs = attrs,
+                lib_kind = clang_kinds.library,
+                organized_srcs = clang_src_info.organized_srcs,
+                lib_specific_srcs = clang_src_info.organized_srcs.c_srcs,
+                language_standard = pkg_ctx.pkg_info.c_language_standard,
             )
+        if clang_src_info.organized_srcs.cxx_srcs:
+            child_name = "{}_cxx".format(bzl_target_name)
+            child_dep_names.append(child_name)
+            _c_child_library(
+                name = child_name,
+                attrs = attrs,
+                lib_kind = clang_kinds.library,
+                organized_srcs = clang_src_info.organized_srcs,
+                lib_specific_srcs = clang_src_info.organized_srcs.cxx_srcs,
+                language_standard = pkg_ctx.pkg_info.cxx_language_standard,
+            )
+
+        # if clang_src_info.organized_srcs.c_srcs:
+        #     c_name = "{}_c".format(bzl_target_name)
+        #     child_dep_names.append(c_name)
+        #     c_attrs = dict(**attrs)
+        #     c_attrs["srcs"] = lists.flatten([
+        #         clang_src_info.organized_srcs.c_srcs,
+        #         clang_src_info.organized_srcs.other_srcs,
+        #         attrs.get("srcs", []),
+        #     ])
+        #     if pkg_ctx.pkg_info.c_language_standard:
+        #         c_attrs["copts"].append("-std={}".format(
+        #             pkg_ctx.pkg_info.c_language_standard,
+        #         ))
+        #     decls.append(
+        #         build_decls.new(
+        #             clang_kinds.library,
+        #             c_name,
+        #             attrs = _starlarkify_clang_attrs(repository_ctx, c_attrs),
+        #         ),
+        #     )
+
+        # if clang_src_info.organized_srcs.cxx_srcs:
+        #     cxx_name = "{}_cxx".format(bzl_target_name)
+        #     child_dep_names.append(cxx_name)
+        #     cxx_attrs = dict(**attrs)
+        #     cxx_attrs["srcs"] = lists.flatten([
+        #         clang_src_info.organized_srcs.cxx_srcs,
+        #         clang_src_info.organized_srcs.other_srcs,
+        #         attrs.get("srcs", []),
+        #     ])
+        #     if pkg_ctx.pkg_info.cxx_language_standard:
+        #         cxx_attrs["copts"].append("-std={}".format(
+        #             pkg_ctx.pkg_info.cxx_language_standard,
+        #         ))
+        #     decls.append(
+        #         build_decls.new(
+        #             clang_kinds.library,
+        #             cxx_name,
+        #             attrs = _starlarkify_clang_attrs(repository_ctx, cxx_attrs),
+        #         ),
+        #     )
 
         if clang_src_info.organized_srcs.assembly_srcs:
             assembly_name = "{}_assembly".format(bzl_target_name)
