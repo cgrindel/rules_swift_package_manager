@@ -1175,7 +1175,7 @@ def _new_clang_src_info_from_sources(
     srcs = sets.to_list(srcs_set)
     explicit_srcs = sets.to_list(explicit_srcs_set)
 
-    # TODO(chuck): Can I remove explicit_srcs? I believe that it is obsolete.
+    # GH1290: Can I remove explicit_srcs? I believe that it is obsolete.
 
     return _new_clang_src_info(
         srcs = srcs,
