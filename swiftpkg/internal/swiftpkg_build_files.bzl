@@ -479,7 +479,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                     organized_srcs = clang_src_info.organized_srcs,
                     lib_specific_srcs = clang_src_info.organized_srcs.cxx_srcs +
                                         clang_src_info.organized_srcs.objcxx_srcs,
-                    language_standard = pkg_ctx.pkg_info.c_language_standard,
+                    language_standard = pkg_ctx.pkg_info.cxx_language_standard,
                     res_copts = res_copts,
                 ),
             )
@@ -652,21 +652,35 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         #     )
 
         if clang_src_info.organized_srcs.assembly_srcs:
-            assembly_name = "{}_assembly".format(bzl_target_name)
-            child_dep_names.append(assembly_name)
-            assembly_attrs = dict(**attrs)
-            assembly_attrs["srcs"] = lists.flatten([
-                clang_src_info.organized_srcs.assembly_srcs,
-                clang_src_info.organized_srcs.other_srcs,
-                attrs.get("srcs", []),
-            ])
+            child_name = "{}_assembly".format(bzl_target_name)
+            child_dep_names.append(child_name)
             decls.append(
-                build_decls.new(
-                    clang_kinds.library,
-                    assembly_name,
-                    attrs = _starlarkify_clang_attrs(repository_ctx, assembly_attrs),
+                _child_library(
+                    repository_ctx,
+                    name = child_name,
+                    attrs = attrs,
+                    lib_kind = clang_kinds.library,
+                    organized_srcs = clang_src_info.organized_srcs,
+                    lib_specific_srcs = clang_src_info.organized_srcs.assembly_srcs,
                 ),
             )
+
+        # if clang_src_info.organized_srcs.assembly_srcs:
+        #     assembly_name = "{}_assembly".format(bzl_target_name)
+        #     child_dep_names.append(assembly_name)
+        #     assembly_attrs = dict(**attrs)
+        #     assembly_attrs["srcs"] = lists.flatten([
+        #         clang_src_info.organized_srcs.assembly_srcs,
+        #         clang_src_info.organized_srcs.other_srcs,
+        #         attrs.get("srcs", []),
+        #     ])
+        #     decls.append(
+        #         build_decls.new(
+        #             clang_kinds.library,
+        #             assembly_name,
+        #             attrs = _starlarkify_clang_attrs(repository_ctx, assembly_attrs),
+        #         ),
+        #     )
 
         # Add the cc_library that brings all of the child targets together.
         uber_attrs = dicts.omit(attrs, ["srcs"]) | {
