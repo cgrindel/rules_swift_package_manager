@@ -479,7 +479,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 ),
             )
 
-        # Add the cc_library that brings all of the child targets together.
+        # Add the objc_library that brings all of the child targets together.
         uber_attrs = dicts.omit(attrs, ["srcs", "hdrs", "textual_hdrs"]) | {
             "deps": [
                 ":{}".format(dname)
