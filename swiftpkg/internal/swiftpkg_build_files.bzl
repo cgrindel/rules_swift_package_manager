@@ -452,66 +452,99 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         )
 
         if clang_src_info.organized_srcs.objc_srcs:
-            objc_name = "{}_objc".format(bzl_target_name)
-            child_dep_names.append(objc_name)
-            objc_attrs = dict(**attrs)
-            child_copts = list(objc_attrs.get("copts", []))
-            if res_copts:
-                child_copts.extend(res_copts)
-
-            objc_attrs["srcs"] = lists.flatten([
-                # There could be C sources mixed in.
-                clang_src_info.organized_srcs.c_srcs,
-                clang_src_info.organized_srcs.objc_srcs,
-                clang_src_info.organized_srcs.other_srcs,
-                attrs.get("srcs", []),
-            ])
-            if pkg_ctx.pkg_info.c_language_standard:
-                child_copts.append("-std={}".format(
-                    pkg_ctx.pkg_info.c_language_standard,
-                ))
-            objc_attrs["copts"] = child_copts
+            child_name = "{}_objc".format(bzl_target_name)
+            child_dep_names.append(child_name)
             decls.append(
-                build_decls.new(
-                    objc_kinds.library,
-                    objc_name,
-                    attrs = _starlarkify_clang_attrs(
-                        repository_ctx,
-                        objc_attrs,
-                    ),
+                _child_library(
+                    repository_ctx,
+                    name = child_name,
+                    attrs = attrs,
+                    lib_kind = objc_kinds.library,
+                    organized_srcs = clang_src_info.organized_srcs,
+                    lib_specific_srcs = clang_src_info.organized_srcs.c_srcs +
+                                        clang_src_info.organized_srcs.objc_srcs,
+                    language_standard = pkg_ctx.pkg_info.c_language_standard,
+                    res_copts = res_copts,
                 ),
             )
-
         if clang_src_info.organized_srcs.objcxx_srcs:
-            objcxx_name = "{}_objcxx".format(bzl_target_name)
-            child_dep_names.append(objcxx_name)
-            objcxx_attrs = dict(**attrs)
-            child_copts = list(objcxx_attrs.get("copts", []))
-            if res_copts:
-                child_copts.extend(res_copts)
-
-            objcxx_attrs["srcs"] = lists.flatten([
-                # There could be C++ sources mixed in.
-                clang_src_info.organized_srcs.cxx_srcs,
-                clang_src_info.organized_srcs.objcxx_srcs,
-                clang_src_info.organized_srcs.other_srcs,
-                attrs.get("srcs", []),
-            ])
-            if pkg_ctx.pkg_info.cxx_language_standard:
-                child_copts.append("-std={}".format(
-                    pkg_ctx.pkg_info.cxx_language_standard,
-                ))
-            objcxx_attrs["copts"] = child_copts
+            child_name = "{}_objcxx".format(bzl_target_name)
+            child_dep_names.append(child_name)
             decls.append(
-                build_decls.new(
-                    objc_kinds.library,
-                    objcxx_name,
-                    attrs = _starlarkify_clang_attrs(
-                        repository_ctx,
-                        objcxx_attrs,
-                    ),
+                _child_library(
+                    repository_ctx,
+                    name = child_name,
+                    attrs = attrs,
+                    lib_kind = objc_kinds.library,
+                    organized_srcs = clang_src_info.organized_srcs,
+                    lib_specific_srcs = clang_src_info.organized_srcs.cxx_srcs +
+                                        clang_src_info.organized_srcs.objcxx_srcs,
+                    language_standard = pkg_ctx.pkg_info.c_language_standard,
+                    res_copts = res_copts,
                 ),
             )
+
+        # if clang_src_info.organized_srcs.objc_srcs:
+        #     objc_name = "{}_objc".format(bzl_target_name)
+        #     child_dep_names.append(objc_name)
+        #     objc_attrs = dict(**attrs)
+        #     child_copts = list(objc_attrs.get("copts", []))
+        #     if res_copts:
+        #         child_copts.extend(res_copts)
+
+        #     objc_attrs["srcs"] = lists.flatten([
+        #         # There could be C sources mixed in.
+        #         clang_src_info.organized_srcs.c_srcs,
+        #         clang_src_info.organized_srcs.objc_srcs,
+        #         clang_src_info.organized_srcs.other_srcs,
+        #         attrs.get("srcs", []),
+        #     ])
+        #     if pkg_ctx.pkg_info.c_language_standard:
+        #         child_copts.append("-std={}".format(
+        #             pkg_ctx.pkg_info.c_language_standard,
+        #         ))
+        #     objc_attrs["copts"] = child_copts
+        #     decls.append(
+        #         build_decls.new(
+        #             objc_kinds.library,
+        #             objc_name,
+        #             attrs = _starlarkify_clang_attrs(
+        #                 repository_ctx,
+        #                 objc_attrs,
+        #             ),
+        #         ),
+        #     )
+
+        # if clang_src_info.organized_srcs.objcxx_srcs:
+        #     objcxx_name = "{}_objcxx".format(bzl_target_name)
+        #     child_dep_names.append(objcxx_name)
+        #     objcxx_attrs = dict(**attrs)
+        #     child_copts = list(objcxx_attrs.get("copts", []))
+        #     if res_copts:
+        #         child_copts.extend(res_copts)
+
+        #     objcxx_attrs["srcs"] = lists.flatten([
+        #         # There could be C++ sources mixed in.
+        #         clang_src_info.organized_srcs.cxx_srcs,
+        #         clang_src_info.organized_srcs.objcxx_srcs,
+        #         clang_src_info.organized_srcs.other_srcs,
+        #         attrs.get("srcs", []),
+        #     ])
+        #     if pkg_ctx.pkg_info.cxx_language_standard:
+        #         child_copts.append("-std={}".format(
+        #             pkg_ctx.pkg_info.cxx_language_standard,
+        #         ))
+        #     objcxx_attrs["copts"] = child_copts
+        #     decls.append(
+        #         build_decls.new(
+        #             objc_kinds.library,
+        #             objcxx_name,
+        #             attrs = _starlarkify_clang_attrs(
+        #                 repository_ctx,
+        #                 objcxx_attrs,
+        #             ),
+        #         ),
+        #     )
 
         # Add the cc_library that brings all of the child targets together.
         uber_attrs = dicts.omit(attrs, ["srcs", "hdrs", "textual_hdrs"]) | {
