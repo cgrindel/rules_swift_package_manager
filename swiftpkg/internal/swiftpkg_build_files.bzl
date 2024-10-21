@@ -220,6 +220,33 @@ def _swift_compiler_plugin_from_target(target, attrs):
 
 # MARK: - Clang Targets
 
+def _child_library(
+        repository_ctx,
+        name,
+        attrs,
+        lib_kind,
+        organized_srcs,
+        lib_specific_srcs,
+        language_standard = None,
+        res_copts = None):
+    child_attrs = dict(**attrs)
+    child_copts = list(attrs.get("copts", []))
+    if res_copts:
+        child_copts.extend(res_copts)
+    child_attrs["srcs"] = lists.flatten([
+        lib_specific_srcs,
+        organized_srcs.other_srcs,
+        attrs.get("srcs", []),
+    ])
+    if language_standard:
+        child_copts.append("-std={}".format(language_standard))
+    child_attrs["copts"] = child_copts
+    return build_decls.new(
+        lib_kind,
+        name,
+        attrs = _starlarkify_clang_attrs(repository_ctx, child_attrs),
+    )
+
 def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     clang_src_info = target.clang_src_info
     if clang_src_info == None:
@@ -364,6 +391,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     # Generate cc_xxx and objc_xxx targets.
 
     bzl_target_name = target.label.name
+    decls = []
+    child_dep_names = []
 
     if target.objc_src_info != None:
         # Enable clang module support.
@@ -414,15 +443,14 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             "noop": noop_modulemap,
             "visibility": ["//:__subpackages__"],
         }
-        decls = [
+        decls.append(
             build_decls.new(
                 kind = swiftpkg_kinds.generate_modulemap,
                 name = modulemap_target_name,
                 attrs = modulemap_attrs,
             ),
-        ]
+        )
 
-        child_dep_names = []
         if clang_src_info.organized_srcs.objc_srcs:
             objc_name = "{}_objc".format(bzl_target_name)
             child_dep_names.append(objc_name)
@@ -511,63 +539,41 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         aspect_hint_attrs = {"module_name": target.c99name}
 
         load_stmts = [swift_interop_hint_load_stmt]
-        decls = [
+        decls.append(
             build_decls.new(
                 kind = swift_kinds.interop_hint,
                 name = aspect_hint_target_name,
                 attrs = aspect_hint_attrs,
             ),
-        ]
+        )
 
-        def _c_child_library(
-                name,
-                attrs,
-                lib_kind,
-                organized_srcs,
-                lib_specific_srcs,
-                language_standard):
-            if not lib_specific_srcs:
-                return
-            child_attrs = dict(**attrs)
-            child_attrs["srcs"] = lists.flatten([
-                lib_specific_srcs,
-                organized_srcs.other_srcs,
-                attrs.get("srcs", []),
-            ])
-            if language_standard:
-                child_attrs["copts"].append("-std={}".format(
-                    language_standard,
-                ))
-            decls.append(
-                build_decls.new(
-                    lib_kind,
-                    name,
-                    attrs = _starlarkify_clang_attrs(repository_ctx, child_attrs),
-                ),
-            )
-
-        child_dep_names = []
         if clang_src_info.organized_srcs.c_srcs:
             child_name = "{}_c".format(bzl_target_name)
             child_dep_names.append(child_name)
-            _c_child_library(
-                name = child_name,
-                attrs = attrs,
-                lib_kind = clang_kinds.library,
-                organized_srcs = clang_src_info.organized_srcs,
-                lib_specific_srcs = clang_src_info.organized_srcs.c_srcs,
-                language_standard = pkg_ctx.pkg_info.c_language_standard,
+            decls.append(
+                _child_library(
+                    repository_ctx,
+                    name = child_name,
+                    attrs = attrs,
+                    lib_kind = clang_kinds.library,
+                    organized_srcs = clang_src_info.organized_srcs,
+                    lib_specific_srcs = clang_src_info.organized_srcs.c_srcs,
+                    language_standard = pkg_ctx.pkg_info.c_language_standard,
+                ),
             )
         if clang_src_info.organized_srcs.cxx_srcs:
             child_name = "{}_cxx".format(bzl_target_name)
             child_dep_names.append(child_name)
-            _c_child_library(
-                name = child_name,
-                attrs = attrs,
-                lib_kind = clang_kinds.library,
-                organized_srcs = clang_src_info.organized_srcs,
-                lib_specific_srcs = clang_src_info.organized_srcs.cxx_srcs,
-                language_standard = pkg_ctx.pkg_info.cxx_language_standard,
+            decls.append(
+                _child_library(
+                    repository_ctx,
+                    name = child_name,
+                    attrs = attrs,
+                    lib_kind = clang_kinds.library,
+                    organized_srcs = clang_src_info.organized_srcs,
+                    lib_specific_srcs = clang_src_info.organized_srcs.cxx_srcs,
+                    language_standard = pkg_ctx.pkg_info.cxx_language_standard,
+                ),
             )
 
         # if clang_src_info.organized_srcs.c_srcs:
