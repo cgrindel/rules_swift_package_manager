@@ -238,6 +238,10 @@ def _c_child_library(
     if language_standard:
         child_copts.append("-std={}".format(language_standard))
     child_attrs["copts"] = child_copts
+    child_attrs["aspect_hints"] = lists.flatten([
+        attrs.get("aspect_hints", []),
+        ["@build_bazel_rules_swift//swift:no_module"],
+    ])
     return build_decls.new(
         rule_kind,
         name,

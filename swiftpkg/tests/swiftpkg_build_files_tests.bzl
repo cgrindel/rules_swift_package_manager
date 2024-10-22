@@ -602,6 +602,7 @@ cc_library(
 
 cc_library(
     name = "ClangLibrary.rspm_cxx",
+    aspect_hints = ["@build_bazel_rules_swift//swift:no_module"],
     copts = [
         "-fblocks",
         "-fobjc-arc",
@@ -680,6 +681,7 @@ objc_library(
 
 objc_library(
     name = "ObjcLibrary.rspm_objc",
+    aspect_hints = ["@build_bazel_rules_swift//swift:no_module"],
     copts = [
         "-fblocks",
         "-fobjc-arc",
@@ -769,6 +771,7 @@ objc_library(
 
 objc_library(
     name = "ObjcLibraryWithModulemap.rspm_objc",
+    aspect_hints = ["@build_bazel_rules_swift//swift:no_module"],
     copts = [
         "-fblocks",
         "-fobjc-arc",
@@ -857,6 +860,7 @@ cc_library(
 
 cc_library(
     name = "ClangLibraryWithConditionalDep.rspm_cxx",
+    aspect_hints = ["@build_bazel_rules_swift//swift:no_module"],
     copts = [
         "-fblocks",
         "-fobjc-arc",
@@ -1019,6 +1023,7 @@ objc_library(
 
 objc_library(
     name = "ObjcLibraryWithResources.rspm_objc",
+    aspect_hints = ["@build_bazel_rules_swift//swift:no_module"],
     copts = [
         "-fblocks",
         "-fobjc-arc",
