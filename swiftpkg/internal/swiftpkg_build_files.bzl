@@ -14,6 +14,8 @@ load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
+_STRING_TYPE = type("")
+
 # MARK: - Target Entry Point
 
 def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
@@ -843,7 +845,7 @@ def _apple_resource_bundle_for_clang(pkg_ctx, target):
 def _collect_modulemap_deps(deps):
     modulemap_deps = []
     for dep in deps:
-        if type(dep) == type(""):
+        if type(dep) == _STRING_TYPE:
             continue
         mm_values = [
             v
