@@ -13,12 +13,30 @@ _PUBLIC_HDR_DIRNAMES = ["include", "public"]
 # https://bazel.build/reference/be/c-cpp#cc_library.srcs
 _HEADER_EXTS = [".h", ".hh", ".hpp", ".hxx", ".inl", ".H"]
 
+# C source extensions
+_C_SRC_EXTS = [".c"]
+
+# C++ source extensions
+_CXX_SRC_EXTS = [".cc", ".cpp"]
+
+# Objective-C source extensions
+_OBJC_SRC_EXTS = [".m"]
+
+_OBJCXX_SRC_EXTS = [".mm"]
+
+# Assembly source extensions
+_ASSEMBLY_SRC_EXTS = [".S"]
+
+# Sources that should be included when constructing other cc_xxx targets
+_OTHER_SRC_EXTS = [".so", ".o", ".inc"]
+
 # Acceptable sources clang and objc:
 # https://bazel.build/reference/be/c-cpp#cc_library.srcs
 # https://bazel.build/reference/be/objective-c#objc_library.srcs
 # NOTE: From examples found so far, .inc files tend to include source, not
 # header declarations.
-_SRC_EXTS = [".c", ".cc", ".cpp", ".S", ".so", ".o", ".m", ".mm", ".inc"]
+_SRC_EXTS = _C_SRC_EXTS + _CXX_SRC_EXTS + _OBJC_SRC_EXTS + _OBJCXX_SRC_EXTS + \
+            _ASSEMBLY_SRC_EXTS + _OTHER_SRC_EXTS
 
 def _is_hdr(path):
     _root, ext = paths.split_extension(path)
@@ -323,6 +341,36 @@ def _collect_files(
         textual_hdrs = sorted(textual_hdrs),
     )
 
+def _organize_srcs(srcs):
+    c_srcs = []
+    cxx_srcs = []
+    objc_srcs = []
+    objcxx_srcs = []
+    assembly_srcs = []
+    other_srcs = []
+    for src in srcs:
+        _root, ext = paths.split_extension(src)
+        if ext in _C_SRC_EXTS:
+            c_srcs.append(src)
+        elif ext in _CXX_SRC_EXTS:
+            cxx_srcs.append(src)
+        elif ext in _OBJC_SRC_EXTS:
+            objc_srcs.append(src)
+        elif ext in _OBJCXX_SRC_EXTS:
+            objcxx_srcs.append(src)
+        elif ext in _ASSEMBLY_SRC_EXTS:
+            assembly_srcs.append(src)
+        else:
+            other_srcs.append(src)
+    return struct(
+        c_srcs = c_srcs,
+        cxx_srcs = cxx_srcs,
+        objc_srcs = objc_srcs,
+        objcxx_srcs = objcxx_srcs,
+        assembly_srcs = assembly_srcs,
+        other_srcs = other_srcs,
+    )
+
 clang_files = struct(
     collect_files = _collect_files,
     find_magical_public_hdr_dir = _find_magical_public_hdr_dir,
@@ -331,6 +379,7 @@ clang_files = struct(
     is_include_hdr = _is_include_hdr,
     is_public_modulemap = _is_public_modulemap,
     is_under_path = _is_under_path,
+    organize_srcs = _organize_srcs,
     reduce_paths = _reduce_paths,
     relativize = _relativize,
 )
