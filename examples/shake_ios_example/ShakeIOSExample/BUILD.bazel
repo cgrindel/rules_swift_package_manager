@@ -10,7 +10,10 @@ swift_library(
     module_name = "ShakeIOSExample",
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
-    deps = ["@swiftpkg_shake_ios//:Shake"],
+    deps = [
+        "@swiftpkg_shake_ios//:Shake",
+        "@swiftpkg_single_factor_auth_swift//:SingleFactorAuth",
+    ],
 )
 
 ios_application(
