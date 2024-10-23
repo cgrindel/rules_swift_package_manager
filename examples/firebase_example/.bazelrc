@@ -20,3 +20,16 @@ build --cxxopt='-std=gnu++14'
 # Firebase SPM support requires `-ObjC` linker option.
 # https://github.com/firebase/firebase-ios-sdk/blob/master/SwiftPackageManager.md#requirements
 build --linkopt='-ObjC'
+
+# Use the sandbox for rules_xcodeproj-specific builds.  rules_xcodeproj removes
+# the sandboxed spawn strategy (--spawn_strategy=remote,worker,local) by
+# default to speed up builds. However, to support setting C/C++ language
+# standard flags per target
+# (https://github.com/cgrindel/rules_swift_package_manager/issues/1079), we
+# need to generate multiple {cc,objc}_library targets based upon the type of
+# source files (e.g. C, C++, ObjC, ObjC++). When builds occur outside of the
+# sandbox, we can experience "error: duplicate interface definition for class
+# 'XXX'" errors. Until we can address the underlying error, clients that use
+# rules_swift_package_manager with rules_xcodeproj may need to use sandbox
+# builds.
+common:rules_xcodeproj --spawn_strategy=remote,worker,sandboxed,local
