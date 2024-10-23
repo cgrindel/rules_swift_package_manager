@@ -580,11 +580,19 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 cc_library(
     name = "ClangLibrary.rspm",
     aspect_hints = [":ClangLibrary.rspm_swift_hint"],
+    deps = [":ClangLibrary.rspm_cxx"],
+    hdrs = ["include/external.h"],
+    includes = ["include"],
+    textual_hdrs = ["src/foo.cc"],
+    visibility = ["//:__subpackages__"],
+)
+
+cc_library(
+    name = "ClangLibrary.rspm_cxx",
     copts = [
         "-fblocks",
         "-fobjc-arc",
         "-fPIC",
-        "-fmodule-name=ClangLibrary",
         "-DSWIFT_PACKAGE=1",
         "-DPLATFORM_POSIX=1",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
@@ -626,18 +634,7 @@ generate_modulemap(
 
 objc_library(
     name = "ObjcLibrary.rspm",
-    copts = [
-        "-fblocks",
-        "-fobjc-arc",
-        "-fPIC",
-        "-fmodule-name=ObjcLibrary",
-        "-DSWIFT_PACKAGE=1",
-        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
-    ],
-    deps = [
-        "@swiftpkg_mypackage//:ObjcLibraryDep.rspm",
-        "@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap",
-    ],
+    deps = [":ObjcLibrary.rspm_objc"],
     enable_modules = True,
     hdrs = ["include/external.h"],
     includes = ["include"],
@@ -658,9 +655,45 @@ objc_library(
         ],
         "//conditions:default": [],
     }),
+    textual_hdrs = ["src/foo.m"],
+    visibility = ["//:__subpackages__"],
+)
+
+objc_library(
+    name = "ObjcLibrary.rspm_objc",
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-DSWIFT_PACKAGE=1",
+        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
+    ],
+    deps = [
+        "@swiftpkg_mypackage//:ObjcLibraryDep.rspm",
+        "@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap",
+    ],
+    enable_modules = True,
+    hdrs = ["include/external.h"],
+    includes = ["include"],
+    sdk_frameworks = select({
+        "@rules_swift_package_manager//config_settings/spm/platform:ios": [
+            "Foundation",
+            "UIKit",
+        ],
+        "@rules_swift_package_manager//config_settings/spm/platform:macos": ["Foundation"],
+        "@rules_swift_package_manager//config_settings/spm/platform:tvos": [
+            "Foundation",
+            "UIKit",
+        ],
+        "@rules_swift_package_manager//config_settings/spm/platform:watchos": [
+            "Foundation",
+            "UIKit",
+        ],
+        "//conditions:default": [],
+    }),
     srcs = [
-        "src/foo.h",
         "src/foo.m",
+        "src/foo.h",
     ],
     textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
@@ -684,18 +717,7 @@ generate_modulemap(
 
 objc_library(
     name = "ObjcLibraryWithModulemap.rspm",
-    copts = [
-        "-fblocks",
-        "-fobjc-arc",
-        "-fPIC",
-        "-fmodule-name=ObjcLibraryWithModulemap",
-        "-DSWIFT_PACKAGE=1",
-        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
-    ],
-    deps = [
-        "@swiftpkg_mypackage//:ObjcLibraryDep.rspm",
-        "@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap",
-    ],
+    deps = [":ObjcLibraryWithModulemap.rspm_objc"],
     enable_modules = True,
     hdrs = ["include/external.h"],
     includes = ["include"],
@@ -716,9 +738,45 @@ objc_library(
         ],
         "//conditions:default": [],
     }),
+    textual_hdrs = ["src/foo.m"],
+    visibility = ["//:__subpackages__"],
+)
+
+objc_library(
+    name = "ObjcLibraryWithModulemap.rspm_objc",
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-DSWIFT_PACKAGE=1",
+        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
+    ],
+    deps = [
+        "@swiftpkg_mypackage//:ObjcLibraryDep.rspm",
+        "@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap",
+    ],
+    enable_modules = True,
+    hdrs = ["include/external.h"],
+    includes = ["include"],
+    sdk_frameworks = select({
+        "@rules_swift_package_manager//config_settings/spm/platform:ios": [
+            "Foundation",
+            "UIKit",
+        ],
+        "@rules_swift_package_manager//config_settings/spm/platform:macos": ["Foundation"],
+        "@rules_swift_package_manager//config_settings/spm/platform:tvos": [
+            "Foundation",
+            "UIKit",
+        ],
+        "@rules_swift_package_manager//config_settings/spm/platform:watchos": [
+            "Foundation",
+            "UIKit",
+        ],
+        "//conditions:default": [],
+    }),
     srcs = [
-        "src/foo.h",
         "src/foo.m",
+        "src/foo.h",
     ],
     textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
@@ -757,11 +815,19 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 cc_library(
     name = "ClangLibraryWithConditionalDep.rspm",
     aspect_hints = [":ClangLibraryWithConditionalDep.rspm_swift_hint"],
+    deps = [":ClangLibraryWithConditionalDep.rspm_cxx"],
+    hdrs = ["include/external.h"],
+    includes = ["include"],
+    textual_hdrs = ["src/foo.cc"],
+    visibility = ["//:__subpackages__"],
+)
+
+cc_library(
+    name = "ClangLibraryWithConditionalDep.rspm_cxx",
     copts = [
         "-fblocks",
         "-fobjc-arc",
         "-fPIC",
-        "-fmodule-name=ClangLibraryWithConditionalDep",
         "-DSWIFT_PACKAGE=1",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
     ],
@@ -886,16 +952,8 @@ generate_modulemap(
 
 objc_library(
     name = "ObjcLibraryWithResources.rspm",
-    copts = [
-        "-fblocks",
-        "-fobjc-arc",
-        "-fPIC",
-        "-fmodule-name=ObjcLibraryWithResources",
-        "-include$(location :ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr)",
-        "-DSWIFT_PACKAGE=1",
-        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
-    ],
     data = [":ObjcLibraryWithResources.rspm_resource_bundle"],
+    deps = [":ObjcLibraryWithResources.rspm_objc"],
     enable_modules = True,
     hdrs = ["include/external.h"],
     includes = ["include"],
@@ -916,14 +974,53 @@ objc_library(
         ],
         "//conditions:default": [],
     }),
+    textual_hdrs = ["src/foo.m"],
+    visibility = ["//:__subpackages__"],
+)
+
+objc_library(
+    name = "ObjcLibraryWithResources.rspm_objc",
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-DSWIFT_PACKAGE=1",
+        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
+        "-include$(location :ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr)",
+    ],
+    deps = [":ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_library"],
+    enable_modules = True,
+    hdrs = ["include/external.h"],
+    includes = ["include"],
+    sdk_frameworks = select({
+        "@rules_swift_package_manager//config_settings/spm/platform:ios": [
+            "Foundation",
+            "UIKit",
+        ],
+        "@rules_swift_package_manager//config_settings/spm/platform:macos": ["Foundation"],
+        "@rules_swift_package_manager//config_settings/spm/platform:tvos": [
+            "Foundation",
+            "UIKit",
+        ],
+        "@rules_swift_package_manager//config_settings/spm/platform:watchos": [
+            "Foundation",
+            "UIKit",
+        ],
+        "//conditions:default": [],
+    }),
     srcs = [
-        "src/foo.h",
         "src/foo.m",
+        "src/foo.h",
         ":ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr",
-        ":ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_impl",
     ],
     textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
+)
+
+objc_library(
+    name = "ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_library",
+    hdrs = [":ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr"],
+    srcs = [":ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_impl"],
 )
 
 objc_resource_bundle_accessor_hdr(
@@ -934,6 +1031,7 @@ objc_resource_bundle_accessor_hdr(
 objc_resource_bundle_accessor_impl(
     name = "ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_impl",
     bundle_name = "MyPackage_ObjcLibraryWithResources",
+    extension = "m",
     module_name = "ObjcLibraryWithResources",
 )
 
