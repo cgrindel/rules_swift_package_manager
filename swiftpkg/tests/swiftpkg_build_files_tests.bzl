@@ -1027,7 +1027,6 @@ objc_library(
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
         "-include$(location :ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr)",
     ],
-    data = [":ObjcLibraryWithResources.rspm_resource_bundle"],
     deps = [":ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_library"],
     enable_modules = True,
     hdrs = ["include/external.h"],

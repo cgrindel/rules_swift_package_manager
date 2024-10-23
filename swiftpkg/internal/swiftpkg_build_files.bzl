@@ -230,7 +230,7 @@ def _c_child_library(
         srcs,
         language_standard = None,
         res_copts = None):
-    child_attrs = dict(**attrs)
+    child_attrs = dicts.omit(attrs, ["data"])
     child_copts = list(attrs.get("copts", []))
     if res_copts:
         child_copts.extend(res_copts)
