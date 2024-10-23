@@ -232,9 +232,39 @@ def _reduce_paths_test(ctx):
 
 reduce_paths_test = unittest.make(_reduce_paths_test)
 
+def _organize_srcs_test(ctx):
+    env = unittest.begin(ctx)
+
+    srcs = [
+        "foo.cc",
+        "foo.c",
+        "foo.inc",
+        "foo.cpp",
+        "foo.m",
+        "foo.so",
+        "foo.mm",
+        "foo.o",
+        "foo.S",
+    ]
+    actual = clang_files.organize_srcs(srcs)
+    expected = struct(
+        c_srcs = ["foo.c"],
+        cxx_srcs = ["foo.cc", "foo.cpp"],
+        objc_srcs = ["foo.m"],
+        objcxx_srcs = ["foo.mm"],
+        assembly_srcs = ["foo.S"],
+        other_srcs = ["foo.inc", "foo.so", "foo.o"],
+    )
+    asserts.equals(env, expected, actual)
+
+    return unittest.end(env)
+
+organize_srcs_test = unittest.make(_organize_srcs_test)
+
 def clang_files_test_suite():
     return unittest.suite(
         "clang_files_tests",
+        organize_srcs_test,
         is_hdr_test,
         is_include_hdr_test,
         is_public_modulemap_test,
