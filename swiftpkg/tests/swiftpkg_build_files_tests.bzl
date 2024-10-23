@@ -580,19 +580,6 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 cc_library(
     name = "ClangLibrary.rspm",
     aspect_hints = [":ClangLibrary.rspm_swift_hint"],
-    copts = [
-        "-fblocks",
-        "-fobjc-arc",
-        "-fPIC",
-        "-DSWIFT_PACKAGE=1",
-        "-DPLATFORM_POSIX=1",
-        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
-        "-Iexternal/bzlmodmangled~swiftpkg_mypackage",
-        "-fmodule-name=ClangLibrary",
-    ] + select({
-        "@rules_swift_package_manager//config_settings/spm/configuration:release": ["-danger"],
-        "//conditions:default": [],
-    }),
     deps = [":ClangLibrary.rspm_cxx"],
     hdrs = ["include/external.h"],
     includes = ["include"],
@@ -647,16 +634,9 @@ generate_modulemap(
 
 objc_library(
     name = "ObjcLibrary.rspm",
-    copts = [
-        "-fblocks",
-        "-fobjc-arc",
-        "-fPIC",
-        "-DSWIFT_PACKAGE=1",
-        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
-        "-fmodule-name=ObjcLibrary",
-    ],
     deps = [":ObjcLibrary.rspm_objc"],
     enable_modules = True,
+    hdrs = ["include/external.h"],
     includes = ["include"],
     module_name = "ObjcLibrary",
     sdk_frameworks = select({
@@ -675,6 +655,7 @@ objc_library(
         ],
         "//conditions:default": [],
     }),
+    textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
 )
 
@@ -736,16 +717,9 @@ generate_modulemap(
 
 objc_library(
     name = "ObjcLibraryWithModulemap.rspm",
-    copts = [
-        "-fblocks",
-        "-fobjc-arc",
-        "-fPIC",
-        "-DSWIFT_PACKAGE=1",
-        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
-        "-fmodule-name=ObjcLibraryWithModulemap",
-    ],
     deps = [":ObjcLibraryWithModulemap.rspm_objc"],
     enable_modules = True,
+    hdrs = ["include/external.h"],
     includes = ["include"],
     module_name = "ObjcLibraryWithModulemap",
     sdk_frameworks = select({
@@ -764,6 +738,7 @@ objc_library(
         ],
         "//conditions:default": [],
     }),
+    textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
 )
 
@@ -840,14 +815,6 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 cc_library(
     name = "ClangLibraryWithConditionalDep.rspm",
     aspect_hints = [":ClangLibraryWithConditionalDep.rspm_swift_hint"],
-    copts = [
-        "-fblocks",
-        "-fobjc-arc",
-        "-fPIC",
-        "-DSWIFT_PACKAGE=1",
-        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
-        "-fmodule-name=ClangLibraryWithConditionalDep",
-    ],
     deps = [":ClangLibraryWithConditionalDep.rspm_cxx"],
     hdrs = ["include/external.h"],
     includes = ["include"],
@@ -985,17 +952,10 @@ generate_modulemap(
 
 objc_library(
     name = "ObjcLibraryWithResources.rspm",
-    copts = [
-        "-fblocks",
-        "-fobjc-arc",
-        "-fPIC",
-        "-DSWIFT_PACKAGE=1",
-        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
-        "-fmodule-name=ObjcLibraryWithResources",
-    ],
     data = [":ObjcLibraryWithResources.rspm_resource_bundle"],
     deps = [":ObjcLibraryWithResources.rspm_objc"],
     enable_modules = True,
+    hdrs = ["include/external.h"],
     includes = ["include"],
     module_name = "ObjcLibraryWithResources",
     sdk_frameworks = select({
@@ -1014,6 +974,7 @@ objc_library(
         ],
         "//conditions:default": [],
     }),
+    textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
 )
 

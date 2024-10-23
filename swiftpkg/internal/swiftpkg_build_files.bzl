@@ -482,16 +482,13 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             )
 
         # Add the objc_library that brings all of the child targets together.
-        uber_attrs = dicts.omit(attrs, ["srcs"]) | {
+        uber_attrs = dicts.omit(attrs, ["srcs", "copts"]) | {
             "deps": [
                 ":{}".format(dname)
                 for dname in child_dep_names
             ],
         }
         uber_attrs["module_name"] = target.c99name
-        copts = uber_attrs.get("copts", [])
-        copts.append("-fmodule-name={}".format(target.c99name))
-        uber_attrs["copts"] = copts
         decls.append(
             build_decls.new(
                 objc_kinds.library,
@@ -559,16 +556,13 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             )
 
         # Add the cc_library that brings all of the child targets together.
-        uber_attrs = dicts.omit(attrs, ["srcs"]) | {
+        uber_attrs = dicts.omit(attrs, ["srcs", "copts"]) | {
             "aspect_hints": [":{}".format(aspect_hint_target_name)],
             "deps": [
                 ":{}".format(dname)
                 for dname in child_dep_names
             ],
         }
-        copts = uber_attrs.get("copts", [])
-        copts.append("-fmodule-name={}".format(target.c99name))
-        uber_attrs["copts"] = copts
         decls.append(
             build_decls.new(
                 clang_kinds.library,
