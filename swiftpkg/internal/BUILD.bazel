@@ -298,6 +298,27 @@ bzl_library(
 )
 
 bzl_library(
+    name = "swift_package_tool",
+    srcs = ["swift_package_tool.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        "@bazel_skylib//lib:dicts",
+        "@bazel_skylib//lib:paths",
+        "@build_bazel_rules_swift//swift",
+    ],
+)
+
+bzl_library(
+    name = "swift_package_tool_repo",
+    srcs = ["swift_package_tool_repo.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":repository_utils",
+        "@bazel_skylib//lib:dicts",
+    ],
+)
+
+bzl_library(
     name = "bazel_repo_names",
     srcs = ["bazel_repo_names.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],

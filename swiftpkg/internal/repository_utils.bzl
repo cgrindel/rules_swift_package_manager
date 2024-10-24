@@ -107,9 +107,29 @@ def _package_name(repository_ctx):
         return repository_ctx.attr.bazel_package_name
     return repository_ctx.name
 
+def _struct_to_kwargs(*, struct, keys):
+    """Convert a struct to a kwargs dict, where the keys are the struct's attrs and the values are the struct's values.
+
+    Example: given a struct like: `struct(a = "foo", b = "bar")` and keys `["a"]`, the result will be `{"a": "foo"}`.
+
+    Args:
+        struct: The struct to convert.
+        keys: The keys to include in the kwargs dict.
+
+    Returns:
+        A kwargs dict.
+    """
+    kwargs = {}
+    for k in keys:
+        v = getattr(struct, k, None)
+        if v != None:
+            kwargs[k] = v
+    return kwargs
+
 repository_utils = struct(
     exec_spm_command = _execute_spm_command,
     is_macos = _is_macos,
     package_name = _package_name,
     parsed_json_from_spm_command = _parsed_json_from_spm_command,
+    struct_to_kwargs = _struct_to_kwargs,
 )

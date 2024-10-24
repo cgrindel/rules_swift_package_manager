@@ -66,6 +66,7 @@ swift_deps.configure_package(
 use_repo(
     swift_deps,
     "swift_deps_info",
+    "swift_package",
     "swiftpkg_swift_markdown",
     "swiftpkg_swift_nio",
 )
