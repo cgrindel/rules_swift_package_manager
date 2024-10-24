@@ -6,5 +6,6 @@ let package = Package(
     name: "shake_ios_example",
     dependencies: [
         .package(url: "https://github.com/shakebugs/shake-ios", from: "17.0.1"),
+        .package(url: "https://github.com/Web3Auth/single-factor-auth-swift/", from: "8.0.0"),
     ]
 )
