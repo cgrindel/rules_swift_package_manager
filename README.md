@@ -20,6 +20,7 @@ development inside a Bazel workspace.
 * [Quickstart](#quickstart)
   * [1. Enable bzlmod](#1-enable-bzlmod)
   * [2. Configure your `MODULE.bazel` to use rules_swift_package_manager.](#2-configure-your-modulebazel-to-use-rules_swift_package_manager)
+    * [(Optional) Use `swift_package` repository for updating packages](#optional-use-swift_package-repository-for-updating-packages)
     * [(Optional) Enable `swift_deps_info` generation for the Gazelle plugin](#optional-enable-swift_deps_info-generation-for-the-gazelle-plugin)
   * [3. Create a minimal `Package.swift` file.](#3-create-a-minimal-packageswift-file)
   * [4. Run `swift package update`](#4-run-swift-package-update)
@@ -120,6 +121,54 @@ You will also need to add a dependency on [rules_swift].
 NOTE: Some Swift package manager features (e.g., resources) use rules from [rules_apple]. It is a
 dependency for `rules_swift_package_manager`. However, you do not need to declare it unless you use
 any of the rules in your project.
+
+#### (Optional) Use `swift_package` repository for updating packages
+
+The `swift_deps` module extension will by default generate a `swift_package` repository which can be used to execute `swift package` commands.
+This is useful if you'd like to control the flags and behavior of `swift package`, as well as for using the correct `swift` binary according to the Bazel configured toolchain.
+
+For example, to resolve the `Package.swift` file:
+
+```sh
+bazel run @swift_package//:resolve
+```
+
+To update packages to their latest supported version:
+
+```sh
+bazel run @swift_package//:update
+```
+
+Both targets support passing arguments as well, so for example, you could update a single package:
+
+```sh
+bazel run @swift_package//:update -- MyPackage
+```
+
+These targets will update the `Package.resolved` file defined in `swift_deps.from_package`.
+The targets come with default flags applied to enable the best Bazel compatibility, if you wish to configure it further, you can do so with `configure_swift_package`:
+
+```starlark
+# MODULE.bazel
+
+swift_deps.configure_swift_package(
+    build_path = "spm-build",
+    cache_path = "spm-cache",
+    dependency_caching = "false",
+    manifest_cache = "none",
+    manifest_caching = "false",
+)
+```
+
+If you do not want to use the `swift_package` repository you can disable it in the `swift_deps.from_package` call:
+
+```starlark
+swift_deps.from_package(
+    declare_swift_package = False,  # <=== Disable the `swift_package` repository
+    resolved = "//:Package.resolved",
+    swift = "//:Package.swift",
+)
+```
 
 #### (Optional) Enable `swift_deps_info` generation for the Gazelle plugin
 

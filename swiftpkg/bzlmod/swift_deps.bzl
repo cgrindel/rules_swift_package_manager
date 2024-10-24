@@ -3,20 +3,24 @@
 load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
 load("//swiftpkg/internal:local_swift_package.bzl", "local_swift_package")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
+load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
 load("//swiftpkg/internal:swift_deps_info.bzl", "swift_deps_info")
 load("//swiftpkg/internal:swift_package.bzl", "PATCH_ATTRS", "swift_package")
+load("//swiftpkg/internal:swift_package_tool.bzl", "SWIFT_PACKAGE_CONFIG_ATTRS")
+load("//swiftpkg/internal:swift_package_tool_repo.bzl", "swift_package_tool_repo")
 
 # MARK: - swift_deps bzlmod Extension
 
 _DO_WHILE_RANGE = range(1000)
 
-def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs):
+def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swift_package):
     """Declare Swift packages from `Package.swift` and `Package.resolved`.
 
     Args:
         module_ctx: An instance of `module_ctx`.
         from_package: The data from the `from_package` tag.
         config_pkgs: The data from the `configure_package` tag.
+        config_swift_package: The data from the `configure_swift_package` tag.
     """
 
     # Read Package.resolved.
@@ -74,6 +78,15 @@ the Swift package to make it available.\
             direct_dep_pkg_infos = direct_dep_pkg_infos,
         )
         direct_dep_repo_names.append(swift_deps_info_repo_name)
+
+    if from_package.declare_swift_package:
+        swift_package_repo_name = "swift_package"
+        _declare_swift_package_repo(
+            name = swift_package_repo_name,
+            from_package = from_package,
+            config_swift_package = config_swift_package,
+        )
+        direct_dep_repo_names.append(swift_package_repo_name)
 
     # Ensure that we add all of the transitive source control deps from the
     # resolved file.
@@ -183,11 +196,30 @@ def _declare_pkg_from_dependency(dep, config_pkg):
             dependencies_index = None,
         )
 
+def _declare_swift_package_repo(name, from_package, config_swift_package):
+    config_swift_package_kwargs = repository_utils.struct_to_kwargs(
+        struct = config_swift_package,
+        keys = SWIFT_PACKAGE_CONFIG_ATTRS,
+    )
+
+    swift_package_tool_repo(
+        name = name,
+        package = "{package}/{name}".format(
+            package = from_package.swift.package,
+            name = from_package.swift.name,
+        ),
+        **config_swift_package_kwargs
+    )
+
 def _swift_deps_impl(module_ctx):
     config_pkgs = {}
     for mod in module_ctx.modules:
         for config_pkg in mod.tags.configure_package:
             config_pkgs[config_pkg.name] = config_pkg
+    config_swift_package = None
+    for mod in module_ctx.modules:
+        for config_swift_package in mod.tags.configure_swift_package:
+            config_swift_package = config_swift_package
     direct_dep_repo_names = []
     for mod in module_ctx.modules:
         for from_package in mod.tags.from_package:
@@ -196,6 +228,7 @@ def _swift_deps_impl(module_ctx):
                     module_ctx,
                     from_package,
                     config_pkgs,
+                    config_swift_package,
                 ),
             )
     return module_ctx.extension_metadata(
@@ -209,6 +242,24 @@ _from_package_tag = tag_class(
             doc = """\
 Declare a `swift_deps_info` repository that is used by external tooling (e.g. \
 Swift Gazelle plugin).\
+""",
+        ),
+        "declare_swift_package": attr.bool(
+            default = True,
+            doc = """\
+Declare a `swift_package_tool` repository named `swift_package` which defines two targets:
+`update` and `resolve`.\
+
+These targets run can be used to run the `swift package` binary in a Bazel context.
+The flags used when running the underlying `swift package` can be configured \
+using the `configure_swift_package` tag.
+
+They can be `bazel run` to update/resolve the `resolved` file:
+
+```
+bazel run @swift_package//:update
+bazel run @swift_package//:resolve
+```
 """,
         ),
         "resolved": attr.label(
@@ -244,10 +295,16 @@ The identity (i.e., name in the package's manifest) for the Swift package.\
     doc = "Used to add or override settings for a particular Swift package.",
 )
 
+_configure_swift_package_tag = tag_class(
+    attrs = SWIFT_PACKAGE_CONFIG_ATTRS,
+    doc = "Used to configure the flags used when running the `swift package` binary.",
+)
+
 swift_deps = module_extension(
     implementation = _swift_deps_impl,
     tag_classes = {
         "configure_package": _configure_package_tag,
+        "configure_swift_package": _configure_swift_package_tag,
         "from_package": _from_package_tag,
     },
 )
