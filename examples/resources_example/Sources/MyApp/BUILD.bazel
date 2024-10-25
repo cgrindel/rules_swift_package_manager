@@ -12,6 +12,7 @@ swift_library(
     visibility = ["//:__subpackages__"],
     deps = [
         "@swiftpkg_another_package_with_resources//:MoreCoolUI",
+        "@swiftpkg_embrace_apple_sdk//:EmbraceIO",
         "@swiftpkg_googlesignin_ios//:GoogleSignInSwift",
         "@swiftpkg_package_with_resources//:CoolUI",
         "@swiftpkg_recaptcha_enterprise_mobile_sdk//:RecaptchaEnterprise",
