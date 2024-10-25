@@ -51,5 +51,6 @@ swift_deps.from_package(
 use_repo(
     swift_deps,
     "swift_deps_info",
+    "swift_package",
     "swiftpkg_lottie_spm",
 )

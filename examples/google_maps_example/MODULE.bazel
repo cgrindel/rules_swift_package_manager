@@ -43,8 +43,11 @@ swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
 )
+
+# Example showing that `swift_package` repo can be disabled.
 swift_deps.from_package(
     declare_swift_deps_info = True,
+    declare_swift_package = False,
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )
