@@ -59,6 +59,7 @@ swift_deps.from_package(
 use_repo(
     swift_deps,
     "swift_deps_info",
+    "swift_package",
     "swiftpkg_firebase_ios_sdk",
     "swiftpkg_reachability.swift",
 )
