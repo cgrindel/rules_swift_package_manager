@@ -20,7 +20,7 @@ bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "apple_support", version = "1.17.1")
 bazel_dep(
     name = "rules_swift",
-    version = "2.2.1",
+    version = "2.2.2",
     repo_name = "build_bazel_rules_swift",
 )
 
@@ -51,9 +51,21 @@ swift_deps.from_package(
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )
+
+# Example showing customization of the `swift_package` repo tool.
+# To resolve: `bazel run @swift_package//:resolve`
+# To update:  `bazel run @swift_package//:update`
+swift_deps.configure_swift_package(
+    build_path = "spm-build",
+    cache_path = "spm-cache",
+    dependency_caching = "false",
+    manifest_cache = "none",
+    manifest_caching = "false",
+)
 use_repo(
     swift_deps,
     "swift_deps_info",
+    "swift_package",
     "swiftpkg_cocoalumberjack",
     "swiftpkg_geoswift",
     "swiftpkg_libwebp_xcode",

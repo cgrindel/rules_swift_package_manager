@@ -12,7 +12,7 @@ bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "apple_support", version = "1.17.1")
 bazel_dep(
     name = "rules_swift",
-    version = "2.2.1",
+    version = "2.2.2",
     repo_name = "build_bazel_rules_swift",
 )
 bazel_dep(
@@ -51,6 +51,7 @@ swift_deps.from_package(
 use_repo(
     swift_deps,
     "swift_deps_info",
+    "swift_package",
     "swiftpkg_kingfisher",
     "swiftpkg_messagekit",
 )

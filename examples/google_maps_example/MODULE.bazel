@@ -12,7 +12,7 @@ bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "apple_support", version = "1.17.1")
 bazel_dep(
     name = "rules_swift",
-    version = "2.2.1",
+    version = "2.2.2",
     repo_name = "build_bazel_rules_swift",
 )
 bazel_dep(
@@ -43,8 +43,11 @@ swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
 )
+
+# Example showing that `swift_package` repo can be disabled.
 swift_deps.from_package(
     declare_swift_deps_info = True,
+    declare_swift_package = False,
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )

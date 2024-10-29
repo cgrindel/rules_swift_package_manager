@@ -17,7 +17,9 @@ On this page:
 swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
 swift_deps.configure_package(<a href="#swift_deps.configure_package-name">name</a>, <a href="#swift_deps.configure_package-init_submodules">init_submodules</a>, <a href="#swift_deps.configure_package-patch_args">patch_args</a>, <a href="#swift_deps.configure_package-patch_cmds">patch_cmds</a>, <a href="#swift_deps.configure_package-patch_cmds_win">patch_cmds_win</a>,
                              <a href="#swift_deps.configure_package-patch_tool">patch_tool</a>, <a href="#swift_deps.configure_package-patches">patches</a>, <a href="#swift_deps.configure_package-recursive_init_submodules">recursive_init_submodules</a>)
-swift_deps.from_package(<a href="#swift_deps.from_package-declare_swift_deps_info">declare_swift_deps_info</a>, <a href="#swift_deps.from_package-resolved">resolved</a>, <a href="#swift_deps.from_package-swift">swift</a>)
+swift_deps.configure_swift_package(<a href="#swift_deps.configure_swift_package-build_path">build_path</a>, <a href="#swift_deps.configure_swift_package-cache_path">cache_path</a>, <a href="#swift_deps.configure_swift_package-dependency_caching">dependency_caching</a>, <a href="#swift_deps.configure_swift_package-manifest_cache">manifest_cache</a>,
+                                   <a href="#swift_deps.configure_swift_package-manifest_caching">manifest_caching</a>)
+swift_deps.from_package(<a href="#swift_deps.from_package-declare_swift_deps_info">declare_swift_deps_info</a>, <a href="#swift_deps.from_package-declare_swift_package">declare_swift_package</a>, <a href="#swift_deps.from_package-resolved">resolved</a>, <a href="#swift_deps.from_package-swift">swift</a>)
 </pre>
 
 
@@ -42,6 +44,22 @@ Used to add or override settings for a particular Swift package.
 | <a id="swift_deps.configure_package-patches"></a>patches |  A list of files that are to be applied as patches after extracting the archive. By default, it uses the Bazel-native patch implementation which doesn't support fuzz match and binary patch, but Bazel will fall back to use patch command line tool if `patch_tool` attribute is specified or there are arguments other than `-p` in `patch_args` attribute.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
 | <a id="swift_deps.configure_package-recursive_init_submodules"></a>recursive_init_submodules |  Whether to clone submodules recursively in the repository.   | Boolean | optional |  `True`  |
 
+<a id="swift_deps.configure_swift_package"></a>
+
+### configure_swift_package
+
+Used to configure the flags used when running the `swift package` binary.
+
+**Attributes**
+
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="swift_deps.configure_swift_package-build_path"></a>build_path |  The relative path within the runfiles tree for the Swift Package Manager build directory.   | String | optional |  `".build"`  |
+| <a id="swift_deps.configure_swift_package-cache_path"></a>cache_path |  The relative path within the runfiles tree for the shared Swift Package Manager cache directory.   | String | optional |  `".cache"`  |
+| <a id="swift_deps.configure_swift_package-dependency_caching"></a>dependency_caching |  Whether to enable the dependency cache.   | String | optional |  `"true"`  |
+| <a id="swift_deps.configure_swift_package-manifest_cache"></a>manifest_cache |  Caching mode of Package.swift manifests (shared: shared cache, local: package's build directory, none: disabled)   | String | optional |  `"shared"`  |
+| <a id="swift_deps.configure_swift_package-manifest_caching"></a>manifest_caching |  Whether to enable build manifest caching.   | String | optional |  `"true"`  |
+
 <a id="swift_deps.from_package"></a>
 
 ### from_package
@@ -53,6 +71,7 @@ Load Swift packages from `Package.swift` and `Package.resolved` files.
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="swift_deps.from_package-declare_swift_deps_info"></a>declare_swift_deps_info |  Declare a `swift_deps_info` repository that is used by external tooling (e.g. Swift Gazelle plugin).   | Boolean | optional |  `False`  |
+| <a id="swift_deps.from_package-declare_swift_package"></a>declare_swift_package |  Declare a `swift_package_tool` repository named `swift_package` which defines two targets: `update` and `resolve`. These targets run can be used to run the `swift package` binary in a Bazel context. The flags used when running the underlying `swift package` can be configured using the `configure_swift_package` tag.<br><br>They can be `bazel run` to update/resolve the `resolved` file:<br><br><pre><code>bazel run @swift_package//:update&#10;bazel run @swift_package//:resolve</code></pre>   | Boolean | optional |  `True`  |
 | <a id="swift_deps.from_package-resolved"></a>resolved |  A `Package.resolved`.   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
 | <a id="swift_deps.from_package-swift"></a>swift |  A `Package.swift`.   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
 
