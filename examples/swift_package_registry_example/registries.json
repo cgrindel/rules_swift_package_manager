@@ -1,0 +1,12 @@
+{
+  "authentication" : {
+
+  },
+  "registries" : {
+    "[default]" : {
+      "supportsAvailability" : false,
+      "url" : "https://fake-spm-registry.deno.dev/"
+    }
+  },
+  "version" : 1
+}
