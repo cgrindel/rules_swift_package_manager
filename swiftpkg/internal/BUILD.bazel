@@ -303,6 +303,7 @@ bzl_library(
     srcs = ["swift_package_tool.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":swift_package_tool_attrs",
         "@bazel_skylib//lib:dicts",
         "@bazel_skylib//lib:paths",
         "@build_bazel_rules_swift//swift",
@@ -315,6 +316,17 @@ bzl_library(
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":repository_utils",
+        ":swift_package_tool_attrs",
+        "@bazel_skylib//lib:dicts",
+    ],
+)
+
+bzl_library(
+    name = "registry_swift_package",
+    srcs = ["registry_swift_package.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":repo_rules",
         "@bazel_skylib//lib:dicts",
     ],
 )
@@ -364,6 +376,12 @@ bzl_library(
 bzl_library(
     name = "swift_deps_info",
     srcs = ["swift_deps_info.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "swift_package_tool_attrs",
+    srcs = ["swift_package_tool_attrs.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
 
