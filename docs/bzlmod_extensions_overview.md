@@ -56,9 +56,9 @@ Used to configure the flags used when running the `swift package` binary.
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="swift_deps.configure_swift_package-build_path"></a>build_path |  The relative path within the runfiles tree for the Swift Package Manager build directory.   | String | optional |  `".build"`  |
 | <a id="swift_deps.configure_swift_package-cache_path"></a>cache_path |  The relative path within the runfiles tree for the shared Swift Package Manager cache directory.   | String | optional |  `".cache"`  |
-| <a id="swift_deps.configure_swift_package-dependency_caching"></a>dependency_caching |  Whether to enable the dependency cache.   | String | optional |  `"true"`  |
+| <a id="swift_deps.configure_swift_package-dependency_caching"></a>dependency_caching |  Whether to enable the dependency cache.   | Boolean | optional |  `True`  |
 | <a id="swift_deps.configure_swift_package-manifest_cache"></a>manifest_cache |  Caching mode of Package.swift manifests (shared: shared cache, local: package's build directory, none: disabled)   | String | optional |  `"shared"`  |
-| <a id="swift_deps.configure_swift_package-manifest_caching"></a>manifest_caching |  Whether to enable build manifest caching.   | String | optional |  `"true"`  |
+| <a id="swift_deps.configure_swift_package-manifest_caching"></a>manifest_caching |  Whether to enable build manifest caching.   | Boolean | optional |  `True`  |
 
 <a id="swift_deps.from_package"></a>
 
