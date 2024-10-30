@@ -91,15 +91,20 @@ def _process_module_tokens(parsed_tokens, prefix_tokens, is_submodule):
         return None, err
     consumed_count += 1
 
-    module_id_or_asterisk_token, err = tokens.get(parsed_tokens, 1, count = tlen)
+    module_declaration_identifier_token, err = tokens.get(parsed_tokens, 1, count = tlen)
     if err != None:
         return None, err
     consumed_count += 1
-    if not tokens.is_a(module_id_or_asterisk_token, tts.identifier) and \
-       not tokens.is_a(module_id_or_asterisk_token, tts.operator, operators.asterisk):
+
+    # Check if the module identifier is an identifier, asterisk, or string literal
+    # Examples: module Foo, module *, module "Foo/Bar.h"
+    if not tokens.is_a(module_declaration_identifier_token, tts.identifier) and \
+       not tokens.is_a(module_declaration_identifier_token, tts.operator, operators.asterisk) and \
+       not tokens.is_a(module_declaration_identifier_token, tts.string_literal):
         return None, errors.new(
-            "Expected module identifier or asterisk, but was {}.".format(
-                module_id_or_asterisk_token.type,
+            "Expected module identifier, asterisk or string_literal, but was {} with value {}.".format(
+                module_declaration_identifier_token.type,
+                module_declaration_identifier_token.value,
             ),
         )
 
@@ -146,7 +151,7 @@ def _process_module_tokens(parsed_tokens, prefix_tokens, is_submodule):
 
     # Create the declaration
     decl = declarations.module(
-        module_id = module_id_or_asterisk_token.value,
+        module_id = module_declaration_identifier_token.value,
         explicit = explicit,
         framework = framework,
         attributes = attributes,
