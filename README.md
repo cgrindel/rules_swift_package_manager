@@ -30,6 +30,7 @@ development inside a Bazel workspace.
   * [8. Build and test your project.](#8-build-and-test-your-project)
   * [9. Check in `Package.swift`, `Package.resolved`, and `MODULE.bazel`.](#9-check-in-packageswift-packageresolved-and-modulebazel)
   * [10. Start coding](#10-start-coding)
+* [Using a Swift package registry](#using-a-swift-package-registry)
 * [Tips and Tricks](#tips-and-tricks)
 <!-- MARKDOWN TOC: END -->
 
@@ -287,6 +288,10 @@ bazel test //...
 ### 10. Start coding
 
 You are ready to start coding.
+
+## Using a Swift package registry
+
+See [our document on using a Swift package registry](/docs/swift_package_registry.md).
 
 ## Tips and Tricks
 

@@ -3,6 +3,10 @@
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
+load(
+    "//swiftpkg/internal:swift_package_tool_attrs.bzl",
+    "swift_package_tool_attrs",
+)
 
 # The name of the runner script.
 _RUNNER_SCRIPT_NAME = "swift_package.sh"
@@ -10,12 +14,19 @@ _RUNNER_SCRIPT_NAME = "swift_package.sh"
 def _swift_package_tool_impl(ctx):
     build_path = ctx.attr.build_path
     cache_path = ctx.attr.cache_path
+    config_path = ctx.attr.config_path
     cmd = ctx.attr.cmd
     package = ctx.attr.package
     package_path = paths.dirname(package)
+    registries = ctx.file.registries
+    runfiles = []
 
     toolchain = swift_common.get_toolchain(ctx)
     swift = toolchain.swift_worker
+    runfiles.append(swift.executable)
+
+    if registries:
+        runfiles.append(registries)
 
     runner_script = ctx.actions.declare_file(_RUNNER_SCRIPT_NAME)
     template_dict = ctx.actions.template_dict()
@@ -24,10 +35,29 @@ def _swift_package_tool_impl(ctx):
     template_dict.add("%(package_path)s", package_path)
     template_dict.add("%(build_path)s", build_path)
     template_dict.add("%(cache_path)s", cache_path)
-    template_dict.add("%(enable_build_manifest_caching)s", "true" if ctx.attr.manifest_caching else "false")
-    template_dict.add("%(enable_dependency_cache)s", "true" if ctx.attr.dependency_caching else "false")
+    template_dict.add("%(config_path)s", config_path)
+    template_dict.add(
+        "%(enable_build_manifest_caching)s",
+        "true" if ctx.attr.manifest_caching else "false",
+    )
+    template_dict.add(
+        "%(enable_dependency_cache)s",
+        "true" if ctx.attr.dependency_caching else "false",
+    )
     template_dict.add("%(manifest_cache)s", ctx.attr.manifest_cache)
+    template_dict.add(
+        "%(registries_json)s",
+        registries.short_path if registries else "",
+    )
+    template_dict.add(
+        "%(replace_scm_with_registry)s",
+        "true" if ctx.attr.replace_scm_with_registry else "false",
+    )
     template_dict.add("%(security_path)s", ctx.attr.security_path)
+    template_dict.add(
+        "%(use_registry_identity_for_scm)s",
+        "true" if ctx.attr.use_registry_identity_for_scm else "false",
+    )
 
     ctx.actions.expand_template(
         template = ctx.file._runner_template,
@@ -40,43 +70,15 @@ def _swift_package_tool_impl(ctx):
         DefaultInfo(
             executable = runner_script,
             files = depset([runner_script]),
-            runfiles = ctx.runfiles(files = [swift.executable]),
+            runfiles = ctx.runfiles(files = runfiles),
         ),
     ]
 
-SWIFT_PACKAGE_CONFIG_ATTRS = {
-    "build_path": attr.string(
-        doc = "The relative path within the runfiles tree for the Swift Package Manager build directory.",
-        default = ".build",
-    ),
-    "cache_path": attr.string(
-        doc = "The relative path within the runfiles tree for the shared Swift Package Manager cache directory.",
-        default = ".cache",
-    ),
-    "dependency_caching": attr.bool(
-        doc = "Whether to enable the dependency cache.",
-        default = True,
-    ),
-    "manifest_cache": attr.string(
-        doc = """Caching mode of Package.swift manifests \
-(shared: shared cache, local: package's build directory, none: disabled)
-""",
-        default = "shared",
-        values = ["shared", "local", "none"],
-    ),
-    "manifest_caching": attr.bool(
-        doc = "Whether to enable build manifest caching.",
-        default = True,
-    ),
-    "security_path": attr.string(
-        doc = "The relative path within the runfiles tree for the security directory.",
-        default = ".security",
-    ),
-}
-
 swift_package_tool = rule(
     implementation = _swift_package_tool_impl,
-    doc = "Defines a rule that can be used to execute the `swift package` tool.",
+    doc = """\
+Defines a rule that can be used to execute the `swift package` tool.\
+""",
     attrs = dicts.add(
         swift_common.toolchain_attrs(),
         {
@@ -86,16 +88,21 @@ swift_package_tool = rule(
                 values = ["update", "resolve"],
             ),
             "package": attr.string(
-                doc = "The relative path to the `Package.swift` file from the workspace root.",
+                doc = """\
+The relative path to the `Package.swift` file from the workspace root.\
+""",
                 mandatory = True,
             ),
             "_runner_template": attr.label(
                 doc = "The template for the runner script.",
                 allow_single_file = True,
-                default = Label("//swiftpkg/internal:swift_package_tool_runner_template.sh"),
+                default = Label(
+                    "//swiftpkg/internal:swift_package_tool_runner_template.sh",
+                ),
             ),
         },
-        SWIFT_PACKAGE_CONFIG_ATTRS,
+        swift_package_tool_attrs.swift_package_tool_config,
+        swift_package_tool_attrs.swift_package_registry,
     ),
     executable = True,
 )

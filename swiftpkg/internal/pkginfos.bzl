@@ -151,15 +151,34 @@ def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map, resolved_dep_ma
 
     source_control = None
     file_system = None
+    registry = None
+
     if type == "sourceControl":
-        pin = None
+        # If the dependency is in the resolved map use that pin,
+        # otherwise, create a new pin with no state. This may be used
+        # by downstream logic to access things like the url of a
+        # package dependency that has not yet been resolved.
         if resolved_dep_map:
             pin = _new_pin_from_resolved_dep_map(resolved_dep_map)
+        else:
+            pin = _new_pin(
+                identity = identity,
+                kind = type,
+                location = dep_map["url"],
+                state = None,
+            )
         source_control = _new_source_control(
             pin = pin,
         )
     elif type == "fileSystem":
         file_system = _new_file_system(path = dep_map["path"])
+    elif type == "registry":
+        pin = None
+        if resolved_dep_map:
+            pin = _new_pin_from_resolved_dep_map(resolved_dep_map)
+        registry = _new_registry(
+            pin = pin,
+        )
     else:
         fail("Unrecognized dependency type {type} for {identity}.".format(
             type = type,
@@ -171,6 +190,7 @@ def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map, resolved_dep_ma
         name = name,
         source_control = source_control,
         file_system = file_system,
+        registry = registry,
     )
 
 def _new_pin_from_resolved_dep_map(resolved_dep_map):
@@ -180,7 +200,7 @@ def _new_pin_from_resolved_dep_map(resolved_dep_map):
         kind = resolved_dep_map["kind"],
         location = resolved_dep_map["location"],
         state = _new_pin_state(
-            revision = state_map["revision"],
+            revision = state_map.get("revision"),
             version = state_map.get("version"),
         ),
     )
@@ -496,7 +516,9 @@ def _new_dependency_identity_to_name_map(dump_deps):
     result = {}
     for dep in dump_deps:
         identity_provider_list = (
-            dep.get("sourceControl") or dep.get("fileSystem")
+            dep.get("sourceControl") or
+            dep.get("fileSystem") or
+            dep.get("registry")
         )
         if not identity_provider_list:
             continue
@@ -711,7 +733,12 @@ def _new_platform(name, version):
 
 # MARK: - External Dependency
 
-def _new_dependency(identity, name, source_control = None, file_system = None):
+def _new_dependency(
+        identity,
+        name,
+        source_control = None,
+        file_system = None,
+        registry = None):
     """Creates a `struct` representing an external dependency for a Swift \
     package.
 
@@ -724,6 +751,9 @@ def _new_dependency(identity, name, source_control = None, file_system = None):
         file_system: Optional. A `struct` as returned by
             `pkginfos.new_file_system()`. If present, it identifies the
             dependency as being loaded from a local file system.
+        registry: Optional. A `struct` as returned by
+            `pkginfos.new_registry()`. If present, it identifies the
+            dependency as being loaded from a Swift package registry.
 
     Returns:
         A `struct` representing an external dependency.
@@ -734,6 +764,7 @@ def _new_dependency(identity, name, source_control = None, file_system = None):
         name = pkginfo_dependencies.normalize_name(name),
         source_control = source_control,
         file_system = file_system,
+        registry = registry,
     )
 
 def _new_source_control(pin):
@@ -775,8 +806,11 @@ def _new_pin(identity, kind, location, state):
 def _new_pin_state(revision, version = None):
     """Create a `struct` representing the state for a pin.
 
+    `revision` is not provided for Swift package registry pins.
+    `version` is not provided for git ref pins.
+
     Args:
-        revision: The commit hash as a `string`.
+        revision: Optional. The commit hash as a `string`.
         version: Optional. The version string for the commit as a `string`.
 
     Returns:
@@ -798,6 +832,19 @@ def _new_file_system(path):
     """
     return struct(
         path = path,
+    )
+
+def _new_registry(pin):
+    """Create a `struct` representing a registry dependency.
+
+    Args:
+        pin: A `struct` as returned by `pkginfos.new_pin()`.
+
+    Returns:
+        A `struct` representing a registry dependency.
+    """
+    return struct(
+        pin = pin,
     )
 
 def _new_dependency_requirement(ranges = None):
@@ -1666,6 +1713,7 @@ pkginfos = struct(
     new_product = _new_product,
     new_product_reference = _new_product_reference,
     new_product_type = _new_product_type,
+    new_registry = _new_registry,
     new_resource = _new_resource,
     new_resource_rule = _new_resource_rule,
     new_resource_rule_process = _new_resource_rule_process,

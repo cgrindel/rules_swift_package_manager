@@ -3,18 +3,21 @@
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:types.bzl", "types")
 load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
-load("//swiftpkg/internal:swift_package_tool.bzl", "SWIFT_PACKAGE_CONFIG_ATTRS")
+load("//swiftpkg/internal:swift_package_tool_attrs.bzl", "swift_package_tool_attrs")
 
 def _package_config_attrs_to_content(attrs):
     """Returns a BUILD file compatible string representation of the keyword arguments"""
     kwargs = repository_utils.struct_to_kwargs(
         struct = attrs,
-        keys = SWIFT_PACKAGE_CONFIG_ATTRS,
+        keys = dicts.add(
+            swift_package_tool_attrs.swift_package_tool_config,
+            swift_package_tool_attrs.swift_package_registry,
+        ),
     )
 
     kwarg_lines = []
     for k, v in kwargs.items():
-        if types.is_string(v):
+        if types.is_string(v) or type(v) == "Label":
             kwarg_lines.append("    {key} = \"{value}\"".format(key = k, value = v))
         elif types.is_bool(v):
             kwarg_lines.append("    {key} = {value}".format(key = k, value = "True" if v else "False"))
@@ -63,7 +66,8 @@ swift_package_tool_repo = repository_rule(
                 mandatory = True,
             ),
         },
-        SWIFT_PACKAGE_CONFIG_ATTRS,
+        swift_package_tool_attrs.swift_package_tool_config,
+        swift_package_tool_attrs.swift_package_registry,
     ),
     doc = "Declares a `@swift_package` repository for using the `swift_package_tool` targets.",
 )
