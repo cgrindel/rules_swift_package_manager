@@ -1,0 +1,16 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+
+exports_files([
+    "registries.json",
+])
+
+swift_binary(
+    name = "swift_package_registry_example",
+    srcs = ["main.swift"],
+    module_name = "swift_package_registry_example",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@swiftpkg_apple.swift_collections//:Collections",
+        "@swiftpkg_apple.swift_nio//:NIO",
+    ],
+)
