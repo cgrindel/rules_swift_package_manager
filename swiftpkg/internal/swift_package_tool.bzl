@@ -24,8 +24,8 @@ def _swift_package_tool_impl(ctx):
     template_dict.add("%(package_path)s", package_path)
     template_dict.add("%(build_path)s", build_path)
     template_dict.add("%(cache_path)s", cache_path)
-    template_dict.add("%(enable_build_manifest_caching)s", ctx.attr.manifest_caching)
-    template_dict.add("%(enable_dependency_cache)s", ctx.attr.dependency_caching)
+    template_dict.add("%(enable_build_manifest_caching)s", "true" if ctx.attr.manifest_caching else "false")
+    template_dict.add("%(enable_dependency_cache)s", "true" if ctx.attr.dependency_caching else "false")
     template_dict.add("%(manifest_cache)s", ctx.attr.manifest_cache)
 
     ctx.actions.expand_template(
@@ -52,10 +52,9 @@ SWIFT_PACKAGE_CONFIG_ATTRS = {
         doc = "The relative path within the runfiles tree for the shared Swift Package Manager cache directory.",
         default = ".cache",
     ),
-    "dependency_caching": attr.string(
+    "dependency_caching": attr.bool(
         doc = "Whether to enable the dependency cache.",
-        default = "true",
-        values = ["true", "false"],
+        default = True,
     ),
     "manifest_cache": attr.string(
         doc = """Caching mode of Package.swift manifests \
@@ -64,10 +63,9 @@ SWIFT_PACKAGE_CONFIG_ATTRS = {
         default = "shared",
         values = ["shared", "local", "none"],
     ),
-    "manifest_caching": attr.string(
+    "manifest_caching": attr.bool(
         doc = "Whether to enable build manifest caching.",
-        default = "true",
-        values = ["true", "false"],
+        default = True,
     ),
 }
 

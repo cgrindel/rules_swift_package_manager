@@ -58,9 +58,9 @@ swift_deps.from_package(
 swift_deps.configure_swift_package(
     build_path = "spm-build",
     cache_path = "spm-cache",
-    dependency_caching = "false",
+    dependency_caching = False,
     manifest_cache = "none",
-    manifest_caching = "false",
+    manifest_caching = False,
 )
 use_repo(
     swift_deps,

@@ -1,23 +1,34 @@
 """Defines the `swift_package_tool_repo` repository rule that creates `swift_package_tool` targets."""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@bazel_skylib//lib:types.bzl", "types")
 load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
 load("//swiftpkg/internal:swift_package_tool.bzl", "SWIFT_PACKAGE_CONFIG_ATTRS")
 
-def _swift_package_tool_repo_impl(repository_ctx):
-    package_path = repository_ctx.attr.package
-
-    # Construct the list of keyword arguments for the `swift_package_tool` rule.
-    # String should be "key = \"value\""
-    # NOTE: only supports string typed values as they are all quoted
+def _package_config_attrs_to_content(attrs):
+    """Returns a BUILD file compatible string representation of the keyword arguments"""
     kwargs = repository_utils.struct_to_kwargs(
-        struct = repository_ctx.attr,
+        struct = attrs,
         keys = SWIFT_PACKAGE_CONFIG_ATTRS,
     )
-    kwarg_content = ",\n".join([
-        "    {key} = \"{value}\"".format(key = k, value = v)
-        for k, v in kwargs.items()
-    ])
+
+    kwarg_lines = []
+    for k, v in kwargs.items():
+        if types.is_string(v):
+            kwarg_lines.append("    {key} = \"{value}\"".format(key = k, value = v))
+        elif types.is_bool(v):
+            kwarg_lines.append("    {key} = {value}".format(key = k, value = "True" if v else "False"))
+        elif types.is_dict(v):
+            json_str = json.encode(v)
+            kwarg_lines.append("    {key} = {value}".format(key = k, value = json_str))
+        else:
+            fail("Unsupported value type for attribute {key}: {value}".format(key = k, value = v))
+
+    return ",\n".join(kwarg_lines)
+
+def _swift_package_tool_repo_impl(repository_ctx):
+    attrs_content = _package_config_attrs_to_content(repository_ctx.attr)
+    package_path = repository_ctx.attr.package
 
     repository_ctx.file(
         "BUILD.bazel",
@@ -28,18 +39,18 @@ swift_package_tool(
     name = "update",
     cmd = "update",
     package = "{package}",
-{kwarg_content}
+{attrs_content}
 )
 
 swift_package_tool(
     name = "resolve",
     cmd = "resolve",
     package = "{package}",
-{kwarg_content}
+{attrs_content}
 )
 """.format(
             package = package_path,
-            kwarg_content = kwarg_content,
+            attrs_content = attrs_content,
         ),
     )
 
