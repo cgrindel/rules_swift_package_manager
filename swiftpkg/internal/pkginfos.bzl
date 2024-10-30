@@ -151,10 +151,17 @@ def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map, resolved_dep_ma
 
     source_control = None
     file_system = None
-    if type == "sourceControl":
-        pin = None
-        if resolved_dep_map:
-            pin = _new_pin_from_resolved_dep_map(resolved_dep_map)
+    pin = None
+
+    # Unresolved dependencies are in the `dep_map` but not the `resolved_dep_map`.
+    # As such, there will be no `pin` for them.
+    # To support the build completing succesfully regardless of this, we will ignore
+    # declaring the dependency if there is no `pin`, downstream a warning is shown
+    # to the user to resolve the package.
+    if resolved_dep_map:
+        pin = _new_pin_from_resolved_dep_map(resolved_dep_map)
+
+    if pin and type == "sourceControl":
         source_control = _new_source_control(
             pin = pin,
         )
@@ -737,9 +744,6 @@ def _new_source_control(pin):
     Returns:
         A `struct` representing source control info for a dependency.
     """
-    if not pin:
-        return None
-
     return struct(
         pin = pin,
     )

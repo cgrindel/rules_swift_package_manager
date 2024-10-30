@@ -52,19 +52,6 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
     direct_dep_repo_names = []
     direct_dep_pkg_infos = {}
     for dep in pkg_info.dependencies:
-        # Ignore unresolved dependencies, for example for a new packgage added
-        # to the `Package.swift` which has not been resolved yet.
-        # By ignoring these for now we can allow the build to progress while
-        # expecting a resolution in the future.
-        if not dep.file_system and \
-           not dep.source_control:
-            # buildifier: disable=print
-            print("""
-WARNING: {name} is unresolved and won't be available duing the build, resolve \
-the Swift package to make it available.\
-""".format(name = dep.name))
-            continue
-
         bazel_repo_name = bazel_repo_names.from_identity(dep.identity)
         direct_dep_repo_names.append(bazel_repo_name)
         pkg_info_label = "@{}//:pkg_info.json".format(bazel_repo_name)
@@ -195,6 +182,17 @@ def _declare_pkg_from_dependency(dep, config_pkg):
             path = dep.file_system.path,
             dependencies_index = None,
         )
+
+    else:
+        # Ignore unresolved dependencies, for example for a new packgage added
+        # to the `Package.swift` which has not been resolved yet.
+        # By ignoring these for now we can allow the build to progress while
+        # expecting a resolution in the future.
+        # buildifier: disable=print
+        print("""
+WARNING: {name} is unresolved and won't be available duing the build, resolve \
+the Swift package to make it available.\
+""".format(name = dep.name))
 
 def _declare_swift_package_repo(name, from_package, config_swift_package):
     config_swift_package_kwargs = repository_utils.struct_to_kwargs(
