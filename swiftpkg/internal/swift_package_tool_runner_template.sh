@@ -26,6 +26,7 @@ cache_path="%(cache_path)s"
 enable_build_manifest_caching="%(enable_build_manifest_caching)s"
 enable_dependency_cache="%(enable_dependency_cache)s"
 manifest_cache="%(manifest_cache)s"
+security_path="%(security_path)s"
 
 # Construct dynamic arguments.
 args=()
@@ -46,9 +47,10 @@ args+=("--manifest-cache=$manifest_cache")
 
 # Run the command.
 "$swift_worker" swift package \
-  --package-path "$package_path" \
   --build-path "$build_path" \
   --cache-path "$cache_path" \
+  --package-path "$package_path" \
+  --security-path "$security_path" \
   "$cmd" \
   "${args[@]}" \
   "$@"
