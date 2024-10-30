@@ -27,6 +27,7 @@ def _swift_package_tool_impl(ctx):
     template_dict.add("%(enable_build_manifest_caching)s", "true" if ctx.attr.manifest_caching else "false")
     template_dict.add("%(enable_dependency_cache)s", "true" if ctx.attr.dependency_caching else "false")
     template_dict.add("%(manifest_cache)s", ctx.attr.manifest_cache)
+    template_dict.add("%(security_path)s", ctx.attr.security_path)
 
     ctx.actions.expand_template(
         template = ctx.file._runner_template,
@@ -66,6 +67,10 @@ SWIFT_PACKAGE_CONFIG_ATTRS = {
     "manifest_caching": attr.bool(
         doc = "Whether to enable build manifest caching.",
         default = True,
+    ),
+    "security_path": attr.string(
+        doc = "The relative path within the runfiles tree for the security directory.",
+        default = ".security",
     ),
 }
 

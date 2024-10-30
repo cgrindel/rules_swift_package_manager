@@ -61,6 +61,7 @@ swift_deps.configure_swift_package(
     dependency_caching = False,
     manifest_cache = "none",
     manifest_caching = False,
+    security_path = "spm-security",
 )
 use_repo(
     swift_deps,
