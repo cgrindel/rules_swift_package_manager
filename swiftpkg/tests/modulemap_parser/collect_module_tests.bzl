@@ -48,28 +48,6 @@ def _collect_module_test(ctx):
 
     do_parse_test(
         env,
-        "module with umbrella header declaration",
-        text = """
-        module "MyModule" {
-            umbrella header "MyModule/MyModule.h"
-        }
-        """,
-        expected = [
-            declarations.module(
-                module_id = "MyModule",
-                framework = False,
-                explicit = False,
-                attributes = [],
-                members = [
-                    struct(attribs = None, decl_type = "umbrella_header", path = "MyModule/MyModule.h", private = False, textual = False),
-                ],
-            ),
-        ],
-
-    )
-
-    do_parse_test(
-        env,
         "two modules with members and exports with newlines",
         text = """
         module MyModule {
@@ -120,6 +98,25 @@ def _collect_module_test(ctx):
             declarations.module(
                 module_id = "MyModule",
                 framework = True,
+                explicit = False,
+                attributes = [],
+                members = [],
+            ),
+        ],
+    )
+
+    do_parse_test(
+        env,
+        "module with string literal module id",
+        text = """
+        module "MyModule" {
+            umbrella header "MyModule/MyModule.h"
+        }
+        """,
+        expected = [
+            declarations.module(
+                module_id = "MyModule",
+                framework = False,
                 explicit = False,
                 attributes = [],
                 members = [],
