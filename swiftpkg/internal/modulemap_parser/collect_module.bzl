@@ -98,6 +98,9 @@ def _process_module_tokens(parsed_tokens, prefix_tokens, is_submodule):
 
     # Check if the module identifier is an identifier, asterisk, or string literal
     # Examples: module Foo, module *, module "Foo"
+    # The specification does not mention that literal strings are supported. However,
+    # canonical implementations of module map parsing do support literal strings.
+    # https://github.com/llvm/llvm-project/blob/dafb90dedcda1ad7b94b0bcdbbe7478f7d0f31f6/clang/lib/Lex/ModuleMap.cpp#L1833
     if not tokens.is_a(module_declaration_identifier_token, tts.identifier) and \
        not tokens.is_a(module_declaration_identifier_token, tts.operator, operators.asterisk) and \
        not tokens.is_a(module_declaration_identifier_token, tts.string_literal):
