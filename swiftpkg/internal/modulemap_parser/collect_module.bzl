@@ -97,7 +97,7 @@ def _process_module_tokens(parsed_tokens, prefix_tokens, is_submodule):
     consumed_count += 1
 
     # Check if the module identifier is an identifier, asterisk, or string literal
-    # Examples: module Foo, module *, module "Foo/Bar.h"
+    # Examples: module Foo, module *, module "Foo"
     if not tokens.is_a(module_declaration_identifier_token, tts.identifier) and \
        not tokens.is_a(module_declaration_identifier_token, tts.operator, operators.asterisk) and \
        not tokens.is_a(module_declaration_identifier_token, tts.string_literal):
