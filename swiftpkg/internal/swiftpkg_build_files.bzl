@@ -83,10 +83,12 @@ def _swift_target_build_file(pkg_ctx, target):
             fail_if_not_found = False,
         )
 
-        if not dep_target or dep_target.type != target_types.macro:
+        if dep_target and dep_target.type == target_types.macro:
+            macro_targets.append(dep_target)
+        else:
             target_deps.append(target_dep)
             continue
-        macro_targets.append(dep_target)
+        
 
     if macro_targets:
         attrs["plugins"] = [
@@ -154,7 +156,7 @@ def _swift_target_build_file(pkg_ctx, target):
         _update_attr_list("srcs", ":{}".format(
             swift_apple_res_bundle_info.accessor_label_name,
         ))
-
+        
     if is_library_target:
         load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(target, attrs)]
@@ -433,6 +435,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         load_stmts = [swiftpkg_generate_modulemap_load_stmt]
         modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
         noop_modulemap = clang_src_info.modulemap_path != None
+
         modulemap_attrs = {
             "deps": bzl_selects.to_starlark(modulemap_deps),
             "hdrs": clang_src_info.hdrs,
@@ -440,6 +443,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             "noop": noop_modulemap,
             "visibility": ["//:__subpackages__"],
         }
+
         decls.append(
             build_decls.new(
                 kind = swiftpkg_kinds.generate_modulemap,
@@ -641,7 +645,52 @@ def _starlarkify_clang_attrs(repository_ctx, attrs):
 
 # buildifier: disable=unused-variable
 def _system_library_build_file(target):
-    # GH009(chuck): Implement _system_library_build_file
+    attrs = {
+        "visibility": ["//:__subpackages__"],
+    }
+
+    # These flags are used by SPM when compiling clang modules.
+    copts = [
+        # Enable 'blocks' language feature
+        "-fblocks",
+        # Synthesize retain and release calls for Objective-C pointers
+        "-fobjc-arc",
+        # Enable support for PIC macros
+        "-fPIC",
+        # The SWIFT_PACKAGE define is a magical value that SPM uses when it
+        # builds clang libraries that will be used as Swift modules.
+        "-DSWIFT_PACKAGE=1",
+    ]
+    attrs["copts"] = copts
+
+    module_map_file = target.clang_src_info.modulemap_path
+    attrs["module_map"] = module_map_file
+
+    # System library targets must include a modulemap file.
+    # https://github.com/swiftlang/swift-package-manager/blob/12c14222fdde2ffd8303a2c805fed1b1eb802e5c/Sources/PackageLoading/PackageBuilder.swift#L853
+    if not module_map_file:
+        fail("Expected a modulemap file for a system library target. name: ", target.name)
+
+    header_files = target.clang_src_info.hdrs
+    attrs["hdrs"] = header_files
+
+    bzl_target_name = pkginfo_targets.bazel_label_name(target)
+
+    decls = [ 
+        build_decls.new(
+            kind = objc_kinds.library,
+            name = bzl_target_name,
+            attrs = attrs,
+        )
+    ]
+
+    return build_files.new(
+        decls = decls,
+    )
+
+    print(decls)
+    fail("System library targets are not yet supported.")
+    
     return None
 
 # MARK: - Apple xcframework Targets

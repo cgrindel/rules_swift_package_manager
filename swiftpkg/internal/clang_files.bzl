@@ -107,6 +107,18 @@ def _is_public_modulemap(path):
     basename = paths.basename(path)
     return basename == "module.modulemap"
 
+def _is_include_root_modulemap(path):
+    """Determines whether the specified path is to a modulemap file that is \
+    located in the include directory.
+
+    Args:
+        path: A path `string`.
+    
+    Returns:
+        A `bool` indicating whether the path is a modulemap file in the include directory.
+    """
+    return paths.dirname(path).endswith("include")
+
 def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path, module_name):
     """Retrieves the list of headers declared in the specified modulemap file \
     for the specified module.
@@ -147,7 +159,6 @@ def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path, module_name):
                 hdr_path = paths.join(modulemap_dirname, cdecl.path)
                 normalized_hdr_path = paths.normalize(hdr_path)
                 hdrs.append(normalized_hdr_path)
-
     return hdrs
 
 def _is_under_path(path, parent):
@@ -266,6 +277,12 @@ def _collect_files(
     # the referenced headers are included. For now, we will just add the
     # modulemap hdrs to the ones that we have already found.
     if modulemap_orig_path != None:
+        # If Swift Package Library provides a modulemap file in the include
+        # directory, then we should include all of the headers that are listed
+        # in the modulemap file.
+        if module_name == "libllbuild":
+            hdrs_set = sets.make()
+            
         mm_hdrs = _get_hdr_paths_from_modulemap(
             repository_ctx,
             modulemap_orig_path,
@@ -284,6 +301,7 @@ def _collect_files(
 
         mm_hdrs_set = sets.make(mm_hdrs)
         hdrs_set = sets.union(hdrs_set, mm_hdrs_set)
+        print("After: {}".format(hdrs_set))
 
     # If we have not found any public header files for a library module, then
     # promote any headers that are listed in the srcs.
