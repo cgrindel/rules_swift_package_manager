@@ -688,11 +688,6 @@ def _system_library_build_file(target):
         decls = decls,
     )
 
-    print(decls)
-    fail("System library targets are not yet supported.")
-    
-    return None
-
 # MARK: - Apple xcframework Targets
 
 def _xcframework_import_build_file(target, artifact_info):
