@@ -16,6 +16,9 @@ tidy(
 # gazelle:proto_import_prefix example
 # gazelle:swift_module_naming_convention pascal_case
 # gazelle:swift_generate_proto_libraries true
+# gazelle:swift_proto_compiler swift_proto=//compilers:swift_proto
+# gazelle:swift_proto_compiler swift_client_proto=//compilers:swift_client_proto
+# gazelle:swift_proto_compiler swift_server_proto=//compilers:swift_server_proto
 # gazelle:swift_generate_grpc_libraries_with_flavors swift_client_proto,swift_server_proto
 # gazelle:exclude .build
 

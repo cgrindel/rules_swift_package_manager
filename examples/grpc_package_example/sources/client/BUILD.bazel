@@ -5,5 +5,9 @@ swift_binary(
     srcs = ["client_main.swift"],
     module_name = "Client",
     visibility = ["//visibility:public"],
-    deps = ["//protos/echo_service:echo_service_swift_client_proto"],
+    deps = [
+        "//protos/echo_service:echo_service_swift_client_proto",
+        "@swiftpkg_grpc_swift//:GRPC",
+        "@swiftpkg_swift_protobuf//:SwiftProtobuf",
+    ],
 )

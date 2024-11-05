@@ -5,5 +5,8 @@ swift_binary(
     srcs = ["server_main.swift"],
     module_name = "Server",
     visibility = ["//visibility:public"],
-    deps = ["//protos/echo_service:echo_service_swift_server_proto"],
+    deps = [
+        "//protos/echo_service:echo_service_swift_server_proto",
+        "@swiftpkg_grpc_swift//:GRPC",
+    ],
 )

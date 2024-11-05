@@ -11,7 +11,7 @@ proto_library(
 
 swift_proto_library(
     name = "echo_response_swift_proto",
-    compilers = ["@build_bazel_rules_swift//proto/compilers:swift_proto"],
+    compilers = ["//compilers:swift_proto"],
     module_name = "EchoResponse",
     protos = [":echo_response_proto"],
     visibility = ["//visibility:public"],
