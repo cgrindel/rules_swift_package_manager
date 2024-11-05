@@ -109,9 +109,7 @@ def _collect_module_test(ctx):
         env,
         "module with string literal module id",
         text = """
-        module "MyModule" {
-            umbrella header "MyModule/MyModule.h"
-        }
+        module "MyModule" {}
         """,
         expected = [
             declarations.module(
@@ -178,7 +176,7 @@ def _collect_module_test(ctx):
         text = """
         module {}
         """,
-        expected_err = "Expected module identifier or asterisk, but was curly_bracket_open.",
+        expected_err = "Expected module identifier, asterisk or string_literal, but was curly_bracket_open.",
     )
 
     do_failing_parse_test(
