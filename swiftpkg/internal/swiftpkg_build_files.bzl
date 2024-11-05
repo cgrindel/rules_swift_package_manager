@@ -641,8 +641,48 @@ def _starlarkify_clang_attrs(repository_ctx, attrs):
 
 # buildifier: disable=unused-variable
 def _system_library_build_file(target):
-    # GH009(chuck): Implement _system_library_build_file
-    return None
+    attrs = {
+        "visibility": ["//:__subpackages__"],
+    }
+
+    # These flags are used by SPM when compiling clang modules.
+    copts = [
+        # Enable 'blocks' language feature
+        "-fblocks",
+        # Synthesize retain and release calls for Objective-C pointers
+        "-fobjc-arc",
+        # Enable support for PIC macros
+        "-fPIC",
+        # The SWIFT_PACKAGE define is a magical value that SPM uses when it
+        # builds clang libraries that will be used as Swift modules.
+        "-DSWIFT_PACKAGE=1",
+    ]
+    attrs["copts"] = copts
+
+    module_map_file = target.clang_src_info.modulemap_path
+    attrs["module_map"] = module_map_file
+
+    # System library targets must include a modulemap file.
+    # https://github.com/swiftlang/swift-package-manager/blob/12c14222fdde2ffd8303a2c805fed1b1eb802e5c/Sources/PackageLoading/PackageBuilder.swift#L853
+    if not module_map_file:
+        fail("Expected a modulemap file for a system library target. name: ", target.name)
+
+    header_files = target.clang_src_info.hdrs
+    attrs["hdrs"] = header_files
+
+    bzl_target_name = pkginfo_targets.bazel_label_name(target)
+
+    decls = [ 
+        build_decls.new(
+            kind = objc_kinds.library,
+            name = bzl_target_name,
+            attrs = attrs,
+        )
+    ]
+
+    return build_files.new(
+        decls = decls,
+    )
 
 # MARK: - Apple xcframework Targets
 
