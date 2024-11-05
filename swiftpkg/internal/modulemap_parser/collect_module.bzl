@@ -105,7 +105,7 @@ def _process_module_tokens(parsed_tokens, prefix_tokens, is_submodule):
        not tokens.is_a(module_declaration_identifier_token, tts.operator, operators.asterisk) and \
        not tokens.is_a(module_declaration_identifier_token, tts.string_literal):
         return None, errors.new(
-            "Expected module identifier, asterisk or string_literal, but was {}.".format(module_declaration_identifier_token.type)
+            "Expected module identifier, asterisk or string_literal, but was {}.".format(module_declaration_identifier_token.type),
         )
 
     # Collect the attributes and module members
