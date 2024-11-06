@@ -299,14 +299,13 @@ def _collect_files(
                 sets.insert(hdrs_set, src)
         srcs_set = sets.difference(srcs_set, hdrs_set)
 
-    # If public includes were specified, then use them. Otherwise, add every
-    # directory that holds a public header file and add any magical public
-    # header directories that we find.
+    # If public includes were specified, then use them. Otherwise, add
+    # any magical public header directories that we find.
     if len(public_includes) == 0:
-        public_includes = [paths.dirname(hdr) for hdr in sets.to_list(hdrs_set)]
+        public_header_folders = ["{}/".format(paths.dirname(hdr)) for hdr in sets.to_list(hdrs_set)]
         magical_public_hdr_dirs = []
-        for pi in public_includes:
-            magical_public_hdr_dir = clang_files.find_magical_public_hdr_dir(pi)
+        for public_header_folder in public_header_folders:
+            magical_public_hdr_dir = _find_magical_public_hdr_dir(public_header_folder)
             if magical_public_hdr_dir != None:
                 magical_public_hdr_dirs.append(magical_public_hdr_dir)
         public_includes.extend(magical_public_hdr_dirs)
