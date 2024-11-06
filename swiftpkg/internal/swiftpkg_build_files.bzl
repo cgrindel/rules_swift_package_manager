@@ -22,7 +22,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
     if target.module_type == module_types.clang:
         return _clang_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.swift:
-        return _swift_target_build_file(pkg_ctx, target)
+        return _swift_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
     elif target.module_type == module_types.binary:
@@ -39,7 +39,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
 
 # MARK: - Swift Target
 
-def _swift_target_build_file(pkg_ctx, target):
+def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     if target.swift_src_info == None:
         fail("Expected a `swift_src_info`. name: ", target.name)
 
@@ -112,6 +112,15 @@ def _swift_target_build_file(pkg_ctx, target):
         # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
         "-DSWIFT_PACKAGE",
     ]
+
+    linkopts = []
+    if target.linker_settings != None:
+        linkopts.extend(lists.flatten([
+            bzl_selects.new_from_build_setting(bs)
+            for bs in target.linker_settings.linked_libraries
+        ]))
+    if linkopts:
+        attrs["linkopts"] = _starlarkify_clang_attrs(repository_ctx, {"linkopts": linkopts})["linkopts"]
 
     # GH046: Support plugins.
 
