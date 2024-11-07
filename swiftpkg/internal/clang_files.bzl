@@ -249,10 +249,10 @@ def _collect_files(
             sets.insert(srcs_set, path)
         elif ext == ".modulemap" and _is_public_modulemap(path):
             if modulemap != None:
-                fail("Found multiple modulemap files. {first} {second}".format(
-                    first = modulemap,
-                    second = path,
-                ))
+                if _is_under_path(path, "include/"):
+                    # If we find a modulemap in the include directory, then we should use that one.
+                    modulemap = path
+                    modulemap_orig_path = orig_path
             modulemap_orig_path = orig_path
             modulemap = path
         else:
