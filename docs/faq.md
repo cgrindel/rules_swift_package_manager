@@ -176,7 +176,7 @@ Here is a quick explainer of why `rules_swift_package_manager` cannot resolve th
 the new architecture:
 
 - Each Swift package is declared as an external Bazel repository.
-- During the loading phase, there is no mechanism for one external repository to peak into another
+- During the loading phase, there is no mechanism for one external repository to peek into another
   external repository. In other words, a Swift package cannot query another Swift package to
   determine all of the available products.
 - So, when `rules_swift_package_manager` generates a `BUILD.bazel` file for a Swift package external
