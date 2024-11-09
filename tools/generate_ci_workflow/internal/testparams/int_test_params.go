@@ -13,7 +13,7 @@ type IntTestParams struct {
 func (itp *IntTestParams) Runner() string {
 	switch itp.OS {
 	case MacOS:
-		return "macos-15"
+		return "macos-14"
 	case LinuxOS:
 		return "ubuntu-22.04"
 	default:
