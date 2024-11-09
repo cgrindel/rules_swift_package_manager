@@ -178,10 +178,7 @@ if [[ -z "${bzl_output:-}" ]]; then
   usage_error "Must specify an output path for the Bazel Starlark source file."
 fi
 
-# DEBUG BEGIN
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") =========================" 
-set -x
-# DEBUG END
+
 
 # sdk_path="$(xcrun --show-sdk-path)"
 # macos_frameworks_dir="${sdk_path}/System/Library/Frameworks"
@@ -190,12 +187,6 @@ sdk_version="$(xcrun --show-sdk-version)"
 sdk_build_version="$(xcrun --show-sdk-build-version)"
 
 platforms_path="$(dirname "$(xcrun --show-sdk-platform-path)")"
-
-# DEBUG BEGIN
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") sdk_version: ${sdk_version}" 
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") sdk_build_version: ${sdk_build_version}" 
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") platforms_path: ${platforms_path}" 
-# DEBUG END
 
 macos_frameworks="$(list_frameworks_for_platform "${platforms_path}/MacOSX.platform")"
 ios_frameworks="$(list_frameworks_for_platform "${platforms_path}/iPhoneOS.platform")"
