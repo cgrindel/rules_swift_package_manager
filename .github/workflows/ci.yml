@@ -34,57 +34,57 @@ jobs:
           - test: '@@//bzlmod:e2e_test'
             runner: ubuntu-22.04
           - test: '@@//bzlmod:e2e_test'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:firebase_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:google_maps_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:grpc_example_test_bazel_.bazelversion'
             runner: ubuntu-22.04
           - test: '@@//examples:grpc_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:interesting_deps_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:ios_sim_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:lottie_ios_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:messagekit_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:nimble_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:objc_code_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:phone_number_kit_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:pkg_manifest_minimal_test_bazel_.bazelversion'
             runner: ubuntu-22.04
           - test: '@@//examples:pkg_manifest_minimal_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:resources_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:shake_ios_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:snapkit_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:soto_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:stripe_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:symlink_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:tca_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:vapor_example_test_bazel_.bazelversion'
             runner: ubuntu-22.04
           - test: '@@//examples:vapor_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//examples:xcmetrics_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: macos-15
           - test: '@@//release:archive_test'
             runner: ubuntu-22.04
           - test: '@@//release:archive_test'
-            runner: macos-14
+            runner: macos-15
     runs-on: ${{ matrix.runner }}
     env:
       CC: clang
@@ -112,7 +112,7 @@ jobs:
       fail-fast: false
       matrix:
         runner:
-          - macos-14
+          - macos-15
           - ubuntu-22.04
     runs-on: ${{ matrix.runner }}
     env:
