@@ -6,8 +6,16 @@ set -o errexit -o nounset -o pipefail
 # to bazel.
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
+echo >&2 "=============================="
+echo >&2 "Executing bazel run //:tidy"
+echo >&2 "=============================="
+
 # Generate Swift external deps and update build files
 "${bazel}" run //:tidy
+
+echo >&2 "=============================="
+echo >&2 "Executing bazel test //..."
+echo >&2 "=============================="
 
 # Ensure that it builds and tests pass
 "${bazel}" test //...
@@ -18,8 +26,16 @@ bazel="${BIT_BAZEL_BINARY:-bazel}"
 # Related:
 # https://github.com/MobileNativeFoundation/rules_xcodeproj/issues/2703
 
+echo >&2 "=============================="
+echo >&2 "Generating the Xcode project"
+echo >&2 "=============================="
+
 # Generate the Xcode project
 "${bazel}" run //analytics/AnalyticsExample:xcodeproj
+
+echo >&2 "=============================="
+echo >&2 "Build the workspace as Xcode would"
+echo >&2 "=============================="
 
 # Build the workspace
 "${bazel}" run //analytics/AnalyticsExample:xcodeproj -- \
