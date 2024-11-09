@@ -15,9 +15,14 @@ name: Continuous Integration
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
+
+env:
+  MACOS_RUNNER: macos-15
+  UBUNTU_RUNNER: ubuntu-22.04
+
 jobs:
   all_ci_tests:
-    runs-on: ubuntu-latest
+    runs-on: ${{ env.UBUNTU_RUNNER }}
     needs:
       - tidy_and_test_matrix
       - integration_test_matrix
@@ -32,59 +37,59 @@ jobs:
       matrix:
         include:
           - test: '@@//bzlmod:e2e_test'
-            runner: ubuntu-22.04
+            runner: ${{ env.UBUNTU_RUNNER }}
           - test: '@@//bzlmod:e2e_test'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:firebase_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:google_maps_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:grpc_example_test_bazel_.bazelversion'
-            runner: ubuntu-22.04
+            runner: ${{ env.UBUNTU_RUNNER }}
           - test: '@@//examples:grpc_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:interesting_deps_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:ios_sim_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:lottie_ios_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:messagekit_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:nimble_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:objc_code_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:phone_number_kit_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:pkg_manifest_minimal_test_bazel_.bazelversion'
-            runner: ubuntu-22.04
+            runner: ${{ env.UBUNTU_RUNNER }}
           - test: '@@//examples:pkg_manifest_minimal_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:resources_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:shake_ios_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:snapkit_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:soto_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:stripe_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:symlink_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:tca_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:vapor_example_test_bazel_.bazelversion'
-            runner: ubuntu-22.04
+            runner: ${{ env.UBUNTU_RUNNER }}
           - test: '@@//examples:vapor_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//examples:xcmetrics_example_test_bazel_.bazelversion'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
           - test: '@@//release:archive_test'
-            runner: ubuntu-22.04
+            runner: ${{ env.UBUNTU_RUNNER }}
           - test: '@@//release:archive_test'
-            runner: macos-14
+            runner: ${{ env.MACOS_RUNNER }}
     runs-on: ${{ matrix.runner }}
     env:
       CC: clang
@@ -112,8 +117,8 @@ jobs:
       fail-fast: false
       matrix:
         runner:
-          - macos-14
-          - ubuntu-22.04
+          - ${{ env.MACOS_RUNNER }}
+          - ${{ env.UBUNTU_RUNNER }}
     runs-on: ${{ matrix.runner }}
     env:
       CC: clang
