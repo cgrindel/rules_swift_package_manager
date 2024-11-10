@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spreso"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/spreso"
 )
 
 type Package struct {

@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/bazelbuild/bazel-gazelle/label"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftpkg"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swift"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swiftpkg"
 	mapset "github.com/deckarep/golang-set/v2"
 	"github.com/stretchr/testify/assert"
 )

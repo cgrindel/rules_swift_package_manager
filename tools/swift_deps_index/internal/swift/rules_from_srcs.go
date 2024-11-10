@@ -5,7 +5,7 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/language"
 	"github.com/bazelbuild/bazel-gazelle/rule"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftpkg"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swiftpkg"
 	mapset "github.com/deckarep/golang-set/v2"
 )
 
