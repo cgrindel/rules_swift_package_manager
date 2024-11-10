@@ -1,5 +1,5 @@
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
-load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_path")
+load("@io_bazel_rules_go//go:def.bzl", "go_path")
 
 package_group(
     name = "go_packages",
@@ -23,41 +23,9 @@ filegroup(
 
 # MARK: - Gazelle Plugin
 
-go_library(
-    name = "gazelle",
-    srcs = [
-        "config.go",
-        "doc.go",
-        "generate.go",
-        "kinds.go",
-        "lang.go",
-        "resolve.go",
-    ],
-    importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle",
-    visibility = ["//visibility:public"],
-    deps = [
-        "//gazelle/internal/reslog",
-        "//gazelle/internal/stringslices",
-        "//gazelle/internal/swift",
-        "//gazelle/internal/swiftbin",
-        "//gazelle/internal/swiftcfg",
-        "@bazel_gazelle//config:go_default_library",
-        "@bazel_gazelle//label:go_default_library",
-        "@bazel_gazelle//language:go_default_library",
-        "@bazel_gazelle//pathtools:go_default_library",
-        "@bazel_gazelle//repo:go_default_library",
-        "@bazel_gazelle//resolve:go_default_library",
-        "@bazel_gazelle//rule:go_default_library",
-        "@org_golang_x_exp//slices:go_default_library",
-        "@org_golang_x_text//cases:go_default_library",
-        "@org_golang_x_text//language:go_default_library",
-    ],
-)
-
 go_path(
     name = "godoc_root",
     deps = [
-        ":gazelle",
         "//gazelle/internal/jsonutils",
     ],
 )
