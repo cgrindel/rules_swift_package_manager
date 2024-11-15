@@ -488,6 +488,7 @@ def _target_generation_test(ctx):
         struct(
             msg = "Swift library target",
             name = "RegularSwiftTargetAsLibrary",
+            attr = {},
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
@@ -514,6 +515,7 @@ swift_library(
         struct(
             msg = "Swift regular target associated with executable product",
             name = "RegularTargetForExec",
+            attr = {},
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
@@ -538,6 +540,7 @@ swift_library(
         struct(
             msg = "Swift test target",
             name = "RegularSwiftTargetAsLibraryTests",
+            attr = {},
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
 
@@ -559,6 +562,7 @@ swift_test(
         struct(
             msg = "Swift executable target",
             name = "SwiftExecutableTarget",
+            attr = {},
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 
@@ -590,6 +594,7 @@ swift_binary(
         struct(
             msg = "simple clang target",
             name = "ClangLibrary",
+            attr = {},
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
@@ -648,6 +653,7 @@ swift_interop_hint(
         struct(
             msg = "Objc target",
             name = "ObjcLibrary",
+            attr = {},
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
@@ -719,6 +725,7 @@ swift_interop_hint(
         struct(
             msg = "Objc target with a modulemap",
             name = "ObjcLibraryWithModulemap",
+            attr = {},
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 
@@ -778,6 +785,7 @@ swift_interop_hint(
         struct(
             msg = "Swift target with conditional dep",
             name = "SwiftLibraryWithConditionalDep",
+            attr = {},
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
@@ -806,6 +814,7 @@ swift_library(
         struct(
             msg = "Clang target with conditional dep",
             name = "ClangLibraryWithConditionalDep",
+            attr = {},
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
@@ -864,6 +873,7 @@ swift_interop_hint(
         struct(
             msg = "Swift library target with @objc directives and Objc dep",
             name = "SwiftForObjcTarget",
+            attr = {},
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
@@ -890,6 +900,7 @@ swift_library(
         struct(
             msg = "Swift library target with file path resource",
             name = "SwiftLibraryWithFilePathResource",
+            attr = {},
             exp = """\
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
@@ -937,6 +948,7 @@ swift_library(
         struct(
             msg = "Objc target with resources",
             name = "ObjcLibraryWithResources",
+            attr = {},
             exp = """\
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
@@ -1034,6 +1046,48 @@ swift_interop_hint(
 )
 """,
         ),
+        struct(
+            msg = "Swift library target with default visibility",
+            name = "RegularSwiftTargetAsLibrary",
+            attr = {
+                "experimental_expose_build_files": False,
+            },
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "RegularSwiftTargetAsLibrary.rspm",
+    always_include_developer_search_paths = True,
+    copts = ["-DSWIFT_PACKAGE"],
+    module_name = "RegularSwiftTargetAsLibrary",
+    package_name = "MyPackage",
+    srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
+    tags = ["manual"],
+    visibility = ["//:__subpackages__"],
+)
+""",
+        ),
+        struct(
+            msg = "Swift library target with public visibility",
+            name = "RegularSwiftTargetAsLibrary",
+            attr = {
+                "experimental_expose_build_files": True,
+            },
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "RegularSwiftTargetAsLibrary.rspm",
+    always_include_developer_search_paths = True,
+    copts = ["-DSWIFT_PACKAGE"],
+    module_name = "RegularSwiftTargetAsLibrary",
+    package_name = "MyPackage",
+    srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
     ]
     for t in tests:
         target = pkginfo_targets.get(_pkg_info.targets, t.name)
@@ -1054,6 +1108,7 @@ swift_interop_hint(
                 paths.normalize(paths.join(target.path, path)): result
                 for path, result in getattr(t, "is_directory", {}).items()
             },
+            attr = t.attr,
         )
         actual = scg.to_starlark(
             swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx, target),

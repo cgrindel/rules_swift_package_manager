@@ -43,6 +43,7 @@ Used to add or override settings for a particular Swift package.
 | <a id="swift_deps.configure_package-patch_tool"></a>patch_tool |  The patch(1) utility to use. If this is specified, Bazel will use the specified patch tool instead of the Bazel-native patch implementation.   | String | optional |  `""`  |
 | <a id="swift_deps.configure_package-patches"></a>patches |  A list of files that are to be applied as patches after extracting the archive. By default, it uses the Bazel-native patch implementation which doesn't support fuzz match and binary patch, but Bazel will fall back to use patch command line tool if `patch_tool` attribute is specified or there are arguments other than `-p` in `patch_args` attribute.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
 | <a id="swift_deps.configure_package-recursive_init_submodules"></a>recursive_init_submodules |  Whether to clone submodules recursively in the repository.   | Boolean | optional |  `True`  |
+| <a id="swift_deps.experimental_expose_build_files"></a>experimental_expose_build_files | Allows to expose internal build files required for Swift package compilation. This option is experimental and should be used at your own risk. The structure and labels of exposed build files may change in future releases without requiring a major version bump. | Boolean | optional | `False` |
 
 <a id="swift_deps.configure_swift_package"></a>
 
