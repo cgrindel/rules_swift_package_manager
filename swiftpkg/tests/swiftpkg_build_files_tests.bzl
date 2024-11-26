@@ -621,6 +621,7 @@ swift_interop_hint(
             msg = "Objc target",
             name = "ObjcLibrary",
             exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 generate_modulemap(
@@ -634,6 +635,7 @@ generate_modulemap(
 
 objc_library(
     name = "ObjcLibrary.rspm",
+    aspect_hints = ["ObjcLibrary.rspm_swift_hint"],
     deps = [":ObjcLibrary.rspm_objc"],
     enable_modules = True,
     hdrs = ["include/external.h"],
@@ -698,18 +700,25 @@ objc_library(
     textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
 )
+
+swift_interop_hint(
+    name = "ObjcLibrary.rspm_swift_hint",
+    module_map = "ObjcLibrary.rspm_modulemap",
+    module_name = "ObjcLibrary",
+)
 """,
         ),
         struct(
             msg = "Objc target with a modulemap",
             name = "ObjcLibraryWithModulemap",
             exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 generate_modulemap(
     name = "ObjcLibraryWithModulemap.rspm_modulemap",
-    deps = ["@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap"],
-    hdrs = ["include/external.h"],
+    deps = [],
+    hdrs = [],
     module_name = "ObjcLibraryWithModulemap",
     noop = True,
     visibility = ["//:__subpackages__"],
@@ -717,6 +726,7 @@ generate_modulemap(
 
 objc_library(
     name = "ObjcLibraryWithModulemap.rspm",
+    aspect_hints = ["ObjcLibraryWithModulemap.rspm_swift_hint"],
     deps = [":ObjcLibraryWithModulemap.rspm_objc"],
     enable_modules = True,
     hdrs = ["include/external.h"],
@@ -758,6 +768,7 @@ objc_library(
     enable_modules = True,
     hdrs = ["include/external.h"],
     includes = ["include"],
+    module_map = "include/module.modulemap",
     sdk_frameworks = select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": [
             "Foundation",
@@ -780,6 +791,12 @@ objc_library(
     ],
     textual_hdrs = ["src/foo.m"],
     visibility = ["//:__subpackages__"],
+)
+
+swift_interop_hint(
+    name = "ObjcLibraryWithModulemap.rspm_swift_hint",
+    module_map = "include/module.modulemap",
+    module_name = "ObjcLibraryWithModulemap",
 )
 """,
         ),
@@ -931,6 +948,7 @@ swift_library(
             name = "ObjcLibraryWithResources",
             exp = """\
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap", "objc_resource_bundle_accessor_hdr", "objc_resource_bundle_accessor_impl", "resource_bundle_infoplist")
 
 apple_resource_bundle(
@@ -952,6 +970,7 @@ generate_modulemap(
 
 objc_library(
     name = "ObjcLibraryWithResources.rspm",
+    aspect_hints = ["ObjcLibraryWithResources.rspm_swift_hint"],
     data = [":ObjcLibraryWithResources.rspm_resource_bundle"],
     deps = [":ObjcLibraryWithResources.rspm_objc"],
     enable_modules = True,
@@ -1038,6 +1057,12 @@ objc_resource_bundle_accessor_impl(
 resource_bundle_infoplist(
     name = "ObjcLibraryWithResources.rspm_resource_bundle_infoplist",
     region = "en",
+)
+
+swift_interop_hint(
+    name = "ObjcLibraryWithResources.rspm_swift_hint",
+    module_map = "ObjcLibraryWithResources.rspm_modulemap",
+    module_name = "ObjcLibraryWithResources",
 )
 """,
         ),

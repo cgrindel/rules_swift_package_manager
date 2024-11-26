@@ -13,7 +13,6 @@
 * [After running `//:swift_update_pkgs`, I see a `.build` directory. What is it? Do I need it?](#after-running-swift_update_pkgs-i-see-a-build-directory-what-is-it-do-i-need-it)
 * [Does the Gazelle plugin run Swift package manager with every execution?](#does-the-gazelle-plugin-run-swift-package-manager-with-every-execution)
 * [Can I store the Swift dependency files in a sub-package (i.e., not in the root of the workspace)?](#can-i-store-the-swift-dependency-files-in-a-sub-package-ie-not-in-the-root-of-the-workspace)
-* [My project builds successfully with `bazel build ...`, but it does not build when using `rules_xcodeproj`. How can I fix this?](#my-project-builds-successfully-with-bazel-build--but-it-does-not-build-when-using-rules_xcodeproj-how-can-i-fix-this)
   * [Why does this happen?](#why-does-this-happen)
 * [How do I handle the error `Unable to resolve byName reference XXX in @swiftpkg_yyy.`?](#how-do-i-handle-the-error-unable-to-resolve-byname-reference-xxx-in-swiftpkg_yyy)
   * [How do I fix this issue?](#how-do-i-fix-this-issue)
@@ -93,21 +92,6 @@ the source files that exist in your project to generate the Bazel build files.
 
 Yes. The [vapor example] demonstrates storing the Swift dependency files in a sub-package called
 `swift`.
-
-## My project builds successfully with `bazel build ...`, but it does not build when using `rules_xcodeproj`. How can I fix this?
-
-tl;dr Add the following to your `.bazelrc`.
-
-```
-# Ensure that sandboxed is added to the spawn strategy list when building with
-# rules_xcodeproj.
-build:rules_xcodeproj --spawn_strategy=remote,worker,sandboxed,local
-```
-
-Alternatively, you can use the [--strategy_regexp] flag to target the relevant targets. For
-instance, if `Sources/BranchSDK/BNCContentDiscoveryManager.m` is not building properly, you can
-specify `--strategy_regexp="Compiling Sources/BranchSDK/.*=sandboxed"` to use the `sandboxed` strategy
-for that file. The regular expression matches on the _description_ for the action.
 
 ### Why does this happen?
 
