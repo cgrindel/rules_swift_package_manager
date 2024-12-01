@@ -103,6 +103,11 @@ jobs:
       - uses: ./.github/actions/configure_remote_cache_auth
         with:
           buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
+      # DEBUG BEGIN
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        if: ${{ matrix.test == '@@//examples:ios_sim_test_bazel_.bazelversion' }}
+      # DEBUG END
       - uses: ./.github/actions/execute_test
         with:
           bzlmod_enabled: ${{ matrix.bzlmod_enabled }}
