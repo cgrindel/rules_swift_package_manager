@@ -229,6 +229,7 @@ def _c_child_library(
         rule_kind,
         srcs,
         language_standard = None,
+        modulemap_path = None,
         res_copts = None):
     child_attrs = dicts.omit(attrs, ["data"])
     child_copts = list(attrs.get("copts", []))
@@ -238,6 +239,8 @@ def _c_child_library(
     if language_standard:
         child_copts.append("-std={}".format(language_standard))
     child_attrs["copts"] = child_copts
+    if modulemap_path:
+        child_attrs["module_map"] = modulemap_path
     return build_decls.new(
         rule_kind,
         name,
@@ -434,8 +437,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
         noop_modulemap = clang_src_info.modulemap_path != None
         modulemap_attrs = {
-            "deps": bzl_selects.to_starlark(modulemap_deps),
-            "hdrs": clang_src_info.hdrs,
+            "deps": [] if noop_modulemap else bzl_selects.to_starlark(modulemap_deps),
+            "hdrs": [] if noop_modulemap else clang_src_info.hdrs,
             "module_name": target.c99name,
             "noop": noop_modulemap,
             "visibility": ["//:__subpackages__"],
@@ -445,6 +448,23 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 kind = swiftpkg_kinds.generate_modulemap,
                 name = modulemap_target_name,
                 attrs = modulemap_attrs,
+            ),
+        )
+
+        # Create an interop hint for any custom or generated modulemap.
+        # `module_map` attr of `objc_library` is being removed.
+        aspect_hint_target_name = pkginfo_targets.swift_hint_label_name(
+            bzl_target_name,
+        )
+        load_stmts.append(swift_interop_hint_load_stmt)
+        decls.append(
+            build_decls.new(
+                kind = swift_kinds.interop_hint,
+                name = aspect_hint_target_name,
+                attrs = {
+                    "module_map": clang_src_info.modulemap_path if clang_src_info.modulemap_path else modulemap_target_name,
+                    "module_name": target.c99name,
+                },
             ),
         )
 
@@ -461,6 +481,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                            clang_src_info.organized_srcs.objc_srcs +
                            clang_src_info.organized_srcs.other_srcs,
                     language_standard = pkg_ctx.pkg_info.c_language_standard,
+                    modulemap_path = clang_src_info.modulemap_path,
                     res_copts = res_copts,
                 ),
             )
@@ -477,18 +498,20 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                            clang_src_info.organized_srcs.objcxx_srcs +
                            clang_src_info.organized_srcs.other_srcs,
                     language_standard = pkg_ctx.pkg_info.cxx_language_standard,
+                    modulemap_path = clang_src_info.modulemap_path,
                     res_copts = res_copts,
                 ),
             )
 
         # Add the objc_library that brings all of the child targets together.
         uber_attrs = dicts.omit(attrs, ["srcs", "copts"]) | {
+            "aspect_hints": [aspect_hint_target_name],
             "deps": [
                 ":{}".format(dname)
                 for dname in child_dep_names
             ],
+            "module_name": target.c99name,
         }
-        uber_attrs["module_name"] = target.c99name
         decls.append(
             build_decls.new(
                 objc_kinds.library,
@@ -502,6 +525,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             bzl_target_name,
         )
         aspect_hint_attrs = {"module_name": target.c99name}
+        if clang_src_info.modulemap_path:
+            aspect_hint_attrs["module_map"] = clang_src_info.modulemap_path
 
         load_stmts = [swift_interop_hint_load_stmt]
         decls.append(
