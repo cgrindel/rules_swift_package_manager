@@ -1,0 +1,23 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "simple_ios_app.lib",
+    srcs = ["ios_main.swift"],
+    target_compatible_with = ["@platforms//os:ios"],
+    visibility = ["//swift:__subpackages__"],
+    tags = ["manual"],
+    deps = ["@swiftpkg_yoti_doc_scan_ios//:YotiDocumentScan"],
+)
+
+ios_application(
+    name = "simple_ios_app",
+    bundle_id = "com.example.simple_ios_app",
+    families = [
+        "iphone",
+        "ipad",
+    ],
+    infoplists = ["Info.plist"],
+    minimum_os_version = "14.0",
+    deps = [":simple_ios_app.lib"],
+)

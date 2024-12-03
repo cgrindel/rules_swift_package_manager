@@ -136,9 +136,21 @@ def _artifact_infos_from_path(repository_ctx, path):
         xcframework_dirs = repository_files.list_directories_under(
             repository_ctx,
             path,
-            max_depth = 1,
             by_name = "*.xcframework",
         )
+
+    # If multiple found, use the last one which is what SPM currently does:
+    # https://github.com/swiftlang/swift-package-manager/blob/c26c12f54357fb7246c0bdbe3483105389f056b8/Sources/Workspace/Workspace%2BBinaryArtifacts.swift#L699-L723
+    if len(xcframework_dirs) > 1:
+        # buildifier: disable=print
+        print("""\
+WARNING: Found multiple XCFramework binary artifacts in the downloaded artifact: \
+{xcframework_dirs}, using the last one.
+""".format(
+            xcframework_dirs = xcframework_dirs,
+        ))
+        xcframework_dirs = xcframework_dirs[-1:]
+
     return [
         artifact_infos.new_xcframework_info_from_files(repository_ctx, xf)
         for xf in xcframework_dirs
