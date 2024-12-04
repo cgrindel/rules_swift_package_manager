@@ -15,7 +15,7 @@ def _new_framework_info(path, link_type):
         A `struct` representing an Apple framework.
     """
     return struct(
-        artifiact_type = artifact_types.framework,
+        artifact_type = artifact_types.framework,
         path = path,
         link_type = link_type,
     )
@@ -37,7 +37,7 @@ def _new_xcframework_info(path, framework_infos):
         framework_info = framework_infos[0]
         link_type = framework_info.link_type
     return struct(
-        artifiact_type = artifact_types.xcframework,
+        artifact_type = artifact_types.xcframework,
         path = path,
         framework_infos = framework_infos,
         link_type = link_type,

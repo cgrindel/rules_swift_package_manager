@@ -29,7 +29,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
         # GH558: Support artifactBundle.
         xcf_artifact_info = lists.find(
             artifact_infos,
-            lambda ai: ai.artifiact_type == artifact_types.xcframework,
+            lambda ai: ai.artifact_type == artifact_types.xcframework,
         )
         if xcf_artifact_info != None:
             return _xcframework_import_build_file(target, xcf_artifact_info)
