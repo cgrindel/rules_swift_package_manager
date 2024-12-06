@@ -45,7 +45,7 @@ def _generate_modulemap_impl(ctx):
         if ModuleMapInfo in dep
     ]
 
-    out_filename = "{}/module.modulemap".format(module_name)
+    out_filename = "{}_modulemap/_/module.modulemap".format(module_name)
     modulemap_file = ctx.actions.declare_file(out_filename)
 
     hdrs = [
