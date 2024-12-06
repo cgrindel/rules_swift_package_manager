@@ -232,6 +232,7 @@ bzl_library(
     deps = [
         ":clang_files",
         ":module_maps",
+        "@build_bazel_rules_swift//swift",
     ],
 )
 

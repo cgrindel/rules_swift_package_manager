@@ -5,6 +5,7 @@
 # https://github.com/bazel-xcode/PodToBUILD/blob/e9bbf68151caf6c8cd9b8ed2fa361b38e0f6a860/BazelExtensions/extensions.bzl#L113
 # https://github.com/bazel-xcode/xchammer/blob/master/sample/UrlGet/Vendor/rules_pods/BazelExtensions/extensions.bzl
 
+load("@build_bazel_rules_swift//swift:swift_interop_info.bzl", "create_swift_interop_info")
 load(":clang_files.bzl", "clang_files")
 load(":module_maps.bzl", "write_module_map")
 
@@ -66,6 +67,12 @@ def _generate_modulemap_impl(ctx):
     )
     provider_hdr = [modulemap_file]
 
+    # This target itself is a modulemap, so suppress any module generation
+    # rules_swift does for it.
+    swift_interop_info = create_swift_interop_info(
+        suppressed = True,
+    )
+
     return [
         DefaultInfo(files = depset([modulemap_file])),
         ModuleMapInfo(
@@ -81,6 +88,7 @@ def _generate_modulemap_impl(ctx):
                 includes = depset([modulemap_file.dirname]),
             ),
         ),
+        swift_interop_info,
     ]
 
 generate_modulemap = rule(
