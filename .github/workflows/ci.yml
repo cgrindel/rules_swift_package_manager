@@ -104,6 +104,7 @@ jobs:
         with:
           buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
       # DEBUG BEGIN
+      # FOO
       - name: Setup tmate session
         uses: mxschmitt/action-tmate@v3
         if: ${{ matrix.test == '@@//examples:ios_sim_test_bazel_.bazelversion' }}
