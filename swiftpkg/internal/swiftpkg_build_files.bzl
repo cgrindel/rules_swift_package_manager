@@ -368,10 +368,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     # Assemble attributes
 
     attrs = {
-        "copts": copts,
-        "srcs": srcs,
         # To mimic SPM behavior we always link the library.
         "alwayslink": True,
+        "copts": copts,
+        "srcs": srcs,
         "visibility": ["//:__subpackages__"],
     }
     if clang_src_info.hdrs:
