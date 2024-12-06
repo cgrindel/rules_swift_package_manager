@@ -494,6 +494,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 swift_library(
     name = "RegularSwiftTargetAsLibrary.rspm",
     always_include_developer_search_paths = True,
+    alwayslink = True,
     copts = ["-DSWIFT_PACKAGE"],
     module_name = "RegularSwiftTargetAsLibrary",
     package_name = "MyPackage",
@@ -515,6 +516,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 swift_library(
     name = "RegularTargetForExec.rspm",
     always_include_developer_search_paths = True,
+    alwayslink = True,
     copts = ["-DSWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
     module_name = "RegularTargetForExec",
@@ -589,6 +591,7 @@ cc_library(
 
 cc_library(
     name = "ClangLibrary.rspm_cxx",
+    alwayslink = True,
     aspect_hints = ["ClangLibrary.rspm_swift_hint"],
     copts = [
         "-fblocks",
@@ -654,6 +657,7 @@ objc_library(
 
 objc_library(
     name = "ObjcLibrary.rspm_objc",
+    alwayslink = True,
     aspect_hints = ["ObjcLibrary.rspm_swift_hint"],
     copts = [
         "-fblocks",
@@ -712,6 +716,7 @@ objc_library(
 
 objc_library(
     name = "ObjcLibraryWithModulemap.rspm_objc",
+    alwayslink = True,
     aspect_hints = ["ObjcLibraryWithModulemap.rspm_swift_hint"],
     copts = [
         "-fblocks",
@@ -765,6 +770,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 swift_library(
     name = "SwiftLibraryWithConditionalDep.rspm",
     always_include_developer_search_paths = True,
+    alwayslink = True,
     copts = ["-DSWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:ClangLibrary.rspm"] + select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
@@ -797,6 +803,7 @@ cc_library(
 
 cc_library(
     name = "ClangLibraryWithConditionalDep.rspm_cxx",
+    alwayslink = True,
     aspect_hints = ["ClangLibraryWithConditionalDep.rspm_swift_hint"],
     copts = [
         "-fblocks",
@@ -845,6 +852,7 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 swift_library(
     name = "SwiftForObjcTarget.rspm",
     always_include_developer_search_paths = True,
+    alwayslink = True,
     copts = ["-DSWIFT_PACKAGE"],
     deps = ["@swiftpkg_mypackage//:ObjcLibraryDep.rspm"],
     features = ["swift.propagate_generated_module_map"],
@@ -886,6 +894,7 @@ resource_bundle_infoplist(
 swift_library(
     name = "SwiftLibraryWithFilePathResource.rspm",
     always_include_developer_search_paths = True,
+    alwayslink = True,
     copts = ["-DSWIFT_PACKAGE"],
     data = [":SwiftLibraryWithFilePathResource.rspm_resource_bundle"],
     module_name = "SwiftLibraryWithFilePathResource",
@@ -934,6 +943,7 @@ objc_library(
 
 objc_library(
     name = "ObjcLibraryWithResources.rspm_objc",
+    alwayslink = True,
     aspect_hints = ["ObjcLibraryWithResources.rspm_swift_hint"],
     copts = [
         "-fblocks",
