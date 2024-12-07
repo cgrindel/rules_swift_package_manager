@@ -9,6 +9,7 @@ swift_library(
         "MarkdownTests.swift",
     ],
     module_name = "FooTests",
+    tags = ["manual"],
     deps = [
         "//Sources/Foo",
         "@swiftpkg_swift_markdown//:Markdown",
@@ -18,7 +19,6 @@ swift_library(
 
 ios_unit_test(
     name = "FooTests",
-    size = "enormous",
     minimum_os_version = "14.0",
     visibility = ["//visibility:public"],
     deps = [":FooTestsLib"],
