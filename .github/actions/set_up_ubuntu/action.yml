@@ -23,7 +23,8 @@ runs:
     - uses: actions/setup-go@v5
       with:
         go-version-file: go.mod
-    - uses: cgrindel/gha_install_swift_on_ubuntu@v2
+    # - uses: cgrindel/gha_install_swift_on_ubuntu@v2
+    - uses: cgrindel/gha_install_swift_on_ubuntu@remove_swift_in_usr_local_bin
       with:
         swift_release_tag: ${{ inputs.swift_release_tag }}
         ubuntu_version: ${{ inputs.ubuntu_version }}
