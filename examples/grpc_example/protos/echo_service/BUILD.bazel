@@ -16,8 +16,8 @@ proto_library(
 swift_proto_library(
     name = "echo_service_swift_client_proto",
     compilers = [
-        "@build_bazel_rules_swift//proto/compilers:swift_proto",
-        "@build_bazel_rules_swift//proto/compilers:swift_client_proto",
+        "//compilers:swift_proto",
+        "//compilers:swift_client_proto",
     ],
     module_name = "EchoServiceClient",
     protos = [":echo_service_proto"],
@@ -31,8 +31,8 @@ swift_proto_library(
 swift_proto_library(
     name = "echo_service_swift_server_proto",
     compilers = [
-        "@build_bazel_rules_swift//proto/compilers:swift_proto",
-        "@build_bazel_rules_swift//proto/compilers:swift_server_proto",
+        "//compilers:swift_proto",
+        "//compilers:swift_server_proto",
     ],
     module_name = "EchoServiceServer",
     protos = [":echo_service_proto"],

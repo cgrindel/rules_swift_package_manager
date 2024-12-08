@@ -9,5 +9,6 @@ swift_test(
     deps = [
         "//protos/echo_service:echo_service_swift_client_proto",
         "//protos/echo_service:echo_service_swift_server_proto",
+        "@swiftpkg_grpc_swift//:GRPC",
     ],
 )
