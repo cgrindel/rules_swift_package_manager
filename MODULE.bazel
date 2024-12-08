@@ -24,7 +24,7 @@ bazel_dep(name = "platforms", version = "0.0.6")
 # rules_swift_package_manager _must_ be a runtime dependency of rules_swift_package_manager.
 bazel_dep(
     name = "rules_swift",
-    version = "2.1.1",
+    version = "2.2.0",
     repo_name = "build_bazel_rules_swift",
 )
 bazel_dep(
