@@ -494,7 +494,11 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 swift_library(
     name = "RegularSwiftTargetAsLibrary.rspm",
     always_include_developer_search_paths = True,
-    copts = ["-DSWIFT_PACKAGE"],
+    copts = [
+        "-DSWIFT_PACKAGE",
+        "-Xcc",
+        "-DSWIFT_PACKAGE",
+    ],
     module_name = "RegularSwiftTargetAsLibrary",
     package_name = "MyPackage",
     srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
@@ -515,7 +519,11 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 swift_library(
     name = "RegularTargetForExec.rspm",
     always_include_developer_search_paths = True,
-    copts = ["-DSWIFT_PACKAGE"],
+    copts = [
+        "-DSWIFT_PACKAGE",
+        "-Xcc",
+        "-DSWIFT_PACKAGE",
+    ],
     deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
     module_name = "RegularTargetForExec",
     package_name = "MyPackage",
@@ -533,7 +541,11 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
 
 swift_test(
     name = "RegularSwiftTargetAsLibraryTests.rspm",
-    copts = ["-DSWIFT_PACKAGE"],
+    copts = [
+        "-DSWIFT_PACKAGE",
+        "-Xcc",
+        "-DSWIFT_PACKAGE",
+    ],
     deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
     module_name = "RegularSwiftTargetAsLibraryTests",
     package_name = "MyPackage",
@@ -551,6 +563,8 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 swift_binary(
     name = "SwiftExecutableTarget.rspm",
     copts = [
+        "-DSWIFT_PACKAGE",
+        "-Xcc",
         "-DSWIFT_PACKAGE",
         "-enable-experimental-feature",
         "BuiltinModule",
@@ -809,7 +823,11 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 swift_library(
     name = "SwiftLibraryWithConditionalDep.rspm",
     always_include_developer_search_paths = True,
-    copts = ["-DSWIFT_PACKAGE"],
+    copts = [
+        "-DSWIFT_PACKAGE",
+        "-Xcc",
+        "-DSWIFT_PACKAGE",
+    ],
     deps = ["@swiftpkg_mypackage//:ClangLibrary.rspm"] + select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
         "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
@@ -887,7 +905,11 @@ generate_modulemap(
 swift_library(
     name = "SwiftForObjcTarget.rspm",
     always_include_developer_search_paths = True,
-    copts = ["-DSWIFT_PACKAGE"],
+    copts = [
+        "-DSWIFT_PACKAGE",
+        "-Xcc",
+        "-DSWIFT_PACKAGE",
+    ],
     deps = [
         "@swiftpkg_mypackage//:ObjcLibraryDep.rspm",
         "@swiftpkg_mypackage//:ObjcLibraryDep.rspm_modulemap",
@@ -930,7 +952,11 @@ resource_bundle_infoplist(
 swift_library(
     name = "SwiftLibraryWithFilePathResource.rspm",
     always_include_developer_search_paths = True,
-    copts = ["-DSWIFT_PACKAGE"],
+    copts = [
+        "-DSWIFT_PACKAGE",
+        "-Xcc",
+        "-DSWIFT_PACKAGE",
+    ],
     data = [":SwiftLibraryWithFilePathResource.rspm_resource_bundle"],
     module_name = "SwiftLibraryWithFilePathResource",
     package_name = "MyPackage",

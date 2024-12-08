@@ -158,11 +158,12 @@ def _to_starlark_test(ctx):
         struct(
             msg = "string values",
             khs = {},
-            vals = ["first", "second", "first"],
+            vals = ["-DFoo", "-Xcc", "-DFoo"],
             exp = """\
 [
-    "first",
-    "second",
+    "-DFoo",
+    "-Xcc",
+    "-DFoo",
 ]\
 """,
         ),
@@ -271,22 +272,27 @@ def _to_starlark_test(ctx):
             khs = {},
             vals = [
                 bzl_selects.new(
-                    value = "a",
+                    value = "-DFoo",
                     kind = "mykind",
                     condition = "//myconditions:alpha",
                 ),
                 bzl_selects.new(
-                    value = "b",
+                    value = "-DBar",
                     kind = "mykind",
                     condition = "//myconditions:beta",
                 ),
                 bzl_selects.new(
-                    value = "c",
+                    value = "-DZoo",
                     kind = "mykind",
                     condition = "//myconditions:alpha",
                 ),
                 bzl_selects.new(
-                    value = "a",
+                    value = "-Xcc",
+                    kind = "mykind",
+                    condition = "//myconditions:alpha",
+                ),
+                bzl_selects.new(
+                    value = "-DFoo",
                     kind = "mykind",
                     condition = "//myconditions:alpha",
                 ),
@@ -294,10 +300,12 @@ def _to_starlark_test(ctx):
             exp = """\
 select({
     "//myconditions:alpha": [
-        "a",
-        "c",
+        "-DFoo",
+        "-DZoo",
+        "-Xcc",
+        "-DFoo",
     ],
-    "//myconditions:beta": ["b"],
+    "//myconditions:beta": ["-DBar"],
     "//conditions:default": [],
 })\
 """,
