@@ -694,16 +694,10 @@ expected: {expected}\
                 expected = ", ".join([link_types.static, link_types.dynamic]),
             ),
         )
-    if target.path.endswith(".xcframework"):
-        glob = scg.new_fn_call(
-            "glob",
-            ["{tpath}/**".format(tpath = target.path)],
-        )
-    else:
-        glob = scg.new_fn_call(
-            "glob",
-            ["{tpath}/*.xcframework/**".format(tpath = target.path)],
-        )
+    glob = scg.new_fn_call(
+        "glob",
+        ["{xcframework_path}/**".format(xcframework_path = artifact_info.path)],
+    )
     decls = [
         build_decls.new(
             kind = kind,

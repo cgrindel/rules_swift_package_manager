@@ -58,10 +58,6 @@ def _resolve_by_name(pkg_ctx, name):
     # 1. Check for target in this package.
     # 2. Check for product in this package.
     # 3. Check for a package with the same name as a dependent package.
-    #
-    # NOTE: This is different from what the SPM code seems to have coded.
-    # However, if we do not check for a local target first, we can end up with
-    # a circular dependency error in Bazel in the nimble_example.
 
     target = lists.find(pkg_ctx.pkg_info.targets, lambda t: t.name == name)
     if target != None:
