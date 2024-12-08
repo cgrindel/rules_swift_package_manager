@@ -22,7 +22,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
     if target.module_type == module_types.clang:
         return _clang_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.swift:
-        return _swift_target_build_file(pkg_ctx, target)
+        return _swift_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
     elif target.module_type == module_types.binary:
@@ -32,14 +32,14 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
             lambda ai: ai.artifact_type == artifact_types.xcframework,
         )
         if xcf_artifact_info != None:
-            return _xcframework_import_build_file(target, xcf_artifact_info)
+            return _xcframework_import_build_file(repository_ctx, target, xcf_artifact_info)
 
     # GH046: Support plugins.
     return None
 
 # MARK: - Swift Target
 
-def _swift_target_build_file(pkg_ctx, target):
+def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     if target.swift_src_info == None:
         fail("Expected a `swift_src_info`. name: ", target.name)
 
@@ -47,7 +47,7 @@ def _swift_target_build_file(pkg_ctx, target):
     attrs = {
         "module_name": target.c99name,
         "srcs": pkginfo_targets.srcs(target),
-        "visibility": ["//:__subpackages__"],
+        "visibility": _build_file_visibility(repository_ctx),
     }
 
     def _update_attr_list(name, value):
@@ -144,6 +144,7 @@ def _swift_target_build_file(pkg_ctx, target):
 
     if target.resources:
         swift_apple_res_bundle_info = _apple_resource_bundle_for_swift(
+            repository_ctx,
             pkg_ctx,
             target,
         )
@@ -176,7 +177,7 @@ def _swift_target_build_file(pkg_ctx, target):
 
     # Generate a modulemap for the Swift module.
     if attrs.get("generates_header", False):
-        all_build_files.append(_generate_modulemap_for_swift_target(target, deps))
+        all_build_files.append(_generate_modulemap_for_swift_target(repository_ctx, target, deps))
 
     return build_files.merge(*all_build_files)
 
@@ -277,6 +278,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     clang_apple_res_bundle_info = None
     if target.resources:
         clang_apple_res_bundle_info = _apple_resource_bundle_for_clang(
+            repository_ctx,
             pkg_ctx,
             target,
         )
@@ -366,7 +368,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     attrs = {
         "copts": copts,
         "srcs": srcs,
-        "visibility": ["//:__subpackages__"],
+        "visibility": _build_file_visibility(repository_ctx),
     }
     if clang_src_info.hdrs:
         attrs["hdrs"] = clang_src_info.hdrs
@@ -441,7 +443,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             "hdrs": [] if noop_modulemap else clang_src_info.hdrs,
             "module_name": target.c99name,
             "noop": noop_modulemap,
-            "visibility": ["//:__subpackages__"],
+            "visibility": _build_file_visibility(repository_ctx),
         }
         decls.append(
             build_decls.new(
@@ -671,7 +673,7 @@ def _system_library_build_file(target):
 
 # MARK: - Apple xcframework Targets
 
-def _xcframework_import_build_file(target, artifact_info):
+def _xcframework_import_build_file(repository_ctx, target, artifact_info):
     attrs = {}
     if artifact_info.link_type == link_types.static:
         load_stmts = [apple_static_xcframework_import_load_stmt]
@@ -703,7 +705,7 @@ expected: {expected}\
             kind = kind,
             name = pkginfo_targets.bazel_label_name(target),
             attrs = attrs | {
-                "visibility": ["//:__subpackages__"],
+                "visibility": _build_file_visibility(repository_ctx),
                 "xcframework_imports": glob,
             },
         ),
@@ -715,7 +717,7 @@ expected: {expected}\
 
 # MARK: - Apple Resource Group
 
-def _apple_resource_bundle(target, package_name, default_localization):
+def _apple_resource_bundle(repository_ctx, target, package_name, default_localization):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     bundle_label_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
     bundle_name = pkginfo_targets.resource_bundle_name(package_name, target.c99name)
@@ -749,7 +751,7 @@ def _apple_resource_bundle(target, package_name, default_localization):
                 # Based upon the code in SPM, it looks like they only support unstructured resources.
                 # https://github.com/apple/swift-package-manager/blob/main/Sources/PackageModel/Resource.swift#L25-L33
                 "resources": resources,
-                "visibility": ["//:__subpackages__"],
+                "visibility": _build_file_visibility(repository_ctx),
             },
         ),
     ]
@@ -759,8 +761,9 @@ def _apple_resource_bundle(target, package_name, default_localization):
         build_file = build_files.new(load_stmts = load_stmts, decls = decls),
     )
 
-def _apple_resource_bundle_for_swift(pkg_ctx, target):
+def _apple_resource_bundle_for_swift(repository_ctx, pkg_ctx, target):
     apple_res_bundle_info = _apple_resource_bundle(
+        repository_ctx,
         target,
         pkg_ctx.pkg_info.name,
         pkg_ctx.pkg_info.default_localization,
@@ -791,8 +794,9 @@ def _apple_resource_bundle_for_swift(pkg_ctx, target):
         ),
     )
 
-def _apple_resource_bundle_for_clang(pkg_ctx, target):
+def _apple_resource_bundle_for_clang(repository_ctx, pkg_ctx, target):
     apple_res_bundle_info = _apple_resource_bundle(
+        repository_ctx,
         target,
         pkg_ctx.pkg_info.name,
         pkg_ctx.pkg_info.default_localization,
@@ -875,7 +879,7 @@ def _collect_modulemap_deps(deps):
         modulemap_deps.append(mm_dep)
     return modulemap_deps
 
-def _generate_modulemap_for_swift_target(target, deps):
+def _generate_modulemap_for_swift_target(repository_ctx, target, deps):
     load_stmts = [swiftpkg_generate_modulemap_load_stmt]
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     modulemap_target_name = pkginfo_targets.modulemap_label_name(bzl_target_name)
@@ -884,7 +888,7 @@ def _generate_modulemap_for_swift_target(target, deps):
         "deps": bzl_selects.to_starlark(modulemap_deps),
         "hdrs": [":{}".format(bzl_target_name)],
         "module_name": target.c99name,
-        "visibility": ["//:__subpackages__"],
+        "visibility": _build_file_visibility(repository_ctx),
     }
     decls = [
         build_decls.new(
@@ -1071,6 +1075,12 @@ def _new_for_license(pkg_info, license):
         package_attrs = {"default_package_metadata": default_package_metadata},
         decls = decls,
     )
+
+# MARK: - Build files encapsulation
+
+def _build_file_visibility(repository_ctx):
+    experimental_expose_build_files = getattr(repository_ctx.attr, "experimental_expose_build_files", False)
+    return ["//visibility:public"] if experimental_expose_build_files else ["//:__subpackages__"]
 
 # MARK: - Constants and API Definition
 
