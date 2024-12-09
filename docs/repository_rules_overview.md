@@ -17,6 +17,8 @@ On this page:
 ## local_swift_package
 
 <pre>
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "local_swift_package")
+
 local_swift_package(<a href="#local_swift_package-name">name</a>, <a href="#local_swift_package-bazel_package_name">bazel_package_name</a>, <a href="#local_swift_package-dependencies_index">dependencies_index</a>, <a href="#local_swift_package-env">env</a>, <a href="#local_swift_package-path">path</a>, <a href="#local_swift_package-repo_mapping">repo_mapping</a>)
 </pre>
 
@@ -40,6 +42,8 @@ Used to build a local Swift package.
 ## swift_package
 
 <pre>
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package")
+
 swift_package(<a href="#swift_package-name">name</a>, <a href="#swift_package-bazel_package_name">bazel_package_name</a>, <a href="#swift_package-branch">branch</a>, <a href="#swift_package-commit">commit</a>, <a href="#swift_package-dependencies_index">dependencies_index</a>, <a href="#swift_package-env">env</a>, <a href="#swift_package-init_submodules">init_submodules</a>,
               <a href="#swift_package-patch_args">patch_args</a>, <a href="#swift_package-patch_cmds">patch_cmds</a>, <a href="#swift_package-patch_cmds_win">patch_cmds_win</a>, <a href="#swift_package-patch_tool">patch_tool</a>, <a href="#swift_package-patches">patches</a>, <a href="#swift_package-recursive_init_submodules">recursive_init_submodules</a>,
               <a href="#swift_package-remote">remote</a>, <a href="#swift_package-repo_mapping">repo_mapping</a>, <a href="#swift_package-shallow_since">shallow_since</a>, <a href="#swift_package-tag">tag</a>, <a href="#swift_package-verbose">verbose</a>, <a href="#swift_package-version">version</a>)
