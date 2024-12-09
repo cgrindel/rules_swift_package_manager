@@ -42,13 +42,13 @@ def _is_hdr(path):
     _root, ext = paths.split_extension(path)
     return lists.contains(_HEADER_EXTS, ext)
 
-def _is_include_hdr(path, public_includes = None):
+def _is_include_hdr(path, public_includes = []):
     """Determines whether the path is a public header.
 
     Args:
         path: A path `string` value.
         public_includes: Optional. A `sequence` of path `string` values that
-                         are used to identify public header files.
+            are used to identify public header files.
 
     Returns:
         A `bool` indicating whether the path is a public header.
@@ -56,8 +56,7 @@ def _is_include_hdr(path, public_includes = None):
     if not _is_hdr(path):
         return False
 
-    public_includes = [] if public_includes == None else public_includes
-    if len(public_includes) > 0:
+    if public_includes:
         for include_path in public_includes:
             if include_path[-1] != "/":
                 include_path += "/"
@@ -94,18 +93,30 @@ def _find_magical_public_hdr_dir(path):
 
     return None
 
-def _is_public_modulemap(path):
+def _is_public_modulemap(path, public_includes = []):
     """Determines whether the specified path is to a public `module.modulemap` file.
 
     Args:
         path: A path `string`.
+        public_includes: Optional. A `sequence` of path `string` values that
+            are used to identify public header files.
 
     Returns:
         A `bool` indicating whether the path is a public `module.modulemap`
         file.
     """
     basename = paths.basename(path)
-    return basename == "module.modulemap"
+    if basename != "module.modulemap":
+        return False
+
+    if public_includes:
+        for public_include in public_includes:
+            if path.startswith(public_include):
+                return True
+    elif _find_magical_public_hdr_dir(path) != None:
+        return True
+
+    return False
 
 def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path, module_name):
     """Retrieves the list of headers declared in the specified modulemap file \
@@ -249,7 +260,10 @@ def _collect_files(
                 sets.insert(srcs_set, path)
         elif lists.contains(_SRC_EXTS, ext):
             sets.insert(srcs_set, path)
-        elif ext == ".modulemap" and _is_public_modulemap(path):
+        elif ext == ".modulemap" and _is_public_modulemap(
+            orig_path,
+            public_includes = public_includes,
+        ):
             if modulemap != None:
                 fail("Found multiple modulemap files. {first} {second}".format(
                     first = modulemap,
