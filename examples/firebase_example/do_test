@@ -10,12 +10,6 @@ print_and_run() {
   "${cmd}" "$@"
 }
 
-# DEBUG BEGIN
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") +++++++++++++++" 
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") BAZEL_REAL: ${BAZEL_REAL:-}" 
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") BIT_BAZEL_BINARY: ${BIT_BAZEL_BINARY:-}" 
-# DEBUG END
-
 # Use the Bazel binary specified by the integration test. Otherise, fall back 
 # to bazel.
 bazel="${BIT_BAZEL_BINARY:-bazel}"
