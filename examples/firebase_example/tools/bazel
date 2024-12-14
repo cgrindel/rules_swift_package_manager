@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+
+# Order of Bazel selection:
+# 1. BIT_BAZEL_BINARY: Use Bazel specified by rules_bazel_integration_test.
+# 2. BAZEL_REAL: Use Bazel specified by Bazelisk
+# 3: bazel: Try to find Bazel on the PATH
+bazel="${BIT_BAZEL_BINARY:-${BAZEL_REAL:-bazel}}"
+
+# DEBUG BEGIN
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") -----------" 
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") BAZEL_REAL: ${BAZEL_REAL:-}" 
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") BIT_BAZEL_BINARY: ${BIT_BAZEL_BINARY:-}" 
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") bazel: ${bazel}" 
+bazel_version="$( "${bazel}" --version )"
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") bazel_version: ${bazel_version}" 
+exit 1
+# DEBUG END
+
+# Execute the command
+"${bazel}" "${@}"

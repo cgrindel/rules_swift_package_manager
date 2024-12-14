@@ -6,5 +6,13 @@ set -o errexit -o nounset -o pipefail
 # to bazel.
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
+# DEBUG BEGIN
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") bazel: ${bazel}" 
+# bazel_path="$( which bazel )"
+# echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") bazel_path: ${bazel_path}" 
+env | sort >&2
+set -x
+# DEBUG END
+
 # Execute the Bazel command
 "${bazel}" "${@}"
