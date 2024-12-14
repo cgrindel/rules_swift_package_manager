@@ -44,6 +44,7 @@ build_test(
 
 xcodeproj(
     name = "xcodeproj",
+    bazel_path = "./bazel_for_xcodeproj",
     project_name = "AnalyticsExample",
     tags = ["manual"],
     top_level_targets = [
