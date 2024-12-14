@@ -10,14 +10,15 @@ print_and_run() {
   "${cmd}" "$@"
 }
 
+# DEBUG BEGIN
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") +++++++++++++++" 
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") BAZEL_REAL: ${BAZEL_REAL:-}" 
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") BIT_BAZEL_BINARY: ${BIT_BAZEL_BINARY:-}" 
+# DEBUG END
+
 # Use the Bazel binary specified by the integration test. Otherise, fall back 
 # to bazel.
 bazel="${BIT_BAZEL_BINARY:-bazel}"
-
-# DEBUG BEGIN
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") MADE IT" 
-exit 1
-# DEBUG END
 
 # Generate Swift external deps and update build files
 print_and_run "${bazel}" run //:tidy
@@ -30,32 +31,6 @@ print_and_run "${bazel}" test //...
 # and that the project builds as rules_xcodeproj executes the build.
 # Related:
 # https://github.com/MobileNativeFoundation/rules_xcodeproj/issues/2703
-
-
-# # Generate a bazel script for rules_xcodeproj to use. This script ensures that
-# # the xcodeproj runner uses the Bazel that is under test. We configure the
-# # xcodeproj macro to find this generated bazel script.
-# bazel_for_xcodeproj="${script_dir}/bazel_for_xcodeproj"
-# backup="${bazel_for_xcodeproj}.bak"
-# cleanup() {
-#   if [[ -e "${backup}" ]]; then
-#     mv -f "${backup}" "${bazel_for_xcodeproj}"
-#   fi
-# }
-# trap cleanup EXIT
-# mv -f "${bazel_for_xcodeproj}" "${backup}"
-# cat >"${bazel_for_xcodeproj}" <<-EOF
-# #!/usr/bin/env bash
-# 
-# set -o errexit -o nounset -o pipefail
-# 
-# # Use the Bazel binary that we specify.
-# bazel="${bazel}"
-# 
-# # Execute the Bazel command
-# "\${bazel}" "\${@}"
-# EOF
-# chmod +x "${bazel_for_xcodeproj}"
 
 # Generate the Xcode project
 print_and_run "${bazel}" run //analytics/AnalyticsExample:xcodeproj
