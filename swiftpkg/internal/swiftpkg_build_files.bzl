@@ -184,6 +184,10 @@ def _swift_library_from_target(target, attrs):
     # library targets. So, we do too.
     attrs["always_include_developer_search_paths"] = True
 
+    # To mimic SPM behavior we always link the library. This will become the
+    # default in rules_swift 3.0, and we can remove it then.
+    attrs["alwayslink"] = True
+
     return build_decls.new(
         kind = swift_kinds.library,
         name = pkginfo_targets.bazel_label_name(target),
@@ -329,6 +333,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     # Assemble attributes
 
     attrs = {
+        # To mimic SPM behavior we always link the library.
+        "alwayslink": True,
         "copts": copts,
         "srcs": srcs,
         "visibility": ["//:__subpackages__"],
