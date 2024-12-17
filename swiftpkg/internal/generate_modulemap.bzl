@@ -20,33 +20,13 @@ ModuleMapInfo = provider(
 def _generate_modulemap_impl(ctx):
     module_name = ctx.attr.module_name
 
-    # Decide whether we should generate the modulemap. If we do not generate
-    # the modulemap, we still need to return expected providers.
-    if ctx.attr.noop:
-        return [
-            DefaultInfo(files = depset([])),
-            ModuleMapInfo(
-                module_name = module_name,
-                modulemap_file = None,
-            ),
-            apple_common.new_objc_provider(
-                module_map = depset([]),
-            ),
-            CcInfo(
-                compilation_context = cc_common.create_compilation_context(
-                    headers = depset([]),
-                    includes = depset([]),
-                ),
-            ),
-        ]
-
     uses = [
         dep[ModuleMapInfo].module_name
         for dep in ctx.attr.deps
         if ModuleMapInfo in dep
     ]
 
-    out_filename = "{}/module.modulemap".format(module_name)
+    out_filename = "{}_modulemap/_/module.modulemap".format(ctx.attr.name)
     modulemap_file = ctx.actions.declare_file(out_filename)
 
     hdrs = [
@@ -85,6 +65,7 @@ def _generate_modulemap_impl(ctx):
         CcInfo(
             compilation_context = cc_common.create_compilation_context(
                 headers = depset(provider_hdr),
+                direct_public_headers = provider_hdr,
                 includes = depset([modulemap_file.dirname]),
             ),
         ),
@@ -105,14 +86,6 @@ generate_modulemap = rule(
         ),
         "module_name": attr.string(
             doc = "The name of the module.",
-        ),
-        "noop": attr.bool(
-            doc = """\
-Designates whether a modulemap should be generated. If `False`, a modulemap is \
-generated. If `True`, a modulemap file is not generated and the returned \
-providers are empty.\
-""",
-            default = False,
         ),
     },
     doc = "Generate a modulemap for an Objective-C module.",
