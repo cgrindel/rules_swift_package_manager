@@ -2,15 +2,23 @@
 
 set -o errexit -o nounset -o pipefail
 
+print_and_run() {
+  local cmd="${1}"
+  shift 1
+  printf >&2 "======================\n%s: %s %s\n======================\n" \
+    "$(basename "${BASH_SOURCE[0]}")" "$(basename "${cmd}")" "$*"
+  "${cmd}" "$@"
+}
+
 # Use the Bazel binary specified by the integration test. Otherise, fall back 
 # to bazel.
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
 # Generate Swift external deps and update build files
-"${bazel}" run //:tidy
+print_and_run "${bazel}" run //:tidy
 
 # Ensure that it builds and tests pass
-"${bazel}" test //...
+print_and_run "${bazel}" test //...
 
 # The analytics/AnalyticsExample generates an Xcode project using
 # rules_xcodeproj. The following ensures that the project generates properly
@@ -19,8 +27,8 @@ bazel="${BIT_BAZEL_BINARY:-bazel}"
 # https://github.com/MobileNativeFoundation/rules_xcodeproj/issues/2703
 
 # Generate the Xcode project
-"${bazel}" run //analytics/AnalyticsExample:xcodeproj
+print_and_run "${bazel}" run //analytics/AnalyticsExample:xcodeproj
 
 # Build the workspace
-"${bazel}" run //analytics/AnalyticsExample:xcodeproj -- \
+print_and_run "${bazel}" run //analytics/AnalyticsExample:xcodeproj -- \
   --generator_output_groups=all_targets 'build --remote_download_minimal'
