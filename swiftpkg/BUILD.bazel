@@ -10,6 +10,7 @@ bzl_library(
     visibility = ["//visibility:public"],
     deps = [
         "//swiftpkg/internal:local_swift_package",
+        "//swiftpkg/internal:registry_swift_package",
         "//swiftpkg/internal:swift_deps_index",
         "//swiftpkg/internal:swift_deps_info",
         "//swiftpkg/internal:swift_package",
