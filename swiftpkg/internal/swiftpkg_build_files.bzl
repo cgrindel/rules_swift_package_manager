@@ -114,9 +114,10 @@ def _swift_target_build_file(pkg_ctx, target):
 
     # Check if any of the sources indicate that the module will be used by
     # Objective-C code. If so, generate the bridge header file.
+    features = []
     if target.swift_src_info.has_objc_directive and is_library_target:
         attrs["generates_header"] = True
-        attrs["features"] = ["swift.propagate_generated_module_map"]
+        features.append("swift.propagate_generated_module_map")
 
     if target.swift_settings != None:
         if len(target.swift_settings.defines) > 0:
@@ -134,8 +135,15 @@ def _swift_target_build_file(pkg_ctx, target):
             ]))
         if len(target.swift_settings.experimental_features) > 0:
             for bs in target.swift_settings.experimental_features:
-                copts.append("-enable-experimental-feature")
-                copts.extend(lists.flatten(bzl_selects.new_from_build_setting(bs)))
+                for experimental_feature in lists.flatten(bzl_selects.new_from_build_setting(bs)):
+                    features.append("swift.experimental_feature." + experimental_feature)
+        if len(target.swift_settings.upcoming_features) > 0:
+            for bs in target.swift_settings.upcoming_features:
+                for upcoming_feature in lists.flatten(bzl_selects.new_from_build_setting(bs)):
+                    features.append("swift.upcoming_feature." + upcoming_feature)
+    
+    if len(features) > 0:
+        attrs["features"] = features
 
     if len(copts) > 0:
         attrs["copts"] = bzl_selects.to_starlark(copts, mutually_inclusive = True)

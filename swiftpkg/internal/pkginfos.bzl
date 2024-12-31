@@ -1437,6 +1437,7 @@ def _new_swift_settings(build_settings):
     defines = []
     unsafe_flags = []
     experimental_features = []
+    upcoming_features = []
     for bs in build_settings:
         if bs.kind == build_setting_kinds.define:
             defines.append(bs)
@@ -1444,17 +1445,21 @@ def _new_swift_settings(build_settings):
             unsafe_flags.append(bs)
         elif bs.kind == build_setting_kinds.experimental_features:
             experimental_features.append(bs)
+        elif bs.kind == build_setting_kinds.upcoming_features:
+            upcoming_features.append(bs)
         else:
             # We do not recognize the setting.
             pass
     if len(defines) == 0 and \
        len(unsafe_flags) == 0 and \
-       len(experimental_features) == 0:
+       len(experimental_features) == 0 and \
+       len(upcoming_features) == 0:
         return None
     return struct(
         defines = defines,
         unsafe_flags = unsafe_flags,
         experimental_features = experimental_features,
+        upcoming_features = upcoming_features,
     )
 
 def _new_linker_settings(build_settings):
@@ -1640,6 +1645,7 @@ build_setting_kinds = struct(
     linked_library = "linkedLibrary",
     unsafe_flags = "unsafeFlags",
     experimental_features = "enableExperimentalFeature",
+    upcoming_features = "enableUpcomingFeature",
 )
 
 # MARK: - API Definition
