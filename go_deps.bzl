@@ -187,8 +187,8 @@ def swift_bazel_go_dependencies():
         name = "org_golang_x_exp",
         build_external = "external",
         importpath = "golang.org/x/exp",
-        sum = "h1:1UoZQm6f0P/ZO0w1Ri+f+ifG/gXhegadRdwBIXEFWDo=",
-        version = "v0.0.0-20241217172543-b2144cdd0a67",
+        sum = "h1:tHbTCyM7JD+jm5mShcnp+cl1Q6nJpFZe7kyALJCclHA=",
+        version = "v0.0.0-20250103163809-dd03c70a0a45",
     )
     maybe(
         go_repository,
