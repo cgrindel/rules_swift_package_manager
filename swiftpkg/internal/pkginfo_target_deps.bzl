@@ -4,52 +4,18 @@ load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
 load(":bazel_repo_names.bzl", "bazel_repo_names")
 load(":bzl_selects.bzl", "bzl_selects")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
-load(":pkginfo_targets.bzl", "pkginfo_targets")
 
 # This value is used to group Bazel select conditions
 _target_dep_kind = "_target_dep"
 
-def _src_type_for_target(target):
-    # Check Objc first. It will have a clang_src_info and an objc_src_info.
-    if target.swift_src_info:
-        return src_types.swift
-    elif target.objc_src_info:
-        return src_types.objc
-    elif target.clang_src_info:
-        return src_types.clang
-    return src_types.unknown
-
-def _modulemap_label_for_target(repo_name, target):
-    return bazel_labels.new(
-        name = pkginfo_targets.modulemap_label_name(target.label.name),
-        repository_name = repo_name,
-        package = target.label.package,
-    )
-
 def _labels_for_target(repo_name, target):
-    labels = [
+    return [
         bazel_labels.new(
             name = target.label.name,
             repository_name = repo_name,
             package = target.label.package,
         ),
     ]
-
-    src_type = _src_type_for_target(target)
-    if src_type == src_types.objc:
-        # If the dep is an objc, return the real Objective-C target, not the Swift
-        # module alias. This is part of a workaround for Objective-C modules not
-        # being able to `@import` modules from other Objective-C modules.
-        # See `swiftpkg_build_files.bzl` for more information.
-        labels.append(_modulemap_label_for_target(repo_name, target))
-
-    elif (src_type == src_types.swift and
-          target.swift_src_info.has_objc_directive):
-        # If an Objc module wants to @import a Swift module, it will need the
-        # modulemap target.
-        labels.append(_modulemap_label_for_target(repo_name, target))
-
-    return labels
 
 def _resolve_by_name(pkg_ctx, name):
     repo_name = bazel_repo_names.normalize(pkg_ctx.repo_name)
@@ -58,10 +24,6 @@ def _resolve_by_name(pkg_ctx, name):
     # 1. Check for target in this package.
     # 2. Check for product in this package.
     # 3. Check for a package with the same name as a dependent package.
-    #
-    # NOTE: This is different from what the SPM code seems to have coded.
-    # However, if we do not check for a local target first, we can end up with
-    # a circular dependency error in Bazel in the nimble_example.
 
     target = lists.find(pkg_ctx.pkg_info.targets, lambda t: t.name == name)
     if target != None:

@@ -5,6 +5,7 @@
 # https://github.com/bazel-xcode/PodToBUILD/blob/e9bbf68151caf6c8cd9b8ed2fa361b38e0f6a860/BazelExtensions/extensions.bzl#L113
 # https://github.com/bazel-xcode/xchammer/blob/master/sample/UrlGet/Vendor/rules_pods/BazelExtensions/extensions.bzl
 
+load("@build_bazel_rules_swift//swift:swift_interop_info.bzl", "create_swift_interop_info")
 load(":clang_files.bzl", "clang_files")
 load(":module_maps.bzl", "write_module_map")
 
@@ -19,33 +20,13 @@ ModuleMapInfo = provider(
 def _generate_modulemap_impl(ctx):
     module_name = ctx.attr.module_name
 
-    # Decide whether we should generate the modulemap. If we do not generate
-    # the modulemap, we still need to return expected providers.
-    if ctx.attr.noop:
-        return [
-            DefaultInfo(files = depset([])),
-            ModuleMapInfo(
-                module_name = module_name,
-                modulemap_file = None,
-            ),
-            apple_common.new_objc_provider(
-                module_map = depset([]),
-            ),
-            CcInfo(
-                compilation_context = cc_common.create_compilation_context(
-                    headers = depset([]),
-                    includes = depset([]),
-                ),
-            ),
-        ]
-
     uses = [
         dep[ModuleMapInfo].module_name
         for dep in ctx.attr.deps
         if ModuleMapInfo in dep
     ]
 
-    out_filename = "{}/module.modulemap".format(module_name)
+    out_filename = "{}_modulemap/_/module.modulemap".format(ctx.attr.name)
     modulemap_file = ctx.actions.declare_file(out_filename)
 
     hdrs = [
@@ -66,6 +47,12 @@ def _generate_modulemap_impl(ctx):
     )
     provider_hdr = [modulemap_file]
 
+    # This target itself is a modulemap, so suppress any module generation
+    # rules_swift does for it.
+    swift_interop_info = create_swift_interop_info(
+        suppressed = True,
+    )
+
     return [
         DefaultInfo(files = depset([modulemap_file])),
         ModuleMapInfo(
@@ -78,9 +65,11 @@ def _generate_modulemap_impl(ctx):
         CcInfo(
             compilation_context = cc_common.create_compilation_context(
                 headers = depset(provider_hdr),
+                direct_public_headers = provider_hdr,
                 includes = depset([modulemap_file.dirname]),
             ),
         ),
+        swift_interop_info,
     ]
 
 generate_modulemap = rule(
@@ -97,14 +86,6 @@ generate_modulemap = rule(
         ),
         "module_name": attr.string(
             doc = "The name of the module.",
-        ),
-        "noop": attr.bool(
-            doc = """\
-Designates whether a modulemap should be generated. If `False`, a modulemap is \
-generated. If `True`, a modulemap file is not generated and the returned \
-providers are empty.\
-""",
-            default = False,
         ),
     },
     doc = "Generate a modulemap for an Objective-C module.",

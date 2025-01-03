@@ -46,7 +46,14 @@ is_include_hdr_test = unittest.make(_is_include_hdr_test)
 def _is_public_modulemap_test(ctx):
     env = unittest.begin(ctx)
 
-    asserts.true(env, clang_files.is_public_modulemap("foo/bar/module.modulemap"))
+    asserts.true(
+        env,
+        clang_files.is_public_modulemap(
+            "foo/bar/module.modulemap",
+            public_includes = ["foo/bar"],
+        ),
+    )
+    asserts.false(env, clang_files.is_public_modulemap("foo/bar/module.modulemap"))
     asserts.false(env, clang_files.is_public_modulemap("foo/bar/chicken.modulemap"))
 
     return unittest.end(env)

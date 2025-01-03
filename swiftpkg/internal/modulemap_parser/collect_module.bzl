@@ -92,18 +92,20 @@ def _process_module_tokens(parsed_tokens, prefix_tokens, is_submodule):
     consumed_count += 1
 
     module_declaration_identifier_token, err = tokens.get(parsed_tokens, 1, count = tlen)
-
     if err != None:
         return None, err
     consumed_count += 1
+
+    # Check if the module identifier is an identifier, asterisk, or string literal
+    # Examples: module Foo, module *, module "Foo"
+    # The specification does not mention that literal strings are supported. However,
+    # canonical implementations of module map parsing do support literal strings.
+    # https://github.com/llvm/llvm-project/blob/dafb90dedcda1ad7b94b0bcdbbe7478f7d0f31f6/clang/lib/Lex/ModuleMap.cpp#L1833
     if not tokens.is_a(module_declaration_identifier_token, tts.identifier) and \
        not tokens.is_a(module_declaration_identifier_token, tts.operator, operators.asterisk) and \
        not tokens.is_a(module_declaration_identifier_token, tts.string_literal):
         return None, errors.new(
-            "Expected module identifier, asterisk or string_literal, but was {} with value {}.".format(
-                module_declaration_identifier_token.type,
-                module_declaration_identifier_token.value,
-            ),
+            "Expected module identifier, asterisk or string_literal, but was {}.".format(module_declaration_identifier_token.type),
         )
 
     # Collect the attributes and module members

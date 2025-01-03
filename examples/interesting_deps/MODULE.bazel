@@ -12,16 +12,22 @@ local_path_override(
     path = "../..",
 )
 
-bazel_dep(name = "cgrindel_bazel_starlib", version = "0.21.0")
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.22.0")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 
 # The apple_support bazel_dep must come before the rules_cc.
 # https://github.com/bazelbuild/apple_support#incompatible-toolchain-resolution
 bazel_dep(name = "apple_support", version = "1.17.1")
+bazel_dep(name = "platforms", version = "0.0.10")
 bazel_dep(
     name = "rules_swift",
-    version = "2.2.2",
+    version = "2.3.1",
     repo_name = "build_bazel_rules_swift",
+)
+bazel_dep(
+    name = "rules_apple",
+    version = "3.16.1",
+    repo_name = "build_bazel_rules_apple",
 )
 
 bazel_dep(
@@ -31,7 +37,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "gazelle",
-    version = "0.39.1",
+    version = "0.40.0",
     dev_dependency = True,
     repo_name = "bazel_gazelle",
 )
@@ -58,9 +64,10 @@ swift_deps.from_package(
 swift_deps.configure_swift_package(
     build_path = "spm-build",
     cache_path = "spm-cache",
-    dependency_caching = "false",
+    dependency_caching = False,
     manifest_cache = "none",
-    manifest_caching = "false",
+    manifest_caching = False,
+    security_path = "spm-security",
 )
 use_repo(
     swift_deps,
@@ -69,6 +76,8 @@ use_repo(
     "swiftpkg_cocoalumberjack",
     "swiftpkg_geoswift",
     "swiftpkg_libwebp_xcode",
+    "swiftpkg_ocmock",
     "swiftpkg_opencombine",
     "swiftpkg_swift_log",
+    "swiftpkg_yoti_doc_scan_ios",
 )

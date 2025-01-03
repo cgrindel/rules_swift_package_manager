@@ -107,6 +107,23 @@ def _collect_module_test(ctx):
 
     do_parse_test(
         env,
+        "module with string literal module id",
+        text = """
+        module "MyModule" {}
+        """,
+        expected = [
+            declarations.module(
+                module_id = "MyModule",
+                framework = False,
+                explicit = False,
+                attributes = [],
+                members = [],
+            ),
+        ],
+    )
+
+    do_parse_test(
+        env,
         "module with asterisk module",
         text = """
         framework module MyModule {
@@ -159,7 +176,7 @@ def _collect_module_test(ctx):
         text = """
         module {}
         """,
-        expected_err = "Expected module identifier or asterisk, but was curly_bracket_open.",
+        expected_err = "Expected module identifier, asterisk or string_literal, but was curly_bracket_open.",
     )
 
     do_failing_parse_test(

@@ -5,6 +5,6 @@ import PackageDescription
 let package = Package(
     name: "PhoneNumberKitExample",
     dependencies: [
-        .package(url: "https://github.com/soto-project/soto.git", from: "7.1.0"),
+        .package(url: "https://github.com/soto-project/soto.git", from: "7.3.0"),
     ]
 )

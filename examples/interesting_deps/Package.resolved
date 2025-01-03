@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/GEOSwift/geos.git",
       "state" : {
-        "revision" : "f510e634c822116fca615064d889300dba40d761",
-        "version" : "8.1.0"
+        "revision" : "4d8af495e7507f48f1ae9104102debdd2043917b",
+        "version" : "9.0.0"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/GEOSwift/GEOSwift",
       "state" : {
-        "revision" : "2d23ede8c82c067655d3a9f0221bc73f08cd399a",
-        "version" : "10.1.0"
+        "revision" : "e42c062c2feb0df61373ae8cd6031a823a0dc981",
+        "version" : "11.0.0"
       }
     },
     {
@@ -34,6 +34,15 @@
       "state" : {
         "revision" : "b2b1d20a90b14d11f6ef4241da6b81c1d3f171e4",
         "version" : "1.3.2"
+      }
+    },
+    {
+      "identity" : "ocmock",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/erikdoe/ocmock",
+      "state" : {
+        "revision" : "2c0bfd373289f4a7716db5d6db471640f91a6507",
+        "version" : "3.9.4"
       }
     },
     {
@@ -50,8 +59,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log",
       "state" : {
-        "revision" : "e97a6fcb1ab07462881ac165fdbb37f067e205d5",
-        "version" : "1.5.4"
+        "revision" : "96a2f8a0fa41e9e09af4585e2724c4e825410b91",
+        "version" : "1.6.2"
+      }
+    },
+    {
+      "identity" : "yoti-doc-scan-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/getyoti/yoti-doc-scan-ios.git",
+      "state" : {
+        "revision" : "f7bacd2c42aaa92db0272ce9d9e9b25bf69ee4bc",
+        "version" : "6.0.0"
       }
     }
   ],
