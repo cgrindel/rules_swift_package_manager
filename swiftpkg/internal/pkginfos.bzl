@@ -382,7 +382,7 @@ def _new_target_from_json_maps(
             c99name = c99name,
             target_path = target_path,
             source_paths = source_paths,
-            public_hdrs_path = public_hdrs_path,
+            public_hdrs_path = "", # System libraries have their headers/modulemaps in the library root path, so the root path is the public path
             exclude_paths = exclude_paths,
             other_hdr_srch_paths = [],
         )
@@ -1078,6 +1078,14 @@ def _new_clang_src_info_from_sources(
             paths.normalize(paths.join(abs_target_path, public_hdrs_path)),
         )
 
+    # If the Swift package manifest does not specify a public headers path,
+    # use the default "include" directory, if it exists.
+    # This copies the behavior of the canonical Swift Package Manager implementation.
+    # https://developer.apple.com/documentation/packagedescription/target/publicheaderspath
+    if public_hdrs_path == None:
+        if repository_files.path_exists(repository_ctx, paths.join(abs_target_path, "include")):
+            public_includes.append(paths.join(abs_target_path, "include"))
+
     # If the Swift package manifest has explicit source paths, respect them.
     # (Be sure to include any explicitly specified include directories.)
     # Otherwise, use all of the source files under the target path.
@@ -1131,7 +1139,7 @@ def _new_clang_src_info_from_sources(
             for pi in public_includes
         ],
         relative_to = pkg_path,
-    )
+    )   
 
     # The `cc_library` rule compiles each source file (.c, .cc) separately only providing the
     # headers. There are some clang modules (e.g.,

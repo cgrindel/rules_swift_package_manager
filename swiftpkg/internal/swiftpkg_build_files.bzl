@@ -658,9 +658,6 @@ def _starlarkify_clang_attrs(repository_ctx, attrs):
 
 # MARK: - System Library Targets
 
-# GH009(chuck): Remove unused-variable directives
-
-# buildifier: disable=unused-variable
 def _system_library_build_file(target):
     attrs = {
         "visibility": ["//:__subpackages__"],

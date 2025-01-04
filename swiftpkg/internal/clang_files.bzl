@@ -118,7 +118,7 @@ def _is_public_modulemap(path, public_includes = []):
 
     return False
 
-def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path, module_name):
+def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path):
     """Retrieves the list of headers declared in the specified modulemap file \
     for the specified module.
 
@@ -128,7 +128,6 @@ def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path, module_name):
     Args:
         repository_ctx: A `repository_ctx` instance.
         modulemap_path: A path `string` to the `module.modulemap` file.
-        module_name: The name of the module.
 
     Returns:
         A `list` of path `string` values.
@@ -262,11 +261,6 @@ def _collect_files(
             orig_path,
             public_includes = public_includes,
         ):
-            if modulemap != None:
-                if _is_under_path(path, "include/"):
-                    # If we find a modulemap in the include directory, then we should use that one.
-                    modulemap = path
-                    modulemap_orig_path = orig_path
             modulemap_orig_path = orig_path
             modulemap = path
         else:
@@ -284,8 +278,7 @@ def _collect_files(
             
         mm_hdrs = _get_hdr_paths_from_modulemap(
             repository_ctx,
-            modulemap_orig_path,
-            module_name,
+            modulemap_orig_path
         )
         mm_hdrs = _relativize_paths(mm_hdrs, relative_to)
 
