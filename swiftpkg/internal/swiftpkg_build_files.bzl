@@ -85,7 +85,6 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         else:
             target_deps.append(target_dep)
             continue
-        
 
     if macro_targets:
         attrs["plugins"] = [
@@ -690,12 +689,12 @@ def _system_library_build_file(target):
 
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
 
-    decls = [ 
+    decls = [
         build_decls.new(
             kind = objc_kinds.library,
             name = bzl_target_name,
             attrs = attrs,
-        )
+        ),
     ]
 
     return build_files.new(
