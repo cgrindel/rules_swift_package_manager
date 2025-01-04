@@ -163,7 +163,7 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         _update_attr_list("srcs", ":{}".format(
             swift_apple_res_bundle_info.accessor_label_name,
         ))
-        
+
     if is_library_target:
         load_stmts = [swift_library_load_stmt]
         decls = [_swift_library_from_target(target, attrs)]

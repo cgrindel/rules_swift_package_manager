@@ -1139,7 +1139,7 @@ def _new_clang_src_info_from_sources(
             for pi in public_includes
         ],
         relative_to = pkg_path,
-    )   
+    )
 
     # The `cc_library` rule compiles each source file (.c, .cc) separately only providing the
     # headers. There are some clang modules (e.g.,
