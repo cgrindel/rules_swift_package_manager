@@ -375,6 +375,20 @@ def _new_target_from_json_maps(
                 pkg_path = pkg_path,
                 sources = clang_src_info.explicit_srcs + clang_src_info.hdrs,
             )
+    elif module_type == module_types.system_library:
+        # System libraries have their headers/modulemaps in the library root path, so the root path is the public path
+        public_hdrs_path = ""
+        
+        clang_src_info = _new_clang_src_info_from_sources(
+            repository_ctx = repository_ctx,
+            pkg_path = pkg_path,
+            c99name = c99name,
+            target_path = target_path,
+            source_paths = source_paths,
+            public_hdrs_path = public_hdrs_path,
+            exclude_paths = exclude_paths,
+            other_hdr_srch_paths = [],
+        )
 
     return _new_target(
         name = target_name,
