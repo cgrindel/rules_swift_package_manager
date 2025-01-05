@@ -2,12 +2,13 @@
 Example module for grpc + proto target generation.
 """
 
+# cgrindel_bazel_starlib
+
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.21.0")
+
 # rules_go
 
 bazel_dep(name = "rules_go", version = "0.50.1")
-
-go_sdk = use_extension("@rules_go//go:extensions.bzl", "go_sdk")
-go_sdk.host()
 
 # gazelle
 
@@ -40,7 +41,6 @@ local_path_override(
     path = "../..",
 )
 
-# swift_deps START
 swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
@@ -56,12 +56,3 @@ use_repo(
     "swift_package",
     "swiftpkg_swift_protobuf",
 )
-# swift_deps END
-
-# rules_apple
-
-bazel_dep(name = "rules_apple", version = "3.16.1")
-
-# rules_xcodeproj
-
-bazel_dep(name = "rules_xcodeproj", version = "2.10.0")
