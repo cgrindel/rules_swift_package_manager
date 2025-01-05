@@ -1522,25 +1522,35 @@ def _new_swift_settings(build_settings):
     """
     defines = []
     unsafe_flags = []
+    language_modes = []
     experimental_features = []
+    upcoming_features = []
     for bs in build_settings:
         if bs.kind == build_setting_kinds.define:
             defines.append(bs)
         elif bs.kind == build_setting_kinds.unsafe_flags:
             unsafe_flags.append(bs)
+        elif bs.kind == build_setting_kinds.language_modes:
+            language_modes.append(bs)
         elif bs.kind == build_setting_kinds.experimental_features:
             experimental_features.append(bs)
+        elif bs.kind == build_setting_kinds.upcoming_features:
+            upcoming_features.append(bs)
         else:
             # We do not recognize the setting.
             pass
     if len(defines) == 0 and \
        len(unsafe_flags) == 0 and \
-       len(experimental_features) == 0:
+       len(language_modes) == 0 and \
+       len(experimental_features) == 0 and \
+       len(upcoming_features) == 0:
         return None
     return struct(
         defines = defines,
         unsafe_flags = unsafe_flags,
+        language_modes = language_modes,
         experimental_features = experimental_features,
+        upcoming_features = upcoming_features,
     )
 
 def _new_linker_settings(build_settings):
@@ -1725,7 +1735,9 @@ build_setting_kinds = struct(
     linked_framework = "linkedFramework",
     linked_library = "linkedLibrary",
     unsafe_flags = "unsafeFlags",
+    language_modes = "swiftLanguageMode",
     experimental_features = "enableExperimentalFeature",
+    upcoming_features = "enableUpcomingFeature",
 )
 
 # MARK: - API Definition
