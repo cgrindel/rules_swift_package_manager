@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "testpackage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AttilaTheFun/TestPackage.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ceed76102796c85dfa51f3e79a8c257ade1a707a"
+      }
+    }
+  ],
+  "version" : 2
+}
