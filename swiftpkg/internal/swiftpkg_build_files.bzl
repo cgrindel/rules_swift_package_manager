@@ -19,7 +19,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
     if target.module_type == module_types.clang:
         return _clang_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.swift:
-        return _swift_target_build_file(pkg_ctx, target)
+        return _swift_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
     elif target.module_type == module_types.binary:
@@ -36,7 +36,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
 
 # MARK: - Swift Target
 
-def _swift_target_build_file(pkg_ctx, target):
+def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     if target.swift_src_info == None:
         fail("Expected a `swift_src_info`. name: ", target.name)
 
@@ -80,10 +80,11 @@ def _swift_target_build_file(pkg_ctx, target):
             fail_if_not_found = False,
         )
 
-        if not dep_target or dep_target.type != target_types.macro:
+        if dep_target and dep_target.type == target_types.macro:
+            macro_targets.append(dep_target)
+        else:
             target_deps.append(target_dep)
             continue
-        macro_targets.append(dep_target)
 
     if macro_targets:
         attrs["plugins"] = [
@@ -107,6 +108,15 @@ def _swift_target_build_file(pkg_ctx, target):
         # https://github.com/apple/swift-package-manager/blob/main/Documentation/Usage.md#packaging-legacy-code
         "-DSWIFT_PACKAGE",
     ]
+
+    linkopts = []
+    if target.linker_settings != None:
+        linkopts.extend(lists.flatten([
+            bzl_selects.new_from_build_setting(bs)
+            for bs in target.linker_settings.linked_libraries
+        ]))
+    if linkopts:
+        attrs["linkopts"] = _starlarkify_clang_attrs(repository_ctx, {"linkopts": linkopts})["linkopts"]
 
     # GH046: Support plugins.
 
@@ -647,12 +657,49 @@ def _starlarkify_clang_attrs(repository_ctx, attrs):
 
 # MARK: - System Library Targets
 
-# GH009(chuck): Remove unused-variable directives
-
-# buildifier: disable=unused-variable
 def _system_library_build_file(target):
-    # GH009(chuck): Implement _system_library_build_file
-    return None
+    attrs = {
+        "visibility": ["//:__subpackages__"],
+    }
+
+    # These flags are used by SPM when compiling clang modules.
+    copts = [
+        # Enable 'blocks' language feature
+        "-fblocks",
+        # Synthesize retain and release calls for Objective-C pointers
+        "-fobjc-arc",
+        # Enable support for PIC macros
+        "-fPIC",
+        # The SWIFT_PACKAGE define is a magical value that SPM uses when it
+        # builds clang libraries that will be used as Swift modules.
+        "-DSWIFT_PACKAGE=1",
+    ]
+    attrs["copts"] = copts
+
+    module_map_file = target.clang_src_info.modulemap_path
+    attrs["module_map"] = module_map_file
+
+    # System library targets must include a modulemap file.
+    # https://github.com/swiftlang/swift-package-manager/blob/12c14222fdde2ffd8303a2c805fed1b1eb802e5c/Sources/PackageLoading/PackageBuilder.swift#L853
+    if not module_map_file:
+        fail("Expected a modulemap file for a system library target. name: ", target.name)
+
+    header_files = target.clang_src_info.hdrs
+    attrs["hdrs"] = header_files
+
+    bzl_target_name = pkginfo_targets.bazel_label_name(target)
+
+    decls = [
+        build_decls.new(
+            kind = objc_kinds.library,
+            name = bzl_target_name,
+            attrs = attrs,
+        ),
+    ]
+
+    return build_files.new(
+        decls = decls,
+    )
 
 # MARK: - Apple xcframework Targets
 

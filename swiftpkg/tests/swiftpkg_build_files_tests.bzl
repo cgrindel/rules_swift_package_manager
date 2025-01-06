@@ -69,6 +69,15 @@ _pkg_info = pkginfos.new(
             targets = ["RegularSwiftTargetAsLibrary"],
         ),
         pkginfos.new_product(
+            name = "SystemLibraryTarget",
+            type = pkginfos.new_product_type(
+                library = pkginfos.new_library_type(
+                    library_type_kinds.automatic,
+                ),
+            ),
+            targets = ["SystemLibraryTarget"],
+        ),
+        pkginfos.new_product(
             name = "ObjcLibraryWithModulemap",
             type = pkginfos.new_product_type(
                 library = pkginfos.new_library_type(
@@ -117,6 +126,20 @@ _pkg_info = pkginfos.new(
             dependencies = [],
             repo_name = _repo_name,
             swift_src_info = pkginfos.new_swift_src_info(),
+        ),
+        pkginfos.new_target(
+            name = "SystemLibraryTarget",
+            type = "regular",
+            c99name = "SystemLibraryTarget",
+            module_type = "SystemLibraryTarget",
+            path = "Source/SystemLibraryTarget",
+            sources = [],
+            dependencies = [],
+            repo_name = _repo_name,
+            clang_src_info = pkginfos.new_clang_src_info(
+                hdrs = ["someHeader.h"],
+                modulemap_path = "module.modulemap",
+            ),
         ),
         pkginfos.new_target(
             name = "RegularSwiftTargetAsLibraryTests",
@@ -758,6 +781,25 @@ swift_interop_hint(
     name = "ObjcLibraryWithModulemap.rspm_swift_hint",
     module_map = "include/module.modulemap",
     module_name = "ObjcLibraryWithModulemap",
+)
+""",
+        ),
+        struct(
+            msg = "System library Target declaration",
+            name = "SystemLibraryTarget",
+            exp = """\
+
+objc_library(
+    name = "SystemLibraryTarget.rspm",
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-DSWIFT_PACKAGE=1",
+    ],
+    hdrs = ["someHeader.h"],
+    module_map = "module.modulemap",
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
