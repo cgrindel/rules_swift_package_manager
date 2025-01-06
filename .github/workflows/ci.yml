@@ -75,6 +75,8 @@ jobs:
             runner: macos-13
           - test: '@@//examples:swift_package_registry_example_test_bazel_.bazelversion'
             runner: macos-13
+          - test: '@@//examples:swift_protobuf_example_test_bazel_.bazelversion'
+            runner: macos-13
           - test: '@@//examples:symlink_example_test_bazel_.bazelversion'
             runner: macos-13
           - test: '@@//examples:tca_example_test_bazel_.bazelversion'

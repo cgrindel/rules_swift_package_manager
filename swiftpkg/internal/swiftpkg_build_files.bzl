@@ -142,7 +142,7 @@ def _swift_target_build_file(pkg_ctx, target):
                 new_language_mode = bzl_selects.new(
                     value = "swift.enable_v" + language_mode.value,
                     kind = language_mode.kind,
-                    condition = language_mode.condition
+                    condition = language_mode.condition,
                 )
                 features.append(new_language_mode)
         for bs in target.swift_settings.experimental_features:
@@ -150,7 +150,7 @@ def _swift_target_build_file(pkg_ctx, target):
                 new_experimental_feature = bzl_selects.new(
                     value = "swift.experimental." + experimental_feature.value,
                     kind = experimental_feature.kind,
-                    condition = experimental_feature.condition
+                    condition = experimental_feature.condition,
                 )
                 features.append(new_experimental_feature)
         for bs in target.swift_settings.upcoming_features:
@@ -158,7 +158,7 @@ def _swift_target_build_file(pkg_ctx, target):
                 new_upcoming_feature = bzl_selects.new(
                     value = "swift.upcoming." + upcoming_feature.value,
                     kind = upcoming_feature.kind,
-                    condition = upcoming_feature.condition
+                    condition = upcoming_feature.condition,
                 )
                 features.append(new_upcoming_feature)
     if len(features) > 0:
