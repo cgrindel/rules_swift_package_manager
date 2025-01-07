@@ -10,8 +10,8 @@ def swift_bazel_go_dependencies():
         name = "com_github_bazelbuild_bazel_gazelle",
         build_external = "external",
         importpath = "github.com/bazelbuild/bazel-gazelle",
-        sum = "h1:SAYys3KRG5i3KTgQAvO423bLT1rQMSgqEKReMkM/CW0=",
-        version = "v0.40.0",
+        sum = "h1:blh57YCxe3QNFbzRtEuLxaak+f5KYSQynznGnUNDRc4=",
+        version = "v0.41.0",
     )
     maybe(
         go_repository,
@@ -75,8 +75,8 @@ def swift_bazel_go_dependencies():
         name = "com_github_fsnotify_fsnotify",
         build_external = "external",
         importpath = "github.com/fsnotify/fsnotify",
-        sum = "h1:dAwr6QBTBZIkG8roQaJjGof0pp0EeF+tNV7YBP3F/8M=",
-        version = "v1.8.0",
+        sum = "h1:8JEhPFa5W2WU7YfeZzPNqzMP6Lwt7L2715Ggo0nosvA=",
+        version = "v1.7.0",
     )
     maybe(
         go_repository,
