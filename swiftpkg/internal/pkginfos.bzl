@@ -1067,6 +1067,14 @@ def _new_clang_src_info_from_sources(
             paths.normalize(paths.join(abs_target_path, public_hdrs_path)),
         )
 
+    # If the Swift package manifest does not specify a public headers path,
+    # use the default "include" directory, if it exists.
+    # This copies the behavior of the canonical Swift Package Manager implementation.
+    # https://developer.apple.com/documentation/packagedescription/target/publicheaderspath
+    if public_hdrs_path == None:
+        if repository_files.path_exists(repository_ctx, paths.join(abs_target_path, "include")):
+            public_includes.append(paths.join(abs_target_path, "include"))
+
     # If the Swift package manifest has explicit source paths, respect them.
     # (Be sure to include any explicitly specified include directories.)
     # Otherwise, use all of the source files under the target path.
