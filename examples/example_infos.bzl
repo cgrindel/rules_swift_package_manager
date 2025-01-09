@@ -146,6 +146,7 @@ _macos_single_bazel_version_test_examples = [
     "shake_ios_example",
     "snapkit_example",
     "stripe_example",
+    "swift_protobuf_example",
     "xcmetrics_example",
     "tca_example",
     "symlink_example",
