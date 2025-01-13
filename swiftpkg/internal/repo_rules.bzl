@@ -139,6 +139,17 @@ def _artifact_infos_from_path(repository_ctx, path):
             by_name = "*.xcframework",
         )
 
+    # NOTE: SPM validates the `.xcframework` paths by decoding the `Info.plist` file.
+    # This would be more involved to do in Starlark, so instead we'll assume
+    # that a `.xcframework` dir is a potential candidate if it contains a
+    # `Info.plist` file without checking the file contents.
+    # See: https://github.com/swiftlang/swift-package-manager/blob/c26c12f54357fb7246c0bdbe3483105389f056b8/Sources/Workspace/Workspace%2BBinaryArtifacts.swift#L771-L780
+    xcframework_dirs = [
+        xf
+        for xf in xcframework_dirs
+        if repository_files.path_exists(repository_ctx, paths.join(xf, "Info.plist"))
+    ]
+
     # If multiple found, use the last one which is what SPM currently does:
     # https://github.com/swiftlang/swift-package-manager/blob/c26c12f54357fb7246c0bdbe3483105389f056b8/Sources/Workspace/Workspace%2BBinaryArtifacts.swift#L699-L723
     if len(xcframework_dirs) > 1:
