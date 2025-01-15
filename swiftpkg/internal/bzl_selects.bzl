@@ -102,6 +102,11 @@ def _new_from_target_dependency_condition(kind, labels, condition = None):
         for p in spm_platforms.supported(condition.platforms)
     ]
 
+    # Because `spm_platforms.label` may transform two different platforms into
+    # the same Bazel label (e.g. `macos` and `driverkit`), we need to uniquify
+    # the conditions.
+    conditions = sets.to_list(sets.make(conditions))
+
     return [
         _new(kind = kind, value = labels, condition = c)
         for c in conditions
@@ -155,34 +160,33 @@ def _to_starlark(values, kind_handlers = {}, mutually_inclusive = False):
     # dict whose keys are the conditions and the value is the value for the
     # condition.
     selects_by_kind = {}
-    no_condition_results = sets.make()
+    no_condition_results = []
 
     for v in values:
         v_type = type(v)
         if v_type != "struct":
             if v_type == "list":
-                no_condition_results = sets.union(no_condition_results, sets.make(v))
+                no_condition_results.extend(v)
             else:
-                sets.insert(no_condition_results, v)
+                no_condition_results.append(v)
             continue
 
         # We are assuming that the select will always result in a list.
         # Hence, we wrap the transformed value in a list.
         kind_handler = kind_handlers.get(v.kind, _noop_kind_handler)
-        tvs_set = sets.make(lists.flatten(kind_handler.transform(v.value)))
+        tvs = lists.flatten(kind_handler.transform(v.value))
         if v.condition != None:
             # Collect all of the values associted with a condition.
             select_dict = selects_by_kind.get(v.kind, {})
-            condition_values = select_dict.get(v.condition, sets.make())
-            condition_values = sets.union(condition_values, tvs_set)
+            condition_values = select_dict.get(v.condition, []) + tvs
             select_dict[v.condition] = condition_values
             selects_by_kind[v.kind] = select_dict
         else:
-            no_condition_results = sets.union(no_condition_results, tvs_set)
+            no_condition_results = no_condition_results + tvs
 
     expr_members = []
-    if sets.length(no_condition_results) > 0:
-        expr_members.append(sets.to_list(no_condition_results))
+    if len(no_condition_results) > 0:
+        expr_members.append(no_condition_results)
     for (kind, select_dict) in selects_by_kind.items():
         kind_handler = kind_handlers.get(kind, _noop_kind_handler)
         sorted_keys = sorted(select_dict.keys())
@@ -191,13 +195,13 @@ def _to_starlark(values, kind_handlers = {}, mutually_inclusive = False):
             # Generate multiple select expressions for each condition.
             for k in sorted_keys:
                 new_dict = {
-                    k: sets.to_list(select_dict[k]),
+                    k: select_dict[k],
                 }
                 _append_select(expr_members, kind_handler, new_dict)
         else:
             # Combine all conditions of the same kind into one select expression.
             new_dict = {
-                k: sets.to_list(select_dict[k])
+                k: select_dict[k]
                 for k in sorted_keys
             }
             _append_select(expr_members, kind_handler, new_dict)
