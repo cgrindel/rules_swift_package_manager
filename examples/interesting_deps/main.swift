@@ -1,5 +1,6 @@
 import CocoaLumberjack
 import CocoaLumberjackSwiftLogBackend
+import FooSwift
 import GEOSwift
 import libwebp
 import Logging
@@ -14,3 +15,5 @@ logger.info("Hello World!")
 
 let webpVersion = WebPGetDecoderVersion()
 logger.info("WebP version: \(webpVersion)")
+
+fooSwift()
