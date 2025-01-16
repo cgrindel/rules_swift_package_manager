@@ -15,6 +15,8 @@ On this page:
 ## swift_deps_index
 
 <pre>
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_deps_index")
+
 swift_deps_index(<a href="#swift_deps_index-name">name</a>, <a href="#swift_deps_index-direct_dep_pkg_infos">direct_dep_pkg_infos</a>)
 </pre>
 

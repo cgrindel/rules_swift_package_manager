@@ -17,6 +17,8 @@ On this page:
 ## generate_modulemap
 
 <pre>
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
+
 generate_modulemap(<a href="#generate_modulemap-name">name</a>, <a href="#generate_modulemap-deps">deps</a>, <a href="#generate_modulemap-hdrs">hdrs</a>, <a href="#generate_modulemap-module_name">module_name</a>)
 </pre>
 
@@ -38,6 +40,8 @@ Generate a modulemap for an Objective-C module.
 ## resource_bundle_accessor
 
 <pre>
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_accessor")
+
 resource_bundle_accessor(<a href="#resource_bundle_accessor-name">name</a>, <a href="#resource_bundle_accessor-bundle_name">bundle_name</a>)
 </pre>
 
@@ -57,6 +61,8 @@ Generate a Swift file with an SPM-specific `Bundle.module` accessor.
 ## resource_bundle_infoplist
 
 <pre>
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_infoplist")
+
 resource_bundle_infoplist(<a href="#resource_bundle_infoplist-name">name</a>, <a href="#resource_bundle_infoplist-region">region</a>)
 </pre>
 
