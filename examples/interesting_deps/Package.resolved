@@ -64,6 +64,15 @@
       }
     },
     {
+      "identity" : "swift-package-defines-example",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/luispadron/swift-package-defines-example",
+      "state" : {
+        "revision" : "e32185cc3c893e81acbb3e359831dbacde4575bc",
+        "version" : "2.0.0"
+      }
+    },
+    {
       "identity" : "yoti-doc-scan-ios",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getyoti/yoti-doc-scan-ios.git",
