@@ -250,7 +250,7 @@ def _collect_files(
 
     modulemap = None
     modulemap_orig_path = None
-    for orig_path in all_srcs:
+    for orig_path in depset(all_srcs).to_list():
         path = _relativize(orig_path, relative_to)
         _root, ext = paths.split_extension(path)
         if lists.contains(_HEADER_EXTS, ext):
