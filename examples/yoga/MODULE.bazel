@@ -1,0 +1,59 @@
+bazel_dep(
+    name = "rules_swift_package_manager",
+    version = "0.0.0",
+)
+local_path_override(
+    module_name = "rules_swift_package_manager",
+    path = "../..",
+)
+
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.23.0")
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+
+# The apple_support bazel_dep must come before the rules_cc.
+# https://github.com/bazelbuild/apple_support#incompatible-toolchain-resolution
+bazel_dep(name = "apple_support", version = "1.17.1")
+bazel_dep(
+    name = "rules_swift",
+    version = "2.3.1",
+    repo_name = "build_bazel_rules_swift",
+)
+bazel_dep(
+    name = "rules_apple",
+    version = "3.16.1",
+    repo_name = "build_bazel_rules_apple",
+)
+
+bazel_dep(
+    name = "bazel_skylib_gazelle_plugin",
+    version = "1.7.1",
+    dev_dependency = True,
+)
+bazel_dep(
+    name = "gazelle",
+    version = "0.41.0",
+    dev_dependency = True,
+    repo_name = "bazel_gazelle",
+)
+
+apple_cc_configure = use_extension(
+    "@apple_support//crosstool:setup.bzl",
+    "apple_cc_configure_extension",
+)
+use_repo(apple_cc_configure, "local_config_apple_cc")
+
+swift_deps = use_extension(
+    "@rules_swift_package_manager//:extensions.bzl",
+    "swift_deps",
+)
+swift_deps.from_package(
+    declare_swift_deps_info = True,
+    resolved = "//:Package.resolved",
+    swift = "//:Package.swift",
+)
+use_repo(
+    swift_deps,
+    "swift_deps_info",
+    "swift_package",
+    "swiftpkg_yoga",
+)
