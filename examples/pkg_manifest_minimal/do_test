@@ -9,10 +9,13 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
 assert_match() {
-  local pattern=${1}
+  local expected=${1}
   local actual="${2}"
-  local err_msg="Expected to match. pattern: ${pattern}, actual: ${actual}"
-  [[ "${actual}" =~ ${pattern} ]] || (echo >&2 "${err_msg}" && exit 1)
+  local err_msg="Expected to match. expected: ${expected}, actual: ${actual}"
+  if [[ "${expected}" != "${actual}" ]]; then
+    echo >&2 "${err_msg}"
+    exit 1
+  fi
 }
 
 # Generate Swift external deps and update build files
@@ -23,7 +26,9 @@ assert_match() {
 
 # Run MyExecutable target
 output="$("${bazel}" run //Sources/MyExecutable)"
-assert_match "Good morning, World!" "${output}"
+assert_match "Good morning, World!
+Hello, my name is Olivia and I'm 30 years old.
+Goodbye" "${output}"
 
 # Run old-style executable in my_local_package
 output="$("${bazel}" run @swiftpkg_my_local_package//:print-greeting)"

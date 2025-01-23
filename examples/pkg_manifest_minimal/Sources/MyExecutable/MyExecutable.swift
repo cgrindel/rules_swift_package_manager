@@ -1,4 +1,5 @@
 import ArgumentParser
+import FarewellFramework
 import GreetingsFramework
 import MyLibrary
 import NotThatAmazingModule
@@ -10,6 +11,8 @@ struct MyExecutable: AsyncParsableCommand {
         print(namedGreeting.value)
 
         let complexClass = ComplexClass(name: "Olivia", age: 30, favoriteColors: ["blue"])
-        print(complexClass.greet())
+        complexClass.greet()
+        let farewellMessage = FarewellFramework.myclang_get_farewell_message(MYCLANG_FAREWELL_GOODBYE)
+        print(String(cString: farewellMessage!))
     }
 }
