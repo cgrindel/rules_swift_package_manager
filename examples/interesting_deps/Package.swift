@@ -12,5 +12,6 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-log", from: "1.6.2"),
         .package(url: "https://github.com/erikdoe/ocmock", from: "3.9.4"),
         .package(url: "https://github.com/getyoti/yoti-doc-scan-ios.git", from: "6.0.0"),
+        .package(url: "https://github.com/luispadron/swift-package-defines-example", from: "2.0.0"),
     ]
 )
