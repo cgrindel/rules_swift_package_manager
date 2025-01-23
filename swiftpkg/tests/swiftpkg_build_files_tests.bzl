@@ -189,7 +189,6 @@ _pkg_info = pkginfos.new(
             exclude_paths = [
                 "src/do_not_include_me.cc",
             ],
-            public_hdrs_path = "include",
             dependencies = [],
             clang_settings = pkginfos.new_clang_settings([
                 pkginfos.new_build_setting(
