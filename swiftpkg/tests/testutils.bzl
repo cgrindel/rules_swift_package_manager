@@ -13,8 +13,7 @@ def _new_stub_repository_ctx(
         find_results = {},
         is_directory_results = {},
         file_type_results = {},
-        load_commands_results = {},
-        attr = {}):
+        load_commands_results = {}):
     def read(path):
         return file_contents.get(path, "")
 
@@ -57,7 +56,6 @@ def _new_stub_repository_ctx(
         execute = execute,
         attr = struct(
             bazel_package_name = repo_name,
-            **attr
         ),
     )
 
