@@ -5,7 +5,7 @@ load("//swiftpkg/internal:local_swift_package.bzl", "local_swift_package")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
 load("//swiftpkg/internal:swift_deps_info.bzl", "swift_deps_info")
-load("//swiftpkg/internal:swift_package.bzl", "EXPERIMENTAL_ATTRS", "PATCH_ATTRS", "swift_package")
+load("//swiftpkg/internal:swift_package.bzl", "PATCH_ATTRS", "TOOL_ATTRS", "swift_package")
 load("//swiftpkg/internal:swift_package_tool.bzl", "SWIFT_PACKAGE_CONFIG_ATTRS")
 load("//swiftpkg/internal:swift_package_tool_repo.bzl", "swift_package_tool_repo")
 
@@ -150,12 +150,12 @@ the Swift package to make it available.\
             )
         _declare_pkg_from_dependency(dep, config_pkg)
 
-    # Add all transitive dependencies to direct_dep_repo_names if `experimental_expose_build_files` flag is set.
+    # Add all transitive dependencies to direct_dep_repo_names if `publicly_expose_all_targets` flag is set.
     for dep in all_deps_by_id.values():
         config_pkg = config_pkgs.get(dep.name) or config_pkgs.get(
             bazel_repo_names.from_identity(dep.identity),
         )
-        if config_pkg and config_pkg.experimental_expose_build_files:
+        if config_pkg and config_pkg.publicly_expose_all_targets:
             bazel_repo_name = bazel_repo_names.from_identity(dep.identity)
             if bazel_repo_name not in direct_dep_repo_names:
                 direct_dep_repo_names.append(bazel_repo_name)
@@ -172,7 +172,7 @@ def _declare_pkg_from_dependency(dep, config_pkg):
         patch_cmds_win = None
         patch_tool = None
         patches = None
-        experimental_expose_build_files = None
+        publicly_expose_all_targets = None
         if config_pkg:
             init_submodules = config_pkg.init_submodules
             recursive_init_submodules = config_pkg.recursive_init_submodules
@@ -181,7 +181,7 @@ def _declare_pkg_from_dependency(dep, config_pkg):
             patch_cmds_win = config_pkg.patch_cmds_win
             patch_tool = config_pkg.patch_tool
             patches = config_pkg.patches
-            experimental_expose_build_files = config_pkg.experimental_expose_build_files
+            publicly_expose_all_targets = config_pkg.publicly_expose_all_targets
 
         pin = dep.source_control.pin
         swift_package(
@@ -198,7 +198,7 @@ def _declare_pkg_from_dependency(dep, config_pkg):
             patch_cmds_win = patch_cmds_win,
             patch_tool = patch_tool,
             patches = patches,
-            experimental_expose_build_files = experimental_expose_build_files,
+            publicly_expose_all_targets = publicly_expose_all_targets,
         )
 
     elif dep.file_system:
@@ -304,7 +304,7 @@ The identity (i.e., name in the package's manifest) for the Swift package.\
             default = True,
             doc = "Whether to clone submodules recursively in the repository.",
         ),
-    } | PATCH_ATTRS | EXPERIMENTAL_ATTRS,
+    } | PATCH_ATTRS | TOOL_ATTRS,
     doc = "Used to add or override settings for a particular Swift package.",
 )
 

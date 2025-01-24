@@ -175,19 +175,20 @@ PATCH_ATTRS = {
     ),
 }
 
-EXPERIMENTAL_ATTRS = {
-    "experimental_expose_build_files": attr.bool(
+TOOL_ATTRS = {
+    "publicly_expose_all_targets": attr.bool(
         default = False,
-        doc = "Allows to expose internal build files required for package compilation. " +
-              "This option is experimental and should be used at your own risk. " +
-              "The structure and labels of exposed build files may change in future releases " +
-              "without requiring a major version bump.",
+        doc = """
+Allows to expose internal build files required for package compilation.
+The structure and labels of exposed build files may change in future releases
+without requiring a major version bump.
+""",
     ),
 }
 
 _ALL_ATTRS = dicts.add(
     PATCH_ATTRS,
-    EXPERIMENTAL_ATTRS,
+    TOOL_ATTRS,
     _GIT_ATTRS,
     repo_rules.env_attrs,
     repo_rules.swift_attrs,

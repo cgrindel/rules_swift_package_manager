@@ -19,7 +19,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
     if target.module_type == module_types.clang:
         return _clang_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.swift:
-        return _swift_target_build_file(repository_ctx, pkg_ctx, target)
+        return _swift_target_build_file(pkg_ctx, target)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
     elif target.module_type == module_types.binary:
@@ -29,14 +29,14 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
             lambda ai: ai.artifact_type == artifact_types.xcframework,
         )
         if xcf_artifact_info != None:
-            return _xcframework_import_build_file(repository_ctx, target, xcf_artifact_info)
+            return _xcframework_import_build_file(pkg_ctx, target, xcf_artifact_info)
 
     # GH046: Support plugins.
     return None
 
 # MARK: - Swift Target
 
-def _swift_target_build_file(repository_ctx, pkg_ctx, target):
+def _swift_target_build_file(pkg_ctx, target):
     if target.swift_src_info == None:
         fail("Expected a `swift_src_info`. name: ", target.name)
 
@@ -44,7 +44,7 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     attrs = {
         "module_name": target.c99name,
         "srcs": pkginfo_targets.srcs(target),
-        "visibility": _build_file_visibility(repository_ctx),
+        "visibility": _build_file_visibility(pkg_ctx.pkg_info.expose_build_files),
     }
 
     def _update_attr_list(name, value):
@@ -145,7 +145,6 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
 
     if target.resources:
         swift_apple_res_bundle_info = _apple_resource_bundle_for_swift(
-            repository_ctx,
             pkg_ctx,
             target,
         )
@@ -215,7 +214,7 @@ def _swift_test_from_target(target, attrs):
 def _swift_compiler_plugin_from_target(target, attrs):
     # Macros are set up as compiler plugins. We expose macro products as an
     # alias to the swift_compiler_plugin target.
-    attrs["visibility"] = ["//visibility:public"]
+    attrs["visibility"] = _build_file_visibility(expose_build_files = True)
     return build_decls.new(
         kind = swift_kinds.compiler_plugin,
         name = pkginfo_targets.bazel_label_name(target),
@@ -341,7 +340,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "alwayslink": True,
         "copts": copts,
         "srcs": srcs,
-        "visibility": _build_file_visibility(repository_ctx),
+        "visibility": _build_file_visibility(pkg_ctx.pkg_info.expose_build_files),
     }
     if clang_src_info.hdrs:
         attrs["hdrs"] = clang_src_info.hdrs
@@ -661,7 +660,7 @@ def _system_library_build_file(target):
 
 # MARK: - Apple xcframework Targets
 
-def _xcframework_import_build_file(repository_ctx, target, artifact_info):
+def _xcframework_import_build_file(pkg_ctx, target, artifact_info):
     attrs = {}
     if artifact_info.link_type == link_types.static:
         load_stmts = [apple_static_xcframework_import_load_stmt]
@@ -693,7 +692,7 @@ expected: {expected}\
             kind = kind,
             name = pkginfo_targets.bazel_label_name(target),
             attrs = attrs | {
-                "visibility": _build_file_visibility(repository_ctx),
+                "visibility": _build_file_visibility(pkg_ctx.pkg_info.expose_build_files),
                 "xcframework_imports": glob,
             },
         ),
@@ -705,7 +704,7 @@ expected: {expected}\
 
 # MARK: - Apple Resource Group
 
-def _apple_resource_bundle(repository_ctx, target, package_name, default_localization):
+def _apple_resource_bundle(target, package_name, default_localization, expose_build_files):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     bundle_label_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
     bundle_name = pkginfo_targets.resource_bundle_name(package_name, target.c99name)
@@ -739,7 +738,7 @@ def _apple_resource_bundle(repository_ctx, target, package_name, default_localiz
                 # Based upon the code in SPM, it looks like they only support unstructured resources.
                 # https://github.com/apple/swift-package-manager/blob/main/Sources/PackageModel/Resource.swift#L25-L33
                 "resources": resources,
-                "visibility": _build_file_visibility(repository_ctx),
+                "visibility": _build_file_visibility(expose_build_files),
             },
         ),
     ]
@@ -749,12 +748,12 @@ def _apple_resource_bundle(repository_ctx, target, package_name, default_localiz
         build_file = build_files.new(load_stmts = load_stmts, decls = decls),
     )
 
-def _apple_resource_bundle_for_swift(repository_ctx, pkg_ctx, target):
+def _apple_resource_bundle_for_swift(pkg_ctx, target):
     apple_res_bundle_info = _apple_resource_bundle(
-        repository_ctx,
         target,
         pkg_ctx.pkg_info.name,
         pkg_ctx.pkg_info.default_localization,
+        pkg_ctx.pkg_info.expose_build_files,
     )
 
     # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
@@ -782,12 +781,12 @@ def _apple_resource_bundle_for_swift(repository_ctx, pkg_ctx, target):
         ),
     )
 
-def _apple_resource_bundle_for_clang(repository_ctx, pkg_ctx, target):
+def _apple_resource_bundle_for_clang(pkg_ctx, target):
     apple_res_bundle_info = _apple_resource_bundle(
-        repository_ctx,
         target,
         pkg_ctx.pkg_info.name,
         pkg_ctx.pkg_info.default_localization,
+        pkg_ctx.pkg_info.expose_build_files,
     )
     all_build_files = [apple_res_bundle_info.build_file]
     objc_accessor_hdr_label_name = None
@@ -886,7 +885,7 @@ def _executable_product_build_file(pkg_info, product, repo_name):
                         product.name,
                         attrs = {
                             "actual": bazel_labels.normalize(label),
-                            "visibility": ["//visibility:public"],
+                            "visibility": _build_file_visibility(expose_build_files = True),
                         },
                     ),
                 ],
@@ -931,7 +930,7 @@ def _library_product_build_file(pkg_ctx, product):
                         bazel_labels.normalize(label)
                         for label in target_labels
                     ],
-                    "visibility": ["//visibility:public"],
+                    "visibility": _build_file_visibility(expose_build_files = True),
                 },
             ),
         ],
@@ -945,7 +944,7 @@ def _swift_binary_from_product(product, dep_target, repo_name):
             "deps": [bazel_labels.normalize(
                 pkginfo_targets.bazel_label(dep_target, repo_name = repo_name),
             )],
-            "visibility": ["//visibility:public"],
+            "visibility": _build_file_visibility(expose_build_files = True),
         },
     )
 
@@ -966,7 +965,7 @@ Expected only one target for the macro product {name} but received {count}.\
                 product.name,
                 attrs = {
                     "actual": ":{}".format(label_name),
-                    "visibility": ["//visibility:public"],
+                    "visibility": _build_file_visibility(expose_build_files = True),
                 },
             ),
         ],
@@ -1012,9 +1011,8 @@ def _new_for_license(pkg_info, license):
 
 # MARK: - Build files encapsulation
 
-def _build_file_visibility(repository_ctx):
-    experimental_expose_build_files = getattr(repository_ctx.attr, "experimental_expose_build_files", False)
-    return ["//visibility:public"] if experimental_expose_build_files else ["//:__subpackages__"]
+def _build_file_visibility(expose_build_files):
+    return ["//visibility:public"] if expose_build_files else ["//:__subpackages__"]
 
 # MARK: - Constants and API Definition
 
