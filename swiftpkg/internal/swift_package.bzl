@@ -9,7 +9,6 @@ load(
 )
 load(":pkg_ctxs.bzl", "pkg_ctxs")
 load(":repo_rules.bzl", "repo_rules")
-load(":repository_files.bzl", "repository_files")
 
 # The implementation of this repository rule is heavily influenced by the
 # implementation for git_repository.
@@ -39,28 +38,6 @@ def _update_git_attrs(orig, keys, override):
         result.pop("branch", None)
     return result
 
-def _remove_bazel_files(repository_ctx, directory):
-    files = ["BUILD.bazel", "BUILD", "WORKSPACE", "WORKSPACE.bazel"]
-    for file in files:
-        repository_files.find_and_delete_files(repository_ctx, directory, file)
-
-def _remove_modulemaps(repository_ctx, directory, targets):
-    repository_files.find_and_delete_files(
-        repository_ctx,
-        directory,
-        "module.modulemap",
-        exclude_paths = [
-            # Framework modulemaps don't cause issues, and are needed
-            "**/*.framework/*",
-        ] + [
-            # We need to leave any modulemaps that we are passing into
-            # `objc_library`
-            target.clang_src_info.modulemap_path
-            for target in targets
-            if target.clang_src_info and target.clang_src_info.modulemap_path
-        ],
-    )
-
 def _swift_package_impl(repository_ctx):
     directory = str(repository_ctx.path("."))
     env = repo_rules.get_exec_env(repository_ctx)
@@ -73,7 +50,7 @@ def _swift_package_impl(repository_ctx):
     patch(repository_ctx)
 
     # Remove any Bazel build files.
-    _remove_bazel_files(repository_ctx, directory)
+    repo_rules.remove_bazel_files(repository_ctx, directory)
 
     # Generate the WORKSPACE file
     repo_rules.write_workspace_file(repository_ctx, directory)
@@ -86,7 +63,7 @@ def _swift_package_impl(repository_ctx):
     repository_ctx.delete(repository_ctx.path(".git"))
 
     # Remove unused modulemaps to prevent module redefinition errors
-    _remove_modulemaps(repository_ctx, directory, pkg_ctx.pkg_info.targets)
+    repo_rules.remove_modulemaps(repository_ctx, directory, pkg_ctx.pkg_info.targets)
 
     # Return attributes that make this reproducible
     return _update_git_attrs(repository_ctx.attr, _ALL_ATTRS.keys(), update)
