@@ -44,7 +44,7 @@ def _swift_target_build_file(pkg_ctx, target):
     attrs = {
         "module_name": target.c99name,
         "srcs": pkginfo_targets.srcs(target),
-        "visibility": _build_file_visibility(pkg_ctx.pkg_info.expose_build_files),
+        "visibility": _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
     }
 
     def _update_attr_list(name, value):
@@ -214,7 +214,7 @@ def _swift_test_from_target(target, attrs):
 def _swift_compiler_plugin_from_target(target, attrs):
     # Macros are set up as compiler plugins. We expose macro products as an
     # alias to the swift_compiler_plugin target.
-    attrs["visibility"] = _build_file_visibility(expose_build_files = True)
+    attrs["visibility"] = ["//visibility:public"]
     return build_decls.new(
         kind = swift_kinds.compiler_plugin,
         name = pkginfo_targets.bazel_label_name(target),
@@ -340,7 +340,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "alwayslink": True,
         "copts": copts,
         "srcs": srcs,
-        "visibility": _build_file_visibility(pkg_ctx.pkg_info.expose_build_files),
+        "visibility": _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
     }
     if clang_src_info.hdrs:
         attrs["hdrs"] = clang_src_info.hdrs
@@ -400,7 +400,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                     "deps": [],
                     "hdrs": clang_src_info.hdrs,
                     "module_name": target.c99name,
-                    "visibility": ["//:__subpackages__"],
+                    "visibility": _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
                 },
             ),
         )
@@ -575,7 +575,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             ":{}".format(dname)
             for dname in child_dep_names
         ],
-        "visibility": ["//:__subpackages__"],
+        "visibility": _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
     }
     decls.append(
         build_decls.new(
@@ -692,7 +692,7 @@ expected: {expected}\
             kind = kind,
             name = pkginfo_targets.bazel_label_name(target),
             attrs = attrs | {
-                "visibility": _build_file_visibility(pkg_ctx.pkg_info.expose_build_files),
+                "visibility": _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
                 "xcframework_imports": glob,
             },
         ),
@@ -704,7 +704,7 @@ expected: {expected}\
 
 # MARK: - Apple Resource Group
 
-def _apple_resource_bundle(target, package_name, default_localization, expose_build_files):
+def _apple_resource_bundle(target, package_name, default_localization, expose_build_targets):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     bundle_label_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
     bundle_name = pkginfo_targets.resource_bundle_name(package_name, target.c99name)
@@ -738,7 +738,7 @@ def _apple_resource_bundle(target, package_name, default_localization, expose_bu
                 # Based upon the code in SPM, it looks like they only support unstructured resources.
                 # https://github.com/apple/swift-package-manager/blob/main/Sources/PackageModel/Resource.swift#L25-L33
                 "resources": resources,
-                "visibility": _build_file_visibility(expose_build_files),
+                "visibility": _target_visibility(expose_build_targets),
             },
         ),
     ]
@@ -753,7 +753,7 @@ def _apple_resource_bundle_for_swift(pkg_ctx, target):
         target,
         pkg_ctx.pkg_info.name,
         pkg_ctx.pkg_info.default_localization,
-        pkg_ctx.pkg_info.expose_build_files,
+        pkg_ctx.pkg_info.expose_build_targets,
     )
 
     # Apparently, SPM provides a `Bundle.module` accessor. So, we do too.
@@ -786,7 +786,7 @@ def _apple_resource_bundle_for_clang(pkg_ctx, target):
         target,
         pkg_ctx.pkg_info.name,
         pkg_ctx.pkg_info.default_localization,
-        pkg_ctx.pkg_info.expose_build_files,
+        pkg_ctx.pkg_info.expose_build_targets,
     )
     all_build_files = [apple_res_bundle_info.build_file]
     objc_accessor_hdr_label_name = None
@@ -885,7 +885,7 @@ def _executable_product_build_file(pkg_info, product, repo_name):
                         product.name,
                         attrs = {
                             "actual": bazel_labels.normalize(label),
-                            "visibility": _build_file_visibility(expose_build_files = True),
+                            "visibility": ["//visibility:public"],
                         },
                     ),
                 ],
@@ -930,7 +930,7 @@ def _library_product_build_file(pkg_ctx, product):
                         bazel_labels.normalize(label)
                         for label in target_labels
                     ],
-                    "visibility": _build_file_visibility(expose_build_files = True),
+                    "visibility": ["//visibility:public"],
                 },
             ),
         ],
@@ -944,7 +944,7 @@ def _swift_binary_from_product(product, dep_target, repo_name):
             "deps": [bazel_labels.normalize(
                 pkginfo_targets.bazel_label(dep_target, repo_name = repo_name),
             )],
-            "visibility": _build_file_visibility(expose_build_files = True),
+            "visibility": ["//visibility:public"],
         },
     )
 
@@ -965,7 +965,7 @@ Expected only one target for the macro product {name} but received {count}.\
                 product.name,
                 attrs = {
                     "actual": ":{}".format(label_name),
-                    "visibility": _build_file_visibility(expose_build_files = True),
+                    "visibility": ["//visibility:public"],
                 },
             ),
         ],
@@ -1009,10 +1009,10 @@ def _new_for_license(pkg_info, license):
         decls = decls,
     )
 
-# MARK: - Build files encapsulation
+# MARK: - Build targets encapsulation
 
-def _build_file_visibility(expose_build_files):
-    return ["//visibility:public"] if expose_build_files else ["//:__subpackages__"]
+def _target_visibility(expose_build_targets):
+    return ["//visibility:public"] if expose_build_targets else ["//:__subpackages__"]
 
 # MARK: - Constants and API Definition
 

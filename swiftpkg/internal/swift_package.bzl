@@ -179,8 +179,8 @@ TOOL_ATTRS = {
     "publicly_expose_all_targets": attr.bool(
         default = False,
         doc = """
-Allows to expose internal build files required for package compilation.
-The structure and labels of exposed build files may change in future releases
+Allows to expose internal build targets required for package compilation.
+The structure and labels of exposed targets may change in future releases
 without requiring a major version bump.
 """,
     ),

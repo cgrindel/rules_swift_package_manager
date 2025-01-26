@@ -31,7 +31,7 @@ load(":testutils.bzl", "testutils")
 _repo_name = "@swiftpkg_mypackage"
 
 def _pkg_info(
-        expose_build_files = False):
+        expose_build_targets = False):
     return pkginfos.new(
         name = "MyPackage",
         path = "/path/to/my-package",
@@ -474,7 +474,7 @@ def _pkg_info(
                 ),
             ),
         ],
-        expose_build_files = expose_build_files,
+        expose_build_targets = expose_build_targets,
     )
 
 def _pkg_ctx(pkg_info):
@@ -1054,7 +1054,7 @@ swift_interop_hint(
             msg = "Swift library target with default visibility",
             name = "RegularSwiftTargetAsLibrary",
             pkg_info = _pkg_info(
-                expose_build_files = False,
+                expose_build_targets = False,
             ),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
@@ -1080,7 +1080,7 @@ swift_library(
             msg = "Swift library target with public visibility",
             name = "RegularSwiftTargetAsLibrary",
             pkg_info = _pkg_info(
-                expose_build_files = True,
+                expose_build_targets = True,
             ),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
