@@ -175,8 +175,20 @@ PATCH_ATTRS = {
     ),
 }
 
+TOOL_ATTRS = {
+    "publicly_expose_all_targets": attr.bool(
+        default = False,
+        doc = """
+Allows to expose internal build targets required for package compilation.
+The structure and labels of exposed targets may change in future releases
+without requiring a major version bump.
+""",
+    ),
+}
+
 _ALL_ATTRS = dicts.add(
     PATCH_ATTRS,
+    TOOL_ATTRS,
     _GIT_ATTRS,
     repo_rules.env_attrs,
     repo_rules.swift_attrs,

@@ -611,6 +611,7 @@ def _new_from_parsed_json(
 
     url = None
     version = None
+    expose_build_targets = False
     if hasattr(repository_ctx, "attr"):
         # We only want to try to collect url and version when called from
         # `swift_package`
@@ -619,6 +620,11 @@ def _new_from_parsed_json(
             repository_ctx.attr,
             "version",
             getattr(repository_ctx.attr, "commit", None),
+        )
+        expose_build_targets = getattr(
+            repository_ctx.attr,
+            "publicly_expose_all_targets",
+            False,
         )
 
     return _new(
@@ -635,6 +641,7 @@ def _new_from_parsed_json(
         targets = targets,
         url = url,
         version = version,
+        expose_build_targets = expose_build_targets,
         c_language_standard = dump_manifest.get("cLanguageStandard"),
         cxx_language_standard = dump_manifest.get("cxxLanguageStandard"),
     )
@@ -652,6 +659,7 @@ def _new(
         targets = [],
         url = None,
         version = None,
+        expose_build_targets = False,
         c_language_standard = None,
         cxx_language_standard = None):
     """Returns a `struct` representing information about a Swift package.
@@ -672,6 +680,8 @@ def _new(
             `pkginfos.new_target()`.
         url: Optional. The url of the package (`string`).
         version: Optional. The semantic version of the package (`string`).
+        expose_build_targets: Optional. Defaults to False. A boolean that specifies whether to expose
+            the package's internal build targets.
         c_language_standard: Optional. The c language standard (e.g. `c99`,
             `gnu99`, `c11`).
         cxx_language_standard: Optional. The c++ language standard (e.g.
@@ -691,6 +701,7 @@ def _new(
         targets = targets,
         url = url,
         version = version,
+        expose_build_targets = expose_build_targets,
         c_language_standard = c_language_standard,
         cxx_language_standard = cxx_language_standard,
     )
