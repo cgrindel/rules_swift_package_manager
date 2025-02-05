@@ -10,8 +10,8 @@ def swift_bazel_go_dependencies():
         name = "com_github_bazelbuild_bazel_gazelle",
         build_external = "external",
         importpath = "github.com/bazelbuild/bazel-gazelle",
-        sum = "h1:blh57YCxe3QNFbzRtEuLxaak+f5KYSQynznGnUNDRc4=",
-        version = "v0.41.0",
+        sum = "h1:BpkUzE3H2l6buJYFTKgzVMecJimQgWwYud25qVIx0SQ=",
+        version = "v0.42.0",
     )
     maybe(
         go_repository,
