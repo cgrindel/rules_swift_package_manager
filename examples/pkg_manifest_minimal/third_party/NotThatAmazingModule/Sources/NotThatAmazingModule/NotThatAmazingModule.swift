@@ -11,8 +11,8 @@ public class ComplexClass {
         self.favoriteColors = favoriteColors
     }
 
-    public func greet() {
-        print("Hello, my name is \(name) and I'm \(age) years old.")
+    public func greet() -> String {
+        return "Hello, my name is \(name) and I'm \(age) years old."
     }
 
     public func addFavoriteColor(color: String) {

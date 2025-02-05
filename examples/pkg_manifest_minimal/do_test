@@ -24,6 +24,7 @@ assert_match() {
 # Run MyExecutable target
 output="$("${bazel}" run //Sources/MyExecutable)"
 assert_match "Good morning, World!" "${output}"
+assert_match "Olivia .* 30 years old" "${output}"
 
 # Run old-style executable in my_local_package
 output="$("${bazel}" run @swiftpkg_my_local_package//:print-greeting)"
