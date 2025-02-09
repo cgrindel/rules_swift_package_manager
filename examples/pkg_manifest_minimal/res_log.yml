@@ -1,0 +1,72 @@
+---
+name: //Sources/MyExecutable
+kind: swift_binary
+imports:
+    - ArgumentParser
+    - FarewellFramework
+    - GreetingsFramework
+    - MyLibrary
+    - NotThatAmazingModule
+local_resolution:
+    - module: MyLibrary
+      label: //Sources/MyLibrary
+external_resolution:
+    modules:
+        - ArgumentParser
+        - FarewellFramework
+        - GreetingsFramework
+        - NotThatAmazingModule
+    products:
+        - identity: my_local_package
+          name: FarewellFramework
+          label: '@swiftpkg_my_local_package//:FarewellFramework'
+        - identity: my_local_package
+          name: GreetingsFramework
+          label: '@swiftpkg_my_local_package//:GreetingsFramework'
+        - identity: notthatamazingmodule
+          name: NotThatAmazingModule
+          label: '@swiftpkg_notthatamazingmodule//:NotThatAmazingModule'
+        - identity: swift-argument-parser
+          name: ArgumentParser
+          label: '@swiftpkg_swift_argument_parser//:ArgumentParser'
+    unresolved: []
+deps:
+    - //Sources/MyLibrary
+    - '@swiftpkg_my_local_package//:FarewellFramework'
+    - '@swiftpkg_my_local_package//:GreetingsFramework'
+    - '@swiftpkg_notthatamazingmodule//:NotThatAmazingModule'
+    - '@swiftpkg_swift_argument_parser//:ArgumentParser'
+---
+name: //Sources/MyLibrary
+kind: swift_library
+imports:
+    - GreetingsFramework
+external_resolution:
+    modules:
+        - GreetingsFramework
+    products:
+        - identity: my_local_package
+          name: GreetingsFramework
+          label: '@swiftpkg_my_local_package//:GreetingsFramework'
+    unresolved: []
+deps:
+    - '@swiftpkg_my_local_package//:GreetingsFramework'
+---
+name: //Tests/MyLibraryTests
+kind: swift_test
+imports:
+    - MyLibrary
+    - XCTest
+builtins:
+    - XCTest
+local_resolution:
+    - module: MyLibrary
+      label: //Sources/MyLibrary
+external_resolution:
+    modules:
+        - XCTest
+    products: []
+    unresolved:
+        - XCTest
+deps:
+    - //Sources/MyLibrary
