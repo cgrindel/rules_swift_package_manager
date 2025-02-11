@@ -14,7 +14,7 @@ require (
 	github.com/deckarep/golang-set/v2 v2.7.0
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/exp v0.0.0-20250207012021-f9890c6ad9f3
+	golang.org/x/exp v0.0.0-20250210185358-939b2ce775ac
 	golang.org/x/text v0.21.0
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -24,7 +24,7 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	golang.org/x/mod v0.22.0 // indirect
+	golang.org/x/mod v0.23.0 // indirect
 	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
 )
