@@ -14,8 +14,16 @@ print_and_run() {
 # to bazel.
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
+echo >&2 "=============================="
+echo >&2 "Executing bazel run //:tidy"
+echo >&2 "=============================="
+
 # Generate Swift external deps and update build files
 print_and_run "${bazel}" run //:tidy
+
+echo >&2 "=============================="
+echo >&2 "Executing bazel test //..."
+echo >&2 "=============================="
 
 # Ensure that it builds and tests pass
 print_and_run "${bazel}" test //...
@@ -26,8 +34,16 @@ print_and_run "${bazel}" test //...
 # Related:
 # https://github.com/MobileNativeFoundation/rules_xcodeproj/issues/2703
 
+echo >&2 "=============================="
+echo >&2 "Generating the Xcode project"
+echo >&2 "=============================="
+
 # Generate the Xcode project
 print_and_run "${bazel}" run //analytics/AnalyticsExample:xcodeproj
+
+echo >&2 "=============================="
+echo >&2 "Build the workspace as Xcode would"
+echo >&2 "=============================="
 
 # Build the workspace
 print_and_run "${bazel}" run //analytics/AnalyticsExample:xcodeproj -- \

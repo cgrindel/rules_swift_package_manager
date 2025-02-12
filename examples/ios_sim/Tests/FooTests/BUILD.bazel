@@ -9,6 +9,7 @@ swift_library(
         "MarkdownTests.swift",
     ],
     module_name = "FooTests",
+    tags = ["manual"],
     deps = [
         "//Sources/Foo",
         "@swiftpkg_swift_markdown//:Markdown",
