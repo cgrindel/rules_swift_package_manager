@@ -14,6 +14,9 @@ load(":repo_rules.bzl", "repo_rules")
 _CODE_IGNORE_LIST = [".", "..", ".build"]
 
 def _list_contents(repository_ctx, repo_dir, path):
+    # Watch directory to ensure the repo is refetched if new files are added to the local package
+    repository_ctx.watch_tree(path)
+
     exec_result = repository_ctx.execute(
         ["ls", "-a", "-1", path],
         working_directory = repo_dir,
