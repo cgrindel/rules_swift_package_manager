@@ -16,7 +16,7 @@ _CODE_IGNORE_LIST = [".", "..", ".build"]
 def _list_contents(repository_ctx, repo_dir, path):
     # Watch directory to ensure the repo is refetched if new files are added to the local package.
     # watch_tree was added in Bazel 7.1.0 so we need to check that it exists before calling it.
-    if hasattr(repository_ctx, 'watch_tree'):
+    if hasattr(repository_ctx, "watch_tree"):
         repository_ctx.watch_tree(path)
 
     exec_result = repository_ctx.execute(
