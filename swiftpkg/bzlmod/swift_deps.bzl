@@ -60,7 +60,7 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
            not dep.source_control:
             # buildifier: disable=print
             print("""
-WARNING: {name} is unresolved and won't be available duing the build, resolve \
+WARNING: {name} is unresolved and won't be available during the build, resolve \
 the Swift package to make it available.\
 """.format(name = dep.name))
             continue
