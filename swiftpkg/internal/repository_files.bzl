@@ -65,6 +65,7 @@ def _list_files_under(
         repository_ctx,
         path,
         exclude_paths = [],
+        exclude_directories = False,
         by_name = None,
         depth = None):
     """Retrieves the list of files under the specified path.
@@ -76,6 +77,7 @@ def _list_files_under(
         path: A path `string` value.
         exclude_paths: Optional. A `list` of path `string` values that should be
             excluded from the result.
+        exclude_directories: Optional. Exclude directories from the result.
         by_name: Optional. The name pattern that must be matched.
         depth: Optional. The depth as an `int` at which the directory must
             live from the starting path.
@@ -95,6 +97,8 @@ def _list_files_under(
         find_args.extend(["-mindepth", depth_str, "-maxdepth", depth_str])
     if by_name != None:
         find_args.extend(["-name", by_name])
+    if exclude_directories:
+        find_args.extend(["-not", "-type", "d"])
     exec_result = repository_ctx.execute(find_args, quiet = True)
     if exec_result.return_code != 0:
         fail("Failed to list files in %s. stderr:\n%s" % (path, exec_result.stderr))

@@ -309,15 +309,12 @@ def _new_target_from_json_maps(
     for directory in resource_directories:
         sets.remove(resources_set, directory)
 
-        resource_files = [
-            p
-            for p in repository_files.list_files_under(
-                repository_ctx,
-                directory.path,
-                exclude_paths = exclude_paths,
-            )
-            if not repository_files.is_directory(repository_ctx, p)
-        ]
+        resource_files = repository_files.list_files_under(
+            repository_ctx,
+            directory.path,
+            exclude_paths = exclude_paths,
+            exclude_directories = True,
+        )
 
         for p in resource_files:
             res = _new_resource_from_discovered_resource(p)
@@ -1023,23 +1020,14 @@ def _new_swift_src_info_from_sources(
         repository_ctx,
         target_path,
         exclude_paths = exclude_paths,
+        exclude_directories = True,
     )
-
-    # Identify the directories
-    directories = repository_files.list_directories_under(
-        repository_ctx,
-        target_path,
-        exclude_paths = exclude_paths,
-    )
-    dirs_set = sets.make(directories)
 
     # The paths should be relative to the target not the root of the workspace.
-    # Do not include directories in the output.
     discovered_res_files = [
         f
         for f in all_target_files
-        if not sets.contains(dirs_set, f) and
-           resource_files.is_auto_discovered_resource(f)
+        if resource_files.is_auto_discovered_resource(f)
     ]
 
     return _new_swift_src_info(
