@@ -209,11 +209,35 @@ def _get_auth(ctx, urls):
         auth_patterns = ctx.attr.auth_patterns
     return use_netrc(netrc, urls, auth_patterns)
 
+def _remove_bazel_files(repository_ctx, directory):
+    files = ["BUILD.bazel", "BUILD", "WORKSPACE", "WORKSPACE.bazel"]
+    for file in files:
+        repository_files.find_and_delete_files(repository_ctx, directory, file)
+
+def _remove_modulemaps(repository_ctx, directory, targets):
+    repository_files.find_and_delete_files(
+        repository_ctx,
+        directory,
+        "module.modulemap",
+        exclude_paths = [
+            # Framework modulemaps don't cause issues, and are needed
+            "**/*.framework/*",
+        ] + [
+            # We need to leave any modulemaps that we are passing into
+            # `objc_library`
+            target.clang_src_info.modulemap_path
+            for target in targets
+            if target.clang_src_info and target.clang_src_info.modulemap_path
+        ],
+    )
+
 repo_rules = struct(
     check_spm_version = _check_spm_version,
     env_attrs = _env_attrs,
     gen_build_files = _gen_build_files,
     get_exec_env = _get_exec_env,
+    remove_bazel_files = _remove_bazel_files,
+    remove_modulemaps = _remove_modulemaps,
     swift_attrs = _swift_attrs,
     write_workspace_file = _write_workspace_file,
 )
