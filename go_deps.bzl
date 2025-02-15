@@ -43,8 +43,8 @@ def swift_bazel_go_dependencies():
         name = "com_github_cpuguy83_go_md2man_v2",
         build_external = "external",
         importpath = "github.com/cpuguy83/go-md2man/v2",
-        sum = "h1:wfIWP927BUkWJb2NmU/kNDYIBTh/ziUX91+lVfRxZq4=",
-        version = "v2.0.4",
+        sum = "h1:XJtiaUW6dEEqVuZiMTn1ldk455QWwEIsMIJlo5vtkx0=",
+        version = "v2.0.6",
     )
     maybe(
         go_repository,
@@ -123,16 +123,16 @@ def swift_bazel_go_dependencies():
         name = "com_github_spf13_cobra",
         build_external = "external",
         importpath = "github.com/spf13/cobra",
-        sum = "h1:e5/vxKd/rZsfSJMUX1agtjeTDf+qv1/JdBF8gg5k9ZM=",
-        version = "v1.8.1",
+        sum = "h1:Py5fIuq/lJsRYxcxfOtsJqpmwJWCMOUy2tMJYV8TNHE=",
+        version = "v1.9.0",
     )
     maybe(
         go_repository,
         name = "com_github_spf13_pflag",
         build_external = "external",
         importpath = "github.com/spf13/pflag",
-        sum = "h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=",
-        version = "v1.0.5",
+        sum = "h1:jFzHGLGAlb3ruxLB8MhbI6A8+AQX/2eW4qeyNZXNp2o=",
+        version = "v1.0.6",
     )
     maybe(
         go_repository,
