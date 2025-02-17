@@ -1,0 +1,19 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+
+swift_binary(
+    name = "skip_local_transitive_dependencies_example",
+    srcs = ["main.swift"],
+    module_name = "skip_local_transitive_dependencies_example",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@swiftpkg_localpackagea//:LocalPackageA",
+    ],
+)
+
+build_test(
+    name = "build_test",
+    targets = [
+        ":skip_local_transitive_dependencies_example",
+    ],
+)
