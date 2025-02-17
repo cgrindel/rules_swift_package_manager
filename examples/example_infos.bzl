@@ -144,6 +144,7 @@ _macos_single_bazel_version_test_examples = [
     "soto_example",  # Soto supports Linux and MacOS. However, the resolved package is different.
     "resources_example",
     "shake_ios_example",
+    "skip_local_transitive_dependencies_example",
     "snapkit_example",
     "stripe_example",
     "xcmetrics_example",
