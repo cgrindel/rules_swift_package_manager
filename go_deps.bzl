@@ -123,8 +123,8 @@ def swift_bazel_go_dependencies():
         name = "com_github_spf13_cobra",
         build_external = "external",
         importpath = "github.com/spf13/cobra",
-        sum = "h1:Py5fIuq/lJsRYxcxfOtsJqpmwJWCMOUy2tMJYV8TNHE=",
-        version = "v1.9.0",
+        sum = "h1:CXSaggrXdbHK9CF+8ywj8Amf7PBRmPCOJugH954Nnlo=",
+        version = "v1.9.1",
     )
     maybe(
         go_repository,
