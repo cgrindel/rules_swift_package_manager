@@ -1,0 +1,3 @@
+import LocalPackageA
+
+await doWorkA()
