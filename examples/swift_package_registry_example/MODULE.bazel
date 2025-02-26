@@ -1,0 +1,53 @@
+bazel_dep(
+    name = "rules_swift_package_manager",
+    version = "0.0.0",
+)
+local_path_override(
+    module_name = "rules_swift_package_manager",
+    path = "../..",
+)
+
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.21.0")
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+bazel_dep(name = "apple_support", version = "1.17.1")
+bazel_dep(
+    name = "rules_swift",
+    version = "2.2.2",
+    repo_name = "build_bazel_rules_swift",
+)
+bazel_dep(
+    name = "rules_apple",
+    version = "3.10.0",
+    repo_name = "build_bazel_rules_apple",
+)
+
+bazel_dep(
+    name = "bazel_skylib_gazelle_plugin",
+    version = "1.7.1",
+    dev_dependency = True,
+)
+bazel_dep(
+    name = "gazelle",
+    version = "0.39.1",
+    dev_dependency = True,
+    repo_name = "bazel_gazelle",
+)
+
+swift_deps = use_extension(
+    "@rules_swift_package_manager//:extensions.bzl",
+    "swift_deps",
+)
+swift_deps.from_package(
+    registries = "//:registries.json",
+    resolved = "//:Package.resolved",
+    swift = "//:Package.swift",
+)
+swift_deps.configure_swift_package(
+    replace_scm_with_registry = True,
+)
+use_repo(
+    swift_deps,
+    "swift_package",
+    "swiftpkg_apple.swift_collections",
+    "swiftpkg_apple.swift_nio",
+)
