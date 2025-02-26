@@ -150,6 +150,7 @@ _macos_single_bazel_version_test_examples = [
     "xcmetrics_example",
     "tca_example",
     "symlink_example",
+    "swift_package_registry_example",
 ]
 
 _linux_single_bazel_version_test_examples = []
