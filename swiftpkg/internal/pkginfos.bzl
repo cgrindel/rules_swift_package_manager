@@ -392,6 +392,17 @@ def _new_target_from_json_maps(
                 pkg_path = pkg_path,
                 sources = clang_src_info.explicit_srcs + clang_src_info.hdrs,
             )
+    elif module_type == module_types.system_library:
+        clang_src_info = _new_clang_src_info_from_sources(
+            repository_ctx = repository_ctx,
+            pkg_path = pkg_path,
+            c99name = c99name,
+            target_path = target_path,
+            source_paths = source_paths,
+            public_hdrs_path = "", # System libraries have their headers/modulemaps in the library root path, so the root path is the public path
+            exclude_paths = exclude_paths,
+            other_hdr_srch_paths = [],
+        )
 
     return _new_target(
         name = target_name,
@@ -1107,11 +1118,28 @@ def _new_clang_src_info_from_sources(
         paths.join(pkg_path, target_path),
     )
 
+    # If the Swift package manifest does not specify a public headers path,
+    # use the default "include" directory, if it exists.
+    # This copies the behavior of the canonical Swift Package Manager implementation.
+    # https://developer.apple.com/documentation/packagedescription/target/publicheaderspath
     public_includes = []
     if public_hdrs_path != None:
         public_includes.append(
             paths.normalize(paths.join(abs_target_path, public_hdrs_path)),
         )
+    elif repository_files.path_exists(
+        repository_ctx,
+        paths.join(abs_target_path, "include"),
+    ):
+        public_includes.append(paths.join(abs_target_path, "include"))
+
+    # If the Swift package manifest does not specify a public headers path,
+    # use the default "include" directory, if it exists.
+    # This copies the behavior of the canonical Swift Package Manager implementation.
+    # https://developer.apple.com/documentation/packagedescription/target/publicheaderspath
+    if public_hdrs_path == None:
+        if repository_files.path_exists(repository_ctx, paths.join(abs_target_path, "include")):
+            public_includes.append(paths.join(abs_target_path, "include"))
 
     # If the Swift package manifest has explicit source paths, respect them.
     # (Be sure to include any explicitly specified include directories.)
