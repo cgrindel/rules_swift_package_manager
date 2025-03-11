@@ -340,7 +340,15 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "visibility": ["//:__subpackages__"],
     }
     if clang_src_info.hdrs:
-        attrs["hdrs"] = clang_src_info.hdrs
+        hdrs = clang_src_info.hdrs
+
+        if clang_src_info.modulemap_path:
+            # We add the custom module map to `hdrs` to insure it's part of the
+            # inputs of downstream targets. Without this sandboxed or RBE builds
+            # can fail.
+            hdrs = hdrs + [clang_src_info.modulemap_path]
+
+        attrs["hdrs"] = hdrs
     if clang_src_info.public_includes:
         attrs["includes"] = clang_src_info.public_includes
     if clang_src_info.textual_hdrs:
