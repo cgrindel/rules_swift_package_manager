@@ -36,10 +36,20 @@ func (*swiftLang) ApparentLoads(moduleToApparentName func(string) string) []rule
 	}
 	return []rule.LoadInfo{
 		{
-			Name: fmt.Sprintf("@%s//swift:swift.bzl", rulesSwift),
+			Name: fmt.Sprintf("@%s//swift:%s.bzl", rulesSwift, swift.BinaryRuleKind),
+			Symbols: []string{
+				swift.BinaryRuleKind,
+			},
+		},
+		{
+			Name: fmt.Sprintf("@%s//swift:%s.bzl", rulesSwift, swift.LibraryRuleKind),
 			Symbols: []string{
 				swift.LibraryRuleKind,
-				swift.BinaryRuleKind,
+			},
+		},
+		{
+			Name: fmt.Sprintf("@%s//swift:%s.bzl", rulesSwift, swift.TestRuleKine),
+			Symbols: []string{
 				swift.TestRuleKind,
 			},
 		},
