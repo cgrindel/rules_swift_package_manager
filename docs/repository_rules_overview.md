@@ -18,6 +18,8 @@ On this page:
 ## local_swift_package
 
 <pre>
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "local_swift_package")
+
 local_swift_package(<a href="#local_swift_package-name">name</a>, <a href="#local_swift_package-bazel_package_name">bazel_package_name</a>, <a href="#local_swift_package-dependencies_index">dependencies_index</a>, <a href="#local_swift_package-env">env</a>, <a href="#local_swift_package-path">path</a>, <a href="#local_swift_package-repo_mapping">repo_mapping</a>)
 </pre>
 
@@ -41,6 +43,8 @@ Used to build a local Swift package.
 ## registry_swift_package
 
 <pre>
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "registry_swift_package")
+
 registry_swift_package(<a href="#registry_swift_package-name">name</a>, <a href="#registry_swift_package-bazel_package_name">bazel_package_name</a>, <a href="#registry_swift_package-dependencies_index">dependencies_index</a>, <a href="#registry_swift_package-env">env</a>, <a href="#registry_swift_package-id">id</a>, <a href="#registry_swift_package-registries">registries</a>,
                        <a href="#registry_swift_package-replace_scm_with_registry">replace_scm_with_registry</a>, <a href="#registry_swift_package-repo_mapping">repo_mapping</a>, <a href="#registry_swift_package-resolved">resolved</a>, <a href="#registry_swift_package-version">version</a>)
 </pre>
@@ -69,6 +73,8 @@ Used to download and build an external Swift package from a registry.
 ## swift_package
 
 <pre>
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package")
+
 swift_package(<a href="#swift_package-name">name</a>, <a href="#swift_package-bazel_package_name">bazel_package_name</a>, <a href="#swift_package-branch">branch</a>, <a href="#swift_package-commit">commit</a>, <a href="#swift_package-dependencies_index">dependencies_index</a>, <a href="#swift_package-env">env</a>, <a href="#swift_package-init_submodules">init_submodules</a>,
               <a href="#swift_package-patch_args">patch_args</a>, <a href="#swift_package-patch_cmds">patch_cmds</a>, <a href="#swift_package-patch_cmds_win">patch_cmds_win</a>, <a href="#swift_package-patch_tool">patch_tool</a>, <a href="#swift_package-patches">patches</a>,
               <a href="#swift_package-publicly_expose_all_targets">publicly_expose_all_targets</a>, <a href="#swift_package-recursive_init_submodules">recursive_init_submodules</a>, <a href="#swift_package-remote">remote</a>, <a href="#swift_package-repo_mapping">repo_mapping</a>,

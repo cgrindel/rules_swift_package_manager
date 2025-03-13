@@ -5,7 +5,8 @@ bzlformat_pkg(name = "bzlformat")
 sh_binary(
     name = "create_example",
     srcs = ["create_example.sh"],
-    data = ["//tools/create_example/template_files"],
+    # data = ["//tools/create_example/template_files"],
+    data = glob(["template_files/**"]),
     deps = [
         "@bazel_tools//tools/bash/runfiles",
         "@cgrindel_bazel_starlib//shlib/lib:fail",
