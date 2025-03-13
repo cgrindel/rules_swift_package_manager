@@ -1,5 +1,5 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@build_bazel_rules_swift//swift:swift_library.bzl", "swift_library")
 
 # NOTE: We are using ios_unit_test so that the correct platform is selected. If
 # you use swift_test and specify Nimble and NimbleObjectiveC, a build error

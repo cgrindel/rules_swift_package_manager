@@ -1,5 +1,5 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@build_bazel_rules_swift//swift:swift_library.bzl", "swift_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 
 bzlformat_pkg(name = "bzlformat")

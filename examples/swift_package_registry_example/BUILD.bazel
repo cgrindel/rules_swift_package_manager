@@ -1,4 +1,4 @@
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+load("@build_bazel_rules_swift//swift:swift_binary.bzl", "swift_binary")
 
 exports_files([
     "registries.json",
