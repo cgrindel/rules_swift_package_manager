@@ -50,4 +50,5 @@ use_repo(
     "swift_package",
     "swiftpkg_apple.swift_collections",
     "swiftpkg_apple.swift_nio",
+    "swiftpkg_swift_async_algorithms",
 )
