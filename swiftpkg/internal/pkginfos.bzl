@@ -27,7 +27,9 @@ def _get_dump_manifest(
         repository_ctx,
         env = {},
         working_directory = "",
-        debug_path = None):
+        debug_path = None,
+        registries_directory = None,
+        replace_scm_with_registry = False):
     """Returns a dict representing the package dump for an SPM package.
 
     Args:
@@ -37,6 +39,10 @@ def _get_dump_manifest(
         working_directory: A `string` specifying the directory for the SPM package.
         debug_path: A `string` specifying the directory path where to  write the
             JSON file.
+        registries_directory: Optional. The directory containing the
+            configuration file for setting a Swift Package Registry.
+        replace_scm_with_registry: Optional. A `bool` specifying whether to
+            replace SCM references with registry references.
 
     Returns:
         A `dict` representing an SPM package dump.
@@ -46,9 +52,17 @@ def _get_dump_manifest(
         debug_path = str(repository_ctx.path("."))
     debug_json_path = paths.join(debug_path, "dump.json")
 
+    args = ["swift", "package"]
+
+    if registries_directory:
+        args.extend(["--config-path", registries_directory])
+    if replace_scm_with_registry:
+        args.append("--replace-scm-with-registry")
+    args.append("dump-package")
+
     return repository_utils.parsed_json_from_spm_command(
         repository_ctx,
-        ["swift", "package", "dump-package"],
+        args,
         env = env,
         working_directory = working_directory,
         debug_json_path = debug_json_path,
@@ -58,7 +72,9 @@ def _get_desc_manifest(
         repository_ctx,
         env = {},
         working_directory = "",
-        debug_path = None):
+        debug_path = None,
+        registries_directory = None,
+        replace_scm_with_registry = False):
     """Returns a dict representing the package description for an SPM package.
 
     Args:
@@ -68,6 +84,10 @@ def _get_desc_manifest(
         working_directory: A `string` specifying the directory for the SPM package.
         debug_path: A `string` specifying the directory path where to  write the
             JSON file.
+        registries_directory: Optional. The directory containing the
+            configuration file for setting a Swift Package Registry.
+        replace_scm_with_registry: Optional. A `bool` specifying whether to
+            replace SCM references with registry references.
 
     Returns:
         A `dict` representing an SPM package description.
@@ -76,9 +96,19 @@ def _get_desc_manifest(
     if debug_path == None:
         debug_path = str(repository_ctx.path("."))
     debug_json_path = paths.join(debug_path, "desc.json")
+
+    args = ["swift", "package"]
+
+    if registries_directory:
+        args.extend(["--config-path", registries_directory])
+    if replace_scm_with_registry:
+        args.append("--replace-scm-with-registry")
+
+    args.extend(["describe", "--type", "json"])
+
     return repository_utils.parsed_json_from_spm_command(
         repository_ctx,
-        ["swift", "package", "describe", "--type", "json"],
+        args,
         env = env,
         working_directory = working_directory,
         debug_json_path = debug_json_path,
@@ -90,7 +120,9 @@ def _get(
         env = {},
         debug_path = None,
         resolved_pkg_map = None,
-        collect_src_info = True):
+        collect_src_info = True,
+        registries_directory = None,
+        replace_scm_with_registry = False):
     """Retrieves the package information for the Swift package defined at the \
     specified directory.
 
@@ -105,6 +137,10 @@ def _get(
             `Package.resolved` JSON.
         collect_src_info: Optional. A `bool` specifying whether source
             information should be collected for the package.
+        registries_directory: Optional. The directory containing the
+            configuration file for setting a Swift Package Registry.
+        replace_scm_with_registry: Optional. A `bool` specifying whether to
+            replace SCM references with registry references.
 
     Returns:
         A `struct` representing the package information as returned by
@@ -119,12 +155,16 @@ def _get(
         env = env,
         working_directory = directory,
         debug_path = debug_path,
+        registries_directory = registries_directory,
+        replace_scm_with_registry = replace_scm_with_registry,
     )
     desc_manifest = _get_desc_manifest(
         repository_ctx,
         env = env,
         working_directory = directory,
         debug_path = debug_path,
+        registries_directory = registries_directory,
+        replace_scm_with_registry = replace_scm_with_registry,
     )
     pkg_info = _new_from_parsed_json(
         repository_ctx = repository_ctx,

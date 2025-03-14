@@ -39,9 +39,11 @@ def _update_git_attrs(orig, keys, override):
     return result
 
 def _swift_package_impl(repository_ctx):
+    attr = repository_ctx.attr
     directory = str(repository_ctx.path("."))
     env = repo_rules.get_exec_env(repository_ctx)
     repo_rules.check_spm_version(repository_ctx, env = env)
+    replace_scm_with_registry = attr.replace_scm_with_registry
 
     # Download the repo
     update = _clone_or_update_repo(repository_ctx, directory)
@@ -55,8 +57,24 @@ def _swift_package_impl(repository_ctx):
     # Generate the WORKSPACE file
     repo_rules.write_workspace_file(repository_ctx, directory)
 
+    # If using Swift Package registries we must set any requested
+    # flags and the config path for the registries JSON file.
+    # NOTE: SPM does not have a flag for setting the exact file path
+    # for the registry, instead we must use the parent directory as the
+    # config path and SPM finds the registry configuration file there.
+    if attr.registries:
+        registries_directory = str(repository_ctx.path(attr.registries).dirname)
+    else:
+        registries_directory = None
+
     # Generate the build file
-    pkg_ctx = pkg_ctxs.read(repository_ctx, directory, env)
+    pkg_ctx = pkg_ctxs.read(
+        repository_ctx,
+        directory,
+        env,
+        registries_directory = registries_directory,
+        replace_scm_with_registry = replace_scm_with_registry,
+    )
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
     # Remove the git stuff
@@ -89,11 +107,21 @@ The commit or revision to download from version control.\
         default = True,
         doc = "Whether to clone submodules recursively in the repository.",
     ),
+    "registries": attr.label(
+        default = None,
+        doc = "The registries JSON file for the package if using " +
+              "Swift Package Registries.",
+    ),
     "remote": attr.string(
         mandatory = True,
         doc = """\
 The version control location from where the repository should be downloaded.\
 """,
+    ),
+    "replace_scm_with_registry": attr.bool(
+        default = False,
+        doc = "Whether to replace SCM references with registry references." +
+              " Only used if `registries` is provided.",
     ),
     "shallow_since": attr.string(
         default = "",

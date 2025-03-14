@@ -33,6 +33,22 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
     else:
         resolved_pkg_map = dict()
 
+    # If using Swift Package registries we must set any requested
+    # flags and the config path for the registries JSON file.
+    # NOTE: SPM does not have a flag for setting the exact file path
+    # for the registry, instead we must use the parent directory as the
+    # config path and SPM finds the registry configuration file there.
+    if from_package.registries:
+        registries_directory = module_ctx.path(from_package.registries).dirname
+    else:
+        registries_directory = None
+
+    if config_swift_package:
+        replace_scm_with_registry = \
+            config_swift_package.replace_scm_with_registry
+    else:
+        replace_scm_with_registry = False
+
     # Get the package info.
     pkg_swift = module_ctx.path(from_package.swift)
     debug_path = module_ctx.path(".")
@@ -42,6 +58,8 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
         debug_path = str(debug_path),
         resolved_pkg_map = resolved_pkg_map,
         collect_src_info = False,
+        registries_directory = registries_directory,
+        replace_scm_with_registry = replace_scm_with_registry,
     )
 
     # Collect all of the deps by identity
@@ -194,6 +212,12 @@ def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_pac
             patches = config_pkg.patches
             publicly_expose_all_targets = config_pkg.publicly_expose_all_targets
 
+        registries = from_package.registries
+        replace_scm_with_registry = False
+        if config_swift_package:
+            replace_scm_with_registry = \
+                config_swift_package.replace_scm_with_registry
+
         pin = dep.source_control.pin
         swift_package(
             name = name,
@@ -210,6 +234,8 @@ def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_pac
             patch_tool = patch_tool,
             patches = patches,
             publicly_expose_all_targets = publicly_expose_all_targets,
+            registries = registries,
+            replace_scm_with_registry = replace_scm_with_registry,
         )
 
     elif dep.file_system:
