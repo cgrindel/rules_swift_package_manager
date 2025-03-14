@@ -895,7 +895,7 @@ def _executable_product_build_file(pkg_info, product, repo_name):
             # product references a regular target.
             # Create the binary target here.
             return build_files.new(
-                load_stmts = [load_statements.new(swift_location, swift_kinds.binary)],
+                load_stmts = [load_statements.new(swift_location_template.format(swift_kinds.binary), swift_kinds.binary)],
                 decls = [_swift_binary_from_product(product, target, repo_name)],
             )
     elif targets_len > 1:
@@ -1016,7 +1016,7 @@ def _target_visibility(expose_build_targets):
 
 # MARK: - Constants and API Definition
 
-swift_location = "@build_bazel_rules_swift//swift:swift.bzl"
+swift_location_template = "@build_bazel_rules_swift//swift:{}.bzl"
 
 swift_kinds = struct(
     library = "swift_library",
@@ -1029,36 +1029,39 @@ swift_kinds = struct(
 )
 
 swift_library_load_stmt = load_statements.new(
-    swift_location,
+    swift_location_template.format(swift_kinds.library),
     swift_kinds.library,
 )
 
 swift_library_group_load_stmt = load_statements.new(
-    swift_location,
+    swift_location_template.format(swift_kinds.library_group),
     swift_kinds.library_group,
 )
 
 swift_binary_load_stmt = load_statements.new(
-    swift_location,
+    swift_location_template.format(swift_kinds.binary),
     swift_kinds.binary,
 )
 
 swift_c_module_load_stmt = load_statements.new(
-    swift_location,
+    swift_location_template.format(swift_kinds.c_module),
     swift_kinds.c_module,
 )
 
 swift_compiler_plugin_load_stmt = load_statements.new(
-    swift_location,
+    swift_location_template.format(swift_kinds.compiler_plugin),
     swift_kinds.compiler_plugin,
 )
 
 swift_interop_hint_load_stmt = load_statements.new(
-    swift_location,
+    swift_location_template.format(swift_kinds.interop_hint),
     swift_kinds.interop_hint,
 )
 
-swift_test_load_stmt = load_statements.new(swift_location, swift_kinds.test)
+swift_test_load_stmt = load_statements.new(
+    swift_location_template.format(swift_kinds.test),
+    swift_kinds.test,
+)
 
 clang_kinds = struct(
     library = "cc_library",
