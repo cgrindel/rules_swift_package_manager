@@ -93,7 +93,7 @@ http_archive(
 http_archive(
     name = "com_github_apple_swift_collections",
     build_file_content = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@build_bazel_rules_swift//swift:swift_library.bzl", "swift_library")
 swift_library(
     name = "Collections",
     srcs = glob(["Sources/Collections/**/*.swift"]),
@@ -118,7 +118,7 @@ swift_library(
 http_archive(
     name = "com_github_apple_swift_argument_parser",
     build_file_content = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@build_bazel_rules_swift//swift:swift_library.bzl", "swift_library")
 swift_library(
     name = "ArgumentParser",
     srcs = glob(["Sources/ArgumentParser/**/*.swift"]),

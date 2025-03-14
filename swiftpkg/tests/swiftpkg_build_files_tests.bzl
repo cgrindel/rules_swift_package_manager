@@ -494,7 +494,7 @@ def _target_generation_test(ctx):
             name = "RegularSwiftTargetAsLibrary",
             pkg_info = _pkg_info(),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@build_bazel_rules_swift//swift:swift_library.bzl", "swift_library")
 
 swift_library(
     name = "RegularSwiftTargetAsLibrary.rspm",
@@ -521,7 +521,7 @@ swift_library(
             name = "RegularTargetForExec",
             pkg_info = _pkg_info(),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@build_bazel_rules_swift//swift:swift_library.bzl", "swift_library")
 
 swift_library(
     name = "RegularTargetForExec.rspm",
@@ -546,7 +546,7 @@ swift_library(
             name = "RegularSwiftTargetAsLibraryTests",
             pkg_info = _pkg_info(),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
+load("@build_bazel_rules_swift//swift:swift_test.bzl", "swift_test")
 
 swift_test(
     name = "RegularSwiftTargetAsLibraryTests.rspm",
@@ -568,7 +568,7 @@ swift_test(
             name = "SwiftExecutableTarget",
             pkg_info = _pkg_info(),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+load("@build_bazel_rules_swift//swift:swift_binary.bzl", "swift_binary")
 
 swift_binary(
     name = "SwiftExecutableTarget.rspm",
@@ -600,7 +600,7 @@ swift_binary(
             name = "ClangLibrary",
             pkg_info = _pkg_info(),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+load("@build_bazel_rules_swift//swift:swift_interop_hint.bzl", "swift_interop_hint")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 cc_library(
@@ -659,7 +659,7 @@ swift_interop_hint(
             name = "ObjcLibrary",
             pkg_info = _pkg_info(),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+load("@build_bazel_rules_swift//swift:swift_interop_hint.bzl", "swift_interop_hint")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 generate_modulemap(
@@ -731,7 +731,7 @@ swift_interop_hint(
             name = "ObjcLibraryWithModulemap",
             pkg_info = _pkg_info(),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+load("@build_bazel_rules_swift//swift:swift_interop_hint.bzl", "swift_interop_hint")
 
 objc_library(
     name = "ObjcLibraryWithModulemap.rspm",
@@ -791,7 +791,7 @@ swift_interop_hint(
             name = "SwiftLibraryWithConditionalDep",
             pkg_info = _pkg_info(),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@build_bazel_rules_swift//swift:swift_library.bzl", "swift_library")
 
 swift_library(
     name = "SwiftLibraryWithConditionalDep.rspm",
@@ -820,7 +820,7 @@ swift_library(
             name = "ClangLibraryWithConditionalDep",
             pkg_info = _pkg_info(),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+load("@build_bazel_rules_swift//swift:swift_interop_hint.bzl", "swift_interop_hint")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 cc_library(
@@ -879,7 +879,7 @@ swift_interop_hint(
             name = "SwiftForObjcTarget",
             pkg_info = _pkg_info(),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@build_bazel_rules_swift//swift:swift_library.bzl", "swift_library")
 
 swift_library(
     name = "SwiftForObjcTarget.rspm",
@@ -907,7 +907,7 @@ swift_library(
             pkg_info = _pkg_info(),
             exp = """\
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@build_bazel_rules_swift//swift:swift_library.bzl", "swift_library")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_accessor", "resource_bundle_infoplist")
 
 apple_resource_bundle(
@@ -955,7 +955,7 @@ swift_library(
             pkg_info = _pkg_info(),
             exp = """\
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+load("@build_bazel_rules_swift//swift:swift_interop_hint.bzl", "swift_interop_hint")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap", "objc_resource_bundle_accessor_hdr", "objc_resource_bundle_accessor_impl", "resource_bundle_infoplist")
 
 apple_resource_bundle(
@@ -1057,7 +1057,7 @@ swift_interop_hint(
                 expose_build_targets = False,
             ),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@build_bazel_rules_swift//swift:swift_library.bzl", "swift_library")
 
 swift_library(
     name = "RegularSwiftTargetAsLibrary.rspm",
@@ -1083,7 +1083,7 @@ swift_library(
                 expose_build_targets = True,
             ),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@build_bazel_rules_swift//swift:swift_library.bzl", "swift_library")
 
 swift_library(
     name = "RegularSwiftTargetAsLibrary.rspm",
@@ -1141,7 +1141,7 @@ def _product_generation_test(ctx):
             name = "oldstyleexec",
             pkg_info = _pkg_info(),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+load("@build_bazel_rules_swift//swift:swift_binary.bzl", "swift_binary")
 
 swift_binary(
     name = "oldstyleexec",
@@ -1155,7 +1155,7 @@ swift_binary(
             name = "RegularSwiftTargetAsLibrary",
             pkg_info = _pkg_info(),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library_group")
+load("@build_bazel_rules_swift//swift:swift_library_group.bzl", "swift_library_group")
 
 swift_library_group(
     name = "RegularSwiftTargetAsLibrary",
@@ -1169,7 +1169,7 @@ swift_library_group(
             name = "ObjcLibraryWithModulemap",
             pkg_info = _pkg_info(),
             exp = """\
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library_group")
+load("@build_bazel_rules_swift//swift:swift_library_group.bzl", "swift_library_group")
 
 swift_library_group(
     name = "ObjcLibraryWithModulemap",

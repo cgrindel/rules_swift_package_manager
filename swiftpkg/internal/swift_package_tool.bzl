@@ -2,7 +2,7 @@
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
+load("@build_bazel_rules_swift//swift:swift_common.bzl", "swift_common")
 load(
     "//swiftpkg/internal:swift_package_tool_attrs.bzl",
     "swift_package_tool_attrs",
