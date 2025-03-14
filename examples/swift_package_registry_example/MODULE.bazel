@@ -7,12 +7,12 @@ local_path_override(
     path = "../..",
 )
 
-bazel_dep(name = "cgrindel_bazel_starlib", version = "0.25.0")
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.25.2")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "apple_support", version = "1.17.1")
 bazel_dep(
     name = "rules_swift",
-    version = "2.5.0",
+    version = "2.7.0",
     repo_name = "build_bazel_rules_swift",
 )
 bazel_dep(
@@ -50,4 +50,5 @@ use_repo(
     "swift_package",
     "swiftpkg_apple.swift_collections",
     "swiftpkg_apple.swift_nio",
+    "swiftpkg_swift_async_algorithms",
 )

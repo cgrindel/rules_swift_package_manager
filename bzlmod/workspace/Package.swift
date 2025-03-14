@@ -9,7 +9,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.5.0"),
-        .package(url: "https://github.com/apple/swift-log", from: "1.6.2"),
+        .package(url: "https://github.com/apple/swift-log", from: "1.6.3"),
     ],
     targets: [
         .executableTarget(
@@ -18,7 +18,6 @@ let package = Package(
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Logging", package: "swift-log"),
                 "MyLibrary",
-                "System",
             ],
             path: "Sources/MyExecutable",
             exclude: ["BUILD.bazel"]
@@ -34,15 +33,6 @@ let package = Package(
             dependencies: ["MyLibrary"],
             path: "Tests/MyLibraryTests",
             exclude: ["BUILD.bazel"]
-        ),
-        .target(
-            name: "System",
-            dependencies: [],
-            path: "Sources/System",
-            exclude: [
-                "BUILD.bazel",
-                "README.md",
-            ]
         ),
     ]
 )

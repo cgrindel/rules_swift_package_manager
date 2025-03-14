@@ -12,5 +12,6 @@ swift_binary(
     deps = [
         "@swiftpkg_apple.swift_collections//:Collections",
         "@swiftpkg_apple.swift_nio//:NIO",
+        "@swiftpkg_swift_async_algorithms//:AsyncAlgorithms",
     ],
 )
