@@ -583,6 +583,7 @@ swift_binary(
     copts = [
         "-DSWIFT_PACKAGE",
         "-Xcc",
+        "-DSWIFT_PACKAGE",
     ] + select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": ["-DFOOBAR"],
         "//conditions:default": [],
