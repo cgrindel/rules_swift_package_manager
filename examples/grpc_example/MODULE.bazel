@@ -16,7 +16,7 @@ bazel_dep(name = "bazel_skylib", version = "1.7.1")
 
 # The apple_support bazel_dep must come before the rules_cc.
 # https://github.com/bazelbuild/apple_support#incompatible-toolchain-resolution
-bazel_dep(name = "apple_support", version = "1.17.1")
+bazel_dep(name = "apple_support", version = "1.19.0")
 bazel_dep(
     name = "rules_swift",
     version = "2.7.0",
