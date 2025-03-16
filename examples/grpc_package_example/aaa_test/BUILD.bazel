@@ -1,5 +1,0 @@
-# There was a bug where disabling proto and grpc generation leaked out
-# into alphabetically later packages. Keep this here to make sure we
-# don't regress.
-
-# gazelle:swift_generate_proto_libraries false
