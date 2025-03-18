@@ -117,9 +117,11 @@ def _swift_target_build_file(pkg_ctx, target):
 
     # Check if any of the sources indicate that the module will be used by
     # Objective-C code. If so, generate the bridge header file.
+    features = []
     if target.swift_src_info.has_objc_directive and is_library_target:
         attrs["generates_header"] = True
-        attrs["features"] = ["swift.propagate_generated_module_map"]
+        feature = bzl_selects.new(value = "swift.propagate_generated_module_map")
+        features.append(feature)
 
     if target.swift_settings != None:
         if len(target.swift_settings.defines) > 0:
@@ -135,11 +137,32 @@ def _swift_target_build_file(pkg_ctx, target):
                 bzl_selects.new_from_build_setting(bs)
                 for bs in target.swift_settings.unsafe_flags
             ]))
-        if len(target.swift_settings.experimental_features) > 0:
-            for bs in target.swift_settings.experimental_features:
-                copts.append("-enable-experimental-feature")
-                copts.extend(lists.flatten(bzl_selects.new_from_build_setting(bs)))
-
+        for bs in target.swift_settings.language_modes:
+            for language_mode in lists.flatten(bzl_selects.new_from_build_setting(bs)):
+                new_language_mode = bzl_selects.new(
+                    value = "swift.enable_v" + language_mode.value,
+                    kind = language_mode.kind,
+                    condition = language_mode.condition,
+                )
+                features.append(new_language_mode)
+        for bs in target.swift_settings.experimental_features:
+            for experimental_feature in lists.flatten(bzl_selects.new_from_build_setting(bs)):
+                new_experimental_feature = bzl_selects.new(
+                    value = "swift.experimental." + experimental_feature.value,
+                    kind = experimental_feature.kind,
+                    condition = experimental_feature.condition,
+                )
+                features.append(new_experimental_feature)
+        for bs in target.swift_settings.upcoming_features:
+            for upcoming_feature in lists.flatten(bzl_selects.new_from_build_setting(bs)):
+                new_upcoming_feature = bzl_selects.new(
+                    value = "swift.upcoming." + upcoming_feature.value,
+                    kind = upcoming_feature.kind,
+                    condition = upcoming_feature.condition,
+                )
+                features.append(new_upcoming_feature)
+    if len(features) > 0:
+        attrs["features"] = bzl_selects.to_starlark(features, mutually_inclusive = True)
     if len(copts) > 0:
         attrs["copts"] = bzl_selects.to_starlark(copts, mutually_inclusive = True)
 

@@ -159,8 +159,16 @@ def _pkg_info(
                         ),
                     ),
                     pkginfos.new_build_setting(
+                        kind = build_setting_kinds.language_modes,
+                        values = ["6"],
+                    ),
+                    pkginfos.new_build_setting(
                         kind = build_setting_kinds.experimental_features,
                         values = ["BuiltinModule"],
+                    ),
+                    pkginfos.new_build_setting(
+                        kind = build_setting_kinds.upcoming_features,
+                        values = ["ExistentialAny"],
                     ),
                     pkginfos.new_build_setting(
                         kind = build_setting_kinds.unsafe_flags,
@@ -576,8 +584,6 @@ swift_binary(
         "-DSWIFT_PACKAGE",
         "-Xcc",
         "-DSWIFT_PACKAGE",
-        "-enable-experimental-feature",
-        "BuiltinModule",
     ] + select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": ["-DFOOBAR"],
         "//conditions:default": [],
@@ -588,6 +594,11 @@ swift_binary(
         "@rules_swift_package_manager//config_settings/spm/configuration:release": ["-cross-module-optimization"],
         "//conditions:default": [],
     }),
+    features = [
+        "swift.enable_v6",
+        "swift.experimental.BuiltinModule",
+        "swift.upcoming.ExistentialAny",
+    ],
     module_name = "SwiftExecutableTarget",
     package_name = "MyPackage",
     srcs = ["Source/SwiftExecutableTarget/main.swift"],
