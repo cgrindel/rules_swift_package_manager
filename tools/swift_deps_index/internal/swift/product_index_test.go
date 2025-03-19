@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/bazelbuild/bazel-gazelle/label"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swift"
 	"github.com/stretchr/testify/assert"
 )
 

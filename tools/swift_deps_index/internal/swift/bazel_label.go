@@ -2,7 +2,7 @@ package swift
 
 import (
 	"github.com/bazelbuild/bazel-gazelle/label"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftpkg"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swiftpkg"
 )
 
 const modulemapLabelNameSuffix = "_modulemap"

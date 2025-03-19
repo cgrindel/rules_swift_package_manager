@@ -10,7 +10,7 @@ go_library(
         "pin_store_v1.go",
         "pin_store_v2.go",
     ],
-    importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spreso",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/spreso",
     visibility = ["//tools/swift_deps_index:__subpackages__"],
     deps = ["//tools/swift_deps_index/internal/jsonutils"],
 )

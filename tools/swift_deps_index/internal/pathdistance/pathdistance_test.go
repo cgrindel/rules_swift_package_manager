@@ -3,7 +3,7 @@ package pathdistance_test
 import (
 	"testing"
 
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/pathdistance"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/pathdistance"
 	"github.com/stretchr/testify/assert"
 )
 

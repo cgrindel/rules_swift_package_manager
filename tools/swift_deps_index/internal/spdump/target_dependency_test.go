@@ -3,7 +3,7 @@ package spdump_test
 import (
 	"testing"
 
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdump"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/spdump"
 	"github.com/stretchr/testify/assert"
 )
 

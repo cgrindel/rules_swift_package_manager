@@ -9,7 +9,7 @@ go_library(
         "json_map.go",
         "json_slice.go",
     ],
-    importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/jsonutils",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/jsonutils",
     visibility = ["//tools/swift_deps_index:__subpackages__"],
 )
 

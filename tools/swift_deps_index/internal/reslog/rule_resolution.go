@@ -6,7 +6,7 @@ import (
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/resolve"
 	"github.com/bazelbuild/bazel-gazelle/rule"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swift"
 	mapset "github.com/deckarep/golang-set/v2"
 	"golang.org/x/exp/slices"
 )

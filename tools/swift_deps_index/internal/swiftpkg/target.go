@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"path/filepath"
 
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdesc"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdump"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/spdesc"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/spdump"
 	mapset "github.com/deckarep/golang-set/v2"
 )
 

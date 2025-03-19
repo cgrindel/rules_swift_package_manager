@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/jsonutils"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/jsonutils"
 	"github.com/stretchr/testify/assert"
 )
 

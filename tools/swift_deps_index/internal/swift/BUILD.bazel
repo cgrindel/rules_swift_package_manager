@@ -39,7 +39,7 @@ go_library(
         "swift_proto_package.go",
         "test_rules_common.go",
     ],
-    importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swift",
     visibility = ["//tools/swift_deps_index:__subpackages__"],
     deps = [
         "//tools/swift_deps_index/internal/pathdistance",

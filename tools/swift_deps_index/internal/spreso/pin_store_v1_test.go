@@ -3,7 +3,7 @@ package spreso_test
 import (
 	"testing"
 
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spreso"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/spreso"
 	"github.com/stretchr/testify/assert"
 )
 

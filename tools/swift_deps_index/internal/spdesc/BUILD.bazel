@@ -14,7 +14,7 @@ filegroup(
 go_library(
     name = "spdesc",
     srcs = ["manifest.go"],
-    importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdesc",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/spdesc",
     visibility = ["//tools/swift_deps_index:__subpackages__"],
 )
 

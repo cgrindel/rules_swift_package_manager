@@ -20,7 +20,7 @@ go_library(
         "find_swift_bin.go",
         "swift_bin.go",
     ],
-    importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftbin",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swiftbin",
     visibility = ["//tools/swift_deps_index:__subpackages__"],
 )
 

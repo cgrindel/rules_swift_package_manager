@@ -3,7 +3,7 @@ package swiftpkg
 import (
 	"fmt"
 
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdump"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/spdump"
 )
 
 // A TargetDependency represents a Swift target dependency.

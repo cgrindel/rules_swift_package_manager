@@ -6,9 +6,9 @@ import (
 	"testing"
 
 	"github.com/bazelbuild/bazel-gazelle/rule"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spreso"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftpkg"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/spreso"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swift"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swiftpkg"
 	"github.com/stretchr/testify/assert"
 )
 

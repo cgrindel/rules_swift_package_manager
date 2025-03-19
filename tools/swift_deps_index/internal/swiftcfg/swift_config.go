@@ -6,9 +6,9 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/config"
 	"github.com/bazelbuild/bazel-gazelle/language"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/reslog"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftbin"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/reslog"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swift"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swiftbin"
 )
 
 const SwiftConfigName = "swift"

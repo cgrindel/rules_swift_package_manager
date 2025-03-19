@@ -4,7 +4,7 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
 go_library(
     name = "updmarker",
     srcs = ["updater.go"],
-    importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/updmarker",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/updmarker",
     visibility = ["//tools/swift_deps_index:__subpackages__"],
 )
 

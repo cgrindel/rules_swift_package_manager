@@ -3,7 +3,7 @@ package swiftpkg
 import (
 	"log"
 
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdump"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/spdump"
 )
 
 // A Dependencies represents a list of external dependencies.

@@ -16,7 +16,7 @@ go_library(
         "target.go",
         "target_dependency.go",
     ],
-    importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftpkg",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swiftpkg",
     visibility = ["//tools/swift_deps_index:__subpackages__"],
     deps = [
         "//tools/swift_deps_index/internal/spdesc",

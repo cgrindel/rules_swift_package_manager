@@ -17,7 +17,7 @@ go_library(
         "module_files_collector.go",
         "swift_config.go",
     ],
-    importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftcfg",
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swiftcfg",
     visibility = ["//tools/swift_deps_index:__subpackages__"],
     deps = [
         "//tools/swift_deps_index/internal/reslog",

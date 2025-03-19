@@ -6,7 +6,7 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/reslog"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/reslog"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -3,7 +3,7 @@ package reslog
 import (
 	"sort"
 
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swift"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swift"
 	"golang.org/x/exp/slices"
 )
 

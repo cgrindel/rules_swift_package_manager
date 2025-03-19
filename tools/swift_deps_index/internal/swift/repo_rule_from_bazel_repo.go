@@ -6,7 +6,7 @@ import (
 
 	"github.com/bazelbuild/bazel-gazelle/label"
 	"github.com/bazelbuild/bazel-gazelle/rule"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spreso"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/spreso"
 )
 
 type commitProvider interface {

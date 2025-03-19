@@ -3,7 +3,7 @@ package spdesc_test
 import (
 	"testing"
 
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/spdesc"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/spdesc"
 	"github.com/stretchr/testify/assert"
 )
 

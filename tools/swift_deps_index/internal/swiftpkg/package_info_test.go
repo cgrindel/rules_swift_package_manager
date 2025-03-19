@@ -4,8 +4,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftbin"
-	"github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftpkg"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swiftbin"
+	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swiftpkg"
 	"github.com/stretchr/testify/assert"
 )
 
