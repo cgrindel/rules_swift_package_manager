@@ -2,6 +2,8 @@ load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@build_bazel_rules_apple//apple:macos.bzl", "macos_unit_test")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
+load("@rules_cc//cc:objc_library.bzl", "objc_library")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 
 tidy(
     name = "tidy",
@@ -19,7 +21,7 @@ gazelle_binary(
     name = "gazelle_bin",
     languages = [
         "@bazel_skylib_gazelle_plugin//bzl",
-        "@rules_swift_package_manager//gazelle",
+        "@swift_gazelle_plugin//gazelle",
     ],
 )
 

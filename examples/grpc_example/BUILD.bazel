@@ -24,7 +24,7 @@ gazelle_binary(
     languages = [
         "@bazel_skylib_gazelle_plugin//bzl",
         "@bazel_gazelle//language/proto",
-        "@rules_swift_package_manager//gazelle",
+        "@swift_gazelle_plugin//gazelle",
     ],
 )
 

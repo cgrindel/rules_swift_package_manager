@@ -40,6 +40,11 @@ bazel_dep(
     dev_dependency = True,
     repo_name = "bazel_gazelle",
 )
+bazel_dep(
+    name = "swift_gazelle_plugin",
+    version = "0.1.0",
+    dev_dependency = True,
+)
 
 apple_cc_configure = use_extension(
     "@apple_support//crosstool:setup.bzl",
