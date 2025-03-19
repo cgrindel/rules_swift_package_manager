@@ -9,9 +9,9 @@ go_library(
         "rule_resolution_summary.go",
     ],
     importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/reslog",
-    visibility = ["//gazelle:go_packages"],
+    visibility = ["//tools/swift_deps_index:__subpackages__"],
     deps = [
-        "//gazelle/internal/swift",
+        "//tools/swift_deps_index/internal/swift",
         "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//resolve:go_default_library",
         "@bazel_gazelle//rule:go_default_library",
@@ -29,8 +29,8 @@ go_test(
     ],
     deps = [
         ":reslog",
-        "//gazelle/internal/swift",
-        "//gazelle/internal/swiftpkg",
+        "//tools/swift_deps_index/internal/swift",
+        "//tools/swift_deps_index/internal/swiftpkg",
         "@bazel_gazelle//label:go_default_library",
         "@bazel_gazelle//resolve:go_default_library",
         "@bazel_gazelle//rule:go_default_library",

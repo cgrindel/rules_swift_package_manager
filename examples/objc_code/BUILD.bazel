@@ -1,7 +1,6 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
-load("@rules_shell//shell:sh_test.bzl", "sh_test")
 
 tidy(
     name = "tidy",

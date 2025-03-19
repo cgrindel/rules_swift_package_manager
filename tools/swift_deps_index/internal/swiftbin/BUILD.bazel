@@ -21,7 +21,7 @@ go_library(
         "swift_bin.go",
     ],
     importpath = "github.com/cgrindel/rules_swift_package_manager/gazelle/internal/swiftbin",
-    visibility = ["//gazelle:go_packages"],
+    visibility = ["//tools/swift_deps_index:__subpackages__"],
 )
 
 go_test(
@@ -31,7 +31,7 @@ go_test(
     local = True,
     deps = [
         ":swiftbin",
-        "//gazelle/internal/jsonutils",
+        "//tools/swift_deps_index/internal/jsonutils",
         "@com_github_stretchr_testify//assert:go_default_library",
     ],
 )
