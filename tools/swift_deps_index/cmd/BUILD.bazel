@@ -10,8 +10,8 @@ go_library(
     importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/cmd",
     visibility = ["//visibility:public"],
     deps = [
-        "//gazelle/internal/swift",
-        "//gazelle/internal/swiftpkg",
+        "//tools/swift_deps_index/internal/swift",
+        "//tools/swift_deps_index/internal/swiftpkg",
         "@com_github_spf13_cobra//:go_default_library",
     ],
 )

@@ -1,0 +1,37 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+bzlformat_pkg(name = "bzlformat")
+
+# MARK: - Integration Test
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
+
+# MARK: - Golang
+
+go_library(
+    name = "swiftbin",
+    srcs = [
+        "doc.go",
+        "find_swift_bin.go",
+        "swift_bin.go",
+    ],
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swiftbin",
+    visibility = ["//tools/swift_deps_index:__subpackages__"],
+)
+
+go_test(
+    name = "swiftbin_test",
+    srcs = ["swift_bin_test.go"],
+    # This test runs Swift commands which will not succeed in the sandbox
+    local = True,
+    deps = [
+        ":swiftbin",
+        "//tools/swift_deps_index/internal/jsonutils",
+        "@com_github_stretchr_testify//assert:go_default_library",
+    ],
+)

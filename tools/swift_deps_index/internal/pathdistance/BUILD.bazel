@@ -1,0 +1,29 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "pathdistance",
+    srcs = ["pathdistance.go"],
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/pathdistance",
+    visibility = ["//tools/swift_deps_index:__subpackages__"],
+    deps = ["@org_golang_x_exp//slices:go_default_library"],
+)
+
+go_test(
+    name = "pathdistance_test",
+    srcs = ["pathdistance_test.go"],
+    deps = [
+        ":pathdistance",
+        "@com_github_stretchr_testify//assert:go_default_library",
+    ],
+)
+
+bzlformat_pkg(name = "bzlformat")
+
+# MARK: - Integration Test
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)

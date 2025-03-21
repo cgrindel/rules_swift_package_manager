@@ -157,7 +157,7 @@ gazelle_binary(
     name = "gazelle_bin",
     languages = [
         "@bazel_skylib_gazelle_plugin//bzl",
-        "@rules_swift_package_manager//gazelle",
+        "@swift_gazelle_plugin//gazelle",
     ],
 )
 
