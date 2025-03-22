@@ -4,6 +4,7 @@
 
 <!-- MARKDOWN TOC: BEGIN -->
 * [Does this replace [rules_spm]?](#does-this-replace-rules_spm)
+* [Where is the Swift gazelle plugin?](#where-is-the-swift-gazelle-plugin)
 * [After running `//:swift_update_pkgs`, I see a `.build` directory. What is it? Do I need it?](#after-running-swift_update_pkgs-i-see-a-build-directory-what-is-it-do-i-need-it)
 * [Can I store the Swift dependency files in a sub-package (i.e., not in the root of the workspace)?](#can-i-store-the-swift-dependency-files-in-a-sub-package-ie-not-in-the-root-of-the-workspace)
 * [How do I handle the error `Unable to resolve byName reference XXX in @swiftpkg_yyy.`?](#how-do-i-handle-the-error-unable-to-resolve-byname-reference-xxx-in-swiftpkg_yyy)
@@ -21,6 +22,10 @@ features and improvements:
 - Bazel build file generation for the primary workspace.
 - Build the external dependencies with [rules_swift].
 - Pin the exact versions for the direct and transitive dependencies.
+
+## Where is the Swift gazelle plugin?
+
+It has moved to https://github.com/cgrindel/swift_gazelle_plugin.
 
 ## After running `//:swift_update_pkgs`, I see a `.build` directory. What is it? Do I need it?
 
