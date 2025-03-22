@@ -186,6 +186,13 @@ def _declare_pkg_from_dependency(dep, config_pkg):
             patch_cmds_win = patch_cmds_win,
             patch_tool = patch_tool,
             patches = patches,
+            exec_properties = {
+                "Arch": "arm64",
+                "OSFamily": "Darwin",
+                "clean-workspace-inputs": "*",
+                "preserve-workspace": "true",
+                "recycle-runner": "true",
+            },
         )
 
     elif dep.file_system:
@@ -194,6 +201,13 @@ def _declare_pkg_from_dependency(dep, config_pkg):
             bazel_package_name = name,
             path = dep.file_system.path,
             dependencies_index = None,
+            exec_properties = {
+                "Arch": "arm64",
+                "OSFamily": "Darwin",
+                "clean-workspace-inputs": "*",
+                "preserve-workspace": "true",
+                "recycle-runner": "true",
+            },
         )
 
 def _declare_swift_package_repo(name, from_package, config_swift_package):
@@ -208,6 +222,13 @@ def _declare_swift_package_repo(name, from_package, config_swift_package):
             package = from_package.swift.package,
             name = from_package.swift.name,
         ),
+        exec_properties = {
+            "Arch": "arm64",
+            "OSFamily": "Darwin",
+            "clean-workspace-inputs": "*",
+            "preserve-workspace": "true",
+            "recycle-runner": "true",
+        },
         **config_swift_package_kwargs
     )
 

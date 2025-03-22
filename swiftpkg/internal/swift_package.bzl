@@ -189,4 +189,5 @@ swift_package = repository_rule(
     doc = """\
 Used to download and build an external Swift package.
 """,
+    remotable = True,
 )

@@ -78,5 +78,6 @@ _ALL_ATTRS = dicts.add(
 local_swift_package = repository_rule(
     implementation = _local_swift_package_impl,
     attrs = _ALL_ATTRS,
+    remotable = True,
     doc = "Used to build a local Swift package.",
 )

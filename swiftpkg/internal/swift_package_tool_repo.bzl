@@ -66,4 +66,5 @@ swift_package_tool_repo = repository_rule(
         SWIFT_PACKAGE_CONFIG_ATTRS,
     ),
     doc = "Declares a `@swift_package` repository for using the `swift_package_tool` targets.",
+    remotable = True,
 )
