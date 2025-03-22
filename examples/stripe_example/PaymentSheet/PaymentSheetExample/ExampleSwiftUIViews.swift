@@ -1,5 +1,5 @@
 //
-//  ExampleAdditions.swift
+//  ExampleSwiftUIViews.swift
 //  PaymentSheet Example
 //
 //  Created by David Estes on 1/15/21.
@@ -42,7 +42,7 @@ struct ExamplePaymentStatusView: View {
             case .completed:
                 Image(systemName: "checkmark.circle.fill").foregroundColor(.green)
                 Text("Success!")
-            case .failed(let error):
+            case let .failed(error):
                 Image(systemName: "xmark.octagon.fill").foregroundColor(.red)
                 Text("Payment failed: \((error as NSError).debugDescription)")
                     .font(.system(size: 12.0))
@@ -68,16 +68,16 @@ struct ExampleCustomerSheetPaymentMethodView: View {
     var body: some View {
         HStack {
             switch customerSheetStatusViewModel {
-            case .selected(let paymentOptionSelection):
+            case let .selected(paymentOptionSelection):
                 PaymentOptionSelectionView(paymentOptionSelection: paymentOptionSelection)
                 Text("(Selected)")
-            case .canceled(let paymentOptionSelection):
+            case let .canceled(paymentOptionSelection):
                 PaymentOptionSelectionView(paymentOptionSelection: paymentOptionSelection)
                 Text("(Canceled)")
-            case .loaded(let paymentOptionSelection):
+            case let .loaded(paymentOptionSelection):
                 PaymentOptionSelectionView(paymentOptionSelection: paymentOptionSelection)
                 Text("(Loaded)")
-            case .error(let error):
+            case let .error(error):
                 Text("(Error)")
                 Image(systemName: "xmark.octagon.fill").foregroundColor(.red)
                 Text("Error: \((error as NSError).debugDescription)")
@@ -94,10 +94,10 @@ struct PaymentOptionSelectionView: View {
         HStack {
             if let paymentOptionSelection = paymentOptionSelection {
                 switch paymentOptionSelection {
-                case .applePay(let paymentOptionDisplayData):
+                case let .applePay(paymentOptionDisplayData):
                     Image(uiImage: paymentOptionDisplayData.image)
                     Text(paymentOptionDisplayData.label)
-                case .paymentMethod(_, let paymentOptionDisplayData):
+                case let .paymentMethod(_, paymentOptionDisplayData):
                     Image(uiImage: paymentOptionDisplayData.image)
                     Text(paymentOptionDisplayData.label)
                 @unknown default:
@@ -128,7 +128,7 @@ struct ExamplePaymentOptionView: View {
         .frame(minWidth: 200)
         .padding()
         .foregroundColor(.black)
-        .background(Color.init(white: 0.9))
+        .background(Color(white: 0.9))
         .cornerRadius(6)
     }
 }

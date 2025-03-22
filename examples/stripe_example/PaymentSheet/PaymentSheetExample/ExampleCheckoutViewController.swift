@@ -11,9 +11,9 @@ import StripePaymentSheet
 import UIKit
 
 class ExampleCheckoutViewController: UIViewController {
-    @IBOutlet weak var buyButton: UIButton!
+    @IBOutlet var buyButton: UIButton!
     var paymentSheet: PaymentSheet?
-    let backendCheckoutUrl = URL(string: "https://stripe-mobile-payment-sheet.glitch.me/checkout")!  // An example backend endpoint
+    let backendCheckoutUrl = URL(string: "https://stripe-mobile-payment-sheet.glitch.me/checkout")! // An example backend endpoint
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,27 +22,31 @@ class ExampleCheckoutViewController: UIViewController {
         buyButton.isEnabled = false
 
         // MARK: Fetch the PaymentIntent and Customer information from the backend
+
         var request = URLRequest(url: backendCheckoutUrl)
         request.httpMethod = "POST"
         let task = URLSession.shared.dataTask(
             with: request,
-            completionHandler: { [weak self] (data, _, _) in
+            completionHandler: { [weak self] data, _, _ in
                 guard let data = data,
-                    let json = try? JSONSerialization.jsonObject(with: data, options: [])
-                        as? [String: Any],
-                    let customerId = json["customer"] as? String,
-                    let customerEphemeralKeySecret = json["ephemeralKey"] as? String,
-                    let paymentIntentClientSecret = json["paymentIntent"] as? String,
-                    let publishableKey = json["publishableKey"] as? String,
-                    let self = self
+                      let json = try? JSONSerialization.jsonObject(with: data, options: [])
+                      as? [String: Any],
+                      let customerId = json["customer"] as? String,
+                      let customerEphemeralKeySecret = json["ephemeralKey"] as? String,
+                      let paymentIntentClientSecret = json["paymentIntent"] as? String,
+                      let publishableKey = json["publishableKey"] as? String,
+                      let self = self
                 else {
                     // Handle error
                     return
                 }
+
                 // MARK: Set your Stripe publishable key - this allows the SDK to make requests to Stripe for your account
+
                 STPAPIClient.shared.publishableKey = publishableKey
 
                 // MARK: Create a PaymentSheet instance
+
                 var configuration = PaymentSheet.Configuration()
                 configuration.merchantDisplayName = "Example, Inc."
                 configuration.applePay = .init(
@@ -50,32 +54,38 @@ class ExampleCheckoutViewController: UIViewController {
                     merchantCountryCode: "US"
                 )
                 configuration.customer = .init(
-                    id: customerId, ephemeralKeySecret: customerEphemeralKeySecret)
+                    id: customerId, ephemeralKeySecret: customerEphemeralKeySecret
+                )
                 configuration.returnURL = "payments-example://stripe-redirect"
                 // Set allowsDelayedPaymentMethods to true if your business can handle payment methods that complete payment after a delay, like SEPA Debit and Sofort.
                 configuration.allowsDelayedPaymentMethods = true
                 self.paymentSheet = PaymentSheet(
                     paymentIntentClientSecret: paymentIntentClientSecret,
-                    configuration: configuration)
+                    configuration: configuration
+                )
 
                 DispatchQueue.main.async {
                     self.buyButton.isEnabled = true
                 }
-            })
+            }
+        )
         task.resume()
     }
 
     @objc
     func didTapCheckoutButton() {
         // MARK: Start the checkout process
+
         paymentSheet?.present(from: self) { paymentResult in
+
             // MARK: Handle the payment result
+
             switch paymentResult {
             case .completed:
                 self.displayAlert("Your order is confirmed!")
             case .canceled:
                 print("Canceled!")
-            case .failed(let error):
+            case let .failed(error):
                 print(error)
                 self.displayAlert("Payment failed: \n\(error.localizedDescription)")
             }
@@ -84,7 +94,7 @@ class ExampleCheckoutViewController: UIViewController {
 
     func displayAlert(_ message: String) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
-        let OKAction = UIAlertAction(title: "OK", style: .default) { (_) in
+        let OKAction = UIAlertAction(title: "OK", style: .default) { _ in
             alertController.dismiss(animated: true) {
                 self.navigationController?.popViewController(animated: true)
             }
