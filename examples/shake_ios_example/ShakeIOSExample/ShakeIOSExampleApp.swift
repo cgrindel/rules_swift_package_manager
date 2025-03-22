@@ -4,7 +4,7 @@ import SwiftUI
 @main
 struct ShakeIOSExampleApp: App {
     init() {
-        Shake.start(clientId: "_client_id_", clientSecret: "_client_secret_")
+        Shake.start(apiKey: "app-api-key")
     }
 
     var body: some Scene {
