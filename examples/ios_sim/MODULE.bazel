@@ -61,13 +61,6 @@ swift_deps.from_package(
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )
-swift_deps.configure_package(
-    name = "swift-cmark",
-    patch_args = ["-p1"],
-    patches = [
-        "//third-party/swift-cmark:0001-Do-not-exclude-files-that-are-needed-for-compilation.patch",
-    ],
-)
 use_repo(
     swift_deps,
     "swift_deps_info",
