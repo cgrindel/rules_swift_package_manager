@@ -52,6 +52,12 @@ sh_binary(
     }) + select({
         "@rules_swift_package_manager//config_settings/spm/platform:watchos": ["watchos"],
         "//conditions:default": [],
+    }) + select({
+        "@platforms//os:macos": ["platform_macos"],
+        "//conditions:default": [],
+    }) + select({
+        "@platforms//os:linux": ["linux"],
+        "//conditions:default": [],
     }),
 )
 # DEBUG END
