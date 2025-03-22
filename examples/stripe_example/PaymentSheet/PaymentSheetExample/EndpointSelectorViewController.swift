@@ -1,5 +1,5 @@
 //
-//  EndpointSelector.swift
+//  EndpointSelectorViewController.swift
 //  PaymentSheet Example
 //
 
@@ -18,21 +18,23 @@ class EndpointSelectorViewController: UITableViewController {
 
     weak var selectorDelegate: EndpointSelectorViewControllerDelegate?
     var endpointSpecs: EndpointSpec?
-    required init?(coder: NSCoder) {
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
     init(delegate: EndpointSelectorViewControllerDelegate,
          endpointSelectorEndpoint: String,
-         currentCheckoutEndpoint: String) {
-        self.selectorDelegate = delegate
+         currentCheckoutEndpoint: String)
+    {
+        selectorDelegate = delegate
         self.endpointSelectorEndpoint = endpointSelectorEndpoint
         self.currentCheckoutEndpoint = currentCheckoutEndpoint
         super.init(nibName: nil, bundle: nil)
     }
 
     override func viewDidLoad() {
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifierEndpointCell)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: reuseIdentifierEndpointCell)
         loadEndpointSelector(endpoint: endpointSelectorEndpoint)
         setBarButtonItems()
     }
@@ -45,7 +47,7 @@ class EndpointSelectorViewController: UITableViewController {
     }
 
     @objc func didTapCancel() {
-        self.selectorDelegate?.cancelTapped()
+        selectorDelegate?.cancelTapped()
     }
 
     @objc func didTapSetManually() {
@@ -56,7 +58,8 @@ class EndpointSelectorViewController: UITableViewController {
 
         let submitAction = UIAlertAction(title: "Submit", style: .default) { [unowned alertController] _ in
             guard let textFields = alertController.textFields,
-                  let input = textFields[0].text else {
+                  let input = textFields[0].text
+            else {
                 return
             }
             self.selectorDelegate?.selected(endpoint: input)
@@ -70,27 +73,30 @@ class EndpointSelectorViewController: UITableViewController {
 }
 
 // MARK: - TableViewController
+
 extension EndpointSelectorViewController {
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    override func numberOfSections(in _: UITableView) -> Int {
         guard let specs = endpointSpecs else {
             return 2
         }
         return specs.endpointMap.count + 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection sectionNumber: Int) -> Int {
+    override func tableView(_: UITableView, numberOfRowsInSection sectionNumber: Int) -> Int {
         if sectionNumber == 0 {
             return 1
         }
         let sectionNumberIndex = sectionNumber - 1
         guard let specs = endpointSpecs,
-              let sortedSection = sortedSections() else {
+              let sortedSection = sortedSections()
+        else {
             return 0
         }
         let sectionKey = sortedSection[sectionNumberIndex].key
         return specs.endpointMap[sectionKey]?.count ?? 0
     }
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection sectionNumber: Int) -> String? {
+
+    override func tableView(_: UITableView, titleForHeaderInSection sectionNumber: Int) -> String? {
         if sectionNumber == 0 {
             return "Current Endpoint"
         }
@@ -112,22 +118,26 @@ extension EndpointSelectorViewController {
         cell.textLabel?.numberOfLines = 0
         return cell
     }
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+    override func tableView(_: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let endpoint = endpoint(for: indexPath) else {
             return
         }
-        self.selectorDelegate?.selected(endpoint: endpoint)
-        self.navigationController?.popViewController(animated: true)
+        selectorDelegate?.selected(endpoint: endpoint)
+        navigationController?.popViewController(animated: true)
     }
 }
+
 // MARK: Cheap Data provider
+
 extension EndpointSelectorViewController {
     func loadEndpointSelector(endpoint: String) {
         let request = URLRequest(url: URL(string: endpoint)!)
         let session = URLSession.shared.dataTask(with: request) { data, _, error in
             guard error == nil,
                   let data = data,
-                  let specs = self.deserializeResponse(data: data) else {
+                  let specs = self.deserializeResponse(data: data)
+            else {
                 fatalError("FAILED on endpoint selector url request")
             }
             self.endpointSpecs = specs
@@ -137,6 +147,7 @@ extension EndpointSelectorViewController {
         }
         session.resume()
     }
+
     func deserializeResponse(data: Data) -> EndpointSpec? {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -149,16 +160,18 @@ extension EndpointSelectorViewController {
 }
 
 // MARK: - Helpers
+
 extension EndpointSelectorViewController {
     func endpoint(for indexPath: IndexPath) -> String? {
         guard indexPath.section != 0 else {
             return currentCheckoutEndpoint
         }
         guard let specs = endpointSpecs,
-              let sortedSection = sortedSections() else {
+              let sortedSection = sortedSections()
+        else {
             return nil
         }
-        let sectionKey = sortedSection[indexPath.section-1].key
+        let sectionKey = sortedSection[indexPath.section - 1].key
         guard let endpointsInSection = specs.endpointMap[sectionKey] else {
             return nil
         }
@@ -179,8 +192,9 @@ struct EndpointSpec: Codable {
     private enum CodingKeys: String, CodingKey {
         case endpointMap
     }
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.endpointMap = try container.decode([String: [String]].self, forKey: .endpointMap)
+        endpointMap = try container.decode([String: [String]].self, forKey: .endpointMap)
     }
 }

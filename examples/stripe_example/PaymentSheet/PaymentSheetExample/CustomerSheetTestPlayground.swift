@@ -39,7 +39,18 @@ struct CustomerSheetTestPlayground: View {
                         }
                         SettingView(setting: $playgroundController.settings.customerMode)
                         SettingView(setting: customerKeyTypeBinding)
-                        TextField("CustomerId", text: customerIdBinding)
+                        HStack {
+                            TextField("CustomerId", text: customerIdBinding)
+                            if playgroundController.settings.customerKeyType == .customerSession {
+                                Spacer()
+                                Button {
+                                    playgroundController.customerSessionSettingsTapped()
+                                } label: {
+                                    Text("CSSettings")
+                                        .font(.callout.smallCaps())
+                                }.buttonStyle(.bordered)
+                            }
+                        }
                     }
                     Group {
                         HStack {
@@ -56,6 +67,7 @@ struct CustomerSheetTestPlayground: View {
                         SettingView(setting: $playgroundController.settings.applePay)
                         SettingView(setting: $playgroundController.settings.defaultBillingAddress)
                         SettingView(setting: $playgroundController.settings.preferredNetworksEnabled)
+                        SettingView(setting: $playgroundController.settings.cardBrandAcceptance)
                         SettingView(setting: $playgroundController.settings.autoreload)
                         TextField("headerTextForSelectionScreen", text: headerTextForSelectionScreenBinding)
                         SettingView(setting: $playgroundController.settings.allowsRemovalOfLastSavedPaymentMethod)
@@ -91,9 +103,10 @@ struct CustomerSheetTestPlayground: View {
                 .environmentObject(playgroundController)
         }
     }
+
     var customerKeyTypeBinding: Binding<CustomerSheetTestPlaygroundSettings.CustomerKeyType> {
         Binding<CustomerSheetTestPlaygroundSettings.CustomerKeyType> {
-            return playgroundController.settings.customerKeyType
+            playgroundController.settings.customerKeyType
         } set: { newKeyType in
             // If switching to customerSession preselect setupIntent
             if playgroundController.settings.customerKeyType.rawValue != newKeyType.rawValue && newKeyType == .customerSession {
@@ -102,9 +115,10 @@ struct CustomerSheetTestPlayground: View {
             playgroundController.settings.customerKeyType = newKeyType
         }
     }
+
     var paymentMethodModeBinding: Binding<CustomerSheetTestPlaygroundSettings.PaymentMethodMode> {
         Binding<CustomerSheetTestPlaygroundSettings.PaymentMethodMode> {
-            return playgroundController.settings.paymentMethodMode
+            playgroundController.settings.paymentMethodMode
         } set: { newPaymentMethodMode in
             // If switching to createAndAttach, ensure using legacy customer ephemeralKey
             if playgroundController.settings.paymentMethodMode.rawValue != newPaymentMethodMode.rawValue && newPaymentMethodMode == .createAndAttach {
@@ -113,9 +127,10 @@ struct CustomerSheetTestPlayground: View {
             playgroundController.settings.paymentMethodMode = newPaymentMethodMode
         }
     }
+
     var merchantCountryBinding: Binding<CustomerSheetTestPlaygroundSettings.MerchantCountry> {
         Binding<CustomerSheetTestPlaygroundSettings.MerchantCountry> {
-            return playgroundController.settings.merchantCountryCode
+            playgroundController.settings.merchantCountryCode
         } set: { newCountry in
             // Reset customer id if country changes
             if playgroundController.settings.merchantCountryCode.rawValue != newCountry.rawValue {
@@ -127,14 +142,15 @@ struct CustomerSheetTestPlayground: View {
 
     var customerIdBinding: Binding<String> {
         Binding<String> {
-            return playgroundController.settings.customerId ?? ""
+            playgroundController.settings.customerId ?? ""
         } set: { newString in
             playgroundController.settings.customerId = (newString != "") ? newString : nil
         }
     }
+
     var headerTextForSelectionScreenBinding: Binding<String> {
         Binding<String> {
-            return playgroundController.settings.headerTextForSelectionScreen ?? ""
+            playgroundController.settings.headerTextForSelectionScreen ?? ""
         } set: { newString in
             playgroundController.settings.headerTextForSelectionScreen = (newString != "") ? newString : nil
         }
@@ -180,7 +196,7 @@ struct CustomerSheetButtons: View {
                 }.padding(.horizontal)
                 HStack {
                     if playgroundController.customerSheet != nil {
-                        HStack{
+                        HStack {
                             Text("Payment method").font(.subheadline)
                             Spacer()
                             Button {

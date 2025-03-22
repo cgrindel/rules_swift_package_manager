@@ -13,16 +13,16 @@ import UIKit
 private let baseUrl = "https://stripe-mobile-payment-sheet-custom-deferred.glitch.me"
 
 class ExampleDeferredCheckoutViewController: UIViewController {
-    @IBOutlet weak var buyButton: UIButton!
+    @IBOutlet var buyButton: UIButton!
 
-    @IBOutlet weak var hotDogQuantityLabel: UILabel!
-    @IBOutlet weak var saladQuantityLabel: UILabel!
-    @IBOutlet weak var hotDogStepper: UIStepper!
-    @IBOutlet weak var saladStepper: UIStepper!
-    @IBOutlet weak var subtotalLabel: UILabel!
-    @IBOutlet weak var salesTaxLabel: UILabel!
-    @IBOutlet weak var totalLabel: UILabel!
-    @IBOutlet weak var subscribeSwitch: UISwitch!
+    @IBOutlet var hotDogQuantityLabel: UILabel!
+    @IBOutlet var saladQuantityLabel: UILabel!
+    @IBOutlet var hotDogStepper: UIStepper!
+    @IBOutlet var saladStepper: UIStepper!
+    @IBOutlet var subtotalLabel: UILabel!
+    @IBOutlet var salesTaxLabel: UILabel!
+    @IBOutlet var totalLabel: UILabel!
+    @IBOutlet var subscribeSwitch: UISwitch!
 
     private let backendCheckoutUrl = URL(string: baseUrl + "/checkout")!
     private let confirmIntentUrl = URL(string: baseUrl + "/confirm_intent")!
@@ -75,7 +75,7 @@ class ExampleDeferredCheckoutViewController: UIViewController {
         saladStepper.isEnabled = false
         subscribeSwitch.isEnabled = false
 
-        self.loadCheckout()
+        loadCheckout()
     }
 
     // MARK: - Button handlers
@@ -83,15 +83,18 @@ class ExampleDeferredCheckoutViewController: UIViewController {
     @objc
     func didTapCheckoutButton() {
         // MARK: Start the checkout process
+
         let paymentSheet = PaymentSheet(intentConfiguration: intentConfiguration, configuration: paymentSheetConfiguration)
         paymentSheet.present(from: self) { paymentResult in
+
             // MARK: Handle the payment result
+
             switch paymentResult {
             case .completed:
                 self.displayAlert("Your order is confirmed!", success: true)
             case .canceled:
                 print("Canceled!")
-            case .failed(let error):
+            case let .failed(error):
                 print(error)
                 self.displayAlert("Payment failed: \n\(error.localizedDescription)", success: false)
             }
@@ -134,7 +137,7 @@ class ExampleDeferredCheckoutViewController: UIViewController {
 
     func displayAlert(_ message: String, success: Bool) {
         let alertController = UIAlertController(title: "", message: message, preferredStyle: .alert)
-        let OKAction = UIAlertAction(title: "OK", style: .default) { (_) in
+        let OKAction = UIAlertAction(title: "OK", style: .default) { _ in
             alertController.dismiss(animated: true) {
                 if success {
                     self.navigationController?.popViewController(animated: true)
@@ -149,13 +152,14 @@ class ExampleDeferredCheckoutViewController: UIViewController {
 
     func serverSideConfirmHandler(_ paymentMethodID: String,
                                   _ shouldSavePaymentMethod: Bool,
-                                  _ intentCreationCallback: @escaping (Result<String, Error>) -> Void) {
+                                  _ intentCreationCallback: @escaping (Result<String, Error>) -> Void)
+    {
         // Create and confirm an intent on your server and invoke `intentCreationCallback` with the client secret
         confirmIntent(paymentMethodID: paymentMethodID, shouldSavePaymentMethod: shouldSavePaymentMethod) { result in
             switch result {
-            case .success(let clientSecret):
+            case let .success(clientSecret):
                 intentCreationCallback(.success(clientSecret))
-            case .failure(let error):
+            case let .failure(error):
                 intentCreationCallback(.failure(error))
             }
         }
@@ -165,6 +169,7 @@ class ExampleDeferredCheckoutViewController: UIViewController {
 
     private func fetchTotals(completion: @escaping () -> Void) {
         // MARK: Fetch the current amounts from the server
+
         var request = URLRequest(url: computeTotalsUrl)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
@@ -179,23 +184,26 @@ class ExampleDeferredCheckoutViewController: UIViewController {
 
         let task = URLSession.shared.dataTask(
             with: request,
-            completionHandler: { [weak self] (data, _, _) in
+            completionHandler: { [weak self] data, _, _ in
                 guard let data = data,
-                      let totals = try? JSONDecoder().decode(ComputedTotals.self, from: data) else {
-                          fatalError("Failed to decode compute_totals response")
-                        }
+                      let totals = try? JSONDecoder().decode(ComputedTotals.self, from: data)
+                else {
+                    fatalError("Failed to decode compute_totals response")
+                }
 
                 self?.computedTotals = totals
                 DispatchQueue.main.async {
                     completion()
                 }
-            })
+            }
+        )
 
         task.resume()
     }
 
     private func loadCheckout() {
         // MARK: Fetch the publishable key, order information, and Customer information from the backend
+
         var request = URLRequest(url: backendCheckoutUrl)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-type")
@@ -210,17 +218,17 @@ class ExampleDeferredCheckoutViewController: UIViewController {
 
         let task = URLSession.shared.dataTask(
             with: request,
-            completionHandler: { [weak self] (data, _, _) in
+            completionHandler: { [weak self] data, _, _ in
                 guard let data = data,
-                    let json = try? JSONSerialization.jsonObject(with: data, options: [])
-                        as? [String: Any],
-                    let customerId = json["customer"] as? String,
-                    let customerEphemeralKeySecret = json["ephemeralKey"] as? String,
-                    let publishableKey = json["publishableKey"] as? String,
-                    let subtotal = json["subtotal"] as? Double,
-                    let tax = json["tax"] as? Double,
-                    let total = json["total"] as? Double,
-                    let self = self
+                      let json = try? JSONSerialization.jsonObject(with: data, options: [])
+                      as? [String: Any],
+                      let customerId = json["customer"] as? String,
+                      let customerEphemeralKeySecret = json["ephemeralKey"] as? String,
+                      let publishableKey = json["publishableKey"] as? String,
+                      let subtotal = json["subtotal"] as? Double,
+                      let tax = json["tax"] as? Double,
+                      let total = json["total"] as? Double,
+                      let self = self
                 else {
                     // Handle error
                     return
@@ -228,22 +236,27 @@ class ExampleDeferredCheckoutViewController: UIViewController {
 
                 DispatchQueue.main.async {
                     self.computedTotals = ComputedTotals(subtotal: subtotal, tax: tax, total: total)
+
                     // MARK: Set your Stripe publishable key - this allows the SDK to make requests to Stripe for your account
+
                     STPAPIClient.shared.publishableKey = publishableKey
 
                     // MARK: Update the configuration.customer details
+
                     self.paymentSheetConfiguration.customer = .init(id: customerId, ephemeralKeySecret: customerEphemeralKeySecret)
                     [self.hotDogStepper, self.saladStepper, self.subscribeSwitch, self.buyButton].forEach { $0?.isEnabled = true }
                     self.updateLabels()
                 }
-            })
+            }
+        )
 
         task.resume()
     }
 
     func confirmIntent(paymentMethodID: String,
                        shouldSavePaymentMethod: Bool,
-                       completion: @escaping (Result<String, Error>) -> Void) {
+                       completion: @escaping (Result<String, Error>) -> Void)
+    {
         var request = URLRequest(url: confirmIntentUrl)
         request.httpMethod = "POST"
 
@@ -263,7 +276,7 @@ class ExampleDeferredCheckoutViewController: UIViewController {
 
         let task = URLSession.shared.dataTask(
             with: request,
-            completionHandler: { (data, _, error) in
+            completionHandler: { data, _, error in
                 guard
                     error == nil,
                     let data = data,
@@ -277,12 +290,13 @@ class ExampleDeferredCheckoutViewController: UIViewController {
                 } else {
                     completion(.failure(error ?? ExampleError(errorDescription: json["error"] ?? "An unknown error occurred.")))
                 }
-        })
+            }
+        )
 
         task.resume()
     }
 
     struct ExampleError: LocalizedError {
-       var errorDescription: String?
+        var errorDescription: String?
     }
 }

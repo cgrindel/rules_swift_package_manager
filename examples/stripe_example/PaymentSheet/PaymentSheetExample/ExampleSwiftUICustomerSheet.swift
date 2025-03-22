@@ -5,6 +5,7 @@
 
 import StripePaymentSheet
 import SwiftUI
+
 struct ExampleSwiftUICustomerSheet: View {
     @State private var showingCustomerSheet = false
     @ObservedObject var model = MyBackendCustomerSheetModel()
@@ -42,7 +43,8 @@ struct ExampleSwiftUICustomerSheet: View {
                 }.customerSheet(
                     isPresented: $showingCustomerSheet,
                     customerSheet: customerSheet,
-                    onCompletion: model.onCompletion)
+                    onCompletion: model.onCompletion
+                )
             } else {
                 ExampleLoadingView()
             }
@@ -66,7 +68,7 @@ class MyBackendCustomerSheetModel: ObservableObject {
     func prepareCustomerSheet() {
         let customer_type = shouldUseNewCustomer ? "new" : "returning"
         let body = [
-            "customer_type": customer_type
+            "customer_type": customer_type,
         ] as [String: Any]
 
         let url = URL(string: "\(backendCheckoutUrl)/customer_ephemeral_key")!
@@ -81,7 +83,8 @@ class MyBackendCustomerSheetModel: ObservableObject {
             guard
                 error == nil,
                 let data = data,
-                let json = try? JSONDecoder().decode([String: String].self, from: data) else {
+                let json = try? JSONDecoder().decode([String: String].self, from: data)
+            else {
                 print(error as Any)
                 self.configureCustomerSheet(response: nil)
                 return
@@ -97,18 +100,17 @@ class MyBackendCustomerSheetModel: ObservableObject {
 
     func onCompletion(result: CustomerSheet.CustomerSheetResult) {
         switch result {
-        case .selected(let selection):
-            self.customerSheetStatusViewModel = .selected(selection)
-        case .canceled(let selection):
-            self.customerSheetStatusViewModel = .canceled(selection)
-        case .error(let error):
-            self.customerSheetStatusViewModel = .error(error)
+        case let .selected(selection):
+            customerSheetStatusViewModel = .selected(selection)
+        case let .canceled(selection):
+            customerSheetStatusViewModel = .canceled(selection)
+        case let .error(error):
+            customerSheetStatusViewModel = .error(error)
         }
     }
 
     func createSetupIntent(customerId: String) async throws -> String {
-        let body = [ "customer_id": customerId,
-        ] as [String: Any]
+        let body = ["customer_id": customerId] as [String: Any]
         let url = URL(string: "\(backendCheckoutUrl)/create_setup_intent")!
         let session = URLSession.shared
 
@@ -129,7 +131,8 @@ class MyBackendCustomerSheetModel: ObservableObject {
         guard let json = response,
               let ephemeralKey = json["customerEphemeralKeySecret"], !ephemeralKey.isEmpty,
               let customerId = json["customerId"], !customerId.isEmpty,
-              let publishableKey = json["publishableKey"] else {
+              let publishableKey = json["publishableKey"]
+        else {
             return
         }
         STPAPIClient.shared.publishableKey = publishableKey
@@ -144,7 +147,7 @@ class MyBackendCustomerSheetModel: ObservableObject {
             // This should be a block that fetches this from your server
             .init(customerId: customerId, ephemeralKeySecret: ephemeralKey)
         }, setupIntentClientSecretProvider: {
-            return try await self.createSetupIntent(customerId: customerId)
+            try await self.createSetupIntent(customerId: customerId)
         })
         DispatchQueue.main.async {
             self.customerSheet = CustomerSheet(configuration: configuration,
