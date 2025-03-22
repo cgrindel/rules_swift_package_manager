@@ -1,0 +1,12 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
+
+swift_test(
+    name = "YogaTests",
+    srcs = [
+        "YogaTests.swift",
+    ],
+    module_name = "YogaTests",
+    deps = [
+        "@swiftpkg_yoga//:yoga",
+    ],
+)
