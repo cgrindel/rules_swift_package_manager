@@ -53,10 +53,13 @@ sh_binary(
         "@rules_swift_package_manager//config_settings/spm/platform:watchos": ["watchos"],
         "//conditions:default": [],
     }) + select({
+        "@rules_swift_package_manager//config_settings/bazel/apple_platform_type:macos": ["apple_platform_type_macos"],
+        "//conditions:default": [],
+    }) + select({
         "@platforms//os:macos": ["platform_macos"],
         "//conditions:default": [],
     }) + select({
-        "@platforms//os:linux": ["linux"],
+        "@platforms//os:linux": ["platform_linux"],
         "//conditions:default": [],
     }),
 )
