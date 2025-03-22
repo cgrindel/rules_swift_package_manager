@@ -107,11 +107,11 @@ jobs:
       - uses: ./.github/actions/configure_remote_cache_auth
         with:
           buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
-      # # DEBUG BEGIN
-      # - name: Setup tmate session
-      #   if: ${{ startsWith(matrix.runner, 'ubuntu') && matrix.test == '@@//examples:vapor_example_test_bazel_.bazelversion' }}
-      #   uses: mxschmitt/action-tmate@v3
-      # # DEBUG END
+      # DEBUG BEGIN
+      - name: Setup tmate session
+        if: ${{ startsWith(matrix.runner, 'ubuntu') && matrix.test == '@@//examples:vapor_example_test_bazel_.bazelversion' }}
+        uses: mxschmitt/action-tmate@v3
+      # DEBUG END
       - uses: ./.github/actions/execute_test
         with:
           bzlmod_enabled: ${{ matrix.bzlmod_enabled }}
