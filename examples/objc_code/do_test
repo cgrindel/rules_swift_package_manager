@@ -12,8 +12,9 @@ bazel="${BIT_BAZEL_BINARY:-bazel}"
 "${bazel}" run //:tidy
 
 # DEBUG BEGIN
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") =====" 
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") --------" 
 "${bazel}" query //... --output label_kind
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") --------" 
 # DEBUG END
 
 # Ensure that it builds and tests pass
