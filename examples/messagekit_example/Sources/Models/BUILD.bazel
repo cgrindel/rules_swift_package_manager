@@ -4,10 +4,10 @@ swift_library(
     name = "Models",
     srcs = [
         "MockMessage.swift",
-        "MockSocket.swift",
         "MockUser.swift",
     ],
     module_name = "Models",
+    tags = ["manual"],
     visibility = ["//visibility:public"],
     deps = ["@swiftpkg_messagekit//:MessageKit"],
 )

@@ -1,19 +1,18 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
-swift_library(
-    name = "UITests",
-    testonly = True,
-    srcs = ["ChatExampleUITests.swift"],
-    module_name = "UITests",
-    tags = ["manual"],
-)
-
 ios_unit_test(
-    name = "ChatExampleUITests",
-    size = "enormous",
+    name = "ModelTests",
     minimum_os_version = "13.0",
     runner = "@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_ordered_runner",
-    test_host = "//Sources:iosapp",
-    deps = [":UITests"],
+    deps = [":ModelTestsLib"],
+)
+
+swift_library(
+    name = "ModelTestsLib",
+    testonly = True,
+    srcs = ["ModelsTests.swift"],
+    module_name = "ModelTests",
+    tags = ["manual"],
+    deps = ["//Sources/Models"],
 )
