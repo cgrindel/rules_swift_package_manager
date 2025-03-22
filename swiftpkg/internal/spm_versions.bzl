@@ -38,7 +38,8 @@ def _get_version(repository_ctx, env = {}):
     """
     exec_out = repository_utils.exec_spm_command(
         repository_ctx,
-        ["swift", "package", "--version"],
+        # ["swift", "package", "--version"],
+        ["pwd"],
         env = env,
     )
     return _extract_version(exec_out)
