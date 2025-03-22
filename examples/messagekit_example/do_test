@@ -11,6 +11,7 @@ bazel="${BIT_BAZEL_BINARY:-bazel}"
 
 # DEBUG BEGIN
 echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") --------" 
+find . >&2
 "${bazel}" query //... --output label_kind
 echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") --------" 
 # DEBUG END
