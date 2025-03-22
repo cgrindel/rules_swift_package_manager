@@ -1,5 +1,5 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
-load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@build_bazel_rules_apple//apple:macos.bzl", "macos_build_test")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 
 tidy(
@@ -33,12 +33,10 @@ gazelle(
     gazelle = ":gazelle_bin",
 )
 
-build_test(
+macos_build_test(
     name = "xcode_metrics_package_targets",
+    minimum_os_version = "10.14",
     targets = [
         "@swiftpkg_xcmetrics//:XCMetrics",
-        "@swiftpkg_xcmetrics//:XCMetricsBackend",
-        "@swiftpkg_xcmetrics//:XCMetricsClient",
-        "@swiftpkg_xcmetrics//:XCMetricsUtils",
     ],
 )
