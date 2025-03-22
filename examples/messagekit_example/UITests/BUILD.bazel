@@ -1,4 +1,4 @@
-load("@build_bazel_rules_apple//apple:ios.bzl", "ios_ui_test")
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
@@ -7,10 +7,9 @@ swift_library(
     srcs = ["ChatExampleUITests.swift"],
     module_name = "UITests",
     tags = ["manual"],
-    deps = ["//Sources:ChatExample"],
 )
 
-ios_ui_test(
+ios_unit_test(
     name = "ChatExampleUITests",
     size = "enormous",
     minimum_os_version = "13.0",
