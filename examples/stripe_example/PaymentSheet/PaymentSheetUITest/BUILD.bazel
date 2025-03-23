@@ -16,14 +16,8 @@ swift_library(
     srcs = [
         "CustomerSheetTestPlaygroundSettings.swift",  # keep: symlink
         "CustomerSheetUITest.swift",
-        "EmbeddedUITest.swift",
-        "LinkPaymentControllerUITest.swift",
-        "PaymentSheet+AddressTests.swift",
-        "PaymentSheetBillingCollectionUITests.swift",
-        "PaymentSheetLPMUITest.swift",
         "PaymentSheetTestPlaygroundSettings.swift",  # keep: symlink
         "PaymentSheetUITest.swift",
-        "PaymentSheetVerticalUITest.swift",
         "XCUITest+PaymentSheetTestUtilities.swift",
         "XCUITest+Utilities.swift",
     ],
