@@ -47,15 +47,5 @@ class PaymentSheetUITestCase: XCTestCase {
 class PaymentSheetStandardUITests: PaymentSheetUITestCase {
     func testPaymentSheetStandard() throws {
         app.launch()
-        // app.staticTexts["PaymentSheet"].tap()
-        // app.staticTexts["Buy"].waitForExistenceAndTap(timeout: 60)
-
-        // app.buttons["Card"].waitForExistenceAndTap()
-        // try! fillCardData(app)
-        // app.buttons["Pay €9.73"].tap()
-        // let successText = app.alerts.staticTexts["Your order is confirmed!"]
-        // XCTAssertTrue(successText.waitForExistence(timeout: 10.0))
-        // let okButton = app.alerts.scrollViews.otherElements.buttons["OK"]
-        // okButton.tap()
     }
 }
