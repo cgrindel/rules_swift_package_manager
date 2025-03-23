@@ -9,11 +9,5 @@ bazel="${BIT_BAZEL_BINARY:-bazel}"
 # Generate Swift external deps and update build files
 "${bazel}" run //:tidy
 
-# DEBUG BEGIN
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") ----" 
-"${bazel}" run //:foo
-echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") ----" 
-# DEBUG END
-
 # Ensure that it builds and tests pass
 "${bazel}" test //...

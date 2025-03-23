@@ -29,38 +29,3 @@ gazelle(
     ],
     gazelle = ":gazelle_bin",
 )
-
-# DEBUG BEGIN
-sh_binary(
-    name = "foo",
-    srcs = ["foo.sh"],
-    args = ["first"] + select({
-        "@rules_swift_package_manager//config_settings/spm/configuration:debug": ["DEBUG"],
-        "//conditions:default": [],
-    }) + select({
-        "@rules_swift_package_manager//config_settings/spm/platform:ios": ["ios"],
-        "//conditions:default": [],
-    }) + select({
-        "@rules_swift_package_manager//config_settings/spm/platform:macos": ["macos"],
-        "//conditions:default": [],
-    }) + select({
-        "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["tvos"],
-        "//conditions:default": [],
-    }) + select({
-        "@rules_swift_package_manager//config_settings/spm/platform:visionos": ["visionos"],
-        "//conditions:default": [],
-    }) + select({
-        "@rules_swift_package_manager//config_settings/spm/platform:watchos": ["watchos"],
-        "//conditions:default": [],
-    }) + select({
-        "@rules_swift_package_manager//config_settings/bazel/apple_platform_type:macos": ["apple_platform_type_macos"],
-        "//conditions:default": [],
-    }) + select({
-        "@platforms//os:macos": ["platform_macos"],
-        "//conditions:default": [],
-    }) + select({
-        "@platforms//os:linux": ["platform_linux"],
-        "//conditions:default": [],
-    }),
-)
-# DEBUG END
