@@ -11,6 +11,7 @@ import SwiftUI
 @available(iOS 15.0, *)
 struct PaymentSheetTestPlayground: View {
     @StateObject var playgroundController: PlaygroundController
+    @StateObject var analyticsLogObserver: AnalyticsLogObserver = .shared
     @State var showingQRSheet = false
 
     init(settings: PaymentSheetTestPlaygroundSettings) {
@@ -19,37 +20,41 @@ struct PaymentSheetTestPlayground: View {
 
     @ViewBuilder
     var clientSettings: some View {
-        // Note: Use group to work around XCode 14: "Extra Argument in Call" issue
-        //  (each view can hold 10 direct subviews)
-        Group {
-            SettingView(setting: $playgroundController.settings.uiStyle)
-            SettingView(setting: $playgroundController.settings.shippingInfo)
-            SettingView(setting: $playgroundController.settings.applePayEnabled)
-            SettingView(setting: $playgroundController.settings.applePayButtonType)
-            SettingView(setting: $playgroundController.settings.allowsDelayedPMs)
+        SettingView(setting: uiStyleBinding)
+        if playgroundController.settings.uiStyle != .embedded {
+            SettingView(setting: $playgroundController.settings.layout)
+        }
+        SettingView(setting: $playgroundController.settings.style)
+        SettingView(setting: $playgroundController.settings.shippingInfo)
+        SettingView(setting: $playgroundController.settings.applePayEnabled)
+        SettingView(setting: $playgroundController.settings.applePayButtonType)
+        SettingView(setting: $playgroundController.settings.allowsDelayedPMs)
+        SettingPickerView(setting: $playgroundController.settings.defaultBillingAddress)
+        if playgroundController.settings.defaultBillingAddress == .customEmail {
+            TextField("Default email", text: customEmailBinding)
+                .keyboardType(.emailAddress)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
         }
         Group {
-            SettingPickerView(setting: $playgroundController.settings.defaultBillingAddress)
-            if playgroundController.settings.defaultBillingAddress == .customEmail {
-                TextField("Default email", text: customEmailBinding)
-                    .keyboardType(.emailAddress)
-                    .autocorrectionDisabled()
-                    .textInputAutocapitalization(.never)
+            if playgroundController.settings.merchantCountryCode == .US {
+                SettingView(setting: linkEnabledModeBinding)
             }
+            SettingView(setting: $playgroundController.settings.linkPassthroughMode)
         }
-        Group {
-            SettingView(setting: $playgroundController.settings.linkEnabled)
-            SettingView(setting: $playgroundController.settings.userOverrideCountry)
-            SettingView(setting: $playgroundController.settings.externalPayPalEnabled)
-            SettingView(setting: $playgroundController.settings.preferredNetworksEnabled)
-            SettingView(setting: $playgroundController.settings.allowsRemovalOfLastSavedPaymentMethod)
+        SettingView(setting: $playgroundController.settings.userOverrideCountry)
+        SettingView(setting: $playgroundController.settings.externalPaymentMethods)
+        // The hardcoded CPM id is only available on our US merchant
+        if playgroundController.settings.merchantCountryCode == .US {
+            SettingView(setting: $playgroundController.settings.customPaymentMethods)
         }
-        Group {
-            SettingView(setting: $playgroundController.settings.requireCVCRecollection)
-        }
-        Group {
-            SettingView(setting: $playgroundController.settings.autoreload)
-        }
+        SettingView(setting: $playgroundController.settings.preferredNetworksEnabled)
+        SettingView(setting: $playgroundController.settings.cardBrandAcceptance)
+        SettingView(setting: $playgroundController.settings.allowsRemovalOfLastSavedPaymentMethod)
+        SettingView(setting: $playgroundController.settings.requireCVCRecollection)
+        SettingView(setting: $playgroundController.settings.autoreload)
+        SettingView(setting: $playgroundController.settings.shakeAmbiguousViews)
+        SettingView(setting: $playgroundController.settings.instantDebitsIncentives)
     }
 
     var body: some View {
@@ -59,7 +64,7 @@ struct PaymentSheetTestPlayground: View {
                     Group {
                         HStack {
                             if ProcessInfo.processInfo.environment["UITesting"] != nil {
-                                AnalyticsLogForTesting(analyticsLog: $playgroundController.analyticsLog)
+                                AnalyticsLogForTesting(analyticsLog: $analyticsLogObserver.analyticsLog)
                             }
                             Text("Backend")
                                 .font(.headline)
@@ -87,12 +92,39 @@ struct PaymentSheetTestPlayground: View {
                                 })
                         }
                         SettingView(setting: $playgroundController.settings.mode)
-                        SettingPickerView(setting: $playgroundController.settings.integrationType)
+                        SettingPickerView(
+                            setting: integrationTypeBinding,
+                            disabledSettings: playgroundController.settings.uiStyle == .embedded ? [.normal] : []
+                        )
                         SettingView(setting: $playgroundController.settings.customerKeyType)
                         SettingView(setting: customerModeBinding)
-                        SettingPickerView(setting: $playgroundController.settings.currency)
+                        HStack {
+                            SettingPickerView(setting: $playgroundController.settings.amount)
+                            SettingPickerView(setting: $playgroundController.settings.currency)
+                        }
                         SettingPickerView(setting: merchantCountryBinding)
                         SettingView(setting: $playgroundController.settings.apmsEnabled)
+                        if playgroundController.settings.apmsEnabled == .off {
+                            TextField("Supported Payment Methods (comma separated)", text: supportedPaymentMethodsBinding)
+                                .autocapitalization(.none)
+                        }
+                    }
+                    Group {
+                        if playgroundController.settings.customerKeyType == .customerSession {
+                            VStack {
+                                HStack {
+                                    Text("Customer Session")
+                                        .font(.subheadline)
+                                    Spacer()
+                                    Button {
+                                        playgroundController.customerSessionSettingsTapped()
+                                    } label: {
+                                        Text("CSSettings")
+                                            .font(.callout.smallCaps())
+                                    }.buttonStyle(.bordered)
+                                }
+                            }
+                        }
                     }
                     Divider()
                     Group {
@@ -124,18 +156,43 @@ struct PaymentSheetTestPlayground: View {
                         SettingView(setting: $playgroundController.settings.collectPhone)
                         SettingView(setting: $playgroundController.settings.collectAddress)
                     }
+
+                    if playgroundController.settings.uiStyle == .embedded {
+                        Divider()
+                        Group {
+                            HStack {
+                                Text("Embedded only configuration")
+                                    .font(.headline)
+                                Spacer()
+                            }
+                            SettingView(setting: $playgroundController.settings.formSheetAction)
+                            SettingView(setting: $playgroundController.settings.embeddedViewDisplaysMandateText)
+                        }
+                    }
+
                 }.padding()
             }
             Spacer()
             Divider()
             PaymentSheetButtons()
                 .environmentObject(playgroundController)
+        }.animationUnlessTesting()
+    }
+
+    var paymentMethodSaveBinding: Binding<PaymentSheetTestPlaygroundSettings.PaymentMethodSave> {
+        Binding<PaymentSheetTestPlaygroundSettings.PaymentMethodSave> {
+            playgroundController.settings.paymentMethodSave
+        } set: { newValue in
+            if playgroundController.settings.paymentMethodSave != newValue {
+                playgroundController.settings.allowRedisplayOverride = .notSet
+            }
+            playgroundController.settings.paymentMethodSave = newValue
         }
     }
 
     var customCTABinding: Binding<String> {
         Binding<String> {
-            return playgroundController.settings.customCtaLabel ?? ""
+            playgroundController.settings.customCtaLabel ?? ""
         } set: { newString in
             playgroundController.settings.customCtaLabel = (newString != "") ? newString : nil
         }
@@ -143,7 +200,7 @@ struct PaymentSheetTestPlayground: View {
 
     var customEmailBinding: Binding<String> {
         Binding<String> {
-            return playgroundController.settings.customEmail ?? ""
+            playgroundController.settings.customEmail ?? ""
         } set: { newString in
             playgroundController.settings.customEmail = (newString != "") ? newString : nil
         }
@@ -151,68 +208,150 @@ struct PaymentSheetTestPlayground: View {
 
     var paymentMethodSettingsBinding: Binding<String> {
         Binding<String> {
-            return playgroundController.settings.paymentMethodConfigurationId ?? ""
+            playgroundController.settings.paymentMethodConfigurationId ?? ""
         } set: { newString in
             playgroundController.settings.paymentMethodConfigurationId = (newString != "") ? newString : nil
         }
     }
+
     var customerModeBinding: Binding<PaymentSheetTestPlaygroundSettings.CustomerMode> {
         Binding<PaymentSheetTestPlaygroundSettings.CustomerMode> {
-            return playgroundController.settings.customerMode
+            playgroundController.settings.customerMode
         } set: { newMode in
             PlaygroundController.resetCustomer()
             playgroundController.settings.customerMode = newMode
         }
     }
+
     var merchantCountryBinding: Binding<PaymentSheetTestPlaygroundSettings.MerchantCountry> {
         Binding<PaymentSheetTestPlaygroundSettings.MerchantCountry> {
-            return playgroundController.settings.merchantCountryCode
+            playgroundController.settings.merchantCountryCode
         } set: { newCountry in
             // Reset customer id if country changes
             if playgroundController.settings.merchantCountryCode.rawValue != newCountry.rawValue {
                 playgroundController.settings.customerMode = .guest
             }
+            // Disable CPMs if we switch to non-US merchant
+            if newCountry != .US {
+                playgroundController.settings.customPaymentMethods = .off
+            }
             playgroundController.settings.merchantCountryCode = newCountry
         }
     }
 
+    var linkEnabledModeBinding: Binding<PaymentSheetTestPlaygroundSettings.LinkEnabledMode> {
+        Binding<PaymentSheetTestPlaygroundSettings.LinkEnabledMode> {
+            playgroundController.settings.linkEnabledMode
+        } set: { newMode in
+            // Reset customer id if Link enabled mode changes, as we change the underlying account ID
+            if playgroundController.settings.linkEnabledMode.rawValue != newMode.rawValue {
+                playgroundController.settings.customerMode = .guest
+            }
+            playgroundController.settings.linkEnabledMode = newMode
+        }
+    }
+
+    var supportedPaymentMethodsBinding: Binding<String> {
+        Binding<String> {
+            playgroundController.settings.supportedPaymentMethods ?? ""
+        } set: { newString in
+            playgroundController.settings.supportedPaymentMethods = newString
+        }
+    }
+
+    var uiStyleBinding: Binding<PaymentSheetTestPlaygroundSettings.UIStyle> {
+        Binding<PaymentSheetTestPlaygroundSettings.UIStyle> {
+            playgroundController.settings.uiStyle
+        } set: { newUIStyle in
+            // If we switch to embedded set confirmation type to deferred CSC if in intent first confirmation type
+            if newUIStyle == .embedded && playgroundController.settings.integrationType == .normal {
+                playgroundController.settings.integrationType = .deferred_csc
+            }
+
+            playgroundController.settings.uiStyle = newUIStyle
+        }
+    }
+
+    var integrationTypeBinding: Binding<PaymentSheetTestPlaygroundSettings.IntegrationType> {
+        Binding<PaymentSheetTestPlaygroundSettings.IntegrationType> {
+            playgroundController.settings.integrationType
+        } set: { newIntegrationType in
+            // If switching to CSC and embedded is selected, reset to PaymentSheet
+            if newIntegrationType == .normal && playgroundController.settings.uiStyle == .embedded {
+                playgroundController.settings.uiStyle = .paymentSheet
+            }
+            playgroundController.settings.integrationType = newIntegrationType
+        }
+    }
+}
+
+extension View {
+    func animationUnlessTesting() -> some View {
+        if ProcessInfo.processInfo.environment["UITesting"] != nil {
+            return AnyView(animation(.bouncy).transition(.opacity))
+        }
+        return AnyView(self)
+    }
+}
+
+struct EmbeddedSettingsView: View {
+    @EnvironmentObject var playgroundController: PlaygroundController
+
+    var body: some View {
+        SettingView(setting: $playgroundController.settings.mode)
+    }
 }
 
 @available(iOS 14.0, *)
 struct PaymentSheetButtons: View {
     @EnvironmentObject var playgroundController: PlaygroundController
-    @State var psIsPresented: Bool = false
-    @State var psFCOptionsIsPresented: Bool = false
-    @State var psFCIsConfirming: Bool = false
+    @State private var psIsPresented: Bool = false
+    @State private var embeddedIsPresented: Bool = false
+    @State private var psFCOptionsIsPresented: Bool = false
+    @State private var psFCIsConfirming: Bool = false
 
     func reloadPlaygroundController() {
-        playgroundController.load()
+        playgroundController.load(reinitializeControllers: true)
+    }
+
+    // This exists so that the embedded playground vc (EPVC) can call the `EmbeddedPaymentElement.update` API
+    // We build the settings view here, rather than in EPVC, so that it can easily update the PI/SI like all other settings and ensure the PI/SI is up to date when it's eventually used at confirm-time
+    @ViewBuilder
+    var embeddedSettingsView: some View {
+        EmbeddedSettingsView()
+    }
+
+    var titleAndReloadView: some View {
+        HStack {
+            Text(playgroundController.settings.uiStyle.rawValue)
+                .font(.subheadline.smallCaps())
+            Spacer()
+            if playgroundController.isLoading {
+                ProgressView()
+            } else {
+                if playgroundController.settings != playgroundController.currentlyRenderedSettings {
+                    StaleView()
+                }
+                Button {
+                    reloadPlaygroundController()
+                } label: {
+                    Image(systemName: "arrow.clockwise.circle")
+                }
+                .accessibility(identifier: "Reload")
+                .frame(alignment: .topLeading)
+            }
+        }.padding(.horizontal)
     }
 
     var body: some View {
         VStack {
-            if playgroundController.settings.uiStyle == .paymentSheet {
+            switch playgroundController.settings.uiStyle {
+            case .paymentSheet:
                 VStack {
-                    HStack {
-                        Text("PaymentSheet")
-                            .font(.subheadline.smallCaps())
-                        Spacer()
-                        if playgroundController.isLoading {
-                            ProgressView()
-                        } else {
-                            if playgroundController.settings != playgroundController.currentlyRenderedSettings {
-                                StaleView()
-                            }
-                            Button {
-                                reloadPlaygroundController()
-                            } label: {
-                                Image(systemName: "arrow.clockwise.circle")
-                            }
-                            .accessibility(identifier: "Reload")
-                            .frame(alignment: .topLeading)
-                        }
-                    }.padding(.horizontal)
-                    if let ps = playgroundController.paymentSheet {
+                    titleAndReloadView
+                    if let ps = playgroundController.paymentSheet,
+                       playgroundController.lastPaymentResult == nil || playgroundController.lastPaymentResult?.shouldAllowPresentingPaymentSheet() ?? false
+                    {
                         HStack {
                             Button {
                                 psIsPresented = true
@@ -231,36 +370,20 @@ struct PaymentSheetButtons: View {
                         .padding()
                     } else {
                         Text("PaymentSheet is nil")
-                        .foregroundColor(.gray)
-                        .padding()
+                            .foregroundColor(.gray)
+                            .padding()
                     }
                     if let result = playgroundController.lastPaymentResult {
                         ExamplePaymentStatusView(result: result)
                     }
                 }
-            } else {
+            case .flowController:
                 VStack {
+                    titleAndReloadView
                     HStack {
-                        Text("PaymentSheet.FlowController")
-                            .font(.subheadline.smallCaps())
-                        Spacer()
-                        if playgroundController.isLoading {
-                            ProgressView()
-                        } else {
-                            if playgroundController.settings != playgroundController.currentlyRenderedSettings {
-                                StaleView()
-                            }
-                            Button {
-                                reloadPlaygroundController()
-                            } label: {
-                                Image(systemName: "arrow.clockwise.circle")
-                            }
-                            .accessibility(identifier: "Reload")
-                            .frame(alignment: .topLeading)
-                        }
-                    }.padding(.horizontal)
-                    HStack {
-                        if let psfc = playgroundController.paymentSheetFlowController {
+                        if let psfc = playgroundController.paymentSheetFlowController,
+                           playgroundController.lastPaymentResult == nil || playgroundController.lastPaymentResult?.shouldAllowPresentingPaymentSheet() ?? false
+                        {
                             Button {
                                 psFCOptionsIsPresented = true
                             } label: {
@@ -286,9 +409,42 @@ struct PaymentSheetButtons: View {
                             .padding()
                         } else {
                             Text("PaymentSheet is nil")
+                                .foregroundColor(.gray)
+                                .padding()
+                        }
+                    }
+                    if let result = playgroundController.lastPaymentResult {
+                        ExamplePaymentStatusView(result: result)
+                    }
+                }
+            case .embedded:
+                VStack {
+                    titleAndReloadView
+                    if playgroundController.embeddedPlaygroundViewController != nil,
+                       playgroundController.lastPaymentResult == nil || playgroundController.lastPaymentResult?.shouldAllowPresentingPaymentSheet() ?? false
+                    {
+                        HStack {
+                            Button {
+                                embeddedIsPresented = true
+                                playgroundController.presentEmbedded(settingsView: {
+                                    embeddedSettingsView.environmentObject(playgroundController)
+                                })
+                            } label: {
+                                Text("Present embedded payment element")
+                            }
+                            Spacer()
+                            Button {
+                                playgroundController.didTapShippingAddressButton()
+                            } label: {
+                                Text("\(playgroundController.addressDetails?.localizedDescription ?? "Address")")
+                                    .accessibility(identifier: "Address")
+                            }
+                        }
+                        .padding()
+                    } else {
+                        Text("Embedded payment element is nil")
                             .foregroundColor(.gray)
                             .padding()
-                        }
                     }
                     if let result = playgroundController.lastPaymentResult {
                         ExamplePaymentStatusView(result: result)
@@ -299,17 +455,31 @@ struct PaymentSheetButtons: View {
     }
 }
 
+extension PaymentSheetResult {
+    func shouldAllowPresentingPaymentSheet() -> Bool {
+        switch self {
+        case .canceled, .failed:
+            return true
+        case .completed:
+            return false
+        }
+    }
+}
+
 /// A zero-sized view whose only purpose is to let XCUITests access the analytics sent by the SDK.
 struct AnalyticsLogForTesting: View {
     @Binding var analyticsLog: [[String: Any]]
     var analyticsLogString: String {
         return try! JSONSerialization.data(withJSONObject: analyticsLog).base64EncodedString()
     }
+
     var body: some View {
         Text(analyticsLogString)
             .frame(width: 0, height: 0)
+            .opacity(0)
             .accessibility(identifier: "_testAnalyticsLog")
             .accessibility(label: Text(analyticsLogString))
+            .accessibility(hidden: false)
     }
 }
 
@@ -337,8 +507,8 @@ struct PaymentOptionView: View {
                     .frame(maxWidth: 30, maxHeight: 30, alignment: .leading)
                     .foregroundColor(.black)
                 Text(paymentOptionDisplayData?.label ?? "None")
-                // Surprisingly, setting the accessibility identifier on the HStack causes the identifier to be
-                // "Payment method-Payment method". We'll set it on a single View instead.
+                    // Surprisingly, setting the accessibility identifier on the HStack causes the identifier to be
+                    // "Payment method-Payment method". We'll set it on a single View instead.
                     .accessibility(identifier: "Payment method")
                     .foregroundColor(.primary)
             }
@@ -351,7 +521,6 @@ struct PaymentOptionView: View {
                 BillingDetailsView(billingDetails: billingDetails)
                     .font(.caption)
                     .foregroundColor(.primary)
-
             }
         }
     }
@@ -410,16 +579,17 @@ struct SettingView<S: PickerEnum>: View {
 
 struct SettingPickerView<S: PickerEnum>: View {
     var setting: Binding<S>
+    var disabledSettings: [S] = []
 
     var body: some View {
         HStack {
             Text(S.enumName).font(.subheadline)
             Spacer()
             Picker(S.enumName, selection: setting) {
-                ForEach(S.allCases, id: \.self) { t in
+                ForEach(S.allCases.filter { !disabledSettings.contains($0) }, id: \.self) { t in
                     Text(t.displayName)
                 }
-            }
+            }.layoutPriority(0.8)
         }
     }
 }

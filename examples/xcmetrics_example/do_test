@@ -2,11 +2,9 @@
 
 set -o errexit -o nounset -o pipefail
 
-
 # Use the Bazel binary specified by the integration test. Otherise, fall back 
 # to bazel.
 bazel="${BIT_BAZEL_BINARY:-bazel}"
-
 
 # Generate Swift external deps and update build files
 "${bazel}" run //:tidy

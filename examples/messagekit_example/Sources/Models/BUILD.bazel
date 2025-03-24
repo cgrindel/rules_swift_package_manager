@@ -1,0 +1,13 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "Models",
+    srcs = [
+        "MockMessage.swift",
+        "MockUser.swift",
+    ],
+    module_name = "Models",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+    deps = ["@swiftpkg_messagekit//:MessageKit"],
+)

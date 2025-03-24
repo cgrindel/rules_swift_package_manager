@@ -1,5 +1,4 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 
 tidy(
@@ -13,8 +12,6 @@ tidy(
 
 # Ignore the Swift build folder
 # gazelle:exclude .build
-
-# gazelle:swift_default_module_name objc_code
 
 gazelle_binary(
     name = "gazelle_bin",
@@ -33,20 +30,4 @@ gazelle(
         "-swift_dependency_index=$(location @swift_deps_info//:swift_deps_index)",
     ],
     gazelle = ":gazelle_bin",
-)
-
-swift_binary(
-    name = "objc_code",
-    srcs = ["main.swift"],
-    visibility = ["//swift:__subpackages__"],
-    deps = [
-        "@swiftpkg_trustkit//:TrustKitStatic",
-    ],
-)
-
-sh_test(
-    name = "objc_code_test",
-    srcs = ["objc_code_test.sh"],
-    data = [":objc_code"],
-    deps = ["@bazel_tools//tools/bash/runfiles"],
 )
