@@ -21,8 +21,18 @@ bazel_dep(name = "protobuf", version = "30.0")
 # Required for proto_library targets:
 bazel_dep(name = "rules_proto", version = "7.1.0")
 
+# Required for compiling objc:
+bazel_dep(name = "apple_support", version = "1.19.0")
+
 # Required for swift_binary and swift_proto_library targets:
 bazel_dep(name = "rules_swift", version = "2.7.0", repo_name = "build_bazel_rules_swift")
+
+# Configure cc toolchain:
+apple_cc_configure = use_extension(
+    "@apple_support//crosstool:setup.bzl",
+    "apple_cc_configure_extension",
+)
+use_repo(apple_cc_configure, "local_config_apple_cc")
 
 # Required for SwiftProtobuf and GRPC Swift:
 swift_deps = use_extension(
