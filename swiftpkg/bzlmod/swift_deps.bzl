@@ -1,6 +1,7 @@
 """Implementation for `swift_deps` bzlmod extension."""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
 load("//swiftpkg/internal:local_swift_package.bzl", "local_swift_package")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
@@ -59,11 +60,21 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
     # Get the package info.
     pkg_swift = module_ctx.path(from_package.swift)
     debug_path = module_ctx.path(".")
+    workspace_root = str(pkg_swift.dirname)
+
+    root_cached_json_directory = None
+    if from_package.cached_json_directory:
+        root_cached_json_directory = paths.join(
+            workspace_root,
+            from_package.cached_json_directory,
+        )
+
     pkg_info = pkginfos.get(
         module_ctx,
-        directory = str(pkg_swift.dirname),
+        directory = workspace_root,
         env = env,
         debug_path = str(debug_path),
+        cached_json_directory = root_cached_json_directory,
         resolved_pkg_map = resolved_pkg_map,
         collect_src_info = False,
         registries_directory = registries_directory,
@@ -157,10 +168,18 @@ the Swift package to make it available.\
             processing = to_process
             to_process = []
             for dep in processing:
+                dep_cached_json_directory = None
+
+                if from_package.cached_json_directory:
+                    dep_cached_json_directory = paths.join(
+                        dep.file_system.path,
+                        from_package.cached_json_directory,
+                    )
                 dep_pkg_info = pkginfos.get(
                     module_ctx,
                     directory = dep.file_system.path,
                     debug_path = None,
+                    cached_json_directory = dep_cached_json_directory,
                     resolved_pkg_map = None,
                     collect_src_info = False,
                 )
@@ -185,7 +204,13 @@ the Swift package to make it available.\
             config_pkg = config_pkgs.get(
                 bazel_repo_names.from_identity(dep.identity),
             )
-        _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_package)
+        _declare_pkg_from_dependency(
+            dep,
+            config_pkg,
+            from_package,
+            config_swift_package,
+            from_package.cached_json_directory,
+        )
 
     # Add all transitive dependencies to direct_dep_repo_names if `publicly_expose_all_targets` flag is set.
     for dep in all_deps_by_id.values():
@@ -199,7 +224,15 @@ the Swift package to make it available.\
 
     return direct_dep_repo_names
 
-def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_package):
+def _declare_pkg_from_dependency(
+        dep,
+        config_pkg,
+        from_package,
+        config_swift_package,
+        cached_json_directory):
+    if cached_json_directory:
+        cached_json_directory = paths.join(cached_json_directory, dep.name)
+
     name = bazel_repo_names.from_identity(dep.identity)
     if dep.source_control:
         init_submodules = None
@@ -236,7 +269,7 @@ def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_pac
             dependencies_index = None,
             env = from_package.env,
             env_inherit = from_package.env_inherit,
-            init_submodules = init_submodules,
+            cached_json_directory = cached_json_directory,            init_submodules = init_submodules,
             recursive_init_submodules = recursive_init_submodules,
             patch_args = patch_args,
             patch_cmds = patch_cmds,
@@ -256,6 +289,7 @@ def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_pac
             env_inherit = from_package.env_inherit,
             path = dep.file_system.path,
             dependencies_index = None,
+            cached_json_directory = cached_json_directory,
         )
 
     elif dep.registry:
@@ -350,6 +384,7 @@ bazel run @swift_package//:resolve
 ```
 """,
             ),
+            "cached_json_directory": attr.string(),
             "env": attr.string_dict(
                 doc = """\
 Environment variables that will be passed to the execution environments for \
