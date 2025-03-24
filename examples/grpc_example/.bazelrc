@@ -10,3 +10,7 @@ try-import %workspace%/../../local.bazelrc
 # GRPC requires C++17 or later.
 build --cxxopt='-std=c++17'
 build --host_cxxopt='-std=c++17'
+
+# Force building for macOS 15.0:
+build --macos_minimum_os=15.0
+build --host_macos_minimum_os=15.0

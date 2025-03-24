@@ -36,11 +36,9 @@ PROTO_PLUGIN_OPTIONS = {
 }
 GRPC_VARIANT_SERVER = "Server"
 GRPC_VARIANT_CLIENT = "Client"
-GRPC_VARIANT_TEST_CLIENT = "TestClient"
 GRPC_VARIANTS = [
     GRPC_VARIANT_SERVER,
     GRPC_VARIANT_CLIENT,
-    GRPC_VARIANT_TEST_CLIENT,
 ]
 GRPC_PLUGIN_OPTION_ALLOWLIST = PROTO_PLUGIN_OPTION_ALLOWLIST + [
     "KeepMethodCasing",
@@ -72,14 +70,15 @@ def make_grpc_swift_proto_compiler(
     swift_proto_compiler(
         name = name,
         protoc = "@protobuf//:protoc",
-        plugin = "@swiftpkg_grpc_swift//:protoc-gen-grpc-swift",
+        plugin = "@swiftpkg_grpc_swift_protobuf//:protoc-gen-grpc-swift",
         plugin_name = name.removesuffix("_proto"),
         plugin_option_allowlist = GRPC_PLUGIN_OPTION_ALLOWLIST,
         plugin_options = merged_plugin_options,
         suffixes = [".grpc.swift"],
         deps = [
             "@swiftpkg_swift_protobuf//:SwiftProtobuf",
-            "@swiftpkg_grpc_swift//:GRPC",
+            "@swiftpkg_grpc_swift_protobuf//:GRPCProtobuf",
+            "@swiftpkg_grpc_swift//:GRPCCore",
         ],
         visibility = ["//visibility:public"],
     )
