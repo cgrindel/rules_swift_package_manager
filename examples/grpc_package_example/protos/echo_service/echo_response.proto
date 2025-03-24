@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-package echo_service;
-
-message EchoResponse {
-  string contents = 1;
-}
