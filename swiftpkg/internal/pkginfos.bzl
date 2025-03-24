@@ -30,6 +30,7 @@ def _get_dump_manifest(
         env = {},
         working_directory = "",
         debug_path = None,
+        cache_path = None,
         registries_directory = None,
         replace_scm_with_registry = False):
     """Returns a dict representing the package dump for an SPM package.
@@ -54,6 +55,10 @@ def _get_dump_manifest(
         debug_path = str(repository_ctx.path("."))
     debug_json_path = paths.join(debug_path, "dump.json")
 
+    cached_json_path = None
+    if cache_path:
+        cached_json_path = paths.join(cache_path, "dump.json")
+
     args = ["swift", "package"]
 
     if registries_directory:
@@ -68,6 +73,7 @@ def _get_dump_manifest(
         env = env,
         working_directory = working_directory,
         debug_json_path = debug_json_path,
+        cached_json_path = cached_json_path,
     )
 
 def _get_desc_manifest(
@@ -75,6 +81,7 @@ def _get_desc_manifest(
         env = {},
         working_directory = "",
         debug_path = None,
+        cache_path = None,
         registries_directory = None,
         replace_scm_with_registry = False):
     """Returns a dict representing the package description for an SPM package.
@@ -99,6 +106,10 @@ def _get_desc_manifest(
         debug_path = str(repository_ctx.path("."))
     debug_json_path = paths.join(debug_path, "desc.json")
 
+    cached_json_path = None
+    if cache_path:
+        cached_json_path = paths.join(cache_path, "desc.json")
+
     args = ["swift", "package"]
 
     if registries_directory:
@@ -114,6 +125,7 @@ def _get_desc_manifest(
         env = env,
         working_directory = working_directory,
         debug_json_path = debug_json_path,
+        cached_json_path = cached_json_path,
     )
 
 def _get(
@@ -121,6 +133,7 @@ def _get(
         directory,
         env = {},
         debug_path = None,
+        cached_json_directory = None,
         resolved_pkg_map = None,
         collect_src_info = True,
         registries_directory = None,
@@ -152,11 +165,13 @@ def _get(
         if not paths.is_absolute(debug_path):
             # For backwards compatibility, resolve relative to the working directory.
             debug_path = paths.join(directory, debug_path)
+
     dump_manifest = _get_dump_manifest(
         repository_ctx,
         env = env,
         working_directory = directory,
         debug_path = debug_path,
+        cache_path = cached_json_directory,
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
     )
@@ -165,6 +180,7 @@ def _get(
         env = env,
         working_directory = directory,
         debug_path = debug_path,
+        cache_path = cached_json_directory,
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
     )
@@ -1805,7 +1821,9 @@ def _new_resource_rule_process(localization = None):
 
 def _new_resource_from_desc_map(desc_map, pkg_path):
     path = desc_map["path"]
-    if paths.is_absolute(path):
+    if path.startswith("./"):
+        path = path[2:]
+    elif paths.is_absolute(path):
         path = paths.relativize(path, pkg_path)
     return _new_resource(
         path = path,
