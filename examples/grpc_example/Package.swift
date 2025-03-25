@@ -7,6 +7,6 @@ let package = Package(
     dependencies: [
         // These are the versions used by rules_swift 1.18.0
         .package(url: "https://github.com/grpc/grpc-swift.git", exact: "1.16.0"),
-        .package(url: "https://github.com/apple/swift-protobuf.git", exact: "1.20.2"),
+        .package(url: "https://github.com/apple/swift-protobuf.git", exact: "1.29.0"),
     ]
 )
