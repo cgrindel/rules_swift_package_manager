@@ -22,6 +22,9 @@ swift_library(
 
 ios_xctestrun_runner(
     name = "ios_xctestrun_ordered_runner",
+    # Increased the destination_timeout to avoid test failures due to the
+    # runner not finding output files. This started happening after upgrade to
+    # rules_apple 3.20.0.
     destination_timeout = 360,  # 3 minutes
     random = False,
     visibility = ["//visibility:public"],
