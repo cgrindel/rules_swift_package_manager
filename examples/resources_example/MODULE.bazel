@@ -17,9 +17,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_apple",
-    # TODO: FIX ME!
     version = "3.20.1",
-    # version = "3.20.0",
     repo_name = "build_bazel_rules_apple",
 )
 

@@ -1,4 +1,8 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
+load(
+    "@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_runner.bzl",
+    "ios_xctestrun_runner",
+)
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
 swift_library(
@@ -16,9 +20,16 @@ swift_library(
     ],
 )
 
+ios_xctestrun_runner(
+    name = "ios_xctestrun_ordered_runner",
+    destination_timeout = 360,  # 3 minutes
+    random = False,
+    visibility = ["//visibility:public"],
+)
+
 ios_unit_test(
     name = "MyAppTests",
     minimum_os_version = "15.0",
-    runner = "@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_ordered_runner",
+    runner = ":ios_xctestrun_ordered_runner",
     deps = [":MyAppTestsLib"],
 )
