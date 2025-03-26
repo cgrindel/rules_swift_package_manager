@@ -1,5 +1,6 @@
 // This file is copied from ClientRequest+Convenience.swift in GRPCCore
-// TODO: Request that they make this public.
+// Requested they make this public: https://github.com/grpc/grpc-swift/issues/2213
+// When they do, we can remove this.
 
 import GRPCCore
 
