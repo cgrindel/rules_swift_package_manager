@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Convenience
 import Foundation
 import GRPCCore
 import GRPCNIOTransportHTTP2
