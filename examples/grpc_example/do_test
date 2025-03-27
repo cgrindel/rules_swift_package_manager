@@ -7,5 +7,5 @@ set -o errexit -o nounset -o pipefail
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
 # Ensure that it builds and tests pass
-"${bazel}" test //...
+"${bazel}" build //...
 

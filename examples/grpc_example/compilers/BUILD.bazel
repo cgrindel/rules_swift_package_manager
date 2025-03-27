@@ -1,4 +1,3 @@
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load(
     "@build_bazel_rules_swift//proto:proto.bzl",
     "swift_proto_compiler",
@@ -7,7 +6,6 @@ load(
     "//compilers:swift_proto_compiler_macros.bzl",
     "GRPC_VARIANT_CLIENT",
     "GRPC_VARIANT_SERVER",
-    "GRPC_VARIANT_TEST_CLIENT",
     "PROTO_PLUGIN_OPTIONS",
     "PROTO_PLUGIN_OPTION_ALLOWLIST",
     "make_grpc_swift_proto_compiler",
@@ -39,19 +37,4 @@ make_grpc_swift_proto_compiler(
 make_grpc_swift_proto_compiler(
     name = "swift_client_proto",
     variants = [GRPC_VARIANT_CLIENT],
-)
-
-make_grpc_swift_proto_compiler(
-    name = "swift_test_client_proto",
-    variants = [GRPC_VARIANT_TEST_CLIENT],
-)
-
-bzl_library(
-    name = "swift_proto_compiler_macros",
-    srcs = ["swift_proto_compiler_macros.bzl"],
-    visibility = ["//visibility:public"],
-    deps = [
-        "@bazel_skylib//lib:dicts",
-        "@build_bazel_rules_swift//swift",
-    ],
 )
