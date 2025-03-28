@@ -8,7 +8,7 @@ extension Foundation.Bundle {
 
     /// This is a workaround for the provided module static var that doesn't always work.
     /// https://forums.swift.org/t/unable-to-find-bundle-in-package-target-tests-when-package-depends-on-another-package-containing-resources-accessed-via-bundle-module/43974/5
-    static var module: Bundle = {
+    static let module: Bundle = {
         let bundleName = "{BUNDLE_NAME}"
         let localBundleName = "LocalPackages_{BUNDLE_NAME}"
 
