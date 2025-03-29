@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Convenience
 import Foundation
 import SwiftProtobuf
 import GRPCCore
@@ -40,10 +39,9 @@ struct ClientMain {
                 let timestamp = Google_Protobuf_Timestamp(date: Date())
                 $0.extra = try! Google_Protobuf_Any(message: timestamp)
             }
-            let clientRequest = ClientRequest(message: request)
             var options = CallOptions.defaults
             options.timeout = .seconds(2)
-            let response = try await client.echo(request: clientRequest, options: options)
+            let response = try await client.echo(request, options: options)
 
             // Print the response
             print(response.contents)
