@@ -9,6 +9,7 @@ bazel-*
 **/.build
 **/Packages
 **/*.xcodeproj
+!examples/swift_build_example/swift-build-app/swift-build-app.xcodeproj
 **/xcuserdata/
 **/DerivedData/
 **/.swiftpm/config/registries.json
