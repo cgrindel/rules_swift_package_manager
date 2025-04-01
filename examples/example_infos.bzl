@@ -116,6 +116,7 @@ _timeouts = {
     "soto_example": "eternal",
     "vapor_example": "eternal",
     "xcmetrics_example": "eternal",
+    "swift_build_example": "eternal",
 }
 
 _default_enable_bzlmods = [True]
@@ -151,6 +152,7 @@ _macos_single_bazel_version_test_examples = [
     "tca_example",
     "symlink_example",
     "swift_package_registry_example",
+    "swift_build_example",
 ]
 
 _linux_single_bazel_version_test_examples = []
