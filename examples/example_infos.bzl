@@ -114,9 +114,9 @@ _default_timeout = "eternal"
 _timeouts = {
     "firebase_example": "eternal",
     "soto_example": "eternal",
+    "swift_build_example": "eternal",
     "vapor_example": "eternal",
     "xcmetrics_example": "eternal",
-    "swift_build_example": "eternal",
 }
 
 _default_enable_bzlmods = [True]
