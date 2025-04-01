@@ -14,6 +14,22 @@ bazel_dep(
     repo_name = "build_bazel_rules_swift",
 )
 bazel_dep(name = "rules_apple", version = "3.20.1", repo_name = "build_bazel_rules_apple")
+bazel_dep(
+    name = "bazel_skylib_gazelle_plugin",
+    version = "1.7.1",
+    dev_dependency = True,
+)
+bazel_dep(
+    name = "gazelle",
+    version = "0.42.0",
+    dev_dependency = True,
+    repo_name = "bazel_gazelle",
+)
+bazel_dep(
+    name = "swift_gazelle_plugin",
+    version = "0.1.0",
+    dev_dependency = True,
+)
 
 swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",

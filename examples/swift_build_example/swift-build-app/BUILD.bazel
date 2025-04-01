@@ -1,0 +1,11 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "swift-build-app",
+    srcs = [
+        "ContentView.swift",
+        "swift_build_appApp.swift",
+    ],
+    module_name = "swift-build-app",
+    visibility = ["//visibility:public"],
+)
