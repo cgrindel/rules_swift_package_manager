@@ -25,7 +25,7 @@
       "location" : "https://github.com/maxwellE/swift-build",
       "state" : {
         "branch" : "maxwelle/bazel-poc",
-        "revision" : "74b3037bcc13813330579b554f0d10d241e82f8d"
+        "revision" : "06d496eac2b71221ff7d0185ef49635b6f754805"
       }
     },
     {
