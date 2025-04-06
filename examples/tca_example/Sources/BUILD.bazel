@@ -12,7 +12,6 @@ swift_library(
 
 ios_application(
     name = "iosapp",
-    app_icons = glob(["Assets.xcassets/AppIcon.appiconset/**"]),
     bundle_id = "co.pointfree.TCAExample",
     families = [
         "iphone",
@@ -20,10 +19,6 @@ ios_application(
     ],
     infoplists = [":Info.plist"],
     minimum_os_version = "16.0",
-    resources = glob(
-        ["Assets.xcassets/**"],
-        exclude = ["Assets.xcassets/AppIcon.appiconset/**"],
-    ),
     visibility = ["//visibility:public"],
     deps = [":TCAExample"],
 )
