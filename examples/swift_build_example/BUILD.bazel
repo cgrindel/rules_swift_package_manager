@@ -1,4 +1,6 @@
 load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@build_bazel_rules_apple//apple:macos.bzl", "macos_command_line_application")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
 
 tidy(
@@ -30,4 +32,20 @@ gazelle(
         "-swift_dependency_index=$(location @swift_deps_info//:swift_deps_index)",
     ],
     gazelle = ":gazelle_bin",
+)
+
+swift_library(
+    name = "main",
+    srcs = ["main_entrypoint.swift"],
+    deps = [
+        "@swiftpkg_swift_build//:SwiftBuild",
+    ],
+)
+
+macos_command_line_application(
+    name = "swbuild_macos_command_line_application",
+    minimum_os_version = "14.0",
+    deps = [
+        ":main",
+    ],
 )
