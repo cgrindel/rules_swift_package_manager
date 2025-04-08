@@ -12,6 +12,6 @@ bazel="${BIT_BAZEL_BINARY:-bazel}"
 "${bazel}" run //:tidy
 
 # Ensure that it builds and tests pass
-"${bazel}" run //:swbuild_macos_command_line_application -- build \
+"${bazel}" run @swiftpkg_swift_build//:swbuild -- build \
     "${script_dir}/swift-build-app/swift-build-app.xcodeproj" \
     --target swift-build-app
