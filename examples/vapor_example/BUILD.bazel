@@ -8,6 +8,11 @@ tidy(
     ],
 )
 
+alias(
+    name = ":update_swift_packages",
+    actual = "//swift:update_swift_packages",
+)
+
 # MARK: - Gazelle
 
 gazelle_binary(

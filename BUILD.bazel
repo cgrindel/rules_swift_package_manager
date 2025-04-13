@@ -65,6 +65,18 @@ tidy_all(
     mode = "modified",
 )
 
+tidy_all(
+    name = "update_swift_packages_for_modified",
+    mode = "modified",
+    tidy_target = "//:update_swift_packages",
+)
+
+tidy_all(
+    name = "update_swift_packages_for_all",
+    mode = "all",
+    tidy_target = "//:update_swift_packages",
+)
+
 # MARK: - Gazelle
 
 gazelle_binary(
