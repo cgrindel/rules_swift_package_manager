@@ -9,7 +9,7 @@ tidy(
 )
 
 alias(
-    name = ":update_swift_packages",
+    name = "update_swift_packages",
     actual = "//swift:update_swift_packages",
 )
 
