@@ -30,3 +30,6 @@ fi
 # --action_env=PATH are specific to running this repository on Linux.
 export CC=clang
 "${bazelisk}" run --action_env=PATH //:tidy_modified
+
+# Execute swift package update on modified workspaces.
+"${bazelisk}" run --action_env=PATH //:update_swift_packages_for_modified

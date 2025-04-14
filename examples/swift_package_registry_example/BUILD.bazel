@@ -1,5 +1,7 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 
+# Running swift package update on this example fails.
+
 exports_files([
     "registries.json",
 ])
