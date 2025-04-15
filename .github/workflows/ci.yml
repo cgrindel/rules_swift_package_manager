@@ -136,3 +136,10 @@ jobs:
         with:
           buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
       - uses: ./.github/actions/tidy_and_test
+        if: ${{ startsWith(matrix.runner, 'ubuntu') }}
+      - name: Execute tests
+        # GH1569: Do not run tidy on macos.
+        if: ${{ startsWith(matrix.runner, 'macos') }}
+        shell: bash
+        run: |
+          bazelisk test //... 
