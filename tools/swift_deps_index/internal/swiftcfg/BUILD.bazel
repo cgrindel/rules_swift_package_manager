@@ -1,0 +1,49 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+# MARK: - Integration Test
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
+
+go_library(
+    name = "swiftcfg",
+    srcs = [
+        "doc.go",
+        "generate_rules_mode.go",
+        "module_files_collector.go",
+        "swift_config.go",
+    ],
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swiftcfg",
+    visibility = ["//tools/swift_deps_index:__subpackages__"],
+    deps = [
+        "//tools/swift_deps_index/internal/reslog",
+        "//tools/swift_deps_index/internal/swift",
+        "//tools/swift_deps_index/internal/swiftbin",
+        "@bazel_gazelle//config:go_default_library",
+        "@bazel_gazelle//language:go_default_library",
+    ],
+)
+
+go_test(
+    name = "swiftcfg_test",
+    srcs = [
+        "module_files_collector_test.go",
+        "swift_config_test.go",
+    ],
+    deps = [
+        ":swiftcfg",
+        "//tools/swift_deps_index/internal/swift",
+        "//tools/swift_deps_index/internal/swiftbin",
+        "//tools/swift_deps_index/internal/swiftpkg",
+        "@bazel_gazelle//config:go_default_library",
+        "@bazel_gazelle//label:go_default_library",
+        "@bazel_gazelle//language:go_default_library",
+        "@com_github_stretchr_testify//assert:go_default_library",
+    ],
+)
+
+bzlformat_pkg(name = "bzlformat")

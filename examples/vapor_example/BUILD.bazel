@@ -8,13 +8,18 @@ tidy(
     ],
 )
 
+alias(
+    name = "update_swift_packages",
+    actual = "//swift:update_swift_packages",
+)
+
 # MARK: - Gazelle
 
 gazelle_binary(
     name = "gazelle_bin",
     languages = [
         "@bazel_skylib_gazelle_plugin//bzl",
-        "@rules_swift_package_manager//gazelle",
+        "@swift_gazelle_plugin//gazelle",
     ],
     visibility = ["//:__subpackages__"],
 )
@@ -28,30 +33,4 @@ gazelle(
         "-swift_dependency_index=$(location @swift_deps_info//:swift_deps_index)",
     ],
     gazelle = ":gazelle_bin",
-)
-
-# Vapor was not happy building under 13.2.1. Fix the version for now.
-# See Keith's article for more details:
-# https://www.smileykeith.com/2021/03/08/locking-xcode-in-bazel/
-
-xcode_version(
-    name = "version14_0_1_14A400",
-    aliases = [
-        "14.0",
-        "14A400",
-        "14.0.1",
-        "14.0.1.14A400",
-        "14",
-    ],
-    default_ios_sdk_version = "16.0",
-    default_macos_sdk_version = "12.3",
-    default_tvos_sdk_version = "16.0",
-    default_watchos_sdk_version = "9.0",
-    version = "14.0.1.14A400",
-)
-
-xcode_config(
-    name = "host_xcodes",
-    default = ":version14_0_1_14A400",
-    versions = [":version14_0_1_14A400"],
 )

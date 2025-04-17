@@ -3,12 +3,21 @@ load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package_tool")
 
 tidy(
     name = "tidy",
     targets = [
         ":update_build_files",
     ],
+)
+
+# Puprosefully am not adding this to tidy. It is expensive to run and only
+# needs to be run when the Package.swift has been updated.
+swift_package_tool(
+    name = "update_swift_packages",
+    cmd = "update",
+    package = "Package.swift",
 )
 
 # MARK: - Gazelle
@@ -20,7 +29,7 @@ gazelle_binary(
     name = "gazelle_bin",
     languages = [
         "@bazel_skylib_gazelle_plugin//bzl",
-        "@rules_swift_package_manager//gazelle",
+        "@swift_gazelle_plugin//gazelle",
     ],
 )
 

@@ -1,34 +1,9 @@
-load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
-load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package_tool")
 
-tidy(
-    name = "tidy",
-    targets = [
-        ":update_build_files",
-    ],
-)
-
-# MARK: - Gazelle
-
-# Ignore the Swift build folder
-# gazelle:proto file
-# gazelle:proto_strip_import_prefix /protos
-# gazelle:proto_import_prefix example
-# gazelle:swift_module_naming_convention pascal_case
-# gazelle:swift_generate_proto_libraries true
-# gazelle:swift_generate_grpc_libraries_with_flavors swift_client_proto,swift_server_proto
-# gazelle:exclude .build
-
-gazelle_binary(
-    name = "gazelle_bin",
-    languages = [
-        "@bazel_skylib_gazelle_plugin//bzl",
-        "@bazel_gazelle//language/proto",
-        "@rules_swift_package_manager//gazelle",
-    ],
-)
-
-gazelle(
-    name = "update_build_files",
-    gazelle = ":gazelle_bin",
+# Puprosefully am not adding this to tidy. It is expensive to run and only
+# needs to be run when the Package.swift has been updated.
+swift_package_tool(
+    name = "update_swift_packages",
+    cmd = "update",
+    package = "Package.swift",
 )

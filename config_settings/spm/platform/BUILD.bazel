@@ -17,7 +17,9 @@ bzlformat_pkg(name = "bzlformat")
     selects.config_setting_group(
         name = pi.spm,
         match_any = [
-            "//config_settings/bazel/apple_platform_type:{}".format(pi.bzl),
+            # Removed the apple_platform_type check, because it can evaluate
+            # to macos on Linux.
+            # "//config_settings/bazel/apple_platform_type:{}".format(pi.bzl),
             "@platforms//os:{}".format(pi.os),
         ],
     )

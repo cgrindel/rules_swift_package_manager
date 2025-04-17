@@ -1,0 +1,10 @@
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package_tool")
+
+# Puprosefully am not adding this to tidy. It is expensive to run and only
+# needs to be run when the Package.swift has been updated.
+swift_package_tool(
+    name = "update_swift_packages",
+    cmd = "update",
+    package = "swift/Package.swift",  # relative path to root of workspace
+    visibility = ["//:__subpackages__"],
+)

@@ -1,0 +1,40 @@
+load(
+    "@build_bazel_rules_swift//proto:proto.bzl",
+    "swift_proto_compiler",
+)
+load(
+    "//compilers:swift_proto_compiler_macros.bzl",
+    "GRPC_VARIANT_CLIENT",
+    "GRPC_VARIANT_SERVER",
+    "PROTO_PLUGIN_OPTIONS",
+    "PROTO_PLUGIN_OPTION_ALLOWLIST",
+    "make_grpc_swift_proto_compiler",
+)
+
+# Swift Protobuf
+
+swift_proto_compiler(
+    name = "swift_proto",
+    plugin = "@swiftpkg_swift_protobuf//:protoc-gen-swift",
+    plugin_name = "swift",
+    plugin_option_allowlist = PROTO_PLUGIN_OPTION_ALLOWLIST,
+    plugin_options = PROTO_PLUGIN_OPTIONS,
+    protoc = "@protobuf//:protoc",
+    suffixes = [".pb.swift"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@swiftpkg_swift_protobuf//:SwiftProtobuf",
+    ],
+)
+
+# Swift GRPC
+
+make_grpc_swift_proto_compiler(
+    name = "swift_server_proto",
+    variants = [GRPC_VARIANT_SERVER],
+)
+
+make_grpc_swift_proto_compiler(
+    name = "swift_client_proto",
+    variants = [GRPC_VARIANT_CLIENT],
+)

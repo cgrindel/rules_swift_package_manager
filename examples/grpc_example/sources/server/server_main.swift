@@ -13,53 +13,39 @@
 // limitations under the License.
 
 import Foundation
-import GRPC
-import NIOCore
-import NIOPosix
+import GRPCCore
+import GRPCNIOTransportHTTP2
 import EchoRequest
 import EchoResponse
 import EchoServiceServer
 
-/// Concrete implementation of the `EchoService` service definition.
-class EchoProvider: EchoService_EchoProvider {
-  var interceptors: EchoService_EchoServerInterceptorFactoryProtocol?
-
-  /// Called when the server receives a request for the `EchoService.Echo` method.
-  ///
-  /// - Parameters:
-  ///   - request: The message containing the request parameters.
-  ///   - context: Information about the current session.
-  /// - Returns: The response that will be sent back to the client.
-  func echo(request: EchoService_EchoRequest,
-            context: StatusOnlyCallContext) -> EventLoopFuture<EchoService_EchoResponse> {
-    return context.eventLoop.makeSucceededFuture(EchoService_EchoResponse.with {
+struct Echo: EchoService_Echo.SimpleServiceProtocol {
+  func echo(
+    request: EchoService_EchoRequest,
+    context: ServerContext
+  ) async throws -> EchoService_EchoResponse {
+    return EchoService_EchoResponse.with {
       $0.contents = "You sent: \(request.contents)"
-    })
+    }
   }
 }
 
 @main
-struct ServerMain {
-  static func main() throws {
-    let group = MultiThreadedEventLoopGroup(numberOfThreads: 1)
-    defer {
-      try! group.syncShutdownGracefully()
-    }
+struct EchoServer {
+  static func main() async throws {
+    // Create a plaintext server using the SwiftNIO based HTTP/2 transport
+    let host = "0.0.0.0"
+    let port = 9000
+    let server = GRPCServer(
+      transport: .http2NIOPosix(
+        address: .ipv4(host: host, port: port),
+        transportSecurity: .plaintext
+      ),
+      services: [Echo()]
+    )
 
-    // Initialize and start the service.
-    let server = Server.insecure(group: group)
-      .withServiceProviders([EchoProvider()])
-      .bind(host: "0.0.0.0", port: 9000)
-
-    server.map {
-      $0.channel.localAddress
-    }.whenSuccess { address in
-      print("server started on port \(address!.port!)")
-    }
-
-    // Wait on the server's `onClose` future to stop the program from exiting.
-    _ = try server.flatMap {
-      $0.onClose
-    }.wait()
+    // Start serving indefinitely.
+    print("Server started, listening on \("0.0.0.0"):\(port)")
+    try await server.serve()
   }
 }

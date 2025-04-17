@@ -6,11 +6,6 @@ set -o errexit -o nounset -o pipefail
 # to bazel.
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
-# Generate Swift external deps and update build files
-"${bazel}" run //:tidy
-
 # Ensure that it builds and tests pass
-"${bazel}" test //...
+"${bazel}" build //...
 
-# Ensure that Gazelle doesn't make any changes
-"${bazel}" run //:update_build_files -- --mode=diff

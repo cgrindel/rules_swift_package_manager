@@ -16,7 +16,7 @@ swift_library(
         # app. This example does not compile without it.
         # https://firebase.google.com/docs/ios/setup#add-sdks
         # keep
-        "@swiftpkg_firebase_ios_sdk//:FirebaseAnalyticsSwift",  # keep
+        "@swiftpkg_firebase_ios_sdk//:FirebaseAnalytics",  # keep
         "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfig",
     ],
 )

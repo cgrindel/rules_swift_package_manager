@@ -6,6 +6,8 @@ swift_binary(
     module_name = "Client",
     visibility = ["//visibility:public"],
     deps = [
+        "@swiftpkg_grpc_swift//:GRPCCore",
+        "@swiftpkg_grpc_swift_nio_transport//:GRPCNIOTransportHTTP2",
         "//protos/echo_service:echo_service_swift_client_proto",
         "//protos/echo_service/requests:echo_request_swift_proto",
         "//protos/echo_service/responses:echo_response_swift_proto",

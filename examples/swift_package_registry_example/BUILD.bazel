@@ -1,5 +1,7 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 
+# Running swift package update on this example fails.
+
 exports_files([
     "registries.json",
 ])
@@ -12,5 +14,6 @@ swift_binary(
     deps = [
         "@swiftpkg_apple.swift_collections//:Collections",
         "@swiftpkg_apple.swift_nio//:NIO",
+        "@swiftpkg_swift_async_algorithms//:AsyncAlgorithms",
     ],
 )

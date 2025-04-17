@@ -2,9 +2,7 @@
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@bazel_skylib//lib:structs.bzl", "structs")
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
-load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 load(
     "//swiftpkg/internal:swift_package_tool_attrs.bzl",
@@ -156,136 +154,21 @@ No source archive was found in the package JSON: {package_json}\
 
     return source_archive.get("checksum")
 
-def _get_resolved_pin_for_url(
-        *,
-        registry_url,
-        repository_ctx,
-        resolved_pkg_map,
-        url):
-    """Returns the resolved pin for the given URL.
-
-    This registry endpoint is provided when determining a
-    package's registry identity given only the URL of the package.
-
-    https://github.com/swiftlang/swift-package-manager/blob/main/Documentation/PackageRegistry/Registry.md#45-lookup-package-identifiers-registered-for-a-url
-    """
-
-    registry_identities_url = paths.join(
-        registry_url,
-        "identifiers",
-    )
-    curl_args = [
-        "curl",
-        "-s",
-        "-H",
-        "\"Accept: {accept_header}\"".format(
-            accept_header = _REGISTRY_JSON_ACCEPT_HEADER["Accept"],
-        ),
-        "-G",
-        "-d",
-        "url={url}".format(url = url),
-        "{url}".format(url = registry_identities_url),
-    ]
-
-    exec_result = repository_ctx.execute(curl_args)
-    if exec_result.return_code != 0:
-        fail("Failed to get registry identities for {url}: {output}".format(
-            url = url,
-            output = exec_result.stdout + exec_result.stderr,
-        ))
-
-    result_json = json.decode(exec_result.stdout)
-    if not result_json:
-        fail("Failed to decode registry identities for {url}: {output}".format(
-            url = url,
-            output = exec_result.stdout,
-        ))
-
-    identifiers = result_json.get("identifiers", [])
-
-    # TODO: is this what SPM does? for now,
-    # pick the first matching identity from the resolved package map.
-    resolved_pin = None
-    for pin in resolved_pkg_map.get("pins", []):
-        if pin.get("identity") in identifiers:
-            resolved_pin = pin
-            break
-
-    return resolved_pin
-
-def _replace_scm_identities_in_pkg_info(
-        *,
-        pkg_info,
-        registries,
-        repository_ctx,
-        resolved_pkg_map):
-    """Replaces the SCM identity of the dependencies in provided package info \
-    and resolved package map.
-    """
-    replaced_dependencies = []
-    replaced_pkg_info = structs.to_dict(pkg_info)
-
-    for dep in pkg_info.dependencies:
-        # Only replace SCM dependencies.
-        if not dep.source_control:
-            replaced_dependencies.append(dep)
-            continue
-        if not dep.source_control.pin or not dep.source_control.pin.location:
-            # buildifier: disable=print
-            print("""\
-Unable to find URL for {identity}, cannot replace SCM identity\
-""".format(identity = dep.identity))
-            replaced_dependencies.append(dep)
-            continue
-
-        # Find first identifier from any of the registries which matches
-        # the resolved identity, preferring scoped registries first.
-        registry_urls = registries.scoped.values() + [registries.default]
-        resolved_pin = None
-        for registry_url in registry_urls:
-            resolved_pin = _get_resolved_pin_for_url(
-                registry_url = registry_url,
-                repository_ctx = repository_ctx,
-                resolved_pkg_map = resolved_pkg_map,
-                url = dep.source_control.pin.location,
-            )
-            if resolved_pin:
-                break
-
-        if not resolved_pin:
-            # buildifier: disable=print
-            print("""\
-Unable to find resolved pin for {identity}, cannot replace SCM identity\
-""".format(identity = dep.identity))
-            replaced_dependencies.append(dep)
-            continue
-
-        replaced_dep = pkginfos.new_dependency(
-            identity = resolved_pin.get("identity"),
-            name = dep.name,
-            registry = pkginfos.new_registry(
-                pin = resolved_pin,
-            ),
-        )
-        replaced_dependencies.append(replaced_dep)
-
-    replaced_pkg_info["dependencies"] = replaced_dependencies
-    return pkginfos.new(**replaced_pkg_info)
-
 def _registry_swift_package_impl(repository_ctx):
     """Implementation for the `registry_swift_package` repository rule."""
+    attr = repository_ctx.attr
     directory = str(repository_ctx.path("."))
     env = repo_rules.get_exec_env(repository_ctx)
-    id = _get_id(repository_ctx.attr.id)
-    version = repository_ctx.attr.version
+    id = _get_id(attr.id)
+    version = attr.version
 
     # TODO: potentially use the other fields here like `authentication`,
     # for now just use the `registries` field.
     registries_json = json.decode(
-        repository_ctx.read(repository_ctx.attr.registries),
+        repository_ctx.read(attr.registries),
     ).get("registries")
     registries = _get_registries(registries_json)
-
+    registries_directory = repository_ctx.path(attr.registries).dirname
     registry_url = _get_registry_url(
         id = id,
         registries = registries,
@@ -345,8 +228,8 @@ def _registry_swift_package_impl(repository_ctx):
     repo_rules.write_workspace_file(repository_ctx, directory)
 
     # Generate the build file
-    if repository_ctx.attr.resolved:
-        pkg_resolved = repository_ctx.path(repository_ctx.attr.resolved)
+    if attr.resolved:
+        pkg_resolved = repository_ctx.path(attr.resolved)
         resolved_pkg_json = repository_ctx.read(pkg_resolved)
         resolved_pkg_map = json.decode(resolved_pkg_json)
     else:
@@ -357,20 +240,9 @@ def _registry_swift_package_impl(repository_ctx):
         directory,
         env,
         resolved_pkg_map = resolved_pkg_map,
+        registries_directory = registries_directory,
+        replace_scm_with_registry = attr.replace_scm_with_registry,
     )
-
-    # Replace any SCM dependencies with their registry definition if requested.
-    if repository_ctx.attr.replace_scm_with_registry:
-        replaced_pkg_info = _replace_scm_identities_in_pkg_info(
-            pkg_info = pkg_ctx.pkg_info,
-            registries = registries,
-            repository_ctx = repository_ctx,
-            resolved_pkg_map = resolved_pkg_map,
-        )
-        pkg_ctx = pkg_ctxs.new(
-            pkg_info = replaced_pkg_info,
-            repo_name = pkg_ctx.repo_name,
-        )
 
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 

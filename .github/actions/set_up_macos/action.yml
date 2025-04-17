@@ -14,20 +14,7 @@ runs:
   steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: '15.2'
-    - name: Override Xcode Version
-      shell: bash
-      run: |
-        # GH762: Investigate why these examples timeout on CI with Xcode 15
-        if [[ "${{ inputs.test_target }}" = "@@//examples:lottie_ios_example_test_bazel_.bazelversion" ]] ||
-           [[ "${{ inputs.test_target }}" = "@@//examples:messagekit_example_test_bazel_.bazelversion" ]] ||
-           [[ "${{ inputs.test_target }}" = "@@//examples:resources_example_test_bazel_.bazelversion" ]] ||
-           [[ "${{ inputs.test_target }}" = "@@//examples:shake_ios_example_test_bazel_.bazelversion" ]]; then
-          sudo xcode-select -s /Applications/Xcode_14.3.1.app/Contents/Developer
-        fi
-        if [[ "${{ inputs.test_target }}" = "@@//examples:firebase_example_test_bazel_.bazelversion" ]]; then
-          sudo xcode-select -s /Applications/Xcode_15.0.1.app/Contents/Developer
-        fi
+        xcode-version: '16.2'
     - name: Confirm Xcode Version
       shell: bash
       run: |

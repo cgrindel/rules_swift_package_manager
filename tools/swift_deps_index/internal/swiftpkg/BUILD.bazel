@@ -1,0 +1,57 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "swiftpkg",
+    srcs = [
+        "dependency.go",
+        "doc.go",
+        "exported_targets.go",
+        "module_type.go",
+        "package_info.go",
+        "platform.go",
+        "product.go",
+        "source_type.go",
+        "swift_file_info.go",
+        "target.go",
+        "target_dependency.go",
+    ],
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/swiftpkg",
+    visibility = ["//tools/swift_deps_index:__subpackages__"],
+    deps = [
+        "//tools/swift_deps_index/internal/spdesc",
+        "//tools/swift_deps_index/internal/spdump",
+        "//tools/swift_deps_index/internal/swiftbin",
+        "@com_github_deckarep_golang_set_v2//:go_default_library",
+        "@org_golang_x_exp//slices:go_default_library",
+    ],
+)
+
+go_test(
+    name = "swiftpkg_test",
+    srcs = [
+        "dependency_test.go",
+        "module_type_test.go",
+        "package_info_test.go",
+        "source_type_test.go",
+        "swift_file_info_test.go",
+    ],
+    # The PackageInfo tests use SwiftBin to create an actual Swift package. To use Swift, the test
+    # needs to be executed outside of the sandbox.
+    local = True,
+    deps = [
+        ":swiftpkg",
+        "//tools/swift_deps_index/internal/swiftbin",
+        "@com_github_stretchr_testify//assert:go_default_library",
+    ],
+)
+
+bzlformat_pkg(name = "bzlformat")
+
+# MARK: - Integration Test
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)

@@ -1,19 +1,6 @@
 load("@build_bazel_rules_apple//apple:ios.bzl", "ios_ui_test")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
-swift_library(
-    name = "UITest",
-    testonly = True,
-    srcs = [
-        "CustomerSheetTestPlaygroundSettings.swift",  # keep: symlink
-        "PaymentSheetTestPlaygroundSettings.swift",  # keep: symlink
-        "PaymentSheetUITest.swift",
-        "XCUITest+Utilities.swift",
-    ],
-    module_name = "PaymentSheetUITest",
-    tags = ["manual"],
-)
-
 ios_ui_test(
     name = "PaymentSheetUITest",
     size = "enormous",
@@ -21,4 +8,18 @@ ios_ui_test(
     runner = "@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_ordered_runner",
     test_host = "//PaymentSheet/PaymentSheetExample:iosapp",
     deps = [":UITest"],
+)
+
+swift_library(
+    name = "UITest",
+    testonly = True,
+    srcs = [
+        "CustomerSheetTestPlaygroundSettings.swift",  # keep: symlink
+        "PaymentSheetTestPlaygroundSettings.swift",  # keep: symlink
+        "PaymentSheetUITest.swift",
+        "XCUITest+PaymentSheetTestUtilities.swift",
+        "XCUITest+Utilities.swift",
+    ],
+    module_name = "PaymentSheetUITest",
+    tags = ["manual"],
 )

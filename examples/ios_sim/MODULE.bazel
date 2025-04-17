@@ -7,20 +7,20 @@ local_path_override(
     path = "../..",
 )
 
-bazel_dep(name = "cgrindel_bazel_starlib", version = "0.25.0")
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.25.2")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 
 # The apple_support bazel_dep must come before the rules_cc.
 # https://github.com/bazelbuild/apple_support#incompatible-toolchain-resolution
-bazel_dep(name = "apple_support", version = "1.17.1")
+bazel_dep(name = "apple_support", version = "1.19.0")
 bazel_dep(
     name = "rules_swift",
-    version = "2.5.0",
+    version = "2.7.0",
     repo_name = "build_bazel_rules_swift",
 )
 bazel_dep(
     name = "rules_apple",
-    version = "3.16.1",
+    version = "3.20.1",
     repo_name = "build_bazel_rules_apple",
 )
 
@@ -36,8 +36,13 @@ bazel_dep(
     repo_name = "bazel_gazelle",
 )
 bazel_dep(
+    name = "swift_gazelle_plugin",
+    version = "0.1.0",
+    dev_dependency = True,
+)
+bazel_dep(
     name = "rules_xcodeproj",
-    version = "2.10.0",
+    version = "2.11.2",
     dev_dependency = True,
 )
 
@@ -55,13 +60,6 @@ swift_deps.from_package(
     declare_swift_deps_info = True,
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
-)
-swift_deps.configure_package(
-    name = "swift-cmark",
-    patch_args = ["-p1"],
-    patches = [
-        "//third-party/swift-cmark:0001-Do-not-exclude-files-that-are-needed-for-compilation.patch",
-    ],
 )
 use_repo(
     swift_deps,

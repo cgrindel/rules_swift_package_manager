@@ -22,5 +22,5 @@ assert_match() {
 "${bazel}" test //...
 
 # Run MyExecutable target
-output="$("${bazel}" run //Sources/MyExecutable)"
+output="$( "${bazel}" run //Sources/MyExecutable 2>&1 )"
 assert_match "Hello, World!" "${output}"

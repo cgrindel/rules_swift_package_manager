@@ -1,5 +1,3 @@
-load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
-
 # NOTE: If you decide to move the Swift dependency files like this example, do
 # not forget to update the `gazelle` declaration `//:update_build_files` to
 # point at the new location of the Swift dependency index JSON file.  Also, the
@@ -8,9 +6,13 @@ load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 # Ignore the Swift build folder
 # gazelle:exclude .build
 
-bzl_library(
-    name = "deps",
-    srcs = ["deps.bzl"],
-    visibility = ["//visibility:public"],
-    deps = ["@rules_swift_package_manager//swiftpkg:defs"],
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package_tool")
+
+# Puprosefully am not adding this to tidy. It is expensive to run and only
+# needs to be run when the Package.swift has been updated.
+swift_package_tool(
+    name = "update_swift_packages",
+    cmd = "update",
+    package = "swift/Package.swift",  # relative path to root of workspace
+    visibility = ["//:__subpackages__"],
 )

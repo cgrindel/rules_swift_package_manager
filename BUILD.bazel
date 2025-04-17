@@ -35,9 +35,7 @@ tidy(
         "@rules_bazel_integration_test//tools:update_deleted_packages",
         ":bzlformat_missing_pkgs_fix",
         ":update_all",
-        # Run go_mod_tidy before go_update_repos
         ":go_mod_tidy",
-        ":go_update_repos",
         ":update_build_files",
     ],
 )
@@ -57,7 +55,6 @@ tidy(
     targets = [
         ":go_get_latest",
         ":go_mod_tidy",
-        ":go_update_repos",
     ],
 )
 
@@ -66,6 +63,18 @@ tidy_all(name = "tidy_all")
 tidy_all(
     name = "tidy_modified",
     mode = "modified",
+)
+
+tidy_all(
+    name = "update_swift_packages_for_modified",
+    mode = "modified",
+    tidy_target = "//:update_swift_packages",
+)
+
+tidy_all(
+    name = "update_swift_packages_for_all",
+    mode = "all",
+    tidy_target = "//:update_swift_packages",
 )
 
 # MARK: - Gazelle
@@ -85,19 +94,6 @@ gazelle(
     name = "update_build_files",
     command = "fix",
     gazelle = ":gazelle_bin",
-)
-
-execute_binary(
-    name = "go_update_repos",
-    arguments = [
-        "-gazelle_bin_target=//:gazelle_bin",
-        "-from_file=go.mod",
-        "-go_deps_file=go_deps.bzl",
-        "-macro_name=swift_bazel_go_dependencies",
-        "-build_external=external",
-    ],
-    binary = "//tools/update_go_repos",
-    execute_in_workspace = True,
 )
 
 # MARK: - Golang
@@ -122,13 +118,6 @@ execute_binary(
     ],
     binary = "@io_bazel_rules_go//go",
     execute_in_workspace = True,
-)
-
-bzl_library(
-    name = "go_deps",
-    srcs = ["go_deps.bzl"],
-    visibility = ["//visibility:public"],
-    deps = ["@bazel_gazelle//:deps"],
 )
 
 # MARK: - Markdown
@@ -163,25 +152,24 @@ filegroup(
         "//config_settings/spm/configuration:all_files",
         "//config_settings/spm/platform:all_files",
         "//config_settings/spm/platform_configuration:all_files",
-        "//gazelle:all_files",
-        "//gazelle/internal/jsonutils:all_files",
-        "//gazelle/internal/pathdistance:all_files",
-        "//gazelle/internal/reslog:all_files",
-        "//gazelle/internal/spdesc:all_files",
-        "//gazelle/internal/spdump:all_files",
-        "//gazelle/internal/spreso:all_files",
-        "//gazelle/internal/stringslices:all_files",
-        "//gazelle/internal/swift:all_files",
-        "//gazelle/internal/swiftbin:all_files",
-        "//gazelle/internal/swiftcfg:all_files",
-        "//gazelle/internal/swiftpkg:all_files",
-        "//gazelle/internal/updmarker:all_files",
         "//swiftpkg:all_files",
         "//swiftpkg/bzlmod:all_files",
         "//swiftpkg/internal:all_files",
         "//swiftpkg/internal/modulemap_parser:all_files",
         "//tools/swift_deps_index:all_files",
         "//tools/swift_deps_index/cmd:all_files",
+        "//tools/swift_deps_index/internal/jsonutils:all_files",
+        "//tools/swift_deps_index/internal/pathdistance:all_files",
+        "//tools/swift_deps_index/internal/reslog:all_files",
+        "//tools/swift_deps_index/internal/spdesc:all_files",
+        "//tools/swift_deps_index/internal/spdump:all_files",
+        "//tools/swift_deps_index/internal/spreso:all_files",
+        "//tools/swift_deps_index/internal/stringslices:all_files",
+        "//tools/swift_deps_index/internal/swift:all_files",
+        "//tools/swift_deps_index/internal/swiftbin:all_files",
+        "//tools/swift_deps_index/internal/swiftcfg:all_files",
+        "//tools/swift_deps_index/internal/swiftpkg:all_files",
+        "//tools/swift_deps_index/internal/updmarker:all_files",
     ],
     visibility = ["//:__subpackages__"],
 )

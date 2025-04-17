@@ -1,0 +1,49 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_library", "go_test")
+
+go_library(
+    name = "reslog",
+    srcs = [
+        "resolution_logger.go",
+        "rule_resolution.go",
+        "rule_resolution_summary.go",
+    ],
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/reslog",
+    visibility = ["//tools/swift_deps_index:__subpackages__"],
+    deps = [
+        "//tools/swift_deps_index/internal/swift",
+        "@bazel_gazelle//label:go_default_library",
+        "@bazel_gazelle//resolve:go_default_library",
+        "@bazel_gazelle//rule:go_default_library",
+        "@com_github_deckarep_golang_set_v2//:go_default_library",
+        "@in_gopkg_yaml_v3//:go_default_library",
+        "@org_golang_x_exp//slices:go_default_library",
+    ],
+)
+
+go_test(
+    name = "reslog_test",
+    srcs = [
+        "resolution_logger_test.go",
+        "rule_resolution_test.go",
+    ],
+    deps = [
+        ":reslog",
+        "//tools/swift_deps_index/internal/swift",
+        "//tools/swift_deps_index/internal/swiftpkg",
+        "@bazel_gazelle//label:go_default_library",
+        "@bazel_gazelle//resolve:go_default_library",
+        "@bazel_gazelle//rule:go_default_library",
+        "@com_github_stretchr_testify//assert:go_default_library",
+    ],
+)
+
+bzlformat_pkg(name = "bzlformat")
+
+# MARK: - Integration Test
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
