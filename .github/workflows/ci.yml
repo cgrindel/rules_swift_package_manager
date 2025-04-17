@@ -136,3 +136,8 @@ jobs:
         with:
           buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
       - uses: ./.github/actions/tidy_and_test
+        if: ${{ startsWith(matrix.runner, 'ubuntu') }}
+      - if: ${{ startsWith(matrix.runner, 'macos') }}
+        name: Execute tests
+        shell: bash
+        run: "bazelisk test //... \n"

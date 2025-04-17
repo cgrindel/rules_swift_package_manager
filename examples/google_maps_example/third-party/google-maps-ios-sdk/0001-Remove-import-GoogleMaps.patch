@@ -5,33 +5,9 @@ Date: Wed, 5 Jun 2024 00:43:43 -0400
 Subject: [PATCH] Remove @import GoogleMaps
 
 ---
- Base/GMSEmpty.m | 3 ---
- Core/GMSEmpty.m | 3 ---
  Maps/GMSEmpty.m | 3 ---
- 3 files changed, 9 deletions(-)
+ 1 files changed, 3 deletions(-)
 
-diff --git a/Base/GMSEmpty.m b/Base/GMSEmpty.m
-index 0185c0b..dab2ec4 100644
---- a/Base/GMSEmpty.m
-+++ b/Base/GMSEmpty.m
-@@ -12,6 +12,3 @@
- // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- // See the License for the specific language governing permissions and
- // limitations under the License.
--
--// Trigger auto-linking if GoogleMaps is never imported in the app.
--@import GoogleMaps;
-diff --git a/Core/GMSEmpty.m b/Core/GMSEmpty.m
-index 0185c0b..dab2ec4 100644
---- a/Core/GMSEmpty.m
-+++ b/Core/GMSEmpty.m
-@@ -12,6 +12,3 @@
- // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- // See the License for the specific language governing permissions and
- // limitations under the License.
--
--// Trigger auto-linking if GoogleMaps is never imported in the app.
--@import GoogleMaps;
 diff --git a/Maps/GMSEmpty.m b/Maps/GMSEmpty.m
 index 0185c0b..dab2ec4 100644
 --- a/Maps/GMSEmpty.m

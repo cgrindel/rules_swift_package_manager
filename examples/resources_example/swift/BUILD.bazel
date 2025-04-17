@@ -1,11 +1,3 @@
-# NOTE: If you decide to move the Swift dependency files like this example, do
-# not forget to update the `gazelle` declaration `//:update_build_files` to
-# point at the new location of the Swift dependency index JSON file.  Also, the
-# `//:gazelle_bin target` must be visible to this package.
-
-# Ignore the Swift build folder
-# gazelle:exclude .build
-
 load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package_tool")
 
 # Puprosefully am not adding this to tidy. It is expensive to run and only

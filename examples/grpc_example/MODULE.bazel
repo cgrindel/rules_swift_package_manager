@@ -11,7 +11,6 @@ local_path_override(
     path = "../..",
 )
 
-# Required by rules_swift_package_manager but not pulled in for some reason:
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.25.2")
 
 # Required by custom swift proto compiler plugin:

@@ -8,9 +8,6 @@ load(
     "swift_package_tool_attrs",
 )
 
-# The name of the runner script.
-_RUNNER_SCRIPT_NAME = "swift_package.sh"
-
 def _swift_package_tool_impl(ctx):
     build_path = ctx.attr.build_path
     cache_path = ctx.attr.cache_path
@@ -28,7 +25,7 @@ def _swift_package_tool_impl(ctx):
     if registries:
         runfiles.append(registries)
 
-    runner_script = ctx.actions.declare_file(_RUNNER_SCRIPT_NAME)
+    runner_script = ctx.actions.declare_file(ctx.label.name + ".sh")
     template_dict = ctx.actions.template_dict()
     template_dict.add("%(swift_worker)s", swift.executable.short_path)
     template_dict.add("%(cmd)s", cmd)
