@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/fluent-sqlite-driver.git",
       "state" : {
-        "revision" : "6e3a5ff7f2cb733771a6bd71dd3a491cce79f24d",
-        "version" : "4.8.0"
+        "revision" : "73529a63ab11c7fe87da17b5a67a1b1f58c020f8",
+        "version" : "4.8.1"
       }
     },
     {
