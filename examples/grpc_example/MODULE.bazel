@@ -21,7 +21,7 @@ bazel_dep(name = "protobuf", version = "30.2")
 bazel_dep(name = "rules_proto", version = "7.1.0")
 
 # Required for compiling objc:
-bazel_dep(name = "apple_support", version = "1.19.0")
+bazel_dep(name = "apple_support", version = "1.21.1")
 
 # Required for swift_binary and swift_proto_library targets:
 bazel_dep(name = "rules_swift", version = "2.7.0", repo_name = "build_bazel_rules_swift")
