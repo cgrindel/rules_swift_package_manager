@@ -24,7 +24,7 @@ bazel_dep(name = "rules_proto", version = "7.1.0")
 bazel_dep(name = "apple_support", version = "1.21.1")
 
 # Required for swift_binary and swift_proto_library targets:
-bazel_dep(name = "rules_swift", version = "2.7.0", repo_name = "build_bazel_rules_swift")
+bazel_dep(name = "rules_swift", version = "2.8.1", repo_name = "build_bazel_rules_swift")
 
 # Configure cc toolchain:
 apple_cc_configure = use_extension(
