@@ -2,7 +2,7 @@ module github.com/cgrindel/rules_swift_package_manager
 
 go 1.23.0
 
-toolchain go1.24.1
+toolchain go1.24.2
 
 // Workaround for inconsistent Go versions being used in rules_bazel_integration_test tests.
 // toolchain go1.21.5
@@ -14,7 +14,7 @@ require (
 	github.com/deckarep/golang-set/v2 v2.8.0
 	github.com/spf13/cobra v1.9.1
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/exp v0.0.0-20250305212735-054e65f0b394
+	golang.org/x/exp v0.0.0-20250408133849-7e4ce0ab07d0
 	golang.org/x/text v0.23.0
 	gopkg.in/yaml.v3 v3.0.1
 )
