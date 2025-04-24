@@ -37,7 +37,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "swift_gazelle_plugin",
-    version = "0.1.0",
+    version = "0.2.1",
     dev_dependency = True,
 )
 bazel_dep(
