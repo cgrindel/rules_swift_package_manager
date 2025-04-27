@@ -3,6 +3,11 @@ name: Tidy and Test
 runs:
   using: composite
   steps:
+    # DEBUG BEGIN
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+    # DEBUG END
+
     - name: Ensure everything is tidy
       shell: bash
       run: |
