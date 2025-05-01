@@ -456,6 +456,51 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     )
     attrs["aspect_hints"] = [aspect_hint_target_name]
 
+    rule_kind = clang_kinds.library
+
+    if clang_src_info.organized_srcs.c_srcs:
+        child_name = "{}_c".format(bzl_target_name)
+        child_dep_names.append(child_name)
+        decls.append(
+            _c_child_library(
+                repository_ctx,
+                name = child_name,
+                attrs = attrs,
+                rule_kind = rule_kind,
+                srcs = clang_src_info.organized_srcs.c_srcs +
+                       clang_src_info.organized_srcs.other_srcs,
+                language_standard = pkg_ctx.pkg_info.c_language_standard,
+            ),
+        )
+    if clang_src_info.organized_srcs.cxx_srcs:
+        child_name = "{}_cxx".format(bzl_target_name)
+        child_dep_names.append(child_name)
+        decls.append(
+            _c_child_library(
+                repository_ctx,
+                name = child_name,
+                attrs = attrs,
+                rule_kind = rule_kind,
+                srcs = clang_src_info.organized_srcs.cxx_srcs +
+                       clang_src_info.organized_srcs.other_srcs,
+                language_standard = pkg_ctx.pkg_info.cxx_language_standard,
+            ),
+        )
+
+    if clang_src_info.organized_srcs.assembly_srcs:
+        child_name = "{}_assembly".format(bzl_target_name)
+        child_dep_names.append(child_name)
+        decls.append(
+            _c_child_library(
+                repository_ctx,
+                name = child_name,
+                attrs = attrs,
+                rule_kind = rule_kind,
+                srcs = clang_src_info.organized_srcs.assembly_srcs +
+                       clang_src_info.organized_srcs.other_srcs,
+            ),
+        )
+
     if target.objc_src_info != None:
         rule_kind = objc_kinds.library
 
@@ -520,8 +565,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                     name = child_name,
                     attrs = attrs,
                     rule_kind = rule_kind,
-                    srcs = clang_src_info.organized_srcs.c_srcs +
-                           clang_src_info.organized_srcs.objc_srcs +
+                    srcs = clang_src_info.organized_srcs.objc_srcs +
                            clang_src_info.organized_srcs.other_srcs +
                            res_objc_srcs,
                     language_standard = pkg_ctx.pkg_info.c_language_standard,
@@ -537,58 +581,11 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                     name = child_name,
                     attrs = attrs,
                     rule_kind = rule_kind,
-                    srcs = clang_src_info.organized_srcs.assembly_srcs +
-                           clang_src_info.organized_srcs.cxx_srcs +
-                           clang_src_info.organized_srcs.objcxx_srcs +
+                    srcs = clang_src_info.organized_srcs.objcxx_srcs +
                            clang_src_info.organized_srcs.other_srcs +
                            res_objcxx_srcs,
                     language_standard = pkg_ctx.pkg_info.cxx_language_standard,
                     res_copts = res_copts,
-                ),
-            )
-    else:
-        rule_kind = clang_kinds.library
-
-        if clang_src_info.organized_srcs.c_srcs:
-            child_name = "{}_c".format(bzl_target_name)
-            child_dep_names.append(child_name)
-            decls.append(
-                _c_child_library(
-                    repository_ctx,
-                    name = child_name,
-                    attrs = attrs,
-                    rule_kind = rule_kind,
-                    srcs = clang_src_info.organized_srcs.c_srcs +
-                           clang_src_info.organized_srcs.other_srcs,
-                    language_standard = pkg_ctx.pkg_info.c_language_standard,
-                ),
-            )
-        if clang_src_info.organized_srcs.cxx_srcs:
-            child_name = "{}_cxx".format(bzl_target_name)
-            child_dep_names.append(child_name)
-            decls.append(
-                _c_child_library(
-                    repository_ctx,
-                    name = child_name,
-                    attrs = attrs,
-                    rule_kind = rule_kind,
-                    srcs = clang_src_info.organized_srcs.cxx_srcs +
-                           clang_src_info.organized_srcs.other_srcs,
-                    language_standard = pkg_ctx.pkg_info.cxx_language_standard,
-                ),
-            )
-
-        if clang_src_info.organized_srcs.assembly_srcs:
-            child_name = "{}_assembly".format(bzl_target_name)
-            child_dep_names.append(child_name)
-            decls.append(
-                _c_child_library(
-                    repository_ctx,
-                    name = child_name,
-                    attrs = attrs,
-                    rule_kind = rule_kind,
-                    srcs = clang_src_info.organized_srcs.assembly_srcs +
-                           clang_src_info.organized_srcs.other_srcs,
                 ),
             )
 
