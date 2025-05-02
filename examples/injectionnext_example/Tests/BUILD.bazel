@@ -1,0 +1,20 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "injectionnext_unit_test.library",
+    testonly = True,
+    srcs = ["EmptyTest.swift"],
+    module_name = "Tests",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+    deps = ["@swiftpkg_injectionnext//:InjectionNext"],
+)
+
+ios_unit_test(
+    name = "injectionnext_unit_test",
+    minimum_os_version = "17.0",
+    runner = "@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_ordered_runner",
+    visibility = ["//visibility:public"],
+    deps = [":injectionnext_unit_test.library"],
+)
