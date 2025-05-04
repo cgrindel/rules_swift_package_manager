@@ -6,24 +6,28 @@
 
 set -o errexit -o nounset -o pipefail
 
+# DEBUG BEGIN
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") START ==============="
+# DEBUG END
+
 # Install Bazelisk, if not found
 if which &>/dev/null bazelisk; then
-  echo "Bazelisk was found."
-  bazelisk="bazelisk"
+	echo "Bazelisk was found."
+	bazelisk="bazelisk"
 else
-  echo "Bazelisk was not found. Installing..."
-  npm install -g @bazel/bazelisk
-  npm_root="$(npm root -g)"
-  bazelisk="${npm_root}/@bazel/bazelisk/bazelisk-linux_amd64"
+	echo "Bazelisk was not found. Installing..."
+	npm install -g @bazel/bazelisk
+	npm_root="$(npm root -g)"
+	bazelisk="${npm_root}/@bazel/bazelisk/bazelisk-linux_amd64"
 fi
 
 # Install build tools
 if which &>/dev/null clang; then
-  echo "clang was found."
+	echo "clang was found."
 else
-  echo "clang was not found. Installing build-essential..."
-  # install-tool clang 12.0.0
-  install-tool clang-12 12.0.0
+	echo "clang was not found. Installing build-essential..."
+	# install-tool clang 12.0.0
+	install-tool clang-12 12.0.0
 fi
 
 # Execute tidy for workspaces with modifications The export of CC and the
@@ -31,5 +35,13 @@ fi
 export CC=clang
 "${bazelisk}" run --action_env=PATH //:tidy_modified
 
+# DEBUG BEGIN
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") Start //:update_swift_packages_for_modified"
+# DEBUG END
+
 # Execute swift package update on modified workspaces.
 "${bazelisk}" run --action_env=PATH //:update_swift_packages_for_modified
+
+# DEBUG BEGIN
+echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") End //:update_swift_packages_for_modified"
+# DEBUG END

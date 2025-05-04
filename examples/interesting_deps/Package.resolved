@@ -77,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getyoti/yoti-doc-scan-ios.git",
       "state" : {
-        "revision" : "750b20e18be733a6cc84c70f95feed9a22bb390f",
-        "version" : "6.1.0"
+        "revision" : "7c95b87cb4d5db30a7f0d442dd088e2f8ad4e620",
+        "version" : "7.0.0"
       }
     }
   ],
