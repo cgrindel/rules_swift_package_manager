@@ -8,6 +8,7 @@ set -o errexit -o nounset -o pipefail
 
 # DEBUG BEGIN
 echo >&2 "*** CHUCK $(basename "${BASH_SOURCE[0]}") START ==============="
+set -x
 # DEBUG END
 
 # Install Bazelisk, if not found
