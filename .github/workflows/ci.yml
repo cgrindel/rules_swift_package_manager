@@ -137,11 +137,6 @@ jobs:
           buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
       - uses: ./.github/actions/tidy_and_test
         if: ${{ startsWith(matrix.runner, 'ubuntu') }}
-      # DEBUG BEGIN
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ startsWith(matrix.runner, 'macos') }}
-      # DEBUG END
       - if: ${{ startsWith(matrix.runner, 'macos') }}
         name: Execute tests
         shell: bash
