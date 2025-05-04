@@ -190,7 +190,7 @@ class PlaygroundController: ObservableObject {
             configuration.cardBrandAcceptance = .allowed(brands: [.visa])
         }
 
-        configuration.updatePaymentMethodEnabled = settings.paymentMethodUpdate == .enabled
+        // configuration.updatePaymentMethodEnabled = .enabled
 
         switch settings.style {
         case .automatic:
@@ -289,8 +289,6 @@ class PlaygroundController: ObservableObject {
         case .allowVisa:
             configuration.cardBrandAcceptance = .allowed(brands: [.visa])
         }
-
-        configuration.updatePaymentMethodEnabled = settings.paymentMethodUpdate == .enabled
 
         return configuration
     }
