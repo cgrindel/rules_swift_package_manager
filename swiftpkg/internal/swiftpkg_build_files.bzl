@@ -724,6 +724,9 @@ expected: {expected}\
 
 # MARK: - Apple Resource Group
 
+def _sanitized_bundle_file_name(bundle_path):
+    return bundle_path.replace(" ", "_").replace(".", "_").replace("(", "_").replace(")", "_")
+
 def _apple_resource_bundle(target, package_name, default_localization, expose_build_targets):
     bzl_target_name = pkginfo_targets.bazel_label_name(target)
     bundle_label_name = pkginfo_targets.resource_bundle_label_name(bzl_target_name)
@@ -732,10 +735,21 @@ def _apple_resource_bundle(target, package_name, default_localization, expose_bu
         bzl_target_name,
     )
 
-    resources = sorted([
+    sorted_resources = sorted([
         r.path
         for r in target.resources
     ])
+    resources = [
+        r
+        for r in sorted_resources
+        if not r.endswith(".bundle")
+    ]
+    precompiled_bundles_and_labels = [
+        (r, "{}_{}".format(bundle_label_name, _sanitized_bundle_file_name(r.split("/")[-1])))
+        for r in sorted_resources
+        if r.endswith(".bundle")
+    ]
+    precompiled_bundle_resource_labels = [bundle_pair[1] for bundle_pair in precompiled_bundles_and_labels]
 
     load_stmts = [
         apple_resource_bundle_load_stmt,
@@ -757,11 +771,28 @@ def _apple_resource_bundle(target, package_name, default_localization, expose_bu
                 "infoplists": [":{}".format(infoplist_name)],
                 # Based upon the code in SPM, it looks like they only support unstructured resources.
                 # https://github.com/apple/swift-package-manager/blob/main/Sources/PackageModel/Resource.swift#L25-L33
-                "resources": resources,
+                "resources": resources + [":{}".format(bundle_label) for bundle_label in precompiled_bundle_resource_labels],
                 "visibility": _target_visibility(expose_build_targets),
             },
         ),
     ]
+
+    if len(precompiled_bundles_and_labels) > 0:
+        load_stmts.append(apple_resource_bundle_import_load_stmt)
+        for precompiled_bundle, precompiled_bundle_label_name in precompiled_bundles_and_labels:
+            decls.append(
+                build_decls.new(
+                    kind = apple_kinds.apple_bundle_import,
+                    name = precompiled_bundle_label_name,
+                    attrs = {
+                        "bundle_imports": scg.new_fn_call(
+                            "glob",
+                            ["{precompiled_bundle}/**/*".format(precompiled_bundle = precompiled_bundle)],
+                        ),
+                    },
+                ),
+            )
+
     return struct(
         bundle_name = bundle_name,
         bundle_label_name = bundle_label_name,
@@ -1132,6 +1163,7 @@ apple_kinds = struct(
     static_xcframework_import = "apple_static_xcframework_import",
     dynamic_xcframework_import = "apple_dynamic_xcframework_import",
     resource_bundle = "apple_resource_bundle",
+    apple_bundle_import = "apple_bundle_import",
 )
 
 apple_apple_location = "@build_bazel_rules_apple//apple:apple.bzl"
@@ -1151,6 +1183,11 @@ apple_dynamic_xcframework_import_load_stmt = load_statements.new(
 apple_resource_bundle_load_stmt = load_statements.new(
     apple_resources_location,
     apple_kinds.resource_bundle,
+)
+
+apple_resource_bundle_import_load_stmt = load_statements.new(
+    apple_resources_location,
+    apple_kinds.apple_bundle_import,
 )
 
 swiftpkg_kinds = struct(

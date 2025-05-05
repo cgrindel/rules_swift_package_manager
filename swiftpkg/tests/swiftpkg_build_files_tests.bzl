@@ -438,6 +438,33 @@ def _pkg_info(
                 swift_src_info = pkginfos.new_swift_src_info(),
             ),
             pkginfos.new_target(
+                name = "SwiftLibraryWithPrecompiledBundleResource",
+                type = "regular",
+                c99name = "SwiftLibraryWithPrecompiledBundleResource",
+                module_type = "SwiftTarget",
+                path = "Source/SwiftLibraryWithPrecompiledBundleResource",
+                sources = [
+                    "SwiftLibraryWithPrecompiledBundleResource.swift",
+                ],
+                resources = [
+                    pkginfos.new_resource(
+                        path = "Source/SwiftLibraryWithPrecompiledBundleResource/Resources/PrecompiledResources.bundle",
+                        rule = pkginfos.new_resource_rule(
+                            process = pkginfos.new_resource_rule_process(),
+                        ),
+                    ),
+                    pkginfos.new_resource(
+                        path = "Source/SwiftLibraryWithPrecompiledBundleResource/Resources/chicken.json",
+                        rule = pkginfos.new_resource_rule(
+                            process = pkginfos.new_resource_rule_process(),
+                        ),
+                    ),
+                ],
+                dependencies = [],
+                repo_name = _repo_name,
+                swift_src_info = pkginfos.new_swift_src_info(),
+            ),
+            pkginfos.new_target(
                 name = "ObjcLibraryWithResources",
                 type = "regular",
                 c99name = "ObjcLibraryWithResources",
@@ -954,6 +981,62 @@ swift_library(
     srcs = [
         "Source/SwiftLibraryWithFilePathResource/SwiftLibraryWithFilePathResource.swift",
         ":SwiftLibraryWithFilePathResource.rspm_resource_bundle_accessor",
+    ],
+    tags = ["manual"],
+    visibility = ["//:__subpackages__"],
+)
+""",
+        ),
+        struct(
+            msg = "Swift library target with precompiled bundle resource.",
+            name = "SwiftLibraryWithPrecompiledBundleResource",
+            pkg_info = _pkg_info(),
+            exp = """\
+load("@build_bazel_rules_apple//apple:resources.bzl", "apple_bundle_import", "apple_resource_bundle")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_accessor", "resource_bundle_infoplist")
+
+apple_bundle_import(
+    name = "SwiftLibraryWithPrecompiledBundleResource.rspm_resource_bundle_PrecompiledResources_bundle",
+    bundle_imports = glob(["Source/SwiftLibraryWithPrecompiledBundleResource/Resources/PrecompiledResources.bundle/**/*"]),
+)
+
+apple_resource_bundle(
+    name = "SwiftLibraryWithPrecompiledBundleResource.rspm_resource_bundle",
+    bundle_name = "MyPackage_SwiftLibraryWithPrecompiledBundleResource",
+    infoplists = [":SwiftLibraryWithPrecompiledBundleResource.rspm_resource_bundle_infoplist"],
+    resources = [
+        "Source/SwiftLibraryWithPrecompiledBundleResource/Resources/chicken.json",
+        ":SwiftLibraryWithPrecompiledBundleResource.rspm_resource_bundle_PrecompiledResources_bundle",
+    ],
+    visibility = ["//:__subpackages__"],
+)
+
+resource_bundle_accessor(
+    name = "SwiftLibraryWithPrecompiledBundleResource.rspm_resource_bundle_accessor",
+    bundle_name = "MyPackage_SwiftLibraryWithPrecompiledBundleResource",
+)
+
+resource_bundle_infoplist(
+    name = "SwiftLibraryWithPrecompiledBundleResource.rspm_resource_bundle_infoplist",
+    region = "en",
+)
+
+swift_library(
+    name = "SwiftLibraryWithPrecompiledBundleResource.rspm",
+    always_include_developer_search_paths = True,
+    alwayslink = True,
+    copts = [
+        "-DSWIFT_PACKAGE",
+        "-Xcc",
+        "-DSWIFT_PACKAGE",
+    ],
+    data = [":SwiftLibraryWithPrecompiledBundleResource.rspm_resource_bundle"],
+    module_name = "SwiftLibraryWithPrecompiledBundleResource",
+    package_name = "MyPackage",
+    srcs = [
+        "Source/SwiftLibraryWithPrecompiledBundleResource/SwiftLibraryWithPrecompiledBundleResource.swift",
+        ":SwiftLibraryWithPrecompiledBundleResource.rspm_resource_bundle_accessor",
     ],
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
