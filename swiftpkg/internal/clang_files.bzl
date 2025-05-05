@@ -247,13 +247,16 @@ def _collect_files(
     hdrs_set = sets.make()
     srcs_set = sets.make()
     others_set = sets.make()
+    def_files_set = sets.make()
 
     modulemap = None
     modulemap_orig_path = None
     for orig_path in all_srcs:
         path = _relativize(orig_path, relative_to)
         _root, ext = paths.split_extension(path)
-        if lists.contains(_HEADER_EXTS, ext):
+        if ext == ".def":
+            sets.insert(def_files_set, path)
+        elif lists.contains(_HEADER_EXTS, ext):
             if _is_include_hdr(orig_path, public_includes = public_includes):
                 sets.insert(hdrs_set, path)
             else:
@@ -343,6 +346,8 @@ def _collect_files(
     for src in srcs:
         if not _is_hdr(src):
             textual_hdrs.append(src)
+
+    textual_hdrs.extend(sets.to_list(def_files_set))
 
     # Remove the prefixes before returning the results
     return struct(
