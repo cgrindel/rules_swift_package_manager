@@ -60,11 +60,12 @@ use_repo(
     "swiftpkg_kscrash",
 )
 
-# We patch KSCrash because it implicitly links against zlib and that information isn't available to rules_swift_package_manager
+# We patch KSCrash because it implicitly links against zlib and that 
+# information isn't available to rules_swift_package_manager
 swift_deps.configure_package(
     name = "swiftpkg_kscrash",
     patch_args = ["-p1"],
     patches = [
-        "//third_party:KSCrash/explicitly_link_zlib.patch",
+        "//third_party/KSCrash:explicitly_link_zlib.patch",
     ],
 )
