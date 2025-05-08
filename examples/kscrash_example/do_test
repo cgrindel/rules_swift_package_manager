@@ -8,8 +8,8 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
 # to bazel.
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
-# # Generate Swift external deps and update build files
-"${bazel}" run //:swift_update_pkgs
+# Generate Swift external deps and update build files
+"${bazel}" run //:tidy
 
 # Ensure that it builds and tests pass
 "${bazel}" test //...
