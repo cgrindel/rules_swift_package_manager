@@ -1,0 +1,14 @@
+diff --git a/Package.swift b/Package.swift
+index bab4940..3164e5f 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -110,6 +110,9 @@ let package = Package(
+       ],
+       resources: [
+         .copy("Resources/PrivacyInfo.xcprivacy")
++      ],
++      linkerSettings: [
++        .linkedLibrary("z")
+       ]
+     ),
+ 
