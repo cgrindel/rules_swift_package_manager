@@ -10,16 +10,7 @@ swift_library(
     module_name = "MyApp",
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
-    deps = [
-        "@swiftpkg_kscrash//:BootTimeMonitor",
-        "@swiftpkg_kscrash//:DemangleFilter",
-        "@swiftpkg_kscrash//:DiscSpaceMonitor",
-        "@swiftpkg_kscrash//:Filters",
-        "@swiftpkg_kscrash//:Installations",
-        "@swiftpkg_kscrash//:Recording",
-        "@swiftpkg_kscrash//:Reporting",
-        "@swiftpkg_kscrash//:Sinks",
-    ],
+    deps = ["@swiftpkg_kscrash//:Reporting"],
 )
 
 ios_application(
