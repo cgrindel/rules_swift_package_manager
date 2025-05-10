@@ -47,6 +47,8 @@ jobs:
             runner: macos-15
           - test: '@@//examples:ios_sim_test_bazel_.bazelversion'
             runner: macos-15
+          - test: '@@//examples:kscrash_example_test_bazel_.bazelversion'
+            runner: macos-15
           - test: '@@//examples:lottie_ios_example_test_bazel_.bazelversion'
             runner: macos-15
           - test: '@@//examples:messagekit_example_test_bazel_.bazelversion'
