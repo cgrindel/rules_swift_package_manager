@@ -17,10 +17,6 @@ if [ -z "${BUILD_WORKSPACE_DIRECTORY:-}" ]; then
 	exit 1
 fi
 
-# DEBUG BEGIN
-set -x
-# DEBUG END
-
 # Collect template values.
 swift_worker="%(swift_worker)s"
 cmd="%(cmd)s"
@@ -70,7 +66,7 @@ fi
 # On MacOS, the swift_worker passes the command to xcrun. On Linux, it is a
 # barebones worker implementation that does not support '--find'. So, on Linux,
 # we try to find the Swift executable in the PATH. This is not a good way to do
-# this 😔.
+# this 😔. It is good enough for now.
 swift_executable="$(
 	"${swift_worker}" --find swift ||
 		which swift ||
