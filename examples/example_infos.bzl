@@ -136,6 +136,7 @@ _macos_single_bazel_version_test_examples = [
     "google_maps_example",
     "interesting_deps",
     "ios_sim",
+    "kscrash_example",
     "lottie_ios_example",
     "messagekit_example",
     "nimble_example",

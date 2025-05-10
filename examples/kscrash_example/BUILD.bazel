@@ -1,0 +1,38 @@
+load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
+
+tidy(
+    name = "tidy",
+    targets = [
+        ":update_build_files",
+    ],
+)
+
+alias(
+    name = "update_swift_packages",
+    actual = "//swift:update_swift_packages",
+)
+
+# MARK: - Gazelle
+
+# Ignore the Swift build folder
+# gazelle:exclude .build
+
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = [
+        "@bazel_skylib_gazelle_plugin//bzl",
+        "@swift_gazelle_plugin//gazelle",
+    ],
+)
+
+gazelle(
+    name = "update_build_files",
+    data = [
+        "@swift_deps_info//:swift_deps_index",
+    ],
+    extra_args = [
+        "-swift_dependency_index=$(location @swift_deps_info//:swift_deps_index)",
+    ],
+    gazelle = ":gazelle_bin",
+)
