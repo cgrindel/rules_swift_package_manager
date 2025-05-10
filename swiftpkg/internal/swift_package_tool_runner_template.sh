@@ -23,9 +23,6 @@ set -x
 
 # Collect template values.
 swift_worker="%(swift_worker)s"
-# DEBUG BEGIN
-"${swift_worker}" --help
-# DEBUG END
 cmd="%(cmd)s"
 package_path="$BUILD_WORKSPACE_DIRECTORY/%(package_path)s"
 build_path="%(build_path)s"
@@ -70,8 +67,21 @@ if [ -n "$registries_json" ]; then
 	ln -sf "$(readlink -f "$registries_json")" "$config_path/registries.json"
 fi
 
+# On MacOS, the swift_worker passes the command to xcrun. On Linux, it is a
+# barebones worker implementation that does not support '--find'. So, on Linux,
+# we try to find the Swift executable in the PATH. This is not a good way to do
+# this 😔.
+swift_executable="$(
+	"${swift_worker}" --find swift ||
+		which swift ||
+		(
+			echo >&2 "Could not find the swift executable."
+			exit 1
+		)
+)"
+
 # Run the command.
-"$swift_worker" swift package \
+"${swift_executable}" package \
 	--build-path "$build_path" \
 	--cache-path "$cache_path" \
 	--config-path "$config_path" \
