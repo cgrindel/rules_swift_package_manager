@@ -137,11 +137,6 @@ jobs:
       - uses: ./.github/actions/configure_remote_cache_auth
         with:
           buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
-      # DEBUG BEGIN
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ startsWith(matrix.runner, 'ubuntu') }}
-      # DEBUG END
       - uses: ./.github/actions/tidy_and_test
         if: ${{ startsWith(matrix.runner, 'ubuntu') }}
       - if: ${{ startsWith(matrix.runner, 'macos') }}
