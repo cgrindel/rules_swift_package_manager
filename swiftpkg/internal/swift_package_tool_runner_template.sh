@@ -13,12 +13,19 @@ set -euo pipefail
 #  %(cache_path)s - The path to the cache directory.
 
 if [ -z "${BUILD_WORKSPACE_DIRECTORY:-}" ]; then
-  echo "BUILD_WORKSPACE_DIRECTORY is not set, this target may only be \`bazel run\`"
-  exit 1
+	echo "BUILD_WORKSPACE_DIRECTORY is not set, this target may only be \`bazel run\`"
+	exit 1
 fi
+
+# DEBUG BEGIN
+set -x
+# DEBUG END
 
 # Collect template values.
 swift_worker="%(swift_worker)s"
+# DEBUG BEGIN
+"${swift_worker}" --help
+# DEBUG END
 cmd="%(cmd)s"
 package_path="$BUILD_WORKSPACE_DIRECTORY/%(package_path)s"
 build_path="%(build_path)s"
@@ -36,40 +43,40 @@ use_registry_identity_for_scm="%(use_registry_identity_for_scm)s"
 args=()
 
 if [ "$enable_build_manifest_caching" = "true" ]; then
-  args+=("--enable-build-manifest-caching")
+	args+=("--enable-build-manifest-caching")
 else
-  args+=("--disable-build-manifest-caching")
+	args+=("--disable-build-manifest-caching")
 fi
 
 if [ "$enable_dependency_cache" = "true" ]; then
-  args+=("--enable-dependency-cache")
+	args+=("--enable-dependency-cache")
 else
-  args+=("--disable-dependency-cache")
+	args+=("--disable-dependency-cache")
 fi
 
 if [ "$replace_scm_with_registry" = "true" ]; then
-  args+=("--replace-scm-with-registry")
+	args+=("--replace-scm-with-registry")
 fi
 
 if [ "$use_registry_identity_for_scm" = "true" ]; then
-  args+=("--use-registry-identity-for-scm")
+	args+=("--use-registry-identity-for-scm")
 fi
 
 args+=("--manifest-cache=$manifest_cache")
 
 # If registries_json is set, symlink the `.json` file to the `config_path/configuration` directory.
 if [ -n "$registries_json" ]; then
-  mkdir -p "$config_path"
-  ln -sf "$(readlink -f "$registries_json")" "$config_path/registries.json"
+	mkdir -p "$config_path"
+	ln -sf "$(readlink -f "$registries_json")" "$config_path/registries.json"
 fi
 
 # Run the command.
 "$swift_worker" swift package \
-  --build-path "$build_path" \
-  --cache-path "$cache_path" \
-  --config-path "$config_path" \
-  --package-path "$package_path" \
-  --security-path "$security_path" \
-  "$cmd" \
-  "${args[@]}" \
-  "$@"
+	--build-path "$build_path" \
+	--cache-path "$cache_path" \
+	--config-path "$config_path" \
+	--package-path "$package_path" \
+	--security-path "$security_path" \
+	"$cmd" \
+	"${args[@]}" \
+	"$@"
