@@ -10,7 +10,7 @@ inputs:
     required: true
   swift_release_tag:
     description: The Swift release tag.
-    default: "swift-6.0.3-RELEASE"
+    default: "swift-6.1-RELEASE"
 
 runs:
   using: composite

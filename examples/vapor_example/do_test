@@ -2,7 +2,7 @@
 
 set -o errexit -o nounset -o pipefail
 
-# Use the Bazel binary specified by the integration test. Otherise, fall back 
+# Use the Bazel binary specified by the integration test. Otherise, fall back
 # to bazel.
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
@@ -11,3 +11,7 @@ bazel="${BIT_BAZEL_BINARY:-bazel}"
 
 # Ensure that it builds and tests pass
 "${bazel}" test //...
+
+# This example is run for MacOS and Linux.  Run //:update_swift_packages to
+# ensure that it works on both platforms.
+"${bazel}" run //:update_swift_packages

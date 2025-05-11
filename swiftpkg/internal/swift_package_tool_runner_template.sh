@@ -13,8 +13,8 @@ set -euo pipefail
 #  %(cache_path)s - The path to the cache directory.
 
 if [ -z "${BUILD_WORKSPACE_DIRECTORY:-}" ]; then
-  echo "BUILD_WORKSPACE_DIRECTORY is not set, this target may only be \`bazel run\`"
-  exit 1
+	echo "BUILD_WORKSPACE_DIRECTORY is not set, this target may only be \`bazel run\`"
+	exit 1
 fi
 
 # Collect template values.
@@ -36,40 +36,53 @@ use_registry_identity_for_scm="%(use_registry_identity_for_scm)s"
 args=()
 
 if [ "$enable_build_manifest_caching" = "true" ]; then
-  args+=("--enable-build-manifest-caching")
+	args+=("--enable-build-manifest-caching")
 else
-  args+=("--disable-build-manifest-caching")
+	args+=("--disable-build-manifest-caching")
 fi
 
 if [ "$enable_dependency_cache" = "true" ]; then
-  args+=("--enable-dependency-cache")
+	args+=("--enable-dependency-cache")
 else
-  args+=("--disable-dependency-cache")
+	args+=("--disable-dependency-cache")
 fi
 
 if [ "$replace_scm_with_registry" = "true" ]; then
-  args+=("--replace-scm-with-registry")
+	args+=("--replace-scm-with-registry")
 fi
 
 if [ "$use_registry_identity_for_scm" = "true" ]; then
-  args+=("--use-registry-identity-for-scm")
+	args+=("--use-registry-identity-for-scm")
 fi
 
 args+=("--manifest-cache=$manifest_cache")
 
 # If registries_json is set, symlink the `.json` file to the `config_path/configuration` directory.
 if [ -n "$registries_json" ]; then
-  mkdir -p "$config_path"
-  ln -sf "$(readlink -f "$registries_json")" "$config_path/registries.json"
+	mkdir -p "$config_path"
+	ln -sf "$(readlink -f "$registries_json")" "$config_path/registries.json"
 fi
 
+# On MacOS, the swift_worker passes the command to xcrun. On Linux, it is a
+# barebones worker implementation that does not support '--find'. So, on Linux,
+# we try to find the Swift executable in the PATH. This is not a good way to do
+# this 😔. It is good enough for now.
+swift_executable="$(
+	"${swift_worker}" --find swift ||
+		which swift ||
+		(
+			echo >&2 "Could not find the swift executable."
+			exit 1
+		)
+)"
+
 # Run the command.
-"$swift_worker" swift package \
-  --build-path "$build_path" \
-  --cache-path "$cache_path" \
-  --config-path "$config_path" \
-  --package-path "$package_path" \
-  --security-path "$security_path" \
-  "$cmd" \
-  "${args[@]}" \
-  "$@"
+"${swift_executable}" package \
+	--build-path "$build_path" \
+	--cache-path "$cache_path" \
+	--config-path "$config_path" \
+	--package-path "$package_path" \
+	--security-path "$security_path" \
+	"$cmd" \
+	"${args[@]}" \
+	"$@"
