@@ -9,9 +9,6 @@ local_path_override(
 
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.27.0")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
-
-# The apple_support bazel_dep must come before the rules_cc.
-# https://github.com/bazelbuild/apple_support#incompatible-toolchain-resolution
 bazel_dep(name = "apple_support", version = "1.22.0")
 bazel_dep(
     name = "rules_swift",
@@ -53,12 +50,12 @@ swift_deps = use_extension(
 )
 swift_deps.from_package(
     declare_swift_deps_info = True,
-    resolved = "//:Package.resolved",
-    swift = "//:Package.swift",
+    resolved = "//:swift/Package.resolved",
+    swift = "//:swift/Package.swift",
 )
 use_repo(
     swift_deps,
     "swift_deps_info",
     "swift_package",
-    "swiftpkg_soto",
+    "swiftpkg_kscrash",
 )

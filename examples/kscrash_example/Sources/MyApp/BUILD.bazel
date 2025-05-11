@@ -1,0 +1,27 @@
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+bzlformat_pkg(name = "bzlformat")
+
+swift_library(
+    name = "MyApp",
+    srcs = ["MyApp.swift"],
+    module_name = "MyApp",
+    tags = ["manual"],
+    visibility = ["//:__subpackages__"],
+    deps = ["@swiftpkg_kscrash//:Reporting"],
+)
+
+ios_application(
+    name = "iosapp",
+    bundle_id = "com.example.MyApp",
+    families = [
+        "iphone",
+        "ipad",
+    ],
+    infoplists = [":Info.plist"],
+    minimum_os_version = "16.0",
+    visibility = ["//visibility:public"],
+    deps = [":MyApp"],
+)
