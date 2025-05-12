@@ -12,6 +12,10 @@ load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
+load(
+    "//config_settings/bazel/compilation_mode:compilation_modes.bzl",
+    bazel_compilation_modes = "compilation_modes"
+)
 
 # MARK: - Target Entry Point
 
@@ -296,7 +300,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     copts.append(
         bzl_selects.new(
             value = "-DDEBUG=1",
-            condition = "@rules_swift_package_manager//config_settings/bazel/compilation_mode:dbg",
+            condition = bazel_compilation_modes.label(bazel_compilation_modes.debug),
         ),
     )
 
