@@ -292,6 +292,14 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "-fmodule-name={}".format(target.c99name),
     ]
 
+    # SPM defines DEBUG=1 for clang targets when building for debug
+    copts.append(
+        bzl_selects.new(
+            value = "-DDEBUG=1",
+            condition = "@rules_swift_package_manager//config_settings/bazel/compilation_mode:dbg",
+        )
+    )
+
     # Do not add the srcs from the clang_src_info, yet. We will do that at the
     # end of this function where we will create separate targets based upon the
     # type of source file.
