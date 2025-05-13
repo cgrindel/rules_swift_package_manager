@@ -130,6 +130,7 @@ bzl_library(
         ":repository_files",
         ":starlark_codegen",
         ":swift_files",
+        "//config_settings/bazel/compilation_mode:compilation_modes",
         "@bazel_skylib//lib:paths",
         "@bazel_skylib//lib:sets",
         "@cgrindel_bazel_starlib//bzllib:defs",

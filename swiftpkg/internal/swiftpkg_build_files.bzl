@@ -2,6 +2,10 @@
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
+load(
+    "//config_settings/bazel/compilation_mode:compilation_modes.bzl",
+    bazel_compilation_modes = "compilation_modes",
+)
 load(":artifact_infos.bzl", "artifact_types", "link_types")
 load(":bazel_apple_platforms.bzl", "bazel_apple_platforms")
 load(":build_decls.bzl", "build_decls")
@@ -12,10 +16,6 @@ load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
-load(
-    "//config_settings/bazel/compilation_mode:compilation_modes.bzl",
-    bazel_compilation_modes = "compilation_modes"
-)
 
 # MARK: - Target Entry Point
 
