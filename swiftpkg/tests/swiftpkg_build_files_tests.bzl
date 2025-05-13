@@ -664,6 +664,9 @@ cc_library(
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage",
     ] + select({
+        "@rules_swift_package_manager//config_settings/bazel/compilation_mode:dbg": ["-DDEBUG=1"],
+        "//conditions:default": [],
+    }) + select({
         "@rules_swift_package_manager//config_settings/spm/configuration:release": ["-danger"],
         "//conditions:default": [],
     }),
@@ -728,7 +731,10 @@ objc_library(
         "-DSWIFT_PACKAGE=1",
         "-fmodule-name=ObjcLibrary",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
-    ],
+    ] + select({
+        "@rules_swift_package_manager//config_settings/bazel/compilation_mode:dbg": ["-DDEBUG=1"],
+        "//conditions:default": [],
+    }),
     deps = ["@swiftpkg_mypackage//:ObjcLibraryDep.rspm"],
     enable_modules = True,
     hdrs = ["include/external.h"],
@@ -788,10 +794,16 @@ objc_library(
         "-DSWIFT_PACKAGE=1",
         "-fmodule-name=ObjcLibraryWithModulemap",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
-    ],
+    ] + select({
+        "@rules_swift_package_manager//config_settings/bazel/compilation_mode:dbg": ["-DDEBUG=1"],
+        "//conditions:default": [],
+    }),
     deps = ["@swiftpkg_mypackage//:ObjcLibraryDep.rspm"],
     enable_modules = True,
-    hdrs = ["include/external.h"],
+    hdrs = [
+        "include/external.h",
+        "include/module.modulemap",
+    ],
     includes = ["include"],
     sdk_frameworks = select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": [
@@ -881,7 +893,10 @@ cc_library(
         "-DSWIFT_PACKAGE=1",
         "-fmodule-name=ClangLibraryWithConditionalDep",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
-    ],
+    ] + select({
+        "@rules_swift_package_manager//config_settings/bazel/compilation_mode:dbg": ["-DDEBUG=1"],
+        "//conditions:default": [],
+    }),
     deps = select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:ClangLibrary.rspm"],
         "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:ClangLibrary.rspm"],
@@ -1089,7 +1104,10 @@ objc_library(
         "-fmodule-name=ObjcLibraryWithResources",
         "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
         "-include$(location :ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr)",
-    ],
+    ] + select({
+        "@rules_swift_package_manager//config_settings/bazel/compilation_mode:dbg": ["-DDEBUG=1"],
+        "//conditions:default": [],
+    }),
     data = [":ObjcLibraryWithResources.rspm_resource_bundle"],
     enable_modules = True,
     hdrs = ["include/external.h"],

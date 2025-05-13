@@ -2,6 +2,10 @@
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
+load(
+    "//config_settings/bazel/compilation_mode:compilation_modes.bzl",
+    bazel_compilation_modes = "compilation_modes",
+)
 load(":artifact_infos.bzl", "artifact_types", "link_types")
 load(":bazel_apple_platforms.bzl", "bazel_apple_platforms")
 load(":build_decls.bzl", "build_decls")
@@ -292,6 +296,14 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "-fmodule-name={}".format(target.c99name),
     ]
 
+    # SPM defines DEBUG=1 for clang targets when building for debug
+    copts.append(
+        bzl_selects.new(
+            value = "-DDEBUG=1",
+            condition = bazel_compilation_modes.label(bazel_compilation_modes.debug),
+        ),
+    )
+
     # Do not add the srcs from the clang_src_info, yet. We will do that at the
     # end of this function where we will create separate targets based upon the
     # type of source file.
@@ -366,7 +378,15 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "visibility": _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
     }
     if clang_src_info.hdrs:
-        attrs["hdrs"] = clang_src_info.hdrs
+        hdrs = clang_src_info.hdrs
+
+        if clang_src_info.modulemap_path:
+            # We add the custom module map to `hdrs` to insure it's part of the
+            # inputs of downstream targets. Without this sandboxed or RBE builds
+            # can fail.
+            hdrs = hdrs + [clang_src_info.modulemap_path]
+
+        attrs["hdrs"] = hdrs
     if clang_src_info.public_includes:
         attrs["includes"] = clang_src_info.public_includes
     if clang_src_info.textual_hdrs:
