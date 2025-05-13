@@ -800,7 +800,10 @@ objc_library(
     }),
     deps = ["@swiftpkg_mypackage//:ObjcLibraryDep.rspm"],
     enable_modules = True,
-    hdrs = ["include/external.h"],
+    hdrs = [
+        "include/external.h",
+        "include/module.modulemap",
+    ],
     includes = ["include"],
     sdk_frameworks = select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": [
