@@ -3,6 +3,7 @@
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
+load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 load(
     "//swiftpkg/internal:swift_package_tool_attrs.bzl",
     "swift_package_tool_attrs",
@@ -55,6 +56,10 @@ def _swift_package_tool_impl(ctx):
         "%(use_registry_identity_for_scm)s",
         "true" if ctx.attr.use_registry_identity_for_scm else "false",
     )
+    template_dict.add(
+        "%(env)s",
+        " ".join(["%s=%s" % (k, v) for (k, v) in ctx.attr.env.items()]),
+    )
 
     ctx.actions.expand_template(
         template = ctx.file._runner_template,
@@ -78,6 +83,7 @@ Defines a rule that can be used to execute the `swift package` tool.\
 """,
     attrs = dicts.add(
         swift_common.toolchain_attrs(),
+        repo_rules.env_attr,
         {
             "cmd": attr.string(
                 doc = "The `swift package` command to execute.",
