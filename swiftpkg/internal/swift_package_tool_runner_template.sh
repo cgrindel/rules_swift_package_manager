@@ -79,9 +79,9 @@ swift_executable="$(
 # Set the environment variables.
 env=(%(env)s)
 if [ -n "${env:-}" ]; then
-	for env_var in "${env[@]}"; do
-		export "$env_var"
-	done
+    for env_var in "${env[@]}"; do
+        export "$env_var"
+    done
 fi
 
 # Run the command.
