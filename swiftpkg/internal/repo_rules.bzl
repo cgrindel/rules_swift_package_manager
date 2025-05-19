@@ -23,7 +23,7 @@ A JSON file that contains a mapping of Swift products and Swift modules.\
     ),
 }
 
-_env_attrs = {
+_env_attr = {
     "env": attr.string_dict(
         doc = """\
 Environment variables that will be passed to the execution environments for \
@@ -32,6 +32,19 @@ package description generation)\
 """,
     ),
 }
+
+_env_attrs = dicts.add(
+    _env_attr,
+    {
+        "env_inherit": attr.string_list(
+            doc = """\
+Environment variables to inherit from the external environment that will be \
+passed to the execution environments for this repository rule. (e.g. SPM version check, \
+SPM dependency resolution, SPM package description generation)\
+""",
+        ),
+    },
+)
 
 _DEVELOPER_DIR_ENV = "DEVELOPER_DIR"
 
@@ -48,6 +61,9 @@ def _get_exec_env(repository_ctx):
     # If the DEVELOPER_DIR is specified in the environment, it will override
     # the value which may be specified in the env attribute.
     env = dicts.add(repository_ctx.attr.env)
+    env_inherit = repository_ctx.attr.env_inherit
+    for key in env_inherit:
+        env[key] = repository_ctx.getenv(key)
     dev_dir = repository_ctx.os.environ.get(_DEVELOPER_DIR_ENV)
     if dev_dir:
         env[_DEVELOPER_DIR_ENV] = dev_dir
@@ -233,6 +249,7 @@ def _remove_modulemaps(repository_ctx, directory, targets):
 
 repo_rules = struct(
     check_spm_version = _check_spm_version,
+    env_attr = _env_attr,
     env_attrs = _env_attrs,
     gen_build_files = _gen_build_files,
     get_exec_env = _get_exec_env,

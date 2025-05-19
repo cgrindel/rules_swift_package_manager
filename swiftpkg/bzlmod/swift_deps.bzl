@@ -49,12 +49,20 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
     else:
         replace_scm_with_registry = False
 
+    # Set the environment variables for getting the package info.
+    env = {}
+    for (key, value) in from_package.env.items():
+        env[key] = value
+    for key in from_package.env_inherit:
+        env[key] = module_ctx.getenv(key)
+
     # Get the package info.
     pkg_swift = module_ctx.path(from_package.swift)
     debug_path = module_ctx.path(".")
     pkg_info = pkginfos.get(
         module_ctx,
         directory = str(pkg_swift.dirname),
+        env = env,
         debug_path = str(debug_path),
         resolved_pkg_map = resolved_pkg_map,
         collect_src_info = False,
@@ -226,6 +234,8 @@ def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_pac
             remote = pin.location,
             version = pin.state.version,
             dependencies_index = None,
+            env = from_package.env,
+            env_inherit = from_package.env_inherit,
             init_submodules = init_submodules,
             recursive_init_submodules = recursive_init_submodules,
             patch_args = patch_args,
@@ -242,6 +252,8 @@ def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_pac
         local_swift_package(
             name = name,
             bazel_package_name = name,
+            env = from_package.env,
+            env_inherit = from_package.env_inherit,
             path = dep.file_system.path,
             dependencies_index = None,
         )
@@ -255,6 +267,8 @@ def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_pac
         registry_swift_package(
             name = name,
             bazel_package_name = name,
+            env = from_package.env,
+            env_inherit = from_package.env_inherit,
             id = dep.registry.pin.identity,
             registries = from_package.registries,
             replace_scm_with_registry = replace_scm_with_registry,
@@ -270,6 +284,7 @@ def _declare_swift_package_repo(name, from_package, config_swift_package):
 
     swift_package_tool_repo(
         name = name,
+        env = from_package.env,
         package = "{package}/{name}".format(
             package = from_package.swift.package,
             name = from_package.swift.name,
@@ -333,6 +348,20 @@ They can be `bazel run` to update/resolve the `resolved` file:
 bazel run @swift_package//:update
 bazel run @swift_package//:resolve
 ```
+""",
+            ),
+            "env": attr.string_dict(
+                doc = """\
+Environment variables that will be passed to the execution environments for \
+this repository rule. (e.g. SPM version check, SPM dependency resolution, SPM \
+package description generation)\
+""",
+            ),
+            "env_inherit": attr.string_list(
+                doc = """\
+Environment variables to inherit from the external environment that will be \
+passed to the execution environments for this repository rule. (e.g. SPM version check, \
+SPM dependency resolution, SPM package description generation)\
 """,
             ),
             "resolve_transitive_local_dependencies": attr.bool(
