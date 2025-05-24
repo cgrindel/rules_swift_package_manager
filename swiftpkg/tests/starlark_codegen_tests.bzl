@@ -346,6 +346,11 @@ def _normalize_define_value_test(ctx):
             val = "CHICKEN=Foo iOS SDK",
             exp = "CHICKEN=Foo\\ iOS\\ SDK",
         ),
+        struct(
+            msg = "with quotes",
+            val = "CHICKEN=\"deadbeef (modified)\"",
+            exp = "CHICKEN=\\\"deadbeef\\ (modified)\\\"",
+        ),
     ]
     for t in tests:
         actual = scg.normalize_define_value(t.val)

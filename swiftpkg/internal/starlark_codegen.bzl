@@ -339,7 +339,7 @@ def _normalize_define_value(value):
     Returns:
         A `string` that is formatted properly to be a `defines` value.
     """
-    return value.replace(" ", "\\ ")
+    return value.replace(" ", "\\ ").replace("\"", "\\\"")
 
 # MARK: - API Definition
 
