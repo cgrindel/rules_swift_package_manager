@@ -26,11 +26,13 @@ bazel_dep(
     name = "rules_swift",
     version = "2.2.0",
     repo_name = "build_bazel_rules_swift",
+    max_compatibility_level = 3,
 )
 bazel_dep(
     name = "rules_apple",
     version = "3.6.0",
     repo_name = "build_bazel_rules_apple",
+    max_compatibility_level = 4,
 )
 bazel_dep(
     name = "gazelle",
