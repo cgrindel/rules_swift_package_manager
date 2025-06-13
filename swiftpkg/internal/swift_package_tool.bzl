@@ -107,4 +107,5 @@ The relative path to the `Package.swift` file from the workspace root.\
         swift_package_tool_attrs.swift_package_registry,
     ),
     executable = True,
+    toolchains = swift_common.use_toolchain(),
 )
