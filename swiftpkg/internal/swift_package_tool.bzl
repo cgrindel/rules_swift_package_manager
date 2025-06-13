@@ -82,7 +82,6 @@ swift_package_tool = rule(
 Defines a rule that can be used to execute the `swift package` tool.\
 """,
     attrs = dicts.add(
-        swift_common.toolchain_attrs(),
         repo_rules.env_attr,
         {
             "cmd": attr.string(
