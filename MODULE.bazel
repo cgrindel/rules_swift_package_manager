@@ -30,9 +30,8 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_apple",
-    version = "3.6.0",
+    version = "4.0.1",
     repo_name = "build_bazel_rules_apple",
-    max_compatibility_level = 4,
 )
 bazel_dep(
     name = "gazelle",
