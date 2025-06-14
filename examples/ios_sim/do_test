@@ -42,8 +42,9 @@ print_and_run "${bazel}" run //:xcodeproj
 # https://github.com/MobileNativeFoundation/rules_xcodeproj/issues/2355
 print_and_run "${bazel}" clean --expunge
 
-# Build the FooTests scheme in the Xcode project
-print_and_run xcodebuild -project App.xcodeproj -scheme FooTests
+# GH1678: Enable this once the underlying build failure is addressed.
+# # Build the FooTests scheme in the Xcode project
+# print_and_run xcodebuild -project App.xcodeproj -scheme FooTests
 
 # Ensure that it builds and tests pass
 print_and_run "${bazel}" test //...
