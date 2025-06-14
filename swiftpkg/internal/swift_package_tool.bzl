@@ -82,7 +82,6 @@ swift_package_tool = rule(
 Defines a rule that can be used to execute the `swift package` tool.\
 """,
     attrs = dicts.add(
-        swift_common.toolchain_attrs(),
         repo_rules.env_attr,
         {
             "cmd": attr.string(
@@ -108,4 +107,5 @@ The relative path to the `Package.swift` file from the workspace root.\
         swift_package_tool_attrs.swift_package_registry,
     ),
     executable = True,
+    toolchains = swift_common.use_toolchain(),
 )
