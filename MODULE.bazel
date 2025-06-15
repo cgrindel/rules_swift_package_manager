@@ -25,8 +25,8 @@ bazel_dep(name = "platforms", version = "0.0.10")
 bazel_dep(
     name = "rules_swift",
     version = "2.2.0",
-    repo_name = "build_bazel_rules_swift",
     max_compatibility_level = 3,
+    repo_name = "build_bazel_rules_swift",
 )
 bazel_dep(
     name = "rules_apple",
@@ -66,7 +66,7 @@ use_repo(
 
 bazel_dep(
     name = "rules_bazel_integration_test",
-    version = "0.32.0",
+    version = "0.33.2",
     dev_dependency = True,
 )
 bazel_dep(
