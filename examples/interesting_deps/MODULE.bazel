@@ -26,7 +26,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_apple",
-    version = "3.22.0",
+    version = "4.0.1",
     repo_name = "build_bazel_rules_apple",
 )
 
@@ -37,7 +37,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "gazelle",
-    version = "0.43.0",
+    version = "0.44.0",
     dev_dependency = True,
     repo_name = "bazel_gazelle",
 )
