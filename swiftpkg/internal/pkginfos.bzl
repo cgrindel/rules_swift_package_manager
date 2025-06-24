@@ -1680,9 +1680,21 @@ def _new_resource_from_discovered_resource(path):
     return _new_resource(
         path = path,
         rule = _new_resource_rule(
-            process = _new_resource_rule_process(),
+            process = _new_resource_rule_process(
+                localization = _localization_from(path),
+            ),
         ),
     )
+
+def _localization_from(path):
+    # Extract the implict localization from the path if its parent folder ends in ".lproj"
+    # https://github.com/swiftlang/swift-package-manager/blob/2f03e7a16e2c4d08a3a16f16cca627ff53b70271/Sources/PackageLoading/TargetSourcesBuilder.swift#L312-L318
+    parent_dir = paths.basename(paths.dirname(path))
+
+    (localization, extension) = paths.split_extension(parent_dir)
+
+    if extension == ".lproj":
+        return localization
 
 # MARK: - Constants
 
