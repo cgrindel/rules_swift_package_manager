@@ -1695,6 +1695,8 @@ def _localization_from(path):
 
     if extension == ".lproj":
         return localization
+    else:
+        return None
 
 # MARK: - Constants
 
