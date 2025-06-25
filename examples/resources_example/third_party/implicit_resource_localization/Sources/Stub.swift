@@ -1,5 +1,1 @@
-//
-//  Stub.swift
-//  Copyright © 2025 DoorDash. All rights reserved.
-//
-
+// Stub file to make SPM happy
