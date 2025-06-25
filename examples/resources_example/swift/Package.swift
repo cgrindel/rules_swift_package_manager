@@ -7,6 +7,7 @@ let package = Package(
     dependencies: [
         .package(path: "../third_party/another_package_with_resources"),
         .package(path: "../third_party/app_lovin_sdk"),
+        .package(path: "../third_party/implicit_resource_localization"),
         .package(path: "../third_party/package_with_resources"),
         .package(path: "../third_party/package_with_resources_swift_6"),
         .package(url: "https://github.com/Iterable/swift-sdk", from: "6.5.12"),
