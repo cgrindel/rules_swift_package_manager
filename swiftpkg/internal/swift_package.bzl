@@ -83,8 +83,23 @@ def _swift_package_impl(repository_ctx):
     # Remove unused modulemaps to prevent module redefinition errors
     repo_rules.remove_modulemaps(repository_ctx, directory, pkg_ctx.pkg_info.targets)
 
+    has_repo_metadata = hasattr(repository_ctx, "repo_metadata")
+    if has_repo_metadata and repository_ctx.attr.commit:
+        return repository_ctx.repo_metadata(reproducible = True)
+
     # Return attributes that make this reproducible
-    return _update_git_attrs(repository_ctx.attr, _ALL_ATTRS.keys(), update)
+    attrs_for_reproducibility = _update_git_attrs(
+        repository_ctx.attr,
+        _ALL_ATTRS.keys(),
+        update,
+    )
+
+    if has_repo_metadata:
+        return repository_ctx.repo_metadata(
+            attrs_for_reproducibility = attrs_for_reproducibility,
+        )
+    else:
+        return attrs_for_reproducibility
 
 _GIT_ATTRS = {
     "branch": attr.string(
