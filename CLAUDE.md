@@ -75,3 +75,7 @@ scenarios like Firebase, gRPC, Stripe, and others. Tests verify both bzlmod and 
 - Apple toolchain configuration is handled automatically via apple_support
 - Swift package resolution requires `Package.swift` and `Package.resolved` files
 - The `tidy` target is crucial for maintaining generated BUILD files and dependencies
+
+## Development Best Practices
+
+- Always use conventional commit format for git commit messages
