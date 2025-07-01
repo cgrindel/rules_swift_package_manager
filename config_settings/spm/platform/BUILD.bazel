@@ -3,8 +3,6 @@ load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load(":platforms.bzl", "platforms")
 
-package(default_visibility = ["//visibility:public"])
-
 bzlformat_pkg(name = "bzlformat")
 
 # NOTE: Ensure that the list of platforms in
@@ -22,6 +20,7 @@ bzlformat_pkg(name = "bzlformat")
             # "//config_settings/bazel/apple_platform_type:{}".format(pi.bzl),
             "@platforms//os:{}".format(pi.os),
         ],
+        visibility = ["//visibility:public"],
     )
     for pi in platforms.all_platform_infos
     if pi.bzl != None and pi.os != None
@@ -33,6 +32,7 @@ bzlformat_pkg(name = "bzlformat")
         constraint_values = [
             "@platforms//os:{}".format(pi.os),
         ],
+        visibility = ["//visibility:public"],
     )
     for pi in platforms.all_platform_infos
     if pi.bzl == None and pi.os != None
@@ -47,5 +47,6 @@ filegroup(
 bzl_library(
     name = "platforms",
     srcs = ["platforms.bzl"],
+    visibility = ["//visibility:public"],
     deps = ["//config_settings/bazel/apple_platform_type:apple_platform_types"],
 )

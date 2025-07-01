@@ -2,14 +2,13 @@ load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load(":compilation_modes.bzl", "compilation_modes")
 
-package(default_visibility = ["//visibility:public"])
-
 bzlformat_pkg(name = "bzlformat")
 
 [
     config_setting(
         name = comp_mode,
         values = {"compilation_mode": comp_mode},
+        visibility = ["//visibility:public"],
     )
     for comp_mode in compilation_modes.all_values
 ]
