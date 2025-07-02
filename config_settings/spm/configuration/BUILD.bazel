@@ -18,6 +18,7 @@ SPM_CONFIG_TO_COMPILATION_MODE = {
     selects.config_setting_group(
         name = spm_config,
         match_all = [bzl_comp_mode],
+        visibility = ["//visibility:public"],
     )
     for (spm_config, bzl_comp_mode) in SPM_CONFIG_TO_COMPILATION_MODE.items()
 ]

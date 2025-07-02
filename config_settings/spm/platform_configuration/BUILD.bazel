@@ -3,8 +3,6 @@ load("@bazel_skylib//lib:selects.bzl", "selects")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load(":platform_configurations.bzl", "platform_configurations")
 
-package(default_visibility = ["//visibility:public"])
-
 bzlformat_pkg(name = "bzlformat")
 
 [
@@ -17,6 +15,7 @@ bzlformat_pkg(name = "bzlformat")
             "//config_settings/spm/configuration:{}".format(pc.configuration),
             "//config_settings/spm/platform:{}".format(pc.platform),
         ],
+        visibility = ["//visibility:public"],
     )
     for pc in platform_configurations.all_values
 ]
@@ -24,6 +23,7 @@ bzlformat_pkg(name = "bzlformat")
 bzl_library(
     name = "platform_configurations",
     srcs = ["platform_configurations.bzl"],
+    visibility = ["//visibility:public"],
     deps = [
         "//config_settings/spm/configuration:configurations",
         "//config_settings/spm/platform:platforms",
