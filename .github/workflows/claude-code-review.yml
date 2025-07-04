@@ -12,8 +12,8 @@ on:
 
 jobs:
   claude-review:
-    # Skip draft PRs
-    if: github.event.pull_request.draft == false
+    # Skip draft PRs and Renovate PRs
+    if: github.event.pull_request.draft == false && github.event.pull_request.user.login != 'app/cgrindel-self-hosted-renovate'
 
     # Optional: Filter by PR author
     # if: |
