@@ -8,6 +8,7 @@ bzlformat_pkg(name = "bzlformat")
     config_setting(
         name = comp_mode,
         values = {"compilation_mode": comp_mode},
+        visibility = ["//visibility:public"],
     )
     for comp_mode in compilation_modes.all_values
 ]
