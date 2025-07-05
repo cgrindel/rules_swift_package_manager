@@ -29,7 +29,11 @@ def _get(targets, name, fail_if_not_found = True):
         if target.name == name:
             return target
     if fail_if_not_found:
-        fail("Failed to find target. name:", name)
+        available_names = [t.name for t in targets]
+        fail("Failed to find target '{}'. Available targets: [{}]".format(
+            name,
+            ", ".join(available_names),
+        ))
     return None
 
 def _get_by_label(targets, label, fail_if_not_found = True):
@@ -50,7 +54,11 @@ def _get_by_label(targets, label, fail_if_not_found = True):
         if target.label == label:
             return target
     if fail_if_not_found:
-        fail("Failed to find target. label:", label)
+        available_labels = [t.label for t in targets]
+        fail("Failed to find target with label '{}'. Available target labels: [{}]".format(
+            label,
+            ", ".join(available_labels),
+        ))
     return None
 
 def _srcs(target):

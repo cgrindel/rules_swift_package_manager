@@ -16,11 +16,19 @@ load(":repo_rules.bzl", "repo_rules")
 # MARK: - Environment Variables
 
 def _clone_or_update_repo(repository_ctx, directory):
-    if ((not repository_ctx.attr.tag and not repository_ctx.attr.commit and not repository_ctx.attr.branch) or
-        (repository_ctx.attr.tag and repository_ctx.attr.commit) or
-        (repository_ctx.attr.tag and repository_ctx.attr.branch) or
-        (repository_ctx.attr.commit and repository_ctx.attr.branch)):
-        fail("Exactly one of commit, tag, or branch must be provided")
+    # Validate that exactly one of commit, tag, or branch is provided
+    provided = []
+    if repository_ctx.attr.commit:
+        provided.append("commit")
+    if repository_ctx.attr.tag:
+        provided.append("tag")
+    if repository_ctx.attr.branch:
+        provided.append("branch")
+
+    if len(provided) != 1:
+        fail("Exactly one of commit, tag, or branch must be provided. Found: [{}]".format(
+            ", ".join(provided) if provided else "none",
+        ))
 
     git_ = git_repo(repository_ctx, directory)
 

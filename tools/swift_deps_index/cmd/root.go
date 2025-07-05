@@ -9,8 +9,8 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "swift_deps_index",
-	Short: "Manage a Swift dependences index file.",
-	Long:  `Manage a Swift dependences index file.`,
+	Short: "Manage a Swift dependencies index file.",
+	Long:  `Manage a Swift dependencies index file.`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
