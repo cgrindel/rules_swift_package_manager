@@ -1206,7 +1206,6 @@ def _new_clang_src_info_from_sources(
         ))
 
     # TODO(chuck): Document why we are doing this!
-    auto_include_paths = []
     for public_hdr_dirname in clang_files.PUBLIC_HDR_DIRNAMES:
         path = paths.join(
             pkg_path,
@@ -1219,7 +1218,7 @@ def _new_clang_src_info_from_sources(
                 path,
                 exclude_paths = abs_exclude_paths,
             ))
-            auto_include_paths.append(path)
+            public_includes.append(path)
 
     # DEBUG BEGIN
     print("*** CHUCK all_srcs: ")
@@ -1244,9 +1243,6 @@ def _new_clang_src_info_from_sources(
     )
 
     # DEBUG BEGIN
-    print("*** CHUCK auto_include_paths: ")
-    for idx, item in enumerate(auto_include_paths):
-        print("*** CHUCK", idx, ":", item)
     print("*** CHUCK organized_files.public_includes: ")
     for idx, item in enumerate(organized_files.public_includes):
         print("*** CHUCK", idx, ":", item)
