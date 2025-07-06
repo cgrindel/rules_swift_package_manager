@@ -1227,6 +1227,10 @@ def _new_clang_src_info_from_sources(
 
     # DEBUG END
 
+    # At this point, we might have duplicates in all_srcs. We need to remove
+    # them.
+    all_srcs = sets.to_list(sets.make(all_srcs))
+
     # Organize the source files
     # Be sure that the all_srcs and the public_includes that are passed to
     # `collect_files` are all absolute paths.  The relative_to option will
