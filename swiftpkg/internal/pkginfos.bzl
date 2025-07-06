@@ -1184,6 +1184,18 @@ def _new_clang_src_info_from_sources(
         for ep in exclude_paths
     ]
 
+    # DEBUG BEGIN
+    print("*** CHUCK ============")
+    print("*** CHUCK c99name: ", c99name)
+    print("*** CHUCK src_paths: ")
+    for idx, item in enumerate(src_paths):
+        print("*** CHUCK", idx, ":", item)
+    print("*** CHUCK abs_exclude_paths: ")
+    for idx, item in enumerate(abs_exclude_paths):
+        print("*** CHUCK", idx, ":", item)
+
+    # DEBUG END
+
     # Get a list of all of the source files
     all_srcs = []
     for sp in src_paths:
@@ -1192,6 +1204,29 @@ def _new_clang_src_info_from_sources(
             sp,
             exclude_paths = abs_exclude_paths,
         ))
+
+    # TODO(chuck): Document why we are doing this!
+    auto_include_paths = []
+    for public_hdr_dirname in clang_files.PUBLIC_HDR_DIRNAMES:
+        path = paths.join(
+            pkg_path,
+            target_path,
+            public_hdr_dirname,
+        )
+        if repository_files.is_directory(repository_ctx, path):
+            all_srcs.extend(repository_files.list_files_under(
+                repository_ctx,
+                path,
+                exclude_paths = abs_exclude_paths,
+            ))
+            auto_include_paths.append(path)
+
+    # DEBUG BEGIN
+    print("*** CHUCK all_srcs: ")
+    for idx, item in enumerate(all_srcs):
+        print("*** CHUCK", idx, ":", item)
+
+    # DEBUG END
 
     # Organize the source files
     # Be sure that the all_srcs and the public_includes that are passed to
@@ -1208,6 +1243,16 @@ def _new_clang_src_info_from_sources(
         relative_to = pkg_path,
     )
 
+    # DEBUG BEGIN
+    print("*** CHUCK auto_include_paths: ")
+    for idx, item in enumerate(auto_include_paths):
+        print("*** CHUCK", idx, ":", item)
+    print("*** CHUCK organized_files.public_includes: ")
+    for idx, item in enumerate(organized_files.public_includes):
+        print("*** CHUCK", idx, ":", item)
+
+    # DEBUG END
+
     # The `cc_library` rule compiles each source file (.c, .cc) separately only providing the
     # headers. There are some clang modules (e.g.,
     # https://github.com/soto-project/soto-core/tree/main/Sources/CSotoExpat) that include
@@ -1219,6 +1264,13 @@ def _new_clang_src_info_from_sources(
     srcs = []
     explicit_srcs = []
     public_includes = organized_files.public_includes
+
+    # DEBUG BEGIN
+    print("*** CHUCK organized_files.hdrs: ")
+    for idx, item in enumerate(organized_files.hdrs):
+        print("*** CHUCK", idx, ":", item)
+
+    # DEBUG END
     private_includes = organized_files.private_includes
     if len(organized_files.srcs) > 0:
         explicit_srcs.extend(organized_files.srcs)

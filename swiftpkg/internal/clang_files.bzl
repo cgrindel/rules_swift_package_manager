@@ -315,7 +315,9 @@ def _collect_files(
     # directory that holds a public header file and add any magical public
     # header directories that we find.
     if len(public_includes) == 0:
-        public_includes = [paths.dirname(hdr) for hdr in sets.to_list(hdrs_set)]
+        public_includes = sets.to_list(sets.make(
+            [paths.dirname(hdr) for hdr in sets.to_list(hdrs_set)],
+        ))
         magical_public_hdr_dirs = []
         for pi in public_includes:
             magical_public_hdr_dir = clang_files.find_magical_public_hdr_dir(pi)
@@ -401,4 +403,5 @@ clang_files = struct(
     organize_srcs = _organize_srcs,
     reduce_paths = _reduce_paths,
     relativize = _relativize,
+    PUBLIC_HDR_DIRNAMES = _PUBLIC_HDR_DIRNAMES,
 )
