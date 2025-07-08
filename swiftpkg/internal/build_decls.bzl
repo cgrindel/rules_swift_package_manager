@@ -75,7 +75,11 @@ def _uniq(decls):
     for decl in results:
         name = decl.name
         if sets.contains(names, name):
-            fail("A duplicate decl name was found. name: {}".format(name))
+            existing_decls = [d for d in results if d.name == name]
+            fail("Duplicate declaration name '{}' found. Declaration types: [{}]".format(
+                name,
+                ", ".join([d.kind for d in existing_decls]),
+            ))
         sets.insert(names, name)
 
     return results
@@ -97,7 +101,11 @@ def _get(decls, name, fail_if_not_found = True):
         if decl.name == name:
             return decl
     if fail_if_not_found:
-        fail("Failed to find build declaration. name:", name)
+        available_names = [d.name for d in decls if d.name]
+        fail("Failed to find build declaration '{}'. Available declarations: [{}]".format(
+            name,
+            ", ".join(available_names),
+        ))
     return None
 
 build_decls = struct(

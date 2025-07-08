@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const dependencyIndexPerms = 0666
+const dependencyIndexPerms = 0644
 
 var outputPath string
 
