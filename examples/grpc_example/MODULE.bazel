@@ -14,7 +14,7 @@ local_path_override(
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.27.0")
 
 # Required by custom swift proto compiler plugin:
-bazel_dep(name = "bazel_skylib", version = "1.8.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.1")
 bazel_dep(name = "protobuf", version = "31.1")
 
 # Required for proto_library targets:
