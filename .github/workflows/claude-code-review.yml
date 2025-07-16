@@ -10,10 +10,14 @@ on:
     #   - "src/**/*.js"
     #   - "src/**/*.jsx"
 
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   claude-review:
     # Skip draft PRs and Renovate PRs
-    if: github.event.pull_request.draft == false && github.event.pull_request.user.login != 'app/cgrindel-self-hosted-renovate'
+    if: github.event.pull_request.draft == false && github.event.pull_request.user.type != 'Bot'
 
     # Optional: Filter by PR author
     # if: |
