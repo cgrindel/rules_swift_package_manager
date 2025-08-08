@@ -122,6 +122,7 @@ def _swift_target_build_file(pkg_ctx, target):
     # Check if any of the sources indicate that the module will be used by
     # Objective-C code. If so, generate the bridge header file.
     features = []
+    has_explicit_laguage_mode = False
     if target.swift_src_info.has_objc_directive and is_library_target:
         attrs["generates_header"] = True
         feature = bzl_selects.new(value = "swift.propagate_generated_module_map")
@@ -142,6 +143,7 @@ def _swift_target_build_file(pkg_ctx, target):
                 for bs in target.swift_settings.unsafe_flags
             ]))
         for bs in target.swift_settings.language_modes:
+            has_explicit_laguage_mode = True
             for language_mode in lists.flatten(bzl_selects.new_from_build_setting(bs)):
                 new_language_mode = bzl_selects.new(
                     value = "swift.enable_v" + language_mode.value,
@@ -165,6 +167,14 @@ def _swift_target_build_file(pkg_ctx, target):
                     condition = upcoming_feature.condition,
                 )
                 features.append(new_upcoming_feature)
+
+    # If the target doesn't have a language mode use the package language mode.
+    if not has_explicit_laguage_mode and pkg_ctx.pkg_info.language_mode:
+        package_language_mode = bzl_selects.new(
+            value = "swift.enable_v" + pkg_ctx.pkg_info.language_mode,
+        )
+        features.append(package_language_mode)
+
     if len(features) > 0:
         attrs["features"] = bzl_selects.to_starlark(features, mutually_inclusive = True)
     if len(copts) > 0:
