@@ -128,13 +128,12 @@ def _swift_target_build_file(pkg_ctx, target):
         feature = bzl_selects.new(value = "swift.propagate_generated_module_map")
         features.append(feature)
 
-    def _set_swift_version(version, kind = None, condition = None):
+    def _set_swift_version_selects(version, kind = None, condition = None):
         # Set the target's Swift language mode using either the swift.enable_v6
         # feature from rules_swift or using the `-swift-version` compiler opt
-        major, _ = semver.major_minor(version)
-        if major == 6:
+        if version == "6":
             new_language_mode = bzl_selects.new(
-                value = "swift.enable_v" + version,
+                value = "swift.enable_v6",
                 kind = kind,
                 condition = condition,
             )
@@ -168,7 +167,7 @@ def _swift_target_build_file(pkg_ctx, target):
         for bs in target.swift_settings.language_modes:
             has_explicit_laguage_mode = True
             for language_mode in lists.flatten(bzl_selects.new_from_build_setting(bs)):
-                _set_swift_version(
+                _set_swift_version_selects(
                     language_mode.value,
                     kind = language_mode.kind,
                     condition = language_mode.condition,
@@ -192,7 +191,7 @@ def _swift_target_build_file(pkg_ctx, target):
 
     # If the target doesn't have a language mode use the package language mode.
     if not has_explicit_laguage_mode and pkg_ctx.pkg_info.language_mode:
-        _set_swift_version(pkg_ctx.pkg_info.language_mode)
+        _set_swift_version_selects(pkg_ctx.pkg_info.language_mode)
 
     if len(features) > 0:
         attrs["features"] = bzl_selects.to_starlark(features, mutually_inclusive = True)
