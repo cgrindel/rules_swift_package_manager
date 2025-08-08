@@ -1,4 +1,3 @@
-
 """Module for parsing semver strings into components"""
 
 def _major_minor(version):
