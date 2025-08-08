@@ -78,17 +78,39 @@ def _parsed_json_from_spm_command(
         arguments,
         env = {},
         working_directory = "",
-        debug_json_path = None):
+        debug_json_path = None,
+        cached_json_path = None):
+    if cached_json_path:
+        cached_json_path_path = repository_ctx.path(cached_json_path)
+        if cached_json_path_path.exists:
+            return json.decode(
+                repository_ctx.read(cached_json_path_path, watch = "yes"),
+            )
+
     json_str = repository_utils.exec_spm_command(
         repository_ctx,
         arguments,
         env = env,
         working_directory = working_directory,
-    )
+    ).replace(working_directory, ".")
+
     if debug_json_path:
         if not paths.is_absolute(debug_json_path):
             debug_json_path = paths.join(working_directory, debug_json_path)
         repository_ctx.file(debug_json_path, content = json_str, executable = False)
+    if cached_json_path:
+        if debug_json_path:
+            tmp_path = debug_json_path
+        else:
+            tmp_path = paths.join(
+                str(repository_ctx.path(".")),
+                paths.basename(cached_json_path),
+            )
+            repository_ctx.file(tmp_path, content = json_str, executable = False)
+        repository_ctx.execute(["mkdir", "-p", paths.dirname(cached_json_path)])
+        repository_ctx.execute(["cp", tmp_path, cached_json_path])
+        repository_ctx.watch(cached_json_path)
+
     return json.decode(json_str)
 
 def _package_name(repository_ctx):
