@@ -47,4 +47,12 @@ swift_deps.from_package(
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )
-use_repo(swift_deps, "swift_deps_info", "swift_package", "swiftpkg_swift_5_package", "swiftpkg_swift_5_package_v6", "swiftpkg_swift_6_package", "swiftpkg_swift_log")
+use_repo(
+    swift_deps,
+    "swift_deps_info",
+    "swift_package",
+    "swiftpkg_swift_5_package",
+    "swiftpkg_swift_5_package_v6",
+    "swiftpkg_swift_6_package",
+    "swiftpkg_swift_log",
+)
