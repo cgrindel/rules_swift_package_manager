@@ -142,12 +142,12 @@ def _swift_target_build_file(pkg_ctx, target):
             copts.append(bzl_selects.new(
                 value = "-swift-version",
                 kind = kind,
-                condition = condition
+                condition = condition,
             ))
             copts.append(bzl_selects.new(
                 value = version,
                 kind = kind,
-                condition = condition
+                condition = condition,
             ))
 
     if target.swift_settings != None:
