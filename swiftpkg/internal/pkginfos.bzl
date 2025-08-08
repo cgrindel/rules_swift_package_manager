@@ -704,7 +704,7 @@ def _package_language_mode(dump_map):
     https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/swift6mode/#Package-manifest
 
     Args:
-        dump_manifest: A `dict` representing the parsed JSON from `swift
+        dump_map: A `dict` representing the parsed JSON from `swift
             package dump-package`.
 
     Returns:
