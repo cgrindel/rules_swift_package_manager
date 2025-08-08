@@ -18,6 +18,7 @@ load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":repository_files.bzl", "repository_files")
 load(":repository_utils.bzl", "repository_utils")
 load(":resource_files.bzl", "resource_files")
+load(":semver.bzl", "semver")
 load(":swift_files.bzl", "swift_files")
 load(":validations.bzl", "validations")
 
@@ -715,7 +716,7 @@ def _package_language_mode(dump_map):
     # Use explict swiftLanguageVersions if defined
     explicit_versions = dump_map["swiftLanguageVersions"]
     if explicit_versions:
-        sorted_versions = sorted(explicit_versions, key = int)
+        sorted_versions = sorted(explicit_versions, key = semver.major_minor)
         return sorted_versions[-1]
 
     # Fall back to using swift tools major verion

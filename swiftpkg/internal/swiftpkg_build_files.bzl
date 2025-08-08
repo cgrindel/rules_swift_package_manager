@@ -15,6 +15,7 @@ load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
+load(":semver.bzl", "semver")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
 # MARK: - Target Entry Point
@@ -60,8 +61,7 @@ def _swift_target_build_file(pkg_ctx, target):
 
     # Naively parse the tools semver.
     tools_version = pkg_ctx.pkg_info.tools_version or "0.0.0"
-    tools_version_components = tools_version.split(".") + ["0", "0"]
-    tools_version_major, tools_version_minor = [int(x if x.isdigit() else "0") for x in tools_version_components[0:2]]
+    tools_version_major, tools_version_minor = semver.major_minor(tools_version)
 
     # Gate package_name behind swift tools version 5.9
     if tools_version_major >= 6 or (tools_version_major == 5 and tools_version_minor >= 9):
