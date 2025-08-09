@@ -1,0 +1,47 @@
+load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@build_bazel_rules_swift//swift:swift_test.bzl", "swift_test")
+load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
+
+tidy(
+    name = "tidy",
+    targets = [
+        ":update_build_files",
+    ],
+)
+
+# MARK: - Gazelle
+
+# Ignore the Swift build folder
+# gazelle:exclude .build
+# gazelle:exclude third_party
+
+gazelle_binary(
+    name = "gazelle_bin",
+    languages = [
+        "@bazel_skylib_gazelle_plugin//bzl",
+        "@swift_gazelle_plugin//gazelle",
+    ],
+)
+
+gazelle(
+    name = "update_build_files",
+    data = [
+        "@swift_deps_info//:swift_deps_index",
+    ],
+    extra_args = [
+        "-swift_dependency_index=$(location @swift_deps_info//:swift_deps_index)",
+    ],
+    gazelle = ":gazelle_bin",
+)
+
+swift_test(
+    name = "language_modes_example",
+    srcs = ["tests.swift"],
+    module_name = "language_modes_example",
+    deps = [
+        "@swiftpkg_swift_5_package//:Tools5",
+        "@swiftpkg_swift_5_package_v6//:Tools5_Mode6",
+        "@swiftpkg_swift_6_package//:Tools6",
+        "@swiftpkg_swift_6_package//:Tools6_Mode5",
+    ],
+)

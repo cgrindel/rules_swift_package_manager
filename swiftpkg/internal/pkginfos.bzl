@@ -18,6 +18,7 @@ load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":repository_files.bzl", "repository_files")
 load(":repository_utils.bzl", "repository_utils")
 load(":resource_files.bzl", "resource_files")
+load(":semver.bzl", "semver")
 load(":swift_files.bzl", "swift_files")
 load(":validations.bzl", "validations")
 
@@ -603,6 +604,7 @@ def _new_from_parsed_json(
         _new_platform(name = pl["platformName"], version = pl["version"])
         for pl in dump_manifest["platforms"]
     ]
+    package_language_mode = _package_language_mode(dump_manifest)
     dep_names_by_id = _new_dependency_identity_to_name_map(
         dump_manifest["dependencies"],
     )
@@ -687,12 +689,44 @@ def _new_from_parsed_json(
         dependencies = dependencies,
         products = products,
         targets = targets,
+        language_mode = package_language_mode,
         url = url,
         version = version,
         expose_build_targets = expose_build_targets,
         c_language_standard = dump_manifest.get("cLanguageStandard"),
         cxx_language_standard = dump_manifest.get("cxxLanguageStandard"),
     )
+
+def _package_language_mode(dump_map):
+    """Returns the default Swift language mode to use for targets in the \
+    package that don't spefify their own explicit language mode.
+
+    Logic based on rules outline at \
+    https://www.swift.org/migration/documentation/swift-6-concurrency-migration-guide/swift6mode/#Package-manifest
+
+    Args:
+        dump_map: A `dict` representing the parsed JSON from `swift
+            package dump-package`.
+
+    Returns:
+        A `string` representing the computed default Swift language mode for
+        the package.
+    """
+
+    # Use explict swiftLanguageVersions if defined
+    explicit_versions = dump_map["swiftLanguageVersions"]
+    if explicit_versions:
+        sorted_versions = sorted(explicit_versions, key = semver.major_minor)
+        return sorted_versions[-1]
+
+    # Fall back to using swift tools major verion
+    tools_version = dump_map["toolsVersion"]["_version"]
+    if tools_version:
+        tools_version_components = tools_version.split(".")
+        tools_version_major = tools_version_components[0]
+        return tools_version_major
+
+    return None
 
 # MARK: - Swift Package
 
@@ -705,6 +739,7 @@ def _new(
         dependencies = [],
         products = [],
         targets = [],
+        language_mode = None,
         url = None,
         version = None,
         expose_build_targets = False,
@@ -726,6 +761,8 @@ def _new(
             `pkginfos.new_product()`.
         targets: A `list` of target structs as created by
             `pkginfos.new_target()`.
+        language_mode: Opional. The language mode to use within the package if
+            targets don't specify their own language mode (`string`).
         url: Optional. The url of the package (`string`).
         version: Optional. The semantic version of the package (`string`).
         expose_build_targets: Optional. Defaults to False. A boolean that specifies whether to expose
@@ -747,6 +784,7 @@ def _new(
         dependencies = dependencies,
         products = products,
         targets = targets,
+        language_mode = language_mode,
         url = url,
         version = version,
         expose_build_targets = expose_build_targets,

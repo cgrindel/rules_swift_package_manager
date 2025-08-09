@@ -43,6 +43,7 @@ bzl_library(
         ":pkginfo_targets",
         ":repository_utils",
         ":resource_files",
+        ":semver",
         ":validations",
         "//config_settings/spm/configuration:configurations",
         "//config_settings/spm/platform:platforms",
@@ -128,6 +129,7 @@ bzl_library(
         ":pkginfo_targets",
         ":pkginfos",
         ":repository_files",
+        ":semver",
         ":starlark_codegen",
         ":swift_files",
         "//config_settings/bazel/compilation_mode:compilation_modes",
@@ -359,6 +361,12 @@ bzl_library(
 bzl_library(
     name = "resource_bundle_infoplist",
     srcs = ["resource_bundle_infoplist.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "semver",
+    srcs = ["semver.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
 
