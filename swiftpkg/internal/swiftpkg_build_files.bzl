@@ -129,26 +129,16 @@ def _swift_target_build_file(pkg_ctx, target):
         features.append(feature)
 
     def _set_swift_version_selects(version, kind = None, condition = None):
-        # Set the target's Swift language mode using either the swift.enable_v6
-        # feature from rules_swift or using the `-swift-version` compiler opt
-        if version == "6":
-            new_language_mode = bzl_selects.new(
-                value = "swift.enable_v6",
-                kind = kind,
-                condition = condition,
-            )
-            features.append(new_language_mode)
-        else:
-            copts.append(bzl_selects.new(
-                value = "-swift-version",
-                kind = kind,
-                condition = condition,
-            ))
-            copts.append(bzl_selects.new(
-                value = version,
-                kind = kind,
-                condition = condition,
-            ))
+        copts.append(bzl_selects.new(
+            value = "-swift-version",
+            kind = kind,
+            condition = condition,
+        ))
+        copts.append(bzl_selects.new(
+            value = version,
+            kind = kind,
+            condition = condition,
+        ))
 
     if target.swift_settings != None:
         if len(target.swift_settings.defines) > 0:
