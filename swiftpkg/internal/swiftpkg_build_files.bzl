@@ -15,6 +15,7 @@ load(":load_statements.bzl", "load_statements")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
+load(":semver.bzl", "semver")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
 # MARK: - Target Entry Point
@@ -60,8 +61,7 @@ def _swift_target_build_file(pkg_ctx, target):
 
     # Naively parse the tools semver.
     tools_version = pkg_ctx.pkg_info.tools_version or "0.0.0"
-    tools_version_components = tools_version.split(".") + ["0", "0"]
-    tools_version_major, tools_version_minor = [int(x if x.isdigit() else "0") for x in tools_version_components[0:2]]
+    tools_version_major, tools_version_minor = semver.major_minor(tools_version)
 
     # Gate package_name behind swift tools version 5.9
     if tools_version_major >= 6 or (tools_version_major == 5 and tools_version_minor >= 9):
@@ -122,10 +122,23 @@ def _swift_target_build_file(pkg_ctx, target):
     # Check if any of the sources indicate that the module will be used by
     # Objective-C code. If so, generate the bridge header file.
     features = []
+    has_explicit_laguage_mode = False
     if target.swift_src_info.has_objc_directive and is_library_target:
         attrs["generates_header"] = True
         feature = bzl_selects.new(value = "swift.propagate_generated_module_map")
         features.append(feature)
+
+    def _set_swift_version_selects(version, kind = None, condition = None):
+        copts.append(bzl_selects.new(
+            value = "-swift-version",
+            kind = kind,
+            condition = condition,
+        ))
+        copts.append(bzl_selects.new(
+            value = version,
+            kind = kind,
+            condition = condition,
+        ))
 
     if target.swift_settings != None:
         if len(target.swift_settings.defines) > 0:
@@ -142,13 +155,13 @@ def _swift_target_build_file(pkg_ctx, target):
                 for bs in target.swift_settings.unsafe_flags
             ]))
         for bs in target.swift_settings.language_modes:
+            has_explicit_laguage_mode = True
             for language_mode in lists.flatten(bzl_selects.new_from_build_setting(bs)):
-                new_language_mode = bzl_selects.new(
-                    value = "swift.enable_v" + language_mode.value,
+                _set_swift_version_selects(
+                    language_mode.value,
                     kind = language_mode.kind,
                     condition = language_mode.condition,
                 )
-                features.append(new_language_mode)
         for bs in target.swift_settings.experimental_features:
             for experimental_feature in lists.flatten(bzl_selects.new_from_build_setting(bs)):
                 new_experimental_feature = bzl_selects.new(
@@ -165,6 +178,11 @@ def _swift_target_build_file(pkg_ctx, target):
                     condition = upcoming_feature.condition,
                 )
                 features.append(new_upcoming_feature)
+
+    # If the target doesn't have a language mode use the package language mode.
+    if not has_explicit_laguage_mode and pkg_ctx.pkg_info.language_mode:
+        _set_swift_version_selects(pkg_ctx.pkg_info.language_mode)
+
     if len(features) > 0:
         attrs["features"] = bzl_selects.to_starlark(features, mutually_inclusive = True)
     if len(copts) > 0:
