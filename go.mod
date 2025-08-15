@@ -1,6 +1,6 @@
 module github.com/cgrindel/rules_swift_package_manager
 
-go 1.23.0
+go 1.24.0
 
 toolchain go1.25.0
 
@@ -14,7 +14,7 @@ require (
 	github.com/deckarep/golang-set/v2 v2.8.0
 	github.com/spf13/cobra v1.9.1
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/exp v0.0.0-20250811191247-51f88131bc50
+	golang.org/x/exp v0.0.0-20250813145105-42675adae3e6
 	golang.org/x/text v0.28.0
 	gopkg.in/yaml.v3 v3.0.1
 )
