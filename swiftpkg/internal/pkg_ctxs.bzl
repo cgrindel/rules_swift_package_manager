@@ -7,6 +7,7 @@ def _read(
         repository_ctx,
         repo_dir,
         env,
+        cached_json_directory,
         resolved_pkg_map = None,
         registries_directory = None,
         replace_scm_with_registry = False):
@@ -14,6 +15,7 @@ def _read(
         repository_ctx = repository_ctx,
         directory = repo_dir,
         env = env,
+        cached_json_directory = cached_json_directory,
         resolved_pkg_map = resolved_pkg_map,
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,

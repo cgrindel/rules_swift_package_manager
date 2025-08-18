@@ -62,7 +62,19 @@ def _local_swift_package_impl(repository_ctx):
     repo_rules.write_workspace_file(repository_ctx, repo_dir)
 
     # Generate the build file
-    pkg_ctx = pkg_ctxs.read(repository_ctx, repo_dir, env)
+    cached_json_directory = None
+    if repository_ctx.attr.cached_json_directory:
+        cached_json_directory = paths.join(
+            str(repository_ctx.workspace_root),
+            repository_ctx.attr.cached_json_directory,
+        )
+
+    pkg_ctx = pkg_ctxs.read(
+        repository_ctx,
+        repo_dir,
+        env,
+        cached_json_directory,
+    )
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
     return update_attrs(repository_ctx.attr, _ALL_ATTRS.keys(), {})
@@ -78,6 +90,7 @@ _ALL_ATTRS = dicts.add(
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
     _PATH_ATTRS,
+    {"cached_json_directory": attr.string()},
 )
 
 local_swift_package = repository_rule(
