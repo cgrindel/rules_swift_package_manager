@@ -611,6 +611,8 @@ swift_binary(
         "-DSWIFT_PACKAGE",
         "-Xcc",
         "-DSWIFT_PACKAGE",
+        "-swift-version",
+        "6",
     ] + select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": ["-DFOOBAR"],
         "//conditions:default": [],
@@ -622,7 +624,6 @@ swift_binary(
         "//conditions:default": [],
     }),
     features = [
-        "swift.enable_v6",
         "swift.experimental.BuiltinModule",
         "swift.upcoming.ExistentialAny",
     ],
