@@ -76,13 +76,13 @@ return_code: {return_code}\
 def _can_ignore_spm_error(exec_result):
     """Ignore error that can occur when an SPM executable product depends on a
     binary target.
-    
+
     https://github.com/swiftlang/swift-package-manager/issues/8101"""
 
     # Error message:
     # https://github.com/swiftlang/swift-package-manager/blob/339afc838a0083ea0b4da002dc53cfb8005d5978/Sources/PackageLoading/Diagnostics.swift#L83-L88
     return exec_result.stderr.endswith(
-        "an executable target requires a 'main.swift' file\n"
+        "an executable target requires a 'main.swift' file\n",
     )
 
 def _parsed_json_from_spm_command(
