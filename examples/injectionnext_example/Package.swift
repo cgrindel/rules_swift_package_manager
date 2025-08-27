@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "injectionnext_example",
     dependencies: [
-        .package(url: "https://github.com/johnno1962/InjectionNext.git", from: "1.3.3"),
+        .package(url: "https://github.com/johnno1962/InjectionNext.git", from: "1.4.0"),
     ],
     targets: [
         .testTarget(
