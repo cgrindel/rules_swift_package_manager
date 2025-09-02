@@ -74,8 +74,11 @@ return_code: {return_code}\
     return exec_result.stdout
 
 def _can_ignore_spm_error(exec_result):
-    """Ignore error that can occur when an SPM executable product depends on a
-    binary target.
+    """Determine if the error from an exec result can be ignored.
+
+    SPM throws an error during `swift package describe` if an executable
+    product depends on a binary target. It also outputs valid JSON so we
+    can move past the error.
 
     https://github.com/swiftlang/swift-package-manager/issues/8101"""
 
