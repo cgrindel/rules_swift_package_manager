@@ -56,7 +56,7 @@ def _execute_spm_command(
         environment = exec_env,
         working_directory = working_directory,
     )
-    if exec_result.return_code != 0:
+    if exec_result.return_code != 0 and not _can_ignore_spm_error(exec_result):
         if err_msg_tpl == None:
             err_msg_tpl = """\
 Failed to execute SPM command. \
@@ -72,6 +72,21 @@ return_code: {return_code}\
             return_code = exec_result.return_code,
         ))
     return exec_result.stdout
+
+def _can_ignore_spm_error(exec_result):
+    """Determine if the error from an exec result can be ignored.
+
+    SPM throws an error during `swift package describe` if an executable
+    product depends on a binary target. It also outputs valid JSON so we
+    can move past the error.
+
+    https://github.com/swiftlang/swift-package-manager/issues/8101"""
+
+    # Error message:
+    # https://github.com/swiftlang/swift-package-manager/blob/339afc838a0083ea0b4da002dc53cfb8005d5978/Sources/PackageLoading/Diagnostics.swift#L83-L88
+    return exec_result.stderr.endswith(
+        "an executable target requires a 'main.swift' file\n",
+    )
 
 def _parsed_json_from_spm_command(
         repository_ctx,
