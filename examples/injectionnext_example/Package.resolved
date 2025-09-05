@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/johnno1962/InjectionNext.git",
       "state" : {
-        "revision" : "fbb8ef51e6c858d6fdcb9fe1199dfe8bb3c5b240",
-        "version" : "1.4.1"
+        "revision" : "5acff37357e4e595e1c7942871b7f1a592e34a99",
+        "version" : "1.4.2"
       }
     }
   ],
