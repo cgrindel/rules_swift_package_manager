@@ -92,5 +92,6 @@ use_repo(
     "swiftpkg_opencombine",
     "swiftpkg_swift_log",
     "swiftpkg_swift_package_defines_example",
+    "swiftpkg_swift_subprocess",
     "swiftpkg_yoti_doc_scan_ios",
 )

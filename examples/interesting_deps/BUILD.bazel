@@ -54,6 +54,7 @@ swift_binary(
         "@swiftpkg_opencombine//:OpenCombine",
         "@swiftpkg_swift_log//:Logging",
         "@swiftpkg_swift_package_defines_example//:FooSwift",
+        "@swiftpkg_swift_subprocess//:Subprocess",
     ],
 )
 
