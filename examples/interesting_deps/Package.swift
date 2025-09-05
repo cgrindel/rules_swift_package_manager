@@ -1,4 +1,4 @@
-// swift-tools-version: 5.7
+// swift-tools-version: 6.1
 
 import Foundation
 import PackageDescription
@@ -17,6 +17,7 @@ let dependencies: [Package.Dependency] = {
             .package(url: "https://github.com/erikdoe/ocmock", from: "3.9.4"),
             .package(url: "https://github.com/getyoti/yoti-doc-scan-ios.git", from: "7.0.0"),
             .package(url: "https://github.com/luispadron/swift-package-defines-example", from: "2.0.0"),
+            .package(url: "https://github.com/swiftlang/swift-subprocess", from: "0.1.0"),
         ]
     } else {
         return [

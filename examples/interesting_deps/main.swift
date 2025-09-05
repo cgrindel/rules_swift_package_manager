@@ -5,6 +5,7 @@ import GEOSwift
 import libwebp
 import Logging
 import OpenCombine
+import Subprocess
 
 // Configure DDLog to be the backend for the swift-log.
 DDLog.add(DDTTYLogger.sharedInstance!)
@@ -17,3 +18,9 @@ let webpVersion = WebPGetDecoderVersion()
 logger.info("WebP version: \(webpVersion)")
 
 fooSwift()
+
+let result = try await run(.name("ls"), output: .string(limit: 4096))
+
+print(result.processIdentifier)
+print(result.terminationStatus)
+print(result.standardOutput)

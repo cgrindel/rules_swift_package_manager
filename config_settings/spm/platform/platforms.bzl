@@ -37,6 +37,7 @@ _NON_APPLE_PLATFORMS = [
     "android",
     "wasi",
     "openbsd",
+    "freebsd",
 ]
 
 _PLATFORM_INFOS = [
