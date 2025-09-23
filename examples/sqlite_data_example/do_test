@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -eou pipefail
+
+# Use the Bazel binary specified by the integration test. Otherise, fall back
+# to bazel.
+bazel="${BIT_BAZEL_BINARY:-bazel}"
+
+# Test resolving the package via the `swift_package` repo.
+"${bazel}" run @swift_package//:resolve
+
+# Ensure that it builds.
+"${bazel}" build //...

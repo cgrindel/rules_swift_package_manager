@@ -84,6 +84,15 @@ def _pkg_info(
                 type = pkginfos.new_product_type(executable = True),
                 targets = ["SwiftExecutableTarget"],
             ),
+            pkginfos.new_product(
+                name = "SystemLibraryTarget",
+                type = pkginfos.new_product_type(
+                    library = pkginfos.new_library_type(
+                        library_type_kinds.automatic,
+                    ),
+                ),
+                targets = ["SystemLibraryTarget"],
+            ),
         ],
         targets = [
             # Old-style regular library that is used to create a binary from an
@@ -506,6 +515,20 @@ def _pkg_info(
                         "Foundation",
                         "UIKit",
                     ],
+                ),
+            ),
+            pkginfos.new_target(
+                name = "SystemLibraryTarget",
+                type = "system",
+                c99name = "SystemLibraryTarget",
+                module_type = "SystemLibraryTarget",
+                path = "Sources/SystemLibraryTarget",
+                sources = [],
+                dependencies = [],
+                repo_name = _repo_name,
+                clang_src_info = pkginfos.new_clang_src_info(
+                    hdrs = ["someHeader.h"],
+                    modulemap_path = "module.modulemap",
                 ),
             ),
         ],
@@ -1160,6 +1183,33 @@ swift_interop_hint(
     name = "ObjcLibraryWithResources.rspm_swift_hint",
     module_map = "ObjcLibraryWithResources.rspm_modulemap",
     module_name = "ObjcLibraryWithResources",
+)
+""",
+        ),
+        struct(
+            msg = "System library target",
+            name = "SystemLibraryTarget",
+            pkg_info = _pkg_info(),
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+
+swift_interop_hint(
+    name = "SystemLibraryTarget.rspm_swift_hint",
+    module_map = "module.modulemap",
+    module_name = "SystemLibraryTarget",
+)
+
+cc_library(
+    name = "SystemLibraryTarget.rspm",
+    aspect_hints = [":SystemLibraryTarget.rspm_swift_hint"],
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-DSWIFT_PACKAGE=1",
+    ],
+    hdrs = ["someHeader.h"],
+    visibility = ["//visibility:public"],
 )
 """,
         ),
