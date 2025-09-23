@@ -709,12 +709,60 @@ def _starlarkify_clang_attrs(repository_ctx, attrs):
 
 # MARK: - System Library Targets
 
-# GH009(chuck): Remove unused-variable directives
-
-# buildifier: disable=unused-variable
 def _system_library_build_file(target):
-    # GH009(chuck): Implement _system_library_build_file
-    return None
+    # System libraries are typically C/Objc libraries that need to be exposed to Swift.
+    # We generate a cc_library with a swift_interop_hint for proper Swift interop.
+
+    bzl_target_name = target.label.name
+
+    # Build the cc_library attributes
+    attrs = {}
+
+    # For system libraries, sources is always empty. We need to use glob to find files.
+    # Look for all .h files in the target path
+    hdrs_glob = paths.join(target.path, "**/*.h")
+
+    # System libraries typically have headers and a module.modulemap
+    # We'll use glob patterns to find them
+    attrs["hdrs"] = scg.new_fn_call("glob", [hdrs_glob])
+
+    # Create swift_interop_hint for C/Swift interop
+    aspect_hint_target_name = pkginfo_targets.swift_hint_label_name(bzl_target_name)
+
+    load_stmts = [swift_interop_hint_load_stmt]
+    decls = []
+
+    # Create the swift_interop_hint
+    decls.append(
+        build_decls.new(
+            kind = swift_kinds.interop_hint,
+            name = aspect_hint_target_name,
+            attrs = {
+                # For system libraries, we often don't have a module map file
+                # Set to None and let rules_swift generate one if needed
+                "module_map": None,
+                "module_name": target.c99name,
+            },
+        ),
+    )
+
+    # Add aspect_hints to cc_library
+    attrs["aspect_hints"] = [":{}".format(aspect_hint_target_name)]
+    attrs["visibility"] = ["//visibility:public"]
+
+    # Create the cc_library
+    decls.append(
+        build_decls.new(
+            kind = clang_kinds.library,
+            name = bzl_target_name,
+            attrs = attrs,
+        ),
+    )
+
+    return build_files.new(
+        load_stmts = load_stmts,
+        decls = decls,
+    )
 
 # MARK: - Apple xcframework Targets
 
