@@ -14,7 +14,7 @@ runs:
   steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: '26.0.1'
+        xcode-version: '26.0.0'
     - name: Confirm Xcode Version
       shell: bash
       run: |
