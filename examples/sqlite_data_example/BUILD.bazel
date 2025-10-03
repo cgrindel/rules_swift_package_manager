@@ -1,4 +1,5 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package_tool")
 
 swift_binary(
     name = "sqlite_data_example",
@@ -8,4 +9,12 @@ swift_binary(
     deps = [
         "@swiftpkg_sqlite_data//:SQLiteData",
     ],
+)
+
+# Purposefully am not adding this to tidy. It is expensive to run and only
+# needs to be run when the Package.swift has been updated.
+swift_package_tool(
+    name = "update_swift_packages",
+    cmd = "update",
+    package = "Package.swift",
 )
