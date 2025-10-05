@@ -24,7 +24,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
     if target.module_type == module_types.clang:
         return _clang_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.swift:
-        return _swift_target_build_file(pkg_ctx, target)
+        return _swift_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.system_library:
         return _system_library_build_file(target)
     elif target.module_type == module_types.binary:
@@ -41,7 +41,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
 
 # MARK: - Swift Target
 
-def _swift_target_build_file(pkg_ctx, target):
+def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     if target.swift_src_info == None:
         fail("Expected a `swift_src_info`. name: ", target.name)
 
@@ -187,6 +187,15 @@ def _swift_target_build_file(pkg_ctx, target):
         attrs["features"] = bzl_selects.to_starlark(features, mutually_inclusive = True)
     if len(copts) > 0:
         attrs["copts"] = bzl_selects.to_starlark(copts, mutually_inclusive = True)
+
+    linkopts = []
+    if target.linker_settings != None:
+        linkopts.extend(lists.flatten([
+            bzl_selects.new_from_build_setting(bs)
+            for bs in target.linker_settings.linked_libraries
+        ]))
+    if linkopts:
+        attrs["linkopts"] = _starlarkify_clang_attrs(repository_ctx, {"linkopts": linkopts})["linkopts"]
 
     if target.resources:
         swift_apple_res_bundle_info = _apple_resource_bundle_for_swift(
@@ -709,12 +718,65 @@ def _starlarkify_clang_attrs(repository_ctx, attrs):
 
 # MARK: - System Library Targets
 
-# GH009(chuck): Remove unused-variable directives
-
-# buildifier: disable=unused-variable
 def _system_library_build_file(target):
-    # GH009(chuck): Implement _system_library_build_file
-    return None
+    bzl_target_name = target.label.name
+
+    attrs = {
+        "visibility": ["//visibility:public"],
+    }
+
+    # Standard C/Objc compilation flags from SPM
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-DSWIFT_PACKAGE=1",
+    ]
+    attrs["copts"] = copts
+
+    # Determine headers: prefer explicit headers from clang_src_info, fallback to glob
+    if target.clang_src_info and target.clang_src_info.hdrs:
+        attrs["hdrs"] = target.clang_src_info.hdrs
+    else:
+        hdrs_glob = paths.join(target.path, "**/*.h")
+        attrs["hdrs"] = scg.new_fn_call("glob", [hdrs_glob])
+
+    # Determine module map: use explicit if provided, otherwise let rules_swift auto-generate
+    module_map_file = None
+    if target.clang_src_info and target.clang_src_info.modulemap_path:
+        module_map_file = target.clang_src_info.modulemap_path
+
+    # Create swift_interop_hint for Swift interop
+    aspect_hint_target_name = pkginfo_targets.swift_hint_label_name(bzl_target_name)
+
+    load_stmts = [swift_interop_hint_load_stmt]
+    decls = []
+
+    decls.append(
+        build_decls.new(
+            kind = swift_kinds.interop_hint,
+            name = aspect_hint_target_name,
+            attrs = {
+                "module_map": module_map_file,
+                "module_name": target.c99name,
+            },
+        ),
+    )
+
+    attrs["aspect_hints"] = [":{}".format(aspect_hint_target_name)]
+
+    decls.append(
+        build_decls.new(
+            kind = clang_kinds.library,
+            name = bzl_target_name,
+            attrs = attrs,
+        ),
+    )
+
+    return build_files.new(
+        load_stmts = load_stmts,
+        decls = decls,
+    )
 
 # MARK: - Apple xcframework Targets
 

@@ -73,6 +73,8 @@ jobs:
             runner: macos-15
           - test: '@@//examples:soto_example_test_bazel_.bazelversion'
             runner: macos-15
+          - test: '@@//examples:sqlite_data_example_test_bazel_.bazelversion'
+            runner: macos-15
           - test: '@@//examples:stripe_example_test_bazel_.bazelversion'
             runner: macos-15
           - test: '@@//examples:swift_package_registry_example_test_bazel_.bazelversion'

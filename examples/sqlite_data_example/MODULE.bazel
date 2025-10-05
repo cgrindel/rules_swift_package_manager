@@ -9,14 +9,16 @@ local_path_override(
 
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.27.0")
 bazel_dep(name = "bazel_skylib", version = "1.8.2")
-
-# The apple_support bazel_dep must come before the rules_cc.
-# https://github.com/bazelbuild/apple_support#incompatible-toolchain-resolution
 bazel_dep(name = "apple_support", version = "1.23.1")
 bazel_dep(
     name = "rules_swift",
     version = "3.1.2",
     repo_name = "build_bazel_rules_swift",
+)
+bazel_dep(
+    name = "rules_apple",
+    version = "4.2.0",
+    repo_name = "build_bazel_rules_apple",
 )
 
 bazel_dep(
@@ -30,34 +32,18 @@ bazel_dep(
     dev_dependency = True,
     repo_name = "bazel_gazelle",
 )
-bazel_dep(
-    name = "swift_gazelle_plugin",
-    version = "0.2.1",
-    dev_dependency = True,
-)
-
-apple_cc_configure = use_extension(
-    "@apple_support//crosstool:setup.bzl",
-    "apple_cc_configure_extension",
-)
-use_repo(apple_cc_configure, "local_config_apple_cc")
 
 swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
 )
 swift_deps.from_package(
-    declare_swift_deps_info = True,
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )
 use_repo(
     swift_deps,
-    "swift_deps_info",
     "swift_package",
-    "swiftpkg_my_local_package",
-    "swiftpkg_notthatamazingmodule",
-    "swiftpkg_swift_argument_parser",
-    "swiftpkg_swift_log",
-    "swiftpkg_swiftformat",
+    "swiftpkg_sqlite_data",
+    "swiftpkg_swift_tagged",
 )
