@@ -1,9 +1,17 @@
 """Attributes shared between rules that interact with the Swift package tool."""
 
 _swift_package_registry_attrs = {
+    "netrc": attr.label(
+        allow_single_file = True,
+        doc = """
+A `.netrc` file that contains authentication credentials used for fetching Swift packages and or binary artifacts.
+
+When provided, this file will be passed to Swift Package Manager commands using \
+the `--netrc-file` flag during package resolution and updates.
+""",
+    ),
     "registries": attr.label(
         allow_single_file = [".json"],
-        cfg = "exec",
         doc = """
 A `registries.json` file that defines the configured Swift package registries.
 
