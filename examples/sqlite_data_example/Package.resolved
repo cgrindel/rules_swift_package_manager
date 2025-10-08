@@ -1,5 +1,5 @@
 {
-  "originHash" : "5f412b769ddb20c712811f44f0e0ef3465d4ca337e51eef487a78e0392997356",
+  "originHash" : "1177790404fddfc043f0f166412977403a44bd3d4f63b9edf4bd0d6388cc134d",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/sqlite-data",
       "state" : {
-        "revision" : "4069be900a3c40e4fcad30518fc3b9be797ad786",
-        "version" : "1.1.0"
+        "revision" : "2235c9e2df56812ed17c1943463123093d88531e",
+        "version" : "1.1.1"
       }
     },
     {
@@ -123,8 +123,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-structured-queries",
       "state" : {
-        "revision" : "49ce85d88f3b39fa8b9bc07de437af83358cbc74",
-        "version" : "0.22.0"
+        "revision" : "edb84b339542b018477bab1d8e4cca851d5fa93c",
+        "version" : "0.23.0"
       }
     },
     {
@@ -150,8 +150,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/xctest-dynamic-overlay",
       "state" : {
-        "revision" : "b2ed9eabefe56202ee4939dd9fc46b6241c88317",
-        "version" : "1.6.1"
+        "revision" : "4c27acf5394b645b70d8ba19dc249c0472d5f618",
+        "version" : "1.7.0"
       }
     }
   ],
