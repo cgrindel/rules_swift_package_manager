@@ -35,6 +35,21 @@ def _swift_package_tool_repo_impl(repository_ctx):
     attrs_content = _package_config_attrs_to_content(repository_ctx.attr)
     package_path = repository_ctx.attr.package
 
+    # We copy .netrc file contents to avoid requiring users to use `exports_files(...)`
+    netrc_attr = None
+    if repository_ctx.attr.netrc:
+        netrc_content = repository_ctx.read(repository_ctx.attr.netrc)
+        repository_ctx.file(".netrc", netrc_content)
+        netrc_attr = '    netrc = ":.netrc",'
+
+    attrs_lines = [line for line in attrs_content.split("\n") if "netrc =" not in line]
+    filtered_attrs = "\n".join(attrs_lines)
+
+    final_attrs_parts = [filtered_attrs]
+    if netrc_attr:
+        final_attrs_parts.append(netrc_attr)
+    final_attrs_content = "\n".join([p for p in final_attrs_parts if p])
+
     repository_ctx.file(
         "BUILD.bazel",
         content = """
@@ -55,7 +70,7 @@ swift_package_tool(
 )
 """.format(
             package = package_path,
-            attrs_content = attrs_content,
+            attrs_content = final_attrs_content,
         ),
     )
 
@@ -73,4 +88,9 @@ swift_package_tool_repo = repository_rule(
         swift_package_tool_attrs.swift_package_registry,
     ),
     doc = "Declares a `@swift_package` repository for using the `swift_package_tool` targets.",
+)
+
+# Exported for testing
+swift_package_tool_repo_testing = struct(
+    package_config_attrs_to_content = _package_config_attrs_to_content,
 )

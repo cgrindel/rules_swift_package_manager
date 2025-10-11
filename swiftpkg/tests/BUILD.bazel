@@ -17,6 +17,7 @@ load(":resource_files_tests.bzl", "resource_files_test_suite")
 load(":semver_tests.bzl", "semver_test_suite")
 load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
 load(":swift_files_tests.bzl", "swift_files_test_suite")
+load(":swift_package_tool_repo_tests.bzl", "swift_package_tool_repo_test_suite")
 load(":swiftpkg_build_files_tests.bzl", "swiftpkg_build_files_test_suite")
 load(":validations_tests.bzl", "validations_test_suite")
 
@@ -57,6 +58,8 @@ starlark_codegen_test_suite()
 swift_files_test_suite()
 
 swiftpkg_build_files_test_suite()
+
+swift_package_tool_repo_test_suite()
 
 validations_test_suite()
 

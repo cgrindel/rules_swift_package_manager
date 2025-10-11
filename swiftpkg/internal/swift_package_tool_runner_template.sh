@@ -27,6 +27,7 @@ config_path="%(config_path)s"
 enable_build_manifest_caching="%(enable_build_manifest_caching)s"
 enable_dependency_cache="%(enable_dependency_cache)s"
 manifest_cache="%(manifest_cache)s"
+netrc_file="%(netrc_file)s"
 registries_json="%(registries_json)s"
 replace_scm_with_registry="%(replace_scm_with_registry)s"
 security_path="%(security_path)s"
@@ -56,6 +57,11 @@ if [ "$use_registry_identity_for_scm" = "true" ]; then
 fi
 
 args+=("--manifest-cache=$manifest_cache")
+
+# If netrc_file is set, add the --netrc-file flag.
+if [ -n "$netrc_file" ]; then
+	args+=("--netrc-file" "$(readlink -f "$netrc_file")")
+fi
 
 # If registries_json is set, symlink the `.json` file to the `config_path/configuration` directory.
 if [ -n "$registries_json" ]; then

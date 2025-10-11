@@ -16,12 +16,16 @@ def _swift_package_tool_impl(ctx):
     cmd = ctx.attr.cmd
     package = ctx.attr.package
     package_path = paths.dirname(package)
+    netrc = ctx.file.netrc
     registries = ctx.file.registries
     runfiles = []
 
     toolchain = swift_common.get_toolchain(ctx)
     swift = toolchain.swift_worker
     runfiles.append(swift.executable)
+
+    if netrc:
+        runfiles.append(netrc)
 
     if registries:
         runfiles.append(registries)
@@ -43,6 +47,10 @@ def _swift_package_tool_impl(ctx):
         "true" if ctx.attr.dependency_caching else "false",
     )
     template_dict.add("%(manifest_cache)s", ctx.attr.manifest_cache)
+    template_dict.add(
+        "%(netrc_file)s",
+        netrc.short_path if netrc else "",
+    )
     template_dict.add(
         "%(registries_json)s",
         registries.short_path if registries else "",
