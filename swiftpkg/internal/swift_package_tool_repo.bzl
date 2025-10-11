@@ -89,3 +89,8 @@ swift_package_tool_repo = repository_rule(
     ),
     doc = "Declares a `@swift_package` repository for using the `swift_package_tool` targets.",
 )
+
+# Exported for testing
+swift_package_tool_repo_testing = struct(
+    package_config_attrs_to_content = _package_config_attrs_to_content,
+)
