@@ -238,6 +238,7 @@ def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_pac
             env_inherit = from_package.env_inherit,
             init_submodules = init_submodules,
             recursive_init_submodules = recursive_init_submodules,
+            netrc = from_package.netrc,
             patch_args = patch_args,
             patch_cmds = patch_cmds,
             patch_cmds_win = patch_cmds_win,
@@ -289,6 +290,7 @@ def _declare_swift_package_repo(name, from_package, config_swift_package):
             package = from_package.swift.package,
             name = from_package.swift.name,
         ),
+        netrc = from_package.netrc,
         registries = from_package.registries,
         **config_swift_package_kwargs
     )
