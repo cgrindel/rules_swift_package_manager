@@ -280,7 +280,7 @@ def _file_type(repository_ctx, path):
         A `string` representing the file type for the path as returned by the
         `file` utility.
     """
-    file_args = ["file", "--brief", path]
+    file_args = ["file", "--dereference", "--brief", path]
     exec_result = repository_ctx.execute(file_args, quiet = True)
     if exec_result.return_code != 0:
         fail("Failed to determine the file type for {path}. stderr:\n{stderr}".format(
