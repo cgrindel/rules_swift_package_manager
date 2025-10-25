@@ -921,6 +921,9 @@ def _new_registry(pin):
     Returns:
         A `struct` representing a registry dependency.
     """
+    if not pin:
+        return None
+
     return struct(
         pin = pin,
     )
