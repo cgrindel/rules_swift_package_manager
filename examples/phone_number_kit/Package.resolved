@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/marmelroy/PhoneNumberKit",
       "state" : {
-        "revision" : "8cba2258060e356d5fc4836d4ff8549faa2409dd",
-        "version" : "4.1.4"
+        "revision" : "abcb569d63fde86a87a2f11475ed14dec5d03aa3",
+        "version" : "4.1.7"
       }
     }
   ],
