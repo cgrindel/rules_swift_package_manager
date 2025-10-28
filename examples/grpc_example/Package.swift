@@ -8,6 +8,6 @@ let package = Package(
         .package(url: "https://github.com/grpc/grpc-swift.git", exact: "2.2.3"),
         .package(url: "https://github.com/grpc/grpc-swift-protobuf.git", exact: "1.3.1"),
         .package(url: "https://github.com/grpc/grpc-swift-nio-transport.git", exact: "1.2.3"),
-        .package(url: "https://github.com/apple/swift-protobuf.git", exact: "1.32.0"),
+        .package(url: "https://github.com/apple/swift-protobuf.git", exact: "1.33.1"),
     ]
 )
