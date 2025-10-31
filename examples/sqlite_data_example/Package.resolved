@@ -1,5 +1,5 @@
 {
-  "originHash" : "00de153ab8d2ccc8005234267913ac645693cb98c173c88848b3b5abfa982892",
+  "originHash" : "92772f94c9be9aa726a3e65d34794e695933b394b178b2fc2cb44f320d0bb635",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/sqlite-data",
       "state" : {
-        "revision" : "02ddad075aa686fc5412d95fdb1f988a44949757",
-        "version" : "1.2.0"
+        "revision" : "b66b894b9a5710f1072c8eb6448a7edfc2d743d9",
+        "version" : "1.3.0"
       }
     },
     {
@@ -123,8 +123,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-structured-queries",
       "state" : {
-        "revision" : "3a95b70a81b7027b8a5117e7dd08188837e5f54e",
-        "version" : "0.24.0"
+        "revision" : "b78cf04628173839fb04993c1d650ce9056bcb30",
+        "version" : "0.25.1"
       }
     },
     {
