@@ -1,0 +1,9 @@
+load("@build_bazel_rules_swift//swift:swift_test.bzl", "swift_test")
+
+swift_test(
+    name = "AwsCrtTests",
+    srcs = ["Tests/AwsCrtTests/AwsCrtTests.swift"],
+    deps = [
+        "@swiftpkg_aws_crt_swift//:AwsCommonRuntimeKit",
+    ],
+)

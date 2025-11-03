@@ -11,6 +11,7 @@ load(
     "//config_settings/spm/platform:platforms.bzl",
     spm_platforms = "platforms",
 )
+load(":apple_builtin.bzl", "apple_builtin")
 load(":clang_files.bzl", "clang_files")
 load(":objc_files.bzl", "objc_files")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
@@ -1173,6 +1174,38 @@ def _new_swift_src_info(
 
 # MARK: - Clang Source Info
 
+def _detect_frameworks_from_sources(repository_ctx, srcs):
+    """Detect Apple frameworks from #include <Framework/Header.h> patterns in C source files."""
+    frameworks_set = sets.make()
+    
+    for src in srcs:
+        # Only scan C/C++/ObjC source and header files
+        if not (src.endswith(".c") or src.endswith(".cc") or src.endswith(".cpp") or 
+                src.endswith(".m") or src.endswith(".mm") or src.endswith(".h") or 
+                src.endswith(".hpp")):
+            continue
+        
+        # Read the file and look for framework includes
+        content = repository_ctx.read(src)
+        lines = content.split("\n")
+        for line in lines:
+            line = line.strip()
+            # Look for #include <Framework/Header.h> or #import <Framework/Header.h>
+            if line.startswith("#include") or line.startswith("#import"):
+                # Extract the include path
+                if "<" in line and ">" in line:
+                    start = line.index("<") + 1
+                    end = line.index(">")
+                    include_path = line[start:end]
+                    # Check if it's a framework include (has a slash)
+                    if "/" in include_path:
+                        framework = include_path.split("/")[0]
+                        # Check if it's a known Apple framework
+                        if sets.contains(apple_builtin.frameworks.all, framework):
+                            sets.insert(frameworks_set, framework)
+    
+    return sorted(sets.to_list(frameworks_set))
+
 def _new_clang_src_info_from_sources(
         repository_ctx,
         pkg_path,
@@ -1187,6 +1220,20 @@ def _new_clang_src_info_from_sources(
     abs_target_path = paths.normalize(
         paths.join(pkg_path, target_path),
     )
+
+    # If no explicit public headers path is specified, default to "include"
+    # if it exists. This matches Swift Package Manager's behavior for C targets.
+    # Also remove any exclude patterns that would exclude the include directory,
+    # since SPM doesn't exclude public headers even if they're in the exclude list.
+    if public_hdrs_path == None:
+        default_include_path = paths.normalize(paths.join(abs_target_path, "include"))
+        if repository_files.is_directory(repository_ctx, default_include_path):
+            public_hdrs_path = "include"
+            # Remove any exclude paths that start with "include/"
+            exclude_paths = [
+                ep for ep in exclude_paths
+                if not ep.startswith("include/") and ep != "include"
+            ]
 
     public_includes = []
     if public_hdrs_path != None:
@@ -1233,6 +1280,25 @@ def _new_clang_src_info_from_sources(
             sp,
             exclude_paths = abs_exclude_paths,
         ))
+
+    # SPM's exclude list only excludes files from being compiled as sources,
+    # but headers in excluded directories are still available for inclusion.
+    # We need to find all header files in excluded directories and add them
+    # to all_srcs so they can be discovered and added to the BUILD file.
+    for ep in exclude_paths:
+        abs_exclude_path = paths.normalize(paths.join(abs_target_path, ep))
+        if repository_files.is_directory(repository_ctx, abs_exclude_path):
+            # Get all files in the excluded directory
+            excluded_files = repository_files.list_files_under(
+                repository_ctx,
+                abs_exclude_path,
+                exclude_paths = [],
+            )
+            # Filter to only header files
+            for f in excluded_files:
+                _, ext = paths.split_extension(f)
+                if ext in [".h", ".hpp", ".hh", ".hxx", ".inc", ".inl", ".modulemap"]:
+                    all_srcs.append(f)
 
     # Organize the source files
     # Be sure that the all_srcs and the public_includes that are passed to
@@ -1304,6 +1370,9 @@ def _new_clang_src_info_from_sources(
 
     # GH1290: Can I remove explicit_srcs? I believe that it is obsolete.
 
+    # Detect Apple frameworks used by C source files
+    frameworks = _detect_frameworks_from_sources(repository_ctx, all_srcs)
+
     return _new_clang_src_info(
         srcs = srcs,
         explicit_srcs = explicit_srcs,
@@ -1312,6 +1381,7 @@ def _new_clang_src_info_from_sources(
         public_includes = public_includes,
         private_includes = private_includes,
         modulemap_path = organized_files.modulemap,
+        frameworks = frameworks,
     )
 
 def _new_clang_src_info(
@@ -1321,7 +1391,8 @@ def _new_clang_src_info(
         textual_hdrs = [],
         public_includes = [],
         private_includes = [],
-        modulemap_path = None):
+        modulemap_path = None,
+        frameworks = []):
     return struct(
         organized_srcs = clang_files.organize_srcs(srcs),
         explicit_srcs = explicit_srcs,
@@ -1330,6 +1401,7 @@ def _new_clang_src_info(
         public_includes = public_includes,
         private_includes = private_includes,
         modulemap_path = modulemap_path,
+        frameworks = frameworks,
     )
 
 # MARK: - Objc Source Info
