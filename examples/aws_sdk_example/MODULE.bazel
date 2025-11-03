@@ -1,0 +1,22 @@
+module(name = "aws_sdk_example")
+
+bazel_dep(name = "rules_swift_package_manager", version = "1.10.0")
+local_path_override(
+    module_name = "rules_swift_package_manager",
+    path = "../..",
+)
+
+bazel_dep(name = "rules_swift", version = "2.3.0")
+
+swift_deps = use_extension(
+    "@rules_swift_package_manager//:extensions.bzl",
+    "swift_deps",
+)
+swift_deps.from_package(
+    resolved = "//:Package.resolved",
+    swift = "//:Package.swift",
+)
+use_repo(
+    swift_deps,
+    "swiftpkg_aws_sdk_swift",
+)
