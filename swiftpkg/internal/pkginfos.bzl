@@ -1177,19 +1177,20 @@ def _new_swift_src_info(
 def _detect_frameworks_from_sources(repository_ctx, srcs):
     """Detect Apple frameworks from #include <Framework/Header.h> patterns in C source files."""
     frameworks_set = sets.make()
-    
+
     for src in srcs:
         # Only scan C/C++/ObjC source and header files
-        if not (src.endswith(".c") or src.endswith(".cc") or src.endswith(".cpp") or 
-                src.endswith(".m") or src.endswith(".mm") or src.endswith(".h") or 
+        if not (src.endswith(".c") or src.endswith(".cc") or src.endswith(".cpp") or
+                src.endswith(".m") or src.endswith(".mm") or src.endswith(".h") or
                 src.endswith(".hpp")):
             continue
-        
+
         # Read the file and look for framework includes
         content = repository_ctx.read(src)
         lines = content.split("\n")
         for line in lines:
             line = line.strip()
+
             # Look for #include <Framework/Header.h> or #import <Framework/Header.h>
             if line.startswith("#include") or line.startswith("#import"):
                 # Extract the include path
@@ -1197,13 +1198,15 @@ def _detect_frameworks_from_sources(repository_ctx, srcs):
                     start = line.index("<") + 1
                     end = line.index(">")
                     include_path = line[start:end]
+
                     # Check if it's a framework include (has a slash)
                     if "/" in include_path:
                         framework = include_path.split("/")[0]
+
                         # Check if it's a known Apple framework
                         if sets.contains(apple_builtin.frameworks.all, framework):
                             sets.insert(frameworks_set, framework)
-    
+
     return sorted(sets.to_list(frameworks_set))
 
 def _new_clang_src_info_from_sources(
@@ -1229,9 +1232,11 @@ def _new_clang_src_info_from_sources(
         default_include_path = paths.normalize(paths.join(abs_target_path, "include"))
         if repository_files.is_directory(repository_ctx, default_include_path):
             public_hdrs_path = "include"
+
             # Remove any exclude paths that start with "include/"
             exclude_paths = [
-                ep for ep in exclude_paths
+                ep
+                for ep in exclude_paths
                 if not ep.startswith("include/") and ep != "include"
             ]
 
@@ -1294,6 +1299,7 @@ def _new_clang_src_info_from_sources(
                 abs_exclude_path,
                 exclude_paths = [],
             )
+
             # Filter to only header files
             for f in excluded_files:
                 _, ext = paths.split_extension(f)
