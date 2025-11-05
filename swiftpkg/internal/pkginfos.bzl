@@ -1174,15 +1174,21 @@ def _new_swift_src_info(
 
 # MARK: - Clang Source Info
 
+_FRAMEWORK_SRC_EXTS = [".c", ".cc", ".cpp", ".m", ".mm", ".h", ".hpp"]
+_HEADER_EXTS = [".h", ".hpp", ".hh", ".hxx", ".inc", ".inl", ".modulemap"]
+
+def _is_framework_src(path):
+    _root, ext = paths.split_extension(path)
+    return lists.contains(_FRAMEWORK_SRC_EXTS, ext)
+
 def _detect_frameworks_from_sources(repository_ctx, srcs):
-    """Detect Apple frameworks from #include <Framework/Header.h> patterns in C source files."""
+    """Detect Apple frameworks from #include <Framework/Header.h> patterns in \
+    C source files."""
     frameworks_set = sets.make()
 
     for src in srcs:
         # Only scan C/C++/ObjC source and header files
-        if not (src.endswith(".c") or src.endswith(".cc") or src.endswith(".cpp") or
-                src.endswith(".m") or src.endswith(".mm") or src.endswith(".h") or
-                src.endswith(".hpp")):
+        if not _is_framework_src(src):
             continue
 
         # Read the file and look for framework includes
@@ -1191,21 +1197,25 @@ def _detect_frameworks_from_sources(repository_ctx, srcs):
         for line in lines:
             line = line.strip()
 
-            # Look for #include <Framework/Header.h> or #import <Framework/Header.h>
-            if line.startswith("#include") or line.startswith("#import"):
-                # Extract the include path
-                if "<" in line and ">" in line:
-                    start = line.index("<") + 1
-                    end = line.index(">")
-                    include_path = line[start:end]
+            # Look for #include <Framework/Header.h> or
+            # #import <Framework/Header.h>
+            if not line.startswith("#include") and \
+               not line.startswith("#import"):
+                continue
 
-                    # Check if it's a framework include (has a slash)
-                    if "/" in include_path:
-                        framework = include_path.split("/")[0]
+            # Extract the include path
+            if "<" in line and ">" in line:
+                start = line.index("<") + 1
+                end = line.index(">")
+                include_path = line[start:end]
 
-                        # Check if it's a known Apple framework
-                        if sets.contains(apple_builtin.frameworks.all, framework):
-                            sets.insert(frameworks_set, framework)
+                # Check if it's a framework include (has a slash)
+                if "/" in include_path:
+                    framework = include_path.split("/")[0]
+
+                    # Check if it's a known Apple framework
+                    if sets.contains(apple_builtin.frameworks.all, framework):
+                        sets.insert(frameworks_set, framework)
 
     return sorted(sets.to_list(frameworks_set))
 
@@ -1229,7 +1239,9 @@ def _new_clang_src_info_from_sources(
     # Also remove any exclude patterns that would exclude the include directory,
     # since SPM doesn't exclude public headers even if they're in the exclude list.
     if public_hdrs_path == None:
-        default_include_path = paths.normalize(paths.join(abs_target_path, "include"))
+        default_include_path = paths.normalize(
+            paths.join(abs_target_path, "include"),
+        )
         if repository_files.is_directory(repository_ctx, default_include_path):
             public_hdrs_path = "include"
 
@@ -1303,7 +1315,7 @@ def _new_clang_src_info_from_sources(
             # Filter to only header files
             for f in excluded_files:
                 _, ext = paths.split_extension(f)
-                if ext in [".h", ".hpp", ".hh", ".hxx", ".inc", ".inl", ".modulemap"]:
+                if ext in _HEADER_EXTS:
                     all_srcs.append(f)
 
     # Organize the source files
