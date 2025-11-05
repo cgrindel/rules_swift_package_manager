@@ -1,5 +1,6 @@
 module(name = "aws_sdk_example")
 
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.27.0")
 bazel_dep(name = "rules_swift_package_manager", version = "1.10.0")
 local_path_override(
     module_name = "rules_swift_package_manager",
