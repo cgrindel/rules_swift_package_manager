@@ -110,7 +110,11 @@ def write_module_map(
         _add_headers(headers = [umbrella_header], kind = "umbrella header")
     elif umbrella_directory:
         # Umbrella directory must be absolute path
-        abs_umbrella = back_to_root_path + umbrella_directory if back_to_root_path else umbrella_directory
+        abs_umbrella = (
+            back_to_root_path + umbrella_directory
+            if back_to_root_path
+            else umbrella_directory
+        )
         content.add(abs_umbrella, format = '    umbrella "%s"')
     else:
         _add_headers(headers = public_headers, kind = "header")
