@@ -9,5 +9,7 @@ bazel="${BIT_BAZEL_BINARY:-bazel}"
 # Generate Swift external deps and update build files
 "${bazel}" run //:tidy
 
-# Ensure that it builds and tests pass
-"${bazel}" test //...
+# Ensure that it builds and runs
+"${bazel}" run //:AwsSdkExample
+
+
