@@ -15,7 +15,13 @@ load("//swiftpkg/internal:swift_package_tool_repo.bzl", "swift_package_tool_repo
 
 _DO_WHILE_RANGE = range(1000)
 
-def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swift_package):
+def _declare_pkgs_from_package(
+    module_ctx,
+    from_package,
+    config_pkgs,
+    config_swift_package,
+    is_root,
+    existing_package_repo_names):
     """Declare Swift packages from `Package.swift` and `Package.resolved`.
 
     Args:
@@ -23,6 +29,8 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
         from_package: The data from the `from_package` tag.
         config_pkgs: The data from the `configure_package` tag.
         config_swift_package: The data from the `configure_swift_package` tag.
+        is_root: Whether the module is the root Bzlmod module.
+        existing_package_repo_names: The list of existing package repository names.
     """
 
     # Read Package.resolved.
@@ -95,6 +103,11 @@ the Swift package to make it available.\
             continue
 
         bazel_repo_name = bazel_repo_names.from_identity(dep.identity)
+
+        if bazel_repo_name in existing_package_repo_names:
+            print("\nWARNING: {bazel_repo_name} is declared by another module, preferring the first declared version.".format(bazel_repo_name = bazel_repo_name))
+            continue
+
         direct_dep_repo_names.append(bazel_repo_name)
         pkg_info_label = "@{}//:pkg_info.json".format(bazel_repo_name)
         direct_dep_pkg_infos[pkg_info_label] = dep.identity
@@ -180,6 +193,11 @@ the Swift package to make it available.\
 
     # Declare the Bazel repositories.
     for dep in all_deps_by_id.values():
+        bazel_repo_name = bazel_repo_names.from_identity(dep.identity)
+        if bazel_repo_name in existing_package_repo_names:
+            print("\nWARNING: {bazel_repo_name} is declared by another module, preferring the first declared version.".format(bazel_repo_name = bazel_repo_name))
+            continue
+
         config_pkg = config_pkgs.get(dep.name)
         if config_pkg == None:
             config_pkg = config_pkgs.get(
@@ -317,8 +335,11 @@ Expected only one `configure_swift_package` tag, but found multiple.\
                     from_package,
                     config_pkgs,
                     config_swift_package,
+                    mod.is_root,
+                    direct_dep_repo_names,
                 ),
             )
+
     return module_ctx.extension_metadata(
         root_module_direct_deps = direct_dep_repo_names,
         root_module_direct_dev_deps = [],
