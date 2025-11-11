@@ -1,6 +1,7 @@
 """Implementation for `swift_deps` bzlmod extension."""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@bazel_skylib//lib:versions.bzl", "versions")
 load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
 load("//swiftpkg/internal:local_swift_package.bzl", "local_swift_package")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
@@ -15,22 +16,111 @@ load("//swiftpkg/internal:swift_package_tool_repo.bzl", "swift_package_tool_repo
 
 _DO_WHILE_RANGE = range(1000)
 
-def _declare_pkgs_from_package(
+# MARK: - Version Comparison Helpers
+
+def _get_dependency_version(dep):
+    """Extract version string from a dependency.
+
+    Args:
+        dep: A dependency struct as returned by `pkginfos.new_dependency()`.
+
+    Returns:
+        The version string if available, otherwise `None`.
+    """
+    if dep.source_control and dep.source_control.pin and dep.source_control.pin.state:
+        return dep.source_control.pin.state.version
+    if dep.registry and dep.registry.pin and dep.registry.pin.state:
+        return dep.registry.pin.state.version
+    return None
+
+def _is_local_package(dep):
+    """Check if a dependency is a local (fileSystem) package.
+
+    Args:
+        dep: A dependency struct as returned by `pkginfos.new_dependency()`.
+
+    Returns:
+        `True` if the dependency is a local package, otherwise `False`.
+    """
+    return dep.file_system != None
+
+def _compare_versions(v1, v2):
+    """Compare two version strings using semantic versioning.
+
+    Uses Minimal Version Selection (MVS) approach - selects highest version.
+
+    Args:
+        v1: First version string.
+        v2: Second version string.
+
+    Returns:
+        -1 if v1 < v2, 0 if v1 == v2, 1 if v1 > v2.
+    """
+    if v1 == v2:
+        return 0
+    # Use bazel_skylib versions module for comparison
+    if versions.is_at_least(threshold = v1, version = v2):
+        # v2 >= v1 and v1 != v2 (already checked above), so v2 > v1
+        return -1
+    else:
+        # v2 < v1, so v1 > v2
+        return 1
+
+def _compare_dependencies(dep1, dep2):
+    """Compare two dependencies to determine which should be selected.
+
+    Uses the following priority:
+    1. Local packages always win over remote packages
+    2. For remote packages, highest version wins (MVS)
+    3. If versions are equal or both None, prefer the first one
+
+    Args:
+        dep1: First dependency candidate struct.
+        dep2: Second dependency candidate struct.
+
+    Returns:
+        -1 if dep1 < dep2 (dep2 should be selected), 0 if equal, 1 if dep1 > dep2 (dep1 should be selected).
+    """
+    is_local1 = _is_local_package(dep1.dep)
+    is_local2 = _is_local_package(dep2.dep)
+
+    # Local packages always win
+    if is_local1 and not is_local2:
+        return 1
+    if is_local2 and not is_local1:
+        return -1
+    if is_local1 and is_local2:
+        # Both are local - prefer first one
+        return 0
+
+    # Both are remote - compare versions
+    v1 = _get_dependency_version(dep1.dep)
+    v2 = _get_dependency_version(dep2.dep)
+    return _compare_versions(v1, v2)
+
+
+def _collect_dependencies_from_package(
     module_ctx,
+    module,
     from_package,
     config_pkgs,
-    config_swift_package,
-    is_root,
-    existing_package_repo_names):
-    """Declare Swift packages from `Package.swift` and `Package.resolved`.
+    config_swift_package):
+    """Collect all Swift package dependencies from a `Package.swift` and `Package.resolved`.
+
+    This function collects dependencies but does not declare repositories yet.
+    This allows us to resolve duplicates across all modules before declaring.
 
     Args:
         module_ctx: An instance of `module_ctx`.
+        module: The bazel_module object for tracking which module declared the dependency.
         from_package: The data from the `from_package` tag.
         config_pkgs: The data from the `configure_package` tag.
         config_swift_package: The data from the `configure_swift_package` tag.
-        is_root: Whether the module is the root Bzlmod module.
-        existing_package_repo_names: The list of existing package repository names.
+
+    Returns:
+        A tuple of (all_deps_list, direct_dep_repo_names_list) where:
+        - all_deps_list: List of dependency candidate structs with all transitive deps
+        - direct_dep_repo_names_list: List of bazel repo names for direct dependencies
     """
 
     # Read Package.resolved.
@@ -103,32 +193,9 @@ the Swift package to make it available.\
             continue
 
         bazel_repo_name = bazel_repo_names.from_identity(dep.identity)
-
-        if bazel_repo_name in existing_package_repo_names:
-            print("\nWARNING: {bazel_repo_name} is declared by another module, preferring the first declared version.".format(bazel_repo_name = bazel_repo_name))
-            continue
-
         direct_dep_repo_names.append(bazel_repo_name)
         pkg_info_label = "@{}//:pkg_info.json".format(bazel_repo_name)
         direct_dep_pkg_infos[pkg_info_label] = dep.identity
-
-    # Write info about the Swift deps that may be used by external tooling.
-    if from_package.declare_swift_deps_info:
-        swift_deps_info_repo_name = "swift_deps_info"
-        swift_deps_info(
-            name = swift_deps_info_repo_name,
-            direct_dep_pkg_infos = direct_dep_pkg_infos,
-        )
-        direct_dep_repo_names.append(swift_deps_info_repo_name)
-
-    if from_package.declare_swift_package:
-        swift_package_repo_name = "swift_package"
-        _declare_swift_package_repo(
-            name = swift_package_repo_name,
-            from_package = from_package,
-            config_swift_package = config_swift_package,
-        )
-        direct_dep_repo_names.append(swift_package_repo_name)
 
     # Ensure that we add all of the transitive source control
     # or registry deps from the resolved file.
@@ -191,31 +258,101 @@ the Swift package to make it available.\
         if to_process:
             fail("Expected no more items to process, but found some.")
 
-    # Declare the Bazel repositories.
+    # Create dependency candidates for all dependencies
+    all_dep_candidates = []
     for dep in all_deps_by_id.values():
         bazel_repo_name = bazel_repo_names.from_identity(dep.identity)
-        if bazel_repo_name in existing_package_repo_names:
-            print("\nWARNING: {bazel_repo_name} is declared by another module, preferring the first declared version.".format(bazel_repo_name = bazel_repo_name))
-            continue
-
         config_pkg = config_pkgs.get(dep.name)
         if config_pkg == None:
-            config_pkg = config_pkgs.get(
-                bazel_repo_names.from_identity(dep.identity),
-            )
-        _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_package)
-
-    # Add all transitive dependencies to direct_dep_repo_names if `publicly_expose_all_targets` flag is set.
-    for dep in all_deps_by_id.values():
-        config_pkg = config_pkgs.get(dep.name) or config_pkgs.get(
-            bazel_repo_names.from_identity(dep.identity),
+            config_pkg = config_pkgs.get(bazel_repo_name)
+        dep_candidate = struct(
+            dep = dep,
+            bazel_repo_name = bazel_repo_name,
+            config_pkg = config_pkg,
+            from_package = from_package,
+            config_swift_package = config_swift_package,
+            module = module,
+            direct_dep = bazel_repo_name in direct_dep_repo_names,
+            publicly_expose_all_targets = config_pkg and config_pkg.publicly_expose_all_targets or False,
         )
-        if config_pkg and config_pkg.publicly_expose_all_targets:
-            bazel_repo_name = bazel_repo_names.from_identity(dep.identity)
-            if bazel_repo_name not in direct_dep_repo_names:
-                direct_dep_repo_names.append(bazel_repo_name)
+        all_dep_candidates.append(dep_candidate)
 
-    return direct_dep_repo_names
+    return (all_dep_candidates, direct_dep_repo_names)
+
+def _resolve_duplicate_dependencies(all_dep_candidates, check_direct_dependencies, root_module_declared_versions):
+    """Resolve duplicate dependencies by selecting the best version.
+
+    Uses Minimal Version Selection (MVS) - selects highest version.
+    Local packages always take precedence over remote packages.
+
+    Args:
+        all_dep_candidates: List of all dependency candidate structs from all modules.
+        check_direct_dependencies: Boolean indicating whether to check version conflicts.
+        root_module_declared_versions: Dict mapping bazel_repo_name to version string
+            for dependencies declared in the root module.
+
+    Returns:
+        A dict mapping bazel_repo_name to the selected dependency candidate.
+    """
+    # Group dependencies by repository name
+    deps_by_repo_name = {}
+    for candidate in all_dep_candidates:
+        repo_name = candidate.bazel_repo_name
+        if repo_name not in deps_by_repo_name:
+            deps_by_repo_name[repo_name] = []
+        deps_by_repo_name[repo_name].append(candidate)
+
+    # Resolve duplicates
+    resolved_deps = {}
+    for repo_name, candidates in deps_by_repo_name.items():
+        if len(candidates) == 1:
+            # No duplicates, use the single candidate
+            resolved_deps[repo_name] = candidates[0]
+        else:
+            # Multiple candidates - resolve duplicates using MVS
+            selected = candidates[0]
+            for candidate in candidates[1:]:
+                comparison = _compare_dependencies(selected, candidate)
+                if comparison < 0:
+                    # candidate is better than selected
+                    selected = candidate
+
+            resolved_deps[repo_name] = selected
+
+    # Check for version mismatches for root module direct dependencies only
+    if check_direct_dependencies:
+        for repo_name, declared_version in root_module_declared_versions.items():
+            resolved_candidate = resolved_deps.get(repo_name)
+            if resolved_candidate == None:
+                continue
+            resolved_version = _get_dependency_version(resolved_candidate.dep)
+            if resolved_version and declared_version and resolved_version != declared_version:
+                fail("""
+For repository '{repo}', root module declared {repo}@{declared} but {repo}@{resolved} \
+from '{resolved_module}' was selected in the resolved dependency graph. \
+To fix: Update your Package.swift to use version >= {resolved}, or set check_direct_dependencies = False.
+""".format(
+                    repo = repo_name,
+                    declared = declared_version,
+                    resolved = resolved_version,
+                    resolved_module = resolved_candidate.module.name,
+                ))
+
+    return resolved_deps
+
+def _declare_resolved_dependencies(resolved_deps):
+    """Declare Bazel repositories for resolved dependencies.
+
+    Args:
+        resolved_deps: Dict mapping bazel_repo_name to selected dependency candidate.
+    """
+    for candidate in resolved_deps.values():
+        _declare_pkg_from_dependency(
+            candidate.dep,
+            candidate.config_pkg,
+            candidate.from_package,
+            candidate.config_swift_package,
+        )
 
 def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_package):
     name = bazel_repo_names.from_identity(dep.identity)
@@ -314,6 +451,7 @@ def _declare_swift_package_repo(name, from_package, config_swift_package):
     )
 
 def _swift_deps_impl(module_ctx):
+    # Collect configuration
     config_pkgs = {}
     for mod in module_ctx.modules:
         for config_pkg in mod.tags.configure_package:
@@ -326,19 +464,110 @@ def _swift_deps_impl(module_ctx):
 Expected only one `configure_swift_package` tag, but found multiple.\
 """)
             config_swift_package = config_swift_package_tag
-    direct_dep_repo_names = []
+
+    # Phase 1: Collect all dependencies from all modules
+    all_dep_candidates = []
+    root_module_direct_dep_repo_names = []
+    root_module_declared_versions = {}  # Track declared versions for root module dependencies
+    root_declare_swift_deps_info = False
+    root_declare_swift_package = False
+    swift_deps_info_repos = []
+    swift_package_repos = []
+    check_direct_dependencies = False
+
     for mod in module_ctx.modules:
         for from_package in mod.tags.from_package:
-            direct_dep_repo_names.extend(
-                _declare_pkgs_from_package(
-                    module_ctx,
-                    from_package,
-                    config_pkgs,
-                    config_swift_package,
-                    mod.is_root,
-                    direct_dep_repo_names,
-                ),
+            # Enable checking if the root module enables it
+            if mod.is_root and from_package.check_direct_dependencies:
+                check_direct_dependencies = True
+
+            # Collect dependencies from this module
+            (module_dep_candidates, module_direct_dep_repo_names) = _collect_dependencies_from_package(
+                module_ctx,
+                mod,
+                from_package,
+                config_pkgs,
+                config_swift_package,
             )
+            all_dep_candidates.extend(module_dep_candidates)
+            # Track root module direct dependencies and their declared versions
+            if mod.is_root:
+                root_module_direct_dep_repo_names.extend(module_direct_dep_repo_names)
+                # Store declared versions for root module direct dependencies
+                # (versions are already captured in module_dep_candidates)
+                for candidate in module_dep_candidates:
+                    if candidate.direct_dep:
+                        version = _get_dependency_version(candidate.dep)
+                        if version:
+                            root_module_declared_versions[candidate.bazel_repo_name] = version
+                # Track root module's declaration flags
+                if from_package.declare_swift_deps_info:
+                    root_declare_swift_deps_info = True
+                if from_package.declare_swift_package:
+                    root_declare_swift_package = True
+
+            # Handle swift_deps_info and swift_package repositories
+            if from_package.declare_swift_deps_info:
+                # Collect direct dep pkg infos for this module
+                direct_dep_pkg_infos = {}
+                for candidate in module_dep_candidates:
+                    if candidate.direct_dep:
+                        pkg_info_label = "@{}//:pkg_info.json".format(candidate.bazel_repo_name)
+                        direct_dep_pkg_infos[pkg_info_label] = candidate.dep.identity
+                swift_deps_info_repos.append((from_package, direct_dep_pkg_infos))
+
+            if from_package.declare_swift_package:
+                swift_package_repos.append((from_package, config_swift_package))
+
+    # Phase 2: Resolve duplicates
+    resolved_deps = _resolve_duplicate_dependencies(all_dep_candidates, check_direct_dependencies, root_module_declared_versions)
+
+    # Phase 3: Declare repositories
+    _declare_resolved_dependencies(resolved_deps)
+
+    # Declare swift_deps_info repository (only once, prefer root module)
+    if swift_deps_info_repos:
+        # Merge direct_dep_pkg_infos from all modules
+        merged_direct_dep_pkg_infos = {}
+        for (_, direct_dep_pkg_infos) in swift_deps_info_repos:
+            merged_direct_dep_pkg_infos.update(direct_dep_pkg_infos)
+        swift_deps_info_repo_name = "swift_deps_info"
+        swift_deps_info(
+            name = swift_deps_info_repo_name,
+            direct_dep_pkg_infos = merged_direct_dep_pkg_infos,
+        )
+
+    # Declare swift_package repository (only once, prefer root module)
+    if swift_package_repos:
+        # Use the first one (typically root module)
+        (from_package_for_repo, config_swift_package_for_repo) = swift_package_repos[0]
+        swift_package_repo_name = "swift_package"
+        _declare_swift_package_repo(
+            name = swift_package_repo_name,
+            from_package = from_package_for_repo,
+            config_swift_package = config_swift_package_for_repo,
+        )
+
+    # Build final direct_dep_repo_names list - only root module direct dependencies
+    direct_dep_repo_names = []
+
+    # Add root module direct dependencies that are resolved
+    for repo_name in root_module_direct_dep_repo_names:
+        if repo_name in resolved_deps:
+            direct_dep_repo_names.append(repo_name)
+
+    # Add transitive dependencies if publicly_expose_all_targets is set
+    for candidate in resolved_deps.values():
+        if candidate.publicly_expose_all_targets:
+            repo_name = candidate.bazel_repo_name
+            if repo_name not in direct_dep_repo_names:
+                direct_dep_repo_names.append(repo_name)
+
+    # Add swift_deps_info and swift_package if declared by root module
+    if root_declare_swift_deps_info:
+        direct_dep_repo_names.append("swift_deps_info")
+    if root_declare_swift_package:
+        direct_dep_repo_names.append("swift_package")
 
     return module_ctx.extension_metadata(
         root_module_direct_deps = direct_dep_repo_names,
@@ -411,6 +640,14 @@ in the output log.
                 mandatory = True,
                 allow_files = [".swift"],
                 doc = "A `Package.swift`.",
+            ),
+            "check_direct_dependencies": attr.bool(
+                default = True,
+                doc = """\
+Check if the direct dependencies declared in the root module match the versions in the \
+resolved dependency graph. When enabled, the build will fail if the root module's \
+Package.resolved contains different versions than what MVS selected. Defaults to True.\
+""",
             ),
         },
     ),

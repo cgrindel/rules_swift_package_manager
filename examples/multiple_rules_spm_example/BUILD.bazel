@@ -6,6 +6,7 @@ swift_binary(
     srcs = ["main.swift"],
     deps = [
         "@swiftpkg_swift_log//:Logging",
+        "@swiftpkg_vapor//:Vapor",
         "@vapor_example//Sources/App",
     ],
 )

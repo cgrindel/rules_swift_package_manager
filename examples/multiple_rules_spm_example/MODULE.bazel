@@ -32,14 +32,13 @@ swift_deps = use_extension(
     "swift_deps",
 )
 swift_deps.from_package(
+    check_direct_dependencies = True,
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )
 use_repo(
     swift_deps,
     "swift_package",
-    "swiftpkg_fluent",
-    "swiftpkg_fluent_sqlite_driver",
     "swiftpkg_swift_log",
     "swiftpkg_vapor",
 )
