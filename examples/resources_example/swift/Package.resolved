@@ -77,8 +77,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk",
       "state" : {
-        "revision" : "c6ce6a5790f0e0b70e66025ec1aa3c4aced13cc6",
-        "version" : "18.8.1"
+        "revision" : "fb634e89a36fd91725ad654d5576d800c061b37d",
+        "version" : "18.8.2"
       }
     },
     {
@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Iterable/swift-sdk",
       "state" : {
-        "revision" : "6dd83e285b4414c49e0e21cd1c9d9c1d11b3208f",
-        "version" : "6.6.2"
+        "revision" : "a29e8b2013edc1c4af9b8ac6a19be8c63baabf24",
+        "version" : "6.6.3"
       }
     }
   ],
