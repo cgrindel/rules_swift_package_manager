@@ -111,9 +111,7 @@ def write_module_map(
     elif umbrella_directory:
         # Umbrella directory must be absolute path
         abs_umbrella = (
-            back_to_root_path + umbrella_directory
-            if back_to_root_path
-            else umbrella_directory
+            back_to_root_path + umbrella_directory if back_to_root_path else umbrella_directory
         )
         content.add(abs_umbrella, format = '    umbrella "%s"')
     else:
