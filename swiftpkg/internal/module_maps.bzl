@@ -32,6 +32,7 @@ def write_module_map(
         private_headers = [],
         private_textual_headers = [],
         umbrella_header = None,
+        umbrella_directory = None,
         workspace_relative = False):
     """Writes the content of the module map to a file.
 
@@ -60,6 +61,8 @@ def write_module_map(
         umbrella_header: A `File` representing an umbrella header that, if
             present, will be written into the module map instead of the list of
             headers in the compilation context.
+        umbrella_directory: A path string representing an umbrella directory that, if
+            present, will be written into the module map instead of individual headers.
         workspace_relative: A Boolean value indicating whether the header paths
             written in the module map file should be relative to the workspace
             or relative to the module map file.
@@ -105,6 +108,12 @@ def write_module_map(
 
     if umbrella_header:
         _add_headers(headers = [umbrella_header], kind = "umbrella header")
+    elif umbrella_directory:
+        # Umbrella directory must be absolute path
+        abs_umbrella = (
+            back_to_root_path + umbrella_directory if back_to_root_path else umbrella_directory
+        )
+        content.add(abs_umbrella, format = '    umbrella "%s"')
     else:
         _add_headers(headers = public_headers, kind = "header")
         _add_headers(headers = private_headers, kind = "private header")
