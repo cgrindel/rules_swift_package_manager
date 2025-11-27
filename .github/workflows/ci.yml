@@ -97,7 +97,7 @@ jobs:
     env:
       CC: clang
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/set_up_ubuntu
         if: ${{ startsWith(matrix.runner, 'ubuntu') }}
         with:
@@ -126,7 +126,7 @@ jobs:
     env:
       CC: clang
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./.github/actions/set_up_ubuntu
         if: ${{ startsWith(matrix.runner, 'ubuntu') }}
         with:
