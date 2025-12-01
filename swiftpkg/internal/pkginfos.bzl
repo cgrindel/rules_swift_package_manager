@@ -461,14 +461,43 @@ def _new_target_from_json_maps(
         objc_src_info = objc_src_info,
     )
 
+def _xcassets_has_actual_assets(repository_ctx, path):
+    """Checks if an xcassets directory contains actual asset files.
+
+    An xcassets directory that only contains Contents.json files has no
+    compilable assets. rules_apple will warn about empty asset catalogs if
+    we include such directories.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+        path: Path to the xcassets directory.
+
+    Returns:
+        True if the directory contains files other than Contents.json.
+    """
+    files = repository_files.list_files_under(
+        repository_ctx,
+        path,
+        exclude_directories = True,
+    )
+    for f in files:
+        if not f.endswith("/Contents.json") and not f.endswith("Contents.json"):
+            return True
+    return False
+
 def _should_expand_resource(repository_ctx, resource):
     path = resource.path
 
     if not repository_files.is_directory(repository_ctx, path):
         return False
 
-    # xcassets and xcdatamodeld folders should be expanded in-place rather than copied directly.
-    if path.endswith(".xcassets") or path.endswith(".xcdatamodeld"):
+    # xcassets folders should be expanded in-place rather than copied directly,
+    # but only if they contain actual assets (not just Contents.json files).
+    if path.endswith(".xcassets"):
+        return _xcassets_has_actual_assets(repository_ctx, path)
+
+    # xcdatamodeld folders should be expanded in-place rather than copied directly.
+    if path.endswith(".xcdatamodeld"):
         return True
 
     return False
