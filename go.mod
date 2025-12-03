@@ -2,7 +2,7 @@ module github.com/cgrindel/rules_swift_package_manager
 
 go 1.24.0
 
-toolchain go1.25.4
+toolchain go1.25.5
 
 // Workaround for inconsistent Go versions being used in rules_bazel_integration_test tests.
 // toolchain go1.21.5
