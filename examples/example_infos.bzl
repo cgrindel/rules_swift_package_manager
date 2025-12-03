@@ -132,6 +132,8 @@ _all_os_single_bazel_version_test_examples = [
 ]
 
 _macos_single_bazel_version_test_examples = [
+    "aws_crt_example",
+    "aws_sdk_example",
     "firebase_example",
     "google_maps_example",
     "interesting_deps",
