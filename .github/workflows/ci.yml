@@ -35,6 +35,10 @@ jobs:
             runner: ubuntu-22.04
           - test: '@@//bzlmod:e2e_test'
             runner: macos-15
+          - test: '@@//examples:aws_crt_example_test_bazel_.bazelversion'
+            runner: macos-15
+          - test: '@@//examples:aws_sdk_example_test_bazel_.bazelversion'
+            runner: macos-15
           - test: '@@//examples:firebase_example_test_bazel_.bazelversion'
             runner: macos-15
           - test: '@@//examples:google_maps_example_test_bazel_.bazelversion'

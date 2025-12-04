@@ -38,12 +38,32 @@ def _generate_modulemap_impl(ctx):
     if len(hdrs) == 0:
         fail("No header files were provided.")
 
+    # Use umbrella directory if all headers share a common root
+    umbrella_dir = None
+    if len(hdrs) > 0:
+        # Find the longest common directory prefix
+        dirs = [h.dirname for h in hdrs]
+        if len(dirs) > 0:
+            common_parts = dirs[0].split("/")
+            for d in dirs[1:]:
+                d_parts = d.split("/")
+                new_common = []
+                for i in range(min(len(common_parts), len(d_parts))):
+                    if common_parts[i] == d_parts[i]:
+                        new_common.append(common_parts[i])
+                    else:
+                        break
+                common_parts = new_common
+            if len(common_parts) > 0:
+                umbrella_dir = "/".join(common_parts)
+
     write_module_map(
         actions = ctx.actions,
         module_map_file = modulemap_file,
         module_name = module_name,
         dependent_module_names = uses,
-        public_headers = hdrs,
+        umbrella_directory = umbrella_dir,
+        public_headers = hdrs if not umbrella_dir else [],
     )
     provider_hdr = [modulemap_file]
 
