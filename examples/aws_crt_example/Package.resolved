@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/awslabs/aws-crt-swift.git",
       "state" : {
-        "revision" : "2f4f02595a25a43f9ca9acdc9f4d4a8ff6e5d3ac",
-        "version" : "0.54.0"
+        "revision" : "3cf057e28bcc8de77180b68bbf7cbbd40765fab9",
+        "version" : "0.54.3"
       }
     },
     {
