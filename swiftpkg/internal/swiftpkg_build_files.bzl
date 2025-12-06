@@ -395,6 +395,19 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             for bs in target.linker_settings.linked_frameworks
         ]))
 
+    # Add frameworks detected from source files as linkopts
+    # cc_library doesn't support sdk_frameworks, so we use -framework flags
+    if clang_src_info.frameworks:
+        for framework in clang_src_info.frameworks:
+            platform_conditions = bazel_apple_platforms.for_framework(framework)
+            for pc in platform_conditions:
+                linkopts.append(
+                    bzl_selects.new(
+                        value = "-framework {}".format(framework),
+                        condition = pc,
+                    ),
+                )
+
     # Assemble attributes
 
     attrs = {
