@@ -31,13 +31,15 @@ load(":testutils.bzl", "testutils")
 _repo_name = "@swiftpkg_mypackage"
 
 def _pkg_info(
-        expose_build_targets = False):
+        expose_build_targets = False,
+        platforms = []):
     return pkginfos.new(
         name = "MyPackage",
         path = "/path/to/my-package",
         tools_version = "5.9",
         url = "https://github.com/my/package",
         version = "0.4.2",
+        platforms = platforms,
         dependencies = [
             pkginfos.new_dependency(
                 identity = "swift-argument-parser",
@@ -1318,11 +1320,45 @@ swift_binary(
             name = "RegularSwiftTargetAsLibrary",
             pkg_info = _pkg_info(),
             exp = """\
+load("@@//swiftpkg/internal:swift_library_group.bzl", apple_swift_library_group = "swift_library_group")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library_group")
 
-swift_library_group(
-    name = "RegularSwiftTargetAsLibrary",
+apple_swift_library_group(
+    name = "RegularSwiftTargetAsLibrary.platform",
     deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
+    platform_type = select({
+        "@apple_support//configs:ios_arm64": "ios",
+        "@apple_support//configs:ios_arm64e": "ios",
+        "@apple_support//configs:ios_sim_arm64": "ios",
+        "@apple_support//configs:ios_x86_64": "ios",
+        "@apple_support//configs:darwin_arm64": "macos",
+        "@apple_support//configs:darwin_arm64e": "macos",
+        "@apple_support//configs:darwin_x86_64": "macos",
+        "@apple_support//configs:tvos_arm64": "tvos",
+        "@apple_support//configs:tvos_sim_arm64": "tvos",
+        "@apple_support//configs:tvos_x86_64": "tvos",
+        "@apple_support//configs:visionos_arm64": "visionos",
+        "@apple_support//configs:visionos_sim_arm64": "visionos",
+        "@apple_support//configs:watchos_arm64": "watchos",
+        "@apple_support//configs:watchos_arm64_32": "watchos",
+        "@apple_support//configs:watchos_armv7k": "watchos",
+        "@apple_support//configs:watchos_device_arm64": "watchos",
+        "@apple_support//configs:watchos_device_arm64e": "watchos",
+        "@apple_support//configs:watchos_x86_64": "watchos",
+    }),
+)
+
+swift_library_group(
+    name = "RegularSwiftTargetAsLibrary.no_platform",
+    deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
+)
+
+alias(
+    name = "RegularSwiftTargetAsLibrary",
+    actual = select({
+        "@apple_support//configs:apple": ":RegularSwiftTargetAsLibrary.platform",
+        "//conditions:default": ":RegularSwiftTargetAsLibrary.no_platform",
+    }),
     visibility = ["//visibility:public"],
 )
 """,
@@ -1332,11 +1368,106 @@ swift_library_group(
             name = "ObjcLibraryWithModulemap",
             pkg_info = _pkg_info(),
             exp = """\
+load("@@//swiftpkg/internal:swift_library_group.bzl", apple_swift_library_group = "swift_library_group")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library_group")
 
-swift_library_group(
-    name = "ObjcLibraryWithModulemap",
+apple_swift_library_group(
+    name = "ObjcLibraryWithModulemap.platform",
     deps = ["@swiftpkg_mypackage//:ObjcLibraryWithModulemap.rspm"],
+    platform_type = select({
+        "@apple_support//configs:ios_arm64": "ios",
+        "@apple_support//configs:ios_arm64e": "ios",
+        "@apple_support//configs:ios_sim_arm64": "ios",
+        "@apple_support//configs:ios_x86_64": "ios",
+        "@apple_support//configs:darwin_arm64": "macos",
+        "@apple_support//configs:darwin_arm64e": "macos",
+        "@apple_support//configs:darwin_x86_64": "macos",
+        "@apple_support//configs:tvos_arm64": "tvos",
+        "@apple_support//configs:tvos_sim_arm64": "tvos",
+        "@apple_support//configs:tvos_x86_64": "tvos",
+        "@apple_support//configs:visionos_arm64": "visionos",
+        "@apple_support//configs:visionos_sim_arm64": "visionos",
+        "@apple_support//configs:watchos_arm64": "watchos",
+        "@apple_support//configs:watchos_arm64_32": "watchos",
+        "@apple_support//configs:watchos_armv7k": "watchos",
+        "@apple_support//configs:watchos_device_arm64": "watchos",
+        "@apple_support//configs:watchos_device_arm64e": "watchos",
+        "@apple_support//configs:watchos_x86_64": "watchos",
+    }),
+)
+
+swift_library_group(
+    name = "ObjcLibraryWithModulemap.no_platform",
+    deps = ["@swiftpkg_mypackage//:ObjcLibraryWithModulemap.rspm"],
+)
+
+alias(
+    name = "ObjcLibraryWithModulemap",
+    actual = select({
+        "@apple_support//configs:apple": ":ObjcLibraryWithModulemap.platform",
+        "//conditions:default": ":ObjcLibraryWithModulemap.no_platform",
+    }),
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Swift library product with platform minimum OS versions",
+            name = "RegularSwiftTargetAsLibrary",
+            pkg_info = _pkg_info(platforms = [
+                pkginfos.new_platform(name = "ios", version = "15.0"),
+                pkginfos.new_platform(name = "macos", version = "12.0"),
+            ]),
+            exp = """\
+load("@@//swiftpkg/internal:swift_library_group.bzl", apple_swift_library_group = "swift_library_group")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library_group")
+
+apple_swift_library_group(
+    name = "RegularSwiftTargetAsLibrary.platform",
+    deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
+    minimum_os_version = select({
+        "@apple_support//configs:ios_arm64": "15.0",
+        "@apple_support//configs:ios_arm64e": "15.0",
+        "@apple_support//configs:ios_sim_arm64": "15.0",
+        "@apple_support//configs:ios_x86_64": "15.0",
+        "@apple_support//configs:darwin_arm64": "12.0",
+        "@apple_support//configs:darwin_arm64e": "12.0",
+        "@apple_support//configs:darwin_x86_64": "12.0",
+        "//conditions:default": None,
+    }),
+    platform_type = select({
+        "@apple_support//configs:ios_arm64": "ios",
+        "@apple_support//configs:ios_arm64e": "ios",
+        "@apple_support//configs:ios_sim_arm64": "ios",
+        "@apple_support//configs:ios_x86_64": "ios",
+        "@apple_support//configs:darwin_arm64": "macos",
+        "@apple_support//configs:darwin_arm64e": "macos",
+        "@apple_support//configs:darwin_x86_64": "macos",
+        "@apple_support//configs:tvos_arm64": "tvos",
+        "@apple_support//configs:tvos_sim_arm64": "tvos",
+        "@apple_support//configs:tvos_x86_64": "tvos",
+        "@apple_support//configs:visionos_arm64": "visionos",
+        "@apple_support//configs:visionos_sim_arm64": "visionos",
+        "@apple_support//configs:watchos_arm64": "watchos",
+        "@apple_support//configs:watchos_arm64_32": "watchos",
+        "@apple_support//configs:watchos_armv7k": "watchos",
+        "@apple_support//configs:watchos_device_arm64": "watchos",
+        "@apple_support//configs:watchos_device_arm64e": "watchos",
+        "@apple_support//configs:watchos_x86_64": "watchos",
+    }),
+)
+
+swift_library_group(
+    name = "RegularSwiftTargetAsLibrary.no_platform",
+    deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
+)
+
+alias(
+    name = "RegularSwiftTargetAsLibrary",
+    actual = select({
+        "@apple_support//configs:apple": ":RegularSwiftTargetAsLibrary.platform",
+        "//conditions:default": ":RegularSwiftTargetAsLibrary.no_platform",
+    }),
     visibility = ["//visibility:public"],
 )
 """,
