@@ -10,6 +10,6 @@ let package = Package(
         .package(path: "third_party/swift_6_package"),
 
         // At least one remote dependency is needed to generate Package.resolved
-        .package(url: "https://github.com/apple/swift-log", from: "1.6.4"),
+        .package(url: "https://github.com/apple/swift-log", from: "1.8.0"),
     ]
 )
