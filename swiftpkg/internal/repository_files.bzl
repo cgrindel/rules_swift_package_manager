@@ -61,6 +61,21 @@ def _find_license_files(repository_ctx):
         find_path = ".",
     )
 
+def _is_filesystem_loop_error(stderr):
+    """Checks if the stderr indicates a filesystem loop error from GNU find.
+
+    GNU find on Linux reports filesystem loops when following symlinks with -L.
+    This is not a fatal error - find still outputs the files it found before
+    hitting the loop.
+
+    Args:
+        stderr: The stderr output from find as a `string`.
+
+    Returns:
+        A `bool` indicating whether this is a filesystem loop error.
+    """
+    return "File system loop detected" in stderr
+
 def _list_files_under(
         repository_ctx,
         path,
@@ -100,8 +115,17 @@ def _list_files_under(
     if exclude_directories:
         find_args.extend(["-not", "-type", "d"])
     exec_result = repository_ctx.execute(find_args, quiet = True)
+
+    # GNU find on Linux exits with an error when it detects a filesystem loop
+    # (e.g., symlinks that create cycles). However, it still outputs the files
+    # it found before hitting the loop. We handle this gracefully by using the
+    # partial output instead of failing.
     if exec_result.return_code != 0:
-        fail("Failed to list files in %s. stderr:\n%s" % (path, exec_result.stderr))
+        if _is_filesystem_loop_error(exec_result.stderr):
+            # buildifier: disable=print
+            print("Warning: Filesystem loop detected in %s. Using partial results." % path)
+        else:
+            fail("Failed to list files in %s. stderr:\n%s" % (path, exec_result.stderr))
     return _process_find_results(
         exec_result.stdout,
         find_path = path,
@@ -150,8 +174,17 @@ def _list_directories_under(
         find_args.extend(["-name", by_name])
 
     exec_result = repository_ctx.execute(find_args, quiet = True)
+
+    # GNU find on Linux exits with an error when it detects a filesystem loop
+    # (e.g., symlinks that create cycles). However, it still outputs the
+    # directories it found before hitting the loop. We handle this gracefully
+    # by using the partial output instead of failing.
     if exec_result.return_code != 0:
-        fail("Failed to list directories under %s. stderr:\n%s" % (path, exec_result.stderr))
+        if _is_filesystem_loop_error(exec_result.stderr):
+            # buildifier: disable=print
+            print("Warning: Filesystem loop detected in %s. Using partial results." % path)
+        else:
+            fail("Failed to list directories under %s. stderr:\n%s" % (path, exec_result.stderr))
     return _process_find_results(
         exec_result.stdout,
         find_path = path,
