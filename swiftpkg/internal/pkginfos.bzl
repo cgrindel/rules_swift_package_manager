@@ -435,6 +435,32 @@ def _new_target_from_json_maps(
                 sources = clang_src_info.explicit_srcs + clang_src_info.hdrs,
             )
 
+    elif module_type == module_types.system_library:
+        # System libraries need clang_src_info to capture the modulemap
+        # which may contain link declarations for system dependencies.
+        # Unlike regular clang targets, system library targets have their
+        # module.modulemap at the target root, not in a "public" subdirectory.
+        abs_target_path = paths.normalize(paths.join(pkg_path, target_path))
+        modulemap_path = paths.join(abs_target_path, "module.modulemap")
+        if repository_files.path_exists(repository_ctx, modulemap_path):
+            # Found the modulemap - create a minimal clang_src_info with just the modulemap
+            relative_modulemap_path = paths.join(target_path, "module.modulemap")
+            clang_src_info = _new_clang_src_info(
+                modulemap_path = relative_modulemap_path,
+            )
+        else:
+            # No modulemap found - fallback to standard discovery
+            clang_src_info = _new_clang_src_info_from_sources(
+                repository_ctx = repository_ctx,
+                pkg_path = pkg_path,
+                c99name = c99name,
+                target_path = target_path,
+                source_paths = source_paths,
+                public_hdrs_path = public_hdrs_path,
+                exclude_paths = exclude_paths,
+                other_hdr_srch_paths = [],
+            )
+
     return _new_target(
         name = target_name,
         type = dump_map["type"],

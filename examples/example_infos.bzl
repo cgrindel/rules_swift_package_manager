@@ -127,8 +127,9 @@ _all_os_all_bazel_versions_test_examples = [
 ]
 
 _all_os_single_bazel_version_test_examples = [
-    "vapor_example",
+    "grdb_example",
     "grpc_example",
+    "vapor_example",
 ]
 
 _macos_single_bazel_version_test_examples = [
