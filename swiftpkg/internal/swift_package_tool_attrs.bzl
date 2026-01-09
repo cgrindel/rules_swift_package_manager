@@ -26,6 +26,11 @@ Swift Package Manager's search paths or in the manually specified \
 `--config-path` directory.
 """,
     ),
+    "replace_scm_with_registry": attr.bool(
+        doc = """Look up source control dependencies in the registry and \
+use the registry to retrieve them instead of source control when possible.""",
+        default = False,
+    ),
 }
 
 _swift_package_tool_config_attrs = {
@@ -55,11 +60,6 @@ _swift_package_tool_config_attrs = {
     "manifest_caching": attr.bool(
         doc = "Whether to enable build manifest caching.",
         default = True,
-    ),
-    "replace_scm_with_registry": attr.bool(
-        doc = """Look up source control dependencies in the registry and \
-use the registry to retrieve them instead of source control when possible.""",
-        default = False,
     ),
     "security_path": attr.string(
         doc = "The relative path within the runfiles tree for the security directory.",

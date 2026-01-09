@@ -1,3 +1,5 @@
+module(name = "skip_local_transitive_dependencies_example")
+
 bazel_dep(
     name = "rules_swift_package_manager",
     version = "0.0.0",
@@ -36,4 +38,4 @@ swift_deps.from_package(
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )
-use_repo(swift_deps, "swift_package", "swiftpkg_localpackagea", "swiftpkg_localpackageb")
+use_repo(swift_deps, "swiftpkg_localpackagea", "swiftpkg_localpackageb")

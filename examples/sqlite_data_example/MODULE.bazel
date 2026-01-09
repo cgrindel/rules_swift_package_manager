@@ -1,3 +1,5 @@
+module(name = "sqlite_data_example")
+
 bazel_dep(
     name = "rules_swift_package_manager",
     version = "0.0.0",
@@ -43,7 +45,16 @@ swift_deps.from_package(
 )
 use_repo(
     swift_deps,
-    "swift_package",
     "swiftpkg_sqlite_data",
     "swiftpkg_swift_tagged",
 )
+
+swift_dev_deps = use_extension(
+    "@rules_swift_package_manager//:extensions.bzl",
+    "swift_dev_deps",
+    dev_dependency = True,
+)
+swift_dev_deps.from_package(
+    swift = "//:Package.swift",
+)
+use_repo(swift_dev_deps, "swift_package")

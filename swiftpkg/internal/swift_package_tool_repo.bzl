@@ -1,6 +1,5 @@
 """Defines the `swift_package_tool_repo` repository rule that creates `swift_package_tool` targets."""
 
-load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:types.bzl", "types")
 load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
@@ -10,11 +9,10 @@ def _package_config_attrs_to_content(attrs):
     """Returns a BUILD file compatible string representation of the keyword arguments"""
     kwargs = repository_utils.struct_to_kwargs(
         struct = attrs,
-        keys = dicts.add(
-            repo_rules.env_attr,
-            swift_package_tool_attrs.swift_package_tool_config,
+        keys =
+            repo_rules.env_attr |
+            swift_package_tool_attrs.swift_package_tool_config |
             swift_package_tool_attrs.swift_package_registry,
-        ),
     )
 
     kwarg_lines = []
@@ -76,17 +74,15 @@ swift_package_tool(
 
 swift_package_tool_repo = repository_rule(
     implementation = _swift_package_tool_repo_impl,
-    attrs = dicts.add(
-        repo_rules.env_attr,
-        {
-            "package": attr.string(
-                doc = "The relative path to the `Package.swift` file to operate on.",
-                mandatory = True,
-            ),
-        },
-        swift_package_tool_attrs.swift_package_tool_config,
-        swift_package_tool_attrs.swift_package_registry,
-    ),
+    attrs = repo_rules.env_attr |
+            swift_package_tool_attrs.swift_package_tool_config |
+            swift_package_tool_attrs.swift_package_registry |
+            {
+                "package": attr.string(
+                    doc = "The relative path to the `Package.swift` file to operate on.",
+                    mandatory = True,
+                ),
+            },
     doc = "Declares a `@swift_package` repository for using the `swift_package_tool` targets.",
 )
 

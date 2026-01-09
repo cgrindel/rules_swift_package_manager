@@ -1,3 +1,5 @@
+module(name = "phone_number_kit")
+
 bazel_dep(
     name = "rules_swift_package_manager",
     version = "0.0.0",
@@ -55,7 +57,6 @@ swift_deps.from_package(
 )
 use_repo(
     swift_deps,
-    "swift_deps_info",
-    "swift_package",
+    "phone_number_kit_swift_deps_info",
     "swiftpkg_phonenumberkit",
 )
