@@ -26,3 +26,15 @@ bzl_library(
         "//swiftpkg/internal:swift_package_tool_repo",
     ],
 )
+
+bzl_library(
+    name = "swift_dev_deps",
+    srcs = ["swift_dev_deps.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//swiftpkg/internal:repo_rules",
+        "//swiftpkg/internal:repository_utils",
+        "//swiftpkg/internal:swift_package_tool_attrs",
+        "//swiftpkg/internal:swift_package_tool_repo",
+    ],
+)

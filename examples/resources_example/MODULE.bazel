@@ -1,3 +1,5 @@
+module(name = "resources_example")
+
 bazel_dep(
     name = "rules_swift_package_manager",
     version = "0.0.0",
@@ -55,12 +57,13 @@ swift_deps.from_package(
 )
 use_repo(
     swift_deps,
-    "swift_deps_info",
-    "swift_package",
+    "resources_example_swift_deps_info",
     "swiftpkg_another_package_with_resources",
     "swiftpkg_app_lovin_sdk",
     "swiftpkg_googlesignin_ios",
+    "swiftpkg_implicit_resource_localization",
     "swiftpkg_package_with_resources",
+    "swiftpkg_package_with_resources_swift_6",
     "swiftpkg_recaptcha_enterprise_mobile_sdk",
     "swiftpkg_sdwebimageswiftui",
     "swiftpkg_swift_sdk",
