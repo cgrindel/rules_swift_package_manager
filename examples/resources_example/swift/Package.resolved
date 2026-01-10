@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleSignIn-iOS",
       "state" : {
-        "revision" : "3996d908c7b3ce8a87d39c808f9a6b2a08fbe043",
-        "version" : "9.0.0"
+        "revision" : "913b4005ea26aebe1c97d54e35ad82a515924c71",
+        "version" : "9.1.0"
       }
     },
     {
@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Iterable/swift-sdk",
       "state" : {
-        "revision" : "abbab6a37f9c9014da29d75e80823727d60bc2f3",
-        "version" : "6.6.4"
+        "revision" : "788c696519389a030f85eb27053e35f7e9efe49a",
+        "version" : "6.6.5"
       }
     }
   ],
