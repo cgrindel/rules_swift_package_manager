@@ -1,3 +1,5 @@
+module(name = "ios_sim")
+
 bazel_dep(
     name = "rules_swift_package_manager",
     version = "0.0.0",
@@ -63,8 +65,8 @@ swift_deps.from_package(
 )
 use_repo(
     swift_deps,
-    "swift_deps_info",
-    "swift_package",
+    "ios_sim_swift_deps_info",
+    "ios_sim_swift_package",
     "swiftpkg_swift_markdown",
     "swiftpkg_swift_nio",
 )

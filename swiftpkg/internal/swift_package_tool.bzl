@@ -91,6 +91,7 @@ Defines a rule that can be used to execute the `swift package` tool.\
 """,
     attrs = dicts.add(
         repo_rules.env_attr,
+        repo_rules.netrc_attrs,
         {
             "cmd": attr.string(
                 doc = "The `swift package` command to execute.",

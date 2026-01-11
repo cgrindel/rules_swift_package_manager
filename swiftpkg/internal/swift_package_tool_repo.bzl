@@ -12,6 +12,7 @@ def _package_config_attrs_to_content(attrs):
         struct = attrs,
         keys = dicts.add(
             repo_rules.env_attr,
+            repo_rules.netrc_attrs,
             swift_package_tool_attrs.swift_package_tool_config,
             swift_package_tool_attrs.swift_package_registry,
         ),
@@ -78,6 +79,7 @@ swift_package_tool_repo = repository_rule(
     implementation = _swift_package_tool_repo_impl,
     attrs = dicts.add(
         repo_rules.env_attr,
+        repo_rules.netrc_attrs,
         {
             "package": attr.string(
                 doc = "The relative path to the `Package.swift` file to operate on.",

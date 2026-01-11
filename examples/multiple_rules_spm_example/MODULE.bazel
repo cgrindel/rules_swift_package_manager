@@ -1,4 +1,4 @@
-module(name = "sqlite_data_example")
+module(name = "multiple_rules_spm_example")
 
 bazel_dep(
     name = "rules_swift_package_manager",
@@ -10,29 +10,23 @@ local_path_override(
 )
 
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.27.0")
-bazel_dep(name = "bazel_skylib", version = "1.9.0")
-bazel_dep(name = "apple_support", version = "1.24.5")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "apple_support", version = "1.24.4")
 bazel_dep(
     name = "rules_swift",
-    version = "3.4.1",
+    version = "3.2.0",
     repo_name = "build_bazel_rules_swift",
 )
 bazel_dep(
     name = "rules_apple",
-    version = "4.3.3",
+    version = "4.2.0",
     repo_name = "build_bazel_rules_apple",
 )
 
 bazel_dep(
     name = "bazel_skylib_gazelle_plugin",
-    version = "1.9.0",
+    version = "1.8.2",
     dev_dependency = True,
-)
-bazel_dep(
-    name = "gazelle",
-    version = "0.47.0",
-    dev_dependency = True,
-    repo_name = "bazel_gazelle",
 )
 
 swift_deps = use_extension(
@@ -45,7 +39,17 @@ swift_deps.from_package(
 )
 use_repo(
     swift_deps,
-    "sqlite_data_example_swift_package",
-    "swiftpkg_sqlite_data",
-    "swiftpkg_swift_tagged",
+    "swift_package",
+    "swiftpkg_swift_log",
+    "swiftpkg_vapor",
+)
+
+# Depend on another repository via Bzlmod that uses `rules_swift_package_manager` to declare its dependencies
+bazel_dep(
+    name = "vapor_example",
+    version = "0.0.0",
+)
+local_path_override(
+    module_name = "vapor_example",
+    path = "../vapor_example",
 )

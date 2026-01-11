@@ -31,7 +31,8 @@ def _get_dump_manifest(
         working_directory = "",
         debug_path = None,
         registries_directory = None,
-        replace_scm_with_registry = False):
+        replace_scm_with_registry = False,
+        use_registry_identity_for_scm = False):
     """Returns a dict representing the package dump for an SPM package.
 
     Args:
@@ -45,6 +46,8 @@ def _get_dump_manifest(
             configuration file for setting a Swift Package Registry.
         replace_scm_with_registry: Optional. A `bool` specifying whether to
             replace SCM references with registry references.
+        use_registry_identity_for_scm: Optional. A `bool` specifying whether to
+            use registry identities for SCM references.
 
     Returns:
         A `dict` representing an SPM package dump.
@@ -60,6 +63,8 @@ def _get_dump_manifest(
         args.extend(["--config-path", registries_directory])
     if replace_scm_with_registry:
         args.append("--replace-scm-with-registry")
+    if use_registry_identity_for_scm:
+        args.append("--use-registry-identity-for-scm")
     args.append("dump-package")
 
     return repository_utils.parsed_json_from_spm_command(
@@ -76,7 +81,8 @@ def _get_desc_manifest(
         working_directory = "",
         debug_path = None,
         registries_directory = None,
-        replace_scm_with_registry = False):
+        replace_scm_with_registry = False,
+        use_registry_identity_for_scm = False):
     """Returns a dict representing the package description for an SPM package.
 
     Args:
@@ -90,6 +96,8 @@ def _get_desc_manifest(
             configuration file for setting a Swift Package Registry.
         replace_scm_with_registry: Optional. A `bool` specifying whether to
             replace SCM references with registry references.
+        use_registry_identity_for_scm: Optional. A `bool` specifying whether to
+            use registry identities for SCM references.
 
     Returns:
         A `dict` representing an SPM package description.
@@ -105,6 +113,8 @@ def _get_desc_manifest(
         args.extend(["--config-path", registries_directory])
     if replace_scm_with_registry:
         args.append("--replace-scm-with-registry")
+    if use_registry_identity_for_scm:
+        args.append("--use-registry-identity-for-scm")
 
     args.extend(["describe", "--type", "json"])
 
@@ -124,7 +134,8 @@ def _get(
         resolved_pkg_map = None,
         collect_src_info = True,
         registries_directory = None,
-        replace_scm_with_registry = False):
+        replace_scm_with_registry = False,
+        use_registry_identity_for_scm = False):
     """Retrieves the package information for the Swift package defined at the \
     specified directory.
 
@@ -143,6 +154,8 @@ def _get(
             configuration file for setting a Swift Package Registry.
         replace_scm_with_registry: Optional. A `bool` specifying whether to
             replace SCM references with registry references.
+        use_registry_identity_for_scm: Optional. A `bool` specifying whether to
+            use registry identities for SCM references.
 
     Returns:
         A `struct` representing the package information as returned by
@@ -159,6 +172,7 @@ def _get(
         debug_path = debug_path,
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
+        use_registry_identity_for_scm = use_registry_identity_for_scm,
     )
     desc_manifest = _get_desc_manifest(
         repository_ctx,
@@ -167,6 +181,7 @@ def _get(
         debug_path = debug_path,
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
+        use_registry_identity_for_scm = use_registry_identity_for_scm,
     )
     pkg_info = _new_from_parsed_json(
         repository_ctx = repository_ctx,
