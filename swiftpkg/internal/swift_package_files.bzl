@@ -1,28 +1,66 @@
 """Utilities for working with `Package.swift` files."""
 
-_PACKAGE_SWIFT_NAME = "Package.swift"
+def _package_dependency_identity_str(dep):
+    if dep.source_control and dep.source_control.pin:
+        return "url: \"{location}\"".format(location = dep.source_control.pin.location)
+    elif dep.registry and dep.registry.pin:
+        return "id: \"{id}\"".format(id = dep.registry.pin.identity)
+    else:
+        fail("Unexpected dependency: {dep}".format(dep = dep))
 
-def _create_merged_package_swift(*, module_ctx, pkg_files, tools_version):
+def _package_dependency_str(mod_name, dep):
+    requirement = dep.requirement
+    if not requirement:
+        fail("Expected a requirement for {name} defined package dependency: {dep}".format(
+            name = mod_name,
+            deps = dep,
+        ))
+
+    identity = _package_dependency_identity_str(dep)
+    if requirement.exact:
+        return """\
+        .package({identity}, exact: \"{exact}\")\
+""".format(identity = identity, exact = requirement.exact)
+    elif requirement.branch:
+        return """\
+        .package({identity}, branch: "{branch}")\
+""".format(identity = identity, branch = requirement.branch)
+    elif requirement.revision:
+        return """\
+        .package({identity}, revision: "{revision}")\
+""".format(identity = identity, revision = requirement.revision)
+    elif requirement.lower_bound and requirement.upper_bound:
+        return """\
+        .package({identity}, "{lb}"..<"{ub}")\
+""".format(identity = identity, lb = requirement.lower_bound, ub = requirement.upper_bound)
+    else:
+        fail("Unexpected requirement for {name} defined package dependency: {dep}".format(
+            name = mod_name,
+            dep = dep,
+        ))
+
+def _create_merged_package_swift(*, all_deps_by_mod, tools_version):
     """Creates a merged `Package.swift` file from the specified `Package.swift` files.
 
     The "merged" Package.swift file simply contains a local `package(path:)` usage for \
     each of the specified `Package.swift` files.
 
     Args:
-        module_ctx: An instance of `module_ctx`.
-        pkg_files: A `list` of `struct(name = str, path = path)` objects representing \
-            the `Package.swift` files and the name of the module the package is for.
+        all_deps_by_mod: A `dict` of module name to `list` of `struct` as \
+            returned by `pkginfos.dependency` objects.
         tools_version: The Swift tools version used by the root module.
 
     Returns:
-        A `path` object representing the merged `Package.swift` file.
+        A `string` representing the merged `Package.swift` file content.
     """
 
     dependencies = []
-    for pkg_file in pkg_files:
-        dependencies.append("""\
-        .package(name: "{name}", path: \"{path}\")
-""".format(name = pkg_file.name, path = pkg_file.path))
+    for mod_name, deps in all_deps_by_mod.items():
+        for dep in deps:
+            dependencies.append(_package_dependency_str(mod_name, dep))
+
+    # sort contents for reproducibility
+    dependencies = sorted(dependencies)
 
     content = """
 // swift-tools-version: {tools_version}
@@ -42,8 +80,7 @@ let package = Package(
         dependencies_str = ",\n".join(dependencies),
     )
 
-    module_ctx.file(_PACKAGE_SWIFT_NAME, content)
-    return module_ctx.path(_PACKAGE_SWIFT_NAME)
+    return content
 
 swift_package_files = struct(
     merge = _create_merged_package_swift,

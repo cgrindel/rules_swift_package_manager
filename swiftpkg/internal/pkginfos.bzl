@@ -209,6 +209,7 @@ def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map, resolved_dep_ma
     source_control = None
     file_system = None
     registry = None
+    requirement = None
 
     if type == "sourceControl":
         # If the dependency is in the resolved map use that pin,
@@ -242,12 +243,21 @@ def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map, resolved_dep_ma
             identity = identity,
         ))
 
+    if type in ["sourceControl", "registry"]:
+        if "requirement" in dep_map:
+            requirement = _new_requirement(dep_map["requirement"])
+        else:
+            fail("Unexpected missing requirement range in dependency: %s" % dep_map)
+    else:
+        requirement = None
+
     return _new_dependency(
         identity = identity,
         name = name,
         source_control = source_control,
         file_system = file_system,
         registry = registry,
+        requirement = requirement,
     )
 
 def _new_pin_from_resolved_dep_map(resolved_dep_map):
@@ -858,7 +868,8 @@ def _new_dependency(
         name,
         source_control = None,
         file_system = None,
-        registry = None):
+        registry = None,
+        requirement = None):
     """Creates a `struct` representing an external dependency for a Swift \
     package.
 
@@ -874,6 +885,7 @@ def _new_dependency(
         registry: Optional. A `struct` as returned by
             `pkginfos.new_registry()`. If present, it identifies the
             dependency as being loaded from a Swift package registry.
+        requirement: Optional. A `struct` with the version requirement range.
 
     Returns:
         A `struct` representing an external dependency.
@@ -885,6 +897,7 @@ def _new_dependency(
         source_control = source_control,
         file_system = file_system,
         registry = registry,
+        requirement = requirement,
     )
 
 def _new_source_control(pin):
@@ -989,20 +1002,73 @@ A depdendency requirement must have one of the following: `ranges`.\
         ranges = ranges,
     )
 
-def _new_version_range(lower, upper):
-    """Creates a `struct` representing a version range.
+def _new_requirement(requirement):
+    """Creates a `struct` representing a dependency requirement range.
+
+    See: https://developer.apple.com/documentation/packagedescription/package/dependency
 
     Args:
-        lower: The minimum semantic version (`string`).
-        upper: The non-inclusive maximum semantic version (`string`).
+        requirement: A `dict` representing a requirement specification as defined by SPM.
 
     Returns:
         A `struct` representing a version range.
     """
-    return struct(
-        lower = lower,
-        upper = upper,
-    )
+    if not requirement:
+        return None
+
+    if "exact" in requirement and requirement["exact"]:
+        exact = requirement["exact"]
+        if len(exact) > 1:
+            fail("Unexpected multiple exact versions in version requirement: %s" % requirement)
+        else:
+            return struct(
+                exact = exact[0],
+                branch = None,
+                lower_bound = None,
+                upper_bound = None,
+                revision = None,
+            )
+
+    if "branch" in requirement and requirement["branch"]:
+        branch = requirement["branch"]
+        if len(branch) > 1:
+            fail("Unexpected multiple branches in version requirement: %s" % requirement)
+        else:
+            return struct(
+                branch = branch[0],
+                exact = None,
+                lower_bound = None,
+                upper_bound = None,
+                revision = None,
+            )
+
+    if "revision" in requirement and requirement["revision"]:
+        revision = requirement["revision"]
+        if len(revision) > 1:
+            fail("Unexpected multiple revisions in version requirement: %s" % requirement)
+        else:
+            return struct(
+                branch = None,
+                exact = None,
+                lower_bound = None,
+                upper_bound = None,
+                revision = revision[0],
+            )
+
+    if "range" in requirement and requirement["range"]:
+        ranges = requirement["range"]
+        if len(ranges) > 1:
+            fail("Unexpected multiple ranges in version requirement: %s" % requirement)
+        else:
+            return struct(
+                branch = None,
+                exact = None,
+                lower_bound = ranges[0]["lower_bound"],
+                upper_bound = ranges[0]["upper_bound"],
+                revision = None,
+            )
+
+    fail("Unrecognized requirement: %s" % requirement)
 
 # MARK: - Product
 
@@ -1952,6 +2018,7 @@ pkginfos = struct(
     new_product_reference = _new_product_reference,
     new_product_type = _new_product_type,
     new_registry = _new_registry,
+    new_requirement = _new_requirement,
     new_resource = _new_resource,
     new_resource_rule = _new_resource_rule,
     new_resource_rule_process = _new_resource_rule_process,
@@ -1963,5 +2030,4 @@ pkginfos = struct(
     new_target_dependency_condition = _new_target_dependency_condition,
     new_target_dependency_from_dump_json_map = _new_target_dependency_from_dump_json_map,
     new_target_reference = _new_target_reference,
-    new_version_range = _new_version_range,
 )

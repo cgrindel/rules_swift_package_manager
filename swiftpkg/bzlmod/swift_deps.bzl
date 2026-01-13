@@ -21,6 +21,7 @@ def _get_env(*, module_ctx, from_package):
     """Returns the environment variables as configured in the `from_package` tag.
 
     Args:
+        module_ctx: An instance of `module_ctx`.
         from_package: The data from the `from_package` tag.
 
     Returns:
@@ -209,7 +210,14 @@ def _declare_pkg_from_dependency(dep, config_pkg, from_package):
             version = dep.registry.pin.state.version,
         )
 
-def _declare_swift_package_repo(name, from_package, config_swift_package):
+def _declare_swift_package_repo(
+        name,
+        package_content,
+        package_path,
+        config_swift_package,
+        env,
+        netrc,
+        registries):
     config_swift_package_kwargs = repository_utils.struct_to_kwargs(
         struct = config_swift_package,
         keys = swift_package_tool_attrs.swift_package_tool_config,
@@ -217,18 +225,16 @@ def _declare_swift_package_repo(name, from_package, config_swift_package):
 
     swift_package_tool_repo(
         name = name,
-        env = from_package.env,
-        package = "{package}/{name}".format(
-            package = from_package.swift.package,
-            name = from_package.swift.name,
-        ),
-        netrc = from_package.netrc,
-        registries = from_package.registries,
+        env = env,
+        package_content = package_content,
+        package_path = str(package_path),
+        netrc = netrc,
+        registries = registries,
         **config_swift_package_kwargs
     )
 
 def _swift_deps_impl(module_ctx):
-    all_deps_by_id = {}
+    all_deps_by_mod = {}
     config_pkgs = {}
     config_swift_package_map = {}
     debug_path = str(module_ctx.path("."))
@@ -263,7 +269,6 @@ Declare the module name using the `module` directive in the MODULE.bazel file.
     # Declare the repositories generate for each module.
     for mod in module_ctx.modules:
         from_package = from_package_map.get(mod.name)
-        config_swift_package = config_swift_package_map.get(mod.name)
 
         # Get the package info.
         pkg_swift = module_ctx.path(from_package.swift)
@@ -297,20 +302,19 @@ Declare the module name using the `module` directive in the MODULE.bazel file.
             name = swift_deps_info_repo_name,
             direct_dep_pkg_infos = direct_dep_pkg_infos,
         )
-        _declare_swift_package_repo(
-            name = swift_package_repo_name,
-            from_package = from_package,
-            config_swift_package = config_swift_package,
-        )
-        if mod.is_root:
-            root_module_direct_deps.extend([
-                swift_deps_info_repo_name,
-                swift_package_repo_name,
-            ])
 
-        # Collect all of the deps by identity
-        for dep in pkg_info.dependencies:
-            all_deps_by_id[dep.identity] = dep
+        # Declare an empty swift_package repository for non-root modules, these should not be used directly.
+        # The root module generates this repository using the merged `Package.swift` file.
+        if mod.is_root:
+            root_module_direct_deps.append(swift_deps_info_repo_name)
+            root_module_direct_deps.append(swift_package_repo_name)
+        else:
+            repository_utils.declare_empty_repository(name = swift_package_repo_name)
+
+        # Collect all of the deps by module name that declared them.
+        if not mod.name in all_deps_by_mod:
+            all_deps_by_mod[mod.name] = []
+        all_deps_by_mod[mod.name].extend(pkg_info.dependencies)
 
     if not root_module or not from_package_map[root_module.name]:
         fail("Expected a root module and from_package for the root module, but found none.")
@@ -320,33 +324,41 @@ Declare the module name using the `module` directive in the MODULE.bazel file.
     if resolved and module_ctx.path(resolved).exists:
         resolved_pkg_map = json.decode(module_ctx.read(module_ctx.path(resolved)))
     else:
-        print("""
-WARNING: {resolved} does not exist, run `bazel run @{module_name}_swift_package//:resolve` to resolve it.
-""".format(resolved = resolved, module_name = root_module.name))
-        resolved_pkg_map = {
-            "pins": [],
-        }
+        resolved_pkg_map = None
 
     # Collect the `Package.swift` files for all modules.
-    pkg_files = []
-    for mod in module_ctx.modules:
-        from_package = from_package_map[mod.name]
-        pkg_files.append(
-            struct(
-                name = mod.name,
-                path = module_ctx.path(from_package.swift),
-            ),
-        )
+    # pkg_files = []
+    # for mod in module_ctx.modules:
+    #     from_package = from_package_map[mod.name]
+    #     pkg_files.append(
+    #         struct(
+    #             name = mod.name,
+    #             path = module_ctx.path(from_package.swift),
+    #         ),
+    #     )
 
     # Merge all of the `Package.swift` files into a single `Package.swift` file.
-    swift_package_file = swift_package_files.merge(
-        module_ctx = module_ctx,
-        pkg_files = pkg_files,
+    merged_package_content = swift_package_files.merge(
+        all_deps_by_mod = all_deps_by_mod,
         tools_version = root_module_swift_tools_version,
     )
+    module_ctx.file("Package.swift", merged_package_content)
+    merged_package_file = module_ctx.path("Package.swift")
 
     # Collect all dependencies from the "merged" `Package.swift` file.
     root_from_package = from_package_map[root_module.name]
+    root_config_swift_package = config_swift_package_map.get(root_module.name)
+
+    # Declare the swift_package repository for the root module.
+    _declare_swift_package_repo(
+        name = "{}_swift_package".format(root_module.name),
+        package_content = merged_package_content,
+        package_path = module_ctx.path(root_from_package.swift).dirname,
+        env = _get_env(module_ctx = module_ctx, from_package = root_from_package),
+        netrc = root_from_package.netrc,
+        registries = root_from_package.registries,
+        config_swift_package = root_config_swift_package,
+    )
 
     # NOTE: SPM does not have a flag for setting the exact file path
     # for the registry, instead we must use the parent directory as the
@@ -358,7 +370,7 @@ WARNING: {resolved} does not exist, run `bazel run @{module_name}_swift_package/
 
     merged_pkg_info = pkginfos.get(
         module_ctx,
-        directory = str(swift_package_file.dirname),
+        directory = str(merged_package_file.dirname),
         env = _get_env(module_ctx = module_ctx, from_package = root_from_package),
         debug_path = debug_path,
         collect_src_info = False,
@@ -368,7 +380,18 @@ WARNING: {resolved} does not exist, run `bazel run @{module_name}_swift_package/
         use_registry_identity_for_scm = root_from_package.use_registry_identity_for_scm,
     )
 
-    fail(swift_package_file, merged_pkg_info)
+    direct_dep_repo_names = []
+    for dep in merged_pkg_info.dependencies:
+        bazel_repo_name = bazel_repo_names.from_identity(dep.identity)
+        if not bazel_repo_name in direct_dep_repo_names:
+            direct_dep_repo_names.append(bazel_repo_name)
+
+    # TODO: Implement handling resolved_pkg_map and declaring the real repositories.
+    # Declare empty repositories for all of the direct dependencies.
+    for repo_name in direct_dep_repo_names:
+        repository_utils.declare_empty_repository(name = repo_name)
+
+    root_module_direct_deps.extend(direct_dep_repo_names)
 
     return module_ctx.extension_metadata(
         root_module_direct_deps = root_module_direct_deps,
