@@ -83,8 +83,8 @@ swift_deps.configure_swift_package(
 )
 use_repo(
     swift_deps,
-    "swift_deps_info",
-    "swift_package",
+    "interesting_deps_example_swift_deps_info",
+    "interesting_deps_example_swift_package",
     "swiftpkg_cocoalumberjack",
     "swiftpkg_geoswift",
     "swiftpkg_libwebp_xcode",

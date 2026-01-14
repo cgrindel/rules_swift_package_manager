@@ -1,3 +1,5 @@
+module(name = "vapor_example")
+
 bazel_dep(
     name = "rules_swift_package_manager",
     version = "0.0.0",
@@ -58,9 +60,6 @@ swift_deps.from_package(
 )
 use_repo(
     swift_deps,
-    "swift_deps_info",
-    "swift_package",
-    "swiftpkg_fluent",
-    "swiftpkg_fluent_sqlite_driver",
-    "swiftpkg_vapor",
+    "vapor_example_swift_deps_info",
+    "vapor_example_swift_package",
 )

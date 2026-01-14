@@ -1,3 +1,5 @@
+module(name = "swift_package_registry_example")
+
 bazel_dep(
     name = "rules_swift_package_manager",
     version = "0.0.0",
@@ -39,16 +41,12 @@ swift_deps = use_extension(
 )
 swift_deps.from_package(
     registries = "//:registries.json",
+    replace_scm_with_registry = True,
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )
-swift_deps.configure_swift_package(
-    replace_scm_with_registry = True,
-)
 use_repo(
     swift_deps,
-    "swift_package",
-    "swiftpkg_apple.swift_collections",
-    "swiftpkg_apple.swift_nio",
-    "swiftpkg_swift_async_algorithms",
+    "swift_package_registry_example_swift_deps_info",
+    "swift_package_registry_example_swift_package",
 )

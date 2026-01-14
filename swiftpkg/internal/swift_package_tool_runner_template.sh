@@ -5,12 +5,6 @@ set -euo pipefail
 #
 # This is a templated script which runs `swift package <cmd>`.
 #
-# The expected template keys are:
-#  %(swift_worker)s - The path to the Swift worker executable.
-#  %(cmd)s - The command to run.
-#  %(package)s - The path to the package to run the command on.
-#  %(build_path)s - The path to the build directory.
-#  %(cache_path)s - The path to the cache directory.
 
 if [ -z "${BUILD_WORKSPACE_DIRECTORY:-}" ]; then
 	echo "BUILD_WORKSPACE_DIRECTORY is not set, this target may only be \`bazel run\`"
@@ -20,7 +14,7 @@ fi
 # Collect template values.
 swift_worker="%(swift_worker)s"
 cmd="%(cmd)s"
-package_path="$BUILD_WORKSPACE_DIRECTORY/%(package_path)s"
+package_path="$(dirname %(package_swift_path)s)"
 build_path="%(build_path)s"
 cache_path="%(cache_path)s"
 config_path="%(config_path)s"
@@ -28,6 +22,7 @@ enable_build_manifest_caching="%(enable_build_manifest_caching)s"
 enable_dependency_cache="%(enable_dependency_cache)s"
 manifest_cache="%(manifest_cache)s"
 netrc_file="%(netrc_file)s"
+output_package_path="%(output_package_path)s"
 registries_json="%(registries_json)s"
 replace_scm_with_registry="%(replace_scm_with_registry)s"
 security_path="%(security_path)s"
@@ -100,3 +95,11 @@ fi
 	"$cmd" \
 	"${args[@]}" \
 	"$@"
+
+# Write back the Package.resolved to the expected location.
+if ! [ -f "$package_path/Package.resolved" ]; then
+	echo "error: 'Package.resolved' not found after resolving packages in $package_path"
+	exit 1
+else
+    cp "$package_path/Package.resolved" "$output_package_path/Package.resolved"
+fi

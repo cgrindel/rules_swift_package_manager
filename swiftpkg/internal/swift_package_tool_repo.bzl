@@ -12,6 +12,7 @@ def _package_config_attrs_to_content(attrs):
         struct = attrs,
         keys = dicts.add(
             repo_rules.env_attr,
+            repo_rules.netrc_attrs,
             swift_package_tool_attrs.swift_package_tool_config,
             swift_package_tool_attrs.swift_package_registry,
         ),
@@ -33,7 +34,8 @@ def _package_config_attrs_to_content(attrs):
 
 def _swift_package_tool_repo_impl(repository_ctx):
     attrs_content = _package_config_attrs_to_content(repository_ctx.attr)
-    package_path = repository_ctx.attr.package
+    package_content = repository_ctx.attr.package_content
+    package_path = repository_ctx.attr.package_path
 
     # We copy .netrc file contents to avoid requiring users to use `exports_files(...)`
     netrc_attr = None
@@ -58,19 +60,22 @@ load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package_tool")
 swift_package_tool(
     name = "update",
     cmd = "update",
-    package = "{package}",
+    package_content = \"\"\"{package_content}\"\"\",
+    package_path = "{package_path}",
 {attrs_content}
 )
 
 swift_package_tool(
     name = "resolve",
     cmd = "resolve",
-    package = "{package}",
+    package_content = \"\"\"{package_content}\"\"\",
+    package_path = "{package_path}",
 {attrs_content}
 )
 """.format(
-            package = package_path,
             attrs_content = final_attrs_content,
+            package_content = package_content,
+            package_path = package_path,
         ),
     )
 
@@ -78,9 +83,15 @@ swift_package_tool_repo = repository_rule(
     implementation = _swift_package_tool_repo_impl,
     attrs = dicts.add(
         repo_rules.env_attr,
+        repo_rules.netrc_attrs,
         {
-            "package": attr.string(
-                doc = "The relative path to the `Package.swift` file to operate on.",
+            "package_content": attr.string(
+                doc = "The content of the `Package.swift` file to operate on.",
+                mandatory = True,
+            ),
+            "package_path": attr.string(
+                doc = """The path to the directory containing the `Package.swift` file\
+of the module that declares this repository.""",
                 mandatory = True,
             ),
         },

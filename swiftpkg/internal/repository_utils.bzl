@@ -141,7 +141,25 @@ def _struct_to_kwargs(*, struct, keys):
             kwargs[k] = v
     return kwargs
 
+def _declare_empty_repository(name):
+    """Declares an empty repository, useful when a repository should always be generated \
+    even if it should not be directly used.
+
+    Args:
+        name: The name of the repository to declare.
+    """
+    _empty_repository(name = name)
+
+def _empty_repository_impl(repository_ctx):
+    repository_ctx.file("BUILD.bazel")
+
+_empty_repository = repository_rule(
+    implementation = _empty_repository_impl,
+    attrs = {},
+)
+
 repository_utils = struct(
+    declare_empty_repository = _declare_empty_repository,
     exec_spm_command = _execute_spm_command,
     is_macos = _is_macos,
     package_name = _package_name,

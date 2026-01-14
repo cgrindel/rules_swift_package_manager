@@ -46,6 +46,18 @@ SPM dependency resolution, SPM package description generation)\
     },
 )
 
+_netrc_attrs = {
+    "netrc": attr.label(
+        allow_single_file = True,
+        doc = """
+A `.netrc` file that contains authentication credentials used for fetching Swift packages and or binary artifacts.
+
+When provided, this file will be passed to Swift Package Manager commands using \
+the `--netrc-file` flag during package resolution and updates.
+""",
+    ),
+}
+
 _DEVELOPER_DIR_ENV = "DEVELOPER_DIR"
 
 def _get_exec_env(repository_ctx):
@@ -253,6 +265,7 @@ repo_rules = struct(
     env_attrs = _env_attrs,
     gen_build_files = _gen_build_files,
     get_exec_env = _get_exec_env,
+    netrc_attrs = _netrc_attrs,
     remove_bazel_files = _remove_bazel_files,
     remove_modulemaps = _remove_modulemaps,
     swift_attrs = _swift_attrs,

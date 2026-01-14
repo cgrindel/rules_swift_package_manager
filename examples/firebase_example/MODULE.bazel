@@ -1,3 +1,5 @@
+module(name = "firebase_example")
+
 bazel_dep(
     name = "rules_swift_package_manager",
     version = "0.0.0",
@@ -63,8 +65,8 @@ swift_deps.from_package(
 )
 use_repo(
     swift_deps,
-    "swift_deps_info",
-    "swift_package",
+    "firebase_example_swift_deps_info",
+    "firebase_example_swift_package",
     "swiftpkg_firebase_ios_sdk",
     "swiftpkg_reachability.swift",
 )

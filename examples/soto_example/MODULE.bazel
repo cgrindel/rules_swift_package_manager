@@ -1,3 +1,5 @@
+module(name = "soto_example")
+
 bazel_dep(
     name = "rules_swift_package_manager",
     version = "0.0.0",
@@ -58,7 +60,7 @@ swift_deps.from_package(
 )
 use_repo(
     swift_deps,
-    "swift_deps_info",
-    "swift_package",
+    "soto_example_swift_deps_info",
+    "soto_example_swift_package",
     "swiftpkg_soto",
 )

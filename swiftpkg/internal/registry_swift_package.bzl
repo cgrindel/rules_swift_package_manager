@@ -242,6 +242,7 @@ def _registry_swift_package_impl(repository_ctx):
         resolved_pkg_map = resolved_pkg_map,
         registries_directory = registries_directory,
         replace_scm_with_registry = attr.replace_scm_with_registry,
+        use_registry_identity_for_scm = attr.use_registry_identity_for_scm,
     )
 
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
@@ -253,27 +254,10 @@ def _registry_swift_package_impl(repository_ctx):
         pkg_ctx.pkg_info.targets,
     )
 
-_REGISTRY_ATTRS = {
+_REGISTRY_PACKAGE_ATTRS = {
     "id": attr.string(
         mandatory = True,
         doc = "The package identifier.",
-    ),
-    "replace_scm_with_registry": attr.bool(
-        default = False,
-        doc = """\
-When enabled replaces SCM identities in dependencies package description \
-with identities from the registries.
-
-Using this option requires that the registries provide `repositoryURLs` as \
-metadata for the package.
-
-When `True` the equivalent `--replace-scm-with-registry` option must be used \
-with the Swift Package Manager CLI (or `swift_package` rule) so that the \
-`resolved` file includes the version and identity information from the registry.
-
-For more information see the \
-[Swift Package Manager documentation](https://github.com/swiftlang/swift-package-manager/blob/swift-6.0.1-RELEASE/Documentation/PackageRegistry/Registry.md#45-lookup-package-identifiers-registered-for-a-url).
-""",
     ),
     "resolved": attr.label(
         allow_files = [".resolved"],
@@ -289,7 +273,7 @@ A `Package.resolved`, used to de-duplicate dependency identities when \
 }
 
 _ALL_ATTRS = dicts.add(
-    _REGISTRY_ATTRS,
+    _REGISTRY_PACKAGE_ATTRS,
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
     swift_package_tool_attrs.swift_package_registry,
