@@ -21,7 +21,7 @@ development inside a Bazel workspace.
   * [1. Enable bzlmod](#1-enable-bzlmod)
   * [2. Configure your `MODULE.bazel` to use rules_swift_package_manager.](#2-configure-your-modulebazel-to-use-rules_swift_package_manager)
     * [(Optional) Use `swift_package` repository for updating packages](#optional-use-swift_package-repository-for-updating-packages)
-    * [(Optional) Enable `swift_deps_info` generation for the Gazelle plugin](#optional-enable-swift_deps_info-generation-for-the-gazelle-plugin)
+    * [(Optional) Enable `{module_name}_swift_deps_info` generation for the Gazelle plugin](#optional-enable-module_name_swift_deps_info-generation-for-the-gazelle-plugin)
   * [3. Create a minimal `Package.swift` file.](#3-create-a-minimal-packageswift-file)
   * [4. Run `swift package update`](#4-run-swift-package-update)
   * [5. Run `bazel mod tidy`.](#5-run-bazel-mod-tidy)
@@ -169,14 +169,18 @@ swift_deps.from_package(
 )
 ```
 
-#### (Optional) Enable `swift_deps_info` generation for the Gazelle plugin
+#### (Optional) Enable `{module_name}_swift_deps_info` generation for the Gazelle plugin
 
 If you will be using the [Gazelle plugin for Swift], you will need to enable the generation of
-the `swift_deps_info` repository by enabling `declare_swift_deps_info`.
+the `{module_name}_swift_deps_info` repository by enabling `declare_swift_deps_info`.
 
-```bazel
+```starlark
+module(name = "example")
+
+...
+
 swift_deps.from_package(
-    declare_swift_deps_info = True, # <=== Enable swift_deps_info generation for the Gazelle plugin
+    declare_swift_deps_info = True, # <=== Enable `example_swift_deps_info` generation for the Gazelle plugin
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )

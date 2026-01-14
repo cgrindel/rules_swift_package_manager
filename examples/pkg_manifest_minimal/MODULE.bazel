@@ -1,3 +1,5 @@
+module(name = "pkg_manifest_minimal")
+
 bazel_dep(
     name = "rules_swift_package_manager",
     version = "0.0.0",
@@ -53,11 +55,20 @@ swift_deps.from_package(
 )
 use_repo(
     swift_deps,
-    "swift_deps_info",
-    "swift_package",
+    "pkg_manifest_minimal_swift_deps_info",
     "swiftpkg_my_local_package",
     "swiftpkg_notthatamazingmodule",
     "swiftpkg_swift_argument_parser",
     "swiftpkg_swift_log",
     "swiftpkg_swiftformat",
 )
+
+swift_dev_deps = use_extension(
+    "@rules_swift_package_manager//:extensions.bzl",
+    "swift_dev_deps",
+    dev_dependency = True,
+)
+swift_dev_deps.from_package(
+    swift = "//:Package.swift",
+)
+use_repo(swift_dev_deps, "swift_package")

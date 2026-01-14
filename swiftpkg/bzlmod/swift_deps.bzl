@@ -1,28 +1,26 @@
 """Implementation for `swift_deps` bzlmod extension."""
 
-load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
 load("//swiftpkg/internal:local_swift_package.bzl", "local_swift_package")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 load("//swiftpkg/internal:registry_swift_package.bzl", "registry_swift_package")
-load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
+load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 load("//swiftpkg/internal:swift_deps_info.bzl", "swift_deps_info")
 load("//swiftpkg/internal:swift_package.bzl", "PATCH_ATTRS", "TOOL_ATTRS", "swift_package")
 load("//swiftpkg/internal:swift_package_tool_attrs.bzl", "swift_package_tool_attrs")
-load("//swiftpkg/internal:swift_package_tool_repo.bzl", "swift_package_tool_repo")
 
 # MARK: - swift_deps bzlmod Extension
 
 _DO_WHILE_RANGE = range(1000)
 
-def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swift_package):
+def _declare_pkgs_from_package(module_ctx, module_name, from_package, config_pkgs):
     """Declare Swift packages from `Package.swift` and `Package.resolved`.
 
     Args:
         module_ctx: An instance of `module_ctx`.
+        module_name: The name of the module declaring the Swift packages.
         from_package: The data from the `from_package` tag.
         config_pkgs: The data from the `configure_package` tag.
-        config_swift_package: The data from the `configure_swift_package` tag.
     """
 
     # Read Package.resolved.
@@ -43,12 +41,6 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
     else:
         registries_directory = None
 
-    if config_swift_package:
-        replace_scm_with_registry = \
-            config_swift_package.replace_scm_with_registry
-    else:
-        replace_scm_with_registry = False
-
     # Set the environment variables for getting the package info.
     env = {}
     for (key, value) in from_package.env.items():
@@ -67,7 +59,7 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
         resolved_pkg_map = resolved_pkg_map,
         collect_src_info = False,
         registries_directory = registries_directory,
-        replace_scm_with_registry = replace_scm_with_registry,
+        replace_scm_with_registry = from_package.replace_scm_with_registry,
     )
 
     # Collect all of the deps by identity
@@ -100,22 +92,21 @@ the Swift package to make it available.\
         direct_dep_pkg_infos[pkg_info_label] = dep.identity
 
     # Write info about the Swift deps that may be used by external tooling.
+    # Each module MUST declare a unique `{module_name}_swift_deps_info` repository
+    # when requested, otherwise, it would be impossible to depend on a
+    # Bazel module that also uses `swift_deps`.
     if from_package.declare_swift_deps_info:
-        swift_deps_info_repo_name = "swift_deps_info"
+        if not module_name:
+            fail("""\
+Expected a module name, but found none. Declare the module name using the `module` directive. \
+Or use `declare_swift_deps_info = False` to skip declaring the `swift_deps_info` repository.
+""")
+        swift_deps_info_repo_name = "{}_swift_deps_info".format(module_name)
         swift_deps_info(
             name = swift_deps_info_repo_name,
             direct_dep_pkg_infos = direct_dep_pkg_infos,
         )
         direct_dep_repo_names.append(swift_deps_info_repo_name)
-
-    if from_package.declare_swift_package:
-        swift_package_repo_name = "swift_package"
-        _declare_swift_package_repo(
-            name = swift_package_repo_name,
-            from_package = from_package,
-            config_swift_package = config_swift_package,
-        )
-        direct_dep_repo_names.append(swift_package_repo_name)
 
     # Ensure that we add all of the transitive source control
     # or registry deps from the resolved file.
@@ -185,7 +176,7 @@ the Swift package to make it available.\
             config_pkg = config_pkgs.get(
                 bazel_repo_names.from_identity(dep.identity),
             )
-        _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_package)
+        _declare_pkg_from_dependency(dep, config_pkg, from_package)
 
     # Add all transitive dependencies to direct_dep_repo_names if `publicly_expose_all_targets` flag is set.
     for dep in all_deps_by_id.values():
@@ -199,7 +190,7 @@ the Swift package to make it available.\
 
     return direct_dep_repo_names
 
-def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_package):
+def _declare_pkg_from_dependency(dep, config_pkg, from_package):
     name = bazel_repo_names.from_identity(dep.identity)
     if dep.source_control:
         init_submodules = None
@@ -220,12 +211,6 @@ def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_pac
             patches = config_pkg.patches
             publicly_expose_all_targets = config_pkg.publicly_expose_all_targets
 
-        registries = from_package.registries
-        replace_scm_with_registry = False
-        if config_swift_package:
-            replace_scm_with_registry = \
-                config_swift_package.replace_scm_with_registry
-
         pin = dep.source_control.pin
         swift_package(
             name = name,
@@ -245,8 +230,8 @@ def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_pac
             patch_tool = patch_tool,
             patches = patches,
             publicly_expose_all_targets = publicly_expose_all_targets,
-            registries = registries,
-            replace_scm_with_registry = replace_scm_with_registry,
+            registries = from_package.registries,
+            replace_scm_with_registry = from_package.replace_scm_with_registry,
         )
 
     elif dep.file_system:
@@ -261,9 +246,6 @@ def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_pac
 
     elif dep.registry:
         resolved = from_package.resolved if from_package else None
-        replace_scm_with_registry = False
-        if config_swift_package:
-            replace_scm_with_registry = config_swift_package.replace_scm_with_registry
 
         registry_swift_package(
             name = name,
@@ -272,98 +254,44 @@ def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_pac
             env_inherit = from_package.env_inherit,
             id = dep.registry.pin.identity,
             registries = from_package.registries,
-            replace_scm_with_registry = replace_scm_with_registry,
+            replace_scm_with_registry = from_package.replace_scm_with_registry,
             resolved = resolved,
             version = dep.registry.pin.state.version,
         )
-
-def _declare_swift_package_repo(name, from_package, config_swift_package):
-    config_swift_package_kwargs = repository_utils.struct_to_kwargs(
-        struct = config_swift_package,
-        keys = swift_package_tool_attrs.swift_package_tool_config,
-    )
-
-    swift_package_tool_repo(
-        name = name,
-        env = from_package.env,
-        package = "{package}/{name}".format(
-            package = from_package.swift.package,
-            name = from_package.swift.name,
-        ),
-        netrc = from_package.netrc,
-        registries = from_package.registries,
-        **config_swift_package_kwargs
-    )
 
 def _swift_deps_impl(module_ctx):
     config_pkgs = {}
     for mod in module_ctx.modules:
         for config_pkg in mod.tags.configure_package:
             config_pkgs[config_pkg.name] = config_pkg
-    config_swift_package = None
-    for mod in module_ctx.modules:
-        for config_swift_package_tag in mod.tags.configure_swift_package:
-            if config_swift_package:
-                fail("""\
-Expected only one `configure_swift_package` tag, but found multiple.\
-""")
-            config_swift_package = config_swift_package_tag
+
     direct_dep_repo_names = []
     for mod in module_ctx.modules:
+        module_name = mod.name
         for from_package in mod.tags.from_package:
             direct_dep_repo_names.extend(
                 _declare_pkgs_from_package(
                     module_ctx,
+                    module_name,
                     from_package,
                     config_pkgs,
-                    config_swift_package,
                 ),
             )
+
     return module_ctx.extension_metadata(
         root_module_direct_deps = direct_dep_repo_names,
         root_module_direct_dev_deps = [],
     )
 
 _from_package_tag = tag_class(
-    attrs = dicts.add(
-        swift_package_tool_attrs.swift_package_registry,
+    attrs =
+        repo_rules.env_attrs |
+        swift_package_tool_attrs.swift_package_registry |
         {
             "declare_swift_deps_info": attr.bool(
                 doc = """\
 Declare a `swift_deps_info` repository that is used by external tooling (e.g. \
 Swift Gazelle plugin).\
-""",
-            ),
-            "declare_swift_package": attr.bool(
-                default = True,
-                doc = """\
-Declare a `swift_package_tool` repository named `swift_package` which defines two targets:
-`update` and `resolve`.\
-
-These targets run can be used to run the `swift package` binary in a Bazel context.
-The flags used when running the underlying `swift package` can be configured \
-using the `configure_swift_package` tag.
-
-They can be `bazel run` to update/resolve the `resolved` file:
-
-```
-bazel run @swift_package//:update
-bazel run @swift_package//:resolve
-```
-""",
-            ),
-            "env": attr.string_dict(
-                doc = """\
-Environment variables that will be passed to the execution environments for \
-this repository rule. (e.g. SPM version check, SPM dependency resolution, SPM \
-package description generation)\
-""",
-            ),
-            "env_inherit": attr.string_list(
-                doc = """\
-Environment variables to inherit from the external environment that will be \
-passed to the execution environments for this repository rule. (e.g. SPM version check, \
-SPM dependency resolution, SPM package description generation)\
 """,
             ),
             "resolve_transitive_local_dependencies": attr.bool(
@@ -392,7 +320,6 @@ in the output log.
                 doc = "A `Package.swift`.",
             ),
         },
-    ),
     doc = "Load Swift packages from `Package.swift` and `Package.resolved` files.",
 )
 
@@ -416,16 +343,10 @@ The identity (i.e., name in the package's manifest) for the Swift package.\
     doc = "Used to add or override settings for a particular Swift package.",
 )
 
-_configure_swift_package_tag = tag_class(
-    attrs = swift_package_tool_attrs.swift_package_tool_config,
-    doc = "Used to configure the flags used when running the `swift package` binary.",
-)
-
 swift_deps = module_extension(
     implementation = _swift_deps_impl,
     tag_classes = {
         "configure_package": _configure_package_tag,
-        "configure_swift_package": _configure_swift_package_tag,
         "from_package": _from_package_tag,
     },
 )

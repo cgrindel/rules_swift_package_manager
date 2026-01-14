@@ -57,7 +57,6 @@ swift_deps.from_package(
 )
 use_repo(
     swift_deps,
-    "swift_deps_info",
-    "swift_package",
+    "aws_crt_example_swift_deps_info",
     "swiftpkg_aws_crt_swift",
 )

@@ -53,38 +53,28 @@ apple_cc_configure = use_extension(
 )
 use_repo(apple_cc_configure, "local_config_apple_cc")
 
+_SPM_ENV = {
+    "INTERESTING_DEPS_ENV": "1",
+}
+
+_SPM_ENV_INHERIT = [
+    "INTERESTING_DEPS_INHERIT_ENV",
+]
+
 swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
 )
 swift_deps.from_package(
     declare_swift_deps_info = True,
-    env = {
-        "INTERESTING_DEPS_ENV": "1",
-    },
-    env_inherit = [
-        "INTERESTING_DEPS_INHERIT_ENV",
-    ],
+    env = _SPM_ENV,
+    env_inherit = _SPM_ENV_INHERIT,
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )
-
-# Example showing customization of the `swift_package` repo tool.
-# To resolve: `bazel run @swift_package//:resolve`
-# To update:  `bazel run @swift_package//:update`
-swift_deps.configure_swift_package(
-    build_path = "spm-build",
-    cache_path = "spm-cache",
-    config_path = "spm-config",
-    dependency_caching = False,
-    manifest_cache = "none",
-    manifest_caching = False,
-    security_path = "spm-security",
-)
 use_repo(
     swift_deps,
-    "swift_deps_info",
-    "swift_package",
+    "interesting_deps_example_swift_deps_info",
     "swiftpkg_cocoalumberjack",
     "swiftpkg_geoswift",
     "swiftpkg_libwebp_xcode",
@@ -95,3 +85,27 @@ use_repo(
     "swiftpkg_swift_subprocess",
     "swiftpkg_yoti_doc_scan_ios",
 )
+
+# Example showing customization of the `swift_package` repo tool.
+# To resolve: `bazel run @swift_package//:resolve`
+# To update:  `bazel run @swift_package//:update`
+swift_dev_deps = use_extension(
+    "@rules_swift_package_manager//:extensions.bzl",
+    "swift_dev_deps",
+    dev_dependency = True,
+)
+swift_dev_deps.from_package(
+    env = _SPM_ENV,
+    env_inherit = _SPM_ENV_INHERIT,
+    swift = "//:Package.swift",
+)
+swift_dev_deps.configure_swift_package(
+    build_path = "spm-build",
+    cache_path = "spm-cache",
+    config_path = "spm-config",
+    dependency_caching = False,
+    manifest_cache = "none",
+    manifest_caching = False,
+    security_path = "spm-security",
+)
+use_repo(swift_dev_deps, "swift_package")
