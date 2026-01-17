@@ -663,6 +663,7 @@ swift_binary(
             pkg_info = _pkg_info(),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 cc_library(
@@ -725,6 +726,7 @@ swift_interop_hint(
             pkg_info = _pkg_info(),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+load("@rules_cc//cc:defs.bzl", "cc_library", "objc_library")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 generate_modulemap(
@@ -800,6 +802,7 @@ swift_interop_hint(
             pkg_info = _pkg_info(),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+load("@rules_cc//cc:defs.bzl", "cc_library", "objc_library")
 
 objc_library(
     name = "ObjcLibraryWithModulemap.rspm",
@@ -895,6 +898,7 @@ swift_library(
             pkg_info = _pkg_info(),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 cc_library(
@@ -1089,6 +1093,7 @@ swift_library(
             exp = """\
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+load("@rules_cc//cc:defs.bzl", "cc_library", "objc_library")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap", "objc_resource_bundle_accessor_hdr", "objc_resource_bundle_accessor_impl", "resource_bundle_infoplist")
 
 apple_resource_bundle(
@@ -1192,6 +1197,7 @@ swift_interop_hint(
             pkg_info = _pkg_info(),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+load("@rules_cc//cc:defs.bzl", "cc_library")
 
 swift_interop_hint(
     name = "SystemLibraryTarget.rspm_swift_hint",
