@@ -20,4 +20,4 @@ jobs:
       author_name: Chuck Grindel
       author_email: chuckgrindel@gmail.com
     secrets:
-      BCR_PUBLISH_TOKEN: ${{ secrets.BCR_PUBLISH_TOKEN }}
+      publish_token: ${{ secrets.BCR_PUBLISH_TOKEN }}
