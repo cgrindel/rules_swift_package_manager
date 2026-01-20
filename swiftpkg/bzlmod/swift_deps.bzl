@@ -80,20 +80,6 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
     direct_dep_repo_names = []
     direct_dep_pkg_infos = {}
     for dep in pkg_info.dependencies:
-        # Ignore unresolved dependencies, for example for a new packgage added
-        # to the `Package.swift` which has not been resolved yet.
-        # By ignoring these for now we can allow the build to progress while
-        # expecting a resolution in the future.
-        if not dep.file_system and \
-           (not dep.source_control or not dep.source_control.pin) and \
-           (not dep.registry or not dep.registry.pin):
-            # buildifier: disable=print
-            print("""
-WARNING: {name} is unresolved and won't be available during the build, resolve \
-the Swift package to make it available.\
-""".format(name = dep.name))
-            continue
-
         bazel_repo_name = bazel_repo_names.from_identity(dep.identity)
         direct_dep_repo_names.append(bazel_repo_name)
         pkg_info_label = "@{}//:pkg_info.json".format(bazel_repo_name)
@@ -180,6 +166,21 @@ the Swift package to make it available.\
 
     # Declare the Bazel repositories.
     for dep in all_deps_by_id.values():
+        # Ignore unresolved dependencies, for example for a new packgage added
+        # to the `Package.swift` which has not been resolved yet.
+        # By ignoring these for now we can allow the build to progress while
+        # expecting a resolution in the future.
+        if not dep.file_system and \
+           (not dep.source_control or not dep.source_control.pin or not dep.source_control.pin.state) and \
+           (not dep.registry or not dep.registry.pin):
+            # buildifier: disable=print
+            print("""
+WARNING: {name} is unresolved and won't be available during the build, resolve \
+the Swift package to make it available.\
+""".format(name = dep.name))
+            _declare_unresolved_pkg_from_dependency(dep)
+            continue
+
         config_pkg = config_pkgs.get(dep.name)
         if config_pkg == None:
             config_pkg = config_pkgs.get(
@@ -198,6 +199,18 @@ the Swift package to make it available.\
                 direct_dep_repo_names.append(bazel_repo_name)
 
     return direct_dep_repo_names
+
+def _unresolved_swift_package_repo_impl(repository_ctx):
+    repository_ctx.file("BUILD.bazel", "# NOTE: This is a placeholder for unresolved Swift packages.")
+
+_unresolved_swift_package_repo = repository_rule(
+    implementation = _unresolved_swift_package_repo_impl,
+    attrs = {},
+)
+
+def _declare_unresolved_pkg_from_dependency(dep):
+    name = bazel_repo_names.from_identity(dep.identity)
+    _unresolved_swift_package_repo(name = name)
 
 def _declare_pkg_from_dependency(dep, config_pkg, from_package, config_swift_package):
     name = bazel_repo_names.from_identity(dep.identity)
