@@ -1,0 +1,54 @@
+bazel_dep(
+    name = "rules_swift_package_manager",
+    version = "0.0.0",
+)
+local_path_override(
+    module_name = "rules_swift_package_manager",
+    path = "../..",
+)
+
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.27.0")
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "apple_support", version = "1.24.4")
+bazel_dep(
+    name = "rules_swift",
+    version = "3.2.0",
+    repo_name = "build_bazel_rules_swift",
+)
+bazel_dep(
+    name = "rules_apple",
+    version = "4.2.0",
+    repo_name = "build_bazel_rules_apple",
+)
+
+bazel_dep(
+    name = "bazel_skylib_gazelle_plugin",
+    version = "1.8.2",
+    dev_dependency = True,
+)
+
+swift_deps = use_extension(
+    "@rules_swift_package_manager//:extensions.bzl",
+    "swift_deps",
+)
+swift_deps.from_package(
+    check_direct_dependencies = True,
+    resolved = "//:Package.resolved",
+    swift = "//:Package.swift",
+)
+use_repo(
+    swift_deps,
+    "swift_package",
+    "swiftpkg_swift_log",
+    "swiftpkg_vapor",
+)
+
+# Depend on another repository via Bzlmod that uses `rules_swift_package_manager` to declare its dependencies
+bazel_dep(
+    name = "vapor_example",
+    version = "0.0.0",
+)
+local_path_override(
+    module_name = "vapor_example",
+    path = "../vapor_example",
+)
