@@ -211,5 +211,8 @@ bzl_library(
     name = "extensions",
     srcs = ["extensions.bzl"],
     visibility = ["//visibility:public"],
-    deps = ["//swiftpkg/bzlmod:swift_deps"],
+    deps = [
+        "//swiftpkg/bzlmod:swift_deps",
+        "//swiftpkg/bzlmod:swift_dev_deps",
+    ],
 )

@@ -46,6 +46,7 @@ _DOC_INFOS = [
         label = "//:extensions",
         symbols = [
             "swift_deps",
+            "swift_dev_deps",
         ],
     ),
 ]
