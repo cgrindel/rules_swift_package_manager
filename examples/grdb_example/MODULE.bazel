@@ -1,3 +1,5 @@
+module(name = "grdb_example")
+
 bazel_dep(
     name = "rules_swift_package_manager",
     version = "0.0.0",
@@ -77,7 +79,7 @@ swift_deps.configure_package(
 )
 use_repo(
     swift_deps,
-    "swift_deps_info",
-    "swift_package",
+    "grdb_example_swift_deps_info",
+    "grdb_example_swift_package",
     "swiftpkg_grdb.swift",
 )

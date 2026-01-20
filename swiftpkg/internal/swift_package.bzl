@@ -9,6 +9,7 @@ load(
 )
 load(":pkg_ctxs.bzl", "pkg_ctxs")
 load(":repo_rules.bzl", "repo_rules")
+load(":swift_package_tool_attrs.bzl", "swift_package_tool_attrs")
 
 # The implementation of this repository rule is heavily influenced by the
 # implementation for git_repository.
@@ -52,6 +53,7 @@ def _swift_package_impl(repository_ctx):
     env = repo_rules.get_exec_env(repository_ctx)
     repo_rules.check_spm_version(repository_ctx, env = env)
     replace_scm_with_registry = attr.replace_scm_with_registry
+    use_registry_identity_for_scm = attr.use_registry_identity_for_scm
 
     # Download the repo
     update = _clone_or_update_repo(repository_ctx, directory)
@@ -82,6 +84,7 @@ def _swift_package_impl(repository_ctx):
         env,
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
+        use_registry_identity_for_scm = use_registry_identity_for_scm,
     )
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
@@ -140,11 +143,6 @@ The commit or revision to download from version control.\
         doc = """\
 The version control location from where the repository should be downloaded.\
 """,
-    ),
-    "replace_scm_with_registry": attr.bool(
-        default = False,
-        doc = "Whether to replace SCM references with registry references." +
-              " Only used if `registries` is provided.",
     ),
     "shallow_since": attr.string(
         default = "",
@@ -219,12 +217,10 @@ _ALL_ATTRS = dicts.add(
     TOOL_ATTRS,
     _GIT_ATTRS,
     repo_rules.env_attrs,
+    repo_rules.netrc_attrs,
     repo_rules.swift_attrs,
+    swift_package_tool_attrs.swift_package_registry,
     {
-        "netrc": attr.label(
-            default = None,
-            doc = "A `.netrc` file for authentication when downloading binary artifacts.",
-        ),
         "version": attr.string(doc = "The resolved version of the package."),
     },
 )

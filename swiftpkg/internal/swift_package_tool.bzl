@@ -14,8 +14,7 @@ def _swift_package_tool_impl(ctx):
     cache_path = ctx.attr.cache_path
     config_path = ctx.attr.config_path
     cmd = ctx.attr.cmd
-    package = ctx.attr.package
-    package_path = paths.dirname(package)
+    package_content = ctx.attr.package_content
     netrc = ctx.file.netrc
     registries = ctx.file.registries
     runfiles = []
@@ -30,11 +29,17 @@ def _swift_package_tool_impl(ctx):
     if registries:
         runfiles.append(registries)
 
+    # Create the "Package.swift" file that will be operated on.
+    package_swift = ctx.actions.declare_file("Package.swift")
+    ctx.actions.write(output = package_swift, content = package_content)
+    runfiles.append(package_swift)
+
     runner_script = ctx.actions.declare_file(ctx.label.name + ".sh")
     template_dict = ctx.actions.template_dict()
     template_dict.add("%(swift_worker)s", swift.executable.short_path)
     template_dict.add("%(cmd)s", cmd)
-    template_dict.add("%(package_path)s", package_path)
+    template_dict.add("%(package_swift_path)s", package_swift.short_path)
+    template_dict.add("%(output_package_path)s", ctx.attr.package_path)
     template_dict.add("%(build_path)s", build_path)
     template_dict.add("%(cache_path)s", cache_path)
     template_dict.add("%(config_path)s", config_path)
@@ -91,16 +96,22 @@ Defines a rule that can be used to execute the `swift package` tool.\
 """,
     attrs = dicts.add(
         repo_rules.env_attr,
+        repo_rules.netrc_attrs,
         {
             "cmd": attr.string(
                 doc = "The `swift package` command to execute.",
                 mandatory = True,
                 values = ["update", "resolve"],
             ),
-            "package": attr.string(
+            "package_content": attr.string(
                 doc = """\
-The relative path to the `Package.swift` file from the workspace root.\
+The content of the `Package.swift` file to operate on.\
 """,
+                mandatory = True,
+            ),
+            "package_path": attr.string(
+                doc = """The path to the directory containing the `Package.swift` file\
+to operate on.""",
                 mandatory = True,
             ),
             "_runner_template": attr.label(
