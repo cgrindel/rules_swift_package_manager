@@ -166,10 +166,12 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
 
     # Declare the Bazel repositories.
     for dep in all_deps_by_id.values():
-        # Ignore unresolved dependencies, for example for a new packgage added
-        # to the `Package.swift` which has not been resolved yet.
-        # By ignoring these for now we can allow the build to progress while
-        # expecting a resolution in the future.
+        # Declare a placeholder repository for unresolved dependencies., 
+        # for example for a new packgage added to the `Package.swift` 
+        # which has not been resolved yet.
+        # This allows the module extension to not fail abruptly in cases 
+        # where a new package dependency is added and a user runs 
+        # bazel run @swift_package//:resolve.
         if not dep.file_system and \
            (not dep.source_control or not dep.source_control.pin or not dep.source_control.pin.state) and \
            (not dep.registry or not dep.registry.pin):
