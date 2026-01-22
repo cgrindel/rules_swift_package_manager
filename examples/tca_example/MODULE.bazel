@@ -15,7 +15,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_swift",
-    version = "3.4.1",
+    version = "3.4.2",
     repo_name = "build_bazel_rules_swift",
 )
 bazel_dep(
