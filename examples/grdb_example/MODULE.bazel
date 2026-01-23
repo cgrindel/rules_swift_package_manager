@@ -15,7 +15,7 @@ bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "apple_support", version = "1.24.5")
 bazel_dep(
     name = "rules_swift",
-    version = "3.4.1",
+    version = "3.4.2",
     repo_name = "build_bazel_rules_swift",
 )
 bazel_dep(
@@ -57,31 +57,24 @@ swift_deps.from_package(
     swift = "//:Package.swift",
 )
 
-# Linux compatibility: GRDB assumes system SQLite includes snapshot support
-# (SQLITE_ENABLE_SNAPSHOT), which is true on macOS but false on most Linux distros.
-# The snapshot functions (sqlite3_snapshot_get, etc.) aren't compiled into Linux's
-# system SQLite, causing linker errors.
+# Linux compatibility: GRDB v7.9.0 defines SQLITE_ENABLE_SNAPSHOT by default, but
+# most Linux distros don't compile snapshot functions (sqlite3_snapshot_get, etc.)
+# into their system SQLite, causing linker errors.
 #
-# GRDB's WALSnapshot.swift uses: #if SQLITE_ENABLE_SNAPSHOT || (!GRDBCUSTOMSQLITE && !GRDBCIPHER)
-# This means snapshot code is enabled for "system SQLite" (neither custom nor SQLCipher).
-#
-# To fix this, we:
-# 1. Remove SQLITE_ENABLE_SNAPSHOT from Package.swift (not strictly necessary, but clean)
-# 2. Add GRDBCUSTOMSQLITE to signal that we're using a "custom" SQLite (without snapshots)
+# In v7.9.0, GRDB simplified snapshot checks to: #if SQLITE_ENABLE_SNAPSHOT && !SQLITE_DISABLE_SNAPSHOT
+# This means we can fix Linux builds by simply removing the SQLITE_ENABLE_SNAPSHOT define,
+# which disables snapshot code without requiring GRDBCUSTOMSQLITE (which would break imports).
 swift_deps.configure_package(
     name = "grdb.swift",
     patch_cmds = [
-        # Remove SQLITE_ENABLE_SNAPSHOT define (cleanup, not strictly needed with GRDBCUSTOMSQLITE)
+        # Remove SQLITE_ENABLE_SNAPSHOT define to disable snapshot code on Linux
         # Using sed -i.bak for cross-platform compatibility (BSD sed on macOS requires backup extension)
         "sed -i.bak 's/\\.define(\"SQLITE_ENABLE_SNAPSHOT\"),//' Package.swift",
         "sed -i.bak 's/\\.define(\"SQLITE_ENABLE_SNAPSHOT\")//' Package.swift",
-        # Add GRDBCUSTOMSQLITE to disable snapshot code path
-        "sed -i.bak 's/\\.define(\"SQLITE_ENABLE_FTS5\")/\\.define(\"SQLITE_ENABLE_FTS5\"), .define(\"GRDBCUSTOMSQLITE\")/' Package.swift",
         # Clean up backup files
         "rm -f Package.swift.bak",
     ],
 )
-
 use_repo(
     swift_deps,
     "swift_deps_info",
