@@ -18,6 +18,6 @@ jobs:
       registry_fork: cgrindel/bazel-central-registry
       attest: false
       author_name: Chuck Grindel
-      author_email: chuckgrindel@gmail.com
+      author_email: chuck.grindel@gmail.com
     secrets:
       publish_token: ${{ secrets.BCR_PUBLISH_TOKEN }}
