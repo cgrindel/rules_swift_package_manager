@@ -30,8 +30,68 @@ def _parse_newline_in_module_member_test(ctx):
 
 parse_newline_in_module_member_test = unittest.make(_parse_newline_in_module_member_test)
 
+def _parse_requires_declaration_test(ctx):
+    env = unittest.begin(ctx)
+
+    do_parse_test(
+        env,
+        "module with requires declaration is skipped",
+        text = """
+        module MyModule {
+            requires cplusplus
+            header "foo.h"
+            export *
+        }
+        """,
+        expected = [
+            declarations.module(
+                module_id = "MyModule",
+                members = [
+                    declarations.single_header("foo.h"),
+                    declarations.export(wildcard = True),
+                ],
+            ),
+        ],
+    )
+
+    do_parse_test(
+        env,
+        "submodule with requires declaration is skipped",
+        text = """
+        module MyModule {
+            header "main.h"
+            explicit module Cxx {
+                requires cplusplus
+                header "cxx.h"
+                export *
+            }
+        }
+        """,
+        expected = [
+            declarations.module(
+                module_id = "MyModule",
+                members = [
+                    declarations.single_header("main.h"),
+                    declarations.module(
+                        module_id = "Cxx",
+                        explicit = True,
+                        members = [
+                            declarations.single_header("cxx.h"),
+                            declarations.export(wildcard = True),
+                        ],
+                    ),
+                ],
+            ),
+        ],
+    )
+
+    return unittest.end(env)
+
+parse_requires_declaration_test = unittest.make(_parse_requires_declaration_test)
+
 def collect_module_member_test_suite():
     return unittest.suite(
         "collect_module_member_tests",
         parse_newline_in_module_member_test,
+        parse_requires_declaration_test,
     )
