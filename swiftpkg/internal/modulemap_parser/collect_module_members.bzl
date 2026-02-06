@@ -13,8 +13,11 @@ load(":tokens.bzl", "tokens", rws = "reserved_words", tts = "token_types")
 _unsupported_module_members = sets.make([
     rws.config_macros,
     rws.conflict,
-    rws.requires,
     rws.use,
+])
+
+_skippable_module_members = sets.make([
+    rws.requires,
 ])
 
 def collect_module_members(parsed_tokens):
@@ -98,6 +101,14 @@ def collect_module_members(parsed_tokens):
 
         elif tokens.is_a(token, tts.reserved) and sets.contains(_unsupported_module_members, token.value):
             return None, errors.new("Unsupported module member token. token: %s" % (token))
+
+        elif tokens.is_a(token, tts.reserved) and sets.contains(_skippable_module_members, token.value):
+            # Skip until newline for declarations we can safely ignore (e.g., requires)
+            for skip_idx in range(idx + 1, tlen):
+                skip_token, _ = tokens.get(parsed_tokens, skip_idx, count = tlen)
+                if skip_token and tokens.is_a(skip_token, tts.newline):
+                    skip_ahead = skip_idx - idx
+                    break
 
         elif tokens.is_a(token, tts.reserved, rws.module):
             collect_result, err = collect_unprocessed_submodule(parsed_tokens[idx:], prefix_tokens)
