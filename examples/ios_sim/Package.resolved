@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-nio.git",
       "state" : {
-        "revision" : "5e72fc102906ebe75a3487595a653e6f43725552",
-        "version" : "2.94.0"
+        "revision" : "9b92dcd5c22ae17016ad867852e0850f1f9f93ed",
+        "version" : "2.94.1"
       }
     },
     {
