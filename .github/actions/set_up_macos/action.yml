@@ -1,6 +1,5 @@
 name: Set Up macOS Runner
 description: Prepare macOS runner to execute tests.
-
 inputs:
   repo_name:
     description: The name of the GitHub repo.
@@ -8,13 +7,12 @@ inputs:
   test_target:
     description: The test target to execute.
     default: ''
-
 runs:
   using: composite
   steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: '26.0.1'
+        xcode-version: '26.2'
     - name: Confirm Xcode Version
       shell: bash
       run: |
