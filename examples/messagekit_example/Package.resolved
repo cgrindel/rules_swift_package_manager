@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nathantannar4/InputBarAccessoryView",
       "state" : {
-        "revision" : "0451bb8bebff4da089f15d440aaa1740fee29ce6",
-        "version" : "7.0.2"
+        "revision" : "b2c054a72655133f595980899731af8bdfafa715",
+        "version" : "7.0.3"
       }
     },
     {
@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "dd3c422ec3088404d6f7e8c905a8318b3de12d6f",
-        "version" : "8.6.0"
+        "revision" : "d30a5fad881137e2267f96a8e3fc35c58999bb94",
+        "version" : "8.6.2"
       }
     },
     {

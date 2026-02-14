@@ -5,7 +5,7 @@
   "registries" : {
     "[default]" : {
       "supportsAvailability" : false,
-      "url" : "https://fake-spm-registry.deno.dev/"
+      "url" : "https://fake-swift-package-registry.luispadron.deno.net/"
     }
   },
   "version" : 1

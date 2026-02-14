@@ -36,9 +36,9 @@ def _new_stub_repository_ctx(
             exec_result = _new_exec_result(
                 stdout = "\n".join(results),
             )
-        elif args_len == 3 and args[0] == "file" and args[1] == "--brief":
-            # Expected command: `file --brief path`
-            path = args[2]
+        elif args_len == 4 and args[0] == "file" and args[1] == "--dereference" and args[2] == "--brief":
+            # Expected command: `file --dereference --brief path`
+            path = args[3]
             results = file_type_results.get(path, "")
             exec_result = _new_exec_result(stdout = results)
         elif args_len == 3 and args[0] == "otool" and args[1] == "-l":
