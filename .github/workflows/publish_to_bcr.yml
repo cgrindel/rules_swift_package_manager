@@ -1,0 +1,23 @@
+name: Publish to BCR
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: "The release tag to publish (e.g. v1.2.3)"
+        required: true
+        type: string
+permissions:
+  contents: write
+jobs:
+  publish_to_bcr:
+    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@0bd40ad4f872b4d216d3f01bc0844ade304e2b5a # v1.1.0
+    with:
+      tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag_name || github.event.release.tag_name }}
+      registry_fork: cgrindel/bazel-central-registry
+      attest: false
+      author_name: Chuck Grindel
+      author_email: chuck.grindel@gmail.com
+    secrets:
+      publish_token: ${{ secrets.BCR_PUBLISH_TOKEN }}

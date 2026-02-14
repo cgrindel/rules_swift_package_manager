@@ -2,20 +2,20 @@ module github.com/cgrindel/rules_swift_package_manager
 
 go 1.24.0
 
-toolchain go1.25.3
+toolchain go1.25.6
 
 // Workaround for inconsistent Go versions being used in rules_bazel_integration_test tests.
 // toolchain go1.21.5
 
 require (
-	github.com/bazelbuild/bazel-gazelle v0.42.0
+	github.com/bazelbuild/bazel-gazelle v0.44.0
 	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
 	github.com/creasty/defaults v1.8.0
 	github.com/deckarep/golang-set/v2 v2.8.0
-	github.com/spf13/cobra v1.10.1
+	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546
-	golang.org/x/text v0.30.0
+	golang.org/x/exp v0.0.0-20260209203927-2842357ff358
+	golang.org/x/text v0.31.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -24,7 +24,7 @@ require (
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
-	golang.org/x/mod v0.29.0 // indirect
+	golang.org/x/mod v0.33.0 // indirect
 	golang.org/x/sys v0.26.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
 )

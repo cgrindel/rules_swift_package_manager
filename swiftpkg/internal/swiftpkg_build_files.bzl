@@ -26,7 +26,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
     elif target.module_type == module_types.swift:
         return _swift_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.system_library:
-        return _system_library_build_file(target)
+        return _system_library_build_file(repository_ctx, target)
     elif target.module_type == module_types.binary:
         # GH558: Support artifactBundle.
         xcf_artifact_info = lists.find(
@@ -395,6 +395,19 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             for bs in target.linker_settings.linked_frameworks
         ]))
 
+    # Add frameworks detected from source files as linkopts
+    # cc_library doesn't support sdk_frameworks, so we use -framework flags
+    if clang_src_info.frameworks:
+        for framework in clang_src_info.frameworks:
+            platform_conditions = bazel_apple_platforms.for_framework(framework)
+            for pc in platform_conditions:
+                linkopts.append(
+                    bzl_selects.new(
+                        value = "-framework {}".format(framework),
+                        condition = pc,
+                    ),
+                )
+
     # Assemble attributes
 
     attrs = {
@@ -550,6 +563,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 
     if target.objc_src_info != None:
         rule_kind = objc_kinds.library
+        load_stmts.append(objc_library_load_stmt)
 
         # Enable clang module support.
         # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
@@ -652,6 +666,11 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         ),
     )
 
+    # Add cc/objc library load statements at the end
+    load_stmts.append(cc_library_load_stmt)
+    if rule_kind == objc_kinds.library:
+        load_stmts.append(objc_library_load_stmt)
+
     all_build_files.append(build_files.new(
         load_stmts = load_stmts,
         decls = decls,
@@ -718,7 +737,56 @@ def _starlarkify_clang_attrs(repository_ctx, attrs):
 
 # MARK: - System Library Targets
 
-def _system_library_build_file(target):
+def _extract_link_libraries_from_modulemap(repository_ctx, modulemap_path):
+    """Extracts link declarations from a modulemap file.
+
+    Parses the modulemap to find 'link' declarations and returns the library names.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+        modulemap_path: Relative path to the modulemap file as a `string`.
+
+    Returns:
+        A `list` of library name `string` values (for `link "libname"` declarations).
+    """
+    if modulemap_path == None:
+        return []
+
+    # The modulemap_path is already the full relative path from the package root
+    # (e.g., "Sources/GRDBSQLite/module.modulemap")
+    full_modulemap_path = modulemap_path
+
+    # Read the modulemap file
+    modulemap_content = repository_ctx.read(full_modulemap_path)
+
+    # Simple regex-style extraction of link declarations
+    # Looking for: link "libname" or link framework "frameworkname"
+    libraries = []
+    lines = modulemap_content.split("\n")
+    for line in lines:
+        stripped = line.strip()
+
+        # Skip lines that don't start with 'link'
+        if not stripped.startswith("link "):
+            continue
+
+        # Remove 'link ' prefix
+        rest = stripped[5:].strip()
+
+        # Skip framework links - these require -framework linkopts which need
+        # different handling (framework search paths, etc.). Not yet implemented.
+        if rest.startswith("framework "):
+            continue
+
+        # Extract the library name from quotes
+        if rest.startswith('"') and '"' in rest[1:]:
+            end_quote = rest.index('"', 1)
+            lib_name = rest[1:end_quote]
+            libraries.append(lib_name)
+
+    return libraries
+
+def _system_library_build_file(repository_ctx, target):
     bzl_target_name = target.label.name
 
     attrs = {
@@ -746,10 +814,18 @@ def _system_library_build_file(target):
     if target.clang_src_info and target.clang_src_info.modulemap_path:
         module_map_file = target.clang_src_info.modulemap_path
 
+    # Extract link libraries from modulemap and add as linkopts
+    # This is important for system libraries that declare dependencies via modulemap
+    link_libraries = _extract_link_libraries_from_modulemap(repository_ctx, module_map_file)
+
+    if link_libraries:
+        linkopts = ["-l{}".format(lib) for lib in link_libraries]
+        attrs["linkopts"] = linkopts
+
     # Create swift_interop_hint for Swift interop
     aspect_hint_target_name = pkginfo_targets.swift_hint_label_name(bzl_target_name)
 
-    load_stmts = [swift_interop_hint_load_stmt]
+    load_stmts = [swift_interop_hint_load_stmt, cc_library_load_stmt]
     decls = []
 
     decls.append(
@@ -1215,8 +1291,22 @@ clang_kinds = struct(
     library = "cc_library",
 )
 
+clang_location = "@rules_cc//cc:defs.bzl"
+
+cc_library_load_stmt = load_statements.new(
+    clang_location,
+    clang_kinds.library,
+)
+
 objc_kinds = struct(
     library = "objc_library",
+)
+
+objc_location = "@rules_cc//cc:defs.bzl"
+
+objc_library_load_stmt = load_statements.new(
+    objc_location,
+    objc_kinds.library,
 )
 
 native_kinds = struct(
