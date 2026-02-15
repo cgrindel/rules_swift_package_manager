@@ -62,12 +62,77 @@ def _exclude_paths_test(ctx):
     ]
 
     for test in tests:
-        actual = repository_files.exclude_paths(test.path_list, test.exclude)
+        actual = repository_files.exclude_paths(".", test.path_list, test.exclude)
         asserts.equals(env, test.expected, actual, test.msg)
 
     return unittest.end(env)
 
 exclude_paths_test = unittest.make(_exclude_paths_test)
+
+def _exclude_paths_with_find_path_test(ctx):
+    env = unittest.begin(ctx)
+
+    prefixed_path_list = [
+        "ios/Market/Sources/main.swift",
+        "ios/Market/App/AppDelegate.swift",
+        "ios/Market/App/Info.plist",
+        "ios/Market/Resources/image.png",
+    ]
+
+    tests = [
+        struct(
+            msg = "relative exclude with find_path prefix",
+            find_path = "ios/Market",
+            exclude = ["App"],
+            path_list = prefixed_path_list,
+            expected = [
+                "ios/Market/Sources/main.swift",
+                "ios/Market/Resources/image.png",
+            ],
+        ),
+        struct(
+            msg = "fully qualified exclude (idempotent)",
+            find_path = "ios/Market",
+            exclude = ["ios/Market/App"],
+            path_list = prefixed_path_list,
+            expected = [
+                "ios/Market/Sources/main.swift",
+                "ios/Market/Resources/image.png",
+            ],
+        ),
+        struct(
+            msg = "exclude file with find_path prefix",
+            find_path = "ios/Market",
+            exclude = ["App/Info.plist"],
+            path_list = prefixed_path_list,
+            expected = [
+                "ios/Market/Sources/main.swift",
+                "ios/Market/App/AppDelegate.swift",
+                "ios/Market/Resources/image.png",
+            ],
+        ),
+        struct(
+            msg = "multiple relative excludes with find_path",
+            find_path = "ios/Market",
+            exclude = ["App", "Resources"],
+            path_list = prefixed_path_list,
+            expected = [
+                "ios/Market/Sources/main.swift",
+            ],
+        ),
+    ]
+
+    for test in tests:
+        actual = repository_files.exclude_paths(
+            test.find_path,
+            test.path_list,
+            test.exclude,
+        )
+        asserts.equals(env, test.expected, actual, test.msg)
+
+    return unittest.end(env)
+
+exclude_paths_with_find_path_test = unittest.make(_exclude_paths_with_find_path_test)
 
 def _process_find_results_test(ctx):
     env = unittest.begin(ctx)
@@ -190,5 +255,6 @@ def repository_files_test_suite():
     return unittest.suite(
         "repository_files_tests",
         exclude_paths_test,
+        exclude_paths_with_find_path_test,
         process_find_results_test,
     )

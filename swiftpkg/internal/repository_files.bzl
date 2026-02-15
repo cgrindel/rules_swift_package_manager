@@ -220,7 +220,10 @@ def _exclude_paths(find_path, path_list, exclude_paths):
         return path_list
 
     # Ensure the find_path is prefixed to any excludes so that they match as expected.
-    exclude_paths = [find_path + "/" + ex.removeprefix(find_path + "/") for ex in exclude_paths]
+    # When find_path is ".", the "./" prefix was already stripped from path_list,
+    # so we should not add it to excludes.
+    if find_path != ".":
+        exclude_paths = [find_path + "/" + ex.removeprefix(find_path + "/") for ex in exclude_paths]
 
     # The exclude path could be a directory.
     excludes_as_dirs = lists.map(
