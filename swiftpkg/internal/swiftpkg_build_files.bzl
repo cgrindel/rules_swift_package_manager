@@ -563,6 +563,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 
     if target.objc_src_info != None:
         rule_kind = objc_kinds.library
+        load_stmts.append(objc_library_load_stmt)
 
         # Enable clang module support.
         # https://bazel.build/reference/be/objective-c#objc_library.enable_modules
@@ -664,6 +665,11 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             attrs = _starlarkify_clang_attrs(repository_ctx, parent_attrs),
         ),
     )
+
+    # Add cc/objc library load statements at the end
+    load_stmts.append(cc_library_load_stmt)
+    if rule_kind == objc_kinds.library:
+        load_stmts.append(objc_library_load_stmt)
 
     all_build_files.append(build_files.new(
         load_stmts = load_stmts,
@@ -819,7 +825,7 @@ def _system_library_build_file(repository_ctx, target):
     # Create swift_interop_hint for Swift interop
     aspect_hint_target_name = pkginfo_targets.swift_hint_label_name(bzl_target_name)
 
-    load_stmts = [swift_interop_hint_load_stmt]
+    load_stmts = [swift_interop_hint_load_stmt, cc_library_load_stmt]
     decls = []
 
     decls.append(
@@ -1285,8 +1291,22 @@ clang_kinds = struct(
     library = "cc_library",
 )
 
+clang_location = "@rules_cc//cc:defs.bzl"
+
+cc_library_load_stmt = load_statements.new(
+    clang_location,
+    clang_kinds.library,
+)
+
 objc_kinds = struct(
     library = "objc_library",
+)
+
+objc_location = "@rules_cc//cc:defs.bzl"
+
+objc_library_load_stmt = load_statements.new(
+    objc_location,
+    objc_kinds.library,
 )
 
 native_kinds = struct(

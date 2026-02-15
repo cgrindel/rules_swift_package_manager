@@ -15,6 +15,7 @@ load(
     "bazel_integration_test",
     "integration_test_utils",
 )
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
 load("//ci:defs.bzl", "ci_integration_test_params")
 
 bzlformat_pkg(name = "bzlformat")

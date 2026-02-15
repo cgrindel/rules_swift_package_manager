@@ -12,16 +12,18 @@ local_path_override(
     path = "../..",
 )
 
-bazel_dep(name = "cgrindel_bazel_starlib", version = "0.27.0")
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.28.0")
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
+bazel_dep(name = "rules_shell", version = "0.6.1")
 
 # The apple_support bazel_dep must come before the rules_cc.
 # https://github.com/bazelbuild/apple_support#incompatible-toolchain-resolution
 bazel_dep(name = "apple_support", version = "1.24.5")
+bazel_dep(name = "rules_cc", version = "0.2.16")
 bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(
     name = "rules_swift",
-    version = "3.4.1",
+    version = "3.4.2",
     repo_name = "build_bazel_rules_swift",
 )
 bazel_dep(
@@ -43,7 +45,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "swift_gazelle_plugin",
-    version = "0.2.1",
+    version = "0.2.2",
     dev_dependency = True,
 )
 

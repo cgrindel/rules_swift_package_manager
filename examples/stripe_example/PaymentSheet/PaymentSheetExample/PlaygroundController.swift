@@ -57,7 +57,7 @@ class PlaygroundController: ObservableObject {
                         request.paymentSummaryItems = [billing]
                         return request
                     },
-                    authorizationResultHandler: { result, completion in
+                    authorizationResultHandler: { result in
                         //                  Hardcoded order details:
                         //                  In a real app, you should fetch these details from your service and call the completion() block on
                         //                  the main queue.
@@ -67,7 +67,7 @@ class PlaygroundController: ObservableObject {
                             webServiceURL: URL(string: "https://my-backend.example.com/apple-order-tracking-backend")!,
                             authenticationToken: "abc123"
                         )
-                        completion(result)
+                        return result
                     }
                 )
                 return PaymentSheet.ApplePayConfiguration(
@@ -319,8 +319,18 @@ class PlaygroundController: ObservableObject {
         if settings.apmsEnabled == .off {
             paymentMethodTypes = self.paymentMethodTypes
         }
-        let confirmHandler: PaymentSheet.IntentConfiguration.ConfirmHandler = { [weak self] in
-            self?.confirmHandler($0, $1, $2)
+        let confirmHandler: PaymentSheet.IntentConfiguration.ConfirmHandler = { [weak self] paymentMethod, shouldSavePaymentMethod in
+            guard let self else { throw ConfirmHandlerError.unknown }
+            return try await withCheckedThrowingContinuation { continuation in
+                self.confirmHandler(paymentMethod, shouldSavePaymentMethod) { result in
+                    switch result {
+                    case .success(let clientSecret):
+                        continuation.resume(returning: clientSecret)
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
         }
 
         switch settings.mode {
@@ -368,8 +378,13 @@ class PlaygroundController: ObservableObject {
 
         return .init(
             externalPaymentMethods: externalPaymentMethods
-        ) { [weak self] externalPaymentMethodType, billingDetails, completion in
-            self?.handleExternalPaymentMethod(type: externalPaymentMethodType, billingDetails: billingDetails, completion: completion)
+        ) { [weak self] externalPaymentMethodType, billingDetails in
+            guard let self else { return .canceled }
+            return await withCheckedContinuation { continuation in
+                self.handleExternalPaymentMethod(type: externalPaymentMethodType, billingDetails: billingDetails) { result in
+                    continuation.resume(returning: result)
+                }
+            }
         }
     }
 
