@@ -5,17 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/awslabs/aws-crt-swift.git",
       "state" : {
-        "revision" : "675dede8a9d2366186cead2c68fe57565c2f6696",
-        "version" : "0.57.0"
-      }
-    },
-    {
-      "identity" : "swift-argument-parser",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-argument-parser.git",
-      "state" : {
-        "revision" : "8f4d2753f0e4778c76d5f05ad16c74f707390531",
-        "version" : "1.2.3"
+        "revision" : "af3605cccac8c9d0ad1625e55cc96123eacf8006",
+        "version" : "0.58.0"
       }
     }
   ],
