@@ -1130,11 +1130,37 @@ def _executable_product_build_file(pkg_info, product, repo_name):
     else:
         fail("Did not find any targets associated with product. name:", product.name)
 
+def _get_platform_min_version(pkg_info, platform_name, sdk_default_min_os = {}):
+    """Extract minimum OS version for a platform from pkg_info.platforms.
+
+    Falls back to SDK default minimum OS version if not explicitly specified
+    in the package manifest.
+
+    Args:
+        pkg_info: The package info struct.
+        platform_name: The platform name (e.g., "ios", "macos").
+        sdk_default_min_os: A dict mapping platform names to SDK default
+            minimum OS versions.
+
+    Returns:
+        The minimum OS version string if found, otherwise None.
+    """
+    for platform in pkg_info.platforms:
+        if platform.name == platform_name:
+            return platform.version
+
+    # Fall back to SDK default minimum OS version if not explicitly specified
+    return sdk_default_min_os.get(platform_name)
+
 def _library_product_build_file(pkg_ctx, product):
     # A library product can reference one or more Swift targets. Hence a
     # dependency on a library product is a shorthand for depend upon all of the
-    # Swift targets that is associated with the product. We use a
-    # `swift_library_group` to represent this.
+    # Swift targets that is associated with the product.
+    #
+    # We generate three targets:
+    # - Foo.platform: swift_library_group with platform transitions
+    # - Foo.no_platform: swift_library_group from rules_swift (no transitions)
+    # - Foo: alias pointing to Foo.platform as default
     target_labels = []
     for tname in product.targets:
         target = lists.find(pkg_ctx.pkg_info.targets, lambda t: t.name == tname)
@@ -1146,21 +1172,74 @@ def _library_product_build_file(pkg_ctx, product):
 
     if len(target_labels) == 0:
         fail("No targets specified for a library product. name:", product.name)
+
+    normalized_deps = [
+        bazel_labels.normalize(label)
+        for label in target_labels
+    ]
+
+    # Build platform_type and minimum_os_version selects based on platform config settings
+    platform_type_select = {}
+    min_os_select = {}
+    for platform_name, config_settings in _platform_config_settings.items():
+        for config_setting in config_settings:
+            platform_type_select[config_setting] = platform_name
+
+        min_version = _get_platform_min_version(
+            pkg_ctx.pkg_info,
+            platform_name,
+            pkg_ctx.sdk_default_min_os,
+        )
+
+        if min_version:
+            for config_setting in config_settings:
+                min_os_select[config_setting] = min_version
+
+    platform_attrs = {
+        "deps": normalized_deps,
+        "platform_type": scg.new_fn_call("select", platform_type_select),
+    }
+
+    # Only add minimum_os_version if we have platform-specific versions
+    if min_os_select:
+        platform_attrs["minimum_os_version"] = scg.new_fn_call("select", min_os_select)
+
+    # Target names
+    platform_target_name = product.name + ".platform"
+    no_platform_target_name = product.name + ".no_platform"
+
+    # .platform target using swift_library_group (with transitions)
+    platform_decl = build_decls.new(
+        _apple_swift_library_group_kind,
+        platform_target_name,
+        attrs = platform_attrs,
+    )
+
+    # .no_platform target using upstream swift_library_group (no transitions)
+    no_platform_decl = build_decls.new(
+        swift_kinds.library_group,
+        no_platform_target_name,
+        attrs = {
+            "deps": normalized_deps,
+        },
+    )
+
+    # Alias with select to choose .platform for Apple, .no_platform otherwise
+    alias_decl = build_decls.new(
+        native_kinds.alias,
+        product.name,
+        attrs = {
+            "actual": scg.new_fn_call("select", {
+                "@apple_support//configs:apple": ":{}".format(platform_target_name),
+                "//conditions:default": ":{}".format(no_platform_target_name),
+            }),
+            "visibility": ["//visibility:public"],
+        },
+    )
+
     return build_files.new(
-        load_stmts = [swift_library_group_load_stmt],
-        decls = [
-            build_decls.new(
-                swift_kinds.library_group,
-                product.name,
-                attrs = {
-                    "deps": [
-                        bazel_labels.normalize(label)
-                        for label in target_labels
-                    ],
-                    "visibility": ["//visibility:public"],
-                },
-            ),
-        ],
+        load_stmts = [_apple_swift_library_group_load_stmt, swift_library_group_load_stmt],
+        decls = [platform_decl, no_platform_decl, alias_decl],
     )
 
 def _swift_binary_from_product(product, dep_target, repo_name):
@@ -1264,6 +1343,46 @@ swift_library_group_load_stmt = load_statements.new(
     swift_location,
     swift_kinds.library_group,
 )
+
+_apple_swift_library_group_location = str(Label("//swiftpkg/internal:swift_library_group.bzl"))
+
+_apple_swift_library_group_kind = "apple_swift_library_group"
+
+_apple_swift_library_group_load_stmt = load_statements.new(
+    _apple_swift_library_group_location,
+    apple_swift_library_group = "swift_library_group",
+)
+
+_platform_config_settings = {
+    "ios": [
+        "@apple_support//configs:ios_arm64",
+        "@apple_support//configs:ios_arm64e",
+        "@apple_support//configs:ios_sim_arm64",
+        "@apple_support//configs:ios_x86_64",
+    ],
+    "macos": [
+        "@apple_support//configs:darwin_arm64",
+        "@apple_support//configs:darwin_arm64e",
+        "@apple_support//configs:darwin_x86_64",
+    ],
+    "tvos": [
+        "@apple_support//configs:tvos_arm64",
+        "@apple_support//configs:tvos_sim_arm64",
+        "@apple_support//configs:tvos_x86_64",
+    ],
+    "visionos": [
+        "@apple_support//configs:visionos_arm64",
+        "@apple_support//configs:visionos_sim_arm64",
+    ],
+    "watchos": [
+        "@apple_support//configs:watchos_arm64",
+        "@apple_support//configs:watchos_arm64_32",
+        "@apple_support//configs:watchos_armv7k",
+        "@apple_support//configs:watchos_device_arm64",
+        "@apple_support//configs:watchos_device_arm64e",
+        "@apple_support//configs:watchos_x86_64",
+    ],
+}
 
 swift_binary_load_stmt = load_statements.new(
     swift_location,
