@@ -202,12 +202,13 @@ def _process_find_results(raw_output, find_path, exclude_paths = [], remove_find
     # The starting path will be prefixed to the results. If the starting path is dot (.),
     # the prefix for the results will be `./`. We will remove it before returning the results.
     path_list = [p.removeprefix("./") for p in path_list]
-    return _exclude_paths(path_list, exclude_paths)
+    return _exclude_paths(find_path, path_list, exclude_paths)
 
-def _exclude_paths(path_list, exclude_paths):
+def _exclude_paths(find_path, path_list, exclude_paths):
     """Filter the list of paths using the provided exclude list.
 
     Args:
+        find_path: The base path where the search was performed.
         path_list: A `list` of paths as `string` values.
         exclude_paths: A `list` of paths to files or directories to exclude from
             the provided paths.
@@ -217,6 +218,12 @@ def _exclude_paths(path_list, exclude_paths):
     """
     if len(exclude_paths) == 0:
         return path_list
+
+    # Ensure the find_path is prefixed to any excludes so that they match as expected.
+    # When find_path is ".", the "./" prefix was already stripped from path_list,
+    # so we should not add it to excludes.
+    if find_path != ".":
+        exclude_paths = [find_path + "/" + ex.removeprefix(find_path + "/") for ex in exclude_paths]
 
     # The exclude path could be a directory.
     excludes_as_dirs = lists.map(
