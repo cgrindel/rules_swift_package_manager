@@ -7,7 +7,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.7.0"),
         .package(url: "https://github.com/apple/swift-log", from: "1.10.1"),
-        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.58.7"),
+        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.59.1"),
         .package(path: "third_party/my_local_package"),
         .package(path: "third_party/NotThatAmazingModule"),
     ]
