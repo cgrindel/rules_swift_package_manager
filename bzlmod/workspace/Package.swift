@@ -9,7 +9,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.7.0"),
-        .package(url: "https://github.com/apple/swift-log", from: "1.9.1"),
+        .package(url: "https://github.com/apple/swift-log", from: "1.10.1"),
     ],
     targets: [
         .executableTarget(

@@ -5,6 +5,6 @@ import PackageDescription
 let package = Package(
     name: "AwsCrtExample",
     dependencies: [
-        .package(url: "https://github.com/awslabs/aws-crt-swift.git", from: "0.57.0"),
+        .package(url: "https://github.com/awslabs/aws-crt-swift.git", from: "0.58.0"),
     ]
 )
