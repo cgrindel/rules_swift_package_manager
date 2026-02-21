@@ -5,6 +5,6 @@ import PackageDescription
 let package = Package(
     name: "AwsSdkExample",
     dependencies: [
-        .package(url: "https://github.com/awslabs/aws-sdk-swift", from: "1.6.55"),
+        .package(url: "https://github.com/awslabs/aws-sdk-swift", from: "1.6.56"),
     ]
 )
