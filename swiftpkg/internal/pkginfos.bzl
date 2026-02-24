@@ -161,6 +161,8 @@ def _get(
         A `struct` representing the package information as returned by
         `pkginfos.new()`.
     """
+    directory = str(repository_ctx.path(directory))
+
     if debug_path:
         if not paths.is_absolute(debug_path):
             # For backwards compatibility, resolve relative to the working directory.
@@ -184,6 +186,21 @@ def _get(
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
     )
+
+    # Ensure package and local dependency paths are absolute even if the
+    # parsed JSON has been normalized to relative paths for cache portability.
+    pkg_path = desc_manifest["path"]
+    if not paths.is_absolute(pkg_path):
+        pkg_path = paths.normalize(paths.join(directory, pkg_path))
+        desc_manifest["path"] = pkg_path
+
+    for dep_map in desc_manifest.get("dependencies", []):
+        if dep_map.get("type") != "fileSystem":
+            continue
+        dep_path = dep_map["path"]
+        if not paths.is_absolute(dep_path):
+            dep_map["path"] = paths.normalize(paths.join(pkg_path, dep_path))
+
     pkg_info = _new_from_parsed_json(
         repository_ctx = repository_ctx,
         dump_manifest = dump_manifest,
