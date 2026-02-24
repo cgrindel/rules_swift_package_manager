@@ -42,6 +42,8 @@ def _get_dump_manifest(
         working_directory: A `string` specifying the directory for the SPM package.
         debug_path: A `string` specifying the directory path where to  write the
             JSON file.
+        cache_path: Optional. A `string` specifying the directory path where to
+            read or write cached JSON.
         registries_directory: Optional. The directory containing the
             configuration file for setting a Swift Package Registry.
         replace_scm_with_registry: Optional. A `bool` specifying whether to
@@ -93,6 +95,8 @@ def _get_desc_manifest(
         working_directory: A `string` specifying the directory for the SPM package.
         debug_path: A `string` specifying the directory path where to  write the
             JSON file.
+        cache_path: Optional. A `string` specifying the directory path where to
+            read or write cached JSON.
         registries_directory: Optional. The directory containing the
             configuration file for setting a Swift Package Registry.
         replace_scm_with_registry: Optional. A `bool` specifying whether to
@@ -148,6 +152,8 @@ def _get(
             command execution.
         debug_path: Optional. The path where to write debug files (e.g. JSON)
             as a `string`.
+        cached_json_directory: Optional. A `string` specifying the directory
+            where JSON output from SPM commands can be cached.
         resolved_pkg_map: Optional. A `dict` of representing the
             `Package.resolved` JSON.
         collect_src_info: Optional. A `bool` specifying whether source

@@ -377,6 +377,7 @@ _from_package_tag = tag_class(
     attrs = dicts.add(
         swift_package_tool_attrs.swift_package_registry,
         {
+            "cached_json_directory": attr.string(),
             "declare_swift_deps_info": attr.bool(
                 doc = """\
 Declare a `swift_deps_info` repository that is used by external tooling (e.g. \
@@ -401,7 +402,6 @@ bazel run @swift_package//:resolve
 ```
 """,
             ),
-            "cached_json_directory": attr.string(),
             "env": attr.string_dict(
                 doc = """\
 Environment variables that will be passed to the execution environments for \
