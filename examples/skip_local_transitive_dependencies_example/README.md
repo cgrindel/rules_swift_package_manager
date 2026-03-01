@@ -7,3 +7,7 @@ Setting `resolve_transitive_local_dependencies` to `False` does not disable reso
 transitive remote dependencies from either local or remote dependencies. It only disables
 resolving transitive dependencies from a direct local package dependency to other local
 packages.
+
+This example also demonstrates setting `cached_json_directory` on
+`swift_deps.from_package` to cache JSON output from Swift Package Manager commands under
+`.spm-json-cache`.

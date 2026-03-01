@@ -32,6 +32,7 @@ swift_deps = use_extension(
     "swift_deps",
 )
 swift_deps.from_package(
+    cached_json_directory = ".spm-json-cache",
     resolve_transitive_local_dependencies = False,
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
