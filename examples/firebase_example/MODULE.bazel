@@ -7,7 +7,7 @@ local_path_override(
     path = "../..",
 )
 
-bazel_dep(name = "cgrindel_bazel_starlib", version = "0.28.0")
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.30.0")
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 
 # The apple_support bazel_dep must come before the rules_cc.
@@ -22,6 +22,17 @@ bazel_dep(
     name = "rules_apple",
     version = "4.3.3",
     repo_name = "build_bazel_rules_apple",
+)
+
+# Workaround: rules_apple 4.3.3 bundletool uses os.system() which doesn't
+# inherit import paths under rules_python >= 1.7.0's new bootstrap mechanism.
+# Pin to rules_apple main which includes the fix from PR #2866.
+# https://github.com/bazelbuild/rules_apple/issues/2843
+# Remove once a rules_apple release includes the fix.
+git_override(
+    module_name = "rules_apple",
+    commit = "0385289e9bcad0c86e27441a09415aef4b9a3c12",
+    remote = "https://github.com/bazelbuild/rules_apple.git",
 )
 
 bazel_dep(

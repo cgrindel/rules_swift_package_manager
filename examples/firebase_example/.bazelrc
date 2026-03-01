@@ -20,3 +20,4 @@ build --cxxopt='-std=gnu++14'
 # Firebase SPM support requires `-ObjC` linker option.
 # https://github.com/firebase/firebase-ios-sdk/blob/master/SwiftPackageManager.md#requirements
 build --linkopt='-ObjC'
+
