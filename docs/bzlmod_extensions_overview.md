@@ -21,8 +21,9 @@ swift_deps.configure_package(<a href="#swift_deps.configure_package-name">name</
 swift_deps.configure_swift_package(<a href="#swift_deps.configure_swift_package-build_path">build_path</a>, <a href="#swift_deps.configure_swift_package-cache_path">cache_path</a>, <a href="#swift_deps.configure_swift_package-config_path">config_path</a>, <a href="#swift_deps.configure_swift_package-dependency_caching">dependency_caching</a>,
                                    <a href="#swift_deps.configure_swift_package-manifest_cache">manifest_cache</a>, <a href="#swift_deps.configure_swift_package-manifest_caching">manifest_caching</a>, <a href="#swift_deps.configure_swift_package-replace_scm_with_registry">replace_scm_with_registry</a>,
                                    <a href="#swift_deps.configure_swift_package-security_path">security_path</a>, <a href="#swift_deps.configure_swift_package-use_registry_identity_for_scm">use_registry_identity_for_scm</a>)
-swift_deps.from_package(<a href="#swift_deps.from_package-declare_swift_deps_info">declare_swift_deps_info</a>, <a href="#swift_deps.from_package-declare_swift_package">declare_swift_package</a>, <a href="#swift_deps.from_package-env">env</a>, <a href="#swift_deps.from_package-env_inherit">env_inherit</a>, <a href="#swift_deps.from_package-netrc">netrc</a>,
-                        <a href="#swift_deps.from_package-registries">registries</a>, <a href="#swift_deps.from_package-resolve_transitive_local_dependencies">resolve_transitive_local_dependencies</a>, <a href="#swift_deps.from_package-resolved">resolved</a>, <a href="#swift_deps.from_package-swift">swift</a>)
+swift_deps.from_package(<a href="#swift_deps.from_package-cached_json_directory">cached_json_directory</a>, <a href="#swift_deps.from_package-declare_swift_deps_info">declare_swift_deps_info</a>, <a href="#swift_deps.from_package-declare_swift_package">declare_swift_package</a>, <a href="#swift_deps.from_package-env">env</a>,
+                        <a href="#swift_deps.from_package-env_inherit">env_inherit</a>, <a href="#swift_deps.from_package-netrc">netrc</a>, <a href="#swift_deps.from_package-registries">registries</a>, <a href="#swift_deps.from_package-resolve_transitive_local_dependencies">resolve_transitive_local_dependencies</a>,
+                        <a href="#swift_deps.from_package-resolved">resolved</a>, <a href="#swift_deps.from_package-swift">swift</a>)
 </pre>
 
 
@@ -78,6 +79,7 @@ Load Swift packages from `Package.swift` and `Package.resolved` files.
 
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="swift_deps.from_package-cached_json_directory"></a>cached_json_directory |  -   | String | optional |  `""`  |
 | <a id="swift_deps.from_package-declare_swift_deps_info"></a>declare_swift_deps_info |  Declare a `swift_deps_info` repository that is used by external tooling (e.g. Swift Gazelle plugin).   | Boolean | optional |  `False`  |
 | <a id="swift_deps.from_package-declare_swift_package"></a>declare_swift_package |  Declare a `swift_package_tool` repository named `swift_package` which defines two targets: `update` and `resolve`. These targets run can be used to run the `swift package` binary in a Bazel context. The flags used when running the underlying `swift package` can be configured using the `configure_swift_package` tag.<br><br>They can be `bazel run` to update/resolve the `resolved` file:<br><br><pre><code>bazel run @swift_package//:update&#10;bazel run @swift_package//:resolve</code></pre>   | Boolean | optional |  `True`  |
 | <a id="swift_deps.from_package-env"></a>env |  Environment variables that will be passed to the execution environments for this repository rule. (e.g. SPM version check, SPM dependency resolution, SPM package description generation)   | <a href="https://bazel.build/rules/lib/dict">Dictionary: String -> String</a> | optional |  `{}`  |

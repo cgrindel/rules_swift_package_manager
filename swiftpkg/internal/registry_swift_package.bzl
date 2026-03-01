@@ -235,10 +235,18 @@ def _registry_swift_package_impl(repository_ctx):
     else:
         resolved_pkg_map = dict()
 
+    cached_json_directory = None
+    if repository_ctx.attr.cached_json_directory:
+        cached_json_directory = paths.join(
+            str(repository_ctx.workspace_root),
+            repository_ctx.attr.cached_json_directory,
+        )
+
     pkg_ctx = pkg_ctxs.read(
         repository_ctx,
         directory,
         env,
+        cached_json_directory,
         resolved_pkg_map = resolved_pkg_map,
         registries_directory = registries_directory,
         replace_scm_with_registry = attr.replace_scm_with_registry,
@@ -292,6 +300,7 @@ _ALL_ATTRS = dicts.add(
     _REGISTRY_ATTRS,
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
+    {"cached_json_directory": attr.string()},
     swift_package_tool_attrs.swift_package_registry,
 )
 

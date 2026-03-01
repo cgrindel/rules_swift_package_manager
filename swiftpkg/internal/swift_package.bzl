@@ -1,6 +1,7 @@
 """Implementation for `swift_package`."""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_tools//tools/build_defs/repo:git_worker.bzl", "git_repo")
 load(
     "@bazel_tools//tools/build_defs/repo:utils.bzl",
@@ -76,10 +77,18 @@ def _swift_package_impl(repository_ctx):
         registries_directory = None
 
     # Generate the build file
+    cached_json_directory = None
+    if repository_ctx.attr.cached_json_directory:
+        cached_json_directory = paths.join(
+            str(repository_ctx.workspace_root),
+            repository_ctx.attr.cached_json_directory,
+        )
+
     pkg_ctx = pkg_ctxs.read(
         repository_ctx,
         directory,
         env,
+        cached_json_directory,
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
     )
@@ -221,6 +230,7 @@ _ALL_ATTRS = dicts.add(
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
     {
+        "cached_json_directory": attr.string(),
         "netrc": attr.label(
             default = None,
             doc = "A `.netrc` file for authentication when downloading binary artifacts.",
