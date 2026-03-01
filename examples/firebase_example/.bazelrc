@@ -21,8 +21,3 @@ build --cxxopt='-std=gnu++14'
 # https://github.com/firebase/firebase-ios-sdk/blob/master/SwiftPackageManager.md#requirements
 build --linkopt='-ObjC'
 
-# Workaround: rules_apple 4.3.3 is incompatible with rules_python's "script"
-# bootstrap (default since 1.8.0). Revert to "system_python" so that
-# codesigningtool/bundletool can resolve `from tools.wrapper_common import execute`.
-# Remove once rules_apple ships a compatible version.
-build --@rules_python//python/config_settings:bootstrap_impl=system_python
