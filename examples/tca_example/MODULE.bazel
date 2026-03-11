@@ -15,12 +15,12 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_swift",
-    version = "3.4.2",
+    version = "3.5.0",
     repo_name = "build_bazel_rules_swift",
 )
 bazel_dep(
     name = "rules_apple",
-    version = "4.3.3",
+    version = "4.5.0",
     repo_name = "build_bazel_rules_apple",
 )
 
