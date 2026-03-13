@@ -31,7 +31,7 @@ bazel_dep(
 # Remove once a rules_apple release includes the fix.
 git_override(
     module_name = "rules_apple",
-    commit = "e0eab8952919d51b5c2e19c9ee8a714256a0b735",
+    commit = "d6fd5b55bc07c70226716a7661672a9d2877dc22",
     remote = "https://github.com/bazelbuild/rules_apple.git",
 )
 
