@@ -1,6 +1,5 @@
 """Tests for SPM trait support in `pkginfos` module."""
 
-load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 
@@ -71,8 +70,7 @@ def _enabled_traits_test(ctx):
     ]
 
     for t in tests:
-        result = pkginfos.enabled_traits_from_dump_manifest(t.dump)
-        actual = sorted(sets.to_list(result))
+        actual = pkginfos.enabled_traits_from_dump_manifest(t.dump)
         asserts.equals(env, sorted(t.exp), actual, t.msg)
 
     return unittest.end(env)
@@ -84,7 +82,7 @@ enabled_traits_test = unittest.make(_enabled_traits_test)
 def _build_setting_trait_filtering_test(ctx):
     env = unittest.begin(ctx)
 
-    enabled = sets.make(["Foo"])
+    enabled = ["Foo"]
 
     tests = [
         struct(
@@ -171,7 +169,7 @@ build_setting_trait_filtering_test = unittest.make(
 def _target_dep_trait_filtering_test(ctx):
     env = unittest.begin(ctx)
 
-    enabled = sets.make(["Foo"])
+    enabled = ["Foo"]
 
     tests = [
         struct(

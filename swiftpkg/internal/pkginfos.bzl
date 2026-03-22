@@ -317,20 +317,20 @@ def _new_product_from_desc_json_map(prd_map):
     )
 
 def _enabled_traits_from_dump_manifest(dump_manifest):
-    """Compute the set of enabled trait names from the dump manifest.
+    """Compute the sorted list of enabled trait names from the dump manifest.
 
     Finds the "default" trait and recursively resolves its enabledTraits.
-    Pre-6.1 packages without a traits array return an empty set.
+    Pre-6.1 packages without a traits array return an empty list.
 
     Args:
         dump_manifest: A `dict` representing the parsed dump JSON.
 
     Returns:
-        A `set` (as created by `sets.make`) of enabled trait name strings.
+        A sorted `list` of enabled trait name strings.
     """
     traits_list = dump_manifest.get("traits", [])
     if not traits_list:
-        return sets.make()
+        return []
 
     # Build a map from trait name to its enabledTraits list
     traits_by_name = {}
@@ -340,7 +340,7 @@ def _enabled_traits_from_dump_manifest(dump_manifest):
     # Find the default trait's enabled traits
     default_enabled = traits_by_name.get("default", [])
     if not default_enabled:
-        return sets.make()
+        return []
 
     # Recursively resolve transitive trait enablement
     resolved = sets.make()
@@ -356,14 +356,14 @@ def _enabled_traits_from_dump_manifest(dump_manifest):
             if not sets.contains(resolved, transitive):
                 worklist.append(transitive)
 
-    return resolved
+    return sorted(sets.to_list(resolved))
 
 def _trait_condition_satisfied(condition_traits, enabled_traits):
     """Returns True if all traits in the condition are enabled.
 
     Args:
         condition_traits: A `list` of trait name strings from a condition.
-        enabled_traits: A `set` of enabled trait names.
+        enabled_traits: A `list` of enabled trait names.
 
     Returns:
         A `bool`.
@@ -371,7 +371,7 @@ def _trait_condition_satisfied(condition_traits, enabled_traits):
     if not condition_traits:
         return True
     for trait in condition_traits:
-        if not sets.contains(enabled_traits, trait):
+        if trait not in enabled_traits:
             return False
     return True
 
@@ -385,7 +385,7 @@ def _new_target_dependency_condition_from_dump_json_map(dump_map):
 
 def _new_target_dependency_from_dump_json_map(dump_map, enabled_traits = None):
     if enabled_traits == None:
-        enabled_traits = sets.make()
+        enabled_traits = []
 
     by_name = None
     by_name_list = dump_map.get("byName")
@@ -444,7 +444,7 @@ def _new_target_from_json_maps(
         collect_src_info,
         enabled_traits = None):
     if enabled_traits == None:
-        enabled_traits = sets.make()
+        enabled_traits = []
     target_name = dump_map["name"]
     target_path = desc_map["path"]
     target_label = pkginfo_targets.bazel_label_from_parts(
@@ -633,7 +633,7 @@ def _new_build_setting_condition_from_json(dump_map):
 
 def _new_build_settings_from_json(dump_map, enabled_traits = None):
     if enabled_traits == None:
-        enabled_traits = sets.make()
+        enabled_traits = []
 
     # Example build setting
     #   {
@@ -858,7 +858,7 @@ def _new_from_parsed_json(
         expose_build_targets = expose_build_targets,
         c_language_standard = dump_manifest.get("cLanguageStandard"),
         cxx_language_standard = dump_manifest.get("cxxLanguageStandard"),
-        enabled_traits = sets.to_list(enabled_traits),
+        enabled_traits = enabled_traits,
     )
 
 def _package_language_mode(dump_map):
