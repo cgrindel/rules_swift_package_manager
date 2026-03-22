@@ -197,6 +197,38 @@ def _target_dep_trait_filtering_test(ctx):
             dump = {"byName": ["PlatDep", {"platformNames": ["ios"]}]},
             exp_not_none = True,
         ),
+        # product dependency type tests
+        struct(
+            msg = "product dep with no trait condition is included",
+            dump = {"product": ["SomeProduct", "SomePkg", None, None]},
+            exp_not_none = True,
+        ),
+        struct(
+            msg = "product dep with enabled trait condition is included",
+            dump = {"product": ["FooProduct", "FooPkg", None, {"traits": ["Foo"]}]},
+            exp_not_none = True,
+        ),
+        struct(
+            msg = "product dep with non-enabled trait condition is excluded",
+            dump = {"product": ["BarProduct", "BarPkg", None, {"traits": ["Bar"]}]},
+            exp_not_none = False,
+        ),
+        # target dependency type tests
+        struct(
+            msg = "target dep with no trait condition is included",
+            dump = {"target": ["SomeTarget", None]},
+            exp_not_none = True,
+        ),
+        struct(
+            msg = "target dep with enabled trait condition is included",
+            dump = {"target": ["FooTarget", {"traits": ["Foo"]}]},
+            exp_not_none = True,
+        ),
+        struct(
+            msg = "target dep with non-enabled trait condition is excluded",
+            dump = {"target": ["BarTarget", {"traits": ["Bar"]}]},
+            exp_not_none = False,
+        ),
     ]
 
     for t in tests:
