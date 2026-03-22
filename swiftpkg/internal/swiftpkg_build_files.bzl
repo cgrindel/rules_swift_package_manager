@@ -115,6 +115,10 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         "-DSWIFT_PACKAGE",
     ]
 
+    # SPM automatically passes each enabled trait name as a -D flag (SE-0450).
+    for trait_name in pkg_ctx.pkg_info.enabled_traits:
+        copts.append("-D" + trait_name)
+
     # GH046: Support plugins.
 
     is_library_target = lists.contains([target_types.library, target_types.regular], target.type)

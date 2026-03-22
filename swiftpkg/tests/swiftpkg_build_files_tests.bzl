@@ -535,6 +535,40 @@ def _pkg_info(
         expose_build_targets = expose_build_targets,
     )
 
+def _pkg_info_with_traits():
+    """Package info with enabled traits for testing trait -D flags."""
+    return pkginfos.new(
+        name = "TraitPackage",
+        path = "/path/to/trait-package",
+        tools_version = "6.1",
+        url = "https://github.com/my/trait-package",
+        version = "1.0.0",
+        dependencies = [],
+        products = [],
+        targets = [
+            pkginfos.new_target(
+                name = "TraitLibrary",
+                type = "regular",
+                c99name = "TraitLibrary",
+                module_type = "SwiftTarget",
+                path = "Sources/TraitLibrary",
+                sources = [
+                    "TraitLibrary.swift",
+                ],
+                dependencies = [],
+                swift_settings = pkginfos.new_swift_settings([
+                    pkginfos.new_build_setting(
+                        kind = build_setting_kinds.define,
+                        values = ["UNCONDITIONAL_DEFINE"],
+                    ),
+                ]),
+                repo_name = _repo_name,
+                swift_src_info = pkginfos.new_swift_src_info(),
+            ),
+        ],
+        enabled_traits = ["FeatureA", "FeatureB"],
+    )
+
 def _pkg_ctx(pkg_info):
     return pkg_ctxs.new(
         pkg_info = pkg_info,
@@ -1268,6 +1302,33 @@ swift_library(
     srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
     tags = ["manual"],
     visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Swift library target with enabled traits",
+            name = "TraitLibrary",
+            pkg_info = _pkg_info_with_traits(),
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "TraitLibrary.rspm",
+    always_include_developer_search_paths = True,
+    alwayslink = True,
+    copts = [
+        "-DSWIFT_PACKAGE",
+        "-Xcc",
+        "-DSWIFT_PACKAGE",
+        "-DFeatureA",
+        "-DFeatureB",
+        "-DUNCONDITIONAL_DEFINE",
+    ],
+    module_name = "TraitLibrary",
+    package_name = "TraitPackage",
+    srcs = ["Sources/TraitLibrary/TraitLibrary.swift"],
+    tags = ["manual"],
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
