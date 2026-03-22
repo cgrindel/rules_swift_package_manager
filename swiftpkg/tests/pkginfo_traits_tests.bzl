@@ -21,7 +21,7 @@ def _enabled_traits_test(ctx):
             exp = ["Foo"],
         ),
         struct(
-            msg = "no default trait yields empty set",
+            msg = "no default trait yields empty list",
             dump = {
                 "traits": [
                     {"description": "The Foo trait", "name": "Foo"},
@@ -30,7 +30,7 @@ def _enabled_traits_test(ctx):
             exp = [],
         ),
         struct(
-            msg = "default with empty enabledTraits yields empty set",
+            msg = "default with empty enabledTraits yields empty list",
             dump = {
                 "traits": [
                     {"enabledTraits": [], "name": "default"},
