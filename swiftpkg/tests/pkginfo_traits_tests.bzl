@@ -82,7 +82,7 @@ enabled_traits_test = unittest.make(_enabled_traits_test)
 def _build_setting_trait_filtering_test(ctx):
     env = unittest.begin(ctx)
 
-    enabled = ["Foo"]
+    enabled = ["Baz", "Foo"]
 
     tests = [
         struct(
@@ -114,7 +114,7 @@ def _build_setting_trait_filtering_test(ctx):
         struct(
             msg = "setting requiring multiple traits, all enabled",
             dump = {
-                "condition": {"traits": ["Foo"]},
+                "condition": {"traits": ["Foo", "Baz"]},
                 "kind": {"define": {"_0": "HAS_BOTH"}},
                 "tool": "swift",
             },
