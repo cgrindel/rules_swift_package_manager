@@ -373,7 +373,7 @@ def _new_from_target_dependency_condition_test(ctx):
             ],
         ),
         struct(
-            msg = "with condition",
+            msg = "with platform condition",
             c = pkginfos.new_target_dependency_condition(
                 platforms = ["ios", "tvos"],
             ),
@@ -387,6 +387,33 @@ def _new_from_target_dependency_condition_test(ctx):
                     spm_platforms.label("ios"),
                     spm_platforms.label("tvos"),
                 ]
+            ],
+        ),
+        struct(
+            msg = "with trait-only condition (no platforms)",
+            c = pkginfos.new_target_dependency_condition(
+                traits = ["FeatureA"],
+            ),
+            exp = [
+                bzl_selects.new(
+                    kind = kind,
+                    value = labels,
+                    condition = None,
+                ),
+            ],
+        ),
+        struct(
+            msg = "with traits and platforms",
+            c = pkginfos.new_target_dependency_condition(
+                platforms = ["ios"],
+                traits = ["FeatureA"],
+            ),
+            exp = [
+                bzl_selects.new(
+                    kind = kind,
+                    value = labels,
+                    condition = spm_platforms.label("ios"),
+                ),
             ],
         ),
     ]
