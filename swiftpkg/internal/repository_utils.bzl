@@ -107,7 +107,7 @@ def _parsed_json_from_spm_command(
         arguments,
         env = env,
         working_directory = working_directory,
-    ).replace(working_directory, ".")
+    ).replace(working_directory + "/", "./")
 
     if debug_json_path:
         if not paths.is_absolute(debug_json_path):
