@@ -25,6 +25,10 @@ load(":validations.bzl", "validations")
 
 _DEFAULT_LOCALIZATION = "en"
 
+# The well-known trait name that SPM uses (SE-0450) to determine which traits
+# are enabled by default when no explicit trait selection is provided.
+_DEFAULT_TRAIT_NAME = "default"
+
 def _get_dump_manifest(
         repository_ctx,
         env = {},
@@ -338,14 +342,14 @@ def _enabled_traits_from_dump_manifest(dump_manifest):
         traits_by_name[trait["name"]] = trait.get("enabledTraits", [])
 
     # Find the default trait's enabled traits
-    default_enabled = traits_by_name.get("default", [])
+    default_enabled = traits_by_name.get(_DEFAULT_TRAIT_NAME, [])
     if not default_enabled:
         return []
 
     # Recursively resolve transitive trait enablement
     resolved = sets.make()
     worklist = list(default_enabled)
-    for _iteration in range(len(traits_list) + 1):
+    for _iteration in range(len(traits_list) * 2):
         if not worklist:
             break
         trait_name = worklist.pop(0)
@@ -1210,12 +1214,19 @@ def _new_product(name, type, targets):
 def _new_target_dependency_condition(platforms = [], traits = []):
     """Create a target dependency condition.
 
+    A condition may contain only traits (no platforms).  In that case a
+    non-None struct with an empty ``platforms`` list is returned.
+    Callers such as ``bzl_selects.new_from_target_dependency_condition``
+    handle this by treating an empty platform list as unconditional,
+    since trait filtering has already been applied upstream in pkginfos.
+
     Args:
         platforms: Optional. A `list` of platform names as `string` values.
         traits: Optional. A `list` of trait names as `string` values.
 
     Returns:
-        A `struct` representing a target dependency condition.
+        A `struct` representing a target dependency condition, or ``None``
+        if both platforms and traits are empty.
     """
     if len(platforms) == 0 and len(traits) == 0:
         return None
