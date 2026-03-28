@@ -261,6 +261,10 @@ def _registry_swift_package_impl(repository_ctx):
         pkg_ctx.pkg_info.targets,
     )
 
+    # We make fetched package files read-only to reduce accidental edits when
+    # tools like rules_xcodeproj expose the external repository in the UI.
+    repo_rules.make_files_read_only(repository_ctx, directory)
+
 _REGISTRY_ATTRS = {
     "id": attr.string(
         mandatory = True,

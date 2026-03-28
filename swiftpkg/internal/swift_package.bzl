@@ -100,6 +100,10 @@ def _swift_package_impl(repository_ctx):
     # Remove unused modulemaps to prevent module redefinition errors
     repo_rules.remove_modulemaps(repository_ctx, directory, pkg_ctx.pkg_info.targets)
 
+    # We make fetched package files read-only to reduce accidental edits when
+    # tools like rules_xcodeproj expose the external repository in the UI.
+    repo_rules.make_files_read_only(repository_ctx, directory)
+
     has_repo_metadata = hasattr(repository_ctx, "repo_metadata")
     if has_repo_metadata and repository_ctx.attr.commit:
         return repository_ctx.repo_metadata(reproducible = True)
