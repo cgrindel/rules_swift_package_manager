@@ -13,6 +13,7 @@ load(":pkginfo_ext_deps_tests.bzl", "pkginfo_ext_deps_test_suite")
 load(":pkginfo_target_deps_tests.bzl", "pkginfo_target_deps_test_suite")
 load(":pkginfo_targets_tests.bzl", "pkginfo_targets_test_suite")
 load(":repository_files_tests.bzl", "repository_files_test_suite")
+load(":repository_utils_tests.bzl", "repository_utils_test_suite")
 load(":resource_files_tests.bzl", "resource_files_test_suite")
 load(":semver_tests.bzl", "semver_test_suite")
 load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
@@ -46,6 +47,8 @@ pkginfo_target_deps_test_suite()
 pkginfo_targets_test_suite()
 
 repository_files_test_suite()
+
+repository_utils_test_suite()
 
 resource_files_test_suite()
 

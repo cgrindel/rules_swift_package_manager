@@ -107,7 +107,8 @@ def _parsed_json_from_spm_command(
         arguments,
         env = env,
         working_directory = working_directory,
-    ).replace(working_directory + "/", "./")
+    )
+    json_str = _replace_working_directory(json_str, working_directory)
 
     if debug_json_path:
         if not paths.is_absolute(debug_json_path):
@@ -163,10 +164,34 @@ def _struct_to_kwargs(*, struct, keys):
             kwargs[k] = v
     return kwargs
 
+def _replace_working_directory(json_str, working_directory):
+    """Replace the working directory prefix in a JSON string.
+
+    Uses a path-prefix-safe replacement by appending a trailing
+    slash to ensure only full path-prefix matches are replaced.
+    Without the trailing slash, a working directory like
+    "/path/to/MyApp" would incorrectly match
+    "/path/to/MyAppFrameworks".
+
+    Args:
+        json_str: A `string` containing JSON output from an
+            SPM command.
+        working_directory: A `string` representing the working
+            directory path.
+
+    Returns:
+        A `string` with the working directory prefix replaced
+        by "./".
+    """
+    if not working_directory:
+        return json_str
+    return json_str.replace(working_directory + "/", "./")
+
 repository_utils = struct(
     exec_spm_command = _execute_spm_command,
     is_macos = _is_macos,
     package_name = _package_name,
     parsed_json_from_spm_command = _parsed_json_from_spm_command,
+    replace_working_directory = _replace_working_directory,
     struct_to_kwargs = _struct_to_kwargs,
 )
