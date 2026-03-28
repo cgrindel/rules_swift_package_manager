@@ -144,6 +144,34 @@ workspace(name = "{}")
 """.format(repo_name)
     repository_ctx.file(path, content = content, executable = False)
 
+def _make_files_read_only(repository_ctx, directory):
+    os_name = repository_ctx.os.name.lower()
+    if os_name.startswith("windows"):
+        return
+
+    exec_result = repository_ctx.execute(
+        [
+            "find",
+            directory,
+            "-type",
+            "f",
+            "-exec",
+            "chmod",
+            "a-w",
+            "{}",
+            "+",
+        ],
+        quiet = True,
+    )
+    if exec_result.return_code != 0:
+        fail("""\
+Failed to mark repository files as read-only. directory: {directory}
+{stderr}\
+""".format(
+            directory = directory,
+            stderr = exec_result.stderr,
+        ))
+
 def _artifact_infos_from_path(repository_ctx, path):
     if path.endswith(".xcframework"):
         xcframework_dirs = [path]
@@ -253,6 +281,7 @@ repo_rules = struct(
     env_attrs = _env_attrs,
     gen_build_files = _gen_build_files,
     get_exec_env = _get_exec_env,
+    make_files_read_only = _make_files_read_only,
     remove_bazel_files = _remove_bazel_files,
     remove_modulemaps = _remove_modulemaps,
     swift_attrs = _swift_attrs,
