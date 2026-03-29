@@ -107,6 +107,12 @@ def _new_from_target_dependency_condition(kind, labels, condition = None):
     # the conditions.
     conditions = sets.to_list(sets.make(conditions))
 
+    # If the condition has no platform constraints (e.g. trait-only
+    # conditions), include the dependency unconditionally.  Trait filtering
+    # has already been applied upstream in pkginfos.
+    if not conditions:
+        return [_new(kind = kind, value = labels)]
+
     return [
         _new(kind = kind, value = labels, condition = c)
         for c in conditions

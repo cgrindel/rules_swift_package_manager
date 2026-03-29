@@ -535,6 +535,62 @@ def _pkg_info(
         expose_build_targets = expose_build_targets,
     )
 
+def _pkg_info_with_traits():
+    """Package info with enabled traits for testing trait -D flags."""
+    return pkginfos.new(
+        name = "TraitPackage",
+        path = "/path/to/trait-package",
+        tools_version = "6.1",
+        url = "https://github.com/my/trait-package",
+        version = "1.0.0",
+        dependencies = [],
+        products = [],
+        targets = [
+            pkginfos.new_target(
+                name = "TraitLibrary",
+                type = "regular",
+                c99name = "TraitLibrary",
+                module_type = "SwiftTarget",
+                path = "Sources/TraitLibrary",
+                sources = [
+                    "TraitLibrary.swift",
+                ],
+                dependencies = [],
+                swift_settings = pkginfos.new_swift_settings([
+                    pkginfos.new_build_setting(
+                        kind = build_setting_kinds.define,
+                        values = ["UNCONDITIONAL_DEFINE"],
+                    ),
+                ]),
+                repo_name = _repo_name,
+                swift_src_info = pkginfos.new_swift_src_info(),
+            ),
+            pkginfos.new_target(
+                name = "TraitClangLibrary",
+                type = "regular",
+                c99name = "TraitClangLibrary",
+                module_type = "ClangTarget",
+                path = "Sources/TraitClangLibrary",
+                sources = [
+                    "foo.c",
+                ],
+                dependencies = [],
+                clang_settings = pkginfos.new_clang_settings([]),
+                repo_name = _repo_name,
+                clang_src_info = pkginfos.new_clang_src_info(
+                    hdrs = [],
+                    srcs = [
+                        "foo.c",
+                    ],
+                    public_includes = [
+                        "include",
+                    ],
+                ),
+            ),
+        ],
+        enabled_traits = ["FeatureA", "FeatureB"],
+    )
+
 def _pkg_ctx(pkg_info):
     return pkg_ctxs.new(
         pkg_info = pkg_info,
@@ -1268,6 +1324,79 @@ swift_library(
     srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
     tags = ["manual"],
     visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "Swift library target with enabled traits",
+            name = "TraitLibrary",
+            pkg_info = _pkg_info_with_traits(),
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "TraitLibrary.rspm",
+    always_include_developer_search_paths = True,
+    alwayslink = True,
+    copts = [
+        "-DSWIFT_PACKAGE",
+        "-Xcc",
+        "-DSWIFT_PACKAGE",
+        "-DFeatureA",
+        "-Xcc",
+        "-DFeatureA",
+        "-DFeatureB",
+        "-Xcc",
+        "-DFeatureB",
+        "-DUNCONDITIONAL_DEFINE",
+    ],
+    module_name = "TraitLibrary",
+    package_name = "TraitPackage",
+    srcs = ["Sources/TraitLibrary/TraitLibrary.swift"],
+    tags = ["manual"],
+    visibility = ["//:__subpackages__"],
+)
+""",
+        ),
+        struct(
+            msg = "Clang library target with enabled traits",
+            name = "TraitClangLibrary",
+            pkg_info = _pkg_info_with_traits(),
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+cc_library(
+    name = "TraitClangLibrary.rspm",
+    deps = [":TraitClangLibrary.rspm_c"],
+    visibility = ["//:__subpackages__"],
+)
+
+cc_library(
+    name = "TraitClangLibrary.rspm_c",
+    alwayslink = True,
+    aspect_hints = ["TraitClangLibrary.rspm_swift_hint"],
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-DSWIFT_PACKAGE=1",
+        "-fmodule-name=TraitClangLibrary",
+        "-DFeatureA",
+        "-DFeatureB",
+    ] + select({
+        "@rules_swift_package_manager//config_settings/bazel/compilation_mode:dbg": ["-DDEBUG=1"],
+        "//conditions:default": [],
+    }),
+    includes = ["include"],
+    srcs = ["foo.c"],
+    visibility = ["//:__subpackages__"],
+)
+
+swift_interop_hint(
+    name = "TraitClangLibrary.rspm_swift_hint",
+    module_map = None,
+    module_name = "TraitClangLibrary",
 )
 """,
         ),

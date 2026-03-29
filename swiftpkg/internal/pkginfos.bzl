@@ -25,6 +25,10 @@ load(":validations.bzl", "validations")
 
 _DEFAULT_LOCALIZATION = "en"
 
+# The well-known trait name that SPM uses (SE-0450) to determine which traits
+# are enabled by default when no explicit trait selection is provided.
+_DEFAULT_TRAIT_NAME = "default"
+
 def _get_dump_manifest(
         repository_ctx,
         env = {},
@@ -316,45 +320,117 @@ def _new_product_from_desc_json_map(prd_map):
         type = prd_type,
     )
 
+def _enabled_traits_from_dump_manifest(dump_manifest):
+    """Compute the sorted list of enabled trait names from the dump manifest.
+
+    Finds the "default" trait and recursively resolves its enabledTraits.
+    Pre-6.1 packages without a traits array return an empty list.
+
+    Args:
+        dump_manifest: A `dict` representing the parsed dump JSON.
+
+    Returns:
+        A sorted `list` of enabled trait name strings.
+    """
+    traits_list = dump_manifest.get("traits", [])
+    if not traits_list:
+        return []
+
+    # Build a map from trait name to its enabledTraits list
+    traits_by_name = {}
+    for trait in traits_list:
+        traits_by_name[trait["name"]] = trait.get("enabledTraits", [])
+
+    # Find the default trait's enabled traits
+    default_enabled = traits_by_name.get(_DEFAULT_TRAIT_NAME, [])
+    if not default_enabled:
+        return []
+
+    # Recursively resolve transitive trait enablement
+    resolved = sets.make()
+    worklist = list(default_enabled)
+    for _iteration in range(len(traits_list) * 2):
+        if not worklist:
+            break
+        trait_name = worklist.pop(0)
+        if sets.contains(resolved, trait_name):
+            continue
+        sets.insert(resolved, trait_name)
+        for transitive in traits_by_name.get(trait_name, []):
+            if not sets.contains(resolved, transitive):
+                worklist.append(transitive)
+
+    return sorted(sets.to_list(resolved))
+
+def _trait_condition_satisfied(condition_traits, enabled_traits):
+    """Returns True if all traits in the condition are enabled.
+
+    Args:
+        condition_traits: A `list` of trait name strings from a condition.
+        enabled_traits: A `list` of enabled trait names.
+
+    Returns:
+        A `bool`.
+    """
+    if not condition_traits:
+        return True
+    for trait in condition_traits:
+        if trait not in enabled_traits:
+            return False
+    return True
+
 def _new_target_dependency_condition_from_dump_json_map(dump_map):
     if dump_map == None:
         return None
     return _new_target_dependency_condition(
         platforms = dump_map.get("platformNames", default = []),
+        traits = dump_map.get("traits", default = []),
     )
 
-def _new_target_dependency_from_dump_json_map(dump_map):
+def _new_target_dependency_from_dump_json_map(dump_map, enabled_traits = None):
+    if enabled_traits == None:
+        enabled_traits = []
+
     by_name = None
     by_name_list = dump_map.get("byName")
     if by_name_list:
+        condition = _new_target_dependency_condition_from_dump_json_map(
+            by_name_list[1],
+        )
+        if condition and not _trait_condition_satisfied(condition.traits, enabled_traits):
+            return None
         by_name = _new_by_name_reference(
             name = by_name_list[0],
-            condition = _new_target_dependency_condition_from_dump_json_map(
-                by_name_list[1],
-            ),
+            condition = condition,
         )
 
     product = None
     product_list = dump_map.get("product")
     if product_list:
+        condition = _new_target_dependency_condition_from_dump_json_map(
+            product_list[3],
+        )
+        if condition and not _trait_condition_satisfied(condition.traits, enabled_traits):
+            return None
         product = _new_product_reference(
             product_name = product_list[0],
             # Per SPM code, a single name implies that the product,
             # package, and target all have the same name.
             dep_name = product_list[1] or product_list[0],
-            condition = _new_target_dependency_condition_from_dump_json_map(
-                product_list[3],
-            ),
+            condition = condition,
         )
 
     target = None
     target_list = dump_map.get("target")
     if target_list:
+        condition = _new_target_dependency_condition_from_dump_json_map(
+            target_list[1],
+        )
+        if condition and not _trait_condition_satisfied(condition.traits, enabled_traits):
+            return None
         target = _new_target_reference(
             target_name = target_list[0],
-            condition = _new_target_dependency_condition_from_dump_json_map(
-                target_list[1],
-            ),
+            condition = condition,
         )
 
     return _new_target_dependency(
@@ -369,7 +445,10 @@ def _new_target_from_json_maps(
         desc_map,
         product_memberships,
         pkg_path,
-        collect_src_info):
+        collect_src_info,
+        enabled_traits = None):
+    if enabled_traits == None:
+        enabled_traits = []
     target_name = dump_map["name"]
     target_path = desc_map["path"]
     target_label = pkginfo_targets.bazel_label_from_parts(
@@ -377,20 +456,28 @@ def _new_target_from_json_maps(
         repo_name = "",
     )
     dependencies = [
-        _new_target_dependency_from_dump_json_map(d)
-        for d in dump_map["dependencies"]
+        dep
+        for dep in [
+            _new_target_dependency_from_dump_json_map(d, enabled_traits)
+            for d in dump_map["dependencies"]
+        ]
+        if dep != None
     ]
     clang_settings = _new_clang_settings_from_dump_json_list(
         dump_map["settings"],
+        enabled_traits,
     )
     cxx_settings = _new_cxx_settings_from_dump_json_list(
         dump_map["settings"],
+        enabled_traits,
     )
     swift_settings = _new_swift_settings_from_dump_json_list(
         dump_map["settings"],
+        enabled_traits,
     )
     linker_settings = _new_linker_settings_from_dump_json_list(
         dump_map["settings"],
+        enabled_traits,
     )
     exclude_paths = dump_map.get("exclude", default = [])
 
@@ -543,11 +630,15 @@ def _new_build_setting_condition_from_json(dump_map):
     if dump_map == None:
         return None
     return _new_build_setting_condition(
-        platforms = dump_map.get("platformNames"),
+        platforms = dump_map.get("platformNames", []),
         configuration = dump_map.get("config"),
+        traits = dump_map.get("traits", []),
     )
 
-def _new_build_settings_from_json(dump_map):
+def _new_build_settings_from_json(dump_map, enabled_traits = None):
+    if enabled_traits == None:
+        enabled_traits = []
+
     # Example build setting
     #   {
     #     "condition" : {
@@ -571,9 +662,16 @@ def _new_build_settings_from_json(dump_map):
     #           platforms = ["ios", "tvos"],
     #       ),
     #   )
-    condition = _new_build_setting_condition_from_json(
-        dump_map.get("condition"),
-    )
+
+    # Check trait condition before parsing the rest of the setting.
+    # If the setting has trait conditions that are not satisfied, skip it.
+    condition_map = dump_map.get("condition")
+    if condition_map != None:
+        condition_traits = condition_map.get("traits", [])
+        if not _trait_condition_satisfied(condition_traits, enabled_traits):
+            return []
+
+    condition = _new_build_setting_condition_from_json(condition_map)
     kind_map = dump_map.get("kind")
     if kind_map == None:
         return []
@@ -587,36 +685,36 @@ def _new_build_settings_from_json(dump_map):
         for (build_setting_kind, kind_type_values) in kind_map.items()
     ]
 
-def _new_clang_settings_from_dump_json_list(dump_list):
+def _new_clang_settings_from_dump_json_list(dump_list, enabled_traits = None):
     build_settings = []
     for setting in dump_list:
         if setting["tool"] != "c":
             continue
-        build_settings.extend(_new_build_settings_from_json(setting))
+        build_settings.extend(_new_build_settings_from_json(setting, enabled_traits))
     return _new_clang_settings(build_settings)
 
-def _new_cxx_settings_from_dump_json_list(dump_list):
+def _new_cxx_settings_from_dump_json_list(dump_list, enabled_traits = None):
     build_settings = []
     for setting in dump_list:
         if setting["tool"] != "cxx":
             continue
-        build_settings.extend(_new_build_settings_from_json(setting))
+        build_settings.extend(_new_build_settings_from_json(setting, enabled_traits))
     return _new_clang_settings(build_settings)
 
-def _new_swift_settings_from_dump_json_list(dump_list):
+def _new_swift_settings_from_dump_json_list(dump_list, enabled_traits = None):
     build_settings = []
     for setting in dump_list:
         if setting["tool"] != "swift":
             continue
-        build_settings.extend(_new_build_settings_from_json(setting))
+        build_settings.extend(_new_build_settings_from_json(setting, enabled_traits))
     return _new_swift_settings(build_settings)
 
-def _new_linker_settings_from_dump_json_list(dump_list):
+def _new_linker_settings_from_dump_json_list(dump_list, enabled_traits = None):
     build_settings = []
     for setting in dump_list:
         if setting["tool"] != "linker":
             continue
-        build_settings.extend(_new_build_settings_from_json(setting))
+        build_settings.extend(_new_build_settings_from_json(setting, enabled_traits))
     return _new_linker_settings(build_settings)
 
 def _new_dependency_identity_to_name_map(dump_deps):
@@ -700,6 +798,8 @@ def _new_from_parsed_json(
         for target_map in desc_manifest["targets"]
     }
 
+    enabled_traits = _enabled_traits_from_dump_manifest(dump_manifest)
+
     pkg_path = desc_manifest["path"]
     targets = []
     for target_map in dump_manifest["targets"]:
@@ -722,6 +822,7 @@ def _new_from_parsed_json(
             product_memberships = product_memberships,
             pkg_path = pkg_path,
             collect_src_info = collect_src_info,
+            enabled_traits = enabled_traits,
         )
         targets.append(target)
 
@@ -761,6 +862,7 @@ def _new_from_parsed_json(
         expose_build_targets = expose_build_targets,
         c_language_standard = dump_manifest.get("cLanguageStandard"),
         cxx_language_standard = dump_manifest.get("cxxLanguageStandard"),
+        enabled_traits = enabled_traits,
     )
 
 def _package_language_mode(dump_map):
@@ -810,7 +912,8 @@ def _new(
         version = None,
         expose_build_targets = False,
         c_language_standard = None,
-        cxx_language_standard = None):
+        cxx_language_standard = None,
+        enabled_traits = None):
     """Returns a `struct` representing information about a Swift package.
 
     Args:
@@ -837,10 +940,14 @@ def _new(
             `gnu99`, `c11`).
         cxx_language_standard: Optional. The c++ language standard (e.g.
             `c++11`, `c++20`).
+        enabled_traits: Optional. A `list` of enabled trait names for this
+            package.
 
     Returns:
         A `struct` representing information about a Swift package.
     """
+    if enabled_traits == None:
+        enabled_traits = []
     return struct(
         name = name,
         path = path,
@@ -856,6 +963,7 @@ def _new(
         expose_build_targets = expose_build_targets,
         c_language_standard = c_language_standard,
         cxx_language_standard = cxx_language_standard,
+        enabled_traits = enabled_traits,
     )
 
 # MARK: - Platform
@@ -1103,19 +1211,28 @@ def _new_product(name, type, targets):
 
 # MARK: - Dependency References
 
-def _new_target_dependency_condition(platforms = []):
+def _new_target_dependency_condition(platforms = [], traits = []):
     """Create a target dependency condition.
+
+    A condition may contain only traits (no platforms).  In that case a
+    non-None struct with an empty ``platforms`` list is returned.
+    Callers such as ``bzl_selects.new_from_target_dependency_condition``
+    handle this by treating an empty platform list as unconditional,
+    since trait filtering has already been applied upstream in pkginfos.
 
     Args:
         platforms: Optional. A `list` of platform names as `string` values.
+        traits: Optional. A `list` of trait names as `string` values.
 
     Returns:
-        A `struct` representing a target dependency condition.
+        A `struct` representing a target dependency condition, or ``None``
+        if both platforms and traits are empty.
     """
-    if len(platforms) == 0:
+    if len(platforms) == 0 and len(traits) == 0:
         return None
     return struct(
         platforms = platforms,
+        traits = traits,
     )
 
 def _new_product_reference(product_name, dep_name, condition = None):
@@ -1628,18 +1745,19 @@ def _new_target(
 
 # MARK: - Build Settings
 
-def _new_build_setting_condition(platforms = [], configuration = None):
+def _new_build_setting_condition(platforms = [], configuration = None, traits = []):
     """Create a build setting condition.
 
     Args:
         platforms: Optional. A `list` of platform names as `string` values.
         configuration: Optional. The name of an SPM configuration as a `string`
             value.
+        traits: Optional. A `list` of trait names as `string` values.
 
     Returns:
         A `struct` representing build setting condition.
     """
-    if platforms == [] and configuration == None:
+    if platforms == [] and configuration == None and traits == []:
         return None
 
     platforms = spm_platforms.supported(platforms)
@@ -1653,6 +1771,7 @@ def _new_build_setting_condition(platforms = [], configuration = None):
     return struct(
         platforms = platforms,
         configuration = configuration,
+        traits = traits,
     )
 
 def _new_build_setting(kind, values, condition = None):
@@ -1955,11 +2074,13 @@ build_setting_kinds = struct(
 # MARK: - API Definition
 
 pkginfos = struct(
+    enabled_traits_from_dump_manifest = _enabled_traits_from_dump_manifest,
     get = _get,
     new = _new,
     new_artifact_download_info = _new_artifact_download_info,
     new_build_setting = _new_build_setting,
     new_build_setting_condition = _new_build_setting_condition,
+    new_build_settings_from_json = _new_build_settings_from_json,
     new_by_name_reference = _new_by_name_reference,
     new_clang_settings = _new_clang_settings,
     new_clang_src_info = _new_clang_src_info,
