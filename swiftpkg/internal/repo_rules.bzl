@@ -80,6 +80,8 @@ higher. Found version %s installed.\
 
 def _gen_build_files(repository_ctx, pkg_ctx):
     if repository_ctx.attr.build_file:
+        # Use template() with no substitutions to copy the file. There is
+        # no direct copy API for label-referenced files in repository rules.
         repository_ctx.template("BUILD.bazel", repository_ctx.attr.build_file)
         return
 
