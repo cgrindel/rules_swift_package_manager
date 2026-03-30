@@ -8,7 +8,7 @@ let package = Package(
         .executable(name: "my-executable", targets: ["MyExecutable"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.7.0"),
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.7.1"),
         .package(url: "https://github.com/apple/swift-log", from: "1.10.1"),
     ],
     targets: [
