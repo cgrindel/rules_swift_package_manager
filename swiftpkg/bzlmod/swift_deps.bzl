@@ -248,6 +248,9 @@ def _declare_pkg_from_dependency(
     if cached_json_directory:
         cached_json_directory = paths.join(cached_json_directory, dep.name)
     name = bazel_repo_names.from_identity(dep.identity)
+    build_file = None
+    if config_pkg:
+        build_file = config_pkg.build_file
     if dep.source_control:
         init_submodules = None
         recursive_init_submodules = None
@@ -280,6 +283,7 @@ def _declare_pkg_from_dependency(
             commit = pin.state.revision,
             remote = pin.location,
             version = pin.state.version,
+            build_file = build_file,
             dependencies_index = None,
             env = from_package.env,
             env_inherit = from_package.env_inherit,
@@ -305,6 +309,7 @@ def _declare_pkg_from_dependency(
             env_inherit = from_package.env_inherit,
             path = dep.file_system.path,
             dependencies_index = None,
+            build_file = build_file,
             cached_json_directory = cached_json_directory,
         )
 
@@ -317,6 +322,7 @@ def _declare_pkg_from_dependency(
         registry_swift_package(
             name = name,
             bazel_package_name = name,
+            build_file = build_file,
             env = from_package.env,
             env_inherit = from_package.env_inherit,
             id = dep.registry.pin.identity,

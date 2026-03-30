@@ -300,7 +300,12 @@ _ALL_ATTRS = dicts.add(
     _REGISTRY_ATTRS,
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
-    {"cached_json_directory": attr.string()},
+    {
+        "build_file": attr.label(
+            doc = "When used, the provided BUILD file will be used instead of generating one.",
+        ),
+        "cached_json_directory": attr.string(),
+    },
     swift_package_tool_attrs.swift_package_registry,
 )
 
