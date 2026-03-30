@@ -454,9 +454,6 @@ in the output log.
 
 _configure_package_tag = tag_class(
     attrs = {
-        "build_file": attr.label(
-            doc = "When used, the provided BUILD file will be used instead of generating one.",
-        ),
         "init_submodules": attr.bool(
             default = False,
             doc = "Whether to clone submodules in the repository.",
