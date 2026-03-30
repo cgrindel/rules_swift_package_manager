@@ -175,6 +175,9 @@ The version control location from where the repository should be downloaded.\
 }
 
 PATCH_ATTRS = {
+    "build_file": attr.label(
+        doc = "When used, the provided BUILD file will be used instead of generating one.",
+    ),
     "patch_args": attr.string_list(
         default = ["-p0"],
         doc =
@@ -230,6 +233,9 @@ _ALL_ATTRS = dicts.add(
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
     {
+        "build_file": attr.label(
+            doc = "When used, the provided BUILD file will be used instead of generating one.",
+        ),
         "cached_json_directory": attr.string(),
         "netrc": attr.label(
             default = None,

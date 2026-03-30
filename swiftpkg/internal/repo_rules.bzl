@@ -79,6 +79,10 @@ higher. Found version %s installed.\
 """ % (min_spm_ver, spm_ver))
 
 def _gen_build_files(repository_ctx, pkg_ctx):
+    if repository_ctx.attr.build_file:
+        repository_ctx.template("BUILD.bazel", repository_ctx.attr.build_file)
+        return
+
     pkg_info = pkg_ctx.pkg_info
 
     bld_files = []
