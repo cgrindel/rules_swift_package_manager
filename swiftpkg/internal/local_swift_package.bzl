@@ -90,7 +90,12 @@ _ALL_ATTRS = dicts.add(
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
     _PATH_ATTRS,
-    {"cached_json_directory": attr.string()},
+    {
+        "build_file": attr.label(
+            doc = "When used, the provided BUILD file will be used instead of generating one.",
+        ),
+        "cached_json_directory": attr.string(),
+    },
 )
 
 local_swift_package = repository_rule(
