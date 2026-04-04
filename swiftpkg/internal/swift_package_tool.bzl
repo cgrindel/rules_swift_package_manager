@@ -9,6 +9,9 @@ load(
     "swift_package_tool_attrs",
 )
 
+def _manifest_swiftc_flags():
+    return "-Xbuild-tools-swiftc -DBAZEL"
+
 def _swift_package_tool_impl(ctx):
     build_path = ctx.attr.build_path
     cache_path = ctx.attr.cache_path
@@ -68,6 +71,10 @@ def _swift_package_tool_impl(ctx):
         "%(env)s",
         " ".join(["%s=%s" % (k, v) for (k, v) in ctx.attr.env.items()]),
     )
+    template_dict.add(
+        "%(manifest_swiftc_flags)s",
+        _manifest_swiftc_flags(),
+    )
 
     ctx.actions.expand_template(
         template = ctx.file._runner_template,
@@ -116,4 +123,8 @@ The relative path to the `Package.swift` file from the workspace root.\
     ),
     executable = True,
     toolchains = swift_common.use_toolchain(),
+)
+
+swift_package_tool_testing = struct(
+    manifest_swiftc_flags = _manifest_swiftc_flags,
 )
