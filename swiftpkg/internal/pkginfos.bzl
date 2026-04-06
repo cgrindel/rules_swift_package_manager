@@ -30,7 +30,8 @@ _DEFAULT_LOCALIZATION = "en"
 # are enabled by default when no explicit trait selection is provided.
 _DEFAULT_TRAIT_NAME = "default"
 
-def _dump_package_args(
+def _package_command_args(
+        subcommand_args,
         registries_directory = None,
         replace_scm_with_registry = False):
     args = ["swift", "package"] + manifest_swiftc_args.BAZEL_DEFINE
@@ -39,22 +40,27 @@ def _dump_package_args(
         args.extend(["--config-path", registries_directory])
     if replace_scm_with_registry:
         args.append("--replace-scm-with-registry")
-    args.append("dump-package")
+    args.extend(subcommand_args)
 
     return args
+
+def _dump_package_args(
+        registries_directory = None,
+        replace_scm_with_registry = False):
+    return _package_command_args(
+        ["dump-package"],
+        registries_directory = registries_directory,
+        replace_scm_with_registry = replace_scm_with_registry,
+    )
 
 def _describe_package_args(
         registries_directory = None,
         replace_scm_with_registry = False):
-    args = ["swift", "package"] + manifest_swiftc_args.BAZEL_DEFINE
-
-    if registries_directory:
-        args.extend(["--config-path", registries_directory])
-    if replace_scm_with_registry:
-        args.append("--replace-scm-with-registry")
-    args.extend(["describe", "--type", "json"])
-
-    return args
+    return _package_command_args(
+        ["describe", "--type", "json"],
+        registries_directory = registries_directory,
+        replace_scm_with_registry = replace_scm_with_registry,
+    )
 
 def _get_dump_manifest(
         repository_ctx,
