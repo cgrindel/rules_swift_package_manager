@@ -23,3 +23,7 @@ runs:
         else
           echo "WARNING: startup --output_base not found in ~/.bazelrc"
         fi
+    - name: Enable ci config
+      shell: bash
+      run: |
+        echo "common --config=ci" >> ~/.bazelrc
