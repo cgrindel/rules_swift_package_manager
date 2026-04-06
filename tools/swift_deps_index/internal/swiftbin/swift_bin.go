@@ -22,7 +22,20 @@ func NewSwiftBin(binPath string) *SwiftBin {
 	return &SwiftBin{BinPath: binPath}
 }
 
+func manifestSwiftcArgs() []string {
+	return []string{"-Xbuild-tools-swiftc", "-DBAZEL"}
+}
+
+func swiftPackageArgs(args ...string) []string {
+	result := []string{"package"}
+	result = append(result, manifestSwiftcArgs()...)
+	result = append(result, args...)
+	return result
+}
+
 // InitPackage initializes a new Swift package in the specified directory.
+// Note: this intentionally does not use swiftPackageArgs() because init
+// creates a new package — there is no manifest to evaluate yet.
 func (sb *SwiftBin) InitPackage(dir, name, pkgType string) error {
 	args := []string{"package", "init", "--name", name, "--type", pkgType}
 	cmd := exec.Command(sb.BinPath, args...)
@@ -37,7 +50,7 @@ func (sb *SwiftBin) InitPackage(dir, name, pkgType string) error {
 func (sb *SwiftBin) DumpPackage(dir, buildDir string) ([]byte, error) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
-	args := []string{"package", "dump-package"}
+	args := swiftPackageArgs("dump-package")
 	args = appendBuildPath(args, buildDir)
 	cmd := exec.Command(sb.BinPath, args...)
 	cmd.Dir = dir
@@ -57,7 +70,7 @@ func (sb *SwiftBin) DumpPackage(dir, buildDir string) ([]byte, error) {
 func (sb *SwiftBin) DescribePackage(dir string) ([]byte, error) {
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
-	args := []string{"package", "describe", "--type", "json"}
+	args := swiftPackageArgs("describe", "--type", "json")
 	cmd := exec.Command(sb.BinPath, args...)
 	cmd.Dir = dir
 	cmd.Stdout = &stdout
@@ -80,7 +93,7 @@ func (sb *SwiftBin) ResolvePackage(dir, buildDir string, updateToLatest bool) er
 	} else {
 		pkgCmd = "resolve"
 	}
-	args := []string{"package", pkgCmd}
+	args := swiftPackageArgs(pkgCmd)
 	args = appendBuildPath(args, buildDir)
 	cmd := exec.Command(sb.BinPath, args...)
 	cmd.Dir = dir

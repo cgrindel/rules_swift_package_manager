@@ -3,11 +3,15 @@
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
+load("//swiftpkg/internal:manifest_swiftc_args.bzl", "manifest_swiftc_args")
 load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 load(
     "//swiftpkg/internal:swift_package_tool_attrs.bzl",
     "swift_package_tool_attrs",
 )
+
+def _manifest_swiftc_flags():
+    return " ".join(manifest_swiftc_args.BAZEL_DEFINE)
 
 def _swift_package_tool_impl(ctx):
     build_path = ctx.attr.build_path
@@ -68,6 +72,10 @@ def _swift_package_tool_impl(ctx):
         "%(env)s",
         " ".join(["%s=%s" % (k, v) for (k, v) in ctx.attr.env.items()]),
     )
+    template_dict.add(
+        "%(manifest_swiftc_flags)s",
+        _manifest_swiftc_flags(),
+    )
 
     ctx.actions.expand_template(
         template = ctx.file._runner_template,
@@ -116,4 +124,8 @@ The relative path to the `Package.swift` file from the workspace root.\
     ),
     executable = True,
     toolchains = swift_common.use_toolchain(),
+)
+
+swift_package_tool_testing = struct(
+    manifest_swiftc_flags = _manifest_swiftc_flags,
 )
