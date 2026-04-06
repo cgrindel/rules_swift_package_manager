@@ -3,6 +3,7 @@
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
+load("//swiftpkg/internal:manifest_swiftc_args.bzl", "manifest_swiftc_args")
 load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 load(
     "//swiftpkg/internal:swift_package_tool_attrs.bzl",
@@ -10,7 +11,7 @@ load(
 )
 
 def _manifest_swiftc_flags():
-    return "-Xbuild-tools-swiftc -DBAZEL"
+    return " ".join(manifest_swiftc_args.BAZEL_DEFINE)
 
 def _swift_package_tool_impl(ctx):
     build_path = ctx.attr.build_path

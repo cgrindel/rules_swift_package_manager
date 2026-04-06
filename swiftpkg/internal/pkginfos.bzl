@@ -13,6 +13,7 @@ load(
 )
 load(":apple_builtin.bzl", "apple_builtin")
 load(":clang_files.bzl", "clang_files")
+load(":manifest_swiftc_args.bzl", "manifest_swiftc_args")
 load(":objc_files.bzl", "objc_files")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
@@ -29,16 +30,10 @@ _DEFAULT_LOCALIZATION = "en"
 # are enabled by default when no explicit trait selection is provided.
 _DEFAULT_TRAIT_NAME = "default"
 
-def _manifest_swiftc_args():
-    return [
-        "-Xbuild-tools-swiftc",
-        "-DBAZEL",
-    ]
-
 def _dump_package_args(
         registries_directory = None,
         replace_scm_with_registry = False):
-    args = ["swift", "package"] + _manifest_swiftc_args()
+    args = ["swift", "package"] + manifest_swiftc_args.BAZEL_DEFINE
 
     if registries_directory:
         args.extend(["--config-path", registries_directory])
@@ -51,7 +46,7 @@ def _dump_package_args(
 def _describe_package_args(
         registries_directory = None,
         replace_scm_with_registry = False):
-    args = ["swift", "package"] + _manifest_swiftc_args()
+    args = ["swift", "package"] + manifest_swiftc_args.BAZEL_DEFINE
 
     if registries_directory:
         args.extend(["--config-path", registries_directory])
@@ -2137,5 +2132,4 @@ pkginfos = struct(
 pkginfos_testing = struct(
     describe_package_args = _describe_package_args,
     dump_package_args = _dump_package_args,
-    manifest_swiftc_args = _manifest_swiftc_args,
 )
