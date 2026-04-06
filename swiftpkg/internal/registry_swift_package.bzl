@@ -312,6 +312,7 @@ _ALL_ATTRS = dicts.add(
 registry_swift_package = repository_rule(
     implementation = _registry_swift_package_impl,
     attrs = _ALL_ATTRS,
+    environ = ["DEVELOPER_DIR"],
     doc = """\
 Used to download and build an external Swift package from a registry.
 """,

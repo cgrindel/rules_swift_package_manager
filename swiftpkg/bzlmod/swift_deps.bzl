@@ -15,6 +15,7 @@ load("//swiftpkg/internal:swift_package_tool_repo.bzl", "swift_package_tool_repo
 # MARK: - swift_deps bzlmod Extension
 
 _DO_WHILE_RANGE = range(1000)
+_DEVELOPER_DIR_ENV = "DEVELOPER_DIR"
 
 def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swift_package):
     """Declare Swift packages from `Package.swift` and `Package.resolved`.
@@ -56,6 +57,15 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
         env[key] = value
     for key in from_package.env_inherit:
         env[key] = module_ctx.getenv(key)
+
+    # If DEVELOPER_DIR is set in the environment, use it to ensure SPM
+    # commands use the same Xcode as Bazel. This is critical for cache
+    # invalidation and for ensuring the correct Swift version is used
+    # when dumping packages.
+    # See: https://github.com/cgrindel/rules_swift_package_manager/issues/2140
+    dev_dir = module_ctx.getenv(_DEVELOPER_DIR_ENV)
+    if dev_dir:
+        env[_DEVELOPER_DIR_ENV] = dev_dir
 
     # Get the package info.
     pkg_swift = module_ctx.path(from_package.swift)
@@ -164,6 +174,7 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
                 dep_pkg_info = pkginfos.get(
                     module_ctx,
                     directory = dep.file_system.path,
+                    env = env,
                     debug_path = None,
                     cached_json_directory = dep_cached_json_directory,
                     resolved_pkg_map = None,
@@ -484,4 +495,5 @@ swift_deps = module_extension(
         "configure_swift_package": _configure_swift_package_tag,
         "from_package": _from_package_tag,
     },
+    environ = [_DEVELOPER_DIR_ENV],
 )
