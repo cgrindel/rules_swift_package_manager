@@ -34,6 +34,8 @@ func swiftPackageArgs(args ...string) []string {
 }
 
 // InitPackage initializes a new Swift package in the specified directory.
+// Note: this intentionally does not use swiftPackageArgs() because init
+// creates a new package — there is no manifest to evaluate yet.
 func (sb *SwiftBin) InitPackage(dir, name, pkgType string) error {
 	args := []string{"package", "init", "--name", name, "--type", pkgType}
 	cmd := exec.Command(sb.BinPath, args...)
