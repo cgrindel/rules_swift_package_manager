@@ -12,10 +12,10 @@ bazel_dep(name = "bazel_skylib", version = "1.9.0")
 
 # The apple_support bazel_dep must come before the rules_cc.
 # https://github.com/bazelbuild/apple_support#incompatible-toolchain-resolution
-bazel_dep(name = "apple_support", version = "2.3.0")
+bazel_dep(name = "apple_support", version = "2.5.2")
 bazel_dep(
     name = "rules_swift",
-    version = "3.5.0",
+    version = "3.6.0",
     repo_name = "build_bazel_rules_swift",
 )
 bazel_dep(
@@ -31,7 +31,7 @@ bazel_dep(
 # Remove once a rules_apple release includes the fix.
 git_override(
     module_name = "rules_apple",
-    commit = "e0eab8952919d51b5c2e19c9ee8a714256a0b735",
+    commit = "f16d670abcf7ea4ddb0599f2c290b6057309482f",
     remote = "https://github.com/bazelbuild/rules_apple.git",
 )
 
