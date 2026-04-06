@@ -16,10 +16,7 @@ runs:
         # Print used Xcode version
         xcode-select -print-path
         xcodebuild -version
-    - uses: bazel-contrib/setup-bazel@0.19.0
-      with:
-        bazelisk-cache: true
-        repository-cache: true
+    - uses: ./.github/actions/set_up_bazel
     # As of macos-13 runner, go was not on the PATH. This resulted in bazel run
     # //:go_update_repos failing.
     - uses: actions/setup-go@v6

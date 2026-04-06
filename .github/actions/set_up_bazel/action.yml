@@ -1,0 +1,25 @@
+name: Set Up Bazel
+description: >-
+  Configure Bazel with caching via bazel-contrib/setup-bazel, then remove the startup --output_base override from ~/.bazelrc so that integration tests can run their own Bazel server without output-base lock contention.
+runs:
+  using: composite
+  steps:
+    - uses: bazel-contrib/setup-bazel@0.19.0
+      with:
+        bazelisk-cache: true
+        repository-cache: true
+    # setup-bazel writes `startup --output_base=$HOME/.bazel` to
+    # ~/.bazelrc so that external repo paths are predictable for
+    # caching. Because ~/.bazelrc is read by ALL Bazel invocations,
+    # integration tests that spawn their own Bazel server end up
+    # sharing the same output base as the outer Bazel, causing the
+    # inner server to block on the output-base lock and time out.
+    - name: Remove output_base override from ~/.bazelrc
+      shell: bash
+      run: |
+        if grep -q '^startup --output_base=' ~/.bazelrc; then
+          sed -i.bak '/^startup --output_base=/d' ~/.bazelrc
+          rm -f ~/.bazelrc.bak
+        else
+          echo "WARNING: startup --output_base not found in ~/.bazelrc"
+        fi
