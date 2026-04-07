@@ -13,6 +13,7 @@ load(":pkginfo_ext_deps_tests.bzl", "pkginfo_ext_deps_test_suite")
 load(":pkginfo_target_deps_tests.bzl", "pkginfo_target_deps_test_suite")
 load(":pkginfo_targets_tests.bzl", "pkginfo_targets_test_suite")
 load(":pkginfo_traits_tests.bzl", "pkginfo_traits_test_suite")
+load(":pkginfos_command_args_tests.bzl", "pkginfos_command_args_test_suite")
 load(":repo_rules_tests.bzl", "repo_rules_test_suite")
 load(":repository_files_tests.bzl", "repository_files_test_suite")
 load(":repository_utils_tests.bzl", "repository_utils_test_suite")
@@ -21,6 +22,7 @@ load(":semver_tests.bzl", "semver_test_suite")
 load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
 load(":swift_files_tests.bzl", "swift_files_test_suite")
 load(":swift_package_tool_repo_tests.bzl", "swift_package_tool_repo_test_suite")
+load(":swift_package_tool_tests.bzl", "swift_package_tool_test_suite")
 load(":swiftpkg_build_files_tests.bzl", "swiftpkg_build_files_test_suite")
 load(":validations_tests.bzl", "validations_test_suite")
 
@@ -50,6 +52,8 @@ pkginfo_targets_test_suite()
 
 pkginfo_traits_test_suite()
 
+pkginfos_command_args_test_suite()
+
 repo_rules_test_suite()
 
 repository_files_test_suite()
@@ -67,6 +71,8 @@ starlark_codegen_test_suite()
 swift_files_test_suite()
 
 swiftpkg_build_files_test_suite()
+
+swift_package_tool_test_suite()
 
 swift_package_tool_repo_test_suite()
 
