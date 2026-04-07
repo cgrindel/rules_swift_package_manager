@@ -92,6 +92,7 @@ fi
 
 # Run the command.
 "${swift_executable}" package \
+	%(manifest_swiftc_flags)s \
 	--build-path "$build_path" \
 	--cache-path "$cache_path" \
 	--config-path "$config_path" \
