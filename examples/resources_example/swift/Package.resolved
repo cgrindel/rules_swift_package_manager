@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SDWebImage/SDWebImage.git",
       "state" : {
-        "revision" : "449e8f8f10377f620db8ad22ea81208eecf6325f",
-        "version" : "5.21.6"
+        "revision" : "2de3a496eaf6df9a1312862adcfd54acd73c39c0",
+        "version" : "5.21.7"
       }
     },
     {
@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Iterable/swift-sdk",
       "state" : {
-        "revision" : "0b5f22876ec4ae83077e747f233258cb7a8e0e32",
-        "version" : "6.6.7"
+        "revision" : "778d0a9a13387d932682a6bf2eecea0c2fc64fbd",
+        "version" : "6.7.1"
       }
     }
   ],
