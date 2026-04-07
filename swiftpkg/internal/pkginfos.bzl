@@ -13,6 +13,7 @@ load(
 )
 load(":apple_builtin.bzl", "apple_builtin")
 load(":clang_files.bzl", "clang_files")
+load(":manifest_swiftc_args.bzl", "manifest_swiftc_args")
 load(":objc_files.bzl", "objc_files")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
@@ -28,6 +29,38 @@ _DEFAULT_LOCALIZATION = "en"
 # The well-known trait name that SPM uses (SE-0450) to determine which traits
 # are enabled by default when no explicit trait selection is provided.
 _DEFAULT_TRAIT_NAME = "default"
+
+def _package_command_args(
+        subcommand_args,
+        registries_directory = None,
+        replace_scm_with_registry = False):
+    args = ["swift", "package"] + manifest_swiftc_args.BAZEL_DEFINE
+
+    if registries_directory:
+        args.extend(["--config-path", registries_directory])
+    if replace_scm_with_registry:
+        args.append("--replace-scm-with-registry")
+    args.extend(subcommand_args)
+
+    return args
+
+def _dump_package_args(
+        registries_directory = None,
+        replace_scm_with_registry = False):
+    return _package_command_args(
+        ["dump-package"],
+        registries_directory = registries_directory,
+        replace_scm_with_registry = replace_scm_with_registry,
+    )
+
+def _describe_package_args(
+        registries_directory = None,
+        replace_scm_with_registry = False):
+    return _package_command_args(
+        ["describe", "--type", "json"],
+        registries_directory = registries_directory,
+        replace_scm_with_registry = replace_scm_with_registry,
+    )
 
 def _get_dump_manifest(
         repository_ctx,
@@ -65,17 +98,12 @@ def _get_dump_manifest(
     if cache_path:
         cached_json_path = paths.join(cache_path, "dump.json")
 
-    args = ["swift", "package"]
-
-    if registries_directory:
-        args.extend(["--config-path", registries_directory])
-    if replace_scm_with_registry:
-        args.append("--replace-scm-with-registry")
-    args.append("dump-package")
-
     return repository_utils.parsed_json_from_spm_command(
         repository_ctx,
-        args,
+        _dump_package_args(
+            registries_directory = registries_directory,
+            replace_scm_with_registry = replace_scm_with_registry,
+        ),
         env = env,
         working_directory = working_directory,
         debug_json_path = debug_json_path,
@@ -118,18 +146,12 @@ def _get_desc_manifest(
     if cache_path:
         cached_json_path = paths.join(cache_path, "desc.json")
 
-    args = ["swift", "package"]
-
-    if registries_directory:
-        args.extend(["--config-path", registries_directory])
-    if replace_scm_with_registry:
-        args.append("--replace-scm-with-registry")
-
-    args.extend(["describe", "--type", "json"])
-
     return repository_utils.parsed_json_from_spm_command(
         repository_ctx,
-        args,
+        _describe_package_args(
+            registries_directory = registries_directory,
+            replace_scm_with_registry = replace_scm_with_registry,
+        ),
         env = env,
         working_directory = working_directory,
         debug_json_path = debug_json_path,
@@ -2111,4 +2133,9 @@ pkginfos = struct(
     new_target_dependency_from_dump_json_map = _new_target_dependency_from_dump_json_map,
     new_target_reference = _new_target_reference,
     new_version_range = _new_version_range,
+)
+
+pkginfos_testing = struct(
+    describe_package_args = _describe_package_args,
+    dump_package_args = _dump_package_args,
 )

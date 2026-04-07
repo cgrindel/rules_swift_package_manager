@@ -1,9 +1,6 @@
 name: Set Up macOS Runner
 description: Prepare macOS runner to execute tests.
 inputs:
-  repo_name:
-    description: The name of the GitHub repo.
-    required: true
   test_target:
     description: The test target to execute.
     default: ''
@@ -19,9 +16,7 @@ runs:
         # Print used Xcode version
         xcode-select -print-path
         xcodebuild -version
-    - uses: cgrindel/gha_set_up_bazel@v1
-      with:
-        repo_name: ${{ inputs.repo_name }}
+    - uses: cgrindel/gha_set_up_bazel@30c77fa6ce7ec59a072e3f95be47fd9fd450e639 # v2.0.2
     # As of macos-13 runner, go was not on the PATH. This resulted in bazel run
     # //:go_update_repos failing.
     - uses: actions/setup-go@v6

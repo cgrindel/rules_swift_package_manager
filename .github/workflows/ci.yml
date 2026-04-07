@@ -109,12 +109,10 @@ jobs:
       - uses: ./.github/actions/set_up_ubuntu
         if: ${{ startsWith(matrix.runner, 'ubuntu') }}
         with:
-          repo_name: rules_swift_package_manager
           ubuntu_version: "22.04"
       - uses: ./.github/actions/set_up_macos
         if: ${{ startsWith(matrix.runner, 'macos') }}
         with:
-          repo_name: rules_swift_package_manager
           test_target: ${{ matrix.test }}
       - uses: ./.github/actions/configure_remote_cache_auth
         with:
@@ -138,12 +136,9 @@ jobs:
       - uses: ./.github/actions/set_up_ubuntu
         if: ${{ startsWith(matrix.runner, 'ubuntu') }}
         with:
-          repo_name: rules_swift_package_manager
           ubuntu_version: "22.04"
       - uses: ./.github/actions/set_up_macos
         if: ${{ startsWith(matrix.runner, 'macos') }}
-        with:
-          repo_name: rules_swift_package_manager
       - uses: ./.github/actions/configure_remote_cache_auth
         with:
           buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
