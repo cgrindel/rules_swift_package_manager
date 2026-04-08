@@ -3,6 +3,7 @@
 ## Table of Contents
 
 <!-- MARKDOWN TOC: BEGIN -->
+* [How do I ensure SPM resolution uses the correct Xcode version?](#how-do-i-ensure-spm-resolution-uses-the-correct-xcode-version)
 * [Does this replace [rules_spm]?](#does-this-replace-rules_spm)
 * [Where is the Swift gazelle plugin?](#where-is-the-swift-gazelle-plugin)
 * [After running `//:swift_update_pkgs`, I see a `.build` directory. What is it? Do I need it?](#after-running-swift_update_pkgs-i-see-a-build-directory-what-is-it-do-i-need-it)
@@ -11,6 +12,30 @@
   * [How do I fix this issue?](#how-do-i-fix-this-issue)
   * [What is the cause of the error? Why can't `rules_swift_package_manager` handle this situation?](#what-is-the-cause-of-the-error-why-cant-rules_swift_package_manager-handle-this-situation)
   <!-- MARKDOWN TOC: END -->
+
+## How do I ensure SPM resolution uses the correct Xcode version?
+
+`rules_swift_package_manager` runs `swift package dump-package` and `swift package describe` during
+repository fetching to inspect Swift packages. By default, these commands use the Xcode selected by
+`xcode-select`. If you have multiple Xcode versions installed and Bazel uses a different one at
+build time, you can get build failures due to Swift version mismatches.
+
+To ensure the same Xcode is used for both SPM resolution and compilation, add the following to your
+`.bazelrc`:
+
+```
+common --repo_env=DEVELOPER_DIR
+```
+
+This passes your `DEVELOPER_DIR` environment variable through to repository rules and module
+extensions. When `DEVELOPER_DIR` is set, `rules_swift_package_manager` will use that Xcode for SPM
+commands instead of the `xcode-select` default. It also ensures that Bazel invalidates cached
+repository results when you switch Xcode versions.
+
+This follows the [recommendation from `rules_apple`][rules_apple_xcode_doc] for ensuring consistent
+Xcode version selection across the build.
+
+[rules_apple_xcode_doc]: https://github.com/bazelbuild/rules_apple/blob/main/doc/common_info.md#controlling-the-xcode-version
 
 ## Does this replace [rules_spm]?
 
