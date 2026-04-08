@@ -1,4 +1,4 @@
-FROM swift:6.2-noble
+FROM swift:6.3-noble
 
 # Install SQLite, build tools, and other dependencies
 RUN apt-get update && apt-get install -y \
