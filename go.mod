@@ -8,8 +8,8 @@ toolchain go1.26.2
 // toolchain go1.21.5
 
 require (
-	github.com/bazelbuild/bazel-gazelle v0.44.0
-	github.com/bazelbuild/buildtools v0.0.0-20240918101019-be1c24cc9a44
+	github.com/bazelbuild/bazel-gazelle v0.50.0
+	github.com/bazelbuild/buildtools v0.0.0-20250930140053-2eb4fccefb52
 	github.com/creasty/defaults v1.8.0
 	github.com/deckarep/golang-set/v2 v2.8.0
 	github.com/spf13/cobra v1.10.2
@@ -25,6 +25,6 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
 	golang.org/x/mod v0.34.0 // indirect
-	golang.org/x/sys v0.26.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
 )
