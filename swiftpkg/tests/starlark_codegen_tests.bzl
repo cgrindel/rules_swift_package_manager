@@ -40,6 +40,18 @@ def _to_starlark_test(ctx):
     expected = "123"
     asserts.equals(env, expected, actual)
 
+    actual = scg.to_starlark(Label("//:foo"))
+    expected = '"@@//:foo"'
+    asserts.equals(env, expected, actual)
+
+    actual = scg.to_starlark({"registries": Label("//:registries.json")})
+    expected = """\
+{
+    "registries": "@@//:registries.json",
+}\
+"""
+    asserts.equals(env, expected, actual)
+
     actual = scg.to_starlark([])
     expected = "[]"
     asserts.equals(env, expected, actual)
