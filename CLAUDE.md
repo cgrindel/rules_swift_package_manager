@@ -79,3 +79,17 @@ scenarios like Firebase, gRPC, Stripe, and others. Tests verify both bzlmod and 
 - The current working directory may be a git worktree. Check by comparing `git rev-parse --git-dir`
   and `git rev-parse --git-common-dir` — if they differ, you are in a linked worktree. Always
   operate relative to the current directory and do not assume paths relative to the main checkout.
+
+### Generating BUILD Files in Starlark
+
+When generating BUILD.bazel file content programmatically (e.g., in repository rules), always use the
+modules in `swiftpkg/internal/` rather than string templates:
+
+- `load_statements.new(location, *symbols)` — create load statements
+- `build_decls.new(kind, name, attrs)` — create rule declarations
+- `build_files.new(load_stmts, decls)` — compose a BUILD file
+- `build_files.write(repository_ctx, build_file, path)` — write it to disk
+
+These modules use `starlark_codegen` to handle proper formatting, indentation, and type conversion
+(including `Label`, `bool`, `dict`, `list`, etc.). Do not hand-roll string formatting for Starlark
+attribute values.
