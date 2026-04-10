@@ -6,6 +6,7 @@ load("//swiftpkg/internal:swift_deps_index.bzl", _swift_deps_index = "swift_deps
 load("//swiftpkg/internal:swift_deps_info.bzl", _swift_deps_info = "swift_deps_info")
 load("//swiftpkg/internal:swift_package.bzl", _swift_package = "swift_package")
 load("//swiftpkg/internal:swift_package_tool.bzl", _swift_package_tool = "swift_package_tool")
+load("//swiftpkg/internal:swift_worker_binary.bzl", _swift_worker_binary = "swift_worker_binary")
 
 # Repository rules
 swift_package = _swift_package
@@ -16,3 +17,4 @@ registry_swift_package = _registry_swift_package
 # Rules
 swift_deps_index = _swift_deps_index
 swift_package_tool = _swift_package_tool
+swift_worker_binary = _swift_worker_binary

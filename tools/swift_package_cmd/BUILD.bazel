@@ -1,0 +1,10 @@
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+
+sh_binary(
+    name = "swift_package_cmd",
+    srcs = ["swift_package_cmd.sh"],
+    data = [
+        "//swiftpkg/internal:swift_package_lib.sh",
+    ],
+    visibility = ["//visibility:public"],
+)
