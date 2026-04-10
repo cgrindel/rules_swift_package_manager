@@ -28,16 +28,8 @@ def _collect_tool_attrs(repository_ctx):
         keys = _attr_keys,
     )
 
-    # Convert Label values to strings so starlark_codegen can handle them.
-    for k, v in kwargs.items():
-        if type(v) == "Label":
-            kwargs[k] = str(v)
-
-    # We copy .netrc file contents to avoid requiring users to use
-    # `exports_files(...)`
     if repository_ctx.attr.netrc:
-        netrc_content = repository_ctx.read(repository_ctx.attr.netrc)
-        repository_ctx.file(".netrc", netrc_content)
+        repository_utils.copy(repository_ctx, repository_ctx.attr.netrc, ".netrc")
         kwargs["netrc"] = ":.netrc"
 
     return kwargs
