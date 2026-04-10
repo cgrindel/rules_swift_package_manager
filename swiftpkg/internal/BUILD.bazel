@@ -394,6 +394,11 @@ bzl_library(
     name = "swift_deps_info",
     srcs = ["swift_deps_info.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":build_decls",
+        ":build_files",
+        ":load_statements",
+    ],
 )
 
 bzl_library(
