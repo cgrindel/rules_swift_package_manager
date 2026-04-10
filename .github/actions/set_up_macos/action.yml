@@ -16,7 +16,7 @@ runs:
         # Print used Xcode version
         xcode-select -print-path
         xcodebuild -version
-    - uses: cgrindel/gha_set_up_bazel@30c77fa6ce7ec59a072e3f95be47fd9fd450e639 # v2.0.2
+    - uses: cgrindel/gha_set_up_bazel@f685b99b2732f9a251c717f2cffd831bb6037c37 # v2.0.3
     # As of macos-13 runner, go was not on the PATH. This resulted in bazel run
     # //:go_update_repos failing.
     - uses: actions/setup-go@v6
