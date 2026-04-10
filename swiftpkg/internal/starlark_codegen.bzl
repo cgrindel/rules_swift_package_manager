@@ -70,6 +70,8 @@ def _normalize(val):
     """
     if _is_simple_type(val):
         return repr(val)
+    if type(val) == "Label":
+        return repr(str(val))
     return val
 
 # MARK: - Generate Starlark Code
@@ -84,9 +86,11 @@ def _to_starlark(val):
         A `string` of Starlark code.
     """
 
-    # Simple types should be converted to their Stalark representation upfront.
+    # Simple types should be converted to their Starlark representation upfront.
     if _is_simple_type(val):
         return repr(val)
+    if type(val) == "Label":
+        return repr(str(val))
 
     # Dealing with a complex type
     out = [val]

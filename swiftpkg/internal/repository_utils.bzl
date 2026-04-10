@@ -164,6 +164,21 @@ def _struct_to_kwargs(*, struct, keys):
             kwargs[k] = v
     return kwargs
 
+def _copy(repository_ctx, src, dest):
+    """Copies a file into the repository.
+
+    Reads the content of `src` and writes it to `dest` within the
+    repository.  This is useful for copying files without requiring
+    the source to use `exports_files(...)`.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+        src: A `Label` or path pointing to the source file.
+        dest: A `string` path for the destination within the repository.
+    """
+    content = repository_ctx.read(src)
+    repository_ctx.file(dest, content = content, executable = False)
+
 def _replace_working_directory(json_str, working_directory):
     """Replace the working directory prefix in a JSON string.
 
@@ -188,6 +203,7 @@ def _replace_working_directory(json_str, working_directory):
     return json_str.replace(working_directory + "/", "./")
 
 repository_utils = struct(
+    copy = _copy,
     exec_spm_command = _execute_spm_command,
     is_macos = _is_macos,
     package_name = _package_name,
