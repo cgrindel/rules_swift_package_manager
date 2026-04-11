@@ -7,6 +7,10 @@ import %workspace%/../../ci.bazelrc
 # Try to import a local.rc file; typically, written by CI
 try-import %workspace%/../../local.bazelrc
 
+# Ensure SPM resolution uses the same Xcode version as the build.
+# https://github.com/cgrindel/rules_swift_package_manager/issues/2140
+common --repo_env=DEVELOPER_DIR
+
 # Per https://github.com/firebase/firebase-ios-sdk/blob/master/Package.swift#L1322-L1323
 # NOTE: Puposefully not specifying --copt='-std=c99' as it is applied to 
 # objc_library targets that contain Objective-C++ files. Tried using 

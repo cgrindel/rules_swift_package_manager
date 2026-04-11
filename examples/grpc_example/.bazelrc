@@ -7,6 +7,10 @@ import %workspace%/../../ci.bazelrc
 # Try to import a local.rc file; typically, written by CI
 try-import %workspace%/../../local.bazelrc
 
+# Ensure SPM resolution uses the same Xcode version as the build.
+# https://github.com/cgrindel/rules_swift_package_manager/issues/2140
+common --repo_env=DEVELOPER_DIR
+
 # GRPC requires C++17 or later.
 build --cxxopt='-std=c++17'
 build --host_cxxopt='-std=c++17'
