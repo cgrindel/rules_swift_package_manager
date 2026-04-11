@@ -9,10 +9,10 @@ local_path_override(
 
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.30.0")
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
-bazel_dep(name = "apple_support", version = "2.3.0")
+bazel_dep(name = "apple_support", version = "2.5.2")
 bazel_dep(
     name = "rules_swift",
-    version = "3.5.0",
+    version = "3.6.0",
     repo_name = "build_bazel_rules_swift",
 )
 bazel_dep(
@@ -28,7 +28,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "gazelle",
-    version = "0.47.0",
+    version = "0.50.0",
     dev_dependency = True,
     repo_name = "bazel_gazelle",
 )
