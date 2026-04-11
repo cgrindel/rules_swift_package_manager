@@ -6,6 +6,39 @@ load(
     "repository_utils",
 )
 
+def _copy_test(ctx):
+    env = unittest.begin(ctx)
+
+    file_calls = []
+
+    def _read(src):
+        return "file content from " + str(src)
+
+    # buildifier: disable=unused-variable
+    def _file(path, content = "", executable = False):
+        file_calls.append(struct(
+            path = path,
+            content = content,
+            executable = executable,
+        ))
+
+    repository_ctx = struct(read = _read, file = _file)
+
+    repository_utils.copy(repository_ctx, "//:.netrc", ".netrc")
+
+    asserts.equals(env, 1, len(file_calls), "one file should be written")
+    asserts.equals(env, ".netrc", file_calls[0].path)
+    asserts.equals(
+        env,
+        "file content from //:.netrc",
+        file_calls[0].content,
+    )
+    asserts.equals(env, False, file_calls[0].executable)
+
+    return unittest.end(env)
+
+copy_test = unittest.make(_copy_test)
+
 def _replace_working_directory_test(ctx):
     env = unittest.begin(ctx)
 
@@ -98,5 +131,6 @@ replace_working_directory_test = unittest.make(_replace_working_directory_test)
 def repository_utils_test_suite():
     return unittest.suite(
         "repository_utils_tests",
+        copy_test,
         replace_working_directory_test,
     )

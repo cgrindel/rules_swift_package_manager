@@ -1,32 +1,29 @@
 """Implementation for `swift_deps_info` repository rule."""
 
+load("//swiftpkg/internal:build_decls.bzl", "build_decls")
+load("//swiftpkg/internal:build_files.bzl", "build_files")
+load("//swiftpkg/internal:load_statements.bzl", "load_statements")
+
 def _swift_deps_info_impl(repository_ctx):
-    direct_dep_pkg_infos = repository_ctx.attr.direct_dep_pkg_infos
-    ddp_labels = "\n".join([
-        "        \"{label}\": \"{identity}\",".format(
-            label = ddpi,
-            identity = direct_dep_pkg_infos[ddpi],
-        )
-        for ddpi in direct_dep_pkg_infos
-    ])
-
-    repository_ctx.file(
-        "BUILD.bazel",
-        executable = False,
-        content = """
-load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_deps_index")
-
-swift_deps_index(
-    name = "swift_deps_index",
-    direct_dep_pkg_infos = {{
-{ddp_labels}
-    }},
-    visibility = ["//visibility:public"],
-)
-""".format(
-            ddp_labels = ddp_labels,
-        ),
+    bld_file = build_files.new(
+        load_stmts = [
+            load_statements.new(
+                "@rules_swift_package_manager//swiftpkg:defs.bzl",
+                "swift_deps_index",
+            ),
+        ],
+        decls = [
+            build_decls.new(
+                "swift_deps_index",
+                name = "swift_deps_index",
+                attrs = {
+                    "direct_dep_pkg_infos": repository_ctx.attr.direct_dep_pkg_infos,
+                    "visibility": ["//visibility:public"],
+                },
+            ),
+        ],
     )
+    build_files.write(repository_ctx, bld_file, "")
 
 swift_deps_info = repository_rule(
     implementation = _swift_deps_info_impl,
