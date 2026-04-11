@@ -37,7 +37,7 @@ git_override(
 
 bazel_dep(
     name = "rules_xcodeproj",
-    version = "3.6.0",
+    version = "4.0.1",
     dev_dependency = True,
 )
 bazel_dep(
