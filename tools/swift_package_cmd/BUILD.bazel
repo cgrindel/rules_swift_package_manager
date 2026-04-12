@@ -8,9 +8,6 @@ sh_binary(
         "//swiftpkg/internal:swift_package_lib.sh",
     ],
     visibility = ["//visibility:public"],
-    deps = [
-        "@bazel_tools//tools/bash/runfiles",
-    ],
 )
 
 bzlformat_pkg(name = "bzlformat")

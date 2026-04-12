@@ -7,39 +7,24 @@ set -o errexit -o nounset -o pipefail
 # --swift_worker as the first flag-value pair; remaining flags come
 # from the swift_package_tool_repo generated target.
 
-# --- begin runfiles.bash initialization ---
-# Copy-pasted from Bazel's Bash runfiles library.
-if [[ ! -d ${RUNFILES_DIR:-/dev/null} && ! -f ${RUNFILES_MANIFEST_FILE:-/dev/null} ]]; then
-  if [[ -f "$0.runfiles_manifest" ]]; then
-    export RUNFILES_MANIFEST_FILE="$0.runfiles_manifest"
-  elif [[ -f "$0.runfiles/MANIFEST" ]]; then
-    export RUNFILES_MANIFEST_FILE="$0.runfiles/MANIFEST"
-  elif [[ -f "$0.runfiles/bazel_tools/tools/bash/runfiles/runfiles.bash" ]]; then
-    export RUNFILES_DIR="$0.runfiles"
+# Locate swift_package_lib.sh in the runfiles tree.
+# RUNFILES_DIR is set by Bazel when invoked via `bazel run`.
+lib_rel="swiftpkg/internal/swift_package_lib.sh"
+lib_path=""
+for prefix in \
+  "${RUNFILES_DIR:-}/_main" \
+  "${RUNFILES_DIR:-}/rules_swift_package_manager"; do
+  if [[ -f "${prefix}/${lib_rel}" ]]; then
+    lib_path="${prefix}/${lib_rel}"
+    break
   fi
-fi
-if [[ -f "${RUNFILES_DIR:-/dev/null}/bazel_tools/tools/bash/runfiles/runfiles.bash" ]]; then
-  # shellcheck source=/dev/null
-  source "${RUNFILES_DIR}/bazel_tools/tools/bash/runfiles/runfiles.bash"
-elif [[ -f ${RUNFILES_MANIFEST_FILE:-/dev/null} ]]; then
-  # shellcheck source=/dev/null
-  source "$(grep -m1 "^bazel_tools/tools/bash/runfiles/runfiles.bash " \
-    "$RUNFILES_MANIFEST_FILE" | cut -d ' ' -f 2-)"
-else
-  echo >&2 "ERROR: cannot find @bazel_tools//tools/bash/runfiles:runfiles.bash"
+done
+
+if [[ -z ${lib_path} ]]; then
+  echo >&2 "ERROR: Could not find ${lib_rel} in runfiles"
   exit 1
 fi
-# --- end runfiles.bash initialization ---
 
-# Source the shared library via rlocation.
-# Try external repo name first, then local workspace name.
-lib_rel="swiftpkg/internal/swift_package_lib.sh"
-lib_path="$(rlocation "rules_swift_package_manager/${lib_rel}" 2>/dev/null)" \
-  || lib_path="$(rlocation "_main/${lib_rel}" 2>/dev/null)" \
-  || {
-    echo >&2 "ERROR: Could not find ${lib_rel}"
-    exit 1
-  }
 # shellcheck source=swiftpkg/internal/swift_package_lib.sh
 source "${lib_path}"
 
