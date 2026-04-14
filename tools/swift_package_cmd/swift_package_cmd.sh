@@ -7,21 +7,17 @@ set -o errexit -o nounset -o pipefail
 # --swift_worker as the first flag-value pair; remaining flags come
 # from the swift_package_tool_repo generated target.
 
-# Locate swift_package_lib.sh in the runfiles tree.
-# RUNFILES_DIR is set by Bazel when invoked via `bazel run`.
-lib_rel="swiftpkg/internal/swift_package_lib.sh"
-lib_path=""
-for prefix in \
-  "${RUNFILES_DIR:-}/_main" \
-  "${RUNFILES_DIR:-}/rules_swift_package_manager"; do
-  if [[ -f "${prefix}/${lib_rel}" ]]; then
-    lib_path="${prefix}/${lib_rel}"
-    break
-  fi
-done
+# Locate swift_package_lib.sh relative to this script.
+# In the runfiles tree, both this script and the library live under
+# the same repository root:
+#   <repo>/tools/swift_package_cmd/swift_package_cmd.sh
+#   <repo>/swiftpkg/internal/swift_package_lib.sh
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_root="${script_dir}/../.."
+lib_path="${repo_root}/swiftpkg/internal/swift_package_lib.sh"
 
-if [[ -z ${lib_path} ]]; then
-  echo >&2 "ERROR: Could not find ${lib_rel} in runfiles"
+if [[ ! -f ${lib_path} ]]; then
+  echo >&2 "ERROR: Could not find swift_package_lib.sh at ${lib_path}"
   exit 1
 fi
 
