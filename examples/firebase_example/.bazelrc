@@ -7,6 +7,10 @@ import %workspace%/../../ci.bazelrc
 # Try to import a local.rc file; typically, written by CI
 try-import %workspace%/../../local.bazelrc
 
+# Ensure SPM resolution uses the same Xcode version as the build.
+# https://github.com/cgrindel/rules_swift_package_manager/issues/2140
+common --repo_env=DEVELOPER_DIR
+
 # NOTE: Puposefully not specifying --copt='-std=c99' as it is applied to
 # objc_library targets that contain Objective-C++ files. Tried using
 # --per_file_copt to exclude .mm files, but did not have success.

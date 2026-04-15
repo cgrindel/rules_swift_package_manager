@@ -245,6 +245,7 @@ _ALL_ATTRS = dicts.add(
 swift_package = repository_rule(
     implementation = _swift_package_impl,
     attrs = _ALL_ATTRS,
+    environ = ["DEVELOPER_DIR"],
     doc = """\
 Used to download and build an external Swift package.
 """,
