@@ -8,32 +8,48 @@ def _swift_worker_binary_impl(ctx):
     toolchain = swift_common.get_toolchain(ctx)
     swift_worker = toolchain.swift_worker
 
-    extra_args_str = ""
-    if ctx.attr.extra_args:
-        expanded = [
-            ctx.expand_location(a, targets = ctx.attr.data)
-            for a in ctx.attr.extra_args
-        ]
-        extra_args_str = " " + " ".join([
-            '"%s"' % a
-            for a in expanded
-        ])
+    # Write extra_args to a params file (one arg per line) so the
+    # launcher can read them at runtime without Starlark-side shell
+    # escaping. ctx.expand_location must still happen in Starlark —
+    # Args does not perform $(rootpath ...) substitution itself.
+    expanded = [
+        ctx.expand_location(a, targets = ctx.attr.data)
+        for a in ctx.attr.extra_args
+    ]
+    args_obj = ctx.actions.args()
+    args_obj.add_all(expanded)
+
+    # Default "shell" format wraps args-with-whitespace in single quotes,
+    # which would then be read back into the array as literal quotes. Use
+    # "multiline" so every arg is written verbatim, one per line.
+    args_obj.set_param_file_format("multiline")
+    args_file = ctx.actions.declare_file(ctx.label.name + ".args")
+    ctx.actions.write(output = args_file, content = args_obj)
 
     launcher = ctx.actions.declare_file(ctx.label.name + ".sh")
     ctx.actions.write(
         output = launcher,
         content = """\
 #!/usr/bin/env bash
-exec "{tool}" --swift_worker "{worker}"{extra_args} "$@"
+set -o errexit -o nounset -o pipefail
+extra_args=()
+while IFS= read -r line; do
+  extra_args+=("$line")
+done < "{args_file}"
+if [[ ${{#extra_args[@]}} -gt 0 ]]; then
+  exec "{tool}" --swift_worker "{worker}" "${{extra_args[@]}}" "$@"
+else
+  exec "{tool}" --swift_worker "{worker}" "$@"
+fi
 """.format(
             tool = tool_executable.short_path,
             worker = swift_worker.executable.short_path,
-            extra_args = extra_args_str,
+            args_file = args_file.short_path,
         ),
         is_executable = True,
     )
 
-    runfiles = ctx.runfiles(files = ctx.files.data)
+    runfiles = ctx.runfiles(files = ctx.files.data + [args_file])
     runfiles = runfiles.merge(ctx.attr.tool[DefaultInfo].default_runfiles)
     runfiles = runfiles.merge(
         ctx.runfiles(files = [swift_worker.executable]),
