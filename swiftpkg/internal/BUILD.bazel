@@ -1,5 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@rules_shell//shell:sh_library.bzl", "sh_library")
 
 bzlformat_pkg(name = "bzlformat")
 
@@ -10,6 +11,12 @@ exports_files([
     "resource_bundle_info.plist.tmpl",
     "swift_package_lib.sh",
 ])
+
+sh_library(
+    name = "swift_package_lib",
+    srcs = ["swift_package_lib.sh"],
+    visibility = ["//visibility:public"],
+)
 
 # MARK: - Integration Test
 

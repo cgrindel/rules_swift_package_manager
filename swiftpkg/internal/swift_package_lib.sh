@@ -23,6 +23,9 @@ spl_resolve_swift_executable() {
     "${swift_worker}" --find swift \
       || which swift \
       || (
+        # `exit 1` only exits this `(...)` subshell, not the caller.
+        # The nonzero status propagates through `$(...)` and trips
+        # `errexit` in the surrounding script.
         echo >&2 "Could not find the swift executable."
         exit 1
       )
