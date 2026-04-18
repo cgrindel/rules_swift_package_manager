@@ -237,6 +237,8 @@ spl_run_swift_package() {
   fi
 
   # Run the command.
+  # The `${extra_args[@]+...}` idiom avoids "unbound variable" on macOS's
+  # bash 3.2 when the array is empty.
   # shellcheck disable=SC2086
   "${swift_executable}" package \
     ${manifest_swiftc_flags} \
@@ -247,5 +249,5 @@ spl_run_swift_package() {
     --security-path "${security_path}" \
     "${cmd}" \
     "${args[@]}" \
-    "${extra_args[@]}"
+    ${extra_args[@]+"${extra_args[@]}"}
 }
