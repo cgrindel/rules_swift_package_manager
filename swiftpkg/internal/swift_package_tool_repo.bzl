@@ -55,10 +55,10 @@ def _collect_extra_args(repository_ctx, cmd):
     ]
 
     if attr.netrc:
-        args.extend(["--netrc_file", ".netrc"])
+        args.extend(["--netrc_file", "$(rootpath :.netrc)"])
 
     if attr.registries:
-        args.extend(["--registries_json", "registries.json"])
+        args.extend(["--registries_json", "$(rootpath :registries.json)"])
 
     env_pairs = ["%s=%s" % (k, v) for (k, v) in attr.env.items()] if attr.env else []
     if env_pairs:

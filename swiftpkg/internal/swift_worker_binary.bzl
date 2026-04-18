@@ -10,9 +10,13 @@ def _swift_worker_binary_impl(ctx):
 
     extra_args_str = ""
     if ctx.attr.extra_args:
+        expanded = [
+            ctx.expand_location(a, targets = ctx.attr.data)
+            for a in ctx.attr.extra_args
+        ]
         extra_args_str = " " + " ".join([
             '"%s"' % a
-            for a in ctx.attr.extra_args
+            for a in expanded
         ])
 
     launcher = ctx.actions.declare_file(ctx.label.name + ".sh")
