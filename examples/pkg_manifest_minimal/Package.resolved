@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-log",
       "state" : {
-        "revision" : "8c0f217f01000dd30f60d6e536569ad4e74291f9",
-        "version" : "1.11.0"
+        "revision" : "5073617dac96330a486245e4c0179cb0a6fd2256",
+        "version" : "1.12.0"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nicklockwood/SwiftFormat",
       "state" : {
-        "revision" : "c8e50ff2cfc2eab46246c072a9ae25ab656c6ec3",
-        "version" : "0.60.1"
+        "revision" : "397309e73621d6355d3a7fb832ca233ac9dd5254",
+        "version" : "0.61.0"
       }
     }
   ],
