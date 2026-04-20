@@ -184,6 +184,20 @@ spl_run_swift_package() {
     esac
   done
 
+  # Validate required flags. package_path is intentionally omitted
+  # because the empty string is valid (root-workspace Package.swift).
+  local missing=()
+  [[ -z ${swift_worker} ]] && missing+=("--swift_worker")
+  [[ -z ${cmd} ]] && missing+=("--cmd")
+  [[ -z ${build_path} ]] && missing+=("--build_path")
+  [[ -z ${cache_path} ]] && missing+=("--cache_path")
+  [[ -z ${config_path} ]] && missing+=("--config_path")
+  [[ -z ${security_path} ]] && missing+=("--security_path")
+  if [[ ${#missing[@]} -gt 0 ]]; then
+    echo >&2 "ERROR: missing required flag(s): ${missing[*]}"
+    return 1
+  fi
+
   if [[ -z ${BUILD_WORKSPACE_DIRECTORY:-} ]]; then
     echo "BUILD_WORKSPACE_DIRECTORY is not set, this target" \
       'may only be `bazel run`'

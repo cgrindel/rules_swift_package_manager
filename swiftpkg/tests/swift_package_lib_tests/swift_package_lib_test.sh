@@ -115,6 +115,25 @@ assert_equal \
   "${fake_swift}" "${fallback_output}" \
   "which swift should be used when swift_worker fails"
 
+# MARK - spl_run_swift_package required-flag validation
+
+# Missing required flags should return non-zero and name them in the
+# error message, without invoking swift at all.
+set +e
+validation_err="$(spl_run_swift_package 2>&1 >/dev/null)"
+validation_rc=$?
+set -e
+assert_equal \
+  "1" "${validation_rc}" \
+  "missing required flags should return exit code 1"
+for flag in --swift_worker --cmd --build_path --cache_path \
+  --config_path --security_path; do
+  case "${validation_err}" in
+    *"${flag}"*) ;;
+    *) fail "validation error should mention ${flag}, got: ${validation_err}" ;;
+  esac
+done
+
 # MARK - spl_run_swift_package (argv capture via fake swift)
 
 # Stand up a fake swift that writes its argv (one arg per line) to
