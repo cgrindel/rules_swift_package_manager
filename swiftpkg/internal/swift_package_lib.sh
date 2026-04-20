@@ -234,7 +234,7 @@ spl_run_swift_package() {
     args+=("--use-registry-identity-for-scm")
   fi
 
-  args+=("--manifest-cache=${manifest_cache}")
+  args+=("--manifest-cache" "${manifest_cache}")
 
   # Set up netrc. Append directly to `args` so paths with spaces stay
   # as a single argv element (the earlier helper+command-substitution
@@ -260,7 +260,8 @@ spl_run_swift_package() {
     args+=("${extra_args[@]}")
   fi
 
-  # Run the command.
+  # Run the command. Intentionally unquote ${manifest_swiftc_flags} so
+  # its space-delimited flag list splits into separate argv elements.
   # shellcheck disable=SC2086
   "${swift_executable}" package \
     ${manifest_swiftc_flags} \

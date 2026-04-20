@@ -92,6 +92,12 @@ bzl_library(
 )
 
 bzl_library(
+    name = "bools",
+    srcs = ["bools.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
     name = "build_decls",
     srcs = ["build_decls.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
@@ -324,6 +330,7 @@ bzl_library(
     srcs = ["swift_package_tool.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":bools",
         ":manifest_swiftc_args",
         ":swift_worker_binary",
         "@bazel_skylib//lib:paths",
@@ -335,6 +342,7 @@ bzl_library(
     srcs = ["swift_package_tool_repo.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":bools",
         ":manifest_swiftc_args",
         ":repository_utils",
         ":swift_package_tool_attrs",

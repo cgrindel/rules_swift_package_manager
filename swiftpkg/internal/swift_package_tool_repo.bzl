@@ -2,6 +2,7 @@
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("//swiftpkg/internal:bools.bzl", "bools")
 load("//swiftpkg/internal:build_decls.bzl", "build_decls")
 load("//swiftpkg/internal:build_files.bzl", "build_files")
 load("//swiftpkg/internal:load_statements.bzl", "load_statements")
@@ -9,9 +10,6 @@ load("//swiftpkg/internal:manifest_swiftc_args.bzl", "manifest_swiftc_args")
 load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
 load("//swiftpkg/internal:swift_package_tool_attrs.bzl", "swift_package_tool_attrs")
-
-def _bool_str(value):
-    return "true" if value else "false"
 
 def _collect_extra_args(repository_ctx, cmd):
     """Builds the extra_args list for the swift_worker_binary target.
@@ -40,15 +38,15 @@ def _collect_extra_args(repository_ctx, cmd):
         "--security_path",
         attr.security_path,
         "--enable_build_manifest_caching",
-        _bool_str(attr.manifest_caching),
+        bools.to_shell_str(attr.manifest_caching),
         "--enable_dependency_cache",
-        _bool_str(attr.dependency_caching),
+        bools.to_shell_str(attr.dependency_caching),
         "--manifest_cache",
         attr.manifest_cache,
         "--replace_scm_with_registry",
-        _bool_str(attr.replace_scm_with_registry),
+        bools.to_shell_str(attr.replace_scm_with_registry),
         "--use_registry_identity_for_scm",
-        _bool_str(attr.use_registry_identity_for_scm),
+        bools.to_shell_str(attr.use_registry_identity_for_scm),
     ]
 
     if attr.netrc:

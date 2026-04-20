@@ -1,14 +1,12 @@
 """Macro that wraps `swift_worker_binary` to provide backward-compatible `swift_package_tool` targets."""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("//swiftpkg/internal:bools.bzl", "bools")
 load("//swiftpkg/internal:manifest_swiftc_args.bzl", "manifest_swiftc_args")
 load("//swiftpkg/internal:swift_worker_binary.bzl", "swift_worker_binary")
 
 def _manifest_swiftc_flags():
     return " ".join(manifest_swiftc_args.BAZEL_DEFINE)
-
-def _bool_str(value):
-    return "true" if value else "false"
 
 def swift_package_tool(
         name,
@@ -66,15 +64,15 @@ def swift_package_tool(
         "--security_path",
         security_path,
         "--enable_build_manifest_caching",
-        _bool_str(manifest_caching),
+        bools.to_shell_str(manifest_caching),
         "--enable_dependency_cache",
-        _bool_str(dependency_caching),
+        bools.to_shell_str(dependency_caching),
         "--manifest_cache",
         manifest_cache,
         "--replace_scm_with_registry",
-        _bool_str(replace_scm_with_registry),
+        bools.to_shell_str(replace_scm_with_registry),
         "--use_registry_identity_for_scm",
-        _bool_str(use_registry_identity_for_scm),
+        bools.to_shell_str(use_registry_identity_for_scm),
     ]
 
     data = []
