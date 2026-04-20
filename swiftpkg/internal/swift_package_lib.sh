@@ -222,11 +222,11 @@ spl_run_swift_package() {
 
   args+=("--manifest-cache=${manifest_cache}")
 
-  # Set up netrc.
-  local netrc_args
-  netrc_args=($(spl_setup_netrc "${netrc_file}"))
-  if [[ ${#netrc_args[@]} -gt 0 ]]; then
-    args+=("${netrc_args[@]}")
+  # Set up netrc. Append directly to `args` so paths with spaces stay
+  # as a single argv element (the earlier helper+command-substitution
+  # approach word-split on IFS).
+  if [[ -n ${netrc_file} ]]; then
+    args+=("--netrc-file" "$(readlink -f "${netrc_file}")")
   fi
 
   # Set up registries.
