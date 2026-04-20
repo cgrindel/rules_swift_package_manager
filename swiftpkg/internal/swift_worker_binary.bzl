@@ -49,11 +49,10 @@ fi
         is_executable = True,
     )
 
-    runfiles = ctx.runfiles(files = ctx.files.data + [args_file])
+    runfiles = ctx.runfiles(files = [args_file, swift_worker.executable])
     runfiles = runfiles.merge(ctx.attr.tool[DefaultInfo].default_runfiles)
-    runfiles = runfiles.merge(
-        ctx.runfiles(files = [swift_worker.executable]),
-    )
+    for dep in ctx.attr.data:
+        runfiles = runfiles.merge(dep[DefaultInfo].default_runfiles)
 
     return [
         DefaultInfo(
