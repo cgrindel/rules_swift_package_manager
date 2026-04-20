@@ -32,6 +32,19 @@ def _swift_worker_binary_impl(ctx):
         content = """\
 #!/usr/bin/env bash
 set -o errexit -o nounset -o pipefail
+
+# Self-locate the runfiles tree so the exec'd tool can bootstrap its
+# own bash runfiles library. Bazel stages runfiles next to the
+# launcher but does not set RUNFILES_DIR/RUNFILES_MANIFEST_FILE for
+# plain scripts (only sh_binary's generated wrapper does).
+if [[ -z ${{RUNFILES_DIR:-}} && -z ${{RUNFILES_MANIFEST_FILE:-}} ]]; then
+  if [[ -d "$0.runfiles" ]]; then
+    export RUNFILES_DIR="$0.runfiles"
+  elif [[ -f "$0.runfiles_manifest" ]]; then
+    export RUNFILES_MANIFEST_FILE="$0.runfiles_manifest"
+  fi
+fi
+
 extra_args=()
 while IFS= read -r line; do
   extra_args+=("$line")
@@ -49,7 +62,12 @@ fi
         is_executable = True,
     )
 
-    runfiles = ctx.runfiles(files = [args_file, swift_worker.executable])
+    # Include ctx.files.data for direct file labels (plain files have no
+    # rule and thus empty default_runfiles), plus merge each dep's
+    # default_runfiles to pick up transitive runfiles from rule targets.
+    runfiles = ctx.runfiles(
+        files = ctx.files.data + [args_file, swift_worker.executable],
+    )
     runfiles = runfiles.merge(ctx.attr.tool[DefaultInfo].default_runfiles)
     for dep in ctx.attr.data:
         runfiles = runfiles.merge(dep[DefaultInfo].default_runfiles)
