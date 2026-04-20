@@ -339,6 +339,7 @@ bzl_library(
         ":repository_utils",
         ":swift_package_tool_attrs",
         "@bazel_skylib//lib:dicts",
+        "@bazel_skylib//lib:paths",
     ],
 )
 

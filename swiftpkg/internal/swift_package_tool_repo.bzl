@@ -1,6 +1,7 @@
 """Defines the `swift_package_tool_repo` repository rule that creates `swift_worker_binary` targets."""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//swiftpkg/internal:build_decls.bzl", "build_decls")
 load("//swiftpkg/internal:build_files.bzl", "build_files")
 load("//swiftpkg/internal:load_statements.bzl", "load_statements")
@@ -23,11 +24,7 @@ def _collect_extra_args(repository_ctx, cmd):
         A `list` of string arguments.
     """
     attr = repository_ctx.attr
-    package_path = attr.package
-
-    # Strip the filename to get the directory.
-    parts = package_path.rsplit("/", 1)
-    pkg_dir = parts[0] if len(parts) > 1 else ""
+    pkg_dir = paths.dirname(attr.package)
 
     args = [
         "--cmd",
