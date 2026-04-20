@@ -210,4 +210,38 @@ assert_argv_has "--replace-scm-with-registry" \
 assert_argv_lacks "--use-registry-identity-for-scm" \
   "use-registry-identity-for-scm flag should be absent"
 
+# MARK - spl_run_swift_package --netrc_file plumbing
+
+# Reinvoke with --netrc_file pointing at a path containing a space; this
+# guards against the word-split regression fixed in spl_setup_netrc.
+netrc_space_dir="$(new_tmp_dir)/dir with spaces"
+mkdir -p "${netrc_space_dir}"
+netrc_space_file="${netrc_space_dir}/.netrc"
+: >"${netrc_space_file}"
+netrc_space_realpath="$(readlink -f "${netrc_space_file}")"
+
+# Reset argv file so the next invocation is captured cleanly.
+: >"${swift_args_file}"
+
+BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
+  spl_run_swift_package \
+  --swift_worker "${fake_run_worker}" \
+  --cmd resolve \
+  --package_path pkgsub \
+  --build_path .build \
+  --cache_path .cache \
+  --config_path "${run_dir}/.config" \
+  --security_path .security \
+  --enable_build_manifest_caching true \
+  --enable_dependency_cache true \
+  --manifest_cache shared \
+  --replace_scm_with_registry false \
+  --use_registry_identity_for_scm false \
+  --netrc_file "${netrc_space_file}"
+
+assert_argv_has "--netrc-file" \
+  "--netrc-file flag should appear when --netrc_file is set"
+assert_argv_has "${netrc_space_realpath}" \
+  "netrc path with spaces should survive as one argv element"
+
 echo "All tests passed."
