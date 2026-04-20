@@ -60,9 +60,9 @@ def _collect_extra_args(repository_ctx, cmd):
     if attr.registries:
         args.extend(["--registries_json", "$(rootpath :registries.json)"])
 
-    env_pairs = ["%s=%s" % (k, v) for (k, v) in attr.env.items()] if attr.env else []
-    if env_pairs:
-        args.extend(["--env", " ".join(env_pairs)])
+    if attr.env:
+        for k, v in attr.env.items():
+            args.extend(["--env", "%s=%s" % (k, v)])
 
     manifest_flags = " ".join(manifest_swiftc_args.BAZEL_DEFINE)
     if manifest_flags:

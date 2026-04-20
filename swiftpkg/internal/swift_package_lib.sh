@@ -82,7 +82,7 @@ spl_setup_registries() {
 #   --registries_json <path>      (optional, may be empty)
 #   --replace_scm_with_registry <true|false>
 #   --use_registry_identity_for_scm <true|false>
-#   --env <KEY=VAL ...>           (optional, space-separated)
+#   --env <KEY=VAL>               (optional, may be repeated)
 #   --manifest_swiftc_flags <flags>  (optional, space-separated)
 #
 # Any remaining arguments after -- are appended to the swift package
@@ -102,7 +102,7 @@ spl_run_swift_package() {
   local registries_json=""
   local replace_scm_with_registry="false"
   local use_registry_identity_for_scm="false"
-  local env=""
+  local env_vars=()
   local manifest_swiftc_flags=""
   local extra_args=()
 
@@ -165,7 +165,7 @@ spl_run_swift_package() {
         shift 2
         ;;
       --env)
-        env="$2"
+        env_vars+=("$2")
         shift 2
         ;;
       --manifest_swiftc_flags)
@@ -232,9 +232,12 @@ spl_run_swift_package() {
   # Set up registries.
   spl_setup_registries "${registries_json}" "${config_path}"
 
-  # Export environment variables.
-  if [[ -n ${env} ]]; then
-    for env_var in ${env}; do
+  # Export environment variables. Each --env pair is already one argv
+  # element, so values containing spaces survive unmodified. The length
+  # guard keeps this compatible with macOS bash 3.2 + `set -u`, which
+  # treats `"${arr[@]}"` on an empty array as an unbound reference.
+  if [[ ${#env_vars[@]} -gt 0 ]]; then
+    for env_var in "${env_vars[@]}"; do
       export "${env_var?}"
     done
   fi

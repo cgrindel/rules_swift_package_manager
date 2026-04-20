@@ -87,9 +87,9 @@ def swift_package_tool(
         extra_args.extend(["--registries_json", "$(rootpath %s)" % registries])
         data.append(registries)
 
-    env_pairs = ["%s=%s" % (k, v) for (k, v) in env.items()] if env else []
-    if env_pairs:
-        extra_args.extend(["--env", " ".join(env_pairs)])
+    if env:
+        for k, v in env.items():
+            extra_args.extend(["--env", "%s=%s" % (k, v)])
 
     manifest_flags = _manifest_swiftc_flags()
     if manifest_flags:
