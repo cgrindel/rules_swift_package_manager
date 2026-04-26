@@ -39,22 +39,6 @@ new_tmp_dir() {
   mktemp -d "${TEST_TMPDIR:-/tmp}/spl_test.XXXXXX"
 }
 
-# MARK - spl_setup_netrc
-
-# An empty netrc path should produce no output and not error.
-netrc_empty_output="$(spl_setup_netrc "")"
-assert_equal "" "${netrc_empty_output}" "empty netrc should produce no output"
-
-# A valid netrc path should produce `--netrc-file <realpath>`.
-netrc_tmp_dir="$(new_tmp_dir)"
-netrc_file="${netrc_tmp_dir}/.netrc"
-: >"${netrc_file}"
-netrc_output="$(spl_setup_netrc "${netrc_file}")"
-netrc_expected="--netrc-file $(readlink -f "${netrc_file}")"
-assert_equal \
-  "${netrc_expected}" "${netrc_output}" \
-  "valid netrc should produce --netrc-file <realpath>"
-
 # MARK - spl_setup_registries
 
 # An empty registries_json should NOT create the config dir or a symlink.
@@ -213,7 +197,8 @@ assert_argv_lacks "--use-registry-identity-for-scm" \
 # MARK - spl_run_swift_package --netrc_file plumbing
 
 # Reinvoke with --netrc_file pointing at a path containing a space; this
-# guards against the word-split regression fixed in spl_setup_netrc.
+# guards against the word-split regression in the inline --netrc-file
+# argv construction inside spl_run_swift_package.
 netrc_space_dir="$(new_tmp_dir)/dir with spaces"
 mkdir -p "${netrc_space_dir}"
 netrc_space_file="${netrc_space_dir}/.netrc"

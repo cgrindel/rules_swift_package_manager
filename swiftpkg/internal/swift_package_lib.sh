@@ -33,21 +33,6 @@ spl_resolve_swift_executable() {
   echo "${swift_executable}"
 }
 
-# Resolves the real path of a .netrc file and outputs the appropriate
-# --netrc-file flag.
-#
-# Arguments:
-#   $1 - path to the .netrc file (may be empty)
-#
-# Outputs:
-#   Prints "--netrc-file <realpath>" to stdout if the file is non-empty.
-spl_setup_netrc() {
-  local netrc_file="$1"
-  if [[ -n ${netrc_file} ]]; then
-    echo "--netrc-file" "$(readlink -f "${netrc_file}")"
-  fi
-}
-
 # Creates the config directory and symlinks registries.json into it so
 # SPM can find registry configuration.
 #
