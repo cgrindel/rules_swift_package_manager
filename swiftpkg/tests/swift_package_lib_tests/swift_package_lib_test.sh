@@ -130,6 +130,11 @@ fake_run_swift="${run_dir}/swift"
 cat >"${fake_run_swift}" <<'FAKE_SWIFT'
 #!/usr/bin/env bash
 printf '%s\n' "$@" >"${SWIFT_ARGS_FILE}"
+if [[ -n ${SWIFT_ENV_FILE:-} ]]; then
+  # `env -0` separates entries with NUL so values containing newlines
+  # cannot be confused with variable boundaries.
+  env -0 >"${SWIFT_ENV_FILE}"
+fi
 FAKE_SWIFT
 chmod +x "${fake_run_swift}"
 
@@ -229,4 +234,59 @@ assert_argv_has "--netrc-file" \
 assert_argv_has "${netrc_space_realpath}" \
   "netrc path with spaces should survive as one argv element"
 
-echo "All tests passed."
+# MARK - spl_run_swift_package --env plumbing
+
+# Verify --env KEY=VAL pairs are exported into swift's environment, and
+# that values containing spaces survive intact (regression for the
+# word-split bug fixed in the --env handling).
+swift_env_file="${run_dir}/swift_env.txt"
+: >"${swift_args_file}"
+: >"${swift_env_file}"
+export SWIFT_ENV_FILE="${swift_env_file}"
+
+BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
+  spl_run_swift_package \
+  --swift_worker "${fake_run_worker}" \
+  --cmd resolve \
+  --package_path pkgsub \
+  --build_path .build \
+  --cache_path .cache \
+  --config_path "${run_dir}/.config" \
+  --security_path .security \
+  --enable_build_manifest_caching true \
+  --enable_dependency_cache true \
+  --manifest_cache shared \
+  --replace_scm_with_registry false \
+  --use_registry_identity_for_scm false \
+  --env "SPL_TEST_FOO=bar" \
+  --env "SPL_TEST_SPACED=value with spaces"
+
+# `env -0` writes one KEY=VAL entry per NUL-delimited record. The
+# `read -r -d ''` loop is portable to macOS bash 3.2 (no mapfile) and
+# preserves entries verbatim, even when VAL contains spaces or other
+# shell metacharacters.
+env_entries=()
+while IFS= read -r -d '' entry; do
+  env_entries+=("${entry}")
+done <"${swift_env_file}"
+
+assert_env_has() {
+  local entry="$1"
+  local msg="$2"
+  local found
+  for found in "${env_entries[@]}"; do
+    if [[ ${found} == "${entry}" ]]; then
+      return 0
+    fi
+  done
+  fail "${msg} (missing env entry: ${entry})"
+}
+
+assert_env_has "SPL_TEST_FOO=bar" \
+  "simple --env KEY=VAL should reach swift's environment"
+assert_env_has "SPL_TEST_SPACED=value with spaces" \
+  "--env value containing spaces should survive as one entry"
+
+unset SWIFT_ENV_FILE SPL_TEST_FOO SPL_TEST_SPACED
+
+echo >&2 "All tests passed."
