@@ -49,6 +49,10 @@ def _collect_extra_args(repository_ctx, cmd):
         bools.to_shell_str(attr.use_registry_identity_for_scm),
     ]
 
+    # The repo rule path copies netrc/registries files into the
+    # generated repo (see _swift_package_tool_repo_impl) and references
+    # them by local label. The macro path in swift_package_tool.bzl
+    # uses $(rootpath <user_label>) directly. Keep both in sync.
     if attr.netrc:
         args.extend(["--netrc_file", "$(rootpath :.netrc)"])
 

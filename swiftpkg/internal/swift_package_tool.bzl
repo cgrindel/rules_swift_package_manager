@@ -90,6 +90,10 @@ def swift_package_tool(
         bools.to_shell_str(use_registry_identity_for_scm),
     ]
 
+    # The macro path resolves netrc/registries via $(rootpath) against
+    # the user-provided label. The repo rule path in
+    # swift_package_tool_repo.bzl copies the files into the generated
+    # repo and references local labels. Keep both in sync.
     if netrc:
         extra_args.extend(["--netrc_file", "$(rootpath %s)" % netrc])
         data.append(netrc)
