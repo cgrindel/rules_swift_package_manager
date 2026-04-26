@@ -46,8 +46,23 @@ def swift_package_tool(
         netrc: Label for a `.netrc` authentication file.
         registries: Label for a `registries.json` file.
         env: Dict of environment variables to pass through.
-        **kwargs: Additional keyword arguments passed to `swift_worker_binary`.
+        **kwargs: Additional keyword arguments passed to
+            `swift_worker_binary`. A user-supplied `data` list is
+            merged with the macro's own additions (netrc, registries).
+            Passing `extra_args` is rejected; the macro owns that
+            attribute. Drop down to `swift_worker_binary` directly if
+            you need to inject raw flags.
     """
+    if "extra_args" in kwargs:
+        fail(
+            "swift_package_tool constructs extra_args from named " +
+            "parameters (cmd, package, netrc, etc.). To pass " +
+            "additional flags, use swift_worker_binary directly.",
+        )
+
+    # Allow callers to pass their own data; merge with macro additions.
+    data = list(kwargs.pop("data", []))
+
     package_path = paths.dirname(package)
 
     extra_args = [
@@ -74,8 +89,6 @@ def swift_package_tool(
         "--use_registry_identity_for_scm",
         bools.to_shell_str(use_registry_identity_for_scm),
     ]
-
-    data = []
 
     if netrc:
         extra_args.extend(["--netrc_file", "$(rootpath %s)" % netrc])
