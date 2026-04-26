@@ -10,6 +10,7 @@ exports_files([
     "ResourceBundleAccessor.swift.tmpl",
     "resource_bundle_info.plist.tmpl",
     "swift_package_lib.sh",
+    "swift_worker_binary_launcher.sh.tmpl",
 ])
 
 sh_library(

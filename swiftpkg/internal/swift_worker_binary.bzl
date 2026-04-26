@@ -27,38 +27,14 @@ def _swift_worker_binary_impl(ctx):
     ctx.actions.write(output = args_file, content = args_obj)
 
     launcher = ctx.actions.declare_file(ctx.label.name + ".sh")
-    ctx.actions.write(
+    ctx.actions.expand_template(
+        template = ctx.file._launcher_template,
         output = launcher,
-        content = """\
-#!/usr/bin/env bash
-set -o errexit -o nounset -o pipefail
-
-# Self-locate the runfiles tree so the exec'd tool can bootstrap its
-# own bash runfiles library. Bazel stages runfiles next to the
-# launcher but does not set RUNFILES_DIR/RUNFILES_MANIFEST_FILE for
-# plain scripts (only sh_binary's generated wrapper does).
-if [[ -z ${{RUNFILES_DIR:-}} && -z ${{RUNFILES_MANIFEST_FILE:-}} ]]; then
-  if [[ -d "$0.runfiles" ]]; then
-    export RUNFILES_DIR="$0.runfiles"
-  elif [[ -f "$0.runfiles_manifest" ]]; then
-    export RUNFILES_MANIFEST_FILE="$0.runfiles_manifest"
-  fi
-fi
-
-extra_args=()
-while IFS= read -r line; do
-  extra_args+=("$line")
-done < "{args_file}"
-if [[ ${{#extra_args[@]}} -gt 0 ]]; then
-  exec "{tool}" --swift_worker "{worker}" "${{extra_args[@]}}" "$@"
-else
-  exec "{tool}" --swift_worker "{worker}" "$@"
-fi
-""".format(
-            tool = tool_executable.short_path,
-            worker = swift_worker.executable.short_path,
-            args_file = args_file.short_path,
-        ),
+        substitutions = {
+            "{ARGS_FILE}": args_file.short_path,
+            "{TOOL}": tool_executable.short_path,
+            "{WORKER}": swift_worker.executable.short_path,
+        },
         is_executable = True,
     )
 
@@ -108,6 +84,10 @@ These are passed before any user-provided command-line arguments.\
 The executable to run. The launcher passes --swift_worker <path> as the \
 first args, followed by any user-provided args.\
 """,
+        ),
+        "_launcher_template": attr.label(
+            default = "@rules_swift_package_manager//swiftpkg/internal:swift_worker_binary_launcher.sh.tmpl",
+            allow_single_file = True,
         ),
     },
     toolchains = swift_common.use_toolchain(),
