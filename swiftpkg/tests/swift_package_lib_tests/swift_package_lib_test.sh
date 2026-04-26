@@ -359,4 +359,35 @@ assert_equal \
   "${reg_plumb_expected}" "${reg_plumb_target}" \
   "--registries_json should symlink config_path/registries.json to realpath"
 
+# MARK - spl_run_swift_package missing BUILD_WORKSPACE_DIRECTORY
+
+# When all required flags are supplied but BUILD_WORKSPACE_DIRECTORY is
+# unset (i.e. invoked via bazel test rather than bazel run), the
+# function should return non-zero and mention the missing variable on
+# stderr. The unset runs inside the $(...) subshell so the parent
+# script's environment is undisturbed.
+set +e
+bwd_err="$(
+  unset BUILD_WORKSPACE_DIRECTORY
+  spl_run_swift_package \
+    --swift_worker "${fake_run_worker}" \
+    --cmd resolve \
+    --package_path pkgsub \
+    --build_path .build \
+    --cache_path .cache \
+    --config_path "${run_dir}/.config" \
+    --security_path .security \
+    2>&1 >/dev/null
+)"
+bwd_rc=$?
+set -e
+
+assert_equal \
+  "1" "${bwd_rc}" \
+  "unset BUILD_WORKSPACE_DIRECTORY should return exit code 1"
+case "${bwd_err}" in
+  *BUILD_WORKSPACE_DIRECTORY*) ;;
+  *) fail "error should mention BUILD_WORKSPACE_DIRECTORY, got: ${bwd_err}" ;;
+esac
+
 echo >&2 "All tests passed."
