@@ -15,6 +15,7 @@ bzl_library(
         "//swiftpkg/internal:swift_deps_info",
         "//swiftpkg/internal:swift_package",
         "//swiftpkg/internal:swift_package_tool",
+        "//swiftpkg/internal:swift_worker_binary",
     ],
 )
 
