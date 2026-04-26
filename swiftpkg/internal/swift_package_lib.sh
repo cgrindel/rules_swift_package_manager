@@ -199,9 +199,9 @@ spl_run_swift_package() {
   fi
 
   if [[ -z ${BUILD_WORKSPACE_DIRECTORY:-} ]]; then
-    echo "BUILD_WORKSPACE_DIRECTORY is not set, this target" \
-      'may only be `bazel run`'
-    exit 1
+    echo >&2 "ERROR: BUILD_WORKSPACE_DIRECTORY is not set;" \
+      'this target may only be `bazel run`.'
+    return 1
   fi
 
   # Resolve package_path relative to workspace.
