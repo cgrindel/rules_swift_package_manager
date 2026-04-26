@@ -1,4 +1,8 @@
-"""Defines the `swift_package_tool_repo` repository rule that creates `swift_worker_binary` targets."""
+"""Defines the `swift_package_tool_repo` repository rule.
+
+The rule generates a workspace exposing `swift_worker_binary` targets
+named `update` and `resolve` that drive `swift package` commands.
+"""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
@@ -73,11 +77,19 @@ def _swift_package_tool_repo_impl(repository_ctx):
     data = []
 
     if repository_ctx.attr.netrc:
-        repository_utils.copy(repository_ctx, repository_ctx.attr.netrc, ".netrc")
+        repository_utils.copy(
+            repository_ctx,
+            repository_ctx.attr.netrc,
+            ".netrc",
+        )
         data.append(":.netrc")
 
     if repository_ctx.attr.registries:
-        repository_utils.copy(repository_ctx, repository_ctx.attr.registries, "registries.json")
+        repository_utils.copy(
+            repository_ctx,
+            repository_ctx.attr.registries,
+            "registries.json",
+        )
         data.append(":registries.json")
 
     update_args = _collect_extra_args(repository_ctx, "update")
@@ -117,12 +129,17 @@ swift_package_tool_repo = repository_rule(
         repo_rules.env_attr,
         {
             "package": attr.string(
-                doc = "The relative path to the `Package.swift` file to operate on.",
+                doc = """\
+The relative path to the `Package.swift` file to operate on.\
+""",
                 mandatory = True,
             ),
         },
         swift_package_tool_attrs.swift_package_tool_config,
         swift_package_tool_attrs.swift_package_registry,
     ),
-    doc = "Declares a `@swift_package` repository for using the `swift_worker_binary` targets.",
+    doc = """\
+Declares a `@swift_package` repository for using the `swift_worker_binary` \
+targets.\
+""",
 )
