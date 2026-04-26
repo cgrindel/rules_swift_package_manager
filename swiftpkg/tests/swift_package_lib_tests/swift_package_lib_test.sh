@@ -289,4 +289,35 @@ assert_env_has "SPL_TEST_SPACED=value with spaces" \
 
 unset SWIFT_ENV_FILE SPL_TEST_FOO SPL_TEST_SPACED
 
+# MARK - spl_run_swift_package --manifest_swiftc_flags splitting
+
+# Verify a single --manifest_swiftc_flags string with multiple
+# space-separated flags splits into distinct argv elements when
+# forwarded to `swift package`. The lib intentionally unquotes the
+# variable to enable this splitting.
+: >"${swift_args_file}"
+
+BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
+  spl_run_swift_package \
+  --swift_worker "${fake_run_worker}" \
+  --cmd resolve \
+  --package_path pkgsub \
+  --build_path .build \
+  --cache_path .cache \
+  --config_path "${run_dir}/.config" \
+  --security_path .security \
+  --enable_build_manifest_caching true \
+  --enable_dependency_cache true \
+  --manifest_cache shared \
+  --replace_scm_with_registry false \
+  --use_registry_identity_for_scm false \
+  --manifest_swiftc_flags "-DSPL_TEST_FLAG_ONE -DSPL_TEST_FLAG_TWO"
+
+assert_argv_has "-DSPL_TEST_FLAG_ONE" \
+  "first manifest swiftc flag should appear as its own argv element"
+assert_argv_has "-DSPL_TEST_FLAG_TWO" \
+  "second manifest swiftc flag should appear as its own argv element"
+assert_argv_lacks "-DSPL_TEST_FLAG_ONE -DSPL_TEST_FLAG_TWO" \
+  "manifest swiftc flags should split, not pass through as one token"
+
 echo >&2 "All tests passed."
