@@ -320,4 +320,43 @@ assert_argv_has "-DSPL_TEST_FLAG_TWO" \
 assert_argv_lacks "-DSPL_TEST_FLAG_ONE -DSPL_TEST_FLAG_TWO" \
   "manifest swiftc flags should split, not pass through as one token"
 
+# MARK - spl_run_swift_package --registries_json plumbing
+
+# When --registries_json is supplied, spl_run_swift_package should
+# materialize <config_path>/registries.json as a symlink to the input
+# file's realpath. (The lower-level spl_setup_registries test verifies
+# the helper directly; this test exercises the flag-parsing path.)
+reg_plumb_dir="$(new_tmp_dir)"
+reg_plumb_file="${reg_plumb_dir}/registries.json"
+echo '{"registries":{"example":{"url":"https://example.invalid"}}}' \
+  >"${reg_plumb_file}"
+reg_plumb_config="${reg_plumb_dir}/.config"
+: >"${swift_args_file}"
+
+BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
+  spl_run_swift_package \
+  --swift_worker "${fake_run_worker}" \
+  --cmd resolve \
+  --package_path pkgsub \
+  --build_path .build \
+  --cache_path .cache \
+  --config_path "${reg_plumb_config}" \
+  --security_path .security \
+  --enable_build_manifest_caching true \
+  --enable_dependency_cache true \
+  --manifest_cache shared \
+  --replace_scm_with_registry false \
+  --use_registry_identity_for_scm false \
+  --registries_json "${reg_plumb_file}"
+
+reg_plumb_symlink="${reg_plumb_config}/registries.json"
+if [[ ! -L ${reg_plumb_symlink} ]]; then
+  fail "expected registries symlink at ${reg_plumb_symlink}"
+fi
+reg_plumb_target="$(readlink "${reg_plumb_symlink}")"
+reg_plumb_expected="$(readlink -f "${reg_plumb_file}")"
+assert_equal \
+  "${reg_plumb_expected}" "${reg_plumb_target}" \
+  "--registries_json should symlink config_path/registries.json to realpath"
+
 echo >&2 "All tests passed."
