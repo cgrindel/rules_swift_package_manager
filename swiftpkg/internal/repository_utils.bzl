@@ -51,6 +51,13 @@ def _execute_spm_command(
     env_overrides = {"SDKROOT": ""}
     exec_env = dicts.add(env, env_overrides)
 
+    # A `.swift-version` file in the package root can hijack Swift toolchain
+    # proxies (e.g. `swiftly`) into requiring a version that isn't installed.
+    repository_ctx.execute(
+        ["rm", "-f", ".swift-version"],
+        working_directory = working_directory,
+    )
+
     exec_result = repository_ctx.execute(
         exec_args,
         environment = exec_env,
