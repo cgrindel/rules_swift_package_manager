@@ -151,6 +151,7 @@ bzl_library(
         ":bzl_selects",
         ":clang_files",
         ":load_statements",
+        ":minimum_os_versions",
         ":objc_files",
         ":pkginfo_target_deps",
         ":pkginfo_targets",
