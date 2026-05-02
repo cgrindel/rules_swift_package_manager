@@ -257,7 +257,15 @@ Pre-generated `dump.json` for this package. Always travels with \
 `cached_desc_manifest`.\
 """,
         ),
-        "cached_json_directory": attr.string(),
+        "cached_json_directory": attr.string(
+            doc = """\
+**Deprecated.** Prefer `cached_dump_manifest` / \
+`cached_desc_manifest`, which let the cache live in the consuming \
+workspace and be regenerated through the active Bazel Swift worker \
+(see GH-2140). Setting both this attribute and the new pair is a hard \
+error.\
+""",
+        ),
         "netrc": attr.label(
             default = None,
             doc = "A `.netrc` file for authentication when downloading binary artifacts.",

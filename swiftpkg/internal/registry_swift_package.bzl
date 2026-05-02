@@ -316,8 +316,9 @@ _ALL_ATTRS = dicts.add(
             allow_single_file = [".json"],
             doc = """\
 Pre-generated `desc.json` for this package, produced by \
-`bazel run @swift_package//:cache`. Always travels with \
-`cached_dump_manifest`. See GH-2140.\
+`bazel run @swift_package//:cache`. When provided alongside \
+`cached_dump_manifest`, the repository rule reads these files instead \
+of invoking `swift package describe`. See GH-2140.\
 """,
         ),
         "cached_dump_manifest": attr.label(
@@ -327,7 +328,15 @@ Pre-generated `dump.json` for this package. Always travels with \
 `cached_desc_manifest`.\
 """,
         ),
-        "cached_json_directory": attr.string(),
+        "cached_json_directory": attr.string(
+            doc = """\
+**Deprecated.** Prefer `cached_dump_manifest` / \
+`cached_desc_manifest`, which let the cache live in the consuming \
+workspace and be regenerated through the active Bazel Swift worker \
+(see GH-2140). Setting both this attribute and the new pair is a hard \
+error.\
+""",
+        ),
     },
     swift_package_tool_attrs.swift_package_registry,
 )
