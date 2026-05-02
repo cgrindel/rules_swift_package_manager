@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+
+# Self-locate the runfiles tree so the exec'd tool can bootstrap its
+# own bash runfiles library. Bazel stages runfiles next to the
+# launcher but does not set RUNFILES_DIR/RUNFILES_MANIFEST_FILE for
+# plain scripts (only sh_binary's generated wrapper does).
+if [[ -z ${RUNFILES_DIR:-} && -z ${RUNFILES_MANIFEST_FILE:-} ]]; then
+  if [[ -d "$0.runfiles" ]]; then
+    export RUNFILES_DIR="$0.runfiles"
+  elif [[ -f "$0.runfiles_manifest" ]]; then
+    export RUNFILES_MANIFEST_FILE="$0.runfiles_manifest"
+  fi
+fi
+
+extra_args=()
+while IFS= read -r line; do
+  extra_args+=("$line")
+done <"{ARGS_FILE}"
+if [[ ${#extra_args[@]} -gt 0 ]]; then
+  exec "{TOOL}" --swift_worker "{WORKER}" "${extra_args[@]}" "$@"
+else
+  exec "{TOOL}" --swift_worker "{WORKER}" "$@"
+fi
