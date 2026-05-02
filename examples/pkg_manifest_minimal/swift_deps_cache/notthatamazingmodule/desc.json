@@ -2,7 +2,7 @@
   "dependencies" : [
     {
       "identity" : "myamazingmodule",
-      "path" : "/Users/chuck/code/cgrindel/rules_swift_package_manager/gh2140_dump_desc_cache/examples/pkg_manifest_minimal/third_party/MyAmazingModule",
+      "path" : "{{WORKSPACE_ROOT}}/third_party/MyAmazingModule",
       "type" : "fileSystem"
     }
   ],
