@@ -29,7 +29,7 @@ def _attrs():
         watchos_minimum_os = "6.0",
     )
 
-def _preserves_importer_above_package_floor_test(ctx):
+def _sets_active_platform_to_package_minimum_test(ctx):
     env = unittest.begin(ctx)
 
     actual = minimum_os_transition.transition_outputs(
@@ -37,7 +37,7 @@ def _preserves_importer_above_package_floor_test(ctx):
         attr = _attrs(),
     )
 
-    asserts.equals(env, "18.0", actual[_IOS_MINIMUM_OS_OPTION])
+    asserts.equals(env, "13.0", actual[_IOS_MINIMUM_OS_OPTION])
     asserts.equals(env, "15.0", actual[_MACOS_MINIMUM_OS_OPTION])
     asserts.equals(env, "18.0", actual[_TVOS_MINIMUM_OS_OPTION])
     asserts.equals(env, "11.0", actual[_WATCHOS_MINIMUM_OS_OPTION])
@@ -45,7 +45,23 @@ def _preserves_importer_above_package_floor_test(ctx):
 
     return unittest.end(env)
 
-preserves_importer_above_package_floor_test = unittest.make(_preserves_importer_above_package_floor_test)
+sets_active_platform_to_package_minimum_test = unittest.make(_sets_active_platform_to_package_minimum_test)
+
+def _overrides_higher_importer_with_package_minimum_test(ctx):
+    env = unittest.begin(ctx)
+
+    settings = _settings("ios", ios = "18.0")
+    actual = minimum_os_transition.transition_outputs(
+        settings = settings,
+        attr = _attrs(),
+    )
+
+    asserts.equals(env, "18.0", settings[_IOS_MINIMUM_OS_OPTION])
+    asserts.equals(env, "13.0", actual[_IOS_MINIMUM_OS_OPTION])
+
+    return unittest.end(env)
+
+overrides_higher_importer_with_package_minimum_test = unittest.make(_overrides_higher_importer_with_package_minimum_test)
 
 def _uses_package_minimum_when_importer_unset_test(ctx):
     env = unittest.begin(ctx)
@@ -65,7 +81,7 @@ def _uses_minimum_os_version_for_visionos_test(ctx):
     env = unittest.begin(ctx)
 
     actual = minimum_os_transition.transition_outputs(
-        settings = _settings("visionos", visionos = ""),
+        settings = _settings("visionos"),
         attr = _attrs(),
     )
 
@@ -166,7 +182,8 @@ rejects_imported_target_with_higher_patch_minimum_os_test = unittest.make(_rejec
 def minimum_os_transition_test_suite():
     return unittest.suite(
         "minimum_os_transition_tests",
-        preserves_importer_above_package_floor_test,
+        sets_active_platform_to_package_minimum_test,
+        overrides_higher_importer_with_package_minimum_test,
         uses_package_minimum_when_importer_unset_test,
         uses_minimum_os_version_for_visionos_test,
         preserves_settings_for_non_apple_platform_test,

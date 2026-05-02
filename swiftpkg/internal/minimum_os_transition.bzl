@@ -39,24 +39,16 @@ def _transition_outputs(settings, attr):
             platform_type,
         ))
 
-    importer_minimum_os = settings[minimum_os_config.option]
-
     import_error = _import_error(
         target_name = getattr(attr, "name", "<unknown>"),
         platform_type = platform_type,
-        importer_minimum_os = importer_minimum_os,
+        importer_minimum_os = settings[minimum_os_config.option],
         imported_minimum_os = minimum_os,
     )
     if import_error:
         fail(import_error)
 
-    # Treat the package's declared minimum as a floor, not a ceiling: keep
-    # the importer's minimum when it is already at or above the package's,
-    # otherwise raise it to the package's. This matches SwiftPM and Xcode,
-    # and avoids breaking packages whose Package.swift under-declares their
-    # platforms relative to the APIs they actually use.
-    if not importer_minimum_os or _version_tuple(importer_minimum_os) < _version_tuple(minimum_os):
-        outputs[minimum_os_config.option] = minimum_os
+    outputs[minimum_os_config.option] = minimum_os
 
     return outputs
 
