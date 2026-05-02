@@ -3,6 +3,7 @@ load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load(":artifact_infos_tests.bzl", "artifact_infos_test_suite")
 load(":bazel_apple_platforms_tests.bzl", "bazel_apple_platforms_test_suite")
 load(":bazel_repo_names_tests.bzl", "bazel_repo_names_test_suite")
+load(":bools_tests.bzl", "bools_test_suite")
 load(":build_decls_tests.bzl", "build_decls_test_suite")
 load(":build_files_tests.bzl", "build_files_test_suite")
 load(":bzl_selects_tests.bzl", "bzl_selects_test_suite")
@@ -32,6 +33,8 @@ artifact_infos_test_suite()
 bazel_apple_platforms_test_suite()
 
 bazel_repo_names_test_suite()
+
+bools_test_suite()
 
 build_decls_test_suite()
 
