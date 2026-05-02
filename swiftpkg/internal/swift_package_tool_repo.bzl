@@ -1,7 +1,9 @@
 """Defines the `swift_package_tool_repo` repository rule.
 
 The rule generates a workspace exposing `swift_worker_binary` targets
-named `update` and `resolve` that drive `swift package` commands.
+named `update`, `resolve`, and `cache` that drive `swift package`
+commands. `cache` runs `//tools/cache_repo_json` to pre-generate the
+SPM dump/describe JSON under the Bazel-resolved Swift toolchain.
 """
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
@@ -20,7 +22,9 @@ def _collect_extra_args(repository_ctx, cmd):
 
     Args:
         repository_ctx: A `repository_ctx` instance.
-        cmd: The swift package command ("update" or "resolve").
+        cmd: The swift package command ("update" or "resolve"), or
+            None to omit the --cmd flag (used by the :cache target,
+            which drives the swift package subcommand itself).
 
     Returns:
         A `list` of string arguments.
@@ -28,9 +32,10 @@ def _collect_extra_args(repository_ctx, cmd):
     attr = repository_ctx.attr
     pkg_dir = paths.dirname(attr.package)
 
-    args = [
-        "--cmd",
-        cmd,
+    args = []
+    if cmd != None:
+        args.extend(["--cmd", cmd])
+    args.extend([
         "--package_path",
         pkg_dir,
         "--build_path",
@@ -51,7 +56,7 @@ def _collect_extra_args(repository_ctx, cmd):
         bools.to_shell_str(attr.replace_scm_with_registry),
         "--use_registry_identity_for_scm",
         bools.to_shell_str(attr.use_registry_identity_for_scm),
-    ]
+    ])
 
     # The repo rule path copies netrc/registries files into the
     # generated repo (see _swift_package_tool_repo_impl) and references
@@ -95,11 +100,22 @@ def _swift_package_tool_repo_impl(repository_ctx):
     update_args = _collect_extra_args(repository_ctx, "update")
     resolve_args = _collect_extra_args(repository_ctx, "resolve")
 
-    common_attrs = {
-        "tool": "@rules_swift_package_manager//tools/swift_package_cmd",
-    }
-    if data:
-        common_attrs["data"] = data
+    # The :cache target reuses the same SPM configuration but does not
+    # take a --cmd flag (cache_repo_json drives resolve/update itself
+    # based on its own --mode). User-provided --output_dir / --mode are
+    # appended at runtime via `bazel run @swift_package//:cache -- ...`.
+    cache_args = _collect_extra_args(repository_ctx, cmd = None)
+
+    common_data = data if data else None
+
+    cmd_tool = "@rules_swift_package_manager//tools/swift_package_cmd"
+    cache_tool = "@rules_swift_package_manager//tools/cache_repo_json"
+
+    def _attrs(tool, extra_args):
+        a = {"extra_args": extra_args, "tool": tool}
+        if common_data:
+            a["data"] = common_data
+        return a
 
     bld_file = build_files.new(
         load_stmts = [
@@ -112,12 +128,17 @@ def _swift_package_tool_repo_impl(repository_ctx):
             build_decls.new(
                 "swift_worker_binary",
                 name = "update",
-                attrs = dicts.add(common_attrs, {"extra_args": update_args}),
+                attrs = _attrs(cmd_tool, update_args),
             ),
             build_decls.new(
                 "swift_worker_binary",
                 name = "resolve",
-                attrs = dicts.add(common_attrs, {"extra_args": resolve_args}),
+                attrs = _attrs(cmd_tool, resolve_args),
+            ),
+            build_decls.new(
+                "swift_worker_binary",
+                name = "cache",
+                attrs = _attrs(cache_tool, cache_args),
             ),
         ],
     )

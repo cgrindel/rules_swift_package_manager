@@ -246,11 +246,14 @@ def _registry_swift_package_impl(repository_ctx):
             repository_ctx.attr.cached_json_directory,
         )
 
+    dump_manifest, desc_manifest = pkg_ctxs.read_cached_manifests(repository_ctx)
     pkg_ctx = pkg_ctxs.read(
         repository_ctx,
         directory,
         env,
         cached_json_directory,
+        dump_manifest = dump_manifest,
+        desc_manifest = desc_manifest,
         resolved_pkg_map = resolved_pkg_map,
         registries_directory = registries_directory,
         replace_scm_with_registry = attr.replace_scm_with_registry,
@@ -308,6 +311,21 @@ _ALL_ATTRS = dicts.add(
     {
         "build_file": attr.label(
             doc = "When used, the provided BUILD file will be used instead of generating one.",
+        ),
+        "cached_desc_manifest": attr.label(
+            allow_single_file = [".json"],
+            doc = """\
+Pre-generated `desc.json` for this package, produced by \
+`bazel run @swift_package//:cache`. Always travels with \
+`cached_dump_manifest`. See GH-2140.\
+""",
+        ),
+        "cached_dump_manifest": attr.label(
+            allow_single_file = [".json"],
+            doc = """\
+Pre-generated `dump.json` for this package. Always travels with \
+`cached_desc_manifest`.\
+""",
         ),
         "cached_json_directory": attr.string(),
     },

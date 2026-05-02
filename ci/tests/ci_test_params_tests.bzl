@@ -96,6 +96,7 @@ collect_from_deps_test = unittest.make(_collect_from_deps_test)
 def _label_str_test(ctx):
     env = unittest.begin(ctx)
 
+    # buildifier: disable=canonical-repository
     tests = [
         struct(
             msg = "bzlmod label",

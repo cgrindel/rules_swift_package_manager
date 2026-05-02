@@ -1,0 +1,60 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "myamazingmodule",
+      "path" : "/Users/chuck/code/cgrindel/rules_swift_package_manager/gh2140_dump_desc_cache/examples/pkg_manifest_minimal/third_party/MyAmazingModule",
+      "type" : "fileSystem"
+    }
+  ],
+  "manifest_display_name" : "NotThatAmazingModule",
+  "name" : "NotThatAmazingModule",
+  "path" : ".",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "NotThatAmazingModule",
+      "targets" : [
+        "NotThatAmazingModule"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "NotThatAmazingModuleTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NotThatAmazingModuleTests",
+      "path" : "Tests/NotThatAmazingModuleTests",
+      "sources" : [
+        "NotThatAmazingModuleTests.swift"
+      ],
+      "target_dependencies" : [
+        "NotThatAmazingModule"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NotThatAmazingModule",
+      "module_type" : "SwiftTarget",
+      "name" : "NotThatAmazingModule",
+      "path" : "Sources/NotThatAmazingModule",
+      "product_dependencies" : [
+        "MyAmazingModule"
+      ],
+      "product_memberships" : [
+        "NotThatAmazingModule"
+      ],
+      "sources" : [
+        "NotThatAmazingModule.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.9"
+}
