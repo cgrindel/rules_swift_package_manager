@@ -61,6 +61,17 @@ manifest.\
             )
     return aliases_by_identity
 
+def _read_cached_manifest(module_ctx, label, workspace_root):
+    """Read a cached dump/desc JSON file with workspace-token expansion.
+
+    The cache writer rewrites paths under the workspace root as
+    `{{WORKSPACE_ROOT}}/<rel>` so the cache stays portable across
+    checkouts. This helper substitutes the token back to the consumer's
+    workspace root before parsing.
+    """
+    text = module_ctx.read(label).replace("{{WORKSPACE_ROOT}}", workspace_root)
+    return json.decode(text)
+
 def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swift_package):
     """Declare Swift packages from `Package.swift` and `Package.resolved`.
 
@@ -152,8 +163,16 @@ mechanism going forward (see GH-2140); please remove `cached_json_directory`.\
         main_dump_label = from_package.dump_manifests.get("_main")
         main_desc_label = from_package.desc_manifests.get("_main")
         if main_dump_label and main_desc_label:
-            root_dump_manifest = json.decode(module_ctx.read(main_dump_label))
-            root_desc_manifest = json.decode(module_ctx.read(main_desc_label))
+            root_dump_manifest = _read_cached_manifest(
+                module_ctx,
+                main_dump_label,
+                workspace_root,
+            )
+            root_desc_manifest = _read_cached_manifest(
+                module_ctx,
+                main_desc_label,
+                workspace_root,
+            )
 
     pkg_info = pkginfos.get(
         module_ctx,
@@ -268,8 +287,16 @@ mechanism going forward (see GH-2140); please remove `cached_json_directory`.\
                     d_dump = from_package.dump_manifests.get(dep.identity)
                     d_desc = from_package.desc_manifests.get(dep.identity)
                     if d_dump and d_desc:
-                        dep_dump_manifest = json.decode(module_ctx.read(d_dump))
-                        dep_desc_manifest = json.decode(module_ctx.read(d_desc))
+                        dep_dump_manifest = _read_cached_manifest(
+                            module_ctx,
+                            d_dump,
+                            workspace_root,
+                        )
+                        dep_desc_manifest = _read_cached_manifest(
+                            module_ctx,
+                            d_desc,
+                            workspace_root,
+                        )
 
                 dep_pkg_info = pkginfos.get(
                     module_ctx,
