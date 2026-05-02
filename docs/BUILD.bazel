@@ -39,6 +39,7 @@ _DOC_INFOS = [
         label = "//swiftpkg:defs",
         symbols = [
             "swift_deps_index",
+            "swift_info_test",
         ],
     ),
     doc_infos.new(

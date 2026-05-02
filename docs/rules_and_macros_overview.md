@@ -8,6 +8,7 @@ The rules and macros described below are used to define Gazelle targets to aid i
 On this page:
 
   * [swift_deps_index](#swift_deps_index)
+  * [swift_info_test](#swift_info_test)
 
 
 <a id="swift_deps_index"></a>
@@ -29,5 +30,28 @@ Generates a Swift dependencies index file that is used by other tooling (e.g., S
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="swift_deps_index-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
 | <a id="swift_deps_index-direct_dep_pkg_infos"></a>direct_dep_pkg_infos |  A `dict` where the key is the label for a Swift package's `pkg_info.json` file and the value is the Swift package's identity value.   | <a href="https://bazel.build/rules/lib/dict">Dictionary: Label -> String</a> | optional |  `{}`  |
+
+
+<a id="swift_info_test"></a>
+
+## swift_info_test
+
+<pre>
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_info_test")
+
+swift_info_test(<a href="#swift_info_test-name">name</a>, <a href="#swift_info_test-swift_info">swift_info</a>)
+</pre>
+
+Compares the cached Swift version recorded in `swift_info.json` against the version of the Swift toolchain Bazel resolves at build time. Fails the test when they disagree, prompting the user to refresh the SPM cache with `bazel run @swift_package//:cache -- --mode=update`.
+
+This is the build-time half of the GH-2140 fix: the cache utility records the Swift version when it generates dump.json/desc.json, and this test verifies the same toolchain is in use whenever `bazel test //...` runs.
+
+**ATTRIBUTES**
+
+
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="swift_info_test-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="swift_info_test-swift_info"></a>swift_info |  The `swift_info.json` produced alongside the cache. Typically the `swift_info.json` from the directory passed via `--output_dir` to the `@swift_package//:cache` utility.   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
 
 
