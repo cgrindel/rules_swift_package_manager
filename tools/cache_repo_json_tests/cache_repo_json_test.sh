@@ -246,7 +246,7 @@ assert_match '"dump.json"' "${content}" \
 # MARK - crj_write_root_build_file
 
 root_build_dir="$(new_tmp_dir)"
-crj_write_root_build_file "${root_build_dir}"
+crj_write_root_build_file "${root_build_dir}" "macos"
 root_build_path="${root_build_dir}/BUILD.bazel"
 [[ -f ${root_build_path} ]] || fail "expected root BUILD.bazel to be written"
 content="$(cat "${root_build_path}")"
@@ -254,3 +254,18 @@ assert_match 'swift_info_test' "${content}" \
   "root BUILD.bazel should declare swift_info_test"
 assert_match 'swift_info.json' "${content}" \
   "root BUILD.bazel should reference swift_info.json"
+assert_match '"@platforms//os:macos"' "${content}" \
+  "root BUILD.bazel should pin target_compatible_with to the host OS"
+
+# MARK - crj_host_os_slug
+
+case "$(uname -s)" in
+  Darwin)
+    assert_equal "macos" "$(crj_host_os_slug)" \
+      "crj_host_os_slug should return 'macos' on Darwin"
+    ;;
+  Linux)
+    assert_equal "linux" "$(crj_host_os_slug)" \
+      "crj_host_os_slug should return 'linux' on Linux"
+    ;;
+esac

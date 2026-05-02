@@ -11,4 +11,5 @@ exports_files(
 swift_info_test(
     name = "swift_info_test",
     swift_info = "swift_info.json",
+    target_compatible_with = ["@platforms//os:macos"],
 )
