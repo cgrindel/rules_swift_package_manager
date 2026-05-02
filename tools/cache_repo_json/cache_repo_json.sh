@@ -101,13 +101,16 @@ crj_run_spm_subcommand() {
 #
 # The cached desc.json stores paths relative to the parent package's
 # root for portability, so dependency paths are absolutized against the
-# supplied parent_pkg_dir before being emitted.
+# supplied parent_pkg_dir before being emitted. Sibling-package paths
+# stored as `{{WORKSPACE_ROOT}}/<rel>` tokens are expanded against the
+# optional workspace_root argument.
 crj_describe_local_deps() {
   local desc_json="$1"
   local parent_pkg_dir="$2"
-  python3 - "${desc_json}" "${parent_pkg_dir}" <<'PY'
+  local workspace_root="${3:-}"
+  python3 - "${desc_json}" "${parent_pkg_dir}" "${workspace_root}" <<'PY'
 import json, os.path, sys
-desc_path, parent_dir = sys.argv[1], sys.argv[2]
+desc_path, parent_dir, ws_root = sys.argv[1], sys.argv[2], sys.argv[3]
 with open(desc_path) as f:
     desc = json.load(f)
 for dep in desc.get("dependencies", []):
@@ -117,6 +120,8 @@ for dep in desc.get("dependencies", []):
     path = dep.get("path") or ""
     if not identity or not path:
         continue
+    if ws_root and "{{WORKSPACE_ROOT}}" in path:
+        path = path.replace("{{WORKSPACE_ROOT}}", ws_root.rstrip("/"))
     if not os.path.isabs(path):
         path = os.path.normpath(os.path.join(parent_dir, path))
     print(f"{identity}\t{path}")
@@ -170,6 +175,8 @@ PY
 #   $4 - registries config dir or empty
 #   $5 - replace_scm_with_registry ("true" / "false")
 #   $6 - manifest_swiftc_flags (space-separated)
+#   $7 - workspace root (BUILD_WORKSPACE_DIRECTORY) for sibling-path
+#        portability. Empty disables the workspace-relative rewrite.
 crj_dump_describe() {
   local swift_executable="$1"
   local pkg_dir="$2"
@@ -177,6 +184,7 @@ crj_dump_describe() {
   local cfg_path="$4"
   local replace_scm="$5"
   local manifest_flags="$6"
+  local workspace_root="${7:-}"
 
   mkdir -p "${out_dir}"
 
@@ -195,13 +203,14 @@ crj_dump_describe() {
 
   # Pipe through path relativization so the cache is portable across
   # checkouts and machines. Mirrors repository_utils._replace_working_directory:
-  # any `<pkg_dir>/` prefix becomes `./`, and the read path absolutizes
-  # back against the on-disk location at fetch time.
+  # any `<pkg_dir>/` prefix becomes `./`, paths under workspace_root but
+  # outside pkg_dir become `{{WORKSPACE_ROOT}}/<rel>`, and the consumer
+  # expands both back at fetch time.
   "${swift_executable}" "${base_args[@]}" dump-package \
-    | crj_relativize_paths "${pkg_dir}" \
+    | crj_relativize_paths "${pkg_dir}" "${workspace_root}" \
       >"${out_dir}/dump.json"
   "${swift_executable}" "${base_args[@]}" describe --type json \
-    | crj_relativize_paths "${pkg_dir}" \
+    | crj_relativize_paths "${pkg_dir}" "${workspace_root}" \
       >"${out_dir}/desc.json"
   crj_write_dep_build_file "${out_dir}"
 }
@@ -209,21 +218,30 @@ crj_dump_describe() {
 # Pipe stdin through, replacing every "${pkg_dir}/" occurrence with
 # "./" and a bare "${pkg_dir}" (e.g. the top-level "path" field whose
 # value equals the package root with no trailing component) with "."
-# so cache files store paths relative to the package root. Plain
-# string substitution is enough; the JSON content does not contain any
-# metacharacters that would interact with this transformation.
+# so cache files store paths relative to the package root. After that,
+# paths still rooted at "${workspace_root}" (typically sibling local
+# packages) are rewritten to a "{{WORKSPACE_ROOT}}/<rel>" token so the
+# cache stays portable across machines; the consumer expands the token
+# back to the on-disk workspace path. Plain string substitution is
+# enough; the JSON content does not contain any metacharacters that
+# would interact with this transformation.
 crj_relativize_paths() {
   local pkg_dir="$1"
+  local workspace_root="${2:-}"
   python3 -c '
 import sys
-root = sys.argv[1].rstrip("/")
+pkg_root = sys.argv[1].rstrip("/")
+ws_root = sys.argv[2].rstrip("/") if len(sys.argv) > 2 and sys.argv[2] else ""
 data = sys.stdin.read()
 # Replace child-path occurrences first so the bare-root replacement
 # does not chew into longer matches.
-data = data.replace(root + "/", "./")
-data = data.replace("\"" + root + "\"", "\".\"")
+data = data.replace(pkg_root + "/", "./")
+data = data.replace("\"" + pkg_root + "\"", "\".\"")
+if ws_root:
+    data = data.replace(ws_root + "/", "{{WORKSPACE_ROOT}}/")
+    data = data.replace("\"" + ws_root + "\"", "\"{{WORKSPACE_ROOT}}\"")
 sys.stdout.write(data)
-' "${pkg_dir}"
+' "${pkg_dir}" "${workspace_root}"
 }
 
 # Process one (identity, path) pair: skip if already visited, otherwise
@@ -239,6 +257,7 @@ crj_process_dep() {
   local replace_scm="$6"
   local manifest_flags="$7"
   local visited="$8"
+  local workspace_root="${9:-}"
 
   if grep -qxF "${identity}" "${visited}" 2>/dev/null; then
     return 0
@@ -252,7 +271,8 @@ crj_process_dep() {
     "${dep_out}" \
     "${cfg_path}" \
     "${replace_scm}" \
-    "${manifest_flags}"
+    "${manifest_flags}" \
+    "${workspace_root}"
 
   # Recurse into transitive filesystem deps (Package.resolved already
   # covers transitive SCM/registry deps).
@@ -266,8 +286,9 @@ crj_process_dep() {
       "${cfg_path}" \
       "${replace_scm}" \
       "${manifest_flags}" \
-      "${visited}"
-  done < <(crj_describe_local_deps "${dep_out}/desc.json" "${path}")
+      "${visited}" \
+      "${workspace_root}"
+  done < <(crj_describe_local_deps "${dep_out}/desc.json" "${path}" "${workspace_root}")
 }
 
 # Write a BUILD.bazel for a per-dep cache directory that exports
@@ -569,7 +590,8 @@ print(os.path.normpath(os.path.join(sys.argv[1], sys.argv[2])))
     "${output_dir}/_main" \
     "${config_path}" \
     "${replace_scm_with_registry}" \
-    "${manifest_swiftc_flags}"
+    "${manifest_swiftc_flags}" \
+    "${BUILD_WORKSPACE_DIRECTORY}"
 
   # Visited set seeds with "_main" so it never gets pruned. Cleaned up
   # inline at the end of main() (no EXIT trap so nounset stays sane).
@@ -592,7 +614,8 @@ print(os.path.normpath(os.path.join(sys.argv[1], sys.argv[2])))
       "${config_path}" \
       "${replace_scm_with_registry}" \
       "${manifest_swiftc_flags}" \
-      "${visited}"
+      "${visited}" \
+      "${BUILD_WORKSPACE_DIRECTORY}"
   done < <(crj_resolved_pins \
     "${root_pkg_dir}/Package.resolved" \
     "${checkouts_dir}")
@@ -609,8 +632,12 @@ print(os.path.normpath(os.path.join(sys.argv[1], sys.argv[2])))
       "${config_path}" \
       "${replace_scm_with_registry}" \
       "${manifest_swiftc_flags}" \
-      "${visited}"
-  done < <(crj_describe_local_deps "${output_dir}/_main/desc.json" "${root_pkg_dir}")
+      "${visited}" \
+      "${BUILD_WORKSPACE_DIRECTORY}"
+  done < <(crj_describe_local_deps \
+    "${output_dir}/_main/desc.json" \
+    "${root_pkg_dir}" \
+    "${BUILD_WORKSPACE_DIRECTORY}")
 
   # Drop any per-dep cache directories that no longer correspond to a
   # discovered dependency.

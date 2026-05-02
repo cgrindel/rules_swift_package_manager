@@ -86,12 +86,45 @@ output="$(printf '%s' "${input}" | crj_relativize_paths "${pkg_dir}/")"
 assert_equal '{"path": "./Sources/Foo"}' "${output}" \
   "should normalize a trailing-slash pkg_dir input"
 
-# Cross-package paths (outside pkg_dir) stay absolute.
+# Cross-package paths (outside pkg_dir) stay absolute when no
+# workspace_root is supplied.
 sibling='/Users/test/somewhere_else/Sibling'
 input='{"path": "'"${sibling}"'"}'
 output="$(printf '%s' "${input}" | crj_relativize_paths "${pkg_dir}")"
 assert_equal "${input}" "${output}" \
-  "should leave paths outside pkg_dir unchanged"
+  "should leave paths outside pkg_dir unchanged when ws_root is unset"
+
+# When workspace_root is supplied, sibling paths under it get rewritten
+# to the {{WORKSPACE_ROOT}}/<rel> token so the cache is portable across
+# checkouts. The consumer expands the token at fetch time.
+ws_root="${relativize_dir}"
+ws_sibling="${ws_root}/sibling_pkg/Sources/Bar"
+input='{"path": "'"${ws_sibling}"'"}'
+output="$(printf '%s' "${input}" | crj_relativize_paths "${pkg_dir}" "${ws_root}")"
+assert_equal '{"path": "{{WORKSPACE_ROOT}}/sibling_pkg/Sources/Bar"}' "${output}" \
+  "should rewrite workspace-internal sibling paths to {{WORKSPACE_ROOT}}/<rel>"
+
+# A bare workspace_root value also gets tokenized.
+input='{"path": "'"${ws_root}"'"}'
+output="$(printf '%s' "${input}" | crj_relativize_paths "${pkg_dir}" "${ws_root}")"
+assert_equal '{"path": "{{WORKSPACE_ROOT}}"}' "${output}" \
+  "should rewrite a bare workspace_root value to '{{WORKSPACE_ROOT}}'"
+
+# pkg_dir paths still take precedence (they get './' form, not the ws token)
+# when pkg_dir lives under workspace_root.
+nested_ws="$(new_tmp_dir)"
+nested_pkg="${nested_ws}/pkg"
+mkdir -p "${nested_pkg}"
+input='{"path": "'"${nested_pkg}"'/Sources/Foo"}'
+output="$(printf '%s' "${input}" | crj_relativize_paths "${nested_pkg}" "${nested_ws}")"
+assert_equal '{"path": "./Sources/Foo"}' "${output}" \
+  "should prefer pkg-relative form for paths under pkg_dir"
+
+# Paths outside the workspace stay absolute even when ws_root is set.
+input='{"path": "/usr/lib/external"}'
+output="$(printf '%s' "${input}" | crj_relativize_paths "${pkg_dir}" "${ws_root}")"
+assert_equal "${input}" "${output}" \
+  "should leave paths outside both pkg_dir and workspace_root unchanged"
 
 # MARK - crj_describe_local_deps
 

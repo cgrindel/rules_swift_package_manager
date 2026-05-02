@@ -69,8 +69,22 @@ together; got cached_dump_manifest={}, cached_desc_manifest={}.\
 """.format(dump_label, desc_label))
     if not has_dump:
         return (None, None)
-    dump = json.decode(repository_ctx.read(dump_label))
-    desc = json.decode(repository_ctx.read(desc_label))
+
+    # Cached JSON encodes sibling local-package paths with the
+    # `{{WORKSPACE_ROOT}}` token so the cache stays portable across
+    # checkouts. Substitute it back to the consumer's workspace before
+    # parsing so downstream code sees absolute paths.
+    ws_root = str(repository_ctx.workspace_root)
+    dump_text = repository_ctx.read(dump_label).replace(
+        "{{WORKSPACE_ROOT}}",
+        ws_root,
+    )
+    desc_text = repository_ctx.read(desc_label).replace(
+        "{{WORKSPACE_ROOT}}",
+        ws_root,
+    )
+    dump = json.decode(dump_text)
+    desc = json.decode(desc_text)
     return (dump, desc)
 
 pkg_ctxs = struct(
