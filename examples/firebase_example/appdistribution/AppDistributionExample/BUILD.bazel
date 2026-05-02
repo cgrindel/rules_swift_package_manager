@@ -26,7 +26,7 @@ ios_application(
     ],
     infoplists = [":Info.plist"],
     launch_storyboard = ":Base.lproj/LaunchScreen.storyboard",
-    minimum_os_version = "13.0",
+    minimum_os_version = "15.0",
     resources = glob(
         ["Assets.xcassets/**"],
         exclude = ["Assets.xcassets/AppIcon.appiconset/**"],

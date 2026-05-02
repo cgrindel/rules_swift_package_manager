@@ -30,7 +30,7 @@ ios_application(
     ],
     infoplists = [":Info.plist"],
     launch_storyboard = "//analytics/AnalyticsExample:Base.lproj/LaunchScreen.storyboard",
-    minimum_os_version = "13.0",
+    minimum_os_version = "15.0",
     visibility = ["//visibility:public"],
     deps = [":AnalyticsExample"],
 )

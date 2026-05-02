@@ -9,7 +9,7 @@ ios_application(
         "ipad",
     ],
     infoplists = [":ABTestingExample-iOS-Info.plist"],
-    minimum_os_version = "14.0",
+    minimum_os_version = "15.0",
     resources = [
         ":GoogleService-Info.plist",
     ],
