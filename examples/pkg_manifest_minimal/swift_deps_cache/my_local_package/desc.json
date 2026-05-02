@@ -1,0 +1,87 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "MyLocalPackage",
+  "name" : "MyLocalPackage",
+  "path" : ".",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "print-greeting",
+      "targets" : [
+        "PrintGreeting"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "GreetingsFramework",
+      "targets" : [
+        "GreetingsFramework"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "PrintGreeting",
+      "module_type" : "SwiftTarget",
+      "name" : "PrintGreeting",
+      "path" : "Sources/PrintGreeting",
+      "product_memberships" : [
+        "print-greeting"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "GreetingsFramework"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "GreetingsFrameworkTests",
+      "module_type" : "SwiftTarget",
+      "name" : "GreetingsFrameworkTests",
+      "path" : "Tests/GreetingsFrameworkTests",
+      "sources" : [
+        "EveningGreetingTests.swift",
+        "MorningGreetingTests.swift",
+        "NamedGreetingTests.swift",
+        "WithNameTests.swift"
+      ],
+      "target_dependencies" : [
+        "GreetingsFramework"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GreetingsFramework",
+      "module_type" : "SwiftTarget",
+      "name" : "GreetingsFramework",
+      "path" : "Sources/GreetingsFramework",
+      "product_memberships" : [
+        "print-greeting",
+        "GreetingsFramework"
+      ],
+      "sources" : [
+        "EveningGreeting.swift",
+        "GreetingProvider.swift",
+        "MorningGreeting.swift",
+        "NameProvider.swift",
+        "NamedGreeting.swift",
+        "WithName.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.7"
+}

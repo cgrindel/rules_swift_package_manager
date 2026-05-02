@@ -1,0 +1,14 @@
+load(
+    "@rules_swift_package_manager//swiftpkg:defs.bzl",
+    "swift_info_test",
+)
+
+exports_files(
+    ["swift_info.json"],
+    visibility = ["//visibility:public"],
+)
+
+swift_info_test(
+    name = "swift_info_test",
+    swift_info = "swift_info.json",
+)

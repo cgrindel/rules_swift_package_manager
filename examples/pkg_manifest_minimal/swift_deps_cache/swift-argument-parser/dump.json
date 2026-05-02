@@ -1,0 +1,718 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "swift-argument-parser",
+  "packageKind" : {
+    "root" : [
+      "."
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "ArgumentParser",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "ArgumentParser"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GenerateDoccReference",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GenerateDoccReference"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    },
+    {
+      "name" : "GenerateManual",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GenerateManual"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParserToolInfo",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "ArgumentParser",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ArgumentParserToolInfo",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "ArgumentParserTestHelpers",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "ArgumentParserToolInfo",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "generate-docc-reference",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GenerateDoccReference",
+      "packageAccess" : false,
+      "pluginCapability" : {
+        "command" : [
+          {
+            "custom" : {
+              "description" : "Generate a documentation reference for a specified target.",
+              "verb" : "generate-docc-reference"
+            }
+          },
+          [
+            {
+              "writeToPackageDirectory" : {
+                "reason" : "This command generates documentation."
+              }
+            }
+          ]
+        ]
+      },
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "plugin"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "generate-manual",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GenerateManual",
+      "packageAccess" : false,
+      "pluginCapability" : {
+        "command" : [
+          {
+            "custom" : {
+              "description" : "Generate a manual entry for a specified target.",
+              "verb" : "generate-manual"
+            }
+          },
+          [
+
+          ]
+        ]
+      },
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "plugin"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "roll",
+      "packageAccess" : false,
+      "path" : "Examples/roll",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "math",
+      "packageAccess" : false,
+      "path" : "Examples/math",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "repeat",
+      "packageAccess" : false,
+      "path" : "Examples/repeat",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "color",
+      "packageAccess" : false,
+      "path" : "Examples/color",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ArgumentParserToolInfo",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "generate-docc-reference",
+      "packageAccess" : false,
+      "path" : "Tools/generate-docc-reference",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ArgumentParserToolInfo",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "generate-manual",
+      "packageAccess" : false,
+      "path" : "Tools/generate-manual",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ArgumentParserTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "ArgumentParserEndToEndTests",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParserTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Snapshots"
+      ],
+      "name" : "ArgumentParserExampleTests",
+      "packageAccess" : false,
+      "resources" : [
+        {
+          "path" : "CountLinesTest.txt",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParserTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Snapshots"
+      ],
+      "name" : "ArgumentParserGenerateDoccReferenceTests",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParserTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Snapshots"
+      ],
+      "name" : "ArgumentParserGenerateManualTests",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ArgumentParserTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "ArgumentParserPackageManagerTests",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParserToolInfo",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Examples"
+      ],
+      "name" : "ArgumentParserToolInfoTests",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ArgumentParserTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt",
+        "Snapshots"
+      ],
+      "name" : "ArgumentParserUnitTests",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "count-lines",
+      "packageAccess" : false,
+      "path" : "Examples/count-lines",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "changelog-authors",
+      "packageAccess" : false,
+      "path" : "Tools/changelog-authors",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.8.0"
+  },
+  "traits" : [
+
+  ]
+}

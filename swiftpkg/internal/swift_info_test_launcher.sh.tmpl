@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+set -o errexit -o nounset -o pipefail
+
+# --- begin runfiles.bash initialization v3 ---
+# Copy-pasted from the Bazel Bash runfiles library v3.
+set -uo pipefail
+set +e
+f=bazel_tools/tools/bash/runfiles/runfiles.bash
+# shellcheck disable=SC1090
+source "${RUNFILES_DIR:-/dev/null}/$f" 2>/dev/null \
+  || source "$(grep -sm1 "^$f " "${RUNFILES_MANIFEST_FILE:-/dev/null}" | cut -f2- -d' ')" 2>/dev/null \
+  || source "$0.runfiles/$f" 2>/dev/null \
+  || source "$(grep -sm1 "^$f " "$0.runfiles_manifest" | cut -f2- -d' ')" 2>/dev/null \
+  || source "$(grep -sm1 "^$f " "$0.exe.runfiles_manifest" | cut -f2- -d' ')" 2>/dev/null \
+  || {
+    echo >&2 "ERROR: cannot find $f"
+    exit 1
+  }
+f=
+set -e
+# --- end runfiles.bash initialization v3 ---
+
+# {SWIFT_INFO} and {WORKER} are short_paths. Build the rlocation key by
+# prepending the workspace name (TEST_WORKSPACE, set by Bazel for tests).
+# For external-repo files, short_path begins with `../` and we strip the
+# workspace prefix.
+to_rlocation_key() {
+  local short_path="$1"
+  if [[ ${short_path} == ../* ]]; then
+    echo "${short_path#../}"
+  else
+    echo "${TEST_WORKSPACE:-_main}/${short_path}"
+  fi
+}
+
+worker_path="$(rlocation "$(to_rlocation_key '{WORKER}')")" || {
+  echo >&2 "ERROR: cannot resolve swift_worker"
+  exit 1
+}
+info_path="$(rlocation "$(to_rlocation_key '{SWIFT_INFO}')")" || {
+  echo >&2 "ERROR: cannot resolve swift_info.json"
+  exit 1
+}
+
+# Resolve the swift binary via the Bazel-selected toolchain so the
+# version we measure matches what `bazel build` would actually use.
+swift_exec="$("${worker_path}" --find swift 2>/dev/null || which swift)"
+if [[ -z ${swift_exec} ]]; then
+  echo >&2 "ERROR: could not locate swift executable"
+  exit 1
+fi
+
+current_version="$("${swift_exec}" --version | head -n 1)"
+cached_version="$(python3 -c '
+import json, sys
+with open(sys.argv[1]) as f:
+    print(json.load(f)["swift_version"])
+' "${info_path}")"
+
+if [[ ${current_version} != "${cached_version}" ]]; then
+  echo >&2 "ERROR: Swift toolchain mismatch with cached swift_info.json:"
+  echo >&2 "  cached:  ${cached_version}"
+  echo >&2 "  current: ${current_version}"
+  echo >&2
+  echo >&2 "Run 'bazel run @swift_package//:cache -- --mode=update' to refresh."
+  exit 1
+fi
+
+echo "Swift toolchain matches cached: ${current_version}"

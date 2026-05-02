@@ -1,0 +1,116 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "MyLocalPackage",
+  "packageKind" : {
+    "root" : [
+      "."
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "print-greeting",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "PrintGreeting"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "GreetingsFramework",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GreetingsFramework"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GreetingsFramework",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "PrintGreeting",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GreetingsFramework",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GreetingsFramework",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GreetingsFrameworkTests",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.7.0"
+  },
+  "traits" : [
+
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "MyAmazingModule",
+  "name" : "MyAmazingModule",
+  "path" : ".",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "MyAmazingModule",
+      "targets" : [
+        "MyAmazingModule"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "MyAmazingModuleTests",
+      "module_type" : "SwiftTarget",
+      "name" : "MyAmazingModuleTests",
+      "path" : "Tests/MyAmazingModuleTests",
+      "sources" : [
+        "MyAmazingModuleTests.swift"
+      ],
+      "target_dependencies" : [
+        "MyAmazingModule"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "MyAmazingModule",
+      "module_type" : "SwiftTarget",
+      "name" : "MyAmazingModule",
+      "path" : "Sources/MyAmazingModule",
+      "product_memberships" : [
+        "MyAmazingModule"
+      ],
+      "sources" : [
+        "MyAmazingModule.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.9"
+}

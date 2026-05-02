@@ -41,10 +41,14 @@ def _to_starlark_test(ctx):
     asserts.equals(env, expected, actual)
 
     actual = scg.to_starlark(Label("//:foo"))
+
+    # buildifier: disable=canonical-repository
     expected = '"@@//:foo"'
     asserts.equals(env, expected, actual)
 
     actual = scg.to_starlark({"registries": Label("//:registries.json")})
+
+    # buildifier: disable=canonical-repository
     expected = """\
 {
     "registries": "@@//:registries.json",
