@@ -311,9 +311,20 @@ EOF
 # swift_info_test target so `bazel test //...` validates the cached
 # Swift version against the current toolchain, and export
 # swift_info.json for any downstream consumer.
+#
+# A single committed cache can only match one (OS, toolchain)
+# combination, so the generator stamps the test with a
+# target_compatible_with constraint matching the host OS that produced
+# the cache. Cross-platform CI then automatically skips the test on
+# other platforms instead of failing.
+#
+# Arguments:
+#   $1 - output directory
+#   $2 - host OS slug ("macos" or "linux")
 crj_write_root_build_file() {
   local out_root="$1"
-  cat >"${out_root}/BUILD.bazel" <<'EOF'
+  local host_os="$2"
+  cat >"${out_root}/BUILD.bazel" <<EOF
 load(
     "@rules_swift_package_manager//swiftpkg:defs.bzl",
     "swift_info_test",
@@ -327,8 +338,24 @@ exports_files(
 swift_info_test(
     name = "swift_info_test",
     swift_info = "swift_info.json",
+    target_compatible_with = ["@platforms//os:${host_os}"],
 )
 EOF
+}
+
+# Map "uname -s" to the @platforms//os slug used in the auto-generated
+# swift_info_test target_compatible_with constraint.
+crj_host_os_slug() {
+  local uname_s
+  uname_s="$(uname -s)"
+  case "${uname_s}" in
+    Darwin) echo "macos" ;;
+    Linux) echo "linux" ;;
+    *)
+      echo >&2 "ERROR: unsupported host OS for cache generation: ${uname_s}"
+      return 1
+      ;;
+  esac
 }
 
 # Drive buildozer to set the dump_manifests and desc_manifests dict
@@ -646,7 +673,9 @@ print(os.path.normpath(os.path.join(sys.argv[1], sys.argv[2])))
   # Write the root BUILD.bazel after pruning so the swift_info_test
   # target is always (re)written. The per-dep BUILD.bazel files are
   # written inline by crj_dump_describe.
-  crj_write_root_build_file "${output_dir}"
+  local host_os
+  host_os="$(crj_host_os_slug)"
+  crj_write_root_build_file "${output_dir}" "${host_os}"
 
   # Update MODULE.bazel with dump_manifests / desc_manifests entries
   # pointing at the freshly generated per-dep cache directories.
