@@ -1356,7 +1356,7 @@ def _implementation_target_visibility():
 
 def _minimum_os_wrapper_decl(pkg_info, kind, name, actual, visibility):
     attrs = {
-        "actual": actual,
+        "deps": [actual],
         "visibility": visibility,
     }
     attrs.update(minimum_os_versions.transition_attrs(pkg_info))

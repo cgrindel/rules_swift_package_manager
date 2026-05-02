@@ -18,7 +18,7 @@ executable_provider_target(
 
 spm_minimum_os_binary(
     name = "executable_wrapped",
-    actual = ":executable_actual",
+    deps = [":executable_actual"],
     ios_minimum_os = "13.0",
     macos_minimum_os = "10.15",
     tvos_minimum_os = "13.0",
@@ -28,7 +28,7 @@ spm_minimum_os_binary(
 
 spm_minimum_os_target(
     name = "swift_c_wrapped",
-    actual = ":swift_c_actual",
+    deps = [":swift_c_actual"],
     ios_minimum_os = "13.0",
     macos_minimum_os = "10.15",
     tvos_minimum_os = "13.0",
@@ -49,7 +49,7 @@ swift_interop_hint(
 
 spm_minimum_os_target(
     name = "custom_module_wrapped",
-    actual = ":custom_module_actual",
+    deps = [":custom_module_actual"],
     ios_minimum_os = "13.0",
     macos_minimum_os = "10.15",
     tvos_minimum_os = "13.0",
@@ -63,7 +63,7 @@ apple_framework_import_provider_target(
 
 spm_minimum_os_target(
     name = "apple_framework_import_wrapped",
-    actual = ":apple_framework_import_actual",
+    deps = [":apple_framework_import_actual"],
     ios_minimum_os = "13.0",
     macos_minimum_os = "10.15",
     tvos_minimum_os = "13.0",

@@ -677,7 +677,7 @@ def _minimum_os_wrapper_behavior_test(ctx):
         "RegularSwiftTargetAsLibrary.rspm",
         "spm_minimum_os_target",
     )
-    asserts.equals(env, ":RegularSwiftTargetAsLibrary.rspm.__impl", wrapper.attrs["actual"])
+    asserts.equals(env, [":RegularSwiftTargetAsLibrary.rspm.__impl"], wrapper.attrs["deps"])
     asserts.false(env, "tags" in wrapper.attrs)
     _assert_minimum_os_attrs(env, wrapper.attrs, expected = {"ios_minimum_os": "13.0"})
 
@@ -796,7 +796,7 @@ def _minimum_os_wrapper_behavior_test(ctx):
 
     oldstyle_product_bf = _product_build_file(pkg_info, "oldstyleexec")
     oldstyle_wrapper = _assert_decl(env, oldstyle_product_bf, "oldstyleexec", "spm_minimum_os_binary")
-    asserts.equals(env, ":oldstyleexec.__impl", oldstyle_wrapper.attrs["actual"])
+    asserts.equals(env, [":oldstyleexec.__impl"], oldstyle_wrapper.attrs["deps"])
     oldstyle_impl = _assert_decl(env, oldstyle_product_bf, "oldstyleexec.__impl", "swift_binary")
     asserts.equals(env, ["@swiftpkg_mypackage//:RegularTargetForExec.rspm"], oldstyle_impl.attrs["deps"])
     asserts.equals(env, ["manual"], oldstyle_impl.attrs["tags"])
@@ -832,7 +832,7 @@ load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl"
 
 spm_minimum_os_target(
     name = "RegularSwiftTargetAsLibrary.rspm",
-    actual = ":RegularSwiftTargetAsLibrary.rspm.__impl",
+    deps = [":RegularSwiftTargetAsLibrary.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -876,7 +876,7 @@ load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl"
 
 spm_minimum_os_target(
     name = "RegularSwiftTargetAsLibrary.rspm",
-    actual = ":RegularSwiftTargetAsLibrary.rspm.__impl",
+    deps = [":RegularSwiftTargetAsLibrary.rspm.__impl"],
     ios_minimum_os = "13.0",
     macos_minimum_os = "10.15",
     tvos_minimum_os = "13.0",
@@ -915,7 +915,7 @@ load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl"
 
 spm_minimum_os_target(
     name = "RegularTargetForExec.rspm",
-    actual = ":RegularTargetForExec.rspm.__impl",
+    deps = [":RegularTargetForExec.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -952,7 +952,7 @@ load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl"
 
 spm_minimum_os_test(
     name = "RegularSwiftTargetAsLibraryTests.rspm",
-    actual = ":RegularSwiftTargetAsLibraryTests.rspm.__impl",
+    deps = [":RegularSwiftTargetAsLibraryTests.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -987,7 +987,7 @@ load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl"
 
 spm_minimum_os_binary(
     name = "SwiftExecutableTarget.rspm",
-    actual = ":SwiftExecutableTarget.rspm.__impl",
+    deps = [":SwiftExecutableTarget.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1086,7 +1086,7 @@ generate_modulemap(
 
 spm_minimum_os_target(
     name = "ClangLibrary.rspm",
-    actual = ":ClangLibrary.rspm.__impl",
+    deps = [":ClangLibrary.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1175,7 +1175,7 @@ objc_library(
 
 spm_minimum_os_target(
     name = "ObjcLibrary.rspm",
-    actual = ":ObjcLibrary.rspm.__impl",
+    deps = [":ObjcLibrary.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1255,7 +1255,7 @@ objc_library(
 
 spm_minimum_os_target(
     name = "ObjcLibraryWithModulemap.rspm",
-    actual = ":ObjcLibraryWithModulemap.rspm.__impl",
+    deps = [":ObjcLibraryWithModulemap.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1281,7 +1281,7 @@ load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl"
 
 spm_minimum_os_target(
     name = "SwiftLibraryWithConditionalDep.rspm",
-    actual = ":SwiftLibraryWithConditionalDep.rspm.__impl",
+    deps = [":SwiftLibraryWithConditionalDep.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1372,7 +1372,7 @@ generate_modulemap(
 
 spm_minimum_os_target(
     name = "ClangLibraryWithConditionalDep.rspm",
-    actual = ":ClangLibraryWithConditionalDep.rspm.__impl",
+    deps = [":ClangLibraryWithConditionalDep.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1398,7 +1398,7 @@ load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl"
 
 spm_minimum_os_target(
     name = "SwiftForObjcTarget.rspm",
-    actual = ":SwiftForObjcTarget.rspm.__impl",
+    deps = [":SwiftForObjcTarget.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1457,7 +1457,7 @@ resource_bundle_infoplist(
 
 spm_minimum_os_target(
     name = "SwiftLibraryWithFilePathResource.rspm",
-    actual = ":SwiftLibraryWithFilePathResource.rspm.__impl",
+    deps = [":SwiftLibraryWithFilePathResource.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1525,7 +1525,7 @@ resource_bundle_infoplist(
 
 spm_minimum_os_target(
     name = "SwiftLibraryWithPrecompiledBundleResource.rspm",
-    actual = ":SwiftLibraryWithPrecompiledBundleResource.rspm.__impl",
+    deps = [":SwiftLibraryWithPrecompiledBundleResource.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1657,7 +1657,7 @@ resource_bundle_infoplist(
 
 spm_minimum_os_target(
     name = "ObjcLibraryWithResources.rspm",
-    actual = ":ObjcLibraryWithResources.rspm.__impl",
+    deps = [":ObjcLibraryWithResources.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1704,7 +1704,7 @@ cc_library(
 
 spm_minimum_os_target(
     name = "SystemLibraryTarget.rspm",
-    actual = ":SystemLibraryTarget.rspm.__impl",
+    deps = [":SystemLibraryTarget.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1726,7 +1726,7 @@ load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl"
 
 spm_minimum_os_target(
     name = "RegularSwiftTargetAsLibrary.rspm",
-    actual = ":RegularSwiftTargetAsLibrary.rspm.__impl",
+    deps = [":RegularSwiftTargetAsLibrary.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1764,7 +1764,7 @@ load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl"
 
 spm_minimum_os_target(
     name = "RegularSwiftTargetAsLibrary.rspm",
-    actual = ":RegularSwiftTargetAsLibrary.rspm.__impl",
+    deps = [":RegularSwiftTargetAsLibrary.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1800,7 +1800,7 @@ load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl"
 
 spm_minimum_os_target(
     name = "TraitLibrary.rspm",
-    actual = ":TraitLibrary.rspm.__impl",
+    deps = [":TraitLibrary.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1872,7 +1872,7 @@ cc_library(
 
 spm_minimum_os_target(
     name = "TraitClangLibrary.rspm",
-    actual = ":TraitClangLibrary.rspm.__impl",
+    deps = [":TraitClangLibrary.rspm.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",
@@ -1932,7 +1932,7 @@ load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl"
 
 spm_minimum_os_binary(
     name = "oldstyleexec",
-    actual = ":oldstyleexec.__impl",
+    deps = [":oldstyleexec.__impl"],
     ios_minimum_os = "12.0",
     macos_minimum_os = "10.13",
     tvos_minimum_os = "12.0",

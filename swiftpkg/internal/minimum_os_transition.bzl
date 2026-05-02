@@ -1,6 +1,11 @@
 """Minimum OS transition wrapper for Swift package targets."""
 
-load("@build_bazel_rules_apple//apple:providers.bzl", "AppleDynamicFrameworkInfo", "AppleFrameworkImportInfo")
+load(
+    "@build_bazel_rules_apple//apple:providers.bzl",
+    "AppleDynamicFrameworkInfo",
+    "AppleFrameworkImportInfo",
+    "AppleResourceInfo",
+)
 load("@build_bazel_rules_swift//swift:providers.bzl", "SwiftBinaryInfo", "SwiftInfo")
 load("@build_bazel_rules_swift//swift:swift_clang_module_aspect.bzl", "swift_clang_module_aspect")
 load("@rules_cc//cc/common:cc_info.bzl", "CcInfo")
@@ -93,6 +98,7 @@ def _forwarded_providers(actual, default_info = None):
     for provider in [
         AppleDynamicFrameworkInfo,
         AppleFrameworkImportInfo,
+        AppleResourceInfo,
         CcInfo,
         RunEnvironmentInfo,
         SwiftInfo,
@@ -141,17 +147,17 @@ def _spm_minimum_os_executable_impl(ctx):
     )
 
 def _actual(ctx):
-    if len(ctx.attr.actual) != 1:
-        fail("{} requires exactly one actual target.".format(ctx.label))
+    if len(ctx.attr.deps) != 1:
+        fail("{} requires exactly one dep.".format(ctx.label))
 
-    return ctx.attr.actual[0]
+    return ctx.attr.deps[0]
 
 _minimum_os_attrs = {
-    "actual": attr.label(
+    "deps": attr.label_list(
         aspects = [swift_clang_module_aspect],
         mandatory = True,
         cfg = _spm_minimum_os_transition,
-        doc = "The target to build under the package minimum OS transition.",
+        doc = "Single-element list whose target is built under the package minimum OS transition.",
     ),
     "ios_minimum_os": attr.string(
         doc = "The package minimum deployment target for iOS.",
