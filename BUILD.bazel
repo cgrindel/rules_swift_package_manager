@@ -170,6 +170,7 @@ filegroup(
         "//tools/swift_deps_index/internal/swiftcfg:all_files",
         "//tools/swift_deps_index/internal/swiftpkg:all_files",
         "//tools/swift_deps_index/internal/updmarker:all_files",
+        "//tools/swift_package_cmd:all_files",
     ],
     visibility = ["//:__subpackages__"],
 )

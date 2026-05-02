@@ -1001,7 +1001,7 @@ def _new_platform(name, version):
         A `struct` representing a Swift package platform.
     """
     return struct(
-        name = name,
+        name = spm_platforms.normalize(name),
         version = version,
     )
 

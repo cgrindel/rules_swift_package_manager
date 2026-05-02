@@ -15,7 +15,7 @@ let package = Package(
         .package(url: "https://github.com/google/GoogleSignIn-iOS", from: "9.1.0"),
         .package(
             url: "https://github.com/GoogleCloudPlatform/recaptcha-enterprise-mobile-sdk",
-            from: "18.8.2"
+            from: "18.9.0"
         ),
     ]
 )

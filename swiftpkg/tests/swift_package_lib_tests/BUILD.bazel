@@ -1,0 +1,20 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+
+bzlformat_pkg(name = "bzlformat")
+
+sh_test(
+    name = "swift_package_lib_test",
+    srcs = ["swift_package_lib_test.sh"],
+    deps = [
+        "//swiftpkg/internal:swift_package_lib",
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:assertions",
+    ],
+)
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
