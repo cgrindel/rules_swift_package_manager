@@ -1,0 +1,369 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "swift-log",
+  "packageKind" : {
+    "root" : [
+      "."
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Logging",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Logging"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "InMemoryLogging",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "InMemoryLogging"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Logging",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+                "-Xfrontend",
+                "-require-explicit-sendable"
+              ]
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Logging",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "InMemoryLogging",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+                "-Xfrontend",
+                "-require-explicit-sendable"
+              ]
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Logging",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "LoggingTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+                "-Xfrontend",
+                "-require-explicit-sendable"
+              ]
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "InMemoryLogging",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Logging",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "InMemoryLoggingTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+                "-Xfrontend",
+                "-require-explicit-sendable"
+              ]
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.2.0"
+  },
+  "traits" : [
+    {
+      "description" : "Notice and above available (compiles out trace, debug, info)",
+      "enabledTraits" : [
+
+      ],
+      "name" : "MaxLogLevelNotice"
+    },
+    {
+      "description" : "All logging compiled out (no log levels available)",
+      "enabledTraits" : [
+
+      ],
+      "name" : "MaxLogLevelNone"
+    },
+    {
+      "description" : "Info and above available (compiles out trace, debug)",
+      "enabledTraits" : [
+
+      ],
+      "name" : "MaxLogLevelInfo"
+    },
+    {
+      "description" : "The default traits of this package.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "default"
+    },
+    {
+      "description" : "Debug and above available (compiles out trace)",
+      "enabledTraits" : [
+
+      ],
+      "name" : "MaxLogLevelDebug"
+    },
+    {
+      "description" : "Warning and above available (compiles out trace, debug, info, notice)",
+      "enabledTraits" : [
+
+      ],
+      "name" : "MaxLogLevelWarning"
+    },
+    {
+      "description" : "Only critical available (compiles out all except critical)",
+      "enabledTraits" : [
+
+      ],
+      "name" : "MaxLogLevelCritical"
+    },
+    {
+      "description" : "Error and above available (compiles out trace, debug, info, notice, warning)",
+      "enabledTraits" : [
+
+      ],
+      "name" : "MaxLogLevelError"
+    }
+  ]
+}

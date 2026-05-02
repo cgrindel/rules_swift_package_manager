@@ -1,0 +1,617 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "swift-argument-parser",
+  "name" : "swift-argument-parser",
+  "path" : ".",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "ArgumentParser",
+      "targets" : [
+        "ArgumentParser"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GenerateDoccReference",
+      "targets" : [
+        "GenerateDoccReference"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    },
+    {
+      "name" : "GenerateManual",
+      "targets" : [
+        "GenerateManual"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    },
+    {
+      "name" : "roll",
+      "targets" : [
+        "roll"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "repeat",
+      "targets" : [
+        "repeat"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "math",
+      "targets" : [
+        "math"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "generate-manual",
+      "targets" : [
+        "generate-manual"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "generate-docc-reference",
+      "targets" : [
+        "generate-docc-reference"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "count-lines",
+      "targets" : [
+        "count-lines"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "color",
+      "targets" : [
+        "color"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "changelog-authors",
+      "targets" : [
+        "changelog-authors"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "roll",
+      "module_type" : "SwiftTarget",
+      "name" : "roll",
+      "path" : "Examples/roll",
+      "product_memberships" : [
+        "roll"
+      ],
+      "sources" : [
+        "SplitMix64.swift",
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParser"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "repeat",
+      "module_type" : "SwiftTarget",
+      "name" : "repeat",
+      "path" : "Examples/repeat",
+      "product_memberships" : [
+        "repeat"
+      ],
+      "sources" : [
+        "Repeat.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParser"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "math",
+      "module_type" : "SwiftTarget",
+      "name" : "math",
+      "path" : "Examples/math",
+      "product_memberships" : [
+        "math"
+      ],
+      "sources" : [
+        "Math.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParser"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "generate_manual",
+      "module_type" : "SwiftTarget",
+      "name" : "generate-manual",
+      "path" : "Tools/generate-manual",
+      "product_memberships" : [
+        "GenerateManual",
+        "generate-manual"
+      ],
+      "sources" : [
+        "AuthorArgument.swift",
+        "DSL/ArgumentSynopsis.swift",
+        "DSL/Author.swift",
+        "DSL/Authors.swift",
+        "DSL/Core/Container.swift",
+        "DSL/Core/Empty.swift",
+        "DSL/Core/ForEach.swift",
+        "DSL/Core/MDocASTNodeWrapper.swift",
+        "DSL/Core/MDocBuilder.swift",
+        "DSL/Core/MDocComponent.swift",
+        "DSL/Discussion.swift",
+        "DSL/Document.swift",
+        "DSL/DocumentDate.swift",
+        "DSL/Exit.swift",
+        "DSL/List.swift",
+        "DSL/MultiPageDescription.swift",
+        "DSL/Name.swift",
+        "DSL/Preamble.swift",
+        "DSL/Section.swift",
+        "DSL/SeeAlso.swift",
+        "DSL/SinglePageDescription.swift",
+        "DSL/Synopsis.swift",
+        "Extensions/ArgumentParser+MDoc.swift",
+        "Extensions/Date+ExpressibleByArgument.swift",
+        "Extensions/Process+SimpleAPI.swift",
+        "GenerateManual.swift",
+        "MDoc/MDocASTNode.swift",
+        "MDoc/MDocMacro.swift",
+        "MDoc/MDocSerializationContext.swift",
+        "MDoc/String+Escaping.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParser",
+        "ArgumentParserToolInfo"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "generate_docc_reference",
+      "module_type" : "SwiftTarget",
+      "name" : "generate-docc-reference",
+      "path" : "Tools/generate-docc-reference",
+      "product_memberships" : [
+        "GenerateDoccReference",
+        "generate-docc-reference"
+      ],
+      "sources" : [
+        "Extensions/ArgumentParser+Markdown.swift",
+        "Extensions/Process+SimpleAPI.swift",
+        "GenerateDoccReference.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParser",
+        "ArgumentParserToolInfo"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "count_lines",
+      "module_type" : "SwiftTarget",
+      "name" : "count-lines",
+      "path" : "Examples/count-lines",
+      "product_memberships" : [
+        "count-lines"
+      ],
+      "sources" : [
+        "CountLines.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParser"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "color",
+      "module_type" : "SwiftTarget",
+      "name" : "color",
+      "path" : "Examples/color",
+      "product_memberships" : [
+        "color"
+      ],
+      "sources" : [
+        "Color.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParser"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "changelog_authors",
+      "module_type" : "SwiftTarget",
+      "name" : "changelog-authors",
+      "path" : "Tools/changelog-authors",
+      "product_memberships" : [
+        "changelog-authors"
+      ],
+      "sources" : [
+        "ChangelogAuthors.swift",
+        "Models.swift",
+        "Util.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParser"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "GenerateManual",
+      "module_type" : "PluginTarget",
+      "name" : "GenerateManual",
+      "path" : "Plugins/GenerateManual",
+      "plugin_capability" : {
+        "intent" : {
+          "description" : "Generate a manual entry for a specified target.",
+          "type" : "custom",
+          "verb" : "generate-manual"
+        },
+        "permissions" : [
+
+        ],
+        "type" : "command"
+      },
+      "product_memberships" : [
+        "GenerateManual"
+      ],
+      "sources" : [
+        "GenerateManualPlugin.swift",
+        "GenerateManualPluginError.swift",
+        "PackagePlugin+Helpers.swift"
+      ],
+      "target_dependencies" : [
+        "generate-manual"
+      ],
+      "type" : "plugin"
+    },
+    {
+      "c99name" : "GenerateDoccReference",
+      "module_type" : "PluginTarget",
+      "name" : "GenerateDoccReference",
+      "path" : "Plugins/GenerateDoccReference",
+      "plugin_capability" : {
+        "intent" : {
+          "description" : "Generate a documentation reference for a specified target.",
+          "type" : "custom",
+          "verb" : "generate-docc-reference"
+        },
+        "permissions" : [
+          {
+            "network_scope" : {
+              "none" : {
+
+              }
+            },
+            "reason" : "This command generates documentation.",
+            "type" : "writeToPackageDirectory"
+          }
+        ],
+        "type" : "command"
+      },
+      "product_memberships" : [
+        "GenerateDoccReference"
+      ],
+      "sources" : [
+        "GenerateDoccReference.swift",
+        "GenerateDoccReferenceError.swift",
+        "PackagePlugin+Helpers.swift"
+      ],
+      "target_dependencies" : [
+        "generate-docc-reference"
+      ],
+      "type" : "plugin"
+    },
+    {
+      "c99name" : "ArgumentParserUnitTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ArgumentParserUnitTests",
+      "path" : "Tests/ArgumentParserUnitTests",
+      "sources" : [
+        "CompletionScriptTests.swift",
+        "DumpHelpGenerationTests.swift",
+        "ErrorMessageTests.swift",
+        "ExitCodeTests.swift",
+        "HelpGenerationTests+AtArgument.swift",
+        "HelpGenerationTests+AtOption.swift",
+        "HelpGenerationTests+GroupName.swift",
+        "HelpGenerationTests.swift",
+        "InputOriginTests.swift",
+        "MirrorTests.swift",
+        "NameSpecificationTests.swift",
+        "ParsableArgumentsValidationTests.swift",
+        "SendableTests.swift",
+        "SequenceExtensionTests.swift",
+        "SplitArgumentTests.swift",
+        "StringEditDistanceTests.swift",
+        "StringSnakeCaseTests.swift",
+        "StringWrappingTests.swift",
+        "TreeTests.swift",
+        "UsageGenerationTests.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParser",
+        "ArgumentParserTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "ArgumentParserToolInfoTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ArgumentParserToolInfoTests",
+      "path" : "Tests/ArgumentParserToolInfoTests",
+      "sources" : [
+        "ArgumentParserToolInfoTests.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParserToolInfo"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "ArgumentParserToolInfo",
+      "module_type" : "SwiftTarget",
+      "name" : "ArgumentParserToolInfo",
+      "path" : "Sources/ArgumentParserToolInfo",
+      "product_memberships" : [
+        "ArgumentParser",
+        "GenerateDoccReference",
+        "GenerateManual",
+        "roll",
+        "repeat",
+        "math",
+        "generate-manual",
+        "generate-docc-reference",
+        "count-lines",
+        "color",
+        "changelog-authors"
+      ],
+      "sources" : [
+        "ToolInfo.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "ArgumentParserTestHelpers",
+      "module_type" : "SwiftTarget",
+      "name" : "ArgumentParserTestHelpers",
+      "path" : "Sources/ArgumentParserTestHelpers",
+      "sources" : [
+        "TestHelpers.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParser",
+        "ArgumentParserToolInfo"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "ArgumentParserPackageManagerTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ArgumentParserPackageManagerTests",
+      "path" : "Tests/ArgumentParserPackageManagerTests",
+      "sources" : [
+        "HelpTests.swift",
+        "PackageManager/Clean.swift",
+        "PackageManager/Config.swift",
+        "PackageManager/Describe.swift",
+        "PackageManager/GenerateXcodeProject.swift",
+        "PackageManager/Options.swift",
+        "Tests.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParser",
+        "ArgumentParserTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "ArgumentParserGenerateManualTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ArgumentParserGenerateManualTests",
+      "path" : "Tests/ArgumentParserGenerateManualTests",
+      "sources" : [
+        "GenerateManualTests.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParserTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "ArgumentParserGenerateDoccReferenceTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ArgumentParserGenerateDoccReferenceTests",
+      "path" : "Tests/ArgumentParserGenerateDoccReferenceTests",
+      "sources" : [
+        "GenerateDoccReferenceTests.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParserTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "ArgumentParserExampleTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ArgumentParserExampleTests",
+      "path" : "Tests/ArgumentParserExampleTests",
+      "resources" : [
+        {
+          "path" : "./Tests/ArgumentParserExampleTests/CountLinesTest.txt",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "CountLinesExampleTests.swift",
+        "MathExampleTests.swift",
+        "RepeatExampleTests.swift",
+        "RollDiceExampleTests.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParserTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "ArgumentParserEndToEndTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ArgumentParserEndToEndTests",
+      "path" : "Tests/ArgumentParserEndToEndTests",
+      "sources" : [
+        "AsyncCommandEndToEndTests.swift",
+        "CustomParsingEndToEndTests.swift",
+        "DefaultSubcommandEndToEndTests.swift",
+        "DefaultsEndToEndTests.swift",
+        "EnumEndToEndTests.swift",
+        "EqualsEndToEndTests.swift",
+        "FlagsEndToEndTests.swift",
+        "JoinedEndToEndTests.swift",
+        "LongNameWithShortDashEndToEndTests.swift",
+        "NestedCommandEndToEndTests.swift",
+        "OptionGroupEndToEndTests.swift",
+        "OptionalEndToEndTests.swift",
+        "PositionalEndToEndTests.swift",
+        "RawRepresentableEndToEndTests.swift",
+        "RepeatingEndToEndTests+ParsingStrategy.swift",
+        "RepeatingEndToEndTests.swift",
+        "ShortNameEndToEndTests.swift",
+        "SimpleEndToEndTests.swift",
+        "SingleValueParsingStrategyTests.swift",
+        "SourceCompatEndToEndTests.swift",
+        "SubcommandEndToEndTests.swift",
+        "TransformEndToEndTests.swift",
+        "UnparsedValuesEndToEndTest.swift",
+        "ValidationEndToEndTests.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParser",
+        "ArgumentParserTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "ArgumentParser",
+      "module_type" : "SwiftTarget",
+      "name" : "ArgumentParser",
+      "path" : "Sources/ArgumentParser",
+      "product_memberships" : [
+        "ArgumentParser",
+        "GenerateDoccReference",
+        "GenerateManual",
+        "roll",
+        "repeat",
+        "math",
+        "generate-manual",
+        "generate-docc-reference",
+        "count-lines",
+        "color",
+        "changelog-authors"
+      ],
+      "sources" : [
+        "Completions/BashCompletionsGenerator.swift",
+        "Completions/CompletionsGenerator.swift",
+        "Completions/FishCompletionsGenerator.swift",
+        "Completions/ZshCompletionsGenerator.swift",
+        "Parsable Properties/Argument.swift",
+        "Parsable Properties/ArgumentDiscussion.swift",
+        "Parsable Properties/ArgumentHelp.swift",
+        "Parsable Properties/ArgumentVisibility.swift",
+        "Parsable Properties/CompletionKind.swift",
+        "Parsable Properties/Errors.swift",
+        "Parsable Properties/Flag.swift",
+        "Parsable Properties/NameSpecification.swift",
+        "Parsable Properties/Option.swift",
+        "Parsable Properties/OptionGroup.swift",
+        "Parsable Properties/ParentCommand.swift",
+        "Parsable Types/AsyncParsableCommand.swift",
+        "Parsable Types/CommandConfiguration.swift",
+        "Parsable Types/CommandGroup.swift",
+        "Parsable Types/EnumerableFlag.swift",
+        "Parsable Types/ExpressibleByArgument.swift",
+        "Parsable Types/ParsableArguments.swift",
+        "Parsable Types/ParsableCommand.swift",
+        "Parsing/ArgumentDecoder.swift",
+        "Parsing/ArgumentDefinition.swift",
+        "Parsing/ArgumentSet.swift",
+        "Parsing/CommandParser.swift",
+        "Parsing/InputKey.swift",
+        "Parsing/InputOrigin.swift",
+        "Parsing/Name.swift",
+        "Parsing/Parsed.swift",
+        "Parsing/ParsedValues.swift",
+        "Parsing/ParserError.swift",
+        "Parsing/SplitArguments.swift",
+        "Usage/DumpHelpGenerator.swift",
+        "Usage/HelpCommand.swift",
+        "Usage/HelpGenerator.swift",
+        "Usage/MessageInfo.swift",
+        "Usage/UsageGenerator.swift",
+        "Utilities/CollectionExtensions.swift",
+        "Utilities/Foundation.swift",
+        "Utilities/Mutex.swift",
+        "Utilities/Platform.swift",
+        "Utilities/SequenceExtensions.swift",
+        "Utilities/StringExtensions.swift",
+        "Utilities/SwiftExtensions.swift",
+        "Utilities/Tree.swift",
+        "Validators/CodingKeyValidator.swift",
+        "Validators/NonsenseFlagsValidator.swift",
+        "Validators/ParsableArgumentsValidation.swift",
+        "Validators/PositionalArgumentsValidator.swift",
+        "Validators/UniqueNamesValidator.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParserToolInfo"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.8"
+}

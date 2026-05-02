@@ -1,0 +1,142 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-argument-parser",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-argument-parser"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.7.1",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-log",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-log"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.11.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swiftformat",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/nicklockwood/SwiftFormat"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "0.60.1",
+                "upperBound" : "1.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fileSystem" : [
+        {
+          "identity" : "my_local_package",
+          "path" : "./third_party/my_local_package",
+          "productFilter" : null,
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fileSystem" : [
+        {
+          "identity" : "notthatamazingmodule",
+          "path" : "./third_party/NotThatAmazingModule",
+          "productFilter" : null,
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "MySwiftPackage",
+  "packageKind" : {
+    "root" : [
+      "."
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+
+  ],
+  "toolsVersion" : {
+    "_version" : "5.7.0"
+  },
+  "traits" : [
+
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "swift-log",
+  "name" : "swift-log",
+  "path" : ".",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Logging",
+      "targets" : [
+        "Logging"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "InMemoryLogging",
+      "targets" : [
+        "InMemoryLogging"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "basic-usage",
+      "targets" : [
+        "basic-usage"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "LoggingTests",
+      "module_type" : "SwiftTarget",
+      "name" : "LoggingTests",
+      "path" : "Tests/LoggingTests",
+      "sources" : [
+        "CompatibilityTest.swift",
+        "GlobalLoggingTest.swift",
+        "LocalLoggingTest.swift",
+        "LockTest.swift",
+        "LogEventTest.swift",
+        "LoggingTest.swift",
+        "MDCTest.swift",
+        "MetadataProviderTest.swift",
+        "SubDirectoryOfLoggingTests/EmitALogFromSubDirectory.swift",
+        "TestLogger.swift",
+        "TestSendable.swift"
+      ],
+      "target_dependencies" : [
+        "Logging"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "Logging",
+      "module_type" : "SwiftTarget",
+      "name" : "Logging",
+      "path" : "Sources/Logging",
+      "product_memberships" : [
+        "Logging",
+        "InMemoryLogging",
+        "basic-usage"
+      ],
+      "sources" : [
+        "Locks.swift",
+        "LogEvent.swift",
+        "LogHandler.swift",
+        "Logging.swift",
+        "MetadataProvider.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "InMemoryLoggingTests",
+      "module_type" : "SwiftTarget",
+      "name" : "InMemoryLoggingTests",
+      "path" : "Tests/InMemoryLoggingTests",
+      "sources" : [
+        "InMemoryLogHandlerTests.swift"
+      ],
+      "target_dependencies" : [
+        "InMemoryLogging",
+        "Logging"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "InMemoryLogging",
+      "module_type" : "SwiftTarget",
+      "name" : "InMemoryLogging",
+      "path" : "Sources/InMemoryLogging",
+      "product_memberships" : [
+        "InMemoryLogging",
+        "basic-usage"
+      ],
+      "sources" : [
+        "InMemoryLogHandler.swift"
+      ],
+      "target_dependencies" : [
+        "Logging"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "basic_usage",
+      "module_type" : "SwiftTarget",
+      "name" : "basic-usage",
+      "path" : "Snippets",
+      "product_memberships" : [
+        "basic-usage"
+      ],
+      "sources" : [
+        "basic-usage.swift"
+      ],
+      "target_dependencies" : [
+        "Logging",
+        "InMemoryLogging"
+      ],
+      "type" : "snippet"
+    }
+  ],
+  "tools_version" : "6.2"
+}

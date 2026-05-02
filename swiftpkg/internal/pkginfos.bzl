@@ -164,6 +164,8 @@ def _get(
         env = {},
         debug_path = None,
         cached_json_directory = None,
+        dump_manifest = None,
+        desc_manifest = None,
         resolved_pkg_map = None,
         collect_src_info = True,
         registries_directory = None,
@@ -180,6 +182,12 @@ def _get(
             as a `string`.
         cached_json_directory: Optional. A `string` specifying the directory
             where JSON output from SPM commands can be cached.
+        dump_manifest: Optional. A pre-parsed dump-package JSON `dict`. When
+            supplied, `swift package dump-package` is not invoked; this is
+            how the cache_repo_json mechanism (GH-2140) skips the loading-
+            phase SPM call.
+        desc_manifest: Optional. A pre-parsed describe JSON `dict`. Same
+            semantics as `dump_manifest`.
         resolved_pkg_map: Optional. A `dict` of representing the
             `Package.resolved` JSON.
         collect_src_info: Optional. A `bool` specifying whether source
@@ -200,27 +208,36 @@ def _get(
             # For backwards compatibility, resolve relative to the working directory.
             debug_path = paths.join(directory, debug_path)
 
-    dump_manifest = _get_dump_manifest(
-        repository_ctx,
-        env = env,
-        working_directory = directory,
-        debug_path = debug_path,
-        cache_path = cached_json_directory,
-        registries_directory = registries_directory,
-        replace_scm_with_registry = replace_scm_with_registry,
-    )
-    desc_manifest = _get_desc_manifest(
-        repository_ctx,
-        env = env,
-        working_directory = directory,
-        debug_path = debug_path,
-        cache_path = cached_json_directory,
-        registries_directory = registries_directory,
-        replace_scm_with_registry = replace_scm_with_registry,
-    )
+    using_cached_manifests = dump_manifest != None or desc_manifest != None
+    if dump_manifest == None:
+        dump_manifest = _get_dump_manifest(
+            repository_ctx,
+            env = env,
+            working_directory = directory,
+            debug_path = debug_path,
+            cache_path = cached_json_directory,
+            registries_directory = registries_directory,
+            replace_scm_with_registry = replace_scm_with_registry,
+        )
+    if desc_manifest == None:
+        desc_manifest = _get_desc_manifest(
+            repository_ctx,
+            env = env,
+            working_directory = directory,
+            debug_path = debug_path,
+            cache_path = cached_json_directory,
+            registries_directory = registries_directory,
+            replace_scm_with_registry = replace_scm_with_registry,
+        )
 
     # Ensure package and local dependency paths are absolute even if the
     # parsed JSON has been normalized to relative paths for cache portability.
+    # When we are reading from a cached manifest the baked-in path was
+    # generated against a possibly-different filesystem location (e.g. a
+    # `.build/checkouts/` working copy or another developer's clone), so
+    # always overwrite it with the on-disk directory we were handed.
+    if using_cached_manifests:
+        desc_manifest["path"] = directory
     pkg_path = desc_manifest["path"]
     if not paths.is_absolute(pkg_path):
         pkg_path = paths.normalize(paths.join(directory, pkg_path))
