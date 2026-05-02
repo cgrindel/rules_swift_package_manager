@@ -9,6 +9,8 @@ load(":build_files_tests.bzl", "build_files_test_suite")
 load(":bzl_selects_tests.bzl", "bzl_selects_test_suite")
 load(":clang_files_tests.bzl", "clang_files_test_suite")
 load(":load_statements_tests.bzl", "load_statements_test_suite")
+load(":minimum_os_transition_tests.bzl", "minimum_os_transition_test_suite")
+load(":minimum_os_versions_tests.bzl", "minimum_os_versions_test_suite")
 load(":objc_files_tests.bzl", "objc_files_test_suite")
 load(":pkginfo_ext_deps_tests.bzl", "pkginfo_ext_deps_test_suite")
 load(":pkginfo_target_deps_tests.bzl", "pkginfo_target_deps_test_suite")
@@ -20,6 +22,7 @@ load(":repository_files_tests.bzl", "repository_files_test_suite")
 load(":repository_utils_tests.bzl", "repository_utils_test_suite")
 load(":resource_files_tests.bzl", "resource_files_test_suite")
 load(":semver_tests.bzl", "semver_test_suite")
+load(":spm_platforms_tests.bzl", "spm_platforms_test_suite")
 load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
 load(":swift_files_tests.bzl", "swift_files_test_suite")
 load(":swift_package_tool_tests.bzl", "swift_package_tool_test_suite")
@@ -44,6 +47,10 @@ clang_files_test_suite()
 
 load_statements_test_suite()
 
+minimum_os_transition_test_suite()
+
+minimum_os_versions_test_suite()
+
 objc_files_test_suite()
 
 pkginfo_ext_deps_test_suite()
@@ -67,6 +74,8 @@ resource_files_test_suite()
 bzl_selects_test_suite()
 
 semver_test_suite()
+
+spm_platforms_test_suite()
 
 starlark_codegen_test_suite()
 

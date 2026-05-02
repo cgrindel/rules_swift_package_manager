@@ -114,6 +114,23 @@ bzl_library(
 )
 
 bzl_library(
+    name = "minimum_os_versions",
+    srcs = ["minimum_os_versions.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":minimum_os_platforms",
+        "//config_settings/spm/platform:platforms",
+    ],
+)
+
+bzl_library(
+    name = "minimum_os_platforms",
+    srcs = ["minimum_os_platforms.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = ["//config_settings/spm/platform:platforms"],
+)
+
+bzl_library(
     name = "load_statements",
     srcs = ["load_statements.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
@@ -365,6 +382,19 @@ bzl_library(
         ":build_decls",
         ":build_files",
         ":load_statements",
+    ],
+)
+
+bzl_library(
+    name = "minimum_os_transition",
+    srcs = ["minimum_os_transition.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":minimum_os_platforms",
+        "@build_bazel_rules_apple//apple:providers",
+        "@build_bazel_rules_swift//swift",
+        "@build_bazel_rules_swift//swift:swift_clang_module_aspect",
+        "@rules_cc//cc/common",
     ],
 )
 
