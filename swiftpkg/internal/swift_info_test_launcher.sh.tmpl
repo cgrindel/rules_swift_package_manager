@@ -66,4 +66,4 @@ if [[ ${current_version} != "${cached_version}" ]]; then
   exit 1
 fi
 
-echo "Swift toolchain matches cached: ${current_version}"
+echo >&2 "Swift toolchain matches cached: ${current_version}"
