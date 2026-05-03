@@ -51,13 +51,16 @@ dump_manifests={}, desc_manifests={}.\
 mechanism going forward (see GH-2140); please remove `cached_json_directory`.\
 """)
 
-    # Read Package.resolved.
+    # Read Package.resolved. Tolerate a missing file so first-time
+    # setup can run `bazel run @swift_package//:cache -- --mode update`
+    # to bootstrap Package.resolved without a separate manual
+    # `swift package update` step.
+    resolved_pkg_map = dict()
     if from_package.resolved:
         pkg_resolved = module_ctx.path(from_package.resolved)
-        resolved_pkg_json = module_ctx.read(pkg_resolved)
-        resolved_pkg_map = json.decode(resolved_pkg_json)
-    else:
-        resolved_pkg_map = dict()
+        if pkg_resolved.exists:
+            resolved_pkg_json = module_ctx.read(pkg_resolved)
+            resolved_pkg_map = json.decode(resolved_pkg_json)
 
     # If using Swift Package registries we must set any requested
     # flags and the config path for the registries JSON file.
