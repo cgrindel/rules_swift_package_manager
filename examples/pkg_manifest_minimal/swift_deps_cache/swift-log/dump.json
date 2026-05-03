@@ -310,11 +310,18 @@
   },
   "traits" : [
     {
-      "description" : "Error and above available (compiles out trace, debug, info, notice, warning)",
+      "description" : "The default traits of this package.",
       "enabledTraits" : [
 
       ],
-      "name" : "MaxLogLevelError"
+      "name" : "default"
+    },
+    {
+      "description" : "All logging compiled out (no log levels available)",
+      "enabledTraits" : [
+
+      ],
+      "name" : "MaxLogLevelNone"
     },
     {
       "description" : "Notice and above available (compiles out trace, debug, info)",
@@ -324,11 +331,11 @@
       "name" : "MaxLogLevelNotice"
     },
     {
-      "description" : "Only critical available (compiles out all except critical)",
+      "description" : "Error and above available (compiles out trace, debug, info, notice, warning)",
       "enabledTraits" : [
 
       ],
-      "name" : "MaxLogLevelCritical"
+      "name" : "MaxLogLevelError"
     },
     {
       "description" : "Warning and above available (compiles out trace, debug, info, notice)",
@@ -336,6 +343,13 @@
 
       ],
       "name" : "MaxLogLevelWarning"
+    },
+    {
+      "description" : "Only critical available (compiles out all except critical)",
+      "enabledTraits" : [
+
+      ],
+      "name" : "MaxLogLevelCritical"
     },
     {
       "description" : "Debug and above available (compiles out trace)",
@@ -350,20 +364,6 @@
 
       ],
       "name" : "MaxLogLevelInfo"
-    },
-    {
-      "description" : "The default traits of this package.",
-      "enabledTraits" : [
-
-      ],
-      "name" : "default"
-    },
-    {
-      "description" : "All logging compiled out (no log levels available)",
-      "enabledTraits" : [
-
-      ],
-      "name" : "MaxLogLevelNone"
     }
   ]
 }

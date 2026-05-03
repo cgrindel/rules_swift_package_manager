@@ -51,11 +51,13 @@ if [[ -z ${swift_exec} ]]; then
 fi
 
 current_version="$("${swift_exec}" --version | head -n 1)"
-cached_version="$(python3 -c '
-import json, sys
-with open(sys.argv[1]) as f:
-    print(json.load(f)["swift_version"])
-' "${info_path}")"
+# swift_info.json is small and well-formed (we wrote it ourselves), so
+# extract the swift_version field with sed instead of taking on a JSON
+# parser dependency.
+cached_version="$(
+  sed -nE 's/.*"swift_version"[[:space:]]*:[[:space:]]*"([^"]*)".*/\1/p' \
+    "${info_path}" | head -n 1
+)"
 
 if [[ ${current_version} != "${cached_version}" ]]; then
   echo >&2 "ERROR: Swift toolchain mismatch with cached swift_info.json:"
