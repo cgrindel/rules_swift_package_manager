@@ -496,7 +496,9 @@ exports_files(
 swift_info_test(
     name = "swift_info_test",
     swift_info = "swift_info.json",
-    target_compatible_with = ["@platforms//os:${host_os}"],
+    target_compatible_with = [
+        "@rules_swift_package_manager//config_settings/bazel/os:${host_os}",
+    ],
 )
 EOF
 }

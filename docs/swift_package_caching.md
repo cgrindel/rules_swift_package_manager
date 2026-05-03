@@ -1,48 +1,28 @@
 # Caching Swift Package Manifests
 
-When `rules_swift_package_manager` resolves a Swift package, it shells
-out to SPM (`swift package dump-package` and `swift package describe`)
-to discover the package's products, targets, and dependencies. Those
-SPM commands run via `xcrun` against whatever Swift toolchain
-`xcode-select` points at, while Bazel compiles your code against the
-toolchain it resolves through `--xcode_version_config` /
-`rules_swift`. When those two toolchains disagree, SPM evaluates `#if
-compiler(>=X.Y)` blocks against one Swift version while Bazel compiles
-the resulting code with another, which can break the build.
+When `rules_swift_package_manager` resolves a Swift package, it shells out to
+SPM (`swift package dump-package` and `swift package describe`) to discover the
+package's products, targets, and dependencies. This information is then used to
+construct the Bazel build targets for each Swift package.
 
-The cache feature lets you commit the output of those SPM commands —
-generated through the active Bazel Swift toolchain — into your
-workspace. At fetch time the rules read the cached JSON instead of
-shelling out, so SPM inspection and Bazel compilation always agree.
+Historically, those SPM commands ran via `xcrun` against whatever Swift
+toolchain `xcode-select` finds on the Bazel host machine. A problem arises
+when the `swift` binary presented by `xcode-select` is different from the one
+configured in the Bazel build (e.g., compiler version mismatches).
 
-This guide walks through setting up the cache, refreshing it, and the
-`swift_info_test` build-time check that catches drift.
+Unfortunately, Bazel repository rules do not have access to the Bazel-provided
+Swift toolchain when the dump and description JSON files are used in [the
+loading phase](https://bazel.build/reference/glossary#loading-phase). The cache
+feature described in this document addresses this concern by generating the
+dump and description JSON files using the Bazel-configured Swift toolchain
+then including the resulting JSON files in your source tree. At fetch time,
+the rules read the cached JSON files to generate each Swift package's Bazel
+build targets.
 
-## When you want this
+This guide walks through setting up the cache, refreshing it, and verifying
+it stays in sync with your toolchain.
 
-- `#if compiler(>=X.Y)` evaluates differently under Apple Swift vs.
-  open-source Swift, or under different Xcode versions, and that has
-  caused build breakages.
-- Your team uses a Swift toolchain that differs from the macOS default
-  (e.g. a pinned `rules_swift` toolchain on Linux CI).
-- You want repository fetches to be faster and not require a working
-  `xcrun` on every developer machine.
-
-If none of these apply, you can keep the existing default behavior and
-skip this guide.
-
-## 1. Add `platforms` as a direct `bazel_dep`
-
-The cache utility auto-emits a `swift_info_test` target with
-`target_compatible_with = ["@platforms//os:<host_os>"]`. For that label
-to resolve under bzlmod visibility rules, your `MODULE.bazel` needs
-`platforms` as a direct dep:
-
-```python
-bazel_dep(name = "platforms", version = "1.0.0")
-```
-
-## 2. Generate the cache
+## 1. Generate the cache
 
 Run the cache utility from the directory containing the `Package.swift`
 you've configured `swift_deps.from_package` against:
@@ -82,7 +62,7 @@ a `{{WORKSPACE_ROOT}}/<rel>` token so the same cache works for every
 checkout. The token is expanded against `repository_ctx.workspace_root`
 at fetch time.
 
-## 3. The `swift_info_test` check
+## 2. The `swift_info_test` check
 
 The cache utility emits a `swift_info_test` target into the cache
 directory's `BUILD.bazel`. When `bazel test //...` runs it, the test
@@ -101,13 +81,13 @@ Run 'bazel run @swift_package//:cache -- --mode=update' to refresh.
 A single committed cache can only match one (OS, toolchain)
 combination, so the auto-emitted test is pinned with
 `target_compatible_with` to the host OS that produced the cache (e.g.
-`@platforms//os:macos`). Cross-platform CI auto-skips it on other
-platforms instead of failing.
+`@rules_swift_package_manager//config_settings/bazel/os:macos`).
+Cross-platform CI auto-skips it on other platforms instead of failing.
 
-If a teammate switches Xcode versions or you bump `rules_swift`, this
-test catches the drift on the next `bazel test //...`.
+If a teammate switches Xcode versions, this test catches the drift on
+the next `bazel test //...`.
 
-## 4. Refreshing the cache
+## 3. Refreshing the cache
 
 Re-run the same command:
 
