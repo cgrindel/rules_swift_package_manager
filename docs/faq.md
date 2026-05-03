@@ -7,6 +7,7 @@
 * [Where is the Swift gazelle plugin?](#where-is-the-swift-gazelle-plugin)
 * [After running `//:swift_update_pkgs`, I see a `.build` directory. What is it? Do I need it?](#after-running-swift_update_pkgs-i-see-a-build-directory-what-is-it-do-i-need-it)
 * [Can I store the Swift dependency files in a sub-package (i.e., not in the root of the workspace)?](#can-i-store-the-swift-dependency-files-in-a-sub-package-ie-not-in-the-root-of-the-workspace)
+* [How do I make sure SPM and Bazel use the same Swift toolchain?](#how-do-i-make-sure-spm-and-bazel-use-the-same-swift-toolchain)
 * [How do I handle the error `Unable to resolve byName reference XXX in @swiftpkg_yyy.`?](#how-do-i-handle-the-error-unable-to-resolve-byname-reference-xxx-in-swiftpkg_yyy)
   * [How do I fix this issue?](#how-do-i-fix-this-issue)
   * [What is the cause of the error? Why can't `rules_swift_package_manager` handle this situation?](#what-is-the-cause-of-the-error-why-cant-rules_swift_package_manager-handle-this-situation)
@@ -39,6 +40,17 @@ into source control. It is not used by the Gazelle plugin or the Starlark reposi
 
 Yes. The [vapor example] demonstrates storing the Swift dependency files in a sub-package called
 `swift`.
+
+## How do I make sure SPM and Bazel use the same Swift toolchain?
+
+By default, `rules_swift_package_manager` inspects packages with `xcrun swift package` (which uses
+the `xcode-select` toolchain) while Bazel compiles them with whatever toolchain it resolves through
+`--xcode_version_config` / `rules_swift`. If those disagree, `#if compiler(>=X.Y)` blocks can
+evaluate against one toolchain and be compiled by another.
+
+You can opt into a committed JSON cache of the SPM `dump-package` and `describe` output, generated
+through the active Bazel Swift worker, so inspection and compilation always agree. See [Caching
+Swift Package Manifests] for the walkthrough.
 
 ## How do I handle the error `Unable to resolve byName reference XXX in @swiftpkg_yyy.`?
 
@@ -108,6 +120,7 @@ the new architecture:
 - As a result, `byName` lookups can only be resolved to the targets/products in the current package
   and to products in Swift packages where the identity exactly matches the product name.
 
+[Caching Swift Package Manifests]: /docs/swift_package_caching.md
 [Patch the Swift package]: /docs/patch_swift_package.md
 [patch this file]: /docs/patch_swift_package.md
 [pusher-websocket-swift Package.swift]: https://github.com/pusher/pusher-websocket-swift/blob/886341f9dad453c9822f2525136ee2006a6c3c9e/Package.swift
