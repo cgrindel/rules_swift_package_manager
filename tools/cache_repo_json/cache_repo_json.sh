@@ -51,6 +51,81 @@ _crj_setup_runfiles() {
 # toolchain). See //tools/cache_repo_json:BUILD.bazel and the design
 # at the top of //swiftpkg/internal:swift_package_lib.sh.
 
+# Lexically normalize a path, mirroring Python's `os.path.normpath`:
+# collapses `//`, drops `.` segments, and resolves `..` segments
+# against the preceding component (without touching the filesystem).
+# Empty input yields ".".
+_crj_normpath() {
+  local path="$1"
+  local is_abs=0
+  [[ ${path:0:1} == / ]] && is_abs=1
+  local -a out=()
+  local component
+  local IFS=/
+  for component in $path; do
+    [[ -z ${component} || ${component} == "." ]] && continue
+    if [[ ${component} == ".." ]]; then
+      local n=${#out[@]}
+      if ((n > 0)) && [[ ${out[n - 1]} != ".." ]]; then
+        unset 'out[n-1]'
+        out=("${out[@]}")
+        continue
+      fi
+      ((is_abs)) && continue
+    fi
+    out+=("${component}")
+  done
+  if ((is_abs)); then
+    if ((${#out[@]} == 0)); then
+      printf '%s' "/"
+    else
+      printf '/%s' "${out[*]}"
+    fi
+  else
+    if ((${#out[@]} == 0)); then
+      printf '%s' "."
+    else
+      printf '%s' "${out[*]}"
+    fi
+  fi
+}
+
+# Compute a relative path from `base` to `target`, mirroring Python's
+# `os.path.relpath`. Both inputs are normalized first.
+_crj_relpath() {
+  local target base
+  target="$(_crj_normpath "$1")"
+  base="$(_crj_normpath "$2")"
+  local -a tparts=() bparts=()
+  local component
+  local IFS=/
+  for component in $target; do
+    [[ -n ${component} ]] && tparts+=("${component}")
+  done
+  for component in $base; do
+    [[ -n ${component} ]] && bparts+=("${component}")
+  done
+  local common=0
+  while ((common < ${#tparts[@]})) \
+    && ((common < ${#bparts[@]})) \
+    && [[ ${tparts[common]} == "${bparts[common]}" ]]; do
+    ((common++))
+  done
+  local -a out=()
+  local i
+  for ((i = common; i < ${#bparts[@]}; i++)); do
+    out+=("..")
+  done
+  for ((i = common; i < ${#tparts[@]}; i++)); do
+    out+=("${tparts[i]}")
+  done
+  if ((${#out[@]} == 0)); then
+    printf '%s' "."
+  else
+    printf '%s' "${out[*]}"
+  fi
+}
+
 # Print first line of `swift --version`. The exact format differs
 # between Apple and open-source Swift, but is stable per toolchain
 # and serves as our cache key. Examples:
@@ -108,24 +183,57 @@ crj_describe_local_deps() {
   local desc_json="$1"
   local parent_pkg_dir="$2"
   local workspace_root="${3:-}"
-  python3 - "${desc_json}" "${parent_pkg_dir}" "${workspace_root}" <<'PY'
-import json, os.path, sys
-desc_path, parent_dir, ws_root = sys.argv[1], sys.argv[2], sys.argv[3]
-with open(desc_path) as f:
-    desc = json.load(f)
-for dep in desc.get("dependencies", []):
-    if dep.get("type") != "fileSystem":
-        continue
-    identity = dep.get("identity") or ""
-    path = dep.get("path") or ""
-    if not identity or not path:
-        continue
-    if ws_root and "{{WORKSPACE_ROOT}}" in path:
-        path = path.replace("{{WORKSPACE_ROOT}}", ws_root.rstrip("/"))
-    if not os.path.isabs(path):
-        path = os.path.normpath(os.path.join(parent_dir, path))
-    print(f"{identity}\t{path}")
-PY
+  workspace_root="${workspace_root%/}"
+
+  # Awk pulls (identity, path) for fileSystem deps from the
+  # `dependencies` array of desc.json. SPM emits well-formed,
+  # alphabetically-sorted, two-space-indented JSON, so a state machine
+  # tracking brace depth and splitting on `"` is reliable here without
+  # taking on a JSON-parser dependency.
+  awk '
+    BEGIN { in_deps = 0; depth = 0; identity = ""; type = ""; path = "" }
+    !in_deps && /"dependencies"[ \t]*:[ \t]*\[/ { in_deps = 1; next }
+    in_deps {
+      if (depth == 0 && $0 ~ /^[ \t]*\][ \t]*,?[ \t]*$/) {
+        in_deps = 0
+        next
+      }
+      n = length($0)
+      for (i = 1; i <= n; i++) {
+        c = substr($0, i, 1)
+        if (c == "{") depth++
+        else if (c == "}") {
+          depth--
+          if (depth == 0) {
+            if (type == "fileSystem" && identity != "" && path != "") {
+              print identity "\t" path
+            }
+            identity = ""; type = ""; path = ""
+          }
+        }
+      }
+      # Only capture top-level fields (depth == 1 after counting).
+      if (depth == 1) {
+        m = split($0, parts, "\"")
+        if (m >= 4) {
+          k = parts[2]
+          v = parts[4]
+          if (k == "identity") identity = v
+          else if (k == "type") type = v
+          else if (k == "path") path = v
+        }
+      }
+    }
+  ' "${desc_json}" | while IFS=$'\t' read -r identity path; do
+    [[ -z ${identity} ]] && continue
+    if [[ -n ${workspace_root} && ${path} == *"{{WORKSPACE_ROOT}}"* ]]; then
+      path="${path//\{\{WORKSPACE_ROOT\}\}/${workspace_root}}"
+    fi
+    if [[ ${path:0:1} != "/" ]]; then
+      path="$(_crj_normpath "${parent_pkg_dir}/${path}")"
+    fi
+    printf '%s\t%s\n' "${identity}" "${path}"
+  done
 }
 
 # Print "<identity>\t<checkout_dir>" lines for every SCM/registry pin
@@ -139,27 +247,63 @@ crj_resolved_pins() {
   if [[ ! -f ${resolved_path} ]]; then
     return 0
   fi
-  python3 - "${resolved_path}" "${checkouts_dir}" <<'PY'
-import json, os.path, sys
-resolved_path, checkouts_dir = sys.argv[1], sys.argv[2]
-with open(resolved_path) as f:
-    data = json.load(f)
-for pin in data.get("pins", []):
-    identity = pin.get("identity") or ""
-    kind = pin.get("kind") or ""
-    location = pin.get("location") or ""
-    if kind in ("remoteSourceControl", "localSourceControl"):
-        basename = location.rstrip("/").rsplit("/", 1)[-1]
-        if basename.endswith(".git"):
-            basename = basename[:-4]
-        checkout = os.path.join(checkouts_dir, basename)
-    elif kind == "registry":
-        checkout = os.path.join(checkouts_dir, identity)
-    else:
+  checkouts_dir="${checkouts_dir%/}"
+
+  # Same pattern as crj_describe_local_deps: walk the `pins` array,
+  # capture top-level fields (identity, kind, location) and post-
+  # process in shell.
+  awk '
+    BEGIN { in_pins = 0; depth = 0; identity = ""; kind = ""; location = "" }
+    !in_pins && /"pins"[ \t]*:[ \t]*\[/ { in_pins = 1; next }
+    in_pins {
+      if (depth == 0 && $0 ~ /^[ \t]*\][ \t]*,?[ \t]*$/) {
+        in_pins = 0
+        next
+      }
+      n = length($0)
+      for (i = 1; i <= n; i++) {
+        c = substr($0, i, 1)
+        if (c == "{") depth++
+        else if (c == "}") {
+          depth--
+          if (depth == 0) {
+            if (identity != "" && kind != "") {
+              print identity "\t" kind "\t" location
+            }
+            identity = ""; kind = ""; location = ""
+          }
+        }
+      }
+      if (depth == 1) {
+        m = split($0, parts, "\"")
+        if (m >= 4) {
+          k = parts[2]
+          v = parts[4]
+          if (k == "identity") identity = v
+          else if (k == "kind") kind = v
+          else if (k == "location") location = v
+        }
+      }
+    }
+  ' "${resolved_path}" | while IFS=$'\t' read -r identity kind location; do
+    local checkout=""
+    case "${kind}" in
+      remoteSourceControl | localSourceControl)
+        local basename="${location%/}"
+        basename="${basename##*/}"
+        basename="${basename%.git}"
+        checkout="${checkouts_dir}/${basename}"
+        ;;
+      registry)
+        checkout="${checkouts_dir}/${identity}"
+        ;;
+      *)
         continue
-    if identity and checkout:
-        print(f"{identity}\t{checkout}")
-PY
+        ;;
+    esac
+    [[ -z ${identity} || -z ${checkout} ]] && continue
+    printf '%s\t%s\n' "${identity}" "${checkout}"
+  done
 }
 
 # Run `swift package dump-package` and `swift package describe` on a
@@ -226,22 +370,36 @@ crj_dump_describe() {
 # enough; the JSON content does not contain any metacharacters that
 # would interact with this transformation.
 crj_relativize_paths() {
-  local pkg_dir="$1"
-  local workspace_root="${2:-}"
-  python3 -c '
-import sys
-pkg_root = sys.argv[1].rstrip("/")
-ws_root = sys.argv[2].rstrip("/") if len(sys.argv) > 2 and sys.argv[2] else ""
-data = sys.stdin.read()
-# Replace child-path occurrences first so the bare-root replacement
-# does not chew into longer matches.
-data = data.replace(pkg_root + "/", "./")
-data = data.replace("\"" + pkg_root + "\"", "\".\"")
-if ws_root:
-    data = data.replace(ws_root + "/", "{{WORKSPACE_ROOT}}/")
-    data = data.replace("\"" + ws_root + "\"", "\"{{WORKSPACE_ROOT}}\"")
-sys.stdout.write(data)
-' "${pkg_dir}" "${workspace_root}"
+  local pkg_root="${1%/}"
+  local ws_root="${2:-}"
+  ws_root="${ws_root%/}"
+  # Awk does literal substring replacement (index/substr) so paths
+  # containing regex metacharacters (`.`, `*`, `[`, etc.) are safe.
+  awk -v pkg="${pkg_root}" -v ws="${ws_root}" '
+    function replace(s, target, repl,    pos, len, out) {
+      if (target == "") return s
+      len = length(target)
+      out = ""
+      pos = index(s, target)
+      while (pos > 0) {
+        out = out substr(s, 1, pos - 1) repl
+        s = substr(s, pos + len)
+        pos = index(s, target)
+      }
+      return out s
+    }
+    {
+      # Replace child-path occurrences first so the bare-root
+      # replacement does not chew into longer matches.
+      line = replace($0, pkg "/", "./")
+      line = replace(line, "\"" pkg "\"", "\".\"")
+      if (ws != "") {
+        line = replace(line, ws "/", "{{WORKSPACE_ROOT}}/")
+        line = replace(line, "\"" ws "\"", "\"{{WORKSPACE_ROOT}}\"")
+      }
+      print line
+    }
+  '
 }
 
 # Process one (identity, path) pair: skip if already visited, otherwise
@@ -399,11 +557,9 @@ crj_update_module_bazel() {
 
   # buildozer takes one command per positional arg; the final arg is
   # the target. The path arg must be relative to the workspace root.
-  # macOS realpath lacks --relative-to, so use python (already a dep).
+  # macOS realpath lacks --relative-to, so do the relpath ourselves.
   local module_bazel_rel
-  module_bazel_rel="$(python3 -c \
-    'import os.path,sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))' \
-    "${module_bazel}" "${BUILD_WORKSPACE_DIRECTORY}")"
+  module_bazel_rel="$(_crj_relpath "${module_bazel}" "${BUILD_WORKSPACE_DIRECTORY}")"
   local target="//${module_bazel_rel}:%swift_deps.from_package"
 
   "${buildozer_path}" "${ops[@]}" "${target}"
@@ -540,9 +696,7 @@ main() {
   # absolute form for filesystem operations.
   local output_dir_rel="${output_dir}"
   if [[ ${output_dir} == /* ]]; then
-    output_dir_rel="$(python3 -c \
-      'import os.path,sys; print(os.path.relpath(sys.argv[1], sys.argv[2]))' \
-      "${output_dir}" "${BUILD_WORKSPACE_DIRECTORY}")"
+    output_dir_rel="$(_crj_relpath "${output_dir}" "${BUILD_WORKSPACE_DIRECTORY}")"
   else
     output_dir="${BUILD_WORKSPACE_DIRECTORY}/${output_dir}"
   fi
@@ -586,16 +740,13 @@ main() {
   # location. SPM treats --build-path as cwd-relative; under `bazel run`
   # cwd is the runfiles sandbox and would lose .build/checkouts.
   #
-  # Normalize via os.path: --package_path can arrive as "" (empty) or
-  # "/" depending on whether the Package.swift label has an empty
-  # package component. os.path.join treats a leading "/" as absolute and
-  # would discard the workspace prefix entirely, so strip it first.
+  # --package_path can arrive as "" (empty) or "/" depending on whether
+  # the Package.swift label has an empty package component. Strip the
+  # leading "/" so concatenation doesn't discard the workspace prefix,
+  # then normalize the result.
   local relative_pkg_path="${package_path#/}"
   local root_pkg_dir
-  root_pkg_dir="$(python3 -c '
-import os.path, sys
-print(os.path.normpath(os.path.join(sys.argv[1], sys.argv[2])))
-' "${BUILD_WORKSPACE_DIRECTORY}" "${relative_pkg_path}")"
+  root_pkg_dir="$(_crj_normpath "${BUILD_WORKSPACE_DIRECTORY}/${relative_pkg_path}")"
   spm_flags+=("--build_path" "${root_pkg_dir}/.build")
 
   # Run swift package resolve|update with the forwarded SPM flags.
