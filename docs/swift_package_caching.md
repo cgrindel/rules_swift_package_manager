@@ -91,12 +91,15 @@ $ bazel run @swift_package//:cache -- \
     --output_dir swift_deps_cache
 ```
 
-`--mode update` regenerates everything. Stale per-dep directories that
-no longer correspond to a discovered dependency are pruned.
+`--mode update` runs `swift package update`, bumping pins in
+`Package.resolved` to the latest versions that satisfy `Package.swift`,
+regenerates every `dump.json` / `desc.json`, and rewrites
+`swift_info.json` with the current Swift toolchain version. Stale
+per-dep directories that no longer correspond to a discovered
+dependency are pruned.
 
-You can also use `--mode resolve` to compare the cached
-`swift_info.json` against the current Swift toolchain without
-regenerating:
+Use `--mode resolve` when you want to refresh the cache without
+bumping any pinned versions:
 
 ```sh
 $ bazel run @swift_package//:cache -- \
@@ -104,9 +107,13 @@ $ bazel run @swift_package//:cache -- \
     --output_dir swift_deps_cache
 ```
 
-This fails fast if the toolchain has drifted. If `swift_info.json`
-doesn't exist yet, `--mode resolve` silently switches to update mode so
-first-time setup works without two commands.
+`--mode resolve` runs `swift package resolve`, honoring the existing
+pins in `Package.resolved`, and regenerates the cache against those
+pins. It first checks that the cached `swift_info.json` matches the
+current Swift toolchain and fails fast if not — re-run with
+`--mode update` to refresh against a new toolchain. If `swift_info.json`
+doesn't exist yet, `--mode resolve` silently switches to update mode
+so first-time setup works without two commands.
 
 ## Per-package attributes
 
