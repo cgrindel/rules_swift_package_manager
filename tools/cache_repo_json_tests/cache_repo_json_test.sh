@@ -254,7 +254,9 @@ assert_match 'swift_info_test' "${content}" \
   "root BUILD.bazel should declare swift_info_test"
 assert_match 'swift_info.json' "${content}" \
   "root BUILD.bazel should reference swift_info.json"
-assert_match '"@platforms//os:macos"' "${content}" \
+assert_match \
+  '"@rules_swift_package_manager//config_settings/bazel/os:macos"' \
+  "${content}" \
   "root BUILD.bazel should pin target_compatible_with to the host OS"
 
 # MARK - crj_host_os_slug
