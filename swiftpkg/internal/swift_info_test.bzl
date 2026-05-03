@@ -38,12 +38,7 @@ swift_info_test = rule(
 Compares the cached Swift version recorded in `swift_info.json` against \
 the version of the Swift toolchain Bazel resolves at build time. Fails \
 the test when they disagree, prompting the user to refresh the SPM cache \
-with `bazel run @swift_package//:cache -- --mode=update`.
-
-This is the build-time half of the GH-2140 fix: the cache utility \
-records the Swift version when it generates dump.json/desc.json, and \
-this test verifies the same toolchain is in use whenever `bazel test \
-//...` runs.\
+with `bazel run @swift_package//:cache -- --mode=update`.\
 """,
     test = True,
     attrs = {
