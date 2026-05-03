@@ -1,130 +1,122 @@
-"""Implementation for the `swift_package_tool` rule used by the `swift_deps` bzlmod extension."""
+"""Macro that wraps `swift_worker_binary` to provide backward-compatible `swift_package_tool` targets."""
 
-load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
+load("//swiftpkg/internal:bools.bzl", "bools")
 load("//swiftpkg/internal:manifest_swiftc_args.bzl", "manifest_swiftc_args")
-load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
-load(
-    "//swiftpkg/internal:swift_package_tool_attrs.bzl",
-    "swift_package_tool_attrs",
-)
+load("//swiftpkg/internal:swift_worker_binary.bzl", "swift_worker_binary")
 
 def _manifest_swiftc_flags():
     return " ".join(manifest_swiftc_args.BAZEL_DEFINE)
 
-def _swift_package_tool_impl(ctx):
-    build_path = ctx.attr.build_path
-    cache_path = ctx.attr.cache_path
-    config_path = ctx.attr.config_path
-    cmd = ctx.attr.cmd
-    package = ctx.attr.package
+def swift_package_tool(
+        name,
+        cmd,
+        package,
+        build_path = ".build",
+        cache_path = ".cache",
+        config_path = ".config",
+        security_path = ".security",
+        manifest_caching = True,
+        dependency_caching = True,
+        manifest_cache = "shared",
+        replace_scm_with_registry = False,
+        use_registry_identity_for_scm = False,
+        netrc = None,
+        registries = None,
+        env = None,
+        **kwargs):
+    """Creates a `swift_worker_binary` target that runs `swift package <cmd>`.
+
+    This macro preserves the `swift_package_tool` API while delegating to
+    `swift_worker_binary` and the `swift_package_cmd` tool script.
+
+    Args:
+        name: The target name.
+        cmd: The `swift package` command to execute ("update" or "resolve").
+        package: Relative path to the `Package.swift` file from the workspace root.
+        build_path: Relative path for the SPM build directory.
+        cache_path: Relative path for the shared SPM cache directory.
+        config_path: Relative path for the SPM configuration directory.
+        security_path: Relative path for the security directory.
+        manifest_caching: Whether to enable build manifest caching.
+        dependency_caching: Whether to enable the dependency cache.
+        manifest_cache: Caching mode of Package.swift manifests (shared, local, none).
+        replace_scm_with_registry: Look up source control deps in the registry.
+        use_registry_identity_for_scm: Use registry identity for source control deps.
+        netrc: Label for a `.netrc` authentication file.
+        registries: Label for a `registries.json` file.
+        env: Dict of environment variables to pass through.
+        **kwargs: Additional keyword arguments passed to
+            `swift_worker_binary`. A user-supplied `data` list is
+            merged with the macro's own additions (netrc, registries).
+            Passing `extra_args` is rejected; the macro owns that
+            attribute. Drop down to `swift_worker_binary` directly if
+            you need to inject raw flags.
+    """
+    if "extra_args" in kwargs:
+        fail(
+            "swift_package_tool constructs extra_args from named " +
+            "parameters (cmd, package, netrc, etc.). To pass " +
+            "additional flags, use swift_worker_binary directly.",
+        )
+
+    # Allow callers to pass their own data; merge with macro additions.
+    data = list(kwargs.pop("data", []))
+
     package_path = paths.dirname(package)
-    netrc = ctx.file.netrc
-    registries = ctx.file.registries
-    runfiles = []
 
-    toolchain = swift_common.get_toolchain(ctx)
-    swift = toolchain.swift_worker
-    runfiles.append(swift.executable)
-
-    if netrc:
-        runfiles.append(netrc)
-
-    if registries:
-        runfiles.append(registries)
-
-    runner_script = ctx.actions.declare_file(ctx.label.name + ".sh")
-    template_dict = ctx.actions.template_dict()
-    template_dict.add("%(swift_worker)s", swift.executable.short_path)
-    template_dict.add("%(cmd)s", cmd)
-    template_dict.add("%(package_path)s", package_path)
-    template_dict.add("%(build_path)s", build_path)
-    template_dict.add("%(cache_path)s", cache_path)
-    template_dict.add("%(config_path)s", config_path)
-    template_dict.add(
-        "%(enable_build_manifest_caching)s",
-        "true" if ctx.attr.manifest_caching else "false",
-    )
-    template_dict.add(
-        "%(enable_dependency_cache)s",
-        "true" if ctx.attr.dependency_caching else "false",
-    )
-    template_dict.add("%(manifest_cache)s", ctx.attr.manifest_cache)
-    template_dict.add(
-        "%(netrc_file)s",
-        netrc.short_path if netrc else "",
-    )
-    template_dict.add(
-        "%(registries_json)s",
-        registries.short_path if registries else "",
-    )
-    template_dict.add(
-        "%(replace_scm_with_registry)s",
-        "true" if ctx.attr.replace_scm_with_registry else "false",
-    )
-    template_dict.add("%(security_path)s", ctx.attr.security_path)
-    template_dict.add(
-        "%(use_registry_identity_for_scm)s",
-        "true" if ctx.attr.use_registry_identity_for_scm else "false",
-    )
-    template_dict.add(
-        "%(env)s",
-        " ".join(["%s=%s" % (k, v) for (k, v) in ctx.attr.env.items()]),
-    )
-    template_dict.add(
-        "%(manifest_swiftc_flags)s",
-        _manifest_swiftc_flags(),
-    )
-
-    ctx.actions.expand_template(
-        template = ctx.file._runner_template,
-        is_executable = True,
-        output = runner_script,
-        computed_substitutions = template_dict,
-    )
-
-    return [
-        DefaultInfo(
-            executable = runner_script,
-            files = depset([runner_script]),
-            runfiles = ctx.runfiles(files = runfiles),
-        ),
+    extra_args = [
+        "--cmd",
+        cmd,
+        "--package_path",
+        package_path,
+        "--build_path",
+        build_path,
+        "--cache_path",
+        cache_path,
+        "--config_path",
+        config_path,
+        "--security_path",
+        security_path,
+        "--enable_build_manifest_caching",
+        bools.to_shell_str(manifest_caching),
+        "--enable_dependency_cache",
+        bools.to_shell_str(dependency_caching),
+        "--manifest_cache",
+        manifest_cache,
+        "--replace_scm_with_registry",
+        bools.to_shell_str(replace_scm_with_registry),
+        "--use_registry_identity_for_scm",
+        bools.to_shell_str(use_registry_identity_for_scm),
     ]
 
-swift_package_tool = rule(
-    implementation = _swift_package_tool_impl,
-    doc = """\
-Defines a rule that can be used to execute the `swift package` tool.\
-""",
-    attrs = dicts.add(
-        repo_rules.env_attr,
-        {
-            "cmd": attr.string(
-                doc = "The `swift package` command to execute.",
-                mandatory = True,
-                values = ["update", "resolve"],
-            ),
-            "package": attr.string(
-                doc = """\
-The relative path to the `Package.swift` file from the workspace root.\
-""",
-                mandatory = True,
-            ),
-            "_runner_template": attr.label(
-                doc = "The template for the runner script.",
-                allow_single_file = True,
-                default = Label(
-                    "//swiftpkg/internal:swift_package_tool_runner_template.sh",
-                ),
-            ),
-        },
-        swift_package_tool_attrs.swift_package_tool_config,
-        swift_package_tool_attrs.swift_package_registry,
-    ),
-    executable = True,
-    toolchains = swift_common.use_toolchain(),
-)
+    # The macro path resolves netrc/registries via $(rootpath) against
+    # the user-provided label. The repo rule path in
+    # swift_package_tool_repo.bzl copies the files into the generated
+    # repo and references local labels. Keep both in sync.
+    if netrc:
+        extra_args.extend(["--netrc_file", "$(rootpath %s)" % netrc])
+        data.append(netrc)
+
+    if registries:
+        extra_args.extend(["--registries_json", "$(rootpath %s)" % registries])
+        data.append(registries)
+
+    if env:
+        for k, v in env.items():
+            extra_args.extend(["--env", "%s=%s" % (k, v)])
+
+    manifest_flags = _manifest_swiftc_flags()
+    if manifest_flags:
+        extra_args.extend(["--manifest_swiftc_flags", manifest_flags])
+
+    swift_worker_binary(
+        name = name,
+        tool = "@rules_swift_package_manager//tools/swift_package_cmd",
+        extra_args = extra_args,
+        data = data,
+        **kwargs
+    )
 
 swift_package_tool_testing = struct(
     manifest_swiftc_flags = _manifest_swiftc_flags,
