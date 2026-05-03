@@ -100,8 +100,9 @@ $ bazel run @swift_package//:cache -- \
 `--mode update` regenerates everything. Stale per-dep directories that
 no longer correspond to a discovered dependency are pruned.
 
-You can also use `--mode resolve` to validate the cache against the
-current toolchain without regenerating:
+You can also use `--mode resolve` to compare the cached
+`swift_info.json` against the current Swift toolchain without
+regenerating:
 
 ```sh
 $ bazel run @swift_package//:cache -- \
