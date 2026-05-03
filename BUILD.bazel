@@ -149,6 +149,7 @@ filegroup(
         "//ci/internal:all_files",
         "//config_settings/bazel/apple_platform_type:all_files",
         "//config_settings/bazel/compilation_mode:all_files",
+        "//config_settings/bazel/os:all_files",
         "//config_settings/spm/configuration:all_files",
         "//config_settings/spm/platform:all_files",
         "//config_settings/spm/platform_configuration:all_files",

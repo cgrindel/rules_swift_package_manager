@@ -1,0 +1,32 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+bzlformat_pkg(name = "bzlformat")
+
+# Aliases for Bazel's platform OS constraints. These exist so that
+# rules_swift_package_manager can reference the OS constraint without
+# requiring downstream consumers to add `bazel_dep(name = "platforms",
+# ...)` to their MODULE.bazel just to satisfy bzlmod visibility for
+# `@platforms//os:<name>`. Anything that already depends on
+# rules_swift_package_manager can reference these aliases directly.
+#
+# Used by the `swift_info_test` target auto-emitted by
+# `//tools/cache_repo_json` (see GH-2140) to pin the test to the host
+# OS that produced the cache.
+
+alias(
+    name = "macos",
+    actual = "@platforms//os:macos",
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "linux",
+    actual = "@platforms//os:linux",
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
