@@ -564,7 +564,14 @@ crj_update_module_bazel() {
   module_bazel_rel="$(_crj_relpath "${module_bazel}" "${BUILD_WORKSPACE_DIRECTORY}")"
   local target="//${module_bazel_rel}:%swift_deps.from_package"
 
-  "${buildozer_path}" "${ops[@]}" "${target}"
+  # Buildozer exits 3 when every dict_set is a no-op (idempotent
+  # re-run). Treat that the same as a successful write so re-running
+  # the cache utility on an already-current workspace doesn't fail.
+  local rc=0
+  "${buildozer_path}" "${ops[@]}" "${target}" || rc=$?
+  if [[ ${rc} -ne 0 && ${rc} -ne 3 ]]; then
+    return ${rc}
+  fi
 }
 
 # Remove any stale per-dep cache directories under ${output_dir} that are

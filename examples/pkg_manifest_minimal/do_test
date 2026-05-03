@@ -2,9 +2,9 @@
 
 set -o errexit -o nounset -o pipefail
 
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null && pwd)"
 
-# Use the Bazel binary specified by the integration test. Otherise, fall back 
+# Use the Bazel binary specified by the integration test. Otherise, fall back
 # to bazel.
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
@@ -12,7 +12,7 @@ assert_match() {
   local pattern=${1}
   local actual="${2}"
   local err_msg="Expected to match. pattern: ${pattern}, actual: ${actual}"
-  [[ "${actual}" =~ ${pattern} ]] || (echo >&2 "${err_msg}" && exit 1)
+  [[ ${actual} =~ ${pattern} ]] || (echo >&2 "${err_msg}" && exit 1)
 }
 
 # Generate Swift external deps and update build files
@@ -20,6 +20,21 @@ assert_match() {
 
 # Ensure that it builds and tests pass
 "${bazel}" test //...
+
+# Smoke-test the SPM cache utility end-to-end on macOS, where the
+# committed swift_info.json was generated. Linux CI runs an open-source
+# Swift toolchain whose version string differs from the Apple Swift
+# stamped in the cache, so --mode resolve would fail there.
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  # Ensure that cache utility works without changing the pinned versions
+  "${bazel}" clean --expunge
+  "${bazel}" run @swift_package//:cache -- \
+    --mode resolve \
+    --output_dir swift_deps_cache
+
+  # Ensure that it builds and tests pass after running the cache utility
+  "${bazel}" test //...
+fi
 
 # Run MyExecutable target
 output="$("${bazel}" run //Sources/MyExecutable)"
@@ -35,5 +50,5 @@ assert_match "Good evening, Jim!" "${output}"
 
 # Generate a resolution log file
 res_log_path="${script_dir}/res_log.yml"
-"${bazel}" run //:update_build_files --  "--resolution_log=${res_log_path}"
-[[ -e "${res_log_path}" ]] || (echo >&2 "Expected to find a resolution log file at ${res_log_path}" && exit 1)
+"${bazel}" run //:update_build_files -- "--resolution_log=${res_log_path}"
+[[ -e ${res_log_path} ]] || (echo >&2 "Expected to find a resolution log file at ${res_log_path}" && exit 1)
