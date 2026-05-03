@@ -10,14 +10,12 @@ toolchain `xcode-select` finds on the Bazel host machine. A problem arises
 when the `swift` binary presented by `xcode-select` is different from the one
 configured in the Bazel build (e.g., compiler version mismatches).
 
-Unfortunately, Bazel repository rules do not have access to the Bazel-provided
-Swift toolchain when the dump and description JSON files are used in [the
-loading phase](https://bazel.build/reference/glossary#loading-phase). The cache
-feature described in this document addresses this concern by generating the
-dump and description JSON files using the Bazel-configured Swift toolchain
-then including the resulting JSON files in your source tree. At fetch time,
-the rules read the cached JSON files to generate each Swift package's Bazel
-build targets.
+Unfortunately, Bazel repository rules execute during [the loading
+phase](https://bazel.build/reference/glossary#loading-phase), where they don't
+have access to the Bazel-configured Swift toolchain. The cache feature works
+around this: it generates the dump and description JSON files using the
+Bazel-configured Swift toolchain _up front_, commits them to your source tree,
+and the rules read those cached files at fetch time.
 
 This guide walks through setting up the cache, refreshing it, and verifying
 it stays in sync with your toolchain.
@@ -41,9 +39,10 @@ The utility:
 - Runs `swift package resolve` (or `update`) through the active Bazel
   Swift worker so the cache reflects the same toolchain Bazel will use
   to compile.
-- Calls `swift package dump-package` and `swift package describe
---type json` for the root package and every transitive dependency
-  (local `fileSystem` deps, SCM checkouts, registry packages).
+- Calls `swift package dump-package` and
+  `swift package describe --type json` for the root package and every
+  transitive dependency (local `fileSystem` deps, SCM checkouts,
+  registry packages).
 - Writes one subdirectory per dependency, each with a `desc.json`, a
   `dump.json`, and a tiny `BUILD.bazel` that exports them.
 - Writes a top-level `swift_info.json` recording the Swift toolchain
@@ -56,11 +55,6 @@ The utility:
 
 Commit the resulting `swift_deps_cache/` tree and the `MODULE.bazel`
 edits.
-
-The committed cache stores workspace-internal sibling-package paths as
-a `{{WORKSPACE_ROOT}}/<rel>` token so the same cache works for every
-checkout. The token is expanded against `repository_ctx.workspace_root`
-at fetch time.
 
 ## 2. The `swift_info_test` check
 
@@ -89,7 +83,7 @@ the next `bazel test //...`.
 
 ## 3. Refreshing the cache
 
-Re-run the same command:
+Re-run the cache utility:
 
 ```sh
 $ bazel run @swift_package//:cache -- \
