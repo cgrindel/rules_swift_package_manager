@@ -18,22 +18,22 @@ executable_provider_target(
 
 spm_minimum_os_binary(
     name = "executable_wrapped",
-    actual = ":executable_actual",
     ios_minimum_os = "13.0",
     macos_minimum_os = "10.15",
     tvos_minimum_os = "13.0",
     visionos_minimum_os = "1.0",
     watchos_minimum_os = "6.0",
+    deps = [":executable_actual"],
 )
 
 spm_minimum_os_target(
     name = "swift_c_wrapped",
-    actual = ":swift_c_actual",
     ios_minimum_os = "13.0",
     macos_minimum_os = "10.15",
     tvos_minimum_os = "13.0",
     visionos_minimum_os = "1.0",
     watchos_minimum_os = "6.0",
+    deps = [":swift_c_actual"],
 )
 
 cc_library(
@@ -49,12 +49,12 @@ swift_interop_hint(
 
 spm_minimum_os_target(
     name = "custom_module_wrapped",
-    actual = ":custom_module_actual",
     ios_minimum_os = "13.0",
     macos_minimum_os = "10.15",
     tvos_minimum_os = "13.0",
     visionos_minimum_os = "1.0",
     watchos_minimum_os = "6.0",
+    deps = [":custom_module_actual"],
 )
 
 apple_framework_import_provider_target(
@@ -63,12 +63,12 @@ apple_framework_import_provider_target(
 
 spm_minimum_os_target(
     name = "apple_framework_import_wrapped",
-    actual = ":apple_framework_import_actual",
     ios_minimum_os = "13.0",
     macos_minimum_os = "10.15",
     tvos_minimum_os = "13.0",
     visionos_minimum_os = "1.0",
     watchos_minimum_os = "6.0",
+    deps = [":apple_framework_import_actual"],
 )
 
 spm_provider_consumer(
