@@ -10,6 +10,7 @@ _objc_resource_bundle_accessor_impl_suffix = "_objc_resource_bundle_accessor_imp
 _resource_bundle_accessor_suffix = "_resource_bundle_accessor"
 _resource_bundle_infoplist_suffix = "_resource_bundle_infoplist"
 _swift_hint_suffix = "_swift_hint"
+_implementation_suffix = ".__impl"
 
 def _get(targets, name, fail_if_not_found = True):
     """Retrieves the target with the given name from a list of targets.
@@ -110,6 +111,9 @@ def _bazel_label_name_from_parts(target_name):
         A Bazel label name as a `string`.
     """
     return target_name + ".rspm"
+
+def _implementation_label_name(label_name):
+    return label_name + _implementation_suffix
 
 def _bazel_label_name(target):
     """Returns the name of the Bazel label for the specified target.
@@ -278,6 +282,7 @@ def make_pkginfo_targets(bazel_labels):
         bazel_label_name = _bazel_label_name,
         get = _get,
         get_by_label = _get_by_label,
+        implementation_label_name = _implementation_label_name,
         is_modulemap_label = _is_modulemap_label,
         join_path = _join_path,
         modulemap_label_name = _modulemap_label_name,
