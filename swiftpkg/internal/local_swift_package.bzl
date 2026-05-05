@@ -74,6 +74,7 @@ def _local_swift_package_impl(repository_ctx):
         repo_dir,
         env,
         cached_json_directory,
+        target_deps = repository_ctx.attr.target_deps,
     )
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 

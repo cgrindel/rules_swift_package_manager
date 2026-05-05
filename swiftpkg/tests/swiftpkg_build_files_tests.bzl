@@ -2,7 +2,7 @@
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
-load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
 load(
     "//config_settings/spm/configuration:configurations.bzl",
     spm_configurations = "configurations",
@@ -33,6 +33,7 @@ _repo_name = "@swiftpkg_mypackage"
 
 def _pkg_info(
         expose_build_targets = False,
+        extra_targets = [],
         platforms = []):
     return pkginfos.new(
         name = "MyPackage",
@@ -553,7 +554,7 @@ def _pkg_info(
                 dependencies = [],
                 repo_name = _repo_name,
             ),
-        ],
+        ] + extra_targets,
         expose_build_targets = expose_build_targets,
     )
 
@@ -613,23 +614,24 @@ def _pkg_info_with_traits():
         enabled_traits = ["FeatureA", "FeatureB"],
     )
 
-def _pkg_ctx(pkg_info):
+def _pkg_ctx(pkg_info, target_deps = {}):
     return pkg_ctxs.new(
         pkg_info = pkg_info,
         repo_name = _repo_name,
+        target_deps = target_deps,
     )
 
-def _target_build_file(pkg_info, target_name, artifact_infos = []):
+def _target_build_file(pkg_info, target_name, artifact_infos = [], target_deps = {}):
     target = pkginfo_targets.get(pkg_info.targets, target_name)
     repository_ctx = testutils.new_stub_repository_ctx(
         repo_name = _repo_name[1:],
     )
-    return swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx(pkg_info), target, artifact_infos = artifact_infos)
+    return swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx(pkg_info, target_deps = target_deps), target, artifact_infos = artifact_infos)
 
-def _product_build_file(pkg_info, product_name):
+def _product_build_file(pkg_info, product_name, target_deps = {}):
     product = lists.find(pkg_info.products, lambda p: p.name == product_name)
     return swiftpkg_build_files.new_for_product(
-        pkg_ctx = _pkg_ctx(pkg_info),
+        pkg_ctx = _pkg_ctx(pkg_info, target_deps = target_deps),
         product = product,
     )
 
@@ -817,6 +819,111 @@ def _minimum_os_wrapper_behavior_test(ctx):
     return unittest.end(env)
 
 minimum_os_wrapper_behavior_test = unittest.make(_minimum_os_wrapper_behavior_test)
+
+def _manual_target_deps_test(ctx):
+    env = unittest.begin(ctx)
+
+    pkg_info = _pkg_info(extra_targets = [
+        pkginfos.new_target(
+            name = "CrossPackageTarget",
+            type = "regular",
+            c99name = "CrossPackageTarget",
+            module_type = "SwiftTarget",
+            path = "SubPackage/CrossPackageTarget",
+            sources = ["CrossPackageTarget.swift"],
+            dependencies = [],
+            label = bazel_labels.new(
+                name = "CrossPackageTarget.rspm",
+                package = "SubPackage",
+                repository_name = _repo_name,
+            ),
+            swift_src_info = pkginfos.new_swift_src_info(),
+        ),
+    ])
+
+    swift_bf = _target_build_file(
+        pkg_info,
+        "RegularTargetForExec",
+        target_deps = {
+            "RegularTargetForExec": [
+                ":SameBuildFileDep",
+                "SwiftExecutableTarget",
+                ":SystemLibraryTarget",
+                ":CrossPackageTarget",
+                "SwiftExecutableTarget.rspm_custom",
+                "@manual_deps//:SwiftDep",
+            ],
+            "RegularTargetForExec.rspm.__impl": ["@manual_deps//:ExactSwiftDep"],
+        },
+    )
+    swift_impl = _assert_decl(
+        env,
+        swift_bf,
+        "RegularTargetForExec.rspm.__impl",
+        "swift_library",
+    )
+    asserts.equals(
+        env,
+        """\
+[
+    "@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm",
+    ":SameBuildFileDep",
+    ":SwiftExecutableTarget.rspm",
+    ":SystemLibraryTarget.rspm",
+    ":CrossPackageTarget",
+    "SwiftExecutableTarget.rspm_custom",
+    "@manual_deps//:SwiftDep",
+    "@manual_deps//:ExactSwiftDep",
+]""",
+        scg.to_starlark(swift_impl.attrs["deps"]),
+    )
+
+    clang_bf = _target_build_file(
+        pkg_info,
+        "ClangLibrary",
+        target_deps = {
+            "ClangLibrary": ["@manual_deps//:ClangImplDep"],
+            "ClangLibrary.rspm_cxx": ["@manual_deps//:ClangChildDep"],
+        },
+    )
+    clang_impl = _assert_decl(env, clang_bf, "ClangLibrary.rspm.__impl", "cc_library")
+    asserts.equals(
+        env,
+        """\
+[
+    ":ClangLibrary.rspm_modulemap",
+    ":ClangLibrary.rspm_cxx",
+    "@manual_deps//:ClangImplDep",
+]""",
+        scg.to_starlark(clang_impl.attrs["deps"]),
+    )
+    clang_child = _assert_decl(env, clang_bf, "ClangLibrary.rspm_cxx", "cc_library")
+    asserts.equals(
+        env,
+        "[\"@manual_deps//:ClangChildDep\"]",
+        scg.to_starlark(clang_child.attrs["deps"]),
+    )
+
+    product_bf = _product_build_file(
+        pkg_info,
+        "oldstyleexec",
+        target_deps = {
+            "oldstyleexec": ["@manual_deps//:ProductDep"],
+        },
+    )
+    product_impl = _assert_decl(env, product_bf, "oldstyleexec.__impl", "swift_binary")
+    asserts.equals(
+        env,
+        [
+            "@swiftpkg_mypackage//:RegularTargetForExec.rspm",
+            "@manual_deps//:ProductDep",
+        ],
+        product_impl.attrs["deps"],
+    )
+
+    return unittest.end(env)
+
+manual_target_deps_test = unittest.make(_manual_target_deps_test)
 
 def _target_generation_test(ctx):
     env = unittest.begin(ctx)
@@ -2102,6 +2209,7 @@ def swiftpkg_build_files_test_suite():
     return unittest.suite(
         "swiftpkg_build_files_tests",
         minimum_os_wrapper_behavior_test,
+        manual_target_deps_test,
         target_generation_test,
         product_generation_test,
         license_generation_test,

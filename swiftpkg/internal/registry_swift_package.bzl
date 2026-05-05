@@ -250,6 +250,7 @@ def _registry_swift_package_impl(repository_ctx):
         resolved_pkg_map = resolved_pkg_map,
         registries_directory = registries_directory,
         replace_scm_with_registry = attr.replace_scm_with_registry,
+        target_deps = repository_ctx.attr.target_deps,
     )
 
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)

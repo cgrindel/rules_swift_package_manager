@@ -182,6 +182,28 @@ swift_deps.from_package(
 )
 ```
 
+#### (Optional) Add dependencies to generated Swift package targets
+
+If a generated Swift package target is missing a Bazel dependency, use `configure_package` to
+append deps to that generated target.
+
+```bazel
+swift_deps.configure_package(
+    name = "ExamplePackage",
+    target_deps = {
+        "ExampleTarget": [
+            ":same_build_file_dep",
+            "@other_repo//:dep",
+            "@//app:main_repo_dep",
+        ],
+    },
+)
+```
+
+Keys should usually be Swift package target names without `.rspm`; these map to generated
+implementation targets like `ExampleTarget.rspm.__impl`. If a key already contains `.rspm`, it is
+matched as a generated target name unchanged.
+
 ### 3. Create a minimal `Package.swift` file.
 
 Create a minimal `Package.swift` file that only contains the external dependencies that are directly
