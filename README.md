@@ -22,6 +22,7 @@ development inside a Bazel workspace.
   * [2. Configure your `MODULE.bazel` to use rules_swift_package_manager.](#2-configure-your-modulebazel-to-use-rules_swift_package_manager)
     * [(Optional) Use `swift_package` repository for updating packages](#optional-use-swift_package-repository-for-updating-packages)
     * [(Optional) Enable `swift_deps_info` generation for the Gazelle plugin](#optional-enable-swift_deps_info-generation-for-the-gazelle-plugin)
+    * [(Optional) Add dependencies to generated Swift package targets](#optional-add-dependencies-to-generated-swift-package-targets)
   * [3. Create a minimal `Package.swift` file.](#3-create-a-minimal-packageswift-file)
   * [4. Run `swift package update`](#4-run-swift-package-update)
   * [5. Run `bazel mod tidy`.](#5-run-bazel-mod-tidy)

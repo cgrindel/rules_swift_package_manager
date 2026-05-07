@@ -127,3 +127,5 @@ Used to download and build an external Swift package.
 | <a id="swift_package-target_deps"></a>target_deps |  Additional dependencies to add to generated targets. Keys are Swift package target names, which are mapped to generated implementation target names. If a key already contains `.rspm`, it is matched as a generated target name unchanged. Values may be Bazel label strings or Swift package target names. Bare value strings and local label strings such as `OtherTarget` or `:OtherTarget` are mapped to generated target labels such as `:OtherTarget.rspm` when they match Swift package targets in the same generated BUILD package. Values that contain `.rspm`, external labels, cross-package labels, and local labels that do not match package targets are emitted unchanged.   | <a href="https://bazel.build/rules/lib/dict">Dictionary: String -> List of strings</a> | optional |  `{}`  |
 | <a id="swift_package-verbose"></a>verbose |  -   | Boolean | optional |  `False`  |
 | <a id="swift_package-version"></a>version |  The resolved version of the package.   | String | optional |  `""`  |
+
+

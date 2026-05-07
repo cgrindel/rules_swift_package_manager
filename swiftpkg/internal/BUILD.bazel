@@ -110,7 +110,12 @@ bzl_library(
     name = "pkginfo_target_deps",
     srcs = ["pkginfo_target_deps.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
-    deps = ["@cgrindel_bazel_starlib//bzllib:defs"],
+    deps = [
+        ":bazel_repo_names",
+        ":bzl_selects",
+        ":pkginfo_dependencies",
+        "@cgrindel_bazel_starlib//bzllib:defs",
+    ],
 )
 
 bzl_library(
