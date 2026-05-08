@@ -250,6 +250,12 @@ def _remove_bazel_files(repository_ctx, directory):
     for file in files:
         repository_files.find_and_delete_files(repository_ctx, directory, file)
 
+def _remove_swift_version_file(repository_ctx, directory):
+    # A `.swift-version` file in the package root can hijack Swift toolchain
+    # proxies (e.g. `swiftly`) into requiring a version that isn't installed.
+    # https://github.com/swiftlang/swiftly/issues/504
+    repository_ctx.delete(paths.join(directory, ".swift-version"))
+
 def _remove_modulemaps(repository_ctx, directory, targets):
     repository_files.find_and_delete_files(
         repository_ctx,
@@ -275,6 +281,7 @@ repo_rules = struct(
     get_exec_env = _get_exec_env,
     remove_bazel_files = _remove_bazel_files,
     remove_modulemaps = _remove_modulemaps,
+    remove_swift_version_file = _remove_swift_version_file,
     swift_attrs = _swift_attrs,
     write_workspace_file = _write_workspace_file,
 )
