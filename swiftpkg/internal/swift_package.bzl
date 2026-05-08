@@ -95,6 +95,7 @@ def _swift_package_impl(repository_ctx):
         cached_json_directory,
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
+        target_deps = repository_ctx.attr.target_deps,
     )
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 

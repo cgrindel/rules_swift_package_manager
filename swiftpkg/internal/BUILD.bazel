@@ -110,7 +110,22 @@ bzl_library(
     name = "pkginfo_target_deps",
     srcs = ["pkginfo_target_deps.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
-    deps = ["@cgrindel_bazel_starlib//bzllib:defs"],
+    deps = [
+        ":bazel_repo_names",
+        ":bzl_selects",
+        ":pkginfo_dependencies",
+        "@cgrindel_bazel_starlib//bzllib:defs",
+    ],
+)
+
+bzl_library(
+    name = "manual_target_deps",
+    srcs = ["manual_target_deps.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":pkginfo_targets",
+        ":pkginfos",
+    ],
 )
 
 bzl_library(
@@ -151,6 +166,7 @@ bzl_library(
         ":bzl_selects",
         ":clang_files",
         ":load_statements",
+        ":manual_target_deps",
         ":minimum_os_versions",
         ":objc_files",
         ":pkginfo_target_deps",
@@ -189,7 +205,9 @@ bzl_library(
     srcs = ["pkg_ctxs.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
-        ":pkginfo_ext_deps",
+        ":manual_target_deps",
+        ":pkginfos",
+        ":repository_utils",
     ],
 )
 
