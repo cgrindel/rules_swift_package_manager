@@ -63,6 +63,10 @@ def _swift_package_impl(repository_ctx):
     # Remove any Bazel build files.
     repo_rules.remove_bazel_files(repository_ctx, directory)
 
+    # Remove any `.swift-version` file so that Swift toolchain proxies do not
+    # require a specific Swift version when running SPM commands.
+    repo_rules.remove_swift_version_file(repository_ctx, directory)
+
     # Generate the WORKSPACE file
     repo_rules.write_workspace_file(repository_ctx, directory)
 
