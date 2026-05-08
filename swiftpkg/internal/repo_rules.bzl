@@ -21,6 +21,20 @@ _swift_attrs = {
 A JSON file that contains a mapping of Swift products and Swift modules.\
 """,
     ),
+    "target_deps": attr.string_list_dict(
+        doc = """\
+Additional dependencies to add to generated targets. Keys are Swift package \
+target names, which are mapped to generated implementation target names. If a \
+key already contains `.rspm`, it is matched as a generated target name \
+unchanged. Values may be Bazel label strings or Swift package target names. \
+Bare value strings and local label strings such as `OtherTarget` or \
+`:OtherTarget` are mapped to generated target labels such as \
+`:OtherTarget.rspm` when they match Swift package targets in the same \
+generated BUILD package. Values that contain `.rspm`, external labels, \
+cross-package labels, and local labels that do not match package targets are \
+emitted unchanged.\
+""",
+    ),
 }
 
 _env_attr = {
@@ -236,6 +250,12 @@ def _remove_bazel_files(repository_ctx, directory):
     for file in files:
         repository_files.find_and_delete_files(repository_ctx, directory, file)
 
+def _remove_swift_version_file(repository_ctx, directory):
+    # A `.swift-version` file in the package root can hijack Swift toolchain
+    # proxies (e.g. `swiftly`) into requiring a version that isn't installed.
+    # https://github.com/swiftlang/swiftly/issues/504
+    repository_ctx.delete(paths.join(directory, ".swift-version"))
+
 def _remove_modulemaps(repository_ctx, directory, targets):
     repository_files.find_and_delete_files(
         repository_ctx,
@@ -261,6 +281,7 @@ repo_rules = struct(
     get_exec_env = _get_exec_env,
     remove_bazel_files = _remove_bazel_files,
     remove_modulemaps = _remove_modulemaps,
+    remove_swift_version_file = _remove_swift_version_file,
     swift_attrs = _swift_attrs,
     write_workspace_file = _write_workspace_file,
 )
