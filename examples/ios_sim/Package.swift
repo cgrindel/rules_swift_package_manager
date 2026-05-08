@@ -6,6 +6,6 @@ let package = Package(
     name: "ios_sim",
     dependencies: [
         .package(url: "https://github.com/apple/swift-nio.git", exact: "2.99.0"),
-        .package(url: "https://github.com/apple/swift-markdown.git", exact: "0.7.3"),
+        .package(url: "https://github.com/apple/swift-markdown.git", exact: "0.8.0"),
     ]
 )
