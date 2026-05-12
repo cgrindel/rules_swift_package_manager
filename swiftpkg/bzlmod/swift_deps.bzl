@@ -404,9 +404,6 @@ def _declare_pkg_from_dependency(
             env = from_package.env,
             env_inherit = from_package.env_inherit,
             path = dep.file_system.path,
-            dependencies_index = None,
-            build_file = build_file,
-            cached_json_directory = cached_json_directory,
             target_deps = target_deps,
         )
 
