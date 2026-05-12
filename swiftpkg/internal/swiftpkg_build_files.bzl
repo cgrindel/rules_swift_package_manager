@@ -12,6 +12,7 @@ load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":bzl_selects.bzl", "bzl_selects")
 load(":load_statements.bzl", "load_statements")
+load(":manual_target_deps.bzl", "manual_target_deps")
 load(":minimum_os_versions.bzl", "minimum_os_versions")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
@@ -105,6 +106,8 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
             pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
             for td in target_deps
         ])
+    deps.extend(manual_target_deps.deps_for_target(pkg_ctx, target))
+    if deps:
         attrs["deps"] = bzl_selects.to_starlark(deps)
 
     # NOTE: We specify defines using copts so that they stay local to the
@@ -503,6 +506,18 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     child_dep_names = []
     load_stmts = []
 
+    def _attrs_for_child(name):
+        child_attrs = dict(attrs)
+        manual_deps = manual_target_deps.deps_for_generated_target(
+            pkg_ctx,
+            name,
+        )
+        if manual_deps:
+            child_deps = list(child_attrs.get("deps", []))
+            child_deps.extend(manual_deps)
+            child_attrs["deps"] = child_deps
+        return child_attrs
+
     # Objective-C targets don't generate a modulemap for non-Swift target by
     # default. We also disable the rules_swift generation of modulemaps to
     # keep parity between consuming from Objective-C and Swift. Because of this
@@ -578,7 +593,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             _c_child_library(
                 repository_ctx,
                 name = child_name,
-                attrs = attrs,
+                attrs = _attrs_for_child(child_name),
                 rule_kind = rule_kind,
                 srcs = clang_src_info.organized_srcs.c_srcs +
                        clang_src_info.organized_srcs.other_srcs,
@@ -592,7 +607,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             _c_child_library(
                 repository_ctx,
                 name = child_name,
-                attrs = attrs,
+                attrs = _attrs_for_child(child_name),
                 rule_kind = rule_kind,
                 srcs = clang_src_info.organized_srcs.cxx_srcs +
                        clang_src_info.organized_srcs.other_srcs,
@@ -607,7 +622,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             _c_child_library(
                 repository_ctx,
                 name = child_name,
-                attrs = attrs,
+                attrs = _attrs_for_child(child_name),
                 rule_kind = rule_kind,
                 srcs = clang_src_info.organized_srcs.assembly_srcs +
                        clang_src_info.organized_srcs.other_srcs,
@@ -677,7 +692,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 _c_child_library(
                     repository_ctx,
                     name = child_name,
-                    attrs = attrs,
+                    attrs = _attrs_for_child(child_name),
                     rule_kind = rule_kind,
                     srcs = clang_src_info.organized_srcs.objc_srcs +
                            clang_src_info.organized_srcs.other_srcs +
@@ -693,7 +708,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 _c_child_library(
                     repository_ctx,
                     name = child_name,
-                    attrs = attrs,
+                    attrs = _attrs_for_child(child_name),
                     rule_kind = rule_kind,
                     srcs = clang_src_info.organized_srcs.objcxx_srcs +
                            clang_src_info.organized_srcs.other_srcs +
@@ -708,7 +723,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "deps": [
             ":{}".format(dname)
             for dname in child_dep_names
-        ],
+        ] + manual_target_deps.deps_for_target(pkg_ctx, target),
         "tags": ["manual"],
         "visibility": _implementation_target_visibility(),
     }
@@ -888,6 +903,10 @@ def _system_library_build_file(repository_ctx, pkg_ctx, target):
         linkopts = ["-l{}".format(lib) for lib in link_libraries]
         attrs["linkopts"] = linkopts
 
+    deps = manual_target_deps.deps_for_target(pkg_ctx, target)
+    if deps:
+        attrs["deps"] = deps
+
     # Create swift_interop_hint for Swift interop
     aspect_hint_target_name = pkginfo_targets.swift_hint_label_name(public_label_name)
 
@@ -970,6 +989,9 @@ expected: {expected}\
         "glob",
         ["{xcframework_path}/**".format(xcframework_path = artifact_info.path)],
     )
+    deps = manual_target_deps.deps_for_target(pkg_ctx, target)
+    if deps:
+        attrs["deps"] = deps
     decls = [
         build_decls.new(
             kind = kind,
@@ -1170,11 +1192,7 @@ def _new_for_products(pkg_ctx):
 def _new_for_product(pkg_ctx, product):
     prod_type = product.type
     if prod_type.is_executable:
-        return _executable_product_build_file(
-            pkg_ctx.pkg_info,
-            product,
-            pkg_ctx.repo_name,
-        )
+        return _executable_product_build_file(pkg_ctx, product)
     elif prod_type.is_library:
         return _library_product_build_file(pkg_ctx, product)
     elif prod_type.is_macro:
@@ -1183,7 +1201,10 @@ def _new_for_product(pkg_ctx, product):
     # GH046: Check for plugin product
     return None
 
-def _executable_product_build_file(pkg_info, product, repo_name):
+def _executable_product_build_file(pkg_ctx, product):
+    pkg_info = pkg_ctx.pkg_info
+    repo_name = pkg_ctx.repo_name
+
     # Retrieve the targets
     targets = [
         pkginfo_targets.get(pkg_info.targets, tname)
@@ -1230,7 +1251,7 @@ def _executable_product_build_file(pkg_info, product, repo_name):
                         actual = ":{}".format(implementation_name),
                         visibility = ["//visibility:public"],
                     ),
-                    _swift_binary_from_product(product, target, repo_name),
+                    _swift_binary_from_product(pkg_ctx, product, target),
                 ],
             )
     elif targets_len > 1:
@@ -1254,6 +1275,10 @@ def _library_product_build_file(pkg_ctx, product):
 
     if len(target_labels) == 0:
         fail("No targets specified for a library product. name:", product.name)
+    deps = [
+        bazel_labels.normalize(label)
+        for label in target_labels
+    ]
     return build_files.new(
         load_stmts = [swift_library_group_load_stmt],
         decls = [
@@ -1261,25 +1286,24 @@ def _library_product_build_file(pkg_ctx, product):
                 swift_kinds.library_group,
                 product.name,
                 attrs = {
-                    "deps": [
-                        bazel_labels.normalize(label)
-                        for label in target_labels
-                    ],
+                    "deps": deps,
                     "visibility": ["//visibility:public"],
                 },
             ),
         ],
     )
 
-def _swift_binary_from_product(product, dep_target, repo_name):
+def _swift_binary_from_product(pkg_ctx, product, dep_target):
     implementation_name = pkginfo_targets.implementation_label_name(product.name)
+    deps = [bazel_labels.normalize(
+        pkginfo_targets.bazel_label(dep_target, repo_name = pkg_ctx.repo_name),
+    )]
+    deps.extend(manual_target_deps.deps_for_product(pkg_ctx, product))
     return build_decls.new(
         kind = swift_kinds.binary,
         name = implementation_name,
         attrs = {
-            "deps": [bazel_labels.normalize(
-                pkginfo_targets.bazel_label(dep_target, repo_name = repo_name),
-            )],
+            "deps": deps,
             "tags": ["manual"],
             "visibility": _implementation_target_visibility(),
         },
