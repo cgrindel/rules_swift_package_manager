@@ -8,6 +8,7 @@ swift_library(
     module_name = "Tests",
     tags = ["manual"],
     visibility = ["//visibility:public"],
+    deps = ["@swiftpkg_injectionnext//:InjectionNext"],
 )
 
 ios_unit_test(
