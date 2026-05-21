@@ -25,7 +25,7 @@ _OBJC_SRC_EXTS = [".m"]
 _OBJCXX_SRC_EXTS = [".mm"]
 
 # Assembly source extensions
-_ASSEMBLY_SRC_EXTS = [".S"]
+_ASSEMBLY_SRC_EXTS = [".S", ".s"]
 
 # Sources that should be included when constructing other cc_xxx targets
 _OTHER_SRC_EXTS = [".so", ".o", ".inc"]

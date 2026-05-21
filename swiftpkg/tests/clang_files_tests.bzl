@@ -252,6 +252,7 @@ def _organize_srcs_test(ctx):
         "foo.mm",
         "foo.o",
         "foo.S",
+        "foo.s",
     ]
     actual = clang_files.organize_srcs(srcs)
     expected = struct(
@@ -259,7 +260,7 @@ def _organize_srcs_test(ctx):
         cxx_srcs = ["foo.cc", "foo.cpp"],
         objc_srcs = ["foo.m"],
         objcxx_srcs = ["foo.mm"],
-        assembly_srcs = ["foo.S"],
+        assembly_srcs = ["foo.S", "foo.s"],
         other_srcs = ["foo.inc", "foo.so", "foo.o"],
     )
     asserts.equals(env, expected, actual)
