@@ -13,10 +13,15 @@ load(":minimum_os_platforms.bzl", "minimum_os_platforms")
 
 _APPLE_PLATFORM_TYPE_OPTION = "//command_line_option:apple_platform_type"
 
+_MINIMUM_OS_VERSION_OPTION = "//command_line_option:minimum_os_version"
+
 # Supported Bazel apple_platform_type values match normalized SwiftPM platform
 # names, so the transition can use the shared platform config map directly.
 _MINIMUM_OS_CONFIG_BY_PLATFORM_TYPE = minimum_os_platforms.by_platform()
 
+# _MINIMUM_OS_VERSION_OPTION is already included in _MINIMUM_OS_OPTIONS from
+# the visionOS platform. _MINIMUM_OS_VERSION_OPTION will need to be appended to
+# _MINIMUM_OS_OPTIONS explicitly if/when visionOS gets a dedicated flag.
 _MINIMUM_OS_OPTIONS = minimum_os_platforms.options()
 
 def _transition_outputs(settings, attr):
@@ -49,6 +54,9 @@ def _transition_outputs(settings, attr):
         fail(import_error)
 
     outputs[minimum_os_config.option] = minimum_os
+
+    # Set the minimum_os_version flag in addition to the OS specific flag
+    outputs[_MINIMUM_OS_VERSION_OPTION] = minimum_os
 
     return outputs
 
