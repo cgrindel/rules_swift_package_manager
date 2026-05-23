@@ -15,6 +15,12 @@
       "matchPackagePatterns": ["buildtools"],
       "matchManagers": ["gomod"],
       "enabled": false
+    },
+    {
+      "description": "The fake registry used by swift_package_registry_example only hosts swift-collections 1.1.x, which is incompatible with swift-async-algorithms >= 1.1.4 (requires swift-collections >= 1.5.0).",
+      "matchPackageNames": ["apple/swift-async-algorithms"],
+      "matchFileNames": ["examples/swift_package_registry_example/Package.swift"],
+      "enabled": false
     }
   ]
 }
