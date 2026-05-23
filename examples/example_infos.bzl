@@ -138,6 +138,7 @@ _macos_single_bazel_version_test_examples = [
     "firebase_example",
     "google_maps_example",
     "interesting_deps",
+    "injectionnext_example",
     "ios_sim",
     "kscrash_example",
     "lottie_ios_example",

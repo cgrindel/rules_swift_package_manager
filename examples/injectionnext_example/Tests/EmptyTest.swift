@@ -1,4 +1,4 @@
-import InjectionNext
+import InjectionBundle
 import XCTest
 
 final class EmptyTest: XCTestCase {

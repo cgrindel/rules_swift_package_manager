@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/shakebugs/shake-ios",
       "state" : {
-        "revision" : "f53b127d5ef517194a48b287fa9dfc4e679e9e12",
-        "version" : "17.2.4"
+        "revision" : "40f650066f0616beb4d6e2de1899042fd1a2d17f",
+        "version" : "17.2.5"
       }
     }
   ],
