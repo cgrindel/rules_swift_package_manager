@@ -20,19 +20,8 @@ bazel_dep(
 )
 bazel_dep(
     name = "rules_apple",
-    version = "4.3.3",
+    version = "4.5.3",
     repo_name = "build_bazel_rules_apple",
-)
-
-# Workaround: rules_apple 4.3.3 bundletool uses os.system() which doesn't
-# inherit import paths under rules_python >= 1.7.0's new bootstrap mechanism.
-# Pin to rules_apple main which includes the fix from PR #2866.
-# https://github.com/bazelbuild/rules_apple/issues/2843
-# Remove once a rules_apple release includes the fix.
-git_override(
-    module_name = "rules_apple",
-    commit = "78ae0928dc9e1ab791408d88943c983bb38382b6",
-    remote = "https://github.com/bazelbuild/rules_apple.git",
 )
 
 bazel_dep(
