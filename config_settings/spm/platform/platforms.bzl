@@ -52,6 +52,15 @@ _PLATFORM_INFOS = [
     _platform_info(spm = "driverkit", bzl = None, os = None),
 ]
 
+def _normalize(name):
+    """Returns the canonical SPM platform name.
+
+    SwiftPM's JSON can use PackageDescription spellings such as `visionOS`.
+    Internally, RSPM platform labels and Bazel Apple platform types use
+    lowercase names.
+    """
+    return name.lower()
+
 def _label(name):
     """Returns the condition label for the SPM platform name.
 
@@ -62,6 +71,8 @@ def _label(name):
         The condition label as a `string`.
     """
 
+    name = _normalize(name)
+
     # There is currently no support Mac Catalyst in Bazel. These are Mac apps
     # that use iOS frameworks. Treat it like iOS for now.
     if name == "maccatalyst":
@@ -71,16 +82,22 @@ def _label(name):
     return "@rules_swift_package_manager//config_settings/spm/platform:{}".format(name)
 
 def _is_supported(name):
+    name = _normalize(name)
     return name != "maccatalyst"
 
 def _supported(names):
-    return [n for n in names if _is_supported(n)]
+    return [
+        _normalize(n)
+        for n in names
+        if _is_supported(n)
+    ]
 
 platforms = struct(
     macos = "macos",
     maccatalyst = "maccatalyst",
     ios = "ios",
     tvos = "tvos",
+    visionos = "visionos",
     watchos = "watchos",
     linux = "linux",
     windows = "windows",
@@ -89,6 +106,7 @@ platforms = struct(
     openbsd = "openbsd",
     all_values = [pi.spm for pi in _PLATFORM_INFOS],
     all_platform_infos = _PLATFORM_INFOS,
+    normalize = _normalize,
     label = _label,
     is_supported = _is_supported,
     supported = _supported,

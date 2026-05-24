@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/awslabs/aws-sdk-swift",
       "state" : {
-        "revision" : "ee91c45e071b400d06f7df3785ba78dab973df2d",
-        "version" : "1.6.105"
+        "revision" : "ca173b20011ece43e919eab15b6abe0c0d8d3347",
+        "version" : "1.6.113"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/smithy-lang/smithy-swift",
       "state" : {
-        "revision" : "3df71b8c33b21b9a76071c915504a8dfda663c33",
-        "version" : "0.203.0"
+        "revision" : "bdc42952d4f26085f17d08118c37506713c690ad",
+        "version" : "0.205.0"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections.git",
       "state" : {
-        "revision" : "6675bc0ff86e61436e615df6fc5174e043e57924",
-        "version" : "1.4.1"
+        "revision" : "fea17c02d767f46b23070fdfdacc28a03a39232a",
+        "version" : "1.5.1"
       }
     },
     {

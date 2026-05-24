@@ -1,5 +1,5 @@
 # InjectionNext Example
 
-This Package contains code that is written in Objective-C++ along with plain C
-code. It validates that the correct cc_library targets are created to link the
-C code with the Objective-C++ target.
+This package depends on InjectionNext, which contains Objective-C++, plain C,
+and lower-case `.s` assembly sources. It validates that the generated
+`cc_library` targets include and link those sources with the Swift product.

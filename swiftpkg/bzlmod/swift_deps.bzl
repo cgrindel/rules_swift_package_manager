@@ -213,6 +213,7 @@ the Swift package to make it available.\
             from_package,
             config_swift_package,
             from_package.cached_json_directory,
+            config_pkg.target_deps if config_pkg else {},
         )
 
     # Add all transitive dependencies to direct_dep_repo_names if `publicly_expose_all_targets` flag is set.
@@ -244,7 +245,8 @@ def _declare_pkg_from_dependency(
         config_pkg,
         from_package,
         config_swift_package,
-        cached_json_directory):
+        cached_json_directory,
+        target_deps):
     if cached_json_directory:
         cached_json_directory = paths.join(cached_json_directory, dep.name)
     name = bazel_repo_names.from_identity(dep.identity)
@@ -299,6 +301,7 @@ def _declare_pkg_from_dependency(
             publicly_expose_all_targets = publicly_expose_all_targets,
             registries = registries,
             replace_scm_with_registry = replace_scm_with_registry,
+            target_deps = target_deps,
         )
 
     elif dep.file_system:
@@ -311,6 +314,7 @@ def _declare_pkg_from_dependency(
             dependencies_index = None,
             build_file = build_file,
             cached_json_directory = cached_json_directory,
+            target_deps = target_deps,
         )
 
     elif dep.registry:
@@ -329,6 +333,7 @@ def _declare_pkg_from_dependency(
             registries = from_package.registries,
             replace_scm_with_registry = replace_scm_with_registry,
             resolved = resolved,
+            target_deps = target_deps,
             version = dep.registry.pin.state.version,
         )
 
@@ -467,6 +472,22 @@ The identity (i.e., name in the package's manifest) for the Swift package.\
         "recursive_init_submodules": attr.bool(
             default = True,
             doc = "Whether to clone submodules recursively in the repository.",
+        ),
+        "target_deps": attr.string_list_dict(
+            doc = """\
+Additional dependencies to add to generated targets for this package.
+
+Keys are Swift package target names, such as `ExampleTarget`, which are mapped \
+to generated implementation target names such as `ExampleTarget.rspm.__impl`. \
+If the key already contains `.rspm`, it is matched as a generated target name \
+unchanged. Values may be Bazel label strings or Swift package target names. \
+Bare value strings and local label strings such as `OtherTarget` or \
+`:OtherTarget` are mapped to generated target labels such as \
+`:OtherTarget.rspm` when they match Swift package targets in the same \
+generated BUILD package. Values that contain `.rspm`, external labels, \
+cross-package labels, and local labels that do not match package targets are \
+emitted unchanged.\
+""",
         ),
     } | PATCH_ATTRS | TOOL_ATTRS,
     doc = "Used to add or override settings for a particular Swift package.",

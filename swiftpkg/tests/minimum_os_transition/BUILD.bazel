@@ -1,0 +1,90 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@build_bazel_rules_swift//swift:swift_interop_hint.bzl", "swift_interop_hint")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+load("//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_binary", "spm_minimum_os_target")
+load(":provider_surface_tests.bzl", "provider_surface_test_suite")
+load(":test_fixtures.bzl", "apple_framework_import_provider_target", "executable_provider_target", "spm_provider_consumer", "swift_c_provider_target")
+
+bzlformat_pkg(name = "bzlformat")
+
+swift_c_provider_target(
+    name = "swift_c_actual",
+)
+
+executable_provider_target(
+    name = "executable_actual",
+)
+
+spm_minimum_os_binary(
+    name = "executable_wrapped",
+    ios_minimum_os = "13.0",
+    macos_minimum_os = "10.15",
+    tvos_minimum_os = "13.0",
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "6.0",
+    deps = [":executable_actual"],
+)
+
+spm_minimum_os_target(
+    name = "swift_c_wrapped",
+    ios_minimum_os = "13.0",
+    macos_minimum_os = "10.15",
+    tvos_minimum_os = "13.0",
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "6.0",
+    deps = [":swift_c_actual"],
+)
+
+cc_library(
+    name = "custom_module_actual",
+    hdrs = ["custom_module.h"],
+    aspect_hints = [":custom_module_hint"],
+)
+
+swift_interop_hint(
+    name = "custom_module_hint",
+    module_name = "CustomModule",
+)
+
+spm_minimum_os_target(
+    name = "custom_module_wrapped",
+    ios_minimum_os = "13.0",
+    macos_minimum_os = "10.15",
+    tvos_minimum_os = "13.0",
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "6.0",
+    deps = [":custom_module_actual"],
+)
+
+apple_framework_import_provider_target(
+    name = "apple_framework_import_actual",
+)
+
+spm_minimum_os_target(
+    name = "apple_framework_import_wrapped",
+    ios_minimum_os = "13.0",
+    macos_minimum_os = "10.15",
+    tvos_minimum_os = "13.0",
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "6.0",
+    deps = [":apple_framework_import_actual"],
+)
+
+spm_provider_consumer(
+    name = "swift_c_consumer",
+    dep = ":swift_c_wrapped",
+)
+
+provider_surface_test_suite(name = "provider_surface_tests")
+
+bzl_library(
+    name = "test_fixtures",
+    srcs = ["test_fixtures.bzl"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@build_bazel_rules_apple//apple:providers",
+        "@build_bazel_rules_swift//swift",
+        "@rules_cc//cc/common",
+    ],
+)

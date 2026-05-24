@@ -28,7 +28,7 @@ bazel_dep(
 )
 bazel_dep(
     name = "gazelle",
-    version = "0.50.0",
+    version = "0.51.0",
     dev_dependency = True,
     repo_name = "bazel_gazelle",
 )
@@ -52,6 +52,20 @@ swift_deps.from_package(
     declare_swift_deps_info = True,
     resolved = "//:swift/Package.resolved",
     swift = "//:swift/Package.swift",
+)
+# Iterable swift-sdk 6.7.1 declares `.iOS(.v10)` in its Package.swift but its
+# source uses iOS 12 APIs (e.g. `NWPathMonitor`) without availability guards.
+# Compiling the package at its declared iOS 10 deployment target fails. Xcode
+# hides the under-declared manifest by clamping SPM package builds to iOS 12,
+# which is why iOS apps consuming Iterable through Xcode work. This patch
+# corrects the third-party metadata so the package compiles under the
+# package-minimum transition, which matches SwiftPM's per-package behavior.
+swift_deps.configure_package(
+    name = "swift-sdk",
+    patch_args = ["-p1"],
+    patches = [
+        "//third_party/iterable_swift_sdk:0001-Bump-iOS-platform-to-v12.patch",
+    ],
 )
 use_repo(
     swift_deps,

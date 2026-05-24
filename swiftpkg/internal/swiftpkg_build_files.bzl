@@ -12,6 +12,8 @@ load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":bzl_selects.bzl", "bzl_selects")
 load(":load_statements.bzl", "load_statements")
+load(":manual_target_deps.bzl", "manual_target_deps")
+load(":minimum_os_versions.bzl", "minimum_os_versions")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
@@ -26,7 +28,7 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
     elif target.module_type == module_types.swift:
         return _swift_target_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.system_library:
-        return _system_library_build_file(repository_ctx, target)
+        return _system_library_build_file(repository_ctx, pkg_ctx, target)
     elif target.module_type == module_types.binary:
         # GH558: Support artifactBundle.
         xcf_artifact_info = lists.find(
@@ -46,10 +48,12 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         fail("Expected a `swift_src_info`. name: ", target.name)
 
     all_build_files = []
+    public_label_name = pkginfo_targets.bazel_label_name(target)
+    implementation_label_name = pkginfo_targets.implementation_label_name(public_label_name)
     attrs = {
         "module_name": target.c99name,
         "srcs": pkginfo_targets.srcs(target),
-        "visibility": _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
+        "visibility": _implementation_target_visibility(),
     }
 
     def _update_attr_list(name, value):
@@ -102,6 +106,8 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
             pkginfo_target_deps.bzl_select_list(pkg_ctx, td)
             for td in target_deps
         ])
+    deps.extend(manual_target_deps.deps_for_target(pkg_ctx, target))
+    if deps:
         attrs["deps"] = bzl_selects.to_starlark(deps)
 
     # NOTE: We specify defines using copts so that they stay local to the
@@ -217,14 +223,50 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         ))
 
     if is_library_target:
-        load_stmts = [swift_library_load_stmt]
-        decls = [_swift_library_from_target(target, attrs)]
+        load_stmts = [swift_library_load_stmt, spm_minimum_os_target_load_stmt]
+        decls = [
+            _minimum_os_wrapper_decl(
+                pkg_info = pkg_ctx.pkg_info,
+                kind = swiftpkg_minimum_os_kinds.target,
+                name = public_label_name,
+                actual = ":{}".format(implementation_label_name),
+                visibility = _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
+            ),
+            _swift_library_from_target(
+                implementation_label_name,
+                attrs,
+            ),
+        ]
     elif target.type == target_types.executable:
-        load_stmts = [swift_binary_load_stmt]
-        decls = [_swift_binary_from_target(target, attrs)]
+        load_stmts = [swift_binary_load_stmt, spm_minimum_os_binary_load_stmt]
+        decls = [
+            _minimum_os_wrapper_decl(
+                pkg_info = pkg_ctx.pkg_info,
+                kind = swiftpkg_minimum_os_kinds.binary,
+                name = public_label_name,
+                actual = ":{}".format(implementation_label_name),
+                visibility = _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
+            ),
+            _swift_binary_from_target(
+                implementation_label_name,
+                attrs,
+            ),
+        ]
     elif target.type == target_types.test:
-        load_stmts = [swift_test_load_stmt]
-        decls = [_swift_test_from_target(target, attrs)]
+        load_stmts = [swift_test_load_stmt, spm_minimum_os_test_load_stmt]
+        decls = [
+            _minimum_os_wrapper_decl(
+                pkg_info = pkg_ctx.pkg_info,
+                kind = swiftpkg_minimum_os_kinds.test,
+                name = public_label_name,
+                actual = ":{}".format(implementation_label_name),
+                visibility = _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
+            ),
+            _swift_test_from_target(
+                implementation_label_name,
+                attrs,
+            ),
+        ]
     elif target.type == target_types.macro:
         load_stmts = [swift_compiler_plugin_load_stmt]
         decls = [_swift_compiler_plugin_from_target(target, attrs)]
@@ -237,7 +279,7 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
 
     return build_files.merge(*all_build_files)
 
-def _swift_library_from_target(target, attrs):
+def _swift_library_from_target(name, attrs):
     # Mark swift_library targets as manual. We do this so that they are always
     # built from a leaf node which can provide critical configuration
     # information.
@@ -253,21 +295,23 @@ def _swift_library_from_target(target, attrs):
 
     return build_decls.new(
         kind = swift_kinds.library,
-        name = pkginfo_targets.bazel_label_name(target),
+        name = name,
         attrs = attrs,
     )
 
-def _swift_binary_from_target(target, attrs):
+def _swift_binary_from_target(name, attrs):
+    attrs["tags"] = ["manual"]
     return build_decls.new(
         kind = swift_kinds.binary,
-        name = pkginfo_targets.bazel_label_name(target),
+        name = name,
         attrs = attrs,
     )
 
-def _swift_test_from_target(target, attrs):
+def _swift_test_from_target(name, attrs):
+    attrs["tags"] = ["manual"]
     return build_decls.new(
         kind = swift_kinds.test,
-        name = pkginfo_targets.bazel_label_name(target),
+        name = name,
         attrs = attrs,
     )
 
@@ -313,6 +357,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     if clang_src_info == None:
         fail("Expected `clang_src_info` to not be None.")
     all_build_files = []
+    public_label_name = pkginfo_targets.bazel_label_name(target)
+    implementation_label_name = pkginfo_targets.implementation_label_name(public_label_name)
 
     # These flags are used by SPM when compiling clang modules.
     copts = [
@@ -425,7 +471,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "alwayslink": True,
         "copts": copts,
         "srcs": srcs,
-        "visibility": _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
+        "visibility": _implementation_target_visibility(),
     }
     if clang_src_info.hdrs:
         hdrs = clang_src_info.hdrs
@@ -460,6 +506,18 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     child_dep_names = []
     load_stmts = []
 
+    def _attrs_for_child(name):
+        child_attrs = dict(attrs)
+        manual_deps = manual_target_deps.deps_for_generated_target(
+            pkg_ctx,
+            name,
+        )
+        if manual_deps:
+            child_deps = list(child_attrs.get("deps", []))
+            child_deps.extend(manual_deps)
+            child_attrs["deps"] = child_deps
+        return child_attrs
+
     # Objective-C targets don't generate a modulemap for non-Swift target by
     # default. We also disable the rules_swift generation of modulemaps to
     # keep parity between consuming from Objective-C and Swift. Because of this
@@ -493,7 +551,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                     "deps": [],
                     "hdrs": clang_src_info.hdrs,
                     "module_name": target.c99name,
-                    "visibility": _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
+                    "visibility": _implementation_target_visibility(),
                 },
             ),
         )
@@ -535,7 +593,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             _c_child_library(
                 repository_ctx,
                 name = child_name,
-                attrs = attrs,
+                attrs = _attrs_for_child(child_name),
                 rule_kind = rule_kind,
                 srcs = clang_src_info.organized_srcs.c_srcs +
                        clang_src_info.organized_srcs.other_srcs,
@@ -549,7 +607,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             _c_child_library(
                 repository_ctx,
                 name = child_name,
-                attrs = attrs,
+                attrs = _attrs_for_child(child_name),
                 rule_kind = rule_kind,
                 srcs = clang_src_info.organized_srcs.cxx_srcs +
                        clang_src_info.organized_srcs.other_srcs,
@@ -564,7 +622,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             _c_child_library(
                 repository_ctx,
                 name = child_name,
-                attrs = attrs,
+                attrs = _attrs_for_child(child_name),
                 rule_kind = rule_kind,
                 srcs = clang_src_info.organized_srcs.assembly_srcs +
                        clang_src_info.organized_srcs.other_srcs,
@@ -634,7 +692,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 _c_child_library(
                     repository_ctx,
                     name = child_name,
-                    attrs = attrs,
+                    attrs = _attrs_for_child(child_name),
                     rule_kind = rule_kind,
                     srcs = clang_src_info.organized_srcs.objc_srcs +
                            clang_src_info.organized_srcs.other_srcs +
@@ -650,7 +708,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 _c_child_library(
                     repository_ctx,
                     name = child_name,
-                    attrs = attrs,
+                    attrs = _attrs_for_child(child_name),
                     rule_kind = rule_kind,
                     srcs = clang_src_info.organized_srcs.objcxx_srcs +
                            clang_src_info.organized_srcs.other_srcs +
@@ -665,19 +723,30 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "deps": [
             ":{}".format(dname)
             for dname in child_dep_names
-        ],
-        "visibility": _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
+        ] + manual_target_deps.deps_for_target(pkg_ctx, target),
+        "tags": ["manual"],
+        "visibility": _implementation_target_visibility(),
     }
     decls.append(
         build_decls.new(
             rule_kind,
-            bzl_target_name,
+            implementation_label_name,
             attrs = _starlarkify_clang_attrs(repository_ctx, parent_attrs),
+        ),
+    )
+    decls.append(
+        _minimum_os_wrapper_decl(
+            pkg_info = pkg_ctx.pkg_info,
+            kind = swiftpkg_minimum_os_kinds.target,
+            name = public_label_name,
+            actual = ":{}".format(implementation_label_name),
+            visibility = _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
         ),
     )
 
     # Add cc/objc library load statements at the end
     load_stmts.append(cc_library_load_stmt)
+    load_stmts.append(spm_minimum_os_target_load_stmt)
     if rule_kind == objc_kinds.library:
         load_stmts.append(objc_library_load_stmt)
 
@@ -796,11 +865,13 @@ def _extract_link_libraries_from_modulemap(repository_ctx, modulemap_path):
 
     return libraries
 
-def _system_library_build_file(repository_ctx, target):
-    bzl_target_name = target.label.name
+def _system_library_build_file(repository_ctx, pkg_ctx, target):
+    public_label_name = pkginfo_targets.bazel_label_name(target)
+    implementation_label_name = pkginfo_targets.implementation_label_name(public_label_name)
 
     attrs = {
-        "visibility": ["//visibility:public"],
+        "tags": ["manual"],
+        "visibility": _implementation_target_visibility(),
     }
 
     # Standard C/Objc compilation flags from SPM
@@ -832,10 +903,18 @@ def _system_library_build_file(repository_ctx, target):
         linkopts = ["-l{}".format(lib) for lib in link_libraries]
         attrs["linkopts"] = linkopts
 
-    # Create swift_interop_hint for Swift interop
-    aspect_hint_target_name = pkginfo_targets.swift_hint_label_name(bzl_target_name)
+    deps = manual_target_deps.deps_for_target(pkg_ctx, target)
+    if deps:
+        attrs["deps"] = deps
 
-    load_stmts = [swift_interop_hint_load_stmt, cc_library_load_stmt]
+    # Create swift_interop_hint for Swift interop
+    aspect_hint_target_name = pkginfo_targets.swift_hint_label_name(public_label_name)
+
+    load_stmts = [
+        swift_interop_hint_load_stmt,
+        cc_library_load_stmt,
+        spm_minimum_os_target_load_stmt,
+    ]
     decls = []
 
     decls.append(
@@ -854,8 +933,17 @@ def _system_library_build_file(repository_ctx, target):
     decls.append(
         build_decls.new(
             kind = clang_kinds.library,
-            name = bzl_target_name,
+            name = implementation_label_name,
             attrs = attrs,
+        ),
+    )
+    decls.append(
+        _minimum_os_wrapper_decl(
+            pkg_info = pkg_ctx.pkg_info,
+            kind = swiftpkg_minimum_os_kinds.target,
+            name = public_label_name,
+            actual = ":{}".format(implementation_label_name),
+            visibility = _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
         ),
     )
 
@@ -867,16 +955,24 @@ def _system_library_build_file(repository_ctx, target):
 # MARK: - Apple xcframework Targets
 
 def _xcframework_import_build_file(pkg_ctx, target, artifact_info):
+    public_label_name = pkginfo_targets.bazel_label_name(target)
+    implementation_label_name = pkginfo_targets.implementation_label_name(public_label_name)
     attrs = {}
     if artifact_info.link_type == link_types.static:
-        load_stmts = [apple_static_xcframework_import_load_stmt]
+        load_stmts = [
+            apple_static_xcframework_import_load_stmt,
+            spm_minimum_os_target_load_stmt,
+        ]
         kind = apple_kinds.static_xcframework_import
 
         # Firebase example requires that GoogleAppMeasurement symbols are
         # passed along.
         attrs["alwayslink"] = True
     elif artifact_info.link_type == link_types.dynamic:
-        load_stmts = [apple_dynamic_xcframework_import_load_stmt]
+        load_stmts = [
+            apple_dynamic_xcframework_import_load_stmt,
+            spm_minimum_os_target_load_stmt,
+        ]
         kind = apple_kinds.dynamic_xcframework_import
     else:
         fail(
@@ -893,14 +989,25 @@ expected: {expected}\
         "glob",
         ["{xcframework_path}/**".format(xcframework_path = artifact_info.path)],
     )
+    deps = manual_target_deps.deps_for_target(pkg_ctx, target)
+    if deps:
+        attrs["deps"] = deps
     decls = [
         build_decls.new(
             kind = kind,
-            name = pkginfo_targets.bazel_label_name(target),
+            name = implementation_label_name,
             attrs = attrs | {
-                "visibility": _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
+                "tags": ["manual"],
+                "visibility": _implementation_target_visibility(),
                 "xcframework_imports": glob,
             },
+        ),
+        _minimum_os_wrapper_decl(
+            pkg_info = pkg_ctx.pkg_info,
+            kind = swiftpkg_minimum_os_kinds.target,
+            name = public_label_name,
+            actual = ":{}".format(implementation_label_name),
+            visibility = _target_visibility(pkg_ctx.pkg_info.expose_build_targets),
         ),
     ]
     return build_files.new(
@@ -1085,11 +1192,7 @@ def _new_for_products(pkg_ctx):
 def _new_for_product(pkg_ctx, product):
     prod_type = product.type
     if prod_type.is_executable:
-        return _executable_product_build_file(
-            pkg_ctx.pkg_info,
-            product,
-            pkg_ctx.repo_name,
-        )
+        return _executable_product_build_file(pkg_ctx, product)
     elif prod_type.is_library:
         return _library_product_build_file(pkg_ctx, product)
     elif prod_type.is_macro:
@@ -1098,7 +1201,10 @@ def _new_for_product(pkg_ctx, product):
     # GH046: Check for plugin product
     return None
 
-def _executable_product_build_file(pkg_info, product, repo_name):
+def _executable_product_build_file(pkg_ctx, product):
+    pkg_info = pkg_ctx.pkg_info
+    repo_name = pkg_ctx.repo_name
+
     # Retrieve the targets
     targets = [
         pkginfo_targets.get(pkg_info.targets, tname)
@@ -1131,9 +1237,22 @@ def _executable_product_build_file(pkg_info, product, repo_name):
             # This is an old-style (pre-5.4) configuration where an executable
             # product references a regular target.
             # Create the binary target here.
+            implementation_name = pkginfo_targets.implementation_label_name(product.name)
             return build_files.new(
-                load_stmts = [load_statements.new(swift_location, swift_kinds.binary)],
-                decls = [_swift_binary_from_product(product, target, repo_name)],
+                load_stmts = [
+                    load_statements.new(swift_location, swift_kinds.binary),
+                    spm_minimum_os_binary_load_stmt,
+                ],
+                decls = [
+                    _minimum_os_wrapper_decl(
+                        pkg_info = pkg_info,
+                        kind = swiftpkg_minimum_os_kinds.binary,
+                        name = product.name,
+                        actual = ":{}".format(implementation_name),
+                        visibility = ["//visibility:public"],
+                    ),
+                    _swift_binary_from_product(pkg_ctx, product, target),
+                ],
             )
     elif targets_len > 1:
         fail("Multiple targets specified for an executable product. name:", product.name)
@@ -1156,6 +1275,10 @@ def _library_product_build_file(pkg_ctx, product):
 
     if len(target_labels) == 0:
         fail("No targets specified for a library product. name:", product.name)
+    deps = [
+        bazel_labels.normalize(label)
+        for label in target_labels
+    ]
     return build_files.new(
         load_stmts = [swift_library_group_load_stmt],
         decls = [
@@ -1163,25 +1286,26 @@ def _library_product_build_file(pkg_ctx, product):
                 swift_kinds.library_group,
                 product.name,
                 attrs = {
-                    "deps": [
-                        bazel_labels.normalize(label)
-                        for label in target_labels
-                    ],
+                    "deps": deps,
                     "visibility": ["//visibility:public"],
                 },
             ),
         ],
     )
 
-def _swift_binary_from_product(product, dep_target, repo_name):
+def _swift_binary_from_product(pkg_ctx, product, dep_target):
+    implementation_name = pkginfo_targets.implementation_label_name(product.name)
+    deps = [bazel_labels.normalize(
+        pkginfo_targets.bazel_label(dep_target, repo_name = pkg_ctx.repo_name),
+    )]
+    deps.extend(manual_target_deps.deps_for_product(pkg_ctx, product))
     return build_decls.new(
         kind = swift_kinds.binary,
-        name = product.name,
+        name = implementation_name,
         attrs = {
-            "deps": [bazel_labels.normalize(
-                pkginfo_targets.bazel_label(dep_target, repo_name = repo_name),
-            )],
-            "visibility": ["//visibility:public"],
+            "deps": deps,
+            "tags": ["manual"],
+            "visibility": _implementation_target_visibility(),
         },
     )
 
@@ -1251,6 +1375,21 @@ def _new_for_license(pkg_info, license):
 def _target_visibility(expose_build_targets):
     return ["//visibility:public"] if expose_build_targets else ["//:__subpackages__"]
 
+def _implementation_target_visibility():
+    return ["//:__subpackages__"]
+
+def _minimum_os_wrapper_decl(pkg_info, kind, name, actual, visibility):
+    attrs = {
+        "deps": [actual],
+        "visibility": visibility,
+    }
+    attrs.update(minimum_os_versions.transition_attrs(pkg_info))
+    return build_decls.new(
+        kind = kind,
+        name = name,
+        attrs = attrs,
+    )
+
 # MARK: - Constants and API Definition
 
 swift_location = "@build_bazel_rules_swift//swift:swift.bzl"
@@ -1296,6 +1435,29 @@ swift_interop_hint_load_stmt = load_statements.new(
 )
 
 swift_test_load_stmt = load_statements.new(swift_location, swift_kinds.test)
+
+swiftpkg_minimum_os_transition_location = "@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl"
+
+swiftpkg_minimum_os_kinds = struct(
+    binary = "spm_minimum_os_binary",
+    target = "spm_minimum_os_target",
+    test = "spm_minimum_os_test",
+)
+
+spm_minimum_os_binary_load_stmt = load_statements.new(
+    swiftpkg_minimum_os_transition_location,
+    swiftpkg_minimum_os_kinds.binary,
+)
+
+spm_minimum_os_target_load_stmt = load_statements.new(
+    swiftpkg_minimum_os_transition_location,
+    swiftpkg_minimum_os_kinds.target,
+)
+
+spm_minimum_os_test_load_stmt = load_statements.new(
+    swiftpkg_minimum_os_transition_location,
+    swiftpkg_minimum_os_kinds.test,
+)
 
 clang_kinds = struct(
     library = "cc_library",

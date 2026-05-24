@@ -33,7 +33,8 @@ def _execute_spm_command(
         working_directory: Working directory for command execution. Can be
                            relative to the repository root or absolute.
         err_msg_tpl: Optional. A `string` template which will be formatted with
-                     the `exec_args` and `stderr` values.
+                     the `working_directory`, `exec_args`, `return_code`,
+                     `stdout`, and `stderr` values.
 
     Returns:
         A `string` representing the stdout of the command execution.
@@ -59,15 +60,17 @@ def _execute_spm_command(
     if exec_result.return_code != 0 and not _can_ignore_spm_error(exec_result):
         if err_msg_tpl == None:
             err_msg_tpl = """\
-Failed to execute SPM command. \
-working_directory: {working_directory}, \
-args: {exec_args}, \
-return_code: {return_code}\
-\n{stderr}.\
+Failed to execute SPM command.
+  working_directory: {working_directory}
+  args: {exec_args}
+  return_code: {return_code}
+  stdout: {stdout}
+  stderr: {stderr}\
 """
         fail(err_msg_tpl.format(
             working_directory = working_directory,
             exec_args = exec_args,
+            stdout = exec_result.stdout,
             stderr = exec_result.stderr,
             return_code = exec_result.return_code,
         ))

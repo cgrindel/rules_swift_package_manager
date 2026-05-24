@@ -58,6 +58,11 @@ def _local_swift_package_impl(repository_ctx):
         link_name = paths.join(repo_dir, base)
         repository_ctx.symlink(orig_file, link_name)
 
+    # Remove the `.swift-version` symlink (the original file in the user's
+    # source tree is preserved) so that Swift toolchain proxies do not require
+    # a specific Swift version when running SPM commands.
+    repo_rules.remove_swift_version_file(repository_ctx, repo_dir)
+
     # Create the WORKSPACE
     repo_rules.write_workspace_file(repository_ctx, repo_dir)
 
@@ -74,6 +79,7 @@ def _local_swift_package_impl(repository_ctx):
         repo_dir,
         env,
         cached_json_directory,
+        target_deps = repository_ctx.attr.target_deps,
     )
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 

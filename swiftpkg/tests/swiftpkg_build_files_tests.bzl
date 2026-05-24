@@ -2,7 +2,7 @@
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
-load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
+load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
 load(
     "//config_settings/spm/configuration:configurations.bzl",
     spm_configurations = "configurations",
@@ -11,6 +11,7 @@ load(
     "//config_settings/spm/platform:platforms.bzl",
     spm_platforms = "platforms",
 )
+load("//swiftpkg/internal:artifact_infos.bzl", "artifact_infos", "link_types")
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
 load(
@@ -31,7 +32,9 @@ load(":testutils.bzl", "testutils")
 _repo_name = "@swiftpkg_mypackage"
 
 def _pkg_info(
-        expose_build_targets = False):
+        expose_build_targets = False,
+        extra_targets = [],
+        platforms = []):
     return pkginfos.new(
         name = "MyPackage",
         path = "/path/to/my-package",
@@ -55,6 +58,7 @@ def _pkg_info(
                 ),
             ),
         ],
+        platforms = platforms,
         products = [
             pkginfos.new_product(
                 name = "oldstyleexec",
@@ -92,6 +96,15 @@ def _pkg_info(
                     ),
                 ),
                 targets = ["SystemLibraryTarget"],
+            ),
+            pkginfos.new_product(
+                name = "BinaryFrameworkTarget",
+                type = pkginfos.new_product_type(
+                    library = pkginfos.new_library_type(
+                        library_type_kinds.automatic,
+                    ),
+                ),
+                targets = ["BinaryFrameworkTarget"],
             ),
         ],
         targets = [
@@ -531,7 +544,17 @@ def _pkg_info(
                     modulemap_path = "module.modulemap",
                 ),
             ),
-        ],
+            pkginfos.new_target(
+                name = "BinaryFrameworkTarget",
+                type = "binary",
+                c99name = "BinaryFrameworkTarget",
+                module_type = "BinaryTarget",
+                path = "BinaryFrameworkTarget.xcframework",
+                sources = [],
+                dependencies = [],
+                repo_name = _repo_name,
+            ),
+        ] + extra_targets,
         expose_build_targets = expose_build_targets,
     )
 
@@ -591,13 +614,316 @@ def _pkg_info_with_traits():
         enabled_traits = ["FeatureA", "FeatureB"],
     )
 
-def _pkg_ctx(pkg_info):
+def _pkg_ctx(pkg_info, target_deps = {}):
     return pkg_ctxs.new(
         pkg_info = pkg_info,
         repo_name = _repo_name,
+        target_deps = target_deps,
     )
 
+def _target_build_file(pkg_info, target_name, artifact_infos = [], target_deps = {}):
+    target = pkginfo_targets.get(pkg_info.targets, target_name)
+    repository_ctx = testutils.new_stub_repository_ctx(
+        repo_name = _repo_name[1:],
+    )
+    return swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx(pkg_info, target_deps = target_deps), target, artifact_infos = artifact_infos)
+
+def _product_build_file(pkg_info, product_name, target_deps = {}):
+    product = lists.find(pkg_info.products, lambda p: p.name == product_name)
+    return swiftpkg_build_files.new_for_product(
+        pkg_ctx = _pkg_ctx(pkg_info, target_deps = target_deps),
+        product = product,
+    )
+
+def _decl(build_file, name):
+    for decl in build_file.decls:
+        if decl.name == name:
+            return decl
+    fail("Declaration '{}' not found. Available declarations: [{}]".format(
+        name,
+        ", ".join([decl.name for decl in build_file.decls]),
+    ))
+
+def _assert_decl(env, build_file, name, kind):
+    decl = _decl(build_file, name)
+    asserts.equals(env, kind, decl.kind, name)
+    return decl
+
+def _assert_minimum_os_attrs(env, attrs, expected = {}):
+    expected_attrs = {
+        "ios_minimum_os": "12.0",
+        "macos_minimum_os": "10.13",
+        "tvos_minimum_os": "12.0",
+        "visionos_minimum_os": "1.0",
+        "watchos_minimum_os": "4.0",
+    }
+    expected_attrs.update(expected)
+    for attr_name, expected_value in expected_attrs.items():
+        asserts.equals(env, expected_value, attrs.get(attr_name), attr_name)
+
 # MARK: - Tests
+
+def _minimum_os_wrapper_behavior_test(ctx):
+    env = unittest.begin(ctx)
+
+    pkg_info = _pkg_info(
+        platforms = [
+            pkginfos.new_platform("ios", "13.0"),
+        ],
+    )
+
+    swift_library_bf = _target_build_file(pkg_info, "RegularSwiftTargetAsLibrary")
+    wrapper = _assert_decl(
+        env,
+        swift_library_bf,
+        "RegularSwiftTargetAsLibrary.rspm",
+        "spm_minimum_os_target",
+    )
+    asserts.equals(env, [":RegularSwiftTargetAsLibrary.rspm.__impl"], wrapper.attrs["deps"])
+    asserts.false(env, "tags" in wrapper.attrs)
+    _assert_minimum_os_attrs(env, wrapper.attrs, expected = {"ios_minimum_os": "13.0"})
+
+    swift_library_impl = _assert_decl(
+        env,
+        swift_library_bf,
+        "RegularSwiftTargetAsLibrary.rspm.__impl",
+        "swift_library",
+    )
+    asserts.false(env, "minimum_os_version" in swift_library_impl.attrs)
+    asserts.false(env, "ios_minimum_os" in swift_library_impl.attrs)
+    asserts.equals(env, ["manual"], swift_library_impl.attrs["tags"])
+
+    regular_exec_bf = _target_build_file(pkg_info, "RegularTargetForExec")
+    regular_exec_impl = _assert_decl(
+        env,
+        regular_exec_bf,
+        "RegularTargetForExec.rspm.__impl",
+        "swift_library",
+    )
+    asserts.equals(
+        env,
+        "[\"@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm\"]",
+        scg.to_starlark(regular_exec_impl.attrs["deps"]),
+    )
+
+    swift_test_bf = _target_build_file(pkg_info, "RegularSwiftTargetAsLibraryTests")
+    _assert_decl(
+        env,
+        swift_test_bf,
+        "RegularSwiftTargetAsLibraryTests.rspm",
+        "spm_minimum_os_test",
+    )
+    _assert_decl(
+        env,
+        swift_test_bf,
+        "RegularSwiftTargetAsLibraryTests.rspm.__impl",
+        "swift_test",
+    )
+
+    swift_binary_bf = _target_build_file(pkg_info, "SwiftExecutableTarget")
+    _assert_decl(
+        env,
+        swift_binary_bf,
+        "SwiftExecutableTarget.rspm",
+        "spm_minimum_os_binary",
+    )
+    swift_binary_impl = _assert_decl(
+        env,
+        swift_binary_bf,
+        "SwiftExecutableTarget.rspm.__impl",
+        "swift_binary",
+    )
+    asserts.false(env, "minimum_os_version" in swift_binary_impl.attrs)
+    asserts.equals(env, ["manual"], swift_binary_impl.attrs["tags"])
+
+    clang_bf = _target_build_file(pkg_info, "ClangLibrary")
+    _assert_decl(env, clang_bf, "ClangLibrary.rspm", "spm_minimum_os_target")
+    clang_impl = _assert_decl(env, clang_bf, "ClangLibrary.rspm.__impl", "cc_library")
+    asserts.equals(env, ["manual"], clang_impl.attrs["tags"])
+
+    objc_bf = _target_build_file(pkg_info, "ObjcLibrary")
+    _assert_decl(env, objc_bf, "ObjcLibrary.rspm", "spm_minimum_os_target")
+    objc_impl = _assert_decl(env, objc_bf, "ObjcLibrary.rspm.__impl", "objc_library")
+    asserts.equals(env, ["manual"], objc_impl.attrs["tags"])
+    objc_compile = _assert_decl(env, objc_bf, "ObjcLibrary.rspm_objc", "objc_library")
+    asserts.equals(
+        env,
+        "[\"@swiftpkg_mypackage//:ObjcLibraryDep.rspm\"]",
+        scg.to_starlark(objc_compile.attrs["deps"]),
+    )
+
+    resource_bf = _target_build_file(pkg_info, "SwiftLibraryWithFilePathResource")
+    _assert_decl(
+        env,
+        resource_bf,
+        "SwiftLibraryWithFilePathResource.rspm",
+        "spm_minimum_os_target",
+    )
+    resource_impl = _assert_decl(
+        env,
+        resource_bf,
+        "SwiftLibraryWithFilePathResource.rspm.__impl",
+        "swift_library",
+    )
+    asserts.true(
+        env,
+        ":SwiftLibraryWithFilePathResource.rspm_resource_bundle_accessor" in resource_impl.attrs["srcs"],
+    )
+    asserts.false(env, "minimum_os_version" in resource_impl.attrs)
+
+    system_bf = _target_build_file(pkg_info, "SystemLibraryTarget")
+    _assert_decl(env, system_bf, "SystemLibraryTarget.rspm", "spm_minimum_os_target")
+    system_impl = _assert_decl(env, system_bf, "SystemLibraryTarget.rspm.__impl", "cc_library")
+    asserts.equals(env, ["manual"], system_impl.attrs["tags"])
+
+    binary_bf = _target_build_file(pkg_info, "BinaryFrameworkTarget", artifact_infos = [
+        artifact_infos.new_xcframework_info(
+            path = "BinaryFrameworkTarget.xcframework",
+            framework_infos = [
+                artifact_infos.new_framework_info(
+                    path = "BinaryFrameworkTarget.xcframework/ios-arm64/BinaryFrameworkTarget.framework",
+                    link_type = link_types.static,
+                ),
+            ],
+        ),
+    ])
+    _assert_decl(env, binary_bf, "BinaryFrameworkTarget.rspm", "spm_minimum_os_target")
+    binary_impl = _assert_decl(
+        env,
+        binary_bf,
+        "BinaryFrameworkTarget.rspm.__impl",
+        "apple_static_xcframework_import",
+    )
+    asserts.equals(env, ["manual"], binary_impl.attrs["tags"])
+
+    oldstyle_product_bf = _product_build_file(pkg_info, "oldstyleexec")
+    oldstyle_wrapper = _assert_decl(env, oldstyle_product_bf, "oldstyleexec", "spm_minimum_os_binary")
+    asserts.equals(env, [":oldstyleexec.__impl"], oldstyle_wrapper.attrs["deps"])
+    oldstyle_impl = _assert_decl(env, oldstyle_product_bf, "oldstyleexec.__impl", "swift_binary")
+    asserts.equals(env, ["@swiftpkg_mypackage//:RegularTargetForExec.rspm"], oldstyle_impl.attrs["deps"])
+    asserts.equals(env, ["manual"], oldstyle_impl.attrs["tags"])
+
+    library_product_bf = _product_build_file(pkg_info, "RegularSwiftTargetAsLibrary")
+    library_product = _assert_decl(
+        env,
+        library_product_bf,
+        "RegularSwiftTargetAsLibrary",
+        "swift_library_group",
+    )
+    asserts.equals(env, ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"], library_product.attrs["deps"])
+
+    executable_product_bf = _product_build_file(pkg_info, "swiftexec")
+    executable_product = _assert_decl(env, executable_product_bf, "swiftexec", "alias")
+    asserts.equals(env, "@swiftpkg_mypackage//:SwiftExecutableTarget.rspm", executable_product.attrs["actual"])
+
+    return unittest.end(env)
+
+minimum_os_wrapper_behavior_test = unittest.make(_minimum_os_wrapper_behavior_test)
+
+def _manual_target_deps_test(ctx):
+    env = unittest.begin(ctx)
+
+    pkg_info = _pkg_info(extra_targets = [
+        pkginfos.new_target(
+            name = "CrossPackageTarget",
+            type = "regular",
+            c99name = "CrossPackageTarget",
+            module_type = "SwiftTarget",
+            path = "SubPackage/CrossPackageTarget",
+            sources = ["CrossPackageTarget.swift"],
+            dependencies = [],
+            label = bazel_labels.new(
+                name = "CrossPackageTarget.rspm",
+                package = "SubPackage",
+                repository_name = _repo_name,
+            ),
+            swift_src_info = pkginfos.new_swift_src_info(),
+        ),
+    ])
+
+    swift_bf = _target_build_file(
+        pkg_info,
+        "RegularTargetForExec",
+        target_deps = {
+            "RegularTargetForExec": [
+                ":SameBuildFileDep",
+                "SwiftExecutableTarget",
+                ":SystemLibraryTarget",
+                ":CrossPackageTarget",
+                "SwiftExecutableTarget.rspm_custom",
+                "@manual_deps//:SwiftDep",
+            ],
+            "RegularTargetForExec.rspm.__impl": ["@manual_deps//:ExactSwiftDep"],
+        },
+    )
+    swift_impl = _assert_decl(
+        env,
+        swift_bf,
+        "RegularTargetForExec.rspm.__impl",
+        "swift_library",
+    )
+    asserts.equals(
+        env,
+        """\
+[
+    "@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm",
+    ":SameBuildFileDep",
+    ":SwiftExecutableTarget.rspm",
+    ":SystemLibraryTarget.rspm",
+    ":CrossPackageTarget",
+    "SwiftExecutableTarget.rspm_custom",
+    "@manual_deps//:SwiftDep",
+    "@manual_deps//:ExactSwiftDep",
+]""",
+        scg.to_starlark(swift_impl.attrs["deps"]),
+    )
+
+    clang_bf = _target_build_file(
+        pkg_info,
+        "ClangLibrary",
+        target_deps = {
+            "ClangLibrary": ["@manual_deps//:ClangImplDep"],
+            "ClangLibrary.rspm_cxx": ["@manual_deps//:ClangChildDep"],
+        },
+    )
+    clang_impl = _assert_decl(env, clang_bf, "ClangLibrary.rspm.__impl", "cc_library")
+    asserts.equals(
+        env,
+        """\
+[
+    ":ClangLibrary.rspm_modulemap",
+    ":ClangLibrary.rspm_cxx",
+    "@manual_deps//:ClangImplDep",
+]""",
+        scg.to_starlark(clang_impl.attrs["deps"]),
+    )
+    clang_child = _assert_decl(env, clang_bf, "ClangLibrary.rspm_cxx", "cc_library")
+    asserts.equals(
+        env,
+        "[\"@manual_deps//:ClangChildDep\"]",
+        scg.to_starlark(clang_child.attrs["deps"]),
+    )
+
+    product_bf = _product_build_file(
+        pkg_info,
+        "oldstyleexec",
+        target_deps = {
+            "oldstyleexec": ["@manual_deps//:ProductDep"],
+        },
+    )
+    product_impl = _assert_decl(env, product_bf, "oldstyleexec.__impl", "swift_binary")
+    asserts.equals(
+        env,
+        [
+            "@swiftpkg_mypackage//:RegularTargetForExec.rspm",
+            "@manual_deps//:ProductDep",
+        ],
+        product_impl.attrs["deps"],
+    )
+
+    return unittest.end(env)
+
+manual_target_deps_test = unittest.make(_manual_target_deps_test)
 
 def _target_generation_test(ctx):
     env = unittest.begin(ctx)
@@ -609,9 +935,65 @@ def _target_generation_test(ctx):
             pkg_info = _pkg_info(),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
+
+spm_minimum_os_target(
+    name = "RegularSwiftTargetAsLibrary.rspm",
+    deps = [":RegularSwiftTargetAsLibrary.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
 
 swift_library(
+    name = "RegularSwiftTargetAsLibrary.rspm.__impl",
+    always_include_developer_search_paths = True,
+    alwayslink = True,
+    copts = [
+        "-DSWIFT_PACKAGE",
+        "-Xcc",
+        "-DSWIFT_PACKAGE",
+    ],
+    module_name = "RegularSwiftTargetAsLibrary",
+    package_name = "MyPackage",
+    srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
+    tags = ["manual"],
+    visibility = ["//:__subpackages__"],
+)
+""",
+        ),
+        struct(
+            msg = "Swift library target with package platforms",
+            name = "RegularSwiftTargetAsLibrary",
+            pkg_info = _pkg_info(
+                platforms = [
+                    pkginfos.new_platform("ios", "13.0"),
+                    pkginfos.new_platform("macos", "10.15"),
+                    pkginfos.new_platform("tvos", "13.0"),
+                    pkginfos.new_platform("visionOS", "1.0"),
+                    pkginfos.new_platform("watchos", "6.0"),
+                ],
+            ),
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
+
+spm_minimum_os_target(
     name = "RegularSwiftTargetAsLibrary.rspm",
+    deps = [":RegularSwiftTargetAsLibrary.rspm.__impl"],
+    ios_minimum_os = "13.0",
+    macos_minimum_os = "10.15",
+    tvos_minimum_os = "13.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "6.0",
+)
+
+swift_library(
+    name = "RegularSwiftTargetAsLibrary.rspm.__impl",
     always_include_developer_search_paths = True,
     alwayslink = True,
     copts = [
@@ -636,9 +1018,21 @@ swift_library(
             pkg_info = _pkg_info(),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
+
+spm_minimum_os_target(
+    name = "RegularTargetForExec.rspm",
+    deps = [":RegularTargetForExec.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
 
 swift_library(
-    name = "RegularTargetForExec.rspm",
+    name = "RegularTargetForExec.rspm.__impl",
     always_include_developer_search_paths = True,
     alwayslink = True,
     copts = [
@@ -661,9 +1055,21 @@ swift_library(
             pkg_info = _pkg_info(),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_test")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_test")
+
+spm_minimum_os_test(
+    name = "RegularSwiftTargetAsLibraryTests.rspm",
+    deps = [":RegularSwiftTargetAsLibraryTests.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
 
 swift_test(
-    name = "RegularSwiftTargetAsLibraryTests.rspm",
+    name = "RegularSwiftTargetAsLibraryTests.rspm.__impl",
     copts = [
         "-DSWIFT_PACKAGE",
         "-Xcc",
@@ -673,6 +1079,7 @@ swift_test(
     module_name = "RegularSwiftTargetAsLibraryTests",
     package_name = "MyPackage",
     srcs = ["Tests/RegularSwiftTargetAsLibraryTests/RegularSwiftTargetAsLibraryTests.swift"],
+    tags = ["manual"],
     visibility = ["//:__subpackages__"],
 )
 """,
@@ -683,9 +1090,21 @@ swift_test(
             pkg_info = _pkg_info(),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_binary")
+
+spm_minimum_os_binary(
+    name = "SwiftExecutableTarget.rspm",
+    deps = [":SwiftExecutableTarget.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
 
 swift_binary(
-    name = "SwiftExecutableTarget.rspm",
+    name = "SwiftExecutableTarget.rspm.__impl",
     copts = [
         "-DSWIFT_PACKAGE",
         "-Xcc",
@@ -709,6 +1128,7 @@ swift_binary(
     module_name = "SwiftExecutableTarget",
     package_name = "MyPackage",
     srcs = ["Source/SwiftExecutableTarget/main.swift"],
+    tags = ["manual"],
     visibility = ["//:__subpackages__"],
 )
 """,
@@ -720,14 +1140,16 @@ swift_binary(
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 cc_library(
-    name = "ClangLibrary.rspm",
+    name = "ClangLibrary.rspm.__impl",
     deps = [
         ":ClangLibrary.rspm_modulemap",
         ":ClangLibrary.rspm_cxx",
     ],
+    tags = ["manual"],
     visibility = ["//:__subpackages__"],
 )
 
@@ -769,6 +1191,17 @@ generate_modulemap(
     visibility = ["//:__subpackages__"],
 )
 
+spm_minimum_os_target(
+    name = "ClangLibrary.rspm",
+    deps = [":ClangLibrary.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
+
 swift_interop_hint(
     name = "ClangLibrary.rspm_swift_hint",
     module_map = "ClangLibrary.rspm_modulemap",
@@ -783,6 +1216,7 @@ swift_interop_hint(
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 load("@rules_cc//cc:defs.bzl", "cc_library", "objc_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 generate_modulemap(
@@ -794,11 +1228,12 @@ generate_modulemap(
 )
 
 objc_library(
-    name = "ObjcLibrary.rspm",
+    name = "ObjcLibrary.rspm.__impl",
     deps = [
         ":ObjcLibrary.rspm_modulemap",
         ":ObjcLibrary.rspm_objc",
     ],
+    tags = ["manual"],
     visibility = ["//:__subpackages__"],
 )
 
@@ -845,6 +1280,17 @@ objc_library(
     visibility = ["//:__subpackages__"],
 )
 
+spm_minimum_os_target(
+    name = "ObjcLibrary.rspm",
+    deps = [":ObjcLibrary.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
+
 swift_interop_hint(
     name = "ObjcLibrary.rspm_swift_hint",
     module_map = "ObjcLibrary.rspm_modulemap",
@@ -859,10 +1305,12 @@ swift_interop_hint(
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 load("@rules_cc//cc:defs.bzl", "cc_library", "objc_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
 
 objc_library(
-    name = "ObjcLibraryWithModulemap.rspm",
+    name = "ObjcLibraryWithModulemap.rspm.__impl",
     deps = [":ObjcLibraryWithModulemap.rspm_objc"],
+    tags = ["manual"],
     visibility = ["//:__subpackages__"],
 )
 
@@ -912,6 +1360,17 @@ objc_library(
     visibility = ["//:__subpackages__"],
 )
 
+spm_minimum_os_target(
+    name = "ObjcLibraryWithModulemap.rspm",
+    deps = [":ObjcLibraryWithModulemap.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
+
 swift_interop_hint(
     name = "ObjcLibraryWithModulemap.rspm_swift_hint",
     module_map = "include/module.modulemap",
@@ -925,9 +1384,21 @@ swift_interop_hint(
             pkg_info = _pkg_info(),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
+
+spm_minimum_os_target(
+    name = "SwiftLibraryWithConditionalDep.rspm",
+    deps = [":SwiftLibraryWithConditionalDep.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
 
 swift_library(
-    name = "SwiftLibraryWithConditionalDep.rspm",
+    name = "SwiftLibraryWithConditionalDep.rspm.__impl",
     always_include_developer_search_paths = True,
     alwayslink = True,
     copts = [
@@ -955,14 +1426,16 @@ swift_library(
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap")
 
 cc_library(
-    name = "ClangLibraryWithConditionalDep.rspm",
+    name = "ClangLibraryWithConditionalDep.rspm.__impl",
     deps = [
         ":ClangLibraryWithConditionalDep.rspm_modulemap",
         ":ClangLibraryWithConditionalDep.rspm_cxx",
     ],
+    tags = ["manual"],
     visibility = ["//:__subpackages__"],
 )
 
@@ -1004,6 +1477,17 @@ generate_modulemap(
     visibility = ["//:__subpackages__"],
 )
 
+spm_minimum_os_target(
+    name = "ClangLibraryWithConditionalDep.rspm",
+    deps = [":ClangLibraryWithConditionalDep.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
+
 swift_interop_hint(
     name = "ClangLibraryWithConditionalDep.rspm_swift_hint",
     module_map = "ClangLibraryWithConditionalDep.rspm_modulemap",
@@ -1017,9 +1501,21 @@ swift_interop_hint(
             pkg_info = _pkg_info(),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
+
+spm_minimum_os_target(
+    name = "SwiftForObjcTarget.rspm",
+    deps = [":SwiftForObjcTarget.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
 
 swift_library(
-    name = "SwiftForObjcTarget.rspm",
+    name = "SwiftForObjcTarget.rspm.__impl",
     always_include_developer_search_paths = True,
     alwayslink = True,
     copts = [
@@ -1045,6 +1541,7 @@ swift_library(
             exp = """\
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_accessor", "resource_bundle_infoplist")
 
 apple_resource_bundle(
@@ -1065,8 +1562,19 @@ resource_bundle_infoplist(
     region = "en",
 )
 
-swift_library(
+spm_minimum_os_target(
     name = "SwiftLibraryWithFilePathResource.rspm",
+    deps = [":SwiftLibraryWithFilePathResource.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
+
+swift_library(
+    name = "SwiftLibraryWithFilePathResource.rspm.__impl",
     always_include_developer_search_paths = True,
     alwayslink = True,
     copts = [
@@ -1093,6 +1601,7 @@ swift_library(
             exp = """\
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_bundle_import", "apple_resource_bundle")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "resource_bundle_accessor", "resource_bundle_infoplist")
 
 apple_bundle_import(
@@ -1121,8 +1630,19 @@ resource_bundle_infoplist(
     region = "en",
 )
 
-swift_library(
+spm_minimum_os_target(
     name = "SwiftLibraryWithPrecompiledBundleResource.rspm",
+    deps = [":SwiftLibraryWithPrecompiledBundleResource.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
+
+swift_library(
+    name = "SwiftLibraryWithPrecompiledBundleResource.rspm.__impl",
     always_include_developer_search_paths = True,
     alwayslink = True,
     copts = [
@@ -1150,6 +1670,7 @@ swift_library(
 load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 load("@rules_cc//cc:defs.bzl", "cc_library", "objc_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
 load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap", "objc_resource_bundle_accessor_hdr", "objc_resource_bundle_accessor_impl", "resource_bundle_infoplist")
 
 apple_resource_bundle(
@@ -1169,11 +1690,12 @@ generate_modulemap(
 )
 
 objc_library(
-    name = "ObjcLibraryWithResources.rspm",
+    name = "ObjcLibraryWithResources.rspm.__impl",
     deps = [
         ":ObjcLibraryWithResources.rspm_modulemap",
         ":ObjcLibraryWithResources.rspm_objc",
     ],
+    tags = ["manual"],
     visibility = ["//:__subpackages__"],
 )
 
@@ -1240,6 +1762,17 @@ resource_bundle_infoplist(
     region = "en",
 )
 
+spm_minimum_os_target(
+    name = "ObjcLibraryWithResources.rspm",
+    deps = [":ObjcLibraryWithResources.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
+
 swift_interop_hint(
     name = "ObjcLibraryWithResources.rspm_swift_hint",
     module_map = "ObjcLibraryWithResources.rspm_modulemap",
@@ -1254,6 +1787,7 @@ swift_interop_hint(
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
 
 swift_interop_hint(
     name = "SystemLibraryTarget.rspm_swift_hint",
@@ -1262,7 +1796,7 @@ swift_interop_hint(
 )
 
 cc_library(
-    name = "SystemLibraryTarget.rspm",
+    name = "SystemLibraryTarget.rspm.__impl",
     aspect_hints = [":SystemLibraryTarget.rspm_swift_hint"],
     copts = [
         "-fblocks",
@@ -1271,7 +1805,19 @@ cc_library(
         "-DSWIFT_PACKAGE=1",
     ],
     hdrs = ["someHeader.h"],
-    visibility = ["//visibility:public"],
+    tags = ["manual"],
+    visibility = ["//:__subpackages__"],
+)
+
+spm_minimum_os_target(
+    name = "SystemLibraryTarget.rspm",
+    deps = [":SystemLibraryTarget.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
 )
 """,
         ),
@@ -1283,9 +1829,21 @@ cc_library(
             ),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
+
+spm_minimum_os_target(
+    name = "RegularSwiftTargetAsLibrary.rspm",
+    deps = [":RegularSwiftTargetAsLibrary.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
 
 swift_library(
-    name = "RegularSwiftTargetAsLibrary.rspm",
+    name = "RegularSwiftTargetAsLibrary.rspm.__impl",
     always_include_developer_search_paths = True,
     alwayslink = True,
     copts = [
@@ -1309,9 +1867,21 @@ swift_library(
             ),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
+
+spm_minimum_os_target(
+    name = "RegularSwiftTargetAsLibrary.rspm",
+    deps = [":RegularSwiftTargetAsLibrary.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//visibility:public"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
 
 swift_library(
-    name = "RegularSwiftTargetAsLibrary.rspm",
+    name = "RegularSwiftTargetAsLibrary.rspm.__impl",
     always_include_developer_search_paths = True,
     alwayslink = True,
     copts = [
@@ -1323,7 +1893,7 @@ swift_library(
     package_name = "MyPackage",
     srcs = ["Source/RegularSwiftTargetAsLibrary/RegularSwiftTargetAsLibrary.swift"],
     tags = ["manual"],
-    visibility = ["//visibility:public"],
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
@@ -1333,9 +1903,21 @@ swift_library(
             pkg_info = _pkg_info_with_traits(),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
+
+spm_minimum_os_target(
+    name = "TraitLibrary.rspm",
+    deps = [":TraitLibrary.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
 
 swift_library(
-    name = "TraitLibrary.rspm",
+    name = "TraitLibrary.rspm.__impl",
     always_include_developer_search_paths = True,
     alwayslink = True,
     copts = [
@@ -1365,10 +1947,12 @@ swift_library(
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
 load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
 
 cc_library(
-    name = "TraitClangLibrary.rspm",
+    name = "TraitClangLibrary.rspm.__impl",
     deps = [":TraitClangLibrary.rspm_c"],
+    tags = ["manual"],
     visibility = ["//:__subpackages__"],
 )
 
@@ -1391,6 +1975,17 @@ cc_library(
     includes = ["include"],
     srcs = ["foo.c"],
     visibility = ["//:__subpackages__"],
+)
+
+spm_minimum_os_target(
+    name = "TraitClangLibrary.rspm",
+    deps = [":TraitClangLibrary.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
 )
 
 swift_interop_hint(
@@ -1440,11 +2035,24 @@ def _product_generation_test(ctx):
             pkg_info = _pkg_info(),
             exp = """\
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_binary")
+
+spm_minimum_os_binary(
+    name = "oldstyleexec",
+    deps = [":oldstyleexec.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//visibility:public"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
 
 swift_binary(
-    name = "oldstyleexec",
+    name = "oldstyleexec.__impl",
     deps = ["@swiftpkg_mypackage//:RegularTargetForExec.rspm"],
-    visibility = ["//visibility:public"],
+    tags = ["manual"],
+    visibility = ["//:__subpackages__"],
 )
 """,
         ),
@@ -1600,6 +2208,8 @@ license_generation_test = unittest.make(_license_generation_test)
 def swiftpkg_build_files_test_suite():
     return unittest.suite(
         "swiftpkg_build_files_tests",
+        minimum_os_wrapper_behavior_test,
+        manual_target_deps_test,
         target_generation_test,
         product_generation_test,
         license_generation_test,
