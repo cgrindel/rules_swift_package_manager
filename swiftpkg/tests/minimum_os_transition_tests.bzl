@@ -41,7 +41,11 @@ def _sets_active_platform_to_package_minimum_test(ctx):
     asserts.equals(env, "15.0", actual[_MACOS_MINIMUM_OS_OPTION])
     asserts.equals(env, "18.0", actual[_TVOS_MINIMUM_OS_OPTION])
     asserts.equals(env, "11.0", actual[_WATCHOS_MINIMUM_OS_OPTION])
-    asserts.equals(env, "2.0", actual[_VISIONOS_MINIMUM_OS_OPTION])
+
+    # `minimum_os_version` (aliased here as _VISIONOS_MINIMUM_OS_OPTION) is
+    # always overwritten with the active platform's package minimum so that
+    # downstream actions like SwiftDeriveFiles see a consistent configuration.
+    asserts.equals(env, "13.0", actual[_VISIONOS_MINIMUM_OS_OPTION])
 
     return unittest.end(env)
 
