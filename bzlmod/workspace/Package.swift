@@ -8,7 +8,7 @@ let package = Package(
         .executable(name: "my-executable", targets: ["MyExecutable"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.7.1"),
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.8.0"),
         // swift-log 1.9.0+ declares swift-tools-version >= 6.1, which the
         // BCR macOS Buildkite runner's installed Swift (6.0.x) cannot parse.
         // Cap below 1.9.0 so SPM resolves to 1.8.0, whose manifest declares
