@@ -81,6 +81,9 @@ def _local_swift_package_impl(repository_ctx):
         cached_json_directory,
         target_deps = repository_ctx.attr.target_deps,
     )
+
+    repo_rules.download_artifacts(repository_ctx, pkg_ctx)
+
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
     return update_attrs(repository_ctx.attr, _ALL_ATTRS.keys(), {})
