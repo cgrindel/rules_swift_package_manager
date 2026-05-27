@@ -93,13 +93,21 @@ higher. Found version %s installed.\
 """ % (min_spm_ver, spm_ver))
 
 def _gen_build_files(repository_ctx, pkg_ctx):
+    pkg_info = pkg_ctx.pkg_info
+
     if repository_ctx.attr.build_file:
+        for target in pkg_info.targets:
+            if target.type == target_types.binary and target.artifact_download_info != None:
+                _download_artifact(
+                    repository_ctx,
+                    target.artifact_download_info,
+                    target.path,
+                )
+
         # Use template() with no substitutions to copy the file. There is
         # no direct copy API for label-referenced files in repository rules.
         repository_ctx.template("BUILD.bazel", repository_ctx.attr.build_file)
         return
-
-    pkg_info = pkg_ctx.pkg_info
 
     bld_files = []
 

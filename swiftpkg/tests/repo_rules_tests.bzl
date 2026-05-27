@@ -4,25 +4,82 @@ load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 
 def _gen_build_files_with_build_file_test(ctx):
-    """When build_file is set, gen_build_files should use it and skip \
-    generation."""
+    """When build_file is set, gen_build_files should download remote binary \
+    artifacts, use it, and skip generation."""
     env = unittest.begin(ctx)
 
     # Track that template was called with the expected arguments.
-    calls = {"template": []}
+    calls = {"download_and_extract": [], "execute": [], "read": [], "template": []}
 
     def _template(path, label):
         calls["template"].append(struct(path = path, label = label))
 
+    # buildifier: disable=unused-variable
+    def _download_and_extract(url, output, sha256 = "", auth = {}):
+        calls["download_and_extract"].append(struct(
+            auth = auth,
+            output = output,
+            sha256 = sha256,
+            url = url,
+        ))
+        return struct(success = True)
+
+    # buildifier: disable=unused-variable
+    def _execute(args, environment = {}, quiet = True):
+        calls["execute"].append(args)
+        return struct(return_code = 0, stdout = "", stderr = "")
+
+    # buildifier: disable=unused-variable
+    def _read(path, watch = "auto"):
+        calls["read"].append(struct(path = path, watch = watch))
+        return ""
+
     build_file_label = "//some/pkg:BUILD.custom"
     repository_ctx = struct(
-        attr = struct(build_file = build_file_label),
+        attr = struct(
+            build_file = build_file_label,
+            netrc = "auth.netrc",
+        ),
+        download_and_extract = _download_and_extract,
+        execute = _execute,
+        name = "bzlmodmangled~test_pkg",
+        read = _read,
         template = _template,
     )
 
-    # Pass None for pkg_ctx. If the early return is bypassed, the function
-    # will fail trying to access pkg_ctx.pkg_info, making the failure obvious.
-    repo_rules.gen_build_files(repository_ctx, None)
+    pkg_info = struct(
+        name = "TestPkg",
+        path = "",
+        products = [],
+        targets = [
+            struct(
+                artifact_download_info = struct(
+                    checksum = "abc123",
+                    url = "https://example.com/Artifact.zip",
+                ),
+                path = "remote/archive/Artifact.zip",
+                type = "binary",
+            ),
+            struct(
+                artifact_download_info = None,
+                path = "Local.xcframework",
+                type = "binary",
+            ),
+            struct(
+                artifact_download_info = struct(
+                    checksum = "def456",
+                    url = "https://example.com/Source.zip",
+                ),
+                path = "remote/archive/Source.zip",
+                type = "regular",
+            ),
+        ],
+        url = "https://github.com/example/test-pkg",
+        version = "1.0.0",
+    )
+    pkg_ctx = struct(pkg_info = pkg_info)
+
+    repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
     asserts.equals(
         env,
@@ -41,6 +98,25 @@ def _gen_build_files_with_build_file_test(ctx):
         build_file_label,
         calls["template"][0].label,
         "template should receive the build_file label",
+    )
+    asserts.equals(
+        env,
+        [struct(path = "auth.netrc", watch = "no")],
+        calls["read"],
+        "the configured netrc should be read for download auth",
+    )
+    asserts.equals(
+        env,
+        [
+            struct(
+                auth = {},
+                output = "remote/archive/Artifact.zip",
+                sha256 = "abc123",
+                url = "https://example.com/Artifact.zip",
+            ),
+        ],
+        calls["download_and_extract"],
+        "only remote binary artifacts should be downloaded",
     )
 
     return unittest.end(env)
