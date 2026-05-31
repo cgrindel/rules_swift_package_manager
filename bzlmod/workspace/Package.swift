@@ -14,7 +14,7 @@ let package = Package(
         // Cap below 1.9.0 so SPM resolves to 1.8.0, whose manifest declares
         // swift-tools-version 6.0 and is readable on the runner. Drop the
         // upper bound once BCR's runner ships Swift >= 6.2.
-        .package(url: "https://github.com/apple/swift-log", "1.5.4" ..< "1.12.1"),
+        .package(url: "https://github.com/apple/swift-log", "1.5.4" ..< "1.9.0"),
     ],
     targets: [
         .executableTarget(
