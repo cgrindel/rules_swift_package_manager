@@ -141,6 +141,15 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         features.append(feature)
 
     def _set_swift_version_selects(version, kind = None, condition = None):
+        # rules_swift uses a feature for v6 and depends on that for other logic
+        if version == "6":
+            features.append(bzl_selects.new(
+                value = "swift.enable_v6",
+                kind = kind,
+                condition = condition,
+            ))
+            return
+
         copts.append(bzl_selects.new(
             value = "-swift-version",
             kind = kind,
