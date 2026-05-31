@@ -141,6 +141,15 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         features.append(feature)
 
     def _set_swift_version_selects(version, kind = None, condition = None):
+        # rules_swift uses a feature for v6 and depends on that for other logic
+        if version == "6":
+            features.append(bzl_selects.new(
+                value = "swift.enable_v6",
+                kind = kind,
+                condition = condition,
+            ))
+            return
+
         copts.append(bzl_selects.new(
             value = "-swift-version",
             kind = kind,
@@ -215,9 +224,9 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
             target,
         )
         all_build_files.append(swift_apple_res_bundle_info.build_file)
-        _update_attr_list("data", ":{}".format(
+        attrs["data"] = _apple_resource_bundle_data(
             swift_apple_res_bundle_info.bundle_label_name,
-        ))
+        )
         _update_attr_list("srcs", ":{}".format(
             swift_apple_res_bundle_info.accessor_label_name,
         ))
@@ -661,9 +670,9 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                 target,
             )
             all_build_files.append(clang_apple_res_bundle_info.build_file)
-            attrs["data"] = [":{}".format(
+            attrs["data"] = _apple_resource_bundle_data(
                 clang_apple_res_bundle_info.bundle_label_name,
-            )]
+            )
             if clang_apple_res_bundle_info.objc_accessor_hdr_label_name:
                 res_objcxx_srcs = [
                     ":{}".format(
@@ -1091,6 +1100,27 @@ def _apple_resource_bundle(target, package_name, default_localization, expose_bu
         bundle_label_name = bundle_label_name,
         build_file = build_files.new(load_stmts = load_stmts, decls = decls),
     )
+
+def _apple_resource_bundle_data(bundle_label_name):
+    """Returns a `select()` attaching the Apple resource bundle only on Apple platforms.
+
+    rules_apple's resource bundles require a resolved Apple platform constraint, so
+    depending on one unconditionally breaks non-Apple (e.g. Linux) builds. Gating the
+    `data` attachment behind the Apple platform conditions keeps the bundle on Apple
+    targets while leaving non-Apple targets with no bundle dependency.
+
+    Args:
+        bundle_label_name: The resource bundle target name as a `string`.
+
+    Returns:
+        A `select()` expression for the `data` attribute.
+    """
+    return bzl_selects.to_starlark([
+        bzl_selects.new(
+            value = ":{}".format(bundle_label_name),
+            condition = "@apple_support//configs:apple",
+        ),
+    ])
 
 def _apple_resource_bundle_for_swift(pkg_ctx, target):
     apple_res_bundle_info = _apple_resource_bundle(

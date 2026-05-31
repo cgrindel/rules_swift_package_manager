@@ -1109,8 +1109,6 @@ swift_binary(
         "-DSWIFT_PACKAGE",
         "-Xcc",
         "-DSWIFT_PACKAGE",
-        "-swift-version",
-        "6",
     ] + select({
         "@rules_swift_package_manager//config_settings/spm/platform:ios": ["-DFOOBAR"],
         "//conditions:default": [],
@@ -1122,6 +1120,7 @@ swift_binary(
         "//conditions:default": [],
     }),
     features = [
+        "swift.enable_v6",
         "swift.experimental.BuiltinModule",
         "swift.upcoming.ExistentialAny",
     ],
@@ -1582,7 +1581,10 @@ swift_library(
         "-Xcc",
         "-DSWIFT_PACKAGE",
     ],
-    data = [":SwiftLibraryWithFilePathResource.rspm_resource_bundle"],
+    data = select({
+        "@apple_support//configs:apple": [":SwiftLibraryWithFilePathResource.rspm_resource_bundle"],
+        "//conditions:default": [],
+    }),
     module_name = "SwiftLibraryWithFilePathResource",
     package_name = "MyPackage",
     srcs = [
@@ -1650,7 +1652,10 @@ swift_library(
         "-Xcc",
         "-DSWIFT_PACKAGE",
     ],
-    data = [":SwiftLibraryWithPrecompiledBundleResource.rspm_resource_bundle"],
+    data = select({
+        "@apple_support//configs:apple": [":SwiftLibraryWithPrecompiledBundleResource.rspm_resource_bundle"],
+        "//conditions:default": [],
+    }),
     module_name = "SwiftLibraryWithPrecompiledBundleResource",
     package_name = "MyPackage",
     srcs = [
@@ -1715,7 +1720,10 @@ objc_library(
         "@rules_swift_package_manager//config_settings/bazel/compilation_mode:dbg": ["-DDEBUG=1"],
         "//conditions:default": [],
     }),
-    data = [":ObjcLibraryWithResources.rspm_resource_bundle"],
+    data = select({
+        "@apple_support//configs:apple": [":ObjcLibraryWithResources.rspm_resource_bundle"],
+        "//conditions:default": [],
+    }),
     enable_modules = True,
     hdrs = ["include/external.h"],
     includes = ["include"],
