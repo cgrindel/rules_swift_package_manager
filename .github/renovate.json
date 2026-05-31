@@ -21,6 +21,12 @@
       "matchPackageNames": ["apple/swift-async-algorithms"],
       "matchFileNames": ["examples/swift_package_registry_example/Package.swift"],
       "enabled": false
+    },
+    {
+      "description": "The BCR macOS Buildkite runner ships Swift 6.0.x and cannot parse swift-log's manifest from 1.9.0 onward (declares swift-tools-version >= 6.1). The bzlmod e2e test's workspace must stay pinned at swift-log < 1.9.0 so SPM resolves to 1.8.0 (tools 6.0). See #2262.",
+      "matchPackageNames": ["apple/swift-log"],
+      "matchFileNames": ["bzlmod/workspace/Package.swift"],
+      "enabled": false
     }
   ]
 }
