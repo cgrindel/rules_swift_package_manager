@@ -6,6 +6,6 @@ let package = Package(
     name: "grdb_example",
     platforms: [.macOS(.v13)],
     dependencies: [
-        .package(url: "https://github.com/groue/GRDB.swift", exact: "7.10.0"),
+        .package(url: "https://github.com/groue/GRDB.swift", exact: "7.11.0"),
     ]
 )
