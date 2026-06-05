@@ -97,6 +97,9 @@ def _swift_package_impl(repository_ctx):
         replace_scm_with_registry = replace_scm_with_registry,
         target_deps = repository_ctx.attr.target_deps,
     )
+
+    repo_rules.download_artifacts(repository_ctx, pkg_ctx)
+
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
     # Remove the git stuff
