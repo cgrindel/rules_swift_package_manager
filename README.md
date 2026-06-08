@@ -89,7 +89,7 @@ Add a dependency on `rules_swift_package_manager`.
 
 <!-- BEGIN MODULE SNIPPET -->
 ```python
-bazel_dep(name = "rules_swift_package_manager", version = "1.17.1")
+bazel_dep(name = "rules_swift_package_manager", version = "1.18.1")
 ```
 <!-- END MODULE SNIPPET -->
 

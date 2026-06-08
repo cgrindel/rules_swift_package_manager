@@ -92,6 +92,26 @@ def _check_spm_version(repository_ctx, env = {}):
 higher. Found version %s installed.\
 """ % (min_spm_ver, spm_ver))
 
+def _download_artifacts(repository_ctx, pkg_ctx):
+    for target in pkg_ctx.pkg_info.targets:
+        if target.type == target_types.binary and target.artifact_download_info != None:
+            url = target.artifact_download_info.url
+            auth = _get_auth(repository_ctx, [url])
+            artifact_download_info = target.artifact_download_info
+
+            result = repository_ctx.download_and_extract(
+                url = url,
+                output = target.path,
+                sha256 = artifact_download_info.checksum,
+                auth = auth,
+            )
+
+            if not result.success:
+                fail("Failed to download artifact. url: {url}, sha256: {sha256}".format(
+                    url = artifact_download_info.url,
+                    sha256 = artifact_download_info.checksum,
+                ))
+
 def _gen_build_files(repository_ctx, pkg_ctx):
     if repository_ctx.attr.build_file:
         # Use template() with no substitutions to copy the file. There is
@@ -122,17 +142,10 @@ def _gen_build_files(repository_ctx, pkg_ctx):
 
         artifact_infos = []
         if target.type == target_types.binary:
-            if target.artifact_download_info != None:
-                artifact_infos = _download_artifact(
-                    repository_ctx,
-                    target.artifact_download_info,
-                    target.path,
-                )
-            else:
-                artifact_infos = _artifact_infos_from_path(
-                    repository_ctx,
-                    target.path,
-                )
+            artifact_infos = _artifact_infos_from_path(
+                repository_ctx,
+                target.path,
+            )
 
         bld_file = swiftpkg_build_files.new_for_target(
             repository_ctx,
@@ -203,23 +216,6 @@ WARNING: Found multiple XCFramework binary artifacts in the downloaded artifact:
         for xf in xcframework_dirs
     ]
 
-def _download_artifact(repository_ctx, artifact_download_info, path):
-    url = artifact_download_info.url
-    auth = _get_auth(repository_ctx, [url])
-
-    result = repository_ctx.download_and_extract(
-        url = url,
-        output = path,
-        sha256 = artifact_download_info.checksum,
-        auth = auth,
-    )
-    if not result.success:
-        fail("Failed to download artifact. url: {url}, sha256: {sha256}".format(
-            url = artifact_download_info.url,
-            sha256 = artifact_download_info.checksum,
-        ))
-    return _artifact_infos_from_path(repository_ctx, path)
-
 # Copied from "@bazel_tools//tools/build_defs/repo:utils.bzl". Availaible starting with 7.1.0
 def _get_auth(ctx, urls):
     """Utility function to obtain the correct auth dict for a list of urls from .netrc file.
@@ -275,6 +271,7 @@ def _remove_modulemaps(repository_ctx, directory, targets):
 
 repo_rules = struct(
     check_spm_version = _check_spm_version,
+    download_artifacts = _download_artifacts,
     env_attr = _env_attr,
     env_attrs = _env_attrs,
     gen_build_files = _gen_build_files,
