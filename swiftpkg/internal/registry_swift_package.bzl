@@ -257,6 +257,8 @@ def _registry_swift_package_impl(repository_ctx):
         target_deps = repository_ctx.attr.target_deps,
     )
 
+    repo_rules.download_artifacts(repository_ctx, pkg_ctx)
+
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
     # Remove unused modulemaps to prevent module redefinition errors
