@@ -258,6 +258,8 @@ def _remove_modulemaps(repository_ctx, directory, targets):
         directory,
         "module.modulemap",
         exclude_paths = [
+            # xcframeworks that vendor libraries can also contain modulemaps
+            "**/*.xcframework/*",
             # Framework modulemaps don't cause issues, and are needed
             "**/*.framework/*",
         ] + [
