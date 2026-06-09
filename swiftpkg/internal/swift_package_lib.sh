@@ -8,28 +8,20 @@
 #
 # Usage: source this file and call the functions you need.
 
-# Resolves the `swift` executable path from the swift_worker binary.
-# Falls back to `which swift` if --find is not supported (e.g. Linux).
-#
-# Arguments:
-#   $1 - path to the swift_worker executable
-#
-# Outputs:
-#   Prints the resolved swift executable path to stdout.
+# Prints the path to the `swift` executable: via `xcrun` on Apple (the
+# selected Xcode toolchain), otherwise from PATH.
 spl_resolve_swift_executable() {
-  local swift_worker="$1"
-  local swift_executable
-  swift_executable="$(
-    "${swift_worker}" --find swift \
-      || which swift \
-      || (
-        # `exit 1` only exits this `(...)` subshell, not the caller.
-        # The nonzero status propagates through `$(...)` and trips
-        # `errexit` in the surrounding script.
-        echo >&2 "Could not find the swift executable."
-        exit 1
-      )
-  )"
+  local swift_executable=""
+  if command -v xcrun >/dev/null 2>&1; then
+    swift_executable="$(xcrun --find swift 2>/dev/null || true)"
+  fi
+  if [[ -z ${swift_executable} || ! -x ${swift_executable} ]]; then
+    swift_executable="$(command -v swift || true)"
+  fi
+  if [[ -z ${swift_executable} || ! -x ${swift_executable} ]]; then
+    echo >&2 "Could not find the swift executable."
+    exit 1
+  fi
   echo "${swift_executable}"
 }
 
@@ -53,7 +45,6 @@ spl_setup_registries() {
 # executes a `swift package` command with the full set of SPM flags.
 #
 # Arguments (passed as flag-value pairs):
-#   --swift_worker <path>
 #   --cmd <update|resolve>
 #   --package_path <path>
 #   --build_path <path>
@@ -73,7 +64,6 @@ spl_setup_registries() {
 # Any remaining arguments after -- are appended to the swift package
 # command.
 spl_run_swift_package() {
-  local swift_worker=""
   local cmd=""
   local package_path=""
   local build_path=""
@@ -93,10 +83,6 @@ spl_run_swift_package() {
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
-      --swift_worker)
-        swift_worker="$2"
-        shift 2
-        ;;
       --cmd)
         cmd="$2"
         shift 2
@@ -172,7 +158,6 @@ spl_run_swift_package() {
   # Validate required flags. package_path is intentionally omitted
   # because the empty string is valid (root-workspace Package.swift).
   local missing=()
-  [[ -z ${swift_worker} ]] && missing+=("--swift_worker")
   [[ -z ${cmd} ]] && missing+=("--cmd")
   [[ -z ${build_path} ]] && missing+=("--build_path")
   [[ -z ${cache_path} ]] && missing+=("--cache_path")
@@ -194,7 +179,7 @@ spl_run_swift_package() {
 
   # Resolve swift executable.
   local swift_executable
-  swift_executable="$(spl_resolve_swift_executable "${swift_worker}")"
+  swift_executable="$(spl_resolve_swift_executable)"
 
   # Construct dynamic arguments.
   local args=()
