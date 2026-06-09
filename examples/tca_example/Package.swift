@@ -7,7 +7,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/pointfreeco/swift-composable-architecture",
-            .upToNextMajor(from: "1.25.5")
+            .upToNextMajor(from: "1.26.0")
         ),
     ]
 )
