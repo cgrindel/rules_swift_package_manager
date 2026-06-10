@@ -1,12 +1,7 @@
 """Implementation for the `swift_worker_binary` rule."""
 
-load("@build_bazel_rules_swift//swift:swift.bzl", "swift_common")
-
 def _swift_worker_binary_impl(ctx):
     tool_executable = ctx.executable.tool
-
-    toolchain = swift_common.get_toolchain(ctx)
-    swift_worker = toolchain.swift_worker
 
     # Write extra_args to a params file (one arg per line) so the
     # launcher can read them at runtime without Starlark-side shell
@@ -33,7 +28,6 @@ def _swift_worker_binary_impl(ctx):
         substitutions = {
             "{ARGS_FILE}": args_file.short_path,
             "{TOOL}": tool_executable.short_path,
-            "{WORKER}": swift_worker.executable.short_path,
         },
         is_executable = True,
     )
@@ -42,7 +36,7 @@ def _swift_worker_binary_impl(ctx):
     # rule and thus empty default_runfiles), plus merge each dep's
     # default_runfiles to pick up transitive runfiles from rule targets.
     runfiles = ctx.runfiles(
-        files = ctx.files.data + [args_file, swift_worker.executable],
+        files = ctx.files.data + [args_file],
     )
     runfiles = runfiles.merge(ctx.attr.tool[DefaultInfo].default_runfiles)
     for dep in ctx.attr.data:
@@ -59,10 +53,9 @@ def _swift_worker_binary_impl(ctx):
 swift_worker_binary = rule(
     implementation = _swift_worker_binary_impl,
     doc = """\
-A reusable rule that resolves the Swift toolchain and generates a launcher \
-script. It wraps a provided tool executable, passing `--swift_worker <path>` \
-as the first arguments so the tool can locate and use the Bazel-configured \
-Swift toolchain.\
+A reusable rule that generates a launcher script wrapping a provided tool \
+executable. Baked-in extra_args are passed before any user-provided \
+command-line arguments.\
 """,
     executable = True,
     attrs = {
@@ -72,23 +65,19 @@ Swift toolchain.\
         ),
         "extra_args": attr.string_list(
             doc = """\
-Additional arguments baked into the launcher script after --swift_worker. \
-These are passed before any user-provided command-line arguments.\
+Additional arguments baked into the launcher script, passed before any \
+user-provided command-line arguments.\
 """,
         ),
         "tool": attr.label(
             executable = True,
             cfg = "exec",
             mandatory = True,
-            doc = """\
-The executable to run. The launcher passes --swift_worker <path> as the \
-first args, followed by any user-provided args.\
-""",
+            doc = "The executable to run, followed by any user-provided args.",
         ),
         "_launcher_template": attr.label(
             default = "@rules_swift_package_manager//swiftpkg/internal:swift_worker_binary_launcher.sh.tmpl",
             allow_single_file = True,
         ),
     },
-    toolchains = swift_common.use_toolchain(),
 )
