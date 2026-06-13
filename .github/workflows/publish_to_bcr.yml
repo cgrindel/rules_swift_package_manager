@@ -12,7 +12,7 @@ permissions:
   contents: write
 jobs:
   publish_to_bcr:
-    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@bb52f0ccbffe38ed0b552b1d187a73608ec1f749 # v1.4.0
+    uses: bazel-contrib/publish-to-bcr/.github/workflows/publish.yaml@c316f1611511a40423572303f66c80bb30bfe2f8 # v1.4.1
     with:
       tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag_name || github.event.release.tag_name }}
       registry_fork: cgrindel/bazel-central-registry
