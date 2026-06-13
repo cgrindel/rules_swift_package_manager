@@ -18,7 +18,7 @@ while IFS= read -r line; do
   extra_args+=("$line")
 done <"{ARGS_FILE}"
 if [[ ${#extra_args[@]} -gt 0 ]]; then
-  exec "{TOOL}" --swift_worker "{WORKER}" "${extra_args[@]}" "$@"
+  exec "{TOOL}" "${extra_args[@]}" "$@"
 else
-  exec "{TOOL}" --swift_worker "{WORKER}" "$@"
+  exec "{TOOL}" "$@"
 fi
