@@ -2,6 +2,7 @@
 
 load(":providers.bzl", "CITestParamsInfo")
 
+# buildifier: disable=canonical-repository
 def _label_str(label):
     # Because we support running with bzlmod enabled and disabled, we need to
     # normalize the target value that is stored. We have chosen to use the

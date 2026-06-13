@@ -1,0 +1,66 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-argument-parser",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.7.1",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-argument-parser"
+    },
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.12.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log"
+    },
+    {
+      "identity" : "swiftformat",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "0.61.0",
+            "upper_bound" : "1.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/nicklockwood/SwiftFormat"
+    },
+    {
+      "identity" : "my_local_package",
+      "path" : "./third_party/my_local_package",
+      "type" : "fileSystem"
+    },
+    {
+      "identity" : "notthatamazingmodule",
+      "path" : "./third_party/NotThatAmazingModule",
+      "type" : "fileSystem"
+    }
+  ],
+  "manifest_display_name" : "MySwiftPackage",
+  "name" : "MySwiftPackage",
+  "path" : ".",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}
