@@ -60,6 +60,10 @@ def _get_registry_url(*, id, registries):
     """
     return registries.scoped.get(id.scope, registries.default)
 
+def _is_localhost_url(url):
+    """Returns True if the URL points to a localhost address."""
+    return url.startswith("http://localhost") or url.startswith("http://127.0.0.1")
+
 def _download_and_parse_package_json(*, id, output, repository_ctx, registry_url, version):
     """Downloads and parses the package JSON metadata from the registry.
 
@@ -71,11 +75,33 @@ def _download_and_parse_package_json(*, id, output, repository_ctx, registry_url
         id.name,
         version,
     )
-    repository_ctx.download(
-        headers = _REGISTRY_JSON_ACCEPT_HEADER,
-        url = package_json_url,
-        output = output,
-    )
+
+    if _is_localhost_url(package_json_url):
+        # Bazel rejects plain http:// URLs without a checksum, but the
+        # metadata checksum is not known ahead of time (it is inside the
+        # response). For localhost registries (e.g. a local registry proxy),
+        # fall back to curl since the traffic never leaves the machine.
+        result = repository_ctx.execute(
+            [
+                "curl", "-sL",
+                "-H", "Accept: application/vnd.swift.registry.v1+json",
+                "-o", output,
+                "-w", "%{http_code}",
+                package_json_url,
+            ],
+            timeout = 30,
+        )
+        if result.return_code != 0 or not result.stdout.startswith("2"):
+            fail("Failed to download package metadata from {url}: {err}".format(
+                url = package_json_url,
+                err = result.stderr if result.return_code != 0 else "HTTP " + result.stdout,
+            ))
+    else:
+        repository_ctx.download(
+            headers = _REGISTRY_JSON_ACCEPT_HEADER,
+            url = package_json_url,
+            output = output,
+        )
 
     return json.decode(repository_ctx.read(output))
 
