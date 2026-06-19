@@ -78,26 +78,27 @@ write_script() {
   chmod +x "${path}"
 }
 
-# When the swift_worker --find returns a path, use it.
-resolve_ok_dir="$(new_tmp_dir)"
-worker_ok="${resolve_ok_dir}/worker"
-write_script "${worker_ok}" 'echo "/fake/resolved/swift"'
-resolve_output="$(spl_resolve_swift_executable "${worker_ok}")"
+# When xcrun is available (Apple), resolve swift via `xcrun --find swift`.
+resolve_xcrun_dir="$(new_tmp_dir)"
+fake_swift_xcrun="${resolve_xcrun_dir}/swift"
+write_script "${fake_swift_xcrun}" 'echo xcrun-swift'
+write_script "${resolve_xcrun_dir}/xcrun" \
+  "[ \"\$1\" = '--find' ] && [ \"\$2\" = 'swift' ] && echo '${fake_swift_xcrun}'"
+xcrun_output="$(PATH="${resolve_xcrun_dir}:${PATH}" \
+  spl_resolve_swift_executable /unused/worker)"
 assert_equal \
-  "/fake/resolved/swift" "${resolve_output}" \
-  "swift_worker --find output should be used when it succeeds"
+  "${fake_swift_xcrun}" "${xcrun_output}" \
+  "xcrun --find swift should be used when xcrun is available"
 
-# When swift_worker fails, fall back to `which swift` on PATH.
-resolve_fallback_dir="$(new_tmp_dir)"
-worker_fail="${resolve_fallback_dir}/worker"
-write_script "${worker_fail}" 'exit 1'
-fake_swift="${resolve_fallback_dir}/swift"
-write_script "${fake_swift}" 'echo fake-swift-called'
-fallback_output="$(PATH="${resolve_fallback_dir}:${PATH}" \
-  spl_resolve_swift_executable "${worker_fail}")"
+# When xcrun is unavailable (e.g. Linux), fall back to `swift` on PATH.
+resolve_path_dir="$(new_tmp_dir)"
+fake_swift_path="${resolve_path_dir}/swift"
+write_script "${fake_swift_path}" 'echo path-swift'
+fallback_output="$(PATH="${resolve_path_dir}" \
+  spl_resolve_swift_executable /unused/worker)"
 assert_equal \
-  "${fake_swift}" "${fallback_output}" \
-  "which swift should be used when swift_worker fails"
+  "${fake_swift_path}" "${fallback_output}" \
+  "swift on PATH should be used when xcrun is unavailable"
 
 # MARK - spl_run_swift_package required-flag validation
 
@@ -110,7 +111,7 @@ set -e
 assert_equal \
   "1" "${validation_rc}" \
   "missing required flags should return exit code 1"
-for flag in --swift_worker --cmd --build_path --cache_path \
+for flag in --cmd --build_path --cache_path \
   --config_path --security_path; do
   case "${validation_err}" in
     *"${flag}"*) ;;
@@ -121,7 +122,7 @@ done
 # MARK - spl_run_swift_package (argv capture via fake swift)
 
 # Stand up a fake swift that writes its argv (one arg per line) to
-# ${SWIFT_ARGS_FILE}, plus a swift_worker that resolves to it.
+# ${SWIFT_ARGS_FILE}, plus a fake xcrun that resolves swift to it.
 run_dir="$(new_tmp_dir)"
 swift_args_file="${run_dir}/swift_args.txt"
 fake_run_swift="${run_dir}/swift"
@@ -138,21 +139,20 @@ fi
 FAKE_SWIFT
 chmod +x "${fake_run_swift}"
 
-fake_run_worker="${run_dir}/worker"
-cat >"${fake_run_worker}" <<FAKE_WORKER
+fake_xcrun="${run_dir}/xcrun"
+cat >"${fake_xcrun}" <<FAKE_XCRUN
 #!/usr/bin/env bash
-echo "${fake_run_swift}"
-FAKE_WORKER
-chmod +x "${fake_run_worker}"
+[ "\$1" = "--find" ] && [ "\$2" = "swift" ] && echo "${fake_run_swift}"
+FAKE_XCRUN
+chmod +x "${fake_xcrun}"
 
 # BUILD_WORKSPACE_DIRECTORY must be set or the function exits.
 workspace_dir="${run_dir}/ws"
 mkdir -p "${workspace_dir}"
 
 export SWIFT_ARGS_FILE="${swift_args_file}"
-BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
+PATH="${run_dir}:${PATH}" BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
   spl_run_swift_package \
-  --swift_worker "${fake_run_worker}" \
   --cmd resolve \
   --package_path pkgsub \
   --build_path .build \
@@ -213,9 +213,8 @@ netrc_space_realpath="$(readlink -f "${netrc_space_file}")"
 # Reset argv file so the next invocation is captured cleanly.
 : >"${swift_args_file}"
 
-BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
+PATH="${run_dir}:${PATH}" BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
   spl_run_swift_package \
-  --swift_worker "${fake_run_worker}" \
   --cmd resolve \
   --package_path pkgsub \
   --build_path .build \
@@ -244,9 +243,8 @@ swift_env_file="${run_dir}/swift_env.txt"
 : >"${swift_env_file}"
 export SWIFT_ENV_FILE="${swift_env_file}"
 
-BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
+PATH="${run_dir}:${PATH}" BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
   spl_run_swift_package \
-  --swift_worker "${fake_run_worker}" \
   --cmd resolve \
   --package_path pkgsub \
   --build_path .build \
@@ -297,9 +295,8 @@ unset SWIFT_ENV_FILE SPL_TEST_FOO SPL_TEST_SPACED
 # variable to enable this splitting.
 : >"${swift_args_file}"
 
-BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
+PATH="${run_dir}:${PATH}" BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
   spl_run_swift_package \
-  --swift_worker "${fake_run_worker}" \
   --cmd resolve \
   --package_path pkgsub \
   --build_path .build \
@@ -333,9 +330,8 @@ echo '{"registries":{"example":{"url":"https://example.invalid"}}}' \
 reg_plumb_config="${reg_plumb_dir}/.config"
 : >"${swift_args_file}"
 
-BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
+PATH="${run_dir}:${PATH}" BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
   spl_run_swift_package \
-  --swift_worker "${fake_run_worker}" \
   --cmd resolve \
   --package_path pkgsub \
   --build_path .build \
@@ -370,7 +366,6 @@ set +e
 bwd_err="$(
   unset BUILD_WORKSPACE_DIRECTORY
   spl_run_swift_package \
-    --swift_worker "${fake_run_worker}" \
     --cmd resolve \
     --package_path pkgsub \
     --build_path .build \
