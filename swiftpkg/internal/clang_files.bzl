@@ -269,7 +269,7 @@ def _collect_files(
             orig_path,
             public_includes = public_includes,
         ):
-            if modulemap != None:
+            if modulemap != None and modulemap != path:
                 fail("Found multiple modulemap files. {first} {second}".format(
                     first = modulemap,
                     second = path,
