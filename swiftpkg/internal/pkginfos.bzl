@@ -30,6 +30,29 @@ _DEFAULT_LOCALIZATION = "en"
 # are enabled by default when no explicit trait selection is provided.
 _DEFAULT_TRAIT_NAME = "default"
 
+_PUBLIC_INCLUDE_FILE_EXTS = [".def", ".macros", ".modulemap"]
+
+def _is_public_include_file(path):
+    _root, ext = paths.split_extension(path)
+    return clang_files.is_hdr(path) or lists.contains(_PUBLIC_INCLUDE_FILE_EXTS, ext)
+
+def _public_include_file_scan_paths(public_include, src_paths):
+    """Returns paths to scan for public include files.
+
+    If a source path sits under the public include root, scanning the whole
+    include root would pull files from sibling directories outside the explicit
+    source paths. If no source path sits under the public include root, treat
+    the public include as a separate header directory and scan it directly.
+    """
+    source_paths_under_public_include = [
+        sp
+        for sp in src_paths
+        if clang_files.is_under_path(sp, public_include)
+    ]
+    if source_paths_under_public_include:
+        return source_paths_under_public_include
+    return [public_include]
+
 def _package_command_args(
         subcommand_args,
         registries_directory = None,
@@ -1464,19 +1487,12 @@ def _new_clang_src_info_from_sources(
         )
 
     # If the Swift package manifest has explicit source paths, respect them.
-    # (Be sure to include any explicitly specified include directories.)
     # Otherwise, use all of the source files under the target path.
     if source_paths != None:
         src_paths = [
             paths.normalize(paths.join(abs_target_path, sp))
             for sp in source_paths
         ]
-
-        # The public includes are already relative to the abs_target_path.
-        src_paths.extend([
-            paths.normalize(paths.join(pkg_path, pi))
-            for pi in public_includes
-        ])
         src_paths = sets.to_list(sets.make(src_paths))
     else:
         src_paths = [abs_target_path]
@@ -1502,6 +1518,24 @@ def _new_clang_src_info_from_sources(
             sp,
             exclude_paths = abs_exclude_paths,
         ))
+
+    # Explicit public include directories may be broader than the target's
+    # source paths. For example, Yoga uses `path = "."`, `sources = ["yoga"]`,
+    # and `publicHeadersPath = "."`. In that case, the package root must be
+    # searched for public headers and module maps without compiling unrelated C
+    # files under directories such as `javascript`.
+    if source_paths != None:
+        for pi in public_includes:
+            for scan_path in _public_include_file_scan_paths(pi, src_paths):
+                all_srcs.extend([
+                    f
+                    for f in repository_files.list_files_under(
+                        repository_ctx,
+                        scan_path,
+                        exclude_paths = abs_exclude_paths,
+                    )
+                    if _is_public_include_file(f)
+                ])
 
     # SPM's exclude list only excludes files from being compiled as sources,
     # but headers in excluded directories are still available for inclusion.
@@ -2142,4 +2176,5 @@ pkginfos = struct(
 pkginfos_testing = struct(
     describe_package_args = _describe_package_args,
     dump_package_args = _dump_package_args,
+    new_clang_src_info_from_sources = _new_clang_src_info_from_sources,
 )
