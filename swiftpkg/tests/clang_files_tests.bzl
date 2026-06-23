@@ -3,6 +3,7 @@
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:clang_files.bzl", "clang_files")
+load(":testutils.bzl", "testutils")
 
 def _is_hdr_test(ctx):
     env = unittest.begin(ctx)
@@ -269,9 +270,47 @@ def _organize_srcs_test(ctx):
 
 organize_srcs_test = unittest.make(_organize_srcs_test)
 
+def _collect_files_uses_custom_modulemap_name_test(ctx):
+    env = unittest.begin(ctx)
+
+    repository_ctx = testutils.new_stub_repository_ctx(
+        "mypackage",
+        file_contents = {
+            "/pkg/yoga/module.modulemap": """\
+module yoga {
+  header "Yoga.h"
+  export *
+}
+""",
+        },
+    )
+
+    actual = clang_files.collect_files(
+        repository_ctx,
+        [
+            "/pkg/yoga/module.modulemap",
+            "/pkg/yoga/module.modulemap",
+            "/pkg/yoga/Yoga.h",
+        ],
+        "core",
+        public_includes = ["/pkg"],
+        relative_to = "/pkg",
+    )
+
+    asserts.equals(env, "yoga/module.modulemap", actual.modulemap)
+    asserts.equals(env, "yoga", actual.module_name)
+    asserts.equals(env, ["yoga/Yoga.h"], actual.hdrs)
+
+    return unittest.end(env)
+
+collect_files_uses_custom_modulemap_name_test = unittest.make(
+    _collect_files_uses_custom_modulemap_name_test,
+)
+
 def clang_files_test_suite():
     return unittest.suite(
         "clang_files_tests",
+        collect_files_uses_custom_modulemap_name_test,
         organize_srcs_test,
         is_hdr_test,
         is_include_hdr_test,
