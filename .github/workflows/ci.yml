@@ -99,6 +99,8 @@ jobs:
             runner: macos-15
           - test: '@@//examples:xcmetrics_example_test_bazel_.bazelversion'
             runner: macos-15
+          - test: '@@//examples:yoga_example_test_bazel_.bazelversion'
+            runner: macos-15
           - test: '@@//release:archive_test'
             runner: ubuntu-22.04
           - test: '@@//release:archive_test'
