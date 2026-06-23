@@ -1602,6 +1602,7 @@ def _new_clang_src_info_from_sources(
         textual_hdrs = textual_hdrs,
         public_includes = public_includes,
         private_includes = private_includes,
+        module_name = organized_files.module_name,
         modulemap_path = organized_files.modulemap,
         frameworks = frameworks,
     )
@@ -1613,6 +1614,7 @@ def _new_clang_src_info(
         textual_hdrs = [],
         public_includes = [],
         private_includes = [],
+        module_name = None,
         modulemap_path = None,
         frameworks = []):
     return struct(
@@ -1622,6 +1624,7 @@ def _new_clang_src_info(
         textual_hdrs = textual_hdrs,
         public_includes = public_includes,
         private_includes = private_includes,
+        module_name = module_name,
         modulemap_path = modulemap_path,
         frameworks = frameworks,
     )
