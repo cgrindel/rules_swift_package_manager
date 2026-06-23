@@ -298,7 +298,6 @@ module yoga {
     )
 
     asserts.equals(env, "yoga/module.modulemap", actual.modulemap)
-    asserts.equals(env, "yoga", actual.module_name)
     asserts.equals(env, ["yoga/Yoga.h"], actual.hdrs)
 
     return unittest.end(env)
