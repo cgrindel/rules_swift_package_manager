@@ -108,11 +108,11 @@ empty working directory leaves string unchanged\
 working directory without trailing content is replaced\
 """,
             json_str = """\
-{"name": "/path/to/MyApp"}\
+{"path": "/path/to/MyApp"}\
 """,
             working_directory = "/path/to/MyApp",
             expected = """\
-{"name": "./"}\
+{"path": "./"}\
 """,
         ),
     ]
