@@ -26,6 +26,25 @@ def _is_hdr_test(ctx):
 
 is_hdr_test = unittest.make(_is_hdr_test)
 
+def _is_public_include_file_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(path = "foo.h", exp = True, msg = "header"),
+        struct(path = "foo.def", exp = True, msg = "textual def header"),
+        struct(path = "foo.macros", exp = True, msg = "textual macros header"),
+        struct(path = "module.modulemap", exp = True, msg = "modulemap"),
+        struct(path = "foo.c", exp = False, msg = "source file"),
+        struct(path = "README.md", exp = False, msg = "unknown extension"),
+    ]
+    for t in tests:
+        actual = clang_files.is_public_include_file(t.path)
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+is_public_include_file_test = unittest.make(_is_public_include_file_test)
+
 def _is_include_hdr_test(ctx):
     env = unittest.begin(ctx)
 
@@ -141,6 +160,52 @@ def _is_under_path_test(ctx):
     return unittest.end(env)
 
 is_under_path_test = unittest.make(_is_under_path_test)
+
+def _public_include_file_scan_paths_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "source paths under public include",
+            public_include = "/pkg",
+            src_paths = [
+                "/pkg/yoga",
+                "/pkg/yoga/algorithm",
+                "/another/source",
+            ],
+            exp = [
+                "/pkg/yoga",
+                "/pkg/yoga/algorithm",
+            ],
+        ),
+        struct(
+            msg = "public include separate from source paths",
+            public_include = "/pkg/include",
+            src_paths = [
+                "/pkg/src",
+            ],
+            exp = ["/pkg/include"],
+        ),
+        struct(
+            msg = "source path equals public include",
+            public_include = "/pkg/include",
+            src_paths = [
+                "/pkg/include",
+                "/pkg/include_extra",
+            ],
+            exp = ["/pkg/include"],
+        ),
+    ]
+    for t in tests:
+        actual = clang_files.public_include_file_scan_paths(
+            t.public_include,
+            t.src_paths,
+        )
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+public_include_file_scan_paths_test = unittest.make(_public_include_file_scan_paths_test)
 
 def _find_magical_public_hdr_dir_test(ctx):
     env = unittest.begin(ctx)
@@ -312,10 +377,12 @@ def clang_files_test_suite():
         collect_files_uses_custom_modulemap_name_test,
         organize_srcs_test,
         is_hdr_test,
+        is_public_include_file_test,
         is_include_hdr_test,
         is_public_modulemap_test,
         relativize_test,
         is_under_path_test,
+        public_include_file_scan_paths_test,
         find_magical_public_hdr_dir_test,
         reduce_paths_test,
     )

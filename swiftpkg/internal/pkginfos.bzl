@@ -30,29 +30,6 @@ _DEFAULT_LOCALIZATION = "en"
 # are enabled by default when no explicit trait selection is provided.
 _DEFAULT_TRAIT_NAME = "default"
 
-_PUBLIC_INCLUDE_FILE_EXTS = [".def", ".macros", ".modulemap"]
-
-def _is_public_include_file(path):
-    _root, ext = paths.split_extension(path)
-    return clang_files.is_hdr(path) or lists.contains(_PUBLIC_INCLUDE_FILE_EXTS, ext)
-
-def _public_include_file_scan_paths(public_include, src_paths):
-    """Returns paths to scan for public include files.
-
-    If a source path sits under the public include root, scanning the whole
-    include root would pull files from sibling directories outside the explicit
-    source paths. If no source path sits under the public include root, treat
-    the public include as a separate header directory and scan it directly.
-    """
-    source_paths_under_public_include = [
-        sp
-        for sp in src_paths
-        if clang_files.is_under_path(sp, public_include)
-    ]
-    if source_paths_under_public_include:
-        return source_paths_under_public_include
-    return [public_include]
-
 def _package_command_args(
         subcommand_args,
         registries_directory = None,
@@ -1526,7 +1503,7 @@ def _new_clang_src_info_from_sources(
     # files under directories such as `javascript`.
     if source_paths != None:
         for pi in public_includes:
-            for scan_path in _public_include_file_scan_paths(pi, src_paths):
+            for scan_path in clang_files.public_include_file_scan_paths(pi, src_paths):
                 all_srcs.extend([
                     f
                     for f in repository_files.list_files_under(
@@ -1534,7 +1511,7 @@ def _new_clang_src_info_from_sources(
                         scan_path,
                         exclude_paths = abs_exclude_paths,
                     )
-                    if _is_public_include_file(f)
+                    if clang_files.is_public_include_file(f)
                 ])
 
     # SPM's exclude list only excludes files from being compiled as sources,
