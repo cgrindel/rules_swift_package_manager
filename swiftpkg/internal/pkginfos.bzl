@@ -243,6 +243,7 @@ def _get(
 
     # Dump the merged pkg_info for debug purposes
     json_str = json.encode_indent(pkg_info, indent = "  ")
+    json_str = repository_utils.replace_working_directory(json_str, directory)
     repository_ctx.file("pkg_info.json", content = json_str, executable = False)
 
     return pkg_info
@@ -1602,6 +1603,7 @@ def _new_clang_src_info_from_sources(
         textual_hdrs = textual_hdrs,
         public_includes = public_includes,
         private_includes = private_includes,
+        module_name = organized_files.module_name,
         modulemap_path = organized_files.modulemap,
         frameworks = frameworks,
     )
@@ -1613,6 +1615,7 @@ def _new_clang_src_info(
         textual_hdrs = [],
         public_includes = [],
         private_includes = [],
+        module_name = None,
         modulemap_path = None,
         frameworks = []):
     return struct(
@@ -1622,6 +1625,7 @@ def _new_clang_src_info(
         textual_hdrs = textual_hdrs,
         public_includes = public_includes,
         private_includes = private_includes,
+        module_name = module_name,
         modulemap_path = modulemap_path,
         frameworks = frameworks,
     )

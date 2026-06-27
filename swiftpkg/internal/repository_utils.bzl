@@ -185,9 +185,9 @@ def _copy(repository_ctx, src, dest):
 def _replace_working_directory(json_str, working_directory):
     """Replace the working directory prefix in a JSON string.
 
-    Uses a path-prefix-safe replacement by appending a trailing
-    slash to ensure only full path-prefix matches are replaced.
-    Without the trailing slash, a working directory like
+    Uses a path-prefix-safe replacement by appending a trailing slash or
+    a trailing quotation mark to ensure only full path-prefix matches are
+    replaced. Without the trailing indicator, a working directory like
     "/path/to/MyApp" would incorrectly match
     "/path/to/MyAppFrameworks".
 
@@ -203,7 +203,7 @@ def _replace_working_directory(json_str, working_directory):
     """
     if not working_directory:
         return json_str
-    return json_str.replace(working_directory + "/", "./")
+    return json_str.replace(working_directory + "/", "./").replace(working_directory + "\"", "./\"")
 
 repository_utils = struct(
     copy = _copy,
