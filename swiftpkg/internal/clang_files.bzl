@@ -32,6 +32,8 @@ _OTHER_SRC_EXTS = [".so", ".o", ".inc"]
 
 _TEXTUAL_HDR_EXTS = [".def", ".macros"]
 
+_PUBLIC_INCLUDE_FILE_EXTS = _TEXTUAL_HDR_EXTS + [".modulemap"]
+
 # Acceptable sources clang and objc:
 # https://bazel.build/reference/be/c-cpp#cc_library.srcs
 # https://bazel.build/reference/be/objective-c#objc_library.srcs
@@ -43,6 +45,10 @@ _SRC_EXTS = _C_SRC_EXTS + _CXX_SRC_EXTS + _OBJC_SRC_EXTS + _OBJCXX_SRC_EXTS + \
 def _is_hdr(path):
     _root, ext = paths.split_extension(path)
     return lists.contains(_HEADER_EXTS, ext)
+
+def _is_public_include_file(path):
+    _root, ext = paths.split_extension(path)
+    return _is_hdr(path) or lists.contains(_PUBLIC_INCLUDE_FILE_EXTS, ext)
 
 def _is_include_hdr(path, public_includes = []):
     """Determines whether the path is a public header.
@@ -189,6 +195,23 @@ def _is_under_path(path, parent):
     if path.startswith(parent_prefix):
         return True
     return False
+
+def _public_include_file_scan_paths(public_include, src_paths):
+    """Returns paths to scan for public include files.
+
+    If a source path sits under the public include root, scanning the whole
+    include root would pull files from sibling directories outside the explicit
+    source paths. If no source path sits under the public include root, treat
+    the public include as a separate header directory and scan it directly.
+    """
+    source_paths_under_public_include = [
+        sp
+        for sp in src_paths
+        if _is_under_path(sp, public_include)
+    ]
+    if source_paths_under_public_include:
+        return source_paths_under_public_include
+    return [public_include]
 
 def _relativize(path, relative_to):
     """Returns a path relative to another path.
@@ -409,9 +432,11 @@ clang_files = struct(
     find_magical_public_hdr_dir = _find_magical_public_hdr_dir,
     is_hdr = _is_hdr,
     is_include_hdr = _is_include_hdr,
+    is_public_include_file = _is_public_include_file,
     is_public_modulemap = _is_public_modulemap,
     is_under_path = _is_under_path,
     organize_srcs = _organize_srcs,
+    public_include_file_scan_paths = _public_include_file_scan_paths,
     reduce_paths = _reduce_paths,
     relativize = _relativize,
 )
