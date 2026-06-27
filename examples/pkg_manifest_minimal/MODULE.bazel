@@ -48,6 +48,24 @@ swift_deps = use_extension(
 )
 swift_deps.from_package(
     declare_swift_deps_info = True,
+    desc_manifests = {
+        "_main": "//swift_deps_cache/_main:desc.json",
+        "swift-argument-parser": "//swift_deps_cache/swift-argument-parser:desc.json",
+        "swift-log": "//swift_deps_cache/swift-log:desc.json",
+        "swiftformat": "//swift_deps_cache/swiftformat:desc.json",
+        "my_local_package": "//swift_deps_cache/my_local_package:desc.json",
+        "notthatamazingmodule": "//swift_deps_cache/notthatamazingmodule:desc.json",
+        "myamazingmodule": "//swift_deps_cache/myamazingmodule:desc.json",
+    },
+    dump_manifests = {
+        "_main": "//swift_deps_cache/_main:dump.json",
+        "swift-argument-parser": "//swift_deps_cache/swift-argument-parser:dump.json",
+        "swift-log": "//swift_deps_cache/swift-log:dump.json",
+        "swiftformat": "//swift_deps_cache/swiftformat:dump.json",
+        "my_local_package": "//swift_deps_cache/my_local_package:dump.json",
+        "notthatamazingmodule": "//swift_deps_cache/notthatamazingmodule:dump.json",
+        "myamazingmodule": "//swift_deps_cache/myamazingmodule:dump.json",
+    },
     resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )

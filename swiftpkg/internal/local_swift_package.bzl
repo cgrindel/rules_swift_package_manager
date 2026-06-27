@@ -74,12 +74,15 @@ def _local_swift_package_impl(repository_ctx):
             repository_ctx.attr.cached_json_directory,
         )
 
+    dump_manifest, desc_manifest = pkg_ctxs.read_cached_manifests(repository_ctx)
     pkg_ctx = pkg_ctxs.read(
         repository_ctx,
         repo_dir,
         env,
         cached_json_directory,
         target_deps = repository_ctx.attr.target_deps,
+        dump_manifest = dump_manifest,
+        desc_manifest = desc_manifest,
     )
 
     repo_rules.download_artifacts(repository_ctx, pkg_ctx)
@@ -103,7 +106,31 @@ _ALL_ATTRS = dicts.add(
         "build_file": attr.label(
             doc = "When used, the provided BUILD file will be used instead of generating one.",
         ),
-        "cached_json_directory": attr.string(),
+        "cached_desc_manifest": attr.label(
+            allow_single_file = [".json"],
+            doc = """\
+Pre-generated `desc.json` for this package, produced by \
+`bazel run @swift_package//:cache`. When provided alongside \
+`cached_dump_manifest`, the repository rule reads these files instead \
+of invoking `swift package describe`. See GH-2140.\
+""",
+        ),
+        "cached_dump_manifest": attr.label(
+            allow_single_file = [".json"],
+            doc = """\
+Pre-generated `dump.json` for this package. Always travels with \
+`cached_desc_manifest`.\
+""",
+        ),
+        "cached_json_directory": attr.string(
+            doc = """\
+**Deprecated.** Prefer `cached_dump_manifest` / \
+`cached_desc_manifest`, which let the cache live in the consuming \
+workspace and be regenerated through the active Bazel Swift worker \
+(see GH-2140). Setting both this attribute and the new pair is a hard \
+error.\
+""",
+        ),
     },
 )
 
