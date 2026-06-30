@@ -89,9 +89,56 @@ def _parse_requires_declaration_test(ctx):
 
 parse_requires_declaration_test = unittest.make(_parse_requires_declaration_test)
 
+def _parse_comments_in_module_member_test(ctx):
+    env = unittest.begin(ctx)
+
+    do_parse_test(
+        env,
+        "comments between module members are ignored",
+        text = """\
+framework module MyLib {
+    umbrella header "MyLib.h"
+
+    export *
+
+    // A line comment between members.
+    explicit module Internal {
+        /* A block comment between headers. */
+        header "Foo.h"
+        header "Bar.h"
+    }
+}
+""",
+        expected = [
+            declarations.module(
+                module_id = "MyLib",
+                framework = True,
+                members = [
+                    declarations.umbrella_header("MyLib.h"),
+                    declarations.export(wildcard = True),
+                    declarations.module(
+                        module_id = "Internal",
+                        explicit = True,
+                        members = [
+                            declarations.single_header("Foo.h"),
+                            declarations.single_header("Bar.h"),
+                        ],
+                    ),
+                ],
+            ),
+        ],
+    )
+
+    return unittest.end(env)
+
+parse_comments_in_module_member_test = unittest.make(
+    _parse_comments_in_module_member_test,
+)
+
 def collect_module_member_test_suite():
     return unittest.suite(
         "collect_module_member_tests",
         parse_newline_in_module_member_test,
         parse_requires_declaration_test,
+        parse_comments_in_module_member_test,
     )
