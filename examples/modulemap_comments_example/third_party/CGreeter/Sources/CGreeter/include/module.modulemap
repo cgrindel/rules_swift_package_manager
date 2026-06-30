@@ -1,0 +1,9 @@
+// A line comment before the module declaration.
+/* A block comment
+   before the module declaration. */
+module CGreeter {
+    // A line comment inside the module body.
+    header "greeter.h"
+    /* A block comment inside the module body. */
+    export *
+}

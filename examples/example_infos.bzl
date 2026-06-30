@@ -143,6 +143,7 @@ _macos_single_bazel_version_test_examples = [
     "kscrash_example",
     "lottie_ios_example",
     "messagekit_example",
+    "modulemap_comments_example",
     "nimble_example",
     "objc_code",
     "phone_number_kit",
