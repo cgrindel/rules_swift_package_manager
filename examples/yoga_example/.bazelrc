@@ -1,0 +1,8 @@
+# Import Shared settings
+import %workspace%/../../shared.bazelrc
+
+# Import CI settings.
+import %workspace%/../../ci.bazelrc
+
+# Try to import a local.rc file; typically, written by CI
+try-import %workspace%/../../local.bazelrc

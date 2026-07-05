@@ -243,6 +243,7 @@ def _get(
 
     # Dump the merged pkg_info for debug purposes
     json_str = json.encode_indent(pkg_info, indent = "  ")
+    json_str = repository_utils.replace_working_directory(json_str, directory)
     repository_ctx.file("pkg_info.json", content = json_str, executable = False)
 
     return pkg_info
@@ -1463,19 +1464,12 @@ def _new_clang_src_info_from_sources(
         )
 
     # If the Swift package manifest has explicit source paths, respect them.
-    # (Be sure to include any explicitly specified include directories.)
     # Otherwise, use all of the source files under the target path.
     if source_paths != None:
         src_paths = [
             paths.normalize(paths.join(abs_target_path, sp))
             for sp in source_paths
         ]
-
-        # The public includes are already relative to the abs_target_path.
-        src_paths.extend([
-            paths.normalize(paths.join(pkg_path, pi))
-            for pi in public_includes
-        ])
         src_paths = sets.to_list(sets.make(src_paths))
     else:
         src_paths = [abs_target_path]
@@ -1501,6 +1495,24 @@ def _new_clang_src_info_from_sources(
             sp,
             exclude_paths = abs_exclude_paths,
         ))
+
+    # Explicit public include directories may be broader than the target's
+    # source paths. For example, Yoga uses `path = "."`, `sources = ["yoga"]`,
+    # and `publicHeadersPath = "."`. In that case, the package root must be
+    # searched for public headers and module maps without compiling unrelated C
+    # files under directories such as `javascript`.
+    if source_paths != None:
+        for pi in public_includes:
+            for scan_path in clang_files.public_include_file_scan_paths(pi, src_paths):
+                all_srcs.extend([
+                    f
+                    for f in repository_files.list_files_under(
+                        repository_ctx,
+                        scan_path,
+                        exclude_paths = abs_exclude_paths,
+                    )
+                    if clang_files.is_public_include_file(f)
+                ])
 
     # SPM's exclude list only excludes files from being compiled as sources,
     # but headers in excluded directories are still available for inclusion.
@@ -1602,6 +1614,7 @@ def _new_clang_src_info_from_sources(
         textual_hdrs = textual_hdrs,
         public_includes = public_includes,
         private_includes = private_includes,
+        module_name = organized_files.module_name,
         modulemap_path = organized_files.modulemap,
         frameworks = frameworks,
     )
@@ -1613,6 +1626,7 @@ def _new_clang_src_info(
         textual_hdrs = [],
         public_includes = [],
         private_includes = [],
+        module_name = None,
         modulemap_path = None,
         frameworks = []):
     return struct(
@@ -1622,6 +1636,7 @@ def _new_clang_src_info(
         textual_hdrs = textual_hdrs,
         public_includes = public_includes,
         private_includes = private_includes,
+        module_name = module_name,
         modulemap_path = modulemap_path,
         frameworks = frameworks,
     )
@@ -2138,4 +2153,5 @@ pkginfos = struct(
 pkginfos_testing = struct(
     describe_package_args = _describe_package_args,
     dump_package_args = _dump_package_args,
+    new_clang_src_info_from_sources = _new_clang_src_info_from_sources,
 )

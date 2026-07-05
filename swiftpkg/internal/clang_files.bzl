@@ -32,6 +32,8 @@ _OTHER_SRC_EXTS = [".so", ".o", ".inc"]
 
 _TEXTUAL_HDR_EXTS = [".def", ".macros"]
 
+_PUBLIC_INCLUDE_FILE_EXTS = _TEXTUAL_HDR_EXTS + [".modulemap"]
+
 # Acceptable sources clang and objc:
 # https://bazel.build/reference/be/c-cpp#cc_library.srcs
 # https://bazel.build/reference/be/objective-c#objc_library.srcs
@@ -43,6 +45,10 @@ _SRC_EXTS = _C_SRC_EXTS + _CXX_SRC_EXTS + _OBJC_SRC_EXTS + _OBJCXX_SRC_EXTS + \
 def _is_hdr(path):
     _root, ext = paths.split_extension(path)
     return lists.contains(_HEADER_EXTS, ext)
+
+def _is_public_include_file(path):
+    _root, ext = paths.split_extension(path)
+    return _is_hdr(path) or lists.contains(_PUBLIC_INCLUDE_FILE_EXTS, ext)
 
 def _is_include_hdr(path, public_includes = []):
     """Determines whether the path is a public header.
@@ -120,8 +126,8 @@ def _is_public_modulemap(path, public_includes = []):
 
     return False
 
-def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path, module_name):
-    """Retrieves the list of headers declared in the specified modulemap file \
+def _get_info_from_modulemap(repository_ctx, modulemap_path, module_name):
+    """Retrieves module info declared in the specified modulemap file \
     for the specified module.
 
     If the specified module is not found, all of the headers from the top-level
@@ -133,7 +139,8 @@ def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path, module_name):
         module_name: The name of the module.
 
     Returns:
-        A `list` of path `string` values.
+        A `struct` containing the module name and a list of header path `string`
+        values.
     """
     modulemap_str = repository_ctx.read(modulemap_path)
     decls, err = modulemap_parser.parse(modulemap_str)
@@ -148,8 +155,12 @@ def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path, module_name):
     # headers from that module if it is found. Otherwise, we collect all of the
     # headers in all of the module declarations at the top-level.
     module_decl = lists.find(module_decls, lambda m: m.module_id == module_name)
+    resolved_module_name = module_name
     if module_decl != None:
         module_decls = [module_decl]
+        resolved_module_name = module_decl.module_id
+    elif len(module_decls) == 1:
+        resolved_module_name = module_decls[0].module_id
 
     modulemap_dirname = paths.dirname(modulemap_path)
     hdrs = []
@@ -161,7 +172,10 @@ def _get_hdr_paths_from_modulemap(repository_ctx, modulemap_path, module_name):
                 normalized_hdr_path = paths.normalize(hdr_path)
                 hdrs.append(normalized_hdr_path)
 
-    return hdrs
+    return struct(
+        hdrs = hdrs,
+        module_name = resolved_module_name,
+    )
 
 def _is_under_path(path, parent):
     """Determines whether a path is under a another path.
@@ -181,6 +195,23 @@ def _is_under_path(path, parent):
     if path.startswith(parent_prefix):
         return True
     return False
+
+def _public_include_file_scan_paths(public_include, src_paths):
+    """Returns paths to scan for public include files.
+
+    If a source path sits under the public include root, scanning the whole
+    include root would pull files from sibling directories outside the explicit
+    source paths. If no source path sits under the public include root, treat
+    the public include as a separate header directory and scan it directly.
+    """
+    source_paths_under_public_include = [
+        sp
+        for sp in src_paths
+        if _is_under_path(sp, public_include)
+    ]
+    if source_paths_under_public_include:
+        return source_paths_under_public_include
+    return [public_include]
 
 def _relativize(path, relative_to):
     """Returns a path relative to another path.
@@ -253,6 +284,7 @@ def _collect_files(
 
     modulemap = None
     modulemap_orig_path = None
+    modulemap_module_name = None
     for orig_path in all_srcs:
         path = _relativize(orig_path, relative_to)
         _root, ext = paths.split_extension(path)
@@ -269,7 +301,7 @@ def _collect_files(
             orig_path,
             public_includes = public_includes,
         ):
-            if modulemap != None:
+            if modulemap != None and modulemap != path:
                 fail("Found multiple modulemap files. {first} {second}".format(
                     first = modulemap,
                     second = path,
@@ -285,11 +317,13 @@ def _collect_files(
     # the referenced headers are included. For now, we will just add the
     # modulemap hdrs to the ones that we have already found.
     if modulemap_orig_path != None:
-        mm_hdrs = _get_hdr_paths_from_modulemap(
+        modulemap_info = _get_info_from_modulemap(
             repository_ctx,
             modulemap_orig_path,
             module_name,
         )
+        modulemap_module_name = modulemap_info.module_name
+        mm_hdrs = modulemap_info.hdrs
         mm_hdrs = _relativize_paths(mm_hdrs, relative_to)
 
         # There are modulemaps in the wild (e.g.,
@@ -358,6 +392,7 @@ def _collect_files(
         public_includes = sorted(public_includes),
         private_includes = sorted(private_includes),
         modulemap = modulemap,
+        module_name = modulemap_module_name,
         others = sorted(others),
         textual_hdrs = sorted(textual_hdrs),
     )
@@ -395,12 +430,13 @@ def _organize_srcs(srcs):
 clang_files = struct(
     collect_files = _collect_files,
     find_magical_public_hdr_dir = _find_magical_public_hdr_dir,
-    get_hdr_paths_from_modulemap = _get_hdr_paths_from_modulemap,
     is_hdr = _is_hdr,
     is_include_hdr = _is_include_hdr,
+    is_public_include_file = _is_public_include_file,
     is_public_modulemap = _is_public_modulemap,
     is_under_path = _is_under_path,
     organize_srcs = _organize_srcs,
+    public_include_file_scan_paths = _public_include_file_scan_paths,
     reduce_paths = _reduce_paths,
     relativize = _relativize,
 )

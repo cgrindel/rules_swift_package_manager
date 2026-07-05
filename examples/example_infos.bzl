@@ -157,6 +157,7 @@ _macos_single_bazel_version_test_examples = [
     "symlink_example",
     "swift_package_registry_example",
     "sqlite_data_example",
+    "yoga_example",
 ]
 
 _linux_single_bazel_version_test_examples = []
