@@ -1,0 +1,26 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package_tool")
+
+swift_package_tool(
+    name = "update_swift_packages",
+    cmd = "update",
+    package = "Package.swift",
+)
+
+swift_binary(
+    name = "yoga_example",
+    srcs = ["main.swift"],
+    module_name = "yoga_example",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@swiftpkg_yoga//:yoga",
+    ],
+)
+
+build_test(
+    name = "build_test",
+    targets = [
+        ":yoga_example",
+    ],
+)

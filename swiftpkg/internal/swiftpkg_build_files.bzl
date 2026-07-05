@@ -514,6 +514,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     decls = []
     child_dep_names = []
     load_stmts = []
+    module_name = clang_src_info.module_name or target.c99name
 
     def _attrs_for_child(name):
         child_attrs = dict(attrs)
@@ -559,7 +560,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                     # modulemaps entierly.
                     "deps": [],
                     "hdrs": clang_src_info.hdrs,
-                    "module_name": target.c99name,
+                    "module_name": module_name,
                     "visibility": _implementation_target_visibility(),
                 },
             ),
@@ -587,7 +588,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             name = aspect_hint_target_name,
             attrs = {
                 "module_map": hint_module_map,
-                "module_name": target.c99name,
+                "module_name": module_name,
             },
         ),
     )

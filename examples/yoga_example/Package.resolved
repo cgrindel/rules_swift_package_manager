@@ -1,0 +1,13 @@
+{
+  "pins" : [
+    {
+      "identity" : "yoga",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/react/yoga",
+      "state" : {
+        "revision" : "db7fc6d82c76c190acca541d4f33d076f23228e7"
+      }
+    }
+  ],
+  "version" : 2
+}
