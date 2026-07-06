@@ -64,6 +64,9 @@ def collect_module_members(parsed_tokens):
                 )
             break
 
+        elif tokens.is_a(token, tts.comment):
+            pass
+
         elif tokens.is_a(token, tts.newline):
             if len(prefix_tokens) > 0:
                 return None, errors.new(
