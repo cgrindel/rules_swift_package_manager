@@ -9,7 +9,7 @@ local_path_override(
 
 bazel_dep(name = "cgrindel_bazel_starlib", version = "0.30.0")
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
-bazel_dep(name = "apple_support", version = "2.7.0")
+bazel_dep(name = "apple_support", version = "2.6.1")
 bazel_dep(
     name = "rules_swift",
     version = "3.6.1",
@@ -32,7 +32,6 @@ swift_deps = use_extension(
     "swift_deps",
 )
 swift_deps.from_package(
-    resolved = "//:Package.resolved",
     swift = "//:Package.swift",
 )
-use_repo(swift_deps, "swift_package", "swiftpkg_yoga")
+use_repo(swift_deps, "swift_package", "swiftpkg_cgreeter")
