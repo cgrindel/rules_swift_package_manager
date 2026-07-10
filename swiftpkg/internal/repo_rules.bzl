@@ -16,9 +16,31 @@ _swift_attrs = {
     "bazel_package_name": attr.string(
         doc = "The short name for the Swift package's Bazel repository.",
     ),
+    "dep_module_aliases": attr.string(
+        doc = """\
+A JSON string mapping package identities to their module alias mappings \
+(SE-0339), e.g. `{"swift-log": {"Logging": "SwiftLog"}}`. A Swift target in \
+this package is compiled with `-module-alias <key>=<value>` for the aliases \
+of every package identity this package directly depends on, so its sources \
+can keep importing the original module name. Set by the `swift_deps` bzlmod \
+extension from the aliases declared in the root package manifest.\
+""",
+    ),
     "dependencies_index": attr.label(
         doc = """\
 A JSON file that contains a mapping of Swift products and Swift modules.\
+""",
+    ),
+    "module_aliases": attr.string_dict(
+        doc = """\
+Mapping of Swift module names defined by this package to replacement module \
+names (SE-0339). A Swift target whose module name matches a key is compiled \
+with the value as its module name, and every generated Swift target in this \
+package is compiled with `-module-alias <key>=<value>` so package sources \
+can keep importing the original name. Bazel targets outside the package \
+graph must import the replacement name. Use this to resolve module name \
+collisions with same-named modules elsewhere in the build (e.g. when using \
+explicit module maps).\
 """,
     ),
     "target_deps": attr.string_list_dict(

@@ -50,8 +50,14 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     all_build_files = []
     public_label_name = pkginfo_targets.bazel_label_name(target)
     implementation_label_name = pkginfo_targets.implementation_label_name(public_label_name)
+
+    # A module is renamed only when this package provides the aliased
+    # product (SE-0339); a same-named module in another package is
+    # unaffected.
+    module_aliases = getattr(pkg_ctx, "module_aliases", {})
+    module_name = module_aliases.get(target.c99name, target.c99name)
     attrs = {
-        "module_name": target.c99name,
+        "module_name": module_name,
         "srcs": pkginfo_targets.srcs(target),
         "visibility": _implementation_target_visibility(),
     }
@@ -126,6 +132,15 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         copts.append("-D" + trait_name)
         copts.append("-Xcc")
         copts.append("-D" + trait_name)
+
+    # Alias renamed modules so package sources can keep importing the
+    # original module name. The flags cover modules renamed by this package
+    # and by its direct dependencies; the package that renames a module gets
+    # the alias too, because sources commonly self-qualify with their own
+    # module name (e.g. swift-log's `Logging.Logger`).
+    for original_name, renamed in getattr(pkg_ctx, "module_alias_flags", {}).items():
+        copts.append("-module-alias")
+        copts.append("{}={}".format(original_name, renamed))
 
     # GH046: Support plugins.
 

@@ -441,6 +441,9 @@ def _new_target_dependency_from_dump_json_map(dump_map, enabled_traits = None):
             # package, and target all have the same name.
             dep_name = product_list[1] or product_list[0],
             condition = condition,
+            # A product dependency is encoded as
+            # [name, package, moduleAliases, condition].
+            module_aliases = product_list[2] or {},
         )
 
     target = None
@@ -1258,7 +1261,7 @@ def _new_target_dependency_condition(platforms = [], traits = []):
         traits = traits,
     )
 
-def _new_product_reference(product_name, dep_name, condition = None):
+def _new_product_reference(product_name, dep_name, condition = None, module_aliases = {}):
     """Creates a product reference.
 
     Args:
@@ -1266,6 +1269,8 @@ def _new_product_reference(product_name, dep_name, condition = None):
         dep_name: The name of the external dependency (`string`).
         condition: Optional. A `struct` as returned by
             `pkginfos.new_target_dependency_condition`.
+        module_aliases: Optional. A `dict` mapping original module names in
+            the product to replacement module names (SE-0339).
 
     Returns:
         A `struct` representing a product reference.
@@ -1274,6 +1279,7 @@ def _new_product_reference(product_name, dep_name, condition = None):
         product_name = product_name,
         dep_name = dep_name,
         condition = condition,
+        module_aliases = module_aliases,
     )
 
 def _new_by_name_reference(name, condition = None):
