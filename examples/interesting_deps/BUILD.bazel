@@ -18,6 +18,15 @@ tidy(
 swift_package_tool(
     name = "update_swift_packages",
     cmd = "update",
+    # Package.swift gates its real dependency list behind these env vars
+    # (see the INTERESTING_DEPS_* checks). The module extension injects
+    # them via `env`/`env_inherit` in MODULE.bazel, but this tool runs
+    # SwiftPM directly, so set them here to avoid passing them on the
+    # command line.
+    env = {
+        "INTERESTING_DEPS_ENV": "1",
+        "INTERESTING_DEPS_INHERIT_ENV": "1",
+    },
     package = "Package.swift",
 )
 
