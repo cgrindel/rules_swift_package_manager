@@ -14,7 +14,7 @@ require (
 	github.com/deckarep/golang-set/v2 v2.9.0
 	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/exp v0.0.0-20260611194520-c48552f49976
+	golang.org/x/exp v0.0.0-20260709172345-9ea1abe57597
 	golang.org/x/text v0.39.0
 	gopkg.in/yaml.v3 v3.0.1
 )
@@ -25,7 +25,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
 	go.mongodb.org/mongo-driver v1.17.4 // indirect
-	golang.org/x/mod v0.37.0 // indirect
+	golang.org/x/mod v0.38.0 // indirect
 	golang.org/x/sys v0.30.0 // indirect
 	golang.org/x/tools/go/vcs v0.1.0-deprecated // indirect
 )
