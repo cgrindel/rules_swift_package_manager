@@ -34,6 +34,12 @@ rules_swift_package_manager reads the aliases from the manifest and:
 The aliases are scoped to the providing package: swift-draw's `Utils` module
 keeps its original name even though swift-game's same-named module is renamed.
 
+The alias also propagates to direct dependents. swift-game depends on swift-log
+and its source writes `import Logging`, so swift-game is compiled with
+`-module-alias Logging=SwiftLog` even though swift-game does not declare the
+alias itself — otherwise its `import Logging` would fail to resolve now that
+swift-log's module is named `SwiftLog`.
+
 Bazel targets outside the package graph import the replacement name (see
 `main.swift`, which imports the first-party `Logging`, `SwiftLog`,
 `GameUtils`, and swift-draw's original `Utils`). Product labels are unchanged
