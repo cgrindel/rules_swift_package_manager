@@ -14,7 +14,7 @@ let package = Package(
         // `-module-alias Logging=SwiftLog` for its `import Logging` to
         // resolve. This exercises propagation of a dependency's module alias
         // to a dependent package (not just to the package that declares it).
-        .package(url: "https://github.com/apple/swift-log", from: "1.5.0"),
+        .package(url: "https://github.com/apple/swift-log", from: "1.14.0"),
     ],
     targets: [
         .target(
