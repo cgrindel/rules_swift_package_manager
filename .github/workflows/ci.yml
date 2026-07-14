@@ -63,6 +63,10 @@ jobs:
             runner: macos-15
           - test: '@@//examples:messagekit_example_test_bazel_.bazelversion'
             runner: macos-15
+          - test: '@@//examples:module_aliases_example_test_bazel_.bazelversion'
+            runner: ubuntu-22.04
+          - test: '@@//examples:module_aliases_example_test_bazel_.bazelversion'
+            runner: macos-15
           - test: '@@//examples:modulemap_comments_example_test_bazel_.bazelversion'
             runner: macos-15
           - test: '@@//examples:nimble_example_test_bazel_.bazelversion'
