@@ -4,6 +4,7 @@ load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
 load("//swiftpkg/internal:local_swift_package.bzl", "local_swift_package")
+load("//swiftpkg/internal:pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 load("//swiftpkg/internal:registry_swift_package.bzl", "registry_swift_package")
 load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
@@ -15,6 +16,50 @@ load("//swiftpkg/internal:swift_package_tool_repo.bzl", "swift_package_tool_repo
 # MARK: - swift_deps bzlmod Extension
 
 _DO_WHILE_RANGE = range(1000)
+
+def _module_aliases_by_identity(pkg_info):
+    """Collect module aliases declared in the root package manifest (SE-0339).
+
+    Collects the `moduleAliases` declared on product dependencies of the root
+    package's targets, keyed by the identity of the package that provides the
+    aliased product. Scoping the aliases to the providing package ensures a
+    same-named module from a different package is unaffected: only the
+    providing package renames its module, and only that package and its
+    direct dependents compile with `-module-alias` flags. Aliases declared by
+    non-root packages in the dependency graph are not yet supported.
+
+    Only pure Swift, source-based modules may be aliased (an SE-0339
+    restriction); aliasing a module with C/Objective-C interop or a binary
+    target is not supported and will fail to build.
+
+    Args:
+        pkg_info: A `struct` as returned by `pkginfos.get` for the root
+            package.
+
+    Returns:
+        A `dict` mapping package identities to a `dict` of original module
+        names to their replacement names.
+    """
+    aliases_by_identity = {}
+    for target in pkg_info.targets:
+        for target_dep in target.dependencies:
+            product = target_dep.product
+            if not (product and product.module_aliases):
+                continue
+            dep = pkginfo_dependencies.get_by_name(
+                pkg_info.dependencies,
+                product.dep_name,
+            )
+            if dep == None:
+                fail("""\
+Unable to resolve the package for the module aliases declared on product \
+'{product}'. No dependency named '{dep_name}' was found in the root package \
+manifest.\
+""".format(product = product.product_name, dep_name = product.dep_name))
+            aliases_by_identity.setdefault(dep.identity, {}).update(
+                product.module_aliases,
+            )
+    return aliases_by_identity
 
 def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swift_package):
     """Declare Swift packages from `Package.swift` and `Package.resolved`.
@@ -80,6 +125,16 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
     )
+
+    # Read SE-0339 module aliases from the root package manifest, keyed by
+    # the identity of the providing package. The providing package renames
+    # its module; that package and any package that directly depends on it
+    # compile with `-module-alias` flags so their imports of the original
+    # name resolve. Every repository receives the full map because a
+    # repository's dependencies are only known once its manifest is parsed
+    # inside the repository rule.
+    module_aliases_by_id = _module_aliases_by_identity(pkg_info)
+    dep_module_aliases_json = json.encode(module_aliases_by_id) if module_aliases_by_id else ""
 
     # Collect all of the deps by identity
     all_deps_by_id = {
@@ -214,6 +269,8 @@ the Swift package to make it available.\
             config_swift_package,
             from_package.cached_json_directory,
             config_pkg.target_deps if config_pkg else {},
+            module_aliases_by_id.get(dep.identity, {}),
+            dep_module_aliases_json,
         )
 
     # Add all transitive dependencies to direct_dep_repo_names if `publicly_expose_all_targets` flag is set.
@@ -246,7 +303,9 @@ def _declare_pkg_from_dependency(
         from_package,
         config_swift_package,
         cached_json_directory,
-        target_deps):
+        target_deps,
+        module_aliases,
+        dep_module_aliases):
     if cached_json_directory:
         cached_json_directory = paths.join(cached_json_directory, dep.name)
     name = bazel_repo_names.from_identity(dep.identity)
@@ -302,6 +361,8 @@ def _declare_pkg_from_dependency(
             registries = registries,
             replace_scm_with_registry = replace_scm_with_registry,
             target_deps = target_deps,
+            module_aliases = module_aliases,
+            dep_module_aliases = dep_module_aliases,
         )
 
     elif dep.file_system:
@@ -315,6 +376,8 @@ def _declare_pkg_from_dependency(
             build_file = build_file,
             cached_json_directory = cached_json_directory,
             target_deps = target_deps,
+            module_aliases = module_aliases,
+            dep_module_aliases = dep_module_aliases,
         )
 
     elif dep.registry:
@@ -335,6 +398,8 @@ def _declare_pkg_from_dependency(
             resolved = resolved,
             target_deps = target_deps,
             version = dep.registry.pin.state.version,
+            module_aliases = module_aliases,
+            dep_module_aliases = dep_module_aliases,
         )
 
 def _declare_swift_package_repo(name, from_package, config_swift_package):

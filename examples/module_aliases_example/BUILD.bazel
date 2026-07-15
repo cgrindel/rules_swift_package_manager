@@ -1,0 +1,40 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary", "swift_library")
+
+# A first-party module whose name collides with swift-log's `Logging` module.
+# The collision is resolved by the SE-0339 module aliases declared in
+# Package.swift, which rename swift-log's module to `SwiftLog`.
+swift_library(
+    name = "Logging",
+    srcs = ["Sources/Logging/Logger.swift"],
+    module_name = "Logging",
+)
+
+swift_binary(
+    name = "module_aliases_example",
+    srcs = ["main.swift"],
+    module_name = "module_aliases_example",
+    visibility = ["//visibility:public"],
+    deps = [
+        # The first-party `Logging` module.
+        ":Logging",
+        # swift-draw's `Utils` product. Its module is not aliased, so it
+        # keeps the original `Utils` name even though swift-game's
+        # same-named module is renamed.
+        "@swiftpkg_swift_draw//:Utils",
+        # swift-game's `Utils` product. The product name is unchanged by the
+        # alias; only the module is renamed, so sources import `GameUtils`.
+        "@swiftpkg_swift_game//:Utils",
+        # The `Logging` product from swift-log. The product name is unchanged
+        # by the alias; only the module is renamed, so sources import
+        # `SwiftLog`.
+        "@swiftpkg_swift_log//:Logging",
+    ],
+)
+
+build_test(
+    name = "build_test",
+    targets = [
+        ":module_aliases_example",
+    ],
+)

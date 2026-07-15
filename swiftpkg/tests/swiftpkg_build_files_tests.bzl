@@ -614,19 +614,33 @@ def _pkg_info_with_traits():
         enabled_traits = ["FeatureA", "FeatureB"],
     )
 
-def _pkg_ctx(pkg_info, target_deps = {}):
+def _pkg_ctx(pkg_info, target_deps = {}, module_aliases = {}, dep_module_aliases = ""):
     return pkg_ctxs.new(
         pkg_info = pkg_info,
         repo_name = _repo_name,
         target_deps = target_deps,
+        module_aliases = module_aliases,
+        dep_module_aliases = dep_module_aliases,
     )
 
-def _target_build_file(pkg_info, target_name, artifact_infos = [], target_deps = {}):
+def _target_build_file(
+        pkg_info,
+        target_name,
+        artifact_infos = [],
+        target_deps = {},
+        module_aliases = {},
+        dep_module_aliases = ""):
     target = pkginfo_targets.get(pkg_info.targets, target_name)
     repository_ctx = testutils.new_stub_repository_ctx(
         repo_name = _repo_name[1:],
     )
-    return swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx(pkg_info, target_deps = target_deps), target, artifact_infos = artifact_infos)
+    pkg_ctx = _pkg_ctx(
+        pkg_info,
+        target_deps = target_deps,
+        module_aliases = module_aliases,
+        dep_module_aliases = dep_module_aliases,
+    )
+    return swiftpkg_build_files.new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = artifact_infos)
 
 def _product_build_file(pkg_info, product_name, target_deps = {}):
     product = lists.find(pkg_info.products, lambda p: p.name == product_name)
@@ -2213,6 +2227,69 @@ license(
 
 license_generation_test = unittest.make(_license_generation_test)
 
+def _module_aliases_test(ctx):
+    env = unittest.begin(ctx)
+
+    pkg_info = _pkg_info()
+
+    # Own alias: the package renames its own module. The target is compiled
+    # with the renamed `module_name` and a matching `-module-alias` flag, so
+    # sources can keep self-qualifying with the original module name.
+    own_bf = _target_build_file(
+        pkg_info,
+        "RegularSwiftTargetAsLibrary",
+        module_aliases = {"RegularSwiftTargetAsLibrary": "RenamedLib"},
+    )
+    own_impl = _assert_decl(
+        env,
+        own_bf,
+        "RegularSwiftTargetAsLibrary.rspm.__impl",
+        "swift_library",
+    )
+    own_copts = scg.to_starlark(own_impl.attrs["copts"])
+    asserts.equals(env, "RenamedLib", own_impl.attrs["module_name"])
+    asserts.true(env, "-module-alias" in own_copts)
+    asserts.true(env, "RegularSwiftTargetAsLibrary=RenamedLib" in own_copts)
+
+    # Propagated alias: a direct dependency (swift-argument-parser) renames a
+    # module. The dependent package keeps its own `module_name` but is still
+    # compiled with the dependency's `-module-alias` flag, so its sources can
+    # import the original module name.
+    dep_bf = _target_build_file(
+        pkg_info,
+        "RegularSwiftTargetAsLibrary",
+        dep_module_aliases = json.encode(
+            {"swift-argument-parser": {"ArgumentParser": "SwiftArgParser"}},
+        ),
+    )
+    dep_impl = _assert_decl(
+        env,
+        dep_bf,
+        "RegularSwiftTargetAsLibrary.rspm.__impl",
+        "swift_library",
+    )
+    dep_copts = scg.to_starlark(dep_impl.attrs["copts"])
+    asserts.equals(env, "RegularSwiftTargetAsLibrary", dep_impl.attrs["module_name"])
+    asserts.true(env, "-module-alias" in dep_copts)
+    asserts.true(env, "ArgumentParser=SwiftArgParser" in dep_copts)
+
+    # No aliases: no `-module-alias` flags are emitted and the module keeps its
+    # original name.
+    plain_bf = _target_build_file(pkg_info, "RegularSwiftTargetAsLibrary")
+    plain_impl = _assert_decl(
+        env,
+        plain_bf,
+        "RegularSwiftTargetAsLibrary.rspm.__impl",
+        "swift_library",
+    )
+    plain_copts = scg.to_starlark(plain_impl.attrs["copts"])
+    asserts.equals(env, "RegularSwiftTargetAsLibrary", plain_impl.attrs["module_name"])
+    asserts.false(env, "-module-alias" in plain_copts)
+
+    return unittest.end(env)
+
+module_aliases_test = unittest.make(_module_aliases_test)
+
 def swiftpkg_build_files_test_suite():
     return unittest.suite(
         "swiftpkg_build_files_tests",
@@ -2221,4 +2298,5 @@ def swiftpkg_build_files_test_suite():
         target_generation_test,
         product_generation_test,
         license_generation_test,
+        module_aliases_test,
     )
