@@ -128,9 +128,71 @@ working directory without trailing content is replaced\
 
 replace_working_directory_test = unittest.make(_replace_working_directory_test)
 
+def _relativize_repo_path_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "path inside the workspace root is relativized",
+            path = "/path/to/MyApp/third_party/foo",
+            workspace_root = "/path/to/MyApp",
+            expected = "third_party/foo",
+        ),
+        struct(
+            msg = "path in a subdirectory workspace root keeps the prefix",
+            path = "/path/to/MyApp/swift/third_party/foo",
+            workspace_root = "/path/to/MyApp",
+            expected = "swift/third_party/foo",
+        ),
+        struct(
+            msg = """\
+prefix-safe: sibling sharing a prefix is not relativized (GH-2405)\
+""",
+            path = "/path/to/MyAppFrameworks/foo",
+            workspace_root = "/path/to/MyApp",
+            expected = "/path/to/MyAppFrameworks/foo",
+        ),
+        struct(
+            msg = "path outside the workspace root is left absolute",
+            path = "/other/place/foo",
+            workspace_root = "/path/to/MyApp",
+            expected = "/other/place/foo",
+        ),
+        struct(
+            msg = "path equal to the workspace root becomes the current dir",
+            path = "/path/to/MyApp",
+            workspace_root = "/path/to/MyApp",
+            expected = ".",
+        ),
+        struct(
+            msg = "trailing slash on the workspace root is handled",
+            path = "/path/to/MyApp/third_party/foo",
+            workspace_root = "/path/to/MyApp/",
+            expected = "third_party/foo",
+        ),
+        struct(
+            msg = "empty workspace root leaves the path unchanged",
+            path = "/path/to/MyApp/third_party/foo",
+            workspace_root = "",
+            expected = "/path/to/MyApp/third_party/foo",
+        ),
+    ]
+
+    for test in tests:
+        actual = repository_utils.relativize_repo_path(
+            test.path,
+            test.workspace_root,
+        )
+        asserts.equals(env, test.expected, actual, test.msg)
+
+    return unittest.end(env)
+
+relativize_repo_path_test = unittest.make(_relativize_repo_path_test)
+
 def repository_utils_test_suite():
     return unittest.suite(
         "repository_utils_tests",
         copy_test,
+        relativize_repo_path_test,
         replace_working_directory_test,
     )
