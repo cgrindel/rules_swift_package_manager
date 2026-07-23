@@ -110,8 +110,33 @@ Load command 3
 
 link_type_test = unittest.make(_link_type_test)
 
+def _versioned_macos_framework_test(ctx):
+    env = unittest.begin(ctx)
+    xcframework_path = "Breez.xcframework"
+    framework_path = xcframework_path + "/macos-arm64_x86_64/Breez.framework"
+    binary_path = framework_path + "/Versions/Current/Breez"
+    repository_ctx = testutils.new_stub_repository_ctx(
+        repo_name = "breez",
+        find_results = {
+            xcframework_path: [framework_path],
+            framework_path: [],
+        },
+        path_exists_results = {binary_path: True},
+        file_type_results = {
+            binary_path: "Mach-O 64-bit dynamically linked shared library arm64",
+        },
+    )
+
+    actual = artifact_infos.new_xcframework_info_from_files(repository_ctx, xcframework_path)
+
+    asserts.equals(env, link_types.dynamic, actual.link_type)
+    return unittest.end(env)
+
+versioned_macos_framework_test = unittest.make(_versioned_macos_framework_test)
+
 def artifact_infos_test_suite(name = "artifact_infos_tests"):
     return unittest.suite(
         name,
         link_type_test,
+        versioned_macos_framework_test,
     )
