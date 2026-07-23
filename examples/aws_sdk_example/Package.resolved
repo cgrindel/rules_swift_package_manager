@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/awslabs/aws-sdk-swift",
       "state" : {
-        "revision" : "ca173b20011ece43e919eab15b6abe0c0d8d3347",
-        "version" : "1.6.113"
+        "revision" : "b0faf38e304bdbb6cb1e322a999380b9439e01df",
+        "version" : "1.7.0"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/smithy-lang/smithy-swift",
       "state" : {
-        "revision" : "bdc42952d4f26085f17d08118c37506713c690ad",
-        "version" : "0.205.0"
+        "revision" : "1f05a2266e93fe6183f28769b865353afa75dd78",
+        "version" : "0.206.0"
       }
     },
     {
@@ -43,6 +43,15 @@
       "state" : {
         "revision" : "87e50f483c54e6efd60e885f7f5aa946cee68023",
         "version" : "1.2.1"
+      }
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser.git",
+      "state" : {
+        "revision" : "626b5b7b2f45e1b0b1c6f4a309296d1d21d7311b",
+        "version" : "1.7.1"
       }
     },
     {
@@ -59,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-async-algorithms.git",
       "state" : {
-        "revision" : "9d349bcc328ac3c31ce40e746b5882742a0d1272",
-        "version" : "1.1.3"
+        "revision" : "d0b4a06d0f173a2f3be27d3ea21b3c3aa18db440",
+        "version" : "1.1.4"
       }
     },
     {
