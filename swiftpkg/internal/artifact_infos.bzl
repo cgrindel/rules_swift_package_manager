@@ -75,7 +75,7 @@ def _new_framework_info_from_framework_dir(repository_ctx, path):
     """
     framework_name = _framework_name_from_path(path)
 
-    # Frameworks have a structure like the following:
+    # Unversioned frameworks have a structure like the following:
     # XXX.framework
     #   └─ Headers (dir)
     #   └─ Modules (dir)
@@ -87,6 +87,12 @@ def _new_framework_info_from_framework_dir(repository_ctx, path):
         by_name = framework_name,
         depth = 1,
     )
+
+    # Versioned macOS frameworks expose the root binary through Versions/Current.
+    if len(binary_files) == 0:
+        versioned_binary_path = paths.join(path, "Versions", "Current", framework_name)
+        if repository_files.path_exists(repository_ctx, versioned_binary_path):
+            binary_files = [versioned_binary_path]
     if len(binary_files) == 0:
         fail("No binary files were found for framework at {}".format(path))
     link_type = _link_type(repository_ctx, binary_files[0])

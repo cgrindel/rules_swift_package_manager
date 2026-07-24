@@ -35,4 +35,4 @@ runs:
         # Need to expose the PATH so that the Swift toolchain can be found
         build --action_env=PATH
         EOF
-    - uses: cgrindel/gha_set_up_bazel@91ad40405d42868076a4e77767234cfea0cd8e26 # v2.0.14
+    - uses: cgrindel/gha_set_up_bazel@3af1bdd47ea7e89b80eb656edfec9e3de0399c66 # v2.0.15

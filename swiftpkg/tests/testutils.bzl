@@ -12,6 +12,7 @@ def _new_stub_repository_ctx(
         file_contents = {},
         find_results = {},
         is_directory_results = {},
+        path_exists_results = {},
         file_type_results = {},
         load_commands_results = {}):
     def read(path):
@@ -27,6 +28,11 @@ def _new_stub_repository_ctx(
             stdout = "TRUE" if result else "FALSE"
             stdout += "\n"
             exec_result = _new_exec_result(stdout = stdout)
+
+        elif args_len == 3 and args[0] == "test" and args[1] == "-e":
+            path = args[2]
+            return_code = 0 if path_exists_results.get(path, False) else 1
+            exec_result = _new_exec_result(return_code = return_code)
 
         elif args_len >= 4 and args[0] == "find":
             # The find command that we expect is `find -H -L path`.
