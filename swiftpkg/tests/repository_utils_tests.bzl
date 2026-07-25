@@ -128,6 +128,64 @@ working directory without trailing content is replaced\
 
 replace_working_directory_test = unittest.make(_replace_working_directory_test)
 
+def _working_directory_variants_test(ctx):
+    env = unittest.begin(ctx)
+
+    def _repository_ctx(realpaths):
+        # Stand-in for `repository_ctx`, whose `path()` returns an object
+        # exposing `realpath`. `realpaths` maps a lexical path to the
+        # symlink-resolved path that Bazel would report for it.
+        def _path(p):
+            return struct(realpath = realpaths.get(p, p))
+
+        return struct(path = _path)
+
+    tests = [
+        struct(
+            msg = "empty working directory yields no variants",
+            working_directory = "",
+            realpaths = {},
+            expected = [],
+        ),
+        struct(
+            msg = "unresolved path yields only itself (no duplicate)",
+            working_directory = "/path/to/MyApp",
+            realpaths = {},
+            expected = ["/path/to/MyApp"],
+        ),
+        struct(
+            msg = """\
+symlinked path yields both spellings so SPM's resolved output matches \
+(GH-2140)\
+""",
+            working_directory = "/path/to/link/MyApp",
+            realpaths = {"/path/to/link/MyApp": "/path/to/real/MyApp"},
+            expected = ["/path/to/link/MyApp", "/path/to/real/MyApp"],
+        ),
+        struct(
+            msg = "macOS /var -> /private/var symlink yields both spellings",
+            working_directory = "/var/tmp/out/repos/foo",
+            realpaths = {
+                "/var/tmp/out/repos/foo": "/private/var/tmp/out/repos/foo",
+            },
+            expected = [
+                "/var/tmp/out/repos/foo",
+                "/private/var/tmp/out/repos/foo",
+            ],
+        ),
+    ]
+
+    for test in tests:
+        actual = repository_utils.working_directory_variants(
+            _repository_ctx(test.realpaths),
+            test.working_directory,
+        )
+        asserts.equals(env, test.expected, actual, test.msg)
+
+    return unittest.end(env)
+
+working_directory_variants_test = unittest.make(_working_directory_variants_test)
+
 def _relativize_repo_path_test(ctx):
     env = unittest.begin(ctx)
 
@@ -195,4 +253,5 @@ def repository_utils_test_suite():
         copy_test,
         relativize_repo_path_test,
         replace_working_directory_test,
+        working_directory_variants_test,
     )

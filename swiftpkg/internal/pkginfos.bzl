@@ -260,7 +260,8 @@ def _get(
 
     # Dump the merged pkg_info for debug purposes
     json_str = json.encode_indent(pkg_info, indent = "  ")
-    json_str = repository_utils.replace_working_directory(json_str, directory)
+    for wd in repository_utils.working_directory_variants(repository_ctx, directory):
+        json_str = repository_utils.replace_working_directory(json_str, wd)
     repository_ctx.file("pkg_info.json", content = json_str, executable = False)
 
     return pkg_info
