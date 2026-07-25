@@ -65,9 +65,13 @@ under GNU `od` and BSD `od`.
 $ swiftpkg/tests/fixtures/mach_o/gen_fixtures.sh
 ```
 
-This rebuilds every binary and rewrites `fixtures.bzl`. It requires `clang`, `lipo`, `ar`, and `od`,
-so it must be run on macOS. The fixtures should rarely, if ever, need to change; regenerate them only
-if a new header layout needs coverage.
+This rebuilds every binary and rewrites `fixtures.bzl`. It requires `clang`, `lipo`, `ar`, `od`,
+`file`, and `otool`, so it must be run on macOS. The fixtures should rarely, if ever, need to change;
+regenerate them only if a new header layout needs coverage.
+
+Regenerating always produces byte-different `thin_archive` and `fat_archive` files, because `ar`
+records a timestamp in each member header and Apple's `ar` has no deterministic mode. A diff limited
+to those two files is expected and harmless.
 
 ## Why They Are Checked In
 

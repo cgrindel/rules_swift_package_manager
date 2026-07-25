@@ -28,13 +28,9 @@ def _new_byte_reader(hex_bytes):
     """Create a reader backed by a synthetic `list` of hexadecimal bytes."""
 
     def read_bytes(offset, count):
-        end = offset + count
-        if end > len(hex_bytes):
-            fail("Read past the end of the synthetic binary. offset: {}, count: {}".format(
-                offset,
-                count,
-            ))
-        return hex_bytes[offset:end]
+        # Returns up to count bytes, matching repository_files.read_bytes,
+        # which stops early when the file ends.
+        return hex_bytes[offset:offset + count]
 
     return read_bytes
 

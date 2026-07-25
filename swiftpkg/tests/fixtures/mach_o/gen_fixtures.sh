@@ -84,31 +84,38 @@ ground_truth_link_type() {
   fi
 }
 
+# The header prefix size that mach_o.link_type reads in a single call. Keep
+# this in sync with _HEADER_PREFIX_SIZE in swiftpkg/internal/mach_o.bzl.
+header_prefix_size=24
+
 # Walks the header chain the way `mach_o.link_type` does, emitting each read it
 # performs. This only determines WHICH bytes get recorded; the expected link
 # type comes from ground_truth_link_type.
 record_reads() {
   local path="$1"
-  local offset=0 magic filetype slice_off_hex size
+  local offset=0 header magic slice_off_hex size
 
   for _ in 1 2; do
-    magic="$(read_bytes "${path}" "${offset}" 4)"
-    echo "            \"${offset}:4\": [$(hex_list "${magic}")],"
+    header="$(read_bytes "${path}" "${offset}" "${header_prefix_size}")"
+    echo "            \"${offset}:${header_prefix_size}\": [$(hex_list \
+      "${header}")],"
+
+    # shellcheck disable=SC2086
+    set -- ${header}
+    magic="$1 $2 $3 $4"
+
     case "${magic}" in
-      "21 3c 61 72")
-        return 0
-        ;;
-      "cf fa ed fe" | "ce fa ed fe" | "fe ed fa cf" | "fe ed fa ce")
-        filetype="$(read_bytes "${path}" "$((offset + 12))" 4)"
-        echo "            \"$((offset + 12)):4\": [$(hex_list "${filetype}")],"
+      "21 3c 61 72" | "cf fa ed fe" | "ce fa ed fe" | "fe ed fa cf" | \
+        "fe ed fa ce")
+        # An ar archive is decided by its magic alone, and a thin Mach-O by the
+        # filetype already inside this prefix. Either way, no further read.
         return 0
         ;;
       "ca fe ba be" | "ca fe ba bf")
         size=4
         [[ ${magic} == "ca fe ba bf" ]] && size=8
-        slice_off_hex="$(read_bytes "${path}" "$((offset + 16))" "${size}")"
-        echo "            \"$((offset + 16)):${size}\": [$(hex_list \
-          "${slice_off_hex}")],"
+        # The first slice's offset lives at byte 16 of the prefix.
+        slice_off_hex="$(echo "${header}" | cut -d ' ' -f 17-$((16 + size)))"
         offset=$((16#$(echo "${slice_off_hex}" | tr -d ' ')))
         ;;
       *)

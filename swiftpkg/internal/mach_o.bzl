@@ -45,6 +45,13 @@ _FAT_ARCH_OFFSET_OFFSET = 16
 _FAT_ARCH_OFFSET_SIZE = 4
 _FAT_ARCH_64_OFFSET_SIZE = 8
 
+# The number of bytes needed to interpret any header this module understands:
+# a Mach-O header through its `filetype` field (16 bytes), and a fat header
+# through the first slice's 64-bit `offset` field (24 bytes). The whole prefix
+# is read in a single call so that each header costs one `od` invocation
+# instead of one per field.
+_HEADER_PREFIX_SIZE = 24
+
 # The Mach-O `filetype` values that describe a dynamically linked library.
 # MH_DYLIB is the common case. MH_DYLIB_STUB is a shared library stub, which
 # carries the same LC_ID_DYLIB identification but no section contents.
@@ -101,11 +108,34 @@ def _uint_le(hex_bytes):
     """
     return _uint_be(reversed(hex_bytes))
 
-def _mach_o_link_type(read_bytes, header_offset, big_endian):
+def _field(header, header_offset, start, size):
+    """Extract a field from a header prefix.
+
+    Args:
+        header: The header prefix as a `list` of hexadecimal byte `string`
+            values.
+        header_offset: The offset the prefix was read from as an `int`. Used
+            for error reporting.
+        start: The offset of the field within the header as an `int`.
+        size: The size of the field in bytes as an `int`.
+
+    Returns:
+        A `list` of lowercase hexadecimal byte `string` values.
+    """
+    end = start + size
+    if len(header) < end:
+        fail("""\
+The header at offset {header_offset} is truncated. Expected at least {end} \
+byte(s), read {actual}.\
+""".format(actual = len(header), end = end, header_offset = header_offset))
+    return header[start:end]
+
+def _mach_o_link_type(header, header_offset, big_endian):
     """Determine the link type from the `filetype` in a Mach-O header.
 
     Args:
-        read_bytes: A `function` as described by `mach_o.link_type`.
+        header: The header prefix as a `list` of hexadecimal byte `string`
+            values.
         header_offset: The offset of the Mach-O header as an `int`.
         big_endian: A `bool` specifying whether the header fields are stored
             big endian.
@@ -113,8 +143,10 @@ def _mach_o_link_type(read_bytes, header_offset, big_endian):
     Returns:
         A `string` value from `link_types`.
     """
-    filetype_bytes = read_bytes(
-        header_offset + _MACH_O_FILETYPE_OFFSET,
+    filetype_bytes = _field(
+        header,
+        header_offset,
+        _MACH_O_FILETYPE_OFFSET,
         4,
     )
     if big_endian:
@@ -134,8 +166,9 @@ def _link_type(read_bytes):
 
     Args:
         read_bytes: A `function` that accepts an offset `int` and a count `int`
-            and returns that many bytes from the binary, starting at the
+            and returns up to that many bytes from the binary, starting at the
             offset, as a `list` of lowercase hexadecimal byte `string` values.
+            Fewer bytes are returned when the file ends first.
 
     Returns:
         A `string` value from `link_types`.
@@ -146,20 +179,23 @@ def _link_type(read_bytes):
     # not permit recursion, so the chain is walked with a bounded loop.
     offset = 0
     for _ in range(2):
-        magic = read_bytes(offset, 4)
+        header = read_bytes(offset, _HEADER_PREFIX_SIZE)
+        magic = _field(header, offset, 0, 4)
         if magic == _AR_MAGIC:
             return link_types.static
         elif magic in _MACH_O_LE_MAGICS:
-            return _mach_o_link_type(read_bytes, offset, big_endian = False)
+            return _mach_o_link_type(header, offset, big_endian = False)
         elif magic in _MACH_O_BE_MAGICS:
-            return _mach_o_link_type(read_bytes, offset, big_endian = True)
+            return _mach_o_link_type(header, offset, big_endian = True)
         elif magic == _FAT_MAGIC or magic == _FAT_MAGIC_64:
             if magic == _FAT_MAGIC_64:
                 size = _FAT_ARCH_64_OFFSET_SIZE
             else:
                 size = _FAT_ARCH_OFFSET_SIZE
-            slice_offset = _uint_be(read_bytes(
-                offset + _FAT_ARCH_OFFSET_OFFSET,
+            slice_offset = _uint_be(_field(
+                header,
+                offset,
+                _FAT_ARCH_OFFSET_OFFSET,
                 size,
             ))
 

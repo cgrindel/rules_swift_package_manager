@@ -304,6 +304,15 @@ def _parse_od_output_test(ctx):
             count = 4,
             exp = ["cf", "fa", "ed", "fe"],
         ),
+        struct(
+            # od stops at the end of the file, so a header prefix read can come
+            # back short. An ar archive is identified by its first four bytes,
+            # so this has to be allowed rather than treated as an error.
+            msg = "a short read returns the bytes that were available",
+            raw = " 21 3c 61 72 63 68 3e 0a\n",
+            count = 24,
+            exp = ["21", "3c", "61", "72", "63", "68", "3e", "0a"],
+        ),
     ]
     for t in tests:
         actual = repository_files.parse_od_output(

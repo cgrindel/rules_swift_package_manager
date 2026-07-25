@@ -317,13 +317,14 @@ def _parse_od_output(stdout, count, path, offset):
 
     Args:
         stdout: The standard output from `od` as a `string`.
-        count: The number of bytes that were requested as an `int`.
+        count: The maximum number of bytes that were requested as an `int`.
         path: The path that was read as a `string`. Used for error reporting.
         offset: The offset that was read from as an `int`. Used for error
             reporting.
 
     Returns:
-        A `list` of lowercase hexadecimal byte `string` values.
+        A `list` of lowercase hexadecimal byte `string` values. It holds fewer
+        than `count` entries when the file ended first.
     """
     normalized = stdout.replace("\n", " ").replace("\t", " ").replace("\r", " ")
     hex_bytes = [
@@ -331,25 +332,34 @@ def _parse_od_output(stdout, count, path, offset):
         for token in normalized.split(" ")
         if token != ""
     ]
-    if len(hex_bytes) != count:
+    if len(hex_bytes) > count:
         fail("""\
-Expected to read {count} byte(s) at offset {offset} from {path}. Read {actual}.\
+Read {actual} byte(s) at offset {offset} from {path}, but only {count} were \
+requested.\
 """.format(
             actual = len(hex_bytes),
             count = count,
             offset = offset,
             path = path,
         ))
+    if len(hex_bytes) == 0:
+        fail("""\
+Read no bytes at offset {offset} from {path}.\
+""".format(offset = offset, path = path))
     return hex_bytes
 
 def _read_bytes(repository_ctx, path, offset, count):
-    """Read a fixed number of bytes from a file.
+    """Read up to a fixed number of bytes from a file.
+
+    Fewer than `count` bytes are returned when the file ends first, which lets
+    a caller request a fixed-size header prefix in one read without knowing how
+    large the file is.
 
     Args:
         repository_ctx: An instance of `repository_ctx`.
         path: The path to read as a `string`.
         offset: The offset to start reading from as an `int`.
-        count: The number of bytes to read as an `int`.
+        count: The maximum number of bytes to read as an `int`.
 
     Returns:
         A `list` of lowercase hexadecimal byte `string` values.
@@ -365,8 +375,8 @@ def _read_bytes(repository_ctx, path, offset, count):
         # Print every line. Without this, GNU od collapses a line that repeats
         # the previous one into a bare `*`, which is not a byte value.
         "-v",
-        # Skip to the offset and stop after count bytes. Reading only what is
-        # needed keeps large framework binaries out of memory.
+        # Skip to the offset and stop after count bytes. Reading only the
+        # header prefix keeps large framework binaries out of memory.
         "-j",
         str(offset),
         "-N",
