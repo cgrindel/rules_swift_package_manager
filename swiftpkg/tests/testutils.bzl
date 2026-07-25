@@ -19,11 +19,11 @@ def _new_stub_repository_ctx(
 
     def od_stdout(args):
         # Expected command:
-        #   od -A n -t x1 -j <offset> -N <count> <path>
+        #   od -A n -t x1 -v -j <offset> -N <count> <path>
         # See repository_files.read_bytes for details.
-        offset = int(args[6])
-        count = int(args[8])
-        hex_bytes = binary_contents.get(args[9], [])
+        offset = int(args[7])
+        count = int(args[9])
+        hex_bytes = binary_contents.get(args[10], [])
         selected = hex_bytes[offset:offset + count]
 
         # Real od writes a leading space before each byte and wraps long
@@ -55,7 +55,7 @@ def _new_stub_repository_ctx(
             exec_result = _new_exec_result(
                 stdout = "\n".join(results),
             )
-        elif args_len == 10 and args[0] == "od":
+        elif args_len == 11 and args[0] == "od":
             exec_result = _new_exec_result(stdout = od_stdout(args))
         else:
             exec_result = _new_exec_result()

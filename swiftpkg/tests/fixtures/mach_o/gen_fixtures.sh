@@ -16,7 +16,7 @@ fixtures_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 work_dir="$(mktemp -d)"
 trap 'rm -rf "${work_dir}"' EXIT
 
-for tool in clang lipo ar od; do
+for tool in clang lipo ar od file otool; do
   if ! command -v "${tool}" >/dev/null 2>&1; then
     echo >&2 "error: ${tool} was not found. This script must run on macOS."
     exit 1
@@ -62,44 +62,49 @@ ln -sf thin_dylib "${fixtures_dir}/symlinked_dylib"
 # hexadecimal bytes. This mirrors `repository_files.read_bytes`.
 read_bytes() {
   local path="$1" offset="$2" count="$3"
-  od -A n -t x1 -j "${offset}" -N "${count}" "${path}" \
+  od -A n -t x1 -v -j "${offset}" -N "${count}" "${path}" \
     | tr '\n\t\r' '   ' | tr -s ' ' | sed -e 's/^ //' -e 's/ $//'
 }
 
-# Walks the header chain exactly as `mach_o.link_type` does, emitting each
-# read it performs and returning the resulting link type. Keeping the two in
-# lockstep is what makes `fixtures.bzl` a faithful recording.
+# Determines the link type the way this ruleset used to, by way of the `file`
+# and `otool` utilities.
+#
+# The expectation recorded for each fixture MUST come from ground truth rather
+# than from a second implementation of the algorithm under test. Deriving it by
+# walking the header here would only prove that two copies of the same logic
+# agree, which is exactly the kind of mistake these fixtures exist to catch.
+ground_truth_link_type() {
+  local path="$1"
+  if file -b "${path}" | grep -q "ar archive"; then
+    echo static
+  elif otool -l "${path}" 2>/dev/null | grep -q LC_ID_DYLIB; then
+    echo dynamic
+  else
+    echo static
+  fi
+}
+
+# Walks the header chain the way `mach_o.link_type` does, emitting each read it
+# performs. This only determines WHICH bytes get recorded; the expected link
+# type comes from ground_truth_link_type.
 record_reads() {
   local path="$1"
-  local offset=0 magic slice_off_hex
+  local offset=0 magic filetype slice_off_hex size
 
   for _ in 1 2; do
     magic="$(read_bytes "${path}" "${offset}" 4)"
     echo "            \"${offset}:4\": [$(hex_list "${magic}")],"
     case "${magic}" in
       "21 3c 61 72")
-        echo "static"
         return 0
         ;;
       "cf fa ed fe" | "ce fa ed fe" | "fe ed fa cf" | "fe ed fa ce")
-        local filetype
         filetype="$(read_bytes "${path}" "$((offset + 12))" 4)"
         echo "            \"$((offset + 12)):4\": [$(hex_list "${filetype}")],"
-        case "${magic}" in
-          # Little endian magic; the filetype is little endian too.
-          "cf fa ed fe" | "ce fa ed fe")
-            [[ ${filetype} == "06 00 00 00" ]] \
-              && echo "dynamic" || echo "static"
-            ;;
-          *)
-            [[ ${filetype} == "00 00 00 06" ]] \
-              && echo "dynamic" || echo "static"
-            ;;
-        esac
         return 0
         ;;
       "ca fe ba be" | "ca fe ba bf")
-        local size=4
+        size=4
         [[ ${magic} == "ca fe ba bf" ]] && size=8
         slice_off_hex="$(read_bytes "${path}" "$((offset + 16))" "${size}")"
         echo "            \"$((offset + 16)):${size}\": [$(hex_list \
@@ -135,7 +140,8 @@ DO NOT EDIT. Regenerate with:
     swiftpkg/tests/fixtures/mach_o/gen_fixtures.sh
 
 Each entry records the bytes that `mach_o.link_type` reads from the
-corresponding fixture, keyed by `"<offset>:<count>"`. `verify_fixtures.sh`
+corresponding fixture, keyed by `"<offset>:<count>"`, along with the link type
+that the `file` and `otool` utilities report for it. `verify_fixtures.sh`
 re-reads the fixtures with `od` and fails if these recordings drift, which is
 what keeps them honest on both Linux and macOS.
 """
@@ -145,9 +151,8 @@ EOF
 
   for name in thin_dylib thin_object thin_archive fat_dylib fat_archive \
     fat64_dylib symlinked_dylib; do
-    reads_and_type="$(record_reads "${fixtures_dir}/${name}")"
-    link_type="$(echo "${reads_and_type}" | tail -n 1)"
-    reads="$(echo "${reads_and_type}" | sed '$d')"
+    reads="$(record_reads "${fixtures_dir}/${name}")"
+    link_type="$(ground_truth_link_type "${fixtures_dir}/${name}")"
     cat <<EOF
     struct(
         name = "${name}",

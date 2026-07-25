@@ -362,6 +362,9 @@ def _read_bytes(repository_ctx, path, offset, count):
         # Print the bytes as one-byte hexadecimal values.
         "-t",
         "x1",
+        # Print every line. Without this, GNU od collapses a line that repeats
+        # the previous one into a bare `*`, which is not a byte value.
+        "-v",
         # Skip to the offset and stop after count bytes. Reading only what is
         # needed keeps large framework binaries out of memory.
         "-j",

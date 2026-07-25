@@ -45,8 +45,11 @@ _FAT_ARCH_OFFSET_OFFSET = 16
 _FAT_ARCH_OFFSET_SIZE = 4
 _FAT_ARCH_64_OFFSET_SIZE = 8
 
-# The Mach-O `filetype` value for a dynamic library (MH_DYLIB).
+# The Mach-O `filetype` values that describe a dynamically linked library.
+# MH_DYLIB is the common case. MH_DYLIB_STUB is a shared library stub, which
+# carries the same LC_ID_DYLIB identification but no section contents.
 _MH_DYLIB = 6
+_MH_DYLIB_STUB = 9
 
 _HEX_DIGITS = {
     "0": 0,
@@ -119,10 +122,10 @@ def _mach_o_link_type(read_bytes, header_offset, big_endian):
     else:
         filetype = _uint_le(filetype_bytes)
 
-    # MH_DYLIB is the only file type that carries an LC_ID_DYLIB load command,
-    # which is what this determination used to look for by way of `otool`.
-    # Everything else (MH_OBJECT, MH_EXECUTE, etc.) is statically linked.
-    if filetype == _MH_DYLIB:
+    # These are the file types that carry an LC_ID_DYLIB load command, which is
+    # what this determination used to look for by way of `otool`. Everything
+    # else (MH_OBJECT, MH_EXECUTE, MH_BUNDLE, etc.) is statically linked.
+    if filetype == _MH_DYLIB or filetype == _MH_DYLIB_STUB:
         return link_types.dynamic
     return link_types.static
 
@@ -150,16 +153,25 @@ def _link_type(read_bytes):
             return _mach_o_link_type(read_bytes, offset, big_endian = False)
         elif magic in _MACH_O_BE_MAGICS:
             return _mach_o_link_type(read_bytes, offset, big_endian = True)
-        elif magic == _FAT_MAGIC:
-            offset = _uint_be(read_bytes(
+        elif magic == _FAT_MAGIC or magic == _FAT_MAGIC_64:
+            if magic == _FAT_MAGIC_64:
+                size = _FAT_ARCH_64_OFFSET_SIZE
+            else:
+                size = _FAT_ARCH_OFFSET_SIZE
+            slice_offset = _uint_be(read_bytes(
                 offset + _FAT_ARCH_OFFSET_OFFSET,
-                _FAT_ARCH_OFFSET_SIZE,
+                size,
             ))
-        elif magic == _FAT_MAGIC_64:
-            offset = _uint_be(read_bytes(
-                offset + _FAT_ARCH_OFFSET_OFFSET,
-                _FAT_ARCH_64_OFFSET_SIZE,
-            ))
+
+            # A slice can never start at the beginning of the file, where the
+            # fat header itself lives. Catch it here so that a malformed or
+            # truncated header does not read as a nested universal binary.
+            if slice_offset == 0:
+                fail("""\
+The first slice of the universal binary has an offset of zero. Please file a \
+bug at https://github.com/cgrindel/rules_swift_package_manager/issues/new/choose.\
+""")
+            offset = slice_offset
         else:
             fail("""\
 Unrecognized magic bytes ({magic}) at offset {offset}. Please file a bug at \
@@ -173,6 +185,7 @@ https://github.com/cgrindel/rules_swift_package_manager/issues/new/choose.\
 
 mach_o = struct(
     link_type = _link_type,
+    # Exposed for testing purposes only.
     uint_be = _uint_be,
     uint_le = _uint_le,
 )

@@ -23,7 +23,7 @@ fi
 # normalize the output to space-separated lowercase hexadecimal bytes.
 read_bytes() {
   local path="$1" offset="$2" count="$3"
-  od -A n -t x1 -j "${offset}" -N "${count}" "${path}" \
+  od -A n -t x1 -v -j "${offset}" -N "${count}" "${path}" \
     | tr '\n\t\r' '   ' | tr -s ' ' | sed -e 's/^ //' -e 's/ $//'
 }
 

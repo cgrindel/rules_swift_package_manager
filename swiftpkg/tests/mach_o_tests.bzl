@@ -99,6 +99,17 @@ def _link_type_test(ctx):
             exp = link_types.dynamic,
         ),
         struct(
+            # A shared library stub carries the same LC_ID_DYLIB that a dylib
+            # does, so it must be treated as dynamically linked. `file` reports
+            # it as a "dynamically linked shared library stub".
+            msg = "shared library stub is dynamically linked",
+            hex_bytes = _mach_o_binary(
+                ["cf", "fa", "ed", "fe"],
+                ["09", "00", "00", "00"],
+            ),
+            exp = link_types.dynamic,
+        ),
+        struct(
             msg = "object file is statically linked",
             hex_bytes = _mach_o_binary(
                 ["cf", "fa", "ed", "fe"],

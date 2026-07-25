@@ -5,7 +5,8 @@ DO NOT EDIT. Regenerate with:
     swiftpkg/tests/fixtures/mach_o/gen_fixtures.sh
 
 Each entry records the bytes that `mach_o.link_type` reads from the
-corresponding fixture, keyed by `"<offset>:<count>"`. `verify_fixtures.sh`
+corresponding fixture, keyed by `"<offset>:<count>"`, along with the link type
+that the `file` and `otool` utilities report for it. `verify_fixtures.sh`
 re-reads the fixtures with `od` and fails if these recordings drift, which is
 what keeps them honest on both Linux and macOS.
 """

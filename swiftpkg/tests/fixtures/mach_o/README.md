@@ -33,14 +33,25 @@ covers the variant whose slice offsets are eight bytes wide rather than four.
 `Versions/Current/<Name>`, so the reader has to follow symlinks. This is what the old implementation
 used the `--dereference` flag of `file` for.
 
+The fixture set is not exhaustive. 32-bit (`ce fa ed fe`) and big-endian (`fe ed fa cf`,
+`fe ed fa ce`) headers, and the `MH_DYLIB_STUB` file type, are covered synthetically in
+`//swiftpkg/tests:mach_o_tests` rather than by a fixture, because current toolchains cannot produce
+them.
+
 ## How They Are Used
 
 The fixtures feed two layers of tests:
 
 1. `fixtures.bzl` records the bytes that `mach_o.link_type` reads from each fixture, keyed by
-   `"<offset>:<count>"`. `//swiftpkg/tests:mach_o_tests` replays those recordings through a fake
-   reader and asserts the resulting link type. This runs at analysis time, so it cannot touch the
-   binaries directly.
+   `"<offset>:<count>"`, along with the expected link type. `//swiftpkg/tests:mach_o_tests` replays
+   those recordings through a fake reader and asserts the resulting link type. This runs at analysis
+   time, so it cannot touch the binaries directly.
+
+   The expected link type is derived from `file` and `otool` — the utilities this ruleset used to
+   depend on — and never from a second walk of the header. Recording it any other way would only
+   prove that two copies of the same algorithm agree, which is precisely the failure these fixtures
+   exist to catch.
+
 2. `verify_fixtures.sh` re-reads the binaries with the real `od` utility, using the same flags as
    `repository_files.read_bytes`, and fails if the recordings in `fixtures.bzl` have drifted.
 
