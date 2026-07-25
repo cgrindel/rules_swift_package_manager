@@ -182,6 +182,38 @@ def _copy(repository_ctx, src, dest):
     content = repository_ctx.read(src)
     repository_ctx.file(dest, content = content, executable = False)
 
+def _relativize_repo_path(path, workspace_root):
+    """Relativize an absolute path against the Bazel workspace root.
+
+    Local Swift package paths reported by SPM are absolute, which bakes a
+    machine-specific path into the lock file when stored as a repository rule
+    attribute. When the path is inside the workspace root, this returns the
+    workspace-root-relative form so the stored value is portable across
+    machines and checkouts. Paths outside the workspace root (e.g. an absolute
+    `.package(path:)` or a sibling reached via `../`) cannot be made portable
+    and are returned unchanged.
+
+    A trailing slash is appended to the workspace root before matching so that
+    a workspace root like "/path/to/MyApp" does not incorrectly match
+    "/path/to/MyAppFrameworks".
+
+    Args:
+        path: An absolute filesystem path as a `string`.
+        workspace_root: The absolute Bazel workspace root as a `string`.
+
+    Returns:
+        A `string` that is either the workspace-root-relative path (when
+        `path` is inside `workspace_root`) or the original `path` unchanged.
+    """
+    if not workspace_root:
+        return path
+    if path == workspace_root:
+        return "."
+    prefix = workspace_root if workspace_root.endswith("/") else workspace_root + "/"
+    if path.startswith(prefix):
+        return path[len(prefix):]
+    return path
+
 def _replace_working_directory(json_str, working_directory):
     """Replace the working directory prefix in a JSON string.
 
@@ -211,6 +243,7 @@ repository_utils = struct(
     is_macos = _is_macos,
     package_name = _package_name,
     parsed_json_from_spm_command = _parsed_json_from_spm_command,
+    relativize_repo_path = _relativize_repo_path,
     replace_working_directory = _replace_working_directory,
     struct_to_kwargs = _struct_to_kwargs,
 )

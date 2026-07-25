@@ -107,6 +107,20 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
     debug_path = module_ctx.path(".")
     workspace_root = str(pkg_swift.dirname)
 
+    # The Bazel workspace root is the directory that the `local_swift_package`
+    # repository rule resolves relative paths against (its
+    # `repository_ctx.workspace_root`). It is derived from the `swift` label so
+    # that it is correct even when `Package.swift` lives in a subdirectory
+    # (e.g. `swift = "//:swift/Package.swift"`), in which case it differs from
+    # `workspace_root` above.
+    swift_repo_rel = paths.join(from_package.swift.package, from_package.swift.name)
+    swift_suffix = "/" + swift_repo_rel
+    abs_pkg_swift = str(pkg_swift)
+    if abs_pkg_swift.endswith(swift_suffix):
+        bazel_workspace_root = abs_pkg_swift[:-len(swift_suffix)]
+    else:
+        bazel_workspace_root = workspace_root
+
     root_cached_json_directory = None
     if from_package.cached_json_directory:
         root_cached_json_directory = paths.join(
@@ -271,6 +285,7 @@ the Swift package to make it available.\
             config_pkg.target_deps if config_pkg else {},
             module_aliases_by_id.get(dep.identity, {}),
             dep_module_aliases_json,
+            bazel_workspace_root,
         )
 
     # Add all transitive dependencies to direct_dep_repo_names if `publicly_expose_all_targets` flag is set.
@@ -305,7 +320,8 @@ def _declare_pkg_from_dependency(
         cached_json_directory,
         target_deps,
         module_aliases,
-        dep_module_aliases):
+        dep_module_aliases,
+        bazel_workspace_root):
     if cached_json_directory:
         cached_json_directory = paths.join(cached_json_directory, dep.name)
     name = bazel_repo_names.from_identity(dep.identity)
@@ -366,12 +382,28 @@ def _declare_pkg_from_dependency(
         )
 
     elif dep.file_system:
+        # Store the local package path relative to the Bazel workspace root so
+        # the lock file stays portable across machines and checkouts. The
+        # `local_swift_package` rule re-absolutizes a relative path against its
+        # `repository_ctx.workspace_root` at fetch time. Packages outside the
+        # workspace root cannot be made portable and are left absolute.
+        local_path = repository_utils.relativize_repo_path(
+            dep.file_system.path,
+            bazel_workspace_root,
+        )
+        if paths.is_absolute(local_path):
+            # buildifier: disable=print
+            print("""
+WARNING: local Swift package '{identity}' resolves to '{path}', which is \
+outside the Bazel workspace root. Its path will be stored as an absolute path \
+in the lock file and will not be portable across machines.\
+""".format(identity = dep.identity, path = local_path))
         local_swift_package(
             name = name,
             bazel_package_name = name,
             env = from_package.env,
             env_inherit = from_package.env_inherit,
-            path = dep.file_system.path,
+            path = local_path,
             dependencies_index = None,
             build_file = build_file,
             cached_json_directory = cached_json_directory,
