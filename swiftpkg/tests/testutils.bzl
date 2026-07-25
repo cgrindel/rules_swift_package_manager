@@ -13,10 +13,23 @@ def _new_stub_repository_ctx(
         find_results = {},
         is_directory_results = {},
         path_exists_results = {},
-        file_type_results = {},
-        load_commands_results = {}):
+        binary_contents = {}):
     def read(path):
         return file_contents.get(path, "")
+
+    def od_stdout(args):
+        # Expected command:
+        #   od -A n -t x1 -j <offset> -N <count> <path>
+        # See repository_files.read_bytes for details.
+        offset = int(args[6])
+        count = int(args[8])
+        hex_bytes = binary_contents.get(args[9], [])
+        selected = hex_bytes[offset:offset + count]
+
+        # Real od writes a leading space before each byte and wraps long
+        # output. Emit the leading space so that the parsing in
+        # repository_files.read_bytes is exercised.
+        return "".join([" " + hb for hb in selected]) + "\n"
 
     # buildifier: disable=unused-variable
     def execute(args, environment = {}, quiet = True):
@@ -42,16 +55,8 @@ def _new_stub_repository_ctx(
             exec_result = _new_exec_result(
                 stdout = "\n".join(results),
             )
-        elif args_len == 4 and args[0] == "file" and args[1] == "--dereference" and args[2] == "--brief":
-            # Expected command: `file --dereference --brief path`
-            path = args[3]
-            results = file_type_results.get(path, "")
-            exec_result = _new_exec_result(stdout = results)
-        elif args_len == 3 and args[0] == "otool" and args[1] == "-l":
-            # Expected command: `otool -l path`
-            path = args[2]
-            results = load_commands_results.get(path, "")
-            exec_result = _new_exec_result(stdout = results)
+        elif args_len == 10 and args[0] == "od":
+            exec_result = _new_exec_result(stdout = od_stdout(args))
         else:
             exec_result = _new_exec_result()
         return exec_result

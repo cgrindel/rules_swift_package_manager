@@ -309,36 +309,91 @@ def _is_directory(repository_ctx, path):
     )
     return exec_result.return_code == 0
 
-def _file_type(repository_ctx, path):
-    """Output the file type.
+def _parse_od_output(stdout, count, path, offset):
+    """Parse the hexadecimal bytes from the output of the `od` utility.
+
+    GNU and BSD `od` agree on the byte values that they print, but they differ
+    in how they pad and wrap them. Treat any run of whitespace as a separator.
+
+    Args:
+        stdout: The standard output from `od` as a `string`.
+        count: The number of bytes that were requested as an `int`.
+        path: The path that was read as a `string`. Used for error reporting.
+        offset: The offset that was read from as an `int`. Used for error
+            reporting.
+
+    Returns:
+        A `list` of lowercase hexadecimal byte `string` values.
+    """
+    normalized = stdout.replace("\n", " ").replace("\t", " ").replace("\r", " ")
+    hex_bytes = [
+        token.lower()
+        for token in normalized.split(" ")
+        if token != ""
+    ]
+    if len(hex_bytes) != count:
+        fail("""\
+Expected to read {count} byte(s) at offset {offset} from {path}. Read {actual}.\
+""".format(
+            actual = len(hex_bytes),
+            count = count,
+            offset = offset,
+            path = path,
+        ))
+    return hex_bytes
+
+def _read_bytes(repository_ctx, path, offset, count):
+    """Read a fixed number of bytes from a file.
 
     Args:
         repository_ctx: An instance of `repository_ctx`.
-        path: The path to test as a `string`.
+        path: The path to read as a `string`.
+        offset: The offset to start reading from as an `int`.
+        count: The number of bytes to read as an `int`.
 
     Returns:
-        A `string` representing the file type for the path as returned by the
-        `file` utility.
+        A `list` of lowercase hexadecimal byte `string` values.
     """
-    file_args = ["file", "--dereference", "--brief", path]
-    exec_result = repository_ctx.execute(file_args, quiet = True)
+    od_args = [
+        "od",
+        # Do not print the input offset column.
+        "-A",
+        "n",
+        # Print the bytes as one-byte hexadecimal values.
+        "-t",
+        "x1",
+        # Skip to the offset and stop after count bytes. Reading only what is
+        # needed keeps large framework binaries out of memory.
+        "-j",
+        str(offset),
+        "-N",
+        str(count),
+        path,
+    ]
+    exec_result = repository_ctx.execute(od_args, quiet = True)
     if exec_result.return_code != 0:
-        fail("Failed to determine the file type for {path}. stderr:\n{stderr}".format(
+        fail("""\
+Failed to read {count} byte(s) at offset {offset} from {path}. stderr:
+{stderr}\
+""".format(
+            count = count,
+            offset = offset,
             path = path,
             stderr = exec_result.stderr,
         ))
-    return exec_result.stdout.removesuffix("\n")
+    return _parse_od_output(exec_result.stdout, count, path, offset)
 
 repository_files = struct(
     copy_directory = _copy_directory,
     exclude_paths = _exclude_paths,
-    file_type = _file_type,
     find_and_delete_files = _find_and_delete_files,
     find_license_files = _find_license_files,
     is_directory = _is_directory,
     list_directories_under = _list_directories_under,
     list_files_under = _list_files_under,
     path_exists = _path_exists,
+    read_bytes = _read_bytes,
     # Exposed for testing purposes only.
+    parse_od_output = _parse_od_output,
     process_find_results = _process_find_results,
 )

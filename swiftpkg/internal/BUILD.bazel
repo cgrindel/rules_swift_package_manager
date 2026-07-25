@@ -331,6 +331,8 @@ bzl_library(
     srcs = ["artifact_infos.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":link_types",
+        ":mach_o",
         ":repository_files",
         "@bazel_skylib//lib:paths",
     ],
@@ -418,6 +420,13 @@ bzl_library(
 )
 
 bzl_library(
+    name = "mach_o",
+    srcs = ["mach_o.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":link_types"],
+)
+
+bzl_library(
     name = "bazel_repo_names",
     srcs = ["bazel_repo_names.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
@@ -426,6 +435,12 @@ bzl_library(
 bzl_library(
     name = "bools",
     srcs = ["bools.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "link_types",
+    srcs = ["link_types.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
 

@@ -4,95 +4,55 @@ load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:artifact_infos.bzl", "artifact_infos", "link_types")
 load(":testutils.bzl", "testutils")
 
+# The cputype and cpusubtype fields, which sit between the magic and the
+# filetype and are not inspected.
+_MACH_O_HEADER_PADDING = ["00"] * 8
+
+def _mach_o_binary(magic, filetype):
+    return magic + _MACH_O_HEADER_PADDING + filetype
+
+_DYLIB_BINARY = _mach_o_binary(
+    ["cf", "fa", "ed", "fe"],
+    ["06", "00", "00", "00"],
+)
+
+_ARCHIVE_BINARY = ["21", "3c", "61", "72", "63", "68", "3e", "0a"]
+
 def _link_type_test(ctx):
     env = unittest.begin(ctx)
 
+    # These exercise artifact_infos.link_type end to end, through the byte
+    # reads that repository_files.read_bytes performs. The exhaustive coverage
+    # of the header formats lives in mach_o_tests.bzl.
     tests = [
         struct(
-            msg = "current ar archive",
-            file_type = """\
-path/to/framework/binary/FooBar (for architecture x86_64):	current ar archive
-path/to/framework/binary/FooBar (for architecture arm64):	current ar archive
-""",
-            load_commands = None,
-            exp = link_types.static,
-        ),
-        struct(
-            msg = "current ar archive random library",
-            file_type = """\
-Mach-O universal binary with 2 architectures: [x86_64:current ar archive random library] [arm64:current ar archive random library]
-path/to/framework/binary/FooBar (for architecture x86_64):	current ar archive random library
-path/to/framework/binary/FooBar (for architecture arm64):	current ar archive random library
-""",
-            load_commands = None,
-            exp = link_types.static,
-        ),
-        struct(
-            msg = "macho-o static library",
-            file_type = "Mach-O 64-bit object arm64",
-            load_commands = """\
-Load command 1
-     cmd LC_SYMTAB
-Load command 2
-      cmd LC_BUILD_VERSION
-Load command 3
-      cmd LC_DATA_IN_CODE
-Load command 4
-      cmd LC_LINKER_OPTIMIZATION_HINT
-""",
-            exp = link_types.static,
-        ),
-        struct(
-            msg = "mach-o static universal library",
-            file_type = """\
-Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit object x86_64] [arm64]
-path/to/framework/binary/FooBar (for architecture x86_64):	Mach-O 64-bit object x86_64
-path/to/framework/binary/FooBar (for architecture arm64):	Mach-O 64-bit object arm64
-""",
-            load_commands = """\
-Load command 0
-      cmd LC_SEGMENT_64
-Load command 1
-     cmd LC_SYMTAB
-Load command 2
-      cmd LC_BUILD_VERSION
-Load command 3
-      cmd LC_DATA_IN_CODE
-""",
+            msg = "ar archive",
+            binary = _ARCHIVE_BINARY,
             exp = link_types.static,
         ),
         struct(
             msg = "mach-o dynamic library",
-            file_type = "Mach-O 64-bit object arm64",
-            load_commands = """\
-Load command 0
-      cmd LC_SEGMENT_64
-Load command 1
-      cmd LC_SEGMENT_64
-Load command 2
-      cmd LC_SEGMENT_64
-Load command 3
-      cmd LC_ID_DYLIB
-""",
+            binary = _DYLIB_BINARY,
             exp = link_types.dynamic,
         ),
         struct(
-            msg = "mach-o universal dynamic library",
-            file_type = """\
-Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit object x86_64] [arm64]
-path/to/framework/binary/FooBar (for architecture x86_64):	Mach-O 64-bit object x86_64
-path/to/framework/binary/FooBar (for architecture arm64):	Mach-O 64-bit object arm64
-""",
-            load_commands = """\
-Load command 0
-      cmd LC_SEGMENT_64
-Load command 1
-      cmd LC_SEGMENT_64
-Load command 2
-      cmd LC_SEGMENT_64
-Load command 3
-      cmd LC_ID_DYLIB
-""",
+            msg = "mach-o object file",
+            binary = _mach_o_binary(
+                ["cf", "fa", "ed", "fe"],
+                ["01", "00", "00", "00"],
+            ),
+            exp = link_types.static,
+        ),
+        struct(
+            msg = "universal binary wrapping a dynamic library",
+            binary = (
+                ["ca", "fe", "ba", "be"] +
+                ["00", "00", "00", "01"] +
+                _MACH_O_HEADER_PADDING +
+                ["00", "00", "00", "20"] +
+                ["00"] * 12 +
+                _DYLIB_BINARY
+            ),
             exp = link_types.dynamic,
         ),
     ]
@@ -100,10 +60,9 @@ Load command 3
         path = "path/to/framework/binary/FooBar"
         stub_repository_ctx = testutils.new_stub_repository_ctx(
             repo_name = "chicken",
-            file_type_results = {path: t.file_type},
-            load_commands_results = {path: t.load_commands},
+            binary_contents = {path: t.binary},
         )
-        actual = artifact_infos.link_type(stub_repository_ctx, "path/to/framework/binary/FooBar")
+        actual = artifact_infos.link_type(stub_repository_ctx, path)
         asserts.equals(env, t.exp, actual, t.msg)
 
     return unittest.end(env)
@@ -122,9 +81,7 @@ def _versioned_macos_framework_test(ctx):
             framework_path: [],
         },
         path_exists_results = {binary_path: True},
-        file_type_results = {
-            binary_path: "Mach-O 64-bit dynamically linked shared library arm64",
-        },
+        binary_contents = {binary_path: _DYLIB_BINARY},
     )
 
     actual = artifact_infos.new_xcframework_info_from_files(repository_ctx, xcframework_path)
