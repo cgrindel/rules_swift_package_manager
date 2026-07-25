@@ -70,27 +70,12 @@
         "CMakeLists.txt"
       ],
       "name" : "ArgumentParser",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableExperimentalFeature" : {
-              "_0" : "StrictConcurrency"
-            }
-          },
-          "tool" : "swift"
-        },
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "regular"
     },
@@ -113,19 +98,12 @@
         "CMakeLists.txt"
       ],
       "name" : "ArgumentParserTestHelpers",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "regular"
     },
@@ -137,19 +115,12 @@
         "CMakeLists.txt"
       ],
       "name" : "ArgumentParserToolInfo",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "regular"
     },
@@ -166,7 +137,7 @@
 
       ],
       "name" : "GenerateDoccReference",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "pluginCapability" : {
         "command" : [
           {
@@ -205,7 +176,7 @@
 
       ],
       "name" : "GenerateManual",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "pluginCapability" : {
         "command" : [
           {
@@ -240,20 +211,13 @@
 
       ],
       "name" : "roll",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "path" : "Examples/roll",
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "executable"
     },
@@ -270,20 +234,13 @@
 
       ],
       "name" : "math",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "path" : "Examples/math",
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "executable"
     },
@@ -300,20 +257,13 @@
 
       ],
       "name" : "repeat",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "path" : "Examples/repeat",
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "executable"
     },
@@ -330,20 +280,36 @@
 
       ],
       "name" : "color",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "path" : "Examples/color",
       "resources" : [
 
       ],
       "settings" : [
+
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
         {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
         }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "default-as-flag",
+      "packageAccess" : true,
+      "path" : "Examples/default-as-flag",
+      "resources" : [
+
+      ],
+      "settings" : [
+
       ],
       "type" : "executable"
     },
@@ -366,20 +332,13 @@
 
       ],
       "name" : "generate-docc-reference",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "path" : "Tools/generate-docc-reference",
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "executable"
     },
@@ -402,20 +361,13 @@
 
       ],
       "name" : "generate-manual",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "path" : "Tools/generate-manual",
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "executable"
     },
@@ -438,19 +390,12 @@
         "CMakeLists.txt"
       ],
       "name" : "ArgumentParserEndToEndTests",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "test"
     },
@@ -467,7 +412,7 @@
         "Snapshots"
       ],
       "name" : "ArgumentParserExampleTests",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "resources" : [
         {
           "path" : "CountLinesTest.txt",
@@ -479,14 +424,7 @@
         }
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "test"
     },
@@ -503,19 +441,12 @@
         "Snapshots"
       ],
       "name" : "ArgumentParserGenerateDoccReferenceTests",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "test"
     },
@@ -532,19 +463,12 @@
         "Snapshots"
       ],
       "name" : "ArgumentParserGenerateManualTests",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "test"
     },
@@ -567,19 +491,12 @@
         "CMakeLists.txt"
       ],
       "name" : "ArgumentParserPackageManagerTests",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "test"
     },
@@ -596,19 +513,12 @@
         "Examples"
       ],
       "name" : "ArgumentParserToolInfoTests",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "test"
     },
@@ -632,19 +542,12 @@
         "Snapshots"
       ],
       "name" : "ArgumentParserUnitTests",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "test"
     },
@@ -661,20 +564,13 @@
 
       ],
       "name" : "count-lines",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "path" : "Examples/count-lines",
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "executable"
     },
@@ -691,26 +587,19 @@
 
       ],
       "name" : "changelog-authors",
-      "packageAccess" : false,
+      "packageAccess" : true,
       "path" : "Tools/changelog-authors",
       "resources" : [
 
       ],
       "settings" : [
-        {
-          "kind" : {
-            "enableUpcomingFeature" : {
-              "_0" : "MemberImportVisibility"
-            }
-          },
-          "tool" : "swift"
-        }
+
       ],
       "type" : "executable"
     }
   ],
   "toolsVersion" : {
-    "_version" : "5.8.0"
+    "_version" : "6.0.0"
   },
   "traits" : [
 
