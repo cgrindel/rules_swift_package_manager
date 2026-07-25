@@ -658,7 +658,6 @@ crj_prune_stale() {
 main() {
   _crj_setup_runfiles
 
-  local swift_worker=""
   local output_dir=""
   local mode="resolve"
   local module_bazel=""
@@ -689,11 +688,6 @@ main() {
         ;;
       --module_bazel)
         module_bazel="$2"
-        shift 2
-        ;;
-      --swift_worker)
-        swift_worker="$2"
-        spm_flags+=("$1" "$2")
         shift 2
         ;;
       --package_path)
@@ -735,10 +729,6 @@ main() {
     esac
   done
 
-  if [[ -z ${swift_worker} ]]; then
-    echo >&2 "ERROR: --swift_worker is required"
-    return 1
-  fi
   if [[ -z ${output_dir} ]]; then
     echo >&2 "ERROR: --output_dir is required"
     return 1
@@ -774,8 +764,11 @@ main() {
   fi
 
   # Resolve the swift executable so we can read the toolchain version.
+  # Matches how swift_package_lib.sh resolves it for the resolve/update
+  # commands (xcrun on Apple, otherwise PATH) so the cache records the
+  # same toolchain those commands run under. See GH-2344.
   local swift_executable
-  swift_executable="$(spl_resolve_swift_executable "${swift_worker}")"
+  swift_executable="$(spl_resolve_swift_executable)"
 
   local current_version
   current_version="$(crj_swift_version "${swift_executable}")"
