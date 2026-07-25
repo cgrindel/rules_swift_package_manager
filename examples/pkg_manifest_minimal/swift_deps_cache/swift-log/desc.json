@@ -55,8 +55,13 @@
         "LogEventTest.swift",
         "LoggingTest.swift",
         "MDCTest.swift",
+        "MetadataAttributesTest.swift",
         "MetadataProviderTest.swift",
+        "MetadataValueInterpolationTest.swift",
+        "StreamLogHandlerTest.swift",
         "SubDirectoryOfLoggingTests/EmitALogFromSubDirectory.swift",
+        "SwiftLogNoOpLogHandlerTest.swift",
+        "TaskLocalLoggerTest.swift",
         "TestLogger.swift",
         "TestSendable.swift"
       ],
@@ -76,10 +81,16 @@
         "basic-usage"
       ],
       "sources" : [
+        "Handlers/MultiplexLogHandler.swift",
+        "Handlers/StreamLogHandler.swift",
+        "Handlers/SwiftLogNoOpLogHandler.swift",
         "Locks.swift",
         "LogEvent.swift",
         "LogHandler.swift",
-        "Logging.swift",
+        "Logger+Attributes.swift",
+        "Logger+With.swift",
+        "Logger.swift",
+        "LoggingSystem.swift",
         "MetadataProvider.swift"
       ],
       "type" : "library"

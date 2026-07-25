@@ -84,6 +84,15 @@
       }
     },
     {
+      "name" : "default-as-flag",
+      "targets" : [
+        "default-as-flag"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
       "name" : "count-lines",
       "targets" : [
         "count-lines"
@@ -229,6 +238,22 @@
       "type" : "executable"
     },
     {
+      "c99name" : "default_as_flag",
+      "module_type" : "SwiftTarget",
+      "name" : "default-as-flag",
+      "path" : "Examples/default-as-flag",
+      "product_memberships" : [
+        "default-as-flag"
+      ],
+      "sources" : [
+        "DefaultAsFlag.swift"
+      ],
+      "target_dependencies" : [
+        "ArgumentParser"
+      ],
+      "type" : "executable"
+    },
+    {
       "c99name" : "count_lines",
       "module_type" : "SwiftTarget",
       "name" : "count-lines",
@@ -298,9 +323,10 @@
         "GenerateManual"
       ],
       "sources" : [
-        "GenerateManualPlugin.swift",
-        "GenerateManualPluginError.swift",
-        "PackagePlugin+Helpers.swift"
+        "GenerateCommon/GeneratePlugin.swift",
+        "GenerateCommon/GeneratePluginError.swift",
+        "GenerateCommon/PackagePlugin+Helpers.swift",
+        "GenerateManualPlugin.swift"
       ],
       "target_dependencies" : [
         "generate-manual"
@@ -335,9 +361,10 @@
         "GenerateDoccReference"
       ],
       "sources" : [
-        "GenerateDoccReference.swift",
-        "GenerateDoccReferenceError.swift",
-        "PackagePlugin+Helpers.swift"
+        "GenerateCommon/GeneratePlugin.swift",
+        "GenerateCommon/GeneratePluginError.swift",
+        "GenerateCommon/PackagePlugin+Helpers.swift",
+        "GenerateDoccReference.swift"
       ],
       "target_dependencies" : [
         "generate-docc-reference"
@@ -351,11 +378,14 @@
       "path" : "Tests/ArgumentParserUnitTests",
       "sources" : [
         "CompletionScriptTests.swift",
+        "DefaultAsFlagCompletionTests.swift",
+        "DefaultAsFlagDumpHelpTests.swift",
         "DumpHelpGenerationTests.swift",
         "ErrorMessageTests.swift",
         "ExitCodeTests.swift",
         "HelpGenerationTests+AtArgument.swift",
         "HelpGenerationTests+AtOption.swift",
+        "HelpGenerationTests+AtOptionDefaultAsFlag.swift",
         "HelpGenerationTests+GroupName.swift",
         "HelpGenerationTests.swift",
         "InputOriginTests.swift",
@@ -404,6 +434,7 @@
         "math",
         "generate-manual",
         "generate-docc-reference",
+        "default-as-flag",
         "count-lines",
         "color",
         "changelog-authors"
@@ -507,6 +538,7 @@
       "sources" : [
         "AsyncCommandEndToEndTests.swift",
         "CustomParsingEndToEndTests.swift",
+        "DefaultAsFlagEndToEndTests.swift",
         "DefaultSubcommandEndToEndTests.swift",
         "DefaultsEndToEndTests.swift",
         "EnumEndToEndTests.swift",
@@ -550,6 +582,7 @@
         "math",
         "generate-manual",
         "generate-docc-reference",
+        "default-as-flag",
         "count-lines",
         "color",
         "changelog-authors"
@@ -601,6 +634,7 @@
         "Utilities/StringExtensions.swift",
         "Utilities/SwiftExtensions.swift",
         "Utilities/Tree.swift",
+        "Validators/AsyncCompletionsValidator.swift",
         "Validators/CodingKeyValidator.swift",
         "Validators/NonsenseFlagsValidator.swift",
         "Validators/ParsableArgumentsValidation.swift",
@@ -613,5 +647,5 @@
       "type" : "library"
     }
   ],
-  "tools_version" : "5.8"
+  "tools_version" : "6.0"
 }
