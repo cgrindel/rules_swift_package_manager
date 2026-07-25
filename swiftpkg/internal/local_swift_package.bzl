@@ -92,7 +92,12 @@ def _local_swift_package_impl(repository_ctx):
 
 _PATH_ATTRS = {
     "path": attr.string(
-        doc = "The path to the local Swift package directory. This can be an absolute path or a relative path to the workspace root.",
+        doc = """\
+The path to the local Swift package directory. This can be an absolute path or \
+a path relative to the workspace root. The `swift_deps` module extension stores \
+a workspace-relative path here whenever the package is inside the workspace \
+root so that the lock file remains portable across machines.\
+""",
         mandatory = True,
     ),
 }
