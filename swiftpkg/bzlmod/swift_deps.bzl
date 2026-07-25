@@ -61,15 +61,32 @@ manifest.\
             )
     return aliases_by_identity
 
-def _read_cached_manifest(module_ctx, label, workspace_root):
+def _read_cached_manifest(module_ctx, label, bazel_workspace_root):
     """Read a cached dump/desc JSON file with workspace-token expansion.
 
     The cache writer rewrites paths under the workspace root as
     `{{WORKSPACE_ROOT}}/<rel>` so the cache stays portable across
     checkouts. This helper substitutes the token back to the consumer's
     workspace root before parsing.
+
+    Args:
+        module_ctx: An instance of `module_ctx`.
+        label: A `Label` for the cached JSON file to read.
+        bazel_workspace_root: The absolute Bazel workspace root as a
+            `string`. This must be the Bazel workspace root, *not* the
+            directory containing `Package.swift`. The cache utility writes
+            the token relative to `BUILD_WORKSPACE_DIRECTORY`, and the repo
+            rules expand it against `repository_ctx.workspace_root`, so the
+            two roots must agree. They differ whenever `Package.swift` lives
+            in a subdirectory (e.g. `swift = "//:swift/Package.swift"`).
+
+    Returns:
+        A `dict` holding the decoded JSON.
     """
-    text = module_ctx.read(label).replace("{{WORKSPACE_ROOT}}", workspace_root)
+    text = module_ctx.read(label).replace(
+        "{{WORKSPACE_ROOT}}",
+        bazel_workspace_root,
+    )
     return json.decode(text)
 
 def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swift_package):
@@ -169,12 +186,12 @@ mechanism going forward (see GH-2140); please remove `cached_json_directory`.\
             root_dump_manifest = _read_cached_manifest(
                 module_ctx,
                 main_dump_label,
-                workspace_root,
+                bazel_workspace_root,
             )
             root_desc_manifest = _read_cached_manifest(
                 module_ctx,
                 main_desc_label,
-                workspace_root,
+                bazel_workspace_root,
             )
 
     pkg_info = pkginfos.get(
@@ -293,12 +310,12 @@ mechanism going forward (see GH-2140); please remove `cached_json_directory`.\
                         dep_dump_manifest = _read_cached_manifest(
                             module_ctx,
                             d_dump,
-                            workspace_root,
+                            bazel_workspace_root,
                         )
                         dep_desc_manifest = _read_cached_manifest(
                             module_ctx,
                             d_desc,
-                            workspace_root,
+                            bazel_workspace_root,
                         )
 
                 dep_pkg_info = pkginfos.get(
