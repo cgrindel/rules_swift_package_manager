@@ -90,6 +90,21 @@ _crj_normpath() {
   fi
 }
 
+# Resolve a directory to its physical path, following symlinks. SPM
+# canonicalizes symlinks in the paths it reports, so the directory we
+# hand to `--package-path` is not necessarily the prefix that appears in
+# the JSON it emits (see crj_relativize_paths). Uses `cd`/`pwd -P`
+# rather than `realpath`, which is not present on stock macOS. Paths
+# that do not resolve to a directory are echoed back unchanged.
+_crj_realpath() {
+  local path="$1"
+  if [[ -d ${path} ]]; then
+    (cd "${path}" && pwd -P)
+  else
+    printf '%s' "${path}"
+  fi
+}
+
 # Compute a relative path from `base` to `target`, mirroring Python's
 # `os.path.relpath`. Both inputs are normalized first.
 _crj_relpath() {
@@ -369,13 +384,45 @@ crj_dump_describe() {
 # back to the on-disk workspace path. Plain string substitution is
 # enough; the JSON content does not contain any metacharacters that
 # would interact with this transformation.
+#
+# Both roots are matched in their lexical *and* symlink-resolved
+# spellings, because SPM canonicalizes symlinks in the paths it reports.
+# Matching only the spelling passed to `--package-path` would silently
+# leave absolute paths in the cache whenever any ancestor is a symlink
+# (e.g. a Bazel output base under a symlinked directory, or the macOS
+# `/var` -> `/private/var` symlink). The two known bare-value fields are
+# `describe`'s top-level `path` and `dump-package`'s `packageKind.root`.
 crj_relativize_paths() {
   local pkg_root="${1%/}"
   local ws_root="${2:-}"
   ws_root="${ws_root%/}"
+
+  # SPM resolves symlinks in the paths it emits, so the spelling we
+  # passed as `--package-path` may not be the one in its output. Compute
+  # the physical spelling of each root as well and strip both. Left
+  # empty when it matches the lexical form, so the awk guards below skip
+  # it (an empty target would otherwise match every empty JSON string).
+  local pkg_root_real ws_root_real=""
+  pkg_root_real="$(_crj_realpath "${pkg_root}")"
+  pkg_root_real="${pkg_root_real%/}"
+  if [[ ${pkg_root_real} == "${pkg_root}" ]]; then
+    pkg_root_real=""
+  fi
+  if [[ -n ${ws_root} ]]; then
+    ws_root_real="$(_crj_realpath "${ws_root}")"
+    ws_root_real="${ws_root_real%/}"
+    if [[ ${ws_root_real} == "${ws_root}" ]]; then
+      ws_root_real=""
+    fi
+  fi
+
   # Awk does literal substring replacement (index/substr) so paths
   # containing regex metacharacters (`.`, `*`, `[`, etc.) are safe.
-  awk -v pkg="${pkg_root}" -v ws="${ws_root}" '
+  awk \
+    -v pkg="${pkg_root}" \
+    -v pkg_real="${pkg_root_real}" \
+    -v ws="${ws_root}" \
+    -v ws_real="${ws_root_real}" '
     function replace(s, target, repl,    pos, len, out) {
       if (target == "") return s
       len = length(target)
@@ -390,12 +437,22 @@ crj_relativize_paths() {
     }
     {
       # Replace child-path occurrences first so the bare-root
-      # replacement does not chew into longer matches.
+      # replacement does not chew into longer matches. Package-relative
+      # rewrites run before workspace-relative ones because the package
+      # root normally sits inside the workspace root.
       line = replace($0, pkg "/", "./")
       line = replace(line, "\"" pkg "\"", "\".\"")
+      if (pkg_real != "") {
+        line = replace(line, pkg_real "/", "./")
+        line = replace(line, "\"" pkg_real "\"", "\".\"")
+      }
       if (ws != "") {
         line = replace(line, ws "/", "{{WORKSPACE_ROOT}}/")
         line = replace(line, "\"" ws "\"", "\"{{WORKSPACE_ROOT}}\"")
+      }
+      if (ws_real != "") {
+        line = replace(line, ws_real "/", "{{WORKSPACE_ROOT}}/")
+        line = replace(line, "\"" ws_real "\"", "\"{{WORKSPACE_ROOT}}\"")
       }
       print line
     }

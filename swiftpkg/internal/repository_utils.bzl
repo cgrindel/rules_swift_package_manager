@@ -111,7 +111,8 @@ def _parsed_json_from_spm_command(
         env = env,
         working_directory = working_directory,
     )
-    json_str = _replace_working_directory(json_str, working_directory)
+    for wd in _working_directory_variants(repository_ctx, working_directory):
+        json_str = _replace_working_directory(json_str, wd)
 
     if debug_json_path:
         if not paths.is_absolute(debug_json_path):
@@ -214,6 +215,38 @@ def _relativize_repo_path(path, workspace_root):
         return path[len(prefix):]
     return path
 
+def _working_directory_variants(repository_ctx, working_directory):
+    """Return the distinct on-disk spellings of a working directory.
+
+    SPM canonicalizes symlinks in the paths it reports, so the directory we
+    pass to `--package-path` is not necessarily the prefix that shows up in
+    the JSON it emits. Given `/tmp/link/MyPkg` where `link` is a symlink to
+    `real`, SPM emits `/tmp/real/MyPkg`. Replacing only the spelling we
+    passed in leaves the absolute path in the stored JSON, which breaks
+    reproducibility across workspaces and machines (GH-2140).
+
+    Returning both spellings lets the caller strip whichever one SPM used.
+    Common sources of a mismatch are a Bazel output base stored under a
+    symlinked directory and the macOS `/var` -> `/private/var` symlink.
+
+    Args:
+        repository_ctx: An instance of `repository_ctx`.
+        working_directory: A `string` representing the working directory
+            path, or empty.
+
+    Returns:
+        A `list` of `string` paths: the working directory as given, plus its
+        symlink-resolved form when that differs. Empty when
+        `working_directory` is empty.
+    """
+    if not working_directory:
+        return []
+    variants = [working_directory]
+    realpath = str(repository_ctx.path(working_directory).realpath)
+    if realpath != working_directory:
+        variants.append(realpath)
+    return variants
+
 def _replace_working_directory(json_str, working_directory):
     """Replace the working directory prefix in a JSON string.
 
@@ -246,4 +279,5 @@ repository_utils = struct(
     relativize_repo_path = _relativize_repo_path,
     replace_working_directory = _replace_working_directory,
     struct_to_kwargs = _struct_to_kwargs,
+    working_directory_variants = _working_directory_variants,
 )

@@ -126,6 +126,51 @@ output="$(printf '%s' "${input}" | crj_relativize_paths "${pkg_dir}" "${ws_root}
 assert_equal "${input}" "${output}" \
   "should leave paths outside both pkg_dir and workspace_root unchanged"
 
+# SPM resolves symlinks in the paths it emits, so the JSON can carry the
+# physical spelling of a root even though the lexical (symlinked)
+# spelling is what was passed to --package-path. Both spellings must be
+# stripped, otherwise an absolute path survives into the committed cache
+# whenever any ancestor is a symlink. See GH-2140.
+symlink_dir="$(new_tmp_dir)"
+mkdir -p "${symlink_dir}/real/pkg/Sources/Foo"
+ln -s "real" "${symlink_dir}/link"
+linked_pkg="${symlink_dir}/link/pkg"
+real_pkg="${symlink_dir}/real/pkg"
+
+# Descendant path emitted in its resolved spelling.
+input='{"path": "'"${real_pkg}"'/Sources/Foo"}'
+output="$(printf '%s' "${input}" | crj_relativize_paths "${linked_pkg}")"
+assert_equal '{"path": "./Sources/Foo"}' "${output}" \
+  "should rewrite descendants emitted via the resolved pkg_dir spelling"
+
+# Bare-root value emitted in its resolved spelling. This is exactly
+# `describe`'s top-level "path" and `dump-package`'s packageKind.root.
+input='{"path": "'"${real_pkg}"'", "name": "pkg"}'
+output="$(printf '%s' "${input}" | crj_relativize_paths "${linked_pkg}")"
+assert_equal '{"path": ".", "name": "pkg"}' "${output}" \
+  "should rewrite a bare resolved pkg_dir value to '.'"
+
+# The lexical spelling must keep working when SPM does not resolve it.
+input='{"path": "'"${linked_pkg}"'/Sources/Foo"}'
+output="$(printf '%s' "${input}" | crj_relativize_paths "${linked_pkg}")"
+assert_equal '{"path": "./Sources/Foo"}' "${output}" \
+  "should still rewrite the lexical pkg_dir spelling"
+
+# The same resolution applies to workspace_root, so sibling packages
+# reached through a symlinked workspace root still tokenize.
+linked_ws="${symlink_dir}/link"
+input='{"path": "'"${symlink_dir}"'/real/sibling_pkg/Sources/Bar"}'
+output="$(printf '%s' "${input}" | crj_relativize_paths "${linked_pkg}" "${linked_ws}")"
+assert_equal '{"path": "{{WORKSPACE_ROOT}}/sibling_pkg/Sources/Bar"}' "${output}" \
+  "should tokenize siblings emitted via the resolved workspace_root spelling"
+
+# Guard against an empty resolved spelling matching every empty JSON
+# string (an unguarded `"" <root> ""` target would match `""`).
+input='{"name": "", "path": "'"${real_pkg}"'"}'
+output="$(printf '%s' "${input}" | crj_relativize_paths "${linked_pkg}")"
+assert_equal '{"name": "", "path": "."}' "${output}" \
+  "should not disturb empty JSON string values"
+
 # MARK - crj_describe_local_deps
 
 describe_dir="$(new_tmp_dir)"
