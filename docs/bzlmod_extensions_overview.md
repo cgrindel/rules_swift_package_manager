@@ -61,14 +61,14 @@ Used to configure the flags used when running the `swift package` binary.
 
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
-| <a id="swift_deps.configure_swift_package-build_path"></a>build_path |  The relative path within the runfiles tree for the Swift Package Manager build directory.   | String | optional |  `".build"`  |
-| <a id="swift_deps.configure_swift_package-cache_path"></a>cache_path |  The relative path within the runfiles tree for the shared Swift Package Manager cache directory.   | String | optional |  `".cache"`  |
-| <a id="swift_deps.configure_swift_package-config_path"></a>config_path |  The relative path within the runfiles tree for the Swift Package Manager configuration directory.   | String | optional |  `".config"`  |
+| <a id="swift_deps.configure_swift_package-build_path"></a>build_path |  The path for the Swift Package Manager build directory. A relative path is resolved against the workspace directory (`BUILD_WORKSPACE_DIRECTORY`).   | String | optional |  `".build"`  |
+| <a id="swift_deps.configure_swift_package-cache_path"></a>cache_path |  The path for the shared Swift Package Manager cache directory. A relative path is resolved against the workspace directory (`BUILD_WORKSPACE_DIRECTORY`).   | String | optional |  `".cache"`  |
+| <a id="swift_deps.configure_swift_package-config_path"></a>config_path |  The path for the Swift Package Manager configuration directory. A relative path is resolved against the workspace directory (`BUILD_WORKSPACE_DIRECTORY`).   | String | optional |  `".config"`  |
 | <a id="swift_deps.configure_swift_package-dependency_caching"></a>dependency_caching |  Whether to enable the dependency cache.   | Boolean | optional |  `True`  |
 | <a id="swift_deps.configure_swift_package-manifest_cache"></a>manifest_cache |  Caching mode of Package.swift manifests (shared: shared cache, local: package's build directory, none: disabled)   | String | optional |  `"shared"`  |
 | <a id="swift_deps.configure_swift_package-manifest_caching"></a>manifest_caching |  Whether to enable build manifest caching.   | Boolean | optional |  `True`  |
 | <a id="swift_deps.configure_swift_package-replace_scm_with_registry"></a>replace_scm_with_registry |  Look up source control dependencies in the registry and use the registry to retrieve them instead of source control when possible.   | Boolean | optional |  `False`  |
-| <a id="swift_deps.configure_swift_package-security_path"></a>security_path |  The relative path within the runfiles tree for the security directory.   | String | optional |  `".security"`  |
+| <a id="swift_deps.configure_swift_package-security_path"></a>security_path |  The path for the security directory. A relative path is resolved against the workspace directory (`BUILD_WORKSPACE_DIRECTORY`).   | String | optional |  `".security"`  |
 | <a id="swift_deps.configure_swift_package-use_registry_identity_for_scm"></a>use_registry_identity_for_scm |  Look up source control dependencies in the registry and use their registry identity when possible to help deduplicate across the two origins.   | Boolean | optional |  `False`  |
 
 <a id="swift_deps.from_package"></a>
