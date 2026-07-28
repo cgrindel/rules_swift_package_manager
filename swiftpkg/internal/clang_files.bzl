@@ -5,6 +5,7 @@ load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load("//swiftpkg/internal/modulemap_parser:declarations.bzl", dts = "declaration_types")
 load("//swiftpkg/internal/modulemap_parser:parser.bzl", modulemap_parser = "parser")
+load(":repository_files.bzl", "repository_files")
 
 # Directory names that may include public header files.
 _PUBLIC_HDR_DIRNAMES = ["include", "public"]
@@ -196,22 +197,44 @@ def _is_under_path(path, parent):
         return True
     return False
 
-def _public_include_file_scan_paths(public_include, src_paths):
+def _public_include_file_scan_paths(repository_ctx, public_include, src_paths):
     """Returns paths to scan for public include files.
 
     If a source path sits under the public include root, scanning the whole
     include root would pull files from sibling directories outside the explicit
     source paths. If no source path sits under the public include root, treat
     the public include as a separate header directory and scan it directly.
+
+    An explicit source path may name an individual file (e.g.
+    `sources: ["util.c"]`) rather than a directory. Scanning a file yields
+    only that file, so any sibling public headers in the same directory would be
+    missed. In that case, scan the file's containing directory instead. The scan
+    remains bounded to the target's own source subtrees, and the caller filters
+    the results to public include files, so no unrelated sources are compiled.
+
+    Args:
+        repository_ctx: An instance of `repository_ctx`.
+        public_include: The public include path as a `string`.
+        src_paths: The explicit source paths as a `list` of `string` values.
+
+    Returns:
+        A `list` of paths to scan for public include files.
     """
     source_paths_under_public_include = [
         sp
         for sp in src_paths
         if _is_under_path(sp, public_include)
     ]
-    if source_paths_under_public_include:
-        return source_paths_under_public_include
-    return [public_include]
+    if not source_paths_under_public_include:
+        return [public_include]
+
+    scan_paths = []
+    for sp in source_paths_under_public_include:
+        if repository_files.is_directory(repository_ctx, sp):
+            scan_paths.append(sp)
+        else:
+            scan_paths.append(paths.dirname(sp))
+    return sets.to_list(sets.make(scan_paths))
 
 def _relativize(path, relative_to):
     """Returns a path relative to another path.

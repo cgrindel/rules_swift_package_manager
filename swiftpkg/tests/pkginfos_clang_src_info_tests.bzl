@@ -31,6 +31,9 @@ module core {
                 "/pkg/yoga/module.modulemap",
             ],
         },
+        is_directory_results = {
+            "/pkg/yoga": True,
+        },
     )
 
     actual = pkginfos_testing.new_clang_src_info_from_sources(
@@ -129,9 +132,62 @@ explicit_source_paths_keep_separate_public_include_test = unittest.make(
     _explicit_source_paths_keep_separate_public_include_test,
 )
 
+def _explicit_source_file_discovers_sibling_public_headers_test(ctx):
+    # Regression test for a target that names an individual source file (rather
+    # than a directory) while its public headers path is the directory that
+    # contains both that file and sibling headers, e.g.:
+    #   path: "Sources/CLib", sources: ["util.c"], publicHeadersPath: "."
+    # The sibling `util.h` must still be discovered as a public header.
+    env = unittest.begin(ctx)
+
+    repository_ctx = testutils.new_stub_repository_ctx(
+        "clib",
+        find_results = {
+            # Scanning the file's containing directory finds the sibling header.
+            "/pkg/Sources/CLib": [
+                "/pkg/Sources/CLib/util.c",
+                "/pkg/Sources/CLib/util.h",
+            ],
+            # The explicit source path is a file; listing it returns itself.
+            "/pkg/Sources/CLib/util.c": [
+                "/pkg/Sources/CLib/util.c",
+            ],
+        },
+        # util.c is a file, not a directory.
+        is_directory_results = {},
+    )
+
+    actual = pkginfos_testing.new_clang_src_info_from_sources(
+        repository_ctx = repository_ctx,
+        pkg_path = "/pkg",
+        c99name = "CLib",
+        target_path = "Sources/CLib",
+        source_paths = ["util.c"],
+        public_hdrs_path = ".",
+        exclude_paths = [],
+    )
+
+    asserts.equals(
+        env,
+        ["Sources/CLib/util.c"],
+        sorted(actual.explicit_srcs),
+    )
+    asserts.equals(
+        env,
+        ["Sources/CLib/util.h"],
+        sorted(actual.hdrs),
+    )
+
+    return unittest.end(env)
+
+explicit_source_file_discovers_sibling_public_headers_test = unittest.make(
+    _explicit_source_file_discovers_sibling_public_headers_test,
+)
+
 def pkginfos_clang_src_info_test_suite():
     unittest.suite(
         "pkginfos_clang_src_info_tests",
         explicit_source_paths_do_not_compile_public_include_sources_test,
         explicit_source_paths_keep_separate_public_include_test,
+        explicit_source_file_discovers_sibling_public_headers_test,
     )
