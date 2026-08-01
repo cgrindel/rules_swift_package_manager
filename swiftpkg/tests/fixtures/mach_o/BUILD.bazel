@@ -17,7 +17,6 @@ filegroup(
         "thin_dylib",
         "thin_object",
     ],
-    visibility = ["//swiftpkg:__subpackages__"],
 )
 
 sh_test(
