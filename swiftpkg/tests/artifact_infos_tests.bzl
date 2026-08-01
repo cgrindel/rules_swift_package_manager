@@ -4,14 +4,7 @@ load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:artifact_infos.bzl", "artifact_infos", "link_types")
 load(":testutils.bzl", "testutils")
 
-# The cputype and cpusubtype fields, which sit between the magic and the
-# filetype and are not inspected.
-_MACH_O_HEADER_PADDING = ["00"] * 8
-
-def _mach_o_binary(magic, filetype):
-    return magic + _MACH_O_HEADER_PADDING + filetype
-
-_DYLIB_BINARY = _mach_o_binary(
+_DYLIB_BINARY = testutils.new_mach_o_binary(
     ["cf", "fa", "ed", "fe"],
     ["06", "00", "00", "00"],
 )
@@ -37,7 +30,7 @@ def _link_type_test(ctx):
         ),
         struct(
             msg = "mach-o object file",
-            binary = _mach_o_binary(
+            binary = testutils.new_mach_o_binary(
                 ["cf", "fa", "ed", "fe"],
                 ["01", "00", "00", "00"],
             ),
@@ -45,10 +38,12 @@ def _link_type_test(ctx):
         ),
         struct(
             msg = "universal binary wrapping a dynamic library",
+            # fat magic + nfat_arch + the slice's cputype and cpusubtype +
+            # the slice offset, padded out to the slice at offset 32.
             binary = (
                 ["ca", "fe", "ba", "be"] +
                 ["00", "00", "00", "01"] +
-                _MACH_O_HEADER_PADDING +
+                ["00"] * 8 +
                 ["00", "00", "00", "20"] +
                 ["00"] * 12 +
                 _DYLIB_BINARY

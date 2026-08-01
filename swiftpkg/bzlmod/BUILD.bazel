@@ -16,6 +16,7 @@ bzl_library(
     deps = [
         "//swiftpkg/internal:bazel_repo_names",
         "//swiftpkg/internal:local_swift_package",
+        "//swiftpkg/internal:pkginfo_dependencies",
         "//swiftpkg/internal:pkginfos",
         "//swiftpkg/internal:registry_swift_package",
         "//swiftpkg/internal:repository_utils",
@@ -24,5 +25,7 @@ bzl_library(
         "//swiftpkg/internal:swift_package_tool",
         "//swiftpkg/internal:swift_package_tool_attrs",
         "//swiftpkg/internal:swift_package_tool_repo",
+        "@bazel_skylib//lib:dicts",
+        "@bazel_skylib//lib:paths",
     ],
 )

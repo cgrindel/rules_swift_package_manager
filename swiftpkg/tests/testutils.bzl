@@ -1,5 +1,27 @@
 """Implementation for `testutils`."""
 
+# The cputype and cpusubtype fields, which sit between the magic and the
+# filetype in a Mach-O header and are not inspected.
+_MACH_O_HEADER_PADDING = ["00"] * 8
+
+def _new_mach_o_binary(magic, filetype):
+    """Assemble the head of a synthetic Mach-O binary.
+
+    Callers pass the magic and filetype as literal bytes rather than importing
+    them from `mach_o.bzl`. Sharing those constants with the implementation
+    would make the tests agree with it by construction instead of checking it.
+
+    Args:
+        magic: The four magic bytes as a `list` of hexadecimal byte `string`
+            values.
+        filetype: The four filetype bytes as a `list` of hexadecimal byte
+            `string` values.
+
+    Returns:
+        A `list` of hexadecimal byte `string` values.
+    """
+    return magic + _MACH_O_HEADER_PADDING + filetype
+
 def _new_exec_result(return_code = 0, stdout = "", stderr = ""):
     return struct(
         return_code = return_code,
@@ -71,5 +93,6 @@ def _new_stub_repository_ctx(
     )
 
 testutils = struct(
+    new_mach_o_binary = _new_mach_o_binary,
     new_stub_repository_ctx = _new_stub_repository_ctx,
 )

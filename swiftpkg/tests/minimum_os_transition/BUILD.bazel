@@ -85,6 +85,7 @@ bzl_library(
     deps = [
         "@build_bazel_rules_apple//apple:providers",
         "@build_bazel_rules_swift//swift",
+        "@build_bazel_rules_swift//swift:providers",
         "@rules_cc//cc/common",
     ],
 )

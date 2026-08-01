@@ -4,10 +4,7 @@ load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:link_types.bzl", "link_types")
 load("//swiftpkg/internal:mach_o.bzl", "mach_o")
 load("//swiftpkg/tests/fixtures/mach_o:fixtures.bzl", "MACH_O_FIXTURES")
-
-# The cputype and cpusubtype fields, which sit between the magic and the
-# filetype and are not inspected.
-_MACH_O_HEADER_PADDING = ["00"] * 8
+load(":testutils.bzl", "testutils")
 
 def _new_recorded_reader(fixture):
     """Create a reader backed by the bytes recorded for a fixture."""
@@ -33,9 +30,6 @@ def _new_byte_reader(hex_bytes):
         return hex_bytes[offset:offset + count]
 
     return read_bytes
-
-def _mach_o_binary(magic, filetype):
-    return magic + _MACH_O_HEADER_PADDING + filetype
 
 def _uint_test(ctx):
     env = unittest.begin(ctx)
@@ -64,7 +58,7 @@ def _link_type_test(ctx):
         ),
         struct(
             msg = "64-bit little endian dylib",
-            hex_bytes = _mach_o_binary(
+            hex_bytes = testutils.new_mach_o_binary(
                 ["cf", "fa", "ed", "fe"],
                 ["06", "00", "00", "00"],
             ),
@@ -72,7 +66,7 @@ def _link_type_test(ctx):
         ),
         struct(
             msg = "32-bit little endian dylib",
-            hex_bytes = _mach_o_binary(
+            hex_bytes = testutils.new_mach_o_binary(
                 ["ce", "fa", "ed", "fe"],
                 ["06", "00", "00", "00"],
             ),
@@ -80,7 +74,7 @@ def _link_type_test(ctx):
         ),
         struct(
             msg = "64-bit big endian dylib",
-            hex_bytes = _mach_o_binary(
+            hex_bytes = testutils.new_mach_o_binary(
                 ["fe", "ed", "fa", "cf"],
                 ["00", "00", "00", "06"],
             ),
@@ -88,7 +82,7 @@ def _link_type_test(ctx):
         ),
         struct(
             msg = "32-bit big endian dylib",
-            hex_bytes = _mach_o_binary(
+            hex_bytes = testutils.new_mach_o_binary(
                 ["fe", "ed", "fa", "ce"],
                 ["00", "00", "00", "06"],
             ),
@@ -99,7 +93,7 @@ def _link_type_test(ctx):
             # does, so it must be treated as dynamically linked. `file` reports
             # it as a "dynamically linked shared library stub".
             msg = "shared library stub is dynamically linked",
-            hex_bytes = _mach_o_binary(
+            hex_bytes = testutils.new_mach_o_binary(
                 ["cf", "fa", "ed", "fe"],
                 ["09", "00", "00", "00"],
             ),
@@ -107,7 +101,7 @@ def _link_type_test(ctx):
         ),
         struct(
             msg = "object file is statically linked",
-            hex_bytes = _mach_o_binary(
+            hex_bytes = testutils.new_mach_o_binary(
                 ["cf", "fa", "ed", "fe"],
                 ["01", "00", "00", "00"],
             ),
@@ -115,7 +109,7 @@ def _link_type_test(ctx):
         ),
         struct(
             msg = "executable is statically linked",
-            hex_bytes = _mach_o_binary(
+            hex_bytes = testutils.new_mach_o_binary(
                 ["cf", "fa", "ed", "fe"],
                 ["02", "00", "00", "00"],
             ),
@@ -123,7 +117,7 @@ def _link_type_test(ctx):
         ),
         struct(
             msg = "bundle is statically linked",
-            hex_bytes = _mach_o_binary(
+            hex_bytes = testutils.new_mach_o_binary(
                 ["cf", "fa", "ed", "fe"],
                 ["08", "00", "00", "00"],
             ),
@@ -131,7 +125,7 @@ def _link_type_test(ctx):
         ),
         struct(
             msg = "big endian object file is statically linked",
-            hex_bytes = _mach_o_binary(
+            hex_bytes = testutils.new_mach_o_binary(
                 ["fe", "ed", "fa", "cf"],
                 ["00", "00", "00", "01"],
             ),
@@ -144,10 +138,10 @@ def _link_type_test(ctx):
             hex_bytes = (
                 ["ca", "fe", "ba", "be"] +
                 ["00", "00", "00", "01"] +
-                _MACH_O_HEADER_PADDING +
+                ["00"] * 8 +
                 ["00", "00", "00", "20"] +
                 ["00"] * 12 +
-                _mach_o_binary(
+                testutils.new_mach_o_binary(
                     ["cf", "fa", "ed", "fe"],
                     ["06", "00", "00", "00"],
                 )
@@ -159,7 +153,7 @@ def _link_type_test(ctx):
             hex_bytes = (
                 ["ca", "fe", "ba", "be"] +
                 ["00", "00", "00", "01"] +
-                _MACH_O_HEADER_PADDING +
+                ["00"] * 8 +
                 ["00", "00", "00", "20"] +
                 ["00"] * 12 +
                 ["21", "3c", "61", "72", "63", "68", "3e", "0a"]
@@ -172,10 +166,10 @@ def _link_type_test(ctx):
             hex_bytes = (
                 ["ca", "fe", "ba", "bf"] +
                 ["00", "00", "00", "01"] +
-                _MACH_O_HEADER_PADDING +
+                ["00"] * 8 +
                 ["00", "00", "00", "00", "00", "00", "00", "20"] +
                 ["00"] * 8 +
-                _mach_o_binary(
+                testutils.new_mach_o_binary(
                     ["cf", "fa", "ed", "fe"],
                     ["06", "00", "00", "00"],
                 )
