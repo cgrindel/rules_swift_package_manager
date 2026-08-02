@@ -11,8 +11,11 @@ load(":link_types.bzl", "link_types")
 # The magic byte sequences that can appear at the start of a framework binary.
 # Each is a `list` of lowercase hexadecimal byte `string` values.
 
-# The first four bytes of the `!<arch>\n` ar archive magic.
-_AR_MAGIC = ["21", "3c", "61", "72"]
+# The `!<arch>\n` ar archive magic. The first four bytes are enough to tell it
+# apart from the Mach-O magics, so they select the branch; the rest is checked
+# once that branch is taken.
+_AR_MAGIC = ["21", "3c", "61", "72", "63", "68", "3e", "0a"]
+_AR_MAGIC_PREFIX = _AR_MAGIC[0:4]
 
 # A Mach-O header stores its fields in the byte order implied by its magic.
 # MH_MAGIC and MH_MAGIC_64 mean the fields are little endian. MH_CIGAM and
@@ -35,6 +38,10 @@ _FAT_MAGIC_64 = ["ca", "fe", "ba", "bf"]
 # The offset of the `filetype` field in a Mach-O header, relative to the start
 # of the header: magic (4) + cputype (4) + cpusubtype (4).
 _MACH_O_FILETYPE_OFFSET = 12
+
+# The offset of the `nfat_arch` field in a fat header, relative to the start of
+# the header: magic (4).
+_FAT_NARCH_OFFSET = 4
 
 # The offset of the first slice's `offset` field in a fat header, relative to
 # the start of the header: magic (4) + nfat_arch (4) + cputype (4) +
@@ -181,7 +188,13 @@ def _link_type(read_bytes):
     for _ in range(2):
         header = read_bytes(offset, _HEADER_PREFIX_SIZE)
         magic = _field(header, offset, 0, 4)
-        if magic == _AR_MAGIC:
+        if magic == _AR_MAGIC_PREFIX:
+            full_magic = _field(header, offset, 0, len(_AR_MAGIC))
+            if full_magic != _AR_MAGIC:
+                fail("""\
+The archive magic at offset {offset} is incomplete ({magic}). Please file a bug \
+at https://github.com/cgrindel/rules_swift_package_manager/issues/new/choose.\
+""".format(magic = " ".join(full_magic), offset = offset))
             return link_types.static
         elif magic in _MACH_O_LE_MAGICS:
             return _mach_o_link_type(header, offset, big_endian = False)
@@ -192,6 +205,16 @@ def _link_type(read_bytes):
                 size = _FAT_ARCH_64_OFFSET_SIZE
             else:
                 size = _FAT_ARCH_OFFSET_SIZE
+
+            # Without at least one slice there is no fat_arch entry, so the
+            # bytes where the slice offset would be are something else.
+            arch_count = _uint_be(_field(header, offset, _FAT_NARCH_OFFSET, 4))
+            if arch_count == 0:
+                fail("""\
+The universal binary at offset {offset} declares no architectures. Please file \
+a bug at https://github.com/cgrindel/rules_swift_package_manager/issues/new/choose.\
+""".format(offset = offset))
+
             slice_offset = _uint_be(_field(
                 header,
                 offset,

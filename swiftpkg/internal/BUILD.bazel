@@ -312,6 +312,7 @@ bzl_library(
         ":module_maps",
         "@build_bazel_rules_swift//swift",
         "@build_bazel_rules_swift//swift:swift_interop_info",
+        "@rules_cc//cc/common",
     ],
 )
 
