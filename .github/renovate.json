@@ -27,6 +27,12 @@
       "matchPackageNames": ["apple/swift-log"],
       "matchFileNames": ["bzlmod/workspace/Package.swift"],
       "enabled": false
+    },
+    {
+      "description": "aws-sdk-swift 1.7.0 and later attach smithy-swift's SmithyCodeGeneratorPlugin (a SwiftPM build tool plugin) to every service target. That plugin generates the per-operation schema code at build time, and this ruleset does not run build tool plugins yet, so the generated clients fail to compile under Bazel. aws_sdk_example must stay on 1.6.x until #46 is implemented.",
+      "matchPackageNames": ["awslabs/aws-sdk-swift"],
+      "matchFileNames": ["examples/aws_sdk_example/Package.swift"],
+      "enabled": false
     }
   ]
 }
