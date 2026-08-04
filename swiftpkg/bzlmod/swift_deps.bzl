@@ -61,7 +61,14 @@ manifest.\
             )
     return aliases_by_identity
 
-def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swift_package):
+def _declare_pkgs_from_package(
+        module_ctx,
+        from_package,
+        config_pkgs,
+        config_swift_package,
+        target_configs,
+        matched_target_configs,
+        available_target_config_packages):
     """Declare Swift packages from `Package.swift` and `Package.resolved`.
 
     Args:
@@ -69,6 +76,11 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
         from_package: The data from the `from_package` tag.
         config_pkgs: The data from the `configure_package` tag.
         config_swift_package: The data from the `configure_swift_package` tag.
+        target_configs: The data from all `configure_target` tags.
+        matched_target_configs: A mutable `dict` recording matched target
+            configuration indexes.
+        available_target_config_packages: A mutable `dict` recording valid
+            names for packages discovered from manifests.
     """
 
     # Read Package.resolved.
@@ -271,10 +283,26 @@ the Swift package to make it available.\
             _declare_unresolved_pkg_from_dependency(dep)
             continue
 
+        dep_repo_name = bazel_repo_names.from_identity(dep.identity)
+        package_config_names = [dep.name, dep.identity, dep_repo_name]
+        for package_config_name in package_config_names:
+            available_target_config_packages[package_config_name] = True
+
+        dep_target_configs = []
+        for index, target_config in enumerate(target_configs):
+            if target_config.package not in package_config_names:
+                continue
+            matched_target_configs[index] = True
+            dep_target_configs.append({
+                "condition": target_config.condition,
+                "swift_copts": target_config.swift_copts,
+                "target": target_config.target,
+            })
+
         config_pkg = config_pkgs.get(dep.name)
         if config_pkg == None:
             config_pkg = config_pkgs.get(
-                bazel_repo_names.from_identity(dep.identity),
+                dep_repo_name,
             )
         _declare_pkg_from_dependency(
             dep,
@@ -283,6 +311,7 @@ the Swift package to make it available.\
             config_swift_package,
             from_package.cached_json_directory,
             config_pkg.target_deps if config_pkg else {},
+            json.encode(dep_target_configs) if dep_target_configs else "",
             module_aliases_by_id.get(dep.identity, {}),
             dep_module_aliases_json,
             bazel_workspace_root,
@@ -319,6 +348,7 @@ def _declare_pkg_from_dependency(
         config_swift_package,
         cached_json_directory,
         target_deps,
+        target_swift_copts,
         module_aliases,
         dep_module_aliases,
         bazel_workspace_root):
@@ -328,6 +358,12 @@ def _declare_pkg_from_dependency(
     build_file = None
     if config_pkg:
         build_file = config_pkg.build_file
+    if build_file and target_swift_copts:
+        fail("""\
+`configure_target` cannot configure package '{package}' because its \
+`configure_package` tag supplies a complete `build_file` override. Remove the \
+override or apply the compiler options in that BUILD file.\
+""".format(package = dep.name))
     if dep.source_control:
         init_submodules = None
         recursive_init_submodules = None
@@ -377,6 +413,7 @@ def _declare_pkg_from_dependency(
             registries = registries,
             replace_scm_with_registry = replace_scm_with_registry,
             target_deps = target_deps,
+            target_swift_copts = target_swift_copts,
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
         )
@@ -408,6 +445,7 @@ in the lock file and will not be portable across machines.\
             build_file = build_file,
             cached_json_directory = cached_json_directory,
             target_deps = target_deps,
+            target_swift_copts = target_swift_copts,
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
         )
@@ -429,6 +467,7 @@ in the lock file and will not be portable across machines.\
             replace_scm_with_registry = replace_scm_with_registry,
             resolved = resolved,
             target_deps = target_deps,
+            target_swift_copts = target_swift_copts,
             version = dep.registry.pin.state.version,
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
@@ -465,6 +504,25 @@ def _swift_deps_impl(module_ctx):
 Expected only one `configure_swift_package` tag, but found multiple.\
 """)
             config_swift_package = config_swift_package_tag
+
+    target_configs = []
+    for mod in module_ctx.modules:
+        for target_config in mod.tags.configure_target:
+            if not target_config.package:
+                fail("`configure_target.package` must not be empty.")
+            if not target_config.target:
+                fail("`configure_target.target` must not be empty.")
+            if not target_config.swift_copts:
+                fail("`configure_target.swift_copts` must not be empty.")
+            target_configs.append(struct(
+                condition = str(target_config.condition) if target_config.condition else None,
+                package = target_config.package,
+                swift_copts = target_config.swift_copts,
+                target = target_config.target,
+            ))
+
+    matched_target_configs = {}
+    available_target_config_packages = {}
     direct_dep_repo_names = []
     for mod in module_ctx.modules:
         for from_package in mod.tags.from_package:
@@ -474,8 +532,25 @@ Expected only one `configure_swift_package` tag, but found multiple.\
                     from_package,
                     config_pkgs,
                     config_swift_package,
+                    target_configs,
+                    matched_target_configs,
+                    available_target_config_packages,
                 ),
             )
+
+    unmatched_target_config_packages = [
+        target_config.package
+        for index, target_config in enumerate(target_configs)
+        if index not in matched_target_configs
+    ]
+    if unmatched_target_config_packages:
+        fail("""\
+Swift compiler options were configured for unknown packages: {unknown}. \
+Available package names are: {available}.\
+""".format(
+            unknown = ", ".join(sorted(unmatched_target_config_packages)),
+            available = ", ".join(sorted(available_target_config_packages.keys())),
+        ))
     return module_ctx.extension_metadata(
         root_module_direct_deps = direct_dep_repo_names,
         root_module_direct_dev_deps = [],
@@ -590,6 +665,35 @@ emitted unchanged.\
     doc = "Used to add or override settings for a particular Swift package.",
 )
 
+_configure_target_tag = tag_class(
+    attrs = {
+        "condition": attr.label(
+            doc = """\
+Optional build configuration condition. Compiler options are appended through \
+a `select()` only when this label matches. Labels are resolved in the module \
+that declares the tag, so root-repository conditions remain valid inside the \
+generated external repository.\
+""",
+        ),
+        "package": attr.string(
+            doc = """\
+The Swift package name, identity, or generated repository name.\
+""",
+            mandatory = True,
+        ),
+        "swift_copts": attr.string_list(
+            doc = "Swift compiler options to append to the generated target.",
+        ),
+        "target": attr.string(
+            doc = """\
+The Swift package target name or generated `.rspm` target name.\
+""",
+            mandatory = True,
+        ),
+    },
+    doc = "Append target-local Swift compiler options to a generated target.",
+)
+
 _configure_swift_package_tag = tag_class(
     attrs = swift_package_tool_attrs.swift_package_tool_config,
     doc = "Used to configure the flags used when running the `swift package` binary.",
@@ -600,6 +704,7 @@ swift_deps = module_extension(
     tag_classes = {
         "configure_package": _configure_package_tag,
         "configure_swift_package": _configure_swift_package_tag,
+        "configure_target": _configure_target_tag,
         "from_package": _from_package_tag,
     },
 )

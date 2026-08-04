@@ -21,6 +21,7 @@ swift_deps.configure_package(<a href="#swift_deps.configure_package-name">name</
 swift_deps.configure_swift_package(<a href="#swift_deps.configure_swift_package-build_path">build_path</a>, <a href="#swift_deps.configure_swift_package-cache_path">cache_path</a>, <a href="#swift_deps.configure_swift_package-config_path">config_path</a>, <a href="#swift_deps.configure_swift_package-dependency_caching">dependency_caching</a>,
                                    <a href="#swift_deps.configure_swift_package-manifest_cache">manifest_cache</a>, <a href="#swift_deps.configure_swift_package-manifest_caching">manifest_caching</a>, <a href="#swift_deps.configure_swift_package-replace_scm_with_registry">replace_scm_with_registry</a>,
                                    <a href="#swift_deps.configure_swift_package-security_path">security_path</a>, <a href="#swift_deps.configure_swift_package-use_registry_identity_for_scm">use_registry_identity_for_scm</a>)
+swift_deps.configure_target(<a href="#swift_deps.configure_target-condition">condition</a>, <a href="#swift_deps.configure_target-package">package</a>, <a href="#swift_deps.configure_target-swift_copts">swift_copts</a>, <a href="#swift_deps.configure_target-target">target</a>)
 swift_deps.from_package(<a href="#swift_deps.from_package-cached_json_directory">cached_json_directory</a>, <a href="#swift_deps.from_package-declare_swift_deps_info">declare_swift_deps_info</a>, <a href="#swift_deps.from_package-declare_swift_package">declare_swift_package</a>, <a href="#swift_deps.from_package-env">env</a>,
                         <a href="#swift_deps.from_package-env_inherit">env_inherit</a>, <a href="#swift_deps.from_package-netrc">netrc</a>, <a href="#swift_deps.from_package-registries">registries</a>, <a href="#swift_deps.from_package-resolve_transitive_local_dependencies">resolve_transitive_local_dependencies</a>,
                         <a href="#swift_deps.from_package-resolved">resolved</a>, <a href="#swift_deps.from_package-swift">swift</a>)
@@ -71,6 +72,21 @@ Used to configure the flags used when running the `swift package` binary.
 | <a id="swift_deps.configure_swift_package-security_path"></a>security_path |  The relative path within the runfiles tree for the security directory.   | String | optional |  `".security"`  |
 | <a id="swift_deps.configure_swift_package-use_registry_identity_for_scm"></a>use_registry_identity_for_scm |  Look up source control dependencies in the registry and use their registry identity when possible to help deduplicate across the two origins.   | Boolean | optional |  `False`  |
 
+<a id="swift_deps.configure_target"></a>
+
+### configure_target
+
+Append target-local Swift compiler options to a generated target.
+
+**Attributes**
+
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="swift_deps.configure_target-condition"></a>condition |  Optional build configuration condition. Compiler options are appended through a `select()` only when this label matches. Labels are resolved in the module that declares the tag, so root-repository conditions remain valid inside the generated external repository.   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
+| <a id="swift_deps.configure_target-package"></a>package |  The Swift package name, identity, or generated repository name.   | String | required |  |
+| <a id="swift_deps.configure_target-swift_copts"></a>swift_copts |  Swift compiler options to append to the generated target.   | List of strings | optional |  `[]`  |
+| <a id="swift_deps.configure_target-target"></a>target |  The Swift package target name or generated `.rspm` target name.   | String | required |  |
+
 <a id="swift_deps.from_package"></a>
 
 ### from_package
@@ -91,5 +107,4 @@ Load Swift packages from `Package.swift` and `Package.resolved` files.
 | <a id="swift_deps.from_package-resolve_transitive_local_dependencies"></a>resolve_transitive_local_dependencies |  Local Swift packages that are declared directly in the `Package.swift` file can depend on other local packages. By default these transitive dependencies will be automatically resolved and made available during the build process.<br><br>The process of resolving transitive local dependencies can become time consuming as the number of local Swift packages grows. Setting this flag to `False` will skip resolving local packages and instead require every local Swift package that is required during the build to be explicitly defined in the `Package.swift` file.<br><br>This time appears as `Fetching module extension swift_deps in @@rules_swift_package_manager~//:extensions.bzl;` in the output log.   | Boolean | optional |  `True`  |
 | <a id="swift_deps.from_package-resolved"></a>resolved |  A `Package.resolved`.   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
 | <a id="swift_deps.from_package-swift"></a>swift |  A `Package.swift`.   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
-
 
