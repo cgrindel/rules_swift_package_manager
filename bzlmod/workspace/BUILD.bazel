@@ -7,6 +7,7 @@ load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package_tool")
 config_setting(
     name = "target_copts_enabled",
     define_values = {"rspm_target_copts": "enabled"},
+    visibility = ["//visibility:public"],
 )
 
 # MARK: - Tidy / Update Source Files
