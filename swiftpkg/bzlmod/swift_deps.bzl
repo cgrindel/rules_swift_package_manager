@@ -17,6 +17,62 @@ load("//swiftpkg/internal:swift_package_tool_repo.bzl", "swift_package_tool_repo
 
 _DO_WHILE_RANGE = range(1000)
 
+def _target_configs_for_dependency(
+        dep,
+        target_configs,
+        matched_target_configs,
+        available_target_config_packages):
+    dep_repo_name = bazel_repo_names.from_identity(dep.identity)
+    package_config_names = depset([
+        dep.name,
+        dep.identity,
+        dep_repo_name,
+    ]).to_list()
+    for package_config_name in package_config_names:
+        available_target_config_packages[package_config_name] = True
+
+    dep_target_configs = []
+    for index, target_config in enumerate(target_configs):
+        if target_config.package not in package_config_names:
+            continue
+        matched_packages = matched_target_configs.get(index, {})
+        matched_packages[dep_repo_name] = True
+        matched_target_configs[index] = matched_packages
+        dep_target_configs.append({
+            "condition": target_config.condition,
+            "swift_copts": target_config.swift_copts,
+            "target": target_config.target,
+        })
+    return dep_target_configs
+
+def _ambiguous_target_config_packages(target_configs, matched_target_configs):
+    return [
+        struct(
+            matches = sorted(matched_target_configs[index].keys()),
+            selector = target_config.package,
+        )
+        for index, target_config in enumerate(target_configs)
+        if len(matched_target_configs.get(index, {})) > 1
+    ]
+
+def _fail_on_ambiguous_target_config_packages(target_configs, matched_target_configs):
+    ambiguities = _ambiguous_target_config_packages(
+        target_configs,
+        matched_target_configs,
+    )
+    if not ambiguities:
+        return
+    fail("""\
+`configure_target` package selectors must each identify exactly one package. \
+Ambiguous selectors: {ambiguities}. Use a unique package identity or generated \
+repository name.\
+""".format(
+        ambiguities = "; ".join([
+            "'{}' matched {}".format(a.selector, ", ".join(a.matches))
+            for a in ambiguities
+        ]),
+    ))
+
 def _module_aliases_by_identity(pkg_info):
     """Collect module aliases declared in the root package manifest (SE-0339).
 
@@ -264,8 +320,29 @@ def _declare_pkgs_from_package(
         if to_process:
             fail("Expected no more items to process, but found some.")
 
+    # Resolve target configuration selectors before declaring repositories. In
+    # particular, unresolved dependencies from a stale Package.resolved must
+    # still count as valid package matches so @swift_package//:resolve remains
+    # available without first deleting configure_target tags.
+    target_configs_by_dep_repo = {}
+    for dep in all_deps_by_id.values():
+        dep_repo_name = bazel_repo_names.from_identity(dep.identity)
+        target_configs_by_dep_repo[dep_repo_name] = _target_configs_for_dependency(
+            dep,
+            target_configs,
+            matched_target_configs,
+            available_target_config_packages,
+        )
+    _fail_on_ambiguous_target_config_packages(
+        target_configs,
+        matched_target_configs,
+    )
+
     # Declare the Bazel repositories.
     for dep in all_deps_by_id.values():
+        dep_repo_name = bazel_repo_names.from_identity(dep.identity)
+        dep_target_configs = target_configs_by_dep_repo[dep_repo_name]
+
         # Declare a placeholder repository for unresolved dependencies.,
         # for example for a new packgage added to the `Package.swift`
         # which has not been resolved yet.
@@ -282,22 +359,6 @@ the Swift package to make it available.\
 """.format(name = dep.name))
             _declare_unresolved_pkg_from_dependency(dep)
             continue
-
-        dep_repo_name = bazel_repo_names.from_identity(dep.identity)
-        package_config_names = [dep.name, dep.identity, dep_repo_name]
-        for package_config_name in package_config_names:
-            available_target_config_packages[package_config_name] = True
-
-        dep_target_configs = []
-        for index, target_config in enumerate(target_configs):
-            if target_config.package not in package_config_names:
-                continue
-            matched_target_configs[index] = True
-            dep_target_configs.append({
-                "condition": target_config.condition,
-                "swift_copts": target_config.swift_copts,
-                "target": target_config.target,
-            })
 
         config_pkg = config_pkgs.get(dep.name)
         if config_pkg == None:
@@ -717,4 +778,9 @@ swift_deps = module_extension(
         "configure_target": _configure_target_tag,
         "from_package": _from_package_tag,
     },
+)
+
+swift_deps_test_utils = struct(
+    ambiguous_target_config_packages = _ambiguous_target_config_packages,
+    target_configs_for_dependency = _target_configs_for_dependency,
 )

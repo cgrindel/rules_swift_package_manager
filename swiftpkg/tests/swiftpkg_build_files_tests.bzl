@@ -12,6 +12,7 @@ load(
     spm_platforms = "platforms",
 )
 load("//swiftpkg/internal:artifact_infos.bzl", "artifact_infos", "link_types")
+load("//swiftpkg/internal:manual_target_swift_copts.bzl", "manual_target_swift_copts")
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
 load(
@@ -2633,6 +2634,82 @@ def _target_swift_copts_test(ctx):
 
 target_swift_copts_test = unittest.make(_target_swift_copts_test)
 
+def _target_swift_copts_precedence_test(ctx):
+    env = unittest.begin(ctx)
+
+    pkg_info = _pkg_info()
+    target_swift_copts = json.encode([
+        {
+            "condition": None,
+            "swift_copts": ["-no-cross-module-optimization"],
+            "target": "SwiftExecutableTarget",
+        },
+        {
+            "condition": "@@//:override",
+            "swift_copts": ["-disable-batch-mode"],
+            "target": "SwiftExecutableTarget.rspm.__impl",
+        },
+    ])
+    build_file = _target_build_file(
+        pkg_info,
+        "SwiftExecutableTarget",
+        target_swift_copts = target_swift_copts,
+    )
+    impl = _assert_decl(
+        env,
+        build_file,
+        "SwiftExecutableTarget.rspm.__impl",
+        "swift_binary",
+    )
+    copts = scg.to_starlark(impl.attrs["copts"])
+
+    base_flag_index = copts.find('"-cross-module-optimization"')
+    configured_flag_index = copts.find('"-no-cross-module-optimization"')
+    configured_select_flag_index = copts.find('"-disable-batch-mode"')
+    asserts.true(env, base_flag_index >= 0)
+    asserts.true(env, base_flag_index < configured_flag_index)
+    asserts.true(env, configured_flag_index < configured_select_flag_index)
+
+    base_condition = spm_configurations.label(spm_configurations.release)
+    asserts.true(env, copts.find('"{}"'.format(base_condition)) < copts.find('"@@//:override"'))
+
+    return unittest.end(env)
+
+target_swift_copts_precedence_test = unittest.make(_target_swift_copts_precedence_test)
+
+def _target_swift_copts_ambiguity_test(ctx):
+    env = unittest.begin(ctx)
+
+    pkg_info = _pkg_info(extra_targets = [
+        pkginfos.new_target(
+            name = "RegularSwiftTargetAsLibrary.rspm",
+            type = "regular",
+            c99name = "RegularSwiftTargetAsLibrary_rspm",
+            module_type = "SwiftTarget",
+            path = "Source/Ambiguous",
+            sources = ["Ambiguous.swift"],
+            dependencies = [],
+            repo_name = _repo_name,
+            swift_src_info = pkginfos.new_swift_src_info(),
+        ),
+    ])
+    error = manual_target_swift_copts.validation_error(
+        pkg_info,
+        [{
+            "condition": None,
+            "swift_copts": ["-DAMBIGUOUS"],
+            "target": "RegularSwiftTargetAsLibrary.rspm",
+        }],
+    )
+    asserts.true(env, error != None)
+    asserts.true(env, "Ambiguous selectors" in error)
+    asserts.true(env, "RegularSwiftTargetAsLibrary" in error)
+    asserts.true(env, "RegularSwiftTargetAsLibrary.rspm" in error)
+
+    return unittest.end(env)
+
+target_swift_copts_ambiguity_test = unittest.make(_target_swift_copts_ambiguity_test)
+
 def swiftpkg_build_files_test_suite():
     return unittest.suite(
         "swiftpkg_build_files_tests",
@@ -2643,4 +2720,6 @@ def swiftpkg_build_files_test_suite():
         license_generation_test,
         module_aliases_test,
         target_swift_copts_test,
+        target_swift_copts_precedence_test,
+        target_swift_copts_ambiguity_test,
     )

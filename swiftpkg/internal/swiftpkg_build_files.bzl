@@ -144,8 +144,7 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         copts.append("-module-alias")
         copts.append("{}={}".format(original_name, renamed))
 
-    # Append user configuration only to the selected generated Swift target.
-    copts.extend(manual_target_swift_copts.copts_for_target(pkg_ctx, target))
+    configured_copts = manual_target_swift_copts.copts_for_target(pkg_ctx, target)
 
     # GH046: Support plugins.
 
@@ -226,8 +225,20 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
 
     if len(features) > 0:
         attrs["features"] = bzl_selects.to_starlark(features, mutually_inclusive = True)
-    if len(copts) > 0:
+    if copts and configured_copts:
+        # Keep generated/package-manifest flags in a separate expression so
+        # target configuration is always last, including when either side
+        # contains select() expressions. This lets override-style flags use
+        # normal last-option-wins compiler semantics.
+        attrs["copts"] = scg.new_expr(
+            bzl_selects.to_starlark(copts, mutually_inclusive = True),
+            scg.new_op("+"),
+            bzl_selects.to_starlark(configured_copts, mutually_inclusive = True),
+        )
+    elif copts:
         attrs["copts"] = bzl_selects.to_starlark(copts, mutually_inclusive = True)
+    elif configured_copts:
+        attrs["copts"] = bzl_selects.to_starlark(configured_copts, mutually_inclusive = True)
 
     linkopts = []
     if target.linker_settings != None:
