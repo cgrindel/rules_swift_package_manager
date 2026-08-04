@@ -614,11 +614,17 @@ def _pkg_info_with_traits():
         enabled_traits = ["FeatureA", "FeatureB"],
     )
 
-def _pkg_ctx(pkg_info, target_deps = {}, module_aliases = {}, dep_module_aliases = ""):
+def _pkg_ctx(
+        pkg_info,
+        target_deps = {},
+        target_swift_copts = "",
+        module_aliases = {},
+        dep_module_aliases = ""):
     return pkg_ctxs.new(
         pkg_info = pkg_info,
         repo_name = _repo_name,
         target_deps = target_deps,
+        target_swift_copts = target_swift_copts,
         module_aliases = module_aliases,
         dep_module_aliases = dep_module_aliases,
     )
@@ -628,6 +634,7 @@ def _target_build_file(
         target_name,
         artifact_infos = [],
         target_deps = {},
+        target_swift_copts = "",
         module_aliases = {},
         dep_module_aliases = ""):
     target = pkginfo_targets.get(pkg_info.targets, target_name)
@@ -637,6 +644,7 @@ def _target_build_file(
     pkg_ctx = _pkg_ctx(
         pkg_info,
         target_deps = target_deps,
+        target_swift_copts = target_swift_copts,
         module_aliases = module_aliases,
         dep_module_aliases = dep_module_aliases,
     )
@@ -2290,6 +2298,64 @@ def _module_aliases_test(ctx):
 
 module_aliases_test = unittest.make(_module_aliases_test)
 
+def _target_swift_copts_test(ctx):
+    env = unittest.begin(ctx)
+
+    pkg_info = _pkg_info()
+    target_swift_copts = json.encode([
+        {
+            "condition": None,
+            "swift_copts": ["-DFIRST"],
+            "target": "RegularSwiftTargetAsLibrary",
+        },
+        {
+            "condition": "@@//:optimized",
+            "swift_copts": ["-DSECOND"],
+            "target": "RegularSwiftTargetAsLibrary.rspm",
+        },
+        {
+            "condition": "@@//:optimized",
+            "swift_copts": ["-DTHIRD"],
+            "target": "RegularSwiftTargetAsLibrary.rspm.__impl",
+        },
+    ])
+
+    selected_bf = _target_build_file(
+        pkg_info,
+        "RegularSwiftTargetAsLibrary",
+        target_swift_copts = target_swift_copts,
+    )
+    selected_impl = _assert_decl(
+        env,
+        selected_bf,
+        "RegularSwiftTargetAsLibrary.rspm.__impl",
+        "swift_library",
+    )
+    selected_copts = scg.to_starlark(selected_impl.attrs["copts"])
+    asserts.true(env, "-DFIRST" in selected_copts)
+    asserts.true(env, '"@@//:optimized"' in selected_copts)
+    asserts.true(env, selected_copts.find("-DSECOND") < selected_copts.find("-DTHIRD"))
+
+    sibling_bf = _target_build_file(
+        pkg_info,
+        "RegularTargetForExec",
+        target_swift_copts = target_swift_copts,
+    )
+    sibling_impl = _assert_decl(
+        env,
+        sibling_bf,
+        "RegularTargetForExec.rspm.__impl",
+        "swift_library",
+    )
+    sibling_copts = scg.to_starlark(sibling_impl.attrs["copts"])
+    asserts.false(env, "-DFIRST" in sibling_copts)
+    asserts.false(env, "-DSECOND" in sibling_copts)
+    asserts.false(env, "-DTHIRD" in sibling_copts)
+
+    return unittest.end(env)
+
+target_swift_copts_test = unittest.make(_target_swift_copts_test)
+
 def swiftpkg_build_files_test_suite():
     return unittest.suite(
         "swiftpkg_build_files_tests",
@@ -2299,4 +2365,5 @@ def swiftpkg_build_files_test_suite():
         product_generation_test,
         license_generation_test,
         module_aliases_test,
+        target_swift_copts_test,
     )

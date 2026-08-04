@@ -8,6 +8,7 @@ let package = Package(
         .executable(name: "my-executable", targets: ["MyExecutable"]),
     ],
     dependencies: [
+        .package(path: "Fixtures/target-copts-fixture"),
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.8.2"),
         // swift-log 1.9.0+ declares swift-tools-version >= 6.1, which the
         // BCR macOS Buildkite runner's installed Swift (6.0.x) cannot parse.
