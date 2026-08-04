@@ -1,6 +1,7 @@
 """Module for creating a module index context for a package info."""
 
 load(":manual_target_deps.bzl", "manual_target_deps")
+load(":manual_target_swift_copts.bzl", "manual_target_swift_copts")
 load(":pkginfos.bzl", "pkginfos")
 load(":repository_utils.bzl", "repository_utils")
 
@@ -13,6 +14,7 @@ def _read(
         registries_directory = None,
         replace_scm_with_registry = False,
         target_deps = {},
+        target_swift_copts = "",
         module_aliases = {},
         dep_module_aliases = ""):
     pkg_info = pkginfos.get(
@@ -28,6 +30,7 @@ def _read(
         pkg_info = pkg_info,
         repo_name = repository_utils.package_name(repository_ctx),
         target_deps = target_deps,
+        target_swift_copts = target_swift_copts,
         module_aliases = module_aliases,
         dep_module_aliases = dep_module_aliases,
     )
@@ -36,9 +39,12 @@ def _new(
         pkg_info,
         repo_name,
         target_deps = {},
+        target_swift_copts = "",
         module_aliases = {},
         dep_module_aliases = ""):
     manual_target_deps.validate(pkg_info, target_deps)
+    decoded_target_swift_copts = json.decode(target_swift_copts) if target_swift_copts else []
+    manual_target_swift_copts.validate(pkg_info, decoded_target_swift_copts)
 
     # A package's sources may import an aliased module under its original
     # name when the package renames the module itself or when a direct
@@ -56,6 +62,7 @@ def _new(
         pkg_info = pkg_info,
         repo_name = repo_name,
         target_deps = target_deps,
+        target_swift_copts = decoded_target_swift_copts,
         module_aliases = module_aliases,
         module_alias_flags = module_alias_flags,
     )

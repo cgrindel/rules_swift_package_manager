@@ -15,11 +15,53 @@ assert_match() {
   [[ "${actual}" =~ ${pattern} ]] || (echo >&2 "${err_msg}" && exit 1)
 }
 
+assert_not_match() {
+  local pattern=${1}
+  local actual="${2}"
+  local err_msg="Expected not to match. pattern: ${pattern}, actual: ${actual}"
+  [[ ! "${actual}" =~ ${pattern} ]] || (echo >&2 "${err_msg}" && exit 1)
+}
+
 # Generate Swift external deps and update build files
 "${bazel}" run //:tidy
 
 # Ensure that it builds and tests pass
 "${bazel}" test //...
+
+# Verify that a condition label from the root module is canonicalized for use
+# inside the generated external repository.
+selected_target="@swiftpkg_target_copts_fixture//:Selected.rspm"
+sibling_target="@swiftpkg_target_copts_fixture//:Sibling.rspm"
+selected_build="$("${bazel}" query \
+  --output=build \
+  "@swiftpkg_target_copts_fixture//:Selected.rspm.__impl" 2>&1)"
+assert_match "@@//:target_copts_enabled" "${selected_build}"
+
+# The configured flags must reach all Swift frontend actions for only the
+# selected generated target. Repeated tags for the same condition retain their
+# declaration order when merged.
+swift_action_query='mnemonic("SwiftCompile|SwiftDeriveFiles|SwiftDumpAST", deps('"${selected_target}"'))'
+selected_disabled="$("${bazel}" aquery --output=text "${swift_action_query}" 2>&1)"
+selected_enabled="$("${bazel}" aquery \
+  --define=rspm_target_copts=enabled \
+  --output=text \
+  "${swift_action_query}" 2>&1)"
+
+for mnemonic in SwiftCompile SwiftDeriveFiles SwiftDumpAST; do
+  assert_match "Mnemonic: ${mnemonic}" "${selected_enabled}"
+done
+assert_not_match "RSPM_TARGET_COPTS_FIRST|RSPM_TARGET_COPTS_SECOND" "${selected_disabled}"
+assert_match "RSPM_TARGET_COPTS_FIRST" "${selected_enabled}"
+assert_match "RSPM_TARGET_COPTS_SECOND" "${selected_enabled}"
+
+sibling_action_query='mnemonic("SwiftCompile|SwiftDeriveFiles|SwiftDumpAST", deps('"${sibling_target}"'))'
+sibling_disabled="$("${bazel}" aquery --output=text "${sibling_action_query}" 2>&1)"
+sibling_enabled="$("${bazel}" aquery \
+  --define=rspm_target_copts=enabled \
+  --output=text \
+  "${sibling_action_query}" 2>&1)"
+assert_not_match "RSPM_TARGET_COPTS_FIRST|RSPM_TARGET_COPTS_SECOND" "${sibling_disabled}"
+assert_not_match "RSPM_TARGET_COPTS_FIRST|RSPM_TARGET_COPTS_SECOND" "${sibling_enabled}"
 
 # Run MyExecutable target
 output="$( "${bazel}" run //Sources/MyExecutable 2>&1 )"

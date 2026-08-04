@@ -14,6 +14,7 @@ load(":build_files.bzl", "build_files")
 load(":bzl_selects.bzl", "bzl_selects")
 load(":load_statements.bzl", "load_statements")
 load(":manual_target_deps.bzl", "manual_target_deps")
+load(":manual_target_swift_copts.bzl", "manual_target_swift_copts")
 load(":minimum_os_versions.bzl", "minimum_os_versions")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
@@ -142,6 +143,9 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     for original_name, renamed in getattr(pkg_ctx, "module_alias_flags", {}).items():
         copts.append("-module-alias")
         copts.append("{}={}".format(original_name, renamed))
+
+    # Append user configuration only to the selected generated Swift target.
+    copts.extend(manual_target_swift_copts.copts_for_target(pkg_ctx, target))
 
     # GH046: Support plugins.
 
