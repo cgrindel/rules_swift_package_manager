@@ -754,6 +754,7 @@ The Swift package name, identity, or generated repository name.\
         ),
         "swift_copts": attr.string_list(
             doc = "Swift compiler options to append to the generated target.",
+            mandatory = True,
         ),
         "target": attr.string(
             doc = """\
