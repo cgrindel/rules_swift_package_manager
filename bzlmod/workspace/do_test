@@ -15,13 +15,6 @@ assert_match() {
   [[ "${actual}" =~ ${pattern} ]] || (echo >&2 "${err_msg}" && exit 1)
 }
 
-assert_not_match() {
-  local pattern=${1}
-  local actual="${2}"
-  local err_msg="Expected not to match. pattern: ${pattern}, actual: ${actual}"
-  [[ ! "${actual}" =~ ${pattern} ]] || (echo >&2 "${err_msg}" && exit 1)
-}
-
 # Generate Swift external deps and update build files
 "${bazel}" run //:tidy
 
@@ -32,36 +25,40 @@ assert_not_match() {
 # inside the generated external repository.
 selected_target="@swiftpkg_target_copts_fixture//:Selected.rspm"
 sibling_target="@swiftpkg_target_copts_fixture//:Sibling.rspm"
-selected_build="$("${bazel}" query \
-  --output=build \
-  "@swiftpkg_target_copts_fixture//:Selected.rspm.__impl" 2>&1)"
-assert_match "@@//:target_copts_enabled" "${selected_build}"
+selected_location="$("${bazel}" query \
+  --output=location \
+  "@swiftpkg_target_copts_fixture//:Selected.rspm.__impl")"
+selected_build_path="${selected_location%%:*}"
+selected_build_content="$(<"${selected_build_path}")"
+assert_match "@@//:target_copts_enabled" "${selected_build_content}"
 
-# The configured flags must reach all Swift frontend actions for only the
-# selected generated target. Repeated tags for the same condition retain their
-# declaration order when merged.
+# The configured flags must reach every Swift frontend action for only the
+# selected generated target.
 swift_action_query='mnemonic("SwiftCompile|SwiftDeriveFiles|SwiftDumpAST", deps('"${selected_target}"'))'
-selected_disabled="$("${bazel}" aquery --output=text "${swift_action_query}" 2>&1)"
-selected_enabled="$("${bazel}" aquery \
+action_evidence_dir="$(mktemp -d "${TMPDIR:-/tmp}/rspm-target-copts-actions.XXXXXX")"
+trap 'rm -rf "${action_evidence_dir}"' EXIT
+"${bazel}" aquery \
+  --output=jsonproto \
+  "${swift_action_query}" > "${action_evidence_dir}/selected-disabled.json"
+"${bazel}" aquery \
   --define=rspm_target_copts=enabled \
-  --output=text \
-  "${swift_action_query}" 2>&1)"
-
-for mnemonic in SwiftCompile SwiftDeriveFiles SwiftDumpAST; do
-  assert_match "Mnemonic: ${mnemonic}" "${selected_enabled}"
-done
-assert_not_match "RSPM_TARGET_COPTS_FIRST|RSPM_TARGET_COPTS_SECOND" "${selected_disabled}"
-assert_match "RSPM_TARGET_COPTS_FIRST" "${selected_enabled}"
-assert_match "RSPM_TARGET_COPTS_SECOND" "${selected_enabled}"
+  --output=jsonproto \
+  "${swift_action_query}" > "${action_evidence_dir}/selected-enabled.json"
 
 sibling_action_query='mnemonic("SwiftCompile|SwiftDeriveFiles|SwiftDumpAST", deps('"${sibling_target}"'))'
-sibling_disabled="$("${bazel}" aquery --output=text "${sibling_action_query}" 2>&1)"
-sibling_enabled="$("${bazel}" aquery \
+"${bazel}" aquery \
+  --output=jsonproto \
+  "${sibling_action_query}" > "${action_evidence_dir}/sibling-disabled.json"
+"${bazel}" aquery \
   --define=rspm_target_copts=enabled \
-  --output=text \
-  "${sibling_action_query}" 2>&1)"
-assert_not_match "RSPM_TARGET_COPTS_FIRST|RSPM_TARGET_COPTS_SECOND" "${sibling_disabled}"
-assert_not_match "RSPM_TARGET_COPTS_FIRST|RSPM_TARGET_COPTS_SECOND" "${sibling_enabled}"
+  --output=jsonproto \
+  "${sibling_action_query}" > "${action_evidence_dir}/sibling-enabled.json"
+
+python3 "${script_dir}/verify_target_copts_actions.py" \
+  --selected-disabled "${action_evidence_dir}/selected-disabled.json" \
+  --selected-enabled "${action_evidence_dir}/selected-enabled.json" \
+  --sibling-disabled "${action_evidence_dir}/sibling-disabled.json" \
+  --sibling-enabled "${action_evidence_dir}/sibling-enabled.json"
 
 # Run MyExecutable target
 output="$( "${bazel}" run //Sources/MyExecutable 2>&1 )"

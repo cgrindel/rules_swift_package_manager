@@ -236,7 +236,9 @@ names may be Swift package target names, public `.rspm` names, or `.rspm.__impl`
 names. Repeated tags for the same target and condition are merged in declaration order; distinct
 conditions are emitted in deterministic label order. `configure_target` cannot be combined with a
 complete `configure_package(build_file = ...)` override for the same package because that override
-bypasses generated targets.
+bypasses generated targets. Package and target selectors that match more than one dependency or
+generated target fail rather than applying options broadly. Configured options are emitted after
+Swift Package manifest options, so configured last-option-wins flags can override manifest values.
 
 ### 3. Create a minimal `Package.swift` file.
 

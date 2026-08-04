@@ -1,0 +1,34 @@
+bazel_dep(
+    name = "rules_swift_package_manager",
+    version = "0.0.0",
+)
+local_path_override(
+    module_name = "rules_swift_package_manager",
+    path = "../..",
+)
+
+bazel_dep(name = "apple_support", version = "2.8.0")
+bazel_dep(
+    name = "rules_swift",
+    version = "3.6.1",
+    repo_name = "build_bazel_rules_swift",
+)
+
+swift_deps = use_extension(
+    "@rules_swift_package_manager//:extensions.bzl",
+    "swift_deps",
+)
+swift_deps.configure_target(
+    package = "swift-log",
+    swift_copts = ["-DSTALE_RESOLVED_PROFILE"],
+    target = "Logging",
+)
+swift_deps.from_package(
+    resolved = "//:Package.resolved",
+    swift = "//:Package.swift",
+)
+use_repo(
+    swift_deps,
+    "swift_package",
+    "swiftpkg_swift_log",
+)

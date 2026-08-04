@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+bazel="${BIT_BAZEL_BINARY:-bazel}"
+
+# Package.swift contains swift-log while the intentionally stale
+# Package.resolved has no pin. A matching configure_target tag must not stop
+# the module extension from exposing the resolver needed to repair the lock.
+"${bazel}" query @swift_package//:resolve

@@ -49,6 +49,21 @@ bazel_integration_test(
     workspace_path = "workspace",
 )
 
+bazel_integration_test(
+    name = "stale_resolved_test",
+    bazel_binaries = bazel_binaries,
+    bazel_version = bazel_binaries.versions.current,
+    tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS + [
+        "no-sandbox",
+    ],
+    test_runner = ":e2e_test_runner",
+    visibility = ["//:__subpackages__"],
+    workspace_files = integration_test_utils.glob_workspace_files("stale_resolved_workspace") + [
+        "//:runtime_files",
+    ],
+    workspace_path = "stale_resolved_workspace",
+)
+
 ci_integration_test_params(
     name = "e2e_test_params",
     bzlmod_modes = ["enabled"],
@@ -56,6 +71,9 @@ ci_integration_test_params(
         "macos",
         "linux",
     ],
-    test_names = ["e2e_test"],
+    test_names = [
+        "e2e_test",
+        "stale_resolved_test",
+    ],
     visibility = ["//:__subpackages__"],
 )
