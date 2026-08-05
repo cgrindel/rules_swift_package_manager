@@ -34,6 +34,10 @@ swift_package_tool(
 
 # Ignore the Swift build folder
 # gazelle:exclude .build
+# The nested fixture is a separate Swift package. Generating BUILD files in
+# its Sources directories turns them into subpackages and invalidates the
+# external repository labels generated for that package.
+# gazelle:exclude Fixtures/target-copts-fixture
 
 gazelle_binary(
     name = "gazelle_bin",
