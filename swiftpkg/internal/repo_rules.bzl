@@ -43,6 +43,13 @@ collisions with same-named modules elsewhere in the build (e.g. when using \
 explicit module maps).\
 """,
     ),
+    "target_configs": attr.string(
+        doc = """\
+A JSON `string` mapping Swift package target names to a `dict` of generated \
+attribute overrides (e.g. `{"FBAudienceNetwork": {"alwayslink": false}}`). \
+Set by the `configure_package_target` tag.\
+""",
+    ),
     "target_deps": attr.string_list_dict(
         doc = """\
 Additional dependencies to add to generated targets. Keys are Swift package \

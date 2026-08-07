@@ -61,13 +61,21 @@ manifest.\
             )
     return aliases_by_identity
 
-def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swift_package):
+def _declare_pkgs_from_package(
+        module_ctx,
+        from_package,
+        config_pkgs,
+        config_pkg_targets,
+        config_swift_package):
     """Declare Swift packages from `Package.swift` and `Package.resolved`.
 
     Args:
         module_ctx: An instance of `module_ctx`.
         from_package: The data from the `from_package` tag.
         config_pkgs: The data from the `configure_package` tag.
+        config_pkg_targets: The data from the `configure_package_target` tag, as
+            a `dict` of package name to `dict` of target name to a `dict` of
+            generated attribute overrides.
         config_swift_package: The data from the `configure_swift_package` tag.
     """
 
@@ -276,6 +284,10 @@ the Swift package to make it available.\
             config_pkg = config_pkgs.get(
                 bazel_repo_names.from_identity(dep.identity),
             )
+        pkg_targets = config_pkg_targets.get(dep.name) or config_pkg_targets.get(
+            bazel_repo_names.from_identity(dep.identity),
+        ) or {}
+        target_configs_json = json.encode(pkg_targets) if pkg_targets else ""
         _declare_pkg_from_dependency(
             dep,
             config_pkg,
@@ -286,6 +298,7 @@ the Swift package to make it available.\
             module_aliases_by_id.get(dep.identity, {}),
             dep_module_aliases_json,
             bazel_workspace_root,
+            target_configs_json,
         )
 
     # Add all transitive dependencies to direct_dep_repo_names if `publicly_expose_all_targets` flag is set.
@@ -321,7 +334,8 @@ def _declare_pkg_from_dependency(
         target_deps,
         module_aliases,
         dep_module_aliases,
-        bazel_workspace_root):
+        bazel_workspace_root,
+        target_configs):
     if cached_json_directory:
         cached_json_directory = paths.join(cached_json_directory, dep.name)
     name = bazel_repo_names.from_identity(dep.identity)
@@ -379,6 +393,7 @@ def _declare_pkg_from_dependency(
             target_deps = target_deps,
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
+            target_configs = target_configs,
         )
 
     elif dep.file_system:
@@ -410,6 +425,7 @@ in the lock file and will not be portable across machines.\
             target_deps = target_deps,
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
+            target_configs = target_configs,
         )
 
     elif dep.registry:
@@ -432,6 +448,7 @@ in the lock file and will not be portable across machines.\
             version = dep.registry.pin.state.version,
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
+            target_configs = target_configs,
         )
 
 def _declare_swift_package_repo(name, from_package, config_swift_package):
@@ -457,6 +474,19 @@ def _swift_deps_impl(module_ctx):
     for mod in module_ctx.modules:
         for config_pkg in mod.tags.configure_package:
             config_pkgs[config_pkg.name] = config_pkg
+
+    # {package_name: {target_name: {attr_name: value}}}, holding only the
+    # attributes that differ from the generated default.
+    config_pkg_targets = {}
+    for mod in module_ctx.modules:
+        for config_target in mod.tags.configure_package_target:
+            overrides = {}
+            if not config_target.alwayslink:
+                overrides["alwayslink"] = False
+            if not overrides:
+                continue
+            config_pkg_targets.setdefault(config_target.package_name, {})
+            config_pkg_targets[config_target.package_name][config_target.target_name] = overrides
     config_swift_package = None
     for mod in module_ctx.modules:
         for config_swift_package_tag in mod.tags.configure_swift_package:
@@ -473,6 +503,7 @@ Expected only one `configure_swift_package` tag, but found multiple.\
                     module_ctx,
                     from_package,
                     config_pkgs,
+                    config_pkg_targets,
                     config_swift_package,
                 ),
             )
@@ -590,6 +621,35 @@ emitted unchanged.\
     doc = "Used to add or override settings for a particular Swift package.",
 )
 
+_configure_package_target_tag = tag_class(
+    attrs = {
+        "alwayslink": attr.bool(
+            default = True,
+            doc = """\
+Whether the generated target is imported with `alwayslink = True`.
+
+Static xcframeworks are force-loaded by default. Set this to `False` for SDKs \
+whose archives contain objects with undefined symbols that only a host \
+application supplies (e.g. Unity plugin glue), where force-loading fails to \
+link.\
+""",
+        ),
+        "package_name": attr.string(
+            doc = """\
+The identity (i.e., name in the package's manifest) for the Swift package.\
+""",
+            mandatory = True,
+        ),
+        "target_name": attr.string(
+            doc = """\
+The Swift package target name, such as `FBAudienceNetwork`.\
+""",
+            mandatory = True,
+        ),
+    },
+    doc = "Used to add or override settings for a particular Swift package target.",
+)
+
 _configure_swift_package_tag = tag_class(
     attrs = swift_package_tool_attrs.swift_package_tool_config,
     doc = "Used to configure the flags used when running the `swift package` binary.",
@@ -599,6 +659,7 @@ swift_deps = module_extension(
     implementation = _swift_deps_impl,
     tag_classes = {
         "configure_package": _configure_package_tag,
+        "configure_package_target": _configure_package_target_tag,
         "configure_swift_package": _configure_swift_package_tag,
         "from_package": _from_package_tag,
     },
