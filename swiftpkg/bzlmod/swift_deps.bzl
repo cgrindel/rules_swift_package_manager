@@ -73,9 +73,7 @@ def _declare_pkgs_from_package(
         module_ctx: An instance of `module_ctx`.
         from_package: The data from the `from_package` tag.
         config_pkgs: The data from the `configure_package` tag.
-        config_pkg_targets: The data from the `configure_package_target` tag, as
-            a `dict` of package name to `dict` of target name to a `dict` of
-            generated attribute overrides.
+        config_pkg_targets: The data from the `configure_package_target` tag.
         config_swift_package: The data from the `configure_swift_package` tag.
     """
 
