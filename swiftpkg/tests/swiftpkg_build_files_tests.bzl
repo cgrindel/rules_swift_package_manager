@@ -614,13 +614,19 @@ def _pkg_info_with_traits():
         enabled_traits = ["FeatureA", "FeatureB"],
     )
 
-def _pkg_ctx(pkg_info, target_deps = {}, module_aliases = {}, dep_module_aliases = ""):
+def _pkg_ctx(
+        pkg_info,
+        target_deps = {},
+        module_aliases = {},
+        dep_module_aliases = "",
+        target_configs = ""):
     return pkg_ctxs.new(
         pkg_info = pkg_info,
         repo_name = _repo_name,
         target_deps = target_deps,
         module_aliases = module_aliases,
         dep_module_aliases = dep_module_aliases,
+        target_configs = target_configs,
     )
 
 def _target_build_file(
@@ -629,7 +635,8 @@ def _target_build_file(
         artifact_infos = [],
         target_deps = {},
         module_aliases = {},
-        dep_module_aliases = ""):
+        dep_module_aliases = "",
+        target_configs = ""):
     target = pkginfo_targets.get(pkg_info.targets, target_name)
     repository_ctx = testutils.new_stub_repository_ctx(
         repo_name = _repo_name[1:],
@@ -639,6 +646,7 @@ def _target_build_file(
         target_deps = target_deps,
         module_aliases = module_aliases,
         dep_module_aliases = dep_module_aliases,
+        target_configs = target_configs,
     )
     return swiftpkg_build_files.new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = artifact_infos)
 
@@ -2290,6 +2298,77 @@ def _module_aliases_test(ctx):
 
 module_aliases_test = unittest.make(_module_aliases_test)
 
+def _static_xcframework_artifact_infos():
+    return [
+        artifact_infos.new_xcframework_info(
+            path = "BinaryFrameworkTarget.xcframework",
+            framework_infos = [
+                artifact_infos.new_framework_info(
+                    path = "BinaryFrameworkTarget.xcframework/ios-arm64/BinaryFrameworkTarget.framework",
+                    link_type = link_types.static,
+                ),
+            ],
+        ),
+    ]
+
+def _target_configs_test(ctx):
+    env = unittest.begin(ctx)
+
+    pkg_info = _pkg_info()
+
+    # No `target_configs`: static xcframeworks are force-loaded.
+    default_bf = _target_build_file(
+        pkg_info,
+        "BinaryFrameworkTarget",
+        artifact_infos = _static_xcframework_artifact_infos(),
+    )
+    default_impl = _assert_decl(
+        env,
+        default_bf,
+        "BinaryFrameworkTarget.rspm.__impl",
+        "apple_static_xcframework_import",
+    )
+    asserts.equals(env, True, default_impl.attrs.get("alwayslink"))
+
+    # `alwayslink = False` for the target: the attribute is omitted entirely so
+    # the generated file matches what an unforced import would produce.
+    override_bf = _target_build_file(
+        pkg_info,
+        "BinaryFrameworkTarget",
+        artifact_infos = _static_xcframework_artifact_infos(),
+        target_configs = json.encode({
+            "BinaryFrameworkTarget": {"alwayslink": False},
+        }),
+    )
+    override_impl = _assert_decl(
+        env,
+        override_bf,
+        "BinaryFrameworkTarget.rspm.__impl",
+        "apple_static_xcframework_import",
+    )
+    asserts.false(env, "alwayslink" in override_impl.attrs)
+
+    # An override for a different target leaves this one force-loaded.
+    other_bf = _target_build_file(
+        pkg_info,
+        "BinaryFrameworkTarget",
+        artifact_infos = _static_xcframework_artifact_infos(),
+        target_configs = json.encode({
+            "SomeOtherTarget": {"alwayslink": False},
+        }),
+    )
+    other_impl = _assert_decl(
+        env,
+        other_bf,
+        "BinaryFrameworkTarget.rspm.__impl",
+        "apple_static_xcframework_import",
+    )
+    asserts.equals(env, True, other_impl.attrs.get("alwayslink"))
+
+    return unittest.end(env)
+
+target_configs_test = unittest.make(_target_configs_test)
+
 def swiftpkg_build_files_test_suite():
     return unittest.suite(
         "swiftpkg_build_files_tests",
@@ -2299,4 +2378,5 @@ def swiftpkg_build_files_test_suite():
         product_generation_test,
         license_generation_test,
         module_aliases_test,
+        target_configs_test,
     )
