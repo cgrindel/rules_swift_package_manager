@@ -628,10 +628,9 @@ _configure_package_target_tag = tag_class(
             doc = """\
 Whether the generated target is imported with `alwayslink = True`.
 
-Static xcframeworks are force-loaded by default. Set this to `False` for SDKs \
-whose archives contain objects with undefined symbols that only a host \
-application supplies (e.g. Unity plugin glue), where force-loading fails to \
-link.\
+Static xcframeworks are force-loaded by default. Set this to `False` when that \
+fails to link because the archive contains an unreferenced object whose \
+undefined symbols nothing on the link line defines.\
 """,
         ),
         "package_name": attr.string(
