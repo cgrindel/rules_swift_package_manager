@@ -1,7 +1,14 @@
 """Module for creating artifact infos for xcframeworks."""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load(":link_types.bzl", _link_types = "link_types")
+load(":mach_o.bzl", "mach_o")
 load(":repository_files.bzl", "repository_files")
+
+# Re-exported so that existing loads of `link_types` from this module keep
+# working. The canonical definition lives in `link_types.bzl` so that
+# `mach_o.bzl` can use it without a circular dependency.
+link_types = _link_types
 
 def _new_framework_info(path, link_type):
     """Create a `struct` representing an Apple framework.
@@ -121,27 +128,6 @@ def _new_framework_info_from_framework_a_file(repository_ctx, framework_a_file):
         link_type = link_type,
     )
 
-def _library_load_commands(repository_ctx, path):
-    """Outputs the load commands of the framework binary file.
-
-    Args:
-        repository_ctx: A `repository_ctx` instance.
-        path: The path to a framework binary file under a `XXX.framework`
-            directory as a `string`.
-
-    Returns:
-        A `string` representing the file type for the path as returned by the
-        `file` utility.
-    """
-    file_args = ["otool", "-l", path]
-    exec_result = repository_ctx.execute(file_args, quiet = True)
-    if exec_result.return_code != 0:
-        fail("Failed to output the load commands for {path}. stderr:\n{stderr}".format(
-            path = path,
-            stderr = exec_result.stderr,
-        ))
-    return exec_result.stdout
-
 def _link_type(repository_ctx, path):
     """Determine the link type for the framework binary file.
 
@@ -153,23 +139,11 @@ def _link_type(repository_ctx, path):
     Returns:
         The link type for the framework as a `string`.
     """
-    file_type = repository_files.file_type(repository_ctx, path)
 
-    # static Examples:
-    #   current ar archive random library
-    #   current ar archive
-    # dynamic Examples:
-    #   dynamically linked shared library
-    if file_type.find("ar archive") >= 0:
-        return link_types.static
-    elif file_type.find("dynamic") >= 0:
-        return link_types.dynamic
-    else:
-        load_commands = _library_load_commands(repository_ctx, path)
-        if load_commands.find("LC_ID_DYLIB") >= 0:
-            return link_types.dynamic
-        else:
-            return link_types.static
+    def read_bytes(offset, count):
+        return repository_files.read_bytes(repository_ctx, path, offset, count)
+
+    return mach_o.link_type(read_bytes)
 
 def _new_xcframework_info_from_files(repository_ctx, path):
     """Return a `struct` descrbing an xcframework from the files at the \
@@ -235,12 +209,6 @@ artifact_infos = struct(
     new_xcframework_info = _new_xcframework_info,
     new_xcframework_info_from_files = _new_xcframework_info_from_files,
     link_type = _link_type,
-)
-
-link_types = struct(
-    dynamic = "dynamic",
-    static = "static",
-    unknown = "unknown",
 )
 
 artifact_types = struct(

@@ -1,0 +1,29 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+
+bzlformat_pkg(name = "bzlformat")
+
+# Real Mach-O binaries and ar archives, checked in so that the tests which
+# consume them run on any platform. Regenerate with gen_fixtures.sh, which
+# requires macOS.
+filegroup(
+    name = "fixtures",
+    srcs = [
+        "fat64_dylib",
+        "fat_archive",
+        "fat_dylib",
+        "symlinked_dylib",
+        "thin_archive",
+        "thin_dylib",
+        "thin_object",
+    ],
+)
+
+sh_test(
+    name = "verify_fixtures_test",
+    srcs = ["verify_fixtures.sh"],
+    data = [
+        "fixtures.bzl",
+        ":fixtures",
+    ],
+)

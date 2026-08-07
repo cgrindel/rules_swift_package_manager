@@ -251,10 +251,87 @@ output/chicken/smidgen/hello.txt
 
 process_find_results_test = unittest.make(_process_find_results_test)
 
+def _parse_od_output_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "BSD od pads every byte with a leading space",
+            raw = " cf fa ed fe\n",
+            count = 4,
+            exp = ["cf", "fa", "ed", "fe"],
+        ),
+        struct(
+            msg = "GNU od indents the row",
+            raw = "  cf fa ed fe\n",
+            count = 4,
+            exp = ["cf", "fa", "ed", "fe"],
+        ),
+        struct(
+            msg = "no trailing newline",
+            raw = " 21 3c 61 72",
+            count = 4,
+            exp = ["21", "3c", "61", "72"],
+        ),
+        struct(
+            msg = "output wrapped across rows",
+            raw = " 00 00 00 00 00 00 00 00\n 00 00 10 00\n",
+            count = 12,
+            exp = [
+                "00",
+                "00",
+                "00",
+                "00",
+                "00",
+                "00",
+                "00",
+                "00",
+                "00",
+                "00",
+                "10",
+                "00",
+            ],
+        ),
+        struct(
+            msg = "tabs and carriage returns are separators",
+            raw = "\tcf\tfa\r\ned\tfe\r\n",
+            count = 4,
+            exp = ["cf", "fa", "ed", "fe"],
+        ),
+        struct(
+            msg = "uppercase bytes are normalized",
+            raw = " CF FA ED FE\n",
+            count = 4,
+            exp = ["cf", "fa", "ed", "fe"],
+        ),
+        struct(
+            # od stops at the end of the file, so a header prefix read can come
+            # back short. An ar archive is identified by its first four bytes,
+            # so this has to be allowed rather than treated as an error.
+            msg = "a short read returns the bytes that were available",
+            raw = " 21 3c 61 72 63 68 3e 0a\n",
+            count = 24,
+            exp = ["21", "3c", "61", "72", "63", "68", "3e", "0a"],
+        ),
+    ]
+    for t in tests:
+        actual = repository_files.parse_od_output(
+            t.raw,
+            t.count,
+            "path/to/binary",
+            0,
+        )
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+parse_od_output_test = unittest.make(_parse_od_output_test)
+
 def repository_files_test_suite():
     return unittest.suite(
         "repository_files_tests",
         exclude_paths_test,
         exclude_paths_with_find_path_test,
+        parse_od_output_test,
         process_find_results_test,
     )
