@@ -98,6 +98,7 @@ def _swift_package_impl(repository_ctx):
         target_deps = repository_ctx.attr.target_deps,
         module_aliases = repository_ctx.attr.module_aliases,
         dep_module_aliases = repository_ctx.attr.dep_module_aliases,
+        target_configs = repository_ctx.attr.target_configs,
     )
 
     repo_rules.download_artifacts(repository_ctx, pkg_ctx)
