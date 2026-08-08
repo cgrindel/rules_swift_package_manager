@@ -69,6 +69,11 @@ def _new_stub_repository_ctx(
             return_code = 0 if path_exists_results.get(path, False) else 1
             exec_result = _new_exec_result(return_code = return_code)
 
+        elif args_len == 3 and args[0] == "test" and args[1] == "-d":
+            path = args[2]
+            return_code = 0 if is_directory_results.get(path, False) else 1
+            exec_result = _new_exec_result(return_code = return_code)
+
         elif args_len >= 4 and args[0] == "find":
             # The find command that we expect is `find -H -L path`.
             # See repository_files.list_files_under for details.
