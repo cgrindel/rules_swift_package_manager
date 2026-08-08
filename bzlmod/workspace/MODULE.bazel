@@ -46,6 +46,18 @@ swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
 )
+swift_deps.configure_target(
+    condition = "//:target_copts_enabled",
+    package = "target-copts-fixture",
+    swift_copts = ["-DRSPM_TARGET_COPTS_FIRST"],
+    target = "Selected",
+)
+swift_deps.configure_target(
+    condition = "//:target_copts_enabled",
+    package = "target-copts-fixture",
+    swift_copts = ["-DRSPM_TARGET_COPTS_SECOND"],
+    target = "Selected.rspm.__impl",
+)
 swift_deps.from_package(
     declare_swift_deps_info = True,
     resolved = "//:Package.resolved",
@@ -57,4 +69,5 @@ use_repo(
     "swift_package",
     "swiftpkg_swift_argument_parser",
     "swiftpkg_swift_log",
+    "swiftpkg_target_copts_fixture",
 )
