@@ -43,6 +43,17 @@ else
   install-tool clang-12 12.0.0
 fi
 
+# The `interesting_deps` example gates its real dependency list behind two
+# environment variables, falling back to an intentionally-invalid
+# `not-a-real-package` when either is missing. It is a fixture for the
+# `env`/`env_inherit` attrs on the `swift_deps` module extension. That example's
+# MODULE.bazel supplies `INTERESTING_DEPS_ENV` via `env`, but it lists
+# `INTERESTING_DEPS_INHERIT_ENV` in `env_inherit`, so that one must be present in
+# the ambient environment. Its `do_test` exports it for the integration tests;
+# export it here so that tidy resolves the real dependencies when Renovate
+# modifies that example.
+export INTERESTING_DEPS_INHERIT_ENV=1
+
 # Execute tidy for workspaces with modifications The export of CC and the
 # --action_env=PATH are specific to running this repository on Linux.
 export CC=clang
