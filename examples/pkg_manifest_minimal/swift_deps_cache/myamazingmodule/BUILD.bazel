@@ -1,0 +1,7 @@
+exports_files(
+    [
+        "desc.json",
+        "dump.json",
+    ],
+    visibility = ["//visibility:public"],
+)

@@ -18,6 +18,7 @@ def _new(name, oss, versions, enable_bzlmods):
     # Remove the Bazel label prefix if it exists.
     # Depending upon the whether bzmlod is enabled, the prefix could be `@@//:`
     # Replace periods (.) with underscore (_), after the first character
+    # buildifier: disable=canonical-repository
     clean_versions = [
         v.removeprefix("//:").removeprefix("@@//:")
         for v in versions

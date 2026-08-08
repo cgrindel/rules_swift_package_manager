@@ -61,6 +61,34 @@ manifest.\
             )
     return aliases_by_identity
 
+def _read_cached_manifest(module_ctx, label, bazel_workspace_root):
+    """Read a cached dump/desc JSON file with workspace-token expansion.
+
+    The cache writer rewrites paths under the workspace root as
+    `{{WORKSPACE_ROOT}}/<rel>` so the cache stays portable across
+    checkouts. This helper substitutes the token back to the consumer's
+    workspace root before parsing.
+
+    Args:
+        module_ctx: An instance of `module_ctx`.
+        label: A `Label` for the cached JSON file to read.
+        bazel_workspace_root: The absolute Bazel workspace root as a
+            `string`. This must be the Bazel workspace root, *not* the
+            directory containing `Package.swift`. The cache utility writes
+            the token relative to `BUILD_WORKSPACE_DIRECTORY`, and the repo
+            rules expand it against `repository_ctx.workspace_root`, so the
+            two roots must agree. They differ whenever `Package.swift` lives
+            in a subdirectory (e.g. `swift = "//:swift/Package.swift"`).
+
+    Returns:
+        A `dict` holding the decoded JSON.
+    """
+    text = module_ctx.read(label).replace(
+        "{{WORKSPACE_ROOT}}",
+        bazel_workspace_root,
+    )
+    return json.decode(text)
+
 def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swift_package):
     """Declare Swift packages from `Package.swift` and `Package.resolved`.
 
@@ -71,13 +99,30 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
         config_swift_package: The data from the `configure_swift_package` tag.
     """
 
-    # Read Package.resolved.
+    has_dump = bool(from_package.dump_manifests)
+    has_desc = bool(from_package.desc_manifests)
+    if has_dump != has_desc:
+        fail("""\
+`dump_manifests` and `desc_manifests` must be provided together. Got \
+dump_manifests={}, desc_manifests={}.\
+""".format(has_dump, has_desc))
+    if has_dump and from_package.cached_json_directory:
+        fail("""\
+`cached_json_directory` cannot be combined with `dump_manifests` / \
+`desc_manifests`. The cached_manifests attributes are the recommended \
+mechanism going forward (see GH-2140); please remove `cached_json_directory`.\
+""")
+
+    # Read Package.resolved. Tolerate a missing file so first-time
+    # setup can run `bazel run @swift_package//:cache -- --mode update`
+    # to bootstrap Package.resolved without a separate manual
+    # `swift package update` step.
+    resolved_pkg_map = dict()
     if from_package.resolved:
         pkg_resolved = module_ctx.path(from_package.resolved)
-        resolved_pkg_json = module_ctx.read(pkg_resolved)
-        resolved_pkg_map = json.decode(resolved_pkg_json)
-    else:
-        resolved_pkg_map = dict()
+        if pkg_resolved.exists:
+            resolved_pkg_json = module_ctx.read(pkg_resolved)
+            resolved_pkg_map = json.decode(resolved_pkg_json)
 
     # If using Swift Package registries we must set any requested
     # flags and the config path for the registries JSON file.
@@ -128,12 +173,35 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
             from_package.cached_json_directory,
         )
 
+    # When dump_manifests / desc_manifests are provided, decode the
+    # `_main` JSON files and pass them to pkginfos.get so it skips the
+    # `swift package dump-package` / `describe` invocations entirely.
+    # That is the load-phase fix for the toolchain mismatch in GH-2140.
+    root_dump_manifest = None
+    root_desc_manifest = None
+    if from_package.dump_manifests:
+        main_dump_label = from_package.dump_manifests.get("_main")
+        main_desc_label = from_package.desc_manifests.get("_main")
+        if main_dump_label and main_desc_label:
+            root_dump_manifest = _read_cached_manifest(
+                module_ctx,
+                main_dump_label,
+                bazel_workspace_root,
+            )
+            root_desc_manifest = _read_cached_manifest(
+                module_ctx,
+                main_desc_label,
+                bazel_workspace_root,
+            )
+
     pkg_info = pkginfos.get(
         module_ctx,
         directory = workspace_root,
         env = env,
         debug_path = str(debug_path),
         cached_json_directory = root_cached_json_directory,
+        dump_manifest = root_dump_manifest,
+        desc_manifest = root_desc_manifest,
         resolved_pkg_map = resolved_pkg_map,
         collect_src_info = False,
         registries_directory = registries_directory,
@@ -230,11 +298,33 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
                         dep.file_system.path,
                         from_package.cached_json_directory,
                     )
+
+                # Use cached dump/desc when available — same load-phase
+                # toolchain shortcut as for the root package.
+                dep_dump_manifest = None
+                dep_desc_manifest = None
+                if from_package.dump_manifests:
+                    d_dump = from_package.dump_manifests.get(dep.identity)
+                    d_desc = from_package.desc_manifests.get(dep.identity)
+                    if d_dump and d_desc:
+                        dep_dump_manifest = _read_cached_manifest(
+                            module_ctx,
+                            d_dump,
+                            bazel_workspace_root,
+                        )
+                        dep_desc_manifest = _read_cached_manifest(
+                            module_ctx,
+                            d_desc,
+                            bazel_workspace_root,
+                        )
+
                 dep_pkg_info = pkginfos.get(
                     module_ctx,
                     directory = dep.file_system.path,
                     debug_path = None,
                     cached_json_directory = dep_cached_json_directory,
+                    dump_manifest = dep_dump_manifest,
+                    desc_manifest = dep_desc_manifest,
                     resolved_pkg_map = None,
                     collect_src_info = False,
                 )
@@ -276,6 +366,15 @@ the Swift package to make it available.\
             config_pkg = config_pkgs.get(
                 bazel_repo_names.from_identity(dep.identity),
             )
+
+        # Look up the per-dep cached_dump/desc labels so the repo rule
+        # can read them instead of invoking SPM during fetch.
+        dep_cached_dump = None
+        dep_cached_desc = None
+        if from_package.dump_manifests:
+            dep_cached_dump = from_package.dump_manifests.get(dep.identity)
+            dep_cached_desc = from_package.desc_manifests.get(dep.identity)
+
         _declare_pkg_from_dependency(
             dep,
             config_pkg,
@@ -286,6 +385,8 @@ the Swift package to make it available.\
             module_aliases_by_id.get(dep.identity, {}),
             dep_module_aliases_json,
             bazel_workspace_root,
+            dep_cached_dump,
+            dep_cached_desc,
         )
 
     # Add all transitive dependencies to direct_dep_repo_names if `publicly_expose_all_targets` flag is set.
@@ -321,7 +422,9 @@ def _declare_pkg_from_dependency(
         target_deps,
         module_aliases,
         dep_module_aliases,
-        bazel_workspace_root):
+        bazel_workspace_root,
+        cached_dump_manifest = None,
+        cached_desc_manifest = None):
     if cached_json_directory:
         cached_json_directory = paths.join(cached_json_directory, dep.name)
     name = bazel_repo_names.from_identity(dep.identity)
@@ -361,10 +464,12 @@ def _declare_pkg_from_dependency(
             remote = pin.location,
             version = pin.state.version,
             build_file = build_file,
+            cached_desc_manifest = cached_desc_manifest,
+            cached_dump_manifest = cached_dump_manifest,
+            cached_json_directory = cached_json_directory,
             dependencies_index = None,
             env = from_package.env,
             env_inherit = from_package.env_inherit,
-            cached_json_directory = cached_json_directory,
             init_submodules = init_submodules,
             recursive_init_submodules = recursive_init_submodules,
             netrc = from_package.netrc,
@@ -401,12 +506,14 @@ in the lock file and will not be portable across machines.\
         local_swift_package(
             name = name,
             bazel_package_name = name,
+            build_file = build_file,
+            cached_desc_manifest = cached_desc_manifest,
+            cached_dump_manifest = cached_dump_manifest,
+            cached_json_directory = cached_json_directory,
+            dependencies_index = None,
             env = from_package.env,
             env_inherit = from_package.env_inherit,
             path = local_path,
-            dependencies_index = None,
-            build_file = build_file,
-            cached_json_directory = cached_json_directory,
             target_deps = target_deps,
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
@@ -422,6 +529,8 @@ in the lock file and will not be portable across machines.\
             name = name,
             bazel_package_name = name,
             build_file = build_file,
+            cached_desc_manifest = cached_desc_manifest,
+            cached_dump_manifest = cached_dump_manifest,
             env = from_package.env,
             env_inherit = from_package.env_inherit,
             id = dep.registry.pin.identity,
@@ -485,7 +594,17 @@ _from_package_tag = tag_class(
     attrs = dicts.add(
         swift_package_tool_attrs.swift_package_registry,
         {
-            "cached_json_directory": attr.string(),
+            "cached_json_directory": attr.string(
+                doc = """\
+@deprecated: Prefer `dump_manifests` / `desc_manifests`.
+
+Path (workspace-relative) at which `pkginfos.get()` reads/writes its
+JSON cache. The new attributes generate the same JSON files via
+`bazel run @swift_package//:cache` under the Bazel-resolved Swift
+toolchain, side-stepping the inspection/compilation toolchain mismatch
+described in https://github.com/cgrindel/rules_swift_package_manager/issues/2140.
+""",
+            ),
             "declare_swift_deps_info": attr.bool(
                 doc = """\
 Declare a `swift_deps_info` repository that is used by external tooling (e.g. \
@@ -510,6 +629,31 @@ bazel run @swift_package//:resolve
 ```
 """,
             ),
+            "desc_manifests": attr.string_keyed_label_dict(
+                allow_files = [".json"],
+                doc = """\
+Map of dependency identity (or `_main` for the root package) to the
+cached `desc.json` produced by `bazel run @swift_package//:cache`.
+
+When provided alongside `dump_manifests`, the module extension and the
+generated `swift_package` / `local_swift_package` / `registry_swift_package`
+repos read these files instead of invoking `swift package describe`,
+ensuring the inspection toolchain matches the one Bazel uses to build.
+
+Both `dump_manifests` and `desc_manifests` must be provided together,
+and may not be combined with `cached_json_directory`.
+""",
+            ),
+            "dump_manifests": attr.string_keyed_label_dict(
+                allow_files = [".json"],
+                doc = """\
+Map of dependency identity (or `_main` for the root package) to the
+cached `dump.json` produced by `bazel run @swift_package//:cache`.
+
+See `desc_manifests` for usage notes; the two attributes always travel
+in pairs.
+""",
+            ),
             "env": attr.string_dict(
                 doc = """\
 Environment variables that will be passed to the execution environments for \
@@ -524,6 +668,7 @@ passed to the execution environments for this repository rule. (e.g. SPM version
 SPM dependency resolution, SPM package description generation)\
 """,
             ),
+            # buildifier: disable=canonical-repository
             "resolve_transitive_local_dependencies": attr.bool(
                 default = True,
                 doc = """\
