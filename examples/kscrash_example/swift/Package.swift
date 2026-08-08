@@ -5,6 +5,6 @@ import PackageDescription
 let package = Package(
     name: "resources_example",
     dependencies: [
-        .package(url: "https://github.com/kstenerud/KSCrash", exact: "2.5.1"),
+        .package(url: "https://github.com/kstenerud/KSCrash", exact: "2.6.0"),
     ]
 )
