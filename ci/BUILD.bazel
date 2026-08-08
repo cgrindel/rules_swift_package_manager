@@ -10,6 +10,7 @@ bzl_library(
     deps = [
         "//ci/internal:bzlmod_modes",
         "//ci/internal:ci_integration_test_params",
+        "//ci/internal:ci_test_params_suite",
         "//ci/internal:ci_workflow",
         "//ci/internal:providers",
     ],

@@ -9,6 +9,8 @@ load(":build_files_tests.bzl", "build_files_test_suite")
 load(":bzl_selects_tests.bzl", "bzl_selects_test_suite")
 load(":clang_files_tests.bzl", "clang_files_test_suite")
 load(":load_statements_tests.bzl", "load_statements_test_suite")
+load(":mach_o_failure_tests.bzl", "mach_o_failure_test_suite")
+load(":mach_o_tests.bzl", "mach_o_test_suite")
 load(":minimum_os_transition_tests.bzl", "minimum_os_transition_test_suite")
 load(":minimum_os_versions_tests.bzl", "minimum_os_versions_test_suite")
 load(":objc_files_tests.bzl", "objc_files_test_suite")
@@ -48,6 +50,10 @@ build_files_test_suite()
 clang_files_test_suite()
 
 load_statements_test_suite()
+
+mach_o_failure_test_suite()
+
+mach_o_test_suite()
 
 minimum_os_transition_test_suite()
 
