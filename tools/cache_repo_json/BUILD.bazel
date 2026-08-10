@@ -1,0 +1,28 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+
+exports_files(
+    ["cache_repo_json.sh"],
+    visibility = ["//visibility:public"],
+)
+
+sh_binary(
+    name = "cache_repo_json",
+    srcs = ["cache_repo_json.sh"],
+    data = [
+        "//swiftpkg/internal:swift_package_lib.sh",
+        "@buildifier_prebuilt//:buildozer",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+    ],
+)
+
+bzlformat_pkg(name = "bzlformat")
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)

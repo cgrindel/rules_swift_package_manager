@@ -1,0 +1,170 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "SwiftFormat",
+  "packageKind" : {
+    "root" : [
+      "."
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "swiftformat",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "CommandLineTool"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "SwiftFormat",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SwiftFormat"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftFormatPlugin",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SwiftFormatPlugin"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SwiftFormat",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "swiftformat"
+      ],
+      "name" : "CommandLineTool",
+      "packageAccess" : false,
+      "path" : "CommandLineTool",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "SwiftFormat",
+      "packageAccess" : false,
+      "path" : "Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SwiftFormat",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "GlobTest[5].txt"
+      ],
+      "name" : "SwiftFormatTests",
+      "packageAccess" : false,
+      "path" : "Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "CommandLineTool",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SwiftFormatPlugin",
+      "packageAccess" : false,
+      "pluginCapability" : {
+        "command" : [
+          {
+            "custom" : {
+              "description" : "Formats Swift source files using SwiftFormat",
+              "verb" : "swiftformat"
+            }
+          },
+          [
+            {
+              "writeToPackageDirectory" : {
+                "reason" : "This command reformats source files"
+              }
+            }
+          ]
+        ]
+      },
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "plugin"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.7.0"
+  },
+  "traits" : [
+
+  ]
+}

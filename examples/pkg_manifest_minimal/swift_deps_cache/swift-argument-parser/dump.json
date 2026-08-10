@@ -1,0 +1,607 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "swift-argument-parser",
+  "packageKind" : {
+    "root" : [
+      "."
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "ArgumentParser",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "ArgumentParser"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GenerateDoccReference",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GenerateDoccReference"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    },
+    {
+      "name" : "GenerateManual",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GenerateManual"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParserToolInfo",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "ArgumentParser",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ArgumentParserToolInfo",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "ArgumentParserTestHelpers",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "ArgumentParserToolInfo",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "generate-docc-reference",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GenerateDoccReference",
+      "packageAccess" : true,
+      "pluginCapability" : {
+        "command" : [
+          {
+            "custom" : {
+              "description" : "Generate a documentation reference for a specified target.",
+              "verb" : "generate-docc-reference"
+            }
+          },
+          [
+            {
+              "writeToPackageDirectory" : {
+                "reason" : "This command generates documentation."
+              }
+            }
+          ]
+        ]
+      },
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "plugin"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "generate-manual",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GenerateManual",
+      "packageAccess" : true,
+      "pluginCapability" : {
+        "command" : [
+          {
+            "custom" : {
+              "description" : "Generate a manual entry for a specified target.",
+              "verb" : "generate-manual"
+            }
+          },
+          [
+
+          ]
+        ]
+      },
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "plugin"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "roll",
+      "packageAccess" : true,
+      "path" : "Examples/roll",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "math",
+      "packageAccess" : true,
+      "path" : "Examples/math",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "repeat",
+      "packageAccess" : true,
+      "path" : "Examples/repeat",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "color",
+      "packageAccess" : true,
+      "path" : "Examples/color",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "default-as-flag",
+      "packageAccess" : true,
+      "path" : "Examples/default-as-flag",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ArgumentParserToolInfo",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "generate-docc-reference",
+      "packageAccess" : true,
+      "path" : "Tools/generate-docc-reference",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ArgumentParserToolInfo",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "generate-manual",
+      "packageAccess" : true,
+      "path" : "Tools/generate-manual",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ArgumentParserTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "ArgumentParserEndToEndTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParserTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Snapshots"
+      ],
+      "name" : "ArgumentParserExampleTests",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "CountLinesTest.txt",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParserTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Snapshots"
+      ],
+      "name" : "ArgumentParserGenerateDoccReferenceTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParserTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Snapshots"
+      ],
+      "name" : "ArgumentParserGenerateManualTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ArgumentParserTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "ArgumentParserPackageManagerTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParserToolInfo",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Examples"
+      ],
+      "name" : "ArgumentParserToolInfoTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ArgumentParserTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt",
+        "Snapshots"
+      ],
+      "name" : "ArgumentParserUnitTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "count-lines",
+      "packageAccess" : true,
+      "path" : "Examples/count-lines",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ArgumentParser",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "changelog-authors",
+      "packageAccess" : true,
+      "path" : "Tools/changelog-authors",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "executable"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.0.0"
+  },
+  "traits" : [
+
+  ]
+}
