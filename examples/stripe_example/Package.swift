@@ -7,7 +7,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/stripe/stripe-ios-spm.git",
-            from: "26.5.0"
+            from: "26.6.0"
         ),
     ]
 )
