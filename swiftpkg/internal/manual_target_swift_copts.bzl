@@ -40,7 +40,7 @@ def _copts_for_target(pkg_ctx, target):
 def _targets_by_config_name(pkg_info):
     targets_by_name = {}
     for target in pkg_info.targets:
-        if target.swift_src_info == None or target.type == target_types.test:
+        if target.swift_src_info == None:
             continue
         for name in _names_for_target(target):
             targets = targets_by_name.get(name, {})
