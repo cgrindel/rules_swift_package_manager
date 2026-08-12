@@ -2634,6 +2634,48 @@ def _target_swift_copts_test(ctx):
 
 target_swift_copts_test = unittest.make(_target_swift_copts_test)
 
+def _target_swift_copts_test_target_test(ctx):
+    env = unittest.begin(ctx)
+
+    pkg_info = _pkg_info()
+    target_swift_copts = json.encode([{
+        "condition": None,
+        "swift_copts": ["-DTEST_ONLY"],
+        "target": "RegularSwiftTargetAsLibraryTests",
+    }])
+
+    selected_bf = _target_build_file(
+        pkg_info,
+        "RegularSwiftTargetAsLibraryTests",
+        target_swift_copts = target_swift_copts,
+    )
+    selected_impl = _assert_decl(
+        env,
+        selected_bf,
+        "RegularSwiftTargetAsLibraryTests.rspm.__impl",
+        "swift_test",
+    )
+    selected_copts = scg.to_starlark(selected_impl.attrs["copts"])
+    asserts.true(env, "-DTEST_ONLY" in selected_copts)
+
+    sibling_bf = _target_build_file(
+        pkg_info,
+        "RegularSwiftTargetAsLibrary",
+        target_swift_copts = target_swift_copts,
+    )
+    sibling_impl = _assert_decl(
+        env,
+        sibling_bf,
+        "RegularSwiftTargetAsLibrary.rspm.__impl",
+        "swift_library",
+    )
+    sibling_copts = scg.to_starlark(sibling_impl.attrs["copts"])
+    asserts.false(env, "-DTEST_ONLY" in sibling_copts)
+
+    return unittest.end(env)
+
+target_swift_copts_test_target_test = unittest.make(_target_swift_copts_test_target_test)
+
 def _target_swift_copts_precedence_test(ctx):
     env = unittest.begin(ctx)
 
@@ -2720,6 +2762,7 @@ def swiftpkg_build_files_test_suite():
         license_generation_test,
         module_aliases_test,
         target_swift_copts_test,
+        target_swift_copts_test_target_test,
         target_swift_copts_precedence_test,
         target_swift_copts_ambiguity_test,
     )
