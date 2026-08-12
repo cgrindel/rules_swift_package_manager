@@ -98,8 +98,8 @@ swift_package(<a href="#swift_package-name">name</a>, <a href="#swift_package-ba
               <a href="#swift_package-dep_module_aliases">dep_module_aliases</a>, <a href="#swift_package-dependencies_index">dependencies_index</a>, <a href="#swift_package-env">env</a>, <a href="#swift_package-env_inherit">env_inherit</a>, <a href="#swift_package-init_submodules">init_submodules</a>,
               <a href="#swift_package-module_aliases">module_aliases</a>, <a href="#swift_package-netrc">netrc</a>, <a href="#swift_package-patch_args">patch_args</a>, <a href="#swift_package-patch_cmds">patch_cmds</a>, <a href="#swift_package-patch_cmds_win">patch_cmds_win</a>, <a href="#swift_package-patch_tool">patch_tool</a>, <a href="#swift_package-patches">patches</a>,
               <a href="#swift_package-publicly_expose_all_targets">publicly_expose_all_targets</a>, <a href="#swift_package-recursive_init_submodules">recursive_init_submodules</a>, <a href="#swift_package-registries">registries</a>, <a href="#swift_package-remote">remote</a>,
-              <a href="#swift_package-replace_scm_with_registry">replace_scm_with_registry</a>, <a href="#swift_package-repo_mapping">repo_mapping</a>, <a href="#swift_package-shallow_since">shallow_since</a>, <a href="#swift_package-tag">tag</a>, <a href="#swift_package-target_deps">target_deps</a>, <a href="#swift_package-target_swift_copts">target_swift_copts</a>, <a href="#swift_package-verbose">verbose</a>,
-              <a href="#swift_package-version">version</a>)
+              <a href="#swift_package-replace_scm_with_registry">replace_scm_with_registry</a>, <a href="#swift_package-repo_mapping">repo_mapping</a>, <a href="#swift_package-shallow_since">shallow_since</a>, <a href="#swift_package-tag">tag</a>, <a href="#swift_package-target_deps">target_deps</a>,
+              <a href="#swift_package-target_swift_copts">target_swift_copts</a>, <a href="#swift_package-verbose">verbose</a>, <a href="#swift_package-version">version</a>)
 </pre>
 
 Used to download and build an external Swift package.
@@ -139,3 +139,5 @@ Used to download and build an external Swift package.
 | <a id="swift_package-target_swift_copts"></a>target_swift_copts |  JSON-encoded Swift compiler options for generated targets. This attribute is set by the `swift_deps.configure_target` module-extension tag; direct users should prefer that typed API.   | String | optional |  `""`  |
 | <a id="swift_package-verbose"></a>verbose |  -   | Boolean | optional |  `False`  |
 | <a id="swift_package-version"></a>version |  The resolved version of the package.   | String | optional |  `""`  |
+
+

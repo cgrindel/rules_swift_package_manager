@@ -23,6 +23,7 @@ development inside a Bazel workspace.
     * [(Optional) Use `swift_package` repository for updating packages](#optional-use-swift_package-repository-for-updating-packages)
     * [(Optional) Enable `swift_deps_info` generation for the Gazelle plugin](#optional-enable-swift_deps_info-generation-for-the-gazelle-plugin)
     * [(Optional) Add dependencies to generated Swift package targets](#optional-add-dependencies-to-generated-swift-package-targets)
+    * [(Optional) Add Swift compiler options to a generated target](#optional-add-swift-compiler-options-to-a-generated-target)
   * [3. Create a minimal `Package.swift` file.](#3-create-a-minimal-packageswift-file)
   * [4. Run `swift package update`](#4-run-swift-package-update)
   * [5. Run `bazel mod tidy`.](#5-run-bazel-mod-tidy)
