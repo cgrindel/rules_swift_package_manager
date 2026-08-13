@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/sqlite-data",
       "state" : {
-        "revision" : "97987458b49f0311717ecfbf7e8ac4c406afbf55",
-        "version" : "1.9.0"
+        "revision" : "fcd8dced6edad0f1f97b1141de528116cd19eadb",
+        "version" : "1.10.0"
       }
     },
     {
