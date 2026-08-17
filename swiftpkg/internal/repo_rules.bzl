@@ -5,6 +5,7 @@ load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_skylib//lib:versions.bzl", "versions")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "read_netrc", "read_user_netrc", "use_netrc")
 load(":artifact_infos.bzl", "artifact_infos")
+load(":bazel_target_mods.bzl", "bazel_target_mods")
 load(":build_files.bzl", "build_files")
 load(":pkginfos.bzl", "target_types")
 load(":repository_files.bzl", "repository_files")
@@ -15,6 +16,15 @@ load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 _swift_attrs = {
     "bazel_package_name": attr.string(
         doc = "The short name for the Swift package's Bazel repository.",
+    ),
+    "bazel_target_mods": attr.string(
+        doc = """\
+A JSON `string` describing buildozer-style modifications that are applied to \
+the declarations in the generated `BUILD.bazel` file. Set by the \
+`swift_deps.bazel_target_set`, `swift_deps.bazel_target_add`, \
+`swift_deps.bazel_target_set_select` and `swift_deps.bazel_target_add_select` \
+tags; direct users should prefer that typed API.\
+""",
     ),
     "dep_module_aliases": attr.string(
         doc = """\
@@ -136,6 +146,12 @@ def _download_artifacts(repository_ctx, pkg_ctx):
 
 def _gen_build_files(repository_ctx, pkg_ctx):
     if repository_ctx.attr.build_file:
+        if repository_ctx.attr.bazel_target_mods:
+            fail("""\
+`bazel_target_mods` cannot be used with `build_file` because the complete \
+BUILD file override bypasses generated declarations.\
+""")
+
         # Use template() with no substitutions to copy the file. There is
         # no direct copy API for label-referenced files in repository rules.
         repository_ctx.template("BUILD.bazel", repository_ctx.attr.build_file)
@@ -189,6 +205,18 @@ def _gen_build_files(repository_ctx, pkg_ctx):
 
     # Write the build file
     root_bld_file = build_files.merge(*bld_files)
+
+    # Apply the root module's buildozer-style modifications last, so that they
+    # see every generated declaration and always win over generated values.
+    if pkg_ctx.bazel_target_mods:
+        root_bld_file = build_files.new(
+            load_stmts = root_bld_file.load_stmts,
+            package_attrs = root_bld_file.package_attrs,
+            decls = bazel_target_mods.apply(
+                root_bld_file.decls,
+                pkg_ctx.bazel_target_mods,
+            ),
+        )
     build_files.write(repository_ctx, root_bld_file, pkg_info.path)
 
 def _write_workspace_file(repository_ctx, repoDir):
