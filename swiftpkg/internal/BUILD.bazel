@@ -220,10 +220,22 @@ bzl_library(
 )
 
 bzl_library(
+    name = "bazel_target_mods",
+    srcs = ["bazel_target_mods.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":build_decls",
+        ":bzl_selects",
+        ":starlark_codegen",
+    ],
+)
+
+bzl_library(
     name = "pkg_ctxs",
     srcs = ["pkg_ctxs.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":bazel_target_mods",
         ":manual_target_deps",
         ":pkginfos",
         ":repository_utils",
@@ -251,6 +263,7 @@ bzl_library(
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":artifact_infos",
+        ":bazel_target_mods",
         ":build_files",
         ":pkg_ctxs",
         ":pkginfos",

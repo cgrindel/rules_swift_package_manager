@@ -3,6 +3,7 @@ load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load(":artifact_infos_tests.bzl", "artifact_infos_test_suite")
 load(":bazel_apple_platforms_tests.bzl", "bazel_apple_platforms_test_suite")
 load(":bazel_repo_names_tests.bzl", "bazel_repo_names_test_suite")
+load(":bazel_target_mods_tests.bzl", "bazel_target_mods_test_suite")
 load(":bools_tests.bzl", "bools_test_suite")
 load(":build_decls_tests.bzl", "build_decls_test_suite")
 load(":build_files_tests.bzl", "build_files_test_suite")
@@ -28,6 +29,7 @@ load(":resource_files_tests.bzl", "resource_files_test_suite")
 load(":semver_tests.bzl", "semver_test_suite")
 load(":spm_platforms_tests.bzl", "spm_platforms_test_suite")
 load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
+load(":swift_deps_tests.bzl", "swift_deps_test_suite")
 load(":swift_files_tests.bzl", "swift_files_test_suite")
 load(":swift_package_tool_tests.bzl", "swift_package_tool_test_suite")
 load(":swiftpkg_build_files_tests.bzl", "swiftpkg_build_files_test_suite")
@@ -40,6 +42,8 @@ artifact_infos_test_suite()
 bazel_apple_platforms_test_suite()
 
 bazel_repo_names_test_suite()
+
+bazel_target_mods_test_suite()
 
 bools_test_suite()
 
@@ -90,6 +94,8 @@ semver_test_suite()
 spm_platforms_test_suite()
 
 starlark_codegen_test_suite()
+
+swift_deps_test_suite()
 
 swift_files_test_suite()
 

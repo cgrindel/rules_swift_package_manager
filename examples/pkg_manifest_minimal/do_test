@@ -21,6 +21,22 @@ assert_match() {
 # Ensure that it builds and tests pass
 "${bazel}" test //...
 
+# Verify that the `bazel_target_add` tag in the MODULE.bazel appended the custom
+# Bazel tag to the generated declaration.
+tagged_target="@swiftpkg_swift_log//:Logging.rspm.__impl"
+matches="$("${bazel}" query \
+  "attr(tags, rspm_custom_tag, ${tagged_target})")"
+assert_match "${tagged_target}" "${matches}"
+
+# The modification must not leak to sibling declarations in the same repository.
+untagged_target="@swiftpkg_swift_log//:InMemoryLogging.rspm.__impl"
+matches="$("${bazel}" query \
+  "attr(tags, rspm_custom_tag, ${untagged_target})")"
+[[ -z "${matches}" ]] || (
+  echo >&2 "Expected no custom tag on ${untagged_target}, found: ${matches}"
+  exit 1
+)
+
 # Run MyExecutable target
 output="$("${bazel}" run //Sources/MyExecutable)"
 assert_match "Good morning, World!" "${output}"
