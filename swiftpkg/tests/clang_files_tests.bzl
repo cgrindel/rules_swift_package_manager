@@ -173,6 +173,10 @@ def _public_include_file_scan_paths_test(ctx):
                 "/pkg/yoga/algorithm",
                 "/another/source",
             ],
+            is_directory_results = {
+                "/pkg/yoga": True,
+                "/pkg/yoga/algorithm": True,
+            },
             exp = [
                 "/pkg/yoga",
                 "/pkg/yoga/algorithm",
@@ -184,6 +188,7 @@ def _public_include_file_scan_paths_test(ctx):
             src_paths = [
                 "/pkg/src",
             ],
+            is_directory_results = {},
             exp = ["/pkg/include"],
         ),
         struct(
@@ -193,11 +198,29 @@ def _public_include_file_scan_paths_test(ctx):
                 "/pkg/include",
                 "/pkg/include_extra",
             ],
+            is_directory_results = {
+                "/pkg/include": True,
+            },
             exp = ["/pkg/include"],
+        ),
+        struct(
+            msg = "source path is a file under public include",
+            public_include = "/pkg/Sources/CLib",
+            src_paths = [
+                "/pkg/Sources/CLib/util.c",
+            ],
+            # util.c is a file, so its containing directory is scanned.
+            is_directory_results = {},
+            exp = ["/pkg/Sources/CLib"],
         ),
     ]
     for t in tests:
+        repository_ctx = testutils.new_stub_repository_ctx(
+            "pkg",
+            is_directory_results = t.is_directory_results,
+        )
         actual = clang_files.public_include_file_scan_paths(
+            repository_ctx,
             t.public_include,
             t.src_paths,
         )
