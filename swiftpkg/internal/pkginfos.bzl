@@ -1509,7 +1509,7 @@ def _new_clang_src_info_from_sources(
     # files under directories such as `javascript`.
     if source_paths != None:
         for pi in public_includes:
-            for scan_path in clang_files.public_include_file_scan_paths(pi, src_paths):
+            for scan_path in clang_files.public_include_file_scan_paths(repository_ctx, pi, src_paths):
                 all_srcs.extend([
                     f
                     for f in repository_files.list_files_under(
