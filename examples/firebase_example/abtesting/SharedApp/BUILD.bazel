@@ -17,6 +17,5 @@ swift_library(
         # https://firebase.google.com/docs/ios/setup#add-sdks
         # keep
         "@swiftpkg_firebase_ios_sdk//:FirebaseAnalytics",  # keep
-        "@swiftpkg_firebase_ios_sdk//:FirebaseRemoteConfig",
     ],
 )
