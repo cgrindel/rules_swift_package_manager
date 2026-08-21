@@ -1,6 +1,7 @@
 """Tests for `pkg_ctxs`."""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
+load("//swiftpkg/internal:bazel_target_mods.bzl", "bazel_target_mods")
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 
@@ -84,8 +85,49 @@ def _module_alias_flags_test(ctx):
 
 module_alias_flags_test = unittest.make(_module_alias_flags_test)
 
+def _bazel_target_mods_test(ctx):
+    env = unittest.begin(ctx)
+
+    mods = [
+        bazel_target_mods.new(
+            bazel_target_mods.verbs.set,
+            "Bar.rspm.__impl",
+            "alwayslink",
+            value = "False",
+        ),
+        bazel_target_mods.new(
+            bazel_target_mods.verbs.add,
+            "Bar.rspm.__impl",
+            "copts",
+            values = ["-DFOO"],
+        ),
+    ]
+
+    tests = [
+        struct(msg = "unset", bazel_target_mods = "", exp = []),
+        struct(msg = "empty JSON list", bazel_target_mods = "[]", exp = []),
+        struct(
+            msg = "modifications are decoded",
+            bazel_target_mods = bazel_target_mods.encode(mods),
+            exp = mods,
+        ),
+    ]
+
+    for t in tests:
+        pkg_ctx = pkg_ctxs.new(
+            pkg_info = struct(dependencies = []),
+            repo_name = "@swiftpkg_swift_game",
+            bazel_target_mods = t.bazel_target_mods,
+        )
+        asserts.equals(env, t.exp, pkg_ctx.bazel_target_mods, t.msg)
+
+    return unittest.end(env)
+
+bazel_target_mods_test = unittest.make(_bazel_target_mods_test)
+
 def pkg_ctxs_test_suite():
     return unittest.suite(
         "pkg_ctxs_tests",
+        bazel_target_mods_test,
         module_alias_flags_test,
     )
