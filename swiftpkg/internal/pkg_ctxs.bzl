@@ -14,7 +14,8 @@ def _read(
         replace_scm_with_registry = False,
         target_deps = {},
         module_aliases = {},
-        dep_module_aliases = ""):
+        dep_module_aliases = "",
+        target_configs = ""):
     pkg_info = pkginfos.get(
         repository_ctx = repository_ctx,
         directory = repo_dir,
@@ -30,6 +31,7 @@ def _read(
         target_deps = target_deps,
         module_aliases = module_aliases,
         dep_module_aliases = dep_module_aliases,
+        target_configs = target_configs,
     )
 
 def _new(
@@ -37,7 +39,8 @@ def _new(
         repo_name,
         target_deps = {},
         module_aliases = {},
-        dep_module_aliases = ""):
+        dep_module_aliases = "",
+        target_configs = ""):
     manual_target_deps.validate(pkg_info, target_deps)
 
     # A package's sources may import an aliased module under its original
@@ -58,6 +61,7 @@ def _new(
         target_deps = target_deps,
         module_aliases = module_aliases,
         module_alias_flags = module_alias_flags,
+        target_configs = json.decode(target_configs) if target_configs else {},
     )
 
 pkg_ctxs = struct(
