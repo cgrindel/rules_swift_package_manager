@@ -16,10 +16,7 @@ swift_library(
     module_name = "CrashlyticsSwiftUIExample",
     tags = ["manual"],
     visibility = ["//visibility:public"],
-    deps = [
-        "@swiftpkg_firebase_ios_sdk//:FirebaseCrashlytics",
-        "@swiftpkg_reachability.swift//:Reachability",
-    ],
+    deps = ["@swiftpkg_reachability.swift//:Reachability"],
 )
 
 ios_application(
