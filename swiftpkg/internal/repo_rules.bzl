@@ -57,6 +57,13 @@ cross-package labels, and local labels that do not match package targets are \
 emitted unchanged.\
 """,
     ),
+    "target_swift_copts": attr.string(
+        doc = """\
+JSON-encoded Swift compiler options for generated targets. This attribute is \
+set by the `swift_deps.configure_target` module-extension tag; direct users \
+should prefer that typed API.\
+""",
+    ),
 }
 
 _env_attr = {
@@ -136,6 +143,12 @@ def _download_artifacts(repository_ctx, pkg_ctx):
 
 def _gen_build_files(repository_ctx, pkg_ctx):
     if repository_ctx.attr.build_file:
+        if repository_ctx.attr.target_swift_copts:
+            fail("""\
+`target_swift_copts` cannot be used with `build_file` because the complete \
+BUILD file override bypasses generated target configuration.\
+""")
+
         # Use template() with no substitutions to copy the file. There is
         # no direct copy API for label-referenced files in repository rules.
         repository_ctx.template("BUILD.bazel", repository_ctx.attr.build_file)

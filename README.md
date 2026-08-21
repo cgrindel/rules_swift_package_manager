@@ -23,6 +23,7 @@ development inside a Bazel workspace.
     * [(Optional) Use `swift_package` repository for updating packages](#optional-use-swift_package-repository-for-updating-packages)
     * [(Optional) Enable `swift_deps_info` generation for the Gazelle plugin](#optional-enable-swift_deps_info-generation-for-the-gazelle-plugin)
     * [(Optional) Add dependencies to generated Swift package targets](#optional-add-dependencies-to-generated-swift-package-targets)
+    * [(Optional) Add Swift compiler options to a generated target](#optional-add-swift-compiler-options-to-a-generated-target)
   * [3. Create a minimal `Package.swift` file.](#3-create-a-minimal-packageswift-file)
   * [4. Run `swift package update`](#4-run-swift-package-update)
   * [5. Run `bazel mod tidy`.](#5-run-bazel-mod-tidy)
@@ -204,6 +205,41 @@ swift_deps.configure_package(
 Keys should usually be Swift package target names without `.rspm`; these map to generated
 implementation targets like `ExampleTarget.rspm.__impl`. If a key already contains `.rspm`, it is
 matched as a generated target name unchanged.
+
+#### (Optional) Add Swift compiler options to a generated target
+
+Use the repeatable `configure_target` tag to append compiler options to one generated Swift target
+without changing sibling targets or globally configuring every Swift action.
+
+```bazel
+swift_deps.configure_target(
+    package = "ExamplePackage",
+    swift_copts = ["-DEXAMPLE_FEATURE"],
+    target = "ExampleTarget",
+)
+```
+
+An optional typed `condition` label emits the options through a `select()`. The label is resolved in
+the module that declares the tag, so a root-module `config_setting` remains valid in the generated
+external repository.
+
+```bazel
+swift_deps.configure_target(
+    condition = "//:release_build",
+    package = "ExamplePackage",
+    swift_copts = ["-DEXAMPLE_RELEASE_FEATURE"],
+    target = "ExampleTarget.rspm.__impl",
+)
+```
+
+Package names may be a Swift package name, package identity, or generated repository name. Target
+names may be Swift package target names, public `.rspm` names, or `.rspm.__impl` implementation
+names. Repeated tags for the same target and condition are merged in declaration order; distinct
+conditions are emitted in deterministic label order. `configure_target` cannot be combined with a
+complete `configure_package(build_file = ...)` override for the same package because that override
+bypasses generated targets. Package and target selectors that match more than one dependency or
+generated target fail rather than applying options broadly. Configured options are emitted after
+Swift Package manifest options, so configured last-option-wins flags can override manifest values.
 
 ### 3. Create a minimal `Package.swift` file.
 

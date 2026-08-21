@@ -114,7 +114,10 @@ def _gen_build_files_with_build_file_test(ctx):
 
     build_file_label = "//some/pkg:BUILD.custom"
     repository_ctx = struct(
-        attr = struct(build_file = build_file_label),
+        attr = struct(
+            build_file = build_file_label,
+            target_swift_copts = "",
+        ),
         template = _template,
     )
 
@@ -168,7 +171,10 @@ def _gen_build_files_without_build_file_test(ctx):
         return struct(return_code = 0, stdout = "", stderr = "")
 
     repository_ctx = struct(
-        attr = struct(build_file = None),
+        attr = struct(
+            build_file = None,
+            target_swift_copts = "",
+        ),
         name = "bzlmodmangled~test_pkg",
         template = _template,
         file = _file,
