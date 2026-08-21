@@ -199,6 +199,21 @@ assert_argv_has "--replace-scm-with-registry" \
 assert_argv_lacks "--use-registry-identity-for-scm" \
   "use-registry-identity-for-scm flag should be absent"
 
+# Relative state paths must anchor to BUILD_WORKSPACE_DIRECTORY, not the
+# process working directory (the runfiles tree under `bazel run`).
+assert_argv_has "${workspace_dir}/.build" \
+  "relative build_path should anchor to BUILD_WORKSPACE_DIRECTORY"
+assert_argv_has "${workspace_dir}/.cache" \
+  "relative cache_path should anchor to BUILD_WORKSPACE_DIRECTORY"
+assert_argv_has "${workspace_dir}/.security" \
+  "relative security_path should anchor to BUILD_WORKSPACE_DIRECTORY"
+assert_argv_lacks ".build" \
+  "unanchored relative build_path should not appear"
+
+# Absolute state paths must pass through unchanged.
+assert_argv_has "${run_dir}/.config" \
+  "absolute config_path should pass through unchanged"
+
 # MARK - spl_run_swift_package --netrc_file plumbing
 
 # Reinvoke with --netrc_file pointing at a path containing a space; this
