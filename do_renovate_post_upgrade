@@ -54,6 +54,31 @@ fi
 # modifies that example.
 export INTERESTING_DEPS_INHERIT_ENV=1
 
+# A wide upgrade can modify MODULE.bazel in dozens of workspaces. Each one is a
+# separate Bazel workspace with its own output base, so without a shared cache
+# every one of them rebuilds the toolchains from scratch. Write the BuildBuddy
+# credentials to local.bazelrc, which every workspace's .bazelrc try-imports
+# from the repository root.
+#
+# This must be local.bazelrc and not shared.bazelrc. local.bazelrc is
+# gitignored; shared.bazelrc is tracked, so Renovate would commit the API key to
+# a public branch and `git ls-files -m` would report the root workspace as
+# modified.
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Disable tracing for the whole block so that the API key is not written to the
+# log. The `[[ -n ... ]]` test alone is enough to leak it.
+set +x
+if [[ -n ${BUILDBUDDY_API_KEY:-} ]]; then
+  cat >"${repo_root}/local.bazelrc" <<EOF
+build:cache --remote_header=x-buildbuddy-api-key=${BUILDBUDDY_API_KEY}
+build --config=cache
+EOF
+  echo "Configured the BuildBuddy remote cache."
+else
+  echo "BUILDBUDDY_API_KEY is not set. Building without the remote cache."
+fi
+set -x
+
 # Execute tidy for workspaces with modifications The export of CC and the
 # --action_env=PATH are specific to running this repository on Linux.
 export CC=clang
