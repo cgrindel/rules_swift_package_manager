@@ -65,11 +65,40 @@ export INTERESTING_DEPS_INHERIT_ENV=1
 # a public branch and `git ls-files -m` would report the root workspace as
 # modified.
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+bb_bazelrc="${repo_root}/local.bazelrc"
+bb_marker="# Written by do_renovate_post_upgrade. Do not commit."
+
+# Remove a local.bazelrc that an earlier run of this script left behind.
+# Renovate reuses clones across runs, so without this a revoked or absent key
+# leaves stale credentials in place and every Bazel call fails on auth instead
+# of falling back to an uncached build.
+#
+# Only our own file is removed. A developer's hand-written local.bazelrc is left
+# alone, which is why the generated file carries a marker line.
+remove_generated_bazelrc() {
+  if [[ -f ${bb_bazelrc} ]] \
+    && [[ "$(head -n 1 "${bb_bazelrc}")" == "${bb_marker}" ]]; then
+    rm -f "${bb_bazelrc}"
+  fi
+}
+
 # Disable tracing for the whole block so that the API key is not written to the
-# log. The `[[ -n ... ]]` test alone is enough to leak it.
+# log. The `[[ -n ... ]]` test alone is enough to leak it. Restore rather than
+# unconditionally re-enable, so that removing the DEBUG block above does not
+# silently start tracing a script that handles a credential.
+xtrace_was_on=0
+case $- in *x*) xtrace_was_on=1 ;; esac
 set +x
-if [[ -n ${BUILDBUDDY_API_KEY:-} ]]; then
-  cat >"${repo_root}/local.bazelrc" <<EOF
+remove_generated_bazelrc
+if [[ -f ${bb_bazelrc} ]]; then
+  # Someone else's local.bazelrc, since ours was just removed. Assume it is
+  # already configured and leave it alone.
+  echo "Using the existing local.bazelrc."
+elif [[ -n ${BUILDBUDDY_API_KEY:-} ]]; then
+  # Do not leave the credentials in the clone once tidy has finished.
+  trap remove_generated_bazelrc EXIT
+  cat >"${bb_bazelrc}" <<EOF
+${bb_marker}
 build:cache --remote_header=x-buildbuddy-api-key=${BUILDBUDDY_API_KEY}
 build --config=cache
 EOF
@@ -77,7 +106,9 @@ EOF
 else
   echo "BUILDBUDDY_API_KEY is not set. Building without the remote cache."
 fi
-set -x
+if [[ ${xtrace_was_on} -eq 1 ]]; then
+  set -x
+fi
 
 # Execute tidy for workspaces with modifications The export of CC and the
 # --action_env=PATH are specific to running this repository on Linux.
