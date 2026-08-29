@@ -7,7 +7,10 @@ bzl_library(
     name = "ci_integration_test_params",
     srcs = ["ci_integration_test_params.bzl"],
     visibility = ["//visibility:public"],
-    deps = [":providers"],
+    deps = [
+        ":ci_test_params",
+        ":providers",
+    ],
 )
 
 bzl_library(
@@ -15,6 +18,7 @@ bzl_library(
     srcs = ["ci_workflow.bzl"],
     visibility = ["//visibility:public"],
     deps = [
+        ":ci_test_params",
         ":providers",
         "@cgrindel_bazel_starlib//updatesrc:defs",
     ],

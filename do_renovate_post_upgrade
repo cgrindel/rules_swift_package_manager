@@ -43,6 +43,86 @@ else
   install-tool clang-12 12.0.0
 fi
 
+# The `interesting_deps` example gates its real dependency list behind two
+# environment variables, falling back to an intentionally-invalid
+# `not-a-real-package` when either is missing. It is a fixture for the
+# `env`/`env_inherit` attrs on the `swift_deps` module extension. That example's
+# MODULE.bazel supplies `INTERESTING_DEPS_ENV` via `env`, but it lists
+# `INTERESTING_DEPS_INHERIT_ENV` in `env_inherit`, so that one must be present in
+# the ambient environment. Its `do_test` exports it for the integration tests;
+# export it here so that tidy resolves the real dependencies when Renovate
+# modifies that example.
+export INTERESTING_DEPS_INHERIT_ENV=1
+
+# A wide upgrade can modify MODULE.bazel in dozens of workspaces. Each one is a
+# separate Bazel workspace with its own output base and its own server, so
+# without a shared cache every one of them rebuilds the toolchains from scratch,
+# and without an idle limit every server stays resident until the end of the
+# run. Write Bazel settings for the whole run to local.bazelrc, which every
+# workspace's .bazelrc try-imports from the repository root.
+#
+# This must be local.bazelrc and not shared.bazelrc. local.bazelrc is
+# gitignored; shared.bazelrc is tracked, so Renovate would commit the API key to
+# a public branch and `git ls-files -m` would report the root workspace as
+# modified.
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+bb_bazelrc="${repo_root}/local.bazelrc"
+bb_marker="# Written by do_renovate_post_upgrade. Do not commit."
+
+# Remove a local.bazelrc that an earlier run of this script left behind.
+# Renovate reuses clones across runs, so without this a revoked or absent key
+# leaves stale credentials in place and every Bazel call fails on auth instead
+# of falling back to an uncached build.
+#
+# Only our own file is removed. A developer's hand-written local.bazelrc is left
+# alone, which is why the generated file carries a marker line.
+remove_generated_bazelrc() {
+  if [[ -f ${bb_bazelrc} ]] \
+    && [[ "$(head -n 1 "${bb_bazelrc}")" == "${bb_marker}" ]]; then
+    rm -f "${bb_bazelrc}"
+  fi
+}
+
+# Disable tracing for the whole block so that the API key is not written to the
+# log. The `[[ -n ... ]]` test alone is enough to leak it. Restore rather than
+# unconditionally re-enable, so that removing the DEBUG block above does not
+# silently start tracing a script that handles a credential.
+xtrace_was_on=0
+case $- in *x*) xtrace_was_on=1 ;; esac
+set +x
+remove_generated_bazelrc
+if [[ -f ${bb_bazelrc} ]]; then
+  # Someone else's local.bazelrc, since ours was just removed. Assume it is
+  # already configured and leave it alone.
+  echo "Using the existing local.bazelrc."
+else
+  # Do not leave the file, which may hold credentials, in the clone once tidy
+  # has finished.
+  trap remove_generated_bazelrc EXIT
+  {
+    echo "${bb_marker}"
+    # tidy_all.sh starts a Bazel server in every workspace it visits and never
+    # shuts any of them down. By default a server idles for three hours, so a
+    # wide upgrade leaves dozens of JVMs resident at once, which starves the
+    # GitHub runner. Have each server exit shortly after its workspace is done.
+    # The root server also idles while `bazel run` executes tidy_all.sh; its
+    # exit does not affect the running script.
+    echo "startup --max_idle_secs=15"
+    if [[ -n ${BUILDBUDDY_API_KEY:-} ]]; then
+      echo "build:cache --remote_header=x-buildbuddy-api-key=${BUILDBUDDY_API_KEY}"
+      echo "build --config=cache"
+    fi
+  } >"${bb_bazelrc}"
+  if [[ -n ${BUILDBUDDY_API_KEY:-} ]]; then
+    echo "Configured the BuildBuddy remote cache."
+  else
+    echo "BUILDBUDDY_API_KEY is not set. Building without the remote cache."
+  fi
+fi
+if [[ ${xtrace_was_on} -eq 1 ]]; then
+  set -x
+fi
+
 # Execute tidy for workspaces with modifications The export of CC and the
 # --action_env=PATH are specific to running this repository on Linux.
 export CC=clang

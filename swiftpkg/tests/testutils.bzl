@@ -1,5 +1,27 @@
 """Implementation for `testutils`."""
 
+# The cputype and cpusubtype fields, which sit between the magic and the
+# filetype in a Mach-O header and are not inspected.
+_MACH_O_HEADER_PADDING = ["00"] * 8
+
+def _new_mach_o_binary(magic, filetype):
+    """Assemble the head of a synthetic Mach-O binary.
+
+    Callers pass the magic and filetype as literal bytes rather than importing
+    them from `mach_o.bzl`. Sharing those constants with the implementation
+    would make the tests agree with it by construction instead of checking it.
+
+    Args:
+        magic: The four magic bytes as a `list` of hexadecimal byte `string`
+            values.
+        filetype: The four filetype bytes as a `list` of hexadecimal byte
+            `string` values.
+
+    Returns:
+        A `list` of hexadecimal byte `string` values.
+    """
+    return magic + _MACH_O_HEADER_PADDING + filetype
+
 def _new_exec_result(return_code = 0, stdout = "", stderr = ""):
     return struct(
         return_code = return_code,
@@ -13,10 +35,23 @@ def _new_stub_repository_ctx(
         find_results = {},
         is_directory_results = {},
         path_exists_results = {},
-        file_type_results = {},
-        load_commands_results = {}):
+        binary_contents = {}):
     def read(path):
         return file_contents.get(path, "")
+
+    def od_stdout(args):
+        # Expected command:
+        #   od -A n -t x1 -v -j <offset> -N <count> <path>
+        # See repository_files.read_bytes for details.
+        offset = int(args[7])
+        count = int(args[9])
+        hex_bytes = binary_contents.get(args[10], [])
+        selected = hex_bytes[offset:offset + count]
+
+        # Real od writes a leading space before each byte and wraps long
+        # output. Emit the leading space so that the parsing in
+        # repository_files.read_bytes is exercised.
+        return "".join([" " + hb for hb in selected]) + "\n"
 
     # buildifier: disable=unused-variable
     def execute(args, environment = {}, quiet = True):
@@ -34,6 +69,11 @@ def _new_stub_repository_ctx(
             return_code = 0 if path_exists_results.get(path, False) else 1
             exec_result = _new_exec_result(return_code = return_code)
 
+        elif args_len == 3 and args[0] == "test" and args[1] == "-d":
+            path = args[2]
+            return_code = 0 if is_directory_results.get(path, False) else 1
+            exec_result = _new_exec_result(return_code = return_code)
+
         elif args_len >= 4 and args[0] == "find":
             # The find command that we expect is `find -H -L path`.
             # See repository_files.list_files_under for details.
@@ -42,16 +82,8 @@ def _new_stub_repository_ctx(
             exec_result = _new_exec_result(
                 stdout = "\n".join(results),
             )
-        elif args_len == 4 and args[0] == "file" and args[1] == "--dereference" and args[2] == "--brief":
-            # Expected command: `file --dereference --brief path`
-            path = args[3]
-            results = file_type_results.get(path, "")
-            exec_result = _new_exec_result(stdout = results)
-        elif args_len == 3 and args[0] == "otool" and args[1] == "-l":
-            # Expected command: `otool -l path`
-            path = args[2]
-            results = load_commands_results.get(path, "")
-            exec_result = _new_exec_result(stdout = results)
+        elif args_len == 11 and args[0] == "od":
+            exec_result = _new_exec_result(stdout = od_stdout(args))
         else:
             exec_result = _new_exec_result()
         return exec_result
@@ -66,5 +98,6 @@ def _new_stub_repository_ctx(
     )
 
 testutils = struct(
+    new_mach_o_binary = _new_mach_o_binary,
     new_stub_repository_ctx = _new_stub_repository_ctx,
 )

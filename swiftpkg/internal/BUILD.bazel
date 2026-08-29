@@ -34,9 +34,12 @@ bzl_library(
     srcs = ["swift_package.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":pkg_ctxs",
         ":pkginfos",
+        ":repo_rules",
         ":spm_versions",
         "@bazel_skylib//lib:dicts",
+        "@bazel_skylib//lib:paths",
         "@bazel_skylib//lib:versions",
         "@bazel_tools//tools/build_defs/repo:git_worker.bzl",
         "@bazel_tools//tools/build_defs/repo:utils.bzl",
@@ -48,15 +51,22 @@ bzl_library(
     srcs = ["pkginfos.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":apple_builtin",
+        ":clang_files",
         ":manifest_swiftc_args",
+        ":objc_files",
         ":pkginfo_dependencies",
         ":pkginfo_targets",
+        ":repository_files",
         ":repository_utils",
         ":resource_files",
         ":semver",
+        ":swift_files",
         ":validations",
         "//config_settings/spm/configuration:configurations",
         "//config_settings/spm/platform:platforms",
+        "@bazel_skylib//lib:paths",
+        "@bazel_skylib//lib:sets",
         "@cgrindel_bazel_starlib//bzllib:defs",
     ],
 )
@@ -96,14 +106,20 @@ bzl_library(
     name = "build_decls",
     srcs = ["build_decls.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
-    deps = [":starlark_codegen"],
+    deps = [
+        ":starlark_codegen",
+        "@bazel_skylib//lib:sets",
+    ],
 )
 
 bzl_library(
     name = "pkginfo_targets",
     srcs = ["pkginfo_targets.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
-    deps = ["@bazel_skylib//lib:paths"],
+    deps = [
+        "@bazel_skylib//lib:paths",
+        "@cgrindel_bazel_starlib//bzllib:defs",
+    ],
 )
 
 bzl_library(
@@ -160,6 +176,7 @@ bzl_library(
     srcs = ["swiftpkg_build_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":artifact_infos",
         ":bazel_apple_platforms",
         ":build_decls",
         ":build_files",
@@ -190,6 +207,8 @@ bzl_library(
     deps = [
         ":build_decls",
         ":load_statements",
+        ":starlark_codegen",
+        "@bazel_skylib//lib:paths",
     ],
 )
 
@@ -216,6 +235,7 @@ bzl_library(
     srcs = ["local_swift_package.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":pkg_ctxs",
         ":pkginfos",
         ":repo_rules",
         "@bazel_skylib//lib:dicts",
@@ -233,8 +253,15 @@ bzl_library(
         ":artifact_infos",
         ":build_files",
         ":pkg_ctxs",
+        ":pkginfos",
         ":repository_files",
+        ":spm_versions",
+        ":starlark_codegen",
         ":swiftpkg_build_files",
+        "@bazel_skylib//lib:dicts",
+        "@bazel_skylib//lib:paths",
+        "@bazel_skylib//lib:versions",
+        "@bazel_tools//tools/build_defs/repo:utils.bzl",
     ],
 )
 
@@ -271,6 +298,8 @@ bzl_library(
         "//config_settings/spm/configuration:configurations",
         "//config_settings/spm/platform:platforms",
         "//config_settings/spm/platform_configuration:platform_configurations",
+        "@bazel_skylib//lib:sets",
+        "@cgrindel_bazel_starlib//bzllib:defs",
     ],
 )
 
@@ -282,6 +311,8 @@ bzl_library(
         ":clang_files",
         ":module_maps",
         "@build_bazel_rules_swift//swift",
+        "@build_bazel_rules_swift//swift:swift_interop_info",
+        "@rules_cc//cc/common",
     ],
 )
 
@@ -298,7 +329,9 @@ bzl_library(
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":apple_builtin",
+        "@bazel_skylib//lib:paths",
         "@bazel_skylib//lib:sets",
+        "@cgrindel_bazel_starlib//bzllib:defs",
     ],
 )
 
@@ -306,7 +339,11 @@ bzl_library(
     name = "bazel_apple_platforms",
     srcs = ["bazel_apple_platforms.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
-    deps = [":apple_builtin"],
+    deps = [
+        ":apple_builtin",
+        "//config_settings/spm/platform:platforms",
+        "@bazel_skylib//lib:sets",
+    ],
 )
 
 bzl_library(
@@ -331,6 +368,8 @@ bzl_library(
     srcs = ["artifact_infos.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":link_types",
+        ":mach_o",
         ":repository_files",
         "@bazel_skylib//lib:paths",
     ],
@@ -374,7 +413,11 @@ bzl_library(
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":bools",
+        ":build_decls",
+        ":build_files",
+        ":load_statements",
         ":manifest_swiftc_args",
+        ":repo_rules",
         ":repository_utils",
         ":swift_package_tool_attrs",
         "@bazel_skylib//lib:dicts",
@@ -387,9 +430,11 @@ bzl_library(
     srcs = ["registry_swift_package.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":pkg_ctxs",
         ":repo_rules",
         ":swift_package_tool_attrs",
         "@bazel_skylib//lib:dicts",
+        "@bazel_skylib//lib:paths",
     ],
 )
 
@@ -412,9 +457,17 @@ bzl_library(
         ":minimum_os_platforms",
         "@build_bazel_rules_apple//apple:providers",
         "@build_bazel_rules_swift//swift",
+        "@build_bazel_rules_swift//swift:providers",
         "@build_bazel_rules_swift//swift:swift_clang_module_aspect",
         "@rules_cc//cc/common",
     ],
+)
+
+bzl_library(
+    name = "mach_o",
+    srcs = ["mach_o.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":link_types"],
 )
 
 bzl_library(
@@ -426,6 +479,12 @@ bzl_library(
 bzl_library(
     name = "bools",
     srcs = ["bools.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "link_types",
+    srcs = ["link_types.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
 
