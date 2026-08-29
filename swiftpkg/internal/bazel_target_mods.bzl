@@ -64,6 +64,43 @@ def _parse_value(value):
 
 # MARK: - Condition Canonicalization
 
+# The canonical spelling of the `select()` default branch. Bazel accepts it, but
+# the rest of the generated output uses the pseudo-label spelling, and only the
+# pseudo-label spelling is recognized as the default branch by this module.
+_CANONICAL_DEFAULT_CONDITION = "@@" + bzl_selects.default_condition
+
+def _condition_error(condition):
+    """Check that a `select()` key declared by the root module is usable.
+
+    Args:
+        condition: The `select()` key as a `string`.
+
+    Returns:
+        A `string` describing the problem, or `None` if there is none.
+    """
+    if condition == bzl_selects.default_condition:
+        return None
+    if condition == _CANONICAL_DEFAULT_CONDITION:
+        return None
+    if condition.startswith("@@"):
+        return None
+    if condition.startswith("@"):
+        return """\
+Invalid `select()` condition '{condition}'. An apparent repository name (a \
+single `@`) is resolved using the repository mapping of the repository that \
+contains the label. The condition is written into a generated repository, so it \
+would resolve against `rules_swift_package_manager`'s repository mapping \
+instead of your root module's. Use a label that is relative to the main \
+repository (e.g. `//:release_build`), which is canonicalized for you, or a \
+canonical label (e.g. `@@some_repo+//:setting`).\
+""".format(condition = condition)
+    if condition.startswith("//"):
+        return None
+    return """\
+Invalid `select()` condition '{condition}'. Conditions must be absolute labels \
+(e.g. `//:release_build` or `@@some_repo+//:setting`).\
+""".format(condition = condition)
+
 def _canonicalize_condition(condition):
     """Canonicalize a `select()` key declared by the root module.
 
@@ -73,22 +110,24 @@ def _canonicalize_condition(condition):
     module. Only the root module may declare these tags, so the canonical form
     is always the main repository.
 
+    A key that names an apparent repository (a single `@`) is rejected. It would
+    be resolved against the repository mapping of the generated repository, not
+    the root module's, which silently points at a different repository.
+
     Args:
         condition: The `select()` key as a `string`.
 
     Returns:
         The canonicalized `select()` key as a `string`.
     """
-    if condition == bzl_selects.default_condition:
+    error = _condition_error(condition)
+    if error != None:
+        fail(error)
+    if condition == _CANONICAL_DEFAULT_CONDITION:
+        return bzl_selects.default_condition
+    if condition == bzl_selects.default_condition or condition.startswith("@@"):
         return condition
-    if condition.startswith("@"):
-        return condition
-    if condition.startswith("//"):
-        return "@@" + condition
-    fail("""\
-Invalid `select()` condition '{condition}'. Conditions must be absolute labels \
-(e.g. `//:release_build` or `@@some_repo//:setting`).\
-""".format(condition = condition))
+    return "@@" + condition
 
 # MARK: - Target Label Parsing
 
@@ -149,8 +188,8 @@ repository, but this label names the package '{package}'.\
 
 # MARK: - Modifications
 
-def _new(verb, target, attr, value = None, values = None):
-    """Create a modification for a generated declaration.
+def _new_error(verb, target, attr, value = None, values = None):
+    """Check the inputs for `bazel_target_mods.new`.
 
     Args:
         verb: One of `bazel_target_mods.verbs`.
@@ -162,39 +201,86 @@ def _new(verb, target, attr, value = None, values = None):
             for the `set_select` and `add_select` verbs.
 
     Returns:
-        A `dict` representing the modification.
+        A `string` describing the problem, or `None` if there is none.
     """
     if verb not in _ALL_VERBS:
-        fail("Unrecognized target modification verb '{verb}'. Expected one of: {expected}.".format(
+        return "Unrecognized target modification verb '{verb}'. Expected one of: {expected}.".format(
             expected = ", ".join(_ALL_VERBS),
             verb = verb,
-        ))
+        )
     if not target:
-        fail("A target modification must specify a target name.")
+        return "A target modification must specify a target name."
     if not attr:
-        fail("A target modification for '{}' must specify an attribute name.".format(target))
+        return "A target modification for '{}' must specify an attribute name.".format(target)
+    if attr == "name":
+        return """\
+The target modification for '{target}' must not modify the `name` attribute. \
+The name of a generated declaration is written separately from its other \
+attributes, so modifying it would emit a duplicate `name` keyword and the \
+generated `BUILD.bazel` file would not load.\
+""".format(target = target)
 
     if verb == _SET:
         if type(value) != "string":
-            fail("""\
+            return """\
 The `set` modification for '{target}' attribute '{attr}' must specify a \
 `string` value.\
-""".format(attr = attr, target = target))
+""".format(attr = attr, target = target)
+        return None
+
+    if verb == _ADD:
+        if not values:
+            return """\
+The `add` modification for '{target}' attribute '{attr}' must specify at least \
+one value.\
+""".format(attr = attr, target = target)
+        return None
+
+    if not values:
+        return """\
+The `{verb}` modification for '{target}' attribute '{attr}' must specify at \
+least one `select()` condition.\
+""".format(attr = attr, target = target, verb = verb)
+    return None
+
+def _new(verb, target, attr, value = None, values = None):
+    """Create a modification for a generated declaration.
+
+    Args:
+        verb: One of `bazel_target_mods.verbs`.
+        target: The name of the generated declaration as a `string`.
+        attr: The name of the attribute as a `string`.
+        value: Optional. The `string` value for the `set` verb. It is written
+            into the generated `BUILD.bazel` file verbatim. Label values are not
+            remapped, so a value such as `//:my_lib` resolves inside the
+            generated repository. Use `@@//:my_lib` to name a target in the main
+            repository.
+        values: Optional. A `list` of `string` values for the `add` verb, or a
+            `dict` mapping `select()` conditions to a `list` of `string` values
+            for the `set_select` and `add_select` verbs. The values are written
+            into the generated `BUILD.bazel` file verbatim. Label values are not
+            remapped, so a value such as `//:my_lib` resolves inside the
+            generated repository. Use `@@//:my_lib` to name a target in the main
+            repository.
+
+    Returns:
+        A `dict` representing the modification.
+    """
+    error = _new_error(verb, target, attr, value = value, values = values)
+    if error != None:
+        fail(error)
+
+    if verb == _SET:
         return {"attr": attr, "target": target, "value": value, "verb": verb}
 
     if verb == _ADD:
         return {
             "attr": attr,
             "target": target,
-            "values": list(values or []),
+            "values": list(values),
             "verb": verb,
         }
 
-    if not values:
-        fail("""\
-The `{verb}` modification for '{target}' attribute '{attr}' must specify at \
-least one `select()` condition.\
-""".format(attr = attr, target = target, verb = verb))
     canonical_values = {}
     for (condition, condition_values) in values.items():
         canonical_values[_canonicalize_condition(condition)] = list(
@@ -468,10 +554,12 @@ def _append(attrs, attr_name, new_part):
 bazel_target_mods = struct(
     apply = _apply,
     canonicalize_condition = _canonicalize_condition,
+    condition_error = _condition_error,
     decode = _decode,
     encode = _encode,
     mods_by_repo = _mods_by_repo,
     new = _new,
+    new_error = _new_error,
     ordered_mods = _ordered_mods,
     parse_target = _parse_target,
     parse_value = _parse_value,
