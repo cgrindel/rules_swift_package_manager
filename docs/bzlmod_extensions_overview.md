@@ -49,9 +49,9 @@ There is no allowlist of attribute names. An attribute that the generated rule d
 
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
-| <a id="swift_deps.bazel_target_add-attr"></a>attr |  The name of the attribute to modify, such as `copts`.   | String | required |  |
+| <a id="swift_deps.bazel_target_add-attr"></a>attr |  The name of the attribute to modify, such as `copts`. The `name` attribute may not be modified.   | String | required |  |
 | <a id="swift_deps.bazel_target_add-target"></a>target |  A label `string` naming a declaration in a generated repository, such as `@swiftpkg_foo//:Bar.rspm.__impl`. Every generated declaration lives in the root package of its repository, so the label must be of the form `@repo_name//:target_name`.   | String | required |  |
-| <a id="swift_deps.bazel_target_add-values"></a>values |  The values to append. If the attribute is absent, it is created with these values.   | List of strings | required |  |
+| <a id="swift_deps.bazel_target_add-values"></a>values |  The values to append. At least one value is required. If the attribute is absent, it is created with these values.<br><br>The values are written into the generated `BUILD.bazel` file verbatim. Label values are not remapped, so a value such as `//:my_lib` resolves inside the generated repository, not your root module. Use `@@//:my_lib` to name a target in the main repository.   | List of strings | required |  |
 
 <a id="swift_deps.bazel_target_add_select"></a>
 
@@ -69,9 +69,9 @@ There is no allowlist of attribute names. An attribute that the generated rule d
 
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
-| <a id="swift_deps.bazel_target_add_select-attr"></a>attr |  The name of the attribute to modify, such as `copts`.   | String | required |  |
+| <a id="swift_deps.bazel_target_add_select-attr"></a>attr |  The name of the attribute to modify, such as `copts`. The `name` attribute may not be modified.   | String | required |  |
 | <a id="swift_deps.bazel_target_add_select-target"></a>target |  A label `string` naming a declaration in a generated repository, such as `@swiftpkg_foo//:Bar.rspm.__impl`. Every generated declaration lives in the root package of its repository, so the label must be of the form `@repo_name//:target_name`.   | String | required |  |
-| <a id="swift_deps.bazel_target_add_select-values"></a>values |  The `select()` branches. Keys are absolute condition labels; a key that is relative to the main repository (e.g. `//:release_build`) is canonicalized (e.g. `@@//:release_build`) so that it still resolves from inside the generated repository. A `//conditions:default` branch with no values is added when one is not provided.   | <a href="https://bazel.build/rules/lib/dict">Dictionary: String -> List of strings</a> | required |  |
+| <a id="swift_deps.bazel_target_add_select-values"></a>values |  The `select()` branches. Keys are absolute condition labels; a key that is relative to the main repository (e.g. `//:release_build`) is canonicalized (e.g. `@@//:release_build`) so that it still resolves from inside the generated repository. A key that names an apparent repository (a single `@`, e.g. `@some_repo//:setting`) is rejected, because it would be resolved against the generated repository's repository mapping; use a canonical label (e.g. `@@some_repo+//:setting`) instead. A `//conditions:default` branch with no values is added when one is not provided.<br><br>The values are written into the generated `BUILD.bazel` file verbatim. Label values are not remapped, so a value such as `//:my_lib` resolves inside the generated repository, not your root module. Use `@@//:my_lib` to name a target in the main repository.   | <a href="https://bazel.build/rules/lib/dict">Dictionary: String -> List of strings</a> | required |  |
 
 <a id="swift_deps.bazel_target_set"></a>
 
@@ -87,9 +87,9 @@ There is no allowlist of attribute names. An attribute that the generated rule d
 
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
-| <a id="swift_deps.bazel_target_set-attr"></a>attr |  The name of the attribute to modify, such as `copts`.   | String | required |  |
+| <a id="swift_deps.bazel_target_set-attr"></a>attr |  The name of the attribute to modify, such as `copts`. The `name` attribute may not be modified.   | String | required |  |
 | <a id="swift_deps.bazel_target_set-target"></a>target |  A label `string` naming a declaration in a generated repository, such as `@swiftpkg_foo//:Bar.rspm.__impl`. Every generated declaration lives in the root package of its repository, so the label must be of the form `@repo_name//:target_name`.   | String | required |  |
-| <a id="swift_deps.bazel_target_set-value"></a>value |  The replacement value. It is parsed the way `buildozer` parses values: `True`/`False` (case-insensitive) become a `bool`, an all-digit value with an optional leading `-` becomes an `int`, and anything else stays a `string`.   | String | required |  |
+| <a id="swift_deps.bazel_target_set-value"></a>value |  The replacement value. It is parsed the way `buildozer` parses values: `True`/`False` (case-insensitive) become a `bool`, an all-digit value with an optional leading `-` becomes an `int`, and anything else stays a `string`.<br><br>The value is written into the generated `BUILD.bazel` file verbatim. Label values are not remapped, so a value such as `//:my_lib` resolves inside the generated repository, not your root module. Use `@@//:my_lib` to name a target in the main repository.   | String | required |  |
 
 <a id="swift_deps.bazel_target_set_select"></a>
 
@@ -105,9 +105,9 @@ There is no allowlist of attribute names. An attribute that the generated rule d
 
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
-| <a id="swift_deps.bazel_target_set_select-attr"></a>attr |  The name of the attribute to modify, such as `copts`.   | String | required |  |
+| <a id="swift_deps.bazel_target_set_select-attr"></a>attr |  The name of the attribute to modify, such as `copts`. The `name` attribute may not be modified.   | String | required |  |
 | <a id="swift_deps.bazel_target_set_select-target"></a>target |  A label `string` naming a declaration in a generated repository, such as `@swiftpkg_foo//:Bar.rspm.__impl`. Every generated declaration lives in the root package of its repository, so the label must be of the form `@repo_name//:target_name`.   | String | required |  |
-| <a id="swift_deps.bazel_target_set_select-values"></a>values |  The `select()` branches. Keys are absolute condition labels; a key that is relative to the main repository (e.g. `//:release_build`) is canonicalized (e.g. `@@//:release_build`) so that it still resolves from inside the generated repository. No `//conditions:default` branch is added for you.   | <a href="https://bazel.build/rules/lib/dict">Dictionary: String -> List of strings</a> | required |  |
+| <a id="swift_deps.bazel_target_set_select-values"></a>values |  The `select()` branches. Keys are absolute condition labels; a key that is relative to the main repository (e.g. `//:release_build`) is canonicalized (e.g. `@@//:release_build`) so that it still resolves from inside the generated repository. A key that names an apparent repository (a single `@`, e.g. `@some_repo//:setting`) is rejected, because it would be resolved against the generated repository's repository mapping; use a canonical label (e.g. `@@some_repo+//:setting`) instead. No `//conditions:default` branch is added for you.<br><br>The values are written into the generated `BUILD.bazel` file verbatim. Label values are not remapped, so a value such as `//:my_lib` resolves inside the generated repository, not your root module. Use `@@//:my_lib` to name a target in the main repository.   | <a href="https://bazel.build/rules/lib/dict">Dictionary: String -> List of strings</a> | required |  |
 
 <a id="swift_deps.configure_package"></a>
 

@@ -37,6 +37,23 @@ matches="$("${bazel}" query \
   exit 1
 )
 
+# Verify that the `bazel_target_add_select` tag in the MODULE.bazel appended a
+# `select()` to the generated declaration. `bazel query` prints main repository
+# labels without a repository part, so a `//:` key here means that the condition
+# resolved back to this module and not to the generated repository.
+decl="$("${bazel}" query --output=build "${tagged_target}")"
+assert_match 'select\(\{"//:rspm_example_conditional": \["-DRSPM_EXAMPLE_CONDITIONAL"\]' \
+  "${decl}"
+
+# The generated BUILD file itself must spell the condition canonically. Without
+# the `@@` prefix, the key would resolve inside the generated repository.
+gen_build_file="$("${bazel}" query --output=location "${tagged_target}" \
+  | sed -E 's/^(.*BUILD\.bazel):[0-9]+:[0-9]+:.*$/\1/')"
+grep -q -F -- '"@@//:rspm_example_conditional"' "${gen_build_file}" || (
+  echo >&2 "Expected a canonical select() key in ${gen_build_file}"
+  exit 1
+)
+
 # Run MyExecutable target
 output="$("${bazel}" run //Sources/MyExecutable)"
 assert_match "Good morning, World!" "${output}"

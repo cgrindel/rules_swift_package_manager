@@ -60,6 +60,17 @@ swift_deps.bazel_target_add(
     target = "@swiftpkg_swift_log//:Logging.rspm.__impl",
     values = ["rspm_custom_tag"],
 )
+
+# Demonstrate a `select()`-aware modification. The `//:rspm_example_conditional`
+# key is canonicalized to `@@//:rspm_example_conditional` so that it still
+# resolves to this module from inside the generated repository. The condition is
+# never satisfied by the example's build, so the copt is inert; `do_test`
+# asserts that the `select()` renders on the generated target.
+swift_deps.bazel_target_add_select(
+    attr = "copts",
+    target = "@swiftpkg_swift_log//:Logging.rspm.__impl",
+    values = {"//:rspm_example_conditional": ["-DRSPM_EXAMPLE_CONDITIONAL"]},
+)
 use_repo(
     swift_deps,
     "swift_deps_info",

@@ -62,6 +62,53 @@ manifest.\
             )
     return aliases_by_identity
 
+def _non_root_target_mods_error(module_name, tag_groups):
+    """Check that a non-root module did not declare target modification tags.
+
+    Args:
+        module_name: The name of the Bazel module as a `string`.
+        tag_groups: A `list` of `struct` values with a `verb` `string` and a
+            `tags` `list`.
+
+    Returns:
+        A `string` describing the problem, or `None` if there is none.
+    """
+    declared = [tg.verb for tg in tag_groups if tg.tags]
+    if not declared:
+        return None
+    return """\
+Only the root module may declare `swift_deps` target modification tags, but \
+module '{name}' declared: {declared}. Ask the maintainers of '{name}' to \
+provide the setting a different way, or apply the modification from your root \
+`MODULE.bazel`.\
+""".format(
+        declared = ", ".join([
+            "bazel_target_{}".format(verb)
+            for verb in declared
+        ]),
+        name = module_name,
+    )
+
+def _build_file_conflict_error(package_name, build_file, target_mods):
+    """Check that target modifications are not combined with a `build_file`.
+
+    Args:
+        package_name: The name of the Swift package as a `string`.
+        build_file: The `build_file` override from the `configure_package` tag,
+            or `None`.
+        target_mods: The encoded target modifications as a `string`.
+
+    Returns:
+        A `string` describing the problem, or `None` if there is none.
+    """
+    if not build_file or not target_mods:
+        return None
+    return """\
+Target modifications cannot be applied to package '{package}' because its \
+`configure_package` tag supplies a complete `build_file` override. Remove the \
+override or apply the modifications in that BUILD file.\
+""".format(package = package_name)
+
 def _bazel_target_mods_by_repo(module_ctx):
     """Collect the buildozer-style target modifications from the root module.
 
@@ -87,20 +134,9 @@ def _bazel_target_mods_by_repo(module_ctx):
             ),
         ]
         if not mod.is_root:
-            declared = [tg.verb for tg in mod_tag_groups if tg.tags]
-            if declared:
-                fail("""\
-Only the root module may declare `swift_deps` target modification tags, but \
-module '{name}' declared: {declared}. Ask the maintainers of '{name}' to \
-provide the setting a different way, or apply the modification from your root \
-`MODULE.bazel`.\
-""".format(
-                    declared = ", ".join([
-                        "bazel_target_{}".format(verb)
-                        for verb in declared
-                    ]),
-                    name = mod.name,
-                ))
+            error = _non_root_target_mods_error(mod.name, mod_tag_groups)
+            if error != None:
+                fail(error)
             continue
         tag_groups.extend(mod_tag_groups)
 
@@ -404,12 +440,13 @@ def _declare_pkg_from_dependency(
     build_file = None
     if config_pkg:
         build_file = config_pkg.build_file
-    if build_file and target_mods:
-        fail("""\
-Target modifications cannot be applied to package '{package}' because its \
-`configure_package` tag supplies a complete `build_file` override. Remove the \
-override or apply the modifications in that BUILD file.\
-""".format(package = dep.name))
+    build_file_conflict = _build_file_conflict_error(
+        dep.name,
+        build_file,
+        target_mods,
+    )
+    if build_file_conflict != None:
+        fail(build_file_conflict)
     if dep.source_control:
         init_submodules = None
         recursive_init_submodules = None
@@ -712,7 +749,8 @@ with Bazel's own error message. Use at your own risk.\
 
 _bazel_target_attr = attr.string(
     doc = """\
-The name of the attribute to modify, such as `copts`.\
+The name of the attribute to modify, such as `copts`. The `name` attribute may \
+not be modified.\
 """,
     mandatory = True,
 )
@@ -735,7 +773,12 @@ _bazel_target_set_tag = tag_class(
             doc = """\
 The replacement value. It is parsed the way `buildozer` parses values: \
 `True`/`False` (case-insensitive) become a `bool`, an all-digit value with an \
-optional leading `-` becomes an `int`, and anything else stays a `string`.\
+optional leading `-` becomes an `int`, and anything else stays a `string`.
+
+The value is written into the generated `BUILD.bazel` file verbatim. Label \
+values are not remapped, so a value such as `//:my_lib` resolves inside the \
+generated repository, not your root module. Use `@@//:my_lib` to name a target \
+in the main repository.\
 """,
             mandatory = True,
         ),
@@ -751,8 +794,13 @@ _bazel_target_add_tag = tag_class(
         "target": _bazel_target_target_attr,
         "values": attr.string_list(
             doc = """\
-The values to append. If the attribute is absent, it is created with these \
-values.\
+The values to append. At least one value is required. If the attribute is \
+absent, it is created with these values.
+
+The values are written into the generated `BUILD.bazel` file verbatim. Label \
+values are not remapped, so a value such as `//:my_lib` resolves inside the \
+generated repository, not your root module. Use `@@//:my_lib` to name a target \
+in the main repository.\
 """,
             mandatory = True,
         ),
@@ -774,7 +822,16 @@ _bazel_target_set_select_tag = tag_class(
 The `select()` branches. Keys are absolute condition labels; a key that is \
 relative to the main repository (e.g. `//:release_build`) is canonicalized \
 (e.g. `@@//:release_build`) so that it still resolves from inside the \
-generated repository. No `//conditions:default` branch is added for you.\
+generated repository. A key that names an apparent repository (a single `@`, \
+e.g. `@some_repo//:setting`) is rejected, because it would be resolved against \
+the generated repository's repository mapping; use a canonical label (e.g. \
+`@@some_repo+//:setting`) instead. No `//conditions:default` branch is added \
+for you.
+
+The values are written into the generated `BUILD.bazel` file verbatim. Label \
+values are not remapped, so a value such as `//:my_lib` resolves inside the \
+generated repository, not your root module. Use `@@//:my_lib` to name a target \
+in the main repository.\
 """,
             mandatory = True,
         ),
@@ -793,8 +850,16 @@ _bazel_target_add_select_tag = tag_class(
 The `select()` branches. Keys are absolute condition labels; a key that is \
 relative to the main repository (e.g. `//:release_build`) is canonicalized \
 (e.g. `@@//:release_build`) so that it still resolves from inside the \
-generated repository. A `//conditions:default` branch with no values is added \
-when one is not provided.\
+generated repository. A key that names an apparent repository (a single `@`, \
+e.g. `@some_repo//:setting`) is rejected, because it would be resolved against \
+the generated repository's repository mapping; use a canonical label (e.g. \
+`@@some_repo+//:setting`) instead. A `//conditions:default` branch with no \
+values is added when one is not provided.
+
+The values are written into the generated `BUILD.bazel` file verbatim. Label \
+values are not remapped, so a value such as `//:my_lib` resolves inside the \
+generated repository, not your root module. Use `@@//:my_lib` to name a target \
+in the main repository.\
 """,
             mandatory = True,
         ),
@@ -822,4 +887,6 @@ swift_deps = module_extension(
 
 swift_deps_test_utils = struct(
     bazel_target_mods_by_repo = _bazel_target_mods_by_repo,
+    build_file_conflict_error = _build_file_conflict_error,
+    non_root_target_mods_error = _non_root_target_mods_error,
 )

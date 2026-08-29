@@ -129,17 +129,18 @@ def _canonicalize_condition_test(ctx):
             exp = "@@rules_swift_package_manager+//:setting",
         ),
         struct(
-            msg = "apparent repository name is left alone",
-            condition = "@some_repo//:setting",
-            exp = "@some_repo//:setting",
-        ),
-        struct(
             msg = "the default condition is a pseudo-label",
             condition = "//conditions:default",
             exp = "//conditions:default",
         ),
+        struct(
+            msg = "the canonical default condition is normalized",
+            condition = "@@//conditions:default",
+            exp = "//conditions:default",
+        ),
     ]
     for t in tests:
+        asserts.equals(env, None, bazel_target_mods.condition_error(t.condition), t.msg)
         asserts.equals(
             env,
             t.exp,
@@ -147,9 +148,153 @@ def _canonicalize_condition_test(ctx):
             t.msg,
         )
 
+    # An apparent repository name (a single `@`) would be resolved using the
+    # repository mapping of the generated repository, not the root module's.
+    error = bazel_target_mods.condition_error("@some_repo//:setting")
+    asserts.true(
+        env,
+        error != None,
+        "Expected an apparent repository name to be rejected.",
+    )
+    asserts.true(
+        env,
+        error.find("@some_repo//:setting") > -1,
+        "Expected the error to name the condition.",
+    )
+    asserts.true(
+        env,
+        error.find("@@") > -1,
+        "Expected the error to suggest a canonical label.",
+    )
+
+    # A relative or otherwise non-absolute label is rejected, too.
+    for condition in ["release_build", ":release_build", "conditions:default"]:
+        asserts.true(
+            env,
+            bazel_target_mods.condition_error(condition) != None,
+            "Expected '{}' to be rejected.".format(condition),
+        )
+
     return unittest.end(env)
 
 canonicalize_condition_test = unittest.make(_canonicalize_condition_test)
+
+# MARK: - Modification Construction
+
+def _new_error_test(ctx):
+    env = unittest.begin(ctx)
+
+    # Well-formed modifications.
+    asserts.equals(
+        env,
+        None,
+        bazel_target_mods.new_error(
+            _verbs.set,
+            _impl_target,
+            "alwayslink",
+            value = "False",
+        ),
+    )
+    asserts.equals(
+        env,
+        None,
+        bazel_target_mods.new_error(
+            _verbs.add,
+            _impl_target,
+            "copts",
+            values = ["-DFOO"],
+        ),
+    )
+    asserts.equals(
+        env,
+        None,
+        bazel_target_mods.new_error(
+            _verbs.add_select,
+            _impl_target,
+            "copts",
+            values = {"//:a": ["-DA"]},
+        ),
+    )
+
+    # The `name` attribute is emitted from the declaration name, so modifying
+    # it would render a duplicate `name` keyword.
+    for verb in _verbs.all:
+        error = bazel_target_mods.new_error(
+            verb,
+            _impl_target,
+            "name",
+            value = "Other",
+            values = {"//:a": ["-DA"]} if verb.endswith("select") else ["-DA"],
+        )
+        asserts.true(
+            env,
+            error != None,
+            "Expected the `name` attribute to be rejected for '{}'.".format(verb),
+        )
+        asserts.true(
+            env,
+            error.find("`name`") > -1,
+            "Expected the error to name the `name` attribute.",
+        )
+
+    # An `add` with no values would create an empty attribute.
+    for values in [[], None]:
+        error = bazel_target_mods.new_error(
+            _verbs.add,
+            _impl_target,
+            "copts",
+            values = values,
+        )
+        asserts.true(
+            env,
+            error != None,
+            "Expected empty `add` values to be rejected.",
+        )
+        asserts.true(
+            env,
+            error.find("at least one value") > -1,
+            "Expected the error to require at least one value.",
+        )
+
+    # The `select` verbs require at least one condition.
+    for verb in [_verbs.set_select, _verbs.add_select]:
+        for values in [{}, None]:
+            asserts.true(
+                env,
+                bazel_target_mods.new_error(
+                    verb,
+                    _impl_target,
+                    "copts",
+                    values = values,
+                ) != None,
+                "Expected empty `{}` values to be rejected.".format(verb),
+            )
+
+    # Other malformed inputs.
+    asserts.true(
+        env,
+        bazel_target_mods.new_error("nope", _impl_target, "copts", value = "-DA") != None,
+        "Expected an unrecognized verb to be rejected.",
+    )
+    asserts.true(
+        env,
+        bazel_target_mods.new_error(_verbs.set, "", "copts", value = "-DA") != None,
+        "Expected an empty target to be rejected.",
+    )
+    asserts.true(
+        env,
+        bazel_target_mods.new_error(_verbs.set, _impl_target, "", value = "-DA") != None,
+        "Expected an empty attribute to be rejected.",
+    )
+    asserts.true(
+        env,
+        bazel_target_mods.new_error(_verbs.set, _impl_target, "copts") != None,
+        "Expected a missing `set` value to be rejected.",
+    )
+
+    return unittest.end(env)
+
+new_error_test = unittest.make(_new_error_test)
 
 # MARK: - JSON Round Trip
 
@@ -376,6 +521,29 @@ select({
         _starlark_for(attrs, "copts"),
     )
 
+    # The canonical spelling of the default branch is normalized, so it is
+    # recognized as the default branch and stays last.
+    mod = bazel_target_mods.new(
+        _verbs.set_select,
+        _impl_target,
+        "copts",
+        values = {
+            "//:release_build": ["-DFOO"],
+            "@@//conditions:default": ["-DDEFAULT"],
+        },
+    )
+    attrs = _attrs_after(_decl(), [mod])
+    asserts.equals(
+        env,
+        """\
+select({
+    "@@//:release_build": ["-DFOO"],
+    "//conditions:default": ["-DDEFAULT"],
+})\
+""",
+        _starlark_for(attrs, "copts"),
+    )
+
     return unittest.end(env)
 
 set_select_test = unittest.make(_set_select_test)
@@ -446,6 +614,29 @@ select({
         values = {
             "//:release_build": ["-DFOO"],
             "//conditions:default": ["-DDEFAULT"],
+        },
+    )
+    attrs = _attrs_after(_decl(), [mod])
+    asserts.equals(
+        env,
+        """\
+select({
+    "@@//:release_build": ["-DFOO"],
+    "//conditions:default": ["-DDEFAULT"],
+})\
+""",
+        _starlark_for(attrs, "copts"),
+    )
+
+    # The canonical spelling of the default branch is normalized, so a second
+    # default branch is not appended.
+    mod = bazel_target_mods.new(
+        _verbs.add_select,
+        _impl_target,
+        "copts",
+        values = {
+            "//:release_build": ["-DFOO"],
+            "@@//conditions:default": ["-DDEFAULT"],
         },
     )
     attrs = _attrs_after(_decl(), [mod])
@@ -713,6 +904,51 @@ def _apply_test(ctx):
 
 apply_test = unittest.make(_apply_test)
 
+def _apply_preserves_comments_test(ctx):
+    env = unittest.begin(ctx)
+
+    comments = ["# This target is generated.", "# Do not edit."]
+    decl = build_decls.new(
+        kind = "swift_library",
+        name = _impl_target,
+        attrs = {"copts": ["-DGENERATED"]},
+        comments = comments,
+    )
+
+    actual = bazel_target_mods.apply(
+        [decl],
+        [bazel_target_mods.new(
+            _verbs.add,
+            _impl_target,
+            "copts",
+            values = ["-DFOO"],
+        )],
+    )
+    asserts.equals(env, 1, len(actual))
+    asserts.equals(env, comments, actual[0].comments)
+    asserts.equals(env, ["-DGENERATED", "-DFOO"], actual[0].attrs["copts"])
+
+    # The comments are rendered before the modified declaration.
+    asserts.equals(
+        env,
+        """\
+# This target is generated.
+# Do not edit.
+swift_library(
+    name = "Bar.rspm.__impl",
+    copts = [
+        "-DGENERATED",
+        "-DFOO",
+    ],
+)\
+""",
+        scg.to_starlark(actual[0]),
+    )
+
+    return unittest.end(env)
+
+apply_preserves_comments_test = unittest.make(_apply_preserves_comments_test)
+
 # MARK: - mods_by_repo
 
 def _mods_by_repo_test(ctx):
@@ -815,11 +1051,13 @@ def bazel_target_mods_test_suite():
         "bazel_target_mods_tests",
         add_select_test,
         add_test,
+        apply_preserves_comments_test,
         apply_test,
         canonicalize_condition_test,
         default_condition_test,
         encode_decode_test,
         mods_by_repo_test,
+        new_error_test,
         ordering_test,
         parse_target_test,
         parse_value_test,

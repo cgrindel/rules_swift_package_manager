@@ -139,6 +139,20 @@ swift_deps.bazel_target_add_select(
   main repository (e.g. `//:release_build`) is rewritten to its canonical form (e.g.
   `@@//:release_build`) so that it still resolves from inside the generated repository. Make sure
   the `config_setting` is visible to external repositories.
+- **`select()` keys may not use an apparent repository name.** A key such as
+  `@some_repo//:setting` is rejected. An apparent name (a single `@`) is resolved using the
+  repository mapping of whichever repository contains the label, and the key ends up inside a
+  generated repository, so it would resolve against `rules_swift_package_manager`'s mapping instead
+  of yours. Use a main-repository-relative label (`//:setting`), which is canonicalized for you, or
+  a canonical label (`@@some_repo+//:setting`).
+- **Values are emitted verbatim; labels in them are not remapped.** A value is written into the
+  generated `BUILD.bazel` file as-is, so a label-valued string such as `//:my_lib` in `deps`
+  resolves inside the generated repository, not in your root module. Use `@@//:my_lib` for a target
+  in the main repository, or a canonical `@@repo+//:target` label for one in another repository.
+- **The `name` attribute may not be modified.** The name of a generated declaration is written
+  separately from its other attributes, so modifying it would emit a duplicate `name` keyword.
+- **`bazel_target_add` requires at least one value**, as do the `select` verbs, which require at
+  least one condition.
 - **Incompatible with a complete build file override.** These tags cannot be combined with
   `configure_package(build_file = ...)` for the same package, because that override bypasses the
   generated declarations entirely.
