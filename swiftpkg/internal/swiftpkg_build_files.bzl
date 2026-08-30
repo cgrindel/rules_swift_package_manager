@@ -1319,12 +1319,36 @@ def _library_product_build_file(pkg_ctx, product):
             pkginfo_target_deps.labels_for_target(pkg_ctx.repo_name, target),
         )
 
+    binary_target_deps = []
+    for target in pkg_ctx.pkg_info.targets:
+        if product.name not in target.product_memberships:
+            continue
+        for target_dep in target.dependencies:
+            dep_target_name = None
+            if target_dep.target:
+                dep_target_name = target_dep.target.target_name
+            elif target_dep.by_name:
+                dep_target_name = target_dep.by_name.name
+            if not dep_target_name:
+                continue
+            dep_target = pkginfo_targets.get(
+                targets = pkg_ctx.pkg_info.targets,
+                name = dep_target_name,
+                fail_if_not_found = False,
+            )
+            if not dep_target or dep_target.type != target_types.binary:
+                continue
+            binary_target_deps.extend(
+                pkginfo_target_deps.bzl_select_list(pkg_ctx, target_dep),
+            )
+
     if len(target_labels) == 0:
         fail("No targets specified for a library product. name:", product.name)
     deps = [
         bazel_labels.normalize(label)
         for label in target_labels
     ]
+    deps.extend(binary_target_deps)
     return build_files.new(
         load_stmts = [swift_library_group_load_stmt],
         decls = [
@@ -1332,7 +1356,7 @@ def _library_product_build_file(pkg_ctx, product):
                 swift_kinds.library_group,
                 product.name,
                 attrs = {
-                    "deps": deps,
+                    "deps": bzl_selects.to_starlark(deps),
                     "visibility": ["//visibility:public"],
                 },
             ),

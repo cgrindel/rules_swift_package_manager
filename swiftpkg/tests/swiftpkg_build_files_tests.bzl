@@ -75,6 +75,15 @@ def _pkg_info(
                 targets = ["RegularSwiftTargetAsLibrary"],
             ),
             pkginfos.new_product(
+                name = "LibraryWithBinaryTargets",
+                type = pkginfos.new_product_type(
+                    library = pkginfos.new_library_type(
+                        library_type_kinds.automatic,
+                    ),
+                ),
+                targets = ["LibraryWithBinaryTargets"],
+            ),
+            pkginfos.new_product(
                 name = "ObjcLibraryWithModulemap",
                 type = pkginfos.new_product_type(
                     library = pkginfos.new_library_type(
@@ -384,6 +393,37 @@ def _pkg_info(
                 swift_src_info = pkginfos.new_swift_src_info(),
             ),
             pkginfos.new_target(
+                name = "LibraryWithBinaryTargets",
+                type = "regular",
+                c99name = "LibraryWithBinaryTargets",
+                module_type = "SwiftTarget",
+                path = "Source/LibraryWithBinaryTargets",
+                sources = ["LibraryWithBinaryTargets.swift"],
+                dependencies = [
+                    pkginfos.new_target_dependency(
+                        by_name = pkginfos.new_by_name_reference(
+                            "BinaryFrameworkTarget",
+                        ),
+                    ),
+                    pkginfos.new_target_dependency(
+                        target = pkginfos.new_target_reference(
+                            "ConditionalBinaryFrameworkTarget",
+                            condition = pkginfos.new_target_dependency_condition(
+                                platforms = [
+                                    spm_platforms.ios,
+                                    spm_platforms.maccatalyst,
+                                    spm_platforms.macos,
+                                    spm_platforms.tvos,
+                                ],
+                            ),
+                        ),
+                    ),
+                ],
+                product_memberships = ["LibraryWithBinaryTargets"],
+                repo_name = _repo_name,
+                swift_src_info = pkginfos.new_swift_src_info(),
+            ),
+            pkginfos.new_target(
                 name = "ClangLibraryWithConditionalDep",
                 type = "regular",
                 c99name = "ClangLibraryWithConditionalDep",
@@ -550,6 +590,16 @@ def _pkg_info(
                 c99name = "BinaryFrameworkTarget",
                 module_type = "BinaryTarget",
                 path = "BinaryFrameworkTarget.xcframework",
+                sources = [],
+                dependencies = [],
+                repo_name = _repo_name,
+            ),
+            pkginfos.new_target(
+                name = "ConditionalBinaryFrameworkTarget",
+                type = "binary",
+                c99name = "ConditionalBinaryFrameworkTarget",
+                module_type = "BinaryTarget",
+                path = "ConditionalBinaryFrameworkTarget.xcframework",
                 sources = [],
                 dependencies = [],
                 repo_name = _repo_name,
@@ -824,7 +874,11 @@ def _minimum_os_wrapper_behavior_test(ctx):
         "RegularSwiftTargetAsLibrary",
         "swift_library_group",
     )
-    asserts.equals(env, ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"], library_product.attrs["deps"])
+    asserts.equals(
+        env,
+        "[\"@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm\"]",
+        scg.to_starlark(library_product.attrs["deps"]),
+    )
 
     executable_product_bf = _product_build_file(pkg_info, "swiftexec")
     executable_product = _assert_decl(env, executable_product_bf, "swiftexec", "alias")
@@ -2088,6 +2142,28 @@ load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library_group")
 swift_library_group(
     name = "RegularSwiftTargetAsLibrary",
     deps = ["@swiftpkg_mypackage//:RegularSwiftTargetAsLibrary.rspm"],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "library product with binary target dependencies",
+            name = "LibraryWithBinaryTargets",
+            pkg_info = _pkg_info(),
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library_group")
+
+swift_library_group(
+    name = "LibraryWithBinaryTargets",
+    deps = [
+        "@swiftpkg_mypackage//:LibraryWithBinaryTargets.rspm",
+        "@swiftpkg_mypackage//:BinaryFrameworkTarget.rspm",
+    ] + select({
+        "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:ConditionalBinaryFrameworkTarget.rspm"],
+        "@rules_swift_package_manager//config_settings/spm/platform:macos": ["@swiftpkg_mypackage//:ConditionalBinaryFrameworkTarget.rspm"],
+        "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:ConditionalBinaryFrameworkTarget.rspm"],
+        "//conditions:default": [],
+    }),
     visibility = ["//visibility:public"],
 )
 """,
