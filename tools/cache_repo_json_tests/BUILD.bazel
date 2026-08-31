@@ -1,0 +1,22 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+
+bzlformat_pkg(name = "bzlformat")
+
+sh_test(
+    name = "cache_repo_json_test",
+    srcs = ["cache_repo_json_test.sh"],
+    data = [
+        "//tools/cache_repo_json:cache_repo_json.sh",
+    ],
+    deps = [
+        "@bazel_tools//tools/bash/runfiles",
+        "@cgrindel_bazel_starlib//shlib/lib:assertions",
+    ],
+)
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
