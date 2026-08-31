@@ -84,6 +84,33 @@ def _pkg_info(
                 targets = ["LibraryWithBinaryTargets"],
             ),
             pkginfos.new_product(
+                name = "SharedBinaryProduct",
+                type = pkginfos.new_product_type(
+                    library = pkginfos.new_library_type(
+                        library_type_kinds.automatic,
+                    ),
+                ),
+                targets = ["SharedBinaryLibA", "SharedBinaryLibB"],
+            ),
+            pkginfos.new_product(
+                name = "LibraryWithBinaryInTargets",
+                type = pkginfos.new_product_type(
+                    library = pkginfos.new_library_type(
+                        library_type_kinds.automatic,
+                    ),
+                ),
+                targets = ["LibraryWithBinaryInTargets", "BinaryFrameworkTarget"],
+            ),
+            pkginfos.new_product(
+                name = "ConditionalBinaryDedupProduct",
+                type = pkginfos.new_product_type(
+                    library = pkginfos.new_library_type(
+                        library_type_kinds.automatic,
+                    ),
+                ),
+                targets = ["ConditionalBinaryDepsA", "ConditionalBinaryDepsB"],
+            ),
+            pkginfos.new_product(
                 name = "ObjcLibraryWithModulemap",
                 type = pkginfos.new_product_type(
                     library = pkginfos.new_library_type(
@@ -424,6 +451,115 @@ def _pkg_info(
                 swift_src_info = pkginfos.new_swift_src_info(),
             ),
             pkginfos.new_target(
+                name = "SharedBinaryLibA",
+                type = "regular",
+                c99name = "SharedBinaryLibA",
+                module_type = "SwiftTarget",
+                path = "Source/SharedBinaryLibA",
+                sources = ["SharedBinaryLibA.swift"],
+                dependencies = [
+                    pkginfos.new_target_dependency(
+                        by_name = pkginfos.new_by_name_reference(
+                            "BinaryFrameworkTarget",
+                        ),
+                    ),
+                ],
+                product_memberships = ["SharedBinaryProduct"],
+                repo_name = _repo_name,
+                swift_src_info = pkginfos.new_swift_src_info(),
+            ),
+            pkginfos.new_target(
+                name = "SharedBinaryLibB",
+                type = "regular",
+                c99name = "SharedBinaryLibB",
+                module_type = "SwiftTarget",
+                path = "Source/SharedBinaryLibB",
+                sources = ["SharedBinaryLibB.swift"],
+                dependencies = [
+                    pkginfos.new_target_dependency(
+                        by_name = pkginfos.new_by_name_reference(
+                            "BinaryFrameworkTarget",
+                        ),
+                    ),
+                ],
+                product_memberships = ["SharedBinaryProduct"],
+                repo_name = _repo_name,
+                swift_src_info = pkginfos.new_swift_src_info(),
+            ),
+            pkginfos.new_target(
+                name = "LibraryWithBinaryInTargets",
+                type = "regular",
+                c99name = "LibraryWithBinaryInTargets",
+                module_type = "SwiftTarget",
+                path = "Source/LibraryWithBinaryInTargets",
+                sources = ["LibraryWithBinaryInTargets.swift"],
+                dependencies = [
+                    pkginfos.new_target_dependency(
+                        by_name = pkginfos.new_by_name_reference(
+                            "BinaryFrameworkTarget",
+                        ),
+                    ),
+                ],
+                product_memberships = ["LibraryWithBinaryInTargets"],
+                repo_name = _repo_name,
+                swift_src_info = pkginfos.new_swift_src_info(),
+            ),
+            pkginfos.new_target(
+                name = "ConditionalBinaryDepsA",
+                type = "regular",
+                c99name = "ConditionalBinaryDepsA",
+                module_type = "SwiftTarget",
+                path = "Source/ConditionalBinaryDepsA",
+                sources = ["ConditionalBinaryDepsA.swift"],
+                dependencies = [
+                    pkginfos.new_target_dependency(
+                        by_name = pkginfos.new_by_name_reference(
+                            "BinaryFrameworkTarget",
+                            condition = pkginfos.new_target_dependency_condition(
+                                platforms = [spm_platforms.ios],
+                            ),
+                        ),
+                    ),
+                    pkginfos.new_target_dependency(
+                        by_name = pkginfos.new_by_name_reference(
+                            "ConditionalBinaryFrameworkTarget",
+                            condition = pkginfos.new_target_dependency_condition(
+                                platforms = [spm_platforms.ios],
+                            ),
+                        ),
+                    ),
+                ],
+                product_memberships = ["ConditionalBinaryDedupProduct"],
+                repo_name = _repo_name,
+                swift_src_info = pkginfos.new_swift_src_info(),
+            ),
+            pkginfos.new_target(
+                name = "ConditionalBinaryDepsB",
+                type = "regular",
+                c99name = "ConditionalBinaryDepsB",
+                module_type = "SwiftTarget",
+                path = "Source/ConditionalBinaryDepsB",
+                sources = ["ConditionalBinaryDepsB.swift"],
+                dependencies = [
+                    pkginfos.new_target_dependency(
+                        by_name = pkginfos.new_by_name_reference(
+                            "BinaryFrameworkTarget",
+                            condition = pkginfos.new_target_dependency_condition(
+                                platforms = [spm_platforms.ios],
+                            ),
+                        ),
+                    ),
+                    pkginfos.new_target_dependency(
+                        by_name = pkginfos.new_by_name_reference(
+                            "ConditionalBinaryFrameworkTarget",
+                        ),
+                    ),
+                ],
+                product_memberships = ["ConditionalBinaryDedupProduct"],
+                repo_name = _repo_name,
+                swift_src_info = pkginfos.new_swift_src_info(),
+            ),
+            pkginfos.new_target(
                 name = "ClangLibraryWithConditionalDep",
                 type = "regular",
                 c99name = "ClangLibraryWithConditionalDep",
@@ -592,6 +728,11 @@ def _pkg_info(
                 path = "BinaryFrameworkTarget.xcframework",
                 sources = [],
                 dependencies = [],
+                product_memberships = [
+                    "BinaryFrameworkTarget",
+                    "ConditionalBinaryDedupProduct",
+                    "LibraryWithBinaryTargets",
+                ],
                 repo_name = _repo_name,
             ),
             pkginfos.new_target(
@@ -602,6 +743,10 @@ def _pkg_info(
                 path = "ConditionalBinaryFrameworkTarget.xcframework",
                 sources = [],
                 dependencies = [],
+                product_memberships = [
+                    "ConditionalBinaryDedupProduct",
+                    "LibraryWithBinaryTargets",
+                ],
                 repo_name = _repo_name,
             ),
         ] + extra_targets,
@@ -2162,6 +2307,62 @@ swift_library_group(
         "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:ConditionalBinaryFrameworkTarget.rspm"],
         "@rules_swift_package_manager//config_settings/spm/platform:macos": ["@swiftpkg_mypackage//:ConditionalBinaryFrameworkTarget.rspm"],
         "@rules_swift_package_manager//config_settings/spm/platform:tvos": ["@swiftpkg_mypackage//:ConditionalBinaryFrameworkTarget.rspm"],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "library product where two targets share a binary target dep",
+            name = "SharedBinaryProduct",
+            pkg_info = _pkg_info(),
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library_group")
+
+swift_library_group(
+    name = "SharedBinaryProduct",
+    deps = [
+        "@swiftpkg_mypackage//:SharedBinaryLibA.rspm",
+        "@swiftpkg_mypackage//:SharedBinaryLibB.rspm",
+        "@swiftpkg_mypackage//:BinaryFrameworkTarget.rspm",
+    ],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "library product listing a binary target in its targets",
+            name = "LibraryWithBinaryInTargets",
+            pkg_info = _pkg_info(),
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library_group")
+
+swift_library_group(
+    name = "LibraryWithBinaryInTargets",
+    deps = [
+        "@swiftpkg_mypackage//:LibraryWithBinaryInTargets.rspm",
+        "@swiftpkg_mypackage//:BinaryFrameworkTarget.rspm",
+    ],
+    visibility = ["//visibility:public"],
+)
+""",
+        ),
+        struct(
+            msg = "conditional binary target dependencies are deduplicated",
+            name = "ConditionalBinaryDedupProduct",
+            pkg_info = _pkg_info(),
+            exp = """\
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library_group")
+
+swift_library_group(
+    name = "ConditionalBinaryDedupProduct",
+    deps = [
+        "@swiftpkg_mypackage//:ConditionalBinaryDepsA.rspm",
+        "@swiftpkg_mypackage//:ConditionalBinaryDepsB.rspm",
+        "@swiftpkg_mypackage//:ConditionalBinaryFrameworkTarget.rspm",
+    ] + select({
+        "@rules_swift_package_manager//config_settings/spm/platform:ios": ["@swiftpkg_mypackage//:BinaryFrameworkTarget.rspm"],
         "//conditions:default": [],
     }),
     visibility = ["//visibility:public"],
