@@ -1,6 +1,7 @@
 """Module for creating Bazel declarations to build a Swift package."""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "bazel_labels", "lists")
 load(
     "//config_settings/bazel/compilation_mode:compilation_modes.bzl",
@@ -1321,10 +1322,61 @@ def _library_product_build_file(pkg_ctx, product):
 
     if len(target_labels) == 0:
         fail("No targets specified for a library product. name:", product.name)
+
     deps = [
         bazel_labels.normalize(label)
         for label in target_labels
     ]
+    target_label_set = sets.make(deps)
+    binary_target_dep_pairs = sets.make()
+    for target in pkg_ctx.pkg_info.targets:
+        if product.name not in target.product_memberships:
+            continue
+        for target_dep in target.dependencies:
+            dep_target_name = None
+            if target_dep.target:
+                dep_target_name = target_dep.target.target_name
+            elif target_dep.by_name:
+                dep_target_name = target_dep.by_name.name
+            if not dep_target_name:
+                continue
+            dep_target = pkginfo_targets.get(
+                targets = pkg_ctx.pkg_info.targets,
+                name = dep_target_name,
+                fail_if_not_found = False,
+            )
+            if not dep_target or dep_target.type != target_types.binary:
+                continue
+            for binary_target_dep in pkginfo_target_deps.bzl_select_list(
+                pkg_ctx,
+                target_dep,
+            ):
+                for label in binary_target_dep.value:
+                    if not sets.contains(target_label_set, label):
+                        sets.insert(
+                            binary_target_dep_pairs,
+                            (binary_target_dep.condition, label),
+                        )
+
+    binary_target_dep_pairs_list = sets.to_list(binary_target_dep_pairs)
+    unconditional_binary_target_labels = sets.make([
+        label
+        for (condition, label) in binary_target_dep_pairs_list
+        if condition == None
+    ])
+    binary_target_deps = [
+        bzl_selects.new(
+            value = label,
+            kind = pkginfo_target_deps.target_dep_kind,
+            condition = condition,
+        )
+        for (condition, label) in binary_target_dep_pairs_list
+        if condition == None or not sets.contains(
+            unconditional_binary_target_labels,
+            label,
+        )
+    ]
+    deps.extend(binary_target_deps)
     return build_files.new(
         load_stmts = [swift_library_group_load_stmt],
         decls = [
@@ -1332,7 +1384,7 @@ def _library_product_build_file(pkg_ctx, product):
                 swift_kinds.library_group,
                 product.name,
                 attrs = {
-                    "deps": deps,
+                    "deps": bzl_selects.to_starlark(deps),
                     "visibility": ["//visibility:public"],
                 },
             ),
