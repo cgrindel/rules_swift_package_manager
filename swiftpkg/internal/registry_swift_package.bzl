@@ -270,10 +270,24 @@ def _registry_swift_package_impl(repository_ctx):
         pkg_ctx.pkg_info.targets,
     )
 
+    repo_rules.make_files_read_only(
+        repository_ctx,
+        directory,
+        enabled = attr.make_files_read_only,
+    )
+
 _REGISTRY_ATTRS = {
     "id": attr.string(
         mandatory = True,
         doc = "The package identifier.",
+    ),
+    "make_files_read_only": attr.bool(
+        default = False,
+        doc = """\
+Whether to make files in the fetched Swift package read-only. This helps \
+prevent accidental edits when external repositories are exposed by tools such \
+as `rules_xcodeproj`.\
+""",
     ),
     "replace_scm_with_registry": attr.bool(
         default = False,

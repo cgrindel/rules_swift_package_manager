@@ -366,6 +366,7 @@ def _declare_pkg_from_dependency(
             env_inherit = from_package.env_inherit,
             cached_json_directory = cached_json_directory,
             init_submodules = init_submodules,
+            make_files_read_only = from_package.make_files_read_only,
             recursive_init_submodules = recursive_init_submodules,
             netrc = from_package.netrc,
             patch_args = patch_args,
@@ -425,6 +426,7 @@ in the lock file and will not be portable across machines.\
             env = from_package.env,
             env_inherit = from_package.env_inherit,
             id = dep.registry.pin.identity,
+            make_files_read_only = from_package.make_files_read_only,
             registries = from_package.registries,
             replace_scm_with_registry = replace_scm_with_registry,
             resolved = resolved,
@@ -522,6 +524,14 @@ package description generation)\
 Environment variables to inherit from the external environment that will be \
 passed to the execution environments for this repository rule. (e.g. SPM version check, \
 SPM dependency resolution, SPM package description generation)\
+""",
+            ),
+            "make_files_read_only": attr.bool(
+                default = False,
+                doc = """\
+Whether to make files in fetched Swift packages read-only. This helps prevent \
+accidental edits when external repositories are exposed by tools such as \
+`rules_xcodeproj`.\
 """,
             ),
             "resolve_transitive_local_dependencies": attr.bool(
