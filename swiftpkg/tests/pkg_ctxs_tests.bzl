@@ -84,8 +84,55 @@ def _module_alias_flags_test(ctx):
 
 module_alias_flags_test = unittest.make(_module_alias_flags_test)
 
+def _target_configs_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(
+            msg = "unset",
+            target_configs = "",
+            exp = {},
+        ),
+        struct(
+            msg = "empty JSON object",
+            target_configs = "{}",
+            exp = {},
+        ),
+        struct(
+            msg = "a target's attribute overrides are decoded",
+            target_configs = json.encode(
+                {"FBAudienceNetwork": {"alwayslink": False}},
+            ),
+            exp = {"FBAudienceNetwork": {"alwayslink": False}},
+        ),
+        struct(
+            msg = "multiple targets",
+            target_configs = json.encode({
+                "FBAudienceNetwork": {"alwayslink": False},
+                "OtherTarget": {"alwayslink": True},
+            }),
+            exp = {
+                "FBAudienceNetwork": {"alwayslink": False},
+                "OtherTarget": {"alwayslink": True},
+            },
+        ),
+    ]
+
+    for t in tests:
+        pkg_ctx = pkg_ctxs.new(
+            pkg_info = struct(dependencies = []),
+            repo_name = "@swiftpkg_swift_game",
+            target_configs = t.target_configs,
+        )
+        asserts.equals(env, t.exp, pkg_ctx.target_configs, t.msg)
+
+    return unittest.end(env)
+
+target_configs_test = unittest.make(_target_configs_test)
+
 def pkg_ctxs_test_suite():
     return unittest.suite(
         "pkg_ctxs_tests",
         module_alias_flags_test,
+        target_configs_test,
     )

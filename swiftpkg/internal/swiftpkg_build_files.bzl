@@ -991,9 +991,13 @@ def _xcframework_import_build_file(pkg_ctx, target, artifact_info):
         ]
         kind = apple_kinds.static_xcframework_import
 
-        # Firebase example requires that GoogleAppMeasurement symbols are
-        # passed along.
-        attrs["alwayslink"] = True
+        # Force-loading by default passes along symbols that some SDKs need
+        # (e.g. GoogleAppMeasurement, for the Firebase example). Overridable
+        # because it breaks others: FBAudienceNetwork ships an unreferenced
+        # object whose symbols nothing on the link line defines.
+        target_config = pkg_ctx.target_configs.get(target.name, {})
+        if target_config.get("alwayslink", True):
+            attrs["alwayslink"] = True
     elif artifact_info.link_type == link_types.dynamic:
         load_stmts = [
             apple_dynamic_xcframework_import_load_stmt,
