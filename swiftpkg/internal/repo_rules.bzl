@@ -199,9 +199,8 @@ workspace(name = "{}")
 """.format(repo_name)
     repository_ctx.file(path, content = content, executable = False)
 
-def _make_files_read_only(repository_ctx, directory):
-    os_name = repository_ctx.os.name.lower()
-    if os_name.startswith("windows"):
+def _make_files_read_only(repository_ctx, directory, enabled):
+    if not enabled:
         return
 
     exec_result = repository_ctx.execute(

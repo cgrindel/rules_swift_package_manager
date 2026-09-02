@@ -225,7 +225,11 @@ def _make_files_read_only_test(ctx):
         os = struct(name = "linux"),
     )
 
-    repo_rules.make_files_read_only(repository_ctx, "/tmp/swiftpkg")
+    repo_rules.make_files_read_only(
+        repository_ctx,
+        "/tmp/swiftpkg",
+        enabled = True,
+    )
 
     asserts.equals(env, 1, len(calls), "expected a single chmod invocation")
     asserts.equals(
@@ -250,7 +254,7 @@ def _make_files_read_only_test(ctx):
 
 make_files_read_only_test = unittest.make(_make_files_read_only_test)
 
-def _make_files_read_only_windows_noop_test(ctx):
+def _make_files_read_only_disabled_noop_test(ctx):
     env = unittest.begin(ctx)
 
     calls = []
@@ -265,17 +269,20 @@ def _make_files_read_only_windows_noop_test(ctx):
 
     repository_ctx = struct(
         execute = execute,
-        os = struct(name = "windows"),
     )
 
-    repo_rules.make_files_read_only(repository_ctx, "C:/tmp/swiftpkg")
+    repo_rules.make_files_read_only(
+        repository_ctx,
+        "/tmp/swiftpkg",
+        enabled = False,
+    )
 
-    asserts.equals(env, [], calls, "expected no chmod invocation on Windows")
+    asserts.equals(env, [], calls, "expected no chmod invocation when disabled")
 
     return unittest.end(env)
 
-make_files_read_only_windows_noop_test = unittest.make(
-    _make_files_read_only_windows_noop_test,
+make_files_read_only_disabled_noop_test = unittest.make(
+    _make_files_read_only_disabled_noop_test,
 )
 
 def repo_rules_test_suite():
@@ -284,6 +291,6 @@ def repo_rules_test_suite():
         download_artifacts_test,
         gen_build_files_with_build_file_test,
         gen_build_files_without_build_file_test,
+        make_files_read_only_disabled_noop_test,
         make_files_read_only_test,
-        make_files_read_only_windows_noop_test,
     )
