@@ -54,6 +54,13 @@ grep -q -F -- '"@@//:rspm_example_conditional"' "${gen_build_file}" || (
   exit 1
 )
 
+# Verify that the `bazel_target_set_bool` tag in the MODULE.bazel wrote a
+# Starlark `bool`, not the string "False".
+grep -q -E -- '^ +alwayslink = False,$' "${gen_build_file}" || (
+  echo >&2 "Expected 'alwayslink = False' in ${gen_build_file}"
+  exit 1
+)
+
 # Run MyExecutable target
 output="$("${bazel}" run //Sources/MyExecutable)"
 assert_match "Good morning, World!" "${output}"

@@ -67,13 +67,13 @@ def _non_root_target_mods_error(module_name, tag_groups):
 
     Args:
         module_name: The name of the Bazel module as a `string`.
-        tag_groups: A `list` of `struct` values with a `verb` `string` and a
-            `tags` `list`.
+        tag_groups: A `list` of `struct` values with a `tag_class` `string`, a
+            `verb` `string` and a `tags` `list`.
 
     Returns:
         A `string` describing the problem, or `None` if there is none.
     """
-    declared = [tg.verb for tg in tag_groups if tg.tags]
+    declared = [tg.tag_class for tg in tag_groups if tg.tags]
     if not declared:
         return None
     return """\
@@ -82,10 +82,7 @@ module '{name}' declared: {declared}. Ask the maintainers of '{name}' to \
 provide the setting a different way, or apply the modification from your root \
 `MODULE.bazel`.\
 """.format(
-        declared = ", ".join([
-            "bazel_target_{}".format(verb)
-            for verb in declared
-        ]),
+        declared = ", ".join(declared),
         name = module_name,
     )
 
@@ -109,6 +106,177 @@ Target modifications cannot be applied to package '{package}' because its \
 override or apply the modifications in that BUILD file.\
 """.format(package = package_name)
 
+# The `select()` branch value types that are declared as `string` values and
+# converted to their Starlark type by this extension.
+_BOOL_BRANCH = "bool"
+_INT_BRANCH = "int"
+
+_VERBS = bazel_target_mods.verbs
+
+# Every target modification tag class, mapped to the `bazel_target_mods` verb
+# that it declares. The tag class states the type of the value, so nothing is
+# parsed or guessed. `branch_type` is set for the two `select()` tag classes
+# whose branch values arrive as `string` values that must be converted.
+_BAZEL_TARGET_MOD_TAG_SPECS = [
+    struct(tag_class = "bazel_target_set_bool", verb = _VERBS.set, branch_type = None),
+    struct(tag_class = "bazel_target_set_int", verb = _VERBS.set, branch_type = None),
+    struct(tag_class = "bazel_target_set_string", verb = _VERBS.set, branch_type = None),
+    struct(
+        tag_class = "bazel_target_set_string_list",
+        verb = _VERBS.set,
+        branch_type = None,
+    ),
+    struct(
+        tag_class = "bazel_target_set_string_dict",
+        verb = _VERBS.set,
+        branch_type = None,
+    ),
+    struct(
+        tag_class = "bazel_target_set_select_bool_dict",
+        verb = _VERBS.set_select,
+        branch_type = _BOOL_BRANCH,
+    ),
+    struct(
+        tag_class = "bazel_target_set_select_int_dict",
+        verb = _VERBS.set_select,
+        branch_type = _INT_BRANCH,
+    ),
+    struct(
+        tag_class = "bazel_target_set_select_string_dict",
+        verb = _VERBS.set_select,
+        branch_type = None,
+    ),
+    struct(
+        tag_class = "bazel_target_set_select_string_list_dict",
+        verb = _VERBS.set_select,
+        branch_type = None,
+    ),
+    struct(tag_class = "bazel_target_add", verb = _VERBS.add, branch_type = None),
+    struct(
+        tag_class = "bazel_target_add_select",
+        verb = _VERBS.add_select,
+        branch_type = None,
+    ),
+]
+
+def _bool_branch_value(value):
+    """Convert a `select()` branch value `string` to a `bool`.
+
+    Args:
+        value: The branch value as a `string`.
+
+    Returns:
+        A `bool` for `True` or `False`, spelled exactly as Starlark spells them.
+        Otherwise, `None`.
+    """
+    if value == "True":
+        return True
+    if value == "False":
+        return False
+    return None
+
+def _int_branch_value(value):
+    """Convert a `select()` branch value `string` to an `int`.
+
+    Args:
+        value: The branch value as a `string`.
+
+    Returns:
+        An `int` for an all-digit value with an optional leading `-`. Otherwise,
+        `None`.
+    """
+    digits = value[1:] if value.startswith("-") else value
+    if digits == "" or not digits.isdigit():
+        return None
+    return int(value)
+
+def _branch_values(tag_class, branch_type, tag):
+    """Convert the `select()` branch values of a tag to their Starlark type.
+
+    Args:
+        tag_class: The name of the tag class as a `string`.
+        branch_type: `bool` or `int` as a `string`.
+        tag: The modification tag.
+
+    Returns:
+        A `struct` with a `values` `dict` mapping `select()` conditions to
+        `bool` or `int` values and an `error` `string`. The `error` is `None`
+        when every branch value was converted; otherwise, it describes the
+        problem and `values` is `None`.
+    """
+    if branch_type == _BOOL_BRANCH:
+        expected = "exactly `True` or `False`"
+    else:
+        expected = "an integer (digits with an optional leading `-`)"
+    values = {}
+    for (condition, value) in tag.values.items():
+        if branch_type == _BOOL_BRANCH:
+            converted = _bool_branch_value(value)
+        else:
+            converted = _int_branch_value(value)
+        if converted == None:
+            return struct(
+                values = None,
+                error = """\
+The `{tag_class}` tag for '{target}' attribute '{attr}' has an invalid value \
+for condition '{condition}': '{value}'. Values must be {expected}.\
+""".format(
+                    attr = tag.attr,
+                    condition = condition,
+                    expected = expected,
+                    tag_class = tag_class,
+                    target = tag.target,
+                    value = value,
+                ),
+            )
+        values[condition] = converted
+    return struct(values = values, error = None)
+
+def _converted_tag(tag_class, branch_type, tag):
+    """Convert a `select()` tag's branch values to their Starlark type.
+
+    Args:
+        tag_class: The name of the tag class as a `string`.
+        branch_type: `bool` or `int` as a `string`.
+        tag: The modification tag.
+
+    Returns:
+        A `struct` with the tag's `attr`, `target` and converted `values`.
+    """
+    result = _branch_values(tag_class, branch_type, tag)
+    if result.error != None:
+        fail(result.error)
+    return struct(attr = tag.attr, target = tag.target, values = result.values)
+
+def _bazel_target_mod_tag_groups(mod, convert):
+    """Collect the target modification tags declared by a Bazel module.
+
+    Args:
+        mod: A Bazel module as provided by `module_ctx.modules`.
+        convert: A `bool` specifying whether the `select()` branch values that
+            arrive as `string` values should be converted to their Starlark
+            type. Conversion fails on a malformed value, so it is skipped for
+            the modules that are rejected for declaring these tags at all.
+
+    Returns:
+        A `list` of `struct` values with a `tag_class` `string`, a `verb`
+        `string` and a `tags` `list`.
+    """
+    tag_groups = []
+    for spec in _BAZEL_TARGET_MOD_TAG_SPECS:
+        tags = getattr(mod.tags, spec.tag_class)
+        if convert and spec.branch_type != None:
+            tags = [
+                _converted_tag(spec.tag_class, spec.branch_type, tag)
+                for tag in tags
+            ]
+        tag_groups.append(struct(
+            tag_class = spec.tag_class,
+            tags = tags,
+            verb = spec.verb,
+        ))
+    return tag_groups
+
 def _bazel_target_mods_by_repo(module_ctx):
     """Collect the buildozer-style target modifications from the root module.
 
@@ -121,24 +289,15 @@ def _bazel_target_mods_by_repo(module_ctx):
     """
     tag_groups = []
     for mod in module_ctx.modules:
-        mod_tag_groups = [
-            struct(verb = bazel_target_mods.verbs.set, tags = mod.tags.bazel_target_set),
-            struct(
-                verb = bazel_target_mods.verbs.set_select,
-                tags = mod.tags.bazel_target_set_select,
-            ),
-            struct(verb = bazel_target_mods.verbs.add, tags = mod.tags.bazel_target_add),
-            struct(
-                verb = bazel_target_mods.verbs.add_select,
-                tags = mod.tags.bazel_target_add_select,
-            ),
-        ]
         if not mod.is_root:
-            error = _non_root_target_mods_error(mod.name, mod_tag_groups)
+            error = _non_root_target_mods_error(
+                mod.name,
+                _bazel_target_mod_tag_groups(mod, convert = False),
+            )
             if error != None:
                 fail(error)
             continue
-        tag_groups.extend(mod_tag_groups)
+        tag_groups.extend(_bazel_target_mod_tag_groups(mod, convert = True))
 
     return bazel_target_mods.mods_by_repo(tag_groups)
 
@@ -765,27 +924,124 @@ root package of its repository, so the label must be of the form \
     mandatory = True,
 )
 
-_bazel_target_set_tag = tag_class(
-    attrs = {
-        "attr": _bazel_target_attr,
-        "target": _bazel_target_target_attr,
-        "value": attr.string(
-            doc = """\
-The replacement value. It is parsed the way `buildozer` parses values: \
-`True`/`False` (case-insensitive) become a `bool`, an all-digit value with an \
-optional leading `-` becomes an `int`, and anything else stays a `string`.
-
+_VERBATIM_VALUE_DOC = """\
 The value is written into the generated `BUILD.bazel` file verbatim. Label \
 values are not remapped, so a value such as `//:my_lib` resolves inside the \
 generated repository, not your root module. Use `@@//:my_lib` to name a target \
 in the main repository.\
-""",
-            mandatory = True,
-        ),
-    },
-    doc = """\
+"""
+
+_VERBATIM_VALUES_DOC = """\
+The values are written into the generated `BUILD.bazel` file verbatim. Label \
+values are not remapped, so a value such as `//:my_lib` resolves inside the \
+generated repository, not your root module. Use `@@//:my_lib` to name a target \
+in the main repository.\
+"""
+
+_SELECT_KEYS_DOC = """\
+Keys are absolute condition labels; a key that is relative to the main \
+repository (e.g. `//:release_build`) is canonicalized (e.g. \
+`@@//:release_build`) so that it still resolves from inside the generated \
+repository. A key that names an apparent repository (a single `@`, e.g. \
+`@some_repo//:setting`) is rejected, because it would be resolved against the \
+generated repository's repository mapping; use a canonical label (e.g. \
+`@@some_repo+//:setting`) instead.\
+"""
+
+_SET_SELECT_DEFAULT_DOC = """\
+No `//conditions:default` branch is added for you.\
+"""
+
+_SET_SELECT_DOC = """\
+Replace (or create) an attribute on a generated declaration with a `select()`.
+""" + _BAZEL_TARGET_MOD_DOC_SUFFIX
+
+def _bazel_target_set_tag_class(value_attr):
+    """Create a tag class that replaces an attribute with a typed value.
+
+    Args:
+        value_attr: The `attr` for the `value` attribute.
+
+    Returns:
+        A `tag_class`.
+    """
+    return tag_class(
+        attrs = {
+            "attr": _bazel_target_attr,
+            "target": _bazel_target_target_attr,
+            "value": value_attr,
+        },
+        doc = """\
 Replace (or create) an attribute on a generated declaration.
 """ + _BAZEL_TARGET_MOD_DOC_SUFFIX,
+    )
+
+def _bazel_target_set_select_tag_class(values_attr):
+    """Create a tag class that replaces an attribute with a `select()`.
+
+    Args:
+        values_attr: The `attr` for the `values` attribute.
+
+    Returns:
+        A `tag_class`.
+    """
+    return tag_class(
+        attrs = {
+            "attr": _bazel_target_attr,
+            "target": _bazel_target_target_attr,
+            "values": values_attr,
+        },
+        doc = _SET_SELECT_DOC,
+    )
+
+_bazel_target_set_bool_tag = _bazel_target_set_tag_class(
+    attr.bool(
+        doc = """\
+The replacement value as a `bool`.\
+""",
+        mandatory = True,
+    ),
+)
+
+_bazel_target_set_int_tag = _bazel_target_set_tag_class(
+    attr.int(
+        doc = """\
+The replacement value as an `int`.\
+""",
+        mandatory = True,
+    ),
+)
+
+_bazel_target_set_string_tag = _bazel_target_set_tag_class(
+    attr.string(
+        doc = """\
+The replacement value as a `string`. An empty `string` is allowed.
+
+""" + _VERBATIM_VALUE_DOC,
+        mandatory = True,
+    ),
+)
+
+_bazel_target_set_string_list_tag = _bazel_target_set_tag_class(
+    attr.string_list(
+        doc = """\
+The replacement value as a `list` of `string` values. An empty `list` is \
+allowed and clears the attribute.
+
+""" + _VERBATIM_VALUES_DOC,
+        mandatory = True,
+    ),
+)
+
+_bazel_target_set_string_dict_tag = _bazel_target_set_tag_class(
+    attr.string_dict(
+        doc = """\
+The replacement value as a `dict` of `string` keys to `string` values. An \
+empty `dict` is allowed and clears the attribute.
+
+""" + _VERBATIM_VALUES_DOC,
+        mandatory = True,
+    ),
 )
 
 _bazel_target_add_tag = tag_class(
@@ -797,11 +1053,7 @@ _bazel_target_add_tag = tag_class(
 The values to append. At least one value is required. If the attribute is \
 absent, it is created with these values.
 
-The values are written into the generated `BUILD.bazel` file verbatim. Label \
-values are not remapped, so a value such as `//:my_lib` resolves inside the \
-generated repository, not your root module. Use `@@//:my_lib` to name a target \
-in the main repository.\
-""",
+""" + _VERBATIM_VALUES_DOC,
             mandatory = True,
         ),
     },
@@ -813,32 +1065,47 @@ last-option-wins semantics (e.g. `copts`) override the generated ones.
 """ + _BAZEL_TARGET_MOD_DOC_SUFFIX,
 )
 
-_bazel_target_set_select_tag = tag_class(
-    attrs = {
-        "attr": _bazel_target_attr,
-        "target": _bazel_target_target_attr,
-        "values": attr.string_list_dict(
-            doc = """\
-The `select()` branches. Keys are absolute condition labels; a key that is \
-relative to the main repository (e.g. `//:release_build`) is canonicalized \
-(e.g. `@@//:release_build`) so that it still resolves from inside the \
-generated repository. A key that names an apparent repository (a single `@`, \
-e.g. `@some_repo//:setting`) is rejected, because it would be resolved against \
-the generated repository's repository mapping; use a canonical label (e.g. \
-`@@some_repo+//:setting`) instead. No `//conditions:default` branch is added \
-for you.
+_bazel_target_set_select_string_dict_tag = _bazel_target_set_select_tag_class(
+    attr.string_dict(
+        doc = """\
+The `select()` branches, whose values are `string` values. \
+""" + _SELECT_KEYS_DOC + " " + _SET_SELECT_DEFAULT_DOC + """
+""" + _VERBATIM_VALUES_DOC,
+        mandatory = True,
+    ),
+)
 
-The values are written into the generated `BUILD.bazel` file verbatim. Label \
-values are not remapped, so a value such as `//:my_lib` resolves inside the \
-generated repository, not your root module. Use `@@//:my_lib` to name a target \
-in the main repository.\
-""",
-            mandatory = True,
-        ),
-    },
-    doc = """\
-Replace (or create) an attribute on a generated declaration with a `select()`.
-""" + _BAZEL_TARGET_MOD_DOC_SUFFIX,
+_bazel_target_set_select_string_list_dict_tag = _bazel_target_set_select_tag_class(
+    attr.string_list_dict(
+        doc = """\
+The `select()` branches, whose values are `list` values of `string` values. \
+""" + _SELECT_KEYS_DOC + " " + _SET_SELECT_DEFAULT_DOC + """
+""" + _VERBATIM_VALUES_DOC,
+        mandatory = True,
+    ),
+)
+
+_bazel_target_set_select_bool_dict_tag = _bazel_target_set_select_tag_class(
+    attr.string_dict(
+        doc = """\
+The `select()` branches, whose values are `string` values that are converted \
+to a `bool`. Each value must be exactly `True` or `False`, spelled the way \
+Starlark spells them; any other value fails when the module extension is \
+evaluated. \
+""" + _SELECT_KEYS_DOC + " " + _SET_SELECT_DEFAULT_DOC,
+        mandatory = True,
+    ),
+)
+
+_bazel_target_set_select_int_dict_tag = _bazel_target_set_select_tag_class(
+    attr.string_dict(
+        doc = """\
+The `select()` branches, whose values are `string` values that are converted \
+to an `int`. Each value must be digits with an optional leading `-`; any other \
+value fails when the module extension is evaluated. \
+""" + _SELECT_KEYS_DOC + " " + _SET_SELECT_DEFAULT_DOC,
+        mandatory = True,
+    ),
 )
 
 _bazel_target_add_select_tag = tag_class(
@@ -847,20 +1114,11 @@ _bazel_target_add_select_tag = tag_class(
         "target": _bazel_target_target_attr,
         "values": attr.string_list_dict(
             doc = """\
-The `select()` branches. Keys are absolute condition labels; a key that is \
-relative to the main repository (e.g. `//:release_build`) is canonicalized \
-(e.g. `@@//:release_build`) so that it still resolves from inside the \
-generated repository. A key that names an apparent repository (a single `@`, \
-e.g. `@some_repo//:setting`) is rejected, because it would be resolved against \
-the generated repository's repository mapping; use a canonical label (e.g. \
-`@@some_repo+//:setting`) instead. A `//conditions:default` branch with no \
-values is added when one is not provided.
+The `select()` branches, whose values are `list` values of `string` values. \
+""" + _SELECT_KEYS_DOC + """ A `//conditions:default` branch with no values is \
+added when one is not provided.
 
-The values are written into the generated `BUILD.bazel` file verbatim. Label \
-values are not remapped, so a value such as `//:my_lib` resolves inside the \
-generated repository, not your root module. Use `@@//:my_lib` to name a target \
-in the main repository.\
-""",
+""" + _VERBATIM_VALUES_DOC,
             mandatory = True,
         ),
     },
@@ -877,8 +1135,15 @@ swift_deps = module_extension(
     tag_classes = {
         "bazel_target_add": _bazel_target_add_tag,
         "bazel_target_add_select": _bazel_target_add_select_tag,
-        "bazel_target_set": _bazel_target_set_tag,
-        "bazel_target_set_select": _bazel_target_set_select_tag,
+        "bazel_target_set_bool": _bazel_target_set_bool_tag,
+        "bazel_target_set_int": _bazel_target_set_int_tag,
+        "bazel_target_set_select_bool_dict": _bazel_target_set_select_bool_dict_tag,
+        "bazel_target_set_select_int_dict": _bazel_target_set_select_int_dict_tag,
+        "bazel_target_set_select_string_dict": _bazel_target_set_select_string_dict_tag,
+        "bazel_target_set_select_string_list_dict": _bazel_target_set_select_string_list_dict_tag,
+        "bazel_target_set_string": _bazel_target_set_string_tag,
+        "bazel_target_set_string_dict": _bazel_target_set_string_dict_tag,
+        "bazel_target_set_string_list": _bazel_target_set_string_list_tag,
         "configure_package": _configure_package_tag,
         "configure_swift_package": _configure_swift_package_tag,
         "from_package": _from_package_tag,
@@ -886,6 +1151,11 @@ swift_deps = module_extension(
 )
 
 swift_deps_test_utils = struct(
+    branch_values = _branch_values,
+    bazel_target_mod_tag_classes = [
+        spec.tag_class
+        for spec in _BAZEL_TARGET_MOD_TAG_SPECS
+    ],
     bazel_target_mods_by_repo = _bazel_target_mods_by_repo,
     build_file_conflict_error = _build_file_conflict_error,
     non_root_target_mods_error = _non_root_target_mods_error,

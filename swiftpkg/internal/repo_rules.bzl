@@ -21,9 +21,9 @@ _swift_attrs = {
         doc = """\
 A JSON `string` describing buildozer-style modifications that are applied to \
 the declarations in the generated `BUILD.bazel` file. Set by the \
-`swift_deps.bazel_target_set`, `swift_deps.bazel_target_add`, \
-`swift_deps.bazel_target_set_select` and `swift_deps.bazel_target_add_select` \
-tags; direct users should prefer that typed API.\
+`swift_deps.bazel_target_set_*`, `swift_deps.bazel_target_set_select_*`, \
+`swift_deps.bazel_target_add` and `swift_deps.bazel_target_add_select` tags; \
+direct users should prefer that typed API.\
 """,
     ),
     "dep_module_aliases": attr.string(

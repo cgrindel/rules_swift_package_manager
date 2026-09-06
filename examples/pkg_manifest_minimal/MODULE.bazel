@@ -71,6 +71,16 @@ swift_deps.bazel_target_add_select(
     target = "@swiftpkg_swift_log//:Logging.rspm.__impl",
     values = {"//:rspm_example_conditional": ["-DRSPM_EXAMPLE_CONDITIONAL"]},
 )
+
+# Demonstrate a typed setter. The generated `swift_library` sets
+# `alwayslink = True`; forcing it to `False` is inert for this example because
+# every symbol it needs from `Logging` is referenced. `do_test` asserts that the
+# value renders as a Starlark `bool` on the generated target.
+swift_deps.bazel_target_set_bool(
+    attr = "alwayslink",
+    target = "@swiftpkg_swift_log//:Logging.rspm.__impl",
+    value = False,
+)
 use_repo(
     swift_deps,
     "swift_deps_info",
