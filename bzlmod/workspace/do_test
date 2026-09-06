@@ -21,6 +21,45 @@ assert_match() {
 # Ensure that it builds and tests pass
 "${bazel}" test //...
 
+# Verify that a condition label from the root module is canonicalized for use
+# inside the generated external repository.
+selected_target="@swiftpkg_target_copts_fixture//:Selected.rspm"
+sibling_target="@swiftpkg_target_copts_fixture//:Sibling.rspm"
+selected_location="$("${bazel}" query \
+  --output=location \
+  "@swiftpkg_target_copts_fixture//:Selected.rspm.__impl")"
+selected_build_path="${selected_location%%:*}"
+selected_build_content="$(<"${selected_build_path}")"
+assert_match "@@//:target_copts_enabled" "${selected_build_content}"
+
+# The configured flags must reach every Swift frontend action for only the
+# selected generated target.
+swift_action_query='mnemonic("SwiftCompile|SwiftDeriveFiles|SwiftDumpAST", deps('"${selected_target}"'))'
+action_evidence_dir="$(mktemp -d "${TMPDIR:-/tmp}/rspm-target-copts-actions.XXXXXX")"
+trap 'rm -rf "${action_evidence_dir}"' EXIT
+"${bazel}" aquery \
+  --output=jsonproto \
+  "${swift_action_query}" > "${action_evidence_dir}/selected-disabled.json"
+"${bazel}" aquery \
+  --define=rspm_target_copts=enabled \
+  --output=jsonproto \
+  "${swift_action_query}" > "${action_evidence_dir}/selected-enabled.json"
+
+sibling_action_query='mnemonic("SwiftCompile|SwiftDeriveFiles|SwiftDumpAST", deps('"${sibling_target}"'))'
+"${bazel}" aquery \
+  --output=jsonproto \
+  "${sibling_action_query}" > "${action_evidence_dir}/sibling-disabled.json"
+"${bazel}" aquery \
+  --define=rspm_target_copts=enabled \
+  --output=jsonproto \
+  "${sibling_action_query}" > "${action_evidence_dir}/sibling-enabled.json"
+
+python3 "${script_dir}/verify_target_copts_actions.py" \
+  --selected-disabled "${action_evidence_dir}/selected-disabled.json" \
+  --selected-enabled "${action_evidence_dir}/selected-enabled.json" \
+  --sibling-disabled "${action_evidence_dir}/sibling-disabled.json" \
+  --sibling-enabled "${action_evidence_dir}/sibling-enabled.json"
+
 # Run MyExecutable target
 output="$( "${bazel}" run //Sources/MyExecutable 2>&1 )"
 assert_match "Hello, World!" "${output}"

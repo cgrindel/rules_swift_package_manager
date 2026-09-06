@@ -96,6 +96,7 @@ def _swift_package_impl(repository_ctx):
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
         target_deps = repository_ctx.attr.target_deps,
+        target_swift_copts = repository_ctx.attr.target_swift_copts,
         module_aliases = repository_ctx.attr.module_aliases,
         dep_module_aliases = repository_ctx.attr.dep_module_aliases,
     )

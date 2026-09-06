@@ -14,6 +14,7 @@ load(":build_files.bzl", "build_files")
 load(":bzl_selects.bzl", "bzl_selects")
 load(":load_statements.bzl", "load_statements")
 load(":manual_target_deps.bzl", "manual_target_deps")
+load(":manual_target_swift_copts.bzl", "manual_target_swift_copts")
 load(":minimum_os_versions.bzl", "minimum_os_versions")
 load(":pkginfo_target_deps.bzl", "pkginfo_target_deps")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
@@ -143,6 +144,8 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         copts.append("-module-alias")
         copts.append("{}={}".format(original_name, renamed))
 
+    configured_copts = manual_target_swift_copts.copts_for_target(pkg_ctx, target)
+
     # GH046: Support plugins.
 
     is_library_target = lists.contains([target_types.library, target_types.regular], target.type)
@@ -222,8 +225,20 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
 
     if len(features) > 0:
         attrs["features"] = bzl_selects.to_starlark(features, mutually_inclusive = True)
-    if len(copts) > 0:
+    if copts and configured_copts:
+        # Keep generated/package-manifest flags in a separate expression so
+        # target configuration is always last, including when either side
+        # contains select() expressions. This lets override-style flags use
+        # normal last-option-wins compiler semantics.
+        attrs["copts"] = scg.new_expr(
+            bzl_selects.to_starlark(copts, mutually_inclusive = True),
+            scg.new_op("+"),
+            bzl_selects.to_starlark(configured_copts, mutually_inclusive = True),
+        )
+    elif copts:
         attrs["copts"] = bzl_selects.to_starlark(copts, mutually_inclusive = True)
+    elif configured_copts:
+        attrs["copts"] = bzl_selects.to_starlark(configured_copts, mutually_inclusive = True)
 
     linkopts = []
     if target.linker_settings != None:
