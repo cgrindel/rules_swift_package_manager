@@ -39,28 +39,14 @@ _verbs = struct(
     set_select = _SET_SELECT,
 )
 
-# MARK: - Value Parsing
+# MARK: - Value Types
 
-def _parse_value(value):
-    """Parse an attribute value `string` the way `buildozer` does.
+# The value types that the `set` verb accepts. The tag class that the root
+# module declares selects the type, so no value is ever parsed or guessed.
+_SET_VALUE_TYPES = ["bool", "int", "string", "list", "dict"]
 
-    Args:
-        value: The value as a `string`.
-
-    Returns:
-        A `bool` for `true`/`false` (case-insensitive), an `int` for an
-        all-digit value with an optional leading `-`, otherwise the original
-        `string`.
-    """
-    lowered = value.lower()
-    if lowered == "true":
-        return True
-    if lowered == "false":
-        return False
-    digits = value[1:] if value.startswith("-") else value
-    if digits != "" and digits.isdigit():
-        return int(value)
-    return value
+# The branch value types that the `set_select` verb accepts.
+_SET_SELECT_VALUE_TYPES = ["bool", "int", "string", "list"]
 
 # MARK: - Condition Canonicalization
 
@@ -195,10 +181,11 @@ def _new_error(verb, target, attr, value = None, values = None):
         verb: One of `bazel_target_mods.verbs`.
         target: The name of the generated declaration as a `string`.
         attr: The name of the attribute as a `string`.
-        value: Optional. The `string` value for the `set` verb.
+        value: Optional. The value for the `set` verb. It must be a `bool`, an
+            `int`, a `string`, a `list` or a `dict`.
         values: Optional. A `list` of `string` values for the `add` verb, or a
-            `dict` mapping `select()` conditions to a `list` of `string` values
-            for the `set_select` and `add_select` verbs.
+            `dict` mapping `select()` conditions to branch values for the
+            `set_select` and `add_select` verbs.
 
     Returns:
         A `string` describing the problem, or `None` if there is none.
@@ -221,11 +208,16 @@ generated `BUILD.bazel` file would not load.\
 """.format(target = target)
 
     if verb == _SET:
-        if type(value) != "string":
+        if type(value) not in _SET_VALUE_TYPES:
             return """\
-The `set` modification for '{target}' attribute '{attr}' must specify a \
-`string` value.\
-""".format(attr = attr, target = target)
+The `set` modification for '{target}' attribute '{attr}' must specify a value \
+of one of these types: {expected}. Found `{actual}`.\
+""".format(
+                actual = type(value),
+                attr = attr,
+                expected = ", ".join(_SET_VALUE_TYPES),
+                target = target,
+            )
         return None
 
     if verb == _ADD:
@@ -241,6 +233,21 @@ one value.\
 The `{verb}` modification for '{target}' attribute '{attr}' must specify at \
 least one `select()` condition.\
 """.format(attr = attr, target = target, verb = verb)
+
+    if verb == _SET_SELECT:
+        for (condition, condition_value) in values.items():
+            if type(condition_value) not in _SET_SELECT_VALUE_TYPES:
+                return """\
+The `set_select` modification for '{target}' attribute '{attr}' must specify a \
+value of one of these types: {expected}. Found `{actual}` for condition \
+'{condition}'.\
+""".format(
+                    actual = type(condition_value),
+                    attr = attr,
+                    condition = condition,
+                    expected = ", ".join(_SET_SELECT_VALUE_TYPES),
+                    target = target,
+                )
     return None
 
 def _new(verb, target, attr, value = None, values = None):
@@ -250,15 +257,18 @@ def _new(verb, target, attr, value = None, values = None):
         verb: One of `bazel_target_mods.verbs`.
         target: The name of the generated declaration as a `string`.
         attr: The name of the attribute as a `string`.
-        value: Optional. The `string` value for the `set` verb. It is written
-            into the generated `BUILD.bazel` file verbatim. Label values are not
+        value: Optional. The value for the `set` verb. It must be a `bool`, an
+            `int`, a `string`, a `list` or a `dict`. It is written into the
+            generated `BUILD.bazel` file verbatim. Label values are not
             remapped, so a value such as `//:my_lib` resolves inside the
             generated repository. Use `@@//:my_lib` to name a target in the main
             repository.
         values: Optional. A `list` of `string` values for the `add` verb, or a
-            `dict` mapping `select()` conditions to a `list` of `string` values
-            for the `set_select` and `add_select` verbs. The values are written
-            into the generated `BUILD.bazel` file verbatim. Label values are not
+            `dict` mapping `select()` conditions to branch values for the
+            `set_select` and `add_select` verbs. A `set_select` branch value may
+            be a `bool`, an `int`, a `string` or a `list`; an `add_select`
+            branch value must be a `list`. The values are written into the
+            generated `BUILD.bazel` file verbatim. Label values are not
             remapped, so a value such as `//:my_lib` resolves inside the
             generated repository. Use `@@//:my_lib` to name a target in the main
             repository.
@@ -271,7 +281,12 @@ def _new(verb, target, attr, value = None, values = None):
         fail(error)
 
     if verb == _SET:
-        return {"attr": attr, "target": target, "value": value, "verb": verb}
+        return {
+            "attr": attr,
+            "target": target,
+            "value": _copy_value(value),
+            "verb": verb,
+        }
 
     if verb == _ADD:
         return {
@@ -283,7 +298,7 @@ def _new(verb, target, attr, value = None, values = None):
 
     canonical_values = {}
     for (condition, condition_values) in values.items():
-        canonical_values[_canonicalize_condition(condition)] = list(
+        canonical_values[_canonicalize_condition(condition)] = _copy_value(
             condition_values,
         )
     return {
@@ -292,6 +307,22 @@ def _new(verb, target, attr, value = None, values = None):
         "values": canonical_values,
         "verb": verb,
     }
+
+def _copy_value(value):
+    """Copy a mutable attribute value so that the caller cannot mutate it.
+
+    Args:
+        value: A `bool`, an `int`, a `string`, a `list` or a `dict`.
+
+    Returns:
+        A copy of `value` when it is a `list` or a `dict`; otherwise, `value`.
+    """
+    value_type = type(value)
+    if value_type == "list":
+        return list(value)
+    if value_type == "dict":
+        return dict(value)
+    return value
 
 def _mods_by_repo(tag_groups):
     """Convert modification tags into modifications grouped by repository name.
@@ -378,8 +409,8 @@ def _validation_error(mods):
     if not conflicts:
         return None
     return """\
-At most one `bazel_target_set` or `bazel_target_set_select` tag may be declared \
-for a target attribute. Conflicts: {conflicts}.\
+At most one setter tag (`bazel_target_set_*` or `bazel_target_set_select_*`) \
+may be declared for a target attribute. Conflicts: {conflicts}.\
 """.format(
         conflicts = "; ".join([
             "'{}' attribute '{}'".format(target, attr)
@@ -490,7 +521,7 @@ def _apply_mod(attrs, mod):
     verb = mod["verb"]
     attr_name = mod["attr"]
     if verb == _SET:
-        attrs[attr_name] = _parse_value(mod["value"])
+        attrs[attr_name] = mod["value"]
     elif verb == _SET_SELECT:
         attrs[attr_name] = _new_select(mod["values"], add_default = False)
     elif verb == _ADD:
@@ -508,7 +539,8 @@ def _new_select(values, add_default):
     """Create a `select()` function call for the specified conditions.
 
     Args:
-        values: A `dict` mapping `select()` conditions to a `list` of values.
+        values: A `dict` mapping `select()` conditions to branch values. A
+            branch value may be a `bool`, an `int`, a `string` or a `list`.
         add_default: A `bool` specifying whether a `//conditions:default` branch
             should be added when the caller did not provide one.
 
@@ -519,11 +551,11 @@ def _new_select(values, add_default):
     for condition in sorted(values.keys()):
         if condition == bzl_selects.default_condition:
             continue
-        select_dict[condition] = list(values[condition])
+        select_dict[condition] = _copy_value(values[condition])
 
     # Keep the default branch last, matching the rest of the generated output.
     if bzl_selects.default_condition in values:
-        select_dict[bzl_selects.default_condition] = list(
+        select_dict[bzl_selects.default_condition] = _copy_value(
             values[bzl_selects.default_condition],
         )
     elif add_default:
@@ -562,7 +594,6 @@ bazel_target_mods = struct(
     new_error = _new_error,
     ordered_mods = _ordered_mods,
     parse_target = _parse_target,
-    parse_value = _parse_value,
     unknown_targets_error = _unknown_targets_error,
     validate = _validate,
     validation_error = _validation_error,

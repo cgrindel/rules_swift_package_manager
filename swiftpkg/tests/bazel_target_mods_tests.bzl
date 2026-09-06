@@ -28,37 +28,6 @@ def _attrs_after(decl, mods):
 def _starlark_for(attrs, attr_name):
     return scg.to_starlark(scg.new_expr(attrs[attr_name]))
 
-# MARK: - Value Parsing
-
-def _parse_value_test(ctx):
-    env = unittest.begin(ctx)
-
-    tests = [
-        struct(msg = "true", value = "True", exp = True),
-        struct(msg = "lowercase true", value = "true", exp = True),
-        struct(msg = "mixed-case true", value = "TrUe", exp = True),
-        struct(msg = "false", value = "False", exp = False),
-        struct(msg = "lowercase false", value = "false", exp = False),
-        struct(msg = "int", value = "42", exp = 42),
-        struct(msg = "zero", value = "0", exp = 0),
-        struct(msg = "negative int", value = "-13", exp = -13),
-        struct(msg = "leading zeros", value = "007", exp = 7),
-        struct(msg = "string", value = "-DFOO", exp = "-DFOO"),
-        struct(msg = "empty string", value = "", exp = ""),
-        struct(msg = "lone dash", value = "-", exp = "-"),
-        struct(msg = "float-ish", value = "1.5", exp = "1.5"),
-        struct(msg = "trailing space", value = "42 ", exp = "42 "),
-        struct(msg = "truthy word", value = "yes", exp = "yes"),
-    ]
-    for t in tests:
-        actual = bazel_target_mods.parse_value(t.value)
-        asserts.equals(env, t.exp, actual, t.msg)
-        asserts.equals(env, type(t.exp), type(actual), t.msg + " (type)")
-
-    return unittest.end(env)
-
-parse_value_test = unittest.make(_parse_value_test)
-
 # MARK: - Target Label Parsing
 
 def _parse_target_test(ctx):
@@ -184,17 +153,20 @@ canonicalize_condition_test = unittest.make(_canonicalize_condition_test)
 def _new_error_test(ctx):
     env = unittest.begin(ctx)
 
-    # Well-formed modifications.
-    asserts.equals(
-        env,
-        None,
-        bazel_target_mods.new_error(
-            _verbs.set,
-            _impl_target,
-            "alwayslink",
-            value = "False",
-        ),
-    )
+    # Well-formed modifications. The `set` verb accepts every value type that
+    # a setter tag class can declare.
+    for value in [False, 0, "", [], {}, True, 42, "-DFOO", ["-DFOO"], {"a": "b"}]:
+        asserts.equals(
+            env,
+            None,
+            bazel_target_mods.new_error(
+                _verbs.set,
+                _impl_target,
+                "alwayslink",
+                value = value,
+            ),
+            "Expected `{}` to be an acceptable `set` value.".format(value),
+        )
     asserts.equals(
         env,
         None,
@@ -292,6 +264,34 @@ def _new_error_test(ctx):
         "Expected a missing `set` value to be rejected.",
     )
 
+    # A `set_select` branch value must be a scalar or a list.
+    asserts.equals(
+        env,
+        None,
+        bazel_target_mods.new_error(
+            _verbs.set_select,
+            _impl_target,
+            "copts",
+            values = {"//:a": True, "//:b": 42, "//:c": "s", "//:d": ["l"]},
+        ),
+    )
+    error = bazel_target_mods.new_error(
+        _verbs.set_select,
+        _impl_target,
+        "copts",
+        values = {"//:a": {"nope": "dict"}},
+    )
+    asserts.true(
+        env,
+        error != None,
+        "Expected a `dict` branch value to be rejected.",
+    )
+    asserts.true(
+        env,
+        error.find("//:a") > -1,
+        "Expected the error to name the condition.",
+    )
+
     return unittest.end(env)
 
 new_error_test = unittest.make(_new_error_test)
@@ -309,7 +309,19 @@ def _encode_decode_test(ctx):
             _verbs.set,
             _impl_target,
             "alwayslink",
-            value = "False",
+            value = False,
+        ),
+        bazel_target_mods.new(
+            _verbs.set,
+            _impl_target,
+            "jobs",
+            value = 4,
+        ),
+        bazel_target_mods.new(
+            _verbs.set,
+            _impl_target,
+            "env",
+            value = {"FOO": "bar"},
         ),
         bazel_target_mods.new(
             _verbs.add,
@@ -322,6 +334,12 @@ def _encode_decode_test(ctx):
             _impl_target,
             "defines",
             values = {"//:release_build": ["NDEBUG"]},
+        ),
+        bazel_target_mods.new(
+            _verbs.set_select,
+            _impl_target,
+            "alwayslink",
+            values = {"//:release_build": True},
         ),
         bazel_target_mods.new(
             _verbs.add_select,
@@ -339,7 +357,14 @@ def _encode_decode_test(ctx):
     asserts.equals(
         env,
         {"@@//:release_build": ["NDEBUG"]},
-        bazel_target_mods.decode(encoded)[2]["values"],
+        bazel_target_mods.decode(encoded)[4]["values"],
+    )
+
+    # A `bool` branch value survives the JSON round trip as a `bool`.
+    asserts.equals(
+        env,
+        {"@@//:release_build": True},
+        bazel_target_mods.decode(encoded)[5]["values"],
     )
 
     return unittest.end(env)
@@ -351,26 +376,84 @@ encode_decode_test = unittest.make(_encode_decode_test)
 def _set_test(ctx):
     env = unittest.begin(ctx)
 
-    # Replaces an existing scalar attribute.
-    attrs = _attrs_after(
-        _decl({"alwayslink": True}),
-        [bazel_target_mods.new(_verbs.set, _impl_target, "alwayslink", value = "False")],
-    )
-    asserts.equals(env, False, attrs["alwayslink"])
+    # Every setter tag class declares the type of its value, so the value is
+    # applied unchanged. One case per tag class.
+    tests = [
+        struct(
+            msg = "bazel_target_set_bool",
+            attr_name = "alwayslink",
+            existing = {"alwayslink": True},
+            value = False,
+            exp_starlark = "False",
+        ),
+        struct(
+            msg = "bazel_target_set_int",
+            attr_name = "shard_count",
+            existing = {},
+            value = 4,
+            exp_starlark = "4",
+        ),
+        struct(
+            msg = "bazel_target_set_string",
+            attr_name = "module_name",
+            existing = {"module_name": "Generated"},
+            value = "Custom",
+            exp_starlark = "\"Custom\"",
+        ),
+        struct(
+            msg = "bazel_target_set_string_list",
+            attr_name = "copts",
+            existing = {"copts": ["-DGENERATED"]},
+            value = ["-DONLY"],
+            exp_starlark = "[\"-DONLY\"]",
+        ),
+        struct(
+            msg = "bazel_target_set_string_dict",
+            attr_name = "env",
+            existing = {},
+            value = {"FOO": "bar"},
+            exp_starlark = """\
+{
+    "FOO": "bar",
+}\
+""",
+        ),
+    ]
+    for t in tests:
+        attrs = _attrs_after(
+            _decl(t.existing),
+            [bazel_target_mods.new(
+                _verbs.set,
+                _impl_target,
+                t.attr_name,
+                value = t.value,
+            )],
+        )
+        asserts.equals(env, t.value, attrs[t.attr_name], t.msg)
+        asserts.equals(
+            env,
+            t.exp_starlark,
+            _starlark_for(attrs, t.attr_name),
+            t.msg + " (starlark)",
+        )
 
-    # Creates an absent attribute.
-    attrs = _attrs_after(
-        _decl(),
-        [bazel_target_mods.new(_verbs.set, _impl_target, "alwayslink", value = "True")],
-    )
-    asserts.equals(env, True, attrs["alwayslink"])
-
-    # Replaces a list attribute wholesale.
-    attrs = _attrs_after(
-        _decl({"copts": ["-DGENERATED"]}),
-        [bazel_target_mods.new(_verbs.set, _impl_target, "copts", value = "-DONLY")],
-    )
-    asserts.equals(env, "-DONLY", attrs["copts"])
+    # Empty values are allowed. An empty list clears a list attribute.
+    for value in ["", [], {}]:
+        attrs = _attrs_after(
+            _decl({"copts": ["-DGENERATED"]}),
+            [bazel_target_mods.new(
+                _verbs.set,
+                _impl_target,
+                "copts",
+                value = value,
+            )],
+        )
+        asserts.equals(
+            env,
+            value,
+            attrs["copts"],
+            "Expected the empty value `{}` to be applied.".format(value),
+        )
 
     # Replaces an expression-valued attribute.
     generated = bzl_selects.to_starlark([
@@ -379,7 +462,7 @@ def _set_test(ctx):
     ])
     attrs = _attrs_after(
         _decl({"copts": generated}),
-        [bazel_target_mods.new(_verbs.set, _impl_target, "copts", value = "7")],
+        [bazel_target_mods.new(_verbs.set, _impl_target, "copts", value = 7)],
     )
     asserts.equals(env, 7, attrs["copts"])
 
@@ -547,6 +630,71 @@ select({
     return unittest.end(env)
 
 set_select_test = unittest.make(_set_select_test)
+
+def _set_select_branch_types_test(ctx):
+    env = unittest.begin(ctx)
+
+    # A branch value is emitted with its own type, so a `bool` renders as
+    # `True`, not `"True"`.
+    tests = [
+        struct(
+            msg = "bool branches",
+            attr_name = "alwayslink",
+            values = {
+                "//:release_build": True,
+                "//conditions:default": False,
+            },
+            exp = """\
+select({
+    "@@//:release_build": True,
+    "//conditions:default": False,
+})\
+""",
+        ),
+        struct(
+            msg = "int branches",
+            attr_name = "shard_count",
+            values = {
+                "//:release_build": 4,
+                "//conditions:default": -1,
+            },
+            exp = """\
+select({
+    "@@//:release_build": 4,
+    "//conditions:default": -1,
+})\
+""",
+        ),
+        struct(
+            msg = "string branches",
+            attr_name = "module_name",
+            values = {
+                "//:release_build": "Release",
+                "//conditions:default": "Debug",
+            },
+            exp = """\
+select({
+    "@@//:release_build": "Release",
+    "//conditions:default": "Debug",
+})\
+""",
+        ),
+    ]
+    for t in tests:
+        attrs = _attrs_after(
+            _decl(),
+            [bazel_target_mods.new(
+                _verbs.set_select,
+                _impl_target,
+                t.attr_name,
+                values = t.values,
+            )],
+        )
+        asserts.equals(env, t.exp, _starlark_for(attrs, t.attr_name), t.msg)
+
+    return unittest.end(env)
+
+set_select_branch_types_test = unittest.make(_set_select_branch_types_test)
 
 # MARK: - add_select
 
@@ -747,7 +895,22 @@ def _validation_error_test(ctx):
         _verbs.set,
         _impl_target,
         "alwayslink",
-        value = "False",
+        value = False,
+    )
+
+    # A `bazel_target_set_bool` and a `bazel_target_set_select_bool_dict` for
+    # the same target attribute are both setters, so they conflict.
+    bool_set_mod = bazel_target_mods.new(
+        _verbs.set,
+        _impl_target,
+        "copts",
+        value = True,
+    )
+    bool_set_select_mod = bazel_target_mods.new(
+        _verbs.set_select,
+        _impl_target,
+        "copts",
+        values = {"//:a": False},
     )
     other_target_set_mod = bazel_target_mods.new(
         _verbs.set,
@@ -777,6 +940,8 @@ def _validation_error_test(ctx):
         [set_select_mod, set_select_mod],
         [set_mod, set_select_mod],
         [set_mod, add_mod, set_select_mod],
+        [bool_set_mod, bool_set_select_mod],
+        [bool_set_mod, set_select_mod],
     ]:
         error = bazel_target_mods.validation_error(mods)
         asserts.true(
@@ -960,7 +1125,7 @@ def _mods_by_repo_test(ctx):
             tags = [struct(
                 target = _impl_label,
                 attr = "alwayslink",
-                value = "False",
+                value = False,
             )],
         ),
         struct(
@@ -1000,7 +1165,7 @@ def _mods_by_repo_test(ctx):
             {
                 "attr": "alwayslink",
                 "target": _impl_target,
-                "value": "False",
+                "value": False,
                 "verb": _verbs.set,
             },
             {
@@ -1060,7 +1225,7 @@ def bazel_target_mods_test_suite():
         new_error_test,
         ordering_test,
         parse_target_test,
-        parse_value_test,
+        set_select_branch_types_test,
         set_select_test,
         set_test,
         unknown_targets_error_test,
