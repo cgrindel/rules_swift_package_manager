@@ -1,0 +1,273 @@
+name: Debug swift package crash
+# Manual-only workflow for investigating GH-2485: `swift package` traps with
+# `Illegal instruction (core dumped)` during the Renovate post-upgrade step.
+#
+# Normal CI never exercises this path. `swift_package_tool` targets are
+# deliberately excluded from `tidy` (see examples/interesting_deps/BUILD.bazel),
+# and CI pins Linux Swift to the tag in .github/actions/set_up_ubuntu, which is
+# older than the toolchain in the Renovate container.
+#
+# Run it from the Actions tab, or:
+#   gh workflow run debug_swift_package_crash.yml --ref <branch> \
+#     -f swift_release_tags=swift-6.1-RELEASE,swift-6.2.4-RELEASE
+"on":
+  workflow_dispatch:
+    inputs:
+      workspace:
+        description: Workspace directory to run `swift package update` in.
+        default: examples/interesting_deps
+        required: true
+      swift_release_tags:
+        description: >-
+          Comma-separated Swift release tags to sweep on the bare runner. The Renovate container uses 6.2.4; CI normally uses 6.1.
+        default: swift-6.2.4-RELEASE
+        required: true
+      runner:
+        description: Runner image for the bare lane.
+        default: ubuntu-24.04
+        type: choice
+        options:
+          - ubuntu-24.04
+          - ubuntu-22.04
+      mode:
+        description: >-
+          bare = `swift package update` only. bazel = `bazel run //:update_swift_packages` (what Renovate actually runs). both = each in turn.
+        default: both
+        type: choice
+        options:
+          - both
+          - bare
+          - bazel
+      iterations:
+        description: Times to repeat each attempt. The crash is suspected to be intermittent.
+        default: "10"
+        required: true
+      run_in_renovate_container:
+        description: >-
+          Also run the bare lane inside ghcr.io/cgrindel/renovate-bot, which reproduces the container's Swift build and git configuration.
+        default: true
+        type: boolean
+permissions:
+  contents: read
+  packages: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+env:
+  # Write the crash report to a file. On the failing Renovate run the backtrace
+  # only went to stderr, where Renovate's URL-credential redaction spliced away
+  # the crash header and the trapping thread's frames. A file keeps them.
+  # `output-to` is ignored by toolchains that predate it, which degrades to the
+  # old stderr behavior rather than failing.
+  SWIFT_BACKTRACE: >-
+    enable=yes,threads=all,symbolicate=full,interactive=no,color=no,cache=yes,output-to=/tmp/swift-crash/backtrace.log
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      swift_tags: ${{ steps.split.outputs.tags }}
+    steps:
+      - id: split
+        name: Expand the Swift tag list into a matrix
+        shell: bash
+        # Dispatch inputs reach the shell through `env`, never through `${{ }}`
+        # interpolation, which would splice attacker-controlled text into the
+        # script itself.
+        env:
+          SWIFT_RELEASE_TAGS: ${{ inputs.swift_release_tags }}
+        run: |
+          set -o errexit -o nounset -o pipefail
+          tags="$(jq -cR 'split(",") | map(gsub("^\\s+|\\s+$";"")) | map(select(length > 0))' \
+            <<<"${SWIFT_RELEASE_TAGS}")"
+          echo "tags=${tags}" >>"${GITHUB_OUTPUT}"
+          echo "Sweeping: ${tags}"
+  bare_runner:
+    name: ${{ matrix.swift_tag }} on ${{ inputs.runner }}
+    needs: prepare
+    runs-on: ${{ inputs.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        swift_tag: ${{ fromJSON(needs.prepare.outputs.swift_tags) }}
+    env:
+      CC: clang
+      # Package.swift gates its real dependency list behind these. Without them
+      # it resolves `not-a-real-package` and never reaches the fetch that traps.
+      INTERESTING_DEPS_ENV: "1"
+      INTERESTING_DEPS_INHERIT_ENV: "1"
+    steps:
+      - uses: actions/checkout@v7
+      - name: Enable core dumps
+        shell: bash
+        run: |
+          set -o errexit -o nounset -o pipefail
+          mkdir -p /tmp/cores /tmp/swift-crash
+          ulimit -c unlimited
+          # Apport and systemd-coredump both swallow the dump; write it where
+          # we can upload it instead.
+          sudo sysctl -w kernel.core_pattern='/tmp/cores/core.%e.%p'
+          sudo sysctl -w fs.suid_dumpable=1
+      - uses: ./.github/actions/set_up_ubuntu
+        with:
+          ubuntu_version: ${{ inputs.runner == 'ubuntu-22.04' && '22.04' || '24.04' }}
+          swift_release_tag: ${{ matrix.swift_tag }}
+      - name: Record the environment
+        shell: bash
+        run: |
+          set -o errexit -o nounset -o pipefail
+          echo "::group::swift version"
+          swift --version || true
+          echo "::endgroup::"
+          echo "::group::git config"
+          git config --list --show-origin || true
+          echo "::endgroup::"
+          echo "::group::uname"
+          uname -a
+          echo "::endgroup::"
+      # Rung 1. No Bazel, no rule, no Renovate. If this trips, everything in
+      # this repo is out of the picture and it is a SwiftPM bug.
+      - name: Bare `swift package update`
+        if: ${{ inputs.mode != 'bazel' }}
+        shell: bash
+        env:
+          WORKSPACE: ${{ inputs.workspace }}
+          ITERATIONS: ${{ inputs.iterations }}
+        run: |
+          set -o errexit -o nounset -o pipefail
+          scratch="$(mktemp -d)"
+          cp "${WORKSPACE}/Package.swift" "${scratch}/"
+          cp "${WORKSPACE}/Package.resolved" "${scratch}/" 2>/dev/null || true
+
+          failures=0
+          for i in $(seq 1 "${ITERATIONS}"); do
+            echo "::group::bare iteration ${i}"
+            # Capturing the status keeps errexit from aborting the loop. The
+            # trap is suspected to be intermittent, so we want the failure
+            # count across every iteration, not just the first.
+            status=0
+            ( cd "${scratch}" && swift package update ) || status=$?
+            if [[ "${status}" -ne 0 ]]; then
+              failures=$((failures + 1))
+              echo "iteration ${i} exited ${status}"
+              # 132 is 128+SIGILL, the signal seen on the Renovate run.
+              if [[ "${status}" -eq 132 ]]; then
+                echo "::error::SIGILL reproduced on a bare swift package update, iteration ${i}"
+              fi
+            fi
+            echo "::endgroup::"
+          done
+          echo "bare lane: ${failures}/${ITERATIONS} iterations failed"
+      # Rung 2. Exactly what Renovate runs per workspace. `--script_path` dumps
+      # the resolved command so the full SwiftPM flag set is visible in the log,
+      # then we run it traced.
+      - name: Bazel `//:update_swift_packages`
+        if: ${{ inputs.mode != 'bare' }}
+        shell: bash
+        working-directory: ${{ inputs.workspace }}
+        env:
+          ITERATIONS: ${{ inputs.iterations }}
+        run: |
+          set -o errexit -o nounset -o pipefail
+          bazelisk run --action_env=PATH --script_path=/tmp/run_update.sh \
+            //:update_swift_packages
+          echo "::group::resolved command"
+          cat /tmp/run_update.sh
+          echo "::endgroup::"
+
+          failures=0
+          for i in $(seq 1 "${ITERATIONS}"); do
+            echo "::group::bazel iteration ${i}"
+            status=0
+            bash -x /tmp/run_update.sh || status=$?
+            if [[ "${status}" -ne 0 ]]; then
+              failures=$((failures + 1))
+              echo "iteration ${i} exited ${status}"
+              if [[ "${status}" -eq 132 ]]; then
+                echo "::error::SIGILL reproduced via //:update_swift_packages, iteration ${i}"
+              fi
+            fi
+            echo "::endgroup::"
+          done
+          echo "bazel lane: ${failures}/${ITERATIONS} iterations failed"
+      - name: Collect crash artifacts
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set -o errexit -o nounset -o pipefail
+          mkdir -p /tmp/swift-crash
+          cp -a /tmp/cores /tmp/swift-crash/cores 2>/dev/null || true
+          git config --list --show-origin >/tmp/swift-crash/git-config.txt 2>&1 || true
+          swift --version >/tmp/swift-crash/swift-version.txt 2>&1 || true
+          ls -la /tmp/swift-crash
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: crash-${{ matrix.swift_tag }}-${{ inputs.runner }}
+          path: /tmp/swift-crash
+          if-no-files-found: warn
+          retention-days: 14
+  renovate_container:
+    name: bare lane in the Renovate container
+    if: ${{ inputs.run_in_renovate_container }}
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/cgrindel/renovate-bot:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      options: --user root
+    env:
+      INTERESTING_DEPS_ENV: "1"
+      INTERESTING_DEPS_INHERIT_ENV: "1"
+    steps:
+      - uses: actions/checkout@v7
+      - name: Record the environment
+        shell: bash
+        run: |
+          echo "::group::swift version"
+          swift --version || true
+          echo "::endgroup::"
+          echo "::group::git config"
+          # The leading hypothesis for GH-2485 is that Renovate's credential
+          # helper or insteadOf rewrites make the `git` child process behave in
+          # a way SwiftPM's output reader mishandles. Diff this against the
+          # bare-runner job's copy.
+          git config --list --show-origin || true
+          echo "::endgroup::"
+          echo "::group::os"
+          cat /etc/os-release
+          echo "::endgroup::"
+      - name: Bare `swift package update`
+        shell: bash
+        env:
+          WORKSPACE: ${{ inputs.workspace }}
+          ITERATIONS: ${{ inputs.iterations }}
+        run: |
+          set -o nounset -o pipefail
+          mkdir -p /tmp/swift-crash
+          scratch="$(mktemp -d)"
+          cp "${WORKSPACE}/Package.swift" "${scratch}/"
+          cp "${WORKSPACE}/Package.resolved" "${scratch}/" 2>/dev/null || true
+
+          failures=0
+          for i in $(seq 1 "${ITERATIONS}"); do
+            echo "::group::container iteration ${i}"
+            status=0
+            ( cd "${scratch}" && swift package update ) || status=$?
+            if [[ "${status}" -ne 0 ]]; then
+              failures=$((failures + 1))
+              echo "iteration ${i} exited ${status}"
+              if [[ "${status}" -eq 132 ]]; then
+                echo "::error::SIGILL reproduced in the Renovate container, iteration ${i}"
+              fi
+            fi
+            echo "::endgroup::"
+          done
+          echo "container lane: ${failures}/${ITERATIONS} iterations failed"
+      - uses: actions/upload-artifact@v4
+        if: ${{ always() }}
+        with:
+          name: crash-renovate-container
+          path: /tmp/swift-crash
+          if-no-files-found: warn
+          retention-days: 14
