@@ -118,14 +118,19 @@ def _canonicalize_condition(condition):
 # MARK: - Target Label Parsing
 
 def _parse_target(target):
-    """Parse the `target` label `string` of a modification tag.
+    """Parse the `target` `string` of a modification tag.
 
-    Every declaration that this ruleset generates for a Swift package lands in
-    the root package of the generated repository. Only labels of the form
-    `@repo_name//:target_name` are supported.
+    The value looks like a label, but it is not resolved as one. The
+    repository portion is the name of the generated repository as this ruleset
+    named it (e.g. `swiftpkg_foo`), not an apparent name from the root
+    module's `use_repo` mapping and not Bazel's canonical name. Every
+    declaration that this ruleset generates for a Swift package lands in the
+    root package of the generated repository, so only values of the form
+    `@repo_name//:target_name` are supported. The canonical `@@` prefix is
+    rejected, because the value is never a canonical label.
 
     Args:
-        target: A label `string` (e.g. `@swiftpkg_foo//:Bar.rspm.__impl`).
+        target: A `string` (e.g. `@swiftpkg_foo//:Bar.rspm.__impl`).
 
     Returns:
         A `struct` with a `repo_name`, a `name` and an `error`. The `error` is
@@ -138,35 +143,42 @@ def _parse_target(target):
             repo_name = None,
             name = None,
             error = """\
-Invalid `swift_deps` target modification label '{target}'. {reason} Labels must \
-be of the form `@repo_name//:target_name` (e.g. \
-`@swiftpkg_foo//:Bar.rspm.__impl`).\
+Invalid `swift_deps` target modification target '{target}'. {reason} Targets \
+must be of the form `@repo_name//:target_name` (e.g. \
+`@swiftpkg_foo//:Bar.rspm.__impl`), where `repo_name` is the name of the \
+generated repository (e.g. `swiftpkg_foo`), not a `use_repo` alias or a \
+canonical repository name.\
 """.format(reason = reason, target = target),
         )
 
     if not target.startswith("@"):
-        return _error("The label must start with a repository name.")
+        return _error("The target must start with a repository name.")
     remainder = target[1:]
 
-    # Accept the canonical `@@repo//:name` spelling, as well.
+    # The canonical `@@` prefix is not accepted. The repository portion is a
+    # generated repository name, never a canonical repository name, so
+    # accepting `@@` would suggest canonical-label support that does not exist.
     if remainder.startswith("@"):
-        remainder = remainder[1:]
+        return _error("""\
+The target must not start with `@@`. The repository portion is the name of \
+the generated repository, not a canonical repository name.\
+""")
     pkg_idx = remainder.find("//")
     if pkg_idx < 0:
-        return _error("The label must contain a package separator (`//`).")
+        return _error("The target must contain a package separator (`//`).")
     repo_name = remainder[:pkg_idx]
     if repo_name == "":
         return _error("The repository name must not be empty.")
     rest = remainder[pkg_idx + len("//"):]
     name_idx = rest.find(":")
     if name_idx < 0:
-        return _error("The label must contain a target separator (`:`).")
+        return _error("The target must contain a target separator (`:`).")
     package = rest[:name_idx]
     name = rest[name_idx + 1:]
     if package != "":
         return _error("""\
 All generated declarations are in the root package of the generated \
-repository, but this label names the package '{package}'.\
+repository, but this target names the package '{package}'.\
 """.format(package = package))
     if name == "":
         return _error("The target name must not be empty.")

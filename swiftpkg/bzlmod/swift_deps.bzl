@@ -926,9 +926,13 @@ not be modified.\
 
 _bazel_target_target_attr = attr.string(
     doc = """\
-A label `string` naming a declaration in a generated repository, such as \
-`@swiftpkg_foo//:Bar.rspm.__impl`. Every generated declaration lives in the \
-root package of its repository, so the label must be of the form \
+A `string` naming a declaration in a generated repository, such as \
+`@swiftpkg_foo//:Bar.rspm.__impl`. It looks like a label, but it is not \
+resolved as one. The repository portion is the name of the generated \
+repository as this ruleset named it (e.g. `swiftpkg_foo`), not an alias \
+declared with `use_repo` and not Bazel's canonical repository name, so the \
+`@@` prefix is rejected. Every generated declaration lives in the root \
+package of its repository, so the value must be of the form \
 `@repo_name//:target_name`.\
 """,
     mandatory = True,

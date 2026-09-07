@@ -82,6 +82,12 @@ $ find "$(bazel info output_base)/external" -maxdepth 1 -name '*swiftpkg_example
 All generated declarations live in the root package of the generated repository, so the `target`
 value must be of the form `@repo_name//:target_name`.
 
+The `target` value looks like a label, but it is not resolved as one. The repository portion is the
+name of the generated repository as this ruleset named it (e.g. `swiftpkg_swift_log`). An alias
+declared with `use_repo` (e.g. `use_repo(swift_deps, log = "swiftpkg_swift_log")`) is not accepted,
+and neither is Bazel's canonical repository name, so the `@@` prefix is rejected. The name does not
+need to be imported with `use_repo` for a modification to apply.
+
 ## The verbs
 
 ### Setters

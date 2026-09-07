@@ -38,13 +38,9 @@ def _parse_target_test(ctx):
     asserts.equals(env, "swiftpkg_foo", parsed.repo_name)
     asserts.equals(env, _impl_target, parsed.name)
 
-    parsed = bazel_target_mods.parse_target("@@swiftpkg_foo//:Bar.rspm")
-    asserts.equals(env, None, parsed.error)
-    asserts.equals(env, "swiftpkg_foo", parsed.repo_name)
-    asserts.equals(env, "Bar.rspm", parsed.name)
-
     failures = [
         struct(msg = "no repository", target = "//:Bar.rspm"),
+        struct(msg = "canonical prefix", target = "@@swiftpkg_foo//:Bar.rspm"),
         struct(msg = "no package separator", target = "@swiftpkg_foo:Bar"),
         struct(msg = "no target separator", target = "@swiftpkg_foo//Bar"),
         struct(msg = "empty repository", target = "@//:Bar.rspm"),
@@ -70,6 +66,14 @@ def _parse_target_test(ctx):
         env,
         parsed.error.find("root package") > -1,
         "Expected the sub-package error to mention the root package.",
+    )
+
+    # The canonical prefix error should say that `@@` is not accepted.
+    parsed = bazel_target_mods.parse_target("@@swiftpkg_foo//:Bar.rspm")
+    asserts.true(
+        env,
+        parsed.error.find("`@@`") > -1,
+        "Expected the canonical prefix error to mention `@@`.",
     )
 
     return unittest.end(env)
