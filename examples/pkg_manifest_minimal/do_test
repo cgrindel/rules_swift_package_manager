@@ -15,6 +15,31 @@ assert_match() {
   [[ "${actual}" =~ ${pattern} ]] || (echo >&2 "${err_msg}" && exit 1)
 }
 
+# Summarize `bazel aquery --output=text` output. Each action starts with a line
+# that begins with `action '`; everything until the next such line belongs to
+# that action, including its multi-line `Command Line:` block. Prints
+# "<action_count> <actions_containing_the_flag>".
+count_actions_with_flag() {
+  local aquery_output="${1}"
+  local flag="${2}"
+  awk -v flag="${flag}" '
+    /^action / {
+      total += 1
+      seen[total] = 0
+    }
+    total > 0 && index($0, flag) > 0 {
+      seen[total] = 1
+    }
+    END {
+      matching = 0
+      for (idx = 1; idx <= total; idx += 1) {
+        matching += seen[idx]
+      }
+      print total + 0, matching + 0
+    }
+  ' <<<"${aquery_output}"
+}
+
 # Generate Swift external deps and update build files
 "${bazel}" run //:tidy
 
@@ -58,6 +83,64 @@ grep -q -F -- '"@@//:rspm_example_conditional"' "${gen_build_file}" || (
 # Starlark `bool`, not the string "False".
 grep -q -E -- '^ +alwayslink = False,$' "${gen_build_file}" || (
   echo >&2 "Expected 'alwayslink = False' in ${gen_build_file}"
+  exit 1
+)
+
+# Verify that the `select()` from `bazel_target_add_select` actually reaches the
+# Swift compile actions, and only under the matching configuration. `bazel
+# aquery` includes the command line by default (`--include_commandline` defaults
+# to true). rules_swift emits a single `SwiftCompile` action today, but it splits
+# compilation into `SwiftCompileModule`/`SwiftCompileCodegen` in some
+# configurations, so match every mnemonic with that prefix.
+conditional_copt="-DRSPM_EXAMPLE_CONDITIONAL"
+tagged_compiles="mnemonic(\"SwiftCompile.*\", ${tagged_target})"
+untagged_compiles="mnemonic(\"SwiftCompile.*\", ${untagged_target})"
+
+# With the condition satisfied, every Swift compile action for the modified
+# target must carry the conditional copt.
+aquery_output="$("${bazel}" aquery --output=text \
+  --define rspm_example_conditional=true "${tagged_compiles}")"
+read -r action_count matching_count \
+  < <(count_actions_with_flag "${aquery_output}" "${conditional_copt}")
+[[ "${action_count}" -gt 0 ]] || (
+  echo >&2 "Expected at least one Swift compile action for ${tagged_target}"
+  exit 1
+)
+[[ "${matching_count}" -eq "${action_count}" ]] || (
+  echo >&2 "Expected all ${action_count} Swift compile actions for" \
+    "${tagged_target} to include ${conditional_copt}, found ${matching_count}"
+  exit 1
+)
+
+# The modification must not leak to a sibling target in the same repository,
+# even when the condition is satisfied. This query keeps the same `--define` as
+# the previous one so that Bazel does not discard the analysis cache twice.
+aquery_output="$("${bazel}" aquery --output=text \
+  --define rspm_example_conditional=true "${untagged_compiles}")"
+read -r action_count matching_count \
+  < <(count_actions_with_flag "${aquery_output}" "${conditional_copt}")
+[[ "${action_count}" -gt 0 ]] || (
+  echo >&2 "Expected at least one Swift compile action for ${untagged_target}"
+  exit 1
+)
+[[ "${matching_count}" -eq 0 ]] || (
+  echo >&2 "Expected no Swift compile action for ${untagged_target} to include" \
+    "${conditional_copt}, found ${matching_count}"
+  exit 1
+)
+
+# Without the define, the condition is not satisfied and no Swift compile action
+# for the modified target may carry the copt.
+aquery_output="$("${bazel}" aquery --output=text "${tagged_compiles}")"
+read -r action_count matching_count \
+  < <(count_actions_with_flag "${aquery_output}" "${conditional_copt}")
+[[ "${action_count}" -gt 0 ]] || (
+  echo >&2 "Expected at least one Swift compile action for ${tagged_target}"
+  exit 1
+)
+[[ "${matching_count}" -eq 0 ]] || (
+  echo >&2 "Expected no Swift compile action for ${tagged_target} to include" \
+    "${conditional_copt} without the define, found ${matching_count}"
   exit 1
 )
 
