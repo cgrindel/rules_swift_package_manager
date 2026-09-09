@@ -7,6 +7,7 @@ load("//swiftpkg/internal:local_swift_package.bzl", "local_swift_package")
 load("//swiftpkg/internal:pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 load("//swiftpkg/internal:registry_swift_package.bzl", "registry_swift_package")
+load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
 load("//swiftpkg/internal:swift_deps_info.bzl", "swift_deps_info")
 load("//swiftpkg/internal:swift_package.bzl", "PATCH_ATTRS", "TOOL_ATTRS", "swift_package")
@@ -138,6 +139,7 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
         collect_src_info = False,
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
+        swift_executable = from_package.swift_executable,
     )
 
     # Read SE-0339 module aliases from the root package manifest, keyed by
@@ -237,6 +239,7 @@ def _declare_pkgs_from_package(module_ctx, from_package, config_pkgs, config_swi
                     cached_json_directory = dep_cached_json_directory,
                     resolved_pkg_map = None,
                     collect_src_info = False,
+                    swift_executable = from_package.swift_executable,
                 )
                 fs_deps = [
                     d
@@ -377,6 +380,7 @@ def _declare_pkg_from_dependency(
             publicly_expose_all_targets = publicly_expose_all_targets,
             registries = registries,
             replace_scm_with_registry = replace_scm_with_registry,
+            swift_executable = from_package.swift_executable,
             target_deps = target_deps,
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
@@ -411,6 +415,7 @@ in the lock file and will not be portable across machines.\
             target_deps = target_deps,
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
+            swift_executable = from_package.swift_executable,
         )
 
     elif dep.registry:
@@ -434,6 +439,7 @@ in the lock file and will not be portable across machines.\
             version = dep.registry.pin.state.version,
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
+            swift_executable = from_package.swift_executable,
         )
 
 def _declare_swift_package_repo(name, from_package, config_swift_package):
@@ -486,6 +492,7 @@ Expected only one `configure_swift_package` tag, but found multiple.\
 _from_package_tag = tag_class(
     attrs = dicts.add(
         swift_package_tool_attrs.swift_package_registry,
+        repo_rules.spm_attrs,
         {
             "cached_json_directory": attr.string(),
             "declare_swift_deps_info": attr.bool(

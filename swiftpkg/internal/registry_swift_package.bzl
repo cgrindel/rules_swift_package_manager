@@ -257,6 +257,7 @@ def _registry_swift_package_impl(repository_ctx):
         target_deps = repository_ctx.attr.target_deps,
         module_aliases = repository_ctx.attr.module_aliases,
         dep_module_aliases = repository_ctx.attr.dep_module_aliases,
+        swift_executable = attr.swift_executable,
     )
 
     repo_rules.download_artifacts(repository_ctx, pkg_ctx)
@@ -322,6 +323,7 @@ A `Package.resolved`, used to de-duplicate dependency identities when \
 _ALL_ATTRS = dicts.add(
     _REGISTRY_ATTRS,
     repo_rules.env_attrs,
+    repo_rules.spm_attrs,
     repo_rules.swift_attrs,
     {
         "build_file": attr.label(

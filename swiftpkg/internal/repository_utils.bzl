@@ -20,7 +20,8 @@ def _execute_spm_command(
         arguments,
         env = {},
         working_directory = "",
-        err_msg_tpl = None):
+        err_msg_tpl = None,
+        swift_executable = None):
     """Executes a Swift package manager command and returns the stdout.
 
     If the command returns a non-zero return code, this function will fail.
@@ -35,14 +36,21 @@ def _execute_spm_command(
         err_msg_tpl: Optional. A `string` template which will be formatted with
                      the `working_directory`, `exec_args`, `return_code`,
                      `stdout`, and `stderr` values.
+        swift_executable: Optional. A label pointing to the Swift executable.
+                          When omitted, Swift is resolved using `xcrun` on
+                          macOS and `PATH` on other platforms.
 
     Returns:
         A `string` representing the stdout of the command execution.
     """
-    exec_args = []
-    if _is_macos(repository_ctx):
-        exec_args.append("xcrun")
-    exec_args.extend(arguments)
+    if swift_executable:
+        repository_ctx.watch(swift_executable)
+        exec_args = [str(repository_ctx.path(swift_executable))] + arguments[1:]
+    else:
+        exec_args = []
+        if _is_macos(repository_ctx):
+            exec_args.append("xcrun")
+        exec_args.extend(arguments)
 
     # It is critical that the SPM commands execute using the host's default
     # SDK. This is typically MacOS.  If the SDKROOT is set to iOS for example,
@@ -97,7 +105,8 @@ def _parsed_json_from_spm_command(
         env = {},
         working_directory = "",
         debug_json_path = None,
-        cached_json_path = None):
+        cached_json_path = None,
+        swift_executable = None):
     if cached_json_path:
         cached_json_path_path = repository_ctx.path(cached_json_path)
         if cached_json_path_path.exists:
@@ -110,6 +119,7 @@ def _parsed_json_from_spm_command(
         arguments,
         env = env,
         working_directory = working_directory,
+        swift_executable = swift_executable,
     )
     json_str = _replace_working_directory(json_str, working_directory)
 

@@ -51,7 +51,11 @@ def _swift_package_impl(repository_ctx):
     attr = repository_ctx.attr
     directory = str(repository_ctx.path("."))
     env = repo_rules.get_exec_env(repository_ctx)
-    repo_rules.check_spm_version(repository_ctx, env = env)
+    repo_rules.check_spm_version(
+        repository_ctx,
+        env = env,
+        swift_executable = attr.swift_executable,
+    )
     replace_scm_with_registry = attr.replace_scm_with_registry
 
     # Download the repo
@@ -98,6 +102,7 @@ def _swift_package_impl(repository_ctx):
         target_deps = repository_ctx.attr.target_deps,
         module_aliases = repository_ctx.attr.module_aliases,
         dep_module_aliases = repository_ctx.attr.dep_module_aliases,
+        swift_executable = attr.swift_executable,
     )
 
     repo_rules.download_artifacts(repository_ctx, pkg_ctx)
@@ -255,6 +260,7 @@ _ALL_ATTRS = dicts.add(
     TOOL_ATTRS,
     _GIT_ATTRS,
     repo_rules.env_attrs,
+    repo_rules.spm_attrs,
     repo_rules.swift_attrs,
     {
         "cached_json_directory": attr.string(),
