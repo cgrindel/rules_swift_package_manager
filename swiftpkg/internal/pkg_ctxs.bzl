@@ -14,7 +14,8 @@ def _read(
         replace_scm_with_registry = False,
         target_deps = {},
         module_aliases = {},
-        dep_module_aliases = ""):
+        dep_module_aliases = "",
+        swift_executable = None):
     pkg_info = pkginfos.get(
         repository_ctx = repository_ctx,
         directory = repo_dir,
@@ -23,6 +24,7 @@ def _read(
         resolved_pkg_map = resolved_pkg_map,
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
+        swift_executable = swift_executable,
     )
     return _new(
         pkg_info = pkg_info,
