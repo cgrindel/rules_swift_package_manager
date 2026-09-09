@@ -129,7 +129,6 @@ _all_os_all_bazel_versions_test_examples = [
 _all_os_single_bazel_version_test_examples = [
     "grdb_example",
     "grpc_example",
-    "language_modes_example",
     "module_aliases_example",
     "vapor_example",
 ]
@@ -143,6 +142,9 @@ _macos_single_bazel_version_test_examples = [
     "injectionnext_example",
     "ios_sim",
     "kscrash_example",
+    # Only runs on macOS. On Linux the Swift 6 language mode is not applied to
+    # the generated targets, so the Tools5_Mode6 and Tools6 assertions fail.
+    "language_modes_example",
     "lottie_ios_example",
     "messagekit_example",
     "modulemap_comments_example",

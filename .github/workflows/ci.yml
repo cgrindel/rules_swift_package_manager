@@ -60,8 +60,6 @@ jobs:
           - test: '@@//examples:kscrash_example_test_bazel_.bazelversion'
             runner: macos-15
           - test: '@@//examples:language_modes_example_test_bazel_.bazelversion'
-            runner: ubuntu-22.04
-          - test: '@@//examples:language_modes_example_test_bazel_.bazelversion'
             runner: macos-15
           - test: '@@//examples:lottie_ios_example_test_bazel_.bazelversion'
             runner: macos-15
