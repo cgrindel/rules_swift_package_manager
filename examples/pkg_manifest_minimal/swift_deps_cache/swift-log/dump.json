@@ -52,7 +52,7 @@
 
       ],
       "exclude" : [
-
+        "CMakeLists.txt"
       ],
       "name" : "Logging",
       "packageAccess" : true,
@@ -116,7 +116,7 @@
         }
       ],
       "exclude" : [
-
+        "CMakeLists.txt"
       ],
       "name" : "InMemoryLogging",
       "packageAccess" : true,
@@ -180,7 +180,7 @@
         }
       ],
       "exclude" : [
-
+        "CMakeLists.txt"
       ],
       "name" : "LoggingTests",
       "packageAccess" : true,
@@ -250,7 +250,7 @@
         }
       ],
       "exclude" : [
-
+        "CMakeLists.txt"
       ],
       "name" : "InMemoryLoggingTests",
       "packageAccess" : true,
@@ -310,18 +310,18 @@
   },
   "traits" : [
     {
-      "description" : "Warning and above available (compiles out trace, debug, info, notice)",
-      "enabledTraits" : [
-
-      ],
-      "name" : "MaxLogLevelWarning"
-    },
-    {
       "description" : "Notice and above available (compiles out trace, debug, info)",
       "enabledTraits" : [
 
       ],
       "name" : "MaxLogLevelNotice"
+    },
+    {
+      "description" : "Warning and above available (compiles out trace, debug, info, notice)",
+      "enabledTraits" : [
+
+      ],
+      "name" : "MaxLogLevelWarning"
     },
     {
       "description" : "Debug and above available (compiles out trace)",
@@ -331,6 +331,13 @@
       "name" : "MaxLogLevelDebug"
     },
     {
+      "description" : "Only critical available (compiles out all except critical)",
+      "enabledTraits" : [
+
+      ],
+      "name" : "MaxLogLevelCritical"
+    },
+    {
       "description" : "The default traits of this package.",
       "enabledTraits" : [
 
@@ -338,11 +345,11 @@
       "name" : "default"
     },
     {
-      "description" : "All logging compiled out (no log levels available)",
+      "description" : "Error and above available (compiles out trace, debug, info, notice, warning)",
       "enabledTraits" : [
 
       ],
-      "name" : "MaxLogLevelNone"
+      "name" : "MaxLogLevelError"
     },
     {
       "description" : "Info and above available (compiles out trace, debug)",
@@ -352,18 +359,11 @@
       "name" : "MaxLogLevelInfo"
     },
     {
-      "description" : "Only critical available (compiles out all except critical)",
+      "description" : "All logging compiled out (no log levels available)",
       "enabledTraits" : [
 
       ],
-      "name" : "MaxLogLevelCritical"
-    },
-    {
-      "description" : "Error and above available (compiles out trace, debug, info, notice, warning)",
-      "enabledTraits" : [
-
-      ],
-      "name" : "MaxLogLevelError"
+      "name" : "MaxLogLevelNone"
     }
   ]
 }
