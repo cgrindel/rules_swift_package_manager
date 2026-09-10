@@ -158,6 +158,7 @@ _macos_single_bazel_version_test_examples = [
     "tca_example",
     "symlink_example",
     "swift_package_registry_example",
+    "swift_parsing_example",
     "sqlite_data_example",
     "yoga_example",
 ]

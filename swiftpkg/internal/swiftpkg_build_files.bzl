@@ -251,7 +251,8 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         load_stmts = [swift_library_load_stmt, spm_minimum_os_target_load_stmt]
         decls = [
             _minimum_os_wrapper_decl(
-                pkg_info = pkg_ctx.pkg_info,
+                pkg_ctx = pkg_ctx,
+                target = target,
                 kind = swiftpkg_minimum_os_kinds.target,
                 name = public_label_name,
                 actual = ":{}".format(implementation_label_name),
@@ -266,7 +267,8 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         load_stmts = [swift_binary_load_stmt, spm_minimum_os_binary_load_stmt]
         decls = [
             _minimum_os_wrapper_decl(
-                pkg_info = pkg_ctx.pkg_info,
+                pkg_ctx = pkg_ctx,
+                target = target,
                 kind = swiftpkg_minimum_os_kinds.binary,
                 name = public_label_name,
                 actual = ":{}".format(implementation_label_name),
@@ -281,7 +283,8 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
         load_stmts = [swift_test_load_stmt, spm_minimum_os_test_load_stmt]
         decls = [
             _minimum_os_wrapper_decl(
-                pkg_info = pkg_ctx.pkg_info,
+                pkg_ctx = pkg_ctx,
+                target = target,
                 kind = swiftpkg_minimum_os_kinds.test,
                 name = public_label_name,
                 actual = ":{}".format(implementation_label_name),
@@ -762,7 +765,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     )
     decls.append(
         _minimum_os_wrapper_decl(
-            pkg_info = pkg_ctx.pkg_info,
+            pkg_ctx = pkg_ctx,
+            target = target,
             kind = swiftpkg_minimum_os_kinds.target,
             name = public_label_name,
             actual = ":{}".format(implementation_label_name),
@@ -965,7 +969,8 @@ def _system_library_build_file(repository_ctx, pkg_ctx, target):
     )
     decls.append(
         _minimum_os_wrapper_decl(
-            pkg_info = pkg_ctx.pkg_info,
+            pkg_ctx = pkg_ctx,
+            target = target,
             kind = swiftpkg_minimum_os_kinds.target,
             name = public_label_name,
             actual = ":{}".format(implementation_label_name),
@@ -1029,7 +1034,8 @@ expected: {expected}\
             },
         ),
         _minimum_os_wrapper_decl(
-            pkg_info = pkg_ctx.pkg_info,
+            pkg_ctx = pkg_ctx,
+            target = target,
             kind = swiftpkg_minimum_os_kinds.target,
             name = public_label_name,
             actual = ":{}".format(implementation_label_name),
@@ -1292,7 +1298,8 @@ def _executable_product_build_file(pkg_ctx, product):
                 ],
                 decls = [
                     _minimum_os_wrapper_decl(
-                        pkg_info = pkg_info,
+                        pkg_ctx = pkg_ctx,
+                        target = target,
                         kind = swiftpkg_minimum_os_kinds.binary,
                         name = product.name,
                         actual = ":{}".format(implementation_name),
@@ -1476,12 +1483,18 @@ def _target_visibility(expose_build_targets):
 def _implementation_target_visibility():
     return ["//:__subpackages__"]
 
-def _minimum_os_wrapper_decl(pkg_info, kind, name, actual, visibility):
+def _minimum_os_wrapper_decl(pkg_ctx, target, kind, name, actual, visibility):
     attrs = {
         "deps": [actual],
         "visibility": visibility,
     }
-    attrs.update(minimum_os_versions.transition_attrs(pkg_info))
+
+    # Test targets are not derived individually (see
+    # `minimum_os_versions.for_targets`); their wrappers get the package-wide
+    # maximum, which is never lower than any target they depend on.
+    effective = pkg_ctx.minimum_os_versions
+    versions = effective.targets.get(target.name, effective.package)
+    attrs.update(minimum_os_versions.transition_attrs(versions))
     return build_decls.new(
         kind = kind,
         name = name,

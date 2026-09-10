@@ -150,6 +150,8 @@ bzl_library(
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":minimum_os_platforms",
+        ":pkginfo_dependencies",
+        ":pkginfos",
         "//config_settings/spm/platform:platforms",
     ],
 )
@@ -224,7 +226,10 @@ bzl_library(
     srcs = ["pkg_ctxs.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":bazel_repo_names",
         ":manual_target_deps",
+        ":minimum_os_versions",
+        ":pkginfo_dependencies",
         ":pkginfos",
         ":repository_utils",
     ],

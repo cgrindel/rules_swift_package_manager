@@ -43,6 +43,16 @@ collisions with same-named modules elsewhere in the build (e.g. when using \
 explicit module maps).\
 """,
     ),
+    "package_repos": attr.label(
+        doc = """\
+A JSON file listing the Bazel repository names of every Swift package declared \
+alongside this one (`{"repo_names": [...]}`). When set, this package's \
+generated targets build against the highest minimum OS version found among \
+the package's own platform declarations and the effective versions of the \
+packages it depends on, matching `swift build`. Set by the `swift_deps` bzlmod \
+extension; when unset only the package's own declarations are used.\
+""",
+    ),
     "target_deps": attr.string_list_dict(
         doc = """\
 Additional dependencies to add to generated targets. Keys are Swift package \
