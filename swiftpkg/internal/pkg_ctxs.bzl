@@ -1,5 +1,6 @@
 """Module for creating a module index context for a package info."""
 
+load(":bazel_target_mods.bzl", btm = "bazel_target_mods")
 load(":manual_target_deps.bzl", "manual_target_deps")
 load(":pkginfos.bzl", "pkginfos")
 load(":repository_utils.bzl", "repository_utils")
@@ -14,7 +15,8 @@ def _read(
         replace_scm_with_registry = False,
         target_deps = {},
         module_aliases = {},
-        dep_module_aliases = ""):
+        dep_module_aliases = "",
+        bazel_target_mods = ""):
     pkg_info = pkginfos.get(
         repository_ctx = repository_ctx,
         directory = repo_dir,
@@ -30,6 +32,7 @@ def _read(
         target_deps = target_deps,
         module_aliases = module_aliases,
         dep_module_aliases = dep_module_aliases,
+        bazel_target_mods = bazel_target_mods,
     )
 
 def _new(
@@ -37,7 +40,8 @@ def _new(
         repo_name,
         target_deps = {},
         module_aliases = {},
-        dep_module_aliases = ""):
+        dep_module_aliases = "",
+        bazel_target_mods = ""):
     manual_target_deps.validate(pkg_info, target_deps)
 
     # A package's sources may import an aliased module under its original
@@ -52,12 +56,16 @@ def _new(
     for dep in pkg_info.dependencies:
         module_alias_flags.update(aliases_by_identity.get(dep.identity, {}))
 
+    decoded_bazel_target_mods = btm.decode(bazel_target_mods)
+    btm.validate(decoded_bazel_target_mods)
+
     return struct(
         pkg_info = pkg_info,
         repo_name = repo_name,
         target_deps = target_deps,
         module_aliases = module_aliases,
         module_alias_flags = module_alias_flags,
+        bazel_target_mods = decoded_bazel_target_mods,
     )
 
 pkg_ctxs = struct(

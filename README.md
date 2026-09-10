@@ -23,6 +23,7 @@ development inside a Bazel workspace.
     * [(Optional) Use `swift_package` repository for updating packages](#optional-use-swift_package-repository-for-updating-packages)
     * [(Optional) Enable `swift_deps_info` generation for the Gazelle plugin](#optional-enable-swift_deps_info-generation-for-the-gazelle-plugin)
     * [(Optional) Add dependencies to generated Swift package targets](#optional-add-dependencies-to-generated-swift-package-targets)
+    * [(Optional) Override attributes on generated Bazel targets](#optional-override-attributes-on-generated-bazel-targets)
   * [3. Create a minimal `Package.swift` file.](#3-create-a-minimal-packageswift-file)
   * [4. Run `swift package update`](#4-run-swift-package-update)
   * [5. Run `bazel mod tidy`.](#5-run-bazel-mod-tidy)
@@ -205,6 +206,85 @@ Keys should usually be Swift package target names without `.rspm`; these map to 
 implementation targets like `ExampleTarget.rspm.__impl`. If a key already contains `.rspm`, it is
 matched as a generated target name unchanged.
 
+#### (Optional) Override attributes on generated Bazel targets
+
+When a generated declaration needs an attribute that this ruleset does not model, use the
+repeatable, `buildozer`-inspired tags to edit it directly. Each takes a `target` label naming a
+declaration in a generated repository and the `attr` to modify.
+
+Nothing is parsed or guessed: you state the type of the value by picking the tag. The `set` verb has
+one tag per value type (`bazel_target_set_bool`, `_int`, `_string`, `_string_list`,
+`_string_dict`), and so does the `set_select` verb (`bazel_target_set_select_bool_dict`,
+`_int_dict`, `_string_dict`, `_string_list_dict`).
+
+```bazel
+# Replace (or create) an attribute.
+swift_deps.bazel_target_set_bool(
+    attr = "alwayslink",
+    target = "@swiftpkg_example//:ExampleTarget.rspm.__impl",
+    value = False,
+)
+
+swift_deps.bazel_target_set_string_list(
+    attr = "copts",
+    target = "@swiftpkg_example//:ExampleTarget.rspm.__impl",
+    value = ["-DEXAMPLE_FEATURE"],
+)
+
+# Append to a list attribute, after the generated values.
+swift_deps.bazel_target_add(
+    attr = "copts",
+    target = "@swiftpkg_example//:ExampleTarget.rspm.__impl",
+    values = ["-DEXAMPLE_FEATURE"],
+)
+
+# Replace an attribute with a `select()`.
+swift_deps.bazel_target_set_select_string_list_dict(
+    attr = "copts",
+    target = "@swiftpkg_example//:ExampleTarget.rspm.__impl",
+    values = {
+        "//:release_build": ["-DEXAMPLE_RELEASE_FEATURE"],
+        "//conditions:default": [],
+    },
+)
+
+# Append a `select()` after the generated value.
+swift_deps.bazel_target_add_select(
+    attr = "copts",
+    target = "@swiftpkg_example//:ExampleTarget.rspm.__impl",
+    values = {"//:release_build": ["-DEXAMPLE_RELEASE_FEATURE"]},
+)
+```
+
+Bazel has no `bool` or `int` dictionary attribute, so `bazel_target_set_select_bool_dict` and
+`bazel_target_set_select_int_dict` take `string` branch values and convert them. A `bool` branch
+must be exactly `True` or `False` and an `int` branch must be digits with an optional leading `-`;
+anything else fails when the module extension is evaluated.
+
+Setters accept an empty value, so `value = []` clears a list attribute. `bazel_target_add` requires
+at least one value and the `select()` verbs require at least one condition. The `add` verbs are
+list-only; use a setter to write a scalar or a `dict`.
+
+Every generated declaration lives in the root package of its repository, so `target` must be of the
+form `@repo_name//:target_name`. `select()` keys that are relative to the main repository (e.g.
+`//:release_build`) are canonicalized (e.g. `@@//:release_build`) so that they still resolve from
+inside the generated repository. `bazel_target_add_select` adds a `//conditions:default` branch when
+you do not supply one; the `bazel_target_set_select_*` tags do not.
+
+For a given target and attribute, at most one `bazel_target_set_*` or `bazel_target_set_select_*`
+tag may be declared. The setter is applied first, then every `bazel_target_add` in declaration
+order, then every `bazel_target_add_select` in declaration order. Because additions land last, flags
+that follow last-option-wins semantics (e.g. `copts`) override the generated values.
+
+These tags may only be declared by the root module, and they cannot be combined with a complete
+`configure_package(build_file = ...)` override for the same package because that override bypasses
+generated declarations. There is no allowlist of attribute names: an attribute that the generated
+rule does not understand fails when Bazel loads the generated `BUILD.bazel` file, with Bazel's own
+error message. Use at your own risk.
+
+For details on finding the target to modify, the ordering rules, and real-world examples, see [our
+document on modifying generated Bazel targets].
+
 ### 3. Create a minimal `Package.swift` file.
 
 Create a minimal `Package.swift` file that only contains the external dependencies that are directly
@@ -277,6 +357,7 @@ The following are a few tips to consider as you work with your repository:
 [Bazel's hybrid mode]: https://bazel.build/external/migration#hybrid-mode
 [bzlmod]: https://bazel.build/external/overview#bzlmod
 [our document on patching Swift packages]: docs/patch_swift_package.md
+[our document on modifying generated Bazel targets]: docs/modify_generated_bazel_targets.md
 [CI GitHub workflow]: .github/workflows/ci.yml
 [Gazelle plugin]: https://github.com/bazelbuild/bazel-gazelle/blob/master/extend.md
 [Gazelle]: https://github.com/bazelbuild/bazel-gazelle

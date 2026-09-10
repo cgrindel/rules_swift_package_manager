@@ -9,6 +9,16 @@ tidy(
     ],
 )
 
+# Used by the `bazel_target_add_select` tag in the MODULE.bazel. It is never
+# satisfied unless `--define rspm_example_conditional=true` is passed, so the
+# conditional copt is inert for the build. It must be publicly visible because
+# the `select()` that references it lives in a generated repository.
+config_setting(
+    name = "rspm_example_conditional",
+    values = {"define": "rspm_example_conditional=true"},
+    visibility = ["//visibility:public"],
+)
+
 # Puprosefully am not adding this to tidy. It is expensive to run and only
 # needs to be run when the Package.swift has been updated.
 swift_package_tool(
