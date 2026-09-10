@@ -4,7 +4,8 @@ load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load("//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_binary", "spm_minimum_os_target")
 load(":provider_surface_tests.bzl", "provider_surface_test_suite")
-load(":test_fixtures.bzl", "apple_framework_import_provider_target", "executable_provider_target", "spm_provider_consumer", "swift_c_provider_target")
+load(":test_fixtures.bzl", "apple_framework_import_provider_target", "executable_provider_target", "minimum_os_probe", "spm_provider_consumer", "swift_c_provider_target")
+load(":transitive_floor_tests.bzl", "transitive_floor_test_suite")
 
 bzlformat_pkg(name = "bzlformat")
 
@@ -77,6 +78,41 @@ spm_provider_consumer(
 )
 
 provider_surface_test_suite(name = "provider_surface_tests")
+
+# A package declaring iOS 15 (e.g. swift-case-paths 1.10 under Swift 6.4).
+minimum_os_probe(
+    name = "imported_actual",
+)
+
+spm_minimum_os_target(
+    name = "imported_wrapped",
+    ios_minimum_os = "15.0",
+    macos_minimum_os = "12.0",
+    tvos_minimum_os = "12.0",
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+    deps = [":imported_actual"],
+)
+
+# A package declaring iOS 13 that imports the package above (e.g.
+# swift-parsing). Its wrapper carries the floor derived from its dependency,
+# as `pkg_ctxs` produces for generated packages.
+minimum_os_probe(
+    name = "importer_actual",
+    deps = [":imported_wrapped"],
+)
+
+spm_minimum_os_target(
+    name = "importer_wrapped",
+    ios_minimum_os = "15.0",
+    macos_minimum_os = "12.0",
+    tvos_minimum_os = "12.0",
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+    deps = [":importer_actual"],
+)
+
+transitive_floor_test_suite(name = "transitive_floor_tests")
 
 bzl_library(
     name = "test_fixtures",
