@@ -41,6 +41,25 @@ spl_setup_registries() {
   fi
 }
 
+# Prints the given path anchored to BUILD_WORKSPACE_DIRECTORY when it
+# is relative. Relative paths would otherwise resolve against the
+# process working directory, which for `bazel run` is the target's
+# runfiles tree in the output base — configuration-specific state that
+# Bazel can rebuild or delete while a `swift package` command is still
+# running. Anchoring to the workspace also makes concurrent direct
+# `swift package` invocations against the same package share SwiftPM's
+# file locks with these targets.
+#
+# Arguments:
+#   $1 - the path to anchor (may be absolute)
+spl_anchor_to_workspace() {
+  local path="$1"
+  case "${path}" in
+    /*) printf '%s' "${path}" ;;
+    *) printf '%s' "${BUILD_WORKSPACE_DIRECTORY}/${path}" ;;
+  esac
+}
+
 # Orchestrates swift executable resolution, netrc/registry setup, and
 # executes a `swift package` command with the full set of SPM flags.
 #
@@ -176,6 +195,14 @@ spl_run_swift_package() {
 
   # Resolve package_path relative to workspace.
   package_path="${BUILD_WORKSPACE_DIRECTORY}/${package_path}"
+
+  # Anchor the SPM state directories to the workspace as well so they
+  # survive Bazel rebuilds and share SwiftPM's inter-process file locks
+  # with direct `swift package` invocations against the same package.
+  build_path="$(spl_anchor_to_workspace "${build_path}")"
+  cache_path="$(spl_anchor_to_workspace "${cache_path}")"
+  config_path="$(spl_anchor_to_workspace "${config_path}")"
+  security_path="$(spl_anchor_to_workspace "${security_path}")"
 
   # Resolve swift executable.
   local swift_executable

@@ -6,6 +6,7 @@
 * [Does this replace [rules_spm]?](#does-this-replace-rules_spm)
 * [Where is the Swift gazelle plugin?](#where-is-the-swift-gazelle-plugin)
 * [After running `//:swift_update_pkgs`, I see a `.build` directory. What is it? Do I need it?](#after-running-swift_update_pkgs-i-see-a-build-directory-what-is-it-do-i-need-it)
+* [Where do the `swift_package_tool` targets (e.g. `@swift_package//:resolve`) write their state?](#where-do-the-swift_package_tool-targets-eg-swift_packageresolve-write-their-state)
 * [Can I store the Swift dependency files in a sub-package (i.e., not in the root of the workspace)?](#can-i-store-the-swift-dependency-files-in-a-sub-package-ie-not-in-the-root-of-the-workspace)
 * [How do I handle the error `Unable to resolve byName reference XXX in @swiftpkg_yyy.`?](#how-do-i-handle-the-error-unable-to-resolve-byname-reference-xxx-in-swiftpkg_yyy)
   * [How do I fix this issue?](#how-do-i-fix-this-issue)
@@ -34,6 +35,24 @@ resolves the external dependencies listed in your `Package.swift` by running Swi
 commands. These commands result in a `.build` directory being created. The directory is a side
 effect of running the Swift package manager commands. It can be ignored and should not be checked
 into source control. It is not used by the Gazelle plugin or the Starlark repository rules.
+
+## Where do the `swift_package_tool` targets (e.g. `@swift_package//:resolve`) write their state?
+
+Into your workspace. The `build_path`, `cache_path`, `config_path` and `security_path` attributes
+default to `.build`, `.cache`, `.config` and `.security`; a relative value is resolved against
+`BUILD_WORKSPACE_DIRECTORY`, matching `package_path`. This keeps Swift package manager state out of
+the runfiles tree, where Bazel may rebuild or delete it mid-command, and lets a direct
+`swift package resolve` share Swift package manager's file locks with the Bazel targets.
+
+Because `.build` holds package checkouts that carry their own `BUILD` files, add these directories
+to your `.bazelignore` and `.gitignore`:
+
+```
+.build
+.cache
+.config
+.security
+```
 
 ## Can I store the Swift dependency files in a sub-package (i.e., not in the root of the workspace)?
 

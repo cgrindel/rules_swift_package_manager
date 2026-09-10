@@ -30,15 +30,15 @@ Swift Package Manager's search paths or in the manually specified \
 
 _swift_package_tool_config_attrs = {
     "build_path": attr.string(
-        doc = "The relative path within the runfiles tree for the Swift Package Manager build directory.",
+        doc = "The path for the Swift Package Manager build directory. A relative path is resolved against the workspace directory (`BUILD_WORKSPACE_DIRECTORY`).",
         default = ".build",
     ),
     "cache_path": attr.string(
-        doc = "The relative path within the runfiles tree for the shared Swift Package Manager cache directory.",
+        doc = "The path for the shared Swift Package Manager cache directory. A relative path is resolved against the workspace directory (`BUILD_WORKSPACE_DIRECTORY`).",
         default = ".cache",
     ),
     "config_path": attr.string(
-        doc = "The relative path within the runfiles tree for the Swift Package Manager configuration directory.",
+        doc = "The path for the Swift Package Manager configuration directory. A relative path is resolved against the workspace directory (`BUILD_WORKSPACE_DIRECTORY`).",
         default = ".config",
     ),
     "dependency_caching": attr.bool(
@@ -62,7 +62,7 @@ use the registry to retrieve them instead of source control when possible.""",
         default = False,
     ),
     "security_path": attr.string(
-        doc = "The relative path within the runfiles tree for the security directory.",
+        doc = "The path for the security directory. A relative path is resolved against the workspace directory (`BUILD_WORKSPACE_DIRECTORY`).",
         default = ".security",
     ),
     "use_registry_identity_for_scm": attr.bool(
