@@ -199,7 +199,7 @@ jobs:
           git config --list --show-origin >/tmp/swift-crash/git-config.txt 2>&1 || true
           swift --version >/tmp/swift-crash/swift-version.txt 2>&1 || true
           ls -la /tmp/swift-crash
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: ${{ always() }}
         with:
           name: crash-${{ matrix.swift_tag }}-${{ inputs.runner }}
@@ -264,7 +264,7 @@ jobs:
             echo "::endgroup::"
           done
           echo "container lane: ${failures}/${ITERATIONS} iterations failed"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: ${{ always() }}
         with:
           name: crash-renovate-container

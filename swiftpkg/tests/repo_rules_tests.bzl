@@ -71,7 +71,7 @@ def _download_artifacts_test(ctx):
         url = "https://github.com/example/test-pkg",
         version = "1.0.0",
     )
-    pkg_ctx = struct(pkg_info = pkg_info)
+    pkg_ctx = struct(pkg_info = pkg_info, bazel_target_mods = [])
 
     repo_rules.download_artifacts(repository_ctx, pkg_ctx)
 
@@ -114,7 +114,10 @@ def _gen_build_files_with_build_file_test(ctx):
 
     build_file_label = "//some/pkg:BUILD.custom"
     repository_ctx = struct(
-        attr = struct(build_file = build_file_label),
+        attr = struct(
+            bazel_target_mods = "",
+            build_file = build_file_label,
+        ),
         template = _template,
     )
 
@@ -168,7 +171,7 @@ def _gen_build_files_without_build_file_test(ctx):
         return struct(return_code = 0, stdout = "", stderr = "")
 
     repository_ctx = struct(
-        attr = struct(build_file = None),
+        attr = struct(bazel_target_mods = "", build_file = None),
         name = "bzlmodmangled~test_pkg",
         template = _template,
         file = _file,
@@ -183,7 +186,7 @@ def _gen_build_files_without_build_file_test(ctx):
         targets = [],
         products = [],
     )
-    pkg_ctx = struct(pkg_info = pkg_info)
+    pkg_ctx = struct(pkg_info = pkg_info, bazel_target_mods = [])
 
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
