@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/stripe/stripe-ios-spm.git",
       "state" : {
-        "revision" : "ae3818759d770514b1a3547384837a9dc619fcbd",
-        "version" : "26.9.0"
+        "revision" : "18508f5216629b2c100e8fc3a7f686e7d71aa498",
+        "version" : "26.11.0"
       }
     }
   ],
