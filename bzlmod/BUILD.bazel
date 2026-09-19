@@ -6,6 +6,7 @@ load(
     "integration_test_utils",
 )
 load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 load("//ci:defs.bzl", "ci_integration_test_params")
 
 bzlformat_pkg(name = "bzlformat")
@@ -47,6 +48,22 @@ bazel_integration_test(
         "//:runtime_files",
     ],
     workspace_path = "workspace",
+)
+
+# Renovate rewrites pins in every Package.resolved without checking the
+# matching Package.swift. Fail regular CI if that undoes an exact pin that the
+# BCR presubmit depends on.
+sh_test(
+    name = "pinned_deps_test",
+    srcs = ["pinned_deps_test.sh"],
+    args = [
+        "$(rootpath workspace/Package.swift)",
+        "$(rootpath workspace/Package.resolved)",
+    ],
+    data = [
+        "workspace/Package.resolved",
+        "workspace/Package.swift",
+    ],
 )
 
 ci_integration_test_params(
