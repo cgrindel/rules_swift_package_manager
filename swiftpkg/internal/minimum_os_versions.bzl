@@ -5,6 +5,7 @@ load(
     spm_platforms = "platforms",
 )
 load(":minimum_os_platforms.bzl", "minimum_os_platforms")
+load(":semver.bzl", "semver")
 
 _MINIMUM_OS_CONFIG_BY_PLATFORM = minimum_os_platforms.by_platform()
 
@@ -21,8 +22,15 @@ def _by_platform(pkg_info):
         for platform_name, config in _MINIMUM_OS_CONFIG_BY_PLATFORM.items()
     }
 
+    # SwiftPM raises a declared version that is below its oldest supported
+    # version, so a package that declares iOS 10 is built and checked at the
+    # fallback. The fallbacks have no patch component, so comparing major and
+    # minor is enough.
     for platform in pkg_info.platforms:
-        if platform.name in _MINIMUM_OS_CONFIG_BY_PLATFORM:
+        fallback = versions.get(platform.name)
+        if fallback == None:
+            continue
+        if semver.major_minor(platform.version) >= semver.major_minor(fallback):
             versions[platform.name] = platform.version
 
     return versions

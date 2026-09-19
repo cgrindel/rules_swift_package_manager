@@ -50,6 +50,28 @@ def _transition_attrs_uses_fallbacks_for_omitted_platforms_test(ctx):
 
 transition_attrs_uses_fallbacks_for_omitted_platforms_test = unittest.make(_transition_attrs_uses_fallbacks_for_omitted_platforms_test)
 
+def _transition_attrs_raises_declared_versions_to_fallbacks_test(ctx):
+    env = unittest.begin(ctx)
+
+    # SwiftPM raises a declared version that is below its oldest supported
+    # version. A lexical comparison would keep macOS 10.9 over 10.13.
+    attrs = minimum_os_versions.transition_attrs(_pkg_info(platforms = [
+        pkginfos.new_platform("iOS", "10.0"),
+        pkginfos.new_platform("macOS", "10.9"),
+    ]))
+
+    asserts.equals(env, {
+        "ios_minimum_os": "12.0",
+        "macos_minimum_os": "10.13",
+        "tvos_minimum_os": "12.0",
+        "visionos_minimum_os": "1.0",
+        "watchos_minimum_os": "4.0",
+    }, attrs)
+
+    return unittest.end(env)
+
+transition_attrs_raises_declared_versions_to_fallbacks_test = unittest.make(_transition_attrs_raises_declared_versions_to_fallbacks_test)
+
 def _fallback_accepts_package_description_spelling_test(ctx):
     env = unittest.begin(ctx)
 
@@ -64,5 +86,6 @@ def minimum_os_versions_test_suite():
         "minimum_os_versions_tests",
         transition_attrs_uses_declared_versions_test,
         transition_attrs_uses_fallbacks_for_omitted_platforms_test,
+        transition_attrs_raises_declared_versions_to_fallbacks_test,
         fallback_accepts_package_description_spelling_test,
     )

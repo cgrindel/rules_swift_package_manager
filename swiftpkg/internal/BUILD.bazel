@@ -150,6 +150,7 @@ bzl_library(
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":minimum_os_platforms",
+        ":semver",
         "//config_settings/spm/platform:platforms",
     ],
 )
