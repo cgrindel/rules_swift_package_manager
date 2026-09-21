@@ -88,6 +88,39 @@ def _dependency_versions(dep_versions_by_identity, pkg_info, dep_name, product_n
         versions = exported.get("package")
     return versions
 
+def _condition_platforms(condition):
+    """Returns the platforms a conditional dependency applies to.
+
+    Mirrors `bzl_selects.new_from_target_dependency_condition`, which emits
+    conditional dependencies as per-platform `select()` branches, so a
+    dependency only raises the floors of platforms whose builds include it.
+
+    Args:
+        condition: A `struct` as returned by
+            `pkginfos.new_target_dependency_condition`, or `None`.
+
+    Returns:
+        A `list` of platform names, or `None` when the dependency applies to
+        every platform (no condition, or only traits or unsupported
+        platforms).
+    """
+    if condition == None:
+        return None
+    names = [
+        "macos" if name == "driverkit" else name
+        for name in spm_platforms.supported(condition.platforms)
+    ]
+    return names or None
+
+def _restrict(versions, platforms):
+    if platforms == None:
+        return versions
+    return {
+        name: version
+        for name, version in versions.items()
+        if name in platforms
+    }
+
 def _for_targets(pkg_info, dep_versions_by_identity = {}):
     """Derives effective minimum OS versions for each non-test target.
 
@@ -118,7 +151,7 @@ def _for_targets(pkg_info, dep_versions_by_identity = {}):
             if tname in versions_by_target
         ]
 
-    def _dep_versions_list(target_dep):
+    def _unconditional_dep_versions_list(target_dep):
         if target_dep.target:
             tname = target_dep.target.target_name
             return [versions_by_target[tname]] if tname in versions_by_target else []
@@ -143,6 +176,14 @@ def _for_targets(pkg_info, dep_versions_by_identity = {}):
             versions = _dependency_versions(dep_versions_by_identity, pkg_info, name, name)
             return [versions] if versions else []
         return []
+
+    def _dep_versions_list(target_dep):
+        ref = target_dep.target or target_dep.product or target_dep.by_name
+        platforms = _condition_platforms(ref.condition if ref else None)
+        return [
+            _restrict(versions, platforms)
+            for versions in _unconditional_dep_versions_list(target_dep)
+        ]
 
     # In-package target dependencies form a DAG, so at most one pass per
     # target is needed to reach a fixed point.

@@ -1489,9 +1489,10 @@ def _minimum_os_wrapper_decl(pkg_ctx, target, kind, name, actual, visibility):
         "visibility": visibility,
     }
 
-    # Test targets are not derived individually (see
-    # `minimum_os_versions.for_targets`); their wrappers get the package-wide
-    # maximum, which is never lower than any target they depend on.
+    # Test targets are not derived individually because `repo_rules` never
+    # generates them (their test-only dependencies may be unresolved). If
+    # that changes, derive them in `minimum_os_versions.for_targets` and read
+    # their dependencies' floors in `pkg_ctxs`.
     effective = pkg_ctx.minimum_os_versions
     versions = effective.targets.get(target.name, effective.package)
     attrs.update(minimum_os_versions.transition_attrs(versions))

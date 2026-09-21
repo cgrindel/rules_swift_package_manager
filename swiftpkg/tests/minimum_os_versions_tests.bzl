@@ -340,6 +340,68 @@ def _for_targets_uses_package_maximum_for_unknown_product_test(ctx):
 
 for_targets_uses_package_maximum_for_unknown_product_test = unittest.make(_for_targets_uses_package_maximum_for_unknown_product_test)
 
+def _conditional_product_dep(product_name, dep_name, platforms = [], traits = []):
+    return pkginfos.new_target_dependency(
+        product = pkginfos.new_product_reference(
+            product_name,
+            dep_name,
+            condition = pkginfos.new_target_dependency_condition(
+                platforms = platforms,
+                traits = traits,
+            ),
+        ),
+    )
+
+def _for_targets_respects_dependency_platform_conditions_test(ctx):
+    env = unittest.begin(ctx)
+
+    # The dependency declares macOS 13 / iOS 16. `MacOnly` uses it only on
+    # macOS, so only its macOS floor is raised: the dependency never enters an
+    # iOS build (conditional deps become per-platform `select()` branches).
+    # `DriverKit` maps to macOS like `bzl_selects` does. `Traits` has a
+    # trait-only condition, which applies to every platform. `CatalystOnly`
+    # lists only an unsupported platform and is treated as unconditional, as
+    # `bzl_selects` includes it unconditionally.
+    pkg_info = struct(
+        name = "swift-game",
+        dependencies = [_CASE_PATHS],
+        platforms = [_ios("12.0"), _macos("10.15")],
+        products = [struct(name = "MacOnly", targets = ["MacOnly"])],
+        targets = [
+            _target("MacOnly", [_conditional_product_dep("CasePaths", "swift-case-paths", platforms = ["macos"])]),
+            _target("DriverKit", [_conditional_product_dep("CasePaths", "swift-case-paths", platforms = ["driverkit"])]),
+            _target("Traits", [_conditional_product_dep("CasePaths", "swift-case-paths", traits = ["Feature"])]),
+            _target("CatalystOnly", [_conditional_product_dep("CasePaths", "swift-case-paths", platforms = ["maccatalyst"])]),
+            _target("DependsOnMacOnly", [_by_name_dep("MacOnly")]),
+            _target(
+                "MacOnlyInPackage",
+                [pkginfos.new_target_dependency(
+                    target = pkginfos.new_target_reference(
+                        "Traits",
+                        condition = pkginfos.new_target_dependency_condition(platforms = ["macOS"]),
+                    ),
+                )],
+            ),
+        ],
+    )
+
+    effective = minimum_os_versions.for_targets(
+        pkg_info,
+        {"swift-case-paths": _exported("16.0", "13.0", ["CasePaths"])},
+    )
+
+    for name in ["MacOnly", "DriverKit", "DependsOnMacOnly", "MacOnlyInPackage"]:
+        asserts.equals(env, "13.0", effective.targets[name]["macos"], name)
+        asserts.equals(env, "12.0", effective.targets[name]["ios"], name)
+    for name in ["Traits", "CatalystOnly"]:
+        asserts.equals(env, "13.0", effective.targets[name]["macos"], name)
+        asserts.equals(env, "16.0", effective.targets[name]["ios"], name)
+    asserts.equals(env, "12.0", effective.products["MacOnly"]["ios"])
+
+    return unittest.end(env)
+
+for_targets_respects_dependency_platform_conditions_test = unittest.make(_for_targets_respects_dependency_platform_conditions_test)
+
 def minimum_os_versions_test_suite():
     return unittest.suite(
         "minimum_os_versions_tests",
@@ -356,4 +418,5 @@ def minimum_os_versions_test_suite():
         is_higher_compares_numerically_test,
         for_targets_raises_only_importing_targets_test,
         for_targets_uses_package_maximum_for_unknown_product_test,
+        for_targets_respects_dependency_platform_conditions_test,
     )
