@@ -115,3 +115,36 @@ def _apple_framework_import_provider_target_impl(_ctx):
 apple_framework_import_provider_target = rule(
     implementation = _apple_framework_import_provider_target_impl,
 )
+
+def _minimum_os_probe_impl(ctx):
+    # Record the minimum OS this target was configured with in the name of its
+    # output so analysis tests can observe the configuration applied by the
+    # wrapper transition. The transition always sets `--minimum_os_version` to
+    # the active platform's package minimum (see #2300).
+    minimum_os = ctx.fragments.cpp.minimum_os_version()
+    probe_file = ctx.actions.declare_file("{}.min-os-{}.txt".format(
+        ctx.attr.name,
+        minimum_os,
+    ))
+    ctx.actions.write(output = probe_file, content = str(minimum_os))
+
+    return [
+        DefaultInfo(
+            files = depset(
+                [probe_file],
+                transitive = [dep[DefaultInfo].files for dep in ctx.attr.deps],
+            ),
+        ),
+        SwiftInfo(modules = []),
+    ]
+
+minimum_os_probe = rule(
+    implementation = _minimum_os_probe_impl,
+    attrs = {
+        "deps": attr.label_list(
+            doc = "Wrapped package targets imported by this target.",
+        ),
+    },
+    fragments = ["cpp"],
+    doc = "Emits a file named after the minimum OS it is configured with.",
+)

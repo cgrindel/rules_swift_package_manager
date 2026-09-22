@@ -516,6 +516,11 @@ def _declare_pkgs_from_package(
         if dep_repo_name in target_mods_by_repo:
             matched_target_mod_repos[dep_repo_name] = True
 
+    # Record every package repository declared below so that each package
+    # repository can read the effective minimum OS versions of the
+    # dependencies that exist without failing on ones that do not.
+    package_repos = _declare_package_repos(all_deps_by_id)
+
     # Declare the Bazel repositories.
     for dep in all_deps_by_id.values():
         # Declare a placeholder repository for unresolved dependencies.,
@@ -556,6 +561,7 @@ the Swift package to make it available.\
                     [],
                 ),
             ),
+            package_repos,
         )
 
     # Add all transitive dependencies to direct_dep_repo_names if `publicly_expose_all_targets` flag is set.
@@ -569,6 +575,45 @@ the Swift package to make it available.\
                 direct_dep_repo_names.append(bazel_repo_name)
 
     return direct_dep_repo_names
+
+_PACKAGE_REPOS_REPO_NAME = "swift_deps_package_repos"
+
+_PACKAGE_REPOS_FILE = "package_repos.json"
+
+def _swift_deps_package_repos_impl(repository_ctx):
+    repository_ctx.file(
+        _PACKAGE_REPOS_FILE,
+        content = json.encode_indent(
+            {"repo_names": repository_ctx.attr.repo_names},
+            indent = "  ",
+        ),
+        executable = False,
+    )
+    repository_ctx.file(
+        "BUILD.bazel",
+        content = 'exports_files(["{}"])\n'.format(_PACKAGE_REPOS_FILE),
+        executable = False,
+    )
+
+_swift_deps_package_repos = repository_rule(
+    implementation = _swift_deps_package_repos_impl,
+    attrs = {
+        "repo_names": attr.string_list(
+            doc = "The names of every Swift package repository declared by the extension.",
+        ),
+    },
+    doc = "Lists the Swift package repositories declared by the `swift_deps` extension.",
+)
+
+def _declare_package_repos(all_deps_by_id):
+    _swift_deps_package_repos(
+        name = _PACKAGE_REPOS_REPO_NAME,
+        repo_names = sorted([
+            bazel_repo_names.from_identity(identity)
+            for identity in all_deps_by_id.keys()
+        ]),
+    )
+    return "@{}//:{}".format(_PACKAGE_REPOS_REPO_NAME, _PACKAGE_REPOS_FILE)
 
 def _unresolved_swift_package_repo_impl(repository_ctx):
     repository_ctx.file("BUILD.bazel", "# NOTE: This is a placeholder for unresolved Swift packages.")
@@ -592,7 +637,8 @@ def _declare_pkg_from_dependency(
         module_aliases,
         dep_module_aliases,
         bazel_workspace_root,
-        target_mods):
+        target_mods,
+        package_repos):
     if cached_json_directory:
         cached_json_directory = paths.join(cached_json_directory, dep.name)
     name = bazel_repo_names.from_identity(dep.identity)
@@ -659,6 +705,7 @@ def _declare_pkg_from_dependency(
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
             bazel_target_mods = target_mods,
+            package_repos = package_repos,
         )
 
     elif dep.file_system:
@@ -691,6 +738,7 @@ in the lock file and will not be portable across machines.\
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
             bazel_target_mods = target_mods,
+            package_repos = package_repos,
         )
 
     elif dep.registry:
@@ -715,6 +763,7 @@ in the lock file and will not be portable across machines.\
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
             bazel_target_mods = target_mods,
+            package_repos = package_repos,
         )
 
 def _declare_swift_package_repo(name, from_package, config_swift_package):
