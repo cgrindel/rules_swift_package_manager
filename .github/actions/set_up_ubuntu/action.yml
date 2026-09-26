@@ -6,7 +6,7 @@ inputs:
     required: true
   swift_release_tag:
     description: The Swift release tag.
-    default: "swift-6.1-RELEASE"
+    default: "swift-6.4.0-RELEASE"
 runs:
   using: composite
   steps:
@@ -35,4 +35,4 @@ runs:
         # Need to expose the PATH so that the Swift toolchain can be found
         build --action_env=PATH
         EOF
-    - uses: cgrindel/gha_set_up_bazel@6687b38440a52562ff1ac2b27b197dc971d6b9b0 # v2.0.17
+    - uses: cgrindel/gha_set_up_bazel@c08d1db85330275db162786c014c5f3ca5b15019 # v2.0.18
