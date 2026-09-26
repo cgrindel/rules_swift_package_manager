@@ -809,13 +809,19 @@ def _pkg_info_with_traits():
         enabled_traits = ["FeatureA", "FeatureB"],
     )
 
-def _pkg_ctx(pkg_info, target_deps = {}, module_aliases = {}, dep_module_aliases = ""):
+def _pkg_ctx(
+        pkg_info,
+        target_deps = {},
+        module_aliases = {},
+        dep_module_aliases = "",
+        dep_minimum_os_versions = {}):
     return pkg_ctxs.new(
         pkg_info = pkg_info,
         repo_name = _repo_name,
         target_deps = target_deps,
         module_aliases = module_aliases,
         dep_module_aliases = dep_module_aliases,
+        dep_minimum_os_versions = dep_minimum_os_versions,
     )
 
 def _target_build_file(
@@ -824,7 +830,8 @@ def _target_build_file(
         artifact_infos = [],
         target_deps = {},
         module_aliases = {},
-        dep_module_aliases = ""):
+        dep_module_aliases = "",
+        dep_minimum_os_versions = {}):
     target = pkginfo_targets.get(pkg_info.targets, target_name)
     repository_ctx = testutils.new_stub_repository_ctx(
         repo_name = _repo_name[1:],
@@ -834,13 +841,18 @@ def _target_build_file(
         target_deps = target_deps,
         module_aliases = module_aliases,
         dep_module_aliases = dep_module_aliases,
+        dep_minimum_os_versions = dep_minimum_os_versions,
     )
     return swiftpkg_build_files.new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = artifact_infos)
 
-def _product_build_file(pkg_info, product_name, target_deps = {}):
+def _product_build_file(pkg_info, product_name, target_deps = {}, dep_minimum_os_versions = {}):
     product = lists.find(pkg_info.products, lambda p: p.name == product_name)
     return swiftpkg_build_files.new_for_product(
-        pkg_ctx = _pkg_ctx(pkg_info, target_deps = target_deps),
+        pkg_ctx = _pkg_ctx(
+            pkg_info,
+            target_deps = target_deps,
+            dep_minimum_os_versions = dep_minimum_os_versions,
+        ),
         product = product,
     )
 
@@ -1032,6 +1044,118 @@ def _minimum_os_wrapper_behavior_test(ctx):
     return unittest.end(env)
 
 minimum_os_wrapper_behavior_test = unittest.make(_minimum_os_wrapper_behavior_test)
+
+def _minimum_os_wrapper_raises_to_dependency_floors_test(ctx):
+    env = unittest.begin(ctx)
+
+    # The package declares iOS 13 / macOS 10.15. `UsesArgumentParser` imports
+    # a product whose effective floors are iOS 15 / macOS 12 (as swift-parsing
+    # imports swift-case-paths under Swift 6.4), and `WrapsArgumentParser`
+    # depends on it in-package. Both are raised; unrelated targets are not.
+    pkg_info = _pkg_info(
+        platforms = [
+            pkginfos.new_platform("ios", "13.0"),
+            pkginfos.new_platform("macos", "10.15"),
+        ],
+        extra_targets = [
+            pkginfos.new_target(
+                name = "UsesArgumentParser",
+                type = "regular",
+                c99name = "UsesArgumentParser",
+                module_type = "SwiftTarget",
+                path = "Source/UsesArgumentParser",
+                sources = ["UsesArgumentParser.swift"],
+                dependencies = [
+                    pkginfos.new_target_dependency(
+                        product = pkginfos.new_product_reference(
+                            "ArgumentParser",
+                            "SwiftArgumentParser",
+                        ),
+                    ),
+                ],
+                repo_name = _repo_name,
+                swift_src_info = pkginfos.new_swift_src_info(),
+            ),
+            pkginfos.new_target(
+                name = "WrapsArgumentParser",
+                type = "regular",
+                c99name = "WrapsArgumentParser",
+                module_type = "SwiftTarget",
+                path = "Source/WrapsArgumentParser",
+                sources = ["WrapsArgumentParser.swift"],
+                dependencies = [
+                    pkginfos.new_target_dependency(
+                        by_name = pkginfos.new_by_name_reference("UsesArgumentParser"),
+                    ),
+                ],
+                repo_name = _repo_name,
+                swift_src_info = pkginfos.new_swift_src_info(),
+            ),
+        ],
+    )
+    raised_versions = {
+        "ios": "15.0",
+        "macos": "12.0",
+        "tvos": "12.0",
+        "visionos": "1.0",
+        "watchos": "4.0",
+    }
+    dep_minimum_os_versions = {
+        "swift-argument-parser": {
+            "package": raised_versions,
+            "products": {"ArgumentParser": raised_versions},
+        },
+    }
+    raised = {"ios_minimum_os": "15.0", "macos_minimum_os": "12.0"}
+    declared = {"ios_minimum_os": "13.0", "macos_minimum_os": "10.15"}
+
+    for target_name in ["UsesArgumentParser", "WrapsArgumentParser"]:
+        bf = _target_build_file(
+            pkg_info,
+            target_name,
+            dep_minimum_os_versions = dep_minimum_os_versions,
+        )
+        wrapper = _assert_decl(env, bf, target_name + ".rspm", "spm_minimum_os_target")
+        _assert_minimum_os_attrs(env, wrapper.attrs, expected = raised)
+
+    unrelated_bf = _target_build_file(
+        pkg_info,
+        "RegularSwiftTargetAsLibrary",
+        dep_minimum_os_versions = dep_minimum_os_versions,
+    )
+    unrelated = _assert_decl(
+        env,
+        unrelated_bf,
+        "RegularSwiftTargetAsLibrary.rspm",
+        "spm_minimum_os_target",
+    )
+    _assert_minimum_os_attrs(env, unrelated.attrs, expected = declared)
+
+    oldstyle_product_bf = _product_build_file(
+        pkg_info,
+        "oldstyleexec",
+        dep_minimum_os_versions = dep_minimum_os_versions,
+    )
+    oldstyle_wrapper = _assert_decl(env, oldstyle_product_bf, "oldstyleexec", "spm_minimum_os_binary")
+    _assert_minimum_os_attrs(env, oldstyle_wrapper.attrs, expected = declared)
+
+    # A dependency with lower floors never lowers the declared versions.
+    lower_bf = _target_build_file(
+        pkg_info,
+        "UsesArgumentParser",
+        dep_minimum_os_versions = {
+            "swift-argument-parser": {
+                "package": {"ios": "12.0", "macos": "10.13"},
+                "products": {"ArgumentParser": {"ios": "12.0", "macos": "10.13"}},
+            },
+        },
+    )
+    lower_wrapper = _assert_decl(env, lower_bf, "UsesArgumentParser.rspm", "spm_minimum_os_target")
+    _assert_minimum_os_attrs(env, lower_wrapper.attrs, expected = declared)
+
+    return unittest.end(env)
+
+minimum_os_wrapper_raises_to_dependency_floors_test = unittest.make(_minimum_os_wrapper_raises_to_dependency_floors_test)
 
 def _manual_target_deps_test(ctx):
     env = unittest.begin(ctx)
@@ -2571,6 +2695,7 @@ def swiftpkg_build_files_test_suite():
     return unittest.suite(
         "swiftpkg_build_files_tests",
         minimum_os_wrapper_behavior_test,
+        minimum_os_wrapper_raises_to_dependency_floors_test,
         manual_target_deps_test,
         target_generation_test,
         product_generation_test,

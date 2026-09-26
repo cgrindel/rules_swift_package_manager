@@ -4,12 +4,13 @@ name: Debug swift package crash
 #
 # Normal CI never exercises this path. `swift_package_tool` targets are
 # deliberately excluded from `tidy` (see examples/interesting_deps/BUILD.bazel),
-# and CI pins Linux Swift to the tag in .github/actions/set_up_ubuntu, which is
-# older than the toolchain in the Renovate container.
+# and CI pins Linux Swift to the tag in .github/actions/set_up_ubuntu, which
+# tracks the toolchain in the Renovate container (see renovate_image/Dockerfile
+# in cgrindel/renovate-bot).
 #
 # Run it from the Actions tab, or:
 #   gh workflow run debug_swift_package_crash.yml --ref <branch> \
-#     -f swift_release_tags=swift-6.1-RELEASE,swift-6.2.4-RELEASE
+#     -f swift_release_tags=swift-6.2.4-RELEASE,swift-6.4.0-RELEASE
 "on":
   workflow_dispatch:
     inputs:
@@ -19,8 +20,8 @@ name: Debug swift package crash
         required: true
       swift_release_tags:
         description: >-
-          Comma-separated Swift release tags to sweep on the bare runner. The Renovate container uses 6.2.4; CI normally uses 6.1.
-        default: swift-6.2.4-RELEASE
+          Comma-separated Swift release tags to sweep on the bare runner. The Renovate container and CI both use 6.4.0.
+        default: swift-6.4.0-RELEASE
         required: true
       runner:
         description: Runner image for the bare lane.
