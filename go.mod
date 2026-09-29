@@ -10,7 +10,7 @@ toolchain go1.27.1
 require (
 	github.com/bazelbuild/bazel-gazelle v0.50.0
 	github.com/bazelbuild/buildtools v0.0.0-20250930140053-2eb4fccefb52
-	github.com/creasty/defaults v1.8.0
+	github.com/creasty/defaults v1.11.0
 	github.com/deckarep/golang-set/v2 v2.9.0
 	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.12.1
