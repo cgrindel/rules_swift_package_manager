@@ -1,7 +1,7 @@
 package swift
 
 import (
-	mapset "github.com/deckarep/golang-set/v2"
+	mapset "github.com/deckarep/golang-set/v3"
 )
 
 type ProductMembershipsIndex map[ProductIndexKey]mapset.Set[string]

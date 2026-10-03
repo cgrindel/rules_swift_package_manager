@@ -1,6 +1,6 @@
 package swift
 
-import mapset "github.com/deckarep/golang-set/v2"
+import mapset "github.com/deckarep/golang-set/v3"
 
 var builtinTestFrameworks = mapset.NewSet[string](
 	"XCTest",

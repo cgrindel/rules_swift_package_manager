@@ -22,7 +22,7 @@ go_library(
         "//tools/swift_deps_index/internal/spdesc",
         "//tools/swift_deps_index/internal/spdump",
         "//tools/swift_deps_index/internal/swiftbin",
-        "@com_github_deckarep_golang_set_v2//:go_default_library",
+        "@com_github_deckarep_golang_set_v3//:go_default_library",
         "@org_golang_x_exp//slices:go_default_library",
     ],
 )
