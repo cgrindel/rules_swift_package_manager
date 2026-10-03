@@ -7,7 +7,7 @@ import (
 
 	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/spdesc"
 	"github.com/cgrindel/rules_swift_package_manager/tools/swift_deps_index/internal/spdump"
-	mapset "github.com/deckarep/golang-set/v2"
+	mapset "github.com/deckarep/golang-set/v3"
 )
 
 // TargetType
