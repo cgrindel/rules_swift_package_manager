@@ -121,11 +121,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/set_up_ubuntu
-        if: ${{ startsWith(matrix.runner, 'ubuntu') }}
+        if: ${{ runner.os == 'Linux' }}
         with:
           ubuntu_version: "22.04"
       - uses: ./.github/actions/set_up_macos
-        if: ${{ startsWith(matrix.runner, 'macos') }}
+        if: ${{ runner.os == 'macOS' }}
         with:
           test_target: ${{ matrix.test }}
       - uses: ./.github/actions/configure_remote_cache_auth
@@ -148,17 +148,17 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/set_up_ubuntu
-        if: ${{ startsWith(matrix.runner, 'ubuntu') }}
+        if: ${{ runner.os == 'Linux' }}
         with:
           ubuntu_version: "22.04"
       - uses: ./.github/actions/set_up_macos
-        if: ${{ startsWith(matrix.runner, 'macos') }}
+        if: ${{ runner.os == 'macOS' }}
       - uses: ./.github/actions/configure_remote_cache_auth
         with:
           buildbuddy_api_key: ${{ secrets.BUILDBUDDY_API_KEY }}
       - uses: ./.github/actions/tidy_and_test
-        if: ${{ startsWith(matrix.runner, 'ubuntu') }}
-      - if: ${{ startsWith(matrix.runner, 'macos') }}
+        if: ${{ runner.os == 'Linux' }}
+      - if: ${{ runner.os == 'macOS' }}
         name: Execute tests
         shell: bash
         run: "bazelisk test //... \n"
