@@ -15,12 +15,30 @@ def _is_macos(repository_ctx):
     os_name = repository_ctx.os.name.lower()
     return os_name.startswith("mac os")
 
+def _host_swift_executable(ctx, linux_swift_executable = None, macos_swift_executable = None):
+    """Returns the configured Swift executable label for the host OS.
+
+    Args:
+        ctx: A `module_ctx` instance.
+        linux_swift_executable: Optional executable file label for Linux hosts.
+        macos_swift_executable: Optional executable file label for macOS hosts.
+
+    Returns:
+        The host's executable label, or None to use system discovery.
+    """
+    if _is_macos(ctx):
+        return macos_swift_executable
+    if ctx.os.name.lower() == "linux":
+        return linux_swift_executable
+    return None
+
 def _execute_spm_command(
         repository_ctx,
         arguments,
         env = {},
         working_directory = "",
-        err_msg_tpl = None):
+        err_msg_tpl = None,
+        swift_executable = None):
     """Executes a Swift package manager command and returns the stdout.
 
     If the command returns a non-zero return code, this function will fail.
@@ -35,14 +53,21 @@ def _execute_spm_command(
         err_msg_tpl: Optional. A `string` template which will be formatted with
                      the `working_directory`, `exec_args`, `return_code`,
                      `stdout`, and `stderr` values.
+        swift_executable: Optional. A label pointing to the Swift executable.
+                          When omitted, Swift is discovered using `xcrun` on
+                          macOS and on the path on Linux.
 
     Returns:
         A `string` representing the stdout of the command execution.
     """
-    exec_args = []
-    if _is_macos(repository_ctx):
-        exec_args.append("xcrun")
-    exec_args.extend(arguments)
+    if swift_executable:
+        repository_ctx.watch(swift_executable)
+        exec_args = [str(repository_ctx.path(swift_executable))] + arguments[1:]
+    else:
+        exec_args = []
+        if _is_macos(repository_ctx):
+            exec_args.append("xcrun")
+        exec_args.extend(arguments)
 
     # It is critical that the SPM commands execute using the host's default
     # SDK. This is typically MacOS.  If the SDKROOT is set to iOS for example,
@@ -50,6 +75,15 @@ def _execute_spm_command(
     # Example: rules_xcodeproj sets the SDKROOT before executing
     # generate_bazel_dependencies.sh.
     env_overrides = {"SDKROOT": ""}
+    if swift_executable and _is_macos(repository_ctx):
+        # Direct Swift invocation requires a nonempty SDKROOT for manifest compilation.
+        sdk_result = repository_ctx.execute(
+            ["/usr/bin/xcrun", "--sdk", "macosx", "--show-sdk-path"],
+            environment = dicts.add(env, env_overrides),
+        )
+        if sdk_result.return_code != 0:
+            fail("Failed to locate the macOS SDK: {}".format(sdk_result.stderr))
+        env_overrides["SDKROOT"] = sdk_result.stdout.strip()
     exec_env = dicts.add(env, env_overrides)
 
     exec_result = repository_ctx.execute(
@@ -97,7 +131,8 @@ def _parsed_json_from_spm_command(
         env = {},
         working_directory = "",
         debug_json_path = None,
-        cached_json_path = None):
+        cached_json_path = None,
+        swift_executable = None):
     if cached_json_path:
         cached_json_path_path = repository_ctx.path(cached_json_path)
         if cached_json_path_path.exists:
@@ -110,6 +145,7 @@ def _parsed_json_from_spm_command(
         arguments,
         env = env,
         working_directory = working_directory,
+        swift_executable = swift_executable,
     )
     json_str = _replace_working_directory(json_str, working_directory)
 
@@ -240,6 +276,7 @@ def _replace_working_directory(json_str, working_directory):
 repository_utils = struct(
     copy = _copy,
     exec_spm_command = _execute_spm_command,
+    host_swift_executable = _host_swift_executable,
     is_macos = _is_macos,
     package_name = _package_name,
     parsed_json_from_spm_command = _parsed_json_from_spm_command,

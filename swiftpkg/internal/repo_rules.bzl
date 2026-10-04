@@ -102,6 +102,16 @@ SPM dependency resolution, SPM package description generation)\
     },
 )
 
+_spm_attrs = {
+    "swift_executable": attr.label(
+        doc = """\
+The Swift executable used for Swift Package Manager commands during repository \
+evaluation. When omitted, Swift is discovered using `xcrun` on macOS and on the \
+path on Linux.\
+""",
+    ),
+}
+
 _DEVELOPER_DIR_ENV = "DEVELOPER_DIR"
 
 def _get_exec_env(repository_ctx):
@@ -125,9 +135,13 @@ def _get_exec_env(repository_ctx):
         env[_DEVELOPER_DIR_ENV] = dev_dir
     return env
 
-def _check_spm_version(repository_ctx, env = {}):
+def _check_spm_version(repository_ctx, env = {}, swift_executable = None):
     min_spm_ver = "5.4.0"
-    spm_ver = spm_versions.get(repository_ctx, env = env)
+    spm_ver = spm_versions.get(
+        repository_ctx,
+        env = env,
+        swift_executable = swift_executable,
+    )
     if not versions.is_at_least(threshold = min_spm_ver, version = spm_ver):
         fail("""\
 `rules_swift_package_manager` requires that Swift Package Manager be version %s or \
@@ -369,6 +383,7 @@ repo_rules = struct(
     remove_bazel_files = _remove_bazel_files,
     remove_modulemaps = _remove_modulemaps,
     remove_swift_version_file = _remove_swift_version_file,
+    spm_attrs = _spm_attrs,
     swift_attrs = _swift_attrs,
     write_workspace_file = _write_workspace_file,
 )
