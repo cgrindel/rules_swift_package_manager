@@ -56,7 +56,7 @@ The fixtures feed two layers of tests:
    `repository_files.read_bytes`, and fails if the recordings in `fixtures.bzl` have drifted.
 
 The second layer is what keeps the first honest. Because CI runs the test suite on both
-`ubuntu-22.04` and `macos-26`, it also verifies that the `od` flags and output format behave the same
+`ubuntu-22.04` and `xcode-27`, it also verifies that the `od` flags and output format behave the same
 under GNU `od` and BSD `od`.
 
 ## Regenerating
