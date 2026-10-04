@@ -9,7 +9,7 @@ runs:
   steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: '26.2'
+        xcode-version: '26.6'
     - name: Confirm Xcode Version
       shell: bash
       run: |
