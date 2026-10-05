@@ -570,7 +570,6 @@ the Swift package to make it available.\
                 ),
             ),
             package_repos,
-            swift_executable,
         )
 
     # Add all transitive dependencies to direct_dep_repo_names if `publicly_expose_all_targets` flag is set.
@@ -647,8 +646,7 @@ def _declare_pkg_from_dependency(
         dep_module_aliases,
         bazel_workspace_root,
         target_mods,
-        package_repos,
-        swift_executable):
+        package_repos):
     if cached_json_directory:
         cached_json_directory = paths.join(cached_json_directory, dep.name)
     name = bazel_repo_names.from_identity(dep.identity)
@@ -711,7 +709,8 @@ def _declare_pkg_from_dependency(
             publicly_expose_all_targets = publicly_expose_all_targets,
             registries = registries,
             replace_scm_with_registry = replace_scm_with_registry,
-            swift_executable = swift_executable,
+            linux_swift_executable = from_package.linux_swift_executable,
+            macos_swift_executable = from_package.macos_swift_executable,
             target_deps = target_deps,
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
@@ -750,7 +749,8 @@ in the lock file and will not be portable across machines.\
             dep_module_aliases = dep_module_aliases,
             bazel_target_mods = target_mods,
             package_repos = package_repos,
-            swift_executable = swift_executable,
+            linux_swift_executable = from_package.linux_swift_executable,
+            macos_swift_executable = from_package.macos_swift_executable,
         )
 
     elif dep.registry:
@@ -776,7 +776,8 @@ in the lock file and will not be portable across machines.\
             dep_module_aliases = dep_module_aliases,
             bazel_target_mods = target_mods,
             package_repos = package_repos,
-            swift_executable = swift_executable,
+            linux_swift_executable = from_package.linux_swift_executable,
+            macos_swift_executable = from_package.macos_swift_executable,
         )
 
 def _declare_swift_package_repo(name, from_package, config_swift_package):
@@ -1222,7 +1223,6 @@ The generated value is preserved: the attribute renders as \
 
 swift_deps = module_extension(
     implementation = _swift_deps_impl,
-    os_dependent = True,
     tag_classes = {
         "bazel_target_add": _bazel_target_add_tag,
         "bazel_target_add_select": _bazel_target_add_select_tag,

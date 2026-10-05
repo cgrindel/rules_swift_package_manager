@@ -36,10 +36,11 @@ def _list_contents(repository_ctx, repo_dir, path):
 def _local_swift_package_impl(repository_ctx):
     repo_dir = str(repository_ctx.path("."))
     env = repo_rules.get_exec_env(repository_ctx)
+    swift_executable = repo_rules.get_swift_executable(repository_ctx)
     repo_rules.check_spm_version(
         repository_ctx,
         env = env,
-        swift_executable = repository_ctx.attr.swift_executable,
+        swift_executable = swift_executable,
     )
 
     orig_code_path = repository_ctx.attr.path
@@ -87,7 +88,7 @@ def _local_swift_package_impl(repository_ctx):
         module_aliases = repository_ctx.attr.module_aliases,
         dep_module_aliases = repository_ctx.attr.dep_module_aliases,
         bazel_target_mods = repository_ctx.attr.bazel_target_mods,
-        swift_executable = repository_ctx.attr.swift_executable,
+        swift_executable = swift_executable,
     )
 
     repo_rules.download_artifacts(repository_ctx, pkg_ctx)

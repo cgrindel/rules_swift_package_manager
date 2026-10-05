@@ -3,6 +3,50 @@
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 
+def _get_swift_executable_test(ctx):
+    env = unittest.begin(ctx)
+
+    linux = Label("//:linux_swift")
+    macos = Label("//:macos_swift")
+    override = Label("//:override_swift")
+    attrs = struct(
+        linux_swift_executable = linux,
+        macos_swift_executable = macos,
+        swift_executable = None,
+    )
+
+    # The same repository attributes must select the executable at fetch time.
+    for os_name, expected in [("linux", linux), ("mac os x", macos), ("unknown", None)]:
+        repository_ctx = struct(attr = attrs, os = struct(name = os_name))
+        actual = repo_rules.get_swift_executable(repository_ctx)
+        asserts.equals(env, expected, actual, "unexpected executable for " + os_name)
+
+    for os_name in ["linux", "mac os x"]:
+        repository_ctx = struct(
+            attr = struct(
+                linux_swift_executable = linux,
+                macos_swift_executable = macos,
+                swift_executable = override,
+            ),
+            os = struct(name = os_name),
+        )
+        actual = repo_rules.get_swift_executable(repository_ctx)
+        asserts.equals(env, override, actual, "explicit executable takes precedence")
+
+    repository_ctx = struct(
+        attr = struct(
+            linux_swift_executable = linux,
+            macos_swift_executable = None,
+            swift_executable = None,
+        ),
+        os = struct(name = "mac os x"),
+    )
+    asserts.equals(env, None, repo_rules.get_swift_executable(repository_ctx), "use system discovery when the host's label is omitted")
+
+    return unittest.end(env)
+
+get_swift_executable_test = unittest.make(_get_swift_executable_test)
+
 def _download_artifacts_test(ctx):
     """download_artifacts downloads remote binary artifacts"""
     env = unittest.begin(ctx)
@@ -294,6 +338,7 @@ def repo_rules_test_suite():
         download_artifacts_test,
         gen_build_files_with_build_file_test,
         gen_build_files_without_build_file_test,
+        get_swift_executable_test,
         make_files_read_only_disabled_noop_test,
         make_files_read_only_test,
     )

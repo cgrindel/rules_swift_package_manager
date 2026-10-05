@@ -9,6 +9,7 @@ load(":bazel_target_mods.bzl", "bazel_target_mods")
 load(":build_files.bzl", "build_files")
 load(":pkginfos.bzl", "target_types")
 load(":repository_files.bzl", "repository_files")
+load(":repository_utils.bzl", "repository_utils")
 load(":spm_versions.bzl", "spm_versions")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
@@ -103,16 +104,38 @@ SPM dependency resolution, SPM package description generation)\
 )
 
 _spm_attrs = {
+    "linux_swift_executable": attr.label(
+        doc = "The Swift executable for Linux hosts. When omitted, Swift is discovered on the path.",
+    ),
+    "macos_swift_executable": attr.label(
+        doc = "The Swift executable for macOS hosts. When omitted, Swift is discovered using `xcrun`.",
+    ),
     "swift_executable": attr.label(
         doc = """\
 The Swift executable used for Swift Package Manager commands during repository \
-evaluation. When omitted, Swift is discovered using `xcrun` on macOS and on the \
-path on Linux.\
+evaluation. Takes precedence over the host-specific executable attributes. \
+When omitted, the host-specific attribute is used, falling back to Swift \
+discovered using `xcrun` on macOS and on the path on Linux.\
 """,
     ),
 }
 
 _DEVELOPER_DIR_ENV = "DEVELOPER_DIR"
+
+def _get_swift_executable(repository_ctx):
+    """Selects the Swift executable when the repository is evaluated.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+
+    Returns:
+        The configured executable label, or None to use system discovery.
+    """
+    return repository_ctx.attr.swift_executable or repository_utils.host_swift_executable(
+        repository_ctx,
+        linux_swift_executable = repository_ctx.attr.linux_swift_executable,
+        macos_swift_executable = repository_ctx.attr.macos_swift_executable,
+    )
 
 def _get_exec_env(repository_ctx):
     """Creates a `dict` of environment variables which will be past to all execution environments for this rule.
@@ -379,6 +402,7 @@ repo_rules = struct(
     env_attrs = _env_attrs,
     gen_build_files = _gen_build_files,
     get_exec_env = _get_exec_env,
+    get_swift_executable = _get_swift_executable,
     make_files_read_only = _make_files_read_only,
     remove_bazel_files = _remove_bazel_files,
     remove_modulemaps = _remove_modulemaps,

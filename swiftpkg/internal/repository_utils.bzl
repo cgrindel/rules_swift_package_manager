@@ -19,7 +19,7 @@ def _host_swift_executable(ctx, linux_swift_executable = None, macos_swift_execu
     """Returns the configured Swift executable label for the host OS.
 
     Args:
-        ctx: A `module_ctx` instance.
+        ctx: A `module_ctx` or `repository_ctx` instance.
         linux_swift_executable: Optional executable file label for Linux hosts.
         macos_swift_executable: Optional executable file label for macOS hosts.
 
