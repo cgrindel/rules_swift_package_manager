@@ -273,6 +273,7 @@ bzl_library(
         ":pkg_ctxs",
         ":pkginfos",
         ":repository_files",
+        ":repository_utils",
         ":spm_versions",
         ":starlark_codegen",
         ":swiftpkg_build_files",

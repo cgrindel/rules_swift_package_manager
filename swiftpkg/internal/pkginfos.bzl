@@ -69,7 +69,8 @@ def _get_dump_manifest(
         debug_path = None,
         cache_path = None,
         registries_directory = None,
-        replace_scm_with_registry = False):
+        replace_scm_with_registry = False,
+        swift_executable = None):
     """Returns a dict representing the package dump for an SPM package.
 
     Args:
@@ -85,6 +86,7 @@ def _get_dump_manifest(
             configuration file for setting a Swift Package Registry.
         replace_scm_with_registry: Optional. A `bool` specifying whether to
             replace SCM references with registry references.
+        swift_executable: Optional. A label pointing to the Swift executable.
 
     Returns:
         A `dict` representing an SPM package dump.
@@ -108,6 +110,7 @@ def _get_dump_manifest(
         working_directory = working_directory,
         debug_json_path = debug_json_path,
         cached_json_path = cached_json_path,
+        swift_executable = swift_executable,
     )
 
 def _get_desc_manifest(
@@ -117,7 +120,8 @@ def _get_desc_manifest(
         debug_path = None,
         cache_path = None,
         registries_directory = None,
-        replace_scm_with_registry = False):
+        replace_scm_with_registry = False,
+        swift_executable = None):
     """Returns a dict representing the package description for an SPM package.
 
     Args:
@@ -133,6 +137,7 @@ def _get_desc_manifest(
             configuration file for setting a Swift Package Registry.
         replace_scm_with_registry: Optional. A `bool` specifying whether to
             replace SCM references with registry references.
+        swift_executable: Optional. A label pointing to the Swift executable.
 
     Returns:
         A `dict` representing an SPM package description.
@@ -156,6 +161,7 @@ def _get_desc_manifest(
         working_directory = working_directory,
         debug_json_path = debug_json_path,
         cached_json_path = cached_json_path,
+        swift_executable = swift_executable,
     )
 
 def _get(
@@ -167,7 +173,8 @@ def _get(
         resolved_pkg_map = None,
         collect_src_info = True,
         registries_directory = None,
-        replace_scm_with_registry = False):
+        replace_scm_with_registry = False,
+        swift_executable = None):
     """Retrieves the package information for the Swift package defined at the \
     specified directory.
 
@@ -188,6 +195,7 @@ def _get(
             configuration file for setting a Swift Package Registry.
         replace_scm_with_registry: Optional. A `bool` specifying whether to
             replace SCM references with registry references.
+        swift_executable: Optional. A label pointing to the Swift executable.
 
     Returns:
         A `struct` representing the package information as returned by
@@ -208,6 +216,7 @@ def _get(
         cache_path = cached_json_directory,
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
+        swift_executable = swift_executable,
     )
     desc_manifest = _get_desc_manifest(
         repository_ctx,
@@ -217,6 +226,7 @@ def _get(
         cache_path = cached_json_directory,
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
+        swift_executable = swift_executable,
     )
 
     # Ensure package and local dependency paths are absolute even if the
