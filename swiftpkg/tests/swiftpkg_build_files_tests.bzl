@@ -663,6 +663,35 @@ def _pkg_info(
                 swift_src_info = pkginfos.new_swift_src_info(),
             ),
             pkginfos.new_target(
+                name = "ClangLibraryWithResources",
+                type = "regular",
+                c99name = "ClangLibraryWithResources",
+                module_type = "ClangTarget",
+                path = ".",
+                sources = [
+                    "src/foo.c",
+                ],
+                source_paths = [
+                    "src/",
+                ],
+                public_hdrs_path = "include",
+                resources = [
+                    pkginfos.new_resource(
+                        path = "Source/ClangLibraryWithResources/PrivacyInfo.xcprivacy",
+                        rule = pkginfos.new_resource_rule(
+                            process = pkginfos.new_resource_rule_process(),
+                        ),
+                    ),
+                ],
+                dependencies = [],
+                repo_name = _repo_name,
+                clang_src_info = pkginfos.new_clang_src_info(
+                    hdrs = ["include/external.h"],
+                    srcs = ["src/foo.c"],
+                    public_includes = ["include"],
+                ),
+            ),
+            pkginfos.new_target(
                 name = "ObjcLibraryWithResources",
                 type = "regular",
                 c99name = "ObjcLibraryWithResources",
@@ -2005,6 +2034,90 @@ swift_library(
 """,
         ),
         struct(
+            msg = "Clang target with resources and no Objc sources",
+            name = "ClangLibraryWithResources",
+            pkg_info = _pkg_info(),
+            exp = """\
+load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap", "resource_bundle_infoplist")
+
+apple_resource_bundle(
+    name = "ClangLibraryWithResources.rspm_resource_bundle",
+    bundle_name = "MyPackage_ClangLibraryWithResources",
+    infoplists = [":ClangLibraryWithResources.rspm_resource_bundle_infoplist"],
+    resources = ["Source/ClangLibraryWithResources/PrivacyInfo.xcprivacy"],
+    visibility = ["//:__subpackages__"],
+)
+
+cc_library(
+    name = "ClangLibraryWithResources.rspm.__impl",
+    data = select({
+        "@apple_support//configs:apple": [":ClangLibraryWithResources.rspm_resource_bundle"],
+        "//conditions:default": [],
+    }),
+    deps = [
+        ":ClangLibraryWithResources.rspm_modulemap",
+        ":ClangLibraryWithResources.rspm_c",
+    ],
+    tags = ["manual"],
+    visibility = ["//:__subpackages__"],
+)
+
+cc_library(
+    name = "ClangLibraryWithResources.rspm_c",
+    alwayslink = True,
+    aspect_hints = ["ClangLibraryWithResources.rspm_swift_hint"],
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-DSWIFT_PACKAGE=1",
+        "-fmodule-name=ClangLibraryWithResources",
+    ] + select({
+        "@rules_swift_package_manager//config_settings/bazel/compilation_mode:dbg": ["-DDEBUG=1"],
+        "//conditions:default": [],
+    }),
+    hdrs = ["include/external.h"],
+    includes = ["include"],
+    srcs = ["src/foo.c"],
+    visibility = ["//:__subpackages__"],
+)
+
+generate_modulemap(
+    name = "ClangLibraryWithResources.rspm_modulemap",
+    deps = [],
+    hdrs = ["include/external.h"],
+    module_name = "ClangLibraryWithResources",
+    visibility = ["//:__subpackages__"],
+)
+
+resource_bundle_infoplist(
+    name = "ClangLibraryWithResources.rspm_resource_bundle_infoplist",
+    region = "en",
+)
+
+spm_minimum_os_target(
+    name = "ClangLibraryWithResources.rspm",
+    deps = [":ClangLibraryWithResources.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
+
+swift_interop_hint(
+    name = "ClangLibraryWithResources.rspm_swift_hint",
+    module_map = "ClangLibraryWithResources.rspm_modulemap",
+    module_name = "ClangLibraryWithResources",
+)
+""",
+        ),
+        struct(
             msg = "Objc target with resources",
             name = "ObjcLibraryWithResources",
             pkg_info = _pkg_info(),
@@ -2033,6 +2146,10 @@ generate_modulemap(
 
 objc_library(
     name = "ObjcLibraryWithResources.rspm.__impl",
+    data = select({
+        "@apple_support//configs:apple": [":ObjcLibraryWithResources.rspm_resource_bundle"],
+        "//conditions:default": [],
+    }),
     deps = [
         ":ObjcLibraryWithResources.rspm_modulemap",
         ":ObjcLibraryWithResources.rspm_objc",
@@ -2055,10 +2172,6 @@ objc_library(
         "-include$(location :ObjcLibraryWithResources.rspm_objc_resource_bundle_accessor_hdr)",
     ] + select({
         "@rules_swift_package_manager//config_settings/bazel/compilation_mode:dbg": ["-DDEBUG=1"],
-        "//conditions:default": [],
-    }),
-    data = select({
-        "@apple_support//configs:apple": [":ObjcLibraryWithResources.rspm_resource_bundle"],
         "//conditions:default": [],
     }),
     enable_modules = True,

@@ -15,6 +15,7 @@ swift_library(
     tags = ["manual"],
     deps = [
         "@swiftpkg_app_lovin_sdk//:AppLovinSDK",
+        "@swiftpkg_c_package_with_resources//:CLibWithResources",
         "@swiftpkg_package_with_resources//:CoolUI",
         "@swiftpkg_swift_sdk//:IterableSDK",
     ],
