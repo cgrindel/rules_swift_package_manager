@@ -8,7 +8,7 @@ toolchain go1.27.1
 // toolchain go1.21.5
 
 require (
-	github.com/bazelbuild/bazel-gazelle v0.50.0
+	github.com/bazelbuild/bazel-gazelle v0.54.0
 	github.com/bazelbuild/buildtools v0.0.0-20250930140053-2eb4fccefb52
 	github.com/creasty/defaults v1.11.0
 	github.com/deckarep/golang-set/v3 v3.0.0
@@ -20,6 +20,7 @@ require (
 )
 
 require (
+	github.com/bazel-contrib/bazel-gazelle/v2 v2.0.0-3 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.9 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
