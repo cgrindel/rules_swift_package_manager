@@ -33,6 +33,7 @@ ios_xctestrun_runner(
 
 ios_unit_test(
     name = "MyAppTests",
+    timeout = "long",
     minimum_os_version = "15.0",
     runner = ":ios_xctestrun_ordered_runner",
     deps = [":MyAppTestsLib"],
