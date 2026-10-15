@@ -1,0 +1,10 @@
+import %workspace%/../../shared.bazelrc
+import %workspace%/../../ci.bazelrc
+try-import %workspace%/../../local.bazelrc
+
+# Keep the default SDK dependencies supplied by rules_swift enabled.
+build:explicit_modules --features=swift.emit_c_module --host_features=swift.emit_c_module
+build:explicit_modules --features=swift.use_c_modules --host_features=swift.use_c_modules
+
+build:explicit_swift_modules --config=explicit_modules
+build:explicit_swift_modules --features=swift.use_explicit_swift_module_map --host_features=swift.use_explicit_swift_module_map
