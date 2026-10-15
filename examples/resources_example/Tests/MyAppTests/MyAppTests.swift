@@ -1,4 +1,5 @@
 import AppLovinSDKResources
+import CLibWithResources
 import CoolUI
 import CoreData
 @testable import IterableSDK
@@ -14,6 +15,14 @@ class MyAppTests: XCTestCase {
     func test_CoolStuff_bundleName() {
         let bundle = Bundle.bundle(named: "package-with-resources_CoolUI")
         XCTAssertNotNil(bundle)
+    }
+
+    func test_CLibWithResources_bundlesPrivacyManifest() throws {
+        XCTAssertEqual(c_lib_with_resources_answer(), 42)
+        let bundle = try XCTUnwrap(
+            Bundle.bundle(named: "c-package-with-resources_CLibWithResources")
+        )
+        XCTAssertNotNil(bundle.url(forResource: "PrivacyInfo", withExtension: "xcprivacy"))
     }
 
     func test_AppLovinSDKResources() throws {
