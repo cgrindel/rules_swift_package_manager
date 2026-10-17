@@ -8,6 +8,8 @@
   packages, check out the [internal rules and macros documentation].
 - If you need to change an attribute on a generated Bazel target, check out the [modifying generated
   Bazel targets documentation].
+- For the rules_swift dependency upgrade and explicit modules setup, see the
+  [rules_swift 4.x migration notes](rules_swift_4_migration.md).
 
 [quickstart]: /README.md#quickstart
 [repository rules documentation]: /docs/repository_rules_overview.md

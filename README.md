@@ -70,9 +70,9 @@ actions. See the [CI GitHub workflow] for more details.
 ## Quickstart
 
 The following provides a quick introduction on how to set up and use the features in this
-repository. These instructions assume that you are using [Bazel modules] to load your external
-dependencies. If you are using Bazel's legacy external dependency management, we recommend using
-[Bazel's hybrid mode], then follow the steps in this quickstart guide.
+repository. Bazel 8 or later and [Bazel modules] are required. The minimum rules_swift version is
+4.2.1. See the [rules_swift 4.x migration notes](docs/rules_swift_4_migration.md) for compatibility
+changes and opting into explicit modules.
 
 Also, check out the [examples] for more information.
 
@@ -354,7 +354,6 @@ The following are a few tips to consider as you work with your repository:
 <!-- Links -->
 
 [Bazel modules]: https://bazel.build/external/module
-[Bazel's hybrid mode]: https://bazel.build/external/migration#hybrid-mode
 [bzlmod]: https://bazel.build/external/overview#bzlmod
 [our document on patching Swift packages]: docs/patch_swift_package.md
 [our document on modifying generated Bazel targets]: docs/modify_generated_bazel_targets.md

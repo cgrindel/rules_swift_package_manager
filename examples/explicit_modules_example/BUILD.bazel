@@ -1,0 +1,23 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@build_bazel_rules_apple//apple:macos.bzl", "macos_application")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "Main",
+    srcs = ["Application.swift"],
+    deps = ["@swiftpkg_explicitmodulesfixture//:Greeter"],
+)
+
+# Bundle the transitive Apple resources so Bundle.module can locate them at runtime.
+macos_application(
+    name = "explicit_modules_example",
+    bundle_id = "com.example.explicit-modules",
+    infoplists = ["Info.plist"],
+    minimum_os_version = "13.0",
+    deps = [":Main"],
+)
+
+build_test(
+    name = "build_test",
+    targets = [":explicit_modules_example"],
+)
