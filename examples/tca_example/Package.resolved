@@ -41,8 +41,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-collections",
       "state" : {
-        "revision" : "3b69cedbaa49957e97c092ae400bb57602ef941f",
-        "version" : "1.7.2"
+        "revision" : "35a1edcb8ebd2bfe251d587f0b69e62af28f508c",
+        "version" : "1.7.3"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-concurrency-extras",
       "state" : {
-        "revision" : "5fa253428866f2360c3754e88537f700ed2656b5",
-        "version" : "1.4.1"
+        "revision" : "8a4260f7373493435bd21194585c95b72bfdd401",
+        "version" : "1.4.3"
       }
     },
     {
@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-issue-reporting",
       "state" : {
-        "revision" : "75b000cea2ca6d7527a57e1b9cc0bdf21a9abe9f",
-        "version" : "2.1.1"
+        "revision" : "b23bb4493c439d3e05152bc167014235ba3d47fc",
+        "version" : "2.1.2"
       }
     },
     {
