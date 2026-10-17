@@ -31,8 +31,9 @@ build --features=swift.use_explicit_swift_module_map --host_features=swift.use_e
 ```
 
 The [explicit modules example] exercises a generated Swift library, an Objective-C dependency,
-and a generated resource accessor with implicit modules, explicit Clang modules, and explicit
-Swift module maps. Run `./do_test` from its directory on macOS with Xcode selected.
+and a generated resource accessor in a macOS application bundle with implicit modules, explicit
+Clang modules, and explicit Swift module maps. Run `./do_test` from its directory on macOS with
+Xcode selected.
 
 SDK selection, excluded SDK modules, compiler compatibility, and application-extension flags are
 described in the [upstream explicit modules guide]. SDK configuration must be supplied by the root

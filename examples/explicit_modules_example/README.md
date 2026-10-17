@@ -10,7 +10,7 @@ On macOS with Xcode selected, run:
 ./do_test
 ```
 
-The integration test builds and runs the same binary in three configurations:
+The integration test builds and runs the same macOS application in three configurations:
 
 1. Implicit modules, using the normal build configuration.
 2. Explicit Clang modules with `--config=explicit_modules`.
@@ -19,6 +19,10 @@ The integration test builds and runs the same binary in three configurations:
 Both explicit configurations retain rules_swift's default SDK dependencies. No manual SDK
 dependencies or dependency-inference configuration are required. The executable checks the
 greeting assembled by the Objective-C dependency and Swift resource accessor.
+
+`macos_application` assembles the transitive Apple resource bundles inside the application bundle.
+A plain `swift_binary` does not assemble these bundles and cannot run this `Bundle.module` check
+by itself. The application runs its assertion and exits without opening a window.
 
 For setup details and limitations, see the [migration notes].
 
