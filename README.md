@@ -119,6 +119,12 @@ use_repo(
 
 You will also need to add a dependency on [rules_swift].
 
+The optional `linux_swift_executable` and `macos_swift_executable` attributes on
+`from_package` select the Swift executable for repository evaluation on the
+corresponding host OS. Each accepts a label pointing to an executable file
+available during repository evaluation. If the host's attribute is omitted,
+Swift is discovered using `xcrun` on macOS or on the path on Linux.
+
 NOTE: Some Swift package manager features (e.g., resources) use rules from [rules_apple]. It is a
 dependency for `rules_swift_package_manager`. However, you do not need to declare it unless you use
 any of the rules in your project.

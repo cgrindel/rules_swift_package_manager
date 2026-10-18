@@ -324,6 +324,12 @@ def _declare_pkgs_from_package(
             repository name that was found.
     """
 
+    swift_executable = repository_utils.host_swift_executable(
+        module_ctx,
+        linux_swift_executable = from_package.linux_swift_executable,
+        macos_swift_executable = from_package.macos_swift_executable,
+    )
+
     # Read Package.resolved.
     if from_package.resolved:
         pkg_resolved = module_ctx.path(from_package.resolved)
@@ -391,6 +397,7 @@ def _declare_pkgs_from_package(
         collect_src_info = False,
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
+        swift_executable = swift_executable,
     )
 
     # Read SE-0339 module aliases from the root package manifest, keyed by
@@ -490,6 +497,7 @@ def _declare_pkgs_from_package(
                     cached_json_directory = dep_cached_json_directory,
                     resolved_pkg_map = None,
                     collect_src_info = False,
+                    swift_executable = swift_executable,
                 )
                 fs_deps = [
                     d
@@ -701,6 +709,8 @@ def _declare_pkg_from_dependency(
             publicly_expose_all_targets = publicly_expose_all_targets,
             registries = registries,
             replace_scm_with_registry = replace_scm_with_registry,
+            linux_swift_executable = from_package.linux_swift_executable,
+            macos_swift_executable = from_package.macos_swift_executable,
             target_deps = target_deps,
             module_aliases = module_aliases,
             dep_module_aliases = dep_module_aliases,
@@ -739,6 +749,8 @@ in the lock file and will not be portable across machines.\
             dep_module_aliases = dep_module_aliases,
             bazel_target_mods = target_mods,
             package_repos = package_repos,
+            linux_swift_executable = from_package.linux_swift_executable,
+            macos_swift_executable = from_package.macos_swift_executable,
         )
 
     elif dep.registry:
@@ -764,6 +776,8 @@ in the lock file and will not be portable across machines.\
             dep_module_aliases = dep_module_aliases,
             bazel_target_mods = target_mods,
             package_repos = package_repos,
+            linux_swift_executable = from_package.linux_swift_executable,
+            macos_swift_executable = from_package.macos_swift_executable,
         )
 
 def _declare_swift_package_repo(name, from_package, config_swift_package):
@@ -875,6 +889,20 @@ package description generation)\
 Environment variables to inherit from the external environment that will be \
 passed to the execution environments for this repository rule. (e.g. SPM version check, \
 SPM dependency resolution, SPM package description generation)\
+""",
+            ),
+            "linux_swift_executable": attr.label(
+                doc = """\
+Label of a Swift executable file available during repository evaluation. \
+Used for Swift Package Manager commands on Linux hosts. Defaults to Swift \
+discovered on the path.\
+""",
+            ),
+            "macos_swift_executable": attr.label(
+                doc = """\
+Label of a Swift executable file available during repository evaluation. \
+Used for Swift Package Manager commands on macOS hosts. Defaults to Swift \
+discovered using `xcrun`.\
 """,
             ),
             "make_files_read_only": attr.bool(

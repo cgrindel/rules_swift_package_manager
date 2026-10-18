@@ -39,6 +39,189 @@ def _copy_test(ctx):
 
 copy_test = unittest.make(_copy_test)
 
+def _host_swift_executable_test(ctx):
+    env = unittest.begin(ctx)
+    linux = Label("//:linux_swift")
+    macos = Label("//:macos_swift")
+    for os_name in ["linux", "mac os x", "unknown"]:
+        host_ctx = struct(os = struct(name = os_name))
+        for linux_label, macos_label in [(linux, macos), (linux, None), (None, macos), (None, None)]:
+            expected = {"linux": linux_label, "mac os x": macos_label}.get(os_name)
+            asserts.equals(
+                env,
+                expected,
+                repository_utils.host_swift_executable(
+                    host_ctx,
+                    linux_swift_executable = linux_label,
+                    macos_swift_executable = macos_label,
+                ),
+                "unexpected executable for {}".format(os_name),
+            )
+    return unittest.end(env)
+
+host_swift_executable_test = unittest.make(_host_swift_executable_test)
+
+def _exec_spm_command_uses_configured_swift_test(ctx):
+    env = unittest.begin(ctx)
+
+    calls = []
+    watched = []
+
+    def _execute(args, environment = {}, working_directory = ""):
+        asserts.equals(
+            env,
+            ["//toolchain:swift"],
+            watched,
+            "the executable should be watched before it is executed",
+        )
+        calls.append(struct(
+            args = args,
+            environment = environment,
+            working_directory = working_directory,
+        ))
+        return struct(return_code = 0, stdout = "configured", stderr = "")
+
+    def _path(label):
+        asserts.equals(env, "//toolchain:swift", label)
+        return "/toolchain/usr/bin/swift"
+
+    def _watch(label):
+        watched.append(label)
+
+    repository_ctx = struct(
+        execute = _execute,
+        os = struct(name = "linux"),
+        path = _path,
+        watch = _watch,
+    )
+
+    actual = repository_utils.exec_spm_command(
+        repository_ctx,
+        ["swift", "package", "--version"],
+        swift_executable = "//toolchain:swift",
+    )
+
+    asserts.equals(env, "configured", actual)
+    asserts.equals(env, ["//toolchain:swift"], watched)
+    asserts.equals(env, 1, len(calls))
+    asserts.equals(
+        env,
+        ["/toolchain/usr/bin/swift", "package", "--version"],
+        calls[0].args,
+    )
+
+    return unittest.end(env)
+
+exec_spm_command_uses_configured_swift_test = unittest.make(
+    _exec_spm_command_uses_configured_swift_test,
+)
+
+def _exec_spm_command_uses_configured_macos_swift_test(ctx):
+    env = unittest.begin(ctx)
+    calls = []
+
+    def _execute(args, environment = {}, working_directory = ""):
+        calls.append(struct(args = args, env = environment, cwd = working_directory))
+        if len(calls) == 1:
+            return struct(return_code = 0, stdout = "/SDKs/MacOSX.sdk\n", stderr = "")
+        return struct(return_code = 0, stdout = "configured", stderr = "")
+
+    def _path(label):
+        return "/toolchain/" + label.name
+
+    watched = []
+    repository_ctx = struct(
+        execute = _execute,
+        os = struct(name = "mac os x"),
+        path = _path,
+        watch = watched.append,
+    )
+    swift = Label("//:swift")
+    actual = repository_utils.exec_spm_command(
+        repository_ctx,
+        ["swift", "package", "dump-package"],
+        env = {"DEVELOPER_DIR": "/Xcode/Contents/Developer", "SDKROOT": "/SDKs/iPhoneOS.sdk"},
+        working_directory = "/package",
+        swift_executable = swift,
+    )
+    asserts.equals(env, "configured", actual)
+    asserts.equals(env, [swift], watched)
+    asserts.equals(env, 2, len(calls))
+    asserts.equals(env, ["/usr/bin/xcrun", "--sdk", "macosx", "--show-sdk-path"], calls[0].args)
+    asserts.equals(env, "", calls[0].env["SDKROOT"])
+    asserts.equals(env, "/Xcode/Contents/Developer", calls[0].env["DEVELOPER_DIR"])
+    asserts.equals(env, ["/toolchain/swift", "package", "dump-package"], calls[1].args)
+    asserts.equals(env, "/SDKs/MacOSX.sdk", calls[1].env["SDKROOT"])
+    asserts.equals(env, "/Xcode/Contents/Developer", calls[1].env["DEVELOPER_DIR"])
+    asserts.equals(env, "/package", calls[1].cwd)
+    return unittest.end(env)
+
+exec_spm_command_uses_configured_macos_swift_test = unittest.make(
+    _exec_spm_command_uses_configured_macos_swift_test,
+)
+
+def _exec_spm_command_falls_back_to_path_test(ctx):
+    env = unittest.begin(ctx)
+
+    calls = []
+
+    # buildifier: disable=unused-variable
+    def _execute(args, environment = {}, working_directory = ""):
+        calls.append(args)
+        return struct(return_code = 0, stdout = "path", stderr = "")
+
+    repository_ctx = struct(
+        execute = _execute,
+        os = struct(name = "linux"),
+    )
+
+    actual = repository_utils.exec_spm_command(
+        repository_ctx,
+        ["swift", "package", "--version"],
+    )
+
+    asserts.equals(env, "path", actual)
+    asserts.equals(env, [["swift", "package", "--version"]], calls)
+
+    return unittest.end(env)
+
+exec_spm_command_falls_back_to_path_test = unittest.make(
+    _exec_spm_command_falls_back_to_path_test,
+)
+
+def _exec_spm_command_falls_back_to_xcrun_test(ctx):
+    env = unittest.begin(ctx)
+
+    calls = []
+
+    # buildifier: disable=unused-variable
+    def _execute(args, environment = {}, working_directory = ""):
+        calls.append(args)
+        return struct(return_code = 0, stdout = "xcrun", stderr = "")
+
+    repository_ctx = struct(
+        execute = _execute,
+        os = struct(name = "mac os x"),
+    )
+
+    actual = repository_utils.exec_spm_command(
+        repository_ctx,
+        ["swift", "package", "--version"],
+    )
+
+    asserts.equals(env, "xcrun", actual)
+    asserts.equals(
+        env,
+        [["xcrun", "swift", "package", "--version"]],
+        calls,
+    )
+
+    return unittest.end(env)
+
+exec_spm_command_falls_back_to_xcrun_test = unittest.make(
+    _exec_spm_command_falls_back_to_xcrun_test,
+)
+
 def _replace_working_directory_test(ctx):
     env = unittest.begin(ctx)
 
@@ -193,6 +376,11 @@ def repository_utils_test_suite():
     return unittest.suite(
         "repository_utils_tests",
         copy_test,
+        exec_spm_command_falls_back_to_path_test,
+        exec_spm_command_falls_back_to_xcrun_test,
+        exec_spm_command_uses_configured_macos_swift_test,
+        exec_spm_command_uses_configured_swift_test,
+        host_swift_executable_test,
         relativize_repo_path_test,
         replace_working_directory_test,
     )

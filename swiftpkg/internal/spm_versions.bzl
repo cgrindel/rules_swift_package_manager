@@ -22,7 +22,7 @@ def _extract_version(version):
             return version[i:].strip()
     return None
 
-def _get_version(repository_ctx, env = {}):
+def _get_version(repository_ctx, env = {}, swift_executable = None):
     """Returns the semantic version for Swit Package Manager.
 
     This is equivalent to running `swift package --version` and returning
@@ -32,6 +32,7 @@ def _get_version(repository_ctx, env = {}):
         repository_ctx: A `repository_ctx` instance.
         env: A `dict` of environment variables that are used in the evaluation
              of the SPM version.
+        swift_executable: Optional. A label pointing to the Swift executable.
 
     Returns:
         A `string` representing the semantic version for Swift Package Manager.
@@ -40,6 +41,7 @@ def _get_version(repository_ctx, env = {}):
         repository_ctx,
         ["swift", "package", "--version"],
         env = env,
+        swift_executable = swift_executable,
     )
     return _extract_version(exec_out)
 
