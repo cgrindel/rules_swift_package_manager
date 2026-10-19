@@ -26,6 +26,17 @@ apple_cc_configure = use_extension(
 )
 use_repo(apple_cc_configure, "local_config_apple_cc")
 
+system_sdk = use_extension(
+    "@build_bazel_rules_swift//swift:extensions.bzl",
+    "system_sdk",
+)
+system_sdk.configure_sdks(
+    # Match rules_swift's macOS exclusion: Xcode 27 ships a Swift interface
+    # for this private module without its underlying Objective-C module.
+    # SDK configuration must be applied in the root module of this example.
+    exclude_modules = {"MacOSX": ["MobileGestaltPrivate"]},
+)
+
 swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
