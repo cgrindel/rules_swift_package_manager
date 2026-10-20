@@ -12,7 +12,7 @@ func TestNewIntTestParamsFromJSON(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Len(t, actual, 2)
 	expected := []testparams.IntTestParams{
-		{Test: "@@//path:int_test", OS: "macos"},
+		{Test: "@@//path:int_test", OS: "macos", RunnerOverride: "macos-15"},
 		{Test: "@@//path:int_test", OS: "linux"},
 	}
 	assert.Equal(t, expected, actual)
@@ -20,7 +20,12 @@ func TestNewIntTestParamsFromJSON(t *testing.T) {
 
 const intTestParamsJSON = `
 [
-  {"test": "@@//path:int_test", "os": "macos", "bzlmod_mode": "enabled"},
+  {"test": "@@//path:int_test", "os": "macos", "bzlmod_mode": "enabled", "runner": "macos-15"},
   {"test": "@@//path:int_test", "os": "linux", "bzlmod_mode": "disabled"}
 ]
 `
+
+func TestRunnerOverride(t *testing.T) {
+	assert.Equal(t, "macos-15", (&testparams.IntTestParams{OS: "macos", RunnerOverride: "macos-15"}).Runner())
+	assert.Equal(t, "xcode-27", (&testparams.IntTestParams{OS: "macos"}).Runner())
+}

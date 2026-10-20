@@ -15,11 +15,12 @@ def _label_str(label):
         result = "@@{}".format(result)
     return result
 
-def _new_integration_test_params(test, os, bzlmod_mode):
+def _new_integration_test_params(test, os, bzlmod_mode, runner = ""):
     return struct(
         test = _label_str(test),
         os = os,
         bzlmod_mode = bzlmod_mode,
+        runner = runner,
     )
 
 def _collect_from_deps(deps):
