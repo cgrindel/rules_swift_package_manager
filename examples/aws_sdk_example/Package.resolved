@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/awslabs/aws-crt-swift",
       "state" : {
-        "revision" : "701b9b527d69460efca1f1976d04788935d07797",
-        "version" : "0.64.2"
+        "revision" : "d754d289d594adc240f55c90eab212bac818509c",
+        "version" : "0.58.1"
       }
     },
     {
@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-configuration.git",
       "state" : {
-        "revision" : "8bae88f79dbddec793390c5bf3e2abb4ac2ece42",
-        "version" : "1.2.2"
+        "revision" : "4e916072eb34f3c136ae64bd2859d6072cdb1b6e",
+        "version" : "1.3.0"
       }
     },
     {
@@ -104,8 +104,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-crypto.git",
       "state" : {
-        "revision" : "1c80d3aff53fedc445b60692980cb4f19a618657",
-        "version" : "5.0.1"
+        "revision" : "c2cbadd7263439d8015189668f96ff5b5be565ce",
+        "version" : "5.0.3"
       }
     },
     {
