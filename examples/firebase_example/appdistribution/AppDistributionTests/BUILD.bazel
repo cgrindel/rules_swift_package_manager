@@ -1,5 +1,13 @@
-load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test", "ios_xctestrun_runner")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+
+# The direct simctl/xctest path can stall after simulator startup on Xcode 27.
+# Run the same XCTest bundle through xcodebuild instead.
+ios_xctestrun_runner(
+    name = "xcodebuild_test_runner",
+    create_xcresult_bundle = True,
+    random = False,
+)
 
 swift_library(
     name = "AppDistributionTests",
@@ -13,7 +21,7 @@ swift_library(
 ios_unit_test(
     name = "FooTests",
     minimum_os_version = "15.0",
-    runner = "@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_ordered_runner",
+    runner = ":xcodebuild_test_runner",
     visibility = ["//visibility:private"],
     deps = [":AppDistributionTests"],
 )
