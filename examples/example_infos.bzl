@@ -14,7 +14,7 @@ load(
     "ci_test_params_suite",
 )
 
-def _new(name, oss, versions, enable_bzlmods):
+def _new(name, oss, versions, enable_bzlmods, runner = ""):
     # Remove the Bazel label prefix if it exists.
     # Depending upon the whether bzmlod is enabled, the prefix could be `@@//:`
     # Replace periods (.) with underscore (_), after the first character
@@ -32,6 +32,7 @@ def _new(name, oss, versions, enable_bzlmods):
         versions = versions,
         clean_versions = clean_versions,
         enable_bzlmods = enable_bzlmods,
+        runner = runner,
     )
 
 def _test_name_prefix(name):
@@ -91,6 +92,7 @@ def _ci_integration_test_params(ei, version):
     ci_integration_test_params(
         name = _test_params_name_from_test_name(test_name),
         oss = ei.oss,
+        runner = ei.runner,
         test_names = [test_name],
         visibility = ["//:__subpackages__"],
     )
@@ -122,6 +124,12 @@ _default_enable_bzlmods = [True]
 
 _enable_bzlmods = {}
 
+# Xcode 27.0 crashes while loading explicit Clang PCMs. Keep this example on
+# Xcode 16.2 until the compiler fix or rules_swift workaround is available.
+_runner_overrides = {
+    "explicit_modules_example": "macos-15",
+}
+
 _all_os_all_bazel_versions_test_examples = [
     "pkg_manifest_minimal",
 ]
@@ -136,6 +144,7 @@ _all_os_single_bazel_version_test_examples = [
 _macos_single_bazel_version_test_examples = [
     "aws_crt_example",
     "aws_sdk_example",
+    "explicit_modules_example",
     "firebase_example",
     "google_maps_example",
     "interesting_deps",
@@ -190,6 +199,7 @@ _all = [
         oss = ["macos"],
         versions = [bazel_binaries.versions.current],
         enable_bzlmods = _enable_bzlmods.get(name, _default_enable_bzlmods),
+        runner = _runner_overrides.get(name, ""),
     )
     for name in _macos_single_bazel_version_test_examples
 ] + [

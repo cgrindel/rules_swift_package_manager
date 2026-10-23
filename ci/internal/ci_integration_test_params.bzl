@@ -26,6 +26,7 @@ def _ci_integration_test_params_impl(ctx):
                     test = test_label,
                     os = os,
                     bzlmod_mode = bzlmod_mode,
+                    runner = ctx.attr.runner,
                 )
                 itps.append(itp)
     return [
@@ -44,6 +45,9 @@ ci_integration_test_params = rule(
         "oss": attr.string_list(
             default = ["macos", "linux"],
             doc = "Accepted values: `macos`, `linux`.",
+        ),
+        "runner": attr.string(
+            doc = "Optional GitHub Actions runner override for these tests.",
         ),
         # This cannot be a label_list, because the labels are tests. It would
         # require that this rule and any rules that use this rule would need to
