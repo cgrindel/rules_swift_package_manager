@@ -658,6 +658,19 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             ),
         )
 
+    # Pure C/C++ targets have no ObjC bundle accessor, but SPM still bundles their
+    # resources (e.g. privacy manifests), so attach the bundle to the parent library.
+    parent_data = None
+    if target.resources and target.objc_src_info == None:
+        clang_apple_res_bundle_info = _apple_resource_bundle_for_clang(
+            pkg_ctx,
+            target,
+        )
+        all_build_files.append(clang_apple_res_bundle_info.build_file)
+        parent_data = _apple_resource_bundle_data(
+            clang_apple_res_bundle_info.bundle_label_name,
+        )
+
     if target.objc_src_info != None:
         rule_kind = objc_kinds.library
         load_stmts.append(objc_library_load_stmt)
@@ -756,6 +769,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "tags": ["manual"],
         "visibility": _implementation_target_visibility(),
     }
+    if parent_data:
+        parent_attrs["data"] = parent_data
     decls.append(
         build_decls.new(
             rule_kind,

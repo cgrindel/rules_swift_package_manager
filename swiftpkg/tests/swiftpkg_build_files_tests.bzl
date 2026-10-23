@@ -707,6 +707,38 @@ def _pkg_info(
                 ),
             ),
             pkginfos.new_target(
+                name = "CLibraryWithResources",
+                type = "regular",
+                c99name = "CLibraryWithResources",
+                module_type = "ClangTarget",
+                path = ".",
+                sources = [
+                    "src/foo.c",
+                ],
+                source_paths = [
+                    "src/",
+                ],
+                public_hdrs_path = "include",
+                resources = [
+                    pkginfos.new_resource(
+                        path = "Source/CLibraryWithResources/PrivacyInfo.xcprivacy",
+                        rule = pkginfos.new_resource_rule(
+                            process = pkginfos.new_resource_rule_process(),
+                        ),
+                    ),
+                ],
+                dependencies = [],
+                repo_name = _repo_name,
+                clang_src_info = pkginfos.new_clang_src_info(
+                    hdrs = ["include/external.h"],
+                    srcs = [
+                        "src/foo.c",
+                    ],
+                    public_includes = ["include"],
+                    private_includes = ["src"],
+                ),
+            ),
+            pkginfos.new_target(
                 name = "SystemLibraryTarget",
                 type = "system",
                 c99name = "SystemLibraryTarget",
@@ -2001,6 +2033,91 @@ swift_library(
     ],
     tags = ["manual"],
     visibility = ["//:__subpackages__"],
+)
+""",
+        ),
+        struct(
+            msg = "C target with resources",
+            name = "CLibraryWithResources",
+            pkg_info = _pkg_info(),
+            exp = """\
+load("@build_bazel_rules_apple//apple:resources.bzl", "apple_resource_bundle")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_interop_hint")
+load("@rules_cc//cc:defs.bzl", "cc_library")
+load("@rules_swift_package_manager//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_target")
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "generate_modulemap", "resource_bundle_infoplist")
+
+apple_resource_bundle(
+    name = "CLibraryWithResources.rspm_resource_bundle",
+    bundle_name = "MyPackage_CLibraryWithResources",
+    infoplists = [":CLibraryWithResources.rspm_resource_bundle_infoplist"],
+    resources = ["Source/CLibraryWithResources/PrivacyInfo.xcprivacy"],
+    visibility = ["//:__subpackages__"],
+)
+
+cc_library(
+    name = "CLibraryWithResources.rspm.__impl",
+    data = select({
+        "@apple_support//configs:apple": [":CLibraryWithResources.rspm_resource_bundle"],
+        "//conditions:default": [],
+    }),
+    deps = [
+        ":CLibraryWithResources.rspm_modulemap",
+        ":CLibraryWithResources.rspm_c",
+    ],
+    tags = ["manual"],
+    visibility = ["//:__subpackages__"],
+)
+
+cc_library(
+    name = "CLibraryWithResources.rspm_c",
+    alwayslink = True,
+    aspect_hints = ["CLibraryWithResources.rspm_swift_hint"],
+    copts = [
+        "-fblocks",
+        "-fobjc-arc",
+        "-fPIC",
+        "-DSWIFT_PACKAGE=1",
+        "-fmodule-name=CLibraryWithResources",
+        "-Iexternal/bzlmodmangled~swiftpkg_mypackage/src",
+    ] + select({
+        "@rules_swift_package_manager//config_settings/bazel/compilation_mode:dbg": ["-DDEBUG=1"],
+        "//conditions:default": [],
+    }),
+    hdrs = ["include/external.h"],
+    includes = ["include"],
+    srcs = ["src/foo.c"],
+    visibility = ["//:__subpackages__"],
+)
+
+generate_modulemap(
+    name = "CLibraryWithResources.rspm_modulemap",
+    deps = [],
+    hdrs = ["include/external.h"],
+    module_name = "CLibraryWithResources",
+    visibility = ["//:__subpackages__"],
+)
+
+resource_bundle_infoplist(
+    name = "CLibraryWithResources.rspm_resource_bundle_infoplist",
+    region = "en",
+)
+
+spm_minimum_os_target(
+    name = "CLibraryWithResources.rspm",
+    deps = [":CLibraryWithResources.rspm.__impl"],
+    ios_minimum_os = "12.0",
+    macos_minimum_os = "10.13",
+    tvos_minimum_os = "12.0",
+    visibility = ["//:__subpackages__"],
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+)
+
+swift_interop_hint(
+    name = "CLibraryWithResources.rspm_swift_hint",
+    module_map = "CLibraryWithResources.rspm_modulemap",
+    module_name = "CLibraryWithResources",
 )
 """,
         ),
