@@ -107,8 +107,6 @@ jobs:
             runner: ubuntu-22.04
           - test: '@@//examples:vapor_example_test_bazel_.bazelversion'
             runner: xcode-27
-          - test: '@@//examples:xcmetrics_example_test_bazel_.bazelversion'
-            runner: xcode-27
           - test: '@@//examples:yoga_example_test_bazel_.bazelversion'
             runner: xcode-27
           - test: '@@//release:archive_test'

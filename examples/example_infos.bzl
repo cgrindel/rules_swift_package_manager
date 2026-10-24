@@ -115,7 +115,6 @@ _timeouts = {
     "firebase_example": "eternal",
     "soto_example": "eternal",
     "vapor_example": "eternal",
-    "xcmetrics_example": "eternal",
 }
 
 _default_enable_bzlmods = [True]
@@ -157,7 +156,6 @@ _macos_single_bazel_version_test_examples = [
     "skip_local_transitive_dependencies_example",
     "snapkit_example",
     "stripe_example",
-    "xcmetrics_example",
     "tca_example",
     "symlink_example",
     "swift_package_registry_example",
