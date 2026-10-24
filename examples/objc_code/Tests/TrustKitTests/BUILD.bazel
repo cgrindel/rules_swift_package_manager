@@ -9,7 +9,7 @@ swift_library(
     ],
     module_name = "ConfigTests",
     deps = [
-        "@swiftpkg_trustkit//:TrustKitStatic",
+        "@swiftpkg_trustkit//:TrustKit",
     ],
 )
 
