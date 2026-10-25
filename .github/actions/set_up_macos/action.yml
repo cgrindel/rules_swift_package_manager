@@ -4,15 +4,12 @@ inputs:
   test_target:
     description: The test target to execute.
     default: ''
-  xcode_version:
-    description: The Xcode version to select.
-    default: '27.0'
 runs:
   using: composite
   steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: ${{ inputs.xcode_version }}
+        xcode-version: '27.2'
     - name: Confirm Xcode Version
       shell: bash
       run: |

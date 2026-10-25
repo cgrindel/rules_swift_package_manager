@@ -6,15 +6,11 @@ const MacOS = "macos"
 const LinuxOS = "linux"
 
 type IntTestParams struct {
-	Test           string `json:"test"`
-	OS             string `json:"os"`
-	RunnerOverride string `json:"runner"`
+	Test string `json:"test"`
+	OS   string `json:"os"`
 }
 
 func (itp *IntTestParams) Runner() string {
-	if itp.RunnerOverride != "" {
-		return itp.RunnerOverride
-	}
 	switch itp.OS {
 	case MacOS:
 		return "xcode-27"

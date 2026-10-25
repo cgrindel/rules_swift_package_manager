@@ -20,11 +20,13 @@ Both explicit configurations retain rules_swift's default SDK dependencies. No m
 dependencies or dependency-inference configuration are required. The executable checks the
 greeting assembled by the Objective-C dependency and Swift resource accessor.
 
-The example's `MODULE.bazel` excludes `MobileGestaltPrivate` from the macOS SDK,
-matching [rules_swift's own configuration](https://github.com/bazelbuild/rules_swift/blob/4.2.1/MODULE.bazel#L218-L220).
+The example's `MODULE.bazel` excludes `MobileGestaltPrivate` from the macOS and iOS SDKs,
+matching [rules_swift's own configuration](https://github.com/bazelbuild/rules_swift/blob/4.2.1/MODULE.bazel#L202-L253).
 Xcode 27 ships its Swift interface without the underlying Objective-C module, so
 precompiling it fails. SDK exclusions must be configured in the consuming root
-module; rules_swift's own exclusions do not propagate to this example.
+module; rules_swift's own exclusions do not propagate to this example. Setting
+`exclude_modules` replaces rules_swift's default exclusions, so the example restates
+the `CoreAudio_Private` default for the iOS simulator.
 
 `macos_application` assembles the transitive Apple resource bundles inside the application bundle.
 A plain `swift_binary` does not assemble these bundles and cannot run this `Bundle.module` check

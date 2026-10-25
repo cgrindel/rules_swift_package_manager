@@ -39,6 +39,26 @@ SDK selection, excluded SDK modules, compiler compatibility, and application-ext
 described in the [upstream explicit modules guide]. SDK configuration must be supplied by the root
 Bazel module. The default SDK selection includes macOS, iOS device, and iOS simulator.
 
+rules_swift's own SDK module exclusions do not apply to your module. Setting `exclude_modules`
+replaces rules_swift's built-in defaults, so restate any default you still need. With Xcode 27,
+exclude `MobileGestaltPrivate` from each SDK you build for. Add a `bazel_dep` on `rules_swift` and
+use its repository name in the label:
+
+```starlark
+system_sdk = use_extension("@rules_swift//swift:extensions.bzl", "system_sdk")
+system_sdk.configure_sdks(
+    exclude_modules = {
+        "MacOSX": ["MobileGestaltPrivate"],
+        "iPhoneOS": ["MobileGestaltPrivate"],
+        # CoreAudio_Private is a rules_swift default for this SDK.
+        "iPhoneSimulator": ["CoreAudio_Private", "MobileGestaltPrivate"],
+    },
+)
+```
+
+Xcode versions before 26.4 need more exclusions. See the [rules_swift `MODULE.bazel`] for the
+current list.
+
 This change does not infer SDK dependencies or dependencies between binary targets. If you disable
 `swift.add_default_precompiled_modules`, you must supply the required SDK dependencies yourself.
 Binary frameworks with missing dependencies still need `swift_deps.configure_package(target_deps =
@@ -46,5 +66,6 @@ Binary frameworks with missing dependencies still need `swift_deps.configure_pac
 
 [upstream release notes]: https://github.com/bazelbuild/rules_swift/releases/tag/4.0.1
 [upstream explicit modules guide]: https://github.com/bazelbuild/rules_swift/blob/4.2.1/doc/explicit_modules.md
+[rules_swift `MODULE.bazel`]: https://github.com/bazelbuild/rules_swift/blob/4.2.1/MODULE.bazel#L202-L253
 [explicit modules example]: /examples/explicit_modules_example
 [modifying generated targets]: /README.md#optional-add-dependencies-to-generated-swift-package-targets

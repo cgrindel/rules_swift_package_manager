@@ -31,10 +31,18 @@ system_sdk = use_extension(
     "system_sdk",
 )
 system_sdk.configure_sdks(
-    # Match rules_swift's macOS exclusion: Xcode 27 ships a Swift interface
-    # for this private module without its underlying Objective-C module.
-    # SDK configuration must be applied in the root module of this example.
-    exclude_modules = {"MacOSX": ["MobileGestaltPrivate"]},
+    # Xcode 27 ships a Swift interface for MobileGestaltPrivate without its
+    # underlying Objective-C module. SDK configuration must be applied in the
+    # root module. Setting exclude_modules replaces rules_swift's defaults, so
+    # the iPhoneSimulator CoreAudio_Private default is restated.
+    exclude_modules = {
+        "MacOSX": ["MobileGestaltPrivate"],
+        "iPhoneOS": ["MobileGestaltPrivate"],
+        "iPhoneSimulator": [
+            "CoreAudio_Private",
+            "MobileGestaltPrivate",
+        ],
+    },
 )
 
 swift_deps = use_extension(
