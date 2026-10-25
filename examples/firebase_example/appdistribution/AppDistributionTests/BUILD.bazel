@@ -20,6 +20,7 @@ swift_library(
 
 ios_unit_test(
     name = "FooTests",
+    timeout = "long",
     minimum_os_version = "15.0",
     runner = ":xcodebuild_test_runner",
     visibility = ["//visibility:private"],
