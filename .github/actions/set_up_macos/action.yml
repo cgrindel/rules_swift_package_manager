@@ -17,6 +17,13 @@ runs:
         xcode-select -print-path
         xcodebuild -version
     - uses: cgrindel/gha_set_up_bazel@1d90e265a42a5a0eb50b7fb1781e7bf3154e3aed # v2.0.22
+    - name: Update local.bazelrc with macOS Flags
+      shell: bash
+      run: |
+        cat >> "local.bazelrc" <<EOF
+        # The runner image has no iOS 27.2 simulator runtime for Xcode 27.2.
+        build --ios_simulator_version=27.0
+        EOF
     # As of macos-13 runner, go was not on the PATH. This resulted in bazel run
     # //:go_update_repos failing.
     - uses: actions/setup-go@v7
