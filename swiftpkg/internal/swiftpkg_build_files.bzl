@@ -615,6 +615,14 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
 
     rule_kind = clang_kinds.library
 
+    clang_apple_res_bundle_info = None
+    if target.resources:
+        clang_apple_res_bundle_info = _apple_resource_bundle_for_clang(
+            pkg_ctx,
+            target,
+        )
+        all_build_files.append(clang_apple_res_bundle_info.build_file)
+
     if clang_src_info.organized_srcs.c_srcs:
         child_name = "{}_c".format(bzl_target_name)
         child_dep_names.append(child_name)
@@ -683,36 +691,26 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         res_copts = []
         res_objc_srcs = []
         res_objcxx_srcs = []
-        clang_apple_res_bundle_info = None
-        if target.resources:
-            clang_apple_res_bundle_info = _apple_resource_bundle_for_clang(
-                pkg_ctx,
-                target,
-            )
-            all_build_files.append(clang_apple_res_bundle_info.build_file)
-            attrs["data"] = _apple_resource_bundle_data(
-                clang_apple_res_bundle_info.bundle_label_name,
-            )
-            if clang_apple_res_bundle_info.objc_accessor_hdr_label_name:
-                res_objcxx_srcs = [
-                    ":{}".format(
-                        clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
-                    ),
-                ]
-                res_objc_srcs = res_objcxx_srcs + [
-                    ":{}".format(
-                        clang_apple_res_bundle_info.objc_accessor_impl_label_name,
-                    ),
-                ]
-
-                # SPM provides a SWIFTPM_MODULE_BUNDLE macro to access the bundle for
-                # ObjC code.  The header file contains the macro definition. It needs
-                # to be available in every Objc source file. So, we specify the
-                # -include flag specifying the header path.
-                # https://github.com/apple/swift-package-manager/blob/8387798811c6cc43761c5e1b48df2d3412dc5de4/Sources/Build/BuildDescription/ClangTargetBuildDescription.swift#L390
-                res_copts.append("-include$(location :{})".format(
+        if clang_apple_res_bundle_info and clang_apple_res_bundle_info.objc_accessor_hdr_label_name:
+            res_objcxx_srcs = [
+                ":{}".format(
                     clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
-                ))
+                ),
+            ]
+            res_objc_srcs = res_objcxx_srcs + [
+                ":{}".format(
+                    clang_apple_res_bundle_info.objc_accessor_impl_label_name,
+                ),
+            ]
+
+            # SPM provides a SWIFTPM_MODULE_BUNDLE macro to access the bundle for
+            # ObjC code.  The header file contains the macro definition. It needs
+            # to be available in every Objc source file. So, we specify the
+            # -include flag specifying the header path.
+            # https://github.com/apple/swift-package-manager/blob/8387798811c6cc43761c5e1b48df2d3412dc5de4/Sources/Build/BuildDescription/ClangTargetBuildDescription.swift#L390
+            res_copts.append("-include$(location :{})".format(
+                clang_apple_res_bundle_info.objc_accessor_hdr_label_name,
+            ))
 
         if clang_src_info.organized_srcs.objc_srcs or res_objc_srcs:
             child_name = "{}_objc".format(bzl_target_name)
@@ -756,6 +754,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "tags": ["manual"],
         "visibility": _implementation_target_visibility(),
     }
+    if clang_apple_res_bundle_info:
+        parent_attrs["data"] = _apple_resource_bundle_data(
+            clang_apple_res_bundle_info.bundle_label_name,
+        )
     decls.append(
         build_decls.new(
             rule_kind,
