@@ -165,10 +165,12 @@ fi
 # sdk_path="$(xcrun --show-sdk-path)"
 # macos_frameworks_dir="${sdk_path}/System/Library/Frameworks"
 
-sdk_version="$(xcrun --show-sdk-version)"
-sdk_build_version="$(xcrun --show-sdk-build-version)"
+# Pass --sdk explicitly so that an SDKROOT in the environment (e.g., one
+# pointing at the Command Line Tools SDK) does not override the selected Xcode.
+sdk_version="$(xcrun --sdk macosx --show-sdk-version)"
+sdk_build_version="$(xcrun --sdk macosx --show-sdk-build-version)"
 
-platforms_path="$(dirname "$(xcrun --show-sdk-platform-path)")"
+platforms_path="$(dirname "$(xcrun --sdk macosx --show-sdk-platform-path)")"
 
 macos_frameworks="$(list_frameworks_for_platform "${platforms_path}/MacOSX.platform")"
 ios_frameworks="$(list_frameworks_for_platform "${platforms_path}/iPhoneOS.platform")"
