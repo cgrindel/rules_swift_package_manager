@@ -8,10 +8,10 @@ local_path_override(
 )
 
 bazel_dep(name = "bazel_skylib", version = "1.8.2")
-bazel_dep(name = "apple_support", version = "1.24.2")
+bazel_dep(name = "apple_support", version = "2.10.1")
 bazel_dep(
     name = "rules_apple",
-    version = "4.3.3",
+    version = "5.3.1",
     repo_name = "build_bazel_rules_apple",
 )
 bazel_dep(
