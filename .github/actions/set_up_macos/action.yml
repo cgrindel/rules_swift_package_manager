@@ -23,6 +23,10 @@ runs:
         cat >> "local.bazelrc" <<EOF
         # The runner image has no iOS 27.2 simulator runtime for Xcode 27.2.
         build --ios_simulator_version=27.0
+        # Inside Bazel actions, xcrun resolves to the Command Line Tools, whose
+        # SDK is missing on the runner image. Pin the Xcode selected above.
+        build --action_env=DEVELOPER_DIR=$(xcode-select -p)
+        build --test_env=DEVELOPER_DIR=$(xcode-select -p)
         EOF
     # As of macos-13 runner, go was not on the PATH. This resulted in bazel run
     # //:go_update_repos failing.
