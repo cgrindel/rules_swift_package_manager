@@ -39,6 +39,8 @@ jobs:
             runner: xcode-27
           - test: '@@//examples:aws_sdk_example_test_bazel_.bazelversion'
             runner: xcode-27
+          - test: '@@//examples:explicit_modules_example_test_bazel_.bazelversion'
+            runner: xcode-27
           - test: '@@//examples:firebase_example_test_bazel_.bazelversion'
             runner: xcode-27
           - test: '@@//examples:google_maps_example_test_bazel_.bazelversion'

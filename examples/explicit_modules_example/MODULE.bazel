@@ -1,0 +1,55 @@
+bazel_dep(
+    name = "rules_swift_package_manager",
+    version = "0.0.0",
+)
+local_path_override(
+    module_name = "rules_swift_package_manager",
+    path = "../..",
+)
+
+bazel_dep(name = "bazel_skylib", version = "1.8.2")
+bazel_dep(name = "apple_support", version = "2.10.1")
+bazel_dep(
+    name = "rules_apple",
+    version = "5.3.1",
+    repo_name = "build_bazel_rules_apple",
+)
+bazel_dep(
+    name = "rules_swift",
+    version = "4.2.1",
+    repo_name = "build_bazel_rules_swift",
+)
+
+apple_cc_configure = use_extension(
+    "@apple_support//crosstool:setup.bzl",
+    "apple_cc_configure_extension",
+)
+use_repo(apple_cc_configure, "local_config_apple_cc")
+
+system_sdk = use_extension(
+    "@build_bazel_rules_swift//swift:extensions.bzl",
+    "system_sdk",
+)
+system_sdk.configure_sdks(
+    # Xcode 27 ships a Swift interface for MobileGestaltPrivate without its
+    # underlying Objective-C module. SDK configuration must be applied in the
+    # root module. Setting exclude_modules replaces rules_swift's defaults, so
+    # the iPhoneSimulator CoreAudio_Private default is restated.
+    exclude_modules = {
+        "MacOSX": ["MobileGestaltPrivate"],
+        "iPhoneOS": ["MobileGestaltPrivate"],
+        "iPhoneSimulator": [
+            "CoreAudio_Private",
+            "MobileGestaltPrivate",
+        ],
+    },
+)
+
+swift_deps = use_extension(
+    "@rules_swift_package_manager//:extensions.bzl",
+    "swift_deps",
+)
+swift_deps.from_package(
+    swift = "//:Package.swift",
+)
+use_repo(swift_deps, "swift_package", "swiftpkg_explicitmodulesfixture")
