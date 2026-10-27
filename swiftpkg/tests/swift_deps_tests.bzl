@@ -334,7 +334,7 @@ def _inference_configuration_test(ctx):
     resolve = swift_deps_test_utils.inference_settings
     config = collect([_inference_module(), _inference_module(root = False)])
     asserts.equals(env, None, config.error)
-    asserts.equals(env, {"system_sdk_deps": False, "binary_target_deps": False}, resolve(config, "foo", "swiftpkg_foo"))
+    asserts.equals(env, {"binary_target_deps": False, "system_sdk_deps": False}, resolve(config, "foo", "swiftpkg_foo"))
 
     # Exercise every combination of independent defaults and tri-state overrides.
     for sdk_default in [False, True]:
@@ -347,8 +347,8 @@ def _inference_configuration_test(ctx):
                     )])
                     asserts.equals(env, None, config.error)
                     asserts.equals(env, {
-                        "system_sdk_deps": sdk_default if sdk == "inherit" else sdk == "on",
                         "binary_target_deps": binary_default if binary == "inherit" else binary == "on",
+                        "system_sdk_deps": sdk_default if sdk == "inherit" else sdk == "on",
                     }, resolve(config, "foo", "swiftpkg_foo"))
                     asserts.equals(env, config.defaults, resolve(config, "other", "swiftpkg_other"))
 
@@ -365,7 +365,7 @@ def _inference_configuration_test(ctx):
         _inference_package(name = "swiftpkg_foo", sdk = "on", binary = "on"),
         _inference_package(name = "foo", sdk = "off"),
     ])])
-    asserts.equals(env, {"system_sdk_deps": False, "binary_target_deps": False}, resolve(config, "foo", "swiftpkg_foo"))
+    asserts.equals(env, {"binary_target_deps": False, "system_sdk_deps": False}, resolve(config, "foo", "swiftpkg_foo"))
     return unittest.end(env)
 
 inference_configuration_test = unittest.make(_inference_configuration_test)
@@ -403,7 +403,7 @@ def _inference_repository_routing_test(ctx):
     )
     for kind in ["git", "local", "registry"]:
         for sdk, binary in [(False, False), (True, False), (False, True), (True, True)]:
-            settings = {"system_sdk_deps": sdk, "binary_target_deps": binary}
+            settings = {"binary_target_deps": binary, "system_sdk_deps": sdk}
             dep = struct(
                 name = "foo",
                 identity = "foo",

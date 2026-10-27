@@ -14,14 +14,6 @@ load(":starlark_codegen.bzl", scg = "starlark_codegen")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
 _swift_attrs = {
-    "system_sdk_deps": attr.bool(
-        default = False,
-        doc = "Effective SDK dependency inference setting. Reserved; does not generate dependencies yet.",
-    ),
-    "binary_target_deps": attr.bool(
-        default = False,
-        doc = "Effective binary-target dependency inference setting. Reserved; does not generate dependencies yet.",
-    ),
     "bazel_package_name": attr.string(
         doc = "The short name for the Swift package's Bazel repository.",
     ),
@@ -33,6 +25,10 @@ the declarations in the generated `BUILD.bazel` file. Set by the \
 `swift_deps.bazel_target_add` and `swift_deps.bazel_target_add_select` tags; \
 direct users should prefer that typed API.\
 """,
+    ),
+    "binary_target_deps": attr.bool(
+        default = False,
+        doc = "Effective binary-target dependency inference setting. Reserved; does not generate dependencies yet.",
     ),
     "dep_module_aliases": attr.string(
         doc = """\
@@ -70,6 +66,10 @@ the package's own platform declarations and the effective versions of the \
 packages it depends on, matching `swift build`. Set by the `swift_deps` bzlmod \
 extension; when unset only the package's own declarations are used.\
 """,
+    ),
+    "system_sdk_deps": attr.bool(
+        default = False,
+        doc = "Effective SDK dependency inference setting. Reserved; does not generate dependencies yet.",
     ),
     "target_deps": attr.string_list_dict(
         doc = """\
