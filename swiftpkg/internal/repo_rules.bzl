@@ -14,6 +14,14 @@ load(":starlark_codegen.bzl", scg = "starlark_codegen")
 load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
 
 _swift_attrs = {
+    "system_sdk_deps": attr.bool(
+        default = False,
+        doc = "Effective SDK dependency inference setting. Reserved; does not generate dependencies yet.",
+    ),
+    "binary_target_deps": attr.bool(
+        default = False,
+        doc = "Effective binary-target dependency inference setting. Reserved; does not generate dependencies yet.",
+    ),
     "bazel_package_name": attr.string(
         doc = "The short name for the Swift package's Bazel repository.",
     ),

@@ -308,7 +308,8 @@ def _declare_pkgs_from_package(
         config_swift_package,
         target_mods_by_repo,
         matched_target_mod_repos,
-        available_target_mod_repos):
+        available_target_mod_repos,
+        inference_config):
     """Declare Swift packages from `Package.swift` and `Package.resolved`.
 
     Args:
@@ -320,6 +321,7 @@ def _declare_pkgs_from_package(
             `list` of target modification `dict` values.
         matched_target_mod_repos: A mutable `dict` recording the repository
             names from `target_mods_by_repo` that were found.
+        inference_config: Root-owned dependency inference configuration.
         available_target_mod_repos: A mutable `dict` recording every generated
             repository name that was found.
     """
@@ -562,6 +564,7 @@ the Swift package to make it available.\
                 ),
             ),
             package_repos,
+            _inference_settings(inference_config, dep.name, bazel_repo_names.from_identity(dep.identity)),
         )
 
     # Add all transitive dependencies to direct_dep_repo_names if `publicly_expose_all_targets` flag is set.
@@ -638,7 +641,13 @@ def _declare_pkg_from_dependency(
         dep_module_aliases,
         bazel_workspace_root,
         target_mods,
-        package_repos):
+        package_repos,
+        inference_settings,
+        package_rules = struct(
+            git = swift_package,
+            local = local_swift_package,
+            registry = registry_swift_package,
+        )):
     if cached_json_directory:
         cached_json_directory = paths.join(cached_json_directory, dep.name)
     name = bazel_repo_names.from_identity(dep.identity)
@@ -678,7 +687,7 @@ def _declare_pkg_from_dependency(
                 config_swift_package.replace_scm_with_registry
 
         pin = dep.source_control.pin
-        swift_package(
+        package_rules.git(
             name = name,
             bazel_package_name = name,
             commit = pin.state.revision,
@@ -706,6 +715,7 @@ def _declare_pkg_from_dependency(
             dep_module_aliases = dep_module_aliases,
             bazel_target_mods = target_mods,
             package_repos = package_repos,
+            **inference_settings
         )
 
     elif dep.file_system:
@@ -725,7 +735,7 @@ WARNING: local Swift package '{identity}' resolves to '{path}', which is \
 outside the Bazel workspace root. Its path will be stored as an absolute path \
 in the lock file and will not be portable across machines.\
 """.format(identity = dep.identity, path = local_path))
-        local_swift_package(
+        package_rules.local(
             name = name,
             bazel_package_name = name,
             env = from_package.env,
@@ -739,6 +749,7 @@ in the lock file and will not be portable across machines.\
             dep_module_aliases = dep_module_aliases,
             bazel_target_mods = target_mods,
             package_repos = package_repos,
+            **inference_settings
         )
 
     elif dep.registry:
@@ -747,7 +758,7 @@ in the lock file and will not be portable across machines.\
         if config_swift_package:
             replace_scm_with_registry = config_swift_package.replace_scm_with_registry
 
-        registry_swift_package(
+        package_rules.registry(
             name = name,
             bazel_package_name = name,
             build_file = build_file,
@@ -764,6 +775,7 @@ in the lock file and will not be portable across machines.\
             dep_module_aliases = dep_module_aliases,
             bazel_target_mods = target_mods,
             package_repos = package_repos,
+            **inference_settings
         )
 
 def _declare_swift_package_repo(name, from_package, config_swift_package):
@@ -784,7 +796,48 @@ def _declare_swift_package_repo(name, from_package, config_swift_package):
         **config_swift_package_kwargs
     )
 
+# Keep inference ownership separate from legacy configure_package settings:
+# dependency modules must not change the root's inference policy.
+_INFERENCE_KEYS = ["system_sdk_deps", "binary_target_deps"]
+
+def _inference_configuration(modules):
+    defaults = {key: False for key in _INFERENCE_KEYS}
+    packages = {}
+    configured = False
+    for mod in modules:
+        tags = mod.tags.configure_explicit_modules
+        if tags and not mod.is_root:
+            return struct(error = "Only the root module may declare configure_explicit_modules (found in '{}').".format(mod.name))
+        for tag in tags:
+            if configured:
+                return struct(error = "Expected at most one configure_explicit_modules tag in the root module.")
+            configured = True
+            defaults = {key: getattr(tag, key) for key in _INFERENCE_KEYS}
+        for tag in mod.tags.configure_package:
+            overrides = {key: getattr(tag, key) for key in _INFERENCE_KEYS}
+            if not mod.is_root:
+                if any([value != "inherit" for value in overrides.values()]):
+                    return struct(error = "Only the root module may override dependency inference for package '{}' (found in '{}').".format(tag.name, mod.name))
+                continue
+            if all([value == "inherit" for value in overrides.values()]):
+                continue
+            if tag.name in packages:
+                return struct(error = "Duplicate dependency inference overrides in the root module for '{}'.".format(tag.name))
+            packages[tag.name] = overrides
+    return struct(error = None, defaults = defaults, packages = packages)
+
+def _inference_settings(config, package_name, repo_name):
+    # Match configure_package's existing package-name-before-repository lookup.
+    overrides = config.packages.get(package_name, config.packages.get(repo_name, {}))
+    return {
+        key: config.defaults[key] if overrides.get(key, "inherit") == "inherit" else overrides[key] == "on"
+        for key in _INFERENCE_KEYS
+    }
+
 def _swift_deps_impl(module_ctx):
+    inference_config = _inference_configuration(module_ctx.modules)
+    if inference_config.error:
+        fail(inference_config.error)
     config_pkgs = {}
     for mod in module_ctx.modules:
         for config_pkg in mod.tags.configure_package:
@@ -813,6 +866,7 @@ Expected only one `configure_swift_package` tag, but found multiple.\
                     target_mods_by_repo,
                     matched_target_mod_repos,
                     available_target_mod_repos,
+                    inference_config,
                 ),
             )
 
@@ -915,6 +969,28 @@ in the output log.
     doc = "Load Swift packages from `Package.swift` and `Package.resolved` files.",
 )
 
+_configure_explicit_modules_tag = tag_class(
+    attrs = {
+        key: attr.bool(
+            default = False,
+            doc = "Opt in to {} inference. Reserved configuration: inference is not implemented yet.".format(
+                "SDK dependency" if key == "system_sdk_deps" else "binary-target dependency",
+            ),
+        )
+        for key in _INFERENCE_KEYS
+    },
+    doc = "Root-only defaults for independent dependency inference settings. Does not enable compiler features or generate inferred dependencies yet.",
+)
+
+_inference_override_attrs = {
+    key: attr.string(
+        default = "inherit",
+        values = ["inherit", "on", "off"],
+        doc = "Root-only package override for {}: inherit the global default, enable, or disable. Inference is not implemented yet.".format(key),
+    )
+    for key in _INFERENCE_KEYS
+}
+
 _configure_package_tag = tag_class(
     attrs = {
         "init_submodules": attr.bool(
@@ -947,7 +1023,7 @@ cross-package labels, and local labels that do not match package targets are \
 emitted unchanged.\
 """,
         ),
-    } | PATCH_ATTRS | TOOL_ATTRS,
+    } | PATCH_ATTRS | TOOL_ATTRS | _inference_override_attrs,
     doc = "Used to add or override settings for a particular Swift package.",
 )
 
@@ -1207,6 +1283,7 @@ swift_deps = module_extension(
         "bazel_target_set_string": _bazel_target_set_string_tag,
         "bazel_target_set_string_dict": _bazel_target_set_string_dict_tag,
         "bazel_target_set_string_list": _bazel_target_set_string_list_tag,
+        "configure_explicit_modules": _configure_explicit_modules_tag,
         "configure_package": _configure_package_tag,
         "configure_swift_package": _configure_swift_package_tag,
         "from_package": _from_package_tag,
@@ -1214,6 +1291,9 @@ swift_deps = module_extension(
 )
 
 swift_deps_test_utils = struct(
+    declare_pkg_from_dependency = _declare_pkg_from_dependency,
+    inference_configuration = _inference_configuration,
+    inference_settings = _inference_settings,
     branch_values = _branch_values,
     bazel_target_mod_tag_classes = [
         spec.tag_class
