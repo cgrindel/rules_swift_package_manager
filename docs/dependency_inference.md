@@ -32,9 +32,17 @@ explicit overrides, the dependency-name entry wins as a whole.
 
 Non-root modules may continue using existing package configuration, with both
 inference fields left at `inherit`. A non-root global tag or an explicit package
-inference override is rejected. Multiple explicit inference overrides for the
-same package name are rejected; put both fields in one tag. This ownership check
+inference override is rejected. Duplicate root `configure_package` names are
+rejected, even when one tag only contains legacy settings. Add inference fields
+to the existing tag alongside `build_file`, `patches`, or `target_deps`; do not
+add a second tag for the same name. This ownership and duplicate-name validation
 runs even if no package is fetched.
+
+Explicit inference overrides must match a discovered dependency name or generated
+repository name. Unknown names fail with a list of available names to help catch
+typos. Matching includes unresolved dependencies, so a stale `Package.resolved`
+does not prevent running package resolution. Both accepted names count as known
+when both are configured, even though the dependency-name override takes priority.
 
 Resolved booleans are passed to Git, local, and registry repositories and stored
 in the package generation context. Direct users of `swift_package`,

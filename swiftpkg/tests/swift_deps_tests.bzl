@@ -325,8 +325,8 @@ def _inference_module(root = True, defaults = [], packages = []):
         tags = struct(configure_explicit_modules = defaults, configure_package = packages),
     )
 
-def _inference_package(name = "foo", sdk = "inherit", binary = "inherit"):
-    return struct(name = name, system_sdk_deps = sdk, binary_target_deps = binary)
+def _inference_package(name = "foo", sdk = "inherit", binary = "inherit", **kwargs):
+    return struct(name = name, system_sdk_deps = sdk, binary_target_deps = binary, **kwargs)
 
 def _inference_configuration_test(ctx):
     env = unittest.begin(ctx)
@@ -386,6 +386,64 @@ def _inference_validation_test(ctx):
 
 inference_validation_test = unittest.make(_inference_validation_test)
 
+def _duplicate_package_configuration_test(ctx):
+    env = unittest.begin(ctx)
+    legacy = _inference_package(
+        build_file = "//:custom.BUILD",
+        patches = ["//:fix.patch"],
+        target_deps = {"Foo": [":Bar"]},
+    )
+    inference = _inference_package(sdk = "on")
+    for packages in [[legacy, inference], [inference, legacy], [legacy, legacy]]:
+        config = swift_deps_test_utils.inference_configuration([
+            _inference_module(packages = packages),
+        ])
+        asserts.true(env, "Duplicate configure_package" in config.error)
+        asserts.true(env, "foo" in config.error)
+
+    # Inference fields can coexist with legacy fields on a single tag.
+    config = swift_deps_test_utils.inference_configuration([
+        _inference_module(packages = [_inference_package(
+            sdk = "on",
+            build_file = legacy.build_file,
+            patches = legacy.patches,
+            target_deps = legacy.target_deps,
+        )]),
+    ])
+    asserts.equals(env, None, config.error)
+    asserts.true(env, swift_deps_test_utils.inference_settings(config, "foo", "swiftpkg_foo")["system_sdk_deps"])
+    return unittest.end(env)
+
+duplicate_package_configuration_test = unittest.make(_duplicate_package_configuration_test)
+
+def _unknown_inference_packages_test(ctx):
+    env = unittest.begin(ctx)
+    collect = swift_deps_test_utils.inference_configuration
+    record = swift_deps_test_utils.record_inference_packages
+    error = swift_deps_test_utils.unknown_inference_packages_error
+    config = collect([_inference_module(packages = [
+        _inference_package(name = "swift-log", sdk = "on"),
+        _inference_package(name = "swiftpkg_swift_log", binary = "off"),
+        _inference_package(name = "swift-lgo", sdk = "off"),
+    ])])
+
+    # Names match even before a dependency has a resolved pin. Both aliases
+    # count, including the lower-priority repository-name override.
+    record(config, [struct(name = "swift-log", identity = "swift-log")])
+    asserts.equals(env, ["swift-log", "swiftpkg_swift_log"], sorted(config.matched_names))
+    asserts.equals(env, "Dependency inference overrides were declared for unknown packages: swift-lgo. Available package names and repositories are: swift-log, swiftpkg_swift_log.", error(config))
+
+    # Discovery accumulates across multiple from_package declarations.
+    record(config, [struct(name = "swift-lgo", identity = "swift-lgo")])
+    asserts.equals(env, None, error(config))
+    config = collect([_inference_module(packages = [_inference_package(sdk = "on")])])
+    asserts.true(env, "unknown packages: foo" in error(config))
+    config = collect([_inference_module(packages = [_inference_package()])])
+    asserts.equals(env, None, error(config))
+    return unittest.end(env)
+
+unknown_inference_packages_test = unittest.make(_unknown_inference_packages_test)
+
 def _inference_repository_routing_test(ctx):
     env = unittest.begin(ctx)
     calls = []
@@ -441,6 +499,8 @@ def swift_deps_test_suite():
     return unittest.suite(
         "swift_deps_tests",
         inference_configuration_test,
+        duplicate_package_configuration_test,
+        unknown_inference_packages_test,
         inference_validation_test,
         inference_repository_routing_test,
         bazel_target_mods_by_repo_test,
