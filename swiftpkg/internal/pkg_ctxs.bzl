@@ -25,7 +25,9 @@ def _read(
         target_deps = {},
         module_aliases = {},
         dep_module_aliases = "",
-        bazel_target_mods = ""):
+        bazel_target_mods = "",
+        system_sdk_deps = False,
+        binary_target_deps = False):
     pkg_info = pkginfos.get(
         repository_ctx = repository_ctx,
         directory = repo_dir,
@@ -42,6 +44,8 @@ def _read(
         module_aliases = module_aliases,
         dep_module_aliases = dep_module_aliases,
         bazel_target_mods = bazel_target_mods,
+        system_sdk_deps = system_sdk_deps,
+        binary_target_deps = binary_target_deps,
         dep_minimum_os_versions = _read_dep_minimum_os_versions(
             repository_ctx,
             pkg_info,
@@ -64,7 +68,9 @@ def _new(
         module_aliases = {},
         dep_module_aliases = "",
         bazel_target_mods = "",
-        dep_minimum_os_versions = {}):
+        dep_minimum_os_versions = {},
+        system_sdk_deps = False,
+        binary_target_deps = False):
     manual_target_deps.validate(pkg_info, target_deps)
 
     # A package's sources may import an aliased module under its original
@@ -89,6 +95,8 @@ def _new(
         module_aliases = module_aliases,
         module_alias_flags = module_alias_flags,
         bazel_target_mods = decoded_bazel_target_mods,
+        system_sdk_deps = system_sdk_deps,
+        binary_target_deps = binary_target_deps,
         # Effective minimum OS versions per target, product and package. See
         # `minimum_os_versions.for_targets`.
         minimum_os_versions = minimum_os_versions.for_targets(

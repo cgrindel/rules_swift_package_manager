@@ -318,9 +318,191 @@ def _branch_values_test(ctx):
 
 branch_values_test = unittest.make(_branch_values_test)
 
+def _inference_module(root = True, defaults = [], packages = []):
+    return struct(
+        is_root = root,
+        name = "app" if root else "dependency",
+        tags = struct(configure_explicit_modules = defaults, configure_package = packages),
+    )
+
+def _inference_package(name = "foo", sdk = "inherit", binary = "inherit", **kwargs):
+    return struct(name = name, system_sdk_deps = sdk, binary_target_deps = binary, **kwargs)
+
+def _inference_configuration_test(ctx):
+    env = unittest.begin(ctx)
+    collect = swift_deps_test_utils.inference_configuration
+    resolve = swift_deps_test_utils.inference_settings
+    config = collect([_inference_module(), _inference_module(root = False)])
+    asserts.equals(env, None, config.error)
+    asserts.equals(env, {"binary_target_deps": False, "system_sdk_deps": False}, resolve(config, "foo", "swiftpkg_foo"))
+
+    # Exercise every combination of independent defaults and tri-state overrides.
+    for sdk_default in [False, True]:
+        for binary_default in [False, True]:
+            for sdk in ["inherit", "on", "off"]:
+                for binary in ["inherit", "on", "off"]:
+                    config = collect([_inference_module(
+                        defaults = [struct(system_sdk_deps = sdk_default, binary_target_deps = binary_default)],
+                        packages = [_inference_package(sdk = sdk, binary = binary)],
+                    )])
+                    asserts.equals(env, None, config.error)
+                    asserts.equals(env, {
+                        "binary_target_deps": binary_default if binary == "inherit" else binary == "on",
+                        "system_sdk_deps": sdk_default if sdk == "inherit" else sdk == "on",
+                    }, resolve(config, "foo", "swiftpkg_foo"))
+                    asserts.equals(env, config.defaults, resolve(config, "other", "swiftpkg_other"))
+
+    # Repository-name aliases work, and dependency-module legacy configuration
+    # cannot overwrite the root's inference policy, regardless of module order.
+    root = _inference_module(packages = [_inference_package(name = "swiftpkg_foo", sdk = "on")])
+    dep = _inference_module(root = False, packages = [_inference_package()])
+    for modules in [[root, dep], [dep, root]]:
+        config = collect(modules)
+        asserts.equals(env, True, resolve(config, "foo", "swiftpkg_foo")["system_sdk_deps"])
+
+    # A dependency-name override takes precedence over a repository-name alias.
+    config = collect([_inference_module(packages = [
+        _inference_package(name = "swiftpkg_foo", sdk = "on", binary = "on"),
+        _inference_package(name = "foo", sdk = "off"),
+    ])])
+    asserts.equals(env, {"binary_target_deps": False, "system_sdk_deps": False}, resolve(config, "foo", "swiftpkg_foo"))
+    return unittest.end(env)
+
+inference_configuration_test = unittest.make(_inference_configuration_test)
+
+def _inference_validation_test(ctx):
+    env = unittest.begin(ctx)
+    defaults = struct(system_sdk_deps = True, binary_target_deps = False)
+    for modules, expected in [
+        ([_inference_module(root = False, defaults = [defaults])], "Only the root module"),
+        ([_inference_module(root = False, packages = [_inference_package(sdk = "off")])], "Only the root module"),
+        ([_inference_module(root = False, packages = [_inference_package(binary = "on")])], "Only the root module"),
+        ([_inference_module(defaults = [defaults, defaults])], "at most one"),
+        ([_inference_module(packages = [_inference_package(sdk = "on"), _inference_package(sdk = "off")])], "Duplicate"),
+    ]:
+        result = swift_deps_test_utils.inference_configuration(modules)
+        asserts.true(env, expected in result.error, result.error)
+    return unittest.end(env)
+
+inference_validation_test = unittest.make(_inference_validation_test)
+
+def _duplicate_package_configuration_test(ctx):
+    env = unittest.begin(ctx)
+    legacy = _inference_package(
+        build_file = "//:custom.BUILD",
+        patches = ["//:fix.patch"],
+        target_deps = {"Foo": [":Bar"]},
+    )
+    inference = _inference_package(sdk = "on")
+    for packages in [[legacy, inference], [inference, legacy], [legacy, legacy]]:
+        config = swift_deps_test_utils.inference_configuration([
+            _inference_module(packages = packages),
+        ])
+        asserts.true(env, "Duplicate configure_package" in config.error)
+        asserts.true(env, "foo" in config.error)
+
+    # Inference fields can coexist with legacy fields on a single tag.
+    config = swift_deps_test_utils.inference_configuration([
+        _inference_module(packages = [_inference_package(
+            sdk = "on",
+            build_file = legacy.build_file,
+            patches = legacy.patches,
+            target_deps = legacy.target_deps,
+        )]),
+    ])
+    asserts.equals(env, None, config.error)
+    asserts.true(env, swift_deps_test_utils.inference_settings(config, "foo", "swiftpkg_foo")["system_sdk_deps"])
+    return unittest.end(env)
+
+duplicate_package_configuration_test = unittest.make(_duplicate_package_configuration_test)
+
+def _unknown_inference_packages_test(ctx):
+    env = unittest.begin(ctx)
+    collect = swift_deps_test_utils.inference_configuration
+    record = swift_deps_test_utils.record_inference_packages
+    error = swift_deps_test_utils.unknown_inference_packages_error
+    config = collect([_inference_module(packages = [
+        _inference_package(name = "swift-log", sdk = "on"),
+        _inference_package(name = "swiftpkg_swift_log", binary = "off"),
+        _inference_package(name = "swift-lgo", sdk = "off"),
+    ])])
+
+    # Names match even before a dependency has a resolved pin. Both aliases
+    # count, including the lower-priority repository-name override.
+    record(config, [struct(name = "swift-log", identity = "swift-log")])
+    asserts.equals(env, ["swift-log", "swiftpkg_swift_log"], sorted(config.matched_names))
+    asserts.equals(env, "Dependency inference overrides were declared for unknown packages: swift-lgo. Available package names and repositories are: swift-log, swiftpkg_swift_log.", error(config))
+
+    # Discovery accumulates across multiple from_package declarations.
+    record(config, [struct(name = "swift-lgo", identity = "swift-lgo")])
+    asserts.equals(env, None, error(config))
+    config = collect([_inference_module(packages = [_inference_package(sdk = "on")])])
+    asserts.true(env, "unknown packages: foo" in error(config))
+    config = collect([_inference_module(packages = [_inference_package()])])
+    asserts.equals(env, None, error(config))
+    return unittest.end(env)
+
+unknown_inference_packages_test = unittest.make(_unknown_inference_packages_test)
+
+def _inference_repository_routing_test(ctx):
+    env = unittest.begin(ctx)
+    calls = []
+
+    def _capture(**kwargs):
+        calls.append(kwargs)
+
+    from_package = struct(
+        env = {},
+        env_inherit = [],
+        registries = {},
+        resolved = None,
+        make_files_read_only = False,
+        netrc = None,
+    )
+    for kind in ["git", "local", "registry"]:
+        for sdk, binary in [(False, False), (True, False), (False, True), (True, True)]:
+            settings = {"binary_target_deps": binary, "system_sdk_deps": sdk}
+            dep = struct(
+                name = "foo",
+                identity = "foo",
+                source_control = struct(pin = struct(
+                    state = struct(revision = "abc", version = "1.0.0"),
+                    location = "https://example.com/foo.git",
+                )) if kind == "git" else None,
+                file_system = struct(path = "/workspace/foo") if kind == "local" else None,
+                registry = struct(pin = struct(identity = "example.foo", state = struct(version = "1.0.0"))) if kind == "registry" else None,
+            )
+            swift_deps_test_utils.declare_pkg_from_dependency(
+                dep,
+                None,
+                from_package,
+                None,
+                None,
+                {},
+                {},
+                "",
+                "/workspace",
+                "",
+                None,
+                settings,
+                package_rules = struct(git = _capture, local = _capture, registry = _capture),
+            )
+            asserts.equals(env, sdk, calls[-1]["system_sdk_deps"], kind)
+            asserts.equals(env, binary, calls[-1]["binary_target_deps"], kind)
+            asserts.equals(env, "swiftpkg_foo", calls[-1]["name"])
+    asserts.equals(env, 12, len(calls))
+    return unittest.end(env)
+
+inference_repository_routing_test = unittest.make(_inference_repository_routing_test)
+
 def swift_deps_test_suite():
     return unittest.suite(
         "swift_deps_tests",
+        inference_configuration_test,
+        duplicate_package_configuration_test,
+        unknown_inference_packages_test,
+        inference_validation_test,
+        inference_repository_routing_test,
         bazel_target_mods_by_repo_test,
         branch_values_test,
         build_file_conflict_error_test,

@@ -26,9 +26,11 @@ swift_deps.bazel_target_set_select_string_list_dict(<a href="#swift_deps.bazel_t
 swift_deps.bazel_target_set_string(<a href="#swift_deps.bazel_target_set_string-attr">attr</a>, <a href="#swift_deps.bazel_target_set_string-target">target</a>, <a href="#swift_deps.bazel_target_set_string-value">value</a>)
 swift_deps.bazel_target_set_string_dict(<a href="#swift_deps.bazel_target_set_string_dict-attr">attr</a>, <a href="#swift_deps.bazel_target_set_string_dict-target">target</a>, <a href="#swift_deps.bazel_target_set_string_dict-value">value</a>)
 swift_deps.bazel_target_set_string_list(<a href="#swift_deps.bazel_target_set_string_list-attr">attr</a>, <a href="#swift_deps.bazel_target_set_string_list-target">target</a>, <a href="#swift_deps.bazel_target_set_string_list-value">value</a>)
-swift_deps.configure_package(<a href="#swift_deps.configure_package-name">name</a>, <a href="#swift_deps.configure_package-build_file">build_file</a>, <a href="#swift_deps.configure_package-init_submodules">init_submodules</a>, <a href="#swift_deps.configure_package-patch_args">patch_args</a>, <a href="#swift_deps.configure_package-patch_cmds">patch_cmds</a>,
-                             <a href="#swift_deps.configure_package-patch_cmds_win">patch_cmds_win</a>, <a href="#swift_deps.configure_package-patch_tool">patch_tool</a>, <a href="#swift_deps.configure_package-patches">patches</a>, <a href="#swift_deps.configure_package-publicly_expose_all_targets">publicly_expose_all_targets</a>,
-                             <a href="#swift_deps.configure_package-recursive_init_submodules">recursive_init_submodules</a>, <a href="#swift_deps.configure_package-target_deps">target_deps</a>)
+swift_deps.configure_explicit_modules(<a href="#swift_deps.configure_explicit_modules-binary_target_deps">binary_target_deps</a>, <a href="#swift_deps.configure_explicit_modules-system_sdk_deps">system_sdk_deps</a>)
+swift_deps.configure_package(<a href="#swift_deps.configure_package-name">name</a>, <a href="#swift_deps.configure_package-binary_target_deps">binary_target_deps</a>, <a href="#swift_deps.configure_package-build_file">build_file</a>, <a href="#swift_deps.configure_package-init_submodules">init_submodules</a>, <a href="#swift_deps.configure_package-patch_args">patch_args</a>,
+                             <a href="#swift_deps.configure_package-patch_cmds">patch_cmds</a>, <a href="#swift_deps.configure_package-patch_cmds_win">patch_cmds_win</a>, <a href="#swift_deps.configure_package-patch_tool">patch_tool</a>, <a href="#swift_deps.configure_package-patches">patches</a>,
+                             <a href="#swift_deps.configure_package-publicly_expose_all_targets">publicly_expose_all_targets</a>, <a href="#swift_deps.configure_package-recursive_init_submodules">recursive_init_submodules</a>, <a href="#swift_deps.configure_package-system_sdk_deps">system_sdk_deps</a>,
+                             <a href="#swift_deps.configure_package-target_deps">target_deps</a>)
 swift_deps.configure_swift_package(<a href="#swift_deps.configure_swift_package-build_path">build_path</a>, <a href="#swift_deps.configure_swift_package-cache_path">cache_path</a>, <a href="#swift_deps.configure_swift_package-config_path">config_path</a>, <a href="#swift_deps.configure_swift_package-dependency_caching">dependency_caching</a>,
                                    <a href="#swift_deps.configure_swift_package-manifest_cache">manifest_cache</a>, <a href="#swift_deps.configure_swift_package-manifest_caching">manifest_caching</a>, <a href="#swift_deps.configure_swift_package-replace_scm_with_registry">replace_scm_with_registry</a>,
                                    <a href="#swift_deps.configure_swift_package-security_path">security_path</a>, <a href="#swift_deps.configure_swift_package-use_registry_identity_for_scm">use_registry_identity_for_scm</a>)
@@ -242,6 +244,19 @@ There is no allowlist of attribute names. An attribute that the generated rule d
 | <a id="swift_deps.bazel_target_set_string_list-target"></a>target |  A `string` naming a declaration in a generated repository, such as `@swiftpkg_foo//:Bar.rspm.__impl`. It looks like a label, but it is not resolved as one. The repository portion is the name of the generated repository as this ruleset named it (e.g. `swiftpkg_foo`), not an alias declared with `use_repo` and not Bazel's canonical repository name, so the `@@` prefix is rejected. Every generated declaration lives in the root package of its repository, so the value must be of the form `@repo_name//:target_name`.   | String | required |  |
 | <a id="swift_deps.bazel_target_set_string_list-value"></a>value |  The replacement value as a `list` of `string` values. An empty `list` is allowed and clears the attribute.<br><br>The values are written into the generated `BUILD.bazel` file verbatim. Label values are not remapped, so a value such as `//:my_lib` resolves inside the generated repository, not your root module. Use `@@//:my_lib` to name a target in the main repository.   | List of strings | required |  |
 
+<a id="swift_deps.configure_explicit_modules"></a>
+
+### configure_explicit_modules
+
+Root-only defaults for independent dependency inference settings. Does not enable compiler features or generate inferred dependencies yet.
+
+**Attributes**
+
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="swift_deps.configure_explicit_modules-binary_target_deps"></a>binary_target_deps |  Opt in to binary-target dependency inference. Reserved configuration: inference is not implemented yet.   | Boolean | optional |  `False`  |
+| <a id="swift_deps.configure_explicit_modules-system_sdk_deps"></a>system_sdk_deps |  Opt in to SDK dependency inference. Reserved configuration: inference is not implemented yet.   | Boolean | optional |  `False`  |
+
 <a id="swift_deps.configure_package"></a>
 
 ### configure_package
@@ -253,6 +268,7 @@ Used to add or override settings for a particular Swift package.
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="swift_deps.configure_package-name"></a>name |  The identity (i.e., name in the package's manifest) for the Swift package.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="swift_deps.configure_package-binary_target_deps"></a>binary_target_deps |  Root-only package override for binary_target_deps: inherit the global default, enable, or disable. Inference is not implemented yet.   | String | optional |  `"inherit"`  |
 | <a id="swift_deps.configure_package-build_file"></a>build_file |  When used, the provided BUILD file will be used instead of generating one.   | <a href="https://bazel.build/concepts/labels">Label</a> | optional |  `None`  |
 | <a id="swift_deps.configure_package-init_submodules"></a>init_submodules |  Whether to clone submodules in the repository.   | Boolean | optional |  `False`  |
 | <a id="swift_deps.configure_package-patch_args"></a>patch_args |  The arguments given to the patch tool. Defaults to -p0, however -p1 will usually be needed for patches generated by git. If multiple -p arguments are specified, the last one will take effect.If arguments other than -p are specified, Bazel will fall back to use patch command line tool instead of the Bazel-native patch implementation. When falling back to patch command line tool and patch_tool attribute is not specified, `patch` will be used.   | List of strings | optional |  `["-p0"]`  |
@@ -262,6 +278,7 @@ Used to add or override settings for a particular Swift package.
 | <a id="swift_deps.configure_package-patches"></a>patches |  A list of files that are to be applied as patches after extracting the archive. By default, it uses the Bazel-native patch implementation which doesn't support fuzz match and binary patch, but Bazel will fall back to use patch command line tool if `patch_tool` attribute is specified or there are arguments other than `-p` in `patch_args` attribute.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
 | <a id="swift_deps.configure_package-publicly_expose_all_targets"></a>publicly_expose_all_targets |  Allows to expose internal build targets required for package compilation. The structure and labels of exposed targets may change in future releases without requiring a major version bump.   | Boolean | optional |  `False`  |
 | <a id="swift_deps.configure_package-recursive_init_submodules"></a>recursive_init_submodules |  Whether to clone submodules recursively in the repository.   | Boolean | optional |  `True`  |
+| <a id="swift_deps.configure_package-system_sdk_deps"></a>system_sdk_deps |  Root-only package override for system_sdk_deps: inherit the global default, enable, or disable. Inference is not implemented yet.   | String | optional |  `"inherit"`  |
 | <a id="swift_deps.configure_package-target_deps"></a>target_deps |  Additional dependencies to add to generated targets for this package.<br><br>Keys are Swift package target names, such as `ExampleTarget`, which are mapped to generated implementation target names such as `ExampleTarget.rspm.__impl`. If the key already contains `.rspm`, it is matched as a generated target name unchanged. Values may be Bazel label strings or Swift package target names. Bare value strings and local label strings such as `OtherTarget` or `:OtherTarget` are mapped to generated target labels such as `:OtherTarget.rspm` when they match Swift package targets in the same generated BUILD package. Values that contain `.rspm`, external labels, cross-package labels, and local labels that do not match package targets are emitted unchanged.   | <a href="https://bazel.build/rules/lib/dict">Dictionary: String -> List of strings</a> | optional |  `{}`  |
 
 <a id="swift_deps.configure_swift_package"></a>
