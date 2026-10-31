@@ -1,6 +1,7 @@
 """Tests for `repo_rules` module."""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
+load("//swiftpkg/internal:bazel_target_mods.bzl", "bazel_target_mods")
 load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 
 def _download_artifacts_test(ctx):
@@ -117,6 +118,8 @@ def _gen_build_files_with_build_file_test(ctx):
         attr = struct(
             bazel_target_mods = "",
             build_file = build_file_label,
+            system_sdk_deps = True,
+            binary_target_deps = True,
         ),
         template = _template,
     )
@@ -163,7 +166,7 @@ def _gen_build_files_without_build_file_test(ctx):
 
     # buildifier: disable=unused-variable
     def _file(path, content = "", executable = False, legacy_utf8 = False):
-        calls["file"].append(struct(path = path))
+        calls["file"].append(struct(path = path, content = content))
 
     # buildifier: disable=unused-variable
     def _execute(args, environment = {}, quiet = True):
@@ -186,9 +189,21 @@ def _gen_build_files_without_build_file_test(ctx):
         targets = [],
         products = [],
     )
-    pkg_ctx = struct(pkg_info = pkg_info, bazel_target_mods = [])
+    pkg_ctx = struct(
+        pkg_info = pkg_info,
+        system_sdk_deps = True,
+        binary_target_deps = True,
+        bazel_target_mods = [bazel_target_mods.new(
+            bazel_target_mods.verbs.set,
+            "package_info.rspm",
+            "package_version",
+            value = "overridden",
+        )],
+    )
 
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
+    asserts.true(env, 'package_version = "overridden"' in calls["file"][-1].content, calls["file"][-1].content)
+    asserts.false(env, 'package_version = "1.0.0"' in calls["file"][-1].content)
 
     asserts.equals(
         env,
