@@ -59,6 +59,9 @@ system_sdk.configure_sdks(
 Xcode versions before 26.4 need more exclusions. See the [rules_swift `MODULE.bazel`] for the
 current list.
 
+The [dependency inference configuration](dependency_inference.md) reserves opt-in settings for
+future inference; these settings do not generate dependencies yet.
+
 This change does not infer SDK dependencies or dependencies between binary targets. If you disable
 `swift.add_default_precompiled_modules`, you must supply the required SDK dependencies yourself.
 Binary frameworks with missing dependencies still need `swift_deps.configure_package(target_deps =

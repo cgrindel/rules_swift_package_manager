@@ -2804,9 +2804,31 @@ def _module_aliases_test(ctx):
 
 module_aliases_test = unittest.make(_module_aliases_test)
 
+def _inference_settings_preserve_generation_test(ctx):
+    env = unittest.begin(ctx)
+    pkg_info = _pkg_info()
+    target = pkginfo_targets.get(pkg_info.targets, "RegularSwiftTargetAsLibrary")
+    repository_ctx = testutils.new_stub_repository_ctx(repo_name = _repo_name[1:])
+    baseline = swiftpkg_build_files.new_for_target(repository_ctx, _pkg_ctx(pkg_info), target)
+    for sdk, binary in [(False, False), (True, False), (False, True), (True, True)]:
+        pkg_ctx = pkg_ctxs.new(
+            pkg_info = pkg_info,
+            repo_name = _repo_name,
+            system_sdk_deps = sdk,
+            binary_target_deps = binary,
+        )
+        asserts.equals(env, sdk, pkg_ctx.system_sdk_deps)
+        asserts.equals(env, binary, pkg_ctx.binary_target_deps)
+        actual = swiftpkg_build_files.new_for_target(repository_ctx, pkg_ctx, target)
+        asserts.equals(env, baseline, actual)
+    return unittest.end(env)
+
+inference_settings_preserve_generation_test = unittest.make(_inference_settings_preserve_generation_test)
+
 def swiftpkg_build_files_test_suite():
     return unittest.suite(
         "swiftpkg_build_files_tests",
+        inference_settings_preserve_generation_test,
         minimum_os_wrapper_behavior_test,
         minimum_os_wrapper_raises_to_dependency_floors_test,
         manual_target_deps_test,

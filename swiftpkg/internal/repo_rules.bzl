@@ -26,6 +26,10 @@ the declarations in the generated `BUILD.bazel` file. Set by the \
 direct users should prefer that typed API.\
 """,
     ),
+    "binary_target_deps": attr.bool(
+        default = False,
+        doc = "Effective binary-target dependency inference setting. Reserved; does not generate dependencies yet.",
+    ),
     "dep_module_aliases": attr.string(
         doc = """\
 A JSON string mapping package identities to their module alias mappings \
@@ -62,6 +66,10 @@ the package's own platform declarations and the effective versions of the \
 packages it depends on, matching `swift build`. Set by the `swift_deps` bzlmod \
 extension; when unset only the package's own declarations are used.\
 """,
+    ),
+    "system_sdk_deps": attr.bool(
+        default = False,
+        doc = "Effective SDK dependency inference setting. Reserved; does not generate dependencies yet.",
     ),
     "target_deps": attr.string_list_dict(
         doc = """\
