@@ -5,6 +5,6 @@ import PackageDescription
 let package = Package(
     name: "google_maps_example",
     dependencies: [
-        .package(url: "https://github.com/googlemaps/ios-maps-sdk", from: "11.2.0"),
+        .package(url: "https://github.com/googlemaps/ios-maps-sdk", from: "11.3.0"),
     ]
 )
