@@ -41,6 +41,19 @@ spl_setup_registries() {
   fi
 }
 
+# Prints the path unchanged if absolute, otherwise relative to
+# BUILD_WORKSPACE_DIRECTORY.
+#
+# Arguments:
+#   $1 - the path to anchor
+spl_anchor_to_workspace() {
+  local path="$1"
+  case "${path}" in
+    /*) printf '%s' "${path}" ;;
+    *) printf '%s' "${BUILD_WORKSPACE_DIRECTORY}/${path}" ;;
+  esac
+}
+
 # Orchestrates swift executable resolution, netrc/registry setup, and
 # executes a `swift package` command with the full set of SPM flags.
 #
@@ -176,6 +189,14 @@ spl_run_swift_package() {
 
   # Resolve package_path relative to workspace.
   package_path="${BUILD_WORKSPACE_DIRECTORY}/${package_path}"
+
+  # Keep SPM state out of the runfiles tree, which Bazel may rebuild
+  # mid-command, and share SwiftPM's file locks with direct
+  # `swift package` invocations.
+  build_path="$(spl_anchor_to_workspace "${build_path}")"
+  cache_path="$(spl_anchor_to_workspace "${cache_path}")"
+  config_path="$(spl_anchor_to_workspace "${config_path}")"
+  security_path="$(spl_anchor_to_workspace "${security_path}")"
 
   # Resolve swift executable.
   local swift_executable
