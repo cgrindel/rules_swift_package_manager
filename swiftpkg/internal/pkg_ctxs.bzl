@@ -7,6 +7,7 @@ load(":minimum_os_versions.bzl", "minimum_os_versions")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":pkginfos.bzl", "pkginfos", "target_types")
 load(":repository_utils.bzl", "repository_utils")
+load(":system_sdk_modules.bzl", "system_sdk_modules")
 
 # Written to the root of every generated package repository. Holds the
 # package's effective minimum OS versions per platform (declared floors raised
@@ -46,6 +47,7 @@ def _read(
         bazel_target_mods = bazel_target_mods,
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
+        sdk_modules = system_sdk_modules.read(repository_ctx) if system_sdk_deps else {},
         dep_minimum_os_versions = _read_dep_minimum_os_versions(
             repository_ctx,
             pkg_info,
@@ -70,7 +72,8 @@ def _new(
         bazel_target_mods = "",
         dep_minimum_os_versions = {},
         system_sdk_deps = False,
-        binary_target_deps = False):
+        binary_target_deps = False,
+        sdk_modules = {}):
     manual_target_deps.validate(pkg_info, target_deps)
 
     # A package's sources may import an aliased module under its original
@@ -97,6 +100,7 @@ def _new(
         bazel_target_mods = decoded_bazel_target_mods,
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
+        sdk_modules = sdk_modules,
         # Effective minimum OS versions per target, product and package. See
         # `minimum_os_versions.for_targets`.
         minimum_os_versions = minimum_os_versions.for_targets(

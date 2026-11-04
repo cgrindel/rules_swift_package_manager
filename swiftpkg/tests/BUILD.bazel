@@ -33,6 +33,7 @@ load(":swift_deps_tests.bzl", "swift_deps_test_suite")
 load(":swift_files_tests.bzl", "swift_files_test_suite")
 load(":swift_package_tool_tests.bzl", "swift_package_tool_test_suite")
 load(":swiftpkg_build_files_tests.bzl", "swiftpkg_build_files_test_suite")
+load(":system_sdk_tests.bzl", "system_sdk_test_suite")
 load(":validations_tests.bzl", "validations_test_suite")
 
 bzlformat_pkg(name = "bzlformat")
@@ -100,6 +101,8 @@ swift_deps_test_suite()
 swift_files_test_suite()
 
 swiftpkg_build_files_test_suite()
+
+system_sdk_test_suite()
 
 swift_package_tool_test_suite()
 

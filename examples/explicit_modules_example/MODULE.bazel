@@ -52,4 +52,5 @@ swift_deps = use_extension(
 swift_deps.from_package(
     swift = "//:Package.swift",
 )
+swift_deps.configure_explicit_modules(system_sdk_deps = True)
 use_repo(swift_deps, "swift_package", "swiftpkg_explicitmodulesfixture")

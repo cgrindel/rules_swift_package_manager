@@ -195,6 +195,7 @@ bzl_library(
         ":semver",
         ":starlark_codegen",
         ":swift_files",
+        ":system_sdk_deps",
         "//config_settings/bazel/compilation_mode:compilation_modes",
         "@bazel_skylib//lib:paths",
         "@bazel_skylib//lib:sets",
@@ -244,6 +245,27 @@ bzl_library(
         ":pkginfo_dependencies",
         ":pkginfos",
         ":repository_utils",
+        ":system_sdk_modules",
+    ],
+)
+
+bzl_library(
+    name = "system_sdk_modules",
+    srcs = ["system_sdk_modules.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "system_sdk_deps",
+    srcs = ["system_sdk_deps.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":bzl_selects",
+        ":objc_files",
+        ":pkginfo_targets",
+        ":swift_files",
+        "//config_settings/spm/platform:platforms",
+        "//config_settings/spm/platform_configuration:platform_configurations",
     ],
 )
 

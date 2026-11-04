@@ -20,6 +20,7 @@ load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":pkginfos.bzl", "build_setting_kinds", "module_types", "pkginfos", "target_types")
 load(":semver.bzl", "semver")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
+load(":system_sdk_deps.bzl", "system_sdk_deps")
 
 # MARK: - Target Entry Point
 
@@ -114,6 +115,7 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
             for td in target_deps
         ])
     deps.extend(manual_target_deps.deps_for_target(pkg_ctx, target))
+    deps = system_sdk_deps.merge(deps, system_sdk_deps.for_target(repository_ctx, pkg_ctx, target))
     if deps:
         attrs["deps"] = bzl_selects.to_starlark(deps)
 
@@ -522,6 +524,8 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             for td in target.dependencies
         ]),
     )
+    inferred_sdk_deps = system_sdk_deps.for_target(repository_ctx, pkg_ctx, target)
+    deps = system_sdk_deps.merge(deps, inferred_sdk_deps)
     if linkopts:
         attrs["linkopts"] = linkopts
     if deps:
@@ -544,6 +548,10 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         if manual_deps:
             child_deps = list(child_attrs.get("deps", []))
             child_deps.extend(manual_deps)
+            child_deps = system_sdk_deps.merge(
+                [d for d in child_deps if d not in inferred_sdk_deps],
+                inferred_sdk_deps,
+            )
             child_attrs["deps"] = child_deps
         return child_attrs
 
@@ -754,6 +762,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "tags": ["manual"],
         "visibility": _implementation_target_visibility(),
     }
+    parent_attrs["deps"] = system_sdk_deps.merge(parent_attrs["deps"], inferred_sdk_deps)
     if clang_apple_res_bundle_info:
         parent_attrs["data"] = _apple_resource_bundle_data(
             clang_apple_res_bundle_info.bundle_label_name,

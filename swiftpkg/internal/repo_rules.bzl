@@ -69,7 +69,7 @@ extension; when unset only the package's own declarations are used.\
     ),
     "system_sdk_deps": attr.bool(
         default = False,
-        doc = "Effective SDK dependency inference setting. Reserved; does not generate dependencies yet.",
+        doc = "Infer platform-specific SDK dependencies from source imports and linked frameworks. Defaults to false.",
     ),
     "target_deps": attr.string_list_dict(
         doc = """\

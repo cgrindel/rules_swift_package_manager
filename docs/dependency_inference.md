@@ -1,10 +1,10 @@
-# Dependency inference configuration (part 2)
+# Dependency inference
 
-This release establishes configuration for future dependency inference. **Neither
-setting currently scans imports or changes generated dependencies**, even when
-set to `True` or `"on"`. Continue supplying missing dependencies with
-`configure_package(target_deps = ...)`. Compiler features remain independently
-configured as described in the [migration notes](rules_swift_4_migration.md).
+`system_sdk_deps` opts source targets into SDK dependency generation from Swift
+imports, Objective-C/C imports and includes, and manifest `linkedFramework`
+settings. It is off by default. `binary_target_deps` remains reserved for a
+separate follow-up and does not infer dependencies yet. Compiler features remain
+independently configured as described in the [migration notes](rules_swift_4_migration.md).
 
 ## Root defaults and package overrides
 
@@ -54,45 +54,54 @@ A complete `build_file` override still bypasses generation. Existing
 configuration does not conflict with either mechanism, and does not change the
 existing conflict between a full BUILD override and target modifications.
 
-## Proposed SDK inventory contract — not an implemented API
+## SDK dependency generation
 
-Part 3 needs a supported inventory interface from rules_swift before it can
-safely translate imports into dependencies. An internal list of module names is
-insufficient: it does not establish which SDKs provide each module. The existing
-RSPM framework catalog also omits non-framework modules and is tied to an older
-SDK. Neither should become the authoritative inference inventory.
+When enabled, generated Swift and Clang targets receive `@system_sdk//:Module`
+dependencies wrapped in platform selects with an empty default for other
+platforms. The scan includes conditional Swift imports, import attributes,
+scoped imports such as `import struct Darwin.stat`, and non-framework modules
+such as `Darwin` and `Dispatch`. It ignores Swift comments and string literals.
+Conditional compilation expressions are not evaluated: a conditional import can
+add an unused dependency on any platform where that SDK module is available.
 
-The proposed contract is a versioned, machine-readable file exported by the
-configured `system_sdk` repository and readable at repository evaluation time.
-Each entry should describe:
+The C/Objective-C scan uses the existing framework import parser for `@import`,
+`#import <Framework/Header.h>` and `#include <Framework/Header.h>`. It reads the
+target's discovered source files and headers, removes comments, and ignores
+quoted local includes. It does not recursively follow external headers or map
+arbitrary C header names to SDK modules. Generated resource accessors also add
+Foundation. Binary artifacts are not scanned.
 
-- The importable module name, including non-framework modules such as `Dispatch`.
-- The public dependency label that consumers should use, with documented label
-  resolution/repository-mapping semantics; no hard-coded canonical repo names.
-- Availability by SDK and platform variant (device, simulator, and Catalyst where
-  applicable), with architecture restrictions if relevant.
-- The SDK configuration and identity the inventory describes. It must reflect
-  configured SDK selection and exclusions, not just modules shipped by Xcode.
+Manifest framework platform and debug/release conditions are intersected with
+SDK availability. Source and manifest dependencies are deduplicated, and manual
+`target_deps` remain additive. Existing target-attribute replacements run last
+and can replace the complete generated dependency list. Unknown modules are
+skipped; supply missed dependencies with `target_deps` or disable inference for
+a package with `system_sdk_deps = "off"`.
 
-For discussion, a record could have `module_name`, `dependency_label`, and
-`sdk_variants` fields under a top-level `schema_version`. These are proposed
-field names, not a format RSPM parses today. We still need agreement with
-rules_swift on the exported file label, label encoding, platform identifiers,
-compatibility policy, and how unavailable or excluded modules are represented.
-The design must avoid a repository-evaluation dependency cycle and allow Linux
-consumers with inference disabled to continue without requiring an Apple SDK.
+## SDK inventory and configuration
 
-RSPM's repository mapping will need access to this inventory and its labels.
-That mapping does not transfer ownership of SDK configuration: only the
-consuming root module configures SDKs and exclusions. Explicit exclusions replace
-rules_swift's defaults, as documented in the migration notes.
+RSPM imports `system_sdk` into its own repository mapping so that generated
+labels resolve without a root `use_repo` declaration. The consuming root module
+still owns SDK selection and exclusions. Configure extra SDKs with rules_swift's
+`system_sdk.configure_sdks`; importing the repository does not enable them.
 
-No inventory file is consumed, SDK repository mapping added, or compiler scanner
-invoked by this change. Once the upstream contract is agreed and available,
-part 3 can collect source imports, resolve platform-specific SDK labels, account
-for generated resource accessors, and test builds with
-`swift.add_default_precompiled_modules` disabled. Binary-framework inference is
-a separate follow-up using its independent setting.
+rules_swift 4.2.1 does not export a structured per-platform inventory. RSPM
+therefore reads the actual generated hub and per-Xcode BUILD alias selects using
+a small internal adapter. It does not use the historical framework catalog or
+assume that every known module is present on every SDK. This adapter is coupled
+to rules_swift's generated format; an unsupported alias shape fails with an
+instruction to disable inference and use manual dependencies. A public upstream
+inventory should replace it when available.
 
-See the [part 2 plan](https://github.com/cgrindel/rules_swift_package_manager/pull/2576#issuecomment-6191433506)
-and the [original proposal](https://github.com/cgrindel/rules_swift_package_manager/discussions/2488).
+Only modules present in the hub and available in **every configured Xcode** are
+inferred for a platform. On iOS, tvOS, watchOS and visionOS, both device and
+simulator SDK aliases must be available; macOS requires its MacOSX alias. This
+conservative intersection respects configured SDKs and exclusions, but can omit
+modules available only in a newer Xcode or a single device/simulator variant.
+Those dependencies can be supplied manually. No Apple dependencies are inferred
+from the non-Apple host stub. Disabled inference does not read or fetch the SDK
+inventory. Enabled inference reads each configured Xcode's generated BUILD file,
+which can trigger rules_swift's SDK scan for that Xcode.
+
+See the [part 3 integration example](../examples/explicit_modules_example) and
+[original proposal](https://github.com/cgrindel/rules_swift_package_manager/discussions/2488).
