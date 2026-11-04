@@ -286,6 +286,7 @@ bzl_library(
         ":artifact_infos",
         ":bazel_target_mods",
         ":build_files",
+        ":dependency_normalization",
         ":pkg_ctxs",
         ":pkginfos",
         ":repository_files",
@@ -502,6 +503,18 @@ bzl_library(
     srcs = ["mach_o.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [":link_types"],
+)
+
+bzl_library(
+    name = "dependency_normalization",
+    srcs = ["dependency_normalization.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":build_decls",
+        ":build_files",
+        ":load_statements",
+        ":starlark_codegen",
+    ],
 )
 
 bzl_library(

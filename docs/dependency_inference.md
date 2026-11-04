@@ -50,7 +50,9 @@ in the package generation context. Direct users of `swift_package`,
 attributes, which also default to false.
 
 A complete `build_file` override still bypasses generation. Existing
-`bazel_target_set_*` and `bazel_target_add*` modifications still run last. Inference
+`bazel_target_set_*` and `bazel_target_add*` modifications apply after inference.
+Dependency expressions are then deduplicated without changing which labels each
+select contributes, including specialization and default branches. Inference
 configuration does not conflict with either mechanism, and does not change the
 existing conflict between a full BUILD override and target modifications.
 
@@ -58,23 +60,28 @@ existing conflict between a full BUILD override and target modifications.
 
 When enabled, generated Swift and Clang targets receive `@system_sdk//:Module`
 dependencies wrapped in platform selects with an empty default for other
-platforms. The scan includes conditional Swift imports, import attributes,
+platforms. The scan includes unconditional Swift imports, import attributes,
 scoped imports such as `import struct Darwin.stat`, and non-framework modules
 such as `Darwin` and `Dispatch`. It ignores Swift comments and string literals.
-Conditional compilation expressions are not evaluated: a conditional import can
-add an unused dependency on any platform where that SDK module is available.
+Imports inside any `#if` branch are skipped: repository evaluation cannot safely
+evaluate Swift conditions, and adding a module can itself change `canImport`.
+Supply dependencies for conditional imports with `target_deps`.
 
 The C/Objective-C scan uses the existing framework import parser for `@import`,
 `#import <Framework/Header.h>` and `#include <Framework/Header.h>`. It reads the
-target's discovered source files and headers, removes comments, and ignores
-quoted local includes. It does not recursively follow external headers or map
+target's discovered source files and headers, removes comments and quoted/raw
+string and character literals, and ignores quoted local includes. It does not recursively follow external headers or map
 arbitrary C header names to SDK modules. Generated resource accessors also add
 Foundation. Binary artifacts are not scanned.
 
 Manifest framework platform and debug/release conditions are intersected with
 SDK availability. Source and manifest dependencies are deduplicated, and manual
 `target_deps` remain additive. Existing target-attribute replacements run last
-and can replace the complete generated dependency list. Unknown modules are
+and can replace the complete generated dependency list. Additive overrides do
+not duplicate a dependency already supplied by inference. For referenced external
+products, inference reads each declared dependency's exported `pkg_info.json` once
+and follows the product's local target graph to exclude its actual module names.
+This avoids assuming a product name is its module name. Unknown modules are
 skipped; supply missed dependencies with `target_deps` or disable inference for
 a package with `system_sdk_deps = "off"`.
 
@@ -85,23 +92,32 @@ labels resolve without a root `use_repo` declaration. The consuming root module
 still owns SDK selection and exclusions. Configure extra SDKs with rules_swift's
 `system_sdk.configure_sdks`; importing the repository does not enable them.
 
-rules_swift 4.2.1 does not export a structured per-platform inventory. RSPM
-therefore reads the actual generated hub and per-Xcode BUILD alias selects using
-a small internal adapter. It does not use the historical framework catalog or
-assume that every known module is present on every SDK. This adapter is coupled
-to rules_swift's generated format; an unsupported alias shape fails with an
-instruction to disable inference and use manual dependencies. A public upstream
-inventory should replace it when available.
+rules_swift 4.2.1 does not export a structured per-platform inventory. A shared,
+lazily fetched RSPM repository reads the generated hub and per-Xcode BUILD files
+once and exports compact metadata. Package repositories read that JSON instead
+of reparsing each full SDK BUILD file. With inference disabled, this repository
+is not fetched.
 
-Only modules present in the hub and available in **every configured Xcode** are
-inferred for a platform. On iOS, tvOS, watchOS and visionOS, both device and
-simulator SDK aliases must be available; macOS requires its MacOSX alias. This
-conservative intersection respects configured SDKs and exclusions, but can omit
-modules available only in a newer Xcode or a single device/simulator variant.
-Those dependencies can be supplied manually. No Apple dependencies are inferred
-from the non-Apple host stub. Disabled inference does not read or fetch the SDK
-inventory. Enabled inference reads each configured Xcode's generated BUILD file,
-which can trigger rules_swift's SDK scan for that Xcode.
+The metadata preserves each hub Xcode selector and SDK variant separately.
+Device-only modules remain eligible for device builds; a module available in a
+newer Xcode is not removed because another Xcode lacks it. The shared repository
+copies the SDK settings' actual constraints because upstream keeps those
+settings private. Generated selects combine those constraints with the hub's
+public Xcode selector, so build-time Xcode selection remains with Bazel.
+
+The adapter still depends on rules_swift's generated format and standard
+extension repository layout. Unsupported formats or replacement hub repositories
+emit a warning and disable the entire inferred inventory; use `target_deps` in
+that case. No partial inventory or guessed universal framework catalog is used.
+An upstream structured inventory should replace this adapter when available.
+
+Reading the shared inventory can fetch and scan every Xcode referenced by the
+hub, once per SDK repository. Consumers needing a stable, limited inventory can
+use rules_swift's root `system_sdk.configure_xcode` with a precomputed BUILD;
+RSPM honors those hub entries. Module extensions cannot observe the build-time
+`--xcode_version` flag, so RSPM does not choose a build Xcode at repository time.
+SDK metadata changes still invalidate the shared inventory and its consumers.
+No Apple dependencies are inferred from the non-Apple host stub.
 
 See the [part 3 integration example](../examples/explicit_modules_example) and
 [original proposal](https://github.com/cgrindel/rules_swift_package_manager/discussions/2488).

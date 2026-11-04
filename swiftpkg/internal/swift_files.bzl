@@ -286,6 +286,8 @@ def _collect_imports(contents):
     which platforms can safely receive each dependency. Scoped imports contribute
     their top-level module; attributes and access modifiers need no special case.
     """
+    if "import" not in contents:
+        return []
     tokens = _tokens(contents)
     imports = []
     depth = 0

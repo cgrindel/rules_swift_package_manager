@@ -7,6 +7,7 @@ load("@bazel_tools//tools/build_defs/repo:utils.bzl", "read_netrc", "read_user_n
 load(":artifact_infos.bzl", "artifact_infos")
 load(":bazel_target_mods.bzl", "bazel_target_mods")
 load(":build_files.bzl", "build_files")
+load(":dependency_normalization.bzl", "dependency_normalization")
 load(":pkginfos.bzl", "target_types")
 load(":repository_files.bzl", "repository_files")
 load(":spm_versions.bzl", "spm_versions")
@@ -235,6 +236,8 @@ BUILD file override bypasses generated declarations.\
                 pkg_ctx.bazel_target_mods,
             ),
         )
+    if getattr(pkg_ctx, "system_sdk_deps", False):
+        root_bld_file = dependency_normalization.build_file(root_bld_file)
     build_files.write(repository_ctx, root_bld_file, pkg_info.path)
 
 def _write_workspace_file(repository_ctx, repoDir):
