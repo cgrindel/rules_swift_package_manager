@@ -2,6 +2,18 @@
 
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 
+def _find(repository_ctx):
+    """Returns a POSIX find, skipping the Windows directory's find.exe on Windows."""
+    if not repository_ctx.os.name.startswith("windows"):
+        return "find"
+    windows = (repository_ctx.getenv("SYSTEMROOT") or "C:\\Windows").lower()
+    for directory in (repository_ctx.getenv("PATH") or "").split(";"):
+        if directory and not directory.lower().startswith(windows):
+            candidate = repository_ctx.path(directory.rstrip("\\") + "\\find.exe")
+            if candidate.exists:
+                return str(candidate)
+    fail("rules_swift_package_manager needs a POSIX find (Git's usr\\bin) on PATH")
+
 def _path_exists(repository_ctx, path):
     """Determines if the specified path exists.
 
@@ -29,7 +41,7 @@ def _find_license_files(repository_ctx):
     """
 
     find_args = [
-        "find",
+        _find(repository_ctx),
         # Follow symlinks and report on the actual files.
         "-H",
         "-L",
@@ -102,7 +114,7 @@ def _list_files_under(
     """
 
     # Follow symlinks and report on the actual files.
-    find_args = ["find", "-H", "-L", path]
+    find_args = [_find(repository_ctx), "-H", "-L", path]
 
     # For GNU find, it is important for the global options (e.g. -maxdepth) to be
     # specified BEFORE other options like -type. Also, GNU find does not support -depth <level>.
@@ -157,7 +169,7 @@ def _list_directories_under(
     """
 
     # Follow symlinks and report on the actual directories.
-    find_args = ["find", "-H", "-L", path]
+    find_args = [_find(repository_ctx), "-H", "-L", path]
 
     # For GNU find, it is important for the global options (e.g. -maxdepth) to be
     # specified BEFORE other options like -type. Also, GNU find does not support -depth <level>.
@@ -258,7 +270,7 @@ def _find_and_delete_files(repository_ctx, path, name, exclude_paths = []):
         exclude_paths: Optional. A `list` of path `string` values to exclude
             from the search.
     """
-    find_args = ["find", path, "-type", "f", "-name", name]
+    find_args = [_find(repository_ctx), path, "-type", "f", "-name", name]
     exclude_args = lists.flatten([
         ["-not", "-path", path + "/" + exclude_path]
         for exclude_path in exclude_paths

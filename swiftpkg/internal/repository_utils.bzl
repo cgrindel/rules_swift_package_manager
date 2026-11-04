@@ -49,7 +49,8 @@ def _execute_spm_command(
     # the SPM command will fail because it cannot compile the package manifest.
     # Example: rules_xcodeproj sets the SDKROOT before executing
     # generate_bazel_dependencies.sh.
-    env_overrides = {"SDKROOT": ""}
+    # On Windows, Swift finds its SDK through SDKROOT.
+    env_overrides = {} if repository_ctx.os.name.startswith("windows") else {"SDKROOT": ""}
     exec_env = dicts.add(env, env_overrides)
 
     exec_result = repository_ctx.execute(
@@ -111,6 +112,10 @@ def _parsed_json_from_spm_command(
         env = env,
         working_directory = working_directory,
     )
+
+    # SwiftPM on Windows writes paths with backslashes.
+    if repository_ctx.os.name.startswith("windows"):
+        json_str = json_str.replace("\\\\", "/")
     json_str = _replace_working_directory(json_str, working_directory)
 
     if debug_json_path:
