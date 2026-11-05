@@ -39,10 +39,16 @@ def _execute_spm_command(
     Returns:
         A `string` representing the stdout of the command execution.
     """
+    env = dict(env)
+    swift_executable = env.pop("RSPM_SWIFT_EXECUTABLE", None)
     exec_args = []
-    if _is_macos(repository_ctx):
-        exec_args.append("xcrun")
-    exec_args.extend(arguments)
+    if swift_executable and arguments and arguments[0] == "swift":
+        exec_args.append(swift_executable)
+        exec_args.extend(arguments[1:])
+    else:
+        if _is_macos(repository_ctx):
+            exec_args.append("xcrun")
+        exec_args.extend(arguments)
 
     # It is critical that the SPM commands execute using the host's default
     # SDK. This is typically MacOS.  If the SDKROOT is set to iOS for example,
