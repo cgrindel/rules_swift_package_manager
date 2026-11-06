@@ -1,10 +1,14 @@
-# Dependency inference configuration (part 2)
+# Dependency inference
 
-This release establishes configuration for future dependency inference. **Neither
-setting currently scans imports or changes generated dependencies**, even when
-set to `True` or `"on"`. Continue supplying missing dependencies with
-`configure_package(target_deps = ...)`. Compiler features remain independently
-configured as described in the [migration notes](rules_swift_4_migration.md).
+Source inference consumes the package-context inventory supplied by the SDK provider.
+The provider and consumer changes can merge in either order. Until the provider
+is present, opting in remains a no-op; no SDK dependencies are guessed or added.
+
+`system_sdk_deps` opts source targets into SDK dependency generation from Swift
+imports, Objective-C/C imports and includes, and manifest `linkedFramework`
+settings. It is off by default. `binary_target_deps` remains reserved for a
+separate follow-up and does not infer dependencies yet. Compiler features remain
+independently configured as described in the [migration notes](rules_swift_4_migration.md).
 
 ## Root defaults and package overrides
 
@@ -50,49 +54,87 @@ in the package generation context. Direct users of `swift_package`,
 attributes, which also default to false.
 
 A complete `build_file` override still bypasses generation. Existing
-`bazel_target_set_*` and `bazel_target_add*` modifications still run last. Inference
+`bazel_target_set_*` and `bazel_target_add*` modifications apply after inference.
+SDK dependencies are then deduplicated by label identity, including canonical
+and apparent SDK labels, while preserving select specialization and default
+branches. Other dependencies are left untouched. Inference
 configuration does not conflict with either mechanism, and does not change the
 existing conflict between a full BUILD override and target modifications.
 
-## Proposed SDK inventory contract — not an implemented API
+## Compiler-driven SDK dependencies
 
-Part 3 needs a supported inventory interface from rules_swift before it can
-safely translate imports into dependencies. An internal list of module names is
-insufficient: it does not establish which SDKs provide each module. The existing
-RSPM framework catalog also omits non-framework modules and is tied to an older
-SDK. Neither should become the authoritative inference inventory.
+With the source-inference consumer installed, Swift imports are collected with
+`swiftc -frontend -scan-dependencies -import-prescan`. Swift evaluates conditional
+imports, including `#elseif`, `canImport`, compiler-version checks and custom
+flags. RSPM does not implement a second Swift lexer or Boolean evaluator.
 
-The proposed contract is a versioned, machine-readable file exported by the
-configured `system_sdk` repository and readable at repository evaluation time.
-Each entry should describe:
+The root must configure [SDK compiler profiles](system_sdk_inventory.md), in
+addition to enabling `system_sdk_deps`. The provider and source-inference
+consumer are separate components; the consumer is a no-op until the provider
+supplies metadata. The provider alone does not generate source dependencies.
 
-- The importable module name, including non-framework modules such as `Dispatch`.
-- The public dependency label that consumers should use, with documented label
-  resolution/repository-mapping semantics; no hard-coded canonical repo names.
-- Availability by SDK and platform variant (device, simulator, and Catalyst where
-  applicable), with architecture restrictions if relevant.
-- The SDK configuration and identity the inventory describes. It must reflect
-  configured SDK selection and exclusions, not just modules shipped by Xcode.
+For each target, scans use the configured compiler/SDK/target triple, root
+conditional defines, SwiftPM defines, traits, language mode, upcoming/experimental
+features and module aliases. Debug, release and fastbuild are scanned separately;
+identical command lines share results. Known dependency module names are supplied
+to `-module-can-import`, without building those dependencies. This supplies name
+availability, not package module versions or validation of their implementations.
+Sources containing version-qualified `canImport` checks are conservatively
+rejected because package module version metadata is unavailable. This safeguard
+can also reject comments mentioning those checks; use manual dependencies. SDK availability comes from the compiler's search paths.
+Developer framework search paths match generated libraries; test helper libraries
+can therefore infer XCTest and Testing without a blanket non-test exclusion.
 
-For discussion, a record could have `module_name`, `dependency_label`, and
-`sdk_variants` fields under a top-level `schema_version`. These are proposed
-field names, not a format RSPM parses today. We still need agreement with
-rules_swift on the exported file label, label encoding, platform identifiers,
-compatibility policy, and how unavailable or excluded modules are represented.
-The design must avoid a repository-evaluation dependency cycle and allow Linux
-consumers with inference disabled to continue without requiring an Apple SDK.
+This is a bounded fetch-time operation. It cannot observe arbitrary Bazel
+`--swiftcopt` values, target transitions or later attribute overrides. Profiles
+must match builds; disable inference for packages that need other configurations.
+Unsafe Swift manifest flags are rejected rather than silently interpreted in a
+different environment. Scan errors fail with the target and SDK/configuration.
+Generated sources and plugin-generated imports are not covered. Only the direct
+Swift imports are prescanned; the existing SDK targets supply their transitive
+SDK dependencies. This is not a full compiler dependency graph or dynamic Bazel
+dependency discovery.
 
-RSPM's repository mapping will need access to this inventory and its labels.
-That mapping does not transfer ownership of SDK configuration: only the
-consuming root module configures SDKs and exclusions. Explicit exclusions replace
-rules_swift's defaults, as documented in the migration notes.
+The C/Objective-C scan handles framework imports and includes, removes comments
+and literals, and ignores quoted local includes. It maps common SDK headers such
+as `dispatch/dispatch.h`, `objc/runtime.h`, `sqlite3.h`, standard C headers and
+`sys/...` to their SDK modules. Arbitrary external headers are not recursively
+scanned, and C preprocessor conditions are not evaluated. Binary artifacts are
+not scanned. Generated resource accessors add Foundation.
 
-No inventory file is consumed, SDK repository mapping added, or compiler scanner
-invoked by this change. Once the upstream contract is agreed and available,
-part 3 can collect source imports, resolve platform-specific SDK labels, account
-for generated resource accessors, and test builds with
-`swift.add_default_precompiled_modules` disabled. Binary-framework inference is
-a separate follow-up using its independent setting.
+Manifest `linkedFramework` settings preserve platform and build-configuration
+conditions. SDK dependencies are deduplicated, including after target overrides,
+without changing select exclusions/defaults or unrelated dependencies. Package
+module names are resolved through their dependency products, preserving platform
+conditions and actual Clang module-map names.
 
-See the [part 2 plan](https://github.com/cgrindel/rules_swift_package_manager/pull/2576#issuecomment-6191433506)
-and the [original proposal](https://github.com/cgrindel/rules_swift_package_manager/discussions/2488).
+`sdk_inference.json` in each scanned package repository records compiler profiles,
+source files, discovered Swift imports by configuration and manifest frameworks.
+The compiler reports imports for the whole source module, not per-import line
+locations.
+Compiler and SDK paths used for scanning are watched and fingerprinted once by
+the shared provider; package repositories read that fingerprint. Configuration changes can
+rerun package generation; this does not promise identical outputs across hosts
+with different toolchains or eliminate all repository refetches.
+
+## Manual dependencies
+
+Use `target_deps` for dependencies valid in every configuration that builds a
+target. For platform-specific SDK modules, use an additive select instead:
+
+```starlark
+swift_deps.bazel_target_add_select(
+    target = "@swiftpkg_example//:Example.rspm.__impl",
+    attr = "deps",
+    values = {"@@platforms//os:ios": ["@system_sdk//:UIKit"]},
+)
+```
+
+The empty default is supplied automatically. Additional SDK/Xcode constraints
+may be needed for modules with narrower availability. An unconditional UIKit
+`target_deps` entry is not valid for a target also built on macOS; inference does
+not reinterpret an explicit unconditional dependency as conditional. Replacing
+`deps` remains available when the complete dependency list is known.
+
+See the [integration example](../examples/explicit_modules_example) and
+[original proposal](https://github.com/cgrindel/rules_swift_package_manager/discussions/2488).

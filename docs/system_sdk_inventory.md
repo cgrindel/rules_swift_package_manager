@@ -1,81 +1,75 @@
-# SDK inventory adapter
+# SDK inventory and compiler profiles
 
-The `rspm_sdk_inventory` repository adapts rules_swift's generated SDK targets
-into compact metadata for dependency inference. It is declared lazily: importing
-its extension does not fetch or scan an SDK. When `system_sdk_deps` is enabled, package contexts receive this metadata before
-SwiftPM runs. Disabled inference and complete BUILD overrides do not read it.
-The adapter alone does not scan package sources or change generated dependencies;
-source inference is provided by the separate consumer PR.
+The SDK provider supplies metadata for compiler-driven dependency inference. It
+alone neither scans package sources nor adds dependencies. It is lazy: disabled
+inference and complete BUILD overrides do not fetch it. Package repositories
+resolve it before downloads and SwiftPM execution.
+
+## Configuration
+
+The root module must declare the configurations for which imports will be scanned:
+
+```starlark
+sdk_inventory = use_extension(
+    "@rules_swift_package_manager//:extensions.bzl",
+    "sdk_inventory",
+)
+sdk_inventory.configure(
+    developer_dir = "/Applications/Xcode.app/Contents/Developer",
+    targets = {
+        "MacOSX": "arm64-apple-macosx14.0",
+        "iPhoneSimulator": "arm64-apple-ios17.0-simulator",
+    },
+    defines = [],
+)
+use_repo(sdk_inventory, "rspm_sdk_inventory")
+```
+
+There may be one configuration tag, owned by the root module. `developer_dir`
+defaults to `DEVELOPER_DIR`, then `xcode-select`. If set explicitly, it must match
+that environment so the upstream hub and this adapter use the same Xcode. Custom
+`TOOLCHAINS` selections are unsupported. Only that Xcode's SDK repository
+is read, even if the upstream hub lists other installed Xcodes. Configure extra
+SDKs with rules_swift's `system_sdk.configure_sdks` as well.
+
+`targets` maps SDK names to exact Swift target triples. Match the compiler,
+architecture, SDK, deployment target and additional conditional defines used by
+builds. These are explicit fetch-time inputs, not values recovered from Bazel's
+`--xcode_version`, transitions or arbitrary `--swiftcopt` flags. Unlisted build
+configurations are unsupported; use manual dependencies or disable inference for
+those packages. Apple compiler scans require a macOS fetch host. Vendored SDK
+BUILD files alone cannot run the compiler on Linux.
 
 ## Contract
 
-The repository exports `modules.json` with schema version 1:
+`@rspm_sdk_inventory//:modules.json` has schema version 2. It contains:
 
-```json
-{
-  "conditions": {
-    "0": {
-      "condition": "@@<inventory-repo>//:<xcode>_<sdk>",
-      "configurations": {
-        "debug": "@@<inventory-repo>//:<xcode>_<sdk>_debug",
-        "release": "@@<inventory-repo>//:<xcode>_<sdk>_release"
-      },
-      "environment": "simulator",
-      "platform": "ios"
-    }
-  },
-  "diagnostic": "",
-  "modules": {"Foundation": ["0"]},
-  "schema_version": 1
-}
-```
+- `modules`: module names mapped to SDK condition identifiers.
+- `conditions`: SDK, platform, environment, and public availability labels,
+  including debug, release and fastbuild conditions.
+- `scan`: the selected compiler, developer directory, compiler/Xcode versions,
+  SDK paths, target triples and additional defines.
+- `scan.inputs_digest`: a content fingerprint of the watched SDK/compiler inputs,
+  calculated once in this shared repository rather than once per package.
+- `diagnostic`: reserved for diagnostics; invalid provider configurations fail.
 
-Module entries reference a shared condition table. Consumers resolve only the
-modules they encounter rather than expanding the complete inventory. Conditions
-combine the hub's public Xcode selectors with the actual SDK constraints copied
-from rules_swift's private SDK config settings. Device and simulator availability
-are separate, as are different Xcode versions. Debug/release groups additionally
-use RSPM's existing SwiftPM configuration settings.
+SDK labels do not contain Xcode versions. Their definitions select the configured
+Xcode and architecture. Compiler identity is deliberately retained in `scan`:
+changing the compiler can change `#if compiler(...)` and `canImport` results and
+must invalidate package scans. Other installed Xcodes are not scan inputs.
 
-An unsupported upstream layout produces an empty inventory with a persisted
-`diagnostic` and a fetch-time warning. Consumers must surface that diagnostic
-when inference is requested. A schema-version mismatch between this repository
-and its reader is an error, rather than silently misinterpreting metadata.
+## Fetching and compatibility
 
-## Upstream compatibility
+This remains a host-dependent, configured compiler operation. Changing its
+configuration can rerun package repository generation, including downloads; this
+is not a promise of zero refetches or identical output across arbitrary hosts.
 
-rules_swift does not currently publish structured per-SDK availability metadata.
-This adapter parses its generated hub and per-Xcode BUILD files. Parsing is
-isolated in `swiftpkg/internal/sdk_inventory/parser.bzl`; repository reads, label resolution and
-output generation live in `swiftpkg/internal/sdk_inventory/repository.bzl`. Tests include unmodified
-blocks captured from rules_swift 4.2.2 output on Xcode 27.0 and verified unchanged
-against rules_swift 4.2.1, alongside synthetic
-multi-Xcode and device-only cases.
-
-The adapter relies on both the generated BUILD syntax and the standard
-`system_sdk` extension's sibling repository naming. Canonical repository-name
-formatting is not a stable Bazel API. Replacement hubs and unsupported layouts
-are not supported. Maintainers must accept this interim coupling before merging;
-a structured metadata interface exported by rules_swift should replace it.
-
-## Reproducibility and fetching
-
-The adapter reads upstream files through `repository_ctx.read`, so Bazel tracks
-those inputs and invalidates the inventory when they change. It does not run its
-own Xcode locator or compiler. The non-Apple upstream stub yields no modules.
-
-Fetching the inventory can fetch every Xcode SDK repository referenced by the
-hub. Each BUILD file is parsed once in this shared repository, rather than once
-per Swift package. Upstream changes can still invalidate consuming package
-repositories. This is tracked host-dependent configuration, not an inventory
-that is identical on arbitrary machines.
-
-For a stable inventory, configure rules_swift's root
-`system_sdk.configure_xcode` with precomputed BUILD files and explicitly select
-the SDKs and exclusions. The root module owns this configuration. RSPM imports
-`system_sdk` into its repository mapping but does not choose a build Xcode or
-observe `--xcode_version` at repository time; generated conditions defer that
-selection to Bazel analysis.
-
-See [proposal #2488](https://github.com/cgrindel/rules_swift_package_manager/discussions/2488)
-and the [inventory interface discussion](https://github.com/cgrindel/rules_swift_package_manager/pull/2576#issuecomment-6191433506).
+The temporary adapter parses rules_swift's generated hub and selected-Xcode BUILD
+files. Parsing, repository I/O and pure output rendering are separate. Tests cover
+captured rules_swift 4.2.1/4.2.2 output, harmless comments/metadata, exact rendering,
+and leaving an unrelated Xcode repository unread. Unsupported layouts and missing
+required aliases fail with a diagnostic, rather than silently disabling inference.
+Canonical sibling-repository naming remains an upstream compatibility limitation;
+replacement hubs are unsupported. A supported upstream metadata interface should
+replace this adapter. Compiler scanning itself does not require that interface,
+but mapping SDK imports to existing Bazel targets still needs a supported contract.

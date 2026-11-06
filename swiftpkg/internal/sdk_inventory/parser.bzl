@@ -13,18 +13,46 @@ _SDK_PLATFORMS = {
 }
 _GROUPS = ["all_modules", "implicit_modules", "all_cross_import_overlays"]
 
+def _line(raw):
+    # Strip comments only outside quoted labels (which contain //).
+    quoted = False
+    escaped = False
+    for i in range(len(raw)):
+        char = raw[i]
+        if escaped:
+            escaped = False
+        elif char == "\\" and quoted:
+            escaped = True
+        elif char == '"':
+            quoted = not quoted
+        elif char == "#" and not quoted:
+            return raw[:i].strip()
+    return raw.strip()
+
 def _aliases(contents):
     result = {}
     name = None
     branches = None
     state = None
+    resume = None
     for raw_line in contents.splitlines():
-        line = raw_line.strip()
+        line = _line(raw_line)
+        if not line:
+            continue
         if state == None:
             if line == "alias(":
                 state = "name"
-            elif line.startswith("alias("):
+            elif line.startswith("alias") and "(" in line:
                 return None
+            continue
+        if state == "metadata":
+            if line == "],":
+                state = resume
+            continue
+        if line.startswith(("visibility = [", "tags = [")):
+            if not line.endswith("],"):
+                resume = state
+                state = "metadata"
             continue
         if state == "name":
             if not (line.startswith('name = "') and line.endswith('",')):
@@ -61,13 +89,23 @@ def _inventory(hub, xcodes):
             continue
         entries = []
         for xcode_condition, actual in sorted(branches.items()):
+            if xcode_condition == "//conditions:default":
+                if not actual.startswith(":_empty"):
+                    return None
+                continue
             repo, sep, target = actual.partition("//:")
             if not sep or not repo.startswith("@system_sdk_xcode_") or target != module:
                 return None
             if not xcode_condition.startswith(":xcode_"):
                 return None
-            aliases = xcodes.get(repo, {}).get(module, {})
+            if repo not in xcodes:
+                continue
+            aliases = xcodes[repo].get(module, {})
             for sdk_condition in sorted(aliases):
+                if sdk_condition == "//conditions:default":
+                    if not aliases[sdk_condition].startswith(":_empty"):
+                        return None
+                    continue
                 sdk = sdk_condition.removeprefix(":").removesuffix("_sdk")
                 if sdk not in _SDK_PLATFORMS:
                     return None
@@ -75,6 +113,7 @@ def _inventory(hub, xcodes):
                     "condition": xcode_condition[1:] + "_" + sdk,
                     "environment": "simulator" if sdk.endswith("Simulator") else "device",
                     "platform": _SDK_PLATFORMS[sdk],
+                    "sdk": sdk,
                     "sdk_condition": sdk_condition,
                     "sdk_repo": repo,
                     "xcode_condition": xcode_condition,
@@ -95,7 +134,9 @@ def _sdk_constraints(contents):
         constraints = []
         in_constraints = False
         for raw_line in body.splitlines():
-            line = raw_line.strip()
+            line = _line(raw_line)
+            if not line:
+                continue
             if line.startswith('name = "') and line.endswith('",'):
                 name = line[len('name = "'):-2]
             elif line == "constraint_values = [":
@@ -107,7 +148,7 @@ def _sdk_constraints(contents):
                 if not value.startswith(("@platforms//os:", "@apple_support//constraints:")):
                     return None
                 constraints.append(value)
-            elif line == 'visibility = ["//visibility:private"],':
+            elif line.startswith(("visibility = [", "tags = [")) and line.endswith("],"):
                 continue
             else:
                 return None

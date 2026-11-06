@@ -98,5 +98,5 @@ use_repo(
 )
 
 # Shared SDK metadata for source dependency inference.
-sdk_inventory = use_extension("//swiftpkg/internal/sdk_inventory:repository.bzl", "sdk_inventory")
+sdk_inventory = use_extension("//:extensions.bzl", "sdk_inventory")
 use_repo(sdk_inventory, "rspm_sdk_inventory")

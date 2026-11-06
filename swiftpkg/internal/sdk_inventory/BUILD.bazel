@@ -13,11 +13,29 @@ bzl_library(
     name = "repository",
     srcs = ["repository.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
-    deps = [":parser"],
+    deps = [
+        ":inputs",
+        ":parser",
+        ":render",
+    ],
+)
+
+exports_files(["fingerprint.py"])
+
+bzl_library(
+    name = "inputs",
+    srcs = ["inputs.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
 )
 
 bzl_library(
     name = "parser",
     srcs = ["parser.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "render",
+    srcs = ["render.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )

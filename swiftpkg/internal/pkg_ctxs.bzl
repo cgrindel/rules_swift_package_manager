@@ -28,11 +28,13 @@ def _read(
         dep_module_aliases = "",
         bazel_target_mods = "",
         system_sdk_deps = False,
-        binary_target_deps = False):
+        binary_target_deps = False,
+        sdk_inventory = None):
     # Resolve SDK metadata before SwiftPM. The source-inference consumer is a
     # separate change; until it lands, this only supplies package-context data.
     infer_sdk = system_sdk_deps and not getattr(repository_ctx.attr, "build_file", None)
-    sdk_inventory = system_sdk_modules.read(repository_ctx) if infer_sdk else system_sdk_modules.empty
+    if sdk_inventory == None:
+        sdk_inventory = system_sdk_modules.read(repository_ctx) if infer_sdk else system_sdk_modules.empty
     pkg_info = pkginfos.get(
         repository_ctx = repository_ctx,
         directory = repo_dir,
@@ -201,7 +203,15 @@ repository name '{name}'.\
         dep_versions[identity] = json.decode(repository_ctx.read(label))
     return dep_versions
 
+def _prepare_sdk(repository_ctx):
+    # Read shared metadata before downloads or SwiftPM, including when fetching
+    # without repository workers. A missing upstream repo must not restart a clone.
+    if repository_ctx.attr.system_sdk_deps and not repository_ctx.attr.build_file:
+        return system_sdk_modules.read(repository_ctx)
+    return system_sdk_modules.empty
+
 pkg_ctxs = struct(
+    prepare_sdk = _prepare_sdk,
     new = _new,
     read = _read,
     referenced_dependency_identities = _referenced_dependency_identities,
