@@ -22,6 +22,8 @@ The first two explicit configurations retain rules_swift's default SDK dependenc
 from `MODULE.bazel`, including Foundation imports in Swift and Objective-C and the generated
 resource accessor. No manual SDK dependencies are required. The executable checks the
 greeting assembled by the Objective-C dependency and Swift resource accessor.
+The runner also builds an iOS simulator app with inferred SDK dependencies. The
+fixture's iOS-only UIKit import verifies the iOS SDK select.
 
 The example's `MODULE.bazel` excludes `MobileGestaltPrivate` from the macOS and iOS SDKs,
 matching [rules_swift's own configuration](https://github.com/bazelbuild/rules_swift/blob/4.2.1/MODULE.bazel#L202-L253).
