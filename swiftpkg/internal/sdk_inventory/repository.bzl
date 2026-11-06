@@ -1,6 +1,6 @@
 """Shared, lazy adapter for rules_swift's generated SDK aliases."""
 
-load(":system_sdk_inventory.bzl", "system_sdk_inventory")
+load(":parser.bzl", "system_sdk_inventory")
 
 _SDK_BUILD = Label("@system_sdk//:BUILD.bazel")
 _INVENTORY = Label("@rspm_sdk_inventory//:modules.json")

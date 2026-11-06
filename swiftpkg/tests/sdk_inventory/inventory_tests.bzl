@@ -1,9 +1,9 @@
 """SDK inventory adapter contract tests."""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
-load("//swiftpkg/internal:system_sdk_inventory.bzl", "system_sdk_inventory")
-load("//swiftpkg/internal:system_sdk_modules.bzl", "system_sdk_modules")
-load(":system_sdk_build_fixtures.bzl", "HUB_BUILD", "XCODE_BUILD")
+load("//swiftpkg/internal/sdk_inventory:parser.bzl", "system_sdk_inventory")
+load("//swiftpkg/internal/sdk_inventory:repository.bzl", "system_sdk_modules")
+load(":build_fixtures.bzl", "HUB_BUILD", "XCODE_BUILD")
 
 def _alias(name, branches):
     return "alias(\n    name = " + json.encode(name) + ",\n    actual = select({\n" + "\n".join([

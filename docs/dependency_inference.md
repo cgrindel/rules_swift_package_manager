@@ -96,11 +96,3 @@ a separate follow-up using its independent setting.
 
 See the [part 2 plan](https://github.com/cgrindel/rules_swift_package_manager/pull/2576#issuecomment-6191433506)
 and the [original proposal](https://github.com/cgrindel/rules_swift_package_manager/discussions/2488).
-
-## SDK inventory groundwork
-
-A lazy [SDK inventory adapter](system_sdk_inventory.md) is available for the
-source-inference follow-up. It defines per-Xcode and per-SDK availability metadata,
-with tests and documented upstream-format coupling. Configuration still does not
-scan sources or generate dependencies; package repositories do not read this
-inventory yet.

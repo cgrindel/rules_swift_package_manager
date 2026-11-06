@@ -1,0 +1,17 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+bzlformat_pkg(name = "bzlformat")
+
+bzl_library(
+    name = "repository",
+    srcs = ["repository.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":parser"],
+)
+
+bzl_library(
+    name = "parser",
+    srcs = ["parser.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)

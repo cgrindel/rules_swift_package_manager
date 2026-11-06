@@ -1,0 +1,13 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load(":inventory_tests.bzl", "system_sdk_inventory_test_suite")
+
+bzlformat_pkg(name = "bzlformat")
+
+system_sdk_inventory_test_suite()
+
+bzl_library(
+    name = "build_fixtures",
+    srcs = ["build_fixtures.bzl"],
+    visibility = ["//visibility:public"],
+)

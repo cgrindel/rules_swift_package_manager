@@ -1,5 +1,6 @@
 """Module for creating a module index context for a package info."""
 
+load("//swiftpkg/internal/sdk_inventory:repository.bzl", "system_sdk_modules")
 load(":bazel_repo_names.bzl", "bazel_repo_names")
 load(":bazel_target_mods.bzl", btm = "bazel_target_mods")
 load(":manual_target_deps.bzl", "manual_target_deps")
@@ -28,6 +29,10 @@ def _read(
         bazel_target_mods = "",
         system_sdk_deps = False,
         binary_target_deps = False):
+    # Resolve SDK metadata before SwiftPM. The source-inference consumer is a
+    # separate change; until it lands, this only supplies package-context data.
+    infer_sdk = system_sdk_deps and not getattr(repository_ctx.attr, "build_file", None)
+    sdk_inventory = system_sdk_modules.read(repository_ctx) if infer_sdk else system_sdk_modules.empty
     pkg_info = pkginfos.get(
         repository_ctx = repository_ctx,
         directory = repo_dir,
@@ -46,6 +51,8 @@ def _read(
         bazel_target_mods = bazel_target_mods,
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
+        sdk_modules = sdk_inventory,
+        sdk_diagnostic = sdk_inventory.diagnostic,
         dep_minimum_os_versions = _read_dep_minimum_os_versions(
             repository_ctx,
             pkg_info,
@@ -70,7 +77,9 @@ def _new(
         bazel_target_mods = "",
         dep_minimum_os_versions = {},
         system_sdk_deps = False,
-        binary_target_deps = False):
+        binary_target_deps = False,
+        sdk_modules = system_sdk_modules.empty,
+        sdk_diagnostic = ""):
     manual_target_deps.validate(pkg_info, target_deps)
 
     # A package's sources may import an aliased module under its original
@@ -97,6 +106,8 @@ def _new(
         bazel_target_mods = decoded_bazel_target_mods,
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
+        sdk_modules = sdk_modules,
+        sdk_diagnostic = sdk_diagnostic,
         # Effective minimum OS versions per target, product and package. See
         # `minimum_os_versions.for_targets`.
         minimum_os_versions = minimum_os_versions.for_targets(

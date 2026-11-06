@@ -2,8 +2,10 @@
 
 The `rspm_sdk_inventory` repository adapts rules_swift's generated SDK targets
 into compact metadata for dependency inference. It is declared lazily: importing
-its extension does not fetch or scan an SDK. Declaring the adapter alone does not
-scan package sources or change generated package dependencies.
+its extension does not fetch or scan an SDK. When `system_sdk_deps` is enabled, package contexts receive this metadata before
+SwiftPM runs. Disabled inference and complete BUILD overrides do not read it.
+The adapter alone does not scan package sources or change generated dependencies;
+source inference is provided by the separate consumer PR.
 
 ## Contract
 
@@ -44,8 +46,8 @@ and its reader is an error, rather than silently misinterpreting metadata.
 
 rules_swift does not currently publish structured per-SDK availability metadata.
 This adapter parses its generated hub and per-Xcode BUILD files. Parsing is
-isolated in `system_sdk_inventory.bzl`; repository reads, label resolution and
-output generation live in `system_sdk_modules.bzl`. Tests include unmodified
+isolated in `swiftpkg/internal/sdk_inventory/parser.bzl`; repository reads, label resolution and
+output generation live in `swiftpkg/internal/sdk_inventory/repository.bzl`. Tests include unmodified
 blocks captured from rules_swift 4.2.2 output on Xcode 27.0 and verified unchanged
 against rules_swift 4.2.1, alongside synthetic
 multi-Xcode and device-only cases.

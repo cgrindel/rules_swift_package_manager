@@ -42,9 +42,6 @@ system_sdk = use_extension(
 )
 use_repo(system_sdk, "system_sdk")
 
-sdk_inventory = use_extension("//swiftpkg/internal:system_sdk_modules.bzl", "sdk_inventory")
-use_repo(sdk_inventory, "rspm_sdk_inventory")
-
 bazel_dep(
     name = "gazelle",
     version = "0.50.0",
@@ -99,3 +96,7 @@ use_repo(
     "bazel_binaries_bazelisk",
     "build_bazel_bazel_.bazelversion",
 )
+
+# Shared SDK metadata for source dependency inference.
+sdk_inventory = use_extension("//swiftpkg/internal/sdk_inventory:repository.bzl", "sdk_inventory")
+use_repo(sdk_inventory, "rspm_sdk_inventory")
