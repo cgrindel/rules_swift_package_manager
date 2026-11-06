@@ -8,3 +8,7 @@ build:explicit_modules --features=swift.use_c_modules --host_features=swift.use_
 
 build:explicit_swift_modules --config=explicit_modules
 build:explicit_swift_modules --features=swift.use_explicit_swift_module_map --host_features=swift.use_explicit_swift_module_map
+
+# Exercise RSPM's inferred SDK dependencies without the toolchain's blanket deps.
+build:inferred_modules --config=explicit_modules
+build:inferred_modules --features=-swift.add_default_precompiled_modules --host_features=-swift.add_default_precompiled_modules

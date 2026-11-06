@@ -230,6 +230,14 @@ def _resource_bundle_infoplist_label_name(target_name):
     """
     return target_name + _resource_bundle_infoplist_suffix
 
+def _module_name(target):
+    """The module name used by generated Swift/Clang targets, before Swift aliases."""
+    if type(target) == "dict":
+        clang = target.get("clang_src_info") or {}
+        return clang.get("module_name") or target["c99name"]
+    clang = getattr(target, "clang_src_info", None)
+    return (clang.module_name if clang else None) or target.c99name
+
 def make_pkginfo_targets(bazel_labels):
     """Create a `pkginfo_targets` module.
 
@@ -285,6 +293,7 @@ def make_pkginfo_targets(bazel_labels):
         implementation_label_name = _implementation_label_name,
         is_modulemap_label = _is_modulemap_label,
         join_path = _join_path,
+        module_name = _module_name,
         modulemap_label_name = _modulemap_label_name,
         objc_resource_bundle_accessor_hdr_label_name = _objc_resource_bundle_accessor_hdr_label_name,
         objc_resource_bundle_accessor_impl_label_name = _objc_resource_bundle_accessor_impl_label_name,

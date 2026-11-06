@@ -7,7 +7,24 @@ bazel="${BIT_BAZEL_BINARY:-bazel}"
 # Verify the same generated targets with implicit modules and both explicit modes.
 "${bazel}" test //...
 "${bazel}" run //:explicit_modules_example
-for config in explicit_modules explicit_swift_modules; do
+# The inventory provider and inference consumer are independently mergeable.
+# Only a missing provider skips integration; a present but broken provider still
+# runs these builds and fails. Unit tests cover the consumer with fixture data.
+configs=(explicit_modules explicit_swift_modules)
+script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+has_inventory=false
+if [[ -f "${script_dir}/../../swiftpkg/internal/sdk_inventory/repository.bzl" ]]; then
+  has_inventory=true
+  configs+=(inferred_modules)
+else
+  echo "SDK inference integration pending: the inventory provider has not landed."
+fi
+for config in "${configs[@]}"; do
   "${bazel}" test --config="${config}" //...
   "${bazel}" run --config="${config}" //:explicit_modules_example
 done
+
+# Build one iOS simulator app with inferred SDK dependencies and no blanket SDK deps.
+if "${has_inventory}"; then
+  "${bazel}" build --config=inferred_modules --ios_multi_cpus=sim_arm64 //:ios_explicit_modules_example
+fi
