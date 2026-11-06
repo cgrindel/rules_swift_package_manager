@@ -226,11 +226,18 @@ sdk_inventory = module_extension(implementation = _extension_impl)
 def _decode(contents):
     metadata = json.decode(contents)
     return struct(
-        modules = {module: [metadata["conditions"][i] for i in ids] for module, ids in metadata["modules"].items()},
+        modules = metadata["modules"],
+        conditions = metadata["conditions"],
         diagnostic = metadata["diagnostic"],
     )
 
+def _entries(inventory, module):
+    if type(inventory) == "dict":
+        return inventory.get(module, [])
+    return [inventory.conditions[i] for i in inventory.modules.get(module, [])]
+
 system_sdk_modules = struct(
+    entries = _entries,
     read = lambda repository_ctx: _decode(repository_ctx.read(_INVENTORY)),
     decode = _decode,
     aliases = _aliases,

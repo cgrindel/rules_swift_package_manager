@@ -51,6 +51,13 @@ def _inventory_test(ctx):
     asserts.equals(env, {}, system_sdk_modules.aliases('system_module_group(name = "all_modules")'))
     asserts.equals(env, None, system_sdk_modules.aliases('alias(name = "Foundation", actual = ":custom")'))
     asserts.equals(env, None, system_sdk_modules.aliases('alias(\nname = "X",\nactual = ":X",\n)'))
+    compact = system_sdk_modules.decode(json.encode({
+        "conditions": {"0": {"condition": "//:macos"}},
+        "diagnostic": "",
+        "modules": {"Foundation": ["0"], "Unused": ["missing"]},
+    }))
+    asserts.equals(env, [{"condition": "//:macos"}], system_sdk_modules.entries(compact, "Foundation"))
+    asserts.equals(env, [], system_sdk_modules.entries(compact, "Unknown"))
     return unittest.end(env)
 
 inventory_test = unittest.make(_inventory_test)

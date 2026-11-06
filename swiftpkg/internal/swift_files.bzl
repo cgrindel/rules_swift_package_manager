@@ -301,6 +301,35 @@ def _scan_prefix(contents):
             return contents[:end + 1]
     return contents
 
+_OS_PLATFORMS = {"Android": "android", "FreeBSD": "freebsd", "Linux": "linux", "OpenBSD": "openbsd", "WASI": "wasi", "Windows": "windows", "iOS": "ios", "macOS": "macos", "tvOS": "tvos", "visionOS": "visionos", "watchOS": "watchos"}
+
+def _matches(expression, entry, module):
+    if expression == None:
+        return None
+    values = []
+    for token in expression:
+        if type(token) == "bool":
+            values.append(token)
+        elif type(token) == "tuple":
+            predicate, argument = token
+            if predicate == "os" and argument in _OS_PLATFORMS:
+                values.append(entry["platform"] == _OS_PLATFORMS[argument])
+            elif predicate == "targetEnvironment" and argument == "simulator" and "environment" in entry:
+                values.append(entry["environment"] == "simulator")
+            elif predicate == "canImport" and argument == module:
+                # The inventory entry proves this imported SDK module exists for
+                # this exact Xcode and SDK. Unrelated canImport remains unknown.
+                values.append(True)
+            else:
+                return None
+        elif token == "!":
+            values.append(not values.pop())
+        else:
+            right = values.pop()
+            left = values.pop()
+            values.append(left and right if token == "&&" else left or right)
+    return values[0]
+
 def _condition(tokens):
     # A deliberately small Boolean grammar. Unknown predicates invalidate the
     # entire expression, including its #else, rather than guessing build flags.
@@ -404,6 +433,7 @@ def _collect_imports(contents):
     return imports
 
 swift_files = struct(
+    matches = _matches,
     collect_imports = _collect_imports,
     scan_prefix = _scan_prefix,
     has_import = _has_import,

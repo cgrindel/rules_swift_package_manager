@@ -48,7 +48,7 @@ def _read(
         bazel_target_mods = bazel_target_mods,
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
-        sdk_modules = sdk_inventory.modules,
+        sdk_modules = sdk_inventory,
         sdk_diagnostic = sdk_inventory.diagnostic,
         dependency_modules = _read_dependency_modules(repository_ctx, pkg_info) if system_sdk_deps else {},
         dep_minimum_os_versions = _read_dep_minimum_os_versions(

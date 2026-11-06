@@ -76,6 +76,7 @@ bzl_library(
     srcs = ["clang_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":objc_files",
         ":repository_files",
         "//swiftpkg/internal/modulemap_parser:declarations",
         "//swiftpkg/internal/modulemap_parser:parser",
@@ -255,9 +256,10 @@ bzl_library(
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         ":bzl_selects",
-        ":objc_files",
+        ":clang_files",
         ":pkginfo_targets",
         ":swift_files",
+        ":system_sdk_modules",
         "//config_settings/spm/platform:platforms",
         "//config_settings/spm/platform_configuration:platform_configurations",
     ],
