@@ -165,45 +165,9 @@ import XCTest
 
 has_import_test = unittest.make(_has_import_test)
 
-def _collect_imports_test(ctx):
-    env = unittest.begin(ctx)
-    content = '''\
-// import FakeComment
-/* nested /* import FakeNested */ import FakeBlock */
-let text = "import FakeString"
-let raw = ##"import FakeRaw"##
-let multiline = """
-import FakeMultiline
-"""
-let interpolated = "value \\(call("import FakeInterpolation"))"
-let regex = #/import FakeRegex/#
-let bare = /import FakeBare/
-@_exported import Foundation
-public import struct Darwin.stat
-import /* module */ Dispatch
-#if canImport(UIKit)
-@preconcurrency import UIKit
-#else
-import AppKit
-#endif
-import Foundation.NSObject; import class Foundation.NSString
-let `import` = 1
-// comment at end without newline'''
-    actual = swift_files.collect_imports(content)
-    asserts.equals(env, ["Foundation", "Darwin", "Dispatch", "UIKit", "AppKit", "Foundation", "Foundation"], [i.module_name for i in actual])
-    asserts.equals(env, [False, False, False, True, True, False, False], [i.is_conditional for i in actual])
-    asserts.equals(env, [11, 12, 13, 15, 17, 19, 19], [i.line_number for i in actual])
-    asserts.equals(env, ["Foundation"], [i.module_name for i in swift_files.collect_imports("import\nFoundation")])
-    asserts.equals(env, [], swift_files.collect_imports("some.import Foundation"))
-    asserts.equals(env, "import Foundation\n", swift_files.scan_prefix("import Foundation\nlet longBody = 1\n"))
-    return unittest.end(env)
-
-collect_imports_test = unittest.make(_collect_imports_test)
-
 def swift_files_test_suite():
     return unittest.suite(
         "swift_files_tests",
         has_objc_directive_test,
         has_import_test,
-        collect_imports_test,
     )

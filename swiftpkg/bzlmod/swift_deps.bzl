@@ -1033,13 +1033,17 @@ _configure_explicit_modules_tag = tag_class(
     attrs = {
         key: attr.bool(
             default = False,
-            doc = "Infer SDK dependencies from source imports and linked frameworks." if key == "system_sdk_deps" else "Reserved configuration for future binary-target dependency inference.",
+            doc = """\
+Opt in to {} inference. Reserved configuration: inference is not implemented yet.\
+""".format(
+                "SDK dependency" if key == "system_sdk_deps" else "binary-target dependency",
+            ),
         )
         for key in _INFERENCE_KEYS
     },
     doc = """\
 Root-only defaults for independent dependency inference settings. Does not \
-enable compiler features. Binary-target inference is not implemented yet.\
+enable compiler features or generate inferred dependencies yet.\
 """,
 )
 
@@ -1049,8 +1053,8 @@ _inference_override_attrs = {
         values = ["inherit", "on", "off"],
         doc = """\
 Root-only package override for {}: inherit the global default, enable, or \
-disable. {}\
-""".format(key, "Binary-target inference is not implemented yet." if key == "binary_target_deps" else "Infers SDK dependencies from source imports and linked frameworks."),
+disable. Inference is not implemented yet.\
+""".format(key),
     )
     for key in _INFERENCE_KEYS
 }

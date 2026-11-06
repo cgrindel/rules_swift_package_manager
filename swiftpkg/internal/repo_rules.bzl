@@ -7,7 +7,6 @@ load("@bazel_tools//tools/build_defs/repo:utils.bzl", "read_netrc", "read_user_n
 load(":artifact_infos.bzl", "artifact_infos")
 load(":bazel_target_mods.bzl", "bazel_target_mods")
 load(":build_files.bzl", "build_files")
-load(":dependency_normalization.bzl", "dependency_normalization")
 load(":pkginfos.bzl", "target_types")
 load(":repository_files.bzl", "repository_files")
 load(":spm_versions.bzl", "spm_versions")
@@ -70,7 +69,7 @@ extension; when unset only the package's own declarations are used.\
     ),
     "system_sdk_deps": attr.bool(
         default = False,
-        doc = "Infer platform-specific SDK dependencies from source imports and linked frameworks. Defaults to false.",
+        doc = "Effective SDK dependency inference setting. Reserved; does not generate dependencies yet.",
     ),
     "target_deps": attr.string_list_dict(
         doc = """\
@@ -236,9 +235,7 @@ BUILD file override bypasses generated declarations.\
                 pkg_ctx.bazel_target_mods,
             ),
         )
-    if getattr(pkg_ctx, "system_sdk_deps", False):
-        root_bld_file = dependency_normalization.build_file(root_bld_file)
-    build_files.write(repository_ctx, root_bld_file, pkg_info.path, diagnostic = getattr(pkg_ctx, "sdk_diagnostic", ""))
+    build_files.write(repository_ctx, root_bld_file, pkg_info.path)
 
 def _write_workspace_file(repository_ctx, repoDir):
     path = paths.join(repoDir, "WORKSPACE")

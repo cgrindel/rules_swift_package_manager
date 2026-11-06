@@ -10,20 +10,15 @@ On macOS with Xcode selected, run:
 ./do_test
 ```
 
-The integration test builds and runs the same macOS application in four configurations:
+The integration test builds and runs the same macOS application in three configurations:
 
 1. Implicit modules, using the normal build configuration.
 2. Explicit Clang modules with `--config=explicit_modules`.
 3. Explicit Clang modules and explicit Swift module maps with `--config=explicit_swift_modules`.
-4. Explicit Clang modules with default SDK dependencies disabled, using `--config=inferred_modules`.
 
-The first two explicit configurations retain rules_swift's default SDK dependencies. The
-`inferred_modules` configuration exercises `configure_explicit_modules(system_sdk_deps = True)`
-from `MODULE.bazel`, including Foundation imports in Swift and Objective-C and the generated
-resource accessor. No manual SDK dependencies are required. The executable checks the
+Both explicit configurations retain rules_swift's default SDK dependencies. No manual SDK
+dependencies or dependency-inference configuration are required. The executable checks the
 greeting assembled by the Objective-C dependency and Swift resource accessor.
-The runner also builds an iOS simulator app with inferred SDK dependencies. The
-fixture's iOS-only UIKit import verifies the iOS SDK select.
 
 The example's `MODULE.bazel` excludes `MobileGestaltPrivate` from the macOS and iOS SDKs,
 matching [rules_swift's own configuration](https://github.com/bazelbuild/rules_swift/blob/4.2.1/MODULE.bazel#L202-L253).

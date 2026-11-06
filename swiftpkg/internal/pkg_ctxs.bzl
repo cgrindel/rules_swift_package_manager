@@ -7,7 +7,6 @@ load(":minimum_os_versions.bzl", "minimum_os_versions")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":pkginfos.bzl", "pkginfos", "target_types")
 load(":repository_utils.bzl", "repository_utils")
-load(":system_sdk_modules.bzl", "system_sdk_modules")
 
 # Written to the root of every generated package repository. Holds the
 # package's effective minimum OS versions per platform (declared floors raised
@@ -38,7 +37,6 @@ def _read(
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
     )
-    sdk_inventory = system_sdk_modules.read(repository_ctx) if system_sdk_deps else struct(modules = {}, diagnostic = "")
     pkg_ctx = _new(
         pkg_info = pkg_info,
         repo_name = repository_utils.package_name(repository_ctx),
@@ -48,9 +46,6 @@ def _read(
         bazel_target_mods = bazel_target_mods,
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
-        sdk_modules = sdk_inventory,
-        sdk_diagnostic = sdk_inventory.diagnostic,
-        dependency_modules = _read_dependency_modules(repository_ctx, pkg_info) if system_sdk_deps else {},
         dep_minimum_os_versions = _read_dep_minimum_os_versions(
             repository_ctx,
             pkg_info,
@@ -75,10 +70,7 @@ def _new(
         bazel_target_mods = "",
         dep_minimum_os_versions = {},
         system_sdk_deps = False,
-        binary_target_deps = False,
-        sdk_modules = {},
-        sdk_diagnostic = "",
-        dependency_modules = {}):
+        binary_target_deps = False):
     manual_target_deps.validate(pkg_info, target_deps)
 
     # A package's sources may import an aliased module under its original
@@ -105,9 +97,6 @@ def _new(
         bazel_target_mods = decoded_bazel_target_mods,
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
-        sdk_modules = sdk_modules,
-        sdk_diagnostic = sdk_diagnostic,
-        dependency_modules = dependency_modules,
         # Effective minimum OS versions per target, product and package. See
         # `minimum_os_versions.for_targets`.
         minimum_os_versions = minimum_os_versions.for_targets(
@@ -201,76 +190,8 @@ repository name '{name}'.\
         dep_versions[identity] = json.decode(repository_ctx.read(label))
     return dep_versions
 
-def _product_modules(info, product_name):
-    targets = {t["name"]: t for t in info.get("targets", [])}
-    pending = []
-    for product in info.get("products", []):
-        if product["name"] == product_name:
-            pending.extend(product["targets"])
-    visited = {}
-    modules = {}
-    for _ in range(len(targets) + 1):
-        if not pending:
-            break
-        current = pending
-        pending = []
-        for name in current:
-            if name in visited or name not in targets:
-                continue
-            visited[name] = True
-            target = targets[name]
-            modules[target["c99name"]] = True
-            for dep in target.get("dependencies", []):
-                ref = dep.get("target")
-                by_name = dep.get("by_name")
-                if ref:
-                    pending.append(ref["target_name"])
-                elif by_name and by_name["name"] in targets:
-                    pending.append(by_name["name"])
-    return sorted(modules)
-
-def _dependency_modules(pkg_info, metadata):
-    result = {}
-    local = {t.name: True for t in pkg_info.targets}
-    local.update({p.name: True for p in pkg_info.products})
-    for target in pkg_info.targets:
-        modules = {}
-        for ref in target.dependencies:
-            dep = None
-            product_name = None
-            if ref.product and ref.product.dep_name != pkg_info.name:
-                dep = pkginfo_dependencies.get_by_name(pkg_info.dependencies, ref.product.dep_name)
-                product_name = ref.product.product_name
-            elif ref.by_name and ref.by_name.name not in local:
-                dep = pkginfo_dependencies.get_by_name(pkg_info.dependencies, ref.by_name.name)
-                product_name = ref.by_name.name
-            if dep and dep.identity in metadata:
-                modules.update({name: True for name in _product_modules(metadata[dep.identity], product_name)})
-        result[target.name] = sorted(modules)
-    return result
-
-def _read_dependency_modules(repository_ctx, pkg_info):
-    # Read only resolved dependencies actually referenced by built targets, once
-    # each. Product names are not module names: follow their exported target graph.
-    repos_label = getattr(repository_ctx.attr, "package_repos", None)
-    if repos_label == None:
-        return {}
-    declared = json.decode(repository_ctx.read(repos_label)).get("repo_names", [])
-    own_name = repository_utils.package_name(repository_ctx)
-    prefix = repository_ctx.name.removesuffix(own_name)
-    metadata = {}
-    for identity in _referenced_dependency_identities(pkg_info):
-        repo = bazel_repo_names.from_identity(identity)
-        if repo not in declared:
-            continue
-        label = Label("@@{}{}//:pkg_info.json".format(prefix, repo))
-        if repository_ctx.path(label).exists:
-            metadata[identity] = json.decode(repository_ctx.read(label))
-    return _dependency_modules(pkg_info, metadata)
-
 pkg_ctxs = struct(
     new = _new,
-    dependency_modules = _dependency_modules,
     read = _read,
     referenced_dependency_identities = _referenced_dependency_identities,
 )
