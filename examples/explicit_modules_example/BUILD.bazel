@@ -2,6 +2,7 @@ load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
 load("@build_bazel_rules_apple//apple:macos.bzl", "macos_application")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 
 swift_library(
     name = "Main",
@@ -30,4 +31,14 @@ ios_application(
     infoplists = ["Info.plist"],
     minimum_os_version = "15.0",
     deps = [":Main"],
+)
+
+# The standalone consumer has no provider/report yet. The runner explicitly
+# executes this test once both components are present.
+sh_test(
+    name = "inference_report_test",
+    srcs = ["verify_inference.sh"],
+    args = ["$(location @swiftpkg_explicitmodulesfixture//:sdk_inference.json)"],
+    data = ["@swiftpkg_explicitmodulesfixture//:sdk_inference.json"],
+    tags = ["manual"],
 )

@@ -465,7 +465,7 @@ def _scan_prefix(contents):
     # Multiline directives and splices keep the complete input. An unfinished
     # trailing literal/comment can safely remain open when there is no later
     # import/include token to discover.
-    if "\\" not in line and (";" in line or ">" in line):
+    if "\\" not in line and (";" in line or ">" in line or '"' in line):
         return contents[:end + 1]
     return contents
 
@@ -491,6 +491,40 @@ def _next_unspliced(contents, start):
         else:
             return pos
     return len(contents)
+
+# Known SDK umbrella modules; do not guess via case folding or fuzzy matching.
+_SYSTEM_HEADER_DIRS = {
+    "arpa": "Darwin",
+    "dispatch": "Dispatch",
+    "mach": "Darwin",
+    "mach-o": "Darwin",
+    "net": "Darwin",
+    "netinet": "Darwin",
+    "netinet6": "Darwin",
+    "objc": "ObjectiveC",
+    "sys": "Darwin",
+}
+_SYSTEM_HEADERS = {header: "Darwin" for header in [
+    "assert.h",
+    "ctype.h",
+    "errno.h",
+    "fcntl.h",
+    "float.h",
+    "inttypes.h",
+    "limits.h",
+    "math.h",
+    "pthread.h",
+    "signal.h",
+    "stdbool.h",
+    "stddef.h",
+    "stdint.h",
+    "stdio.h",
+    "stdlib.h",
+    "string.h",
+    "time.h",
+    "unistd.h",
+]}
+_SYSTEM_HEADERS.update({"TargetConditionals.h": "TargetConditionals", "sqlite3.h": "SQLite3"})
 
 def _clang_imports(contents):
     if "import" not in contents and "include" not in contents and "\\\n" not in contents and "\\\r\n" not in contents:
@@ -578,9 +612,17 @@ def _clang_imports(contents):
                 line = "#import" + directive[len("include"):]
         elif not line.startswith("@import "):
             continue
-        module = objc_files.parse_for_import(line)
+        module = None
+        if line.startswith("#import"):
+            header = line[len("#import"):].strip()
+            if header.startswith("<") and ">" in header:
+                header = header[1:header.index(">")]
+                first = header.split("/")[0]
+                module = _SYSTEM_HEADERS.get(header) or _SYSTEM_HEADER_DIRS.get(first) or first.removesuffix(".h")
+        else:
+            module = objc_files.parse_for_import(line)
         if module:
-            imports[module.split("/")[0].split(".")[0]] = True
+            imports[module.split(".")[0]] = True
     return imports
 
 clang_files = struct(

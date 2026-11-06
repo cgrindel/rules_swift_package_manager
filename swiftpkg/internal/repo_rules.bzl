@@ -221,7 +221,10 @@ BUILD file override bypasses generated declarations.\
     bld_files.append(swiftpkg_build_files.new_for_products(pkg_ctx))
 
     # Export the pkg_info.json
-    exports_files = scg.new_fn_call("exports_files", ["pkg_info.json"])
+    exported = ["pkg_info.json"]
+    if hasattr(pkg_ctx, "source_scans"):
+        exported.append("sdk_inference.json")
+    exports_files = scg.new_fn_call("exports_files", exported)
     bld_files.append(build_files.new(decls = [exports_files]))
 
     # Write the build file
@@ -238,7 +241,7 @@ BUILD file override bypasses generated declarations.\
                 pkg_ctx.bazel_target_mods,
             ),
         )
-    if getattr(pkg_ctx, "system_sdk_deps", False):
+    if hasattr(pkg_ctx, "source_scans"):
         root_bld_file = dependency_normalization.build_file(root_bld_file)
     build_files.write(repository_ctx, root_bld_file, pkg_info.path, diagnostic = getattr(pkg_ctx, "sdk_diagnostic", ""))
 

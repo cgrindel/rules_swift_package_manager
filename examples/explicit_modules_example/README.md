@@ -23,7 +23,9 @@ from `MODULE.bazel`, including Foundation imports in Swift and Objective-C and t
 resource accessor. No manual SDK dependencies are required. The executable checks the
 greeting assembled by the Objective-C dependency and Swift resource accessor.
 The runner also builds an iOS simulator app with inferred SDK dependencies. The
-fixture's iOS-only UIKit import verifies the iOS SDK select.
+fixture's UIKit/AppKit fallback verifies compiler-evaluated conditional imports.
+The manifest also links Security, and the Swift target imports a package-provided
+Clang module. Scan profiles must match the example's arm64 macOS 13/iOS 15 builds.
 
 The example's `MODULE.bazel` excludes `MobileGestaltPrivate` from the macOS and iOS SDKs,
 matching [rules_swift's own configuration](https://github.com/bazelbuild/rules_swift/blob/4.2.1/MODULE.bazel#L202-L253).
@@ -41,7 +43,7 @@ For setup details and limitations, see the [migration notes].
 
 [migration notes]: /docs/rules_swift_4_migration.md
 
-Source inference requires the SDK inventory provider from #2619. During the
+Source inference requires the SDK inventory provider and its compiler profiles. During the
 independent rollout, `do_test` reports when that provider is absent and runs the
 implicit/default-explicit configurations. Once the provider is present, it also
 runs inferred modules and builds the iOS simulator app; inference failures are

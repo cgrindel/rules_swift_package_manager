@@ -9,6 +9,7 @@ load(":build_decls_tests.bzl", "build_decls_test_suite")
 load(":build_files_tests.bzl", "build_files_test_suite")
 load(":bzl_selects_tests.bzl", "bzl_selects_test_suite")
 load(":clang_files_tests.bzl", "clang_files_test_suite")
+load(":compiler_imports_tests.bzl", "compiler_imports_test_suite")
 load(":dependency_modules_tests.bzl", "dependency_modules_test_suite")
 load(":dependency_normalization_tests.bzl", "dependency_normalization_test_suite")
 load(":load_statements_tests.bzl", "load_statements_test_suite")
@@ -33,7 +34,6 @@ load(":spm_platforms_tests.bzl", "spm_platforms_test_suite")
 load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
 load(":swift_deps_tests.bzl", "swift_deps_test_suite")
 load(":swift_files_tests.bzl", "swift_files_test_suite")
-load(":swift_imports_tests.bzl", "swift_imports_test_suite")
 load(":swift_package_tool_tests.bzl", "swift_package_tool_test_suite")
 load(":swiftpkg_build_files_tests.bzl", "swiftpkg_build_files_test_suite")
 load(":system_sdk_tests.bzl", "system_sdk_test_suite")
@@ -109,13 +109,13 @@ swift_files_test_suite()
 
 swiftpkg_build_files_test_suite()
 
-swift_imports_test_suite()
-
 system_sdk_test_suite()
 
 swift_package_tool_test_suite()
 
 validations_test_suite()
+
+compiler_imports_test_suite()
 
 bzl_library(
     name = "testutils",

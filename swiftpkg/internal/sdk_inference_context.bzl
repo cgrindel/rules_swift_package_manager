@@ -6,14 +6,18 @@ sdk_modules to package contexts, inference remains a no-op even when opted in.
 
 load("@bazel_skylib//lib:structs.bzl", "structs")
 load(":bazel_repo_names.bzl", "bazel_repo_names")
+load(":compiler_imports.bzl", "compiler_imports")
 load(":dependency_modules.bzl", "dependency_modules")
 load(":pkg_ctxs.bzl", "pkg_ctxs")
+load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":repository_utils.bzl", "repository_utils")
 
 def _prepare(repository_ctx, pkg_ctx):
     inventory = getattr(pkg_ctx, "sdk_modules", None)
     if not pkg_ctx.system_sdk_deps or inventory == None or not inventory.modules:
         return pkg_ctx
+    if not getattr(inventory, "scan", None):
+        fail("SDK inference requires the compiler-profile inventory provider (schema 2).")
     pkg_info = pkg_ctx.pkg_info
 
     # Read only resolved dependencies actually referenced by built targets, once
@@ -33,6 +37,37 @@ def _prepare(repository_ctx, pkg_ctx):
     platforms = {entry["platform"]: True for entry in inventory.conditions.values()}
     fields = structs.to_dict(pkg_ctx)
     fields["dependency_modules"] = dependency_modules.for_package(pkg_info, metadata, platforms)
+    fields["source_scans"] = {}
+    context = struct(**fields)
+
+    # The provider fingerprints watched SDK/compiler files once. Reading its
+    # modules.json records that digest without walking every SDK for each package.
+    reports = {}
+    for target in pkg_info.targets:
+        if target.type == "test" or not target.swift_src_info:
+            continue
+        sources = pkginfo_targets.srcs(target)
+        if not sources:
+            continue
+        for src in sources:
+            contents = repository_ctx.read(src)
+            if "canImport" in contents and ("_version" in contents or "_underlyingVersion" in contents):
+                fail("Version-qualified canImport needs module version metadata unavailable during repository fetching ({}). Disable system_sdk_deps and supply manual deps for this package.".format(src))
+        records = compiler_imports.scan(repository_ctx, context, target, fields["dependency_modules"].get(target.name, {}))
+        fields["source_scans"][target.name] = records
+        reports[target.name] = {
+            "linked_frameworks": [
+                {"condition": setting.condition, "values": setting.values}
+                for setting in target.linker_settings.linked_frameworks
+            ] if target.linker_settings else [],
+            "scans": records,
+            "sources": sorted(sources),
+        }
+    repository_ctx.file("sdk_inference.json", json.encode_indent({
+        "compiler": inventory.scan,
+        "schema_version": 1,
+        "targets": reports,
+    }))
     return struct(**fields)
 
 sdk_inference_context = struct(prepare = _prepare)

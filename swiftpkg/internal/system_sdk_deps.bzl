@@ -3,10 +3,7 @@
 load(":bzl_selects.bzl", "bzl_selects")
 load(":clang_files.bzl", "clang_files")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
-load(":swift_imports.bzl", "swift_imports")
 load(":system_sdk_labels.bzl", "system_sdk_labels")
-
-_DEVELOPER_MODULES = ["XCTest", "Testing", "XCUIAutomation", "StoreKitTest"]
 
 def _entries(inventory, module):
     # The inventory provider supplies this compact package-context interface.
@@ -16,17 +13,14 @@ def _source_imports(repository_ctx, target):
     imported = {}
     if target.resources and (target.swift_src_info or target.objc_src_info):
         # The generated Bundle.module accessors import Foundation.
-        imported["Foundation"] = [[]]
+        imported["Foundation"] = True
     srcs = pkginfo_targets.srcs(target)
     if target.clang_src_info:
         srcs = target.clang_src_info.explicit_srcs + target.clang_src_info.hdrs + target.clang_src_info.textual_hdrs
     for src in sorted({s: True for s in srcs}):
-        if src.endswith(".swift"):
-            for imp in swift_imports.collect(repository_ctx.read(src)):
-                imported.setdefault(imp.module_name, []).append(imp.conditions)
-        elif src.endswith((".m", ".mm", ".c", ".cc", ".cpp", ".cxx", ".h", ".hh", ".hpp", ".hxx", ".inc", ".inl")):
+        if src.endswith((".m", ".mm", ".c", ".cc", ".cpp", ".cxx", ".h", ".hh", ".hpp", ".hxx", ".inc", ".inl")):
             for module in clang_files.imports(repository_ctx.read(src)):
-                imported.setdefault(module, []).append([])
+                imported[module] = True
     return imported
 
 def _excluded_modules(pkg_ctx, target):
@@ -35,8 +29,6 @@ def _excluded_modules(pkg_ctx, target):
     aliases = getattr(pkg_ctx, "module_alias_flags", {})
     unconditional = {name: True for name in aliases}
     unconditional.update({name: True for name in aliases.values()})
-    if target.type != "test":
-        unconditional.update({name: True for name in _DEVELOPER_MODULES})
     return struct(
         unconditional = unconditional,
         platforms = getattr(pkg_ctx, "dependency_modules", {}).get(target.name, {}),
@@ -45,14 +37,25 @@ def _excluded_modules(pkg_ctx, target):
 def _excluded(excluded, module, entry):
     return module in excluded.unconditional or module in excluded.platforms.get(entry["platform"], [])
 
-def _source_deps(inventory, imported, excluded):
+def _source_deps(inventory, imported, excluded, scans):
     deps = {}
     for module in sorted(imported):
         for entry in _entries(inventory, module):
+            if not _excluded(excluded, module, entry):
+                deps[(module, entry["condition"])] = "sdk"
+    scanned_modules = {module: True for record in scans for module in record["imports"]}
+    for module in sorted(scanned_modules):
+        for entry in _entries(inventory, module):
             if _excluded(excluded, module, entry):
                 continue
-            if any([all([swift_imports.matches(expr, entry, module) == expected for expr, expected in clauses]) for clauses in imported[module]]):
+            matches = [record for record in scans if record["sdk"] == entry["sdk"] and module in record["imports"]]
+            if not matches:
+                continue
+            if len(matches) == len(entry["configurations"]):
                 deps[(module, entry["condition"])] = "sdk"
+            elif (module, entry["condition"]) not in deps:
+                for record in matches:
+                    deps[(module, record["condition"])] = "sdk_configuration"
     return deps
 
 def _add_manifest_deps(inventory, target, excluded, deps):
@@ -86,7 +89,7 @@ def _for_target(repository_ctx, pkg_ctx, target):
     if inventory == None or not inventory.modules:
         return []
     excluded = _excluded_modules(pkg_ctx, target)
-    deps = _source_deps(inventory, _source_imports(repository_ctx, target), excluded)
+    deps = _source_deps(inventory, _source_imports(repository_ctx, target), excluded, getattr(pkg_ctx, "source_scans", {}).get(target.name, []))
     _add_manifest_deps(inventory, target, excluded, deps)
     return [
         bzl_selects.new(

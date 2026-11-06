@@ -19,8 +19,11 @@ def _inventory(modules):
     references = {}
     for module, entries in modules.items():
         references[module] = []
-        for entry in entries:
-            key = str(len(conditions))
+        for original in entries:
+            entry = dict(original)
+            key = entry.get("sdk", entry["condition"])
+            entry["sdk"] = key
+            entry.setdefault("configurations", {c: entry["condition"] + "_" + c for c in ["debug", "release", "fastbuild"]})
             conditions[key] = entry
             references[module].append(key)
     return struct(conditions = conditions, diagnostic = "", modules = references)
@@ -62,9 +65,14 @@ def _entries(platforms):
         for platform in platforms
     ]
 
-def _with_inventory(pkg_ctx, inventory, dependency_modules = {}):
+def _with_inventory(pkg_ctx, inventory, dependency_modules = {}, source_modules = ["Foundation", "Darwin", "Dispatch", "UIKit", "AppKit", "XCTest"]):
     fields = structs.to_dict(pkg_ctx)
     fields.update(sdk_modules = inventory, dependency_modules = dependency_modules)
+    fields["source_scans"] = {target.name: [
+        {"condition": label, "configuration": config, "imports": source_modules, "sdk": entry["sdk"]}
+        for entry in inventory.conditions.values()
+        for config, label in entry["configurations"].items()
+    ] for target in pkg_ctx.pkg_info.targets if target.swift_src_info}
     return struct(**fields)
 
 def _context(target, enabled = True, manual = {}, dependency_modules = {}):
@@ -108,7 +116,7 @@ def _generated_deps_test(ctx):
     repository_ctx = testutils.new_stub_repository_ctx(
         repo_name = "swiftpkg_example",
         file_contents = {
-            "Sources/Example/example.h": "#include <Darwin/stdio.h>\n/* #import <UIKit/UIKit.h> */",
+            "Sources/Example/example.h": "#include <stdio.h>\n/* #import <UIKit/UIKit.h> */",
             "Sources/Example/example.m": "#import <Foundation/Foundation.h>\n@import Dispatch;\n// @import UIKit;",
             "Sources/Example/example.swift": "import Foundation\nimport Darwin\nimport Dispatch\n#if canImport(UIKit)\nimport UIKit\n#endif\nimport UnknownModule",
         },
@@ -123,8 +131,8 @@ def _generated_deps_test(ctx):
         for module in ["Foundation", "Darwin", "Dispatch", "Security"]:
             asserts.true(env, "@system_sdk//:" + module in deps, deps)
         asserts.equals(env, not clang, "@system_sdk//:UIKit" in deps)
-        asserts.true(env, "xcode1_ios" in deps)
-        asserts.true(env, "xcode1_macos" in deps)
+        asserts.true(env, '"@inventory//:xcode1_ios"' in deps)
+        asserts.true(env, '"@inventory//:xcode1_macos"' in deps)
         asserts.true(env, "xcode1_macos_debug" in deps)
         asserts.false(env, "xcode1_ios_debug" in deps)
         asserts.false(env, "Unknown" in deps)
@@ -159,8 +167,19 @@ def _regressions_test(ctx):
     for settings in [[configured, unconditional], [unconditional, configured]]:
         target = _fixture(linker_settings = pkginfos.new_linker_settings(settings))
         deps = system_sdk_deps.for_target(repository_ctx, _context(target), target)
-        asserts.equals(env, 2, len(deps))
+        asserts.equals(env, 2, len([d for d in deps if d.value == "@system_sdk//:Security"]))
         asserts.false(env, any([d.condition.endswith("_debug") for d in deps]))
+
+    for header, module in [
+        ("dispatch/dispatch.h", "Dispatch"),
+        ("objc/runtime.h", "ObjectiveC"),
+        ("sqlite3.h", "SQLite3"),
+        ("stdio.h", "Darwin"),
+        ("sys/types.h", "Darwin"),
+        ("TargetConditionals.h", "TargetConditionals"),
+    ]:
+        asserts.equals(env, {module: True}, clang_files.imports("#include <" + header + ">\n"))
+    asserts.equals(env, '#import "local.h"\n', clang_files.scan_prefix('#import "local.h"\nint body = 0;\n'))
 
     contents = """const char *s = "/*";
 #import <Foundation/Foundation.h>
@@ -226,28 +245,10 @@ def _platform_exclusions_test(ctx):
 
 platform_exclusions_test = unittest.make(_platform_exclusions_test)
 
-def _conditional_imports_test(ctx):
+def _compiler_results_test(ctx):
     env = unittest.begin(ctx)
     target = _fixture()
-    source = """#if os(iOS) || os(tvOS)
-import UIKit
-#else
-import AppKit
-#endif
-#if targetEnvironment(simulator)
-import Dispatch
-#endif
-#if canImport(Foundation)
-import Foundation
-#endif
-#if DEBUG
-import Darwin
-#endif
-#if canImport(XCTest)
-import XCTest
-#endif
-"""
-    repository_ctx = testutils.new_stub_repository_ctx(repo_name = "swiftpkg_example", file_contents = {"Sources/Example/example.swift": source})
+    repository_ctx = testutils.new_stub_repository_ctx(repo_name = "swiftpkg_example")
     pkg_ctx = _with_inventory(
         pkg_ctxs.new(
             pkg_info = pkginfos.new(name = "Example", path = ".", targets = [target]),
@@ -268,14 +269,12 @@ import XCTest
     )
     deps = system_sdk_deps.for_target(repository_ctx, pkg_ctx, target)
     labels = {(d.value, d.condition): True for d in deps}
-    for pair in [("@system_sdk//:UIKit", "//:ios"), ("@system_sdk//:AppKit", "//:macos"), ("@system_sdk//:Dispatch", "//:ios_sim"), ("@system_sdk//:Foundation", "//:macos")]:
+    for pair in [("@system_sdk//:UIKit", "//:ios"), ("@system_sdk//:AppKit", "//:macos"), ("@system_sdk//:Dispatch", "//:ios_sim"), ("@system_sdk//:Foundation", "//:macos"), ("@system_sdk//:XCTest", "//:ios"), ("@system_sdk//:Darwin", "//:ios"), ("@system_sdk//:Dispatch", "//:ios_device")]:
         asserts.true(env, pair in labels, labels)
-    for pair in [("@system_sdk//:Dispatch", "//:ios_device"), ("@system_sdk//:Darwin", "//:ios"), ("@system_sdk//:XCTest", "//:ios")]:
-        asserts.false(env, pair in labels, labels)
     return unittest.end(env)
 
-conditional_imports_test = unittest.make(_conditional_imports_test)
+compiler_results_test = unittest.make(_compiler_results_test)
 
 def system_sdk_test_suite(name = "system_sdk_tests"):
-    unittest.suite("system_sdk_unit_tests", missing_inventory_test, generated_deps_test, regressions_test, sdk_identity_test, platform_exclusions_test, conditional_imports_test)
+    unittest.suite("system_sdk_unit_tests", missing_inventory_test, generated_deps_test, regressions_test, sdk_identity_test, platform_exclusions_test, compiler_results_test)
     native.test_suite(name = name, tests = [":system_sdk_unit_tests"])

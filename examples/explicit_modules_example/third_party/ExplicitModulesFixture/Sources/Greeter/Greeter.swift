@@ -1,7 +1,11 @@
+private let interpolationProbe = "\(8 / 2)"
+
 import Foundation
 import ObjCGreeter
-#if os(iOS)
+#if canImport(UIKit)
 import UIKit
+#elseif canImport(AppKit)
+import AppKit
 #endif
 
 public func greeting() -> String {
