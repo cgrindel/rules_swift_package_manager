@@ -72,11 +72,11 @@ def _merge(*bld_files):
         decls = decls,
     )
 
-def _write(repository_ctx, build_file, path):
+def _write(repository_ctx, build_file, path, diagnostic = ""):
     bld_file_path = paths.join(path, "BUILD.bazel")
     repository_ctx.file(
         bld_file_path,
-        content = scg.to_starlark(build_file),
+        content = ("# SDK inference disabled: " + diagnostic + ". Use target_deps.\n" if diagnostic else "") + scg.to_starlark(build_file),
         executable = False,
         legacy_utf8 = False,
     )

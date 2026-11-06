@@ -63,9 +63,13 @@ dependencies wrapped in platform selects with an empty default for other
 platforms. The scan includes unconditional Swift imports, import attributes,
 scoped imports such as `import struct Darwin.stat`, and non-framework modules
 such as `Darwin` and `Dispatch`. It ignores Swift comments and string literals.
-Imports inside any `#if` branch are skipped: repository evaluation cannot safely
-evaluate Swift conditions, and adding a module can itself change `canImport`.
-Supply dependencies for conditional imports with `target_deps`.
+The scanner evaluates `os(...)`, `targetEnvironment(simulator)`, and
+`canImport(Module)` when it guards an import of that same SDK module. It keeps
+`#elseif` and `#else` branches distinct for each Xcode and SDK variant.
+Other conditions, including custom build flags and compiler-version checks,
+remain unknown and are skipped. Developer test modules such as `XCTest` and
+`Testing` are not inferred for non-test targets. Supply missed dependencies
+with `target_deps`.
 
 The C/Objective-C scan uses the existing framework import parser for `@import`,
 `#import <Framework/Header.h>` and `#include <Framework/Header.h>`. It reads the
@@ -97,6 +101,10 @@ lazily fetched RSPM repository reads the generated hub and per-Xcode BUILD files
 once and exports compact metadata. Package repositories read that JSON instead
 of reparsing each full SDK BUILD file. With inference disabled, this repository
 is not fetched.
+
+The metadata stores each SDK condition once and references it by ID for each
+module. If the upstream layout cannot be read, the shared inventory records
+the reason and generated BUILD files include it as a comment.
 
 The metadata preserves each hub Xcode selector and SDK variant separately.
 Device-only modules remain eligible for device builds; a module available in a

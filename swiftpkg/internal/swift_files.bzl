@@ -279,25 +279,106 @@ def _tokens(contents):
             tokens.append((char, line))
     return tokens
 
-def _collect_imports(contents):
-    """Return module_name, line_number and is_conditional for Swift imports.
+def _scan_prefix(contents):
+    # Native string searches avoid lexing large implementation bodies. Only cut
+    # when the last possible import has a complete module name on its own line;
+    # unusual/multiline declarations retain the full source. All preceding text
+    # remains intact, including comments, directives and literal delimiters.
+    last = contents.rfind("import")
+    if last < 0:
+        return ""
+    end = contents.find("\n", last)
+    if end < 0:
+        return contents
+    tail = [piece for piece in contents[last + len("import"):end].strip().replace("\t", " ").split(" ") if piece]
+    if tail and tail[0] in _IMPORT_KINDS:
+        tail = tail[1:]
+    if tail:
+        module = tail[0].split(".")[0].removesuffix(";")
+        if module.startswith("`") and module.endswith("`"):
+            module = module[1:-1]
+        if module and not module[0].isdigit() and all([_identifier_char(c) for c in module.elems()]):
+            return contents[:end + 1]
+    return contents
 
-    Conditional blocks are recorded, not evaluated. SDK availability determines
-    which platforms can safely receive each dependency. Scoped imports contribute
-    their top-level module; attributes and access modifiers need no special case.
+def _condition(tokens):
+    # A deliberately small Boolean grammar. Unknown predicates invalidate the
+    # entire expression, including its #else, rather than guessing build flags.
+    output = []
+    operators = []
+    precedence = {"!": 3, "&&": 2, "||": 1}
+    expect_operand = True
+    skip_to = 0
+    for idx, token in enumerate(tokens):
+        if idx < skip_to:
+            continue
+        if expect_operand:
+            if token in ["!", "("]:
+                operators.append(token)
+            elif token in ["true", "false"]:
+                output.append(token == "true")
+                expect_operand = False
+            elif token in ["os", "targetEnvironment", "canImport"] and idx + 3 < len(tokens) and tokens[idx + 1] == "(" and tokens[idx + 3] == ")":
+                output.append((token, tokens[idx + 2]))
+                skip_to = idx + 4
+                expect_operand = False
+            else:
+                return None
+        elif token == ")":
+            found = False
+            for _ in range(len(operators)):
+                op = operators.pop()
+                if op == "(":
+                    found = True
+                    break
+                output.append(op)
+            if not found:
+                return None
+        elif token in ["&", "|"] and idx + 1 < len(tokens) and tokens[idx + 1] == token:
+            op = token + token
+            for _ in range(len(operators)):
+                if operators[-1] == "(" or precedence[operators[-1]] < precedence[op]:
+                    break
+                output.append(operators.pop())
+            operators.append(op)
+            skip_to = idx + 2
+            expect_operand = True
+        else:
+            return None
+    if expect_operand or "(" in operators:
+        return None
+    output.extend(reversed(operators))
+    return output
+
+def _collect_imports(contents):
+    """Return Swift imports with nested, conservatively parsed branch conditions.
+
+    Each conditions pair holds a Boolean expression and its required truth value.
+    Unsupported expressions are None, including when negated by #else/#elseif.
     """
-    if "import" not in contents:
-        return []
-    tokens = _tokens(contents)
+    tokens = _tokens(_scan_prefix(contents))
     imports = []
-    depth = 0
+    branches = []
     for idx, (token, line) in enumerate(tokens):
         if token == "#" and idx + 1 < len(tokens):
             directive = tokens[idx + 1][0]
-            if directive == "if":
-                depth += 1
-            elif directive == "endif":
-                depth = max(0, depth - 1)
+            if directive in ["if", "elseif"]:
+                expression_tokens = []
+                for pos in range(idx + 2, len(tokens)):
+                    if tokens[pos][1] != line:
+                        break
+                    expression_tokens.append(tokens[pos][0])
+                expression = _condition(expression_tokens)
+                if directive == "if":
+                    branches.append({"current": expression, "previous": []})
+                elif branches:
+                    branches[-1]["previous"].append(branches[-1]["current"])
+                    branches[-1]["current"] = expression
+            elif directive == "else" and branches:
+                branches[-1]["previous"].append(branches[-1]["current"])
+                branches[-1]["current"] = [True]
+            elif directive == "endif" and branches:
+                branches.pop()
         if token != "import" or (idx and tokens[idx - 1][0] in [".", "`"]):
             continue
         next_idx = idx + 1
@@ -310,15 +391,21 @@ def _collect_imports(contents):
         module_name = tokens[next_idx][0]
         if not module_name or not _identifier_char(module_name[0]) or module_name[0].isdigit():
             continue
+        conditions = []
+        for branch in branches:
+            conditions.extend([(expr, False) for expr in branch["previous"]])
+            conditions.append((branch["current"], True))
         imports.append(struct(
             module_name = module_name,
             line_number = line,
-            is_conditional = depth > 0,
+            is_conditional = bool(branches),
+            conditions = conditions,
         ))
     return imports
 
 swift_files = struct(
     collect_imports = _collect_imports,
+    scan_prefix = _scan_prefix,
     has_import = _has_import,
     has_objc_directive = _has_objc_directive,
 )

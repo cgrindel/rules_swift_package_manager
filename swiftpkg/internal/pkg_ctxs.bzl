@@ -38,6 +38,7 @@ def _read(
         registries_directory = registries_directory,
         replace_scm_with_registry = replace_scm_with_registry,
     )
+    sdk_inventory = system_sdk_modules.read(repository_ctx) if system_sdk_deps else struct(modules = {}, diagnostic = "")
     pkg_ctx = _new(
         pkg_info = pkg_info,
         repo_name = repository_utils.package_name(repository_ctx),
@@ -47,7 +48,8 @@ def _read(
         bazel_target_mods = bazel_target_mods,
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
-        sdk_modules = system_sdk_modules.read(repository_ctx) if system_sdk_deps else {},
+        sdk_modules = sdk_inventory.modules,
+        sdk_diagnostic = sdk_inventory.diagnostic,
         dependency_modules = _read_dependency_modules(repository_ctx, pkg_info) if system_sdk_deps else {},
         dep_minimum_os_versions = _read_dep_minimum_os_versions(
             repository_ctx,
@@ -75,6 +77,7 @@ def _new(
         system_sdk_deps = False,
         binary_target_deps = False,
         sdk_modules = {},
+        sdk_diagnostic = "",
         dependency_modules = {}):
     manual_target_deps.validate(pkg_info, target_deps)
 
@@ -103,6 +106,7 @@ def _new(
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
         sdk_modules = sdk_modules,
+        sdk_diagnostic = sdk_diagnostic,
         dependency_modules = dependency_modules,
         # Effective minimum OS versions per target, product and package. See
         # `minimum_os_versions.for_targets`.

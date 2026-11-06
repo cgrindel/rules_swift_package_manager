@@ -195,6 +195,7 @@ let `import` = 1
     asserts.equals(env, [11, 12, 13, 15, 17, 19, 19], [i.line_number for i in actual])
     asserts.equals(env, ["Foundation"], [i.module_name for i in swift_files.collect_imports("import\nFoundation")])
     asserts.equals(env, [], swift_files.collect_imports("some.import Foundation"))
+    asserts.equals(env, "import Foundation\n", swift_files.scan_prefix("import Foundation\nlet longBody = 1\n"))
     return unittest.end(env)
 
 collect_imports_test = unittest.make(_collect_imports_test)
