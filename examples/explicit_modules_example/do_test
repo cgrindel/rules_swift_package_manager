@@ -10,6 +10,27 @@ if [[ -z "${DEVELOPER_DIR:-}" ]]; then
   export DEVELOPER_DIR
 fi
 
+# The fixture only scans arm64. Strict checking must reject an unscanned CPU;
+# relaxing the guard must accept both unmatched and matching profiles. These
+# checks analyze only the empty guard, so they do not compile x86_64 SDK modules.
+profile_guard_log="$(mktemp)"
+trap 'rm -f "${profile_guard_log}"' EXIT
+if "${bazel}" build --nobuild --platforms=@apple_support//platforms:macos_x86_64 \
+  --@rules_swift_package_manager//config_settings/sdk_inference:strict_profile=true \
+  @rspm_sdk_inventory//:scan_profile >"${profile_guard_log}" 2>&1; then
+  echo "Expected the strict SDK profile guard to reject x86_64" >&2
+  exit 1
+fi
+if ! grep -q 'SDK inference has no scan profile' "${profile_guard_log}"; then
+  cat "${profile_guard_log}" >&2
+  exit 1
+fi
+for cpu in x86_64 arm64; do
+  "${bazel}" build --nobuild --platforms="@apple_support//platforms:macos_${cpu}" \
+    --@rules_swift_package_manager//config_settings/sdk_inference:strict_profile=false \
+    @rspm_sdk_inventory//:scan_profile
+done
+
 # Verify the same generated targets with implicit modules and both explicit modes.
 "${bazel}" test //...
 "${bazel}" run //:explicit_modules_example

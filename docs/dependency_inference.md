@@ -88,7 +88,8 @@ can therefore infer XCTest and Testing without a blanket non-test exclusion.
 
 This is a bounded fetch-time operation. It cannot observe arbitrary Bazel
 `--swiftcopt` values, target transitions or later attribute overrides. Profiles
-must match builds; disable inference for packages that need other configurations.
+must match builds. Unmatched configurations need blanket or manual SDK dependencies
+and an explicit relaxation of the profile guard, or inference disabled entirely.
 Unsafe Swift manifest flags are rejected rather than silently interpreted in a
 different environment. Scan errors fail with the target and SDK/configuration.
 C++ interoperability enabled through Bazel features or target overrides is not
@@ -117,8 +118,10 @@ source files, discovered Swift imports by configuration and manifest frameworks.
 It also records package-module version warnings emitted by the prescan.
 The compiler reports imports for the whole source module, not per-import line
 locations.
-Compiler and SDK paths used for scanning are watched and fingerprinted once by
-the shared provider; package repositories read that fingerprint. Configuration changes can
+The shared provider watches and fingerprints compiler/SDK identity files by
+default, assuming an unmodified Xcode installation. Set `full_sdk_tracking = True`
+for recursive content tracking when editing SDKs or toolchain libraries in place.
+Package repositories read the fingerprint. Configuration changes can
 rerun package generation; this does not promise identical outputs across hosts
 with different toolchains or eliminate all repository refetches.
 Each Swift target starts one compiler process per distinct SDK/configuration
@@ -129,10 +132,16 @@ repeat its download and SwiftPM work. Host header-search environment variables
 are cleared using the provider's scan environment.
 
 Only one target triple per SDK is supported. Universal macOS builds and mixed-CPU
-simulator builds need separate profile configurations or manual dependencies.
+simulator builds need separate profile configurations or blanket/manual dependencies.
+Include a `MacOSX` profile for exec tools and macros, even in iOS applications;
+include an `iPhoneOS` profile for device builds and archives.
 On Apple fetch hosts, generated targets depend on a guard that fails analysis
 for an unconfigured Xcode, CPU, SDK or device/simulator environment, even if no
-SDK import was found. On non-macOS fetch hosts, Apple SDK inference is a no-op;
+SDK import was found. Where blanket or manual dependencies cover unscanned
+configurations, set
+`--@rules_swift_package_manager//config_settings/sdk_inference:strict_profile=false`.
+This only relaxes the guard; it does not enable blanket dependencies or infer
+imports for unmatched profiles. On non-macOS fetch hosts, Apple SDK inference is a no-op;
 the provider's metadata records why it was skipped. See [SDK compiler
 profiles](system_sdk_inventory.md) for these limits and tracked Xcode selection.
 
