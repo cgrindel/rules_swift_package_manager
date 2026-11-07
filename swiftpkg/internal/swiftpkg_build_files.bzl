@@ -141,7 +141,7 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
     # and by its direct dependencies; the package that renames a module gets
     # the alias too, because sources commonly self-qualify with their own
     # module name (e.g. swift-log's `Logging.Logger`).
-    for original_name, renamed in getattr(pkg_ctx, "module_alias_flags", {}).items():
+    for original_name, renamed in pkg_ctx.module_alias_flags.items():
         copts.append("-module-alias")
         copts.append("{}={}".format(original_name, renamed))
 

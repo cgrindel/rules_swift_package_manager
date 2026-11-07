@@ -63,9 +63,10 @@ def _arguments(pkg_ctx, target, entry, configuration, available_modules):
     args.extend(sorted(pkginfo_targets.srcs(target)))
     return args
 
-def _missing_version(stderr, package_modules):
+def _version_warnings(stderr, package_modules):
     # Let Swift parse and evaluate #if/#elseif, including comments and inactive
     # branches. -module-can-import supplies names, not package module versions.
+    warnings = []
     for line in stderr.splitlines():
         _, sep, diagnostic = line.partition(": warning: ")
         if not sep:
@@ -74,8 +75,8 @@ def _missing_version(stderr, package_modules):
             if diagnostic.startswith(prefix):
                 module = diagnostic[len(prefix):].partition("'")[0]
                 if module in package_modules:
-                    return module
-    return None
+                    warnings.append({"message": line, "module": module})
+    return warnings
 
 def _scan(ctx, pkg_ctx, target, dependency_modules):
     inventory = pkg_ctx.sdk_modules
@@ -105,19 +106,18 @@ def _scan(ctx, pkg_ctx, target, dependency_modules):
                 result = ctx.execute(args, environment = scan["environment"])
                 if result.return_code:
                     fail("Swift import prescan failed for {} ({}, {}):\n{}\nUse manual SDK deps and disable inference for unsupported configurations.".format(target.name, sdk, configuration, result.stderr))
-                module = _missing_version(result.stderr, available + [pkg_ctx.module_alias_flags.get(name, name) for name in available])
-                if module:
-                    fail("Version-qualified canImport for package module {} requires version metadata unavailable during repository fetching:\n{}\nDisable system_sdk_deps and supply manual deps for this package.".format(module, result.stderr))
+                warnings = _version_warnings(result.stderr, available + [pkg_ctx.module_alias_flags.get(name, name) for name in available])
                 decoded = json.decode(result.stdout)
                 if type(decoded) != "dict" or type(decoded.get("imports")) != "list" or not all([type(name) == "string" for name in decoded["imports"]]):
                     fail("Unsupported Swift import prescan output for " + target.name)
-                cache[key] = sorted({name: True for name in decoded["imports"]})
+                cache[key] = struct(imports = sorted({name: True for name in decoded["imports"]}), warnings = warnings)
             results.append({
                 "condition": entry["configurations"][configuration],
                 "configuration": configuration,
-                "imports": cache[key],
+                "imports": cache[key].imports,
                 "sdk": sdk,
+                "warnings": cache[key].warnings,
             })
     return results
 
-compiler_imports = struct(arguments = _arguments, scan = _scan, missing_version = _missing_version)
+compiler_imports = struct(arguments = _arguments, scan = _scan, version_warnings = _version_warnings)

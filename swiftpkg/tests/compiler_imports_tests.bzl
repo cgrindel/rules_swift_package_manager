@@ -99,7 +99,7 @@ def _prepare_test(ctx):
         asserts.true(env, "/Developer/usr/lib" in args)
         asserts.true(env, "/SDK/Developer/Library/Frameworks" in args)
         asserts.equals(env, fixture.context.sdk_modules.scan["environment"], environment)
-        return struct(return_code = 0, stdout = '{"imports": ["Testing", "Foundation"]}', stderr = "")
+        return struct(return_code = 0, stdout = '{"imports": ["Testing", "Foundation"]}', stderr = "Sources/Consumer.swift:1:15: warning: cannot find user version number for module 'Testing'; version number ignored [#ModuleVersionMissing]")
 
     repo = struct(
         name = "extension+swiftpkg_consumer",
@@ -120,6 +120,8 @@ def _prepare_test(ctx):
     asserts.equals(env, ["Consumer", "Helper", "Testing"], result.dependency_modules["Consumer"]["ios"])
     asserts.equals(env, 2, len(calls))  # debug and fastbuild reuse identical arguments
     asserts.equals(env, 3, len(result.source_scans["Consumer"]))
+    for record in result.source_scans["Consumer"]:
+        asserts.equals(env, ["Testing"], [w["module"] for w in record["warnings"]])
     report = json.decode(outputs["sdk_inference.json"])
     asserts.equals(env, ["Sources/Consumer.swift"], report["targets"]["Consumer"]["sources"])
     asserts.equals(env, result.source_scans["Consumer"], report["targets"]["Consumer"]["scans"])
@@ -150,15 +152,15 @@ def _version_diagnostic_test(ctx):
     # Captured from Swift's import prescan for _version and _underlyingVersion.
     for kind in ["module", "Clang module"]:
         diagnostic = "Sources/Consumer.swift:1:15: warning: cannot find user version number for {} 'Helpers'; version number ignored [#ModuleVersionMissing]".format(kind)
-        asserts.equals(env, "Helpers", compiler_imports.missing_version(diagnostic, ["Helpers"]))
-        asserts.equals(env, None, compiler_imports.missing_version(diagnostic, ["OtherPackage"]))
+        asserts.equals(env, [{"message": diagnostic, "module": "Helpers"}], compiler_imports.version_warnings(diagnostic, ["Helpers"]))
+        asserts.equals(env, [], compiler_imports.version_warnings(diagnostic, ["OtherPackage"]))
     for stderr in [
         "",
         "1 | // canImport(Helpers, _version: 1.0)",
         "Sources/Consumer.swift:2:1: warning: unrelated warning",
         "Sources/Consumer.swift:1:15: warning: cannot find user version number for module 'Foundation'; version number ignored [#ModuleVersionMissing]",
     ]:
-        asserts.equals(env, None, compiler_imports.missing_version(stderr, ["Helpers"]))
+        asserts.equals(env, [], compiler_imports.version_warnings(stderr, ["Helpers"]))
     return unittest.end(env)
 
 version_diagnostic_test = unittest.make(_version_diagnostic_test)

@@ -13,7 +13,8 @@ for sdk, expected, absent in [("MacOSX", "AppKit", "UIKit"), ("iPhoneSimulator",
     assert {record["configuration"] for record in records} == {"debug", "release", "fastbuild"}, records
     for record in records:
         imports = set(record["imports"])
-        assert {expected, "Foundation", "ObjCGreeter"} <= imports, record
+        assert {expected, "Foundation", "ObjCGreeter", "Compression"} <= imports, record
+        assert any(w["module"] == "ObjCGreeter" for w in record["warnings"]), record
         assert absent not in imports, record
 for record in report["targets"]["DeveloperProbe"]["scans"]:
     assert {"XCTest", "Testing"} <= set(record["imports"]), record

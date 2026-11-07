@@ -13,6 +13,8 @@ def _prepare(repository_ctx, pkg_ctx):
     inventory = getattr(pkg_ctx, "sdk_modules", None)
     if inventory == None or not inventory.scan:
         fail("SDK inference requires the compiler-profile inventory provider (schema 2).")
+    if not inventory.scan.get("host_supported", True):
+        return pkg_ctx
     pkg_info = pkg_ctx.pkg_info
 
     # Read only resolved dependencies actually referenced by built targets, once

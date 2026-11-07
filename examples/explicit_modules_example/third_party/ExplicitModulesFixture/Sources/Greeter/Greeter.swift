@@ -1,6 +1,9 @@
-
 import Foundation
 import ObjCGreeter
+#if canImport(ObjCGreeter, _version: 999.0)
+// SwiftPM warns and ignores a version when the package module has no metadata.
+import Compression
+#endif
 #if canImport(UIKit)
 import UIKit
 #elseif canImport(AppKit)

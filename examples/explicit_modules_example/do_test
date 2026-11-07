@@ -4,6 +4,12 @@ set -o errexit -o nounset -o pipefail
 
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
+# Resolve the system selection before Bazel so it becomes a tracked repo input.
+if [[ -z "${DEVELOPER_DIR:-}" ]]; then
+  DEVELOPER_DIR="$(xcode-select -p)"
+  export DEVELOPER_DIR
+fi
+
 # Verify the same generated targets with implicit modules and both explicit modes.
 "${bazel}" test //...
 "${bazel}" run //:explicit_modules_example

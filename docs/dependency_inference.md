@@ -77,10 +77,12 @@ features and module aliases. Debug, release and fastbuild are scanned separately
 identical command lines share results. Known dependency module names are supplied
 to `-module-can-import`, without building those dependencies. This supplies name
 availability, not package module versions or validation of their implementations.
-If Swift evaluates a version-qualified `canImport` check on a package module and
-reports missing version metadata, inference fails rather than silently accepting
-an ignored version constraint. Comments, strings and SDK checks are left to the
-compiler. SDK availability comes from the compiler's search paths.
+If Swift evaluates a version-qualified `canImport` check on a package module
+without version metadata, it warns and ignores the version constraint. The
+prescan preserves this behavior, matching SwiftPM's default package builds, and
+records the diagnostic in each scan's `warnings` list in `sdk_inference.json`.
+RSPM does not invent a package module version. Comments, strings and SDK checks
+are left to the compiler. SDK availability comes from the compiler's search paths.
 Developer framework search paths match generated libraries; test helper libraries
 can therefore infer XCTest and Testing without a blanket non-test exclusion.
 
@@ -112,6 +114,7 @@ Only metadata for reachable products is read, once per package repository.
 
 `sdk_inference.json` in each scanned package repository records compiler profiles,
 source files, discovered Swift imports by configuration and manifest frameworks.
+It also records package-module version warnings emitted by the prescan.
 The compiler reports imports for the whole source module, not per-import line
 locations.
 Compiler and SDK paths used for scanning are watched and fingerprinted once by
@@ -124,6 +127,14 @@ command, so this typically means two processes per target per configured SDK.
 Changing the configured Xcode invalidates every opted-in package's scans and can
 repeat its download and SwiftPM work. Host header-search environment variables
 are cleared using the provider's scan environment.
+
+Only one target triple per SDK is supported. Universal macOS builds and mixed-CPU
+simulator builds need separate profile configurations or manual dependencies.
+On Apple fetch hosts, generated targets depend on a guard that fails analysis
+for an unconfigured Xcode, CPU, SDK or device/simulator environment, even if no
+SDK import was found. On non-macOS fetch hosts, Apple SDK inference is a no-op;
+the provider's metadata records why it was skipped. See [SDK compiler
+profiles](system_sdk_inventory.md) for these limits and tracked Xcode selection.
 
 ## Manual dependencies
 

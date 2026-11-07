@@ -26,7 +26,7 @@ def _inventory(modules):
             entry.setdefault("configurations", {c: entry["condition"] + "_" + c for c in ["debug", "release", "fastbuild"]})
             conditions[key] = entry
             references[module].append(key)
-    return struct(conditions = conditions, diagnostic = "", modules = references)
+    return struct(conditions = conditions, diagnostic = "", modules = references, scan = {"guard": "@inventory//:scan_profile"})
 
 def _fixture(clang = False, resources = [], linker_settings = None, dependencies = []):
     return pkginfos.new_target(
@@ -168,7 +168,7 @@ def _regressions_test(ctx):
         target = _fixture(linker_settings = pkginfos.new_linker_settings(settings))
         deps = system_sdk_deps.for_target(repository_ctx, _context(target), target)
         asserts.equals(env, 2, len([d for d in deps if d.value == "@system_sdk//:Security"]))
-        asserts.false(env, any([d.condition.endswith("_debug") for d in deps]))
+        asserts.false(env, any([d.condition.endswith("_debug") for d in deps if d.condition]))
 
     for header, module in [
         ("dispatch/dispatch.h", "Dispatch"),
@@ -275,6 +275,27 @@ def _compiler_results_test(ctx):
 
 compiler_results_test = unittest.make(_compiler_results_test)
 
+def _host_and_guard_test(ctx):
+    env = unittest.begin(ctx)
+    target = _fixture(clang = True)
+    context = _context(target)
+    fields = structs.to_dict(context)
+    fields["sdk_modules"] = struct(modules = {}, conditions = {}, scan = {"host_supported": False})
+    context = struct(**fields)
+
+    # Linux must not scan sources, execute the compiler, or read package metadata.
+    repository_ctx = struct()
+    asserts.equals(env, context, sdk_inference_context.prepare(repository_ctx, context))
+    asserts.equals(env, [], system_sdk_deps.for_target(repository_ctx, context, target))
+    target = _fixture(linker_settings = pkginfos.new_linker_settings([]))
+    context = _with_inventory(_context(target), _inventory({}), source_modules = [])
+    guard = system_sdk_deps.for_target(repository_ctx, context, target)
+    asserts.equals(env, ["@inventory//:scan_profile"], [d.value for d in guard])
+    asserts.equals(env, [None], [d.condition for d in guard])
+    return unittest.end(env)
+
+host_and_guard_test = unittest.make(_host_and_guard_test)
+
 def system_sdk_test_suite(name = "system_sdk_tests"):
-    unittest.suite("system_sdk_unit_tests", disabled_test, generated_deps_test, regressions_test, sdk_identity_test, platform_exclusions_test, compiler_results_test)
+    unittest.suite("system_sdk_unit_tests", disabled_test, generated_deps_test, regressions_test, sdk_identity_test, platform_exclusions_test, compiler_results_test, host_and_guard_test)
     native.test_suite(name = name, tests = [":system_sdk_unit_tests"])

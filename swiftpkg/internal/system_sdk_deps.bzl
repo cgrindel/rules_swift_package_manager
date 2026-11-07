@@ -86,10 +86,15 @@ def _for_target(repository_ctx, pkg_ctx, target):
     if not pkg_ctx.system_sdk_deps:
         return []
     inventory = pkg_ctx.sdk_modules
+    if not inventory.scan.get("host_supported", True):
+        return []
     excluded = _excluded_modules(pkg_ctx, target)
     deps = _source_deps(inventory, _source_imports(repository_ctx, target), excluded, (pkg_ctx.source_scans or {}).get(target.name, []))
     _add_manifest_deps(inventory, target, excluded, deps)
-    return [
+
+    # Keep this unconditional even when no SDK imports were found. Otherwise an
+    # unsupported profile could silently compile with empty select defaults.
+    return [bzl_selects.new(value = inventory.scan["guard"])] + [
         bzl_selects.new(
             value = "@system_sdk//:" + module,
             # Separate platform+configuration selects from plain platform selects;
