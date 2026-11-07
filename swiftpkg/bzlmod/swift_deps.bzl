@@ -890,6 +890,27 @@ def _inference_settings(config, package_name, repo_name):
             settings[key] = value == "on"
     return settings
 
+def _extension_metadata(module_ctx, direct_dep_repo_names):
+    """Report the repositories as dev dependencies when only dev usages exist.
+
+    Args:
+        module_ctx: A `module_ctx`.
+        direct_dep_repo_names: A `list` of the direct dependency repository
+            names.
+
+    Returns:
+        The `extension_metadata` for the extension.
+    """
+    if module_ctx.root_module_has_non_dev_dependency:
+        return module_ctx.extension_metadata(
+            root_module_direct_deps = direct_dep_repo_names,
+            root_module_direct_dev_deps = [],
+        )
+    return module_ctx.extension_metadata(
+        root_module_direct_deps = [],
+        root_module_direct_dev_deps = direct_dep_repo_names,
+    )
+
 def _swift_deps_impl(module_ctx):
     inference_config = _inference_configuration(module_ctx.modules)
     if inference_config.error:
@@ -943,10 +964,7 @@ Available repositories are: {available}.\
             available = ", ".join(sorted(available_target_mod_repos.keys())),
             unknown = ", ".join(sorted(unknown_target_mod_repos)),
         ))
-    return module_ctx.extension_metadata(
-        root_module_direct_deps = direct_dep_repo_names,
-        root_module_direct_dev_deps = [],
-    )
+    return _extension_metadata(module_ctx, direct_dep_repo_names)
 
 _from_package_tag = tag_class(
     attrs = dicts.add(
@@ -1359,6 +1377,7 @@ swift_deps = module_extension(
 )
 
 swift_deps_test_utils = struct(
+    extension_metadata = _extension_metadata,
     declare_pkg_from_dependency = _declare_pkg_from_dependency,
     inference_configuration = _inference_configuration,
     inference_settings = _inference_settings,
