@@ -76,6 +76,7 @@ bzl_library(
     srcs = ["clang_files.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":objc_files",
         ":repository_files",
         "//swiftpkg/internal/modulemap_parser:declarations",
         "//swiftpkg/internal/modulemap_parser:parser",
@@ -195,6 +196,7 @@ bzl_library(
         ":semver",
         ":starlark_codegen",
         ":swift_files",
+        ":system_sdk_deps",
         "//config_settings/bazel/compilation_mode:compilation_modes",
         "@bazel_skylib//lib:paths",
         "@bazel_skylib//lib:sets",
@@ -244,6 +246,19 @@ bzl_library(
         ":pkginfo_dependencies",
         ":pkginfos",
         ":repository_utils",
+        "//swiftpkg/internal/sdk_inventory:repository",
+    ],
+)
+
+bzl_library(
+    name = "system_sdk_deps",
+    srcs = ["system_sdk_deps.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":bzl_selects",
+        ":clang_files",
+        ":pkginfo_targets",
+        ":system_sdk_labels",
     ],
 )
 
@@ -270,9 +285,11 @@ bzl_library(
         ":artifact_infos",
         ":bazel_target_mods",
         ":build_files",
+        ":dependency_normalization",
         ":pkg_ctxs",
         ":pkginfos",
         ":repository_files",
+        ":sdk_inference_context",
         ":spm_versions",
         ":starlark_codegen",
         ":swiftpkg_build_files",
@@ -489,6 +506,52 @@ bzl_library(
 )
 
 bzl_library(
+    name = "dependency_normalization",
+    srcs = ["dependency_normalization.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":build_decls",
+        ":build_files",
+        ":load_statements",
+        ":starlark_codegen",
+        ":system_sdk_labels",
+    ],
+)
+
+bzl_library(
+    name = "dependency_modules",
+    srcs = ["dependency_modules.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":pkginfo_dependencies",
+        ":pkginfo_targets",
+        "//config_settings/spm/platform:platforms",
+    ],
+)
+
+bzl_library(
+    name = "sdk_inference_context",
+    srcs = ["sdk_inference_context.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":bazel_repo_names",
+        ":compiler_imports",
+        ":dependency_modules",
+        ":pkg_ctxs",
+        ":pkginfo_targets",
+        ":repository_utils",
+        "@bazel_skylib//lib:structs",
+    ],
+)
+
+bzl_library(
+    name = "compiler_imports",
+    srcs = ["compiler_imports.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":pkginfo_targets"],
+)
+
+bzl_library(
     name = "bazel_repo_names",
     srcs = ["bazel_repo_names.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
@@ -557,6 +620,12 @@ bzl_library(
 bzl_library(
     name = "swift_package_tool_attrs",
     srcs = ["swift_package_tool_attrs.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "system_sdk_labels",
+    srcs = ["system_sdk_labels.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
 

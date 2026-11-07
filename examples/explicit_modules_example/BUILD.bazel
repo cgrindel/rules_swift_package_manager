@@ -1,6 +1,8 @@
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
 load("@build_bazel_rules_apple//apple:macos.bzl", "macos_application")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
 
 swift_library(
     name = "Main",
@@ -20,4 +22,22 @@ macos_application(
 build_test(
     name = "build_test",
     targets = [":explicit_modules_example"],
+)
+
+ios_application(
+    name = "ios_explicit_modules_example",
+    bundle_id = "com.example.explicit-modules.ios",
+    families = ["iphone"],
+    infoplists = ["Info.plist"],
+    minimum_os_version = "15.0",
+    deps = [":Main"],
+)
+
+# The runner explicitly checks the report with the inferred-modules config.
+sh_test(
+    name = "inference_report_test",
+    srcs = ["verify_inference.sh"],
+    args = ["$(location @swiftpkg_explicitmodulesfixture//:sdk_inference.json)"],
+    data = ["@swiftpkg_explicitmodulesfixture//:sdk_inference.json"],
+    tags = ["manual"],
 )

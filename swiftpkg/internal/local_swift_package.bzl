@@ -34,6 +34,7 @@ def _list_contents(repository_ctx, repo_dir, path):
     return results
 
 def _local_swift_package_impl(repository_ctx):
+    sdk_inventory = pkg_ctxs.prepare_sdk(repository_ctx)
     repo_dir = str(repository_ctx.path("."))
     env = repo_rules.get_exec_env(repository_ctx)
     repo_rules.check_spm_version(repository_ctx, env = env)
@@ -81,6 +82,7 @@ def _local_swift_package_impl(repository_ctx):
         cached_json_directory,
         target_deps = repository_ctx.attr.target_deps,
         system_sdk_deps = repository_ctx.attr.system_sdk_deps,
+        sdk_inventory = sdk_inventory,
         binary_target_deps = repository_ctx.attr.binary_target_deps,
         module_aliases = repository_ctx.attr.module_aliases,
         dep_module_aliases = repository_ctx.attr.dep_module_aliases,

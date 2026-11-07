@@ -5,6 +5,7 @@ load("@bazel_skylib//lib:sets.bzl", "sets")
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
 load("//swiftpkg/internal/modulemap_parser:declarations.bzl", dts = "declaration_types")
 load("//swiftpkg/internal/modulemap_parser:parser.bzl", modulemap_parser = "parser")
+load(":objc_files.bzl", "objc_files")
 load(":repository_files.bzl", "repository_files")
 
 # Directory names that may include public header files.
@@ -450,7 +451,183 @@ def _organize_srcs(srcs):
         other_srcs = other_srcs,
     )
 
+def _scan_prefix(contents):
+    if "\\\n" in contents or "\\\r\n" in contents:
+        return contents
+    last = max(contents.rfind("import"), contents.rfind("include"))
+    if last < 0:
+        return ""
+    end = contents.find("\n", last)
+    if end < 0:
+        return contents
+    line = contents[last:end]
+
+    # Multiline directives and splices keep the complete input. An unfinished
+    # trailing literal/comment can safely remain open when there is no later
+    # import/include token to discover.
+    if "\\" not in line and (";" in line or ">" in line or '"' in line):
+        return contents[:end + 1]
+    return contents
+
+def _digit_separator(contents, idx):
+    if idx + 1 >= len(contents) or not contents[idx + 1].isalnum():
+        return False
+    start = idx
+    for pos in range(idx - 1, -1, -1):
+        if not (contents[pos].isalnum() or contents[pos] in "_.'"):
+            break
+        start = pos
+    return start < idx and contents[start].isdigit()
+
+def _next_unspliced(contents, start):
+    skip_to = start
+    for pos in range(start, len(contents)):
+        if pos < skip_to:
+            continue
+        if contents[pos:pos + 2] == "\\\n":
+            skip_to = pos + 2
+        elif contents[pos:pos + 3] == "\\\r\n":
+            skip_to = pos + 3
+        else:
+            return pos
+    return len(contents)
+
+# Known SDK umbrella modules; do not guess via case folding or fuzzy matching.
+_SYSTEM_HEADER_DIRS = {
+    "arpa": "Darwin",
+    "dispatch": "Dispatch",
+    "mach": "Darwin",
+    "mach-o": "Darwin",
+    "net": "Darwin",
+    "netinet": "Darwin",
+    "netinet6": "Darwin",
+    "objc": "ObjectiveC",
+    "sys": "Darwin",
+}
+_SYSTEM_HEADERS = {header: "Darwin" for header in [
+    "assert.h",
+    "ctype.h",
+    "errno.h",
+    "fcntl.h",
+    "float.h",
+    "inttypes.h",
+    "limits.h",
+    "math.h",
+    "pthread.h",
+    "signal.h",
+    "stdbool.h",
+    "stddef.h",
+    "stdint.h",
+    "stdio.h",
+    "stdlib.h",
+    "string.h",
+    "time.h",
+    "unistd.h",
+]}
+_SYSTEM_HEADERS.update({"TargetConditionals.h": "TargetConditionals", "sqlite3.h": "SQLite3"})
+
+def _clang_imports(contents):
+    if "import" not in contents and "include" not in contents and "\\\n" not in contents and "\\\r\n" not in contents:
+        return {}
+
+    contents = _scan_prefix(contents)
+
+    # Preserve newlines while masking comments and C/ObjC/C++ literals. In
+    # particular, comment delimiters inside quoted/raw strings are not comments.
+    pieces = []
+    state = "code"
+    closing = ""
+    skip_to = 0
+    splice_to = 0
+    for idx in range(len(contents)):
+        char = contents[idx]
+
+        # Translation phase two removes escaped newlines before tokenization.
+        # Raw strings are masked as a whole and preserve their delimiters.
+        if idx < splice_to:
+            continue
+        if state != "raw" and char == "\\":
+            if contents[idx + 1:idx + 2] == "\n":
+                splice_to = idx + 2
+                continue
+            if contents[idx + 1:idx + 3] == "\r\n":
+                splice_to = idx + 3
+                continue
+        if char == "\n":
+            pieces.append("\n")
+            if state in ["line", "quote"]:
+                state = "code"
+        if idx < skip_to:
+            continue
+        next_idx = _next_unspliced(contents, idx + 1) if char in "/*R" else idx + 1
+        pair = char + contents[next_idx:next_idx + 1]
+        if state == "line":
+            continue
+        if state == "block":
+            if pair == "*/":
+                state = "code"
+                skip_to = next_idx + 1
+            continue
+        if state == "raw":
+            if contents[idx:idx + len(closing)] == closing:
+                state = "code"
+                skip_to = idx + len(closing)
+            continue
+        if state == "quote":
+            if char == "\\":
+                skip_to = _next_unspliced(contents, idx + 1) + 1
+            elif char == closing:
+                state = "code"
+            continue
+        if char == "\n":
+            continue
+        if pair == "//":
+            state = "line"
+            skip_to = next_idx + 1
+        elif pair == "/*":
+            state = "block"
+            pieces.append(" ")
+            skip_to = next_idx + 1
+        elif pair == 'R"':
+            opening = contents.find("(", next_idx + 1, next_idx + 18)
+            if opening >= 0:
+                closing = ")" + contents[next_idx + 1:opening] + '"'
+                state = "raw"
+                skip_to = opening + 1
+            else:
+                pieces.append(char)
+        elif char in ['"', "'"] and not (char == "'" and _digit_separator(contents, idx)):
+            state = "quote"
+            closing = char
+            pieces.append(" ")
+        else:
+            pieces.append(char)
+    lines = "".join(pieces).splitlines()
+    imports = {}
+    for line in lines:
+        line = line.strip()
+        if line.startswith("#"):
+            directive = line[1:].lstrip()
+            if directive.startswith("include"):
+                line = "#import" + directive[len("include"):]
+        elif not line.startswith("@import "):
+            continue
+        module = None
+        if line.startswith("#import"):
+            header = line[len("#import"):].strip()
+            if header.startswith("<") and ">" in header:
+                header = header[1:header.index(">")]
+                first = header.split("/")[0]
+                module = _SYSTEM_HEADERS.get(header) or _SYSTEM_HEADER_DIRS.get(first) or first.removesuffix(".h")
+        else:
+            module = objc_files.parse_for_import(line)
+        if module:
+            imports[module.split(".")[0]] = True
+    return imports
+
 clang_files = struct(
+    imports = _clang_imports,
+    scan_prefix = _scan_prefix,
     collect_files = _collect_files,
     find_magical_public_hdr_dir = _find_magical_public_hdr_dir,
     is_hdr = _is_hdr,
