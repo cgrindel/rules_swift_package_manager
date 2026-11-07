@@ -454,6 +454,7 @@ def _inference_repository_routing_test(ctx):
     from_package = struct(
         env = {},
         env_inherit = [],
+        swift_executable = None,
         registries = {},
         resolved = None,
         make_files_read_only = False,

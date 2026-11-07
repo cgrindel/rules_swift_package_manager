@@ -189,10 +189,60 @@ prefix-safe: sibling sharing a prefix is not relativized (GH-2405)\
 
 relativize_repo_path_test = unittest.make(_relativize_repo_path_test)
 
+def _exec_spm_command_swift_executable_test(ctx):
+    env = unittest.begin(ctx)
+
+    calls = []
+
+    # buildifier: disable=unused-variable
+    def _execute(args, environment = {}, working_directory = ""):
+        calls.append(struct(args = args, environment = environment))
+        return struct(return_code = 0, stdout = "ok", stderr = "")
+
+    repository_ctx = struct(
+        execute = _execute,
+        os = struct(name = "mac os x"),
+    )
+
+    repository_utils.exec_spm_command(
+        repository_ctx,
+        ["swift", "package", "resolve"],
+        env = {"RSPM_SWIFT_EXECUTABLE": "/opt/swift/bin/swift"},
+    )
+    asserts.equals(
+        env,
+        ["/opt/swift/bin/swift", "package", "resolve"],
+        calls[0].args,
+        "the configured swift replaces xcrun and the bare swift",
+    )
+    asserts.false(
+        env,
+        "RSPM_SWIFT_EXECUTABLE" in calls[0].environment,
+        "the marker is not passed to the command",
+    )
+
+    repository_utils.exec_spm_command(
+        repository_ctx,
+        ["swift", "package", "resolve"],
+    )
+    asserts.equals(
+        env,
+        ["xcrun", "swift", "package", "resolve"],
+        calls[1].args,
+        "without a configured swift the host one is used",
+    )
+
+    return unittest.end(env)
+
+exec_spm_command_swift_executable_test = unittest.make(
+    _exec_spm_command_swift_executable_test,
+)
+
 def repository_utils_test_suite():
     return unittest.suite(
         "repository_utils_tests",
         copy_test,
+        exec_spm_command_swift_executable_test,
         relativize_repo_path_test,
         replace_working_directory_test,
     )

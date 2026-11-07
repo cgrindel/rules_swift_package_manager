@@ -356,6 +356,10 @@ def _declare_pkgs_from_package(
         env[key] = value
     for key in from_package.env_inherit:
         env[key] = module_ctx.getenv(key)
+    if from_package.swift_executable:
+        env["RSPM_SWIFT_EXECUTABLE"] = str(
+            module_ctx.path(from_package.swift_executable),
+        )
 
     # Get the package info.
     pkg_swift = module_ctx.path(from_package.swift)
@@ -704,6 +708,7 @@ def _declare_pkg_from_dependency(
             dependencies_index = None,
             env = from_package.env,
             env_inherit = from_package.env_inherit,
+            swift_executable = from_package.swift_executable,
             cached_json_directory = cached_json_directory,
             init_submodules = init_submodules,
             make_files_read_only = from_package.make_files_read_only,
@@ -747,6 +752,7 @@ in the lock file and will not be portable across machines.\
             bazel_package_name = name,
             env = from_package.env,
             env_inherit = from_package.env_inherit,
+            swift_executable = from_package.swift_executable,
             path = local_path,
             dependencies_index = None,
             build_file = build_file,
@@ -771,6 +777,7 @@ in the lock file and will not be portable across machines.\
             build_file = build_file,
             env = from_package.env,
             env_inherit = from_package.env_inherit,
+            swift_executable = from_package.swift_executable,
             id = dep.registry.pin.identity,
             make_files_read_only = from_package.make_files_read_only,
             registries = from_package.registries,
@@ -1023,6 +1030,13 @@ in the output log.
                 mandatory = True,
                 allow_files = [".swift"],
                 doc = "A `Package.swift`.",
+            ),
+            "swift_executable": attr.label(
+                allow_single_file = True,
+                doc = """\
+Optional `swift` executable used for every SPM command instead of the one found \
+on the host `PATH` or through `xcrun`.\
+""",
             ),
         },
     ),

@@ -100,6 +100,13 @@ package description generation)\
 _env_attrs = dicts.add(
     _env_attr,
     {
+        "swift_executable": attr.label(
+            allow_single_file = True,
+            doc = """\
+Optional `swift` executable used for every SPM command instead of the one found \
+on the host `PATH` or through `xcrun`.\
+""",
+        ),
         "env_inherit": attr.string_list(
             doc = """\
 Environment variables to inherit from the external environment that will be \
@@ -111,6 +118,7 @@ SPM dependency resolution, SPM package description generation)\
 )
 
 _DEVELOPER_DIR_ENV = "DEVELOPER_DIR"
+_SWIFT_EXECUTABLE_ENV = "RSPM_SWIFT_EXECUTABLE"
 
 def _get_exec_env(repository_ctx):
     """Creates a `dict` of environment variables which will be past to all execution environments for this rule.
@@ -131,6 +139,10 @@ def _get_exec_env(repository_ctx):
     dev_dir = repository_ctx.os.environ.get(_DEVELOPER_DIR_ENV)
     if dev_dir:
         env[_DEVELOPER_DIR_ENV] = dev_dir
+    if repository_ctx.attr.swift_executable:
+        env[_SWIFT_EXECUTABLE_ENV] = str(
+            repository_ctx.path(repository_ctx.attr.swift_executable),
+        )
     return env
 
 def _check_spm_version(repository_ctx, env = {}):
