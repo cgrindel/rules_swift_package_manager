@@ -97,7 +97,7 @@ def _repository_test(ctx):
 
     upstream = system_sdk_modules.read_upstream(struct(read = read), sdk_build, "Xcode 27.0\nBuild version 27A266a")
     asserts.equals(env, 2, len(reads))
-    scan = {"targets": {"MacOSX": "arm64-apple-macosx14.0"}}
+    scan = {"targets": {"MacOSX": "arm64-apple-macosx14.0"}, "xcode_version": "Xcode 27.0\nBuild version 27A266a"}
     result = sdk_inventory_render.render(upstream, "inventory", "@sdk//:", {"debug": "//:debug", "release": "//:release"}, lambda x: x, scan)
     asserts.equals(env, {
         "conditions": {"MacOSX": {
@@ -109,10 +109,11 @@ def _repository_test(ctx):
         }},
         "diagnostic": "",
         "modules": {"Dispatch": ["MacOSX"], "Foundation": ["MacOSX"]},
-        "scan": scan,
+        "scan": dict(scan, guard = "@@inventory//:scan_profile"),
         "schema_version": 2,
     }, result.metadata)
     asserts.equals(env, '''load("@bazel_skylib//lib:selects.bzl", "selects")
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
 package(default_visibility = ["//visibility:public"])
 exports_files(["modules.json"])
 config_setting(name = "compilation_fastbuild", values = {"compilation_mode": "fastbuild"})
@@ -121,6 +122,7 @@ selects.config_setting_group(name = "sdk_MacOSX", match_all = ["@sdk//:xcode_27_
 selects.config_setting_group(name = "sdk_MacOSX_debug", match_all = ["@sdk//:xcode_27_0_0_27A266a", ":sdk_MacOSX_platform", "//:debug"])
 selects.config_setting_group(name = "sdk_MacOSX_release", match_all = ["@sdk//:xcode_27_0_0_27A266a", ":sdk_MacOSX_platform", "//:release"])
 selects.config_setting_group(name = "sdk_MacOSX_fastbuild", match_all = ["@sdk//:xcode_27_0_0_27A266a", ":sdk_MacOSX_platform", ":compilation_fastbuild"])
+cc_library(name = "scan_profile", deps = select({":sdk_MacOSX": []}, no_match_error = "SDK inference has no scan profile for this build\'s Xcode, CPU, SDK and device/simulator environment. Configured Xcode: Xcode 27.0; Build version 27A266a. Configured targets: MacOSX=arm64-apple-macosx14.0. Match these profiles or disable system_sdk_deps and supply manual dependencies."))
 ''', result.build)
     return unittest.end(env)
 
@@ -230,5 +232,27 @@ def _symlink_retarget_test(ctx):
 
 symlink_retarget_test = unittest.make(_symlink_retarget_test)
 
+def _host_and_selection_test(ctx):
+    env = unittest.begin(ctx)
+    outputs = {}
+
+    # Deliberately omit attrs/execute/read: Linux must return before any SDK work.
+    system_sdk_modules.generate(struct(os = struct(name = "linux"), file = lambda name, content: outputs.update({name: content})))
+    metadata = system_sdk_modules.decode(outputs["modules.json"])
+    asserts.equals(env, {}, metadata.modules)
+    asserts.equals(env, {}, metadata.conditions)
+    asserts.equals(env, {"host_supported": False}, metadata.scan)
+    asserts.true(env, "linux" in metadata.diagnostic)
+    for environment, configured in [("/Xcode", ""), (None, "/Xcode"), ("/Xcode", "/Xcode")]:
+        def getenv(name):
+            asserts.equals(env, "DEVELOPER_DIR", name)
+            return environment
+
+        repo = struct(attr = struct(developer_dir = configured), getenv = getenv, path = lambda p: struct(realpath = p))
+        asserts.equals(env, "/Xcode", system_sdk_modules.developer_dir(repo))
+    return unittest.end(env)
+
+host_and_selection_test = unittest.make(_host_and_selection_test)
+
 def system_sdk_inventory_test_suite():
-    unittest.suite("system_sdk_inventory_tests", inventory_test, upstream_format_test, repository_test, format_variants_test, watch_cycle_test, profiles_test, symlink_retarget_test)
+    unittest.suite("system_sdk_inventory_tests", inventory_test, upstream_format_test, repository_test, format_variants_test, watch_cycle_test, profiles_test, symlink_retarget_test, host_and_selection_test)

@@ -18,6 +18,15 @@ def _execute(ctx, args, developer_dir):
         _error("{} failed:\n{}".format(args, result.stderr))
     return result.stdout.strip()
 
+def _developer_dir(ctx):
+    environment = ctx.getenv("DEVELOPER_DIR")
+    configured = ctx.attr.developer_dir
+    if not environment and not configured:
+        _error("set DEVELOPER_DIR or sdk_inventory.configure(developer_dir = ...) explicitly; xcode-select is not a tracked repository input")
+    if environment and configured and ctx.path(environment).realpath != ctx.path(configured).realpath:
+        _error("developer_dir must match DEVELOPER_DIR when both are specified")
+    return environment or configured
+
 def _selection(hub, version_output):
     """Choose exactly one hub branch before touching any per-Xcode repository."""
     version = None
@@ -66,17 +75,18 @@ def _read_upstream(ctx, sdk_build, version_output):
 def _repo_impl(ctx):
     # Repository rules cannot inspect a build's --xcode_version, platform or
     # swiftcopts. Require root-owned scan profiles rather than guessing them.
+    if ctx.os.name.lower() != "mac os x":
+        result = sdk_inventory_render.unsupported_host(ctx.os.name)
+        ctx.file("BUILD.bazel", result.build)
+        ctx.file("modules.json", json.encode(result.metadata))
+        return
     if not ctx.attr.targets:
         _error("no compiler scan profiles were configured")
     for sdk, triple in ctx.attr.targets.items():
         error = sdk_scan_profiles.error(sdk, triple)
         if error:
             _error(error)
-    if ctx.os.name.lower() != "mac os x":
-        _error("compiler-driven Apple SDK inference requires a macOS fetch host")
-    developer_dir = ctx.getenv("DEVELOPER_DIR") or _execute(ctx, ["/usr/bin/xcode-select", "-p"], "")
-    if ctx.attr.developer_dir and ctx.path(ctx.attr.developer_dir).realpath != ctx.path(developer_dir).realpath:
-        _error("developer_dir must match DEVELOPER_DIR/xcode-select so the upstream hub and package scans use the same Xcode")
+    developer_dir = _developer_dir(ctx)
     if ctx.getenv("TOOLCHAINS") not in [None, "", "XcodeDefault", "com.apple.dt.toolchain.XcodeDefault"]:
         _error("custom TOOLCHAINS are not supported by these Xcode SDK scan profiles")
     version = _execute(ctx, ["/usr/bin/xcrun", "xcodebuild", "-version"], developer_dir)
@@ -152,7 +162,7 @@ sdk_inventory = module_extension(
     implementation = _extension_impl,
     tag_classes = {"configure": tag_class(attrs = {
         "defines": attr.string_list(doc = "Additional Swift conditional compilation flags shared by the scan profiles."),
-        "developer_dir": attr.string(doc = "Xcode Developer directory. Defaults to DEVELOPER_DIR, then xcode-select."),
+        "developer_dir": attr.string(doc = "Explicit Xcode Developer directory. DEVELOPER_DIR or this attribute is required on macOS; when both are set they must agree."),
         "targets": attr.string_dict(mandatory = True, doc = "SDK name to compiler target triple; only these configurations are inferred."),
     })},
 )
@@ -174,4 +184,6 @@ system_sdk_modules = struct(
     empty = _EMPTY,
     read_upstream = _read_upstream,
     selection = _selection,
+    developer_dir = _developer_dir,
+    generate = _repo_impl,
 )

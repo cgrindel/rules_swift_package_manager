@@ -25,9 +25,11 @@ sdk_inventory.configure(
 use_repo(sdk_inventory, "rspm_sdk_inventory")
 ```
 
-There may be one configuration tag, owned by the root module. `developer_dir`
-defaults to `DEVELOPER_DIR`, then `xcode-select`. If set explicitly, it must match
-that environment so the upstream hub and this adapter use the same Xcode. Custom
+There may be one configuration tag, owned by the root module. On macOS, set
+`developer_dir` or `DEVELOPER_DIR`; if both are set they must agree. There is no
+implicit `xcode-select` fallback: subprocess output is not a tracked repository
+input. To follow the system selection, run `export DEVELOPER_DIR="$(xcode-select -p)"`
+before invoking Bazel. Its value is tracked with `repository_ctx.getenv`. Custom
 `TOOLCHAINS` selections are unsupported. Only that Xcode's SDK repository
 is read, even if the upstream hub lists other installed Xcodes. Configure extra
 SDKs with rules_swift's `system_sdk.configure_sdks` as well.
@@ -37,8 +39,20 @@ architecture, SDK, deployment target and additional conditional defines used by
 builds. These are explicit fetch-time inputs, not values recovered from Bazel's
 `--xcode_version`, transitions or arbitrary `--swiftcopt` flags. Unlisted build
 configurations are unsupported; use manual dependencies or disable inference for
-those packages. Apple compiler scans require a macOS fetch host. Vendored SDK
-BUILD files alone cannot run the compiler on Linux.
+those packages. Apple compiler scans require a macOS fetch host. On Linux and
+other non-macOS fetch hosts, the provider exports an empty inventory with a
+diagnostic; Apple inference is a no-op and does not fetch Xcode or invoke swiftc.
+This supports cross-platform packages built natively on Linux, not cross-compiling
+Apple targets from a Linux fetch host.
+
+Only **one target triple per SDK** is supported. An arm64 macOS profile does not
+cover the x86_64 slice of a universal build, and an arm64 simulator profile does
+not cover x86_64 simulators. Use separate profile configurations or disable
+inference for packages that must build for multiple CPUs of the same SDK.
+The consumer adds a profile guard that fails analysis when the selected Xcode,
+CPU, SDK or device/simulator environment is not covered. Deployment versions and
+arbitrary Swift flags still must be matched by the user; the guard cannot compare
+all compiler options with repository-time profiles.
 
 Profiles validate the target's OS and device/simulator environment against its SDK
 before fetching upstream SDK metadata. Supported scan CPUs are `arm64` and
@@ -62,7 +76,9 @@ package scans to use as well.
 - `scan.inputs_digest`: a content fingerprint of the watched SDK/compiler inputs,
   including logical paths, symlink destinations and directory membership,
   calculated once in this shared repository rather than once per package.
-- `diagnostic`: reserved for diagnostics; invalid provider configurations fail.
+- `scan.guard`: a dependency label that rejects unconfigured Apple build profiles.
+- `diagnostic`: explains skipped inference on non-macOS hosts; invalid Apple
+  provider configurations fail. Skipped profiles have `scan.host_supported = False`.
 
 SDK labels do not contain Xcode versions. Their definitions select the configured
 Xcode and architecture. Compiler identity is deliberately retained in `scan`:

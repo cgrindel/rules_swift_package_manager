@@ -11,6 +11,7 @@ def _render(upstream, repo_name, hub_label, configuration_labels, resolve_label,
     conditions = {}
     build = [
         'load("@bazel_skylib//lib:selects.bzl", "selects")',
+        'load("@rules_cc//cc:cc_library.bzl", "cc_library")',
         'package(default_visibility = ["//visibility:public"])',
         'exports_files(["modules.json"])',
         'config_setting(name = "compilation_fastbuild", values = {"compilation_mode": "fastbuild"})',
@@ -49,6 +50,15 @@ def _render(upstream, repo_name, hub_label, configuration_labels, resolve_label,
             }
         if refs:
             modules[module] = sorted(refs)
+    error = "SDK inference has no scan profile for this build's Xcode, CPU, SDK and device/simulator environment. Configured Xcode: {}. Configured targets: {}. Match these profiles or disable system_sdk_deps and supply manual dependencies.".format(
+        scan["xcode_version"].replace("\n", "; "),
+        ", ".join([sdk + "=" + triple for sdk, triple in sorted(scan["targets"].items())]),
+    )
+    build.append("cc_library(name = \"scan_profile\", deps = select({}, no_match_error = {}))".format(
+        repr({":sdk_" + sdk: [] for sdk in sorted(conditions)}),
+        repr(error),
+    ))
+    scan = dict(scan, guard = "@@{}//:scan_profile".format(repo_name))
     return struct(
         build = "\n".join(build) + "\n",
         metadata = {
@@ -60,4 +70,16 @@ def _render(upstream, repo_name, hub_label, configuration_labels, resolve_label,
         },
     )
 
-sdk_inventory_render = struct(render = _render)
+def _unsupported_host(host):
+    return struct(
+        build = 'exports_files(["modules.json"], visibility = ["//visibility:public"])\n',
+        metadata = {
+            "conditions": {},
+            "diagnostic": "Apple SDK inference is inactive on the {} fetch host; no Apple compiler or SDK is fetched.".format(host),
+            "modules": {},
+            "scan": {"host_supported": False},
+            "schema_version": 2,
+        },
+    )
+
+sdk_inventory_render = struct(render = _render, unsupported_host = _unsupported_host)
