@@ -5,7 +5,6 @@ closures are cached per package/product/platform across all consuming targets.
 """
 
 load("//config_settings/spm/platform:platforms.bzl", spm_platforms = "platforms")
-load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 
 def _field(value, name, default = None):
@@ -23,6 +22,7 @@ def _index(info):
         name = _field(info, "name"),
         targets = {_field(t, "name"): t for t in _field(info, "targets", [])},
         products = {_field(p, "name"): _field(p, "targets") for p in _field(info, "products", [])},
+        dependencies = {_field(d, "name").lower(): _field(d, "identity") for d in _field(info, "dependencies", [])},
     )
 
 def _reference(dependency):
@@ -67,11 +67,24 @@ def _walk(index, roots, platform):
                     external.append((kind, ref))
     return struct(targets = visited.values(), external = external)
 
-def _for_package(pkg_info, metadata, platforms):
+def _external_key(index, kind, ref):
+    name = _field(ref, "dep_name") if kind == "product" else _field(ref, "name")
+    identity = index.dependencies.get(name.lower()) if name else None
+    product = _field(ref, "product_name") if kind == "product" else name
+    return (identity, product) if identity else None
+
+def _resolve(pkg_info, metadata, platforms):
     local = _index(pkg_info)
     indexes = {identity: _index(info) for identity, info in metadata.items()}
     products = {}
     result = {}
+    missing = {}
+
+    # Each package/product is visited once per consuming target and platform.
+    # Use a worklist rather than recursion (which Starlark does not support).
+    limit = 1
+    for index in indexes.values():
+        limit += len(index.products)
     for target in pkg_info.targets:
         if target.type == "test":
             continue
@@ -79,19 +92,32 @@ def _for_package(pkg_info, metadata, platforms):
         for platform in sorted(platforms):
             closure = _walk(local, [target.name], platform)
             modules = {pkginfo_targets.module_name(t): True for t in closure.targets}
-            for kind, ref in closure.external:
-                dep_name = _field(ref, "dep_name") if kind == "product" else _field(ref, "name")
-                product_name = _field(ref, "product_name") if kind == "product" else dep_name
-                dep = pkginfo_dependencies.get_by_name(pkg_info.dependencies, dep_name)
-                if not dep or dep.identity not in indexes:
-                    continue
-                key = (dep.identity, product_name, platform)
-                if key not in products:
-                    index = indexes[dep.identity]
-                    product = _walk(index, index.products.get(product_name, []), platform)
-                    products[key] = [pkginfo_targets.module_name(t) for t in product.targets]
-                modules.update({name: True for name in products[key]})
+            pending = [_external_key(local, kind, ref) for kind, ref in closure.external]
+            visited = {}
+            for _ in range(limit):
+                if not pending:
+                    break
+                current = pending
+                pending = []
+                for key in current:
+                    if key == None or key in visited:
+                        continue
+                    visited[key] = True
+                    identity, product_name = key
+                    if identity not in indexes:
+                        missing[identity] = True
+                        continue
+                    index = indexes[identity]
+                    cache_key = (identity, product_name, platform)
+                    if cache_key not in products:
+                        products[cache_key] = _walk(index, index.products.get(product_name, []), platform)
+                    product = products[cache_key]
+                    modules.update({pkginfo_targets.module_name(t): True for t in product.targets})
+                    pending.extend([_external_key(index, kind, ref) for kind, ref in product.external])
             result[target.name][platform] = sorted(modules)
-    return result
+    return struct(modules = result, missing = sorted(missing))
 
-dependency_modules = struct(for_package = _for_package)
+dependency_modules = struct(
+    for_package = lambda pkg_info, metadata, platforms: _resolve(pkg_info, metadata, platforms).modules,
+    resolve = _resolve,
+)

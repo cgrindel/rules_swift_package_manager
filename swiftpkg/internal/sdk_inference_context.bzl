@@ -1,22 +1,17 @@
-"""Prepare source inference from an optional package-context SDK inventory.
-
-The provider and consumer can be merged independently. Until the provider adds
-sdk_modules to package contexts, inference remains a no-op even when opted in.
-"""
+"""Prepare compiler scans using the SDK provider and resolved package graph."""
 
 load("@bazel_skylib//lib:structs.bzl", "structs")
 load(":bazel_repo_names.bzl", "bazel_repo_names")
 load(":compiler_imports.bzl", "compiler_imports")
 load(":dependency_modules.bzl", "dependency_modules")
-load(":pkg_ctxs.bzl", "pkg_ctxs")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":repository_utils.bzl", "repository_utils")
 
 def _prepare(repository_ctx, pkg_ctx):
-    inventory = getattr(pkg_ctx, "sdk_modules", None)
-    if not pkg_ctx.system_sdk_deps or inventory == None or not inventory.modules:
+    if not pkg_ctx.system_sdk_deps:
         return pkg_ctx
-    if not getattr(inventory, "scan", None):
+    inventory = getattr(pkg_ctx, "sdk_modules", None)
+    if inventory == None or not inventory.scan:
         fail("SDK inference requires the compiler-profile inventory provider (schema 2).")
     pkg_info = pkg_ctx.pkg_info
 
@@ -26,17 +21,22 @@ def _prepare(repository_ctx, pkg_ctx):
     declared = json.decode(repository_ctx.read(repos_label)).get("repo_names", []) if repos_label else []
     own_name = repository_utils.package_name(repository_ctx)
     prefix = repository_ctx.name.removesuffix(own_name)
-    metadata = {}
-    for identity in pkg_ctxs.referenced_dependency_identities(pkg_info):
-        repo = bazel_repo_names.from_identity(identity)
-        if repo not in declared:
-            continue
-        label = Label("@@{}{}//:pkg_info.json".format(prefix, repo))
-        if repository_ctx.path(label).exists:
-            metadata[identity] = json.decode(repository_ctx.read(label))
     platforms = {entry["platform"]: True for entry in inventory.conditions.values()}
+    metadata = {}
+    attempted = {}
+    resolved = dependency_modules.resolve(pkg_info, metadata, platforms)
+    for _ in range(len(declared)):
+        pending = [identity for identity in resolved.missing if identity not in attempted and bazel_repo_names.from_identity(identity) in declared]
+        if not pending:
+            break
+        for identity in pending:
+            attempted[identity] = True
+            label = Label("@@{}{}//:pkg_info.json".format(prefix, bazel_repo_names.from_identity(identity)))
+            if repository_ctx.path(label).exists:
+                metadata[identity] = json.decode(repository_ctx.read(label))
+        resolved = dependency_modules.resolve(pkg_info, metadata, platforms)
     fields = structs.to_dict(pkg_ctx)
-    fields["dependency_modules"] = dependency_modules.for_package(pkg_info, metadata, platforms)
+    fields["dependency_modules"] = resolved.modules
     fields["source_scans"] = {}
     context = struct(**fields)
 
@@ -50,9 +50,9 @@ def _prepare(repository_ctx, pkg_ctx):
         if not sources:
             continue
         for src in sources:
-            contents = repository_ctx.read(src)
-            if "canImport" in contents and ("_version" in contents or "_underlyingVersion" in contents):
-                fail("Version-qualified canImport needs module version metadata unavailable during repository fetching ({}). Disable system_sdk_deps and supply manual deps for this package.".format(src))
+            # execute() does not track compiler input files. Keep these reads for
+            # local source changes as well as the provider's SDK fingerprint.
+            repository_ctx.read(src)
         records = compiler_imports.scan(repository_ctx, context, target, fields["dependency_modules"].get(target.name, {}))
         fields["source_scans"][target.name] = records
         reports[target.name] = {

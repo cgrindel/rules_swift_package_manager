@@ -222,7 +222,7 @@ BUILD file override bypasses generated declarations.\
 
     # Export the pkg_info.json
     exported = ["pkg_info.json"]
-    if hasattr(pkg_ctx, "source_scans"):
+    if pkg_ctx.source_scans != None:
         exported.append("sdk_inference.json")
     exports_files = scg.new_fn_call("exports_files", exported)
     bld_files.append(build_files.new(decls = [exports_files]))
@@ -241,9 +241,9 @@ BUILD file override bypasses generated declarations.\
                 pkg_ctx.bazel_target_mods,
             ),
         )
-    if hasattr(pkg_ctx, "source_scans"):
+    if pkg_ctx.source_scans != None:
         root_bld_file = dependency_normalization.build_file(root_bld_file)
-    build_files.write(repository_ctx, root_bld_file, pkg_info.path, diagnostic = getattr(pkg_ctx, "sdk_diagnostic", ""))
+    build_files.write(repository_ctx, root_bld_file, pkg_info.path)
 
 def _write_workspace_file(repository_ctx, repoDir):
     path = paths.join(repoDir, "WORKSPACE")

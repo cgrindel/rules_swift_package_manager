@@ -113,6 +113,8 @@ def _new(
             pkg_info,
             dep_minimum_os_versions,
         ),
+        dependency_modules = {},
+        source_scans = None,
     )
 
 def _referenced_dependency_identities(pkg_info):

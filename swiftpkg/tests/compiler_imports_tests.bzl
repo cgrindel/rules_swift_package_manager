@@ -29,7 +29,7 @@ def _fixture():
     fields["sdk_modules"] = struct(
         modules = {"Foundation": ["iPhoneSimulator"], "Testing": ["iPhoneSimulator"]},
         conditions = {"iPhoneSimulator": entry},
-        scan = {"defines": ["CUSTOM"], "developer_dir": "/Xcode/Developer", "sdks": {"iPhoneSimulator": "/SDK"}, "swiftc": "/Xcode/usr/bin/swiftc", "targets": {"iPhoneSimulator": "arm64-apple-ios17.0-simulator"}},
+        scan = {"defines": ["CUSTOM"], "developer_dir": "/Xcode/Developer", "environment": {"CPATH": "", "DEVELOPER_DIR": "/Xcode/Developer", "SDKROOT": ""}, "sdks": {"iPhoneSimulator": "/SDK"}, "swiftc": "/Xcode/usr/bin/swiftc", "targets": {"iPhoneSimulator": "arm64-apple-ios17.0-simulator"}},
     )
     return struct(context = struct(**fields), target = target, entry = entry)
 
@@ -77,18 +77,28 @@ def _prepare_test(ctx):
     def read(path):
         reads.append(str(path))
         if path == "repos.json":
-            return json.encode({"repo_names": ["swiftpkg_helpers"]})
+            return json.encode({"repo_names": ["swiftpkg_helpers", "swiftpkg_testing", "swiftpkg_unused"]})
         if str(path).endswith("swiftpkg_helpers//:pkg_info.json"):
-            return json.encode({"name": "Helpers", "products": [{"name": "Helpers", "targets": ["Testing"]}], "targets": [{"c99name": "Testing", "dependencies": [], "name": "Testing"}]})
-        return "import Testing\nimport Foundation\n"
+            return json.encode({
+                "dependencies": [{"identity": "testing", "name": "testing"}],
+                "name": "Helpers",
+                "products": [{"name": "Helpers", "targets": ["Helper"]}],
+                "targets": [{"c99name": "Helper", "dependencies": [{"product": {"dep_name": "testing", "product_name": "Testing"}}], "name": "Helper"}],
+            })
+        if str(path).endswith("swiftpkg_testing//:pkg_info.json"):
+            return json.encode({"name": "Testing", "products": [{"name": "Testing", "targets": ["Testing"]}], "targets": [{"c99name": "Testing", "name": "Testing"}]})
+        asserts.equals(env, "Sources/Consumer.swift", path)
 
-    # buildifier: disable=unused-variable
+        # This used to fail the broad substring-based version-check guard.
+        return '// canImport(Testing, _version: 1.0)\nlet irrelevant_version = "canImport"\nimport Testing\nimport Foundation\n'
+
     def execute(args, environment):
         calls.append(args)
         asserts.true(env, "-module-can-import" in args)
         asserts.true(env, "Testing" in args)
         asserts.true(env, "/Developer/usr/lib" in args)
         asserts.true(env, "/SDK/Developer/Library/Frameworks" in args)
+        asserts.equals(env, fixture.context.sdk_modules.scan["environment"], environment)
         return struct(return_code = 0, stdout = '{"imports": ["Testing", "Foundation"]}', stderr = "")
 
     repo = struct(
@@ -101,8 +111,13 @@ def _prepare_test(ctx):
         file = lambda p, contents: outputs.update({p: contents}),
     )
     result = sdk_inference_context.prepare(repo, fixture.context)
-    asserts.equals(env, 1, len([p for p in reads if p.endswith("pkg_info.json")]))
-    asserts.equals(env, ["Consumer", "Testing"], result.dependency_modules["Consumer"]["ios"])
+    asserts.equals(env, [
+        "repos.json",
+        "@@extension+swiftpkg_helpers//:pkg_info.json",
+        "@@extension+swiftpkg_testing//:pkg_info.json",
+        "Sources/Consumer.swift",
+    ], reads)
+    asserts.equals(env, ["Consumer", "Helper", "Testing"], result.dependency_modules["Consumer"]["ios"])
     asserts.equals(env, 2, len(calls))  # debug and fastbuild reuse identical arguments
     asserts.equals(env, 3, len(result.source_scans["Consumer"]))
     report = json.decode(outputs["sdk_inference.json"])
@@ -113,5 +128,40 @@ def _prepare_test(ctx):
 
 prepare_test = unittest.make(_prepare_test)
 
+def _aliases_test(ctx):
+    env = unittest.begin(ctx)
+    fixture = _fixture()
+    fields = structs.to_dict(fixture.context)
+    fields.update(
+        module_aliases = {"Consumer": "RenamedConsumer"},
+        module_alias_flags = {"Consumer": "RenamedConsumer", "Testing": "PackageTesting"},
+    )
+    args = compiler_imports.arguments(struct(**fields), fixture.target, fixture.entry, "debug", ["Consumer", "Testing"])
+    asserts.equals(env, "RenamedConsumer", args[args.index("-module-name") + 1])
+    asserts.equals(env, ["Consumer", "PackageTesting", "RenamedConsumer", "Testing"], [args[i + 1] for i in range(len(args)) if args[i] == "-module-can-import"])
+    asserts.equals(env, ["Consumer=RenamedConsumer", "Testing=PackageTesting"], [args[i + 1] for i in range(len(args)) if args[i] == "-module-alias"])
+    return unittest.end(env)
+
+aliases_test = unittest.make(_aliases_test)
+
+def _version_diagnostic_test(ctx):
+    env = unittest.begin(ctx)
+
+    # Captured from Swift's import prescan for _version and _underlyingVersion.
+    for kind in ["module", "Clang module"]:
+        diagnostic = "Sources/Consumer.swift:1:15: warning: cannot find user version number for {} 'Helpers'; version number ignored [#ModuleVersionMissing]".format(kind)
+        asserts.equals(env, "Helpers", compiler_imports.missing_version(diagnostic, ["Helpers"]))
+        asserts.equals(env, None, compiler_imports.missing_version(diagnostic, ["OtherPackage"]))
+    for stderr in [
+        "",
+        "1 | // canImport(Helpers, _version: 1.0)",
+        "Sources/Consumer.swift:2:1: warning: unrelated warning",
+        "Sources/Consumer.swift:1:15: warning: cannot find user version number for module 'Foundation'; version number ignored [#ModuleVersionMissing]",
+    ]:
+        asserts.equals(env, None, compiler_imports.missing_version(stderr, ["Helpers"]))
+    return unittest.end(env)
+
+version_diagnostic_test = unittest.make(_version_diagnostic_test)
+
 def compiler_imports_test_suite():
-    unittest.suite("compiler_imports_tests", arguments_test, prepare_test)
+    unittest.suite("compiler_imports_tests", arguments_test, prepare_test, aliases_test, version_diagnostic_test)

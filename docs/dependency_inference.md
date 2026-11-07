@@ -1,8 +1,7 @@
 # Dependency inference
 
-Source inference consumes the package-context inventory supplied by the SDK provider.
-The provider and consumer changes can merge in either order. Until the provider
-is present, opting in remains a no-op; no SDK dependencies are guessed or added.
+Source inference requires the SDK inventory provider and configured compiler
+profiles. Enabling inference without that provider fails with a diagnostic.
 
 `system_sdk_deps` opts source targets into SDK dependency generation from Swift
 imports, Objective-C/C imports and includes, and manifest `linkedFramework`
@@ -69,9 +68,8 @@ imports, including `#elseif`, `canImport`, compiler-version checks and custom
 flags. RSPM does not implement a second Swift lexer or Boolean evaluator.
 
 The root must configure [SDK compiler profiles](system_sdk_inventory.md), in
-addition to enabling `system_sdk_deps`. The provider and source-inference
-consumer are separate components; the consumer is a no-op until the provider
-supplies metadata. The provider alone does not generate source dependencies.
+addition to enabling `system_sdk_deps`. The provider alone does not generate
+source dependencies.
 
 For each target, scans use the configured compiler/SDK/target triple, root
 conditional defines, SwiftPM defines, traits, language mode, upcoming/experimental
@@ -79,9 +77,10 @@ features and module aliases. Debug, release and fastbuild are scanned separately
 identical command lines share results. Known dependency module names are supplied
 to `-module-can-import`, without building those dependencies. This supplies name
 availability, not package module versions or validation of their implementations.
-Sources containing version-qualified `canImport` checks are conservatively
-rejected because package module version metadata is unavailable. This safeguard
-can also reject comments mentioning those checks; use manual dependencies. SDK availability comes from the compiler's search paths.
+If Swift evaluates a version-qualified `canImport` check on a package module and
+reports missing version metadata, inference fails rather than silently accepting
+an ignored version constraint. Comments, strings and SDK checks are left to the
+compiler. SDK availability comes from the compiler's search paths.
 Developer framework search paths match generated libraries; test helper libraries
 can therefore infer XCTest and Testing without a blanket non-test exclusion.
 
@@ -90,6 +89,8 @@ This is a bounded fetch-time operation. It cannot observe arbitrary Bazel
 must match builds; disable inference for packages that need other configurations.
 Unsafe Swift manifest flags are rejected rather than silently interpreted in a
 different environment. Scan errors fail with the target and SDK/configuration.
+C++ interoperability enabled through Bazel features or target overrides is not
+passed to these prescans; packages that rely on it must use manual SDK dependencies.
 Generated sources and plugin-generated imports are not covered. Only the direct
 Swift imports are prescanned; the existing SDK targets supply their transitive
 SDK dependencies. This is not a full compiler dependency graph or dynamic Bazel
@@ -106,7 +107,8 @@ Manifest `linkedFramework` settings preserve platform and build-configuration
 conditions. SDK dependencies are deduplicated, including after target overrides,
 without changing select exclusions/defaults or unrelated dependencies. Package
 module names are resolved through their dependency products, preserving platform
-conditions and actual Clang module-map names.
+conditions and actual Clang module-map names across transitive package dependencies.
+Only metadata for reachable products is read, once per package repository.
 
 `sdk_inference.json` in each scanned package repository records compiler profiles,
 source files, discovered Swift imports by configuration and manifest frameworks.
@@ -116,6 +118,12 @@ Compiler and SDK paths used for scanning are watched and fingerprinted once by
 the shared provider; package repositories read that fingerprint. Configuration changes can
 rerun package generation; this does not promise identical outputs across hosts
 with different toolchains or eliminate all repository refetches.
+Each Swift target starts one compiler process per distinct SDK/configuration
+command, sequentially during fetching. Debug and fastbuild normally share a
+command, so this typically means two processes per target per configured SDK.
+Changing the configured Xcode invalidates every opted-in package's scans and can
+repeat its download and SwiftPM work. Host header-search environment variables
+are cleared using the provider's scan environment.
 
 ## Manual dependencies
 

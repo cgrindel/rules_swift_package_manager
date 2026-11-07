@@ -66,5 +66,52 @@ def _external_modules_test(ctx):
 
 external_modules_test = unittest.make(_external_modules_test)
 
+def _transitive_modules_test(ctx):
+    env = unittest.begin(ctx)
+    info = struct(name = "Consumer", products = [], dependencies = [pkginfos.new_dependency(identity = "provider", name = "provider")], targets = [
+        _target("Consumer", [_product_ref()]),
+    ])
+    metadata = {"provider": {
+        "dependencies": [{"identity": "testing", "name": "test-helpers"}],
+        "name": "Provider",
+        "products": [{"name": "Modules", "targets": ["Helper"]}],
+        "targets": [{
+            "c99name": "Helper",
+            "dependencies": [
+                {"product": {"condition": {"platforms": ["macos"]}, "dep_name": "test-helpers", "product_name": "TestSupport"}},
+            ],
+            "name": "Helper",
+        }],
+    }}
+    partial = dependency_modules.resolve(info, metadata, ["ios", "macos"])
+    asserts.equals(env, ["testing"], partial.missing)
+    asserts.equals(env, [], dependency_modules.resolve(info, metadata, ["ios"]).missing)
+    metadata["testing"] = {
+        "dependencies": [{"identity": "provider", "name": "provider"}],
+        "name": "Testing",
+        "products": [{"name": "TestSupport", "targets": ["Testing"]}],
+        "targets": [
+            {
+                "c99name": "Testing",
+                "dependencies": [
+                    {"target": {"target_name": "CObjC"}},
+                    # An external cycle must terminate without dropping other edges.
+                    {"product": {"dep_name": "provider", "product_name": "Modules"}},
+                ],
+                "name": "Testing",
+            },
+            {"c99name": "CObjC", "clang_src_info": {"module_name": "ObjectiveC"}, "name": "CObjC"},
+        ],
+    }
+    result = dependency_modules.resolve(info, metadata, ["ios", "macos"])
+    asserts.equals(env, [], result.missing)
+    asserts.equals(env, {"Consumer": {
+        "ios": ["Consumer", "Helper"],
+        "macos": ["Consumer", "Helper", "ObjectiveC", "Testing"],
+    }}, result.modules)
+    return unittest.end(env)
+
+transitive_modules_test = unittest.make(_transitive_modules_test)
+
 def dependency_modules_test_suite():
-    unittest.suite("dependency_modules_tests", local_modules_test, external_modules_test)
+    unittest.suite("dependency_modules_tests", local_modules_test, external_modules_test, transitive_modules_test)

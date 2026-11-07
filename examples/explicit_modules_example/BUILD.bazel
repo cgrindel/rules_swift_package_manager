@@ -33,8 +33,7 @@ ios_application(
     deps = [":Main"],
 )
 
-# The standalone consumer has no provider/report yet. The runner explicitly
-# executes this test once both components are present.
+# The runner explicitly checks the report with the inferred-modules config.
 sh_test(
     name = "inference_report_test",
     srcs = ["verify_inference.sh"],

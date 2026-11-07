@@ -43,8 +43,6 @@ For setup details and limitations, see the [migration notes].
 
 [migration notes]: /docs/rules_swift_4_migration.md
 
-Source inference requires the SDK inventory provider and its compiler profiles. During the
-independent rollout, `do_test` reports when that provider is absent and runs the
-implicit/default-explicit configurations. Once the provider is present, it also
-runs inferred modules and builds the iOS simulator app; inference failures are
-not skipped. The consumer's unit tests use inventory fixtures in either case.
+Source inference requires the SDK inventory provider and its compiler profiles.
+`do_test` always exercises inferred modules and builds the iOS simulator app;
+missing provider wiring or scan failures fail the test rather than skip coverage.

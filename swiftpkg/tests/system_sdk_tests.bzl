@@ -93,23 +93,23 @@ def _context(target, enabled = True, manual = {}, dependency_modules = {}):
         dependency_modules = dependency_modules,
     )
 
-def _missing_inventory_test(ctx):
+def _disabled_test(ctx):
     env = unittest.begin(ctx)
     target = _fixture()
     pkg_ctx = pkg_ctxs.new(
         pkg_info = pkginfos.new(name = "Example", path = ".", targets = [target]),
         repo_name = "swiftpkg_example",
-        system_sdk_deps = True,
+        system_sdk_deps = False,
     )
 
-    # Neither a missing provider nor an empty inventory may read package files.
+    # Disabled inference must not inspect the provider or read package files.
     repository_ctx = struct(read = lambda path: fail("Unexpected inference read: " + str(path)))
     for context in [pkg_ctx, _with_inventory(pkg_ctx, _inventory({}))]:
         asserts.equals(env, context, sdk_inference_context.prepare(repository_ctx, context))
         asserts.equals(env, [], system_sdk_deps.for_target(repository_ctx, context, target))
     return unittest.end(env)
 
-missing_inventory_test = unittest.make(_missing_inventory_test)
+disabled_test = unittest.make(_disabled_test)
 
 def _generated_deps_test(ctx):
     env = unittest.begin(ctx)
@@ -276,5 +276,5 @@ def _compiler_results_test(ctx):
 compiler_results_test = unittest.make(_compiler_results_test)
 
 def system_sdk_test_suite(name = "system_sdk_tests"):
-    unittest.suite("system_sdk_unit_tests", missing_inventory_test, generated_deps_test, regressions_test, sdk_identity_test, platform_exclusions_test, compiler_results_test)
+    unittest.suite("system_sdk_unit_tests", disabled_test, generated_deps_test, regressions_test, sdk_identity_test, platform_exclusions_test, compiler_results_test)
     native.test_suite(name = name, tests = [":system_sdk_unit_tests"])

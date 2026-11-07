@@ -26,12 +26,12 @@ def _source_imports(repository_ctx, target):
 def _excluded_modules(pkg_ctx, target):
     # Alias flags apply to this package's compilation. Resolved module names
     # below are platform-scoped, including names supplied by Clang module maps.
-    aliases = getattr(pkg_ctx, "module_alias_flags", {})
+    aliases = pkg_ctx.module_alias_flags
     unconditional = {name: True for name in aliases}
     unconditional.update({name: True for name in aliases.values()})
     return struct(
         unconditional = unconditional,
-        platforms = getattr(pkg_ctx, "dependency_modules", {}).get(target.name, {}),
+        platforms = pkg_ctx.dependency_modules.get(target.name, {}),
     )
 
 def _excluded(excluded, module, entry):
@@ -83,13 +83,11 @@ def _add_manifest_deps(inventory, target, excluded, deps):
                     deps[(module, label)] = kind
 
 def _for_target(repository_ctx, pkg_ctx, target):
-    if not getattr(pkg_ctx, "system_sdk_deps", False):
+    if not pkg_ctx.system_sdk_deps:
         return []
-    inventory = getattr(pkg_ctx, "sdk_modules", None)
-    if inventory == None or not inventory.modules:
-        return []
+    inventory = pkg_ctx.sdk_modules
     excluded = _excluded_modules(pkg_ctx, target)
-    deps = _source_deps(inventory, _source_imports(repository_ctx, target), excluded, getattr(pkg_ctx, "source_scans", {}).get(target.name, []))
+    deps = _source_deps(inventory, _source_imports(repository_ctx, target), excluded, (pkg_ctx.source_scans or {}).get(target.name, []))
     _add_manifest_deps(inventory, target, excluded, deps)
     return [
         bzl_selects.new(

@@ -1,4 +1,3 @@
-private let interpolationProbe = "\(8 / 2)"
 
 import Foundation
 import ObjCGreeter
