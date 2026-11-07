@@ -3,6 +3,7 @@
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal/sdk_inventory:inputs.bzl", "sdk_inventory_inputs")
 load("//swiftpkg/internal/sdk_inventory:parser.bzl", "system_sdk_inventory")
+load("//swiftpkg/internal/sdk_inventory:profiles.bzl", "sdk_scan_profiles")
 load("//swiftpkg/internal/sdk_inventory:render.bzl", "sdk_inventory_render")
 load("//swiftpkg/internal/sdk_inventory:repository.bzl", "system_sdk_modules")
 load(":build_fixtures.bzl", "HUB_BUILD", "XCODE_BUILD")
@@ -149,21 +150,85 @@ def _watch_cycle_test(ctx):
         def readdir(watch):
             asserts.equals(env, "yes", watch)
             reads.append(name)
-            return [path("/SDK/alias"), path("/SDK/module.modulemap")]
+            return ["/SDK/alias", "/SDK/module.modulemap"]
 
         return struct(
             exists = True,
             realpath = "/SDK" if name == "/SDK/alias" else name,
-            is_dir = name == "/SDK",
+            is_dir = name in ["/SDK", "/SDK/alias"],
             readdir = readdir,
         )
 
-    sdk_inventory_inputs.files(struct(path = path, watch = lambda p: watches.append(p)), ["/SDK"])
+    manifest = sdk_inventory_inputs.manifest(struct(path = path, watch = lambda p: watches.append(p)), ["/SDK"])
     asserts.equals(env, ["/SDK"], reads)
     asserts.true(env, "/SDK/module.modulemap" in watches)
+    asserts.equals(env, {
+        "files": ["/SDK/module.modulemap"],
+        "layout": [
+            ["/SDK", "/SDK", "directory"],
+            ["/SDK/alias", "/SDK", "directory"],
+            ["/SDK/module.modulemap", "/SDK/module.modulemap", "file"],
+        ],
+    }, manifest)
     return unittest.end(env)
 
 watch_cycle_test = unittest.make(_watch_cycle_test)
 
+def _profiles_test(ctx):
+    env = unittest.begin(ctx)
+    for sdk, triple in {
+        "AppleTVOS": "arm64-apple-tvos17.0",
+        "AppleTVSimulator": "arm64-apple-tvos17.0-simulator",
+        "MacOSX": "arm64-apple-macosx14.0",
+        "WatchOS": "arm64-apple-watchos10.0",
+        "WatchSimulator": "arm64-apple-watchos10.0-simulator",
+        "XROS": "arm64-apple-xros1.0",
+        "XRSimulator": "arm64-apple-xros1.0-simulator",
+        "iPhoneOS": "arm64-apple-ios17.0",
+        "iPhoneSimulator": "x86_64-apple-ios17.0-simulator",
+    }.items():
+        asserts.equals(env, None, sdk_scan_profiles.error(sdk, triple))
+    for sdk, triple in [
+        ("iPhoneSimulator", "arm64-apple-ios17.0"),
+        ("iPhoneOS", "arm64-apple-ios17.0-simulator"),
+        ("MacOSX", "arm64-apple-ios17.0"),
+        ("iPhoneOS", "arm64-apple-ios17.0-macabi"),
+        ("iPhoneOS", "x86_64-apple-ios17.0"),
+        ("MacOSX", "arm64e-apple-macosx14.0"),
+        ("MacOSX", "arm64-unknown-macosx14.0"),
+        ("MacOSX", "arm64-apple-macosx"),
+        ("Unknown", "arm64-apple-ios17.0"),
+    ]:
+        asserts.true(env, sdk_scan_profiles.error(sdk, triple) != None, triple)
+    environment = sdk_scan_profiles.environment("/Xcode/Developer")
+    asserts.equals(env, "/Xcode/Developer", environment["DEVELOPER_DIR"])
+    for variable in ["CPATH", "C_INCLUDE_PATH", "CPLUS_INCLUDE_PATH", "OBJC_INCLUDE_PATH", "SDKROOT"]:
+        asserts.equals(env, "", environment[variable])
+    return unittest.end(env)
+
+profiles_test = unittest.make(_profiles_test)
+
+def _symlink_retarget_test(ctx):
+    env = unittest.begin(ctx)
+
+    def manifest(destination):
+        def path(name):
+            return struct(
+                exists = True,
+                realpath = destination if name == "/SDK/current" else name,
+                is_dir = name == "/SDK",
+                readdir = lambda watch: ["/SDK/A", "/SDK/B", "/SDK/current"],
+            )
+
+        return sdk_inventory_inputs.manifest(struct(path = path, watch = lambda p: None), ["/SDK"])
+
+    before = manifest("/SDK/A")
+    after = manifest("/SDK/B")
+    asserts.equals(env, before["files"], after["files"])
+    asserts.true(env, before["layout"] != after["layout"])
+    return unittest.end(env)
+
+symlink_retarget_test = unittest.make(_symlink_retarget_test)
+
 def system_sdk_inventory_test_suite():
-    unittest.suite("system_sdk_inventory_tests", inventory_test, upstream_format_test, repository_test, format_variants_test, watch_cycle_test)
+    unittest.suite("system_sdk_inventory_tests", inventory_test, upstream_format_test, repository_test, format_variants_test, watch_cycle_test, profiles_test, symlink_retarget_test)

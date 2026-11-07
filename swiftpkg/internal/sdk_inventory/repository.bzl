@@ -2,6 +2,7 @@
 
 load(":inputs.bzl", "sdk_inventory_inputs")
 load(":parser.bzl", "system_sdk_inventory")
+load(":profiles.bzl", "sdk_scan_profiles")
 load(":render.bzl", "sdk_inventory_render")
 
 _SDK_BUILD = Label("@system_sdk//:BUILD.bazel")
@@ -12,7 +13,7 @@ def _error(reason):
     fail("SDK inference: {}. Configure sdk_inventory.configure(...) or disable system_sdk_deps for this package.".format(reason))
 
 def _execute(ctx, args, developer_dir):
-    result = ctx.execute(args, environment = {"DEVELOPER_DIR": developer_dir, "SDKROOT": ""})
+    result = ctx.execute(args, environment = sdk_scan_profiles.environment(developer_dir))
     if result.return_code:
         _error("{} failed:\n{}".format(args, result.stderr))
     return result.stdout.strip()
@@ -67,6 +68,10 @@ def _repo_impl(ctx):
     # swiftcopts. Require root-owned scan profiles rather than guessing them.
     if not ctx.attr.targets:
         _error("no compiler scan profiles were configured")
+    for sdk, triple in ctx.attr.targets.items():
+        error = sdk_scan_profiles.error(sdk, triple)
+        if error:
+            _error(error)
     if ctx.os.name.lower() != "mac os x":
         _error("compiler-driven Apple SDK inference requires a macOS fetch host")
     developer_dir = ctx.getenv("DEVELOPER_DIR") or _execute(ctx, ["/usr/bin/xcode-select", "-p"], "")
@@ -91,13 +96,14 @@ def _repo_impl(ctx):
             if ctx.path(path).exists:
                 roots.append(path)
     ctx.report_progress("Tracking configured SDK and compiler inputs")
-    inputs = sdk_inventory_inputs.files(ctx, roots)
+    inputs = sdk_inventory_inputs.manifest(ctx, roots)
     ctx.file("scan_inputs.json", json.encode(inputs))
     ctx.read(ctx.attr._fingerprint)
     digest = _execute(ctx, ["/usr/bin/python3", str(ctx.path(ctx.attr._fingerprint)), str(ctx.path("scan_inputs.json"))], developer_dir)
     scan = {
         "defines": ctx.attr.defines,
         "developer_dir": developer_dir,
+        "environment": sdk_scan_profiles.environment(developer_dir),
         "inputs_digest": digest,
         "sdks": sdks,
         "swift_version": _execute(ctx, [swiftc, "--version"], developer_dir),

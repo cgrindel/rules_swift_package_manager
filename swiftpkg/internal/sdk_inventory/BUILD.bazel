@@ -16,11 +16,19 @@ bzl_library(
     deps = [
         ":inputs",
         ":parser",
+        ":profiles",
         ":render",
     ],
 )
 
 exports_files(["fingerprint.py"])
+
+bzl_library(
+    name = "render",
+    srcs = ["render.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":profiles"],
+)
 
 bzl_library(
     name = "inputs",
@@ -35,7 +43,7 @@ bzl_library(
 )
 
 bzl_library(
-    name = "render",
-    srcs = ["render.bzl"],
+    name = "profiles",
+    srcs = ["profiles.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )

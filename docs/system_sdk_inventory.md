@@ -40,6 +40,16 @@ configurations are unsupported; use manual dependencies or disable inference for
 those packages. Apple compiler scans require a macOS fetch host. Vendored SDK
 BUILD files alone cannot run the compiler on Linux.
 
+Profiles validate the target's OS and device/simulator environment against its SDK
+before fetching upstream SDK metadata. Supported scan CPUs are `arm64` and
+`x86_64` (the latter only for macOS and simulators); other ABI variants require
+their own matching Bazel constraints and are rejected.
+
+Scans clear inherited `CPATH`, `C_INCLUDE_PATH`, `CPLUS_INCLUDE_PATH`, and
+`OBJC_INCLUDE_PATH`, and use the selected default toolchain. Extra host include
+paths are not supported scan inputs. The provider exports this environment for
+package scans to use as well.
+
 ## Contract
 
 `@rspm_sdk_inventory//:modules.json` has schema version 2. It contains:
@@ -50,6 +60,7 @@ BUILD files alone cannot run the compiler on Linux.
 - `scan`: the selected compiler, developer directory, compiler/Xcode versions,
   SDK paths, target triples and additional defines.
 - `scan.inputs_digest`: a content fingerprint of the watched SDK/compiler inputs,
+  including logical paths, symlink destinations and directory membership,
   calculated once in this shared repository rather than once per package.
 - `diagnostic`: reserved for diagnostics; invalid provider configurations fail.
 

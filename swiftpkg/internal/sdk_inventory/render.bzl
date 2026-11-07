@@ -1,6 +1,12 @@
 """Pure rendering of the SDK provider's BUILD and metadata contract."""
 
+load(":profiles.bzl", "sdk_scan_profiles")
+
 def _render(upstream, repo_name, hub_label, configuration_labels, resolve_label, scan):
+    for sdk, triple in scan["targets"].items():
+        error = sdk_scan_profiles.error(sdk, triple)
+        if error:
+            fail(error)
     modules = {}
     conditions = {}
     build = [
@@ -22,7 +28,7 @@ def _render(upstream, repo_name, hub_label, configuration_labels, resolve_label,
             sdk_name = name + "_platform"
             constraints = [resolve_label(c) for c in upstream.constraints[entry["sdk_repo"]][entry["sdk_condition"]]]
             arch = scan["targets"][sdk].split("-")[0]
-            cpu = {"arm64": "aarch64", "arm64e": "aarch64", "x86_64": "x86_64"}.get(arch)
+            cpu = {"arm64": "aarch64", "x86_64": "x86_64"}.get(arch)
             if not cpu:
                 fail("Unsupported SDK scan architecture: " + arch)
             constraints.append(resolve_label("@platforms//cpu:" + cpu))
