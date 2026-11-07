@@ -47,8 +47,9 @@ Apple targets from a Linux fetch host.
 
 Only **one target triple per SDK** is supported. An arm64 macOS profile does not
 cover the x86_64 slice of a universal build, and an arm64 simulator profile does
-not cover x86_64 simulators. Use separate profile configurations or disable
-inference for packages that must build for multiple CPUs of the same SDK.
+not cover x86_64 simulators. Universal or mixed-CPU builds must disable inference
+for affected packages and supply manual dependencies. Separate single-CPU builds
+can each use a matching profile configuration.
 The consumer adds a profile guard that fails analysis when the selected Xcode,
 CPU, SDK or device/simulator environment is not covered. Deployment versions and
 arbitrary Swift flags still must be matched by the user; the guard cannot compare
@@ -90,6 +91,9 @@ must invalidate package scans. Other installed Xcodes are not scan inputs.
 This remains a host-dependent, configured compiler operation. Changing its
 configuration can rerun package repository generation, including downloads; this
 is not a promise of zero refetches or identical output across arbitrary hosts.
+SDK-tree tracking is retained for invalidation correctness despite its cost;
+see the [cold-fetch and unchanged-build measurements](sdk_inference_benchmark.md)
+for watched file counts, bytes, and server-restart revalidation costs.
 
 The temporary adapter parses rules_swift's generated hub and selected-Xcode BUILD
 files. Parsing, repository I/O and pure output rendering are separate. Tests cover
