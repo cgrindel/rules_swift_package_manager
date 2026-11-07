@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/datatheorem/TrustKit.git",
       "state" : {
-        "revision" : "a6a36d7eae622c6375f091f3c307006b2556e90c",
-        "version" : "3.0.8"
+        "revision" : "f0c2612a6a8c06d2be1e3488dd9ad4f75da17d24",
+        "version" : "4.0.0"
       }
     }
   ],

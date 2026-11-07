@@ -19,10 +19,6 @@ class ConfigTests: XCTestCase {
                     ],
             ] as [String: Any]
 
-        TrustKit.setLoggerBlock {
-            print($0)
-        }
-
         _ = TrustKit(configuration: trustKitConfig)
     }
 }

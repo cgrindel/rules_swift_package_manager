@@ -6,8 +6,8 @@ let package = Package(
     name: "MySwiftPackage",
     dependencies: [
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.8.2"),
-        .package(url: "https://github.com/apple/swift-log", from: "1.16.2"),
-        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.64.5"),
+        .package(url: "https://github.com/apple/swift-log", from: "1.17.0"),
+        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.64.6"),
         .package(path: "third_party/my_local_package"),
         .package(path: "third_party/NotThatAmazingModule"),
     ]
