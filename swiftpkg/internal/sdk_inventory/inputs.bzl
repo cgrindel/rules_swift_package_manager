@@ -15,17 +15,26 @@ def _manifest(ctx, roots):
         pending = []
         for logical in current:
             path = ctx.path(logical)
-            ctx.watch(logical)
             if not path.exists:
+                ctx.watch(logical)
                 layout[logical] = [None, "missing"]
                 continue
             canonical = str(path.realpath)
-            layout[logical] = [canonical, "directory" if path.is_dir else "file"]
+
+            # Track aliases even when their physical destination was visited.
+            # Ordinary files are watched below only once; readdir watches
+            # directory membership without an additional directory watch.
+            if logical != canonical:
+                ctx.watch(logical)
+            is_dir = visited.get(canonical)
+            if is_dir == None:
+                is_dir = path.is_dir
+            layout[logical] = [canonical, "directory" if is_dir else "file"]
             if canonical in visited:
                 continue
-            visited[canonical] = True
-            physical = ctx.path(canonical)
-            if physical.is_dir:
+            visited[canonical] = is_dir
+            if is_dir:
+                physical = ctx.path(canonical)
                 pending.extend([str(p) for p in physical.readdir(watch = "yes")])
             else:
                 ctx.watch(canonical)

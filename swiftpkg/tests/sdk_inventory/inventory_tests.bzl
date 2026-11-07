@@ -161,7 +161,7 @@ def _watch_cycle_test(ctx):
 
     manifest = sdk_inventory_inputs.manifest(struct(path = path, watch = lambda p: watches.append(p)), ["/SDK"])
     asserts.equals(env, ["/SDK"], reads)
-    asserts.true(env, "/SDK/module.modulemap" in watches)
+    asserts.equals(env, ["/SDK/alias", "/SDK/module.modulemap"], watches)
     asserts.equals(env, {
         "files": ["/SDK/module.modulemap"],
         "layout": [

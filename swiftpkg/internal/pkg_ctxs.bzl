@@ -54,7 +54,6 @@ def _read(
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
         sdk_modules = sdk_inventory,
-        sdk_diagnostic = sdk_inventory.diagnostic,
         dep_minimum_os_versions = _read_dep_minimum_os_versions(
             repository_ctx,
             pkg_info,
@@ -80,8 +79,7 @@ def _new(
         dep_minimum_os_versions = {},
         system_sdk_deps = False,
         binary_target_deps = False,
-        sdk_modules = system_sdk_modules.empty,
-        sdk_diagnostic = ""):
+        sdk_modules = system_sdk_modules.empty):
     manual_target_deps.validate(pkg_info, target_deps)
 
     # A package's sources may import an aliased module under its original
@@ -109,7 +107,6 @@ def _new(
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
         sdk_modules = sdk_modules,
-        sdk_diagnostic = sdk_diagnostic,
         # Effective minimum OS versions per target, product and package. See
         # `minimum_os_versions.for_targets`.
         minimum_os_versions = minimum_os_versions.for_targets(

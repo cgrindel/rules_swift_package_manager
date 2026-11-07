@@ -81,6 +81,6 @@ captured rules_swift 4.2.1/4.2.2 output, harmless comments/metadata, exact rende
 and leaving an unrelated Xcode repository unread. Unsupported layouts and missing
 required aliases fail with a diagnostic, rather than silently disabling inference.
 Canonical sibling-repository naming remains an upstream compatibility limitation;
-replacement hubs are unsupported. A supported upstream metadata interface should
-replace this adapter. Compiler scanning itself does not require that interface,
-but mapping SDK imports to existing Bazel targets still needs a supported contract.
+replacement hubs are unsupported. This adapter works with released rules_swift;
+no upstream change is required. A supported upstream metadata interface could
+replace the BUILD parsing and canonical-name assumptions in the future.
