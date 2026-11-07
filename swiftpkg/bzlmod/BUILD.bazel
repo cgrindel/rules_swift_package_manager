@@ -30,3 +30,10 @@ bzl_library(
         "@bazel_skylib//lib:paths",
     ],
 )
+
+bzl_library(
+    name = "sdk_inventory",
+    srcs = ["sdk_inventory.bzl"],
+    visibility = ["//visibility:public"],
+    deps = ["//swiftpkg/internal/sdk_inventory:repository"],
+)
