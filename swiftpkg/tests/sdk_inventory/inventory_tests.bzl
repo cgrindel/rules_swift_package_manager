@@ -122,7 +122,7 @@ selects.config_setting_group(name = "sdk_MacOSX", match_all = ["@sdk//:xcode_27_
 selects.config_setting_group(name = "sdk_MacOSX_debug", match_all = ["@sdk//:xcode_27_0_0_27A266a", ":sdk_MacOSX_platform", "//:debug"])
 selects.config_setting_group(name = "sdk_MacOSX_release", match_all = ["@sdk//:xcode_27_0_0_27A266a", ":sdk_MacOSX_platform", "//:release"])
 selects.config_setting_group(name = "sdk_MacOSX_fastbuild", match_all = ["@sdk//:xcode_27_0_0_27A266a", ":sdk_MacOSX_platform", ":compilation_fastbuild"])
-cc_library(name = "scan_profile", deps = select({":sdk_MacOSX": []}, no_match_error = "SDK inference has no scan profile for this build\'s Xcode, CPU, SDK and device/simulator environment. Configured Xcode: Xcode 27.0; Build version 27A266a. Configured targets: MacOSX=arm64-apple-macosx14.0. Match these profiles or disable system_sdk_deps and supply manual dependencies."))
+cc_library(name = "scan_profile", deps = select({":sdk_MacOSX": [], "//config_settings/sdk_inference:allow_unmatched_profile": []}, no_match_error = "SDK inference has no scan profile for this build\'s Xcode, CPU, SDK and device/simulator environment. Configured Xcode: Xcode 27.0; Build version 27A266a. Configured targets: MacOSX=arm64-apple-macosx14.0. Include a MacOSX profile for exec tools/macros and a device profile for device builds. Match these profiles, disable system_sdk_deps, or set --@rules_swift_package_manager//config_settings/sdk_inference:strict_profile=false where blanket or manual SDK dependencies cover unmatched profiles."))
 ''', result.build)
     return unittest.end(env)
 
@@ -254,5 +254,62 @@ def _host_and_selection_test(ctx):
 
 host_and_selection_test = unittest.make(_host_and_selection_test)
 
+def _identity_tracking_test(ctx):
+    env = unittest.begin(ctx)
+    watched = []
+
+    # No readdir: default tracking must never traverse SDK/toolchain directories.
+    def path(name):
+        return struct(exists = True, realpath = name, is_dir = False, dirname = "/Xcode/Contents")
+
+    inputs = sdk_inventory_inputs.collect(
+        struct(path = path, watch = lambda p: watched.append(p)),
+        "/Xcode/Contents/Developer",
+        "/Toolchain/usr/bin/swiftc",
+        {"MacOSX": "/MacOSX.sdk", "iPhoneSimulator": "/iPhoneSimulator.sdk"},
+        False,
+    )
+    expected = ["/MacOSX.sdk/SDKSettings.json", "/Toolchain/usr/bin/swiftc", "/Xcode/Contents/version.plist", "/iPhoneSimulator.sdk/SDKSettings.json"]
+    asserts.equals(env, expected, inputs["files"])
+    asserts.equals(env, expected, sorted(watched))
+    return unittest.end(env)
+
+identity_tracking_test = unittest.make(_identity_tracking_test)
+
+def _full_tracking_test(ctx):
+    env = unittest.begin(ctx)
+    directories = ["/Toolchain/usr/lib", "/SDK", "/Platform/Developer/Library/Frameworks", "/Platform/Developer/usr/lib"]
+    reads = []
+    watched = []
+
+    def path(name):
+        def readdir(watch):
+            asserts.equals(env, "yes", watch)
+            reads.append(name)
+            return [name + "/content"]
+
+        return struct(
+            exists = True,
+            realpath = name,
+            dirname = "/Xcode/Contents" if name.endswith("/Contents/Developer") else struct(dirname = "/Toolchain/usr" if name.endswith("swiftc") else "/Platform/Developer"),
+            is_dir = name in directories,
+            readdir = readdir,
+        )
+
+    inputs = sdk_inventory_inputs.collect(
+        struct(path = path, watch = lambda p: watched.append(p)),
+        "/Xcode/Contents/Developer",
+        "/Toolchain/usr/bin/swiftc",
+        {"MacOSX": "/SDK"},
+        True,
+    )
+    asserts.equals(env, sorted(directories), sorted(reads))
+    expected = sorted(["/Toolchain/usr/bin/swiftc", "/Xcode/Contents/version.plist", "/SDK/SDKSettings.json"] + [d + "/content" for d in directories])
+    asserts.equals(env, expected, inputs["files"])
+    asserts.equals(env, expected, sorted(watched))
+    return unittest.end(env)
+
+full_tracking_test = unittest.make(_full_tracking_test)
+
 def system_sdk_inventory_test_suite():
-    unittest.suite("system_sdk_inventory_tests", inventory_test, upstream_format_test, repository_test, format_variants_test, watch_cycle_test, profiles_test, symlink_retarget_test, host_and_selection_test)
+    unittest.suite("system_sdk_inventory_tests", inventory_test, upstream_format_test, repository_test, format_variants_test, watch_cycle_test, profiles_test, symlink_retarget_test, host_and_selection_test, identity_tracking_test, full_tracking_test)

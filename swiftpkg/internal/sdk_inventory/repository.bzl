@@ -92,21 +92,11 @@ def _repo_impl(ctx):
     version = _execute(ctx, ["/usr/bin/xcrun", "xcodebuild", "-version"], developer_dir)
     upstream = _read_upstream(ctx, _SDK_BUILD, version)
     swiftc = _execute(ctx, ["/usr/bin/xcrun", "--find", "swiftc"], developer_dir)
-    ctx.watch(swiftc)
     sdks = {}
     for sdk in sorted(ctx.attr.targets):
         sdks[sdk] = _execute(ctx, ["/usr/bin/xcrun", "--sdk", sdk.lower(), "--show-sdk-path"], developer_dir)
-        ctx.watch(sdks[sdk] + "/SDKSettings.json")
-    roots = [swiftc, str(ctx.path(swiftc).dirname.dirname) + "/lib"] + sdks.values()
-    for sdk_path in sdks.values():
-        platform_developer = str(ctx.path(sdk_path).dirname.dirname)
-        for suffix in ["/Library/Frameworks", "/usr/lib"]:
-            path = platform_developer + suffix
-            ctx.watch(path)
-            if ctx.path(path).exists:
-                roots.append(path)
     ctx.report_progress("Tracking configured SDK and compiler inputs")
-    inputs = sdk_inventory_inputs.manifest(ctx, roots)
+    inputs = sdk_inventory_inputs.collect(ctx, developer_dir, swiftc, sdks, ctx.attr.full_sdk_tracking)
     ctx.file("scan_inputs.json", json.encode(inputs))
     ctx.read(ctx.attr._fingerprint)
     digest = _execute(ctx, ["/usr/bin/python3", str(ctx.path(ctx.attr._fingerprint)), str(ctx.path("scan_inputs.json"))], developer_dir)
@@ -114,6 +104,7 @@ def _repo_impl(ctx):
         "defines": ctx.attr.defines,
         "developer_dir": developer_dir,
         "environment": sdk_scan_profiles.environment(developer_dir),
+        "input_tracking": "full" if ctx.attr.full_sdk_tracking else "identity",
         "inputs_digest": digest,
         "sdks": sdks,
         "swift_version": _execute(ctx, [swiftc, "--version"], developer_dir),
@@ -139,6 +130,7 @@ _sdk_inventory_repo = repository_rule(
     attrs = {
         "defines": attr.string_list(),
         "developer_dir": attr.string(),
+        "full_sdk_tracking": attr.bool(default = False),
         "targets": attr.string_dict(),
         "_fingerprint": attr.label(default = Label(":fingerprint.py"), allow_single_file = True),
     },
@@ -155,7 +147,7 @@ def _extension_impl(module_ctx):
         fail("Specify at most one sdk_inventory.configure tag.")
     args = {}
     if tags:
-        args = {"defines": tags[0].defines, "developer_dir": tags[0].developer_dir, "targets": tags[0].targets}
+        args = {"defines": tags[0].defines, "developer_dir": tags[0].developer_dir, "full_sdk_tracking": tags[0].full_sdk_tracking, "targets": tags[0].targets}
     _sdk_inventory_repo(name = "rspm_sdk_inventory", **args)
 
 sdk_inventory = module_extension(
@@ -163,6 +155,7 @@ sdk_inventory = module_extension(
     tag_classes = {"configure": tag_class(attrs = {
         "defines": attr.string_list(doc = "Additional Swift conditional compilation flags shared by the scan profiles."),
         "developer_dir": attr.string(doc = "Explicit Xcode Developer directory. DEVELOPER_DIR or this attribute is required on macOS; when both are set they must agree."),
+        "full_sdk_tracking": attr.bool(default = False, doc = "Recursively watch SDK and toolchain contents. Default identity tracking assumes an unmodified Xcode installation; enable this for in-place SDK/toolchain edits."),
         "targets": attr.string_dict(mandatory = True, doc = "SDK name to compiler target triple; only these configurations are inferred."),
     })},
 )

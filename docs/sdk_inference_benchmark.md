@@ -18,7 +18,7 @@ installed. They are not a Firebase or large dependency-graph benchmark.
 - These are individual local observations, not a controlled comparison of
   implementations or a prediction of CI performance.
 
-## Results
+## Original full-tracking report test
 
 | Invocation | Wall time | Inventory regenerated? | Package prescans rerun? |
 | --- | ---: | --- | --- |
@@ -42,22 +42,70 @@ well as startup and ordinary reanalysis. Its 43.62 seconds must not be attribute
 entirely to hashing SDK files. The profile shows no inventory implementation or
 package scan execution, and the test result was cached.
 
-## Decision and limits
+## Controlled tracking comparison
 
-Keep SDK/compiler input tracking so changed compiler or SDK contents invalidate
-the fetch-time result. This has a significant first-fetch and restarted-server
-cost, even though the inventory is shared across packages. It is not equivalent
-to watching only Xcode's version string. Changing the configured Xcode or watched
-inputs can also regenerate opted-in packages, including download and SwiftPM
-work. No zero-refetch or cross-host reproducibility guarantee is made.
+A follow-up on the same machine used three copies of the same example and a new
+output base per copy. The modes were `system_sdk_deps = False`, inference enabled
+with default identity tracking, and inference enabled with
+`full_sdk_tracking = True`. The target was the generated package's `BUILD.bazel`
+source file, forcing package generation without compiling the application, SDK
+modules or a test runner. All modes used the same flags and two SDK profiles.
 
-Xcode 27.2 CI remains the authoritative Apple integration check. A larger-package
-benchmark is still needed to characterize the additional per-target scan cost.
+| Tracking mode | Fresh output base | Unchanged, same server | Unchanged, restarted server |
+| --- | ---: | ---: | ---: |
+| Inference disabled | 4.86 s | 0.17 s | 1.28 s |
+| Identity (default) | 9.66 s | 0.19 s | 1.46 s |
+| Full contents (opt-in) | 248.21 s | 0.65 s | 43.42 s |
+
+The full provider took 243.18 seconds, with 228.94 seconds in traversal/watch
+registration. Identity tracking took 5.44 seconds in the provider, including
+0.29 seconds in traversal/watch registration. The two targets' package prescans
+took 0.49 seconds with identity tracking and 0.50 seconds with full tracking.
+Neither the provider implementation nor the package prescans reran after restart.
+The disabled control did not fetch the inventory.
+
+| Watched manifest | Identity | Full |
+| --- | ---: | ---: |
+| Canonical files | 4 | 48,338 |
+| Logical layout entries | 4 | 71,206 |
+| Logical content bytes | 173,129,537 | 3,670,254,703 |
+| `scan_inputs.json` bytes | 1,339 | 34,255,052 |
+
+The default's four files are the compiler binary, Xcode version file and two SDK
+settings files. The compiler resolves to a large binary, so identity tracking
+still hashes about 173 MB; it is not free. The additional full-tracking file
+compared with the original run is Xcode's version file.
+
+The full restart exceeded the disabled control by 42.14 seconds, while identity
+tracking exceeded it by 0.18 seconds. Along with the absence of regenerated
+repositories, this strongly implicates input revalidation in the full mode's
+restart cost. The difference still includes other loading/reanalysis work and
+must not be described as an isolated hashing measurement.
+
+These were single sequential runs (disabled, identity, full), with other local
+Bazel validation paused. Shared download/repository caches and OS caches were
+retained, and the order was not randomized. The target differs from the original
+report-test measurement above, so compare modes within this table rather than
+attributing changes between the two experiments to the implementation alone.
+
+## Tracking policy
+
+Full tracking is now opt-in (`sdk_inventory.configure(full_sdk_tracking = True)`).
+The default watches and fingerprints only the compiler binary, Xcode's
+`Contents/version.plist`, and each configured SDK's `SDKSettings.json`. It assumes
+an unmodified Xcode installation; in-place edits to SDK headers, developer
+frameworks or toolchain libraries require full tracking to invalidate scans.
+
+Changing the configured Xcode or tracked inputs can regenerate opted-in packages,
+including download and SwiftPM work. No zero-refetch or cross-host reproducibility
+guarantee is made. Xcode 27.2 CI remains the authoritative Apple integration check.
+A larger-package benchmark is still needed to characterize per-target scan cost.
 
 ## Reproducing
 
 Run from `examples/explicit_modules_example` with both provider and consumer
-installed. Select a concrete Xcode path appropriate for the machine:
+installed. Set `full_sdk_tracking = True` on `sdk_inventory.configure(...)` to
+reproduce the original full-tracking measurement; omit it to use identity tracking. Select a concrete Xcode path appropriate for the machine:
 
 ```sh
 export DEVELOPER_DIR=/Applications/Xcode-27.0.0.app/Contents/Developer
@@ -82,3 +130,20 @@ Inspect `scan_inputs.json` in the generated `rspm_sdk_inventory` repository to
 count `files` and `layout`. Sum the file sizes for `files`, which contains resolved
 paths with directory cycles and aliases removed. Preserve all three profiles and
 logs; a warm invocation alone does not measure cold input tracking.
+
+For the controlled comparison, use three copies of the fixture, each with a
+`local_path_override` pointing to the same ruleset checkout and the same Bazel rc
+settings. Change only `system_sdk_deps` and `full_sdk_tracking` as described above.
+For each mode, allocate a new output base and use the same cold/warm/shutdown/restart
+sequence, replacing the test command with:
+
+```sh
+/usr/bin/time -p bazel --output_base="$benchmark_output_base" build \
+  --config=inferred_modules --xcode_version=27.0.0 \
+  @swiftpkg_explicitmodulesfixture//:BUILD.bazel \
+  --profile="$benchmark_output_base/cold.profile.gz"
+```
+
+This intentionally requests a source-file target: its repository is generated,
+but no compilation actions are executed. Preserve the profiles and manifest sizes
+before running additional builds in those output bases.

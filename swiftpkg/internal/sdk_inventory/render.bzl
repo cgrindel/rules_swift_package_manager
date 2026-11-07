@@ -50,12 +50,17 @@ def _render(upstream, repo_name, hub_label, configuration_labels, resolve_label,
             }
         if refs:
             modules[module] = sorted(refs)
-    error = "SDK inference has no scan profile for this build's Xcode, CPU, SDK and device/simulator environment. Configured Xcode: {}. Configured targets: {}. Match these profiles or disable system_sdk_deps and supply manual dependencies.".format(
+    error = "SDK inference has no scan profile for this build's Xcode, CPU, SDK and device/simulator environment. Configured Xcode: {}. Configured targets: {}. Include a MacOSX profile for exec tools/macros and a device profile for device builds. Match these profiles, disable system_sdk_deps, or set --@rules_swift_package_manager//config_settings/sdk_inference:strict_profile=false where blanket or manual SDK dependencies cover unmatched profiles.".format(
         scan["xcode_version"].replace("\n", "; "),
         ", ".join([sdk + "=" + triple for sdk, triple in sorted(scan["targets"].items())]),
     )
+    profiles = {":sdk_" + sdk: [] for sdk in sorted(conditions)}
+
+    # This branch permits unmatched profiles only when explicitly requested.
+    # Multiple matches are unambiguous: all branches have the same empty value.
+    profiles[resolve_label("//config_settings/sdk_inference:allow_unmatched_profile")] = []
     build.append("cc_library(name = \"scan_profile\", deps = select({}, no_match_error = {}))".format(
-        repr({":sdk_" + sdk: [] for sdk in sorted(conditions)}),
+        repr(profiles),
         repr(error),
     ))
     scan = dict(scan, guard = "@@{}//:scan_profile".format(repo_name))
