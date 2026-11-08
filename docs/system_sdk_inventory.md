@@ -133,8 +133,7 @@ For in-place SDK/toolchain development, set `full_sdk_tracking = True` on
 `sdk_inventory.configure(...)`. This additionally traverses and watches the
 configured SDK trees, toolchain libraries and developer framework directories,
 and fingerprints their files and layout. It costs substantially more at fetch
-time and when revalidating repository inputs after a server restart. See the
-[cold-fetch and unchanged-build measurements](sdk_inference_benchmark.md).
+time and when revalidating repository inputs after a server restart.
 
 The temporary adapter parses rules_swift's generated hub and selected-Xcode BUILD
 files. Parsing, repository I/O and pure output rendering are separate. Tests cover
