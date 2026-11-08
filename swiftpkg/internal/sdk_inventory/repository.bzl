@@ -11,7 +11,13 @@ _INVENTORY = Label("@rspm_sdk_inventory//:modules.json")
 _EMPTY = struct(modules = {}, conditions = {}, diagnostic = "", scan = {})
 
 def _error(reason):
-    fail("SDK inference: {}. Configure sdk_inventory.configure(...) or disable system_sdk_deps for this package.".format(reason))
+    fail("SDK inference: {}.".format(reason))
+
+def _config_error(reason):
+    fail("""\
+SDK inference: {}. Configure sdk_inventory.configure(...) or disable \
+system_sdk_deps for this package.\
+""".format(reason))
 
 def _execute(ctx, args, developer_dir):
     result = ctx.execute(args, environment = sdk_scan_profiles.environment(developer_dir))
@@ -23,9 +29,9 @@ def _developer_dir(ctx):
     environment = ctx.getenv("DEVELOPER_DIR")
     configured = ctx.attr.developer_dir
     if not environment and not configured:
-        _error("set DEVELOPER_DIR or sdk_inventory.configure(developer_dir = ...) explicitly; xcode-select is not a tracked repository input")
+        _config_error("set DEVELOPER_DIR or sdk_inventory.configure(developer_dir = ...) explicitly; xcode-select is not a tracked repository input")
     if environment and configured and ctx.path(environment).realpath != ctx.path(configured).realpath:
-        _error("developer_dir must match DEVELOPER_DIR when both are specified")
+        _config_error("developer_dir must match DEVELOPER_DIR when both are specified")
     return environment or configured
 
 def _selection(hub, version_output):
@@ -43,7 +49,7 @@ def _selection(hub, version_output):
     condition = ":xcode_" + "_".join(version + [build.replace("-", "_")])
     branches = hub.get("all_modules")
     if not branches or condition not in branches:
-        _error("the configured Xcode ({}) is absent from the system_sdk hub".format(condition))
+        _config_error("the configured Xcode ({}) is absent from the system_sdk hub".format(condition))
     actual = branches[condition]
     repo, sep, target = actual.partition("//:")
     if not sep or not repo.startswith("@system_sdk_xcode_") or target != "all_modules":
@@ -82,14 +88,14 @@ def _repo_impl(ctx):
         ctx.file("modules.json", json.encode(result.metadata))
         return
     if not ctx.attr.targets:
-        _error("no compiler scan profiles were configured")
+        _config_error("no compiler scan profiles were configured")
     for sdk, triple in ctx.attr.targets.items():
         error = sdk_scan_profiles.error(sdk, triple)
         if error:
-            _error(error)
+            _config_error(error)
     developer_dir = _developer_dir(ctx)
     if ctx.getenv("TOOLCHAINS") not in [None, "", "XcodeDefault", "com.apple.dt.toolchain.XcodeDefault"]:
-        _error("custom TOOLCHAINS are not supported by these Xcode SDK scan profiles")
+        _config_error("custom TOOLCHAINS are not supported by these Xcode SDK scan profiles")
     version = _execute(ctx, ["/usr/bin/xcrun", "xcodebuild", "-version"], developer_dir)
     upstream = _read_upstream(ctx, _SDK_BUILD, version)
     swiftc = _execute(ctx, ["/usr/bin/xcrun", "--find", "swiftc"], developer_dir)
@@ -122,7 +128,7 @@ def _repo_impl(ctx):
         scan,
     )
     if sorted(result.metadata["conditions"]) != sorted(ctx.attr.targets):
-        _error("a configured scan SDK is absent from the rules_swift inventory; also configure system_sdk.configure_sdks")
+        _config_error("a configured scan SDK is absent from the rules_swift inventory; also configure system_sdk.configure_sdks")
     build_files.write(ctx, result.build, "")
     ctx.file("modules.json", json.encode(result.metadata))
 
