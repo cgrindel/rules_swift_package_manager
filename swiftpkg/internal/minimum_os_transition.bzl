@@ -158,6 +158,10 @@ def _actual(ctx):
     return ctx.attr.deps[0]
 
 _minimum_os_attrs = {
+    "apple_platform": attr.bool(
+        default = True,
+        doc = "Whether the target platform is Apple's; set by the macros below.",
+    ),
     "deps": attr.label_list(
         aspects = [swift_clang_module_aspect],
         mandatory = True,
@@ -178,10 +182,6 @@ _minimum_os_attrs = {
     ),
     "watchos_minimum_os": attr.string(
         doc = "The package minimum deployment target for watchOS.",
-    ),
-    "apple_platform": attr.bool(
-        default = True,
-        doc = "Whether the target platform is Apple's; set by the macros below.",
     ),
     "_allowlist_function_transition": attr.label(
         default = "@bazel_tools//tools/allowlists/function_transition_allowlist",
