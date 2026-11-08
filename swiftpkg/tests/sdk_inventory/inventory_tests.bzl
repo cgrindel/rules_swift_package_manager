@@ -97,24 +97,43 @@ cc_library(
 """
 
 def _alias(name, branches):
-    return "alias(\n    name = " + json.encode(name) + ",\n    actual = select({\n" + "\n".join([
+    entries = "\n".join([
         "        " + json.encode(k) + ": " + json.encode(v) + ","
         for k, v in branches.items()
-    ]) + "\n    }),\n)\n"
+    ])
+    return (
+        "alias(\n    name = " + json.encode(name) +
+        ",\n    actual = select({\n" + entries + "\n    }),\n)\n"
+    )
 
 def _sdk_alias(name, sdks):
-    return _alias(name, {":" + sdk + "_sdk": ":" + sdk + "_" + name for sdk in sdks})
+    branches = {":" + sdk + "_sdk": ":" + sdk + "_" + name for sdk in sdks}
+    return _alias(name, branches)
 
 def _inventory_test(ctx):
     env = unittest.begin(ctx)
-    names = ["Foundation", "UIKit", "Darwin", "Dispatch", "NewModule", "ExcludedModule", "DeviceOnly"]
+    names = [
+        "Foundation",
+        "UIKit",
+        "Darwin",
+        "Dispatch",
+        "NewModule",
+        "ExcludedModule",
+        "DeviceOnly",
+    ]
     hub_text = "".join([
-        _alias(name, {":xcode_1": "@system_sdk_xcode_1//:" + name, ":xcode_2": "@system_sdk_xcode_2//:" + name})
+        _alias(name, {
+            ":xcode_1": "@system_sdk_xcode_1//:" + name,
+            ":xcode_2": "@system_sdk_xcode_2//:" + name,
+        })
         for name in names
     ])
     all_sdks = ["MacOSX", "iPhoneOS", "iPhoneSimulator"]
     first = "".join([_sdk_alias(n, all_sdks) for n in names])
-    second = "".join([_sdk_alias(n, all_sdks) for n in ["Foundation", "Darwin", "Dispatch"]])
+    second = "".join([
+        _sdk_alias(n, all_sdks)
+        for n in ["Foundation", "Darwin", "Dispatch"]
+    ])
     second += _sdk_alias("UIKit", ["iPhoneOS", "iPhoneSimulator"])
     second += _sdk_alias("ExcludedModule", ["MacOSX"])
     second += _sdk_alias("DeviceOnly", ["iPhoneOS"])
@@ -130,10 +149,17 @@ def _inventory_test(ctx):
     asserts.equals(env, 4, len(result["DeviceOnly"]))
     asserts.equals(env, 3, len(result["NewModule"]))
     asserts.equals(env, "ios", result["DeviceOnly"][-1]["platform"])
-    asserts.equals(env, ":iPhoneOS_sdk", result["DeviceOnly"][-1]["sdk_condition"])
-    asserts.equals(env, {}, system_sdk_inventory.aliases('system_module_group(name = "all_modules")'))
-    asserts.equals(env, None, system_sdk_inventory.aliases('alias(name = "Foundation", actual = ":custom")'))
-    asserts.equals(env, None, system_sdk_inventory.aliases('alias(\nname = "X",\nactual = ":X",\n)'))
+    asserts.equals(
+        env,
+        ":iPhoneOS_sdk",
+        result["DeviceOnly"][-1]["sdk_condition"],
+    )
+    all_modules_only = 'system_module_group(name = "all_modules")'
+    asserts.equals(env, {}, system_sdk_inventory.aliases(all_modules_only))
+    custom_alias = 'alias(name = "Foundation", actual = ":custom")'
+    asserts.equals(env, None, system_sdk_inventory.aliases(custom_alias))
+    non_select_alias = 'alias(\nname = "X",\nactual = ":X",\n)'
+    asserts.equals(env, None, system_sdk_inventory.aliases(non_select_alias))
     compact = system_sdk_modules.decode(json.encode({
         "conditions": {"0": {"condition": "//:macos"}},
         "diagnostic": "",
@@ -141,7 +167,11 @@ def _inventory_test(ctx):
         "scan": {},
         "schema_version": 2,
     }))
-    asserts.equals(env, [{"condition": "//:macos"}], [compact.conditions[i] for i in compact.modules["Foundation"]])
+    foundation_conditions = [
+        compact.conditions[i]
+        for i in compact.modules["Foundation"]
+    ]
+    asserts.equals(env, [{"condition": "//:macos"}], foundation_conditions)
     asserts.equals(env, [], compact.modules.get("Unknown", []))
     return unittest.end(env)
 
@@ -152,14 +182,41 @@ def _upstream_format_test(ctx):
     hub = system_sdk_inventory.aliases(HUB_BUILD)
     sdk = system_sdk_inventory.aliases(XCODE_BUILD)
     constraints = system_sdk_inventory.sdk_constraints(XCODE_BUILD)
-    result = system_sdk_inventory.inventory(hub, {"@system_sdk_xcode_27_0_0_27A266a": sdk})
+    result = system_sdk_inventory.inventory(
+        hub,
+        {"@system_sdk_xcode_27_0_0_27A266a": sdk},
+    )
     asserts.equals(env, ["Dispatch", "Foundation", "UIKit"], sorted(result))
-    asserts.equals(env, ["ios", "ios"], [e["platform"] for e in result["UIKit"]])
-    asserts.equals(env, ["device", "simulator"], [e["environment"] for e in result["UIKit"]])
+    asserts.equals(
+        env,
+        ["ios", "ios"],
+        [e["platform"] for e in result["UIKit"]],
+    )
+    asserts.equals(
+        env,
+        ["device", "simulator"],
+        [e["environment"] for e in result["UIKit"]],
+    )
     asserts.equals(env, ["@platforms//os:macos"], constraints[":MacOSX_sdk"])
-    asserts.equals(env, ["@platforms//os:ios", "@apple_support//constraints:simulator"], constraints[":iPhoneSimulator_sdk"])
-    asserts.equals(env, None, system_sdk_inventory.sdk_constraints(XCODE_BUILD.replace("@platforms//os:macos", "@unknown//:os")))
-    asserts.equals(env, None, system_sdk_inventory.aliases(HUB_BUILD.replace("actual = select({", "actual = unexpected({")))
+    asserts.equals(
+        env,
+        ["@platforms//os:ios", "@apple_support//constraints:simulator"],
+        constraints[":iPhoneSimulator_sdk"],
+    )
+    unknown_os_build = XCODE_BUILD.replace(
+        "@platforms//os:macos",
+        "@unknown//:os",
+    )
+    asserts.equals(
+        env,
+        None,
+        system_sdk_inventory.sdk_constraints(unknown_os_build),
+    )
+    unexpected_hub = HUB_BUILD.replace(
+        "actual = select({",
+        "actual = unexpected({",
+    )
+    asserts.equals(env, None, system_sdk_inventory.aliases(unexpected_hub))
     return unittest.end(env)
 
 upstream_format_test = unittest.make(_upstream_format_test)
@@ -168,38 +225,73 @@ def _repository_test(ctx):
     env = unittest.begin(ctx)
     sdk_build = Label("@system_sdk//:BUILD.bazel")
     reads = []
+    unused_branch = (
+        '        ":xcode_unused": ' +
+        '"@system_sdk_xcode_unused//:all_modules",'
+    )
 
-    # A broken second Xcode must never be fetched merely because it is installed.
-    hub = HUB_BUILD.replace("    }),", '        ":xcode_unused": "@system_sdk_xcode_unused//:all_modules",\n    }),')
+    # A broken second Xcode must never be fetched merely because it is
+    # installed.
+    hub = HUB_BUILD.replace("    }),", unused_branch + "\n    }),")
 
     # Only the all_modules branch is needed to choose the repository; retain
     # correctly named aliases in the other blocks.
-    hub = HUB_BUILD.replace('"@system_sdk_xcode_27_0_0_27A266a//:all_modules",', '"@system_sdk_xcode_27_0_0_27A266a//:all_modules",\n        ":xcode_unused": "@system_sdk_xcode_unused//:all_modules",')
+    all_modules_branch = '"@system_sdk_xcode_27_0_0_27A266a//:all_modules",'
+    hub = HUB_BUILD.replace(
+        all_modules_branch,
+        all_modules_branch + "\n" + unused_branch,
+    )
 
     def read(label):
         reads.append(str(label))
         if label == sdk_build:
             return hub
-        asserts.true(env, "system_sdk_xcode_27_0_0_27A266a//:" in str(label), str(label))
+        asserts.true(
+            env,
+            "system_sdk_xcode_27_0_0_27A266a//:" in str(label),
+            str(label),
+        )
         return XCODE_BUILD
 
-    upstream = system_sdk_modules.read_upstream(struct(read = read), sdk_build, "Xcode 27.0\nBuild version 27A266a")
+    xcode_version = "Xcode 27.0\nBuild version 27A266a"
+    upstream = system_sdk_modules.read_upstream(
+        struct(read = read),
+        sdk_build,
+        xcode_version,
+    )
     asserts.equals(env, 2, len(reads))
-    scan = {"targets": {"MacOSX": "arm64-apple-macosx14.0"}, "xcode_version": "Xcode 27.0\nBuild version 27A266a"}
-    result = sdk_inventory_render.render(upstream, "inventory", "@sdk//:", {"debug": "//:debug", "release": "//:release"}, lambda x: x, scan)
-    asserts.equals(env, {
-        "conditions": {"MacOSX": {
-            "condition": "@@inventory//:sdk_MacOSX",
-            "configurations": {"debug": "@@inventory//:sdk_MacOSX_debug", "fastbuild": "@@inventory//:sdk_MacOSX_fastbuild", "release": "@@inventory//:sdk_MacOSX_release"},
-            "environment": "device",
-            "platform": "macos",
-            "sdk": "MacOSX",
-        }},
+    scan = {
+        "targets": {"MacOSX": "arm64-apple-macosx14.0"},
+        "xcode_version": xcode_version,
+    }
+    result = sdk_inventory_render.render(
+        upstream,
+        "inventory",
+        "@sdk//:",
+        {"debug": "//:debug", "release": "//:release"},
+        lambda x: x,
+        scan,
+    )
+    expected_metadata = {
+        "conditions": {
+            "MacOSX": {
+                "condition": "@@inventory//:sdk_MacOSX",
+                "configurations": {
+                    "debug": "@@inventory//:sdk_MacOSX_debug",
+                    "fastbuild": "@@inventory//:sdk_MacOSX_fastbuild",
+                    "release": "@@inventory//:sdk_MacOSX_release",
+                },
+                "environment": "device",
+                "platform": "macos",
+                "sdk": "MacOSX",
+            },
+        },
         "diagnostic": "",
         "modules": {"Dispatch": ["MacOSX"], "Foundation": ["MacOSX"]},
         "scan": dict(scan, guard = "@@inventory//:scan_profile"),
         "schema_version": 2,
-    }, result.metadata)
+    }
+    asserts.equals(env, expected_metadata, result.metadata)
     asserts.equals(env, _EXPECTED_BUILD, scg.to_starlark(result.build))
     return unittest.end(env)
 
@@ -207,15 +299,38 @@ repository_test = unittest.make(_repository_test)
 
 def _format_variants_test(ctx):
     env = unittest.begin(ctx)
-    decorated = HUB_BUILD.replace("alias(\n", 'alias(\n    # comment\n    tags = ["manual"],\n    visibility = ["//visibility:public"],\n')
-    asserts.equals(env, system_sdk_inventory.aliases(HUB_BUILD), system_sdk_inventory.aliases(decorated))
-    decorated = XCODE_BUILD.replace('visibility = ["//visibility:private"],', 'visibility = ["//visibility:public"], # safe metadata\n    tags = ["manual"],')
-    asserts.equals(env, system_sdk_inventory.sdk_constraints(XCODE_BUILD), system_sdk_inventory.sdk_constraints(decorated))
+    hub_decoration = (
+        '    # comment\n    tags = ["manual"],\n' +
+        '    visibility = ["//visibility:public"],\n'
+    )
+    decorated = HUB_BUILD.replace("alias(\n", "alias(\n" + hub_decoration)
+    asserts.equals(
+        env,
+        system_sdk_inventory.aliases(HUB_BUILD),
+        system_sdk_inventory.aliases(decorated),
+    )
+    decorated = XCODE_BUILD.replace(
+        'visibility = ["//visibility:private"],',
+        'visibility = ["//visibility:public"], # safe metadata\n' +
+        '    tags = ["manual"],',
+    )
+    asserts.equals(
+        env,
+        system_sdk_inventory.sdk_constraints(XCODE_BUILD),
+        system_sdk_inventory.sdk_constraints(decorated),
+    )
     hub = system_sdk_inventory.aliases(HUB_BUILD)
     sdk = system_sdk_inventory.aliases(XCODE_BUILD)
     sdk["UIKit"]["//conditions:default"] = ":_empty_module"
-    result = system_sdk_inventory.inventory(hub, {"@system_sdk_xcode_27_0_0_27A266a": sdk})
-    asserts.equals(env, ["iPhoneOS", "iPhoneSimulator"], [entry["sdk"] for entry in result["UIKit"]])
+    result = system_sdk_inventory.inventory(
+        hub,
+        {"@system_sdk_xcode_27_0_0_27A266a": sdk},
+    )
+    asserts.equals(
+        env,
+        ["iPhoneOS", "iPhoneSimulator"],
+        [entry["sdk"] for entry in result["UIKit"]],
+    )
     return unittest.end(env)
 
 format_variants_test = unittest.make(_format_variants_test)
@@ -238,7 +353,10 @@ def _watch_cycle_test(ctx):
             readdir = readdir,
         )
 
-    manifest = sdk_inventory_inputs.manifest(struct(path = path, watch = lambda p: watches.append(p)), ["/SDK"])
+    manifest = sdk_inventory_inputs.manifest(
+        struct(path = path, watch = lambda p: watches.append(p)),
+        ["/SDK"],
+    )
     asserts.equals(env, ["/SDK"], reads)
     asserts.equals(env, ["/SDK/alias", "/SDK/module.modulemap"], watches)
     asserts.equals(env, {
@@ -281,7 +399,13 @@ def _profiles_test(ctx):
         asserts.true(env, sdk_scan_profiles.error(sdk, triple) != None, triple)
     environment = sdk_scan_profiles.environment("/Xcode/Developer")
     asserts.equals(env, "/Xcode/Developer", environment["DEVELOPER_DIR"])
-    for variable in ["CPATH", "C_INCLUDE_PATH", "CPLUS_INCLUDE_PATH", "OBJC_INCLUDE_PATH", "SDKROOT"]:
+    for variable in [
+        "CPATH",
+        "C_INCLUDE_PATH",
+        "CPLUS_INCLUDE_PATH",
+        "OBJC_INCLUDE_PATH",
+        "SDKROOT",
+    ]:
         asserts.equals(env, "", environment[variable])
     return unittest.end(env)
 
@@ -299,7 +423,10 @@ def _symlink_retarget_test(ctx):
                 readdir = lambda watch: ["/SDK/A", "/SDK/B", "/SDK/current"],
             )
 
-        return sdk_inventory_inputs.manifest(struct(path = path, watch = lambda p: None), ["/SDK"])
+        return sdk_inventory_inputs.manifest(
+            struct(path = path, watch = lambda p: None),
+            ["/SDK"],
+        )
 
     before = manifest("/SDK/A")
     after = manifest("/SDK/B")
@@ -313,23 +440,34 @@ def _host_and_selection_test(ctx):
     env = unittest.begin(ctx)
     outputs = {}
 
-    # Deliberately omit attrs/execute/read: Linux must return before any SDK work.
+    # Deliberately omit attrs/execute/read: Linux must return before any SDK
+    # work.
     # buildifier: disable=unused-variable
     def file(name, content, **kwargs):
         outputs[name] = content
 
-    system_sdk_modules.generate(struct(os = struct(name = "linux"), file = file))
+    system_sdk_modules.generate(
+        struct(os = struct(name = "linux"), file = file),
+    )
     metadata = system_sdk_modules.decode(outputs["modules.json"])
     asserts.equals(env, {}, metadata.modules)
     asserts.equals(env, {}, metadata.conditions)
     asserts.equals(env, {"host_supported": False}, metadata.scan)
     asserts.true(env, "linux" in metadata.diagnostic)
-    for environment, configured in [("/Xcode", ""), (None, "/Xcode"), ("/Xcode", "/Xcode")]:
+    for environment, configured in [
+        ("/Xcode", ""),
+        (None, "/Xcode"),
+        ("/Xcode", "/Xcode"),
+    ]:
         def getenv(name):
             asserts.equals(env, "DEVELOPER_DIR", name)
             return environment
 
-        repo = struct(attr = struct(developer_dir = configured), getenv = getenv, path = lambda p: struct(realpath = p))
+        repo = struct(
+            attr = struct(developer_dir = configured),
+            getenv = getenv,
+            path = lambda p: struct(realpath = p),
+        )
         asserts.equals(env, "/Xcode", system_sdk_modules.developer_dir(repo))
     return unittest.end(env)
 
@@ -339,9 +477,15 @@ def _identity_tracking_test(ctx):
     env = unittest.begin(ctx)
     watched = []
 
-    # No readdir: default tracking must never traverse SDK/toolchain directories.
+    # No readdir: default tracking must never traverse SDK/toolchain
+    # directories.
     def path(name):
-        return struct(exists = True, realpath = name, is_dir = False, dirname = "/Xcode/Contents")
+        return struct(
+            exists = True,
+            realpath = name,
+            is_dir = False,
+            dirname = "/Xcode/Contents",
+        )
 
     inputs = sdk_inventory_inputs.collect(
         struct(path = path, watch = lambda p: watched.append(p)),
@@ -350,7 +494,12 @@ def _identity_tracking_test(ctx):
         {"MacOSX": "/MacOSX.sdk", "iPhoneSimulator": "/iPhoneSimulator.sdk"},
         False,
     )
-    expected = ["/MacOSX.sdk/SDKSettings.json", "/Toolchain/usr/bin/swiftc", "/Xcode/Contents/version.plist", "/iPhoneSimulator.sdk/SDKSettings.json"]
+    expected = [
+        "/MacOSX.sdk/SDKSettings.json",
+        "/Toolchain/usr/bin/swiftc",
+        "/Xcode/Contents/version.plist",
+        "/iPhoneSimulator.sdk/SDKSettings.json",
+    ]
     asserts.equals(env, expected, inputs["files"])
     asserts.equals(env, expected, sorted(watched))
     return unittest.end(env)
@@ -359,7 +508,12 @@ identity_tracking_test = unittest.make(_identity_tracking_test)
 
 def _full_tracking_test(ctx):
     env = unittest.begin(ctx)
-    directories = ["/Toolchain/usr/lib", "/SDK", "/Platform/Developer/Library/Frameworks", "/Platform/Developer/usr/lib"]
+    directories = [
+        "/Toolchain/usr/lib",
+        "/SDK",
+        "/Platform/Developer/Library/Frameworks",
+        "/Platform/Developer/usr/lib",
+    ]
     reads = []
     watched = []
 
@@ -369,10 +523,17 @@ def _full_tracking_test(ctx):
             reads.append(name)
             return [name + "/content"]
 
+        if name.endswith("/Contents/Developer"):
+            dirname = "/Xcode/Contents"
+        elif name.endswith("swiftc"):
+            dirname = struct(dirname = "/Toolchain/usr")
+        else:
+            dirname = struct(dirname = "/Platform/Developer")
+
         return struct(
             exists = True,
             realpath = name,
-            dirname = "/Xcode/Contents" if name.endswith("/Contents/Developer") else struct(dirname = "/Toolchain/usr" if name.endswith("swiftc") else "/Platform/Developer"),
+            dirname = dirname,
             is_dir = name in directories,
             readdir = readdir,
         )
@@ -385,7 +546,12 @@ def _full_tracking_test(ctx):
         True,
     )
     asserts.equals(env, sorted(directories), sorted(reads))
-    expected = sorted(["/Toolchain/usr/bin/swiftc", "/Xcode/Contents/version.plist", "/SDK/SDKSettings.json"] + [d + "/content" for d in directories])
+    contents = [d + "/content" for d in directories]
+    expected = sorted([
+        "/Toolchain/usr/bin/swiftc",
+        "/Xcode/Contents/version.plist",
+        "/SDK/SDKSettings.json",
+    ] + contents)
     asserts.equals(env, expected, inputs["files"])
     asserts.equals(env, expected, sorted(watched))
     return unittest.end(env)
@@ -393,4 +559,16 @@ def _full_tracking_test(ctx):
 full_tracking_test = unittest.make(_full_tracking_test)
 
 def system_sdk_inventory_test_suite():
-    unittest.suite("system_sdk_inventory_tests", inventory_test, upstream_format_test, repository_test, format_variants_test, watch_cycle_test, profiles_test, symlink_retarget_test, host_and_selection_test, identity_tracking_test, full_tracking_test)
+    unittest.suite(
+        "system_sdk_inventory_tests",
+        inventory_test,
+        upstream_format_test,
+        repository_test,
+        format_variants_test,
+        watch_cycle_test,
+        profiles_test,
+        symlink_retarget_test,
+        host_and_selection_test,
+        identity_tracking_test,
+        full_tracking_test,
+    )

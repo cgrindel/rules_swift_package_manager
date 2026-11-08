@@ -3,7 +3,8 @@
 Verified unchanged against rules_swift 4.2.1 on the same Xcode.
 Captured from @system_sdk and @system_sdk_xcode_27_0_0_27A266a. Only the
 Foundation, UIKit, Dispatch, Foundation_clang and all_modules aliases and
-config_settings are retained. Keep formatting intact: it is the adapter contract.
+config_settings are retained. Keep formatting intact: it is the adapter
+contract.
 """
 
 HUB_BUILD = """config_setting(
