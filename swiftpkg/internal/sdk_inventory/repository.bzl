@@ -1,5 +1,6 @@
 """Lazy SDK metadata for one explicitly configured compiler environment."""
 
+load("//swiftpkg/internal:build_files.bzl", "build_files")
 load(":inputs.bzl", "sdk_inventory_inputs")
 load(":parser.bzl", "system_sdk_inventory")
 load(":profiles.bzl", "sdk_scan_profiles")
@@ -77,7 +78,7 @@ def _repo_impl(ctx):
     # swiftcopts. Require root-owned scan profiles rather than guessing them.
     if ctx.os.name.lower() != "mac os x":
         result = sdk_inventory_render.unsupported_host(ctx.os.name)
-        ctx.file("BUILD.bazel", result.build)
+        build_files.write(ctx, result.build, "")
         ctx.file("modules.json", json.encode(result.metadata))
         return
     if not ctx.attr.targets:
@@ -122,7 +123,7 @@ def _repo_impl(ctx):
     )
     if sorted(result.metadata["conditions"]) != sorted(ctx.attr.targets):
         _error("a configured scan SDK is absent from the rules_swift inventory; also configure system_sdk.configure_sdks")
-    ctx.file("BUILD.bazel", result.build)
+    build_files.write(ctx, result.build, "")
     ctx.file("modules.json", json.encode(result.metadata))
 
 _sdk_inventory_repo = repository_rule(

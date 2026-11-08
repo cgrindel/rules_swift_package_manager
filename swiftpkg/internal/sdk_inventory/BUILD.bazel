@@ -18,6 +18,7 @@ bzl_library(
         ":parser",
         ":profiles",
         ":render",
+        "//swiftpkg/internal:build_files",
     ],
 )
 
@@ -27,7 +28,13 @@ bzl_library(
     name = "render",
     srcs = ["render.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
-    deps = [":profiles"],
+    deps = [
+        ":profiles",
+        "//swiftpkg/internal:build_decls",
+        "//swiftpkg/internal:build_files",
+        "//swiftpkg/internal:load_statements",
+        "//swiftpkg/internal:starlark_codegen",
+    ],
 )
 
 bzl_library(

@@ -1,12 +1,100 @@
 """SDK inventory adapter contract tests."""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
+load(
+    "//swiftpkg/internal:starlark_codegen.bzl",
+    scg = "starlark_codegen",
+)
 load("//swiftpkg/internal/sdk_inventory:inputs.bzl", "sdk_inventory_inputs")
 load("//swiftpkg/internal/sdk_inventory:parser.bzl", "system_sdk_inventory")
 load("//swiftpkg/internal/sdk_inventory:profiles.bzl", "sdk_scan_profiles")
 load("//swiftpkg/internal/sdk_inventory:render.bzl", "sdk_inventory_render")
 load("//swiftpkg/internal/sdk_inventory:repository.bzl", "system_sdk_modules")
 load(":build_fixtures.bzl", "HUB_BUILD", "XCODE_BUILD")
+
+_EXPECTED_NO_MATCH_ERROR = """\
+SDK inference has no scan profile for this build's Xcode, CPU, SDK and \
+device/simulator environment. Configured Xcode: Xcode 27.0; Build version \
+27A266a. Configured targets: MacOSX=arm64-apple-macosx14.0. Include a MacOSX \
+profile for exec tools/macros and a device profile for device builds. Match \
+these profiles, disable system_sdk_deps, or set \
+--@rules_swift_package_manager//config_settings/sdk_inference:strict_profile=false \
+where blanket or manual SDK dependencies cover unmatched profiles.\
+"""
+
+_EXPECTED_BUILD = """\
+load("@bazel_skylib//lib:selects.bzl", "selects")
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+exports_files(["modules.json"])
+
+config_setting(
+    name = "compilation_fastbuild",
+    values = {
+        "compilation_mode": "fastbuild",
+    },
+)
+
+config_setting(
+    name = "sdk_MacOSX_platform",
+    constraint_values = [
+        "@platforms//os:macos",
+        "@platforms//cpu:aarch64",
+    ],
+)
+
+selects.config_setting_group(
+    name = "sdk_MacOSX",
+    match_all = [
+        "@sdk//:xcode_27_0_0_27A266a",
+        ":sdk_MacOSX_platform",
+    ],
+)
+
+selects.config_setting_group(
+    name = "sdk_MacOSX_debug",
+    match_all = [
+        "@sdk//:xcode_27_0_0_27A266a",
+        ":sdk_MacOSX_platform",
+        "//:debug",
+    ],
+)
+
+selects.config_setting_group(
+    name = "sdk_MacOSX_release",
+    match_all = [
+        "@sdk//:xcode_27_0_0_27A266a",
+        ":sdk_MacOSX_platform",
+        "//:release",
+    ],
+)
+
+selects.config_setting_group(
+    name = "sdk_MacOSX_fastbuild",
+    match_all = [
+        "@sdk//:xcode_27_0_0_27A266a",
+        ":sdk_MacOSX_platform",
+        ":compilation_fastbuild",
+    ],
+)
+
+cc_library(
+    name = "scan_profile",
+    deps = select(
+        {
+            ":sdk_MacOSX": [],
+            "//config_settings/sdk_inference:allow_unmatched_profile": [],
+        },
+        no_match_error = \
+""" + repr(_EXPECTED_NO_MATCH_ERROR) + """\
+,
+    ),
+)
+"""
 
 def _alias(name, branches):
     return "alias(\n    name = " + json.encode(name) + ",\n    actual = select({\n" + "\n".join([
@@ -112,18 +200,7 @@ def _repository_test(ctx):
         "scan": dict(scan, guard = "@@inventory//:scan_profile"),
         "schema_version": 2,
     }, result.metadata)
-    asserts.equals(env, '''load("@bazel_skylib//lib:selects.bzl", "selects")
-load("@rules_cc//cc:cc_library.bzl", "cc_library")
-package(default_visibility = ["//visibility:public"])
-exports_files(["modules.json"])
-config_setting(name = "compilation_fastbuild", values = {"compilation_mode": "fastbuild"})
-config_setting(name = "sdk_MacOSX_platform", constraint_values = ["@platforms//os:macos", "@platforms//cpu:aarch64"])
-selects.config_setting_group(name = "sdk_MacOSX", match_all = ["@sdk//:xcode_27_0_0_27A266a", ":sdk_MacOSX_platform"])
-selects.config_setting_group(name = "sdk_MacOSX_debug", match_all = ["@sdk//:xcode_27_0_0_27A266a", ":sdk_MacOSX_platform", "//:debug"])
-selects.config_setting_group(name = "sdk_MacOSX_release", match_all = ["@sdk//:xcode_27_0_0_27A266a", ":sdk_MacOSX_platform", "//:release"])
-selects.config_setting_group(name = "sdk_MacOSX_fastbuild", match_all = ["@sdk//:xcode_27_0_0_27A266a", ":sdk_MacOSX_platform", ":compilation_fastbuild"])
-cc_library(name = "scan_profile", deps = select({":sdk_MacOSX": [], "//config_settings/sdk_inference:allow_unmatched_profile": []}, no_match_error = "SDK inference has no scan profile for this build\'s Xcode, CPU, SDK and device/simulator environment. Configured Xcode: Xcode 27.0; Build version 27A266a. Configured targets: MacOSX=arm64-apple-macosx14.0. Include a MacOSX profile for exec tools/macros and a device profile for device builds. Match these profiles, disable system_sdk_deps, or set --@rules_swift_package_manager//config_settings/sdk_inference:strict_profile=false where blanket or manual SDK dependencies cover unmatched profiles."))
-''', result.build)
+    asserts.equals(env, _EXPECTED_BUILD, scg.to_starlark(result.build))
     return unittest.end(env)
 
 repository_test = unittest.make(_repository_test)
@@ -237,7 +314,11 @@ def _host_and_selection_test(ctx):
     outputs = {}
 
     # Deliberately omit attrs/execute/read: Linux must return before any SDK work.
-    system_sdk_modules.generate(struct(os = struct(name = "linux"), file = lambda name, content: outputs.update({name: content})))
+    # buildifier: disable=unused-variable
+    def file(name, content, **kwargs):
+        outputs[name] = content
+
+    system_sdk_modules.generate(struct(os = struct(name = "linux"), file = file))
     metadata = system_sdk_modules.decode(outputs["modules.json"])
     asserts.equals(env, {}, metadata.modules)
     asserts.equals(env, {}, metadata.conditions)
