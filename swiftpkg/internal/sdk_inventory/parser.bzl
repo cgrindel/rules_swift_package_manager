@@ -13,6 +13,8 @@ _SDK_PLATFORMS = {
 }
 _GROUPS = ["all_modules", "implicit_modules", "all_cross_import_overlays"]
 
+_CONSTRAINT_PREFIXES = ("@platforms//os:", "@apple_support//constraints:")
+
 def _line(raw):
     # Strip comments only outside quoted labels (which contain //).
     quoted = False
@@ -69,7 +71,8 @@ def _aliases(contents):
                 state = "end"
             elif line.startswith('"') and line.endswith('",'):
                 parts = line[1:-2].split('\": \"')
-                if len(parts) != 2 or any(['"' in p or "\\" in p for p in parts]):
+                has_escape = any(['"' in p or "\\" in p for p in parts])
+                if len(parts) != 2 or has_escape:
                     return None
                 branches[parts[0]] = parts[1]
             else:
@@ -94,7 +97,9 @@ def _inventory(hub, xcodes):
                     return None
                 continue
             repo, sep, target = actual.partition("//:")
-            if not sep or not repo.startswith("@system_sdk_xcode_") or target != module:
+            if (not sep or
+                not repo.startswith("@system_sdk_xcode_") or
+                target != module):
                 return None
             if not xcode_condition.startswith(":xcode_"):
                 return None
@@ -109,9 +114,13 @@ def _inventory(hub, xcodes):
                 sdk = sdk_condition.removeprefix(":").removesuffix("_sdk")
                 if sdk not in _SDK_PLATFORMS:
                     return None
+                if sdk.endswith("Simulator"):
+                    environment = "simulator"
+                else:
+                    environment = "device"
                 entries.append({
                     "condition": xcode_condition[1:] + "_" + sdk,
-                    "environment": "simulator" if sdk.endswith("Simulator") else "device",
+                    "environment": environment,
                     "platform": _SDK_PLATFORMS[sdk],
                     "sdk": sdk,
                     "sdk_condition": sdk_condition,
@@ -123,8 +132,9 @@ def _inventory(hub, xcodes):
     return result
 
 def _sdk_constraints(contents):
-    # Upstream marks these settings private, so reproduce their actual constraint
-    # lists in the shared repo. Never infer availability from these lists alone.
+    # Upstream marks these settings private, so reproduce their actual
+    # constraint lists in the shared repo. Never infer availability from these
+    # lists alone.
     result = {}
     for block in ("\n" + contents).split("\nconfig_setting(\n")[1:]:
         body, separator, _ = block.partition("\n)")
@@ -143,18 +153,28 @@ def _sdk_constraints(contents):
                 in_constraints = True
             elif line == "]," and in_constraints:
                 in_constraints = False
-            elif in_constraints and line.startswith('"') and line.endswith('",'):
+            elif (in_constraints and
+                  line.startswith('"') and
+                  line.endswith('",')):
                 value = line[1:-2]
-                if not value.startswith(("@platforms//os:", "@apple_support//constraints:")):
+                if not value.startswith(_CONSTRAINT_PREFIXES):
                     return None
                 constraints.append(value)
-            elif line.startswith(("visibility = [", "tags = [")) and line.endswith("],"):
+            elif (line.startswith(("visibility = [", "tags = [")) and
+                  line.endswith("],")):
                 continue
             else:
                 return None
-        if not name or not name.endswith("_sdk") or not constraints or in_constraints:
+        if (not name or
+            not name.endswith("_sdk") or
+            not constraints or
+            in_constraints):
             return None
         result[":" + name] = constraints
     return result
 
-system_sdk_inventory = struct(aliases = _aliases, inventory = _inventory, sdk_constraints = _sdk_constraints)
+system_sdk_inventory = struct(
+    aliases = _aliases,
+    inventory = _inventory,
+    sdk_constraints = _sdk_constraints,
+)

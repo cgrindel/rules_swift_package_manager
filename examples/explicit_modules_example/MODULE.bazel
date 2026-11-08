@@ -56,7 +56,10 @@ use_repo(swift_deps, "swift_package", "swiftpkg_explicitmodulesfixture")
 
 # Bound inference to the configurations this example builds. Compiler flags and
 # Xcode selection used for fetching must match the corresponding builds.
-sdk_inventory = use_extension("@rules_swift_package_manager//:extensions.bzl", "sdk_inventory")
+sdk_inventory = use_extension(
+    "@rules_swift_package_manager//:extensions.bzl",
+    "sdk_inventory",
+)
 sdk_inventory.configure(targets = {
     "MacOSX": "arm64-apple-macosx13.0",
     "iPhoneSimulator": "arm64-apple-ios15.0-simulator",

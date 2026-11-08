@@ -22,8 +22,11 @@ def _error(sdk, triple):
     if parts[0] not in ["arm64", "x86_64"]:
         return "Unsupported SDK scan architecture: " + parts[0]
     version = parts[2].removeprefix(os)
-    if not parts[2].startswith(os) or not version or not all([p.isdigit() for p in version.split(".")]):
-        return "Target {} does not match SDK {} (expected {} with a deployment version)".format(triple, sdk, os)
+    version_is_numeric = all([p.isdigit() for p in version.split(".")])
+    if not parts[2].startswith(os) or not version or not version_is_numeric:
+        return """\
+Target {} does not match SDK {} (expected {} with a deployment version)\
+""".format(triple, sdk, os)
     if (parts[3] if len(parts) == 4 else "") != environment:
         return "Target {} does not match SDK {} environment".format(triple, sdk)
     if environment == "" and sdk != "MacOSX" and parts[0] != "arm64":

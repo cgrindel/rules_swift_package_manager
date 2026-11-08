@@ -10,20 +10,27 @@ def _collect(ctx, developer_dir, swiftc, sdks, full):
         roots.extend(sdks.values())
         for sdk_path in sdks.values():
             platform_developer = str(ctx.path(sdk_path).dirname.dirname)
-            roots.extend([platform_developer + suffix for suffix in ["/Library/Frameworks", "/usr/lib"]])
+            roots.extend([
+                platform_developer + suffix
+                for suffix in ["/Library/Frameworks", "/usr/lib"]
+            ])
     return _manifest(ctx, roots)
 
 def _manifest(ctx, roots):
     # SDKs contain directory aliases and cycles (e.g. Ruby.framework headers).
     # watch_tree follows those links without a visited set. Watch physical
-    # directories and files once, including directory membership for new modules.
+    # directories and files once, including directory membership for new
+    # modules.
     pending = roots
     visited = {}
     files = []
     layout = {}
     for _ in range(128):
         if not pending:
-            return {"files": sorted(files), "layout": [[p] + layout[p] for p in sorted(layout)]}
+            return {
+                "files": sorted(files),
+                "layout": [[p] + layout[p] for p in sorted(layout)],
+            }
         current = pending
         pending = []
         for logical in current:
@@ -48,7 +55,8 @@ def _manifest(ctx, roots):
             visited[canonical] = is_dir
             if is_dir:
                 physical = ctx.path(canonical)
-                pending.extend([str(p) for p in physical.readdir(watch = "yes")])
+                children = physical.readdir(watch = "yes")
+                pending.extend([str(p) for p in children])
             else:
                 ctx.watch(canonical)
                 files.append(canonical)
