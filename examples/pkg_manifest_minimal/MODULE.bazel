@@ -85,6 +85,7 @@ use_repo(
     swift_deps,
     "swift_deps_info",
     "swift_package",
+    "swiftpkg_bazel_local_package",
     "swiftpkg_my_local_package",
     "swiftpkg_notthatamazingmodule",
     "swiftpkg_swift_argument_parser",

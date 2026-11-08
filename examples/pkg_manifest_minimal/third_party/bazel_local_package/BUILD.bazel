@@ -1,0 +1,2 @@
+# Makes this local Swift package a Bazel package too. local_swift_package must
+# not carry this file, or the one under Sources, into the generated repository.

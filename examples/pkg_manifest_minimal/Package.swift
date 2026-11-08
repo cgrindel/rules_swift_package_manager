@@ -9,6 +9,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-log", from: "1.17.0"),
         .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.64.6"),
         .package(path: "third_party/my_local_package"),
+        .package(path: "third_party/bazel_local_package"),
         .package(path: "third_party/NotThatAmazingModule"),
     ]
 )
