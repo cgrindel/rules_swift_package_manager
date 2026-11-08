@@ -52,6 +52,12 @@ swift_deps = use_extension(
 swift_deps.from_package(
     swift = "//:Package.swift",
 )
+
+# Fetch the SDK inventory from every package repository. Inference does not
+# generate dependencies yet; this exercises the provider on a macOS host.
+swift_deps.configure_explicit_modules(
+    system_sdk_deps = True,
+)
 use_repo(swift_deps, "swift_package", "swiftpkg_explicitmodulesfixture")
 
 # Bound inference to the configurations this example builds. Compiler flags and

@@ -4,6 +4,11 @@ set -o errexit -o nounset -o pipefail
 
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
+# The SDK inventory does not read xcode-select. Pass the selected Xcode
+# explicitly; .bazelrc forwards it to repository rules.
+DEVELOPER_DIR="${DEVELOPER_DIR:-$(xcode-select -p)}"
+export DEVELOPER_DIR
+
 # Verify the same generated targets with implicit modules and both explicit modes.
 "${bazel}" test //...
 "${bazel}" run //:explicit_modules_example
@@ -11,3 +16,17 @@ for config in explicit_modules explicit_swift_modules; do
   "${bazel}" test --config="${config}" //...
   "${bazel}" run --config="${config}" //:explicit_modules_example
 done
+
+# Verify the SDK inventory's profile guard. The host and iOS simulator profiles
+# are configured; an iOS device build is not.
+scan_profile="@rspm_sdk_inventory//:scan_profile"
+strict_flag="@rules_swift_package_manager//config_settings/sdk_inference:strict_profile"
+ios_device="--platforms=@apple_support//platforms:ios_arm64"
+"${bazel}" build "${scan_profile}"
+"${bazel}" build --platforms=@apple_support//platforms:ios_sim_arm64 \
+  "${scan_profile}"
+if "${bazel}" build "${ios_device}" "${scan_profile}"; then
+  echo >&2 "Expected the unconfigured iOS device profile to fail."
+  exit 1
+fi
+"${bazel}" build "${ios_device}" "--${strict_flag}=false" "${scan_profile}"
