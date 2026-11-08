@@ -913,18 +913,20 @@ Expected only one `configure_swift_package` tag, but found multiple.\
     direct_dep_repo_names = []
     for mod in module_ctx.modules:
         for from_package in mod.tags.from_package:
-            direct_dep_repo_names.extend(
-                _declare_pkgs_from_package(
-                    module_ctx,
-                    from_package,
-                    config_pkgs,
-                    config_swift_package,
-                    target_mods_by_repo,
-                    matched_target_mod_repos,
-                    available_target_mod_repos,
-                    inference_config,
-                ),
+            repo_names = _declare_pkgs_from_package(
+                module_ctx,
+                from_package,
+                config_pkgs,
+                config_swift_package,
+                target_mods_by_repo,
+                matched_target_mod_repos,
+                available_target_mod_repos,
+                inference_config,
             )
+
+            # Only the root module's packages are its direct deps.
+            if mod.is_root:
+                direct_dep_repo_names.extend(repo_names)
 
     inference_error = _unknown_inference_packages_error(inference_config)
     if inference_error:
