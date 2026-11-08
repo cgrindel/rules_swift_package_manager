@@ -86,6 +86,8 @@ minimum_os_probe(
 
 spm_minimum_os_target(
     name = "imported_wrapped",
+    # These exercise the Apple path whatever platform the tests run on.
+    apple_platform = True,
     ios_minimum_os = "15.0",
     macos_minimum_os = "12.0",
     tvos_minimum_os = "12.0",
@@ -104,6 +106,8 @@ minimum_os_probe(
 
 spm_minimum_os_target(
     name = "importer_wrapped",
+    # These exercise the Apple path whatever platform the tests run on.
+    apple_platform = True,
     ios_minimum_os = "15.0",
     macos_minimum_os = "12.0",
     tvos_minimum_os = "12.0",

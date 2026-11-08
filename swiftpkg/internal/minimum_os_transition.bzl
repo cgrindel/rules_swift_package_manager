@@ -208,7 +208,9 @@ _spm_minimum_os_test = rule(
     doc = "Applies Swift package minimum OS settings to a test implementation target.",
 )
 
-def _apple_platform():
+def _apple_platform(value):
+    if value != None:
+        return value
     return select({
         Label("@platforms//os:ios"): True,
         Label("@platforms//os:macos"): True,
@@ -218,14 +220,14 @@ def _apple_platform():
         "//conditions:default": False,
     })
 
-def spm_minimum_os_target(**kwargs):
-    _spm_minimum_os_target(apple_platform = _apple_platform(), **kwargs)
+def spm_minimum_os_target(apple_platform = None, **kwargs):
+    _spm_minimum_os_target(apple_platform = _apple_platform(apple_platform), **kwargs)
 
-def spm_minimum_os_binary(**kwargs):
-    _spm_minimum_os_binary(apple_platform = _apple_platform(), **kwargs)
+def spm_minimum_os_binary(apple_platform = None, **kwargs):
+    _spm_minimum_os_binary(apple_platform = _apple_platform(apple_platform), **kwargs)
 
-def spm_minimum_os_test(**kwargs):
-    _spm_minimum_os_test(apple_platform = _apple_platform(), **kwargs)
+def spm_minimum_os_test(apple_platform = None, **kwargs):
+    _spm_minimum_os_test(apple_platform = _apple_platform(apple_platform), **kwargs)
 
 minimum_os_transition = struct(
     import_error = _import_error,
