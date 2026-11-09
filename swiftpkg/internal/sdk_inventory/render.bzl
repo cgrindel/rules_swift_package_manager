@@ -231,5 +231,6 @@ def _unsupported_host(host):
 
 sdk_inventory_render = struct(
     render = _render,
+    schema_version = _SCHEMA_VERSION,
     unsupported_host = _unsupported_host,
 )

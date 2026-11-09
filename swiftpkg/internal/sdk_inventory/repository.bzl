@@ -10,8 +10,6 @@ _SDK_BUILD = Label("@system_sdk//:BUILD.bazel")
 _INVENTORY = Label("@rspm_sdk_inventory//:modules.json")
 _EMPTY = struct(modules = {}, conditions = {}, diagnostic = "", scan = {})
 
-_SCHEMA_VERSION = 2
-
 _DEFAULT_TOOLCHAINS = [
     None,
     "",
@@ -277,7 +275,7 @@ sdk_inventory = module_extension(
 def _decode(contents):
     metadata = json.decode(contents)
     schema_version = metadata.get("schema_version")
-    if schema_version != _SCHEMA_VERSION:
+    if schema_version != sdk_inventory_render.schema_version:
         fail("Unsupported RSPM SDK inventory schema: {}".format(
             schema_version,
         ))
