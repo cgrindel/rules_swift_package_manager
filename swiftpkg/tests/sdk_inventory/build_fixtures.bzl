@@ -7,7 +7,8 @@ config_settings are retained. Keep formatting intact: it is the adapter
 contract.
 """
 
-HUB_BUILD = """config_setting(
+HUB_BUILD = """\
+config_setting(
     name = "xcode_27_0_0_27A266a",
     flag_values = {
         "@bazel_tools//tools/osx:xcode_version_flag_exact": "27.0.0.27A266a",
@@ -50,7 +51,8 @@ alias(
 )
 """
 
-XCODE_BUILD = """config_setting(
+XCODE_BUILD = """\
+config_setting(
     name = "MacOSX_sdk",
     constraint_values = [
         "@platforms//os:macos",
