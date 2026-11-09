@@ -20,13 +20,20 @@ done
 # Verify the SDK inventory's profile guard. The host and iOS simulator profiles
 # are configured; an iOS device build is not.
 scan_profile="@rspm_sdk_inventory//:scan_profile"
-strict_flag="@rules_swift_package_manager//config_settings/sdk_inference:strict_profile"
+strict_flag="@rules_swift_package_manager//config_settings/sdk_inference"
+strict_flag+=":strict_profile"
 ios_device="--platforms=@apple_support//platforms:ios_arm64"
 "${bazel}" build "${scan_profile}"
 "${bazel}" build --platforms=@apple_support//platforms:ios_sim_arm64 \
   "${scan_profile}"
-if "${bazel}" build "${ios_device}" "${scan_profile}"; then
+echo "Expecting the unconfigured iOS device profile to fail."
+if output="$("${bazel}" build "${ios_device}" "${scan_profile}" 2>&1)"; then
   echo >&2 "Expected the unconfigured iOS device profile to fail."
+  exit 1
+fi
+if [[ "${output}" != *"SDK inference has no scan profile"* ]]; then
+  echo >&2 "The iOS device build failed for an unexpected reason:"
+  echo >&2 "${output}"
   exit 1
 fi
 "${bazel}" build "${ios_device}" "--${strict_flag}=false" "${scan_profile}"
