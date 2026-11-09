@@ -48,11 +48,14 @@ Configure extra SDKs with rules_swift's `system_sdk.configure_sdks` as well.
 architecture, SDK, deployment target and additional conditional defines used by
 builds. These are explicit fetch-time inputs, not values recovered from Bazel's
 `--xcode_version`, transitions or arbitrary `--swiftcopt` flags. Unlisted build
-configurations have no inferred dependencies; see the strict profile guard below. Apple compiler scans require a macOS fetch host. On Linux and
-other non-macOS fetch hosts, the provider exports an empty inventory with a
-diagnostic; Apple inference is a no-op and does not fetch Xcode or invoke swiftc.
-This supports cross-platform packages built natively on Linux, not cross-compiling
-Apple targets from a Linux fetch host.
+configurations have no inferred dependencies; see the strict profile guard
+below.
+
+Apple compiler scans require a macOS fetch host. On Linux and other non-macOS
+fetch hosts, the provider exports an empty inventory with a diagnostic; Apple
+inference is a no-op and does not fetch Xcode or invoke swiftc. This supports
+cross-platform packages built natively on Linux, not cross-compiling Apple
+targets from a Linux fetch host.
 
 Only **one target triple per SDK** is supported. An arm64 macOS profile does not
 cover the x86_64 slice of a universal build, and an arm64 simulator profile does
