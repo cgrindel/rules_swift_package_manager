@@ -47,10 +47,21 @@ bzl_library(
     name = "parser",
     srcs = ["parser.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":sdks"],
 )
 
 bzl_library(
     name = "profiles",
     srcs = ["profiles.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":sdks"],
+)
+
+bzl_library(
+    name = "sdks",
+    srcs = ["sdks.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        "//config_settings/bazel/apple_platform_type:apple_platform_types",
+    ],
 )

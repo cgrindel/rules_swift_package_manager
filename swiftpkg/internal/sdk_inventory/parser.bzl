@@ -1,16 +1,7 @@
 """Pure parser for the supported rules_swift generated SDK BUILD format."""
 
-_SDK_PLATFORMS = {
-    "AppleTVOS": "tvos",
-    "AppleTVSimulator": "tvos",
-    "MacOSX": "macos",
-    "WatchOS": "watchos",
-    "WatchSimulator": "watchos",
-    "XROS": "visionos",
-    "XRSimulator": "visionos",
-    "iPhoneOS": "ios",
-    "iPhoneSimulator": "ios",
-}
+load(":sdks.bzl", "sdks")
+
 _GROUPS = ["all_modules", "implicit_modules", "all_cross_import_overlays"]
 
 _CONSTRAINT_PREFIXES = ("@platforms//os:", "@apple_support//constraints:")
@@ -112,16 +103,13 @@ def _inventory(hub, xcodes):
                         return None
                     continue
                 sdk = sdk_condition.removeprefix(":").removesuffix("_sdk")
-                if sdk not in _SDK_PLATFORMS:
+                sdk_info = sdks.get(sdk)
+                if not sdk_info:
                     return None
-                if sdk.endswith("Simulator"):
-                    environment = "simulator"
-                else:
-                    environment = "device"
                 entries.append({
                     "condition": xcode_condition[1:] + "_" + sdk,
-                    "environment": environment,
-                    "platform": _SDK_PLATFORMS[sdk],
+                    "environment": sdk_info.environment,
+                    "platform": sdk_info.platform,
                     "sdk": sdk,
                     "sdk_condition": sdk_condition,
                     "sdk_repo": repo,
