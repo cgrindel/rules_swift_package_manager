@@ -20,7 +20,10 @@ _DEFAULT_TOOLCHAINS = [
 ]
 
 def _error(reason):
-    fail("SDK inference: {}.".format(reason))
+    fail("""\
+SDK inference: {}. Disable system_sdk_deps for this package to bypass SDK \
+inference.\
+""".format(reason))
 
 def _config_error(reason):
     fail("""\
@@ -28,13 +31,13 @@ SDK inference: {}. Configure sdk_inventory.configure(...) or disable \
 system_sdk_deps for this package.\
 """.format(reason))
 
-def _execute(ctx, args, developer_dir):
+def _execute(ctx, args, developer_dir, error_fn = _error):
     result = ctx.execute(
         args,
         environment = sdk_scan_profiles.environment(developer_dir),
     )
     if result.return_code:
-        _error("{} failed:\n{}".format(args, result.stderr))
+        error_fn("{} failed:\n{}".format(args, result.stderr))
     return result.stdout.strip()
 
 def _developer_dir(ctx):
@@ -129,12 +132,14 @@ def _repo_impl(ctx):
         ctx,
         ["/usr/bin/xcrun", "xcodebuild", "-version"],
         developer_dir,
+        error_fn = _config_error,
     )
     upstream = _read_upstream(ctx, _SDK_BUILD, version)
     swiftc = _execute(
         ctx,
         ["/usr/bin/xcrun", "--find", "swiftc"],
         developer_dir,
+        error_fn = _config_error,
     )
     sdks = {}
     for sdk in sorted(ctx.attr.targets):
@@ -142,6 +147,7 @@ def _repo_impl(ctx):
             ctx,
             ["/usr/bin/xcrun", "--sdk", sdk.lower(), "--show-sdk-path"],
             developer_dir,
+            error_fn = _config_error,
         )
     ctx.report_progress("Tracking configured SDK and compiler inputs")
     inputs = sdk_inventory_inputs.collect(
