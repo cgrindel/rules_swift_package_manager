@@ -11,8 +11,8 @@
 - For the rules_swift dependency upgrade and explicit modules setup, see the
   [rules_swift 4.x migration notes](rules_swift_4_migration.md).
 
-- For the dependency inference configuration and proposed SDK inventory contract, see
-  [dependency inference](dependency_inference.md).
+- For the dependency inference configuration, see
+  [dependency inference](dependency_inference.md) and [SDK compiler profiles](system_sdk_inventory.md).
 
 [quickstart]: /README.md#quickstart
 [repository rules documentation]: /docs/repository_rules_overview.md

@@ -34,6 +34,15 @@ bazel_dep(
     version = "4.3.3",
     repo_name = "build_bazel_rules_apple",
 )
+
+# Generated package repositories resolve SDK labels through this module's
+# mapping.
+system_sdk = use_extension(
+    "@build_bazel_rules_swift//swift:extensions.bzl",
+    "system_sdk",
+)
+use_repo(system_sdk, "system_sdk")
+
 bazel_dep(
     name = "gazelle",
     version = "0.50.0",
@@ -88,3 +97,7 @@ use_repo(
     "bazel_binaries_bazelisk",
     "build_bazel_bazel_.bazelversion",
 )
+
+# Shared SDK metadata for source dependency inference.
+sdk_inventory = use_extension("//:extensions.bzl", "sdk_inventory")
+use_repo(sdk_inventory, "rspm_sdk_inventory")

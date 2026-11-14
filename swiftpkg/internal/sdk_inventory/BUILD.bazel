@@ -1,0 +1,67 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+bzlformat_pkg(name = "bzlformat")
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
+
+bzl_library(
+    name = "repository",
+    srcs = ["repository.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":inputs",
+        ":parser",
+        ":profiles",
+        ":render",
+        "//swiftpkg/internal:build_files",
+    ],
+)
+
+exports_files(["fingerprint.py"])
+
+bzl_library(
+    name = "render",
+    srcs = ["render.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":profiles",
+        "//swiftpkg/internal:build_decls",
+        "//swiftpkg/internal:build_files",
+        "//swiftpkg/internal:load_statements",
+        "//swiftpkg/internal:starlark_codegen",
+    ],
+)
+
+bzl_library(
+    name = "parser",
+    srcs = ["parser.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":sdks"],
+)
+
+bzl_library(
+    name = "profiles",
+    srcs = ["profiles.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":sdks"],
+)
+
+bzl_library(
+    name = "sdks",
+    srcs = ["sdks.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        "//config_settings/bazel/apple_platform_type:apple_platform_types",
+    ],
+)
+
+bzl_library(
+    name = "inputs",
+    srcs = ["inputs.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)

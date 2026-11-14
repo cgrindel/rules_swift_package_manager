@@ -1,5 +1,6 @@
 """Module for creating a module index context for a package info."""
 
+load("//swiftpkg/internal/sdk_inventory:repository.bzl", "system_sdk_modules")
 load(":bazel_repo_names.bzl", "bazel_repo_names")
 load(":bazel_target_mods.bzl", btm = "bazel_target_mods")
 load(":manual_target_deps.bzl", "manual_target_deps")
@@ -27,7 +28,8 @@ def _read(
         dep_module_aliases = "",
         bazel_target_mods = "",
         system_sdk_deps = False,
-        binary_target_deps = False):
+        binary_target_deps = False,
+        sdk_inventory = system_sdk_modules.empty):
     pkg_info = pkginfos.get(
         repository_ctx = repository_ctx,
         directory = repo_dir,
@@ -46,6 +48,7 @@ def _read(
         bazel_target_mods = bazel_target_mods,
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
+        sdk_modules = sdk_inventory,
         dep_minimum_os_versions = _read_dep_minimum_os_versions(
             repository_ctx,
             pkg_info,
@@ -70,7 +73,8 @@ def _new(
         bazel_target_mods = "",
         dep_minimum_os_versions = {},
         system_sdk_deps = False,
-        binary_target_deps = False):
+        binary_target_deps = False,
+        sdk_modules = system_sdk_modules.empty):
     manual_target_deps.validate(pkg_info, target_deps)
 
     # A package's sources may import an aliased module under its original
@@ -97,6 +101,7 @@ def _new(
         bazel_target_mods = decoded_bazel_target_mods,
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
+        sdk_modules = sdk_modules,
         # Effective minimum OS versions per target, product and package. See
         # `minimum_os_versions.for_targets`.
         minimum_os_versions = minimum_os_versions.for_targets(
@@ -190,7 +195,26 @@ repository name '{name}'.\
         dep_versions[identity] = json.decode(repository_ctx.read(label))
     return dep_versions
 
+def _prepare_sdk(repository_ctx):
+    """Read the SDK inventory for a package repository, if it is enabled.
+
+    Call this before downloads or SwiftPM, including when fetching without
+    repository workers, so that a missing upstream repository does not restart
+    a clone.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+
+    Returns:
+        The SDK inventory `struct` to pass to `pkg_ctxs.read`.
+    """
+    attr = repository_ctx.attr
+    if attr.system_sdk_deps and not attr.build_file:
+        return system_sdk_modules.read(repository_ctx)
+    return system_sdk_modules.empty
+
 pkg_ctxs = struct(
+    prepare_sdk = _prepare_sdk,
     new = _new,
     read = _read,
     referenced_dependency_identities = _referenced_dependency_identities,
