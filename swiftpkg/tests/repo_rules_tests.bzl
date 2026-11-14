@@ -191,7 +191,8 @@ def _gen_build_files_without_build_file_test(ctx):
     )
     pkg_ctx = struct(
         pkg_info = pkg_info,
-        system_sdk_deps = True,
+        system_sdk_deps = False,
+        source_scans = None,
         binary_target_deps = True,
         bazel_target_mods = [bazel_target_mods.new(
             bazel_target_mods.verbs.set,

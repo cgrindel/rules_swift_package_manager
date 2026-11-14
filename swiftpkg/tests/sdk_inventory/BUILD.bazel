@@ -1,0 +1,21 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load(":inventory_tests.bzl", "system_sdk_inventory_test_suite")
+
+bzlformat_pkg(name = "bzlformat")
+
+system_sdk_inventory_test_suite()
+
+sh_test(
+    name = "fingerprint_test",
+    srcs = ["fingerprint_test.sh"],
+    args = ["$(rootpath //swiftpkg/internal/sdk_inventory:fingerprint.py)"],
+    data = ["//swiftpkg/internal/sdk_inventory:fingerprint.py"],
+)
+
+bzl_library(
+    name = "build_fixtures",
+    srcs = ["build_fixtures.bzl"],
+    visibility = ["//visibility:public"],
+)

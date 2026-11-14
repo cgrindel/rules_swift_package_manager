@@ -2,9 +2,17 @@ import %workspace%/../../shared.bazelrc
 import %workspace%/../../ci.bazelrc
 try-import %workspace%/../../local.bazelrc
 
+# Select the machine's Xcode in local.bazelrc, not in MODULE.bazel:
+# common --repo_env=DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
+# build --xcode_version=<matching installed Xcode version>
+
 # Keep the default SDK dependencies supplied by rules_swift enabled.
 build:explicit_modules --features=swift.emit_c_module --host_features=swift.emit_c_module
 build:explicit_modules --features=swift.use_c_modules --host_features=swift.use_c_modules
 
 build:explicit_swift_modules --config=explicit_modules
 build:explicit_swift_modules --features=swift.use_explicit_swift_module_map --host_features=swift.use_explicit_swift_module_map
+
+# Exercise RSPM's inferred SDK dependencies without the toolchain's blanket deps.
+build:inferred_modules --config=explicit_modules
+build:inferred_modules --features=-swift.add_default_precompiled_modules --host_features=-swift.add_default_precompiled_modules

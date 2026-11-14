@@ -47,11 +47,10 @@ swift_deps = use_extension(
     "swift_deps",
 )
 
-# Exercise the reserved inference API through actual extension evaluation.
-# These settings do not change generated dependencies in part 2.
+# Exercise inference policy without requiring host Apple SDK scanning in BCR.
 swift_deps.configure_explicit_modules(
     binary_target_deps = False,
-    system_sdk_deps = True,
+    system_sdk_deps = False,
 )
 swift_deps.configure_package(
     name = "swift-log",
