@@ -15,6 +15,17 @@ def _is_macos(repository_ctx):
     os_name = repository_ctx.os.name.lower()
     return os_name.startswith("mac os")
 
+def _is_windows(repository_ctx):
+    """Determines if the host is running Windows.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+
+    Returns:
+        A `bool` indicating whether the host is running Windows.
+    """
+    return repository_ctx.os.name.lower().startswith("windows")
+
 def _execute_spm_command(
         repository_ctx,
         arguments,
@@ -50,7 +61,7 @@ def _execute_spm_command(
     # Example: rules_xcodeproj sets the SDKROOT before executing
     # generate_bazel_dependencies.sh.
     # On Windows, Swift finds its SDK through SDKROOT.
-    env_overrides = {} if repository_ctx.os.name.startswith("windows") else {"SDKROOT": ""}
+    env_overrides = {} if _is_windows(repository_ctx) else {"SDKROOT": ""}
     exec_env = dicts.add(env, env_overrides)
 
     exec_result = repository_ctx.execute(
@@ -114,7 +125,7 @@ def _parsed_json_from_spm_command(
     )
 
     # SwiftPM on Windows writes paths with backslashes.
-    if repository_ctx.os.name.startswith("windows"):
+    if _is_windows(repository_ctx):
         json_str = json_str.replace("\\\\", "/")
     json_str = _replace_working_directory(json_str, working_directory)
 
@@ -246,6 +257,7 @@ repository_utils = struct(
     copy = _copy,
     exec_spm_command = _execute_spm_command,
     is_macos = _is_macos,
+    is_windows = _is_windows,
     package_name = _package_name,
     parsed_json_from_spm_command = _parsed_json_from_spm_command,
     relativize_repo_path = _relativize_repo_path,

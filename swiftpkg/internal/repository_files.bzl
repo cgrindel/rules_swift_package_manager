@@ -1,17 +1,23 @@
 """Module for retrieving and manipulating repository file information."""
 
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
+load(":repository_utils.bzl", "repository_utils")
 
 def _find(repository_ctx):
     """Returns a POSIX find, skipping the Windows directory's find.exe on Windows."""
-    if not repository_ctx.os.name.startswith("windows"):
+    if not repository_utils.is_windows(repository_ctx):
         return "find"
-    windows = (repository_ctx.getenv("SYSTEMROOT") or "C:\\Windows").lower()
-    for directory in (repository_ctx.getenv("PATH") or "").split(";"):
-        if directory and not directory.lower().startswith(windows):
-            candidate = repository_ctx.path(directory.rstrip("\\") + "\\find.exe")
-            if candidate.exists:
-                return str(candidate)
+
+    # `os.environ` reads these without making them repository dependencies.
+    environ = repository_ctx.os.environ
+    windows = (environ.get("SYSTEMROOT") or "C:\\Windows").replace("/", "\\").rstrip("\\").lower()
+    for directory in (environ.get("PATH") or "").split(";"):
+        entry = directory.strip('"').rstrip("\\/")
+        normalized = entry.replace("/", "\\").lower()
+        if entry and normalized != windows and not normalized.startswith(windows + "\\"):
+            candidate = entry + "\\find.exe"
+            if repository_ctx.path(candidate).exists:
+                return candidate
     fail("rules_swift_package_manager needs a POSIX find (Git's usr\\bin) on PATH")
 
 def _path_exists(repository_ctx, path):
@@ -419,6 +425,7 @@ repository_files = struct(
     path_exists = _path_exists,
     read_bytes = _read_bytes,
     # Exposed for testing purposes only.
+    find = _find,
     parse_od_output = _parse_od_output,
     process_find_results = _process_find_results,
 )
