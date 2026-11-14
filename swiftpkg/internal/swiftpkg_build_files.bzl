@@ -216,6 +216,22 @@ def _swift_target_build_file(repository_ctx, pkg_ctx, target):
                 )
                 features.append(new_upcoming_feature)
 
+    # SwiftPM passes a Swift target's cSettings defines to the Clang importer.
+    if target.clang_settings != None:
+        copts.extend(lists.flatten([
+            bzl_selects.new_from_build_setting(
+                pkginfos.new_build_setting(
+                    kind = bs.kind,
+                    values = lists.flatten([
+                        ["-Xcc", "-D" + scg.normalize_define_value(v)]
+                        for v in bs.values
+                    ]),
+                    condition = bs.condition,
+                ),
+            )
+            for bs in target.clang_settings.defines
+        ]))
+
     # If the target doesn't have a language mode use the package language mode.
     if not has_explicit_laguage_mode and pkg_ctx.pkg_info.language_mode:
         _set_swift_version_selects(pkg_ctx.pkg_info.language_mode)
