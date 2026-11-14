@@ -183,6 +183,33 @@ def _rejects_imported_target_with_higher_patch_minimum_os_test(ctx):
 
 rejects_imported_target_with_higher_patch_minimum_os_test = unittest.make(_rejects_imported_target_with_higher_patch_minimum_os_test)
 
+def _preserves_settings_off_apple_platforms_test(ctx):
+    env = unittest.begin(ctx)
+
+    # A package declaring a higher minimum than the importer would be
+    # rejected on Apple; off Apple the transition leaves the settings alone.
+    settings = _settings("macos")
+    attr = struct(
+        apple_platform = False,
+        ios_minimum_os = "26.0",
+        macos_minimum_os = "26.0",
+        tvos_minimum_os = "26.0",
+        visionos_minimum_os = "26.0",
+        watchos_minimum_os = "26.0",
+    )
+    actual = minimum_os_transition.transition_outputs(
+        settings = settings,
+        attr = attr,
+    )
+
+    asserts.equals(env, "15.0", actual[_MACOS_MINIMUM_OS_OPTION])
+    asserts.equals(env, "18.0", actual[_IOS_MINIMUM_OS_OPTION])
+    asserts.equals(env, "2.0", actual[_VISIONOS_MINIMUM_OS_OPTION])
+
+    return unittest.end(env)
+
+preserves_settings_off_apple_platforms_test = unittest.make(_preserves_settings_off_apple_platforms_test)
+
 def minimum_os_transition_test_suite():
     return unittest.suite(
         "minimum_os_transition_tests",
@@ -194,4 +221,5 @@ def minimum_os_transition_test_suite():
         rejects_imported_target_with_higher_minimum_os_test,
         allows_imported_target_with_equal_or_lower_minimum_os_test,
         rejects_imported_target_with_higher_patch_minimum_os_test,
+        preserves_settings_off_apple_platforms_test,
     )
