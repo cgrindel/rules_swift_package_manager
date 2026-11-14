@@ -495,6 +495,29 @@ def _inference_repository_routing_test(ctx):
 
 inference_repository_routing_test = unittest.make(_inference_repository_routing_test)
 
+def _extension_metadata_test(ctx):
+    env = unittest.begin(ctx)
+    for has_non_dev in (True, False):
+        captured = {}
+        module_ctx = struct(
+            root_module_has_non_dev_dependency = has_non_dev,
+            extension_metadata = lambda **kwargs: captured.update(kwargs),
+        )
+        swift_deps_test_utils.extension_metadata(module_ctx, ["swiftpkg_foo"])
+        asserts.equals(
+            env,
+            ["swiftpkg_foo"] if has_non_dev else [],
+            captured["root_module_direct_deps"],
+        )
+        asserts.equals(
+            env,
+            [] if has_non_dev else ["swiftpkg_foo"],
+            captured["root_module_direct_dev_deps"],
+        )
+    return unittest.end(env)
+
+extension_metadata_test = unittest.make(_extension_metadata_test)
+
 def swift_deps_test_suite():
     return unittest.suite(
         "swift_deps_tests",
@@ -507,4 +530,5 @@ def swift_deps_test_suite():
         branch_values_test,
         build_file_conflict_error_test,
         non_root_target_mods_error_test,
+        extension_metadata_test,
     )
