@@ -7,7 +7,7 @@ let package = Package(
     dependencies: [
         .package(
             url: "https://github.com/firebase/firebase-ios-sdk",
-            .upToNextMajor(from: "13.1.1")
+            .upToNextMajor(from: "13.2.0")
         ),
         // Used by crashlytics example
         .package(
