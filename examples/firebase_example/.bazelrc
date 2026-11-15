@@ -20,8 +20,3 @@ build --cxxopt='-std=gnu++14'
 # Firebase SPM support requires `-ObjC` linker option.
 # https://github.com/firebase/firebase-ios-sdk/blob/master/SwiftPackageManager.md#requirements
 build --linkopt='-ObjC'
-
-# Required by rules_apple after bazelbuild/rules_apple#2889 removed the
-# automatic device-type fallback from the test runner.
-test --ios_simulator_device="iPhone 16"
-

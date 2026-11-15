@@ -23,8 +23,6 @@ runs:
         cat >> "local.bazelrc" <<EOF
         # The runner image has no iOS 27.2 simulator runtime for Xcode 27.2.
         build --ios_simulator_version=27.0
-        # Use one simulator device for every example.
-        test --ios_simulator_device="iPhone 16"
         EOF
     # As of macos-13 runner, go was not on the PATH. This resulted in bazel run
     # //:go_update_repos failing.
