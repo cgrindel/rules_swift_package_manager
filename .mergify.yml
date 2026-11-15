@@ -1,12 +1,38 @@
 queue_rules:
+  # Order matters: with no queue name on the queue action, a PR goes to the
+  # first rule whose queue_conditions it matches.
   - name: default
-    batch_size: 1
+    merge_method: squash
+    batch_size: 3
+    max_checks_retries: 1
+    queue_conditions:
+      - -author=cgrindel-self-hosted-renovate[bot]
+      - check-success=all_ci_tests
+      - check-success=conventional_commit_check
+    # Evaluated against Mergify's draft batch PR. The PR title check is left
+    # out because the batch PR's title is not a conventional commit.
     merge_conditions:
       - check-success=all_ci_tests
-      - check-success=conventional_commit_check
+
+  - name: renovate
+    merge_method: squash
+    batch_size: 5
+    batch_max_wait_time: 15 min
+    max_checks_retries: 1
     queue_conditions:
+      - author=cgrindel-self-hosted-renovate[bot]
       - check-success=all_ci_tests
       - check-success=conventional_commit_check
+    merge_conditions:
+      - check-success=all_ci_tests
+
+priority_rules:
+  # PRs that match no rule get medium priority, so contributor PRs go ahead
+  # of Renovate PRs.
+  - name: renovate
+    conditions:
+      - author=cgrindel-self-hosted-renovate[bot]
+    priority: low
 
 pull_request_rules:
   - name: Automatic merge on approval
@@ -20,8 +46,8 @@ pull_request_rules:
       - -merged
       - base=main
     actions:
-      queue:
-        name: default
+      # No name: queue_conditions route the PR to default or renovate.
+      queue: {}
 
 merge_queue:
-  max_parallel_checks: 1
+  max_parallel_checks: 2
