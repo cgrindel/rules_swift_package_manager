@@ -4,6 +4,7 @@
     "github>cgrindel/renovate_presets:ruleset_base",
     "github>cgrindel/renovate_presets:cgrindel_default"
   ],
+  "automerge": false,
   "postUpgradeTasks": {
     "commands": [
       "./do_renovate_post_upgrade"
