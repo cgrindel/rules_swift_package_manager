@@ -327,11 +327,69 @@ def _parse_od_output_test(ctx):
 
 parse_od_output_test = unittest.make(_parse_od_output_test)
 
+def _windows_ctx(path_env, existing, systemroot = "C:\\Windows"):
+    return struct(
+        os = struct(
+            name = "windows 11",
+            environ = {"PATH": path_env, "SYSTEMROOT": systemroot},
+        ),
+        path = lambda p: struct(exists = p in existing),
+    )
+
+def _find_test(ctx):
+    env = unittest.begin(ctx)
+
+    asserts.equals(
+        env,
+        "find",
+        repository_files.find(struct(os = struct(name = "linux", environ = {}))),
+        "non-Windows hosts use find from PATH",
+    )
+
+    git_find = "C:\\Program Files\\Git\\usr\\bin\\find.exe"
+    tests = [
+        struct(
+            msg = "skips the Windows directory, with backslashes, forward slashes and quotes",
+            path_env = ";".join([
+                "C:\\Windows\\system32",
+                "C:/Windows/System32",
+                "\"C:\\Windows\"",
+                "C:\\Program Files\\Git\\usr\\bin\\",
+            ]),
+            existing = [
+                "C:\\Windows\\system32\\find.exe",
+                "C:/Windows/System32\\find.exe",
+                "C:\\Windows\\find.exe",
+                git_find,
+            ],
+            exp = git_find,
+        ),
+        struct(
+            msg = "a directory that only starts with the Windows directory's name is not skipped",
+            path_env = "C:\\WindowsTools\\bin;C:\\Program Files\\Git\\usr\\bin",
+            existing = ["C:\\WindowsTools\\bin\\find.exe", git_find],
+            exp = "C:\\WindowsTools\\bin\\find.exe",
+        ),
+        struct(
+            msg = "skips entries without a find.exe",
+            path_env = "C:\\Tools;;C:\\Program Files\\Git\\usr\\bin",
+            existing = [git_find],
+            exp = git_find,
+        ),
+    ]
+    for t in tests:
+        asserts.equals(env, t.exp, repository_files.find(_windows_ctx(t.path_env, t.existing)), t.msg)
+
+    return unittest.end(env)
+
+find_test = unittest.make(_find_test)
+
 def repository_files_test_suite():
     return unittest.suite(
         "repository_files_tests",
         exclude_paths_test,
         exclude_paths_with_find_path_test,
+        find_test,
         parse_od_output_test,
         process_find_results_test,
     )
