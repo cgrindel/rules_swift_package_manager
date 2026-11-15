@@ -9,8 +9,9 @@ jobs:
   conventional_commit_check:
     # Mergify's draft batch PRs are titled "merge queue: ...". Each queued PR
     # already passed this check, so skip it for them. A skipped check still
-    # satisfies branch protection and Mergify.
-    if: ${{ !startsWith(github.head_ref, 'mergify/merge-queue/') }}
+    # satisfies branch protection and Mergify. Fork branches never skip it.
+    if: >-
+      ${{ !(startsWith(github.head_ref, 'mergify/merge-queue/') && github.event.pull_request.head.repo.full_name == github.repository) }}
     runs-on: ubuntu-latest
     steps:
       - uses: agenthunt/conventional-commit-checker-action@v2.0.1
