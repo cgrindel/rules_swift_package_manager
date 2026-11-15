@@ -495,37 +495,73 @@ def _inference_repository_routing_test(ctx):
 
 inference_repository_routing_test = unittest.make(_inference_repository_routing_test)
 
+_EXTENSION_METADATA_SENTINEL = struct(sentinel = "extension_metadata")
+
+def _new_fake_module_ctx(modules, metadata):
+    """Create a fake `module_ctx`.
+
+    Args:
+        modules: The fake modules for `module_ctx.modules`.
+        metadata: A `dict` that receives the kwargs passed to
+            `module_ctx.extension_metadata`.
+
+    Returns:
+        A `struct` that mimics a `module_ctx`. Its `extension_metadata`
+        returns `_EXTENSION_METADATA_SENTINEL`, and its `is_dev_dependency`
+        reads the fake tag's `is_dev` field.
+    """
+
+    def _extension_metadata(**kwargs):
+        metadata.update(kwargs)
+        return _EXTENSION_METADATA_SENTINEL
+
+    return struct(
+        modules = modules,
+        extension_metadata = _extension_metadata,
+        is_dev_dependency = lambda tag: tag.is_dev,
+    )
+
 def _extension_metadata_test(ctx):
     env = unittest.begin(ctx)
-    for has_non_dev in (True, False):
-        captured = {}
-        module_ctx = struct(
-            root_module_has_non_dev_dependency = has_non_dev,
-            extension_metadata = lambda **kwargs: captured.update(kwargs),
-        )
-        swift_deps_test_utils.extension_metadata(module_ctx, ["swiftpkg_foo"])
-        asserts.equals(
-            env,
-            ["swiftpkg_foo"] if has_non_dev else [],
-            captured["root_module_direct_deps"],
-        )
-        asserts.equals(
-            env,
-            [] if has_non_dev else ["swiftpkg_foo"],
-            captured["root_module_direct_dev_deps"],
-        )
+
+    # A repo that is both a dev and a non-dev dep is only a non-dev dep, and
+    # duplicates are dropped.
+    metadata = {}
+    actual = swift_deps_test_utils.extension_metadata(
+        _new_fake_module_ctx([], metadata),
+        ["swiftpkg_foo", "swiftpkg_shared", "swiftpkg_foo"],
+        ["swiftpkg_bar", "swiftpkg_shared", "swiftpkg_bar"],
+    )
+    asserts.equals(env, _EXTENSION_METADATA_SENTINEL, actual)
+    asserts.equals(
+        env,
+        ["swiftpkg_foo", "swiftpkg_shared"],
+        metadata["root_module_direct_deps"],
+    )
+    asserts.equals(
+        env,
+        ["swiftpkg_bar"],
+        metadata["root_module_direct_dev_deps"],
+    )
+
     return unittest.end(env)
 
 extension_metadata_test = unittest.make(_extension_metadata_test)
 
-def _new_ext_module(name, is_root, from_package_repo_names):
-    """Create a fake Bazel module with one `from_package` tag.
+def _new_ext_module(
+        name,
+        is_root,
+        from_package_repo_names,
+        dev_from_package_repo_names = None):
+    """Create a fake Bazel module with `from_package` tags.
 
     Args:
         name: The module name.
         is_root: Whether the module is the root module.
-        from_package_repo_names: The repository names that the fake
+        from_package_repo_names: The repository names that the fake non-dev
             `from_package` tag declares.
+        dev_from_package_repo_names: Optional. The repository names that a
+            second, dev `from_package` tag declares.
 
     Returns:
         A `struct` that mimics an entry in `module_ctx.modules`.
@@ -537,7 +573,14 @@ def _new_ext_module(name, is_root, from_package_repo_names):
     tags["configure_explicit_modules"] = []
     tags["configure_package"] = []
     tags["configure_swift_package"] = []
-    tags["from_package"] = [struct(repo_names = from_package_repo_names)]
+    from_package_tags = [
+        struct(is_dev = False, repo_names = from_package_repo_names),
+    ]
+    if dev_from_package_repo_names != None:
+        from_package_tags.append(
+            struct(is_dev = True, repo_names = dev_from_package_repo_names),
+        )
+    tags["from_package"] = from_package_tags
     return struct(is_root = is_root, name = name, tags = struct(**tags))
 
 def _run_swift_deps_impl(modules):
@@ -548,8 +591,9 @@ def _run_swift_deps_impl(modules):
 
     Returns:
         A `struct` with `declared` (the repository names declared for every
-        `from_package` tag, in order) and `metadata` (the kwargs passed to
-        `module_ctx.extension_metadata`).
+        `from_package` tag, in order), `metadata` (the kwargs passed to
+        `module_ctx.extension_metadata`), and `result` (the value that the
+        implementation returned).
     """
     declared = []
     metadata = {}
@@ -558,19 +602,11 @@ def _run_swift_deps_impl(modules):
         declared.extend(from_package.repo_names)
         return from_package.repo_names
 
-    def _extension_metadata(**kwargs):
-        metadata.update(kwargs)
-
-    module_ctx = struct(
-        modules = modules,
-        extension_metadata = _extension_metadata,
-        root_module_has_non_dev_dependency = True,
-    )
-    swift_deps_test_utils.swift_deps_impl(
-        module_ctx,
+    result = swift_deps_test_utils.swift_deps_impl(
+        _new_fake_module_ctx(modules, metadata),
         declare_pkgs_from_package = _declare_pkgs_from_package,
     )
-    return struct(declared = declared, metadata = metadata)
+    return struct(declared = declared, metadata = metadata, result = result)
 
 def _root_module_direct_deps_test(ctx):
     env = unittest.begin(ctx)
@@ -596,6 +632,7 @@ def _root_module_direct_deps_test(ctx):
         "swiftpkg_baz" in actual.metadata["root_module_direct_deps"],
     )
     asserts.equals(env, [], actual.metadata["root_module_direct_dev_deps"])
+    asserts.equals(env, _EXTENSION_METADATA_SENTINEL, actual.result)
 
     # A repo that only a non-root module declares exists, but it is not
     # reported as a direct dep of the root, regardless of module order.
@@ -609,6 +646,50 @@ def _root_module_direct_deps_test(ctx):
     return unittest.end(env)
 
 root_module_direct_deps_test = unittest.make(_root_module_direct_deps_test)
+
+def _root_module_direct_dev_deps_test(ctx):
+    env = unittest.begin(ctx)
+
+    # Only a dev tag declares packages, so they are all direct dev deps.
+    actual = _run_swift_deps_impl([
+        _new_ext_module("my_app", True, [], ["swiftpkg_foo"]),
+    ])
+    asserts.equals(env, _EXTENSION_METADATA_SENTINEL, actual.result)
+    asserts.equals(env, [], actual.metadata["root_module_direct_deps"])
+    asserts.equals(
+        env,
+        ["swiftpkg_foo"],
+        actual.metadata["root_module_direct_dev_deps"],
+    )
+
+    # A dev and a non-dev tag split the packages. A package in both is a
+    # non-dev dep. A non-root module's dev tag is not reported.
+    actual = _run_swift_deps_impl([
+        _new_ext_module(
+            "my_app",
+            True,
+            ["swiftpkg_foo", "swiftpkg_shared"],
+            ["swiftpkg_bar", "swiftpkg_shared"],
+        ),
+        _new_ext_module("some_dep", False, [], ["swiftpkg_baz"]),
+    ])
+    asserts.equals(env, _EXTENSION_METADATA_SENTINEL, actual.result)
+    asserts.equals(
+        env,
+        ["swiftpkg_foo", "swiftpkg_shared"],
+        actual.metadata["root_module_direct_deps"],
+    )
+    asserts.equals(
+        env,
+        ["swiftpkg_bar"],
+        actual.metadata["root_module_direct_dev_deps"],
+    )
+
+    return unittest.end(env)
+
+root_module_direct_dev_deps_test = unittest.make(
+    _root_module_direct_dev_deps_test,
+)
 
 def swift_deps_test_suite():
     return unittest.suite(
@@ -624,4 +705,5 @@ def swift_deps_test_suite():
         non_root_target_mods_error_test,
         extension_metadata_test,
         root_module_direct_deps_test,
+        root_module_direct_dev_deps_test,
     )
