@@ -4,6 +4,15 @@ inputs:
   test_target:
     description: The test target to execute.
     default: ''
+  ios_simulator_device:
+    description: |
+      The iOS simulator device type that every test uses and that is pre-booted.
+    default: 'iPhone 16'
+  ios_simulator_version:
+    description: |
+      The iOS simulator runtime version that every test uses and that is
+      pre-booted.
+    default: '27.0'
 runs:
   using: composite
   steps:
@@ -19,11 +28,29 @@ runs:
     - uses: cgrindel/gha_set_up_bazel@18264e68d4d698b4748e9190a522595c41e34181 # v2.0.25
     - name: Update local.bazelrc with macOS Flags
       shell: bash
+      env:
+        IOS_SIMULATOR_DEVICE: ${{ inputs.ios_simulator_device }}
+        IOS_SIMULATOR_VERSION: ${{ inputs.ios_simulator_version }}
       run: |
         cat >> "local.bazelrc" <<EOF
         # The runner image has no iOS 27.2 simulator runtime for Xcode 27.2.
-        build --ios_simulator_version=27.0
+        build --ios_simulator_version=${IOS_SIMULATOR_VERSION}
+        # Use one device for every example so they all reuse the pre-booted
+        # simulator.
+        test --ios_simulator_device="${IOS_SIMULATOR_DEVICE}"
         EOF
+    # Boot the simulator that rules_apple's test runner will reuse while the
+    # rest of the setup and build run. The log is printed by a later step in
+    # the workflow.
+    - name: Pre-boot iOS Simulator
+      shell: bash
+      env:
+        IOS_SIMULATOR_DEVICE: ${{ inputs.ios_simulator_device }}
+        IOS_SIMULATOR_VERSION: ${{ inputs.ios_simulator_version }}
+      run: |
+        nohup "${GITHUB_ACTION_PATH}/preboot_simulator.sh" \
+          "${IOS_SIMULATOR_DEVICE}" "${IOS_SIMULATOR_VERSION}" \
+          > "${RUNNER_TEMP}/preboot_simulator.log" 2>&1 &
     # As of macos-13 runner, go was not on the PATH. This resulted in bazel run
     # //:go_update_repos failing.
     - uses: actions/setup-go@v7
