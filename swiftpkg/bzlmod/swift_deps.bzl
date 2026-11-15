@@ -890,7 +890,19 @@ def _inference_settings(config, package_name, repo_name):
             settings[key] = value == "on"
     return settings
 
-def _swift_deps_impl(module_ctx):
+def _swift_deps_impl(
+        module_ctx,
+        declare_pkgs_from_package = _declare_pkgs_from_package):
+    """Implementation for the `swift_deps` module extension.
+
+    Args:
+        module_ctx: An instance of `module_ctx`.
+        declare_pkgs_from_package: The function that declares the packages for
+            a `from_package` tag. Tests replace it to avoid running SwiftPM.
+
+    Returns:
+        The extension metadata from `module_ctx.extension_metadata`.
+    """
     inference_config = _inference_configuration(module_ctx.modules)
     if inference_config.error:
         fail(inference_config.error)
@@ -913,18 +925,20 @@ Expected only one `configure_swift_package` tag, but found multiple.\
     direct_dep_repo_names = []
     for mod in module_ctx.modules:
         for from_package in mod.tags.from_package:
-            direct_dep_repo_names.extend(
-                _declare_pkgs_from_package(
-                    module_ctx,
-                    from_package,
-                    config_pkgs,
-                    config_swift_package,
-                    target_mods_by_repo,
-                    matched_target_mod_repos,
-                    available_target_mod_repos,
-                    inference_config,
-                ),
+            repo_names = declare_pkgs_from_package(
+                module_ctx,
+                from_package,
+                config_pkgs,
+                config_swift_package,
+                target_mods_by_repo,
+                matched_target_mod_repos,
+                available_target_mod_repos,
+                inference_config,
             )
+
+            # Only the root module's packages are its direct deps.
+            if mod.is_root:
+                direct_dep_repo_names.extend(repo_names)
 
     inference_error = _unknown_inference_packages_error(inference_config)
     if inference_error:
@@ -1372,4 +1386,5 @@ swift_deps_test_utils = struct(
     bazel_target_mods_by_repo = _bazel_target_mods_by_repo,
     build_file_conflict_error = _build_file_conflict_error,
     non_root_target_mods_error = _non_root_target_mods_error,
+    swift_deps_impl = _swift_deps_impl,
 )
