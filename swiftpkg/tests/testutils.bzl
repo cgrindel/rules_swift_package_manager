@@ -95,6 +95,7 @@ def _new_stub_repository_ctx(
         attr = struct(
             bazel_package_name = repo_name,
         ),
+        os = struct(name = "linux"),
     )
 
 testutils = struct(

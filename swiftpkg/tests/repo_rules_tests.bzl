@@ -179,6 +179,7 @@ def _gen_build_files_without_build_file_test(ctx):
         template = _template,
         file = _file,
         execute = _execute,
+        os = struct(name = "linux"),
     )
 
     pkg_info = struct(
