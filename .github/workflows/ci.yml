@@ -135,12 +135,6 @@ jobs:
         with:
           bzlmod_enabled: ${{ matrix.bzlmod_enabled }}
           test_target: ${{ matrix.test }}
-      - if: ${{ always() && runner.os == 'macOS' }}
-        name: Print simulator pre-boot log
-        shell: bash
-        run: |
-          log="${RUNNER_TEMP}/preboot_simulator.log"
-          if [[ -f "${log}" ]]; then cat "${log}"; else echo "No pre-boot log found."; fi
   tidy_and_test_matrix:
     strategy:
       fail-fast: false
@@ -168,9 +162,3 @@ jobs:
         name: Execute tests
         shell: bash
         run: "bazelisk test //... \n"
-      - if: ${{ always() && runner.os == 'macOS' }}
-        name: Print simulator pre-boot log
-        shell: bash
-        run: |
-          log="${RUNNER_TEMP}/preboot_simulator.log"
-          if [[ -f "${log}" ]]; then cat "${log}"; else echo "No pre-boot log found."; fi
