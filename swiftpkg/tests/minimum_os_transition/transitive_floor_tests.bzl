@@ -4,6 +4,9 @@ load("@bazel_skylib//lib:unittest.bzl", "analysistest", "asserts")
 
 _IOS_MINIMUM_OS_OPTION = "//command_line_option:ios_minimum_os"
 _APPLE_PLATFORM_TYPE_OPTION = "//command_line_option:apple_platform_type"
+_MINIMUM_OS_VERSION_OPTION = "//command_line_option:minimum_os_version"
+_PLATFORMS_OPTION = "//command_line_option:platforms"
+_EXTRA_TOOLCHAINS_OPTION = "//command_line_option:extra_toolchains"
 
 def _probe_basenames(target):
     return sorted([
@@ -34,6 +37,34 @@ raised_importer_builds_at_dependency_floor_test = analysistest.make(
     },
 )
 
+def _off_apple_ignores_package_floors_test_impl(ctx):
+    env = analysistest.begin(ctx)
+    target = analysistest.target_under_test(env)
+
+    # On Linux the wrappers leave the minimum OS alone, so both probes keep
+    # the consumer's value and the iOS 13 importer of an iOS 15 package
+    # analyzes instead of failing.
+    asserts.equals(env, [
+        "imported_actual.min-os-11.0.txt",
+        "off_apple_importer_actual.min-os-11.0.txt",
+    ], _probe_basenames(target))
+
+    return analysistest.end(env)
+
+off_apple_ignores_package_floors_test = analysistest.make(
+    _off_apple_ignores_package_floors_test_impl,
+    config_settings = {
+        _APPLE_PLATFORM_TYPE_OPTION: "ios",
+        _EXTRA_TOOLCHAINS_OPTION: [
+            str(Label(":linux_stub_cc_toolchain")),
+            str(Label(":linux_stub_swift_toolchain")),
+        ],
+        _IOS_MINIMUM_OS_OPTION: "11.0",
+        _MINIMUM_OS_VERSION_OPTION: "11.0",
+        _PLATFORMS_OPTION: str(Label(":linux_x86_64")),
+    },
+)
+
 def transitive_floor_test_suite(name):
     """Defines the transitive floor analysis test suite.
 
@@ -44,9 +75,14 @@ def transitive_floor_test_suite(name):
         name = "{}_test_0".format(name),
         target_under_test = ":importer_wrapped",
     )
+    off_apple_ignores_package_floors_test(
+        name = "{}_test_1".format(name),
+        target_under_test = ":off_apple_importer_wrapped",
+    )
     native.test_suite(
         name = name,
         tests = [
             ":{}_test_0".format(name),
+            ":{}_test_1".format(name),
         ],
     )
