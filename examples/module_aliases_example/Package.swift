@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "module_aliases_example",
     dependencies: [
-        .package(url: "https://github.com/apple/swift-log", from: "1.17.0"),
+        .package(url: "https://github.com/apple/swift-log", from: "1.17.2"),
         .package(path: "third_party/swift-draw"),
         .package(path: "third_party/swift-game"),
     ],
