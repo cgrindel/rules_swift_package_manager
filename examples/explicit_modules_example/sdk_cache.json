@@ -1,0 +1,1950 @@
+{
+  "schema_version": 3,
+  "request": {
+    "targets": {
+      "MacOSX": "arm64-apple-macosx13.0",
+      "iPhoneSimulator": "arm64-apple-ios15.0-simulator"
+    },
+    "defines": null,
+    "exclude_modules": {
+      "MacOSX": [
+        "MobileGestaltPrivate"
+      ],
+      "iPhoneSimulator": [
+        "CoreAudio_Private",
+        "MobileGestaltPrivate"
+      ]
+    },
+    "full_sdk_tracking": false
+  },
+  "xcode_version": "27.0.0.27A266a",
+  "swift_version": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0",
+  "fingerprints": {
+    "compiler/swiftc": "84b410d8143298f90ab0b721d488dab90e2fdbf23577ae6186162832a1155cb7",
+    "sdk/MacOSX/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
+    "sdk/iPhoneSimulator/SDKSettings.json": "b8c86f02919d336244af1509b95b3bdaf9fd1151ee97ba188f5f77b301ed4a1e",
+    "xcode/version.plist": "99aa0f4ffa738d03c9d86b273745d4a3945c7cdc7462221033fb807463d895e9"
+  },
+  "modules": {
+    "ARKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ARKitCore": [
+      "MacOSX"
+    ],
+    "AVFAudio": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AVFoundation": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AVKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AVRouting": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Accelerate": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Accessibility": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AccessoryAccess": [
+      "MacOSX"
+    ],
+    "AccessoryLiveActivities": [
+      "iPhoneSimulator"
+    ],
+    "AccessoryNotifications": [
+      "iPhoneSimulator"
+    ],
+    "AccessorySetupKit": [
+      "iPhoneSimulator"
+    ],
+    "AccessoryTransportExtension": [
+      "iPhoneSimulator"
+    ],
+    "Accounts": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ActivityKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AdAttributionKit": [
+      "iPhoneSimulator"
+    ],
+    "AdServices": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AdSupport": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AddressBook": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AddressBookUI": [
+      "iPhoneSimulator"
+    ],
+    "AlarmKit": [
+      "iPhoneSimulator"
+    ],
+    "AppClip": [
+      "iPhoneSimulator"
+    ],
+    "AppIntents": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AppIntentsTesting": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AppIntentsTypeSupport": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AppKit": [
+      "MacOSX"
+    ],
+    "AppMigrationKit": [
+      "iPhoneSimulator"
+    ],
+    "AppTrackingTransparency": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AppleArchive": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AppleScriptObjC": [
+      "MacOSX"
+    ],
+    "AppleTextureEncoder": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ApplicationServices": [
+      "MacOSX"
+    ],
+    "AssetsLibrary": [
+      "iPhoneSimulator"
+    ],
+    "AudioAccessoryKit": [
+      "MacOSX"
+    ],
+    "AudioToolbox": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AudioUnit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AudioVideoBridging": [
+      "MacOSX"
+    ],
+    "AuthenticationServices": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "AutomatedDeviceEnrollment": [
+      "iPhoneSimulator"
+    ],
+    "AutomaticAssessmentConfiguration": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Automator": [
+      "MacOSX"
+    ],
+    "BackgroundAssets": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "BackgroundTasks": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Bootstrap": [
+      "MacOSX"
+    ],
+    "BrowserEngineCore": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "BrowserEngineKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "BrowserKit": [
+      "iPhoneSimulator"
+    ],
+    "BusinessChat": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CFNetwork": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CUPS": [
+      "MacOSX"
+    ],
+    "CallKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CarKey": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CarPlay": [
+      "iPhoneSimulator"
+    ],
+    "Carbon": [
+      "MacOSX"
+    ],
+    "Charts": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Cinematic": [
+      "MacOSX"
+    ],
+    "ClassKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ClassKitUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ClockKit": [
+      "iPhoneSimulator"
+    ],
+    "CloudKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Cocoa": [
+      "MacOSX"
+    ],
+    "Collaboration": [
+      "MacOSX"
+    ],
+    "ColorSync": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Combine": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CommonCrypto": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CompositorServices": [
+      "MacOSX"
+    ],
+    "Compression": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ComputeGraph": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ContactProvider": [
+      "iPhoneSimulator"
+    ],
+    "Contacts": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ContactsUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreAI": [
+      "MacOSX"
+    ],
+    "CoreAIAsset": [
+      "MacOSX"
+    ],
+    "CoreAICommon": [
+      "MacOSX"
+    ],
+    "CoreAICompiler": [
+      "MacOSX"
+    ],
+    "CoreAIDelegates": [
+      "MacOSX"
+    ],
+    "CoreAIRuntime": [
+      "MacOSX"
+    ],
+    "CoreAudio": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreAudioKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreAudioKitPrivate": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreAudioTypes": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreBluetooth": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreData": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreFoundation": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreGraphics": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreHID": [
+      "MacOSX"
+    ],
+    "CoreHaptics": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreImage": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreLocation": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreLocationUI": [
+      "iPhoneSimulator"
+    ],
+    "CoreMIDI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreML": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreMedia": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreMediaIO": [
+      "MacOSX"
+    ],
+    "CoreMotion": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreNFC": [
+      "iPhoneSimulator"
+    ],
+    "CoreServices": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreSpotlight": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreTelephony": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreText": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreTransferable": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreVideo": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CoreWLAN": [
+      "MacOSX"
+    ],
+    "CrashReportExtension": [
+      "MacOSX"
+    ],
+    "CreateML": [
+      "MacOSX"
+    ],
+    "CreateMLComponents": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CryptoKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "CryptoTokenKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "DVDPlayback": [
+      "MacOSX"
+    ],
+    "Darwin": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "DataDetection": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "DeclaredAgeRange": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "DeveloperToolsSupport": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "DeviceActivity": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "DeviceCheck": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "DeviceDiscoveryExtension": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "DeviceDiscoveryUI": [
+      "iPhoneSimulator"
+    ],
+    "DirectoryService": [
+      "MacOSX"
+    ],
+    "DiscRecording": [
+      "MacOSX"
+    ],
+    "DiscRecordingUI": [
+      "MacOSX"
+    ],
+    "DiskArbitration": [
+      "MacOSX"
+    ],
+    "DiskImageKit": [
+      "MacOSX"
+    ],
+    "Dispatch": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "DispatchIntrospection": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Distributed": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "DockKit": [
+      "MacOSX"
+    ],
+    "EditLine": [
+      "MacOSX"
+    ],
+    "EndpointSecurity": [
+      "MacOSX"
+    ],
+    "EnergyKit": [
+      "iPhoneSimulator"
+    ],
+    "Evaluations": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "EventKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "EventKitUI": [
+      "iPhoneSimulator"
+    ],
+    "ExceptionHandling": [
+      "MacOSX"
+    ],
+    "ExecutionPolicy": [
+      "MacOSX"
+    ],
+    "ExposureNotification": [
+      "iPhoneSimulator"
+    ],
+    "ExtensionFoundation": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ExtensionKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ExternalAccessory": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "FFI": [
+      "MacOSX"
+    ],
+    "FSKit": [
+      "MacOSX"
+    ],
+    "FamilyControls": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "FileProvider": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "FileProviderUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "FinanceKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "FinanceKitUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "FinderSync": [
+      "MacOSX"
+    ],
+    "ForceFeedback": [
+      "MacOSX"
+    ],
+    "Foundation": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "FoundationModels": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "GLKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "GLUT": [
+      "MacOSX"
+    ],
+    "GSS": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "GameController": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "GameKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "GameSave": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "GameplayKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "GeoToolbox": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "GroupActivities": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "HealthKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "HealthKitUI": [
+      "iPhoneSimulator"
+    ],
+    "HomeKit": [
+      "iPhoneSimulator"
+    ],
+    "Hypervisor": [
+      "MacOSX"
+    ],
+    "ICADevices": [
+      "MacOSX"
+    ],
+    "ICU": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "IOBluetooth": [
+      "MacOSX"
+    ],
+    "IOBluetoothUI": [
+      "MacOSX"
+    ],
+    "IOKit": [
+      "MacOSX"
+    ],
+    "IOSurface": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "IOUSBHost": [
+      "MacOSX"
+    ],
+    "IdentityDocumentServices": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "IdentityDocumentServicesUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "IdentityLookup": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "IdentityLookupUI": [
+      "iPhoneSimulator"
+    ],
+    "ImageCaptureCore": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ImageIO": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ImagePlayground": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ImmersiveMediaSupport": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "InputMethodKit": [
+      "MacOSX"
+    ],
+    "Intents": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "IntentsUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "JavaRuntimeSupport": [
+      "MacOSX"
+    ],
+    "JavaScriptCore": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "KernelManagement": [
+      "MacOSX"
+    ],
+    "LatentSemanticMapping": [
+      "MacOSX"
+    ],
+    "LightweightCodeRequirements": [
+      "MacOSX"
+    ],
+    "LinkPresentation": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "LinkSecurity": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "LiveCommunicationKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "LocalAuthentication": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "LocalAuthenticationEmbeddedUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "LockedCameraCapture": [
+      "iPhoneSimulator"
+    ],
+    "MLCompute": [
+      "MacOSX"
+    ],
+    "MachO": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MailKit": [
+      "MacOSX"
+    ],
+    "ManagedApp": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ManagedAppDistribution": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ManagedSettings": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ManagedSettingsUI": [
+      "iPhoneSimulator"
+    ],
+    "MapKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MarketplaceKit": [
+      "iPhoneSimulator"
+    ],
+    "Matter": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MatterSupport": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MediaAccessibility": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MediaExtension": [
+      "MacOSX"
+    ],
+    "MediaIntelligence": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MediaIntents": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MediaLibrary": [
+      "MacOSX"
+    ],
+    "MediaPlayer": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MediaToolbox": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MessageUI": [
+      "iPhoneSimulator"
+    ],
+    "Messages": [
+      "iPhoneSimulator"
+    ],
+    "Metal": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MetalFX": [
+      "MacOSX"
+    ],
+    "MetalKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MetalPerformancePrimitives": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MetalPerformanceShaders": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MetalPerformanceShadersGraph": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MetricKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MobileCoreServices": [
+      "iPhoneSimulator"
+    ],
+    "ModelIO": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MultipeerConnectivity": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MusicKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "MusicUnderstanding": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "NaturalLanguage": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "NearbyInteraction": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "NetFS": [
+      "MacOSX"
+    ],
+    "Network": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "NetworkExtension": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "NotificationCenter": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "NowPlaying": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "OSAKit": [
+      "MacOSX"
+    ],
+    "OSLog": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ObjectiveC": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Observation": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "OpenAL": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "OpenCL": [
+      "MacOSX"
+    ],
+    "OpenDirectory": [
+      "MacOSX"
+    ],
+    "OpenGL": [
+      "MacOSX"
+    ],
+    "OpenGLES": [
+      "iPhoneSimulator"
+    ],
+    "PDFKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "PHASE": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "PaperKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ParavirtualizedGraphics": [
+      "MacOSX"
+    ],
+    "PassKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "PencilKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "PermissionKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Photos": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "PhotosUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "PreferencePanes": [
+      "MacOSX"
+    ],
+    "ProximityReader": [
+      "iPhoneSimulator"
+    ],
+    "ProximityReaderStub": [
+      "MacOSX"
+    ],
+    "PushKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "PushToTalk": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Quartz": [
+      "MacOSX"
+    ],
+    "QuartzCore": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "QuickLook": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "QuickLookThumbnailing": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "QuickLookUI": [
+      "MacOSX"
+    ],
+    "RealityCoreDeformation": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "RealityCoreRenderer": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "RealityCoreTextureProcessing": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "RealityFoundation": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "RealityFoundationCloth": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "RealityKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "RegexBuilder": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "RelevanceKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ReplayKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "RoomPlan": [
+      "iPhoneSimulator"
+    ],
+    "Runtime": [
+      "MacOSX"
+    ],
+    "SQLite3": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SafariServices": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SafetyKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SceneKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ScreenCaptureKit": [
+      "MacOSX"
+    ],
+    "ScreenSaver": [
+      "MacOSX"
+    ],
+    "ScreenTime": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ScriptingBridge": [
+      "MacOSX"
+    ],
+    "SecureElementCredential": [
+      "iPhoneSimulator"
+    ],
+    "Security": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SecurityFoundation": [
+      "MacOSX"
+    ],
+    "SecurityInterface": [
+      "MacOSX"
+    ],
+    "SecurityUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SensitiveContentAnalysis": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SensorKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ServiceManagement": [
+      "MacOSX"
+    ],
+    "ServicesAccountLinking": [
+      "iPhoneSimulator"
+    ],
+    "ShaderGraph": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SharedWithYou": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SharedWithYouCore": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ShazamKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Social": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SoundAnalysis": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Spatial": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SpatialPreview": [
+      "MacOSX"
+    ],
+    "Speech": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SpriteKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "StateReporting": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "StickerFoundation": [
+      "MacOSX"
+    ],
+    "StickerKit": [
+      "MacOSX"
+    ],
+    "StoreKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "StoreKitTest": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SuggestedActions": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Swift": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SwiftData": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SwiftOnoneSupport": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SwiftShims": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SwiftUICore": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Symbols": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Synchronization": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "System": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SystemConfiguration": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "SystemExtensions": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "TWAIN": [
+      "MacOSX"
+    ],
+    "TabularData": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "TargetConditionals": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Tcl": [
+      "MacOSX"
+    ],
+    "TelephonyMessagingKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Testing": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ThreadNetwork": [
+      "MacOSX"
+    ],
+    "TipKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "TouchController": [
+      "iPhoneSimulator"
+    ],
+    "Translation": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "TranslationUIProvider": [
+      "iPhoneSimulator"
+    ],
+    "TrustInsights": [
+      "iPhoneSimulator"
+    ],
+    "UIKit": [
+      "iPhoneSimulator"
+    ],
+    "UIUtilities": [
+      "iPhoneSimulator"
+    ],
+    "USDKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "UniformTypeIdentifiers": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "UserNotifications": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "UserNotificationsUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "VideoSubscriberAccount": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "VideoToolbox": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "Virtualization": [
+      "MacOSX"
+    ],
+    "Vision": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "VisionKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "VisualIntelligence": [
+      "MacOSX"
+    ],
+    "WatchConnectivity": [
+      "iPhoneSimulator"
+    ],
+    "WeatherKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "WebKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "WiFiAware": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "WidgetKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "WorkoutKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "XCTest": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "XCUIAutomation": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "XPC": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_ARKit_SwiftUI": [
+      "MacOSX"
+    ],
+    "_AVKit_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_AdAttributionKit_StoreKit": [
+      "iPhoneSimulator"
+    ],
+    "_AppIntents_AppKit": [
+      "MacOSX"
+    ],
+    "_AppIntents_HealthKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_AppIntents_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_AppIntents_UIKit": [
+      "iPhoneSimulator"
+    ],
+    "_AuthenticationServices_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_AvailabilityInternal": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Builtin_float": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Builtin_intrinsics": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Builtin_inttypes": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Builtin_iso646": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Builtin_limits": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Builtin_stdalign": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Builtin_stdarg": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Builtin_stdatomic": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Builtin_stdbool": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Builtin_stddef": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Builtin_stdint": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Builtin_stdnoreturn": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Builtin_tgmath": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Builtin_unwind": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_CompositorServices_SwiftUI": [
+      "MacOSX"
+    ],
+    "_Concurrency": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Contacts_AppIntents": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_CoreData_CloudKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_CoreLocationUI_SwiftUI": [
+      "iPhoneSimulator"
+    ],
+    "_CoreNFC_UIKit": [
+      "iPhoneSimulator"
+    ],
+    "_CoreSpotlight_FoundationModels": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_DarwinFoundation1": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_DarwinFoundation2": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_DarwinFoundation3": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Darwin_xlocale": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_DataDetection_SwiftUI": [
+      "iPhoneSimulator"
+    ],
+    "_DeviceActivity_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_DeviceDiscoveryUI_SwiftUI": [
+      "iPhoneSimulator"
+    ],
+    "_FinanceKit_AppIntents": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_FoundationModels_AppKit": [
+      "MacOSX"
+    ],
+    "_FoundationModels_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_FoundationModels_UIKit": [
+      "iPhoneSimulator"
+    ],
+    "_GameController_SwiftUI": [
+      "iPhoneSimulator"
+    ],
+    "_GeoToolbox_AppIntents": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_GroupActivities_AppKit": [
+      "MacOSX"
+    ],
+    "_GroupActivities_UIKit": [
+      "iPhoneSimulator"
+    ],
+    "_HomeKit_SwiftUI": [
+      "iPhoneSimulator"
+    ],
+    "_Intents_TipKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_LinkPresentation_AppIntents": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_LocalAuthentication_SwiftUI": [
+      "MacOSX"
+    ],
+    "_LocationEssentials": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_ManagedAppDistribution_SwiftUI": [
+      "MacOSX"
+    ],
+    "_MapKit_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_MarketplaceKit_UIKit": [
+      "iPhoneSimulator"
+    ],
+    "_MediaIntents_AppIntents": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_MediaPlayer_AppIntents": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_MusicKit_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_NowPlaying_AppIntents": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_PassKit_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_PermissionKit_AppKit": [
+      "MacOSX"
+    ],
+    "_PermissionKit_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_PermissionKit_UIKit": [
+      "iPhoneSimulator"
+    ],
+    "_PhotosUI_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_PhotosUI_WidgetKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Photos_AppIntents": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_QuickLook_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_RealityKit_ComputeGraph": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_RealityKit_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_RelevanceKit_MapKit": [
+      "iPhoneSimulator"
+    ],
+    "_SceneKit_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_ScreenCaptureKit_SwiftUI": [
+      "MacOSX"
+    ],
+    "_SecureElementCredential_SwiftUI": [
+      "iPhoneSimulator"
+    ],
+    "_SecureElementCredential_UIKit": [
+      "iPhoneSimulator"
+    ],
+    "_SharedWithYou_AppIntents": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_SpatialPreview_SwiftUI": [
+      "MacOSX"
+    ],
+    "_SpatialPreview_USDKit": [
+      "MacOSX"
+    ],
+    "_SpriteKit_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_StoreKit_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_StringProcessing": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_SwiftConcurrencyShims": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_SwiftData_CoreData": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_SwiftData_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_System_Foundation": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Testing_AppKit": [
+      "MacOSX"
+    ],
+    "_Testing_CoreGraphics": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Testing_CoreImage": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Testing_CoreTransferable": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Testing_Foundation": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Testing_UIKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Translation_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_USDKit_RealityKit": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_UserNotifications_AppIntents": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_Vision_FoundationModels": [
+      "MacOSX"
+    ],
+    "_Volatile": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_WebKit_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_WorkoutKit_SwiftUI": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_xlocale_ctype_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_xlocale_inttypes_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_xlocale_stdio_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_xlocale_stdlib_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_xlocale_string_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_xlocale_time_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_xlocale_wchar_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "_xlocale_wctype_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "alloca": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "asl": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "assert_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "complex_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ctype_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "dnssd": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "errno_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "fenv_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "float_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "hvf": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "iAd": [
+      "iPhoneSimulator"
+    ],
+    "iTunesLibrary": [
+      "MacOSX"
+    ],
+    "inttypes_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "iso646_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "kcdata": [
+      "MacOSX"
+    ],
+    "launch": [
+      "MacOSX"
+    ],
+    "ldap": [
+      "MacOSX"
+    ],
+    "libDER": [
+      "MacOSX"
+    ],
+    "libexslt": [
+      "MacOSX"
+    ],
+    "libkern": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "libunwind": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "libxml2": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "libxslt": [
+      "MacOSX"
+    ],
+    "limits_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "locale_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "math_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "networkext": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "nl_types": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "notify": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "os": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "os_availability": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "os_object": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "os_workgroup": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "pthread": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ptrauth": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "ptrcheck": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "rpc": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "runetype": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "sched": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "setjmp_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "signal_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "simd": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "stdalign_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "stdarg_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "stdatomic_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "stdbool_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "stddef_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "stdint_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "stdio_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "stdlib_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "stdnoreturn_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "string_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "sys_appleapiopts": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "sys_cdefs": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "sys_qos": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "sys_resource": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "sys_select": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "sys_types": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "sys_wait": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "tgmath_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "tidy": [
+      "MacOSX"
+    ],
+    "time_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "unistd": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "unwind": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "unwind_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "vmnet": [
+      "MacOSX"
+    ],
+    "vproc": [
+      "MacOSX"
+    ],
+    "wchar_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "wctype_h": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "xcselect": [
+      "MacOSX"
+    ],
+    "xlocale": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ],
+    "zlib": [
+      "MacOSX",
+      "iPhoneSimulator"
+    ]
+  }
+}

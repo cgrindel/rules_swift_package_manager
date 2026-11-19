@@ -4,10 +4,10 @@ set -o errexit -o nounset -o pipefail
 
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
-# The SDK inventory does not read xcode-select. Pass the selected Xcode
-# explicitly; .bazelrc forwards it to repository rules.
-DEVELOPER_DIR="${DEVELOPER_DIR:-$(xcode-select -p)}"
-export DEVELOPER_DIR
+# Generate explicitly before fetching any package that consumes the cache. The
+# generator is independent of this workspace's package repos and existing cache.
+"${bazel}" run @rules_swift_package_manager//swiftpkg:update_sdk_cache -- \
+  --request sdk_profiles.json --output sdk_cache.json
 
 # Verify the same generated targets with implicit modules and both explicit modes.
 "${bazel}" test //...

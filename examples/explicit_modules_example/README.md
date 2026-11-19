@@ -47,3 +47,8 @@ itself. The application runs its assertion and exits without opening a window.
 For setup details and limitations, see the [migration notes].
 
 [migration notes]: /docs/rules_swift_4_migration.md
+
+SDK metadata is committed in `sdk_cache.json`. `do_test` first regenerates it
+explicitly for the CI toolchain, then runs the cache validation test and examples.
+Repository fetching itself only reads the JSON. See
+[SDK cache setup](../../docs/system_sdk_inventory.md).

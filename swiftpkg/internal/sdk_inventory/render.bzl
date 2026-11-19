@@ -7,9 +7,9 @@ load(
     "//swiftpkg/internal:starlark_codegen.bzl",
     scg = "starlark_codegen",
 )
-load(":profiles.bzl", "sdk_scan_profiles")
+load(":sdks.bzl", "sdks")
 
-_SCHEMA_VERSION = 2
+_SCHEMA_VERSION = 3
 
 _SELECTS_LOCATION = "@bazel_skylib//lib:selects.bzl"
 _CC_LIBRARY_LOCATION = "@rules_cc//cc:cc_library.bzl"
@@ -28,11 +28,6 @@ profile for device builds. Match these profiles, disable system_sdk_deps, or \
 set \
 --@rules_swift_package_manager//config_settings/sdk_inference:strict_profile=false \
 where blanket or manual SDK dependencies cover unmatched profiles.\
-"""
-
-_UNSUPPORTED_HOST_TMPL = """\
-Apple SDK inference is inactive on the {host} fetch host; no Apple compiler \
-or SDK is fetched.\
 """
 
 def _sdk_decls(name, constraints, xcode_setting, configuration_labels):
@@ -74,74 +69,34 @@ def _sdk_decls(name, constraints, xcode_setting, configuration_labels):
         ))
     return decls
 
-def _render(
-        upstream,
-        repo_name,
-        hub_label,
-        configuration_labels,
-        resolve_label,
-        scan):
-    """Render the SDK inventory repository's BUILD file and metadata.
-
-    Args:
-        upstream: The parsed rules_swift SDK inventory `struct`.
-        repo_name: The canonical name of the inventory repository.
-        hub_label: The label prefix of the rules_swift SDK hub repository.
-        configuration_labels: A `dict` mapping `debug` and `release` to their
-            config setting labels.
-        resolve_label: A function that resolves a label `string`.
-        scan: The scan settings as a `dict`.
-
-    Returns:
-        A `struct` with `build` (a build file `struct` as returned by
-        `build_files.new`) and `metadata` (a `dict`).
-    """
-    for sdk, triple in scan["targets"].items():
-        error = sdk_scan_profiles.error(sdk, triple)
-        if error:
-            fail(error)
-
-    modules = {}
+def _render(cache, repo_name, configuration_labels, resolve_label):
+    """Render configuration labels from portable cache IDs, without host reads."""
+    scan = dict(cache["request"], xcode_version = cache["xcode_version"], swift_version = cache["swift_version"], fingerprints = cache["fingerprints"])
+    modules = cache["modules"]
     conditions = {}
-    sdk_decls = []
-    for module, entries in sorted(upstream.modules.items()):
-        refs = []
-        for entry in entries:
-            sdk = entry["sdk"]
-            if sdk not in scan.get("targets", {}):
-                continue
-            refs.append(sdk)
-            if sdk in conditions:
-                continue
-
-            arch = scan["targets"][sdk].split("-")[0]
-            cpu = _CPU_BY_ARCH.get(arch)
-            if not cpu:
-                fail("Unsupported SDK scan architecture: " + arch)
-            sdk_repo_constraints = upstream.constraints[entry["sdk_repo"]]
-            sdk_condition = sdk_repo_constraints[entry["sdk_condition"]]
-            constraints = [resolve_label(c) for c in sdk_condition]
-            constraints.append(resolve_label("@platforms//cpu:" + cpu))
-
-            name = "sdk_" + sdk
-            sdk_decls.extend(_sdk_decls(
-                name = name,
-                constraints = constraints,
-                xcode_setting = hub_label + entry["xcode_condition"][1:],
-                configuration_labels = configuration_labels,
-            ))
-            conditions[sdk] = {
-                "condition": "@@{}//:{}".format(repo_name, name),
-                "configurations": {
-                    config: "@@{}//:{}_{}".format(repo_name, name, config)
-                    for config in ["debug", "release", "fastbuild"]
-                },
-                "environment": entry["environment"],
-                "platform": entry["platform"],
-                "sdk": sdk,
-            }
-        if refs:
-            modules[module] = sorted(refs)
+    sdk_decls = [build_decls.new(
+        kind = "config_setting",
+        name = "cached_xcode",
+        attrs = {"flag_values": {resolve_label("@bazel_tools//tools/osx:xcode_version_flag_exact"): cache["xcode_version"]}},
+    )]
+    for sdk, triple in sorted(scan["targets"].items()):
+        sdk_info = sdks.get(sdk)
+        constraints = [resolve_label("@platforms//os:" + sdk_info.platform)]
+        if sdk != "MacOSX":
+            constraints.append(resolve_label("@apple_support//constraints:" + sdk_info.environment))
+        constraints.append(resolve_label("@platforms//cpu:" + _CPU_BY_ARCH[triple.split("-")[0]]))
+        name = "sdk_" + sdk
+        sdk_decls.extend(_sdk_decls(name, constraints, ":cached_xcode", configuration_labels))
+        conditions[sdk] = {
+            "condition": "@@{}//:{}".format(repo_name, name),
+            "configurations": {
+                config: "@@{}//:{}_{}".format(repo_name, name, config)
+                for config in ["debug", "release", "fastbuild"]
+            },
+            "environment": sdk_info.environment,
+            "platform": sdk_info.platform,
+            "sdk": sdk,
+        }
 
     no_match_error = _NO_MATCH_ERROR_TMPL.format(
         xcode = scan["xcode_version"].replace("\n", "; "),
@@ -158,6 +113,7 @@ def _render(
         "//config_settings/sdk_inference:allow_unmatched_profile",
     )
     profiles[allow_unmatched] = []
+    profiles[resolve_label("@platforms//os:linux")] = []
 
     decls = [
         scg.new_fn_call("exports_files", ["modules.json"]),
@@ -200,37 +156,7 @@ def _render(
         },
     )
 
-def _unsupported_host(host):
-    """Render an inactive inventory for a host without Apple SDKs.
-
-    Args:
-        host: The fetch host's OS name as a `string`.
-
-    Returns:
-        A `struct` with `build` and `metadata`, like `render`.
-    """
-    build = build_files.new(
-        decls = [
-            scg.new_fn_call(
-                "exports_files",
-                ["modules.json"],
-                visibility = ["//visibility:public"],
-            ),
-        ],
-    )
-    return struct(
-        build = build,
-        metadata = {
-            "conditions": {},
-            "diagnostic": _UNSUPPORTED_HOST_TMPL.format(host = host),
-            "modules": {},
-            "scan": {"host_supported": False},
-            "schema_version": _SCHEMA_VERSION,
-        },
-    )
-
 sdk_inventory_render = struct(
     render = _render,
     schema_version = _SCHEMA_VERSION,
-    unsupported_host = _unsupported_host,
 )

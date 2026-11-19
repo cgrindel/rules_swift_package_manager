@@ -1,8 +1,23 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load(":sdk_cache.bzl", "swift_sdk_cache")
 
 # Allow docs to access the defs.bzl
 package(default_visibility = ["//visibility:public"])
+
+swift_sdk_cache(
+    name = "update_sdk_cache",
+    tags = ["manual"],
+)
+
+bzl_library(
+    name = "sdk_cache",
+    srcs = ["sdk_cache.bzl"],
+    deps = [
+        "@apple_support//lib:apple_support",
+        "@build_bazel_rules_swift//swift:swift_common",
+    ],
+)
 
 bzl_library(
     name = "defs",
