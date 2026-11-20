@@ -199,6 +199,53 @@ assert_argv_has "--replace-scm-with-registry" \
 assert_argv_lacks "--use-registry-identity-for-scm" \
   "use-registry-identity-for-scm flag should be absent"
 
+# Relative state paths anchor to BUILD_WORKSPACE_DIRECTORY; absolute
+# paths pass through.
+assert_argv_has "${workspace_dir}/.build" \
+  "relative build_path should anchor to BUILD_WORKSPACE_DIRECTORY"
+assert_argv_has "${workspace_dir}/.cache" \
+  "relative cache_path should anchor to BUILD_WORKSPACE_DIRECTORY"
+assert_argv_has "${workspace_dir}/.security" \
+  "relative security_path should anchor to BUILD_WORKSPACE_DIRECTORY"
+assert_argv_lacks ".build" \
+  "unanchored relative build_path should not appear"
+assert_argv_has "${run_dir}/.config" \
+  "absolute config_path should pass through unchanged"
+
+# MARK - spl_run_swift_package relative config_path + --registries_json
+
+# The registries symlink must land in the anchored config_path.
+rel_cfg_dir="$(new_tmp_dir)"
+rel_cfg_file="${rel_cfg_dir}/registries.json"
+echo '{"registries":{}}' >"${rel_cfg_file}"
+: >"${swift_args_file}"
+
+PATH="${run_dir}:${PATH}" BUILD_WORKSPACE_DIRECTORY="${workspace_dir}" \
+  spl_run_swift_package \
+  --cmd resolve \
+  --package_path pkgsub \
+  --build_path .build \
+  --cache_path .cache \
+  --config_path .config \
+  --security_path .security \
+  --enable_build_manifest_caching true \
+  --enable_dependency_cache false \
+  --manifest_cache shared \
+  --replace_scm_with_registry false \
+  --use_registry_identity_for_scm false \
+  --registries_json "${rel_cfg_file}"
+
+assert_argv_has "${workspace_dir}/.config" \
+  "relative config_path should anchor to BUILD_WORKSPACE_DIRECTORY"
+
+rel_cfg_symlink="${workspace_dir}/.config/registries.json"
+if [[ ! -L ${rel_cfg_symlink} ]]; then
+  fail "expected registries symlink at ${rel_cfg_symlink}"
+fi
+assert_equal \
+  "$(readlink -f "${rel_cfg_file}")" "$(readlink "${rel_cfg_symlink}")" \
+  "registries symlink should point to the registries.json realpath"
+
 # MARK - spl_run_swift_package --netrc_file plumbing
 
 # Reinvoke with --netrc_file pointing at a path containing a space; this
