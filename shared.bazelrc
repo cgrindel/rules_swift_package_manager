@@ -46,3 +46,6 @@ build --enable_platform_specific_config
 build:macos --apple_crosstool_top=@local_config_apple_cc//:toolchain
 build:macos --crosstool_top=@local_config_apple_cc//:toolchain
 build:macos --host_crosstool_top=@local_config_apple_cc//:toolchain
+
+# Run every iOS test on the same simulator device.
+test:macos --ios_simulator_device="iPhone 16"

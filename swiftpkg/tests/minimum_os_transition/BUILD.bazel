@@ -4,7 +4,7 @@ load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load("//swiftpkg/internal:minimum_os_transition.bzl", "spm_minimum_os_binary", "spm_minimum_os_target")
 load(":provider_surface_tests.bzl", "provider_surface_test_suite")
-load(":test_fixtures.bzl", "apple_framework_import_provider_target", "executable_provider_target", "minimum_os_probe", "spm_provider_consumer", "swift_c_provider_target")
+load(":test_fixtures.bzl", "apple_framework_import_provider_target", "executable_provider_target", "minimum_os_probe", "spm_provider_consumer", "stub_toolchain", "swift_c_provider_target")
 load(":transitive_floor_tests.bzl", "transitive_floor_test_suite")
 
 bzlformat_pkg(name = "bzlformat")
@@ -86,6 +86,8 @@ minimum_os_probe(
 
 spm_minimum_os_target(
     name = "imported_wrapped",
+    # These exercise the Apple path whatever platform the tests run on.
+    apple_platform = True,
     ios_minimum_os = "15.0",
     macos_minimum_os = "12.0",
     tvos_minimum_os = "12.0",
@@ -104,12 +106,69 @@ minimum_os_probe(
 
 spm_minimum_os_target(
     name = "importer_wrapped",
+    # These exercise the Apple path whatever platform the tests run on.
+    apple_platform = True,
     ios_minimum_os = "15.0",
     macos_minimum_os = "12.0",
     tvos_minimum_os = "12.0",
     visionos_minimum_os = "1.0",
     watchos_minimum_os = "4.0",
     deps = [":importer_actual"],
+)
+
+# The same importer/imported shape without pinning `apple_platform`, so the
+# macro's select decides. The importer's iOS 13 floor is below the imported
+# package's iOS 15, which fails on Apple; off Apple the floors are ignored.
+spm_minimum_os_target(
+    name = "off_apple_imported_wrapped",
+    ios_minimum_os = "15.0",
+    macos_minimum_os = "12.0",
+    tvos_minimum_os = "12.0",
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+    deps = [":imported_actual"],
+)
+
+minimum_os_probe(
+    name = "off_apple_importer_actual",
+    deps = [":off_apple_imported_wrapped"],
+)
+
+spm_minimum_os_target(
+    name = "off_apple_importer_wrapped",
+    ios_minimum_os = "13.0",
+    macos_minimum_os = "12.0",
+    tvos_minimum_os = "12.0",
+    visionos_minimum_os = "1.0",
+    watchos_minimum_os = "4.0",
+    deps = [":off_apple_importer_actual"],
+)
+
+platform(
+    name = "linux_x86_64",
+    constraint_values = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:linux",
+    ],
+)
+
+# `swift_clang_module_aspect` on the wrappers resolves the Swift and C++
+# toolchains but never reads them for targets that already provide SwiftInfo,
+# like the probes. These stubs let the Linux test analyze on any host.
+stub_toolchain(name = "stub_toolchain")
+
+toolchain(
+    name = "linux_stub_cc_toolchain",
+    target_compatible_with = ["@platforms//os:linux"],
+    toolchain = ":stub_toolchain",
+    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+)
+
+toolchain(
+    name = "linux_stub_swift_toolchain",
+    target_compatible_with = ["@platforms//os:linux"],
+    toolchain = ":stub_toolchain",
+    toolchain_type = "@build_bazel_rules_swift//toolchains:toolchain_type",
 )
 
 transitive_floor_test_suite(name = "transitive_floor_tests")

@@ -148,3 +148,13 @@ minimum_os_probe = rule(
     fragments = ["cpp"],
     doc = "Emits a file named after the minimum OS it is configured with.",
 )
+
+def _stub_toolchain_impl(_ctx):
+    return [platform_common.ToolchainInfo()]
+
+stub_toolchain = rule(
+    implementation = _stub_toolchain_impl,
+    doc = """\
+Satisfies toolchain resolution for a platform the tests never build for.\
+""",
+)

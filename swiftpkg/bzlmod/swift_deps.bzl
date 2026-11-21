@@ -890,7 +890,49 @@ def _inference_settings(config, package_name, repo_name):
             settings[key] = value == "on"
     return settings
 
-def _swift_deps_impl(module_ctx):
+def _extension_metadata(
+        module_ctx,
+        direct_dep_repo_names,
+        direct_dev_dep_repo_names):
+    """Create the extension metadata for the root module's direct deps.
+
+    A repository that is both a dev and a non-dev dependency is reported only
+    as a non-dev dependency.
+
+    Args:
+        module_ctx: A `module_ctx`.
+        direct_dep_repo_names: A `list` of the repository names declared by
+            the root module's non-dev `from_package` tags.
+        direct_dev_dep_repo_names: A `list` of the repository names declared
+            by the root module's dev `from_package` tags.
+
+    Returns:
+        The `extension_metadata` for the extension.
+    """
+    direct_deps = {name: None for name in direct_dep_repo_names}
+    direct_dev_deps = {
+        name: None
+        for name in direct_dev_dep_repo_names
+        if name not in direct_deps
+    }
+    return module_ctx.extension_metadata(
+        root_module_direct_deps = list(direct_deps),
+        root_module_direct_dev_deps = list(direct_dev_deps),
+    )
+
+def _swift_deps_impl(
+        module_ctx,
+        declare_pkgs_from_package = _declare_pkgs_from_package):
+    """Implementation for the `swift_deps` module extension.
+
+    Args:
+        module_ctx: An instance of `module_ctx`.
+        declare_pkgs_from_package: The function that declares the packages for
+            a `from_package` tag. Tests replace it to avoid running SwiftPM.
+
+    Returns:
+        The extension metadata from `module_ctx.extension_metadata`.
+    """
     inference_config = _inference_configuration(module_ctx.modules)
     if inference_config.error:
         fail(inference_config.error)
@@ -911,20 +953,28 @@ Expected only one `configure_swift_package` tag, but found multiple.\
     matched_target_mod_repos = {}
     available_target_mod_repos = {}
     direct_dep_repo_names = []
+    direct_dev_dep_repo_names = []
     for mod in module_ctx.modules:
         for from_package in mod.tags.from_package:
-            direct_dep_repo_names.extend(
-                _declare_pkgs_from_package(
-                    module_ctx,
-                    from_package,
-                    config_pkgs,
-                    config_swift_package,
-                    target_mods_by_repo,
-                    matched_target_mod_repos,
-                    available_target_mod_repos,
-                    inference_config,
-                ),
+            repo_names = declare_pkgs_from_package(
+                module_ctx,
+                from_package,
+                config_pkgs,
+                config_swift_package,
+                target_mods_by_repo,
+                matched_target_mod_repos,
+                available_target_mod_repos,
+                inference_config,
             )
+
+            # Only the root module's packages are its direct deps. Packages
+            # from a dev `from_package` tag are its direct dev deps.
+            if not mod.is_root:
+                continue
+            if module_ctx.is_dev_dependency(from_package):
+                direct_dev_dep_repo_names.extend(repo_names)
+            else:
+                direct_dep_repo_names.extend(repo_names)
 
     inference_error = _unknown_inference_packages_error(inference_config)
     if inference_error:
@@ -943,9 +993,10 @@ Available repositories are: {available}.\
             available = ", ".join(sorted(available_target_mod_repos.keys())),
             unknown = ", ".join(sorted(unknown_target_mod_repos)),
         ))
-    return module_ctx.extension_metadata(
-        root_module_direct_deps = direct_dep_repo_names,
-        root_module_direct_dev_deps = [],
+    return _extension_metadata(
+        module_ctx,
+        direct_dep_repo_names,
+        direct_dev_dep_repo_names,
     )
 
 _from_package_tag = tag_class(
@@ -1359,6 +1410,7 @@ swift_deps = module_extension(
 )
 
 swift_deps_test_utils = struct(
+    extension_metadata = _extension_metadata,
     declare_pkg_from_dependency = _declare_pkg_from_dependency,
     inference_configuration = _inference_configuration,
     inference_settings = _inference_settings,
@@ -1372,4 +1424,5 @@ swift_deps_test_utils = struct(
     bazel_target_mods_by_repo = _bazel_target_mods_by_repo,
     build_file_conflict_error = _build_file_conflict_error,
     non_root_target_mods_error = _non_root_target_mods_error,
+    swift_deps_impl = _swift_deps_impl,
 )

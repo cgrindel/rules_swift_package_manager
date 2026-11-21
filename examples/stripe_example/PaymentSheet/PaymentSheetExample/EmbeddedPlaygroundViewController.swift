@@ -7,7 +7,7 @@
 
 import Combine
 import Foundation
-@_spi(EmbeddedPaymentElementPrivateBeta) @_spi(STP) @_spi(ExperimentalAllowsRemovalOfLastSavedPaymentMethodAPI) import StripePaymentSheet
+@_spi(EmbeddedPaymentElementPrivateBeta) @_spi(InternalOnlyAPI) @_spi(ExperimentalAllowsRemovalOfLastSavedPaymentMethodAPI) import StripePaymentSheet
 import SwiftUI
 import UIKit
 

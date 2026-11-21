@@ -30,6 +30,11 @@ def _transition_outputs(settings, attr):
         for option in _MINIMUM_OS_OPTIONS
     }
 
+    # Minimum OS versions mean nothing when the target platform isn't Apple's
+    # (Linux, Android, WebAssembly), whatever --apple_platform_type says.
+    if not attr.apple_platform:
+        return outputs
+
     platform_type = settings[_APPLE_PLATFORM_TYPE_OPTION]
     minimum_os_config = _MINIMUM_OS_CONFIG_BY_PLATFORM_TYPE.get(platform_type)
     if minimum_os_config == None:
@@ -153,6 +158,10 @@ def _actual(ctx):
     return ctx.attr.deps[0]
 
 _minimum_os_attrs = {
+    "apple_platform": attr.bool(
+        default = True,
+        doc = "Whether the target platform is Apple's; set by the macros below.",
+    ),
     "deps": attr.label_list(
         aspects = [swift_clang_module_aspect],
         mandatory = True,
@@ -179,25 +188,60 @@ _minimum_os_attrs = {
     ),
 }
 
-spm_minimum_os_target = rule(
+_spm_minimum_os_target = rule(
     implementation = _spm_minimum_os_target_impl,
     attrs = _minimum_os_attrs,
     doc = "Applies Swift package minimum OS settings to an implementation target.",
 )
 
-spm_minimum_os_binary = rule(
+_spm_minimum_os_binary = rule(
     implementation = _spm_minimum_os_executable_impl,
     attrs = _minimum_os_attrs,
     executable = True,
     doc = "Applies Swift package minimum OS settings to an executable implementation target.",
 )
 
-spm_minimum_os_test = rule(
+_spm_minimum_os_test = rule(
     implementation = _spm_minimum_os_executable_impl,
     attrs = _minimum_os_attrs,
     test = True,
     doc = "Applies Swift package minimum OS settings to a test implementation target.",
 )
+
+# Every platform with a package minimum OS is an Apple OS whose SwiftPM name
+# matches its `@platforms//os` constraint (`macos` is an alias of `osx`).
+def _apple_platform_select():
+    conditions = {
+        Label("@platforms//os:{}".format(platform)): True
+        for platform in _MINIMUM_OS_CONFIG_BY_PLATFORM_TYPE
+    }
+    conditions["//conditions:default"] = False
+    return conditions
+
+_APPLE_PLATFORM_SELECT = _apple_platform_select()
+
+def _apple_platform(value):
+    if value != None:
+        return value
+    return select(_APPLE_PLATFORM_SELECT)
+
+def spm_minimum_os_target(apple_platform = None, **kwargs):
+    _spm_minimum_os_target(
+        apple_platform = _apple_platform(apple_platform),
+        **kwargs
+    )
+
+def spm_minimum_os_binary(apple_platform = None, **kwargs):
+    _spm_minimum_os_binary(
+        apple_platform = _apple_platform(apple_platform),
+        **kwargs
+    )
+
+def spm_minimum_os_test(apple_platform = None, **kwargs):
+    _spm_minimum_os_test(
+        apple_platform = _apple_platform(apple_platform),
+        **kwargs
+    )
 
 minimum_os_transition = struct(
     import_error = _import_error,
