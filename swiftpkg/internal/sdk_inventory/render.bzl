@@ -71,7 +71,13 @@ def _sdk_decls(name, constraints, xcode_setting, configuration_labels):
 
 def _render(cache, repo_name, configuration_labels, resolve_label):
     """Render configuration labels from portable cache IDs, without host reads."""
-    scan = dict(cache["request"], xcode_version = cache["xcode_version"], swift_version = cache["swift_version"], fingerprints = cache["fingerprints"])
+    scan = dict(
+        cache["request"],
+        xcode_version = cache["xcode_version"],
+        swift_version = cache["swift_version"],
+        fingerprints = cache["fingerprints"],
+        package_names = sorted(cache.get("packages", {})),
+    )
     modules = cache["modules"]
     conditions = {}
     sdk_decls = [build_decls.new(
@@ -116,7 +122,13 @@ def _render(cache, repo_name, configuration_labels, resolve_label):
     profiles[resolve_label("@platforms//os:linux")] = []
 
     decls = [
-        scg.new_fn_call("exports_files", ["modules.json"]),
+        scg.new_fn_call(
+            "exports_files",
+            ["modules.json"] + [
+                "packages/" + name + ".json"
+                for name in scan["package_names"]
+            ],
+        ),
         build_decls.new(
             kind = "config_setting",
             name = _FASTBUILD_SETTING,

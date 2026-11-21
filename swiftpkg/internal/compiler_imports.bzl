@@ -1,4 +1,4 @@
-"""Swift compiler import prescans for explicitly configured SDK profiles."""
+"""Consume committed compiler prescans; never execute Swift during fetching."""
 
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 
@@ -13,24 +13,23 @@ def _arguments(pkg_ctx, target, entry, configuration, available_modules):
     scan = pkg_ctx.sdk_modules.scan
     sdk = entry["sdk"]
     args = [
-        scan["swiftc"],
         "-frontend",
         "-scan-dependencies",
         "-import-prescan",
         "-module-name",
         pkg_ctx.module_aliases.get(target.c99name, target.c99name),
         "-sdk",
-        scan["sdks"][sdk],
+        "${SDK}",
         "-target",
         scan["targets"][sdk],
         "-module-cache-path",
-        ".rspm_sdk_module_cache",
+        "${MODULE_CACHE}",
         "-DSWIFT_PACKAGE",
     ]
     args.append("-O" if configuration == "release" else "-Onone")
     if configuration != "release":
         args.append("-DDEBUG")
-    for name in scan.get("defines", []) + pkg_ctx.pkg_info.enabled_traits:
+    for name in (scan.get("defines") or []) + pkg_ctx.pkg_info.enabled_traits:
         args.append("-D" + name)
     importable = {name: True for name in available_modules}
     importable.update({pkg_ctx.module_alias_flags.get(name, name): True for name in available_modules})
@@ -63,61 +62,54 @@ def _arguments(pkg_ctx, target, entry, configuration, available_modules):
     args.extend(sorted(pkginfo_targets.srcs(target)))
     return args
 
-def _version_warnings(stderr, package_modules):
-    # Let Swift parse and evaluate #if/#elseif, including comments and inactive
-    # branches. -module-can-import supplies names, not package module versions.
-    warnings = []
-    for line in stderr.splitlines():
-        _, sep, diagnostic = line.partition(": warning: ")
-        if not sep:
-            continue
-        for prefix in ["cannot find user version number for module '", "cannot find user version number for Clang module '"]:
-            if diagnostic.startswith(prefix):
-                module = diagnostic[len(prefix):].partition("'")[0]
-                if module in package_modules:
-                    warnings.append({"message": line, "module": module})
-    return warnings
+def _validate_inputs(ctx, inputs):
+    """Check source bytes using Bazel's native checksum verifier, without tools."""
+    for source, digest in sorted(inputs.items()):
+        if source.startswith("/") or ".." in source.split("/"):
+            fail("Invalid relative source path in SDK cache: " + source)
+
+        # A checksum-only download could reuse old bytes from the download cache.
+        # Include the exact current contents in canonical_id, so that a changed
+        # source must be read and verified again. No network request is involved.
+        contents = ctx.read(source)
+        path = str(ctx.path(source))
+        url_path = path.replace("%", "%25").replace(" ", "%20").replace("#", "%23").replace("?", "%3F")
+        result = ctx.download(
+            url = "file://" + url_path,
+            output = ".rspm_cached_input",
+            sha256 = digest,
+            canonical_id = "rspm-source-cache\n" + contents,
+            allow_fail = True,
+        )
+        ctx.delete(".rspm_cached_input")
+        if not result.success:
+            fail("SDK source cache is stale for {}. Regenerate with bazel run @rules_swift_package_manager//swiftpkg:update_sdk_cache -- --request <profiles.json> --package <root-package> --output <cache.json>.".format(source))
 
 def _scan(ctx, pkg_ctx, target, dependency_modules):
     inventory = pkg_ctx.sdk_modules
-    scan = inventory.scan
+    package = inventory.scan.get("packages", {}).get(pkg_ctx.repo_name)
+    cached = package.get("targets", {}).get(target.name) if package else None
+    if cached == None:
+        fail("Missing committed SDK prescan for {}/{}. Run bazel run @rules_swift_package_manager//swiftpkg:update_sdk_cache -- --request <profiles.json> --package <root-package> --output <cache.json>.".format(pkg_ctx.repo_name, target.name))
+    if sorted(cached["inputs"]) != sorted(pkginfo_targets.srcs(target)):
+        fail("SDK cache source list changed for {}; regenerate the cache.".format(target.name))
+    _validate_inputs(ctx, cached["inputs"])
     results = []
-    cache = {}
     for _, entry in sorted(inventory.conditions.items()):
         sdk = entry["sdk"]
         for configuration in sorted(entry["configurations"]):
-            available = dependency_modules.get(entry["platform"], [])
-            args = _arguments(pkg_ctx, target, entry, configuration, available)
-
-            # Match always_include_developer_search_paths on generated libraries.
-            sdk_developer = ctx.path(scan["sdks"][sdk]).dirname.dirname
-            framework_dirs = [str(sdk_developer) + "/Library/Frameworks"]
-            if entry["platform"] != "macos":
-                framework_dirs.append(scan["sdks"][sdk] + "/Developer/Library/Frameworks")
-            for path in framework_dirs:
-                if ctx.path(path).exists:
-                    args.extend(["-F", path])
-            swift_developer_lib = str(sdk_developer) + "/usr/lib"
-            if ctx.path(swift_developer_lib).exists:
-                args.extend(["-I", swift_developer_lib])
-            key = tuple(args)
-            if key not in cache:
-                ctx.report_progress("Scanning Swift imports: {} ({}, {})".format(target.name, sdk, configuration))
-                result = ctx.execute(args, environment = scan["environment"])
-                if result.return_code:
-                    fail("Swift import prescan failed for {} ({}, {}):\n{}\nUse manual SDK deps and disable inference for unsupported configurations.".format(target.name, sdk, configuration, result.stderr))
-                warnings = _version_warnings(result.stderr, available + [pkg_ctx.module_alias_flags.get(name, name) for name in available])
-                decoded = json.decode(result.stdout)
-                if type(decoded) != "dict" or type(decoded.get("imports")) != "list" or not all([type(name) == "string" for name in decoded["imports"]]):
-                    fail("Unsupported Swift import prescan output for " + target.name)
-                cache[key] = struct(imports = sorted({name: True for name in decoded["imports"]}), warnings = warnings)
+            args = _arguments(pkg_ctx, target, entry, configuration, dependency_modules.get(entry["platform"], []))
+            records = [r for r in cached["scans"] if r["sdk"] == sdk and r["configuration"] == configuration]
+            if len(records) != 1 or records[0]["arguments"] != args:
+                fail("SDK cache compiler settings changed for {} ({}, {}); regenerate the cache. Expected arguments: {}".format(target.name, sdk, configuration, args))
+            record = records[0]
             results.append({
                 "condition": entry["configurations"][configuration],
                 "configuration": configuration,
-                "imports": cache[key].imports,
+                "imports": record["imports"],
                 "sdk": sdk,
-                "warnings": cache[key].warnings,
+                "warnings": record["warnings"],
             })
     return results
 
-compiler_imports = struct(arguments = _arguments, scan = _scan, version_warnings = _version_warnings)
+compiler_imports = struct(arguments = _arguments, scan = _scan, validate_inputs = _validate_inputs)

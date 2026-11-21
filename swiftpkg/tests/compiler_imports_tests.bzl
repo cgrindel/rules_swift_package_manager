@@ -38,18 +38,17 @@ def _arguments_test(ctx):
     fixture = _fixture()
     args = compiler_imports.arguments(fixture.context, fixture.target, fixture.entry, "debug", ["Testing"])
     asserts.equals(env, [
-        "/Xcode/usr/bin/swiftc",
         "-frontend",
         "-scan-dependencies",
         "-import-prescan",
         "-module-name",
         "Consumer",
         "-sdk",
-        "/SDK",
+        "${SDK}",
         "-target",
         "arm64-apple-ios17.0-simulator",
         "-module-cache-path",
-        ".rspm_sdk_module_cache",
+        "${MODULE_CACHE}",
         "-DSWIFT_PACKAGE",
         "-Onone",
         "-DDEBUG",
@@ -92,21 +91,36 @@ def _prepare_test(ctx):
         # This used to fail the broad substring-based version-check guard.
         return '// canImport(Testing, _version: 1.0)\nlet irrelevant_version = "canImport"\nimport Testing\nimport Foundation\n'
 
-    def execute(args, environment):
-        calls.append(args)
-        asserts.true(env, "-module-can-import" in args)
-        asserts.true(env, "Testing" in args)
-        asserts.true(env, "/Developer/usr/lib" in args)
-        asserts.true(env, "/SDK/Developer/Library/Frameworks" in args)
-        asserts.equals(env, fixture.context.sdk_modules.scan["environment"], environment)
-        return struct(return_code = 0, stdout = '{"imports": ["Testing", "Foundation"]}', stderr = "Sources/Consumer.swift:1:15: warning: cannot find user version number for module 'Testing'; version number ignored [#ModuleVersionMissing]")
+    def download(url, output, sha256, canonical_id, allow_fail):
+        calls.append(url)
+        asserts.equals(env, "file://Sources/Consumer.swift", url)
+        asserts.equals(env, ".rspm_cached_input", output)
+        asserts.equals(env, "a" * 64, sha256)
+        asserts.true(env, canonical_id.startswith("rspm-source-cache\n"))
+        asserts.true(env, allow_fail)
+        return struct(success = True)
+
+    fixture.context.sdk_modules.scan["packages"] = {"swiftpkg_consumer": {
+        "inputs": {},
+        "targets": {"Consumer": {
+            "inputs": {"Sources/Consumer.swift": "a" * 64},
+            "scans": [{
+                "arguments": compiler_imports.arguments(fixture.context, fixture.target, fixture.entry, configuration, ["Consumer", "Helper", "Testing"]),
+                "configuration": configuration,
+                "imports": ["Foundation", "Testing"],
+                "sdk": "iPhoneSimulator",
+                "warnings": [{"message": "version number ignored", "module": "Testing"}],
+            } for configuration in ["debug", "fastbuild", "release"]],
+        }},
+    }}
 
     repo = struct(
         name = "extension+swiftpkg_consumer",
         attr = struct(bazel_package_name = "swiftpkg_consumer", package_repos = "repos.json"),
         read = read,
-        execute = execute,
-        path = lambda p: struct(exists = True, is_dir = False, realpath = str(p), dirname = struct(dirname = "/Developer")),
+        download = download,
+        delete = lambda path: asserts.equals(env, ".rspm_cached_input", path),
+        path = lambda p: p if p == "Sources/Consumer.swift" else struct(exists = True),
         report_progress = lambda _: None,
         file = lambda p, contents: outputs.update({p: contents}),
     )
@@ -118,7 +132,7 @@ def _prepare_test(ctx):
         "Sources/Consumer.swift",
     ], reads)
     asserts.equals(env, ["Consumer", "Helper", "Testing"], result.dependency_modules["Consumer"]["ios"])
-    asserts.equals(env, 2, len(calls))  # debug and fastbuild reuse identical arguments
+    asserts.equals(env, 1, len(calls))  # One native source checksum; no compiler invocation.
     asserts.equals(env, 3, len(result.source_scans["Consumer"]))
     for record in result.source_scans["Consumer"]:
         asserts.equals(env, ["Testing"], [w["module"] for w in record["warnings"]])
@@ -146,24 +160,5 @@ def _aliases_test(ctx):
 
 aliases_test = unittest.make(_aliases_test)
 
-def _version_diagnostic_test(ctx):
-    env = unittest.begin(ctx)
-
-    # Captured from Swift's import prescan for _version and _underlyingVersion.
-    for kind in ["module", "Clang module"]:
-        diagnostic = "Sources/Consumer.swift:1:15: warning: cannot find user version number for {} 'Helpers'; version number ignored [#ModuleVersionMissing]".format(kind)
-        asserts.equals(env, [{"message": diagnostic, "module": "Helpers"}], compiler_imports.version_warnings(diagnostic, ["Helpers"]))
-        asserts.equals(env, [], compiler_imports.version_warnings(diagnostic, ["OtherPackage"]))
-    for stderr in [
-        "",
-        "1 | // canImport(Helpers, _version: 1.0)",
-        "Sources/Consumer.swift:2:1: warning: unrelated warning",
-        "Sources/Consumer.swift:1:15: warning: cannot find user version number for module 'Foundation'; version number ignored [#ModuleVersionMissing]",
-    ]:
-        asserts.equals(env, [], compiler_imports.version_warnings(stderr, ["Helpers"]))
-    return unittest.end(env)
-
-version_diagnostic_test = unittest.make(_version_diagnostic_test)
-
 def compiler_imports_test_suite():
-    unittest.suite("compiler_imports_tests", arguments_test, prepare_test, aliases_test, version_diagnostic_test)
+    unittest.suite("compiler_imports_tests", arguments_test, prepare_test, aliases_test)

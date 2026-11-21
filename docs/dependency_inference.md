@@ -60,90 +60,79 @@ branches. Other dependencies are left untouched. Inference
 configuration does not conflict with either mechanism, and does not change the
 existing conflict between a full BUILD override and target modifications.
 
-## Compiler-driven SDK dependencies
+## Generate and commit compiler prescans
 
-With the source-inference consumer installed, Swift imports are collected with
-`swiftc -frontend -scan-dependencies -import-prescan`. Swift evaluates conditional
-imports, including `#elseif`, `canImport`, compiler-version checks and custom
-flags. RSPM does not implement a second Swift lexer or Boolean evaluator.
+Configure the [SDK cache provider](system_sdk_inventory.md), then generate SDK
+availability and source prescans explicitly:
 
-The root must configure [SDK compiler profiles](system_sdk_inventory.md), in
-addition to enabling `system_sdk_deps`. The provider alone does not generate
-source dependencies.
+```sh
+bazel run @rules_swift_package_manager//swiftpkg:update_sdk_cache --xcode_version=27.0 -- \
+  --request sdk_profiles.json --package . --output sdk_cache.json
+```
 
-For each target, scans use the configured compiler/SDK/target triple, root
-conditional defines, SwiftPM defines, traits, language mode, upcoming/experimental
-features and module aliases. Debug, release and fastbuild are scanned separately;
-identical command lines share results. Known dependency module names are supplied
-to `-module-can-import`, without building those dependencies. This supplies name
-availability, not package module versions or validation of their implementations.
-If Swift evaluates a version-qualified `canImport` check on a package module
-without version metadata, it warns and ignores the version constraint. The
-prescan preserves this behavior, matching SwiftPM's default package builds, and
-records the diagnostic in each scan's `warnings` list in `sdk_inference.json`.
-RSPM does not invent a package module version. Comments, strings and SDK checks
-are left to the compiler. SDK availability comes from the compiler's search paths.
-Developer framework search paths match generated libraries; test helper libraries
-can therefore infer XCTest and Testing without a blanket non-test exclusion.
+The Go tool uses the configured Xcode toolchain. It asks SwiftPM for the root
+package's dependency graph and evaluates each package's manifest/description,
+then runs `swiftc -frontend -scan-dependencies -import-prescan` for Swift source
+targets. Existing `Package.resolved` pins are enforced. Sources may be downloaded
+by this explicit command. The target depends on neither generated package
+repositories nor the cache it creates, so it can bootstrap a missing cache.
 
-This is a bounded fetch-time operation. It cannot observe arbitrary Bazel
-`--swiftcopt` values, target transitions or later attribute overrides. Profiles
-must match builds. Unmatched configurations need blanket or manual SDK dependencies
-and an explicit relaxation of the profile guard, or inference disabled entirely.
-Unsafe Swift manifest flags are rejected rather than silently interpreted in a
-different environment. Scan errors fail with the target and SDK/configuration.
-C++ interoperability enabled through Bazel features or target overrides is not
-passed to these prescans; packages that rely on it must use manual SDK dependencies.
-Generated sources and plugin-generated imports are not covered. Only the direct
-Swift imports are prescanned; the existing SDK targets supply their transitive
-SDK dependencies. This is not a full compiler dependency graph or dynamic Bazel
-dependency discovery.
+Swift evaluates `#if`, `#elseif`, `#else`, `os`, `arch`, `targetEnvironment`,
+`canImport`, and compiler/language-version checks. Scans apply manifest settings,
+default traits, language modes, product module aliases and the platform-specific
+transitive module closure. Each SDK/configuration has its own result; identical
+debug/fastbuild requests share one invocation. Scans are sequential during
+explicit generation, never during repository fetching.
 
-The C/Objective-C scan handles framework imports and includes, removes comments
-and literals, and ignores quoted local includes. It maps common SDK headers such
-as `dispatch/dispatch.h`, `objc/runtime.h`, `sqlite3.h`, standard C headers and
-`sys/...` to their SDK modules. Arbitrary external headers are not recursively
-scanned, and C preprocessor conditions are not evaluated. Binary artifacts are
-not scanned. Generated resource accessors add Foundation.
+Package modules are visible through `-module-can-import`, without building them.
+Missing package-module versions retain SwiftPM's warning and unversioned behavior
+for version-qualified `canImport`. Warnings use portable paths and appear in
+`sdk_inference.json`.
 
-Manifest `linkedFramework` settings preserve platform and build-configuration
-conditions. SDK dependencies are deduplicated, including after target overrides,
-without changing select exclusions/defaults or unrelated dependencies. Package
-module names are resolved through their dependency products, preserving platform
-conditions and actual Clang module-map names across transitive package dependencies.
-Only metadata for reachable products is read, once per package repository.
+Commit the cache. Changed settings, package manifests, source lists, source bytes
+or expected compiler arguments reject stale results with a regeneration diagnostic.
+Source checksums use Bazel's native local file downloader, with no subprocess or
+network request. The canonical ID includes the exact current source contents so
+its download cache cannot hide an edited file behind a previously verified digest.
+Temporary verified copies are deleted. Compiler/SDK compatibility belongs to the
+separate build-time cache-validation test, not fetching.
 
-`sdk_inference.json` in each scanned package repository records compiler profiles,
-source files, discovered Swift imports by configuration and manifest frameworks.
-It also records package-module version warnings emitted by the prescan.
-The compiler reports imports for the whole source module, not per-import line
-locations.
-The shared provider watches and fingerprints compiler/SDK identity files by
-default, assuming an unmodified Xcode installation. Set `full_sdk_tracking = True`
-for recursive content tracking when editing SDKs or toolchain libraries in place.
-Package repositories read the fingerprint. Configuration changes can
-rerun package generation; this does not promise identical outputs across hosts
-with different toolchains or eliminate all repository refetches.
-Each Swift target starts one compiler process per distinct SDK/configuration
-command, sequentially during fetching. Debug and fastbuild normally share a
-command, so this typically means two processes per target per configured SDK.
-Changing the configured Xcode invalidates every opted-in package's scans and can
-repeat its download and SwiftPM work. Host header-search environment variables
-are cleared using the provider's scan environment.
+Profiles cannot observe arbitrary Bazel flags or transitions. Unsupported unsafe
+Swift flags, C++ interop configuration and generated sources still require manual
+SDK deps with inference disabled. Custom module maps and aliases must agree with
+the generated package metadata; argument validation rejects mismatches. Generate
+from matching patched sources for patched packages: checksums intentionally reject
+caches generated from unpatched checkouts.
 
-Only one target triple per SDK is supported. Universal macOS builds and mixed-CPU
-simulator builds need separate profile configurations or blanket/manual dependencies.
-Include a `MacOSX` profile for exec tools and macros, even in iOS applications;
-include an `iPhoneOS` profile for device builds and archives.
-On Apple fetch hosts, generated targets depend on a guard that fails analysis
-for an unconfigured Xcode, CPU, SDK or device/simulator environment, even if no
-SDK import was found. Where blanket or manual dependencies cover unscanned
-configurations, set
+This moves SDK discovery, hashing and Swift prescans out of loading. Existing
+SwiftPM manifest calls elsewhere remain until the wider v2 cache migration.
+
+## Generated SDK dependencies
+
+Swift and Clang targets receive `@system_sdk//:Module` dependencies under SDK,
+platform and configuration selects. Package-provided modules are excluded using
+the resolved product/target graph, including conditional edges and actual Clang
+module-map names. XCTest and Testing can be inferred for package helper libraries.
+
+The C/Objective-C parser remains a pure source-reading operation. It handles
+framework imports/includes and common SDK header families such as Dispatch,
+ObjectiveC, Darwin and SQLite. It does not run a C preprocessor or scan binary
+artifacts. Resource accessors add Foundation. Manifest `linkedFramework` conditions
+intersect SDK availability. Existing normalization merges source, manifest and
+manual dependencies while preserving `select()` coverage and specialization.
+
+`sdk_inference.json` records sources, imports, frameworks, warnings and profiles.
+Committed cache JSON contains no canonical repository names or absolute Xcode
+paths. The provider resolves portable IDs through the current repository mapping.
+Changing the committed cache invalidates consumers; installing another Xcode alone
+does not refetch them. Run the validation test in Apple CI.
+
+Include a MacOSX profile for exec tools/macros, and separate device and simulator
+profiles where needed. The guard rejects unmatched Apple configurations. Where
+blanket/manual dependencies cover them, set
 `--@rules_swift_package_manager//config_settings/sdk_inference:strict_profile=false`.
-This only relaxes the guard; it does not enable blanket dependencies or infer
-imports for unmatched profiles. On non-macOS fetch hosts, Apple SDK inference is a no-op;
-the provider's metadata records why it was skipped. See [SDK compiler
-profiles](system_sdk_inventory.md) for these limits and tracked Xcode selection.
+This only relaxes the guard. Linux matches no Apple SDK conditions and is allowed
+by the guard. Deployment versions and arbitrary compiler flags still need to match.
 
 ## Manual dependencies
 

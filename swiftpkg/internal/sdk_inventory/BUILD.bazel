@@ -17,6 +17,7 @@ bzl_library(
         ":profiles",
         ":render",
         "//swiftpkg/internal:build_files",
+        "//swiftpkg/internal:repository_utils",
     ],
 )
 

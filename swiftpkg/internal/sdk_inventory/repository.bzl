@@ -1,6 +1,7 @@
 """Read a committed SDK cache without consulting the fetch host."""
 
 load("//swiftpkg/internal:build_files.bzl", "build_files")
+load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
 load(":profiles.bzl", "sdk_scan_profiles")
 load(":render.bzl", "sdk_inventory_render")
 
@@ -51,6 +52,10 @@ def _repo_impl(ctx):
     )
     build_files.write(ctx, result.build, "")
     ctx.file("modules.json", json.encode(result.metadata))
+    for name, package in cache.get("packages", {}).items():
+        if any([part in name for part in ["/", "\\", ":"]]):
+            _error("invalid package ID " + name, ctx.attr.generator)
+        ctx.file("packages/" + name + ".json", json.encode(package))
 
 _sdk_inventory_repo = repository_rule(
     implementation = _repo_impl,
@@ -94,8 +99,25 @@ def _decode(contents):
         scan = metadata["scan"],
     )
 
+def _read(ctx):
+    inventory = _decode(ctx.read(_INVENTORY))
+    name = repository_utils.package_name(ctx)
+    packages = {}
+    if name in inventory.scan.get("package_names", []):
+        label = Label("@@{}//:packages/{}.json".format(
+            _INVENTORY.repo_name,
+            name,
+        ))
+        packages[name] = json.decode(ctx.read(label))
+    return struct(
+        modules = inventory.modules,
+        conditions = inventory.conditions,
+        diagnostic = inventory.diagnostic,
+        scan = dict(inventory.scan, packages = packages),
+    )
+
 system_sdk_modules = struct(
-    read = lambda ctx: _decode(ctx.read(_INVENTORY)),
+    read = _read,
     decode = _decode,
     empty = _EMPTY,
     validate = _validate,

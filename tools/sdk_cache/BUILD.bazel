@@ -6,6 +6,7 @@ go_library(
     srcs = [
         "cache.go",
         "main.go",
+        "packages.go",
     ],
     importpath = "github.com/cgrindel/rules_swift_package_manager/tools/sdk_cache",
     visibility = ["//visibility:private"],
@@ -19,7 +20,10 @@ go_binary(
 
 go_test(
     name = "sdk_cache_test",
-    srcs = ["cache_test.go"],
+    srcs = [
+        "cache_test.go",
+        "packages_test.go",
+    ],
     embed = [":sdk_cache_lib"],
 )
 

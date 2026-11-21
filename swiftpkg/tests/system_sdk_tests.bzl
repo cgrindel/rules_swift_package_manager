@@ -275,18 +275,9 @@ def _compiler_results_test(ctx):
 
 compiler_results_test = unittest.make(_compiler_results_test)
 
-def _host_and_guard_test(ctx):
+def _guard_test(ctx):
     env = unittest.begin(ctx)
-    target = _fixture(clang = True)
-    context = _context(target)
-    fields = structs.to_dict(context)
-    fields["sdk_modules"] = struct(modules = {}, conditions = {}, scan = {"host_supported": False})
-    context = struct(**fields)
-
-    # Linux must not scan sources, execute the compiler, or read package metadata.
     repository_ctx = struct()
-    asserts.equals(env, context, sdk_inference_context.prepare(repository_ctx, context))
-    asserts.equals(env, [], system_sdk_deps.for_target(repository_ctx, context, target))
     target = _fixture(linker_settings = pkginfos.new_linker_settings([]))
     context = _with_inventory(_context(target), _inventory({}), source_modules = [])
     guard = system_sdk_deps.for_target(repository_ctx, context, target)
@@ -294,8 +285,8 @@ def _host_and_guard_test(ctx):
     asserts.equals(env, [None], [d.condition for d in guard])
     return unittest.end(env)
 
-host_and_guard_test = unittest.make(_host_and_guard_test)
+guard_test = unittest.make(_guard_test)
 
 def system_sdk_test_suite(name = "system_sdk_tests"):
-    unittest.suite("system_sdk_unit_tests", disabled_test, generated_deps_test, regressions_test, sdk_identity_test, platform_exclusions_test, compiler_results_test, host_and_guard_test)
+    unittest.suite("system_sdk_unit_tests", disabled_test, generated_deps_test, regressions_test, sdk_identity_test, platform_exclusions_test, compiler_results_test, guard_test)
     native.test_suite(name = name, tests = [":system_sdk_unit_tests"])

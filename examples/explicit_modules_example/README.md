@@ -49,3 +49,9 @@ For setup details and limitations, see the [migration notes].
 Source inference requires the SDK inventory provider and its compiler profiles.
 `do_test` always exercises inferred modules and builds the iOS simulator app;
 missing provider wiring or scan failures fail the test rather than skip coverage.
+
+SDK metadata and source prescans are committed in `sdk_cache.json`. `do_test`
+regenerates it explicitly for the CI toolchain with `--package .` before testing.
+Fetching checks source fingerprints and consumes cached results without invoking
+a compiler. The cache-validation test checks the current compiler/SDK separately.
+See [cache setup](../../docs/system_sdk_inventory.md).

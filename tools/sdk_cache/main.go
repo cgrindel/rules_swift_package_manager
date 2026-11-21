@@ -175,6 +175,7 @@ func run() error {
 	developer := flag.String("developer-dir", "", "Developer directory resolved by apple_support")
 	toolchainPath := flag.String("toolchain", "", "Bazel-generated toolchain descriptor")
 	requestPath := flag.String("request", "", "portable generation settings")
+	packagePath := flag.String("package", "", "root Swift package whose resolved graph should be prescanned")
 	outputPath := flag.String("output", "", "source-tree cache to write")
 	validatePath := flag.String("validate", "", "validate this cache against the configured toolchain without rewriting it")
 	flag.Parse()
@@ -246,6 +247,11 @@ func run() error {
 	}
 	if err := t.inventory(cache); err != nil {
 		return err
+	}
+	if *packagePath != "" {
+		if err := t.scanPackages(*packagePath, cache); err != nil {
+			return err
+		}
 	}
 	return writeJSON(*outputPath, cache)
 }

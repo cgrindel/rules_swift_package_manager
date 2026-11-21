@@ -6,9 +6,10 @@ not run Python, Swift, xcrun, or any other subprocess; inspect the host SDK; or 
 host environment variables. This follows the loading-phase direction in
 [#2641](https://github.com/cgrindel/rules_swift_package_manager/issues/2641).
 
-This provider alone does not infer package dependencies. The source-inference
-consumer lands after it. Existing SwiftPM manifest evaluation elsewhere in RSPM
-has not been migrated by this change.
+The provider renders SDK configuration labels; the source-inference consumer
+reads committed prescans. Add `--package .` when generating the cache to include
+those prescans (see [dependency inference](dependency_inference.md)). Existing
+SwiftPM manifest evaluation elsewhere in RSPM has not been migrated by this change.
 
 ## Generate and configure
 
@@ -125,7 +126,9 @@ parsing rules_swift BUILD files during fetching.
 
 The provider renders public platform/configuration conditions and the guard from
 those portable IDs. Canonical labels occur only in its generated `modules.json`,
-resolved through the current repository mapping. Changing the committed cache
+resolved through the current repository mapping. Source prescans are exported in
+separate per-package JSON files so each consumer reads only its own results.
+Changing the committed cache
 invalidates its consumers; installing or switching Xcode alone does not refetch
 packages. rules_swift still supplies the actual `@system_sdk` build targets, and
 its own SDK repository implementation is outside this change's scope.

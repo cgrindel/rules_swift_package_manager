@@ -60,6 +60,13 @@ func TestXcodeVersion(t *testing.T) {
 	}
 }
 
+func TestCompilerStampIgnoresDefaultHostTarget(t *testing.T) {
+	version := "Apple Swift version 6.3\n"
+	if compilerVersion(version+"Target: arm64-apple-macosx27.0") != compilerVersion(version+"Target: x86_64-apple-macosx27.0") {
+		t.Fatal("host architecture changed the configured compiler stamp")
+	}
+}
+
 func TestProfiles(t *testing.T) {
 	for _, triple := range []string{"arm64-apple-ios15.0-simulator", "x86_64-apple-ios16.0-simulator"} {
 		if err := validateProfile("iPhoneSimulator", triple); err != nil {

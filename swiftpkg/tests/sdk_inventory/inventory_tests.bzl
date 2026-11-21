@@ -87,5 +87,40 @@ def _profiles_test(ctx):
 
 profiles_test = unittest.make(_profiles_test)
 
+def _package_slice_test(ctx):
+    env = unittest.begin(ctx)
+    own = {"inputs": {"Package.swift": "a" * 64}, "targets": {}}
+    cache = dict(_CACHE, packages = {
+        "swiftpkg_one": own,
+        "swiftpkg_other": {"inputs": {}, "targets": {"Unrelated": {}}},
+    })
+    rendered = sdk_inventory_render.render(
+        cache,
+        "inventory",
+        {"debug": "//:debug", "release": "//:release"},
+        lambda label: label,
+    )
+    asserts.false(env, "packages" in rendered.metadata["scan"])
+    reads = []
+
+    def read(label):
+        label = str(label)
+        reads.append(label)
+        if label.endswith("//:modules.json"):
+            return json.encode(rendered.metadata)
+        asserts.true(env, label.endswith("//:packages/swiftpkg_one.json"))
+        return json.encode(own)
+
+    result = system_sdk_modules.read(struct(
+        name = "extension+swiftpkg_one",
+        attr = struct(bazel_package_name = "swiftpkg_one"),
+        read = read,
+    ))
+    asserts.equals(env, 2, len(reads))
+    asserts.equals(env, {"swiftpkg_one": own}, result.scan["packages"])
+    return unittest.end(env)
+
+package_slice_test = unittest.make(_package_slice_test)
+
 def system_sdk_inventory_test_suite():
-    unittest.suite("system_sdk_inventory_tests", render_test, repository_test, profiles_test)
+    unittest.suite("system_sdk_inventory_tests", render_test, repository_test, profiles_test, package_slice_test)

@@ -18,7 +18,7 @@
     "full_sdk_tracking": false
   },
   "xcode_version": "27.0.0.27A266a",
-  "swift_version": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)\nTarget: arm64-apple-macosx27.0.0",
+  "swift_version": "Apple Swift version 6.4 (swiftlang-6.4.0.34.1 clang-2100.3.34.1)",
   "fingerprints": {
     "compiler/swiftc": "84b410d8143298f90ab0b721d488dab90e2fdbf23577ae6186162832a1155cb7",
     "sdk/MacOSX/SDKSettings.json": "7b93ad7e534cc4b31c6a4e39d19b5e0288acf2168c2649479a796d1cb51939fb",
@@ -1946,5 +1946,524 @@
       "MacOSX",
       "iPhoneSimulator"
     ]
+  },
+  "packages": {
+    "swiftpkg_explicit_modules_example": {
+      "inputs": {
+        "Package.swift": "e98b9fe5f1729f1503b81bbb5a917a536481184c4864060b5389609477f262c9"
+      },
+      "targets": {}
+    },
+    "swiftpkg_explicitmodulesfixture": {
+      "inputs": {
+        "Package.swift": "ea2a32189febd644ac8200bfa9e65746c9ce6886bc4dde06ab7043fad6f67d46"
+      },
+      "targets": {
+        "DeveloperProbe": {
+          "inputs": {
+            "Sources/DeveloperProbe/DeveloperProbe.swift": "c6c255314744b80017a1712b50bcb3544cf215a6cf63a1622d6024ba28d27b3d"
+          },
+          "scans": [
+            {
+              "sdk": "MacOSX",
+              "configuration": "debug",
+              "arguments": [
+                "-frontend",
+                "-scan-dependencies",
+                "-import-prescan",
+                "-module-name",
+                "DeveloperProbe",
+                "-sdk",
+                "${SDK}",
+                "-target",
+                "arm64-apple-macosx13.0",
+                "-module-cache-path",
+                "${MODULE_CACHE}",
+                "-DSWIFT_PACKAGE",
+                "-Onone",
+                "-DDEBUG",
+                "-module-can-import",
+                "DeveloperProbe",
+                "-swift-version",
+                "5",
+                "Sources/DeveloperProbe/DeveloperProbe.swift"
+              ],
+              "imports": [
+                "Swift",
+                "SwiftOnoneSupport",
+                "Testing",
+                "XCTest",
+                "_Concurrency",
+                "_StringProcessing",
+                "_SwiftConcurrencyShims"
+              ],
+              "warnings": []
+            },
+            {
+              "sdk": "MacOSX",
+              "configuration": "fastbuild",
+              "arguments": [
+                "-frontend",
+                "-scan-dependencies",
+                "-import-prescan",
+                "-module-name",
+                "DeveloperProbe",
+                "-sdk",
+                "${SDK}",
+                "-target",
+                "arm64-apple-macosx13.0",
+                "-module-cache-path",
+                "${MODULE_CACHE}",
+                "-DSWIFT_PACKAGE",
+                "-Onone",
+                "-DDEBUG",
+                "-module-can-import",
+                "DeveloperProbe",
+                "-swift-version",
+                "5",
+                "Sources/DeveloperProbe/DeveloperProbe.swift"
+              ],
+              "imports": [
+                "Swift",
+                "SwiftOnoneSupport",
+                "Testing",
+                "XCTest",
+                "_Concurrency",
+                "_StringProcessing",
+                "_SwiftConcurrencyShims"
+              ],
+              "warnings": []
+            },
+            {
+              "sdk": "MacOSX",
+              "configuration": "release",
+              "arguments": [
+                "-frontend",
+                "-scan-dependencies",
+                "-import-prescan",
+                "-module-name",
+                "DeveloperProbe",
+                "-sdk",
+                "${SDK}",
+                "-target",
+                "arm64-apple-macosx13.0",
+                "-module-cache-path",
+                "${MODULE_CACHE}",
+                "-DSWIFT_PACKAGE",
+                "-O",
+                "-module-can-import",
+                "DeveloperProbe",
+                "-swift-version",
+                "5",
+                "Sources/DeveloperProbe/DeveloperProbe.swift"
+              ],
+              "imports": [
+                "Swift",
+                "Testing",
+                "XCTest",
+                "_Concurrency",
+                "_StringProcessing",
+                "_SwiftConcurrencyShims"
+              ],
+              "warnings": []
+            },
+            {
+              "sdk": "iPhoneSimulator",
+              "configuration": "debug",
+              "arguments": [
+                "-frontend",
+                "-scan-dependencies",
+                "-import-prescan",
+                "-module-name",
+                "DeveloperProbe",
+                "-sdk",
+                "${SDK}",
+                "-target",
+                "arm64-apple-ios15.0-simulator",
+                "-module-cache-path",
+                "${MODULE_CACHE}",
+                "-DSWIFT_PACKAGE",
+                "-Onone",
+                "-DDEBUG",
+                "-module-can-import",
+                "DeveloperProbe",
+                "-swift-version",
+                "5",
+                "Sources/DeveloperProbe/DeveloperProbe.swift"
+              ],
+              "imports": [
+                "Swift",
+                "SwiftOnoneSupport",
+                "Testing",
+                "XCTest",
+                "_Concurrency",
+                "_StringProcessing",
+                "_SwiftConcurrencyShims"
+              ],
+              "warnings": []
+            },
+            {
+              "sdk": "iPhoneSimulator",
+              "configuration": "fastbuild",
+              "arguments": [
+                "-frontend",
+                "-scan-dependencies",
+                "-import-prescan",
+                "-module-name",
+                "DeveloperProbe",
+                "-sdk",
+                "${SDK}",
+                "-target",
+                "arm64-apple-ios15.0-simulator",
+                "-module-cache-path",
+                "${MODULE_CACHE}",
+                "-DSWIFT_PACKAGE",
+                "-Onone",
+                "-DDEBUG",
+                "-module-can-import",
+                "DeveloperProbe",
+                "-swift-version",
+                "5",
+                "Sources/DeveloperProbe/DeveloperProbe.swift"
+              ],
+              "imports": [
+                "Swift",
+                "SwiftOnoneSupport",
+                "Testing",
+                "XCTest",
+                "_Concurrency",
+                "_StringProcessing",
+                "_SwiftConcurrencyShims"
+              ],
+              "warnings": []
+            },
+            {
+              "sdk": "iPhoneSimulator",
+              "configuration": "release",
+              "arguments": [
+                "-frontend",
+                "-scan-dependencies",
+                "-import-prescan",
+                "-module-name",
+                "DeveloperProbe",
+                "-sdk",
+                "${SDK}",
+                "-target",
+                "arm64-apple-ios15.0-simulator",
+                "-module-cache-path",
+                "${MODULE_CACHE}",
+                "-DSWIFT_PACKAGE",
+                "-O",
+                "-module-can-import",
+                "DeveloperProbe",
+                "-swift-version",
+                "5",
+                "Sources/DeveloperProbe/DeveloperProbe.swift"
+              ],
+              "imports": [
+                "Swift",
+                "Testing",
+                "XCTest",
+                "_Concurrency",
+                "_StringProcessing",
+                "_SwiftConcurrencyShims"
+              ],
+              "warnings": []
+            }
+          ]
+        },
+        "Greeter": {
+          "inputs": {
+            "Sources/Greeter/Greeter.swift": "14f83c1a07317ef2cda43cd15ce37bce39530c5604a229913c9403f3241c80c0"
+          },
+          "scans": [
+            {
+              "sdk": "MacOSX",
+              "configuration": "debug",
+              "arguments": [
+                "-frontend",
+                "-scan-dependencies",
+                "-import-prescan",
+                "-module-name",
+                "Greeter",
+                "-sdk",
+                "${SDK}",
+                "-target",
+                "arm64-apple-macosx13.0",
+                "-module-cache-path",
+                "${MODULE_CACHE}",
+                "-DSWIFT_PACKAGE",
+                "-Onone",
+                "-DDEBUG",
+                "-module-can-import",
+                "Greeter",
+                "-module-can-import",
+                "ObjCGreeter",
+                "-swift-version",
+                "5",
+                "Sources/Greeter/Greeter.swift"
+              ],
+              "imports": [
+                "AppKit",
+                "Compression",
+                "Foundation",
+                "ObjCGreeter",
+                "Swift",
+                "SwiftOnoneSupport",
+                "_Concurrency",
+                "_StringProcessing",
+                "_SwiftConcurrencyShims"
+              ],
+              "warnings": [
+                {
+                  "message": "Sources/Greeter/Greeter.swift:3:15: warning: cannot find user version number for module 'ObjCGreeter'; version number ignored [#ModuleVersionMissing]",
+                  "module": "ObjCGreeter"
+                },
+                {
+                  "message": "   |               `- warning: cannot find user version number for module 'ObjCGreeter'; version number ignored [#ModuleVersionMissing]",
+                  "module": "ObjCGreeter"
+                }
+              ]
+            },
+            {
+              "sdk": "MacOSX",
+              "configuration": "fastbuild",
+              "arguments": [
+                "-frontend",
+                "-scan-dependencies",
+                "-import-prescan",
+                "-module-name",
+                "Greeter",
+                "-sdk",
+                "${SDK}",
+                "-target",
+                "arm64-apple-macosx13.0",
+                "-module-cache-path",
+                "${MODULE_CACHE}",
+                "-DSWIFT_PACKAGE",
+                "-Onone",
+                "-DDEBUG",
+                "-module-can-import",
+                "Greeter",
+                "-module-can-import",
+                "ObjCGreeter",
+                "-swift-version",
+                "5",
+                "Sources/Greeter/Greeter.swift"
+              ],
+              "imports": [
+                "AppKit",
+                "Compression",
+                "Foundation",
+                "ObjCGreeter",
+                "Swift",
+                "SwiftOnoneSupport",
+                "_Concurrency",
+                "_StringProcessing",
+                "_SwiftConcurrencyShims"
+              ],
+              "warnings": [
+                {
+                  "message": "Sources/Greeter/Greeter.swift:3:15: warning: cannot find user version number for module 'ObjCGreeter'; version number ignored [#ModuleVersionMissing]",
+                  "module": "ObjCGreeter"
+                },
+                {
+                  "message": "   |               `- warning: cannot find user version number for module 'ObjCGreeter'; version number ignored [#ModuleVersionMissing]",
+                  "module": "ObjCGreeter"
+                }
+              ]
+            },
+            {
+              "sdk": "MacOSX",
+              "configuration": "release",
+              "arguments": [
+                "-frontend",
+                "-scan-dependencies",
+                "-import-prescan",
+                "-module-name",
+                "Greeter",
+                "-sdk",
+                "${SDK}",
+                "-target",
+                "arm64-apple-macosx13.0",
+                "-module-cache-path",
+                "${MODULE_CACHE}",
+                "-DSWIFT_PACKAGE",
+                "-O",
+                "-module-can-import",
+                "Greeter",
+                "-module-can-import",
+                "ObjCGreeter",
+                "-swift-version",
+                "5",
+                "Sources/Greeter/Greeter.swift"
+              ],
+              "imports": [
+                "AppKit",
+                "Compression",
+                "Foundation",
+                "ObjCGreeter",
+                "Swift",
+                "_Concurrency",
+                "_StringProcessing",
+                "_SwiftConcurrencyShims"
+              ],
+              "warnings": [
+                {
+                  "message": "Sources/Greeter/Greeter.swift:3:15: warning: cannot find user version number for module 'ObjCGreeter'; version number ignored [#ModuleVersionMissing]",
+                  "module": "ObjCGreeter"
+                },
+                {
+                  "message": "   |               `- warning: cannot find user version number for module 'ObjCGreeter'; version number ignored [#ModuleVersionMissing]",
+                  "module": "ObjCGreeter"
+                }
+              ]
+            },
+            {
+              "sdk": "iPhoneSimulator",
+              "configuration": "debug",
+              "arguments": [
+                "-frontend",
+                "-scan-dependencies",
+                "-import-prescan",
+                "-module-name",
+                "Greeter",
+                "-sdk",
+                "${SDK}",
+                "-target",
+                "arm64-apple-ios15.0-simulator",
+                "-module-cache-path",
+                "${MODULE_CACHE}",
+                "-DSWIFT_PACKAGE",
+                "-Onone",
+                "-DDEBUG",
+                "-module-can-import",
+                "Greeter",
+                "-module-can-import",
+                "ObjCGreeter",
+                "-swift-version",
+                "5",
+                "Sources/Greeter/Greeter.swift"
+              ],
+              "imports": [
+                "Compression",
+                "Foundation",
+                "ObjCGreeter",
+                "Swift",
+                "SwiftOnoneSupport",
+                "UIKit",
+                "_Concurrency",
+                "_StringProcessing",
+                "_SwiftConcurrencyShims"
+              ],
+              "warnings": [
+                {
+                  "message": "Sources/Greeter/Greeter.swift:3:15: warning: cannot find user version number for module 'ObjCGreeter'; version number ignored [#ModuleVersionMissing]",
+                  "module": "ObjCGreeter"
+                },
+                {
+                  "message": "   |               `- warning: cannot find user version number for module 'ObjCGreeter'; version number ignored [#ModuleVersionMissing]",
+                  "module": "ObjCGreeter"
+                }
+              ]
+            },
+            {
+              "sdk": "iPhoneSimulator",
+              "configuration": "fastbuild",
+              "arguments": [
+                "-frontend",
+                "-scan-dependencies",
+                "-import-prescan",
+                "-module-name",
+                "Greeter",
+                "-sdk",
+                "${SDK}",
+                "-target",
+                "arm64-apple-ios15.0-simulator",
+                "-module-cache-path",
+                "${MODULE_CACHE}",
+                "-DSWIFT_PACKAGE",
+                "-Onone",
+                "-DDEBUG",
+                "-module-can-import",
+                "Greeter",
+                "-module-can-import",
+                "ObjCGreeter",
+                "-swift-version",
+                "5",
+                "Sources/Greeter/Greeter.swift"
+              ],
+              "imports": [
+                "Compression",
+                "Foundation",
+                "ObjCGreeter",
+                "Swift",
+                "SwiftOnoneSupport",
+                "UIKit",
+                "_Concurrency",
+                "_StringProcessing",
+                "_SwiftConcurrencyShims"
+              ],
+              "warnings": [
+                {
+                  "message": "Sources/Greeter/Greeter.swift:3:15: warning: cannot find user version number for module 'ObjCGreeter'; version number ignored [#ModuleVersionMissing]",
+                  "module": "ObjCGreeter"
+                },
+                {
+                  "message": "   |               `- warning: cannot find user version number for module 'ObjCGreeter'; version number ignored [#ModuleVersionMissing]",
+                  "module": "ObjCGreeter"
+                }
+              ]
+            },
+            {
+              "sdk": "iPhoneSimulator",
+              "configuration": "release",
+              "arguments": [
+                "-frontend",
+                "-scan-dependencies",
+                "-import-prescan",
+                "-module-name",
+                "Greeter",
+                "-sdk",
+                "${SDK}",
+                "-target",
+                "arm64-apple-ios15.0-simulator",
+                "-module-cache-path",
+                "${MODULE_CACHE}",
+                "-DSWIFT_PACKAGE",
+                "-O",
+                "-module-can-import",
+                "Greeter",
+                "-module-can-import",
+                "ObjCGreeter",
+                "-swift-version",
+                "5",
+                "Sources/Greeter/Greeter.swift"
+              ],
+              "imports": [
+                "Compression",
+                "Foundation",
+                "ObjCGreeter",
+                "Swift",
+                "UIKit",
+                "_Concurrency",
+                "_StringProcessing",
+                "_SwiftConcurrencyShims"
+              ],
+              "warnings": [
+                {
+                  "message": "Sources/Greeter/Greeter.swift:3:15: warning: cannot find user version number for module 'ObjCGreeter'; version number ignored [#ModuleVersionMissing]",
+                  "module": "ObjCGreeter"
+                },
+                {
+                  "message": "   |               `- warning: cannot find user version number for module 'ObjCGreeter'; version number ignored [#ModuleVersionMissing]",
+                  "module": "ObjCGreeter"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
   }
 }

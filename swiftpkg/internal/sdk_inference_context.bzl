@@ -1,4 +1,4 @@
-"""Prepare compiler scans using the SDK provider and resolved package graph."""
+"""Validate cached prescans against the resolved package graph."""
 
 load("@bazel_skylib//lib:structs.bzl", "structs")
 load(":bazel_repo_names.bzl", "bazel_repo_names")
@@ -10,11 +10,9 @@ load(":repository_utils.bzl", "repository_utils")
 def _prepare(repository_ctx, pkg_ctx):
     if not pkg_ctx.system_sdk_deps:
         return pkg_ctx
-    inventory = getattr(pkg_ctx, "sdk_modules", None)
+    inventory = pkg_ctx.sdk_modules
     if inventory == None or not inventory.scan:
-        fail("SDK inference requires the compiler-profile inventory provider (schema 2).")
-    if not inventory.scan.get("host_supported", True):
-        return pkg_ctx
+        fail("SDK inference requires a committed SDK cache (schema 3).")
     pkg_info = pkg_ctx.pkg_info
 
     # Read only resolved dependencies actually referenced by built targets, once
@@ -42,8 +40,11 @@ def _prepare(repository_ctx, pkg_ctx):
     fields["source_scans"] = {}
     context = struct(**fields)
 
-    # The provider fingerprints watched SDK/compiler files once. Reading its
-    # modules.json records that digest without walking every SDK for each package.
+    package_cache = inventory.scan.get("packages", {}).get(pkg_ctx.repo_name)
+    if not package_cache:
+        fail("Missing SDK package cache for {}. Run the SDK cache generator with --package <root-package>.".format(pkg_ctx.repo_name))
+    compiler_imports.validate_inputs(repository_ctx, package_cache["inputs"])
+
     reports = {}
     for target in pkg_info.targets:
         if target.type == "test" or not target.swift_src_info:
@@ -51,10 +52,6 @@ def _prepare(repository_ctx, pkg_ctx):
         sources = pkginfo_targets.srcs(target)
         if not sources:
             continue
-        for src in sources:
-            # execute() does not track compiler input files. Keep these reads for
-            # local source changes as well as the provider's SDK fingerprint.
-            repository_ctx.read(src)
         records = compiler_imports.scan(repository_ctx, context, target, fields["dependency_modules"].get(target.name, {}))
         fields["source_scans"][target.name] = records
         reports[target.name] = {
@@ -66,7 +63,7 @@ def _prepare(repository_ctx, pkg_ctx):
             "sources": sorted(sources),
         }
     repository_ctx.file("sdk_inference.json", json.encode_indent({
-        "compiler": inventory.scan,
+        "compiler": {k: v for k, v in inventory.scan.items() if k != "packages"},
         "schema_version": 1,
         "targets": reports,
     }))

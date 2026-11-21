@@ -7,7 +7,7 @@ bazel="${BIT_BAZEL_BINARY:-bazel}"
 # Generate explicitly before fetching any package that consumes the cache. The
 # generator is independent of this workspace's package repos and existing cache.
 "${bazel}" run @rules_swift_package_manager//swiftpkg:update_sdk_cache -- \
-  --request sdk_profiles.json --output sdk_cache.json
+  --request sdk_profiles.json --package . --output sdk_cache.json
 
 # The fixture only scans arm64. Strict checking must reject an unscanned CPU;
 # relaxing the guard must accept both unmatched and matching profiles. These

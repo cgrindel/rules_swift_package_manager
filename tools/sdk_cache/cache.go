@@ -34,12 +34,13 @@ type Toolchain struct {
 }
 
 type Cache struct {
-	SchemaVersion int                 `json:"schema_version"`
-	Request       Request             `json:"request"`
-	XcodeVersion  string              `json:"xcode_version"`
-	SwiftVersion  string              `json:"swift_version"`
-	Fingerprints  map[string]string   `json:"fingerprints"`
-	Modules       map[string][]string `json:"modules"`
+	SchemaVersion int                     `json:"schema_version"`
+	Request       Request                 `json:"request"`
+	XcodeVersion  string                  `json:"xcode_version"`
+	SwiftVersion  string                  `json:"swift_version"`
+	Fingerprints  map[string]string       `json:"fingerprints"`
+	Modules       map[string][]string     `json:"modules"`
+	Packages      map[string]packageCache `json:"packages,omitempty"`
 }
 
 func readJSON(path string, value any) error {
@@ -105,6 +106,9 @@ func environment(developerDir string) []string {
 		"OBJC_INCLUDE_PATH": true, "SDKROOT": true, "TOOLCHAINS": true,
 		"SWIFT_MODULECACHE_PATH": true, "CLANG_MODULE_CACHE_PATH": true,
 		"DEVELOPER_DIR": true,
+		"SWIFT_EXEC":    true, "SWIFT_EXEC_MANIFEST": true,
+		"SWIFT_DRIVER_SWIFT_FRONTEND_EXEC": true, "SWIFT_DRIVER_CLANG_EXEC": true,
+		"SWIFTPM_MODULECACHE_OVERRIDE": true, "SWIFTPM_SDKROOT": true,
 	}
 	var env []string
 	for _, entry := range os.Environ() {
@@ -160,7 +164,7 @@ func (t Toolchain) stamp(request Request) (*Cache, error) {
 		return nil, err
 	}
 	c := &Cache{SchemaVersion: schemaVersion, Request: request, XcodeVersion: exact,
-		SwiftVersion: strings.TrimSpace(string(swift)), Fingerprints: map[string]string{}, Modules: map[string][]string{}}
+		SwiftVersion: compilerVersion(string(swift)), Fingerprints: map[string]string{}, Modules: map[string][]string{}}
 	inputs := map[string]string{
 		"compiler/swiftc":     t.Compiler,
 		"xcode/version.plist": filepath.Join(t.DeveloperDir, "..", "version.plist"),
@@ -199,6 +203,18 @@ func (t Toolchain) stamp(request Request) (*Cache, error) {
 		c.Fingerprints[name] = digest
 	}
 	return c, nil
+}
+
+func compilerVersion(output string) string {
+	// --version also prints the default host target. The request supplies exact
+	// scan triples, so host architecture is not part of compiler identity.
+	var lines []string
+	for _, line := range strings.Split(strings.TrimSpace(output), "\n") {
+		if !strings.HasPrefix(line, "Target:") {
+			lines = append(lines, line)
+		}
+	}
+	return strings.Join(lines, "\n")
 }
 
 // Logical names, rather than installation paths or symlink destinations, enter
