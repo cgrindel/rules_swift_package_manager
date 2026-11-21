@@ -47,4 +47,6 @@ tar -xf "${swift_bazel_tar_gz}" -C "${workspace_dir}"
 
 # Test the extracted contents
 cd "${workspace_dir}"
-"${bazel}" test //bzlmod:e2e_test
+# Forward the nested test's progress into this test's log. If the outer archive
+# test times out, its log must show which fetch/build the inner test reached.
+"${bazel}" test --test_output=streamed //bzlmod:e2e_test
