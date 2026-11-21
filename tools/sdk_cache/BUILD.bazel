@@ -1,0 +1,32 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@io_bazel_rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+
+go_library(
+    name = "sdk_cache_lib",
+    srcs = [
+        "cache.go",
+        "main.go",
+    ],
+    importpath = "github.com/cgrindel/rules_swift_package_manager/tools/sdk_cache",
+    visibility = ["//visibility:private"],
+)
+
+go_binary(
+    name = "sdk_cache",
+    embed = [":sdk_cache_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "sdk_cache_test",
+    srcs = ["cache_test.go"],
+    embed = [":sdk_cache_lib"],
+)
+
+bzlformat_pkg(name = "bzlformat")
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)

@@ -3,7 +3,8 @@ load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 
 package(default_visibility = ["//visibility:public"])
 
-# Disable only where blanket or manual SDK dependencies cover unscanned profiles.
+# Disable only where blanket or manual SDK dependencies cover unscanned
+# profiles.
 bool_flag(
     name = "strict_profile",
     build_setting_default = True,

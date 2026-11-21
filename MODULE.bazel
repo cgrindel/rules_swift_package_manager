@@ -35,7 +35,8 @@ bazel_dep(
     repo_name = "build_bazel_rules_apple",
 )
 
-# Generated package repositories resolve SDK labels through this module's mapping.
+# Generated package repositories resolve SDK labels through this module's
+# mapping.
 system_sdk = use_extension(
     "@build_bazel_rules_swift//swift:extensions.bzl",
     "system_sdk",

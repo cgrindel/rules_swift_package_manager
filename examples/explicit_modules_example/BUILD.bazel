@@ -3,6 +3,17 @@ load("@build_bazel_rules_apple//apple:ios.bzl", "ios_application")
 load("@build_bazel_rules_apple//apple:macos.bzl", "macos_application")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
+load("@rules_swift_package_manager//swiftpkg:sdk_cache.bzl", "swift_sdk_cache_test")
+
+exports_files([
+    "sdk_cache.json",
+    "sdk_profiles.json",
+])
+
+swift_sdk_cache_test(
+    name = "sdk_cache_test",
+    cache = "sdk_cache.json",
+)
 
 swift_library(
     name = "Main",

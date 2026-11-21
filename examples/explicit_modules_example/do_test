@@ -4,11 +4,10 @@ set -o errexit -o nounset -o pipefail
 
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
-# Resolve the system selection before Bazel so it becomes a tracked repo input.
-if [[ -z "${DEVELOPER_DIR:-}" ]]; then
-  DEVELOPER_DIR="$(xcode-select -p)"
-  export DEVELOPER_DIR
-fi
+# Generate explicitly before fetching any package that consumes the cache. The
+# generator is independent of this workspace's package repos and existing cache.
+"${bazel}" run @rules_swift_package_manager//swiftpkg:update_sdk_cache -- \
+  --request sdk_profiles.json --output sdk_cache.json
 
 # The fixture only scans arm64. Strict checking must reject an unscanned CPU;
 # relaxing the guard must accept both unmatched and matching profiles. These

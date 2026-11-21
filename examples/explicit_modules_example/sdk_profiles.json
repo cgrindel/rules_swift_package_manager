@@ -1,0 +1,10 @@
+{
+  "targets": {
+    "MacOSX": "arm64-apple-macosx13.0",
+    "iPhoneSimulator": "arm64-apple-ios15.0-simulator"
+  },
+  "exclude_modules": {
+    "MacOSX": ["MobileGestaltPrivate"],
+    "iPhoneSimulator": ["CoreAudio_Private", "MobileGestaltPrivate"]
+  }
+}
