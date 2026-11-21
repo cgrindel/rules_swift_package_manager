@@ -56,8 +56,7 @@ exec "$root/{workspace}/{tool}" --toolchain "$root/{workspace}/{descriptor}"{val
     )]
     if cache_files:
         # The installed SDK is checked at execution time, not an action input.
-        # Never reuse a previous success after an in-place Xcode modification.
-        providers.append(testing.ExecutionInfo({"local": "1", "no-cache": "1"}))
+        providers.append(testing.ExecutionInfo({"local": "1"}))
     return providers
 
 _ATTRS = dict(apple_support.action_required_attrs(), **{
@@ -82,7 +81,7 @@ so it can bootstrap or repair missing and stale caches.
 """,
 )
 
-swift_sdk_cache_test = rule(
+_swift_sdk_cache_test = rule(
     implementation = _impl,
     test = True,
     attrs = dict(_ATTRS, cache = attr.label(mandatory = True, allow_single_file = [".json"])),
@@ -90,3 +89,20 @@ swift_sdk_cache_test = rule(
     toolchains = swift_common.use_all_toolchains(),
     doc = "Validate a committed SDK cache against Bazel's configured Xcode toolchain at test time.",
 )
+
+def swift_sdk_cache_test(name, tags = [], **kwargs):
+    """Validate the installed SDK on every test invocation.
+
+    Args:
+        name: Test target name.
+        tags: Additional test tags.
+        **kwargs: Attributes forwarded to the validation rule, including cache.
+    """
+
+    # ExecutionInfo controls spawn caching, but not Bazel's test-result cache.
+    # The external tag prevents reusing a pass after an in-place SDK change.
+    _swift_sdk_cache_test(
+        name = name,
+        tags = depset(tags + ["external"]).to_list(),
+        **kwargs
+    )
