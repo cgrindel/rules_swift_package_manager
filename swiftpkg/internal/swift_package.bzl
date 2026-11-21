@@ -48,6 +48,7 @@ def _update_git_attrs(orig, keys, override):
     return result
 
 def _swift_package_impl(repository_ctx):
+    sdk_inventory = pkg_ctxs.prepare_sdk(repository_ctx)
     attr = repository_ctx.attr
     directory = str(repository_ctx.path("."))
     env = repo_rules.get_exec_env(repository_ctx)
@@ -97,6 +98,7 @@ def _swift_package_impl(repository_ctx):
         replace_scm_with_registry = replace_scm_with_registry,
         target_deps = repository_ctx.attr.target_deps,
         system_sdk_deps = repository_ctx.attr.system_sdk_deps,
+        sdk_inventory = sdk_inventory,
         binary_target_deps = repository_ctx.attr.binary_target_deps,
         module_aliases = repository_ctx.attr.module_aliases,
         dep_module_aliases = repository_ctx.attr.dep_module_aliases,
