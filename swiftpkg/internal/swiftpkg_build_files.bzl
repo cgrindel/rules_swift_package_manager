@@ -12,6 +12,7 @@ load(":bazel_apple_platforms.bzl", "bazel_apple_platforms")
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":bzl_selects.bzl", "bzl_selects")
+load(":header_symlinks.bzl", "header_symlinks")
 load(":load_statements.bzl", "load_statements")
 load(":manual_target_deps.bzl", "manual_target_deps")
 load(":minimum_os_versions.bzl", "minimum_os_versions")
@@ -41,6 +42,36 @@ def _new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = []):
 
     # GH046: Support plugins.
     return None
+
+# MARK: - Header Symlinks
+
+def _new_for_header_symlinks(pkg_ctx):
+    """Create the targets that recreate the removed header symlinks.
+
+    Args:
+        pkg_ctx: A `struct` as returned by `pkg_ctxs.new`.
+
+    Returns:
+        A `struct` as returned by `build_files.new`, or `None`.
+    """
+    if not pkg_ctx.header_symlinks:
+        return None
+    decls = [
+        build_decls.new(
+            kind = swiftpkg_kinds.symlinked_header,
+            name = header_symlinks.label_name(link),
+            attrs = {
+                "out": link.path,
+                "target": ":{}".format(link.target),
+                "visibility": _implementation_target_visibility(),
+            },
+        )
+        for link in sorted(pkg_ctx.header_symlinks, key = lambda l: l.path)
+    ]
+    return build_files.new(
+        load_stmts = [swiftpkg_symlinked_header_load_stmt],
+        decls = decls,
+    )
 
 # MARK: - Swift Target
 
@@ -431,10 +462,22 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         ),
     )
 
+    # Header symlinks removed from the repository are recreated by
+    # `symlinked_header` targets. See `_new_for_header_symlinks`.
+    target_links = header_symlinks.links_for_target(
+        pkg_ctx.header_symlinks,
+        target.path,
+        public_includes = clang_src_info.public_includes,
+        private_includes = clang_src_info.private_includes,
+    )
+
     # Do not add the srcs from the clang_src_info, yet. We will do that at the
     # end of this function where we will create separate targets based upon the
     # type of source file.
-    srcs = []
+    srcs = [
+        ":{}".format(header_symlinks.label_name(link))
+        for link in target_links.srcs
+    ]
     deps = []
 
     local_includes = [
@@ -517,8 +560,12 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
         "srcs": srcs,
         "visibility": _implementation_target_visibility(),
     }
-    if clang_src_info.hdrs:
-        hdrs = clang_src_info.hdrs
+    all_hdrs = clang_src_info.hdrs + [
+        ":{}".format(header_symlinks.label_name(link))
+        for link in target_links.hdrs
+    ]
+    if all_hdrs:
+        hdrs = all_hdrs
 
         if clang_src_info.modulemap_path:
             # We add the custom module map to `hdrs` to insure it's part of the
@@ -527,10 +574,28 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
             hdrs = hdrs + [clang_src_info.modulemap_path]
 
         attrs["hdrs"] = hdrs
-    if clang_src_info.public_includes:
-        attrs["includes"] = clang_src_info.public_includes
-    if clang_src_info.textual_hdrs:
-        attrs["textual_hdrs"] = clang_src_info.textual_hdrs
+
+    # A header symlink's directory goes in `includes`, which reaches the
+    # explicit module precompile as well as the compiles, so that quoted
+    # includes resolve through the output tree's symlink and the source tree.
+    includes = clang_src_info.public_includes + [
+        d
+        for d in header_symlinks.include_dirs(target_links.hdrs + target_links.srcs)
+        if d not in clang_src_info.public_includes
+    ]
+    if includes:
+        attrs["includes"] = includes
+
+    # A header symlink dangles in sandboxes and on remote executors unless its
+    # target is an input too, and the target may be listed nowhere else (e.g.
+    # msgpack-objective-C's `msgpack/msgpack.h`). Textual headers reach
+    # dependents' compiles without becoming module headers.
+    textual_hdrs = list(clang_src_info.textual_hdrs)
+    for link in target_links.hdrs + target_links.srcs:
+        if link.target not in textual_hdrs:
+            textual_hdrs.append(link.target)
+    if textual_hdrs:
+        attrs["textual_hdrs"] = textual_hdrs
 
     deps.extend(
         lists.flatten([
@@ -575,7 +640,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     # example.
     if clang_src_info.modulemap_path:
         hint_module_map = clang_src_info.modulemap_path
-    elif clang_src_info.hdrs:
+    elif all_hdrs:
         modulemap_target_name = pkginfo_targets.modulemap_label_name(
             bzl_target_name,
         )
@@ -594,7 +659,7 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
                     # added to `objc_library` as well so we can stop generating
                     # modulemaps entierly.
                     "deps": [],
-                    "hdrs": clang_src_info.hdrs,
+                    "hdrs": all_hdrs,
                     "module_name": module_name,
                     "visibility": _implementation_target_visibility(),
                 },
@@ -1645,6 +1710,7 @@ skylib_build_test_load_stmt = load_statements.new(
 )
 
 swiftpkg_build_files = struct(
+    new_for_header_symlinks = _new_for_header_symlinks,
     new_for_license = _new_for_license,
     new_for_target = _new_for_target,
     new_for_products = _new_for_products,
@@ -1688,9 +1754,15 @@ swiftpkg_kinds = struct(
     objc_resource_bundle_accessor_impl = "objc_resource_bundle_accessor_impl",
     resource_bundle_accessor = "resource_bundle_accessor",
     resource_bundle_infoplist = "resource_bundle_infoplist",
+    symlinked_header = "symlinked_header",
 )
 
 swiftpkg_build_defs_location = "@rules_swift_package_manager//swiftpkg:build_defs.bzl"
+
+swiftpkg_symlinked_header_load_stmt = load_statements.new(
+    swiftpkg_build_defs_location,
+    swiftpkg_kinds.symlinked_header,
+)
 
 swiftpkg_generate_modulemap_load_stmt = load_statements.new(
     swiftpkg_build_defs_location,

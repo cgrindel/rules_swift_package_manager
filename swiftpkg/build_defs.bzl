@@ -17,9 +17,14 @@ load(
     "//swiftpkg/internal:resource_bundle_infoplist.bzl",
     _resource_bundle_infoplist = "resource_bundle_infoplist",
 )
+load(
+    "//swiftpkg/internal:symlinked_header.bzl",
+    _symlinked_header = "symlinked_header",
+)
 
 generate_modulemap = _generate_modulemap
 objc_resource_bundle_accessor_hdr = _objc_resource_bundle_accessor_hdr
 objc_resource_bundle_accessor_impl = _objc_resource_bundle_accessor_impl
 resource_bundle_accessor = _resource_bundle_accessor
 resource_bundle_infoplist = _resource_bundle_infoplist
+symlinked_header = _symlinked_header

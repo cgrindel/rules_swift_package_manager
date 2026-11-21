@@ -1,0 +1,44 @@
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary", "swift_library")
+load("@rules_cc//cc:defs.bzl", "objc_library")
+
+# Linking compiles every Objective-C source in ably-cocoa, including
+# Source/SocketRocket/ARTSRWebSocket.m, which reaches the symlinked header.
+swift_binary(
+    name = "symlinked_header_example",
+    srcs = ["main.swift"],
+    deps = [
+        ":PublicHeadersObjc",
+        ":PublicHeadersSwift",
+        "@swiftpkg_ably_cocoa//:Ably",
+    ],
+)
+
+# Dependents that reach msgpack-objective-C's and delta-codec-cocoa's public
+# header symlinks: an Objective-C compile and a Swift import, which needs the
+# modules' explicit precompiles under --config=explicit_modules.
+objc_library(
+    name = "PublicHeadersObjc",
+    srcs = ["PublicHeaders.m"],
+    hdrs = ["PublicHeaders.h"],
+    enable_modules = True,
+    deps = [
+        "@swiftpkg_delta_codec_cocoa//:AblyDeltaCodec",
+        "@swiftpkg_msgpack_objective_c//:msgpack",
+    ],
+)
+
+swift_library(
+    name = "PublicHeadersSwift",
+    srcs = ["PublicHeaders.swift"],
+    module_name = "PublicHeadersSwift",
+    deps = [
+        "@swiftpkg_delta_codec_cocoa//:AblyDeltaCodec",
+        "@swiftpkg_msgpack_objective_c//:msgpack",
+    ],
+)
+
+build_test(
+    name = "build_test",
+    targets = [":symlinked_header_example"],
+)

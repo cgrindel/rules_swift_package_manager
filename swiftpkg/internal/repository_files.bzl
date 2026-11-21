@@ -210,6 +210,39 @@ def _list_directories_under(
         remove_find_path = True,
     )
 
+def _list_symlinks_under(repository_ctx, path, prune_names = [".build", ".git"]):
+    """Retrieves the symlinks under the specified path without following them.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+        path: A path `string` value.
+        prune_names: Optional. A `list` of directory names that are not
+            searched.
+
+    Returns:
+        A sorted `list` of symlink paths relative to `path`.
+    """
+
+    # Follow `path` itself if it is a symlink, but nothing beneath it.
+    find_args = [_find(repository_ctx), "-H", path]
+    if prune_names:
+        find_args.append("(")
+        for idx, name in enumerate(prune_names):
+            if idx > 0:
+                find_args.append("-o")
+            find_args.extend(["-name", name])
+        find_args.extend([")", "-prune", "-o"])
+    find_args.extend(["-type", "l", "-print"])
+    exec_result = repository_ctx.execute(find_args, quiet = True)
+    if exec_result.return_code != 0:
+        fail("Failed to list symlinks under %s. stderr:\n%s" % (path, exec_result.stderr))
+    prefix = path.rstrip("/") + "/"
+    return sorted([
+        p.removeprefix(prefix)
+        for p in exec_result.stdout.splitlines()
+        if p
+    ])
+
 def _process_find_results(raw_output, find_path, exclude_paths = [], remove_find_path = False):
     path_list = raw_output.splitlines()
 
@@ -422,6 +455,7 @@ repository_files = struct(
     is_directory = _is_directory,
     list_directories_under = _list_directories_under,
     list_files_under = _list_files_under,
+    list_symlinks_under = _list_symlinks_under,
     path_exists = _path_exists,
     read_bytes = _read_bytes,
     # Exposed for testing purposes only.

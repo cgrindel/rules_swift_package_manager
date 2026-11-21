@@ -159,6 +159,7 @@ _macos_single_bazel_version_test_examples = [
     "stripe_example",
     "tca_example",
     "symlink_example",
+    "symlinked_header_example",
     "swift_package_registry_example",
     "swift_parsing_example",
     "sqlite_data_example",

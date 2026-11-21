@@ -495,6 +495,72 @@ def _inference_repository_routing_test(ctx):
 
 inference_repository_routing_test = unittest.make(_inference_repository_routing_test)
 
+def _header_symlinks_routing_test(ctx):
+    env = unittest.begin(ctx)
+    calls = []
+
+    def _capture(**kwargs):
+        calls.append(kwargs)
+
+    from_package = struct(
+        env = {},
+        env_inherit = [],
+        registries = {},
+        resolved = None,
+        make_files_read_only = False,
+        netrc = None,
+    )
+    for kind in ["git", "local", "registry"]:
+        for mode in [None, "warn", "ignore", "replace"]:
+            config_pkg = None
+            if mode != None:
+                config_pkg = struct(
+                    build_file = None,
+                    init_submodules = False,
+                    recursive_init_submodules = True,
+                    patch_args = ["-p0"],
+                    patch_cmds = [],
+                    patch_cmds_win = [],
+                    patch_tool = "",
+                    patches = [],
+                    publicly_expose_all_targets = False,
+                    header_symlinks = mode,
+                )
+            dep = struct(
+                name = "foo",
+                identity = "foo",
+                source_control = struct(pin = struct(
+                    state = struct(revision = "abc", version = "1.0.0"),
+                    location = "https://example.com/foo.git",
+                )) if kind == "git" else None,
+                file_system = struct(path = "/workspace/foo") if kind == "local" else None,
+                registry = struct(pin = struct(identity = "example.foo", state = struct(version = "1.0.0"))) if kind == "registry" else None,
+            )
+            swift_deps_test_utils.declare_pkg_from_dependency(
+                dep,
+                config_pkg,
+                from_package,
+                None,
+                None,
+                {},
+                {},
+                "",
+                "/workspace",
+                "",
+                None,
+                {},
+                package_rules = struct(git = _capture, local = _capture, registry = _capture),
+            )
+            msg = "{} mode={}".format(kind, mode)
+
+            # Every kind receives the mode; `local_swift_package` treats
+            # "replace" as "warn".
+            asserts.equals(env, mode or "warn", calls[-1]["header_symlinks"], msg)
+    asserts.equals(env, 12, len(calls))
+    return unittest.end(env)
+
+header_symlinks_routing_test = unittest.make(_header_symlinks_routing_test)
+
 _EXTENSION_METADATA_SENTINEL = struct(sentinel = "extension_metadata")
 
 def _new_fake_module_ctx(modules, metadata):
@@ -699,6 +765,7 @@ def swift_deps_test_suite():
         unknown_inference_packages_test,
         inference_validation_test,
         inference_repository_routing_test,
+        header_symlinks_routing_test,
         bazel_target_mods_by_repo_test,
         branch_values_test,
         build_file_conflict_error_test,

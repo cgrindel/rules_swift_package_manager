@@ -103,6 +103,8 @@ jobs:
             runner: xcode-27
           - test: '@@//examples:symlink_example_test_bazel_.bazelversion'
             runner: xcode-27
+          - test: '@@//examples:symlinked_header_example_test_bazel_.bazelversion'
+            runner: xcode-27
           - test: '@@//examples:tca_example_test_bazel_.bazelversion'
             runner: xcode-27
           - test: '@@//examples:vapor_example_test_bazel_.bazelversion'

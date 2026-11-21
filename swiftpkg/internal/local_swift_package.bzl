@@ -7,6 +7,7 @@ load(
     "update_attrs",
 )
 load("@cgrindel_bazel_starlib//bzllib:defs.bzl", "lists")
+load(":header_symlinks.bzl", "header_symlinks")
 load(":pkg_ctxs.bzl", "pkg_ctxs")
 load(":repo_rules.bzl", "repo_rules")
 
@@ -58,6 +59,15 @@ def _local_swift_package_impl(repository_ctx):
         link_name = paths.join(repo_dir, base)
         repository_ctx.symlink(orig_file, link_name)
 
+    # The repository links to the user's source tree, so header symlinks are
+    # never replaced, only reported.
+    hdr_symlinks = header_symlinks.process(
+        repository_ctx,
+        orig_code_path,
+        repository_ctx.attr.header_symlinks,
+        local = True,
+    )
+
     # Remove the `.swift-version` symlink (the original file in the user's
     # source tree is preserved) so that Swift toolchain proxies do not require
     # a specific Swift version when running SPM commands.
@@ -90,6 +100,7 @@ def _local_swift_package_impl(repository_ctx):
     repo_rules.download_artifacts(repository_ctx, pkg_ctx)
 
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
+    header_symlinks.write_list(repository_ctx, hdr_symlinks.found)
 
     return update_attrs(repository_ctx.attr, _ALL_ATTRS.keys(), {})
 
@@ -106,6 +117,7 @@ root so that the lock file remains portable across machines.\
 }
 
 _ALL_ATTRS = dicts.add(
+    header_symlinks.attrs,
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
     _PATH_ATTRS,

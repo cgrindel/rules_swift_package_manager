@@ -4,6 +4,7 @@ load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
 load("//swiftpkg/internal:bazel_target_mods.bzl", "bazel_target_mods")
+load("//swiftpkg/internal:header_symlinks.bzl", "header_symlinks")
 load("//swiftpkg/internal:local_swift_package.bzl", "local_swift_package")
 load("//swiftpkg/internal:pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
@@ -668,6 +669,9 @@ def _declare_pkg_from_dependency(
     )
     if build_file_conflict != None:
         fail(build_file_conflict)
+    header_symlinks_mode = header_symlinks.modes.warn
+    if config_pkg:
+        header_symlinks_mode = config_pkg.header_symlinks
     if dep.source_control:
         init_submodules = None
         recursive_init_submodules = None
@@ -716,6 +720,7 @@ def _declare_pkg_from_dependency(
             patches = patches,
             publicly_expose_all_targets = publicly_expose_all_targets,
             registries = registries,
+            header_symlinks = header_symlinks_mode,
             replace_scm_with_registry = replace_scm_with_registry,
             target_deps = target_deps,
             module_aliases = module_aliases,
@@ -745,6 +750,7 @@ in the lock file and will not be portable across machines.\
         package_rules.local(
             name = name,
             bazel_package_name = name,
+            header_symlinks = header_symlinks_mode,
             env = from_package.env,
             env_inherit = from_package.env_inherit,
             path = local_path,
@@ -774,6 +780,7 @@ in the lock file and will not be portable across machines.\
             id = dep.registry.pin.identity,
             make_files_read_only = from_package.make_files_read_only,
             registries = from_package.registries,
+            header_symlinks = header_symlinks_mode,
             replace_scm_with_registry = replace_scm_with_registry,
             resolved = resolved,
             target_deps = target_deps,
@@ -1142,7 +1149,7 @@ cross-package labels, and local labels that do not match package targets are \
 emitted unchanged.\
 """,
         ),
-    } | PATCH_ATTRS | TOOL_ATTRS | _inference_override_attrs,
+    } | PATCH_ATTRS | TOOL_ATTRS | header_symlinks.attrs | _inference_override_attrs,
     doc = "Used to add or override settings for a particular Swift package.",
 )
 
