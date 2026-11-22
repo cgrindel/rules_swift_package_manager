@@ -1,6 +1,15 @@
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary", "swift_library")
 load("@rules_cc//cc:defs.bzl", "objc_library")
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package_tool")
+
+# Purposefully not added to a tidy target. It is expensive to run and only
+# needs to be run when the Package.swift has been updated.
+swift_package_tool(
+    name = "update_swift_packages",
+    cmd = "update",
+    package = "Package.swift",
+)
 
 # Linking compiles every Objective-C source in ably-cocoa, including
 # Source/SocketRocket/ARTSRWebSocket.m, which reaches the symlinked header.
