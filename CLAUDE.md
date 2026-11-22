@@ -45,14 +45,10 @@ Examples have individual `do_test` scripts that can be run to test specific func
      - Resource handling (`resource_files.bzl`, `resource_bundle_accessor.bzl`)
    - `bzlmod/` - Bazel module extension for Swift dependencies
 
-2. **tools/swift_deps_index/** - Go-based tooling for Swift dependency analysis
-   - Processes Swift package manifests and resolution data
-   - Generates dependency indexes and metadata
-
-3. **examples/** - Comprehensive test examples for different Swift package scenarios
+2. **examples/** - Comprehensive test examples for different Swift package scenarios
    - Each example has its own `do_test` script and demonstrates specific features
 
-4. **ci/** - Continuous integration configuration and test definitions
+3. **ci/** - Continuous integration configuration and test definitions
 
 ### Key Files
 

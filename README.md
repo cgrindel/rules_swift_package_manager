@@ -184,6 +184,24 @@ swift_deps.from_package(
 )
 ```
 
+The plugin builds its Swift dependency index from it. In your `BUILD.bazel`:
+
+```bazel
+load("@swift_gazelle_plugin//swift_deps_index:defs.bzl", "swift_deps_index")
+
+swift_deps_index(
+    name = "swift_deps_index",
+    swift_deps_info = "@swift_deps_info",
+)
+
+gazelle(
+    name = "update_build_files",
+    data = [":swift_deps_index"],
+    extra_args = ["-swift_dependency_index=$(location :swift_deps_index)"],
+    gazelle = ":gazelle_bin",
+)
+```
+
 #### (Optional) Add dependencies to generated Swift package targets
 
 If a generated Swift package target is missing a Bazel dependency, use `configure_package` to
