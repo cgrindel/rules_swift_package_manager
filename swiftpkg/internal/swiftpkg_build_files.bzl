@@ -431,6 +431,13 @@ def _clang_target_build_file(repository_ctx, pkg_ctx, target):
     clang_src_info = target.clang_src_info
     if clang_src_info == None:
         fail("Expected `clang_src_info` to not be None.")
+    modulemap_error = header_symlinks.modulemap_error(
+        pkg_ctx.repo_name,
+        pkg_ctx.header_symlinks,
+        clang_src_info.hdrs,
+    )
+    if modulemap_error:
+        fail(modulemap_error)
     all_build_files = []
     public_label_name = pkginfo_targets.bazel_label_name(target)
     implementation_label_name = pkginfo_targets.implementation_label_name(public_label_name)

@@ -170,6 +170,57 @@ def _links_for_target_test(ctx):
 
 links_for_target_test = unittest.make(_links_for_target_test)
 
+def _modulemap_error_test(ctx):
+    env = unittest.begin(ctx)
+
+    links = [
+        _link("include/B.h", "real/B.h"),
+        _link("include/A.h", "real/A.h"),
+        _link("Private/C.h", "real/C.h"),
+    ]
+
+    # No removed symlink is a public header.
+    asserts.equals(
+        env,
+        None,
+        header_symlinks.modulemap_error("swiftpkg_foo", links, ["include/Other.h"]),
+    )
+    asserts.equals(
+        env,
+        None,
+        header_symlinks.modulemap_error("swiftpkg_foo", [], ["include/A.h"]),
+    )
+
+    # The modulemap names one removed symlink.
+    asserts.equals(
+        env,
+        "swiftpkg_foo: header_symlinks = \"replace\" cannot recreate header " +
+        "symlinks that the package's module.modulemap names: include/A.h. Set " +
+        "header_symlinks = \"warn\" or \"ignore\" for this package with " +
+        "swift_deps.configure_package.",
+        header_symlinks.modulemap_error(
+            "swiftpkg_foo",
+            links,
+            ["include/A.h", "include/Other.h"],
+        ),
+    )
+
+    # Several are listed in sorted order.
+    actual = header_symlinks.modulemap_error(
+        "swiftpkg_foo",
+        links,
+        ["include/B.h", "include/A.h"],
+    )
+    asserts.true(
+        env,
+        "module.modulemap names: include/A.h, include/B.h. Set" in actual,
+        actual,
+    )
+
+    return unittest.end(env)
+
+modulemap_error_test = unittest.make(_modulemap_error_test)
+
 def _include_dirs_test(ctx):
     env = unittest.begin(ctx)
 
@@ -357,6 +408,7 @@ def header_symlinks_test_suite():
         list_content_test,
         links_for_target_test,
         include_dirs_test,
+        modulemap_error_test,
         select_links_test,
         select_links_chain_test,
         select_links_deterministic_test,

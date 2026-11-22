@@ -49,7 +49,9 @@ symlinks, and symlinks that point outside the package are never changed.
   including the explicit module precompile.
 
 rules_swift_package_manager does not modify local packages or packages with a \
-`build_file`, so `"replace"` behaves like `"warn"` for them.\
+`build_file`, so `"replace"` behaves like `"warn"` for them. `"replace"` fails \
+for a package whose own `module.modulemap` names a header symlink, because \
+that modulemap would no longer find the header next to it.\
 """,
     ),
 }
@@ -203,6 +205,36 @@ def _links_for_target(links, target_path, public_includes = [], private_includes
             srcs.append(link)
     return struct(hdrs = hdrs, srcs = srcs)
 
+def _modulemap_error(name, links, hdrs):
+    """Return an error when a custom modulemap names a removed header symlink.
+
+    A package's own `module.modulemap` names its headers by path relative to
+    itself. The modulemap stays in the source tree, while a removed symlink is
+    recreated in the output tree, so clang can no longer find the header and
+    the target's `hdrs` would list a file that no longer exists.
+
+    Args:
+        name: The package's repository name as a `string`.
+        links: A `list` of `struct` values from `header_symlinks.new_link` for
+            the symlinks that were removed.
+        hdrs: The target's public headers as a `list` of package-relative
+            paths, including the ones that its modulemap names.
+
+    Returns:
+        The error as a `string`, or `None` if no removed symlink is listed.
+    """
+    hdrs_set = {h: None for h in hdrs}
+    listed = sorted([link.path for link in links if link.path in hdrs_set])
+    if not listed:
+        return None
+    return "{name}: header_symlinks = \"replace\" cannot recreate header \
+symlinks that the package's module.modulemap names: {paths}. Set \
+header_symlinks = \"warn\" or \"ignore\" for this package with \
+swift_deps.configure_package.".format(
+        name = name,
+        paths = ", ".join(listed),
+    )
+
 def _include_dirs(links):
     """Return the sorted, unique directories that contain the symlinks."""
     return sorted({paths.dirname(link.path): None for link in links}.keys())
@@ -299,6 +331,7 @@ header_symlinks = struct(
     list_content = _list_content,
     list_file = _LIST_FILE,
     mode_values = _MODE_VALUES,
+    modulemap_error = _modulemap_error,
     modes = _MODES,
     new_entry = _new_entry,
     new_link = _new_link,
