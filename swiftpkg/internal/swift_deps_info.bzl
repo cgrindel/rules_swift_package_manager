@@ -4,20 +4,37 @@ load("//swiftpkg/internal:build_decls.bzl", "build_decls")
 load("//swiftpkg/internal:build_files.bzl", "build_files")
 load("//swiftpkg/internal:load_statements.bzl", "load_statements")
 
+_MOVED_MESSAGE = """\
+swift_deps_index has moved to swift_gazelle_plugin. Load it from \
+@swift_gazelle_plugin//swift_deps_index:defs.bzl and set \
+swift_deps_info = "@swift_deps_info".\
+"""
+
 def _swift_deps_info_impl(repository_ctx):
     bld_file = build_files.new(
         load_stmts = [
             load_statements.new(
-                "@rules_swift_package_manager//swiftpkg:defs.bzl",
-                "swift_deps_index",
+                "@rules_swift_package_manager//swiftpkg/internal:swift_deps_info_manifest.bzl",
+                "swift_deps_info_manifest",
             ),
         ],
         decls = [
             build_decls.new(
-                "swift_deps_index",
-                name = "swift_deps_index",
+                "swift_deps_info_manifest",
+                name = "swift_deps_info",
                 attrs = {
                     "direct_dep_pkg_infos": repository_ctx.attr.direct_dep_pkg_infos,
+                    "visibility": ["//visibility:public"],
+                },
+            ),
+            # The index itself is built by swift_gazelle_plugin now. Fail with
+            # directions for anyone still pointing at the old target.
+            build_decls.new(
+                "genrule",
+                name = "swift_deps_index",
+                attrs = {
+                    "cmd": "echo '{}' >&2; exit 1".format(_MOVED_MESSAGE),
+                    "outs": ["swift_deps_index.json"],
                     "visibility": ["//visibility:public"],
                 },
             ),

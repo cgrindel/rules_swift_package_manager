@@ -17,17 +17,29 @@ On this page:
 <pre>
 load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_deps_index")
 
-swift_deps_index(<a href="#swift_deps_index-name">name</a>, <a href="#swift_deps_index-direct_dep_pkg_infos">direct_dep_pkg_infos</a>)
+swift_deps_index(<a href="#swift_deps_index-name">name</a>, <a href="#swift_deps_index-kwargs">**kwargs</a>)
 </pre>
 
-Generates a Swift dependencies index file that is used by other tooling (e.g., Swift Gazelle plugin).
+Moved to swift_gazelle_plugin.
 
-**ATTRIBUTES**
+Load `swift_deps_index` from
+`@swift_gazelle_plugin//swift_deps_index:defs.bzl` and point it at the
+`swift_deps_info` repository:
+
+```starlark
+swift_deps_index(
+    name = "swift_deps_index",
+    swift_deps_info = "@swift_deps_info",
+)
+```
 
 
-| Name  | Description | Type | Mandatory | Default |
-| :------------- | :------------- | :------------- | :------------- | :------------- |
-| <a id="swift_deps_index-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
-| <a id="swift_deps_index-direct_dep_pkg_infos"></a>direct_dep_pkg_infos |  A `dict` where the key is the label for a Swift package's `pkg_info.json` file and the value is the Swift package's identity value.   | <a href="https://bazel.build/rules/lib/dict">Dictionary: Label -> String</a> | optional |  `{}`  |
+**PARAMETERS**
+
+
+| Name  | Description | Default Value |
+| :------------- | :------------- | :------------- |
+| <a id="swift_deps_index-name"></a>name |  A unique name for this target.   |  none |
+| <a id="swift_deps_index-kwargs"></a>kwargs |  Ignored.   |  none |
 
 

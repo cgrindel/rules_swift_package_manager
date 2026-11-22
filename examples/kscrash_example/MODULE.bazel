@@ -38,6 +38,20 @@ bazel_dep(
     dev_dependency = True,
 )
 
+# The Swift Gazelle plugin builds its index with Go: set the Go SDK here.
+bazel_dep(
+    name = "rules_go",
+    version = "0.60.0",
+    dev_dependency = True,
+)
+
+go_sdk = use_extension(
+    "@rules_go//go:extensions.bzl",
+    "go_sdk",
+    dev_dependency = True,
+)
+go_sdk.download(version = "1.26.0")
+
 apple_cc_configure = use_extension(
     "@apple_support//crosstool:setup.bzl",
     "apple_cc_configure_extension",
