@@ -244,6 +244,7 @@ bzl_library(
         ":pkginfo_dependencies",
         ":pkginfos",
         ":repository_utils",
+        "//swiftpkg/internal/sdk_inventory:repository",
     ],
 )
 
