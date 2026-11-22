@@ -12,8 +12,10 @@ let package = Package(
         .target(
             name: "Greeter",
             dependencies: ["ObjCGreeter"],
-            resources: [.process("Resources")]
+            resources: [.process("Resources")],
+            linkerSettings: [.linkedFramework("Security")]
         ),
         .target(name: "ObjCGreeter"),
+        .target(name: "DeveloperProbe"),
     ]
 )
