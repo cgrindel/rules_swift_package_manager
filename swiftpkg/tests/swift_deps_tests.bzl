@@ -561,6 +561,68 @@ def _header_symlinks_routing_test(ctx):
 
 header_symlinks_routing_test = unittest.make(_header_symlinks_routing_test)
 
+def _configure_package_patches_test(ctx):
+    env = unittest.begin(ctx)
+    calls = []
+
+    def _capture(**kwargs):
+        calls.append(kwargs)
+
+    from_package = struct(
+        env = {},
+        env_inherit = [],
+        registries = {},
+        resolved = None,
+        make_files_read_only = False,
+        netrc = None,
+    )
+    config_pkg = struct(
+        build_file = None,
+        init_submodules = False,
+        recursive_init_submodules = True,
+        patch_args = ["-p1"],
+        patch_cmds = ["echo patched"],
+        patch_cmds_win = ["Write-Output patched"],
+        patch_tool = "patch",
+        patches = ["//patches:foo.patch"],
+        publicly_expose_all_targets = False,
+        header_symlinks = "warn",
+    )
+    for kind in ["git", "registry"]:
+        dep = struct(
+            name = "foo",
+            identity = "foo",
+            source_control = struct(pin = struct(
+                state = struct(revision = "abc", version = "1.0.0"),
+                location = "https://example.com/foo.git",
+            )) if kind == "git" else None,
+            file_system = None,
+            registry = struct(pin = struct(identity = "example.foo", state = struct(version = "1.0.0"))) if kind == "registry" else None,
+        )
+        swift_deps_test_utils.declare_pkg_from_dependency(
+            dep,
+            config_pkg,
+            from_package,
+            None,
+            None,
+            {},
+            {},
+            "",
+            "/workspace",
+            "",
+            None,
+            {"binary_target_deps": False, "system_sdk_deps": False},
+            package_rules = struct(git = _capture, local = _capture, registry = _capture),
+        )
+        asserts.equals(env, ["//patches:foo.patch"], calls[-1].get("patches"), kind)
+        asserts.equals(env, ["-p1"], calls[-1].get("patch_args"), kind)
+        asserts.equals(env, ["echo patched"], calls[-1].get("patch_cmds"), kind)
+        asserts.equals(env, ["Write-Output patched"], calls[-1].get("patch_cmds_win"), kind)
+        asserts.equals(env, "patch", calls[-1].get("patch_tool"), kind)
+    return unittest.end(env)
+
+configure_package_patches_test = unittest.make(_configure_package_patches_test)
+
 _EXTENSION_METADATA_SENTINEL = struct(sentinel = "extension_metadata")
 
 def _new_fake_module_ctx(modules, metadata):
@@ -766,6 +828,7 @@ def swift_deps_test_suite():
         inference_validation_test,
         inference_repository_routing_test,
         header_symlinks_routing_test,
+        configure_package_patches_test,
         bazel_target_mods_by_repo_test,
         branch_values_test,
         build_file_conflict_error_test,
