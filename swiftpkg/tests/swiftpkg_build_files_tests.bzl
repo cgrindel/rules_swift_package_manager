@@ -12,6 +12,7 @@ load(
     spm_platforms = "platforms",
 )
 load("//swiftpkg/internal:artifact_infos.bzl", "artifact_infos", "link_types")
+load("//swiftpkg/internal:header_symlinks.bzl", "header_symlinks")
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:pkginfo_targets.bzl", "pkginfo_targets")
 load(
@@ -863,7 +864,8 @@ def _pkg_ctx(
         target_deps = {},
         module_aliases = {},
         dep_module_aliases = "",
-        dep_minimum_os_versions = {}):
+        dep_minimum_os_versions = {},
+        header_symlinks = []):
     return pkg_ctxs.new(
         pkg_info = pkg_info,
         repo_name = _repo_name,
@@ -871,6 +873,7 @@ def _pkg_ctx(
         module_aliases = module_aliases,
         dep_module_aliases = dep_module_aliases,
         dep_minimum_os_versions = dep_minimum_os_versions,
+        header_symlinks = header_symlinks,
     )
 
 def _target_build_file(
@@ -880,7 +883,8 @@ def _target_build_file(
         target_deps = {},
         module_aliases = {},
         dep_module_aliases = "",
-        dep_minimum_os_versions = {}):
+        dep_minimum_os_versions = {},
+        header_symlinks = []):
     target = pkginfo_targets.get(pkg_info.targets, target_name)
     repository_ctx = testutils.new_stub_repository_ctx(
         repo_name = _repo_name[1:],
@@ -891,6 +895,7 @@ def _target_build_file(
         module_aliases = module_aliases,
         dep_module_aliases = dep_module_aliases,
         dep_minimum_os_versions = dep_minimum_os_versions,
+        header_symlinks = header_symlinks,
     )
     return swiftpkg_build_files.new_for_target(repository_ctx, pkg_ctx, target, artifact_infos = artifact_infos)
 
@@ -2861,9 +2866,80 @@ def _inference_settings_preserve_generation_test(ctx):
 
 inference_settings_preserve_generation_test = unittest.make(_inference_settings_preserve_generation_test)
 
+def _header_symlinks_test(ctx):
+    env = unittest.begin(ctx)
+
+    pkg_info = _pkg_info()
+    links = [
+        header_symlinks.new_link("src/Private/X.h", "src/X.h"),
+        header_symlinks.new_link("include/Pub.h", "src/Pub.h"),
+    ]
+
+    objc_bf = _target_build_file(pkg_info, "ObjcLibrary", header_symlinks = links)
+    objc_compile = _assert_decl(env, objc_bf, "ObjcLibrary.rspm_objc", "objc_library")
+    asserts.true(
+        env,
+        ":src/Private/X.h.rspm_symlink" in objc_compile.attrs["srcs"],
+        "private header symlink in srcs",
+    )
+    asserts.equals(
+        env,
+        ["include/external.h", ":include/Pub.h.rspm_symlink"],
+        objc_compile.attrs["hdrs"],
+    )
+    asserts.equals(env, ["include", "src/Private"], objc_compile.attrs["includes"])
+
+    # The symlinks' targets travel with the target as textual headers, after
+    # the existing ones and without duplicates.
+    asserts.equals(
+        env,
+        ["src/foo.m", "src/Pub.h", "src/X.h"],
+        objc_compile.attrs["textual_hdrs"],
+    )
+    links_with_existing_target = links + [
+        header_symlinks.new_link("src/Other/X.h", "src/X.h"),
+        header_symlinks.new_link("src/Other/Foo.m.h", "src/foo.m"),
+    ]
+    objc_bf = _target_build_file(pkg_info, "ObjcLibrary", header_symlinks = links_with_existing_target)
+    objc_compile = _assert_decl(env, objc_bf, "ObjcLibrary.rspm_objc", "objc_library")
+    asserts.equals(
+        env,
+        ["src/foo.m", "src/Pub.h", "src/X.h"],
+        objc_compile.attrs["textual_hdrs"],
+    )
+
+    # Without header symlinks, the target is unchanged.
+    objc_bf = _target_build_file(pkg_info, "ObjcLibrary")
+    objc_compile = _assert_decl(env, objc_bf, "ObjcLibrary.rspm_objc", "objc_library")
+    asserts.equals(env, ["include"], objc_compile.attrs["includes"])
+    asserts.equals(env, ["src/foo.m"], objc_compile.attrs["textual_hdrs"])
+    asserts.equals(env, ["include/external.h"], objc_compile.attrs["hdrs"])
+
+    asserts.equals(
+        env,
+        None,
+        swiftpkg_build_files.new_for_header_symlinks(_pkg_ctx(pkg_info)),
+    )
+    symlinks_bf = swiftpkg_build_files.new_for_header_symlinks(
+        _pkg_ctx(pkg_info, header_symlinks = links),
+    )
+    asserts.equals(
+        env,
+        ["include/Pub.h.rspm_symlink", "src/Private/X.h.rspm_symlink"],
+        [decl.name for decl in symlinks_bf.decls],
+    )
+    decl = _assert_decl(env, symlinks_bf, "src/Private/X.h.rspm_symlink", "symlinked_header")
+    asserts.equals(env, "src/Private/X.h", decl.attrs["out"])
+    asserts.equals(env, ":src/X.h", decl.attrs["target"])
+
+    return unittest.end(env)
+
+header_symlinks_test = unittest.make(_header_symlinks_test)
+
 def swiftpkg_build_files_test_suite():
     return unittest.suite(
         "swiftpkg_build_files_tests",
+        header_symlinks_test,
         inference_settings_preserve_generation_test,
         minimum_os_wrapper_behavior_test,
         minimum_os_wrapper_raises_to_dependency_floors_test,

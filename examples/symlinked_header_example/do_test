@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+bazel="${BIT_BAZEL_BINARY:-bazel}"
+
+fail() {
+  echo >&2 "FAILURE: $*"
+  exit 1
+}
+
+# Build and run with implicit and explicit Clang modules. The example's
+# .bazelrc sets --spawn_strategy=sandboxed, so every compile sees only its
+# declared inputs, as on a remote executor.
+"${bazel}" test //...
+"${bazel}" run //:symlinked_header_example
+"${bazel}" test --config=explicit_modules //...
+"${bazel}" run --config=explicit_modules //:symlinked_header_example
+
+output_base="$("${bazel}" info output_base)"
+output_path="$("${bazel}" info output_path)"
+
+# Check that a header symlink was removed from the generated repository and
+# recreated in the output tree as a declared symlink to the real header.
+assert_replaced() {
+  local repo="$1"
+  local link_path="$2"
+  local target_path="$3"
+  local repo_dir="${output_base}/external/rules_swift_package_manager++swift_deps+${repo}"
+
+  [[ -f "${repo_dir}/${target_path}" ]] || fail "Expected ${target_path} in ${repo_dir}."
+  [[ -e "${repo_dir}/${link_path}" || -L "${repo_dir}/${link_path}" ]] &&
+    fail "Expected ${link_path} to be removed from ${repo_dir}."
+
+  local links=()
+  local link
+  while IFS= read -r link; do
+    links+=("${link}")
+  done < <(find -H "${output_path}" -path "*${repo}/${link_path}" -type l)
+  [[ ${#links[@]} -gt 0 ]] || fail "Expected a symlink for ${link_path} under ${output_path}."
+  for link in "${links[@]}"; do
+    [[ "$(readlink "${link}")" == *${repo}/${target_path} ]] ||
+      fail "Expected ${link} to point to ${target_path}. Found $(readlink "${link}")."
+    [[ -f "${link}" ]] || fail "Expected ${link} to resolve."
+  done
+}
+
+# A private header.
+assert_replaced swiftpkg_ably_cocoa \
+  Source/PrivateHeaders/Ably/ARTSRWebSocket.h Source/SocketRocket/ARTSRWebSocket.h
+# Public headers whose targets are not otherwise listed in the generated
+# targets (msgpack/msgpack.h) or are only private sources (Pod/Classes).
+assert_replaced swiftpkg_msgpack_objective_c \
+  include/msgpack/msgpack.h msgpack/msgpack.h
+assert_replaced swiftpkg_msgpack_objective_c \
+  include/msgpack/MessagePack.h Pod/Classes/MessagePack.h
+assert_replaced swiftpkg_delta_codec_cocoa \
+  include/AblyDeltaCodec/AblyDeltaCodec.h DeltaCodec/AblyDeltaCodec.h

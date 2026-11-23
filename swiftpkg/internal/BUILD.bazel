@@ -34,6 +34,7 @@ bzl_library(
     srcs = ["swift_package.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":header_symlinks",
         ":pkg_ctxs",
         ":pkginfos",
         ":repo_rules",
@@ -252,6 +253,7 @@ bzl_library(
     srcs = ["local_swift_package.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":header_symlinks",
         ":pkg_ctxs",
         ":pkginfos",
         ":repo_rules",
@@ -451,6 +453,7 @@ bzl_library(
     srcs = ["registry_swift_package.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":header_symlinks",
         ":pkg_ctxs",
         ":repo_rules",
         ":swift_package_tool_attrs",
@@ -489,6 +492,24 @@ bzl_library(
     srcs = ["mach_o.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [":link_types"],
+)
+
+bzl_library(
+    name = "header_symlinks",
+    srcs = ["header_symlinks.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":clang_files",
+        ":repository_files",
+        "@bazel_skylib//lib:paths",
+    ],
+)
+
+bzl_library(
+    name = "symlinked_header",
+    srcs = ["symlinked_header.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = ["@bazel_skylib//lib:paths"],
 )
 
 bzl_library(

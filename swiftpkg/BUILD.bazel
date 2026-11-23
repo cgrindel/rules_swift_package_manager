@@ -38,5 +38,6 @@ bzl_library(
         "//swiftpkg/internal:objc_resource_bundle_accessor",
         "//swiftpkg/internal:resource_bundle_accessor",
         "//swiftpkg/internal:resource_bundle_infoplist",
+        "//swiftpkg/internal:symlinked_header",
     ],
 )

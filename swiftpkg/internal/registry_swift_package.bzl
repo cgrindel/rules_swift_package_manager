@@ -2,6 +2,7 @@
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("//swiftpkg/internal:header_symlinks.bzl", "header_symlinks")
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 load(
@@ -221,6 +222,15 @@ def _registry_swift_package_impl(repository_ctx):
         ),
     )
 
+    # Warn about header symlinks, or remove them so that the BUILD file
+    # recreates them.
+    hdr_symlinks = header_symlinks.process(
+        repository_ctx,
+        directory,
+        attr.header_symlinks,
+        has_build_file = attr.build_file != None,
+    )
+
     # Remove any Bazel build files.
     repo_rules.remove_bazel_files(repository_ctx, directory)
 
@@ -260,11 +270,13 @@ def _registry_swift_package_impl(repository_ctx):
         module_aliases = repository_ctx.attr.module_aliases,
         dep_module_aliases = repository_ctx.attr.dep_module_aliases,
         bazel_target_mods = repository_ctx.attr.bazel_target_mods,
+        header_symlinks = hdr_symlinks.removed,
     )
 
     repo_rules.download_artifacts(repository_ctx, pkg_ctx)
 
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
+    header_symlinks.write_list(repository_ctx, hdr_symlinks.found)
 
     # Remove unused modulemaps to prevent module redefinition errors
     repo_rules.remove_modulemaps(
@@ -324,6 +336,7 @@ A `Package.resolved`, used to de-duplicate dependency identities when \
 
 _ALL_ATTRS = dicts.add(
     _REGISTRY_ATTRS,
+    header_symlinks.attrs,
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
     {

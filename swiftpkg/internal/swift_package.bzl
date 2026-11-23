@@ -8,6 +8,7 @@ load(
     "patch",
     "update_attrs",
 )
+load(":header_symlinks.bzl", "header_symlinks")
 load(":pkg_ctxs.bzl", "pkg_ctxs")
 load(":repo_rules.bzl", "repo_rules")
 
@@ -60,6 +61,15 @@ def _swift_package_impl(repository_ctx):
     # Apply any patches
     patch(repository_ctx)
 
+    # Warn about header symlinks, or remove them so that the BUILD file
+    # recreates them.
+    hdr_symlinks = header_symlinks.process(
+        repository_ctx,
+        directory,
+        attr.header_symlinks,
+        has_build_file = attr.build_file != None,
+    )
+
     # Remove any Bazel build files.
     repo_rules.remove_bazel_files(repository_ctx, directory)
 
@@ -101,11 +111,13 @@ def _swift_package_impl(repository_ctx):
         module_aliases = repository_ctx.attr.module_aliases,
         dep_module_aliases = repository_ctx.attr.dep_module_aliases,
         bazel_target_mods = repository_ctx.attr.bazel_target_mods,
+        header_symlinks = hdr_symlinks.removed,
     )
 
     repo_rules.download_artifacts(repository_ctx, pkg_ctx)
 
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
+    header_symlinks.write_list(repository_ctx, hdr_symlinks.found)
 
     # Remove the git stuff
     repository_ctx.delete(repository_ctx.path(".git"))
@@ -256,6 +268,7 @@ without requiring a major version bump.
 _ALL_ATTRS = dicts.add(
     PATCH_ATTRS,
     TOOL_ATTRS,
+    header_symlinks.attrs,
     _GIT_ATTRS,
     repo_rules.env_attrs,
     repo_rules.swift_attrs,

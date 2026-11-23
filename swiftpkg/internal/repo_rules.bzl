@@ -214,6 +214,11 @@ BUILD file override bypasses generated declarations.\
             continue
         bld_files.append(bld_file)
 
+    # Recreate the header symlinks that were removed from the repository
+    header_symlinks_bld_file = swiftpkg_build_files.new_for_header_symlinks(pkg_ctx)
+    if header_symlinks_bld_file != None:
+        bld_files.append(header_symlinks_bld_file)
+
     # Create Bazel declarations for the targets
     bld_files.append(swiftpkg_build_files.new_for_products(pkg_ctx))
 
