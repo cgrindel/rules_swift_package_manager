@@ -1388,6 +1388,9 @@ def _new_swift_src_info(
 _FRAMEWORK_SRC_EXTS = [".c", ".cc", ".cpp", ".m", ".mm", ".h", ".hpp"]
 _HEADER_EXTS = [".h", ".hpp", ".hh", ".hxx", ".inc", ".inl", ".modulemap"]
 
+# Excluded source files with these extensions stay available to #include.
+_EXCLUDED_TEXTUAL_SRC_EXTS = [".c", ".cc", ".cpp", ".m", ".mm"]
+
 def _is_framework_src(path):
     _root, ext = paths.split_extension(path)
     return lists.contains(_FRAMEWORK_SRC_EXTS, ext)
@@ -1495,6 +1498,7 @@ def _new_clang_src_info_from_sources(
 
     # Get a list of all of the source files
     all_srcs = []
+    excluded_textual_srcs = []
     for sp in src_paths:
         all_srcs.extend(repository_files.list_files_under(
             repository_ctx,
@@ -1539,6 +1543,15 @@ def _new_clang_src_info_from_sources(
                 _, ext = paths.split_extension(f)
                 if ext in _HEADER_EXTS:
                     all_srcs.append(f)
+        elif repository_files.path_exists(repository_ctx, abs_exclude_path):
+            # The same holds for an excluded file. A C-family source file is
+            # kept as a textual header: it is not compiled, but other sources
+            # may #include it.
+            _, ext = paths.split_extension(abs_exclude_path)
+            if clang_files.is_hdr(abs_exclude_path):
+                all_srcs.append(abs_exclude_path)
+            elif ext in _EXCLUDED_TEXTUAL_SRC_EXTS:
+                excluded_textual_srcs.append(abs_exclude_path)
 
     # Organize the source files
     # Be sure that the all_srcs and the public_includes that are passed to
@@ -1561,7 +1574,10 @@ def _new_clang_src_info_from_sources(
     # non-header files (e.g. `#include "xmltok_impl.c"`). The ensure that all of the files are
     # present for compilation, we add any non-header source files to the `textual_hdrs`.
     # Related to GH252.
-    textual_hdrs = organized_files.textual_hdrs
+    textual_hdrs = organized_files.textual_hdrs + [
+        clang_files.relativize(p, pkg_path)
+        for p in excluded_textual_srcs
+    ]
     hdrs = []
     srcs = []
     explicit_srcs = []
