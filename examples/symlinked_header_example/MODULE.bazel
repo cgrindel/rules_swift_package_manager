@@ -1,0 +1,81 @@
+bazel_dep(
+    name = "rules_swift_package_manager",
+    version = "0.0.0",
+)
+local_path_override(
+    module_name = "rules_swift_package_manager",
+    path = "../..",
+)
+
+bazel_dep(name = "bazel_skylib", version = "1.9.2")
+bazel_dep(name = "apple_support", version = "2.12.0")
+bazel_dep(name = "rules_cc", version = "0.2.28")
+bazel_dep(
+    name = "rules_apple",
+    version = "5.4.0",
+    repo_name = "build_bazel_rules_apple",
+)
+bazel_dep(
+    name = "rules_swift",
+    version = "4.3.0",
+    repo_name = "build_bazel_rules_swift",
+)
+
+apple_cc_configure = use_extension(
+    "@apple_support//crosstool:setup.bzl",
+    "apple_cc_configure_extension",
+)
+use_repo(apple_cc_configure, "local_config_apple_cc")
+
+system_sdk = use_extension(
+    "@build_bazel_rules_swift//swift:extensions.bzl",
+    "system_sdk",
+)
+system_sdk.configure_sdks(
+    # Xcode 27 ships a Swift interface for MobileGestaltPrivate without its
+    # underlying Objective-C module. SDK configuration must be applied in the
+    # root module. Setting exclude_modules replaces rules_swift's defaults, so
+    # the iPhoneSimulator CoreAudio_Private default is restated.
+    exclude_modules = {
+        "MacOSX": ["MobileGestaltPrivate"],
+        "iPhoneOS": ["MobileGestaltPrivate"],
+        "iPhoneSimulator": [
+            "CoreAudio_Private",
+            "MobileGestaltPrivate",
+        ],
+    },
+)
+
+swift_deps = use_extension(
+    "@rules_swift_package_manager//:extensions.bzl",
+    "swift_deps",
+)
+swift_deps.from_package(
+    resolved = "//:Package.resolved",
+    swift = "//:Package.swift",
+)
+
+# Recreate the packages' header symlinks as symlinks that Bazel declares.
+# ably-cocoa's is a private header. msgpack-objective-C's and
+# delta-codec-cocoa's are public headers that dependents include.
+swift_deps.configure_package(
+    name = "ably-cocoa",
+    header_symlinks = "replace",
+)
+
+swift_deps.configure_package(
+    name = "delta-codec-cocoa",
+    header_symlinks = "replace",
+)
+
+swift_deps.configure_package(
+    name = "msgpack-objective-c",
+    header_symlinks = "replace",
+)
+use_repo(
+    swift_deps,
+    "swift_package",
+    "swiftpkg_ably_cocoa",
+    "swiftpkg_delta_codec_cocoa",
+    "swiftpkg_msgpack_objective_c",
+)

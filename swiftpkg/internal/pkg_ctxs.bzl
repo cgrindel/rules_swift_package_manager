@@ -27,7 +27,8 @@ def _read(
         dep_module_aliases = "",
         bazel_target_mods = "",
         system_sdk_deps = False,
-        binary_target_deps = False):
+        binary_target_deps = False,
+        header_symlinks = []):
     pkg_info = pkginfos.get(
         repository_ctx = repository_ctx,
         directory = repo_dir,
@@ -46,6 +47,7 @@ def _read(
         bazel_target_mods = bazel_target_mods,
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
+        header_symlinks = header_symlinks,
         dep_minimum_os_versions = _read_dep_minimum_os_versions(
             repository_ctx,
             pkg_info,
@@ -70,7 +72,8 @@ def _new(
         bazel_target_mods = "",
         dep_minimum_os_versions = {},
         system_sdk_deps = False,
-        binary_target_deps = False):
+        binary_target_deps = False,
+        header_symlinks = []):
     manual_target_deps.validate(pkg_info, target_deps)
 
     # A package's sources may import an aliased module under its original
@@ -97,6 +100,9 @@ def _new(
         bazel_target_mods = decoded_bazel_target_mods,
         system_sdk_deps = system_sdk_deps,
         binary_target_deps = binary_target_deps,
+        # Header symlinks removed from the repository, as `struct` values from
+        # `header_symlinks.new_link`. The BUILD file recreates them.
+        header_symlinks = header_symlinks,
         # Effective minimum OS versions per target, product and package. See
         # `minimum_os_versions.for_targets`.
         minimum_os_versions = minimum_os_versions.for_targets(
