@@ -19,3 +19,9 @@ alias(
     actual = "//tools/swift_deps_tool",
     visibility = ["//visibility:public"],
 )
+
+alias(
+    name = "init",
+    actual = "//tools/init",
+    visibility = ["//visibility:public"],
+)
