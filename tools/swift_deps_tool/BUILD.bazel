@@ -1,0 +1,38 @@
+load(
+    "@build_bazel_rules_swift//swift:swift.bzl",
+    "swift_binary",
+    "swift_library",
+    "swift_test",
+)
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+swift_library(
+    name = "SwiftDepsToolLib",
+    srcs = glob(
+        ["Sources/*.swift"],
+        exclude = ["Sources/main.swift"],
+    ),
+    module_name = "SwiftDepsToolLib",
+)
+
+swift_binary(
+    name = "swift_deps_tool",
+    srcs = ["Sources/main.swift"],
+    visibility = ["//visibility:public"],
+    deps = [":SwiftDepsToolLib"],
+)
+
+swift_test(
+    name = "tests",
+    size = "small",
+    srcs = glob(["Tests/*.swift"]),
+    deps = [":SwiftDepsToolLib"],
+)
+
+bzlformat_pkg(name = "bzlformat")
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["**"]),
+    visibility = ["//:__subpackages__"],
+)

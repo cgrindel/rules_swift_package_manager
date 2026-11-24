@@ -13,3 +13,9 @@ filegroup(
     srcs = glob(["*"]),
     visibility = ["//:__subpackages__"],
 )
+
+alias(
+    name = "swift_deps_tool",
+    actual = "//tools/swift_deps_tool",
+    visibility = ["//visibility:public"],
+)
