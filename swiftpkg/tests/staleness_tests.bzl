@@ -39,12 +39,14 @@ def _fake_reader(files):
     """Returns a reader over `files` (a `dict` of absolute path to text).
 
     The returned `struct` also has a `watched` list that records every
-    `watch` call.
+    `watch` call and a `checked` list that records every `exists` call.
     """
     watched = []
+    checked = []
 
     def _exists(path_or_label):
         key = _key(path_or_label)
+        checked.append(key)
         if key in files:
             return True
         prefix = key + "/"
@@ -84,7 +86,13 @@ def _fake_reader(files):
         dirname = _dirname,
         join = _join,
         watched = watched,
+        checked = checked,
     )
+
+def _assert_checked_paths_watched(env, reader):
+    watched = {w: True for w in reader.watched}
+    unwatched = [c for c in reader.checked if c not in watched]
+    asserts.equals(env, [], unwatched)
 
 # MARK: - Fixtures
 
@@ -146,7 +154,8 @@ def _collect(files, slice = None, config = None, patches = {}):
 def _fresh_test(ctx):
     env = unittest.begin(ctx)
 
-    _, inputs = _collect(_fresh_files())
+    reader, inputs = _collect(_fresh_files())
+    _assert_checked_paths_watched(env, reader)
     asserts.equals(
         env,
         [
@@ -354,16 +363,18 @@ def _local_packages_discovered_to_fixed_point_test(ctx):
         ["bar/Package.swift.cached: differs from cached copy"],
         staleness.evaluate(inputs).reasons,
     )
-    asserts.equals(
-        env,
-        [
-            _WS + "/Package@swift-5.9.swift",
-            _WS + "/shared/Foo/Package.swift",
-            _WS + "/shared/Foo/Package@swift-6.0.swift",
-            _WS + "/shared/Bar/Package.swift",
-        ],
-        reader.watched,
-    )
+    _assert_checked_paths_watched(env, reader)
+    for path in [
+        _WS,
+        _WS + "/Package@swift-5.9.swift",
+        _WS + "/shared/Foo",
+        _WS + "/shared/Foo/Package.swift",
+        _WS + "/shared/Foo/Package@swift-6.0.swift",
+        _WS + "/shared/Bar",
+        _WS + "/shared/Bar/Package.swift",
+        _CACHE + "/bar/dump.json",
+    ]:
+        asserts.true(env, path in reader.watched, path)
 
     return unittest.end(env)
 
@@ -476,6 +487,30 @@ def _render_flags_defaults_test(ctx):
 
 render_flags_defaults_test = unittest.make(_render_flags_defaults_test)
 
+def _render_flags_root_package_labels_test(ctx):
+    env = unittest.begin(ctx)
+
+    asserts.equals(
+        env,
+        _DEFAULT_FLAGS.replace(
+            "replace_scm_with_registry",
+            "registries=registries.json\nreplace_scm_with_registry",
+        ).replace(
+            "manifest_caching=true\n",
+            "manifest_caching=true\nnetrc=.netrc\n",
+        ),
+        staleness.render_flags(_new_config(
+            netrc = Label("@@//:.netrc"),
+            registries = Label("@@//:registries.json"),
+        )),
+    )
+
+    return unittest.end(env)
+
+render_flags_root_package_labels_test = unittest.make(
+    _render_flags_root_package_labels_test,
+)
+
 def staleness_test_suite(name = "staleness_tests"):
     return unittest.suite(
         name,
@@ -488,4 +523,5 @@ def staleness_test_suite(name = "staleness_tests"):
         local_packages_discovered_to_fixed_point_test,
         render_flags_matches_tool_fixture_test,
         render_flags_defaults_test,
+        render_flags_root_package_labels_test,
     )

@@ -45,6 +45,11 @@ _NON_DEFAULT_KEYS = ["cache_path", "config_path", "security_path"]
 # Workspace-relative paths of a `Label`, rendered when set.
 _LABEL_KEYS = ["netrc", "registries"]
 
+def _workspace_relative(label):
+    if not label.package:
+        return label.name
+    return "{}/{}".format(label.package, label.name)
+
 def _render_value(value):
     if type(value) == "bool":
         return "true" if value else "false"
@@ -79,7 +84,7 @@ def _render_flags(config_swift_package):
         for key in _LABEL_KEYS:
             label = getattr(config_swift_package, key)
             if label != None:
-                values[key] = "{}/{}".format(label.package, label.name)
+                values[key] = _workspace_relative(label)
     return "".join([
         "{}={}\n".format(key, values[key])
         for key in sorted(values.keys())
@@ -111,8 +116,14 @@ def _evaluate(inputs):
 
 # MARK: - Pairing
 
+def _exists(reader, path_or_label):
+    # `path.exists` registers no watch. Watch first so that creating a
+    # missing file later re-evaluates the extension.
+    reader.watch(path_or_label)
+    return reader.exists(path_or_label)
+
 def _read(reader, path_or_label):
-    if not reader.exists(path_or_label):
+    if not _exists(reader, path_or_label):
         return None
     return reader.read(path_or_label)
 
@@ -124,11 +135,11 @@ def _is_variant(name):
     )
 
 def _list_dir(reader, dir):
-    if not reader.exists(dir):
+    if not _exists(reader, dir):
         return []
     return reader.readdir(dir)
 
-def _manifest_inputs(reader, slice, identity, live_swift, live_dir, watch_swift):
+def _manifest_inputs(reader, slice, identity, live_swift, live_dir):
     """Inputs for a `Package.swift` and its variants.
 
     Args:
@@ -137,14 +148,11 @@ def _manifest_inputs(reader, slice, identity, live_swift, live_dir, watch_swift)
         identity: The cache identity.
         live_swift: A `Label` or path of the live `Package.swift`.
         live_dir: The path of the directory that holds `live_swift`.
-        watch_swift: Whether to watch `live_swift` (paths, not labels).
 
     Returns:
         A `list` of inputs.
     """
     inputs = []
-    if watch_swift:
-        reader.watch(live_swift)
     inputs.append(_new_input(
         name = "{}/Package.swift{}".format(identity, _CACHED_SUFFIX),
         live = _read(reader, live_swift),
@@ -161,7 +169,6 @@ def _manifest_inputs(reader, slice, identity, live_swift, live_dir, watch_swift)
     ])
     for n in live_variants:
         path = reader.join(live_dir, n)
-        reader.watch(path)
         inputs.append(_new_input(
             name = "{}/{}{}".format(identity, n, _CACHED_SUFFIX),
             live = _read(reader, path),
@@ -264,7 +271,6 @@ def _collect_with_reader(reader, slice, config_swift_package, patch_files_by_ide
         _MAIN,
         slice.swift,
         root_dir,
-        watch_swift = False,
     )
 
     # (3) Package.resolved, unless absent on both sides.
@@ -326,13 +332,12 @@ def _collect_with_reader(reader, slice, config_swift_package, patch_files_by_ide
             local.identity,
             reader.join(local.dir, "Package.swift"),
             local.dir,
-            watch_swift = True,
         ))
 
     # (8) Every listed manifest must exist. Contents are not read.
     for identity in slice.identities:
         for basename in ["dump.json", "desc.json"]:
-            exists = reader.exists(slices.cache_label(slice, identity, basename))
+            exists = _exists(reader, slices.cache_label(slice, identity, basename))
             inputs.append(_new_input(
                 name = "{}/{}".format(identity, basename),
                 live = "",
@@ -382,8 +387,12 @@ def _collect(module_ctx, slice, config_swift_package, patch_files_by_identity):
     5. `registries.json`, when configured or when a cached copy exists.
     6. Each patch file, by sorted identity.
     7. Each local package's `Package.swift` and variants, in discovery
-       order. These are watched with `module_ctx.watch`.
+       order.
     8. The existence of each identity's `dump.json` and `desc.json`.
+
+    Every path checked for existence, and every directory listed, is passed
+    to `module_ctx.watch` first, so creating or changing any input
+    re-evaluates the extension.
 
     Names are paths relative to the slice's `swift_deps_cache` directory.
 
