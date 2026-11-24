@@ -130,7 +130,11 @@ def _dump_and_desc_agree_test(ctx):
     )
 
     desc = json.decode(DESC_JSON)
-    desc["dependencies"].append({"identity": "swift-log", "type": "sourceControl"})
+    desc["dependencies"].append({
+        "identity": "swift-log",
+        "type": "sourceControl",
+        "url": "https://github.com/apple/swift-log",
+    })
     asserts.equals(
         env,
         "dependency `swift-log` is in desc but not in dump",
@@ -141,6 +145,68 @@ def _dump_and_desc_agree_test(ctx):
 
 dump_and_desc_agree_test = unittest.make(_dump_and_desc_agree_test)
 
+def _dependency_shapes_test(ctx):
+    env = unittest.begin(ctx)
+
+    dump = json.decode(DUMP_JSON)
+    for deps, want in [
+        ([{}], "desc dependency: missing `identity`"),
+        (["x"], "desc dependency: not an object"),
+        (
+            [{"identity": "local_pkg", "type": "fileSystem"}],
+            "desc dependency `local_pkg`: missing `path`",
+        ),
+        (
+            [{"identity": "local_pkg", "type": "sourceControl"}],
+            "desc dependency `local_pkg`: missing `url`",
+        ),
+        (
+            [{"identity": "local_pkg", "type": "other"}],
+            "desc dependency `local_pkg`: unknown `type` \"other\"",
+        ),
+        (
+            [{"identity": "local_pkg"}],
+            "desc dependency `local_pkg`: unknown `type` null",
+        ),
+        ([{"identity": "local_pkg", "type": "registry"}], None),
+    ]:
+        desc = json.decode(DESC_JSON)
+        desc["dependencies"] = deps
+        asserts.equals(env, want, _check(dump, desc))
+
+    want = (
+        "dump dependency: no `sourceControl`, `fileSystem`, or `registry` " +
+        "entry with an `identity`"
+    )
+    for deps in [[{}], [{"fileSystem": [{}]}], [{"sourceControl": []}], ["x"]]:
+        dump = json.decode(DUMP_JSON)
+        dump["dependencies"] = deps
+        asserts.equals(env, want, _check(dump, json.decode(DESC_JSON)))
+
+    return unittest.end(env)
+
+dependency_shapes_test = unittest.make(_dependency_shapes_test)
+
+def _unused_desc_target_needs_only_name_test(ctx):
+    env = unittest.begin(ctx)
+
+    desc = json.decode(DESC_JSON)
+    desc["targets"].append({"name": "Tests"})
+    asserts.equals(env, None, _check(json.decode(DUMP_JSON), desc))
+
+    desc["targets"].append({"path": "Sources/Nameless"})
+    asserts.equals(
+        env,
+        "desc target: missing `name`",
+        _check(json.decode(DUMP_JSON), desc),
+    )
+
+    return unittest.end(env)
+
+unused_desc_target_needs_only_name_test = unittest.make(
+    _unused_desc_target_needs_only_name_test,
+)
+
 def manifest_shapes_test_suite():
     return unittest.suite(
         "manifest_shapes_tests",
@@ -148,4 +214,6 @@ def manifest_shapes_test_suite():
         top_level_keys_test,
         item_keys_test,
         dump_and_desc_agree_test,
+        dependency_shapes_test,
+        unused_desc_target_needs_only_name_test,
     )

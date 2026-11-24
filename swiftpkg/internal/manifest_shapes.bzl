@@ -27,13 +27,23 @@ _DUMP_TARGET_KEYS = [
     ("dependencies", "list"),
     ("settings", "list"),
 ]
+_DESC_TARGET_NAME_KEYS = [("name", "string")]
+
+# Required only on desc targets named in dump; the parser reads only `name`
+# from the others.
 _DESC_TARGET_KEYS = [
-    ("name", "string"),
     ("path", "string"),
     ("c99name", "string"),
     ("module_type", "string"),
     ("sources", "list"),
 ]
+
+# The extra key each desc dependency type needs.
+_DESC_DEPENDENCY_KEYS = {
+    "fileSystem": [("path", "string")],
+    "registry": [],
+    "sourceControl": [("url", "string")],
+}
 
 def _check_item(what, item, specs):
     if type(item) != "dict":
@@ -43,6 +53,7 @@ def _check_item(what, item, specs):
     return _check_keys(what, item, specs)
 
 def _dump_dependency_identity(dep):
+    """The identity of a dump dependency, or `None` if it has none."""
     if type(dep) != "dict":
         return None
     for kind in ["sourceControl", "fileSystem", "registry"]:
@@ -52,6 +63,18 @@ def _dump_dependency_identity(dep):
             if type(provider) == "dict" and type(provider.get("identity")) == "string":
                 return provider["identity"]
     return None
+
+def _check_desc_dependency(dep):
+    if type(dep) != "dict":
+        return "desc dependency: not an object"
+    identity = dep.get("identity")
+    if type(identity) != "string":
+        return _type_error("desc dependency", "identity", "string", identity)
+    what = "desc dependency `{}`".format(identity)
+    dep_type = dep.get("type")
+    if dep_type not in _DESC_DEPENDENCY_KEYS:
+        return "{}: unknown `type` {}".format(what, json.encode(dep_type))
+    return _check_keys(what, dep, _DESC_DEPENDENCY_KEYS[dep_type])
 
 def _check(dump, desc):
     """Checks that a dump/desc manifest pair has the shape the parser needs.
@@ -105,29 +128,39 @@ def _check(dump, desc):
             return err
         dump_target_names[target["name"]] = None
 
-    desc_target_names = {}
+    desc_targets_by_name = {}
     for target in desc["targets"]:
-        err = _check_item("desc target", target, _DESC_TARGET_KEYS)
+        err = _check_item("desc target", target, _DESC_TARGET_NAME_KEYS)
         if err != None:
             return err
-        desc_target_names[target["name"]] = None
+        desc_targets_by_name[target["name"]] = target
 
     # The parser looks up every dump target in the desc targets.
     for name in dump_target_names:
-        if name not in desc_target_names:
+        target = desc_targets_by_name.get(name)
+        if target == None:
             return "target `{}` is in dump but not in desc".format(name)
+        err = _check_item("desc target", target, _DESC_TARGET_KEYS)
+        if err != None:
+            return err
 
     dump_ids = {}
     for dep in dump["dependencies"]:
         identity = _dump_dependency_identity(dep)
-        if identity != None:
-            dump_ids[identity] = None
+        if identity == None:
+            return (
+                "dump dependency: no `sourceControl`, `fileSystem`, or " +
+                "`registry` entry with an `identity`"
+            )
+        dump_ids[identity] = None
     for dep in desc["dependencies"]:
-        if type(dep) != "dict":
-            return "desc: a dependency is not an object"
-        identity = dep.get("identity")
-        if identity != None and identity not in dump_ids:
-            return "dependency `{}` is in desc but not in dump".format(identity)
+        err = _check_desc_dependency(dep)
+        if err != None:
+            return err
+        if dep["identity"] not in dump_ids:
+            return "dependency `{}` is in desc but not in dump".format(
+                dep["identity"],
+            )
     return None
 
 manifest_shapes = struct(
