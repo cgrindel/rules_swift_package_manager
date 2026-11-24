@@ -1,5 +1,9 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("//swiftpkg/internal:slice_messages.bzl", "slice_messages")
+load("//swiftpkg/internal:swift_package_stale.bzl", "swift_package_stale")
+load("//swiftpkg/internal:swift_package_tool_rule.bzl", "swift_package_tool_rule")
+load("//swiftpkg/internal:swift_version_check.bzl", "swift_version_check")
 load(":artifact_infos_tests.bzl", "artifact_infos_test_suite")
 load(":bazel_apple_platforms_tests.bzl", "bazel_apple_platforms_test_suite")
 load(":bazel_repo_names_tests.bzl", "bazel_repo_names_test_suite")
@@ -22,16 +26,25 @@ load(":pkginfo_targets_tests.bzl", "pkginfo_targets_test_suite")
 load(":pkginfo_traits_tests.bzl", "pkginfo_traits_test_suite")
 load(":pkginfos_clang_src_info_tests.bzl", "pkginfos_clang_src_info_test_suite")
 load(":pkginfos_command_args_tests.bzl", "pkginfos_command_args_test_suite")
+load(":pkginfos_from_manifests_tests.bzl", "pkginfos_from_manifests_test_suite")
 load(":repo_rules_tests.bzl", "repo_rules_test_suite")
 load(":repository_files_tests.bzl", "repository_files_test_suite")
 load(":repository_utils_tests.bzl", "repository_utils_test_suite")
 load(":resource_files_tests.bzl", "resource_files_test_suite")
 load(":semver_tests.bzl", "semver_test_suite")
+load(":slice_merge_tests.bzl", "slice_merge_test_suite")
+load(":slice_messages_tests.bzl", "slice_messages_test_suite")
+load(":slices_tests.bzl", "slices_test_suite")
 load(":spm_platforms_tests.bzl", "spm_platforms_test_suite")
+load(":staleness_tests.bzl", "staleness_test_suite")
 load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
 load(":swift_deps_tests.bzl", "swift_deps_test_suite")
 load(":swift_files_tests.bzl", "swift_files_test_suite")
+load(":swift_package_aliases_tests.bzl", "swift_package_aliases_test_suite")
+load(":swift_package_stale_tests.bzl", "swift_package_stale_test_suite")
+load(":swift_package_tool_args_tests.bzl", "swift_package_tool_args_test_suite")
 load(":swift_package_tool_tests.bzl", "swift_package_tool_test_suite")
+load(":swift_version_check_tests.bzl", "swift_version_check_test_suite")
 load(":swiftpkg_build_files_tests.bzl", "swiftpkg_build_files_test_suite")
 load(":validations_tests.bzl", "validations_test_suite")
 
@@ -79,6 +92,8 @@ pkginfos_clang_src_info_test_suite()
 
 pkginfos_command_args_test_suite()
 
+pkginfos_from_manifests_test_suite()
+
 repo_rules_test_suite()
 
 repository_files_test_suite()
@@ -90,6 +105,14 @@ resource_files_test_suite()
 bzl_selects_test_suite()
 
 semver_test_suite()
+
+slice_merge_test_suite()
+
+slice_messages_test_suite()
+
+slices_test_suite()
+
+staleness_test_suite()
 
 spm_platforms_test_suite()
 
@@ -103,7 +126,40 @@ swiftpkg_build_files_test_suite()
 
 swift_package_tool_test_suite()
 
+swift_package_aliases_test_suite()
+
+swift_package_stale(
+    name = "swift_package_stale_fixture",
+    message = slice_messages.stale("swift/macos", "@platforms//os:macos"),
+    tags = ["manual"],
+)
+
+swift_package_stale_test_suite()
+
+swift_package_tool_rule(
+    name = "swift_package_tool_rule_fixture",
+    args = ["cache"],
+    tags = ["manual"],
+)
+
+swift_package_tool_args_test_suite()
+
+swift_version_check(
+    name = "swift_version_check_fixture",
+    slice_dir = "swift/macos",
+    tags = ["manual"],
+    version_file = "fixtures/slices/swift_version.txt",
+)
+
+swift_version_check_test_suite()
+
 validations_test_suite()
+
+bzl_library(
+    name = "slice_manifests",
+    srcs = ["slice_manifests.bzl"],
+    visibility = ["//visibility:public"],
+)
 
 bzl_library(
     name = "testutils",

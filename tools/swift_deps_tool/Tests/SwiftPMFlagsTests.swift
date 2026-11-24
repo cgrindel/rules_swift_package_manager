@@ -13,16 +13,21 @@ final class SwiftPMFlagsTests: XCTestCase {
       ("manifest_cache", "local"),
       ("dependency_caching", "false"),
       ("netrc", "auth/.netrc"),
+      ("replace_scm_with_registry", "false"),
+      ("manifest_caching", "true"),
     ]
     let forward = try SwiftPMFlags(
       keyValues: Dictionary(uniqueKeysWithValues: pairs), workspace: workspace)
     let reversed = try SwiftPMFlags(
       keyValues: Dictionary(uniqueKeysWithValues: pairs.reversed()), workspace: workspace)
+    // Shared with `_TOOL_FIXTURE` in `swiftpkg/tests/staleness_tests.bzl`. Keep them identical.
     let expected = """
       cache_path=.spm/cache
       dependency_caching=false
       manifest_cache=local
+      manifest_caching=true
       netrc=auth/.netrc
+      replace_scm_with_registry=false
       use_registry_identity_for_scm=true
 
       """

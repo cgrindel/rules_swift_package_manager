@@ -25,4 +25,11 @@ public enum IncModuleRenderer {
         + manifests("desc_manifests", "desc.json")
         + ")\n"
   }
+
+  /// Renders with the labels `IncModuleFile.labels` picked.
+  public static func render(labels: IncModuleFile.Labels, identities: [String]) -> String {
+    render(
+      config: labels.config, swiftLabel: labels.swift, resolvedLabel: labels.resolved,
+      slicePackage: labels.slicePackage, identities: identities)
+  }
 }

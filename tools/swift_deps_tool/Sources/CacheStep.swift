@@ -62,12 +62,13 @@ public struct CacheStep {
       patches: patches, swiftVersion: try spm.version())
     let identities = [Self.mainIdentity] + remotes + locals.map(\.identity)
     _ = try Prune.removeVanished(cacheDir: cacheDir, keep: Set(identities))
+    let incModule = sliceURL.appendingPathComponent("inc.MODULE.bazel")
     let text = IncModuleRenderer.render(
-      config: inv.config, swiftLabel: inv.swiftLabel,
-      resolvedLabel: "\(inv.slicePackage):Package.resolved", slicePackage: inv.slicePackage,
+      labels: IncModuleFile.labels(
+        at: incModule, config: inv.config, swiftLabel: inv.swiftLabel,
+        slicePackage: inv.slicePackage),
       identities: identities)
-    try Data(text.utf8).write(
-      to: sliceURL.appendingPathComponent("inc.MODULE.bazel"), options: .atomic)
+    try Data(text.utf8).write(to: incModule, options: .atomic)
   }
 
   /// `cache` never picks pins, so a slice without its own `Package.resolved` needs a `resolve`

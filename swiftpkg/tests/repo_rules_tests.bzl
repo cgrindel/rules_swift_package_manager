@@ -108,10 +108,14 @@ def _gen_build_files_with_build_file_test(ctx):
     env = unittest.begin(ctx)
 
     # Track that template was called with the expected arguments.
-    calls = {"template": []}
+    calls = {"file": [], "template": []}
 
     def _template(path, label):
         calls["template"].append(struct(path = path, label = label))
+
+    # buildifier: disable=unused-variable
+    def _file(path, content = "", executable = False, legacy_utf8 = False):
+        calls["file"].append(struct(path = path, content = content))
 
     build_file_label = "//some/pkg:BUILD.custom"
     repository_ctx = struct(
@@ -121,6 +125,7 @@ def _gen_build_files_with_build_file_test(ctx):
             system_sdk_deps = True,
             binary_target_deps = True,
         ),
+        file = _file,
         template = _template,
     )
 
@@ -145,6 +150,13 @@ def _gen_build_files_with_build_file_test(ctx):
         build_file_label,
         calls["template"][0].label,
         "template should receive the build_file label",
+    )
+
+    # A custom BUILD file has unknown target names, so no aliases.
+    asserts.equals(
+        env,
+        [struct(path = "rspm_targets.json", content = '{\n  "targets": []\n}\n')],
+        calls["file"],
     )
 
     return unittest.end(env)
@@ -204,6 +216,19 @@ def _gen_build_files_without_build_file_test(ctx):
 
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
     asserts.true(env, 'package_version = "overridden"' in calls["file"][-1].content, calls["file"][-1].content)
+    asserts.true(
+        env,
+        'exports_files([\n    "pkg_info.json",\n    "rspm_targets.json",\n])' in calls["file"][-1].content,
+        calls["file"][-1].content,
+    )
+    targets_json = [f for f in calls["file"] if f.path == "rspm_targets.json"]
+    asserts.equals(env, 1, len(targets_json))
+    asserts.equals(
+        env,
+        {"targets": ["package_info.rspm"]},
+        json.decode(targets_json[0].content),
+    )
+    asserts.true(env, targets_json[0].content.endswith("}\n"))
     asserts.false(env, 'package_version = "1.0.0"' in calls["file"][-1].content)
 
     asserts.equals(
