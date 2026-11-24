@@ -18,9 +18,15 @@ assert_contains() {
     || fail "Expected to contain: ${expected}, actual: ${actual}"
 }
 
-# The host can only regenerate its own OS's slice. The other slice may be
-# stale until CI's Linux job fills it (generate_linux_slices.yml), so every
-# assertion about it accepts both states.
+assert_not_contains() {
+  local unexpected="${1}"
+  local actual="${2}"
+  [[ "${actual}" != *"${unexpected}"* ]] \
+    || fail "Expected not to contain: ${unexpected}, actual: ${actual}"
+}
+
+# Both slices are committed and fresh. CI's Linux job regenerates the Linux
+# slice (generate_linux_slices.yml); the host only regenerates its own.
 if [[ "$(uname)" == "Darwin" ]]; then
   host_slice="apple"
   other_slice="linux"
@@ -67,19 +73,13 @@ assert_contains "hello from multi_slice" "${output}"
 
 # MARK: - Alias layout
 
-# swift-log is in both slices. It is one plain repository when the slices are
-# identical, and an alias repository over `__slice_<n>` repositories when they
-# differ or one is stale. Either way, the host configuration must reach a
-# real `Logging` target.
+# swift-log has the same pin, the same manifests and the same Swift
+# `major.minor` in both slices, so it is one plain repository: `Logging` is a
+# real rule in `@swiftpkg_swift_log` itself, not an alias.
 output="$("${bazel}" cquery --output=build @swiftpkg_swift_log//:Logging)"
-if [[ "${output}" == *"alias("* ]]; then
-  [[ "${output}" =~ actual\ =\ \"@@[^\"]*swiftpkg_swift_log__slice_[0-9]+//:Logging\" ]] \
-    || fail "Expected Logging to alias a __slice_ repository: ${output}"
-  aliases="$("${bazel}" query 'kind(alias, @swiftpkg_swift_log//:all)')"
-  [[ -n "${aliases}" ]] || fail "Expected aliases in @swiftpkg_swift_log."
-elif [[ ! -d "${other_cache}" ]]; then
-  fail "The ${other_slice} slice is stale, so swift-log must be aliased: ${output}"
-fi
+assert_contains "swiftpkg_swift_log/BUILD.bazel" "${output}"
+assert_not_contains "__slice_" "${output}"
+assert_not_contains "alias(" "${output}"
 
 # swift-system is only a dependency on Linux.
 if [[ "${host_slice}" == "linux" ]]; then
@@ -95,20 +95,21 @@ else
   # The extension's own stale warning is not a `fail()`, so this proves the
   # failing target or repository was reached.
   assert_contains "Error in fail: " "${output}"
-  if [[ "${output}" != *"is not in slice \`swift_deps/apple\`"* ]]; then
-    assert_contains "slice \`swift_deps/linux\`" "${output}"
-    assert_contains "is stale" "${output}"
-  fi
+  assert_contains "is not in slice \`swift_deps/apple\`" "${output}"
 fi
 
 # MARK: - Stale handling
 
-# Change an input of the other OS's slice. The host configuration still
+# Change an input of the other OS's slice. swift-log becomes an alias
+# repository over a `__slice_` repository, the host configuration still
 # builds, `@swift_package` stays usable, and under the other platform the
 # `select()` routes to the stale target, whose analysis fails.
 save_swift_deps
-mkdir -p "${other_cache}/_main"
 echo "x=y" >>"${other_cache}/_main/flags.cached"
+output="$("${bazel}" cquery --output=build @swiftpkg_swift_log//:Logging)"
+assert_contains "alias(" "${output}"
+[[ "${output}" =~ @@[^\"]*swiftpkg_swift_log__slice_[0-9]+//:Logging ]] \
+  || fail "Expected Logging to alias a __slice_ repository: ${output}"
 "${bazel}" build //Sources/MultiSlice
 "${bazel}" build @swift_package//:cache
 if output="$("${bazel}" cquery @swiftpkg_swift_log//:Logging \
