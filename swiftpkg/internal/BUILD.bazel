@@ -570,6 +570,12 @@ bzl_library(
 )
 
 bzl_library(
+    name = "slices",
+    srcs = ["slices.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
     name = "stale_swift_package",
     srcs = ["stale_swift_package.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
