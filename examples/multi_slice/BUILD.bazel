@@ -14,3 +14,16 @@ tidy(
 )
 
 bzlformat_pkg(name = "bzlformat")
+
+# MARK: - Platforms
+
+# Used by `do_test` to analyze the other OS's slice branch.
+platform(
+    name = "linux",
+    constraint_values = ["@platforms//os:linux"],
+)
+
+platform(
+    name = "macos",
+    constraint_values = ["@platforms//os:macos"],
+)

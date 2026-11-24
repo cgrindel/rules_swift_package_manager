@@ -15,7 +15,7 @@ def _merge_or_error(slice_entries):
             where `pkgs` is a `dict` of identity to
             `struct(kind, pin_key, dump_text, desc_text, dump_label,
             desc_label, local_path, swift_version)`, where `swift_version` is
-            the trimmed text of the slice's `_main/swift_version.txt`. A stale
+            the `major.minor` of the slice's `_main/swift_version.txt`. A stale
             slice's pkg structs carry only `kind` and `pin_key` (and
             `swift_version = None`).
 
