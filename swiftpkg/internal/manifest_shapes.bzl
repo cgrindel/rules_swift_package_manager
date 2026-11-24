@@ -72,7 +72,9 @@ def _check_desc_dependency(dep):
         return _type_error("desc dependency", "identity", "string", identity)
     what = "desc dependency `{}`".format(identity)
     dep_type = dep.get("type")
-    if dep_type not in _DESC_DEPENDENCY_KEYS:
+
+    # A `dict` or `list` is unhashable, so check the type before the lookup.
+    if type(dep_type) != "string" or dep_type not in _DESC_DEPENDENCY_KEYS:
         return "{}: unknown `type` {}".format(what, json.encode(dep_type))
     return _check_keys(what, dep, _DESC_DEPENDENCY_KEYS[dep_type])
 

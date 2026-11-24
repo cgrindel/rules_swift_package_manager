@@ -4,11 +4,14 @@ load(":bazel_target_mods.bzl", "bazel_target_mods")
 load(":build_decls.bzl", "build_decls")
 
 # The kinds whose targets carry the check in `data`, so that building any of
-# them runs the check's validation action.
+# them runs the check's validation action. `apple_dynamic_xcframework_import`
+# has no `data` attribute, so it is not listed.
 _KINDS = [
+    "apple_static_xcframework_import",
     "cc_library",
     "objc_library",
     "swift_binary",
+    "swift_compiler_plugin",
     "swift_library",
     "swift_test",
 ]

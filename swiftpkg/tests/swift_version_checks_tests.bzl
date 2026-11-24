@@ -16,11 +16,22 @@ def _attach_adds_data_to_library_kinds_test(ctx):
         build_decls.new("cc_library", "Bar.rspm", attrs = {"data": [":x"]}),
         build_decls.new("objc_library", "Baz.rspm", attrs = {"data": select_data}),
         build_decls.new("alias", "Foo", attrs = {"actual": ":Foo.rspm"}),
+        build_decls.new("swift_compiler_plugin", "Macros.rspm", attrs = {}),
+        build_decls.new("apple_static_xcframework_import", "S.rspm", attrs = {}),
+        build_decls.new("apple_dynamic_xcframework_import", "D.rspm", attrs = {}),
     ]
 
     actual = swift_version_checks.attach(decls)
 
-    asserts.equals(env, 4, len(actual))
+    asserts.equals(env, 7, len(actual))
+    asserts.equals(env, {"data": [_LABEL]}, actual[4].attrs, "swift_compiler_plugin")
+    asserts.equals(env, {"data": [_LABEL]}, actual[5].attrs, "apple_static_xcframework_import")
+    asserts.equals(
+        env,
+        decls[6],
+        actual[6],
+        "apple_dynamic_xcframework_import has no data attribute",
+    )
     asserts.equals(
         env,
         {"data": [_LABEL], "srcs": ["a.swift"]},

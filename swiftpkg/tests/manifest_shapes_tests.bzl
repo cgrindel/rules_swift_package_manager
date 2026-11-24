@@ -168,6 +168,14 @@ def _dependency_shapes_test(ctx):
             [{"identity": "local_pkg"}],
             "desc dependency `local_pkg`: unknown `type` null",
         ),
+        (
+            [{"identity": "local_pkg", "type": {"a": 1}}],
+            "desc dependency `local_pkg`: unknown `type` {\"a\":1}",
+        ),
+        (
+            [{"identity": "local_pkg", "type": ["x"]}],
+            "desc dependency `local_pkg`: unknown `type` [\"x\"]",
+        ),
         ([{"identity": "local_pkg", "type": "registry"}], None),
     ]:
         desc = json.decode(DESC_JSON)
