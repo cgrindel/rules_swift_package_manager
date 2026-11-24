@@ -1,0 +1,59 @@
+name: Generate Linux slices
+# Manual-only workflow that regenerates the `swift_deps/linux` slice of child
+# workspaces. A Linux slice can only be produced by Linux SwiftPM, so a
+# maintainer on macOS runs this, downloads the artifact, and commits it:
+#
+#   gh workflow run generate_linux_slices.yml --ref <branch> \
+#     -f dirs="examples/multi_slice"
+#   gh run download <run id> --name linux-slices
+#   tar -xzf linux-slices.tgz   # at the repo root
+"on":
+  workflow_dispatch:
+    inputs:
+      dirs:
+        description: >-
+          Space-separated child workspace directories, relative to the repo root, whose `swift_deps/linux` slice to regenerate.
+        default: examples/multi_slice
+        required: true
+permissions:
+  contents: read
+jobs:
+  generate:
+    runs-on: ubuntu-22.04
+    env:
+      CC: clang
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/set_up_ubuntu
+        with:
+          ubuntu_version: "22.04"
+      - name: Regenerate the Linux slices
+        shell: bash
+        # Dispatch inputs reach the shell through `env`, never through `${{ }}`
+        # interpolation, which would splice untrusted text into the script.
+        env:
+          DIRS: ${{ inputs.dirs }}
+        run: |
+          set -o errexit -o nounset -o pipefail
+          read -r -a dirs <<<"${DIRS}"
+          for dir in "${dirs[@]}"; do
+            echo "::group::${dir}"
+            # The Linux host selects the `linux` slice by default.
+            ( cd "${dir}" && bazelisk run @swift_package//:cache )
+            # Drop the SwiftPM scratch dirs; they are never committed.
+            rm -rf "${dir}"/swift_deps/*/.build
+            echo "::endgroup::"
+          done
+          slice_dirs=()
+          for dir in "${dirs[@]}"; do
+            slice_dirs+=("${dir}/swift_deps/linux")
+          done
+          # Relative paths, so `tar -x` at the repo root restores them in place.
+          tar -czf linux-slices.tgz "${slice_dirs[@]}"
+          tar -tzf linux-slices.tgz
+      - uses: actions/upload-artifact@v7
+        with:
+          name: linux-slices
+          path: linux-slices.tgz
+          if-no-files-found: error
+          retention-days: 14
