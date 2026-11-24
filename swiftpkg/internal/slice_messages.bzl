@@ -16,6 +16,22 @@ def _stale(slice_dir, config):
         "that config"
     ).format(slice_dir = slice_dir, config = config)
 
+def _missing(slice_dir, config, identity):
+    """Returns the message for a fresh slice that lacks a package.
+
+    Args:
+        slice_dir: The slice directory as a `string`.
+        config: The config label of the slice as a `string`.
+        identity: The Swift package identity as a `string`.
+
+    Returns:
+        The message as a `string`.
+    """
+    return (
+        "package `{identity}` is not in slice `{slice_dir}` " +
+        "(config `{config}`); it is only available to the other slices"
+    ).format(identity = identity, slice_dir = slice_dir, config = config)
+
 def _no_match(configs):
     """Returns the message for a `select()` that matches no slice.
 
@@ -31,5 +47,6 @@ def _no_match(configs):
 
 slice_messages = struct(
     stale = _stale,
+    missing = _missing,
     no_match = _no_match,
 )

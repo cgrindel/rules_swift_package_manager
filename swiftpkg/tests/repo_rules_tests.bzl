@@ -155,7 +155,7 @@ def _gen_build_files_with_build_file_test(ctx):
     # A custom BUILD file has unknown target names, so no aliases.
     asserts.equals(
         env,
-        [struct(path = "targets.json", content = '{\n  "targets": []\n}\n')],
+        [struct(path = "rspm_targets.json", content = '{\n  "targets": []\n}\n')],
         calls["file"],
     )
 
@@ -218,10 +218,10 @@ def _gen_build_files_without_build_file_test(ctx):
     asserts.true(env, 'package_version = "overridden"' in calls["file"][-1].content, calls["file"][-1].content)
     asserts.true(
         env,
-        'exports_files([\n    "pkg_info.json",\n    "targets.json",\n])' in calls["file"][-1].content,
+        'exports_files([\n    "pkg_info.json",\n    "rspm_targets.json",\n])' in calls["file"][-1].content,
         calls["file"][-1].content,
     )
-    targets_json = [f for f in calls["file"] if f.path == "targets.json"]
+    targets_json = [f for f in calls["file"] if f.path == "rspm_targets.json"]
     asserts.equals(env, 1, len(targets_json))
     asserts.equals(
         env,

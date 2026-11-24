@@ -18,6 +18,25 @@ def _stale_test(ctx):
 
 stale_test = unittest.make(_stale_test)
 
+def _missing_test(ctx):
+    env = unittest.begin(ctx)
+
+    asserts.equals(
+        env,
+        "package `swift-nio` is not in slice `swift/macos` " +
+        "(config `@platforms//os:macos`); it is only available to the " +
+        "other slices",
+        slice_messages.missing(
+            "swift/macos",
+            "@platforms//os:macos",
+            "swift-nio",
+        ),
+    )
+
+    return unittest.end(env)
+
+missing_test = unittest.make(_missing_test)
+
 def _no_match_test(ctx):
     env = unittest.begin(ctx)
 
@@ -35,5 +54,6 @@ def slice_messages_test_suite():
     return unittest.suite(
         "slice_messages_tests",
         stale_test,
+        missing_test,
         no_match_test,
     )

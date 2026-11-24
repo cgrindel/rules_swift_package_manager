@@ -224,7 +224,7 @@ BUILD file override bypasses generated declarations.\
     # Export the pkg_info.json
     exports_files = scg.new_fn_call(
         "exports_files",
-        ["pkg_info.json", "targets.json"],
+        ["pkg_info.json", "rspm_targets.json"],
     )
     bld_files.append(build_files.new(decls = [exports_files]))
 
@@ -250,13 +250,13 @@ BUILD file override bypasses generated declarations.\
     build_files.write(repository_ctx, root_bld_file, pkg_info.path)
 
 def _write_targets_json(repository_ctx, names, path):
-    """Writes the names of the root BUILD file's targets to `targets.json`.
+    """Writes the names of the root BUILD file's targets to `rspm_targets.json`.
 
     An alias repository reads this file to learn which targets to alias.
     """
     content = json.encode_indent({"targets": sorted(names)}, indent = "  ")
     repository_ctx.file(
-        paths.join(path, "targets.json"),
+        paths.join(path, "rspm_targets.json"),
         content = content + "\n",
         executable = False,
     )
