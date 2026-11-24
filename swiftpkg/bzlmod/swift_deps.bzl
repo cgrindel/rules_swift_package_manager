@@ -9,6 +9,7 @@ load("//swiftpkg/internal:pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 load("//swiftpkg/internal:registry_swift_package.bzl", "registry_swift_package")
 load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
+load("//swiftpkg/internal:slices.bzl", "slices")
 load("//swiftpkg/internal:swift_deps_info.bzl", "swift_deps_info")
 load("//swiftpkg/internal:swift_package.bzl", "PATCH_ATTRS", "TOOL_ATTRS", "swift_package")
 load("//swiftpkg/internal:swift_package_tool_attrs.bzl", "swift_package_tool_attrs")
@@ -755,7 +756,7 @@ Expected only one `configure_swift_package` tag, but found multiple.\
     for mod in module_ctx.modules:
         for from_package in mod.tags.from_package:
             # v2 tags are collected across all modules below.
-            if from_package.dump_manifests:
+            if slices.is_v2_tag(from_package):
                 continue
             repo_names = declare_pkgs_from_package(
                 module_ctx,
@@ -871,7 +872,7 @@ manifest for this slice. Read only when `dump_manifests` is set.\
 v2: maps a package identity (`_main` for the root package, e.g. \
 `swift-log` for a dependency) to its checked-in `swift package dump-package` \
 manifest for this slice. Declare one `from_package` tag per slice; the slice \
-directory is the Bazel package of `resolved`. Setting it selects v2 mode: `config` becomes required, and the v1 \
+directory is the Bazel package of `resolved`. Setting it or `config` selects v2 mode: `config` becomes required, and the v1 \
 attributes `cached_json_directory`, `declare_swift_deps_info`, `env`, \
 `env_inherit` and `resolve_transitive_local_dependencies` are ignored. In v2 \
 mode, `configure_package` patches may only be files in the root module.\

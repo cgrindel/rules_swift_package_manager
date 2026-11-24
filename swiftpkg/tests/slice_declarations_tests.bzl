@@ -970,7 +970,7 @@ v2_passes_netrc_and_read_only_test = unittest.make(
 def _collect_builds_slices_in_order_test(ctx):
     env = unittest.begin(ctx)
 
-    v1 = _tag(dump_ids = [])
+    v1 = _tag(config = None, dump_ids = [])
     actual = _collect([
         _module([
             _tag(netrc = Label("@@//:.netrc"), make_files_read_only = True),
@@ -994,6 +994,22 @@ def _collect_builds_slices_in_order_test(ctx):
 
 collect_builds_slices_in_order_test = unittest.make(
     _collect_builds_slices_in_order_test,
+)
+
+def _collect_keeps_bootstrap_slice_test(ctx):
+    env = unittest.begin(ctx)
+
+    # `init` writes `config` with empty manifest dicts. That is a v2 slice
+    # with no cache yet, not a v1 tag.
+    actual = _collect([_module([_tag(dump_ids = [])])])
+    asserts.equals(env, None, actual.error)
+    asserts.equals(env, ["swift/macos"], [s.dir for s in actual.result])
+    asserts.equals(env, [], actual.result[0].identities)
+
+    return unittest.end(env)
+
+collect_keeps_bootstrap_slice_test = unittest.make(
+    _collect_keeps_bootstrap_slice_test,
 )
 
 def _collect_requires_config_test(ctx):
@@ -1060,6 +1076,7 @@ def slice_declarations_test_suite():
         stale_warning_and_merge_entry_test,
         bazel_workspace_root_test,
         collect_builds_slices_in_order_test,
+        collect_keeps_bootstrap_slice_test,
         collect_requires_config_test,
         collect_rejects_duplicate_root_configs_test,
         identical_declares_one_repo_test,

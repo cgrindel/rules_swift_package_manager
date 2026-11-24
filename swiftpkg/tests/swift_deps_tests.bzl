@@ -575,6 +575,7 @@ def _new_ext_module(
     tags["configure_swift_package"] = []
     from_package_tags = [
         struct(
+            config = None,
             dump_manifests = {},
             is_dev = False,
             repo_names = from_package_repo_names,
@@ -583,6 +584,7 @@ def _new_ext_module(
     if dev_from_package_repo_names != None:
         from_package_tags.append(
             struct(
+                config = None,
                 dump_manifests = {},
                 is_dev = True,
                 repo_names = dev_from_package_repo_names,

@@ -69,7 +69,9 @@ def _validate(slice):
             "different identities; differing: {ids}"
         ).format(dir = slice.dir, ids = ", ".join(differing))
 
-    if _MAIN_IDENTITY not in dump_ids:
+    # Empty dicts are what `init` writes before the first cache run; the
+    # slice is then stale, not invalid.
+    if dump_ids and _MAIN_IDENTITY not in dump_ids:
         return "slice `{dir}`: dump_manifests is missing the `{main}` identity".format(
             dir = slice.dir,
             main = _MAIN_IDENTITY,
@@ -109,7 +111,22 @@ def _cache_label(slice, identity, basename):
         basename = basename,
     ))
 
+def _is_v2_tag(tag):
+    """Whether a `from_package` tag describes a v2 slice.
+
+    `config` marks a v2 tag even when the manifest dicts are still empty, as
+    `init` writes them before the first cache run.
+
+    Args:
+        tag: A `from_package` tag.
+
+    Returns:
+        A `bool`.
+    """
+    return tag.config != None or len(tag.dump_manifests) > 0
+
 slices = struct(
+    is_v2_tag = _is_v2_tag,
     new = _new,
     validate = _validate,
     cache_label = _cache_label,

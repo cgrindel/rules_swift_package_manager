@@ -1,6 +1,6 @@
 """Collects and evaluates the v2 slices of the `swift_deps` extension.
 
-A v2 `from_package` tag (one with `dump_manifests`) describes one slice: one
+A v2 `from_package` tag (one with `config` or `dump_manifests`) describes one slice: one
 resolution of a `Package.swift` for one config. `collect` turns the tags into
 slices. `evaluate` decides whether a slice's `swift_deps_cache` is fresh and
 lists the packages it contributes.
@@ -59,7 +59,7 @@ def _collect_or_error(modules, is_dev_dependency):
     root_dirs_by_config = {}
     for mod in modules:
         for tag in mod.tags.from_package:
-            if not tag.dump_manifests:
+            if not slices.is_v2_tag(tag):
                 continue
             for attr in ["config", "resolved"]:
                 if getattr(tag, attr) == None:
