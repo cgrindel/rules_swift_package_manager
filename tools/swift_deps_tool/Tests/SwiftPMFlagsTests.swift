@@ -42,6 +42,17 @@ final class SwiftPMFlagsTests: XCTestCase {
     }
   }
 
+  func testEmptyPathValueIsRejected() {
+    for key in ["cache_path", "config_path", "security_path", "netrc", "registries"] {
+      XCTAssertThrowsError(
+        try SwiftPMFlags(keyValues: [key: ""], workspace: workspace)
+      ) { error in
+        let message = String(describing: error)
+        XCTAssertEqual(message, "configure_swift_package.\(key) must not be empty")
+      }
+    }
+  }
+
   func testUnknownKeyIsRejected() {
     for key in ["build_path", "bogus"] {
       XCTAssertThrowsError(

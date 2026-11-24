@@ -37,7 +37,7 @@ final class ManifestsTests: XCTestCase {
     let desc = try Manifests.write(
       package: package, cacheDir: cacheDir, workspace: root, spm: swiftPM(), scratchPath: nil)
 
-    XCTAssertEqual(desc.identity, "json")
+    XCTAssertEqual(desc.fileSystemDependencyPaths, [])
     let read = { (name: String) in
       try String(contentsOf: cacheDir.appendingPathComponent(name), encoding: .utf8)
     }

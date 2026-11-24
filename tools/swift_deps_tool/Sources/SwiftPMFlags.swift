@@ -18,10 +18,15 @@ public struct SwiftPMFlags: Equatable {
   private let workspace: URL
 
   /// Validates `keyValues` (the `--flag KEY=VALUE` pairs). Rejects unknown keys (including
-  /// `build_path`), absolute path values, and malformed booleans or `manifest_cache` values.
+  /// `build_path`), empty or absolute path values, and malformed booleans or `manifest_cache`
+  /// values.
   public init(keyValues: [String: String], workspace: URL) throws {
     for (key, value) in keyValues {
       if Self.pathKeys.contains(key) {
+        // An empty path would resolve to the workspace root.
+        guard !value.isEmpty else {
+          throw ToolError(message: "configure_swift_package.\(key) must not be empty")
+        }
         guard !value.hasPrefix("/") else {
           throw ToolError(
             message: "configure_swift_package.\(key) must be workspace-relative, got '\(value)'")
@@ -50,8 +55,12 @@ public struct SwiftPMFlags: Equatable {
     arguments(sliceDir: sliceDir, scratchPath: sliceDir.appendingPathComponent(".build"))
   }
 
-  /// The given keys as `key=value\n` lines sorted by key. Defaults are not printed, so the
-  /// result reflects the client's tag.
+  /// The flags as text, for staleness checks. A Starlark twin must produce the same bytes:
+  ///
+  /// - one `key=value\n` line per pair passed in, and no others (defaults are not added);
+  /// - lines sorted by key in ASCII order;
+  /// - each value verbatim, so booleans are spelled `true` or `false`;
+  /// - an empty map gives the empty string.
   public func normalized() -> String {
     given.keys.sorted().map { "\($0)=\(given[$0]!)\n" }.joined()
   }

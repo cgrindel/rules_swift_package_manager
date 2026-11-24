@@ -34,9 +34,14 @@ final class LocalPackagesTests: XCTestCase {
       [localA.path, localA.appendingPathComponent("local_b").path])
   }
 
-  func testDescReadsIdentityAndFileSystemPaths() throws {
+  func testDescReadsFileSystemPaths() throws {
     let desc = try readDesc(root.appendingPathComponent("local_a"))
-    XCTAssertEqual(desc.identity, "locala")
     XCTAssertEqual(desc.fileSystemDependencyPaths, ["./local_b", ".."])
+  }
+
+  func testDescRequiresName() {
+    XCTAssertThrowsError(try Desc(data: Data(#"{"dependencies": []}"#.utf8))) { error in
+      XCTAssertTrue(String(describing: error).contains("no top-level name"), "\(error)")
+    }
   }
 }
