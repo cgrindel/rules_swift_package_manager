@@ -133,6 +133,37 @@ def _v2_no_patches_omits_data_test(ctx):
 
 v2_no_patches_omits_data_test = unittest.make(_v2_no_patches_omits_data_test)
 
+def _v2_build_file_from_attr_decodes_json_test(ctx):
+    env = unittest.begin(ctx)
+
+    attr = struct(
+        slices = json.encode([{
+            "config": _MACOS_SLICE.config,
+            "config_value": _MACOS_SLICE.config_value,
+            "dir": _MACOS_SLICE.dir,
+            "package_value": _MACOS_SLICE.package_value,
+        }]),
+        package_path = "swift/Package.swift",
+        swift_label = "@@//swift:Package.swift",
+        flags = "",
+        patch_specs = json.encode({
+            "swift-log": {"args": [], "files": [_PATCH]},
+        }),
+        patch_files = [Label(_PATCH)],
+    )
+    text = scg.to_starlark(
+        swift_package_tool_repo_lib.build_file_from_attr(attr),
+    )
+    _assert_contains(env, text, '"@@platforms//os:macos": ["swift/macos"],')
+    _assert_contains(env, text, '"swift-log=$(rootpath @@//third_party:fix.patch)",')
+    _assert_contains(env, text, 'data = ["@@//third_party:fix.patch"],')
+
+    return unittest.end(env)
+
+v2_build_file_from_attr_decodes_json_test = unittest.make(
+    _v2_build_file_from_attr_decodes_json_test,
+)
+
 def _v1_unchanged_test(ctx):
     env = unittest.begin(ctx)
 
@@ -217,5 +248,6 @@ def swift_package_tool_repo_test_suite(name = "swift_package_tool_repo_tests"):
         v2_build_file_declares_three_targets_test,
         v2_patch_args_default_test,
         v2_no_patches_omits_data_test,
+        v2_build_file_from_attr_decodes_json_test,
         v1_unchanged_test,
     )

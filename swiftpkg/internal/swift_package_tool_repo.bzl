@@ -171,27 +171,53 @@ def _build_file(
         decls = decls,
     )
 
-def _v2_build_file_from_attr(attr):
+def _require(d, key, what):
+    if key not in d:
+        fail("Expected key '{key}' in {what}: {d}".format(
+            key = key,
+            what = what,
+            d = json.encode(d),
+        ))
+    return d[key]
+
+def _build_file_from_attr(attr):
+    """Decodes the v2 JSON attributes and returns the v2 BUILD file.
+
+    Args:
+        attr: The repository rule attributes (`repository_ctx.attr`).
+
+    Returns:
+        A `struct` as returned by `build_files.new`.
+    """
     slices = [
-        struct(
-            config = s["config"],
-            config_value = s["config_value"],
-            dir = s["dir"],
-            package_value = s["package_value"],
-        )
+        struct(**{
+            key: _require(s, key, "a slices entry")
+            for key in ["config", "config_value", "dir", "package_value"]
+        })
         for s in json.decode(attr.slices)
     ]
-    patch_specs = {
-        identity: struct(files = spec["files"], args = spec["args"])
-        for identity, spec in json.decode(attr.patch_specs or "{}").items()
-    }
+    patch_files = [str(f) for f in attr.patch_files]
+    known_files = {f: None for f in patch_files}
+    patch_specs = {}
+    for identity, spec in json.decode(attr.patch_specs or "{}").items():
+        what = "the patch_specs entry for '{}'".format(identity)
+        files = _require(spec, "files", what)
+        for f in files:
+            if f not in known_files:
+                fail("""\
+The patch file '{f}' for '{identity}' is not in patch_files: {known}\
+""".format(f = f, identity = identity, known = patch_files))
+        patch_specs[identity] = struct(
+            files = files,
+            args = _require(spec, "args", what),
+        )
     return _build_file(
         slices = slices,
         package_path = attr.package_path,
         swift_label = attr.swift_label,
         flags = attr.flags,
         patch_specs = patch_specs,
-        patch_files = [str(f) for f in attr.patch_files],
+        patch_files = patch_files,
     )
 
 def _swift_package_tool_repo_impl(repository_ctx):
@@ -200,7 +226,7 @@ def _swift_package_tool_repo_impl(repository_ctx):
         # resolves them against the workspace. The v1 `env` is ignored.
         build_files.write(
             repository_ctx,
-            _v2_build_file_from_attr(repository_ctx.attr),
+            _build_file_from_attr(repository_ctx.attr),
             "",
         )
         return
@@ -242,7 +268,8 @@ netrc and registries paths travel here as workspace-relative paths.\
             ),
             "package": attr.string(
                 doc = """\
-The relative path to the `Package.swift` file to operate on.\
+The relative path to the `Package.swift` file to operate on. Ignored when \
+`slices` is set.\
 """,
                 mandatory = True,
             ),
@@ -284,5 +311,6 @@ targets.\
 
 swift_package_tool_repo_lib = struct(
     build_file = _build_file,
+    build_file_from_attr = _build_file_from_attr,
     v1_build_file = _v1_build_file,
 )
