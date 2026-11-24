@@ -48,7 +48,7 @@ public struct CacheStep {
       }
       let rootDesc = try Manifests.write(
         package: packageDir, cacheDir: cacheDir.appendingPathComponent(Self.mainIdentity),
-        spm: spm, scratchPath: nil)
+        workspace: inv.workspace, spm: spm, scratchPath: nil)
       let remotes = try writeRemotes(spm: spm, patches: patches)
       let locals = try writeLocals(spm: spm, rootDesc: rootDesc, remotes: Set(remotes))
       return (remotes, locals)
@@ -99,7 +99,8 @@ public struct CacheStep {
         patches: patches[pin.identity] ?? [],
         patchArgs: inv.patchArgs[pin.identity] ?? [])
       _ = try Manifests.write(
-        package: workDir, cacheDir: freshCacheDir(pin.identity), spm: spm,
+        package: workDir, cacheDir: freshCacheDir(pin.identity), workspace: inv.workspace,
+        spm: spm,
         scratchPath: workDir.appendingPathComponent(".build"))
     }
     return pins.map(\.identity)
@@ -123,7 +124,8 @@ public struct CacheStep {
       }
       locals.append((identity, package.appendingPathComponent("Package.swift")))
       return try Manifests.write(
-        package: package, cacheDir: freshCacheDir(identity), spm: spm,
+        package: package, cacheDir: freshCacheDir(identity), workspace: inv.workspace,
+        spm: spm,
         scratchPath: buildDir.appendingPathComponent("rspm-local/\(identity)"))
     }
     return locals

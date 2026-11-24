@@ -109,6 +109,29 @@ final class SwiftPMTests: XCTestCase {
     try swiftPM.run(["resolve"], in: root)
   }
 
+  func testDefaultDirsStayUnderSliceBuildWithCustomScratchPath() throws {
+    let argvFile = root.appendingPathComponent("argv.txt")
+    let tool = try fakeTool("for arg in \"$@\"; do echo \"$arg\"; done > '\(argvFile.path)'")
+    let registries = root.appendingPathComponent("my_registries.json")
+    try Data("{}".utf8).write(to: registries)
+    let swiftPM = try swiftPM(tool: tool, keyValues: ["registries": "my_registries.json"])
+
+    try swiftPM.run(["describe"], in: root, scratchPath: root.appendingPathComponent("dep/.build"))
+
+    let argv = try String(contentsOf: argvFile, encoding: .utf8).split(separator: "\n")
+    let slice = root.appendingPathComponent("slice/.build").path
+    func value(_ flag: String) -> String? {
+      argv.firstIndex(of: Substring(flag)).map { String(argv[$0 + 1]) }
+    }
+    XCTAssertEqual(value("--scratch-path"), root.appendingPathComponent("dep/.build").path)
+    XCTAssertEqual(value("--cache-path"), slice + "/.cache")
+    XCTAssertEqual(value("--config-path"), slice + "/.config")
+    XCTAssertEqual(value("--security-path"), slice + "/.security")
+    XCTAssertEqual(
+      try FileManager.default.destinationOfSymbolicLink(
+        atPath: slice + "/.config/registries.json"), registries.path)
+  }
+
   private func lines(_ values: [String]) -> String {
     values.map { $0 + "\n" }.joined()
   }

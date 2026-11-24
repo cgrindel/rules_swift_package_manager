@@ -47,7 +47,7 @@ public struct SwiftPMFlags: Equatable {
 
   /// `--scratch-path <sliceDir>/.build` followed by the SwiftPM flags, sorted by key.
   public func arguments(sliceDir: URL) -> [String] {
-    arguments(scratchPath: sliceDir.appendingPathComponent(".build"))
+    arguments(sliceDir: sliceDir, scratchPath: sliceDir.appendingPathComponent(".build"))
   }
 
   /// The given keys as `key=value\n` lines sorted by key. Defaults are not printed, so the
@@ -56,10 +56,12 @@ public struct SwiftPMFlags: Equatable {
     given.keys.sorted().map { "\($0)=\(given[$0]!)\n" }.joined()
   }
 
-  func arguments(scratchPath: URL) -> [String] {
+  /// `scratchPath` may differ from `<sliceDir>/.build` (a dependency's copy has its own), but the
+  /// default cache, config and security directories always stay under `<sliceDir>/.build`.
+  func arguments(sliceDir: URL, scratchPath: URL) -> [String] {
     var args = ["--scratch-path", scratchPath.path]
-    args += ["--cache-path", cachePath.path]
-    args += ["--config-path", configPath.path]
+    args += ["--cache-path", cachePath(sliceDir: sliceDir).path]
+    args += ["--config-path", configPath(sliceDir: sliceDir).path]
     args.append(
       bool("dependency_caching", true)
         ? "--enable-dependency-cache" : "--disable-dependency-cache")
@@ -73,18 +75,26 @@ public struct SwiftPMFlags: Equatable {
     if bool("replace_scm_with_registry", false) {
       args.append("--replace-scm-with-registry")
     }
-    args += ["--security-path", securityPath.path]
+    args += ["--security-path", securityPath(sliceDir: sliceDir).path]
     if bool("use_registry_identity_for_scm", false) {
       args.append("--use-registry-identity-for-scm")
     }
     return args
   }
 
-  var cachePath: URL { path("cache_path") ?? workspace.appendingPathComponent(".cache") }
-  var configPath: URL { path("config_path") ?? workspace.appendingPathComponent(".config") }
-  var securityPath: URL { path("security_path") ?? workspace.appendingPathComponent(".security") }
+  /// A given path resolves against the workspace; the default is `<sliceDir>/.build/<name>`,
+  /// which `init` already lists in `.bazelignore` and `.gitignore`.
+  func cachePath(sliceDir: URL) -> URL { path("cache_path", default: ".cache", sliceDir) }
+  func configPath(sliceDir: URL) -> URL { path("config_path", default: ".config", sliceDir) }
+  func securityPath(sliceDir: URL) -> URL {
+    path("security_path", default: ".security", sliceDir)
+  }
   /// The client's `registries.json`, if one is configured.
   var registries: URL? { path("registries") }
+
+  private func path(_ key: String, default name: String, _ sliceDir: URL) -> URL {
+    path(key) ?? sliceDir.appendingPathComponent(".build").appendingPathComponent(name)
+  }
 
   private func path(_ key: String) -> URL? {
     given[key].map { workspace.appendingPathComponent($0) }

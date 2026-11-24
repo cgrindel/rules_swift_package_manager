@@ -23,7 +23,8 @@ public struct SwiftPM {
     try linkRegistries()
     let scratch = scratchPath ?? sliceDir.appendingPathComponent(".build")
     let result = try launch(
-      ["package"] + flags.arguments(scratchPath: scratch) + args, in: packageDir)
+      ["package"] + flags.arguments(sliceDir: sliceDir, scratchPath: scratch) + args, in: packageDir
+    )
     guard result.status == 0 else {
       let tail = String(decoding: result.stderr, as: UTF8.self)
         .split(separator: "\n", omittingEmptySubsequences: false)
@@ -56,8 +57,9 @@ public struct SwiftPM {
   private func linkRegistries() throws {
     guard let registries = flags.registries else { return }
     let fileManager = FileManager.default
-    try fileManager.createDirectory(at: flags.configPath, withIntermediateDirectories: true)
-    let link = flags.configPath.appendingPathComponent("registries.json")
+    let configPath = flags.configPath(sliceDir: sliceDir)
+    try fileManager.createDirectory(at: configPath, withIntermediateDirectories: true)
+    let link = configPath.appendingPathComponent("registries.json")
     if (try? fileManager.destinationOfSymbolicLink(atPath: link.path)) != nil
       || fileManager.fileExists(atPath: link.path)
     {

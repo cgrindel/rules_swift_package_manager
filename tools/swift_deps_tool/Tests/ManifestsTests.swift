@@ -35,7 +35,7 @@ final class ManifestsTests: XCTestCase {
     let cacheDir = root.appendingPathComponent("cache/MyPkg")
 
     let desc = try Manifests.write(
-      package: package, cacheDir: cacheDir, spm: swiftPM(), scratchPath: nil)
+      package: package, cacheDir: cacheDir, workspace: root, spm: swiftPM(), scratchPath: nil)
 
     XCTAssertEqual(desc.identity, "json")
     let read = { (name: String) in
@@ -50,7 +50,7 @@ final class ManifestsTests: XCTestCase {
     try FileManager.default.createDirectory(at: package, withIntermediateDirectories: true)
     XCTAssertThrowsError(
       try Manifests.write(
-        package: package, cacheDir: root.appendingPathComponent("cache"),
+        package: package, cacheDir: root.appendingPathComponent("cache"), workspace: root,
         spm: swiftPM(failing: true), scratchPath: nil)
     ) { error in
       XCTAssertEqual((error as? ToolError)?.package, "MyPkg", "\(error)")

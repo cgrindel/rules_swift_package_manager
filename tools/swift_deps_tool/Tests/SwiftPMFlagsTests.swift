@@ -72,12 +72,12 @@ final class SwiftPMFlagsTests: XCTestCase {
       defaults.arguments(sliceDir: sliceDir),
       [
         "--scratch-path", "/ws/slices/macos/.build",
-        "--cache-path", "/ws/.cache",
-        "--config-path", "/ws/.config",
+        "--cache-path", "/ws/slices/macos/.build/.cache",
+        "--config-path", "/ws/slices/macos/.build/.config",
         "--enable-dependency-cache",
         "--manifest-cache", "shared",
         "--enable-build-manifest-caching",
-        "--security-path", "/ws/.security",
+        "--security-path", "/ws/slices/macos/.build/.security",
       ])
 
     let custom = try SwiftPMFlags(
