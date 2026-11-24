@@ -386,13 +386,15 @@ def _fresh_pkgs(module_ctx, slice, directory, bazel_workspace_root, resolved_map
         fail("Expected no more items to process, but found some.")
 
     # Part of the grouping key: one repository serves only slices cached with
-    # the same Swift version. It is a staleness input, so it exists here.
+    # the same Swift `major.minor`, the granularity of the build-time version
+    # check. Patch versions do not change manifest selection, so a 6.4.2 slice
+    # and a 6.4.0 slice with identical manifests share one repository.
     swift_version = manifest_files.read_text(
         module_ctx,
         slices.cache_label(slice, _MAIN, "swift_version.txt"),
     )
     if swift_version != None:
-        swift_version = swift_version.strip()
+        swift_version = _major_minor(swift_version.strip())
 
     reasons = []
     pkgs = {}
@@ -431,6 +433,10 @@ def _fresh_pkgs(module_ctx, slice, directory, bazel_workspace_root, resolved_map
             swift_version = swift_version,
         )
     return struct(reasons = reasons, pkgs = pkgs, pkg_info = pkg_info)
+
+def _major_minor(version):
+    """Returns the `major.minor` prefix of a dotted version string."""
+    return ".".join(version.split(".")[:2])
 
 def _new_evaluated(slice, reasons, pkgs, pkg_info = None, module_aliases_by_id = {}):
     return struct(
@@ -551,7 +557,7 @@ def _evaluate(module_ctx, slice, config_swift_package, config_pkgs):
           entry is `struct(kind, pin_key, dump_text, desc_text, dump_label,
           desc_label, local_path, dep, swift_version)`, where `kind` is
           `source_control` or `local`, `dep` is the `pkginfos.new_dependency`
-          struct, and `swift_version` is the trimmed text of the slice's
+          struct, and `swift_version` is the `major.minor` of the slice's
           `_main/swift_version.txt`. A stale entry is
           `struct(kind, pin_key, swift_version = None)`, where `kind` is `source_control`,
           `registry`, or `unknown`, and `pin_key` is `None` for `unknown`.

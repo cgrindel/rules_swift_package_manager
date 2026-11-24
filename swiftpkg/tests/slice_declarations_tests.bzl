@@ -902,10 +902,10 @@ direct_deps_split_dev_test = unittest.make(_direct_deps_split_dev_test)
 def _identical_requires_same_swift_version_test(ctx):
     env = unittest.begin(ctx)
 
-    # Same pin and manifest bytes, cached with different Swift versions.
+    # Same pin and manifest bytes, cached with different Swift minors.
     actual = _declare([
-        _fresh("swift/macos", _MACOS, swift_version = "6.2"),
-        _fresh("swift/linux", _LINUX, swift_version = "6.1"),
+        _fresh("swift/macos", _MACOS, swift_version = "6.4"),
+        _fresh("swift/linux", _LINUX, swift_version = "6.3"),
     ])
     git = actual.calls["git"]
     asserts.equals(
@@ -935,6 +935,35 @@ def _identical_requires_same_swift_version_test(ctx):
 
 identical_requires_same_swift_version_test = unittest.make(
     _identical_requires_same_swift_version_test,
+)
+
+def _identical_ignores_swift_patch_version_test(ctx):
+    env = unittest.begin(ctx)
+
+    # Evaluation keeps only `major.minor` of `swift_version.txt`.
+    versions = []
+    for text in ["6.4.2\n", "6.4.0\n"]:
+        files = _fresh_files()
+        files[_cache("_main", "swift_version.txt")] = text
+        actual = _evaluate(files)
+        asserts.equals(env, None, actual.error)
+        for identity, pkg in actual.result.pkgs.items():
+            asserts.equals(env, "6.4", pkg.swift_version, identity)
+        versions.append(actual.result.pkgs["swift-log"].swift_version)
+
+    # Slices cached by 6.4.2 and 6.4.0 with the same bytes are identical.
+    actual = _declare([
+        _fresh("swift/macos", _MACOS, swift_version = versions[0]),
+        _fresh("swift/linux", _LINUX, swift_version = versions[1]),
+    ])
+    git = actual.calls["git"]
+    asserts.equals(env, ["swiftpkg_swift_log"], [k["name"] for k in git])
+    asserts.equals(env, [], actual.calls["aliases"])
+
+    return unittest.end(env)
+
+identical_ignores_swift_patch_version_test = unittest.make(
+    _identical_ignores_swift_patch_version_test,
 )
 
 def _v2_passes_netrc_and_read_only_test(ctx):
@@ -1108,5 +1137,6 @@ def slice_declarations_test_suite():
         fresh_slice_missing_identity_gets_missing_message_test,
         direct_deps_split_dev_test,
         identical_requires_same_swift_version_test,
+        identical_ignores_swift_patch_version_test,
         v2_passes_netrc_and_read_only_test,
     )
