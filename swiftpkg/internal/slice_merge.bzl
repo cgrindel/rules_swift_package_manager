@@ -19,8 +19,9 @@ def _merge_or_error(slice_entries):
 
     Returns:
         A `struct(error, result)`. On success, `error` is `None` and `result`
-        is the `dict` described in `slice_merge.merge`. On a kind conflict,
-        `error` is a message and `result` is `None`.
+        is the `dict` described in `slice_merge.merge`. When two fresh slices
+        disagree on an identity's kind, `error` is a message and `result` is
+        `None`. Stale slices never cause a kind conflict.
     """
     any_stale = False
     identities = {}
@@ -31,7 +32,31 @@ def _merge_or_error(slice_entries):
 
     result = {}
     for identity in sorted(identities):
+        # The kind comes from the fresh slices. A stale slice's pin may still
+        # name an older kind (e.g. a remote pin for a package that a fresh
+        # slice now has as local), so a stale entry's kind is used only when
+        # no fresh slice has the identity.
         kind = None
+        stale_kind = None
+        for se in slice_entries:
+            entry = se.pkgs.get(identity)
+            if entry == None:
+                continue
+            if se.stale:
+                if stale_kind == None:
+                    stale_kind = entry.kind
+            elif kind == None:
+                kind = entry.kind
+            elif kind != entry.kind:
+                return struct(
+                    error = """\
+Package `{identity}` has conflicting kinds across slices: `{a}` and `{b}`.\
+""".format(identity = identity, a = kind, b = entry.kind),
+                    result = None,
+                )
+        if kind == None:
+            kind = stale_kind
+
         groups = []
         groups_by_key = {}
         stale_configs = []
@@ -40,15 +65,6 @@ def _merge_or_error(slice_entries):
             entry = se.pkgs.get(identity)
             if entry != None:
                 present_count += 1
-                if kind == None:
-                    kind = entry.kind
-                elif kind != entry.kind:
-                    return struct(
-                        error = """\
-Package `{identity}` has conflicting kinds across slices: `{a}` and `{b}`.\
-""".format(identity = identity, a = kind, b = entry.kind),
-                        result = None,
-                    )
             if se.stale or entry == None:
                 stale_configs.append(se.config)
                 continue

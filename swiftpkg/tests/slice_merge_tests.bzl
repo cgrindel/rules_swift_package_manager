@@ -212,6 +212,38 @@ def _kind_conflict_fails_test(ctx):
 
 kind_conflict_fails_test = unittest.make(_kind_conflict_fails_test)
 
+def _stale_kind_conflict_is_ignored_test(ctx):
+    env = unittest.begin(ctx)
+
+    # The stale slice's live Package.resolved still pins foo remotely while
+    # the fresh slice now has it as a local package.
+    result = slice_merge_testing.merge_or_error([
+        _slice("a", {"foo": _pkg("foo@1", kind = "local")}),
+        _slice("b", {"foo": _stale_pkg("foo@1")}, stale = True),
+    ])
+
+    asserts.equals(env, None, result.error)
+    m = result.result["foo"]
+    asserts.equals(env, "local", m.kind)
+    asserts.false(env, m.identical)
+    asserts.true(env, m.any_stale)
+    asserts.equals(env, [(1, ["a"])], _group_summary(m.groups))
+    asserts.equals(env, ["b"], m.stale_configs)
+
+    # Stale first in input order: the fresh kind still wins.
+    result = slice_merge_testing.merge_or_error([
+        _slice("b", {"foo": _stale_pkg("foo@1")}, stale = True),
+        _slice("a", {"foo": _pkg("foo@1", kind = "local")}),
+    ])
+    asserts.equals(env, None, result.error)
+    asserts.equals(env, "local", result.result["foo"].kind)
+
+    return unittest.end(env)
+
+stale_kind_conflict_is_ignored_test = unittest.make(
+    _stale_kind_conflict_is_ignored_test,
+)
+
 def _repo_name_test(ctx):
     env = unittest.begin(ctx)
 
@@ -240,5 +272,6 @@ def slice_merge_test_suite(name = "slice_merge_tests"):
         identity_only_in_stale_slice_test,
         fresh_slice_lacking_identity_test,
         kind_conflict_fails_test,
+        stale_kind_conflict_is_ignored_test,
         repo_name_test,
     )
