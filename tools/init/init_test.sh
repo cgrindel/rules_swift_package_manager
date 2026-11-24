@@ -22,8 +22,8 @@ set -e
 # --- end runfiles.bash initialization v3 ---
 
 init_sh="$(rlocation "rules_swift_package_manager/tools/init/init.sh")"
-fixture="$(rlocation \
-  "rules_swift_package_manager/tools/swift_deps_tool/Tests/fixtures/inc.MODULE.bazel.empty.expected")"
+fixtures="rules_swift_package_manager/tools/swift_deps_tool/Tests/fixtures"
+fixture="$(rlocation "${fixtures}/inc.MODULE.bazel.empty.expected")"
 
 fail() {
   echo >&2 "FAIL: ${*}"
@@ -82,9 +82,10 @@ grep -qF 'include("//swift/macos:inc.MODULE.bazel")' <<<"${out}" \
   || fail "missing include line in output: ${out}"
 grep -qF 'use_repo(swift_deps, "swift_package")' <<<"${out}" \
   || fail "missing use_repo line in output"
-grep -qF \
-  'swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")' \
-  <<<"${out}" || fail "missing use_extension line in output"
+use_extension='swift_deps = use_extension('
+use_extension+='"@rules_swift_package_manager//:extensions.bzl", "swift_deps")'
+grep -qF "${use_extension}" <<<"${out}" \
+  || fail "missing use_extension line in output"
 grep -qF "Package.resolved" <<<"${out}" || fail "missing seed reminder"
 
 # Second init in the same dir is refused.
@@ -121,5 +122,68 @@ if "${init_sh}" --config //:c --swift nope/Package.swift --dir x \
   >/dev/null 2>&1; then fail "missing Package.swift accepted"; fi
 if "${init_sh}" --config //:c --swift Package.swift --dir y \
   --seed missing >/dev/null 2>&1; then fail "missing seed accepted"; fi
+
+# Runs init with the given arguments, expects it to fail, and checks that
+# stderr contains the expected message.
+assert_refused() {
+  local expected="${1}"
+  shift
+  local err
+  if err="$("${init_sh}" --config //:c "${@}" 2>&1)"; then
+    fail "init ${*} should fail"
+  fi
+  grep -qF -- "${expected}" <<<"${err}" \
+    || fail "init ${*}: expected '${expected}' in: ${err}"
+}
+
+# An existing BUILD or BUILD.bazel is never overwritten.
+mkdir -p "${ws}/has_build" "${ws}/has_build_bazel"
+echo "# client" >"${ws}/has_build/BUILD"
+echo "# client" >"${ws}/has_build_bazel/BUILD.bazel"
+assert_refused "${ws}/has_build/BUILD already exists" \
+  --swift swift/Package.swift --dir has_build
+assert_refused "${ws}/has_build_bazel/BUILD.bazel already exists" \
+  --swift swift/Package.swift --dir has_build_bazel
+[[ "$(cat "${ws}/has_build_bazel/BUILD.bazel")" == "# client" ]] \
+  || fail "client BUILD.bazel was changed"
+
+# The slice cannot be the directory that holds Package.swift.
+assert_refused "--dir must differ from the directory of --swift (swift)" \
+  --swift swift/Package.swift --dir swift
+assert_refused "--dir must differ from the directory of --swift (swift)" \
+  --swift ./swift/Package.swift --dir ./swift/
+[[ ! -e "${ws}/swift/BUILD.bazel" ]] || fail "wrote swift/BUILD.bazel"
+
+# Absolute paths, ".", ".." and empty components are rejected.
+assert_refused "--dir must not be empty or the workspace root" \
+  --swift swift/Package.swift --dir .
+assert_refused "--dir must not be empty or the workspace root" \
+  --swift swift/Package.swift --dir ./
+assert_refused "--dir must be relative to the workspace root, got /abs" \
+  --swift swift/Package.swift --dir /abs
+assert_refused "--dir must not contain '.', '..' or empty components" \
+  --swift swift/Package.swift --dir a/../b
+assert_refused "--dir must not contain '.', '..' or empty components" \
+  --swift swift/Package.swift --dir a/./b
+assert_refused "--dir must not contain '.', '..' or empty components" \
+  --swift swift/Package.swift --dir a//b
+assert_refused "--swift must be relative to the workspace root" \
+  --swift "${ws}/swift/Package.swift" --dir abs_swift
+assert_refused "--swift must not contain '.', '..' or empty components" \
+  --swift swift/../swift/Package.swift --dir dotdot_swift
+assert_refused "--seed must be relative to the workspace root" \
+  --swift swift/Package.swift --dir abs_seed --seed "${ws}/seed.resolved"
+assert_refused "--seed must not contain '.', '..' or empty components" \
+  --swift swift/Package.swift --dir dotdot_seed --seed x/../seed.resolved
+
+# A single leading "./" is stripped from every path.
+out="$("${init_sh}" --config //:c --swift ./swift/Package.swift \
+  --dir ./dotted/ --seed ./seed.resolved)"
+assert_file "${ws}/dotted/Package.resolved"
+grep -qF 'include("//dotted:inc.MODULE.bazel")' <<<"${out}" \
+  || fail "leading ./ not stripped from --dir: ${out}"
+grep -qF 'swift = "//swift:Package.swift"' "${ws}/dotted/inc.MODULE.bazel" \
+  || fail "leading ./ not stripped from --swift"
+assert_count 1 "dotted/.build" "${ws}/.bazelignore"
 
 echo "PASS"

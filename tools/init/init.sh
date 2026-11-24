@@ -47,6 +47,34 @@ while [[ ${#} -gt 0 ]]; do
 done
 [[ -n ${swift} && -n ${dir} && -n ${config} ]] || usage
 
+# Strips one leading "./" (and, for --dir, one trailing "/"), then rejects
+# absolute paths, empty paths and ".", ".." or empty components.
+normalize_path() {
+  local flag="${1}" path="${2}"
+  path="${path#./}"
+  [[ ${flag} != "--dir" ]] || path="${path%/}"
+  [[ ${path} != . ]] || path=""
+  [[ ${path} != /* ]] \
+    || die "${flag} must be relative to the workspace root, got ${2}"
+  [[ -n ${path} ]] || die "${flag} must not be empty or the workspace root"
+  local part parts
+  IFS=/ read -ra parts <<<"${path}"
+  for part in "${parts[@]}"; do
+    case "${part}" in
+      "" | . | ..)
+        die "${flag} must not contain '.', '..' or empty components, got ${2}"
+        ;;
+    esac
+  done
+  echo "${path}"
+}
+
+swift="$(normalize_path --swift "${swift}")"
+dir="$(normalize_path --dir "${dir}")"
+if [[ -n ${seed} ]]; then
+  seed="$(normalize_path --seed "${seed}")"
+fi
+
 root="${BUILD_WORKSPACE_DIRECTORY:-}"
 [[ -n ${root} ]] \
   || die "BUILD_WORKSPACE_DIRECTORY is not set; run this with bazel run."
@@ -56,13 +84,20 @@ if [[ -n ${seed} && ! -f "${root}/${seed}" ]]; then
   die "Seed not found: ${root}/${seed}"
 fi
 
-dir="${dir%/}"
 inc_path="${root}/${dir}/inc.MODULE.bazel"
 [[ ! -e ${inc_path} ]] \
   || die "${inc_path} already exists; refusing to overwrite."
+for build_name in BUILD BUILD.bazel; do
+  [[ ! -e "${root}/${dir}/${build_name}" ]] \
+    || die "${root}/${dir}/${build_name} already exists; a slice needs a" \
+      "new directory. Pick a --dir that is not a Bazel package."
+done
 
 # Label of Package.swift: //<dirname>:<basename>, or //:<basename> at the root.
 swift_pkg="$(dirname "${swift}")"
+[[ ${dir} != "${swift_pkg}" ]] \
+  || die "--dir must differ from the directory of --swift (${swift_pkg});" \
+    "the slice's Package.resolved would be the one beside Package.swift."
 [[ ${swift_pkg} != "." ]] || swift_pkg=""
 swift_label="//${swift_pkg}:$(basename "${swift}")"
 slice_pkg="//${dir}"
@@ -116,7 +151,8 @@ if ! grep -qF '"swift_deps"' "${root}/MODULE.bazel" 2>/dev/null; then
   echo
   echo "Also add (the slice file uses it):"
   echo
-  echo 'swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")'
+  printf '%s%s\n' 'swift_deps = use_extension(' \
+    '"@rules_swift_package_manager//:extensions.bzl", "swift_deps")'
   echo 'use_repo(swift_deps, "swift_package")'
 fi
 if [[ -n ${seed} ]]; then

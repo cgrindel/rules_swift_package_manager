@@ -30,6 +30,7 @@ public struct CacheStep {
   private var sliceResolved: URL { sliceURL.appendingPathComponent("Package.resolved") }
 
   private func runSteps() throws {
+    try checkSliceDir()
     try checkBazelignore()
     let flags = try SwiftPMFlags(keyValues: inv.flags, workspace: inv.workspace)
     let spm = SwiftPM(tool: inv.swiftTool, flags: flags, sliceDir: sliceURL)
@@ -38,13 +39,14 @@ public struct CacheStep {
       paths.map { inv.workspace.appendingPathComponent($0) }
     }
 
+    let hadSliceResolved = fileManager.fileExists(atPath: sliceResolved.path)
     let (remotes, locals) = try placement.withResolvedInPlace {
       () -> ([String], [(identity: String, packageSwift: URL)]) in
       switch inv.command {
       case .resolve: try spm.run(["resolve"], in: packageDir)
       case .update: try spm.run(["update"], in: packageDir)
       // Fetch any missing checkouts, failing rather than changing a pin.
-      case .cache: try spm.run(["resolve", "--force-resolved-versions"], in: packageDir)
+      case .cache: try runCache(spm: spm, hadSliceResolved: hadSliceResolved)
       }
       let rootDesc = try Manifests.write(
         package: packageDir, cacheDir: cacheDir.appendingPathComponent(Self.mainIdentity),
@@ -66,6 +68,29 @@ public struct CacheStep {
       identities: identities)
     try Data(text.utf8).write(
       to: sliceURL.appendingPathComponent("inc.MODULE.bazel"), options: .atomic)
+  }
+
+  /// `cache` never picks pins, so a slice without its own `Package.resolved` needs a `resolve`
+  /// first. Says so when SwiftPM fails, rather than only passing on SwiftPM's error.
+  private func runCache(spm: SwiftPM, hadSliceResolved: Bool) throws {
+    do {
+      try spm.run(["resolve", "--force-resolved-versions"], in: packageDir)
+    } catch var error as ToolError where !hadSliceResolved {
+      error.message =
+        "no `Package.resolved` in slice `\(inv.sliceDir)`; run "
+        + "`bazel run @swift_package//:resolve` under flags that select this slice first "
+        + "(\(error.message))"
+      throw error
+    }
+  }
+
+  /// The slice's `Package.resolved` must not be the one SwiftPM writes beside `Package.swift`.
+  private func checkSliceDir() throws {
+    guard sliceURL.standardizedFileURL.path != packageDir.standardizedFileURL.path else {
+      throw ToolError(
+        message: "the slice directory must differ from the directory of \(inv.packagePath); "
+          + "its Package.resolved would be the one SwiftPM writes beside Package.swift")
+    }
   }
 
   /// Checkouts under `.build` often ship `BUILD.bazel` files; unignored, they become packages.

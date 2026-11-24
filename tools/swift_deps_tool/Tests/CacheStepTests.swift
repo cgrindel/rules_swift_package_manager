@@ -69,12 +69,14 @@ final class CacheStepTests: XCTestCase {
     return tool
   }
 
-  private func invocation(_ command: String) throws -> Invocation {
+  private func invocation(_ command: String, slice: String = "swift/macos", tool: URL? = nil)
+    throws -> Invocation
+  {
     try Invocation.parse(
       [
-        command, "--workspace", root.path, "--swift-tool", fakeTool().path, "--target-os",
-        "macos", "--package", "pkg/Package.swift", "--slice", "swift/macos", "--slice-package",
-        "//swift/macos", "--swift-label", "//pkg:Package.swift", "--config",
+        command, "--workspace", root.path, "--swift-tool", (tool ?? fakeTool()).path,
+        "--target-os", "macos", "--package", "pkg/Package.swift", "--slice", slice,
+        "--slice-package", "//\(slice)", "--swift-label", "//pkg:Package.swift", "--config",
         "@platforms//os:macos", "--patch", "swift-log=patches/fix.patch", "--patch-args",
         "swift-log=-p1",
       ], env: [:])
@@ -170,5 +172,47 @@ final class CacheStepTests: XCTestCase {
     XCTAssertTrue(
       try read("log.txt").split(separator: "\n").first?
         .hasSuffix("resolve --force-resolved-versions") == true)
+  }
+
+  func testRefusesSliceInPackageDir() throws {
+    try makeWorkspace()
+    try write("pkg/.build\n", to: ".bazelignore")
+    for slice in ["pkg", "pkg/"] {
+      XCTAssertThrowsError(try CacheStep(invocation("resolve", slice: slice)).run()) { error in
+        let message = String(describing: error)
+        XCTAssertTrue(
+          message.contains("must differ from the directory of pkg/Package.swift"), message)
+      }
+    }
+    XCTAssertFalse(exists("log.txt"))
+  }
+
+  func testCacheWithoutSliceResolvedSaysToResolveFirst() throws {
+    try makeWorkspace()
+    let tool = try write(
+      """
+      #!/bin/sh
+      if [ "$1" = --version ]; then echo "Swift version 6.1.2 (fake)"; exit 0; fi
+      echo "error: a resolved file is required" >&2
+      exit 1
+
+      """, to: "failing_swift")
+    try fileManager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: tool.path)
+    XCTAssertThrowsError(try CacheStep(invocation("cache", tool: tool)).run()) { error in
+      let message = (error as? ToolError)?.message ?? "\(error)"
+      XCTAssertTrue(
+        message.hasPrefix(
+          "no `Package.resolved` in slice `swift/macos`; run "
+            + "`bazel run @swift_package//:resolve` under flags that select this slice first"),
+        message)
+      XCTAssertTrue(message.contains("a resolved file is required"), message)
+    }
+
+    // With a slice file, SwiftPM's error passes through unchanged.
+    try write("{}", to: "swift/macos/Package.resolved")
+    XCTAssertThrowsError(try CacheStep(invocation("cache", tool: tool)).run()) { error in
+      let message = (error as? ToolError)?.message ?? "\(error)"
+      XCTAssertEqual(message, "error: a resolved file is required", message)
+    }
   }
 }
