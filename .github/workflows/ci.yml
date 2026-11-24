@@ -9,6 +9,8 @@ name: Continuous Integration
   pull_request:
     branches:
       - main
+      - cgrindel/hermetic_repo_rule
+      - cgrindel/v2_*
   merge_group: {}
   schedule:
     - cron: 14 11 * * *

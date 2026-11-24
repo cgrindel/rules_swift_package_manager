@@ -1,0 +1,8 @@
+swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
+swift_deps.from_package(
+    config = "@platforms//os:macos",
+    swift = "//swift:Package.swift",
+    resolved = "//swift/macos:Package.resolved",
+    dump_manifests = {},
+    desc_manifests = {},
+)
