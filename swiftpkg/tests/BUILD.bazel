@@ -31,6 +31,7 @@ load(":repository_files_tests.bzl", "repository_files_test_suite")
 load(":repository_utils_tests.bzl", "repository_utils_test_suite")
 load(":resource_files_tests.bzl", "resource_files_test_suite")
 load(":semver_tests.bzl", "semver_test_suite")
+load(":slice_merge_tests.bzl", "slice_merge_test_suite")
 load(":slice_messages_tests.bzl", "slice_messages_test_suite")
 load(":slices_tests.bzl", "slices_test_suite")
 load(":spm_platforms_tests.bzl", "spm_platforms_test_suite")
@@ -101,6 +102,8 @@ resource_files_test_suite()
 bzl_selects_test_suite()
 
 semver_test_suite()
+
+slice_merge_test_suite()
 
 slice_messages_test_suite()
 

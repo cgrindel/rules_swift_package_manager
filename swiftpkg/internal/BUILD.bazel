@@ -576,6 +576,13 @@ bzl_library(
 )
 
 bzl_library(
+    name = "slice_merge",
+    srcs = ["slice_merge.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":bazel_repo_names"],
+)
+
+bzl_library(
     name = "slices",
     srcs = ["slices.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
