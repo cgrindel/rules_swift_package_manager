@@ -69,4 +69,10 @@ final class RunfilesTests: XCTestCase {
       rlocationpath: rlocationpath, env: [:], argv0: argv0, cwd: cwd)
     XCTAssertEqual(missing.standardizedFileURL.path, expected.standardizedFileURL.path)
   }
+
+  func testRootStripsRlocationpath() {
+    let resolved = URL(fileURLWithPath: "/out/cache.runfiles/rules_swift+/tools/swift")
+    XCTAssertEqual(
+      Runfiles.root(of: resolved, rlocationpath: rlocationpath).path, "/out/cache.runfiles")
+  }
 }

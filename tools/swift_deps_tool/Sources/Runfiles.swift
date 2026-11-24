@@ -22,4 +22,15 @@ public enum Runfiles {
 
     return candidates.first { FileManager.default.fileExists(atPath: $0.path) } ?? fallback
   }
+
+  /// Returns the runfiles root that `resolved` was found under: `resolved` with the
+  /// `rlocationpath` components removed.
+  public static func root(of resolved: URL, rlocationpath: String) -> URL {
+    let depth = rlocationpath.split(separator: "/").count
+    var root = resolved
+    for _ in 0..<depth {
+      root = root.deletingLastPathComponent()
+    }
+    return root
+  }
 }
