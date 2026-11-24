@@ -14,15 +14,33 @@ bzl_library(
     srcs = ["slice_declarations.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
+        ":swift_deps_common",
         "//swiftpkg/internal:bazel_repo_names",
+        "//swiftpkg/internal:bazel_target_mods",
+        "//swiftpkg/internal:local_swift_package",
         "//swiftpkg/internal:manifest_files",
         "//swiftpkg/internal:manifest_shapes",
         "//swiftpkg/internal:pkginfo_dependencies",
         "//swiftpkg/internal:pkginfos",
         "//swiftpkg/internal:repository_utils",
+        "//swiftpkg/internal:slice_merge",
         "//swiftpkg/internal:slice_messages",
         "//swiftpkg/internal:slices",
+        "//swiftpkg/internal:stale_swift_package",
         "//swiftpkg/internal:staleness",
+        "//swiftpkg/internal:swift_package",
+        "//swiftpkg/internal:swift_package_aliases",
+        "//swiftpkg/internal:swift_package_tool_repo",
+        "@bazel_skylib//lib:paths",
+    ],
+)
+
+bzl_library(
+    name = "swift_deps_common",
+    srcs = ["swift_deps_common.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        "//swiftpkg/internal:bazel_repo_names",
         "@bazel_skylib//lib:paths",
     ],
 )
@@ -33,6 +51,7 @@ bzl_library(
     visibility = ["//visibility:public"],
     deps = [
         ":slice_declarations",
+        ":swift_deps_common",
         "//swiftpkg/internal:bazel_repo_names",
         "//swiftpkg/internal:bazel_target_mods",
         "//swiftpkg/internal:local_swift_package",

@@ -6,6 +6,7 @@ load(
     "slice_declarations",
     "slice_declarations_testing",
 )
+load("//swiftpkg/internal:slice_messages.bzl", "slice_messages")
 load("//swiftpkg/internal:slices.bzl", "slices")
 load("//swiftpkg/internal:staleness.bzl", "staleness")
 load(":fake_module_ctx.bzl", "fake_module_ctx")
@@ -454,6 +455,397 @@ def _bazel_workspace_root_test(ctx):
 
 bazel_workspace_root_test = unittest.make(_bazel_workspace_root_test)
 
+# MARK: - declare
+
+_MACOS = "@@//config:macos"
+_LINUX = "@@//config:linux"
+_WINDOWS = "@@//config:windows"
+_LOG_URL = "https://github.com/apple/swift-log"
+_PACKAGE_REPOS_LABEL = "@swift_deps_package_repos//:package_repos.json"
+
+def _decl_slice(dir, config, identities, is_root = True, is_dev = False):
+    ids = ["_main"] + identities
+    return slices.new(
+        config = Label(config),
+        swift = Label("@@//app:Package.swift"),
+        resolved = Label("@@//{}:Package.resolved".format(dir)),
+        dump_manifests = {
+            i: Label("@@//{}:swift_deps_cache/{}/dump.json".format(dir, i))
+            for i in ids
+        },
+        desc_manifests = {
+            i: Label("@@//{}:swift_deps_cache/{}/desc.json".format(dir, i))
+            for i in ids
+        },
+        is_root = is_root,
+        is_dev = is_dev,
+    )
+
+def _git_dep(identity, revision, name = None):
+    return struct(
+        identity = identity,
+        name = name if name != None else identity,
+        source_control = struct(pin = struct(
+            location = "https://github.com/apple/" + identity,
+            state = struct(revision = revision, version = "1.0.0"),
+        )),
+        file_system = None,
+        registry = None,
+    )
+
+def _fresh_entry(dir, identity, revision = "aaa"):
+    dep = _git_dep(identity, revision)
+    return struct(
+        kind = "source_control",
+        pin_key = "{}@{}".format(dep.source_control.pin.location, revision),
+        dump_text = "dump-" + revision,
+        desc_text = "desc-" + revision,
+        dump_label = Label("@@//{}:swift_deps_cache/{}/dump.json".format(dir, identity)),
+        desc_label = Label("@@//{}:swift_deps_cache/{}/desc.json".format(dir, identity)),
+        local_path = None,
+        dep = dep,
+    )
+
+def _fresh(dir, config, revisions = {"swift-log": "aaa"}, direct = None, is_root = True, is_dev = False):
+    """A fresh evaluated slice. `direct` lists the root's direct deps."""
+    if direct == None:
+        direct = sorted(revisions.keys())
+    pkgs = {
+        identity: _fresh_entry(dir, identity, revision)
+        for identity, revision in revisions.items()
+    }
+    return struct(
+        slice = _decl_slice(
+            dir,
+            config,
+            sorted(revisions.keys()),
+            is_root = is_root,
+            is_dev = is_dev,
+        ),
+        stale = False,
+        reasons = [],
+        pkgs = pkgs,
+        pkg_info = struct(dependencies = [pkgs[i].dep for i in direct]),
+        module_aliases_by_id = {},
+    )
+
+def _stale(dir, config, identities = ["swift-log"], is_root = True):
+    return struct(
+        slice = _decl_slice(dir, config, identities, is_root = is_root),
+        stale = True,
+        reasons = ["changed"],
+        pkgs = {
+            identity: struct(kind = "source_control", pin_key = "x@" + identity)
+            for identity in identities
+        },
+        pkg_info = None,
+        module_aliases_by_id = {},
+    )
+
+def _inference_config():
+    return struct(
+        defaults = {"binary_target_deps": False, "system_sdk_deps": False},
+        packages = {},
+        matched_names = {},
+        available_names = {},
+    )
+
+def _config_pkg(name, patches = [], patch_args = [], publicly_expose_all_targets = False):
+    return struct(
+        name = name,
+        build_file = None,
+        target_deps = {},
+        init_submodules = False,
+        recursive_init_submodules = True,
+        patch_args = patch_args,
+        patch_cmds = [],
+        patch_cmds_win = [],
+        patch_tool = "",
+        patches = patches,
+        publicly_expose_all_targets = publicly_expose_all_targets,
+    )
+
+def _declare(evaluated, config_pkgs = {}, target_mods_by_repo = {}):
+    """Runs `declare` with fake rules.
+
+    Returns:
+        A `struct(result, calls, matched, available)`. `calls` is a `dict` of
+        rule kind to the `list` of kwargs passed to it.
+    """
+    calls = {
+        kind: []
+        for kind in ["git", "local", "aliases", "stale", "tool_repo", "package_repos"]
+    }
+
+    def _rule(kind):
+        return lambda **kwargs: calls[kind].append(kwargs)
+
+    matched = {}
+    available = {}
+    result = slice_declarations.declare(
+        fake_module_ctx.new(),
+        evaluated,
+        config_pkgs,
+        None,
+        target_mods_by_repo,
+        matched,
+        available,
+        _inference_config(),
+        package_rules = struct(**{kind: _rule(kind) for kind in calls}),
+    )
+    return struct(result = result, calls = calls, matched = matched, available = available)
+
+def _swift_version(dir):
+    return Label("@@//{}:swift_deps_cache/_main/swift_version.txt".format(dir))
+
+def _identical_declares_one_repo_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = _declare(
+        [_fresh("swift/macos", _MACOS), _fresh("swift/linux", _LINUX)],
+        target_mods_by_repo = {"swiftpkg_swift_log": []},
+    )
+    asserts.equals(env, [], actual.calls["aliases"])
+    asserts.equals(env, [], actual.calls["stale"])
+    asserts.equals(env, [], actual.calls["local"])
+    asserts.equals(
+        env,
+        [{"name": "swift_deps_package_repos", "repo_names": ["swiftpkg_swift_log"]}],
+        actual.calls["package_repos"],
+    )
+    asserts.equals(env, 1, len(actual.calls["git"]))
+    kwargs = actual.calls["git"][0]
+    asserts.equals(env, "swiftpkg_swift_log", kwargs["name"])
+    asserts.equals(env, "swiftpkg_swift_log", kwargs["bazel_package_name"])
+    asserts.equals(env, _LOG_URL, kwargs["remote"])
+    asserts.equals(env, "aaa", kwargs["commit"])
+    asserts.equals(env, "1.0.0", kwargs["version"])
+    asserts.equals(
+        env,
+        Label("@@//swift/macos:swift_deps_cache/swift-log/dump.json"),
+        kwargs["dump_manifest"],
+    )
+    asserts.equals(
+        env,
+        Label("@@//swift/macos:swift_deps_cache/swift-log/desc.json"),
+        kwargs["desc_manifest"],
+    )
+    asserts.equals(env, _swift_version("swift/macos"), kwargs["swift_version"])
+    asserts.equals(env, "swift/macos", kwargs["slice_dir"])
+    asserts.equals(env, _PACKAGE_REPOS_LABEL, kwargs["package_repos"])
+    asserts.equals(env, {}, kwargs["module_aliases"])
+    asserts.equals(env, "", kwargs["dep_module_aliases"])
+    asserts.equals(env, False, kwargs["system_sdk_deps"])
+    for v1_only in ["env", "env_inherit", "cached_json_directory", "netrc", "registries", "replace_scm_with_registry"]:
+        asserts.false(env, v1_only in kwargs, v1_only)
+    asserts.equals(env, {"swiftpkg_swift_log": True}, actual.matched)
+    asserts.equals(env, {"swiftpkg_swift_log": True}, actual.available)
+
+    return unittest.end(env)
+
+identical_declares_one_repo_test = unittest.make(_identical_declares_one_repo_test)
+
+def _two_groups_declare_hidden_repos_and_aliases_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = _declare([
+        _fresh("swift/macos", _MACOS, {"swift-log": "aaa"}),
+        _fresh("swift/linux", _LINUX, {"swift-log": "bbb"}),
+        _stale("swift/windows", _WINDOWS),
+    ])
+    git = actual.calls["git"]
+    asserts.equals(
+        env,
+        ["swiftpkg_swift_log__slice_1", "swiftpkg_swift_log__slice_2"],
+        [k["name"] for k in git],
+    )
+    asserts.equals(env, ["aaa", "bbb"], [k["commit"] for k in git])
+    asserts.equals(env, ["swift/macos", "swift/linux"], [k["slice_dir"] for k in git])
+    asserts.equals(
+        env,
+        [_swift_version("swift/macos"), _swift_version("swift/linux")],
+        [k["swift_version"] for k in git],
+    )
+    asserts.equals(
+        env,
+        [{
+            "branches": {
+                _MACOS: "swiftpkg_swift_log__slice_1",
+                _LINUX: "swiftpkg_swift_log__slice_2",
+                _WINDOWS: "",
+            },
+            "name": "swiftpkg_swift_log",
+            "stale_messages": {
+                _WINDOWS: slice_messages.stale("swift/windows", _WINDOWS),
+            },
+        }],
+        actual.calls["aliases"],
+    )
+    asserts.equals(env, [], actual.calls["stale"])
+
+    # Hidden repos are not user-visible.
+    asserts.equals(
+        env,
+        [{"name": "swift_deps_package_repos", "repo_names": ["swiftpkg_swift_log"]}],
+        actual.calls["package_repos"],
+    )
+
+    return unittest.end(env)
+
+two_groups_declare_hidden_repos_and_aliases_test = unittest.make(
+    _two_groups_declare_hidden_repos_and_aliases_test,
+)
+
+def _stale_only_declares_stale_repo_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = _declare([
+        _fresh("swift/macos", _MACOS, {}),
+        _stale("swift/linux", _LINUX, ["swift-nio"]),
+    ])
+    asserts.equals(env, [], actual.calls["git"])
+    asserts.equals(env, [], actual.calls["aliases"])
+    asserts.equals(
+        env,
+        [{
+            "message": slice_messages.stale("swift/linux", _LINUX),
+            "name": "swiftpkg_swift_nio",
+        }],
+        actual.calls["stale"],
+    )
+    asserts.equals(env, {"swiftpkg_swift_nio": True}, actual.available)
+
+    return unittest.end(env)
+
+stale_only_declares_stale_repo_test = unittest.make(
+    _stale_only_declares_stale_repo_test,
+)
+
+def _swift_package_declared_once_for_two_root_slices_test(ctx):
+    env = unittest.begin(ctx)
+
+    patch = Label("@@//patches:log.patch")
+    actual = _declare(
+        [
+            _fresh("swift/macos", _MACOS),
+            _fresh("swift/linux", _LINUX),
+            _fresh("dep/macos", _MACOS, is_root = False),
+        ],
+        config_pkgs = {
+            "swift-log": _config_pkg("swift-log", patches = [patch], patch_args = ["-p1"]),
+            "unknown": _config_pkg("unknown", patches = [Label("@@//patches:x.patch")]),
+        },
+    )
+    tool = actual.calls["tool_repo"]
+    asserts.equals(env, 1, len(tool))
+    kwargs = tool[0]
+    asserts.equals(env, "swift_package", kwargs["name"])
+    asserts.equals(env, "app/Package.swift", kwargs["package"])
+    asserts.equals(env, "app/Package.swift", kwargs["package_path"])
+    asserts.equals(env, "@@//app:Package.swift", kwargs["swift_label"])
+    asserts.equals(env, staleness.render_flags(None), kwargs["flags"])
+    asserts.equals(
+        env,
+        [
+            {"config": _MACOS, "config_value": _MACOS, "dir": "swift/macos", "package_value": "//swift/macos"},
+            {"config": _LINUX, "config_value": _LINUX, "dir": "swift/linux", "package_value": "//swift/linux"},
+        ],
+        json.decode(kwargs["slices"]),
+    )
+    asserts.equals(
+        env,
+        {"swift-log": {"args": ["-p1"], "files": [str(patch)]}},
+        json.decode(kwargs["patch_specs"]),
+    )
+    asserts.equals(env, [patch], kwargs["patch_files"])
+
+    return unittest.end(env)
+
+swift_package_declared_once_for_two_root_slices_test = unittest.make(
+    _swift_package_declared_once_for_two_root_slices_test,
+)
+
+def _non_root_slices_do_not_declare_swift_package_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = _declare([_fresh("dep/macos", _MACOS, is_root = False)])
+    asserts.equals(env, [], actual.calls["tool_repo"])
+    asserts.equals(env, 1, len(actual.calls["git"]))
+    asserts.equals(env, [], actual.result.direct)
+    asserts.equals(env, [], actual.result.direct_dev)
+
+    return unittest.end(env)
+
+non_root_slices_do_not_declare_swift_package_test = unittest.make(
+    _non_root_slices_do_not_declare_swift_package_test,
+)
+
+def _fresh_slice_missing_identity_gets_missing_message_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = _declare([
+        _fresh("swift/macos", _MACOS, {"swift-log": "aaa"}),
+        _fresh("swift/linux", _LINUX, {}),
+    ])
+    asserts.equals(
+        env,
+        ["swiftpkg_swift_log__slice_1"],
+        [k["name"] for k in actual.calls["git"]],
+    )
+    asserts.equals(
+        env,
+        [{
+            "branches": {
+                _MACOS: "swiftpkg_swift_log__slice_1",
+                _LINUX: "",
+            },
+            "name": "swiftpkg_swift_log",
+            "stale_messages": {
+                _LINUX: slice_messages.missing("swift/linux", _LINUX, "swift-log"),
+            },
+        }],
+        actual.calls["aliases"],
+    )
+
+    return unittest.end(env)
+
+fresh_slice_missing_identity_gets_missing_message_test = unittest.make(
+    _fresh_slice_missing_identity_gets_missing_message_test,
+)
+
+def _direct_deps_split_dev_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = _declare(
+        [
+            # `swift-collections` and `swift-atomics` are transitive.
+            _fresh(
+                "swift/macos",
+                _MACOS,
+                {"swift-atomics": "a", "swift-collections": "c", "swift-log": "l"},
+                direct = ["swift-log"],
+            ),
+            _fresh("swift/dev", _LINUX, {"swift-log": "l", "swift-nio": "n"}, is_dev = True),
+            _fresh("dep/macos", _WINDOWS, {"swift-argument-parser": "p"}, is_root = False),
+        ],
+        config_pkgs = {
+            "swift-collections": _config_pkg(
+                "swift-collections",
+                publicly_expose_all_targets = True,
+            ),
+        },
+    )
+    asserts.equals(
+        env,
+        ["swiftpkg_swift_collections", "swiftpkg_swift_log", "swift_package"],
+        actual.result.direct,
+    )
+    asserts.equals(env, ["swiftpkg_swift_nio"], actual.result.direct_dev)
+
+    return unittest.end(env)
+
+direct_deps_split_dev_test = unittest.make(_direct_deps_split_dev_test)
+
 # MARK: - collect
 
 def _collect_builds_slices_in_order_test(ctx):
@@ -545,4 +937,11 @@ def slice_declarations_test_suite():
         collect_builds_slices_in_order_test,
         collect_requires_config_test,
         collect_rejects_duplicate_root_configs_test,
+        identical_declares_one_repo_test,
+        two_groups_declare_hidden_repos_and_aliases_test,
+        stale_only_declares_stale_repo_test,
+        swift_package_declared_once_for_two_root_slices_test,
+        non_root_slices_do_not_declare_swift_package_test,
+        fresh_slice_missing_identity_gets_missing_message_test,
+        direct_deps_split_dev_test,
     )

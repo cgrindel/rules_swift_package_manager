@@ -14,14 +14,22 @@ same config, and a registry pin in a fresh slice.
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
+load("//swiftpkg/internal:bazel_target_mods.bzl", "bazel_target_mods")
+load("//swiftpkg/internal:local_swift_package.bzl", "local_swift_package")
 load("//swiftpkg/internal:manifest_files.bzl", "manifest_files")
 load("//swiftpkg/internal:manifest_shapes.bzl", "manifest_shapes")
 load("//swiftpkg/internal:pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
+load("//swiftpkg/internal:slice_merge.bzl", "slice_merge")
 load("//swiftpkg/internal:slice_messages.bzl", "slice_messages")
 load("//swiftpkg/internal:slices.bzl", "slices")
+load("//swiftpkg/internal:stale_swift_package.bzl", "stale_swift_package")
 load("//swiftpkg/internal:staleness.bzl", "staleness")
+load("//swiftpkg/internal:swift_package.bzl", "swift_package")
+load("//swiftpkg/internal:swift_package_aliases.bzl", "swift_package_aliases")
+load("//swiftpkg/internal:swift_package_tool_repo.bzl", "swift_package_tool_repo")
+load(":swift_deps_common.bzl", "swift_deps_common", "swift_deps_package_repos")
 
 _MAIN = "_main"
 _REGISTRY_ISSUE = "https://github.com/cgrindel/rules_swift_package_manager/issues/2699"
@@ -167,8 +175,8 @@ def _stale_pkgs(slice, resolved_map):
 
 # MARK: - Patches
 
-def _patch_files_by_identity(module_ctx, slice, config_pkgs):
-    """Maps the patch files of `configure_package` tags to identities.
+def _patch_tags_by_identity(module_ctx, slice, config_pkgs):
+    """Maps the `configure_package` tags with patches to identities.
 
     A tag's name matches, in order: an identity equal to the lowercased name,
     an identity whose repository name is the name, or a dependency name in
@@ -181,7 +189,7 @@ def _patch_files_by_identity(module_ctx, slice, config_pkgs):
         config_pkgs: A `dict` of name to `configure_package` tag.
 
     Returns:
-        A `dict` of identity to `list` of patch `Label`.
+        A `dict` of identity to `list` of tags, in sorted name order.
     """
     by_repo_name = {
         bazel_repo_names.from_identity(identity): identity
@@ -210,7 +218,26 @@ def _patch_files_by_identity(module_ctx, slice, config_pkgs):
             identity = by_dep_name.get(pkginfo_dependencies.normalize_name(name))
         if identity == None:
             continue
-        result.setdefault(identity, []).extend(tag.patches)
+        result.setdefault(identity, []).append(tag)
+    return result
+
+def _patch_files_by_identity(module_ctx, slice, config_pkgs):
+    """Maps the patch files of `configure_package` tags to identities.
+
+    See `_patch_tags_by_identity` for how a tag's name is matched.
+
+    Args:
+        module_ctx: A `module_ctx`.
+        slice: A slice from `slices.new`.
+        config_pkgs: A `dict` of name to `configure_package` tag.
+
+    Returns:
+        A `dict` of identity to `list` of patch `Label`.
+    """
+    result = {}
+    for identity, tags in _patch_tags_by_identity(module_ctx, slice, config_pkgs).items():
+        for tag in tags:
+            result.setdefault(identity, []).extend(tag.patches)
     return result
 
 # MARK: - Evaluate
@@ -543,6 +570,100 @@ def _to_merge_entry(evaluated):
 
 # MARK: - Declare
 
+_SWIFT_PACKAGE_REPO_NAME = "swift_package"
+
+_DEFAULT_RULES = struct(
+    git = swift_package,
+    local = local_swift_package,
+    aliases = swift_package_aliases,
+    stale = stale_swift_package,
+    tool_repo = swift_package_tool_repo,
+    package_repos = swift_deps_package_repos,
+)
+
+def _root_module_aliases(evaluated):
+    """The SE-0339 aliases by identity from the fresh root slices.
+
+    If the root slices disagree, the first one wins and a warning is printed.
+    """
+    result = None
+    first_dir = None
+    for e in evaluated:
+        if not e.slice.is_root or e.stale:
+            continue
+        if result == None:
+            result = e.module_aliases_by_id
+            first_dir = e.slice.dir
+        elif result != e.module_aliases_by_id:
+            # buildifier: disable=print
+            print((
+                "WARNING: the root slices declare different module aliases; " +
+                "using the aliases of slice `{}`."
+            ).format(first_dir))
+            break
+    return result if result != None else {}
+
+def _group_slice(evaluated, identity, group):
+    """The slice whose entry a merge group was built from."""
+    for e in evaluated:
+        if e.stale:
+            continue
+        entry = e.pkgs.get(identity)
+        if entry != None and entry.dump_label == group.entry.dump_label:
+            return e.slice
+    fail("No slice holds the group entry of `{}`.".format(identity))
+
+def _swift_package_kwargs(module_ctx, root_slices, config_pkgs, config_swift_package):
+    """The `swift_package_tool_repo` kwargs for the root slices."""
+    swift = root_slices[0].swift
+    for s in root_slices[1:]:
+        if s.swift != swift:
+            fail((
+                "the root slices name different `swift` labels: `{a}` " +
+                "(slice `{a_dir}`) and `{b}` (slice `{b_dir}`); all root " +
+                "slices must resolve the same `Package.swift`"
+            ).format(a = str(swift), a_dir = root_slices[0].dir, b = str(s.swift), b_dir = s.dir))
+    package = paths.join(swift.package, swift.name)
+
+    tags_by_identity = {}
+    for s in root_slices:
+        for identity, tags in _patch_tags_by_identity(module_ctx, s, config_pkgs).items():
+            known = tags_by_identity.setdefault(identity, [])
+            for tag in tags:
+                if tag not in known:
+                    known.append(tag)
+    patch_specs = {}
+    patch_files = []
+    for identity in sorted(tags_by_identity.keys()):
+        tags = tags_by_identity[identity]
+        files = []
+        for tag in tags:
+            files.extend(tag.patches)
+        patch_specs[identity] = {
+            "args": tags[0].patch_args,
+            "files": [str(f) for f in files],
+        }
+        patch_files.extend([f for f in files if f not in patch_files])
+
+    return dict(
+        name = _SWIFT_PACKAGE_REPO_NAME,
+        package = package,
+        package_path = package,
+        swift_label = str(swift),
+        slices = json.encode([
+            {
+                "config": s.config,
+                "config_value": s.config,
+                "dir": s.dir,
+                "package_value": "//" + s.dir,
+            }
+            for s in root_slices
+        ]),
+        flags = staleness.render_flags(config_swift_package),
+        patch_specs = json.encode(patch_specs),
+        patch_files = patch_files,
+    )
+
 def _declare(
         module_ctx,
         evaluated,
@@ -551,37 +672,161 @@ def _declare(
         target_mods_by_repo,
         matched_target_mod_repos,
         available_target_mod_repos,
-        inference_config):
+        inference_config,
+        package_rules = _DEFAULT_RULES):
     """Declares the repositories of the evaluated slices.
 
-    Not implemented yet (Task 3.4).
+    Per identity: one repository when every slice holds the same package;
+    otherwise one hidden repository per group plus an alias repository; and a
+    stale repository when only stale slices know the identity. The root
+    slices also get one `@swift_package`.
 
     Args:
         module_ctx: A `module_ctx`.
-        evaluated: A `list` of `slice_declarations.evaluate` results.
+        evaluated: A `list` of `slice_declarations.evaluate` results for
+            every module's slices.
         config_pkgs: A `dict` of name to `configure_package` tag.
         config_swift_package: A `configure_swift_package` tag or `None`.
-        target_mods_by_repo: See `_declare_pkgs_from_package`.
-        matched_target_mod_repos: See `_declare_pkgs_from_package`.
-        available_target_mod_repos: See `_declare_pkgs_from_package`.
-        inference_config: See `_declare_pkgs_from_package`.
+        target_mods_by_repo: A `dict` of repository name to target
+            modifications.
+        matched_target_mod_repos: A mutable `dict` recording the repository
+            names from `target_mods_by_repo` that were found.
+        available_target_mod_repos: A mutable `dict` recording every
+            user-visible repository name.
+        inference_config: Root-owned dependency inference configuration.
+        package_rules: The repository rules. Tests pass fakes.
 
     Returns:
-        A `struct(direct, direct_dev)` of repository names.
+        A `struct(direct, direct_dev)` of repository names for the root
+        module.
     """
+    merged = slice_merge.merge([_to_merge_entry(e) for e in evaluated])
+    first_by_config = {}
+    for e in evaluated:
+        first_by_config.setdefault(e.slice.config, e)
 
-    # buildifier: disable=unused-variable
-    _ignore = (
+    module_aliases_by_id = _root_module_aliases(evaluated)
+    dep_module_aliases = json.encode(module_aliases_by_id) if module_aliases_by_id else ""
+
+    # Record the user-visible names before declaring anything, as v1 does.
+    for identity, m in merged.items():
+        repo_name = bazel_repo_names.from_identity(identity)
+        available_target_mod_repos[repo_name] = True
+        if repo_name in target_mods_by_repo:
+            matched_target_mod_repos[repo_name] = True
+        deps = [g.entry.dep for g in m.groups]
+        if not deps:
+            deps = [struct(name = identity, identity = identity)]
+        swift_deps_common.record_inference_packages(inference_config, deps)
+
+    package_repos = swift_deps_common.declare_package_repos(
+        [bazel_repo_names.from_identity(identity) for identity in merged],
+        package_repos_rule = package_rules.package_repos,
+    )
+
+    def _declare_pkg(name, identity, group):
+        slice = _group_slice(evaluated, identity, group)
+        entry = group.entry
+        dep = entry.dep
+        repo_name = bazel_repo_names.from_identity(identity)
+        config_pkg = swift_deps_common.config_pkg_for(config_pkgs, dep)
+        repo = swift_deps_common.pkg_repo_kwargs(
+            name = name,
+            dep = dep,
+            config_pkg = config_pkg,
+            make_files_read_only = None,
+            local_path = entry.local_path,
+            target_deps = config_pkg.target_deps if config_pkg else {},
+            module_aliases = module_aliases_by_id.get(identity, {}),
+            dep_module_aliases = dep_module_aliases,
+            target_mods = bazel_target_mods.encode(
+                target_mods_by_repo.get(repo_name, []),
+            ),
+            package_repos = package_repos,
+            inference_settings = swift_deps_common.inference_settings(
+                inference_config,
+                dep.name,
+                repo_name,
+            ),
+        )
+        getattr(package_rules, repo.kind)(
+            dump_manifest = entry.dump_label,
+            desc_manifest = entry.desc_label,
+            swift_version = slices.cache_label(slice, _MAIN, "swift_version.txt"),
+            slice_dir = slice.dir,
+            **repo.kwargs
+        )
+
+    for identity, m in merged.items():
+        repo_name = bazel_repo_names.from_identity(identity)
+        if m.identical:
+            _declare_pkg(repo_name, identity, m.groups[0])
+            continue
+        if not m.groups:
+            stale_slice = [
+                e.slice
+                for e in evaluated
+                if e.stale and identity in e.pkgs
+            ][0]
+            package_rules.stale(
+                name = repo_name,
+                message = slice_messages.stale(stale_slice.dir, stale_slice.config),
+            )
+            continue
+        branches = {}
+        for group in m.groups:
+            group_repo = slice_merge.repo_name(identity, group.index)
+            _declare_pkg(group_repo, identity, group)
+            for config in group.configs:
+                branches.setdefault(config, group_repo)
+        stale_messages = {}
+        for config in m.stale_configs:
+            if config in branches:
+                continue
+            branches[config] = ""
+            e = first_by_config[config]
+            if e.stale:
+                stale_messages[config] = slice_messages.stale(e.slice.dir, config)
+            else:
+                stale_messages[config] = slice_messages.missing(e.slice.dir, config, identity)
+        package_rules.aliases(
+            name = repo_name,
+            branches = branches,
+            stale_messages = stale_messages,
+        )
+
+    root = [e for e in evaluated if e.slice.is_root]
+    if not root:
+        return struct(direct = [], direct_dev = [])
+
+    package_rules.tool_repo(**_swift_package_kwargs(
         module_ctx,
-        evaluated,
+        [e.slice for e in root],
         config_pkgs,
         config_swift_package,
-        target_mods_by_repo,
-        matched_target_mod_repos,
-        available_target_mod_repos,
-        inference_config,
+    ))
+
+    # As v1: the root package's direct deps, plus every package whose
+    # `configure_package` sets `publicly_expose_all_targets`. A stale slice
+    # has no package info, so all of its names count as direct.
+    direct = {}
+    direct_dev = {}
+    for e in root:
+        if e.stale:
+            identities = list(e.pkgs.keys())
+        else:
+            identities = [dep.identity for dep in e.pkg_info.dependencies]
+            for identity, entry in e.pkgs.items():
+                config_pkg = swift_deps_common.config_pkg_for(config_pkgs, entry.dep)
+                if config_pkg and config_pkg.publicly_expose_all_targets:
+                    identities.append(identity)
+        names = direct_dev if e.slice.is_dev else direct
+        for identity in identities:
+            names[bazel_repo_names.from_identity(identity)] = None
+    return struct(
+        direct = sorted(direct.keys()) + [_SWIFT_PACKAGE_REPO_NAME],
+        direct_dev = sorted([n for n in direct_dev if n not in direct]),
     )
-    fail("v2 declaration is not implemented yet")
 
 slice_declarations = struct(
     collect = _collect,
