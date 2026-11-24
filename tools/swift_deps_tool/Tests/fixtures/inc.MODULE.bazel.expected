@@ -1,0 +1,14 @@
+swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
+swift_deps.from_package(
+    config = "@platforms//os:macos",
+    swift = "//swift:Package.swift",
+    resolved = "//swift/macos:Package.resolved",
+    dump_manifests = {
+        "_main": "//swift/macos:swift_deps_cache/_main/dump.json",
+        "swift-log": "//swift/macos:swift_deps_cache/swift-log/dump.json",
+    },
+    desc_manifests = {
+        "_main": "//swift/macos:swift_deps_cache/_main/desc.json",
+        "swift-log": "//swift/macos:swift_deps_cache/swift-log/desc.json",
+    },
+)

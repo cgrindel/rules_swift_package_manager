@@ -26,10 +26,7 @@ public enum CLI {
     #endif
   }
 
-  // TODO(Task 1.6): dispatch to CacheStep.
   private static func run(_ invocation: Invocation) throws {
-    throw ToolError(
-      slice: invocation.slicePackage,
-      message: "command '\(invocation.command.rawValue)' is not implemented")
+    try CacheStep(invocation).run()
   }
 }
