@@ -2,6 +2,7 @@ load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load("//swiftpkg/internal:slice_messages.bzl", "slice_messages")
 load("//swiftpkg/internal:swift_package_stale.bzl", "swift_package_stale")
+load("//swiftpkg/internal:swift_package_tool_rule.bzl", "swift_package_tool_rule")
 load("//swiftpkg/internal:swift_version_check.bzl", "swift_version_check")
 load(":artifact_infos_tests.bzl", "artifact_infos_test_suite")
 load(":bazel_apple_platforms_tests.bzl", "bazel_apple_platforms_test_suite")
@@ -41,6 +42,7 @@ load(":swift_deps_tests.bzl", "swift_deps_test_suite")
 load(":swift_files_tests.bzl", "swift_files_test_suite")
 load(":swift_package_aliases_tests.bzl", "swift_package_aliases_test_suite")
 load(":swift_package_stale_tests.bzl", "swift_package_stale_test_suite")
+load(":swift_package_tool_args_tests.bzl", "swift_package_tool_args_test_suite")
 load(":swift_package_tool_tests.bzl", "swift_package_tool_test_suite")
 load(":swift_version_check_tests.bzl", "swift_version_check_test_suite")
 load(":swiftpkg_build_files_tests.bzl", "swiftpkg_build_files_test_suite")
@@ -133,6 +135,14 @@ swift_package_stale(
 )
 
 swift_package_stale_test_suite()
+
+swift_package_tool_rule(
+    name = "swift_package_tool_rule_fixture",
+    args = ["cache"],
+    tags = ["manual"],
+)
+
+swift_package_tool_args_test_suite()
 
 swift_version_check(
     name = "swift_version_check_fixture",

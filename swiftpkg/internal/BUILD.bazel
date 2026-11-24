@@ -614,6 +614,22 @@ bzl_library(
 )
 
 bzl_library(
+    name = "swift_package_tool_args",
+    srcs = ["swift_package_tool_args.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":slice_messages",
+        ":starlark_codegen",
+    ],
+)
+
+bzl_library(
+    name = "swift_package_tool_rule",
+    srcs = ["swift_package_tool_rule.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
     name = "swift_version_check",
     srcs = ["swift_version_check.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
