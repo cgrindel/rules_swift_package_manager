@@ -1,0 +1,15 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_toolchain_tool")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+swift_toolchain_tool(
+    name = "swift",
+    visibility = ["//visibility:public"],
+)
+
+bzlformat_pkg(name = "bzlformat")
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)
