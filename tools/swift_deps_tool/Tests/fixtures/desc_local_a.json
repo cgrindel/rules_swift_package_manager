@@ -1,0 +1,16 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "local_b",
+      "path" : "./local_b",
+      "type" : "fileSystem"
+    },
+    {
+      "identity" : "root",
+      "path" : "..",
+      "type" : "fileSystem"
+    }
+  ],
+  "name" : "LocalA",
+  "path" : "./"
+}

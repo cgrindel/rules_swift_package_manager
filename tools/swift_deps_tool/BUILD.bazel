@@ -26,6 +26,7 @@ swift_test(
     name = "tests",
     size = "small",
     srcs = glob(["Tests/*.swift"]),
+    data = glob(["Tests/fixtures/**"]),
     deps = [":SwiftDepsToolLib"],
 )
 

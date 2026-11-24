@@ -1,0 +1,16 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "local_a",
+      "path" : "./local_a",
+      "type" : "fileSystem"
+    },
+    {
+      "identity" : "swift-log",
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log"
+    }
+  ],
+  "name" : "Root",
+  "path" : "./"
+}
