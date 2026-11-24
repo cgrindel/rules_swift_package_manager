@@ -38,6 +38,7 @@ bzl_library(
         "//swiftpkg/internal:objc_resource_bundle_accessor",
         "//swiftpkg/internal:resource_bundle_accessor",
         "//swiftpkg/internal:resource_bundle_infoplist",
+        "//swiftpkg/internal:swift_package_stale",
         "//swiftpkg/internal:swift_version_check",
     ],
 )

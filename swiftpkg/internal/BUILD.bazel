@@ -564,6 +564,24 @@ bzl_library(
 )
 
 bzl_library(
+    name = "slice_messages",
+    srcs = ["slice_messages.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "stale_swift_package",
+    srcs = ["stale_swift_package.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "swift_package_stale",
+    srcs = ["swift_package_stale.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
     name = "swift_version_check",
     srcs = ["swift_version_check.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
