@@ -2,9 +2,7 @@
 
 set -o errexit -o nounset -o pipefail
 
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" > /dev/null && pwd)"
-
-# Use the Bazel binary specified by the integration test. Otherise, fall back 
+# Use the Bazel binary specified by the integration test. Otherise, fall back
 # to bazel.
 bazel="${BIT_BAZEL_BINARY:-bazel}"
 
@@ -17,6 +15,26 @@ assert_match() {
 
 # Generate Swift external deps and update build files
 "${bazel}" run //:tidy
+
+# The checked-in slice was cached on macOS. Regenerating it there must not
+# change it, and `bazel mod tidy` must find the root use_repo current. Linux
+# hosts only build and test against it.
+if [[ "$(uname)" == "Darwin" ]]; then
+  tmp="$(mktemp -d)"
+  trap 'rm -rf "${tmp}"' EXIT
+  cp -R swift_deps "${tmp}/swift_deps"
+  cp MODULE.bazel "${tmp}/MODULE.bazel"
+
+  "${bazel}" run @swift_package//:cache
+  diff -r --exclude=.build "${tmp}/swift_deps" swift_deps \
+    || (echo >&2 "The cache step changed the checked-in slice." && exit 1)
+
+  "${bazel}" mod tidy
+  diff "${tmp}/MODULE.bazel" MODULE.bazel \
+    || (echo >&2 "bazel mod tidy changed MODULE.bazel." && exit 1)
+  diff -r --exclude=.build "${tmp}/swift_deps" swift_deps \
+    || (echo >&2 "bazel mod tidy changed the slice." && exit 1)
+fi
 
 # Ensure that it builds and tests pass
 "${bazel}" test //...

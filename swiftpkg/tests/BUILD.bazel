@@ -168,6 +168,13 @@ swift_version_checks_test_suite()
 validations_test_suite()
 
 bzl_library(
+    name = "fake_module_ctx",
+    srcs = ["fake_module_ctx.bzl"],
+    visibility = ["//visibility:public"],
+    deps = ["//swiftpkg/internal:staleness"],
+)
+
+bzl_library(
     name = "slice_manifests",
     srcs = ["slice_manifests.bzl"],
     visibility = ["//visibility:public"],

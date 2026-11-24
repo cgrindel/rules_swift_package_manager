@@ -1,0 +1,174 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-argument-parser",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-argument-parser"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.8.2",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-log",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-log"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "exact" : [
+              "1.8.0"
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "MySwiftPackage",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "my-executable",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "MyExecutable"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "ArgumentParser",
+            "swift-argument-parser",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Logging",
+            "swift-log",
+            null,
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "MyLibrary",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "BUILD.bazel"
+      ],
+      "name" : "MyExecutable",
+      "packageAccess" : false,
+      "path" : "Sources/MyExecutable",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "BUILD.bazel"
+      ],
+      "name" : "MyLibrary",
+      "packageAccess" : false,
+      "path" : "Sources/MyLibrary",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "MyLibrary",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "BUILD.bazel"
+      ],
+      "name" : "MyLibraryTests",
+      "packageAccess" : false,
+      "path" : "Tests/MyLibraryTests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.7.0"
+  },
+  "traits" : [
+
+  ]
+}

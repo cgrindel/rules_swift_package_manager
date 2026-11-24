@@ -60,11 +60,11 @@ sh_test(
     srcs = ["pinned_deps_test.sh"],
     args = [
         "$(rootpath workspace/Package.swift)",
-        "$(rootpath workspace/Package.resolved)",
+        "$(rootpath workspace/swift_deps/any/Package.resolved)",
     ],
     data = [
-        "workspace/Package.resolved",
         "workspace/Package.swift",
+        "workspace/swift_deps/any/Package.resolved",
     ],
 )
 
