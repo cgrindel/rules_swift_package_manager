@@ -7,7 +7,7 @@ let package = Package(
     dependencies: [
         // Source/PrivateHeaders/Ably/ARTSRWebSocket.h is a symlink to
         // Source/SocketRocket/ARTSRWebSocket.h.
-        .package(url: "https://github.com/ably/ably-cocoa", exact: "1.2.41"),
+        .package(url: "https://github.com/ably/ably-cocoa", exact: "1.4.1"),
         // Public headers under include/ are symlinks into the package.
         .package(url: "https://github.com/ably/delta-codec-cocoa", exact: "1.3.5"),
         .package(url: "https://github.com/rvi/msgpack-objective-C", exact: "0.4.0"),
