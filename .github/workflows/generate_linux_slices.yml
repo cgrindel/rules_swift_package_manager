@@ -1,24 +1,38 @@
 name: Generate Linux slices
-# Manual-only workflow that regenerates the `swift_deps/linux` slice of child
-# workspaces. A Linux slice can only be produced by Linux SwiftPM, so a
-# maintainer on macOS runs this, downloads the artifact, and commits it:
+# Workflow that regenerates the `swift_deps/linux` slice of child workspaces.
+# A Linux slice can only be produced by Linux SwiftPM, so a maintainer on macOS
+# runs this, downloads the artifact, and commits it.
+#
+# Dispatch (only works once this file is on the default branch):
 #
 #   gh workflow run generate_linux_slices.yml --ref <branch> \
 #     -f dirs="examples/multi_slice"
-#   gh run download <run id> --name linux-slices
+#
+# Push marker (works from `cgrindel/v2_*` branches before the file reaches the
+# default branch). A push runs the job only when the head commit message
+# contains `[linux-slices]`, and regenerates every workspace that has a
+# `swift_deps/linux/inc.MODULE.bazel`:
+#
+#   git commit --allow-empty -m "chore: regenerate Linux slices [linux-slices]" && git push
+#   gh run list --workflow generate_linux_slices.yml
+#   gh run download <id> --name linux-slices
 #   tar -xzf linux-slices.tgz   # at the repo root
 "on":
+  push:
+    branches:
+      - "cgrindel/v2_*"
   workflow_dispatch:
     inputs:
       dirs:
         description: >-
-          Space-separated child workspace directories, relative to the repo root, whose `swift_deps/linux` slice to regenerate.
+          Space-separated child workspace directories, relative to the repo root, whose `swift_deps/linux` slice to regenerate. Empty means every workspace with a `swift_deps/linux/inc.MODULE.bazel`.
         default: examples/multi_slice
-        required: true
+        required: false
 permissions:
   contents: read
 jobs:
   generate:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[linux-slices]')
     runs-on: ubuntu-22.04
     env:
       CC: clang
@@ -31,10 +45,19 @@ jobs:
         shell: bash
         # Dispatch inputs reach the shell through `env`, never through `${{ }}`
         # interpolation, which would splice untrusted text into the script.
+        # `DIRS` is empty on push; discover the workspaces in that case.
         env:
           DIRS: ${{ inputs.dirs }}
         run: |
           set -o errexit -o nounset -o pipefail
+          if [[ -z "${DIRS// /}" ]]; then
+            DIRS="$(find . -path '*/swift_deps/linux/inc.MODULE.bazel' -not -path './bazel-*' \
+              | sed 's#/swift_deps/linux/inc.MODULE.bazel##; s#^\./##' | sort | tr '\n' ' ')"
+          fi
+          if [[ -z "${DIRS// /}" ]]; then
+            echo >&2 "No workspaces with swift_deps/linux/inc.MODULE.bazel found."
+            exit 1
+          fi
           read -r -a dirs <<<"${DIRS}"
           for dir in "${dirs[@]}"; do
             echo "::group::${dir}"
