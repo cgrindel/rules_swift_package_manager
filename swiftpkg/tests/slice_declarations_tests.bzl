@@ -415,6 +415,26 @@ def _patch_files_by_identity_test(ctx):
 
 patch_files_by_identity_test = unittest.make(_patch_files_by_identity_test)
 
+def _bootstrap_slice_with_unknown_patch_is_stale_test(ctx):
+    env = unittest.begin(ctx)
+
+    # `init` wrote empty manifest dicts. A patched `configure_package` whose
+    # name matches no identity must not stop evaluation; `cache` has to run.
+    patch = Label("@@//patches:unknown.patch")
+    actual = _evaluate(
+        {"/ws/app/Package.swift": "// MyPkg"},
+        slice = _new_slice(identities = []),
+        config_pkgs = {"unknown": struct(name = "unknown", patches = [patch])},
+    )
+    asserts.equals(env, None, actual.error)
+    asserts.true(env, actual.result.stale)
+
+    return unittest.end(env)
+
+bootstrap_slice_with_unknown_patch_is_stale_test = unittest.make(
+    _bootstrap_slice_with_unknown_patch_is_stale_test,
+)
+
 def _stale_warning_and_merge_entry_test(ctx):
     env = unittest.begin(ctx)
 
@@ -1019,7 +1039,7 @@ def _collect_requires_config_test(ctx):
     asserts.equals(
         env,
         "from_package `@@//:Package.swift` (slice `swift/macos`): `config` " +
-        "is required when `dump_manifests` is set",
+        "is required when `config` or `dump_manifests` is set",
         actual.error,
     )
 
@@ -1073,6 +1093,7 @@ def slice_declarations_test_suite():
         registry_pin_fails_with_2699_test,
         no_resolved_file_means_no_pins_test,
         patch_files_by_identity_test,
+        bootstrap_slice_with_unknown_patch_is_stale_test,
         stale_warning_and_merge_entry_test,
         bazel_workspace_root_test,
         collect_builds_slices_in_order_test,

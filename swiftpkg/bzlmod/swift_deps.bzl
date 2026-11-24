@@ -832,8 +832,12 @@ _from_package_tag = tag_class(
             "cached_json_directory": attr.string(),
             "config": attr.label(
                 doc = """\
-v2: the `swift_deps_config` target that lists the slices. Required when \
-`dump_manifests` is set.\
+v2: the label that selects this slice, anything `select()` accepts (e.g. \
+`@rules_swift_package_manager//config:any`). Setting it or `dump_manifests` \
+selects v2 mode: `config` becomes required, and the v1 attributes \
+`cached_json_directory`, `declare_swift_deps_info`, `env`, `env_inherit` and \
+`resolve_transitive_local_dependencies` are ignored. In v2 mode, \
+`configure_package` patches may only be files in the root module.\
 """,
             ),
             "declare_swift_deps_info": attr.bool(
@@ -872,10 +876,7 @@ manifest for this slice. Read only when `dump_manifests` is set.\
 v2: maps a package identity (`_main` for the root package, e.g. \
 `swift-log` for a dependency) to its checked-in `swift package dump-package` \
 manifest for this slice. Declare one `from_package` tag per slice; the slice \
-directory is the Bazel package of `resolved`. Setting it or `config` selects v2 mode: `config` becomes required, and the v1 \
-attributes `cached_json_directory`, `declare_swift_deps_info`, `env`, \
-`env_inherit` and `resolve_transitive_local_dependencies` are ignored. In v2 \
-mode, `configure_package` patches may only be files in the root module.\
+directory is the Bazel package of `resolved`. See `config` for v2 mode.\
 """,
             ),
             "env": attr.string_dict(

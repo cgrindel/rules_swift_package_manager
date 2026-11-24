@@ -1,8 +1,8 @@
 """Collects and evaluates the v2 slices of the `swift_deps` extension.
 
-A v2 `from_package` tag (one with `config` or `dump_manifests`) describes one slice: one
-resolution of a `Package.swift` for one config. `collect` turns the tags into
-slices. `evaluate` decides whether a slice's `swift_deps_cache` is fresh and
+A v2 `from_package` tag (one with `config` or `dump_manifests`) describes
+one slice: one resolution of a `Package.swift` for one config. `collect` turns
+the tags into slices. `evaluate` decides whether a slice's `swift_deps_cache` is fresh and
 lists the packages it contributes.
 
 Extension evaluation is all or nothing, so nothing here calls `fail()` for a
@@ -65,7 +65,7 @@ def _collect_or_error(modules, is_dev_dependency):
                 if getattr(tag, attr) == None:
                     return _error((
                         "from_package `{swift}`{where}: `{attr}` is required " +
-                        "when `dump_manifests` is set"
+                        "when `config` or `dump_manifests` is set"
                     ).format(
                         swift = str(tag.swift),
                         where = (
@@ -216,13 +216,16 @@ def _patch_tags_by_identity(module_ctx, slice, config_pkgs):
             identity = by_repo_name[name]
         else:
             if by_dep_name == None:
-                dump = manifest_files.read_json(
-                    module_ctx,
-                    slice.dump_manifests[_MAIN],
-                )
                 by_dep_name = {}
-                if type(dump) == "dict":
-                    by_dep_name = pkginfos.dependency_identity_by_name(dump)
+
+                # A slice that `init` just wrote lists no manifests yet.
+                if _MAIN in slice.dump_manifests:
+                    dump = manifest_files.read_json(
+                        module_ctx,
+                        slice.dump_manifests[_MAIN],
+                    )
+                    if type(dump) == "dict":
+                        by_dep_name = pkginfos.dependency_identity_by_name(dump)
             identity = by_dep_name.get(pkginfo_dependencies.normalize_name(name))
         if identity == None:
             continue
