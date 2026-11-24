@@ -221,17 +221,11 @@ def _get(
 
     # Ensure package and local dependency paths are absolute even if the
     # parsed JSON has been normalized to relative paths for cache portability.
-    pkg_path = desc_manifest["path"]
-    if not paths.is_absolute(pkg_path):
-        pkg_path = paths.normalize(paths.join(directory, pkg_path))
-        desc_manifest["path"] = pkg_path
-
-    for dep_map in desc_manifest.get("dependencies", []):
-        if dep_map.get("type") != "fileSystem":
-            continue
-        dep_path = dep_map["path"]
-        if not paths.is_absolute(dep_path):
-            dep_map["path"] = paths.normalize(paths.join(pkg_path, dep_path))
+    desc_manifest = _absolutize_manifest_paths(
+        desc_manifest,
+        directory = directory,
+        source_directory = directory,
+    )
 
     pkg_info = _new_from_parsed_json(
         repository_ctx = repository_ctx,
@@ -247,6 +241,92 @@ def _get(
     repository_ctx.file("pkg_info.json", content = json_str, executable = False)
 
     return pkg_info
+
+def _absolutize_manifest_paths(desc_manifest, directory, source_directory):
+    """Returns a copy of the describe manifest with absolute paths.
+
+    The package path is resolved against `directory`. Relative `fileSystem`
+    dependency paths are resolved against `source_directory`. Absolute paths
+    are left unchanged. The input `dict` is not mutated.
+
+    Args:
+        desc_manifest: A `dict` representing the parsed JSON from `swift
+            package describe`.
+        directory: The directory where the package's files live as a
+            `string`.
+        source_directory: The package's original directory as a `string`.
+            Relative local dependency paths are relative to it.
+
+    Returns:
+        A new `dict` with absolute package and local dependency paths.
+    """
+    result = dict(desc_manifest)
+    pkg_path = result["path"]
+    if not paths.is_absolute(pkg_path):
+        result["path"] = paths.normalize(paths.join(directory, pkg_path))
+
+    deps = []
+    for dep_map in result.get("dependencies", []):
+        if dep_map.get("type") == "fileSystem":
+            dep_path = dep_map["path"]
+            if not paths.is_absolute(dep_path):
+                dep_map = dict(dep_map)
+                dep_map["path"] = paths.normalize(
+                    paths.join(source_directory, dep_path),
+                )
+        deps.append(dep_map)
+    if "dependencies" in result:
+        result["dependencies"] = deps
+    return result
+
+def _new_from_manifests(
+        repository_ctx,
+        directory,
+        dump_manifest,
+        desc_manifest,
+        resolved_pkg_map = None,
+        collect_src_info = True,
+        source_directory = None):
+    """Returns the package information from cached manifest JSON.
+
+    The manifests are the decoded `dump.json` and `desc.json` written by the
+    cache tool. Their package path is `./` and local dependency paths are
+    relative to the package root. This re-absolutizes them before parsing.
+
+    Args:
+        repository_ctx: A `repository_ctx`.
+        directory: The directory where the package's files live for this
+            reader as a `string` (e.g. the repository directory).
+        dump_manifest: A `dict` representing the parsed JSON from `swift
+            package dump-package`.
+        desc_manifest: A `dict` representing the parsed JSON from `swift
+            package describe`. It is not mutated.
+        resolved_pkg_map: Optional. A `dict` of representing the
+            `Package.resolved` JSON.
+        collect_src_info: Optional. A `bool` specifying whether source
+            information should be collected for the package.
+        source_directory: Optional. The package's original directory in the
+            client's tree as a `string`. Relative local dependency paths are
+            resolved against it. Defaults to `directory`.
+
+    Returns:
+        A `struct` representing the package information as returned by
+        `pkginfos.new()`.
+    """
+    if source_directory == None:
+        source_directory = directory
+    desc_manifest = _absolutize_manifest_paths(
+        desc_manifest,
+        directory = directory,
+        source_directory = source_directory,
+    )
+    return _new_from_parsed_json(
+        repository_ctx = repository_ctx,
+        dump_manifest = dump_manifest,
+        desc_manifest = desc_manifest,
+        collect_src_info = collect_src_info,
+        resolved_pkg_map = resolved_pkg_map,
+    )
 
 def _new_dependency_from_desc_json_map(dep_names_by_id, dep_map, resolved_dep_map = None):
     identity = dep_map["identity"]
@@ -2130,6 +2210,7 @@ pkginfos = struct(
     new_dependency = _new_dependency,
     new_dependency_requirement = _new_dependency_requirement,
     new_file_system = _new_file_system,
+    new_from_manifests = _new_from_manifests,
     new_from_parsed_json = _new_from_parsed_json,
     new_library_type = _new_library_type,
     new_linker_settings = _new_linker_settings,
