@@ -129,15 +129,17 @@ def _pkg_repo_kwargs(
         inference_settings):
     """Builds the package repository kwargs that v1 and v2 share.
 
-    The v1-only attributes (`env`, `env_inherit`, `cached_json_directory`,
-    `netrc`, `registries`, `replace_scm_with_registry`, `resolved`) are added
-    by the v1 caller. The v2-only attributes are added by the v2 caller.
+    The caller adds the rest. v1 adds `env`, `env_inherit`,
+    `cached_json_directory`, `registries`, `replace_scm_with_registry`,
+    `resolved`, and `netrc`. v2 adds the cached-manifest attributes and
+    `netrc`.
 
     Args:
         name: The repository name.
         dep: A `pkginfos.new_dependency` struct.
         config_pkg: The `configure_package` tag or `None`.
-        make_files_read_only: The `from_package` setting, or `None`.
+        make_files_read_only: The `from_package` setting. Only `git` and
+            `registry` repositories take it.
         local_path: For a local dep, the path to store in the repository
             (workspace-relative when possible). Ignored otherwise.
         target_deps: The `target_deps` of the `configure_package` tag.

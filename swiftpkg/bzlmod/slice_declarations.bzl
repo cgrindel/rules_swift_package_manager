@@ -12,6 +12,7 @@ without `config` or `resolved`, an inconsistent tag, two root slices with the
 same config, and a registry pin in a fresh slice.
 """
 
+load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
 load("//swiftpkg/internal:bazel_target_mods.bzl", "bazel_target_mods")
@@ -80,6 +81,8 @@ def _collect_or_error(modules, is_dev_dependency):
                 desc_manifests = tag.desc_manifests,
                 is_root = mod.is_root,
                 is_dev = is_dev_dependency(tag),
+                netrc = tag.netrc,
+                make_files_read_only = tag.make_files_read_only,
             )
             err = slices.validate(slice)
             if err != None:
@@ -162,15 +165,20 @@ def _stale_pkgs(slice, resolved_map):
         resolved_map: The decoded live `Package.resolved`, or `None`.
 
     Returns:
-        A `dict` of identity to `struct(kind, pin_key)`.
+        A `dict` of identity to `struct(kind, pin_key, swift_version)`, with
+        `swift_version = None`.
     """
     pkgs = {
-        identity: struct(kind = "unknown", pin_key = None)
+        identity: struct(kind = "unknown", pin_key = None, swift_version = None)
         for identity in slice.identities
         if identity != _MAIN
     }
     for pin in _pins(resolved_map):
-        pkgs[pin.identity] = struct(kind = _pin_kind(pin), pin_key = _pin_key(pin))
+        pkgs[pin.identity] = struct(
+            kind = _pin_kind(pin),
+            pin_key = _pin_key(pin),
+            swift_version = None,
+        )
     return pkgs
 
 # MARK: - Patches
@@ -374,6 +382,15 @@ def _fresh_pkgs(module_ctx, slice, directory, bazel_workspace_root, resolved_map
     if to_process:
         fail("Expected no more items to process, but found some.")
 
+    # Part of the grouping key: one repository serves only slices cached with
+    # the same Swift version. It is a staleness input, so it exists here.
+    swift_version = manifest_files.read_text(
+        module_ctx,
+        slices.cache_label(slice, _MAIN, "swift_version.txt"),
+    )
+    if swift_version != None:
+        swift_version = swift_version.strip()
+
     reasons = []
     pkgs = {}
     for identity in sorted(all_deps_by_id.keys()):
@@ -408,6 +425,7 @@ def _fresh_pkgs(module_ctx, slice, directory, bazel_workspace_root, resolved_map
             desc_label = m.desc.label,
             local_path = local_path,
             dep = dep,
+            swift_version = swift_version,
         )
     return struct(reasons = reasons, pkgs = pkgs, pkg_info = pkg_info)
 
@@ -528,9 +546,11 @@ def _evaluate(module_ctx, slice, config_swift_package, config_pkgs):
         - `reasons`: a `list` of `string`, empty when fresh.
         - `pkgs`: a `dict` of identity (never `_main`) to an entry. A fresh
           entry is `struct(kind, pin_key, dump_text, desc_text, dump_label,
-          desc_label, local_path, dep)`, where `kind` is `source_control` or
-          `local` and `dep` is the `pkginfos.new_dependency` struct. A stale
-          entry is `struct(kind, pin_key)`, where `kind` is `source_control`,
+          desc_label, local_path, dep, swift_version)`, where `kind` is
+          `source_control` or `local`, `dep` is the `pkginfos.new_dependency`
+          struct, and `swift_version` is the trimmed text of the slice's
+          `_main/swift_version.txt`. A stale entry is
+          `struct(kind, pin_key, swift_version = None)`, where `kind` is `source_control`,
           `registry`, or `unknown`, and `pin_key` is `None` for `unknown`.
         - `pkg_info`: the root package info, or `None` when stale.
         - `module_aliases_by_id`: the root's SE-0339 aliases by identity, or
@@ -613,8 +633,41 @@ def _group_slice(evaluated, identity, group):
             return e.slice
     fail("No slice holds the group entry of `{}`.".format(identity))
 
-def _swift_package_kwargs(module_ctx, root_slices, config_pkgs, config_swift_package):
-    """The `swift_package_tool_repo` kwargs for the root slices."""
+def _patch_tags_for_tool(module_ctx, root, config_pkgs):
+    """The `configure_package` tag with patches for each root identity.
+
+    The tag is the one the package repository applies: `config_pkg_for` on
+    the dependency of the first fresh root slice that has it. An identity that
+    only stale root slices know falls back to the first tag that
+    `_patch_tags_by_identity` matches.
+
+    Returns:
+        A `dict` of identity to tag, for tags with patches.
+    """
+    result = {}
+    seen = {}
+    for e in root:
+        if e.stale:
+            continue
+        for identity in sorted(e.pkgs.keys()):
+            if identity in seen:
+                continue
+            seen[identity] = None
+            tag = swift_deps_common.config_pkg_for(config_pkgs, e.pkgs[identity].dep)
+            if tag and tag.patches:
+                result[identity] = tag
+    for e in root:
+        tags_by_identity = _patch_tags_by_identity(module_ctx, e.slice, config_pkgs)
+        for identity in sorted(tags_by_identity.keys()):
+            if identity in seen:
+                continue
+            seen[identity] = None
+            result[identity] = tags_by_identity[identity][0]
+    return result
+
+def _swift_package_kwargs(module_ctx, root, config_pkgs, config_swift_package):
+    """The `swift_package_tool_repo` kwargs for the evaluated root slices."""
+    root_slices = [e.slice for e in root]
     swift = root_slices[0].swift
     for s in root_slices[1:]:
         if s.swift != swift:
@@ -625,22 +678,17 @@ def _swift_package_kwargs(module_ctx, root_slices, config_pkgs, config_swift_pac
             ).format(a = str(swift), a_dir = root_slices[0].dir, b = str(s.swift), b_dir = s.dir))
     package = paths.join(swift.package, swift.name)
 
-    tags_by_identity = {}
-    for s in root_slices:
-        for identity, tags in _patch_tags_by_identity(module_ctx, s, config_pkgs).items():
-            known = tags_by_identity.setdefault(identity, [])
-            for tag in tags:
-                if tag not in known:
-                    known.append(tag)
+    tag_by_identity = _patch_tags_for_tool(module_ctx, root, config_pkgs)
     patch_specs = {}
     patch_files = []
-    for identity in sorted(tags_by_identity.keys()):
-        tags = tags_by_identity[identity]
+    for identity in sorted(tag_by_identity.keys()):
+        tag = tag_by_identity[identity]
         files = []
-        for tag in tags:
-            files.extend(tag.patches)
+        for f in tag.patches:
+            if f not in files:
+                files.append(f)
         patch_specs[identity] = {
-            "args": tags[0].patch_args,
+            "args": tag.patch_args,
             "files": [str(f) for f in files],
         }
         patch_files.extend([f for f in files if f not in patch_files])
@@ -734,7 +782,7 @@ def _declare(
             name = name,
             dep = dep,
             config_pkg = config_pkg,
-            make_files_read_only = None,
+            make_files_read_only = slice.make_files_read_only,
             local_path = entry.local_path,
             target_deps = config_pkg.target_deps if config_pkg else {},
             module_aliases = module_aliases_by_id.get(identity, {}),
@@ -749,12 +797,16 @@ def _declare(
                 repo_name,
             ),
         )
+        v2_kwargs = {}
+        if repo.kind == "git":
+            # Binary artifacts download with the slice tag's `.netrc`.
+            v2_kwargs["netrc"] = slice.netrc
         getattr(package_rules, repo.kind)(
             dump_manifest = entry.dump_label,
             desc_manifest = entry.desc_label,
             swift_version = slices.cache_label(slice, _MAIN, "swift_version.txt"),
             slice_dir = slice.dir,
-            **repo.kwargs
+            **dicts.add(repo.kwargs, v2_kwargs)
         )
 
     for identity, m in merged.items():
@@ -801,7 +853,7 @@ def _declare(
 
     package_rules.tool_repo(**_swift_package_kwargs(
         module_ctx,
-        [e.slice for e in root],
+        root,
         config_pkgs,
         config_swift_package,
     ))

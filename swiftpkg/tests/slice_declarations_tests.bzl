@@ -100,7 +100,9 @@ def _tag(
         config = Label("@@//config:macos"),
         dump_ids = ["_main"],
         desc_ids = None,
-        is_dev = False):
+        is_dev = False,
+        netrc = None,
+        make_files_read_only = False):
     if desc_ids == None:
         desc_ids = dump_ids
     return struct(
@@ -116,6 +118,8 @@ def _tag(
             for i in desc_ids
         },
         is_dev = is_dev,
+        netrc = netrc,
+        make_files_read_only = make_files_read_only,
     )
 
 def _module(tags, is_root = True):
@@ -161,6 +165,8 @@ def _fresh_slice_lists_all_identities_test(ctx):
     asserts.equals(env, LOCAL_PKG_DESC_JSON, local.desc_text)
     asserts.equals(env, "local_pkg", local.dep.name)
     asserts.equals(env, "/ws/local_pkg", local.dep.file_system.path)
+    for identity in ev.pkgs:
+        asserts.equals(env, "6.0", ev.pkgs[identity].swift_version, identity)
 
     leaf = ev.pkgs["leaf_pkg"]
     asserts.equals(env, "local", leaf.kind)
@@ -463,7 +469,7 @@ _WINDOWS = "@@//config:windows"
 _LOG_URL = "https://github.com/apple/swift-log"
 _PACKAGE_REPOS_LABEL = "@swift_deps_package_repos//:package_repos.json"
 
-def _decl_slice(dir, config, identities, is_root = True, is_dev = False):
+def _decl_slice(dir, config, identities, is_root = True, is_dev = False, netrc = None, make_files_read_only = False):
     ids = ["_main"] + identities
     return slices.new(
         config = Label(config),
@@ -479,6 +485,8 @@ def _decl_slice(dir, config, identities, is_root = True, is_dev = False):
         },
         is_root = is_root,
         is_dev = is_dev,
+        netrc = netrc,
+        make_files_read_only = make_files_read_only,
     )
 
 def _git_dep(identity, revision, name = None):
@@ -493,7 +501,7 @@ def _git_dep(identity, revision, name = None):
         registry = None,
     )
 
-def _fresh_entry(dir, identity, revision = "aaa"):
+def _fresh_entry(dir, identity, revision = "aaa", swift_version = "6.0"):
     dep = _git_dep(identity, revision)
     return struct(
         kind = "source_control",
@@ -504,23 +512,37 @@ def _fresh_entry(dir, identity, revision = "aaa"):
         desc_label = Label("@@//{}:swift_deps_cache/{}/desc.json".format(dir, identity)),
         local_path = None,
         dep = dep,
+        swift_version = swift_version,
     )
 
-def _fresh(dir, config, revisions = {"swift-log": "aaa"}, direct = None, is_root = True, is_dev = False):
+def _fresh(
+        dir,
+        config,
+        revisions = {"swift-log": "aaa"},
+        direct = None,
+        is_root = True,
+        is_dev = False,
+        swift_version = "6.0",
+        netrc = None,
+        make_files_read_only = False,
+        extra_pkgs = {}):
     """A fresh evaluated slice. `direct` lists the root's direct deps."""
     if direct == None:
         direct = sorted(revisions.keys())
     pkgs = {
-        identity: _fresh_entry(dir, identity, revision)
+        identity: _fresh_entry(dir, identity, revision, swift_version)
         for identity, revision in revisions.items()
     }
+    pkgs.update(extra_pkgs)
     return struct(
         slice = _decl_slice(
             dir,
             config,
-            sorted(revisions.keys()),
+            sorted(pkgs.keys()),
             is_root = is_root,
             is_dev = is_dev,
+            netrc = netrc,
+            make_files_read_only = make_files_read_only,
         ),
         stale = False,
         reasons = [],
@@ -535,7 +557,11 @@ def _stale(dir, config, identities = ["swift-log"], is_root = True):
         stale = True,
         reasons = ["changed"],
         pkgs = {
-            identity: struct(kind = "source_control", pin_key = "x@" + identity)
+            identity: struct(
+                kind = "source_control",
+                pin_key = "x@" + identity,
+                swift_version = None,
+            )
             for identity in identities
         },
         pkg_info = None,
@@ -636,7 +662,7 @@ def _identical_declares_one_repo_test(ctx):
     asserts.equals(env, {}, kwargs["module_aliases"])
     asserts.equals(env, "", kwargs["dep_module_aliases"])
     asserts.equals(env, False, kwargs["system_sdk_deps"])
-    for v1_only in ["env", "env_inherit", "cached_json_directory", "netrc", "registries", "replace_scm_with_registry"]:
+    for v1_only in ["env", "env_inherit", "cached_json_directory", "registries", "replace_scm_with_registry"]:
         asserts.false(env, v1_only in kwargs, v1_only)
     asserts.equals(env, {"swiftpkg_swift_log": True}, actual.matched)
     asserts.equals(env, {"swiftpkg_swift_log": True}, actual.available)
@@ -732,7 +758,14 @@ def _swift_package_declared_once_for_two_root_slices_test(ctx):
             _fresh("dep/macos", _MACOS, is_root = False),
         ],
         config_pkgs = {
-            "swift-log": _config_pkg("swift-log", patches = [patch], patch_args = ["-p1"]),
+            # The same patch twice is listed once.
+            "swift-log": _config_pkg("swift-log", patches = [patch, patch], patch_args = ["-p1"]),
+            # The package repo applies only the `swift-log` tag, so the tool
+            # does too.
+            "swiftpkg_swift_log": _config_pkg(
+                "swiftpkg_swift_log",
+                patches = [Label("@@//patches:other.patch")],
+            ),
             "unknown": _config_pkg("unknown", patches = [Label("@@//patches:x.patch")]),
         },
     )
@@ -846,6 +879,92 @@ def _direct_deps_split_dev_test(ctx):
 
 direct_deps_split_dev_test = unittest.make(_direct_deps_split_dev_test)
 
+def _identical_requires_same_swift_version_test(ctx):
+    env = unittest.begin(ctx)
+
+    # Same pin and manifest bytes, cached with different Swift versions.
+    actual = _declare([
+        _fresh("swift/macos", _MACOS, swift_version = "6.2"),
+        _fresh("swift/linux", _LINUX, swift_version = "6.1"),
+    ])
+    git = actual.calls["git"]
+    asserts.equals(
+        env,
+        ["swiftpkg_swift_log__slice_1", "swiftpkg_swift_log__slice_2"],
+        [k["name"] for k in git],
+    )
+    asserts.equals(
+        env,
+        [_swift_version("swift/macos"), _swift_version("swift/linux")],
+        [k["swift_version"] for k in git],
+    )
+    asserts.equals(
+        env,
+        [{
+            "branches": {
+                _LINUX: "swiftpkg_swift_log__slice_2",
+                _MACOS: "swiftpkg_swift_log__slice_1",
+            },
+            "name": "swiftpkg_swift_log",
+            "stale_messages": {},
+        }],
+        actual.calls["aliases"],
+    )
+
+    return unittest.end(env)
+
+identical_requires_same_swift_version_test = unittest.make(
+    _identical_requires_same_swift_version_test,
+)
+
+def _v2_passes_netrc_and_read_only_test(ctx):
+    env = unittest.begin(ctx)
+
+    netrc = Label("@@//:.netrc")
+    local = struct(
+        kind = "local",
+        pin_key = "path:local_pkg",
+        dump_text = "dump",
+        desc_text = "desc",
+        dump_label = Label("@@//swift/macos:swift_deps_cache/local_pkg/dump.json"),
+        desc_label = Label("@@//swift/macos:swift_deps_cache/local_pkg/desc.json"),
+        local_path = "local_pkg",
+        dep = struct(
+            identity = "local_pkg",
+            name = "local_pkg",
+            source_control = None,
+            file_system = struct(path = "/ws/local_pkg"),
+            registry = None,
+        ),
+        swift_version = "6.0",
+    )
+    actual = _declare([
+        _fresh(
+            "swift/macos",
+            _MACOS,
+            netrc = netrc,
+            make_files_read_only = True,
+            extra_pkgs = {"local_pkg": local},
+        ),
+    ])
+    git = actual.calls["git"]
+    asserts.equals(env, 1, len(git))
+    asserts.equals(env, netrc, git[0]["netrc"])
+    asserts.equals(env, True, git[0]["make_files_read_only"])
+
+    # `local_swift_package` has neither attribute.
+    local_calls = actual.calls["local"]
+    asserts.equals(env, 1, len(local_calls))
+    asserts.equals(env, "local_pkg", local_calls[0]["path"])
+    asserts.false(env, "netrc" in local_calls[0])
+    asserts.false(env, "make_files_read_only" in local_calls[0])
+
+    return unittest.end(env)
+
+v2_passes_netrc_and_read_only_test = unittest.make(
+    _v2_passes_netrc_and_read_only_test,
+)
+
 # MARK: - collect
 
 def _collect_builds_slices_in_order_test(ctx):
@@ -853,7 +972,11 @@ def _collect_builds_slices_in_order_test(ctx):
 
     v1 = _tag(dump_ids = [])
     actual = _collect([
-        _module([_tag(), v1, _tag(dir = "swift/linux", config = Label("@@//config:linux"), is_dev = True)]),
+        _module([
+            _tag(netrc = Label("@@//:.netrc"), make_files_read_only = True),
+            v1,
+            _tag(dir = "swift/linux", config = Label("@@//config:linux"), is_dev = True),
+        ]),
         _module([_tag(dir = "dep/macos")], is_root = False),
     ])
     asserts.equals(env, None, actual.error)
@@ -864,6 +987,8 @@ def _collect_builds_slices_in_order_test(ctx):
     )
     asserts.equals(env, [True, True, False], [s.is_root for s in actual.result])
     asserts.equals(env, [False, True, False], [s.is_dev for s in actual.result])
+    asserts.equals(env, [Label("@@//:.netrc"), None, None], [s.netrc for s in actual.result])
+    asserts.equals(env, [True, False, False], [s.make_files_read_only for s in actual.result])
 
     return unittest.end(env)
 
@@ -944,4 +1069,6 @@ def slice_declarations_test_suite():
         non_root_slices_do_not_declare_swift_package_test,
         fresh_slice_missing_identity_gets_missing_message_test,
         direct_deps_split_dev_test,
+        identical_requires_same_swift_version_test,
+        v2_passes_netrc_and_read_only_test,
     )

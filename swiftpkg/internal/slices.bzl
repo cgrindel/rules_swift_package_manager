@@ -9,7 +9,9 @@ def _new(
         dump_manifests,
         desc_manifests,
         is_root,
-        is_dev):
+        is_dev,
+        netrc = None,
+        make_files_read_only = False):
     """Create a slice.
 
     Args:
@@ -23,6 +25,10 @@ def _new(
             `swift package describe` JSON.
         is_root: Whether the declaring module is the root module.
         is_dev: Whether the declaring tag is a dev dependency.
+        netrc: Optional. The `Label` of the tag's `.netrc` file, passed to
+            the package repositories for binary-artifact downloads.
+        make_files_read_only: Whether the package repositories make their
+            files read-only.
 
     Returns:
         A `struct` representing the slice.
@@ -41,6 +47,8 @@ def _new(
         identities = sorted(dump_manifests.keys()),
         is_root = is_root,
         is_dev = is_dev,
+        netrc = netrc,
+        make_files_read_only = make_files_read_only,
     )
 
 def _validate(slice):

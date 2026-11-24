@@ -9,7 +9,12 @@ load(
 
 # MARK: - Helpers
 
-def _pkg(pin_key, dump_text = "dump", desc_text = "desc", kind = "source_control"):
+def _pkg(
+        pin_key,
+        dump_text = "dump",
+        desc_text = "desc",
+        kind = "source_control",
+        swift_version = "6.0"):
     return struct(
         kind = kind,
         pin_key = pin_key,
@@ -18,6 +23,7 @@ def _pkg(pin_key, dump_text = "dump", desc_text = "desc", kind = "source_control
         dump_label = "dump_label_" + pin_key,
         desc_label = "desc_label_" + pin_key,
         local_path = None,
+        swift_version = swift_version,
     )
 
 def _stale_pkg(pin_key, kind = "source_control"):
@@ -29,6 +35,7 @@ def _stale_pkg(pin_key, kind = "source_control"):
         dump_label = None,
         desc_label = None,
         local_path = None,
+        swift_version = None,
     )
 
 def _slice(config, pkgs, stale = False):
@@ -118,6 +125,30 @@ def _different_pins_two_groups_test(ctx):
     return unittest.end(env)
 
 different_pins_two_groups_test = unittest.make(_different_pins_two_groups_test)
+
+def _different_swift_versions_two_groups_test(ctx):
+    env = unittest.begin(ctx)
+
+    # Same pin and manifest bytes, cached with different Swift versions.
+    foo_a = _pkg("foo@1", swift_version = "6.2")
+    foo_b = _pkg("foo@1", swift_version = "6.1")
+    actual = slice_merge.merge([
+        _slice("a", {"foo": foo_a}),
+        _slice("b", {"foo": foo_b}),
+        _slice("c", {"foo": _pkg("foo@1", swift_version = "6.2")}),
+    ])
+
+    m = actual["foo"]
+    asserts.false(env, m.identical)
+    asserts.equals(env, [(1, ["a", "c"]), (2, ["b"])], _group_summary(m.groups))
+    asserts.equals(env, foo_a, m.groups[0].entry)
+    asserts.equals(env, foo_b, m.groups[1].entry)
+
+    return unittest.end(env)
+
+different_swift_versions_two_groups_test = unittest.make(
+    _different_swift_versions_two_groups_test,
+)
 
 def _stale_slice_forces_alias_test(ctx):
     env = unittest.begin(ctx)
@@ -268,6 +299,7 @@ def slice_merge_test_suite(name = "slice_merge_tests"):
         single_slice_identical_test,
         two_equal_slices_identical_test,
         different_pins_two_groups_test,
+        different_swift_versions_two_groups_test,
         stale_slice_forces_alias_test,
         identity_only_in_stale_slice_test,
         fresh_slice_lacking_identity_test,

@@ -40,8 +40,25 @@ def _new_derives_dir_and_package_label_test(ctx):
     asserts.false(env, s.is_dev)
 
     # A string config is kept as given.
+    asserts.equals(env, None, s.netrc)
+    asserts.false(env, s.make_files_read_only)
+
     s2 = slices.new("//x:y", s.swift, s.resolved, {}, {}, False, True)
     asserts.equals(env, "//x:y", s2.config)
+
+    s3 = slices.new(
+        "//x:y",
+        s.swift,
+        s.resolved,
+        {},
+        {},
+        False,
+        True,
+        netrc = Label("@@//:.netrc"),
+        make_files_read_only = True,
+    )
+    asserts.equals(env, Label("@@//:.netrc"), s3.netrc)
+    asserts.true(env, s3.make_files_read_only)
 
     return unittest.end(env)
 

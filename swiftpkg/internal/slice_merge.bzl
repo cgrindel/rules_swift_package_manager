@@ -14,8 +14,10 @@ def _merge_or_error(slice_entries):
         slice_entries: A `list` of `struct(config, dir, stale, pkgs)` values,
             where `pkgs` is a `dict` of identity to
             `struct(kind, pin_key, dump_text, desc_text, dump_label,
-            desc_label, local_path)`. A stale slice's pkg structs carry only
-            `kind` and `pin_key`.
+            desc_label, local_path, swift_version)`, where `swift_version` is
+            the trimmed text of the slice's `_main/swift_version.txt`. A stale
+            slice's pkg structs carry only `kind` and `pin_key` (and
+            `swift_version = None`).
 
     Returns:
         A `struct(error, result)`. On success, `error` is `None` and `result`
@@ -68,7 +70,12 @@ Package `{identity}` has conflicting kinds across slices: `{a}` and `{b}`.\
             if se.stale or entry == None:
                 stale_configs.append(se.config)
                 continue
-            key = (entry.pin_key, entry.dump_text, entry.desc_text)
+            key = (
+                entry.pin_key,
+                entry.dump_text,
+                entry.desc_text,
+                entry.swift_version,
+            )
             group = groups_by_key.get(key)
             if group == None:
                 group = struct(
@@ -107,7 +114,7 @@ def _merge(slice_entries):
         `struct(kind, identical, any_stale, groups, stale_configs)`.
         `groups` is a `list` of `struct(index, configs, entry)` built from the
         fresh slices that contain the identity, keyed by
-        `(pin_key, dump_text, desc_text)` and numbered from 1 in input order.
+        `(pin_key, dump_text, desc_text, swift_version)` and numbered from 1 in input order.
         `stale_configs` lists the configs whose slice is stale or lacks the
         identity, in input order. `identical` is true only when no slice is
         stale and every slice holds the same entry, in which case there is

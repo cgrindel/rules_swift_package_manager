@@ -31,6 +31,7 @@ bzl_library(
         "//swiftpkg/internal:swift_package",
         "//swiftpkg/internal:swift_package_aliases",
         "//swiftpkg/internal:swift_package_tool_repo",
+        "@bazel_skylib//lib:dicts",
         "@bazel_skylib//lib:paths",
     ],
 )
