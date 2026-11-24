@@ -65,7 +65,8 @@ final class ResolvedPlacementTests: XCTestCase {
     XCTAssertThrowsError(try placement().withResolvedInPlace { ran = true }) { error in
       let message = String(describing: error)
       XCTAssertTrue(message.contains("init --seed"), message)
-      XCTAssertTrue(message.contains(packageResolved.path), message)
+      XCTAssertTrue(message.contains("`\(packageResolved.path)` already exists"), message)
+      XCTAssertTrue(message.contains("copy it to `\(sliceResolved.path)`"), message)
       XCTAssertEqual((error as? ToolError)?.slice, sliceDir.path)
     }
     XCTAssertFalse(ran)
@@ -96,6 +97,7 @@ final class ResolvedPlacementTests: XCTestCase {
       let message = String(describing: error)
       XCTAssertTrue(message.contains("777"), message)
       XCTAssertTrue(message.contains(other.path), message)
+      XCTAssertTrue(message.contains("If no run is active, delete \(lockDir.path)"), message)
     }
     XCTAssertFalse(ran)
     XCTAssertTrue(exists(lockDir))
@@ -115,6 +117,40 @@ final class ResolvedPlacementTests: XCTestCase {
     XCTAssertEqual(try read(other.appendingPathComponent("Package.resolved")), "other")
     XCTAssertFalse(exists(packageResolved))
     XCTAssertFalse(exists(lockDir))
+  }
+
+  func testDeadLockCopyMovesIntoHolderSliceWithoutResolved() throws {
+    // A first `resolve` for `other` crashed: its slice has no file, so the copy is its result.
+    let other = sliceDir.deletingLastPathComponent().appendingPathComponent("other")
+    try fileManager.createDirectory(at: other, withIntermediateDirectories: true)
+    try write("dead copy", to: packageResolved)
+    try makeLock(pid: "777", slice: other)
+
+    var ran = false
+    try placement { _ in false }.withResolvedInPlace {
+      ran = true
+      XCTAssertFalse(exists(packageResolved))
+    }
+    XCTAssertTrue(ran)
+    XCTAssertEqual(try read(other.appendingPathComponent("Package.resolved")), "dead copy")
+    XCTAssertFalse(exists(packageResolved))
+    XCTAssertFalse(exists(lockDir))
+  }
+
+  func testInterruptCleanupMovesBackAndReleasesLock() throws {
+    try write("old", to: sliceResolved)
+    try placement().withResolvedInPlace {
+      try write("new", to: packageResolved)
+      // What the SIGINT/SIGTERM handler does before `_exit`.
+      InterruptCleanup.cleanUp()
+      XCTAssertFalse(exists(packageResolved))
+      XCTAssertFalse(exists(lockDir))
+      XCTAssertEqual(try read(sliceResolved), "new")
+    }
+    XCTAssertEqual(try read(sliceResolved), "new")
+    // Outside a placement the handler has nothing to do.
+    InterruptCleanup.cleanUp()
+    XCTAssertEqual(try read(sliceResolved), "new")
   }
 
   func testUnreadablePidIsTreatedAsDead() throws {

@@ -46,11 +46,16 @@ public struct ResolvedPlacement {
     if fileManager.fileExists(atPath: packageResolved.path) {
       throw error(
         """
-        found \(packageResolved.path), a v1 leftover beside Package.swift. \
-        Seed a slice from it with `init --seed \(packageResolved.path)`, then delete the file \
-        beside Package.swift.
+        `\(packageResolved.path)` already exists beside `Package.swift`. If it is a v1 \
+        `Package.resolved`, copy it to `\(sliceResolved.path)` (or run `init --seed` for a new \
+        slice) and delete it; then rerun.
         """)
     }
+    // Installed after the leftover check, so an interrupt never moves a file this run did not
+    // place. Removed before the lock is released (defers run in reverse).
+    InterruptCleanup.install(
+      packageResolved: packageResolved, sliceResolved: sliceResolved, lockDir: lockDir)
+    defer { InterruptCleanup.uninstall() }
     if fileManager.fileExists(atPath: sliceResolved.path) {
       try fileManager.copyItem(at: sliceResolved, to: packageResolved)
     }
@@ -111,14 +116,14 @@ public struct ResolvedPlacement {
   }
 
   /// Fails if the lock holder is alive. Otherwise takes the lock aside under a name unique to this
-  /// process, so only one process clears it, then removes it and the dead run's copy.
+  /// process, so only one process clears it, then removes it and recovers the dead run's copy.
   private func stealDeadLock() throws {
     let holderPID = readPID(in: lockDir)
     let holderSlice = readSlice(in: lockDir)
     if let holderPID, isAlive(holderPID) {
       throw error(
         "another run (pid \(holderPID), slice \(holderSlice ?? "unknown")) holds the lock at "
-          + "\(lockDir.path)")
+          + "\(lockDir.path). If no run is active, delete \(lockDir.path).")
     }
     let stale = packageDir.appendingPathComponent("\(Self.lockName).stale.\(pid)")
     try? fileManager.removeItem(at: stale)
@@ -129,15 +134,28 @@ public struct ResolvedPlacement {
       _ = rename(stale.path, lockDir.path)
       throw error("the lock at \(lockDir.path) changed hands while clearing it; try again")
     }
-    // The dead run's copy is only safe to delete when its slice still has its own file.
-    if let holderSlice,
-      fileManager.fileExists(
-        atPath: URL(fileURLWithPath: holderSlice).appendingPathComponent(Self.resolvedName).path),
-      fileManager.fileExists(atPath: packageResolved.path)
-    {
+    defer { try? fileManager.removeItem(at: stale) }
+    try recoverDeadCopy(holderSlice: holderSlice)
+  }
+
+  /// Puts the dead run's copy where it belongs. When the holder's slice has its own file, the
+  /// copy is redundant and is deleted. When it has none (a first `resolve` that crashed), the
+  /// copy is that slice's only result, so it moves there. With no known holder slice, the copy
+  /// stays for the leftover check to report.
+  private func recoverDeadCopy(holderSlice: String?) throws {
+    guard let holderSlice, fileManager.fileExists(atPath: packageResolved.path) else { return }
+    let holderResolved = URL(fileURLWithPath: holderSlice)
+      .appendingPathComponent(Self.resolvedName)
+    if fileManager.fileExists(atPath: holderResolved.path) {
       try fileManager.removeItem(at: packageResolved)
+      return
     }
-    try fileManager.removeItem(at: stale)
+    guard rename(packageResolved.path, holderResolved.path) == 0 else {
+      let reason = describe(errno: errno)
+      throw error(
+        "could not move a dead run's \(packageResolved.path) to \(holderResolved.path): "
+          + "\(reason)")
+    }
   }
 
   /// Removes the lock only if it still names this process.
