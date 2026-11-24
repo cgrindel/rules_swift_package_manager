@@ -2,7 +2,7 @@
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
-load(":fixtures/slices/manifests.bzl", "DESC_JSON", "DUMP_JSON")
+load(":slice_manifests.bzl", "DESC_JSON", "DUMP_JSON")
 
 # `_new_from_parsed_json` only touches the ctx for source info and resource
 # expansion. The fixture has neither, so an empty struct is enough.

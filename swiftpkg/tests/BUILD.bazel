@@ -156,9 +156,9 @@ swift_version_check_test_suite()
 validations_test_suite()
 
 bzl_library(
-    name = "fixtures_slices_manifests",
-    srcs = ["fixtures/slices/manifests.bzl"],
-    visibility = ["//swiftpkg:__subpackages__"],
+    name = "slice_manifests",
+    srcs = ["slice_manifests.bzl"],
+    visibility = ["//visibility:public"],
 )
 
 bzl_library(
