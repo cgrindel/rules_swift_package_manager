@@ -71,8 +71,8 @@ final class SwiftPMTests: XCTestCase {
     let pwd = try String(contentsOf: pwdFile, encoding: .utf8)
       .trimmingCharacters(in: .newlines)
     XCTAssertEqual(
-      URL(fileURLWithPath: pwd).resolvingSymlinksInPath(),
-      packageDir.resolvingSymlinksInPath())
+      URL(fileURLWithPath: pwd).resolvingSymlinksInPath().path,
+      packageDir.resolvingSymlinksInPath().path)
 
     let scratch = root.appendingPathComponent("rspm/foo/.build")
     try swiftPM.run(["describe"], in: packageDir, scratchPath: scratch)

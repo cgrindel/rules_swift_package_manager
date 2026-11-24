@@ -24,8 +24,8 @@ final class InvocationTests: XCTestCase {
     ]
     let inv = try Invocation.parse(args, env: [:])
     XCTAssertEqual(inv.command, .cache)
-    XCTAssertEqual(inv.workspace, URL(fileURLWithPath: "/ws"))
-    XCTAssertEqual(inv.swiftTool, URL(fileURLWithPath: "/usr/bin/swift"))
+    XCTAssertEqual(inv.workspace.path, "/ws")
+    XCTAssertEqual(inv.swiftTool.path, "/usr/bin/swift")
     XCTAssertEqual(inv.targetOS, "macos")
     XCTAssertEqual(inv.packagePath, "swift/Package.swift")
     XCTAssertEqual(inv.sliceDir, "swift/macos")
