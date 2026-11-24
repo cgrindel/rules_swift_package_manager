@@ -282,6 +282,47 @@ unlisted_identity_marks_stale_test = unittest.make(
     _unlisted_identity_marks_stale_test,
 )
 
+def _structurally_bad_manifest_marks_stale_test(ctx):
+    env = unittest.begin(ctx)
+
+    # Valid JSON, but not a manifest the parser can read.
+    files = _fresh_files()
+    files[_cache("local_pkg", "dump.json")] = """{"name": "x"}"""
+    actual = _evaluate(files)
+    asserts.equals(env, None, actual.error)
+    ev = actual.result
+    asserts.true(env, ev.stale)
+    asserts.equals(
+        env,
+        ["local_pkg/dump.json: dump: missing `toolsVersion`"],
+        ev.reasons,
+    )
+    _assert_stale_pkgs(env, ev, ["leaf_pkg", "local_pkg", "swift-log"])
+
+    return unittest.end(env)
+
+structurally_bad_manifest_marks_stale_test = unittest.make(
+    _structurally_bad_manifest_marks_stale_test,
+)
+
+def _malformed_pin_is_skipped_test(ctx):
+    env = unittest.begin(ctx)
+
+    resolved = json.decode(RESOLVED_JSON)
+    resolved["pins"].append({"kind": "remoteSourceControl"})
+    actual = _evaluate(_fresh_files(resolved = json.encode_indent(resolved)))
+    asserts.equals(env, None, actual.error)
+    asserts.false(env, actual.result.stale)
+    asserts.equals(
+        env,
+        ["leaf_pkg", "local_pkg", "swift-log"],
+        sorted(actual.result.pkgs.keys()),
+    )
+
+    return unittest.end(env)
+
+malformed_pin_is_skipped_test = unittest.make(_malformed_pin_is_skipped_test)
+
 def _registry_pin_fails_with_2699_test(ctx):
     env = unittest.begin(ctx)
 
@@ -494,6 +535,8 @@ def slice_declarations_test_suite():
         missing_dump_marks_stale_and_keeps_names_test,
         changed_manifest_marks_stale_test,
         unlisted_identity_marks_stale_test,
+        structurally_bad_manifest_marks_stale_test,
+        malformed_pin_is_skipped_test,
         registry_pin_fails_with_2699_test,
         no_resolved_file_means_no_pins_test,
         patch_files_by_identity_test,

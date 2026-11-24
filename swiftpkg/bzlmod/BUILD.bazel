@@ -16,6 +16,7 @@ bzl_library(
     deps = [
         "//swiftpkg/internal:bazel_repo_names",
         "//swiftpkg/internal:manifest_files",
+        "//swiftpkg/internal:manifest_shapes",
         "//swiftpkg/internal:pkginfo_dependencies",
         "//swiftpkg/internal:pkginfos",
         "//swiftpkg/internal:repository_utils",

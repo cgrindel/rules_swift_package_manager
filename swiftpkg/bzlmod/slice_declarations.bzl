@@ -15,6 +15,7 @@ same config, and a registry pin in a fresh slice.
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
 load("//swiftpkg/internal:manifest_files.bzl", "manifest_files")
+load("//swiftpkg/internal:manifest_shapes.bzl", "manifest_shapes")
 load("//swiftpkg/internal:pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
@@ -106,29 +107,32 @@ def _collect(module_ctx):
 
 # MARK: - Pins
 
-def _pins(resolved_map):
-    """The well-formed pins of a decoded `Package.resolved`.
+def _pin_maps(resolved_map):
+    """The well-formed pin `dict` values of a decoded `Package.resolved`.
 
     A malformed pin is skipped rather than failing the extension.
     """
     if type(resolved_map) != "dict":
         return []
-    pins = []
-    for pin_map in resolved_map.get("pins", []):
-        if (type(pin_map) != "dict" or
-            type(pin_map.get("identity")) != "string" or
-            type(pin_map.get("state")) != "dict"):
-            continue
-        pins.append(pkginfos.new_pin(
-            identity = pin_map["identity"],
-            kind = pin_map.get("kind"),
-            location = pin_map.get("location"),
-            state = pkginfos.new_pin_state(
-                revision = pin_map["state"].get("revision"),
-                version = pin_map["state"].get("version"),
-            ),
-        ))
-    return pins
+    pins = resolved_map.get("pins")
+    if type(pins) != "list":
+        return []
+    return [
+        pin_map
+        for pin_map in pins
+        if (type(pin_map) == "dict" and
+            type(pin_map.get("identity")) == "string" and
+            type(pin_map.get("kind")) == "string" and
+            type(pin_map.get("location")) == "string" and
+            type(pin_map.get("state")) == "dict")
+    ]
+
+def _pins(resolved_map):
+    """The well-formed pins of a decoded `Package.resolved`, as pin structs."""
+    return [
+        pkginfos.new_pin_from_resolved_dep_map(pin_map)
+        for pin_map in _pin_maps(resolved_map)
+    ]
 
 def _pin_kind(pin):
     if pin.kind == "registry":
@@ -258,10 +262,21 @@ def _read_manifest(module_ctx, manifests, identity, basename):
 def _read_manifests(module_ctx, slice, identity):
     dump = _read_manifest(module_ctx, slice.dump_manifests, identity, "dump.json")
     desc = _read_manifest(module_ctx, slice.desc_manifests, identity, "desc.json")
+    reasons = [m.reason for m in [dump, desc] if m.reason != None]
+    return struct(dump = dump, desc = desc, reasons = reasons)
+
+def _read_parseable_manifests(module_ctx, slice, identity):
+    """Like `_read_manifests`, but also checks the shape the parser needs."""
+    m = _read_manifests(module_ctx, slice, identity)
+    if m.reasons:
+        return m
+    err = manifest_shapes.check(m.dump.value, m.desc.value)
+    if err == None:
+        return m
     return struct(
-        dump = dump,
-        desc = desc,
-        reasons = [m.reason for m in [dump, desc] if m.reason != None],
+        dump = m.dump,
+        desc = m.desc,
+        reasons = ["{}/dump.json: {}".format(identity, err)],
     )
 
 def _fresh_pkgs(module_ctx, slice, directory, bazel_workspace_root, resolved_map):
@@ -275,7 +290,7 @@ def _fresh_pkgs(module_ctx, slice, directory, bazel_workspace_root, resolved_map
         A `struct(reasons, pkgs, pkg_info)`. A non-empty `reasons` means the
         cache does not cover the repo set after all, so the slice is stale.
     """
-    main = _read_manifests(module_ctx, slice, _MAIN)
+    main = _read_parseable_manifests(module_ctx, slice, _MAIN)
     if main.reasons:
         return struct(reasons = main.reasons, pkgs = None, pkg_info = None)
 
@@ -284,7 +299,9 @@ def _fresh_pkgs(module_ctx, slice, directory, bazel_workspace_root, resolved_map
         directory = directory,
         dump_manifest = main.dump.value,
         desc_manifest = main.desc.value,
-        resolved_pkg_map = resolved_map,
+        # Only the pins that `_pins` accepts, so a malformed one cannot fail
+        # the parser.
+        resolved_pkg_map = {"pins": _pin_maps(resolved_map)},
         collect_src_info = False,
     )
 
@@ -311,7 +328,7 @@ def _fresh_pkgs(module_ctx, slice, directory, bazel_workspace_root, resolved_map
         processing = to_process
         to_process = []
         for dep in processing:
-            m = _read_manifests(module_ctx, slice, dep.identity)
+            m = _read_parseable_manifests(module_ctx, slice, dep.identity)
             manifests_by_id[dep.identity] = m
             if m.reasons:
                 continue

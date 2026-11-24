@@ -580,6 +580,12 @@ bzl_library(
 )
 
 bzl_library(
+    name = "manifest_shapes",
+    srcs = ["manifest_shapes.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
     name = "manifest_swiftc_args",
     srcs = ["manifest_swiftc_args.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],

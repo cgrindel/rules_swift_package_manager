@@ -16,6 +16,7 @@ load(":clang_files_tests.bzl", "clang_files_test_suite")
 load(":load_statements_tests.bzl", "load_statements_test_suite")
 load(":mach_o_failure_tests.bzl", "mach_o_failure_test_suite")
 load(":mach_o_tests.bzl", "mach_o_test_suite")
+load(":manifest_shapes_tests.bzl", "manifest_shapes_test_suite")
 load(":minimum_os_transition_tests.bzl", "minimum_os_transition_test_suite")
 load(":minimum_os_versions_tests.bzl", "minimum_os_versions_test_suite")
 load(":objc_files_tests.bzl", "objc_files_test_suite")
@@ -98,6 +99,8 @@ pkginfos_command_args_test_suite()
 pkginfos_from_manifests_test_suite()
 
 repo_rules_test_suite()
+
+manifest_shapes_test_suite()
 
 repository_files_test_suite()
 
