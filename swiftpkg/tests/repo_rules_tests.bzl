@@ -2,6 +2,12 @@
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:bazel_target_mods.bzl", "bazel_target_mods")
+load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
+load(
+    "//swiftpkg/internal:pkginfos.bzl",
+    "library_type_kinds",
+    "pkginfos",
+)
 load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 
 def _download_artifacts_test(ctx):
@@ -251,6 +257,114 @@ gen_build_files_without_build_file_test = unittest.make(
     _gen_build_files_without_build_file_test,
 )
 
+def _gen_build_files_adds_version_check_in_v2_test(ctx):
+    """When slice_dir is set, gen_build_files declares the Swift version \
+    check and attaches it to the generated libraries."""
+    env = unittest.begin(ctx)
+
+    calls = {"file": []}
+
+    # buildifier: disable=unused-variable
+    def _file(path, content = "", executable = False, legacy_utf8 = False):
+        calls["file"].append(struct(path = path, content = content))
+
+    # buildifier: disable=unused-variable
+    def _execute(args, environment = {}, quiet = True):
+        return struct(return_code = 0, stdout = "", stderr = "")
+
+    repository_ctx = struct(
+        attr = struct(
+            bazel_package_name = "swiftpkg_test_pkg",
+            bazel_target_mods = "",
+            build_file = None,
+            slice_dir = "swift/macos",
+        ),
+        name = "bzlmodmangled~swiftpkg_test_pkg",
+        file = _file,
+        execute = _execute,
+        os = struct(name = "linux"),
+    )
+
+    repo_name = "@swiftpkg_test_pkg"
+    pkg_info = pkginfos.new(
+        name = "TestPkg",
+        path = "",
+        tools_version = "5.9",
+        url = "https://github.com/example/test-pkg",
+        version = "1.0.0",
+        products = [
+            pkginfos.new_product(
+                name = "Foo",
+                type = pkginfos.new_product_type(
+                    library = pkginfos.new_library_type(
+                        library_type_kinds.automatic,
+                    ),
+                ),
+                targets = ["Foo"],
+            ),
+        ],
+        targets = [
+            pkginfos.new_target(
+                name = "Foo",
+                type = "regular",
+                c99name = "Foo",
+                module_type = "SwiftTarget",
+                path = "Sources/Foo",
+                sources = ["Foo.swift"],
+                dependencies = [],
+                repo_name = repo_name,
+                swift_src_info = pkginfos.new_swift_src_info(),
+            ),
+        ],
+    )
+    pkg_ctx = pkg_ctxs.new(pkg_info = pkg_info, repo_name = repo_name)
+
+    repo_rules.gen_build_files(repository_ctx, pkg_ctx)
+
+    build_files = [f for f in calls["file"] if f.path == "BUILD.bazel"]
+    asserts.equals(env, 1, len(build_files))
+    content = build_files[0].content
+    asserts.true(
+        env,
+        """\
+swift_version_check(
+    name = "swift_version_check",
+    slice_dir = "swift/macos",
+    version_file = "swift_version.txt",
+)""" in content,
+        content,
+    )
+    asserts.true(
+        env,
+        """\
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "swift_version_check")""" in content,
+        content,
+    )
+    asserts.true(
+        env,
+        'swift_library(\n    name = "Foo.rspm.__impl",' in content,
+        content,
+    )
+    asserts.true(
+        env,
+        '    data = [":swift_version_check"],' in content,
+        content,
+    )
+
+    targets_json = [f for f in calls["file"] if f.path == "rspm_targets.json"]
+    asserts.equals(env, 1, len(targets_json))
+    asserts.true(
+        env,
+        "swift_version_check" in json.decode(targets_json[0].content)["targets"],
+        targets_json[0].content,
+    )
+
+    return unittest.end(env)
+
+gen_build_files_adds_version_check_in_v2_test = unittest.make(
+    _gen_build_files_adds_version_check_in_v2_test,
+)
+
 def _make_files_read_only_test(ctx):
     env = unittest.begin(ctx)
 
@@ -333,6 +447,7 @@ def repo_rules_test_suite():
     return unittest.suite(
         "repo_rules_tests",
         download_artifacts_test,
+        gen_build_files_adds_version_check_in_v2_test,
         gen_build_files_with_build_file_test,
         gen_build_files_without_build_file_test,
         make_files_read_only_disabled_noop_test,

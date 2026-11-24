@@ -270,12 +270,17 @@ bzl_library(
     deps = [
         ":artifact_infos",
         ":bazel_target_mods",
+        ":build_decls",
         ":build_files",
+        ":load_statements",
+        ":manifest_files",
         ":pkg_ctxs",
         ":pkginfos",
         ":repository_files",
+        ":repository_utils",
         ":spm_versions",
         ":starlark_codegen",
+        ":swift_version_checks",
         ":swiftpkg_build_files",
         "@bazel_skylib//lib:dicts",
         "@bazel_skylib//lib:paths",
@@ -537,6 +542,16 @@ bzl_library(
     deps = [
         ":slices",
         "@bazel_skylib//lib:paths",
+    ],
+)
+
+bzl_library(
+    name = "swift_version_checks",
+    srcs = ["swift_version_checks.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":bazel_target_mods",
+        ":build_decls",
     ],
 )
 

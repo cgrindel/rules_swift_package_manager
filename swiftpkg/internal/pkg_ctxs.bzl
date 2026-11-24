@@ -27,16 +27,30 @@ def _read(
         dep_module_aliases = "",
         bazel_target_mods = "",
         system_sdk_deps = False,
-        binary_target_deps = False):
-    pkg_info = pkginfos.get(
-        repository_ctx = repository_ctx,
-        directory = repo_dir,
-        env = env,
-        cached_json_directory = cached_json_directory,
-        resolved_pkg_map = resolved_pkg_map,
-        registries_directory = registries_directory,
-        replace_scm_with_registry = replace_scm_with_registry,
-    )
+        binary_target_deps = False,
+        dump_manifest = None,
+        desc_manifest = None,
+        source_directory = None):
+    if dump_manifest != None and desc_manifest != None:
+        # v2: the manifests come from the checked-in cache.
+        pkg_info = pkginfos.new_from_manifests(
+            repository_ctx,
+            directory = repo_dir,
+            dump_manifest = dump_manifest,
+            desc_manifest = desc_manifest,
+            resolved_pkg_map = resolved_pkg_map,
+            source_directory = source_directory,
+        )
+    else:
+        pkg_info = pkginfos.get(
+            repository_ctx = repository_ctx,
+            directory = repo_dir,
+            env = env,
+            cached_json_directory = cached_json_directory,
+            resolved_pkg_map = resolved_pkg_map,
+            registries_directory = registries_directory,
+            replace_scm_with_registry = replace_scm_with_registry,
+        )
     pkg_ctx = _new(
         pkg_info = pkg_info,
         repo_name = repository_utils.package_name(repository_ctx),

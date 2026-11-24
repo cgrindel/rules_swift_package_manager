@@ -596,6 +596,7 @@ def _append(attrs, attr_name, new_part):
     attrs[attr_name] = scg.new_expr(existing, scg.new_op("+"), new_part)
 
 bazel_target_mods = struct(
+    append = _append,
     apply = _apply,
     canonicalize_condition = _canonicalize_condition,
     condition_error = _condition_error,

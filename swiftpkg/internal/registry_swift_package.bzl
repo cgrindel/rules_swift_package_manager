@@ -157,6 +157,11 @@ No source archive was found in the package JSON: {package_json}\
 def _registry_swift_package_impl(repository_ctx):
     """Implementation for the `registry_swift_package` repository rule."""
     attr = repository_ctx.attr
+    if attr.dump_manifest:
+        fail("""\
+Registry packages are not supported by v2 slices yet; see \
+https://github.com/cgrindel/rules_swift_package_manager/issues/2699\
+""")
     directory = str(repository_ctx.path("."))
     env = repo_rules.get_exec_env(repository_ctx)
     id = _get_id(attr.id)
@@ -326,6 +331,7 @@ _ALL_ATTRS = dicts.add(
     _REGISTRY_ATTRS,
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
+    repo_rules.v2_attrs,
     {
         "build_file": attr.label(
             doc = "When used, the provided BUILD file will be used instead of generating one.",

@@ -6,12 +6,21 @@ load("@bazel_skylib//lib:versions.bzl", "versions")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "read_netrc", "read_user_netrc", "use_netrc")
 load(":artifact_infos.bzl", "artifact_infos")
 load(":bazel_target_mods.bzl", "bazel_target_mods")
+load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
+load(":load_statements.bzl", "load_statements")
+load(":manifest_files.bzl", "manifest_files")
 load(":pkginfos.bzl", "target_types")
 load(":repository_files.bzl", "repository_files")
+load(":repository_utils.bzl", "repository_utils")
 load(":spm_versions.bzl", "spm_versions")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
-load(":swiftpkg_build_files.bzl", "swiftpkg_build_files")
+load(":swift_version_checks.bzl", "swift_version_checks")
+load(
+    ":swiftpkg_build_files.bzl",
+    "swiftpkg_build_defs_location",
+    "swiftpkg_build_files",
+)
 
 _swift_attrs = {
     "bazel_package_name": attr.string(
@@ -109,6 +118,86 @@ SPM dependency resolution, SPM package description generation)\
         ),
     },
 )
+
+_v2_attrs = {
+    "desc_manifest": attr.label(
+        allow_single_file = True,
+        doc = """\
+The cached `swift package describe` JSON (`desc.json`) for this package in \
+the slice. Required when `dump_manifest` is set.\
+""",
+    ),
+    "dump_manifest": attr.label(
+        allow_single_file = True,
+        doc = """\
+The cached `swift package dump-package` JSON (`dump.json`) for this package \
+in the slice. When set, the package is read from the cached manifests instead \
+of running Swift Package Manager.\
+""",
+    ),
+    "slice_dir": attr.string(
+        doc = """\
+The workspace-relative slice directory, used in the Swift version check \
+message. Required when `dump_manifest` is set.\
+""",
+    ),
+    "swift_version": attr.label(
+        allow_single_file = True,
+        doc = """\
+The slice's `swift_version.txt`, the Swift version the manifests were cached \
+with. Required when `dump_manifest` is set.\
+""",
+    ),
+}
+
+def _read_v2_manifests(repository_ctx):
+    """Reads the cached manifests for a v2 slice.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+
+    Returns:
+        `None` when `dump_manifest` is unset (v1). Otherwise a `struct` with
+        `dump_manifest` and `desc_manifest` as decoded `dict` values.
+    """
+    attr = repository_ctx.attr
+    if not attr.dump_manifest:
+        return None
+    missing = [
+        name
+        for name in ["desc_manifest", "swift_version", "slice_dir"]
+        if not getattr(attr, name)
+    ]
+    if missing:
+        fail("""\
+`{repo}` sets `dump_manifest` but not: {missing}.\
+""".format(repo = repository_ctx.name, missing = ", ".join(missing)))
+
+    def _read(label):
+        value = manifest_files.read_json(repository_ctx, label)
+        if value == None:
+            fail("""\
+The cached manifest {label} is missing or malformed. Run \
+`bazel run @swift_package//:cache` to regenerate it.\
+""".format(label = label))
+        return value
+
+    return struct(
+        dump_manifest = _read(attr.dump_manifest),
+        desc_manifest = _read(attr.desc_manifest),
+    )
+
+def _copy_swift_version(repository_ctx):
+    """Copies the slice's `swift_version.txt` to the repository root.
+
+    Args:
+        repository_ctx: A `repository_ctx` instance.
+    """
+    repository_utils.copy(
+        repository_ctx,
+        repository_ctx.attr.swift_version,
+        "swift_version.txt",
+    )
 
 _DEVELOPER_DIR_ENV = "DEVELOPER_DIR"
 
@@ -240,6 +329,25 @@ BUILD file override bypasses generated declarations.\
             decls = bazel_target_mods.apply(
                 root_bld_file.decls,
                 pkg_ctx.bazel_target_mods,
+            ),
+        )
+
+    # A v2 slice carries the Swift version its manifests were cached with.
+    # Every generated library, binary and test depends on the check, so a
+    # build with a different Swift fails with a message naming the slice.
+    slice_dir = getattr(repository_ctx.attr, "slice_dir", "")
+    if slice_dir:
+        root_bld_file = build_files.new(
+            load_stmts = load_statements.uniq(
+                root_bld_file.load_stmts + [load_statements.new(
+                    swiftpkg_build_defs_location,
+                    swift_version_checks.name,
+                )],
+            ),
+            package_attrs = root_bld_file.package_attrs,
+            decls = build_decls.uniq(
+                swift_version_checks.attach(root_bld_file.decls) +
+                [swift_version_checks.decl(slice_dir)],
             ),
         )
     _write_targets_json(
@@ -392,15 +500,18 @@ def _remove_modulemaps(repository_ctx, directory, targets):
 
 repo_rules = struct(
     check_spm_version = _check_spm_version,
+    copy_swift_version = _copy_swift_version,
     download_artifacts = _download_artifacts,
     env_attr = _env_attr,
     env_attrs = _env_attrs,
     gen_build_files = _gen_build_files,
     get_exec_env = _get_exec_env,
     make_files_read_only = _make_files_read_only,
+    read_v2_manifests = _read_v2_manifests,
     remove_bazel_files = _remove_bazel_files,
     remove_modulemaps = _remove_modulemaps,
     remove_swift_version_file = _remove_swift_version_file,
     swift_attrs = _swift_attrs,
+    v2_attrs = _v2_attrs,
     write_workspace_file = _write_workspace_file,
 )
