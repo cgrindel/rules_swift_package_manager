@@ -42,6 +42,7 @@ bzl_library(
     visibility = ["//swiftpkg:__subpackages__"],
     deps = [
         "//swiftpkg/internal:bazel_repo_names",
+        "//swiftpkg/internal:slices",
         "@bazel_skylib//lib:paths",
     ],
 )

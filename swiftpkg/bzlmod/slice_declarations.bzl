@@ -6,10 +6,10 @@ the tags into slices. `evaluate` decides whether a slice's `swift_deps_cache` is
 lists the packages it contributes.
 
 Extension evaluation is all or nothing, so nothing here calls `fail()` for a
-missing or stale cache. A stale slice still lists every package name it knows
-so that the root `use_repo` keeps working. Only user errors fail: a tag
-without `config` or `resolved`, an inconsistent tag, two root slices with the
-same config, and a registry pin in a fresh slice.
+missing, stale, or inconsistent cache. A stale slice still lists every package
+name it knows so that the root `use_repo` keeps working. Only user errors
+fail: a v2 tag in a non-root module, a tag without `config` or `resolved`, two
+root slices with the same config, and a registry pin in a fresh slice.
 """
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
@@ -34,6 +34,7 @@ load(":swift_deps_common.bzl", "swift_deps_common", "swift_deps_package_repos")
 
 _MAIN = "_main"
 _REGISTRY_ISSUE = "https://github.com/cgrindel/rules_swift_package_manager/issues/2699"
+_NON_ROOT_ISSUE = "https://github.com/cgrindel/rules_swift_package_manager/issues/2641"
 _DO_WHILE_RANGE = range(1000)
 
 def _error(msg):
@@ -47,13 +48,17 @@ def _ok(result):
 def _collect_or_error(modules, is_dev_dependency):
     """Builds a slice for every v2 `from_package` tag.
 
+    Only the root module may declare v2 tags for now. The committed manifest
+    lists are not validated here: `evaluate` marks an inconsistent slice
+    stale.
+
     Args:
         modules: The value of `module_ctx.modules`.
         is_dev_dependency: `module_ctx.is_dev_dependency`.
 
     Returns:
-        A `struct(error, result)`. `result` is a `list` of slices in module
-        and tag order.
+        A `struct(error, result)`. `result` is a `list` of slices in tag
+        order.
     """
     result = []
     root_dirs_by_config = {}
@@ -61,6 +66,11 @@ def _collect_or_error(modules, is_dev_dependency):
         for tag in mod.tags.from_package:
             if not slices.is_v2_tag(tag):
                 continue
+            if not mod.is_root:
+                return _error((
+                    "v2 `from_package` slices are only supported in the " +
+                    "root module for now (module `{name}`); see {url}"
+                ).format(name = mod.name, url = _NON_ROOT_ISSUE))
             for attr in ["config", "resolved"]:
                 if getattr(tag, attr) == None:
                     return _error((
@@ -84,29 +94,27 @@ def _collect_or_error(modules, is_dev_dependency):
                 netrc = tag.netrc,
                 make_files_read_only = tag.make_files_read_only,
             )
-            err = slices.validate(slice)
-            if err != None:
-                return _error(err)
-            if slice.is_root:
-                other = root_dirs_by_config.get(slice.config)
-                if other != None:
-                    return _error((
-                        "slices `{a}` and `{b}` have the same config " +
-                        "`{config}`; each slice of the root module needs its " +
-                        "own config"
-                    ).format(a = other, b = slice.dir, config = slice.config))
-                root_dirs_by_config[slice.config] = slice.dir
+            other = root_dirs_by_config.get(slice.config)
+            if other != None:
+                return _error((
+                    "slices `{a}` and `{b}` have the same config " +
+                    "`{config}`; each slice of the root module needs its " +
+                    "own config"
+                ).format(a = other, b = slice.dir, config = slice.config))
+            root_dirs_by_config[slice.config] = slice.dir
             result.append(slice)
     return _ok(result)
 
 def _collect(module_ctx):
-    """Builds a slice for every v2 `from_package` tag of every module.
+    """Builds a slice for every v2 `from_package` tag of the root module.
+
+    Fails when a non-root module declares a v2 tag.
 
     Args:
         module_ctx: A `module_ctx`.
 
     Returns:
-        A `list` of slices from `slices.new`, in module and tag order.
+        A `list` of slices from `slices.new`, in tag order.
     """
     collected = _collect_or_error(
         module_ctx.modules,
@@ -471,6 +479,24 @@ def _evaluate_or_error(
         A `struct(error, result)`. `result` is as `slice_declarations.evaluate`
         returns.
     """
+
+    # The live `Package.resolved` is absent for a package with no remote deps.
+    resolved_text = manifest_files.read_text(module_ctx, slice.resolved)
+    resolved_map = {}
+    if resolved_text != None:
+        resolved_map = json.decode(resolved_text, default = None)
+
+    # The manifest lists are generated into the committed `inc.MODULE.bazel`.
+    # An inconsistent list means the cache needs regenerating, so the slice
+    # is stale rather than an error.
+    invalid = slices.validate(slice)
+    if invalid != None:
+        return _ok(_new_evaluated(
+            slice,
+            [invalid],
+            _stale_pkgs(slice, resolved_map),
+        ))
+
     patch_files_by_identity = _patch_files_by_identity(
         module_ctx,
         slice,
@@ -482,12 +508,6 @@ def _evaluate_or_error(
         config_swift_package,
         patch_files_by_identity,
     ))
-
-    # The live `Package.resolved` is absent for a package with no remote deps.
-    resolved_text = manifest_files.read_text(module_ctx, slice.resolved)
-    resolved_map = {}
-    if resolved_text != None:
-        resolved_map = json.decode(resolved_text, default = None)
 
     if verdict.stale:
         return _ok(_new_evaluated(
@@ -741,7 +761,7 @@ def _declare(
     Args:
         module_ctx: A `module_ctx`.
         evaluated: A `list` of `slice_declarations.evaluate` results for
-            every module's slices.
+            the root module's slices.
         config_pkgs: A `dict` of name to `configure_package` tag.
         config_swift_package: A `configure_swift_package` tag or `None`.
         target_mods_by_repo: A `dict` of repository name to target

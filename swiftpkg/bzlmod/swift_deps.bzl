@@ -748,6 +748,10 @@ Expected only one `configure_swift_package` tag, but found multiple.\
 """)
             config_swift_package = config_swift_package_tag
 
+    mixed_modes_error = swift_deps_common.mixed_modes_error(module_ctx.modules)
+    if mixed_modes_error:
+        fail(mixed_modes_error)
+
     target_mods_by_repo = _bazel_target_mods_by_repo(module_ctx)
     matched_target_mod_repos = {}
     available_target_mod_repos = {}

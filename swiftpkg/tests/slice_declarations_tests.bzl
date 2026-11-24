@@ -239,6 +239,55 @@ missing_dump_marks_stale_and_keeps_names_test = unittest.make(
     _missing_dump_marks_stale_and_keeps_names_test,
 )
 
+def _inconsistent_manifest_lists_mark_stale_test(ctx):
+    env = unittest.begin(ctx)
+
+    def _slice(dump_ids, desc_ids):
+        return slices.new(
+            config = Label("@@//config:macos"),
+            swift = Label("@@//app:Package.swift"),
+            resolved = Label("@@//swift/macos:Package.resolved"),
+            dump_manifests = {i: _cache_label(i, "dump.json") for i in dump_ids},
+            desc_manifests = {i: _cache_label(i, "desc.json") for i in desc_ids},
+            is_root = True,
+            is_dev = False,
+        )
+
+    # The dump and desc lists disagree.
+    actual = _evaluate(
+        _fresh_files(),
+        slice = _slice(_ALL_IDS, ["_main", "leaf_pkg", "local_pkg"]),
+    )
+    asserts.equals(env, None, actual.error)
+    ev = actual.result
+    asserts.true(env, ev.stale)
+    asserts.equals(
+        env,
+        [
+            "slice `swift/macos`: dump_manifests and desc_manifests have " +
+            "different identities; differing: swift-log",
+        ],
+        ev.reasons,
+    )
+    _assert_stale_pkgs(env, ev, ["leaf_pkg", "local_pkg", "swift-log"])
+
+    # Non-empty lists without `_main`.
+    ids = ["leaf_pkg", "local_pkg", "swift-log"]
+    actual = _evaluate(_fresh_files(), slice = _slice(ids, ids))
+    asserts.equals(env, None, actual.error)
+    asserts.true(env, actual.result.stale)
+    asserts.equals(
+        env,
+        ["slice `swift/macos`: dump_manifests is missing the `_main` identity"],
+        actual.result.reasons,
+    )
+
+    return unittest.end(env)
+
+inconsistent_manifest_lists_mark_stale_test = unittest.make(
+    _inconsistent_manifest_lists_mark_stale_test,
+)
+
 def _changed_manifest_marks_stale_test(ctx):
     env = unittest.begin(ctx)
 
@@ -775,7 +824,6 @@ def _swift_package_declared_once_for_two_root_slices_test(ctx):
         [
             _fresh("swift/macos", _MACOS),
             _fresh("swift/linux", _LINUX),
-            _fresh("dep/macos", _MACOS, is_root = False),
         ],
         config_pkgs = {
             # The same patch twice is listed once.
@@ -816,21 +864,6 @@ def _swift_package_declared_once_for_two_root_slices_test(ctx):
 
 swift_package_declared_once_for_two_root_slices_test = unittest.make(
     _swift_package_declared_once_for_two_root_slices_test,
-)
-
-def _non_root_slices_do_not_declare_swift_package_test(ctx):
-    env = unittest.begin(ctx)
-
-    actual = _declare([_fresh("dep/macos", _MACOS, is_root = False)])
-    asserts.equals(env, [], actual.calls["tool_repo"])
-    asserts.equals(env, 1, len(actual.calls["git"]))
-    asserts.equals(env, [], actual.result.direct)
-    asserts.equals(env, [], actual.result.direct_dev)
-
-    return unittest.end(env)
-
-non_root_slices_do_not_declare_swift_package_test = unittest.make(
-    _non_root_slices_do_not_declare_swift_package_test,
 )
 
 def _fresh_slice_missing_identity_gets_missing_message_test(ctx):
@@ -879,7 +912,6 @@ def _direct_deps_split_dev_test(ctx):
                 direct = ["swift-log"],
             ),
             _fresh("swift/dev", _LINUX, {"swift-log": "l", "swift-nio": "n"}, is_dev = True),
-            _fresh("dep/macos", _WINDOWS, {"swift-argument-parser": "p"}, is_root = False),
         ],
         config_pkgs = {
             "swift-collections": _config_pkg(
@@ -1026,18 +1058,19 @@ def _collect_builds_slices_in_order_test(ctx):
             v1,
             _tag(dir = "swift/linux", config = Label("@@//config:linux"), is_dev = True),
         ]),
-        _module([_tag(dir = "dep/macos")], is_root = False),
+        # A non-root module's v1 tag is not a slice.
+        _module([v1], is_root = False),
     ])
     asserts.equals(env, None, actual.error)
     asserts.equals(
         env,
-        ["swift/macos", "swift/linux", "dep/macos"],
+        ["swift/macos", "swift/linux"],
         [s.dir for s in actual.result],
     )
-    asserts.equals(env, [True, True, False], [s.is_root for s in actual.result])
-    asserts.equals(env, [False, True, False], [s.is_dev for s in actual.result])
-    asserts.equals(env, [Label("@@//:.netrc"), None, None], [s.netrc for s in actual.result])
-    asserts.equals(env, [True, False, False], [s.make_files_read_only for s in actual.result])
+    asserts.equals(env, [True, True], [s.is_root for s in actual.result])
+    asserts.equals(env, [False, True], [s.is_dev for s in actual.result])
+    asserts.equals(env, [Label("@@//:.netrc"), None], [s.netrc for s in actual.result])
+    asserts.equals(env, [True, False], [s.make_files_read_only for s in actual.result])
 
     return unittest.end(env)
 
@@ -1072,14 +1105,11 @@ def _collect_requires_config_test(ctx):
         actual.error,
     )
 
-    # A `slices.validate` error is returned as is.
+    # Inconsistent manifest lists are left to `evaluate`, which marks the
+    # slice stale.
     actual = _collect([_module([_tag(dump_ids = ["_main", "swift-log"], desc_ids = ["_main"])])])
-    asserts.equals(
-        env,
-        "slice `swift/macos`: dump_manifests and desc_manifests have " +
-        "different identities; differing: swift-log",
-        actual.error,
-    )
+    asserts.equals(env, None, actual.error)
+    asserts.equals(env, ["swift/macos"], [s.dir for s in actual.result])
 
     return unittest.end(env)
 
@@ -1097,24 +1127,41 @@ def _collect_rejects_duplicate_root_configs_test(ctx):
         actual.error,
     )
 
-    # Non-root modules may reuse a root config.
-    actual = _collect([
-        _module([_tag()]),
-        _module([_tag(dir = "dep/macos")], is_root = False),
-    ])
-    asserts.equals(env, None, actual.error)
-
     return unittest.end(env)
 
 collect_rejects_duplicate_root_configs_test = unittest.make(
     _collect_rejects_duplicate_root_configs_test,
 )
 
+def _non_root_v2_tag_fails_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = _collect([
+        _module([_tag()]),
+        _module([_tag(dir = "dep/macos")], is_root = False),
+    ])
+    asserts.equals(
+        env,
+        "v2 `from_package` slices are only supported in the root module " +
+        "for now (module `some_dep`); see " +
+        "https://github.com/cgrindel/rules_swift_package_manager/issues/2641",
+        actual.error,
+    )
+
+    # A bootstrap tag (`config` with empty manifest lists) counts as v2.
+    actual = _collect([_module([_tag(dump_ids = [])], is_root = False)])
+    asserts.true(env, actual.error != None and "some_dep" in actual.error)
+
+    return unittest.end(env)
+
+non_root_v2_tag_fails_test = unittest.make(_non_root_v2_tag_fails_test)
+
 def slice_declarations_test_suite():
     return unittest.suite(
         "slice_declarations_tests",
         fresh_slice_lists_all_identities_test,
         missing_dump_marks_stale_and_keeps_names_test,
+        inconsistent_manifest_lists_mark_stale_test,
         changed_manifest_marks_stale_test,
         unlisted_identity_marks_stale_test,
         structurally_bad_manifest_marks_stale_test,
@@ -1133,7 +1180,7 @@ def slice_declarations_test_suite():
         two_groups_declare_hidden_repos_and_aliases_test,
         stale_only_declares_stale_repo_test,
         swift_package_declared_once_for_two_root_slices_test,
-        non_root_slices_do_not_declare_swift_package_test,
+        non_root_v2_tag_fails_test,
         fresh_slice_missing_identity_gets_missing_message_test,
         direct_deps_split_dev_test,
         identical_requires_same_swift_version_test,

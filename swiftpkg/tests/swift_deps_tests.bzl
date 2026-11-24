@@ -2,6 +2,7 @@
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/bzlmod:swift_deps.bzl", "swift_deps_test_utils")
+load("//swiftpkg/bzlmod:swift_deps_common.bzl", "swift_deps_common")
 
 _target = "@swiftpkg_foo//:Bar.rspm.__impl"
 
@@ -701,6 +702,35 @@ root_module_direct_dev_deps_test = unittest.make(
     _root_module_direct_dev_deps_test,
 )
 
+def _mixed_modes_error_test(ctx):
+    env = unittest.begin(ctx)
+
+    def _modules(*tags_per_module):
+        return [
+            struct(tags = struct(from_package = tags))
+            for tags in tags_per_module
+        ]
+
+    v1 = struct(config = None, dump_manifests = {})
+    v2 = struct(config = Label("@@//config:macos"), dump_manifests = {})
+    v2_cached = struct(config = None, dump_manifests = {"_main": "x"})
+
+    asserts.equals(env, None, swift_deps_common.mixed_modes_error(_modules([v1, v1])))
+    asserts.equals(env, None, swift_deps_common.mixed_modes_error(_modules([v2, v2_cached])))
+    asserts.equals(env, None, swift_deps_common.mixed_modes_error(_modules([])))
+    want = (
+        "mixing v1 and v2 `from_package` tags is not supported; migrate " +
+        "every tag to slices"
+    )
+    asserts.equals(env, want, swift_deps_common.mixed_modes_error(_modules([v1, v2])))
+
+    # Across modules too.
+    asserts.equals(env, want, swift_deps_common.mixed_modes_error(_modules([v2], [v1])))
+
+    return unittest.end(env)
+
+mixed_modes_error_test = unittest.make(_mixed_modes_error_test)
+
 def swift_deps_test_suite():
     return unittest.suite(
         "swift_deps_tests",
@@ -716,4 +746,5 @@ def swift_deps_test_suite():
         extension_metadata_test,
         root_module_direct_deps_test,
         root_module_direct_dev_deps_test,
+        mixed_modes_error_test,
     )

@@ -6,6 +6,7 @@ live here to avoid a load cycle.
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
+load("//swiftpkg/internal:slices.bzl", "slices")
 
 # MARK: - Package repos
 
@@ -216,11 +217,39 @@ in the lock file and will not be portable across machines.\
         return struct(kind = "registry", kwargs = kwargs)
     fail("Swift package `{}` has no source.".format(dep.identity))
 
+# MARK: - Mode
+
+def _mixed_modes_error(modules):
+    """Checks that the `from_package` tags do not mix v1 and v2.
+
+    Args:
+        modules: The value of `module_ctx.modules`.
+
+    Returns:
+        `None` when every tag is v1 or every tag is v2; otherwise, an error
+        `string`.
+    """
+    has_v1 = False
+    has_v2 = False
+    for mod in modules:
+        for tag in mod.tags.from_package:
+            if slices.is_v2_tag(tag):
+                has_v2 = True
+            else:
+                has_v1 = True
+    if has_v1 and has_v2:
+        return (
+            "mixing v1 and v2 `from_package` tags is not supported; " +
+            "migrate every tag to slices"
+        )
+    return None
+
 swift_deps_common = struct(
     build_file_conflict_error = _build_file_conflict_error,
     config_pkg_for = _config_pkg_for,
     declare_package_repos = _declare_package_repos,
     inference_settings = _inference_settings,
+    mixed_modes_error = _mixed_modes_error,
     pkg_repo_kwargs = _pkg_repo_kwargs,
     record_inference_packages = _record_inference_packages,
 )

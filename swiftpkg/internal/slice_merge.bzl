@@ -7,8 +7,8 @@ whether hidden per-group repositories plus an alias repository are needed.
 
 load(":bazel_repo_names.bzl", "bazel_repo_names")
 
-def _merge_or_error(slice_entries):
-    """Merges slice entries per identity, returning an error instead of failing.
+def _merge(slice_entries):
+    """Merges slice entries per package identity.
 
     Args:
         slice_entries: A `list` of `struct(config, dir, stale, pkgs)` values,
@@ -20,10 +20,20 @@ def _merge_or_error(slice_entries):
             `swift_version = None`).
 
     Returns:
-        A `struct(error, result)`. On success, `error` is `None` and `result`
-        is the `dict` described in `slice_merge.merge`. When two fresh slices
-        disagree on an identity's kind, `error` is a message and `result` is
-        `None`. Stale slices never cause a kind conflict.
+        A `dict` of identity (sorted) to
+        `struct(kind, identical, any_stale, groups, stale_configs)`.
+        `kind` is the kind of the first fresh slice that holds the identity,
+        or of the first stale one when no fresh slice does; it is
+        informational, since slices may disagree (for example, a package that
+        is local in one slice and remote in another) and each group's entry
+        decides its repository rule. `groups` is a `list` of
+        `struct(index, configs, entry)` built from the fresh slices that
+        contain the identity, keyed by
+        `(pin_key, dump_text, desc_text, swift_version)` and numbered from 1 in
+        input order. `stale_configs` lists the configs whose slice is stale or
+        lacks the identity, in input order. `identical` is true only when no
+        slice is stale and every slice holds the same entry, in which case
+        there is exactly one group.
     """
     any_stale = False
     identities = {}
@@ -34,10 +44,9 @@ def _merge_or_error(slice_entries):
 
     result = {}
     for identity in sorted(identities):
-        # The kind comes from the fresh slices. A stale slice's pin may still
-        # name an older kind (e.g. a remote pin for a package that a fresh
-        # slice now has as local), so a stale entry's kind is used only when
-        # no fresh slice has the identity.
+        # A stale slice's pin may still name an older kind (e.g. a remote pin
+        # for a package that a fresh slice now has as local), so a stale
+        # entry's kind is used only when no fresh slice has the identity.
         kind = None
         stale_kind = None
         for se in slice_entries:
@@ -49,13 +58,6 @@ def _merge_or_error(slice_entries):
                     stale_kind = entry.kind
             elif kind == None:
                 kind = entry.kind
-            elif kind != entry.kind:
-                return struct(
-                    error = """\
-Package `{identity}` has conflicting kinds across slices: `{a}` and `{b}`.\
-""".format(identity = identity, a = kind, b = entry.kind),
-                    result = None,
-                )
         if kind == None:
             kind = stale_kind
 
@@ -100,30 +102,7 @@ Package `{identity}` has conflicting kinds across slices: `{a}` and `{b}`.\
             stale_configs = stale_configs,
         )
 
-    return struct(error = None, result = result)
-
-def _merge(slice_entries):
-    """Merges slice entries per package identity.
-
-    Args:
-        slice_entries: A `list` of `struct(config, dir, stale, pkgs)` values.
-            See `slice_merge_testing.merge_or_error` for details.
-
-    Returns:
-        A `dict` of identity (sorted) to
-        `struct(kind, identical, any_stale, groups, stale_configs)`.
-        `groups` is a `list` of `struct(index, configs, entry)` built from the
-        fresh slices that contain the identity, keyed by
-        `(pin_key, dump_text, desc_text, swift_version)` and numbered from 1 in input order.
-        `stale_configs` lists the configs whose slice is stale or lacks the
-        identity, in input order. `identical` is true only when no slice is
-        stale and every slice holds the same entry, in which case there is
-        exactly one group.
-    """
-    merged = _merge_or_error(slice_entries)
-    if merged.error != None:
-        fail(merged.error)
-    return merged.result
+    return result
 
 def _repo_name(identity, group_index):
     """Returns the hidden repository name for an identity's group.
@@ -140,8 +119,4 @@ def _repo_name(identity, group_index):
 slice_merge = struct(
     merge = _merge,
     repo_name = _repo_name,
-)
-
-slice_merge_testing = struct(
-    merge_or_error = _merge_or_error,
 )
