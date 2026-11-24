@@ -574,11 +574,19 @@ def _new_ext_module(
     tags["configure_package"] = []
     tags["configure_swift_package"] = []
     from_package_tags = [
-        struct(is_dev = False, repo_names = from_package_repo_names),
+        struct(
+            dump_manifests = {},
+            is_dev = False,
+            repo_names = from_package_repo_names,
+        ),
     ]
     if dev_from_package_repo_names != None:
         from_package_tags.append(
-            struct(is_dev = True, repo_names = dev_from_package_repo_names),
+            struct(
+                dump_manifests = {},
+                is_dev = True,
+                repo_names = dev_from_package_repo_names,
+            ),
         )
     tags["from_package"] = from_package_tags
     return struct(is_root = is_root, name = name, tags = struct(**tags))

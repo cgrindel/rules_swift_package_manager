@@ -13,54 +13,11 @@ load("//swiftpkg/internal:swift_deps_info.bzl", "swift_deps_info")
 load("//swiftpkg/internal:swift_package.bzl", "PATCH_ATTRS", "TOOL_ATTRS", "swift_package")
 load("//swiftpkg/internal:swift_package_tool_attrs.bzl", "swift_package_tool_attrs")
 load("//swiftpkg/internal:swift_package_tool_repo.bzl", "swift_package_tool_repo")
+load(":slice_declarations.bzl", "slice_declarations")
 
 # MARK: - swift_deps bzlmod Extension
 
 _DO_WHILE_RANGE = range(1000)
-
-def _module_aliases_by_identity(pkg_info):
-    """Collect module aliases declared in the root package manifest (SE-0339).
-
-    Collects the `moduleAliases` declared on product dependencies of the root
-    package's targets, keyed by the identity of the package that provides the
-    aliased product. Scoping the aliases to the providing package ensures a
-    same-named module from a different package is unaffected: only the
-    providing package renames its module, and only that package and its
-    direct dependents compile with `-module-alias` flags. Aliases declared by
-    non-root packages in the dependency graph are not yet supported.
-
-    Only pure Swift, source-based modules may be aliased (an SE-0339
-    restriction); aliasing a module with C/Objective-C interop or a binary
-    target is not supported and will fail to build.
-
-    Args:
-        pkg_info: A `struct` as returned by `pkginfos.get` for the root
-            package.
-
-    Returns:
-        A `dict` mapping package identities to a `dict` of original module
-        names to their replacement names.
-    """
-    aliases_by_identity = {}
-    for target in pkg_info.targets:
-        for target_dep in target.dependencies:
-            product = target_dep.product
-            if not (product and product.module_aliases):
-                continue
-            dep = pkginfo_dependencies.get_by_name(
-                pkg_info.dependencies,
-                product.dep_name,
-            )
-            if dep == None:
-                fail("""\
-Unable to resolve the package for the module aliases declared on product \
-'{product}'. No dependency named '{dep_name}' was found in the root package \
-manifest.\
-""".format(product = product.product_name, dep_name = product.dep_name))
-            aliases_by_identity.setdefault(dep.identity, {}).update(
-                product.module_aliases,
-            )
-    return aliases_by_identity
 
 def _non_root_target_mods_error(module_name, tag_groups):
     """Check that a non-root module did not declare target modification tags.
@@ -402,7 +359,7 @@ def _declare_pkgs_from_package(
     # name resolve. Every repository receives the full map because a
     # repository's dependencies are only known once its manifest is parsed
     # inside the repository rule.
-    module_aliases_by_id = _module_aliases_by_identity(pkg_info)
+    module_aliases_by_id = pkginfo_dependencies.module_aliases_by_identity(pkg_info)
     dep_module_aliases_json = json.encode(module_aliases_by_id) if module_aliases_by_id else ""
 
     # Collect all of the deps by identity
@@ -956,6 +913,9 @@ Expected only one `configure_swift_package` tag, but found multiple.\
     direct_dev_dep_repo_names = []
     for mod in module_ctx.modules:
         for from_package in mod.tags.from_package:
+            # v2 tags are collected across all modules below.
+            if from_package.dump_manifests:
+                continue
             repo_names = declare_pkgs_from_package(
                 module_ctx,
                 from_package,
@@ -975,6 +935,30 @@ Expected only one `configure_swift_package` tag, but found multiple.\
                 direct_dev_dep_repo_names.extend(repo_names)
             else:
                 direct_dep_repo_names.extend(repo_names)
+
+    v2_slices = slice_declarations.collect(module_ctx)
+    if v2_slices:
+        evaluated = [
+            slice_declarations.evaluate(
+                module_ctx,
+                slice,
+                config_swift_package,
+                config_pkgs,
+            )
+            for slice in v2_slices
+        ]
+        v2_repo_names = slice_declarations.declare(
+            module_ctx,
+            evaluated,
+            config_pkgs,
+            config_swift_package,
+            target_mods_by_repo,
+            matched_target_mod_repos,
+            available_target_mod_repos,
+            inference_config,
+        )
+        direct_dep_repo_names.extend(v2_repo_names.direct)
+        direct_dev_dep_repo_names.extend(v2_repo_names.direct_dev)
 
     inference_error = _unknown_inference_packages_error(inference_config)
     if inference_error:

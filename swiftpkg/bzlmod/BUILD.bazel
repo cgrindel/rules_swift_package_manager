@@ -10,10 +10,28 @@ filegroup(
 )
 
 bzl_library(
+    name = "slice_declarations",
+    srcs = ["slice_declarations.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        "//swiftpkg/internal:bazel_repo_names",
+        "//swiftpkg/internal:manifest_files",
+        "//swiftpkg/internal:pkginfo_dependencies",
+        "//swiftpkg/internal:pkginfos",
+        "//swiftpkg/internal:repository_utils",
+        "//swiftpkg/internal:slice_messages",
+        "//swiftpkg/internal:slices",
+        "//swiftpkg/internal:staleness",
+        "@bazel_skylib//lib:paths",
+    ],
+)
+
+bzl_library(
     name = "swift_deps",
     srcs = ["swift_deps.bzl"],
     visibility = ["//visibility:public"],
     deps = [
+        ":slice_declarations",
         "//swiftpkg/internal:bazel_repo_names",
         "//swiftpkg/internal:bazel_target_mods",
         "//swiftpkg/internal:local_swift_package",

@@ -845,6 +845,27 @@ def _new_dependency_identity_to_name_map(dump_deps):
         result[identity] = name
     return result
 
+def _dependency_identity_by_name(dump_manifest):
+    """Maps each dependency name in a dump manifest to its identity.
+
+    The names are normalized the same way as `pkginfos.new_dependency` names
+    them, so a `configure_package` name can be matched against them.
+
+    Args:
+        dump_manifest: A `dict` representing the parsed JSON from `swift
+            package dump-package`.
+
+    Returns:
+        A `dict` of normalized dependency name to identity.
+    """
+    names_by_id = _new_dependency_identity_to_name_map(
+        dump_manifest.get("dependencies", []),
+    )
+    return {
+        pkginfo_dependencies.normalize_name(name): identity
+        for identity, name in names_by_id.items()
+    }
+
 def _new_from_parsed_json(
         repository_ctx,
         dump_manifest,
@@ -2197,6 +2218,7 @@ build_setting_kinds = struct(
 # MARK: - API Definition
 
 pkginfos = struct(
+    dependency_identity_by_name = _dependency_identity_by_name,
     enabled_traits_from_dump_manifest = _enabled_traits_from_dump_manifest,
     get = _get,
     new = _new,
