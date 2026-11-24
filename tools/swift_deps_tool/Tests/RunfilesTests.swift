@@ -35,7 +35,7 @@ final class RunfilesTests: XCTestCase {
     let actual = Runfiles.resolve(
       rlocationpath: rlocationpath, env: ["RUNFILES_DIR": runfilesDir.path],
       argv0: argv0, cwd: cwd)
-    XCTAssertEqual(actual.standardizedFileURL, expected.standardizedFileURL)
+    XCTAssertEqual(actual.standardizedFileURL.path, expected.standardizedFileURL.path)
   }
 
   func testResolveFallsBackToArgv0Runfiles() throws {
@@ -50,7 +50,7 @@ final class RunfilesTests: XCTestCase {
     let actual = Runfiles.resolve(
       rlocationpath: rlocationpath, env: ["RUNFILES_DIR": runfilesDir.path],
       argv0: argv0, cwd: cwd)
-    XCTAssertEqual(actual.standardizedFileURL, expected.standardizedFileURL)
+    XCTAssertEqual(actual.standardizedFileURL.path, expected.standardizedFileURL.path)
   }
 
   func testResolveFallsBackToParentOfCwd() throws {
@@ -61,12 +61,12 @@ final class RunfilesTests: XCTestCase {
 
     let actual = Runfiles.resolve(
       rlocationpath: rlocationpath, env: [:], argv0: argv0, cwd: cwd)
-    XCTAssertEqual(actual.standardizedFileURL, expected.standardizedFileURL)
+    XCTAssertEqual(actual.standardizedFileURL.path, expected.standardizedFileURL.path)
 
     // When no candidate exists, the cwd-parent candidate is returned.
     try FileManager.default.removeItem(at: expected)
     let missing = Runfiles.resolve(
       rlocationpath: rlocationpath, env: [:], argv0: argv0, cwd: cwd)
-    XCTAssertEqual(missing.standardizedFileURL, expected.standardizedFileURL)
+    XCTAssertEqual(missing.standardizedFileURL.path, expected.standardizedFileURL.path)
   }
 }
