@@ -145,17 +145,18 @@ fi
 
 echo "Created slice package ${slice_pkg}."
 echo
-echo "Add this to MODULE.bazel:"
+# The include must follow the root use_extension: `bazel mod tidy` writes
+# use_repo into the first file that uses the extension.
+echo "Add this to MODULE.bazel, after the root swift_deps use_extension and"
+echo "use_repo, so that \`bazel mod tidy\` keeps the root use_repo current:"
 echo
-echo "include(\"${slice_pkg}:inc.MODULE.bazel\")"
 if ! grep -qF '"swift_deps"' "${root}/MODULE.bazel" 2>/dev/null; then
-  echo
-  echo "Also add (the slice file uses it):"
-  echo
   printf '%s%s\n' 'swift_deps = use_extension(' \
     '"@rules_swift_package_manager//:extensions.bzl", "swift_deps")'
   echo 'use_repo(swift_deps, "swift_package")'
+  echo
 fi
+echo "include(\"${slice_pkg}:inc.MODULE.bazel\")"
 if [[ -n ${seed} ]]; then
   echo
   echo "Seed copied. Remove any Package.resolved beside Package.swift before"
