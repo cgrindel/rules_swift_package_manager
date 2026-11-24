@@ -6,7 +6,11 @@ name: Generate Linux slices
 # Dispatch (only works once this file is on the default branch):
 #
 #   gh workflow run generate_linux_slices.yml --ref <branch> \
-#     -f dirs="examples/multi_slice"
+#     -f dirs="examples/multi_slice" -f command=cache
+#
+# `command` picks the `@swift_package` target to run: `cache` (the default)
+# rebuilds the slice from the committed `Package.resolved`, `resolve` resolves
+# first, and `update` updates the pins. A push always uses `cache`.
 #
 # Push marker (works from `cgrindel/v2_*` branches before the file reaches the
 # default branch). A push runs the job only when the head commit message
@@ -16,7 +20,10 @@ name: Generate Linux slices
 #   git commit --allow-empty -m "chore: regenerate Linux slices [linux-slices]" && git push
 #   gh run list --workflow generate_linux_slices.yml
 #   gh run download <id> --name linux-slices
-#   tar -xzf linux-slices.tgz   # at the repo root
+#   # At the repo root. Remove the old slice first so that identities the
+#   # new slice pruned do not linger.
+#   rm -rf <dir>/swift_deps/linux
+#   tar -xzf linux-slices.tgz
 "on":
   push:
     branches:
@@ -27,6 +34,15 @@ name: Generate Linux slices
         description: >-
           Space-separated child workspace directories, relative to the repo root, whose `swift_deps/linux` slice to regenerate. Empty means every workspace with a `swift_deps/linux/inc.MODULE.bazel`.
         default: examples/multi_slice
+        required: false
+      command:
+        description: The `@swift_package` target to run in each workspace.
+        type: choice
+        options:
+          - cache
+          - resolve
+          - update
+        default: cache
         required: false
 permissions:
   contents: read
@@ -45,11 +61,21 @@ jobs:
         shell: bash
         # Dispatch inputs reach the shell through `env`, never through `${{ }}`
         # interpolation, which would splice untrusted text into the script.
-        # `DIRS` is empty on push; discover the workspaces in that case.
+        # `DIRS` and `COMMAND` are empty on push; discover the workspaces and
+        # use `cache` in that case.
         env:
           DIRS: ${{ inputs.dirs }}
+          COMMAND: ${{ inputs.command }}
         run: |
           set -o errexit -o nounset -o pipefail
+          COMMAND="${COMMAND:-cache}"
+          case "${COMMAND}" in
+            cache | resolve | update) ;;
+            *)
+              echo >&2 "Unknown command: ${COMMAND}. Expected cache, resolve or update."
+              exit 1
+              ;;
+          esac
           if [[ -z "${DIRS// /}" ]]; then
             DIRS="$(find . -path '*/swift_deps/linux/inc.MODULE.bazel' -not -path './bazel-*' \
               | sed 's#/swift_deps/linux/inc.MODULE.bazel##; s#^\./##' | sort | tr '\n' ' ')"
@@ -62,7 +88,7 @@ jobs:
           for dir in "${dirs[@]}"; do
             echo "::group::${dir}"
             # The Linux host selects the `linux` slice by default.
-            ( cd "${dir}" && bazelisk run @swift_package//:cache )
+            ( cd "${dir}" && bazelisk run "@swift_package//:${COMMAND}" )
             # Drop the SwiftPM scratch dirs; they are never committed.
             rm -rf "${dir}"/swift_deps/*/.build
             echo "::endgroup::"
