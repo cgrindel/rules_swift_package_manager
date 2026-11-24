@@ -564,6 +564,13 @@ bzl_library(
 )
 
 bzl_library(
+    name = "swift_version_check",
+    srcs = ["swift_version_check.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = ["@bazel_skylib//rules:common_settings"],
+)
+
+bzl_library(
     name = "validations",
     srcs = ["validations.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],

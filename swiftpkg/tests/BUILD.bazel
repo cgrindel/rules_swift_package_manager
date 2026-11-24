@@ -1,5 +1,6 @@
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("//swiftpkg/internal:swift_version_check.bzl", "swift_version_check")
 load(":artifact_infos_tests.bzl", "artifact_infos_test_suite")
 load(":bazel_apple_platforms_tests.bzl", "bazel_apple_platforms_test_suite")
 load(":bazel_repo_names_tests.bzl", "bazel_repo_names_test_suite")
@@ -32,6 +33,7 @@ load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
 load(":swift_deps_tests.bzl", "swift_deps_test_suite")
 load(":swift_files_tests.bzl", "swift_files_test_suite")
 load(":swift_package_tool_tests.bzl", "swift_package_tool_test_suite")
+load(":swift_version_check_tests.bzl", "swift_version_check_test_suite")
 load(":swiftpkg_build_files_tests.bzl", "swiftpkg_build_files_test_suite")
 load(":validations_tests.bzl", "validations_test_suite")
 
@@ -102,6 +104,15 @@ swift_files_test_suite()
 swiftpkg_build_files_test_suite()
 
 swift_package_tool_test_suite()
+
+swift_version_check(
+    name = "swift_version_check_fixture",
+    slice_dir = "swift/macos",
+    tags = ["manual"],
+    version_file = "fixtures/slices/swift_version.txt",
+)
+
+swift_version_check_test_suite()
 
 validations_test_suite()
 

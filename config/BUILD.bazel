@@ -1,0 +1,39 @@
+load("@bazel_skylib//lib:selects.bzl", "selects")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+
+bzlformat_pkg(name = "bzlformat")
+
+# Slice `config` labels for clients.
+
+selects.config_setting_group(
+    name = "apple",
+    match_any = [
+        "@platforms//os:macos",
+        "@platforms//os:ios",
+        "@platforms//os:tvos",
+        "@platforms//os:watchos",
+        "@platforms//os:visionos",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+selects.config_setting_group(
+    name = "any",
+    match_any = [
+        ":apple",
+        "@platforms//os:linux",
+    ],
+    visibility = ["//visibility:public"],
+)
+
+alias(
+    name = "linux",
+    actual = "@platforms//os:linux",
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "all_files",
+    srcs = glob(["*"]),
+    visibility = ["//:__subpackages__"],
+)

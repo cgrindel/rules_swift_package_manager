@@ -1,5 +1,6 @@
 load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_missing_pkgs", "bzlformat_pkg")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy", "tidy_all")
 load("@cgrindel_bazel_starlib//markdown:defs.bzl", "markdown_pkg")
@@ -20,6 +21,20 @@ bzlformat_pkg(name = "bzlformat")
 
 bzlformat_missing_pkgs(
     name = "bzlformat_missing_pkgs",
+)
+
+# MARK: - Swift Version Check
+
+# Controls the build-time check that a slice's `swift_deps_cache` was produced
+# by the resolved Swift toolchain's `major.minor` version.
+string_flag(
+    name = "swift_version_check",
+    build_setting_default = "error",
+    values = [
+        "error",
+        "off",
+    ],
+    visibility = ["//visibility:public"],
 )
 
 # MARK: - Tidy / Update Source Files
@@ -147,6 +162,7 @@ filegroup(
         ":all_files",
         "//ci:all_files",
         "//ci/internal:all_files",
+        "//config:all_files",
         "//config_settings/bazel/apple_platform_type:all_files",
         "//config_settings/bazel/compilation_mode:all_files",
         "//config_settings/spm/configuration:all_files",
