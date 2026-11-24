@@ -1,8 +1,16 @@
 swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
 swift_deps.from_package(
     config = "@rules_swift_package_manager//config:linux",
-    desc_manifests = {},
-    dump_manifests = {},
+    desc_manifests = {
+        "_main": "//swift_deps/linux:swift_deps_cache/_main/desc.json",
+        "swift-log": "//swift_deps/linux:swift_deps_cache/swift-log/desc.json",
+        "swift-system": "//swift_deps/linux:swift_deps_cache/swift-system/desc.json",
+    },
+    dump_manifests = {
+        "_main": "//swift_deps/linux:swift_deps_cache/_main/dump.json",
+        "swift-log": "//swift_deps/linux:swift_deps_cache/swift-log/dump.json",
+        "swift-system": "//swift_deps/linux:swift_deps_cache/swift-system/dump.json",
+    },
     resolved = "//swift_deps/linux:Package.resolved",
     swift = "//:Package.swift",
 )
