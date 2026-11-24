@@ -595,6 +595,19 @@ bzl_library(
 )
 
 bzl_library(
+    name = "swift_package_aliases",
+    srcs = ["swift_package_aliases.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":build_decls",
+        ":build_files",
+        ":load_statements",
+        ":slice_messages",
+        ":starlark_codegen",
+    ],
+)
+
+bzl_library(
     name = "swift_package_stale",
     srcs = ["swift_package_stale.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],

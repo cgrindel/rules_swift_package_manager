@@ -39,6 +39,7 @@ load(":staleness_tests.bzl", "staleness_test_suite")
 load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
 load(":swift_deps_tests.bzl", "swift_deps_test_suite")
 load(":swift_files_tests.bzl", "swift_files_test_suite")
+load(":swift_package_aliases_tests.bzl", "swift_package_aliases_test_suite")
 load(":swift_package_stale_tests.bzl", "swift_package_stale_test_suite")
 load(":swift_package_tool_tests.bzl", "swift_package_tool_test_suite")
 load(":swift_version_check_tests.bzl", "swift_version_check_test_suite")
@@ -122,6 +123,8 @@ swift_files_test_suite()
 swiftpkg_build_files_test_suite()
 
 swift_package_tool_test_suite()
+
+swift_package_aliases_test_suite()
 
 swift_package_stale(
     name = "swift_package_stale_fixture",

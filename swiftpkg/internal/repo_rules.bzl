@@ -173,6 +173,10 @@ BUILD file override bypasses generated declarations.\
         # Use template() with no substitutions to copy the file. There is
         # no direct copy API for label-referenced files in repository rules.
         repository_ctx.template("BUILD.bazel", repository_ctx.attr.build_file)
+
+        # The target names in a custom BUILD file are unknown, so an alias
+        # repository over this package declares no aliases.
+        _write_targets_json(repository_ctx, [], "")
         return
 
     pkg_info = pkg_ctx.pkg_info
@@ -218,7 +222,10 @@ BUILD file override bypasses generated declarations.\
     bld_files.append(swiftpkg_build_files.new_for_products(pkg_ctx))
 
     # Export the pkg_info.json
-    exports_files = scg.new_fn_call("exports_files", ["pkg_info.json"])
+    exports_files = scg.new_fn_call(
+        "exports_files",
+        ["pkg_info.json", "targets.json"],
+    )
     bld_files.append(build_files.new(decls = [exports_files]))
 
     # Write the build file
@@ -235,7 +242,24 @@ BUILD file override bypasses generated declarations.\
                 pkg_ctx.bazel_target_mods,
             ),
         )
+    _write_targets_json(
+        repository_ctx,
+        [d.name for d in root_bld_file.decls if d.kind != "_function"],
+        pkg_info.path,
+    )
     build_files.write(repository_ctx, root_bld_file, pkg_info.path)
+
+def _write_targets_json(repository_ctx, names, path):
+    """Writes the names of the root BUILD file's targets to `targets.json`.
+
+    An alias repository reads this file to learn which targets to alias.
+    """
+    content = json.encode_indent({"targets": sorted(names)}, indent = "  ")
+    repository_ctx.file(
+        paths.join(path, "targets.json"),
+        content = content + "\n",
+        executable = False,
+    )
 
 def _write_workspace_file(repository_ctx, repoDir):
     path = paths.join(repoDir, "WORKSPACE")
