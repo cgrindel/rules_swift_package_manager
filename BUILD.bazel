@@ -6,11 +6,15 @@ load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy", "tidy_all")
 load("@cgrindel_bazel_starlib//markdown:defs.bzl", "markdown_pkg")
 load("@cgrindel_bazel_starlib//shlib/rules:execute_binary.bzl", "execute_binary")
 load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_update_all")
-load(
-    "@rules_bazel_integration_test//bazel_integration_test:defs.bzl",
-    "integration_test_utils",
-)
 load("//ci:defs.bzl", "ci_workflow")
+
+# Clients load this package for `:swift_version_check`, so it must not load
+# from dev dependencies such as rules_bazel_integration_test. These are its
+# `integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS`.
+_INTEGRATION_TEST_TAGS = [
+    "exclusive",
+    "manual",
+]
 
 # Allow docs to access the extensions.bzl
 exports_files(["extensions.bzl"])
@@ -196,7 +200,7 @@ filegroup(
 
 test_suite(
     name = "smoke_integration_tests",
-    tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
+    tags = _INTEGRATION_TEST_TAGS,
     tests = [
         "//bzlmod:e2e_test",
         "//examples:smoke_integration_tests",
@@ -207,7 +211,7 @@ test_suite(
 
 test_suite(
     name = "all_integration_tests",
-    tags = integration_test_utils.DEFAULT_INTEGRATION_TEST_TAGS,
+    tags = _INTEGRATION_TEST_TAGS,
     tests = [
         ":smoke_integration_tests",
         "//examples:all_integration_tests",
