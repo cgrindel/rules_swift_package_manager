@@ -605,3 +605,10 @@ bzl_library(
     srcs = ["validations.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
+
+bzl_library(
+    name = "staleness",
+    srcs = ["staleness.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [":slices"],
+)

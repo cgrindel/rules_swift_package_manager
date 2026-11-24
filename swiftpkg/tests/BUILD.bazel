@@ -34,6 +34,7 @@ load(":semver_tests.bzl", "semver_test_suite")
 load(":slice_messages_tests.bzl", "slice_messages_test_suite")
 load(":slices_tests.bzl", "slices_test_suite")
 load(":spm_platforms_tests.bzl", "spm_platforms_test_suite")
+load(":staleness_tests.bzl", "staleness_test_suite")
 load(":starlark_codegen_tests.bzl", "starlark_codegen_test_suite")
 load(":swift_deps_tests.bzl", "swift_deps_test_suite")
 load(":swift_files_tests.bzl", "swift_files_test_suite")
@@ -104,6 +105,8 @@ semver_test_suite()
 slice_messages_test_suite()
 
 slices_test_suite()
+
+staleness_test_suite()
 
 spm_platforms_test_suite()
 
