@@ -2,38 +2,6 @@
 
 load("@bazel_skylib//rules:common_settings.bzl", "BuildSettingInfo")
 
-# Positional arguments: $1 swift wrapper, $2 version file, $3 slice dir,
-# $4 output marker. Paths are passed as arguments, never interpolated into the
-# command.
-_CHECK_COMMAND = """\
-set -o errexit -o nounset -o pipefail
-swift="$1"
-version_file="$2"
-slice_dir="$3"
-out="$4"
-
-want="$(cut -d. -f1,2 < "${version_file}")"
-if ! version_output="$("${swift}" --version 2>&1)"; then
-  printf 'swift_version_check: `swift --version` failed:\\n%s\\n' \
-    "${version_output}" >&2
-  exit 1
-fi
-have="$(printf '%s\\n' "${version_output}" \
-  | sed -nE 's/.*Swift version ([0-9]+\\.[0-9]+).*/\\1/p' \
-  | head -n 1)"
-if [[ -z "${have}" ]]; then
-  printf 'swift_version_check: could not parse `swift --version` output:\\n%s\\n' \
-    "${version_output}" >&2
-  exit 1
-fi
-if [[ "${have}" != "${want}" ]]; then
-  printf '`swift_deps_cache` for slice `%s` was produced by Swift %s but this build uses Swift %s; run `bazel run @swift_package//:cache`\\n' \
-    "${slice_dir}" "${want}" "${have}" >&2
-  exit 1
-fi
-touch "${out}"
-"""
-
 def _swift_version_check_impl(ctx):
     validated = ctx.actions.declare_file("{}.validated".format(ctx.label.name))
     mode = ctx.attr._mode[BuildSettingInfo].value
@@ -41,12 +9,16 @@ def _swift_version_check_impl(ctx):
     if mode == "off":
         ctx.actions.write(validated, "")
     else:
+        # The script is a source file, so run it through `bash` rather than
+        # rely on its executable bit. Paths are passed as arguments, never
+        # interpolated into the command.
         ctx.actions.run_shell(
-            inputs = [ctx.file.version_file],
+            inputs = [ctx.file.version_file, ctx.file._script],
             tools = [ctx.attr._swift[DefaultInfo].files_to_run],
             outputs = [validated],
-            command = _CHECK_COMMAND,
+            command = 'exec bash "${@}"',
             arguments = [
+                ctx.file._script.path,
                 ctx.executable._swift.path,
                 ctx.file.version_file.path,
                 ctx.attr.slice_dir,
@@ -78,6 +50,10 @@ swift_version_check = rule(
         ),
         "_mode": attr.label(
             default = Label("//:swift_version_check"),
+        ),
+        "_script": attr.label(
+            allow_single_file = True,
+            default = Label(":swift_version_check.sh"),
         ),
         "_swift": attr.label(
             default = Label("//tools:swift"),

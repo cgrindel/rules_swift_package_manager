@@ -49,28 +49,25 @@ def _error_mode_registers_check_action_test_impl(ctx):
     )
     action = actions[0]
 
-    command = " ".join(action.argv)
-    asserts.true(
-        env,
-        "--version" in command,
-        "expected `--version` in argv: {}".format(action.argv),
-    )
-    asserts.true(
-        env,
-        "swift/macos" in action.argv,
-        "expected slice dir in argv: {}".format(action.argv),
-    )
+    inputs = action.inputs.to_list()
+    version_files = [f for f in inputs if f.basename == "swift_version.txt"]
+    asserts.equals(env, 1, len(version_files), "inputs: {}".format(inputs))
+    scripts = [f for f in inputs if f.basename == "swift_version_check.sh"]
+    asserts.equals(env, 1, len(scripts), "inputs: {}".format(inputs))
+    wrappers = [f for f in inputs if f.short_path.endswith("tools/swift")]
+    asserts.equals(env, 1, len(wrappers), "inputs: {}".format(inputs))
 
-    input_basenames = [f.basename for f in action.inputs.to_list()]
-    asserts.true(
+    validation_files = _validation_files(env)
+    asserts.equals(
         env,
-        "swift_version.txt" in input_basenames,
-        "expected version file in inputs: {}".format(input_basenames),
-    )
-    asserts.true(
-        env,
-        "swift" in input_basenames,
-        "expected swift wrapper in inputs: {}".format(input_basenames),
+        [
+            scripts[0].path,
+            wrappers[0].path,
+            version_files[0].path,
+            "swift/macos",
+            validation_files[0].path,
+        ],
+        action.argv[-5:],
     )
 
     validation_files = _validation_files(env)
