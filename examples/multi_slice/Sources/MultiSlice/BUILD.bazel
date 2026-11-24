@@ -1,0 +1,12 @@
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+
+swift_binary(
+    name = "MultiSlice",
+    srcs = ["main.swift"],
+    module_name = "MultiSlice",
+    visibility = ["//visibility:public"],
+    deps = ["@swiftpkg_swift_log//:Logging"] + select({
+        "@platforms//os:linux": ["@swiftpkg_swift_system//:SystemPackage"],
+        "//conditions:default": [],
+    }),
+)

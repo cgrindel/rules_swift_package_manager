@@ -75,6 +75,10 @@ jobs:
             runner: xcode-27
           - test: '@@//examples:modulemap_comments_example_test_bazel_.bazelversion'
             runner: xcode-27
+          - test: '@@//examples:multi_slice_test_bazel_.bazelversion'
+            runner: ubuntu-22.04
+          - test: '@@//examples:multi_slice_test_bazel_.bazelversion'
+            runner: xcode-27
           - test: '@@//examples:nimble_example_test_bazel_.bazelversion'
             runner: xcode-27
           - test: '@@//examples:objc_code_test_bazel_.bazelversion'

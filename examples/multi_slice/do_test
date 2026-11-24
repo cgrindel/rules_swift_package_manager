@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+# Use the Bazel binary specified by the integration test. Otherwise, fall back
+# to bazel.
+bazel="${BIT_BAZEL_BINARY:-bazel}"
+
+fail() {
+  echo >&2 "${@}"
+  exit 1
+}
+
+assert_contains() {
+  local expected="${1}"
+  local actual="${2}"
+  [[ "${actual}" == *"${expected}"* ]] \
+    || fail "Expected to contain: ${expected}, actual: ${actual}"
+}
+
+# The host can only regenerate its own OS's slice. The other slice may be
+# stale until CI's Linux job fills it (generate_linux_slices.yml), so every
+# assertion about it accepts both states.
+if [[ "$(uname)" == "Darwin" ]]; then
+  host_slice="apple"
+  other_slice="linux"
+else
+  host_slice="linux"
+  other_slice="apple"
+fi
+other_cache="swift_deps/${other_slice}/swift_deps_cache"
+
+tmp="$(mktemp -d)"
+trap 'rm -rf "${tmp}"' EXIT
+
+# Copies `swift_deps` aside, without SwiftPM scratch dirs.
+save_swift_deps() {
+  rm -rf swift_deps/*/.build "${tmp}/swift_deps"
+  cp -R swift_deps "${tmp}/swift_deps"
+}
+
+restore_swift_deps() {
+  rm -rf swift_deps
+  cp -R "${tmp}/swift_deps" swift_deps
+}
+
+"${bazel}" run //:tidy
+
+"${bazel}" build //...
+
+output="$("${bazel}" run //Sources/MultiSlice 2>&1)"
+assert_contains "hello from multi_slice" "${output}"
+
+# MARK: - Alias layout
+
+# swift-log is in both slices. It is one plain repository when the slices are
+# identical, and an alias repository over `__slice_<n>` repositories when they
+# differ or one is stale. Either way, the host configuration must reach a
+# real `Logging` target.
+output="$("${bazel}" cquery --output=build @swiftpkg_swift_log//:Logging)"
+if [[ "${output}" == *"alias("* ]]; then
+  [[ "${output}" =~ actual\ =\ \"@@[^\"]*swiftpkg_swift_log__slice_[0-9]+//:Logging\" ]] \
+    || fail "Expected Logging to alias a __slice_ repository: ${output}"
+  aliases="$("${bazel}" query 'kind(alias, @swiftpkg_swift_log//:all)')"
+  [[ -n "${aliases}" ]] || fail "Expected aliases in @swiftpkg_swift_log."
+elif [[ ! -d "${other_cache}" ]]; then
+  fail "The ${other_slice} slice is stale, so swift-log must be aliased: ${output}"
+fi
+
+# swift-system is only a dependency on Linux.
+if [[ "${host_slice}" == "linux" ]]; then
+  "${bazel}" build @swiftpkg_swift_system//:SystemPackage
+  output="$("${bazel}" run //Sources/MultiSlice 2>&1)"
+  assert_contains "/tmp" "${output}"
+else
+  if output="$("${bazel}" build @swiftpkg_swift_system//:SystemPackage 2>&1)"; then
+    fail "Expected @swiftpkg_swift_system to fail on macOS: ${output}"
+  fi
+  if [[ "${output}" != *"is not in slice \`swift_deps/apple\`"* ]]; then
+    assert_contains "slice \`swift_deps/linux\`" "${output}"
+    assert_contains "is stale" "${output}"
+  fi
+fi
+
+# MARK: - Stale handling
+
+# Change an input of the other OS's slice. The host configuration still
+# builds, `@swift_package` stays usable, and the other slice's branch fails.
+save_swift_deps
+mkdir -p "${other_cache}/_main"
+echo "x=y" >>"${other_cache}/_main/flags.cached"
+"${bazel}" build //Sources/MultiSlice
+"${bazel}" build @swift_package//:cache
+output="$("${bazel}" query --output=build @swiftpkg_swift_log//:_stale_1 2>&1 || true)"
+assert_contains "slice \`swift_deps/${other_slice}\`" "${output}"
+assert_contains "is stale" "${output}"
+restore_swift_deps
+
+# MARK: - Swift version check
+
+save_swift_deps
+echo "1.0.0" >"swift_deps/${host_slice}/swift_deps_cache/_main/swift_version.txt"
+if output="$("${bazel}" build //Sources/MultiSlice 2>&1)"; then
+  fail "Expected the Swift version check to fail: ${output}"
+fi
+assert_contains "was produced by Swift 1.0" "${output}"
+"${bazel}" build //Sources/MultiSlice \
+  --@rules_swift_package_manager//:swift_version_check=off
+restore_swift_deps
+
+# MARK: - Cache reproducibility
+
+# Regenerating the host's slice must not change it.
+save_swift_deps
+"${bazel}" run @swift_package//:cache
+diff -r --exclude=.build \
+  "${tmp}/swift_deps/${host_slice}" "swift_deps/${host_slice}" \
+  || fail "The cache step changed the checked-in ${host_slice} slice."
+rm -rf swift_deps/*/.build

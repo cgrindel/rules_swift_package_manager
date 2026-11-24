@@ -1,0 +1,83 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-log",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-log"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.6.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "multi_slice",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "Logging",
+            "swift-log",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "BUILD.bazel"
+      ],
+      "name" : "MultiSlice",
+      "packageAccess" : true,
+      "path" : "Sources/MultiSlice",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "executable"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.9.0"
+  },
+  "traits" : [
+
+  ]
+}

@@ -1,1 +1,3 @@
 bzlmod/workspace/swift_deps/any/.build
+examples/multi_slice/swift_deps/apple/.build
+examples/multi_slice/swift_deps/linux/.build

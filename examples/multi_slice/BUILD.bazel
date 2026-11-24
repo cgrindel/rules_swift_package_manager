@@ -1,0 +1,16 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
+load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_update_all")
+
+# MARK: - Tidy / Update Source Files
+
+updatesrc_update_all(name = "update_all")
+
+tidy(
+    name = "tidy",
+    targets = [
+        ":update_all",
+    ],
+)
+
+bzlformat_pkg(name = "bzlformat")
