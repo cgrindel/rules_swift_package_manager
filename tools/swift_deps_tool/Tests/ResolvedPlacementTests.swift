@@ -75,20 +75,24 @@ final class ResolvedPlacementTests: XCTestCase {
 
   func testRemovesCopyOnError() throws {
     try write("old", to: sliceResolved)
-    XCTAssertThrowsError(try placement().withResolvedInPlace { throw BodyError() }) { error in
+    let body = {
+      try self.write("new", to: self.packageResolved)
+      throw BodyError()
+    }
+    XCTAssertThrowsError(try placement().withResolvedInPlace(body)) { error in
       XCTAssertTrue(error is BodyError)
     }
     XCTAssertFalse(exists(packageResolved))
     XCTAssertFalse(exists(lockDir))
-    XCTAssertEqual(try read(sliceResolved), "old")
+    XCTAssertEqual(try read(sliceResolved), "new")
   }
 
   func testLiveLockFails() throws {
     let other = sliceDir.deletingLastPathComponent().appendingPathComponent("other")
     try makeLock(pid: "777\n", slice: other)
     var ran = false
-    let isAlive = placement { $0 == 777 }
-    XCTAssertThrowsError(try isAlive.withResolvedInPlace { ran = true }) { error in
+    let placement = self.placement { $0 == 777 }
+    XCTAssertThrowsError(try placement.withResolvedInPlace { ran = true }) { error in
       let message = String(describing: error)
       XCTAssertTrue(message.contains("777"), message)
       XCTAssertTrue(message.contains(other.path), message)
@@ -111,6 +115,44 @@ final class ResolvedPlacementTests: XCTestCase {
     XCTAssertEqual(try read(other.appendingPathComponent("Package.resolved")), "other")
     XCTAssertFalse(exists(packageResolved))
     XCTAssertFalse(exists(lockDir))
+  }
+
+  func testUnreadablePidIsTreatedAsDead() throws {
+    try makeLock(pid: "", slice: sliceDir)
+    var askedAlive = false
+    let placement = self.placement { _ in
+      askedAlive = true
+      return true
+    }
+    let ran = try placement.withResolvedInPlace { true }
+    XCTAssertTrue(ran)
+    XCTAssertFalse(askedAlive)
+    XCTAssertFalse(exists(lockDir))
+  }
+
+  func testMoveBackFailureKeepsBodyError() throws {
+    let body = {
+      try self.write("new", to: self.packageResolved)
+      try self.fileManager.removeItem(at: self.sliceDir)
+      throw BodyError()
+    }
+    XCTAssertThrowsError(try placement().withResolvedInPlace(body)) { error in
+      XCTAssertTrue(error is BodyError, String(describing: error))
+    }
+    XCTAssertFalse(exists(lockDir))
+  }
+
+  func testReleaseLeavesLockItDoesNotOwn() throws {
+    try placement().withResolvedInPlace {
+      try write("999", to: lockDir.appendingPathComponent("pid"))
+    }
+    XCTAssertEqual(try read(lockDir.appendingPathComponent("pid")), "999")
+  }
+
+  func testProcessIsAliveRejectsNonPositivePIDs() {
+    XCTAssertFalse(ResolvedPlacement.processIsAlive(0))
+    XCTAssertFalse(ResolvedPlacement.processIsAlive(-1))
+    XCTAssertTrue(ResolvedPlacement.processIsAlive(ProcessInfo.processInfo.processIdentifier))
   }
 
   func testFirstResolveWithNoSliceResolvedWorks() throws {
