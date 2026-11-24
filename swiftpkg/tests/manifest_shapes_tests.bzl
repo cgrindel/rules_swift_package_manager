@@ -116,13 +116,10 @@ item_keys_test = unittest.make(_item_keys_test)
 def _dump_and_desc_agree_test(ctx):
     env = unittest.begin(ctx)
 
+    # An extra desc target is harmless; the parser only looks up dump targets.
     desc = json.decode(DESC_JSON)
     desc["targets"].append(dict(desc["targets"][0], name = "Extra"))
-    asserts.equals(
-        env,
-        "target `Extra` is in desc but not in dump",
-        _check(json.decode(DUMP_JSON), desc),
-    )
+    asserts.equals(env, None, _check(json.decode(DUMP_JSON), desc))
 
     desc = json.decode(DESC_JSON)
     desc["targets"] = []

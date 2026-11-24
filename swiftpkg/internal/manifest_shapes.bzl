@@ -116,9 +116,6 @@ def _check(dump, desc):
     for name in dump_target_names:
         if name not in desc_target_names:
             return "target `{}` is in dump but not in desc".format(name)
-    for name in desc_target_names:
-        if name not in dump_target_names:
-            return "target `{}` is in desc but not in dump".format(name)
 
     dump_ids = {}
     for dep in dump["dependencies"]:
