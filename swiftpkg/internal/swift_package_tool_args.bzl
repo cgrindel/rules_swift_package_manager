@@ -34,12 +34,18 @@ def _render(cmd, package_path, swift_label, slices, flags, patch_specs):
     Args:
         cmd: The tool command (`resolve`, `update` or `cache`) as a `string`.
         package_path: The workspace-relative path to `Package.swift`.
-        swift_label: The `swift_label` as written in the tag.
+        swift_label: The `Package.swift` label passed to the tool as
+            `--swift-label`.
         slices: A `list` of `struct` values with `config` (the canonical
-            config label, used as a `select()` key), `config_label` (the
-            config label as written in the tag), `dir` (the
-            workspace-relative slice directory) and `package_label` (the
-            slice package label as written).
+            config label, used as the `select()` key), `config_value` (the
+            config label passed to the tool as `--config`), `dir` (the
+            workspace-relative slice directory, passed as `--slice`) and
+            `package_value` (the slice package label passed as
+            `--slice-package`). The extension passes canonical labels in
+            `config_value`, `package_value` and `swift_label`; the tool keeps
+            the labels an existing `inc.MODULE.bazel` already holds and uses
+            these only for a slice without one, so canonical names do not
+            reach a file that `init` wrote.
         flags: The flags as rendered by `staleness.render_flags`: a
             `key=value\\n` `string` or a `list` of `key=value` strings, in
             sorted order.
@@ -83,9 +89,9 @@ def _render(cmd, package_path, swift_label, slices, flags, patch_specs):
         ],
         _slice_select(slices, "dir", no_match_error),
         ["--slice-package"],
-        _slice_select(slices, "package_label", no_match_error),
+        _slice_select(slices, "package_value", no_match_error),
         ["--config"],
-        _slice_select(slices, "config_label", no_match_error),
+        _slice_select(slices, "config_value", no_match_error),
         ["--target-os"],
         scg.new_fn_call("select", _TARGET_OS_SELECT),
     ]

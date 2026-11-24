@@ -13,16 +13,16 @@ load(
 
 _MACOS_SLICE = struct(
     config = "@@platforms//os:macos",
-    config_label = "@platforms//os:macos",
+    config_value = "@platforms//os:macos",
     dir = "swift/macos",
-    package_label = "//swift/macos",
+    package_value = "//swift/macos",
 )
 
 _LINUX_SLICE = struct(
     config = "@@platforms//os:linux",
-    config_label = "@platforms//os:linux",
+    config_value = "@platforms//os:linux",
     dir = "swift/linux",
-    package_label = "//swift/linux",
+    package_value = "//swift/linux",
 )
 
 _TARGET_OS_SELECT = """\
@@ -51,7 +51,7 @@ def _single_slice_test(ctx):
     actual = _render_decl(
         cmd = "cache",
         package_path = "Package.swift",
-        swift_label = "@swift_package//:swift",
+        swift_label = "//swift:Package.swift",
         slices = [_MACOS_SLICE],
         flags = "",
         patch_specs = {},
@@ -64,7 +64,7 @@ swift_package_tool_rule(
         "--package",
         "Package.swift",
         "--swift-label",
-        "@swift_package//:swift",
+        "//swift:Package.swift",
         "--slice",
     ] + select(
         {
@@ -141,7 +141,7 @@ swift_package_tool_rule(
 
 two_slices_select_test = unittest.make(_two_slices_select_test)
 
-def _flags_sorted_test(ctx):
+def _flags_preserve_order_test(ctx):
     env = unittest.begin(ctx)
 
     # The flags arrive already sorted from `staleness.render_flags`; the
@@ -171,7 +171,7 @@ def _flags_sorted_test(ctx):
 
     return unittest.end(env)
 
-flags_sorted_test = unittest.make(_flags_sorted_test)
+flags_preserve_order_test = unittest.make(_flags_preserve_order_test)
 
 def _patches_use_rootpath_test(ctx):
     env = unittest.begin(ctx)
@@ -270,7 +270,7 @@ def swift_package_tool_args_test_suite(name = "swift_package_tool_args_tests"):
         name + "_unit",
         single_slice_test,
         two_slices_select_test,
-        flags_sorted_test,
+        flags_preserve_order_test,
         patches_use_rootpath_test,
     )
     native.test_suite(
