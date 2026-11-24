@@ -1,6 +1,7 @@
 /// Renders a slice's `inc.MODULE.bazel`, formatted as buildifier would.
 public enum IncModuleRenderer {
-  /// Identities are sorted, so the output only changes when the set of packages does.
+  /// Identities are sorted, so the output only changes when the set of packages does. Keyword
+  /// arguments are in the alphabetical order that `bazel mod tidy` rewrites them to.
   public static func render(
     config: String, swiftLabel: String, resolvedLabel: String, slicePackage: String,
     identities: [String]
@@ -17,13 +18,16 @@ public enum IncModuleRenderer {
       swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
       swift_deps.from_package(
           config = "\(config)",
-          swift = "\(swiftLabel)",
-          resolved = "\(resolvedLabel)",
 
       """
-        + manifests("dump_manifests", "dump.json")
         + manifests("desc_manifests", "desc.json")
-        + ")\n"
+        + manifests("dump_manifests", "dump.json")
+        + """
+            resolved = "\(resolvedLabel)",
+            swift = "\(swiftLabel)",
+        )
+
+        """
   }
 
   /// Renders with the labels `IncModuleFile.labels` picked.

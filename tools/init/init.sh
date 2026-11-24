@@ -111,15 +111,16 @@ cat >"${root}/${dir}/BUILD.bazel" <<'BUILD'
 package(default_visibility = ["//visibility:public"])
 BUILD
 
-# Keep in sync with the fixture inc.MODULE.bazel.empty.expected.
+# Keep in sync with the fixture inc.MODULE.bazel.empty.expected. Keyword
+# arguments are in the alphabetical order that `bazel mod tidy` writes.
 cat >"${inc_path}" <<INC
 swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
 swift_deps.from_package(
     config = "${config}",
-    swift = "${swift_label}",
-    resolved = "${slice_pkg}:Package.resolved",
-    dump_manifests = {},
     desc_manifests = {},
+    dump_manifests = {},
+    resolved = "${slice_pkg}:Package.resolved",
+    swift = "${swift_label}",
 )
 INC
 

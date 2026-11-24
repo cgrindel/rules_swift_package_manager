@@ -138,18 +138,18 @@ final class CacheStepTests: XCTestCase {
       swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
       swift_deps.from_package(
           config = "@platforms//os:macos",
-          swift = "//pkg:Package.swift",
-          resolved = "//swift/macos:Package.resolved",
-          dump_manifests = {
-              "_main": "//swift/macos:swift_deps_cache/_main/dump.json",
-              "localdir": "//swift/macos:swift_deps_cache/localdir/dump.json",
-              "swift-log": "//swift/macos:swift_deps_cache/swift-log/dump.json",
-          },
           desc_manifests = {
               "_main": "//swift/macos:swift_deps_cache/_main/desc.json",
               "localdir": "//swift/macos:swift_deps_cache/localdir/desc.json",
               "swift-log": "//swift/macos:swift_deps_cache/swift-log/desc.json",
           },
+          dump_manifests = {
+              "_main": "//swift/macos:swift_deps_cache/_main/dump.json",
+              "localdir": "//swift/macos:swift_deps_cache/localdir/dump.json",
+              "swift-log": "//swift/macos:swift_deps_cache/swift-log/dump.json",
+          },
+          resolved = "//swift/macos:Package.resolved",
+          swift = "//pkg:Package.swift",
       )
 
       """)
