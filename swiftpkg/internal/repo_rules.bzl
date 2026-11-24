@@ -150,6 +150,34 @@ with. Required when `dump_manifest` is set.\
     ),
 }
 
+def _v2_attrs_error(repo_name, attr):
+    """Checks that the v2 attributes are set together.
+
+    Args:
+        repo_name: The repository name, used in the message.
+        attr: The `repository_ctx.attr` value.
+
+    Returns:
+        `None` when consistent; otherwise, an error `string`.
+    """
+    if not attr.dump_manifest:
+        if attr.slice_dir:
+            return """\
+`{repo}` sets `slice_dir` but not `dump_manifest`; a v2 slice package needs \
+both.\
+""".format(repo = repo_name)
+        return None
+    missing = [
+        name
+        for name in ["desc_manifest", "swift_version", "slice_dir"]
+        if not getattr(attr, name)
+    ]
+    if missing:
+        return """\
+`{repo}` sets `dump_manifest` but not: {missing}.\
+""".format(repo = repo_name, missing = ", ".join(missing))
+    return None
+
 def _read_v2_manifests(repository_ctx):
     """Reads the cached manifests for a v2 slice.
 
@@ -161,17 +189,11 @@ def _read_v2_manifests(repository_ctx):
         `dump_manifest` and `desc_manifest` as decoded `dict` values.
     """
     attr = repository_ctx.attr
+    err = _v2_attrs_error(repository_ctx.name, attr)
+    if err != None:
+        fail(err)
     if not attr.dump_manifest:
         return None
-    missing = [
-        name
-        for name in ["desc_manifest", "swift_version", "slice_dir"]
-        if not getattr(attr, name)
-    ]
-    if missing:
-        fail("""\
-`{repo}` sets `dump_manifest` but not: {missing}.\
-""".format(repo = repository_ctx.name, missing = ", ".join(missing)))
 
     def _read(label):
         value = manifest_files.read_json(repository_ctx, label)
@@ -263,9 +285,13 @@ BUILD file override bypasses generated declarations.\
         # no direct copy API for label-referenced files in repository rules.
         repository_ctx.template("BUILD.bazel", repository_ctx.attr.build_file)
 
-        # The target names in a custom BUILD file are unknown, so an alias
-        # repository over this package declares no aliases.
-        _write_targets_json(repository_ctx, [], "")
+        # An alias repository over this package aliases the names that the
+        # custom BUILD file declares literally.
+        _write_targets_json(
+            repository_ctx,
+            _declared_names(repository_ctx.read(repository_ctx.attr.build_file)),
+            "",
+        )
         return
 
     pkg_info = pkg_ctx.pkg_info
@@ -356,6 +382,26 @@ BUILD file override bypasses generated declarations.\
         pkg_info.path,
     )
     build_files.write(repository_ctx, root_bld_file, pkg_info.path)
+
+_NAME_PREFIX = 'name = "'
+
+def _declared_names(content):
+    """Collects the target names that a BUILD file declares literally.
+
+    Every `name = "<x>"` is a name. Names that a macro computes are not seen.
+
+    Args:
+        content: The BUILD file content as a `string`.
+
+    Returns:
+        A sorted `list` of unique names.
+    """
+    names = {}
+    for chunk in content.split(_NAME_PREFIX)[1:]:
+        end = chunk.find('"')
+        if end > 0:
+            names[chunk[:end]] = None
+    return sorted(names.keys())
 
 def _write_targets_json(repository_ctx, names, path):
     """Writes the names of the root BUILD file's targets to `rspm_targets.json`.
@@ -501,6 +547,7 @@ def _remove_modulemaps(repository_ctx, directory, targets):
 repo_rules = struct(
     check_spm_version = _check_spm_version,
     copy_swift_version = _copy_swift_version,
+    declared_names = _declared_names,
     download_artifacts = _download_artifacts,
     env_attr = _env_attr,
     env_attrs = _env_attrs,
@@ -513,5 +560,6 @@ repo_rules = struct(
     remove_swift_version_file = _remove_swift_version_file,
     swift_attrs = _swift_attrs,
     v2_attrs = _v2_attrs,
+    v2_attrs_error = _v2_attrs_error,
     write_workspace_file = _write_workspace_file,
 )

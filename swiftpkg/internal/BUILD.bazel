@@ -513,6 +513,7 @@ bzl_library(
         ":build_decls",
         ":build_files",
         ":load_statements",
+        ":minimum_os_versions",
         ":slice_messages",
         ":starlark_codegen",
     ],

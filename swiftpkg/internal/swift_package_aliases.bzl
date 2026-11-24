@@ -3,10 +3,59 @@
 load(":build_decls.bzl", "build_decls")
 load(":build_files.bzl", "build_files")
 load(":load_statements.bzl", "load_statements")
+load(":minimum_os_versions.bzl", "minimum_os_versions")
 load(":slice_messages.bzl", "slice_messages")
 load(":starlark_codegen.bzl", scg = "starlark_codegen")
 
 _STALE_PREFIX = "_stale_"
+
+_MINIMUM_OS_VERSIONS_FILE = "minimum_os_versions.json"
+
+def _max_versions(versions_list):
+    """Merges platform version `dict` values, keeping the highest per platform.
+
+    Args:
+        versions_list: A `list` of `dict` values mapping a platform name to a
+            version `string`.
+
+    Returns:
+        A `dict` mapping each platform name to its highest version.
+    """
+    result = {}
+    for versions in versions_list:
+        for platform_name in sorted(versions.keys()):
+            version = versions[platform_name]
+            current = result.get(platform_name)
+            if current == None or minimum_os_versions.is_higher(version, current):
+                result[platform_name] = version
+    return result
+
+def _merge_minimum_os_versions(exported_list):
+    """Merges the minimum OS versions that the branch repositories export.
+
+    A dependent reads one `minimum_os_versions.json` per dependency. Behind an
+    alias repository, any branch may be selected, so the merged file holds,
+    per platform, the highest version of any branch.
+
+    Args:
+        exported_list: A `list` of `dict` values as returned by
+            `minimum_os_versions.new_exported`.
+
+    Returns:
+        A `dict` with the same `package` and `products` shape.
+    """
+    products_lists = {}
+    for exported in exported_list:
+        products = exported.get("products", {})
+        for name in sorted(products.keys()):
+            products_lists.setdefault(name, []).append(products[name])
+    return {
+        "package": _max_versions([e.get("package", {}) for e in exported_list]),
+        "products": {
+            name: _max_versions(products_lists[name])
+            for name in sorted(products_lists.keys())
+        },
+    }
 
 def _build_file(names, branches, stale_messages):
     """Creates the alias repository's root build file.
@@ -105,6 +154,7 @@ repository name '{name}'.\
     canonical_prefix = canonical_name[:len(canonical_name) - len(apparent_name)]
 
     names = {}
+    exported_list = []
     for repo in sorted({r: None for r in repository_ctx.attr.branches.values() if r}):
         targets_json = repository_ctx.read(Label(
             "@@{prefix}{repo}//:rspm_targets.json".format(
@@ -114,6 +164,26 @@ repository name '{name}'.\
         ))
         for name in json.decode(targets_json)["targets"]:
             names[name] = None
+
+        # Dependents read this repository's `minimum_os_versions.json`, so
+        # merge the branches' files. A branch without one contributes
+        # nothing.
+        versions_label = Label("@@{prefix}{repo}//:{file}".format(
+            prefix = canonical_prefix,
+            repo = repo,
+            file = _MINIMUM_OS_VERSIONS_FILE,
+        ))
+        if repository_ctx.path(versions_label).exists:
+            exported_list.append(json.decode(repository_ctx.read(versions_label)))
+
+    repository_ctx.file(
+        _MINIMUM_OS_VERSIONS_FILE,
+        content = json.encode_indent(
+            _merge_minimum_os_versions(exported_list),
+            indent = "  ",
+        ),
+        executable = False,
+    )
 
     bld_file = _build_file(
         names = names.keys(),
@@ -145,11 +215,13 @@ Declares `alias` targets that select a package repository per slice config.
 
 Each target named in the package repositories' `rspm_targets.json` files gets an \
 `alias` whose `actual` selects the matching repository's target. A package \
-repository that uses a custom `build_file` lists no targets, so it \
-contributes no aliases.\
+repository that uses a custom `build_file` lists the names its file declares \
+literally. The repository also writes a `minimum_os_versions.json` that holds, \
+per platform, the highest version that any package repository exports.\
 """,
 )
 
 swift_package_aliases_lib = struct(
     build_file = _build_file,
+    merge_minimum_os_versions = _merge_minimum_os_versions,
 )

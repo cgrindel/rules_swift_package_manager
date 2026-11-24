@@ -126,7 +126,11 @@ _ALL_ATTRS = dicts.add(
     _PATH_ATTRS,
     {
         "build_file": attr.label(
-            doc = "When used, the provided BUILD file will be used instead of generating one.",
+            doc = """\
+When used, the provided BUILD file will be used instead of generating one. \
+In a v2 alias repository, only the targets that this file declares with a \
+literal `name = "..."` get aliases; names that a macro computes are not seen.\
+""",
         ),
         "cached_json_directory": attr.string(),
     },

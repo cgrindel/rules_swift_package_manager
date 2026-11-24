@@ -169,6 +169,45 @@ two_stale_configs_get_distinct_targets_test = unittest.make(
     _two_stale_configs_get_distinct_targets_test,
 )
 
+def _merge_minimum_os_versions_takes_max_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = swift_package_aliases_lib.merge_minimum_os_versions([
+        {
+            "package": {"ios": "13.0", "macos": "10.15"},
+            "products": {
+                "Logging": {"ios": "13.0", "macos": "10.15"},
+                "OnlyA": {"ios": "12.0"},
+            },
+        },
+        {
+            # `10.9` < `10.15` as versions, though not as strings.
+            "package": {"ios": "12.0", "macos": "10.9", "tvos": "13.0"},
+            "products": {"Logging": {"ios": "14.0", "macos": "10.9"}},
+        },
+    ])
+    expected = {
+        "package": {"ios": "13.0", "macos": "10.15", "tvos": "13.0"},
+        "products": {
+            "Logging": {"ios": "14.0", "macos": "10.15"},
+            "OnlyA": {"ios": "12.0"},
+        },
+    }
+    asserts.equals(env, expected, actual)
+
+    # No branch exports anything.
+    asserts.equals(
+        env,
+        {"package": {}, "products": {}},
+        swift_package_aliases_lib.merge_minimum_os_versions([]),
+    )
+
+    return unittest.end(env)
+
+merge_minimum_os_versions_takes_max_test = unittest.make(
+    _merge_minimum_os_versions_takes_max_test,
+)
+
 def swift_package_aliases_test_suite(name = "swift_package_aliases_tests"):
     return unittest.suite(
         name,
@@ -176,4 +215,5 @@ def swift_package_aliases_test_suite(name = "swift_package_aliases_tests"):
         stale_branch_adds_stale_target_test,
         no_match_error_lists_configs_test,
         two_stale_configs_get_distinct_targets_test,
+        merge_minimum_os_versions_takes_max_test,
     )
