@@ -1,13 +1,14 @@
 """Detects whether a slice's `swift_deps_cache` is stale.
 
 A slice is fresh when every cached input matches its live counterpart and
-every listed manifest exists. The comparison is exact text. Nothing here
+every listed manifest exists and decodes as JSON. The comparison is exact text. Nothing here
 calls `fail()` on a missing file; a missing file makes the slice stale.
 
 The pairing logic takes a `reader` struct so that unit tests can pass an
 in-memory fake. `collect` builds the real reader from a `module_ctx`.
 """
 
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load(":slices.bzl", "slices")
 
 _MAIN = "_main"
@@ -90,15 +91,17 @@ def _render_flags(config_swift_package):
         for key in sorted(values.keys())
     ])
 
-def _new_input(name, live, cached):
-    return struct(name = name, live = live, cached = cached)
+def _new_input(name, live, cached, error = None):
+    return struct(name = name, live = live, cached = cached, error = error)
 
 def _evaluate(inputs):
     """Compares each live input with its cached copy.
 
     Args:
         inputs: A `list` of `struct(name, live, cached)`, where `live` and
-            `cached` are `string` contents or `None` when missing.
+            `cached` are `string` contents or `None` when missing. An input
+            may also carry `error`, a `string` that makes it stale on its own
+            (for example, a manifest that is not valid JSON).
 
     Returns:
         A `struct` with `stale` (`bool`) and `reasons` (one `string` per
@@ -106,7 +109,10 @@ def _evaluate(inputs):
     """
     reasons = []
     for i in inputs:
-        if i.live == None:
+        error = getattr(i, "error", None)
+        if error != None:
+            reasons.append("{}: {}".format(i.name, error))
+        elif i.live == None:
             reasons.append("{}: missing live file".format(i.name))
         elif i.cached == None:
             reasons.append("{}: missing cached copy".format(i.name))
@@ -296,7 +302,19 @@ def _collect_with_reader(reader, slice, config_swift_package, patch_files_by_ide
         ),
     ))
 
-    # (5) registries.json, when configured or when a copy is left over.
+    # (5) The Swift version the tool ran with. Only its existence matters
+    # here; `swift_version_check` compares the contents at build time.
+    swift_version_exists = _exists(
+        reader,
+        slices.cache_label(slice, _MAIN, "swift_version.txt"),
+    )
+    inputs.append(_new_input(
+        name = "{}/swift_version.txt".format(_MAIN),
+        live = "",
+        cached = "" if swift_version_exists else None,
+    ))
+
+    # (6) registries.json, when configured or when a copy is left over.
     registries = None
     if config_swift_package != None:
         registries = config_swift_package.registries
@@ -311,7 +329,7 @@ def _collect_with_reader(reader, slice, config_swift_package, patch_files_by_ide
             cached = registries_cached,
         ))
 
-    # (6) Patch files.
+    # (7) Patch files.
     for identity in sorted(patch_files_by_identity.keys()):
         for patch in patch_files_by_identity[identity]:
             basename = "patches/" + patch.name.split("/")[-1]
@@ -324,7 +342,7 @@ def _collect_with_reader(reader, slice, config_swift_package, patch_files_by_ide
                 ),
             ))
 
-    # (7) Local packages, reached by path.
+    # (8) Local packages, reached by path.
     for local in _local_packages(reader, slice, root_dir):
         inputs.extend(_manifest_inputs(
             reader,
@@ -334,14 +352,20 @@ def _collect_with_reader(reader, slice, config_swift_package, patch_files_by_ide
             local.dir,
         ))
 
-    # (8) Every listed manifest must exist. Contents are not read.
+    # (9) Every listed manifest must exist and decode as JSON. A
+    # merge-conflicted manifest marks the slice stale rather than failing the
+    # extension when it decodes the manifest later.
     for identity in slice.identities:
         for basename in ["dump.json", "desc.json"]:
-            exists = _exists(reader, slices.cache_label(slice, identity, basename))
+            text = _read(reader, slices.cache_label(slice, identity, basename))
+            error = None
+            if text != None and json.decode(text, default = None) == None:
+                error = "not valid JSON"
             inputs.append(_new_input(
                 name = "{}/{}".format(identity, basename),
                 live = "",
-                cached = "" if exists else None,
+                cached = "" if text != None else None,
+                error = error,
             ))
     return inputs
 
@@ -362,9 +386,9 @@ def _new_module_ctx_reader(module_ctx):
         return str(module_ctx.path(path_or_label).dirname)
 
     def _join(dir, rel):
-        if rel.startswith("/"):
-            return str(module_ctx.path(rel))
-        return str(module_ctx.path(dir).get_child(rel))
+        # Normalize first so that `..` never reaches Bazel. `paths.join`
+        # returns `rel` when it is absolute.
+        return str(module_ctx.path(paths.normalize(paths.join(str(dir), rel))))
 
     return struct(
         exists = _exists,
@@ -384,11 +408,13 @@ def _collect(module_ctx, slice, config_swift_package, patch_files_by_identity):
        with no live counterpart.
     3. `Package.resolved`, unless absent on both sides.
     4. The rendered flags and `_main/flags.cached`.
-    5. `registries.json`, when configured or when a cached copy exists.
-    6. Each patch file, by sorted identity.
-    7. Each local package's `Package.swift` and variants, in discovery
+    5. The existence of `_main/swift_version.txt`.
+    6. `registries.json`, when configured or when a cached copy exists.
+    7. Each patch file, by sorted identity.
+    8. Each local package's `Package.swift` and variants, in discovery
        order.
-    8. The existence of each identity's `dump.json` and `desc.json`.
+    9. Each identity's `dump.json` and `desc.json`: each must exist and
+       decode as JSON.
 
     Every path checked for existence, and every directory listed, is passed
     to `module_ctx.watch` first, so creating or changing any input

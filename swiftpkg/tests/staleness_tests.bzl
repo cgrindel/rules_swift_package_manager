@@ -133,6 +133,7 @@ def _fresh_files():
         _CACHE + "/_main/Package@swift-5.9.swift.cached": "// root 5.9",
         _CACHE + "/_main/Package.resolved.cached": "{pins}",
         _CACHE + "/_main/flags.cached": _DEFAULT_FLAGS,
+        _CACHE + "/_main/swift_version.txt": "6.1\n",
         _CACHE + "/_main/dump.json": "{}",
         _CACHE + "/_main/desc.json": "{}",
         _CACHE + "/swift-log/dump.json": "{}",
@@ -163,6 +164,7 @@ def _fresh_test(ctx):
             "_main/Package@swift-5.9.swift.cached",
             "_main/Package.resolved.cached",
             "_main/flags.cached",
+            "_main/swift_version.txt",
             "_main/dump.json",
             "_main/desc.json",
             "swift-log/dump.json",
@@ -196,6 +198,54 @@ def _missing_manifest_is_stale_test(ctx):
 
 missing_manifest_is_stale_test = unittest.make(
     _missing_manifest_is_stale_test,
+)
+
+def _malformed_manifest_is_stale_test(ctx):
+    env = unittest.begin(ctx)
+
+    files = _fresh_files()
+    files[_CACHE + "/swift-log/dump.json"] = """\
+<<<<<<< HEAD
+{}
+=======
+{"name": "x"}
+>>>>>>> other
+"""
+    _, inputs = _collect(files)
+    result = staleness.evaluate(inputs)
+    asserts.true(env, result.stale)
+    asserts.equals(
+        env,
+        ["swift-log/dump.json: not valid JSON"],
+        result.reasons,
+    )
+
+    return unittest.end(env)
+
+malformed_manifest_is_stale_test = unittest.make(
+    _malformed_manifest_is_stale_test,
+)
+
+def _missing_swift_version_is_stale_test(ctx):
+    env = unittest.begin(ctx)
+
+    files = _fresh_files()
+    files.pop(_CACHE + "/_main/swift_version.txt")
+    reader, inputs = _collect(files)
+    _assert_checked_paths_watched(env, reader)
+    asserts.true(env, _CACHE + "/_main/swift_version.txt" in reader.watched)
+    result = staleness.evaluate(inputs)
+    asserts.true(env, result.stale)
+    asserts.equals(
+        env,
+        ["_main/swift_version.txt: missing cached copy"],
+        result.reasons,
+    )
+
+    return unittest.end(env)
+
+missing_swift_version_is_stale_test = unittest.make(
+    _missing_swift_version_is_stale_test,
 )
 
 def _changed_package_swift_test(ctx):
@@ -352,11 +402,12 @@ def _local_packages_discovered_to_fixed_point_test(ctx):
             "_main/Package@swift-5.9.swift.cached",
             "_main/Package.resolved.cached",
             "_main/flags.cached",
+            "_main/swift_version.txt",
             "foo/Package.swift.cached",
             "foo/Package@swift-6.0.swift.cached",
             "bar/Package.swift.cached",
         ],
-        names[:7],
+        names[:8],
     )
     asserts.equals(
         env,
@@ -516,6 +567,8 @@ def staleness_test_suite(name = "staleness_tests"):
         name,
         fresh_test,
         missing_manifest_is_stale_test,
+        malformed_manifest_is_stale_test,
+        missing_swift_version_is_stale_test,
         changed_package_swift_test,
         evaluate_reasons_test,
         resolved_absent_on_both_sides_is_not_an_input_test,

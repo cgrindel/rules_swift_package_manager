@@ -20,7 +20,11 @@ def _read_text(ctx, label_or_path):
     return ctx.read(path)
 
 def _read_json(ctx, label):
-    """Returns the decoded JSON from a file, or `None` if it does not exist.
+    """Returns the decoded JSON from a file, or `None`.
+
+    A file that does not exist or is not valid JSON (for example, a
+    merge-conflicted committed `dump.json`) yields `None`, so the caller can
+    treat the slice as stale rather than fail.
 
     Args:
         ctx: A `module_ctx` or `repository_ctx`.
@@ -32,7 +36,7 @@ def _read_json(ctx, label):
     text = _read_text(ctx, label)
     if text == None:
         return None
-    return json.decode(text)
+    return json.decode(text, default = None)
 
 manifest_files = struct(
     read_json = _read_json,

@@ -532,7 +532,10 @@ bzl_library(
     name = "staleness",
     srcs = ["staleness.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
-    deps = [":slices"],
+    deps = [
+        ":slices",
+        "@bazel_skylib//lib:paths",
+    ],
 )
 
 bzl_library(
