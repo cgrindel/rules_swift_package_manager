@@ -441,6 +441,7 @@ bzl_library(
         ":manifest_swiftc_args",
         ":repo_rules",
         ":repository_utils",
+        ":swift_package_tool_args",
         ":swift_package_tool_attrs",
         "@bazel_skylib//lib:dicts",
         "@bazel_skylib//lib:paths",

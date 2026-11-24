@@ -1004,6 +1004,12 @@ _from_package_tag = tag_class(
         swift_package_tool_attrs.swift_package_registry,
         {
             "cached_json_directory": attr.string(),
+            "config": attr.label(
+                doc = """\
+v2: the `swift_deps_config` target that lists the slices. Required when \
+`dump_manifests` is set.\
+""",
+            ),
             "declare_swift_deps_info": attr.bool(
                 doc = """\
 Declare a `swift_deps_info` repository that is used by external tooling (e.g. \
@@ -1026,6 +1032,21 @@ They can be `bazel run` to update/resolve the `resolved` file:
 bazel run @swift_package//:update
 bazel run @swift_package//:resolve
 ```
+""",
+            ),
+            "desc_manifests": attr.string_keyed_label_dict(
+                doc = """\
+v2: maps a slice directory to its checked-in `swift package describe` \
+manifest. Read only when `dump_manifests` is set.\
+""",
+            ),
+            "dump_manifests": attr.string_keyed_label_dict(
+                doc = """\
+v2: maps a slice directory to its checked-in `swift package dump-package` \
+manifest. Setting it selects v2 mode: `config` becomes required, and the v1 \
+attributes `cached_json_directory`, `declare_swift_deps_info`, `env`, \
+`env_inherit` and `resolve_transitive_local_dependencies` are ignored. In v2 \
+mode, `configure_package` patches may only be files in the root module.\
 """,
             ),
             "env": attr.string_dict(

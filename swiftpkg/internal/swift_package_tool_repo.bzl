@@ -1,7 +1,10 @@
 """Defines the `swift_package_tool_repo` repository rule.
 
-The rule generates a workspace exposing `swift_worker_binary` targets
-named `update` and `resolve` that drive `swift package` commands.
+In v1 mode, the rule generates a workspace exposing `swift_worker_binary`
+targets named `update` and `resolve` that drive `swift package` commands.
+
+In v2 mode (`slices` is set), it generates `swift_package_tool_rule` targets
+named `resolve`, `update` and `cache` that run `swift_deps_tool`.
 """
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
@@ -13,19 +16,21 @@ load("//swiftpkg/internal:load_statements.bzl", "load_statements")
 load("//swiftpkg/internal:manifest_swiftc_args.bzl", "manifest_swiftc_args")
 load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
+load("//swiftpkg/internal:swift_package_tool_args.bzl", "swift_package_tool_args")
 load("//swiftpkg/internal:swift_package_tool_attrs.bzl", "swift_package_tool_attrs")
 
-def _collect_extra_args(repository_ctx, cmd):
+_V2_CMDS = ["resolve", "update", "cache"]
+
+def _collect_extra_args(attr, cmd):
     """Builds the extra_args list for the swift_worker_binary target.
 
     Args:
-        repository_ctx: A `repository_ctx` instance.
+        attr: The repository rule attributes (`repository_ctx.attr`).
         cmd: The swift package command ("update" or "resolve").
 
     Returns:
         A `list` of string arguments.
     """
-    attr = repository_ctx.attr
     pkg_dir = paths.dirname(attr.package)
 
     args = [
@@ -73,27 +78,18 @@ def _collect_extra_args(repository_ctx, cmd):
 
     return args
 
-def _swift_package_tool_repo_impl(repository_ctx):
-    data = []
+def _v1_build_file(attr, data):
+    """Returns the v1 BUILD file with `swift_worker_binary` targets.
 
-    if repository_ctx.attr.netrc:
-        repository_utils.copy(
-            repository_ctx,
-            repository_ctx.attr.netrc,
-            ".netrc",
-        )
-        data.append(":.netrc")
+    Args:
+        attr: The repository rule attributes (`repository_ctx.attr`).
+        data: A `list` of labels for the files copied into the repository.
 
-    if repository_ctx.attr.registries:
-        repository_utils.copy(
-            repository_ctx,
-            repository_ctx.attr.registries,
-            "registries.json",
-        )
-        data.append(":registries.json")
-
-    update_args = _collect_extra_args(repository_ctx, "update")
-    resolve_args = _collect_extra_args(repository_ctx, "resolve")
+    Returns:
+        A `struct` as returned by `build_files.new`.
+    """
+    update_args = _collect_extra_args(attr, "update")
+    resolve_args = _collect_extra_args(attr, "resolve")
 
     common_attrs = {
         "tool": "@rules_swift_package_manager//tools/swift_package_cmd",
@@ -101,7 +97,7 @@ def _swift_package_tool_repo_impl(repository_ctx):
     if data:
         common_attrs["data"] = data
 
-    bld_file = build_files.new(
+    return build_files.new(
         load_stmts = [
             load_statements.new(
                 "@rules_swift_package_manager//swiftpkg:defs.bzl",
@@ -121,18 +117,160 @@ def _swift_package_tool_repo_impl(repository_ctx):
             ),
         ],
     )
-    build_files.write(repository_ctx, bld_file, "")
+
+def _build_file(
+        slices,
+        package_path,
+        swift_label,
+        flags,
+        patch_specs,
+        patch_files):
+    """Returns the v2 BUILD file with `swift_package_tool_rule` targets.
+
+    Args:
+        slices: A `list` of slice `struct` values as described by
+            `swift_package_tool_args.render`.
+        package_path: The workspace-relative path to `Package.swift`.
+        swift_label: The `Package.swift` label passed as `--swift-label`.
+        flags: The `key=value\\n` `string` from `staleness.render_flags`.
+        patch_specs: A `dict` mapping a package identity to a `struct` with
+            `files` (a `list` of canonical patch label strings) and `args`.
+        patch_files: A `list` of canonical label strings for every patch
+            file, so that `$(rootpath ...)` resolves in the generated targets.
+
+    Returns:
+        A `struct` as returned by `build_files.new`.
+    """
+    decls = []
+    for cmd in _V2_CMDS:
+        attrs = {
+            "args": swift_package_tool_args.to_expr(
+                swift_package_tool_args.render(
+                    cmd = cmd,
+                    package_path = package_path,
+                    swift_label = swift_label,
+                    slices = slices,
+                    flags = flags,
+                    patch_specs = patch_specs,
+                ),
+            ),
+            "visibility": ["//visibility:public"],
+        }
+        if patch_files:
+            attrs["data"] = patch_files
+        decls.append(
+            build_decls.new("swift_package_tool_rule", name = cmd, attrs = attrs),
+        )
+    return build_files.new(
+        load_stmts = [
+            load_statements.new(
+                "@rules_swift_package_manager//swiftpkg/internal:swift_package_tool_rule.bzl",
+                "swift_package_tool_rule",
+            ),
+        ],
+        decls = decls,
+    )
+
+def _v2_build_file_from_attr(attr):
+    slices = [
+        struct(
+            config = s["config"],
+            config_value = s["config_value"],
+            dir = s["dir"],
+            package_value = s["package_value"],
+        )
+        for s in json.decode(attr.slices)
+    ]
+    patch_specs = {
+        identity: struct(files = spec["files"], args = spec["args"])
+        for identity, spec in json.decode(attr.patch_specs or "{}").items()
+    }
+    return _build_file(
+        slices = slices,
+        package_path = attr.package_path,
+        swift_label = attr.swift_label,
+        flags = attr.flags,
+        patch_specs = patch_specs,
+        patch_files = [str(f) for f in attr.patch_files],
+    )
+
+def _swift_package_tool_repo_impl(repository_ctx):
+    if repository_ctx.attr.slices:
+        # The netrc and registries paths travel in `flags`; the tool
+        # resolves them against the workspace. The v1 `env` is ignored.
+        build_files.write(
+            repository_ctx,
+            _v2_build_file_from_attr(repository_ctx.attr),
+            "",
+        )
+        return
+
+    data = []
+
+    if repository_ctx.attr.netrc:
+        repository_utils.copy(
+            repository_ctx,
+            repository_ctx.attr.netrc,
+            ".netrc",
+        )
+        data.append(":.netrc")
+
+    if repository_ctx.attr.registries:
+        repository_utils.copy(
+            repository_ctx,
+            repository_ctx.attr.registries,
+            "registries.json",
+        )
+        data.append(":registries.json")
+
+    build_files.write(
+        repository_ctx,
+        _v1_build_file(repository_ctx.attr, data),
+        "",
+    )
 
 swift_package_tool_repo = repository_rule(
     implementation = _swift_package_tool_repo_impl,
     attrs = dicts.add(
         repo_rules.env_attr,
         {
+            "flags": attr.string(
+                doc = """\
+v2: the `key=value\\n` flags as rendered by `staleness.render_flags`. The \
+netrc and registries paths travel here as workspace-relative paths.\
+""",
+            ),
             "package": attr.string(
                 doc = """\
 The relative path to the `Package.swift` file to operate on.\
 """,
                 mandatory = True,
+            ),
+            "package_path": attr.string(
+                doc = "v2: the workspace-relative path to `Package.swift`.",
+            ),
+            "patch_files": attr.label_list(
+                allow_files = True,
+                doc = """\
+v2: every patch file referenced in `patch_specs`, so that the generated \
+targets list them in `data`.\
+""",
+            ),
+            "patch_specs": attr.string(
+                doc = """\
+v2: a JSON object mapping a package identity to \
+`{"files": [<label string>], "args": [<patch arg>]}`.\
+""",
+            ),
+            "slices": attr.string(
+                doc = """\
+v2: a JSON list of `{config, config_value, dir, package_value}` objects. \
+When set, the rule generates the v2 `resolve`, `update` and `cache` targets \
+and ignores the v1 `env`, `netrc` and `registries` attributes.\
+""",
+            ),
+            "swift_label": attr.string(
+                doc = "v2: the `Package.swift` label passed as `--swift-label`.",
             ),
         },
         swift_package_tool_attrs.swift_package_tool_config,
@@ -142,4 +280,9 @@ The relative path to the `Package.swift` file to operate on.\
 Declares a `@swift_package` repository for using the `swift_worker_binary` \
 targets.\
 """,
+)
+
+swift_package_tool_repo_lib = struct(
+    build_file = _build_file,
+    v1_build_file = _v1_build_file,
 )
