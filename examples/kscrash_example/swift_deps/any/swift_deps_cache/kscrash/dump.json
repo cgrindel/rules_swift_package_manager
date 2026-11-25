@@ -1,0 +1,1649 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : "gnu++11",
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "KSCrash",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "12.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "12.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "5.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "10.14"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "visionos",
+      "version" : "1.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Reporting",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "KSCrashFilters",
+        "KSCrashSinks",
+        "KSCrashInstallations"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Filters",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "KSCrashFilters"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Sinks",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "KSCrashSinks"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Installations",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "KSCrashInstallations"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Recording",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "KSCrashRecording"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "RecordingCore",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "KSCrashRecordingCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "DiscSpaceMonitor",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "KSCrashDiscSpaceMonitor"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "BootTimeMonitor",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "KSCrashBootTimeMonitor"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "DemangleFilter",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "KSCrashDemangleFilter"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Profiler",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "KSCrashProfiler"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Monitors",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "KSCrashMonitors"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Report",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "KSCrashReportModel"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashRecording",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "Monitors"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../KSCrashRecordingCore/include"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "."
+            }
+          },
+          "tool" : "cxx"
+        },
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "Monitors"
+            }
+          },
+          "tool" : "cxx"
+        },
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../KSCrashRecordingCore/include"
+            }
+          },
+          "tool" : "cxx"
+        },
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "cxx"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashTestTools",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashRecordingTests",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../Sources/KSCrashRecording"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../Sources/KSCrashRecording/Monitors"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../Sources/KSCrashRecordingCore/include"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "c++"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "c++abi"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashReportingCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashFilters",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashFilters",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashReportingCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashFiltersTests",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashFilters",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashSinks",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashFilters",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashSinks",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashDemangleFilter",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashInstallations",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashInstallations",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashFilters",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashSinks",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashInstallationsTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashRecordingCore",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashTestTools",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashRecordingCoreTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "c++"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "c++abi"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashRecordingCoreSwiftTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashReportingCore",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "z"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashReportingCore",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashReportingCoreTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashCore",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashCoreTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashDiscSpaceMonitor",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../KSCrashRecording/Monitors"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashDiscSpaceMonitor",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashDiscSpaceMonitorTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../Sources/KSCrashRecording/Monitors"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashBootTimeMonitor",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../KSCrashRecording/Monitors"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashBootTimeMonitor",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashBootTimeMonitorTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../Sources/KSCrashRecording/Monitors"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashDemangleFilter",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "cxx"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashDemangleFilter",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashDemangleFilterTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashReportModel",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashReportModel",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashReportModelTests",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashTestTools",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+
+              ]
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashProfiler",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashBenchmarks",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashBenchmarksObjC",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../Sources/KSCrashRecording"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "c++"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "c++abi"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashBenchmarksCold",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashSwiftCore",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashSwiftCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashSwiftCoreTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashSwiftCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashProfiler",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashProfiler",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashProfilerTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashRecordingCore",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashRecording",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashReportModel",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashSwiftCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashMonitors",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "macos",
+              "visionos"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "KSCRASH_HAS_METRICKIT"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "KSCrashMonitors",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "KSCrashReportModel",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "KSCrashMonitorsTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "macos",
+              "visionos"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "KSCRASH_HAS_METRICKIT"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.9.0"
+  },
+  "traits" : [
+
+  ]
+}
