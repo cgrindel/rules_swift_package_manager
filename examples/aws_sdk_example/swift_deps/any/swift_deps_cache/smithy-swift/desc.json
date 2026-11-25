@@ -1,0 +1,1703 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "aws-crt-swift",
+      "requirement" : {
+        "exact" : [
+          "0.58.1"
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/awslabs/aws-crt-swift.git"
+    },
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log.git"
+    },
+    {
+      "identity" : "async-http-client",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.22.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/swift-server/async-http-client.git"
+    }
+  ],
+  "manifest_display_name" : "smithy-swift",
+  "name" : "smithy-swift",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Smithy",
+      "targets" : [
+        "Smithy"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithySerialization",
+      "targets" : [
+        "SmithySerialization"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "ClientRuntime",
+      "targets" : [
+        "ClientRuntime"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyRetriesAPI",
+      "targets" : [
+        "SmithyRetriesAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyRetries",
+      "targets" : [
+        "SmithyRetries"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyReadWrite",
+      "targets" : [
+        "SmithyReadWrite"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyXML",
+      "targets" : [
+        "SmithyXML"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyJSON",
+      "targets" : [
+        "SmithyJSON"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyFormURL",
+      "targets" : [
+        "SmithyFormURL"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyTimestamps",
+      "targets" : [
+        "SmithyTimestamps"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyIdentity",
+      "targets" : [
+        "SmithyIdentity"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyIdentityAPI",
+      "targets" : [
+        "SmithyIdentityAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyHTTPAPI",
+      "targets" : [
+        "SmithyHTTPAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyHTTPClient",
+      "targets" : [
+        "SmithyHTTPClient"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyHTTPAuth",
+      "targets" : [
+        "SmithyHTTPAuth"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyHTTPAuthAPI",
+      "targets" : [
+        "SmithyHTTPAuthAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyEventStreamsAPI",
+      "targets" : [
+        "SmithyEventStreamsAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyEventStreamsAuthAPI",
+      "targets" : [
+        "SmithyEventStreamsAuthAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyEventStreams",
+      "targets" : [
+        "SmithyEventStreams"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyStreams",
+      "targets" : [
+        "SmithyStreams"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyChecksumsAPI",
+      "targets" : [
+        "SmithyChecksumsAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyChecksums",
+      "targets" : [
+        "SmithyChecksums"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyCBOR",
+      "targets" : [
+        "SmithyCBOR"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyWaitersAPI",
+      "targets" : [
+        "SmithyWaitersAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyTestUtil",
+      "targets" : [
+        "SmithyTestUtil"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithySwiftNIO",
+      "targets" : [
+        "SmithySwiftNIO"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyTelemetryAPI",
+      "targets" : [
+        "SmithyTelemetryAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyHTTPClientAPI",
+      "targets" : [
+        "SmithyHTTPClientAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "SmithyXMLTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyXMLTests",
+      "path" : "Tests/SmithyXMLTests",
+      "sources" : [
+        "FloatReaderTests.swift",
+        "FloatWriterTests.swift",
+        "NamespaceReaderTests.swift",
+        "NodeInfoTests.swift",
+        "ReaderTests.swift",
+        "WriterTests.swift"
+      ],
+      "target_dependencies" : [
+        "SmithySerialization",
+        "SmithyXML",
+        "ClientRuntime"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyXML",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyXML",
+      "path" : "Sources/SmithyXML",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyXML",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "NodeInfo.swift",
+        "Reader/Reader+libxml2.swift",
+        "Reader/Reader.swift",
+        "Writer/Writer+libxml2.swift",
+        "Writer/Writer.swift"
+      ],
+      "target_dependencies" : [
+        "SmithySerialization",
+        "SmithyReadWrite",
+        "SmithyTimestamps"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyWaitersAPITests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyWaitersAPITests",
+      "path" : "Tests/SmithyWaitersAPITests",
+      "sources" : [
+        "AcceptorTests.swift",
+        "JMESUtilsTests.swift",
+        "WaiterConfigurationTests.swift",
+        "WaiterRetryerTests.swift",
+        "WaiterSchedulerTests.swift",
+        "WaiterTestUtils.swift",
+        "WaiterTests.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy",
+        "SmithyWaitersAPI"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyWaitersAPI",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyWaitersAPI",
+      "path" : "Sources/SmithyWaitersAPI",
+      "product_memberships" : [
+        "SmithyWaitersAPI"
+      ],
+      "sources" : [
+        "Acceptor.swift",
+        "JMESUtils.swift",
+        "Waiter.swift",
+        "WaiterConfiguration.swift",
+        "WaiterErrors.swift",
+        "WaiterOptions.swift",
+        "WaiterOutcome.swift",
+        "WaiterRetryer.swift",
+        "WaiterScheduler.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyTimestampsTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyTimestampsTests",
+      "path" : "Tests/SmithyTimestampsTests",
+      "sources" : [
+        "DateFormatterTests.swift",
+        "Helpers/DateHelpers.swift",
+        "TimestampSerdeUtilsTests.swift"
+      ],
+      "target_dependencies" : [
+        "SmithyTimestamps"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyTimestamps",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyTimestamps",
+      "path" : "Sources/SmithyTimestamps",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyReadWrite",
+        "SmithyXML",
+        "SmithyJSON",
+        "SmithyFormURL",
+        "SmithyTimestamps",
+        "SmithyCBOR",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "DateFormatters.swift",
+        "TimestampSerdeUtils.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyTestUtilTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyTestUtilTests",
+      "path" : "Tests/SmithyTestUtilTests",
+      "sources" : [
+        "FormURLComparatorTests.swift",
+        "RequestTestUtilTests/HttpRequestTestBaseTests.swift",
+        "RequestTestUtilTests/XMLComparatorTests.swift",
+        "ResponseTestUtilTests/FloatingPointEquivalenceCheckerTests.swift",
+        "ResponseTestUtilTests/HttpResponseTestBaseTests.swift"
+      ],
+      "target_dependencies" : [
+        "SmithyTestUtil"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyTestUtil",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyTestUtil",
+      "path" : "Sources/SmithyTestUtil",
+      "product_memberships" : [
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "CBORComparator.swift",
+        "DummyIdentityResolver.swift",
+        "Errors/TestBaseError.swift",
+        "FormURLComparator.swift",
+        "JSONComparator.swift",
+        "NetworkingTestUtils.swift",
+        "ProtocolTestClient.swift",
+        "ProtocolTestResponseClient.swift",
+        "RequestTestUtil/AuthTestUtil/MockAuthSchemeResolver.swift",
+        "RequestTestUtil/AuthTestUtil/MockAuthSchemes.swift",
+        "RequestTestUtil/AuthTestUtil/MockIdentity.swift",
+        "RequestTestUtil/AuthTestUtil/MockSigner.swift",
+        "RequestTestUtil/AuthTestUtil/SelectNoAuthScheme.swift",
+        "RequestTestUtil/ExpectedSdkHttpRequest.swift",
+        "RequestTestUtil/HttpRequestTestBase+FormURL.swift",
+        "RequestTestUtil/HttpRequestTestBase.swift",
+        "RequestTestUtil/MockDeserializeMiddleware.swift",
+        "RequestTestUtil/MockInput.swift",
+        "RequestTestUtil/MockMiddlewareError.swift",
+        "RequestTestUtil/MockOutput.swift",
+        "RequestTestUtil/MockRetryStrategy.swift",
+        "RequestTestUtil/MockSerializeMiddleware.swift",
+        "RequestTestUtil/MockStreamInput.swift",
+        "RequestTestUtil/QueryIdempotencyTestTokenGenerator.swift",
+        "ResponseTestUtil/ByteStream+Equatable.swift",
+        "ResponseTestUtil/FloatingPointEquivalenceChecker.swift",
+        "ResponseTestUtil/HttpResponseTestBase.swift",
+        "ResponseTestUtil/ProtocolTestRetryStrategyOptions.swift",
+        "SmithyTestUtilError.swift",
+        "TestInitializer.swift",
+        "TestOrchestrator.swift",
+        "XCTAssertions.swift",
+        "XMLComparator.swift"
+      ],
+      "target_dependencies" : [
+        "ClientRuntime",
+        "SmithyHTTPAPI",
+        "SmithyIdentity",
+        "SmithyCBOR"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyTelemetryAPI",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyTelemetryAPI",
+      "path" : "Sources/SmithyTelemetryAPI",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyTestUtil",
+        "SmithySwiftNIO",
+        "SmithyTelemetryAPI",
+        "SmithyHTTPClientAPI"
+      ],
+      "sources" : [
+        "Context/TelemetryContext.swift",
+        "Context/TelemetryContextManager.swift",
+        "Context/TelemetryScope.swift",
+        "DefaultTelemetry.swift",
+        "Logging/LoggerProvider.swift",
+        "Metrics/AsyncMeasurement.swift",
+        "Metrics/Histogram.swift",
+        "Metrics/Meter.swift",
+        "Metrics/MeterProvider.swift",
+        "Metrics/MonotonicCounter.swift",
+        "Metrics/UpDownCounter.swift",
+        "TelemetryProvider.swift",
+        "Tracing/SpanKind.swift",
+        "Tracing/TraceSpan.swift",
+        "Tracing/TraceSpanStatus.swift",
+        "Tracing/Tracer.swift",
+        "Tracing/TracerProvider.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithySwiftNIOTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithySwiftNIOTests",
+      "path" : "Tests/SmithySwiftNIOTests",
+      "sources" : [
+        "SwiftNIOHTTPClientStreamBridgeTests.swift",
+        "SwiftNIOHTTPClientTLSOptionsTests.swift"
+      ],
+      "target_dependencies" : [
+        "SmithySwiftNIO",
+        "SmithyTestUtil"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithySwiftNIO",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithySwiftNIO",
+      "path" : "Sources/SmithySwiftNIO",
+      "product_dependencies" : [
+        "AsyncHTTPClient"
+      ],
+      "product_memberships" : [
+        "SmithySwiftNIO"
+      ],
+      "sources" : [
+        "SwiftNIOHTTPClient.swift",
+        "SwiftNIOHTTPClientConfiguration+HTTPClientConfiguration.swift",
+        "SwiftNIOHTTPClientError.swift",
+        "SwiftNIOHTTPClientStreamBridge.swift",
+        "SwiftNIOHTTPClientTLSOptions.swift",
+        "SwiftNIOHTTPClientTLSResolverUtils.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy",
+        "SmithyHTTPAPI",
+        "SmithyStreams",
+        "SmithyHTTPClientAPI"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyStreamsTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyStreamsTests",
+      "path" : "Tests/SmithyStreamsTests",
+      "sources" : [
+        "BufferedStreamTests.swift"
+      ],
+      "target_dependencies" : [
+        "SmithyStreams",
+        "Smithy"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyStreams",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyStreams",
+      "path" : "Sources/SmithyStreams",
+      "product_dependencies" : [
+        "Logging",
+        "AwsCommonRuntimeKit"
+      ],
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyHTTPClient",
+        "SmithyHTTPAuth",
+        "SmithyStreams",
+        "SmithyChecksums",
+        "SmithyTestUtil",
+        "SmithySwiftNIO"
+      ],
+      "sources" : [
+        "BufferedStream.swift",
+        "FileStream.swift",
+        "NSLock+Extension.swift",
+        "StreamableHttpBody.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithySerialization",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithySerialization",
+      "path" : "Sources/SmithySerialization",
+      "product_memberships" : [
+        "SmithySerialization",
+        "ClientRuntime",
+        "SmithyXML",
+        "SmithyJSON",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "ResponseDecodingError.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyRetriesTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyRetriesTests",
+      "path" : "Tests/SmithyRetriesTests",
+      "sources" : [
+        "DefaultRetryErrorInfoProviderTests.swift",
+        "DefaultRetryStrategy/ClientSideRateLimiterTests.swift",
+        "DefaultRetryStrategy/DefaultRetryStrategyTests.swift",
+        "DefaultRetryStrategy/ExponentialBackoffStrategyTests.swift",
+        "DefaultRetryStrategy/RetryQuotaTests.swift",
+        "RetryIntegrationTests.swift"
+      ],
+      "target_dependencies" : [
+        "ClientRuntime",
+        "SmithyRetriesAPI",
+        "SmithyRetries",
+        "SmithyTestUtil"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyRetriesAPI",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyRetriesAPI",
+      "path" : "Sources/SmithyRetriesAPI",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyRetriesAPI",
+        "SmithyRetries",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "RetryBackoffStrategy.swift",
+        "RetryError.swift",
+        "RetryErrorInfo.swift",
+        "RetryErrorInfoProvider.swift",
+        "RetryErrorType.swift",
+        "RetryStrategy.swift",
+        "RetryStrategyOptions.swift",
+        "RetryToken.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyRetries",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyRetries",
+      "path" : "Sources/SmithyRetries",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyRetries",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "DefaultRetryStrategy/ClientSideRateLimiter.swift",
+        "DefaultRetryStrategy/DefaultRetryStrategy+Error.swift",
+        "DefaultRetryStrategy/DefaultRetryStrategy.swift",
+        "DefaultRetryStrategy/DefaultRetryToken.swift",
+        "DefaultRetryStrategy/RetryQuota.swift",
+        "DefaultRetryStrategy/RetryQuotaRepository.swift",
+        "ExponentialBackOffJitterType.swift",
+        "ExponentialBackoffStrategy.swift",
+        "ExponentialBackoffStrategyOptions.swift"
+      ],
+      "target_dependencies" : [
+        "SmithyRetriesAPI"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyReadWrite",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyReadWrite",
+      "path" : "Sources/SmithyReadWrite",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyReadWrite",
+        "SmithyXML",
+        "SmithyJSON",
+        "SmithyFormURL",
+        "SmithyCBOR",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "DataProviding.swift",
+        "ReadingClosure.swift",
+        "SmithyReader.swift",
+        "SmithyWriter.swift",
+        "WireResponseErrorClosure.swift",
+        "WireResponseOutputClosure.swift",
+        "WritingClosure.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy",
+        "SmithyTimestamps"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyJSONTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyJSONTests",
+      "path" : "Tests/SmithyJSONTests",
+      "sources" : [
+        "DocumentTests.swift",
+        "FloatingPointTests.swift",
+        "ReaderTests.swift",
+        "WriterTests.swift"
+      ],
+      "target_dependencies" : [
+        "SmithySerialization",
+        "SmithyJSON",
+        "ClientRuntime",
+        "SmithyTestUtil"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyJSON",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyJSON",
+      "path" : "Sources/SmithyJSON",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyJSON",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "Document+Init.swift",
+        "Document+JSONUtils.swift",
+        "JSONNode.swift",
+        "NodeInfo.swift",
+        "Reader/Reader+JSONDeserialization.swift",
+        "Reader/Reader.swift",
+        "Writer/Writer+JSONSerialization.swift",
+        "Writer/Writer.swift"
+      ],
+      "target_dependencies" : [
+        "SmithySerialization",
+        "SmithyReadWrite",
+        "SmithyTimestamps"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyIdentityTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyIdentityTests",
+      "path" : "Tests/SmithyIdentityTests",
+      "sources" : [
+        "CustomAWSCredentialIdentityResolverTests.swift",
+        "MockAWSCredentialIdentityResolver.swift",
+        "StaticAWSCredentialIdentityResolverTests.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy",
+        "SmithyIdentity"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyIdentityAPI",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyIdentityAPI",
+      "path" : "Sources/SmithyIdentityAPI",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyIdentity",
+        "SmithyIdentityAPI",
+        "SmithyHTTPAuth",
+        "SmithyHTTPAuthAPI",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "ClientConfigDefaultIdentityResolver.swift",
+        "Context/Context+AuthSchemePreference.swift",
+        "Context/Context+FlowType.swift",
+        "Context/Context+IdentityResolver.swift",
+        "FlowType.swift",
+        "Identity.swift",
+        "IdentityResolver.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyIdentity",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyIdentity",
+      "path" : "Sources/SmithyIdentity",
+      "product_dependencies" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyIdentity",
+        "SmithyHTTPAuth",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "AWSCredentialIdentity.swift",
+        "AWSCredentialIdentityResolver.swift",
+        "AWSCredentialIdentityResolvers/CustomAWSCredentialIdentityResolver.swift",
+        "AWSCredentialIdentityResolvers/StaticAWSCredentialIdentityResolver.swift",
+        "BearerTokenIdentity.swift",
+        "BearerTokenIdentityResolvers/BearerTokenIdentityResolver.swift",
+        "BearerTokenIdentityResolvers/StaticBearerTokenIdentityResolver.swift",
+        "CRTAdapters/AWSCredentialIdentityResolvedByCRT.swift",
+        "CRTAdapters/AWSCredentialIdentityResolverCRTAdapter.swift",
+        "CRTAdapters/AWSCredentialIdentityUtilityInitializers.swift",
+        "CRTAdapters/CRTAWSCredentialIdentity.swift"
+      ],
+      "target_dependencies" : [
+        "SmithyIdentityAPI"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyHTTPClientTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyHTTPClientTests",
+      "path" : "Tests/SmithyHTTPClientTests",
+      "product_dependencies" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "sources" : [
+        "HttpRequestTests.swift"
+      ],
+      "target_dependencies" : [
+        "SmithyHTTPClient",
+        "SmithyHTTPAPI",
+        "Smithy",
+        "SmithyTestUtil"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyHTTPClientAPI",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyHTTPClientAPI",
+      "path" : "Sources/SmithyHTTPClientAPI",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyTestUtil",
+        "SmithySwiftNIO",
+        "SmithyHTTPClientAPI"
+      ],
+      "sources" : [
+        "HttpClientConfiguration.swift",
+        "HttpTelemetry.swift",
+        "TLSConfiguration.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy",
+        "SmithyHTTPAPI",
+        "SmithyTelemetryAPI"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyHTTPClient",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyHTTPClient",
+      "path" : "Sources/SmithyHTTPClient",
+      "product_dependencies" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyHTTPClient",
+        "SmithyHTTPAuth",
+        "SmithyChecksums",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "Headers+Extension.swift",
+        "SdkHttpRequest+CRT.swift",
+        "SdkHttpRequestBuilder+HTTPRequestBase.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy",
+        "SmithyHTTPAPI",
+        "SmithyStreams"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyHTTPAuthTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyHTTPAuthTests",
+      "path" : "Tests/SmithyHTTPAuthTests",
+      "sources" : [
+        "BearerTokenSignerTests.swift"
+      ],
+      "target_dependencies" : [
+        "SmithyHTTPAuth",
+        "SmithyHTTPAPI",
+        "Smithy",
+        "SmithyIdentity",
+        "ClientRuntime"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyHTTPAuthAPITests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyHTTPAuthAPITests",
+      "path" : "Tests/SmithyHTTPAuthAPITests",
+      "sources" : [
+        "ReprioritizeAuthOptionsTests.swift"
+      ],
+      "target_dependencies" : [
+        "SmithyHTTPAuthAPI",
+        "Smithy",
+        "ClientRuntime"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyHTTPAuthAPI",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyHTTPAuthAPI",
+      "path" : "Sources/SmithyHTTPAuthAPI",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyHTTPAuth",
+        "SmithyHTTPAuthAPI",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "AuthOption.swift",
+        "AuthScheme.swift",
+        "AuthSchemeResolver.swift",
+        "AuthSchemeResolverParameters.swift",
+        "Context/Context+Chunked.swift",
+        "Context/Context+EstimatedSkew.swift",
+        "Context/Context+HTTPAuth.swift",
+        "Context/Context+RequestSignature.swift",
+        "Context/SigningPropertyKeys.swift",
+        "IdentityResolverConfiguration.swift",
+        "ReprioritizeAuthOptions.swift",
+        "SelectedAuthScheme.swift",
+        "Signer.swift",
+        "SigningConfigFields/AWSSignatureType.swift",
+        "SigningConfigFields/AWSSignedBodyHeader.swift",
+        "SigningConfigFields/AWSSignedBodyValue.swift",
+        "SigningConfigFields/SigningAlgorithm.swift",
+        "SigningConfigFields/SigningFlags.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy",
+        "SmithyHTTPAPI",
+        "SmithyIdentityAPI"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyHTTPAuth",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyHTTPAuth",
+      "path" : "Sources/SmithyHTTPAuth",
+      "product_dependencies" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyHTTPAuth",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "AWSSigningConfig.swift",
+        "AuthSchemes/BearerTokenAuthScheme.swift",
+        "CRTAdapters.swift",
+        "DefaultIdentityResolverConfiguration.swift",
+        "SigV4AuthScheme.swift",
+        "SigV4Signer.swift",
+        "Signers/BearerTokenSigner.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy",
+        "SmithyHTTPAPI",
+        "SmithyHTTPAuthAPI",
+        "SmithyIdentity",
+        "SmithyIdentityAPI",
+        "SmithyChecksumsAPI",
+        "SmithyHTTPClient"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyHTTPAPITests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyHTTPAPITests",
+      "path" : "Tests/SmithyHTTPAPITests",
+      "sources" : [
+        "HeadersTests.swift",
+        "HttpStatusCodeTests.swift"
+      ],
+      "target_dependencies" : [
+        "SmithyHTTPAPI"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyHTTPAPI",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyHTTPAPI",
+      "path" : "Sources/SmithyHTTPAPI",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyHTTPAPI",
+        "SmithyHTTPClient",
+        "SmithyHTTPAuth",
+        "SmithyHTTPAuthAPI",
+        "SmithyChecksums",
+        "SmithyTestUtil",
+        "SmithySwiftNIO",
+        "SmithyHTTPClientAPI"
+      ],
+      "sources" : [
+        "ALPNProtocol.swift",
+        "Context+HTTP.swift",
+        "Endpoint.swift",
+        "EndpointPropertyValue.swift",
+        "HTTPClient.swift",
+        "HTTPClientError.swift",
+        "HTTPMethodType.swift",
+        "HTTPRequest.swift",
+        "HTTPResponse.swift",
+        "HTTPStatusCode.swift",
+        "Headers.swift",
+        "URL+getQueryItems.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyFormURLTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyFormURLTests",
+      "path" : "Tests/SmithyFormURLTests",
+      "sources" : [
+        "FormURLEncoderTests.swift",
+        "Models/QueryListsInput.swift",
+        "Models/QueryMapsInput.swift"
+      ],
+      "target_dependencies" : [
+        "SmithyFormURL",
+        "ClientRuntime"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyFormURL",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyFormURL",
+      "path" : "Sources/SmithyFormURL",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyFormURL",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "NodeInfo.swift",
+        "Writer.swift"
+      ],
+      "target_dependencies" : [
+        "SmithyReadWrite",
+        "SmithyTimestamps"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyEventStreamsTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyEventStreamsTests",
+      "path" : "Tests/SmithyEventStreamsTests",
+      "sources" : [
+        "DefaultMessageDecoderTests.swift",
+        "DefaultMessageEncoderTests.swift",
+        "EventStreamTestData.swift",
+        "MessageTypeTests.swift"
+      ],
+      "target_dependencies" : [
+        "SmithyEventStreams"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyEventStreamsAuthAPI",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyEventStreamsAuthAPI",
+      "path" : "Sources/SmithyEventStreamsAuthAPI",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyEventStreamsAuthAPI",
+        "SmithyEventStreams",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "Context+EventStreamsAuthAPI.swift",
+        "MessageDataSigner.swift",
+        "MessageDecoderStream.swift",
+        "MessageEncoderStream.swift",
+        "MessageSigner.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy",
+        "SmithyEventStreamsAPI"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyEventStreamsAPI",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyEventStreamsAPI",
+      "path" : "Sources/SmithyEventStreamsAPI",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyEventStreamsAPI",
+        "SmithyEventStreamsAuthAPI",
+        "SmithyEventStreams",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "Context+EventStreamsAPI.swift",
+        "EventStreamError.swift",
+        "Header.swift",
+        "MarshalClosure.swift",
+        "Message.swift",
+        "MessageDecoder.swift",
+        "MessageEncoder.swift",
+        "MessageType.swift",
+        "UnmarshalClosure.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyEventStreams",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyEventStreams",
+      "path" : "Sources/SmithyEventStreams",
+      "product_dependencies" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyEventStreams",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "DefaultMessageDecoder.swift",
+        "DefaultMessageDecoderStream.swift",
+        "DefaultMessageEncoder.swift",
+        "DefaultMessageEncoderStream.swift",
+        "Header+CRT.swift",
+        "Message+CRT.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy",
+        "SmithyEventStreamsAPI",
+        "SmithyEventStreamsAuthAPI"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyChecksumsAPI",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyChecksumsAPI",
+      "path" : "Sources/SmithyChecksumsAPI",
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyHTTPAuth",
+        "SmithyChecksumsAPI",
+        "SmithyChecksums",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "Checksum.swift",
+        "ChecksumAlgorithm.swift",
+        "Context+Checksum.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyChecksums",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyChecksums",
+      "path" : "Sources/SmithyChecksums",
+      "product_dependencies" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyChecksums",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "CRC32.swift",
+        "CRC32C.swift",
+        "CRC64NVME.swift",
+        "ChecksumAlgorithm.swift",
+        "ChunkedReader.swift",
+        "ChunkedStream.swift",
+        "MD5.swift",
+        "SHA1.swift",
+        "SHA256.swift",
+        "SigningConfig+Extension.swift",
+        "ValidatingBufferedStream.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy",
+        "SmithyChecksumsAPI",
+        "SmithyStreams",
+        "SmithyHTTPClient"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SmithyCBORTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyCBORTests",
+      "path" : "Tests/SmithyCBORTests",
+      "sources" : [
+        "ReaderTests.swift"
+      ],
+      "target_dependencies" : [
+        "SmithyCBOR",
+        "ClientRuntime",
+        "SmithyTestUtil"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SmithyCBOR",
+      "module_type" : "SwiftTarget",
+      "name" : "SmithyCBOR",
+      "path" : "Sources/SmithyCBOR",
+      "product_dependencies" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyCBOR",
+        "SmithyTestUtil"
+      ],
+      "sources" : [
+        "NodeInfo.swift",
+        "Reader/Reader.swift",
+        "Writer/Writer.swift"
+      ],
+      "target_dependencies" : [
+        "SmithyReadWrite",
+        "SmithyTimestamps"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "Smithy",
+      "module_type" : "SwiftTarget",
+      "name" : "Smithy",
+      "path" : "Sources/Smithy",
+      "product_dependencies" : [
+        "Logging"
+      ],
+      "product_memberships" : [
+        "Smithy",
+        "SmithySerialization",
+        "ClientRuntime",
+        "SmithyReadWrite",
+        "SmithyXML",
+        "SmithyJSON",
+        "SmithyFormURL",
+        "SmithyIdentity",
+        "SmithyIdentityAPI",
+        "SmithyHTTPAPI",
+        "SmithyHTTPClient",
+        "SmithyHTTPAuth",
+        "SmithyHTTPAuthAPI",
+        "SmithyEventStreamsAPI",
+        "SmithyEventStreamsAuthAPI",
+        "SmithyEventStreams",
+        "SmithyStreams",
+        "SmithyChecksumsAPI",
+        "SmithyChecksums",
+        "SmithyCBOR",
+        "SmithyTestUtil",
+        "SmithySwiftNIO",
+        "SmithyTelemetryAPI",
+        "SmithyHTTPClientAPI"
+      ],
+      "sources" : [
+        "Attribute.swift",
+        "ByteStream.swift",
+        "ClientError.swift",
+        "Context.swift",
+        "Document/DocumentError.swift",
+        "Document/Implementations/BigDecimalDocument.swift",
+        "Document/Implementations/BigIntegerDocument.swift",
+        "Document/Implementations/BlobDocument.swift",
+        "Document/Implementations/BooleanDocument.swift",
+        "Document/Implementations/ByteDocument.swift",
+        "Document/Implementations/Document.swift",
+        "Document/Implementations/DoubleDocument.swift",
+        "Document/Implementations/FloatDocument.swift",
+        "Document/Implementations/IntegerDocument.swift",
+        "Document/Implementations/ListDocument.swift",
+        "Document/Implementations/LongDocument.swift",
+        "Document/Implementations/NullDocument.swift",
+        "Document/Implementations/ShortDocument.swift",
+        "Document/Implementations/StringDocument.swift",
+        "Document/Implementations/StringMapDocument.swift",
+        "Document/Implementations/TimestampDocument.swift",
+        "Document/ShapeType.swift",
+        "Document/SmithyDocument.swift",
+        "Logging/LogAgent.swift",
+        "Logging/LogAgentLevel.swift",
+        "Logging/SwiftLog+LogAgent.swift",
+        "RequestMessage.swift",
+        "RequestMessageBuilder.swift",
+        "RequestMessageSerializer.swift",
+        "ResponseMessage.swift",
+        "ResponseMessageDeserializer.swift",
+        "Stream.swift",
+        "URI.swift",
+        "URIQueryItem.swift",
+        "URIScheme.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "ClientRuntimeTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ClientRuntimeTests",
+      "path" : "Tests/ClientRuntimeTests",
+      "product_dependencies" : [
+        "Logging"
+      ],
+      "resources" : [
+        {
+          "path" : "./Tests/ClientRuntimeTests/Resources/endpoint_rules.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Endpoints/EndpointsAuthSchemeResolverTests.swift",
+        "Endpoints/EndpointsRuleEngineTests.swift",
+        "Idempotency/IdempotencyTokenMiddlewareTests.swift",
+        "InterceptorTests/InterceptorTests.swift",
+        "LoggingTests/SwiftLoggerTests.swift",
+        "MessageTests/URITests.swift",
+        "MiddlewareTests/AttributesTests.swift",
+        "MiddlewareTests/ProviderTests.swift",
+        "NetworkingTests/ChecksumAlgorithmTests.swift",
+        "NetworkingTests/EndpointTests.swift",
+        "NetworkingTests/Http/CRTClientEngineIntegrationTests.swift",
+        "NetworkingTests/Http/HttpBodyTests.swift",
+        "NetworkingTests/Http/HttpClientTests.swift",
+        "NetworkingTests/Http/MiddlewareTests/AuthSchemeMiddlewareTests.swift",
+        "NetworkingTests/Http/MiddlewareTests/ContentLengthMiddlewareTests.swift",
+        "NetworkingTests/Http/MiddlewareTests/MutateHeaderMiddlewareTests.swift",
+        "NetworkingTests/Http/MiddlewareTests/SignerMiddlewareTests.swift",
+        "NetworkingTests/Http/MockHttpClientEngine.swift",
+        "NetworkingTests/Http/MockURLProtocol.swift",
+        "NetworkingTests/Http/SdkRequestBuilderTests.swift",
+        "NetworkingTests/Streaming/StreamableHttpBodyTests.swift",
+        "NetworkingTests/URLSession/FoundationStreamBridgeTests.swift",
+        "OrchestratorTests/OrchestratorTests.swift",
+        "PrimitiveTypeExtensionsTests/NumberExtensionsTests.swift",
+        "PrimitiveTypeExtensionsTests/StringExtensionsTests.swift",
+        "Protocols/AWSJSON/AWSJSONErrorTests.swift",
+        "Protocols/AWSQuery/AwsQueryCompatibleErrorDetailsTests.swift",
+        "RpcV2CborErrorTests/RpcV2CborErrorTests.swift",
+        "SerializationTests/SerializationUtilsTests/DataObjectSerializationTests.swift",
+        "SerializationTests/SerializationUtilsTests/HeaderUtilsTests.swift",
+        "TestUtils.swift"
+      ],
+      "target_dependencies" : [
+        "ClientRuntime",
+        "SmithyTestUtil",
+        "SmithyStreams"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "ClientRuntime",
+      "module_type" : "SwiftTarget",
+      "name" : "ClientRuntime",
+      "path" : "Sources/ClientRuntime",
+      "product_dependencies" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "product_memberships" : [
+        "ClientRuntime",
+        "SmithyTestUtil"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/ClientRuntime/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Client/Client.swift",
+        "Client/ClientBuilder.swift",
+        "ClockSkew/ClockSkewProvider.swift",
+        "ClockSkew/ClockSkewStore.swift",
+        "ClockSkew/DefaultClockSkewProvider.swift",
+        "Config/ClientConfigDefaultsProvider.swift",
+        "Config/ClientConfiguration.swift",
+        "Config/Context+Config.swift",
+        "Config/ContextBuilder+withSmithyDefaultConfig.swift",
+        "Config/DefaultClientConfiguration.swift",
+        "Config/DefaultHttpClientConfiguration.swift",
+        "Config/DefaultIdempotencyTokenGenerator.swift",
+        "Config/DefaultSDKRuntimeConfiguration.swift",
+        "Config/IdempotencyTokenGenerator.swift",
+        "Config/IdentityPropertyKeys.swift",
+        "Endpoints/CRTResolvedEndpoint.swift",
+        "Endpoints/CRTResolvedEndpointType.swift",
+        "Endpoints/CredentialScope.swift",
+        "Endpoints/DefaultEndpointResolver.swift",
+        "Endpoints/EndpointError.swift",
+        "Endpoints/EndpointResolverMiddleware.swift",
+        "Endpoints/EndpointsAuthSchemeResolver.swift",
+        "Endpoints/EndpointsRequestContext.swift",
+        "Endpoints/EndpointsRequestContextProviding.swift",
+        "Endpoints/EndpointsRuleEngine.swift",
+        "Endpoints/PartitionDefinition.swift",
+        "Endpoints/ServiceEndpointMetadata.swift",
+        "Endpoints/SmithyEndpoint.swift",
+        "Endpoints/StaticEndpointResolver.swift",
+        "Idempotency/Context+Idempotency.swift",
+        "Idempotency/IdempotencyTokenMiddleware.swift",
+        "Interceptor/AnyInterceptor.swift",
+        "Interceptor/DefaultInterceptorContext.swift",
+        "Interceptor/HttpInterceptorProvider.swift",
+        "Interceptor/Interceptor.swift",
+        "Interceptor/InterceptorContext.swift",
+        "Interceptor/InterceptorProvider.swift",
+        "Interceptor/Interceptors.swift",
+        "Interceptor/SendableHttpInterceptorProviderBox.swift",
+        "Interceptor/SendableInterceptorProviderBox.swift",
+        "Networking/BaseError/BaseError.swift",
+        "Networking/Http/CRT/CRTClientEngine.swift",
+        "Networking/Http/CRT/CRTClientEngineConfig.swift",
+        "Networking/Http/CRT/CRTClientEngineLogHandlerFactory.swift",
+        "Networking/Http/CRT/CRTClientTLSOptions.swift",
+        "Networking/Http/CRT/Endpoint+CRT.swift",
+        "Networking/Http/CRT/HTTP2Stream+ByteStream.swift",
+        "Networking/Http/CRT/SDKDefaultIO.swift",
+        "Networking/Http/HTTPError.swift",
+        "Networking/Http/HTTPResponse+WireDataProviding.swift",
+        "Networking/Http/HttpClientConfiguration.swift",
+        "Networking/Http/Middlewares/AuthSchemeMiddleware.swift",
+        "Networking/Http/Middlewares/ContentLengthMiddleware.swift",
+        "Networking/Http/Middlewares/ContentMD5Middleware.swift",
+        "Networking/Http/Middlewares/ContentTypeMiddleware.swift",
+        "Networking/Http/Middlewares/DeserializeMiddleware.swift",
+        "Networking/Http/Middlewares/HeaderMiddleware.swift",
+        "Networking/Http/Middlewares/LoggerMiddleware.swift",
+        "Networking/Http/Middlewares/MutateHeadersMiddleware.swift",
+        "Networking/Http/Middlewares/Providers/HeaderProvider.swift",
+        "Networking/Http/Middlewares/Providers/QueryItemProvider.swift",
+        "Networking/Http/Middlewares/Providers/URLPathProvider.swift",
+        "Networking/Http/Middlewares/QueryItemMiddleware.swift",
+        "Networking/Http/Middlewares/RequestBody/BlobBodyMiddleware.swift",
+        "Networking/Http/Middlewares/RequestBody/BlobStreamBodyMiddleware.swift",
+        "Networking/Http/Middlewares/RequestBody/BodyMiddleware.swift",
+        "Networking/Http/Middlewares/RequestBody/EnumBodyMiddleware.swift",
+        "Networking/Http/Middlewares/RequestBody/EventStreamBodyMiddleware.swift",
+        "Networking/Http/Middlewares/RequestBody/PayloadBodyMiddleware.swift",
+        "Networking/Http/Middlewares/RequestBody/StringBodyMiddleware.swift",
+        "Networking/Http/Middlewares/SignerMiddleware.swift",
+        "Networking/Http/Middlewares/URLHostMiddleware.swift",
+        "Networking/Http/Middlewares/URLPathMiddleware.swift",
+        "Networking/Http/SdkHttpClient.swift",
+        "Networking/Http/String+URLPercentEncoding.swift",
+        "Networking/Http/TLSConfiguration.swift",
+        "Networking/Http/URLSession/FoundationStreamBridge.swift",
+        "Networking/Http/URLSession/URLSessionConfiguration+HTTPClientConfiguration.swift",
+        "Networking/Http/URLSession/URLSessionHTTPClient.swift",
+        "Networking/Http/URLSession/URLSessionTLSOptions.swift",
+        "Networking/Http/URLSession/URLSessionTLSResolverUtils.swift",
+        "Networking/Http/UnknownHttpServiceError.swift",
+        "Networking/ModeledError.swift",
+        "Networking/ServiceError.swift",
+        "Networking/Streaming/ByteStream+FileHandle.swift",
+        "Networking/Streaming/ByteStream+Validating.swift",
+        "Networking/UnknownServiceError.swift",
+        "Orchestrator/ApplyEndpoint.swift",
+        "Orchestrator/ApplySigner.swift",
+        "Orchestrator/AuthSchemeSelector.swift",
+        "Orchestrator/ExecuteRequest.swift",
+        "Orchestrator/Orchestrator.swift",
+        "Orchestrator/OrchestratorBuilder.swift",
+        "Orchestrator/OrchestratorTelemetry.swift",
+        "Pagination/PaginateToken.swift",
+        "Pagination/PaginatorSequence.swift",
+        "Plugins/AuthSchemePlugin.swift",
+        "Plugins/DefaultClientPlugin.swift",
+        "Plugins/HttpClientPlugin.swift",
+        "Plugins/Plugin.swift",
+        "Plugins/RetryPlugin.swift",
+        "Plugins/TelemetryPlugin.swift",
+        "PrimitiveTypeExtensions/AsyncSequence+Extension.swift",
+        "PrimitiveTypeExtensions/FileHandle+Extension.swift",
+        "PrimitiveTypeExtensions/Indirect.swift",
+        "PrimitiveTypeExtensions/NSLock+Extension.swift",
+        "PrimitiveTypeExtensions/Number+Extension.swift",
+        "PrimitiveTypeExtensions/String+Extensions.swift",
+        "Retries/DefaultRetryErrorInfoProvider.swift",
+        "Serialization/SerializationUtils/CharacterSet+Extension.swift",
+        "Serialization/SerializationUtils/Double+Extension.swift",
+        "Serialization/SerializationUtils/HeaderUtils.swift",
+        "Serialization/SerializationUtils/TimestampFormatter.swift",
+        "Telemetry/Context/TelemetryContext.swift",
+        "Telemetry/Context/TelemetryContextManager.swift",
+        "Telemetry/Context/TelemetryScope.swift",
+        "Telemetry/DefaultTelemetry.swift",
+        "Telemetry/Logging/ClientLogMode.swift",
+        "Telemetry/Logging/LogLevel+StringExtension.swift",
+        "Telemetry/Logging/LoggerProvider.swift",
+        "Telemetry/Logging/SDKLogHandlerFactory.swift",
+        "Telemetry/Logging/SDKLogLevel.swift",
+        "Telemetry/Logging/SDKLoggingSystem.swift",
+        "Telemetry/Metrics/AsyncMeasurement.swift",
+        "Telemetry/Metrics/Histogram.swift",
+        "Telemetry/Metrics/Meter.swift",
+        "Telemetry/Metrics/MeterProvider.swift",
+        "Telemetry/Metrics/MonotonicCounter.swift",
+        "Telemetry/Metrics/UpDownCounter.swift",
+        "Telemetry/TelemetryProvider.swift",
+        "Telemetry/Tracing/SpanContext.swift",
+        "Telemetry/Tracing/SpanKind.swift",
+        "Telemetry/Tracing/TraceSpan.swift",
+        "Telemetry/Tracing/TraceSpanStatus.swift",
+        "Telemetry/Tracing/Tracer.swift",
+        "Telemetry/Tracing/TracerProvider.swift",
+        "Util/Initialize.swift",
+        "Util/PlatformOperatingSystem.swift",
+        "Util/PlatformOperationSystemVersion.swift",
+        "Util/SwiftVersion.swift",
+        "protocols/ErrorTypeUtils.swift",
+        "protocols/awsjson/AWSJSONError.swift",
+        "protocols/awsquery/AWSQueryError.swift",
+        "protocols/awsquery/AwsQueryCompatibleErrorDetails.swift",
+        "protocols/awsquery/QueryCompatibleUtils.swift",
+        "protocols/ec2query/EC2QueryError.swift",
+        "protocols/restjson/RestJSONError.swift",
+        "protocols/restxml/RestXMLError.swift",
+        "protocols/rpcv2cbor/RpcV2CborError.swift",
+        "protocols/rpcv2cbor/RpcV2CborQueryCompatible.swift",
+        "protocols/rpcv2cbor/RpcV2CborValidateResponseHeaderMiddleware.swift"
+      ],
+      "target_dependencies" : [
+        "Smithy",
+        "SmithyTelemetryAPI",
+        "SmithyHTTPClientAPI",
+        "SmithyRetriesAPI",
+        "SmithyRetries",
+        "SmithyXML",
+        "SmithyJSON",
+        "SmithyFormURL",
+        "SmithyIdentity",
+        "SmithyIdentityAPI",
+        "SmithyHTTPAPI",
+        "SmithyHTTPClient",
+        "SmithyHTTPAuth",
+        "SmithyHTTPAuthAPI",
+        "SmithyEventStreamsAPI",
+        "SmithyEventStreams",
+        "SmithyEventStreamsAuthAPI",
+        "SmithyStreams",
+        "SmithyChecksumsAPI",
+        "SmithyChecksums",
+        "SmithyCBOR"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.9"
+}

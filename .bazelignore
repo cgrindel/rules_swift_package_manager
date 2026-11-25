@@ -11,3 +11,4 @@ examples/interesting_deps/swift_deps/any/.build
 examples/ios_sim/swift_deps/any/.build
 examples/injectionnext_example/swift_deps/any/.build
 examples/kscrash_example/swift_deps/any/.build
+examples/aws_sdk_example/swift_deps/any/.build

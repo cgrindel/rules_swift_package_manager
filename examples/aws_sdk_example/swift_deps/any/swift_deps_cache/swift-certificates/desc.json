@@ -1,0 +1,311 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-crypto",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "3.12.3",
+            "upper_bound" : "6.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-crypto.git"
+    },
+    {
+      "identity" : "swift-asn1",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.1.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-asn1.git"
+    }
+  ],
+  "manifest_display_name" : "swift-certificates",
+  "name" : "swift-certificates",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "X509",
+      "targets" : [
+        "X509"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "_CertificateInternals",
+      "module_type" : "SwiftTarget",
+      "name" : "_CertificateInternals",
+      "path" : "Sources/_CertificateInternals",
+      "product_memberships" : [
+        "X509"
+      ],
+      "sources" : [
+        "_TinyArray.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "X509Tests",
+      "module_type" : "SwiftTarget",
+      "name" : "X509Tests",
+      "path" : "Tests/X509Tests",
+      "product_dependencies" : [
+        "SwiftASN1",
+        "Crypto"
+      ],
+      "resources" : [
+        {
+          "path" : "./Tests/X509Tests/CSR Vectors",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/X509Tests/OCSP Test Resources/www.apple.com.der",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/X509Tests/OCSP Test Resources/www.apple.com.intermediate.der",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/X509Tests/OCSP Test Resources/www.apple.com.intermediate.ocsp-response.der",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/X509Tests/OCSP Test Resources/www.apple.com.ocsp-response.der",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/X509Tests/OCSP Test Resources/www.apple.com.root.der",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/X509Tests/PEMTestRSACertificate.pem",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/X509Tests/ca-certificates.crt",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "CMSSignerInfoUnsignedAttributesRoundTripTest.swift",
+        "CMSTests.swift",
+        "CSRTests.swift",
+        "CertificateDERTests.swift",
+        "CertificateStore.swift",
+        "CertificateTests.swift",
+        "CustomPrivateKeyTests.swift",
+        "DNSNamesTests.swift",
+        "DistinguishedNameBuilderTests.swift",
+        "DistinguishedNameTests.swift",
+        "ExtendedKeyUsageTests.swift",
+        "ExtensionBuilderTests.swift",
+        "IPAddressTests.swift",
+        "NameConstraintsTests.swift",
+        "OCSPPolicyVerifierTests.swift",
+        "OCSPTests.swift",
+        "PEMTests.swift",
+        "PolicyBuilderTests.swift",
+        "RFC5280PolicyTests.swift",
+        "SecKeyWrapperTests.swift",
+        "ServerIdentityPolicyTests.swift",
+        "SignatureTests.swift",
+        "TimeTests.swift",
+        "VerifierTests.swift"
+      ],
+      "target_dependencies" : [
+        "X509"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "X509",
+      "module_type" : "SwiftTarget",
+      "name" : "X509",
+      "path" : "Sources/X509",
+      "product_dependencies" : [
+        "SwiftASN1",
+        "Crypto",
+        "_CryptoExtras"
+      ],
+      "product_memberships" : [
+        "X509"
+      ],
+      "sources" : [
+        "CSR/CSRAttribute.swift",
+        "CSR/CSRAttributes.swift",
+        "CSR/CSRVersion.swift",
+        "CSR/CertificateSigningRequest.swift",
+        "CSR/CertificationRequestInfo.swift",
+        "CSR/ExtensionRequest.swift",
+        "Certificate.swift",
+        "CertificatePrivateKey.swift",
+        "CertificatePublicKey.swift",
+        "CertificateSerialNumber.swift",
+        "CertificateVersion.swift",
+        "CryptographicMessageSyntax/CMSAttribute.swift",
+        "CryptographicMessageSyntax/CMSContentInfo.swift",
+        "CryptographicMessageSyntax/CMSEncapsulatedContentInfo.swift",
+        "CryptographicMessageSyntax/CMSIssuerAndSerialNumber.swift",
+        "CryptographicMessageSyntax/CMSOperations.swift",
+        "CryptographicMessageSyntax/CMSSignature.swift",
+        "CryptographicMessageSyntax/CMSSignedData.swift",
+        "CryptographicMessageSyntax/CMSSignerIdentifier.swift",
+        "CryptographicMessageSyntax/CMSSignerInfo.swift",
+        "CryptographicMessageSyntax/CMSVersion.swift",
+        "Curve25519+DER.swift",
+        "CustomPrivateKey.swift",
+        "Digests.swift",
+        "DistinguishedName.swift",
+        "DistinguishedNameBuilder/CommonName.swift",
+        "DistinguishedNameBuilder/CountryName.swift",
+        "DistinguishedNameBuilder/DNBuilder.swift",
+        "DistinguishedNameBuilder/DomainComponent.swift",
+        "DistinguishedNameBuilder/EmailAddress.swift",
+        "DistinguishedNameBuilder/LocalityName.swift",
+        "DistinguishedNameBuilder/OrganizationName.swift",
+        "DistinguishedNameBuilder/OrganizationalUnitName.swift",
+        "DistinguishedNameBuilder/StateOrProvinceName.swift",
+        "DistinguishedNameBuilder/StreetAddress.swift",
+        "Error.swift",
+        "Extension Types/AuthorityInformationAccess.swift",
+        "Extension Types/AuthorityKeyIdentifier.swift",
+        "Extension Types/BasicConstraints.swift",
+        "Extension Types/ExtendedKeyUsage.swift",
+        "Extension Types/ExtensionIdentifiers.swift",
+        "Extension Types/KeyUsage.swift",
+        "Extension Types/NameConstraints.swift",
+        "Extension Types/SubjectAlternativeName.swift",
+        "Extension Types/SubjectKeyIdentifier.swift",
+        "Extension.swift",
+        "Extensions.swift",
+        "ExtensionsBuilder.swift",
+        "GeneralName.swift",
+        "Lock.swift",
+        "LockedValueBox.swift",
+        "OCSP/BasicOCSPResponse.swift",
+        "OCSP/DirectoryString.swift",
+        "OCSP/OCSPCertID.swift",
+        "OCSP/OCSPCertStatus.swift",
+        "OCSP/OCSPExtensionID.swift",
+        "OCSP/OCSPNonce.swift",
+        "OCSP/OCSPPolicy.swift",
+        "OCSP/OCSPRequest.swift",
+        "OCSP/OCSPResponse.swift",
+        "OCSP/OCSPResponseBytes.swift",
+        "OCSP/OCSPResponseData.swift",
+        "OCSP/OCSPResponseStatus.swift",
+        "OCSP/OCSPSignature.swift",
+        "OCSP/OCSPSingleRequest.swift",
+        "OCSP/OCSPSingleResponse.swift",
+        "OCSP/OCSPTBSRequest.swift",
+        "OCSP/OCSPVersion.swift",
+        "PKCS8PrivateKey.swift",
+        "PromiseAndFuture.swift",
+        "RDNAttribute.swift",
+        "RandomNumberGenerator+bytes.swift",
+        "RelativeDistinguishedName.swift",
+        "SEC1PrivateKey.swift",
+        "SecKeyWrapper.swift",
+        "Signature.swift",
+        "SignatureAlgorithm.swift",
+        "Verifier/AllOfPolicies.swift",
+        "Verifier/AnyPolicy.swift",
+        "Verifier/CertificateStore.swift",
+        "Verifier/CustomCertificateStore.swift",
+        "Verifier/OneOfPolicies.swift",
+        "Verifier/PolicyBuilder.swift",
+        "Verifier/RFC5280/BasicConstraintsPolicy.swift",
+        "Verifier/RFC5280/DNSNames.swift",
+        "Verifier/RFC5280/ExpiryPolicy.swift",
+        "Verifier/RFC5280/IPConstraints.swift",
+        "Verifier/RFC5280/NameConstraintsPolicy.swift",
+        "Verifier/RFC5280/RFC5280Policy.swift",
+        "Verifier/RFC5280/URIConstraints.swift",
+        "Verifier/RFC5280/VersionPolicy.swift",
+        "Verifier/ServerIdentityPolicy.swift",
+        "Verifier/TrustRootLoading.swift",
+        "Verifier/UnverifiedChain.swift",
+        "Verifier/ValidatedCertificateChain.swift",
+        "Verifier/VerificationDiagnostic.swift",
+        "Verifier/Verifier.swift",
+        "Verifier/VerifierPolicy.swift",
+        "X509BaseTypes/AlgorithmIdentifier.swift",
+        "X509BaseTypes/ECDSASignature.swift",
+        "X509BaseTypes/RSAPKCS1PublicKey.swift",
+        "X509BaseTypes/SubjectPublicKeyInfo.swift",
+        "X509BaseTypes/TBSCertificate.swift",
+        "X509BaseTypes/Time.swift",
+        "X509BaseTypes/TimeCalculations.swift",
+        "X509BaseTypes/Validity.swift",
+        "X509SendableMetatype.swift"
+      ],
+      "target_dependencies" : [
+        "_CertificateInternals"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CertificateInternalsTests",
+      "module_type" : "SwiftTarget",
+      "name" : "CertificateInternalsTests",
+      "path" : "Tests/CertificateInternalsTests",
+      "sources" : [
+        "TinyArrayTests.swift"
+      ],
+      "target_dependencies" : [
+        "_CertificateInternals"
+      ],
+      "type" : "test"
+    }
+  ],
+  "tools_version" : "6.1"
+}

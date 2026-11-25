@@ -1,0 +1,188 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.14.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log.git"
+    },
+    {
+      "identity" : "swift-async-algorithms",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.1.3",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-async-algorithms.git"
+    }
+  ],
+  "manifest_display_name" : "swift-service-lifecycle",
+  "name" : "swift-service-lifecycle",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "ServiceLifecycle",
+      "targets" : [
+        "ServiceLifecycle"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "ServiceLifecycleTestKit",
+      "targets" : [
+        "ServiceLifecycleTestKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "UnixSignals",
+      "targets" : [
+        "UnixSignals"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "UnixSignalsTests",
+      "module_type" : "SwiftTarget",
+      "name" : "UnixSignalsTests",
+      "path" : "Tests/UnixSignalsTests",
+      "sources" : [
+        "UnixSignalTests.swift"
+      ],
+      "target_dependencies" : [
+        "UnixSignals"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "UnixSignals",
+      "module_type" : "SwiftTarget",
+      "name" : "UnixSignals",
+      "path" : "Sources/UnixSignals",
+      "product_memberships" : [
+        "ServiceLifecycle",
+        "ServiceLifecycleTestKit",
+        "UnixSignals"
+      ],
+      "sources" : [
+        "UnixSignal.swift",
+        "UnixSignalsSequence.swift"
+      ],
+      "target_dependencies" : [
+        "ConcurrencyHelpers"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "ServiceLifecycleTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ServiceLifecycleTests",
+      "path" : "Tests/ServiceLifecycleTests",
+      "sources" : [
+        "AsyncCancelOnGracefulShutdownSequenceTests.swift",
+        "ClosureServiceTests.swift",
+        "GracefulShutdownTests.swift",
+        "MockService.swift",
+        "ServiceGroupAddServiceTests.swift",
+        "ServiceGroupTests.swift",
+        "XCTest+Async.swift"
+      ],
+      "target_dependencies" : [
+        "ServiceLifecycle",
+        "ServiceLifecycleTestKit"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "ServiceLifecycleTestKit",
+      "module_type" : "SwiftTarget",
+      "name" : "ServiceLifecycleTestKit",
+      "path" : "Sources/ServiceLifecycleTestKit",
+      "product_memberships" : [
+        "ServiceLifecycleTestKit"
+      ],
+      "sources" : [
+        "GracefulShutdown.swift"
+      ],
+      "target_dependencies" : [
+        "ServiceLifecycle"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "ServiceLifecycle",
+      "module_type" : "SwiftTarget",
+      "name" : "ServiceLifecycle",
+      "path" : "Sources/ServiceLifecycle",
+      "product_dependencies" : [
+        "Logging",
+        "AsyncAlgorithms"
+      ],
+      "product_memberships" : [
+        "ServiceLifecycle",
+        "ServiceLifecycleTestKit"
+      ],
+      "sources" : [
+        "AsyncCancelOnGracefulShutdownSequence.swift",
+        "AsyncGracefulShutdownSequence.swift",
+        "CancellationWaiter.swift",
+        "ClosureService.swift",
+        "GracefulShutdown.swift",
+        "Service.swift",
+        "ServiceGroup.swift",
+        "ServiceGroupConfiguration.swift",
+        "ServiceRunnerError.swift"
+      ],
+      "target_dependencies" : [
+        "UnixSignals",
+        "ConcurrencyHelpers"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "ConcurrencyHelpers",
+      "module_type" : "SwiftTarget",
+      "name" : "ConcurrencyHelpers",
+      "path" : "Sources/ConcurrencyHelpers",
+      "product_memberships" : [
+        "ServiceLifecycle",
+        "ServiceLifecycleTestKit",
+        "UnixSignals"
+      ],
+      "sources" : [
+        "Lock.swift",
+        "LockedValueBox.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.2"
+}

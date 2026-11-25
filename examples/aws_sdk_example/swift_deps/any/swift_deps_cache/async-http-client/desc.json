@@ -1,0 +1,414 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-nio",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.100.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio.git"
+    },
+    {
+      "identity" : "swift-nio-ssl",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.30.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio-ssl.git"
+    },
+    {
+      "identity" : "swift-nio-http2",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.36.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio-http2.git"
+    },
+    {
+      "identity" : "swift-nio-extras",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.26.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio-extras.git"
+    },
+    {
+      "identity" : "swift-nio-transport-services",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.24.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio-transport-services.git"
+    },
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.7.1",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log.git"
+    },
+    {
+      "identity" : "swift-atomics",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.2",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-atomics.git"
+    },
+    {
+      "identity" : "swift-algorithms",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-algorithms.git"
+    },
+    {
+      "identity" : "swift-distributed-tracing",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.3.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-distributed-tracing.git"
+    },
+    {
+      "identity" : "swift-configuration",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-configuration.git"
+    },
+    {
+      "identity" : "swift-service-context",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.1.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-service-context.git"
+    }
+  ],
+  "manifest_display_name" : "async-http-client",
+  "name" : "async-http-client",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "AsyncHTTPClient",
+      "targets" : [
+        "AsyncHTTPClient"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "CAsyncHTTPClient",
+      "module_type" : "ClangTarget",
+      "name" : "CAsyncHTTPClient",
+      "path" : "Sources/CAsyncHTTPClient",
+      "product_memberships" : [
+        "AsyncHTTPClient"
+      ],
+      "sources" : [
+        "CAsyncHTTPClient.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AsyncHTTPClientTests",
+      "module_type" : "SwiftTarget",
+      "name" : "AsyncHTTPClientTests",
+      "path" : "Tests/AsyncHTTPClientTests",
+      "product_dependencies" : [
+        "NIOTLS",
+        "NIOCore",
+        "NIOConcurrencyHelpers",
+        "NIOEmbedded",
+        "NIOFoundationCompat",
+        "NIOTestUtils",
+        "NIOSSL",
+        "NIOHTTP2",
+        "NIOSOCKS",
+        "Atomics",
+        "Algorithms",
+        "Configuration",
+        "Logging",
+        "InMemoryLogging",
+        "Tracing",
+        "ServiceContextModule",
+        "InMemoryTracing"
+      ],
+      "resources" : [
+        {
+          "path" : "./Tests/AsyncHTTPClientTests/Resources/example.com.cert.pem",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/AsyncHTTPClientTests/Resources/example.com.private-key.pem",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/AsyncHTTPClientTests/Resources/self_signed_cert.pem",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/AsyncHTTPClientTests/Resources/self_signed_key.pem",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "AsyncAwaitEndToEndTests.swift",
+        "AsyncTestHelpers.swift",
+        "BidirectionalStreamingTests.swift",
+        "ConnectionPoolSizeConfigValueIsRespectedTests.swift",
+        "EmbeddedChannel+HTTPConvenience.swift",
+        "FoundationExtensionTests.swift",
+        "HTTP1ClientChannelHandlerTesting.swift",
+        "HTTP1ClientChannelHandlerTests.swift",
+        "HTTP1ConnectionStateMachineTests.swift",
+        "HTTP1ConnectionTests.swift",
+        "HTTP1ProxyConnectHandlerTests.swift",
+        "HTTP2ClientRequestHandlerTests.swift",
+        "HTTP2ClientTests.swift",
+        "HTTP2ConnectionTests.swift",
+        "HTTP2IdleHandlerTests.swift",
+        "HTTPClient+SOCKSTests.swift",
+        "HTTPClient+StructuredConcurrencyTests.swift",
+        "HTTPClientBase.swift",
+        "HTTPClientCookieTests.swift",
+        "HTTPClientInformationalResponsesTests.swift",
+        "HTTPClientInternalTests.swift",
+        "HTTPClientNIOTSTests.swift",
+        "HTTPClientRequestTests.swift",
+        "HTTPClientResponseTests.swift",
+        "HTTPClientTestUtils.swift",
+        "HTTPClientTests.swift",
+        "HTTPClientTracingInternalTests.swift",
+        "HTTPClientTracingTests.swift",
+        "HTTPClientUncleanSSLConnectionShutdownTests.swift",
+        "HTTPConnectionPool+FactoryTests.swift",
+        "HTTPConnectionPool+HTTP1ConnectionsTest.swift",
+        "HTTPConnectionPool+HTTP1StateTests.swift",
+        "HTTPConnectionPool+HTTP2ConnectionsTest.swift",
+        "HTTPConnectionPool+HTTP2StateMachineTests.swift",
+        "HTTPConnectionPool+ManagerTests.swift",
+        "HTTPConnectionPool+RequestQueueTests.swift",
+        "HTTPConnectionPool+StateTestUtils.swift",
+        "HTTPConnectionPoolTests.swift",
+        "HTTPRequestStateMachineTests.swift",
+        "IdleTimeoutNoReuseTests.swift",
+        "LRUCacheTests.swift",
+        "LocalAddressOverrideTests.swift",
+        "Mocks/MockConnectionPool.swift",
+        "Mocks/MockHTTPExecutableRequest.swift",
+        "Mocks/MockRequestExecutor.swift",
+        "Mocks/MockRequestQueuer.swift",
+        "NWWaitingHandlerTests.swift",
+        "NoBytesSentOverBodyLimitTests.swift",
+        "RacePoolIdleConnectionsAndGetTests.swift",
+        "RandomizedDNSResolverIntegrationTests.swift",
+        "RequestBagTests.swift",
+        "RequestValidationTests.swift",
+        "ResponseDelayGetTests.swift",
+        "SOCKSEventsHandlerTests.swift",
+        "SOCKSTestUtils.swift",
+        "SSLContextCacheTests.swift",
+        "StressGetHttpsTests.swift",
+        "SwiftConfigurationTests.swift",
+        "TLSEventsHandlerTests.swift",
+        "Transaction+StateMachineTests.swift",
+        "TransactionTests.swift",
+        "XCTest+AsyncAwait.swift"
+      ],
+      "target_dependencies" : [
+        "AsyncHTTPClient"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AsyncHTTPClient",
+      "module_type" : "SwiftTarget",
+      "name" : "AsyncHTTPClient",
+      "path" : "Sources/AsyncHTTPClient",
+      "product_dependencies" : [
+        "NIO",
+        "NIOTLS",
+        "NIOCore",
+        "NIOPosix",
+        "NIOHTTP1",
+        "NIOConcurrencyHelpers",
+        "NIOHTTP2",
+        "NIOSSL",
+        "NIOHTTPCompression",
+        "NIOSOCKS",
+        "NIOTransportServices",
+        "Atomics",
+        "Algorithms",
+        "Configuration",
+        "Logging",
+        "Tracing",
+        "ServiceContextModule"
+      ],
+      "product_memberships" : [
+        "AsyncHTTPClient"
+      ],
+      "sources" : [
+        "AsyncAwait/AnyAsyncSequence.swift",
+        "AsyncAwait/AnyAsyncSequenceProucerDelete.swift",
+        "AsyncAwait/AsyncLazySequence.swift",
+        "AsyncAwait/HTTPClient+execute.swift",
+        "AsyncAwait/HTTPClient+shutdown.swift",
+        "AsyncAwait/HTTPClient+tracing.swift",
+        "AsyncAwait/HTTPClientRequest+Prepared.swift",
+        "AsyncAwait/HTTPClientRequest+auth.swift",
+        "AsyncAwait/HTTPClientRequest.swift",
+        "AsyncAwait/HTTPClientResponse.swift",
+        "AsyncAwait/SingleIteratorPrecondition.swift",
+        "AsyncAwait/Transaction+StateMachine.swift",
+        "AsyncAwait/Transaction.swift",
+        "Base64.swift",
+        "BasicAuth.swift",
+        "BestEffortHashableTLSConfiguration.swift",
+        "Configuration+BrowserLike.swift",
+        "ConnectionPool.swift",
+        "ConnectionPool/ChannelHandler/HTTP1ProxyConnectHandler.swift",
+        "ConnectionPool/ChannelHandler/SOCKSEventsHandler.swift",
+        "ConnectionPool/ChannelHandler/TLSEventsHandler.swift",
+        "ConnectionPool/HTTP1/HTTP1ClientChannelHandler.swift",
+        "ConnectionPool/HTTP1/HTTP1Connection.swift",
+        "ConnectionPool/HTTP1/HTTP1ConnectionStateMachine.swift",
+        "ConnectionPool/HTTP2/HTTP2ClientRequestHandler.swift",
+        "ConnectionPool/HTTP2/HTTP2Connection.swift",
+        "ConnectionPool/HTTP2/HTTP2IdleHandler.swift",
+        "ConnectionPool/HTTPConnectionEvent.swift",
+        "ConnectionPool/HTTPConnectionPool+Factory.swift",
+        "ConnectionPool/HTTPConnectionPool+Manager.swift",
+        "ConnectionPool/HTTPConnectionPool.swift",
+        "ConnectionPool/HTTPExecutableRequest.swift",
+        "ConnectionPool/HTTPRequestStateMachine+Demand.swift",
+        "ConnectionPool/HTTPRequestStateMachine.swift",
+        "ConnectionPool/RequestBodyLength.swift",
+        "ConnectionPool/RequestFramingMetadata.swift",
+        "ConnectionPool/RequestOptions.swift",
+        "ConnectionPool/State Machine/HTTPConnectionPool+Backoff.swift",
+        "ConnectionPool/State Machine/HTTPConnectionPool+HTTP1Connections.swift",
+        "ConnectionPool/State Machine/HTTPConnectionPool+HTTP1StateMachine.swift",
+        "ConnectionPool/State Machine/HTTPConnectionPool+HTTP2Connections.swift",
+        "ConnectionPool/State Machine/HTTPConnectionPool+HTTP2StateMachine.swift",
+        "ConnectionPool/State Machine/HTTPConnectionPool+RequestQueue.swift",
+        "ConnectionPool/State Machine/HTTPConnectionPool+StateMachine.swift",
+        "ConnectionTarget.swift",
+        "DeconstructedURL.swift",
+        "FileDownloadDelegate.swift",
+        "FoundationExtensions.swift",
+        "HTTPClient+HTTPCookie.swift",
+        "HTTPClient+Proxy.swift",
+        "HTTPClient+StructuredConcurrency.swift",
+        "HTTPClient.swift",
+        "HTTPClientConfiguration+SwiftConfiguration.swift",
+        "HTTPHandler.swift",
+        "LRUCache.swift",
+        "NIOLoopBound+Execute.swift",
+        "NIOTransportServices/NWErrorHandler.swift",
+        "NIOTransportServices/NWWaitingHandler.swift",
+        "NIOTransportServices/TLSConfiguration.swift",
+        "RedirectState.swift",
+        "RequestBag+StateMachine.swift",
+        "RequestBag+Tracing.swift",
+        "RequestBag.swift",
+        "RequestValidation.swift",
+        "SSLContextCache.swift",
+        "Scheme.swift",
+        "Singleton.swift",
+        "StringConvertibleInstances.swift",
+        "StructuredConcurrencyHelpers.swift",
+        "TracingSupport.swift",
+        "Utils.swift"
+      ],
+      "target_dependencies" : [
+        "CAsyncHTTPClient"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.2"
+}

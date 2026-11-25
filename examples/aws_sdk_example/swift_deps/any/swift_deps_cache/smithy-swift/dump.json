@@ -1,0 +1,2079 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "aws-crt-swift",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/awslabs/aws-crt-swift.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "exact" : [
+              "0.58.1"
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-log",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-log.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "async-http-client",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/swift-server/async-http-client.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.22.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "smithy-swift",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "6.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Smithy",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Smithy"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithySerialization",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithySerialization"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "ClientRuntime",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "ClientRuntime"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyRetriesAPI",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyRetriesAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyRetries",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyRetries"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyReadWrite",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyReadWrite"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyXML",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyXML"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyJSON",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyJSON"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyFormURL",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyFormURL"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyTimestamps",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyTimestamps"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyIdentity",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyIdentity"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyIdentityAPI",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyIdentityAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyHTTPAPI",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyHTTPAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyHTTPClient",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyHTTPClient"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyHTTPAuth",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyHTTPAuth"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyHTTPAuthAPI",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyHTTPAuthAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyEventStreamsAPI",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyEventStreamsAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyEventStreamsAuthAPI",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyEventStreamsAuthAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyEventStreams",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyEventStreams"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyStreams",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyStreams"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyChecksumsAPI",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyChecksumsAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyChecksums",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyChecksums"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyCBOR",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyCBOR"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyWaitersAPI",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyWaitersAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyTestUtil",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyTestUtil"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithySwiftNIO",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithySwiftNIO"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyTelemetryAPI",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyTelemetryAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SmithyHTTPClientAPI",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SmithyHTTPClientAPI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "Logging",
+            "swift-log",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Smithy",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithySerialization",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyTelemetryAPI",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyTelemetryAPI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyHTTPClientAPI",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyTelemetryAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPClientAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyRetriesAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyRetries",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyXML",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyJSON",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyFormURL",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyIdentity",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyIdentityAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPClient",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPAuth",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPAuthAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyEventStreamsAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyEventStreams",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyEventStreamsAuthAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyStreams",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyChecksumsAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyChecksums",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyCBOR",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AwsCommonRuntimeKit",
+            "aws-crt-swift",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ClientRuntime",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyStreams",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPClientAPI",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AsyncHTTPClient",
+            "async-http-client",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithySwiftNIO",
+      "packageAccess" : true,
+      "path" : "Sources/SmithySwiftNIO",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyRetriesAPI",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithyRetriesAPI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyRetries",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyTimestamps",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyReadWrite",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithySerialization",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyReadWrite",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyTimestamps",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyXML",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithySerialization",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyReadWrite",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyTimestamps",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyJSON",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithyReadWrite",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyTimestamps",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyFormURL",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyTimestamps",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ClientRuntime",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyIdentity",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyCBOR",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyTestUtil",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithyIdentityAPI",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AwsCommonRuntimeKit",
+            "aws-crt-swift",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyIdentity",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyIdentityAPI",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyHTTPAPI",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyStreams",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AwsCommonRuntimeKit",
+            "aws-crt-swift",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyHTTPClient",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPAuthAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyIdentity",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyIdentityAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyChecksumsAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPClient",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AwsCommonRuntimeKit",
+            "aws-crt-swift",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyHTTPAuth",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyIdentityAPI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyHTTPAuthAPI",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyEventStreamsAPI",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyEventStreamsAPI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyEventStreamsAuthAPI",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyEventStreamsAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyEventStreamsAuthAPI",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AwsCommonRuntimeKit",
+            "aws-crt-swift",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyEventStreams",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Logging",
+            "swift-log",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AwsCommonRuntimeKit",
+            "aws-crt-swift",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyStreams",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyChecksumsAPI",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyChecksumsAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyStreams",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPClient",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AwsCommonRuntimeKit",
+            "aws-crt-swift",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyChecksums",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithyReadWrite",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyTimestamps",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AwsCommonRuntimeKit",
+            "aws-crt-swift",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyCBOR",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyWaitersAPI",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ClientRuntime",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyTestUtil",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyStreams",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Logging",
+            "swift-log",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ClientRuntimeTests",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithySwiftNIO",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyTestUtil",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithySwiftNIOTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithyCBOR",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ClientRuntime",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyTestUtil",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyCBORTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithyHTTPClient",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyTestUtil",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AwsCommonRuntimeKit",
+            "aws-crt-swift",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyHTTPClientTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithySerialization",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyXML",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ClientRuntime",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyXMLTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithyHTTPAuth",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyHTTPAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyIdentity",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ClientRuntime",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyHTTPAuthTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithyHTTPAuthAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ClientRuntime",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyHTTPAuthAPITests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithySerialization",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyJSON",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ClientRuntime",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyTestUtil",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyJSONTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithyFormURL",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ClientRuntime",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyFormURLTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithyTimestamps",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyTimestampsTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithyTestUtil",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyTestUtilTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithyEventStreams",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyEventStreamsTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyIdentity",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyIdentityTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyWaitersAPI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyWaitersAPITests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ClientRuntime",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyRetriesAPI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyRetries",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SmithyTestUtil",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyRetriesTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithyHTTPAPI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyHTTPAPITests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SmithyStreams",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Smithy",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SmithyStreamsTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.9.0"
+  },
+  "traits" : [
+
+  ]
+}
