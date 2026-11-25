@@ -437,6 +437,15 @@ def build(path):
         if word in text:
             log("NOTE: BUILD.bazel still mentions `{}`".format(word))
 
+    # The root package must stay. Do not leave an empty file behind.
+    code = [l for l in text.split("\n") if l.strip() and not l.lstrip().startswith("#")]
+    if not code:
+        log("only comments were left; replaced them with a note")
+        text = (
+            "# The root package of the example. Update the Swift packages with\n"
+            "# `bazel run @swift_package//:update`.\n"
+        )
+
     open(path, "w").write(tidy_blank_lines(text))
 
 
