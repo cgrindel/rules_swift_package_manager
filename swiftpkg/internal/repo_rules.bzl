@@ -244,11 +244,8 @@ BUILD file override bypasses generated declarations.\
     # Create Bazel declarations for the targets
     bld_files.append(swiftpkg_build_files.new_for_products(pkg_ctx))
 
-    # Export the pkg_info.json
-    exports_files = scg.new_fn_call(
-        "exports_files",
-        ["pkg_info.json", "rspm_targets.json"],
-    )
+    # Export the list of the root BUILD file's targets.
+    exports_files = scg.new_fn_call("exports_files", ["rspm_targets.json"])
     bld_files.append(build_files.new(decls = [exports_files]))
 
     # Write the build file

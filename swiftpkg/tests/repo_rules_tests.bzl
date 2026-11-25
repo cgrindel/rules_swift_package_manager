@@ -254,7 +254,7 @@ def _gen_build_files_without_build_file_test(ctx):
     asserts.true(env, 'package_version = "overridden"' in calls["file"][-1].content, calls["file"][-1].content)
     asserts.true(
         env,
-        'exports_files([\n    "pkg_info.json",\n    "rspm_targets.json",\n])' in calls["file"][-1].content,
+        'exports_files(["rspm_targets.json"])' in calls["file"][-1].content,
         calls["file"][-1].content,
     )
     targets_json = [f for f in calls["file"] if f.path == "rspm_targets.json"]

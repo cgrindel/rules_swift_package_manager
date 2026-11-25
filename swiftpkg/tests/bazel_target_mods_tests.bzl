@@ -976,7 +976,7 @@ def _unknown_targets_error_test(ctx):
     decls = [
         build_decls.new("swift_library", _impl_target),
         build_decls.new("alias", "Bar.rspm"),
-        scg.new_fn_call("exports_files", ["pkg_info.json"]),
+        scg.new_fn_call("exports_files", ["rspm_targets.json"]),
     ]
 
     asserts.equals(
