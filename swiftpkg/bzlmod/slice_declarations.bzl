@@ -678,6 +678,11 @@ def _patch_tags_for_tool(module_ctx, root, config_pkgs):
     way the first cache run after `init`, whose slice lists no manifests,
     still copies the patches.
 
+    One gap remains on that first run: a `configure_package` tag that matches
+    only by dependency name (not by identity or repository name) cannot match,
+    because there is no `_main` `dump.json` to map the name yet. The second
+    cache run picks it up, since staleness then asks for its patch files.
+
     Returns:
         A `dict` of identity to tag, for tags with patches.
     """

@@ -138,6 +138,9 @@ append_line_once() {
 
 append_line_once "${root}/.bazelignore" "${dir}/.build"
 append_line_once "${root}/.gitignore" "${dir}/.build"
+# The tool's lock dir next to Package.swift, left behind by an interrupted
+# resolve.
+append_line_once "${root}/.gitignore" ".rspm_resolve_lock/"
 
 if [[ -n ${seed} ]]; then
   cp "${root}/${seed}" "${root}/${dir}/Package.resolved"

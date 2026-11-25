@@ -75,6 +75,7 @@ package(default_visibility = ["//visibility:public"])'
 
 assert_count 1 "swift/macos/.build" "${ws}/.bazelignore"
 assert_count 1 "swift/macos/.build" "${ws}/.gitignore"
+assert_count 1 ".rspm_resolve_lock/" "${ws}/.gitignore"
 # Existing content without a trailing newline is preserved.
 assert_count 1 "existing" "${ws}/.gitignore"
 
@@ -110,6 +111,7 @@ out="$("${init_sh}" --config @platforms//os:linux \
 assert_count 1 "swift/macos/.build" "${ws}/.bazelignore"
 assert_count 1 "swift/linux/.build" "${ws}/.bazelignore"
 assert_count 1 "swift/linux/.build" "${ws}/.gitignore"
+assert_count 1 ".rspm_resolve_lock/" "${ws}/.gitignore"
 grep -qF 'include("//swift/linux:inc.MODULE.bazel")' <<<"${out}" \
   || fail "missing include line for linux"
 if grep -qF "use_repo(" <<<"${out}"; then
