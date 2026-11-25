@@ -1,0 +1,353 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-nio",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.82.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio.git"
+    },
+    {
+      "identity" : "swift-atomics",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.2",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-atomics.git"
+    }
+  ],
+  "manifest_display_name" : "swift-nio-http2",
+  "name" : "swift-nio-http2",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "NIOHTTP2",
+      "targets" : [
+        "NIOHTTP2"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOHPACK",
+      "targets" : [
+        "NIOHPACK"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOHTTP2Server",
+      "targets" : [
+        "NIOHTTP2Server"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOHTTP2PerformanceTester",
+      "targets" : [
+        "NIOHTTP2PerformanceTester"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "NIOHTTP2Tests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOHTTP2Tests",
+      "path" : "Tests/NIOHTTP2Tests",
+      "product_dependencies" : [
+        "NIOConcurrencyHelpers",
+        "NIOCore",
+        "NIOEmbedded",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "Atomics"
+      ],
+      "sources" : [
+        "CircularBufferExtensionsTests.swift",
+        "CompoundOutboundBufferTest.swift",
+        "ConcurrentStreamBufferTest.swift",
+        "ConfiguringPipelineAsyncMultiplexerTests.swift",
+        "ConfiguringPipelineInlineMultiplexerTests.swift",
+        "ConfiguringPipelineTests.swift",
+        "ConfiguringPipelineWithFramePayloadStreamsTests.swift",
+        "ConnectionStateMachineTests.swift",
+        "ContentLengthVerifierTests.swift",
+        "ControlFrameBufferTests.swift",
+        "DOSHeuristicsTests.swift",
+        "GlitchesMonitorTests.swift",
+        "HTTP2ErrorTests.swift",
+        "HTTP2FrameParserTests.swift",
+        "HTTP2FramePayloadStreamMultiplexerTests.swift",
+        "HTTP2FramePayloadToHTTP1CodecCRLFTests.swift",
+        "HTTP2FramePayloadToHTTP1CodecTests.swift",
+        "HTTP2InlineStreamMultiplexerTests.swift",
+        "HTTP2StreamMultiplexerTests.swift",
+        "HTTP2ToHTTP1CodecTests.swift",
+        "InboundWindowManagerTests.swift",
+        "NIOHTTP2ServerConnectionManagementHandler+StateMachineTests.swift",
+        "NIOHTTP2ServerConnectionManagementHandlerTests.swift",
+        "OutboundFlowControlBufferTests.swift",
+        "ReentrancyTests.swift",
+        "SimpleClientServerFramePayloadStreamTests.swift",
+        "SimpleClientServerInlineStreamMultiplexerTests.swift",
+        "SimpleClientServerTests.swift",
+        "StreamChannelFlowControllerTests.swift",
+        "StreamIDTests.swift",
+        "StreamMapTests.swift",
+        "TestUtilities.swift"
+      ],
+      "target_dependencies" : [
+        "NIOHTTP2"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOHTTP2Server",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOHTTP2Server",
+      "path" : "Sources/NIOHTTP2Server",
+      "product_dependencies" : [
+        "NIOCore",
+        "NIOPosix",
+        "NIOHTTP1"
+      ],
+      "product_memberships" : [
+        "NIOHTTP2Server"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "NIOHTTP2"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOHTTP2PerformanceTester",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOHTTP2PerformanceTester",
+      "path" : "Sources/NIOHTTP2PerformanceTester",
+      "product_dependencies" : [
+        "NIOCore",
+        "NIOPosix",
+        "NIOEmbedded"
+      ],
+      "product_memberships" : [
+        "NIOHTTP2PerformanceTester"
+      ],
+      "sources" : [
+        "Bench1Conn10kRequests.swift",
+        "Benchmark.swift",
+        "HPACKHeaderCanonicalFormBenchmark.swift",
+        "HPACKHeaderDecodingBenchmark.swift",
+        "HPACKHeaderEncodingBenchmark.swift",
+        "HPACKHeadersNormalizationOfHTTPHeadersBenchmark.swift",
+        "HuffmanDecodingBenchmark.swift",
+        "HuffmanEncodingBenchmark.swift",
+        "ServerOnly10KRequestsBenchmark.swift",
+        "StreamTeardownBenchmark.swift",
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "NIOHTTP2"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOHTTP2",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOHTTP2",
+      "path" : "Sources/NIOHTTP2",
+      "product_dependencies" : [
+        "NIO",
+        "NIOCore",
+        "NIOHTTP1",
+        "NIOTLS",
+        "NIOConcurrencyHelpers",
+        "Atomics"
+      ],
+      "product_memberships" : [
+        "NIOHTTP2",
+        "NIOHTTP2Server",
+        "NIOHTTP2PerformanceTester"
+      ],
+      "sources" : [
+        "ConnectionStateMachine/ConnectionStateMachine.swift",
+        "ConnectionStateMachine/ConnectionStreamsState.swift",
+        "ConnectionStateMachine/FrameReceivingStates/MayReceiveFrames.swift",
+        "ConnectionStateMachine/FrameReceivingStates/ReceivingDataState.swift",
+        "ConnectionStateMachine/FrameReceivingStates/ReceivingGoAwayState.swift",
+        "ConnectionStateMachine/FrameReceivingStates/ReceivingHeadersState.swift",
+        "ConnectionStateMachine/FrameReceivingStates/ReceivingPushPromiseState.swift",
+        "ConnectionStateMachine/FrameReceivingStates/ReceivingRstStreamState.swift",
+        "ConnectionStateMachine/FrameReceivingStates/ReceivingWindowUpdateState.swift",
+        "ConnectionStateMachine/FrameSendingStates/MaySendFrames.swift",
+        "ConnectionStateMachine/FrameSendingStates/SendingDataState.swift",
+        "ConnectionStateMachine/FrameSendingStates/SendingGoawayState.swift",
+        "ConnectionStateMachine/FrameSendingStates/SendingHeadersState.swift",
+        "ConnectionStateMachine/FrameSendingStates/SendingPushPromiseState.swift",
+        "ConnectionStateMachine/FrameSendingStates/SendingRstStreamState.swift",
+        "ConnectionStateMachine/FrameSendingStates/SendingWindowUpdateState.swift",
+        "ConnectionStateMachine/HTTP2SettingsState.swift",
+        "ConnectionStateMachine/HasExtendedConnectSettings.swift",
+        "ConnectionStateMachine/HasFlowControlWindows.swift",
+        "ConnectionStateMachine/HasLocalSettings.swift",
+        "ConnectionStateMachine/HasRemoteSettings.swift",
+        "ConnectionStateMachine/LocallyQuiescingState.swift",
+        "ConnectionStateMachine/QuiescingState.swift",
+        "ConnectionStateMachine/RemotelyQuiescingState.swift",
+        "ConnectionStateMachine/SendAndReceiveGoawayState.swift",
+        "ConnectionStateMachine/StateMachineResult.swift",
+        "ContentLengthVerifier.swift",
+        "DOSHeuristics.swift",
+        "Error+Any.swift",
+        "Frame Buffers/ConcurrentStreamBuffer.swift",
+        "Frame Buffers/ControlFrameBuffer.swift",
+        "Frame Buffers/OutboundFlowControlBuffer.swift",
+        "Frame Buffers/OutboundFrameBuffer.swift",
+        "GlitchesMonitor.swift",
+        "HPACKHeaders+Validation.swift",
+        "HTTP2ChannelHandler+InboundStreamMultiplexer.swift",
+        "HTTP2ChannelHandler+InlineStreamMultiplexer.swift",
+        "HTTP2ChannelHandler.swift",
+        "HTTP2CommonInboundStreamMultiplexer.swift",
+        "HTTP2ConnectionStateChange.swift",
+        "HTTP2Error.swift",
+        "HTTP2ErrorCode.swift",
+        "HTTP2FlowControlWindow.swift",
+        "HTTP2Frame.swift",
+        "HTTP2FrameEncoder.swift",
+        "HTTP2FrameParser.swift",
+        "HTTP2PingData.swift",
+        "HTTP2PipelineHelpers.swift",
+        "HTTP2Settings.swift",
+        "HTTP2Stream.swift",
+        "HTTP2StreamChannel+OutboundStreamMultiplexer.swift",
+        "HTTP2StreamChannel.swift",
+        "HTTP2StreamDelegate.swift",
+        "HTTP2StreamID.swift",
+        "HTTP2StreamMultiplexer.swift",
+        "HTTP2ToHTTP1Codec.swift",
+        "HTTP2UserEvents.swift",
+        "InboundEventBuffer.swift",
+        "InboundWindowManager.swift",
+        "MultiplexerAbstractChannel.swift",
+        "NIOHTTP2FrameDelegate.swift",
+        "NIOHTTP2ServerConnectionManagementHandler+StateMachine.swift",
+        "NIOHTTP2ServerConnectionManagementHandler.swift",
+        "StreamChannelFlowController.swift",
+        "StreamChannelList.swift",
+        "StreamMap.swift",
+        "StreamStateMachine.swift",
+        "Timer.swift",
+        "UnsafeTransfer.swift",
+        "WatermarkedFlowController.swift"
+      ],
+      "target_dependencies" : [
+        "NIOHPACK"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOHPACKTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOHPACKTests",
+      "path" : "Tests/NIOHPACKTests",
+      "product_dependencies" : [
+        "NIOCore",
+        "NIOFoundationCompat"
+      ],
+      "resources" : [
+        {
+          "path" : "./Tests/NIOHPACKTests/Fixtures/large_complex_huffman_b64.txt",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/NIOHPACKTests/Fixtures/large_huffman_b64.txt",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "HPACKCodingTests.swift",
+        "HPACKHeadersTests.swift",
+        "HPACKIntegrationTests.swift",
+        "HPACKRegressionTests.swift",
+        "HeaderTableTests.swift",
+        "HuffmanCodingTests.swift",
+        "IntegerCodingTests.swift"
+      ],
+      "target_dependencies" : [
+        "NIOHPACK"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOHPACK",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOHPACK",
+      "path" : "Sources/NIOHPACK",
+      "product_dependencies" : [
+        "NIO",
+        "NIOCore",
+        "NIOConcurrencyHelpers",
+        "NIOHTTP1"
+      ],
+      "product_memberships" : [
+        "NIOHTTP2",
+        "NIOHPACK",
+        "NIOHTTP2Server",
+        "NIOHTTP2PerformanceTester"
+      ],
+      "sources" : [
+        "DynamicHeaderTable.swift",
+        "HPACKDecoder.swift",
+        "HPACKEncoder.swift",
+        "HPACKErrors.swift",
+        "HPACKHeader.swift",
+        "HeaderTables.swift",
+        "HuffmanCoding.swift",
+        "HuffmanTables.swift",
+        "IndexedHeaderTable.swift",
+        "IntegerCoding.swift",
+        "StaticHeaderTable.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.1"
+}

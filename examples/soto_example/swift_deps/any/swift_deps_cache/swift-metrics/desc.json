@@ -1,0 +1,123 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "swift-metrics",
+  "name" : "swift-metrics",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "CoreMetrics",
+      "targets" : [
+        "CoreMetrics"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Metrics",
+      "targets" : [
+        "Metrics"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "MetricsTestKit",
+      "targets" : [
+        "MetricsTestKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "MetricsTests",
+      "module_type" : "SwiftTarget",
+      "name" : "MetricsTests",
+      "path" : "Tests/MetricsTests",
+      "sources" : [
+        "CoreMetricsTests.swift",
+        "GlobalMetricsSystemTests.swift",
+        "LockTest.swift",
+        "MappingMetricsFactoryTests.swift",
+        "MetricsTests.swift",
+        "StreamMetricsFactoryTests.swift",
+        "TaskLocalMetricsFactoryTests.swift",
+        "TestMetricsDescriptionTests.swift",
+        "TestSendable.swift"
+      ],
+      "target_dependencies" : [
+        "Metrics",
+        "MetricsTestKit"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "MetricsTestKit",
+      "module_type" : "SwiftTarget",
+      "name" : "MetricsTestKit",
+      "path" : "Sources/MetricsTestKit",
+      "product_memberships" : [
+        "MetricsTestKit"
+      ],
+      "sources" : [
+        "StreamMetricsFactory.swift",
+        "TestMetrics.swift"
+      ],
+      "target_dependencies" : [
+        "Metrics"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "Metrics",
+      "module_type" : "SwiftTarget",
+      "name" : "Metrics",
+      "path" : "Sources/Metrics",
+      "product_memberships" : [
+        "Metrics",
+        "MetricsTestKit"
+      ],
+      "sources" : [
+        "Metrics.swift"
+      ],
+      "target_dependencies" : [
+        "CoreMetrics"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CoreMetrics",
+      "module_type" : "SwiftTarget",
+      "name" : "CoreMetrics",
+      "path" : "Sources/CoreMetrics",
+      "product_memberships" : [
+        "CoreMetrics",
+        "Metrics",
+        "MetricsTestKit"
+      ],
+      "sources" : [
+        "Locks.swift",
+        "MappingMetricsFactory.swift",
+        "Metrics.swift",
+        "WithMetricsFactory.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.2"
+}

@@ -1,0 +1,78 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "jmespath.swift",
+  "name" : "jmespath.swift",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "JMESPath",
+      "targets" : [
+        "JMESPath"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "JMESPathTests",
+      "module_type" : "SwiftTarget",
+      "name" : "JMESPathTests",
+      "path" : "Tests/JMESPathTests",
+      "sources" : [
+        "ComplianceTests.swift",
+        "ErrorTests.swift",
+        "JSONTests.swift",
+        "LexerTests.swift",
+        "MirrorTests.swift"
+      ],
+      "target_dependencies" : [
+        "JMESPath"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "JMESPath",
+      "module_type" : "SwiftTarget",
+      "name" : "JMESPath",
+      "path" : "Sources/JMESPath",
+      "product_memberships" : [
+        "JMESPath"
+      ],
+      "sources" : [
+        "Array.swift",
+        "Ast.swift",
+        "Error.swift",
+        "Expression.swift",
+        "Functions.swift",
+        "Interpreter.swift",
+        "JSON/BufferView.swift",
+        "JSON/BufferViewCompatibility.swift",
+        "JSON/BufferViewIndex.swift",
+        "JSON/BufferViewIterator.swift",
+        "JSON/JSONEncoder.swift",
+        "JSON/JSONScanner.swift",
+        "JSON/JSONUtilities.swift",
+        "JSON/JSONWriter.swift",
+        "Lexer.swift",
+        "Number.swift",
+        "Object.swift",
+        "Parser.swift",
+        "Runtime.swift",
+        "Token.swift",
+        "Variable+json.swift",
+        "Variable.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.2"
+}

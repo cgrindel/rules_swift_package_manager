@@ -19,3 +19,4 @@ examples/modulemap_comments_example/swift_deps/any/.build
 examples/nimble_example/swift_deps/any/.build
 examples/objc_code/swift_deps/any/.build
 examples/phone_number_kit/swift_deps/any/.build
+examples/soto_example/swift_deps/any/.build
