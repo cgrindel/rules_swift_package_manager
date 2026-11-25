@@ -20,6 +20,15 @@ bazel_dep(
     repo_name = "build_bazel_rules_swift",
 )
 
+# TODO(#2641): remove once a rules_swift release includes swift_toolchain_tool.
+# The root module's override in rules_swift_package_manager does not reach
+# this workspace.
+git_override(
+    module_name = "rules_swift",
+    commit = "dd629b0cbb25c017e30fff3c40d0f0fddf653613",
+    remote = "https://github.com/cgrindel/rules_swift.git",
+)
+
 apple_cc_configure = use_extension(
     "@apple_support//crosstool:setup.bzl",
     "apple_cc_configure_extension",
@@ -49,7 +58,8 @@ swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
 )
-swift_deps.from_package(
-    swift = "//:Package.swift",
-)
 use_repo(swift_deps, "swift_package", "swiftpkg_explicitmodulesfixture")
+
+# The slice's `from_package` tag. Include it after the root `use_extension` so
+# that `bazel mod tidy` writes `use_repo` here rather than into the slice file.
+include("//swift_deps/any:inc.MODULE.bazel")
