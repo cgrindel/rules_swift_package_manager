@@ -191,7 +191,7 @@ def _stale_pkgs(slice, resolved_map):
 
 # MARK: - Patches
 
-def _patch_tags_by_identity(module_ctx, slice, config_pkgs):
+def _patch_tags_by_identity(module_ctx, slice, config_pkgs, pinned = []):
     """Maps the `configure_package` tags with patches to identities.
 
     A tag's name matches, in order: an identity equal to the lowercased name,
@@ -203,13 +203,18 @@ def _patch_tags_by_identity(module_ctx, slice, config_pkgs):
         module_ctx: A `module_ctx`.
         slice: A slice from `slices.new`.
         config_pkgs: A `dict` of name to `configure_package` tag.
+        pinned: Optional. More identities to match, such as the pins of a
+            slice that `init` just wrote and that lists no manifests yet.
 
     Returns:
         A `dict` of identity to `list` of tags, in sorted name order.
     """
+    identities = {i: None for i in slice.identities}
+    for identity in pinned:
+        identities[identity] = None
     by_repo_name = {
         bazel_repo_names.from_identity(identity): identity
-        for identity in slice.identities
+        for identity in identities
     }
     by_dep_name = None
     result = {}
@@ -218,7 +223,7 @@ def _patch_tags_by_identity(module_ctx, slice, config_pkgs):
         if not tag.patches:
             continue
         identity = None
-        if name.lower() in slice.identities:
+        if name.lower() in identities:
             identity = name.lower()
         elif name in by_repo_name:
             identity = by_repo_name[name]
@@ -668,7 +673,9 @@ def _patch_tags_for_tool(module_ctx, root, config_pkgs):
     The tag is the one the package repository applies: `config_pkg_for` on
     the dependency of the first fresh root slice that has it. An identity that
     only stale root slices know falls back to the first tag that
-    `_patch_tags_by_identity` matches.
+    `_patch_tags_by_identity` matches, including on the slice's pins. That
+    way the first cache run after `init`, whose slice lists no manifests,
+    still copies the patches.
 
     Returns:
         A `dict` of identity to tag, for tags with patches.
@@ -686,7 +693,12 @@ def _patch_tags_for_tool(module_ctx, root, config_pkgs):
             if tag and tag.patches:
                 result[identity] = tag
     for e in root:
-        tags_by_identity = _patch_tags_by_identity(module_ctx, e.slice, config_pkgs)
+        tags_by_identity = _patch_tags_by_identity(
+            module_ctx,
+            e.slice,
+            config_pkgs,
+            pinned = e.pkgs.keys(),
+        )
         for identity in sorted(tags_by_identity.keys()):
             if identity in seen:
                 continue

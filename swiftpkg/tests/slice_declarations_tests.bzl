@@ -866,6 +866,54 @@ swift_package_declared_once_for_two_root_slices_test = unittest.make(
     _swift_package_declared_once_for_two_root_slices_test,
 )
 
+def _bootstrap_slice_patches_reach_tool_test(ctx):
+    env = unittest.begin(ctx)
+
+    # `init` wrote empty manifest dicts, so only the pins name the package.
+    # The first cache run must still copy its patch.
+    patch = Label("@@//patches:maps.patch")
+    bootstrap = struct(
+        slice = slices.new(
+            config = Label(_MACOS),
+            swift = Label("@@//app:Package.swift"),
+            resolved = Label("@@//swift/macos:Package.resolved"),
+            dump_manifests = {},
+            desc_manifests = {},
+            is_root = True,
+            is_dev = False,
+        ),
+        stale = True,
+        reasons = ["missing cached copy"],
+        pkgs = {
+            "ios-maps-sdk": struct(
+                kind = "source_control",
+                pin_key = "x@ios-maps-sdk",
+                swift_version = None,
+            ),
+        },
+        pkg_info = None,
+        module_aliases_by_id = {},
+    )
+    actual = _declare(
+        [bootstrap],
+        config_pkgs = {
+            "ios-maps-sdk": _config_pkg("ios-maps-sdk", patches = [patch], patch_args = ["-p1"]),
+        },
+    )
+    kwargs = actual.calls["tool_repo"][0]
+    asserts.equals(
+        env,
+        {"ios-maps-sdk": {"args": ["-p1"], "files": [str(patch)]}},
+        json.decode(kwargs["patch_specs"]),
+    )
+    asserts.equals(env, [patch], kwargs["patch_files"])
+
+    return unittest.end(env)
+
+bootstrap_slice_patches_reach_tool_test = unittest.make(
+    _bootstrap_slice_patches_reach_tool_test,
+)
+
 def _fresh_slice_missing_identity_gets_missing_message_test(ctx):
     env = unittest.begin(ctx)
 
@@ -1180,6 +1228,7 @@ def slice_declarations_test_suite():
         two_groups_declare_hidden_repos_and_aliases_test,
         stale_only_declares_stale_repo_test,
         swift_package_declared_once_for_two_root_slices_test,
+        bootstrap_slice_patches_reach_tool_test,
         non_root_v2_tag_fails_test,
         fresh_slice_missing_identity_gets_missing_message_test,
         direct_deps_split_dev_test,
