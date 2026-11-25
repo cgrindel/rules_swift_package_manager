@@ -1,0 +1,842 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "async-http-client",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.24.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/swift-server/async-http-client.git"
+    },
+    {
+      "identity" : "async-kit",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.15.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/vapor/async-kit.git"
+    },
+    {
+      "identity" : "console-kit",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "4.14.0",
+            "upper_bound" : "5.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/vapor/console-kit.git"
+    },
+    {
+      "identity" : "swift-crypto",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "6.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-crypto.git"
+    },
+    {
+      "identity" : "routing-kit",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "4.9.0",
+            "upper_bound" : "5.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/vapor/routing-kit.git"
+    },
+    {
+      "identity" : "swift-nio",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.81.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio.git"
+    },
+    {
+      "identity" : "swift-nio-ssl",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.34.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio-ssl.git"
+    },
+    {
+      "identity" : "swift-nio-http2",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.28.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio-http2.git"
+    },
+    {
+      "identity" : "swift-nio-extras",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.24.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio-extras.git"
+    },
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.8.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log.git"
+    },
+    {
+      "identity" : "swift-metrics",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.5.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-metrics.git"
+    },
+    {
+      "identity" : "swift-distributed-tracing",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.1.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-distributed-tracing.git"
+    },
+    {
+      "identity" : "swift-service-context",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-service-context.git"
+    },
+    {
+      "identity" : "swift-algorithms",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-algorithms.git"
+    },
+    {
+      "identity" : "websocket-kit",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.13.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/vapor/websocket-kit.git"
+    },
+    {
+      "identity" : "multipart-kit",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "4.2.1",
+            "upper_bound" : "5.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/vapor/multipart-kit.git"
+    },
+    {
+      "identity" : "swift-atomics",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.1.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-atomics.git"
+    },
+    {
+      "identity" : "swift-certificates",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.14.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-certificates.git"
+    },
+    {
+      "identity" : "swift-asn1",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-asn1.git"
+    }
+  ],
+  "manifest_display_name" : "vapor",
+  "name" : "vapor",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Vapor",
+      "targets" : [
+        "Vapor"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "XCTVapor",
+      "targets" : [
+        "XCTVapor"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "VaporTesting",
+      "targets" : [
+        "VaporTesting"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Development",
+      "targets" : [
+        "Development"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "XCTVapor",
+      "module_type" : "SwiftTarget",
+      "name" : "XCTVapor",
+      "path" : "Sources/XCTVapor",
+      "product_memberships" : [
+        "XCTVapor"
+      ],
+      "sources" : [
+        "+Application.swift",
+        "+XCTHTTPResponse.swift",
+        "Exports.swift",
+        "XCTApplicationTester.swift",
+        "XCTVaporContext.swift",
+        "XCTVaporTests.swift",
+        "typealiases.swift"
+      ],
+      "target_dependencies" : [
+        "VaporTestUtils",
+        "Vapor"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "VaporTests",
+      "module_type" : "SwiftTarget",
+      "name" : "VaporTests",
+      "path" : "Tests/VaporTests",
+      "product_dependencies" : [
+        "NIOTestUtils",
+        "SwiftASN1"
+      ],
+      "resources" : [
+        {
+          "path" : "./Tests/VaporTests/Utilities/SubUtilities",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/VaporTests/Utilities/expired.crt",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/VaporTests/Utilities/expired.key",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/VaporTests/Utilities/foo bar.html",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/VaporTests/Utilities/foo.txt",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/VaporTests/Utilities/index.html",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/VaporTests/Utilities/long-test-file.txt",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/VaporTests/Utilities/my-secret-env-content",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/VaporTests/Utilities/test.env",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "ApplicationCreationTests.swift",
+        "ApplicationTests.swift",
+        "AsyncAuthTests.swift",
+        "AsyncCacheTests.swift",
+        "AsyncClientTests.swift",
+        "AsyncCommandsTests.swift",
+        "AsyncEnvironmentTests.swift",
+        "AsyncFileTests.swift",
+        "AsyncMiddlewareTests.swift",
+        "AsyncPasswordTests.swift",
+        "AsyncRequestTests.swift",
+        "AsyncRouteTests.swift",
+        "AsyncSessionTests.swift",
+        "AsyncWebSocketTests.swift",
+        "AuthenticationTests.swift",
+        "BaseNTests.swift",
+        "BcryptTests.swift",
+        "BodyStreamStateTests.swift",
+        "CacheTests.swift",
+        "ClientTests.swift",
+        "ConditionalResponseCompressionTests.swift",
+        "ContentTests.swift",
+        "DotEnvTests.swift",
+        "EndpointCacheTests.swift",
+        "EnvironmentSecretTests.swift",
+        "ErrorTests.swift",
+        "FileTests.swift",
+        "HTTPCacheTests.swift",
+        "HTTPHeaderTests.swift",
+        "HTTPMediaTypeSetTests.swift",
+        "LoggingTests.swift",
+        "MetricsTests.swift",
+        "MiddlewareTests.swift",
+        "PasswordTests.swift",
+        "PipelineTests.swift",
+        "QueryTests.swift",
+        "RequestTests.swift",
+        "RouteTests.swift",
+        "SecurityTests.swift",
+        "ServerTests.swift",
+        "ServiceTests.swift",
+        "SessionTests.swift",
+        "URITests.swift",
+        "URLEncodedFormTests.swift",
+        "Utilities/ByteBuffer+Helpers.swift",
+        "Utilities/CapturingMetricsSystem.swift",
+        "Utilities/ResponderClient.swift",
+        "Utilities/TestLogging.swift",
+        "Utilities/TestTracer.swift",
+        "Utilities/ThreadSafe.swift",
+        "UtilityTests.swift",
+        "ValidationTests.swift",
+        "VaporTesting.swift",
+        "ViewTests.swift",
+        "WebSocketTests.swift"
+      ],
+      "target_dependencies" : [
+        "XCTVapor",
+        "VaporTesting",
+        "Vapor"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "VaporTesting",
+      "module_type" : "SwiftTarget",
+      "name" : "VaporTesting",
+      "path" : "Sources/VaporTesting",
+      "product_memberships" : [
+        "VaporTesting"
+      ],
+      "sources" : [
+        "+TestingHTTPResponse.swift",
+        "Exports.swift",
+        "TestingApplicationTester.swift",
+        "VaporTestingContext.swift",
+        "XCTest+Migration.swift",
+        "withApp.swift"
+      ],
+      "target_dependencies" : [
+        "VaporTestUtils",
+        "Vapor"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "VaporTestUtils",
+      "module_type" : "SwiftTarget",
+      "name" : "VaporTestUtils",
+      "path" : "Sources/VaporTestUtils",
+      "product_memberships" : [
+        "XCTVapor",
+        "VaporTesting"
+      ],
+      "sources" : [
+        "TestingApplication.swift",
+        "TestingHTTPRequest.swift",
+        "TestingHTTPResponse.swift",
+        "Utilities.swift"
+      ],
+      "target_dependencies" : [
+        "Vapor"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "Vapor",
+      "module_type" : "SwiftTarget",
+      "name" : "Vapor",
+      "path" : "Sources/Vapor",
+      "product_dependencies" : [
+        "AsyncHTTPClient",
+        "AsyncKit",
+        "ConsoleKit",
+        "Logging",
+        "Metrics",
+        "Tracing",
+        "ServiceContextModule",
+        "NIO",
+        "NIOConcurrencyHelpers",
+        "NIOCore",
+        "NIOExtras",
+        "NIOFoundationCompat",
+        "NIOHTTPCompression",
+        "NIOHTTP1",
+        "NIOHTTP2",
+        "NIOSSL",
+        "NIOWebSocket",
+        "Crypto",
+        "Algorithms",
+        "RoutingKit",
+        "WebSocketKit",
+        "MultipartKit",
+        "Atomics",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "X509",
+        "SwiftASN1"
+      ],
+      "product_memberships" : [
+        "Vapor",
+        "XCTVapor",
+        "VaporTesting",
+        "Development"
+      ],
+      "sources" : [
+        "Application.swift",
+        "Authentication/AuthenticationCache.swift",
+        "Authentication/Authenticator.swift",
+        "Authentication/BasicAuthorization.swift",
+        "Authentication/BearerAuthorization.swift",
+        "Authentication/GuardMiddleware.swift",
+        "Authentication/RedirectMiddleware.swift",
+        "Authentication/SessionAuthenticatable.swift",
+        "Bcrypt/Bcrypt.swift",
+        "Cache/Application+Cache.swift",
+        "Cache/Cache.swift",
+        "Cache/CacheExpirationTime.swift",
+        "Cache/MemoryCache.swift",
+        "Cache/Request+Cache.swift",
+        "Client/Application+Clients.swift",
+        "Client/Client.swift",
+        "Client/ClientRequest.swift",
+        "Client/ClientResponse.swift",
+        "Client/Request+Client.swift",
+        "Commands/BootCommand.swift",
+        "Commands/CommandContext+Application.swift",
+        "Commands/RoutesCommand.swift",
+        "Commands/ServeCommand.swift",
+        "Concurrency/AnyResponse+Concurrency.swift",
+        "Concurrency/AsyncBasicResponder.swift",
+        "Concurrency/AsyncMiddleware.swift",
+        "Concurrency/AsyncPasswordHasher+Concurrency.swift",
+        "Concurrency/AsyncSessionDriver.swift",
+        "Concurrency/Authentication+Concurrency.swift",
+        "Concurrency/Cache+Concurrency.swift",
+        "Concurrency/Client+Concurrency.swift",
+        "Concurrency/RequestBody+Concurrency.swift",
+        "Concurrency/Responder+Concurrency.swift",
+        "Concurrency/ResponseCodable+Concurrency.swift",
+        "Concurrency/RoutesBuilder+Concurrency.swift",
+        "Concurrency/ViewRenderer+Concurrency.swift",
+        "Concurrency/WebSocket+Concurrency.swift",
+        "Content/ContainerGetPathExecutor.swift",
+        "Content/Content.swift",
+        "Content/ContentCoders.swift",
+        "Content/ContentConfiguration.swift",
+        "Content/ContentContainer.swift",
+        "Content/JSONCoder+Custom.swift",
+        "Content/JSONCoders+Content.swift",
+        "Content/PlaintextDecoder.swift",
+        "Content/PlaintextEncoder.swift",
+        "Content/URLQueryCoders.swift",
+        "Content/URLQueryContainer.swift",
+        "Core/Core.swift",
+        "Core/Running.swift",
+        "Deprecations/CORSMiddleware+AllowOriginSetting.swift",
+        "Deprecations/CORSMiddleware+Configuration+exposedHeaders.swift",
+        "Deprecations/DotEnvFile+load.swift",
+        "Deprecations/Routes+caseInsenstive.swift",
+        "Deprecations/Validatable+validate.swift",
+        "Environment/Environment+Process.swift",
+        "Environment/Environment+Secret.swift",
+        "Environment/Environment.swift",
+        "Error/Abort.swift",
+        "Error/AbortError.swift",
+        "Error/DebuggableError.swift",
+        "Error/Demangler.swift",
+        "Error/ErrorSource.swift",
+        "Error/StackTrace.swift",
+        "Exports.swift",
+        "HTTP/Application+HTTP.swift",
+        "HTTP/BasicResponder.swift",
+        "HTTP/BodyStream.swift",
+        "HTTP/Client/Application+HTTP+Client.swift",
+        "HTTP/Client/EventLoopHTTPClient.swift",
+        "HTTP/EndpointCache.swift",
+        "HTTP/HTTPMethod+String.swift",
+        "HTTP/HTTPStatus.swift",
+        "HTTP/Headers/HTTPCookies.swift",
+        "HTTP/Headers/HTTPHeaderCacheControl.swift",
+        "HTTP/Headers/HTTPHeaderExpires.swift",
+        "HTTP/Headers/HTTPHeaderLastModified.swift",
+        "HTTP/Headers/HTTPHeaders+Cache.swift",
+        "HTTP/Headers/HTTPHeaders+Connection.swift",
+        "HTTP/Headers/HTTPHeaders+ContentDisposition.swift",
+        "HTTP/Headers/HTTPHeaders+ContentRange.swift",
+        "HTTP/Headers/HTTPHeaders+Directive.swift",
+        "HTTP/Headers/HTTPHeaders+Forwarded.swift",
+        "HTTP/Headers/HTTPHeaders+Link.swift",
+        "HTTP/Headers/HTTPHeaders+Name.swift",
+        "HTTP/Headers/HTTPHeaders+ResponseCompression.swift",
+        "HTTP/Headers/HTTPHeaders.swift",
+        "HTTP/Headers/HTTPMediaType.swift",
+        "HTTP/Headers/HTTPMediaTypePreference.swift",
+        "HTTP/Responder.swift",
+        "HTTP/Server/Application+HTTP+Server.swift",
+        "HTTP/Server/CloseOnIdleHandler.swift",
+        "HTTP/Server/HTTPServer.swift",
+        "HTTP/Server/HTTPServerConfiguration+RequestDecompressionConfiguration.swift",
+        "HTTP/Server/HTTPServerConfiguration+ResponseCompressionConfiguration.swift",
+        "HTTP/Server/HTTPServerHandler.swift",
+        "HTTP/Server/HTTPServerRequestDecoder.swift",
+        "HTTP/Server/HTTPServerResponseEncoder.swift",
+        "HTTP/Server/HTTPServerUpgradeHandler.swift",
+        "Logging/Logger+Report.swift",
+        "Logging/LoggingSystem+Environment.swift",
+        "Middleware/Application+Middleware.swift",
+        "Middleware/CORSMiddleware.swift",
+        "Middleware/ErrorMiddleware.swift",
+        "Middleware/FileMiddleware.swift",
+        "Middleware/Middleware.swift",
+        "Middleware/MiddlewareConfiguration.swift",
+        "Middleware/ResponseCompressionMiddleware.swift",
+        "Middleware/RouteLoggingMiddleware.swift",
+        "Middleware/TracingMiddleware.swift",
+        "Multipart/File+Multipart.swift",
+        "Multipart/FormDataDecoder+Content.swift",
+        "Multipart/FormDataEncoder+Content.swift",
+        "Passwords/Application+Password.swift",
+        "Passwords/Application+Passwords.swift",
+        "Passwords/AsyncPasswordHasher.swift",
+        "Passwords/BcryptHasher.swift",
+        "Passwords/PasswordHasher.swift",
+        "Passwords/PlaintextHasher.swift",
+        "Passwords/Request+Password.swift",
+        "Request/Redirect.swift",
+        "Request/Request+Body.swift",
+        "Request/Request+BodyStream.swift",
+        "Request/Request.swift",
+        "Responder/Application+Responder.swift",
+        "Responder/DefaultResponder.swift",
+        "Response/Response+Body.swift",
+        "Response/Response.swift",
+        "Response/ResponseCodable.swift",
+        "Routing/Application+Routes.swift",
+        "Routing/Parameters+Require.swift",
+        "Routing/Request+WebSocket.swift",
+        "Routing/Route.swift",
+        "Routing/RouteCollection.swift",
+        "Routing/Routes.swift",
+        "Routing/RoutesBuilder+Group.swift",
+        "Routing/RoutesBuilder+Method.swift",
+        "Routing/RoutesBuilder+Middleware.swift",
+        "Routing/RoutesBuilder+WebSocket.swift",
+        "Routing/RoutesBuilder.swift",
+        "Security/OTP.swift",
+        "Security/ValidatedCertificateChain.swift",
+        "Server/Application+Servers.swift",
+        "Server/Server.swift",
+        "Services/App+Service.swift",
+        "Services/Req+Service.swift",
+        "Services/Service.swift",
+        "Sessions/Application+Sessions.swift",
+        "Sessions/MemorySessions.swift",
+        "Sessions/Request+Session.swift",
+        "Sessions/Session.swift",
+        "Sessions/SessionCache.swift",
+        "Sessions/SessionData.swift",
+        "Sessions/SessionDriver.swift",
+        "Sessions/SessionsConfiguration.swift",
+        "Sessions/SessionsMiddleware.swift",
+        "URLEncodedForm/URLEncodedFormData.swift",
+        "URLEncodedForm/URLEncodedFormDecoder.swift",
+        "URLEncodedForm/URLEncodedFormEncoder.swift",
+        "URLEncodedForm/URLEncodedFormError.swift",
+        "URLEncodedForm/URLEncodedFormParser.swift",
+        "URLEncodedForm/URLEncodedFormSerializer.swift",
+        "URLEncodedForm/URLQueryFragmentConvertible.swift",
+        "Utilities/AnyResponse.swift",
+        "Utilities/Array+Random.swift",
+        "Utilities/Base32.swift",
+        "Utilities/Base64.swift",
+        "Utilities/BaseN.swift",
+        "Utilities/BasicCodingKey.swift",
+        "Utilities/ByteCount.swift",
+        "Utilities/Bytes+Hex.swift",
+        "Utilities/Bytes+SecureCompare.swift",
+        "Utilities/Collection+Safe.swift",
+        "Utilities/DataProtocol+Copy.swift",
+        "Utilities/DecoderUnwrapper.swift",
+        "Utilities/DirectoryConfiguration.swift",
+        "Utilities/DotEnv.swift",
+        "Utilities/Extendable.swift",
+        "Utilities/File.swift",
+        "Utilities/FileIO.swift",
+        "Utilities/LifecycleHandler.swift",
+        "Utilities/OptionalType.swift",
+        "Utilities/RFC1123.swift",
+        "Utilities/SocketAddress+Hostname.swift",
+        "Utilities/Storage.swift",
+        "Utilities/String+IsIPAddress.swift",
+        "Utilities/Thread.swift",
+        "Utilities/URI.swift",
+        "Utilities/VaporSendableMetadataType.swift",
+        "Validation/RangeResult.swift",
+        "Validation/Validatable.swift",
+        "Validation/Validation.swift",
+        "Validation/ValidationKey.swift",
+        "Validation/Validations.swift",
+        "Validation/ValidationsError.swift",
+        "Validation/Validator.swift",
+        "Validation/ValidatorResult.swift",
+        "Validation/Validators/And.swift",
+        "Validation/Validators/Case.swift",
+        "Validation/Validators/CharacterSet.swift",
+        "Validation/Validators/Count.swift",
+        "Validation/Validators/Custom.swift",
+        "Validation/Validators/Email.swift",
+        "Validation/Validators/Empty.swift",
+        "Validation/Validators/In.swift",
+        "Validation/Validators/Nil.swift",
+        "Validation/Validators/NilIgnoring.swift",
+        "Validation/Validators/Not.swift",
+        "Validation/Validators/Or.swift",
+        "Validation/Validators/Pattern.swift",
+        "Validation/Validators/Range.swift",
+        "Validation/Validators/URL.swift",
+        "Validation/Validators/Valid.swift",
+        "View/Application+Views.swift",
+        "View/PlaintextRenderer.swift",
+        "View/Request+View.swift",
+        "View/View.swift",
+        "View/ViewRenderer.swift",
+        "_Deprecations.swift"
+      ],
+      "target_dependencies" : [
+        "CVaporBcrypt"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "Development",
+      "module_type" : "SwiftTarget",
+      "name" : "Development",
+      "path" : "Sources/Development",
+      "product_memberships" : [
+        "Development"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/Development/Resources",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "configure.swift",
+        "entrypoint.swift",
+        "routes.swift"
+      ],
+      "target_dependencies" : [
+        "Vapor"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "CVaporBcrypt",
+      "module_type" : "ClangTarget",
+      "name" : "CVaporBcrypt",
+      "path" : "Sources/CVaporBcrypt",
+      "product_memberships" : [
+        "Vapor",
+        "XCTVapor",
+        "VaporTesting",
+        "Development"
+      ],
+      "sources" : [
+        "bcrypt.c",
+        "blf.c"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}

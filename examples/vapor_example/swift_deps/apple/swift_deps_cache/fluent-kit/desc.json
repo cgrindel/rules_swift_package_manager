@@ -1,0 +1,421 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-nio",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.81.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio.git"
+    },
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.6.3",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log.git"
+    },
+    {
+      "identity" : "sql-kit",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "3.32.0",
+            "upper_bound" : "4.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/vapor/sql-kit.git"
+    },
+    {
+      "identity" : "swift-distributed-tracing",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.3.1",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-distributed-tracing.git"
+    },
+    {
+      "identity" : "swift-service-context",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-service-context.git"
+    },
+    {
+      "identity" : "swift-service-lifecycle",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.9.1",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/swift-server/swift-service-lifecycle.git"
+    }
+  ],
+  "manifest_display_name" : "fluent-kit",
+  "name" : "fluent-kit",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "FluentKit",
+      "targets" : [
+        "FluentKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FluentBenchmark",
+      "targets" : [
+        "FluentBenchmark"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FluentSQL",
+      "targets" : [
+        "FluentSQL"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "XCTFluent",
+      "targets" : [
+        "XCTFluent"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "XCTFluent",
+      "module_type" : "SwiftTarget",
+      "name" : "XCTFluent",
+      "path" : "Sources/XCTFluent",
+      "product_dependencies" : [
+        "NIOEmbedded"
+      ],
+      "product_memberships" : [
+        "XCTFluent"
+      ],
+      "sources" : [
+        "DummyDatabase.swift",
+        "TestDatabase.swift"
+      ],
+      "target_dependencies" : [
+        "FluentKit"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FluentSQL",
+      "module_type" : "SwiftTarget",
+      "name" : "FluentSQL",
+      "path" : "Sources/FluentSQL",
+      "product_dependencies" : [
+        "SQLKit"
+      ],
+      "product_memberships" : [
+        "FluentBenchmark",
+        "FluentSQL"
+      ],
+      "sources" : [
+        "ConverterUtilities.swift",
+        "DatabaseQuery+SQL.swift",
+        "DatabaseSchema+SQL.swift",
+        "Exports.swift",
+        "SQLDatabase+Model+Concurrency.swift",
+        "SQLDatabase+Model.swift",
+        "SQLJSONColumnPath+Deprecated.swift",
+        "SQLList+Deprecated.swift",
+        "SQLQualifiedTable+Deprecated.swift",
+        "SQLQueryConverter.swift",
+        "SQLSchemaConverter.swift"
+      ],
+      "target_dependencies" : [
+        "FluentKit"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FluentKitTests",
+      "module_type" : "SwiftTarget",
+      "name" : "FluentKitTests",
+      "path" : "Tests/FluentKitTests",
+      "product_dependencies" : [
+        "InMemoryTracing"
+      ],
+      "sources" : [
+        "AsyncTests/AsyncFilterQueryTests.swift",
+        "AsyncTests/AsyncFluentKitTests.swift",
+        "AsyncTests/AsyncQueryBuilderTests.swift",
+        "CompositeIDTests.swift",
+        "DummyDatabaseForTestSQLSerializer.swift",
+        "FilterQueryTests.swift",
+        "FluentKitTests.swift",
+        "OptionalEnumQueryTests.swift",
+        "OptionalFieldQueryTests.swift",
+        "QueryBuilderTests.swift",
+        "SQLTests.swift",
+        "TestUtilities.swift",
+        "TracingTests.swift"
+      ],
+      "target_dependencies" : [
+        "FluentBenchmark",
+        "FluentSQL",
+        "XCTFluent"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FluentKit",
+      "module_type" : "SwiftTarget",
+      "name" : "FluentKit",
+      "path" : "Sources/FluentKit",
+      "product_dependencies" : [
+        "NIO",
+        "NIOConcurrencyHelpers",
+        "NIOCore",
+        "NIOPosix",
+        "Logging",
+        "SQLKit",
+        "Tracing",
+        "ServiceContextModule",
+        "ServiceLifecycle"
+      ],
+      "product_memberships" : [
+        "FluentKit",
+        "FluentBenchmark",
+        "FluentSQL",
+        "XCTFluent"
+      ],
+      "sources" : [
+        "Concurrency/AsyncMigration.swift",
+        "Concurrency/AsyncModelMiddleware.swift",
+        "Concurrency/Children+Concurrency.swift",
+        "Concurrency/Database+Concurrency.swift",
+        "Concurrency/EnumBuilder+Concurrency.swift",
+        "Concurrency/Model+Concurrency.swift",
+        "Concurrency/ModelResponder+Concurrency.swift",
+        "Concurrency/OptionalChild+Concurrency.swift",
+        "Concurrency/OptionalParent+Concurrency.swift",
+        "Concurrency/Parent+Concurrency.swift",
+        "Concurrency/QueryBuilder+Concurrency.swift",
+        "Concurrency/Relation+Concurrency.swift",
+        "Concurrency/SchemaBuilder+Concurrency.swift",
+        "Concurrency/Siblings+Concurrency.swift",
+        "Database/Database+Logging.swift",
+        "Database/Database.swift",
+        "Database/DatabaseID.swift",
+        "Database/DatabaseInput.swift",
+        "Database/DatabaseOutput.swift",
+        "Database/Databases.swift",
+        "Database/KeyPrefixingStrategy.swift",
+        "Database/TransactionControlDatabase.swift",
+        "Enum/DatabaseEnum.swift",
+        "Enum/EnumBuilder.swift",
+        "Enum/EnumMetadata.swift",
+        "Enum/EnumProperty.swift",
+        "Enum/OptionalEnumProperty.swift",
+        "Exports.swift",
+        "FluentError.swift",
+        "Middleware/ModelMiddleware.swift",
+        "Middleware/ModelResponder.swift",
+        "Migration/Migration.swift",
+        "Migration/MigrationLog.swift",
+        "Migration/Migrations.swift",
+        "Migration/Migrator.swift",
+        "Model/AnyModel.swift",
+        "Model/EagerLoad.swift",
+        "Model/Fields+Codable.swift",
+        "Model/Fields.swift",
+        "Model/MirrorBypass.swift",
+        "Model/Model+CRUD.swift",
+        "Model/Model.swift",
+        "Model/ModelAlias.swift",
+        "Model/Schema.swift",
+        "Operators/FieldOperators.swift",
+        "Operators/Operators.swift",
+        "Operators/ValueOperators+Array.swift",
+        "Operators/ValueOperators+String.swift",
+        "Operators/ValueOperators.swift",
+        "Properties/Boolean.swift",
+        "Properties/BooleanPropertyFormat.swift",
+        "Properties/Children.swift",
+        "Properties/CompositeChildren.swift",
+        "Properties/CompositeID.swift",
+        "Properties/CompositeOptionalChild.swift",
+        "Properties/CompositeOptionalParent.swift",
+        "Properties/CompositeParent.swift",
+        "Properties/Field.swift",
+        "Properties/FieldKey.swift",
+        "Properties/Group.swift",
+        "Properties/ID.swift",
+        "Properties/OptionalBoolean.swift",
+        "Properties/OptionalChild.swift",
+        "Properties/OptionalField.swift",
+        "Properties/OptionalParent.swift",
+        "Properties/Parent.swift",
+        "Properties/Property.swift",
+        "Properties/Relation.swift",
+        "Properties/Siblings.swift",
+        "Properties/Timestamp.swift",
+        "Properties/TimestampFormat.swift",
+        "Query/Builder/QueryBuilder+Aggregate.swift",
+        "Query/Builder/QueryBuilder+EagerLoad.swift",
+        "Query/Builder/QueryBuilder+Filter.swift",
+        "Query/Builder/QueryBuilder+Group.swift",
+        "Query/Builder/QueryBuilder+Join+DirectRelations.swift",
+        "Query/Builder/QueryBuilder+Join.swift",
+        "Query/Builder/QueryBuilder+Paginate.swift",
+        "Query/Builder/QueryBuilder+Range.swift",
+        "Query/Builder/QueryBuilder+Set.swift",
+        "Query/Builder/QueryBuilder+Sort.swift",
+        "Query/Builder/QueryBuilder.swift",
+        "Query/Database/DatabaseQuery+Action.swift",
+        "Query/Database/DatabaseQuery+Aggregate.swift",
+        "Query/Database/DatabaseQuery+Field.swift",
+        "Query/Database/DatabaseQuery+Filter.swift",
+        "Query/Database/DatabaseQuery+Join.swift",
+        "Query/Database/DatabaseQuery+Range.swift",
+        "Query/Database/DatabaseQuery+Sort.swift",
+        "Query/Database/DatabaseQuery+Value.swift",
+        "Query/Database/DatabaseQuery.swift",
+        "Query/QueryHistory.swift",
+        "Schema/DatabaseSchema.swift",
+        "Schema/SchemaBuilder.swift",
+        "Utilities/OptionalType.swift",
+        "Utilities/RandomGeneratable.swift",
+        "Utilities/SomeCodingKey.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FluentBenchmark",
+      "module_type" : "SwiftTarget",
+      "name" : "FluentBenchmark",
+      "path" : "Sources/FluentBenchmark",
+      "product_dependencies" : [
+        "SQLKit",
+        "SQLKitBenchmark"
+      ],
+      "product_memberships" : [
+        "FluentBenchmark"
+      ],
+      "sources" : [
+        "Exports.swift",
+        "FluentBenchmarker.swift",
+        "SolarSystem/GalacticJurisdiction.swift",
+        "SolarSystem/Galaxy.swift",
+        "SolarSystem/Governor.swift",
+        "SolarSystem/Jurisdiction.swift",
+        "SolarSystem/Moon.swift",
+        "SolarSystem/Planet.swift",
+        "SolarSystem/PlanetTag.swift",
+        "SolarSystem/SolarSystem.swift",
+        "SolarSystem/Star.swift",
+        "SolarSystem/Tag.swift",
+        "Tests/AggregateTests.swift",
+        "Tests/ArrayTests.swift",
+        "Tests/BatchTests.swift",
+        "Tests/CRUDTests.swift",
+        "Tests/ChildTests.swift",
+        "Tests/ChildrenTests.swift",
+        "Tests/ChunkTests.swift",
+        "Tests/CodableTests.swift",
+        "Tests/CompositeIDTests.swift",
+        "Tests/CompositeRelationTests.swift",
+        "Tests/EagerLoadTests.swift",
+        "Tests/EnumTests.swift",
+        "Tests/FilterTests.swift",
+        "Tests/GroupTests.swift",
+        "Tests/IDTests.swift",
+        "Tests/JoinTests.swift",
+        "Tests/MiddlewareTests.swift",
+        "Tests/MigratorTests.swift",
+        "Tests/ModelTests.swift",
+        "Tests/OptionalParentTests.swift",
+        "Tests/PaginationTests.swift",
+        "Tests/ParentTests.swift",
+        "Tests/PerformanceTests+Siblings.swift",
+        "Tests/PerformanceTests.swift",
+        "Tests/RangeTests.swift",
+        "Tests/SQLTests.swift",
+        "Tests/SchemaTests.swift",
+        "Tests/SetTests.swift",
+        "Tests/SiblingsTests.swift",
+        "Tests/SoftDeleteTests.swift",
+        "Tests/SortTests.swift",
+        "Tests/TimestampTests.swift",
+        "Tests/TransactionTests.swift",
+        "Tests/UniqueTests.swift"
+      ],
+      "target_dependencies" : [
+        "FluentKit",
+        "FluentSQL"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}

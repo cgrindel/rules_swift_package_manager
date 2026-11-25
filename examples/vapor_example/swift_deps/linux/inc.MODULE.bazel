@@ -1,0 +1,8 @@
+swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
+swift_deps.from_package(
+    config = "@rules_swift_package_manager//config:linux",
+    desc_manifests = {},
+    dump_manifests = {},
+    resolved = "//swift_deps/linux:Package.resolved",
+    swift = "//swift:Package.swift",
+)

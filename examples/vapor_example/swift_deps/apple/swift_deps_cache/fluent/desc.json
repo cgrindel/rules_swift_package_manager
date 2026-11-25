@@ -1,0 +1,122 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "fluent-kit",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.52.2",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/vapor/fluent-kit.git"
+    },
+    {
+      "identity" : "vapor",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "4.117.0",
+            "upper_bound" : "5.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/vapor/vapor.git"
+    }
+  ],
+  "manifest_display_name" : "fluent",
+  "name" : "fluent",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Fluent",
+      "targets" : [
+        "Fluent"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "FluentTests",
+      "module_type" : "SwiftTarget",
+      "name" : "FluentTests",
+      "path" : "Tests/FluentTests",
+      "product_dependencies" : [
+        "XCTFluent",
+        "VaporTesting"
+      ],
+      "sources" : [
+        "CacheTests.swift",
+        "CredentialTests.swift",
+        "OperatorTests.swift",
+        "PaginationTests.swift",
+        "QueryHistoryTests.swift",
+        "RepositoryTests.swift",
+        "SessionTests.swift"
+      ],
+      "target_dependencies" : [
+        "Fluent"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "Fluent",
+      "module_type" : "SwiftTarget",
+      "name" : "Fluent",
+      "path" : "Sources/Fluent",
+      "product_dependencies" : [
+        "FluentKit",
+        "Vapor"
+      ],
+      "product_memberships" : [
+        "Fluent"
+      ],
+      "sources" : [
+        "Concurrency/FluentProvider+Concurrency.swift",
+        "Concurrency/ModelCredentialsAuthenticatable+Concurrency.swift",
+        "Concurrency/Pagination+Concurrency.swift",
+        "Concurrency/Sessions+Concurrency.swift",
+        "Exports.swift",
+        "Fluent+Cache.swift",
+        "Fluent+History.swift",
+        "Fluent+Paginate.swift",
+        "Fluent+Pagination.swift",
+        "Fluent+Sessions.swift",
+        "FluentProvider.swift",
+        "MigrateCommand.swift",
+        "ModelAuthenticatable.swift",
+        "ModelCredentialsAuthenticatable.swift",
+        "ModelTokenAuthenticatable.swift",
+        "PageLimit.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}
