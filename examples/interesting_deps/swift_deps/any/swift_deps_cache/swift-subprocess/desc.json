@@ -1,0 +1,165 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-system",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.5.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-system"
+    },
+    {
+      "identity" : "swift-docc-plugin",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.4.5",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-docc-plugin"
+    }
+  ],
+  "manifest_display_name" : "swift-subprocess",
+  "name" : "swift-subprocess",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "ios",
+      "version" : "99.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Subprocess",
+      "targets" : [
+        "Subprocess"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "_SubprocessCShims",
+      "module_type" : "ClangTarget",
+      "name" : "_SubprocessCShims",
+      "path" : "Sources/_SubprocessCShims",
+      "product_memberships" : [
+        "Subprocess"
+      ],
+      "sources" : [
+        "process_shims.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "TestResources",
+      "module_type" : "SwiftTarget",
+      "name" : "TestResources",
+      "path" : "Tests/TestResources",
+      "product_dependencies" : [
+        "SystemPackage"
+      ],
+      "resources" : [
+        {
+          "path" : "./Tests/TestResources/Resources",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "TestResources.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SubprocessTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SubprocessTests",
+      "path" : "Tests/SubprocessTests",
+      "product_dependencies" : [
+        "SystemPackage"
+      ],
+      "sources" : [
+        "AsyncIOTests.swift",
+        "DarwinTests.swift",
+        "IntegrationTests.swift",
+        "LinterTests.swift",
+        "LinuxTests.swift",
+        "PlatformConformance.swift",
+        "ProcessMonitoringTests.swift",
+        "ProtocolConformanceTests.swift",
+        "TestSupport.swift",
+        "UnixTests.swift",
+        "WindowsTests.swift"
+      ],
+      "target_dependencies" : [
+        "_SubprocessCShims",
+        "Subprocess",
+        "TestResources"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "Subprocess",
+      "module_type" : "SwiftTarget",
+      "name" : "Subprocess",
+      "path" : "Sources/Subprocess",
+      "product_dependencies" : [
+        "SystemPackage"
+      ],
+      "product_memberships" : [
+        "Subprocess"
+      ],
+      "sources" : [
+        "API.swift",
+        "Buffer.swift",
+        "Configuration.swift",
+        "Error.swift",
+        "Execution.swift",
+        "IO/AsyncIO+KQueue.swift",
+        "IO/AsyncIO+Linux.swift",
+        "IO/AsyncIO+Unix.swift",
+        "IO/AsyncIO+Windows.swift",
+        "IO/Input.swift",
+        "IO/Output.swift",
+        "Platforms/Subprocess+BSD.swift",
+        "Platforms/Subprocess+Darwin.swift",
+        "Platforms/Subprocess+Linux.swift",
+        "Platforms/Subprocess+Unix.swift",
+        "Platforms/Subprocess+Windows.swift",
+        "Result.swift",
+        "Span+Subprocess.swift",
+        "SubprocessFoundation/Input+Foundation.swift",
+        "SubprocessFoundation/Output+Foundation.swift",
+        "SubprocessFoundation/Span+SubprocessFoundation.swift",
+        "SubprocessOutputSequence.swift",
+        "Teardown.swift",
+        "Thread.swift"
+      ],
+      "target_dependencies" : [
+        "_SubprocessCShims"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.2"
+}

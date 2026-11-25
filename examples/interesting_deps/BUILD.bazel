@@ -1,57 +1,17 @@
-load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
 load("@build_bazel_rules_apple//apple:macos.bzl", "macos_unit_test")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
+load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_update_all")
 load("@rules_cc//cc:defs.bzl", "objc_library")
 load("@rules_shell//shell:sh_test.bzl", "sh_test")
-load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package_tool")
+
+updatesrc_update_all(name = "update_all")
 
 tidy(
     name = "tidy",
     targets = [
-        ":update_build_files",
+        ":update_all",
     ],
-)
-
-# Puprosefully am not adding this to tidy. It is expensive to run and only
-# needs to be run when the Package.swift has been updated.
-swift_package_tool(
-    name = "update_swift_packages",
-    cmd = "update",
-    # Package.swift gates its real dependency list behind these env vars
-    # (see the INTERESTING_DEPS_* checks). The module extension injects
-    # them via `env`/`env_inherit` in MODULE.bazel, but this tool runs
-    # SwiftPM directly, so set them here to avoid passing them on the
-    # command line.
-    env = {
-        "INTERESTING_DEPS_ENV": "1",
-        "INTERESTING_DEPS_INHERIT_ENV": "1",
-    },
-    package = "Package.swift",
-)
-
-# MARK: - Gazelle
-
-# Ignore the Swift build folder
-# gazelle:exclude .build
-
-gazelle_binary(
-    name = "gazelle_bin",
-    languages = [
-        "@bazel_skylib_gazelle_plugin//bzl",
-        "@swift_gazelle_plugin//gazelle",
-    ],
-)
-
-gazelle(
-    name = "update_build_files",
-    data = [
-        "@swift_deps_info//:swift_deps_index",
-    ],
-    extra_args = [
-        "-swift_dependency_index=$(location @swift_deps_info//:swift_deps_index)",
-    ],
-    gazelle = ":gazelle_bin",
 )
 
 swift_binary(

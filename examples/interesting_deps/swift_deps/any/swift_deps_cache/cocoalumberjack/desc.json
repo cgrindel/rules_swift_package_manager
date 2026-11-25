@@ -1,0 +1,229 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.11.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log"
+    }
+  ],
+  "manifest_display_name" : "CocoaLumberjack",
+  "name" : "CocoaLumberjack",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "9.0"
+    },
+    {
+      "name" : "visionos",
+      "version" : "1.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "CocoaLumberjack",
+      "targets" : [
+        "CocoaLumberjack"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "CocoaLumberjackSwift",
+      "targets" : [
+        "CocoaLumberjackSwift"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "CocoaLumberjackSwiftLogBackend",
+      "targets" : [
+        "CocoaLumberjackSwiftLogBackend"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "CocoaLumberjackTests",
+      "module_type" : "ClangTarget",
+      "name" : "CocoaLumberjackTests",
+      "path" : "Tests/CocoaLumberjackTests",
+      "sources" : [
+        "DDAtomicCounterTests.m",
+        "DDBasicLoggingTests.m",
+        "DDContextFilterLogFormatter+DeprecatedTests.m",
+        "DDContextFilterLogFormatterTests.m",
+        "DDFileLoggerPerformanceTests.m",
+        "DDFileLoggerTests.m",
+        "DDLogFileManagerTests.m",
+        "DDLogMessageTests.m",
+        "DDLogTests.m",
+        "DDOSLoggingTests.m",
+        "DDSMocking.m",
+        "DDSampleFileManager.m"
+      ],
+      "target_dependencies" : [
+        "CocoaLumberjack"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CocoaLumberjackSwiftTests",
+      "module_type" : "SwiftTarget",
+      "name" : "CocoaLumberjackSwiftTests",
+      "path" : "Tests/CocoaLumberjackSwiftTests",
+      "sources" : [
+        "DDLogCombineTests.swift",
+        "DDLogMessageFormatTests.swift"
+      ],
+      "target_dependencies" : [
+        "CocoaLumberjackSwift"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CocoaLumberjackSwiftSupport",
+      "module_type" : "ClangTarget",
+      "name" : "CocoaLumberjackSwiftSupport",
+      "path" : "Sources/CocoaLumberjackSwiftSupport",
+      "product_memberships" : [
+        "CocoaLumberjackSwift"
+      ],
+      "sources" : [
+        "empty.c"
+      ],
+      "target_dependencies" : [
+        "CocoaLumberjack"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CocoaLumberjackSwiftLogBackendTests",
+      "module_type" : "SwiftTarget",
+      "name" : "CocoaLumberjackSwiftLogBackendTests",
+      "path" : "Tests/CocoaLumberjackSwiftLogBackendTests",
+      "sources" : [
+        "DDLogHandlerTests.swift"
+      ],
+      "target_dependencies" : [
+        "CocoaLumberjackSwiftLogBackend"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CocoaLumberjackSwiftLogBackend",
+      "module_type" : "SwiftTarget",
+      "name" : "CocoaLumberjackSwiftLogBackend",
+      "path" : "Sources/CocoaLumberjackSwiftLogBackend",
+      "product_dependencies" : [
+        "Logging"
+      ],
+      "product_memberships" : [
+        "CocoaLumberjackSwiftLogBackend"
+      ],
+      "sources" : [
+        "DDLogHandler.swift",
+        "DDLogMessage+SwiftLogInformation.swift",
+        "SwiftLogMessage.swift"
+      ],
+      "target_dependencies" : [
+        "CocoaLumberjack"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CocoaLumberjackSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "CocoaLumberjackSwift",
+      "path" : "Sources/CocoaLumberjackSwift",
+      "product_memberships" : [
+        "CocoaLumberjackSwift"
+      ],
+      "sources" : [
+        "CocoaLumberjack.swift",
+        "ConfigurationGlobals.swift",
+        "CurrentFileNameHelper.swift",
+        "DDAssert.swift",
+        "DDLog+Combine.swift",
+        "DDLogFlag+DDLogLevel.swift",
+        "DDLogMessageFormat.swift"
+      ],
+      "target_dependencies" : [
+        "CocoaLumberjack",
+        "CocoaLumberjackSwiftSupport"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CocoaLumberjack",
+      "module_type" : "ClangTarget",
+      "name" : "CocoaLumberjack",
+      "path" : "Sources/CocoaLumberjack",
+      "product_memberships" : [
+        "CocoaLumberjack",
+        "CocoaLumberjackSwift",
+        "CocoaLumberjackSwiftLogBackend"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/CocoaLumberjack/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "CLI/CLIColor.m",
+        "DDASLLogCapture.m",
+        "DDASLLogger.m",
+        "DDAbstractDatabaseLogger.m",
+        "DDFileLogger.m",
+        "DDLog.m",
+        "DDLoggerNames.m",
+        "DDOSLogger.m",
+        "DDTTYLogger.m",
+        "Extensions/DDContextFilterLogFormatter+Deprecated.m",
+        "Extensions/DDContextFilterLogFormatter.m",
+        "Extensions/DDDispatchQueueLogFormatter.m",
+        "Extensions/DDFileLogger+Buffering.m",
+        "Extensions/DDMultiFormatter.m"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.4"
+}

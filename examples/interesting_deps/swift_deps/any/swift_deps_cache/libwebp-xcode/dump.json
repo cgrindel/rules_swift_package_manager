@@ -1,0 +1,101 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "libwebp",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "10.10"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "9.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "9.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "2.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "libwebp",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "libwebp"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "libwebp",
+      "packageAccess" : false,
+      "path" : ".",
+      "publicHeadersPath" : "include",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "libwebp"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "sources" : [
+        "libwebp/src",
+        "libwebp/sharpyuv"
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.0.0"
+  },
+  "traits" : [
+
+  ]
+}

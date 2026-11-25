@@ -1,0 +1,417 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-system",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-system"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.5.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-docc-plugin",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-docc-plugin"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.4.5",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "swift-subprocess",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "99.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Subprocess",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Subprocess"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "_SubprocessCShims",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SystemPackage",
+            "swift-system",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "Subprocess",
+      "packageAccess" : true,
+      "path" : "Sources/Subprocess",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "macos",
+              "freebsd",
+              "openbsd"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "SUBPROCESS_ASYNCIO_KQUEUE"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "_SubprocessCShims",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Subprocess",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestResources",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SystemPackage",
+            "swift-system",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SubprocessTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Span"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "macos",
+              "freebsd",
+              "openbsd"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "SUBPROCESS_ASYNCIO_KQUEUE"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "SystemPackage",
+            "swift-system",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TestResources",
+      "packageAccess" : true,
+      "path" : "Tests/TestResources",
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "platformNames" : [
+              "macos",
+              "freebsd",
+              "openbsd"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "SUBPROCESS_ASYNCIO_KQUEUE"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "_SubprocessCShims",
+      "packageAccess" : true,
+      "path" : "Sources/_SubprocessCShims",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.2.0"
+  },
+  "traits" : [
+    {
+      "enabledTraits" : [
+
+      ],
+      "name" : "SubprocessFoundation"
+    },
+    {
+      "description" : "The default traits of this package.",
+      "enabledTraits" : [
+        "SubprocessFoundation"
+      ],
+      "name" : "default"
+    }
+  ]
+}

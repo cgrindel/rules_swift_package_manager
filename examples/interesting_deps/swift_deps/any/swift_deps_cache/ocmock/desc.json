@@ -1,0 +1,102 @@
+{
+  "default_localization" : "en",
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "OCMock",
+  "name" : "OCMock",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "OCMock",
+      "targets" : [
+        "OCMock"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "swift_test",
+      "module_type" : "SwiftTarget",
+      "name" : "swift-test",
+      "path" : "SwiftPMTests/swift",
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "OCMock"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "objc_test",
+      "module_type" : "ClangTarget",
+      "name" : "objc-test",
+      "path" : "SwiftPMTests/objc",
+      "sources" : [
+        "objc-header.m",
+        "objc-module.m"
+      ],
+      "target_dependencies" : [
+        "OCMock"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "OCMock",
+      "module_type" : "ClangTarget",
+      "name" : "OCMock",
+      "path" : "Source",
+      "product_memberships" : [
+        "OCMock"
+      ],
+      "sources" : [
+        "OCMock/NSInvocation+OCMAdditions.m",
+        "OCMock/NSMethodSignature+OCMAdditions.m",
+        "OCMock/NSNotificationCenter+OCMAdditions.m",
+        "OCMock/NSObject+OCMAdditions.m",
+        "OCMock/NSValue+OCMAdditions.m",
+        "OCMock/OCClassMockObject.m",
+        "OCMock/OCMArg.m",
+        "OCMock/OCMArgAction.m",
+        "OCMock/OCMBlockArgCaller.m",
+        "OCMock/OCMBlockCaller.m",
+        "OCMock/OCMBoxedReturnValueProvider.m",
+        "OCMock/OCMConstraint.m",
+        "OCMock/OCMExceptionReturnValueProvider.m",
+        "OCMock/OCMExpectationRecorder.m",
+        "OCMock/OCMFunctions.m",
+        "OCMock/OCMIndirectReturnValueProvider.m",
+        "OCMock/OCMInvocationExpectation.m",
+        "OCMock/OCMInvocationMatcher.m",
+        "OCMock/OCMInvocationStub.m",
+        "OCMock/OCMLocation.m",
+        "OCMock/OCMMacroState.m",
+        "OCMock/OCMNonRetainingObjectReturnValueProvider.m",
+        "OCMock/OCMNotificationPoster.m",
+        "OCMock/OCMObjectReturnValueProvider.m",
+        "OCMock/OCMObserverRecorder.m",
+        "OCMock/OCMPassByRefSetter.m",
+        "OCMock/OCMQuantifier.m",
+        "OCMock/OCMRealObjectForwarder.m",
+        "OCMock/OCMRecorder.m",
+        "OCMock/OCMStubRecorder.m",
+        "OCMock/OCMVerifier.m",
+        "OCMock/OCMockObject.m",
+        "OCMock/OCObserverMockObject.m",
+        "OCMock/OCPartialMockObject.m",
+        "OCMock/OCProtocolMockObject.m"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.3"
+}

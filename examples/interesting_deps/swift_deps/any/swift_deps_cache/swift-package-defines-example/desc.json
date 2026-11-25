@@ -1,0 +1,68 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "swift-package-defines-example",
+  "name" : "swift-package-defines-example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Foo",
+      "targets" : [
+        "Foo"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FooSwift",
+      "targets" : [
+        "FooSwift"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "FooSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "FooSwift",
+      "path" : "Sources/FooSwift",
+      "product_memberships" : [
+        "FooSwift"
+      ],
+      "sources" : [
+        "Foo.swift"
+      ],
+      "target_dependencies" : [
+        "Foo"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "Foo",
+      "module_type" : "ClangTarget",
+      "name" : "Foo",
+      "path" : "Sources/Foo",
+      "product_memberships" : [
+        "Foo",
+        "FooSwift"
+      ],
+      "sources" : [
+        "Foo.m"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.7"
+}
