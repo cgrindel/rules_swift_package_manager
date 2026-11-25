@@ -191,6 +191,35 @@ final class CacheStepTests: XCTestCase {
         .hasSuffix("resolve --force-resolved-versions") == true)
   }
 
+  func testMalformedIncModuleFailsBeforeTouchingTheSlice() throws {
+    try makeWorkspace()
+    let incModule = try write(
+      """
+      swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
+      swift_deps.from_package(
+          netrc "//:.netrc"
+      )
+
+      """, to: "swift/macos/inc.MODULE.bazel")
+    let before = try fileManager.subpathsOfDirectory(atPath: root.path).sorted()
+
+    for command in ["resolve", "update", "cache"] {
+      XCTAssertThrowsError(try CacheStep(invocation(command)).run()) { error in
+        let message = (error as? ToolError)?.message ?? "\(error)"
+        XCTAssertTrue(message.contains(incModule.path), message)
+      }
+    }
+
+    // SwiftPM never ran, and neither the cache (whose vanished `gone` entry a run prunes) nor
+    // any other file changed.
+    XCTAssertFalse(exists("log.txt"))
+    XCTAssertTrue(exists("swift/macos/swift_deps_cache/gone/dump.json"))
+    XCTAssertEqual(
+      try fileManager.subpathsOfDirectory(atPath: root.path).sorted()
+        .filter { $0 != "fake_swift" && $0 != "resolved.fake.json" },
+      before.filter { $0 != "fake_swift" && $0 != "resolved.fake.json" })
+  }
+
   func testRefusesSliceInPackageDir() throws {
     try makeWorkspace()
     try write("pkg/.build\n", to: ".bazelignore")

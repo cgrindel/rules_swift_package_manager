@@ -32,6 +32,12 @@ public struct CacheStep {
   private func runSteps() throws {
     try checkSliceDir()
     try checkBazelignore()
+    // Read the existing file before anything changes the slice, so a file the tool cannot
+    // parse fails the run with the slice untouched.
+    let incModule = sliceURL.appendingPathComponent("inc.MODULE.bazel")
+    let labels = try IncModuleFile.labels(
+      at: incModule, config: inv.config, swiftLabel: inv.swiftLabel,
+      slicePackage: inv.slicePackage)
     let flags = try SwiftPMFlags(keyValues: inv.flags, workspace: inv.workspace)
     let spm = SwiftPM(
       tool: inv.swiftTool, flags: flags, sliceDir: sliceURL, runfilesDir: inv.runfilesDir)
@@ -63,12 +69,7 @@ public struct CacheStep {
       patches: patches, swiftVersion: try spm.version())
     let identities = [Self.mainIdentity] + remotes + locals.map(\.identity)
     _ = try Prune.removeVanished(cacheDir: cacheDir, keep: Set(identities))
-    let incModule = sliceURL.appendingPathComponent("inc.MODULE.bazel")
-    let text = IncModuleRenderer.render(
-      labels: try IncModuleFile.labels(
-        at: incModule, config: inv.config, swiftLabel: inv.swiftLabel,
-        slicePackage: inv.slicePackage),
-      identities: identities)
+    let text = IncModuleRenderer.render(labels: labels, identities: identities)
     try Data(text.utf8).write(to: incModule, options: .atomic)
   }
 
