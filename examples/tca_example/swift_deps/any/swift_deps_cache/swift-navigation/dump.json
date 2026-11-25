@@ -1,0 +1,1365 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-case-paths",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-case-paths"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.10.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-custom-dump",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-custom-dump"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.3.2",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-issue-reporting",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-issue-reporting"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.1.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-perception",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-perception"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.3.4",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-macro-testing",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-macro-testing"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "0.7.0",
+                "upperBound" : "1.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-sharing",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-sharing"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.10.1",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-docc-plugin",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/swiftlang/swift-docc-plugin"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-syntax",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/swiftlang/swift-syntax"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "509.0.0",
+                "upperBound" : "605.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "swift-navigation",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "SwiftNavigation",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SwiftNavigation"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftUINavigation",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SwiftUINavigation"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "UIKitNavigation",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "UIKitNavigation"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AppKitNavigation",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AppKitNavigation"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SwiftNavigationMacros",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "CasePaths",
+            "swift-case-paths",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "CasePaths"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "CustomDump",
+            "swift-custom-dump",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "CustomDump"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "IssueReporting",
+            "swift-issue-reporting",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "IssueReporting"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "Perception",
+            "swift-perception",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "Perception"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "PerceptionCore",
+            "swift-perception",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "Perception"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "Sharing",
+            "swift-sharing",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "Sharing"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SwiftNavigation",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "CheckImplementationOnly"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SwiftNavigation",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "IssueReportingTestSupport",
+            "swift-issue-reporting",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SwiftNavigationTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "CheckImplementationOnly"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "CasePathsMacrosSupport",
+            "swift-case-paths",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "CasePaths"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "SwiftCompilerPlugin",
+            "swift-syntax",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftDiagnostics",
+            "swift-syntax",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftSyntax",
+            "swift-syntax",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftSyntaxBuilder",
+            "swift-syntax",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftSyntaxMacros",
+            "swift-syntax",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SwiftNavigationMacros",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "CheckImplementationOnly"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "macro"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SwiftNavigationMacros",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "MacroTesting",
+            "swift-macro-testing",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SwiftNavigationMacrosTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "CheckImplementationOnly"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SwiftNavigation",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "CasePaths",
+            "swift-case-paths",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "CasePaths"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "IssueReporting",
+            "swift-issue-reporting",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "IssueReporting"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SwiftUINavigation",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "CheckImplementationOnly"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SwiftUINavigation",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "IssueReportingTestSupport",
+            "swift-issue-reporting",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SwiftUINavigationTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "CheckImplementationOnly"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SwiftNavigation",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "UIKitNavigationShim",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "UIKitNavigation",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "CheckImplementationOnly"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+                "-Xlinker",
+                "-ObjC"
+              ]
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "UIKitNavigationShim",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "CheckImplementationOnly"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "UIKitNavigation",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "IssueReportingTestSupport",
+            "swift-issue-reporting",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "UIKitNavigationTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "CheckImplementationOnly"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SwiftNavigation",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppKitNavigation",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "CheckImplementationOnly"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.4.0"
+  },
+  "traits" : [
+    {
+      "description" : "Drive enum navigation and form data with CasePaths",
+      "enabledTraits" : [
+
+      ],
+      "name" : "CasePaths"
+    },
+    {
+      "description" : "Pretty-print and diff SwiftNavigation's data types using CustomDump",
+      "enabledTraits" : [
+
+      ],
+      "name" : "CustomDump"
+    },
+    {
+      "description" : "Surface logical issues as unobtrusive runtime warnings",
+      "enabledTraits" : [
+
+      ],
+      "name" : "IssueReporting"
+    },
+    {
+      "description" : "Back-port Swift Observation to older platforms",
+      "enabledTraits" : [
+
+      ],
+      "name" : "Perception"
+    },
+    {
+      "description" : "Derive bindings from '@Shared' state",
+      "enabledTraits" : [
+
+      ],
+      "name" : "Sharing"
+    },
+    {
+      "description" : "The default traits of this package.",
+      "enabledTraits" : [
+        "CasePaths",
+        "CustomDump",
+        "IssueReporting",
+        "Perception"
+      ],
+      "name" : "default"
+    }
+  ]
+}

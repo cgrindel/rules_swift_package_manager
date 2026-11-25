@@ -1,0 +1,384 @@
+{
+  "cxx_language_standard" : "c++17",
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "OpenCombine",
+  "name" : "OpenCombine",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "OpenCombine",
+      "targets" : [
+        "OpenCombine"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "OpenCombineDispatch",
+      "targets" : [
+        "OpenCombineDispatch"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "OpenCombineFoundation",
+      "targets" : [
+        "OpenCombineFoundation"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "OpenCombineShim",
+      "targets" : [
+        "OpenCombineShim"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "OpenCombineTests",
+      "module_type" : "SwiftTarget",
+      "name" : "OpenCombineTests",
+      "path" : "Tests/OpenCombineTests",
+      "sources" : [
+        "AnyCancellableTests.swift",
+        "AnyPublisherTests.swift",
+        "AnySubscriberTests.swift",
+        "CombineIdentifierTests.swift",
+        "ConcurrencyTests/FutureConcurrencyTests.swift",
+        "ConcurrencyTests/PublisherConcurrencyTests.swift",
+        "CurrentValueSubjectTests.swift",
+        "DispatchTests/DispatchQueueSchedulerTests.swift",
+        "FoundationTests/JSONDecoderTests.swift",
+        "FoundationTests/JSONEncoderTests.swift",
+        "FoundationTests/NotificationCenterTests.swift",
+        "FoundationTests/OperationQueueSchedulerTests.swift",
+        "FoundationTests/PropertyListDecoderTests.swift",
+        "FoundationTests/PropertyListEncoderTests.swift",
+        "FoundationTests/RunLoopSchedulerTests.swift",
+        "FoundationTests/TimerPublisherTests.swift",
+        "FoundationTests/URLSessionTests.swift",
+        "Helpers/AssertCrashes.swift",
+        "Helpers/AutomaticallyFinish.swift",
+        "Helpers/CleaningUpSubscriber.swift",
+        "Helpers/CommonTests.swift",
+        "Helpers/CustomPublisher.swift",
+        "Helpers/CustomSubscription.swift",
+        "Helpers/ExecuteOnBackgroundThread.swift",
+        "Helpers/FairPriorityQueue.swift",
+        "Helpers/OperatorTestHelper.swift",
+        "Helpers/TestCoders.swift",
+        "Helpers/TestLifecycle.swift",
+        "Helpers/TestReflection.swift",
+        "Helpers/TestingError.swift",
+        "Helpers/TestingThreadSafety.swift",
+        "Helpers/TrackingCollection.swift",
+        "Helpers/TrackingEncoder.swift",
+        "Helpers/TrackingIntrospection.swift",
+        "Helpers/TrackingSubscriber.swift",
+        "Helpers/VirtualTimeScheduler.swift",
+        "Helpers/XCTUnwrap.swift",
+        "ImmediateSchedulerTests.swift",
+        "IntrospectionTests.swift",
+        "ObservableObjectPublisherTests.swift",
+        "ObservableObjectTests.swift",
+        "PassthroughSubjectTests.swift",
+        "PublishedTests.swift",
+        "PublisherTests.swift",
+        "PublisherTests/AllSatisfyTests.swift",
+        "PublisherTests/AssertNoFailureTests.swift",
+        "PublisherTests/AutoconnectTests.swift",
+        "PublisherTests/BreakpointTests.swift",
+        "PublisherTests/BufferTests.swift",
+        "PublisherTests/CatchTests.swift",
+        "PublisherTests/CollectByCountTests.swift",
+        "PublisherTests/CollectTests.swift",
+        "PublisherTests/CompactMapTests.swift",
+        "PublisherTests/ComparisonTests.swift",
+        "PublisherTests/ConcatenateTests.swift",
+        "PublisherTests/ContainsTests.swift",
+        "PublisherTests/CountTests.swift",
+        "PublisherTests/DebounceTests.swift",
+        "PublisherTests/DeferredTests.swift",
+        "PublisherTests/DelayTests.swift",
+        "PublisherTests/DropTests.swift",
+        "PublisherTests/DropUntilOutputTests.swift",
+        "PublisherTests/DropWhileTests.swift",
+        "PublisherTests/EmptyTests.swift",
+        "PublisherTests/EncodeTests.swift",
+        "PublisherTests/FailTests.swift",
+        "PublisherTests/FilterTests.swift",
+        "PublisherTests/FirstTests.swift",
+        "PublisherTests/FlatMapTests.swift",
+        "PublisherTests/FutureTests.swift",
+        "PublisherTests/HandleEventsTests.swift",
+        "PublisherTests/IgnoreOutputTests.swift",
+        "PublisherTests/JustTests.swift",
+        "PublisherTests/LastTests.swift",
+        "PublisherTests/MakeConnectableTests.swift",
+        "PublisherTests/MapErrorTests.swift",
+        "PublisherTests/MapKeyPathTests.swift",
+        "PublisherTests/MapTests.swift",
+        "PublisherTests/MeasureIntervalTests.swift",
+        "PublisherTests/MulticastTests.swift",
+        "PublisherTests/OptionalPublisherTests.swift",
+        "PublisherTests/OutputTests.swift",
+        "PublisherTests/PrefixUntilOutputTests.swift",
+        "PublisherTests/PrefixWhileTests.swift",
+        "PublisherTests/PrintTests.swift",
+        "PublisherTests/ReceiveOnTests.swift",
+        "PublisherTests/RecordTests.swift",
+        "PublisherTests/ReduceTests.swift",
+        "PublisherTests/RemoveDuplicatesTests.swift",
+        "PublisherTests/ReplaceEmptyTests.swift",
+        "PublisherTests/ReplaceErrorTests.swift",
+        "PublisherTests/ReplaceNilTests.swift",
+        "PublisherTests/ResultPublisherTests.swift",
+        "PublisherTests/RetryTests.swift",
+        "PublisherTests/ScanTests.swift",
+        "PublisherTests/SequenceTests.swift",
+        "PublisherTests/SetFailureTypeTests.swift",
+        "PublisherTests/ShareTests.swift",
+        "PublisherTests/SubscribeOnTests.swift",
+        "PublisherTests/SwitchToLatestTests.swift",
+        "PublisherTests/ThrottleTests.swift",
+        "PublisherTests/TimeoutTests.swift",
+        "PublisherTests/ZipTests.swift",
+        "SubscribersTests/AssignTests.swift",
+        "SubscribersTests/CompletionTests.swift",
+        "SubscribersTests/SinkTests.swift",
+        "SubscribersTests/SubscribersDemandTests.swift",
+        "Subscriptions/EmptySubscriptionTests.swift",
+        "VirtualTimeSchedulerTests.swift"
+      ],
+      "target_dependencies" : [
+        "OpenCombine",
+        "OpenCombineDispatch",
+        "OpenCombineFoundation"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "OpenCombineShim",
+      "module_type" : "SwiftTarget",
+      "name" : "OpenCombineShim",
+      "path" : "Sources/OpenCombineShim",
+      "product_memberships" : [
+        "OpenCombineShim"
+      ],
+      "sources" : [
+        "OpenCombineShim.swift"
+      ],
+      "target_dependencies" : [
+        "OpenCombine",
+        "OpenCombineDispatch",
+        "OpenCombineFoundation"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "OpenCombineFoundation",
+      "module_type" : "SwiftTarget",
+      "name" : "OpenCombineFoundation",
+      "path" : "Sources/OpenCombineFoundation",
+      "product_memberships" : [
+        "OpenCombineFoundation",
+        "OpenCombineShim"
+      ],
+      "sources" : [
+        "Helpers/Locking.swift",
+        "Helpers/Portability.swift",
+        "Helpers/Utils.swift",
+        "Helpers/Violations.swift",
+        "JSONEncoder.swift",
+        "NotificationCenter.swift",
+        "OperationQueue+Scheduler.swift",
+        "PropertyListEncoder.swift",
+        "RunLoop+Scheduler.swift",
+        "Timer+Publisher.swift",
+        "URLSession.swift"
+      ],
+      "target_dependencies" : [
+        "OpenCombine",
+        "COpenCombineHelpers"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "OpenCombineDispatch",
+      "module_type" : "SwiftTarget",
+      "name" : "OpenCombineDispatch",
+      "path" : "Sources/OpenCombineDispatch",
+      "product_memberships" : [
+        "OpenCombineDispatch",
+        "OpenCombineShim"
+      ],
+      "sources" : [
+        "DispatchQueue+Scheduler.swift"
+      ],
+      "target_dependencies" : [
+        "OpenCombine"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "OpenCombine",
+      "module_type" : "SwiftTarget",
+      "name" : "OpenCombine",
+      "path" : "Sources/OpenCombine",
+      "product_memberships" : [
+        "OpenCombine",
+        "OpenCombineDispatch",
+        "OpenCombineFoundation",
+        "OpenCombineShim"
+      ],
+      "sources" : [
+        "AnyCancellable.swift",
+        "AnyPublisher.swift",
+        "AnySubscriber.swift",
+        "Cancellable.swift",
+        "Codable.swift",
+        "CombineIdentifier.swift",
+        "Concurrency/ConcurrencyHelpers.swift",
+        "Concurrency/Future+Concurrency.swift",
+        "Concurrency/GENERATED-Publisher+Concurrency.swift",
+        "CurrentValueSubject.swift",
+        "CustomCombineIdentifierConvertible.swift",
+        "Future.swift",
+        "GENERATED-RootProtocols.swift",
+        "Helpers/ConduitBase.swift",
+        "Helpers/ConduitList.swift",
+        "Helpers/DebugHook.swift",
+        "Helpers/FilterProducer.swift",
+        "Helpers/Locking.swift",
+        "Helpers/PartialCompletion.swift",
+        "Helpers/PublishedSubject.swift",
+        "Helpers/PublishedSubscriber.swift",
+        "Helpers/ReduceProducer.swift",
+        "Helpers/SubjectSubscriber.swift",
+        "Helpers/SubscriberTap.swift",
+        "Helpers/SubscriptionStatus.swift",
+        "Helpers/SubscriptionTap.swift",
+        "Helpers/Utils.swift",
+        "Helpers/Violations.swift",
+        "ImmediateScheduler.swift",
+        "ObservableObject.swift",
+        "PassthroughSubject.swift",
+        "Published.swift",
+        "Publisher+Subscribe.swift",
+        "Publishers/Deferred.swift",
+        "Publishers/Empty.swift",
+        "Publishers/Fail.swift",
+        "Publishers/GENERATED-Publishers.Catch.swift",
+        "Publishers/GENERATED-Publishers.Encode.swift",
+        "Publishers/GENERATED-Publishers.MapKeyPath.swift",
+        "Publishers/Just.swift",
+        "Publishers/Optional.Publisher.swift",
+        "Publishers/Publishers.AllSatisfy.swift",
+        "Publishers/Publishers.AssertNoFailure.swift",
+        "Publishers/Publishers.Autoconnect.swift",
+        "Publishers/Publishers.Breakpoint.swift",
+        "Publishers/Publishers.Buffer.swift",
+        "Publishers/Publishers.Collect.swift",
+        "Publishers/Publishers.CollectByCount.swift",
+        "Publishers/Publishers.CompactMap.swift",
+        "Publishers/Publishers.Comparison.swift",
+        "Publishers/Publishers.Concatenate.swift",
+        "Publishers/Publishers.Contains.swift",
+        "Publishers/Publishers.Count.swift",
+        "Publishers/Publishers.Debounce.swift",
+        "Publishers/Publishers.Delay.swift",
+        "Publishers/Publishers.Drop.swift",
+        "Publishers/Publishers.DropUntilOutput.swift",
+        "Publishers/Publishers.DropWhile.swift",
+        "Publishers/Publishers.Filter.swift",
+        "Publishers/Publishers.First.swift",
+        "Publishers/Publishers.FlatMap.swift",
+        "Publishers/Publishers.HandleEvents.swift",
+        "Publishers/Publishers.IgnoreOutput.swift",
+        "Publishers/Publishers.Last.swift",
+        "Publishers/Publishers.MakeConnectable.swift",
+        "Publishers/Publishers.Map.swift",
+        "Publishers/Publishers.MapError.swift",
+        "Publishers/Publishers.MeasureInterval.swift",
+        "Publishers/Publishers.Multicast.swift",
+        "Publishers/Publishers.Output.swift",
+        "Publishers/Publishers.PrefixUntilOutput.swift",
+        "Publishers/Publishers.PrefixWhile.swift",
+        "Publishers/Publishers.Print.swift",
+        "Publishers/Publishers.ReceiveOn.swift",
+        "Publishers/Publishers.Reduce.swift",
+        "Publishers/Publishers.RemoveDuplicates.swift",
+        "Publishers/Publishers.ReplaceEmpty.swift",
+        "Publishers/Publishers.ReplaceError.swift",
+        "Publishers/Publishers.Retry.swift",
+        "Publishers/Publishers.Scan.swift",
+        "Publishers/Publishers.Sequence.swift",
+        "Publishers/Publishers.SetFailureType.swift",
+        "Publishers/Publishers.Share.swift",
+        "Publishers/Publishers.SubscribeOn.swift",
+        "Publishers/Publishers.SwitchToLatest.swift",
+        "Publishers/Publishers.Throttle.swift",
+        "Publishers/Publishers.Timeout.swift",
+        "Publishers/Publishers.Zip.swift",
+        "Publishers/Publishers.swift",
+        "Publishers/Record.swift",
+        "Publishers/Result.Publisher.swift",
+        "Result.swift",
+        "Scheduler.swift",
+        "Subject+Void.swift",
+        "Subscriber+Void.swift",
+        "Subscribers/Subscribers.Assign.swift",
+        "Subscribers/Subscribers.Completion.swift",
+        "Subscribers/Subscribers.Demand.swift",
+        "Subscribers/Subscribers.Sink.swift",
+        "Subscribers/Subscribers.swift",
+        "Subscription.swift",
+        "Subscriptions.swift",
+        "_Introspection.swift"
+      ],
+      "target_dependencies" : [
+        "COpenCombineHelpers"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "COpenCombineHelpers",
+      "module_type" : "ClangTarget",
+      "name" : "COpenCombineHelpers",
+      "path" : "Sources/COpenCombineHelpers",
+      "product_memberships" : [
+        "OpenCombine",
+        "OpenCombineDispatch",
+        "OpenCombineFoundation",
+        "OpenCombineShim"
+      ],
+      "sources" : [
+        "COpenCombineHelpers.cpp"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.5"
+}

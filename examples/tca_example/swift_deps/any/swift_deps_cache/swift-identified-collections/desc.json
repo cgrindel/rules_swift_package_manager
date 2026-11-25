@@ -1,0 +1,145 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-collections",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.2",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-collections"
+    },
+    {
+      "identity" : "swift-collections-benchmark",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "0.0.2",
+            "upper_bound" : "1.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-collections-benchmark"
+    },
+    {
+      "identity" : "swift-docc-plugin",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-docc-plugin"
+    }
+  ],
+  "manifest_display_name" : "swift-identified-collections",
+  "name" : "swift-identified-collections",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "IdentifiedCollections",
+      "targets" : [
+        "IdentifiedCollections"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "swift-identified-collections-benchmark",
+      "targets" : [
+        "swift-identified-collections-benchmark"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "c99name" : "swift_identified_collections_benchmark",
+      "module_type" : "SwiftTarget",
+      "name" : "swift-identified-collections-benchmark",
+      "path" : "Sources/swift-identified-collections-benchmark",
+      "product_dependencies" : [
+        "CollectionsBenchmark"
+      ],
+      "product_memberships" : [
+        "swift-identified-collections-benchmark"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "IdentifiedCollections"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "IdentifiedCollectionsTests",
+      "module_type" : "SwiftTarget",
+      "name" : "IdentifiedCollectionsTests",
+      "path" : "Tests/IdentifiedCollectionsTests",
+      "sources" : [
+        "IdentifiedArrayCollectionOperationTests.swift",
+        "IdentifiedArrayTests.swift"
+      ],
+      "target_dependencies" : [
+        "IdentifiedCollections"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "IdentifiedCollections",
+      "module_type" : "SwiftTarget",
+      "name" : "IdentifiedCollections",
+      "path" : "Sources/IdentifiedCollections",
+      "product_dependencies" : [
+        "OrderedCollections"
+      ],
+      "product_memberships" : [
+        "IdentifiedCollections",
+        "swift-identified-collections-benchmark"
+      ],
+      "sources" : [
+        "Identified/Identified.swift",
+        "IdentifiedArray/IdentifiedArray+Codable.swift",
+        "IdentifiedArray/IdentifiedArray+Collection.swift",
+        "IdentifiedArray/IdentifiedArray+CollectionAlgorithms.swift",
+        "IdentifiedArray/IdentifiedArray+CustomDebugStringConvertible.swift",
+        "IdentifiedArray/IdentifiedArray+CustomReflectable.swift",
+        "IdentifiedArray/IdentifiedArray+CustomStringConvertible.swift",
+        "IdentifiedArray/IdentifiedArray+Equatable.swift",
+        "IdentifiedArray/IdentifiedArray+ExpressibleByArrayLiteral.swift",
+        "IdentifiedArray/IdentifiedArray+Hashable.swift",
+        "IdentifiedArray/IdentifiedArray+IdentifiedCollection.swift",
+        "IdentifiedArray/IdentifiedArray+Initializers.swift",
+        "IdentifiedArray/IdentifiedArray+Insertions.swift",
+        "IdentifiedArray/IdentifiedArray+MutableCollection.swift",
+        "IdentifiedArray/IdentifiedArray+RandomAccessCollection.swift",
+        "IdentifiedArray/IdentifiedArray+RangeReplaceableCollection.swift",
+        "IdentifiedArray/IdentifiedArray+Sendable.swift",
+        "IdentifiedArray/IdentifiedArray.swift",
+        "IdentifiedCollection.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}

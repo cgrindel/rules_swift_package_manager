@@ -1,0 +1,814 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-collections",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-collections"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.1.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "combine-schedulers",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/combine-schedulers"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.2",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-case-paths",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-case-paths"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.5.4",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-clocks",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-clocks"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.4",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-concurrency-extras",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-concurrency-extras"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.2.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-custom-dump",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-custom-dump"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.3.2",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-dependencies",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-dependencies"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.4.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-identified-collections",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-identified-collections"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.1.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-issue-reporting",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-issue-reporting"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.1.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-macro-testing",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-macro-testing"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "0.2.0",
+                "upperBound" : "1.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-navigation",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-navigation"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.7.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-perception",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-perception"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.3.4",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-sharing",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-sharing"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-docc-plugin",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/swiftlang/swift-docc-plugin"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-syntax",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/swiftlang/swift-syntax"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "509.0.0",
+                "upperBound" : "605.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "swift-composable-architecture",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "16.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "16.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "ComposableArchitecture",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "ComposableArchitecture"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ComposableArchitectureMacros",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "CasePaths",
+            "swift-case-paths",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Clocks",
+            "swift-clocks",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "CombineSchedulers",
+            "combine-schedulers",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "ConcurrencyExtras",
+            "swift-concurrency-extras",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "CustomDump",
+            "swift-custom-dump",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Dependencies",
+            "swift-dependencies",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "DependenciesMacros",
+            "swift-dependencies",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "IdentifiedCollections",
+            "swift-identified-collections",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "IssueReporting",
+            "swift-issue-reporting",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "OrderedCollections",
+            "swift-collections",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Perception",
+            "swift-perception",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Sharing",
+            "swift-sharing",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftUINavigation",
+            "swift-navigation",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "UIKitNavigation",
+            "swift-navigation",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ComposableArchitecture",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ComposableArchitecture",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "IssueReportingTestSupport",
+            "swift-issue-reporting",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ComposableArchitectureTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferSendableFromCaptures"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "SwiftSyntaxMacros",
+            "swift-syntax",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftCompilerPlugin",
+            "swift-syntax",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ComposableArchitectureMacros",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "macro"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "ComposableArchitectureMacros",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "MacroTesting",
+            "swift-macro-testing",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ComposableArchitectureMacrosTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferSendableFromCaptures"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.4.0"
+  },
+  "traits" : [
+    {
+      "description" : "Prepare for the next major release by enabling some of the more viral deprecations. These deprecations rely on overloads that can tax the compiler and prevent existing applications from compiling. Temporarily enable this trait to perform these specific migrations.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "ComposableArchitecture2DeprecationOverloads"
+    },
+    {
+      "description" : "Prepare for the next major release by enabling some of the more viral deprecations. Enable this trait to remain ready for Composable Architecture 2.0.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "ComposableArchitecture2Deprecations"
+    }
+  ]
+}

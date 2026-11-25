@@ -1,0 +1,930 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "combine-schedulers",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/combine-schedulers"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.2",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-clocks",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-clocks"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.4",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-concurrency-extras",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-concurrency-extras"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-issue-reporting",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-issue-reporting"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.1.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-syntax",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/swiftlang/swift-syntax"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "509.0.0",
+                "upperBound" : "605.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-macro-testing",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-macro-testing"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "0.2.0",
+                "upperBound" : "1.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-docc-plugin",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-docc-plugin"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "swift-dependencies",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Dependencies",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Dependencies"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "DependenciesMacros",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "DependenciesMacros"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "DependenciesTestSupport",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "DependenciesTestSupport"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "IssueReporting",
+            "swift-issue-reporting",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependenciesTestObserver",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "Clocks",
+            "swift-clocks",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "Clocks"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "CombineSchedulers",
+            "combine-schedulers",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "CombineSchedulers"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "ConcurrencyExtras",
+            "swift-concurrency-extras",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "IssueReporting",
+            "swift-issue-reporting",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Dependencies",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Dependencies",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "ConcurrencyExtras",
+            "swift-concurrency-extras",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "IssueReportingTestSupport",
+            "swift-issue-reporting",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependenciesTestSupport",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Dependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependenciesTestSupport",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "IssueReportingTestSupport",
+            "swift-issue-reporting",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Dependencies.xctestplan"
+      ],
+      "name" : "DependenciesTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "DependenciesMacrosPlugin",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "IssueReporting",
+            "swift-issue-reporting",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependenciesMacros",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "SwiftSyntaxMacros",
+            "swift-syntax",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftCompilerPlugin",
+            "swift-syntax",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependenciesMacrosPlugin",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "macro"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Dependencies",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependenciesMacros",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "DependenciesMacrosPlugin",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "MacroTesting",
+            "swift-macro-testing",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DependenciesMacrosPluginTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.4.0"
+  },
+  "traits" : [
+    {
+      "enabledTraits" : [
+
+      ],
+      "name" : "Clocks"
+    },
+    {
+      "enabledTraits" : [
+
+      ],
+      "name" : "CombineSchedulers"
+    },
+    {
+      "enabledTraits" : [
+
+      ],
+      "name" : "Foundation"
+    },
+    {
+      "enabledTraits" : [
+
+      ],
+      "name" : "FoundationNetworking"
+    },
+    {
+      "description" : "The default traits of this package.",
+      "enabledTraits" : [
+        "Clocks",
+        "CombineSchedulers",
+        "Foundation",
+        "FoundationNetworking"
+      ],
+      "name" : "default"
+    }
+  ]
+}
