@@ -18,6 +18,11 @@ name: Debug swift package crash
         description: Workspace directory to run `swift package update` in.
         default: examples/interesting_deps
         required: true
+      slice:
+        description: >-
+          Slice directory, relative to the workspace, whose `Package.resolved` seeds the bare lane.
+        default: swift_deps/any
+        required: true
       swift_release_tags:
         description: >-
           Comma-separated Swift release tags to sweep on the bare runner. The Renovate container and CI both use 6.4.0.
@@ -132,12 +137,13 @@ jobs:
         shell: bash
         env:
           WORKSPACE: ${{ inputs.workspace }}
+          SLICE: ${{ inputs.slice }}
           ITERATIONS: ${{ inputs.iterations }}
         run: |
           set -o errexit -o nounset -o pipefail
           scratch="$(mktemp -d)"
           cp "${WORKSPACE}/Package.swift" "${scratch}/"
-          cp "${WORKSPACE}/Package.resolved" "${scratch}/" 2>/dev/null || true
+          cp "${WORKSPACE}/${SLICE}/Package.resolved" "${scratch}/"
 
           failures=0
           for i in $(seq 1 "${ITERATIONS}"); do
@@ -242,13 +248,14 @@ jobs:
         shell: bash
         env:
           WORKSPACE: ${{ inputs.workspace }}
+          SLICE: ${{ inputs.slice }}
           ITERATIONS: ${{ inputs.iterations }}
         run: |
           set -o nounset -o pipefail
           mkdir -p /tmp/swift-crash
           scratch="$(mktemp -d)"
           cp "${WORKSPACE}/Package.swift" "${scratch}/"
-          cp "${WORKSPACE}/Package.resolved" "${scratch}/" 2>/dev/null || true
+          cp "${WORKSPACE}/${SLICE}/Package.resolved" "${scratch}/"
 
           failures=0
           for i in $(seq 1 "${ITERATIONS}"); do
