@@ -1,0 +1,30 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "lottie-spm",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "4.6.1",
+            "upper_bound" : "5.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/airbnb/lottie-spm"
+    }
+  ],
+  "manifest_display_name" : "lottie_ios_example",
+  "name" : "lottie_ios_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}
