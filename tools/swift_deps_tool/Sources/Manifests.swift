@@ -5,8 +5,10 @@ public struct Manifests {
   /// Runs `dump-package` into `cacheDir/dump.json` and `describe --type json` into
   /// `cacheDir/desc.json`, both relativized to the package root and the workspace, and returns
   /// the description. Prints a warning for each path outside the workspace, which stays absolute.
+  /// `gitCeiling` is passed to `SwiftPM.run`.
   public static func write(
-    package: URL, cacheDir: URL, workspace: URL, spm: SwiftPM, scratchPath: URL?
+    package: URL, cacheDir: URL, workspace: URL, spm: SwiftPM, scratchPath: URL?,
+    gitCeiling: URL? = nil
   ) throws -> Desc {
     try FileManager.default.createDirectory(at: cacheDir, withIntermediateDirectories: true)
     let root = try realPath(package)
@@ -15,7 +17,7 @@ public struct Manifests {
     func dump(_ args: [String], to name: String) throws -> Data {
       let output: Data
       do {
-        output = try spm.run(args, in: package, scratchPath: scratchPath)
+        output = try spm.run(args, in: package, scratchPath: scratchPath, gitCeiling: gitCeiling)
       } catch var error as ToolError {
         error.package = package.lastPathComponent
         throw error

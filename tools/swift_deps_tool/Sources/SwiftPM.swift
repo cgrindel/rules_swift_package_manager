@@ -21,12 +21,24 @@ public struct SwiftPM {
   ///
   /// `scratchPath` replaces the default `<sliceDir>/.build`. If `registries` is configured,
   /// `registries.json` in the config path is linked to it first, as `spl_setup_registries` does.
+  ///
+  /// `gitCeiling`, when set, becomes `GIT_CEILING_DIRECTORIES`, so that git does not look above
+  /// it for a repository. SwiftPM fills a manifest's `Context.gitInformation` from the
+  /// repository that contains the package; for a checkout copied without `.git` into the slice,
+  /// that would be the user's own repository.
   @discardableResult
-  public func run(_ args: [String], in packageDir: URL, scratchPath: URL? = nil) throws -> Data {
+  public func run(
+    _ args: [String], in packageDir: URL, scratchPath: URL? = nil, gitCeiling: URL? = nil
+  ) throws -> Data {
     try linkRegistries()
     let scratch = scratchPath ?? sliceDir.appendingPathComponent(".build")
+    var environment: [String: String] = [:]
+    if let gitCeiling {
+      environment["GIT_CEILING_DIRECTORIES"] = gitCeiling.path
+    }
     let result = try launch(
-      ["package"] + flags.arguments(sliceDir: sliceDir, scratchPath: scratch) + args, in: packageDir
+      ["package"] + flags.arguments(sliceDir: sliceDir, scratchPath: scratch) + args,
+      in: packageDir, environment: environment
     )
     guard result.status == 0 else {
       let tail = String(decoding: result.stderr, as: UTF8.self)
@@ -71,16 +83,20 @@ public struct SwiftPM {
     try fileManager.createSymbolicLink(at: link, withDestinationURL: registries)
   }
 
-  private func launch(_ arguments: [String], in directory: URL?) throws
+  private func launch(
+    _ arguments: [String], in directory: URL?, environment extra: [String: String] = [:]
+  ) throws
     -> (status: Int32, stdout: Data, stderr: Data)
   {
     let process = Process()
     process.executableURL = tool
     process.arguments = arguments
+    var extra = extra
     if let runfilesDir {
-      var environment = ProcessInfo.processInfo.environment
-      environment["RUNFILES_DIR"] = runfilesDir.path
-      process.environment = environment
+      extra["RUNFILES_DIR"] = runfilesDir.path
+    }
+    if !extra.isEmpty {
+      process.environment = ProcessInfo.processInfo.environment.merging(extra) { $1 }
     }
     if let directory {
       process.currentDirectoryURL = directory

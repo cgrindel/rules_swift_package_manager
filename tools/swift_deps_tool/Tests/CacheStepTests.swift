@@ -35,7 +35,8 @@ final class CacheStepTests: XCTestCase {
 
   /// A fake `swift`: `resolve` creates the swift-log checkout and `Package.resolved`;
   /// `dump-package` and `describe` print `desc.fake.json` from the package directory, or a
-  /// description named after the directory. Every call is appended to `log.txt`.
+  /// description named after the directory. Every call is appended to `log.txt`, and its
+  /// `GIT_CEILING_DIRECTORIES` to `ceiling.txt`.
   private func fakeTool() throws -> URL {
     let resolved = try write(
       """
@@ -53,6 +54,7 @@ final class CacheStepTests: XCTestCase {
         prev=$a
       done
       echo "$(basename "$(pwd -P)"):$*" >> '\(root.path)/log.txt'
+      echo "$(basename "$(pwd -P)"):${GIT_CEILING_DIRECTORIES:-}" >> '\(root.path)/ceiling.txt'
       case " $* " in
         *" resolve "*)
           mkdir -p "$scratch/checkouts/swift-log"
@@ -155,6 +157,21 @@ final class CacheStepTests: XCTestCase {
       """)
     // A local package's identity is its directory name, as SwiftPM's, not its package name.
     XCTAssertFalse(exists("\(cache)/mylocal"))
+    // Only the copied checkout, which has no `.git`, is dumped with git stopped above it.
+    // The root and local packages are real directories of the workspace's repository.
+    func resolved(_ path: String) -> String {
+      URL(fileURLWithPath: path).resolvingSymlinksInPath().path
+    }
+    var ceilings: [String: Set<String>] = [:]
+    for line in try read("ceiling.txt").split(separator: "\n") {
+      let parts = line.split(separator: ":", maxSplits: 1, omittingEmptySubsequences: false)
+      ceilings[String(parts[0]), default: []].insert(String(parts[1]))
+    }
+    XCTAssertEqual(
+      ceilings["swift-log"].map { Set($0.map(resolved)) },
+      [resolved(root.appendingPathComponent("swift/macos/.build/rspm").path)])
+    XCTAssertEqual(ceilings["pkg"], [""])
+    XCTAssertEqual(ceilings["LocalDir"], [""])
     // The root and each local package are described exactly once.
     let log = try read("log.txt").split(separator: "\n")
     XCTAssertEqual(
