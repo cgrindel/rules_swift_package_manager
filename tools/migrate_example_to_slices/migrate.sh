@@ -399,7 +399,8 @@ def build(path):
 
     text = re.sub(r"^load\([^)]*\)\n?", fix_load, text, flags=re.M)
 
-    # tidy runs :update_all only.
+    # tidy runs :update_all only. An example without a tidy keeps none: its
+    # MODULE.bazel may not depend on cgrindel_bazel_starlib.
     tidy_spans = find_calls(text, "tidy")
     if len(tidy_spans) > 1:
         raise SystemExit("ERROR: more than one tidy() in " + path)
@@ -407,22 +408,17 @@ def build(path):
         s, e = tidy_spans[0]
         text = text[:s] + TIDY + text[e:]
         log("tidy now runs :update_all only")
-        insert_at = s
+        if not find_calls(text, "updatesrc_update_all"):
+            text = (
+                text[:s]
+                + 'updatesrc_update_all(name = "update_all")\n\n'
+                + text[s:]
+            )
+            if UPDATE_ALL_LOAD not in text:
+                text = UPDATE_ALL_LOAD + "\n" + text
+            log("added updatesrc_update_all")
     else:
-        text = text.rstrip("\n") + "\n\n" + TIDY
-        if 'load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")' not in text:
-            text = 'load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")\n' + text
-        log("added tidy")
-        insert_at = text.index(TIDY)
-    if not find_calls(text, "updatesrc_update_all"):
-        text = (
-            text[:insert_at]
-            + 'updatesrc_update_all(name = "update_all")\n\n'
-            + text[insert_at:]
-        )
-        if UPDATE_ALL_LOAD not in text:
-            text = UPDATE_ALL_LOAD + "\n" + text
-        log("added updatesrc_update_all")
+        log("no tidy() to rewrite; left the BUILD.bazel without one")
 
     # Keep the single-line loads at the top sorted.
     lines = text.lstrip("\n").split("\n")
