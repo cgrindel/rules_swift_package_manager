@@ -452,7 +452,7 @@ def build(path):
 # MARK: - do_test
 
 
-def do_test(path, host_slice, slice_dir_note):
+def do_test(path, slice_dir_note):
     text = open(path).read()
 
     new = re.sub(r"//:update_swift_packages\b", "@swift_package//:update", text)
@@ -470,20 +470,34 @@ def do_test(path, host_slice, slice_dir_note):
     text = "\n\n".join(kept)
 
     if re.search(r"^\s*trap ", text, re.M):
-        log("NOTE: do_test already sets a trap; the appended block replaces it")
+        log("NOTE: do_test already sets a trap; the inserted block replaces it")
 
     block = """\
-# The checked-in {host} slice was cached on macOS. Regenerating it there must
-# not change it, and `bazel mod tidy` must find the root use_repo current.{note}
-if [[ "$(uname)" == "Darwin" ]]; then
+# The checked-in slice for this host must regenerate byte-for-byte on this
+# host, and `bazel mod tidy` must find the root use_repo current. An `any`
+# slice is cached on macOS, so only macOS checks it.{note}
+if [[ -d swift_deps/apple && "$(uname)" == "Darwin" ]]; then
+  host_slice="apple"
+elif [[ -d swift_deps/linux && "$(uname)" == "Linux" ]]; then
+  host_slice="linux"
+elif [[ -d swift_deps/any && "$(uname)" == "Darwin" ]]; then
+  host_slice="any"
+else
+  host_slice=""
+fi
+if [[ -z "${{host_slice}}" ]]; then
+  echo "No checked-in slice for $(uname); skipped the cache-and-diff check."
+else
   slice_tmp="$(mktemp -d)"
   trap 'rm -rf "${{slice_tmp}}"' EXIT
   cp -R swift_deps "${{slice_tmp}}/swift_deps"
   cp MODULE.bazel "${{slice_tmp}}/MODULE.bazel"
 
   "${{bazel}}" run @swift_package//:cache
-  diff -r --exclude=.build "${{slice_tmp}}/swift_deps/{host}" swift_deps/{host} \\
-    || (echo >&2 "The cache step changed the checked-in {host} slice." && exit 1)
+  diff -r --exclude=.build \\
+    "${{slice_tmp}}/swift_deps/${{host_slice}}" "swift_deps/${{host_slice}}" \\
+    || (echo >&2 "The cache step changed the checked-in ${{host_slice}} slice." \\
+      && exit 1)
 
   "${{bazel}}" mod tidy
   diff "${{slice_tmp}}/MODULE.bazel" MODULE.bazel \\
@@ -491,11 +505,32 @@ if [[ "$(uname)" == "Darwin" ]]; then
   diff -r --exclude=.build "${{slice_tmp}}/swift_deps" swift_deps \\
     || (echo >&2 "bazel mod tidy changed a slice." && exit 1)
 fi
-""".format(host=host_slice, note=slice_dir_note)
+""".format(note=slice_dir_note)
     # Only blank lines are normalized; other lines stay byte for byte.
     text = re.sub(r"\n{3,}", "\n\n", text).rstrip("\n") + "\n"
-    open(path, "w").write(text + "\n" + block)
-    log("appended the Darwin cache-and-diff block for the {} slice".format(host_slice))
+
+    # Snapshot the committed slice, not the one `update` rewrites: insert the
+    # block before the first `@swift_package//:update` line and the comment
+    # lines right above it.
+    lines = text.split("\n")
+    at = next(
+        (
+            i
+            for i, l in enumerate(lines)
+            if not l.lstrip().startswith("#") and "@swift_package//:update" in l
+        ),
+        None,
+    )
+    if at is None:
+        open(path, "w").write(text + "\n" + block)
+        log("appended the cache-and-diff block")
+        return
+    while at > 0 and lines[at - 1].lstrip().startswith("#"):
+        at -= 1
+    before = "\n".join(lines[:at])
+    after = "\n".join(lines[at:])
+    open(path, "w").write(before + "\n" + block + "\n" + after)
+    log("inserted the cache-and-diff block before @swift_package//:update")
 
 
 # MARK: - swift/BUILD.bazel
@@ -540,13 +575,9 @@ cmds[sys.argv[1]](*sys.argv[2:])
 PY
 }
 
-# The slice that macOS caches: `any`, or `apple` for a two-slice example.
-darwin_slice=any
 linux_note=""
 for slice in "${slices[@]}"; do
-  if [[ ${slice} == apple ]]; then
-    darwin_slice=apple
-  elif [[ ${slice} == linux ]]; then
+  if [[ ${slice} == linux ]]; then
     linux_note=$'\n'"# The linux slice comes from the generate_linux_slices workflow."
   fi
 done
@@ -562,7 +593,7 @@ if [[ ${swift_dir} != . && -f "${example_dir}/${swift_dir}/BUILD.bazel" ]]; then
 fi
 if [[ -f "${example_dir}/do_test" ]]; then
   echo "do_test:"
-  rewrite do_test "${example_dir}/do_test" "${darwin_slice}" "${linux_note}"
+  rewrite do_test "${example_dir}/do_test" "${linux_note}"
 else
   warn "No do_test in ${example_rel}."
 fi

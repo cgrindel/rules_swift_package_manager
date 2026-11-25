@@ -10,17 +10,31 @@ bazel="${BIT_BAZEL_BINARY:-bazel}"
 "${bazel}" test //...
 "${bazel}" run //:modulemap_comments_example
 
-# The checked-in any slice was cached on macOS. Regenerating it there must
-# not change it, and `bazel mod tidy` must find the root use_repo current.
-if [[ "$(uname)" == "Darwin" ]]; then
+# The checked-in slice for this host must regenerate byte-for-byte on this
+# host, and `bazel mod tidy` must find the root use_repo current. An `any`
+# slice is cached on macOS, so only macOS checks it.
+if [[ -d swift_deps/apple && "$(uname)" == "Darwin" ]]; then
+  host_slice="apple"
+elif [[ -d swift_deps/linux && "$(uname)" == "Linux" ]]; then
+  host_slice="linux"
+elif [[ -d swift_deps/any && "$(uname)" == "Darwin" ]]; then
+  host_slice="any"
+else
+  host_slice=""
+fi
+if [[ -z "${host_slice}" ]]; then
+  echo "No checked-in slice for $(uname); skipped the cache-and-diff check."
+else
   slice_tmp="$(mktemp -d)"
   trap 'rm -rf "${slice_tmp}"' EXIT
   cp -R swift_deps "${slice_tmp}/swift_deps"
   cp MODULE.bazel "${slice_tmp}/MODULE.bazel"
 
   "${bazel}" run @swift_package//:cache
-  diff -r --exclude=.build "${slice_tmp}/swift_deps/any" swift_deps/any \
-    || (echo >&2 "The cache step changed the checked-in any slice." && exit 1)
+  diff -r --exclude=.build \
+    "${slice_tmp}/swift_deps/${host_slice}" "swift_deps/${host_slice}" \
+    || (echo >&2 "The cache step changed the checked-in ${host_slice} slice." \
+      && exit 1)
 
   "${bazel}" mod tidy
   diff "${slice_tmp}/MODULE.bazel" MODULE.bazel \
