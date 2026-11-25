@@ -364,6 +364,12 @@ def build(path):
     spans = []
     for name in ("gazelle_binary", "gazelle", "swift_package_tool"):
         spans += [(with_attached_comments(text, s), e) for s, e in find_calls(text, name)]
+    # An alias of a v1 `swift_package_tool` in another package.
+    spans += [
+        (with_attached_comments(text, s), e)
+        for s, e in find_calls(text, "alias")
+        if "update_swift_packages" in text[s:e]
+    ]
     text = remove_spans(text, spans)
 
     # Gazelle directives and headings, a paragraph at a time.
@@ -483,11 +489,43 @@ fi
     log("appended the Darwin cache-and-diff block for the {} slice".format(host_slice))
 
 
+# MARK: - swift/BUILD.bazel
+
+
+def swift_build(path):
+    """Drops the v1 `swift_package_tool` from the package of `Package.swift`.
+
+    The package stays, since `//swift:Package.swift` must remain a label.
+    """
+    text = open(path).read()
+    spans = [
+        (with_attached_comments(text, s), e)
+        for s, e in find_calls(text, "swift_package_tool")
+    ]
+    text = remove_spans(text, spans)
+    text = re.sub(
+        r'^load\("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package_tool"\)\n',
+        "",
+        text,
+        flags=re.M,
+    )
+    code = [l for l in text.split("\n") if l.strip() and not l.lstrip().startswith("#")]
+    if not code:
+        log("only comments were left; replaced them with a note")
+        text = (
+            "# The package exists so that `//swift:Package.swift` is a valid "
+            "label. Update\n# the Swift packages with "
+            "`bazel run @swift_package//:update`.\n"
+        )
+    open(path, "w").write(tidy_blank_lines(text))
+
+
 cmds = {
     "module": module,
     "module_includes": module_includes,
     "build": build,
     "do_test": do_test,
+    "swift_build": swift_build,
 }
 cmds[sys.argv[1]](*sys.argv[2:])
 PY
@@ -508,6 +546,11 @@ echo "MODULE.bazel:"
 rewrite module "${example_dir}/MODULE.bazel"
 echo "BUILD.bazel:"
 rewrite build "${example_dir}/BUILD.bazel"
+swift_dir="$(dirname "${swift_rel}")"
+if [[ ${swift_dir} != . && -f "${example_dir}/${swift_dir}/BUILD.bazel" ]]; then
+  echo "${swift_dir}/BUILD.bazel:"
+  rewrite swift_build "${example_dir}/${swift_dir}/BUILD.bazel"
+fi
 if [[ -f "${example_dir}/do_test" ]]; then
   echo "do_test:"
   rewrite do_test "${example_dir}/do_test" "${darwin_slice}" "${linux_note}"
