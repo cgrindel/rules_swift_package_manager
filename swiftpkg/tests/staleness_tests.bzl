@@ -562,6 +562,34 @@ render_flags_root_package_labels_test = unittest.make(
     _render_flags_root_package_labels_test,
 )
 
+def _render_flags_real_tag_without_labels_test(ctx):
+    env = unittest.begin(ctx)
+
+    # A `configure_swift_package` tag has no `netrc` or `registries`
+    # attribute; those live on `from_package`.
+    config = struct(
+        build_path = "spm-build",
+        cache_path = ".cache",
+        config_path = ".config",
+        security_path = ".security",
+        dependency_caching = False,
+        manifest_cache = "shared",
+        manifest_caching = True,
+        replace_scm_with_registry = False,
+        use_registry_identity_for_scm = False,
+    )
+    asserts.equals(
+        env,
+        _DEFAULT_FLAGS.replace("dependency_caching=true", "dependency_caching=false"),
+        staleness.render_flags(config),
+    )
+
+    return unittest.end(env)
+
+render_flags_real_tag_without_labels_test = unittest.make(
+    _render_flags_real_tag_without_labels_test,
+)
+
 def staleness_test_suite(name = "staleness_tests"):
     return unittest.suite(
         name,
@@ -577,4 +605,5 @@ def staleness_test_suite(name = "staleness_tests"):
         render_flags_matches_tool_fixture_test,
         render_flags_defaults_test,
         render_flags_root_package_labels_test,
+        render_flags_real_tag_without_labels_test,
     )

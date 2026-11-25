@@ -82,8 +82,10 @@ def _render_flags(config_swift_package):
             value = getattr(config_swift_package, key)
             if value != _DEFAULTS[key]:
                 values[key] = value
+        # A `configure_swift_package` tag has no `netrc` or `registries`
+        # attribute; they live on `from_package`.
         for key in _LABEL_KEYS:
-            label = getattr(config_swift_package, key)
+            label = getattr(config_swift_package, key, None)
             if label != None:
                 values[key] = _workspace_relative(label)
     return "".join([
