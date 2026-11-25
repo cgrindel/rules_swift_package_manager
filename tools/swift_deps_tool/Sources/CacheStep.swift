@@ -65,7 +65,7 @@ public struct CacheStep {
     _ = try Prune.removeVanished(cacheDir: cacheDir, keep: Set(identities))
     let incModule = sliceURL.appendingPathComponent("inc.MODULE.bazel")
     let text = IncModuleRenderer.render(
-      labels: IncModuleFile.labels(
+      labels: try IncModuleFile.labels(
         at: incModule, config: inv.config, swiftLabel: inv.swiftLabel,
         slicePackage: inv.slicePackage),
       identities: identities)

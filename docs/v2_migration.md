@@ -37,7 +37,9 @@ layout.
   to the end of the graph. Manifests that read the environment are not supported.
 - `configure_swift_package.build_path` is gone. The scratch path is always `<slice>/.build`.
 - `netrc`, `registries` and `make_files_read_only` are `from_package` attributes, and all root
-  slices must agree on `netrc` and `registries`. See [Known limitations](#known-limitations).
+  slices must agree on `netrc` and `registries`. Add them to the slice's `inc.MODULE.bazel`. The
+  tool owns only `desc_manifests` and `dump_manifests`, so `cache`, `resolve` and `update` keep any
+  other attribute you add to the tag.
 - `patch_cmds` cannot change a manifest. Use `patches` for manifest changes.
 - `swift` must come from a rules_swift toolchain: Xcode on macOS, a hermetic or `PATH` toolchain on
   Linux. You need a rules_swift that has `swift_toolchain_tool` (bazelbuild/rules_swift#2034); until
@@ -105,9 +107,6 @@ Linux machine or CI job and commit it.
 
 ## Known limitations
 
-- `netrc`, `registries` and `make_files_read_only` exist on `from_package`, but the cache step
-  rewrites `inc.MODULE.bazel` with only `config`, `swift`, `resolved` and the manifest lists, so a
-  value you add there does not survive the next `cache` run.
 - In the alias layout, used when two slices pin a package differently, `bazel_target_*` changes land
   on the hidden `@swiftpkg_<name>__slice_<n>` repositories. A `bazel query` against the top-level
   alias shows none of the attributes; query the target the alias points at instead.
