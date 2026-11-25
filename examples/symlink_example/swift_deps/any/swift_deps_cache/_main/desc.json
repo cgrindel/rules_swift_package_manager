@@ -1,0 +1,22 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "empty_framework",
+      "path" : "./third_party/empty_framework",
+      "type" : "fileSystem"
+    }
+  ],
+  "manifest_display_name" : "symlink_example",
+  "name" : "symlink_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}

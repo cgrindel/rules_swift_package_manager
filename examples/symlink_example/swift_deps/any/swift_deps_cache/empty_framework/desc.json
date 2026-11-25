@@ -1,0 +1,40 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "EmptyFramework",
+  "name" : "EmptyFramework",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "EmptyFramework",
+      "targets" : [
+        "EmptyFramework"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "EmptyFramework",
+      "module_type" : "BinaryTarget",
+      "name" : "EmptyFramework",
+      "path" : "EmptyFramework.xcframework",
+      "product_memberships" : [
+        "EmptyFramework"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    }
+  ],
+  "tools_version" : "5.7"
+}

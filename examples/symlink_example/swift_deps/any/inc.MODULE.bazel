@@ -1,0 +1,14 @@
+swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
+swift_deps.from_package(
+    config = "@rules_swift_package_manager//config:any",
+    desc_manifests = {
+        "_main": "//swift_deps/any:swift_deps_cache/_main/desc.json",
+        "empty_framework": "//swift_deps/any:swift_deps_cache/empty_framework/desc.json",
+    },
+    dump_manifests = {
+        "_main": "//swift_deps/any:swift_deps_cache/_main/dump.json",
+        "empty_framework": "//swift_deps/any:swift_deps_cache/empty_framework/dump.json",
+    },
+    resolved = "//swift_deps/any:Package.resolved",
+    swift = "//:Package.swift",
+)

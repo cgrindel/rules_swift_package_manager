@@ -26,3 +26,4 @@ examples/skip_local_transitive_dependencies_example/swift_deps/any/.build
 examples/snapkit_example/swift_deps/any/.build
 examples/stripe_example/swift_deps/any/.build
 examples/tca_example/swift_deps/any/.build
+examples/symlink_example/swift_deps/any/.build
