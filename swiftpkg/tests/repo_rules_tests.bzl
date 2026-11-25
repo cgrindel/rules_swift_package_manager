@@ -218,7 +218,11 @@ def _gen_build_files_without_build_file_test(ctx):
         return struct(return_code = 0, stdout = "", stderr = "")
 
     repository_ctx = struct(
-        attr = struct(bazel_target_mods = "", build_file = None),
+        attr = struct(
+            bazel_target_mods = "",
+            build_file = None,
+            slice_dir = "swift/macos",
+        ),
         name = "bzlmodmangled~test_pkg",
         template = _template,
         file = _file,
@@ -257,7 +261,7 @@ def _gen_build_files_without_build_file_test(ctx):
     asserts.equals(env, 1, len(targets_json))
     asserts.equals(
         env,
-        {"targets": ["package_info.rspm"]},
+        {"targets": ["package_info.rspm", "swift_version_check"]},
         json.decode(targets_json[0].content),
     )
     asserts.true(env, targets_json[0].content.endswith("}\n"))
@@ -283,8 +287,8 @@ gen_build_files_without_build_file_test = unittest.make(
     _gen_build_files_without_build_file_test,
 )
 
-def _gen_build_files_adds_version_check_in_v2_test(ctx):
-    """When slice_dir is set, gen_build_files declares the Swift version \
+def _gen_build_files_adds_version_check_test(ctx):
+    """gen_build_files declares the Swift version \
     check and attaches it to the generated libraries."""
     env = unittest.begin(ctx)
 
@@ -387,8 +391,8 @@ load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "swift_version_che
 
     return unittest.end(env)
 
-gen_build_files_adds_version_check_in_v2_test = unittest.make(
-    _gen_build_files_adds_version_check_in_v2_test,
+gen_build_files_adds_version_check_test = unittest.make(
+    _gen_build_files_adds_version_check_test,
 )
 
 def _make_files_read_only_test(ctx):
@@ -469,52 +473,13 @@ make_files_read_only_disabled_noop_test = unittest.make(
     _make_files_read_only_disabled_noop_test,
 )
 
-def _v2_attrs_error_test(ctx):
-    env = unittest.begin(ctx)
-
-    def _attr(dump_manifest = None, desc_manifest = None, swift_version = None, slice_dir = ""):
-        return struct(
-            dump_manifest = dump_manifest,
-            desc_manifest = desc_manifest,
-            swift_version = swift_version,
-            slice_dir = slice_dir,
-        )
-
-    # v1: nothing set.
-    asserts.equals(env, None, repo_rules.v2_attrs_error("foo", _attr()))
-
-    # v2: everything set.
-    asserts.equals(env, None, repo_rules.v2_attrs_error("foo", _attr(
-        dump_manifest = "d",
-        desc_manifest = "e",
-        swift_version = "s",
-        slice_dir = "swift/macos",
-    )))
-
-    asserts.equals(
-        env,
-        "`foo` sets `slice_dir` but not `dump_manifest`; a v2 slice " +
-        "package needs both.",
-        repo_rules.v2_attrs_error("foo", _attr(slice_dir = "swift/macos")),
-    )
-    asserts.equals(
-        env,
-        "`foo` sets `dump_manifest` but not: desc_manifest, swift_version, slice_dir.",
-        repo_rules.v2_attrs_error("foo", _attr(dump_manifest = "d")),
-    )
-
-    return unittest.end(env)
-
-v2_attrs_error_test = unittest.make(_v2_attrs_error_test)
-
 def repo_rules_test_suite():
     return unittest.suite(
         "repo_rules_tests",
         download_artifacts_test,
-        gen_build_files_adds_version_check_in_v2_test,
+        gen_build_files_adds_version_check_test,
         gen_build_files_with_build_file_test,
         gen_build_files_without_build_file_test,
         make_files_read_only_disabled_noop_test,
         make_files_read_only_test,
-        v2_attrs_error_test,
     )

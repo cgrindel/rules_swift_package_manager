@@ -2,7 +2,7 @@ import Foundation
 
 /// The `configure_swift_package` flags for one slice, validated and rendered for SwiftPM.
 ///
-/// The SwiftPM spellings match `swiftpkg/internal/swift_package_lib.sh`.
+/// The SwiftPM spellings match the flags that `swift package` accepts.
 public struct SwiftPMFlags: Equatable {
   private static let pathKeys: Set<String> = [
     "cache_path", "config_path", "security_path", "netrc", "registries",

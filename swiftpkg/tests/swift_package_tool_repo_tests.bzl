@@ -26,7 +26,7 @@ _LINUX_SLICE = struct(
 
 _PATCH = "@@//third_party:fix.patch"
 
-def _v2_text(patch_specs, patch_files):
+def _text(patch_specs, patch_files):
     bld_file = swift_package_tool_repo_lib.build_file(
         slices = [_MACOS_SLICE, _LINUX_SLICE],
         package_path = "swift/Package.swift",
@@ -44,10 +44,10 @@ def _assert_contains(env, text, fragment):
         "Expected to find:\n{}\nin:\n{}".format(fragment, text),
     )
 
-def _v2_build_file_declares_three_targets_test(ctx):
+def _build_file_declares_three_targets_test(ctx):
     env = unittest.begin(ctx)
 
-    text = _v2_text(
+    text = _text(
         patch_specs = {
             "swift-log": struct(files = [_PATCH], args = ["-p1"]),
         },
@@ -106,14 +106,14 @@ swift_package_tool_rule(
 
     return unittest.end(env)
 
-v2_build_file_declares_three_targets_test = unittest.make(
-    _v2_build_file_declares_three_targets_test,
+build_file_declares_three_targets_test = unittest.make(
+    _build_file_declares_three_targets_test,
 )
 
-def _v2_patch_args_default_test(ctx):
+def _patch_args_default_test(ctx):
     env = unittest.begin(ctx)
 
-    text = _v2_text(
+    text = _text(
         patch_specs = {"swift-log": struct(files = [_PATCH], args = [])},
         patch_files = [_PATCH],
     )
@@ -121,19 +121,19 @@ def _v2_patch_args_default_test(ctx):
 
     return unittest.end(env)
 
-v2_patch_args_default_test = unittest.make(_v2_patch_args_default_test)
+patch_args_default_test = unittest.make(_patch_args_default_test)
 
-def _v2_no_patches_omits_data_test(ctx):
+def _no_patches_omits_data_test(ctx):
     env = unittest.begin(ctx)
 
-    text = _v2_text(patch_specs = {}, patch_files = [])
+    text = _text(patch_specs = {}, patch_files = [])
     asserts.false(env, "data =" in text, "Unexpected data:\n" + text)
 
     return unittest.end(env)
 
-v2_no_patches_omits_data_test = unittest.make(_v2_no_patches_omits_data_test)
+no_patches_omits_data_test = unittest.make(_no_patches_omits_data_test)
 
-def _v2_build_file_from_attr_decodes_json_test(ctx):
+def _build_file_from_attr_decodes_json_test(ctx):
     env = unittest.begin(ctx)
 
     attr = struct(
@@ -160,94 +160,15 @@ def _v2_build_file_from_attr_decodes_json_test(ctx):
 
     return unittest.end(env)
 
-v2_build_file_from_attr_decodes_json_test = unittest.make(
-    _v2_build_file_from_attr_decodes_json_test,
+build_file_from_attr_decodes_json_test = unittest.make(
+    _build_file_from_attr_decodes_json_test,
 )
-
-def _v1_unchanged_test(ctx):
-    env = unittest.begin(ctx)
-
-    attr = struct(
-        package = "swift/Package.swift",
-        build_path = ".build",
-        cache_path = ".cache",
-        config_path = ".config",
-        security_path = ".security",
-        manifest_caching = True,
-        dependency_caching = False,
-        manifest_cache = "shared",
-        replace_scm_with_registry = False,
-        use_registry_identity_for_scm = True,
-        netrc = "//:.netrc",
-        registries = None,
-        env = {"FOO": "bar"},
-    )
-    actual = scg.to_starlark(
-        swift_package_tool_repo_lib.v1_build_file(attr, data = [":.netrc"]),
-    )
-    expected_args = """\
-[
-        "--cmd",
-        "{cmd}",
-        "--package_path",
-        "swift",
-        "--build_path",
-        ".build",
-        "--cache_path",
-        ".cache",
-        "--config_path",
-        ".config",
-        "--security_path",
-        ".security",
-        "--enable_build_manifest_caching",
-        "true",
-        "--enable_dependency_cache",
-        "false",
-        "--manifest_cache",
-        "shared",
-        "--replace_scm_with_registry",
-        "false",
-        "--use_registry_identity_for_scm",
-        "true",
-        "--netrc_file",
-        "$(rootpath :.netrc)",
-        "--env",
-        "FOO=bar",
-        "--manifest_swiftc_flags",
-        "-Xbuild-tools-swiftc -DBAZEL",
-    ]"""
-    expected = """\
-load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_worker_binary")
-
-swift_worker_binary(
-    name = "update",
-    data = [":.netrc"],
-    extra_args = {update},
-    tool = "@rules_swift_package_manager//tools/swift_package_cmd",
-)
-
-swift_worker_binary(
-    name = "resolve",
-    data = [":.netrc"],
-    extra_args = {resolve},
-    tool = "@rules_swift_package_manager//tools/swift_package_cmd",
-)
-""".format(
-        update = expected_args.format(cmd = "update"),
-        resolve = expected_args.format(cmd = "resolve"),
-    )
-    asserts.equals(env, expected, actual)
-
-    return unittest.end(env)
-
-v1_unchanged_test = unittest.make(_v1_unchanged_test)
 
 def swift_package_tool_repo_test_suite(name = "swift_package_tool_repo_tests"):
     return unittest.suite(
         name,
-        v2_build_file_declares_three_targets_test,
-        v2_patch_args_default_test,
-        v2_no_patches_omits_data_test,
-        v2_build_file_from_attr_decodes_json_test,
-        v1_unchanged_test,
+        build_file_declares_three_targets_test,
+        patch_args_default_test,
+        no_patches_omits_data_test,
+        build_file_from_attr_decodes_json_test,
     )

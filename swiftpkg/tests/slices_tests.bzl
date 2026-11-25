@@ -122,24 +122,6 @@ def _validate_empty_manifests_test(ctx):
 
 validate_empty_manifests_test = unittest.make(_validate_empty_manifests_test)
 
-def _is_v2_tag_test(ctx):
-    env = unittest.begin(ctx)
-
-    label = Label("@@//swift/macos:swift_deps_cache/_main/dump.json")
-    asserts.false(env, slices.is_v2_tag(struct(config = None, dump_manifests = {})))
-    asserts.true(env, slices.is_v2_tag(struct(
-        config = Label("@@//config:macos"),
-        dump_manifests = {},
-    )))
-    asserts.true(env, slices.is_v2_tag(struct(
-        config = None,
-        dump_manifests = {"_main": label},
-    )))
-
-    return unittest.end(env)
-
-is_v2_tag_test = unittest.make(_is_v2_tag_test)
-
 def _validate_label_outside_slice_test(ctx):
     env = unittest.begin(ctx)
 
@@ -177,7 +159,6 @@ def slices_test_suite(name = "slices_tests"):
         validate_key_mismatch_test,
         validate_missing_main_test,
         validate_empty_manifests_test,
-        is_v2_tag_test,
         validate_label_outside_slice_test,
         cache_label_test,
     )

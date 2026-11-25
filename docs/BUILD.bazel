@@ -40,7 +40,7 @@ _DOC_INFOS = [
         name = "rules_and_macros",
         label = "//swiftpkg:defs",
         symbols = [
-            "swift_deps_index",
+            "swift_package_tool",
         ],
     ),
     doc_infos.new(
@@ -88,8 +88,8 @@ write_header(
         "# Rules and Macros",
         "",
         """
-The rules and macros described below are used to define Gazelle targets to aid \
-in the generation and maintenance of Swift package dependencies.
+The rules described below back the `@swift_package` targets (`resolve`, \
+`update` and `cache`) that maintain the Swift package slices.
 """,
     ],
     symbols = _DOC_WITH_SYMBOLS["rules_and_macros"].symbols,

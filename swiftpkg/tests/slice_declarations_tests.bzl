@@ -388,7 +388,7 @@ def _registry_pin_fails_with_2699_test(ctx):
     actual = _evaluate(files)
     asserts.equals(
         env,
-        "registry package `apple.swift-collections` is not supported by v2 " +
+        "registry package `apple.swift-collections` is not supported by slices " +
         "yet; see https://github.com/cgrindel/rules_swift_package_manager/issues/2699",
         actual.error,
     )
@@ -736,8 +736,8 @@ def _identical_declares_one_repo_test(ctx):
     asserts.equals(env, {}, kwargs["module_aliases"])
     asserts.equals(env, "", kwargs["dep_module_aliases"])
     asserts.equals(env, False, kwargs["system_sdk_deps"])
-    for v1_only in ["env", "env_inherit", "cached_json_directory", "registries", "replace_scm_with_registry"]:
-        asserts.false(env, v1_only in kwargs, v1_only)
+    for removed in ["env", "env_inherit", "cached_json_directory", "registries", "replace_scm_with_registry", "dependencies_index"]:
+        asserts.false(env, removed in kwargs, removed)
     asserts.equals(env, {"swiftpkg_swift_log": True}, actual.matched)
     asserts.equals(env, {"swiftpkg_swift_log": True}, actual.available)
 
@@ -846,7 +846,7 @@ def _swift_package_declared_once_for_two_root_slices_test(ctx):
     asserts.equals(env, 1, len(tool))
     kwargs = tool[0]
     asserts.equals(env, "swift_package", kwargs["name"])
-    asserts.equals(env, "app/Package.swift", kwargs["package"])
+    asserts.false(env, "package" in kwargs)
     asserts.equals(env, "app/Package.swift", kwargs["package_path"])
     asserts.equals(env, "@@//app:Package.swift", kwargs["swift_label"])
     asserts.equals(env, staleness.render_flags(None), kwargs["flags"])
@@ -1076,7 +1076,7 @@ identical_ignores_swift_patch_version_test = unittest.make(
     _identical_ignores_swift_patch_version_test,
 )
 
-def _v2_passes_netrc_and_read_only_test(ctx):
+def _passes_netrc_and_read_only_test(ctx):
     env = unittest.begin(ctx)
 
     netrc = Label("@@//:.netrc")
@@ -1120,8 +1120,8 @@ def _v2_passes_netrc_and_read_only_test(ctx):
 
     return unittest.end(env)
 
-v2_passes_netrc_and_read_only_test = unittest.make(
-    _v2_passes_netrc_and_read_only_test,
+passes_netrc_and_read_only_test = unittest.make(
+    _passes_netrc_and_read_only_test,
 )
 
 # MARK: - collect
@@ -1129,7 +1129,6 @@ v2_passes_netrc_and_read_only_test = unittest.make(
 def _collect_builds_slices_in_order_test(ctx):
     env = unittest.begin(ctx)
 
-    v1 = _tag(config = None, dump_ids = [])
     actual = _collect([
         _module([
             _tag(
@@ -1137,11 +1136,8 @@ def _collect_builds_slices_in_order_test(ctx):
                 registries = Label("@@//:registries.json"),
                 make_files_read_only = True,
             ),
-            v1,
             _tag(dir = "swift/linux", config = Label("@@//config:linux"), is_dev = True),
         ]),
-        # A non-root module's v1 tag is not a slice.
-        _module([v1], is_root = False),
     ])
     asserts.equals(env, None, actual.error)
     asserts.equals(
@@ -1168,8 +1164,8 @@ collect_builds_slices_in_order_test = unittest.make(
 def _collect_keeps_bootstrap_slice_test(ctx):
     env = unittest.begin(ctx)
 
-    # `init` writes `config` with empty manifest dicts. That is a v2 slice
-    # with no cache yet, not a v1 tag.
+    # `init` writes `config` with empty manifest dicts. That is a slice with
+    # no cache yet.
     actual = _collect([_module([_tag(dump_ids = [])])])
     asserts.equals(env, None, actual.error)
     asserts.equals(env, ["swift/macos"], [s.dir for s in actual.result])
@@ -1181,16 +1177,8 @@ collect_keeps_bootstrap_slice_test = unittest.make(
     _collect_keeps_bootstrap_slice_test,
 )
 
-def _collect_requires_config_test(ctx):
+def _collect_leaves_inconsistent_manifests_test(ctx):
     env = unittest.begin(ctx)
-
-    actual = _collect([_module([_tag(config = None)])])
-    asserts.equals(
-        env,
-        "from_package `@@//:Package.swift` (slice `swift/macos`): `config` " +
-        "is required when `config` or `dump_manifests` is set",
-        actual.error,
-    )
 
     # Inconsistent manifest lists are left to `evaluate`, which marks the
     # slice stale.
@@ -1200,7 +1188,9 @@ def _collect_requires_config_test(ctx):
 
     return unittest.end(env)
 
-collect_requires_config_test = unittest.make(_collect_requires_config_test)
+collect_leaves_inconsistent_manifests_test = unittest.make(
+    _collect_leaves_inconsistent_manifests_test,
+)
 
 def _collect_rejects_duplicate_root_configs_test(ctx):
     env = unittest.begin(ctx)
@@ -1220,7 +1210,7 @@ collect_rejects_duplicate_root_configs_test = unittest.make(
     _collect_rejects_duplicate_root_configs_test,
 )
 
-def _non_root_v2_tag_fails_test(ctx):
+def _non_root_tag_fails_test(ctx):
     env = unittest.begin(ctx)
 
     actual = _collect([
@@ -1229,19 +1219,19 @@ def _non_root_v2_tag_fails_test(ctx):
     ])
     asserts.equals(
         env,
-        "v2 `from_package` slices are only supported in the root module " +
+        "`from_package` slices are only supported in the root module " +
         "for now (module `some_dep`); see " +
         "https://github.com/cgrindel/rules_swift_package_manager/issues/2641",
         actual.error,
     )
 
-    # A bootstrap tag (`config` with empty manifest lists) counts as v2.
+    # A bootstrap tag (`config` with empty manifest lists) fails too.
     actual = _collect([_module([_tag(dump_ids = [])], is_root = False)])
     asserts.true(env, actual.error != None and "some_dep" in actual.error)
 
     return unittest.end(env)
 
-non_root_v2_tag_fails_test = unittest.make(_non_root_v2_tag_fails_test)
+non_root_tag_fails_test = unittest.make(_non_root_tag_fails_test)
 
 def _flag_slice(dir, netrc = None, registries = None):
     return struct(dir = dir, netrc = netrc, registries = registries)
@@ -1344,7 +1334,7 @@ def slice_declarations_test_suite():
         bazel_workspace_root_test,
         collect_builds_slices_in_order_test,
         collect_keeps_bootstrap_slice_test,
-        collect_requires_config_test,
+        collect_leaves_inconsistent_manifests_test,
         collect_rejects_duplicate_root_configs_test,
         identical_declares_one_repo_test,
         two_groups_declare_hidden_repos_and_aliases_test,
@@ -1352,11 +1342,11 @@ def slice_declarations_test_suite():
         swift_package_declared_once_for_two_root_slices_test,
         tool_flags_carry_from_package_labels_test,
         bootstrap_slice_patches_reach_tool_test,
-        non_root_v2_tag_fails_test,
+        non_root_tag_fails_test,
         fresh_slice_missing_identity_gets_missing_message_test,
         direct_deps_split_dev_test,
         identical_requires_same_swift_version_test,
         identical_ignores_swift_patch_version_test,
-        v2_passes_netrc_and_read_only_test,
+        passes_netrc_and_read_only_test,
         tool_flag_labels_error_test,
     )

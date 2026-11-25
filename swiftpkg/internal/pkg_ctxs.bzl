@@ -17,40 +17,44 @@ _MINIMUM_OS_VERSIONS_FILE = "minimum_os_versions.json"
 def _read(
         repository_ctx,
         repo_dir,
-        env,
-        cached_json_directory,
+        dump_manifest,
+        desc_manifest,
         resolved_pkg_map = None,
-        registries_directory = None,
-        replace_scm_with_registry = False,
         target_deps = {},
         module_aliases = {},
         dep_module_aliases = "",
         bazel_target_mods = "",
         system_sdk_deps = False,
         binary_target_deps = False,
-        dump_manifest = None,
-        desc_manifest = None,
         source_directory = None):
-    if dump_manifest != None and desc_manifest != None:
-        # v2: the manifests come from the checked-in cache.
-        pkg_info = pkginfos.new_from_manifests(
-            repository_ctx,
-            directory = repo_dir,
-            dump_manifest = dump_manifest,
-            desc_manifest = desc_manifest,
-            resolved_pkg_map = resolved_pkg_map,
-            source_directory = source_directory,
-        )
-    else:
-        pkg_info = pkginfos.get(
-            repository_ctx = repository_ctx,
-            directory = repo_dir,
-            env = env,
-            cached_json_directory = cached_json_directory,
-            resolved_pkg_map = resolved_pkg_map,
-            registries_directory = registries_directory,
-            replace_scm_with_registry = replace_scm_with_registry,
-        )
+    """Reads the package from the slice's cached manifests.
+
+    Args:
+        repository_ctx: A `repository_ctx`.
+        repo_dir: The repository directory as a `string`.
+        dump_manifest: The decoded cached `dump.json` as a `dict`.
+        desc_manifest: The decoded cached `desc.json` as a `dict`.
+        resolved_pkg_map: Optional. The decoded `Package.resolved`.
+        target_deps: The `configure_package` `target_deps`.
+        module_aliases: The package's SE-0339 module aliases.
+        dep_module_aliases: The JSON of all aliases by identity, or `""`.
+        bazel_target_mods: The encoded target modifications.
+        system_sdk_deps: The effective SDK dependency inference setting.
+        binary_target_deps: The effective binary-target inference setting.
+        source_directory: Optional. The package's original directory;
+            relative local dependency paths are resolved against it.
+
+    Returns:
+        A `struct` as returned by `pkg_ctxs.new`.
+    """
+    pkg_info = pkginfos.new_from_manifests(
+        repository_ctx,
+        directory = repo_dir,
+        dump_manifest = dump_manifest,
+        desc_manifest = desc_manifest,
+        resolved_pkg_map = resolved_pkg_map,
+        source_directory = source_directory,
+    )
     pkg_ctx = _new(
         pkg_info = pkg_info,
         repo_name = repository_utils.package_name(repository_ctx),

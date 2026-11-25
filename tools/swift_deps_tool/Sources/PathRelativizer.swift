@@ -4,8 +4,7 @@ import Foundation
 public enum PathRelativizer {
   /// Two textual passes over `json`:
   /// 1. `<packageRoot>/` becomes `./` and `<packageRoot>"` becomes `./"`. The trailing `/` or `"`
-  ///    keeps `/w/pkg` from matching `/w/pkgOther`. Mirrors `_replace_working_directory` in
-  ///    `swiftpkg/internal/repository_utils.bzl`.
+  ///    keeps `/w/pkg` from matching `/w/pkgOther`.
   /// 2. Every remaining string value that is `<workspaceRoot>` or starts with `<workspaceRoot>/`
   ///    becomes the path from `packageRoot` to it, with `..` segments (for example
   ///    `../MyAmazingModule` for a sibling package).

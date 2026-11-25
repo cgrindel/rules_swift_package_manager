@@ -1,7 +1,6 @@
 """Implementation for `swift_package`."""
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
-load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@bazel_tools//tools/build_defs/repo:git_worker.bzl", "git_repo")
 load(
     "@bazel_tools//tools/build_defs/repo:utils.bzl",
@@ -13,8 +12,6 @@ load(":repo_rules.bzl", "repo_rules")
 
 # The implementation of this repository rule is heavily influenced by the
 # implementation for git_repository.
-
-# MARK: - Environment Variables
 
 def _clone_or_update_repo(repository_ctx, directory):
     # Validate that exactly one of commit, tag, or branch is provided
@@ -51,14 +48,8 @@ def _swift_package_impl(repository_ctx):
     attr = repository_ctx.attr
     directory = str(repository_ctx.path("."))
 
-    # v2 reads the cached manifests and never runs Swift Package Manager.
-    v2_manifests = repo_rules.read_v2_manifests(repository_ctx)
-    if v2_manifests:
-        env = {}
-    else:
-        env = repo_rules.get_exec_env(repository_ctx)
-        repo_rules.check_spm_version(repository_ctx, env = env)
-    replace_scm_with_registry = attr.replace_scm_with_registry
+    # Read the slice's cached manifests; Swift Package Manager never runs.
+    manifests = repo_rules.read_manifests(repository_ctx)
 
     # Download the repo
     update = _clone_or_update_repo(repository_ctx, directory)
@@ -70,51 +61,28 @@ def _swift_package_impl(repository_ctx):
     repo_rules.remove_bazel_files(repository_ctx, directory)
 
     # Remove any `.swift-version` file so that Swift toolchain proxies do not
-    # require a specific Swift version when running SPM commands.
+    # pick up a version the package pins.
     repo_rules.remove_swift_version_file(repository_ctx, directory)
 
     # Generate the WORKSPACE file
     repo_rules.write_workspace_file(repository_ctx, directory)
 
-    # If using Swift Package registries we must set any requested
-    # flags and the config path for the registries JSON file.
-    # NOTE: SPM does not have a flag for setting the exact file path
-    # for the registry, instead we must use the parent directory as the
-    # config path and SPM finds the registry configuration file there.
-    if attr.registries:
-        registries_directory = str(repository_ctx.path(attr.registries).dirname)
-    else:
-        registries_directory = None
-
     # Generate the build file
-    cached_json_directory = None
-    if not v2_manifests and repository_ctx.attr.cached_json_directory:
-        cached_json_directory = paths.join(
-            str(repository_ctx.workspace_root),
-            repository_ctx.attr.cached_json_directory,
-        )
-
     pkg_ctx = pkg_ctxs.read(
         repository_ctx,
         directory,
-        env,
-        cached_json_directory,
-        registries_directory = registries_directory,
-        replace_scm_with_registry = replace_scm_with_registry,
-        target_deps = repository_ctx.attr.target_deps,
-        system_sdk_deps = repository_ctx.attr.system_sdk_deps,
-        binary_target_deps = repository_ctx.attr.binary_target_deps,
-        module_aliases = repository_ctx.attr.module_aliases,
-        dep_module_aliases = repository_ctx.attr.dep_module_aliases,
-        bazel_target_mods = repository_ctx.attr.bazel_target_mods,
-        dump_manifest = v2_manifests.dump_manifest if v2_manifests else None,
-        desc_manifest = v2_manifests.desc_manifest if v2_manifests else None,
+        dump_manifest = manifests.dump_manifest,
+        desc_manifest = manifests.desc_manifest,
+        target_deps = attr.target_deps,
+        system_sdk_deps = attr.system_sdk_deps,
+        binary_target_deps = attr.binary_target_deps,
+        module_aliases = attr.module_aliases,
+        dep_module_aliases = attr.dep_module_aliases,
+        bazel_target_mods = attr.bazel_target_mods,
     )
 
     repo_rules.download_artifacts(repository_ctx, pkg_ctx)
-
-    if v2_manifests:
-        repo_rules.copy_swift_version(repository_ctx)
+    repo_rules.copy_swift_version(repository_ctx)
 
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
@@ -177,21 +145,11 @@ as `rules_xcodeproj`.\
         default = True,
         doc = "Whether to clone submodules recursively in the repository.",
     ),
-    "registries": attr.label(
-        default = None,
-        doc = "The registries JSON file for the package if using " +
-              "Swift Package Registries.",
-    ),
     "remote": attr.string(
         mandatory = True,
         doc = """\
 The version control location from where the repository should be downloaded.\
 """,
-    ),
-    "replace_scm_with_registry": attr.bool(
-        default = False,
-        doc = "Whether to replace SCM references with registry references." +
-              " Only used if `registries` is provided.",
     ),
     "shallow_since": attr.string(
         default = "",
@@ -216,7 +174,7 @@ PATCH_ATTRS = {
     "build_file": attr.label(
         doc = """\
 When used, the provided BUILD file will be used instead of generating one. \
-In a v2 alias repository, only the targets that this file declares with a \
+In an alias repository, only the targets that this file declares with a \
 literal `name = "..."` get aliases; names that a macro computes are not seen.\
 """,
     ),
@@ -272,11 +230,9 @@ _ALL_ATTRS = dicts.add(
     PATCH_ATTRS,
     TOOL_ATTRS,
     _GIT_ATTRS,
-    repo_rules.env_attrs,
     repo_rules.swift_attrs,
-    repo_rules.v2_attrs,
+    repo_rules.slice_attrs,
     {
-        "cached_json_directory": attr.string(),
         "netrc": attr.label(
             default = None,
             doc = "A `.netrc` file for authentication when downloading binary artifacts.",

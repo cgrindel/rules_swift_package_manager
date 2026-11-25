@@ -39,95 +39,6 @@ def _copy_test(ctx):
 
 copy_test = unittest.make(_copy_test)
 
-def _replace_working_directory_test(ctx):
-    env = unittest.begin(ctx)
-
-    tests = [
-        struct(
-            msg = "simple replacement",
-            json_str = """\
-{"path": "/path/to/MyApp/Sources/main.swift"}\
-""",
-            working_directory = "/path/to/MyApp",
-            expected = """\
-{"path": "./Sources/main.swift"}\
-""",
-        ),
-        struct(
-            msg = """\
-prefix-safe: does not corrupt paths sharing a prefix (GH-2139)\
-""",
-            json_str = """\
-{
-  "path": "/path/to/LocalPkg/Sources/main.swift",
-  "dep": "/path/to/LocalPkgUtils/Sources/lib.swift"
-}\
-""",
-            working_directory = "/path/to/LocalPkg",
-            expected = """\
-{
-  "path": "./Sources/main.swift",
-  "dep": "/path/to/LocalPkgUtils/Sources/lib.swift"
-}\
-""",
-        ),
-        struct(
-            msg = "multiple occurrences replaced",
-            json_str = """\
-{"src": "/work/dir/a.swift", "test": "/work/dir/b.swift"}\
-""",
-            working_directory = "/work/dir",
-            expected = """\
-{"src": "./a.swift", "test": "./b.swift"}\
-""",
-        ),
-        struct(
-            msg = "no match leaves string unchanged",
-            json_str = """\
-{"path": "/other/place/file.swift"}\
-""",
-            working_directory = "/path/to/MyApp",
-            expected = """\
-{"path": "/other/place/file.swift"}\
-""",
-        ),
-        struct(
-            msg = """\
-empty working directory leaves string unchanged\
-""",
-            json_str = """\
-{"path": "/path/to/MyApp/file.swift"}\
-""",
-            working_directory = "",
-            expected = """\
-{"path": "/path/to/MyApp/file.swift"}\
-""",
-        ),
-        struct(
-            msg = """\
-working directory without trailing content is replaced\
-""",
-            json_str = """\
-{"path": "/path/to/MyApp"}\
-""",
-            working_directory = "/path/to/MyApp",
-            expected = """\
-{"path": "./"}\
-""",
-        ),
-    ]
-
-    for test in tests:
-        actual = repository_utils.replace_working_directory(
-            test.json_str,
-            test.working_directory,
-        )
-        asserts.equals(env, test.expected, actual, test.msg)
-
-    return unittest.end(env)
-
-replace_working_directory_test = unittest.make(_replace_working_directory_test)
-
 def _relativize_repo_path_test(ctx):
     env = unittest.begin(ctx)
 
@@ -189,55 +100,9 @@ prefix-safe: sibling sharing a prefix is not relativized (GH-2405)\
 
 relativize_repo_path_test = unittest.make(_relativize_repo_path_test)
 
-def _spm_ctx(os_name, stdout):
-    calls = []
-
-    # buildifier: disable=unused-variable
-    def _execute(args, environment = {}, working_directory = ""):
-        calls.append(struct(args = args, environment = environment))
-        return struct(return_code = 0, stdout = stdout, stderr = "")
-
-    return calls, struct(os = struct(name = os_name), execute = _execute)
-
-def _exec_spm_command_sdkroot_test(ctx):
-    env = unittest.begin(ctx)
-
-    calls, linux_ctx = _spm_ctx("linux", "")
-    repository_utils.exec_spm_command(linux_ctx, ["swift", "package", "describe"], env = {"SDKROOT": "/sdk"})
-    asserts.equals(env, "", calls[0].environment["SDKROOT"], "SDKROOT is cleared off Windows")
-
-    calls, windows_ctx = _spm_ctx("Windows 11", "")
-    repository_utils.exec_spm_command(windows_ctx, ["swift", "package", "describe"], env = {"SDKROOT": "C:\\sdk"})
-    asserts.equals(env, "C:\\sdk", calls[0].environment["SDKROOT"], "SDKROOT is kept on Windows")
-    asserts.equals(env, ["swift", "package", "describe"], calls[0].args)
-
-    return unittest.end(env)
-
-exec_spm_command_sdkroot_test = unittest.make(_exec_spm_command_sdkroot_test)
-
-def _parsed_json_windows_paths_test(ctx):
-    env = unittest.begin(ctx)
-
-    stdout = """{"path": "C:\\\\pkg\\\\Sources\\\\Foo"}"""
-
-    _, windows_ctx = _spm_ctx("windows 11", stdout)
-    parsed = repository_utils.parsed_json_from_spm_command(windows_ctx, ["swift", "package", "describe"])
-    asserts.equals(env, "C:/pkg/Sources/Foo", parsed["path"], "backslashes become slashes on Windows")
-
-    _, linux_ctx = _spm_ctx("linux", stdout)
-    parsed = repository_utils.parsed_json_from_spm_command(linux_ctx, ["swift", "package", "describe"])
-    asserts.equals(env, "C:\\pkg\\Sources\\Foo", parsed["path"], "left alone elsewhere")
-
-    return unittest.end(env)
-
-parsed_json_windows_paths_test = unittest.make(_parsed_json_windows_paths_test)
-
 def repository_utils_test_suite():
     return unittest.suite(
         "repository_utils_tests",
         copy_test,
-        exec_spm_command_sdkroot_test,
-        parsed_json_windows_paths_test,
         relativize_repo_path_test,
-        replace_working_directory_test,
     )
