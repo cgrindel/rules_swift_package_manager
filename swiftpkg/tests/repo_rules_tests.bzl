@@ -130,6 +130,7 @@ load("@rules_swift//swift:swift.bzl", "swift_library")
 swift_library(
     name = "Foo",
     srcs = ["Foo.swift"],
+    module_name = "NotATarget",
 )
 
 alias(

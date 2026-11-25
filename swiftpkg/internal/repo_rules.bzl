@@ -388,7 +388,8 @@ _NAME_PREFIX = 'name = "'
 def _declared_names(content):
     """Collects the target names that a BUILD file declares literally.
 
-    Every `name = "<x>"` is a name. Names that a macro computes are not seen.
+    Every `name = "<x>"` is a name, unless a longer identifier ends in `name`
+    (e.g., `module_name = "<x>"`). Names that a macro computes are not seen.
 
     Args:
         content: The BUILD file content as a `string`.
@@ -397,7 +398,13 @@ def _declared_names(content):
         A sorted `list` of unique names.
     """
     names = {}
-    for chunk in content.split(_NAME_PREFIX)[1:]:
+    chunks = content.split(_NAME_PREFIX)
+    for i in range(1, len(chunks)):
+        # Only accept `name` as a standalone attribute, not a suffix.
+        before = chunks[i - 1]
+        if before and before[-1] not in " \t\r\n(,":
+            continue
+        chunk = chunks[i]
         end = chunk.find('"')
         if end > 0:
             names[chunk[:end]] = None

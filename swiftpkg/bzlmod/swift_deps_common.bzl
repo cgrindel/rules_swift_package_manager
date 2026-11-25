@@ -229,19 +229,23 @@ def _mixed_modes_error(modules):
         `None` when every tag is v1 or every tag is v2; otherwise, an error
         `string`.
     """
-    has_v1 = False
-    has_v2 = False
+    v1_mods = []
+    v2_mods = []
     for mod in modules:
         for tag in mod.tags.from_package:
             if slices.is_v2_tag(tag):
-                has_v2 = True
-            else:
-                has_v1 = True
-    if has_v1 and has_v2:
+                if mod.name not in v2_mods:
+                    v2_mods.append(mod.name)
+            elif mod.name not in v1_mods:
+                v1_mods.append(mod.name)
+    if v1_mods and v2_mods:
         return (
-            "mixing v1 and v2 `from_package` tags is not supported; " +
-            "migrate every tag to slices"
-        )
+            "v1 and v2 `from_package` tags cannot be mixed in one build: " +
+            "module(s) {v1} use v1 tags while {v2} use v2 slices. " +
+            "Migrate every module to slices, or keep every module on v1 " +
+            "until non-root slices are supported (see " +
+            "https://github.com/cgrindel/rules_swift_package_manager/issues/2641)."
+        ).format(v1 = ", ".join(v1_mods), v2 = ", ".join(v2_mods))
     return None
 
 swift_deps_common = struct(

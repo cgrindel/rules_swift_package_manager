@@ -707,8 +707,8 @@ def _mixed_modes_error_test(ctx):
 
     def _modules(*tags_per_module):
         return [
-            struct(tags = struct(from_package = tags))
-            for tags in tags_per_module
+            struct(name = "mod{}".format(i), tags = struct(from_package = tags))
+            for i, tags in enumerate(tags_per_module)
         ]
 
     v1 = struct(config = None, dump_manifests = {})
@@ -718,14 +718,25 @@ def _mixed_modes_error_test(ctx):
     asserts.equals(env, None, swift_deps_common.mixed_modes_error(_modules([v1, v1])))
     asserts.equals(env, None, swift_deps_common.mixed_modes_error(_modules([v2, v2_cached])))
     asserts.equals(env, None, swift_deps_common.mixed_modes_error(_modules([])))
-    want = (
-        "mixing v1 and v2 `from_package` tags is not supported; migrate " +
-        "every tag to slices"
+    want_fmt = (
+        "v1 and v2 `from_package` tags cannot be mixed in one build: " +
+        "module(s) {v1} use v1 tags while {v2} use v2 slices. " +
+        "Migrate every module to slices, or keep every module on v1 " +
+        "until non-root slices are supported (see " +
+        "https://github.com/cgrindel/rules_swift_package_manager/issues/2641)."
     )
-    asserts.equals(env, want, swift_deps_common.mixed_modes_error(_modules([v1, v2])))
+    asserts.equals(
+        env,
+        want_fmt.format(v1 = "mod0", v2 = "mod0"),
+        swift_deps_common.mixed_modes_error(_modules([v1, v2])),
+    )
 
     # Across modules too.
-    asserts.equals(env, want, swift_deps_common.mixed_modes_error(_modules([v2], [v1])))
+    asserts.equals(
+        env,
+        want_fmt.format(v1 = "mod1", v2 = "mod0"),
+        swift_deps_common.mixed_modes_error(_modules([v2], [v1])),
+    )
 
     return unittest.end(env)
 

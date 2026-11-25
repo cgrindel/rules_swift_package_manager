@@ -759,7 +759,7 @@ Expected only one `configure_swift_package` tag, but found multiple.\
     direct_dev_dep_repo_names = []
     for mod in module_ctx.modules:
         for from_package in mod.tags.from_package:
-            # v2 tags are collected across all modules below.
+            # v2 tags are handled separately below; v2 is root-module only.
             if slices.is_v2_tag(from_package):
                 continue
             repo_names = declare_pkgs_from_package(
