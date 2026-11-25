@@ -1243,6 +1243,89 @@ def _non_root_v2_tag_fails_test(ctx):
 
 non_root_v2_tag_fails_test = unittest.make(_non_root_v2_tag_fails_test)
 
+def _flag_slice(dir, netrc = None, registries = None):
+    return struct(dir = dir, netrc = netrc, registries = registries)
+
+_NETRC_A = Label("//swift_deps/apple:.netrc")
+_NETRC_B = Label("//swift_deps/linux:.netrc")
+_REGISTRIES_A = Label("//:registries.json")
+_REGISTRIES_B = Label("//:other_registries.json")
+
+def _assert_flag_error(env, actual, attr):
+    asserts.true(env, actual != None, "expected an error for " + attr)
+    if actual == None:
+        return
+    for want in ("`{}`".format(attr), "swift_deps/apple", "swift_deps/linux"):
+        asserts.true(
+            env,
+            want in actual,
+            "expected {} in: {}".format(want, actual),
+        )
+
+def _tool_flag_labels_error_test(ctx):
+    env = unittest.begin(ctx)
+    check = slice_declarations_testing.tool_flag_labels_error
+
+    _assert_flag_error(
+        env,
+        check([
+            _flag_slice("swift_deps/apple", netrc = _NETRC_A),
+            _flag_slice("swift_deps/linux", netrc = _NETRC_B),
+        ]),
+        "netrc",
+    )
+    _assert_flag_error(
+        env,
+        check([
+            _flag_slice("swift_deps/apple", registries = _REGISTRIES_A),
+            _flag_slice("swift_deps/linux", registries = _REGISTRIES_B),
+        ]),
+        "registries",
+    )
+    _assert_flag_error(
+        env,
+        check([
+            _flag_slice("swift_deps/apple"),
+            _flag_slice("swift_deps/linux", netrc = _NETRC_B),
+        ]),
+        "netrc",
+    )
+    _assert_flag_error(
+        env,
+        check([
+            _flag_slice("swift_deps/apple", registries = _REGISTRIES_A),
+            _flag_slice("swift_deps/linux"),
+        ]),
+        "registries",
+    )
+    asserts.equals(
+        env,
+        None,
+        check([
+            _flag_slice(
+                "swift_deps/apple",
+                netrc = _NETRC_A,
+                registries = _REGISTRIES_A,
+            ),
+            _flag_slice(
+                "swift_deps/linux",
+                netrc = _NETRC_A,
+                registries = _REGISTRIES_A,
+            ),
+        ]),
+        "equal labels",
+    )
+    asserts.equals(
+        env,
+        None,
+        check([_flag_slice("swift_deps/apple", netrc = _NETRC_A)]),
+        "single slice",
+    )
+
+    return unittest.end(env)
+
+tool_flag_labels_error_test = unittest.make(_tool_flag_labels_error_test)
+
 def slice_declarations_test_suite():
     return unittest.suite(
         "slice_declarations_tests",
@@ -1275,4 +1358,5 @@ def slice_declarations_test_suite():
         identical_requires_same_swift_version_test,
         identical_ignores_swift_patch_version_test,
         v2_passes_netrc_and_read_only_test,
+        tool_flag_labels_error_test,
     )
