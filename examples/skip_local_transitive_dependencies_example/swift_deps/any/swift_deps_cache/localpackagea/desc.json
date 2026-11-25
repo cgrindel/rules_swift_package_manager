@@ -1,0 +1,50 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "localpackageb",
+      "path" : "../LocalPackageB",
+      "type" : "fileSystem"
+    }
+  ],
+  "manifest_display_name" : "LocalPackageA",
+  "name" : "LocalPackageA",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "LocalPackageA",
+      "targets" : [
+        "LocalPackageA"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "LocalPackageA",
+      "module_type" : "SwiftTarget",
+      "name" : "LocalPackageA",
+      "path" : "Sources/LocalPackageA",
+      "product_dependencies" : [
+        "LocalPackageB"
+      ],
+      "product_memberships" : [
+        "LocalPackageA"
+      ],
+      "sources" : [
+        "LocalPackageA.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.9"
+}

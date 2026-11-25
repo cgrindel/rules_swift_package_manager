@@ -1,0 +1,27 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "localpackagea",
+      "path" : "./LocalPackageA",
+      "type" : "fileSystem"
+    },
+    {
+      "identity" : "localpackageb",
+      "path" : "./LocalPackageB",
+      "type" : "fileSystem"
+    }
+  ],
+  "manifest_display_name" : "skip_local_transitive_dependencies_example",
+  "name" : "skip_local_transitive_dependencies_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}

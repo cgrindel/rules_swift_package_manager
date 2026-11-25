@@ -1,0 +1,58 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "opencombine",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "0.14.0",
+            "upper_bound" : "1.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/OpenCombine/OpenCombine"
+    }
+  ],
+  "manifest_display_name" : "LocalPackageB",
+  "name" : "LocalPackageB",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "LocalPackageB",
+      "targets" : [
+        "LocalPackageB"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "LocalPackageB",
+      "module_type" : "SwiftTarget",
+      "name" : "LocalPackageB",
+      "path" : "Sources/LocalPackageB",
+      "product_dependencies" : [
+        "OpenCombine"
+      ],
+      "product_memberships" : [
+        "LocalPackageB"
+      ],
+      "sources" : [
+        "LocalPackageB.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.9"
+}
