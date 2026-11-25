@@ -19,21 +19,13 @@ bazel_dep(
     repo_name = "build_bazel_rules_swift",
 )
 
-bazel_dep(
-    name = "bazel_skylib_gazelle_plugin",
-    version = "1.9.2",
-    dev_dependency = True,
-)
-bazel_dep(
-    name = "gazelle",
-    version = "0.54.0",
-    dev_dependency = True,
-    repo_name = "bazel_gazelle",
-)
-bazel_dep(
-    name = "swift_gazelle_plugin",
-    version = "0.2.2",
-    dev_dependency = True,
+# TODO(#2641): remove once a rules_swift release includes swift_toolchain_tool.
+# The root module's override in rules_swift_package_manager does not reach
+# this workspace.
+git_override(
+    module_name = "rules_swift",
+    commit = "dd629b0cbb25c017e30fff3c40d0f0fddf653613",
+    remote = "https://github.com/cgrindel/rules_swift.git",
 )
 
 apple_cc_configure = use_extension(
@@ -45,11 +37,6 @@ use_repo(apple_cc_configure, "local_config_apple_cc")
 swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
-)
-swift_deps.from_package(
-    declare_swift_deps_info = True,
-    resolved = "//:Package.resolved",
-    swift = "//:Package.swift",
 )
 
 # Demonstrate a buildozer-style modification of a generated declaration. The
@@ -83,7 +70,6 @@ swift_deps.bazel_target_set_bool(
 )
 use_repo(
     swift_deps,
-    "swift_deps_info",
     "swift_package",
     "swiftpkg_my_local_package",
     "swiftpkg_notthatamazingmodule",
@@ -91,3 +77,9 @@ use_repo(
     "swiftpkg_swift_log",
     "swiftpkg_swiftformat",
 )
+
+# One `from_package` tag per slice. Include them after the root
+# `use_extension` so that `bazel mod tidy` writes `use_repo` here rather than
+# into a slice file.
+include("//swift_deps/apple:inc.MODULE.bazel")
+include("//swift_deps/linux:inc.MODULE.bazel")

@@ -156,11 +156,6 @@ assert_match "Good evening, Jim!" "${output}"
 # Buid and run the SwiftFormat alias
 "${bazel}" run //:swiftformat -- --version
 
-# Generate a resolution log file
-res_log_path="${script_dir}/res_log.yml"
-"${bazel}" run //:update_build_files --  "--resolution_log=${res_log_path}"
-[[ -e "${res_log_path}" ]] || (echo >&2 "Expected to find a resolution log file at ${res_log_path}" && exit 1)
-
 # Local Swift package paths must be stored relative to the workspace root so
 # that a committed MODULE.bazel.lock is portable across machines. See GH-2405.
 lock_file="${script_dir}/MODULE.bazel.lock"
@@ -177,4 +172,24 @@ if grep -q '"path": "/' "${lock_file}"; then
   echo >&2 "ERROR: ${lock_file} contains absolute local Swift package paths."
   grep '"path": "/' "${lock_file}" >&2
   exit 1
+fi
+
+# The checked-in apple slice was cached on macOS. Regenerating it there must
+# not change it, and `bazel mod tidy` must find the root use_repo current.
+# The linux slice comes from the generate_linux_slices workflow.
+if [[ "$(uname)" == "Darwin" ]]; then
+  slice_tmp="$(mktemp -d)"
+  trap 'rm -rf "${slice_tmp}"' EXIT
+  cp -R swift_deps "${slice_tmp}/swift_deps"
+  cp MODULE.bazel "${slice_tmp}/MODULE.bazel"
+
+  "${bazel}" run @swift_package//:cache
+  diff -r --exclude=.build "${slice_tmp}/swift_deps/apple" swift_deps/apple \
+    || (echo >&2 "The cache step changed the checked-in apple slice." && exit 1)
+
+  "${bazel}" mod tidy
+  diff "${slice_tmp}/MODULE.bazel" MODULE.bazel \
+    || (echo >&2 "bazel mod tidy changed MODULE.bazel." && exit 1)
+  diff -r --exclude=.build "${slice_tmp}/swift_deps" swift_deps \
+    || (echo >&2 "bazel mod tidy changed a slice." && exit 1)
 fi
