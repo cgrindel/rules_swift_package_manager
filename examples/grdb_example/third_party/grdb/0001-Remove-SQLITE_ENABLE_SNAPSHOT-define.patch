@@ -1,0 +1,10 @@
+--- a/Package.swift
++++ b/Package.swift
+@@ -14,7 +14,6 @@
+ ]
+ var swiftSettings: [SwiftSetting] = [
+     .define("SQLITE_ENABLE_FTS5"),
+-    .define("SQLITE_ENABLE_SNAPSHOT"),
+     // Not all Linux distributions have support for WAL snapshots.
+     .define("SQLITE_DISABLE_SNAPSHOT", .when(platforms: [.linux])),
+ ]

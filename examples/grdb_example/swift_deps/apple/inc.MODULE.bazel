@@ -1,0 +1,14 @@
+swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
+swift_deps.from_package(
+    config = "@rules_swift_package_manager//config:apple",
+    desc_manifests = {
+        "_main": "//swift_deps/apple:swift_deps_cache/_main/desc.json",
+        "grdb.swift": "//swift_deps/apple:swift_deps_cache/grdb.swift/desc.json",
+    },
+    dump_manifests = {
+        "_main": "//swift_deps/apple:swift_deps_cache/_main/dump.json",
+        "grdb.swift": "//swift_deps/apple:swift_deps_cache/grdb.swift/dump.json",
+    },
+    resolved = "//swift_deps/apple:Package.resolved",
+    swift = "//:Package.swift",
+)
