@@ -1,0 +1,40 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "swift_5_package",
+  "name" : "swift_5_package",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Tools5",
+      "targets" : [
+        "Tools5"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "Tools5",
+      "module_type" : "SwiftTarget",
+      "name" : "Tools5",
+      "path" : "Sources/Tools5",
+      "product_memberships" : [
+        "Tools5"
+      ],
+      "sources" : [
+        "Content.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.9"
+}

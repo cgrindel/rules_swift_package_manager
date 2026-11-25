@@ -1,0 +1,64 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "swift_6_package",
+  "name" : "swift_6_package",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Tools6",
+      "targets" : [
+        "Tools6"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Tools6_Mode5",
+      "targets" : [
+        "Tools6_Mode5"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "Tools6_Mode5",
+      "module_type" : "SwiftTarget",
+      "name" : "Tools6_Mode5",
+      "path" : "Sources/Tools6_Mode5",
+      "product_memberships" : [
+        "Tools6_Mode5"
+      ],
+      "sources" : [
+        "Content.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "Tools6",
+      "module_type" : "SwiftTarget",
+      "name" : "Tools6",
+      "path" : "Sources/Tools6",
+      "product_memberships" : [
+        "Tools6"
+      ],
+      "sources" : [
+        "Content.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}
