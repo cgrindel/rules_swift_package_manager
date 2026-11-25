@@ -54,6 +54,6 @@ while read -r url expected; do
   [[ ${actual} == "${expected}" ]] \
     || fail "${url} is pinned to ${expected} in Package.swift, but" \
       "Package.resolved has '${actual}'. Run" \
-      "'bazel run //:update_swift_packages' in bzlmod/workspace."
+      "'bazel run @swift_package//:resolve' in bzlmod/workspace."
   echo "OK: ${url} ${expected}"
 done <<<"${exact_pins}"
