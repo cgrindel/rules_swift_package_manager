@@ -1,0 +1,90 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "interop-ios-for-google-sdks",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "101.0.0",
+            "upper_bound" : "102.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/interop-ios-for-google-sdks.git"
+    }
+  ],
+  "manifest_display_name" : "RecaptchaEnterprise",
+  "name" : "RecaptchaEnterprise",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "RecaptchaEnterprise",
+      "targets" : [
+        "RecaptchaEnterpriseWrapper"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "RecaptchaEnterpriseWrapper",
+      "module_type" : "ClangTarget",
+      "name" : "RecaptchaEnterpriseWrapper",
+      "path" : "Sources/Public",
+      "product_memberships" : [
+        "RecaptchaEnterprise"
+      ],
+      "sources" : [
+        "RecaptchaEnterprise/dummy.m"
+      ],
+      "target_dependencies" : [
+        "RecaptchaEnterprise"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "RecaptchaEnterpriseSDK",
+      "module_type" : "BinaryTarget",
+      "name" : "RecaptchaEnterpriseSDK",
+      "path" : "remote/archive/recaptcha-sdk-xcframework.xcframework.zip",
+      "product_memberships" : [
+        "RecaptchaEnterprise"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "RecaptchaEnterprise",
+      "module_type" : "SwiftTarget",
+      "name" : "RecaptchaEnterprise",
+      "path" : "Sources/RecaptchaEnterprise",
+      "product_dependencies" : [
+        "RecaptchaInterop"
+      ],
+      "product_memberships" : [
+        "RecaptchaEnterprise"
+      ],
+      "sources" : [
+        "RecaptchaInteropBidings.swift"
+      ],
+      "target_dependencies" : [
+        "RecaptchaEnterpriseSDK"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.5"
+}

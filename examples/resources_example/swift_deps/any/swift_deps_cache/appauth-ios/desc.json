@@ -1,0 +1,235 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "AppAuth",
+  "name" : "AppAuth",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "AppAuthCore",
+      "targets" : [
+        "AppAuthCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AppAuth",
+      "targets" : [
+        "AppAuth"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AppAuthTV",
+      "targets" : [
+        "AppAuthTV"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "AppAuthTVTests",
+      "module_type" : "ClangTarget",
+      "name" : "AppAuthTVTests",
+      "path" : "UnitTests/AppAuthTV",
+      "sources" : [
+        "OIDTVAuthorizationRequestTests.m",
+        "OIDTVAuthorizationResponseTests.m",
+        "OIDTVTokenRequestTests.m"
+      ],
+      "target_dependencies" : [
+        "AppAuthTV"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AppAuthTV",
+      "module_type" : "ClangTarget",
+      "name" : "AppAuthTV",
+      "path" : "Sources/AppAuthTV",
+      "product_memberships" : [
+        "AppAuthTV"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/AppAuthTV/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "OIDTVAuthorizationRequest.m",
+        "OIDTVAuthorizationResponse.m",
+        "OIDTVAuthorizationService.m",
+        "OIDTVServiceConfiguration.m",
+        "OIDTVTokenRequest.m"
+      ],
+      "target_dependencies" : [
+        "AppAuthCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AppAuthCoreTests",
+      "module_type" : "ClangTarget",
+      "name" : "AppAuthCoreTests",
+      "path" : "UnitTests",
+      "sources" : [
+        "OIDAuthStateTests.m",
+        "OIDAuthorizationRequestTests.m",
+        "OIDAuthorizationResponseTests.m",
+        "OIDEndSessionRequestTests.m",
+        "OIDGrantTypesTests.m",
+        "OIDRPProfileCode.m",
+        "OIDRegistrationRequestTests.m",
+        "OIDRegistrationResponseTests.m",
+        "OIDResponseTypesTests.m",
+        "OIDScopesTests.m",
+        "OIDServiceConfigurationTests.m",
+        "OIDServiceDiscoveryTests.m",
+        "OIDTokenRequestTests.m",
+        "OIDTokenResponseTests.m",
+        "OIDTokenUtilitiesTests.m",
+        "OIDURLQueryComponentTests.m",
+        "OIDURLQueryComponentTestsIOS7.m",
+        "OIDURLSessionProviderTests.m"
+      ],
+      "target_dependencies" : [
+        "AppAuthCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AppAuthCoreSwiftTests",
+      "module_type" : "SwiftTarget",
+      "name" : "AppAuthCoreSwiftTests",
+      "path" : "UnitTests",
+      "sources" : [
+        "OIDSwiftTests.swift"
+      ],
+      "target_dependencies" : [
+        "AppAuthCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AppAuthCore",
+      "module_type" : "ClangTarget",
+      "name" : "AppAuthCore",
+      "path" : "Sources/AppAuthCore",
+      "product_memberships" : [
+        "AppAuthCore",
+        "AppAuth",
+        "AppAuthTV"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/AppAuthCore/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "OIDAuthState.m",
+        "OIDAuthorizationRequest.m",
+        "OIDAuthorizationResponse.m",
+        "OIDAuthorizationService.m",
+        "OIDClientMetadataParameters.m",
+        "OIDEndSessionRequest.m",
+        "OIDEndSessionResponse.m",
+        "OIDError.m",
+        "OIDErrorUtilities.m",
+        "OIDFieldMapping.m",
+        "OIDGrantTypes.m",
+        "OIDIDToken.m",
+        "OIDRegistrationRequest.m",
+        "OIDRegistrationResponse.m",
+        "OIDResponseTypes.m",
+        "OIDScopeUtilities.m",
+        "OIDScopes.m",
+        "OIDServiceConfiguration.m",
+        "OIDServiceDiscovery.m",
+        "OIDTokenRequest.m",
+        "OIDTokenResponse.m",
+        "OIDTokenUtilities.m",
+        "OIDURLQueryComponent.m",
+        "OIDURLSessionProvider.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AppAuth",
+      "module_type" : "ClangTarget",
+      "name" : "AppAuth",
+      "path" : "Sources/AppAuth",
+      "product_memberships" : [
+        "AppAuth"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/AppAuth/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "iOS/OIDAuthState+IOS.m",
+        "iOS/OIDAuthorizationService+IOS.m",
+        "iOS/OIDExternalUserAgentCatalyst.m",
+        "iOS/OIDExternalUserAgentIOS.m",
+        "iOS/OIDExternalUserAgentIOSCustomBrowser.m",
+        "macOS/LoopbackHTTPServer/OIDLoopbackHTTPServer.m",
+        "macOS/OIDAuthState+Mac.m",
+        "macOS/OIDAuthorizationService+Mac.m",
+        "macOS/OIDExternalUserAgentMac.m",
+        "macOS/OIDRedirectHTTPHandler.m"
+      ],
+      "target_dependencies" : [
+        "AppAuthCore"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.7"
+}

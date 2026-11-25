@@ -1,0 +1,150 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "interop-ios-for-google-sdks",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/interop-ios-for-google-sdks.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "101.0.0",
+                "upperBound" : "102.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "RecaptchaEnterprise",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "15.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "RecaptchaEnterprise",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "RecaptchaEnterpriseWrapper"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "checksum" : "a9d052abdce0a50b3dfcc1d6ddab28719bd5091d7961febf699e9a9eb29fc55b",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "RecaptchaEnterpriseSDK",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://dl.google.com/recaptchaenterprise/v18.9.1/RecaptchaEnterpriseSDK_iOS_xcframework/recaptcha-sdk-xcframework.xcframework.zip"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "RecaptchaEnterpriseSDK",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "RecaptchaInterop",
+            "interop-ios-for-google-sdks",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "RecaptchaEnterprise",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "RecaptchaEnterprise",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "RecaptchaEnterpriseWrapper",
+      "packageAccess" : false,
+      "path" : "Sources/Public",
+      "publicHeadersPath" : ".",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.5.0"
+  },
+  "traits" : [
+
+  ]
+}

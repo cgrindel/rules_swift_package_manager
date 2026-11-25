@@ -1,0 +1,51 @@
+{
+  "default_localization" : "en",
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "implicit_resource_localization",
+  "name" : "implicit_resource_localization",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "implicit_resource_localization",
+      "targets" : [
+        "implicit_resource_localization"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "implicit_resource_localization",
+      "module_type" : "SwiftTarget",
+      "name" : "implicit_resource_localization",
+      "path" : "Sources",
+      "product_memberships" : [
+        "implicit_resource_localization"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/Resouces/Base.lproj/Storyboard.storyboard",
+          "rule" : {
+            "process" : {
+              "localization" : "Base"
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Stub.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.1"
+}

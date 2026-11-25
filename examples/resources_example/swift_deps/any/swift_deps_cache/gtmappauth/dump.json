@@ -1,0 +1,270 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "gtm-session-fetcher",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/gtm-session-fetcher.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "3.3.0",
+                "upperBound" : "6.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "appauth-ios",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/openid/AppAuth-iOS.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "3.0.0",
+                "upperBound" : "4.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "GTMAppAuth",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GTMAppAuth",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GTMAppAuth"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "GTMSessionFetcherCore",
+            "gtm-session-fetcher",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AppAuthCore",
+            "AppAuth-iOS",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GTMAppAuth",
+      "packageAccess" : false,
+      "path" : "GTMAppAuth/Sources",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "Security"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "AppAuthCore",
+            "AppAuth-iOS",
+            null,
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GTMAppAuth",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TestHelpers",
+      "packageAccess" : false,
+      "path" : "GTMAppAuth/Tests/Helpers",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GTMAppAuth",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GTMAppAuthTests",
+      "packageAccess" : false,
+      "path" : "GTMAppAuth/Tests/Unit",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "AppAuthCore",
+            "AppAuth-iOS",
+            null,
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GTMAppAuth",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "swift-objc-interop-tests",
+      "packageAccess" : false,
+      "path" : "GTMAppAuth/Tests/ObjCIntegration",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.7.0"
+  },
+  "traits" : [
+
+  ]
+}

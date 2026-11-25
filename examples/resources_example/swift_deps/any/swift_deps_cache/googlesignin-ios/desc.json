@@ -1,0 +1,613 @@
+{
+  "default_localization" : "en",
+  "dependencies" : [
+    {
+      "identity" : "appauth-ios",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "3.0.0",
+            "upper_bound" : "4.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/openid/AppAuth-iOS.git"
+    },
+    {
+      "identity" : "app-check",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "11.0.0",
+            "upper_bound" : "13.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/app-check.git"
+    },
+    {
+      "identity" : "gtmappauth",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "6.0.0",
+            "upper_bound" : "7.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/GTMAppAuth.git"
+    },
+    {
+      "identity" : "gtm-session-fetcher",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "3.3.0",
+            "upper_bound" : "6.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/gtm-session-fetcher.git"
+    },
+    {
+      "identity" : "ocmock",
+      "requirement" : {
+        "revision" : [
+          "7291762d3551c5c7e31c49cce40a0e391a52e889"
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/firebase/ocmock.git"
+    },
+    {
+      "identity" : "googleutilities",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "8.0.0",
+            "upper_bound" : "9.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/GoogleUtilities.git"
+    }
+  ],
+  "manifest_display_name" : "GoogleSignIn",
+  "name" : "GoogleSignIn",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GoogleSignIn",
+      "targets" : [
+        "GoogleSignIn"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GoogleSignInSwift",
+      "targets" : [
+        "GoogleSignInSwift"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "GoogleSignInSwift_UnitTests",
+      "module_type" : "SwiftTarget",
+      "name" : "GoogleSignInSwift-UnitTests",
+      "path" : "GoogleSignInSwift/Tests/Unit",
+      "sources" : [
+        "GoogleSignInButtonExtensionsTests.swift",
+        "GoogleSignInButtonStylingTests.swift"
+      ],
+      "target_dependencies" : [
+        "GoogleSignInSwift"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GoogleSignInSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "GoogleSignInSwift",
+      "path" : "GoogleSignInSwift/Sources",
+      "product_memberships" : [
+        "GoogleSignInSwift"
+      ],
+      "resources" : [
+        {
+          "path" : "./GoogleSignInSwift/Sources/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "GoogleSignInButton.swift",
+        "GoogleSignInButtonBundleExtensions.swift",
+        "GoogleSignInButtonStrings.swift",
+        "GoogleSignInButtonStyling.swift",
+        "GoogleSignInButtonViewModel.swift"
+      ],
+      "target_dependencies" : [
+        "GoogleSignIn"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GoogleSignIn_UnitTests",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleSignIn-UnitTests",
+      "path" : "GoogleSignIn/Tests/Unit",
+      "product_dependencies" : [
+        "OCMock",
+        "AppAuth",
+        "AppCheckCore",
+        "GTMAppAuth",
+        "GTMSessionFetcherCore",
+        "GULMethodSwizzler",
+        "GULSwizzlerTestHelpers"
+      ],
+      "sources" : [
+        "GIDAppCheckTest.m",
+        "GIDAuthStateMigrationTest.m",
+        "GIDClaimTest.m",
+        "GIDClaimsInternalOptionsTest.m",
+        "GIDConfiguration+Testing.m",
+        "GIDConfigurationTest.m",
+        "GIDEMMErrorHandlerTest.m",
+        "GIDEMMSupportTest.m",
+        "GIDFailingOIDAuthState.m",
+        "GIDFakeFetcher.m",
+        "GIDFakeFetcherService.m",
+        "GIDFakeMainBundle.m",
+        "GIDGoogleUser+Testing.m",
+        "GIDGoogleUserTest.m",
+        "GIDMDMPasscodeStateTests.m",
+        "GIDProfileData+Testing.m",
+        "GIDProfileDataTest.m",
+        "GIDScopesTest.m",
+        "GIDSignInButtonTest.m",
+        "GIDSignInCallbackSchemesTest.m",
+        "GIDSignInInternalOptionsTest.m",
+        "GIDSignInPreferencesTest.m",
+        "GIDSignInTest.m",
+        "GIDTokenTest.m",
+        "OIDAuthState+Testing.m",
+        "OIDAuthorizationRequest+Testing.m",
+        "OIDAuthorizationResponse+Testing.m",
+        "OIDServiceConfiguration+Testing.m",
+        "OIDTokenRequest+Testing.m",
+        "OIDTokenResponse+Testing.m",
+        "UIAlertAction+Testing.m"
+      ],
+      "target_dependencies" : [
+        "GoogleSignIn"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GoogleSignIn",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleSignIn",
+      "path" : "GoogleSignIn/Sources",
+      "product_dependencies" : [
+        "AppAuth",
+        "AppAuthCore",
+        "AppCheckCore",
+        "GTMAppAuth",
+        "GTMSessionFetcherCore"
+      ],
+      "product_memberships" : [
+        "GoogleSignIn",
+        "GoogleSignInSwift"
+      ],
+      "resources" : [
+        {
+          "path" : "./GoogleSignIn/Sources/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Resources/Roboto-Bold.ttf",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Resources/google.png",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Resources/google@2x.png",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Resources/google@3x.png",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/ar.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "ar"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/ca.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "ca"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/cs.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "cs"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/da.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "da"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/de.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "de"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/el.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "el"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/en.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "en"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/en_GB.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "en_gb"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/es.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "es"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/es_MX.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "es_mx"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/fi.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "fi"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/fr.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "fr"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/fr_CA.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "fr_ca"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/he.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "he"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/hi.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "hi"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/hr.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "hr"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/hu.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "hu"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/id.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "id"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/it.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "it"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/ja.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "ja"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/ko.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "ko"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/ms.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "ms"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/nb.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "nb"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/nl.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "nl"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/pl.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "pl"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/pt.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "pt"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/pt_BR.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "pt_br"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/pt_PT.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "pt_pt"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/ro.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "ro"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/ru.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "ru"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/sk.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "sk"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/sv.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "sv"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/th.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "th"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/tr.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "tr"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/uk.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "uk"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/vi.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "vi"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/zh_CN.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "zh_cn"
+            }
+          }
+        },
+        {
+          "path" : "./GoogleSignIn/Sources/Strings/zh_TW.lproj/GoogleSignIn.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "zh_tw"
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "GIDAppCheck/Implementations/Fake/GIDAppCheckProviderFake.m",
+        "GIDAppCheck/Implementations/GIDAppCheck.m",
+        "GIDAppCheck/UI/GIDActivityIndicatorViewController.m",
+        "GIDAuthStateMigration/Fake/GIDFakeAuthStateMigration.m",
+        "GIDAuthStateMigration/Implementation/GIDAuthStateMigration.m",
+        "GIDAuthentication.m",
+        "GIDBundle/Fake/GIDFakeBundle.m",
+        "GIDBundle/Implementation/NSBundle+GIDBundle.m",
+        "GIDCallbackQueue.m",
+        "GIDClaim.m",
+        "GIDClaimsInternalOptions.m",
+        "GIDConfiguration.m",
+        "GIDEMMErrorHandler.m",
+        "GIDEMMSupport.m",
+        "GIDGoogleUser.m",
+        "GIDJSONSerializer/Fake/GIDFakeJSONSerializerImpl.m",
+        "GIDJSONSerializer/Implementation/GIDJSONSerializerImpl.m",
+        "GIDMDMPasscodeCache.m",
+        "GIDMDMPasscodeState.m",
+        "GIDProfileData.m",
+        "GIDScopes.m",
+        "GIDSignIn.m",
+        "GIDSignInButton.m",
+        "GIDSignInCallbackSchemes.m",
+        "GIDSignInInternalOptions.m",
+        "GIDSignInPreferences.m",
+        "GIDSignInResult.m",
+        "GIDSignInStrings.m",
+        "GIDTimedLoader/GIDTimedLoader.m",
+        "GIDToken.m",
+        "NSBundle+GID3PAdditions.m"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}

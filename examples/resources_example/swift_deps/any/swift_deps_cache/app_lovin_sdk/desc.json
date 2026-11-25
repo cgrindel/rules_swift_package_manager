@@ -1,0 +1,67 @@
+{
+  "default_localization" : "en",
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "AppLovinSDK",
+  "name" : "AppLovinSDK",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "AppLovinSDK",
+      "targets" : [
+        "AppLovinSDKResources"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "AppLovinSDKResources",
+      "module_type" : "ClangTarget",
+      "name" : "AppLovinSDKResources",
+      "path" : "Sources/AppLovinSDKResources",
+      "product_memberships" : [
+        "AppLovinSDK"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/AppLovinSDKResources/AppLovinSDKResources.bundle",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "ALResourceManager.m"
+      ],
+      "target_dependencies" : [
+        "AppLovinSDK"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AppLovinSDK",
+      "module_type" : "BinaryTarget",
+      "name" : "AppLovinSDK",
+      "path" : "remote/archive/AppLovinSDK-12.0.0.xcframework.zip",
+      "product_memberships" : [
+        "AppLovinSDK"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    }
+  ],
+  "tools_version" : "5.3"
+}

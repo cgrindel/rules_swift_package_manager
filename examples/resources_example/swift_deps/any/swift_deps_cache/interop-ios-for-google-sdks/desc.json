@@ -1,0 +1,85 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "InteropForGoogle",
+  "name" : "InteropForGoogle",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "11.0"
+    },
+    {
+      "name" : "maccatalyst",
+      "version" : "13.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "10.13"
+    },
+    {
+      "name" : "tvos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "7.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "RecaptchaInterop",
+      "targets" : [
+        "RecaptchaInterop"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "SwiftImportsTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftImportsTest",
+      "path" : "SwiftPMTests/SwiftImportsTest",
+      "sources" : [
+        "SwiftImportsTest.swift"
+      ],
+      "target_dependencies" : [
+        "RecaptchaInterop"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "RecaptchaInterop",
+      "module_type" : "ClangTarget",
+      "name" : "RecaptchaInterop",
+      "path" : "RecaptchaEnterprise/RecaptchaInterop",
+      "product_memberships" : [
+        "RecaptchaInterop"
+      ],
+      "sources" : [
+        "placeholder.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "ObjCImportsTest",
+      "module_type" : "ClangTarget",
+      "name" : "ObjCImportsTest",
+      "path" : "SwiftPMTests/ObjCImportsTest",
+      "sources" : [
+        "ObjCImportsTest.m"
+      ],
+      "target_dependencies" : [
+        "RecaptchaInterop"
+      ],
+      "type" : "test"
+    }
+  ],
+  "tools_version" : "5.5"
+}

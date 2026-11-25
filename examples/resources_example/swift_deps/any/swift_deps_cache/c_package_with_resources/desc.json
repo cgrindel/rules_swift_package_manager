@@ -1,0 +1,50 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "c-package-with-resources",
+  "name" : "c-package-with-resources",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "CLibWithResources",
+      "targets" : [
+        "CLibWithResources"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "CLibWithResources",
+      "module_type" : "ClangTarget",
+      "name" : "CLibWithResources",
+      "path" : ".",
+      "product_memberships" : [
+        "CLibWithResources"
+      ],
+      "resources" : [
+        {
+          "path" : "./spm_resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "c_lib_with_resources.c"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.3"
+}

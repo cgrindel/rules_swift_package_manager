@@ -1,0 +1,174 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "SDWebImage",
+  "name" : "SDWebImage",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.11"
+    },
+    {
+      "name" : "ios",
+      "version" : "9.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "9.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "2.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "SDWebImage",
+      "targets" : [
+        "SDWebImage"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SDWebImageMapKit",
+      "targets" : [
+        "SDWebImageMapKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "SDWebImageMapKit",
+      "module_type" : "ClangTarget",
+      "name" : "SDWebImageMapKit",
+      "path" : "SDWebImageMapKit",
+      "product_memberships" : [
+        "SDWebImageMapKit"
+      ],
+      "resources" : [
+        {
+          "path" : "./SDWebImageMapKit/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "MapKit/MKAnnotationView+WebCache.m"
+      ],
+      "target_dependencies" : [
+        "SDWebImage"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SDWebImage",
+      "module_type" : "ClangTarget",
+      "name" : "SDWebImage",
+      "path" : "SDWebImage",
+      "product_memberships" : [
+        "SDWebImage",
+        "SDWebImageMapKit"
+      ],
+      "resources" : [
+        {
+          "path" : "./SDWebImage/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Core/NSButton+WebCache.m",
+        "Core/NSData+ImageContentType.m",
+        "Core/NSImage+Compatibility.m",
+        "Core/SDAnimatedImage.m",
+        "Core/SDAnimatedImagePlayer.m",
+        "Core/SDAnimatedImageRep.m",
+        "Core/SDAnimatedImageView+WebCache.m",
+        "Core/SDAnimatedImageView.m",
+        "Core/SDCallbackQueue.m",
+        "Core/SDDiskCache.m",
+        "Core/SDGraphicsImageRenderer.m",
+        "Core/SDImageAPNGCoder.m",
+        "Core/SDImageAWebPCoder.m",
+        "Core/SDImageCache.m",
+        "Core/SDImageCacheConfig.m",
+        "Core/SDImageCacheDefine.m",
+        "Core/SDImageCachesManager.m",
+        "Core/SDImageCoder.m",
+        "Core/SDImageCoderHelper.m",
+        "Core/SDImageCodersManager.m",
+        "Core/SDImageFrame.m",
+        "Core/SDImageGIFCoder.m",
+        "Core/SDImageGraphics.m",
+        "Core/SDImageHEICCoder.m",
+        "Core/SDImageIOAnimatedCoder.m",
+        "Core/SDImageIOCoder.m",
+        "Core/SDImageLoader.m",
+        "Core/SDImageLoadersManager.m",
+        "Core/SDImageTransformer.m",
+        "Core/SDMemoryCache.m",
+        "Core/SDWebImageCacheKeyFilter.m",
+        "Core/SDWebImageCacheSerializer.m",
+        "Core/SDWebImageCompat.m",
+        "Core/SDWebImageDefine.m",
+        "Core/SDWebImageDownloader.m",
+        "Core/SDWebImageDownloaderConfig.m",
+        "Core/SDWebImageDownloaderDecryptor.m",
+        "Core/SDWebImageDownloaderOperation.m",
+        "Core/SDWebImageDownloaderRequestModifier.m",
+        "Core/SDWebImageDownloaderResponseModifier.m",
+        "Core/SDWebImageError.m",
+        "Core/SDWebImageIndicator.m",
+        "Core/SDWebImageManager.m",
+        "Core/SDWebImageOperation.m",
+        "Core/SDWebImageOptionsProcessor.m",
+        "Core/SDWebImagePrefetcher.m",
+        "Core/SDWebImageTransition.m",
+        "Core/UIButton+WebCache.m",
+        "Core/UIImage+ExtendedCacheData.m",
+        "Core/UIImage+ForceDecode.m",
+        "Core/UIImage+GIF.m",
+        "Core/UIImage+MemoryCacheCost.m",
+        "Core/UIImage+Metadata.m",
+        "Core/UIImage+MultiFormat.m",
+        "Core/UIImage+Transform.m",
+        "Core/UIImageView+HighlightedWebCache.m",
+        "Core/UIImageView+WebCache.m",
+        "Core/UIView+WebCache.m",
+        "Core/UIView+WebCacheOperation.m",
+        "Core/UIView+WebCacheState.m",
+        "Private/NSBezierPath+SDRoundedCorners.m",
+        "Private/SDAssociatedObject.m",
+        "Private/SDAsyncBlockOperation.m",
+        "Private/SDDeviceHelper.m",
+        "Private/SDDisplayLink.m",
+        "Private/SDFileAttributeHelper.m",
+        "Private/SDImageAssetManager.m",
+        "Private/SDImageCachesManagerOperation.m",
+        "Private/SDImageFramePool.m",
+        "Private/SDInternalMacros.m",
+        "Private/SDWeakProxy.m",
+        "Private/UIColor+SDHexString.m"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.3"
+}

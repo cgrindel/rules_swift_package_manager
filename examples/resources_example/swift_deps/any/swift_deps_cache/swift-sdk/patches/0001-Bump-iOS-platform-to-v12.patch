@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: JP Simard <jp@jpsim.com>
+Date: Fri, 2 May 2026 00:00:00 +0000
+Subject: [PATCH] Bump iOS platform to v12
+
+The Iterable swift-sdk Package.swift declares iOS 10 but the source
+uses iOS 12+ APIs (e.g. NWPathMonitor). Bump the declared platform to
+match what the source actually requires so it compiles correctly when
+the package's declared minimum is applied as the build's minimum OS.
+---
+ Package.swift | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Package.swift b/Package.swift
+index 0000000..0000000 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -4,7 +4,7 @@ import PackageDescription
+
+ let package = Package(
+     name: "IterableSDK",
+-    platforms: [.iOS(.v10)],
++    platforms: [.iOS(.v12)],
+     products: [
+         // The external product of our package is an importable
+         // library that has the same name as the package itself:

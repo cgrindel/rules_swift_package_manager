@@ -1,0 +1,373 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "googleutilities",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/GoogleUtilities.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "8.1.0",
+                "upperBound" : "9.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "interop-ios-for-google-sdks",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/interop-ios-for-google-sdks.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "101.0.0",
+                "upperBound" : "102.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "AppCheck",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "maccatalyst",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "11.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "8.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "AppCheckCore",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AppCheckCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AppCheckRecaptchaProvider",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AppCheckRecaptchaProvider"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULUserDefaults",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppCheckCore",
+      "packageAccess" : true,
+      "path" : "AppCheckCore/Sources",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../.."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "maccatalyst",
+              "macos",
+              "tvos",
+              "visionos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "DeviceCheck"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppCheckCore",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "RecaptchaInterop",
+            "interop-ios-for-google-sdks",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppCheckRecaptchaProvider",
+      "packageAccess" : true,
+      "path" : "AppCheckRecaptchaProvider/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppCheckCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Unit/Swift",
+        "Unit/ObjC"
+      ],
+      "name" : "AppCheckCoreUnit",
+      "packageAccess" : true,
+      "path" : "AppCheckCore/Tests",
+      "resources" : [
+        {
+          "path" : "Fixture",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../.."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppCheckCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppCheckCoreUnitSwift",
+      "packageAccess" : true,
+      "path" : "AppCheckCore/Tests/Unit/Swift",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../.."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppCheckCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AppCheckRecaptchaProvider",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppCheckCoreUnitObjC",
+      "packageAccess" : true,
+      "path" : "AppCheckCore/Tests/Unit/ObjC",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../.."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../../Sources/Public"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppCheckRecaptchaProvider",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppCheckRecaptchaProviderUnit",
+      "packageAccess" : true,
+      "path" : "AppCheckRecaptchaProvider/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.0.0"
+  },
+  "traits" : [
+
+  ]
+}

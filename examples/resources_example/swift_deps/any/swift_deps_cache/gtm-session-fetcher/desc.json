@@ -1,0 +1,229 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "GTMSessionFetcher",
+  "name" : "GTMSessionFetcher",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "7.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GTMSessionFetcher",
+      "targets" : [
+        "GTMSessionFetcherCore",
+        "GTMSessionFetcherFull"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GTMSessionFetcherCore",
+      "targets" : [
+        "GTMSessionFetcherCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GTMSessionFetcherFull",
+      "targets" : [
+        "GTMSessionFetcherFull"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GTMSessionFetcherLogView",
+      "targets" : [
+        "GTMSessionFetcherLogView"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "swift_test",
+      "module_type" : "SwiftTarget",
+      "name" : "swift-test",
+      "path" : "SwiftPMTests/SwiftImportTest",
+      "sources" : [
+        "ImportTests.swift"
+      ],
+      "target_dependencies" : [
+        "GTMSessionFetcherCore",
+        "GTMSessionFetcherFull",
+        "GTMSessionFetcherLogView"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "objc_import_test",
+      "module_type" : "ClangTarget",
+      "name" : "objc-import-test",
+      "path" : "SwiftPMTests/ObjCImportTest",
+      "sources" : [
+        "HeadersImportTests.m",
+        "ModuleImportTests.m"
+      ],
+      "target_dependencies" : [
+        "GTMSessionFetcherCore",
+        "GTMSessionFetcherFull",
+        "GTMSessionFetcherLogView"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GTMSessionFetcherUserAgentTests",
+      "module_type" : "ClangTarget",
+      "name" : "GTMSessionFetcherUserAgentTests",
+      "path" : "UnitTests",
+      "sources" : [
+        "GTMSessionFetcherUserAgentTest.m"
+      ],
+      "target_dependencies" : [
+        "GTMSessionFetcherCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GTMSessionFetcherLogView",
+      "module_type" : "ClangTarget",
+      "name" : "GTMSessionFetcherLogView",
+      "path" : "Sources/LogView",
+      "product_memberships" : [
+        "GTMSessionFetcherLogView"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/LogView/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "GTMSessionFetcherLogViewController.m"
+      ],
+      "target_dependencies" : [
+        "GTMSessionFetcherCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GTMSessionFetcherFull",
+      "module_type" : "ClangTarget",
+      "name" : "GTMSessionFetcherFull",
+      "path" : "Sources/Full",
+      "product_memberships" : [
+        "GTMSessionFetcher",
+        "GTMSessionFetcherFull"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/Full/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "GTMGatherInputStream.m",
+        "GTMMIMEDocument.m",
+        "GTMReadMonitorInputStream.m"
+      ],
+      "target_dependencies" : [
+        "GTMSessionFetcherCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GTMSessionFetcherCoreTests",
+      "module_type" : "ClangTarget",
+      "name" : "GTMSessionFetcherCoreTests",
+      "path" : "UnitTests",
+      "sources" : [
+        "FetcherNotificationsCounter.m",
+        "GTMGatherInputStreamTest.m",
+        "GTMHTTPServer.m",
+        "GTMMIMEDocumentTest.m",
+        "GTMReadMonitorInputStreamTest.m",
+        "GTMSessionFetcherChunkedUploadTest.m",
+        "GTMSessionFetcherCookieTest.m",
+        "GTMSessionFetcherFetchingTest.m",
+        "GTMSessionFetcherServiceTest.m",
+        "GTMSessionFetcherTestServer.m",
+        "GTMSessionFetcherUtilityTest.m",
+        "SubstituteUIApplication.m"
+      ],
+      "target_dependencies" : [
+        "GTMSessionFetcherFull",
+        "GTMSessionFetcherCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GTMSessionFetcherCore",
+      "module_type" : "ClangTarget",
+      "name" : "GTMSessionFetcherCore",
+      "path" : "Sources/Core",
+      "product_memberships" : [
+        "GTMSessionFetcher",
+        "GTMSessionFetcherCore",
+        "GTMSessionFetcherFull",
+        "GTMSessionFetcherLogView"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/Core/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "GTMSessionFetcher.m",
+        "GTMSessionFetcherLogging.m",
+        "GTMSessionFetcherService.m",
+        "GTMSessionUploadFetcher.m"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.8"
+}
