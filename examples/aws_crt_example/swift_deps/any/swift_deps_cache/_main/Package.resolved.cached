@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "aws-crt-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/awslabs/aws-crt-swift.git",
+      "state" : {
+        "revision" : "bb952f4afde4fb6e8ea8813a641973ba6c2ab9eb",
+        "version" : "0.64.5"
+      }
+    }
+  ],
+  "version" : 2
+}

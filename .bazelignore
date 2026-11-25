@@ -3,3 +3,4 @@ examples/multi_slice/swift_deps/apple/.build
 examples/multi_slice/swift_deps/linux/.build
 examples/pkg_manifest_minimal/swift_deps/apple/.build
 examples/pkg_manifest_minimal/swift_deps/linux/.build
+examples/aws_crt_example/swift_deps/any/.build
