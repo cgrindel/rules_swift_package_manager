@@ -1,0 +1,539 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "nimble",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/Quick/Nimble.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "13.2.0",
+                "upperBound" : "14.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-argument-parser",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-argument-parser.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.3.1",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-algorithms",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-algorithms.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.2.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-fakes",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/Quick/swift-fakes.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "0.0.1",
+                "upperBound" : "1.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "Quick",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "visionos",
+      "version" : "1.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Quick",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Quick"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "quicklint",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "QuickLint"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "DefocusCommandPlugin",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "DefocusCommandPlugin"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    },
+    {
+      "name" : "LintError",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "LintError"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    },
+    {
+      "name" : "LintWarning",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "LintWarning"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    },
+    {
+      "name" : "LintCommandPlugin",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "LintCommandPlugin"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuickLint",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DefocusCommandPlugin",
+      "packageAccess" : true,
+      "pluginCapability" : {
+        "command" : [
+          {
+            "sourceCodeFormatting" : {
+
+            }
+          },
+          [
+            {
+              "writeToPackageDirectory" : {
+                "reason" : "Remove focus from Quick tests"
+              }
+            }
+          ]
+        ]
+      },
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "plugin"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuickLint",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "LintError",
+      "packageAccess" : true,
+      "pluginCapability" : {
+        "buildTool" : null
+      },
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "plugin"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuickLint",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "LintWarning",
+      "packageAccess" : true,
+      "pluginCapability" : {
+        "buildTool" : null
+      },
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "plugin"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuickLint",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "LintCommandPlugin",
+      "packageAccess" : true,
+      "pluginCapability" : {
+        "command" : [
+          {
+            "custom" : {
+              "description" : "Verify no focused tests in Quick tests",
+              "verb" : "quicklint"
+            }
+          },
+          [
+
+          ]
+        ]
+      },
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "plugin"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "ArgumentParser",
+            "swift-argument-parser",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Algorithms",
+            "swift-algorithms",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuickLint",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Quick",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Nimble",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "QuickAfterSuiteTests/AfterSuiteTests+ObjC.m",
+        "QuickFocusedTests/FocusedTests+ObjC.m",
+        "QuickTests/FunctionalTests/ObjC",
+        "QuickTests/Helpers/QCKSpecRunner.h",
+        "QuickTests/Helpers/QCKSpecRunner.m",
+        "QuickTests/Helpers/QuickTestsBridgingHeader.h",
+        "QuickTests/QuickConfigurationTests.m",
+        "QuickFocusedTests/Info.plist",
+        "QuickTests/Info.plist",
+        "QuickAfterSuiteTests/Info.plist"
+      ],
+      "name" : "QuickTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Quick",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuickIssue853RegressionTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuickLint",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Quick",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Nimble",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Fakes",
+            "swift-fakes",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuickLintTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "QuickObjCRuntime",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "QuickObjCRuntime",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "Quick",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.9.0"
+  },
+  "traits" : [
+
+  ]
+}

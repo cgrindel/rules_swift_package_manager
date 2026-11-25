@@ -95,6 +95,20 @@ final class SwiftPMTests: XCTestCase {
     XCTAssertEqual(try String(contentsOf: envFile, encoding: .utf8), runfiles.path + "\n")
   }
 
+  func testRunSetsGitCeilingOnlyWhenGiven() throws {
+    let envFile = root.appendingPathComponent("env.txt")
+    let tool = try fakeTool(
+      "echo \"${GIT_CEILING_DIRECTORIES-unset}\" > '\(envFile.path)'")
+    let swiftPM = try swiftPM(tool: tool)
+
+    try swiftPM.run(["dump-package"], in: root)
+    XCTAssertEqual(try String(contentsOf: envFile, encoding: .utf8), "unset\n")
+
+    let ceiling = root.appendingPathComponent("rspm")
+    try swiftPM.run(["dump-package"], in: root, gitCeiling: ceiling)
+    XCTAssertEqual(try String(contentsOf: envFile, encoding: .utf8), ceiling.path + "\n")
+  }
+
   func testRunFailureReportsCommandAndStderrTail() throws {
     let tool = try fakeTool(
       "i=1; while [ $i -le 25 ]; do echo \"err $i\" >&2; i=$((i+1)); done; exit 1")

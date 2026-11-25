@@ -1,0 +1,488 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-nio",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-nio.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.82.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-atomics",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-atomics.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.2",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "swift-nio-http2",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "NIOHTTP2",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NIOHTTP2"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOHPACK",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NIOHPACK"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOHTTP2",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOCore",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOPosix",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOHTTP1",
+            "swift-nio",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOHTTP2Server",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOHTTP2",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOCore",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOPosix",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOEmbedded",
+            "swift-nio",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOHTTP2PerformanceTester",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOHPACK",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIO",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOCore",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOHTTP1",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOTLS",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOConcurrencyHelpers",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Atomics",
+            "swift-atomics",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOHTTP2",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "NIO",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOCore",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOConcurrencyHelpers",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOHTTP1",
+            "swift-nio",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOHPACK",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOHTTP2",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOConcurrencyHelpers",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOCore",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOEmbedded",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOHTTP1",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOFoundationCompat",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Atomics",
+            "swift-atomics",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOHTTP2Tests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOHPACK",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOCore",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOFoundationCompat",
+            "swift-nio",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOHPACKTests",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Fixtures/large_complex_huffman_b64.txt",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Fixtures/large_huffman_b64.txt",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.1.0"
+  },
+  "traits" : [
+
+  ]
+}

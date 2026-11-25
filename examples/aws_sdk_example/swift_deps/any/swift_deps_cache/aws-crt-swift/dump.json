@@ -1,0 +1,1075 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "aws-crt-swift",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "6.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "AwsCommonRuntimeKit",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AwsCPlatformConfig",
+      "packageAccess" : true,
+      "path" : "aws-common-runtime/config",
+      "publicHeadersPath" : ".",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "config" : "debug",
+            "platformNames" : [
+
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "DEBUG_BUILD"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "INTEL_NO_ITTNOTIFY_API"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_APPSTORE_SAFE"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AwsCPlatformConfig",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "source/android",
+        "AWSCRTAndroidTestRunner",
+        "verification",
+        "include/aws/common/",
+        "scripts/appverifier_ctest.py",
+        "scripts/appverifier_xml.py",
+        "source/linux/system_info.c",
+        "bin/",
+        "tests",
+        "cmake",
+        "CONTRIBUTING.md",
+        "LICENSE",
+        "format-check.py",
+        "NOTICE",
+        "builder.json",
+        "CMakeLists.txt",
+        "README.md",
+        "source/arch/intel",
+        "source/arch/arm",
+        "source/windows",
+        "source/linux"
+      ],
+      "name" : "AwsCCommon",
+      "packageAccess" : true,
+      "path" : "aws-common-runtime/aws-c-common",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "source/external/libcbor"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "config" : "debug",
+            "platformNames" : [
+
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "DEBUG_BUILD"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AwsCCommon",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CODE_OF_CONDUCT.md",
+        "tests",
+        "cmake",
+        "CONTRIBUTING.md",
+        "LICENSE",
+        "format-check.py",
+        "NOTICE",
+        "builder.json",
+        "CMakeLists.txt",
+        "README.md"
+      ],
+      "name" : "AwsCSdkUtils",
+      "packageAccess" : true,
+      "path" : "aws-common-runtime/aws-c-sdkutils",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "config" : "debug",
+            "platformNames" : [
+
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "DEBUG_BUILD"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "INTEL_NO_ITTNOTIFY_API"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_APPSTORE_SAFE"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AwsCCommon",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "bin",
+        "include/aws/cal/private",
+        "source/shared/ed25519.c",
+        "CODE_OF_CONDUCT.md",
+        "ecdsa-fuzz-corpus/windows/p256_sig_corpus.txt",
+        "ecdsa-fuzz-corpus/darwin/p256_sig_corpus.txt",
+        "tests",
+        "cmake",
+        "CONTRIBUTING.md",
+        "LICENSE",
+        "format-check.py",
+        "NOTICE",
+        "builder.json",
+        "CMakeLists.txt",
+        "README.md",
+        "source/windows",
+        "source/unix",
+        "source/shared/lccrypto_common.c"
+      ],
+      "name" : "AwsCCal",
+      "packageAccess" : true,
+      "path" : "aws-common-runtime/aws-c-cal",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "config" : "debug",
+            "platformNames" : [
+
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "DEBUG_BUILD"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "INTEL_NO_ITTNOTIFY_API"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_APPSTORE_SAFE"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AwsCCommon",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCCal",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "docs",
+        "CODE_OF_CONDUCT.md",
+        "codebuild",
+        "PKCS11.md",
+        "source/pkcs11/v2.40",
+        "tests",
+        "cmake",
+        "CONTRIBUTING.md",
+        "LICENSE",
+        "format-check.py",
+        "NOTICE",
+        "builder.json",
+        "CMakeLists.txt",
+        "README.md",
+        "source/windows",
+        "source/linux",
+        "source/s2n"
+      ],
+      "name" : "AwsCIo",
+      "packageAccess" : true,
+      "path" : "aws-common-runtime/aws-c-io",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "config" : "debug",
+            "platformNames" : [
+
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "DEBUG_BUILD"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "INTEL_NO_ITTNOTIFY_API"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_APPSTORE_SAFE"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "__APPLE__"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_ENABLE_DISPATCH_QUEUE"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_USE_SECITEM"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "macos"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_ENABLE_KQUEUE"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AwsCCommon",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "source/huffman_generator/",
+        "CODE_OF_CONDUCT.md",
+        "codebuild",
+        "tests",
+        "cmake",
+        "CONTRIBUTING.md",
+        "LICENSE",
+        "format-check.py",
+        "NOTICE",
+        "builder.json",
+        "CMakeLists.txt",
+        "README.md"
+      ],
+      "name" : "AwsCCompression",
+      "packageAccess" : true,
+      "path" : "aws-common-runtime/aws-c-compression",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "config" : "debug",
+            "platformNames" : [
+
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "DEBUG_BUILD"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "INTEL_NO_ITTNOTIFY_API"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_APPSTORE_SAFE"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AwsCCompression",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCIo",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCCal",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCCommon",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "bin",
+        "integration-testing",
+        "include/aws/http/private",
+        "CODE_OF_CONDUCT.md",
+        "codebuild/linux-integration-tests.yml",
+        "tests",
+        "cmake",
+        "CONTRIBUTING.md",
+        "LICENSE",
+        "format-check.py",
+        "NOTICE",
+        "builder.json",
+        "CMakeLists.txt",
+        "README.md"
+      ],
+      "name" : "AwsCHttp",
+      "packageAccess" : true,
+      "path" : "aws-common-runtime/aws-c-http",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "config" : "debug",
+            "platformNames" : [
+
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "DEBUG_BUILD"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "INTEL_NO_ITTNOTIFY_API"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_APPSTORE_SAFE"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_USE_SECITEM"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AwsCHttp",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCCompression",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCCal",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCIo",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCSdkUtils",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCCommon",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CODE_OF_CONDUCT.md",
+        "tests",
+        "cmake",
+        "CONTRIBUTING.md",
+        "LICENSE",
+        "format-check.py",
+        "NOTICE",
+        "builder.json",
+        "CMakeLists.txt",
+        "README.md"
+      ],
+      "name" : "AwsCAuth",
+      "packageAccess" : true,
+      "path" : "aws-common-runtime/aws-c-auth",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "config" : "debug",
+            "platformNames" : [
+
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "DEBUG_BUILD"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "INTEL_NO_ITTNOTIFY_API"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_APPSTORE_SAFE"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AwsCCommon",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "bin",
+        "CMakeLists.txt",
+        "LICENSE",
+        "builder.json",
+        "README.md",
+        "cmake",
+        "tests",
+        "source/arm",
+        "source/intel"
+      ],
+      "name" : "AwsCChecksums",
+      "packageAccess" : true,
+      "path" : "aws-common-runtime/aws-checksums",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "config" : "debug",
+            "platformNames" : [
+
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "DEBUG_BUILD"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "INTEL_NO_ITTNOTIFY_API"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_APPSTORE_SAFE"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AwsCChecksums",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCCommon",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCIo",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCCal",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "bin",
+        "CODE_OF_CONDUCT.md",
+        "clang-tidy/run-clang-tidy.sh",
+        "tests",
+        "cmake",
+        "CONTRIBUTING.md",
+        "LICENSE",
+        "format-check.py",
+        "NOTICE",
+        "builder.json",
+        "CMakeLists.txt",
+        "README.md"
+      ],
+      "name" : "AwsCEventStream",
+      "packageAccess" : true,
+      "path" : "aws-common-runtime/aws-c-event-stream",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "config" : "debug",
+            "platformNames" : [
+
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "DEBUG_BUILD"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "INTEL_NO_ITTNOTIFY_API"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_APPSTORE_SAFE"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AwsCHttp",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCCal",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCIo",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCCommon",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "bin",
+        "CODE_OF_CONDUCT.md",
+        "tests",
+        "cmake",
+        "CONTRIBUTING.md",
+        "LICENSE",
+        "format-check.py",
+        "NOTICE",
+        "builder.json",
+        "CMakeLists.txt",
+        "README.md"
+      ],
+      "name" : "AwsCMqtt",
+      "packageAccess" : true,
+      "path" : "aws-common-runtime/aws-c-mqtt",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "config" : "debug",
+            "platformNames" : [
+
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "DEBUG_BUILD"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "INTEL_NO_ITTNOTIFY_API"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_APPSTORE_SAFE"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "LibNative",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "system"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AwsCAuth",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCHttp",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCCal",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCCompression",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCIo",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCCommon",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCChecksums",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCEventStream",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "AwsCMqtt",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "LibNative",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AwsCommonRuntimeKit",
+      "packageAccess" : true,
+      "path" : "Source/AwsCommonRuntimeKit",
+      "resources" : [
+        {
+          "path" : "PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AwsCommonRuntimeKit",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AwsCommonRuntimeKitTests",
+      "packageAccess" : true,
+      "path" : "Test/AwsCommonRuntimeKitTests",
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "__APPLE__"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_ENABLE_DISPATCH_QUEUE"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_USE_SECITEM"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "macos"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "AWS_ENABLE_KQUEUE"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.9.0"
+  },
+  "traits" : [
+
+  ]
+}

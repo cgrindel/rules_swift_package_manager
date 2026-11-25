@@ -1,0 +1,1488 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "grpc-swift-2",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/grpc/grpc-swift-2.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.4.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-nio",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-nio.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.104.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-nio-http2",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-nio-http2.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.46.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-nio-transport-services",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-nio-transport-services.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.20.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-nio-ssl",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-nio-ssl.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.34.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-nio-extras",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-nio-extras.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.27.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-certificates",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-certificates.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.14.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-asn1",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-asn1.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "grpc-swift-nio-transport",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "GRPCNIOTransportHTTP2",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GRPCNIOTransportHTTP2"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GRPCNIOTransportHTTP2Posix",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GRPCNIOTransportHTTP2Posix"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GRPCNIOTransportHTTP2TransportServices",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GRPCNIOTransportHTTP2TransportServices"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CGRPCNIOTransportZlib",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "z"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "GRPCCore",
+            "grpc-swift-2",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOCore",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOHTTP1",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOTLS",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOHTTP2",
+            "swift-nio-http2",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOExtras",
+            "swift-nio-extras",
+            null,
+            null
+          ]
+        },
+        {
+          "target" : [
+            "CGRPCNIOTransportZlib",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GRPCNIOTransportCore",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.1:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.2:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.3:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.4:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.5:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.6:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.7:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.8:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.9:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.10:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.11:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.12:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.13:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "GRPCNIOTransportCore",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOCore",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOEmbedded",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOTestUtils",
+            "swift-nio",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GRPCNIOTransportCoreTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.1:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.2:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.3:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.4:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.5:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.6:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.7:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.8:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.9:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.10:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.11:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.12:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.13:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "GRPCNIOTransportCore",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GRPCCore",
+            "grpc-swift-2",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOPosix",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOSSL",
+            "swift-nio-ssl",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "X509",
+            "swift-certificates",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftASN1",
+            "swift-asn1",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOCertificateReloading",
+            "swift-nio-extras",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GRPCNIOTransportHTTP2Posix",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "platformNames" : [
+              "linux"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "_GNU_SOURCE"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.1:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.2:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.3:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.4:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.5:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.6:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.7:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.8:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.9:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.10:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.11:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.12:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.13:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "GRPCNIOTransportCore",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GRPCCore",
+            "grpc-swift-2",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOTransportServices",
+            "swift-nio-transport-services",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GRPCNIOTransportHTTP2TransportServices",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.1:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.2:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.3:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.4:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.5:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.6:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.7:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.8:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.9:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.10:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.11:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.12:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.13:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "GRPCNIOTransportHTTP2Posix",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "GRPCNIOTransportHTTP2TransportServices",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GRPCNIOTransportHTTP2",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.1:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.2:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.3:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.4:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.5:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.6:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.7:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.8:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.9:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.10:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.11:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.12:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.13:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "GRPCNIOTransportHTTP2",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GRPCCore",
+            "grpc-swift-2",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "X509",
+            "swift-certificates",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOSSL",
+            "swift-nio-ssl",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GRPCNIOTransportHTTP2Tests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.1:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.2:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.3:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.4:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.5:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.6:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.7:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.8:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.9:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.10:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.11:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.12:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftNIOTransport 2.13:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.1.0"
+  },
+  "traits" : [
+
+  ]
+}

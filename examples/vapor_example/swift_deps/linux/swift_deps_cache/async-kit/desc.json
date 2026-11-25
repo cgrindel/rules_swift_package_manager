@@ -1,0 +1,166 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-nio",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.95.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio.git"
+    },
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.10.1",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log.git"
+    },
+    {
+      "identity" : "swift-collections",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.4.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-collections.git"
+    },
+    {
+      "identity" : "swift-algorithms",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.2.1",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-algorithms.git"
+    }
+  ],
+  "manifest_display_name" : "async-kit",
+  "name" : "async-kit",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "AsyncKit",
+      "targets" : [
+        "AsyncKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "c99name" : "AsyncKitTests",
+      "module_type" : "SwiftTarget",
+      "name" : "AsyncKitTests",
+      "path" : "Tests/AsyncKitTests",
+      "sources" : [
+        "AsyncConnectionPoolTests.swift",
+        "AsyncKitTestsCommon.swift",
+        "Collection+FlattenTests.swift",
+        "ConnectionPoolTests.swift",
+        "EventLoop+ConcurrencyTests.swift",
+        "EventLoopFutureQueueTests.swift",
+        "EventLoopGroup+FutureTests.swift",
+        "Future+CollectionTests.swift",
+        "Future+ConjunctionTests.swift",
+        "Future+MiscellaneousTests.swift",
+        "Future+NonemptyTests.swift",
+        "Future+OptionalTests.swift",
+        "Future+TransformTests.swift",
+        "Future+TryTests.swift",
+        "FutureOperatorsTests.swift"
+      ],
+      "target_dependencies" : [
+        "AsyncKit"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AsyncKit",
+      "module_type" : "SwiftTarget",
+      "name" : "AsyncKit",
+      "path" : "Sources/AsyncKit",
+      "product_dependencies" : [
+        "Logging",
+        "NIOCore",
+        "NIOEmbedded",
+        "NIOPosix",
+        "Collections",
+        "Algorithms"
+      ],
+      "product_memberships" : [
+        "AsyncKit"
+      ],
+      "sources" : [
+        "ConnectionPool/ConnectionPoolError.swift",
+        "ConnectionPool/ConnectionPoolItem.swift",
+        "ConnectionPool/ConnectionPoolSource.swift",
+        "ConnectionPool/EventLoopConnectionPool.swift",
+        "ConnectionPool/EventLoopGroupConnectionPool.swift",
+        "EventLoop/EventLoop+Concurrency.swift",
+        "EventLoop/EventLoop+Flatten.swift",
+        "EventLoop/EventLoop+Future.swift",
+        "EventLoop/EventLoopGroup+Concurrency.swift",
+        "EventLoop/EventLoopGroup+Throwing.swift",
+        "EventLoopFuture/Collection+Flatten.swift",
+        "EventLoopFuture/EventLoopFutureQueue+Sequence.swift",
+        "EventLoopFuture/EventLoopFutureQueue.swift",
+        "EventLoopFuture/Future+Collection.swift",
+        "EventLoopFuture/Future+Conjunctions.swift",
+        "EventLoopFuture/Future+Miscellaneous.swift",
+        "EventLoopFuture/Future+Nonempty.swift",
+        "EventLoopFuture/Future+Optional.swift",
+        "EventLoopFuture/Future+Transform.swift",
+        "EventLoopFuture/Future+Try.swift",
+        "EventLoopFuture/FutureOperators.swift",
+        "EventLoopFuture/Optional+StrictMap.swift",
+        "Exports.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}

@@ -18,27 +18,20 @@ bazel_dep(
     version = "4.3.0",
     repo_name = "build_bazel_rules_swift",
 )
+
+# TODO(#2641): remove once a rules_swift release includes swift_toolchain_tool.
+# The root module's override in rules_swift_package_manager does not reach
+# this workspace.
+git_override(
+    module_name = "rules_swift",
+    commit = "dd629b0cbb25c017e30fff3c40d0f0fddf653613",
+    remote = "https://github.com/cgrindel/rules_swift.git",
+)
+
 bazel_dep(
     name = "rules_apple",
     version = "5.4.0",
     repo_name = "build_bazel_rules_apple",
-)
-
-bazel_dep(
-    name = "bazel_skylib_gazelle_plugin",
-    version = "1.9.2",
-    dev_dependency = True,
-)
-bazel_dep(
-    name = "gazelle",
-    version = "0.54.0",
-    dev_dependency = True,
-    repo_name = "bazel_gazelle",
-)
-bazel_dep(
-    name = "swift_gazelle_plugin",
-    version = "0.2.2",
-    dev_dependency = True,
 )
 
 apple_cc_configure = use_extension(
@@ -51,11 +44,6 @@ swift_deps = use_extension(
     "@rules_swift_package_manager//:extensions.bzl",
     "swift_deps",
 )
-swift_deps.from_package(
-    declare_swift_deps_info = True,
-    resolved = "//:Package.resolved",
-    swift = "//:Package.swift",
-)
 
 # Linux compatibility: GRDB v7.9.0 defines SQLITE_ENABLE_SNAPSHOT by default, but
 # most Linux distros don't compile snapshot functions (sqlite3_snapshot_get, etc.)
@@ -64,20 +52,25 @@ swift_deps.from_package(
 # In v7.9.0, GRDB simplified snapshot checks to: #if SQLITE_ENABLE_SNAPSHOT && !SQLITE_DISABLE_SNAPSHOT
 # This means we can fix Linux builds by simply removing the SQLITE_ENABLE_SNAPSHOT define,
 # which disables snapshot code without requiring GRDBCUSTOMSQLITE (which would break imports).
+#
+# The fix is a patch file, not `patch_cmds`: the cache step applies a package's
+# `patches` before it dumps the manifest, so the removed define stays out of the
+# cached manifest that the generated build files come from.
 swift_deps.configure_package(
     name = "grdb.swift",
-    patch_cmds = [
-        # Remove SQLITE_ENABLE_SNAPSHOT define to disable snapshot code on Linux
-        # Using sed -i.bak for cross-platform compatibility (BSD sed on macOS requires backup extension)
-        "sed -i.bak 's/\\.define(\"SQLITE_ENABLE_SNAPSHOT\"),//' Package.swift",
-        "sed -i.bak 's/\\.define(\"SQLITE_ENABLE_SNAPSHOT\")//' Package.swift",
-        # Clean up backup files
-        "rm -f Package.swift.bak",
+    patch_args = ["-p1"],
+    patches = [
+        "//third_party/grdb:0001-Remove-SQLITE_ENABLE_SNAPSHOT-define.patch",
     ],
 )
 use_repo(
     swift_deps,
-    "swift_deps_info",
     "swift_package",
     "swiftpkg_grdb.swift",
 )
+
+# One `from_package` tag per slice. Include them after the root
+# `use_extension` so that `bazel mod tidy` writes `use_repo` here rather than
+# into a slice file.
+include("//swift_deps/apple:inc.MODULE.bazel")
+include("//swift_deps/linux:inc.MODULE.bazel")

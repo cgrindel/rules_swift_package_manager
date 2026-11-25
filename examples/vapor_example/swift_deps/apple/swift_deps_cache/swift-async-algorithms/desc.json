@@ -1,0 +1,296 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-collections",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.7.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-collections.git"
+    }
+  ],
+  "manifest_display_name" : "swift-async-algorithms",
+  "name" : "swift-async-algorithms",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "AsyncAlgorithms",
+      "targets" : [
+        "AsyncAlgorithms"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AsyncStreaming",
+      "targets" : [
+        "AsyncStreaming"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "_CAsyncSequenceValidationSupport",
+      "module_type" : "SystemLibraryTarget",
+      "name" : "_CAsyncSequenceValidationSupport",
+      "path" : "Sources/_CAsyncSequenceValidationSupport",
+      "sources" : [
+
+      ],
+      "type" : "system-target"
+    },
+    {
+      "c99name" : "AsyncStreamingTests",
+      "module_type" : "SwiftTarget",
+      "name" : "AsyncStreamingTests",
+      "path" : "Tests/AsyncStreamingTests",
+      "product_dependencies" : [
+        "BasicContainers",
+        "ContainersPreview",
+        "SpanPreview"
+      ],
+      "sources" : [
+        "AsyncReader/AsyncReader+collectTests.swift",
+        "AsyncReader/AsyncReader+forEachTests.swift",
+        "AsyncReader/AsyncReader+pipe.swift",
+        "AsyncReader/AsyncReaderTests.swift",
+        "AsyncWriter/AsyncWriterCallerAsyncWriterAdapterTests.swift",
+        "AsyncWriter/AsyncWriterTests.swift",
+        "CallerAsyncReader/CallerAsyncReader+pipe.swift",
+        "CallerAsyncReader/CallerAsyncReaderTests.swift",
+        "CallerAsyncWriter/CallerAsyncWriterAsyncWriterAdapterTests.swift",
+        "CallerAsyncWriter/CallerAsyncWriterTests.swift",
+        "DuplexChannel/DuplexAsyncChannelTests.swift",
+        "EitherErrorTests.swift",
+        "Helpers/Array+Span.swift",
+        "Helpers/UniqueArrayAsyncReader.swift",
+        "Helpers/UniqueArrayAsyncWriter.swift",
+        "Helpers/UniqueArrayCallerAsyncReader.swift",
+        "Helpers/UniqueArrayCallerAsyncWriter.swift",
+        "MultiProducerSingleConsumerChannel/MultiProducerSingleConsumerAsyncChannelTests.swift"
+      ],
+      "target_dependencies" : [
+        "AsyncStreaming"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AsyncStreaming",
+      "module_type" : "SwiftTarget",
+      "name" : "AsyncStreaming",
+      "path" : "Sources/AsyncStreaming",
+      "product_dependencies" : [
+        "BasicContainers",
+        "ContainersPreview",
+        "DequeModule"
+      ],
+      "product_memberships" : [
+        "AsyncStreaming"
+      ],
+      "sources" : [
+        "AsyncReader/AsyncReader+collect.swift",
+        "AsyncReader/AsyncReader+forEach.swift",
+        "AsyncReader/AsyncReader+pipe.swift",
+        "AsyncReader/AsyncReader.swift",
+        "AsyncWriter/AsyncWriter.swift",
+        "AsyncWriter/AsyncWriterCallerAsyncWriterAdapter.swift",
+        "CallerAsyncReader/CallerAsyncReader+pipe.swift",
+        "CallerAsyncReader/CallerAsyncReader.swift",
+        "CallerAsyncWriter/CallerAsyncWriter.swift",
+        "CallerAsyncWriter/CallerAsyncWriterAsyncWriterAdapter.swift",
+        "DuplexChannel/DuplexAsyncChannel.swift",
+        "EitherError.swift",
+        "MultiProducerSingleConsumerChannel/MultiProducerSingleConsumerAsyncChannel+Internal.swift",
+        "MultiProducerSingleConsumerChannel/MultiProducerSingleConsumerAsyncChannel.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AsyncSequenceValidation",
+      "module_type" : "SwiftTarget",
+      "name" : "AsyncSequenceValidation",
+      "path" : "Sources/AsyncSequenceValidation",
+      "sources" : [
+        "AsyncSequenceValidationDiagram.swift",
+        "Clock.swift",
+        "Event.swift",
+        "Expectation.swift",
+        "Input.swift",
+        "Job.swift",
+        "Locking.swift",
+        "SourceLocation.swift",
+        "TaskDriver.swift",
+        "Test.swift",
+        "Theme.swift",
+        "WorkQueue.swift"
+      ],
+      "target_dependencies" : [
+        "_CAsyncSequenceValidationSupport",
+        "AsyncAlgorithms"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AsyncAlgorithms_XCTest",
+      "module_type" : "SwiftTarget",
+      "name" : "AsyncAlgorithms_XCTest",
+      "path" : "Sources/AsyncAlgorithms_XCTest",
+      "sources" : [
+        "ValidationTest.swift"
+      ],
+      "target_dependencies" : [
+        "AsyncAlgorithms",
+        "AsyncSequenceValidation"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AsyncAlgorithmsTests",
+      "module_type" : "SwiftTarget",
+      "name" : "AsyncAlgorithmsTests",
+      "path" : "Tests/AsyncAlgorithmsTests",
+      "sources" : [
+        "Interspersed/TestInterspersed.swift",
+        "MultiProducerSingleConsumerChannel/MultiProducerSingleConsumerAsyncChannelTests.swift",
+        "Performance/TestThroughput.swift",
+        "Performance/ThroughputMeasurement.swift",
+        "Support/Asserts.swift",
+        "Support/Failure.swift",
+        "Support/Gate.swift",
+        "Support/GatedSequence.swift",
+        "Support/Indefinite.swift",
+        "Support/Locking.swift",
+        "Support/ManualClock.swift",
+        "Support/ManualExecutor.swift",
+        "Support/ReportingSequence.swift",
+        "Support/Validator.swift",
+        "Support/ViolatingSequence.swift",
+        "TestAdjacentPairs.swift",
+        "TestBuffer.swift",
+        "TestBufferedByteIterator.swift",
+        "TestChain.swift",
+        "TestChannel.swift",
+        "TestChunk.swift",
+        "TestCombineLatest.swift",
+        "TestCompacted.swift",
+        "TestDebounce.swift",
+        "TestDictionary.swift",
+        "TestFlatMapLatest.swift",
+        "TestJoin.swift",
+        "TestLazy.swift",
+        "TestManualClock.swift",
+        "TestMapError.swift",
+        "TestMerge.swift",
+        "TestRangeReplaceableCollection.swift",
+        "TestReductions.swift",
+        "TestRemoveDuplicates.swift",
+        "TestSetAlgebra.swift",
+        "TestShare.swift",
+        "TestThrottle.swift",
+        "TestThrowingChannel.swift",
+        "TestTimer.swift",
+        "TestValidationTests.swift",
+        "TestValidator.swift",
+        "TestZip.swift"
+      ],
+      "target_dependencies" : [
+        "AsyncAlgorithms",
+        "AsyncSequenceValidation",
+        "AsyncAlgorithms_XCTest"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AsyncAlgorithms",
+      "module_type" : "SwiftTarget",
+      "name" : "AsyncAlgorithms",
+      "path" : "Sources/AsyncAlgorithms",
+      "product_dependencies" : [
+        "OrderedCollections",
+        "DequeModule"
+      ],
+      "product_memberships" : [
+        "AsyncAlgorithms"
+      ],
+      "sources" : [
+        "AsyncAdjacentPairsSequence.swift",
+        "AsyncBufferedByteIterator.swift",
+        "AsyncChain2Sequence.swift",
+        "AsyncChain3Sequence.swift",
+        "AsyncChunkedByGroupSequence.swift",
+        "AsyncChunkedOnProjectionSequence.swift",
+        "AsyncChunksOfCountOrSignalSequence.swift",
+        "AsyncChunksOfCountSequence.swift",
+        "AsyncCompactedSequence.swift",
+        "AsyncExclusiveReductionsSequence.swift",
+        "AsyncInclusiveReductionsSequence.swift",
+        "AsyncJoinedBySeparatorSequence.swift",
+        "AsyncJoinedSequence.swift",
+        "AsyncMapErrorSequence.swift",
+        "AsyncRemoveDuplicatesSequence.swift",
+        "AsyncShareSequence.swift",
+        "AsyncSyncSequence.swift",
+        "AsyncThrottleSequence.swift",
+        "AsyncThrowingExclusiveReductionsSequence.swift",
+        "AsyncThrowingInclusiveReductionsSequence.swift",
+        "AsyncTimerSequence.swift",
+        "Buffer/AsyncBufferSequence.swift",
+        "Buffer/BoundedBufferStateMachine.swift",
+        "Buffer/BoundedBufferStorage.swift",
+        "Buffer/UnboundedBufferStateMachine.swift",
+        "Buffer/UnboundedBufferStorage.swift",
+        "Channels/AsyncChannel.swift",
+        "Channels/AsyncThrowingChannel.swift",
+        "Channels/ChannelStateMachine.swift",
+        "Channels/ChannelStorage.swift",
+        "CombineLatest/AsyncCombineLatest2Sequence.swift",
+        "CombineLatest/AsyncCombineLatest3Sequence.swift",
+        "CombineLatest/CombineLatestStateMachine.swift",
+        "CombineLatest/CombineLatestStorage.swift",
+        "Debounce/AsyncDebounceSequence.swift",
+        "Debounce/DebounceStateMachine.swift",
+        "Debounce/DebounceStorage.swift",
+        "Dictionary.swift",
+        "FlatMapLatest/AsyncFlatMapLatestSequence.swift",
+        "FlatMapLatest/FlatMapLatestStateMachine.swift",
+        "FlatMapLatest/FlatMapLatestStorage.swift",
+        "Internal/Disconnected.swift",
+        "Internal/_TinyArray.swift",
+        "Interspersed/AsyncInterspersedSequence.swift",
+        "Locking.swift",
+        "Merge/AsyncMerge2Sequence.swift",
+        "Merge/AsyncMerge3Sequence.swift",
+        "Merge/MergeStateMachine.swift",
+        "Merge/MergeStorage.swift",
+        "MultiProducerSingleConsumerChannel/MultiProducerSingleConsumerAsyncChannel+Internal.swift",
+        "MultiProducerSingleConsumerChannel/MultiProducerSingleConsumerAsyncChannel.swift",
+        "RangeReplaceableCollection.swift",
+        "Rethrow.swift",
+        "SetAlgebra.swift",
+        "UnsafeTransfer.swift",
+        "Zip/AsyncZip2Sequence.swift",
+        "Zip/AsyncZip3Sequence.swift",
+        "Zip/ZipStateMachine.swift",
+        "Zip/ZipStorage.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.2"
+}

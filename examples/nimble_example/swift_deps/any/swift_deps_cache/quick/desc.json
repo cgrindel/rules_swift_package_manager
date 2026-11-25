@@ -1,0 +1,433 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "nimble",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "13.2.0",
+            "upper_bound" : "14.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/Quick/Nimble.git"
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.3.1",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-argument-parser.git"
+    },
+    {
+      "identity" : "swift-algorithms",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.2.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-algorithms.git"
+    },
+    {
+      "identity" : "swift-fakes",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "0.0.1",
+            "upper_bound" : "1.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/Quick/swift-fakes.git"
+    }
+  ],
+  "manifest_display_name" : "Quick",
+  "name" : "Quick",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "visionos",
+      "version" : "1.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Quick",
+      "targets" : [
+        "Quick"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "quicklint",
+      "targets" : [
+        "QuickLint"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "DefocusCommandPlugin",
+      "targets" : [
+        "DefocusCommandPlugin"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    },
+    {
+      "name" : "LintError",
+      "targets" : [
+        "LintError"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    },
+    {
+      "name" : "LintWarning",
+      "targets" : [
+        "LintWarning"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    },
+    {
+      "name" : "LintCommandPlugin",
+      "targets" : [
+        "LintCommandPlugin"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "c99name" : "QuickTests",
+      "module_type" : "SwiftTarget",
+      "name" : "QuickTests",
+      "path" : "Tests/QuickTests",
+      "product_dependencies" : [
+        "Nimble"
+      ],
+      "sources" : [
+        "QuickAfterSuiteTests/AfterSuiteTests.swift",
+        "QuickFocusedTests/FacusedTests+Async.swift",
+        "QuickFocusedTests/FocusedTests.swift",
+        "QuickTestHelpers/XCTestCaseProvider.swift",
+        "QuickTests/Fixtures/FunctionalTests_AsyncBehaviorTests_AsyncBehaviors.swift",
+        "QuickTests/Fixtures/FunctionalTests_BehaviorTests_Behaviors.swift",
+        "QuickTests/Fixtures/FunctionalTests_SharedExamplesTests_SharedExamples.swift",
+        "QuickTests/FunctionalTests/AfterEachTests.swift",
+        "QuickTests/FunctionalTests/AroundEachTests.swift",
+        "QuickTests/FunctionalTests/Async/AfterEachAsyncTests.swift",
+        "QuickTests/FunctionalTests/Async/AroundEachAsyncTests.swift",
+        "QuickTests/FunctionalTests/Async/AsyncBehaviorTests.swift",
+        "QuickTests/FunctionalTests/Async/AsyncOrderingTests.swift",
+        "QuickTests/FunctionalTests/Async/BeforeEachAsyncTests.swift",
+        "QuickTests/FunctionalTests/Async/ContextAsyncTests.swift",
+        "QuickTests/FunctionalTests/Async/CrossReferencingAsyncSpecs.swift",
+        "QuickTests/FunctionalTests/Async/DescribeAsyncTests.swift",
+        "QuickTests/FunctionalTests/Async/ItAsyncTests.swift",
+        "QuickTests/FunctionalTests/Async/JustBeforeEachAsyncTests.swift",
+        "QuickTests/FunctionalTests/Async/PendingAsyncTests.swift",
+        "QuickTests/FunctionalTests/BeforeEachTests.swift",
+        "QuickTests/FunctionalTests/BeforeSuiteTests.swift",
+        "QuickTests/FunctionalTests/BehaviorTests.swift",
+        "QuickTests/FunctionalTests/BundleModuleNameTests.swift",
+        "QuickTests/FunctionalTests/Configuration/AfterEach/Configuration+AfterEach.swift",
+        "QuickTests/FunctionalTests/Configuration/AfterEach/Configuration+AfterEachAsyncTests.swift",
+        "QuickTests/FunctionalTests/Configuration/AfterEach/Configuration+AfterEachTests.swift",
+        "QuickTests/FunctionalTests/Configuration/BeforeEach/Configuration+BeforeEach.swift",
+        "QuickTests/FunctionalTests/Configuration/BeforeEach/Configuration+BeforeEachAsyncSpec.swift",
+        "QuickTests/FunctionalTests/Configuration/BeforeEach/Configuration+BeforeEachTests.swift",
+        "QuickTests/FunctionalTests/ContextTests.swift",
+        "QuickTests/FunctionalTests/CrossReferencingSpecs.swift",
+        "QuickTests/FunctionalTests/CurrentSpecTests.swift",
+        "QuickTests/FunctionalTests/DescribeTests.swift",
+        "QuickTests/FunctionalTests/ItTests.swift",
+        "QuickTests/FunctionalTests/JustBeforeEachTests.swift",
+        "QuickTests/FunctionalTests/OrderingTests.swift",
+        "QuickTests/FunctionalTests/PendingTests.swift",
+        "QuickTests/FunctionalTests/QuickSpec_SelectedTests.swift",
+        "QuickTests/FunctionalTests/SharedExamples+BeforeEachTests.swift",
+        "QuickTests/FunctionalTests/SharedExamplesTests.swift",
+        "QuickTests/FunctionalTests/SubclassDetectionSpec.swift",
+        "QuickTests/FunctionalTests/TestSelectorNameProviderTests.swift",
+        "QuickTests/FunctionalTests/TestStateSpec.swift",
+        "QuickTests/Helpers/NSObject+MethodList.swift",
+        "QuickTests/Helpers/QuickSpecRunner.swift",
+        "QuickTests/Helpers/XCTestObservationCenter+QCKSuspendObservation.swift"
+      ],
+      "target_dependencies" : [
+        "Quick"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "QuickObjCRuntime",
+      "module_type" : "ClangTarget",
+      "name" : "QuickObjCRuntime",
+      "path" : "Sources/QuickObjCRuntime",
+      "product_memberships" : [
+        "Quick"
+      ],
+      "sources" : [
+        "QuickSpecBase.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "QuickLintTests",
+      "module_type" : "SwiftTarget",
+      "name" : "QuickLintTests",
+      "path" : "Tests/QuickLintTests",
+      "product_dependencies" : [
+        "Nimble",
+        "Fakes"
+      ],
+      "sources" : [
+        "DefocusCommandSpec.swift",
+        "DefocusFormatterSpec.swift",
+        "Fakes/FakeFileDetector.swift",
+        "Fakes/FakeFileInterface.swift",
+        "Fakes/FakeWriter.swift",
+        "FileDetectorSpec.swift",
+        "FocusLintSpec.swift",
+        "LintCommandSpec.swift",
+        "Result+CapturingAsync.swift"
+      ],
+      "target_dependencies" : [
+        "QuickLint",
+        "Quick"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "QuickLint",
+      "module_type" : "SwiftTarget",
+      "name" : "QuickLint",
+      "path" : "Sources/QuickLint",
+      "product_dependencies" : [
+        "ArgumentParser",
+        "Algorithms"
+      ],
+      "product_memberships" : [
+        "quicklint",
+        "DefocusCommandPlugin",
+        "LintError",
+        "LintWarning",
+        "LintCommandPlugin"
+      ],
+      "sources" : [
+        "DefocusFormatter.swift",
+        "DirectoryManager.swift",
+        "FileDetector.swift",
+        "FileInterface.swift",
+        "FocusLint.swift",
+        "QuickLint.swift",
+        "ServiceLocator.swift",
+        "Writer.swift"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "QuickIssue853RegressionTests",
+      "module_type" : "SwiftTarget",
+      "name" : "QuickIssue853RegressionTests",
+      "path" : "Tests/QuickIssue853RegressionTests",
+      "sources" : [
+        "SubclassOfSubclassWithStructPropertyTests.swift"
+      ],
+      "target_dependencies" : [
+        "Quick"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "Quick",
+      "module_type" : "SwiftTarget",
+      "name" : "Quick",
+      "path" : "Sources/Quick",
+      "product_memberships" : [
+        "Quick"
+      ],
+      "sources" : [
+        "Async/AsyncBehavior.swift",
+        "Async/AsyncExampleGroup.swift",
+        "Async/AsyncSpec.swift",
+        "Async/AsyncWorld.swift",
+        "Behavior.swift",
+        "Callsite.swift",
+        "Configuration/QCKConfiguration.swift",
+        "Configuration/QuickConfiguration.swift",
+        "CurrentSpec.swift",
+        "DSL/AsyncDSL.swift",
+        "DSL/AsyncWorld+DSL.swift",
+        "DSL/DSL.swift",
+        "DSL/World+DSL.swift",
+        "ErrorUtility.swift",
+        "ExampleGroup.swift",
+        "Examples/AsyncExample.swift",
+        "Examples/Example.swift",
+        "Examples/ExampleMetadata.swift",
+        "Filter.swift",
+        "Hooks/AsyncExampleHooks.swift",
+        "Hooks/Closures.swift",
+        "Hooks/ExampleHooks.swift",
+        "Hooks/HooksPhase.swift",
+        "Hooks/SuiteHooks.swift",
+        "NSBundle+CurrentTestBundle.swift",
+        "QuickMain.swift",
+        "QuickSelectedTestSuiteBuilder.swift",
+        "QuickSpec.swift",
+        "QuickTestObservation.swift",
+        "QuickTestSuite.swift",
+        "StopTest.swift",
+        "String+C99ExtendedIdentifier.swift",
+        "SubclassDetection.swift",
+        "TestSelectorNameProvider.swift",
+        "TestState.swift",
+        "URL+FileName.swift",
+        "World.swift"
+      ],
+      "target_dependencies" : [
+        "QuickObjCRuntime"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "LintWarning",
+      "module_type" : "PluginTarget",
+      "name" : "LintWarning",
+      "path" : "Plugins/LintWarning",
+      "plugin_capability" : {
+        "type" : "buildTool"
+      },
+      "product_memberships" : [
+        "LintWarning"
+      ],
+      "sources" : [
+        "LintWarning.swift"
+      ],
+      "target_dependencies" : [
+        "QuickLint"
+      ],
+      "type" : "plugin"
+    },
+    {
+      "c99name" : "LintError",
+      "module_type" : "PluginTarget",
+      "name" : "LintError",
+      "path" : "Plugins/LintError",
+      "plugin_capability" : {
+        "type" : "buildTool"
+      },
+      "product_memberships" : [
+        "LintError"
+      ],
+      "sources" : [
+        "LintError.swift"
+      ],
+      "target_dependencies" : [
+        "QuickLint"
+      ],
+      "type" : "plugin"
+    },
+    {
+      "c99name" : "LintCommandPlugin",
+      "module_type" : "PluginTarget",
+      "name" : "LintCommandPlugin",
+      "path" : "Plugins/LintCommandPlugin",
+      "plugin_capability" : {
+        "intent" : {
+          "description" : "Verify no focused tests in Quick tests",
+          "type" : "custom",
+          "verb" : "quicklint"
+        },
+        "permissions" : [
+
+        ],
+        "type" : "command"
+      },
+      "product_memberships" : [
+        "LintCommandPlugin"
+      ],
+      "sources" : [
+        "LintCommandPlugin.swift"
+      ],
+      "target_dependencies" : [
+        "QuickLint"
+      ],
+      "type" : "plugin"
+    },
+    {
+      "c99name" : "DefocusCommandPlugin",
+      "module_type" : "PluginTarget",
+      "name" : "DefocusCommandPlugin",
+      "path" : "Plugins/DefocusCommandPlugin",
+      "plugin_capability" : {
+        "intent" : {
+          "type" : "sourceCodeFormatting"
+        },
+        "permissions" : [
+          {
+            "network_scope" : {
+              "none" : {
+
+              }
+            },
+            "reason" : "Remove focus from Quick tests",
+            "type" : "writeToPackageDirectory"
+          }
+        ],
+        "type" : "command"
+      },
+      "product_memberships" : [
+        "DefocusCommandPlugin"
+      ],
+      "sources" : [
+        "DefocusCommandPlugin.swift"
+      ],
+      "target_dependencies" : [
+        "QuickLint"
+      ],
+      "type" : "plugin"
+    }
+  ],
+  "tools_version" : "5.9"
+}

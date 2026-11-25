@@ -1,0 +1,43 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "Shake",
+  "name" : "Shake",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "12.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Shake",
+      "targets" : [
+        "Shake"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "Shake",
+      "module_type" : "BinaryTarget",
+      "name" : "Shake",
+      "path" : "Sources/Shake.xcframework",
+      "product_memberships" : [
+        "Shake"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    }
+  ],
+  "tools_version" : "5.3"
+}

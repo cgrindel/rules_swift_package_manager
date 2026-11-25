@@ -1,0 +1,113 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "cwlcatchexception",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.2.1",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/mattgallagher/CwlCatchException.git"
+    }
+  ],
+  "manifest_display_name" : "CwlPreconditionTesting",
+  "name" : "CwlPreconditionTesting",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "CwlPreconditionTesting",
+      "targets" : [
+        "CwlPreconditionTesting",
+        "CwlMachBadInstructionHandler"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "CwlPosixPreconditionTesting",
+      "targets" : [
+        "CwlPosixPreconditionTesting"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "CwlPreconditionTestingTests",
+      "module_type" : "SwiftTarget",
+      "name" : "CwlPreconditionTestingTests",
+      "path" : "Tests/CwlPreconditionTestingTests",
+      "sources" : [
+        "CwlCatchBadInstructionTests.swift"
+      ],
+      "target_dependencies" : [
+        "CwlPreconditionTesting",
+        "CwlPosixPreconditionTesting"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CwlPreconditionTesting",
+      "module_type" : "SwiftTarget",
+      "name" : "CwlPreconditionTesting",
+      "path" : "Sources/CwlPreconditionTesting",
+      "product_dependencies" : [
+        "CwlCatchException"
+      ],
+      "product_memberships" : [
+        "CwlPreconditionTesting"
+      ],
+      "sources" : [
+        "CwlBadInstructionException.swift",
+        "CwlCatchBadInstruction.swift",
+        "CwlDarwinDefinitions.swift"
+      ],
+      "target_dependencies" : [
+        "CwlMachBadInstructionHandler"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CwlPosixPreconditionTesting",
+      "module_type" : "SwiftTarget",
+      "name" : "CwlPosixPreconditionTesting",
+      "path" : "Sources/CwlPosixPreconditionTesting",
+      "product_memberships" : [
+        "CwlPosixPreconditionTesting"
+      ],
+      "sources" : [
+        "CwlCatchBadInstructionPosix.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CwlMachBadInstructionHandler",
+      "module_type" : "ClangTarget",
+      "name" : "CwlMachBadInstructionHandler",
+      "path" : "Sources/CwlMachBadInstructionHandler",
+      "product_memberships" : [
+        "CwlPreconditionTesting"
+      ],
+      "sources" : [
+        "CwlMachBadInstructionHandler.m",
+        "mach_excServer.c"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.5"
+}

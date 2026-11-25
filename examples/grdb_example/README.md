@@ -20,8 +20,8 @@ sudo dnf install sqlite sqlite-devel
 ## Linux Configuration
 
 GRDB assumes that system SQLite includes snapshot support (`SQLITE_ENABLE_SNAPSHOT`), which is
-true on macOS but not on most Linux distributions. This example uses `configure_package` with
-`patch_cmds` in `MODULE.bazel` to:
+true on macOS but not on most Linux distributions. This example uses `configure_package` with a
+patch file (`third_party/grdb/`) in `MODULE.bazel` to:
 
 1. Remove the `SQLITE_ENABLE_SNAPSHOT` define from GRDB's `Package.swift`
 2. Add `GRDBCUSTOMSQLITE` define to disable the "system SQLite" code path
@@ -32,9 +32,6 @@ This allows GRDB to work correctly with Linux's system SQLite which doesn't incl
 ## Run the Example
 
 ```sh
-# Generate build files
-bazel run //:tidy
-
 # Build
 bazel build //...
 

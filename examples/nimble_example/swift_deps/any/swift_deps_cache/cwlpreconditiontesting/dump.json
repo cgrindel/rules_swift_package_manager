@@ -1,0 +1,178 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "cwlcatchexception",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/mattgallagher/CwlCatchException.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.2.1",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "CwlPreconditionTesting",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "CwlPreconditionTesting",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "CwlPreconditionTesting",
+        "CwlMachBadInstructionHandler"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "CwlPosixPreconditionTesting",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "CwlPosixPreconditionTesting"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "CwlMachBadInstructionHandler",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "CwlCatchException",
+            "CwlCatchException",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CwlPreconditionTesting",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CwlPosixPreconditionTesting",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CwlMachBadInstructionHandler",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "CwlPreconditionTesting",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CwlPosixPreconditionTesting",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CwlPreconditionTestingTests",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.5.0"
+  },
+  "traits" : [
+
+  ]
+}

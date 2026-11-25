@@ -1,0 +1,536 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : "en",
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "appauth-ios",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/openid/AppAuth-iOS.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "3.0.0",
+                "upperBound" : "4.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "app-check",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/app-check.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "11.0.0",
+                "upperBound" : "13.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "gtmappauth",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/GTMAppAuth.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "6.0.0",
+                "upperBound" : "7.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "gtm-session-fetcher",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/gtm-session-fetcher.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "3.3.0",
+                "upperBound" : "6.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "ocmock",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/firebase/ocmock.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "revision" : [
+              "7291762d3551c5c7e31c49cce40a0e391a52e889"
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "googleutilities",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/GoogleUtilities.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "8.0.0",
+                "upperBound" : "9.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "GoogleSignIn",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "15.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GoogleSignIn",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleSignIn"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GoogleSignInSwift",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleSignInSwift"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "AppAuth",
+            "AppAuth-iOS",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AppAuthCore",
+            "AppAuth-iOS",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AppCheckCore",
+            "app-check",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GTMAppAuth",
+            "GTMAppAuth",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GTMSessionFetcherCore",
+            "gtm-session-fetcher",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleSignIn",
+      "packageAccess" : true,
+      "path" : "GoogleSignIn/Sources",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Strings",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "GID_SDK_VERSION=10.1.0"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "CoreGraphics"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "CoreText"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "Foundation"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "LocalAuthentication"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "Security"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "macos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "AppKit"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "UIKit"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GoogleSignIn",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleSignInSwift",
+      "packageAccess" : true,
+      "path" : "GoogleSignInSwift/Sources",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GoogleSignIn",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "OCMock",
+            "ocmock",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AppAuth",
+            "AppAuth-iOS",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AppCheckCore",
+            "app-check",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GTMAppAuth",
+            "GTMAppAuth",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GTMSessionFetcherCore",
+            "gtm-session-fetcher",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULMethodSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULSwizzlerTestHelpers",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleSignIn-UnitTests",
+      "packageAccess" : true,
+      "path" : "GoogleSignIn/Tests/Unit",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../../"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "GID_SDK_VERSION=10.1.0"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GoogleSignInSwift",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleSignInSwift-UnitTests",
+      "packageAccess" : true,
+      "path" : "GoogleSignInSwift/Tests/Unit",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.0.0"
+  },
+  "traits" : [
+
+  ]
+}

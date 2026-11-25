@@ -125,10 +125,13 @@ public struct CacheStep {
         workDir: buildDir.appendingPathComponent("rspm/\(pin.identity)"),
         patches: patches[pin.identity] ?? [],
         patchArgs: inv.patchArgs[pin.identity] ?? [])
+      // The copy has no `.git`, so stop git at `.build/rspm`: a manifest that reads
+      // `Context.gitInformation` must not see the workspace's repository.
       _ = try Manifests.write(
         package: workDir, cacheDir: freshCacheDir(pin.identity), workspace: inv.workspace,
         spm: spm,
-        scratchPath: workDir.appendingPathComponent(".build"))
+        scratchPath: workDir.appendingPathComponent(".build"),
+        gitCeiling: workDir.deletingLastPathComponent())
     }
     return pins.map(\.identity)
   }

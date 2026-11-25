@@ -1,0 +1,341 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "GTMSessionFetcher",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "7.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GTMSessionFetcher",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GTMSessionFetcherCore",
+        "GTMSessionFetcherFull"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GTMSessionFetcherCore",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GTMSessionFetcherCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GTMSessionFetcherFull",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GTMSessionFetcherFull"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GTMSessionFetcherLogView",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GTMSessionFetcherLogView"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GTMSessionFetcherCore",
+      "packageAccess" : false,
+      "path" : "Sources/Core",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GTMSessionFetcherCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GTMSessionFetcherFull",
+      "packageAccess" : false,
+      "path" : "Sources/Full",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GTMSessionFetcherCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GTMSessionFetcherLogView",
+      "packageAccess" : false,
+      "path" : "Sources/LogView",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GTMSessionFetcherFull",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GTMSessionFetcherCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "GTMSessionFetcherUserAgentTest.m"
+      ],
+      "name" : "GTMSessionFetcherCoreTests",
+      "packageAccess" : false,
+      "path" : "UnitTests",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../Sources/Core"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GTMSessionFetcherCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GTMSessionFetcherUserAgentTests",
+      "packageAccess" : false,
+      "path" : "UnitTests",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../Sources/Core"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "sources" : [
+        "GTMSessionFetcherUserAgentTest.m"
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GTMSessionFetcherCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GTMSessionFetcherFull",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GTMSessionFetcherLogView",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "swift-test",
+      "packageAccess" : false,
+      "path" : "SwiftPMTests/SwiftImportTest",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GTMSessionFetcherCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GTMSessionFetcherFull",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GTMSessionFetcherLogView",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "objc-import-test",
+      "packageAccess" : false,
+      "path" : "SwiftPMTests/ObjCImportTest",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.8.0"
+  },
+  "traits" : [
+
+  ]
+}

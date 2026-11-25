@@ -1,0 +1,262 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-issue-reporting",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.1.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-issue-reporting"
+    },
+    {
+      "identity" : "swift-syntax",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "509.0.0",
+            "upper_bound" : "605.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/swiftlang/swift-syntax"
+    },
+    {
+      "identity" : "swift-docc-plugin",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-docc-plugin"
+    },
+    {
+      "identity" : "swift-macro-testing",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "0.7.0",
+            "upper_bound" : "1.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-macro-testing"
+    }
+  ],
+  "manifest_display_name" : "swift-case-paths",
+  "name" : "swift-case-paths",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "CasePaths",
+      "targets" : [
+        "CasePaths"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "CasePathsCore",
+      "targets" : [
+        "CasePathsCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "CasePathsMacrosSupport",
+      "targets" : [
+        "CasePathsMacrosSupport"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "CasePathsMacros",
+      "targets" : [
+        "CasePathsMacros"
+      ],
+      "type" : {
+        "macro" : null
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "c99name" : "CasePathsTests",
+      "module_type" : "SwiftTarget",
+      "name" : "CasePathsTests",
+      "path" : "Tests/CasePathsTests",
+      "sources" : [
+        "CasePathableTests.swift",
+        "CasePathsTests.swift",
+        "CaseSetTests.swift",
+        "CompileTimeTests.swift",
+        "DeprecatedTests.swift",
+        "DeprecatedXCTModifyTests.swift",
+        "MacroTests.swift",
+        "ReflectionTests.swift",
+        "XCTModifyTests.swift",
+        "XCTUnwrapTests.swift"
+      ],
+      "target_dependencies" : [
+        "CasePaths",
+        "CasePathsMacrosSupport"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CasePathsMacrosTests",
+      "module_type" : "SwiftTarget",
+      "name" : "CasePathsMacrosTests",
+      "path" : "Tests/CasePathsMacrosTests",
+      "product_dependencies" : [
+        "MacroTesting"
+      ],
+      "sources" : [
+        "CasePathableMacroTests.swift",
+        "CasePathsMacrosSupportTests.swift"
+      ],
+      "target_dependencies" : [
+        "CasePathsMacros",
+        "CasePathsMacrosSupport"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CasePathsMacrosSupport",
+      "module_type" : "SwiftTarget",
+      "name" : "CasePathsMacrosSupport",
+      "path" : "Sources/CasePathsMacrosSupport",
+      "product_dependencies" : [
+        "SwiftSyntaxMacros",
+        "SwiftCompilerPlugin",
+        "SwiftDiagnostics",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder"
+      ],
+      "product_memberships" : [
+        "CasePaths",
+        "CasePathsMacrosSupport",
+        "CasePathsMacros"
+      ],
+      "sources" : [
+        "CasePathableMacro.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CasePathsMacros",
+      "module_type" : "SwiftTarget",
+      "name" : "CasePathsMacros",
+      "path" : "Sources/CasePathsMacros",
+      "product_dependencies" : [
+        "SwiftSyntaxMacros",
+        "SwiftCompilerPlugin",
+        "SwiftSyntax"
+      ],
+      "product_memberships" : [
+        "CasePaths",
+        "CasePathsMacros"
+      ],
+      "sources" : [
+        "CasePathableMacro.swift",
+        "Plugin.swift"
+      ],
+      "target_dependencies" : [
+        "CasePathsMacrosSupport"
+      ],
+      "type" : "macro"
+    },
+    {
+      "c99name" : "CasePathsCore",
+      "module_type" : "SwiftTarget",
+      "name" : "CasePathsCore",
+      "path" : "Sources/CasePathsCore",
+      "product_dependencies" : [
+        "IssueReporting"
+      ],
+      "product_memberships" : [
+        "CasePaths",
+        "CasePathsCore"
+      ],
+      "sources" : [
+        "AnyCasePath.swift",
+        "CasePath.swift",
+        "CasePathIterable.swift",
+        "CasePathReflectable.swift",
+        "CasePathable.swift",
+        "Internal/KeyPath+Sendable.swift",
+        "Internal/TypeName.swift",
+        "Internal/UncheckedSendable.swift",
+        "Never+CasePathable.swift",
+        "Optional+CasePathable.swift",
+        "Result+CasePathable.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CasePaths",
+      "module_type" : "SwiftTarget",
+      "name" : "CasePaths",
+      "path" : "Sources/CasePaths",
+      "product_memberships" : [
+        "CasePaths"
+      ],
+      "sources" : [
+        "EnumReflection.swift",
+        "Internal/Deprecations.swift",
+        "Internal/Exports.swift",
+        "Internal/LockIsolated.swift",
+        "Macros.swift",
+        "XCTestSupport.swift"
+      ],
+      "target_dependencies" : [
+        "CasePathsCore",
+        "CasePathsMacros"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.4"
+}

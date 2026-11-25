@@ -1,0 +1,213 @@
+{
+  "cLanguageStandard" : "c99",
+  "cxxLanguageStandard" : "gnu++14",
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "googleutilities",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/GoogleUtilities.git"
+              }
+            ]
+          },
+          "nameForTargetDependencyResolutionOnly" : "GoogleUtilities",
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "8.1.0",
+                "upperBound" : "9.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "nanopb",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/firebase/nanopb.git"
+              }
+            ]
+          },
+          "nameForTargetDependencyResolutionOnly" : "nanopb",
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.30910.0",
+                "upperBound" : "2.30911.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "GoogleAdsOnDeviceConversion",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "12.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "7.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GoogleAdsOnDeviceConversion",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleAdsOnDeviceConversionTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "GoogleAdsOnDeviceConversion",
+            {
+              "platformNames" : [
+                "ios"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULLogger",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULNetwork",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleAdsOnDeviceConversionTarget",
+      "packageAccess" : false,
+      "path" : "GoogleAdsOnDeviceConversionWrapper",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "c++"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "checksum" : "58c6e6f9c147710ea946a5537333ee62f702e7a13a45f3f3170acb25ad99eab7",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleAdsOnDeviceConversion",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://dl.google.com/firebase/ios/appads/3.8.0/GoogleAdsOnDeviceConversion.zip"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.3.0"
+  },
+  "traits" : [
+
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-composable-architecture",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.26.2",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-composable-architecture"
+    }
+  ],
+  "manifest_display_name" : "tca_example",
+  "name" : "tca_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}

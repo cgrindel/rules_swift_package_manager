@@ -263,7 +263,8 @@ swift_package_tool_repo = repository_rule(
             "flags": attr.string(
                 doc = """\
 v2: the `key=value\\n` flags as rendered by `staleness.render_flags`. The \
-netrc and registries paths travel here as workspace-relative paths.\
+netrc and registries paths come from the root slices' `from_package` tags and \
+travel here as workspace-relative paths.\
 """,
             ),
             "package": attr.string(

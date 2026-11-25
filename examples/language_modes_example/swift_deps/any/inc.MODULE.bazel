@@ -1,0 +1,20 @@
+swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
+swift_deps.from_package(
+    config = "@rules_swift_package_manager//config:any",
+    desc_manifests = {
+        "_main": "//swift_deps/any:swift_deps_cache/_main/desc.json",
+        "swift-log": "//swift_deps/any:swift_deps_cache/swift-log/desc.json",
+        "swift_5_package": "//swift_deps/any:swift_deps_cache/swift_5_package/desc.json",
+        "swift_5_package_v6": "//swift_deps/any:swift_deps_cache/swift_5_package_v6/desc.json",
+        "swift_6_package": "//swift_deps/any:swift_deps_cache/swift_6_package/desc.json",
+    },
+    dump_manifests = {
+        "_main": "//swift_deps/any:swift_deps_cache/_main/dump.json",
+        "swift-log": "//swift_deps/any:swift_deps_cache/swift-log/dump.json",
+        "swift_5_package": "//swift_deps/any:swift_deps_cache/swift_5_package/dump.json",
+        "swift_5_package_v6": "//swift_deps/any:swift_deps_cache/swift_5_package_v6/dump.json",
+        "swift_6_package": "//swift_deps/any:swift_deps_cache/swift_6_package/dump.json",
+    },
+    resolved = "//swift_deps/any:Package.resolved",
+    swift = "//:Package.swift",
+)

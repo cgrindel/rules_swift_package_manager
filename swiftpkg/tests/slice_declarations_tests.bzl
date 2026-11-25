@@ -102,6 +102,7 @@ def _tag(
         desc_ids = None,
         is_dev = False,
         netrc = None,
+        registries = None,
         make_files_read_only = False):
     if desc_ids == None:
         desc_ids = dump_ids
@@ -119,6 +120,7 @@ def _tag(
         },
         is_dev = is_dev,
         netrc = netrc,
+        registries = registries,
         make_files_read_only = make_files_read_only,
     )
 
@@ -538,7 +540,7 @@ _WINDOWS = "@@//config:windows"
 _LOG_URL = "https://github.com/apple/swift-log"
 _PACKAGE_REPOS_LABEL = "@swift_deps_package_repos//:package_repos.json"
 
-def _decl_slice(dir, config, identities, is_root = True, is_dev = False, netrc = None, make_files_read_only = False):
+def _decl_slice(dir, config, identities, is_root = True, is_dev = False, netrc = None, registries = None, make_files_read_only = False):
     ids = ["_main"] + identities
     return slices.new(
         config = Label(config),
@@ -555,6 +557,7 @@ def _decl_slice(dir, config, identities, is_root = True, is_dev = False, netrc =
         is_root = is_root,
         is_dev = is_dev,
         netrc = netrc,
+        registries = registries,
         make_files_read_only = make_files_read_only,
     )
 
@@ -593,6 +596,7 @@ def _fresh(
         is_dev = False,
         swift_version = "6.0",
         netrc = None,
+        registries = None,
         make_files_read_only = False,
         extra_pkgs = {}):
     """A fresh evaluated slice. `direct` lists the root's direct deps."""
@@ -611,6 +615,7 @@ def _fresh(
             is_root = is_root,
             is_dev = is_dev,
             netrc = netrc,
+            registries = registries,
             make_files_read_only = make_files_read_only,
         ),
         stale = False,
@@ -866,6 +871,79 @@ swift_package_declared_once_for_two_root_slices_test = unittest.make(
     _swift_package_declared_once_for_two_root_slices_test,
 )
 
+def _tool_flags_carry_from_package_labels_test(ctx):
+    env = unittest.begin(ctx)
+
+    netrc = Label("@@//auth:.netrc")
+    registries = Label("@@//:registries.json")
+    actual = _declare([
+        _fresh("swift/macos", _MACOS, netrc = netrc, registries = registries),
+        _fresh("swift/linux", _LINUX, netrc = netrc, registries = registries),
+    ])
+    tool = actual.calls["tool_repo"]
+    asserts.equals(env, 1, len(tool))
+    asserts.equals(
+        env,
+        staleness.render_flags(None, netrc = netrc, registries = registries),
+        tool[0]["flags"],
+    )
+    asserts.true(env, "netrc=auth/.netrc\n" in tool[0]["flags"])
+    asserts.true(env, "registries=registries.json\n" in tool[0]["flags"])
+
+    return unittest.end(env)
+
+tool_flags_carry_from_package_labels_test = unittest.make(
+    _tool_flags_carry_from_package_labels_test,
+)
+
+def _bootstrap_slice_patches_reach_tool_test(ctx):
+    env = unittest.begin(ctx)
+
+    # `init` wrote empty manifest dicts, so only the pins name the package.
+    # The first cache run must still copy its patch.
+    patch = Label("@@//patches:maps.patch")
+    bootstrap = struct(
+        slice = slices.new(
+            config = Label(_MACOS),
+            swift = Label("@@//app:Package.swift"),
+            resolved = Label("@@//swift/macos:Package.resolved"),
+            dump_manifests = {},
+            desc_manifests = {},
+            is_root = True,
+            is_dev = False,
+        ),
+        stale = True,
+        reasons = ["missing cached copy"],
+        pkgs = {
+            "ios-maps-sdk": struct(
+                kind = "source_control",
+                pin_key = "x@ios-maps-sdk",
+                swift_version = None,
+            ),
+        },
+        pkg_info = None,
+        module_aliases_by_id = {},
+    )
+    actual = _declare(
+        [bootstrap],
+        config_pkgs = {
+            "ios-maps-sdk": _config_pkg("ios-maps-sdk", patches = [patch], patch_args = ["-p1"]),
+        },
+    )
+    kwargs = actual.calls["tool_repo"][0]
+    asserts.equals(
+        env,
+        {"ios-maps-sdk": {"args": ["-p1"], "files": [str(patch)]}},
+        json.decode(kwargs["patch_specs"]),
+    )
+    asserts.equals(env, [patch], kwargs["patch_files"])
+
+    return unittest.end(env)
+
+bootstrap_slice_patches_reach_tool_test = unittest.make(
+    _bootstrap_slice_patches_reach_tool_test,
+)
+
 def _fresh_slice_missing_identity_gets_missing_message_test(ctx):
     env = unittest.begin(ctx)
 
@@ -1054,7 +1132,11 @@ def _collect_builds_slices_in_order_test(ctx):
     v1 = _tag(config = None, dump_ids = [])
     actual = _collect([
         _module([
-            _tag(netrc = Label("@@//:.netrc"), make_files_read_only = True),
+            _tag(
+                netrc = Label("@@//:.netrc"),
+                registries = Label("@@//:registries.json"),
+                make_files_read_only = True,
+            ),
             v1,
             _tag(dir = "swift/linux", config = Label("@@//config:linux"), is_dev = True),
         ]),
@@ -1070,6 +1152,11 @@ def _collect_builds_slices_in_order_test(ctx):
     asserts.equals(env, [True, True], [s.is_root for s in actual.result])
     asserts.equals(env, [False, True], [s.is_dev for s in actual.result])
     asserts.equals(env, [Label("@@//:.netrc"), None], [s.netrc for s in actual.result])
+    asserts.equals(
+        env,
+        [Label("@@//:registries.json"), None],
+        [s.registries for s in actual.result],
+    )
     asserts.equals(env, [True, False], [s.make_files_read_only for s in actual.result])
 
     return unittest.end(env)
@@ -1156,6 +1243,89 @@ def _non_root_v2_tag_fails_test(ctx):
 
 non_root_v2_tag_fails_test = unittest.make(_non_root_v2_tag_fails_test)
 
+def _flag_slice(dir, netrc = None, registries = None):
+    return struct(dir = dir, netrc = netrc, registries = registries)
+
+_NETRC_A = Label("//swift_deps/apple:.netrc")
+_NETRC_B = Label("//swift_deps/linux:.netrc")
+_REGISTRIES_A = Label("//:registries.json")
+_REGISTRIES_B = Label("//:other_registries.json")
+
+def _assert_flag_error(env, actual, attr):
+    asserts.true(env, actual != None, "expected an error for " + attr)
+    if actual == None:
+        return
+    for want in ("`{}`".format(attr), "swift_deps/apple", "swift_deps/linux"):
+        asserts.true(
+            env,
+            want in actual,
+            "expected {} in: {}".format(want, actual),
+        )
+
+def _tool_flag_labels_error_test(ctx):
+    env = unittest.begin(ctx)
+    check = slice_declarations_testing.tool_flag_labels_error
+
+    _assert_flag_error(
+        env,
+        check([
+            _flag_slice("swift_deps/apple", netrc = _NETRC_A),
+            _flag_slice("swift_deps/linux", netrc = _NETRC_B),
+        ]),
+        "netrc",
+    )
+    _assert_flag_error(
+        env,
+        check([
+            _flag_slice("swift_deps/apple", registries = _REGISTRIES_A),
+            _flag_slice("swift_deps/linux", registries = _REGISTRIES_B),
+        ]),
+        "registries",
+    )
+    _assert_flag_error(
+        env,
+        check([
+            _flag_slice("swift_deps/apple"),
+            _flag_slice("swift_deps/linux", netrc = _NETRC_B),
+        ]),
+        "netrc",
+    )
+    _assert_flag_error(
+        env,
+        check([
+            _flag_slice("swift_deps/apple", registries = _REGISTRIES_A),
+            _flag_slice("swift_deps/linux"),
+        ]),
+        "registries",
+    )
+    asserts.equals(
+        env,
+        None,
+        check([
+            _flag_slice(
+                "swift_deps/apple",
+                netrc = _NETRC_A,
+                registries = _REGISTRIES_A,
+            ),
+            _flag_slice(
+                "swift_deps/linux",
+                netrc = _NETRC_A,
+                registries = _REGISTRIES_A,
+            ),
+        ]),
+        "equal labels",
+    )
+    asserts.equals(
+        env,
+        None,
+        check([_flag_slice("swift_deps/apple", netrc = _NETRC_A)]),
+        "single slice",
+    )
+
+    return unittest.end(env)
+
+tool_flag_labels_error_test = unittest.make(_tool_flag_labels_error_test)
+
 def slice_declarations_test_suite():
     return unittest.suite(
         "slice_declarations_tests",
@@ -1180,10 +1350,13 @@ def slice_declarations_test_suite():
         two_groups_declare_hidden_repos_and_aliases_test,
         stale_only_declares_stale_repo_test,
         swift_package_declared_once_for_two_root_slices_test,
+        tool_flags_carry_from_package_labels_test,
+        bootstrap_slice_patches_reach_tool_test,
         non_root_v2_tag_fails_test,
         fresh_slice_missing_identity_gets_missing_message_test,
         direct_deps_split_dev_test,
         identical_requires_same_swift_version_test,
         identical_ignores_swift_patch_version_test,
         v2_passes_netrc_and_read_only_test,
+        tool_flag_labels_error_test,
     )

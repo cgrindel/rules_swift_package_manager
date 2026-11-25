@@ -1,0 +1,764 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-nio",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-nio.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.100.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-nio-ssl",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-nio-ssl.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.30.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-nio-http2",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-nio-http2.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.36.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-nio-extras",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-nio-extras.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.26.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-nio-transport-services",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-nio-transport-services.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.24.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-log",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-log.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.7.1",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-atomics",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-atomics.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.2",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-algorithms",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-algorithms.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-distributed-tracing",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-distributed-tracing.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.3.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-configuration",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-configuration.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-service-context",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-service-context.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.1.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "async-http-client",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "AsyncHTTPClient",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AsyncHTTPClient"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CAsyncHTTPClient",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "_GNU_SOURCE"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "CAsyncHTTPClient",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIO",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOTLS",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOCore",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOPosix",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOHTTP1",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOConcurrencyHelpers",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOHTTP2",
+            "swift-nio-http2",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOSSL",
+            "swift-nio-ssl",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOHTTPCompression",
+            "swift-nio-extras",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOSOCKS",
+            "swift-nio-extras",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOTransportServices",
+            "swift-nio-transport-services",
+            null,
+            {
+              "platformNames" : [
+                "macos",
+                "ios",
+                "tvos",
+                "watchos",
+                "maccatalyst",
+                "visionos"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "Atomics",
+            "swift-atomics",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Algorithms",
+            "swift-algorithms",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Configuration",
+            "swift-configuration",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Logging",
+            "swift-log",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Tracing",
+            "swift-distributed-tracing",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "ServiceContextModule",
+            "swift-service-context",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AsyncHTTPClient",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "AsyncHTTPClient",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOTLS",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOCore",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOConcurrencyHelpers",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOEmbedded",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOFoundationCompat",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOTestUtils",
+            "swift-nio",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOSSL",
+            "swift-nio-ssl",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOHTTP2",
+            "swift-nio-http2",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "NIOSOCKS",
+            "swift-nio-extras",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Atomics",
+            "swift-atomics",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Algorithms",
+            "swift-algorithms",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Configuration",
+            "swift-configuration",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Logging",
+            "swift-log",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "InMemoryLogging",
+            "swift-log",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Tracing",
+            "swift-distributed-tracing",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "ServiceContextModule",
+            "swift-service-context",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "InMemoryTracing",
+            "swift-distributed-tracing",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AsyncHTTPClientTests",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Resources/self_signed_cert.pem",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Resources/self_signed_key.pem",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Resources/example.com.cert.pem",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Resources/example.com.private-key.pem",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.2.0"
+  },
+  "traits" : [
+    {
+      "description" : "Enables source unstable SPIs to support the swift-http-api-proposal\nAHC backend. Do not rely on this module in API stable packages.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "UnstableHTTPAPIsSupport"
+    },
+    {
+      "description" : "The default traits of this package.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "default"
+    }
+  ]
+}

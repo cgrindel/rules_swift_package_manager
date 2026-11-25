@@ -1,0 +1,96 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "nanopb",
+  "name" : "nanopb",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "12.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "7.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "nanopb",
+      "targets" : [
+        "nanopb"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "swift_test",
+      "module_type" : "SwiftTarget",
+      "name" : "swift-test",
+      "path" : "spm-test/swift",
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "nanopb"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "objc_test",
+      "module_type" : "ClangTarget",
+      "name" : "objc-test",
+      "path" : "spm-test/objc",
+      "sources" : [
+        "c-header.c",
+        "objc-header.m",
+        "objc-module.m",
+        "objc-qualified.m"
+      ],
+      "target_dependencies" : [
+        "nanopb"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "nanopb",
+      "module_type" : "ClangTarget",
+      "name" : "nanopb",
+      "path" : ".",
+      "product_memberships" : [
+        "nanopb"
+      ],
+      "resources" : [
+        {
+          "path" : "./spm_resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "pb_common.c",
+        "pb_decode.c",
+        "pb_encode.c"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.3"
+}

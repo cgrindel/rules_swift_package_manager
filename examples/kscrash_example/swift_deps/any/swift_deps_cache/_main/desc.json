@@ -1,0 +1,27 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "kscrash",
+      "requirement" : {
+        "exact" : [
+          "2.6.1"
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/kstenerud/KSCrash"
+    }
+  ],
+  "manifest_display_name" : "resources_example",
+  "name" : "resources_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "6.0"
+}

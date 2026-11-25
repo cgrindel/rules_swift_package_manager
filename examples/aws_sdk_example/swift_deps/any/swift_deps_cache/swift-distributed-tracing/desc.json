@@ -1,0 +1,211 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "swift-distributed-tracing",
+  "name" : "swift-distributed-tracing",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Instrumentation",
+      "targets" : [
+        "Instrumentation",
+        "ServiceContextModule"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Tracing",
+      "targets" : [
+        "Tracing"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "InMemoryTracing",
+      "targets" : [
+        "InMemoryTracing"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "_CWASI",
+      "module_type" : "ClangTarget",
+      "name" : "_CWASI",
+      "path" : "Sources/_CWASI",
+      "product_memberships" : [
+        "Tracing",
+        "InMemoryTracing"
+      ],
+      "sources" : [
+        "_CWASI.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "TracingTests",
+      "module_type" : "SwiftTarget",
+      "name" : "TracingTests",
+      "path" : "Tests/TracingTests",
+      "sources" : [
+        "ActorTracingTests.swift",
+        "DynamicTracepointTracerTests.swift",
+        "SpanTests.swift",
+        "TaskLocalInstrumentTests.swift",
+        "TestTracer.swift",
+        "TracedLock.swift",
+        "TracedLockTests.swift",
+        "TracerTests.swift",
+        "TracerTimeTests.swift",
+        "TracingInstrumentationSystemTests.swift"
+      ],
+      "target_dependencies" : [
+        "Tracing"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "Tracing",
+      "module_type" : "SwiftTarget",
+      "name" : "Tracing",
+      "path" : "Sources/Tracing",
+      "product_memberships" : [
+        "Tracing",
+        "InMemoryTracing"
+      ],
+      "sources" : [
+        "InstrumentationSystem+Tracing.swift",
+        "NoOpTracer.swift",
+        "SpanProtocol.swift",
+        "Tracer.swift",
+        "TracerProtocol+Legacy.swift",
+        "TracerProtocol.swift",
+        "TracingTime.swift",
+        "WithTracer.swift"
+      ],
+      "target_dependencies" : [
+        "Instrumentation",
+        "ServiceContextModule",
+        "_CWASI"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "ServiceContextModuleTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ServiceContextModuleTests",
+      "path" : "Tests/ServiceContextModuleTests",
+      "sources" : [
+        "ServiceContextMetatypeTests.swift",
+        "ServiceContextModuleTests.swift"
+      ],
+      "target_dependencies" : [
+        "ServiceContextModule",
+        "Tracing"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "ServiceContextModule",
+      "module_type" : "SwiftTarget",
+      "name" : "ServiceContextModule",
+      "path" : "Sources/ServiceContextModule",
+      "product_memberships" : [
+        "Instrumentation",
+        "Tracing",
+        "InMemoryTracing"
+      ],
+      "sources" : [
+        "ServiceContextModule.swift"
+      ],
+      "target_dependencies" : [
+        "Instrumentation"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "InstrumentationTests",
+      "module_type" : "SwiftTarget",
+      "name" : "InstrumentationTests",
+      "path" : "Tests/InstrumentationTests",
+      "sources" : [
+        "InstrumentTests.swift",
+        "InstrumentationContextTests.swift"
+      ],
+      "target_dependencies" : [
+        "Instrumentation"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "Instrumentation",
+      "module_type" : "SwiftTarget",
+      "name" : "Instrumentation",
+      "path" : "Sources/Instrumentation",
+      "product_memberships" : [
+        "Instrumentation",
+        "Tracing",
+        "InMemoryTracing"
+      ],
+      "sources" : [
+        "Instrument.swift",
+        "InstrumentationContext.swift",
+        "InstrumentationContextKey.swift",
+        "InstrumentationSystem.swift",
+        "Locks.swift",
+        "MultiplexInstrument.swift",
+        "NoOpInstrument.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "InMemoryTracingTests",
+      "module_type" : "SwiftTarget",
+      "name" : "InMemoryTracingTests",
+      "path" : "Tests/InMemoryTracingTests",
+      "sources" : [
+        "InMemoryTracerTests.swift"
+      ],
+      "target_dependencies" : [
+        "InMemoryTracing"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "InMemoryTracing",
+      "module_type" : "SwiftTarget",
+      "name" : "InMemoryTracing",
+      "path" : "Sources/InMemoryTracing",
+      "product_memberships" : [
+        "InMemoryTracing"
+      ],
+      "sources" : [
+        "InMemorySpan.swift",
+        "InMemorySpanContext.swift",
+        "InMemoryTracer.swift"
+      ],
+      "target_dependencies" : [
+        "Tracing"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.2"
+}

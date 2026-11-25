@@ -1,0 +1,2294 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-atomics",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.1.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-atomics.git"
+    },
+    {
+      "identity" : "swift-collections",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.1.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-collections.git"
+    },
+    {
+      "identity" : "swift-system",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.4.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-system.git"
+    }
+  ],
+  "manifest_display_name" : "swift-nio",
+  "name" : "swift-nio",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "NIOCore",
+      "targets" : [
+        "NIOCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIO",
+      "targets" : [
+        "NIO"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOEmbedded",
+      "targets" : [
+        "NIOEmbedded"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOPosix",
+      "targets" : [
+        "NIOPosix"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "_NIOConcurrency",
+      "targets" : [
+        "_NIOConcurrency"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOTLS",
+      "targets" : [
+        "NIOTLS"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOHTTP1",
+      "targets" : [
+        "NIOHTTP1"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOConcurrencyHelpers",
+      "targets" : [
+        "NIOConcurrencyHelpers"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOFoundationEssentialsCompat",
+      "targets" : [
+        "NIOFoundationEssentialsCompat"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOFoundationCompat",
+      "targets" : [
+        "NIOFoundationCompat"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOWebSocket",
+      "targets" : [
+        "NIOWebSocket"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOTestUtils",
+      "targets" : [
+        "NIOTestUtils"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "_NIOFileSystem",
+      "targets" : [
+        "_NIOFileSystem",
+        "NIOFileSystem"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "_NIOFileSystemFoundationCompat",
+      "targets" : [
+        "_NIOFileSystemFoundationCompat"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOWebSocketServer",
+      "targets" : [
+        "NIOWebSocketServer"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOWebSocketClient",
+      "targets" : [
+        "NIOWebSocketClient"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOUDPEchoServer",
+      "targets" : [
+        "NIOUDPEchoServer"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOUDPEchoClient",
+      "targets" : [
+        "NIOUDPEchoClient"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOTCPEchoServer",
+      "targets" : [
+        "NIOTCPEchoServer"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOTCPEchoClient",
+      "targets" : [
+        "NIOTCPEchoClient"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOPerformanceTester",
+      "targets" : [
+        "NIOPerformanceTester"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOMulticastChat",
+      "targets" : [
+        "NIOMulticastChat"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOHTTP1Server",
+      "targets" : [
+        "NIOHTTP1Server"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOHTTP1Client",
+      "targets" : [
+        "NIOHTTP1Client"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOEchoServer",
+      "targets" : [
+        "NIOEchoServer"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOEchoClient",
+      "targets" : [
+        "NIOEchoClient"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOChatServer",
+      "targets" : [
+        "NIOChatServer"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOChatClient",
+      "targets" : [
+        "NIOChatClient"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOAsyncAwaitDemo",
+      "targets" : [
+        "NIOAsyncAwaitDemo"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOFileSystemTour",
+      "targets" : [
+        "NIOFileSystemTour"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "_NIOFileSystemFoundationCompat",
+      "module_type" : "SwiftTarget",
+      "name" : "_NIOFileSystemFoundationCompat",
+      "path" : "Sources/_NIOFileSystemFoundationCompat",
+      "product_memberships" : [
+        "_NIOFileSystemFoundationCompat",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "Data+FileSystem.swift",
+        "Date+FileInfo.swift"
+      ],
+      "target_dependencies" : [
+        "_NIOFileSystem",
+        "NIOFoundationEssentialsCompat"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "_NIOFileSystem",
+      "module_type" : "SwiftTarget",
+      "name" : "_NIOFileSystem",
+      "path" : "Sources/_NIOFileSystem",
+      "product_dependencies" : [
+        "Atomics",
+        "DequeModule",
+        "SystemPackage"
+      ],
+      "product_memberships" : [
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "NIOFileSystemTour"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/_NIOFileSystem/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Array+FileSystem.swift",
+        "ArraySlice+FileSystem.swift",
+        "BufferedReader.swift",
+        "BufferedWriter.swift",
+        "ByteBuffer+FileSystem.swift",
+        "ByteCount.swift",
+        "Convenience.swift",
+        "DirectoryEntries.swift",
+        "DirectoryEntry.swift",
+        "Exports.swift",
+        "FileChunks.swift",
+        "FileHandle.swift",
+        "FileHandleProtocol.swift",
+        "FileInfo.swift",
+        "FileSystem.swift",
+        "FileSystemError+Syscall.swift",
+        "FileSystemError.swift",
+        "FileSystemProtocol.swift",
+        "FileType.swift",
+        "IOStrategy.swift",
+        "Internal/BufferedOrAnyStream.swift",
+        "Internal/BufferedStream.swift",
+        "Internal/Cancellation.swift",
+        "Internal/Concurrency Primitives/TokenBucket.swift",
+        "Internal/ParallelDirCopy.swift",
+        "Internal/ParallelRemoval.swift",
+        "Internal/String+UnsafeUnititializedCapacity.swift",
+        "Internal/System Calls/CInterop.swift",
+        "Internal/System Calls/Errno.swift",
+        "Internal/System Calls/FileDescriptor+Syscalls.swift",
+        "Internal/System Calls/Mocking.swift",
+        "Internal/System Calls/Syscall.swift",
+        "Internal/System Calls/Syscalls.swift",
+        "Internal/System Calls/SystemPackage+Windows.swift",
+        "Internal/SystemFileHandle.swift",
+        "Internal/Utilities.swift",
+        "NIOFilePath.swift",
+        "NIOFileSystemSendableMetatype.swift",
+        "OpenOptions.swift",
+        "String+FileSystem.swift"
+      ],
+      "target_dependencies" : [
+        "NIOCore",
+        "NIOPosix",
+        "CNIOLinux",
+        "CNIODarwin",
+        "CNIOWindows"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "_NIODataStructures",
+      "module_type" : "SwiftTarget",
+      "name" : "_NIODataStructures",
+      "path" : "Sources/_NIODataStructures",
+      "product_memberships" : [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationEssentialsCompat",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOTCPEchoServer",
+        "NIOTCPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "Heap.swift",
+        "PriorityQueue.swift",
+        "_TinyArray.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "_NIOConcurrency",
+      "module_type" : "SwiftTarget",
+      "name" : "_NIOConcurrency",
+      "path" : "Sources/_NIOConcurrency",
+      "product_memberships" : [
+        "_NIOConcurrency",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "Empty.swift"
+      ],
+      "target_dependencies" : [
+        "NIO",
+        "NIOCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "_NIOBase64",
+      "module_type" : "SwiftTarget",
+      "name" : "_NIOBase64",
+      "path" : "Sources/_NIOBase64",
+      "product_memberships" : [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationEssentialsCompat",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOTCPEchoServer",
+        "NIOTCPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "Base64.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOWebSocketTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOWebSocketTests",
+      "path" : "Tests/NIOWebSocketTests",
+      "sources" : [
+        "ByteBufferWebSocketTests.swift",
+        "NIOWebSocketClientUpgraderTests.swift",
+        "NIOWebSocketFrameAggregatorTests.swift",
+        "WebSocketClientEndToEndTests.swift",
+        "WebSocketFrameDecoderTest.swift",
+        "WebSocketFrameEncoderTest.swift",
+        "WebSocketMaskingKeyTests.swift",
+        "WebSocketServerEndToEndTests.swift"
+      ],
+      "target_dependencies" : [
+        "NIOCore",
+        "NIOEmbedded",
+        "NIOWebSocket"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOWebSocketServer",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOWebSocketServer",
+      "path" : "Sources/NIOWebSocketServer",
+      "product_memberships" : [
+        "NIOWebSocketServer"
+      ],
+      "sources" : [
+        "Server.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore",
+        "NIOHTTP1",
+        "NIOWebSocket"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOWebSocketClient",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOWebSocketClient",
+      "path" : "Sources/NIOWebSocketClient",
+      "product_memberships" : [
+        "NIOWebSocketClient"
+      ],
+      "sources" : [
+        "Client.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore",
+        "NIOHTTP1",
+        "NIOWebSocket"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOWebSocket",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOWebSocket",
+      "path" : "Sources/NIOWebSocket",
+      "product_memberships" : [
+        "NIOWebSocket",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOPerformanceTester",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "NIOWebSocketClientUpgrader.swift",
+        "NIOWebSocketFrameAggregator.swift",
+        "NIOWebSocketServerUpgrader.swift",
+        "SHA1.swift",
+        "WebSocketErrorCodes.swift",
+        "WebSocketFrame.swift",
+        "WebSocketFrameDecoder.swift",
+        "WebSocketFrameEncoder.swift",
+        "WebSocketOpcode.swift",
+        "WebSocketProtocolErrorHandler.swift"
+      ],
+      "target_dependencies" : [
+        "NIO",
+        "NIOCore",
+        "NIOHTTP1",
+        "CNIOSHA1",
+        "_NIOBase64"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOUDPEchoServer",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOUDPEchoServer",
+      "path" : "Sources/NIOUDPEchoServer",
+      "product_memberships" : [
+        "NIOUDPEchoServer"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOUDPEchoClient",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOUDPEchoClient",
+      "path" : "Sources/NIOUDPEchoClient",
+      "product_memberships" : [
+        "NIOUDPEchoClient"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOTests",
+      "path" : "Tests/NIOTests",
+      "sources" : [
+        "NIOTests.swift"
+      ],
+      "target_dependencies" : [
+        "NIO"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOTestUtilsTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOTestUtilsTests",
+      "path" : "Tests/NIOTestUtilsTests",
+      "sources" : [
+        "ByteToMessageDecoderVerifierTest.swift",
+        "EventCounterHandlerTest.swift",
+        "ManualTaskExecutorTest.swift",
+        "NIOHTTP1TestServerTest.swift"
+      ],
+      "target_dependencies" : [
+        "NIOTestUtils",
+        "NIOCore",
+        "NIOEmbedded",
+        "NIOPosix"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOTestUtils",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOTestUtils",
+      "path" : "Sources/NIOTestUtils",
+      "product_dependencies" : [
+        "Atomics"
+      ],
+      "product_memberships" : [
+        "NIOTestUtils",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "ByteToMessageDecoderVerifier.swift",
+        "EventCounterHandler.swift",
+        "ManualTaskExecutor.swift",
+        "NIOHTTP1TestServer.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore",
+        "NIOEmbedded",
+        "NIOHTTP1"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOTLSTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOTLSTests",
+      "path" : "Tests/NIOTLSTests",
+      "sources" : [
+        "ApplicationProtocolNegotiationHandlerTests.swift",
+        "NIOTypedApplicationProtocolNegotiationHandlerTests.swift",
+        "SNIHandlerTests.swift"
+      ],
+      "target_dependencies" : [
+        "NIOCore",
+        "NIOEmbedded",
+        "NIOTLS",
+        "NIOFoundationCompat",
+        "NIOTestUtils"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOTLS",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOTLS",
+      "path" : "Sources/NIOTLS",
+      "product_dependencies" : [
+        "DequeModule"
+      ],
+      "product_memberships" : [
+        "NIOTLS",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "ApplicationProtocolNegotiationHandler.swift",
+        "NIOTypedApplicationProtocolNegotiationHandler.swift",
+        "ProtocolNegotiationHandlerStateMachine.swift",
+        "SNIHandler.swift",
+        "TLSEvents.swift"
+      ],
+      "target_dependencies" : [
+        "NIO",
+        "NIOCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOTCPEchoServer",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOTCPEchoServer",
+      "path" : "Sources/NIOTCPEchoServer",
+      "product_memberships" : [
+        "NIOTCPEchoServer"
+      ],
+      "sources" : [
+        "Server.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOTCPEchoClient",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOTCPEchoClient",
+      "path" : "Sources/NIOTCPEchoClient",
+      "product_memberships" : [
+        "NIOTCPEchoClient"
+      ],
+      "sources" : [
+        "Client.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOSingletonsTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOSingletonsTests",
+      "path" : "Tests/NIOSingletonsTests",
+      "sources" : [
+        "GlobalSingletonsTests.swift"
+      ],
+      "target_dependencies" : [
+        "NIOCore",
+        "NIOPosix"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOPosixTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOPosixTests",
+      "path" : "Tests/NIOPosixTests",
+      "sources" : [
+        "AcceptBackoffHandlerTest.swift",
+        "AsyncChannelBootstrapTests.swift",
+        "BlockingIOThreadPoolTest.swift",
+        "BootstrapTest.swift",
+        "ChannelNotificationTest.swift",
+        "ChannelPipelineTest.swift",
+        "ChannelTests.swift",
+        "CoWValue.swift",
+        "CodecTest.swift",
+        "ControlMessageTests.swift",
+        "CrashTestSupport.swift",
+        "DatagramChannelTests.swift",
+        "EchoServerClientTest.swift",
+        "EventLoopCrashTests.swift",
+        "EventLoopFutureGetAbandoningOnCancelTests.swift",
+        "EventLoopFutureIsolatedTests.swift",
+        "EventLoopFutureTest.swift",
+        "EventLoopMetricsDelegateTests.swift",
+        "EventLoopTest.swift",
+        "FileRegionTest.swift",
+        "GetAddrInfoResolverTest.swift",
+        "HappyEyeballsTest.swift",
+        "IPv4Header.swift",
+        "IdleStateHandlerTest.swift",
+        "IntegerBitPackingTests.swift",
+        "LoopBoundCrashTests.swift",
+        "MulticastTest.swift",
+        "NIOFileHandleTest.swift",
+        "NIOLoopBoundTests.swift",
+        "NIORandomizedDNSResolverTest.swift",
+        "NIOScheduledCallbackTests.swift",
+        "NIOThreadPoolTest.swift",
+        "NIOTransportAccessibleChannelCoreTests.swift",
+        "NonBlockingFileIOTest.swift",
+        "PendingDatagramWritesManagerTests.swift",
+        "PipeChannelTest.swift",
+        "RawSocketBootstrapTests.swift",
+        "SALChannelTests.swift",
+        "SALEventLoopTests.swift",
+        "SelectorTest.swift",
+        "SerialExecutorTests.swift",
+        "SocketAddressTest.swift",
+        "SocketChannelTest.swift",
+        "SocketOptionProviderTest.swift",
+        "StreamChannelsTest.swift",
+        "StrictCrashTests.swift",
+        "SyscallAbstractionLayer.swift",
+        "SyscallAbstractionLayerContext.swift",
+        "SystemCallWrapperHelpers.swift",
+        "SystemCrashTests.swift",
+        "SystemTest.swift",
+        "TestUtils.swift",
+        "ThreadTest.swift",
+        "UniversalBootstrapSupportTest.swift",
+        "VsockAddressTest.swift",
+        "XCTest+AsyncAwait.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore",
+        "NIOFoundationCompat",
+        "NIOTestUtils",
+        "NIOConcurrencyHelpers",
+        "NIOEmbedded",
+        "CNIOOpenBSD",
+        "CNIOLinux",
+        "CNIODarwin",
+        "NIOTLS"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOPosix",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOPosix",
+      "path" : "Sources/NIOPosix",
+      "product_dependencies" : [
+        "Atomics"
+      ],
+      "product_memberships" : [
+        "NIO",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOTCPEchoServer",
+        "NIOTCPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/NIOPosix/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "BSDSocketAPICommon.swift",
+        "BSDSocketAPIPosix.swift",
+        "BSDSocketAPIWindows.swift",
+        "BaseSocket.swift",
+        "BaseSocketChannel+AccessibleTransport.swift",
+        "BaseSocketChannel+SocketOptionProvider.swift",
+        "BaseSocketChannel.swift",
+        "BaseStreamSocketChannel.swift",
+        "Bootstrap.swift",
+        "ControlMessage.swift",
+        "DatagramVectorReadManager.swift",
+        "Errors+Any.swift",
+        "FileDescriptor.swift",
+        "GetaddrinfoResolver.swift",
+        "HappyEyeballs.swift",
+        "IO.swift",
+        "IntegerBitPacking.swift",
+        "IntegerTypes.swift",
+        "Linux.swift",
+        "LinuxCPUSet.swift",
+        "LinuxUring.swift",
+        "MultiThreadedEventLoopGroup.swift",
+        "NIOPosixSendableMetatype.swift",
+        "NIORandomizedDNSResolver.swift",
+        "NIOThreadPool.swift",
+        "NonBlockingFileIO.swift",
+        "PendingDatagramWritesManager.swift",
+        "PendingWritesManager.swift",
+        "PipeChannel.swift",
+        "PipePair.swift",
+        "Pool.swift",
+        "PosixSingletons+ConcurrencyTakeOver.swift",
+        "PosixSingletons.swift",
+        "RawSocketBootstrap.swift",
+        "Resolver.swift",
+        "Selectable.swift",
+        "SelectableChannel.swift",
+        "SelectableEventLoop.swift",
+        "SelectorEpoll.swift",
+        "SelectorGeneric.swift",
+        "SelectorKqueue.swift",
+        "SelectorUring.swift",
+        "SelectorWSAPoll.swift",
+        "ServerSocket.swift",
+        "Socket.swift",
+        "SocketChannel.swift",
+        "SocketProtocols.swift",
+        "StructuredConcurrencyHelpers.swift",
+        "System.swift",
+        "Thread.swift",
+        "ThreadPosix.swift",
+        "ThreadWindows.swift",
+        "Utilities.swift",
+        "VsockAddress.swift",
+        "VsockChannelEvents.swift",
+        "Windows.swift"
+      ],
+      "target_dependencies" : [
+        "CNIOOpenBSD",
+        "CNIOLinux",
+        "CNIODarwin",
+        "CNIOWindows",
+        "NIOConcurrencyHelpers",
+        "NIOCore",
+        "_NIODataStructures",
+        "CNIOPosix"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOPerformanceTester",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOPerformanceTester",
+      "path" : "Sources/NIOPerformanceTester",
+      "product_memberships" : [
+        "NIOPerformanceTester"
+      ],
+      "sources" : [
+        "Benchmark.swift",
+        "ByteBufferViewContainsBenchmark.swift",
+        "ByteBufferViewCopyToArrayBenchmark.swift",
+        "ByteBufferViewIteratorBenchmark.swift",
+        "ByteBufferWriteMultipleBenchmarks.swift",
+        "ByteToMessageDecoderDecodeManySmallsBenchmark.swift",
+        "ChannelPipelineBenchmark.swift",
+        "ChannelPipelineInstantiationBenchmark.swift",
+        "CircularBufferCopyToArrayBenchmark.swift",
+        "CircularBufferIntoByteBufferBenchmark.swift",
+        "DeadlineNowBenchmark.swift",
+        "ExecuteBenchmark.swift",
+        "LockBenchmark.swift",
+        "NIOAsyncSequenceProducerBenchmark.swift",
+        "NIOAsyncWriterSingleWritesBenchmark.swift",
+        "NIOThreadPoolSubmitBenchmark.swift",
+        "RunIfActiveBenchmark.swift",
+        "SchedulingAndRunningBenchmark.swift",
+        "TCPThroughputBenchmark.swift",
+        "UDPBenchmark.swift",
+        "WebSocketFrameDecoderBenchmark.swift",
+        "WebSocketFrameEncoderBenchmark.swift",
+        "main.swift",
+        "resources.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore",
+        "NIOEmbedded",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "CNIOWindows"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOMulticastChat",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOMulticastChat",
+      "path" : "Sources/NIOMulticastChat",
+      "product_memberships" : [
+        "NIOMulticastChat"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOHTTP1Tests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOHTTP1Tests",
+      "path" : "Tests/NIOHTTP1Tests",
+      "sources" : [
+        "ByteBufferUtilsTest.swift",
+        "ContentLengthTests.swift",
+        "HTTPClientUpgradeTests.swift",
+        "HTTPDecoderLengthTest.swift",
+        "HTTPDecoderTest.swift",
+        "HTTPDecoderTesting.swift",
+        "HTTPHeaderValidationTests.swift",
+        "HTTPHeadersTest.swift",
+        "HTTPRequestEncoderTest.swift",
+        "HTTPResponseEncoderTest.swift",
+        "HTTPResponseStatusTests.swift",
+        "HTTPServerClientTest.swift",
+        "HTTPServerPipelineHandlerTest.swift",
+        "HTTPServerProtocolErrorHandlerTest.swift",
+        "HTTPServerUpgradeTests.swift",
+        "HTTPServerUpgraderStateMachineTests.swift",
+        "HTTPTest.swift",
+        "HTTPTypesTest.swift",
+        "NIOHTTPObjectAggregatorTest.swift",
+        "TestUtils.swift"
+      ],
+      "target_dependencies" : [
+        "NIOCore",
+        "NIOEmbedded",
+        "NIOPosix",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOTestUtils"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOHTTP1Server",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOHTTP1Server",
+      "path" : "Sources/NIOHTTP1Server",
+      "product_memberships" : [
+        "NIOHTTP1Server"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore",
+        "NIOHTTP1",
+        "NIOConcurrencyHelpers"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOHTTP1Client",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOHTTP1Client",
+      "path" : "Sources/NIOHTTP1Client",
+      "product_memberships" : [
+        "NIOHTTP1Client"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore",
+        "NIOHTTP1",
+        "NIOConcurrencyHelpers"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOHTTP1",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOHTTP1",
+      "path" : "Sources/NIOHTTP1",
+      "product_dependencies" : [
+        "DequeModule"
+      ],
+      "product_memberships" : [
+        "NIOHTTP1",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOPerformanceTester",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "ByteCollectionUtils.swift",
+        "HTTPDecoder.swift",
+        "HTTPEncoder.swift",
+        "HTTPHeaderValidator.swift",
+        "HTTPHeaders+Validation.swift",
+        "HTTPPipelineSetup.swift",
+        "HTTPServerPipelineHandler.swift",
+        "HTTPServerProtocolErrorHandler.swift",
+        "HTTPServerRequestMethodQueue.swift",
+        "HTTPServerUpgradeHandler.swift",
+        "HTTPTypedPipelineSetup.swift",
+        "HTTPTypes.swift",
+        "NIOHTTPClientUpgradeHandler.swift",
+        "NIOHTTPObjectAggregator.swift",
+        "NIOTypedHTTPClientUpgradeHandler.swift",
+        "NIOTypedHTTPClientUpgraderStateMachine.swift",
+        "NIOTypedHTTPServerUpgradeHandler.swift",
+        "NIOTypedHTTPServerUpgraderStateMachine.swift"
+      ],
+      "target_dependencies" : [
+        "NIO",
+        "NIOCore",
+        "NIOConcurrencyHelpers",
+        "CNIOLLHTTP"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOFoundationEssentialsCompat",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOFoundationEssentialsCompat",
+      "path" : "Sources/NIOFoundationEssentialsCompat",
+      "product_memberships" : [
+        "NIOFoundationEssentialsCompat",
+        "NIOFoundationCompat",
+        "_NIOFileSystemFoundationCompat",
+        "NIOPerformanceTester",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "ByteBuffer-foundation.swift",
+        "Codable+ByteBuffer.swift"
+      ],
+      "target_dependencies" : [
+        "NIOCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOFoundationCompatTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOFoundationCompatTests",
+      "path" : "Tests/NIOFoundationCompatTests",
+      "sources" : [
+        "ByteBuffer+UUIDTests.swift",
+        "ByteBufferDataProtocolTests.swift",
+        "ByteBufferView+MutableDataProtocolTest.swift",
+        "Codable+ByteBufferTest.swift",
+        "JSONSerialization+ByteBufferTest.swift",
+        "WaitSpinningRunLoopTests.swift"
+      ],
+      "target_dependencies" : [
+        "NIOCore",
+        "NIOFoundationCompat",
+        "NIOPosix"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOFoundationCompat",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOFoundationCompat",
+      "path" : "Sources/NIOFoundationCompat",
+      "product_memberships" : [
+        "NIOFoundationCompat",
+        "NIOPerformanceTester",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "Exports.swift",
+        "JSONSerialization+ByteBuffer.swift",
+        "WaitSpinningRunLoop.swift"
+      ],
+      "target_dependencies" : [
+        "NIO",
+        "NIOFoundationEssentialsCompat"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOFileSystem",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOFileSystem",
+      "path" : "Sources/NIOFileSystem",
+      "product_memberships" : [
+        "_NIOFileSystem",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "Exports.swift"
+      ],
+      "target_dependencies" : [
+        "_NIOFileSystem"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOFSTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOFSTests",
+      "path" : "Tests/NIOFSTests",
+      "product_dependencies" : [
+        "Atomics",
+        "DequeModule",
+        "SystemPackage"
+      ],
+      "sources" : [
+        "ByteCountTests.swift",
+        "DirectoryEntriesTests.swift",
+        "FileChunksTests.swift",
+        "FileHandleTests.swift",
+        "FileInfoTests.swift",
+        "FileOpenOptionsTests.swift",
+        "FilePathTests.swift",
+        "FileSystemErrorTests.swift",
+        "FileTypeTests.swift",
+        "Internal/CancellationTests.swift",
+        "Internal/Concurrency Primitives/BufferedStreamTests.swift",
+        "Internal/MockingInfrastructure.swift",
+        "Internal/SyscallTests.swift",
+        "XCTestExtensions.swift"
+      ],
+      "target_dependencies" : [
+        "NIOCore",
+        "NIOFS"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOFSIntegrationTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOFSIntegrationTests",
+      "path" : "Tests/NIOFSIntegrationTests",
+      "sources" : [
+        "BufferedReaderTests.swift",
+        "BufferedWriterTests.swift",
+        "ConvenienceTests.swift",
+        "FileHandleTests.swift",
+        "FileSystemTests+SPI.swift",
+        "FileSystemTests.swift",
+        "XCTestExtensions.swift"
+      ],
+      "target_dependencies" : [
+        "NIOCore",
+        "NIOPosix",
+        "NIOFS",
+        "NIOFoundationCompat"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOFSFoundationCompatTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOFSFoundationCompatTests",
+      "path" : "Tests/NIOFSFoundationCompatTests",
+      "sources" : [
+        "FileSystemFoundationCompatTests.swift"
+      ],
+      "target_dependencies" : [
+        "NIOFS",
+        "NIOFSFoundationCompat"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOFSFoundationCompat",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOFSFoundationCompat",
+      "path" : "Sources/NIOFSFoundationCompat",
+      "sources" : [
+        "Data+FileSystem.swift",
+        "Date+FileInfo.swift"
+      ],
+      "target_dependencies" : [
+        "NIOFS",
+        "NIOFoundationEssentialsCompat"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOFS",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOFS",
+      "path" : "Sources/NIOFS",
+      "product_dependencies" : [
+        "Atomics",
+        "DequeModule",
+        "SystemPackage"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/NIOFS/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Array+FileSystem.swift",
+        "ArraySlice+FileSystem.swift",
+        "BufferedReader.swift",
+        "BufferedWriter.swift",
+        "ByteBuffer+FileSystem.swift",
+        "ByteCount.swift",
+        "Convenience.swift",
+        "DirectoryEntries.swift",
+        "DirectoryEntry.swift",
+        "Exports.swift",
+        "FileChunks.swift",
+        "FileHandle.swift",
+        "FileHandleProtocol.swift",
+        "FileInfo.swift",
+        "FileSystem.swift",
+        "FileSystemError+Syscall.swift",
+        "FileSystemError.swift",
+        "FileSystemProtocol.swift",
+        "FileType.swift",
+        "IOStrategy.swift",
+        "Internal/BufferedOrAnyStream.swift",
+        "Internal/BufferedStream.swift",
+        "Internal/Cancellation.swift",
+        "Internal/Concurrency Primitives/TokenBucket.swift",
+        "Internal/ParallelDirCopy.swift",
+        "Internal/ParallelRemoval.swift",
+        "Internal/String+UnsafeUnititializedCapacity.swift",
+        "Internal/System Calls/CInterop.swift",
+        "Internal/System Calls/Errno.swift",
+        "Internal/System Calls/FileDescriptor+Syscalls.swift",
+        "Internal/System Calls/Mocking.swift",
+        "Internal/System Calls/Syscall.swift",
+        "Internal/System Calls/Syscalls.swift",
+        "Internal/System Calls/SystemPackage+Windows.swift",
+        "Internal/SystemFileHandle.swift",
+        "Internal/Utilities.swift",
+        "NIOFilePath.swift",
+        "NIOFileSystemSendableMetatype.swift",
+        "OpenOptions.swift",
+        "String+FileSystem.swift"
+      ],
+      "target_dependencies" : [
+        "NIOCore",
+        "NIOPosix",
+        "CNIOLinux",
+        "CNIODarwin",
+        "CNIOWindows"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOEmbeddedTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOEmbeddedTests",
+      "path" : "Tests/NIOEmbeddedTests",
+      "sources" : [
+        "AsyncTestingChannelTests.swift",
+        "AsyncTestingEventLoopTests.swift",
+        "EmbeddedChannelTest.swift",
+        "EmbeddedEventLoopTest.swift",
+        "TestUtils.swift",
+        "XCTest+AsyncAwait.swift"
+      ],
+      "target_dependencies" : [
+        "NIOConcurrencyHelpers",
+        "NIOCore",
+        "NIOEmbedded"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOEmbedded",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOEmbedded",
+      "path" : "Sources/NIOEmbedded",
+      "product_dependencies" : [
+        "Atomics",
+        "DequeModule"
+      ],
+      "product_memberships" : [
+        "NIO",
+        "NIOEmbedded",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOPerformanceTester",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "AsyncTestingChannel.swift",
+        "AsyncTestingEventLoop.swift",
+        "Embedded.swift"
+      ],
+      "target_dependencies" : [
+        "NIOCore",
+        "NIOConcurrencyHelpers",
+        "_NIODataStructures"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOEchoServer",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOEchoServer",
+      "path" : "Sources/NIOEchoServer",
+      "product_memberships" : [
+        "NIOEchoServer"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore",
+        "NIOConcurrencyHelpers"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOEchoClient",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOEchoClient",
+      "path" : "Sources/NIOEchoClient",
+      "product_memberships" : [
+        "NIOEchoClient"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore",
+        "NIOConcurrencyHelpers"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIODataStructuresTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIODataStructuresTests",
+      "path" : "Tests/NIODataStructuresTests",
+      "sources" : [
+        "HeapTests.swift",
+        "PriorityQueueTests.swift"
+      ],
+      "target_dependencies" : [
+        "_NIODataStructures"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOCoreTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOCoreTests",
+      "path" : "Tests/NIOCoreTests",
+      "product_dependencies" : [
+        "Atomics"
+      ],
+      "sources" : [
+        "AddressedEnvelopeTests.swift",
+        "AsyncChannel/AsyncChannelInboundStreamTests.swift",
+        "AsyncChannel/AsyncChannelOutboundWriterTests.swift",
+        "AsyncChannel/AsyncChannelTests.swift",
+        "AsyncSequenceTests.swift",
+        "AsyncSequences/NIOAsyncSequenceProducer+HighLowWatermarkBackPressureStrategyTests.swift",
+        "AsyncSequences/NIOAsyncSequenceTests.swift",
+        "AsyncSequences/NIOAsyncWriterTests.swift",
+        "AsyncSequences/NIOThrowingAsyncSequenceTests.swift",
+        "BaseObjectsTest.swift",
+        "ByteBufferBinaryEncodedLengthPrefixTests.swift",
+        "ByteBufferCrashTests.swift",
+        "ByteBufferCustomAllocatorTest.swift",
+        "ByteBufferLengthPrefixTests.swift",
+        "ByteBufferQUICBinaryEncodingStrategyTests.swift",
+        "ByteBufferSpanTests.swift",
+        "ByteBufferTest.swift",
+        "ChannelOptionStorageTest.swift",
+        "CircularBufferTests.swift",
+        "CustomChannelTests.swift",
+        "DispatchQueue+WithFutureTest.swift",
+        "IOErrorTest.swift",
+        "IntegerTypesTest.swift",
+        "LinuxTest.swift",
+        "MarkedCircularBufferTests.swift",
+        "NIOAnyDebugTest.swift",
+        "NIOCloseOnErrorHandlerTest.swift",
+        "NIODecodedAsyncSequenceTests.swift",
+        "NIOIsolatedEventLoopTests.swift",
+        "NIOPooledRecvBufferAllocatorTests.swift",
+        "NIOSplitLinesMessageDecoderTests.swift",
+        "RecvByteBufAllocatorTest.swift",
+        "SingleStepByteToMessageDecoderTest.swift",
+        "TimeAmount+DurationTests.swift",
+        "TimeAmountTests.swift",
+        "TypeAssistedChannelHandlerTests.swift",
+        "UtilitiesTest.swift",
+        "XCTest+AsyncAwait.swift",
+        "XCTest+Extensions.swift"
+      ],
+      "target_dependencies" : [
+        "NIOConcurrencyHelpers",
+        "NIOCore",
+        "NIOEmbedded",
+        "NIOFoundationCompat",
+        "NIOTestUtils"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOCore",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOCore",
+      "path" : "Sources/NIOCore",
+      "product_dependencies" : [
+        "DequeModule",
+        "Atomics"
+      ],
+      "product_memberships" : [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationEssentialsCompat",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOTCPEchoServer",
+        "NIOTCPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "AddressedEnvelope.swift",
+        "AsyncAwaitSupport.swift",
+        "AsyncChannel/AsyncChannel.swift",
+        "AsyncChannel/AsyncChannelHandler.swift",
+        "AsyncChannel/AsyncChannelInboundStream.swift",
+        "AsyncChannel/AsyncChannelOutboundWriter.swift",
+        "AsyncSequences/NIOAsyncSequenceProducer.swift",
+        "AsyncSequences/NIOAsyncSequenceProducerStrategies.swift",
+        "AsyncSequences/NIOAsyncWriter.swift",
+        "AsyncSequences/NIOThrowingAsyncSequenceProducer.swift",
+        "BSDSocketAPI.swift",
+        "ByteBuffer-aux.swift",
+        "ByteBuffer-binaryEncodedLengthPrefix.swift",
+        "ByteBuffer-conversions.swift",
+        "ByteBuffer-core.swift",
+        "ByteBuffer-hex.swift",
+        "ByteBuffer-int.swift",
+        "ByteBuffer-lengthPrefix.swift",
+        "ByteBuffer-multi-int.swift",
+        "ByteBuffer-quicBinaryEncodingStrategy.swift",
+        "ByteBuffer-views.swift",
+        "Channel.swift",
+        "ChannelHandler.swift",
+        "ChannelHandlers.swift",
+        "ChannelInvoker.swift",
+        "ChannelOption.swift",
+        "ChannelPipeline.swift",
+        "CircularBuffer.swift",
+        "Codec.swift",
+        "ConvenienceOptionSupport.swift",
+        "DeadChannel.swift",
+        "DispatchQueue+WithFuture.swift",
+        "EventLoop+Deprecated.swift",
+        "EventLoop+SerialExecutor.swift",
+        "EventLoop.swift",
+        "EventLoopFuture+AssumeIsolated.swift",
+        "EventLoopFuture+Deprecated.swift",
+        "EventLoopFuture+WithEventLoop.swift",
+        "EventLoopFuture.swift",
+        "FileDescriptor.swift",
+        "FileHandle.swift",
+        "FileRegion.swift",
+        "GlobalSingletons.swift",
+        "IO.swift",
+        "IOData.swift",
+        "IPProtocol.swift",
+        "IntegerBitPacking.swift",
+        "IntegerTypes.swift",
+        "Interfaces.swift",
+        "Linux.swift",
+        "MarkedCircularBuffer.swift",
+        "MulticastChannel.swift",
+        "NIOAny.swift",
+        "NIOCloseOnErrorHandler.swift",
+        "NIOCoreSendableMetatype.swift",
+        "NIODecodedAsyncSequence.swift",
+        "NIOLoopBound.swift",
+        "NIOPooledRecvBufferAllocator.swift",
+        "NIOScheduledCallback.swift",
+        "NIOSendable.swift",
+        "NIOSplitLinesMessageDecoder.swift",
+        "NIOTransportAccessibleChannelCore.swift",
+        "RecvByteBufferAllocator.swift",
+        "SingleStepByteToMessageDecoder.swift",
+        "SocketAddresses.swift",
+        "SocketOptionProvider.swift",
+        "SystemCallHelpers.swift",
+        "TimeAmount+Duration.swift",
+        "TypeAssistedChannelHandler.swift",
+        "UniversalBootstrapSupport.swift",
+        "Utilities.swift"
+      ],
+      "target_dependencies" : [
+        "NIOConcurrencyHelpers",
+        "_NIOBase64",
+        "CNIOOpenBSD",
+        "CNIOFreeBSD",
+        "CNIODarwin",
+        "CNIOLinux",
+        "CNIOWindows",
+        "CNIOWASI",
+        "_NIODataStructures"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOConcurrencyHelpersTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOConcurrencyHelpersTests",
+      "path" : "Tests/NIOConcurrencyHelpersTests",
+      "sources" : [
+        "NIOConcurrencyHelpersTests.swift"
+      ],
+      "target_dependencies" : [
+        "NIOConcurrencyHelpers",
+        "NIOCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOConcurrencyHelpers",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOConcurrencyHelpers",
+      "path" : "Sources/NIOConcurrencyHelpers",
+      "product_memberships" : [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOConcurrencyHelpers",
+        "NIOFoundationEssentialsCompat",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOTCPEchoServer",
+        "NIOTCPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "NIOAtomic.swift",
+        "NIOLock.swift",
+        "NIOLockedValueBox.swift",
+        "NIOThreadPoolWorkAvailable.swift",
+        "atomics.swift",
+        "lock.swift"
+      ],
+      "target_dependencies" : [
+        "CNIOAtomics"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOChatServer",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOChatServer",
+      "path" : "Sources/NIOChatServer",
+      "product_memberships" : [
+        "NIOChatServer"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore",
+        "NIOConcurrencyHelpers"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOChatClient",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOChatClient",
+      "path" : "Sources/NIOChatClient",
+      "product_memberships" : [
+        "NIOChatClient"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore",
+        "NIOConcurrencyHelpers"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOBase64Tests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOBase64Tests",
+      "path" : "Tests/NIOBase64Tests",
+      "sources" : [
+        "Base64Test.swift"
+      ],
+      "target_dependencies" : [
+        "_NIOBase64"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOAsyncAwaitDemo",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOAsyncAwaitDemo",
+      "path" : "Sources/NIOAsyncAwaitDemo",
+      "product_memberships" : [
+        "NIOAsyncAwaitDemo"
+      ],
+      "sources" : [
+        "AsyncChannelIO.swift",
+        "FullRequestResponse.swift",
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "NIOPosix",
+        "NIOCore",
+        "NIOHTTP1"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIO",
+      "module_type" : "SwiftTarget",
+      "name" : "NIO",
+      "path" : "Sources/NIO",
+      "product_memberships" : [
+        "NIO",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOPerformanceTester",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "Exports.swift"
+      ],
+      "target_dependencies" : [
+        "NIOCore",
+        "NIOEmbedded",
+        "NIOPosix"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CNIOWindows",
+      "module_type" : "ClangTarget",
+      "name" : "CNIOWindows",
+      "path" : "Sources/CNIOWindows",
+      "product_memberships" : [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationEssentialsCompat",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOTCPEchoServer",
+        "NIOTCPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "WSAStartup.c",
+        "shim.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CNIOWASI",
+      "module_type" : "ClangTarget",
+      "name" : "CNIOWASI",
+      "path" : "Sources/CNIOWASI",
+      "product_memberships" : [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationEssentialsCompat",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOTCPEchoServer",
+        "NIOTCPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "CNIOWASI.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CNIOSHA1",
+      "module_type" : "ClangTarget",
+      "name" : "CNIOSHA1",
+      "path" : "Sources/CNIOSHA1",
+      "product_memberships" : [
+        "NIOWebSocket",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOPerformanceTester",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "c_nio_sha1.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CNIOPosix",
+      "module_type" : "ClangTarget",
+      "name" : "CNIOPosix",
+      "path" : "Sources/CNIOPosix",
+      "product_memberships" : [
+        "NIO",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOTCPEchoServer",
+        "NIOTCPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "event_loop_id.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CNIOOpenBSD",
+      "module_type" : "ClangTarget",
+      "name" : "CNIOOpenBSD",
+      "path" : "Sources/CNIOOpenBSD",
+      "product_memberships" : [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationEssentialsCompat",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOTCPEchoServer",
+        "NIOTCPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "shim.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CNIOLinux",
+      "module_type" : "ClangTarget",
+      "name" : "CNIOLinux",
+      "path" : "Sources/CNIOLinux",
+      "product_memberships" : [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationEssentialsCompat",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOTCPEchoServer",
+        "NIOTCPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "liburing_shims.c",
+        "shim.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CNIOLLHTTP",
+      "module_type" : "ClangTarget",
+      "name" : "CNIOLLHTTP",
+      "path" : "Sources/CNIOLLHTTP",
+      "product_memberships" : [
+        "NIOHTTP1",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOPerformanceTester",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "c_nio_api.c",
+        "c_nio_http.c",
+        "c_nio_llhttp.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CNIOFreeBSD",
+      "module_type" : "ClangTarget",
+      "name" : "CNIOFreeBSD",
+      "path" : "Sources/CNIOFreeBSD",
+      "product_memberships" : [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationEssentialsCompat",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOTCPEchoServer",
+        "NIOTCPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "shim.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CNIODarwin",
+      "module_type" : "ClangTarget",
+      "name" : "CNIODarwin",
+      "path" : "Sources/CNIODarwin",
+      "product_memberships" : [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOFoundationEssentialsCompat",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOTCPEchoServer",
+        "NIOTCPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "shim.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CNIOAtomics",
+      "module_type" : "ClangTarget",
+      "name" : "CNIOAtomics",
+      "path" : "Sources/CNIOAtomics",
+      "product_memberships" : [
+        "NIOCore",
+        "NIO",
+        "NIOEmbedded",
+        "NIOPosix",
+        "_NIOConcurrency",
+        "NIOTLS",
+        "NIOHTTP1",
+        "NIOConcurrencyHelpers",
+        "NIOFoundationEssentialsCompat",
+        "NIOFoundationCompat",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "_NIOFileSystem",
+        "_NIOFileSystemFoundationCompat",
+        "NIOWebSocketServer",
+        "NIOWebSocketClient",
+        "NIOUDPEchoServer",
+        "NIOUDPEchoClient",
+        "NIOTCPEchoServer",
+        "NIOTCPEchoClient",
+        "NIOPerformanceTester",
+        "NIOMulticastChat",
+        "NIOHTTP1Server",
+        "NIOHTTP1Client",
+        "NIOEchoServer",
+        "NIOEchoClient",
+        "NIOChatServer",
+        "NIOChatClient",
+        "NIOAsyncAwaitDemo",
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "src/c-atomics.c",
+        "src/c-nioatomics.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOFileSystemTour",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOFileSystemTour",
+      "path" : "Snippets",
+      "product_memberships" : [
+        "NIOFileSystemTour"
+      ],
+      "sources" : [
+        "NIOFileSystemTour.swift"
+      ],
+      "target_dependencies" : [
+        "_NIOFileSystemFoundationCompat",
+        "_NIOFileSystem",
+        "_NIOConcurrency",
+        "NIOWebSocket",
+        "NIOTestUtils",
+        "NIOTLS",
+        "NIOPosix",
+        "NIOHTTP1",
+        "NIOFoundationEssentialsCompat",
+        "NIOFoundationCompat",
+        "NIOFileSystem",
+        "NIOEmbedded",
+        "NIOCore",
+        "NIOConcurrencyHelpers",
+        "NIO"
+      ],
+      "type" : "snippet"
+    }
+  ],
+  "tools_version" : "6.1"
+}

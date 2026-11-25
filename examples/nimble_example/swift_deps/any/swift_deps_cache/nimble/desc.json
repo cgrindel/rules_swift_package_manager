@@ -1,0 +1,304 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "cwlpreconditiontesting",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.2.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/mattgallagher/CwlPreconditionTesting.git"
+    },
+    {
+      "identity" : "swift-docc-plugin",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-docc-plugin"
+    }
+  ],
+  "manifest_display_name" : "Nimble",
+  "name" : "Nimble",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    },
+    {
+      "name" : "visionos",
+      "version" : "1.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Nimble",
+      "targets" : [
+        "Nimble",
+        "NimbleObjectiveC"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "c99name" : "NimbleTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NimbleTests",
+      "path" : "Tests/NimbleTests",
+      "sources" : [
+        "AsyncAwaitTest+Require.swift",
+        "AsyncAwaitTest.swift",
+        "AsyncTimerSequenceTest.swift",
+        "DSLTest.swift",
+        "Helpers/AsyncHelpers.swift",
+        "Helpers/BackgroundThreadObject.swift",
+        "Helpers/ObjectWithLazyProperty.swift",
+        "LinuxSupport.swift",
+        "Matchers/AllPassTest.swift",
+        "Matchers/AlwaysFailMatcher.swift",
+        "Matchers/AsyncAllPassTest.swift",
+        "Matchers/AsyncPredicateTest.swift",
+        "Matchers/BeAKindOfTest.swift",
+        "Matchers/BeAnInstanceOfTest.swift",
+        "Matchers/BeCloseToTest.swift",
+        "Matchers/BeEmptyTest.swift",
+        "Matchers/BeGreaterThanOrEqualToTest.swift",
+        "Matchers/BeGreaterThanTest.swift",
+        "Matchers/BeIdenticalToObjectTest.swift",
+        "Matchers/BeIdenticalToTest.swift",
+        "Matchers/BeLessThanOrEqualToTest.swift",
+        "Matchers/BeLessThanTest.swift",
+        "Matchers/BeLogicalTest.swift",
+        "Matchers/BeNilTest.swift",
+        "Matchers/BeResultTest.swift",
+        "Matchers/BeVoidTest.swift",
+        "Matchers/BeWithinTest.swift",
+        "Matchers/BeginWithPrefixTest.swift",
+        "Matchers/BeginWithTest.swift",
+        "Matchers/ContainElementSatisfyingTest.swift",
+        "Matchers/ContainTest.swift",
+        "Matchers/ElementsEqualTest.swift",
+        "Matchers/EndWithTest.swift",
+        "Matchers/EqualTest.swift",
+        "Matchers/HaveCountTest.swift",
+        "Matchers/MapTest.swift",
+        "Matchers/MatchErrorTest.swift",
+        "Matchers/MatchTest.swift",
+        "Matchers/NegationTest.swift",
+        "Matchers/PostNotificationTest.swift",
+        "Matchers/RaisesExceptionTest.swift",
+        "Matchers/SatisfyAllOfTest.swift",
+        "Matchers/SatisfyAnyOfTest.swift",
+        "Matchers/ThrowAssertionTest.swift",
+        "Matchers/ThrowErrorTest.swift",
+        "Matchers/ToSucceedTest.swift",
+        "NimbleTimeIntervalTest.swift",
+        "OnFailureThrowsTest.swift",
+        "PollingTest+Require.swift",
+        "PollingTest.swift",
+        "PredicateTest.swift",
+        "StatusTest.swift",
+        "SwiftTestingSupportTest.swift",
+        "SynchronousTest.swift",
+        "UserDescriptionTest.swift"
+      ],
+      "target_dependencies" : [
+        "Nimble",
+        "NimbleSharedTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NimbleSharedTestHelpers",
+      "module_type" : "SwiftTarget",
+      "name" : "NimbleSharedTestHelpers",
+      "path" : "Sources/NimbleSharedTestHelpers",
+      "sources" : [
+        "utils.swift"
+      ],
+      "target_dependencies" : [
+        "Nimble",
+        "NimbleObjectiveC"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NimbleObjectiveCTests",
+      "module_type" : "ClangTarget",
+      "name" : "NimbleObjectiveCTests",
+      "path" : "Tests/NimbleObjectiveCTests",
+      "sources" : [
+        "ObjCAllPassTest.m",
+        "ObjCAsyncTest.m",
+        "ObjCBeAnInstanceOfTest.m",
+        "ObjCBeCloseToTest.m",
+        "ObjCBeEmptyTest.m",
+        "ObjCBeFalseTest.m",
+        "ObjCBeFalsyTest.m",
+        "ObjCBeGreaterThanOrEqualToTest.m",
+        "ObjCBeGreaterThanTest.m",
+        "ObjCBeIdenticalToTest.m",
+        "ObjCBeKindOfTest.m",
+        "ObjCBeLessThanOrEqualToTest.m",
+        "ObjCBeLessThanTest.m",
+        "ObjCBeNilTest.m",
+        "ObjCBeTrueTest.m",
+        "ObjCBeTruthyTest.m",
+        "ObjCBeginWithTest.m",
+        "ObjCContainElementSatisfyingTest.m",
+        "ObjCContainTest.m",
+        "ObjCEndWithTest.m",
+        "ObjCEqualTest.m",
+        "ObjCHaveCountTest.m",
+        "ObjCMatchTest.m",
+        "ObjCRaiseExceptionTest.m",
+        "ObjCSatisfyAllOfTest.m",
+        "ObjCSatisfyAnyOfTest.m",
+        "ObjCSyncTest.m",
+        "ObjCUserDescriptionTest.m",
+        "ObjcStringersTest.m"
+      ],
+      "target_dependencies" : [
+        "NimbleObjectiveC",
+        "Nimble",
+        "NimbleSharedTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NimbleObjectiveC",
+      "module_type" : "ClangTarget",
+      "name" : "NimbleObjectiveC",
+      "path" : "Sources/NimbleObjectiveC",
+      "product_memberships" : [
+        "Nimble"
+      ],
+      "sources" : [
+        "DSL.m",
+        "NMBExceptionCapture.m",
+        "NMBStringify.m",
+        "XCTestObservationCenter+Register.m"
+      ],
+      "target_dependencies" : [
+        "Nimble"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "Nimble",
+      "module_type" : "SwiftTarget",
+      "name" : "Nimble",
+      "path" : "Sources/Nimble",
+      "product_dependencies" : [
+        "CwlPreconditionTesting",
+        "CwlPosixPreconditionTesting"
+      ],
+      "product_memberships" : [
+        "Nimble"
+      ],
+      "sources" : [
+        "Adapters/AdapterProtocols.swift",
+        "Adapters/AssertionDispatcher.swift",
+        "Adapters/AssertionRecorder+Async.swift",
+        "Adapters/AssertionRecorder.swift",
+        "Adapters/NMBExpectation.swift",
+        "Adapters/NimbleEnvironment.swift",
+        "Adapters/NimbleSwiftTestingHandler.swift",
+        "Adapters/NimbleXCTestHandler.swift",
+        "Adapters/NonObjectiveC/ExceptionCapture.swift",
+        "AsyncExpression.swift",
+        "DSL+AsyncAwait.swift",
+        "DSL+Require.swift",
+        "DSL+Wait.swift",
+        "DSL.swift",
+        "Expectation.swift",
+        "ExpectationMessage.swift",
+        "Expression.swift",
+        "FailureMessage.swift",
+        "Matchers/AllPass.swift",
+        "Matchers/AsyncAllPass.swift",
+        "Matchers/AsyncMatcher.swift",
+        "Matchers/BeAKindOf.swift",
+        "Matchers/BeAnInstanceOf.swift",
+        "Matchers/BeCloseTo.swift",
+        "Matchers/BeEmpty.swift",
+        "Matchers/BeGreaterThan.swift",
+        "Matchers/BeGreaterThanOrEqualTo.swift",
+        "Matchers/BeIdenticalTo.swift",
+        "Matchers/BeLessThan.swift",
+        "Matchers/BeLessThanOrEqual.swift",
+        "Matchers/BeLogical.swift",
+        "Matchers/BeNil.swift",
+        "Matchers/BeResult.swift",
+        "Matchers/BeVoid.swift",
+        "Matchers/BeWithin.swift",
+        "Matchers/BeginWith.swift",
+        "Matchers/BeginWithPrefix.swift",
+        "Matchers/Contain.swift",
+        "Matchers/ContainElementSatisfying.swift",
+        "Matchers/ElementsEqual.swift",
+        "Matchers/EndWith.swift",
+        "Matchers/Equal+Tuple.swift",
+        "Matchers/Equal+TupleArray.swift",
+        "Matchers/Equal.swift",
+        "Matchers/HaveCount.swift",
+        "Matchers/Map.swift",
+        "Matchers/Match.swift",
+        "Matchers/MatchError.swift",
+        "Matchers/Matcher.swift",
+        "Matchers/MatcherProtocols.swift",
+        "Matchers/Negation.swift",
+        "Matchers/PostNotification.swift",
+        "Matchers/RaisesException.swift",
+        "Matchers/SatisfyAllOf.swift",
+        "Matchers/SatisfyAnyOf.swift",
+        "Matchers/ThrowAssertion.swift",
+        "Matchers/ThrowError.swift",
+        "Matchers/ToSucceed.swift",
+        "Polling+AsyncAwait.swift",
+        "Polling+Require.swift",
+        "Polling.swift",
+        "Requirement.swift",
+        "Utils/AsyncAwait.swift",
+        "Utils/AsyncTimerSequence.swift",
+        "Utils/Errors.swift",
+        "Utils/NimbleTimeInterval.swift",
+        "Utils/PollAwait.swift",
+        "Utils/SourceLocation.swift",
+        "Utils/Stringers.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}

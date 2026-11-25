@@ -1,0 +1,346 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "swift-distributed-tracing",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Instrumentation",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Instrumentation",
+        "ServiceContextModule"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Tracing",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Tracing"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "InMemoryTracing",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "InMemoryTracing"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "Instrumentation",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency=complete"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "Instrumentation",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "InstrumentationTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency=complete"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "Instrumentation",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "ServiceContextModule",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency=complete"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "ServiceContextModule",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "Tracing",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ServiceContextModuleTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency=complete"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "Instrumentation",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "ServiceContextModule",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "_CWASI",
+            {
+              "platformNames" : [
+                "wasi"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "Tracing",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency=complete"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "Tracing",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TracingTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency=complete"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "Tracing",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "InMemoryTracing",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency=complete"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "InMemoryTracing",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "InMemoryTracingTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency=complete"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "_CWASI",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency=complete"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.2.0"
+  },
+  "traits" : [
+
+  ]
+}

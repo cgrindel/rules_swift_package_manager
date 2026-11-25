@@ -1,0 +1,993 @@
+{
+  "cxx_language_standard" : "c++17",
+  "dependencies" : [
+    {
+      "identity" : "swift-asn1",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.2.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-asn1.git"
+    }
+  ],
+  "manifest_display_name" : "swift-crypto",
+  "name" : "swift-crypto",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Crypto",
+      "targets" : [
+        "Crypto"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "_CryptoExtras",
+      "targets" : [
+        "_CryptoExtras"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "CryptoExtras",
+      "targets" : [
+        "CryptoExtras"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "crypto-shasum",
+      "targets" : [
+        "crypto-shasum"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "crypto_shasum",
+      "module_type" : "SwiftTarget",
+      "name" : "crypto-shasum",
+      "path" : "Sources/crypto-shasum",
+      "product_memberships" : [
+        "crypto-shasum"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "Crypto"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "_CryptoExtras",
+      "module_type" : "SwiftTarget",
+      "name" : "_CryptoExtras",
+      "path" : "Sources/_CryptoExtras",
+      "product_memberships" : [
+        "_CryptoExtras"
+      ],
+      "sources" : [
+        "Exports.swift"
+      ],
+      "target_dependencies" : [
+        "CryptoExtras"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CryptoTests",
+      "module_type" : "SwiftTarget",
+      "name" : "CryptoTests",
+      "path" : "Tests/CryptoTests",
+      "resources" : [
+        {
+          "path" : "./Tests/CryptoTests/HPKE/hpke-test-vectors.json",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/CryptoTests/KEM/MLKEM1024KAT.json",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/CryptoTests/KEM/MLKEM1024_BSSLKAT.json",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/CryptoTests/KEM/MLKEM768KAT.json",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/CryptoTests/KEM/MLKEM768_BSSLKAT.json",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/CryptoTests/KEM/test-vectors.json",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/CryptoTests/Signatures/MLDSA/MLDSA65_KeyGen_KAT.json",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/CryptoTests/Signatures/MLDSA/MLDSA87_KeyGen_KAT.json",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "ASN1/ASN1Tests.swift",
+        "ASN1/GeneralizedTimeTests.swift",
+        "Authenticated Encryption/AES-GCM-Runner.swift",
+        "Authenticated Encryption/ChaChaPoly-Runner.swift",
+        "Digests/DigestsTests.swift",
+        "ECDH/BoringSSL/ASN1.swift",
+        "ECDH/BoringSSL/secpECDH_Runner_boring.swift",
+        "ECDH/X25519-Runner.swift",
+        "ECDH/secpECDH_Runner.swift",
+        "Encodings/BoringSSL/DERTests_boring.swift",
+        "Encodings/BoringSSL/ECKeyEncodingsTests_boring.swift",
+        "Encodings/DERTests.swift",
+        "Encodings/ECKeyEncodingsTests.swift",
+        "HPKE/HPKETests-TestVectors.swift",
+        "HPKE/HPKETests.swift",
+        "KEM/Boring/XWingTests_boring.swift",
+        "KEM/MLKEMKeyGenTests.swift",
+        "KEM/MLKEMTests.swift",
+        "KEM/XWingTests.swift",
+        "Key Derivation/HKDFTests.swift",
+        "Key Derivation/SharedSecretTests.swift",
+        "Key Derivation/X963KDFTests.swift",
+        "Key Wrapping/KeyWrapping.swift",
+        "MAC/HMACTests.swift",
+        "SecureBytes/SecureBytesTests.swift",
+        "Signatures/ECDSA/ECDSASignatureTests.swift",
+        "Signatures/ECDSA/RawECDSASignaturesTests.swift",
+        "Signatures/EdDSA/Ed25519-Runner.swift",
+        "Signatures/MLDSA/MLDSAKeyGenTests.swift",
+        "Signatures/MLDSA/MLDSATests.swift",
+        "SymmetricKeyTests/SymmetricKeyTests.swift",
+        "Utils/Boring/CTRDRBG.swift",
+        "Utils/Boring/SequenceDRBG.swift",
+        "Utils/PrettyBytes.swift",
+        "Utils/RFCVector.swift",
+        "Utils/SplitData.swift",
+        "Utils/Wycheproof.swift",
+        "Utils/XCTestUtils.swift"
+      ],
+      "target_dependencies" : [
+        "Crypto"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CryptoExtrasTests",
+      "module_type" : "SwiftTarget",
+      "name" : "CryptoExtrasTests",
+      "path" : "Tests/CryptoExtrasTests",
+      "resources" : [
+        {
+          "path" : "./Tests/CryptoExtrasTests/ECToolbox/H2CVectors/P256_XMD-SHA-256_SSWU_RO_.json",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/CryptoExtrasTests/ECToolbox/H2CVectors/P384_XMD-SHA-384_SSWU_RO_.json",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/CryptoExtrasTests/OPRFs/OPRFVectors/OPRFVectors-VOPRFDraft19.json",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/CryptoExtrasTests/OPRFs/OPRFVectors/OPRFVectors-VOPRFDraft8.json",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/CryptoExtrasTests/OPRFs/OPRFVectors/OPRFVectors-edgecases.json",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "AES Block Function Tests.swift",
+        "AES-GCM-SIV-Runner.swift",
+        "AES_CBCTests.swift",
+        "AES_CFBTests.swift",
+        "AES_CTRTests.swift",
+        "ARC/ARCAPITests.swift",
+        "ARC/ARCEncodingTests.swift",
+        "ARC/ARCPublicAPITests.swift",
+        "ARC/ARCTestVectors.swift",
+        "ARC/ARCTests.swift",
+        "CMACTests.swift",
+        "ChaCha20CTRTests.swift",
+        "Curve25519DERTests.swift",
+        "Curve25519PEMTests.swift",
+        "ECToolbox/BoringSSL/ECToolboxBoringSSLTests.swift",
+        "ECToolbox/HashToCurveTests.swift",
+        "EncryptedPEMTests.swift",
+        "MLDSATests.swift",
+        "MLKEMTests.swift",
+        "OPRFs/ECVOPRFTests.swift",
+        "OPRFs/VOPRFAPITests.swift",
+        "OPRFs/VOPRFPublicAPITests.swift",
+        "PBKDF2Tests.swift",
+        "PKCS8DERRepresentationTests.swift",
+        "SHA512256Tests.swift",
+        "ScryptTests.swift",
+        "TestRSABlindSigning.swift",
+        "TestRSABlindSigningAPI.swift",
+        "TestRSAEncryption.swift",
+        "TestRSASigning.swift",
+        "Util/IntegerEncodingTests.swift",
+        "Utils/BytesUtil.swift",
+        "Utils/RFCVector.swift",
+        "Utils/SplitData.swift",
+        "Utils/Wycheproof.swift",
+        "Utils/XCTestUtils.swift",
+        "ZKPs/ZKPToolbox.swift"
+      ],
+      "target_dependencies" : [
+        "CryptoExtras"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CryptoExtras",
+      "module_type" : "SwiftTarget",
+      "name" : "CryptoExtras",
+      "path" : "Sources/CryptoExtras",
+      "product_dependencies" : [
+        "SwiftASN1"
+      ],
+      "product_memberships" : [
+        "_CryptoExtras",
+        "CryptoExtras"
+      ],
+      "sources" : [
+        "AES/AES_CBC.swift",
+        "AES/AES_CFB.swift",
+        "AES/AES_CTR.swift",
+        "AES/AES_GCM_SIV.swift",
+        "AES/Block Function.swift",
+        "AES/BoringSSL/AES_CBC_boring.swift",
+        "AES/BoringSSL/AES_CFB_boring.swift",
+        "AES/BoringSSL/AES_CTR_boring.swift",
+        "AES/BoringSSL/AES_GCM_SIV_boring.swift",
+        "AES/CMAC.swift",
+        "ARC/ARC+API.swift",
+        "ARC/ARC.swift",
+        "ARC/ARCCredential.swift",
+        "ARC/ARCEncoding.swift",
+        "ARC/ARCPrecredential.swift",
+        "ARC/ARCPresentation.swift",
+        "ARC/ARCRequest.swift",
+        "ARC/ARCResponse.swift",
+        "ARC/ARCServer.swift",
+        "ChaCha20CTR/BoringSSL/ChaCha20CTR_boring.swift",
+        "ChaCha20CTR/ChaCha20CTR.swift",
+        "Digests/BoringSSL/BoringSSLSHA512256Context.swift",
+        "Digests/BoringSSL/BoringSSLSHA512256HashFunction.swift",
+        "Digests/SHA512256.swift",
+        "Digests/SHA512256Digest.swift",
+        "EC/Curve25519+PEM.swift",
+        "EC/ObjectIdentifier.swift",
+        "EC/PKCS8DERRepresentation.swift",
+        "EC/PKCS8PrivateKey.swift",
+        "EC/RFC8410AlgorithmIdentifier.swift",
+        "ECToolbox/BoringSSL/ECToolbox_boring.swift",
+        "ECToolbox/ECToolbox.swift",
+        "H2G/HashToField.swift",
+        "Key Derivation/KDF.swift",
+        "Key Derivation/PBKDF2/BoringSSL/PBKDF2_boring.swift",
+        "Key Derivation/PBKDF2/BoringSSL/PBKDF2_commoncrypto.swift",
+        "Key Derivation/PBKDF2/PBKDF2.swift",
+        "Key Derivation/Scrypt/BoringSSL/Scrypt_boring.swift",
+        "Key Derivation/Scrypt/Scrypt.swift",
+        "OPRFs/OPRF.swift",
+        "OPRFs/OPRFClient.swift",
+        "OPRFs/OPRFServer.swift",
+        "OPRFs/VOPRF+API.swift",
+        "OPRFs/VOPRFClient.swift",
+        "OPRFs/VOPRFServer.swift",
+        "RSA/BoringSSLPassphraseCallbackManager.swift",
+        "RSA/RSA+BlindSigning.swift",
+        "RSA/RSA.swift",
+        "RSA/RSA_boring.swift",
+        "Reexport.swift",
+        "Util/BoringSSL/Zeroization_boring.swift",
+        "Util/BoringSSLHelpers.swift",
+        "Util/CryptoKitErrors_boring.swift",
+        "Util/Data+Extensions.swift",
+        "Util/DigestType.swift",
+        "Util/Error.swift",
+        "Util/I2OSP.swift",
+        "Util/IntegerEncoding.swift",
+        "Util/PEMDocument.swift",
+        "Util/PrettyBytes.swift",
+        "Util/SubjectPublicKeyInfo.swift",
+        "Util/ThreadSpecific/ThreadOps.swift",
+        "Util/ThreadSpecific/ThreadPosix.swift",
+        "Util/ThreadSpecific/ThreadSpecific.swift",
+        "Util/ThreadSpecific/ThreadWindows.swift",
+        "Util/Zeroization.swift",
+        "ZKPs/DLEQ.swift",
+        "ZKPs/Prover.swift",
+        "ZKPs/Verifier.swift",
+        "ZKPs/ZKPToolbox.swift"
+      ],
+      "target_dependencies" : [
+        "CCryptoBoringSSL",
+        "CryptoBoringWrapper",
+        "Crypto"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CryptoBoringWrapperTests",
+      "module_type" : "SwiftTarget",
+      "name" : "CryptoBoringWrapperTests",
+      "path" : "Tests/CryptoBoringWrapperTests",
+      "sources" : [
+        "ArbitraryPrecisionIntegerTests.swift",
+        "EllipticCurvePointTests.swift",
+        "FiniteFieldArithmeticTests.swift"
+      ],
+      "target_dependencies" : [
+        "CryptoBoringWrapper"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CryptoBoringWrapper",
+      "module_type" : "SwiftTarget",
+      "name" : "CryptoBoringWrapper",
+      "path" : "Sources/CryptoBoringWrapper",
+      "product_memberships" : [
+        "Crypto",
+        "_CryptoExtras",
+        "CryptoExtras",
+        "crypto-shasum"
+      ],
+      "sources" : [
+        "AEAD/BoringSSLAEAD.swift",
+        "CryptoKitErrors_boring.swift",
+        "EC/EllipticCurve.swift",
+        "EC/EllipticCurvePoint.swift",
+        "Util/ArbitraryPrecisionInteger.swift",
+        "Util/Data+Span.swift",
+        "Util/FiniteFieldArithmeticContext.swift",
+        "Util/RandomBytes.swift"
+      ],
+      "target_dependencies" : [
+        "CCryptoBoringSSL"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "Crypto",
+      "module_type" : "SwiftTarget",
+      "name" : "Crypto",
+      "path" : "Sources/Crypto",
+      "product_memberships" : [
+        "Crypto",
+        "_CryptoExtras",
+        "CryptoExtras",
+        "crypto-shasum"
+      ],
+      "sources" : [
+        "AEADs/AES/GCM/AES-GCM.swift",
+        "AEADs/AES/GCM/BoringSSL/AES-GCM_boring.swift",
+        "AEADs/ChachaPoly/BoringSSL/ChaChaPoly_boring.swift",
+        "AEADs/ChachaPoly/ChaChaPoly.swift",
+        "AEADs/Cipher.swift",
+        "AEADs/Nonces.swift",
+        "ASN1/ASN1.swift",
+        "ASN1/Basic ASN1 Types/ASN1Any.swift",
+        "ASN1/Basic ASN1 Types/ASN1BitString.swift",
+        "ASN1/Basic ASN1 Types/ASN1Boolean.swift",
+        "ASN1/Basic ASN1 Types/ASN1Identifier.swift",
+        "ASN1/Basic ASN1 Types/ASN1Integer.swift",
+        "ASN1/Basic ASN1 Types/ASN1Null.swift",
+        "ASN1/Basic ASN1 Types/ASN1OctetString.swift",
+        "ASN1/Basic ASN1 Types/ASN1Strings.swift",
+        "ASN1/Basic ASN1 Types/ArraySliceBigint.swift",
+        "ASN1/Basic ASN1 Types/GeneralizedTime.swift",
+        "ASN1/Basic ASN1 Types/ObjectIdentifier.swift",
+        "ASN1/ECDSASignature.swift",
+        "ASN1/PEMDocument.swift",
+        "ASN1/PKCS8PrivateKey.swift",
+        "ASN1/SEC1PrivateKey.swift",
+        "ASN1/SubjectPublicKeyInfo.swift",
+        "CryptoError_boring.swift",
+        "CryptoKitErrors.swift",
+        "Digests/BoringSSL/Digest_boring.swift",
+        "Digests/Digest.swift",
+        "Digests/Digests.swift",
+        "Digests/HashFunctions.swift",
+        "Digests/HashFunctions_SHA2.swift",
+        "Digests/HashFunctions_SHA3.swift",
+        "Digests/XKCP/Digest_xkcp.swift",
+        "HPKE/Ciphersuite/HPKE-AEAD.swift",
+        "HPKE/Ciphersuite/HPKE-Ciphersuite.swift",
+        "HPKE/Ciphersuite/HPKE-KDF.swift",
+        "HPKE/Ciphersuite/HPKE-KexKeyDerivation.swift",
+        "HPKE/Ciphersuite/HPKE-LabeledExtract.swift",
+        "HPKE/Ciphersuite/HPKE-Utils.swift",
+        "HPKE/Ciphersuite/KEM/Conformances/DHKEM.swift",
+        "HPKE/Ciphersuite/KEM/Conformances/HPKE-KEM-Curve25519.swift",
+        "HPKE/Ciphersuite/KEM/Conformances/HPKE-NIST-EC-KEMs.swift",
+        "HPKE/Ciphersuite/KEM/HPKE-KEM.swift",
+        "HPKE/HPKE-Errors.swift",
+        "HPKE/HPKE.swift",
+        "HPKE/Key Schedule/HPKE-Context.swift",
+        "HPKE/Key Schedule/HPKE-KeySchedule.swift",
+        "HPKE/Modes/HPKE-Modes.swift",
+        "Insecure/Insecure.swift",
+        "Insecure/Insecure_HashFunctions.swift",
+        "KEM/BoringSSL/MLKEM_boring.swift",
+        "KEM/BoringSSL/MLKEM_wrapper.swift",
+        "KEM/BoringSSL/XWing_boring.swift",
+        "KEM/KEM-Errors.swift",
+        "KEM/KEM.swift",
+        "KEM/MLKEM.swift",
+        "KEM/XWing.swift",
+        "Key Agreement/BoringSSL/ECDH_boring.swift",
+        "Key Agreement/DH.swift",
+        "Key Agreement/ECDH.swift",
+        "Key Derivation/ANSIx963.swift",
+        "Key Derivation/HKDF.swift",
+        "Key Wrapping/AESWrap.swift",
+        "Key Wrapping/BoringSSL/AESWrap_boring.swift",
+        "Keys/EC/BoringSSL/Ed25519_boring.swift",
+        "Keys/EC/BoringSSL/NISTCurvesKeys_boring.swift",
+        "Keys/EC/BoringSSL/X25519Keys_boring.swift",
+        "Keys/EC/Curve25519.swift",
+        "Keys/EC/Ed25519Keys.swift",
+        "Keys/EC/NISTCurvesKeys.swift",
+        "Keys/EC/X25519Keys.swift",
+        "Keys/Symmetric/SymmetricKeys.swift",
+        "Message Authentication Codes/HMAC/HMAC.swift",
+        "Message Authentication Codes/MACFunctions.swift",
+        "Message Authentication Codes/MessageAuthenticationCode.swift",
+        "PRF/AES.swift",
+        "Signatures/BoringSSL/ECDSASignature_boring.swift",
+        "Signatures/BoringSSL/ECDSA_boring.swift",
+        "Signatures/BoringSSL/EdDSA_boring.swift",
+        "Signatures/BoringSSL/MLDSA_boring.swift",
+        "Signatures/BoringSSL/MLDSA_wrapper.swift",
+        "Signatures/ECDSA.swift",
+        "Signatures/Ed25519.swift",
+        "Signatures/MLDSA.swift",
+        "Signatures/Signature.swift",
+        "Util/ArraySpanHelpers.swift",
+        "Util/Backports.swift",
+        "Util/BoringSSL/CryptoKitErrors_boring.swift",
+        "Util/BoringSSL/InlineArray+withBytes_boring.swift",
+        "Util/BoringSSL/Optional+withUnsafeBytes_boring.swift",
+        "Util/BoringSSL/RNG_boring.swift",
+        "Util/BoringSSL/SafeCompare_boring.swift",
+        "Util/BoringSSL/Zeroization_boring.swift",
+        "Util/BoringSSL/_CryptoModuleAnchor.swift",
+        "Util/Data+ArraySpan.swift",
+        "Util/PrettyBytes.swift",
+        "Util/SafeCompare.swift",
+        "Util/SecureBytes.swift",
+        "Util/Zeroization.swift"
+      ],
+      "target_dependencies" : [
+        "CCryptoBoringSSL",
+        "CryptoBoringWrapper",
+        "CXKCP",
+        "CXKCPShims"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CXKCPTests",
+      "module_type" : "SwiftTarget",
+      "name" : "CXKCPTests",
+      "path" : "Tests/CXKCPTests",
+      "sources" : [
+        "CXKCPTests.swift"
+      ],
+      "target_dependencies" : [
+        "CXKCP"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CXKCPShims",
+      "module_type" : "ClangTarget",
+      "name" : "CXKCPShims",
+      "path" : "Sources/CXKCPShims",
+      "product_memberships" : [
+        "Crypto",
+        "_CryptoExtras",
+        "CryptoExtras",
+        "crypto-shasum"
+      ],
+      "sources" : [
+        "shims.c"
+      ],
+      "target_dependencies" : [
+        "CXKCP"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CXKCP",
+      "module_type" : "ClangTarget",
+      "name" : "CXKCP",
+      "path" : "Sources/CXKCP",
+      "product_memberships" : [
+        "Crypto",
+        "_CryptoExtras",
+        "CryptoExtras",
+        "crypto-shasum"
+      ],
+      "sources" : [
+        "FIPS202-opt64/KeccakHash.c",
+        "FIPS202-opt64/KeccakP-1600-opt64.c",
+        "FIPS202-opt64/KeccakSponge.c",
+        "FIPS202-opt64/SimpleFIPS202.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CCryptoBoringSSL",
+      "module_type" : "ClangTarget",
+      "name" : "CCryptoBoringSSL",
+      "path" : "Sources/CCryptoBoringSSL",
+      "product_memberships" : [
+        "Crypto",
+        "_CryptoExtras",
+        "CryptoExtras",
+        "crypto-shasum"
+      ],
+      "sources" : [
+        "crypto/aes/aes.cc",
+        "crypto/asn1/a_bitstr.cc",
+        "crypto/asn1/a_bool.cc",
+        "crypto/asn1/a_d2i_fp.cc",
+        "crypto/asn1/a_dup.cc",
+        "crypto/asn1/a_gentm.cc",
+        "crypto/asn1/a_i2d_fp.cc",
+        "crypto/asn1/a_int.cc",
+        "crypto/asn1/a_mbstr.cc",
+        "crypto/asn1/a_object.cc",
+        "crypto/asn1/a_octet.cc",
+        "crypto/asn1/a_strex.cc",
+        "crypto/asn1/a_strnid.cc",
+        "crypto/asn1/a_time.cc",
+        "crypto/asn1/a_type.cc",
+        "crypto/asn1/a_utctm.cc",
+        "crypto/asn1/asn1_lib.cc",
+        "crypto/asn1/asn1_par.cc",
+        "crypto/asn1/asn_pack.cc",
+        "crypto/asn1/f_int.cc",
+        "crypto/asn1/f_string.cc",
+        "crypto/asn1/posix_time.cc",
+        "crypto/asn1/tasn_dec.cc",
+        "crypto/asn1/tasn_enc.cc",
+        "crypto/asn1/tasn_fre.cc",
+        "crypto/asn1/tasn_new.cc",
+        "crypto/asn1/tasn_typ.cc",
+        "crypto/asn1/tasn_utl.cc",
+        "crypto/base64/base64.cc",
+        "crypto/bio/bio.cc",
+        "crypto/bio/bio_mem.cc",
+        "crypto/bio/errno.cc",
+        "crypto/bio/fd.cc",
+        "crypto/bio/file.cc",
+        "crypto/bio/hexdump.cc",
+        "crypto/bio/pair.cc",
+        "crypto/bio/printf.cc",
+        "crypto/blake2/blake2.cc",
+        "crypto/bn/bn_asn1.cc",
+        "crypto/bn/convert.cc",
+        "crypto/bn/div.cc",
+        "crypto/bn/exponentiation.cc",
+        "crypto/bn/sqrt.cc",
+        "crypto/buf/buf.cc",
+        "crypto/bytestring/asn1_compat.cc",
+        "crypto/bytestring/ber.cc",
+        "crypto/bytestring/cbb.cc",
+        "crypto/bytestring/cbs.cc",
+        "crypto/bytestring/unicode.cc",
+        "crypto/chacha/chacha.cc",
+        "crypto/cipher/derive_key.cc",
+        "crypto/cipher/e_aesctrhmac.cc",
+        "crypto/cipher/e_aeseax.cc",
+        "crypto/cipher/e_aesgcmsiv.cc",
+        "crypto/cipher/e_chacha20poly1305.cc",
+        "crypto/cipher/e_des.cc",
+        "crypto/cipher/e_null.cc",
+        "crypto/cipher/e_rc2.cc",
+        "crypto/cipher/e_rc4.cc",
+        "crypto/cipher/e_tls.cc",
+        "crypto/cipher/get_cipher.cc",
+        "crypto/cipher/tls_cbc.cc",
+        "crypto/cms/cms.cc",
+        "crypto/conf/conf.cc",
+        "crypto/cpu_aarch64_apple.cc",
+        "crypto/cpu_aarch64_fuchsia.cc",
+        "crypto/cpu_aarch64_linux.cc",
+        "crypto/cpu_aarch64_openbsd.cc",
+        "crypto/cpu_aarch64_sysreg.cc",
+        "crypto/cpu_aarch64_win.cc",
+        "crypto/cpu_arm_freebsd.cc",
+        "crypto/cpu_arm_linux.cc",
+        "crypto/cpu_intel.cc",
+        "crypto/crypto.cc",
+        "crypto/curve25519/asm/x25519-asm-arm.S",
+        "crypto/curve25519/curve25519.cc",
+        "crypto/curve25519/curve25519_64_adx.cc",
+        "crypto/curve25519/spake25519.cc",
+        "crypto/des/des.cc",
+        "crypto/dh/dh_asn1.cc",
+        "crypto/dh/params.cc",
+        "crypto/digest/digest_extra.cc",
+        "crypto/dsa/dsa.cc",
+        "crypto/dsa/dsa_asn1.cc",
+        "crypto/ec/ec_asn1.cc",
+        "crypto/ec/ec_derive.cc",
+        "crypto/ec/hash_to_curve.cc",
+        "crypto/ecdh/ecdh.cc",
+        "crypto/ecdsa/ecdsa_asn1.cc",
+        "crypto/ecdsa/ecdsa_p1363.cc",
+        "crypto/engine/engine.cc",
+        "crypto/err/err.cc",
+        "crypto/evp/evp.cc",
+        "crypto/evp/evp_asn1.cc",
+        "crypto/evp/evp_ctx.cc",
+        "crypto/evp/p_dh.cc",
+        "crypto/evp/p_dh_asn1.cc",
+        "crypto/evp/p_dsa_asn1.cc",
+        "crypto/evp/p_ec.cc",
+        "crypto/evp/p_ec_asn1.cc",
+        "crypto/evp/p_ed25519.cc",
+        "crypto/evp/p_ed25519_asn1.cc",
+        "crypto/evp/p_hkdf.cc",
+        "crypto/evp/p_rsa.cc",
+        "crypto/evp/p_rsa_asn1.cc",
+        "crypto/evp/p_x25519.cc",
+        "crypto/evp/p_x25519_asn1.cc",
+        "crypto/evp/pbkdf.cc",
+        "crypto/evp/print.cc",
+        "crypto/evp/scrypt.cc",
+        "crypto/evp/sign.cc",
+        "crypto/ex_data.cc",
+        "crypto/fipsmodule/bcm.cc",
+        "crypto/fipsmodule/fips_shared_support.cc",
+        "crypto/fuzzer_mode.cc",
+        "crypto/hpke/hpke.cc",
+        "crypto/hrss/asm/poly_rq_mul.S",
+        "crypto/hrss/hrss.cc",
+        "crypto/kyber/kyber.cc",
+        "crypto/lhash/lhash.cc",
+        "crypto/md4/md4.cc",
+        "crypto/md5/md5.cc",
+        "crypto/mem.cc",
+        "crypto/mldsa/mldsa.cc",
+        "crypto/mlkem/mlkem.cc",
+        "crypto/obj/obj.cc",
+        "crypto/obj/obj_xref.cc",
+        "crypto/pem/pem_all.cc",
+        "crypto/pem/pem_info.cc",
+        "crypto/pem/pem_lib.cc",
+        "crypto/pem/pem_oth.cc",
+        "crypto/pem/pem_pk8.cc",
+        "crypto/pem/pem_pkey.cc",
+        "crypto/pem/pem_x509.cc",
+        "crypto/pem/pem_xaux.cc",
+        "crypto/pkcs7/pkcs7.cc",
+        "crypto/pkcs7/pkcs7_x509.cc",
+        "crypto/pkcs8/p5_pbev2.cc",
+        "crypto/pkcs8/pkcs8.cc",
+        "crypto/pkcs8/pkcs8_x509.cc",
+        "crypto/poly1305/poly1305.cc",
+        "crypto/poly1305/poly1305_arm.cc",
+        "crypto/poly1305/poly1305_arm_asm.S",
+        "crypto/poly1305/poly1305_vec.cc",
+        "crypto/pool/pool.cc",
+        "crypto/rand/deterministic.cc",
+        "crypto/rand/fork_detect.cc",
+        "crypto/rand/forkunsafe.cc",
+        "crypto/rand/getentropy.cc",
+        "crypto/rand/ios.cc",
+        "crypto/rand/passive.cc",
+        "crypto/rand/rand.cc",
+        "crypto/rand/trusty.cc",
+        "crypto/rand/urandom.cc",
+        "crypto/rand/windows.cc",
+        "crypto/rc4/rc4.cc",
+        "crypto/refcount.cc",
+        "crypto/rsa/rsa_asn1.cc",
+        "crypto/rsa/rsa_crypt.cc",
+        "crypto/rsa/rsa_extra.cc",
+        "crypto/rsa/rsa_print.cc",
+        "crypto/sha/sha1.cc",
+        "crypto/sha/sha256.cc",
+        "crypto/sha/sha512.cc",
+        "crypto/siphash/siphash.cc",
+        "crypto/slhdsa/slhdsa.cc",
+        "crypto/spake2plus/spake2plus.cc",
+        "crypto/stack/stack.cc",
+        "crypto/thread.cc",
+        "crypto/thread_none.cc",
+        "crypto/thread_pthread.cc",
+        "crypto/thread_win.cc",
+        "crypto/trust_token/pmbtoken.cc",
+        "crypto/trust_token/trust_token.cc",
+        "crypto/trust_token/voprf.cc",
+        "crypto/x509/a_digest.cc",
+        "crypto/x509/a_sign.cc",
+        "crypto/x509/a_verify.cc",
+        "crypto/x509/algorithm.cc",
+        "crypto/x509/asn1_gen.cc",
+        "crypto/x509/by_dir.cc",
+        "crypto/x509/by_file.cc",
+        "crypto/x509/i2d_pr.cc",
+        "crypto/x509/name_print.cc",
+        "crypto/x509/policy.cc",
+        "crypto/x509/rsa_pss.cc",
+        "crypto/x509/t_crl.cc",
+        "crypto/x509/t_req.cc",
+        "crypto/x509/t_x509.cc",
+        "crypto/x509/t_x509a.cc",
+        "crypto/x509/v3_akey.cc",
+        "crypto/x509/v3_akeya.cc",
+        "crypto/x509/v3_alt.cc",
+        "crypto/x509/v3_bcons.cc",
+        "crypto/x509/v3_bitst.cc",
+        "crypto/x509/v3_conf.cc",
+        "crypto/x509/v3_cpols.cc",
+        "crypto/x509/v3_crld.cc",
+        "crypto/x509/v3_enum.cc",
+        "crypto/x509/v3_extku.cc",
+        "crypto/x509/v3_genn.cc",
+        "crypto/x509/v3_ia5.cc",
+        "crypto/x509/v3_info.cc",
+        "crypto/x509/v3_int.cc",
+        "crypto/x509/v3_lib.cc",
+        "crypto/x509/v3_ncons.cc",
+        "crypto/x509/v3_ocsp.cc",
+        "crypto/x509/v3_pcons.cc",
+        "crypto/x509/v3_pmaps.cc",
+        "crypto/x509/v3_prn.cc",
+        "crypto/x509/v3_purp.cc",
+        "crypto/x509/v3_skey.cc",
+        "crypto/x509/v3_utl.cc",
+        "crypto/x509/x509.cc",
+        "crypto/x509/x509_att.cc",
+        "crypto/x509/x509_cmp.cc",
+        "crypto/x509/x509_d2.cc",
+        "crypto/x509/x509_def.cc",
+        "crypto/x509/x509_ext.cc",
+        "crypto/x509/x509_lu.cc",
+        "crypto/x509/x509_obj.cc",
+        "crypto/x509/x509_req.cc",
+        "crypto/x509/x509_set.cc",
+        "crypto/x509/x509_trs.cc",
+        "crypto/x509/x509_txt.cc",
+        "crypto/x509/x509_v3.cc",
+        "crypto/x509/x509_vfy.cc",
+        "crypto/x509/x509_vpm.cc",
+        "crypto/x509/x509cset.cc",
+        "crypto/x509/x509name.cc",
+        "crypto/x509/x509rset.cc",
+        "crypto/x509/x509spki.cc",
+        "crypto/x509/x_algor.cc",
+        "crypto/x509/x_all.cc",
+        "crypto/x509/x_attrib.cc",
+        "crypto/x509/x_crl.cc",
+        "crypto/x509/x_exten.cc",
+        "crypto/x509/x_name.cc",
+        "crypto/x509/x_pubkey.cc",
+        "crypto/x509/x_req.cc",
+        "crypto/x509/x_sig.cc",
+        "crypto/x509/x_spki.cc",
+        "crypto/x509/x_x509.cc",
+        "crypto/x509/x_x509a.cc",
+        "crypto/xwing/xwing.cc",
+        "gen/bcm/aes-gcm-avx2-x86_64-apple.S",
+        "gen/bcm/aes-gcm-avx2-x86_64-linux.S",
+        "gen/bcm/aes-gcm-avx512-x86_64-apple.S",
+        "gen/bcm/aes-gcm-avx512-x86_64-linux.S",
+        "gen/bcm/aesni-gcm-x86_64-apple.S",
+        "gen/bcm/aesni-gcm-x86_64-linux.S",
+        "gen/bcm/aesni-x86-apple.S",
+        "gen/bcm/aesni-x86-linux.S",
+        "gen/bcm/aesni-x86_64-apple.S",
+        "gen/bcm/aesni-x86_64-linux.S",
+        "gen/bcm/aesv8-armv7-linux.S",
+        "gen/bcm/aesv8-armv8-apple.S",
+        "gen/bcm/aesv8-armv8-linux.S",
+        "gen/bcm/aesv8-armv8-win.S",
+        "gen/bcm/aesv8-gcm-armv8-apple.S",
+        "gen/bcm/aesv8-gcm-armv8-linux.S",
+        "gen/bcm/aesv8-gcm-armv8-win.S",
+        "gen/bcm/armv4-mont-linux.S",
+        "gen/bcm/armv8-mont-apple.S",
+        "gen/bcm/armv8-mont-linux.S",
+        "gen/bcm/armv8-mont-win.S",
+        "gen/bcm/bn-586-apple.S",
+        "gen/bcm/bn-586-linux.S",
+        "gen/bcm/bn-armv8-apple.S",
+        "gen/bcm/bn-armv8-linux.S",
+        "gen/bcm/bn-armv8-win.S",
+        "gen/bcm/bsaes-armv7-linux.S",
+        "gen/bcm/co-586-apple.S",
+        "gen/bcm/co-586-linux.S",
+        "gen/bcm/ghash-armv4-linux.S",
+        "gen/bcm/ghash-neon-armv8-apple.S",
+        "gen/bcm/ghash-neon-armv8-linux.S",
+        "gen/bcm/ghash-neon-armv8-win.S",
+        "gen/bcm/ghash-ssse3-x86-apple.S",
+        "gen/bcm/ghash-ssse3-x86-linux.S",
+        "gen/bcm/ghash-ssse3-x86_64-apple.S",
+        "gen/bcm/ghash-ssse3-x86_64-linux.S",
+        "gen/bcm/ghash-x86-apple.S",
+        "gen/bcm/ghash-x86-linux.S",
+        "gen/bcm/ghash-x86_64-apple.S",
+        "gen/bcm/ghash-x86_64-linux.S",
+        "gen/bcm/ghashv8-armv7-linux.S",
+        "gen/bcm/ghashv8-armv8-apple.S",
+        "gen/bcm/ghashv8-armv8-linux.S",
+        "gen/bcm/ghashv8-armv8-win.S",
+        "gen/bcm/p256-armv8-asm-apple.S",
+        "gen/bcm/p256-armv8-asm-linux.S",
+        "gen/bcm/p256-armv8-asm-win.S",
+        "gen/bcm/p256-x86_64-asm-apple.S",
+        "gen/bcm/p256-x86_64-asm-linux.S",
+        "gen/bcm/p256_beeu-armv8-asm-apple.S",
+        "gen/bcm/p256_beeu-armv8-asm-linux.S",
+        "gen/bcm/p256_beeu-armv8-asm-win.S",
+        "gen/bcm/p256_beeu-x86_64-asm-apple.S",
+        "gen/bcm/p256_beeu-x86_64-asm-linux.S",
+        "gen/bcm/rdrand-x86_64-apple.S",
+        "gen/bcm/rdrand-x86_64-linux.S",
+        "gen/bcm/rsaz-avx2-apple.S",
+        "gen/bcm/rsaz-avx2-linux.S",
+        "gen/bcm/sha1-586-apple.S",
+        "gen/bcm/sha1-586-linux.S",
+        "gen/bcm/sha1-armv4-large-linux.S",
+        "gen/bcm/sha1-armv8-apple.S",
+        "gen/bcm/sha1-armv8-linux.S",
+        "gen/bcm/sha1-armv8-win.S",
+        "gen/bcm/sha1-x86_64-apple.S",
+        "gen/bcm/sha1-x86_64-linux.S",
+        "gen/bcm/sha256-586-apple.S",
+        "gen/bcm/sha256-586-linux.S",
+        "gen/bcm/sha256-armv4-linux.S",
+        "gen/bcm/sha256-armv8-apple.S",
+        "gen/bcm/sha256-armv8-linux.S",
+        "gen/bcm/sha256-armv8-win.S",
+        "gen/bcm/sha256-x86_64-apple.S",
+        "gen/bcm/sha256-x86_64-linux.S",
+        "gen/bcm/sha512-586-apple.S",
+        "gen/bcm/sha512-586-linux.S",
+        "gen/bcm/sha512-armv4-linux.S",
+        "gen/bcm/sha512-armv8-apple.S",
+        "gen/bcm/sha512-armv8-linux.S",
+        "gen/bcm/sha512-armv8-win.S",
+        "gen/bcm/sha512-x86_64-apple.S",
+        "gen/bcm/sha512-x86_64-linux.S",
+        "gen/bcm/vpaes-armv7-linux.S",
+        "gen/bcm/vpaes-armv8-apple.S",
+        "gen/bcm/vpaes-armv8-linux.S",
+        "gen/bcm/vpaes-armv8-win.S",
+        "gen/bcm/vpaes-x86-apple.S",
+        "gen/bcm/vpaes-x86-linux.S",
+        "gen/bcm/vpaes-x86_64-apple.S",
+        "gen/bcm/vpaes-x86_64-linux.S",
+        "gen/bcm/x86-mont-apple.S",
+        "gen/bcm/x86-mont-linux.S",
+        "gen/bcm/x86_64-mont-apple.S",
+        "gen/bcm/x86_64-mont-linux.S",
+        "gen/bcm/x86_64-mont5-apple.S",
+        "gen/bcm/x86_64-mont5-linux.S",
+        "gen/crypto/aes128gcmsiv-x86_64-apple.S",
+        "gen/crypto/aes128gcmsiv-x86_64-linux.S",
+        "gen/crypto/chacha-armv4-linux.S",
+        "gen/crypto/chacha-armv8-apple.S",
+        "gen/crypto/chacha-armv8-linux.S",
+        "gen/crypto/chacha-armv8-win.S",
+        "gen/crypto/chacha-x86-apple.S",
+        "gen/crypto/chacha-x86-linux.S",
+        "gen/crypto/chacha-x86_64-apple.S",
+        "gen/crypto/chacha-x86_64-linux.S",
+        "gen/crypto/chacha20_poly1305_armv8-apple.S",
+        "gen/crypto/chacha20_poly1305_armv8-linux.S",
+        "gen/crypto/chacha20_poly1305_armv8-win.S",
+        "gen/crypto/chacha20_poly1305_x86_64-apple.S",
+        "gen/crypto/chacha20_poly1305_x86_64-linux.S",
+        "gen/crypto/err_data.cc",
+        "gen/crypto/md5-586-apple.S",
+        "gen/crypto/md5-586-linux.S",
+        "gen/crypto/md5-x86_64-apple.S",
+        "gen/crypto/md5-x86_64-linux.S",
+        "third_party/fiat/asm/fiat_curve25519_adx_mul.S",
+        "third_party/fiat/asm/fiat_curve25519_adx_square.S",
+        "third_party/fiat/asm/fiat_p256_adx_mul.S",
+        "third_party/fiat/asm/fiat_p256_adx_sqr.S"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.2"
+}

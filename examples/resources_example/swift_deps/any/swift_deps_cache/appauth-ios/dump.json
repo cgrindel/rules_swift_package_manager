@@ -1,0 +1,287 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "AppAuth",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "AppAuthCore",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AppAuthCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AppAuth",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AppAuth"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AppAuthTV",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "AppAuthTV"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppAuthCore",
+      "packageAccess" : false,
+      "path" : "Sources/AppAuthCore",
+      "publicHeadersPath" : "",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppAuthCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppAuth",
+      "packageAccess" : false,
+      "path" : "Sources/AppAuth",
+      "publicHeadersPath" : "",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "iOS"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "macOS"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "macOS/LoopbackHTTPServer"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "sources" : [
+        "iOS",
+        "macOS"
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppAuthCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppAuthTV",
+      "packageAccess" : false,
+      "path" : "Sources/AppAuthTV",
+      "publicHeadersPath" : "",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppAuthCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "OIDSwiftTests.swift",
+        "AppAuthTV"
+      ],
+      "name" : "AppAuthCoreTests",
+      "packageAccess" : false,
+      "path" : "UnitTests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppAuthCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppAuthCoreSwiftTests",
+      "packageAccess" : false,
+      "path" : "UnitTests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "sources" : [
+        "OIDSwiftTests.swift"
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "AppAuthTV",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppAuthTVTests",
+      "packageAccess" : false,
+      "path" : "UnitTests/AppAuthTV",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.7.0"
+  },
+  "traits" : [
+
+  ]
+}

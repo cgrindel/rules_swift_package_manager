@@ -1,0 +1,252 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "abseil-cpp-binary",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/abseil-cpp-binary.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.2025051202.0",
+                "upperBound" : "1.2025051300.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "gRPC",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "gRPC-Core",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "grpcWrapper"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "gRPC-C++",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "grpcppWrapper"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "grpc",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "grpcWrapper",
+      "packageAccess" : false,
+      "path" : "grpc-Wrapper",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "openssl_grpc",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "opensslWrapper",
+      "packageAccess" : false,
+      "path" : "openssl-grpc-Wrapper",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "grpcpp",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "grpcWrapper",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "opensslWrapper",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "abseil",
+            "abseil-cpp-binary",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "grpcppWrapper",
+      "packageAccess" : false,
+      "path" : "grpcpp-Wrapper",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "checksum" : "1f9551447b6a7969364aa8e4b0bbd2e73ba3470d3a29f429d08c807cbd6bd25f",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "grpc",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://dl.google.com/firebase/ios/bin/grpc/1.83.1/rc0/grpc.zip"
+    },
+    {
+      "checksum" : "777afb52397b3a2302e4d225346c2d3f7b11a352411ddadc440d0db3c59bf9dd",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "grpcpp",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://dl.google.com/firebase/ios/bin/grpc/1.83.1/rc0/grpcpp.zip"
+    },
+    {
+      "checksum" : "8d33c1998a0e5df87b761b636da8cac33315d3a38ba9a310a960e62a874cf2c9",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "openssl_grpc",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://dl.google.com/firebase/ios/bin/grpc/1.83.1/rc0/openssl_grpc.zip"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.6.0"
+  },
+  "traits" : [
+
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "trustkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/datatheorem/TrustKit.git",
+      "state" : {
+        "revision" : "f0c2612a6a8c06d2be1e3488dd9ad4f75da17d24",
+        "version" : "4.0.0"
+      }
+    }
+  ],
+  "version" : 2
+}

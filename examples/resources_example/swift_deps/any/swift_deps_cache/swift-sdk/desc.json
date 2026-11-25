@@ -1,0 +1,245 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "IterableSDK",
+  "name" : "IterableSDK",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "12.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "IterableSDK",
+      "targets" : [
+        "IterableSDK"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "IterableAppExtensions",
+      "targets" : [
+        "IterableAppExtensions"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "IterableSDK",
+      "module_type" : "SwiftTarget",
+      "name" : "IterableSDK",
+      "path" : "swift-sdk",
+      "product_memberships" : [
+        "IterableSDK"
+      ],
+      "resources" : [
+        {
+          "path" : "./swift-sdk/Resources/Assets.xcassets",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./swift-sdk/Resources/IterableDataModel.xcdatamodeld",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./swift-sdk/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./swift-sdk/Resources/anoncriteria_response.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./swift-sdk/ui-components/uikit/IterableEmbeddedView.xib",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./swift-sdk/ui-components/uikit/SampleInboxCell.xib",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Core/Constants.swift",
+        "Core/Models/AuthTokenValidityState.swift",
+        "Core/Models/CommerceItem.swift",
+        "Core/Models/IterableAction.swift",
+        "Core/Models/IterableActionContext.swift",
+        "Core/Models/IterableAttributionInfo.swift",
+        "Core/Models/IterableEmbeddedMessage.swift",
+        "Core/Models/IterableInAppMessage.swift",
+        "Core/Models/IterablePushNotificationMetadata.swift",
+        "Core/Models/RetryPolicy.swift",
+        "Core/Protocols/IterableAuthManagerProtocol.swift",
+        "Core/Protocols/IterableEmbeddedManagerProtocol.swift",
+        "Core/Protocols/IterableEmbeddedUpdateDelegate.swift",
+        "Core/Protocols/IterableInAppManagerProtocol.swift",
+        "Core/Protocols/IterableInboxViewControllerViewDelegate.swift",
+        "Core/Utilities/AuthFailure.swift",
+        "Core/Utilities/AuthFailureReason.swift",
+        "Internal/APNSTypeChecker.swift",
+        "Internal/ActionRunner.swift",
+        "Internal/AppExtensionHelper.swift",
+        "Internal/Auth.swift",
+        "Internal/AuthManager.swift",
+        "Internal/ClassExtensions.swift",
+        "Internal/CoreDataUtil.swift",
+        "Internal/DataFieldsHelper.swift",
+        "Internal/DateProvider.swift",
+        "Internal/DeepLinkManager.swift",
+        "Internal/Dwifft/AbstractDiffCalculator.swift",
+        "Internal/Dwifft/Dwifft+UIKit.swift",
+        "Internal/Dwifft/Dwifft.swift",
+        "Internal/Dwifft/SectionedValues.swift",
+        "Internal/EmbeddedHelper.swift",
+        "Internal/EmbeddedMessagingProcessor.swift",
+        "Internal/EmbeddedMessagingSerialization.swift",
+        "Internal/EmbeddedSessionManager.swift",
+        "Internal/EmptyEmbeddedManager.swift",
+        "Internal/EmptyInAppManager.swift",
+        "Internal/HealthMonitor.swift",
+        "Internal/InboxImpressionTracker.swift",
+        "Internal/InboxMessageViewModel.swift",
+        "Internal/InboxSessionManager.swift",
+        "Internal/InboxState.swift",
+        "Internal/InboxViewControllerViewModel.swift",
+        "Internal/InboxViewControllerViewModelProtocol.swift",
+        "Internal/InboxViewControllerViewModelView.swift",
+        "Internal/InternalIterableAPI.swift",
+        "Internal/InternalIterableAppIntegration.swift",
+        "Internal/IterableAPICallRequest.swift",
+        "Internal/IterableAPICallTaskProcessor.swift",
+        "Internal/IterableAPIMobileFrameworkDetector.swift",
+        "Internal/IterableCoreDataPersistence.swift",
+        "Internal/IterableEmbeddedManager.swift",
+        "Internal/IterableHtmlMessageViewController.swift",
+        "Internal/IterableIdentityResolution.swift",
+        "Internal/IterableInboxCell+Layout.swift",
+        "Internal/IterableNotifications.swift",
+        "Internal/IterablePersistence.swift",
+        "Internal/IterableRequest.swift",
+        "Internal/IterableRequestUtil.swift",
+        "Internal/IterableTask.swift",
+        "Internal/IterableTaskError.swift",
+        "Internal/IterableTaskManagedObject.swift",
+        "Internal/IterableTaskProcessor.swift",
+        "Internal/IterableTaskResult.swift",
+        "Internal/IterableTaskRunner.swift",
+        "Internal/IterableTaskScheduler.swift",
+        "Internal/IterableUserDefaults.swift",
+        "Internal/MiscEmbeddedClasses.swift",
+        "Internal/MiscInboxClasses.swift",
+        "Internal/Models.swift",
+        "Internal/Network/NetworkConnectivityChecker.swift",
+        "Internal/Network/NetworkConnectivityManager.swift",
+        "Internal/Network/NetworkHelper.swift",
+        "Internal/Network/NetworkMonitor.swift",
+        "Internal/Network/NetworkSession.swift",
+        "Internal/Pending.swift",
+        "Internal/RequestHandlerProtocol.swift",
+        "Internal/RequestProcessorUtil.swift",
+        "Internal/RequestSender.swift",
+        "Internal/UnknownUserManager+Functions.swift",
+        "Internal/UnknownUserManager.swift",
+        "Internal/UnknownUserManagerProtocol.swift",
+        "Internal/UnknownUserMerge.swift",
+        "Internal/Utilities/DependencyContainer.swift",
+        "Internal/Utilities/DependencyContainerProtocol.swift",
+        "Internal/Utilities/IterableLogUtil.swift",
+        "Internal/Utilities/IterableUtil.swift",
+        "Internal/Utilities/Keychain/IterableKeychain.swift",
+        "Internal/Utilities/Keychain/KeychainWrapper.swift",
+        "Internal/Utilities/LocalStorage.swift",
+        "Internal/Utilities/LocalStorageProtocol.swift",
+        "Internal/Utilities/NotificationHelper.swift",
+        "Internal/Utilities/OrderedDictionary.swift",
+        "Internal/Utilities/PersistenceHelper.swift",
+        "Internal/Utilities/ResourceHelper.swift",
+        "Internal/Utilities/UIColor+Extension.swift",
+        "Internal/Utilities/WebViewProtocol.swift",
+        "Internal/api-client/ApiClient.swift",
+        "Internal/api-client/ApiClientProtocol.swift",
+        "Internal/api-client/Request/OfflineRequestProcessor.swift",
+        "Internal/api-client/Request/OnlineRequestProcessor.swift",
+        "Internal/api-client/Request/RequestCreator.swift",
+        "Internal/api-client/Request/RequestHandler.swift",
+        "Internal/api-client/Request/RequestProcessorProtocol.swift",
+        "Internal/in-app/InAppCalculations.swift",
+        "Internal/in-app/InAppContentParser.swift",
+        "Internal/in-app/InAppDisplayer.swift",
+        "Internal/in-app/InAppHelper.swift",
+        "Internal/in-app/InAppInternal.swift",
+        "Internal/in-app/InAppManager+Functions.swift",
+        "Internal/in-app/InAppManager.swift",
+        "Internal/in-app/InAppMessageParser.swift",
+        "Internal/in-app/InAppPersistence.swift",
+        "Internal/in-app/InAppPresenter.swift",
+        "IterableTokenGenerator.swift",
+        "SDK/IterableAPI.swift",
+        "SDK/IterableAppIntegration.swift",
+        "SDK/IterableConfig.swift",
+        "SDK/IterableLogging.swift",
+        "SDK/IterableMessaging.swift",
+        "ui-components/swiftui/InboxViewRepresentable.swift",
+        "ui-components/swiftui/IterableInboxView.swift",
+        "ui-components/uikit/IterableEmbeddedView.swift",
+        "ui-components/uikit/IterableInboxCell.swift",
+        "ui-components/uikit/IterableInboxNavigationViewController.swift",
+        "ui-components/uikit/IterableInboxViewController.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "IterableAppExtensions",
+      "module_type" : "SwiftTarget",
+      "name" : "IterableAppExtensions",
+      "path" : "notification-extension",
+      "product_memberships" : [
+        "IterableAppExtensions"
+      ],
+      "sources" : [
+        "ITBNotificationServiceExtension.swift",
+        "NotificationContentParser.swift",
+        "NotificationExtensionConstants.swift",
+        "TestFile.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.3"
+}

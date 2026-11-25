@@ -1,0 +1,353 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : "c++17",
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "OpenCombine",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "OpenCombine",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "OpenCombine"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "OpenCombineDispatch",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "OpenCombineDispatch"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "OpenCombineFoundation",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "OpenCombineFoundation"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "OpenCombineShim",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "OpenCombineShim"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "COpenCombineHelpers",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "COpenCombineHelpers",
+            {
+              "platformNames" : [
+                "macos",
+                "maccatalyst",
+                "ios",
+                "watchos",
+                "tvos",
+                "driverkit",
+                "linux",
+                "android",
+                "windows"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+        "RootProtocols.swift.gyb",
+        "Concurrency/Publisher+Concurrency.swift.gyb",
+        "Publishers/Publishers.Encode.swift.gyb",
+        "Publishers/Publishers.MapKeyPath.swift.gyb",
+        "Publishers/Publishers.Catch.swift.gyb"
+      ],
+      "name" : "OpenCombine",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "platformNames" : [
+              "wasi"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "WASI"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "OpenCombine",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "OpenCombineDispatch",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "OpenCombine",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "COpenCombineHelpers",
+            {
+              "platformNames" : [
+                "macos",
+                "maccatalyst",
+                "ios",
+                "watchos",
+                "tvos",
+                "driverkit",
+                "linux",
+                "android",
+                "windows"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "OpenCombineFoundation",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "OpenCombine",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "OpenCombineDispatch",
+            {
+              "platformNames" : [
+                "macos",
+                "maccatalyst",
+                "ios",
+                "watchos",
+                "tvos",
+                "driverkit",
+                "linux",
+                "android",
+                "windows"
+              ]
+            }
+          ]
+        },
+        {
+          "target" : [
+            "OpenCombineFoundation",
+            {
+              "platformNames" : [
+                "macos",
+                "maccatalyst",
+                "ios",
+                "watchos",
+                "tvos",
+                "driverkit",
+                "linux",
+                "android",
+                "windows"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "OpenCombineShim",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "OpenCombine",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "OpenCombineDispatch",
+            {
+              "platformNames" : [
+                "macos",
+                "maccatalyst",
+                "ios",
+                "watchos",
+                "tvos",
+                "driverkit",
+                "linux",
+                "android",
+                "windows"
+              ]
+            }
+          ]
+        },
+        {
+          "target" : [
+            "OpenCombineFoundation",
+            {
+              "platformNames" : [
+                "macos",
+                "maccatalyst",
+                "ios",
+                "watchos",
+                "tvos",
+                "driverkit",
+                "linux",
+                "android",
+                "windows"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "OpenCombineTests",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "unsafeFlags" : {
+              "_0" : [
+                "-enable-testing"
+              ]
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "wasi"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "WASI"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.5.0"
+  },
+  "traits" : [
+
+  ]
+}

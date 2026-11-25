@@ -1,0 +1,30 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "snapkit",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "6.0.0",
+            "upper_bound" : "7.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/SnapKit/SnapKit.git"
+    }
+  ],
+  "manifest_display_name" : "snapkit_example",
+  "name" : "snapkit_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}

@@ -1,0 +1,24 @@
+From ae17f21634da0d4a28aa12a9effdcba248edb77d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ste=CC=81phane=20Copin?=
+ <7003579+stephanecopin@users.noreply.github.com>
+Date: Wed, 5 Jun 2024 00:43:43 -0400
+Subject: [PATCH] Remove @import GoogleMaps
+
+---
+ Maps/GMSEmpty.m | 3 ---
+ 1 files changed, 3 deletions(-)
+
+diff --git a/Maps/GMSEmpty.m b/Maps/GMSEmpty.m
+index 0185c0b..dab2ec4 100644
+--- a/Maps/GMSEmpty.m
++++ b/Maps/GMSEmpty.m
+@@ -12,6 +12,3 @@
+ // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ // See the License for the specific language governing permissions and
+ // limitations under the License.
+-
+-// Trigger auto-linking if GoogleMaps is never imported in the app.
+-@import GoogleMaps;
+-- 
+2.39.3 (Apple Git-145)
+

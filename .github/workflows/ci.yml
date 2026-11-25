@@ -103,8 +103,6 @@ jobs:
             runner: xcode-27
           - test: '@@//examples:stripe_example_test_bazel_.bazelversion'
             runner: xcode-27
-          - test: '@@//examples:swift_package_registry_example_test_bazel_.bazelversion'
-            runner: xcode-27
           - test: '@@//examples:swift_parsing_example_test_bazel_.bazelversion'
             runner: xcode-27
           - test: '@@//examples:symlink_example_test_bazel_.bazelversion'

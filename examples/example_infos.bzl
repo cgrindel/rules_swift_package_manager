@@ -160,7 +160,7 @@ _macos_single_bazel_version_test_examples = [
     "stripe_example",
     "tca_example",
     "symlink_example",
-    "swift_package_registry_example",
+    # TODO(#2699): swift_package_registry_example runs on the v1 path until registry support lands.
     "swift_parsing_example",
     "sqlite_data_example",
     "yoga_example",

@@ -1,0 +1,673 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "aws-crt-swift",
+  "name" : "aws-crt-swift",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "AwsCommonRuntimeKit",
+      "targets" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "LibNative",
+      "module_type" : "SystemLibraryTarget",
+      "name" : "LibNative",
+      "path" : "Source/LibNative",
+      "product_memberships" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "system-target"
+    },
+    {
+      "c99name" : "AwsCommonRuntimeKitTests",
+      "module_type" : "SwiftTarget",
+      "name" : "AwsCommonRuntimeKitTests",
+      "path" : "Test/AwsCommonRuntimeKitTests",
+      "resources" : [
+        {
+          "path" : "./Test/AwsCommonRuntimeKitTests/Resources/example_credentials.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Test/AwsCommonRuntimeKitTests/Resources/example_profile.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Test/AwsCommonRuntimeKitTests/Resources/example_sso_profile.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "XCBaseTestCase.swift",
+        "auth/ChunkSignerTests.swift",
+        "auth/CredentialsProviderTests.swift",
+        "auth/CredentialsTests.swift",
+        "auth/IMDSClientTests.swift",
+        "auth/SignerTests.swift",
+        "auth/SigningConfigTests.swift",
+        "crt/AllocatorTests.swift",
+        "crt/CBOR.swift",
+        "crt/ChecksumsTests.swift",
+        "crt/ECTests.swift",
+        "crt/HashTests.swift",
+        "crt/ShutDownCallbackOptionsTests.swift",
+        "crt/Utilities.swift",
+        "event-stream/EventStreamTests.swift",
+        "http/HTTP2ClientConnectionTests.swift",
+        "http/HTTP2SettingsTests.swift",
+        "http/HTTP2StreamManagerTests.swift",
+        "http/HTTPClientConnectionManagerTests.swift",
+        "http/HTTPClientConnectionOptionsTests.swift",
+        "http/HTTPClientTestFixture.swift",
+        "http/HTTPMessageTests.swift",
+        "http/HTTPMonitoringOptionsTests.swift",
+        "http/HTTPProxyEnvSettingsTests.swift",
+        "http/HTTPProxyOptionsTests.swift",
+        "http/HTTPProxyTests.swift",
+        "http/HTTPRequestTests.swift",
+        "http/HTTPTests.swift",
+        "io/BootstrapTests.swift",
+        "io/EventLoopGroupTests.swift",
+        "io/HostResolverTests.swift",
+        "io/RetryerTests.swift",
+        "io/SocketOptionsTest.swift",
+        "io/StreamTests.swift",
+        "io/TLSContextTests.swift",
+        "mqtt/Mqtt5ClientTests.swift",
+        "mqtt/MqttRRClientTests.swift",
+        "sdkutils/EndpointPropertyTests.swift",
+        "sdkutils/EndpointsRuleEngineTests.swift",
+        "sdkutils/FileBasedConfigurationTests.swift"
+      ],
+      "target_dependencies" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AwsCommonRuntimeKit",
+      "module_type" : "SwiftTarget",
+      "name" : "AwsCommonRuntimeKit",
+      "path" : "Source/AwsCommonRuntimeKit",
+      "product_memberships" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "resources" : [
+        {
+          "path" : "./Source/AwsCommonRuntimeKit/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "CommonRuntimeKit.swift",
+        "auth/credentials/Credentials.swift",
+        "auth/credentials/CredentialsProvider.swift",
+        "auth/imds/IAMProfile.swift",
+        "auth/imds/IMDSClient.swift",
+        "auth/imds/IMDSInstanceInfo.swift",
+        "auth/signing/Signer.swift",
+        "auth/signing/SigningConfig.swift",
+        "crt/AWSString.swift",
+        "crt/Allocator.swift",
+        "crt/ByteBuffer.swift",
+        "crt/CBOR.swift",
+        "crt/CStruct.swift",
+        "crt/Checksums.swift",
+        "crt/CommonRuntimeError.swift",
+        "crt/ContinuationCore.swift",
+        "crt/EC.swift",
+        "crt/Hash.swift",
+        "crt/Lock.swift",
+        "crt/Logger.swift",
+        "crt/ShutdownCallbackCore.swift",
+        "crt/Utilities.swift",
+        "event-stream/EventStreamHeader.swift",
+        "event-stream/EventStreamMessage.swift",
+        "event-stream/EventStreamMessageDecoder.swift",
+        "http/HTTP1Stream.swift",
+        "http/HTTP2ClientConnection.swift",
+        "http/HTTP2Error.swift",
+        "http/HTTP2Settings.swift",
+        "http/HTTP2Stream.swift",
+        "http/HTTP2StreamManager.swift",
+        "http/HTTP2StreamManagerOptions.swift",
+        "http/HTTPClientConnection.swift",
+        "http/HTTPClientConnectionManager.swift",
+        "http/HTTPClientConnectionManagerCallbackCore.swift",
+        "http/HTTPClientConnectionManagerMetrics.swift",
+        "http/HTTPClientConnectionOptions.swift",
+        "http/HTTPHeader.swift",
+        "http/HTTPHeaderBlock.swift",
+        "http/HTTPMonitoringOptions.swift",
+        "http/HTTPProxyAuthenticationType.swift",
+        "http/HTTPProxyConnectionType.swift",
+        "http/HTTPProxyEnvSettings.swift",
+        "http/HTTPProxyEnvType.swift",
+        "http/HTTPProxyOptions.swift",
+        "http/HTTPRequest.swift",
+        "http/HTTPRequestBase.swift",
+        "http/HTTPRequestOptions.swift",
+        "http/HTTPStream.swift",
+        "http/HTTPStreamCallbackCore.swift",
+        "http/HTTPVersion.swift",
+        "io/ClientBootstrap.swift",
+        "io/EventLoopGroup.swift",
+        "io/HostAddress.swift",
+        "io/HostAddressType.swift",
+        "io/HostResolver.swift",
+        "io/SocketDomain.swift",
+        "io/SocketOptions.swift",
+        "io/SocketType.swift",
+        "io/Stream.swift",
+        "io/StreamCore.swift",
+        "io/TLSConnectionOptions.swift",
+        "io/TLSContext.swift",
+        "io/TLSContextOptions.swift",
+        "io/TLSSecitemOptions.swift",
+        "io/retryer/ExponentialBackoffJitterMode.swift",
+        "io/retryer/RetryError.swift",
+        "io/retryer/RetryStrategy.swift",
+        "io/retryer/RetryToken.swift",
+        "mqtt/Mqtt5Client.swift",
+        "mqtt/Mqtt5Enums.swift",
+        "mqtt/Mqtt5Options.swift",
+        "mqtt/Mqtt5Packets.swift",
+        "mqtt/MqttRequestResponseClient.swift",
+        "sdkutils/FileBasedConfiguration.swift",
+        "sdkutils/endpoint/EndpointProperty.swift",
+        "sdkutils/endpoint/EndpointsRequestContext.swift",
+        "sdkutils/endpoint/EndpointsRuleEngine.swift",
+        "sdkutils/endpoint/ResolvedEndpointType.swift"
+      ],
+      "target_dependencies" : [
+        "AwsCAuth",
+        "AwsCHttp",
+        "AwsCCal",
+        "AwsCCompression",
+        "AwsCIo",
+        "AwsCCommon",
+        "AwsCChecksums",
+        "AwsCEventStream",
+        "AwsCMqtt",
+        "LibNative"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AwsCSdkUtils",
+      "module_type" : "ClangTarget",
+      "name" : "AwsCSdkUtils",
+      "path" : "aws-common-runtime/aws-c-sdkutils",
+      "product_memberships" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "sources" : [
+        "source/aws_profile.c",
+        "source/endpoints_regex.c",
+        "source/endpoints_rule_engine.c",
+        "source/endpoints_ruleset.c",
+        "source/endpoints_standard_lib.c",
+        "source/endpoints_types_impl.c",
+        "source/endpoints_util.c",
+        "source/partitions.c",
+        "source/resource_name.c",
+        "source/sdkutils.c"
+      ],
+      "target_dependencies" : [
+        "AwsCCommon"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AwsCPlatformConfig",
+      "module_type" : "ClangTarget",
+      "name" : "AwsCPlatformConfig",
+      "path" : "aws-common-runtime/config",
+      "product_memberships" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "sources" : [
+        "empty.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AwsCMqtt",
+      "module_type" : "ClangTarget",
+      "name" : "AwsCMqtt",
+      "path" : "aws-common-runtime/aws-c-mqtt",
+      "product_memberships" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "sources" : [
+        "source/client.c",
+        "source/client_channel_handler.c",
+        "source/client_impl_shared.c",
+        "source/fixed_header.c",
+        "source/mqtt.c",
+        "source/mqtt311_decoder.c",
+        "source/mqtt311_listener.c",
+        "source/mqtt_iot_metrics.c",
+        "source/mqtt_subscription_set.c",
+        "source/packets.c",
+        "source/request-response/protocol_adapter.c",
+        "source/request-response/request_response_client.c",
+        "source/request-response/request_response_subscription_set.c",
+        "source/request-response/subscription_manager.c",
+        "source/shared.c",
+        "source/topic_tree.c",
+        "source/v5/mqtt5_callbacks.c",
+        "source/v5/mqtt5_client.c",
+        "source/v5/mqtt5_decoder.c",
+        "source/v5/mqtt5_encoder.c",
+        "source/v5/mqtt5_listener.c",
+        "source/v5/mqtt5_options_storage.c",
+        "source/v5/mqtt5_to_mqtt3_adapter.c",
+        "source/v5/mqtt5_topic_alias.c",
+        "source/v5/mqtt5_types.c",
+        "source/v5/mqtt5_utils.c",
+        "source/v5/rate_limiters.c"
+      ],
+      "target_dependencies" : [
+        "AwsCHttp",
+        "AwsCCal",
+        "AwsCIo",
+        "AwsCCommon"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AwsCIo",
+      "module_type" : "ClangTarget",
+      "name" : "AwsCIo",
+      "path" : "aws-common-runtime/aws-c-io",
+      "product_memberships" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "sources" : [
+        "source/alpn_handler.c",
+        "source/async_stream.c",
+        "source/bsd/kqueue_event_loop.c",
+        "source/channel.c",
+        "source/channel_bootstrap.c",
+        "source/darwin/darwin_pki_utils.c",
+        "source/darwin/dispatch_queue_event_loop.c",
+        "source/darwin/nw_socket.c",
+        "source/darwin/secure_transport_tls_channel_handler.c",
+        "source/event_loop.c",
+        "source/exponential_backoff_retry_strategy.c",
+        "source/future.c",
+        "source/host_resolver.c",
+        "source/io.c",
+        "source/message_pool.c",
+        "source/no_retry_strategy.c",
+        "source/pem.c",
+        "source/pkcs11_lib.c",
+        "source/pkcs11_tls_op_handler.c",
+        "source/posix/host_resolver.c",
+        "source/posix/pipe.c",
+        "source/posix/shared_library.c",
+        "source/posix/socket.c",
+        "source/retry_strategy.c",
+        "source/socket.c",
+        "source/socket_channel_handler.c",
+        "source/socket_shared.c",
+        "source/standard_retry_strategy.c",
+        "source/statistics.c",
+        "source/stream.c",
+        "source/tls_channel_handler.c",
+        "source/tls_channel_handler_shared.c",
+        "source/tracing.c"
+      ],
+      "target_dependencies" : [
+        "AwsCCommon",
+        "AwsCCal"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AwsCHttp",
+      "module_type" : "ClangTarget",
+      "name" : "AwsCHttp",
+      "path" : "aws-common-runtime/aws-c-http",
+      "product_memberships" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "sources" : [
+        "source/connection.c",
+        "source/connection_manager.c",
+        "source/connection_monitor.c",
+        "source/h1_connection.c",
+        "source/h1_decoder.c",
+        "source/h1_encoder.c",
+        "source/h1_stream.c",
+        "source/h2_connection.c",
+        "source/h2_decoder.c",
+        "source/h2_frames.c",
+        "source/h2_stream.c",
+        "source/hpack.c",
+        "source/hpack_decoder.c",
+        "source/hpack_encoder.c",
+        "source/hpack_huffman_static.c",
+        "source/http.c",
+        "source/http2_stream_manager.c",
+        "source/no_proxy.c",
+        "source/proxy_connection.c",
+        "source/proxy_strategy.c",
+        "source/random_access_set.c",
+        "source/request_response.c",
+        "source/statistics.c",
+        "source/strutil.c",
+        "source/websocket.c",
+        "source/websocket_bootstrap.c",
+        "source/websocket_decoder.c",
+        "source/websocket_encoder.c"
+      ],
+      "target_dependencies" : [
+        "AwsCCompression",
+        "AwsCIo",
+        "AwsCCal",
+        "AwsCCommon"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AwsCEventStream",
+      "module_type" : "ClangTarget",
+      "name" : "AwsCEventStream",
+      "path" : "aws-common-runtime/aws-c-event-stream",
+      "product_memberships" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "sources" : [
+        "source/event_stream.c",
+        "source/event_stream_channel_handler.c",
+        "source/event_stream_rpc.c",
+        "source/event_stream_rpc_client.c",
+        "source/event_stream_rpc_server.c"
+      ],
+      "target_dependencies" : [
+        "AwsCChecksums",
+        "AwsCCommon",
+        "AwsCIo",
+        "AwsCCal"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AwsCCompression",
+      "module_type" : "ClangTarget",
+      "name" : "AwsCCompression",
+      "path" : "aws-common-runtime/aws-c-compression",
+      "product_memberships" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "sources" : [
+        "source/compression.c",
+        "source/huffman.c",
+        "source/huffman_testing.c"
+      ],
+      "target_dependencies" : [
+        "AwsCCommon"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AwsCCommon",
+      "module_type" : "ClangTarget",
+      "name" : "AwsCCommon",
+      "path" : "aws-common-runtime/aws-c-common",
+      "product_memberships" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "sources" : [
+        "source/allocator.c",
+        "source/allocator_sba.c",
+        "source/arch/generic/cpuid.c",
+        "source/array_list.c",
+        "source/assert.c",
+        "source/byte_buf.c",
+        "source/cache.c",
+        "source/cbor.c",
+        "source/codegen.c",
+        "source/command_line_parser.c",
+        "source/common.c",
+        "source/condition_variable.c",
+        "source/date_time.c",
+        "source/device_random.c",
+        "source/encoding.c",
+        "source/error.c",
+        "source/external/cJSON.c",
+        "source/external/libcbor/allocators.c",
+        "source/external/libcbor/cbor.c",
+        "source/external/libcbor/cbor/arrays.c",
+        "source/external/libcbor/cbor/bytestrings.c",
+        "source/external/libcbor/cbor/callbacks.c",
+        "source/external/libcbor/cbor/common.c",
+        "source/external/libcbor/cbor/encoding.c",
+        "source/external/libcbor/cbor/floats_ctrls.c",
+        "source/external/libcbor/cbor/internal/builder_callbacks.c",
+        "source/external/libcbor/cbor/internal/encoders.c",
+        "source/external/libcbor/cbor/internal/loaders.c",
+        "source/external/libcbor/cbor/internal/memory_utils.c",
+        "source/external/libcbor/cbor/internal/stack.c",
+        "source/external/libcbor/cbor/internal/unicode.c",
+        "source/external/libcbor/cbor/ints.c",
+        "source/external/libcbor/cbor/maps.c",
+        "source/external/libcbor/cbor/serialization.c",
+        "source/external/libcbor/cbor/streaming.c",
+        "source/external/libcbor/cbor/strings.c",
+        "source/external/libcbor/cbor/tags.c",
+        "source/fifo_cache.c",
+        "source/file.c",
+        "source/hash_table.c",
+        "source/host_utils.c",
+        "source/json.c",
+        "source/lifo_cache.c",
+        "source/linked_hash_table.c",
+        "source/log_channel.c",
+        "source/log_formatter.c",
+        "source/log_writer.c",
+        "source/logging.c",
+        "source/lru_cache.c",
+        "source/math.c",
+        "source/memtrace.c",
+        "source/platform_fallback_stubs/file_direct_io.c",
+        "source/platform_fallback_stubs/system_info.c",
+        "source/posix/clock.c",
+        "source/posix/condition_variable.c",
+        "source/posix/cross_process_lock.c",
+        "source/posix/device_random.c",
+        "source/posix/environment.c",
+        "source/posix/file.c",
+        "source/posix/mutex.c",
+        "source/posix/process.c",
+        "source/posix/rw_lock.c",
+        "source/posix/system_info.c",
+        "source/posix/system_resource_utils.c",
+        "source/posix/thread.c",
+        "source/posix/time.c",
+        "source/priority_queue.c",
+        "source/process_common.c",
+        "source/ref_count.c",
+        "source/ring_buffer.c",
+        "source/statistics.c",
+        "source/string.c",
+        "source/system_info.c",
+        "source/task_scheduler.c",
+        "source/thread_scheduler.c",
+        "source/thread_shared.c",
+        "source/uri.c",
+        "source/uuid.c",
+        "source/xml_parser.c"
+      ],
+      "target_dependencies" : [
+        "AwsCPlatformConfig"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AwsCChecksums",
+      "module_type" : "ClangTarget",
+      "name" : "AwsCChecksums",
+      "path" : "aws-common-runtime/aws-checksums",
+      "product_memberships" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "sources" : [
+        "source/checksums.c",
+        "source/crc32.c",
+        "source/crc64.c",
+        "source/crc64_sw.c",
+        "source/crc_sw.c",
+        "source/crc_util.c",
+        "source/xxhash.c"
+      ],
+      "target_dependencies" : [
+        "AwsCCommon"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AwsCCal",
+      "module_type" : "ClangTarget",
+      "name" : "AwsCCal",
+      "path" : "aws-common-runtime/aws-c-cal",
+      "product_memberships" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "sources" : [
+        "source/cal.c",
+        "source/darwin/commoncrypto_aes.c",
+        "source/darwin/commoncrypto_hmac.c",
+        "source/darwin/commoncrypto_md5.c",
+        "source/darwin/commoncrypto_platform_init.c",
+        "source/darwin/commoncrypto_sha1.c",
+        "source/darwin/commoncrypto_sha256.c",
+        "source/darwin/commoncrypto_sha512.c",
+        "source/darwin/securityframework_ecc.c",
+        "source/darwin/securityframework_rsa.c",
+        "source/der.c",
+        "source/ecc.c",
+        "source/ed25519.c",
+        "source/hash.c",
+        "source/hkdf.c",
+        "source/hmac.c",
+        "source/rsa.c",
+        "source/shared/ed25519_noop.c",
+        "source/shared/ref_hkdf.c",
+        "source/symmetric_cipher.c"
+      ],
+      "target_dependencies" : [
+        "AwsCCommon"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AwsCAuth",
+      "module_type" : "ClangTarget",
+      "name" : "AwsCAuth",
+      "path" : "aws-common-runtime/aws-c-auth",
+      "product_memberships" : [
+        "AwsCommonRuntimeKit"
+      ],
+      "sources" : [
+        "source/auth.c",
+        "source/aws_http_credentials_provider.c",
+        "source/aws_imds_client.c",
+        "source/aws_profile.c",
+        "source/aws_signing.c",
+        "source/credentials.c",
+        "source/credentials_provider_anonymous.c",
+        "source/credentials_provider_cached.c",
+        "source/credentials_provider_chain.c",
+        "source/credentials_provider_cognito.c",
+        "source/credentials_provider_default_chain.c",
+        "source/credentials_provider_delegate.c",
+        "source/credentials_provider_ecs.c",
+        "source/credentials_provider_environment.c",
+        "source/credentials_provider_imds.c",
+        "source/credentials_provider_login.c",
+        "source/credentials_provider_process.c",
+        "source/credentials_provider_profile.c",
+        "source/credentials_provider_sso.c",
+        "source/credentials_provider_static.c",
+        "source/credentials_provider_sts.c",
+        "source/credentials_provider_sts_web_identity.c",
+        "source/credentials_provider_x509.c",
+        "source/credentials_utils.c",
+        "source/key_derivation.c",
+        "source/login_token_utils.c",
+        "source/signable.c",
+        "source/signable_chunk.c",
+        "source/signable_http_request.c",
+        "source/signable_trailer.c",
+        "source/signing.c",
+        "source/signing_config.c",
+        "source/signing_result.c",
+        "source/sigv4_http_request.c",
+        "source/sso_token_utils.c",
+        "source/token_provider_sso_profile.c",
+        "source/token_provider_sso_session.c"
+      ],
+      "target_dependencies" : [
+        "AwsCHttp",
+        "AwsCCompression",
+        "AwsCCal",
+        "AwsCIo",
+        "AwsCSdkUtils",
+        "AwsCCommon"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.9"
+}

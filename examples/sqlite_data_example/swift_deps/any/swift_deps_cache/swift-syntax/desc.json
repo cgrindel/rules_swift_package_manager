@@ -1,0 +1,1849 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "swift-syntax",
+  "name" : "swift-syntax",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    },
+    {
+      "name" : "maccatalyst",
+      "version" : "13.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "SwiftBasicFormat",
+      "targets" : [
+        "SwiftBasicFormat"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftCompilerPlugin",
+      "targets" : [
+        "SwiftCompilerPlugin"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftDiagnostics",
+      "targets" : [
+        "SwiftDiagnostics"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftIDEUtils",
+      "targets" : [
+        "SwiftIDEUtils"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftIfConfig",
+      "targets" : [
+        "SwiftIfConfig"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftWarningControl",
+      "targets" : [
+        "SwiftWarningControl"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftLexicalLookup",
+      "targets" : [
+        "SwiftLexicalLookup"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftOperators",
+      "targets" : [
+        "SwiftOperators"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftParser",
+      "targets" : [
+        "SwiftParser"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftParserDiagnostics",
+      "targets" : [
+        "SwiftParserDiagnostics"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftRefactor",
+      "targets" : [
+        "SwiftRefactor"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftSyntax",
+      "targets" : [
+        "SwiftSyntax"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftSyntaxBuilder",
+      "targets" : [
+        "SwiftSyntaxBuilder"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftSyntaxMacros",
+      "targets" : [
+        "SwiftSyntaxMacros"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftSyntaxMacroExpansion",
+      "targets" : [
+        "SwiftSyntaxMacroExpansion"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftSyntaxMacrosTestSupport",
+      "targets" : [
+        "SwiftSyntaxMacrosTestSupport"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftSyntaxMacrosGenericTestSupport",
+      "targets" : [
+        "SwiftSyntaxMacrosGenericTestSupport"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "_SwiftCompilerPluginMessageHandling",
+      "targets" : [
+        "SwiftCompilerPluginMessageHandling"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "_SwiftLibraryPluginProvider",
+      "targets" : [
+        "SwiftLibraryPluginProvider"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "5",
+    "6"
+  ],
+  "targets" : [
+    {
+      "c99name" : "_SwiftSyntaxTestSupport",
+      "module_type" : "SwiftTarget",
+      "name" : "_SwiftSyntaxTestSupport",
+      "path" : "Sources/_SwiftSyntaxTestSupport",
+      "sources" : [
+        "AssertEqualWithDiff.swift",
+        "IncrementalParseTestUtils.swift",
+        "LocationMarkers.swift",
+        "LongTestsDisabled.swift",
+        "Syntax+Assertions.swift",
+        "SyntaxComparison.swift",
+        "SyntaxProtocol+Initializer.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxGenericTestSupport",
+        "SwiftBasicFormat",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacroExpansion"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "_SwiftSyntaxGenericTestSupport",
+      "module_type" : "SwiftTarget",
+      "name" : "_SwiftSyntaxGenericTestSupport",
+      "path" : "Sources/_SwiftSyntaxGenericTestSupport",
+      "product_memberships" : [
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport"
+      ],
+      "sources" : [
+        "AssertEqualWithDiff.swift",
+        "String+TrimmingTrailingWhitespace.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "_SwiftSyntaxCShims",
+      "module_type" : "ClangTarget",
+      "name" : "_SwiftSyntaxCShims",
+      "path" : "Sources/_SwiftSyntaxCShims",
+      "product_memberships" : [
+        "SwiftBasicFormat",
+        "SwiftCompilerPlugin",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftParserDiagnostics",
+        "SwiftRefactor",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "PlatformMutex.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "_SwiftLibraryPluginProviderCShims",
+      "module_type" : "ClangTarget",
+      "name" : "_SwiftLibraryPluginProviderCShims",
+      "path" : "Sources/_SwiftLibraryPluginProviderCShims",
+      "product_memberships" : [
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "LoadLibrary.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "_InstructionCounter",
+      "module_type" : "ClangTarget",
+      "name" : "_InstructionCounter",
+      "path" : "Sources/_InstructionCounter",
+      "sources" : [
+        "src/InstructionsExecuted.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftWarningControlTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftWarningControlTest",
+      "path" : "Tests/SwiftWarningControlTest",
+      "sources" : [
+        "WarningControlTests.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxTestSupport",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftParser",
+        "SwiftSyntaxMacrosGenericTestSupport"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftWarningControl",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftWarningControl",
+      "path" : "Sources/SwiftWarningControl",
+      "product_memberships" : [
+        "SwiftWarningControl"
+      ],
+      "sources" : [
+        "DiagnosticGroupInheritanceTree.swift",
+        "SyntaxProtocol+WarningControl.swift",
+        "WarningControlDeclSyntax.swift",
+        "WarningControlRegionBuilder.swift",
+        "WarningControlRegions.swift",
+        "WarningGroupControl.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftSyntax",
+        "SwiftParser",
+        "SwiftDiagnostics",
+        "SwiftIfConfig"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftSyntaxTestSupportTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntaxTestSupportTest",
+      "path" : "Tests/SwiftSyntaxTestSupportTest",
+      "sources" : [
+        "IncrementalParseTestUtilsTest.swift",
+        "SyntaxComparisonTests.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxTestSupport",
+        "SwiftParser"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftSyntaxTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntaxTest",
+      "path" : "Tests/SwiftSyntaxTest",
+      "sources" : [
+        "AbsolutePositionTests.swift",
+        "BumpPtrAllocatorTests.swift",
+        "DebugDescriptionTests.swift",
+        "DummyParseToken.swift",
+        "IdentifierTests.swift",
+        "MemoryLayoutTest.swift",
+        "MultithreadingTests.swift",
+        "RawSyntaxTests.swift",
+        "SourceLocationConverterTests.swift",
+        "SyntaxChildrenTests.swift",
+        "SyntaxCollectionsTests.swift",
+        "SyntaxCreationTests.swift",
+        "SyntaxTests.swift",
+        "SyntaxTextTests.swift",
+        "SyntaxTreeModifierTests.swift",
+        "SyntaxVisitorTests.swift",
+        "TriviaCommentValueTests.swift",
+        "TriviaTests.swift",
+        "VisitorTests.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxTestSupport",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftSyntaxMacrosTestSupportTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntaxMacrosTestSupportTests",
+      "path" : "Tests/SwiftSyntaxMacrosTestSupportTests",
+      "sources" : [
+        "AssertionsTests.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftDiagnostics",
+        "SwiftSyntax",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacrosTestSupport"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftSyntaxMacrosTestSupport",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntaxMacrosTestSupport",
+      "path" : "Sources/SwiftSyntaxMacrosTestSupport",
+      "product_memberships" : [
+        "SwiftSyntaxMacrosTestSupport"
+      ],
+      "sources" : [
+        "Assertions.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftSyntax",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacrosGenericTestSupport"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftSyntaxMacrosGenericTestSupport",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntaxMacrosGenericTestSupport",
+      "path" : "Sources/SwiftSyntaxMacrosGenericTestSupport",
+      "product_memberships" : [
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport"
+      ],
+      "sources" : [
+        "Assertions.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxGenericTestSupport",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftIfConfig",
+        "SwiftParser",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftSyntaxMacros",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntaxMacros",
+      "path" : "Sources/SwiftSyntaxMacros",
+      "product_memberships" : [
+        "SwiftCompilerPlugin",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "AbstractSourceLocation.swift",
+        "MacroExpansionContext.swift",
+        "MacroExpansionDiagnosticMessages.swift",
+        "MacroProtocols/AccessorMacro.swift",
+        "MacroProtocols/AttachedMacro.swift",
+        "MacroProtocols/BodyMacro.swift",
+        "MacroProtocols/CodeItemMacro.swift",
+        "MacroProtocols/DeclarationMacro.swift",
+        "MacroProtocols/ExpressionMacro.swift",
+        "MacroProtocols/ExtensionMacro.swift",
+        "MacroProtocols/FreestandingMacro.swift",
+        "MacroProtocols/Macro+Format.swift",
+        "MacroProtocols/Macro.swift",
+        "MacroProtocols/MemberAttributeMacro.swift",
+        "MacroProtocols/MemberMacro.swift",
+        "MacroProtocols/PeerMacro.swift",
+        "MacroProtocols/PreambleMacro.swift",
+        "Syntax+LexicalContext.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftDiagnostics",
+        "SwiftIfConfig",
+        "SwiftParser",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftSyntaxMacroExpansionTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntaxMacroExpansionTest",
+      "path" : "Tests/SwiftSyntaxMacroExpansionTest",
+      "sources" : [
+        "AccessorMacroTests.swift",
+        "AttributeRemoverTests.swift",
+        "BodyMacroTests.swift",
+        "CodeItemMacroTests.swift",
+        "DeclarationMacroTests.swift",
+        "ExpressionMacroTests.swift",
+        "ExtensionMacroTests.swift",
+        "LexicalContextTests.swift",
+        "MacroArgumentTests.swift",
+        "MacroReplacementTests.swift",
+        "MemberAttributeMacroTests.swift",
+        "MemberMacroTests.swift",
+        "MultiRoleMacroTests.swift",
+        "PeerMacroTests.swift",
+        "PreambleMacroTests.swift",
+        "StringInterpolationErrorTests.swift",
+        "SwiftTestingTests.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftSyntax",
+        "_SwiftSyntaxTestSupport",
+        "SwiftDiagnostics",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftSyntaxMacroExpansion",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntaxMacroExpansion",
+      "path" : "Sources/SwiftSyntaxMacroExpansion",
+      "product_memberships" : [
+        "SwiftCompilerPlugin",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "BasicMacroExpansionContext.swift",
+        "FunctionParameterUtils.swift",
+        "IndentationUtils.swift",
+        "MacroArgument.swift",
+        "MacroExpansion.swift",
+        "MacroExpansionDiagnosticMessages.swift",
+        "MacroReplacement.swift",
+        "MacroSpec.swift",
+        "MacroSystem.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftDiagnostics",
+        "SwiftOperators"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftSyntaxBuilderTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntaxBuilderTest",
+      "path" : "Tests/SwiftSyntaxBuilderTest",
+      "sources" : [
+        "AccessorDeclTests.swift",
+        "ArrayExprTests.swift",
+        "Assertions.swift",
+        "AttributeListSyntaxTests.swift",
+        "BooleanLiteralTests.swift",
+        "BreakStmtSyntaxTests.swift",
+        "ClassDeclSyntaxTests.swift",
+        "ClosureExprTests.swift",
+        "CollectionNodeFlatteningTests.swift",
+        "CustomAttributeTests.swift",
+        "DictionaryExprTests.swift",
+        "DoStmtTests.swift",
+        "EnumCaseElementTests.swift",
+        "ExprListTests.swift",
+        "ExtensionDeclTests.swift",
+        "FloatLiteralTests.swift",
+        "ForInStmtTests.swift",
+        "FunctionParameterSyntaxTests.swift",
+        "FunctionSignatureSyntaxTests.swift",
+        "FunctionTests.swift",
+        "FunctionTypeSyntaxTests.swift",
+        "IfConfigDeclSyntaxTests.swift",
+        "IfStmtTests.swift",
+        "ImportDeclSyntaxTests.swift",
+        "InitializerDeclTests.swift",
+        "IntegerLiteralTests.swift",
+        "LabeledExprSyntaxTests.swift",
+        "ProtocolDeclTests.swift",
+        "ReturnStmsTests.swift",
+        "SourceFileTests.swift",
+        "StringInterpolationTests.swift",
+        "StringLiteralExprSyntaxTests.swift",
+        "StructTests.swift",
+        "SubscriptTests.swift",
+        "SwitchCaseLabelSyntaxTests.swift",
+        "SwitchTests.swift",
+        "TernaryExprTests.swift",
+        "TriviaTests.swift",
+        "TupleTests.swift",
+        "VariableTests.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxTestSupport",
+        "SwiftSyntaxBuilder"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftSyntaxBuilder",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntaxBuilder",
+      "path" : "Sources/SwiftSyntaxBuilder",
+      "product_memberships" : [
+        "SwiftCompilerPlugin",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftRefactor",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "ConvenienceInitializers.swift",
+        "DeclSyntaxParseable.swift",
+        "Indenter.swift",
+        "ListBuilder.swift",
+        "ResultBuilderExtensions.swift",
+        "SwiftSyntaxBuilderCompatibility.swift",
+        "Syntax+StringInterpolation.swift",
+        "SyntaxNodeWithBody.swift",
+        "SyntaxParsable+ExpressibleByStringInterpolation.swift",
+        "ValidatingSyntaxNodes.swift",
+        "WithTrailingCommaSyntax+EnsuringTrailingComma.swift",
+        "generated/BuildableNodes.swift",
+        "generated/RenamedChildrenBuilderCompatibility.swift",
+        "generated/ResultBuilders.swift",
+        "generated/SyntaxExpressibleByStringInterpolationConformances.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftBasicFormat",
+        "SwiftParser",
+        "SwiftDiagnostics",
+        "SwiftParserDiagnostics",
+        "SwiftSyntax"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftSyntax604",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntax604",
+      "path" : "Sources/VersionMarkerModules/SwiftSyntax604",
+      "product_memberships" : [
+        "SwiftBasicFormat",
+        "SwiftCompilerPlugin",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftParserDiagnostics",
+        "SwiftRefactor",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "Empty.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftSyntax603",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntax603",
+      "path" : "Sources/VersionMarkerModules/SwiftSyntax603",
+      "product_memberships" : [
+        "SwiftBasicFormat",
+        "SwiftCompilerPlugin",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftParserDiagnostics",
+        "SwiftRefactor",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "Empty.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftSyntax602",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntax602",
+      "path" : "Sources/VersionMarkerModules/SwiftSyntax602",
+      "product_memberships" : [
+        "SwiftBasicFormat",
+        "SwiftCompilerPlugin",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftParserDiagnostics",
+        "SwiftRefactor",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "Empty.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftSyntax601",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntax601",
+      "path" : "Sources/VersionMarkerModules/SwiftSyntax601",
+      "product_memberships" : [
+        "SwiftBasicFormat",
+        "SwiftCompilerPlugin",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftParserDiagnostics",
+        "SwiftRefactor",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "Empty.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftSyntax600",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntax600",
+      "path" : "Sources/VersionMarkerModules/SwiftSyntax600",
+      "product_memberships" : [
+        "SwiftBasicFormat",
+        "SwiftCompilerPlugin",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftParserDiagnostics",
+        "SwiftRefactor",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "Empty.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftSyntax510",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntax510",
+      "path" : "Sources/VersionMarkerModules/SwiftSyntax510",
+      "product_memberships" : [
+        "SwiftBasicFormat",
+        "SwiftCompilerPlugin",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftParserDiagnostics",
+        "SwiftRefactor",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "Empty.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftSyntax509",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntax509",
+      "path" : "Sources/VersionMarkerModules/SwiftSyntax509",
+      "product_memberships" : [
+        "SwiftBasicFormat",
+        "SwiftCompilerPlugin",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftParserDiagnostics",
+        "SwiftRefactor",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "Empty.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftSyntax_all",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntax-all",
+      "path" : "Sources/SwiftSyntax-all",
+      "sources" : [
+        "empty.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxCShims",
+        "_InstructionCounter",
+        "_SwiftSyntaxTestSupport",
+        "_SwiftSyntaxGenericTestSupport",
+        "SwiftBasicFormat",
+        "SwiftCompilerPlugin",
+        "SwiftCompilerPluginMessageHandling",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftLibraryPluginProvider",
+        "_SwiftLibraryPluginProviderCShims",
+        "SwiftSyntax",
+        "SwiftSyntax509",
+        "SwiftSyntax510",
+        "SwiftSyntax600",
+        "SwiftSyntax601",
+        "SwiftSyntax602",
+        "SwiftSyntax603",
+        "SwiftSyntax604",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "SwiftParser",
+        "SwiftParserDiagnostics",
+        "SwiftOperators",
+        "SwiftRefactor"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftSyntax",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftSyntax",
+      "path" : "Sources/SwiftSyntax",
+      "product_memberships" : [
+        "SwiftBasicFormat",
+        "SwiftCompilerPlugin",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftParserDiagnostics",
+        "SwiftRefactor",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "AbsolutePosition.swift",
+        "AbsoluteSyntaxInfo.swift",
+        "ArenaAllocatedBuffer.swift",
+        "Assert.swift",
+        "BumpPtrAllocator.swift",
+        "CommonAncestor.swift",
+        "Convenience.swift",
+        "CustomTraits.swift",
+        "EditorPlaceholder.swift",
+        "Identifier.swift",
+        "MemoryLayout.swift",
+        "MissingNodeInitializers.swift",
+        "Raw/RawSyntax.swift",
+        "Raw/RawSyntaxArena.swift",
+        "Raw/RawSyntaxLayoutView.swift",
+        "Raw/RawSyntaxNodeProtocol.swift",
+        "Raw/RawSyntaxTokenView.swift",
+        "SourceEdit.swift",
+        "SourceLength.swift",
+        "SourceLocation.swift",
+        "SourcePresence.swift",
+        "SwiftSyntaxCompatibility.swift",
+        "Syntax.swift",
+        "SyntaxChildren.swift",
+        "SyntaxCollection.swift",
+        "SyntaxHashable.swift",
+        "SyntaxIdentifier.swift",
+        "SyntaxNodeStructure.swift",
+        "SyntaxProtocol.swift",
+        "SyntaxText.swift",
+        "SyntaxTreeViewMode.swift",
+        "TokenDiagnostic.swift",
+        "TokenSequence.swift",
+        "TokenSyntax.swift",
+        "Trivia+commentValue.swift",
+        "Trivia.swift",
+        "Utils.swift",
+        "generated/ChildNameForKeyPath.swift",
+        "generated/Keyword.swift",
+        "generated/RenamedChildrenCompatibility.swift",
+        "generated/RenamedNodesCompatibility.swift",
+        "generated/SyntaxAnyVisitor.swift",
+        "generated/SyntaxBaseNodes.swift",
+        "generated/SyntaxCollections.swift",
+        "generated/SyntaxEnum.swift",
+        "generated/SyntaxKind.swift",
+        "generated/SyntaxRewriter.swift",
+        "generated/SyntaxTraits.swift",
+        "generated/SyntaxVisitor.swift",
+        "generated/TokenKind.swift",
+        "generated/Tokens.swift",
+        "generated/TriviaPieces.swift",
+        "generated/raw/RawSyntaxNodesAB.swift",
+        "generated/raw/RawSyntaxNodesC.swift",
+        "generated/raw/RawSyntaxNodesD.swift",
+        "generated/raw/RawSyntaxNodesEF.swift",
+        "generated/raw/RawSyntaxNodesGHI.swift",
+        "generated/raw/RawSyntaxNodesJKLMN.swift",
+        "generated/raw/RawSyntaxNodesOP.swift",
+        "generated/raw/RawSyntaxNodesQRS.swift",
+        "generated/raw/RawSyntaxNodesTUVWXYZ.swift",
+        "generated/raw/RawSyntaxValidation.swift",
+        "generated/syntaxNodes/SyntaxNodesAB.swift",
+        "generated/syntaxNodes/SyntaxNodesC.swift",
+        "generated/syntaxNodes/SyntaxNodesD.swift",
+        "generated/syntaxNodes/SyntaxNodesEF.swift",
+        "generated/syntaxNodes/SyntaxNodesGHI.swift",
+        "generated/syntaxNodes/SyntaxNodesJKLMN.swift",
+        "generated/syntaxNodes/SyntaxNodesOP.swift",
+        "generated/syntaxNodes/SyntaxNodesQRS.swift",
+        "generated/syntaxNodes/SyntaxNodesTUVWXYZ.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxCShims",
+        "SwiftSyntax509",
+        "SwiftSyntax510",
+        "SwiftSyntax600",
+        "SwiftSyntax601",
+        "SwiftSyntax602",
+        "SwiftSyntax603",
+        "SwiftSyntax604"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftRefactorTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftRefactorTest",
+      "path" : "Tests/SwiftRefactorTest",
+      "sources" : [
+        "CallToTrailingClosureTests.swift",
+        "ConvertComputedPropertyToStoredTest.swift",
+        "ConvertComputedPropertyToZeroParameterFunctionTests.swift",
+        "ConvertStoredPropertyToComputedTest.swift",
+        "ConvertZeroParameterFunctionToComputedPropertyTests.swift",
+        "ExpandEditorPlaceholderTests.swift",
+        "FormatRawStringLiteral.swift",
+        "IntegerLiteralUtilities.swift",
+        "ManifestEditTests.swift",
+        "MigrateToNewIfLetSyntax.swift",
+        "OpaqueParameterToGeneric.swift",
+        "RefactorTestUtils.swift",
+        "ReformatIntegerLiteral.swift",
+        "RemoveRedundantParenthesesTests.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxTestSupport",
+        "SwiftIDEUtils",
+        "SwiftRefactor"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftRefactor",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftRefactor",
+      "path" : "Sources/SwiftRefactor",
+      "product_memberships" : [
+        "SwiftRefactor"
+      ],
+      "sources" : [
+        "AddSeparatorsToIntegerLiteral.swift",
+        "CallLikeSyntax.swift",
+        "CallToTrailingClosures.swift",
+        "ConvertComputedPropertyToStored.swift",
+        "ConvertComputedPropertyToZeroParameterFunction.swift",
+        "ConvertStoredPropertyToComputed.swift",
+        "ConvertZeroParameterFunctionToComputedProperty.swift",
+        "DeclModifierRemover.swift",
+        "ExpandEditorPlaceholder.swift",
+        "FormatRawStringLiteral.swift",
+        "IntegerLiteralUtilities.swift",
+        "MigrateToNewIfLetSyntax.swift",
+        "OpaqueParameterToGeneric.swift",
+        "PackageManifest/AddPackageDependency.swift",
+        "PackageManifest/AddPackageTarget.swift",
+        "PackageManifest/AddPluginUsage.swift",
+        "PackageManifest/AddProduct.swift",
+        "PackageManifest/AddSwiftSetting.swift",
+        "PackageManifest/AddTargetDependency.swift",
+        "PackageManifest/ManifestEditError.swift",
+        "PackageManifest/ManifestSyntaxRepresentable.swift",
+        "PackageManifest/PackageDependency.swift",
+        "PackageManifest/PackageTarget.swift",
+        "PackageManifest/ProductDescription.swift",
+        "PackageManifest/StringUtils.swift",
+        "PackageManifest/SyntaxEditUtils.swift",
+        "RefactoringProvider.swift",
+        "RemoveRedundantParentheses.swift",
+        "RemoveSeparatorsFromIntegerLiteral.swift",
+        "SyntaxUtils.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftBasicFormat",
+        "SwiftParser",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftParserTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftParserTest",
+      "path" : "Tests/SwiftParserTest",
+      "sources" : [
+        "AbsolutePositionTests.swift",
+        "Assertions.swift",
+        "AttributeTests.swift",
+        "AvailabilityTests.swift",
+        "ClosureMissingInTests.swift",
+        "DeclarationTests.swift",
+        "DirectiveTests.swift",
+        "DoExpressionTests.swift",
+        "ExpressionInterpretedAsVersionTupleTests.swift",
+        "ExpressionTests.swift",
+        "ExpressionTypeTests.swift",
+        "IncrementalParsingTests.swift",
+        "IsValidIdentifierTests.swift",
+        "LexerTests.swift",
+        "Parser+EntryTests.swift",
+        "ParserTestCase.swift",
+        "ParserTests.swift",
+        "PatternTests.swift",
+        "RegexLiteralTests.swift",
+        "SendingTest.swift",
+        "SequentialToConcurrentEditTranslationTests.swift",
+        "SomeAnyTypeTests.swift",
+        "StatementTests.swift",
+        "StringLiteralRepresentedLiteralValueTests.swift",
+        "TestEverythingUnexpectedTests.swift",
+        "ThenStatementTests.swift",
+        "TrailingCommaTests.swift",
+        "TriviaParserTests.swift",
+        "TypeCompositionTests.swift",
+        "TypeMemberTests.swift",
+        "TypeMetatypeTests.swift",
+        "TypeTests.swift",
+        "Utils.swift",
+        "ValueGenericsTests.swift",
+        "VariadicGenericsTests.swift",
+        "translated/ActorTests.swift",
+        "translated/AlwaysEmitConformanceMetadataAttrTests.swift",
+        "translated/AsyncSyntaxTests.swift",
+        "translated/AsyncTests.swift",
+        "translated/AvailabilityQueryTests.swift",
+        "translated/AvailabilityQueryUnavailabilityTests.swift",
+        "translated/BorrowExprTests.swift",
+        "translated/BraceRecoveryEofTests.swift",
+        "translated/BuiltinBridgeObjectTests.swift",
+        "translated/BuiltinWordTests.swift",
+        "translated/ConflictMarkersTests.swift",
+        "translated/ConsecutiveStatementsTests.swift",
+        "translated/CopyExprTests.swift",
+        "translated/DebuggerTests.swift",
+        "translated/DelayedExtensionTests.swift",
+        "translated/DeprecatedWhereTests.swift",
+        "translated/DiagnoseAvailabilityTests.swift",
+        "translated/DiagnoseAvailabilityWindowsTests.swift",
+        "translated/DiagnoseDynamicReplacementTests.swift",
+        "translated/DiagnoseInitializerAsTypedPatternTests.swift",
+        "translated/DiagnosticMissingFuncKeywordTests.swift",
+        "translated/DollarIdentifierTests.swift",
+        "translated/EffectfulPropertiesTests.swift",
+        "translated/EnumElementPatternSwift4Tests.swift",
+        "translated/EnumTests.swift",
+        "translated/ErrorsTests.swift",
+        "translated/EscapedIdentifiersTests.swift",
+        "translated/ForeachAsyncTests.swift",
+        "translated/ForeachTests.swift",
+        "translated/ForwardSlashRegexSkippingAllowedTests.swift",
+        "translated/ForwardSlashRegexSkippingInvalidTests.swift",
+        "translated/ForwardSlashRegexSkippingTests.swift",
+        "translated/ForwardSlashRegexTests.swift",
+        "translated/GenericDisambiguationTests.swift",
+        "translated/GuardTests.swift",
+        "translated/GuardTopLevelTests.swift",
+        "translated/HashbangLibraryTests.swift",
+        "translated/HashbangMainTests.swift",
+        "translated/IdentifiersTests.swift",
+        "translated/IfconfigExprTests.swift",
+        "translated/ImplicitGetterIncompleteTests.swift",
+        "translated/InitDeinitTests.swift",
+        "translated/InvalidIfExprTests.swift",
+        "translated/InvalidStringInterpolationProtocolTests.swift",
+        "translated/InvalidTests.swift",
+        "translated/MatchingPatternsTests.swift",
+        "translated/MetatypeObjectConversionTests.swift",
+        "translated/ModuleSelectorTests.swift",
+        "translated/MoveExprTests.swift",
+        "translated/MultilineErrorsTests.swift",
+        "translated/MultilinePoundDiagnosticArgRdar41154797Tests.swift",
+        "translated/MultilineStringTests.swift",
+        "translated/NoimplicitcopyAttrTests.swift",
+        "translated/NumberIdentifierErrorsTests.swift",
+        "translated/ObjcEnumTests.swift",
+        "translated/ObjectLiteralsTests.swift",
+        "translated/OperatorDeclDesignatedTypesTests.swift",
+        "translated/OperatorDeclTests.swift",
+        "translated/OperatorsTests.swift",
+        "translated/OptionalChainLvaluesTests.swift",
+        "translated/OptionalLvaluesTests.swift",
+        "translated/OptionalTests.swift",
+        "translated/OriginalDefinedInAttrTests.swift",
+        "translated/PatternWithoutVariablesScriptTests.swift",
+        "translated/PatternWithoutVariablesTests.swift",
+        "translated/PlaygroundLvaluesTests.swift",
+        "translated/PoundAssertTests.swift",
+        "translated/PrefixSlashTests.swift",
+        "translated/RawStringErrorsTests.swift",
+        "translated/RawStringTests.swift",
+        "translated/RecoveryLibraryTests.swift",
+        "translated/RecoveryTests.swift",
+        "translated/RegexParseEndOfBufferTests.swift",
+        "translated/RegexParseErrorTests.swift",
+        "translated/RegexTests.swift",
+        "translated/ResultBuilderTests.swift",
+        "translated/SelfRebindingTests.swift",
+        "translated/SemicolonTests.swift",
+        "translated/StringLiteralEofTests.swift",
+        "translated/SubscriptingTests.swift",
+        "translated/SuperTests.swift",
+        "translated/SwitchIncompleteTests.swift",
+        "translated/SwitchTests.swift",
+        "translated/ToplevelLibraryTests.swift",
+        "translated/TrailingClosuresTests.swift",
+        "translated/TrailingSemiTests.swift",
+        "translated/TryTests.swift",
+        "translated/TypeExprTests.swift",
+        "translated/TypealiasTests.swift",
+        "translated/UnclosedStringInterpolationTests.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxTestSupport",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftSyntaxBuilder"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftParserDiagnosticsTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftParserDiagnosticsTest",
+      "path" : "Tests/SwiftParserDiagnosticsTest",
+      "sources" : [
+        "DiagnosticInfrastructureTests.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftDiagnostics",
+        "SwiftParserDiagnostics"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftParserDiagnostics",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftParserDiagnostics",
+      "path" : "Sources/SwiftParserDiagnostics",
+      "product_memberships" : [
+        "SwiftCompilerPlugin",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftParserDiagnostics",
+        "SwiftRefactor",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "DiagnosticExtensions.swift",
+        "LexerDiagnosticMessages.swift",
+        "MissingNodesError.swift",
+        "MissingTokenError.swift",
+        "MultiLineStringLiteralDiagnosticsGenerator.swift",
+        "ParseDiagnosticsGenerator.swift",
+        "ParserDiagnosticMessages.swift",
+        "PresenceUtils.swift",
+        "SyntaxExtensions.swift",
+        "Utils.swift",
+        "generated/ChildNameForDiagnostics.swift",
+        "generated/SyntaxKindNameForDiagnostics.swift",
+        "generated/TokenNameForDiagnostics.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftBasicFormat",
+        "SwiftDiagnostics",
+        "SwiftParser",
+        "SwiftSyntax"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftParser",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftParser",
+      "path" : "Sources/SwiftParser",
+      "product_memberships" : [
+        "SwiftCompilerPlugin",
+        "SwiftIDEUtils",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftParserDiagnostics",
+        "SwiftRefactor",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "Attributes.swift",
+        "Availability.swift",
+        "CharacterInfo.swift",
+        "CollectionNodes+Parsable.swift",
+        "CompilerFiles.swift",
+        "Declarations.swift",
+        "Directives.swift",
+        "ExpressionInterpretedAsVersionTuple.swift",
+        "Expressions.swift",
+        "IncrementalParseTransition.swift",
+        "IsValidIdentifier.swift",
+        "Lexer/Cursor.swift",
+        "Lexer/Lexeme.swift",
+        "Lexer/LexemeSequence.swift",
+        "Lexer/Lexer.swift",
+        "Lexer/RegexLiteralLexer.swift",
+        "Lexer/UnicodeScalarExtensions.swift",
+        "Lookahead.swift",
+        "LoopProgressCondition.swift",
+        "Modifiers.swift",
+        "Names.swift",
+        "Nominals.swift",
+        "Parameters.swift",
+        "ParseSourceFile.swift",
+        "Parser.swift",
+        "Patterns.swift",
+        "Recovery.swift",
+        "Specifiers.swift",
+        "Statements.swift",
+        "StringLiteralRepresentedLiteralValue.swift",
+        "StringLiterals.swift",
+        "SwiftParserCompatibility.swift",
+        "SwiftVersion.swift",
+        "SyntaxUtils.swift",
+        "TokenConsumer.swift",
+        "TokenPrecedence.swift",
+        "TokenSpec.swift",
+        "TokenSpecSet.swift",
+        "TopLevel.swift",
+        "TriviaParser.swift",
+        "Types.swift",
+        "generated/ExperimentalFeatures.swift",
+        "generated/IsLexerClassified.swift",
+        "generated/LayoutNodes+Parsable.swift",
+        "generated/Parser+TokenSpecSet.swift",
+        "generated/TokenSpecStaticMembers.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftSyntax"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftOperatorsTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftOperatorsTest",
+      "path" : "Tests/SwiftOperatorsTest",
+      "sources" : [
+        "OperatorTableTests.swift",
+        "SyntaxSynthesisTests.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxTestSupport",
+        "SwiftOperators",
+        "SwiftParser"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftOperators",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftOperators",
+      "path" : "Sources/SwiftOperators",
+      "product_memberships" : [
+        "SwiftCompilerPlugin",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftOperators",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "Operator.swift",
+        "OperatorError+Diagnostics.swift",
+        "OperatorError.swift",
+        "OperatorTable+Defaults.swift",
+        "OperatorTable+Folding.swift",
+        "OperatorTable+Semantics.swift",
+        "OperatorTable.swift",
+        "PrecedenceGraph.swift",
+        "PrecedenceGroup.swift",
+        "SyntaxSynthesis.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftDiagnostics",
+        "SwiftParser",
+        "SwiftSyntax"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftLibraryPluginProvider",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftLibraryPluginProvider",
+      "path" : "Sources/SwiftLibraryPluginProvider",
+      "product_memberships" : [
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "LibraryPluginProvider.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftSyntaxMacros",
+        "SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProviderCShims"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftLexicalLookupTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftLexicalLookupTest",
+      "path" : "Tests/SwiftLexicalLookupTest",
+      "sources" : [
+        "Assertions.swift",
+        "ExpectedName.swift",
+        "MarkerExpectation.swift",
+        "NameLookupTests.swift",
+        "ResultExpectation.swift",
+        "SimpleQueryTests.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxTestSupport",
+        "SwiftLexicalLookup"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftLexicalLookup",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftLexicalLookup",
+      "path" : "Sources/SwiftLexicalLookup",
+      "product_memberships" : [
+        "SwiftLexicalLookup"
+      ],
+      "sources" : [
+        "IdentifiableSyntax.swift",
+        "LookupConfig.swift",
+        "LookupName.swift",
+        "LookupResult.swift",
+        "Scopes/CanInterleaveResultsLaterScopeSyntax.swift",
+        "Scopes/FunctionScopeSyntax.swift",
+        "Scopes/GenericParameterScopeSyntax.swift",
+        "Scopes/IntroducingToSequentialParentScopeSyntax.swift",
+        "Scopes/LookInMembersScopeSyntax.swift",
+        "Scopes/NominalTypeDeclSyntax.swift",
+        "Scopes/ScopeImplementations.swift",
+        "Scopes/ScopeSyntax.swift",
+        "Scopes/SequentialScopeSyntax.swift",
+        "Scopes/WithGenericParametersScopeSyntax.swift",
+        "SimpleLookupQueries.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftSyntax",
+        "SwiftIfConfig"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftIfConfigTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftIfConfigTest",
+      "path" : "Tests/SwiftIfConfigTest",
+      "sources" : [
+        "ActiveRegionTests.swift",
+        "EvaluateTests.swift",
+        "TestingBuildConfiguration.swift",
+        "VisitorTests.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxTestSupport",
+        "SwiftIfConfig",
+        "SwiftParser",
+        "SwiftSyntaxMacrosGenericTestSupport"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftIfConfig",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftIfConfig",
+      "path" : "Sources/SwiftIfConfig",
+      "product_memberships" : [
+        "SwiftCompilerPlugin",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "ActiveClauseEvaluator.swift",
+        "ActiveSyntaxRewriter.swift",
+        "ActiveSyntaxVisitor.swift",
+        "BuildConfiguration.swift",
+        "ConfiguredRegions.swift",
+        "IfConfigDecl+IfConfig.swift",
+        "IfConfigDiagnostic.swift",
+        "IfConfigEvaluation.swift",
+        "IfConfigFunctions.swift",
+        "IfConfigRegionState.swift",
+        "StaticBuildConfiguration.swift",
+        "SyntaxLiteralUtils.swift",
+        "SyntaxProtocol+IfConfig.swift",
+        "VersionTuple+Parsing.swift",
+        "VersionTuple.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftDiagnostics",
+        "SwiftOperators",
+        "SwiftParser"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftIDEUtilsTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftIDEUtilsTest",
+      "path" : "Tests/SwiftIDEUtilsTest",
+      "sources" : [
+        "Assertions.swift",
+        "ClassificationTests.swift",
+        "FixItApplierTests.swift",
+        "NameMatcherTests.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxTestSupport",
+        "SwiftIDEUtils",
+        "SwiftParser",
+        "SwiftSyntax"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftIDEUtils",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftIDEUtils",
+      "path" : "Sources/SwiftIDEUtils",
+      "product_memberships" : [
+        "SwiftIDEUtils",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport"
+      ],
+      "sources" : [
+        "DeclNameLocation.swift",
+        "FixItApplier.swift",
+        "NameMatcher.swift",
+        "SwiftIDEUtilsCompatibility.swift",
+        "Syntax+Classifications.swift",
+        "SyntaxClassification.swift",
+        "SyntaxClassifier.swift",
+        "Utils.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftSyntax",
+        "SwiftDiagnostics",
+        "SwiftParser"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftDiagnosticsTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftDiagnosticsTest",
+      "path" : "Tests/SwiftDiagnosticsTest",
+      "sources" : [
+        "DiagnosticDecorators/ANSIDiagnosticDecoratorTests.swift",
+        "DiagnosticDecorators/BasicDiagnosticDecoratorTests.swift",
+        "DiagnosticFormatterTests.swift",
+        "DiagnosticTestingUtils.swift",
+        "FixItTests.swift",
+        "GroupDiagnosticsFormatterTests.swift",
+        "ParserDiagnosticsFormatterIntegrationTests.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxTestSupport",
+        "SwiftDiagnostics",
+        "SwiftParser",
+        "SwiftParserDiagnostics"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftDiagnostics",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftDiagnostics",
+      "path" : "Sources/SwiftDiagnostics",
+      "product_memberships" : [
+        "SwiftCompilerPlugin",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftOperators",
+        "SwiftParserDiagnostics",
+        "SwiftRefactor",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "Convenience.swift",
+        "Diagnostic.swift",
+        "DiagnosticDecorators/ANSIDiagnosticDecorator.swift",
+        "DiagnosticDecorators/BasicDiagnosticDecorator.swift",
+        "DiagnosticDecorators/DiagnosticDecorator.swift",
+        "DiagnosticsFormatter.swift",
+        "FixIt.swift",
+        "GroupedDiagnostics.swift",
+        "Message.swift",
+        "Note.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftSyntax"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftCompilerPluginTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftCompilerPluginTest",
+      "path" : "Tests/SwiftCompilerPluginTest",
+      "sources" : [
+        "CompilerPluginTests.swift",
+        "JSONTests.swift",
+        "LRUCacheTests.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftCompilerPlugin"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftCompilerPluginMessageHandling",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftCompilerPluginMessageHandling",
+      "path" : "Sources/SwiftCompilerPluginMessageHandling",
+      "product_memberships" : [
+        "SwiftCompilerPlugin",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "CompilerPluginMessageHandler.swift",
+        "Diagnostics.swift",
+        "JSON/CodingUtilities.swift",
+        "JSON/JSON.swift",
+        "JSON/JSONDecoding.swift",
+        "JSON/JSONEncoding.swift",
+        "LRUCache.swift",
+        "Macros.swift",
+        "PluginMacroExpansionContext.swift",
+        "PluginMessageCompatibility.swift",
+        "PluginMessages.swift",
+        "StandardIOMessageConnection.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxCShims",
+        "SwiftDiagnostics",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftSyntax",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftCompilerPlugin",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftCompilerPlugin",
+      "path" : "Sources/SwiftCompilerPlugin",
+      "product_memberships" : [
+        "SwiftCompilerPlugin"
+      ],
+      "sources" : [
+        "CompilerPlugin.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftCompilerPluginMessageHandling",
+        "SwiftSyntaxMacros"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftBasicFormatTest",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftBasicFormatTest",
+      "path" : "Tests/SwiftBasicFormatTest",
+      "sources" : [
+        "BasicFormatTests.swift",
+        "IndentTests.swift",
+        "InferIndentationTests.swift"
+      ],
+      "target_dependencies" : [
+        "_SwiftSyntaxTestSupport",
+        "SwiftBasicFormat",
+        "SwiftSyntaxBuilder"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftBasicFormat",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftBasicFormat",
+      "path" : "Sources/SwiftBasicFormat",
+      "product_memberships" : [
+        "SwiftBasicFormat",
+        "SwiftCompilerPlugin",
+        "SwiftIfConfig",
+        "SwiftWarningControl",
+        "SwiftLexicalLookup",
+        "SwiftParserDiagnostics",
+        "SwiftRefactor",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntaxMacrosGenericTestSupport",
+        "_SwiftCompilerPluginMessageHandling",
+        "_SwiftLibraryPluginProvider"
+      ],
+      "sources" : [
+        "BasicFormat.swift",
+        "Indenter.swift",
+        "InferIndentation.swift",
+        "Syntax+Extensions.swift",
+        "SyntaxProtocol+Formatted.swift",
+        "Trivia+FormatExtensions.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftSyntax"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "PerformanceTest",
+      "module_type" : "SwiftTarget",
+      "name" : "PerformanceTest",
+      "path" : "Tests/PerformanceTest",
+      "sources" : [
+        "InstructionsCountAssertion.swift",
+        "ParsingPerformanceTests.swift",
+        "SyntaxClassifierPerformanceTests.swift",
+        "VisitorPerformanceTests.swift"
+      ],
+      "target_dependencies" : [
+        "_InstructionCounter",
+        "_SwiftSyntaxTestSupport",
+        "SwiftIDEUtils",
+        "SwiftParser",
+        "SwiftSyntax"
+      ],
+      "type" : "test"
+    }
+  ],
+  "tools_version" : "5.9"
+}

@@ -1,0 +1,313 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "Promises",
+  "name" : "Promises",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "9.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "10.11"
+    },
+    {
+      "name" : "tvos",
+      "version" : "9.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "2.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "FBLPromises",
+      "targets" : [
+        "FBLPromises"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FBLPromisesTestHelpers",
+      "targets" : [
+        "FBLPromisesTestHelpers"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Promises",
+      "targets" : [
+        "Promises"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "PromisesTestHelpers",
+      "targets" : [
+        "PromisesTestHelpers"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "PromisesTests",
+      "module_type" : "SwiftTarget",
+      "name" : "PromisesTests",
+      "path" : "Tests/PromisesTests",
+      "sources" : [
+        "Promise+AllTests.swift",
+        "Promise+AlwaysTests.swift",
+        "Promise+AnyTests.swift",
+        "Promise+AsyncTests.swift",
+        "Promise+AwaitTests.swift",
+        "Promise+CatchTests.swift",
+        "Promise+DelayTests.swift",
+        "Promise+DoTests.swift",
+        "Promise+RaceTests.swift",
+        "Promise+RecoverTests.swift",
+        "Promise+ReduceTests.swift",
+        "Promise+RetryTests.swift",
+        "Promise+StringTests.swift",
+        "Promise+ThenTests.swift",
+        "Promise+TimeoutTests.swift",
+        "Promise+ValidateTests.swift",
+        "Promise+WrapTests.swift",
+        "PromiseTests.swift"
+      ],
+      "target_dependencies" : [
+        "PromisesTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "PromisesTestHelpers",
+      "module_type" : "SwiftTarget",
+      "name" : "PromisesTestHelpers",
+      "path" : "Sources/PromisesTestHelpers",
+      "product_memberships" : [
+        "PromisesTestHelpers"
+      ],
+      "sources" : [
+        "PromisesTestHelpers.swift",
+        "PromisesTestInteroperability.swift"
+      ],
+      "target_dependencies" : [
+        "Promises"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "PromisesPerformanceTests",
+      "module_type" : "SwiftTarget",
+      "name" : "PromisesPerformanceTests",
+      "path" : "Tests/PromisesPerformanceTests",
+      "sources" : [
+        "Promise+ThenPerformanceTests.swift"
+      ],
+      "target_dependencies" : [
+        "FBLPromisesTestHelpers",
+        "PromisesTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "PromisesInteroperabilityTests",
+      "module_type" : "SwiftTarget",
+      "name" : "PromisesInteroperabilityTests",
+      "path" : "Tests/PromisesInteroperabilityTests",
+      "sources" : [
+        "Promise+CatchInteroperabilityTests.swift",
+        "Promise+ThenInteroperabilityTests.swift"
+      ],
+      "target_dependencies" : [
+        "FBLPromisesTestHelpers",
+        "PromisesTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "Promises",
+      "module_type" : "SwiftTarget",
+      "name" : "Promises",
+      "path" : "Sources/Promises",
+      "product_memberships" : [
+        "Promises",
+        "PromisesTestHelpers"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/Promises/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Promise+All.swift",
+        "Promise+Always.swift",
+        "Promise+Any.swift",
+        "Promise+Async.swift",
+        "Promise+Await.swift",
+        "Promise+Catch.swift",
+        "Promise+Delay.swift",
+        "Promise+Do.swift",
+        "Promise+Race.swift",
+        "Promise+Recover.swift",
+        "Promise+Reduce.swift",
+        "Promise+Retry.swift",
+        "Promise+Testing.swift",
+        "Promise+Then.swift",
+        "Promise+Timeout.swift",
+        "Promise+Validate.swift",
+        "Promise+Wrap.swift",
+        "Promise.swift",
+        "PromiseError.swift"
+      ],
+      "target_dependencies" : [
+        "FBLPromises"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FBLPromisesTests",
+      "module_type" : "ClangTarget",
+      "name" : "FBLPromisesTests",
+      "path" : "Tests/FBLPromisesTests",
+      "sources" : [
+        "FBLPromise+AllTests.m",
+        "FBLPromise+AlwaysTests.m",
+        "FBLPromise+AnyTests.m",
+        "FBLPromise+AsyncTests.m",
+        "FBLPromise+AwaitTests.m",
+        "FBLPromise+CatchTests.m",
+        "FBLPromise+DelayTests.m",
+        "FBLPromise+DoTests.m",
+        "FBLPromise+RaceTests.m",
+        "FBLPromise+RecoverTests.m",
+        "FBLPromise+ReduceTests.m",
+        "FBLPromise+RetryTests.m",
+        "FBLPromise+ThenTests.m",
+        "FBLPromise+TimeoutTests.m",
+        "FBLPromise+ValidateTests.m",
+        "FBLPromise+WrapTests.m",
+        "FBLPromiseTests.m"
+      ],
+      "target_dependencies" : [
+        "FBLPromisesTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FBLPromisesTestHelpers",
+      "module_type" : "ClangTarget",
+      "name" : "FBLPromisesTestHelpers",
+      "path" : "Sources/FBLPromisesTestHelpers",
+      "product_memberships" : [
+        "FBLPromisesTestHelpers"
+      ],
+      "sources" : [
+        "FBLPromisesTestInteroperability.m"
+      ],
+      "target_dependencies" : [
+        "FBLPromises"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FBLPromisesPerformanceTests",
+      "module_type" : "ClangTarget",
+      "name" : "FBLPromisesPerformanceTests",
+      "path" : "Tests/FBLPromisesPerformanceTests",
+      "sources" : [
+        "FBLPromise+ThenPerformanceTests.m"
+      ],
+      "target_dependencies" : [
+        "FBLPromisesTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FBLPromisesInteroperabilityTests",
+      "module_type" : "ClangTarget",
+      "name" : "FBLPromisesInteroperabilityTests",
+      "path" : "Tests/FBLPromisesInteroperabilityTests",
+      "sources" : [
+        "FBLPromise+CatchInteroperabilityTests.m",
+        "FBLPromise+ThenInteroperabilityTests.m"
+      ],
+      "target_dependencies" : [
+        "FBLPromisesTestHelpers",
+        "PromisesTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FBLPromises",
+      "module_type" : "ClangTarget",
+      "name" : "FBLPromises",
+      "path" : "Sources/FBLPromises",
+      "product_memberships" : [
+        "FBLPromises",
+        "FBLPromisesTestHelpers",
+        "Promises",
+        "PromisesTestHelpers"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/FBLPromises/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "FBLPromise+All.m",
+        "FBLPromise+Always.m",
+        "FBLPromise+Any.m",
+        "FBLPromise+Async.m",
+        "FBLPromise+Await.m",
+        "FBLPromise+Catch.m",
+        "FBLPromise+Delay.m",
+        "FBLPromise+Do.m",
+        "FBLPromise+Race.m",
+        "FBLPromise+Recover.m",
+        "FBLPromise+Reduce.m",
+        "FBLPromise+Retry.m",
+        "FBLPromise+Testing.m",
+        "FBLPromise+Then.m",
+        "FBLPromise+Timeout.m",
+        "FBLPromise+Validate.m",
+        "FBLPromise+Wrap.m",
+        "FBLPromise.m",
+        "FBLPromiseError.m"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.3"
+}

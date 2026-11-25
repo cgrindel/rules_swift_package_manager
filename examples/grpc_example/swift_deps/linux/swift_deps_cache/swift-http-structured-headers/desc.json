@@ -1,0 +1,133 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "swift-http-structured-headers",
+  "name" : "swift-http-structured-headers",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "StructuredFieldValues",
+      "targets" : [
+        "StructuredFieldValues"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "RawStructuredFieldValues",
+      "targets" : [
+        "RawStructuredFieldValues"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "sh-parser",
+      "targets" : [
+        "sh-parser"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "sh_parser",
+      "module_type" : "SwiftTarget",
+      "name" : "sh-parser",
+      "path" : "Sources/sh-parser",
+      "product_memberships" : [
+        "sh-parser"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "RawStructuredFieldValues"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "StructuredFieldValuesTests",
+      "module_type" : "SwiftTarget",
+      "name" : "StructuredFieldValuesTests",
+      "path" : "Tests/StructuredFieldValuesTests",
+      "sources" : [
+        "Base32.swift",
+        "Fixtures.swift",
+        "StructuredFieldDecoderTests.swift",
+        "StructuredFieldEncoderTests.swift",
+        "StructuredFieldParserTests.swift",
+        "StructuredFieldSerializerTests.swift"
+      ],
+      "target_dependencies" : [
+        "RawStructuredFieldValues",
+        "StructuredFieldValues"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "StructuredFieldValues",
+      "module_type" : "SwiftTarget",
+      "name" : "StructuredFieldValues",
+      "path" : "Sources/StructuredFieldValues",
+      "product_memberships" : [
+        "StructuredFieldValues"
+      ],
+      "sources" : [
+        "Decoder/BareInnerListDecoder.swift",
+        "Decoder/BareItemDecoder.swift",
+        "Decoder/DictionaryKeyedContainer.swift",
+        "Decoder/KeyedInnerListDecoder.swift",
+        "Decoder/KeyedItemDecoder.swift",
+        "Decoder/KeyedTopLevelListDecoder.swift",
+        "Decoder/ParametersDecoder.swift",
+        "Decoder/StructuredFieldValueDecoder.swift",
+        "Decoder/StructuredHeaderCodingKey.swift",
+        "Decoder/TopLevelListDecoder.swift",
+        "DisplayString.swift",
+        "Encoder/StructuredFieldKeyedEncodingContainer.swift",
+        "Encoder/StructuredFieldUnkeyedEncodingContainer.swift",
+        "Encoder/StructuredFieldValueEncoder.swift",
+        "StructuredFieldValue.swift"
+      ],
+      "target_dependencies" : [
+        "RawStructuredFieldValues"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "RawStructuredFieldValues",
+      "module_type" : "SwiftTarget",
+      "name" : "RawStructuredFieldValues",
+      "path" : "Sources/RawStructuredFieldValues",
+      "product_memberships" : [
+        "StructuredFieldValues",
+        "RawStructuredFieldValues",
+        "sh-parser"
+      ],
+      "sources" : [
+        "ASCII.swift",
+        "ComponentTypes.swift",
+        "Errors.swift",
+        "FieldParser.swift",
+        "FieldSerializer.swift",
+        "OrderedMap.swift",
+        "PseudoDecimal.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.1"
+}

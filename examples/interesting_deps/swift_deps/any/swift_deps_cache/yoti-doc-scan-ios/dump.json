@@ -1,0 +1,379 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "YotiIDV",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "YotiDocumentScan",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "YotiDocumentScan",
+        "Microblink"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "YotiNFC",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "YotiNFC"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "YotiSDKIdentityDocument",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "YotiNetwork",
+        "YotiSDKDesign",
+        "YotiSDKCore",
+        "YotiSDKDocument",
+        "YotiSDKIdentityDocument"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "YotiSDKSupplementaryDocument",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "YotiNetwork",
+        "YotiSDKDesign",
+        "YotiSDKCore",
+        "YotiSDKDocument",
+        "YotiSDKSupplementaryDocument"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "YotiSDKFaceTec",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "YotiNetwork",
+        "YotiSDKDesign",
+        "YotiSDKCore",
+        "YotiSDKFace",
+        "YotiSDKFaceTec",
+        "FaceTecSDK"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "YotiSDKFaceCapture",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "YotiNetwork",
+        "YotiSDKDesign",
+        "YotiSDKCore",
+        "YotiSDKFace",
+        "YotiSDKFaceCapture"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "checksum" : "6ec27882563a8e789dc2a6cfa877e7390d4369330177f7f903e8eba8da56112f",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "YotiNetwork",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://github.com/getyoti/yoti-doc-scan-ios/releases/download/v7.0.0/YotiNetwork.zip"
+    },
+    {
+      "checksum" : "0302b77da86e8f6c3f7dae1fcba6645ab48afcccac3324899090c8da8c71ea88",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "YotiDocumentScan",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://github.com/getyoti/yoti-doc-scan-ios/releases/download/v7.0.0/YotiDocumentScan-SPM.zip"
+    },
+    {
+      "checksum" : "461724fc3c423e9fe3d7c632b8cb825b96b3d41827bd901baa8c92b9a3f74b67",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "YotiNFC",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://github.com/getyoti/yoti-doc-scan-ios/releases/download/v7.0.0/YotiNFC.zip"
+    },
+    {
+      "checksum" : "531ea8c3cfbacc6fff038dafd2779592963fefee3ab3591765302d3a65afef35",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "YotiSDKDesign",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://github.com/getyoti/yoti-doc-scan-ios/releases/download/v7.0.0/YotiSDKDesign.zip"
+    },
+    {
+      "checksum" : "7a2ba7fb94b339550c2e2084090e0f63caa5beb540d1a8ea133c01b6fd55c1b8",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "YotiSDKCore",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://github.com/getyoti/yoti-doc-scan-ios/releases/download/v7.0.0/YotiSDKCore.zip"
+    },
+    {
+      "checksum" : "4ada17f6c87c6f1087bf0ecfe8c64ec722310509b1a591691eb1d16bd04cd90c",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "YotiSDKDocument",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://github.com/getyoti/yoti-doc-scan-ios/releases/download/v7.0.0/YotiSDKDocument.zip"
+    },
+    {
+      "checksum" : "c674bd39f5f096d2578f08f160ede4983a9a3325600e488e5b33171020d036b0",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "YotiSDKIdentityDocument",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://github.com/getyoti/yoti-doc-scan-ios/releases/download/v7.0.0/YotiSDKIdentityDocument.zip"
+    },
+    {
+      "checksum" : "0f084f090a18332b547e2b3d691db1e83b164f4df2d019b341dd242fce026360",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "YotiSDKSupplementaryDocument",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://github.com/getyoti/yoti-doc-scan-ios/releases/download/v7.0.0/YotiSDKSupplementaryDocument.zip"
+    },
+    {
+      "checksum" : "2af12ea78cbd7f4a0aadcde8e3695ea1d006e8301b663fd400a6fe64e8085232",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "YotiSDKFace",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://github.com/getyoti/yoti-doc-scan-ios/releases/download/v7.0.0/YotiSDKFace.zip"
+    },
+    {
+      "checksum" : "9078999ab7ff46c106ca255683f7ea48a970249e168cbf46ccb16c6d51fe8ef1",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "YotiSDKFaceTec",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://github.com/getyoti/yoti-doc-scan-ios/releases/download/v7.0.0/YotiSDKFaceTec-SPM.zip"
+    },
+    {
+      "checksum" : "720ccb965d6841d1b684599e280337e5db241279a998b153980e7fdff283fb99",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "YotiSDKFaceCapture",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://github.com/getyoti/yoti-doc-scan-ios/releases/download/v7.0.0/YotiSDKFaceCapture.zip"
+    },
+    {
+      "checksum" : "2551094c9cb9c0dd80d4485259dc661e60d51ba5e0c93db1b7b683ff9ce9fac7",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Microblink",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://github.com/getyoti/yoti-doc-scan-ios/releases/download/v7.0.0/Microblink.zip"
+    },
+    {
+      "checksum" : "00ef878f9adc9cfbb58012ad48544ddb54267b269310496fd83b284a84af9cf6",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FaceTecSDK",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://github.com/getyoti/yoti-doc-scan-ios/releases/download/v7.0.0/FaceTecSDK.zip"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.5.0"
+  },
+  "traits" : [
+
+  ]
+}

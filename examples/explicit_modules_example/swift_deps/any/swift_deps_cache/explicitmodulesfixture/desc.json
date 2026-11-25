@@ -1,0 +1,69 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "ExplicitModulesFixture",
+  "name" : "ExplicitModulesFixture",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "13.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Greeter",
+      "targets" : [
+        "Greeter"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "ObjCGreeter",
+      "module_type" : "ClangTarget",
+      "name" : "ObjCGreeter",
+      "path" : "Sources/ObjCGreeter",
+      "product_memberships" : [
+        "Greeter"
+      ],
+      "sources" : [
+        "ObjCGreeter.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "Greeter",
+      "module_type" : "SwiftTarget",
+      "name" : "Greeter",
+      "path" : "Sources/Greeter",
+      "product_memberships" : [
+        "Greeter"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/Greeter/Resources/audience.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Greeter.swift"
+      ],
+      "target_dependencies" : [
+        "ObjCGreeter"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.7"
+}

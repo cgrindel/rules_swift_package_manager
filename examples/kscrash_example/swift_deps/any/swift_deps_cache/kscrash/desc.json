@@ -1,0 +1,1320 @@
+{
+  "cxx_language_standard" : "gnu++11",
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "KSCrash",
+  "name" : "KSCrash",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "12.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "5.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "10.14"
+    },
+    {
+      "name" : "visionos",
+      "version" : "1.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Reporting",
+      "targets" : [
+        "KSCrashFilters",
+        "KSCrashSinks",
+        "KSCrashInstallations"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Filters",
+      "targets" : [
+        "KSCrashFilters"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Sinks",
+      "targets" : [
+        "KSCrashSinks"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Installations",
+      "targets" : [
+        "KSCrashInstallations"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Recording",
+      "targets" : [
+        "KSCrashRecording"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "RecordingCore",
+      "targets" : [
+        "KSCrashRecordingCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "DiscSpaceMonitor",
+      "targets" : [
+        "KSCrashDiscSpaceMonitor"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "BootTimeMonitor",
+      "targets" : [
+        "KSCrashBootTimeMonitor"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "DemangleFilter",
+      "targets" : [
+        "KSCrashDemangleFilter"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Profiler",
+      "targets" : [
+        "KSCrashProfiler"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Monitors",
+      "targets" : [
+        "KSCrashMonitors"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Report",
+      "targets" : [
+        "KSCrashReportModel"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "KSCrashTestTools",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashTestTools",
+      "path" : "Sources/KSCrashTestTools",
+      "sources" : [
+        "FileBasedTestCase.m",
+        "KSTestCaseUtils.m",
+        "TestThread.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashRecordingCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashSwiftCoreTests",
+      "module_type" : "SwiftTarget",
+      "name" : "KSCrashSwiftCoreTests",
+      "path" : "Tests/KSCrashSwiftCoreTests",
+      "sources" : [
+        "UnfairLock_Tests.swift"
+      ],
+      "target_dependencies" : [
+        "KSCrashSwiftCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashSwiftCore",
+      "module_type" : "SwiftTarget",
+      "name" : "KSCrashSwiftCore",
+      "path" : "Sources/KSCrashSwiftCore",
+      "product_memberships" : [
+        "Profiler",
+        "Monitors"
+      ],
+      "sources" : [
+        "UnfairLock.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashSinks",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashSinks",
+      "path" : "Sources/KSCrashSinks",
+      "product_memberships" : [
+        "Reporting",
+        "Sinks",
+        "Installations"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/KSCrashSinks/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "KSCrashReportSinkConsole.m",
+        "KSCrashReportSinkEMail.m",
+        "KSCrashReportSinkStandard.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashRecording",
+        "KSCrashFilters"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashReportingCoreTests",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashReportingCoreTests",
+      "path" : "Tests/KSCrashReportingCoreTests",
+      "sources" : [
+        "KSCString_Tests.m",
+        "KSGZipHelper_Tests.m",
+        "KSNSDictionaryHelper_Tests.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashReportingCore",
+        "KSCrashCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashReportingCore",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashReportingCore",
+      "path" : "Sources/KSCrashReportingCore",
+      "product_memberships" : [
+        "Reporting",
+        "Filters",
+        "Sinks",
+        "Installations"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/KSCrashReportingCore/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "KSCString.m",
+        "KSGZipHelper.m",
+        "KSHTTPMultipartPostBody.m",
+        "KSHTTPRequestSender.m",
+        "KSNSDictionaryHelper.m",
+        "KSReachabilityKSCrash.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashReportModelTests",
+      "module_type" : "SwiftTarget",
+      "name" : "KSCrashReportModelTests",
+      "path" : "Tests/KSCrashReportModelTests",
+      "resources" : [
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/Abort.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/Abort.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/BadPointer.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/BadPointer.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/CorruptMemory.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/CorruptMemory.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/CorruptObject.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/CorruptObject.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/CrashInHandler.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/CrashInHandler.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/Hang.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/MainThreadDeadlock.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/MainThreadDeadlock.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/NSException.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/NSException.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/Profile.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/StackOverflow.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/StackOverflow.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/WatchdogTimeout.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/Zombie.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/Zombie.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/ZombieNSException.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/ZombieNSException.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashReportModelTests/Resources/Example-Reports/_README.md",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "CrashReportDecoder.swift",
+        "CrashReportDecodingTests.swift",
+        "CrashReportEncodingTests.swift",
+        "CrashReportTests.swift"
+      ],
+      "target_dependencies" : [
+        "KSCrashReportModel"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashReportModel",
+      "module_type" : "SwiftTarget",
+      "name" : "KSCrashReportModel",
+      "path" : "Sources/KSCrashReportModel",
+      "product_memberships" : [
+        "Monitors",
+        "Report"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/KSCrashReportModel/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "CrashReport.swift",
+        "Models/AppMemoryInfo.swift",
+        "Models/ApplicationStats.swift",
+        "Models/Backtrace.swift",
+        "Models/BinaryImage.swift",
+        "Models/CppExceptionInfo.swift",
+        "Models/Crash.swift",
+        "Models/CrashError.swift",
+        "Models/DebugInfo.swift",
+        "Models/ExceptionInfo.swift",
+        "Models/ExitReasonInfo.swift",
+        "Models/HangInfo.swift",
+        "Models/MachError.swift",
+        "Models/MemoryInfo.swift",
+        "Models/NotableAddress.swift",
+        "Models/ProcessState.swift",
+        "Models/ProfileInfo.swift",
+        "Models/ReferencedObject.swift",
+        "Models/Registers.swift",
+        "Models/ReportInfo.swift",
+        "Models/SignalError.swift",
+        "Models/StackDump.swift",
+        "Models/StackFrame.swift",
+        "Models/SystemInfo.swift",
+        "Models/TerminationReason.swift",
+        "Models/Thread.swift",
+        "Models/UserReportedInfo.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashRecordingTests",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashRecordingTests",
+      "path" : "Tests/KSCrashRecordingTests",
+      "resources" : [
+        {
+          "path" : "./Tests/KSCrashRecordingTests/Resources/processed.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashRecordingTests/Resources/raw.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "KSCrashAppMemoryTracker_Tests.m",
+        "KSCrashAppMemory_Tests.m",
+        "KSCrashCPUTracker_Tests.m",
+        "KSCrashConfiguration_Tests.m",
+        "KSCrashMonitorSelection_Tests.m",
+        "KSCrashMonitor_CPPException_ObjCException_Tests.mm",
+        "KSCrashMonitor_CPPException_Tests.m",
+        "KSCrashMonitor_Deadlock_Tests.m",
+        "KSCrashMonitor_LifecycleStitch_Tests.m",
+        "KSCrashMonitor_Lifecycle_Tests.m",
+        "KSCrashMonitor_NSException_Tests.m",
+        "KSCrashMonitor_ResourceStitch_Tests.m",
+        "KSCrashMonitor_Signal_Tests.m",
+        "KSCrashMonitor_SystemStitch_Tests.m",
+        "KSCrashMonitor_System_Tests.m",
+        "KSCrashMonitor_Termination_Tests.m",
+        "KSCrashMonitor_UserInfoStitch_Tests.m",
+        "KSCrashMonitor_UserInfo_Tests.m",
+        "KSCrashMonitor_User_Tests.m",
+        "KSCrashMonitor_WatchdogStitch_Tests.m",
+        "KSCrashMonitor_Watchdog_Tests.m",
+        "KSCrashMonitor_Zombie_Tests.m",
+        "KSCrashNamespaceMacro_Tests.m",
+        "KSCrashNamespace_Tests.m",
+        "KSCrashReportC_Tests.m",
+        "KSCrashReportFinalizer_Tests.m",
+        "KSCrashReportFixer_Tests.m",
+        "KSCrashReportStoreC_RunSidecar_Tests.m",
+        "KSCrashReportStoreC_Tests.m",
+        "KSCrashThreadcrumb_Tests.m",
+        "KSCrash_Tests.m",
+        "KSThreadCache_Tests.m",
+        "KSUnwinderComparison_Tests.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashTestTools",
+        "KSCrashRecording",
+        "KSCrashRecordingCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashRecordingCoreTests",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashRecordingCoreTests",
+      "path" : "Tests/KSCrashRecordingCoreTests",
+      "sources" : [
+        "KSBinaryImageCache_Tests.m",
+        "KSCPURingBuffer_Tests.m",
+        "KSCPU_Tests.m",
+        "KSCrashMonitorRegistry_Tests.m",
+        "KSCrashMonitor_Tests.m",
+        "KSCxaThrowSwapper_Tests.mm",
+        "KSDebug_Tests.m",
+        "KSDynamicLinker_Tests.m",
+        "KSFileUtils_Tests.m",
+        "KSJSONCodec_Tests.m",
+        "KSLogger_Tests.m",
+        "KSMach-O_Tests.m",
+        "KSMach_Tests.m",
+        "KSMachineContext_Tests.m",
+        "KSMemory_Tests.m",
+        "KSObjC_Tests.m",
+        "KSSignalInfo_Tests.m",
+        "KSStackCursor_SelfThread_Tests.m",
+        "KSString_Tests.m",
+        "KSSymbolicator_Tests.m",
+        "KSSysCtl_Tests.m",
+        "KSThread_Tests.m",
+        "KSUnwind_Tests.m",
+        "LibunwindRegression/KSUnwindRegressionTests.m",
+        "LibunwindRegression/ksunwind_test_harness.m",
+        "LibunwindRegression/unwind_test_arm64.S",
+        "LibunwindRegression/unwind_test_arm64_frame.S",
+        "LibunwindRegression/unwind_test_arm64_frameless.S",
+        "LibunwindRegression/unwind_test_x86_64.S",
+        "LibunwindRegression/unwind_test_x86_64_frame.S",
+        "LibunwindRegression/unwind_test_x86_64_frameless.S"
+      ],
+      "target_dependencies" : [
+        "KSCrashTestTools",
+        "KSCrashRecordingCore",
+        "KSCrashCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashRecordingCoreSwiftTests",
+      "module_type" : "SwiftTarget",
+      "name" : "KSCrashRecordingCoreSwiftTests",
+      "path" : "Tests/KSCrashRecordingCoreSwiftTests",
+      "sources" : [
+        "KSBacktraceTests.swift"
+      ],
+      "target_dependencies" : [
+        "KSCrashRecordingCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashRecordingCore",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashRecordingCore",
+      "path" : "Sources/KSCrashRecordingCore",
+      "product_memberships" : [
+        "Reporting",
+        "Filters",
+        "Sinks",
+        "Installations",
+        "Recording",
+        "RecordingCore",
+        "DiscSpaceMonitor",
+        "BootTimeMonitor",
+        "DemangleFilter",
+        "Profiler",
+        "Monitors"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/KSCrashRecordingCore/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "KSBacktrace.c",
+        "KSBinaryImageCache.c",
+        "KSCPU.c",
+        "KSCPURingBuffer.c",
+        "KSCPU_arm.c",
+        "KSCPU_arm64.c",
+        "KSCPU_x86_32.c",
+        "KSCPU_x86_64.c",
+        "KSCrashMonitor.c",
+        "KSCrashMonitorAPI.c",
+        "KSCrashMonitorRegistry.c",
+        "KSCxaThrowSwapper.c",
+        "KSDate.c",
+        "KSDebug.c",
+        "KSDynamicLinker.c",
+        "KSFileUtils.c",
+        "KSFileUtilsObjC.m",
+        "KSID.c",
+        "KSJSONCodec.c",
+        "KSJSONCodecObjC.m",
+        "KSKeyValueStore.c",
+        "KSLogger.c",
+        "KSMach-O.c",
+        "KSMach.c",
+        "KSMachineContext.c",
+        "KSMemory.c",
+        "KSObjC.c",
+        "KSSignalInfo.c",
+        "KSStackCursor.c",
+        "KSStackCursor_Backtrace.c",
+        "KSStackCursor_MachineContext.c",
+        "KSStackCursor_SelfThread.c",
+        "KSString.c",
+        "KSSymbolicator.c",
+        "KSSysCtl.c",
+        "KSThread.c",
+        "KSThreadInit.m",
+        "Unwind/KSCompactUnwind.c",
+        "Unwind/KSCompactUnwind_arm.c",
+        "Unwind/KSCompactUnwind_arm64.c",
+        "Unwind/KSCompactUnwind_x86.c",
+        "Unwind/KSCompactUnwind_x86_64.c",
+        "Unwind/KSDwarfUnwind.c",
+        "Unwind/KSStackCursor_Unwind.c"
+      ],
+      "target_dependencies" : [
+        "KSCrashCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashRecording",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashRecording",
+      "path" : "Sources/KSCrashRecording",
+      "product_memberships" : [
+        "Reporting",
+        "Filters",
+        "Sinks",
+        "Installations",
+        "Recording",
+        "DiscSpaceMonitor",
+        "BootTimeMonitor",
+        "DemangleFilter",
+        "Profiler",
+        "Monitors"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/KSCrashRecording/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "KSCrash+Backtrace.m",
+        "KSCrash+Hang.m",
+        "KSCrash+Namespace.m",
+        "KSCrash+UserInfo.m",
+        "KSCrash.m",
+        "KSCrashAppMemory.m",
+        "KSCrashAppMemoryTracker.m",
+        "KSCrashAppStateTracker.m",
+        "KSCrashBasicMonitorPlugin.m",
+        "KSCrashC.c",
+        "KSCrashCPUTracker.m",
+        "KSCrashConfiguration.m",
+        "KSCrashReport.m",
+        "KSCrashReportC.c",
+        "KSCrashReportFixer.m",
+        "KSCrashReportRunId.m",
+        "KSCrashReportStore.m",
+        "KSCrashReportStoreC.m",
+        "KSCrashRunContext.m",
+        "KSCrashThreadcrumb.m",
+        "KSTaskRole.c",
+        "KSTerminationReason.c",
+        "KSThreadCache.c",
+        "Monitors/KSCrashMonitor_CPPException.cpp",
+        "Monitors/KSCrashMonitor_Deadlock.m",
+        "Monitors/KSCrashMonitor_Lifecycle.m",
+        "Monitors/KSCrashMonitor_LifecycleStitch.m",
+        "Monitors/KSCrashMonitor_MachException.c",
+        "Monitors/KSCrashMonitor_NSException.m",
+        "Monitors/KSCrashMonitor_Resource.m",
+        "Monitors/KSCrashMonitor_ResourceStitch.m",
+        "Monitors/KSCrashMonitor_Signal.c",
+        "Monitors/KSCrashMonitor_System.m",
+        "Monitors/KSCrashMonitor_SystemStitch.m",
+        "Monitors/KSCrashMonitor_Termination.m",
+        "Monitors/KSCrashMonitor_User.c",
+        "Monitors/KSCrashMonitor_UserInfo.c",
+        "Monitors/KSCrashMonitor_UserInfoStitch.m",
+        "Monitors/KSCrashMonitor_Watchdog.c",
+        "Monitors/KSCrashMonitor_WatchdogStitch.m",
+        "Monitors/KSCrashMonitor_Zombie.c"
+      ],
+      "target_dependencies" : [
+        "KSCrashRecordingCore",
+        "KSCrashCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashProfilerTests",
+      "module_type" : "SwiftTarget",
+      "name" : "KSCrashProfilerTests",
+      "path" : "Tests/KSCrashProfilerTests",
+      "sources" : [
+        "TimeProfilerTests.swift"
+      ],
+      "target_dependencies" : [
+        "KSCrashProfiler"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashProfiler",
+      "module_type" : "SwiftTarget",
+      "name" : "KSCrashProfiler",
+      "path" : "Sources/KSCrashProfiler",
+      "product_memberships" : [
+        "Profiler"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/KSCrashProfiler/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Private/TimeProfile.Report.swift",
+        "Private/TimeProfileMetrics.swift",
+        "Private/UnsafeReportWriter.swift",
+        "Profile.swift",
+        "Profiler.swift",
+        "Sample.swift",
+        "TimeProfile.swift",
+        "TimeProfiler.swift"
+      ],
+      "target_dependencies" : [
+        "KSCrashRecordingCore",
+        "KSCrashRecording",
+        "KSCrashSwiftCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashMonitorsTests",
+      "module_type" : "SwiftTarget",
+      "name" : "KSCrashMonitorsTests",
+      "path" : "Tests/KSCrashMonitorsTests",
+      "sources" : [
+        "MetricKitMonitor_Tests.swift"
+      ],
+      "target_dependencies" : [
+        "KSCrashMonitors",
+        "KSCrashReportModel"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashMonitors",
+      "module_type" : "SwiftTarget",
+      "name" : "KSCrashMonitors",
+      "path" : "Sources/KSCrashMonitors",
+      "product_memberships" : [
+        "Monitors"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/KSCrashMonitors/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "MetricKit/Implementation/MXCallStackTree+Parsing.swift",
+        "MetricKit/Implementation/MetricKitJSONDumper.swift",
+        "MetricKit/Implementation/MetricKitMonitor+Helpers.swift",
+        "MetricKit/Implementation/MetricKitMonitor+Implementation.swift",
+        "MetricKit/Implementation/MetricKitMonitor+Subscriber.swift",
+        "MetricKit/Implementation/MetricKitRunIdHandler.swift",
+        "MetricKit/MetricKitMonitor.swift",
+        "Monitors.swift"
+      ],
+      "target_dependencies" : [
+        "KSCrashRecordingCore",
+        "KSCrashRecording",
+        "KSCrashReportModel",
+        "KSCrashSwiftCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashInstallationsTests",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashInstallationsTests",
+      "path" : "Tests/KSCrashInstallationsTests",
+      "sources" : [
+        "KSCrashInstallationEmail_Tests.m",
+        "KSCrashInstallationStandard_Tests.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashInstallations",
+        "KSCrashFilters",
+        "KSCrashSinks",
+        "KSCrashRecording"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashInstallations",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashInstallations",
+      "path" : "Sources/KSCrashInstallations",
+      "product_memberships" : [
+        "Reporting",
+        "Installations"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/KSCrashInstallations/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "KSCrashInstallation.m",
+        "KSCrashInstallationConsole.m",
+        "KSCrashInstallationEmail.m",
+        "KSCrashInstallationStandard.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashFilters",
+        "KSCrashSinks",
+        "KSCrashRecording",
+        "KSCrashDemangleFilter"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashFiltersTests",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashFiltersTests",
+      "path" : "Tests/KSCrashFiltersTests",
+      "resources" : [
+        {
+          "path" : "./Tests/KSCrashFiltersTests/Resources/bad_access_0xbad0_64bit.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashFiltersTests/Resources/nonatomic_race.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashFiltersTests/Resources/nonatomic_race_32bit.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashFiltersTests/Resources/oom.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashFiltersTests/Resources/sigterm.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Tests/KSCrashFiltersTests/Resources/watchdog.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "KSCrashReportFilterAlert_Tests.m",
+        "KSCrashReportFilterAppleFmt_Tests.m",
+        "KSCrashReportFilterDoctor_Tests.m",
+        "KSCrashReportFilterGZip_Tests.m",
+        "KSCrashReportFilterJSON_Tests.m",
+        "KSCrashReportFilter_Tests.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashFilters",
+        "KSCrashRecording",
+        "KSCrashRecordingCore",
+        "KSCrashReportingCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashFilters",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashFilters",
+      "path" : "Sources/KSCrashFilters",
+      "product_memberships" : [
+        "Reporting",
+        "Filters",
+        "Sinks",
+        "Installations"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/KSCrashFilters/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "KSCrashDoctor.m",
+        "KSCrashReportFilterAlert.m",
+        "KSCrashReportFilterAppleFmt.m",
+        "KSCrashReportFilterBasic.m",
+        "KSCrashReportFilterDoctor.m",
+        "KSCrashReportFilterGZip.m",
+        "KSCrashReportFilterJSON.m",
+        "KSCrashReportFilterSets.m",
+        "KSCrashReportFilterStringify.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashRecording",
+        "KSCrashRecordingCore",
+        "KSCrashReportingCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashDiscSpaceMonitorTests",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashDiscSpaceMonitorTests",
+      "path" : "Tests/KSCrashDiscSpaceMonitorTests",
+      "sources" : [
+        "KSCrashMonitor_DiscSpace_Tests.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashDiscSpaceMonitor",
+        "KSCrashRecording",
+        "KSCrashRecordingCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashDiscSpaceMonitor",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashDiscSpaceMonitor",
+      "path" : "Sources/KSCrashDiscSpaceMonitor",
+      "product_memberships" : [
+        "DiscSpaceMonitor"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/KSCrashDiscSpaceMonitor/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "KSCrashMonitor_DiscSpace.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashRecordingCore",
+        "KSCrashRecording"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashDemangleFilterTests",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashDemangleFilterTests",
+      "path" : "Tests/KSCrashDemangleFilterTests",
+      "sources" : [
+        "KSCrashReportFilterDemangle_Tests.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashDemangleFilter",
+        "KSCrashRecording"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashDemangleFilter",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashDemangleFilter",
+      "path" : "Sources/KSCrashDemangleFilter",
+      "product_memberships" : [
+        "Reporting",
+        "Installations",
+        "DemangleFilter"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/KSCrashDemangleFilter/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "KSCrashReportFilterDemangle.m",
+        "KSDemangle_CPP.cpp",
+        "KSDemangle_Swift.cpp"
+      ],
+      "target_dependencies" : [
+        "KSCrashRecording"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashCoreTests",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashCoreTests",
+      "path" : "Tests/KSCrashCoreTests",
+      "sources" : [
+        "KSNSErrorHelper_Tests.m",
+        "KSSpinLock_Tests.m",
+        "KSUnfairLock_Tests.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashCore",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashCore",
+      "path" : "Sources/KSCrashCore",
+      "product_memberships" : [
+        "Reporting",
+        "Filters",
+        "Sinks",
+        "Installations",
+        "Recording",
+        "RecordingCore",
+        "DiscSpaceMonitor",
+        "BootTimeMonitor",
+        "DemangleFilter",
+        "Profiler",
+        "Monitors"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/KSCrashCore/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "KSNSErrorHelper.m",
+        "KSSpinLock.c",
+        "KSUnfairLock.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashBootTimeMonitorTests",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashBootTimeMonitorTests",
+      "path" : "Tests/KSCrashBootTimeMonitorTests",
+      "sources" : [
+        "KSCrashMonitor_BootTime_Tests.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashBootTimeMonitor",
+        "KSCrashRecording",
+        "KSCrashRecordingCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashBootTimeMonitor",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashBootTimeMonitor",
+      "path" : "Sources/KSCrashBootTimeMonitor",
+      "product_memberships" : [
+        "BootTimeMonitor"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/KSCrashBootTimeMonitor/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "KSCrashMonitor_BootTime.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashRecordingCore",
+        "KSCrashRecording"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "KSCrashBenchmarksObjC",
+      "module_type" : "ClangTarget",
+      "name" : "KSCrashBenchmarksObjC",
+      "path" : "Tests/KSCrashBenchmarksObjC",
+      "sources" : [
+        "KSBenchmarkTestCase.m",
+        "KSCrashReportBenchmarks.m",
+        "KSCxaThrowBenchmarks.mm",
+        "KSKeyValueStoreBenchmarks.m"
+      ],
+      "target_dependencies" : [
+        "KSCrashRecordingCore",
+        "KSCrashRecording"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashBenchmarksCold",
+      "module_type" : "SwiftTarget",
+      "name" : "KSCrashBenchmarksCold",
+      "path" : "Tests/KSCrashBenchmarksCold",
+      "sources" : [
+        "KSCxaThrowColdBenchmarks.swift"
+      ],
+      "target_dependencies" : [
+        "KSCrashRecordingCore",
+        "KSCrashRecording"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "KSCrashBenchmarks",
+      "module_type" : "SwiftTarget",
+      "name" : "KSCrashBenchmarks",
+      "path" : "Tests/KSCrashBenchmarks",
+      "sources" : [
+        "KSBacktraceBenchmarks.swift",
+        "KSBenchmarkTestCase.swift",
+        "KSDynamicLinkerBenchmarks.swift",
+        "KSJSONCodecBenchmarks.swift",
+        "KSMemoryBenchmarks.swift",
+        "KSThreadBenchmarks.swift",
+        "KSTimeProfilerBenchmarks.swift",
+        "ProfilerSampleMetric.swift"
+      ],
+      "target_dependencies" : [
+        "KSCrashRecordingCore",
+        "KSCrashRecording",
+        "KSCrashProfiler"
+      ],
+      "type" : "test"
+    }
+  ],
+  "tools_version" : "5.9"
+}

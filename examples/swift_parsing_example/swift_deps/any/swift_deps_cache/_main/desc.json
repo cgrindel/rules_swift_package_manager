@@ -1,0 +1,39 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-parsing",
+      "requirement" : {
+        "exact" : [
+          "0.15.2"
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-parsing"
+    },
+    {
+      "identity" : "locallow",
+      "path" : "./LocalLow",
+      "type" : "fileSystem"
+    }
+  ],
+  "manifest_display_name" : "swift_parsing_example",
+  "name" : "swift_parsing_example",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "ios",
+      "version" : "18.0"
+    }
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "6.0"
+}

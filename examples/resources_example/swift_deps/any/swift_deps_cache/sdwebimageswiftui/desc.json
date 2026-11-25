@@ -1,0 +1,88 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "sdwebimage",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "5.21.1",
+            "upper_bound" : "6.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/SDWebImage/SDWebImage.git"
+    }
+  ],
+  "manifest_display_name" : "SDWebImageSwiftUI",
+  "name" : "SDWebImageSwiftUI",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "11.0"
+    },
+    {
+      "name" : "ios",
+      "version" : "14.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "14.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "7.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "SDWebImageSwiftUI",
+      "targets" : [
+        "SDWebImageSwiftUI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "SDWebImageSwiftUI",
+      "module_type" : "SwiftTarget",
+      "name" : "SDWebImageSwiftUI",
+      "path" : "SDWebImageSwiftUI",
+      "product_dependencies" : [
+        "SDWebImage"
+      ],
+      "product_memberships" : [
+        "SDWebImageSwiftUI"
+      ],
+      "resources" : [
+        {
+          "path" : "./SDWebImageSwiftUI/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Classes/AnimatedImage.swift",
+        "Classes/Image.swift",
+        "Classes/ImageManager.swift",
+        "Classes/ImagePlayer.swift",
+        "Classes/ImageViewWrapper.swift",
+        "Classes/Indicator/Indicator.swift",
+        "Classes/SDWebImageSwiftUI.swift",
+        "Classes/Transition/Transition.swift",
+        "Classes/WebImage.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.3"
+}

@@ -1,0 +1,489 @@
+{
+  "c_language_standard" : "c99",
+  "cxx_language_standard" : "gnu++14",
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "GoogleUtilities",
+  "name" : "GoogleUtilities",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "12.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "7.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GULAppDelegateSwizzler",
+      "targets" : [
+        "GoogleUtilities-AppDelegateSwizzler"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULEnvironment",
+      "targets" : [
+        "GoogleUtilities-Environment"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULLogger",
+      "targets" : [
+        "GoogleUtilities-Logger"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULMethodSwizzler",
+      "targets" : [
+        "GoogleUtilities-MethodSwizzler"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULNetwork",
+      "targets" : [
+        "GoogleUtilities-Network"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULNSData",
+      "targets" : [
+        "GoogleUtilities-NSData"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULReachability",
+      "targets" : [
+        "GoogleUtilities-Reachability"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULSwizzlerTestHelpers",
+      "targets" : [
+        "GoogleUtilities-SwizzlerTestHelpers"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULUserDefaults",
+      "targets" : [
+        "GoogleUtilities-UserDefaults"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "third_party_IsAppEncrypted",
+      "module_type" : "ClangTarget",
+      "name" : "third-party-IsAppEncrypted",
+      "path" : "third_party/IsAppEncrypted",
+      "product_memberships" : [
+        "GULAppDelegateSwizzler",
+        "GULEnvironment",
+        "GULLogger",
+        "GULMethodSwizzler",
+        "GULNetwork",
+        "GULReachability",
+        "GULSwizzlerTestHelpers",
+        "GULUserDefaults"
+      ],
+      "sources" : [
+        "IsAppEncrypted.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "swift_test",
+      "module_type" : "SwiftTarget",
+      "name" : "swift-test",
+      "path" : "SwiftPMTests/swift-test",
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "GoogleUtilities-AppDelegateSwizzler",
+        "GoogleUtilities-Environment",
+        "GoogleUtilities-Logger",
+        "GoogleUtilities-MethodSwizzler",
+        "GoogleUtilities-Network",
+        "GoogleUtilities-NSData",
+        "GoogleUtilities-Reachability",
+        "GoogleUtilities-UserDefaults"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "objc_import_test",
+      "module_type" : "ClangTarget",
+      "name" : "objc-import-test",
+      "path" : "SwiftPMTests/objc-import-test",
+      "sources" : [
+        "objc-header.m",
+        "objc-module.m"
+      ],
+      "target_dependencies" : [
+        "GoogleUtilities-AppDelegateSwizzler",
+        "GoogleUtilities-Environment",
+        "GoogleUtilities-Logger",
+        "GoogleUtilities-MethodSwizzler",
+        "GoogleUtilities-Network",
+        "GoogleUtilities-NSData",
+        "GoogleUtilities-Reachability",
+        "GoogleUtilities-UserDefaults"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "UtilitiesUnit",
+      "module_type" : "ClangTarget",
+      "name" : "UtilitiesUnit",
+      "path" : "GoogleUtilities/Tests/Unit",
+      "sources" : [
+        "Environment/GULAppEnvironmentUtilTest.m",
+        "Environment/GULKeychainStorageInvalidInputTests.m",
+        "Environment/GULKeychainStorageTests.m",
+        "Logger/GULLoggerTest.m",
+        "Network/GULMutableDictionaryTest.m",
+        "Network/GULNetworkURLSessionTest.m",
+        "Reachability/GULReachabilityCheckerTest.m",
+        "Swizzler/GULAppDelegateSwizzlerTest.m",
+        "Swizzler/GULRuntimeClassDiffTests.m",
+        "Swizzler/GULRuntimeClassSnapshotTests.m",
+        "Swizzler/GULRuntimeDiffTests.m",
+        "Swizzler/GULRuntimeSnapshotTests.m",
+        "Swizzler/GULRuntimeStateHelperTests.m",
+        "Swizzler/GULSceneDelegateSwizzlerTest.m",
+        "Swizzler/GULSwizzlerInheritedMethodsSwizzlingTest.m",
+        "Swizzler/GULSwizzlerTest.m",
+        "Swizzler/GULSwizzlingCacheTest.m",
+        "UserDefaults/GULUserDefaultsTests.m",
+        "Utils/GULTestKeychain.m"
+      ],
+      "target_dependencies" : [
+        "GoogleUtilities-AppDelegateSwizzler",
+        "GoogleUtilities-Environment",
+        "GoogleUtilities-Logger",
+        "GoogleUtilities-MethodSwizzler",
+        "GoogleUtilities-Network",
+        "GoogleUtilities-NSData",
+        "GoogleUtilities-Reachability",
+        "GoogleUtilities-UserDefaults",
+        "GoogleUtilities-SwizzlerTestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GoogleUtilities_UserDefaults",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleUtilities-UserDefaults",
+      "path" : "GoogleUtilities/UserDefaults",
+      "product_memberships" : [
+        "GULUserDefaults"
+      ],
+      "resources" : [
+        {
+          "path" : "./GoogleUtilities/UserDefaults/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "GULUserDefaults.m"
+      ],
+      "target_dependencies" : [
+        "GoogleUtilities-Logger"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GoogleUtilities_SwizzlerTestHelpers",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleUtilities-SwizzlerTestHelpers",
+      "path" : "GoogleUtilities/SwizzlerTestHelpers",
+      "product_memberships" : [
+        "GULSwizzlerTestHelpers"
+      ],
+      "sources" : [
+        "GULRuntimeClassDiff.m",
+        "GULRuntimeClassSnapshot.m",
+        "GULRuntimeDiff.m",
+        "GULRuntimeSnapshot.m",
+        "GULRuntimeStateHelper.m",
+        "GULSwizzler+Unswizzle.m",
+        "GULSwizzlingCache.m"
+      ],
+      "target_dependencies" : [
+        "GoogleUtilities-MethodSwizzler"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GoogleUtilities_Reachability",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleUtilities-Reachability",
+      "path" : "GoogleUtilities/Reachability",
+      "product_memberships" : [
+        "GULAppDelegateSwizzler",
+        "GULNetwork",
+        "GULReachability"
+      ],
+      "resources" : [
+        {
+          "path" : "./GoogleUtilities/Reachability/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "GULReachabilityChecker.m"
+      ],
+      "target_dependencies" : [
+        "GoogleUtilities-Logger"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GoogleUtilities_Network",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleUtilities-Network",
+      "path" : "GoogleUtilities/Network",
+      "product_memberships" : [
+        "GULAppDelegateSwizzler",
+        "GULNetwork"
+      ],
+      "resources" : [
+        {
+          "path" : "./GoogleUtilities/Network/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "GULMutableDictionary.m",
+        "GULNetwork.m",
+        "GULNetworkConstants.m",
+        "GULNetworkURLSession.m"
+      ],
+      "target_dependencies" : [
+        "GoogleUtilities-Logger",
+        "GoogleUtilities-NSData",
+        "GoogleUtilities-Reachability"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GoogleUtilities_NSData",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleUtilities-NSData",
+      "path" : "GoogleUtilities/NSData+zlib",
+      "product_memberships" : [
+        "GULAppDelegateSwizzler",
+        "GULNetwork",
+        "GULNSData"
+      ],
+      "resources" : [
+        {
+          "path" : "./GoogleUtilities/NSData+zlib/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "GULNSData+zlib.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GoogleUtilities_MethodSwizzler",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleUtilities-MethodSwizzler",
+      "path" : "GoogleUtilities/MethodSwizzler",
+      "product_memberships" : [
+        "GULMethodSwizzler",
+        "GULSwizzlerTestHelpers"
+      ],
+      "resources" : [
+        {
+          "path" : "./GoogleUtilities/MethodSwizzler/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "GULSwizzler.m"
+      ],
+      "target_dependencies" : [
+        "GoogleUtilities-Logger"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GoogleUtilities_Logger",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleUtilities-Logger",
+      "path" : "GoogleUtilities/Logger",
+      "product_memberships" : [
+        "GULAppDelegateSwizzler",
+        "GULLogger",
+        "GULMethodSwizzler",
+        "GULNetwork",
+        "GULReachability",
+        "GULSwizzlerTestHelpers",
+        "GULUserDefaults"
+      ],
+      "resources" : [
+        {
+          "path" : "./GoogleUtilities/Logger/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "GULLogger.m"
+      ],
+      "target_dependencies" : [
+        "GoogleUtilities-Environment"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GoogleUtilities_Environment",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleUtilities-Environment",
+      "path" : "GoogleUtilities/Environment",
+      "product_memberships" : [
+        "GULAppDelegateSwizzler",
+        "GULEnvironment",
+        "GULLogger",
+        "GULMethodSwizzler",
+        "GULNetwork",
+        "GULReachability",
+        "GULSwizzlerTestHelpers",
+        "GULUserDefaults"
+      ],
+      "resources" : [
+        {
+          "path" : "./GoogleUtilities/Environment/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "GULAppEnvironmentUtil.m",
+        "NetworkInfo/GULNetworkInfo.m",
+        "SecureStorage/GULKeychainStorage.m",
+        "SecureStorage/GULKeychainUtils.m"
+      ],
+      "target_dependencies" : [
+        "third-party-IsAppEncrypted"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GoogleUtilities_AppDelegateSwizzler",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleUtilities-AppDelegateSwizzler",
+      "path" : "GoogleUtilities/AppDelegateSwizzler",
+      "product_memberships" : [
+        "GULAppDelegateSwizzler"
+      ],
+      "resources" : [
+        {
+          "path" : "./GoogleUtilities/AppDelegateSwizzler/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "GULAppDelegateSwizzler.m",
+        "GULSceneDelegateSwizzler.m"
+      ],
+      "target_dependencies" : [
+        "GoogleUtilities-Environment",
+        "GoogleUtilities-Logger",
+        "GoogleUtilities-Network"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.9"
+}

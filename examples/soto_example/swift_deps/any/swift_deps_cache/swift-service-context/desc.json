@@ -1,0 +1,98 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-distributed-tracing",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.7.2",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-distributed-tracing.git"
+    }
+  ],
+  "manifest_display_name" : "swift-service-context",
+  "name" : "swift-service-context",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "ServiceContextModule",
+      "targets" : [
+        "ServiceContextModuleCompatibility"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "InstrumentationBaggage",
+      "targets" : [
+        "InstrumentationBaggage"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "ServiceContextTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ServiceContextTests",
+      "path" : "Tests/ServiceContextTests",
+      "product_dependencies" : [
+        "Instrumentation"
+      ],
+      "sources" : [
+        "CompatibilityShimTests.swift"
+      ],
+      "target_dependencies" : [
+        "ServiceContextModuleCompatibility"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "ServiceContextModuleCompatibility",
+      "module_type" : "SwiftTarget",
+      "name" : "ServiceContextModuleCompatibility",
+      "path" : "Sources/ServiceContextModule",
+      "product_dependencies" : [
+        "Instrumentation"
+      ],
+      "product_memberships" : [
+        "ServiceContextModule"
+      ],
+      "sources" : [
+        "Reexport.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "InstrumentationBaggage",
+      "module_type" : "SwiftTarget",
+      "name" : "InstrumentationBaggage",
+      "path" : "Sources/InstrumentationBaggage",
+      "product_dependencies" : [
+        "Instrumentation"
+      ],
+      "product_memberships" : [
+        "InstrumentationBaggage"
+      ],
+      "sources" : [
+        "CompatibilityShims.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.2"
+}

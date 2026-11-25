@@ -1,0 +1,454 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-collections",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.1.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-collections"
+    },
+    {
+      "identity" : "combine-schedulers",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.2",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/combine-schedulers"
+    },
+    {
+      "identity" : "swift-case-paths",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.5.4",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-case-paths"
+    },
+    {
+      "identity" : "swift-clocks",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.4",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-clocks"
+    },
+    {
+      "identity" : "swift-concurrency-extras",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.2.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-concurrency-extras"
+    },
+    {
+      "identity" : "swift-custom-dump",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.3.2",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-custom-dump"
+    },
+    {
+      "identity" : "swift-dependencies",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.4.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-dependencies"
+    },
+    {
+      "identity" : "swift-identified-collections",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.1.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-identified-collections"
+    },
+    {
+      "identity" : "swift-issue-reporting",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.1.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-issue-reporting"
+    },
+    {
+      "identity" : "swift-macro-testing",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "0.2.0",
+            "upper_bound" : "1.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-macro-testing"
+    },
+    {
+      "identity" : "swift-navigation",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.7.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-navigation"
+    },
+    {
+      "identity" : "swift-perception",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.3.4",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-perception"
+    },
+    {
+      "identity" : "swift-sharing",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-sharing"
+    },
+    {
+      "identity" : "swift-docc-plugin",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/swiftlang/swift-docc-plugin"
+    },
+    {
+      "identity" : "swift-syntax",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "509.0.0",
+            "upper_bound" : "605.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/swiftlang/swift-syntax"
+    }
+  ],
+  "manifest_display_name" : "swift-composable-architecture",
+  "name" : "swift-composable-architecture",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "16.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "16.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "ComposableArchitecture",
+      "targets" : [
+        "ComposableArchitecture"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "ComposableArchitectureMacros",
+      "targets" : [
+        "ComposableArchitectureMacros"
+      ],
+      "type" : {
+        "macro" : null
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "c99name" : "ComposableArchitectureTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ComposableArchitectureTests",
+      "path" : "Tests/ComposableArchitectureTests",
+      "product_dependencies" : [
+        "IssueReportingTestSupport"
+      ],
+      "sources" : [
+        "BindableStoreTests.swift",
+        "BindingLocalTests.swift",
+        "CompatibilityTests.swift",
+        "CompileTimeTests.swift",
+        "ComposableArchitectureTests.swift",
+        "CurrentValueRelayTests.swift",
+        "DebugTests.swift",
+        "DependencyKeyWritingReducerTests.swift",
+        "EffectCancellationIsolationTests.swift",
+        "EffectCancellationTests.swift",
+        "EffectDebounceTests.swift",
+        "EffectFailureTests.swift",
+        "EffectOperationTests.swift",
+        "EffectRunTests.swift",
+        "EffectTests.swift",
+        "EnumReducerMacroTests.swift",
+        "Internal/BaseTCATestCase.swift",
+        "Internal/TestHelpers.swift",
+        "MacroConformanceTests.swift",
+        "MacroTests.swift",
+        "MemoryManagementTests.swift",
+        "NestedEnumFeatureTests.swift",
+        "ObservableStateEnumMacroTests.swift",
+        "ObservableTests.swift",
+        "ReducerBuilderTests.swift",
+        "ReducerTests.swift",
+        "Reducers/BindingReducerTests.swift",
+        "Reducers/ForEachReducerTests.swift",
+        "Reducers/IfCaseLetReducerTests.swift",
+        "Reducers/IfLetReducerTests.swift",
+        "Reducers/OnChangeReducerTests.swift",
+        "Reducers/PresentationReducerTests.swift",
+        "Reducers/StackReducerTests.swift",
+        "RuntimeWarningTests.swift",
+        "ScopeCacheTests.swift",
+        "ScopeLoggerTests.swift",
+        "ScopeTests.swift",
+        "StoreLifetimeTests.swift",
+        "StorePerceptionTests.swift",
+        "StoreTests.swift",
+        "TaskCancellationTests.swift",
+        "TestStoreFailureTests.swift",
+        "TestStoreNonExhaustiveTests.swift",
+        "TestStoreTests.swift",
+        "ThrottleTests.swift",
+        "ViewStoreTests.swift"
+      ],
+      "target_dependencies" : [
+        "ComposableArchitecture"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "ComposableArchitectureMacrosTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ComposableArchitectureMacrosTests",
+      "path" : "Tests/ComposableArchitectureMacrosTests",
+      "product_dependencies" : [
+        "MacroTesting"
+      ],
+      "sources" : [
+        "MacroBaseTestCase.swift",
+        "ObservableStateMacroTests.swift",
+        "PresentsMacroTests.swift",
+        "ReducerMacroTests.swift",
+        "ViewActionMacroTests.swift"
+      ],
+      "target_dependencies" : [
+        "ComposableArchitectureMacros"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "ComposableArchitectureMacros",
+      "module_type" : "SwiftTarget",
+      "name" : "ComposableArchitectureMacros",
+      "path" : "Sources/ComposableArchitectureMacros",
+      "product_dependencies" : [
+        "SwiftSyntaxMacros",
+        "SwiftCompilerPlugin"
+      ],
+      "product_memberships" : [
+        "ComposableArchitecture",
+        "ComposableArchitectureMacros"
+      ],
+      "sources" : [
+        "Availability.swift",
+        "Extensions.swift",
+        "ObservableStateMacro.swift",
+        "Plugins.swift",
+        "PresentsMacro.swift",
+        "ReducerMacro.swift",
+        "ViewActionMacro.swift"
+      ],
+      "type" : "macro"
+    },
+    {
+      "c99name" : "ComposableArchitecture",
+      "module_type" : "SwiftTarget",
+      "name" : "ComposableArchitecture",
+      "path" : "Sources/ComposableArchitecture",
+      "product_dependencies" : [
+        "CasePaths",
+        "Clocks",
+        "CombineSchedulers",
+        "ConcurrencyExtras",
+        "CustomDump",
+        "Dependencies",
+        "DependenciesMacros",
+        "IdentifiedCollections",
+        "IssueReporting",
+        "OrderedCollections",
+        "Perception",
+        "Sharing",
+        "SwiftUINavigation",
+        "UIKitNavigation"
+      ],
+      "product_memberships" : [
+        "ComposableArchitecture"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/ComposableArchitecture/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "CaseReducer.swift",
+        "Core.swift",
+        "Dependencies/Dismiss.swift",
+        "Dependencies/IsPresented.swift",
+        "Effect.swift",
+        "Effects/Cancellation.swift",
+        "Effects/Publisher.swift",
+        "Internal/AreOrderedSetsDuplicates.swift",
+        "Internal/Box.swift",
+        "Internal/Create.swift",
+        "Internal/CurrentValueRelay.swift",
+        "Internal/Debug.swift",
+        "Internal/DefaultSubscript.swift",
+        "Internal/Deprecations.swift",
+        "Internal/DispatchQueue.swift",
+        "Internal/EffectActions.swift",
+        "Internal/EphemeralState.swift",
+        "Internal/Exports.swift",
+        "Internal/HashableStaticString.swift",
+        "Internal/KeyPath+Sendable.swift",
+        "Internal/Locking.swift",
+        "Internal/Logger.swift",
+        "Internal/NavigationID.swift",
+        "Internal/OpenExistential.swift",
+        "Internal/PresentationID.swift",
+        "Internal/ReturningLastNonNilValue.swift",
+        "Internal/RuntimeWarnings.swift",
+        "Internal/StackIDGenerator.swift",
+        "Macros.swift",
+        "Observation/Alert+Observation.swift",
+        "Observation/Binding+Observation.swift",
+        "Observation/IdentifiedArray+Observation.swift",
+        "Observation/NavigationStack+Observation.swift",
+        "Observation/ObservableState.swift",
+        "Observation/ObservationStateRegistrar.swift",
+        "Observation/Store+Observation.swift",
+        "Observation/ViewAction.swift",
+        "Reducer.swift",
+        "Reducer/ReducerBuilder.swift",
+        "Reducer/Reducers/BindingReducer.swift",
+        "Reducer/Reducers/CombineReducers.swift",
+        "Reducer/Reducers/DebugReducer.swift",
+        "Reducer/Reducers/DependencyKeyWritingReducer.swift",
+        "Reducer/Reducers/EmptyReducer.swift",
+        "Reducer/Reducers/ForEachReducer.swift",
+        "Reducer/Reducers/IfCaseLetReducer.swift",
+        "Reducer/Reducers/IfLetReducer.swift",
+        "Reducer/Reducers/OnChange.swift",
+        "Reducer/Reducers/Optional.swift",
+        "Reducer/Reducers/PresentationReducer.swift",
+        "Reducer/Reducers/Reduce.swift",
+        "Reducer/Reducers/Scope.swift",
+        "Reducer/Reducers/SignpostReducer.swift",
+        "Reducer/Reducers/StackReducer.swift",
+        "Sharing/AppStorageKeyPathKey.swift",
+        "Store.swift",
+        "SwiftUI/Binding.swift",
+        "TestStore.swift",
+        "UIKit/AlertStateUIKit.swift",
+        "UIKit/NavigationStackControllerUIKit.swift"
+      ],
+      "target_dependencies" : [
+        "ComposableArchitectureMacros"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.4"
+}

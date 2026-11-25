@@ -1,0 +1,587 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-nio",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.77.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio.git"
+    },
+    {
+      "identity" : "swift-atomics",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.1.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-atomics.git"
+    },
+    {
+      "identity" : "swift-crypto",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "6.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-crypto.git"
+    },
+    {
+      "identity" : "swift-distributed-tracing",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.3.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-distributed-tracing.git"
+    },
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.8.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log.git"
+    },
+    {
+      "identity" : "swift-metrics",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-metrics.git"
+    },
+    {
+      "identity" : "swift-nio-ssl",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.7.2",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio-ssl.git"
+    },
+    {
+      "identity" : "swift-nio-transport-services",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.13.1",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio-transport-services.git"
+    },
+    {
+      "identity" : "async-http-client",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.30.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/swift-server/async-http-client.git"
+    },
+    {
+      "identity" : "jmespath.swift",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.2",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/jmespath/jmespath.swift.git"
+    },
+    {
+      "identity" : "swift-service-lifecycle",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.12.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/swift-server/swift-service-lifecycle.git"
+    }
+  ],
+  "manifest_display_name" : "soto-core",
+  "name" : "soto-core",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "SotoCore",
+      "targets" : [
+        "SotoCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SotoTestUtils",
+      "targets" : [
+        "SotoTestUtils"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SotoSignerV4",
+      "targets" : [
+        "SotoSignerV4"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SotoSignerCloudFront",
+      "targets" : [
+        "SotoSignerCloudFront"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "SotoXMLTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SotoXMLTests",
+      "path" : "Tests/SotoXMLTests",
+      "sources" : [
+        "XMLCoderTests.swift",
+        "XMLTests.swift"
+      ],
+      "target_dependencies" : [
+        "SotoXML",
+        "SotoCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SotoXML",
+      "module_type" : "SwiftTarget",
+      "name" : "SotoXML",
+      "path" : "Sources/SotoXML",
+      "product_memberships" : [
+        "SotoCore",
+        "SotoTestUtils"
+      ],
+      "sources" : [
+        "Expat.swift",
+        "XML.swift",
+        "XMLDecoder.swift",
+        "XMLEncoder.swift"
+      ],
+      "target_dependencies" : [
+        "CSotoExpat"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SotoTestUtils",
+      "module_type" : "SwiftTarget",
+      "name" : "SotoTestUtils",
+      "path" : "Sources/SotoTestUtils",
+      "product_dependencies" : [
+        "Logging",
+        "NIO",
+        "NIOFoundationCompat",
+        "NIOHTTP1",
+        "NIOPosix",
+        "NIOTestUtils"
+      ],
+      "product_memberships" : [
+        "SotoTestUtils"
+      ],
+      "sources" : [
+        "Environment.swift",
+        "TestServer.swift",
+        "TestUtils.swift"
+      ],
+      "target_dependencies" : [
+        "SotoCore",
+        "SotoXML"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SotoSignerV4Tests",
+      "module_type" : "SwiftTarget",
+      "name" : "SotoSignerV4Tests",
+      "path" : "Tests/SotoSignerV4Tests",
+      "sources" : [
+        "AWSSignerTests.swift",
+        "SigV4aTests.swift"
+      ],
+      "target_dependencies" : [
+        "SotoSignerV4"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SotoSignerV4",
+      "module_type" : "SwiftTarget",
+      "name" : "SotoSignerV4",
+      "path" : "Sources/SotoSignerV4",
+      "product_dependencies" : [
+        "Crypto",
+        "NIOCore",
+        "NIOHTTP1"
+      ],
+      "product_memberships" : [
+        "SotoCore",
+        "SotoTestUtils",
+        "SotoSignerV4"
+      ],
+      "sources" : [
+        "HexEncoding.swift",
+        "SigV4a.swift",
+        "credentials.swift",
+        "exports.swift",
+        "signer.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SotoSignerCloudFrontTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SotoSignerCloudFrontTests",
+      "path" : "Tests/SotoSignerCloudFrontTests",
+      "product_dependencies" : [
+        "Crypto",
+        "_CryptoExtras",
+        "NIOCore"
+      ],
+      "sources" : [
+        "CloudFrontSignerTests.swift"
+      ],
+      "target_dependencies" : [
+        "SotoSignerCloudFront"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SotoSignerCloudFront",
+      "module_type" : "SwiftTarget",
+      "name" : "SotoSignerCloudFront",
+      "path" : "Sources/SotoSignerCloudFront",
+      "product_dependencies" : [
+        "Crypto",
+        "_CryptoExtras",
+        "NIOCore"
+      ],
+      "product_memberships" : [
+        "SotoSignerCloudFront"
+      ],
+      "sources" : [
+        "CloudFrontSigner+Internal.swift",
+        "CloudFrontSigner+SignedCookies.swift",
+        "CloudFrontSigner+SignedURL.swift",
+        "CloudFrontSigner.swift",
+        "CloudFrontSignerError.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SotoCoreTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SotoCoreTests",
+      "path" : "Tests/SotoCoreTests",
+      "product_dependencies" : [
+        "NIOPosix",
+        "_NIOFileSystem",
+        "InMemoryTracing",
+        "InMemoryLogging"
+      ],
+      "resources" : [
+        {
+          "path" : "./Tests/SotoCoreTests/Resources/credential-process-test-helper.sh",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "AWSClientTests.swift",
+        "AWSRequestTests.swift",
+        "AWSResponseTests.swift",
+        "AWSServiceTests.swift",
+        "CRCTests.swift",
+        "Concurrency/AsyncSequenceTests.swift",
+        "Concurrency/Count.swift",
+        "Concurrency/ExpiringValueTests.swift",
+        "Concurrency/Sequence+concurrentMapTests.swift",
+        "Credential/ConfigFileCredentialProviderTests.swift",
+        "Credential/ConfigFileLoaderTests.swift",
+        "Credential/CredentialProcessProviderTests.swift",
+        "Credential/CredentialProviderTests.swift",
+        "Credential/Login/DPoPTokenGeneratorTests.swift",
+        "Credential/Login/LoginCredentialProviderTests.swift",
+        "Credential/Login/LoginErrorHandlingTests.swift",
+        "Credential/Login/LoginTokenManagerTests.swift",
+        "Credential/Login/MockAWSHTTPClient.swift",
+        "Credential/MetaDataCredentialProviderTests.swift",
+        "Credential/RotatingCredentialProviderTests.swift",
+        "Credential/RuntimeSelectorCredentialProviderTests.swift",
+        "Credential/SSO/SSOCredentialProviderTests.swift",
+        "Credential/SSO/SSOTestHelpers.swift",
+        "Credential/SSO/SSOTokenManagerTests.swift",
+        "Credential/STSAssumeRoleTests.swift",
+        "Credential/StaticCredential+EnvironmentTests.swift",
+        "Doc/ARNTests.swift",
+        "Doc/EnvironmentTests.swift",
+        "Doc/RegionTests.swift",
+        "EndpointDiscoveryTests.swift",
+        "ISO8601Tests.swift",
+        "LoggingTests.swift",
+        "MiddlewareTests.swift",
+        "PaginateTests.swift",
+        "PayloadTests.swift",
+        "QueryEncoderTests.swift",
+        "TimeStampTests.swift",
+        "TracingTests.swift",
+        "ValidationTests.swift",
+        "WaiterTests.swift"
+      ],
+      "target_dependencies" : [
+        "SotoCore",
+        "SotoTestUtils"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SotoCore",
+      "module_type" : "SwiftTarget",
+      "name" : "SotoCore",
+      "path" : "Sources/SotoCore",
+      "product_dependencies" : [
+        "Logging",
+        "AsyncHTTPClient",
+        "Atomics",
+        "Metrics",
+        "NIOCore",
+        "NIOHTTP1",
+        "_NIOFileSystem",
+        "NIOPosix",
+        "NIOSSL",
+        "NIOTransportServices",
+        "NIOFoundationCompat",
+        "JMESPath",
+        "Tracing",
+        "ServiceLifecycle"
+      ],
+      "product_memberships" : [
+        "SotoCore",
+        "SotoTestUtils"
+      ],
+      "sources" : [
+        "AWSClient+Paginate.swift",
+        "AWSClient+ServiceLifecycle.swift",
+        "AWSClient.swift",
+        "AWSEndpointDiscovery.swift",
+        "AWSService.swift",
+        "AWSServiceConfig.swift",
+        "AWSShapes/Base64Data.swift",
+        "AWSShapes/Document.swift",
+        "AWSShapes/EventPayload.swift",
+        "Concurrency/AnyAsyncSequence.swift",
+        "Concurrency/ByteBufferSequence.swift",
+        "Concurrency/EventStream.swift",
+        "Concurrency/ExpiringValue.swift",
+        "Concurrency/FixedSizeByteBufferAsyncSequence.swift",
+        "Concurrency/Sequence+concurrentMap.swift",
+        "Credential/ConfigFileCredentialProvider.swift",
+        "Credential/ConfigFileLoader.swift",
+        "Credential/Credential+IsEmpty.swift",
+        "Credential/CredentialProcessProvider.swift",
+        "Credential/CredentialProvider.swift",
+        "Credential/CredentialProviderError.swift",
+        "Credential/CredentialProviderSelector.swift",
+        "Credential/DeferredCredentialProvider.swift",
+        "Credential/EmptyCredential.swift",
+        "Credential/ExpiringCredential.swift",
+        "Credential/Login/DPoPTokenGenerator.swift",
+        "Credential/Login/LoginCredentialProvider.swift",
+        "Credential/Login/LoginDataStructures.swift",
+        "Credential/Login/LoginTokenManager.swift",
+        "Credential/MetaDataCredentialProvider.swift",
+        "Credential/NullCredentialProvider.swift",
+        "Credential/RotatingCredentialProvider.swift",
+        "Credential/RuntimeSelectorCredentialProvider.swift",
+        "Credential/SSO/SSOCredentialProvider.swift",
+        "Credential/SSO/SSODataStructures.swift",
+        "Credential/SSO/SSOTokenManager.swift",
+        "Credential/STSAssumeRole.swift",
+        "Credential/StaticCredential+CredentialProvider.swift",
+        "Credential/StaticCredential+Environment.swift",
+        "Doc/ARN.swift",
+        "Doc/AWSShape.swift",
+        "Doc/EndpointVariant.swift",
+        "Doc/Environment.swift",
+        "Doc/Region.swift",
+        "Doc/ServiceProtocol.swift",
+        "Encoder/CodableProperties/CodableProperties.swift",
+        "Encoder/CodableProperties/CollectionCoders.swift",
+        "Encoder/CodableProperties/DateCoders.swift",
+        "Encoder/CodableProperties/EC2ArrayCoder.swift",
+        "Encoder/EventStreamDecoder.swift",
+        "Encoder/QueryEncoder.swift",
+        "Encoder/RequestContainer.swift",
+        "Encoder/ResponseContainer.swift",
+        "Errors/ClientErrors.swift",
+        "Errors/Error.swift",
+        "Errors/ServerErrors.swift",
+        "Exports.swift",
+        "HTTP/AWSHTTPBody.swift",
+        "HTTP/AWSHTTPClient.swift",
+        "HTTP/AWSHTTPRequest.swift",
+        "HTTP/AWSHTTPResponse+HAL.swift",
+        "HTTP/AWSHTTPResponse.swift",
+        "HTTP/AsyncHTTPClient.swift",
+        "HTTP/S3SignedAsyncSequence.swift",
+        "Middleware/Middleware.swift",
+        "Middleware/Middleware/EditHeadersMiddleware.swift",
+        "Middleware/Middleware/EndpointDiscoveryMiddleware.swift",
+        "Middleware/Middleware/ErrorHandlingMiddleware.swift",
+        "Middleware/Middleware/LoggingMiddleware.swift",
+        "Middleware/Middleware/RetryMiddleware.swift",
+        "Middleware/Middleware/S3Middleware.swift",
+        "Middleware/Middleware/SigningMiddleware.swift",
+        "Middleware/Middleware/TracingMiddleware.swift",
+        "Middleware/Middleware/TreeHashMiddleware.swift",
+        "Middleware/MiddlewareStack.swift",
+        "RetryPolicy.swift",
+        "Utils/UnsafeTransfer.swift",
+        "Utils/base64.swift",
+        "Utils/crc32.swift",
+        "Utils/iso8601.swift",
+        "Waiters/AWSClient+Waiter.swift",
+        "Waiters/Matcher.swift"
+      ],
+      "target_dependencies" : [
+        "SotoSignerV4",
+        "SotoXML",
+        "INIParser"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "INIParserTests",
+      "module_type" : "SwiftTarget",
+      "name" : "INIParserTests",
+      "path" : "Tests/INIParserTests",
+      "sources" : [
+        "INIParserTests.swift"
+      ],
+      "target_dependencies" : [
+        "INIParser"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "INIParser",
+      "module_type" : "SwiftTarget",
+      "name" : "INIParser",
+      "path" : "Sources/INIParser",
+      "product_memberships" : [
+        "SotoCore",
+        "SotoTestUtils"
+      ],
+      "sources" : [
+        "INIParser.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CSotoExpat",
+      "module_type" : "ClangTarget",
+      "name" : "CSotoExpat",
+      "path" : "Sources/CSotoExpat",
+      "product_memberships" : [
+        "SotoCore",
+        "SotoTestUtils"
+      ],
+      "sources" : [
+        "xmlparse.c",
+        "xmlrole.c",
+        "xmltok.c",
+        "xmltok_impl.c",
+        "xmltok_ns.c"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.2"
+}

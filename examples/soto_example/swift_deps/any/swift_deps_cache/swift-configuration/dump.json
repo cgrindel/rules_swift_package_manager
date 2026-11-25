@@ -1,0 +1,646 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-system",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-system"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.5.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-collections",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-collections"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.3.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-service-lifecycle",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/swift-server/swift-service-lifecycle"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.8.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-log",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-log"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.6.3",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-metrics",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-metrics"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.7.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "yams",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/jpsim/Yams"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "5.4.0",
+                "upperBound" : "7.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "swift-configuration",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Configuration",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Configuration"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "ConfigurationTesting",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "ConfigurationTesting"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "SystemPackage",
+            "swift-system",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "DequeModule",
+            "swift-collections",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Logging",
+            "swift-log",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "Logging"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "Metrics",
+            "swift-metrics",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "Reloading"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "ServiceLifecycle",
+            "swift-service-lifecycle",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "Reloading"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "UnixSignals",
+            "swift-service-lifecycle",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "Reloading"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "Yams",
+            "Yams",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "YAML"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+        "ConfigReader+methods.swift.gyb",
+        "ConfigSnapshotReader+methods.swift.gyb"
+      ],
+      "name" : "Configuration",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=Configuration 1.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Configuration",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ConfigurationTestingInternal",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ConfigurationTesting",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "ConfigReaderTests/ConfigReaderMethodTestsGet1.swift.gyb",
+        "ConfigReaderTests/ConfigReaderMethodTestsGet2.swift.gyb",
+        "ConfigReaderTests/ConfigReaderMethodTestsGet3.swift.gyb",
+        "ConfigReaderTests/ConfigReaderMethodTestsGet4.swift.gyb",
+        "ConfigReaderTests/ConfigReaderMethodTestsGet5.swift.gyb",
+        "ConfigReaderTests/ConfigReaderMethodTestsFetch1.swift.gyb",
+        "ConfigReaderTests/ConfigReaderMethodTestsFetch2.swift.gyb",
+        "ConfigReaderTests/ConfigReaderMethodTestsFetch3.swift.gyb",
+        "ConfigReaderTests/ConfigReaderMethodTestsFetch4.swift.gyb",
+        "ConfigReaderTests/ConfigReaderMethodTestsFetch5.swift.gyb",
+        "ConfigReaderTests/ConfigReaderMethodTestsWatch1.swift.gyb",
+        "ConfigReaderTests/ConfigReaderMethodTestsWatch2.swift.gyb",
+        "ConfigReaderTests/ConfigReaderMethodTestsWatch3.swift.gyb",
+        "ConfigReaderTests/ConfigReaderMethodTestsWatch4.swift.gyb",
+        "ConfigReaderTests/ConfigReaderMethodTestsWatch5.swift.gyb",
+        "ConfigReaderTests/ConfigSnapshotReaderMethodTestsGet1.swift.gyb",
+        "ConfigReaderTests/ConfigSnapshotReaderMethodTestsGet2.swift.gyb",
+        "ConfigReaderTests/ConfigSnapshotReaderMethodTestsGet3.swift.gyb"
+      ],
+      "name" : "ConfigurationTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=Configuration 1.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Configuration",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "ConfigurationTestingInternal",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ConfigurationTesting",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=Configuration 1.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Configuration",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "ServiceLifecycle",
+            "swift-service-lifecycle",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ConfigurationTestingInternal",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=Configuration 1.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.2.0"
+  },
+  "traits" : [
+    {
+      "description" : "Adds support for parsing command line arguments.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "CommandLineArguments"
+    },
+    {
+      "description" : "Adds support for parsing JSON configuration files.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "JSON"
+    },
+    {
+      "description" : "Adds support for swift-log integration.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "Logging"
+    },
+    {
+      "description" : "Adds support for parsing property list configuration files.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "PropertyList"
+    },
+    {
+      "description" : "Adds support for reloading built-in provider variants, such as ReloadingFileProvider.",
+      "enabledTraits" : [
+        "Logging"
+      ],
+      "name" : "Reloading"
+    },
+    {
+      "description" : "Adds support for parsing YAML configuration files.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "YAML"
+    },
+    {
+      "description" : "The default traits of this package.",
+      "enabledTraits" : [
+        "JSON"
+      ],
+      "name" : "default"
+    }
+  ]
+}

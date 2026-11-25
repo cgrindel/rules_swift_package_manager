@@ -1,0 +1,278 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "combine-schedulers",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/combine-schedulers"
+    },
+    {
+      "identity" : "swift-case-paths",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.10.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-case-paths"
+    },
+    {
+      "identity" : "swift-concurrency-extras",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.3.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-concurrency-extras"
+    },
+    {
+      "identity" : "swift-custom-dump",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-custom-dump"
+    },
+    {
+      "identity" : "swift-dependencies",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.5.1",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-dependencies"
+    },
+    {
+      "identity" : "swift-identified-collections",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-identified-collections"
+    },
+    {
+      "identity" : "swift-issue-reporting",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.1.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-issue-reporting"
+    },
+    {
+      "identity" : "swift-perception",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.4.1",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-perception"
+    },
+    {
+      "identity" : "swift-docc-plugin",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/swiftlang/swift-docc-plugin"
+    }
+  ],
+  "manifest_display_name" : "swift-sharing",
+  "name" : "swift-sharing",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Sharing",
+      "targets" : [
+        "Sharing"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "c99name" : "SharingTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SharingTests",
+      "path" : "Tests/SharingTests",
+      "product_dependencies" : [
+        "CombineSchedulers",
+        "CustomDump",
+        "DependenciesTestSupport"
+      ],
+      "sources" : [
+        "AppStorageTests.swift",
+        "BindingTests.swift",
+        "CasePathsTraitTests.swift",
+        "CompileTimeTests.swift",
+        "ContinuationTests.swift",
+        "DefaultTests.swift",
+        "EquatableTests.swift",
+        "ErrorThrowingTests.swift",
+        "FileStorageTests.swift",
+        "InMemoryTests.swift",
+        "IsLoadingTests.swift",
+        "ObservationTests.swift",
+        "ParametrizedTests.swift",
+        "PublisherTests.swift",
+        "SharedChangeTrackerTests.swift",
+        "SharedTests.swift"
+      ],
+      "target_dependencies" : [
+        "Sharing"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "Sharing2",
+      "module_type" : "SwiftTarget",
+      "name" : "Sharing2",
+      "path" : "Sources/VersionMarkerModules/Sharing2",
+      "product_memberships" : [
+        "Sharing"
+      ],
+      "sources" : [
+        "Empty.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "Sharing1",
+      "module_type" : "SwiftTarget",
+      "name" : "Sharing1",
+      "path" : "Sources/VersionMarkerModules/Sharing1",
+      "product_memberships" : [
+        "Sharing"
+      ],
+      "sources" : [
+        "Empty.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "Sharing",
+      "module_type" : "SwiftTarget",
+      "name" : "Sharing",
+      "path" : "Sources/Sharing",
+      "product_dependencies" : [
+        "ConcurrencyExtras",
+        "CustomDump",
+        "Dependencies",
+        "IdentifiedCollections",
+        "IssueReporting",
+        "PerceptionCore"
+      ],
+      "product_memberships" : [
+        "Sharing"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/Sharing/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Internal/Deprecations.swift",
+        "Internal/KeyPath+Sendable.swift",
+        "Internal/MutexBackport.swift",
+        "Internal/NSRecursiveLock+WithLock.swift",
+        "Internal/PassthroughRelay.swift",
+        "Internal/PersistentReferences.swift",
+        "Internal/Reference.swift",
+        "Internal/SharedChangeTracker.swift",
+        "Internal/TypeName.swift",
+        "Shared.swift",
+        "SharedBinding.swift",
+        "SharedContinuations.swift",
+        "SharedKey.swift",
+        "SharedKeys/AppStorageKey.swift",
+        "SharedKeys/DefaultKey.swift",
+        "SharedKeys/FileStorageKey.swift",
+        "SharedKeys/InMemoryKey.swift",
+        "SharedPublisher.swift",
+        "SharedReader.swift",
+        "SharedReaderKey.swift",
+        "SwiftUIStateSharing.swift",
+        "Traits/CasePaths.swift",
+        "Traits/CustomDump.swift",
+        "Traits/IdentifiedCollections.swift"
+      ],
+      "target_dependencies" : [
+        "Sharing1",
+        "Sharing2"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.4"
+}

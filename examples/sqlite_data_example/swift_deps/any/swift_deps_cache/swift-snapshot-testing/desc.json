@@ -1,0 +1,223 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-custom-dump",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.3.3",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-custom-dump"
+    },
+    {
+      "identity" : "swift-syntax",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "509.0.0",
+            "upper_bound" : "605.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/swiftlang/swift-syntax"
+    }
+  ],
+  "manifest_display_name" : "swift-snapshot-testing",
+  "name" : "swift-snapshot-testing",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "SnapshotTesting",
+      "targets" : [
+        "SnapshotTesting"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "InlineSnapshotTesting",
+      "targets" : [
+        "InlineSnapshotTesting"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SnapshotTestingCustomDump",
+      "targets" : [
+        "SnapshotTestingCustomDump"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "c99name" : "SnapshotTestingTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SnapshotTestingTests",
+      "path" : "Tests/SnapshotTestingTests",
+      "sources" : [
+        "AssertSnapshotSwiftTests.swift",
+        "DeprecationTests.swift",
+        "Internal/BaseSuite.swift",
+        "Internal/BaseTestCase.swift",
+        "Internal/TestHelpers.swift",
+        "RecordTests.swift",
+        "SnapshotTestingTests.swift",
+        "SnapshotsTraitTests.swift",
+        "SwiftTestingTests.swift",
+        "WaitTests.swift",
+        "WithSnapshotTestingTests.swift"
+      ],
+      "target_dependencies" : [
+        "SnapshotTesting"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SnapshotTestingCustomDump",
+      "module_type" : "SwiftTarget",
+      "name" : "SnapshotTestingCustomDump",
+      "path" : "Sources/SnapshotTestingCustomDump",
+      "product_dependencies" : [
+        "CustomDump"
+      ],
+      "product_memberships" : [
+        "InlineSnapshotTesting",
+        "SnapshotTestingCustomDump"
+      ],
+      "sources" : [
+        "CustomDump.swift"
+      ],
+      "target_dependencies" : [
+        "SnapshotTesting"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SnapshotTesting",
+      "module_type" : "SwiftTarget",
+      "name" : "SnapshotTesting",
+      "path" : "Sources/SnapshotTesting",
+      "product_memberships" : [
+        "SnapshotTesting",
+        "InlineSnapshotTesting",
+        "SnapshotTestingCustomDump"
+      ],
+      "sources" : [
+        "AssertSnapshot.swift",
+        "Async.swift",
+        "Common/Internal.swift",
+        "Common/PlistEncoder.swift",
+        "Common/String+SpecialCharacters.swift",
+        "Common/View.swift",
+        "Common/XCTAttachment.swift",
+        "Diff.swift",
+        "Diffing.swift",
+        "Extensions/Wait.swift",
+        "Internal/Deprecations.swift",
+        "Internal/RecordIssue.swift",
+        "SnapshotTestingConfiguration.swift",
+        "SnapshotsTestTrait.swift",
+        "Snapshotting.swift",
+        "Snapshotting/Any.swift",
+        "Snapshotting/CALayer.swift",
+        "Snapshotting/CGPath.swift",
+        "Snapshotting/CaseIterable.swift",
+        "Snapshotting/Data.swift",
+        "Snapshotting/Encodable.swift",
+        "Snapshotting/NSBezierPath.swift",
+        "Snapshotting/NSImage.swift",
+        "Snapshotting/NSView.swift",
+        "Snapshotting/NSViewController.swift",
+        "Snapshotting/SceneKit.swift",
+        "Snapshotting/SpriteKit.swift",
+        "Snapshotting/String.swift",
+        "Snapshotting/SwiftUIView.swift",
+        "Snapshotting/UIBezierPath.swift",
+        "Snapshotting/UIImage.swift",
+        "Snapshotting/UIView.swift",
+        "Snapshotting/UIViewController.swift",
+        "Snapshotting/URLRequest.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "InlineSnapshotTestingTests",
+      "module_type" : "SwiftTarget",
+      "name" : "InlineSnapshotTestingTests",
+      "path" : "Tests/InlineSnapshotTestingTests",
+      "sources" : [
+        "AssertInlineSnapshotSwiftTests.swift",
+        "CustomDumpTests.swift",
+        "InlineSnapshotTestingTests.swift",
+        "Internal/BaseSuite.swift",
+        "Internal/BaseTestCase.swift"
+      ],
+      "target_dependencies" : [
+        "InlineSnapshotTesting"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "InlineSnapshotTesting",
+      "module_type" : "SwiftTarget",
+      "name" : "InlineSnapshotTesting",
+      "path" : "Sources/InlineSnapshotTesting",
+      "product_dependencies" : [
+        "SwiftParser",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder"
+      ],
+      "product_memberships" : [
+        "InlineSnapshotTesting"
+      ],
+      "sources" : [
+        "AssertInlineSnapshot.swift",
+        "Exports.swift"
+      ],
+      "target_dependencies" : [
+        "SnapshotTesting",
+        "SnapshotTestingCustomDump"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}

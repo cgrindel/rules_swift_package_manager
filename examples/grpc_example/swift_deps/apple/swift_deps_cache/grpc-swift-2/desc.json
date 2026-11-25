@@ -1,0 +1,324 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-collections",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.1.3",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-collections.git"
+    },
+    {
+      "identity" : "swift-protobuf",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.38.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-protobuf.git"
+    }
+  ],
+  "manifest_display_name" : "grpc-swift-2",
+  "name" : "grpc-swift-2",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "GRPCCore",
+      "targets" : [
+        "GRPCCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GRPCCodeGen",
+      "targets" : [
+        "GRPCCodeGen"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GRPCInProcessTransport",
+      "targets" : [
+        "GRPCInProcessTransport"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "GRPCInProcessTransportTests",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCInProcessTransportTests",
+      "path" : "Tests/GRPCInProcessTransportTests",
+      "sources" : [
+        "ClientServerWithMethods.swift",
+        "InProcessClientTransportTests.swift",
+        "InProcessServerTransportTests.swift",
+        "InProcessTransportTests.swift",
+        "Test Utilities/JSONSerializing.swift",
+        "Test Utilities/XCTest+Utilities.swift"
+      ],
+      "target_dependencies" : [
+        "GRPCInProcessTransport"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GRPCInProcessTransport",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCInProcessTransport",
+      "path" : "Sources/GRPCInProcessTransport",
+      "product_memberships" : [
+        "GRPCInProcessTransport"
+      ],
+      "sources" : [
+        "InProcessTransport+Client.swift",
+        "InProcessTransport+Server.swift",
+        "InProcessTransport.swift",
+        "Syscalls.swift"
+      ],
+      "target_dependencies" : [
+        "GRPCCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GRPCCoreTests",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCCoreTests",
+      "path" : "Tests/GRPCCoreTests",
+      "product_dependencies" : [
+        "SwiftProtobuf"
+      ],
+      "resources" : [
+        {
+          "path" : "./Tests/GRPCCoreTests/Configuration/Inputs",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Call/Client/ClientRequestTests.swift",
+        "Call/Client/ClientResponseTests.swift",
+        "Call/Client/Internal/ClientRPCExecutorTestSupport/ClientRPCExecutorTestHarness+ServerBehavior.swift",
+        "Call/Client/Internal/ClientRPCExecutorTestSupport/ClientRPCExecutorTestHarness+Transport.swift",
+        "Call/Client/Internal/ClientRPCExecutorTestSupport/ClientRPCExecutorTestHarness.swift",
+        "Call/Client/Internal/ClientRPCExecutorTests+Hedging.swift",
+        "Call/Client/Internal/ClientRPCExecutorTests+Retries.swift",
+        "Call/Client/Internal/ClientRPCExecutorTests.swift",
+        "Call/Client/RetryDelaySequenceTests.swift",
+        "Call/ConditionalInterceptorTests.swift",
+        "Call/Server/Internal/ServerCancellationManagerTests.swift",
+        "Call/Server/Internal/ServerRPCExecutorTestSupport/ServerRPCExecutorTestHarness.swift",
+        "Call/Server/Internal/ServerRPCExecutorTests.swift",
+        "Call/Server/RPCRouterTests.swift",
+        "Call/Server/ServerContextTests.swift",
+        "Call/Server/ServerRequestTests.swift",
+        "Call/Server/ServerResponseTests.swift",
+        "Coding/CodingTests.swift",
+        "Coding/CompressionAlgorithmTests.swift",
+        "Configuration/Generated/code.pb.swift",
+        "Configuration/Generated/rls.pb.swift",
+        "Configuration/Generated/rls_config.pb.swift",
+        "Configuration/Generated/service_config.pb.swift",
+        "Configuration/MethodConfigCodingTests.swift",
+        "Configuration/MethodConfigTests.swift",
+        "Configuration/ServiceConfigCodingTests.swift",
+        "GRPCClientTests.swift",
+        "GRPCServerTests.swift",
+        "Internal/Metadata+GRPCTests.swift",
+        "Internal/MethodConfigsTests.swift",
+        "Internal/Result+CatchingTests.swift",
+        "MetadataTests.swift",
+        "MethodDescriptorTests.swift",
+        "RPCErrorTests.swift",
+        "RPCPartsTests.swift",
+        "RuntimeErrorTests.swift",
+        "ServiceDescriptorTests.swift",
+        "StatusTests.swift",
+        "Streaming/Internal/AsyncSequenceOfOne.swift",
+        "Streaming/Internal/BroadcastAsyncSequenceTests.swift",
+        "Test Utilities/AsyncSequence+Utilities.swift",
+        "Test Utilities/AtomicCounter.swift",
+        "Test Utilities/Call/Client/ClientInterceptors.swift",
+        "Test Utilities/Call/Server/ServerInterceptors.swift",
+        "Test Utilities/Coding+Identity.swift",
+        "Test Utilities/Coding+JSON.swift",
+        "Test Utilities/RPCAsyncSequence+Utilities.swift",
+        "Test Utilities/RPCWriter+Utilities.swift",
+        "Test Utilities/Services/BinaryEcho.swift",
+        "Test Utilities/Services/HelloWorld.swift",
+        "Test Utilities/Transport/AnyTransport.swift",
+        "Test Utilities/Transport/StreamCountingTransport.swift",
+        "Test Utilities/Transport/ThrowingTransport.swift",
+        "Test Utilities/XCTest+Utilities.swift",
+        "TimeoutTests.swift",
+        "Transport/RetryThrottleTests.swift"
+      ],
+      "target_dependencies" : [
+        "GRPCCore",
+        "GRPCInProcessTransport"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GRPCCore",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCCore",
+      "path" : "Sources/GRPCCore",
+      "product_dependencies" : [
+        "DequeModule"
+      ],
+      "product_memberships" : [
+        "GRPCCore",
+        "GRPCInProcessTransport"
+      ],
+      "sources" : [
+        "Call/Client/CallOptions.swift",
+        "Call/Client/ClientContext.swift",
+        "Call/Client/ClientInterceptor.swift",
+        "Call/Client/ClientRequest.swift",
+        "Call/Client/ClientResponse.swift",
+        "Call/Client/Internal/ClientRPCExecutor+HedgingExecutor.swift",
+        "Call/Client/Internal/ClientRPCExecutor+OneShotExecutor.swift",
+        "Call/Client/Internal/ClientRPCExecutor+RetryExecutor.swift",
+        "Call/Client/Internal/ClientRPCExecutor.swift",
+        "Call/Client/Internal/ClientRequest+Convenience.swift",
+        "Call/Client/Internal/ClientResponse+Convenience.swift",
+        "Call/Client/Internal/ClientStreamExecutor.swift",
+        "Call/Client/Internal/RetryDelaySequence.swift",
+        "Call/ConditionalInterceptor.swift",
+        "Call/Server/Internal/ServerCancellationManager.swift",
+        "Call/Server/Internal/ServerRPCExecutor.swift",
+        "Call/Server/RPCRouter.swift",
+        "Call/Server/RegistrableRPCService.swift",
+        "Call/Server/ServerContext+RPCCancellationHandle.swift",
+        "Call/Server/ServerContext.swift",
+        "Call/Server/ServerInterceptor.swift",
+        "Call/Server/ServerRequest.swift",
+        "Call/Server/ServerResponse.swift",
+        "Coding/Coding.swift",
+        "Coding/CompressionAlgorithm.swift",
+        "Coding/GRPCContiguousBytes.swift",
+        "Configuration/MethodConfig.swift",
+        "Configuration/ServiceConfig.swift",
+        "GRPCClient.swift",
+        "GRPCServer.swift",
+        "Internal/Base64.swift",
+        "Internal/Concurrency Primitives/UnsafeTransfer.swift",
+        "Internal/Metadata+GRPC.swift",
+        "Internal/MethodConfigs.swift",
+        "Internal/Result+Catching.swift",
+        "Internal/String+Extensions.swift",
+        "Internal/TaskGroup+CancellableTask.swift",
+        "Metadata.swift",
+        "MethodDescriptor.swift",
+        "RPCError.swift",
+        "RuntimeError.swift",
+        "ServiceDescriptor.swift",
+        "Status.swift",
+        "Streaming/Internal/AsyncSequenceOfOne.swift",
+        "Streaming/Internal/BroadcastAsyncSequence+RPCWriter.swift",
+        "Streaming/Internal/BroadcastAsyncSequence.swift",
+        "Streaming/Internal/GRPCAsyncThrowingStream.swift",
+        "Streaming/Internal/RPCWriter+Map.swift",
+        "Streaming/Internal/RPCWriter+MessageToRPCResponsePart.swift",
+        "Streaming/Internal/RPCWriter+Serialize.swift",
+        "Streaming/Internal/UncheckedAsyncIteratorSequence.swift",
+        "Streaming/RPCAsyncSequence.swift",
+        "Streaming/RPCWriter+Closable.swift",
+        "Streaming/RPCWriter.swift",
+        "Streaming/RPCWriterProtocol.swift",
+        "Timeout.swift",
+        "Transport/ClientTransport.swift",
+        "Transport/RPCParts.swift",
+        "Transport/RPCStream.swift",
+        "Transport/RetryThrottle.swift",
+        "Transport/ServerTransport.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GRPCCodeGenTests",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCCodeGenTests",
+      "path" : "Tests/GRPCCodeGenTests",
+      "sources" : [
+        "Internal/Renderer/TextBasedRendererTests.swift",
+        "Internal/StructuredSwift+ClientTests.swift",
+        "Internal/StructuredSwift+ImportTests.swift",
+        "Internal/StructuredSwift+MetadataTests.swift",
+        "Internal/StructuredSwift+ServerTests.swift",
+        "Internal/StructuredSwiftTestHelpers.swift",
+        "Internal/Translator/ClientCodeTranslatorSnippetBasedTests.swift",
+        "Internal/Translator/DocsTests.swift",
+        "Internal/Translator/IDLToStructuredSwiftTranslatorSnippetBasedTests.swift",
+        "Internal/Translator/ServerCodeTranslatorSnippetBasedTests.swift",
+        "Internal/Translator/TestFunctions.swift",
+        "Internal/Translator/TypealiasTranslatorSnippetBasedTests.swift"
+      ],
+      "target_dependencies" : [
+        "GRPCCodeGen"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GRPCCodeGen",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCCodeGen",
+      "path" : "Sources/GRPCCodeGen",
+      "product_memberships" : [
+        "GRPCCodeGen"
+      ],
+      "sources" : [
+        "CodeGenError.swift",
+        "CodeGenerationRequest.swift",
+        "CodeGenerator.swift",
+        "Internal/Namer.swift",
+        "Internal/Renderer/RendererProtocol.swift",
+        "Internal/Renderer/TextBasedRenderer.swift",
+        "Internal/StructuredSwift+Client.swift",
+        "Internal/StructuredSwift+Server.swift",
+        "Internal/StructuredSwift+ServiceMetadata.swift",
+        "Internal/StructuredSwiftRepresentation.swift",
+        "Internal/Translator/ClientCodeTranslator.swift",
+        "Internal/Translator/Docs.swift",
+        "Internal/Translator/IDLToStructuredSwiftTranslator.swift",
+        "Internal/Translator/MetadataTranslator.swift",
+        "Internal/Translator/ServerCodeTranslator.swift",
+        "Internal/TypeName.swift",
+        "Internal/TypeUsage.swift",
+        "SourceFile.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.1"
+}

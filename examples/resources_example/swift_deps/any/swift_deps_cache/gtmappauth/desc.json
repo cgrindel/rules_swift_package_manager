@@ -1,0 +1,161 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "gtm-session-fetcher",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "3.3.0",
+            "upper_bound" : "6.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/gtm-session-fetcher.git"
+    },
+    {
+      "identity" : "appauth-ios",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "3.0.0",
+            "upper_bound" : "4.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/openid/AppAuth-iOS.git"
+    }
+  ],
+  "manifest_display_name" : "GTMAppAuth",
+  "name" : "GTMAppAuth",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GTMAppAuth",
+      "targets" : [
+        "GTMAppAuth"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "swift_objc_interop_tests",
+      "module_type" : "ClangTarget",
+      "name" : "swift-objc-interop-tests",
+      "path" : "GTMAppAuth/Tests/ObjCIntegration",
+      "product_dependencies" : [
+        "AppAuthCore"
+      ],
+      "sources" : [
+        "GTMAuthSessionTests.m",
+        "KeychainStore/GTMKeychainStoreTests.m",
+        "KeychainStore/GTMOAuth2CompatibilityTests.m"
+      ],
+      "target_dependencies" : [
+        "GTMAppAuth",
+        "TestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "TestHelpers",
+      "module_type" : "SwiftTarget",
+      "name" : "TestHelpers",
+      "path" : "GTMAppAuth/Tests/Helpers",
+      "product_dependencies" : [
+        "AppAuthCore"
+      ],
+      "sources" : [
+        "AuthorizationTestingHelp.swift",
+        "GTMAppAuthTestingHelpers.swift",
+        "KeychainHelperFake.swift",
+        "OIDAuthStateTesting.swift",
+        "OIDAuthorizationRequestTesting.swift",
+        "OIDAuthorizationResponseTesting.swift",
+        "OIDRegistrationRequestTesting.swift",
+        "OIDRegistrationResponseTesting.swift",
+        "OIDServiceConfigurationTesting.swift",
+        "OIDTokenRequestTesting.swift",
+        "OIDTokenResponseTesting.swift"
+      ],
+      "target_dependencies" : [
+        "GTMAppAuth"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GTMAppAuthTests",
+      "module_type" : "SwiftTarget",
+      "name" : "GTMAppAuthTests",
+      "path" : "GTMAppAuth/Tests/Unit",
+      "sources" : [
+        "AuthSessionTests.swift",
+        "KeychainStore/GTMOAuth2CompatibilityTests.swift",
+        "KeychainStore/KeychainStoreTests.swift"
+      ],
+      "target_dependencies" : [
+        "GTMAppAuth",
+        "TestHelpers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GTMAppAuth",
+      "module_type" : "SwiftTarget",
+      "name" : "GTMAppAuth",
+      "path" : "GTMAppAuth/Sources",
+      "product_dependencies" : [
+        "GTMSessionFetcherCore",
+        "AppAuthCore"
+      ],
+      "product_memberships" : [
+        "GTMAppAuth"
+      ],
+      "resources" : [
+        {
+          "path" : "./GTMAppAuth/Sources/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "AuthSession.swift",
+        "AuthSessionDelegate.swift",
+        "AuthSessionStore.swift",
+        "KeychainStore/GTMOAuth2Compatibility.swift",
+        "KeychainStore/KeychainAttribute.swift",
+        "KeychainStore/KeychainHelper.swift",
+        "KeychainStore/KeychainStore.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.7"
+}

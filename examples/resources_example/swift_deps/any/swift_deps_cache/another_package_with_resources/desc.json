@@ -1,0 +1,62 @@
+{
+  "default_localization" : "en",
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "another-package-with-resources",
+  "name" : "another-package-with-resources",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "MoreCoolUI",
+      "targets" : [
+        "MoreCoolUI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "MoreCoolUI",
+      "module_type" : "SwiftTarget",
+      "name" : "MoreCoolUI",
+      "path" : ".",
+      "product_memberships" : [
+        "MoreCoolUI"
+      ],
+      "resources" : [
+        {
+          "path" : "./Resources/Assets.xcassets",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Resources/Localization/en.lproj/Localizable.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "en"
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "MoreCoolStuff.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.5"
+}

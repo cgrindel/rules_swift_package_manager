@@ -1,0 +1,142 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "Kingfisher",
+  "name" : "Kingfisher",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "9.0"
+    },
+    {
+      "name" : "visionos",
+      "version" : "1.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Kingfisher",
+      "targets" : [
+        "Kingfisher"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "c99name" : "Kingfisher",
+      "module_type" : "SwiftTarget",
+      "name" : "Kingfisher",
+      "path" : "Sources",
+      "product_memberships" : [
+        "Kingfisher"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Cache/CacheSerializer.swift",
+        "Cache/DiskStorage.swift",
+        "Cache/FormatIndicatedCacheSerializer.swift",
+        "Cache/ImageCache.swift",
+        "Cache/MemoryStorage.swift",
+        "Cache/Storage.swift",
+        "Extensions/CPListItem+Kingfisher.swift",
+        "Extensions/HasImageComponent+Kingfisher.swift",
+        "Extensions/ImageView+Kingfisher.swift",
+        "Extensions/NSButton+Kingfisher.swift",
+        "Extensions/NSTextAttachment+Kingfisher.swift",
+        "Extensions/PHLivePhotoView+Kingfisher.swift",
+        "Extensions/UIButton+Kingfisher.swift",
+        "General/ImageSource/AVAssetImageDataProvider.swift",
+        "General/ImageSource/ImageDataProvider.swift",
+        "General/ImageSource/LivePhotoSource.swift",
+        "General/ImageSource/PHPickerResultImageDataProvider.swift",
+        "General/ImageSource/PhotosPickerItemImageDataProvider.swift",
+        "General/ImageSource/Resource.swift",
+        "General/ImageSource/Source.swift",
+        "General/KF.swift",
+        "General/KFOptionsSetter.swift",
+        "General/Kingfisher.swift",
+        "General/KingfisherError.swift",
+        "General/KingfisherManager+LivePhoto.swift",
+        "General/KingfisherManager.swift",
+        "General/KingfisherOptionsInfo.swift",
+        "Image/Filter.swift",
+        "Image/GIFAnimatedImage.swift",
+        "Image/GraphicsContext.swift",
+        "Image/Image.swift",
+        "Image/ImageDrawing.swift",
+        "Image/ImageFormat.swift",
+        "Image/ImageProcessor.swift",
+        "Image/ImageProgressive.swift",
+        "Image/ImageTransition.swift",
+        "Image/Placeholder.swift",
+        "Networking/AuthenticationChallengeResponsable.swift",
+        "Networking/ImageDataProcessor.swift",
+        "Networking/ImageDownloader+LivePhoto.swift",
+        "Networking/ImageDownloader.swift",
+        "Networking/ImageDownloaderDelegate.swift",
+        "Networking/ImageModifier.swift",
+        "Networking/ImagePrefetcher.swift",
+        "Networking/NetworkMetrics.swift",
+        "Networking/NetworkMonitor.swift",
+        "Networking/RedirectHandler.swift",
+        "Networking/RequestModifier.swift",
+        "Networking/ResponseCacheControlPolicy.swift",
+        "Networking/RetryStrategy.swift",
+        "Networking/SessionDataTask.swift",
+        "Networking/SessionDelegate.swift",
+        "SwiftUI/ImageBinder.swift",
+        "SwiftUI/ImageContext.swift",
+        "SwiftUI/KFAnimatedImage.swift",
+        "SwiftUI/KFImage.swift",
+        "SwiftUI/KFImageOptions.swift",
+        "SwiftUI/KFImageProtocol.swift",
+        "SwiftUI/KFImageRenderer.swift",
+        "Utility/Box.swift",
+        "Utility/CallbackQueue.swift",
+        "Utility/CancellationToken.swift",
+        "Utility/Delegate.swift",
+        "Utility/DisplayLink.swift",
+        "Utility/ExtensionHelpers.swift",
+        "Utility/Result.swift",
+        "Utility/Runtime.swift",
+        "Utility/SizeExtensions.swift",
+        "Utility/String+SHA256.swift",
+        "Views/AnimatedImageView.swift",
+        "Views/Indicator.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.2"
+}

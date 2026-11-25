@@ -1,0 +1,69 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "GoogleMaps",
+  "name" : "GoogleMaps",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "17.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GoogleMaps",
+      "targets" : [
+        "GoogleMapsTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "GoogleMapsTarget",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleMapsTarget",
+      "path" : "Maps",
+      "product_memberships" : [
+        "GoogleMaps"
+      ],
+      "resources" : [
+        {
+          "path" : "./Maps/Resources/GoogleMapsResources/GoogleMaps.bundle",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "GMSEmpty.m"
+      ],
+      "target_dependencies" : [
+        "GoogleMaps"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GoogleMaps",
+      "module_type" : "BinaryTarget",
+      "name" : "GoogleMaps",
+      "path" : "remote/archive/GoogleMaps_3p.xcframework.zip",
+      "product_memberships" : [
+        "GoogleMaps"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    }
+  ],
+  "tools_version" : "5.9"
+}

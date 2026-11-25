@@ -1,0 +1,280 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "YotiIDV",
+  "name" : "YotiIDV",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "YotiDocumentScan",
+      "targets" : [
+        "YotiDocumentScan",
+        "Microblink"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "YotiNFC",
+      "targets" : [
+        "YotiNFC"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "YotiSDKIdentityDocument",
+      "targets" : [
+        "YotiNetwork",
+        "YotiSDKDesign",
+        "YotiSDKCore",
+        "YotiSDKDocument",
+        "YotiSDKIdentityDocument"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "YotiSDKSupplementaryDocument",
+      "targets" : [
+        "YotiNetwork",
+        "YotiSDKDesign",
+        "YotiSDKCore",
+        "YotiSDKDocument",
+        "YotiSDKSupplementaryDocument"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "YotiSDKFaceTec",
+      "targets" : [
+        "YotiNetwork",
+        "YotiSDKDesign",
+        "YotiSDKCore",
+        "YotiSDKFace",
+        "YotiSDKFaceTec",
+        "FaceTecSDK"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "YotiSDKFaceCapture",
+      "targets" : [
+        "YotiNetwork",
+        "YotiSDKDesign",
+        "YotiSDKCore",
+        "YotiSDKFace",
+        "YotiSDKFaceCapture"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "YotiSDKSupplementaryDocument",
+      "module_type" : "BinaryTarget",
+      "name" : "YotiSDKSupplementaryDocument",
+      "path" : "remote/archive/YotiSDKSupplementaryDocument.zip",
+      "product_memberships" : [
+        "YotiSDKSupplementaryDocument"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "YotiSDKIdentityDocument",
+      "module_type" : "BinaryTarget",
+      "name" : "YotiSDKIdentityDocument",
+      "path" : "remote/archive/YotiSDKIdentityDocument.zip",
+      "product_memberships" : [
+        "YotiSDKIdentityDocument"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "YotiSDKFaceTec",
+      "module_type" : "BinaryTarget",
+      "name" : "YotiSDKFaceTec",
+      "path" : "remote/archive/YotiSDKFaceTec-SPM.zip",
+      "product_memberships" : [
+        "YotiSDKFaceTec"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "YotiSDKFaceCapture",
+      "module_type" : "BinaryTarget",
+      "name" : "YotiSDKFaceCapture",
+      "path" : "remote/archive/YotiSDKFaceCapture.zip",
+      "product_memberships" : [
+        "YotiSDKFaceCapture"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "YotiSDKFace",
+      "module_type" : "BinaryTarget",
+      "name" : "YotiSDKFace",
+      "path" : "remote/archive/YotiSDKFace.zip",
+      "product_memberships" : [
+        "YotiSDKFaceTec",
+        "YotiSDKFaceCapture"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "YotiSDKDocument",
+      "module_type" : "BinaryTarget",
+      "name" : "YotiSDKDocument",
+      "path" : "remote/archive/YotiSDKDocument.zip",
+      "product_memberships" : [
+        "YotiSDKIdentityDocument",
+        "YotiSDKSupplementaryDocument"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "YotiSDKDesign",
+      "module_type" : "BinaryTarget",
+      "name" : "YotiSDKDesign",
+      "path" : "remote/archive/YotiSDKDesign.zip",
+      "product_memberships" : [
+        "YotiSDKIdentityDocument",
+        "YotiSDKSupplementaryDocument",
+        "YotiSDKFaceTec",
+        "YotiSDKFaceCapture"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "YotiSDKCore",
+      "module_type" : "BinaryTarget",
+      "name" : "YotiSDKCore",
+      "path" : "remote/archive/YotiSDKCore.zip",
+      "product_memberships" : [
+        "YotiSDKIdentityDocument",
+        "YotiSDKSupplementaryDocument",
+        "YotiSDKFaceTec",
+        "YotiSDKFaceCapture"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "YotiNetwork",
+      "module_type" : "BinaryTarget",
+      "name" : "YotiNetwork",
+      "path" : "remote/archive/YotiNetwork.zip",
+      "product_memberships" : [
+        "YotiSDKIdentityDocument",
+        "YotiSDKSupplementaryDocument",
+        "YotiSDKFaceTec",
+        "YotiSDKFaceCapture"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "YotiNFC",
+      "module_type" : "BinaryTarget",
+      "name" : "YotiNFC",
+      "path" : "remote/archive/YotiNFC.zip",
+      "product_memberships" : [
+        "YotiNFC"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "YotiDocumentScan",
+      "module_type" : "BinaryTarget",
+      "name" : "YotiDocumentScan",
+      "path" : "remote/archive/YotiDocumentScan-SPM.zip",
+      "product_memberships" : [
+        "YotiDocumentScan"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "Microblink",
+      "module_type" : "BinaryTarget",
+      "name" : "Microblink",
+      "path" : "remote/archive/Microblink.zip",
+      "product_memberships" : [
+        "YotiDocumentScan"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "FaceTecSDK",
+      "module_type" : "BinaryTarget",
+      "name" : "FaceTecSDK",
+      "path" : "remote/archive/FaceTecSDK.zip",
+      "product_memberships" : [
+        "YotiSDKFaceTec"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    }
+  ],
+  "tools_version" : "5.5"
+}

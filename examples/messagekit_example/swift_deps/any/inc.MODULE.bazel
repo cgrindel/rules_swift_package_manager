@@ -1,0 +1,18 @@
+swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
+swift_deps.from_package(
+    config = "@rules_swift_package_manager//config:any",
+    desc_manifests = {
+        "_main": "//swift_deps/any:swift_deps_cache/_main/desc.json",
+        "inputbaraccessoryview": "//swift_deps/any:swift_deps_cache/inputbaraccessoryview/desc.json",
+        "kingfisher": "//swift_deps/any:swift_deps_cache/kingfisher/desc.json",
+        "messagekit": "//swift_deps/any:swift_deps_cache/messagekit/desc.json",
+    },
+    dump_manifests = {
+        "_main": "//swift_deps/any:swift_deps_cache/_main/dump.json",
+        "inputbaraccessoryview": "//swift_deps/any:swift_deps_cache/inputbaraccessoryview/dump.json",
+        "kingfisher": "//swift_deps/any:swift_deps_cache/kingfisher/dump.json",
+        "messagekit": "//swift_deps/any:swift_deps_cache/messagekit/dump.json",
+    },
+    resolved = "//swift_deps/any:Package.resolved",
+    swift = "//:Package.swift",
+)

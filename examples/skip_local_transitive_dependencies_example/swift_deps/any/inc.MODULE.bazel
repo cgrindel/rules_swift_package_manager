@@ -1,0 +1,18 @@
+swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
+swift_deps.from_package(
+    config = "@rules_swift_package_manager//config:any",
+    desc_manifests = {
+        "_main": "//swift_deps/any:swift_deps_cache/_main/desc.json",
+        "localpackagea": "//swift_deps/any:swift_deps_cache/localpackagea/desc.json",
+        "localpackageb": "//swift_deps/any:swift_deps_cache/localpackageb/desc.json",
+        "opencombine": "//swift_deps/any:swift_deps_cache/opencombine/desc.json",
+    },
+    dump_manifests = {
+        "_main": "//swift_deps/any:swift_deps_cache/_main/dump.json",
+        "localpackagea": "//swift_deps/any:swift_deps_cache/localpackagea/dump.json",
+        "localpackageb": "//swift_deps/any:swift_deps_cache/localpackageb/dump.json",
+        "opencombine": "//swift_deps/any:swift_deps_cache/opencombine/dump.json",
+    },
+    resolved = "//swift_deps/any:Package.resolved",
+    swift = "//:Package.swift",
+)

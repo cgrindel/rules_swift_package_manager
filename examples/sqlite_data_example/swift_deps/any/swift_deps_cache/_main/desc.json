@@ -1,0 +1,40 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "sqlite-data",
+      "requirement" : {
+        "exact" : [
+          "1.13.0"
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/sqlite-data"
+    },
+    {
+      "identity" : "swift-tagged",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "0.10.0",
+            "upper_bound" : "1.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-tagged"
+    }
+  ],
+  "manifest_display_name" : "sqlite_data_example",
+  "name" : "sqlite_data_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "6.0"
+}

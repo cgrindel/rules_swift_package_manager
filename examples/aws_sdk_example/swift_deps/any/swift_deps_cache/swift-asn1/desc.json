@@ -1,0 +1,78 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "swift-asn1",
+  "name" : "swift-asn1",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "SwiftASN1",
+      "targets" : [
+        "SwiftASN1"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "SwiftASN1Tests",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftASN1Tests",
+      "path" : "Tests/SwiftASN1Tests",
+      "sources" : [
+        "ASN1StringTests.swift",
+        "ASN1Tests.swift",
+        "GeneralizedTimeTests.swift",
+        "Test Helper Types/CMSContentInfo.swift",
+        "Test Helper Types/ECDSASignature.swift",
+        "Test Helper Types/PKCS8PrivateKey.swift",
+        "Test Helper Types/SEC1PrivateKey.swift",
+        "Test Helper Types/SubjectPublicKeyInfo.swift",
+        "UTCTimeTests.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftASN1"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftASN1",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftASN1",
+      "path" : "Sources/SwiftASN1",
+      "product_memberships" : [
+        "SwiftASN1"
+      ],
+      "sources" : [
+        "ASN1.swift",
+        "BER.swift",
+        "Basic ASN1 Types/ASN1Any.swift",
+        "Basic ASN1 Types/ASN1BitString.swift",
+        "Basic ASN1 Types/ASN1Boolean.swift",
+        "Basic ASN1 Types/ASN1Identifier.swift",
+        "Basic ASN1 Types/ASN1Integer.swift",
+        "Basic ASN1 Types/ASN1Null.swift",
+        "Basic ASN1 Types/ASN1OctetString.swift",
+        "Basic ASN1 Types/ASN1Strings.swift",
+        "Basic ASN1 Types/ArraySliceBigint.swift",
+        "Basic ASN1 Types/GeneralizedTime.swift",
+        "Basic ASN1 Types/ObjectIdentifier.swift",
+        "Basic ASN1 Types/PEMDocument.swift",
+        "Basic ASN1 Types/TimeUtilities.swift",
+        "Basic ASN1 Types/UTCTime.swift",
+        "DER.swift",
+        "Errors.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.1"
+}

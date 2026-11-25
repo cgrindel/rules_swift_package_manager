@@ -1,0 +1,22 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "explicitmodulesfixture",
+      "path" : "./third_party/ExplicitModulesFixture",
+      "type" : "fileSystem"
+    }
+  ],
+  "manifest_display_name" : "explicit_modules_example",
+  "name" : "explicit_modules_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}

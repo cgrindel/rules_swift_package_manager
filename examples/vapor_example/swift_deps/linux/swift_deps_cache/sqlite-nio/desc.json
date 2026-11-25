@@ -1,0 +1,174 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-nio",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.101.3",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio.git"
+    },
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.14.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log.git"
+    }
+  ],
+  "manifest_display_name" : "sqlite-nio",
+  "name" : "sqlite-nio",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "SQLiteNIO",
+      "targets" : [
+        "SQLiteNIO"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "VendorSQLite",
+      "module_type" : "PluginTarget",
+      "name" : "VendorSQLite",
+      "path" : "Plugins/VendorSQLite",
+      "plugin_capability" : {
+        "intent" : {
+          "description" : "Vendor SQLite",
+          "type" : "custom",
+          "verb" : "vendor-sqlite"
+        },
+        "permissions" : [
+          {
+            "network_scope" : {
+              "all" : {
+                "ports" : [
+                  443
+                ]
+              }
+            },
+            "reason" : "Retrieve the latest build of SQLite",
+            "type" : "allowNetworkConnections"
+          },
+          {
+            "network_scope" : {
+              "none" : {
+
+              }
+            },
+            "reason" : "Update the vendored SQLite files",
+            "type" : "writeToPackageDirectory"
+          }
+        ],
+        "type" : "command"
+      },
+      "sources" : [
+        "AsyncNotOmittingEmptySubsequencesLineSequence.swift",
+        "Process+SimpleRunPopen.swift",
+        "SemanticVersion.swift",
+        "Sqlite3ProductInfo.swift",
+        "SymbolGraph.swift",
+        "UsefulArgumentExtractor.swift",
+        "VendorSQLite3.swift"
+      ],
+      "type" : "plugin"
+    },
+    {
+      "c99name" : "VaporCSQLite",
+      "module_type" : "ClangTarget",
+      "name" : "VaporCSQLite",
+      "path" : "Sources/VaporCSQLite",
+      "product_memberships" : [
+        "SQLiteNIO"
+      ],
+      "sources" : [
+        "sqlite_nio_sqlite3.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SQLiteNIOTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SQLiteNIOTests",
+      "path" : "Tests/SQLiteNIOTests",
+      "sources" : [
+        "SQLiteConnectionHookTests.swift",
+        "SQLiteCustomFunctionTests.swift",
+        "SQLiteNIOTests.swift"
+      ],
+      "target_dependencies" : [
+        "SQLiteNIO"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SQLiteNIO",
+      "module_type" : "SwiftTarget",
+      "name" : "SQLiteNIO",
+      "path" : "Sources/SQLiteNIO",
+      "product_dependencies" : [
+        "Logging",
+        "NIOCore",
+        "NIOPosix",
+        "NIOFoundationCompat",
+        "NIOFoundationEssentialsCompat"
+      ],
+      "product_memberships" : [
+        "SQLiteNIO"
+      ],
+      "sources" : [
+        "Exports.swift",
+        "SQLiteConnection+Hooks.swift",
+        "SQLiteConnection.swift",
+        "SQLiteCustomFunction.swift",
+        "SQLiteData.swift",
+        "SQLiteDataConvertible.swift",
+        "SQLiteDataType.swift",
+        "SQLiteDatabase.swift",
+        "SQLiteError.swift",
+        "SQLiteRow.swift",
+        "SQLiteStatement.swift"
+      ],
+      "target_dependencies" : [
+        "VaporCSQLite"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.1"
+}

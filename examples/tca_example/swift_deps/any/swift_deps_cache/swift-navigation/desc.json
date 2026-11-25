@@ -1,0 +1,459 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-case-paths",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.10.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-case-paths"
+    },
+    {
+      "identity" : "swift-custom-dump",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.3.2",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-custom-dump"
+    },
+    {
+      "identity" : "swift-issue-reporting",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.1.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-issue-reporting"
+    },
+    {
+      "identity" : "swift-perception",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.3.4",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-perception"
+    },
+    {
+      "identity" : "swift-macro-testing",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "0.7.0",
+            "upper_bound" : "1.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-macro-testing"
+    },
+    {
+      "identity" : "swift-sharing",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.10.1",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-sharing"
+    },
+    {
+      "identity" : "swift-docc-plugin",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/swiftlang/swift-docc-plugin"
+    },
+    {
+      "identity" : "swift-syntax",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "509.0.0",
+            "upper_bound" : "605.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/swiftlang/swift-syntax"
+    }
+  ],
+  "manifest_display_name" : "swift-navigation",
+  "name" : "swift-navigation",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "SwiftNavigation",
+      "targets" : [
+        "SwiftNavigation"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftUINavigation",
+      "targets" : [
+        "SwiftUINavigation"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "UIKitNavigation",
+      "targets" : [
+        "UIKitNavigation"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AppKitNavigation",
+      "targets" : [
+        "AppKitNavigation"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SwiftNavigationMacros",
+      "targets" : [
+        "SwiftNavigationMacros"
+      ],
+      "type" : {
+        "macro" : null
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "c99name" : "UIKitNavigationTests",
+      "module_type" : "SwiftTarget",
+      "name" : "UIKitNavigationTests",
+      "path" : "Tests/UIKitNavigationTests",
+      "product_dependencies" : [
+        "IssueReportingTestSupport"
+      ],
+      "sources" : [
+        "MemoryManagementTests.swift",
+        "ObserveTests.swift",
+        "UIControlTests.swift",
+        "UITabBarControllerBindingTests.swift",
+        "UITransactionTests.swift",
+        "ViewControllerRepresentingTests.swift"
+      ],
+      "target_dependencies" : [
+        "UIKitNavigation"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "UIKitNavigationShim",
+      "module_type" : "ClangTarget",
+      "name" : "UIKitNavigationShim",
+      "path" : "Sources/UIKitNavigationShim",
+      "product_memberships" : [
+        "UIKitNavigation"
+      ],
+      "sources" : [
+        "shim.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "UIKitNavigation",
+      "module_type" : "SwiftTarget",
+      "name" : "UIKitNavigation",
+      "path" : "Sources/UIKitNavigation",
+      "product_memberships" : [
+        "UIKitNavigation"
+      ],
+      "sources" : [
+        "Bindings/UIColorWell.swift",
+        "Bindings/UIControl.swift",
+        "Bindings/UIDatePicker.swift",
+        "Bindings/UIPageControl.swift",
+        "Bindings/UISegmentedControl.swift",
+        "Bindings/UISlider.swift",
+        "Bindings/UIStepper.swift",
+        "Bindings/UISwitch.swift",
+        "Bindings/UITabBarController.swift",
+        "Bindings/UITextField.swift",
+        "Internal/Exports.swift",
+        "Internal/PopFromViewController.swift",
+        "Navigation/Dismiss.swift",
+        "Navigation/NavigationStackController.swift",
+        "Navigation/Presentation.swift",
+        "Navigation/Push.swift",
+        "Navigation/UIAlertController.swift",
+        "SwiftUI/Representable.swift",
+        "UIBinding.swift",
+        "UIKitAnimation.swift",
+        "UITransaction.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftNavigation",
+        "UIKitNavigationShim"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftUINavigationTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftUINavigationTests",
+      "path" : "Tests/SwiftUINavigationTests",
+      "product_dependencies" : [
+        "IssueReportingTestSupport"
+      ],
+      "sources" : [
+        "AlertTests.swift",
+        "BindingTests.swift",
+        "SwiftUINavigationTests.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftUINavigation"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftUINavigation",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftUINavigation",
+      "path" : "Sources/SwiftUINavigation",
+      "product_dependencies" : [
+        "CasePaths",
+        "IssueReporting"
+      ],
+      "product_memberships" : [
+        "SwiftUINavigation"
+      ],
+      "sources" : [
+        "Alert+State.swift",
+        "Alert.swift",
+        "Binding.swift",
+        "ConfirmationDialog+State.swift",
+        "ConfirmationDialog.swift",
+        "FullScreenCover.swift",
+        "Internal/Binding+Internal.swift",
+        "Internal/Deprecations.swift",
+        "Internal/Exports.swift",
+        "Internal/Identified.swift",
+        "NavigationDestination.swift",
+        "NavigationLink.swift",
+        "Popover.swift",
+        "Sheet.swift",
+        "Traits/CasePaths.swift",
+        "WithState.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftNavigation"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SwiftNavigationTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftNavigationTests",
+      "path" : "Tests/SwiftNavigationTests",
+      "product_dependencies" : [
+        "IssueReportingTestSupport"
+      ],
+      "sources" : [
+        "ButtonStateTests.swift",
+        "CaseBindableTests.swift",
+        "IsolationTests.swift",
+        "LifetimeTests.swift",
+        "ObserveTests.swift",
+        "TextStateTests.swift",
+        "UIBindableTests.swift",
+        "UIBindingTests.swift",
+        "UINavigationPathTests.swift",
+        "UITransactionTests.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftNavigation"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftNavigationMacrosTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftNavigationMacrosTests",
+      "path" : "Tests/SwiftNavigationMacrosTests",
+      "product_dependencies" : [
+        "MacroTesting"
+      ],
+      "sources" : [
+        "CaseBindableMacroTests.swift",
+        "UITransactionEntryMacroTests.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftNavigationMacros"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SwiftNavigationMacros",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftNavigationMacros",
+      "path" : "Sources/SwiftNavigationMacros",
+      "product_dependencies" : [
+        "CasePathsMacrosSupport",
+        "SwiftCompilerPlugin",
+        "SwiftDiagnostics",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros"
+      ],
+      "product_memberships" : [
+        "SwiftNavigation",
+        "SwiftUINavigation",
+        "UIKitNavigation",
+        "AppKitNavigation",
+        "SwiftNavigationMacros"
+      ],
+      "sources" : [
+        "CaseBindableMacro.swift",
+        "Plugin.swift",
+        "Support.swift",
+        "TransactionEntryMacro.swift"
+      ],
+      "type" : "macro"
+    },
+    {
+      "c99name" : "SwiftNavigation",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftNavigation",
+      "path" : "Sources/SwiftNavigation",
+      "product_dependencies" : [
+        "CasePaths",
+        "CustomDump",
+        "IssueReporting",
+        "Perception",
+        "PerceptionCore"
+      ],
+      "product_memberships" : [
+        "SwiftNavigation",
+        "SwiftUINavigation",
+        "UIKitNavigation",
+        "AppKitNavigation"
+      ],
+      "sources" : [
+        "AlertState.swift",
+        "Bind.swift",
+        "Binding.swift",
+        "ButtonState.swift",
+        "ButtonStateBuilder.swift",
+        "CaseBindable.swift",
+        "ConfirmationDialogState.swift",
+        "HashableObject.swift",
+        "Internal/AnyHashableSendable.swift",
+        "Internal/AssumeIsolated.swift",
+        "Internal/Deprecations.swift",
+        "Internal/ErrorMechanism.swift",
+        "Internal/Exports.swift",
+        "Internal/HashableStaticString.swift",
+        "Internal/KeyPath+Sendable.swift",
+        "Internal/LockIsolated.swift",
+        "Internal/ToOptionalUnit.swift",
+        "NSObject+Observe.swift",
+        "Observe.swift",
+        "TextState.swift",
+        "Traits/CasePaths.swift",
+        "Traits/CustomDump.swift",
+        "Traits/IssueReporting.swift",
+        "Traits/Perception.swift",
+        "Traits/Sharing.swift",
+        "TransactionEntry.swift",
+        "UIBindable.swift",
+        "UIBinding.swift",
+        "UINavigationPath.swift",
+        "UITransaction.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftNavigationMacros"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AppKitNavigation",
+      "module_type" : "SwiftTarget",
+      "name" : "AppKitNavigation",
+      "path" : "Sources/AppKitNavigation",
+      "product_memberships" : [
+        "AppKitNavigation"
+      ],
+      "sources" : [
+        "AppKitAnimation.swift",
+        "Internal/Exports.swift",
+        "SwiftUI/Representable.swift",
+        "UIBinding.swift",
+        "UITransaction.swift"
+      ],
+      "target_dependencies" : [
+        "SwiftNavigation"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.4"
+}

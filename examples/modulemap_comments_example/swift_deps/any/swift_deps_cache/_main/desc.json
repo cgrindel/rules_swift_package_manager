@@ -1,0 +1,22 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "cgreeter",
+      "path" : "./third_party/CGreeter",
+      "type" : "fileSystem"
+    }
+  ],
+  "manifest_display_name" : "modulemap_comments_example",
+  "name" : "modulemap_comments_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}

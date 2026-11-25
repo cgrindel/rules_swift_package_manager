@@ -1,0 +1,30 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "shake-ios",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "18.1.0",
+            "upper_bound" : "19.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/shakebugs/shake-ios"
+    }
+  ],
+  "manifest_display_name" : "shake_ios_example",
+  "name" : "shake_ios_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}

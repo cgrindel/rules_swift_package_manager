@@ -1,0 +1,181 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "geos",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "9.0.0",
+            "upper_bound" : "10.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/GEOSwift/geos.git"
+    }
+  ],
+  "manifest_display_name" : "GEOSwift",
+  "name" : "GEOSwift",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "12.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "10.13"
+    },
+    {
+      "name" : "tvos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "4.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GEOSwift",
+      "targets" : [
+        "GEOSwift"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "GEOSwiftTests",
+      "module_type" : "SwiftTarget",
+      "name" : "GEOSwiftTests",
+      "path" : "Tests/GEOSwiftTests",
+      "sources" : [
+        "Codable/CodableTestCase.swift",
+        "Codable/Feature+CodableTests.swift",
+        "Codable/FeatureCollection+CodableTests.swift",
+        "Codable/GeoJSON+CodableTests.swift",
+        "Codable/Geometry+CodableTests.swift",
+        "Codable/GeometryCollection+CodableTests.swift",
+        "Codable/JSON+CodableTests.swift",
+        "Codable/LineString+CodableTests.swift",
+        "Codable/MultiLineString+CodableTests.swift",
+        "Codable/MultiPoint+CodableTests.swift",
+        "Codable/MultiPolygon+CodableTests.swift",
+        "Codable/Point+CodableTests.swift",
+        "Codable/Polygon+CodableTests.swift",
+        "Core Types/CoreTypesTestUtilities.swift",
+        "Core Types/FeatureCollectionTests.swift",
+        "Core Types/FeatureTests.swift",
+        "Core Types/GeometryCollectionTests.swift",
+        "Core Types/GeometryConvertibleTests.swift",
+        "Core Types/JSONTests.swift",
+        "Core Types/LineStringConvertibleTests.swift",
+        "Core Types/LineStringTests.swift",
+        "Core Types/MultiLineStringTests.swift",
+        "Core Types/MultiPointTests.swift",
+        "Core Types/MultiPolygonTests.swift",
+        "Core Types/PointTests.swift",
+        "Core Types/PolygonTests.swift",
+        "GEOS/BoundableTests.swift",
+        "GEOS/ClosednessTestableTests.swift",
+        "GEOS/EnvelopeTests.swift",
+        "GEOS/GEOSContextTestCase.swift",
+        "GEOS/GEOSContextTests.swift",
+        "GEOS/GEOSObjectTests.swift",
+        "GEOS/Geometry+GEOSTests.swift",
+        "GEOS/GeometryCollection+GEOSTests.swift",
+        "GEOS/GeometryConvertible+GEOSTests.swift",
+        "GEOS/LineString+GEOSTests.swift",
+        "GEOS/LineStringConvertible+GEOSTests.swift",
+        "GEOS/MultiLineString+GEOSTests.swift",
+        "GEOS/MultiPoint+GEOSTests.swift",
+        "GEOS/MultiPolygon+GEOSTests.swift",
+        "GEOS/Point+GEOSTests.swift",
+        "GEOS/Polygon+GEOSTests.swift",
+        "GEOS/PreparedGeometryTests.swift",
+        "GEOS/SimplicityTestableTests.swift",
+        "GEOS/WKBTests.swift",
+        "GEOS/WKTTests.swift",
+        "Helpers/Collection+AllPairs.swift"
+      ],
+      "target_dependencies" : [
+        "GEOSwift"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GEOSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "GEOSwift",
+      "path" : "Sources/GEOSwift",
+      "product_dependencies" : [
+        "geos"
+      ],
+      "product_memberships" : [
+        "GEOSwift"
+      ],
+      "sources" : [
+        "Codable/CodableGeometry.swift",
+        "Codable/Feature+Codable.swift",
+        "Codable/FeatureCollection+Codable.swift",
+        "Codable/GeoJSON+Codable.swift",
+        "Codable/GeoJSONType.swift",
+        "Codable/Geometry+Codable.swift",
+        "Codable/GeometryCollection+Codable.swift",
+        "Codable/JSON+Codable.swift",
+        "Codable/LineString+Codable.swift",
+        "Codable/MultiLineString+Codable.swift",
+        "Codable/MultiPoint+Codable.swift",
+        "Codable/MultiPolygon+Codable.swift",
+        "Codable/Point+Codable.swift",
+        "Codable/Polygon+Codable.swift",
+        "Core Types/Feature.swift",
+        "Core Types/FeatureCollection.swift",
+        "Core Types/GeoJSON.swift",
+        "Core Types/Geometry.swift",
+        "Core Types/GeometryCollection.swift",
+        "Core Types/GeometryConvertible.swift",
+        "Core Types/JSON.swift",
+        "Core Types/LineString.swift",
+        "Core Types/LineStringConvertible.swift",
+        "Core Types/MultiLineString.swift",
+        "Core Types/MultiPoint.swift",
+        "Core Types/MultiPolygon.swift",
+        "Core Types/Point.swift",
+        "Core Types/Polygon.swift",
+        "GEOS/Boundable.swift",
+        "GEOS/Circle.swift",
+        "GEOS/ClosednessTestable.swift",
+        "GEOS/Envelope.swift",
+        "GEOS/GEOSContext.swift",
+        "GEOS/GEOSError.swift",
+        "GEOS/GEOSHelpers.swift",
+        "GEOS/GEOSObject.swift",
+        "GEOS/Geometry+GEOS.swift",
+        "GEOS/GeometryCollection+GEOS.swift",
+        "GEOS/GeometryConvertible+GEOS.swift",
+        "GEOS/LineString+GEOS.swift",
+        "GEOS/LineStringConvertible+GEOS.swift",
+        "GEOS/MultiLineString+GEOS.swift",
+        "GEOS/MultiPoint+GEOS.swift",
+        "GEOS/MultiPolygon+GEOS.swift",
+        "GEOS/Point+GEOS.swift",
+        "GEOS/Polygon+GEOS.swift",
+        "GEOS/PreparedGeometry.swift",
+        "GEOS/SimplicityTestable.swift",
+        "GEOS/WKBConvertible.swift",
+        "GEOS/WKBInitializable.swift",
+        "GEOS/WKTConvertible.swift",
+        "GEOS/WKTInitializable.swift",
+        "GEOSwiftError.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.9"
+}

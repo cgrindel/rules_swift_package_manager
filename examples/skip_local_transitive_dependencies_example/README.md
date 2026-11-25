@@ -1,13 +1,9 @@
 # skip_local_transitive_dependencies Example
 
-This example demonstrates setting the `resolve_transitive_local_dependencies` option on 
-`swift_deps.from_package` to `False` to disable resolving transitive local dependencies.
+This example has two local packages: `LocalPackageA` depends on `LocalPackageB`, which depends on a
+remote package (OpenCombine). Both local packages are also direct dependencies in `Package.swift`.
 
-Setting `resolve_transitive_local_dependencies` to `False` does not disable resolving
-transitive remote dependencies from either local or remote dependencies. It only disables
-resolving transitive dependencies from a direct local package dependency to other local
-packages.
-
-This example also demonstrates setting `cached_json_directory` on
-`swift_deps.from_package` to cache JSON output from Swift Package Manager commands under
-`.spm-json-cache`.
+In v1, this example set `resolve_transitive_local_dependencies = False` and `cached_json_directory`
+on `swift_deps.from_package`. v2 has neither option. The `@swift_package//:cache` step resolves the
+whole graph with SwiftPM and checks the manifests into `swift_deps/any`, so the extension reads
+local packages from the slice instead of resolving them at fetch time.

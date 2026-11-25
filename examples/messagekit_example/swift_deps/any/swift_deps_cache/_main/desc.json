@@ -1,0 +1,43 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "messagekit",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "5.0.0",
+            "upper_bound" : "6.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/MessageKit/MessageKit"
+    },
+    {
+      "identity" : "kingfisher",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "8.16.0",
+            "upper_bound" : "9.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/onevcat/Kingfisher"
+    }
+  ],
+  "manifest_display_name" : "messagekit_example",
+  "name" : "messagekit_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}

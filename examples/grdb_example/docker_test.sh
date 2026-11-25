@@ -28,8 +28,8 @@ docker run --rm \
         echo "=== Cleaning bazel cache ==="
         bazel clean --expunge || true
 
-        echo "=== Running swift package resolve ==="
-        bazel run //:update_swift_packages
+        echo "=== Running swift package update ==="
+        bazel run @swift_package//:update
 
         echo "=== Running tidy ==="
         bazel run //:tidy

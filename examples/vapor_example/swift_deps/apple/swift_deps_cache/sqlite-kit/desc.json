@@ -1,0 +1,135 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-nio",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.65.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio.git"
+    },
+    {
+      "identity" : "sqlite-nio",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.9.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/vapor/sqlite-nio.git"
+    },
+    {
+      "identity" : "sql-kit",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "3.29.3",
+            "upper_bound" : "4.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/vapor/sql-kit.git"
+    },
+    {
+      "identity" : "async-kit",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.19.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/vapor/async-kit.git"
+    }
+  ],
+  "manifest_display_name" : "sqlite-kit",
+  "name" : "sqlite-kit",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "SQLiteKit",
+      "targets" : [
+        "SQLiteKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "SQLiteKitTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SQLiteKitTests",
+      "path" : "Tests/SQLiteKitTests",
+      "product_dependencies" : [
+        "SQLKitBenchmark"
+      ],
+      "sources" : [
+        "SQLiteKitTests.swift"
+      ],
+      "target_dependencies" : [
+        "SQLiteKit"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SQLiteKit",
+      "module_type" : "SwiftTarget",
+      "name" : "SQLiteKit",
+      "path" : "Sources/SQLiteKit",
+      "product_dependencies" : [
+        "NIOFoundationCompat",
+        "AsyncKit",
+        "SQLiteNIO",
+        "SQLKit"
+      ],
+      "product_memberships" : [
+        "SQLiteKit"
+      ],
+      "sources" : [
+        "Exports.swift",
+        "SQLiteConfiguration.swift",
+        "SQLiteConnection+SQLKit.swift",
+        "SQLiteConnectionSource.swift",
+        "SQLiteDataDecoder.swift",
+        "SQLiteDataEncoder.swift",
+        "SQLiteDialect.swift",
+        "SQLiteRow+SQLRow.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.9"
+}

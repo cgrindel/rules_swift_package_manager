@@ -1,0 +1,151 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-docc-plugin",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.4.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-docc-plugin"
+    }
+  ],
+  "manifest_display_name" : "swift-issue-reporting",
+  "name" : "swift-issue-reporting",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "IssueReporting",
+      "targets" : [
+        "IssueReporting"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "IssueReportingTestSupport",
+      "targets" : [
+        "IssueReportingTestSupport"
+      ],
+      "type" : {
+        "library" : [
+          "dynamic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "c99name" : "IssueReportingTestsNoSupport",
+      "module_type" : "SwiftTarget",
+      "name" : "IssueReportingTestsNoSupport",
+      "path" : "Tests/IssueReportingTestsNoSupport",
+      "sources" : [
+        "WithExpectedIssueTests.swift"
+      ],
+      "target_dependencies" : [
+        "IssueReporting"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "IssueReportingTests",
+      "module_type" : "SwiftTarget",
+      "name" : "IssueReportingTests",
+      "path" : "Tests/IssueReportingTests",
+      "sources" : [
+        "ExpectReportsIssueTests.swift",
+        "HostAppDetectionTests.swift",
+        "Support.swift",
+        "SwiftTestingTests.swift",
+        "UnimplementedTests.swift",
+        "WithErrorReportingTests.swift",
+        "XCTestTests.swift"
+      ],
+      "target_dependencies" : [
+        "IssueReporting",
+        "IssueReportingTestSupport"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "IssueReportingTestSupport",
+      "module_type" : "SwiftTarget",
+      "name" : "IssueReportingTestSupport",
+      "path" : "Sources/IssueReportingTestSupport",
+      "product_memberships" : [
+        "IssueReportingTestSupport"
+      ],
+      "sources" : [
+        "SwiftTesting.swift",
+        "Symbolic Links/IssueReportingPackageSupport/_Test.swift",
+        "XCTest.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "IssueReporting",
+      "module_type" : "SwiftTarget",
+      "name" : "IssueReporting",
+      "path" : "Sources/IssueReporting",
+      "product_memberships" : [
+        "IssueReporting"
+      ],
+      "sources" : [
+        "ErrorReporting.swift",
+        "ExpectReportsIssue.swift",
+        "Internal/AppHostWarning.swift",
+        "Internal/Deprecations.swift",
+        "Internal/FailureObserver.swift",
+        "Internal/LockIsolated.swift",
+        "Internal/Rethrows.swift",
+        "Internal/SwiftTesting.swift",
+        "Internal/UncheckedSendable.swift",
+        "Internal/Warn.swift",
+        "Internal/XCTest.swift",
+        "IsTesting.swift",
+        "IssueReporter.swift",
+        "IssueReporters/BreakpointReporter.swift",
+        "IssueReporters/DefaultReporter.swift",
+        "IssueReporters/FatalErrorReporter.swift",
+        "IssueSeverity.swift",
+        "ReportIssue.swift",
+        "Symbolic Links/IssueReportingPackageSupport/_Test.swift",
+        "TestContext.swift",
+        "Unimplemented.swift",
+        "WithIssueContext.swift",
+        "_WithKnownIssue.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}

@@ -1,0 +1,136 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "swift-tagged",
+  "name" : "swift-tagged",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Tagged",
+      "targets" : [
+        "Tagged"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "TaggedMoney",
+      "targets" : [
+        "TaggedMoney"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "TaggedTime",
+      "targets" : [
+        "TaggedTime"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "TaggedTimeTests",
+      "module_type" : "SwiftTarget",
+      "name" : "TaggedTimeTests",
+      "path" : "Tests/TaggedTimeTests",
+      "sources" : [
+        "TaggedTimeTests.swift"
+      ],
+      "target_dependencies" : [
+        "TaggedTime"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "TaggedTime",
+      "module_type" : "SwiftTarget",
+      "name" : "TaggedTime",
+      "path" : "Sources/TaggedTime",
+      "product_memberships" : [
+        "TaggedTime"
+      ],
+      "sources" : [
+        "TaggedTime.swift"
+      ],
+      "target_dependencies" : [
+        "Tagged"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "TaggedTests",
+      "module_type" : "SwiftTarget",
+      "name" : "TaggedTests",
+      "path" : "Tests/TaggedTests",
+      "sources" : [
+        "TaggedTests.swift"
+      ],
+      "target_dependencies" : [
+        "Tagged"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "TaggedMoneyTests",
+      "module_type" : "SwiftTarget",
+      "name" : "TaggedMoneyTests",
+      "path" : "Tests/TaggedMoneyTests",
+      "sources" : [
+        "TaggedMoneyTests.swift"
+      ],
+      "target_dependencies" : [
+        "TaggedMoney"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "TaggedMoney",
+      "module_type" : "SwiftTarget",
+      "name" : "TaggedMoney",
+      "path" : "Sources/TaggedMoney",
+      "product_memberships" : [
+        "TaggedMoney"
+      ],
+      "sources" : [
+        "TaggedMoney.swift"
+      ],
+      "target_dependencies" : [
+        "Tagged"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "Tagged",
+      "module_type" : "SwiftTarget",
+      "name" : "Tagged",
+      "path" : "Sources/Tagged",
+      "product_memberships" : [
+        "Tagged",
+        "TaggedMoney",
+        "TaggedTime"
+      ],
+      "sources" : [
+        "Tagged.swift",
+        "UUID.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.1"
+}

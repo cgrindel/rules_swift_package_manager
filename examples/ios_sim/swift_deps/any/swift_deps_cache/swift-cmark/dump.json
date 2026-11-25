@@ -1,0 +1,188 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "cmark-gfm",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "cmark-gfm",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "cmark-gfm"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "cmark-gfm-extensions",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "cmark-gfm-extensions"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "cmark-gfm-bin",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "cmark-gfm-bin"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "api_test",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "api_test"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "scanners.re",
+        "libcmark-gfm.pc.in",
+        "config.h.in",
+        "CMakeLists.txt"
+      ],
+      "name" : "cmark-gfm",
+      "packageAccess" : false,
+      "path" : "src",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "cmark-gfm",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt",
+        "ext_scanners.re"
+      ],
+      "name" : "cmark-gfm-extensions",
+      "packageAccess" : false,
+      "path" : "extensions",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "cmark-gfm",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "cmark-gfm-extensions",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "cmark-gfm-bin",
+      "packageAccess" : false,
+      "path" : "bin",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "sources" : [
+        "main.c"
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "cmark-gfm",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "cmark-gfm-extensions",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "api_test",
+      "packageAccess" : false,
+      "path" : "api_test",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.3.0"
+  },
+  "traits" : [
+
+  ]
+}

@@ -1,0 +1,309 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : "en",
+  "dependencies" : [
+
+  ],
+  "name" : "GRDB",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "7.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GRDBSQLite",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GRDBSQLite"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GRDB",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GRDB"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GRDB-dynamic",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GRDB"
+      ],
+      "type" : {
+        "library" : [
+          "dynamic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GRDBSQLite",
+      "packageAccess" : false,
+      "providers" : [
+        {
+          "apt" : [
+            [
+              "libsqlite3-dev"
+            ]
+          ]
+        }
+      ],
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "system"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "GRDBSQLite",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GRDB",
+      "packageAccess" : true,
+      "path" : "GRDB",
+      "resources" : [
+        {
+          "path" : "PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "SQLITE_ENABLE_FTS5"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "SQLITE_ENABLE_SNAPSHOT"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "linux"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "SQLITE_DISABLE_SNAPSHOT"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GRDB",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CocoaPods",
+        "Crash",
+        "CustomSQLite",
+        "GRDBManualInstall",
+        "GRDBTests/Core/DatabasePool/getThreadsCount.c",
+        "Info.plist",
+        "Performance",
+        "SPM",
+        "Swift6Migration",
+        "generatePerformanceReport.rb",
+        "parsePerformanceTests.rb"
+      ],
+      "name" : "GRDBTests",
+      "packageAccess" : true,
+      "path" : "Tests",
+      "resources" : [
+        {
+          "path" : "GRDBTests/Betty.jpeg",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "GRDBTests/Private/InflectionsTests.json",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "GRDBTests/ValueObservation/Issue1383.sqlite",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "GRDBTests/GRDBCipher/db.SQLCipher3",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "SQLITE_ENABLE_FTS5"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "SQLITE_ENABLE_SNAPSHOT"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "linux"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "SQLITE_DISABLE_SNAPSHOT"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferSendableFromCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "GlobalActorIsolatedTypesUsability"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.1.0"
+  },
+  "traits" : [
+
+  ]
+}

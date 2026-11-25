@@ -1,0 +1,211 @@
+{
+  "c_language_standard" : "c99",
+  "cxx_language_standard" : "gnu++14",
+  "dependencies" : [
+    {
+      "identity" : "googleutilities",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "8.1.0",
+            "upper_bound" : "9.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/GoogleUtilities.git"
+    },
+    {
+      "identity" : "nanopb",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.30910.0",
+            "upper_bound" : "2.30911.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/firebase/nanopb.git"
+    },
+    {
+      "identity" : "google-ads-on-device-conversion-ios-sdk",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "3.8.0",
+            "upper_bound" : "3.9.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/googleads/google-ads-on-device-conversion-ios-sdk"
+    }
+  ],
+  "manifest_display_name" : "GoogleAppMeasurement",
+  "name" : "GoogleAppMeasurement",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "11.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "8.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GoogleAppMeasurement",
+      "targets" : [
+        "GoogleAppMeasurementTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GoogleAppMeasurementCore",
+      "targets" : [
+        "GoogleAppMeasurementCoreTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GoogleAppMeasurementIdentitySupport",
+      "targets" : [
+        "GoogleAppMeasurementIdentitySupportTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "GoogleAppMeasurementTarget",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleAppMeasurementTarget",
+      "path" : "GoogleAppMeasurementWrapper",
+      "product_dependencies" : [
+        "GULAppDelegateSwizzler",
+        "GULMethodSwizzler",
+        "GULNSData",
+        "GULNetwork",
+        "GULLogger",
+        "GULEnvironment",
+        "nanopb",
+        "GoogleAdsOnDeviceConversion"
+      ],
+      "product_memberships" : [
+        "GoogleAppMeasurement"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "target_dependencies" : [
+        "GoogleAppMeasurementIdentitySupport",
+        "GoogleAppMeasurement"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GoogleAppMeasurementIdentitySupportTarget",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleAppMeasurementIdentitySupportTarget",
+      "path" : "GoogleAppMeasurementIdentitySupportWrapper",
+      "product_dependencies" : [
+        "GULAppDelegateSwizzler",
+        "GULMethodSwizzler",
+        "GULNSData",
+        "GULNetwork",
+        "GULLogger",
+        "GULEnvironment",
+        "nanopb"
+      ],
+      "product_memberships" : [
+        "GoogleAppMeasurementIdentitySupport"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "target_dependencies" : [
+        "GoogleAppMeasurementIdentitySupport",
+        "GoogleAppMeasurement"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GoogleAppMeasurementIdentitySupport",
+      "module_type" : "BinaryTarget",
+      "name" : "GoogleAppMeasurementIdentitySupport",
+      "path" : "remote/archive/GoogleAppMeasurementIdentitySupport.zip",
+      "product_memberships" : [
+        "GoogleAppMeasurement",
+        "GoogleAppMeasurementIdentitySupport"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "GoogleAppMeasurementCoreTarget",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleAppMeasurementCoreTarget",
+      "path" : "GoogleAppMeasurementCoreWrapper",
+      "product_dependencies" : [
+        "GULAppDelegateSwizzler",
+        "GULMethodSwizzler",
+        "GULNSData",
+        "GULNetwork",
+        "GULLogger",
+        "GULEnvironment",
+        "nanopb"
+      ],
+      "product_memberships" : [
+        "GoogleAppMeasurementCore"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "target_dependencies" : [
+        "GoogleAppMeasurement"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GoogleAppMeasurement",
+      "module_type" : "BinaryTarget",
+      "name" : "GoogleAppMeasurement",
+      "path" : "remote/archive/GoogleAppMeasurement.zip",
+      "product_memberships" : [
+        "GoogleAppMeasurement",
+        "GoogleAppMeasurementCore",
+        "GoogleAppMeasurementIdentitySupport"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    }
+  ],
+  "tools_version" : "6.0"
+}

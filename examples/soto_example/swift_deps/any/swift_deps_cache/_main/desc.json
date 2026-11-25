@@ -1,0 +1,30 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "soto",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "7.17.0",
+            "upper_bound" : "8.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/soto-project/soto.git"
+    }
+  ],
+  "manifest_display_name" : "PhoneNumberKitExample",
+  "name" : "PhoneNumberKitExample",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}

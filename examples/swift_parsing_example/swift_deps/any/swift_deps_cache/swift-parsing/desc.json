@@ -1,0 +1,276 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-docc-plugin",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-docc-plugin"
+    },
+    {
+      "identity" : "swift-benchmark",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "0.1.1",
+            "upper_bound" : "1.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/swift-benchmark"
+    },
+    {
+      "identity" : "swift-case-paths",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.10.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-case-paths"
+    }
+  ],
+  "manifest_display_name" : "swift-parsing",
+  "name" : "swift-parsing",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Parsing",
+      "targets" : [
+        "Parsing"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "swift-parsing-benchmark",
+      "targets" : [
+        "swift-parsing-benchmark"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "swift_parsing_benchmark",
+      "module_type" : "SwiftTarget",
+      "name" : "swift-parsing-benchmark",
+      "path" : "Sources/swift-parsing-benchmark",
+      "product_dependencies" : [
+        "Benchmark"
+      ],
+      "product_memberships" : [
+        "swift-parsing-benchmark"
+      ],
+      "sources" : [
+        "Arithmetic.swift",
+        "BinaryData.swift",
+        "Bool.swift",
+        "CSV.swift",
+        "Color.swift",
+        "Common/Benchmarking.swift",
+        "Common/ParsingError.swift",
+        "Date.swift",
+        "HTTP.swift",
+        "JSON.swift",
+        "Numerics.swift",
+        "PrefixUpTo.swift",
+        "Race.swift",
+        "ReadmeExample.swift",
+        "Samples/CSVSample.swift",
+        "Samples/XCTestLogsSample.swift",
+        "StringAbstractions.swift",
+        "UUID.swift",
+        "XCTestLogs.swift",
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "Parsing"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "ParsingTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ParsingTests",
+      "path" : "Tests/ParsingTests",
+      "sources" : [
+        "AlwaysTests.swift",
+        "AnyParserTests.swift",
+        "BacktrackTests.swift",
+        "BoolTests.swift",
+        "CaseIterableRawRepresentableTests.swift",
+        "CaseIterableTests.swift",
+        "CharacterSetTests.swift",
+        "CompactMapTests.swift",
+        "ConditionalTests.swift",
+        "ConsumedTests.swift",
+        "DigitsTests.swift",
+        "DoubleTests.swift",
+        "EndTests.swift",
+        "FailTests.swift",
+        "FilterTests.swift",
+        "FirstTests.swift",
+        "FlatMapTests.swift",
+        "FromSubstringTests.swift",
+        "IntTests.swift",
+        "LazyTests.swift",
+        "ManyTests.swift",
+        "MapTests.swift",
+        "NotTests.swift",
+        "OneOfBuilderTests.swift",
+        "OneOfTests.swift",
+        "OptionallyTests.swift",
+        "ParseableFormatTests.swift",
+        "ParserBuilderTests.swift",
+        "ParserTests.swift",
+        "ParsingErrorTests.swift",
+        "PeekTests.swift",
+        "PipeEndTests.swift",
+        "PipeTests.swift",
+        "PrefixTests.swift",
+        "PrefixThroughTests.swift",
+        "PrefixUpToTests.swift",
+        "RegressionTests.swift",
+        "ReplaceErrorTests.swift",
+        "RestTests.swift",
+        "SkipTests.swift",
+        "StartsWithTests.swift",
+        "StreamTests.swift",
+        "UTF8Tests.swift",
+        "UUIDTests.swift",
+        "VariadicTests.swift",
+        "WhitespaceTests.swift"
+      ],
+      "target_dependencies" : [
+        "Parsing"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "Parsing",
+      "module_type" : "SwiftTarget",
+      "name" : "Parsing",
+      "path" : "Sources/Parsing",
+      "product_dependencies" : [
+        "CasePaths"
+      ],
+      "product_memberships" : [
+        "Parsing",
+        "swift-parsing-benchmark"
+      ],
+      "sources" : [
+        "Builders/OneOfBuilder.swift",
+        "Builders/ParserBuilder.swift",
+        "Conversion.swift",
+        "Conversions/AnyConversion.swift",
+        "Conversions/BinaryFloatingPoint.swift",
+        "Conversions/ConversionMap.swift",
+        "Conversions/Conversions.swift",
+        "Conversions/Data.swift",
+        "Conversions/Enum.swift",
+        "Conversions/FixedWidthInteger.swift",
+        "Conversions/Identity.swift",
+        "Conversions/JSON.swift",
+        "Conversions/LosslessStringConvertible.swift",
+        "Conversions/Memberwise.swift",
+        "Conversions/ParseableFormatStyleConversion.swift",
+        "Conversions/RawRepresentable.swift",
+        "Conversions/String.swift",
+        "Conversions/Substring.swift",
+        "Conversions/UTF8View.swift",
+        "ConvertingError.swift",
+        "CountingRange.swift",
+        "EmptyInitializable.swift",
+        "Internal/AnyEquatable.swift",
+        "Internal/Deprecations.swift",
+        "Parser.swift",
+        "ParserPrinter.swift",
+        "ParserPrinters/Always.swift",
+        "ParserPrinters/AnyParserPrinter.swift",
+        "ParserPrinters/Backtracking.swift",
+        "ParserPrinters/Bool.swift",
+        "ParserPrinters/CaseIterableRawRepresentable.swift",
+        "ParserPrinters/CharacterSet.swift",
+        "ParserPrinters/Conditional.swift",
+        "ParserPrinters/Consumed.swift",
+        "ParserPrinters/Digits.swift",
+        "ParserPrinters/End.swift",
+        "ParserPrinters/Fail.swift",
+        "ParserPrinters/Filter.swift",
+        "ParserPrinters/First.swift",
+        "ParserPrinters/Float.swift",
+        "ParserPrinters/From.swift",
+        "ParserPrinters/Int.swift",
+        "ParserPrinters/Lazy.swift",
+        "ParserPrinters/Literal.swift",
+        "ParserPrinters/Many.swift",
+        "ParserPrinters/Map.swift",
+        "ParserPrinters/Newline.swift",
+        "ParserPrinters/Not.swift",
+        "ParserPrinters/OneOf.swift",
+        "ParserPrinters/OneOfMany.swift",
+        "ParserPrinters/Optional.swift",
+        "ParserPrinters/Optionally.swift",
+        "ParserPrinters/Parse.swift",
+        "ParserPrinters/ParseableFormatStyle.swift",
+        "ParserPrinters/Peek.swift",
+        "ParserPrinters/Pipe.swift",
+        "ParserPrinters/Prefix.swift",
+        "ParserPrinters/PrefixThrough.swift",
+        "ParserPrinters/PrefixUpTo.swift",
+        "ParserPrinters/Printing.swift",
+        "ParserPrinters/Pullback.swift",
+        "ParserPrinters/ReplaceError.swift",
+        "ParserPrinters/Rest.swift",
+        "ParserPrinters/Skip.swift",
+        "ParserPrinters/StartsWith.swift",
+        "ParserPrinters/UUID.swift",
+        "ParserPrinters/Whitespace.swift",
+        "Parsers/AnyParser.swift",
+        "Parsers/CompactMap.swift",
+        "Parsers/FlatMap.swift",
+        "Parsers/Parsers.swift",
+        "Parsers/Stream.swift",
+        "ParsingError.swift",
+        "PrependableCollection.swift",
+        "PrintingError.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.2"
+}

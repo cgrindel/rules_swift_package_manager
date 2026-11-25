@@ -1,0 +1,73 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : "c++20",
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "yoga",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "yoga",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "core"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "core",
+      "packageAccess" : false,
+      "path" : ".",
+      "publicHeadersPath" : ".",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "."
+            }
+          },
+          "tool" : "cxx"
+        }
+      ],
+      "sources" : [
+        "yoga"
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.0.0"
+  },
+  "traits" : [
+
+  ]
+}

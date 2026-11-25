@@ -1,0 +1,54 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.17.2",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log"
+    },
+    {
+      "identity" : "swift-draw",
+      "path" : "./third_party/swift-draw",
+      "type" : "fileSystem"
+    },
+    {
+      "identity" : "swift-game",
+      "path" : "./third_party/swift-game",
+      "type" : "fileSystem"
+    }
+  ],
+  "manifest_display_name" : "module_aliases_example",
+  "name" : "module_aliases_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+    {
+      "c99name" : "ModuleAliases",
+      "module_type" : "SwiftTarget",
+      "name" : "ModuleAliases",
+      "path" : "Sources/ModuleAliases",
+      "product_dependencies" : [
+        "Logging",
+        "Utils",
+        "Utils"
+      ],
+      "sources" : [
+        "Empty.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.7"
+}

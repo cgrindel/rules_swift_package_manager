@@ -1,0 +1,129 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-concurrency-extras",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-concurrency-extras"
+    },
+    {
+      "identity" : "swift-issue-reporting",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.1.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-issue-reporting"
+    },
+    {
+      "identity" : "opencombine",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "0.14.0",
+            "upper_bound" : "1.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/OpenCombine/OpenCombine.git"
+    }
+  ],
+  "manifest_display_name" : "combine-schedulers",
+  "name" : "combine-schedulers",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "CombineSchedulers",
+      "targets" : [
+        "CombineSchedulers"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "c99name" : "CombineSchedulersTests",
+      "module_type" : "SwiftTarget",
+      "name" : "CombineSchedulersTests",
+      "path" : "Tests/CombineSchedulersTests",
+      "sources" : [
+        "ImmediateSchedulerTests.swift",
+        "TestSchedulerTests.swift",
+        "TimerTests.swift",
+        "UISchedulerTests.swift",
+        "UnimplementedSchedulerTests.swift"
+      ],
+      "target_dependencies" : [
+        "CombineSchedulers"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CombineSchedulers",
+      "module_type" : "SwiftTarget",
+      "name" : "CombineSchedulers",
+      "path" : "Sources/CombineSchedulers",
+      "product_dependencies" : [
+        "ConcurrencyExtras",
+        "IssueReporting"
+      ],
+      "product_memberships" : [
+        "CombineSchedulers"
+      ],
+      "sources" : [
+        "AnyScheduler.swift",
+        "Concurrency.swift",
+        "ImmediateScheduler.swift",
+        "Internal/Deprecations.swift",
+        "Internal/Lock.swift",
+        "Internal/NSRecursiveLock.swift",
+        "Internal/Platform.swift",
+        "SwiftUI.swift",
+        "TestScheduler.swift",
+        "Timer.swift",
+        "UIKit.swift",
+        "UIScheduler.swift",
+        "UnimplementedScheduler.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.4"
+}

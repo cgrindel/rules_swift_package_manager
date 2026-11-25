@@ -1,0 +1,134 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "PhoneNumberKit",
+  "name" : "PhoneNumberKit",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "12.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "10.13"
+    },
+    {
+      "name" : "tvos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "4.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "PhoneNumberKit",
+      "targets" : [
+        "PhoneNumberKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "PhoneNumberKit-Static",
+      "targets" : [
+        "PhoneNumberKit"
+      ],
+      "type" : {
+        "library" : [
+          "static"
+        ]
+      }
+    },
+    {
+      "name" : "PhoneNumberKit-Dynamic",
+      "targets" : [
+        "PhoneNumberKit"
+      ],
+      "type" : {
+        "library" : [
+          "dynamic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "PhoneNumberKitTests",
+      "module_type" : "SwiftTarget",
+      "name" : "PhoneNumberKitTests",
+      "path" : "PhoneNumberKitTests",
+      "sources" : [
+        "PartialFormatterTests.swift",
+        "PhoneNumber+CodableTests.swift",
+        "PhoneNumberTextFieldTests.swift",
+        "PhoneNumberUtilityParsingTests.swift",
+        "PhoneNumberUtilityTests.swift"
+      ],
+      "target_dependencies" : [
+        "PhoneNumberKit"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "PhoneNumberKit",
+      "module_type" : "SwiftTarget",
+      "name" : "PhoneNumberKit",
+      "path" : "PhoneNumberKit",
+      "product_memberships" : [
+        "PhoneNumberKit",
+        "PhoneNumberKit-Static",
+        "PhoneNumberKit-Dynamic"
+      ],
+      "resources" : [
+        {
+          "path" : "./PhoneNumberKit/Resources/PhoneNumberMetadata.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./PhoneNumberKit/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Bundle+Resources.swift",
+        "Constants.swift",
+        "Formatter.swift",
+        "MetadataManager.swift",
+        "MetadataParsing.swift",
+        "MetadataTypes.swift",
+        "NSRegularExpression+Swift.swift",
+        "ParseManager.swift",
+        "PartialFormatter.swift",
+        "PhoneNumber+Codable.swift",
+        "PhoneNumber.swift",
+        "PhoneNumberFormatter.swift",
+        "PhoneNumberParser.swift",
+        "PhoneNumberUtility.swift",
+        "RegexManager.swift",
+        "UI/CountryCodePickerOptions.swift",
+        "UI/CountryCodePickerSectionHeaderView.swift",
+        "UI/CountryCodePickerTableViewCell.swift",
+        "UI/CountryCodePickerViewController.swift",
+        "UI/PhoneNumberTextField.swift",
+        "UI/PhoneNumberTextFieldDelegate.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.5"
+}

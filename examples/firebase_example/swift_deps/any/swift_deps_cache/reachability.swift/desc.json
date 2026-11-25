@@ -1,0 +1,63 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "Reachability",
+  "name" : "Reachability",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Reachability",
+      "targets" : [
+        "Reachability"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "ReachabilityTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ReachabilityTests",
+      "path" : "Tests",
+      "sources" : [
+        "ReachabilityTests.swift"
+      ],
+      "target_dependencies" : [
+        "Reachability"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "Reachability",
+      "module_type" : "SwiftTarget",
+      "name" : "Reachability",
+      "path" : "Sources",
+      "product_memberships" : [
+        "Reachability"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Reachability.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.3"
+}

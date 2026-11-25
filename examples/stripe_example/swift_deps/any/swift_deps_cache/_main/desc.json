@@ -1,0 +1,30 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "stripe-ios-spm",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "26.16.1",
+            "upper_bound" : "27.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/stripe/stripe-ios-spm.git"
+    }
+  ],
+  "manifest_display_name" : "stripe_example",
+  "name" : "stripe_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}

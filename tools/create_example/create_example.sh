@@ -26,10 +26,6 @@ MODULE_bazel_location=rules_swift_package_manager/tools/create_example/template_
 MODULE_bazel="$(rlocation "${MODULE_bazel_location}")" || \
   (echo >&2 "Failed to locate ${MODULE_bazel_location}" && exit 1)
 
-set_up_clean_test_location=rules_swift_package_manager/tools/create_example/template_files/set_up_clean_test
-set_up_clean_test="$(rlocation "${set_up_clean_test_location}")" || \
-  (echo >&2 "Failed to locate ${set_up_clean_test_location}" && exit 1)
-
 bazelrc_location=rules_swift_package_manager/tools/create_example/template_files/.bazelrc
 bazelrc="$(rlocation "${bazelrc_location}")" || \
   (echo >&2 "Failed to locate ${bazelrc_location}" && exit 1)
@@ -138,32 +134,29 @@ write_file "${force}" "${example_dir}/WORKSPACE.bzlmod" <<-EOF
 EOF
 
 write_file "${force}" "${example_dir}/BUILD.bazel" <<-EOF
-load("@bazel_gazelle//:def.bzl", "gazelle", "gazelle_binary")
+load("@build_bazel_rules_swift//swift:swift.bzl", "swift_binary")
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
 load("@cgrindel_bazel_starlib//bzltidy:defs.bzl", "tidy")
+load("@cgrindel_bazel_starlib//updatesrc:defs.bzl", "updatesrc_update_all")
+
+# MARK: - Tidy / Update Source Files
+
+updatesrc_update_all(name = "update_all")
 
 tidy(
     name = "tidy",
     targets = [
-        ":update_build_files",
+        ":update_all",
     ],
 )
 
-# MARK: - Gazelle
+bzlformat_pkg(name = "bzlformat")
 
-# Ignore the Swift build folder
-# gazelle:exclude .build
-
-gazelle_binary(
-    name = "gazelle_bin",
-    languages = [
-        "@bazel_skylib_gazelle_plugin//bzl",
-        "@swift_gazelle_plugin//gazelle",
-    ],
-)
-
-gazelle(
-    name = "update_build_files",
-    gazelle = ":gazelle_bin",
+swift_binary(
+    name = "${example_dirname}",
+    srcs = ["main.swift"],
+    module_name = "Main",
+    deps = ["@swiftpkg_swift_log//:Logging"],
 )
 EOF
 
@@ -194,12 +187,40 @@ EOF
 
 copy_template_file "${force}" "${example_dir}" "${do_test}"
 copy_template_file "${force}" "${example_dir}" "${MODULE_bazel}"
-copy_template_file "${force}" "${example_dir}" "${set_up_clean_test}"
 copy_template_file "${force}" "${example_dir}" "${bazelrc}"
 
 # MARK - Initialize the repo
 
 cd "${example_dir}"
+
+if [[ -e "${example_dir}/swift_deps/any/inc.MODULE.bazel" ]]; then
+  echo "The swift_deps/any slice exists; skipping init."
+else
+  echo "Creating the swift_deps/any slice..."
+  bazelisk run @rules_swift_package_manager//tools:init -- \
+    --swift Package.swift \
+    --dir swift_deps/any \
+    --config @rules_swift_package_manager//config:any
+  # The include must follow the root use_extension: `bazel mod tidy` writes
+  # use_repo into the first file that uses the extension.
+  cat >>"${example_dir}/MODULE.bazel" <<-EOF
+
+# The slice's \`from_package\` tag. Include it after the root \`use_extension\` so
+# that \`bazel mod tidy\` writes \`use_repo\` here rather than into the slice file.
+include("//swift_deps/any:inc.MODULE.bazel")
+EOF
+fi
+
+# The rspm root ignores every slice's SwiftPM scratch dir.
+bazelignore_line="examples/${example_dirname}/swift_deps/any/.build"
+if ! grep -qxF -- "${bazelignore_line}" "${BUILD_WORKSPACE_DIRECTORY}/.bazelignore"; then
+  echo "${bazelignore_line}" >>"${BUILD_WORKSPACE_DIRECTORY}/.bazelignore"
+fi
+
+echo "Resolving Swift packages..."
+bazelisk run @swift_package//:resolve
+bazelisk mod tidy
+rm -rf "${example_dir}"/swift_deps/*/.build
 
 echo "Running tidy..."
 bazelisk run //:tidy

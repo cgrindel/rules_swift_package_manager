@@ -1,0 +1,93 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "abseil",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "abseil",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "abslWrapper"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "absl",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "abslWrapper",
+      "packageAccess" : false,
+      "path" : "absl-Wrapper",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "checksum" : "42605c4ae87ead7d0d0167e04ff87d3431c69a01c4ab9bb251afb1f8f4e8bf79",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "absl",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://dl.google.com/firebase/ios/bin/abseil/1.2025051202.0/rc0/absl.zip"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.6.0"
+  },
+  "traits" : [
+
+  ]
+}

@@ -1,0 +1,104 @@
+{
+  "c_language_standard" : "c99",
+  "cxx_language_standard" : "gnu++14",
+  "dependencies" : [
+    {
+      "identity" : "googleutilities",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "8.1.0",
+            "upper_bound" : "9.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/GoogleUtilities.git"
+    },
+    {
+      "identity" : "nanopb",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.30910.0",
+            "upper_bound" : "2.30911.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/firebase/nanopb.git"
+    }
+  ],
+  "manifest_display_name" : "GoogleAdsOnDeviceConversion",
+  "name" : "GoogleAdsOnDeviceConversion",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "12.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "7.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GoogleAdsOnDeviceConversion",
+      "targets" : [
+        "GoogleAdsOnDeviceConversionTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "GoogleAdsOnDeviceConversionTarget",
+      "module_type" : "ClangTarget",
+      "name" : "GoogleAdsOnDeviceConversionTarget",
+      "path" : "GoogleAdsOnDeviceConversionWrapper",
+      "product_dependencies" : [
+        "GULEnvironment",
+        "GULLogger",
+        "GULNetwork",
+        "nanopb"
+      ],
+      "product_memberships" : [
+        "GoogleAdsOnDeviceConversion"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "target_dependencies" : [
+        "GoogleAdsOnDeviceConversion"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GoogleAdsOnDeviceConversion",
+      "module_type" : "BinaryTarget",
+      "name" : "GoogleAdsOnDeviceConversion",
+      "path" : "remote/archive/GoogleAdsOnDeviceConversion.zip",
+      "product_memberships" : [
+        "GoogleAdsOnDeviceConversion"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    }
+  ],
+  "tools_version" : "5.3"
+}

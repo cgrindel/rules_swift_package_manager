@@ -1,0 +1,59 @@
+{
+  "cxx_language_standard" : "c++20",
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "yoga",
+  "name" : "yoga",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "yoga",
+      "targets" : [
+        "core"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "core",
+      "module_type" : "ClangTarget",
+      "name" : "core",
+      "path" : ".",
+      "product_memberships" : [
+        "yoga"
+      ],
+      "sources" : [
+        "yoga/YGConfig.cpp",
+        "yoga/YGEnums.cpp",
+        "yoga/YGNode.cpp",
+        "yoga/YGNodeLayout.cpp",
+        "yoga/YGNodeStyle.cpp",
+        "yoga/YGPixelGrid.cpp",
+        "yoga/YGValue.cpp",
+        "yoga/algorithm/AbsoluteLayout.cpp",
+        "yoga/algorithm/Baseline.cpp",
+        "yoga/algorithm/Cache.cpp",
+        "yoga/algorithm/CalculateLayout.cpp",
+        "yoga/algorithm/FlexLine.cpp",
+        "yoga/algorithm/PixelGrid.cpp",
+        "yoga/config/Config.cpp",
+        "yoga/debug/AssertFatal.cpp",
+        "yoga/debug/Log.cpp",
+        "yoga/event/event.cpp",
+        "yoga/node/LayoutResults.cpp",
+        "yoga/node/Node.cpp"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.0"
+}

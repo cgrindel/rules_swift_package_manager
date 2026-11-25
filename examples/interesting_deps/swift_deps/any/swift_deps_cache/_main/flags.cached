@@ -1,0 +1,8 @@
+cache_path=spm-cache
+config_path=spm-config
+dependency_caching=false
+manifest_cache=none
+manifest_caching=false
+replace_scm_with_registry=false
+security_path=spm-security
+use_registry_identity_for_scm=false

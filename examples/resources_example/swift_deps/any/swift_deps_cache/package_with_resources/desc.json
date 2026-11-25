@@ -1,0 +1,75 @@
+{
+  "default_localization" : "en",
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "package-with-resources",
+  "name" : "package-with-resources",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "CoolUI",
+      "targets" : [
+        "CoolUI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "CoolUITests",
+      "module_type" : "SwiftTarget",
+      "name" : "CoolUITests",
+      "path" : "Tests/CoolUITests",
+      "sources" : [
+        "BundleNameTest.swift"
+      ],
+      "target_dependencies" : [
+        "CoolUI"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CoolUI",
+      "module_type" : "SwiftTarget",
+      "name" : "CoolUI",
+      "path" : "Sources/CoolUI",
+      "product_memberships" : [
+        "CoolUI"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/CoolUI/Resources/Assets.xcassets",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Sources/CoolUI/Resources/Localization/en.lproj/Localizable.strings",
+          "rule" : {
+            "process" : {
+              "localization" : "en"
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "CoolStuff.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.5"
+}

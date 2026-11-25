@@ -92,6 +92,7 @@ def _collect_or_error(modules, is_dev_dependency):
                 is_root = mod.is_root,
                 is_dev = is_dev_dependency(tag),
                 netrc = tag.netrc,
+                registries = tag.registries,
                 make_files_read_only = tag.make_files_read_only,
             )
             other = root_dirs_by_config.get(slice.config)
@@ -191,7 +192,7 @@ def _stale_pkgs(slice, resolved_map):
 
 # MARK: - Patches
 
-def _patch_tags_by_identity(module_ctx, slice, config_pkgs):
+def _patch_tags_by_identity(module_ctx, slice, config_pkgs, pinned = []):
     """Maps the `configure_package` tags with patches to identities.
 
     A tag's name matches, in order: an identity equal to the lowercased name,
@@ -203,13 +204,18 @@ def _patch_tags_by_identity(module_ctx, slice, config_pkgs):
         module_ctx: A `module_ctx`.
         slice: A slice from `slices.new`.
         config_pkgs: A `dict` of name to `configure_package` tag.
+        pinned: Optional. More identities to match, such as the pins of a
+            slice that `init` just wrote and that lists no manifests yet.
 
     Returns:
         A `dict` of identity to `list` of tags, in sorted name order.
     """
+    identities = {i: None for i in slice.identities}
+    for identity in pinned:
+        identities[identity] = None
     by_repo_name = {
         bazel_repo_names.from_identity(identity): identity
-        for identity in slice.identities
+        for identity in identities
     }
     by_dep_name = None
     result = {}
@@ -218,7 +224,7 @@ def _patch_tags_by_identity(module_ctx, slice, config_pkgs):
         if not tag.patches:
             continue
         identity = None
-        if name.lower() in slice.identities:
+        if name.lower() in identities:
             identity = name.lower()
         elif name in by_repo_name:
             identity = by_repo_name[name]
@@ -668,7 +674,14 @@ def _patch_tags_for_tool(module_ctx, root, config_pkgs):
     The tag is the one the package repository applies: `config_pkg_for` on
     the dependency of the first fresh root slice that has it. An identity that
     only stale root slices know falls back to the first tag that
-    `_patch_tags_by_identity` matches.
+    `_patch_tags_by_identity` matches, including on the slice's pins. That
+    way the first cache run after `init`, whose slice lists no manifests,
+    still copies the patches.
+
+    One gap remains on that first run: a `configure_package` tag that matches
+    only by dependency name (not by identity or repository name) cannot match,
+    because there is no `_main` `dump.json` to map the name yet. The second
+    cache run picks it up, since staleness then asks for its patch files.
 
     Returns:
         A `dict` of identity to tag, for tags with patches.
@@ -686,13 +699,50 @@ def _patch_tags_for_tool(module_ctx, root, config_pkgs):
             if tag and tag.patches:
                 result[identity] = tag
     for e in root:
-        tags_by_identity = _patch_tags_by_identity(module_ctx, e.slice, config_pkgs)
+        tags_by_identity = _patch_tags_by_identity(
+            module_ctx,
+            e.slice,
+            config_pkgs,
+            pinned = e.pkgs.keys(),
+        )
         for identity in sorted(tags_by_identity.keys()):
             if identity in seen:
                 continue
             seen[identity] = None
             result[identity] = tags_by_identity[identity][0]
     return result
+
+def _tool_flag_labels_error(root_slices):
+    """Checks that the root slices agree on `netrc` and `registries`.
+
+    The tool runs once for every root slice with one set of flags, so the
+    slices must agree on the `from_package` labels that become flags.
+
+    Args:
+        root_slices: A `list` of the root slices.
+
+    Returns:
+        An error `string` that names both slice dirs and the attribute, or
+        `None` when the slices agree.
+    """
+    first = root_slices[0]
+    for s in root_slices[1:]:
+        for attr in ("netrc", "registries"):
+            a = getattr(first, attr)
+            b = getattr(s, attr)
+            if a != b:
+                return (
+                    "the root slices name different `{attr}` labels: " +
+                    "`{a}` (slice `{a_dir}`) and `{b}` (slice `{b_dir}`); " +
+                    "all root slices must use the same `{attr}`"
+                ).format(
+                    attr = attr,
+                    a = str(a),
+                    a_dir = first.dir,
+                    b = str(b),
+                    b_dir = s.dir,
+                )
+    return None
 
 def _swift_package_kwargs(module_ctx, root, config_pkgs, config_swift_package):
     """The `swift_package_tool_repo` kwargs for the evaluated root slices."""
@@ -705,6 +755,9 @@ def _swift_package_kwargs(module_ctx, root, config_pkgs, config_swift_package):
                 "(slice `{a_dir}`) and `{b}` (slice `{b_dir}`); all root " +
                 "slices must resolve the same `Package.swift`"
             ).format(a = str(swift), a_dir = root_slices[0].dir, b = str(s.swift), b_dir = s.dir))
+    err = _tool_flag_labels_error(root_slices)
+    if err:
+        fail(err)
     package = paths.join(swift.package, swift.name)
 
     tag_by_identity = _patch_tags_for_tool(module_ctx, root, config_pkgs)
@@ -736,7 +789,11 @@ def _swift_package_kwargs(module_ctx, root, config_pkgs, config_swift_package):
             }
             for s in root_slices
         ]),
-        flags = staleness.render_flags(config_swift_package),
+        flags = staleness.render_flags(
+            config_swift_package,
+            netrc = root_slices[0].netrc,
+            registries = root_slices[0].registries,
+        ),
         patch_specs = json.encode(patch_specs),
         patch_files = patch_files,
     )
@@ -922,4 +979,5 @@ slice_declarations_testing = struct(
     evaluate_or_error = _evaluate_or_error,
     patch_files_by_identity = _patch_files_by_identity,
     stale_warning = _stale_warning,
+    tool_flag_labels_error = _tool_flag_labels_error,
 )
