@@ -6,3 +6,4 @@ examples/pkg_manifest_minimal/swift_deps/linux/.build
 examples/aws_crt_example/swift_deps/any/.build
 examples/explicit_modules_example/swift_deps/any/.build
 examples/firebase_example/swift_deps/any/.build
+examples/google_maps_example/swift_deps/any/.build

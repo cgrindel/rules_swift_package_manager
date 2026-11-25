@@ -1,0 +1,30 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "ios-maps-sdk",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "11.4.0",
+            "upper_bound" : "12.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/googlemaps/ios-maps-sdk"
+    }
+  ],
+  "manifest_display_name" : "google_maps_example",
+  "name" : "google_maps_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}
