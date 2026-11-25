@@ -66,7 +66,7 @@ final class SwiftPMTests: XCTestCase {
     XCTAssertEqual(String(decoding: stdout, as: UTF8.self), "out\n")
     let flags = try SwiftPMFlags(keyValues: [:], workspace: root)
     let sliceArgs = flags.arguments(sliceDir: root.appendingPathComponent("slice"))
-    let expected = ["package"] + sliceArgs + ["dump-package"]
+    let expected = ["package"] + SwiftPM.manifestDefine + sliceArgs + ["dump-package"]
     XCTAssertEqual(try String(contentsOf: argvFile, encoding: .utf8), lines(expected))
     let pwd = try String(contentsOf: pwdFile, encoding: .utf8)
       .trimmingCharacters(in: .newlines)
@@ -77,9 +77,34 @@ final class SwiftPMTests: XCTestCase {
     let scratch = root.appendingPathComponent("rspm/foo/.build")
     try swiftPM.run(["describe"], in: packageDir, scratchPath: scratch)
     var overridden = expected
-    overridden[2] = scratch.path
+    overridden[expected.firstIndex(of: "--scratch-path")! + 1] = scratch.path
     overridden[overridden.count - 1] = "describe"
     XCTAssertEqual(try String(contentsOf: argvFile, encoding: .utf8), lines(overridden))
+  }
+
+  func testRunPassesBazelDefineForEveryManifestEvaluation() throws {
+    let argvFile = root.appendingPathComponent("argv.txt")
+    let tool = try fakeTool("for arg in \"$@\"; do echo \"$arg\"; done > '\(argvFile.path)'")
+    let swiftPM = try swiftPM(tool: tool)
+    let commands = [
+      ["resolve"], ["resolve", "--force-resolved-versions"], ["update"], ["dump-package"],
+      ["describe", "--type", "json"],
+    ]
+    for command in commands {
+      try swiftPM.run(command, in: root)
+      let argv = try String(contentsOf: argvFile, encoding: .utf8)
+        .split(separator: "\n").map(String.init)
+      XCTAssertEqual(
+        Array(argv.prefix(3)), ["package", "-Xbuild-tools-swiftc", "-DBAZEL"], "\(command)")
+      XCTAssertEqual(Array(argv.suffix(command.count)), command, "\(command)")
+    }
+  }
+
+  func testBazelDefineIsNotPartOfTheFlags() throws {
+    let flags = try SwiftPMFlags(keyValues: [:], workspace: root)
+    XCTAssertEqual(flags.normalized(), "")
+    XCTAssertFalse(
+      flags.arguments(sliceDir: root.appendingPathComponent("slice")).contains("-DBAZEL"))
   }
 
   func testRunPassesRunfilesDirToTool() throws {
