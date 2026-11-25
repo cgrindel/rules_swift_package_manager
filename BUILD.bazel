@@ -83,16 +83,19 @@ tidy_all(
     mode = "modified",
 )
 
+# Run `swift package update` for the slices of each child workspace via the
+# v2 `@swift_package//:update` target. `tidy_all` skips a workspace that does
+# not define the target.
 tidy_all(
     name = "update_swift_packages_for_modified",
     mode = "modified",
-    tidy_target = "//:update_swift_packages",
+    tidy_target = "@swift_package//:update",
 )
 
 tidy_all(
     name = "update_swift_packages_for_all",
     mode = "all",
-    tidy_target = "//:update_swift_packages",
+    tidy_target = "@swift_package//:update",
 )
 
 # MARK: - Gazelle
