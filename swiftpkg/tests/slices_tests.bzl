@@ -41,6 +41,7 @@ def _new_derives_dir_and_package_label_test(ctx):
 
     # A string config is kept as given.
     asserts.equals(env, None, s.netrc)
+    asserts.equals(env, None, s.registries)
     asserts.false(env, s.make_files_read_only)
 
     s2 = slices.new("//x:y", s.swift, s.resolved, {}, {}, False, True)
@@ -55,9 +56,11 @@ def _new_derives_dir_and_package_label_test(ctx):
         False,
         True,
         netrc = Label("@@//:.netrc"),
+        registries = Label("@@//:registries.json"),
         make_files_read_only = True,
     )
     asserts.equals(env, Label("@@//:.netrc"), s3.netrc)
+    asserts.equals(env, Label("@@//:registries.json"), s3.registries)
     asserts.true(env, s3.make_files_read_only)
 
     return unittest.end(env)

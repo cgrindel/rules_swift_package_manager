@@ -92,6 +92,7 @@ def _collect_or_error(modules, is_dev_dependency):
                 is_root = mod.is_root,
                 is_dev = is_dev_dependency(tag),
                 netrc = tag.netrc,
+                registries = tag.registries,
                 make_files_read_only = tag.make_files_read_only,
             )
             other = root_dirs_by_config.get(slice.config)
@@ -717,6 +718,24 @@ def _swift_package_kwargs(module_ctx, root, config_pkgs, config_swift_package):
                 "(slice `{a_dir}`) and `{b}` (slice `{b_dir}`); all root " +
                 "slices must resolve the same `Package.swift`"
             ).format(a = str(swift), a_dir = root_slices[0].dir, b = str(s.swift), b_dir = s.dir))
+
+        # The tool runs once for every root slice with one set of flags, so
+        # the slices must agree on the `from_package` labels in them.
+        for attr in ("netrc", "registries"):
+            a = getattr(root_slices[0], attr)
+            b = getattr(s, attr)
+            if a != b:
+                fail((
+                    "the root slices name different `{attr}` labels: " +
+                    "`{a}` (slice `{a_dir}`) and `{b}` (slice `{b_dir}`); " +
+                    "all root slices must use the same `{attr}`"
+                ).format(
+                    attr = attr,
+                    a = str(a),
+                    a_dir = root_slices[0].dir,
+                    b = str(b),
+                    b_dir = s.dir,
+                ))
     package = paths.join(swift.package, swift.name)
 
     tag_by_identity = _patch_tags_for_tool(module_ctx, root, config_pkgs)
@@ -748,7 +767,11 @@ def _swift_package_kwargs(module_ctx, root, config_pkgs, config_swift_package):
             }
             for s in root_slices
         ]),
-        flags = staleness.render_flags(config_swift_package),
+        flags = staleness.render_flags(
+            config_swift_package,
+            netrc = root_slices[0].netrc,
+            registries = root_slices[0].registries,
+        ),
         patch_specs = json.encode(patch_specs),
         patch_files = patch_files,
     )

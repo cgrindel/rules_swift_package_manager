@@ -102,6 +102,7 @@ def _tag(
         desc_ids = None,
         is_dev = False,
         netrc = None,
+        registries = None,
         make_files_read_only = False):
     if desc_ids == None:
         desc_ids = dump_ids
@@ -119,6 +120,7 @@ def _tag(
         },
         is_dev = is_dev,
         netrc = netrc,
+        registries = registries,
         make_files_read_only = make_files_read_only,
     )
 
@@ -538,7 +540,7 @@ _WINDOWS = "@@//config:windows"
 _LOG_URL = "https://github.com/apple/swift-log"
 _PACKAGE_REPOS_LABEL = "@swift_deps_package_repos//:package_repos.json"
 
-def _decl_slice(dir, config, identities, is_root = True, is_dev = False, netrc = None, make_files_read_only = False):
+def _decl_slice(dir, config, identities, is_root = True, is_dev = False, netrc = None, registries = None, make_files_read_only = False):
     ids = ["_main"] + identities
     return slices.new(
         config = Label(config),
@@ -555,6 +557,7 @@ def _decl_slice(dir, config, identities, is_root = True, is_dev = False, netrc =
         is_root = is_root,
         is_dev = is_dev,
         netrc = netrc,
+        registries = registries,
         make_files_read_only = make_files_read_only,
     )
 
@@ -593,6 +596,7 @@ def _fresh(
         is_dev = False,
         swift_version = "6.0",
         netrc = None,
+        registries = None,
         make_files_read_only = False,
         extra_pkgs = {}):
     """A fresh evaluated slice. `direct` lists the root's direct deps."""
@@ -611,6 +615,7 @@ def _fresh(
             is_root = is_root,
             is_dev = is_dev,
             netrc = netrc,
+            registries = registries,
             make_files_read_only = make_files_read_only,
         ),
         stale = False,
@@ -866,6 +871,31 @@ swift_package_declared_once_for_two_root_slices_test = unittest.make(
     _swift_package_declared_once_for_two_root_slices_test,
 )
 
+def _tool_flags_carry_from_package_labels_test(ctx):
+    env = unittest.begin(ctx)
+
+    netrc = Label("@@//auth:.netrc")
+    registries = Label("@@//:registries.json")
+    actual = _declare([
+        _fresh("swift/macos", _MACOS, netrc = netrc, registries = registries),
+        _fresh("swift/linux", _LINUX, netrc = netrc, registries = registries),
+    ])
+    tool = actual.calls["tool_repo"]
+    asserts.equals(env, 1, len(tool))
+    asserts.equals(
+        env,
+        staleness.render_flags(None, netrc = netrc, registries = registries),
+        tool[0]["flags"],
+    )
+    asserts.true(env, "netrc=auth/.netrc\n" in tool[0]["flags"])
+    asserts.true(env, "registries=registries.json\n" in tool[0]["flags"])
+
+    return unittest.end(env)
+
+tool_flags_carry_from_package_labels_test = unittest.make(
+    _tool_flags_carry_from_package_labels_test,
+)
+
 def _bootstrap_slice_patches_reach_tool_test(ctx):
     env = unittest.begin(ctx)
 
@@ -1102,7 +1132,11 @@ def _collect_builds_slices_in_order_test(ctx):
     v1 = _tag(config = None, dump_ids = [])
     actual = _collect([
         _module([
-            _tag(netrc = Label("@@//:.netrc"), make_files_read_only = True),
+            _tag(
+                netrc = Label("@@//:.netrc"),
+                registries = Label("@@//:registries.json"),
+                make_files_read_only = True,
+            ),
             v1,
             _tag(dir = "swift/linux", config = Label("@@//config:linux"), is_dev = True),
         ]),
@@ -1118,6 +1152,11 @@ def _collect_builds_slices_in_order_test(ctx):
     asserts.equals(env, [True, True], [s.is_root for s in actual.result])
     asserts.equals(env, [False, True], [s.is_dev for s in actual.result])
     asserts.equals(env, [Label("@@//:.netrc"), None], [s.netrc for s in actual.result])
+    asserts.equals(
+        env,
+        [Label("@@//:registries.json"), None],
+        [s.registries for s in actual.result],
+    )
     asserts.equals(env, [True, False], [s.make_files_read_only for s in actual.result])
 
     return unittest.end(env)
@@ -1228,6 +1267,7 @@ def slice_declarations_test_suite():
         two_groups_declare_hidden_repos_and_aliases_test,
         stale_only_declares_stale_repo_test,
         swift_package_declared_once_for_two_root_slices_test,
+        tool_flags_carry_from_package_labels_test,
         bootstrap_slice_patches_reach_tool_test,
         non_root_v2_tag_fails_test,
         fresh_slice_missing_identity_gets_missing_message_test,

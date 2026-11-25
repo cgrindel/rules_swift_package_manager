@@ -107,7 +107,10 @@ replace_scm_with_registry=false
 use_registry_identity_for_scm=false
 """
 
-def _new_slice(identities = ["_main", "swift-log"]):
+def _new_slice(
+        identities = ["_main", "swift-log"],
+        netrc = None,
+        registries = None):
     return slices.new(
         config = Label("@@//config:macos"),
         swift = Label("@@//:Package.swift"),
@@ -122,6 +125,8 @@ def _new_slice(identities = ["_main", "swift-log"]):
         },
         is_root = True,
         is_dev = False,
+        netrc = netrc,
+        registries = registries,
     )
 
 def _fresh_files():
@@ -334,11 +339,14 @@ def _registries_and_patches_test(ctx):
     files[_CACHE + "/_main/registries.json.cached"] = "{reg}"
     files[_WS + "/patches/log.patch"] = "patch v2"
     files[_CACHE + "/swift-log/patches/log.patch"] = "patch v1"
-    config = _new_config(registries = Label("@@//:registries.json"))
-    files[_CACHE + "/_main/flags.cached"] = staleness.render_flags(config)
+    registries = Label("@@//:registries.json")
+    files[_CACHE + "/_main/flags.cached"] = staleness.render_flags(
+        None,
+        registries = registries,
+    )
     _, inputs = _collect(
         files,
-        config = config,
+        slice = _new_slice(registries = registries),
         patches = {"swift-log": [Label("@@//patches:log.patch")]},
     )
     names = [i.name for i in inputs]
@@ -444,8 +452,6 @@ def _new_config(
         manifest_caching = True,
         replace_scm_with_registry = False,
         use_registry_identity_for_scm = False,
-        netrc = None,
-        registries = None,
         build_path = ".build"):
     return struct(
         build_path = build_path,
@@ -457,8 +463,6 @@ def _new_config(
         manifest_caching = manifest_caching,
         replace_scm_with_registry = replace_scm_with_registry,
         use_registry_identity_for_scm = use_registry_identity_for_scm,
-        netrc = netrc,
-        registries = registries,
     )
 
 # Shared with `SwiftPMFlagsTests.testNormalizedIsSortedAndStable` in
@@ -480,11 +484,14 @@ def _render_flags_matches_tool_fixture_test(ctx):
         cache_path = ".spm/cache",
         dependency_caching = False,
         manifest_cache = "local",
-        netrc = Label("@@//auth:.netrc"),
         use_registry_identity_for_scm = True,
         build_path = "custom/build",
     )
-    asserts.equals(env, _TOOL_FIXTURE, staleness.render_flags(config))
+    asserts.equals(
+        env,
+        _TOOL_FIXTURE,
+        staleness.render_flags(config, netrc = Label("@@//auth:.netrc")),
+    )
 
     return unittest.end(env)
 
@@ -529,9 +536,10 @@ def _render_flags_defaults_test(ctx):
             "replace_scm_with_registry",
             "registries=reg/registries.json\nreplace_scm_with_registry",
         ),
-        staleness.render_flags(_new_config(
+        staleness.render_flags(
+            _new_config(),
             registries = Label("@@//reg:registries.json"),
-        )),
+        ),
     )
 
     return unittest.end(env)
@@ -550,10 +558,11 @@ def _render_flags_root_package_labels_test(ctx):
             "manifest_caching=true\n",
             "manifest_caching=true\nnetrc=.netrc\n",
         ),
-        staleness.render_flags(_new_config(
+        staleness.render_flags(
+            _new_config(),
             netrc = Label("@@//:.netrc"),
             registries = Label("@@//:registries.json"),
-        )),
+        ),
     )
 
     return unittest.end(env)
@@ -562,11 +571,11 @@ render_flags_root_package_labels_test = unittest.make(
     _render_flags_root_package_labels_test,
 )
 
-def _render_flags_real_tag_without_labels_test(ctx):
+def _render_flags_from_package_labels_test(ctx):
     env = unittest.begin(ctx)
 
     # A `configure_swift_package` tag has no `netrc` or `registries`
-    # attribute; those live on `from_package`.
+    # attribute; those live on `from_package` and are passed explicitly.
     config = struct(
         build_path = "spm-build",
         cache_path = ".cache",
@@ -578,22 +587,54 @@ def _render_flags_real_tag_without_labels_test(ctx):
         replace_scm_with_registry = False,
         use_registry_identity_for_scm = False,
     )
+    netrc = Label("@@//auth:.netrc")
+    registries = Label("@@//:registries.json")
+    expected = """\
+dependency_caching=false
+manifest_cache=shared
+manifest_caching=true
+netrc=auth/.netrc
+registries=registries.json
+replace_scm_with_registry=false
+use_registry_identity_for_scm=false
+"""
     asserts.equals(
         env,
-        _DEFAULT_FLAGS.replace("dependency_caching=true", "dependency_caching=false"),
-        staleness.render_flags(config),
+        expected,
+        staleness.render_flags(
+            config,
+            netrc = netrc,
+            registries = registries,
+        ),
     )
 
-    # `collect` takes the same tag.
+    # `collect` reads the labels from the slice: the same flags are fresh,
+    # and the registries file is an input.
+    slice = _new_slice(netrc = netrc, registries = registries)
     files = _fresh_files()
-    files[_CACHE + "/_main/flags.cached"] = staleness.render_flags(config)
-    _, inputs = _collect(files, config = config)
+    files[_WS + "/registries.json"] = "{reg}"
+    files[_CACHE + "/_main/registries.json.cached"] = "{reg}"
+    files[_CACHE + "/_main/flags.cached"] = expected
+    _, inputs = _collect(files, slice = slice, config = config)
     asserts.equals(env, [], staleness.evaluate(inputs).reasons)
+    asserts.true(
+        env,
+        "_main/registries.json.cached" in [i.name for i in inputs],
+    )
+
+    # Flags cached without the labels are stale.
+    files[_CACHE + "/_main/flags.cached"] = staleness.render_flags(config)
+    _, inputs = _collect(files, slice = slice, config = config)
+    asserts.equals(
+        env,
+        ["_main/flags.cached: differs from cached copy"],
+        staleness.evaluate(inputs).reasons,
+    )
 
     return unittest.end(env)
 
-render_flags_real_tag_without_labels_test = unittest.make(
-    _render_flags_real_tag_without_labels_test,
+render_flags_from_package_labels_test = unittest.make(
+    _render_flags_from_package_labels_test,
 )
 
 def staleness_test_suite(name = "staleness_tests"):
@@ -611,5 +652,5 @@ def staleness_test_suite(name = "staleness_tests"):
         render_flags_matches_tool_fixture_test,
         render_flags_defaults_test,
         render_flags_root_package_labels_test,
-        render_flags_real_tag_without_labels_test,
+        render_flags_from_package_labels_test,
     )

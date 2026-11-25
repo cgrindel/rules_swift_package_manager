@@ -43,9 +43,6 @@ _ALWAYS_KEYS = [
 # under `<slice>/.build` apply otherwise.
 _NON_DEFAULT_KEYS = ["cache_path", "config_path", "security_path"]
 
-# Workspace-relative paths of a `Label`, rendered when set.
-_LABEL_KEYS = ["netrc", "registries"]
-
 def _workspace_relative(label):
     if not label.package:
         return label.name
@@ -56,17 +53,24 @@ def _render_value(value):
         return "true" if value else "false"
     return str(value)
 
-def _render_flags(config_swift_package):
-    """Renders the `configure_swift_package` flags as the tool writes them.
+def _render_flags(config_swift_package, netrc = None, registries = None):
+    """Renders the tool flags as the tool writes them.
 
     The output must equal `SwiftPMFlags.normalized()` in
     `tools/swift_deps_tool/Sources/SwiftPMFlags.swift` for the flags that the
     extension passes to the tool: one `key=value\\n` line per flag, sorted by
     key. `build_path` is never included.
 
+    `netrc` and `registries` are attributes of the `from_package` tag, not of
+    `configure_swift_package`, so they are passed separately.
+
     Args:
         config_swift_package: A `configure_swift_package` tag, a `struct`
             with the same attributes, or `None` for the defaults.
+        netrc: Optional. The `Label` of the slice's `.netrc` file, rendered
+            as a workspace-relative path.
+        registries: Optional. The `Label` of the slice's `registries.json`
+            file, rendered as a workspace-relative path.
 
     Returns:
         A `string`.
@@ -82,13 +86,10 @@ def _render_flags(config_swift_package):
             value = getattr(config_swift_package, key)
             if value != _DEFAULTS[key]:
                 values[key] = value
-
-        # A `configure_swift_package` tag has no `netrc` or `registries`
-        # attribute; they live on `from_package`.
-        for key in _LABEL_KEYS:
-            label = getattr(config_swift_package, key, None)
-            if label != None:
-                values[key] = _workspace_relative(label)
+    if netrc != None:
+        values["netrc"] = _workspace_relative(netrc)
+    if registries != None:
+        values["registries"] = _workspace_relative(registries)
     return "".join([
         "{}={}\n".format(key, values[key])
         for key in sorted(values.keys())
@@ -263,7 +264,8 @@ def _collect_with_reader(reader, slice, config_swift_package, patch_files_by_ide
             `readdir(path)` (basenames), `watch(path)`,
             `dirname(path_or_label)`, and `join(dir, rel)` (normalized;
             `rel` may be absolute).
-        slice: A slice `struct` from `slices.new`.
+        slice: A slice `struct` from `slices.new`. Its `netrc` and
+            `registries` feed the flags and the `registries.json` input.
         config_swift_package: A `configure_swift_package` tag or `None`.
         patch_files_by_identity: A `dict` of identity to `list` of patch
             `Label`.
@@ -298,7 +300,11 @@ def _collect_with_reader(reader, slice, config_swift_package, patch_files_by_ide
     # (4) Flags.
     inputs.append(_new_input(
         name = "{}/flags{}".format(_MAIN, _CACHED_SUFFIX),
-        live = _render_flags(config_swift_package),
+        live = _render_flags(
+            config_swift_package,
+            netrc = slice.netrc,
+            registries = slice.registries,
+        ),
         cached = _read(
             reader,
             slices.cache_label(slice, _MAIN, "flags" + _CACHED_SUFFIX),
@@ -318,10 +324,7 @@ def _collect_with_reader(reader, slice, config_swift_package, patch_files_by_ide
     ))
 
     # (6) registries.json, when configured or when a copy is left over.
-    registries = None
-    if config_swift_package != None:
-        # See `_render_flags`: the tag may have no `registries`.
-        registries = getattr(config_swift_package, "registries", None)
+    registries = slice.registries
     registries_cached = _read(
         reader,
         slices.cache_label(slice, _MAIN, "registries.json" + _CACHED_SUFFIX),
@@ -428,7 +431,8 @@ def _collect(module_ctx, slice, config_swift_package, patch_files_by_identity):
 
     Args:
         module_ctx: A `module_ctx`.
-        slice: A slice `struct` from `slices.new`.
+        slice: A slice `struct` from `slices.new`. Its `netrc` and
+            `registries` feed the flags and the `registries.json` input.
         config_swift_package: A `configure_swift_package` tag or `None`.
         patch_files_by_identity: A `dict` of identity to `list` of patch
             `Label`.

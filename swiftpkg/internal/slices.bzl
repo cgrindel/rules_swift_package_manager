@@ -11,6 +11,7 @@ def _new(
         is_root,
         is_dev,
         netrc = None,
+        registries = None,
         make_files_read_only = False):
     """Create a slice.
 
@@ -26,7 +27,10 @@ def _new(
         is_root: Whether the declaring module is the root module.
         is_dev: Whether the declaring tag is a dev dependency.
         netrc: Optional. The `Label` of the tag's `.netrc` file, passed to
-            the package repositories for binary-artifact downloads.
+            the package repositories for binary-artifact downloads and
+            rendered into the tool flags.
+        registries: Optional. The `Label` of the tag's `registries.json`
+            file, rendered into the tool flags and watched for staleness.
         make_files_read_only: Whether the package repositories make their
             files read-only.
 
@@ -48,6 +52,7 @@ def _new(
         is_root = is_root,
         is_dev = is_dev,
         netrc = netrc,
+        registries = registries,
         make_files_read_only = make_files_read_only,
     )
 
