@@ -1,0 +1,290 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "grpc-swift-2",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.4.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/grpc/grpc-swift-2.git"
+    },
+    {
+      "identity" : "swift-protobuf",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.39.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-protobuf.git"
+    }
+  ],
+  "manifest_display_name" : "grpc-swift-protobuf",
+  "name" : "grpc-swift-protobuf",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "GRPCProtobuf",
+      "targets" : [
+        "GRPCProtobuf"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "protoc-gen-grpc-swift-2",
+      "targets" : [
+        "protoc-gen-grpc-swift-2"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "GRPCProtobufGenerator",
+      "targets" : [
+        "GRPCProtobufGenerator"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    },
+    {
+      "name" : "generate-grpc-code-from-protos",
+      "targets" : [
+        "generate-grpc-code-from-protos"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "protoc_gen_grpc_swift_2",
+      "module_type" : "SwiftTarget",
+      "name" : "protoc-gen-grpc-swift-2",
+      "path" : "Sources/protoc-gen-grpc-swift-2",
+      "product_dependencies" : [
+        "GRPCCodeGen",
+        "SwiftProtobuf",
+        "SwiftProtobufPluginLibrary"
+      ],
+      "product_memberships" : [
+        "protoc-gen-grpc-swift-2",
+        "GRPCProtobufGenerator",
+        "generate-grpc-code-from-protos"
+      ],
+      "sources" : [
+        "GenerateGRPC.swift",
+        "Options.swift",
+        "Version.swift"
+      ],
+      "target_dependencies" : [
+        "GRPCProtobufCodeGen",
+        "CGRPCProtobuf"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "generate_grpc_code_from_protos",
+      "module_type" : "PluginTarget",
+      "name" : "generate-grpc-code-from-protos",
+      "path" : "Plugins/GRPCProtobufGeneratorCommand",
+      "plugin_capability" : {
+        "intent" : {
+          "description" : "Generate Swift code for gRPC services from protobuf definitions.",
+          "type" : "custom",
+          "verb" : "generate-grpc-code-from-protos"
+        },
+        "permissions" : [
+          {
+            "network_scope" : {
+              "none" : {
+
+              }
+            },
+            "reason" : "To write the generated Swift files back into the source directory of the package.",
+            "type" : "writeToPackageDirectory"
+          }
+        ],
+        "type" : "command"
+      },
+      "product_dependencies" : [
+        "protoc-gen-swift",
+        "protoc"
+      ],
+      "product_memberships" : [
+        "generate-grpc-code-from-protos"
+      ],
+      "sources" : [
+        "CommandConfig.swift",
+        "CommandPluginError.swift",
+        "Plugin.swift",
+        "PluginsShared/GenerationConfig.swift",
+        "PluginsShared/PluginUtils.swift"
+      ],
+      "target_dependencies" : [
+        "protoc-gen-grpc-swift-2"
+      ],
+      "type" : "plugin"
+    },
+    {
+      "c99name" : "GRPCProtobufTests",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCProtobufTests",
+      "path" : "Tests/GRPCProtobufTests",
+      "product_dependencies" : [
+        "GRPCCore",
+        "GRPCInProcessTransport",
+        "SwiftProtobuf"
+      ],
+      "sources" : [
+        "Errors/DetailedErrorTests.swift",
+        "Errors/Generated/error-service.grpc.swift",
+        "Errors/Generated/error-service.pb.swift",
+        "ProtobufCodingTests.swift"
+      ],
+      "target_dependencies" : [
+        "GRPCProtobuf"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GRPCProtobufGenerator",
+      "module_type" : "PluginTarget",
+      "name" : "GRPCProtobufGenerator",
+      "path" : "Plugins/GRPCProtobufGenerator",
+      "plugin_capability" : {
+        "type" : "buildTool"
+      },
+      "product_dependencies" : [
+        "protoc-gen-swift",
+        "protoc"
+      ],
+      "product_memberships" : [
+        "GRPCProtobufGenerator"
+      ],
+      "sources" : [
+        "BuildPluginConfig.swift",
+        "BuildPluginError.swift",
+        "Plugin.swift",
+        "PluginsShared/GenerationConfig.swift",
+        "PluginsShared/PluginUtils.swift"
+      ],
+      "target_dependencies" : [
+        "protoc-gen-grpc-swift-2"
+      ],
+      "type" : "plugin"
+    },
+    {
+      "c99name" : "GRPCProtobufCodeGenTests",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCProtobufCodeGenTests",
+      "path" : "Tests/GRPCProtobufCodeGenTests",
+      "product_dependencies" : [
+        "GRPCCodeGen",
+        "SwiftProtobuf",
+        "SwiftProtobufPluginLibrary"
+      ],
+      "resources" : [
+        {
+          "path" : "./Tests/GRPCProtobufCodeGenTests/Generated",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "CamelCaserTests.swift",
+        "ProtobufCodeGenParserTests.swift",
+        "ProtobufCodeGeneratorTests.swift",
+        "Utilities.swift"
+      ],
+      "target_dependencies" : [
+        "GRPCProtobufCodeGen"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GRPCProtobufCodeGen",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCProtobufCodeGen",
+      "path" : "Sources/GRPCProtobufCodeGen",
+      "product_dependencies" : [
+        "GRPCCodeGen",
+        "SwiftProtobufPluginLibrary"
+      ],
+      "product_memberships" : [
+        "protoc-gen-grpc-swift-2",
+        "GRPCProtobufGenerator",
+        "generate-grpc-code-from-protos"
+      ],
+      "sources" : [
+        "CamelCaser.swift",
+        "ProtobufCodeGenParser.swift",
+        "ProtobufCodeGenerator.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GRPCProtobuf",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCProtobuf",
+      "path" : "Sources/GRPCProtobuf",
+      "product_dependencies" : [
+        "GRPCCore",
+        "SwiftProtobuf"
+      ],
+      "product_memberships" : [
+        "GRPCProtobuf"
+      ],
+      "sources" : [
+        "Coding.swift",
+        "ContiguousBytesAdapter.swift",
+        "Errors/ErrorDetails+AnyPacking.swift",
+        "Errors/ErrorDetails+CustomStringConvertible.swift",
+        "Errors/ErrorDetails+Types.swift",
+        "Errors/ErrorDetails.swift",
+        "Errors/Generated/code.pb.swift",
+        "Errors/Generated/error_details.pb.swift",
+        "Errors/Generated/status.pb.swift",
+        "Errors/GoogleRPCStatus.swift",
+        "Errors/RPCError+GoogleRPCStatus.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CGRPCProtobuf",
+      "module_type" : "ClangTarget",
+      "name" : "CGRPCProtobuf",
+      "path" : "Sources/CGRPCProtobuf",
+      "product_memberships" : [
+        "protoc-gen-grpc-swift-2",
+        "GRPCProtobufGenerator",
+        "generate-grpc-code-from-protos"
+      ],
+      "sources" : [
+        "CGRPCProtobuf.c"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.1"
+}

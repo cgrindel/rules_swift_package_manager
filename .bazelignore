@@ -32,3 +32,5 @@ examples/sqlite_data_example/swift_deps/any/.build
 examples/yoga_example/swift_deps/any/.build
 examples/grdb_example/swift_deps/apple/.build
 examples/grdb_example/swift_deps/linux/.build
+examples/grpc_example/swift_deps/apple/.build
+examples/grpc_example/swift_deps/linux/.build

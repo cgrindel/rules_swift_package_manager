@@ -1,0 +1,217 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-nio",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.83.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio.git"
+    },
+    {
+      "identity" : "swift-atomics",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.2",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-atomics.git"
+    }
+  ],
+  "manifest_display_name" : "swift-nio-transport-services",
+  "name" : "swift-nio-transport-services",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "NIOTransportServices",
+      "targets" : [
+        "NIOTransportServices"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOTSHTTPServer",
+      "targets" : [
+        "NIOTSHTTPServer"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOTSHTTPClient",
+      "targets" : [
+        "NIOTSHTTPClient"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "NIOTSEchoClient",
+      "targets" : [
+        "NIOTSEchoClient"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "NIOTransportServicesTests",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOTransportServicesTests",
+      "path" : "Tests/NIOTransportServicesTests",
+      "product_dependencies" : [
+        "NIOCore",
+        "NIOEmbedded",
+        "NIOPosix",
+        "Atomics"
+      ],
+      "sources" : [
+        "NIOFilterEmptyWritesHandlerTests.swift",
+        "NIOTSAsyncBootstrapTests.swift",
+        "NIOTSBootstrapTests.swift",
+        "NIOTSChannelMetadataTests.swift",
+        "NIOTSChannelOptionsTests.swift",
+        "NIOTSConnectionChannelTests.swift",
+        "NIOTSDatagramBootstrapTests.swift",
+        "NIOTSEndToEndTests.swift",
+        "NIOTSEventLoopTests.swift",
+        "NIOTSListenerChannelTests.swift",
+        "NIOTSSingletonTests.swift",
+        "NIOTSSocketOptionTests.swift",
+        "NIOTSSocketOptionsOnChannelTests.swift",
+        "NIOTSTestUtilities.swift",
+        "NIOTSUDPMultiDatagramsPOSIXServerTests.swift",
+        "NIOTSWorkaroundTests.swift"
+      ],
+      "target_dependencies" : [
+        "NIOTransportServices"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "NIOTransportServices",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOTransportServices",
+      "path" : "Sources/NIOTransportServices",
+      "product_dependencies" : [
+        "NIO",
+        "NIOCore",
+        "NIOFoundationCompat",
+        "NIOTLS",
+        "Atomics"
+      ],
+      "product_memberships" : [
+        "NIOTransportServices",
+        "NIOTSHTTPServer",
+        "NIOTSHTTPClient",
+        "NIOTSEchoClient"
+      ],
+      "sources" : [
+        "AcceptHandler.swift",
+        "Datagram/NIOTSDatagramConnectionBootstrap.swift",
+        "Datagram/NIOTSDatagramConnectionChannel.swift",
+        "Datagram/NIOTSDatagramListenerBootstrap.swift",
+        "Datagram/NIOTSDatagramListenerChannel.swift",
+        "NIOFilterEmptyWritesHandler.swift",
+        "NIOTSBootstraps.swift",
+        "NIOTSChannelOptions.swift",
+        "NIOTSConnectionBootstrap.swift",
+        "NIOTSConnectionChannel.swift",
+        "NIOTSErrors.swift",
+        "NIOTSEventLoop.swift",
+        "NIOTSEventLoopGroup.swift",
+        "NIOTSListenerBootstrap.swift",
+        "NIOTSListenerChannel.swift",
+        "NIOTSNetworkEvents.swift",
+        "NIOTSSingletons.swift",
+        "SocketAddress+NWEndpoint.swift",
+        "StateManagedChannel.swift",
+        "StateManagedListenerChannel.swift",
+        "StateManagedNWConnectionChannel.swift",
+        "TCPOptions+SocketChannelOption.swift",
+        "UDPOptions+SocketChannelOption.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "NIOTSHTTPServer",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOTSHTTPServer",
+      "path" : "Sources/NIOTSHTTPServer",
+      "product_dependencies" : [
+        "NIOCore",
+        "NIOHTTP1"
+      ],
+      "product_memberships" : [
+        "NIOTSHTTPServer"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "NIOTransportServices"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOTSHTTPClient",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOTSHTTPClient",
+      "path" : "Sources/NIOTSHTTPClient",
+      "product_dependencies" : [
+        "NIOCore",
+        "NIOHTTP1"
+      ],
+      "product_memberships" : [
+        "NIOTSHTTPClient"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "target_dependencies" : [
+        "NIOTransportServices"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "NIOTSEchoClient",
+      "module_type" : "SwiftTarget",
+      "name" : "NIOTSEchoClient",
+      "path" : "Sources/NIOTSEchoClient",
+      "product_dependencies" : [
+        "NIOCore"
+      ],
+      "product_memberships" : [
+        "NIOTSEchoClient"
+      ],
+      "sources" : [
+        "NIOTSEchoClient.swift"
+      ],
+      "target_dependencies" : [
+        "NIOTransportServices"
+      ],
+      "type" : "executable"
+    }
+  ],
+  "tools_version" : "6.1"
+}

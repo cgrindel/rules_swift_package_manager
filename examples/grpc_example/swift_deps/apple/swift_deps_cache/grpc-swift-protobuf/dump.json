@@ -1,0 +1,704 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "grpc-swift-2",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/grpc/grpc-swift-2.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.4.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-protobuf",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-protobuf.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.39.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "grpc-swift-protobuf",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "GRPCProtobuf",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GRPCProtobuf"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "protoc-gen-grpc-swift-2",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "protoc-gen-grpc-swift-2"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "GRPCProtobufGenerator",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GRPCProtobufGenerator"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    },
+    {
+      "name" : "generate-grpc-code-from-protos",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "generate-grpc-code-from-protos"
+      ],
+      "type" : {
+        "plugin" : null
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "GRPCProtobufCodeGen",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GRPCCodeGen",
+            "grpc-swift-2",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftProtobuf",
+            "swift-protobuf",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftProtobufPluginLibrary",
+            "swift-protobuf",
+            null,
+            null
+          ]
+        },
+        {
+          "target" : [
+            "CGRPCProtobuf",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "protoc-gen-grpc-swift-2",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftProtobuf 2.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftProtobuf 2.1:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "GRPCCore",
+            "grpc-swift-2",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftProtobuf",
+            "swift-protobuf",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GRPCProtobuf",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftProtobuf 2.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftProtobuf 2.1:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "GRPCProtobuf",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GRPCCore",
+            "grpc-swift-2",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GRPCInProcessTransport",
+            "grpc-swift-2",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftProtobuf",
+            "swift-protobuf",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GRPCProtobufTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftProtobuf 2.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftProtobuf 2.1:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "GRPCCodeGen",
+            "grpc-swift-2",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftProtobufPluginLibrary",
+            "swift-protobuf",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GRPCProtobufCodeGen",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftProtobuf 2.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftProtobuf 2.1:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "GRPCProtobufCodeGen",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GRPCCodeGen",
+            "grpc-swift-2",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftProtobuf",
+            "swift-protobuf",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SwiftProtobufPluginLibrary",
+            "swift-protobuf",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GRPCProtobufCodeGenTests",
+      "packageAccess" : true,
+      "resources" : [
+        {
+          "path" : "Generated",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftProtobuf 2.0:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "AvailabilityMacro=gRPCSwiftProtobuf 2.1:macOS 15.0, iOS 18.0, watchOS 11.0, tvOS 18.0, visionOS 2.0"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "protoc-gen-grpc-swift-2",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "protoc-gen-swift",
+            "swift-protobuf",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "protoc",
+            "swift-protobuf",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GRPCProtobufGenerator",
+      "packageAccess" : true,
+      "pluginCapability" : {
+        "buildTool" : null
+      },
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "plugin"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "protoc-gen-grpc-swift-2",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "protoc-gen-swift",
+            "swift-protobuf",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "protoc",
+            "swift-protobuf",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "generate-grpc-code-from-protos",
+      "packageAccess" : true,
+      "path" : "Plugins/GRPCProtobufGeneratorCommand",
+      "pluginCapability" : {
+        "command" : [
+          {
+            "custom" : {
+              "description" : "Generate Swift code for gRPC services from protobuf definitions.",
+              "verb" : "generate-grpc-code-from-protos"
+            }
+          },
+          [
+            {
+              "writeToPackageDirectory" : {
+                "reason" : "To write the generated Swift files back into the source directory of the package."
+              }
+            }
+          ]
+        ]
+      },
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "plugin"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CGRPCProtobuf",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "CGRPC_GRPC_SWIFT_PROTOBUF_VERSION=\"\""
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.1.0"
+  },
+  "traits" : [
+
+  ]
+}
