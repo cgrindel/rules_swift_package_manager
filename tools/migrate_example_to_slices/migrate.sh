@@ -160,6 +160,18 @@ import sys
 
 GAZELLE_DEPS = {"gazelle", "swift_gazelle_plugin", "bazel_skylib_gazelle_plugin"}
 
+# v1 `from_package` attributes that the migration cannot carry into a slice.
+_BY_HAND = "Carry it into each slice's inc.MODULE.bazel by hand."
+UNCARRIED_TAG_ATTRS = {
+    "declare_swift_package": (
+        "v2 always declares @swift_package, so drop it by hand and check that "
+        "nothing else declares a repository with that name."
+    ),
+    "make_files_read_only": _BY_HAND,
+    "netrc": _BY_HAND,
+    "registries": _BY_HAND + " v2 does not support registries until #2699.",
+}
+
 GIT_OVERRIDE = """\
 # TODO(#2641): remove once a rules_swift release includes swift_toolchain_tool.
 # The root module's override in rules_swift_package_manager does not reach
@@ -271,6 +283,17 @@ def call_name_attr(span_text):
 
 def module(path):
     text = open(path).read()
+
+    # Refuse to drop a v1 tag attribute that `init` does not write into
+    # the slice's inc.MODULE.bazel.
+    for s, e in find_calls(text, "swift_deps.from_package"):
+        for attr in sorted(UNCARRIED_TAG_ATTRS):
+            if re.search(r"\b" + attr + r"\s*=", text[s:e]):
+                raise SystemExit(
+                    "ERROR: the v1 from_package tag in {} sets `{}`. {}".format(
+                        path, attr, UNCARRIED_TAG_ATTRS[attr]
+                    )
+                )
 
     # Gazelle deps.
     spans = [
