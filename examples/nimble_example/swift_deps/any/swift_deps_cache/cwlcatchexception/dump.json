@@ -1,0 +1,105 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "CwlCatchException",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "CwlCatchException",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "CwlCatchException"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "CwlCatchExceptionSupport",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CwlCatchException",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CwlCatchExceptionSupport",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "CwlCatchException",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CwlCatchExceptionTests",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.5.0"
+  },
+  "traits" : [
+
+  ]
+}

@@ -1,0 +1,292 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "cwlpreconditiontesting",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/mattgallagher/CwlPreconditionTesting.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.2.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-docc-plugin",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-docc-plugin"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "Nimble",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "6.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "visionos",
+      "version" : "1.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Nimble",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Nimble",
+        "NimbleObjectiveC"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "CwlPreconditionTesting",
+            "CwlPreconditionTesting",
+            null,
+            {
+              "platformNames" : [
+                "macos",
+                "ios",
+                "maccatalyst",
+                "visionos"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "CwlPosixPreconditionTesting",
+            "CwlPreconditionTesting",
+            null,
+            {
+              "platformNames" : [
+                "tvos",
+                "watchos"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "Nimble",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Nimble",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NimbleObjectiveC",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NimbleSharedTestHelpers",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Nimble",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NimbleSharedTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "NimbleTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Nimble",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NimbleObjectiveC",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NimbleObjectiveC",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Nimble",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NimbleSharedTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NimbleObjectiveCTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.0.0"
+  },
+  "traits" : [
+
+  ]
+}

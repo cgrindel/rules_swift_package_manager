@@ -1,0 +1,56 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "quick",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "7.6.2",
+            "upper_bound" : "8.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/Quick/Quick"
+    },
+    {
+      "identity" : "nimble",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "14.0.0",
+            "upper_bound" : "15.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/Quick/Nimble"
+    }
+  ],
+  "manifest_display_name" : "nimble_example",
+  "name" : "nimble_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+    {
+      "c99name" : "CounterTests",
+      "module_type" : "SwiftTarget",
+      "name" : "CounterTests",
+      "path" : "Sources/NimbleExample/NimbleExampleTests",
+      "product_dependencies" : [
+        "Quick",
+        "Nimble"
+      ],
+      "sources" : [
+        "CounterSpec.swift"
+      ],
+      "type" : "test"
+    }
+  ],
+  "tools_version" : "5.7"
+}

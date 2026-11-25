@@ -1,0 +1,69 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "CwlCatchException",
+  "name" : "CwlCatchException",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "CwlCatchException",
+      "targets" : [
+        "CwlCatchException"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "CwlCatchExceptionTests",
+      "module_type" : "SwiftTarget",
+      "name" : "CwlCatchExceptionTests",
+      "path" : "Tests/CwlCatchExceptionTests",
+      "sources" : [
+        "CwlCatchExceptionTests.swift"
+      ],
+      "target_dependencies" : [
+        "CwlCatchException"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CwlCatchExceptionSupport",
+      "module_type" : "ClangTarget",
+      "name" : "CwlCatchExceptionSupport",
+      "path" : "Sources/CwlCatchExceptionSupport",
+      "product_memberships" : [
+        "CwlCatchException"
+      ],
+      "sources" : [
+        "CwlCatchException.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CwlCatchException",
+      "module_type" : "SwiftTarget",
+      "name" : "CwlCatchException",
+      "path" : "Sources/CwlCatchException",
+      "product_memberships" : [
+        "CwlCatchException"
+      ],
+      "sources" : [
+        "CwlCatchException.swift"
+      ],
+      "target_dependencies" : [
+        "CwlCatchExceptionSupport"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.5"
+}

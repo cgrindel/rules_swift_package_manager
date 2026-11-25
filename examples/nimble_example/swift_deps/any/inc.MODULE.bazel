@@ -1,0 +1,26 @@
+swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
+swift_deps.from_package(
+    config = "@rules_swift_package_manager//config:any",
+    desc_manifests = {
+        "_main": "//swift_deps/any:swift_deps_cache/_main/desc.json",
+        "cwlcatchexception": "//swift_deps/any:swift_deps_cache/cwlcatchexception/desc.json",
+        "cwlpreconditiontesting": "//swift_deps/any:swift_deps_cache/cwlpreconditiontesting/desc.json",
+        "nimble": "//swift_deps/any:swift_deps_cache/nimble/desc.json",
+        "quick": "//swift_deps/any:swift_deps_cache/quick/desc.json",
+        "swift-algorithms": "//swift_deps/any:swift_deps_cache/swift-algorithms/desc.json",
+        "swift-argument-parser": "//swift_deps/any:swift_deps_cache/swift-argument-parser/desc.json",
+        "swift-numerics": "//swift_deps/any:swift_deps_cache/swift-numerics/desc.json",
+    },
+    dump_manifests = {
+        "_main": "//swift_deps/any:swift_deps_cache/_main/dump.json",
+        "cwlcatchexception": "//swift_deps/any:swift_deps_cache/cwlcatchexception/dump.json",
+        "cwlpreconditiontesting": "//swift_deps/any:swift_deps_cache/cwlpreconditiontesting/dump.json",
+        "nimble": "//swift_deps/any:swift_deps_cache/nimble/dump.json",
+        "quick": "//swift_deps/any:swift_deps_cache/quick/dump.json",
+        "swift-algorithms": "//swift_deps/any:swift_deps_cache/swift-algorithms/dump.json",
+        "swift-argument-parser": "//swift_deps/any:swift_deps_cache/swift-argument-parser/dump.json",
+        "swift-numerics": "//swift_deps/any:swift_deps_cache/swift-numerics/dump.json",
+    },
+    resolved = "//swift_deps/any:Package.resolved",
+    swift = "//:Package.swift",
+)
