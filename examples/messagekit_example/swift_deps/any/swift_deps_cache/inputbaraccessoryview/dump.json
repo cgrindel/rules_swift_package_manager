@@ -1,0 +1,70 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "InputBarAccessoryView",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "14.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "InputBarAccessoryView",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "InputBarAccessoryView"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "Supporting/Info.plist"
+      ],
+      "name" : "InputBarAccessoryView",
+      "packageAccess" : true,
+      "path" : "Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.0.0"
+  },
+  "traits" : [
+
+  ]
+}

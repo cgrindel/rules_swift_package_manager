@@ -1,0 +1,160 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "inputbaraccessoryview",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "7.0.0",
+            "upper_bound" : "8.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/nathantannar4/InputBarAccessoryView"
+    }
+  ],
+  "manifest_display_name" : "MessageKit",
+  "name" : "MessageKit",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "14.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "MessageKit",
+      "targets" : [
+        "MessageKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "c99name" : "MessageKitTests",
+      "module_type" : "SwiftTarget",
+      "name" : "MessageKitTests",
+      "path" : "Tests/MessageKitTests",
+      "sources" : [
+        "Controllers Test/MessageLabelTests.swift",
+        "Controllers Test/MessagesViewControllerTests.swift",
+        "MessageKitTests.swift",
+        "Mocks/MockMessage.swift",
+        "Mocks/MockMessagesDataSource.swift",
+        "Mocks/MockUser.swift",
+        "Model Tests/AvatarTests.swift",
+        "Model Tests/DetectorTypeTests.swift",
+        "Model Tests/MessageKitDateFormatterTests.swift",
+        "Model Tests/MessageStyleTests.swift",
+        "Model Tests/SenderTests.swift",
+        "Protocols Tests/MessagesDisplayDelegateTests.swift",
+        "Views Tests/AvatarViewTests.swift",
+        "Views Tests/MessageCollectionViewCellTests.swift",
+        "Views Tests/MessagesCollectionViewTests.swift"
+      ],
+      "target_dependencies" : [
+        "MessageKit"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "MessageKit",
+      "module_type" : "SwiftTarget",
+      "name" : "MessageKit",
+      "path" : "Sources",
+      "product_dependencies" : [
+        "InputBarAccessoryView"
+      ],
+      "product_memberships" : [
+        "MessageKit"
+      ],
+      "sources" : [
+        "Controllers/MessagesViewController+Keyboard.swift",
+        "Controllers/MessagesViewController+Menu.swift",
+        "Controllers/MessagesViewController+PanGesture.swift",
+        "Controllers/MessagesViewController+State.swift",
+        "Controllers/MessagesViewController+TypingIndicator.swift",
+        "Controllers/MessagesViewController+UIScrollViewDelegate.swift",
+        "Controllers/MessagesViewController.swift",
+        "Extensions/Bundle+Extensions.swift",
+        "Extensions/CGRect+Extensions.swift",
+        "Extensions/MessageKind+textMessageKind.swift",
+        "Extensions/MessageKit+Availability.swift",
+        "Extensions/NSAttributedString+Extensions.swift",
+        "Extensions/UIColor+Extensions.swift",
+        "Extensions/UIEdgeInsets+Extensions.swift",
+        "Extensions/UIImage+Extensions.swift",
+        "Extensions/UIView+Extensions.swift",
+        "Layout/AudioMessageSizeCalculator.swift",
+        "Layout/CellSizeCalculator.swift",
+        "Layout/ContactMessageSizeCalculator.swift",
+        "Layout/LinkPreviewMessageSizeCalculator.swift",
+        "Layout/LocationMessageSizeCalculator.swift",
+        "Layout/MediaMessageSizeCalculator.swift",
+        "Layout/MessageSizeCalculator.swift",
+        "Layout/MessagesCollectionViewFlowLayout.swift",
+        "Layout/MessagesCollectionViewLayoutAttributes.swift",
+        "Layout/TextMessageSizeCalculator.swift",
+        "Layout/TypingIndicatorCellSizeCalculator.swift",
+        "Models/AccessoryPosition.swift",
+        "Models/Avatar.swift",
+        "Models/AvatarPosition.swift",
+        "Models/DetectorType.swift",
+        "Models/HorizontalEdgeInsets.swift",
+        "Models/LabelAlignment.swift",
+        "Models/LinkPreviewFonts.swift",
+        "Models/LocationMessageSnapshotOptions.swift",
+        "Models/MessageInputBarKind.swift",
+        "Models/MessageKind.swift",
+        "Models/MessageKitDateFormatter.swift",
+        "Models/MessageKitError.swift",
+        "Models/MessageStyle.swift",
+        "Protocols/AudioItem.swift",
+        "Protocols/ContactItem.swift",
+        "Protocols/LinkItem.swift",
+        "Protocols/LocationItem.swift",
+        "Protocols/MediaItem.swift",
+        "Protocols/MessageCellDelegate.swift",
+        "Protocols/MessageLabelDelegate.swift",
+        "Protocols/MessageType.swift",
+        "Protocols/MessagesDataSource.swift",
+        "Protocols/MessagesDisplayDelegate.swift",
+        "Protocols/MessagesLayoutDelegate.swift",
+        "Protocols/SenderType.swift",
+        "Views/AvatarView.swift",
+        "Views/BubbleCircle.swift",
+        "Views/Cells/AudioMessageCell.swift",
+        "Views/Cells/ContactMessageCell.swift",
+        "Views/Cells/LinkPreviewMessageCell.swift",
+        "Views/Cells/LocationMessageCell.swift",
+        "Views/Cells/MediaMessageCell.swift",
+        "Views/Cells/MessageCollectionViewCell.swift",
+        "Views/Cells/MessageContentCell.swift",
+        "Views/Cells/TextMessageCell.swift",
+        "Views/Cells/TypingIndicatorCell.swift",
+        "Views/HeadersFooters/MessageReusableView.swift",
+        "Views/InsetLabel.swift",
+        "Views/LinkPreviewView.swift",
+        "Views/MessageContainerView.swift",
+        "Views/MessageLabel.swift",
+        "Views/MessagesCollectionView.swift",
+        "Views/MessagesInputContainerView.swift",
+        "Views/PlayButtonView.swift",
+        "Views/TypingBubble.swift",
+        "Views/TypingIndicator.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}

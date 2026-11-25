@@ -1,0 +1,132 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "inputbaraccessoryview",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/nathantannar4/InputBarAccessoryView"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "7.0.0",
+                "upperBound" : "8.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "MessageKit",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "14.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "MessageKit",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "MessageKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "InputBarAccessoryView",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Supporting/Info.plist",
+        "Supporting/MessageKit.h"
+      ],
+      "name" : "MessageKit",
+      "packageAccess" : true,
+      "path" : "Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "IS_SPM"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "MessageKit",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "MessageKitTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.0.0"
+  },
+  "traits" : [
+
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "InputBarAccessoryView",
+  "name" : "InputBarAccessoryView",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "14.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "InputBarAccessoryView",
+      "targets" : [
+        "InputBarAccessoryView"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "c99name" : "InputBarAccessoryView",
+      "module_type" : "SwiftTarget",
+      "name" : "InputBarAccessoryView",
+      "path" : "Sources",
+      "product_memberships" : [
+        "InputBarAccessoryView"
+      ],
+      "sources" : [
+        "Controls/InputBarButtonItem.swift",
+        "Controls/InputBarSendButton.swift",
+        "Extensions/NSMutableAttributedString+Extensions.swift",
+        "Extensions/NSNotification+Extensions.swift",
+        "Extensions/String+Extensions.swift",
+        "Extensions/UITextView+Extensions.swift",
+        "Extensions/UIView+AutoLayout.swift",
+        "InputBarAccessoryView.swift",
+        "KeyboardManager/KeyboardEvent.swift",
+        "KeyboardManager/KeyboardManager.swift",
+        "KeyboardManager/KeyboardNotification.swift",
+        "Models/HorizontalEdgePadding.swift",
+        "Models/NSConstraintLayoutSet.swift",
+        "Plugins/AttachmentManager/AttachmentManager.swift",
+        "Plugins/AttachmentManager/Protocols/AttachmentManagerDataSource.swift",
+        "Plugins/AttachmentManager/Protocols/AttachmentManagerDelegate.swift",
+        "Plugins/AttachmentManager/Views/AttachmentCell.swift",
+        "Plugins/AttachmentManager/Views/AttachmentsView.swift",
+        "Plugins/AttachmentManager/Views/ImageAttachmentCell.swift",
+        "Plugins/AutocompleteManager/AutocompleteManager.swift",
+        "Plugins/AutocompleteManager/Models/AutocompleteCompletion.swift",
+        "Plugins/AutocompleteManager/Models/AutocompleteSession.swift",
+        "Plugins/AutocompleteManager/Protocols/AutocompleteManagerDataSource.swift",
+        "Plugins/AutocompleteManager/Protocols/AutocompleteManagerDelegate.swift",
+        "Plugins/AutocompleteManager/Views/AutocompleteCell.swift",
+        "Plugins/AutocompleteManager/Views/AutocompleteTableView.swift",
+        "Protocols/InputBarAccessoryViewDelegate.swift",
+        "Protocols/InputItem.swift",
+        "Protocols/InputPlugin.swift",
+        "Supporting/InputBarAccessoryView+Availability.swift",
+        "ViewControllers/InputBarViewController.swift",
+        "Views/InputStackView.swift",
+        "Views/InputTextView.swift",
+        "Views/SeparatorLine.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}

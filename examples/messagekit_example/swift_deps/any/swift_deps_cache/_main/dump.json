@@ -1,0 +1,87 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "messagekit",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/MessageKit/MessageKit"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "5.0.0",
+                "upperBound" : "6.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "kingfisher",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/onevcat/Kingfisher"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "8.16.0",
+                "upperBound" : "9.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "messagekit_example",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+
+  ],
+  "toolsVersion" : {
+    "_version" : "5.7.0"
+  },
+  "traits" : [
+
+  ]
+}
