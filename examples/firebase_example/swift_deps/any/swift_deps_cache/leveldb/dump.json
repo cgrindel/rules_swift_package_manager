@@ -1,0 +1,150 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : "gnu++14",
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "leveldb",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "leveldb",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "leveldb"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "db/leveldbutil.cc",
+        "util/env_windows.cc",
+        "util/testutil.cc",
+        "db/autocompact_test.cc",
+        "db/corruption_test.cc",
+        "db/db_test.cc",
+        "db/dbformat_test.cc",
+        "db/fault_injection_test.cc",
+        "db/filename_test.cc",
+        "db/log_test.cc",
+        "db/recovery_test.cc",
+        "db/skiplist_test.cc",
+        "db/version_edit_test.cc",
+        "db/version_set_test.cc",
+        "db/write_batch_test.cc",
+        "issues/issue178_test.cc",
+        "issues/issue200_test.cc",
+        "issues/issue320_test.cc",
+        "table/filter_block_test.cc",
+        "table/table_test.cc",
+        "util/arena_test.cc",
+        "util/bloom_test.cc",
+        "util/cache_test.cc",
+        "util/coding_test.cc",
+        "util/crc32c_test.cc",
+        "util/env_posix_test.cc",
+        "util/env_test.cc",
+        "util/env_windows_test.cc",
+        "util/hash_test.cc",
+        "util/logging_test.cc",
+        "util/no_destructor_test.cc",
+        "util/status_test.cc",
+        "db/c_test.c",
+        "port/README.md",
+        "port/port_config.h.in"
+      ],
+      "name" : "leveldb",
+      "packageAccess" : false,
+      "path" : ".",
+      "publicHeadersPath" : "include",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "LEVELDB_IS_BIG_ENDIAN=0"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "LEVELDB_PLATFORM_POSIX=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "HAVE_FULLFSYNC=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "./"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "include/"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "sources" : [
+        "db/",
+        "port/",
+        "table/",
+        "util/",
+        "include/"
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.3.0"
+  },
+  "traits" : [
+
+  ]
+}

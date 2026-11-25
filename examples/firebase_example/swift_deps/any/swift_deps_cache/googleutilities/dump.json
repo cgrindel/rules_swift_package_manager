@@ -1,0 +1,781 @@
+{
+  "cLanguageStandard" : "c99",
+  "cxxLanguageStandard" : "gnu++14",
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "GoogleUtilities",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "12.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "7.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GULAppDelegateSwizzler",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleUtilities-AppDelegateSwizzler"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULEnvironment",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleUtilities-Environment"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULLogger",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleUtilities-Logger"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULMethodSwizzler",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleUtilities-MethodSwizzler"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULNetwork",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleUtilities-Network"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULNSData",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleUtilities-NSData"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULReachability",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleUtilities-Reachability"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULSwizzlerTestHelpers",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleUtilities-SwizzlerTestHelpers"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GULUserDefaults",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleUtilities-UserDefaults"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GoogleUtilities-Environment",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Logger",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Network",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md"
+      ],
+      "name" : "GoogleUtilities-AppDelegateSwizzler",
+      "packageAccess" : true,
+      "path" : "GoogleUtilities/AppDelegateSwizzler",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "third-party-IsAppEncrypted",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleUtilities-Environment",
+      "packageAccess" : true,
+      "path" : "GoogleUtilities/Environment",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "LICENSE"
+      ],
+      "name" : "third-party-IsAppEncrypted",
+      "packageAccess" : true,
+      "path" : "third_party/IsAppEncrypted",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GoogleUtilities-Environment",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleUtilities-Logger",
+      "packageAccess" : true,
+      "path" : "GoogleUtilities/Logger",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GoogleUtilities-Logger",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleUtilities-MethodSwizzler",
+      "packageAccess" : true,
+      "path" : "GoogleUtilities/MethodSwizzler",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GoogleUtilities-Logger",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-NSData",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Reachability",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleUtilities-Network",
+      "packageAccess" : true,
+      "path" : "GoogleUtilities/Network",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../.."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleUtilities-NSData",
+      "packageAccess" : true,
+      "path" : "GoogleUtilities/NSData+zlib",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../.."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "z"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GoogleUtilities-Logger",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleUtilities-Reachability",
+      "packageAccess" : true,
+      "path" : "GoogleUtilities/Reachability",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GoogleUtilities-Logger",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleUtilities-UserDefaults",
+      "packageAccess" : true,
+      "path" : "GoogleUtilities/UserDefaults",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GoogleUtilities-MethodSwizzler",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleUtilities-SwizzlerTestHelpers",
+      "packageAccess" : true,
+      "path" : "GoogleUtilities/SwizzlerTestHelpers",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GoogleUtilities-AppDelegateSwizzler",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Environment",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Logger",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-MethodSwizzler",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Network",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-NSData",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Reachability",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-UserDefaults",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "swift-test",
+      "packageAccess" : true,
+      "path" : "SwiftPMTests/swift-test",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GoogleUtilities-AppDelegateSwizzler",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Environment",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Logger",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-MethodSwizzler",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Network",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-NSData",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Reachability",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-UserDefaults",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "objc-import-test",
+      "packageAccess" : true,
+      "path" : "SwiftPMTests/objc-import-test",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GoogleUtilities-AppDelegateSwizzler",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Environment",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Logger",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-MethodSwizzler",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Network",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-NSData",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-Reachability",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-UserDefaults",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleUtilities-SwizzlerTestHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Network/third_party/LICENSE",
+        "Network/GULNetworkTest.m",
+        "Network/third_party/GTMHTTPServer.m"
+      ],
+      "name" : "UtilitiesUnit",
+      "packageAccess" : true,
+      "path" : "GoogleUtilities/Tests/Unit",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../.."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.9.0"
+  },
+  "traits" : [
+
+  ]
+}

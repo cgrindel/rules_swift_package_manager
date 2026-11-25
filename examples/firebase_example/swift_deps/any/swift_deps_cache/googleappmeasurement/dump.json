@@ -1,0 +1,605 @@
+{
+  "cLanguageStandard" : "c99",
+  "cxxLanguageStandard" : "gnu++14",
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "googleutilities",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/GoogleUtilities.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "8.1.0",
+                "upperBound" : "9.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "nanopb",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/firebase/nanopb.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.30910.0",
+                "upperBound" : "2.30911.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "google-ads-on-device-conversion-ios-sdk",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/googleads/google-ads-on-device-conversion-ios-sdk"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "3.8.0",
+                "upperBound" : "3.9.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "GoogleAppMeasurement",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "11.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "8.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "GoogleAppMeasurement",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleAppMeasurementTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GoogleAppMeasurementCore",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleAppMeasurementCoreTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GoogleAppMeasurementIdentitySupport",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "GoogleAppMeasurementIdentitySupportTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "GoogleAppMeasurementIdentitySupport",
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "macos",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "target" : [
+            "GoogleAppMeasurement",
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "macos",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "GULAppDelegateSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULMethodSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULNSData",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULNetwork",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULLogger",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GoogleAdsOnDeviceConversion",
+            "google-ads-on-device-conversion-ios-sdk",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleAppMeasurementTarget",
+      "packageAccess" : true,
+      "path" : "GoogleAppMeasurementWrapper",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "sqlite3"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "c++"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "z"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "StoreKit"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "GoogleAppMeasurement",
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "macos",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "GULAppDelegateSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULMethodSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULNSData",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULNetwork",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULLogger",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleAppMeasurementCoreTarget",
+      "packageAccess" : true,
+      "path" : "GoogleAppMeasurementCoreWrapper",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "sqlite3"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "c++"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "z"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "StoreKit"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "GoogleAppMeasurementIdentitySupport",
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "macos",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "target" : [
+            "GoogleAppMeasurement",
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "macos",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "GULAppDelegateSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULMethodSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULNSData",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULNetwork",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULLogger",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleAppMeasurementIdentitySupportTarget",
+      "packageAccess" : true,
+      "path" : "GoogleAppMeasurementIdentitySupportWrapper",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "sqlite3"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "c++"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "z"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "StoreKit"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "checksum" : "630f8c4d85267dfaf43f4debd7f92b1bce3998568648bf1177b99dd2c78a01a3",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleAppMeasurement",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://dl.google.com/firebase/ios/swiftpm/13.2.0/GoogleAppMeasurement.zip"
+    },
+    {
+      "checksum" : "97944e6b3903a18d85ac732ce868ad1b0ec1d335930fd2468124093ec0170be8",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GoogleAppMeasurementIdentitySupport",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://dl.google.com/firebase/ios/swiftpm/13.2.0/GoogleAppMeasurementIdentitySupport.zip"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.0.0"
+  },
+  "traits" : [
+
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "firebase-ios-sdk",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "13.2.0",
+            "upper_bound" : "14.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/firebase/firebase-ios-sdk"
+    },
+    {
+      "identity" : "reachability.swift",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "5.2.4",
+            "upper_bound" : "6.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/ashleymills/Reachability.swift.git"
+    }
+  ],
+  "manifest_display_name" : "firebase_example",
+  "name" : "firebase_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}

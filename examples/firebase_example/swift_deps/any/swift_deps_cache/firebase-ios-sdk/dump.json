@@ -1,0 +1,5890 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : "gnu++17",
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "promises",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/promises.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.4.1",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "googleappmeasurement",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/GoogleAppMeasurement.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "13.2.0",
+                "upperBound" : "13.3.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "googledatatransport",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/GoogleDataTransport.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "10.1.1",
+                "upperBound" : "11.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "googleutilities",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/GoogleUtilities.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "8.1.4",
+                "upperBound" : "9.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "gtm-session-fetcher",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/gtm-session-fetcher.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "4.0.0",
+                "upperBound" : "6.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "nanopb",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/firebase/nanopb.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.30910.1",
+                "upperBound" : "2.30911.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "abseil-cpp-binary",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/abseil-cpp-binary.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.2025051202.0",
+                "upperBound" : "1.2025051300.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "grpc-binary",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/grpc-binary.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.83.1",
+                "upperBound" : "1.84.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "ocmock",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/erikdoe/ocmock.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "revision" : [
+              "2c0bfd373289f4a7716db5d6db471640f91a6507"
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "leveldb",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/firebase/leveldb.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.22.5",
+                "upperBound" : "1.23.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "gcdwebserver",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/SlaunchaMan/GCDWebServer.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "revision" : [
+              "935e2736044e71e5341663c3cc9a335ba6867a2b"
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "interop-ios-for-google-sdks",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/interop-ios-for-google-sdks.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "101.0.0",
+                "upperBound" : "102.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "app-check",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/google/app-check.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "12.1.0",
+                "upperBound" : "13.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "Firebase",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "maccatalyst",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "11.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "8.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "FirebaseAILogic",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseAILogic"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseAnalytics",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseAnalyticsTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseAnalyticsCore",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseAnalyticsCoreTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseAnalyticsIdentitySupport",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseAnalyticsIdentitySupportTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseAuth",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseAuth"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseAppCheck",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseAppCheck"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseAppDistribution-Beta",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseAppDistributionTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseAuthCombine-Community",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseAuthCombineSwift"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseFirestoreCombine-Community",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseFirestoreCombineSwift"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseFunctionsCombine-Community",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseFunctionsCombineSwift"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseStorageCombine-Community",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseStorageCombineSwift"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseCore",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseCrashlytics",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseCrashlytics"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseDatabase",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseDatabase"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseFirestore",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseFirestoreTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseFunctions",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseFunctions"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseInAppMessaging-Beta",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseInAppMessagingTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseInstallations",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseInstallations"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseMessaging",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseMessaging"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebasePerformance",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebasePerformanceTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseRemoteConfig",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseRemoteConfig"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseStorage",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "FirebaseStorage"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Firebase",
+      "packageAccess" : true,
+      "path" : "CoreOnly/Sources",
+      "publicHeadersPath" : "./",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAppCheck",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAppCheckInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAuthInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCoreExtension",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GeminiLanguageModel",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseAILogic",
+      "packageAccess" : true,
+      "path" : "FirebaseAI/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAILogic",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseStorage",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md",
+        "Snippets/README.md"
+      ],
+      "name" : "FirebaseAILogicUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseAI/Tests/Unit",
+      "resources" : [
+        {
+          "path" : "vertexai-sdk-test-data/mock-responses",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Firebase",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCoreInternal",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULLogger",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseCore",
+      "packageAccess" : true,
+      "path" : "FirebaseCore/Sources",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../.."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "Firebase_VERSION=13.2.0"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "maccatalyst",
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "UIKit"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "macos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "AppKit"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SharedTestUtilities",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "OCMock",
+            "ocmock",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Resources/GoogleService-Info.plist"
+      ],
+      "name" : "CoreUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseCore/Tests/Unit",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../.."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseCoreExtension",
+      "packageAccess" : true,
+      "path" : "FirebaseCore/Extension",
+      "publicHeadersPath" : ".",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "GULNSData",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseCoreInternal",
+      "packageAccess" : true,
+      "path" : "FirebaseCore/Internal/Sources",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCoreInternal",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseCoreInternalTests",
+      "packageAccess" : true,
+      "path" : "FirebaseCore/Internal/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseABTesting",
+      "packageAccess" : true,
+      "path" : "FirebaseABTesting/Sources",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseABTesting",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "OCMock",
+            "ocmock",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "ABTestingUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseABTesting/Tests/Unit",
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../.."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "FirebaseAnalyticsWrapper",
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "macos",
+                "tvos"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseAnalyticsTarget",
+      "packageAccess" : true,
+      "path" : "SwiftPM-PlatformExclude/FirebaseAnalyticsWrap",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "FirebaseAnalytics",
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "macos",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "GoogleAppMeasurement",
+            "GoogleAppMeasurement",
+            null,
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "macos",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseInstallations",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULAppDelegateSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULMethodSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULNSData",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULNetwork",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseAnalyticsWrapper",
+      "packageAccess" : true,
+      "path" : "FirebaseAnalyticsWrapper",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "sqlite3"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "c++"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "z"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "StoreKit"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "checksum" : "e916c5b1bf160b5c40a949e58261b13b5edc76c19f24b1eb2d675da1de63ad74",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseAnalytics",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://dl.google.com/firebase/ios/swiftpm/13.2.0/FirebaseAnalytics.zip"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAnalyticsTarget",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AnalyticsSwiftUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseAnalytics/Tests/SwiftUnit",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAnalyticsTarget",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AnalyticsObjCAPI",
+      "packageAccess" : true,
+      "path" : "FirebaseAnalytics/Tests/ObjCAPI",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "FirebaseAnalyticsCoreWrapper",
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "macos",
+                "tvos"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseAnalyticsCoreTarget",
+      "packageAccess" : true,
+      "path" : "SwiftPM-PlatformExclude/FirebaseAnalyticsCoreWrap",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "FirebaseAnalytics",
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "macos",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "GoogleAppMeasurementCore",
+            "GoogleAppMeasurement",
+            null,
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "macos",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseInstallations",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULAppDelegateSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULMethodSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULNSData",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULNetwork",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseAnalyticsCoreWrapper",
+      "packageAccess" : true,
+      "path" : "FirebaseAnalyticsCoreWrapper",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "sqlite3"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "c++"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "z"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "StoreKit"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "FirebaseAnalytics",
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "macos",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "GoogleAppMeasurementIdentitySupport",
+            "GoogleAppMeasurement",
+            null,
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "macos",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseInstallations",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULAppDelegateSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULMethodSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULNSData",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULNetwork",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseAnalyticsIdentitySupportTarget",
+      "packageAccess" : true,
+      "path" : "FirebaseAnalyticsIdentitySupportWrapper",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "sqlite3"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "c++"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "z"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "StoreKit"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "FirebaseAppDistribution",
+            {
+              "platformNames" : [
+                "ios"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseAppDistributionTarget",
+      "packageAccess" : true,
+      "path" : "SwiftPM-PlatformExclude/FirebaseAppDistributionWrap",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseInstallations",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULAppDelegateSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULUserDefaults",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseAppDistribution",
+      "packageAccess" : true,
+      "path" : "FirebaseAppDistribution/Sources",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAppDistribution",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "OCMock",
+            "ocmock",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Swift/"
+      ],
+      "name" : "AppDistributionUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseAppDistribution/Tests/Unit",
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../.."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAppDistribution",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "AppDistributionUnitSwift",
+      "packageAccess" : true,
+      "path" : "FirebaseAppDistribution/Tests/Unit/Swift",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../../.."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAppCheckInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAuthInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAuthInternal",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCoreExtension",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULAppDelegateSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GTMSessionFetcherCore",
+            "gtm-session-fetcher",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "ObjC",
+        "Public"
+      ],
+      "name" : "FirebaseAuth",
+      "packageAccess" : true,
+      "path" : "FirebaseAuth/Sources",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "Security"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "SafariServices"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "RecaptchaInterop",
+            "interop-ios-for-google-sdks",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Swift",
+        "Resources"
+      ],
+      "name" : "FirebaseAuthInternal",
+      "packageAccess" : true,
+      "path" : "FirebaseAuth/Sources",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "FirebaseAuthInterop",
+      "packageAccess" : true,
+      "path" : "FirebaseAuth/Interop",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAuth",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "ObjCAPITests.m",
+        "ObjCGlobalTests.m",
+        "FIROAuthProviderTests.m"
+      ],
+      "name" : "AuthUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseAuth/Tests/Unit",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAuth",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseAuthCombineSwift",
+      "packageAccess" : true,
+      "path" : "FirebaseCombineSwift/Sources/Auth",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "FirebaseFirestoreTarget",
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "Firestore"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseFirestoreCombineSwift",
+      "packageAccess" : true,
+      "path" : "FirebaseCombineSwift/Sources/Firestore",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseStorage",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseStorageCombineSwift",
+      "packageAccess" : true,
+      "path" : "FirebaseCombineSwift/Sources/Storage",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseInstallations",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseSessions",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseRemoteConfigInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCrashlyticsSwift",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GoogleDataTransport",
+            "GoogleDataTransport",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "FBLPromises",
+            "Promises",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "run",
+        "CHANGELOG.md",
+        "LICENSE",
+        "README.md",
+        "ProtoSupport",
+        "UnitTests",
+        "generate_project.sh",
+        "upload-symbols",
+        "CrashlyticsInputFiles.xcfilelist",
+        "third_party/libunwind/LICENSE",
+        "Crashlytics/Rollouts"
+      ],
+      "name" : "FirebaseCrashlytics",
+      "packageAccess" : true,
+      "path" : "Crashlytics",
+      "publicHeadersPath" : "Crashlytics/Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : ".."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "DISPLAY_VERSION=13.2.0"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "CLS_SDK_NAME=Crashlytics iOS SDK"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "macos",
+              "maccatalyst"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "CLS_SDK_NAME=Crashlytics macOS SDK"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "CLS_SDK_NAME=Crashlytics tvOS SDK"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "watchos"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "CLS_SDK_NAME=Crashlytics watchOS SDK"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_FIELD_32BIT=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_NO_PACKED_STRUCTS=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_ENABLE_MALLOC=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "Security"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "macos",
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "SystemConfiguration"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "sources" : [
+        "Crashlytics",
+        "Protogen",
+        "Shared",
+        "third_party/libunwind/dwarf.h"
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseRemoteConfigInterop",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseCrashlyticsSwift",
+      "packageAccess" : true,
+      "path" : "Crashlytics/Crashlytics/Rollouts",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCrashlyticsSwift",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseCrashlyticsSwiftUnit",
+      "packageAccess" : true,
+      "path" : "Crashlytics/UnitTestsSwift/",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCrashlytics",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "OCMock",
+            "ocmock",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseCrashlyticsUnit",
+      "packageAccess" : true,
+      "path" : "Crashlytics/UnitTests",
+      "resources" : [
+        {
+          "path" : "FIRCLSMachO/machO_data",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Data",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../.."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "DISPLAY_VERSION=13.2.0"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "CLS_SDK_NAME=Crashlytics iOS SDK"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "macos",
+              "maccatalyst"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "CLS_SDK_NAME=Crashlytics macOS SDK"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "CLS_SDK_NAME=Crashlytics tvOS SDK"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "watchos"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "CLS_SDK_NAME=Crashlytics watchOS SDK"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAppCheckInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "leveldb",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULUserDefaults",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "third_party/Wrap-leveldb/LICENSE",
+        "third_party/SocketRocket/LICENSE",
+        "third_party/FImmutableSortedDictionary/LICENSE",
+        "third_party/SocketRocket/aa2297808c225710e267afece4439c256f6efdb3"
+      ],
+      "name" : "FirebaseDatabaseInternal",
+      "packageAccess" : true,
+      "path" : "FirebaseDatabase/Sources",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "CFNetwork"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "Security"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "macos",
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "SystemConfiguration"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "watchos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "WatchKit"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseDatabase",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SharedTestUtilities",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "OCMock",
+            "ocmock",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Unit/Swift",
+        "Integration/"
+      ],
+      "name" : "DatabaseUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseDatabase/Tests/",
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../.."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseDatabase",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "DatabaseUnitSwift",
+      "packageAccess" : true,
+      "path" : "FirebaseDatabase/Tests/Unit/Swift",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../.."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseDatabaseInternal",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseSharedSwift",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseDatabase",
+      "packageAccess" : true,
+      "path" : "FirebaseDatabase/Swift/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "third_party/FirebaseDataEncoder/LICENSE",
+        "third_party/FirebaseDataEncoder/METADATA"
+      ],
+      "name" : "FirebaseSharedSwift",
+      "packageAccess" : true,
+      "path" : "FirebaseSharedSwift/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseSharedSwift",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseSharedSwiftTests",
+      "packageAccess" : true,
+      "path" : "FirebaseSharedSwift/Tests/",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "FirebaseFirestore",
+            {
+              "platformNames" : [
+                "ios",
+                "tvos",
+                "macos",
+                "maccatalyst"
+              ],
+              "traits" : [
+                "Firestore"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseFirestoreTarget",
+      "packageAccess" : true,
+      "path" : "SwiftPM-PlatformExclude/FirebaseFirestoreWrap",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "FIREBASE_BINARY_FIRESTORE=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+
+            ],
+            "traits" : [
+              "Firestore"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "FIRESTORE_TRAIT_ENABLED"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAppCheckInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAuthInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCoreExtension",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseMessagingInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseSharedSwift",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GTMSessionFetcherCore",
+            "gtm-session-fetcher",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseFunctions",
+      "packageAccess" : true,
+      "path" : "FirebaseFunctions/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseFunctions",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAppCheckInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAuthInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseMessagingInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SharedTestUtilities",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseFunctionsUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseFunctions/Tests/Unit",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../../"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseFunctions",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SharedTestUtilities",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseFunctionsIntegration",
+      "packageAccess" : true,
+      "path" : "FirebaseFunctions/Tests/Integration",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseFunctions",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SharedTestUtilities",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "ObjCPPAPITests.mm"
+      ],
+      "name" : "FirebaseFunctionsObjCIntegration",
+      "packageAccess" : true,
+      "path" : "FirebaseFunctions/Tests/ObjCIntegration",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../.."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseFunctions",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseFunctionsCombineSwift",
+      "packageAccess" : true,
+      "path" : "FirebaseCombineSwift/Sources/Functions",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseFunctionsCombineSwift",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SharedTestUtilities",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FunctionsCombineUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseFunctions/Tests/CombineUnit",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "FirebaseInAppMessaging",
+            {
+              "platformNames" : [
+                "ios",
+                "tvos"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseInAppMessagingTarget",
+      "packageAccess" : true,
+      "path" : "SwiftPM-PlatformExclude/FirebaseInAppMessagingWrap",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseInstallations",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseABTesting",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULUserDefaults",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        },
+        {
+          "target" : [
+            "FirebaseInAppMessaging_iOS",
+            {
+              "platformNames" : [
+                "ios"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+        "DefaultUI/CHANGELOG.md",
+        "DefaultUI/README.md"
+      ],
+      "name" : "FirebaseInAppMessagingInternal",
+      "packageAccess" : true,
+      "path" : "FirebaseInAppMessaging/Sources",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_FIELD_32BIT=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_NO_PACKED_STRUCTS=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_ENABLE_MALLOC=1"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseInAppMessaging_iOS",
+      "packageAccess" : true,
+      "path" : "FirebaseInAppMessaging/iOS",
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseInAppMessagingInternal",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseInAppMessaging",
+      "packageAccess" : true,
+      "path" : "FirebaseInAppMessaging/Swift/Source",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "FBLPromises",
+            "Promises",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULUserDefaults",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseInstallations",
+      "packageAccess" : true,
+      "path" : "FirebaseInstallations/Source/Library",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../../"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "Security"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseInstallations",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULAppDelegateSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULReachability",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULUserDefaults",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GoogleDataTransport",
+            "GoogleDataTransport",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseMessaging",
+      "packageAccess" : true,
+      "path" : "FirebaseMessaging/Sources",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_FIELD_32BIT=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_NO_PACKED_STRUCTS=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_ENABLE_MALLOC=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "macos",
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "SystemConfiguration"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseMessagingInterop",
+      "packageAccess" : true,
+      "path" : "FirebaseMessaging/Interop",
+      "publicHeadersPath" : ".",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseMessaging",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SharedTestUtilities",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "OCMock",
+            "ocmock",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "MessagingUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseMessaging/Tests/UnitTests",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../.."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "FirebasePerformance",
+            {
+              "platformNames" : [
+                "ios",
+                "tvos",
+                "visionos"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebasePerformanceTarget",
+      "packageAccess" : true,
+      "path" : "SwiftPM-PlatformExclude/FirebasePerformanceWrap",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseInstallations",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseRemoteConfigInternal",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseSessions",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GoogleDataTransport",
+            "GoogleDataTransport",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULMethodSwizzler",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULUserDefaults",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebasePerformance",
+      "packageAccess" : true,
+      "path" : "FirebasePerformance/Sources",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_FIELD_32BIT=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_NO_PACKED_STRUCTS=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_ENABLE_MALLOC=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "FIRPerformance_LIB_VERSION=13.2.0"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "MobileCoreServices"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "QuartzCore"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebasePerformanceTarget",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SharedTestUtilities",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GCDWebServer",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "OCMock",
+            "ocmock",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "PerformanceUnit",
+      "packageAccess" : true,
+      "path" : "FirebasePerformance/Tests/Unit",
+      "resources" : [
+        {
+          "path" : "FPRURLFilterTests-Info.plist",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Server/smallDownloadFile",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Server/bigDownloadFile",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../.."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_FIELD_32BIT=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_NO_PACKED_STRUCTS=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_ENABLE_MALLOC=1"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCoreExtension",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAppCheckInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAuthInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseMessagingInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GoogleDataTransport",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "OCMock",
+            "ocmock",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SharedTestUtilities",
+      "packageAccess" : true,
+      "path" : "SharedTestUtilities",
+      "publicHeadersPath" : "./",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseABTesting",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseInstallations",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseRemoteConfigInterop",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULNSData",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseRemoteConfigInternal",
+      "packageAccess" : true,
+      "path" : "FirebaseRemoteConfig/Sources",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseRemoteConfigInternal",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "OCMock",
+            "ocmock",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "RCNConfigAnalyticsTest.m",
+        "RCNConfigSettingsTest.m",
+        "RCNConfigTest.m",
+        "RCNRemoteConfig+FIRAppTest.m",
+        "RCNThrottlingTests.m"
+      ],
+      "name" : "RemoteConfigUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseRemoteConfig/Tests/Unit",
+      "resources" : [
+        {
+          "path" : "SecondApp-GoogleService-Info.plist",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Defaults-testInfo.plist",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "TestABTPayload.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../.."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseRemoteConfigInternal",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "RemoteConfigSwiftUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseRemoteConfig/Tests/SwiftUnit",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../.."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseRemoteConfigInternal",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseSharedSwift",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseRemoteConfig",
+      "packageAccess" : true,
+      "path" : "FirebaseRemoteConfig/Swift",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseRemoteConfig",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "RemoteConfigFakeConsoleObjC",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "AccessToken.json",
+        "README.md",
+        "ObjC/"
+      ],
+      "name" : "RemoteConfigFakeConsole",
+      "packageAccess" : true,
+      "path" : "FirebaseRemoteConfig/Tests/Swift",
+      "resources" : [
+        {
+          "path" : "Defaults-testInfo.plist",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../../"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "OCMock",
+            "ocmock",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "RemoteConfigFakeConsoleObjC",
+      "packageAccess" : true,
+      "path" : "FirebaseRemoteConfig/Tests/Swift/ObjC",
+      "publicHeadersPath" : ".",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseRemoteConfigInterop",
+      "packageAccess" : true,
+      "path" : "FirebaseRemoteConfig/Interop",
+      "publicHeadersPath" : ".",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseInstallations",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCoreExtension",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseSessionsObjC",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GoogleDataTransport",
+            "GoogleDataTransport",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULUserDefaults",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseSessions",
+      "packageAccess" : true,
+      "path" : "FirebaseSessions/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : ".."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "DISPLAY_VERSION=13.2.0"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_FIELD_32BIT=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_NO_PACKED_STRUCTS=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_ENABLE_MALLOC=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "Security"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "maccatalyst",
+              "macos",
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "SystemConfiguration"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCoreExtension",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md",
+        "Sources/",
+        "Tests/",
+        "ProtoSupport/",
+        "generate_project.sh",
+        "generate_protos.sh",
+        "generate_testapp.sh"
+      ],
+      "name" : "FirebaseSessionsObjC",
+      "packageAccess" : true,
+      "path" : "FirebaseSessions",
+      "publicHeadersPath" : "SourcesObjC",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : ".."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "DISPLAY_VERSION=13.2.0"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_FIELD_32BIT=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_NO_PACKED_STRUCTS=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "PB_ENABLE_MALLOC=1"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "Security"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "maccatalyst",
+              "macos",
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "SystemConfiguration"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseSessions",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseSessionsUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseSessions/Tests/Unit",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAppCheckInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAuthInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCoreExtension",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GTMSessionFetcherCore",
+            "gtm-session-fetcher",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseStorage",
+      "packageAccess" : true,
+      "path" : "FirebaseStorage/Sources",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseStorage",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SharedTestUtilities",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseStorageUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseStorage/Tests/Unit",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../../"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseStorage",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "FIRStorageIntegrationTests.m",
+        "ObjCPPAPITests.mm",
+        "Credentials.h"
+      ],
+      "name" : "StorageObjCIntegration",
+      "packageAccess" : true,
+      "path" : "FirebaseStorage/Tests/ObjCIntegration",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../.."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Firebase",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAuth",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAppCheck",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseABTesting",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAnalytics",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "FirebaseAppDistribution",
+            {
+              "platformNames" : [
+                "ios"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAuthCombineSwift",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "FirebaseFirestoreCombineSwift",
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "Firestore"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseFunctionsCombineSwift",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseStorageCombineSwift",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCrashlytics",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseDatabase",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "FirebaseFirestoreTarget",
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "Firestore"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseFunctions",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "FirebaseInAppMessaging",
+            {
+              "platformNames" : [
+                "ios",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseInstallations",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseMessaging",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "FirebasePerformance",
+            {
+              "platformNames" : [
+                "ios",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseRemoteConfig",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseSessions",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseStorage",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "swift-test",
+      "packageAccess" : true,
+      "path" : "SwiftPMTests/swift-test",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAnalyticsWrapper",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Firebase",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "analytics-import-test",
+      "packageAccess" : true,
+      "path" : "SwiftPMTests/analytics-import-test",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Firebase",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAuth",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseABTesting",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAppCheck",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "FirebaseAppDistribution",
+            {
+              "platformNames" : [
+                "ios"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCrashlytics",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseDatabase",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "FirebaseFirestoreTarget",
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "Firestore"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseFunctions",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "FirebaseInAppMessaging",
+            {
+              "platformNames" : [
+                "ios",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseInstallations",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseMessaging",
+            null
+          ]
+        },
+        {
+          "target" : [
+            "FirebasePerformance",
+            {
+              "platformNames" : [
+                "ios",
+                "tvos"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseRemoteConfig",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseStorage",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "objc-import-test",
+      "packageAccess" : true,
+      "path" : "SwiftPMTests/objc-import-test",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "condition" : {
+            "platformNames" : [
+
+            ],
+            "traits" : [
+              "Firestore"
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "FIRESTORE_TRAIT_ENABLED"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "version-test",
+      "packageAccess" : true,
+      "path" : "SwiftPMTests/version-test",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "FIR_VERSION=13.2.0"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAppCheckInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AppCheckCore",
+            "app-check",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AppCheckRecaptchaProvider",
+            "app-check",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULEnvironment",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GULUserDefaults",
+            "GoogleUtilities",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseAppCheck",
+      "packageAccess" : true,
+      "path" : "FirebaseAppCheck/Sources",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../.."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "maccatalyst",
+              "macos",
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "DeviceCheck"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "FirebaseAppCheckInterop",
+      "packageAccess" : true,
+      "path" : "FirebaseAppCheck/Interop",
+      "publicHeadersPath" : "Public",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAppCheck",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SharedTestUtilities",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "OCMock",
+            "ocmock",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Swift"
+      ],
+      "name" : "FirebaseAppCheckUnit",
+      "packageAccess" : true,
+      "path" : "FirebaseAppCheck/Tests/Unit",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../.."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseAppCheck",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCoreExtension",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SharedTestUtilities",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "AppCheckCore",
+            "app-check",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseAppCheckUnitSwift",
+      "packageAccess" : true,
+      "path" : "FirebaseAppCheck/Tests/Unit/Swift",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../../"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseFirestoreTarget",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseFirestoreTestingSupport",
+      "packageAccess" : true,
+      "path" : "FirebaseTestingSupport/Firestore/Sources",
+      "publicHeadersPath" : "./",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../.."
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../../Firestore/Source/Public/FirebaseFirestore"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "FirebaseFirestoreTestingSupport",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirestoreTestingSupportTests",
+      "packageAccess" : true,
+      "path" : "FirebaseTestingSupport/Firestore/Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../.."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Firebase",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseFirestoreTarget",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseFirestoreTests",
+      "packageAccess" : true,
+      "path" : "Firestore/Swift/Tests/Unit",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "../../../"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "FirebaseFirestoreInternalWrapper",
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "tvos",
+                "macos"
+              ],
+              "traits" : [
+                "Firestore"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "abseil",
+            "abseil-cpp-binary",
+            null,
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "tvos",
+                "macos"
+              ],
+              "traits" : [
+                "Firestore"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "gRPC-C++",
+            "grpc-binary",
+            null,
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "tvos",
+                "macos"
+              ],
+              "traits" : [
+                "Firestore"
+              ]
+            }
+          ]
+        },
+        {
+          "product" : [
+            "nanopb",
+            "nanopb",
+            null,
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseAppCheckInterop",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseCoreExtension",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "leveldb",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "FirebaseSharedSwift",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseFirestore",
+      "packageAccess" : true,
+      "path" : "Firestore/Swift/Source",
+      "resources" : [
+        {
+          "path" : "Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "5"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "macos",
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "SystemConfiguration"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "condition" : {
+            "platformNames" : [
+              "ios",
+              "tvos"
+            ]
+          },
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "UIKit"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedFramework" : {
+              "_0" : "Network"
+            }
+          },
+          "tool" : "linker"
+        },
+        {
+          "kind" : {
+            "linkedLibrary" : {
+              "_0" : "c++"
+            }
+          },
+          "tool" : "linker"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "FirebaseFirestoreInternal",
+            {
+              "platformNames" : [
+                "ios",
+                "maccatalyst",
+                "tvos",
+                "macos"
+              ],
+              "traits" : [
+                "Firestore"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseFirestoreInternalWrapper",
+      "packageAccess" : true,
+      "path" : "FirebaseFirestoreInternal",
+      "publicHeadersPath" : ".",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "checksum" : "b4ef49a93104f47c8865aa29e095baea73f288a0c4295eb9d52b6a885c269cb6",
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "FirebaseFirestoreInternal",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "binary",
+      "url" : "https://dl.google.com/firebase/ios/bin/firestore/13.2.0/rc0/FirebaseFirestoreInternal.zip"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GeminiAPIClient",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GeminiAPIDataModels",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GeminiLanguageModel",
+      "packageAccess" : true,
+      "path" : "GeminiLanguageModel/Sources/GeminiLanguageModel",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GeminiLanguageModel",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GeminiTestUtilities",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "IntegrationTests/README.md",
+        "README.md"
+      ],
+      "name" : "GeminiLanguageModelTests",
+      "packageAccess" : true,
+      "path" : "GeminiLanguageModel/Tests/GeminiLanguageModelTests",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GeminiAPIDataModels",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GeminiAPIClient",
+      "packageAccess" : true,
+      "path" : "GeminiLanguageModel/Sources/GeminiAPIClient",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "GeminiAPIClient",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "GeminiTestUtilities",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GeminiAPIClientTests",
+      "packageAccess" : true,
+      "path" : "GeminiLanguageModel/Tests/GeminiAPIClientTests",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "GeminiAPIDataModels",
+      "packageAccess" : true,
+      "path" : "GeminiLanguageModel/Sources/GeminiAPIDataModels",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "README.md"
+      ],
+      "name" : "GeminiTestUtilities",
+      "packageAccess" : true,
+      "path" : "GeminiLanguageModel/Tests/GeminiTestUtilities",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "swiftLanguageMode" : {
+              "_0" : "6"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.2.0"
+  },
+  "traits" : [
+    {
+      "description" : "Enables Firestore support and its underlying dependencies (gRPC, Abseil).",
+      "enabledTraits" : [
+
+      ],
+      "name" : "Firestore"
+    },
+    {
+      "description" : "The default traits of this package.",
+      "enabledTraits" : [
+        "Firestore"
+      ],
+      "name" : "default"
+    }
+  ]
+}

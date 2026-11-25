@@ -1,0 +1,3858 @@
+{
+  "cxx_language_standard" : "gnu++17",
+  "dependencies" : [
+    {
+      "identity" : "promises",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.4.1",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/promises.git"
+    },
+    {
+      "identity" : "googleappmeasurement",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "13.2.0",
+            "upper_bound" : "13.3.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/GoogleAppMeasurement.git"
+    },
+    {
+      "identity" : "googledatatransport",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "10.1.1",
+            "upper_bound" : "11.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/GoogleDataTransport.git"
+    },
+    {
+      "identity" : "googleutilities",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "8.1.4",
+            "upper_bound" : "9.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/GoogleUtilities.git"
+    },
+    {
+      "identity" : "gtm-session-fetcher",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "4.0.0",
+            "upper_bound" : "6.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/gtm-session-fetcher.git"
+    },
+    {
+      "identity" : "nanopb",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.30910.1",
+            "upper_bound" : "2.30911.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/firebase/nanopb.git"
+    },
+    {
+      "identity" : "abseil-cpp-binary",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.2025051202.0",
+            "upper_bound" : "1.2025051300.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/abseil-cpp-binary.git"
+    },
+    {
+      "identity" : "grpc-binary",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.83.1",
+            "upper_bound" : "1.84.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/grpc-binary.git"
+    },
+    {
+      "identity" : "ocmock",
+      "requirement" : {
+        "revision" : [
+          "2c0bfd373289f4a7716db5d6db471640f91a6507"
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/erikdoe/ocmock.git"
+    },
+    {
+      "identity" : "leveldb",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.22.5",
+            "upper_bound" : "1.23.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/firebase/leveldb.git"
+    },
+    {
+      "identity" : "gcdwebserver",
+      "requirement" : {
+        "revision" : [
+          "935e2736044e71e5341663c3cc9a335ba6867a2b"
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/SlaunchaMan/GCDWebServer.git"
+    },
+    {
+      "identity" : "interop-ios-for-google-sdks",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "101.0.0",
+            "upper_bound" : "102.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/interop-ios-for-google-sdks.git"
+    },
+    {
+      "identity" : "app-check",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "12.1.0",
+            "upper_bound" : "13.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/app-check.git"
+    }
+  ],
+  "manifest_display_name" : "Firebase",
+  "name" : "Firebase",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "maccatalyst",
+      "version" : "15.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "11.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "8.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "FirebaseAILogic",
+      "targets" : [
+        "FirebaseAILogic"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseAnalytics",
+      "targets" : [
+        "FirebaseAnalyticsTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseAnalyticsCore",
+      "targets" : [
+        "FirebaseAnalyticsCoreTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseAnalyticsIdentitySupport",
+      "targets" : [
+        "FirebaseAnalyticsIdentitySupportTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseAuth",
+      "targets" : [
+        "FirebaseAuth"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseAppCheck",
+      "targets" : [
+        "FirebaseAppCheck"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseAppDistribution-Beta",
+      "targets" : [
+        "FirebaseAppDistributionTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseAuthCombine-Community",
+      "targets" : [
+        "FirebaseAuthCombineSwift"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseFirestoreCombine-Community",
+      "targets" : [
+        "FirebaseFirestoreCombineSwift"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseFunctionsCombine-Community",
+      "targets" : [
+        "FirebaseFunctionsCombineSwift"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseStorageCombine-Community",
+      "targets" : [
+        "FirebaseStorageCombineSwift"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseCore",
+      "targets" : [
+        "FirebaseCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseCrashlytics",
+      "targets" : [
+        "FirebaseCrashlytics"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseDatabase",
+      "targets" : [
+        "FirebaseDatabase"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseFirestore",
+      "targets" : [
+        "FirebaseFirestoreTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseFunctions",
+      "targets" : [
+        "FirebaseFunctions"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseInAppMessaging-Beta",
+      "targets" : [
+        "FirebaseInAppMessagingTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseInstallations",
+      "targets" : [
+        "FirebaseInstallations"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseMessaging",
+      "targets" : [
+        "FirebaseMessaging"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebasePerformance",
+      "targets" : [
+        "FirebasePerformanceTarget"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseRemoteConfig",
+      "targets" : [
+        "FirebaseRemoteConfig"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "FirebaseStorage",
+      "targets" : [
+        "FirebaseStorage"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "version_test",
+      "module_type" : "ClangTarget",
+      "name" : "version-test",
+      "path" : "SwiftPMTests/version-test",
+      "sources" : [
+        "versionTest.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "swift_test",
+      "module_type" : "SwiftTarget",
+      "name" : "swift-test",
+      "path" : "SwiftPMTests/swift-test",
+      "product_dependencies" : [
+        "nanopb"
+      ],
+      "sources" : [
+        "all-imports.swift"
+      ],
+      "target_dependencies" : [
+        "Firebase",
+        "FirebaseAuth",
+        "FirebaseAppCheck",
+        "FirebaseABTesting",
+        "FirebaseAnalytics",
+        "FirebaseAppDistribution",
+        "FirebaseAuthCombineSwift",
+        "FirebaseFirestoreCombineSwift",
+        "FirebaseFunctionsCombineSwift",
+        "FirebaseStorageCombineSwift",
+        "FirebaseCrashlytics",
+        "FirebaseCore",
+        "FirebaseDatabase",
+        "FirebaseFirestoreTarget",
+        "FirebaseFunctions",
+        "FirebaseInAppMessaging",
+        "FirebaseInstallations",
+        "FirebaseMessaging",
+        "FirebasePerformance",
+        "FirebaseRemoteConfig",
+        "FirebaseSessions",
+        "FirebaseStorage"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "objc_import_test",
+      "module_type" : "ClangTarget",
+      "name" : "objc-import-test",
+      "path" : "SwiftPMTests/objc-import-test",
+      "sources" : [
+        "objc-header.m",
+        "objc-module.m"
+      ],
+      "target_dependencies" : [
+        "Firebase",
+        "FirebaseAuth",
+        "FirebaseABTesting",
+        "FirebaseAppCheck",
+        "FirebaseAppDistribution",
+        "FirebaseCrashlytics",
+        "FirebaseCore",
+        "FirebaseDatabase",
+        "FirebaseFirestoreTarget",
+        "FirebaseFunctions",
+        "FirebaseInAppMessaging",
+        "FirebaseInstallations",
+        "FirebaseMessaging",
+        "FirebasePerformance",
+        "FirebaseRemoteConfig",
+        "FirebaseStorage"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "analytics_import_test",
+      "module_type" : "SwiftTarget",
+      "name" : "analytics-import-test",
+      "path" : "SwiftPMTests/analytics-import-test",
+      "sources" : [
+        "analytics-import.swift",
+        "firebase-import.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseAnalyticsWrapper",
+        "Firebase"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "StorageObjCIntegration",
+      "module_type" : "ClangTarget",
+      "name" : "StorageObjCIntegration",
+      "path" : "FirebaseStorage/Tests/ObjCIntegration",
+      "sources" : [
+        "ObjCAPITests.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseStorage"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SharedTestUtilities",
+      "module_type" : "ClangTarget",
+      "name" : "SharedTestUtilities",
+      "path" : "SharedTestUtilities",
+      "product_dependencies" : [
+        "GoogleDataTransport",
+        "OCMock"
+      ],
+      "sources" : [
+        "AppCheckFake/FIRAppCheckFake.m",
+        "AppCheckFake/FIRAppCheckTokenResultFake.m",
+        "Date/FIRDateTestUtils.m",
+        "ExceptionCatcher.m",
+        "FIRAuthInteropFake.m",
+        "FIRComponentTestUtilities.m",
+        "FIRMessagingInteropFake.m",
+        "FIROptionsMock.m",
+        "FIRSampleAppUtilities.m",
+        "GDTCORTransportFake.m",
+        "URLSession/FIRURLSessionOCMockStub.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseCore",
+        "FirebaseCoreExtension",
+        "FirebaseAppCheckInterop",
+        "FirebaseAuthInterop",
+        "FirebaseMessagingInterop"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "RemoteConfigUnit",
+      "module_type" : "ClangTarget",
+      "name" : "RemoteConfigUnit",
+      "path" : "FirebaseRemoteConfig/Tests/Unit",
+      "product_dependencies" : [
+        "OCMock"
+      ],
+      "resources" : [
+        {
+          "path" : "./FirebaseRemoteConfig/Tests/Unit/Defaults-testInfo.plist",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseRemoteConfig/Tests/Unit/SecondApp-GoogleService-Info.plist",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseRemoteConfig/Tests/Unit/TestABTPayload.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "FIRRemoteConfigComponentTest.m",
+        "RCNConfigContentTest.m",
+        "RCNConfigDBManagerTest.m",
+        "RCNConfigExperimentTest.m",
+        "RCNConfigValueTest.m",
+        "RCNInstanceIDTest.m",
+        "RCNPersonalizationTest.m",
+        "RCNRemoteConfigTest.m",
+        "RCNTestUtilities.m",
+        "RCNUserDefaultsManagerTests.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseRemoteConfigInternal"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "RemoteConfigSwiftUnit",
+      "module_type" : "SwiftTarget",
+      "name" : "RemoteConfigSwiftUnit",
+      "path" : "FirebaseRemoteConfig/Tests/SwiftUnit",
+      "sources" : [
+        "RemoteConfigInteropTests.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseRemoteConfigInternal"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "RemoteConfigFakeConsoleObjC",
+      "module_type" : "ClangTarget",
+      "name" : "RemoteConfigFakeConsoleObjC",
+      "path" : "FirebaseRemoteConfig/Tests/Swift/ObjC",
+      "product_dependencies" : [
+        "OCMock"
+      ],
+      "sources" : [
+        "FetchMocks.m",
+        "RealtimeMocks.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "RemoteConfigFakeConsole",
+      "module_type" : "SwiftTarget",
+      "name" : "RemoteConfigFakeConsole",
+      "path" : "FirebaseRemoteConfig/Tests/Swift",
+      "resources" : [
+        {
+          "path" : "./FirebaseRemoteConfig/Tests/Swift/Defaults-testInfo.plist",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "FakeConsole/FakeConsoleTests.swift",
+        "FakeUtils/FakeConsole.swift",
+        "FakeUtils/MockURLProtocol.swift",
+        "SwiftAPI/APITestBase.swift",
+        "SwiftAPI/APITests.swift",
+        "SwiftAPI/AsyncAwaitTests.swift",
+        "SwiftAPI/AsyncSequenceTests.swift",
+        "SwiftAPI/Codable.swift",
+        "SwiftAPI/Constants.swift",
+        "SwiftAPI/FirebaseRemoteConfigSwift_APIBuildTests.swift",
+        "SwiftAPI/PropertyWrapperDefaultConfigsTests.swift",
+        "SwiftAPI/PropertyWrapperTestUtils.swift",
+        "SwiftAPI/PropertyWrapperTests.swift",
+        "SwiftAPI/RemoteConfigConsole.swift",
+        "SwiftAPI/Value.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseRemoteConfig",
+        "RemoteConfigFakeConsoleObjC"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "PerformanceUnit",
+      "module_type" : "ClangTarget",
+      "name" : "PerformanceUnit",
+      "path" : "FirebasePerformance/Tests/Unit",
+      "product_dependencies" : [
+        "GCDWebServer",
+        "OCMock"
+      ],
+      "resources" : [
+        {
+          "path" : "./FirebasePerformance/Tests/Unit/FPRURLFilterTests-Info.plist",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebasePerformance/Tests/Unit/Server/bigDownloadFile",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebasePerformance/Tests/Unit/Server/smallDownloadFile",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Common/FPRConsoleURLGeneratorTest.m",
+        "Common/FPRDiagnosticsTest.m",
+        "Common/FPRFakeDate.m",
+        "Configurations/FPRConfigurationsTest.m",
+        "Configurations/FPRFakeRemoteConfig.m",
+        "Configurations/FPRRemoteConfigFlagsTest.m",
+        "FIRPerformanceTest.m",
+        "FPRAppActivityTrackerTest.m",
+        "FPRClassInstrumentorTest.m",
+        "FPRClientTest.m",
+        "FPRInstrumentTest.m",
+        "FPRInstrumentationTest.m",
+        "FPRNanoPbUtilsTest.m",
+        "FPRNetworkTraceTest.m",
+        "FPRObjectInstrumentorTest.m",
+        "FPRScreenTraceTrackerTest.m",
+        "FPRSelectorInstrumentorTest.m",
+        "FPRSessionDetailsTest.m",
+        "FPRSessionManagerTest.m",
+        "FPRTestCase.m",
+        "FPRTestUtils.m",
+        "FPRTraceBackgroundActivityTrackerTest.m",
+        "FPRURLFilterTests.m",
+        "Fakes/FIRAppFake.m",
+        "Fakes/FPRFakeClient.m",
+        "Fakes/FPRFakeConfigurations.m",
+        "Fakes/FPRFakeInstallations.m",
+        "Fakes/NSBundleFake.m",
+        "Fakes/NSProcessInfoFake.m",
+        "Gauges/FPRCPUGaugeCollectorTests.m",
+        "Gauges/FPRCPUGaugeDataTests.m",
+        "Gauges/FPRGaugeManagerTests.m",
+        "Gauges/FPRMemoryGaugeCollectorTests.m",
+        "Gauges/FPRMemoryGaugeDataTests.m",
+        "ISASwizzler/FPRObjectSwizzlerTest.m",
+        "ISASwizzler/FPRProxy.m",
+        "Instruments/FIRHTTPMetricTests.m",
+        "Instruments/FPRNSURLConnectionInstrumentTest.m",
+        "Instruments/FPRNSURLConnectionInstrumentTestDelegates.m",
+        "Instruments/FPRNSURLSessionInstrumentTest.m",
+        "Instruments/FPRNSURLSessionInstrumentTestDelegates.m",
+        "Instruments/FPRUIViewControllerInstrumentTest.m",
+        "Loggers/FPRGDTEventTest.m",
+        "Loggers/FPRGDTLogSamplerTest.m",
+        "Loggers/FPRGDTLoggerTest.m",
+        "Loggers/FPRGDTRateLimiterTest.m",
+        "Server/FPRHermeticTestServer.m",
+        "Timer/FIRTraceTest.m",
+        "Timer/FPRCounterListTest.m"
+      ],
+      "target_dependencies" : [
+        "FirebasePerformanceTarget",
+        "SharedTestUtilities"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "MessagingUnit",
+      "module_type" : "ClangTarget",
+      "name" : "MessagingUnit",
+      "path" : "FirebaseMessaging/Tests/UnitTests",
+      "product_dependencies" : [
+        "OCMock"
+      ],
+      "sources" : [
+        "FIRMessagingAPNSInfoTest.m",
+        "FIRMessagingAnalyticsTest.m",
+        "FIRMessagingAuthKeychainTest.m",
+        "FIRMessagingAuthServiceTest.m",
+        "FIRMessagingBackupExcludedPlistTest.m",
+        "FIRMessagingCheckinPreferencesTest.m",
+        "FIRMessagingCheckinServiceTest.m",
+        "FIRMessagingCheckinStoreTest.m",
+        "FIRMessagingContextManagerServiceTest.m",
+        "FIRMessagingExtensionHelperTest.m",
+        "FIRMessagingFIDRegisterOperationTest.m",
+        "FIRMessagingFIDUnregisterOperationTest.m",
+        "FIRMessagingFakeKeychain.m",
+        "FIRMessagingHandlingTest.m",
+        "FIRMessagingLegacyArchiveFixtures.m",
+        "FIRMessagingLinkHandlingTest.m",
+        "FIRMessagingPendingTopicsListTest.m",
+        "FIRMessagingPubSubTest.m",
+        "FIRMessagingRemoteNotificationsProxyTest.m",
+        "FIRMessagingRmqManagerTest.m",
+        "FIRMessagingServiceTest.m",
+        "FIRMessagingTest.m",
+        "FIRMessagingTestNotificationUtilities.m",
+        "FIRMessagingTestUtilities.m",
+        "FIRMessagingTokenInfoTest.m",
+        "FIRMessagingTokenManagerTest.m",
+        "FIRMessagingTokenOperationsTest.m",
+        "FIRMessagingTokenStoreTest.m",
+        "FIRMessagingUtilitiesTest.m",
+        "FIRTestsAssertionHandler.m",
+        "XCTestCase+FIRMessagingRmqManagerTests.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseMessaging",
+        "SharedTestUtilities"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GeminiTestUtilities",
+      "module_type" : "SwiftTarget",
+      "name" : "GeminiTestUtilities",
+      "path" : "GeminiLanguageModel/Tests/GeminiTestUtilities",
+      "sources" : [
+        "AppCheckDebugClient.swift",
+        "ConditionTrait+Credentials.swift",
+        "ConditionTrait+FoundationModels.swift",
+        "HTTPURLResponse+Mock.swift",
+        "IntegrationTestEnvironment.swift",
+        "IntegrationTestingBackend.swift",
+        "MockHTTPURLProtocol.swift",
+        "Tag+Integration.swift",
+        "TestConstants.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GeminiLanguageModelTests",
+      "module_type" : "SwiftTarget",
+      "name" : "GeminiLanguageModelTests",
+      "path" : "GeminiLanguageModel/Tests/GeminiLanguageModelTests",
+      "sources" : [
+        "GeminiErrorMapperTests.swift",
+        "GeminiImageTranslatorPassThroughTests.swift",
+        "GeminiImageTranslatorTests.swift",
+        "GeminiLanguageModelTests.swift",
+        "GeminiRequestTranslatorTests.swift",
+        "GeminiTranscriptTranslatorTests.swift",
+        "GenerationSchema+GeminiTests.swift",
+        "IntegrationTestingBackendTests.swift",
+        "IntegrationTests/BasicContentGenerationIntegrationTests.swift",
+        "IntegrationTests/GuidedGenerationIntegrationTests.swift",
+        "IntegrationTests/ImageUnderstandingIntegrationTests.swift",
+        "IntegrationTests/IntegrationTestingBackend+GeminiLanguageModel.swift",
+        "IntegrationTests/ToolCallingIntegrationTests.swift",
+        "StreamedTokenCounterTests.swift",
+        "TestImages.swift"
+      ],
+      "target_dependencies" : [
+        "GeminiLanguageModel",
+        "GeminiTestUtilities"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GeminiLanguageModel",
+      "module_type" : "SwiftTarget",
+      "name" : "GeminiLanguageModel",
+      "path" : "GeminiLanguageModel/Sources/GeminiLanguageModel",
+      "product_memberships" : [
+        "FirebaseAILogic"
+      ],
+      "sources" : [
+        "GeminiErrorMapper.swift",
+        "GeminiImageTranslator.swift",
+        "GeminiLanguageModel+Error.swift",
+        "GeminiLanguageModel.swift",
+        "GeminiLanguageModelExecutor.swift",
+        "GeminiRequestTranslator.swift",
+        "GeminiTranscriptTranslator.swift",
+        "GenerationSchema+Gemini.swift",
+        "StreamedTokenCounter.swift"
+      ],
+      "target_dependencies" : [
+        "GeminiAPIClient",
+        "GeminiAPIDataModels"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GeminiAPIDataModels",
+      "module_type" : "SwiftTarget",
+      "name" : "GeminiAPIDataModels",
+      "path" : "GeminiLanguageModel/Sources/GeminiAPIDataModels",
+      "product_memberships" : [
+        "FirebaseAILogic"
+      ],
+      "sources" : [
+        "GenerateContent/AudioResponseFormat+Delivery.swift",
+        "GenerateContent/AudioResponseFormat+MIMEType.swift",
+        "GenerateContent/AudioResponseFormat.swift",
+        "GenerateContent/AudioTranscription.swift",
+        "GenerateContent/AudioTranscriptionConfig+Mode.swift",
+        "GenerateContent/AudioTranscriptionConfig.swift",
+        "GenerateContent/AudioTranscriptionConfigLanguageAuto.swift",
+        "GenerateContent/AudioTranscriptionConfigLanguageHints.swift",
+        "GenerateContent/AudioTranscriptionWordInfo.swift",
+        "GenerateContent/Blob.swift",
+        "GenerateContent/CalendarDate.swift",
+        "GenerateContent/Candidate+FinishReason.swift",
+        "GenerateContent/Candidate.swift",
+        "GenerateContent/Citation.swift",
+        "GenerateContent/CitationMetadata.swift",
+        "GenerateContent/CodeExecution.swift",
+        "GenerateContent/CodeExecutionResult+Outcome.swift",
+        "GenerateContent/CodeExecutionResult.swift",
+        "GenerateContent/Content.swift",
+        "GenerateContent/CountTokensRequest.swift",
+        "GenerateContent/CountTokensResponse.swift",
+        "GenerateContent/ExecutableCode+Language.swift",
+        "GenerateContent/ExecutableCode.swift",
+        "GenerateContent/FileData.swift",
+        "GenerateContent/FunctionCall.swift",
+        "GenerateContent/FunctionCallingConfig+Mode.swift",
+        "GenerateContent/FunctionCallingConfig.swift",
+        "GenerateContent/FunctionDeclaration+Behavior.swift",
+        "GenerateContent/FunctionDeclaration.swift",
+        "GenerateContent/FunctionResponse+Scheduling.swift",
+        "GenerateContent/FunctionResponse.swift",
+        "GenerateContent/FunctionResponseBlob.swift",
+        "GenerateContent/FunctionResponseFileData.swift",
+        "GenerateContent/FunctionResponsePart.swift",
+        "GenerateContent/GenerateContentRequest.swift",
+        "GenerateContent/GenerateContentRequestOutputConfig.swift",
+        "GenerateContent/GenerateContentResponse.swift",
+        "GenerateContent/GenerationConfig+MediaResolution.swift",
+        "GenerateContent/GenerationConfig.swift",
+        "GenerateContent/GoogleMaps.swift",
+        "GenerateContent/GoogleMapsGroundingTypes.swift",
+        "GenerateContent/GoogleMapsPlaces.swift",
+        "GenerateContent/GoogleMapsRouting.swift",
+        "GenerateContent/GoogleSearch+BlockingConfidence.swift",
+        "GenerateContent/GoogleSearch.swift",
+        "GenerateContent/GroundingChunk.swift",
+        "GenerateContent/GroundingMetadata.swift",
+        "GenerateContent/GroundingMetadataSourceFlaggingURI.swift",
+        "GenerateContent/GroundingSupport.swift",
+        "GenerateContent/HarmCategory.swift",
+        "GenerateContent/HistoryContent.swift",
+        "GenerateContent/HistoryPart.swift",
+        "GenerateContent/ImageChunk.swift",
+        "GenerateContent/ImageConfig+PersonGeneration.swift",
+        "GenerateContent/ImageConfig+ProminentPeople.swift",
+        "GenerateContent/ImageConfig.swift",
+        "GenerateContent/ImageConfigImageOutputOptions.swift",
+        "GenerateContent/ImageResponseFormat+AspectRatio.swift",
+        "GenerateContent/ImageResponseFormat+Delivery.swift",
+        "GenerateContent/ImageResponseFormat+ImageSize.swift",
+        "GenerateContent/ImageResponseFormat+MIMEType.swift",
+        "GenerateContent/ImageResponseFormat.swift",
+        "GenerateContent/ImageSearch.swift",
+        "GenerateContent/Interval.swift",
+        "GenerateContent/LatLng.swift",
+        "GenerateContent/LogprobsResult.swift",
+        "GenerateContent/LogprobsResultCandidate.swift",
+        "GenerateContent/MapsChunk.swift",
+        "GenerateContent/MapsRoute.swift",
+        "GenerateContent/Modality.swift",
+        "GenerateContent/ModalityTokenCount.swift",
+        "GenerateContent/ModelStage.swift",
+        "GenerateContent/ModelStatus.swift",
+        "GenerateContent/MultiSpeakerVoiceConfig.swift",
+        "GenerateContent/Part+MediaProcessing.swift",
+        "GenerateContent/Part+MediaResolution+Level.swift",
+        "GenerateContent/Part+MediaResolution.swift",
+        "GenerateContent/Part.swift",
+        "GenerateContent/PlaceAnswerSources.swift",
+        "GenerateContent/PrebuiltVoiceConfig.swift",
+        "GenerateContent/PromptFeedback+BlockReason.swift",
+        "GenerateContent/PromptFeedback.swift",
+        "GenerateContent/ReplicatedVoiceConfig.swift",
+        "GenerateContent/ResponseFormatConfig.swift",
+        "GenerateContent/RetrievalConfig.swift",
+        "GenerateContent/RetrievalMetadata.swift",
+        "GenerateContent/ReviewSnippet.swift",
+        "GenerateContent/SafetyRating+OverwrittenThreshold.swift",
+        "GenerateContent/SafetyRating+Probability.swift",
+        "GenerateContent/SafetyRating+Severity.swift",
+        "GenerateContent/SafetyRating.swift",
+        "GenerateContent/SafetySetting+Method.swift",
+        "GenerateContent/SafetySetting+Threshold.swift",
+        "GenerateContent/SafetySetting.swift",
+        "GenerateContent/SearchEntryPoint.swift",
+        "GenerateContent/SearchTypes.swift",
+        "GenerateContent/Segment.swift",
+        "GenerateContent/ServiceTier.swift",
+        "GenerateContent/SpeakerVoiceConfig.swift",
+        "GenerateContent/SpeechConfig.swift",
+        "GenerateContent/SpeechMetadata.swift",
+        "GenerateContent/TemplateFunction.swift",
+        "GenerateContent/TemplateGenerateContentRequest.swift",
+        "GenerateContent/TextResponseFormat+MIMEType.swift",
+        "GenerateContent/TextResponseFormat.swift",
+        "GenerateContent/ThinkingConfig+ThinkingLevel.swift",
+        "GenerateContent/ThinkingConfig.swift",
+        "GenerateContent/Tool.swift",
+        "GenerateContent/ToolCall.swift",
+        "GenerateContent/ToolConfig.swift",
+        "GenerateContent/ToolResponse.swift",
+        "GenerateContent/ToolType.swift",
+        "GenerateContent/TopCandidates.swift",
+        "GenerateContent/URLContext.swift",
+        "GenerateContent/URLContextMetadata.swift",
+        "GenerateContent/URLMetadata+URLRetrievalStatus.swift",
+        "GenerateContent/URLMetadata.swift",
+        "GenerateContent/UsageMetadata+TrafficType.swift",
+        "GenerateContent/UsageMetadata.swift",
+        "GenerateContent/VideoResponseFormat+AspectRatio.swift",
+        "GenerateContent/VideoResponseFormat+Delivery.swift",
+        "GenerateContent/VideoResponseFormat.swift",
+        "GenerateContent/VoiceConfig.swift",
+        "GenerateContent/WebChunk.swift",
+        "GenerateContent/WebSearch.swift",
+        "Shared/Buildable.swift",
+        "Shared/GoogleCloudAPIError.swift",
+        "Shared/JSONValue.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GeminiAPIClientTests",
+      "module_type" : "SwiftTarget",
+      "name" : "GeminiAPIClientTests",
+      "path" : "GeminiLanguageModel/Tests/GeminiAPIClientTests",
+      "sources" : [
+        "Content+Text.swift",
+        "EndpointConfigurationTests.swift",
+        "GeminiAPIClientIntegrationTests.swift",
+        "GeminiAPIClientTests.swift",
+        "GeminiAPIErrorTests.swift",
+        "HTTPLineDecoderTests.swift",
+        "HTTPStreamingClientTests.swift",
+        "HeaderProviderTests.swift",
+        "PartTests.swift"
+      ],
+      "target_dependencies" : [
+        "GeminiAPIClient",
+        "GeminiTestUtilities"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GeminiAPIClient",
+      "module_type" : "SwiftTarget",
+      "name" : "GeminiAPIClient",
+      "path" : "GeminiLanguageModel/Sources/GeminiAPIClient",
+      "product_memberships" : [
+        "FirebaseAILogic"
+      ],
+      "sources" : [
+        "EndpointConfiguration.swift",
+        "GeminiAPIClient.swift",
+        "GeminiAPIError.swift",
+        "HTTPLineDecoder.swift",
+        "HTTPStreamingClient.swift",
+        "HeaderProvider.swift",
+        "LockedValue.swift",
+        "ModelResource.swift"
+      ],
+      "target_dependencies" : [
+        "GeminiAPIDataModels"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FunctionsCombineUnit",
+      "module_type" : "SwiftTarget",
+      "name" : "FunctionsCombineUnit",
+      "path" : "FirebaseFunctions/Tests/CombineUnit",
+      "sources" : [
+        "HTTPSCallableTests.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseFunctionsCombineSwift",
+        "SharedTestUtilities"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirestoreTestingSupportTests",
+      "module_type" : "SwiftTarget",
+      "name" : "FirestoreTestingSupportTests",
+      "path" : "FirebaseTestingSupport/Firestore/Tests",
+      "sources" : [
+        "QueryFakeTests.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseFirestoreTestingSupport"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirebaseStorageUnit",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseStorageUnit",
+      "path" : "FirebaseStorage/Tests/Unit",
+      "sources" : [
+        "StorageAPITests.swift",
+        "StorageAsyncAwaitTests.swift",
+        "StorageAuthorizerTests.swift",
+        "StorageComponentTests.swift",
+        "StorageDeleteTests.swift",
+        "StorageGetMetadataTests.swift",
+        "StorageListTests.swift",
+        "StorageMetadataTests.swift",
+        "StorageObservableTaskTests.swift",
+        "StoragePathTests.swift",
+        "StoragePutFileTests.swift",
+        "StorageReferenceTests.swift",
+        "StorageTaskEnqueueTests.swift",
+        "StorageTaskTests.swift",
+        "StorageTestHelpers.swift",
+        "StorageTests.swift",
+        "StorageUpdateMetadataTests.swift",
+        "StorageUtilsTests.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseStorage",
+        "SharedTestUtilities"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirebaseStorageCombineSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseStorageCombineSwift",
+      "path" : "FirebaseCombineSwift/Sources/Storage",
+      "product_memberships" : [
+        "FirebaseStorageCombine-Community"
+      ],
+      "sources" : [
+        "Storage+Combine.swift",
+        "StorageReference+Combine.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseStorage"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseStorage",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseStorage",
+      "path" : "FirebaseStorage/Sources",
+      "product_dependencies" : [
+        "GTMSessionFetcherCore",
+        "GULEnvironment"
+      ],
+      "product_memberships" : [
+        "FirebaseStorageCombine-Community",
+        "FirebaseStorage"
+      ],
+      "sources" : [
+        "AsyncAwait.swift",
+        "Internal/StorageDeleteTask.swift",
+        "Internal/StorageFetcherService.swift",
+        "Internal/StorageGetDownloadURLTask.swift",
+        "Internal/StorageGetMetadataTask.swift",
+        "Internal/StorageInternalTask.swift",
+        "Internal/StorageListTask.swift",
+        "Internal/StoragePath.swift",
+        "Internal/StorageTaskState.swift",
+        "Internal/StorageTokenAuthorizer.swift",
+        "Internal/StorageUpdateMetadataTask.swift",
+        "Internal/StorageUtils.swift",
+        "Result.swift",
+        "Storage.swift",
+        "StorageConstants.swift",
+        "StorageDownloadTask.swift",
+        "StorageError.swift",
+        "StorageListResult.swift",
+        "StorageMetadata.swift",
+        "StorageObservableTask.swift",
+        "StorageReference.swift",
+        "StorageTask.swift",
+        "StorageTaskSnapshot.swift",
+        "StorageUploadTask.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseAppCheckInterop",
+        "FirebaseAuthInterop",
+        "FirebaseCore",
+        "FirebaseCoreExtension"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseSharedSwiftTests",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseSharedSwiftTests",
+      "path" : "FirebaseSharedSwift/Tests",
+      "sources" : [
+        "Codable/FirebaseDataEncoderTests.swift",
+        "third_party/DataEncoderTests.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseSharedSwift"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirebaseSharedSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseSharedSwift",
+      "path" : "FirebaseSharedSwift/Sources",
+      "product_memberships" : [
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseDatabase",
+        "FirebaseFirestore",
+        "FirebaseFunctions",
+        "FirebaseRemoteConfig"
+      ],
+      "sources" : [
+        "FirebaseRemoteConfigValueDecoding.swift",
+        "third_party/FirebaseDataEncoder/FirebaseDataEncoder.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseSessionsUnit",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseSessionsUnit",
+      "path" : "FirebaseSessions/Tests/Unit",
+      "sources" : [
+        "ApplicationInfoTests.swift",
+        "Error+EquatableTests.swift",
+        "FirebaseSessionsTests+BaseBehaviors.swift",
+        "FirebaseSessionsTests+DataCollection.swift",
+        "FirebaseSessionsTests+Subscribers.swift",
+        "InitiatorTests.swift",
+        "LegacyRemoteSettings.swift",
+        "LegacySettingsCacheClient.swift",
+        "Library/FirebaseSessionsTestsBase.swift",
+        "Library/LifecycleNotifications.swift",
+        "Mocks/MockApplicationInfo.swift",
+        "Mocks/MockGDTLogger.swift",
+        "Mocks/MockInstallationsProtocol.swift",
+        "Mocks/MockLocalOverrideSettings.swift",
+        "Mocks/MockNetworkInfo.swift",
+        "Mocks/MockSessionCoordinator.swift",
+        "Mocks/MockSettingsDownloader.swift",
+        "Mocks/MockSettingsProtocol.swift",
+        "Mocks/MockSubscriber.swift",
+        "Mocks/MockTimeProvider.swift",
+        "RemoteSettingsDeadlockTests.swift",
+        "RemoteSettingsTests.swift",
+        "SDKDefaultSettingsTests.swift",
+        "SessionCoordinatorTests.swift",
+        "SessionGeneratorTests.swift",
+        "SessionStartEventTests.swift",
+        "SessionsSettingsTests.swift",
+        "SessionsStateTests.swift",
+        "SettingsCacheMigrationTests.swift",
+        "TestNanoPBHelpers.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseSessions"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirebaseSessionsObjC",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseSessionsObjC",
+      "path" : "FirebaseSessions",
+      "product_dependencies" : [
+        "GULEnvironment",
+        "nanopb"
+      ],
+      "product_memberships" : [
+        "FirebaseCrashlytics",
+        "FirebasePerformance"
+      ],
+      "sources" : [
+        "SourcesObjC/NanoPB/FIRSESNanoPBHelpers.m",
+        "SourcesObjC/Protogen/nanopb/sessions.nanopb.c"
+      ],
+      "target_dependencies" : [
+        "FirebaseCore",
+        "FirebaseCoreExtension"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseSessions",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseSessions",
+      "path" : "FirebaseSessions/Sources",
+      "product_dependencies" : [
+        "nanopb",
+        "GoogleDataTransport",
+        "GULEnvironment",
+        "GULUserDefaults"
+      ],
+      "product_memberships" : [
+        "FirebaseCrashlytics",
+        "FirebasePerformance"
+      ],
+      "sources" : [
+        "ApplicationInfo.swift",
+        "Development/DevEventConsoleLogger.swift",
+        "Development/NanoPB+CustomStringConvertible.swift",
+        "EventGDTLogger.swift",
+        "FirebaseSessions.swift",
+        "FirebaseSessionsError.swift",
+        "GoogleDataTransport+GoogleDataTransportProtocol.swift",
+        "Installations+InstallationsProtocol.swift",
+        "Logger.swift",
+        "NetworkInfo.swift",
+        "Public/SessionsDependencies.swift",
+        "Public/SessionsProvider.swift",
+        "Public/SessionsSubscriber.swift",
+        "SessionCoordinator.swift",
+        "SessionGenerator.swift",
+        "SessionInitiator.swift",
+        "SessionStartEvent.swift",
+        "SessionsState.swift",
+        "Settings/LocalOverrideSettings.swift",
+        "Settings/RemoteSettings.swift",
+        "Settings/SDKDefaultSettings.swift",
+        "Settings/SessionsSettings.swift",
+        "Settings/SettingsCacheClient.swift",
+        "Settings/SettingsDownloadClient.swift",
+        "Settings/SettingsProtocol.swift",
+        "Settings/SettingsProvider.swift",
+        "Time.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseCore",
+        "FirebaseInstallations",
+        "FirebaseCoreExtension",
+        "FirebaseSessionsObjC"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseRemoteConfigInterop",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseRemoteConfigInterop",
+      "path" : "FirebaseRemoteConfig/Interop",
+      "product_memberships" : [
+        "FirebaseCrashlytics",
+        "FirebasePerformance",
+        "FirebaseRemoteConfig"
+      ],
+      "sources" : [
+        "RemoteConfigConstants.swift",
+        "RemoteConfigInterop.swift",
+        "RolloutAssignment.swift",
+        "RolloutsStateSubscriber.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseRemoteConfigInternal",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseRemoteConfigInternal",
+      "path" : "FirebaseRemoteConfig/Sources",
+      "product_dependencies" : [
+        "GULEnvironment",
+        "GULNSData"
+      ],
+      "product_memberships" : [
+        "FirebasePerformance",
+        "FirebaseRemoteConfig"
+      ],
+      "sources" : [
+        "FIRConfigValue.m",
+        "FIRRemoteConfig.m",
+        "FIRRemoteConfigComponent.m",
+        "FIRRemoteConfigUpdate.m",
+        "RCNConfigContent.m",
+        "RCNConfigDBManager.m",
+        "RCNConfigExperiment.m",
+        "RCNConfigFetch.m",
+        "RCNConfigRealtime.m",
+        "RCNConfigSessionConfiguration.m",
+        "RCNConfigSettings.m",
+        "RCNConstants3P.m",
+        "RCNDevice.m",
+        "RCNPersonalization.m",
+        "RCNUserDefaultsManager.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseCore",
+        "FirebaseABTesting",
+        "FirebaseInstallations",
+        "FirebaseRemoteConfigInterop"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseRemoteConfig",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseRemoteConfig",
+      "path" : "FirebaseRemoteConfig/Swift",
+      "product_memberships" : [
+        "FirebaseRemoteConfig"
+      ],
+      "resources" : [
+        {
+          "path" : "./FirebaseRemoteConfig/Swift/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Codable.swift",
+        "CustomSignals.swift",
+        "FirebaseRemoteConfigValueDecoderHelper.swift",
+        "PropertyWrapper/RemoteConfigProperty.swift",
+        "PropertyWrapper/RemoteConfigValueObservable.swift",
+        "RemoteConfig+Async.swift",
+        "SPMSwiftHeaderWorkaround.swift",
+        "Value.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseRemoteConfigInternal",
+        "FirebaseSharedSwift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebasePerformanceTarget",
+      "module_type" : "ClangTarget",
+      "name" : "FirebasePerformanceTarget",
+      "path" : "SwiftPM-PlatformExclude/FirebasePerformanceWrap",
+      "product_memberships" : [
+        "FirebasePerformance"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "target_dependencies" : [
+        "FirebasePerformance"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebasePerformance",
+      "module_type" : "ClangTarget",
+      "name" : "FirebasePerformance",
+      "path" : "FirebasePerformance/Sources",
+      "product_dependencies" : [
+        "GoogleDataTransport",
+        "GULEnvironment",
+        "GULMethodSwizzler",
+        "GULUserDefaults",
+        "nanopb"
+      ],
+      "product_memberships" : [
+        "FirebasePerformance"
+      ],
+      "sources" : [
+        "AppActivity/FPRAppActivityTracker.m",
+        "AppActivity/FPRScreenTraceTracker.m",
+        "AppActivity/FPRSessionDetails.m",
+        "AppActivity/FPRSessionManager.m",
+        "AppActivity/FPRTraceBackgroundActivityTracker.m",
+        "Common/FPRConsoleURLGenerator.m",
+        "Common/FPRConstants.m",
+        "Common/FPRDiagnostics.m",
+        "Common/FPRPerfDate.m",
+        "Configurations/FPRConfigurations.m",
+        "Configurations/FPRRemoteConfigFlags.m",
+        "FIRPerformance.m",
+        "FPRClient.m",
+        "FPRConfiguration.m",
+        "FPRConsoleLogger.m",
+        "FPRDataUtils.m",
+        "FPRNanoPbUtils.m",
+        "FPRURLFilter.m",
+        "Gauges/CPU/FPRCPUGaugeCollector.m",
+        "Gauges/CPU/FPRCPUGaugeData.m",
+        "Gauges/FPRGaugeManager.m",
+        "Gauges/Memory/FPRMemoryGaugeCollector.m",
+        "Gauges/Memory/FPRMemoryGaugeData.m",
+        "ISASwizzler/FPRObjectSwizzler.m",
+        "ISASwizzler/FPRSwizzledObject.m",
+        "Instrumentation/FIRHTTPMetric.m",
+        "Instrumentation/FPRClassInstrumentor.m",
+        "Instrumentation/FPRInstrument.m",
+        "Instrumentation/FPRInstrumentation.m",
+        "Instrumentation/FPRNetworkTrace.m",
+        "Instrumentation/FPRObjectInstrumentor.m",
+        "Instrumentation/FPRProxyObjectHelper.m",
+        "Instrumentation/FPRSelectorInstrumentor.m",
+        "Instrumentation/Network/Delegates/FPRNSURLConnectionDelegate.m",
+        "Instrumentation/Network/Delegates/FPRNSURLConnectionDelegateInstrument.m",
+        "Instrumentation/Network/Delegates/FPRNSURLSessionDelegate.m",
+        "Instrumentation/Network/Delegates/FPRNSURLSessionDelegateInstrument.m",
+        "Instrumentation/Network/FPRNSURLConnectionInstrument.m",
+        "Instrumentation/Network/FPRNSURLSessionInstrument.m",
+        "Instrumentation/Network/FPRNetworkInstrumentHelpers.m",
+        "Instrumentation/UIKit/FPRUIViewControllerInstrument.m",
+        "Loggers/FPRGDTEvent.m",
+        "Loggers/FPRGDTLogSampler.m",
+        "Loggers/FPRGDTLogger.m",
+        "Loggers/FPRGDTRateLimiter.m",
+        "Protogen/nanopb/perf_metric.nanopb.c",
+        "Timer/FIRTrace.m",
+        "Timer/FPRCounterList.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseCore",
+        "FirebaseInstallations",
+        "FirebaseRemoteConfigInternal",
+        "FirebaseSessions"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseMessagingInterop",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseMessagingInterop",
+      "path" : "FirebaseMessaging/Interop",
+      "product_memberships" : [
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseFunctions"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseMessaging",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseMessaging",
+      "path" : "FirebaseMessaging/Sources",
+      "product_dependencies" : [
+        "GULAppDelegateSwizzler",
+        "GULEnvironment",
+        "GULReachability",
+        "GULUserDefaults",
+        "GoogleDataTransport",
+        "nanopb"
+      ],
+      "product_memberships" : [
+        "FirebaseMessaging"
+      ],
+      "resources" : [
+        {
+          "path" : "./FirebaseMessaging/Sources/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "FIRMessaging+ExtensionHelper.m",
+        "FIRMessaging.m",
+        "FIRMessagingAnalytics.m",
+        "FIRMessagingConstants.m",
+        "FIRMessagingContextManagerService.m",
+        "FIRMessagingExtensionHelper.m",
+        "FIRMessagingLogger.m",
+        "FIRMessagingPendingTopicsList.m",
+        "FIRMessagingPersistentSyncMessage.m",
+        "FIRMessagingPubSub.m",
+        "FIRMessagingRemoteNotificationsProxy.m",
+        "FIRMessagingRmqManager.m",
+        "FIRMessagingSyncMessageManager.m",
+        "FIRMessagingTopicOperation.m",
+        "FIRMessagingUtilities.m",
+        "NSDictionary+FIRMessaging.m",
+        "NSError+FIRMessaging.m",
+        "Protogen/nanopb/me.nanopb.c",
+        "Token/FIRMessagingAPNSInfo.m",
+        "Token/FIRMessagingAuthKeychain.m",
+        "Token/FIRMessagingAuthService.m",
+        "Token/FIRMessagingBackupExcludedPlist.m",
+        "Token/FIRMessagingCheckinPreferences.m",
+        "Token/FIRMessagingCheckinService.m",
+        "Token/FIRMessagingCheckinStore.m",
+        "Token/FIRMessagingFIDRegisterOperation.m",
+        "Token/FIRMessagingFIDUnregisterOperation.m",
+        "Token/FIRMessagingKeychain.m",
+        "Token/FIRMessagingTokenDeleteOperation.m",
+        "Token/FIRMessagingTokenFetchOperation.m",
+        "Token/FIRMessagingTokenInfo.m",
+        "Token/FIRMessagingTokenManager.m",
+        "Token/FIRMessagingTokenOperation.m",
+        "Token/FIRMessagingTokenStore.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseCore",
+        "FirebaseInstallations"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseInstallations",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseInstallations",
+      "path" : "FirebaseInstallations/Source/Library",
+      "product_dependencies" : [
+        "FBLPromises",
+        "GULEnvironment",
+        "GULUserDefaults"
+      ],
+      "product_memberships" : [
+        "FirebaseAnalytics",
+        "FirebaseAnalyticsCore",
+        "FirebaseAnalyticsIdentitySupport",
+        "FirebaseAppDistribution-Beta",
+        "FirebaseCrashlytics",
+        "FirebaseInAppMessaging-Beta",
+        "FirebaseInstallations",
+        "FirebaseMessaging",
+        "FirebasePerformance",
+        "FirebaseRemoteConfig"
+      ],
+      "resources" : [
+        {
+          "path" : "./FirebaseInstallations/Source/Library/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Errors/FIRInstallationsErrorUtil.m",
+        "Errors/FIRInstallationsHTTPError.m",
+        "FIRInstallations.m",
+        "FIRInstallationsAuthTokenResult.m",
+        "FIRInstallationsItem.m",
+        "FIRInstallationsLogger.m",
+        "IIDMigration/FIRInstallationsIIDStore.m",
+        "IIDMigration/FIRInstallationsIIDTokenStore.m",
+        "InstallationsAPI/FIRInstallationsAPIService.m",
+        "InstallationsAPI/FIRInstallationsItem+RegisterInstallationAPI.m",
+        "InstallationsIDController/FIRCurrentDateProvider.m",
+        "InstallationsIDController/FIRInstallationsBackoffController.m",
+        "InstallationsIDController/FIRInstallationsIDController.m",
+        "InstallationsIDController/FIRInstallationsSingleOperationPromiseCache.m",
+        "InstallationsStore/FIRInstallationsStore.m",
+        "InstallationsStore/FIRInstallationsStoredAuthToken.m",
+        "InstallationsStore/FIRInstallationsStoredItem.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseInAppMessaging_iOS",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseInAppMessaging_iOS",
+      "path" : "FirebaseInAppMessaging/iOS",
+      "product_memberships" : [
+        "FirebaseInAppMessaging-Beta"
+      ],
+      "resources" : [
+        {
+          "path" : "./FirebaseInAppMessaging/iOS/Resources/FIRInAppMessageDisplayStoryboard.storyboard",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseInAppMessaging/iOS/Resources/close-with-transparency.png",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseInAppMessaging/iOS/Resources/close-with-transparency@2x.png",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "FirebaseInAppMessaging_iOS.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseInAppMessagingTarget",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseInAppMessagingTarget",
+      "path" : "SwiftPM-PlatformExclude/FirebaseInAppMessagingWrap",
+      "product_memberships" : [
+        "FirebaseInAppMessaging-Beta"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseInAppMessaging"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseInAppMessagingInternal",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseInAppMessagingInternal",
+      "path" : "FirebaseInAppMessaging/Sources",
+      "product_dependencies" : [
+        "GULEnvironment",
+        "GULUserDefaults",
+        "nanopb"
+      ],
+      "product_memberships" : [
+        "FirebaseInAppMessaging-Beta"
+      ],
+      "sources" : [
+        "Analytics/FIRIAMAnalyticsEventLoggerImpl.m",
+        "Analytics/FIRIAMClearcutHttpRequestSender.m",
+        "Analytics/FIRIAMClearcutLogStorage.m",
+        "Analytics/FIRIAMClearcutLogger.m",
+        "Analytics/FIRIAMClearcutUploader.m",
+        "Analytics/Protogen/nanopb/fiam.nanopb.c",
+        "Data/FIRIAMFetchResponseParser.m",
+        "Data/FIRIAMMessageContentDataWithImageURL.m",
+        "Data/FIRIAMMessageDefinition.m",
+        "Data/FIRIAMRenderingEffectSetting.m",
+        "DefaultUI/Banner/FIRIAMBannerViewController.m",
+        "DefaultUI/Banner/FIRIAMBannerViewUIWindow.m",
+        "DefaultUI/Card/FIRIAMCardViewController.m",
+        "DefaultUI/FIRCore+InAppMessagingDisplay.m",
+        "DefaultUI/FIRIAMBaseRenderingViewController.m",
+        "DefaultUI/FIRIAMDefaultDisplayImpl.m",
+        "DefaultUI/FIRIAMRenderingWindowHelper.m",
+        "DefaultUI/ImageOnly/FIRIAMImageOnlyViewController.m",
+        "DefaultUI/Modal/FIRIAMModalViewController.m",
+        "DisplayTrigger/FIRIAMDisplayTriggerDefinition.m",
+        "FIRCore+InAppMessaging.m",
+        "FIRInAppMessaging.m",
+        "FIRInAppMessagingErrors.m",
+        "Flows/FIRIAMActivityLogger.m",
+        "Flows/FIRIAMBookKeeper.m",
+        "Flows/FIRIAMClientInfoFetcher.m",
+        "Flows/FIRIAMDisplayCheckOnAnalyticEventsFlow.m",
+        "Flows/FIRIAMDisplayCheckOnAppForegroundFlow.m",
+        "Flows/FIRIAMDisplayCheckOnFetchDoneNotificationFlow.m",
+        "Flows/FIRIAMDisplayCheckTriggerFlow.m",
+        "Flows/FIRIAMDisplayExecutor.m",
+        "Flows/FIRIAMFetchFlow.m",
+        "Flows/FIRIAMFetchOnAppForegroundFlow.m",
+        "Flows/FIRIAMMessageClientCache.m",
+        "Flows/FIRIAMMsgFetcherUsingRestful.m",
+        "Flows/FIRIAMServerMsgFetchStorage.m",
+        "RenderingObjects/FIRInAppMessagingRenderingDataClasses.m",
+        "Runtime/FIRIAMActionURLFollower.m",
+        "Runtime/FIRIAMRuntimeManager.m",
+        "Runtime/FIRIAMSDKModeManager.m",
+        "Runtime/FIRIAMSDKSettings.m",
+        "Runtime/FIRInAppMessaging+Bootstrap.m",
+        "Util/FIRIAMElapsedTimeTracker.m",
+        "Util/FIRIAMTimeFetcher.m",
+        "Util/NSString+FIRInterlaceStrings.m",
+        "Util/UIApplication+FIRForegroundWindowScene.m",
+        "Util/UIColor+FIRIAMHexString.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseCore",
+        "FirebaseInstallations",
+        "FirebaseABTesting",
+        "FirebaseInAppMessaging_iOS"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseInAppMessaging",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseInAppMessaging",
+      "path" : "FirebaseInAppMessaging/Swift/Source",
+      "product_memberships" : [
+        "FirebaseInAppMessaging-Beta"
+      ],
+      "sources" : [
+        "CustomInAppMessageDisplayViewModifier.swift",
+        "SPMSwiftHeaderWorkaround.swift",
+        "SwiftUIPreviewHelpers.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseInAppMessagingInternal"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseFunctionsUnit",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseFunctionsUnit",
+      "path" : "FirebaseFunctions/Tests/Unit",
+      "sources" : [
+        "ContextProviderTests.swift",
+        "FunctionsAPITests.swift",
+        "FunctionsErrorTests.swift",
+        "FunctionsSerializerTests.swift",
+        "FunctionsStreamTests.swift",
+        "FunctionsTests.swift",
+        "MockURLProtocol.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseFunctions",
+        "FirebaseAppCheckInterop",
+        "FirebaseAuthInterop",
+        "FirebaseMessagingInterop",
+        "SharedTestUtilities"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirebaseFunctionsObjCIntegration",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseFunctionsObjCIntegration",
+      "path" : "FirebaseFunctions/Tests/ObjCIntegration",
+      "sources" : [
+        "FIRIntegrationTests.m",
+        "ObjCAPITests.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseFunctions",
+        "SharedTestUtilities"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirebaseFunctionsIntegration",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseFunctionsIntegration",
+      "path" : "FirebaseFunctions/Tests/Integration",
+      "sources" : [
+        "IntegrationTests.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseFunctions",
+        "SharedTestUtilities"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirebaseFunctionsCombineSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseFunctionsCombineSwift",
+      "path" : "FirebaseCombineSwift/Sources/Functions",
+      "product_memberships" : [
+        "FirebaseFunctionsCombine-Community"
+      ],
+      "sources" : [
+        "Functions+Combine.swift",
+        "HTTPSCallable+Combine.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseFunctions"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseFunctions",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseFunctions",
+      "path" : "FirebaseFunctions/Sources",
+      "product_dependencies" : [
+        "GTMSessionFetcherCore"
+      ],
+      "product_memberships" : [
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseFunctions"
+      ],
+      "sources" : [
+        "Callable+Codable.swift",
+        "Functions.swift",
+        "FunctionsError.swift",
+        "HTTPSCallable.swift",
+        "HTTPSCallableOptions.swift",
+        "Internal/FunctionsContext.swift",
+        "Internal/FunctionsSerializer.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseAppCheckInterop",
+        "FirebaseAuthInterop",
+        "FirebaseCore",
+        "FirebaseCoreExtension",
+        "FirebaseMessagingInterop",
+        "FirebaseSharedSwift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseFirestoreTests",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseFirestoreTests",
+      "path" : "Firestore/Swift/Tests/Unit",
+      "sources" : [
+        "AsyncAwait/AsyncSequenceTests.swift",
+        "Codable/FirestoreDecoderTests.swift",
+        "PropertyWrapper/FirestoreQueryObservableLifetimeTests.swift"
+      ],
+      "target_dependencies" : [
+        "Firebase",
+        "FirebaseCore",
+        "FirebaseFirestoreTarget"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirebaseFirestoreTestingSupport",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseFirestoreTestingSupport",
+      "path" : "FirebaseTestingSupport/Firestore/Sources",
+      "sources" : [
+        "FIRQueryFake.mm"
+      ],
+      "target_dependencies" : [
+        "FirebaseFirestoreTarget"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseFirestoreTarget",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseFirestoreTarget",
+      "path" : "SwiftPM-PlatformExclude/FirebaseFirestoreWrap",
+      "product_memberships" : [
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFirestore"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseFirestore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseFirestoreInternalWrapper",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseFirestoreInternalWrapper",
+      "path" : "FirebaseFirestoreInternal",
+      "product_memberships" : [
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFirestore"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseFirestoreInternal"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseFirestoreInternal",
+      "module_type" : "BinaryTarget",
+      "name" : "FirebaseFirestoreInternal",
+      "path" : "remote/archive/FirebaseFirestoreInternal.zip",
+      "product_memberships" : [
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFirestore"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "FirebaseFirestoreCombineSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseFirestoreCombineSwift",
+      "path" : "FirebaseCombineSwift/Sources/Firestore",
+      "product_memberships" : [
+        "FirebaseFirestoreCombine-Community"
+      ],
+      "sources" : [
+        "CollectionReference+Combine.swift",
+        "DocumentReference+Combine.swift",
+        "Firestore+Combine.swift",
+        "Query+Combine.swift",
+        "Transaction+Combine.swift",
+        "WriteBatch+Combine.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseFirestoreTarget"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseFirestore",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseFirestore",
+      "path" : "Firestore/Swift/Source",
+      "product_dependencies" : [
+        "abseil",
+        "gRPC-C++",
+        "nanopb",
+        "leveldb"
+      ],
+      "product_memberships" : [
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFirestore"
+      ],
+      "resources" : [
+        {
+          "path" : "./Firestore/Swift/Source/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "AsyncAwait/CollectionReference+AsyncAwait.swift",
+        "AsyncAwait/DocumentReference+AsyncSequence.swift",
+        "AsyncAwait/Firestore+AsyncAwait.swift",
+        "AsyncAwait/Query+AsyncSequence.swift",
+        "Codable/BSONObjectId+Codable.swift",
+        "Codable/BSONTimestamp+Codable.swift",
+        "Codable/Blob+Codable.swift",
+        "Codable/CodableErrors.swift",
+        "Codable/CodablePassThroughTypes.swift",
+        "Codable/CollectionReference+WriteEncodable.swift",
+        "Codable/Decimal128Value+Codable.swift",
+        "Codable/DocumentID.swift",
+        "Codable/DocumentReference+Codable.swift",
+        "Codable/DocumentReference+ReadDecodable.swift",
+        "Codable/DocumentReference+WriteEncodable.swift",
+        "Codable/DocumentSnapshot+ReadDecodable.swift",
+        "Codable/EncoderDecoder.swift",
+        "Codable/ExplicitNull.swift",
+        "Codable/FieldValue+Encodable.swift",
+        "Codable/GeoPoint+Codable.swift",
+        "Codable/Int32Value+Codable.swift",
+        "Codable/MaxKey+Codable.swift",
+        "Codable/MinKey+Codable.swift",
+        "Codable/RegexValue+Codable.swift",
+        "Codable/ServerTimestamp.swift",
+        "Codable/Timestamp+Codable.swift",
+        "Codable/TimestampDecodingStrategy.swift",
+        "Codable/TimestampEncodingStrategy.swift",
+        "Codable/Transaction+WriteEncodable.swift",
+        "Codable/VectorValue+Codable.swift",
+        "Codable/WriteBatch+WriteEncodable.swift",
+        "ExpressionImplementation.swift",
+        "Helper/PipelineHelper.swift",
+        "PipelineResultChange.swift",
+        "PipelineWrapper.swift",
+        "PropertyWrapper/FirestoreQuery.swift",
+        "PropertyWrapper/FirestoreQueryObservable.swift",
+        "PropertyWrapper/QueryPredicate.swift",
+        "Stages.swift",
+        "SwiftAPI/FieldValue+Swift.swift",
+        "SwiftAPI/Firestore+Pipeline.swift",
+        "SwiftAPI/Pipeline/Aggregates/AggregateFunction.swift",
+        "SwiftAPI/Pipeline/Aggregates/AliasedAggregate.swift",
+        "SwiftAPI/Pipeline/Aggregates/AliasedWindowFunction.swift",
+        "SwiftAPI/Pipeline/Aggregates/CountAll.swift",
+        "SwiftAPI/Pipeline/Aggregates/Rank.swift",
+        "SwiftAPI/Pipeline/Aggregates/WindowFunction.swift",
+        "SwiftAPI/Pipeline/DistanceMeasure.swift",
+        "SwiftAPI/Pipeline/Expressions/AliasedExpression.swift",
+        "SwiftAPI/Pipeline/Expressions/Constant.swift",
+        "SwiftAPI/Pipeline/Expressions/CurrentDocument.swift",
+        "SwiftAPI/Pipeline/Expressions/Expression.swift",
+        "SwiftAPI/Pipeline/Expressions/Field.swift",
+        "SwiftAPI/Pipeline/Expressions/FunctionExpressions/ArrayExpression.swift",
+        "SwiftAPI/Pipeline/Expressions/FunctionExpressions/BooleanExpression/BooleanExpression.swift",
+        "SwiftAPI/Pipeline/Expressions/FunctionExpressions/BooleanExpression/DocumentSearchExpressions.swift",
+        "SwiftAPI/Pipeline/Expressions/FunctionExpressions/ConditionalExpression.swift",
+        "SwiftAPI/Pipeline/Expressions/FunctionExpressions/CurrentTimestamp.swift",
+        "SwiftAPI/Pipeline/Expressions/FunctionExpressions/ErrorExpression.swift",
+        "SwiftAPI/Pipeline/Expressions/FunctionExpressions/FunctionExpression.swift",
+        "SwiftAPI/Pipeline/Expressions/FunctionExpressions/MapExpression.swift",
+        "SwiftAPI/Pipeline/Expressions/FunctionExpressions/RandomExpression.swift",
+        "SwiftAPI/Pipeline/Expressions/FunctionExpressions/Score.swift",
+        "SwiftAPI/Pipeline/Expressions/PipelineExpression.swift",
+        "SwiftAPI/Pipeline/Expressions/Variable.swift",
+        "SwiftAPI/Pipeline/Ordering.swift",
+        "SwiftAPI/Pipeline/Pipeline.swift",
+        "SwiftAPI/Pipeline/PipelineResult.swift",
+        "SwiftAPI/Pipeline/PipelineSource.swift",
+        "SwiftAPI/Pipeline/QueryEnhancement.swift",
+        "SwiftAPI/Pipeline/RealtimePipeline.swift",
+        "SwiftAPI/Pipeline/RealtimePipelineSource.swift",
+        "SwiftAPI/Pipeline/Selectable.swift",
+        "SwiftAPI/Pipeline/Subcollection.swift",
+        "SwiftAPI/Pipeline/TimeGranularity.swift",
+        "SwiftAPI/Pipeline/TimePart.swift",
+        "SwiftAPI/Pipeline/TimeUnit.swift",
+        "SwiftAPI/Pipeline/WindowField.swift",
+        "SwiftAPI/Pipeline/WindowSpec.swift",
+        "SwiftAPI/VectorValue+Swift.swift",
+        "SwiftHeaderWorkaround.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseFirestoreInternalWrapper",
+        "FirebaseAppCheckInterop",
+        "FirebaseCore",
+        "FirebaseCoreExtension",
+        "FirebaseSharedSwift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseDatabaseInternal",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseDatabaseInternal",
+      "path" : "FirebaseDatabase/Sources",
+      "product_dependencies" : [
+        "leveldb",
+        "GULUserDefaults"
+      ],
+      "product_memberships" : [
+        "FirebaseDatabase"
+      ],
+      "sources" : [
+        "Api/FIRDataSnapshot.m",
+        "Api/FIRDatabase.m",
+        "Api/FIRDatabaseComponent.m",
+        "Api/FIRDatabaseConfig.m",
+        "Api/FIRDatabaseQuery.m",
+        "Api/FIRMutableData.m",
+        "Api/FIRServerValue.m",
+        "Api/FIRTransactionResult.m",
+        "Constants/FConstants.m",
+        "Core/FCompoundHash.m",
+        "Core/FListenProvider.m",
+        "Core/FPersistentConnection.m",
+        "Core/FQueryParams.m",
+        "Core/FQuerySpec.m",
+        "Core/FRangeMerge.m",
+        "Core/FRepo.m",
+        "Core/FRepoInfo.m",
+        "Core/FRepoManager.m",
+        "Core/FServerValues.m",
+        "Core/FSnapshotHolder.m",
+        "Core/FSparseSnapshotTree.m",
+        "Core/FSyncPoint.m",
+        "Core/FSyncTree.m",
+        "Core/FWriteRecord.m",
+        "Core/FWriteTree.m",
+        "Core/FWriteTreeRef.m",
+        "Core/Operation/FAckUserWrite.m",
+        "Core/Operation/FMerge.m",
+        "Core/Operation/FOperationSource.m",
+        "Core/Operation/FOverwrite.m",
+        "Core/Utilities/FIRRetryHelper.m",
+        "Core/Utilities/FImmutableTree.m",
+        "Core/Utilities/FPath.m",
+        "Core/Utilities/FTree.m",
+        "Core/Utilities/FTreeNode.m",
+        "Core/View/FCacheNode.m",
+        "Core/View/FCancelEvent.m",
+        "Core/View/FChange.m",
+        "Core/View/FChildEventRegistration.m",
+        "Core/View/FDataEvent.m",
+        "Core/View/FEventRaiser.m",
+        "Core/View/FKeepSyncedEventRegistration.m",
+        "Core/View/FValueEventRegistration.m",
+        "Core/View/FView.m",
+        "Core/View/FViewCache.m",
+        "Core/View/Filter/FChildChangeAccumulator.m",
+        "Core/View/Filter/FIndexedFilter.m",
+        "Core/View/Filter/FLimitedFilter.m",
+        "FClock.m",
+        "FEventGenerator.m",
+        "FIRDatabaseReference.m",
+        "FIndex.m",
+        "FKeyIndex.m",
+        "FListenComplete.m",
+        "FMaxNode.m",
+        "FNamedNode.m",
+        "FPathIndex.m",
+        "FPriorityIndex.m",
+        "FRangedFilter.m",
+        "FTransformedEnumerator.m",
+        "FValueIndex.m",
+        "FViewProcessor.m",
+        "FViewProcessorResult.m",
+        "Login/FIRDatabaseConnectionContextProvider.m",
+        "Persistence/FCachePolicy.m",
+        "Persistence/FLevelDBStorageEngine.m",
+        "Persistence/FPendingPut.m",
+        "Persistence/FPersistenceManager.m",
+        "Persistence/FPruneForest.m",
+        "Persistence/FTrackedQuery.m",
+        "Persistence/FTrackedQueryManager.m",
+        "Realtime/FConnection.m",
+        "Realtime/FWebSocketConnection.m",
+        "Snapshot/FChildrenNode.m",
+        "Snapshot/FCompoundWrite.m",
+        "Snapshot/FEmptyNode.m",
+        "Snapshot/FIndexedNode.m",
+        "Snapshot/FLeafNode.m",
+        "Snapshot/FSnapshotUtilities.m",
+        "Utilities/FAtomicNumber.m",
+        "Utilities/FEventEmitter.m",
+        "Utilities/FNextPushId.m",
+        "Utilities/FParsedUrl.m",
+        "Utilities/FStringUtilities.m",
+        "Utilities/FUtilities.m",
+        "Utilities/FValidation.m",
+        "Utilities/Tuples/FTupleBoolBlock.m",
+        "Utilities/Tuples/FTupleCallbackStatus.m",
+        "Utilities/Tuples/FTupleFirebase.m",
+        "Utilities/Tuples/FTupleNodePath.m",
+        "Utilities/Tuples/FTupleObjectNode.m",
+        "Utilities/Tuples/FTupleObjects.m",
+        "Utilities/Tuples/FTupleOnDisconnect.m",
+        "Utilities/Tuples/FTuplePathValue.m",
+        "Utilities/Tuples/FTupleRemovedQueriesEvents.m",
+        "Utilities/Tuples/FTupleSetIdPath.m",
+        "Utilities/Tuples/FTupleStringNode.m",
+        "Utilities/Tuples/FTupleTSN.m",
+        "Utilities/Tuples/FTupleTransaction.m",
+        "Utilities/Tuples/FTupleUserCallback.m",
+        "third_party/FImmutableSortedDictionary/FImmutableSortedDictionary/FArraySortedDictionary.m",
+        "third_party/FImmutableSortedDictionary/FImmutableSortedDictionary/FImmutableSortedDictionary.m",
+        "third_party/FImmutableSortedDictionary/FImmutableSortedDictionary/FImmutableSortedSet.m",
+        "third_party/FImmutableSortedDictionary/FImmutableSortedDictionary/FLLRBEmptyNode.m",
+        "third_party/FImmutableSortedDictionary/FImmutableSortedDictionary/FLLRBValueNode.m",
+        "third_party/FImmutableSortedDictionary/FImmutableSortedDictionary/FTreeSortedDictionary.m",
+        "third_party/FImmutableSortedDictionary/FImmutableSortedDictionary/FTreeSortedDictionaryEnumerator.m",
+        "third_party/SocketRocket/FSRWebSocket.m",
+        "third_party/SocketRocket/NSData+SRB64Additions.m",
+        "third_party/SocketRocket/fbase64.c",
+        "third_party/Wrap-leveldb/APLevelDB.mm"
+      ],
+      "target_dependencies" : [
+        "FirebaseAppCheckInterop",
+        "FirebaseCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseDatabase",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseDatabase",
+      "path" : "FirebaseDatabase/Swift/Sources",
+      "product_memberships" : [
+        "FirebaseDatabase"
+      ],
+      "sources" : [
+        "Codable/DataSnapshot+ReadDecodable.swift",
+        "Codable/DatabaseReference+WriteEncodable.swift",
+        "Codable/EncoderDecoder.swift",
+        "Codable/ServerTimestamp.swift",
+        "SPMSwiftHeaderWorkaround.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseDatabaseInternal",
+        "FirebaseSharedSwift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseCrashlyticsUnit",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseCrashlyticsUnit",
+      "path" : "Crashlytics/UnitTests",
+      "product_dependencies" : [
+        "OCMock"
+      ],
+      "resources" : [
+        {
+          "path" : "./Crashlytics/UnitTests/Data",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./Crashlytics/UnitTests/FIRCLSMachO/machO_data",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "FABOperation/FABNetworkOperationTests.m",
+        "FABOperation/FABOperationInFlightCancellationTest.m",
+        "FABOperation/FABOperationPreFlightCancellationTest.m",
+        "FABOperation/FABTestAsyncOperation.m",
+        "FABOperation/FABTestExpectations.m",
+        "FABURLBuilderTests.m",
+        "FIRCLSApplicationIdentifierModelTests.m",
+        "FIRCLSBinaryImageTests.m",
+        "FIRCLSCompactUnwindTests.m",
+        "FIRCLSConstantsTest.m",
+        "FIRCLSContextInitGateTests.m",
+        "FIRCLSContextManagerTests.m",
+        "FIRCLSDataCollectionArbiterTest.m",
+        "FIRCLSDemangleOperationTests.m",
+        "FIRCLSDwarfExpressionTests.m",
+        "FIRCLSDwarfTests.m",
+        "FIRCLSExistingReportManagerTests.m",
+        "FIRCLSFileManagerTests.m",
+        "FIRCLSFileTests.m",
+        "FIRCLSInstallIdentifierModelTests.m",
+        "FIRCLSInternalReportTests.m",
+        "FIRCLSLoggingTests.m",
+        "FIRCLSMachO/FIRCLSMachOBinaryTests.m",
+        "FIRCLSMachO/FIRCLSMachOTests.m",
+        "FIRCLSMachO/FIRCLSdSYMTests.m",
+        "FIRCLSOnDemandModelTests.m",
+        "FIRCLSProcessReportOperationTests.m",
+        "FIRCLSReportAdapterTests.m",
+        "FIRCLSReportManagerTests.m",
+        "FIRCLSReportUploaderTests.m",
+        "FIRCLSRolloutsPersistenceManagerTests.m",
+        "FIRCLSSettingsTests.m",
+        "FIRCLSSymbolResolverTests.m",
+        "FIRCLSSymbolicationOperationTests.m",
+        "FIRCLSUnwindTests.m",
+        "FIRCLSUserDefaultsTests.m",
+        "FIRCLSUtilityTests.m",
+        "FIRCrashlyticsReportTests.m",
+        "FIRCrashlyticsTests.m",
+        "FIRExceptionModelTests.m",
+        "FIRRecordExceptionModelTests.m",
+        "FIRStackFrameTests.m",
+        "Mocks/FABMockApplicationIdentifierModel.m",
+        "Mocks/FIRAppFake.m",
+        "Mocks/FIRCLSMockExistingReportManager.m",
+        "Mocks/FIRCLSMockFileManager.m",
+        "Mocks/FIRCLSMockOnDemandModel.m",
+        "Mocks/FIRCLSMockReportManager.m",
+        "Mocks/FIRCLSMockReportUploader.m",
+        "Mocks/FIRCLSMockSettings.m",
+        "Mocks/FIRCLSMockSymbolResolver.m",
+        "Mocks/FIRCLSTempMockFileManager.m",
+        "Mocks/FIRMockGDTCoreTransport.m",
+        "Mocks/FIRMockInstallations.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseCrashlytics"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirebaseCrashlyticsSwiftUnit",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseCrashlyticsSwiftUnit",
+      "path" : "Crashlytics/UnitTestsSwift",
+      "sources" : [
+        "CrashlyticsRemoteConfigManagerTests.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseCrashlyticsSwift"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirebaseCrashlyticsSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseCrashlyticsSwift",
+      "path" : "Crashlytics/Crashlytics/Rollouts",
+      "product_memberships" : [
+        "FirebaseCrashlytics"
+      ],
+      "sources" : [
+        "CrashlyticsRemoteConfigManager.swift",
+        "EncodedRolloutAssignment.swift",
+        "StringToHexConverter.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseRemoteConfigInterop"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseCrashlytics",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseCrashlytics",
+      "path" : "Crashlytics",
+      "product_dependencies" : [
+        "GoogleDataTransport",
+        "GULEnvironment",
+        "FBLPromises",
+        "nanopb"
+      ],
+      "product_memberships" : [
+        "FirebaseCrashlytics"
+      ],
+      "resources" : [
+        {
+          "path" : "./Crashlytics/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Crashlytics/Components/FIRCLSApplication.m",
+        "Crashlytics/Components/FIRCLSBinaryImage.m",
+        "Crashlytics/Components/FIRCLSContext.m",
+        "Crashlytics/Components/FIRCLSCrashedMarkerFile.c",
+        "Crashlytics/Components/FIRCLSHost.m",
+        "Crashlytics/Components/FIRCLSProcess.c",
+        "Crashlytics/Components/FIRCLSUserLogging.m",
+        "Crashlytics/Controllers/FIRCLSAnalyticsManager.m",
+        "Crashlytics/Controllers/FIRCLSContextManager.m",
+        "Crashlytics/Controllers/FIRCLSExistingReportManager.m",
+        "Crashlytics/Controllers/FIRCLSManagerData.m",
+        "Crashlytics/Controllers/FIRCLSNotificationManager.m",
+        "Crashlytics/Controllers/FIRCLSReportManager.m",
+        "Crashlytics/Controllers/FIRCLSReportUploader.m",
+        "Crashlytics/Controllers/FIRCLSRolloutsPersistenceManager.m",
+        "Crashlytics/DataCollection/FIRCLSDataCollectionArbiter.m",
+        "Crashlytics/DataCollection/FIRCLSDataCollectionToken.m",
+        "Crashlytics/FIRCLSUserDefaults/FIRCLSUserDefaults.m",
+        "Crashlytics/FIRCrashlytics.m",
+        "Crashlytics/FIRCrashlyticsReport.m",
+        "Crashlytics/FIRExceptionModel.m",
+        "Crashlytics/FIRStackFrame.m",
+        "Crashlytics/Handlers/FIRCLSException.mm",
+        "Crashlytics/Handlers/FIRCLSHandler.m",
+        "Crashlytics/Handlers/FIRCLSMachException.c",
+        "Crashlytics/Handlers/FIRCLSSignal.c",
+        "Crashlytics/Helpers/FIRCLSAllocate.c",
+        "Crashlytics/Helpers/FIRCLSContextInitData.m",
+        "Crashlytics/Helpers/FIRCLSContextInitGate.m",
+        "Crashlytics/Helpers/FIRCLSFile.m",
+        "Crashlytics/Helpers/FIRCLSInternalLogging.c",
+        "Crashlytics/Helpers/FIRCLSLogger.m",
+        "Crashlytics/Helpers/FIRCLSThreadState.c",
+        "Crashlytics/Helpers/FIRCLSUtility.m",
+        "Crashlytics/Models/FIRCLSExecutionIdentifierModel.m",
+        "Crashlytics/Models/FIRCLSFileManager.m",
+        "Crashlytics/Models/FIRCLSInstallIdentifierModel.m",
+        "Crashlytics/Models/FIRCLSInternalReport.m",
+        "Crashlytics/Models/FIRCLSLaunchMarkerModel.m",
+        "Crashlytics/Models/FIRCLSNonFatalError.m",
+        "Crashlytics/Models/FIRCLSOnDemandModel.m",
+        "Crashlytics/Models/FIRCLSSettings.m",
+        "Crashlytics/Models/FIRCLSSymbolResolver.m",
+        "Crashlytics/Models/Record/FIRCLSRecordApplication.m",
+        "Crashlytics/Models/Record/FIRCLSRecordBase.m",
+        "Crashlytics/Models/Record/FIRCLSRecordHost.m",
+        "Crashlytics/Models/Record/FIRCLSRecordIdentity.m",
+        "Crashlytics/Models/Record/FIRCLSReportAdapter.m",
+        "Crashlytics/Operations/FIRCLSAsyncOperation.m",
+        "Crashlytics/Operations/Reports/FIRCLSProcessReportOperation.m",
+        "Crashlytics/Operations/Symbolication/FIRCLSDemangleOperation.mm",
+        "Crashlytics/Operations/Symbolication/FIRCLSSerializeSymbolicatedFramesOperation.m",
+        "Crashlytics/Operations/Symbolication/FIRCLSSymbolicationOperation.m",
+        "Crashlytics/Operations/Symbolication/FIRCLSThreadArrayOperation.m",
+        "Crashlytics/Settings/FIRCLSSettingsManager.m",
+        "Crashlytics/Settings/Models/FIRCLSApplicationIdentifierModel.m",
+        "Crashlytics/Settings/Operations/FIRCLSDownloadAndSaveSettingsOperation.m",
+        "Crashlytics/Settings/Operations/FIRCLSNetworkOperation.m",
+        "Crashlytics/Unwind/Compact/FIRCLSCompactUnwind.c",
+        "Crashlytics/Unwind/Dwarf/FIRCLSDataParsing.c",
+        "Crashlytics/Unwind/Dwarf/FIRCLSDwarfExpressionMachine.c",
+        "Crashlytics/Unwind/Dwarf/FIRCLSDwarfUnwind.c",
+        "Crashlytics/Unwind/FIRCLSUnwind.c",
+        "Crashlytics/Unwind/FIRCLSUnwind_arm.c",
+        "Crashlytics/Unwind/FIRCLSUnwind_x86.c",
+        "Protogen/nanopb/crashlytics.nanopb.c",
+        "Shared/FIRCLSByteUtility.m",
+        "Shared/FIRCLSConstants.m",
+        "Shared/FIRCLSFABHost.m",
+        "Shared/FIRCLSMachO/FIRCLSCodeMapping.m",
+        "Shared/FIRCLSMachO/FIRCLSMachO.m",
+        "Shared/FIRCLSMachO/FIRCLSMachOBinary.m",
+        "Shared/FIRCLSMachO/FIRCLSMachOSlice.m",
+        "Shared/FIRCLSMachO/FIRCLSdSYM.m",
+        "Shared/FIRCLSNetworking/FIRCLSFABNetworkClient.m",
+        "Shared/FIRCLSNetworking/FIRCLSNetworkResponseHandler.m",
+        "Shared/FIRCLSNetworking/FIRCLSURLBuilder.m",
+        "Shared/FIRCLSOperation/FIRCLSCompoundOperation.m",
+        "Shared/FIRCLSOperation/FIRCLSFABAsyncOperation.m",
+        "Shared/FIRCLSUUID.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseCore",
+        "FirebaseInstallations",
+        "FirebaseSessions",
+        "FirebaseRemoteConfigInterop",
+        "FirebaseCrashlyticsSwift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseCoreInternalTests",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseCoreInternalTests",
+      "path" : "FirebaseCore/Internal/Tests",
+      "sources" : [
+        "Common/AdjustableDate.swift",
+        "Common/Assertions.swift",
+        "Integration/HeartbeatLoggingIntegrationTests.swift",
+        "Unit/HeartbeatControllerTests.swift",
+        "Unit/HeartbeatStorageTests.swift",
+        "Unit/HeartbeatTests.swift",
+        "Unit/HeartbeatsBundleTests.swift",
+        "Unit/HeartbeatsPayloadTests.swift",
+        "Unit/RingBufferTests.swift",
+        "Unit/StorageTests.swift",
+        "Unit/WeakContainerTests.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseCoreInternal"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirebaseCoreInternal",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseCoreInternal",
+      "path" : "FirebaseCore/Internal/Sources",
+      "product_dependencies" : [
+        "GULNSData"
+      ],
+      "product_memberships" : [
+        "FirebaseAILogic",
+        "FirebaseAnalytics",
+        "FirebaseAnalyticsCore",
+        "FirebaseAnalyticsIdentitySupport",
+        "FirebaseAuth",
+        "FirebaseAppCheck",
+        "FirebaseAppDistribution-Beta",
+        "FirebaseAuthCombine-Community",
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseStorageCombine-Community",
+        "FirebaseCore",
+        "FirebaseCrashlytics",
+        "FirebaseDatabase",
+        "FirebaseFirestore",
+        "FirebaseFunctions",
+        "FirebaseInAppMessaging-Beta",
+        "FirebaseInstallations",
+        "FirebaseMessaging",
+        "FirebasePerformance",
+        "FirebaseRemoteConfig",
+        "FirebaseStorage"
+      ],
+      "resources" : [
+        {
+          "path" : "./FirebaseCore/Internal/Sources/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "HeartbeatLogging/Heartbeat.swift",
+        "HeartbeatLogging/HeartbeatController.swift",
+        "HeartbeatLogging/HeartbeatLoggingTestUtils.swift",
+        "HeartbeatLogging/HeartbeatStorage.swift",
+        "HeartbeatLogging/HeartbeatsBundle.swift",
+        "HeartbeatLogging/HeartbeatsPayload.swift",
+        "HeartbeatLogging/RingBuffer.swift",
+        "HeartbeatLogging/Storage.swift",
+        "HeartbeatLogging/StorageFactory.swift",
+        "HeartbeatLogging/WeakContainer.swift",
+        "HeartbeatLogging/_ObjC_HeartbeatController.swift",
+        "HeartbeatLogging/_ObjC_HeartbeatsPayload.swift",
+        "Utilities/UnfairLock.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseCoreExtension",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseCoreExtension",
+      "path" : "FirebaseCore/Extension",
+      "product_memberships" : [
+        "FirebaseAILogic",
+        "FirebaseAuth",
+        "FirebaseAuthCombine-Community",
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseStorageCombine-Community",
+        "FirebaseCrashlytics",
+        "FirebaseFirestore",
+        "FirebaseFunctions",
+        "FirebasePerformance",
+        "FirebaseStorage"
+      ],
+      "resources" : [
+        {
+          "path" : "./FirebaseCore/Extension/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseCore",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseCore",
+      "path" : "FirebaseCore/Sources",
+      "product_dependencies" : [
+        "GULEnvironment",
+        "GULLogger"
+      ],
+      "product_memberships" : [
+        "FirebaseAILogic",
+        "FirebaseAnalytics",
+        "FirebaseAnalyticsCore",
+        "FirebaseAnalyticsIdentitySupport",
+        "FirebaseAuth",
+        "FirebaseAppCheck",
+        "FirebaseAppDistribution-Beta",
+        "FirebaseAuthCombine-Community",
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseStorageCombine-Community",
+        "FirebaseCore",
+        "FirebaseCrashlytics",
+        "FirebaseDatabase",
+        "FirebaseFirestore",
+        "FirebaseFunctions",
+        "FirebaseInAppMessaging-Beta",
+        "FirebaseInstallations",
+        "FirebaseMessaging",
+        "FirebasePerformance",
+        "FirebaseRemoteConfig",
+        "FirebaseStorage"
+      ],
+      "resources" : [
+        {
+          "path" : "./FirebaseCore/Sources/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "FIRAnalyticsConfiguration.m",
+        "FIRApp.m",
+        "FIRBundleUtil.m",
+        "FIRComponent.m",
+        "FIRComponentContainer.m",
+        "FIRComponentType.m",
+        "FIRConfiguration.m",
+        "FIRFirebaseUserAgent.m",
+        "FIRHeartbeatLogger.m",
+        "FIRLogger.m",
+        "FIROptions.m",
+        "FIRSceneFinder.m",
+        "FIRTimestamp.m",
+        "FIRVersion.m"
+      ],
+      "target_dependencies" : [
+        "Firebase",
+        "FirebaseCoreInternal"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseAuthInterop",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseAuthInterop",
+      "path" : "FirebaseAuth/Interop",
+      "product_memberships" : [
+        "FirebaseAILogic",
+        "FirebaseAuth",
+        "FirebaseAuthCombine-Community",
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseStorageCombine-Community",
+        "FirebaseFunctions",
+        "FirebaseStorage"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseAuthInternal",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseAuthInternal",
+      "path" : "FirebaseAuth/Sources",
+      "product_dependencies" : [
+        "RecaptchaInterop"
+      ],
+      "product_memberships" : [
+        "FirebaseAuth",
+        "FirebaseAuthCombine-Community"
+      ],
+      "sources" : [
+        "ObjC/FIRAuth.m",
+        "ObjC/FIRAuthErrorUtils.m",
+        "ObjC/FIRAuthProvider.m",
+        "ObjC/FIRMultiFactorConstants.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseAuthCombineSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseAuthCombineSwift",
+      "path" : "FirebaseCombineSwift/Sources/Auth",
+      "product_memberships" : [
+        "FirebaseAuthCombine-Community"
+      ],
+      "sources" : [
+        "Auth+Combine.swift",
+        "GameCenterAuthProvider+Combine.swift",
+        "MultiFactor+Combine.swift",
+        "MultiFactorResolver+Combine.swift",
+        "OAuthProvider+Combine.swift",
+        "PhoneAuthProvider+Combine.swift",
+        "User+Combine.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseAuth"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseAuth",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseAuth",
+      "path" : "FirebaseAuth/Sources",
+      "product_dependencies" : [
+        "GULAppDelegateSwizzler",
+        "GULEnvironment",
+        "GTMSessionFetcherCore"
+      ],
+      "product_memberships" : [
+        "FirebaseAuth",
+        "FirebaseAuthCombine-Community"
+      ],
+      "resources" : [
+        {
+          "path" : "./FirebaseAuth/Sources/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Swift/ActionCode/ActionCodeInfo.swift",
+        "Swift/ActionCode/ActionCodeOperation.swift",
+        "Swift/ActionCode/ActionCodeSettings.swift",
+        "Swift/ActionCode/ActionCodeURL.swift",
+        "Swift/Auth/AppCheckInterop+FirebaseAuth.swift",
+        "Swift/Auth/Auth+Async.swift",
+        "Swift/Auth/Auth.swift",
+        "Swift/Auth/AuthComponent.swift",
+        "Swift/Auth/AuthDataResult.swift",
+        "Swift/Auth/AuthDispatcher.swift",
+        "Swift/Auth/AuthGlobalWorkQueue.swift",
+        "Swift/Auth/AuthOperationType.swift",
+        "Swift/Auth/AuthSettings.swift",
+        "Swift/Auth/AuthTokenResult.swift",
+        "Swift/AuthProvider/AuthCredential.swift",
+        "Swift/AuthProvider/AuthProviderID.swift",
+        "Swift/AuthProvider/EmailAuthProvider.swift",
+        "Swift/AuthProvider/FacebookAuthProvider.swift",
+        "Swift/AuthProvider/FederatedAuthProvider.swift",
+        "Swift/AuthProvider/GameCenterAuthProvider.swift",
+        "Swift/AuthProvider/GitHubAuthProvider.swift",
+        "Swift/AuthProvider/GoogleAuthProvider.swift",
+        "Swift/AuthProvider/OAuthCredential.swift",
+        "Swift/AuthProvider/OAuthProvider.swift",
+        "Swift/AuthProvider/PhoneAuthCredential.swift",
+        "Swift/AuthProvider/PhoneAuthProvider.swift",
+        "Swift/AuthProvider/TwitterAuthProvider.swift",
+        "Swift/Backend/AuthBackend.swift",
+        "Swift/Backend/AuthBackendRPCIssuer.swift",
+        "Swift/Backend/AuthRPCRequest.swift",
+        "Swift/Backend/AuthRPCResponse.swift",
+        "Swift/Backend/AuthRequestConfiguration.swift",
+        "Swift/Backend/IdentityToolkitRequest.swift",
+        "Swift/Backend/RPC/AuthMFAResponse.swift",
+        "Swift/Backend/RPC/CreateAuthURIRequest.swift",
+        "Swift/Backend/RPC/CreateAuthURIResponse.swift",
+        "Swift/Backend/RPC/DeleteAccountRequest.swift",
+        "Swift/Backend/RPC/DeleteAccountResponse.swift",
+        "Swift/Backend/RPC/EmailLinkSignInRequest.swift",
+        "Swift/Backend/RPC/EmailLinkSignInResponse.swift",
+        "Swift/Backend/RPC/GetAccountInfoRequest.swift",
+        "Swift/Backend/RPC/GetAccountInfoResponse.swift",
+        "Swift/Backend/RPC/GetOOBConfirmationCodeRequest.swift",
+        "Swift/Backend/RPC/GetOOBConfirmationCodeResponse.swift",
+        "Swift/Backend/RPC/GetProjectConfigRequest.swift",
+        "Swift/Backend/RPC/GetProjectConfigResponse.swift",
+        "Swift/Backend/RPC/GetRecaptchaConfigRequest.swift",
+        "Swift/Backend/RPC/GetRecaptchaConfigResponse.swift",
+        "Swift/Backend/RPC/MultiFactor/Enroll/FinalizeMFAEnrollmentRequest.swift",
+        "Swift/Backend/RPC/MultiFactor/Enroll/FinalizeMFAEnrollmentResponse.swift",
+        "Swift/Backend/RPC/MultiFactor/Enroll/StartMFAEnrollmentRequest.swift",
+        "Swift/Backend/RPC/MultiFactor/Enroll/StartMFAEnrollmentResponse.swift",
+        "Swift/Backend/RPC/MultiFactor/SignIn/FinalizeMFASignInRequest.swift",
+        "Swift/Backend/RPC/MultiFactor/SignIn/FinalizeMFASignInResponse.swift",
+        "Swift/Backend/RPC/MultiFactor/SignIn/StartMFASignInRequest.swift",
+        "Swift/Backend/RPC/MultiFactor/SignIn/StartMFASignInResponse.swift",
+        "Swift/Backend/RPC/MultiFactor/Unenroll/WithdrawMFARequest.swift",
+        "Swift/Backend/RPC/MultiFactor/Unenroll/WithdrawMFAResponse.swift",
+        "Swift/Backend/RPC/Proto/AuthProto.swift",
+        "Swift/Backend/RPC/Proto/AuthProtoMFAEnrollment.swift",
+        "Swift/Backend/RPC/Proto/Phone/AuthProtoFinalizeMFAPhoneRequestInfo.swift",
+        "Swift/Backend/RPC/Proto/Phone/AuthProtoFinalizeMFAPhoneResponseInfo.swift",
+        "Swift/Backend/RPC/Proto/Phone/AuthProtoStartMFAPhoneRequestInfo.swift",
+        "Swift/Backend/RPC/Proto/Phone/AuthProtoStartMFAPhoneResponseInfo.swift",
+        "Swift/Backend/RPC/Proto/TOTP/AuthProtoFinalizeMFATOTPEnrollmentRequestInfo.swift",
+        "Swift/Backend/RPC/Proto/TOTP/AuthProtoFinalizeMFATOTPEnrollmentResponseInfo.swift",
+        "Swift/Backend/RPC/Proto/TOTP/AuthProtoFinalizeMFATOTPSignInRequestInfo.swift",
+        "Swift/Backend/RPC/Proto/TOTP/AuthProtoStartMFATOTPEnrollmentRequestInfo.swift",
+        "Swift/Backend/RPC/Proto/TOTP/AuthProtoStartMFATOTPEnrollmentResponseInfo.swift",
+        "Swift/Backend/RPC/ResetPasswordRequest.swift",
+        "Swift/Backend/RPC/ResetPasswordResponse.swift",
+        "Swift/Backend/RPC/RevokeTokenRequest.swift",
+        "Swift/Backend/RPC/RevokeTokenResponse.swift",
+        "Swift/Backend/RPC/SecureTokenRequest.swift",
+        "Swift/Backend/RPC/SecureTokenResponse.swift",
+        "Swift/Backend/RPC/SendVerificationTokenRequest.swift",
+        "Swift/Backend/RPC/SendVerificationTokenResponse.swift",
+        "Swift/Backend/RPC/SetAccountInfoRequest.swift",
+        "Swift/Backend/RPC/SetAccountInfoResponse.swift",
+        "Swift/Backend/RPC/SignInWithGameCenterRequest.swift",
+        "Swift/Backend/RPC/SignInWithGameCenterResponse.swift",
+        "Swift/Backend/RPC/SignUpNewUserRequest.swift",
+        "Swift/Backend/RPC/SignUpNewUserResponse.swift",
+        "Swift/Backend/RPC/VerifyAssertionRequest.swift",
+        "Swift/Backend/RPC/VerifyAssertionResponse.swift",
+        "Swift/Backend/RPC/VerifyCustomTokenRequest.swift",
+        "Swift/Backend/RPC/VerifyCustomTokenResponse.swift",
+        "Swift/Backend/RPC/VerifyPasswordRequest.swift",
+        "Swift/Backend/RPC/VerifyPasswordResponse.swift",
+        "Swift/Backend/RPC/VerifyPhoneNumberRequest.swift",
+        "Swift/Backend/RPC/VerifyPhoneNumberResponse.swift",
+        "Swift/Backend/VerifyClientRequest.swift",
+        "Swift/Backend/VerifyClientResponse.swift",
+        "Swift/Base64URLEncodedStringExtension.swift",
+        "Swift/MultiFactor/MultiFactor.swift",
+        "Swift/MultiFactor/MultiFactorAssertion.swift",
+        "Swift/MultiFactor/MultiFactorInfo.swift",
+        "Swift/MultiFactor/MultiFactorResolver.swift",
+        "Swift/MultiFactor/MultiFactorSession.swift",
+        "Swift/MultiFactor/Phone/PhoneMultiFactorAssertion.swift",
+        "Swift/MultiFactor/Phone/PhoneMultiFactorGenerator.swift",
+        "Swift/MultiFactor/Phone/PhoneMultiFactorInfo.swift",
+        "Swift/MultiFactor/TOTP/TOTPMultFactorAssertion.swift",
+        "Swift/MultiFactor/TOTP/TOTPMultiFactorGenerator.swift",
+        "Swift/MultiFactor/TOTP/TOTPMultiFactorInfo.swift",
+        "Swift/MultiFactor/TOTP/TOTPSecret.swift",
+        "Swift/Storage/AuthKeychainServices.swift",
+        "Swift/Storage/AuthKeychainStorage.swift",
+        "Swift/Storage/AuthKeychainStorageReal.swift",
+        "Swift/Storage/AuthUserDefaults.swift",
+        "Swift/SystemService/AuthAPNSToken.swift",
+        "Swift/SystemService/AuthAPNSTokenManager.swift",
+        "Swift/SystemService/AuthAPNSTokenType.swift",
+        "Swift/SystemService/AuthAppCredential.swift",
+        "Swift/SystemService/AuthAppCredentialManager.swift",
+        "Swift/SystemService/AuthNotificationManager.swift",
+        "Swift/SystemService/AuthStoredUserManager.swift",
+        "Swift/SystemService/SecureTokenService.swift",
+        "Swift/SystemService/TokenRefreshCoalescer.swift",
+        "Swift/User/AdditionalUserInfo.swift",
+        "Swift/User/User.swift",
+        "Swift/User/UserInfo.swift",
+        "Swift/User/UserInfoImpl.swift",
+        "Swift/User/UserMetadata.swift",
+        "Swift/User/UserProfileChangeRequest.swift",
+        "Swift/User/UserProfileUpdate.swift",
+        "Swift/Utilities/AuthCondition.swift",
+        "Swift/Utilities/AuthDefaultUIDelegate.swift",
+        "Swift/Utilities/AuthErrorUtils.swift",
+        "Swift/Utilities/AuthErrors.swift",
+        "Swift/Utilities/AuthInternalErrors.swift",
+        "Swift/Utilities/AuthLog.swift",
+        "Swift/Utilities/AuthRecaptchaVerifier.swift",
+        "Swift/Utilities/AuthTokenLifetime.swift",
+        "Swift/Utilities/AuthUIDelegate.swift",
+        "Swift/Utilities/AuthURLPresenter.swift",
+        "Swift/Utilities/AuthWebUtils.swift",
+        "Swift/Utilities/AuthWebViewController.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseAppCheckInterop",
+        "FirebaseAuthInterop",
+        "FirebaseAuthInternal",
+        "FirebaseCore",
+        "FirebaseCoreExtension"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseAppDistributionTarget",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseAppDistributionTarget",
+      "path" : "SwiftPM-PlatformExclude/FirebaseAppDistributionWrap",
+      "product_memberships" : [
+        "FirebaseAppDistribution-Beta"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseAppDistribution"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseAppDistribution",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseAppDistribution",
+      "path" : "FirebaseAppDistribution/Sources",
+      "product_dependencies" : [
+        "GULAppDelegateSwizzler",
+        "GULUserDefaults"
+      ],
+      "product_memberships" : [
+        "FirebaseAppDistribution-Beta"
+      ],
+      "sources" : [
+        "FIRAppDistribution.m",
+        "FIRAppDistributionMachO.m",
+        "FIRAppDistributionMachOSlice.m",
+        "FIRAppDistributionRelease.m",
+        "FIRAppDistributionUIService.m",
+        "FIRFADApiService.m",
+        "FIRFADLogger.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseCore",
+        "FirebaseInstallations"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseAppCheckUnitSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseAppCheckUnitSwift",
+      "path" : "FirebaseAppCheck/Tests/Unit/Swift",
+      "product_dependencies" : [
+        "AppCheckCore"
+      ],
+      "sources" : [
+        "AppAttestProviderFactoryTests.swift",
+        "AppCheckAPITests.swift",
+        "RecaptchaProvider+Test.swift",
+        "RecaptchaProviderTests.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseAppCheck",
+        "FirebaseCoreExtension",
+        "SharedTestUtilities"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirebaseAppCheckUnit",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseAppCheckUnit",
+      "path" : "FirebaseAppCheck/Tests/Unit",
+      "product_dependencies" : [
+        "OCMock"
+      ],
+      "sources" : [
+        "AppAttestProvider/FIRAppAttestProviderTests.m",
+        "Core/Errors/FIRAppCheckErrorUtilTests.m",
+        "Core/FIRAppCheckLoggerTests.m",
+        "Core/FIRAppCheckSettingsTests.m",
+        "Core/FIRAppCheckTests.m",
+        "Core/FIRAppCheckValidatorTests.m",
+        "DebugProvider/FIRAppCheckDebugProviderFactoryTests.m",
+        "DebugProvider/FIRAppCheckDebugProviderTests.m",
+        "DebugProvider/FIRAppCheckDebugTokenConfigStoreTests.m",
+        "DefaultProviderFactory/FIRDefaultProviderFactoryTests.m",
+        "DeviceCheckProvider/FIRDeviceCheckProviderFactoryTests.m",
+        "DeviceCheckProvider/FIRDeviceCheckProviderTests.m",
+        "Utils/FIRFixtureLoader.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseAppCheck",
+        "SharedTestUtilities"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirebaseAppCheckInterop",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseAppCheckInterop",
+      "path" : "FirebaseAppCheck/Interop",
+      "product_memberships" : [
+        "FirebaseAILogic",
+        "FirebaseAuth",
+        "FirebaseAppCheck",
+        "FirebaseAuthCombine-Community",
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseStorageCombine-Community",
+        "FirebaseDatabase",
+        "FirebaseFirestore",
+        "FirebaseFunctions",
+        "FirebaseStorage"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseAppCheck",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseAppCheck",
+      "path" : "FirebaseAppCheck/Sources",
+      "product_dependencies" : [
+        "AppCheckCore",
+        "AppCheckRecaptchaProvider",
+        "GULEnvironment",
+        "GULUserDefaults"
+      ],
+      "product_memberships" : [
+        "FirebaseAILogic",
+        "FirebaseAppCheck"
+      ],
+      "sources" : [
+        "AppAttestProvider/FIRAppAttestProvider.m",
+        "AppAttestProvider/FIRAppAttestProviderFactory.m",
+        "Core/Errors/FIRAppCheckErrorUtil.m",
+        "Core/Errors/FIRAppCheckErrors.m",
+        "Core/FIRApp+AppCheck.m",
+        "Core/FIRAppCheck.m",
+        "Core/FIRAppCheckComponent.m",
+        "Core/FIRAppCheckLogger.m",
+        "Core/FIRAppCheckSettings.m",
+        "Core/FIRAppCheckToken.m",
+        "Core/FIRAppCheckTokenResult.m",
+        "Core/FIRAppCheckValidator.m",
+        "Core/FIRHeartbeatLogger+AppCheck.m",
+        "Core/FIRInternalAppCheckProvider.m",
+        "DebugProvider/FIRAppCheckDebugProvider.m",
+        "DebugProvider/FIRAppCheckDebugProviderFactory.m",
+        "DebugProvider/FIRAppCheckDebugTokenConfigStore.m",
+        "DefaultProviderFactory/FIRDefaultProviderFactory.m",
+        "DeviceCheckProvider/FIRDeviceCheckProvider.m",
+        "DeviceCheckProvider/FIRDeviceCheckProviderFactory.m",
+        "RecaptchaProvider/FIRRecaptchaProvider.m",
+        "RecaptchaProvider/FIRRecaptchaProviderFactory.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseAppCheckInterop",
+        "FirebaseCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseAnalyticsWrapper",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseAnalyticsWrapper",
+      "path" : "FirebaseAnalyticsWrapper",
+      "product_dependencies" : [
+        "GoogleAppMeasurement",
+        "GULAppDelegateSwizzler",
+        "GULMethodSwizzler",
+        "GULNSData",
+        "GULNetwork",
+        "nanopb"
+      ],
+      "product_memberships" : [
+        "FirebaseAnalytics"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseAnalytics",
+        "FirebaseCore",
+        "FirebaseInstallations"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseAnalyticsTarget",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseAnalyticsTarget",
+      "path" : "SwiftPM-PlatformExclude/FirebaseAnalyticsWrap",
+      "product_memberships" : [
+        "FirebaseAnalytics"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseAnalyticsWrapper"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseAnalyticsIdentitySupportTarget",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseAnalyticsIdentitySupportTarget",
+      "path" : "FirebaseAnalyticsIdentitySupportWrapper",
+      "product_dependencies" : [
+        "GoogleAppMeasurementIdentitySupport",
+        "GULAppDelegateSwizzler",
+        "GULMethodSwizzler",
+        "GULNSData",
+        "GULNetwork",
+        "nanopb"
+      ],
+      "product_memberships" : [
+        "FirebaseAnalyticsIdentitySupport"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseAnalytics",
+        "FirebaseCore",
+        "FirebaseInstallations"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseAnalyticsCoreWrapper",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseAnalyticsCoreWrapper",
+      "path" : "FirebaseAnalyticsCoreWrapper",
+      "product_dependencies" : [
+        "GoogleAppMeasurementCore",
+        "GULAppDelegateSwizzler",
+        "GULMethodSwizzler",
+        "GULNSData",
+        "GULNetwork",
+        "nanopb"
+      ],
+      "product_memberships" : [
+        "FirebaseAnalyticsCore"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseAnalytics",
+        "FirebaseCore",
+        "FirebaseInstallations"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseAnalyticsCoreTarget",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseAnalyticsCoreTarget",
+      "path" : "SwiftPM-PlatformExclude/FirebaseAnalyticsCoreWrap",
+      "product_memberships" : [
+        "FirebaseAnalyticsCore"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseAnalyticsCoreWrapper"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseAnalytics",
+      "module_type" : "BinaryTarget",
+      "name" : "FirebaseAnalytics",
+      "path" : "remote/archive/FirebaseAnalytics.zip",
+      "product_memberships" : [
+        "FirebaseAnalytics",
+        "FirebaseAnalyticsCore",
+        "FirebaseAnalyticsIdentitySupport"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "FirebaseAILogicUnit",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseAILogicUnit",
+      "path" : "FirebaseAI/Tests/Unit",
+      "resources" : [
+        {
+          "path" : "./FirebaseAI/Tests/Unit/Resources/animals.mp4",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseAI/Tests/Unit/Resources/blue.png",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseAI/Tests/Unit/Resources/gemini-report.pdf",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseAI/Tests/Unit/Resources/hello-world.mp3",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseAI/Tests/Unit/vertexai-sdk-test-data/mock-responses",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "APITests.swift",
+        "ChatTests.swift",
+        "Fakes/AppCheckInteropFake.swift",
+        "Fakes/AuthInteropFake.swift",
+        "FirebaseInfoHeadersTests.swift",
+        "GenerationConfigTests.swift",
+        "GenerativeAIServiceTests.swift",
+        "GenerativeModelGoogleAITests.swift",
+        "GenerativeModelVertexAICachingTests.swift",
+        "GenerativeModelVertexAITests.swift",
+        "JSONValueTests.swift",
+        "LiveGenerationConfigTests.swift",
+        "MapsGroundingTests.swift",
+        "MockURLProtocol.swift",
+        "ObjectiveCClassEnumerationTests.swift",
+        "PartTests.swift",
+        "PartsRepresentableTests.swift",
+        "RequestOptionsTest.swift",
+        "SafetyTests.swift",
+        "Snippets/ChatSnippets.swift",
+        "Snippets/CloudStorageSnippets.swift",
+        "Snippets/CountTokensSnippets.swift",
+        "Snippets/FirebaseAppSnippetsUtil.swift",
+        "Snippets/FunctionCallingSnippets.swift",
+        "Snippets/LiveSnippets.swift",
+        "Snippets/MultimodalSnippets.swift",
+        "Snippets/StructuredOutputSnippets.swift",
+        "Snippets/TextSnippets.swift",
+        "TemplateChatTests.swift",
+        "TemplateGenerateContentRequestTests.swift",
+        "TemplateGenerativeModelTests.swift",
+        "TemplateInputTests.swift",
+        "TestUtilities/BundleTestUtil.swift",
+        "TestUtilities/FirebaseAI+DefaultAPIConfig.swift",
+        "TestUtilities/GenerativeModelTestUtil.swift",
+        "TestUtilities/XCTUtil.swift",
+        "Types/BackendTests.swift",
+        "Types/CitationMetadataTests.swift",
+        "Types/CitationTests.swift",
+        "Types/GenerateContentResponseTests.swift",
+        "Types/GroundingMetadataTests.swift",
+        "Types/Internal/APIConfigTests.swift",
+        "Types/Internal/Requests/CountTokensRequestTests.swift",
+        "Types/InternalPartTests.swift",
+        "Types/Live/BidiGenerateContentServerMessageTests.swift",
+        "Types/Live/LiveServerVoiceActivityTests.swift",
+        "Types/Live/LiveSessionServiceTests.swift",
+        "Types/Live/SpeechConfigTests.swift",
+        "Types/Live/VoiceConfigTests.swift",
+        "Types/ModalityTokenCountTests.swift",
+        "Types/ProtoDateTests.swift",
+        "Types/ProtoDurationTests.swift",
+        "Types/SchemaTests.swift",
+        "Types/ToolTests.swift",
+        "VertexComponentTests.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseAILogic",
+        "FirebaseStorage"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "FirebaseAILogic",
+      "module_type" : "SwiftTarget",
+      "name" : "FirebaseAILogic",
+      "path" : "FirebaseAI/Sources",
+      "product_memberships" : [
+        "FirebaseAILogic"
+      ],
+      "sources" : [
+        "AILog.swift",
+        "Chat.swift",
+        "Constants.swift",
+        "Errors.swift",
+        "Extensions/Internal/FirebaseInfo+Headers.swift",
+        "Extensions/Internal/GeminiLanguageModel+Firebase.swift",
+        "Extensions/Internal/JSONSerialization+prettyString.swift",
+        "Extensions/Public/FirebaseAI+GeminiLanguageModel.swift",
+        "FirebaseAI.swift",
+        "FirebaseInfo.swift",
+        "GenAIURLSession.swift",
+        "GenerateContentError.swift",
+        "GenerateContentRequest.swift",
+        "GenerateContentResponse.swift",
+        "GenerationConfig.swift",
+        "GenerativeAIRequest.swift",
+        "GenerativeAIService.swift",
+        "GenerativeModel.swift",
+        "History.swift",
+        "JSONValue.swift",
+        "ModalityTokenCount.swift",
+        "ModelContent.swift",
+        "PartsRepresentable+Image.swift",
+        "PartsRepresentable.swift",
+        "Protocols/Internal/CodableProtoEnum.swift",
+        "Safety.swift",
+        "TaskLocals.swift",
+        "TemplateChat.swift",
+        "TemplateGenerateContentRequest.swift",
+        "TemplateGenerativeModel.swift",
+        "TemplateInput.swift",
+        "Tool.swift",
+        "Types/Internal/APIConfig.swift",
+        "Types/Internal/AppCheck.swift",
+        "Types/Internal/DataType.swift",
+        "Types/Internal/Errors/BackendError.swift",
+        "Types/Internal/Errors/EmptyContentError.swift",
+        "Types/Internal/InternalPart.swift",
+        "Types/Internal/Live/AsyncWebSocket.swift",
+        "Types/Internal/Live/BidiActivityDetectionConfig.swift",
+        "Types/Internal/Live/BidiContextWindowCompressionConfig.swift",
+        "Types/Internal/Live/BidiGenerateContentClientContent.swift",
+        "Types/Internal/Live/BidiGenerateContentClientMessage.swift",
+        "Types/Internal/Live/BidiGenerateContentRealtimeInput.swift",
+        "Types/Internal/Live/BidiGenerateContentServerContent.swift",
+        "Types/Internal/Live/BidiGenerateContentServerMessage.swift",
+        "Types/Internal/Live/BidiGenerateContentSetup.swift",
+        "Types/Internal/Live/BidiGenerateContentSetupComplete.swift",
+        "Types/Internal/Live/BidiGenerateContentToolCall.swift",
+        "Types/Internal/Live/BidiGenerateContentToolCallCancellation.swift",
+        "Types/Internal/Live/BidiGenerateContentToolResponse.swift",
+        "Types/Internal/Live/BidiGenerateContentTranscription.swift",
+        "Types/Internal/Live/BidiGenerationConfig.swift",
+        "Types/Internal/Live/BidiRealtimeInputConfig.swift",
+        "Types/Internal/Live/BidiSessionResumptionUpdate.swift",
+        "Types/Internal/Live/BidiVoiceActivity.swift",
+        "Types/Internal/Live/GoAway.swift",
+        "Types/Internal/Live/LiveSessionService.swift",
+        "Types/Internal/ProtoDate.swift",
+        "Types/Internal/ProtoDuration.swift",
+        "Types/Internal/Requests/CountTokensRequest.swift",
+        "Types/Internal/Shared/ProtoMultiSpeakerVoiceConfig.swift",
+        "Types/Internal/Shared/ProtoSpeakerVoiceConfig.swift",
+        "Types/Internal/Shared/ProtoSpeechConfig.swift",
+        "Types/Internal/Shared/ProtoVoiceConfig.swift",
+        "Types/Internal/Tools/TemplateFunction.swift",
+        "Types/Internal/Tools/TemplateTool+Internal.swift",
+        "Types/Internal/Tools/URLContext.swift",
+        "Types/Public/Backend.swift",
+        "Types/Public/ImageConfig.swift",
+        "Types/Public/Live/ActivityDetectionConfig.swift",
+        "Types/Public/Live/AudioTranscriptionConfig.swift",
+        "Types/Public/Live/ContextWindowCompressionConfig.swift",
+        "Types/Public/Live/LiveAudioTranscription.swift",
+        "Types/Public/Live/LiveGenerationConfig.swift",
+        "Types/Public/Live/LiveGenerativeModel.swift",
+        "Types/Public/Live/LiveServerContent.swift",
+        "Types/Public/Live/LiveServerGoingAwayNotice.swift",
+        "Types/Public/Live/LiveServerMessage.swift",
+        "Types/Public/Live/LiveServerToolCall.swift",
+        "Types/Public/Live/LiveServerToolCallCancellation.swift",
+        "Types/Public/Live/LiveServerVoiceActivity.swift",
+        "Types/Public/Live/LiveSession.swift",
+        "Types/Public/Live/LiveSessionErrors.swift",
+        "Types/Public/Live/LiveSessionResumptionUpdate.swift",
+        "Types/Public/Live/RealtimeInputConfig.swift",
+        "Types/Public/Live/SessionResumptionConfig.swift",
+        "Types/Public/MultiSpeakerVoiceConfig.swift",
+        "Types/Public/Part.swift",
+        "Types/Public/ResponseModality.swift",
+        "Types/Public/Schema.swift",
+        "Types/Public/SpeakerVoiceConfig.swift",
+        "Types/Public/SpeechConfig.swift",
+        "Types/Public/SpeechMetadata.swift",
+        "Types/Public/ThinkingConfig.swift",
+        "Types/Public/Tools/CodeExecution.swift",
+        "Types/Public/Tools/GoogleMaps.swift",
+        "Types/Public/Tools/TemplateTool.swift",
+        "Types/Public/Tools/TemplateToolConfig.swift",
+        "Types/Public/URLContextMetadata.swift",
+        "Types/Public/URLMetadata.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseAppCheck",
+        "FirebaseAppCheckInterop",
+        "FirebaseAuthInterop",
+        "FirebaseCore",
+        "FirebaseCoreExtension",
+        "GeminiLanguageModel"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "FirebaseABTesting",
+      "module_type" : "ClangTarget",
+      "name" : "FirebaseABTesting",
+      "path" : "FirebaseABTesting/Sources",
+      "product_memberships" : [
+        "FirebaseInAppMessaging-Beta",
+        "FirebasePerformance",
+        "FirebaseRemoteConfig"
+      ],
+      "resources" : [
+        {
+          "path" : "./FirebaseABTesting/Sources/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "ABTConditionalUserPropertyController.m",
+        "ABTExperimentPayload.m",
+        "FIRExperimentController.m",
+        "FIRLifecycleEvents.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "Firebase",
+      "module_type" : "ClangTarget",
+      "name" : "Firebase",
+      "path" : "CoreOnly/Sources",
+      "product_memberships" : [
+        "FirebaseAILogic",
+        "FirebaseAnalytics",
+        "FirebaseAnalyticsCore",
+        "FirebaseAnalyticsIdentitySupport",
+        "FirebaseAuth",
+        "FirebaseAppCheck",
+        "FirebaseAppDistribution-Beta",
+        "FirebaseAuthCombine-Community",
+        "FirebaseFirestoreCombine-Community",
+        "FirebaseFunctionsCombine-Community",
+        "FirebaseStorageCombine-Community",
+        "FirebaseCore",
+        "FirebaseCrashlytics",
+        "FirebaseDatabase",
+        "FirebaseFirestore",
+        "FirebaseFunctions",
+        "FirebaseInAppMessaging-Beta",
+        "FirebaseInstallations",
+        "FirebaseMessaging",
+        "FirebasePerformance",
+        "FirebaseRemoteConfig",
+        "FirebaseStorage"
+      ],
+      "sources" : [
+        "dummy.m"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "DatabaseUnitSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "DatabaseUnitSwift",
+      "path" : "FirebaseDatabase/Tests/Unit/Swift",
+      "sources" : [
+        "Codable/ServerValueCodingTests.swift",
+        "DatabaseAPITests.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseDatabase"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "DatabaseUnit",
+      "module_type" : "ClangTarget",
+      "name" : "DatabaseUnit",
+      "path" : "FirebaseDatabase/Tests",
+      "product_dependencies" : [
+        "OCMock"
+      ],
+      "resources" : [
+        {
+          "path" : "./FirebaseDatabase/Tests/Resources/GoogleService-Info.plist",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseDatabase/Tests/Resources/syncPointSpec.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Helpers/FDevice.m",
+        "Helpers/FEventTester.m",
+        "Helpers/FIRFakeApp.m",
+        "Helpers/FMockStorageEngine.m",
+        "Helpers/FTestBase.m",
+        "Helpers/FTestCachePolicy.m",
+        "Helpers/FTestClock.m",
+        "Helpers/FTestExpectations.m",
+        "Helpers/FTestHelpers.m",
+        "Helpers/FTupleEventTypeString.m",
+        "Helpers/SenTest+FWaiter.m",
+        "Unit/FArraySortedDictionaryTest.m",
+        "Unit/FCompoundHashTest.m",
+        "Unit/FCompoundWriteTest.m",
+        "Unit/FConnectionHostTest.m",
+        "Unit/FConnectionTest.m",
+        "Unit/FIRDataSnapshotTests.m",
+        "Unit/FIRDatabaseConnectionContextProviderTests.m",
+        "Unit/FIRMutableDataTests.m",
+        "Unit/FLevelDBStorageEngineTests.m",
+        "Unit/FNextPushIdTest.m",
+        "Unit/FNodeTests.m",
+        "Unit/FPathTests.m",
+        "Unit/FPersistenceManagerTest.m",
+        "Unit/FPersistentConnectionTests.m",
+        "Unit/FPruneForestTest.m",
+        "Unit/FPruningTest.m",
+        "Unit/FQueryParamsTest.m",
+        "Unit/FRangeMergeTest.m",
+        "Unit/FRepoGetDataPersistenceTests.m",
+        "Unit/FRepoInfoTest.m",
+        "Unit/FRepoTests.m",
+        "Unit/FRepoTransactionTests.m",
+        "Unit/FSparseSnapshotTests.m",
+        "Unit/FSyncPointTests.m",
+        "Unit/FSyncTreeTests.m",
+        "Unit/FTrackedQueryManagerTest.m",
+        "Unit/FTreeSortedDictionaryTests.m",
+        "Unit/FUtilitiesTest.m",
+        "Unit/FWebSocketConnectionTest.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseDatabase",
+        "SharedTestUtilities"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CoreUnit",
+      "module_type" : "ClangTarget",
+      "name" : "CoreUnit",
+      "path" : "FirebaseCore/Tests/Unit",
+      "product_dependencies" : [
+        "OCMock"
+      ],
+      "sources" : [
+        "FIRAnalyticsConfigurationTest.m",
+        "FIRAppTest.m",
+        "FIRBundleUtilTest.m",
+        "FIRComponentContainerTest.m",
+        "FIRComponentTypeTest.m",
+        "FIRConfigurationTest.m",
+        "FIRFirebaseUserAgentTests.m",
+        "FIRHeartbeatLoggerTests.m",
+        "FIRLoggerTest.m",
+        "FIROptionsTest.m",
+        "FIRSceneFinderTests.m",
+        "FIRTestCase.m",
+        "FIRTestComponents.m",
+        "FIRTimestampTest.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseCore",
+        "SharedTestUtilities"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AuthUnit",
+      "module_type" : "SwiftTarget",
+      "name" : "AuthUnit",
+      "path" : "FirebaseAuth/Tests/Unit",
+      "sources" : [
+        "ActionCodeURLTests.swift",
+        "AdditionalUserInfoTests.swift",
+        "AuthAPNSTokenManagerTests.swift",
+        "AuthAPNSTokenTests.swift",
+        "AuthAppCredentialManagerTests.swift",
+        "AuthAppCredentialTests.swift",
+        "AuthBackendTests.swift",
+        "AuthDispatcherTests.swift",
+        "AuthKeychainServicesTests.swift",
+        "AuthLifecycleTests.swift",
+        "AuthNotificationManagerTests.swift",
+        "AuthProviderIDTests.swift",
+        "AuthStateChangesAsyncTests.swift",
+        "AuthTests.swift",
+        "AuthTokenLifetimeTests.swift",
+        "AuthURLPresenterTests.swift",
+        "AuthUseUserAccessGroupTests.swift",
+        "AuthUserDefaultsTests.swift",
+        "AuthWebUtilsTests.swift",
+        "CreateAuthURITests.swift",
+        "DeleteAccountTests.swift",
+        "EmailAuthProviderTests.swift",
+        "EmailLinkSignInTests.swift",
+        "FacebookAuthProviderTests.swift",
+        "Fakes/FakeAppCheck.swift",
+        "Fakes/FakeAuthKeychainStorage.swift",
+        "Fakes/FakeBackendRPCIssuer.swift",
+        "FinalizeMFAEnrollmentRequestTests.swift",
+        "FinalizeMFASignInRequestTests.swift",
+        "GetAccountInfoTests.swift",
+        "GetOOBConfirmationCodeTests.swift",
+        "GetProjectConfigTests.swift",
+        "GetRecaptchaConfigTests.swift",
+        "GitHubAuthProviderTests.swift",
+        "GoogleAuthProviderTests.swift",
+        "IdTokenChangesAsyncTests.swift",
+        "IdentityToolkitRequestTests.swift",
+        "MFAResponseDecodingTests.swift",
+        "MultiFactorResolverTests.swift",
+        "OAuthProviderTests.swift",
+        "PhoneAuthProviderTests.swift",
+        "RPCBaseTests.swift",
+        "ResetPasswordTests.swift",
+        "RevokeTokenTests.swift",
+        "SecureTokenRequestTests.swift",
+        "SecureTokenTests.swift",
+        "SendVerificationCodeTests.swift",
+        "SetAccountInfoTests.swift",
+        "SignInWithGameCenterTests.swift",
+        "SignUpNewUserTests.swift",
+        "StartMFAEnrollmentRequestTests.swift",
+        "StartMFASignInRequestTests.swift",
+        "SwiftAPI.swift",
+        "SwiftGlobalTests.swift",
+        "TokenRefreshCoalescerTests.swift",
+        "TwitterAuthProviderTests.swift",
+        "UserMetadataTests.swift",
+        "UserPropertyThreadSafetyTests.swift",
+        "UserTests.swift",
+        "VerifyAssertionTests.swift",
+        "VerifyClientTests.swift",
+        "VerifyCustomTokenTests.swift",
+        "VerifyPasswordTests.swift",
+        "VerifyPhoneNumberTests.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseAuth"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AppDistributionUnitSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "AppDistributionUnitSwift",
+      "path" : "FirebaseAppDistribution/Tests/Unit/Swift",
+      "sources" : [
+        "AppDistributionAPITest.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseAppDistribution"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AppDistributionUnit",
+      "module_type" : "ClangTarget",
+      "name" : "AppDistributionUnit",
+      "path" : "FirebaseAppDistribution/Tests/Unit",
+      "product_dependencies" : [
+        "OCMock"
+      ],
+      "resources" : [
+        {
+          "path" : "./FirebaseAppDistribution/Tests/Unit/Resources/armv7-armv7s-executable",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseAppDistribution/Tests/Unit/Resources/x86_64-executable",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "FIRAppDistributionMachOTests.m",
+        "FIRAppDistributionTests.m",
+        "FIRFADApiServiceTests.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseAppDistribution"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AnalyticsSwiftUnit",
+      "module_type" : "SwiftTarget",
+      "name" : "AnalyticsSwiftUnit",
+      "path" : "FirebaseAnalytics/Tests/SwiftUnit",
+      "sources" : [
+        "AnalyticsAPITests.swift"
+      ],
+      "target_dependencies" : [
+        "FirebaseAnalyticsTarget"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AnalyticsObjCAPI",
+      "module_type" : "ClangTarget",
+      "name" : "AnalyticsObjCAPI",
+      "path" : "FirebaseAnalytics/Tests/ObjCAPI",
+      "sources" : [
+        "ObjCAPITests.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseAnalyticsTarget"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "ABTestingUnit",
+      "module_type" : "ClangTarget",
+      "name" : "ABTestingUnit",
+      "path" : "FirebaseABTesting/Tests/Unit",
+      "product_dependencies" : [
+        "OCMock"
+      ],
+      "resources" : [
+        {
+          "path" : "./FirebaseABTesting/Tests/Unit/Resources/TestABTPayload1.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseABTesting/Tests/Unit/Resources/TestABTPayload2.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseABTesting/Tests/Unit/Resources/TestABTPayload3.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseABTesting/Tests/Unit/Resources/TestABTPayload4.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseABTesting/Tests/Unit/Resources/TestABTPayload5.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./FirebaseABTesting/Tests/Unit/Resources/TestABTPayload6.txt",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "ABTConditionalUserPropertyControllerTest.m",
+        "ABTExperimentPayloadTest.m",
+        "ABTFakeFIRAConditionalUserPropertyController.m",
+        "ABTTestUniversalConstants.m",
+        "FIRExperimentControllerTest.m",
+        "Utilities/ABTTestUtilities.m"
+      ],
+      "target_dependencies" : [
+        "FirebaseABTesting"
+      ],
+      "type" : "test"
+    }
+  ],
+  "tools_version" : "6.2"
+}

@@ -1,0 +1,305 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "googleutilities",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "8.1.0",
+            "upper_bound" : "9.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/GoogleUtilities.git"
+    },
+    {
+      "identity" : "interop-ios-for-google-sdks",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "101.0.0",
+            "upper_bound" : "102.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/interop-ios-for-google-sdks.git"
+    }
+  ],
+  "manifest_display_name" : "AppCheck",
+  "name" : "AppCheck",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "maccatalyst",
+      "version" : "15.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "11.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "8.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "AppCheckCore",
+      "targets" : [
+        "AppCheckCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "AppCheckRecaptchaProvider",
+      "targets" : [
+        "AppCheckRecaptchaProvider"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "c99name" : "AppCheckRecaptchaProviderUnit",
+      "module_type" : "SwiftTarget",
+      "name" : "AppCheckRecaptchaProviderUnit",
+      "path" : "AppCheckRecaptchaProvider/Tests",
+      "sources" : [
+        "AppCheckRecaptchaProviderTests.swift",
+        "MockRecaptchaSupport.swift",
+        "RecaptchaAPIServiceTests.swift",
+        "RecaptchaTokenGeneratorTests.swift"
+      ],
+      "target_dependencies" : [
+        "AppCheckRecaptchaProvider"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AppCheckRecaptchaProvider",
+      "module_type" : "SwiftTarget",
+      "name" : "AppCheckRecaptchaProvider",
+      "path" : "AppCheckRecaptchaProvider/Sources",
+      "product_dependencies" : [
+        "RecaptchaInterop"
+      ],
+      "product_memberships" : [
+        "AppCheckRecaptchaProvider"
+      ],
+      "sources" : [
+        "Public/AppCheckRecaptchaProvider.swift",
+        "RecaptchaAPIService.swift",
+        "RecaptchaTokenGenerator.swift"
+      ],
+      "target_dependencies" : [
+        "AppCheckCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "AppCheckCoreUnitSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "AppCheckCoreUnitSwift",
+      "path" : "AppCheckCore/Tests/Unit/Swift",
+      "sources" : [
+        "AppCheckAPITests.swift"
+      ],
+      "target_dependencies" : [
+        "AppCheckCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AppCheckCoreUnitObjC",
+      "module_type" : "ClangTarget",
+      "name" : "AppCheckCoreUnitObjC",
+      "path" : "AppCheckCore/Tests/Unit/ObjC",
+      "sources" : [
+        "AppCheckCoreObjCAPITests.m"
+      ],
+      "target_dependencies" : [
+        "AppCheckCore",
+        "AppCheckRecaptchaProvider"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AppCheckCoreUnit",
+      "module_type" : "SwiftTarget",
+      "name" : "AppCheckCoreUnit",
+      "path" : "AppCheckCore/Tests",
+      "resources" : [
+        {
+          "path" : "./AppCheckCore/Tests/Fixture/AppAttestAttestationResponseSuccess.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./AppCheckCore/Tests/Fixture/AppAttestResponseMissingChallenge.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./AppCheckCore/Tests/Fixture/AppAttestResponseSuccess.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./AppCheckCore/Tests/Fixture/DeviceCheckResponseMissingTimeToLive.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./AppCheckCore/Tests/Fixture/DeviceCheckResponseMissingToken.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./AppCheckCore/Tests/Fixture/FACTokenExchangeResponseSuccess.json",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./AppCheckCore/Tests/Fixture/GACAppAttestStoredArtifact.bin",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "./AppCheckCore/Tests/Fixture/GACAppCheckStoredToken.bin",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Integration/AppCheckCoreDeviceCheckAPIServiceE2ETests.swift",
+        "Unit/AppAttestProvider/AppCheckCoreAppAttestAPIServiceTests.swift",
+        "Unit/AppAttestProvider/AppCheckCoreAppAttestProviderTests.swift",
+        "Unit/AppAttestProvider/Storage/AppCheckCoreAppAttestArtifactStorageTests.swift",
+        "Unit/AppAttestProvider/Storage/AppCheckCoreAppAttestKeyIDStorageTests.swift",
+        "Unit/AppAttestProvider/Storage/AppCheckCoreAppAttestStoredArtifactTests.swift",
+        "Unit/Core/AppCheckCoreAPIServiceTests.swift",
+        "Unit/Core/AppCheckCoreBackoffWrapperTests.swift",
+        "Unit/Core/AppCheckCoreCryptoUtilsTests.swift",
+        "Unit/Core/AppCheckCoreErrorsTests.swift",
+        "Unit/Core/AppCheckCoreLoggerTests.swift",
+        "Unit/Core/AppCheckCoreMainThreadDeliveryTests.swift",
+        "Unit/Core/AppCheckCoreStorageTests.swift",
+        "Unit/Core/AppCheckCoreStoredTokenTests.swift",
+        "Unit/Core/AppCheckCoreTests.swift",
+        "Unit/Core/AppCheckCoreTimerTests.swift",
+        "Unit/Core/AppCheckCoreTokenRefresherTests.swift",
+        "Unit/Core/AppCheckCoreTokenResultTests.swift",
+        "Unit/DebugProvider/AppCheckCoreDebugProviderAPIServiceTests.swift",
+        "Unit/DebugProvider/AppCheckCoreDebugProviderTests.swift",
+        "Unit/DeviceCheckProvider/AppCheckCoreDeviceCheckAPIServiceTests.swift",
+        "Unit/DeviceCheckProvider/AppCheckCoreDeviceCheckProviderTests.swift",
+        "Unit/Utils/AppCheckCoreFakes.swift",
+        "Unit/Utils/AppCheckCoreFixtureLoader.swift",
+        "Unit/Utils/AppCheckCoreURLSessionFake.swift"
+      ],
+      "target_dependencies" : [
+        "AppCheckCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "AppCheckCore",
+      "module_type" : "SwiftTarget",
+      "name" : "AppCheckCore",
+      "path" : "AppCheckCore/Sources",
+      "product_dependencies" : [
+        "GULEnvironment",
+        "GULUserDefaults"
+      ],
+      "product_memberships" : [
+        "AppCheckCore",
+        "AppCheckRecaptchaProvider"
+      ],
+      "sources" : [
+        "AppAttestProvider/API/AppCheckCoreAppAttestAPIService.swift",
+        "AppAttestProvider/API/AppCheckCoreAppAttestAttestationResponse.swift",
+        "AppAttestProvider/AppCheckCoreAppAttestProvider.swift",
+        "AppAttestProvider/AppCheckCoreAppAttestProviderState.swift",
+        "AppAttestProvider/AppCheckCoreAppAttestService.swift",
+        "AppAttestProvider/Errors/AppCheckCoreAppAttestRejectionError.swift",
+        "AppAttestProvider/Storage/AppCheckCoreAppAttestArtifactStorage.swift",
+        "AppAttestProvider/Storage/AppCheckCoreAppAttestKeyIDStorage.swift",
+        "AppAttestProvider/Storage/AppCheckCoreAppAttestStoredArtifact.swift",
+        "Core/APIService/AppCheckCoreAPIService.swift",
+        "Core/APIService/AppCheckCoreToken+APIResponse.swift",
+        "Core/APIService/AppCheckCoreURLSessionDataResponse.swift",
+        "Core/AppCheckCore.swift",
+        "Core/AppCheckCoreLogger.swift",
+        "Core/AppCheckCoreProvider.swift",
+        "Core/AppCheckCoreSettings.swift",
+        "Core/AppCheckCoreToken.swift",
+        "Core/AppCheckCoreTokenDelegate.swift",
+        "Core/AppCheckCoreTokenResult.swift",
+        "Core/Backoff/AppCheckCoreBackoffWrapper.swift",
+        "Core/Errors/AppCheckCoreErrorUtil.swift",
+        "Core/Errors/AppCheckCoreErrors.swift",
+        "Core/Errors/AppCheckCoreHTTPError.swift",
+        "Core/Storage/AppCheckCoreStorage.swift",
+        "Core/Storage/AppCheckCoreStoredToken.swift",
+        "Core/TokenRefresh/AppCheckCoreTimer.swift",
+        "Core/TokenRefresh/AppCheckCoreTokenRefreshResult.swift",
+        "Core/TokenRefresh/AppCheckCoreTokenRefresher.swift",
+        "Core/Utils/AppCheckCoreCryptoUtils.swift",
+        "Core/Utils/SafeContinuation.swift",
+        "DebugProvider/AppCheckCoreDebugProvider.swift",
+        "DebugProvider/AppCheckCoreDebugProviderAPIService.swift",
+        "DeviceCheckProvider/API/AppCheckCoreDeviceCheckAPIService.swift",
+        "DeviceCheckProvider/AppCheckCoreDeviceCheckProvider.swift",
+        "DeviceCheckProvider/AppCheckCoreDeviceCheckTokenGenerator.swift",
+        "DeviceCheckProvider/DCDevice+GACDeviceCheckTokenGenerator.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}

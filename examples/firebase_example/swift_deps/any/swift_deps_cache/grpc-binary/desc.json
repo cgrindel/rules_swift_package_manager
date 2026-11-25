@@ -1,0 +1,174 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "abseil-cpp-binary",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.2025051202.0",
+            "upper_bound" : "1.2025051300.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/google/abseil-cpp-binary.git"
+    }
+  ],
+  "manifest_display_name" : "gRPC",
+  "name" : "gRPC",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "gRPC-Core",
+      "targets" : [
+        "grpcWrapper"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "gRPC-C++",
+      "targets" : [
+        "grpcppWrapper"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "openssl_grpc",
+      "module_type" : "BinaryTarget",
+      "name" : "openssl_grpc",
+      "path" : "remote/archive/openssl_grpc.zip",
+      "product_memberships" : [
+        "gRPC-C++"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "opensslWrapper",
+      "module_type" : "ClangTarget",
+      "name" : "opensslWrapper",
+      "path" : "openssl-grpc-Wrapper",
+      "product_memberships" : [
+        "gRPC-C++"
+      ],
+      "resources" : [
+        {
+          "path" : "./openssl-grpc-Wrapper/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "empty.m"
+      ],
+      "target_dependencies" : [
+        "openssl_grpc"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "grpcppWrapper",
+      "module_type" : "ClangTarget",
+      "name" : "grpcppWrapper",
+      "path" : "grpcpp-Wrapper",
+      "product_dependencies" : [
+        "abseil"
+      ],
+      "product_memberships" : [
+        "gRPC-C++"
+      ],
+      "resources" : [
+        {
+          "path" : "./grpcpp-Wrapper/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "empty.m"
+      ],
+      "target_dependencies" : [
+        "grpcpp",
+        "grpcWrapper",
+        "opensslWrapper"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "grpcpp",
+      "module_type" : "BinaryTarget",
+      "name" : "grpcpp",
+      "path" : "remote/archive/grpcpp.zip",
+      "product_memberships" : [
+        "gRPC-C++"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    },
+    {
+      "c99name" : "grpcWrapper",
+      "module_type" : "ClangTarget",
+      "name" : "grpcWrapper",
+      "path" : "grpc-Wrapper",
+      "product_memberships" : [
+        "gRPC-Core",
+        "gRPC-C++"
+      ],
+      "resources" : [
+        {
+          "path" : "./grpc-Wrapper/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "empty.m"
+      ],
+      "target_dependencies" : [
+        "grpc"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "grpc",
+      "module_type" : "BinaryTarget",
+      "name" : "grpc",
+      "path" : "remote/archive/grpc.zip",
+      "product_memberships" : [
+        "gRPC-Core",
+        "gRPC-C++"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    }
+  ],
+  "tools_version" : "5.6"
+}

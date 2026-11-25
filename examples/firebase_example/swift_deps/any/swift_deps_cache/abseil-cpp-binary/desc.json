@@ -1,0 +1,66 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "abseil",
+  "name" : "abseil",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "abseil",
+      "targets" : [
+        "abslWrapper"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "abslWrapper",
+      "module_type" : "ClangTarget",
+      "name" : "abslWrapper",
+      "path" : "absl-Wrapper",
+      "product_memberships" : [
+        "abseil"
+      ],
+      "resources" : [
+        {
+          "path" : "./absl-Wrapper/Resources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "empty.m"
+      ],
+      "target_dependencies" : [
+        "absl"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "absl",
+      "module_type" : "BinaryTarget",
+      "name" : "absl",
+      "path" : "remote/archive/absl.zip",
+      "product_memberships" : [
+        "abseil"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "binary"
+    }
+  ],
+  "tools_version" : "5.6"
+}
