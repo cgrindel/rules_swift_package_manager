@@ -2,9 +2,9 @@ name: Debug swift package crash
 # Manual-only workflow for investigating GH-2485: `swift package` traps with
 # `Illegal instruction (core dumped)` during the Renovate post-upgrade step.
 #
-# Normal CI never exercises this path. `swift_package_tool` targets are
-# deliberately excluded from `tidy` (see examples/interesting_deps/BUILD.bazel),
-# and CI pins Linux Swift to the tag in .github/actions/set_up_ubuntu, which
+# Normal CI never exercises this path. The `@swift_package` targets that run
+# SwiftPM (`resolve`, `update`, `cache`) are not part of any `tidy`, and CI
+# pins Linux Swift to the tag in .github/actions/set_up_ubuntu, which
 # tracks the toolchain in the Renovate container (see renovate_image/Dockerfile
 # in cgrindel/renovate-bot).
 #

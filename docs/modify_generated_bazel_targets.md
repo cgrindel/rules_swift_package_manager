@@ -5,6 +5,7 @@
 <!-- MARKDOWN TOC: BEGIN -->
 * [What this is](#what-this-is)
 * [Find the target to modify](#find-the-target-to-modify)
+  * [Packages that differ between slices](#packages-that-differ-between-slices)
 * [The verbs](#the-verbs)
   * [Setters](#setters)
   * [Select setters](#select-setters)
@@ -88,6 +89,23 @@ declared with `use_repo` (e.g. `use_repo(swift_deps, log = "swiftpkg_swift_log")
 and neither is Bazel's canonical repository name, so the `@@` prefix is rejected. The name does not
 need to be imported with `use_repo` for a modification to apply.
 
+### Packages that differ between slices
+
+When two slices pin a package differently, or one of them is stale, the package uses the alias
+layout. `@swiftpkg_<identity>` then holds only `alias` targets that `select()` between hidden
+repositories named `swiftpkg_<identity>__slice_<n>`, one per distinct slice. Keep naming the target
+as `@swiftpkg_<identity>//:<target>` in the tags; the modification is applied to the matching
+declaration in every hidden repository.
+
+A `bazel query` against the top-level alias shows none of the modified attributes, because they live
+on the hidden declarations. Use `cquery` to see which hidden target the alias resolves to under the
+configuration you care about, then query that target:
+
+```sh
+# Prints the alias; its `actual` names the hidden swiftpkg_example__slice_<n> target.
+$ bazel cquery --output=build @swiftpkg_example//:ExampleTarget.rspm.__impl
+```
+
 ## The verbs
 
 ### Setters
@@ -159,9 +177,9 @@ swift_deps.bazel_target_set_select_string_dict(
 ```
 
 `bazel_target_set_select_bool_dict` and `bazel_target_set_select_int_dict` take `string` branch
-values because Bazel has no `bool` or `int` dictionary attribute, and convert them for you. A
-`bool` branch must be exactly `True` or `False`, spelled the way Starlark spells them, and an `int`
-branch must be digits with an optional leading `-`. Anything else fails when the module extension is
+values because Bazel has no `bool` or `int` dictionary attribute, and convert them for you. A `bool`
+branch must be exactly `True` or `False`, spelled the way Starlark spells them, and an `int` branch
+must be digits with an optional leading `-`. Anything else fails when the module extension is
 evaluated, with an error naming the target, the attribute, the condition and the bad value.
 
 ```bazel
@@ -186,10 +204,10 @@ swift_deps.bazel_target_set_select_int_dict(
 
 ### `bazel_target_add`
 
-Appends to a list attribute, creating the attribute if it is absent. Unlike the setters, this verb is
-list-only and requires at least one value. The values land _after_ the generated values, so options
-that follow last-option-wins semantics (e.g. `copts`) override what `rules_swift_package_manager`
-generated.
+Appends to a list attribute, creating the attribute if it is absent. Unlike the setters, this verb
+is list-only and requires at least one value. The values land _after_ the generated values, so
+options that follow last-option-wins semantics (e.g. `copts`) override what
+`rules_swift_package_manager` generated.
 
 ```bazel
 swift_deps.bazel_target_add(
@@ -231,12 +249,12 @@ swift_deps.bazel_target_add_select(
   main repository (e.g. `//:release_build`) is rewritten to its canonical form (e.g.
   `@@//:release_build`) so that it still resolves from inside the generated repository. Make sure
   the `config_setting` is visible to external repositories.
-- **`select()` keys may not use an apparent repository name.** A key such as
-  `@some_repo//:setting` is rejected. An apparent name (a single `@`) is resolved using the
-  repository mapping of whichever repository contains the label, and the key ends up inside a
-  generated repository, so it would resolve against `rules_swift_package_manager`'s mapping instead
-  of yours. Use a main-repository-relative label (`//:setting`), which is canonicalized for you, or
-  a canonical label (`@@some_repo+//:setting`).
+- **`select()` keys may not use an apparent repository name.** A key such as `@some_repo//:setting`
+  is rejected. An apparent name (a single `@`) is resolved using the repository mapping of whichever
+  repository contains the label, and the key ends up inside a generated repository, so it would
+  resolve against `rules_swift_package_manager`'s mapping instead of yours. Use a
+  main-repository-relative label (`//:setting`), which is canonicalized for you, or a canonical
+  label (`@@some_repo+//:setting`).
 - **Values are emitted verbatim; labels in them are not remapped.** A value is written into the
   generated `BUILD.bazel` file as-is, so a label-valued string such as `//:my_lib` in `deps`
   resolves inside the generated repository, not in your root module. Use `@@//:my_lib` for a target
@@ -259,8 +277,7 @@ swift_deps.bazel_target_add_select(
 `rules_swift_package_manager` sets `alwayslink = True` on every generated
 `apple_static_xcframework_import`. A few prebuilt SDKs ship an archive containing an object that
 nothing references and whose symbols nothing can resolve. Force-loading pulls it in and the link
-fails, even though the same SDK links fine under Swift package manager and Xcode. See
-[issue #2445].
+fails, even though the same SDK links fine under Swift package manager and Xcode. See [issue #2445].
 
 ```bazel
 swift_deps.bazel_target_set_bool(

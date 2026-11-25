@@ -5,8 +5,9 @@
 <!-- MARKDOWN TOC: BEGIN -->
 * [Does this replace [rules_spm]?](#does-this-replace-rules_spm)
 * [Where is the Swift gazelle plugin?](#where-is-the-swift-gazelle-plugin)
-* [After running `//:swift_update_pkgs`, I see a `.build` directory. What is it? Do I need it?](#after-running-swift_update_pkgs-i-see-a-build-directory-what-is-it-do-i-need-it)
+* [After running `@swift_package//:resolve`, I see a `.build` directory in my slice. What is it? Do I need it?](#after-running-swift_packageresolve-i-see-a-build-directory-in-my-slice-what-is-it-do-i-need-it)
 * [Can I store the Swift dependency files in a sub-package (i.e., not in the root of the workspace)?](#can-i-store-the-swift-dependency-files-in-a-sub-package-ie-not-in-the-root-of-the-workspace)
+* [My build fails with "slice ... is stale". What do I do?](#my-build-fails-with-slice--is-stale-what-do-i-do)
 * [How do I handle the error `Unable to resolve byName reference XXX in @swiftpkg_yyy.`?](#how-do-i-handle-the-error-unable-to-resolve-byname-reference-xxx-in-swiftpkg_yyy)
   * [How do I fix this issue?](#how-do-i-fix-this-issue)
   * [What is the cause of the error? Why can't `rules_swift_package_manager` handle this situation?](#what-is-the-cause-of-the-error-why-cant-rules_swift_package_manager-handle-this-situation)
@@ -14,10 +15,10 @@
 
 ## Does this replace [rules_spm]?
 
-Yes. There are some [limitations with the rules_spm
-implementation](https://github.com/cgrindel/rules_spm/discussions/157). After receiving feedback and
-suggestions from the community, we opted to create a clean sheet implementation which includes new
-features and improvements:
+Yes. There are some
+[limitations with the rules_spm implementation](https://github.com/cgrindel/rules_spm/discussions/157).
+After receiving feedback and suggestions from the community, we opted to create a clean sheet
+implementation which includes new features and improvements:
 
 - Bazel build file generation for the primary workspace.
 - Build the external dependencies with [rules_swift].
@@ -27,18 +28,25 @@ features and improvements:
 
 It has moved to https://github.com/cgrindel/swift_gazelle_plugin.
 
-## After running `//:swift_update_pkgs`, I see a `.build` directory. What is it? Do I need it?
+## After running `@swift_package//:resolve`, I see a `.build` directory in my slice. What is it? Do I need it?
 
-The `//:swift_update_pkgs` target runs the Gazelle plugin in `update-repos` mode. This mode
-resolves the external dependencies listed in your `Package.swift` by running Swift package manager
-commands. These commands result in a `.build` directory being created. The directory is a side
-effect of running the Swift package manager commands. It can be ignored and should not be checked
-into source control. It is not used by the Gazelle plugin or the Starlark repository rules.
+The `@swift_package` targets run Swift package manager with `--scratch-path <slice>/.build`, so
+SwiftPM puts its checkouts there. Do not check it in. `init` adds it to `.bazelignore` and
+`.gitignore`. It must stay in `.bazelignore`, because checkouts often contain `BUILD.bazel` files
+that would otherwise become packages of your workspace. Bazel reads the slice's checked-in
+`swift_deps_cache/` instead.
 
 ## Can I store the Swift dependency files in a sub-package (i.e., not in the root of the workspace)?
 
-Yes. The [vapor example] demonstrates storing the Swift dependency files in a sub-package called
-`swift`.
+Yes. `Package.swift` can live in any directory, and each slice is its own Bazel package. The [vapor
+example] keeps `Package.swift` in `swift/` and its slices in `swift_deps/apple` and
+`swift_deps/linux`.
+
+## My build fails with "slice ... is stale". What do I do?
+
+Run `bazel run @swift_package//:cache` under flags that select that slice, then `bazel mod tidy`,
+and commit the result. See the [troubleshooting section of the migration guide] for this and the
+other slice errors.
 
 ## How do I handle the error `Unable to resolve byName reference XXX in @swiftpkg_yyy.`?
 
@@ -90,26 +98,26 @@ reference is the following:
 
 ### What is the cause of the error? Why can't `rules_swift_package_manager` handle this situation?
 
-This specific case is the reason that previous versions of `rules_swift_package_manager`
-pre-processed the transitive Swift dependencies using the Gazelle plugin’s `update-repos` action and
-stored the results in a JSON file that was checked into source control.
+Early versions of `rules_swift_package_manager` pre-processed the transitive Swift dependencies
+using the Gazelle plugin’s `update-repos` action and could resolve this case.
 
-Here is a quick explainer of why `rules_swift_package_manager` cannot resolve this dependency with
-the new architecture:
+Here is a quick explainer of why `rules_swift_package_manager` cannot resolve this dependency today:
 
 - Each Swift package is declared as an external Bazel repository.
 - During the loading phase, there is no mechanism for one external repository to peek into another
   external repository. In other words, a Swift package cannot query another Swift package to
   determine all of the available products.
 - So, when `rules_swift_package_manager` generates a `BUILD.bazel` file for a Swift package external
-  repo, it only has the information that is returned by calling `swift package description` and
-  `swift package dump-package`. The output from these calls only provides the identity and the type
-  of the Swift package (e.g., remote, file system).
+  repo, it only has that package's cached `swift package describe` and `swift package dump-package`
+  output. That output only provides the identity and the type of the Swift package (e.g., remote,
+  file system).
 - As a result, `byName` lookups can only be resolved to the targets/products in the current package
   and to products in Swift packages where the identity exactly matches the product name.
 
 [Patch the Swift package]: /docs/patch_swift_package.md
 [patch this file]: /docs/patch_swift_package.md
-[pusher-websocket-swift Package.swift]: https://github.com/pusher/pusher-websocket-swift/blob/886341f9dad453c9822f2525136ee2006a6c3c9e/Package.swift
+[pusher-websocket-swift Package.swift]:
+  https://github.com/pusher/pusher-websocket-swift/blob/886341f9dad453c9822f2525136ee2006a6c3c9e/Package.swift
 [rules_swift]: https://github.com/bazelbuild/rules_swift
 [vapor example]: /examples/vapor_example
+[troubleshooting section of the migration guide]: /docs/v2_migration.md#troubleshooting

@@ -13,6 +13,15 @@ assert_match() {
   [[ "${actual}" =~ ${pattern} ]] || (echo >&2 "${err_msg}" && exit 1)
 }
 
+# The BCR presubmit runs an older Swift than the one that produced the
+# checked-in cache, so it sets RSPM_SWIFT_VERSION_CHECK=off. The cwd is a
+# scratch copy of the workspace, so appending to .bazelrc is safe.
+swift_version_check="${RSPM_SWIFT_VERSION_CHECK:-error}"
+if [[ "${swift_version_check}" == "off" ]]; then
+  echo "common --@rules_swift_package_manager//:swift_version_check=off" \
+    >>.bazelrc
+fi
+
 # Generate Swift external deps and update build files
 "${bazel}" run //:tidy
 
@@ -28,7 +37,10 @@ elif [[ -d swift_deps/any && "$(uname)" == "Darwin" ]]; then
 else
   host_slice=""
 fi
-if [[ -z "${host_slice}" ]]; then
+if [[ "${swift_version_check}" == "off" ]]; then
+  # A different Swift rewrites swift_version.txt, so the diff would fail.
+  echo "swift_version_check is off; skipped the cache-and-diff check."
+elif [[ -z "${host_slice}" ]]; then
   echo "No checked-in slice for $(uname); skipped the cache-and-diff check."
 else
   slice_tmp="$(mktemp -d)"
