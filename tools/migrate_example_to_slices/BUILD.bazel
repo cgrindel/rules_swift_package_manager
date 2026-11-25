@@ -1,0 +1,18 @@
+load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_pkg")
+load("@rules_shell//shell:sh_binary.bzl", "sh_binary")
+
+bzlformat_pkg(name = "bzlformat")
+
+# Maintainer-only: migrates one example workspace from the v1
+# `from_package` tag to v2 slices. Run from the repository root:
+#
+#   bazel run //tools/migrate_example_to_slices -- <example_name>
+sh_binary(
+    name = "migrate_example_to_slices",
+    srcs = ["migrate.sh"],
+)
+
+alias(
+    name = "migrate",
+    actual = ":migrate_example_to_slices",
+)
