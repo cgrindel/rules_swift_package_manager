@@ -584,6 +584,12 @@ def _render_flags_real_tag_without_labels_test(ctx):
         staleness.render_flags(config),
     )
 
+    # `collect` takes the same tag.
+    files = _fresh_files()
+    files[_CACHE + "/_main/flags.cached"] = staleness.render_flags(config)
+    _, inputs = _collect(files, config = config)
+    asserts.equals(env, [], staleness.evaluate(inputs).reasons)
+
     return unittest.end(env)
 
 render_flags_real_tag_without_labels_test = unittest.make(

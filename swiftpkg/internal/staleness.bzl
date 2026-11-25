@@ -82,6 +82,7 @@ def _render_flags(config_swift_package):
             value = getattr(config_swift_package, key)
             if value != _DEFAULTS[key]:
                 values[key] = value
+
         # A `configure_swift_package` tag has no `netrc` or `registries`
         # attribute; they live on `from_package`.
         for key in _LABEL_KEYS:
@@ -319,7 +320,8 @@ def _collect_with_reader(reader, slice, config_swift_package, patch_files_by_ide
     # (6) registries.json, when configured or when a copy is left over.
     registries = None
     if config_swift_package != None:
-        registries = config_swift_package.registries
+        # See `_render_flags`: the tag may have no `registries`.
+        registries = getattr(config_swift_package, "registries", None)
     registries_cached = _read(
         reader,
         slices.cache_label(slice, _MAIN, "registries.json" + _CACHED_SUFFIX),
