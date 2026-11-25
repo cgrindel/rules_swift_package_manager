@@ -32,7 +32,7 @@ name: Debug swift package crash
           - ubuntu-22.04
       mode:
         description: >-
-          bare = `swift package update` only. bazel = `bazel run //:update_swift_packages` (what Renovate actually runs). both = each in turn.
+          bare = `swift package update` only. bazel = `bazel run @swift_package//:update` (the v2 update target). both = each in turn.
         default: both
         type: choice
         options:
@@ -158,10 +158,10 @@ jobs:
             echo "::endgroup::"
           done
           echo "bare lane: ${failures}/${ITERATIONS} iterations failed"
-      # Rung 2. Exactly what Renovate runs per workspace. `--script_path` dumps
+      # Rung 2. The v2 update target, run per workspace. `--script_path` dumps
       # the resolved command so the full SwiftPM flag set is visible in the log,
       # then we run it traced.
-      - name: Bazel `//:update_swift_packages`
+      - name: Bazel `@swift_package//:update`
         if: ${{ inputs.mode != 'bare' }}
         shell: bash
         working-directory: ${{ inputs.workspace }}
@@ -170,7 +170,7 @@ jobs:
         run: |
           set -o errexit -o nounset -o pipefail
           bazelisk run --action_env=PATH --script_path=/tmp/run_update.sh \
-            //:update_swift_packages
+            @swift_package//:update
           echo "::group::resolved command"
           cat /tmp/run_update.sh
           echo "::endgroup::"
@@ -184,7 +184,7 @@ jobs:
               failures=$((failures + 1))
               echo "iteration ${i} exited ${status}"
               if [[ "${status}" -eq 132 ]]; then
-                echo "::error::SIGILL reproduced via //:update_swift_packages, iteration ${i}"
+                echo "::error::SIGILL reproduced via @swift_package//:update, iteration ${i}"
               fi
             fi
             echo "::endgroup::"
