@@ -2,32 +2,34 @@
 # Rules and Macros
 
 
-The rules and macros described below are used to define Gazelle targets to aid in the generation and maintenance of Swift package dependencies.
+The rules described below back the `@swift_package` targets (`resolve`, `update` and `cache`) that maintain the Swift package slices.
 
 
 On this page:
 
-  * [swift_deps_index](#swift_deps_index)
+  * [swift_package_tool](#swift_package_tool)
 
 
-<a id="swift_deps_index"></a>
+<a id="swift_package_tool"></a>
 
-## swift_deps_index
+## swift_package_tool
 
 <pre>
-load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_deps_index")
+load("@rules_swift_package_manager//swiftpkg:defs.bzl", "swift_package_tool")
 
-swift_deps_index(<a href="#swift_deps_index-name">name</a>, <a href="#swift_deps_index-direct_dep_pkg_infos">direct_dep_pkg_infos</a>)
+swift_package_tool(<a href="#swift_package_tool-name">name</a>, <a href="#swift_package_tool-data">data</a>)
 </pre>
 
-Generates a Swift dependencies index file that is used by other tooling (e.g., Swift Gazelle plugin).
+Runs `swift_deps_tool` with the `swift` wrapper from the Swift toolchain.
+
+The generated `@swift_package` repository sets `args` to the tool command and its flags, as rendered by `swift_package_tool_args.render`. The rule passes the `swift` wrapper's runfiles path to the tool in the `RSPM_SWIFT_TOOL` environment variable.
 
 **ATTRIBUTES**
 
 
 | Name  | Description | Type | Mandatory | Default |
 | :------------- | :------------- | :------------- | :------------- | :------------- |
-| <a id="swift_deps_index-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
-| <a id="swift_deps_index-direct_dep_pkg_infos"></a>direct_dep_pkg_infos |  A `dict` where the key is the label for a Swift package's `pkg_info.json` file and the value is the Swift package's identity value.   | <a href="https://bazel.build/rules/lib/dict">Dictionary: Label -> String</a> | optional |  `{}`  |
+| <a id="swift_package_tool-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="swift_package_tool-data"></a>data |  Files that the tool reads at run time, such as the patch files referenced with `$(rootpath ...)` in `args`.   | <a href="https://bazel.build/concepts/labels">List of labels</a> | optional |  `[]`  |
 
 

@@ -51,11 +51,29 @@ swift_deps.configure_package(
 )
 ```
 
+Patch files must live in the root module.
+
+The `@swift_package` cache step applies the same patches, with the same `patch_args`, to a copy of
+each checkout before it records the package's manifest. That is how a patch that changes a
+`Package.swift` (for example, raising a platform version) reaches the build. It also copies the
+patch files into `swift_deps_cache/<identity>/patches/`, so adding or changing a patch makes the
+slice stale until you run the cache step.
+
+Use `patches`, not `patch_cmds`, for any change to a package's `Package.swift`. The [resources
+example] patches a manifest this way. The cache step does not run `patch_cmds`. Only the repository
+rule runs them, and it reads the manifest from the cache, not from the patched checkout. A
+`patch_cmds` change to source files still works.
+
 ## Test the Patch
 
-Now, it is time to test your patch.
+Now, it is time to regenerate the slice and test your patch.
 
 ```sh
+# Apply the patch in the cache step
+$ bazel run @swift_package//:cache
+
 # Build/Test
 $ bazel test //...
 ```
+
+[resources example]: /examples/resources_example/MODULE.bazel

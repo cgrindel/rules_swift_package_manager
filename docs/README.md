@@ -2,6 +2,7 @@
 
 - For information on how configure and use `rules_swift_package_manager`, check out the [quickstart]
   and the [tips and tricks].
+- If you are upgrading from v1, follow the [v1 to v2 migration guide](v2_migration.md).
 - To view the Starlark API documentation, check out the [repository rules documentation] and the
   [rules and macros documentation].
 - If you are interested in learning more about the rules used to help build the external Swift

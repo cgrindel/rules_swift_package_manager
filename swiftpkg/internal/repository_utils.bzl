@@ -1,20 +1,5 @@
 """Defintion for repository utility functions."""
 
-load("@bazel_skylib//lib:dicts.bzl", "dicts")
-load("@bazel_skylib//lib:paths.bzl", "paths")
-
-def _is_macos(repository_ctx):
-    """Determines if the host is running MacOS.
-
-    Args:
-        repository_ctx: A `repository_ctx` instance.
-
-    Returns:
-        A `bool` indicating whether the host is running MacOS.
-    """
-    os_name = repository_ctx.os.name.lower()
-    return os_name.startswith("mac os")
-
 def _is_windows(repository_ctx):
     """Determines if the host is running Windows.
 
@@ -26,133 +11,11 @@ def _is_windows(repository_ctx):
     """
     return repository_ctx.os.name.lower().startswith("windows")
 
-def _execute_spm_command(
-        repository_ctx,
-        arguments,
-        env = {},
-        working_directory = "",
-        err_msg_tpl = None):
-    """Executes a Swift package manager command and returns the stdout.
-
-    If the command returns a non-zero return code, this function will fail.
-
-    Args:
-        repository_ctx: A `repository_ctx` instance.
-        arguments: A `list` of arguments which will be executed.
-        env: A `dict` of environment variables that will be included in the
-             command execution.
-        working_directory: Working directory for command execution. Can be
-                           relative to the repository root or absolute.
-        err_msg_tpl: Optional. A `string` template which will be formatted with
-                     the `working_directory`, `exec_args`, `return_code`,
-                     `stdout`, and `stderr` values.
-
-    Returns:
-        A `string` representing the stdout of the command execution.
-    """
-    exec_args = []
-    if _is_macos(repository_ctx):
-        exec_args.append("xcrun")
-    exec_args.extend(arguments)
-
-    # It is critical that the SPM commands execute using the host's default
-    # SDK. This is typically MacOS.  If the SDKROOT is set to iOS for example,
-    # the SPM command will fail because it cannot compile the package manifest.
-    # Example: rules_xcodeproj sets the SDKROOT before executing
-    # generate_bazel_dependencies.sh.
-    # On Windows, Swift finds its SDK through SDKROOT.
-    env_overrides = {} if _is_windows(repository_ctx) else {"SDKROOT": ""}
-    exec_env = dicts.add(env, env_overrides)
-
-    exec_result = repository_ctx.execute(
-        exec_args,
-        environment = exec_env,
-        working_directory = working_directory,
-    )
-    if exec_result.return_code != 0 and not _can_ignore_spm_error(exec_result):
-        if err_msg_tpl == None:
-            err_msg_tpl = """\
-Failed to execute SPM command.
-  working_directory: {working_directory}
-  args: {exec_args}
-  return_code: {return_code}
-  stdout: {stdout}
-  stderr: {stderr}\
-"""
-        fail(err_msg_tpl.format(
-            working_directory = working_directory,
-            exec_args = exec_args,
-            stdout = exec_result.stdout,
-            stderr = exec_result.stderr,
-            return_code = exec_result.return_code,
-        ))
-    return exec_result.stdout
-
-def _can_ignore_spm_error(exec_result):
-    """Determine if the error from an exec result can be ignored.
-
-    SPM throws an error during `swift package describe` if an executable
-    product depends on a binary target. It also outputs valid JSON so we
-    can move past the error.
-
-    https://github.com/swiftlang/swift-package-manager/issues/8101"""
-
-    # Error message:
-    # https://github.com/swiftlang/swift-package-manager/blob/339afc838a0083ea0b4da002dc53cfb8005d5978/Sources/PackageLoading/Diagnostics.swift#L83-L88
-    return exec_result.stderr.endswith(
-        "an executable target requires a 'main.swift' file\n",
-    )
-
-def _parsed_json_from_spm_command(
-        repository_ctx,
-        arguments,
-        env = {},
-        working_directory = "",
-        debug_json_path = None,
-        cached_json_path = None):
-    if cached_json_path:
-        cached_json_path_path = repository_ctx.path(cached_json_path)
-        if cached_json_path_path.exists:
-            return json.decode(
-                repository_ctx.read(cached_json_path_path, watch = "yes"),
-            )
-
-    json_str = repository_utils.exec_spm_command(
-        repository_ctx,
-        arguments,
-        env = env,
-        working_directory = working_directory,
-    )
-
-    # SwiftPM on Windows writes paths with backslashes.
-    if _is_windows(repository_ctx):
-        json_str = json_str.replace("\\\\", "/")
-    json_str = _replace_working_directory(json_str, working_directory)
-
-    if debug_json_path:
-        if not paths.is_absolute(debug_json_path):
-            debug_json_path = paths.join(working_directory, debug_json_path)
-        repository_ctx.file(debug_json_path, content = json_str, executable = False)
-    if cached_json_path:
-        if debug_json_path:
-            tmp_path = debug_json_path
-        else:
-            tmp_path = paths.join(
-                str(repository_ctx.path(".")),
-                paths.basename(cached_json_path),
-            )
-            repository_ctx.file(tmp_path, content = json_str, executable = False)
-        repository_ctx.execute(["mkdir", "-p", paths.dirname(cached_json_path)])
-        repository_ctx.execute(["cp", tmp_path, cached_json_path])
-        repository_ctx.watch(cached_json_path)
-
-    return json.decode(json_str)
-
 def _package_name(repository_ctx):
     """The name used to declare the Bazel repository.
 
     This name can be different from the `repository_ctx.name` when using
-    bzlmod. This value is used for lookups in the Swift deps index.
+    bzlmod. Sibling package repositories are found by this name.
 
     Args:
         repository_ctx: An instance of `repository_ctx`.
@@ -163,25 +26,6 @@ def _package_name(repository_ctx):
     if repository_ctx.attr.bazel_package_name != "":
         return repository_ctx.attr.bazel_package_name
     return repository_ctx.name
-
-def _struct_to_kwargs(*, struct, keys):
-    """Convert a struct to a kwargs dict, where the keys are the struct's attrs and the values are the struct's values.
-
-    Example: given a struct like: `struct(a = "foo", b = "bar")` and keys `["a"]`, the result will be `{"a": "foo"}`.
-
-    Args:
-        struct: The struct to convert.
-        keys: The keys to include in the kwargs dict.
-
-    Returns:
-        A kwargs dict.
-    """
-    kwargs = {}
-    for k in keys:
-        v = getattr(struct, k, None)
-        if v != None:
-            kwargs[k] = v
-    return kwargs
 
 def _copy(repository_ctx, src, dest):
     """Copies a file into the repository.
@@ -230,37 +74,9 @@ def _relativize_repo_path(path, workspace_root):
         return path[len(prefix):]
     return path
 
-def _replace_working_directory(json_str, working_directory):
-    """Replace the working directory prefix in a JSON string.
-
-    Uses a path-prefix-safe replacement by appending a trailing slash or
-    a trailing quotation mark to ensure only full path-prefix matches are
-    replaced. Without the trailing indicator, a working directory like
-    "/path/to/MyApp" would incorrectly match
-    "/path/to/MyAppFrameworks".
-
-    Args:
-        json_str: A `string` containing JSON output from an
-            SPM command.
-        working_directory: A `string` representing the working
-            directory path.
-
-    Returns:
-        A `string` with the working directory prefix replaced
-        by "./".
-    """
-    if not working_directory:
-        return json_str
-    return json_str.replace(working_directory + "/", "./").replace(working_directory + "\"", "./\"")
-
 repository_utils = struct(
     copy = _copy,
-    exec_spm_command = _execute_spm_command,
-    is_macos = _is_macos,
     is_windows = _is_windows,
     package_name = _package_name,
-    parsed_json_from_spm_command = _parsed_json_from_spm_command,
     relativize_repo_path = _relativize_repo_path,
-    replace_working_directory = _replace_working_directory,
-    struct_to_kwargs = _struct_to_kwargs,
 )

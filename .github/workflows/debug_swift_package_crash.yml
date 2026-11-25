@@ -2,9 +2,9 @@ name: Debug swift package crash
 # Manual-only workflow for investigating GH-2485: `swift package` traps with
 # `Illegal instruction (core dumped)` during the Renovate post-upgrade step.
 #
-# Normal CI never exercises this path. `swift_package_tool` targets are
-# deliberately excluded from `tidy` (see examples/interesting_deps/BUILD.bazel),
-# and CI pins Linux Swift to the tag in .github/actions/set_up_ubuntu, which
+# Normal CI never exercises this path. The `@swift_package` targets that run
+# SwiftPM (`resolve`, `update`, `cache`) are not part of any `tidy`, and CI
+# pins Linux Swift to the tag in .github/actions/set_up_ubuntu, which
 # tracks the toolchain in the Renovate container (see renovate_image/Dockerfile
 # in cgrindel/renovate-bot).
 #
@@ -17,6 +17,11 @@ name: Debug swift package crash
       workspace:
         description: Workspace directory to run `swift package update` in.
         default: examples/interesting_deps
+        required: true
+      slice:
+        description: >-
+          Slice directory, relative to the workspace, whose `Package.resolved` seeds the bare lane.
+        default: swift_deps/any
         required: true
       swift_release_tags:
         description: >-
@@ -32,7 +37,7 @@ name: Debug swift package crash
           - ubuntu-22.04
       mode:
         description: >-
-          bare = `swift package update` only. bazel = `bazel run //:update_swift_packages` (what Renovate actually runs). both = each in turn.
+          bare = `swift package update` only. bazel = `bazel run @swift_package//:update` (the v2 update target). both = each in turn.
         default: both
         type: choice
         options:
@@ -132,12 +137,13 @@ jobs:
         shell: bash
         env:
           WORKSPACE: ${{ inputs.workspace }}
+          SLICE: ${{ inputs.slice }}
           ITERATIONS: ${{ inputs.iterations }}
         run: |
           set -o errexit -o nounset -o pipefail
           scratch="$(mktemp -d)"
           cp "${WORKSPACE}/Package.swift" "${scratch}/"
-          cp "${WORKSPACE}/Package.resolved" "${scratch}/" 2>/dev/null || true
+          cp "${WORKSPACE}/${SLICE}/Package.resolved" "${scratch}/"
 
           failures=0
           for i in $(seq 1 "${ITERATIONS}"); do
@@ -158,10 +164,10 @@ jobs:
             echo "::endgroup::"
           done
           echo "bare lane: ${failures}/${ITERATIONS} iterations failed"
-      # Rung 2. Exactly what Renovate runs per workspace. `--script_path` dumps
+      # Rung 2. The v2 update target, run per workspace. `--script_path` dumps
       # the resolved command so the full SwiftPM flag set is visible in the log,
       # then we run it traced.
-      - name: Bazel `//:update_swift_packages`
+      - name: Bazel `@swift_package//:update`
         if: ${{ inputs.mode != 'bare' }}
         shell: bash
         working-directory: ${{ inputs.workspace }}
@@ -170,7 +176,7 @@ jobs:
         run: |
           set -o errexit -o nounset -o pipefail
           bazelisk run --action_env=PATH --script_path=/tmp/run_update.sh \
-            //:update_swift_packages
+            @swift_package//:update
           echo "::group::resolved command"
           cat /tmp/run_update.sh
           echo "::endgroup::"
@@ -184,7 +190,7 @@ jobs:
               failures=$((failures + 1))
               echo "iteration ${i} exited ${status}"
               if [[ "${status}" -eq 132 ]]; then
-                echo "::error::SIGILL reproduced via //:update_swift_packages, iteration ${i}"
+                echo "::error::SIGILL reproduced via @swift_package//:update, iteration ${i}"
               fi
             fi
             echo "::endgroup::"
@@ -242,13 +248,14 @@ jobs:
         shell: bash
         env:
           WORKSPACE: ${{ inputs.workspace }}
+          SLICE: ${{ inputs.slice }}
           ITERATIONS: ${{ inputs.iterations }}
         run: |
           set -o nounset -o pipefail
           mkdir -p /tmp/swift-crash
           scratch="$(mktemp -d)"
           cp "${WORKSPACE}/Package.swift" "${scratch}/"
-          cp "${WORKSPACE}/Package.resolved" "${scratch}/" 2>/dev/null || true
+          cp "${WORKSPACE}/${SLICE}/Package.resolved" "${scratch}/"
 
           failures=0
           for i in $(seq 1 "${ITERATIONS}"); do

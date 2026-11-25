@@ -10,5 +10,9 @@ bcr_test_module:
       name: "Run test module"
       platform: ${{ platform }}
       bazel: ${{ bazel }}
+      # BCR runs an older Swift than the one that produced the example caches.
+      # The e2e workspace's do_test turns the Swift version check off for it.
+      test_flags:
+        - "--test_env=RSPM_SWIFT_VERSION_CHECK=off"
       test_targets:
         - "//bzlmod:e2e_test"

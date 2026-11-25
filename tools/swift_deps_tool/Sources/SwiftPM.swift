@@ -2,6 +2,13 @@ import Foundation
 
 /// Runs `swift package` through the `swift_toolchain_tool` wrapper with a slice's flags.
 public struct SwiftPM {
+  /// Defines `BAZEL` while SwiftPM compiles a manifest, so a `Package.swift` can use `#if BAZEL`
+  /// for Bazel-only dependencies or settings (#2159).
+  ///
+  /// The define is always on. It is not part of `SwiftPMFlags`, so it never appears in the
+  /// normalized flags and never affects staleness.
+  public static let manifestDefine = ["-Xbuild-tools-swiftc", "-DBAZEL"]
+
   private static let stderrTailLines = 20
 
   private let tool: URL
@@ -17,7 +24,7 @@ public struct SwiftPM {
     self.runfilesDir = runfilesDir
   }
 
-  /// Runs `swift package <flags> <args>` in `packageDir` and returns its stdout.
+  /// Runs `swift package <manifestDefine> <flags> <args>` in `packageDir` and returns its stdout.
   ///
   /// `scratchPath` replaces the default `<sliceDir>/.build`. If `registries` is configured,
   /// `registries.json` in the config path is linked to it first, as `spl_setup_registries` does.
@@ -37,7 +44,7 @@ public struct SwiftPM {
       environment["GIT_CEILING_DIRECTORIES"] = gitCeiling.path
     }
     let result = try launch(
-      ["package"] + flags.arguments(sliceDir: sliceDir, scratchPath: scratch) + args,
+      ["package"] + Self.manifestDefine + flags.arguments(sliceDir: sliceDir, scratchPath: scratch) + args,
       in: packageDir, environment: environment
     )
     guard result.status == 0 else {

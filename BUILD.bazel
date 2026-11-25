@@ -1,4 +1,3 @@
-load("@bazel_gazelle//:def.bzl", "DEFAULT_LANGUAGES", "gazelle", "gazelle_binary")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@bazel_skylib//rules:common_settings.bzl", "string_flag")
 load("@cgrindel_bazel_starlib//bzlformat:defs.bzl", "bzlformat_missing_pkgs", "bzlformat_pkg")
@@ -84,35 +83,31 @@ tidy_all(
     mode = "modified",
 )
 
+# Run `swift package update` for the slices of each child workspace via the
+# v2 `@swift_package//:update` target. `tidy_all` skips a workspace that does
+# not define the target.
 tidy_all(
     name = "update_swift_packages_for_modified",
     mode = "modified",
-    tidy_target = "//:update_swift_packages",
+    tidy_target = "@swift_package//:update",
 )
 
 tidy_all(
     name = "update_swift_packages_for_all",
     mode = "all",
-    tidy_target = "//:update_swift_packages",
+    tidy_target = "@swift_package//:update",
 )
 
 # MARK: - Gazelle
 
-gazelle_binary(
-    name = "gazelle_bin",
-    languages = DEFAULT_LANGUAGES + [
-        "@bazel_skylib_gazelle_plugin//bzl",
-    ],
-)
-
+# The gazelle targets live in //tools/gazelle, because gazelle is a dev
+# dependency and clients load this package.
 # gazelle:prefix github.com/cgrindel/rules_swift_package_manager
 # gazelle:go_naming_convention import
 # gazelle:go_naming_convention_external go_default_library
-# gazelle:resolve_regexp go ^github.com/bazelbuild/bazel-gazelle/(.*)$ @bazel_gazelle//$1:go_default_library
-gazelle(
+alias(
     name = "update_build_files",
-    command = "fix",
-    gazelle = ":gazelle_bin",
+    actual = "//tools/gazelle:update_build_files",
 )
 
 # MARK: - Golang
@@ -178,22 +173,7 @@ filegroup(
         "//swiftpkg/internal/modulemap_parser:all_files",
         "//tools:all_files",
         "//tools/init:all_files",
-        "//tools/swift_deps_index:all_files",
-        "//tools/swift_deps_index/cmd:all_files",
-        "//tools/swift_deps_index/internal/jsonutils:all_files",
-        "//tools/swift_deps_index/internal/pathdistance:all_files",
-        "//tools/swift_deps_index/internal/reslog:all_files",
-        "//tools/swift_deps_index/internal/spdesc:all_files",
-        "//tools/swift_deps_index/internal/spdump:all_files",
-        "//tools/swift_deps_index/internal/spreso:all_files",
-        "//tools/swift_deps_index/internal/stringslices:all_files",
-        "//tools/swift_deps_index/internal/swift:all_files",
-        "//tools/swift_deps_index/internal/swiftbin:all_files",
-        "//tools/swift_deps_index/internal/swiftcfg:all_files",
-        "//tools/swift_deps_index/internal/swiftpkg:all_files",
-        "//tools/swift_deps_index/internal/updmarker:all_files",
         "//tools/swift_deps_tool:all_files",
-        "//tools/swift_package_cmd:all_files",
     ],
     visibility = ["//:__subpackages__"],
 )

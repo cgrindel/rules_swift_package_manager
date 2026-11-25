@@ -19,20 +19,13 @@ The `registries.json` file is used when resolving Swift packages from a \
 Swift package registry. It is created by Swift Package Manager when using \
 the `swift package-registry` commands.
 
-When using the `swift_package_tool` rules, this file is symlinked to the \
-`config_path` directory defined in the `configure_swift_package` tag. \
-If not using the `swift_package_tool` rules, the file must be in one of \
-Swift Package Manager's search paths or in the manually specified \
-`--config-path` directory.
+The `@swift_package` targets link this file into the `config_path` \
+directory defined in the `configure_swift_package` tag.
 """,
     ),
 }
 
 _swift_package_tool_config_attrs = {
-    "build_path": attr.string(
-        doc = "The relative path within the runfiles tree for the Swift Package Manager build directory.",
-        default = ".build",
-    ),
     "cache_path": attr.string(
         doc = "The relative path within the runfiles tree for the shared Swift Package Manager cache directory.",
         default = ".cache",

@@ -11,11 +11,8 @@ bzl_library(
     deps = [
         "//swiftpkg/internal:local_swift_package",
         "//swiftpkg/internal:registry_swift_package",
-        "//swiftpkg/internal:swift_deps_index",
-        "//swiftpkg/internal:swift_deps_info",
         "//swiftpkg/internal:swift_package",
-        "//swiftpkg/internal:swift_package_tool",
-        "//swiftpkg/internal:swift_worker_binary",
+        "//swiftpkg/internal:swift_package_tool_rule",
     ],
 )
 

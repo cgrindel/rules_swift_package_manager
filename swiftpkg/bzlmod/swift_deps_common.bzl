@@ -1,4 +1,4 @@
-"""Helpers shared by the v1 and v2 declarations of the `swift_deps` extension.
+"""Helpers shared by `swift_deps.bzl` and `slice_declarations.bzl`.
 
 `swift_deps.bzl` loads `slice_declarations.bzl`, so the helpers that both need
 live here to avoid a load cycle.
@@ -6,7 +6,6 @@ live here to avoid a load cycle.
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 load("//swiftpkg/internal:bazel_repo_names.bzl", "bazel_repo_names")
-load("//swiftpkg/internal:slices.bzl", "slices")
 
 # MARK: - Package repos
 
@@ -128,12 +127,10 @@ def _pkg_repo_kwargs(
         target_mods,
         package_repos,
         inference_settings):
-    """Builds the package repository kwargs that v1 and v2 share.
+    """Builds the package repository kwargs that do not depend on the slice.
 
-    The caller adds the rest. v1 adds `env`, `env_inherit`,
-    `cached_json_directory`, `registries`, `replace_scm_with_registry`,
-    `resolved`, and `netrc`. v2 adds the cached-manifest attributes and
-    `netrc`.
+    The caller adds the cached-manifest attributes and, for `git`
+    repositories, `netrc`.
 
     Args:
         name: The repository name.
@@ -179,7 +176,6 @@ def _pkg_repo_kwargs(
             commit = pin.state.revision,
             remote = pin.location,
             version = pin.state.version,
-            dependencies_index = None,
             make_files_read_only = make_files_read_only,
             init_submodules = config_pkg.init_submodules if config_pkg else None,
             recursive_init_submodules = (
@@ -203,10 +199,7 @@ WARNING: local Swift package '{identity}' resolves to '{path}', which is \
 outside the Bazel workspace root. Its path will be stored as an absolute path \
 in the lock file and will not be portable across machines.\
 """.format(identity = dep.identity, path = local_path))
-        kwargs.update(
-            path = local_path,
-            dependencies_index = None,
-        )
+        kwargs.update(path = local_path)
         return struct(kind = "local", kwargs = kwargs)
     if dep.registry:
         kwargs.update(
@@ -217,43 +210,11 @@ in the lock file and will not be portable across machines.\
         return struct(kind = "registry", kwargs = kwargs)
     fail("Swift package `{}` has no source.".format(dep.identity))
 
-# MARK: - Mode
-
-def _mixed_modes_error(modules):
-    """Checks that the `from_package` tags do not mix v1 and v2.
-
-    Args:
-        modules: The value of `module_ctx.modules`.
-
-    Returns:
-        `None` when every tag is v1 or every tag is v2; otherwise, an error
-        `string`.
-    """
-    v1_mods = []
-    v2_mods = []
-    for mod in modules:
-        for tag in mod.tags.from_package:
-            if slices.is_v2_tag(tag):
-                if mod.name not in v2_mods:
-                    v2_mods.append(mod.name)
-            elif mod.name not in v1_mods:
-                v1_mods.append(mod.name)
-    if v1_mods and v2_mods:
-        return (
-            "v1 and v2 `from_package` tags cannot be mixed in one build: " +
-            "module(s) {v1} use v1 tags while {v2} use v2 slices. " +
-            "Migrate every module to slices, or keep every module on v1 " +
-            "until non-root slices are supported (see " +
-            "https://github.com/cgrindel/rules_swift_package_manager/issues/2641)."
-        ).format(v1 = ", ".join(v1_mods), v2 = ", ".join(v2_mods))
-    return None
-
 swift_deps_common = struct(
     build_file_conflict_error = _build_file_conflict_error,
     config_pkg_for = _config_pkg_for,
     declare_package_repos = _declare_package_repos,
     inference_settings = _inference_settings,
-    mixed_modes_error = _mixed_modes_error,
     pkg_repo_kwargs = _pkg_repo_kwargs,
     record_inference_packages = _record_inference_packages,
 )

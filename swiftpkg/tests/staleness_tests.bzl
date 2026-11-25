@@ -451,10 +451,8 @@ def _new_config(
         manifest_cache = "shared",
         manifest_caching = True,
         replace_scm_with_registry = False,
-        use_registry_identity_for_scm = False,
-        build_path = ".build"):
+        use_registry_identity_for_scm = False):
     return struct(
-        build_path = build_path,
         cache_path = cache_path,
         config_path = config_path,
         security_path = security_path,
@@ -485,7 +483,6 @@ def _render_flags_matches_tool_fixture_test(ctx):
         dependency_caching = False,
         manifest_cache = "local",
         use_registry_identity_for_scm = True,
-        build_path = "custom/build",
     )
     asserts.equals(
         env,
@@ -577,7 +574,6 @@ def _render_flags_from_package_labels_test(ctx):
     # A `configure_swift_package` tag has no `netrc` or `registries`
     # attribute; those live on `from_package` and are passed explicitly.
     config = struct(
-        build_path = "spm-build",
         cache_path = ".cache",
         config_path = ".config",
         security_path = ".security",

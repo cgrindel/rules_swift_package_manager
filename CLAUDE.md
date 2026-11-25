@@ -19,11 +19,15 @@ rulesets, making Swift package products and targets available as Bazel targets.
 ### Code Maintenance
 
 - `bazel run //:tidy` - Update source files from build outputs
-- `bazel run //:update_build_files` - Update Bazel BUILD files using Gazelle
+- `bazel run //:update_build_files` - Update Bazel BUILD files using Gazelle (an alias for
+  `//tools/gazelle:update_build_files`)
 - `bazel run //:update_files` - Quick update of source files
 - `bazel run //:tidy_all` - Run all tidy operations across the repository
 
 ### Go-specific Commands
+
+Go is a maintainer-only dev dependency (`tools/generate_ci_workflow`, Gazelle). No Go reaches
+clients.
 
 - `bazel run //:go_mod_tidy` - Tidy Go module dependencies
 - `bazel run //:go_get_latest` - Update Go dependencies to latest versions
@@ -45,9 +49,14 @@ Examples have individual `do_test` scripts that can be run to test specific func
      - Resource handling (`resource_files.bzl`, `resource_bundle_accessor.bzl`)
    - `bzlmod/` - Bazel module extension for Swift dependencies
 
-2. **tools/swift_deps_index/** - Go-based tooling for Swift dependency analysis
-   - Processes Swift package manifests and resolution data
-   - Generates dependency indexes and metadata
+2. **tools/** - Client and maintainer tooling
+   - `swift_deps_tool/` - Foundation-only Swift binary behind `@swift_package//:resolve`, `:update`
+     and `:cache`; runs SwiftPM and writes each slice's `swift_deps_cache/` and `inc.MODULE.bazel`
+   - `init/` - Shell script behind `@rules_swift_package_manager//tools:init`; creates a slice
+   - `swift` - `swift_toolchain_tool` that gives the tools and the version check the toolchain's
+     `swift`
+   - `generate_ci_workflow/` - Go program that writes `.github/workflows/ci.yml` (maintainers only)
+   - `gazelle/` - Gazelle targets for this repository (maintainers only)
 
 3. **examples/** - Comprehensive test examples for different Swift package scenarios
    - Each example has its own `do_test` script and demonstrates specific features
@@ -59,7 +68,8 @@ Examples have individual `do_test` scripts that can be run to test specific func
 - `extensions.bzl` - Bazel module extensions entry point
 - `MODULE.bazel` - Bazel module configuration with runtime dependencies
 - `shared.bazelrc` - Common Bazel configuration (bzlmod enabled, Apple toolchain setup)
-- `BUILD.bazel` - Root build configuration with Gazelle and maintenance targets
+- `BUILD.bazel` - Root build configuration: `:swift_version_check` flag (loaded by clients, so no
+  dev-dependency loads) and maintenance targets
 
 ### Testing Strategy
 
@@ -70,7 +80,9 @@ scenarios like Firebase, gRPC, Stripe, and others. Tests verify both bzlmod and 
 
 - This repository uses bzlmod by default (`--enable_bzlmod` in shared.bazelrc)
 - Apple toolchain configuration is handled automatically via apple_support
-- Swift package resolution requires `Package.swift` and `Package.resolved` files
+- The loading phase never runs `swift`. Each slice (`swift_deps/<any|apple|linux>/` in the examples)
+  checks in `Package.resolved`, `swift_deps_cache/` and `inc.MODULE.bazel`; regenerate it with
+  `bazel run @swift_package//:cache` on a host of the slice's OS. See `docs/v2_migration.md`
 - The `tidy` target is crucial for maintaining generated BUILD files and dependencies
 
 ## Development Best Practices
@@ -82,8 +94,8 @@ scenarios like Firebase, gRPC, Stripe, and others. Tests verify both bzlmod and 
 
 ### Generating BUILD Files in Starlark
 
-When generating BUILD.bazel file content programmatically (e.g., in repository rules), always use the
-modules in `swiftpkg/internal/` rather than string templates:
+When generating BUILD.bazel file content programmatically (e.g., in repository rules), always use
+the modules in `swiftpkg/internal/` rather than string templates:
 
 - `load_statements.new(location, *symbols)` — create load statements
 - `build_decls.new(kind, name, attrs)` — create rule declarations

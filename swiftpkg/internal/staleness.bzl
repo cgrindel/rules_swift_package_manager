@@ -59,7 +59,7 @@ def _render_flags(config_swift_package, netrc = None, registries = None):
     The output must equal `SwiftPMFlags.normalized()` in
     `tools/swift_deps_tool/Sources/SwiftPMFlags.swift` for the flags that the
     extension passes to the tool: one `key=value\\n` line per flag, sorted by
-    key. `build_path` is never included.
+    key.
 
     `netrc` and `registries` are attributes of the `from_package` tag, not of
     `configure_swift_package`, so they are passed separately.

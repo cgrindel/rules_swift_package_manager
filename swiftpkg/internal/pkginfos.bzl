@@ -13,12 +13,10 @@ load(
 )
 load(":apple_builtin.bzl", "apple_builtin")
 load(":clang_files.bzl", "clang_files")
-load(":manifest_swiftc_args.bzl", "manifest_swiftc_args")
 load(":objc_files.bzl", "objc_files")
 load(":pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load(":pkginfo_targets.bzl", "pkginfo_targets")
 load(":repository_files.bzl", "repository_files")
-load(":repository_utils.bzl", "repository_utils")
 load(":resource_files.bzl", "resource_files")
 load(":semver.bzl", "semver")
 load(":swift_files.bzl", "swift_files")
@@ -29,218 +27,6 @@ _DEFAULT_LOCALIZATION = "en"
 # The well-known trait name that SPM uses (SE-0450) to determine which traits
 # are enabled by default when no explicit trait selection is provided.
 _DEFAULT_TRAIT_NAME = "default"
-
-def _package_command_args(
-        subcommand_args,
-        registries_directory = None,
-        replace_scm_with_registry = False):
-    args = ["swift", "package"] + manifest_swiftc_args.BAZEL_DEFINE
-
-    if registries_directory:
-        args.extend(["--config-path", registries_directory])
-    if replace_scm_with_registry:
-        args.append("--replace-scm-with-registry")
-    args.extend(subcommand_args)
-
-    return args
-
-def _dump_package_args(
-        registries_directory = None,
-        replace_scm_with_registry = False):
-    return _package_command_args(
-        ["dump-package"],
-        registries_directory = registries_directory,
-        replace_scm_with_registry = replace_scm_with_registry,
-    )
-
-def _describe_package_args(
-        registries_directory = None,
-        replace_scm_with_registry = False):
-    return _package_command_args(
-        ["describe", "--type", "json"],
-        registries_directory = registries_directory,
-        replace_scm_with_registry = replace_scm_with_registry,
-    )
-
-def _get_dump_manifest(
-        repository_ctx,
-        env = {},
-        working_directory = "",
-        debug_path = None,
-        cache_path = None,
-        registries_directory = None,
-        replace_scm_with_registry = False):
-    """Returns a dict representing the package dump for an SPM package.
-
-    Args:
-        repository_ctx: A `repository_ctx`.
-        env: A `dict` of environment variables that will be included in the
-             command execution.
-        working_directory: A `string` specifying the directory for the SPM package.
-        debug_path: A `string` specifying the directory path where to  write the
-            JSON file.
-        cache_path: Optional. A `string` specifying the directory path where to
-            read or write cached JSON.
-        registries_directory: Optional. The directory containing the
-            configuration file for setting a Swift Package Registry.
-        replace_scm_with_registry: Optional. A `bool` specifying whether to
-            replace SCM references with registry references.
-
-    Returns:
-        A `dict` representing an SPM package dump.
-    """
-    debug_json_path = None
-    if debug_path == None:
-        debug_path = str(repository_ctx.path("."))
-    debug_json_path = paths.join(debug_path, "dump.json")
-
-    cached_json_path = None
-    if cache_path:
-        cached_json_path = paths.join(cache_path, "dump.json")
-
-    return repository_utils.parsed_json_from_spm_command(
-        repository_ctx,
-        _dump_package_args(
-            registries_directory = registries_directory,
-            replace_scm_with_registry = replace_scm_with_registry,
-        ),
-        env = env,
-        working_directory = working_directory,
-        debug_json_path = debug_json_path,
-        cached_json_path = cached_json_path,
-    )
-
-def _get_desc_manifest(
-        repository_ctx,
-        env = {},
-        working_directory = "",
-        debug_path = None,
-        cache_path = None,
-        registries_directory = None,
-        replace_scm_with_registry = False):
-    """Returns a dict representing the package description for an SPM package.
-
-    Args:
-        repository_ctx: A `repository_ctx`.
-        env: A `dict` of environment variables that will be included in the
-             command execution.
-        working_directory: A `string` specifying the directory for the SPM package.
-        debug_path: A `string` specifying the directory path where to  write the
-            JSON file.
-        cache_path: Optional. A `string` specifying the directory path where to
-            read or write cached JSON.
-        registries_directory: Optional. The directory containing the
-            configuration file for setting a Swift Package Registry.
-        replace_scm_with_registry: Optional. A `bool` specifying whether to
-            replace SCM references with registry references.
-
-    Returns:
-        A `dict` representing an SPM package description.
-    """
-    debug_json_path = None
-    if debug_path == None:
-        debug_path = str(repository_ctx.path("."))
-    debug_json_path = paths.join(debug_path, "desc.json")
-
-    cached_json_path = None
-    if cache_path:
-        cached_json_path = paths.join(cache_path, "desc.json")
-
-    return repository_utils.parsed_json_from_spm_command(
-        repository_ctx,
-        _describe_package_args(
-            registries_directory = registries_directory,
-            replace_scm_with_registry = replace_scm_with_registry,
-        ),
-        env = env,
-        working_directory = working_directory,
-        debug_json_path = debug_json_path,
-        cached_json_path = cached_json_path,
-    )
-
-def _get(
-        repository_ctx,
-        directory,
-        env = {},
-        debug_path = None,
-        cached_json_directory = None,
-        resolved_pkg_map = None,
-        collect_src_info = True,
-        registries_directory = None,
-        replace_scm_with_registry = False):
-    """Retrieves the package information for the Swift package defined at the \
-    specified directory.
-
-    Args:
-        repository_ctx: A `repository_ctx`.
-        directory: The path for the Swift package (`string`).
-        env: A `dict` of environment variables that will be included in the
-            command execution.
-        debug_path: Optional. The path where to write debug files (e.g. JSON)
-            as a `string`.
-        cached_json_directory: Optional. A `string` specifying the directory
-            where JSON output from SPM commands can be cached.
-        resolved_pkg_map: Optional. A `dict` of representing the
-            `Package.resolved` JSON.
-        collect_src_info: Optional. A `bool` specifying whether source
-            information should be collected for the package.
-        registries_directory: Optional. The directory containing the
-            configuration file for setting a Swift Package Registry.
-        replace_scm_with_registry: Optional. A `bool` specifying whether to
-            replace SCM references with registry references.
-
-    Returns:
-        A `struct` representing the package information as returned by
-        `pkginfos.new()`.
-    """
-    directory = str(repository_ctx.path(directory))
-
-    if debug_path:
-        if not paths.is_absolute(debug_path):
-            # For backwards compatibility, resolve relative to the working directory.
-            debug_path = paths.join(directory, debug_path)
-
-    dump_manifest = _get_dump_manifest(
-        repository_ctx,
-        env = env,
-        working_directory = directory,
-        debug_path = debug_path,
-        cache_path = cached_json_directory,
-        registries_directory = registries_directory,
-        replace_scm_with_registry = replace_scm_with_registry,
-    )
-    desc_manifest = _get_desc_manifest(
-        repository_ctx,
-        env = env,
-        working_directory = directory,
-        debug_path = debug_path,
-        cache_path = cached_json_directory,
-        registries_directory = registries_directory,
-        replace_scm_with_registry = replace_scm_with_registry,
-    )
-
-    # Ensure package and local dependency paths are absolute even if the
-    # parsed JSON has been normalized to relative paths for cache portability.
-    desc_manifest = _absolutize_manifest_paths(
-        desc_manifest,
-        directory = directory,
-        source_directory = directory,
-    )
-
-    pkg_info = _new_from_parsed_json(
-        repository_ctx = repository_ctx,
-        dump_manifest = dump_manifest,
-        desc_manifest = desc_manifest,
-        collect_src_info = collect_src_info,
-        resolved_pkg_map = resolved_pkg_map,
-    )
-
-    # Dump the merged pkg_info for debug purposes
-    json_str = json.encode_indent(pkg_info, indent = "  ")
-    json_str = repository_utils.replace_working_directory(json_str, directory)
-    repository_ctx.file("pkg_info.json", content = json_str, executable = False)
-
-    return pkg_info
 
 def _absolutize_manifest_paths(desc_manifest, directory, source_directory):
     """Returns a copy of the describe manifest with absolute paths.
@@ -2220,7 +2006,6 @@ build_setting_kinds = struct(
 pkginfos = struct(
     dependency_identity_by_name = _dependency_identity_by_name,
     enabled_traits_from_dump_manifest = _enabled_traits_from_dump_manifest,
-    get = _get,
     new = _new,
     new_artifact_download_info = _new_artifact_download_info,
     new_build_setting = _new_build_setting,
@@ -2260,7 +2045,5 @@ pkginfos = struct(
 )
 
 pkginfos_testing = struct(
-    describe_package_args = _describe_package_args,
-    dump_package_args = _dump_package_args,
     new_clang_src_info_from_sources = _new_clang_src_info_from_sources,
 )

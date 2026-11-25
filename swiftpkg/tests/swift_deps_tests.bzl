@@ -447,19 +447,7 @@ unknown_inference_packages_test = unittest.make(_unknown_inference_packages_test
 
 def _inference_repository_routing_test(ctx):
     env = unittest.begin(ctx)
-    calls = []
-
-    def _capture(**kwargs):
-        calls.append(kwargs)
-
-    from_package = struct(
-        env = {},
-        env_inherit = [],
-        registries = {},
-        resolved = None,
-        make_files_read_only = False,
-        netrc = None,
-    )
+    count = 0
     for kind in ["git", "local", "registry"]:
         for sdk, binary in [(False, False), (True, False), (False, True), (True, True)]:
             settings = {"binary_target_deps": binary, "system_sdk_deps": sdk}
@@ -473,25 +461,25 @@ def _inference_repository_routing_test(ctx):
                 file_system = struct(path = "/workspace/foo") if kind == "local" else None,
                 registry = struct(pin = struct(identity = "example.foo", state = struct(version = "1.0.0"))) if kind == "registry" else None,
             )
-            swift_deps_test_utils.declare_pkg_from_dependency(
-                dep,
-                None,
-                from_package,
-                None,
-                None,
-                {},
-                {},
-                "",
-                "/workspace",
-                "",
-                None,
-                settings,
-                package_rules = struct(git = _capture, local = _capture, registry = _capture),
+            repo = swift_deps_common.pkg_repo_kwargs(
+                name = "swiftpkg_foo",
+                dep = dep,
+                config_pkg = None,
+                make_files_read_only = False,
+                local_path = "foo",
+                target_deps = {},
+                module_aliases = {},
+                dep_module_aliases = "",
+                target_mods = "",
+                package_repos = None,
+                inference_settings = settings,
             )
-            asserts.equals(env, sdk, calls[-1]["system_sdk_deps"], kind)
-            asserts.equals(env, binary, calls[-1]["binary_target_deps"], kind)
-            asserts.equals(env, "swiftpkg_foo", calls[-1]["name"])
-    asserts.equals(env, 12, len(calls))
+            count += 1
+            asserts.equals(env, kind, repo.kind)
+            asserts.equals(env, sdk, repo.kwargs["system_sdk_deps"], kind)
+            asserts.equals(env, binary, repo.kwargs["binary_target_deps"], kind)
+            asserts.equals(env, "swiftpkg_foo", repo.kwargs["name"])
+    asserts.equals(env, 12, count)
     return unittest.end(env)
 
 inference_repository_routing_test = unittest.make(_inference_repository_routing_test)
@@ -549,199 +537,6 @@ def _extension_metadata_test(ctx):
 
 extension_metadata_test = unittest.make(_extension_metadata_test)
 
-def _new_ext_module(
-        name,
-        is_root,
-        from_package_repo_names,
-        dev_from_package_repo_names = None):
-    """Create a fake Bazel module with `from_package` tags.
-
-    Args:
-        name: The module name.
-        is_root: Whether the module is the root module.
-        from_package_repo_names: The repository names that the fake non-dev
-            `from_package` tag declares.
-        dev_from_package_repo_names: Optional. The repository names that a
-            second, dev `from_package` tag declares.
-
-    Returns:
-        A `struct` that mimics an entry in `module_ctx.modules`.
-    """
-    tags = {
-        tag_class: []
-        for tag_class in swift_deps_test_utils.bazel_target_mod_tag_classes
-    }
-    tags["configure_explicit_modules"] = []
-    tags["configure_package"] = []
-    tags["configure_swift_package"] = []
-    from_package_tags = [
-        struct(
-            config = None,
-            dump_manifests = {},
-            is_dev = False,
-            repo_names = from_package_repo_names,
-        ),
-    ]
-    if dev_from_package_repo_names != None:
-        from_package_tags.append(
-            struct(
-                config = None,
-                dump_manifests = {},
-                is_dev = True,
-                repo_names = dev_from_package_repo_names,
-            ),
-        )
-    tags["from_package"] = from_package_tags
-    return struct(is_root = is_root, name = name, tags = struct(**tags))
-
-def _run_swift_deps_impl(modules):
-    """Run the `swift_deps` implementation with fake package declaration.
-
-    Args:
-        modules: The fake modules for `module_ctx.modules`.
-
-    Returns:
-        A `struct` with `declared` (the repository names declared for every
-        `from_package` tag, in order), `metadata` (the kwargs passed to
-        `module_ctx.extension_metadata`), and `result` (the value that the
-        implementation returned).
-    """
-    declared = []
-    metadata = {}
-
-    def _declare_pkgs_from_package(_module_ctx, from_package, *_args):
-        declared.extend(from_package.repo_names)
-        return from_package.repo_names
-
-    result = swift_deps_test_utils.swift_deps_impl(
-        _new_fake_module_ctx(modules, metadata),
-        declare_pkgs_from_package = _declare_pkgs_from_package,
-    )
-    return struct(declared = declared, metadata = metadata, result = result)
-
-def _root_module_direct_deps_test(ctx):
-    env = unittest.begin(ctx)
-
-    # The root and a non-root module resolve different packages. Both are
-    # declared, but only the root's are its direct deps.
-    actual = _run_swift_deps_impl([
-        _new_ext_module("my_app", True, ["swiftpkg_foo", "swiftpkg_bar"]),
-        _new_ext_module("some_dep", False, ["swiftpkg_baz"]),
-    ])
-    asserts.equals(
-        env,
-        ["swiftpkg_foo", "swiftpkg_bar", "swiftpkg_baz"],
-        actual.declared,
-    )
-    asserts.equals(
-        env,
-        ["swiftpkg_foo", "swiftpkg_bar"],
-        actual.metadata["root_module_direct_deps"],
-    )
-    asserts.false(
-        env,
-        "swiftpkg_baz" in actual.metadata["root_module_direct_deps"],
-    )
-    asserts.equals(env, [], actual.metadata["root_module_direct_dev_deps"])
-    asserts.equals(env, _EXTENSION_METADATA_SENTINEL, actual.result)
-
-    # A repo that only a non-root module declares exists, but it is not
-    # reported as a direct dep of the root, regardless of module order.
-    actual = _run_swift_deps_impl([
-        _new_ext_module("some_dep", False, ["swiftpkg_only_dep"]),
-        _new_ext_module("my_app", True, []),
-    ])
-    asserts.equals(env, ["swiftpkg_only_dep"], actual.declared)
-    asserts.equals(env, [], actual.metadata["root_module_direct_deps"])
-
-    return unittest.end(env)
-
-root_module_direct_deps_test = unittest.make(_root_module_direct_deps_test)
-
-def _root_module_direct_dev_deps_test(ctx):
-    env = unittest.begin(ctx)
-
-    # Only a dev tag declares packages, so they are all direct dev deps.
-    actual = _run_swift_deps_impl([
-        _new_ext_module("my_app", True, [], ["swiftpkg_foo"]),
-    ])
-    asserts.equals(env, _EXTENSION_METADATA_SENTINEL, actual.result)
-    asserts.equals(env, [], actual.metadata["root_module_direct_deps"])
-    asserts.equals(
-        env,
-        ["swiftpkg_foo"],
-        actual.metadata["root_module_direct_dev_deps"],
-    )
-
-    # A dev and a non-dev tag split the packages. A package in both is a
-    # non-dev dep. A non-root module's dev tag is not reported.
-    actual = _run_swift_deps_impl([
-        _new_ext_module(
-            "my_app",
-            True,
-            ["swiftpkg_foo", "swiftpkg_shared"],
-            ["swiftpkg_bar", "swiftpkg_shared"],
-        ),
-        _new_ext_module("some_dep", False, [], ["swiftpkg_baz"]),
-    ])
-    asserts.equals(env, _EXTENSION_METADATA_SENTINEL, actual.result)
-    asserts.equals(
-        env,
-        ["swiftpkg_foo", "swiftpkg_shared"],
-        actual.metadata["root_module_direct_deps"],
-    )
-    asserts.equals(
-        env,
-        ["swiftpkg_bar"],
-        actual.metadata["root_module_direct_dev_deps"],
-    )
-
-    return unittest.end(env)
-
-root_module_direct_dev_deps_test = unittest.make(
-    _root_module_direct_dev_deps_test,
-)
-
-def _mixed_modes_error_test(ctx):
-    env = unittest.begin(ctx)
-
-    def _modules(*tags_per_module):
-        return [
-            struct(name = "mod{}".format(i), tags = struct(from_package = tags))
-            for i, tags in enumerate(tags_per_module)
-        ]
-
-    v1 = struct(config = None, dump_manifests = {})
-    v2 = struct(config = Label("@@//config:macos"), dump_manifests = {})
-    v2_cached = struct(config = None, dump_manifests = {"_main": "x"})
-
-    asserts.equals(env, None, swift_deps_common.mixed_modes_error(_modules([v1, v1])))
-    asserts.equals(env, None, swift_deps_common.mixed_modes_error(_modules([v2, v2_cached])))
-    asserts.equals(env, None, swift_deps_common.mixed_modes_error(_modules([])))
-    want_fmt = (
-        "v1 and v2 `from_package` tags cannot be mixed in one build: " +
-        "module(s) {v1} use v1 tags while {v2} use v2 slices. " +
-        "Migrate every module to slices, or keep every module on v1 " +
-        "until non-root slices are supported (see " +
-        "https://github.com/cgrindel/rules_swift_package_manager/issues/2641)."
-    )
-    asserts.equals(
-        env,
-        want_fmt.format(v1 = "mod0", v2 = "mod0"),
-        swift_deps_common.mixed_modes_error(_modules([v1, v2])),
-    )
-
-    # Across modules too.
-    asserts.equals(
-        env,
-        want_fmt.format(v1 = "mod1", v2 = "mod0"),
-        swift_deps_common.mixed_modes_error(_modules([v2], [v1])),
-    )
-
-    return unittest.end(env)
-
-mixed_modes_error_test = unittest.make(_mixed_modes_error_test)
-
 def swift_deps_test_suite():
     return unittest.suite(
         "swift_deps_tests",
@@ -755,7 +550,4 @@ def swift_deps_test_suite():
         build_file_conflict_error_test,
         non_root_target_mods_error_test,
         extension_metadata_test,
-        root_module_direct_deps_test,
-        root_module_direct_dev_deps_test,
-        mixed_modes_error_test,
     )

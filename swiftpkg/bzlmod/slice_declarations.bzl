@@ -1,15 +1,13 @@
-"""Collects and evaluates the v2 slices of the `swift_deps` extension.
+"""Collects and evaluates the slices of the `swift_deps` extension.
 
-A v2 `from_package` tag (one with `config` or `dump_manifests`) describes
-one slice: one resolution of a `Package.swift` for one config. `collect` turns
+A `from_package` tag describes one slice: one resolution of a `Package.swift` for one config. `collect` turns
 the tags into slices. `evaluate` decides whether a slice's `swift_deps_cache` is fresh and
 lists the packages it contributes.
 
 Extension evaluation is all or nothing, so nothing here calls `fail()` for a
 missing, stale, or inconsistent cache. A stale slice still lists every package
 name it knows so that the root `use_repo` keeps working. Only user errors
-fail: a v2 tag in a non-root module, a tag without `config` or `resolved`, two
-root slices with the same config, and a registry pin in a fresh slice.
+fail: a `from_package` tag in a non-root module, two root slices with the same config, and a registry pin in a fresh slice.
 """
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
@@ -46,11 +44,11 @@ def _ok(result):
 # MARK: - Collect
 
 def _collect_or_error(modules, is_dev_dependency):
-    """Builds a slice for every v2 `from_package` tag.
+    """Builds a slice for every `from_package` tag.
 
-    Only the root module may declare v2 tags for now. The committed manifest
-    lists are not validated here: `evaluate` marks an inconsistent slice
-    stale.
+    Only the root module may declare `from_package` tags for now. The
+    committed manifest lists are not validated here: `evaluate` marks an
+    inconsistent slice stale.
 
     Args:
         modules: The value of `module_ctx.modules`.
@@ -64,25 +62,11 @@ def _collect_or_error(modules, is_dev_dependency):
     root_dirs_by_config = {}
     for mod in modules:
         for tag in mod.tags.from_package:
-            if not slices.is_v2_tag(tag):
-                continue
             if not mod.is_root:
                 return _error((
-                    "v2 `from_package` slices are only supported in the " +
+                    "`from_package` slices are only supported in the " +
                     "root module for now (module `{name}`); see {url}"
                 ).format(name = mod.name, url = _NON_ROOT_ISSUE))
-            for attr in ["config", "resolved"]:
-                if getattr(tag, attr) == None:
-                    return _error((
-                        "from_package `{swift}`{where}: `{attr}` is required " +
-                        "when `config` or `dump_manifests` is set"
-                    ).format(
-                        swift = str(tag.swift),
-                        where = (
-                            " (slice `{}`)".format(tag.resolved.package) if tag.resolved != None else ""
-                        ),
-                        attr = attr,
-                    ))
             slice = slices.new(
                 config = tag.config,
                 swift = tag.swift,
@@ -107,9 +91,9 @@ def _collect_or_error(modules, is_dev_dependency):
     return _ok(result)
 
 def _collect(module_ctx):
-    """Builds a slice for every v2 `from_package` tag of the root module.
+    """Builds a slice for every `from_package` tag of the root module.
 
-    Fails when a non-root module declares a v2 tag.
+    Fails when a non-root module declares a `from_package` tag.
 
     Args:
         module_ctx: A `module_ctx`.
@@ -197,8 +181,7 @@ def _patch_tags_by_identity(module_ctx, slice, config_pkgs, pinned = []):
 
     A tag's name matches, in order: an identity equal to the lowercased name,
     an identity whose repository name is the name, or a dependency name in
-    the cached root `dump.json`. A tag that matches nothing is ignored, as v1
-    ignores unknown `configure_package` names.
+    the cached root `dump.json`. A tag that matches nothing is ignored.
 
     Args:
         module_ctx: A `module_ctx`.
@@ -270,7 +253,7 @@ def _patch_files_by_identity(module_ctx, slice, config_pkgs):
 def _bazel_workspace_root(swift, abs_swift):
     """The directory that `local_swift_package` resolves relative paths against.
 
-    It is derived from the `swift` label as v1 does, so it is right even when
+    It is derived from the `swift` label, so it is right even when
     `Package.swift` lives in a subdirectory.
 
     Args:
@@ -334,7 +317,7 @@ def _read_parseable_manifests(module_ctx, slice, identity):
 def _fresh_pkgs(module_ctx, slice, directory, bazel_workspace_root, resolved_map):
     """Builds the packages of a slice whose staleness inputs are fresh.
 
-    The repo set is computed as v1 does: the direct deps of the root package,
+    The repo set is the direct deps of the root package,
     every pin in `Package.resolved`, and the transitive local packages. All
     manifests come from the cache.
 
@@ -532,7 +515,7 @@ def _evaluate_or_error(
     for pin in _pins(resolved_map):
         if pin.kind == "registry":
             return _error((
-                "registry package `{identity}` is not supported by v2 yet; " +
+                "registry package `{identity}` is not supported by slices yet; " +
                 "see {url}"
             ).format(identity = pin.identity, url = _REGISTRY_ISSUE))
 
@@ -777,7 +760,6 @@ def _swift_package_kwargs(module_ctx, root, config_pkgs, config_swift_package):
 
     return dict(
         name = _SWIFT_PACKAGE_REPO_NAME,
-        package = package,
         package_path = package,
         swift_label = str(swift),
         slices = json.encode([
@@ -842,7 +824,7 @@ def _declare(
     module_aliases_by_id = _root_module_aliases(evaluated)
     dep_module_aliases = json.encode(module_aliases_by_id) if module_aliases_by_id else ""
 
-    # Record the user-visible names before declaring anything, as v1 does.
+    # Record the user-visible names before declaring anything.
     for identity, m in merged.items():
         repo_name = bazel_repo_names.from_identity(identity)
         available_target_mod_repos[repo_name] = True
@@ -883,16 +865,16 @@ def _declare(
                 repo_name,
             ),
         )
-        v2_kwargs = {}
+        slice_kwargs = {}
         if repo.kind == "git":
             # Binary artifacts download with the slice tag's `.netrc`.
-            v2_kwargs["netrc"] = slice.netrc
+            slice_kwargs["netrc"] = slice.netrc
         getattr(package_rules, repo.kind)(
             dump_manifest = entry.dump_label,
             desc_manifest = entry.desc_label,
             swift_version = slices.cache_label(slice, _MAIN, "swift_version.txt"),
             slice_dir = slice.dir,
-            **dicts.add(repo.kwargs, v2_kwargs)
+            **dicts.add(repo.kwargs, slice_kwargs)
         )
 
     for identity, m in merged.items():
@@ -944,7 +926,7 @@ def _declare(
         config_swift_package,
     ))
 
-    # As v1: the root package's direct deps, plus every package whose
+    # The root package's direct deps, plus every package whose
     # `configure_package` sets `publicly_expose_all_targets`. A stale slice
     # has no package info, so all of its names count as direct.
     direct = {}

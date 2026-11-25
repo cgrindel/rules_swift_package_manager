@@ -157,13 +157,13 @@ No source archive was found in the package JSON: {package_json}\
 def _registry_swift_package_impl(repository_ctx):
     """Implementation for the `registry_swift_package` repository rule."""
     attr = repository_ctx.attr
-    if attr.dump_manifest:
-        fail("""\
-Registry packages are not supported by v2 slices yet; see \
-https://github.com/cgrindel/rules_swift_package_manager/issues/2699\
-""")
     directory = str(repository_ctx.path("."))
-    env = repo_rules.get_exec_env(repository_ctx)
+
+    # Read the slice's cached manifests; Swift Package Manager never runs.
+    # The `swift_deps` extension does not declare registry packages until
+    # https://github.com/cgrindel/rules_swift_package_manager/issues/2699
+    # lands.
+    manifests = repo_rules.read_manifests(repository_ctx)
     id = _get_id(attr.id)
     version = attr.version
 
@@ -173,7 +173,6 @@ https://github.com/cgrindel/rules_swift_package_manager/issues/2699\
         repository_ctx.read(attr.registries),
     ).get("registries")
     registries = _get_registries(registries_json)
-    registries_directory = repository_ctx.path(attr.registries).dirname
     registry_url = _get_registry_url(
         id = id,
         registries = registries,
@@ -244,21 +243,12 @@ https://github.com/cgrindel/rules_swift_package_manager/issues/2699\
     else:
         resolved_pkg_map = dict()
 
-    cached_json_directory = None
-    if repository_ctx.attr.cached_json_directory:
-        cached_json_directory = paths.join(
-            str(repository_ctx.workspace_root),
-            repository_ctx.attr.cached_json_directory,
-        )
-
     pkg_ctx = pkg_ctxs.read(
         repository_ctx,
         directory,
-        env,
-        cached_json_directory,
+        dump_manifest = manifests.dump_manifest,
+        desc_manifest = manifests.desc_manifest,
         resolved_pkg_map = resolved_pkg_map,
-        registries_directory = registries_directory,
-        replace_scm_with_registry = attr.replace_scm_with_registry,
         target_deps = repository_ctx.attr.target_deps,
         system_sdk_deps = repository_ctx.attr.system_sdk_deps,
         binary_target_deps = repository_ctx.attr.binary_target_deps,
@@ -268,7 +258,7 @@ https://github.com/cgrindel/rules_swift_package_manager/issues/2699\
     )
 
     repo_rules.download_artifacts(repository_ctx, pkg_ctx)
-
+    repo_rules.copy_swift_version(repository_ctx)
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
     # Remove unused modulemaps to prevent module redefinition errors
@@ -297,28 +287,12 @@ prevent accidental edits when external repositories are exposed by tools such \
 as `rules_xcodeproj`.\
 """,
     ),
-    "replace_scm_with_registry": attr.bool(
-        default = False,
-        doc = """\
-When enabled replaces SCM identities in dependencies package description \
-with identities from the registries.
-
-Using this option requires that the registries provide `repositoryURLs` as \
-metadata for the package.
-
-When `True` the equivalent `--replace-scm-with-registry` option must be used \
-with the Swift Package Manager CLI (or `swift_package` rule) so that the \
-`resolved` file includes the version and identity information from the registry.
-
-For more information see the \
-[Swift Package Manager documentation](https://github.com/swiftlang/swift-package-manager/blob/swift-6.0.1-RELEASE/Documentation/PackageRegistry/Registry.md#45-lookup-package-identifiers-registered-for-a-url).
-""",
-    ),
     "resolved": attr.label(
         allow_files = [".resolved"],
         doc = """\
 A `Package.resolved`, used to de-duplicate dependency identities when \
-`use_registry_identity_for_scm` or `replace_scm_with_registry` is enabled.
+`use_registry_identity_for_scm` or `replace_scm_with_registry` is enabled in \
+`configure_swift_package`.
 """,
     ),
     "version": attr.string(
@@ -329,18 +303,16 @@ A `Package.resolved`, used to de-duplicate dependency identities when \
 
 _ALL_ATTRS = dicts.add(
     _REGISTRY_ATTRS,
-    repo_rules.env_attrs,
     repo_rules.swift_attrs,
-    repo_rules.v2_attrs,
+    repo_rules.slice_attrs,
     {
         "build_file": attr.label(
             doc = """\
 When used, the provided BUILD file will be used instead of generating one. \
-In a v2 alias repository, only the targets that this file declares with a \
+In an alias repository, only the targets that this file declares with a \
 literal `name = "..."` get aliases; names that a macro computes are not seen.\
 """,
         ),
-        "cached_json_directory": attr.string(),
     },
     swift_package_tool_attrs.swift_package_registry,
 )
