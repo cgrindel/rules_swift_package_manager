@@ -1,0 +1,3351 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-atomics",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-atomics.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.1.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-collections",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-collections.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.1.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-system",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-system.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.4.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "swift-nio",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "NIOCore",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NIOCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIO",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NIO"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOEmbedded",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NIOEmbedded"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOPosix",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NIOPosix"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "_NIOConcurrency",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "_NIOConcurrency"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOTLS",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NIOTLS"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOHTTP1",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NIOHTTP1"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOConcurrencyHelpers",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NIOConcurrencyHelpers"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOFoundationEssentialsCompat",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NIOFoundationEssentialsCompat"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOFoundationCompat",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NIOFoundationCompat"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOWebSocket",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NIOWebSocket"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "NIOTestUtils",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "NIOTestUtils"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "_NIOFileSystem",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "_NIOFileSystem",
+        "NIOFileSystem"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "_NIOFileSystemFoundationCompat",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "_NIOFileSystemFoundationCompat"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOConcurrencyHelpers",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "_NIOBase64",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOOpenBSD",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOFreeBSD",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIODarwin",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOLinux",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOWindows",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOWASI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "_NIODataStructures",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "DequeModule",
+            "swift-collections",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Atomics",
+            "swift-atomics",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOCore",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "_NIODataStructures",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "_NIOBase64",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOConcurrencyHelpers",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "_NIODataStructures",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Atomics",
+            "swift-atomics",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "DequeModule",
+            "swift-collections",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOEmbedded",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "CNIOOpenBSD",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOLinux",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIODarwin",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOWindows",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOConcurrencyHelpers",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "_NIODataStructures",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOPosix",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Atomics",
+            "swift-atomics",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "PrivacyInfo.xcprivacy"
+      ],
+      "name" : "NIOPosix",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOEmbedded",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIO",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "NIO",
+            {
+              "platformNames" : [
+                "macos",
+                "ios",
+                "tvos",
+                "watchos",
+                "linux",
+                "android"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "_NIOConcurrency",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOFoundationEssentialsCompat",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "NIO",
+            {
+              "platformNames" : [
+                "macos",
+                "ios",
+                "tvos",
+                "watchos",
+                "linux",
+                "android"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "NIOFoundationEssentialsCompat",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOFoundationCompat",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CNIOAtomics",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "_GNU_SOURCE"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CNIOPosix",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "_GNU_SOURCE"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CNIOSHA1",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CNIOOpenBSD",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CNIOFreeBSD",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CNIOLinux",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "_GNU_SOURCE"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CNIODarwin",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "__APPLE_USE_RFC_3542"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CNIOWindows",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CNIOWASI",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "CNIOAtomics",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOConcurrencyHelpers",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "NIO",
+            {
+              "platformNames" : [
+                "macos",
+                "ios",
+                "tvos",
+                "watchos",
+                "linux",
+                "android"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOConcurrencyHelpers",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOLLHTTP",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "DequeModule",
+            "swift-collections",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOHTTP1",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "NIO",
+            {
+              "platformNames" : [
+                "macos",
+                "ios",
+                "tvos",
+                "watchos",
+                "linux",
+                "android"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOHTTP1",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOSHA1",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "_NIOBase64",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOWebSocket",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "CNIOLLHTTP",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "_GNU_SOURCE"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "LLHTTP_STRICT_MODE"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "target" : [
+            "NIO",
+            {
+              "platformNames" : [
+                "macos",
+                "ios",
+                "tvos",
+                "watchos",
+                "linux",
+                "android"
+              ]
+            }
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "DequeModule",
+            "swift-collections",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOTLS",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOEmbedded",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOHTTP1",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Atomics",
+            "swift-atomics",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOTestUtils",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOLinux",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIODarwin",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOWindows",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Atomics",
+            "swift-atomics",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "DequeModule",
+            "swift-collections",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SystemPackage",
+            "swift-system",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "PrivacyInfo.xcprivacy"
+      ],
+      "name" : "NIOFS",
+      "packageAccess" : true,
+      "path" : "Sources/NIOFS",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "condition" : {
+            "config" : "debug",
+            "platformNames" : [
+
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "ENABLE_MOCKING"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOFS",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOFoundationEssentialsCompat",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOFSFoundationCompat",
+      "packageAccess" : true,
+      "path" : "Sources/NIOFSFoundationCompat",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOLinux",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIODarwin",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOWindows",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Atomics",
+            "swift-atomics",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "DequeModule",
+            "swift-collections",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SystemPackage",
+            "swift-system",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "PrivacyInfo.xcprivacy"
+      ],
+      "name" : "_NIOFileSystem",
+      "packageAccess" : true,
+      "path" : "Sources/_NIOFileSystem",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "condition" : {
+            "config" : "debug",
+            "platformNames" : [
+
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "ENABLE_MOCKING"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "_NIOFileSystem",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOFoundationEssentialsCompat",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "_NIOFileSystemFoundationCompat",
+      "packageAccess" : true,
+      "path" : "Sources/_NIOFileSystemFoundationCompat",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "_NIOFileSystem",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOFileSystem",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md"
+      ],
+      "name" : "NIOTCPEchoServer",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md"
+      ],
+      "name" : "NIOTCPEchoClient",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOConcurrencyHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md"
+      ],
+      "name" : "NIOEchoServer",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOConcurrencyHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md"
+      ],
+      "name" : "NIOEchoClient",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOHTTP1",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOConcurrencyHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md"
+      ],
+      "name" : "NIOHTTP1Server",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOHTTP1",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOConcurrencyHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md"
+      ],
+      "name" : "NIOHTTP1Client",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOConcurrencyHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md"
+      ],
+      "name" : "NIOChatServer",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOConcurrencyHelpers",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md"
+      ],
+      "name" : "NIOChatClient",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOHTTP1",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOWebSocket",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md"
+      ],
+      "name" : "NIOWebSocketServer",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOHTTP1",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOWebSocket",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md"
+      ],
+      "name" : "NIOWebSocketClient",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOMulticastChat",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md"
+      ],
+      "name" : "NIOUDPEchoServer",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "README.md"
+      ],
+      "name" : "NIOUDPEchoClient",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOHTTP1",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOAsyncAwaitDemo",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOEmbedded",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOHTTP1",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOFoundationCompat",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOWebSocket",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOWindows",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOPerformanceTester",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "executable"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOConcurrencyHelpers",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOEmbedded",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOFoundationCompat",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOTestUtils",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Atomics",
+            "swift-atomics",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOCoreTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOConcurrencyHelpers",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOEmbedded",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOEmbeddedTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOFoundationCompat",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOTestUtils",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOConcurrencyHelpers",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOEmbedded",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOOpenBSD",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIOLinux",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "CNIODarwin",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOTLS",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOPosixTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOConcurrencyHelpers",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOConcurrencyHelpersTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "_NIODataStructures",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIODataStructuresTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "_NIOBase64",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOBase64Tests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOEmbedded",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOHTTP1",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOFoundationCompat",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOTestUtils",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOHTTP1Tests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOEmbedded",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOTLS",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOFoundationCompat",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOTestUtils",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOTLSTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOEmbedded",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOWebSocket",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOWebSocketTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOTestUtils",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOEmbedded",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOTestUtilsTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOFoundationCompat",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOFoundationCompatTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIO",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOSingletonsTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOFS",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Atomics",
+            "swift-atomics",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "DequeModule",
+            "swift-collections",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SystemPackage",
+            "swift-system",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOFSTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "condition" : {
+            "config" : "debug",
+            "platformNames" : [
+
+            ]
+          },
+          "kind" : {
+            "define" : {
+              "_0" : "ENABLE_MOCKING"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOPosix",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOFS",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOFoundationCompat",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Test Data"
+      ],
+      "name" : "NIOFSIntegrationTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "NIOFS",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "NIOFSFoundationCompat",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "NIOFSFoundationCompatTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "Lifetimes"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.1.0"
+  },
+  "traits" : [
+
+  ]
+}

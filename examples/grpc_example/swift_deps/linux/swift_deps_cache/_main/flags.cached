@@ -1,0 +1,5 @@
+dependency_caching=true
+manifest_cache=shared
+manifest_caching=true
+replace_scm_with_registry=false
+use_registry_identity_for_scm=false

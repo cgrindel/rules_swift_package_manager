@@ -1,0 +1,151 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "swift-atomics",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Atomics",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Atomics"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "CMakeLists.txt"
+      ],
+      "name" : "_AtomicsShims",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "_AtomicsShims",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "CMakeLists.txt",
+        "Conformances/AtomicBool.swift.gyb",
+        "Conformances/IntegerConformances.swift.gyb",
+        "Conformances/PointerConformances.swift.gyb",
+        "Primitives/Primitives.native.swift.gyb",
+        "Types/IntegerOperations.swift.gyb"
+      ],
+      "name" : "Atomics",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "BuiltinModule"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Atomics",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "main.swift",
+        "Basics/BasicTests.gyb-template",
+        "Basics/BasicAtomicBoolTests.swift.gyb",
+        "Basics/BasicAtomicDoubleWordTests.swift.gyb",
+        "Basics/BasicAtomicInt16Tests.swift.gyb",
+        "Basics/BasicAtomicInt32Tests.swift.gyb",
+        "Basics/BasicAtomicInt64Tests.swift.gyb",
+        "Basics/BasicAtomicInt8Tests.swift.gyb",
+        "Basics/BasicAtomicIntTests.swift.gyb",
+        "Basics/BasicAtomicMutablePointerTests.swift.gyb",
+        "Basics/BasicAtomicMutableRawPointerTests.swift.gyb",
+        "Basics/BasicAtomicOptionalMutablePointerTests.swift.gyb",
+        "Basics/BasicAtomicOptionalMutableRawPointerTests.swift.gyb",
+        "Basics/BasicAtomicOptionalPointerTests.swift.gyb",
+        "Basics/BasicAtomicOptionalRawPointerTests.swift.gyb",
+        "Basics/BasicAtomicOptionalRawRepresentableTests.swift.gyb",
+        "Basics/BasicAtomicOptionalReferenceTests.swift.gyb",
+        "Basics/BasicAtomicOptionalUnmanagedTests.swift.gyb",
+        "Basics/BasicAtomicPointerTests.swift.gyb",
+        "Basics/BasicAtomicRawPointerTests.swift.gyb",
+        "Basics/BasicAtomicRawRepresentableTests.swift.gyb",
+        "Basics/BasicAtomicReferenceTests.swift.gyb",
+        "Basics/BasicAtomicUInt16Tests.swift.gyb",
+        "Basics/BasicAtomicUInt32Tests.swift.gyb",
+        "Basics/BasicAtomicUInt64Tests.swift.gyb",
+        "Basics/BasicAtomicUInt8Tests.swift.gyb",
+        "Basics/BasicAtomicUIntTests.swift.gyb",
+        "Basics/BasicAtomicUnmanagedTests.swift.gyb"
+      ],
+      "name" : "AtomicsTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "BuiltinModule"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.10.0"
+  },
+  "traits" : [
+
+  ]
+}

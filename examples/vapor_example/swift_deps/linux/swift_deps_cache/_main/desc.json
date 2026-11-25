@@ -1,0 +1,47 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "vapor",
+      "requirement" : {
+        "exact" : [
+          "4.122.4"
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/vapor/vapor.git"
+    },
+    {
+      "identity" : "fluent",
+      "requirement" : {
+        "exact" : [
+          "4.13.0"
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/vapor/fluent.git"
+    },
+    {
+      "identity" : "fluent-sqlite-driver",
+      "requirement" : {
+        "exact" : [
+          "4.9.0"
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/vapor/fluent-sqlite-driver.git"
+    }
+  ],
+  "manifest_display_name" : "vapor_example",
+  "name" : "vapor_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}

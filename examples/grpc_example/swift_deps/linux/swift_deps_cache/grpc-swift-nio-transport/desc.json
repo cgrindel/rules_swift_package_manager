@@ -1,0 +1,441 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "grpc-swift-2",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.4.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/grpc/grpc-swift-2.git"
+    },
+    {
+      "identity" : "swift-nio",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.104.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio.git"
+    },
+    {
+      "identity" : "swift-nio-http2",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.46.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio-http2.git"
+    },
+    {
+      "identity" : "swift-nio-transport-services",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.20.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio-transport-services.git"
+    },
+    {
+      "identity" : "swift-nio-ssl",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.34.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio-ssl.git"
+    },
+    {
+      "identity" : "swift-nio-extras",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.27.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio-extras.git"
+    },
+    {
+      "identity" : "swift-certificates",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.14.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-certificates.git"
+    },
+    {
+      "identity" : "swift-asn1",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-asn1.git"
+    }
+  ],
+  "manifest_display_name" : "grpc-swift-nio-transport",
+  "name" : "grpc-swift-nio-transport",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "GRPCNIOTransportHTTP2",
+      "targets" : [
+        "GRPCNIOTransportHTTP2"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GRPCNIOTransportHTTP2Posix",
+      "targets" : [
+        "GRPCNIOTransportHTTP2Posix"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "GRPCNIOTransportHTTP2TransportServices",
+      "targets" : [
+        "GRPCNIOTransportHTTP2TransportServices"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "GRPCNIOTransportHTTP2TransportServices",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCNIOTransportHTTP2TransportServices",
+      "path" : "Sources/GRPCNIOTransportHTTP2TransportServices",
+      "product_dependencies" : [
+        "GRPCCore",
+        "NIOTransportServices"
+      ],
+      "product_memberships" : [
+        "GRPCNIOTransportHTTP2",
+        "GRPCNIOTransportHTTP2TransportServices"
+      ],
+      "sources" : [
+        "Config+TLS.swift",
+        "Exports.swift",
+        "HTTP2ClientTransport+TransportServices.swift",
+        "HTTP2ServerTransport+TransportServices.swift"
+      ],
+      "target_dependencies" : [
+        "GRPCNIOTransportCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GRPCNIOTransportHTTP2Tests",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCNIOTransportHTTP2Tests",
+      "path" : "Tests/GRPCNIOTransportHTTP2Tests",
+      "product_dependencies" : [
+        "GRPCCore",
+        "X509",
+        "NIOSSL"
+      ],
+      "sources" : [
+        "ControlClient.swift",
+        "ControlMessages.swift",
+        "ControlService.swift",
+        "HTTP2ServerTransport+DebugTests.swift",
+        "HTTP2ServerTransport+RateLimitTests.swift",
+        "HTTP2TransportNIOPosixTests.swift",
+        "HTTP2TransportNIOTransportServicesTests.swift",
+        "HTTP2TransportRegressionTests.swift",
+        "HTTP2TransportTLSEnabledTests.swift",
+        "HTTP2TransportTests.swift",
+        "TLSConfigurationTests.swift",
+        "Test Utilities/CertificateChain.swift",
+        "Test Utilities/HTTP2StatusCodeServer.swift",
+        "Test Utilities/JSONCoding.swift",
+        "Test Utilities/JSONSerializing.swift",
+        "Test Utilities/SelfSignedCertificateKeyPairs.swift",
+        "Test Utilities/Services/HelloWorld/HelloWorld.grpc.swift",
+        "Test Utilities/Services/HelloWorld/HelloWorldService.swift",
+        "Test Utilities/StatsService.swift",
+        "Test Utilities/System.swift",
+        "Test Utilities/ThrowingAsyncSequence.swift",
+        "Test Utilities/TransportKind.swift",
+        "Test Utilities/VsockLoopback.swift",
+        "Test Utilities/XCTest+Utilities.swift",
+        "UnixDomainSocketCredentialsTests.swift",
+        "VirtualSocketPeerContextIDTests.swift",
+        "XCTestCase+Vsock.swift"
+      ],
+      "target_dependencies" : [
+        "GRPCNIOTransportHTTP2"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GRPCNIOTransportHTTP2Posix",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCNIOTransportHTTP2Posix",
+      "path" : "Sources/GRPCNIOTransportHTTP2Posix",
+      "product_dependencies" : [
+        "GRPCCore",
+        "NIOPosix",
+        "NIOSSL",
+        "X509",
+        "SwiftASN1",
+        "NIOCertificateReloading"
+      ],
+      "product_memberships" : [
+        "GRPCNIOTransportHTTP2",
+        "GRPCNIOTransportHTTP2Posix"
+      ],
+      "sources" : [
+        "Channel+UnixDomainSocketCredentials.swift",
+        "Config+TLS.swift",
+        "Exports.swift",
+        "HTTP2ClientTransport+Posix.swift",
+        "HTTP2ServerTransport+Posix.swift",
+        "NIOClientBootstrap+SocketAddress.swift",
+        "NIOSSL+GRPC.swift",
+        "SwallowFcntlFailedErrorHandler.swift",
+        "ValidatedCertificateChain.swift"
+      ],
+      "target_dependencies" : [
+        "GRPCNIOTransportCore"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GRPCNIOTransportHTTP2",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCNIOTransportHTTP2",
+      "path" : "Sources/GRPCNIOTransportHTTP2",
+      "product_memberships" : [
+        "GRPCNIOTransportHTTP2"
+      ],
+      "sources" : [
+        "Exports.swift"
+      ],
+      "target_dependencies" : [
+        "GRPCNIOTransportHTTP2Posix",
+        "GRPCNIOTransportHTTP2TransportServices"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "GRPCNIOTransportCoreTests",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCNIOTransportCoreTests",
+      "path" : "Tests/GRPCNIOTransportCoreTests",
+      "product_dependencies" : [
+        "NIOCore",
+        "NIOEmbedded",
+        "NIOTestUtils"
+      ],
+      "sources" : [
+        "Client/Connection/BackoffTests.swift",
+        "Client/Connection/ClientConnectionHandlerStateMachineTests.swift",
+        "Client/Connection/ClientConnectionHandlerTests.swift",
+        "Client/Connection/Connection+Equatable.swift",
+        "Client/Connection/ConnectionTests.swift",
+        "Client/Connection/GRPCChannelEnqueueRaceTests.swift",
+        "Client/Connection/GRPCChannelTests.swift",
+        "Client/Connection/LoadBalancers/LoadBalancerTest.swift",
+        "Client/Connection/LoadBalancers/PickFirstLoadBalancerTests.swift",
+        "Client/Connection/LoadBalancers/RoundRobinLoadBalancerTests.swift",
+        "Client/Connection/LoadBalancers/SubchannelTests.swift",
+        "Client/Connection/RequestQueueTests.swift",
+        "Client/Connection/Utilities/ConnectionTest.swift",
+        "Client/Connection/Utilities/HTTP2Connectors.swift",
+        "Client/Connection/Utilities/NameResolvers.swift",
+        "Client/Connection/Utilities/TestServer.swift",
+        "Client/GRPCClientStreamHandlerTests.swift",
+        "Client/HTTP2ClientTransportConfigTests.swift",
+        "Client/Resolver/DNSResolverTests.swift",
+        "Client/Resolver/NameResolverRegistryTests.swift",
+        "Client/Resolver/SocketAddressTests.swift",
+        "GRPCMessageDecoderTests.swift",
+        "GRPCMessageDeframerTests.swift",
+        "GRPCMessageFramerTests.swift",
+        "GRPCStreamStateMachineTests.swift",
+        "HTTP2Frame+Helpers.swift",
+        "Internal/FlushCoalescingHandlerTests.swift",
+        "Internal/GRPCStatusMessageMarshallerTests.swift",
+        "Internal/MethodDescriptorIsKnownTests.swift",
+        "Internal/NIOHTTP2HandlerRateLimitsTests.swift",
+        "Internal/NIOSocketAddressConversionTests.swift",
+        "Internal/PercentEncodingTests.swift",
+        "Internal/ProcessUniqueIDTests.swift",
+        "Internal/TimerTests.swift",
+        "OneOrManyQueueTests.swift",
+        "Server/Compression/ZlibTests.swift",
+        "Server/Connection/ServerConnectionManagementHandler+StateMachineTests.swift",
+        "Server/Connection/ServerConnectionManagementHandlerTests.swift",
+        "Server/GRPCServerStreamHandlerTests.swift",
+        "Server/HTTP2ServerTransportConfigTests.swift",
+        "Test Utilities/AtomicCounter.swift",
+        "Test Utilities/MethodDescriptor+Common.swift",
+        "Test Utilities/System.swift",
+        "Test Utilities/Task+Poll.swift",
+        "Test Utilities/XCTest+Utilities.swift"
+      ],
+      "target_dependencies" : [
+        "GRPCNIOTransportCore"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "GRPCNIOTransportCore",
+      "module_type" : "SwiftTarget",
+      "name" : "GRPCNIOTransportCore",
+      "path" : "Sources/GRPCNIOTransportCore",
+      "product_dependencies" : [
+        "GRPCCore",
+        "NIOCore",
+        "NIOHTTP1",
+        "NIOTLS",
+        "NIOHTTP2",
+        "NIOExtras"
+      ],
+      "product_memberships" : [
+        "GRPCNIOTransportHTTP2",
+        "GRPCNIOTransportHTTP2Posix",
+        "GRPCNIOTransportHTTP2TransportServices"
+      ],
+      "sources" : [
+        "Client/Connection/Backoff.swift",
+        "Client/Connection/ClientConnectionHandler.swift",
+        "Client/Connection/Connection.swift",
+        "Client/Connection/ConnectionFactory.swift",
+        "Client/Connection/ConnectivityState.swift",
+        "Client/Connection/GRPCChannel.swift",
+        "Client/Connection/LoadBalancers/LoadBalancer.swift",
+        "Client/Connection/LoadBalancers/LoadBalancerEvent.swift",
+        "Client/Connection/LoadBalancers/PickFirstLoadBalancer.swift",
+        "Client/Connection/LoadBalancers/RoundRobinLoadBalancer.swift",
+        "Client/Connection/LoadBalancers/Subchannel.swift",
+        "Client/Connection/RequestQueue.swift",
+        "Client/GRPCClientStreamHandler.swift",
+        "Client/HTTP2ClientTransport.swift",
+        "Client/Resolver/DNSResolver.swift",
+        "Client/Resolver/NameResolver+DNS.swift",
+        "Client/Resolver/NameResolver+IPv4.swift",
+        "Client/Resolver/NameResolver+IPv6.swift",
+        "Client/Resolver/NameResolver+UDS.swift",
+        "Client/Resolver/NameResolver+VSOCK.swift",
+        "Client/Resolver/NameResolver.swift",
+        "Client/Resolver/NameResolverRegistry.swift",
+        "Client/Resolver/SocketAddress.swift",
+        "Client/WrappedChannel/WrappedChannel+Config.swift",
+        "Client/WrappedChannel/WrappedChannel+State.swift",
+        "Client/WrappedChannel/WrappedChannel.swift",
+        "Compression/CompressionAlgorithm.swift",
+        "Compression/Zlib.swift",
+        "GRPCMessageDecoder.swift",
+        "GRPCMessageFramer.swift",
+        "GRPCNIOTransportBytes.swift",
+        "GRPCStreamStateMachine.swift",
+        "Internal/Base64.swift",
+        "Internal/CallOptions+MethodConfig.swift",
+        "Internal/Channel+AddressInfo.swift",
+        "Internal/ConstantAsyncSequence.swift",
+        "Internal/ContentType.swift",
+        "Internal/DebugOnly.swift",
+        "Internal/DiscardingTaskGroup+CancellableHandle.swift",
+        "Internal/EventLoopFuture+ChannelInitializer.swift",
+        "Internal/FlushCoalescingHandler.swift",
+        "Internal/GRPCStatusMessageMarshaller.swift",
+        "Internal/IPv6ScopeID.swift",
+        "Internal/MethodConfigs.swift",
+        "Internal/MethodDescriptor+IsKnown.swift",
+        "Internal/NIOChannel+WaitForActive.swift",
+        "Internal/NIOChannelPipeline+GRPC.swift",
+        "Internal/NIOHTTP2Handler+RateLimits.swift",
+        "Internal/NIOSocketAddress+GRPCSocketAddress.swift",
+        "Internal/PercentEncoding.swift",
+        "Internal/ProcessUniqueID.swift",
+        "Internal/Result+Catching.swift",
+        "Internal/Timer.swift",
+        "ListeningServerTransport.swift",
+        "OneOrManyQueue.swift",
+        "RateLimit.swift",
+        "Server/Connection/GRPCServerFlushNotificationHandler.swift",
+        "Server/Connection/ServerConnection.swift",
+        "Server/Connection/ServerConnectionManagementHandler+StateMachine.swift",
+        "Server/Connection/ServerConnectionManagementHandler.swift",
+        "Server/ConnectionConfigurator.swift",
+        "Server/CustomTransport.swift",
+        "Server/GRPCServerStreamHandler.swift",
+        "Server/HTTP2ServerTransport.swift",
+        "Server/ListenerConfigurator.swift",
+        "Server/ListenerFactory.swift",
+        "TLSConfig+Internal.swift",
+        "TLSConfig.swift",
+        "UnixDomainSocketCredentials.swift"
+      ],
+      "target_dependencies" : [
+        "CGRPCNIOTransportZlib"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CGRPCNIOTransportZlib",
+      "module_type" : "ClangTarget",
+      "name" : "CGRPCNIOTransportZlib",
+      "path" : "Sources/CGRPCNIOTransportZlib",
+      "product_memberships" : [
+        "GRPCNIOTransportHTTP2",
+        "GRPCNIOTransportHTTP2Posix",
+        "GRPCNIOTransportHTTP2TransportServices"
+      ],
+      "sources" : [
+        "empty.c"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.1"
+}

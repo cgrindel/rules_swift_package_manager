@@ -1,0 +1,120 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-numerics",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-numerics.git"
+    }
+  ],
+  "manifest_display_name" : "swift-algorithms",
+  "name" : "swift-algorithms",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Algorithms",
+      "targets" : [
+        "Algorithms"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "SwiftAlgorithmsTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SwiftAlgorithmsTests",
+      "path" : "Tests/SwiftAlgorithmsTests",
+      "sources" : [
+        "AdjacentPairsTests.swift",
+        "ChainTests.swift",
+        "ChunkedTests.swift",
+        "CombinationsTests.swift",
+        "CompactedTests.swift",
+        "CycleTests.swift",
+        "FirstNonNilTests.swift",
+        "GroupedTests.swift",
+        "IndexedTests.swift",
+        "IntersperseTests.swift",
+        "JoinedTests.swift",
+        "KeyedTests.swift",
+        "MinMaxTests.swift",
+        "PartitionTests.swift",
+        "PermutationsTests.swift",
+        "ProductTests.swift",
+        "RandomSampleTests.swift",
+        "ReductionsTests.swift",
+        "RotateTests.swift",
+        "SplitTests.swift",
+        "StrideTests.swift",
+        "SuffixTests.swift",
+        "TestUtilities.swift",
+        "TrimTests.swift",
+        "UniquePermutationsTests.swift",
+        "UniqueTests.swift",
+        "WindowsTests.swift"
+      ],
+      "target_dependencies" : [
+        "Algorithms"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "Algorithms",
+      "module_type" : "SwiftTarget",
+      "name" : "Algorithms",
+      "path" : "Sources/Algorithms",
+      "product_dependencies" : [
+        "RealModule"
+      ],
+      "product_memberships" : [
+        "Algorithms"
+      ],
+      "sources" : [
+        "AdjacentPairs.swift",
+        "Chain.swift",
+        "Chunked.swift",
+        "Combinations.swift",
+        "Compacted.swift",
+        "Cycle.swift",
+        "EitherSequence.swift",
+        "FirstNonNil.swift",
+        "FlattenCollection.swift",
+        "Grouped.swift",
+        "Indexed.swift",
+        "Intersperse.swift",
+        "Joined.swift",
+        "Keyed.swift",
+        "MinMax.swift",
+        "Partition.swift",
+        "Permutations.swift",
+        "Product.swift",
+        "RandomSample.swift",
+        "Reductions.swift",
+        "Rotate.swift",
+        "Split.swift",
+        "Stride.swift",
+        "Suffix.swift",
+        "Trim.swift",
+        "Unique.swift",
+        "Windows.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.7"
+}

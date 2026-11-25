@@ -1,8 +1,24 @@
 swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
 swift_deps.from_package(
     config = "@rules_swift_package_manager//config:linux",
-    desc_manifests = {},
-    dump_manifests = {},
+    desc_manifests = {
+        "_main": "//swift_deps/linux:swift_deps_cache/_main/desc.json",
+        "my_local_package": "//swift_deps/linux:swift_deps_cache/my_local_package/desc.json",
+        "myamazingmodule": "//swift_deps/linux:swift_deps_cache/myamazingmodule/desc.json",
+        "notthatamazingmodule": "//swift_deps/linux:swift_deps_cache/notthatamazingmodule/desc.json",
+        "swift-argument-parser": "//swift_deps/linux:swift_deps_cache/swift-argument-parser/desc.json",
+        "swift-log": "//swift_deps/linux:swift_deps_cache/swift-log/desc.json",
+        "swiftformat": "//swift_deps/linux:swift_deps_cache/swiftformat/desc.json",
+    },
+    dump_manifests = {
+        "_main": "//swift_deps/linux:swift_deps_cache/_main/dump.json",
+        "my_local_package": "//swift_deps/linux:swift_deps_cache/my_local_package/dump.json",
+        "myamazingmodule": "//swift_deps/linux:swift_deps_cache/myamazingmodule/dump.json",
+        "notthatamazingmodule": "//swift_deps/linux:swift_deps_cache/notthatamazingmodule/dump.json",
+        "swift-argument-parser": "//swift_deps/linux:swift_deps_cache/swift-argument-parser/dump.json",
+        "swift-log": "//swift_deps/linux:swift_deps_cache/swift-log/dump.json",
+        "swiftformat": "//swift_deps/linux:swift_deps_cache/swiftformat/dump.json",
+    },
     resolved = "//swift_deps/linux:Package.resolved",
     swift = "//:Package.swift",
 )

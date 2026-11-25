@@ -1,0 +1,87 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.5.3",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log.git"
+    }
+  ],
+  "manifest_display_name" : "routing-kit",
+  "name" : "routing-kit",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "RoutingKit",
+      "targets" : [
+        "RoutingKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "RoutingKitTests",
+      "module_type" : "SwiftTarget",
+      "name" : "RoutingKitTests",
+      "path" : "Tests/RoutingKitTests",
+      "sources" : [
+        "RouterTests.swift"
+      ],
+      "target_dependencies" : [
+        "RoutingKit"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "RoutingKit",
+      "module_type" : "SwiftTarget",
+      "name" : "RoutingKit",
+      "path" : "Sources/RoutingKit",
+      "product_dependencies" : [
+        "Logging"
+      ],
+      "product_memberships" : [
+        "RoutingKit"
+      ],
+      "sources" : [
+        "AnyRouter.swift",
+        "Parameters.swift",
+        "PathComponent.swift",
+        "Router.swift",
+        "TrieRouter.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.10"
+}

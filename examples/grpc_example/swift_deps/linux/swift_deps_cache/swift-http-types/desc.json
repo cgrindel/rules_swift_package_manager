@@ -1,0 +1,110 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "swift-http-types",
+  "name" : "swift-http-types",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "HTTPTypes",
+      "targets" : [
+        "HTTPTypes"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "HTTPTypesFoundation",
+      "targets" : [
+        "HTTPTypesFoundation"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "HTTPTypesTests",
+      "module_type" : "SwiftTarget",
+      "name" : "HTTPTypesTests",
+      "path" : "Tests/HTTPTypesTests",
+      "sources" : [
+        "HTTPFieldNameTests.swift",
+        "HTTPFieldValueTests.swift",
+        "HTTPTypesTests.swift",
+        "HTTPTypesURLTests.swift"
+      ],
+      "target_dependencies" : [
+        "HTTPTypes"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "HTTPTypesFoundationTests",
+      "module_type" : "SwiftTarget",
+      "name" : "HTTPTypesFoundationTests",
+      "path" : "Tests/HTTPTypesFoundationTests",
+      "sources" : [
+        "HTTPTypesFoundationTests.swift"
+      ],
+      "target_dependencies" : [
+        "HTTPTypesFoundation"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "HTTPTypesFoundation",
+      "module_type" : "SwiftTarget",
+      "name" : "HTTPTypesFoundation",
+      "path" : "Sources/HTTPTypesFoundation",
+      "product_memberships" : [
+        "HTTPTypesFoundation"
+      ],
+      "sources" : [
+        "HTTPTypes+ISOLatin1.swift",
+        "HTTPTypesFoundation.swift",
+        "URLRequest+HTTPTypes.swift",
+        "URLResponse+HTTPTypes.swift",
+        "URLSession+HTTPTypes.swift"
+      ],
+      "target_dependencies" : [
+        "HTTPTypes"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "HTTPTypes",
+      "module_type" : "SwiftTarget",
+      "name" : "HTTPTypes",
+      "path" : "Sources/HTTPTypes",
+      "product_memberships" : [
+        "HTTPTypes",
+        "HTTPTypesFoundation"
+      ],
+      "sources" : [
+        "HTTP2ErrorCode.swift",
+        "HTTP3ErrorCode.swift",
+        "HTTPField.swift",
+        "HTTPFieldName.swift",
+        "HTTPFieldValue.swift",
+        "HTTPFields.swift",
+        "HTTPParsedFields.swift",
+        "HTTPRequest+URL.swift",
+        "HTTPRequest.swift",
+        "HTTPResponse.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.1"
+}

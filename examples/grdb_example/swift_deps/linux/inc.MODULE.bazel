@@ -1,8 +1,14 @@
 swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
 swift_deps.from_package(
     config = "@rules_swift_package_manager//config:linux",
-    desc_manifests = {},
-    dump_manifests = {},
+    desc_manifests = {
+        "_main": "//swift_deps/linux:swift_deps_cache/_main/desc.json",
+        "grdb.swift": "//swift_deps/linux:swift_deps_cache/grdb.swift/desc.json",
+    },
+    dump_manifests = {
+        "_main": "//swift_deps/linux:swift_deps_cache/_main/dump.json",
+        "grdb.swift": "//swift_deps/linux:swift_deps_cache/grdb.swift/dump.json",
+    },
     resolved = "//swift_deps/linux:Package.resolved",
     swift = "//:Package.swift",
 )

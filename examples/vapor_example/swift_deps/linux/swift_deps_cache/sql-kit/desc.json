@@ -1,0 +1,269 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-collections",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.1.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-collections.git"
+    },
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.5.4",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log.git"
+    },
+    {
+      "identity" : "swift-nio",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.84.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-nio.git"
+    }
+  ],
+  "manifest_display_name" : "sql-kit",
+  "name" : "sql-kit",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "6.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "13.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "SQLKit",
+      "targets" : [
+        "SQLKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SQLKitBenchmark",
+      "targets" : [
+        "SQLKitBenchmark"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "SQLKitTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SQLKitTests",
+      "path" : "Tests/SQLKitTests",
+      "product_dependencies" : [
+        "NIOCore",
+        "NIOEmbedded"
+      ],
+      "sources" : [
+        "AsyncTests.swift",
+        "BaseTests.swift",
+        "BasicQueryTests.swift",
+        "DeprecatedTests.swift",
+        "SQLBetweenTests.swift",
+        "SQLCodingTests.swift",
+        "SQLCommonTableExpressionTests.swift",
+        "SQLCreateDropTriggerTests.swift",
+        "SQLCreateTableTests.swift",
+        "SQLDialectFeatureTests.swift",
+        "SQLExpressionTests.swift",
+        "SQLInsertUpsertTests.swift",
+        "SQLQueryEncoderTests.swift",
+        "SQLQueryStringTests.swift",
+        "SQLRowDecoderTests.swift",
+        "SQLUnionTests.swift",
+        "TestMocks.swift",
+        "Utilities.swift"
+      ],
+      "target_dependencies" : [
+        "SQLKit",
+        "SQLKitBenchmark"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SQLKitBenchmark",
+      "module_type" : "SwiftTarget",
+      "name" : "SQLKitBenchmark",
+      "path" : "Sources/SQLKitBenchmark",
+      "product_memberships" : [
+        "SQLKitBenchmark"
+      ],
+      "sources" : [
+        "SQLBenchmark+Codable.swift",
+        "SQLBenchmark+Enum.swift",
+        "SQLBenchmark+JSONPaths.swift",
+        "SQLBenchmark+Planets.swift",
+        "SQLBenchmark+Union.swift",
+        "SQLBenchmark+Upsert.swift",
+        "SQLBenchmarker.swift"
+      ],
+      "target_dependencies" : [
+        "SQLKit"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "SQLKit",
+      "module_type" : "SwiftTarget",
+      "name" : "SQLKit",
+      "path" : "Sources/SQLKit",
+      "product_dependencies" : [
+        "Collections",
+        "Logging",
+        "NIOCore"
+      ],
+      "product_memberships" : [
+        "SQLKit",
+        "SQLKitBenchmark"
+      ],
+      "sources" : [
+        "Builders/Implementations/SQLAlterEnumBuilder.swift",
+        "Builders/Implementations/SQLAlterTableBuilder.swift",
+        "Builders/Implementations/SQLConflictUpdateBuilder.swift",
+        "Builders/Implementations/SQLCreateEnumBuilder.swift",
+        "Builders/Implementations/SQLCreateIndexBuilder.swift",
+        "Builders/Implementations/SQLCreateTableBuilder.swift",
+        "Builders/Implementations/SQLCreateTriggerBuilder.swift",
+        "Builders/Implementations/SQLDeleteBuilder.swift",
+        "Builders/Implementations/SQLDropEnumBuilder.swift",
+        "Builders/Implementations/SQLDropIndexBuilder.swift",
+        "Builders/Implementations/SQLDropTableBuilder.swift",
+        "Builders/Implementations/SQLDropTriggerBuilder.swift",
+        "Builders/Implementations/SQLInsertBuilder.swift",
+        "Builders/Implementations/SQLPredicateGroupBuilder.swift",
+        "Builders/Implementations/SQLRawBuilder.swift",
+        "Builders/Implementations/SQLSecondaryPredicateGroupBuilder.swift",
+        "Builders/Implementations/SQLSelectBuilder.swift",
+        "Builders/Implementations/SQLSubqueryBuilder.swift",
+        "Builders/Implementations/SQLUnionBuilder.swift",
+        "Builders/Implementations/SQLUpdateBuilder.swift",
+        "Builders/Prototypes/SQLAliasedColumnListBuilder.swift",
+        "Builders/Prototypes/SQLColumnUpdateBuilder.swift",
+        "Builders/Prototypes/SQLCommonTableExpressionBuilder.swift",
+        "Builders/Prototypes/SQLCommonUnionBuilder.swift",
+        "Builders/Prototypes/SQLJoinBuilder.swift",
+        "Builders/Prototypes/SQLPartialResultBuilder.swift",
+        "Builders/Prototypes/SQLPredicateBuilder.swift",
+        "Builders/Prototypes/SQLQueryBuilder.swift",
+        "Builders/Prototypes/SQLQueryFetcher.swift",
+        "Builders/Prototypes/SQLReturningBuilder.swift",
+        "Builders/Prototypes/SQLSecondaryPredicateBuilder.swift",
+        "Builders/Prototypes/SQLSubqueryClauseBuilder.swift",
+        "Builders/Prototypes/SQLUnqualifiedColumnListBuilder.swift",
+        "Database/SQLDatabase.swift",
+        "Database/SQLDatabaseReportedVersion.swift",
+        "Database/SQLDialect.swift",
+        "Deprecated/SQLDatabase+Deprecated.swift",
+        "Deprecated/SQLError.swift",
+        "Deprecated/SQLExpressions+Deprecated.swift",
+        "Deprecated/SQLQueryBuilders+Deprecated.swift",
+        "Exports.swift",
+        "Expressions/Basics/SQLAlias.swift",
+        "Expressions/Basics/SQLBetween.swift",
+        "Expressions/Basics/SQLColumn.swift",
+        "Expressions/Basics/SQLConstraint.swift",
+        "Expressions/Basics/SQLDataType.swift",
+        "Expressions/Basics/SQLDirection.swift",
+        "Expressions/Basics/SQLDistinct.swift",
+        "Expressions/Basics/SQLForeignKeyAction.swift",
+        "Expressions/Basics/SQLNestedSubpathExpression.swift",
+        "Expressions/Basics/SQLQualifiedTable.swift",
+        "Expressions/Basics/SQLQueryString.swift",
+        "Expressions/Clauses/SQLAlterColumnDefinitionType.swift",
+        "Expressions/Clauses/SQLColumnAssignment.swift",
+        "Expressions/Clauses/SQLColumnConstraintAlgorithm.swift",
+        "Expressions/Clauses/SQLColumnDefinition.swift",
+        "Expressions/Clauses/SQLCommonTableExpression.swift",
+        "Expressions/Clauses/SQLConflictAction.swift",
+        "Expressions/Clauses/SQLConflictResolutionStrategy.swift",
+        "Expressions/Clauses/SQLDropBehaviour.swift",
+        "Expressions/Clauses/SQLEnumDataType.swift",
+        "Expressions/Clauses/SQLExcludedColumn.swift",
+        "Expressions/Clauses/SQLForeignKey.swift",
+        "Expressions/Clauses/SQLJoin.swift",
+        "Expressions/Clauses/SQLJoinMethod.swift",
+        "Expressions/Clauses/SQLLockingClause.swift",
+        "Expressions/Clauses/SQLOrderBy.swift",
+        "Expressions/Clauses/SQLReturning.swift",
+        "Expressions/Clauses/SQLSubquery.swift",
+        "Expressions/Clauses/SQLTableConstraintAlgorithm.swift",
+        "Expressions/Queries/SQLAlterEnum.swift",
+        "Expressions/Queries/SQLAlterTable.swift",
+        "Expressions/Queries/SQLCreateEnum.swift",
+        "Expressions/Queries/SQLCreateIndex.swift",
+        "Expressions/Queries/SQLCreateTable.swift",
+        "Expressions/Queries/SQLCreateTrigger.swift",
+        "Expressions/Queries/SQLDelete.swift",
+        "Expressions/Queries/SQLDropEnum.swift",
+        "Expressions/Queries/SQLDropIndex.swift",
+        "Expressions/Queries/SQLDropTable.swift",
+        "Expressions/Queries/SQLDropTrigger.swift",
+        "Expressions/Queries/SQLInsert.swift",
+        "Expressions/Queries/SQLSelect.swift",
+        "Expressions/Queries/SQLUnion.swift",
+        "Expressions/Queries/SQLUpdate.swift",
+        "Expressions/SQLExpression.swift",
+        "Expressions/SQLSerializer.swift",
+        "Expressions/SQLStatement.swift",
+        "Expressions/Syntax/SQLBinaryExpression.swift",
+        "Expressions/Syntax/SQLBinaryOperator.swift",
+        "Expressions/Syntax/SQLBind.swift",
+        "Expressions/Syntax/SQLFunction.swift",
+        "Expressions/Syntax/SQLGroupExpression.swift",
+        "Expressions/Syntax/SQLIdentifier.swift",
+        "Expressions/Syntax/SQLList.swift",
+        "Expressions/Syntax/SQLLiteral.swift",
+        "Expressions/Syntax/SQLRaw.swift",
+        "Rows/SQLCodingUtilities.swift",
+        "Rows/SQLQueryEncoder.swift",
+        "Rows/SQLRow.swift",
+        "Rows/SQLRowDecoder.swift",
+        "Utilities/SomeCodingKey.swift",
+        "Utilities/StringHandling.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.1"
+}
