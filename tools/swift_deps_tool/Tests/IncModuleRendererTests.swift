@@ -192,9 +192,87 @@ final class IncModuleRendererTests: XCTestCase {
     }
   }
 
+  private func assertCommentFails(_ incModule: URL, line: Int) {
+    XCTAssertThrowsError(try IncModuleFile.extraAttributes(at: incModule)) { error in
+      XCTAssertEqual(
+        (error as? ToolError)?.message,
+        "cannot parse \(incModule.path) line \(line): comments are not supported in "
+          + "inc.MODULE.bazel; put them in MODULE.bazel")
+    }
+  }
+
   func testCommentLineFails() throws {
-    let incModule = try writeIncModule("    # keep me\n")
-    XCTAssertThrowsError(try IncModuleFile.extraAttributes(at: incModule))
+    assertCommentFails(try writeIncModule("    # keep me\n"), line: 8)
+  }
+
+  func testTrailingCommentFails() throws {
+    assertCommentFails(try writeIncModule("    netrc = \"//:.netrc\",  # keep me\n"), line: 8)
+  }
+
+  func testCommentInsideMultilineValueFails() throws {
+    assertCommentFails(
+      try writeIncModule("    registries = [\n        # keep me\n        \"a\",\n    ],\n"),
+      line: 9)
+  }
+
+  private func writeRaw(_ text: String) throws -> URL {
+    let incModule = try tempDir().appendingPathComponent("inc.MODULE.bazel")
+    try Data(text.utf8).write(to: incModule)
+    return incModule
+  }
+
+  private let tag = """
+    swift_deps.from_package(
+        config = "@platforms//os:macos",
+        resolved = "//swift/macos:Package.resolved",
+        swift = "//swift:Package.swift",
+    )
+
+    """
+
+  private func assertStrayContentFails(_ incModule: URL, line: Int) {
+    XCTAssertThrowsError(
+      try IncModuleFile.labels(
+        at: incModule, config: "c", swiftLabel: "s", slicePackage: "//p")
+    ) { error in
+      let message = (error as? ToolError)?.message ?? "\(error)"
+      XCTAssertTrue(
+        message.hasPrefix(
+          "cannot parse \(incModule.path) line \(line): unexpected content outside the "
+            + "`swift_deps.from_package(` tag; the tool owns this file"),
+        message)
+      XCTAssertTrue(message.hasSuffix("Put other tags and statements in the root MODULE.bazel"))
+    }
+  }
+
+  func testCommentOutsideTheTagFails() throws {
+    assertCommentFails(
+      try writeRaw("# keep me\n" + IncModuleFile.useExtensionLine + "\n" + tag), line: 1)
+  }
+
+  func testOtherTagAfterTheCallFails() throws {
+    assertStrayContentFails(
+      try writeRaw(
+        IncModuleFile.useExtensionLine + "\n" + tag
+          + "swift_deps.configure_package(\n    name = \"swift-log\",\n)\n"),
+      line: 7)
+  }
+
+  func testSecondFromPackageTagFails() throws {
+    assertStrayContentFails(
+      try writeRaw(IncModuleFile.useExtensionLine + "\n" + tag + tag), line: 7)
+  }
+
+  func testDifferentUseExtensionLineFails() throws {
+    assertStrayContentFails(
+      try writeRaw(
+        #"swift_deps = use_extension("//:extensions.bzl", "swift_deps")"# + "\n" + tag),
+      line: 1)
+  }
+
+  func testFileWithOnlyTheToolsLinesParses() throws {
+    let incModule = try writeRaw("\n" + IncModuleFile.useExtensionLine + "\n\n" + tag + "\n")
+    XCTAssertEqual(try IncModuleFile.extraAttributes(at: incModule), [])
   }
 
   func testMissingCommaFails() throws {

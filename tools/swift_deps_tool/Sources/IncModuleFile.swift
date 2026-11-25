@@ -51,6 +51,10 @@ public enum IncModuleFile {
 
   private static let callStart = "swift_deps.from_package("
 
+  /// The first line of every file, as `init` and the tool write it.
+  public static let useExtensionLine =
+    #"swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")"#
+
   private static let resolvedSuffix = ":Package.resolved"
 
   /// The `config`, `swift` and `resolved` values in the file at `url`, or `nil` when the file
@@ -102,10 +106,12 @@ public enum IncModuleFile {
 
   /// Every keyword argument of the `swift_deps.from_package(` call in `text`, in order.
   ///
-  /// The tool and `init` write the file, so the format is known: the call opens on its own line,
-  /// each argument starts a line as `<name> = <value>,`, and a line holding only `)` closes the
-  /// call. A value may span lines while it has open brackets (e.g. a `dict`). Blank lines are
-  /// skipped. Anything else, such as a comment, is an error naming `path`.
+  /// The tool owns the file and rewrites it, so it accepts only what it can write back: the
+  /// `swift_deps = use_extension(...)` line, the call opening on its own line, each argument
+  /// starting a line as `<name> = <value>,`, and a line holding only `)` that closes the call. A
+  /// value may span lines while it has open brackets (e.g. a `dict`). Blank lines are skipped.
+  /// Anything else, such as a comment or another tag, is an error naming `path` and the line,
+  /// rather than being dropped on the next rewrite.
   public static func attributes(in text: String, path: String) throws -> [Attribute] {
     func fail(_ line: Int, _ why: String) -> ToolError {
       ToolError(
@@ -113,25 +119,58 @@ public enum IncModuleFile {
           + "write each `from_package` attribute as `<name> = <value>,`")
     }
     let lines = text.components(separatedBy: "\n")
-    guard
-      let start = lines.firstIndex(where: {
-        $0.trimmingCharacters(in: .whitespaces) == callStart
-      })
-    else {
+    var result: [Attribute]?
+    var sawUseExtension = false
+    var index = 0
+    while index < lines.count {
+      let trimmed = lines[index].trimmingCharacters(in: .whitespaces)
+      let lineNumber = index + 1
+      if trimmed.isEmpty {
+        index += 1
+        continue
+      }
+      if trimmed.hasPrefix("#") { throw commentError(path, lineNumber) }
+      if trimmed == useExtensionLine, !sawUseExtension {
+        sawUseExtension = true
+        index += 1
+        continue
+      }
+      if trimmed == callStart, result == nil {
+        let (attributes, end) = try callAttributes(
+          lines: lines, start: index, path: path, fail: fail)
+        result = attributes
+        index = end + 1
+        continue
+      }
+      throw ToolError(
+        message: "cannot parse \(path) line \(lineNumber): unexpected content outside the "
+          + "`\(callStart)` tag; the tool owns this file and rewrites it, so it holds only the "
+          + "`use_extension` line and one `from_package` tag. Put other tags and statements in "
+          + "the root MODULE.bazel")
+    }
+    guard let result else {
       throw ToolError(message: "cannot parse \(path): no `\(callStart)` line")
     }
+    return result
+  }
+
+  /// The arguments of the call that opens at `lines[start]`, and the index of its `)` line.
+  private static func callAttributes(
+    lines: [String], start: Int, path: String, fail: (Int, String) -> ToolError
+  ) throws -> ([Attribute], Int) {
     var result: [Attribute] = []
     var seen: Set<String> = []
     var index = start + 1
     while index < lines.count {
       let line = lines[index]
       let trimmed = line.trimmingCharacters(in: .whitespaces)
-      if trimmed == ")" { return result }
+      if trimmed == ")" { return (result, index) }
       if trimmed.isEmpty {
         index += 1
         continue
       }
       let lineNumber = index + 1
+      if trimmed.hasPrefix("#") { throw commentError(path, lineNumber) }
       guard let eq = trimmed.range(of: " = ") else {
         throw fail(lineNumber, "expected `<name> = <value>,`")
       }
@@ -143,14 +182,14 @@ public enum IncModuleFile {
         throw fail(lineNumber, "`\(name)` is set twice")
       }
       var value = String(trimmed[eq.upperBound...])
-      var depth = try bracketDepth(value, line: lineNumber, fail: fail)
+      var depth = try bracketDepth(value, line: lineNumber, path: path, fail: fail)
       while depth > 0 {
         index += 1
         guard index < lines.count else {
           throw fail(lineNumber, "`\(name)` has an unclosed bracket")
         }
         value += "\n" + lines[index]
-        depth += try bracketDepth(lines[index], line: index + 1, fail: fail)
+        depth += try bracketDepth(lines[index], line: index + 1, path: path, fail: fail)
       }
       guard depth == 0, value.hasSuffix(",") else {
         throw fail(lineNumber, "`\(name)` does not end with `,`")
@@ -161,9 +200,16 @@ public enum IncModuleFile {
     throw ToolError(message: "cannot parse \(path): the `\(callStart)` call is not closed")
   }
 
+  /// The tool rewrites the file with its arguments sorted, so it has nowhere to keep a comment.
+  private static func commentError(_ path: String, _ line: Int) -> ToolError {
+    ToolError(
+      message: "cannot parse \(path) line \(line): comments are not supported in "
+        + "inc.MODULE.bazel; put them in MODULE.bazel")
+  }
+
   /// Open minus closed brackets in `line`, ignoring those inside strings.
   private static func bracketDepth(
-    _ line: String, line lineNumber: Int, fail: (Int, String) -> ToolError
+    _ line: String, line lineNumber: Int, path: String, fail: (Int, String) -> ToolError
   ) throws -> Int {
     var depth = 0
     var inString = false
@@ -181,7 +227,7 @@ public enum IncModuleFile {
       }
       switch char {
       case "\"": inString = true
-      case "#": throw fail(lineNumber, "comments are not supported")
+      case "#": throw commentError(path, lineNumber)
       case "(", "[", "{": depth += 1
       case ")", "]", "}": depth -= 1
       default: break

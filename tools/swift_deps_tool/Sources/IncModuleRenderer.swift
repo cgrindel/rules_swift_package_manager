@@ -25,11 +25,7 @@ public enum IncModuleRenderer {
     arguments += extraAttributes.map { ($0.name, "    \($0.name) = \($0.value),\n") }
     // Names are unique (`IncModuleFile` rejects duplicates), so this order is total.
     arguments.sort { $0.name < $1.name }
-    return """
-      swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
-      swift_deps.from_package(
-
-      """
+    return IncModuleFile.useExtensionLine + "\nswift_deps.from_package(\n"
       + arguments.map(\.text).joined()
       + ")\n"
   }

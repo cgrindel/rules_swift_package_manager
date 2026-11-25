@@ -40,6 +40,11 @@ layout.
   slices must agree on `netrc` and `registries`. Add them to the slice's `inc.MODULE.bazel`. The
   tool owns only `desc_manifests` and `dump_manifests`, so `cache`, `resolve` and `update` keep any
   other attribute you add to the tag.
+- `inc.MODULE.bazel` belongs to the tool, which rewrites it on every `cache`, `resolve` and
+  `update`. It holds exactly one `use_extension` line and one `from_package` tag, with one
+  `<name> = <value>,` attribute per line. You may add attributes to the tag, but not comments or
+  other tags; the tool fails on them, naming the line. Put comments and other tags, such as
+  `configure_package`, in `MODULE.bazel`.
 - `patch_cmds` cannot change a manifest. Use `patches` for manifest changes.
 - `swift` must come from a rules_swift toolchain: Xcode on macOS, a hermetic or `PATH` toolchain on
   Linux. You need a rules_swift that has `swift_toolchain_tool` (bazelbuild/rules_swift#2034); until
