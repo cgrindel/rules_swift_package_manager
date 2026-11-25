@@ -34,3 +34,5 @@ examples/grdb_example/swift_deps/apple/.build
 examples/grdb_example/swift_deps/linux/.build
 examples/grpc_example/swift_deps/apple/.build
 examples/grpc_example/swift_deps/linux/.build
+examples/module_aliases_example/swift_deps/apple/.build
+examples/module_aliases_example/swift_deps/linux/.build

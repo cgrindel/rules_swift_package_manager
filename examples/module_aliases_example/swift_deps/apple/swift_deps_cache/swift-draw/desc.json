@@ -1,0 +1,40 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "swift-draw",
+  "name" : "swift-draw",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Utils",
+      "targets" : [
+        "Utils"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "Utils",
+      "module_type" : "SwiftTarget",
+      "name" : "Utils",
+      "path" : "Sources/Utils",
+      "product_memberships" : [
+        "Utils"
+      ],
+      "sources" : [
+        "DrawGreeting.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.7"
+}

@@ -1,0 +1,55 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.17.2",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log"
+    }
+  ],
+  "manifest_display_name" : "swift-game",
+  "name" : "swift-game",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Utils",
+      "targets" : [
+        "Utils"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "Utils",
+      "module_type" : "SwiftTarget",
+      "name" : "Utils",
+      "path" : "Sources/Utils",
+      "product_dependencies" : [
+        "Logging"
+      ],
+      "product_memberships" : [
+        "Utils"
+      ],
+      "sources" : [
+        "GameGreeting.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.7"
+}
