@@ -1,0 +1,125 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "SnapKit",
+  "name" : "SnapKit",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "14.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "14.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "SnapKit",
+      "targets" : [
+        "SnapKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SnapKit-Dynamic",
+      "targets" : [
+        "SnapKit"
+      ],
+      "type" : {
+        "library" : [
+          "dynamic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "c99name" : "SnapKitTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SnapKitTests",
+      "path" : "Tests/SnapKitTests",
+      "sources" : [
+        "Tests.swift"
+      ],
+      "target_dependencies" : [
+        "SnapKit"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SnapKit",
+      "module_type" : "SwiftTarget",
+      "name" : "SnapKit",
+      "path" : "Sources",
+      "product_memberships" : [
+        "SnapKit",
+        "SnapKit-Dynamic"
+      ],
+      "resources" : [
+        {
+          "path" : "./Sources/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Constraint.swift",
+        "ConstraintAttributes.swift",
+        "ConstraintConfig.swift",
+        "ConstraintConstantTarget.swift",
+        "ConstraintDSL.swift",
+        "ConstraintDescription.swift",
+        "ConstraintDirectionalInsetTarget.swift",
+        "ConstraintDirectionalInsets.swift",
+        "ConstraintInsetTarget.swift",
+        "ConstraintInsets.swift",
+        "ConstraintItem.swift",
+        "ConstraintLayoutGuide+Extensions.swift",
+        "ConstraintLayoutGuide.swift",
+        "ConstraintLayoutGuideDSL.swift",
+        "ConstraintLayoutSupport.swift",
+        "ConstraintLayoutSupportDSL.swift",
+        "ConstraintMaker.swift",
+        "ConstraintMakerEditable.swift",
+        "ConstraintMakerExtendable.swift",
+        "ConstraintMakerFinalizable.swift",
+        "ConstraintMakerPrioritizable.swift",
+        "ConstraintMakerRelatable+Extensions.swift",
+        "ConstraintMakerRelatable.swift",
+        "ConstraintMultiplierTarget.swift",
+        "ConstraintOffsetTarget.swift",
+        "ConstraintPriority.swift",
+        "ConstraintPriorityTarget.swift",
+        "ConstraintRelatableTarget.swift",
+        "ConstraintRelation.swift",
+        "ConstraintView+Extensions.swift",
+        "ConstraintView.swift",
+        "ConstraintViewDSL.swift",
+        "Debugging.swift",
+        "LayoutConstraint.swift",
+        "LayoutConstraintItem.swift",
+        "Typealiases.swift",
+        "UILayoutSupport+Extensions.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}

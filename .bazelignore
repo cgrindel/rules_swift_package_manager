@@ -23,3 +23,4 @@ examples/soto_example/swift_deps/any/.build
 examples/resources_example/swift_deps/any/.build
 examples/shake_ios_example/swift_deps/any/.build
 examples/skip_local_transitive_dependencies_example/swift_deps/any/.build
+examples/snapkit_example/swift_deps/any/.build
