@@ -1,0 +1,27 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "yoga",
+      "requirement" : {
+        "revision" : [
+          "db7fc6d82c76c190acca541d4f33d076f23228e7"
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/react/yoga"
+    }
+  ],
+  "manifest_display_name" : "yoga_example",
+  "name" : "yoga_example",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "targets" : [
+
+  ],
+  "tools_version" : "5.7"
+}
