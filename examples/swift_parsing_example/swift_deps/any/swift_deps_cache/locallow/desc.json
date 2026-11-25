@@ -1,0 +1,54 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "localhigh",
+      "path" : "../LocalHigh",
+      "type" : "fileSystem"
+    }
+  ],
+  "manifest_display_name" : "LocalLow",
+  "name" : "LocalLow",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "10.15"
+    },
+    {
+      "name" : "ios",
+      "version" : "13.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "LocalLow",
+      "targets" : [
+        "LocalLow"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "LocalLow",
+      "module_type" : "SwiftTarget",
+      "name" : "LocalLow",
+      "path" : "Sources/LocalLow",
+      "product_dependencies" : [
+        "LocalHigh"
+      ],
+      "product_memberships" : [
+        "LocalLow"
+      ],
+      "sources" : [
+        "LocalLow.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.9"
+}

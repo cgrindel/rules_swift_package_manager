@@ -1,0 +1,24 @@
+swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
+swift_deps.from_package(
+    config = "@rules_swift_package_manager//config:any",
+    desc_manifests = {
+        "_main": "//swift_deps/any:swift_deps_cache/_main/desc.json",
+        "localhigh": "//swift_deps/any:swift_deps_cache/localhigh/desc.json",
+        "locallow": "//swift_deps/any:swift_deps_cache/locallow/desc.json",
+        "swift-case-paths": "//swift_deps/any:swift_deps_cache/swift-case-paths/desc.json",
+        "swift-issue-reporting": "//swift_deps/any:swift_deps_cache/swift-issue-reporting/desc.json",
+        "swift-parsing": "//swift_deps/any:swift_deps_cache/swift-parsing/desc.json",
+        "swift-syntax": "//swift_deps/any:swift_deps_cache/swift-syntax/desc.json",
+    },
+    dump_manifests = {
+        "_main": "//swift_deps/any:swift_deps_cache/_main/dump.json",
+        "localhigh": "//swift_deps/any:swift_deps_cache/localhigh/dump.json",
+        "locallow": "//swift_deps/any:swift_deps_cache/locallow/dump.json",
+        "swift-case-paths": "//swift_deps/any:swift_deps_cache/swift-case-paths/dump.json",
+        "swift-issue-reporting": "//swift_deps/any:swift_deps_cache/swift-issue-reporting/dump.json",
+        "swift-parsing": "//swift_deps/any:swift_deps_cache/swift-parsing/dump.json",
+        "swift-syntax": "//swift_deps/any:swift_deps_cache/swift-syntax/dump.json",
+    },
+    resolved = "//swift_deps/any:Package.resolved",
+    swift = "//:Package.swift",
+)

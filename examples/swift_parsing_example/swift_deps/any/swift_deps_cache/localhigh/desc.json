@@ -1,0 +1,47 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "LocalHigh",
+  "name" : "LocalHigh",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "macos",
+      "version" : "13.0"
+    },
+    {
+      "name" : "ios",
+      "version" : "16.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "LocalHigh",
+      "targets" : [
+        "LocalHigh"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "LocalHigh",
+      "module_type" : "SwiftTarget",
+      "name" : "LocalHigh",
+      "path" : "Sources/LocalHigh",
+      "product_memberships" : [
+        "LocalHigh"
+      ],
+      "sources" : [
+        "LocalHigh.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.9"
+}

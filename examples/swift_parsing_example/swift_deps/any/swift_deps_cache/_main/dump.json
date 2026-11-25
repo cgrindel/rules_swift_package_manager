@@ -1,0 +1,83 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-parsing",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-parsing"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "exact" : [
+              "0.15.2"
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "fileSystem" : [
+        {
+          "identity" : "locallow",
+          "path" : "./LocalLow",
+          "productFilter" : null,
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "swift_parsing_example",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "15.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "18.0"
+    }
+  ],
+  "products" : [
+
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+
+  ],
+  "toolsVersion" : {
+    "_version" : "6.0.0"
+  },
+  "traits" : [
+
+  ]
+}

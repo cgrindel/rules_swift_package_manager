@@ -29,3 +29,22 @@ assert_match "user=frodo host=shire.example" "${output}"
 wrapper="$( "${bazel}" query --output=build '@swiftpkg_locallow//:LocalLow.rspm' 2>/dev/null )"
 assert_match 'macos_minimum_os = "13.0"' "${wrapper}"
 assert_match 'ios_minimum_os = "16.0"' "${wrapper}"
+
+# The checked-in any slice was cached on macOS. Regenerating it there must
+# not change it, and `bazel mod tidy` must find the root use_repo current.
+if [[ "$(uname)" == "Darwin" ]]; then
+  slice_tmp="$(mktemp -d)"
+  trap 'rm -rf "${slice_tmp}"' EXIT
+  cp -R swift_deps "${slice_tmp}/swift_deps"
+  cp MODULE.bazel "${slice_tmp}/MODULE.bazel"
+
+  "${bazel}" run @swift_package//:cache
+  diff -r --exclude=.build "${slice_tmp}/swift_deps/any" swift_deps/any \
+    || (echo >&2 "The cache step changed the checked-in any slice." && exit 1)
+
+  "${bazel}" mod tidy
+  diff "${slice_tmp}/MODULE.bazel" MODULE.bazel \
+    || (echo >&2 "bazel mod tidy changed MODULE.bazel." && exit 1)
+  diff -r --exclude=.build "${slice_tmp}/swift_deps" swift_deps \
+    || (echo >&2 "bazel mod tidy changed a slice." && exit 1)
+fi
