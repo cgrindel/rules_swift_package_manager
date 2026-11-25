@@ -1,0 +1,955 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : "en",
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "identity-ios-mediapipe",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/stripe/identity-ios-mediapipe"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "exact" : [
+              "1.0.0"
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "Stripe",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "15.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Stripe",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Stripe"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "StripePayments",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "StripePayments"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "StripePaymentsUI",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "StripePaymentsUI"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "StripePaymentSheet",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "StripePaymentSheet"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "StripeApplePay",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "StripeApplePay"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "StripeIdentity",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "StripeIdentity"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "StripeIssuing",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "StripeIssuing"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "StripeCardScan",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "StripeCardScan"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "StripeFinancialConnections",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "StripeFinancialConnections"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "StripeFinancialConnectionsLite",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "StripeFinancialConnectionsLite"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "StripeConnect",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "StripeConnect"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "StripeCryptoOnramp",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "StripeCryptoOnramp"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Stripe3DS2",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeApplePay",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeUICore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripePayments",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripePaymentsUI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeIssuing",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "Stripe",
+      "packageAccess" : true,
+      "path" : "Stripe/StripeiOS",
+      "resources" : [
+        {
+          "path" : "Resources/StripeiOS.xcassets",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist",
+        "Resources/CertificateFiles",
+        "include/Stripe3DS2-Prefix.pch"
+      ],
+      "name" : "Stripe3DS2",
+      "packageAccess" : true,
+      "path" : "Stripe3DS2/Stripe3DS2",
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "headerSearchPath" : {
+              "_0" : "."
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "StripeCameraCore",
+      "packageAccess" : true,
+      "path" : "StripeCameraCore/StripeCameraCore",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "StripeCore",
+      "packageAccess" : true,
+      "path" : "StripeCore/StripeCore",
+      "resources" : [
+        {
+          "path" : "PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "StripeApplePay",
+      "packageAccess" : true,
+      "path" : "StripeApplePay/StripeApplePay",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeUICore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeCameraCore",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "MediaPipeSPM",
+            "identity-ios-mediapipe",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "Identity"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "StripeIdentity",
+      "packageAccess" : true,
+      "path" : "StripeIdentity/StripeIdentity",
+      "resources" : [
+        {
+          "path" : "Resources/Audio",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Resources/Images",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Resources/face_landmarker.task",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripePayments",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripePaymentsUI",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "StripeIssuing",
+      "packageAccess" : true,
+      "path" : "StripeIssuing/StripeIssuing",
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "StripeCardScan",
+      "packageAccess" : true,
+      "path" : "StripeCardScan/StripeCardScan",
+      "resources" : [
+        {
+          "path" : "Resources/CompiledModels/UxModel.mlmodelc",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Resources/CompiledModels/SSDOcr.mlmodelc",
+          "rule" : {
+            "copy" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "StripeUICore",
+      "packageAccess" : true,
+      "path" : "StripeUICore/StripeUICore",
+      "resources" : [
+        {
+          "path" : "Resources/StripeUICore.xcassets",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Resources/JSON",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Stripe3DS2",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "StripePayments",
+      "packageAccess" : true,
+      "path" : "StripePayments/StripePayments",
+      "resources" : [
+        {
+          "path" : "Resources",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Stripe3DS2",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripePayments",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeUICore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "StripePaymentsUI",
+      "packageAccess" : true,
+      "path" : "StripePaymentsUI/StripePaymentsUI",
+      "resources" : [
+        {
+          "path" : "Resources/StripePaymentsUI.xcassets",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Resources/JSON",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "StripePaymentsUI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeApplePay",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripePayments",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeUICore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeFinancialConnectionsLite",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "StripePaymentSheet",
+      "packageAccess" : true,
+      "path" : "StripePaymentSheet/StripePaymentSheet",
+      "resources" : [
+        {
+          "path" : "Resources/StripePaymentSheet.xcassets",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "StripeFinancialConnectionsLite",
+      "packageAccess" : true,
+      "path" : "StripeFinancialConnectionsLite/StripeFinancialConnectionsLite",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeUICore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "Info.plist"
+      ],
+      "name" : "StripeFinancialConnections",
+      "packageAccess" : true,
+      "path" : "StripeFinancialConnections/StripeFinancialConnections",
+      "resources" : [
+        {
+          "path" : "Resources/Images",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeUICore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeFinancialConnections",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "StripeConnect",
+      "packageAccess" : true,
+      "path" : "StripeConnect/StripeConnect",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "StripeApplePay",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeCore",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeIdentity",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripePayments",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripePaymentSheet",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripePaymentsUI",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "StripeUICore",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+        "StripeCryptoOnramp.h"
+      ],
+      "name" : "StripeCryptoOnramp",
+      "packageAccess" : true,
+      "path" : "StripeCryptoOnramp/StripeCryptoOnramp",
+      "resources" : [
+        {
+          "path" : "Resources/StripeCryptoOnramp.xcassets",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        },
+        {
+          "path" : "Resources/Localizations",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.1.0"
+  },
+  "traits" : [
+    {
+      "description" : "Enables 3D face capture in StripeIdentity.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "Identity"
+    }
+  ]
+}
