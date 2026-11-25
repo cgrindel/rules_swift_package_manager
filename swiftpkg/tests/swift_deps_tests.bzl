@@ -2,6 +2,7 @@
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/bzlmod:swift_deps.bzl", "swift_deps_test_utils")
+load("//swiftpkg/bzlmod:swift_deps_common.bzl", "swift_deps_common")
 
 _target = "@swiftpkg_foo//:Bar.rspm.__impl"
 
@@ -574,11 +575,21 @@ def _new_ext_module(
     tags["configure_package"] = []
     tags["configure_swift_package"] = []
     from_package_tags = [
-        struct(is_dev = False, repo_names = from_package_repo_names),
+        struct(
+            config = None,
+            dump_manifests = {},
+            is_dev = False,
+            repo_names = from_package_repo_names,
+        ),
     ]
     if dev_from_package_repo_names != None:
         from_package_tags.append(
-            struct(is_dev = True, repo_names = dev_from_package_repo_names),
+            struct(
+                config = None,
+                dump_manifests = {},
+                is_dev = True,
+                repo_names = dev_from_package_repo_names,
+            ),
         )
     tags["from_package"] = from_package_tags
     return struct(is_root = is_root, name = name, tags = struct(**tags))
@@ -691,6 +702,46 @@ root_module_direct_dev_deps_test = unittest.make(
     _root_module_direct_dev_deps_test,
 )
 
+def _mixed_modes_error_test(ctx):
+    env = unittest.begin(ctx)
+
+    def _modules(*tags_per_module):
+        return [
+            struct(name = "mod{}".format(i), tags = struct(from_package = tags))
+            for i, tags in enumerate(tags_per_module)
+        ]
+
+    v1 = struct(config = None, dump_manifests = {})
+    v2 = struct(config = Label("@@//config:macos"), dump_manifests = {})
+    v2_cached = struct(config = None, dump_manifests = {"_main": "x"})
+
+    asserts.equals(env, None, swift_deps_common.mixed_modes_error(_modules([v1, v1])))
+    asserts.equals(env, None, swift_deps_common.mixed_modes_error(_modules([v2, v2_cached])))
+    asserts.equals(env, None, swift_deps_common.mixed_modes_error(_modules([])))
+    want_fmt = (
+        "v1 and v2 `from_package` tags cannot be mixed in one build: " +
+        "module(s) {v1} use v1 tags while {v2} use v2 slices. " +
+        "Migrate every module to slices, or keep every module on v1 " +
+        "until non-root slices are supported (see " +
+        "https://github.com/cgrindel/rules_swift_package_manager/issues/2641)."
+    )
+    asserts.equals(
+        env,
+        want_fmt.format(v1 = "mod0", v2 = "mod0"),
+        swift_deps_common.mixed_modes_error(_modules([v1, v2])),
+    )
+
+    # Across modules too.
+    asserts.equals(
+        env,
+        want_fmt.format(v1 = "mod1", v2 = "mod0"),
+        swift_deps_common.mixed_modes_error(_modules([v2], [v1])),
+    )
+
+    return unittest.end(env)
+
+mixed_modes_error_test = unittest.make(_mixed_modes_error_test)
+
 def swift_deps_test_suite():
     return unittest.suite(
         "swift_deps_tests",
@@ -706,4 +757,5 @@ def swift_deps_test_suite():
         extension_metadata_test,
         root_module_direct_deps_test,
         root_module_direct_dev_deps_test,
+        mixed_modes_error_test,
     )

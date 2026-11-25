@@ -1,0 +1,67 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.6.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log"
+    },
+    {
+      "identity" : "swift-system",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.4.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-system"
+    }
+  ],
+  "manifest_display_name" : "multi_slice",
+  "name" : "multi_slice",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "MultiSlice",
+      "targets" : [
+        "MultiSlice"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "MultiSlice",
+      "module_type" : "SwiftTarget",
+      "name" : "MultiSlice",
+      "path" : "Sources/MultiSlice",
+      "product_dependencies" : [
+        "Logging",
+        "SystemPackage"
+      ],
+      "product_memberships" : [
+        "MultiSlice"
+      ],
+      "sources" : [
+        "main.swift"
+      ],
+      "type" : "executable"
+    }
+  ],
+  "tools_version" : "5.9"
+}

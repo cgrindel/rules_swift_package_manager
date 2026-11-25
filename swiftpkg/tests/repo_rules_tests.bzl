@@ -2,6 +2,12 @@
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
 load("//swiftpkg/internal:bazel_target_mods.bzl", "bazel_target_mods")
+load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
+load(
+    "//swiftpkg/internal:pkginfos.bzl",
+    "library_type_kinds",
+    "pkginfos",
+)
 load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
 
 def _download_artifacts_test(ctx):
@@ -118,6 +124,29 @@ def _gen_build_files_with_build_file_test(ctx):
         calls["file"].append(struct(path = path, content = content))
 
     build_file_label = "//some/pkg:BUILD.custom"
+    build_file_content = """\
+load("@rules_swift//swift:swift.bzl", "swift_library")
+
+swift_library(
+    name = "Foo",
+    srcs = ["Foo.swift"],
+    module_name = "NotATarget",
+)
+
+alias(
+    name = "Bar",
+    actual = ":Foo",
+)
+
+alias(name = "Bar", actual = ":Foo")
+"""
+
+    # buildifier: disable=unused-variable
+    def _read(path, watch = "auto"):
+        if path != build_file_label:
+            fail("unexpected read: {}".format(path))
+        return build_file_content
+
     repository_ctx = struct(
         attr = struct(
             bazel_target_mods = "",
@@ -126,6 +155,7 @@ def _gen_build_files_with_build_file_test(ctx):
             binary_target_deps = True,
         ),
         file = _file,
+        read = _read,
         template = _template,
     )
 
@@ -152,11 +182,13 @@ def _gen_build_files_with_build_file_test(ctx):
         "template should receive the build_file label",
     )
 
-    # A custom BUILD file has unknown target names, so no aliases.
+    # The names that the custom BUILD file declares, sorted and deduped.
+    asserts.equals(env, 1, len(calls["file"]))
+    asserts.equals(env, "rspm_targets.json", calls["file"][0].path)
     asserts.equals(
         env,
-        [struct(path = "rspm_targets.json", content = '{\n  "targets": []\n}\n')],
-        calls["file"],
+        {"targets": ["Bar", "Foo"]},
+        json.decode(calls["file"][0].content),
     )
 
     return unittest.end(env)
@@ -251,6 +283,114 @@ gen_build_files_without_build_file_test = unittest.make(
     _gen_build_files_without_build_file_test,
 )
 
+def _gen_build_files_adds_version_check_in_v2_test(ctx):
+    """When slice_dir is set, gen_build_files declares the Swift version \
+    check and attaches it to the generated libraries."""
+    env = unittest.begin(ctx)
+
+    calls = {"file": []}
+
+    # buildifier: disable=unused-variable
+    def _file(path, content = "", executable = False, legacy_utf8 = False):
+        calls["file"].append(struct(path = path, content = content))
+
+    # buildifier: disable=unused-variable
+    def _execute(args, environment = {}, quiet = True):
+        return struct(return_code = 0, stdout = "", stderr = "")
+
+    repository_ctx = struct(
+        attr = struct(
+            bazel_package_name = "swiftpkg_test_pkg",
+            bazel_target_mods = "",
+            build_file = None,
+            slice_dir = "swift/macos",
+        ),
+        name = "bzlmodmangled~swiftpkg_test_pkg",
+        file = _file,
+        execute = _execute,
+        os = struct(name = "linux"),
+    )
+
+    repo_name = "@swiftpkg_test_pkg"
+    pkg_info = pkginfos.new(
+        name = "TestPkg",
+        path = "",
+        tools_version = "5.9",
+        url = "https://github.com/example/test-pkg",
+        version = "1.0.0",
+        products = [
+            pkginfos.new_product(
+                name = "Foo",
+                type = pkginfos.new_product_type(
+                    library = pkginfos.new_library_type(
+                        library_type_kinds.automatic,
+                    ),
+                ),
+                targets = ["Foo"],
+            ),
+        ],
+        targets = [
+            pkginfos.new_target(
+                name = "Foo",
+                type = "regular",
+                c99name = "Foo",
+                module_type = "SwiftTarget",
+                path = "Sources/Foo",
+                sources = ["Foo.swift"],
+                dependencies = [],
+                repo_name = repo_name,
+                swift_src_info = pkginfos.new_swift_src_info(),
+            ),
+        ],
+    )
+    pkg_ctx = pkg_ctxs.new(pkg_info = pkg_info, repo_name = repo_name)
+
+    repo_rules.gen_build_files(repository_ctx, pkg_ctx)
+
+    build_files = [f for f in calls["file"] if f.path == "BUILD.bazel"]
+    asserts.equals(env, 1, len(build_files))
+    content = build_files[0].content
+    asserts.true(
+        env,
+        """\
+swift_version_check(
+    name = "swift_version_check",
+    slice_dir = "swift/macos",
+    version_file = "swift_version.txt",
+)""" in content,
+        content,
+    )
+    asserts.true(
+        env,
+        """\
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "swift_version_check")""" in content,
+        content,
+    )
+    asserts.true(
+        env,
+        'swift_library(\n    name = "Foo.rspm.__impl",' in content,
+        content,
+    )
+    asserts.true(
+        env,
+        '    data = [":swift_version_check"],' in content,
+        content,
+    )
+
+    targets_json = [f for f in calls["file"] if f.path == "rspm_targets.json"]
+    asserts.equals(env, 1, len(targets_json))
+    asserts.true(
+        env,
+        "swift_version_check" in json.decode(targets_json[0].content)["targets"],
+        targets_json[0].content,
+    )
+
+    return unittest.end(env)
+
+gen_build_files_adds_version_check_in_v2_test = unittest.make(
+    _gen_build_files_adds_version_check_in_v2_test,
+)
+
 def _make_files_read_only_test(ctx):
     env = unittest.begin(ctx)
 
@@ -329,12 +469,52 @@ make_files_read_only_disabled_noop_test = unittest.make(
     _make_files_read_only_disabled_noop_test,
 )
 
+def _v2_attrs_error_test(ctx):
+    env = unittest.begin(ctx)
+
+    def _attr(dump_manifest = None, desc_manifest = None, swift_version = None, slice_dir = ""):
+        return struct(
+            dump_manifest = dump_manifest,
+            desc_manifest = desc_manifest,
+            swift_version = swift_version,
+            slice_dir = slice_dir,
+        )
+
+    # v1: nothing set.
+    asserts.equals(env, None, repo_rules.v2_attrs_error("foo", _attr()))
+
+    # v2: everything set.
+    asserts.equals(env, None, repo_rules.v2_attrs_error("foo", _attr(
+        dump_manifest = "d",
+        desc_manifest = "e",
+        swift_version = "s",
+        slice_dir = "swift/macos",
+    )))
+
+    asserts.equals(
+        env,
+        "`foo` sets `slice_dir` but not `dump_manifest`; a v2 slice " +
+        "package needs both.",
+        repo_rules.v2_attrs_error("foo", _attr(slice_dir = "swift/macos")),
+    )
+    asserts.equals(
+        env,
+        "`foo` sets `dump_manifest` but not: desc_manifest, swift_version, slice_dir.",
+        repo_rules.v2_attrs_error("foo", _attr(dump_manifest = "d")),
+    )
+
+    return unittest.end(env)
+
+v2_attrs_error_test = unittest.make(_v2_attrs_error_test)
+
 def repo_rules_test_suite():
     return unittest.suite(
         "repo_rules_tests",
         download_artifacts_test,
+        gen_build_files_adds_version_check_in_v2_test,
         gen_build_files_with_build_file_test,
         gen_build_files_without_build_file_test,
         make_files_read_only_disabled_noop_test,
         make_files_read_only_test,
+        v2_attrs_error_test,
     )

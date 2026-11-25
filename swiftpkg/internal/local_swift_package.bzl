@@ -35,8 +35,14 @@ def _list_contents(repository_ctx, repo_dir, path):
 
 def _local_swift_package_impl(repository_ctx):
     repo_dir = str(repository_ctx.path("."))
-    env = repo_rules.get_exec_env(repository_ctx)
-    repo_rules.check_spm_version(repository_ctx, env = env)
+
+    # v2 reads the cached manifests and never runs Swift Package Manager.
+    v2_manifests = repo_rules.read_v2_manifests(repository_ctx)
+    if v2_manifests:
+        env = {}
+    else:
+        env = repo_rules.get_exec_env(repository_ctx)
+        repo_rules.check_spm_version(repository_ctx, env = env)
 
     orig_code_path = repository_ctx.attr.path
     if not paths.is_absolute(orig_code_path):
@@ -68,7 +74,7 @@ def _local_swift_package_impl(repository_ctx):
 
     # Generate the build file
     cached_json_directory = None
-    if repository_ctx.attr.cached_json_directory:
+    if not v2_manifests and repository_ctx.attr.cached_json_directory:
         cached_json_directory = paths.join(
             str(repository_ctx.workspace_root),
             repository_ctx.attr.cached_json_directory,
@@ -85,9 +91,17 @@ def _local_swift_package_impl(repository_ctx):
         module_aliases = repository_ctx.attr.module_aliases,
         dep_module_aliases = repository_ctx.attr.dep_module_aliases,
         bazel_target_mods = repository_ctx.attr.bazel_target_mods,
+        dump_manifest = v2_manifests.dump_manifest if v2_manifests else None,
+        desc_manifest = v2_manifests.desc_manifest if v2_manifests else None,
+        # Relative local dependency paths in the cached manifests are relative
+        # to the package's original directory, not to this repository.
+        source_directory = orig_code_path if v2_manifests else None,
     )
 
     repo_rules.download_artifacts(repository_ctx, pkg_ctx)
+
+    if v2_manifests:
+        repo_rules.copy_swift_version(repository_ctx)
 
     repo_rules.gen_build_files(repository_ctx, pkg_ctx)
 
@@ -108,10 +122,15 @@ root so that the lock file remains portable across machines.\
 _ALL_ATTRS = dicts.add(
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
+    repo_rules.v2_attrs,
     _PATH_ATTRS,
     {
         "build_file": attr.label(
-            doc = "When used, the provided BUILD file will be used instead of generating one.",
+            doc = """\
+When used, the provided BUILD file will be used instead of generating one. \
+In a v2 alias repository, only the targets that this file declares with a \
+literal `name = "..."` get aliases; names that a macro computes are not seen.\
+""",
         ),
         "cached_json_directory": attr.string(),
     },

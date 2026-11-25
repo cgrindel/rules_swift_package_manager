@@ -129,6 +129,7 @@ _all_os_single_bazel_version_test_examples = [
     "grdb_example",
     "grpc_example",
     "module_aliases_example",
+    "multi_slice",
     "vapor_example",
 ]
 

@@ -1,0 +1,164 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "swift-system",
+  "name" : "swift-system",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "SystemPackage",
+      "targets" : [
+        "SystemPackage"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "c99name" : "SystemTests",
+      "module_type" : "SwiftTarget",
+      "name" : "SystemTests",
+      "path" : "Tests/SystemTests",
+      "sources" : [
+        "ErrnoTest.swift",
+        "FileDescriptorExtras.swift",
+        "FileModeTests.swift",
+        "FileOperationsTest.swift",
+        "FileOperationsTestWindows.swift",
+        "FilePathTests/FilePathComponentsTest.swift",
+        "FilePathTests/FilePathDecodable.swift",
+        "FilePathTests/FilePathExtras.swift",
+        "FilePathTests/FilePathParsingTest.swift",
+        "FilePathTests/FilePathSyntaxTest.swift",
+        "FilePathTests/FilePathTempTest.swift",
+        "FilePathTests/FilePathTest.swift",
+        "FileTypesTest.swift",
+        "IORequestTests.swift",
+        "IORingTests.swift",
+        "MachPortTests.swift",
+        "MockingTest.swift",
+        "StatFSTests.swift",
+        "StatTests.swift",
+        "SystemCharTest.swift",
+        "SystemStringTests.swift",
+        "TestingInfrastructure.swift",
+        "UtilTests.swift"
+      ],
+      "target_dependencies" : [
+        "SystemPackage"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "SystemPackage",
+      "module_type" : "SwiftTarget",
+      "name" : "SystemPackage",
+      "path" : "Sources/System",
+      "product_memberships" : [
+        "SystemPackage"
+      ],
+      "sources" : [
+        "Errno.swift",
+        "ErrnoWindows.swift",
+        "FileDescriptor.swift",
+        "FileHelpers.swift",
+        "FileOperations.swift",
+        "FilePath/FilePath.swift",
+        "FilePath/FilePathComponentView.swift",
+        "FilePath/FilePathComponents.swift",
+        "FilePath/FilePathParsing.swift",
+        "FilePath/FilePathString.swift",
+        "FilePath/FilePathSyntax.swift",
+        "FilePath/FilePathTemp.swift",
+        "FilePath/FilePathTempPosix.swift",
+        "FilePath/FilePathTempWindows.swift",
+        "FilePath/FilePathWindows.swift",
+        "FilePermissions.swift",
+        "FileSystem/FileFlags.swift",
+        "FileSystem/FileMode.swift",
+        "FileSystem/FileType.swift",
+        "FileSystem/Identifiers.swift",
+        "FileSystem/MountFlags.swift",
+        "FileSystem/Stat.swift",
+        "FileSystem/StatFS.swift",
+        "IORing/IOCompletion.swift",
+        "IORing/IORequest.swift",
+        "IORing/IORing+Util.swift",
+        "IORing/IORing.swift",
+        "IORing/PollEvents.swift",
+        "IORing/RawIORequest.swift",
+        "Internals/Backcompat.swift",
+        "Internals/CInterop.swift",
+        "Internals/Constants.swift",
+        "Internals/Exports.swift",
+        "Internals/Mocking.swift",
+        "Internals/RawBuffer.swift",
+        "Internals/Syscalls.swift",
+        "Internals/WindowsSyscallAdapters.swift",
+        "MachPort.swift",
+        "PlatformString.swift",
+        "SystemString.swift",
+        "Util+StringArray.swift",
+        "Util.swift",
+        "UtilConsumers.swift",
+        "WinSDK+Overlay.swift"
+      ],
+      "target_dependencies" : [
+        "CSystem",
+        "CSystemStatFS"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "MemberImportVisibility",
+      "module_type" : "SwiftTarget",
+      "name" : "MemberImportVisibility",
+      "path" : "Tests/MemberImportVisibility",
+      "sources" : [
+        "Probe.swift"
+      ],
+      "target_dependencies" : [
+        "SystemPackage"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "CSystemStatFS",
+      "module_type" : "SystemLibraryTarget",
+      "name" : "CSystemStatFS",
+      "path" : "Sources/CSystemStatFS",
+      "product_memberships" : [
+        "SystemPackage"
+      ],
+      "sources" : [
+
+      ],
+      "type" : "system-target"
+    },
+    {
+      "c99name" : "CSystem",
+      "module_type" : "ClangTarget",
+      "name" : "CSystem",
+      "path" : "Sources/CSystem",
+      "product_memberships" : [
+        "SystemPackage"
+      ],
+      "sources" : [
+        "shims.c"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.2"
+}

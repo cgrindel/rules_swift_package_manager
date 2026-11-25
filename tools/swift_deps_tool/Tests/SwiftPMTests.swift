@@ -82,6 +82,19 @@ final class SwiftPMTests: XCTestCase {
     XCTAssertEqual(try String(contentsOf: argvFile, encoding: .utf8), lines(overridden))
   }
 
+  func testRunPassesRunfilesDirToTool() throws {
+    let envFile = root.appendingPathComponent("env.txt")
+    let tool = try fakeTool("echo \"$RUNFILES_DIR\" > '\(envFile.path)'")
+    let flags = try SwiftPMFlags(keyValues: [:], workspace: root)
+    let runfiles = root.appendingPathComponent("tool.runfiles")
+    let swiftPM = SwiftPM(
+      tool: tool, flags: flags, sliceDir: root.appendingPathComponent("slice"),
+      runfilesDir: runfiles)
+
+    try swiftPM.run(["resolve"], in: root)
+    XCTAssertEqual(try String(contentsOf: envFile, encoding: .utf8), runfiles.path + "\n")
+  }
+
   func testRunFailureReportsCommandAndStderrTail() throws {
     let tool = try fakeTool(
       "i=1; while [ $i -le 25 ]; do echo \"err $i\" >&2; i=$((i+1)); done; exit 1")

@@ -23,6 +23,8 @@ _DOC_INFOS = [
             "generate_modulemap",
             "resource_bundle_accessor",
             "resource_bundle_infoplist",
+            "swift_package_stale",
+            "swift_version_check",
         ],
     ),
     doc_infos.new(

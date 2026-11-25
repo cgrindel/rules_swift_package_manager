@@ -38,6 +38,31 @@ final class InvocationTests: XCTestCase {
       ["foo": ["patches/foo1.patch", "patches/foo2.patch"], "bar": ["patches/bar.patch"]]
     )
     XCTAssertEqual(inv.patchArgs, ["foo": ["-p1", "--verbose"]])
+    XCTAssertNil(inv.runfilesDir)
+  }
+
+  func testSwiftToolFromRunfilesSetsRunfilesDir() throws {
+    let runfiles = FileManager.default.temporaryDirectory
+      .appendingPathComponent("InvocationTests-\(UUID().uuidString)")
+    let tool = runfiles.appendingPathComponent("rules_swift_package_manager+/tools/swift")
+    try FileManager.default.createDirectory(
+      at: tool.deletingLastPathComponent(), withIntermediateDirectories: true)
+    XCTAssertTrue(FileManager.default.createFile(atPath: tool.path, contents: Data()))
+    defer { try? FileManager.default.removeItem(at: runfiles) }
+
+    let args = [
+      "cache", "--workspace", "/ws", "--target-os", "macos", "--package", "Package.swift",
+      "--slice", "s", "--slice-package", "//s", "--swift-label", "//:Package.swift",
+      "--config", "//:c",
+    ]
+    let inv = try Invocation.parse(
+      args,
+      env: [
+        "RSPM_SWIFT_TOOL": "rules_swift_package_manager+/tools/swift",
+        "RUNFILES_DIR": runfiles.path,
+      ])
+    XCTAssertEqual(inv.swiftTool.standardizedFileURL.path, tool.standardizedFileURL.path)
+    XCTAssertEqual(inv.runfilesDir?.standardizedFileURL.path, runfiles.standardizedFileURL.path)
   }
 
   func testMissingCommandFails() {

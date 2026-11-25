@@ -19,21 +19,13 @@ bazel_dep(
     repo_name = "build_bazel_rules_swift",
 )
 
-bazel_dep(
-    name = "bazel_skylib_gazelle_plugin",
-    version = "1.9.2",
-    dev_dependency = True,
-)
-bazel_dep(
-    name = "gazelle",
-    version = "0.54.0",
-    dev_dependency = True,
-    repo_name = "bazel_gazelle",
-)
-bazel_dep(
-    name = "swift_gazelle_plugin",
-    version = "0.2.2",
-    dev_dependency = True,
+# TODO(#2641): Remove once rules_swift ships swift_toolchain_tool
+# (https://github.com/bazelbuild/rules_swift/pull/2034). The root module's
+# override in rules_swift_package_manager does not reach this workspace.
+git_override(
+    module_name = "rules_swift",
+    commit = "dd629b0cbb25c017e30fff3c40d0f0fddf653613",
+    remote = "https://github.com/cgrindel/rules_swift.git",
 )
 
 apple_cc_configure = use_extension(
@@ -58,15 +50,13 @@ swift_deps.configure_package(
     binary_target_deps = "on",
     system_sdk_deps = "off",
 )
-swift_deps.from_package(
-    declare_swift_deps_info = True,
-    resolved = "//:Package.resolved",
-    swift = "//:Package.swift",
-)
 use_repo(
     swift_deps,
-    "swift_deps_info",
     "swift_package",
     "swiftpkg_swift_argument_parser",
     "swiftpkg_swift_log",
 )
+
+# The slice's `from_package` tag. Include it after the root `use_extension` so
+# that `bazel mod tidy` writes `use_repo` here rather than into the slice file.
+include("//swift_deps/any:inc.MODULE.bazel")

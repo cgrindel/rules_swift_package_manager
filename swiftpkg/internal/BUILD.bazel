@@ -270,12 +270,17 @@ bzl_library(
     deps = [
         ":artifact_infos",
         ":bazel_target_mods",
+        ":build_decls",
         ":build_files",
+        ":load_statements",
+        ":manifest_files",
         ":pkg_ctxs",
         ":pkginfos",
         ":repository_files",
+        ":repository_utils",
         ":spm_versions",
         ":starlark_codegen",
+        ":swift_version_checks",
         ":swiftpkg_build_files",
         "@bazel_skylib//lib:dicts",
         "@bazel_skylib//lib:paths",
@@ -441,6 +446,7 @@ bzl_library(
         ":manifest_swiftc_args",
         ":repo_rules",
         ":repository_utils",
+        ":swift_package_tool_args",
         ":swift_package_tool_attrs",
         "@bazel_skylib//lib:dicts",
         "@bazel_skylib//lib:paths",
@@ -507,6 +513,7 @@ bzl_library(
         ":build_decls",
         ":build_files",
         ":load_statements",
+        ":minimum_os_versions",
         ":slice_messages",
         ":starlark_codegen",
     ],
@@ -540,6 +547,16 @@ bzl_library(
 )
 
 bzl_library(
+    name = "swift_version_checks",
+    srcs = ["swift_version_checks.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+    deps = [
+        ":bazel_target_mods",
+        ":build_decls",
+    ],
+)
+
+bzl_library(
     name = "bazel_repo_names",
     srcs = ["bazel_repo_names.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
@@ -560,6 +577,12 @@ bzl_library(
 bzl_library(
     name = "manifest_files",
     srcs = ["manifest_files.bzl"],
+    visibility = ["//swiftpkg:__subpackages__"],
+)
+
+bzl_library(
+    name = "manifest_shapes",
+    srcs = ["manifest_shapes.bzl"],
     visibility = ["//swiftpkg:__subpackages__"],
 )
 

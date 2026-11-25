@@ -1,0 +1,207 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "swift-log",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Logging",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Logging"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "InMemoryLogging",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "InMemoryLogging"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Logging",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency=complete"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Logging",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "InMemoryLogging",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency=complete"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Logging",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "LoggingTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency=complete"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "InMemoryLogging",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "Logging",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "InMemoryLoggingTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableExperimentalFeature" : {
+              "_0" : "StrictConcurrency=complete"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.0.0"
+  },
+  "traits" : [
+
+  ]
+}

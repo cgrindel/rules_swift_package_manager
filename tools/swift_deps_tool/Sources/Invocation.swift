@@ -9,6 +9,9 @@ public struct Invocation: Equatable {
   public var command: Command
   public var workspace: URL
   public var swiftTool: URL
+  /// The runfiles root of `swiftTool` when it came from `RSPM_SWIFT_TOOL`; the `swift` wrapper
+  /// needs it as `RUNFILES_DIR` to find its runfiles, and `bazel run` does not set it.
+  public var runfilesDir: URL?
   public var targetOS: String
   public var packagePath: String
   public var sliceDir: String
@@ -76,19 +79,23 @@ public struct Invocation: Equatable {
     if single["--workspace"] == nil {
       single["--workspace"] = env["BUILD_WORKSPACE_DIRECTORY"]
     }
+    var runfilesDir: URL?
     if single["--swift-tool"] == nil, let rlocationpath = env["RSPM_SWIFT_TOOL"],
       !rlocationpath.isEmpty
     {
-      single["--swift-tool"] = Runfiles.resolve(
+      let resolved = Runfiles.resolve(
         rlocationpath: rlocationpath, env: env, argv0: CommandLine.arguments[0],
         cwd: URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
-      ).path
+      )
+      single["--swift-tool"] = resolved.path
+      runfilesDir = Runfiles.root(of: resolved, rlocationpath: rlocationpath)
     }
 
     return Invocation(
       command: command,
       workspace: URL(fileURLWithPath: try required("--workspace")),
       swiftTool: URL(fileURLWithPath: try required("--swift-tool")),
+      runfilesDir: runfilesDir,
       targetOS: try required("--target-os"),
       packagePath: try required("--package"),
       sliceDir: try required("--slice"),

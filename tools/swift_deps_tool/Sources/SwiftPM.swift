@@ -7,11 +7,14 @@ public struct SwiftPM {
   private let tool: URL
   private let flags: SwiftPMFlags
   private let sliceDir: URL
+  private let runfilesDir: URL?
 
-  public init(tool: URL, flags: SwiftPMFlags, sliceDir: URL) {
+  /// `runfilesDir`, when set, is passed to `tool` as `RUNFILES_DIR`.
+  public init(tool: URL, flags: SwiftPMFlags, sliceDir: URL, runfilesDir: URL? = nil) {
     self.tool = tool
     self.flags = flags
     self.sliceDir = sliceDir
+    self.runfilesDir = runfilesDir
   }
 
   /// Runs `swift package <flags> <args>` in `packageDir` and returns its stdout.
@@ -74,6 +77,11 @@ public struct SwiftPM {
     let process = Process()
     process.executableURL = tool
     process.arguments = arguments
+    if let runfilesDir {
+      var environment = ProcessInfo.processInfo.environment
+      environment["RUNFILES_DIR"] = runfilesDir.path
+      process.environment = environment
+    }
     if let directory {
       process.currentDirectoryURL = directory
     }

@@ -111,15 +111,16 @@ cat >"${root}/${dir}/BUILD.bazel" <<'BUILD'
 package(default_visibility = ["//visibility:public"])
 BUILD
 
-# Keep in sync with the fixture inc.MODULE.bazel.empty.expected.
+# Keep in sync with the fixture inc.MODULE.bazel.empty.expected. Keyword
+# arguments are in the alphabetical order that `bazel mod tidy` writes.
 cat >"${inc_path}" <<INC
 swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
 swift_deps.from_package(
     config = "${config}",
-    swift = "${swift_label}",
-    resolved = "${slice_pkg}:Package.resolved",
-    dump_manifests = {},
     desc_manifests = {},
+    dump_manifests = {},
+    resolved = "${slice_pkg}:Package.resolved",
+    swift = "${swift_label}",
 )
 INC
 
@@ -144,17 +145,18 @@ fi
 
 echo "Created slice package ${slice_pkg}."
 echo
-echo "Add this to MODULE.bazel:"
+# The include must follow the root use_extension: `bazel mod tidy` writes
+# use_repo into the first file that uses the extension.
+echo "Add this to MODULE.bazel, after the root swift_deps use_extension and"
+echo "use_repo, so that \`bazel mod tidy\` keeps the root use_repo current:"
 echo
-echo "include(\"${slice_pkg}:inc.MODULE.bazel\")"
 if ! grep -qF '"swift_deps"' "${root}/MODULE.bazel" 2>/dev/null; then
-  echo
-  echo "Also add (the slice file uses it):"
-  echo
   printf '%s%s\n' 'swift_deps = use_extension(' \
     '"@rules_swift_package_manager//:extensions.bzl", "swift_deps")'
   echo 'use_repo(swift_deps, "swift_package")'
+  echo
 fi
+echo "include(\"${slice_pkg}:inc.MODULE.bazel\")"
 if [[ -n ${seed} ]]; then
   echo
   echo "Seed copied. Remove any Package.resolved beside Package.swift before"

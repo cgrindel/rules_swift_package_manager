@@ -1,15 +1,16 @@
 """Tests for `slice_merge` module."""
 
 load("@bazel_skylib//lib:unittest.bzl", "asserts", "unittest")
-load(
-    "//swiftpkg/internal:slice_merge.bzl",
-    "slice_merge",
-    "slice_merge_testing",
-)
+load("//swiftpkg/internal:slice_merge.bzl", "slice_merge")
 
 # MARK: - Helpers
 
-def _pkg(pin_key, dump_text = "dump", desc_text = "desc", kind = "source_control"):
+def _pkg(
+        pin_key,
+        dump_text = "dump",
+        desc_text = "desc",
+        kind = "source_control",
+        swift_version = "6.0"):
     return struct(
         kind = kind,
         pin_key = pin_key,
@@ -18,6 +19,7 @@ def _pkg(pin_key, dump_text = "dump", desc_text = "desc", kind = "source_control
         dump_label = "dump_label_" + pin_key,
         desc_label = "desc_label_" + pin_key,
         local_path = None,
+        swift_version = swift_version,
     )
 
 def _stale_pkg(pin_key, kind = "source_control"):
@@ -29,6 +31,7 @@ def _stale_pkg(pin_key, kind = "source_control"):
         dump_label = None,
         desc_label = None,
         local_path = None,
+        swift_version = None,
     )
 
 def _slice(config, pkgs, stale = False):
@@ -119,6 +122,30 @@ def _different_pins_two_groups_test(ctx):
 
 different_pins_two_groups_test = unittest.make(_different_pins_two_groups_test)
 
+def _different_swift_versions_two_groups_test(ctx):
+    env = unittest.begin(ctx)
+
+    # Same pin and manifest bytes, cached with different Swift versions.
+    foo_a = _pkg("foo@1", swift_version = "6.2")
+    foo_b = _pkg("foo@1", swift_version = "6.1")
+    actual = slice_merge.merge([
+        _slice("a", {"foo": foo_a}),
+        _slice("b", {"foo": foo_b}),
+        _slice("c", {"foo": _pkg("foo@1", swift_version = "6.2")}),
+    ])
+
+    m = actual["foo"]
+    asserts.false(env, m.identical)
+    asserts.equals(env, [(1, ["a", "c"]), (2, ["b"])], _group_summary(m.groups))
+    asserts.equals(env, foo_a, m.groups[0].entry)
+    asserts.equals(env, foo_b, m.groups[1].entry)
+
+    return unittest.end(env)
+
+different_swift_versions_two_groups_test = unittest.make(
+    _different_swift_versions_two_groups_test,
+)
+
 def _stale_slice_forces_alias_test(ctx):
     env = unittest.begin(ctx)
 
@@ -188,42 +215,39 @@ def _fresh_slice_lacking_identity_test(ctx):
 
 fresh_slice_lacking_identity_test = unittest.make(_fresh_slice_lacking_identity_test)
 
-def _kind_conflict_fails_test(ctx):
+def _fresh_kind_conflict_splits_groups_test(ctx):
     env = unittest.begin(ctx)
 
-    result = slice_merge_testing.merge_or_error([
+    # A package that is local in one fresh slice and remote in another gets
+    # one group per kind; each group's entry decides its repository rule.
+    actual = slice_merge.merge([
         _slice("a", {"foo": _pkg("foo@1")}),
-        _slice("b", {"foo": _pkg("foo@1", kind = "registry")}),
+        _slice("b", {"foo": _pkg("path:foo", kind = "local")}),
     ])
 
-    asserts.equals(env, None, result.result)
-    asserts.true(env, result.error != None)
-    asserts.true(env, "foo" in result.error)
-    asserts.true(env, "source_control" in result.error)
-    asserts.true(env, "registry" in result.error)
-
-    ok = slice_merge_testing.merge_or_error([
-        _slice("a", {"foo": _pkg("foo@1")}),
-    ])
-    asserts.equals(env, None, ok.error)
-    asserts.equals(env, ["foo"], ok.result.keys())
+    m = actual["foo"]
+    asserts.equals(env, "source_control", m.kind)
+    asserts.false(env, m.identical)
+    asserts.equals(env, [(1, ["a"]), (2, ["b"])], _group_summary(m.groups))
+    asserts.equals(env, ["source_control", "local"], [g.entry.kind for g in m.groups])
 
     return unittest.end(env)
 
-kind_conflict_fails_test = unittest.make(_kind_conflict_fails_test)
+fresh_kind_conflict_splits_groups_test = unittest.make(
+    _fresh_kind_conflict_splits_groups_test,
+)
 
 def _stale_kind_conflict_is_ignored_test(ctx):
     env = unittest.begin(ctx)
 
     # The stale slice's live Package.resolved still pins foo remotely while
     # the fresh slice now has it as a local package.
-    result = slice_merge_testing.merge_or_error([
+    result = slice_merge.merge([
         _slice("a", {"foo": _pkg("foo@1", kind = "local")}),
         _slice("b", {"foo": _stale_pkg("foo@1")}, stale = True),
     ])
 
-    asserts.equals(env, None, result.error)
-    m = result.result["foo"]
+    m = result["foo"]
     asserts.equals(env, "local", m.kind)
     asserts.false(env, m.identical)
     asserts.true(env, m.any_stale)
@@ -231,12 +255,11 @@ def _stale_kind_conflict_is_ignored_test(ctx):
     asserts.equals(env, ["b"], m.stale_configs)
 
     # Stale first in input order: the fresh kind still wins.
-    result = slice_merge_testing.merge_or_error([
+    result = slice_merge.merge([
         _slice("b", {"foo": _stale_pkg("foo@1")}, stale = True),
         _slice("a", {"foo": _pkg("foo@1", kind = "local")}),
     ])
-    asserts.equals(env, None, result.error)
-    asserts.equals(env, "local", result.result["foo"].kind)
+    asserts.equals(env, "local", result["foo"].kind)
 
     return unittest.end(env)
 
@@ -268,10 +291,11 @@ def slice_merge_test_suite(name = "slice_merge_tests"):
         single_slice_identical_test,
         two_equal_slices_identical_test,
         different_pins_two_groups_test,
+        different_swift_versions_two_groups_test,
         stale_slice_forces_alias_test,
         identity_only_in_stale_slice_test,
         fresh_slice_lacking_identity_test,
-        kind_conflict_fails_test,
+        fresh_kind_conflict_splits_groups_test,
         stale_kind_conflict_is_ignored_test,
         repo_name_test,
     )

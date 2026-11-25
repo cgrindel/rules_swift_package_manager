@@ -10,6 +10,8 @@ On this page:
   * [generate_modulemap](#generate_modulemap)
   * [resource_bundle_accessor](#resource_bundle_accessor)
   * [resource_bundle_infoplist](#resource_bundle_infoplist)
+  * [swift_package_stale](#swift_package_stale)
+  * [swift_version_check](#swift_version_check)
 
 
 <a id="generate_modulemap"></a>
@@ -75,5 +77,50 @@ Generate an Info.plist for an SPM resource bundle.
 | :------------- | :------------- | :------------- | :------------- | :------------- |
 | <a id="resource_bundle_infoplist-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
 | <a id="resource_bundle_infoplist-region"></a>region |  The localization/region value that should be embedded in the Info.plist.   | String | optional |  `"en"`  |
+
+
+<a id="swift_package_stale"></a>
+
+## swift_package_stale
+
+<pre>
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "swift_package_stale")
+
+swift_package_stale(<a href="#swift_package_stale-name">name</a>, <a href="#swift_package_stale-message">message</a>)
+</pre>
+
+Fails at analysis time with `message`.
+
+Generated `select()` branches for stale cache slices point at this rule so that only builds that select a stale slice fail.
+
+**ATTRIBUTES**
+
+
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="swift_package_stale-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="swift_package_stale-message"></a>message |  The failure message to report at analysis time.   | String | required |  |
+
+
+<a id="swift_version_check"></a>
+
+## swift_version_check
+
+<pre>
+load("@rules_swift_package_manager//swiftpkg:build_defs.bzl", "swift_version_check")
+
+swift_version_check(<a href="#swift_version_check-name">name</a>, <a href="#swift_version_check-slice_dir">slice_dir</a>, <a href="#swift_version_check-version_file">version_file</a>)
+</pre>
+
+Validates that the resolved Swift toolchain's `major.minor` version matches the version that produced a slice's `swift_deps_cache`. The check runs as a `_validation` output. `--@rules_swift_package_manager//:swift_version_check=off` skips it.
+
+**ATTRIBUTES**
+
+
+| Name  | Description | Type | Mandatory | Default |
+| :------------- | :------------- | :------------- | :------------- | :------------- |
+| <a id="swift_version_check-name"></a>name |  A unique name for this target.   | <a href="https://bazel.build/concepts/labels#target-names">Name</a> | required |  |
+| <a id="swift_version_check-slice_dir"></a>slice_dir |  The slice directory, used in the failure message.   | String | required |  |
+| <a id="swift_version_check-version_file"></a>version_file |  The cache's `swift_version.txt` (`major.minor.patch`).   | <a href="https://bazel.build/concepts/labels">Label</a> | required |  |
 
 

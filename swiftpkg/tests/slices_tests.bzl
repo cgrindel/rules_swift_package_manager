@@ -40,8 +40,25 @@ def _new_derives_dir_and_package_label_test(ctx):
     asserts.false(env, s.is_dev)
 
     # A string config is kept as given.
+    asserts.equals(env, None, s.netrc)
+    asserts.false(env, s.make_files_read_only)
+
     s2 = slices.new("//x:y", s.swift, s.resolved, {}, {}, False, True)
     asserts.equals(env, "//x:y", s2.config)
+
+    s3 = slices.new(
+        "//x:y",
+        s.swift,
+        s.resolved,
+        {},
+        {},
+        False,
+        True,
+        netrc = Label("@@//:.netrc"),
+        make_files_read_only = True,
+    )
+    asserts.equals(env, Label("@@//:.netrc"), s3.netrc)
+    asserts.true(env, s3.make_files_read_only)
 
     return unittest.end(env)
 
@@ -91,6 +108,35 @@ def _validate_missing_main_test(ctx):
 
 validate_missing_main_test = unittest.make(_validate_missing_main_test)
 
+def _validate_empty_manifests_test(ctx):
+    env = unittest.begin(ctx)
+
+    # What `init` writes before the first cache run.
+    err = slices.validate(_new_slice(dump_ids = [], desc_ids = []))
+    asserts.equals(env, None, err)
+
+    return unittest.end(env)
+
+validate_empty_manifests_test = unittest.make(_validate_empty_manifests_test)
+
+def _is_v2_tag_test(ctx):
+    env = unittest.begin(ctx)
+
+    label = Label("@@//swift/macos:swift_deps_cache/_main/dump.json")
+    asserts.false(env, slices.is_v2_tag(struct(config = None, dump_manifests = {})))
+    asserts.true(env, slices.is_v2_tag(struct(
+        config = Label("@@//config:macos"),
+        dump_manifests = {},
+    )))
+    asserts.true(env, slices.is_v2_tag(struct(
+        config = None,
+        dump_manifests = {"_main": label},
+    )))
+
+    return unittest.end(env)
+
+is_v2_tag_test = unittest.make(_is_v2_tag_test)
+
 def _validate_label_outside_slice_test(ctx):
     env = unittest.begin(ctx)
 
@@ -127,6 +173,8 @@ def slices_test_suite(name = "slices_tests"):
         validate_ok_test,
         validate_key_mismatch_test,
         validate_missing_main_test,
+        validate_empty_manifests_test,
+        is_v2_tag_test,
         validate_label_outside_slice_test,
         cache_label_test,
     )

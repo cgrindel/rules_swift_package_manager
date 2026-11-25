@@ -27,14 +27,14 @@ final class IncModuleRendererTests: XCTestCase {
       swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
       swift_deps.from_package(
           config = "@platforms//os:macos",
-          swift = "//swift:Package.swift",
-          resolved = "//swift/macos:Package.resolved",
-          dump_manifests = {
-              "_main": "//swift/macos:swift_deps_cache/_main/dump.json",
-          },
           desc_manifests = {
               "_main": "//swift/macos:swift_deps_cache/_main/desc.json",
           },
+          dump_manifests = {
+              "_main": "//swift/macos:swift_deps_cache/_main/dump.json",
+          },
+          resolved = "//swift/macos:Package.resolved",
+          swift = "//swift:Package.swift",
       )
 
       """)

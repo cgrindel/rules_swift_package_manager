@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+# Use the Bazel binary specified by the integration test. Otherwise, fall back
+# to bazel.
+bazel="${BIT_BAZEL_BINARY:-bazel}"
+
+fail() {
+  echo >&2 "${@}"
+  exit 1
+}
+
+assert_contains() {
+  local expected="${1}"
+  local actual="${2}"
+  [[ "${actual}" == *"${expected}"* ]] \
+    || fail "Expected to contain: ${expected}, actual: ${actual}"
+}
+
+assert_not_contains() {
+  local unexpected="${1}"
+  local actual="${2}"
+  [[ "${actual}" != *"${unexpected}"* ]] \
+    || fail "Expected not to contain: ${unexpected}, actual: ${actual}"
+}
+
+# Both slices are committed and fresh. CI's Linux job regenerates the Linux
+# slice (generate_linux_slices.yml); the host only regenerates its own.
+if [[ "$(uname)" == "Darwin" ]]; then
+  host_slice="apple"
+  other_slice="linux"
+  other_platform="//:linux"
+else
+  host_slice="linux"
+  other_slice="apple"
+  other_platform="//:macos"
+fi
+other_cache="swift_deps/${other_slice}/swift_deps_cache"
+
+tmp="$(mktemp -d)"
+saved=false
+
+# Copies `swift_deps` aside, without SwiftPM scratch dirs.
+save_swift_deps() {
+  rm -rf swift_deps/*/.build "${tmp}/swift_deps"
+  cp -R swift_deps "${tmp}/swift_deps"
+  saved=true
+}
+
+restore_swift_deps() {
+  rm -rf swift_deps
+  cp -R "${tmp}/swift_deps" swift_deps
+  saved=false
+}
+
+# A failed assertion must not leave a modified `swift_deps` behind, which
+# matters when this runs from the source tree.
+cleanup() {
+  if [[ "${saved}" == true ]]; then
+    restore_swift_deps
+  fi
+  rm -rf "${tmp}"
+}
+trap cleanup EXIT
+
+"${bazel}" run //:tidy
+
+"${bazel}" build //...
+
+output="$("${bazel}" run //Sources/MultiSlice 2>&1)"
+assert_contains "hello from multi_slice" "${output}"
+
+# MARK: - Alias layout
+
+# swift-log has the same pin, the same manifests and the same Swift
+# `major.minor` in both slices, so it is one plain repository: `Logging` is a
+# real rule in `@swiftpkg_swift_log` itself, not an alias.
+output="$("${bazel}" cquery --output=build @swiftpkg_swift_log//:Logging)"
+assert_contains "swiftpkg_swift_log/BUILD.bazel" "${output}"
+assert_not_contains "__slice_" "${output}"
+assert_not_contains "alias(" "${output}"
+
+# swift-system is only a dependency on Linux.
+if [[ "${host_slice}" == "linux" ]]; then
+  "${bazel}" build @swiftpkg_swift_system//:SystemPackage
+  # Only the binary writes to stdout; Bazel's own output goes to stderr.
+  output="$("${bazel}" run //Sources/MultiSlice 2>/dev/null)"
+  grep -qx "/tmp" <<<"${output}" \
+    || fail "Expected a /tmp line from SystemPackage, actual: ${output}"
+else
+  if output="$("${bazel}" build @swiftpkg_swift_system//:SystemPackage 2>&1)"; then
+    fail "Expected @swiftpkg_swift_system to fail on macOS: ${output}"
+  fi
+  # The extension's own stale warning is not a `fail()`, so this proves the
+  # failing target or repository was reached.
+  assert_contains "Error in fail: " "${output}"
+  assert_contains "is not in slice \`swift_deps/apple\`" "${output}"
+fi
+
+# MARK: - Stale handling
+
+# Change an input of the other OS's slice. swift-log becomes an alias
+# repository over a `__slice_` repository, the host configuration still
+# builds, `@swift_package` stays usable, and under the other platform the
+# `select()` routes to the stale target, whose analysis fails.
+save_swift_deps
+echo "x=y" >>"${other_cache}/_main/flags.cached"
+output="$("${bazel}" cquery --output=build @swiftpkg_swift_log//:Logging)"
+assert_contains "alias(" "${output}"
+[[ "${output}" =~ @@[^\"]*swiftpkg_swift_log__slice_[0-9]+//:Logging ]] \
+  || fail "Expected Logging to alias a __slice_ repository: ${output}"
+"${bazel}" build //Sources/MultiSlice
+"${bazel}" build @swift_package//:cache
+if output="$("${bazel}" cquery @swiftpkg_swift_log//:Logging \
+  --platforms="${other_platform}" 2>&1)"; then
+  fail "Expected Logging to fail under ${other_platform}: ${output}"
+fi
+# `Error in fail:` comes from the stale target, not the extension's warning.
+assert_contains "Error in fail: slice \`swift_deps/${other_slice}\`" "${output}"
+assert_contains "is stale" "${output}"
+restore_swift_deps
+
+# MARK: - Swift version check
+
+save_swift_deps
+echo "1.0.0" >"swift_deps/${host_slice}/swift_deps_cache/_main/swift_version.txt"
+if output="$("${bazel}" build //Sources/MultiSlice 2>&1)"; then
+  fail "Expected the Swift version check to fail: ${output}"
+fi
+assert_contains "was produced by Swift 1.0" "${output}"
+"${bazel}" build //Sources/MultiSlice \
+  --@rules_swift_package_manager//:swift_version_check=off
+restore_swift_deps
+
+# MARK: - Cache reproducibility
+
+# Regenerating the host's slice must not change it.
+save_swift_deps
+"${bazel}" run @swift_package//:cache
+diff -r --exclude=.build \
+  "${tmp}/swift_deps/${host_slice}" "swift_deps/${host_slice}" \
+  || fail "The cache step changed the checked-in ${host_slice} slice."
+rm -rf swift_deps/*/.build

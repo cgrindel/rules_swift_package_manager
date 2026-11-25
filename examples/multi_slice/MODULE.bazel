@@ -1,0 +1,53 @@
+bazel_dep(
+    name = "rules_swift_package_manager",
+    version = "0.0.0",
+)
+local_path_override(
+    module_name = "rules_swift_package_manager",
+    path = "../..",
+)
+
+bazel_dep(name = "cgrindel_bazel_starlib", version = "0.30.0")
+bazel_dep(name = "bazel_skylib", version = "1.9.2")
+bazel_dep(name = "platforms", version = "1.0.0")
+
+# The apple_support bazel_dep must come before the rules_cc.
+# https://github.com/bazelbuild/apple_support#incompatible-toolchain-resolution
+bazel_dep(name = "apple_support", version = "2.12.0")
+bazel_dep(
+    name = "rules_swift",
+    version = "4.3.0",
+    repo_name = "build_bazel_rules_swift",
+)
+
+# TODO(#2641): Remove once rules_swift ships swift_toolchain_tool
+# (https://github.com/bazelbuild/rules_swift/pull/2034). The root module's
+# override in rules_swift_package_manager does not reach this workspace.
+git_override(
+    module_name = "rules_swift",
+    commit = "dd629b0cbb25c017e30fff3c40d0f0fddf653613",
+    remote = "https://github.com/cgrindel/rules_swift.git",
+)
+
+apple_cc_configure = use_extension(
+    "@apple_support//crosstool:setup.bzl",
+    "apple_cc_configure_extension",
+)
+use_repo(apple_cc_configure, "local_config_apple_cc")
+
+swift_deps = use_extension(
+    "@rules_swift_package_manager//:extensions.bzl",
+    "swift_deps",
+)
+use_repo(
+    swift_deps,
+    "swift_package",
+    "swiftpkg_swift_log",
+    "swiftpkg_swift_system",
+)
+
+# One `from_package` tag per slice. Include them after the root
+# `use_extension` so that `bazel mod tidy` writes `use_repo` here rather than
+# into a slice file.
+include("//swift_deps/apple:inc.MODULE.bazel")
+include("//swift_deps/linux:inc.MODULE.bazel")

@@ -9,58 +9,17 @@ load("//swiftpkg/internal:pkginfo_dependencies.bzl", "pkginfo_dependencies")
 load("//swiftpkg/internal:pkginfos.bzl", "pkginfos")
 load("//swiftpkg/internal:registry_swift_package.bzl", "registry_swift_package")
 load("//swiftpkg/internal:repository_utils.bzl", "repository_utils")
+load("//swiftpkg/internal:slices.bzl", "slices")
 load("//swiftpkg/internal:swift_deps_info.bzl", "swift_deps_info")
 load("//swiftpkg/internal:swift_package.bzl", "PATCH_ATTRS", "TOOL_ATTRS", "swift_package")
 load("//swiftpkg/internal:swift_package_tool_attrs.bzl", "swift_package_tool_attrs")
 load("//swiftpkg/internal:swift_package_tool_repo.bzl", "swift_package_tool_repo")
+load(":slice_declarations.bzl", "slice_declarations")
+load(":swift_deps_common.bzl", "INFERENCE_KEYS", "swift_deps_common")
 
 # MARK: - swift_deps bzlmod Extension
 
 _DO_WHILE_RANGE = range(1000)
-
-def _module_aliases_by_identity(pkg_info):
-    """Collect module aliases declared in the root package manifest (SE-0339).
-
-    Collects the `moduleAliases` declared on product dependencies of the root
-    package's targets, keyed by the identity of the package that provides the
-    aliased product. Scoping the aliases to the providing package ensures a
-    same-named module from a different package is unaffected: only the
-    providing package renames its module, and only that package and its
-    direct dependents compile with `-module-alias` flags. Aliases declared by
-    non-root packages in the dependency graph are not yet supported.
-
-    Only pure Swift, source-based modules may be aliased (an SE-0339
-    restriction); aliasing a module with C/Objective-C interop or a binary
-    target is not supported and will fail to build.
-
-    Args:
-        pkg_info: A `struct` as returned by `pkginfos.get` for the root
-            package.
-
-    Returns:
-        A `dict` mapping package identities to a `dict` of original module
-        names to their replacement names.
-    """
-    aliases_by_identity = {}
-    for target in pkg_info.targets:
-        for target_dep in target.dependencies:
-            product = target_dep.product
-            if not (product and product.module_aliases):
-                continue
-            dep = pkginfo_dependencies.get_by_name(
-                pkg_info.dependencies,
-                product.dep_name,
-            )
-            if dep == None:
-                fail("""\
-Unable to resolve the package for the module aliases declared on product \
-'{product}'. No dependency named '{dep_name}' was found in the root package \
-manifest.\
-""".format(product = product.product_name, dep_name = product.dep_name))
-            aliases_by_identity.setdefault(dep.identity, {}).update(
-                product.module_aliases,
-            )
-    return aliases_by_identity
 
 def _non_root_target_mods_error(module_name, tag_groups):
     """Check that a non-root module did not declare target modification tags.
@@ -85,26 +44,6 @@ provide the setting a different way, or apply the modification from your root \
         declared = ", ".join(declared),
         name = module_name,
     )
-
-def _build_file_conflict_error(package_name, build_file, target_mods):
-    """Check that target modifications are not combined with a `build_file`.
-
-    Args:
-        package_name: The name of the Swift package as a `string`.
-        build_file: The `build_file` override from the `configure_package` tag,
-            or `None`.
-        target_mods: The encoded target modifications as a `string`.
-
-    Returns:
-        A `string` describing the problem, or `None` if there is none.
-    """
-    if not build_file or not target_mods:
-        return None
-    return """\
-Target modifications cannot be applied to package '{package}' because its \
-`configure_package` tag supplies a complete `build_file` override. Remove the \
-override or apply the modifications in that BUILD file.\
-""".format(package = package_name)
 
 # The `select()` branch value types that are declared as `string` values and
 # converted to their Starlark type by this extension.
@@ -402,7 +341,7 @@ def _declare_pkgs_from_package(
     # name resolve. Every repository receives the full map because a
     # repository's dependencies are only known once its manifest is parsed
     # inside the repository rule.
-    module_aliases_by_id = _module_aliases_by_identity(pkg_info)
+    module_aliases_by_id = pkginfo_dependencies.module_aliases_by_identity(pkg_info)
     dep_module_aliases_json = json.encode(module_aliases_by_id) if module_aliases_by_id else ""
 
     # Collect all of the deps by identity
@@ -512,7 +451,7 @@ def _declare_pkgs_from_package(
     # must still count as known repositories so that
     # `@swift_package//:resolve` remains available without first deleting the
     # modification tags.
-    _record_inference_packages(inference_config, all_deps_by_id.values())
+    swift_deps_common.record_inference_packages(inference_config, all_deps_by_id.values())
     for dep in all_deps_by_id.values():
         dep_repo_name = bazel_repo_names.from_identity(dep.identity)
         available_target_mod_repos[dep_repo_name] = True
@@ -522,7 +461,10 @@ def _declare_pkgs_from_package(
     # Record every package repository declared below so that each package
     # repository can read the effective minimum OS versions of the
     # dependencies that exist without failing on ones that do not.
-    package_repos = _declare_package_repos(all_deps_by_id)
+    package_repos = swift_deps_common.declare_package_repos([
+        bazel_repo_names.from_identity(identity)
+        for identity in all_deps_by_id.keys()
+    ])
 
     # Declare the Bazel repositories.
     for dep in all_deps_by_id.values():
@@ -565,7 +507,7 @@ the Swift package to make it available.\
                 ),
             ),
             package_repos,
-            _inference_settings(
+            swift_deps_common.inference_settings(
                 inference_config,
                 dep.name,
                 bazel_repo_names.from_identity(dep.identity),
@@ -583,45 +525,6 @@ the Swift package to make it available.\
                 direct_dep_repo_names.append(bazel_repo_name)
 
     return direct_dep_repo_names
-
-_PACKAGE_REPOS_REPO_NAME = "swift_deps_package_repos"
-
-_PACKAGE_REPOS_FILE = "package_repos.json"
-
-def _swift_deps_package_repos_impl(repository_ctx):
-    repository_ctx.file(
-        _PACKAGE_REPOS_FILE,
-        content = json.encode_indent(
-            {"repo_names": repository_ctx.attr.repo_names},
-            indent = "  ",
-        ),
-        executable = False,
-    )
-    repository_ctx.file(
-        "BUILD.bazel",
-        content = 'exports_files(["{}"])\n'.format(_PACKAGE_REPOS_FILE),
-        executable = False,
-    )
-
-_swift_deps_package_repos = repository_rule(
-    implementation = _swift_deps_package_repos_impl,
-    attrs = {
-        "repo_names": attr.string_list(
-            doc = "The names of every Swift package repository declared by the extension.",
-        ),
-    },
-    doc = "Lists the Swift package repositories declared by the `swift_deps` extension.",
-)
-
-def _declare_package_repos(all_deps_by_id):
-    _swift_deps_package_repos(
-        name = _PACKAGE_REPOS_REPO_NAME,
-        repo_names = sorted([
-            bazel_repo_names.from_identity(identity)
-            for identity in all_deps_by_id.keys()
-        ]),
-    )
-    return "@{}//:{}".format(_PACKAGE_REPOS_REPO_NAME, _PACKAGE_REPOS_FILE)
 
 def _unresolved_swift_package_repo_impl(repository_ctx):
     repository_ctx.file("BUILD.bazel", "# NOTE: This is a placeholder for unresolved Swift packages.")
@@ -657,75 +560,8 @@ def _declare_pkg_from_dependency(
         )):
     if cached_json_directory:
         cached_json_directory = paths.join(cached_json_directory, dep.name)
-    name = bazel_repo_names.from_identity(dep.identity)
-    build_file = None
-    if config_pkg:
-        build_file = config_pkg.build_file
-    build_file_conflict = _build_file_conflict_error(
-        dep.name,
-        build_file,
-        target_mods,
-    )
-    if build_file_conflict != None:
-        fail(build_file_conflict)
-    if dep.source_control:
-        init_submodules = None
-        recursive_init_submodules = None
-        patch_args = None
-        patch_cmds = None
-        patch_cmds_win = None
-        patch_tool = None
-        patches = None
-        publicly_expose_all_targets = None
-        if config_pkg:
-            init_submodules = config_pkg.init_submodules
-            recursive_init_submodules = config_pkg.recursive_init_submodules
-            patch_args = config_pkg.patch_args
-            patch_cmds = config_pkg.patch_cmds
-            patch_cmds_win = config_pkg.patch_cmds_win
-            patch_tool = config_pkg.patch_tool
-            patches = config_pkg.patches
-            publicly_expose_all_targets = config_pkg.publicly_expose_all_targets
-
-        registries = from_package.registries
-        replace_scm_with_registry = False
-        if config_swift_package:
-            replace_scm_with_registry = \
-                config_swift_package.replace_scm_with_registry
-
-        pin = dep.source_control.pin
-        package_rules.git(
-            name = name,
-            bazel_package_name = name,
-            commit = pin.state.revision,
-            remote = pin.location,
-            version = pin.state.version,
-            build_file = build_file,
-            dependencies_index = None,
-            env = from_package.env,
-            env_inherit = from_package.env_inherit,
-            cached_json_directory = cached_json_directory,
-            init_submodules = init_submodules,
-            make_files_read_only = from_package.make_files_read_only,
-            recursive_init_submodules = recursive_init_submodules,
-            netrc = from_package.netrc,
-            patch_args = patch_args,
-            patch_cmds = patch_cmds,
-            patch_cmds_win = patch_cmds_win,
-            patch_tool = patch_tool,
-            patches = patches,
-            publicly_expose_all_targets = publicly_expose_all_targets,
-            registries = registries,
-            replace_scm_with_registry = replace_scm_with_registry,
-            target_deps = target_deps,
-            module_aliases = module_aliases,
-            dep_module_aliases = dep_module_aliases,
-            bazel_target_mods = target_mods,
-            package_repos = package_repos,
-            **inference_settings
-        )
-
-    elif dep.file_system:
+    local_path = None
+    if dep.file_system:
         # Store the local package path relative to the Bazel workspace root so
         # the lock file stays portable across machines and checkouts. The
         # `local_swift_package` rule re-absolutizes a relative path against its
@@ -735,55 +571,44 @@ def _declare_pkg_from_dependency(
             dep.file_system.path,
             bazel_workspace_root,
         )
-        if paths.is_absolute(local_path):
-            # buildifier: disable=print
-            print("""
-WARNING: local Swift package '{identity}' resolves to '{path}', which is \
-outside the Bazel workspace root. Its path will be stored as an absolute path \
-in the lock file and will not be portable across machines.\
-""".format(identity = dep.identity, path = local_path))
-        package_rules.local(
-            name = name,
-            bazel_package_name = name,
-            env = from_package.env,
-            env_inherit = from_package.env_inherit,
-            path = local_path,
-            dependencies_index = None,
-            build_file = build_file,
+    repo = swift_deps_common.pkg_repo_kwargs(
+        name = bazel_repo_names.from_identity(dep.identity),
+        dep = dep,
+        config_pkg = config_pkg,
+        make_files_read_only = from_package.make_files_read_only,
+        local_path = local_path,
+        target_deps = target_deps,
+        module_aliases = module_aliases,
+        dep_module_aliases = dep_module_aliases,
+        target_mods = target_mods,
+        package_repos = package_repos,
+        inference_settings = inference_settings,
+    )
+
+    # The v1-only attributes.
+    replace_scm_with_registry = False
+    if config_swift_package:
+        replace_scm_with_registry = config_swift_package.replace_scm_with_registry
+    v1_kwargs = dict(
+        env = from_package.env,
+        env_inherit = from_package.env_inherit,
+    )
+    if repo.kind == "git":
+        v1_kwargs.update(
             cached_json_directory = cached_json_directory,
-            target_deps = target_deps,
-            module_aliases = module_aliases,
-            dep_module_aliases = dep_module_aliases,
-            bazel_target_mods = target_mods,
-            package_repos = package_repos,
-            **inference_settings
-        )
-
-    elif dep.registry:
-        resolved = from_package.resolved if from_package else None
-        replace_scm_with_registry = False
-        if config_swift_package:
-            replace_scm_with_registry = config_swift_package.replace_scm_with_registry
-
-        package_rules.registry(
-            name = name,
-            bazel_package_name = name,
-            build_file = build_file,
-            env = from_package.env,
-            env_inherit = from_package.env_inherit,
-            id = dep.registry.pin.identity,
-            make_files_read_only = from_package.make_files_read_only,
+            netrc = from_package.netrc,
             registries = from_package.registries,
             replace_scm_with_registry = replace_scm_with_registry,
-            resolved = resolved,
-            target_deps = target_deps,
-            version = dep.registry.pin.state.version,
-            module_aliases = module_aliases,
-            dep_module_aliases = dep_module_aliases,
-            bazel_target_mods = target_mods,
-            package_repos = package_repos,
-            **inference_settings
         )
+    elif repo.kind == "local":
+        v1_kwargs.update(cached_json_directory = cached_json_directory)
+    else:
+        v1_kwargs.update(
+            registries = from_package.registries,
+            replace_scm_with_registry = replace_scm_with_registry,
+            resolved = from_package.resolved if from_package else None,
+        )
+    getattr(package_rules, repo.kind)(**dicts.add(repo.kwargs, v1_kwargs))
 
 def _declare_swift_package_repo(name, from_package, config_swift_package):
     config_swift_package_kwargs = repository_utils.struct_to_kwargs(
@@ -803,12 +628,8 @@ def _declare_swift_package_repo(name, from_package, config_swift_package):
         **config_swift_package_kwargs
     )
 
-# Keep inference ownership separate from legacy configure_package settings:
-# dependency modules must not change the root's inference policy.
-_INFERENCE_KEYS = ["system_sdk_deps", "binary_target_deps"]
-
 def _inference_configuration(modules):
-    defaults = {key: False for key in _INFERENCE_KEYS}
+    defaults = {key: False for key in INFERENCE_KEYS}
     packages = {}
     root_package_names = {}
     configured = False
@@ -825,9 +646,9 @@ Only the root module may declare configure_explicit_modules \
 Expected at most one configure_explicit_modules tag in the root module.\
 """)
             configured = True
-            defaults = {key: getattr(tag, key) for key in _INFERENCE_KEYS}
+            defaults = {key: getattr(tag, key) for key in INFERENCE_KEYS}
         for tag in mod.tags.configure_package:
-            overrides = {key: getattr(tag, key) for key in _INFERENCE_KEYS}
+            overrides = {key: getattr(tag, key) for key in INFERENCE_KEYS}
             if not mod.is_root:
                 if any([value != "inherit" for value in overrides.values()]):
                     return struct(error = """\
@@ -852,15 +673,6 @@ settings for this package in one tag so existing settings are not lost.\
         available_names = {},
     )
 
-def _record_inference_packages(config, dependencies):
-    # Include unresolved dependencies so overrides do not block package resolve.
-    # Record both accepted names even if the package-name override takes priority.
-    for dep in dependencies:
-        for name in [dep.name, bazel_repo_names.from_identity(dep.identity)]:
-            config.available_names[name] = True
-            if name in config.packages:
-                config.matched_names[name] = True
-
 def _unknown_inference_packages_error(config):
     unknown = sorted([
         name
@@ -876,19 +688,6 @@ Available package names and repositories are: {available}.\
         unknown = ", ".join(unknown),
         available = ", ".join(sorted(config.available_names)),
     )
-
-def _inference_settings(config, package_name, repo_name):
-    # Match configure_package's existing package-name-before-repository lookup.
-    overrides = config.packages.get(
-        package_name,
-        config.packages.get(repo_name, {}),
-    )
-    settings = dict(config.defaults)
-    for key in _INFERENCE_KEYS:
-        value = overrides.get(key, "inherit")
-        if value != "inherit":
-            settings[key] = value == "on"
-    return settings
 
 def _extension_metadata(
         module_ctx,
@@ -949,6 +748,10 @@ Expected only one `configure_swift_package` tag, but found multiple.\
 """)
             config_swift_package = config_swift_package_tag
 
+    mixed_modes_error = swift_deps_common.mixed_modes_error(module_ctx.modules)
+    if mixed_modes_error:
+        fail(mixed_modes_error)
+
     target_mods_by_repo = _bazel_target_mods_by_repo(module_ctx)
     matched_target_mod_repos = {}
     available_target_mod_repos = {}
@@ -956,6 +759,9 @@ Expected only one `configure_swift_package` tag, but found multiple.\
     direct_dev_dep_repo_names = []
     for mod in module_ctx.modules:
         for from_package in mod.tags.from_package:
+            # v2 tags are handled separately below; v2 is root-module only.
+            if slices.is_v2_tag(from_package):
+                continue
             repo_names = declare_pkgs_from_package(
                 module_ctx,
                 from_package,
@@ -975,6 +781,30 @@ Expected only one `configure_swift_package` tag, but found multiple.\
                 direct_dev_dep_repo_names.extend(repo_names)
             else:
                 direct_dep_repo_names.extend(repo_names)
+
+    v2_slices = slice_declarations.collect(module_ctx)
+    if v2_slices:
+        evaluated = [
+            slice_declarations.evaluate(
+                module_ctx,
+                slice,
+                config_swift_package,
+                config_pkgs,
+            )
+            for slice in v2_slices
+        ]
+        v2_repo_names = slice_declarations.declare(
+            module_ctx,
+            evaluated,
+            config_pkgs,
+            config_swift_package,
+            target_mods_by_repo,
+            matched_target_mod_repos,
+            available_target_mod_repos,
+            inference_config,
+        )
+        direct_dep_repo_names.extend(v2_repo_names.direct)
+        direct_dev_dep_repo_names.extend(v2_repo_names.direct_dev)
 
     inference_error = _unknown_inference_packages_error(inference_config)
     if inference_error:
@@ -1004,6 +834,16 @@ _from_package_tag = tag_class(
         swift_package_tool_attrs.swift_package_registry,
         {
             "cached_json_directory": attr.string(),
+            "config": attr.label(
+                doc = """\
+v2: the label that selects this slice, anything `select()` accepts (e.g. \
+`@rules_swift_package_manager//config:any`). Setting it or `dump_manifests` \
+selects v2 mode: `config` becomes required, and the v1 attributes \
+`cached_json_directory`, `declare_swift_deps_info`, `env`, `env_inherit` and \
+`resolve_transitive_local_dependencies` are ignored. In v2 mode, \
+`configure_package` patches may only be files in the root module.\
+""",
+            ),
             "declare_swift_deps_info": attr.bool(
                 doc = """\
 Declare a `swift_deps_info` repository that is used by external tooling (e.g. \
@@ -1026,6 +866,21 @@ They can be `bazel run` to update/resolve the `resolved` file:
 bazel run @swift_package//:update
 bazel run @swift_package//:resolve
 ```
+""",
+            ),
+            "desc_manifests": attr.string_keyed_label_dict(
+                doc = """\
+v2: maps a package identity (`_main` for the root package, e.g. \
+`swift-log` for a dependency) to its checked-in `swift package describe` \
+manifest for this slice. Read only when `dump_manifests` is set.\
+""",
+            ),
+            "dump_manifests": attr.string_keyed_label_dict(
+                doc = """\
+v2: maps a package identity (`_main` for the root package, e.g. \
+`swift-log` for a dependency) to its checked-in `swift package dump-package` \
+manifest for this slice. Declare one `from_package` tag per slice; the slice \
+directory is the Bazel package of `resolved`. See `config` for v2 mode.\
 """,
             ),
             "env": attr.string_dict(
@@ -1090,7 +945,7 @@ Opt in to {} inference. Reserved configuration: inference is not implemented yet
                 "SDK dependency" if key == "system_sdk_deps" else "binary-target dependency",
             ),
         )
-        for key in _INFERENCE_KEYS
+        for key in INFERENCE_KEYS
     },
     doc = """\
 Root-only defaults for independent dependency inference settings. Does not \
@@ -1107,7 +962,7 @@ Root-only package override for {}: inherit the global default, enable, or \
 disable. Inference is not implemented yet.\
 """.format(key),
     )
-    for key in _INFERENCE_KEYS
+    for key in INFERENCE_KEYS
 }
 
 _configure_package_tag = tag_class(
@@ -1413,8 +1268,8 @@ swift_deps_test_utils = struct(
     extension_metadata = _extension_metadata,
     declare_pkg_from_dependency = _declare_pkg_from_dependency,
     inference_configuration = _inference_configuration,
-    inference_settings = _inference_settings,
-    record_inference_packages = _record_inference_packages,
+    inference_settings = swift_deps_common.inference_settings,
+    record_inference_packages = swift_deps_common.record_inference_packages,
     unknown_inference_packages_error = _unknown_inference_packages_error,
     branch_values = _branch_values,
     bazel_target_mod_tag_classes = [
@@ -1422,7 +1277,7 @@ swift_deps_test_utils = struct(
         for spec in _BAZEL_TARGET_MOD_TAG_SPECS
     ],
     bazel_target_mods_by_repo = _bazel_target_mods_by_repo,
-    build_file_conflict_error = _build_file_conflict_error,
+    build_file_conflict_error = swift_deps_common.build_file_conflict_error,
     non_root_target_mods_error = _non_root_target_mods_error,
     swift_deps_impl = _swift_deps_impl,
 )

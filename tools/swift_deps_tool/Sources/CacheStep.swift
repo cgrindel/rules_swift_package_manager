@@ -33,7 +33,8 @@ public struct CacheStep {
     try checkSliceDir()
     try checkBazelignore()
     let flags = try SwiftPMFlags(keyValues: inv.flags, workspace: inv.workspace)
-    let spm = SwiftPM(tool: inv.swiftTool, flags: flags, sliceDir: sliceURL)
+    let spm = SwiftPM(
+      tool: inv.swiftTool, flags: flags, sliceDir: sliceURL, runfilesDir: inv.runfilesDir)
     let placement = ResolvedPlacement(packageDir: packageDir, sliceDir: sliceURL)
     let patches = inv.patches.mapValues { paths in
       paths.map { inv.workspace.appendingPathComponent($0) }

@@ -86,6 +86,12 @@ use_extension='swift_deps = use_extension('
 use_extension+='"@rules_swift_package_manager//:extensions.bzl", "swift_deps")'
 grep -qF "${use_extension}" <<<"${out}" \
   || fail "missing use_extension line in output"
+# `bazel mod tidy` writes use_repo into the first file that uses the
+# extension, so the include must come after the root use_extension.
+use_extension_line="$(grep -nF "${use_extension}" <<<"${out}" | cut -d: -f1)"
+include_line="$(grep -nF 'include("//swift/macos:' <<<"${out}" | cut -d: -f1)"
+[[ ${use_extension_line} -lt ${include_line} ]] \
+  || fail "use_extension must be printed before the include: ${out}"
 grep -qF "Package.resolved" <<<"${out}" || fail "missing seed reminder"
 
 # Second init in the same dir is refused.

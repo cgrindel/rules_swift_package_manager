@@ -1,0 +1,93 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-argument-parser",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.8.2",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-argument-parser"
+    },
+    {
+      "identity" : "swift-log",
+      "requirement" : {
+        "exact" : [
+          "1.8.0"
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-log"
+    }
+  ],
+  "manifest_display_name" : "MySwiftPackage",
+  "name" : "MySwiftPackage",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "my-executable",
+      "targets" : [
+        "MyExecutable"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "MyLibraryTests",
+      "module_type" : "SwiftTarget",
+      "name" : "MyLibraryTests",
+      "path" : "Tests/MyLibraryTests",
+      "sources" : [
+        "MyLibraryTests.swift"
+      ],
+      "target_dependencies" : [
+        "MyLibrary"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "MyLibrary",
+      "module_type" : "SwiftTarget",
+      "name" : "MyLibrary",
+      "path" : "Sources/MyLibrary",
+      "product_memberships" : [
+        "my-executable"
+      ],
+      "sources" : [
+        "World.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "MyExecutable",
+      "module_type" : "SwiftTarget",
+      "name" : "MyExecutable",
+      "path" : "Sources/MyExecutable",
+      "product_dependencies" : [
+        "ArgumentParser",
+        "Logging"
+      ],
+      "product_memberships" : [
+        "my-executable"
+      ],
+      "sources" : [
+        "MyExecutable.swift"
+      ],
+      "target_dependencies" : [
+        "MyLibrary"
+      ],
+      "type" : "executable"
+    }
+  ],
+  "tools_version" : "5.7"
+}
