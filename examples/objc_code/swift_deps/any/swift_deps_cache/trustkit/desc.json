@@ -1,0 +1,105 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "TrustKit",
+  "name" : "TrustKit",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "maccatalyst",
+      "version" : "15.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "9.0"
+    },
+    {
+      "name" : "visionos",
+      "version" : "1.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "TrustKit",
+      "targets" : [
+        "TrustKit"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "TrustKitSwift",
+      "module_type" : "SwiftTarget",
+      "name" : "TrustKitSwift",
+      "path" : "TrustKit/Swift",
+      "product_memberships" : [
+        "TrustKit"
+      ],
+      "sources" : [
+        "SubjectPublicKeyInfo.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "TrustKit",
+      "module_type" : "ClangTarget",
+      "name" : "TrustKit",
+      "path" : "TrustKit",
+      "product_memberships" : [
+        "TrustKit"
+      ],
+      "resources" : [
+        {
+          "path" : "./TrustKit/PrivacyInfo.xcprivacy",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Dependencies/RSSwizzle/RSSwizzle.m",
+        "Pinning/TSKSPKIHashCache.m",
+        "Pinning/pinning_utils.m",
+        "Pinning/ssl_pin_verifier.m",
+        "Reporting/TSKBackgroundReporter.m",
+        "Reporting/TSKPinFailureReport.m",
+        "Reporting/TSKReportsRateLimiter.m",
+        "Reporting/reporting_utils.m",
+        "Reporting/vendor_identifier.m",
+        "Swizzling/TSKNSURLConnectionDelegateProxy.m",
+        "Swizzling/TSKNSURLSessionDelegateProxy.m",
+        "TSKPinningValidator.m",
+        "TSKPinningValidatorResult.m",
+        "TSKTrustKitConfig.m",
+        "TrustKit.m",
+        "configuration_utils.m",
+        "parse_configuration.m"
+      ],
+      "target_dependencies" : [
+        "TrustKitSwift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.0"
+}
