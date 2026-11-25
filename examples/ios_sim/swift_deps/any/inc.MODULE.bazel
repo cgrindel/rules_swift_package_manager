@@ -1,0 +1,24 @@
+swift_deps = use_extension("@rules_swift_package_manager//:extensions.bzl", "swift_deps")
+swift_deps.from_package(
+    config = "@rules_swift_package_manager//config:any",
+    desc_manifests = {
+        "_main": "//swift_deps/any:swift_deps_cache/_main/desc.json",
+        "swift-atomics": "//swift_deps/any:swift_deps_cache/swift-atomics/desc.json",
+        "swift-cmark": "//swift_deps/any:swift_deps_cache/swift-cmark/desc.json",
+        "swift-collections": "//swift_deps/any:swift_deps_cache/swift-collections/desc.json",
+        "swift-markdown": "//swift_deps/any:swift_deps_cache/swift-markdown/desc.json",
+        "swift-nio": "//swift_deps/any:swift_deps_cache/swift-nio/desc.json",
+        "swift-system": "//swift_deps/any:swift_deps_cache/swift-system/desc.json",
+    },
+    dump_manifests = {
+        "_main": "//swift_deps/any:swift_deps_cache/_main/dump.json",
+        "swift-atomics": "//swift_deps/any:swift_deps_cache/swift-atomics/dump.json",
+        "swift-cmark": "//swift_deps/any:swift_deps_cache/swift-cmark/dump.json",
+        "swift-collections": "//swift_deps/any:swift_deps_cache/swift-collections/dump.json",
+        "swift-markdown": "//swift_deps/any:swift_deps_cache/swift-markdown/dump.json",
+        "swift-nio": "//swift_deps/any:swift_deps_cache/swift-nio/dump.json",
+        "swift-system": "//swift_deps/any:swift_deps_cache/swift-system/dump.json",
+    },
+    resolved = "//swift_deps/any:Package.resolved",
+    swift = "//:Package.swift",
+)

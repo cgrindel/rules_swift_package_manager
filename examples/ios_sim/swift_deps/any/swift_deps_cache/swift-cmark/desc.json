@@ -1,0 +1,158 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "cmark-gfm",
+  "name" : "cmark-gfm",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "cmark-gfm",
+      "targets" : [
+        "cmark-gfm"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "cmark-gfm-extensions",
+      "targets" : [
+        "cmark-gfm-extensions"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "cmark-gfm-bin",
+      "targets" : [
+        "cmark-gfm-bin"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    },
+    {
+      "name" : "api_test",
+      "targets" : [
+        "api_test"
+      ],
+      "type" : {
+        "executable" : null
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "cmark_gfm_extensions",
+      "module_type" : "ClangTarget",
+      "name" : "cmark-gfm-extensions",
+      "path" : "extensions",
+      "product_memberships" : [
+        "cmark-gfm-extensions",
+        "cmark-gfm-bin",
+        "api_test"
+      ],
+      "sources" : [
+        "autolink.c",
+        "core-extensions.c",
+        "ext_scanners.c",
+        "strikethrough.c",
+        "table.c",
+        "tagfilter.c",
+        "tasklist.c"
+      ],
+      "target_dependencies" : [
+        "cmark-gfm"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "cmark_gfm_bin",
+      "module_type" : "ClangTarget",
+      "name" : "cmark-gfm-bin",
+      "path" : "bin",
+      "product_memberships" : [
+        "cmark-gfm-bin"
+      ],
+      "sources" : [
+        "main.c"
+      ],
+      "target_dependencies" : [
+        "cmark-gfm",
+        "cmark-gfm-extensions"
+      ],
+      "type" : "executable"
+    },
+    {
+      "c99name" : "cmark_gfm",
+      "module_type" : "ClangTarget",
+      "name" : "cmark-gfm",
+      "path" : "src",
+      "product_memberships" : [
+        "cmark-gfm",
+        "cmark-gfm-extensions",
+        "cmark-gfm-bin",
+        "api_test"
+      ],
+      "sources" : [
+        "arena.c",
+        "blocks.c",
+        "buffer.c",
+        "cmark.c",
+        "cmark_ctype.c",
+        "commonmark.c",
+        "footnotes.c",
+        "houdini_href_e.c",
+        "houdini_html_e.c",
+        "houdini_html_u.c",
+        "html.c",
+        "inlines.c",
+        "iterator.c",
+        "latex.c",
+        "linked_list.c",
+        "man.c",
+        "map.c",
+        "node.c",
+        "plaintext.c",
+        "plugin.c",
+        "references.c",
+        "registry.c",
+        "render.c",
+        "scanners.c",
+        "syntax_extension.c",
+        "utf8.c",
+        "xml.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "api_test",
+      "module_type" : "ClangTarget",
+      "name" : "api_test",
+      "path" : "api_test",
+      "product_memberships" : [
+        "api_test"
+      ],
+      "sources" : [
+        "cplusplus.cpp",
+        "harness.c",
+        "main.c"
+      ],
+      "target_dependencies" : [
+        "cmark-gfm",
+        "cmark-gfm-extensions"
+      ],
+      "type" : "executable"
+    }
+  ],
+  "tools_version" : "5.3"
+}

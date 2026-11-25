@@ -1,0 +1,681 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-cmark",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "0.9.0",
+            "upper_bound" : "1.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/swiftlang/swift-cmark.git"
+    },
+    {
+      "identity" : "swift-docc-plugin",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.1.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-docc-plugin"
+    }
+  ],
+  "manifest_display_name" : "swift-markdown",
+  "name" : "swift-markdown",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Markdown",
+      "targets" : [
+        "Markdown"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "XMLConverter",
+      "targets" : [
+        "XMLConverter"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "LinkCollector",
+      "targets" : [
+        "LinkCollector"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "PreferredHeadingStyle",
+      "targets" : [
+        "PreferredHeadingStyle"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "UseCodeFence",
+      "targets" : [
+        "UseCodeFence"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "CondenseAutolinks",
+      "targets" : [
+        "CondenseAutolinks"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "DefaultFormatting",
+      "targets" : [
+        "DefaultFormatting"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "CustomLinePrefix",
+      "targets" : [
+        "CustomLinePrefix"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "UnorderedListMarker",
+      "targets" : [
+        "UnorderedListMarker"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "OrderedListNumerals",
+      "targets" : [
+        "OrderedListNumerals"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "MaximumWidth",
+      "targets" : [
+        "MaximumWidth"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "ThematicBreakCharacter",
+      "targets" : [
+        "ThematicBreakCharacter"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "EmphasisMarkers",
+      "targets" : [
+        "EmphasisMarkers"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "ChildThrough",
+      "targets" : [
+        "ChildThrough"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "ParseDocumentString",
+      "targets" : [
+        "ParseDocumentString"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "ParseDocumentFile",
+      "targets" : [
+        "ParseDocumentFile"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "RemoveElementKind",
+      "targets" : [
+        "RemoveElementKind"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    },
+    {
+      "name" : "ReplaceText",
+      "targets" : [
+        "ReplaceText"
+      ],
+      "type" : {
+        "snippet" : null
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "c99name" : "MarkdownTests",
+      "module_type" : "SwiftTarget",
+      "name" : "MarkdownTests",
+      "path" : "Tests/MarkdownTests",
+      "resources" : [
+        {
+          "path" : "./Tests/MarkdownTests/Visitors/Everything.md",
+          "rule" : {
+            "process" : {
+
+            }
+          }
+        }
+      ],
+      "sources" : [
+        "Base/AtomicCounterTests.swift",
+        "Base/HierarchyTests.swift",
+        "Base/MarkupIdentifierTests.swift",
+        "Base/MarkupTests.swift",
+        "Base/ParsedRangePreservedAfterEditing.swift",
+        "Base/PlainTextConvertibleMarkupTests.swift",
+        "Base/RawMarkupTests.swift",
+        "Base/RawMarkupToMarkupTests.swift",
+        "Base/StableIdentifierTests.swift",
+        "Block Nodes/CodeBlockTests.swift",
+        "Block Nodes/DocumentTests.swift",
+        "Block Nodes/HTMLBlockTests.swift",
+        "Block Nodes/HeadingTests.swift",
+        "Block Nodes/ParagraphTests.swift",
+        "Block Nodes/TableTests.swift",
+        "Infrastructure/SourceLocationTests.swift",
+        "Inline Nodes/ImageTests.swift",
+        "Inline Nodes/InlineAttributesTests.swift",
+        "Inline Nodes/InlineCodeTests.swift",
+        "Inline Nodes/InlineHTMLTests.swift",
+        "Inline Nodes/LineBreakTests.swift",
+        "Inline Nodes/LinkTests.swift",
+        "Inline Nodes/SoftBreakTests.swift",
+        "Inline Nodes/SymbolLinkTests.swift",
+        "Inline Nodes/TextTests.swift",
+        "Interpretive Nodes/AsideTests.swift",
+        "Parsing/BacktickTests.swift",
+        "Parsing/BlockDirectiveParserTests.swift",
+        "Parsing/CommonMarkConverterTests.swift",
+        "Parsing/DoxygenCommandParserTests.swift",
+        "Parsing/SourceURLTests.swift",
+        "Performance/EditPerformanceTests.swift",
+        "Performance/MarkupChildrenPerformanceTests.swift",
+        "Structural Restrictions/BasicBlockContainerTests.swift",
+        "Structural Restrictions/BasicInlineContainerTests.swift",
+        "Structural Restrictions/ListItemContainerTests.swift",
+        "Utility/AssertElementDidntChange.swift",
+        "Visitors/HTMLFormatterTests.swift",
+        "Visitors/MarkupFormatterTests.swift",
+        "Visitors/MarkupRewriterTests.swift",
+        "Visitors/MarkupTreeDumperTests.swift",
+        "Visitors/MarkupVisitorTests.swift",
+        "Visitors/MarkupWalkerTests.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "Markdown",
+      "module_type" : "SwiftTarget",
+      "name" : "Markdown",
+      "path" : "Sources/Markdown",
+      "product_dependencies" : [
+        "cmark-gfm",
+        "cmark-gfm-extensions"
+      ],
+      "product_memberships" : [
+        "Markdown",
+        "XMLConverter",
+        "LinkCollector",
+        "PreferredHeadingStyle",
+        "UseCodeFence",
+        "CondenseAutolinks",
+        "DefaultFormatting",
+        "CustomLinePrefix",
+        "UnorderedListMarker",
+        "OrderedListNumerals",
+        "MaximumWidth",
+        "ThematicBreakCharacter",
+        "EmphasisMarkers",
+        "ChildThrough",
+        "ParseDocumentString",
+        "ParseDocumentFile",
+        "RemoveElementKind",
+        "ReplaceText"
+      ],
+      "sources" : [
+        "Base/ChildIndexPath.swift",
+        "Base/DirectiveArgument.swift",
+        "Base/Document.swift",
+        "Base/LiteralMarkup.swift",
+        "Base/Markup.swift",
+        "Base/MarkupChildren.swift",
+        "Base/MarkupData.swift",
+        "Base/PlainTextConvertibleMarkup.swift",
+        "Base/RawMarkup.swift",
+        "Block Nodes/Block Container Blocks/BlockDirective.swift",
+        "Block Nodes/Block Container Blocks/BlockQuote.swift",
+        "Block Nodes/Block Container Blocks/CustomBlock.swift",
+        "Block Nodes/Block Container Blocks/Doxygen Commands/DoxygenAbstract.swift",
+        "Block Nodes/Block Container Blocks/Doxygen Commands/DoxygenDiscussion.swift",
+        "Block Nodes/Block Container Blocks/Doxygen Commands/DoxygenNote.swift",
+        "Block Nodes/Block Container Blocks/Doxygen Commands/DoxygenParameter.swift",
+        "Block Nodes/Block Container Blocks/Doxygen Commands/DoxygenReturns.swift",
+        "Block Nodes/Block Container Blocks/ListItem.swift",
+        "Block Nodes/Block Container Blocks/OrderedList.swift",
+        "Block Nodes/Block Container Blocks/UnorderedList.swift",
+        "Block Nodes/Inline Container Blocks/Paragraph.swift",
+        "Block Nodes/Leaf Blocks/CodeBlock.swift",
+        "Block Nodes/Leaf Blocks/HTMLBlock.swift",
+        "Block Nodes/Leaf Blocks/Heading.swift",
+        "Block Nodes/Leaf Blocks/ThematicBreak.swift",
+        "Block Nodes/Tables/Table.swift",
+        "Block Nodes/Tables/TableBody.swift",
+        "Block Nodes/Tables/TableCell.swift",
+        "Block Nodes/Tables/TableCellContainer.swift",
+        "Block Nodes/Tables/TableHead.swift",
+        "Block Nodes/Tables/TableRow.swift",
+        "Infrastructure/Replacement.swift",
+        "Infrastructure/SourceLocation.swift",
+        "Inline Nodes/Inline Containers/Emphasis.swift",
+        "Inline Nodes/Inline Containers/Image.swift",
+        "Inline Nodes/Inline Containers/InlineAttributes.swift",
+        "Inline Nodes/Inline Containers/Link.swift",
+        "Inline Nodes/Inline Containers/Strikethrough.swift",
+        "Inline Nodes/Inline Containers/Strong.swift",
+        "Inline Nodes/Inline Leaves/CustomInline.swift",
+        "Inline Nodes/Inline Leaves/InlineCode.swift",
+        "Inline Nodes/Inline Leaves/InlineHTML.swift",
+        "Inline Nodes/Inline Leaves/LineBreak.swift",
+        "Inline Nodes/Inline Leaves/SoftBreak.swift",
+        "Inline Nodes/Inline Leaves/SymbolLink.swift",
+        "Inline Nodes/Inline Leaves/Text.swift",
+        "Interpretive Nodes/Aside.swift",
+        "Parser/BlockDirectiveParser.swift",
+        "Parser/CommonMarkConverter.swift",
+        "Parser/LazySplitLines.swift",
+        "Parser/ParseOptions.swift",
+        "Parser/RangeAdjuster.swift",
+        "Parser/RangerTracker.swift",
+        "Rewriter/MarkupRewriter.swift",
+        "Structural Restrictions/BasicBlockContainer.swift",
+        "Structural Restrictions/BasicInlineContainer.swift",
+        "Structural Restrictions/BlockContainer.swift",
+        "Structural Restrictions/BlockMarkup.swift",
+        "Structural Restrictions/InlineContainer.swift",
+        "Structural Restrictions/InlineMarkup.swift",
+        "Structural Restrictions/ListItemContainer.swift",
+        "Utility/AtomicCounter.swift",
+        "Utility/CharacterExtensions.swift",
+        "Utility/CollectionExtensions.swift",
+        "Utility/StringExtensions.swift",
+        "Visitor/MarkupVisitor.swift",
+        "Walker/MarkupWalker.swift",
+        "Walker/Walkers/HTMLFormatter.swift",
+        "Walker/Walkers/MarkupFormatter.swift",
+        "Walker/Walkers/MarkupTreeDumper.swift"
+      ],
+      "target_dependencies" : [
+        "CAtomic"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "CAtomic",
+      "module_type" : "ClangTarget",
+      "name" : "CAtomic",
+      "path" : "Sources/CAtomic",
+      "product_memberships" : [
+        "Markdown",
+        "XMLConverter",
+        "LinkCollector",
+        "PreferredHeadingStyle",
+        "UseCodeFence",
+        "CondenseAutolinks",
+        "DefaultFormatting",
+        "CustomLinePrefix",
+        "UnorderedListMarker",
+        "OrderedListNumerals",
+        "MaximumWidth",
+        "ThematicBreakCharacter",
+        "EmphasisMarkers",
+        "ChildThrough",
+        "ParseDocumentString",
+        "ParseDocumentFile",
+        "RemoveElementKind",
+        "ReplaceText"
+      ],
+      "sources" : [
+        "CAtomic.c"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "XMLConverter",
+      "module_type" : "SwiftTarget",
+      "name" : "XMLConverter",
+      "path" : "Snippets/Visitors",
+      "product_memberships" : [
+        "XMLConverter"
+      ],
+      "sources" : [
+        "XMLConverter.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "LinkCollector",
+      "module_type" : "SwiftTarget",
+      "name" : "LinkCollector",
+      "path" : "Snippets/Walkers",
+      "product_memberships" : [
+        "LinkCollector"
+      ],
+      "sources" : [
+        "LinkCollector.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "PreferredHeadingStyle",
+      "module_type" : "SwiftTarget",
+      "name" : "PreferredHeadingStyle",
+      "path" : "Snippets/Formatting",
+      "product_memberships" : [
+        "PreferredHeadingStyle"
+      ],
+      "sources" : [
+        "PreferredHeadingStyle.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "UseCodeFence",
+      "module_type" : "SwiftTarget",
+      "name" : "UseCodeFence",
+      "path" : "Snippets/Formatting",
+      "product_memberships" : [
+        "UseCodeFence"
+      ],
+      "sources" : [
+        "UseCodeFence.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "CondenseAutolinks",
+      "module_type" : "SwiftTarget",
+      "name" : "CondenseAutolinks",
+      "path" : "Snippets/Formatting",
+      "product_memberships" : [
+        "CondenseAutolinks"
+      ],
+      "sources" : [
+        "CondenseAutolinks.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "DefaultFormatting",
+      "module_type" : "SwiftTarget",
+      "name" : "DefaultFormatting",
+      "path" : "Snippets/Formatting",
+      "product_memberships" : [
+        "DefaultFormatting"
+      ],
+      "sources" : [
+        "DefaultFormatting.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "CustomLinePrefix",
+      "module_type" : "SwiftTarget",
+      "name" : "CustomLinePrefix",
+      "path" : "Snippets/Formatting",
+      "product_memberships" : [
+        "CustomLinePrefix"
+      ],
+      "sources" : [
+        "CustomLinePrefix.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "UnorderedListMarker",
+      "module_type" : "SwiftTarget",
+      "name" : "UnorderedListMarker",
+      "path" : "Snippets/Formatting",
+      "product_memberships" : [
+        "UnorderedListMarker"
+      ],
+      "sources" : [
+        "UnorderedListMarker.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "OrderedListNumerals",
+      "module_type" : "SwiftTarget",
+      "name" : "OrderedListNumerals",
+      "path" : "Snippets/Formatting",
+      "product_memberships" : [
+        "OrderedListNumerals"
+      ],
+      "sources" : [
+        "OrderedListNumerals.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "MaximumWidth",
+      "module_type" : "SwiftTarget",
+      "name" : "MaximumWidth",
+      "path" : "Snippets/Formatting",
+      "product_memberships" : [
+        "MaximumWidth"
+      ],
+      "sources" : [
+        "MaximumWidth.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "ThematicBreakCharacter",
+      "module_type" : "SwiftTarget",
+      "name" : "ThematicBreakCharacter",
+      "path" : "Snippets/Formatting",
+      "product_memberships" : [
+        "ThematicBreakCharacter"
+      ],
+      "sources" : [
+        "ThematicBreakCharacter.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "EmphasisMarkers",
+      "module_type" : "SwiftTarget",
+      "name" : "EmphasisMarkers",
+      "path" : "Snippets/Formatting",
+      "product_memberships" : [
+        "EmphasisMarkers"
+      ],
+      "sources" : [
+        "EmphasisMarkers.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "ChildThrough",
+      "module_type" : "SwiftTarget",
+      "name" : "ChildThrough",
+      "path" : "Snippets/Querying",
+      "product_memberships" : [
+        "ChildThrough"
+      ],
+      "sources" : [
+        "ChildThrough.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "ParseDocumentString",
+      "module_type" : "SwiftTarget",
+      "name" : "ParseDocumentString",
+      "path" : "Snippets/Parsing",
+      "product_memberships" : [
+        "ParseDocumentString"
+      ],
+      "sources" : [
+        "ParseDocumentString.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "ParseDocumentFile",
+      "module_type" : "SwiftTarget",
+      "name" : "ParseDocumentFile",
+      "path" : "Snippets/Parsing",
+      "product_memberships" : [
+        "ParseDocumentFile"
+      ],
+      "sources" : [
+        "ParseDocumentFile.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "RemoveElementKind",
+      "module_type" : "SwiftTarget",
+      "name" : "RemoveElementKind",
+      "path" : "Snippets/Rewriters",
+      "product_memberships" : [
+        "RemoveElementKind"
+      ],
+      "sources" : [
+        "RemoveElementKind.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    },
+    {
+      "c99name" : "ReplaceText",
+      "module_type" : "SwiftTarget",
+      "name" : "ReplaceText",
+      "path" : "Snippets/Rewriters",
+      "product_memberships" : [
+        "ReplaceText"
+      ],
+      "sources" : [
+        "ReplaceText.swift"
+      ],
+      "target_dependencies" : [
+        "Markdown"
+      ],
+      "type" : "snippet"
+    }
+  ],
+  "tools_version" : "6.2"
+}
