@@ -428,5 +428,3 @@ The following are a few tips to consider as you work with your repository:
 [rules_spm]: https://github.com/cgrindel/rules_spm
 [rules_swift]: https://github.com/bazelbuild/rules_swift
 [rules_swift_package_manager]: https://github.com/cgrindel/rules_swift_package_manager
-[tidy]:
-  https://github.com/cgrindel/bazel-starlib/blob/main/doc/bzltidy/rules_and_macros_overview.md#tidy

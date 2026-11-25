@@ -59,10 +59,10 @@ each checkout before it records the package's manifest. That is how a patch that
 patch files into `swift_deps_cache/<identity>/patches/`, so adding or changing a patch makes the
 slice stale until you run the cache step.
 
-Use `patches`, not `patch_cmds`, for any change to a package's `Package.swift`. The cache step does
-not run `patch_cmds`. Only the repository rule runs them, and it reads the manifest from the cache,
-not from the patched checkout. A `patch_cmds` change to source files still works. The [resources
-example] patches a manifest this way.
+Use `patches`, not `patch_cmds`, for any change to a package's `Package.swift`. The [resources
+example] patches a manifest this way. The cache step does not run `patch_cmds`. Only the repository
+rule runs them, and it reads the manifest from the cache, not from the patched checkout. A
+`patch_cmds` change to source files still works.
 
 ## Test the Patch
 

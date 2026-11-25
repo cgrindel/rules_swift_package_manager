@@ -26,9 +26,9 @@ layout.
 
 ## What changed
 
-- `from_package` needs `config`, `dump_manifests` and `desc_manifests`. A generated
-  `inc.MODULE.bazel` per slice holds the tag; you no longer write it by hand. A tag without `config`
-  is a v1 tag and fails with a missing mandatory attribute.
+- `from_package` needs `config`, `resolved`, `dump_manifests` and `desc_manifests`; `resolved` was
+  optional in v1. A generated `inc.MODULE.bazel` per slice holds the tag; you no longer write it by
+  hand. A tag without `config` is a v1 tag and fails with a missing mandatory attribute.
 - `Package.resolved` moves from beside `Package.swift` into each slice directory.
 - `swift_deps_info`, `declare_swift_deps_info`, `swift_deps_index.json` and `cached_json_directory`
   are gone. [swift_gazelle_plugin] users must wait for a plugin release that reads the slice cache.
@@ -61,7 +61,8 @@ layout.
 The steps use one slice, `swift_deps/any`, and a `Package.swift` at the workspace root. Use your own
 paths.
 
-1. Delete the v1 `from_package` tag from `MODULE.bazel`; `init` generates its replacement. Its v1
+1. Delete the v1 `from_package` tag from `MODULE.bazel`; `init` generates its replacement. Keep a
+   copy of any `netrc`, `registries` and `make_files_read_only` lines for step 3. Its other v1
    attributes (`cached_json_directory`, `declare_swift_deps_info`, `declare_swift_package`, `env`,
    `env_inherit`, `resolve_transitive_local_dependencies`) have no v2 equivalent. Also remove
    `build_path` from `configure_swift_package` and `"swift_deps_info"` from `use_repo`.
@@ -82,6 +83,10 @@ paths.
 
    Then delete the v1 `Package.resolved` beside `Package.swift`. The cache step refuses to run while
    it is there.
+
+   If the v1 `from_package` tag set `netrc`, `registries` or `make_files_read_only`, copy those
+   lines into the `from_package` tag of the new `inc.MODULE.bazel` before step 5. `registries` has
+   no effect until [#2699] lands.
 
 4. Add the `include()` that `init` printed to `MODULE.bazel`, after the root `use_extension` and
    `use_repo`. `bazel mod tidy` writes `use_repo` into the first file that uses the extension, so
@@ -115,8 +120,8 @@ Linux machine or CI job and commit it.
 - In the alias layout, used when two slices pin a package differently, `bazel_target_*` changes land
   on the hidden `@swiftpkg_<name>__slice_<n>` repositories. A `bazel query` against the top-level
   alias shows none of the attributes; query the target the alias points at instead.
-- On the first `cache` after `init`, a `configure_package` tag that matches only by dependency name
-  is not applied. Run `cache` a second time.
+- On the first `resolve` or `cache` after `init`, a `configure_package` tag that matches only by
+  dependency name is not applied. Run `cache` once more.
 - `bazel run @swift_package//:update` updates every package; it takes no package arguments.
 - Registry packages fail until [#2699] lands. The registry example keeps its v1 setup and is not
   tested until then.
