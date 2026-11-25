@@ -15,3 +15,4 @@ examples/aws_sdk_example/swift_deps/any/.build
 examples/language_modes_example/swift_deps/any/.build
 examples/lottie_ios_example/swift_deps/any/.build
 examples/messagekit_example/swift_deps/any/.build
+examples/modulemap_comments_example/swift_deps/any/.build

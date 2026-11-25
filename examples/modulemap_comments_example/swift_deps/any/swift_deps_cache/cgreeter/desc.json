@@ -1,0 +1,40 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "CGreeter",
+  "name" : "CGreeter",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "CGreeter",
+      "targets" : [
+        "CGreeter"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "targets" : [
+    {
+      "c99name" : "CGreeter",
+      "module_type" : "ClangTarget",
+      "name" : "CGreeter",
+      "path" : "Sources/CGreeter",
+      "product_memberships" : [
+        "CGreeter"
+      ],
+      "sources" : [
+        "greeter.c"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.7"
+}

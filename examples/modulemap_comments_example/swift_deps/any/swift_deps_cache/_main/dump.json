@@ -1,0 +1,45 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "fileSystem" : [
+        {
+          "identity" : "cgreeter",
+          "path" : "./third_party/CGreeter",
+          "productFilter" : null,
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "modulemap_comments_example",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+
+  ],
+  "toolsVersion" : {
+    "_version" : "5.7.0"
+  },
+  "traits" : [
+
+  ]
+}
