@@ -41,7 +41,6 @@ development inside a Bazel workspace.
 ## Documentation
 
 - [Rules and API documentation](/docs/README.md)
-- [High-level design](/docs/design/high-level.md)
 - [Frequently Asked Questions](/docs/faq.md)
 - [Migrating from v1 to v2](/docs/v2_migration.md)
 
