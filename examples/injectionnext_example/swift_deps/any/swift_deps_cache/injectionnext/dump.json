@@ -1,0 +1,130 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "InjectionNext",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "InjectionNext",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "InjectionBundle"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "InjectionNextC",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "InjectionBundle",
+      "packageAccess" : false,
+      "path" : "Sources/InjectionNext",
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "DEBUG_ONLY"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "InjectionNextC",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "DEBUG_ONLY"
+            }
+          },
+          "tool" : "c"
+        },
+        {
+          "kind" : {
+            "define" : {
+              "_0" : "FISHHOOK_EXPORT"
+            }
+          },
+          "tool" : "c"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "InjectionBundle",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "InjectionNextTests",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.4.0"
+  },
+  "traits" : [
+
+  ]
+}

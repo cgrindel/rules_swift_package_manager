@@ -1,0 +1,113 @@
+{
+  "dependencies" : [
+
+  ],
+  "manifest_display_name" : "InjectionNext",
+  "name" : "InjectionNext",
+  "path" : "./",
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "InjectionNext",
+      "targets" : [
+        "InjectionBundle"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "c99name" : "InjectionNextTests",
+      "module_type" : "SwiftTarget",
+      "name" : "InjectionNextTests",
+      "path" : "Tests/InjectionNextTests",
+      "sources" : [
+        "InjectionNextTests.swift"
+      ],
+      "target_dependencies" : [
+        "InjectionBundle"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "InjectionNextC",
+      "module_type" : "ClangTarget",
+      "name" : "InjectionNextC",
+      "path" : "Sources/InjectionNextC",
+      "product_memberships" : [
+        "InjectionNext"
+      ],
+      "sources" : [
+        "ClientBoot.mm",
+        "DLKit/DLKitC.c",
+        "DLKit/trie_dladdr.mm",
+        "DLKit/trie_dlops.mm",
+        "InjectionLite/InjectionBoot.mm",
+        "InjectionTouchEvents.mm",
+        "SimpleSocket.mm",
+        "SwiftTraceGuts/ObjCBridge.mm",
+        "SwiftTraceGuts/SwiftTrace.mm",
+        "SwiftTraceGuts/Trampolines.mm",
+        "SwiftTraceGuts/fast_dladdr.mm",
+        "SwiftTraceGuts/fishhook.c",
+        "SwiftTraceGuts/xt_forwarding_trampoline_arm64.s",
+        "SwiftTraceGuts/xt_forwarding_trampoline_arm7.s",
+        "SwiftTraceGuts/xt_forwarding_trampoline_x64.s",
+        "SwiftTraceGuts/xt_forwarding_trampoline_x86.s"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "InjectionBundle",
+      "module_type" : "SwiftTarget",
+      "name" : "InjectionBundle",
+      "path" : "Sources/InjectionNext",
+      "product_memberships" : [
+        "InjectionNext"
+      ],
+      "sources" : [
+        "DLKit/DLKit.swift",
+        "DLKit/Demangling.swift",
+        "DLKit/FileSymbols.swift",
+        "DLKit/ImageSymbols.swift",
+        "DLKit/Interposing.swift",
+        "DLKit/Iterators.swift",
+        "InjectionLite/Common.swift",
+        "InjectionLite/Generics.swift",
+        "InjectionLite/KeyPaths.swift",
+        "InjectionLite/Metadata.swift",
+        "InjectionLite/Reloader.swift",
+        "InjectionLite/Sweeper.swift",
+        "InjectionNext.swift",
+        "SwiftRegex5/TupleRegex.swift",
+        "SwiftTrace/EasyPointer.swift",
+        "SwiftTrace/StringIndex.swift",
+        "SwiftTrace/SwiftArgs.swift",
+        "SwiftTrace/SwiftAspects.swift",
+        "SwiftTrace/SwiftInterpose.swift",
+        "SwiftTrace/SwiftInvoke.swift",
+        "SwiftTrace/SwiftLifetime.swift",
+        "SwiftTrace/SwiftMeta.swift",
+        "SwiftTrace/SwiftRefs.swift",
+        "SwiftTrace/SwiftStack.swift",
+        "SwiftTrace/SwiftStats.swift",
+        "SwiftTrace/SwiftSwizzle.swift",
+        "SwiftTrace/SwiftTrace.swift"
+      ],
+      "target_dependencies" : [
+        "InjectionNextC"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "5.4"
+}

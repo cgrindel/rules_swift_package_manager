@@ -9,3 +9,4 @@ examples/firebase_example/swift_deps/any/.build
 examples/google_maps_example/swift_deps/any/.build
 examples/interesting_deps/swift_deps/any/.build
 examples/ios_sim/swift_deps/any/.build
+examples/injectionnext_example/swift_deps/any/.build

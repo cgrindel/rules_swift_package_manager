@@ -1,0 +1,83 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "injectionnext",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/johnno1962/InjectionNext.git"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.0.1",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "injectionnext_example",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "InjectionNext",
+            "InjectionNext",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SomeTest",
+      "packageAccess" : false,
+      "path" : "Tests",
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.7.0"
+  },
+  "traits" : [
+
+  ]
+}
