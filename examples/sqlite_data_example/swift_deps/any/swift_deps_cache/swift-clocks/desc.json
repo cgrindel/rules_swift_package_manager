@@ -1,0 +1,124 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-docc-plugin",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-docc-plugin"
+    },
+    {
+      "identity" : "swift-concurrency-extras",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-concurrency-extras"
+    },
+    {
+      "identity" : "swift-issue-reporting",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.1.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-issue-reporting"
+    }
+  ],
+  "manifest_display_name" : "swift-clocks",
+  "name" : "swift-clocks",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "Clocks",
+      "targets" : [
+        "Clocks"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "c99name" : "ClocksTests",
+      "module_type" : "SwiftTarget",
+      "name" : "ClocksTests",
+      "path" : "Tests/ClocksTests",
+      "sources" : [
+        "ImmediateClockTests.swift",
+        "Internal/ActorIsolated.swift",
+        "Internal/AsyncStream.swift",
+        "TestClocksTests.swift",
+        "UnimplementedClockTests.swift"
+      ],
+      "target_dependencies" : [
+        "Clocks"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "Clocks",
+      "module_type" : "SwiftTarget",
+      "name" : "Clocks",
+      "path" : "Sources/Clocks",
+      "product_dependencies" : [
+        "ConcurrencyExtras",
+        "IssueReporting"
+      ],
+      "product_memberships" : [
+        "Clocks"
+      ],
+      "sources" : [
+        "AnyClock.swift",
+        "ImmediateClock.swift",
+        "Internal/Lock.swift",
+        "Internal/_AsyncTimerSequence.swift",
+        "SwiftUI.swift",
+        "TestClock.swift",
+        "Timer.swift",
+        "UnimplementedClock.swift"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.4"
+}

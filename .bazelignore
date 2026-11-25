@@ -28,3 +28,4 @@ examples/stripe_example/swift_deps/any/.build
 examples/tca_example/swift_deps/any/.build
 examples/symlink_example/swift_deps/any/.build
 examples/swift_parsing_example/swift_deps/any/.build
+examples/sqlite_data_example/swift_deps/any/.build

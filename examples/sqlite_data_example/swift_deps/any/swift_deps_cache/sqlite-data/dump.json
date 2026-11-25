@@ -1,0 +1,968 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-collections",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-collections"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "grdb.swift",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/groue/GRDB.swift"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "7.6.0",
+                "upperBound" : "8.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-clocks",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-clocks"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-concurrency-extras",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-concurrency-extras"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.4.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-custom-dump",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-custom-dump"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.3.3",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-dependencies",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-dependencies"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.9.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-issue-reporting",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-issue-reporting"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.1.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-perception",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-perception"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.0.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-sharing",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-sharing"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "2.3.0",
+                "upperBound" : "3.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-snapshot-testing",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-snapshot-testing"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.18.4",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-structured-queries",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-structured-queries"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "0.39.1",
+                "upperBound" : "1.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "condition" : {
+                "traits" : [
+                  "CasePaths"
+                ]
+              },
+              "name" : "CasePaths"
+            },
+            {
+              "condition" : {
+                "traits" : [
+                  "ColumnCoding"
+                ]
+              },
+              "name" : "ColumnCoding"
+            },
+            {
+              "condition" : {
+                "traits" : [
+                  "LazyInitializableByDefault"
+                ]
+              },
+              "name" : "LazyInitializableByDefault"
+            },
+            {
+              "condition" : {
+                "traits" : [
+                  "SuppressPlatformSQLiteAvailability"
+                ]
+              },
+              "name" : "SuppressPlatformSQLiteAvailability"
+            },
+            {
+              "condition" : {
+                "traits" : [
+                  "Tagged"
+                ]
+              },
+              "name" : "Tagged"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-tagged",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/pointfreeco/swift-tagged"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "0.10.0",
+                "upperBound" : "1.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sourceControl" : [
+        {
+          "identity" : "swift-docc-plugin",
+          "location" : {
+            "remote" : [
+              {
+                "urlString" : "https://github.com/apple/swift-docc-plugin"
+              }
+            ]
+          },
+          "productFilter" : null,
+          "requirement" : {
+            "range" : [
+              {
+                "lowerBound" : "1.0.0",
+                "upperBound" : "2.0.0"
+              }
+            ]
+          },
+          "traits" : [
+            {
+              "name" : "default"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "name" : "sqlite-data",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+    {
+      "options" : [
+
+      ],
+      "platformName" : "ios",
+      "version" : "16.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "macos",
+      "version" : "13.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "tvos",
+      "version" : "16.0"
+    },
+    {
+      "options" : [
+
+      ],
+      "platformName" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "SQLiteData",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SQLiteData"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "SQLiteDataTestSupport",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "SQLiteDataTestSupport"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : [
+    "6"
+  ],
+  "targets" : [
+    {
+      "dependencies" : [
+        {
+          "product" : [
+            "Clocks",
+            "swift-clocks",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "ConcurrencyExtras",
+            "swift-concurrency-extras",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Dependencies",
+            "swift-dependencies",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "GRDB",
+            "GRDB.swift",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "IssueReporting",
+            "swift-issue-reporting",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "OrderedCollections",
+            "swift-collections",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Perception",
+            "swift-perception",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Sharing",
+            "swift-sharing",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "StructuredQueriesSQLite",
+            "swift-structured-queries",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Tagged",
+            "swift-tagged",
+            null,
+            {
+              "platformNames" : [
+
+              ],
+              "traits" : [
+                "Tagged"
+              ]
+            }
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SQLiteData",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SQLiteData",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "ConcurrencyExtras",
+            "swift-concurrency-extras",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "ConcurrencyExtrasTestSupport",
+            "swift-concurrency-extras",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "CustomDump",
+            "swift-custom-dump",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "Dependencies",
+            "swift-dependencies",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "InlineSnapshotTesting",
+            "swift-snapshot-testing",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "StructuredQueriesTestSupport",
+            "swift-structured-queries",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SQLiteDataTestSupport",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SQLiteData",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "SQLiteDataTestSupport",
+            null
+          ]
+        },
+        {
+          "byName" : [
+            "TestLocals",
+            null
+          ]
+        },
+        {
+          "product" : [
+            "DependenciesTestSupport",
+            "swift-dependencies",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "InlineSnapshotTesting",
+            "swift-snapshot-testing",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "SnapshotTestingCustomDump",
+            "swift-snapshot-testing",
+            null,
+            null
+          ]
+        },
+        {
+          "product" : [
+            "StructuredQueries",
+            "swift-structured-queries",
+            null,
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "SQLiteDataTests",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "SQLiteData",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TestLocals",
+      "packageAccess" : true,
+      "resources" : [
+
+      ],
+      "settings" : [
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ExistentialAny"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "ImmutableWeakCaptures"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InferIsolatedConformances"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "NonisolatedNonsendingByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "InternalImportsByDefault"
+            }
+          },
+          "tool" : "swift"
+        },
+        {
+          "kind" : {
+            "enableUpcomingFeature" : {
+              "_0" : "MemberImportVisibility"
+            }
+          },
+          "tool" : "swift"
+        }
+      ],
+      "type" : "regular"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "6.4.0"
+  },
+  "traits" : [
+    {
+      "description" : "Introduce support for enum tables.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "CasePaths"
+    },
+    {
+      "description" : "Align the Codable coding of tables and selections with their column names.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "ColumnCoding"
+    },
+    {
+      "description" : "Optionalize draft properties that have no default.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "LazyInitializableByDefault"
+    },
+    {
+      "description" : "A deprecated alias for the 'Tagged' trait.",
+      "enabledTraits" : [
+        "Tagged"
+      ],
+      "name" : "SQLiteDataTagged"
+    },
+    {
+      "description" : "Throw an error, rather than coerce, when decoding a column whose storage type does not match the expected type.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "StrictDecoding"
+    },
+    {
+      "description" : "Suppress '@available' checks on APIs that depend on a newer version of SQLite than the one bundled with the platform.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "SuppressPlatformSQLiteAvailability"
+    },
+    {
+      "description" : "Introduce SQLiteData conformances to the swift-tagged package.",
+      "enabledTraits" : [
+
+      ],
+      "name" : "Tagged"
+    }
+  ]
+}

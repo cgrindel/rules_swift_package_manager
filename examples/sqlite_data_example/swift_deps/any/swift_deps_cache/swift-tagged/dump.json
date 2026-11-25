@@ -1,0 +1,199 @@
+{
+  "cLanguageStandard" : null,
+  "cxxLanguageStandard" : null,
+  "defaultLocalization" : null,
+  "dependencies" : [
+
+  ],
+  "name" : "swift-tagged",
+  "packageKind" : {
+    "root" : [
+      "./"
+    ]
+  },
+  "pkgConfig" : null,
+  "platforms" : [
+
+  ],
+  "products" : [
+    {
+      "name" : "Tagged",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "Tagged"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "TaggedMoney",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "TaggedMoney"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "TaggedTime",
+      "settings" : [
+
+      ],
+      "targets" : [
+        "TaggedTime"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    }
+  ],
+  "providers" : null,
+  "swiftLanguageVersions" : null,
+  "targets" : [
+    {
+      "dependencies" : [
+
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "Tagged",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Tagged",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TaggedTests",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Tagged",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TaggedMoney",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "TaggedMoney",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TaggedMoneyTests",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "Tagged",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TaggedTime",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "regular"
+    },
+    {
+      "dependencies" : [
+        {
+          "byName" : [
+            "TaggedTime",
+            null
+          ]
+        }
+      ],
+      "exclude" : [
+
+      ],
+      "name" : "TaggedTimeTests",
+      "packageAccess" : false,
+      "resources" : [
+
+      ],
+      "settings" : [
+
+      ],
+      "type" : "test"
+    }
+  ],
+  "toolsVersion" : {
+    "_version" : "5.1.0"
+  },
+  "traits" : [
+
+  ]
+}

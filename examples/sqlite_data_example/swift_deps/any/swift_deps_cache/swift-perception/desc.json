@@ -1,0 +1,218 @@
+{
+  "dependencies" : [
+    {
+      "identity" : "swift-macro-testing",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "0.6.0",
+            "upper_bound" : "1.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-macro-testing"
+    },
+    {
+      "identity" : "swift-issue-reporting",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "2.1.0",
+            "upper_bound" : "3.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/pointfreeco/swift-issue-reporting"
+    },
+    {
+      "identity" : "swift-syntax",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "509.0.0",
+            "upper_bound" : "605.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/swiftlang/swift-syntax"
+    },
+    {
+      "identity" : "swift-docc-plugin",
+      "requirement" : {
+        "range" : [
+          {
+            "lower_bound" : "1.0.0",
+            "upper_bound" : "2.0.0"
+          }
+        ]
+      },
+      "type" : "sourceControl",
+      "url" : "https://github.com/apple/swift-docc-plugin"
+    }
+  ],
+  "manifest_display_name" : "swift-perception",
+  "name" : "swift-perception",
+  "path" : "./",
+  "platforms" : [
+    {
+      "name" : "ios",
+      "version" : "15.0"
+    },
+    {
+      "name" : "macos",
+      "version" : "12.0"
+    },
+    {
+      "name" : "tvos",
+      "version" : "15.0"
+    },
+    {
+      "name" : "watchos",
+      "version" : "9.0"
+    }
+  ],
+  "products" : [
+    {
+      "name" : "PerceptionCore",
+      "targets" : [
+        "PerceptionCore"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "Perception",
+      "targets" : [
+        "Perception"
+      ],
+      "type" : {
+        "library" : [
+          "automatic"
+        ]
+      }
+    },
+    {
+      "name" : "PerceptionMacros",
+      "targets" : [
+        "PerceptionMacros"
+      ],
+      "type" : {
+        "macro" : null
+      }
+    }
+  ],
+  "swift_languages_versions" : [
+    "5"
+  ],
+  "targets" : [
+    {
+      "c99name" : "PerceptionTests",
+      "module_type" : "SwiftTarget",
+      "name" : "PerceptionTests",
+      "path" : "Tests/PerceptionTests",
+      "sources" : [
+        "ModifyAccessorTests.swift",
+        "PerceptionCheckingTests.swift",
+        "PerceptionTrackingTests.swift",
+        "WithPerceptionTrackingOverloadTests.swift"
+      ],
+      "target_dependencies" : [
+        "Perception"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "PerceptionMacrosTests",
+      "module_type" : "SwiftTarget",
+      "name" : "PerceptionMacrosTests",
+      "path" : "Tests/PerceptionMacrosTests",
+      "product_dependencies" : [
+        "MacroTesting"
+      ],
+      "sources" : [
+        "PerceptionMacrosTests.swift"
+      ],
+      "target_dependencies" : [
+        "PerceptionMacros"
+      ],
+      "type" : "test"
+    },
+    {
+      "c99name" : "PerceptionMacros",
+      "module_type" : "SwiftTarget",
+      "name" : "PerceptionMacros",
+      "path" : "Sources/PerceptionMacros",
+      "product_dependencies" : [
+        "SwiftSyntaxMacros",
+        "SwiftCompilerPlugin"
+      ],
+      "product_memberships" : [
+        "Perception",
+        "PerceptionMacros"
+      ],
+      "sources" : [
+        "Availability.swift",
+        "Extensions.swift",
+        "PerceptibleMacro.swift",
+        "Plugins.swift"
+      ],
+      "type" : "macro"
+    },
+    {
+      "c99name" : "PerceptionCore",
+      "module_type" : "SwiftTarget",
+      "name" : "PerceptionCore",
+      "path" : "Sources/PerceptionCore",
+      "product_dependencies" : [
+        "IssueReporting"
+      ],
+      "product_memberships" : [
+        "PerceptionCore",
+        "Perception"
+      ],
+      "sources" : [
+        "Internal/Deprecations.swift",
+        "Internal/Exports.swift",
+        "Internal/Locals.swift",
+        "Internal/ObservationBeta.swift",
+        "Locking.swift",
+        "Perceptible.swift",
+        "Perception/PerceptionChecking.swift",
+        "Perception/PerceptionRegistrar.swift",
+        "PerceptionTracking.swift",
+        "Perceptions.swift",
+        "SwiftUI/Bindable.swift",
+        "SwiftUI/Environment.swift",
+        "SwiftUI/WithPerceptionTracking.swift",
+        "ThreadLocal.swift",
+        "_PerceptionRegistrar.swift"
+      ],
+      "type" : "library"
+    },
+    {
+      "c99name" : "Perception",
+      "module_type" : "SwiftTarget",
+      "name" : "Perception",
+      "path" : "Sources/Perception",
+      "product_memberships" : [
+        "Perception"
+      ],
+      "sources" : [
+        "Exports.swift",
+        "Macros.swift"
+      ],
+      "target_dependencies" : [
+        "PerceptionCore",
+        "PerceptionMacros"
+      ],
+      "type" : "library"
+    }
+  ],
+  "tools_version" : "6.4"
+}
