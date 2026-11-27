@@ -148,6 +148,19 @@ output/chicken
 output/chicken/smidgen
 output/chicken/smidgen/hello.txt
 """
+
+    # The same entries in the order that a different filesystem returns them.
+    raw_no_dot_prefix_other_order = """\
+output
+output/chicken
+output/chicken/smidgen
+output/chicken/smidgen/hello.txt
+output/foo
+output/foo/bar
+output/foo/bar/monkey.txt
+output/foo/baz
+output/foo/baz/elephant.txt
+"""
     raw_with_dot_prefix = """\
 ./foo
 ./foo/baz
@@ -168,14 +181,32 @@ output/chicken/smidgen/hello.txt
             remove_find_path = False,
             exp = [
                 "output",
-                "output/foo",
-                "output/foo/baz",
-                "output/foo/baz/elephant.txt",
-                "output/foo/bar",
-                "output/foo/bar/monkey.txt",
                 "output/chicken",
                 "output/chicken/smidgen",
                 "output/chicken/smidgen/hello.txt",
+                "output/foo",
+                "output/foo/bar",
+                "output/foo/bar/monkey.txt",
+                "output/foo/baz",
+                "output/foo/baz/elephant.txt",
+            ],
+        ),
+        struct(
+            msg = "results do not depend on the filesystem order",
+            raw = raw_no_dot_prefix_other_order,
+            find_path = "output",
+            exclude_paths = [],
+            remove_find_path = False,
+            exp = [
+                "output",
+                "output/chicken",
+                "output/chicken/smidgen",
+                "output/chicken/smidgen/hello.txt",
+                "output/foo",
+                "output/foo/bar",
+                "output/foo/bar/monkey.txt",
+                "output/foo/baz",
+                "output/foo/baz/elephant.txt",
             ],
         ),
         struct(
@@ -185,14 +216,14 @@ output/chicken/smidgen/hello.txt
             exclude_paths = [],
             remove_find_path = False,
             exp = [
-                "foo",
-                "foo/baz",
-                "foo/baz/elephant.txt",
-                "foo/bar",
-                "foo/bar/monkey.txt",
                 "chicken",
                 "chicken/smidgen",
                 "chicken/smidgen/hello.txt",
+                "foo",
+                "foo/bar",
+                "foo/bar/monkey.txt",
+                "foo/baz",
+                "foo/baz/elephant.txt",
             ],
         ),
         struct(
@@ -215,14 +246,14 @@ output/chicken/smidgen/hello.txt
             exclude_paths = [],
             remove_find_path = True,
             exp = [
-                "output/foo",
-                "output/foo/baz",
-                "output/foo/baz/elephant.txt",
-                "output/foo/bar",
-                "output/foo/bar/monkey.txt",
                 "output/chicken",
                 "output/chicken/smidgen",
                 "output/chicken/smidgen/hello.txt",
+                "output/foo",
+                "output/foo/bar",
+                "output/foo/bar/monkey.txt",
+                "output/foo/baz",
+                "output/foo/baz/elephant.txt",
             ],
         ),
         struct(
