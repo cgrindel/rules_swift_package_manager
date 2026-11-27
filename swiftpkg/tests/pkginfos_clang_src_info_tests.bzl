@@ -231,7 +231,11 @@ def _header_search_path_headers_are_sorted_test(ctx):
             ],
             actual.organized_srcs.other_srcs,
         )
-        asserts.equals(env, ["Sources/Lib/Lib.m"], actual.organized_srcs.objc_srcs)
+        asserts.equals(
+            env,
+            ["Sources/Lib/Lib.m"],
+            actual.organized_srcs.objc_srcs,
+        )
         asserts.equals(env, ["Sources/Lib/include/Lib.h"], actual.hdrs)
 
     return unittest.end(env)
