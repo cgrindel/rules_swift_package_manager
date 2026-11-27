@@ -43,7 +43,7 @@ def _find_license_files(repository_ctx):
         repository_ctx: A `repository_ctx` instance.
 
     Returns:
-        A `list` of path `string` values.
+        A sorted `list` of path `string` values.
     """
 
     find_args = [
@@ -116,7 +116,7 @@ def _list_files_under(
             live from the starting path.
 
     Returns:
-        A `list` of path `string` values.
+        A sorted `list` of path `string` values.
     """
 
     # Follow symlinks and report on the actual files.
@@ -171,7 +171,7 @@ def _list_directories_under(
             excluded from the result.
 
     Returns:
-        A `list` of path `string` values.
+        A sorted `list` of path `string` values.
     """
 
     # Follow symlinks and report on the actual directories.
@@ -252,7 +252,9 @@ def _process_find_results(raw_output, find_path, exclude_paths = [], remove_find
 
     # The starting path will be prefixed to the results. If the starting path is dot (.),
     # the prefix for the results will be `./`. We will remove it before returning the results.
-    path_list = [p.removeprefix("./") for p in path_list]
+    # Sort the results, because find reports them in filesystem order, which
+    # differs between hosts (e.g., APFS and ext4).
+    path_list = sorted([p.removeprefix("./") for p in path_list])
     return _exclude_paths(find_path, path_list, exclude_paths)
 
 def _exclude_paths(find_path, path_list, exclude_paths):
