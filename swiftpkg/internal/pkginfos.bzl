@@ -1385,13 +1385,6 @@ def _new_swift_src_info(
 
 # MARK: - Clang Source Info
 
-_FRAMEWORK_SRC_EXTS = [".c", ".cc", ".cpp", ".m", ".mm", ".h", ".hpp"]
-_HEADER_EXTS = [".h", ".hpp", ".hh", ".hxx", ".inc", ".inl", ".modulemap"]
-
-def _is_framework_src(path):
-    _root, ext = paths.split_extension(path)
-    return lists.contains(_FRAMEWORK_SRC_EXTS, ext)
-
 def _detect_frameworks_from_sources(repository_ctx, srcs):
     """Detect Apple frameworks from #include <Framework/Header.h> patterns in \
     C source files."""
@@ -1399,7 +1392,7 @@ def _detect_frameworks_from_sources(repository_ctx, srcs):
 
     for src in srcs:
         # Only scan C/C++/ObjC source and header files
-        if not _is_framework_src(src):
+        if not clang_files.is_framework_scan_file(src):
             continue
 
         # Read the file and look for framework includes
@@ -1534,10 +1527,9 @@ def _new_clang_src_info_from_sources(
                 exclude_paths = [],
             )
 
-            # Filter to only header files
+            # Keep only files that other sources can still include
             for f in excluded_files:
-                _, ext = paths.split_extension(f)
-                if ext in _HEADER_EXTS:
+                if clang_files.is_includable_excluded_file(f):
                     all_srcs.append(f)
 
     # Organize the source files
