@@ -184,10 +184,71 @@ explicit_source_file_discovers_sibling_public_headers_test = unittest.make(
     _explicit_source_file_discovers_sibling_public_headers_test,
 )
 
+def _header_search_path_headers_are_sorted_test(ctx):
+    # Headers under a header search path outside of the target are added to
+    # `srcs`. Their order must not depend on the filesystem order.
+    env = unittest.begin(ctx)
+
+    shared_hdrs = [
+        "/pkg/Sources/Shared/Zeta.h",
+        "/pkg/Sources/Shared/Alpha.h",
+        "/pkg/Sources/Shared/Nested/Beta.h",
+        "/pkg/Sources/Shared/Mid.h",
+    ]
+    for find_order in [shared_hdrs, reversed(shared_hdrs)]:
+        repository_ctx = testutils.new_stub_repository_ctx(
+            "lib",
+            find_results = {
+                "/pkg/Sources/Lib": [
+                    "/pkg/Sources/Lib/include/Lib.h",
+                    "/pkg/Sources/Lib/Lib.m",
+                ],
+                "/pkg/Sources/Shared": list(find_order),
+            },
+            path_exists_results = {
+                "/pkg/Sources/Shared": True,
+            },
+        )
+
+        actual = pkginfos_testing.new_clang_src_info_from_sources(
+            repository_ctx = repository_ctx,
+            pkg_path = "/pkg",
+            c99name = "Lib",
+            target_path = "Sources/Lib",
+            source_paths = None,
+            public_hdrs_path = "include",
+            exclude_paths = [],
+            other_hdr_srch_paths = [struct(values = ["../Shared"])],
+        )
+
+        asserts.equals(
+            env,
+            [
+                "Sources/Shared/Alpha.h",
+                "Sources/Shared/Mid.h",
+                "Sources/Shared/Nested/Beta.h",
+                "Sources/Shared/Zeta.h",
+            ],
+            actual.organized_srcs.other_srcs,
+        )
+        asserts.equals(
+            env,
+            ["Sources/Lib/Lib.m"],
+            actual.organized_srcs.objc_srcs,
+        )
+        asserts.equals(env, ["Sources/Lib/include/Lib.h"], actual.hdrs)
+
+    return unittest.end(env)
+
+header_search_path_headers_are_sorted_test = unittest.make(
+    _header_search_path_headers_are_sorted_test,
+)
+
 def pkginfos_clang_src_info_test_suite():
     unittest.suite(
         "pkginfos_clang_src_info_tests",
         explicit_source_paths_do_not_compile_public_include_sources_test,
         explicit_source_paths_keep_separate_public_include_test,
         explicit_source_file_discovers_sibling_public_headers_test,
+        header_search_path_headers_are_sorted_test,
     )

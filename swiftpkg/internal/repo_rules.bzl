@@ -299,7 +299,9 @@ def _artifact_infos_from_path(repository_ctx, path):
         if repository_files.path_exists(repository_ctx, paths.join(xf, "Info.plist"))
     ]
 
-    # If multiple found, use the last one which is what SPM currently does:
+    # If multiple found, use the last one in sorted order. This is
+    # deterministic, but may differ from SPM, which takes the last one in its
+    # directory-walk order:
     # https://github.com/swiftlang/swift-package-manager/blob/c26c12f54357fb7246c0bdbe3483105389f056b8/Sources/Workspace/Workspace%2BBinaryArtifacts.swift#L699-L723
     if len(xcframework_dirs) > 1:
         # buildifier: disable=print
