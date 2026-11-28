@@ -79,3 +79,10 @@ use_repo(
     "swiftpkg_delta_codec_cocoa",
     "swiftpkg_msgpack_objective_c",
 )
+
+# DO NOT MERGE: tests ably-cocoa 1.4.1 against bazelbuild/rules_swift#2038.
+git_override(
+    module_name = "rules_swift",
+    commit = "5ebbebf7d3cbb0941098f6e74792f7165bf26a82",
+    remote = "https://github.com/cgrindel/rules_swift.git",
+)
