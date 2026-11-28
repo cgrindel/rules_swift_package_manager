@@ -78,6 +78,32 @@ is_includable_excluded_file_test = unittest.make(
     _is_includable_excluded_file_test,
 )
 
+def _is_c_family_src_test(ctx):
+    env = unittest.begin(ctx)
+
+    tests = [
+        struct(path = "foo.c", exp = True, msg = ".c"),
+        struct(path = "foo.cc", exp = True, msg = ".cc"),
+        struct(path = "foo.cpp", exp = True, msg = ".cpp"),
+        struct(path = "foo.m", exp = True, msg = ".m"),
+        struct(path = "foo.mm", exp = True, msg = ".mm"),
+        struct(path = "foo.h", exp = False, msg = ".h"),
+        struct(path = "foo.hpp", exp = False, msg = ".hpp"),
+        struct(path = "foo.inc", exp = False, msg = ".inc"),
+        struct(path = "foo.S", exp = False, msg = ".S"),
+        struct(path = "foo.s", exp = False, msg = ".s"),
+        struct(path = "foo.o", exp = False, msg = ".o"),
+        struct(path = "foo.swift", exp = False, msg = ".swift"),
+        struct(path = "foo", exp = False, msg = "no extension"),
+    ]
+    for t in tests:
+        actual = clang_files.is_c_family_src(t.path)
+        asserts.equals(env, t.exp, actual, t.msg)
+
+    return unittest.end(env)
+
+is_c_family_src_test = unittest.make(_is_c_family_src_test)
+
 def _is_framework_scan_file_test(ctx):
     env = unittest.begin(ctx)
 
@@ -460,6 +486,7 @@ def clang_files_test_suite():
         is_hdr_test,
         is_public_include_file_test,
         is_includable_excluded_file_test,
+        is_c_family_src_test,
         is_framework_scan_file_test,
         is_include_hdr_test,
         is_public_modulemap_test,

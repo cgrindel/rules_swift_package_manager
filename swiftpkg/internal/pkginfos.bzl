@@ -1514,9 +1514,10 @@ def _new_clang_src_info_from_sources(
                 ])
 
     # SPM's exclude list only excludes files from being compiled as sources,
-    # but headers in excluded directories are still available for inclusion.
-    # We need to find all header files in excluded directories and add them
-    # to all_srcs so they can be discovered and added to the BUILD file.
+    # but files in excluded directories can still be #included by other
+    # sources. Add files in excluded directories that can still be #included
+    # (see `clang_files.is_includable_excluded_file`) to all_srcs so they can
+    # be discovered and added to the BUILD file.
     for ep in exclude_paths:
         abs_exclude_path = paths.normalize(paths.join(abs_target_path, ep))
         if repository_files.is_directory(repository_ctx, abs_exclude_path):
