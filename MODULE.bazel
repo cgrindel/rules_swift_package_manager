@@ -29,6 +29,16 @@ bazel_dep(
     max_compatibility_level = 3,
     repo_name = "build_bazel_rules_swift",
 )
+
+# TODO(#2641): Remove once a rules_swift release includes `swift_toolchain_tool`
+# (https://github.com/bazelbuild/rules_swift/pull/2034). Until then, build
+# against the fork branch that carries it.
+git_override(
+    module_name = "rules_swift",
+    commit = "dd629b0cbb25c017e30fff3c40d0f0fddf653613",
+    remote = "https://github.com/cgrindel/rules_swift.git",
+)
+
 bazel_dep(
     name = "rules_apple",
     version = "4.3.3",
