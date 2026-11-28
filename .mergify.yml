@@ -1,6 +1,20 @@
 queue_rules:
   # Order matters: with no queue name on the queue action, a PR goes to the
   # first rule whose queue_conditions it matches.
+  # PRs that target the v2 release branch. Listed first because a PR goes to
+  # the first queue whose queue_conditions match. The larger batch lets a whole
+  # GitHub-native PR stack land in one batch instead of across several.
+  - name: v2
+    merge_method: squash
+    batch_size: 8
+    max_checks_retries: 1
+    queue_conditions:
+      - base=v2
+      - check-success=all_ci_tests
+      - check-success=conventional_commit_check
+    merge_conditions:
+      - check-success=all_ci_tests
+
   - name: default
     merge_method: squash
     batch_size: 3
@@ -44,7 +58,8 @@ pull_request_rules:
       - -draft
       - -closed
       - -merged
-      - base=main
+      # v2 is the long-lived release branch for the v2 PR stack.
+      - base~=^(main|v2)$
     actions:
       # No name: queue_conditions route the PR to default or renovate.
       queue: {}

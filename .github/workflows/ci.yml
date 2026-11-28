@@ -9,6 +9,7 @@ name: Continuous Integration
   pull_request:
     branches:
       - main
+      - v2
   merge_group: {}
   schedule:
     - cron: 14 11 * * *
