@@ -56,7 +56,7 @@ _SRC_EXTS = _C_SRC_EXTS + _CXX_SRC_EXTS + _OBJC_SRC_EXTS + _OBJCXX_SRC_EXTS + \
 _FRAMEWORK_SCAN_EXTS = _C_SRC_EXTS + _CXX_SRC_EXTS + _OBJC_SRC_EXTS + \
                        _OBJCXX_SRC_EXTS + [".h", ".hpp"]
 
-# Files in an excluded directory that other sources can still `#include`.
+# Excluded files that other sources can still `#include`.
 _INCLUDABLE_EXCLUDED_FILE_EXTS = _HEADER_EXTS + _PUBLIC_INCLUDE_FILE_EXTS + \
                                  _INC_EXTS
 
@@ -69,11 +69,11 @@ def _is_public_include_file(path):
     return _is_hdr(path) or lists.contains(_PUBLIC_INCLUDE_FILE_EXTS, ext)
 
 def _is_includable_excluded_file(path):
-    """Determines whether a file in an excluded directory must be kept.
+    """Determines whether an excluded file must be kept.
 
     SwiftPM only skips compiling excluded files. Files in an excluded
-    directory can still be `#include`d by other sources, so they must remain
-    available.
+    directory, and individually excluded files, can still be `#include`d by
+    other sources, so they must remain available.
 
     Args:
         path: A path `string` value.
@@ -84,6 +84,18 @@ def _is_includable_excluded_file(path):
     """
     _root, ext = paths.split_extension(path)
     return lists.contains(_INCLUDABLE_EXCLUDED_FILE_EXTS, ext)
+
+def _is_modulemap(path):
+    """Determines whether a file is a module map.
+
+    Args:
+        path: A path `string` value.
+
+    Returns:
+        A `bool` indicating whether the file has a `.modulemap` extension.
+    """
+    _root, ext = paths.split_extension(path)
+    return ext == ".modulemap"
 
 def _is_c_family_src(path):
     """Determines whether a file is a C-family source file.
@@ -522,6 +534,7 @@ clang_files = struct(
     is_hdr = _is_hdr,
     is_includable_excluded_file = _is_includable_excluded_file,
     is_include_hdr = _is_include_hdr,
+    is_modulemap = _is_modulemap,
     is_public_include_file = _is_public_include_file,
     is_public_modulemap = _is_public_modulemap,
     is_under_path = _is_under_path,

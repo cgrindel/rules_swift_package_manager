@@ -1,4 +1,5 @@
 import ArgumentParser
+import ExcludedFiles
 import GreetingsFramework
 import MyLibrary
 import NotThatAmazingModule
@@ -11,5 +12,7 @@ struct MyExecutable: AsyncParsableCommand {
 
         let complexClass = ComplexClass(name: "Olivia", age: 30, favoriteColors: ["blue"])
         print(complexClass.greet())
+
+        print(String(cString: excluded_files_greeting()))
     }
 }
