@@ -45,6 +45,13 @@ swift_deps.from_package(
 swift_deps.configure_swift_package(
     replace_scm_with_registry = True,
 )
+
+# Registry packages accept the same patch settings as source control packages.
+swift_deps.configure_package(
+    name = "apple.swift-collections",
+    patch_args = ["-p1"],
+    patches = ["//third-party/swift-collections:0001-Add-CollectionsPatchMarker.patch"],
+)
 use_repo(
     swift_deps,
     "swift_package",

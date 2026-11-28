@@ -28,8 +28,11 @@ _OBJCXX_SRC_EXTS = [".mm"]
 # Assembly source extensions
 _ASSEMBLY_SRC_EXTS = [".S", ".s"]
 
+# Files that are textually included into sources (e.g., `#include "foo.inc"`)
+_INC_EXTS = [".inc"]
+
 # Sources that should be included when constructing other cc_xxx targets
-_OTHER_SRC_EXTS = [".so", ".o", ".inc"]
+_OTHER_SRC_EXTS = [".so", ".o"] + _INC_EXTS
 
 _TEXTUAL_HDR_EXTS = [".def", ".macros"]
 
@@ -40,8 +43,22 @@ _PUBLIC_INCLUDE_FILE_EXTS = _TEXTUAL_HDR_EXTS + [".modulemap"]
 # https://bazel.build/reference/be/objective-c#objc_library.srcs
 # NOTE: From examples found so far, .inc files tend to include source, not
 # header declarations.
+# C, C++, Objective-C, and Objective-C++ source extensions.
+_C_FAMILY_SRC_EXTS = _C_SRC_EXTS + _CXX_SRC_EXTS + _OBJC_SRC_EXTS + \
+                     _OBJCXX_SRC_EXTS
+
 _SRC_EXTS = _C_SRC_EXTS + _CXX_SRC_EXTS + _OBJC_SRC_EXTS + _OBJCXX_SRC_EXTS + \
             _ASSEMBLY_SRC_EXTS + _OTHER_SRC_EXTS
+
+# Files that are scanned for `#include <Framework/Header.h>` directives when
+# detecting Apple framework dependencies. This intentionally matches the list
+# that pkginfos used before these checks moved here.
+_FRAMEWORK_SCAN_EXTS = _C_SRC_EXTS + _CXX_SRC_EXTS + _OBJC_SRC_EXTS + \
+                       _OBJCXX_SRC_EXTS + [".h", ".hpp"]
+
+# Files in an excluded directory that other sources can still `#include`.
+_INCLUDABLE_EXCLUDED_FILE_EXTS = _HEADER_EXTS + _PUBLIC_INCLUDE_FILE_EXTS + \
+                                 _INC_EXTS
 
 def _is_hdr(path):
     _root, ext = paths.split_extension(path)
@@ -50,6 +67,53 @@ def _is_hdr(path):
 def _is_public_include_file(path):
     _root, ext = paths.split_extension(path)
     return _is_hdr(path) or lists.contains(_PUBLIC_INCLUDE_FILE_EXTS, ext)
+
+def _is_includable_excluded_file(path):
+    """Determines whether a file in an excluded directory must be kept.
+
+    SwiftPM only skips compiling excluded files. Files in an excluded
+    directory can still be `#include`d by other sources, so they must remain
+    available.
+
+    Args:
+        path: A path `string` value.
+
+    Returns:
+        A `bool` indicating whether the file can be included by other sources
+        (headers, `.inc`, `.def`, `.macros`, and `.modulemap` files).
+    """
+    _root, ext = paths.split_extension(path)
+    return lists.contains(_INCLUDABLE_EXCLUDED_FILE_EXTS, ext)
+
+def _is_c_family_src(path):
+    """Determines whether a file is a C-family source file.
+
+    This identifies C-family sources, e.g. so that excluded ones can be kept
+    as textual headers.
+
+    Args:
+        path: A path `string` value.
+
+    Returns:
+        A `bool` indicating whether the file is a C, C++, Objective-C, or
+        Objective-C++ source (`.c`, `.cc`, `.cpp`, `.m`, or `.mm`).
+    """
+    _root, ext = paths.split_extension(path)
+    return lists.contains(_C_FAMILY_SRC_EXTS, ext)
+
+def _is_framework_scan_file(path):
+    """Determines whether a file should be scanned for framework includes.
+
+    Args:
+        path: A path `string` value.
+
+    Returns:
+        A `bool` indicating whether the file is a C, C++, Objective-C, or
+        Objective-C++ source or header that may contain
+        `#include <Framework/Header.h>` directives.
+    """
+    _root, ext = paths.split_extension(path)
+    return lists.contains(_FRAMEWORK_SCAN_EXTS, ext)
 
 def _is_include_hdr(path, public_includes = []):
     """Determines whether the path is a public header.
@@ -453,7 +517,10 @@ def _organize_srcs(srcs):
 clang_files = struct(
     collect_files = _collect_files,
     find_magical_public_hdr_dir = _find_magical_public_hdr_dir,
+    is_c_family_src = _is_c_family_src,
+    is_framework_scan_file = _is_framework_scan_file,
     is_hdr = _is_hdr,
+    is_includable_excluded_file = _is_includable_excluded_file,
     is_include_hdr = _is_include_hdr,
     is_public_include_file = _is_public_include_file,
     is_public_modulemap = _is_public_modulemap,

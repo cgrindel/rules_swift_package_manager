@@ -771,6 +771,18 @@ in the lock file and will not be portable across machines.\
         if config_swift_package:
             replace_scm_with_registry = config_swift_package.replace_scm_with_registry
 
+        patch_args = None
+        patch_cmds = None
+        patch_cmds_win = None
+        patch_tool = None
+        patches = None
+        if config_pkg:
+            patch_args = config_pkg.patch_args
+            patch_cmds = config_pkg.patch_cmds
+            patch_cmds_win = config_pkg.patch_cmds_win
+            patch_tool = config_pkg.patch_tool
+            patches = config_pkg.patches
+
         package_rules.registry(
             name = name,
             bazel_package_name = name,
@@ -779,6 +791,11 @@ in the lock file and will not be portable across machines.\
             env_inherit = from_package.env_inherit,
             id = dep.registry.pin.identity,
             make_files_read_only = from_package.make_files_read_only,
+            patch_args = patch_args,
+            patch_cmds = patch_cmds,
+            patch_cmds_win = patch_cmds_win,
+            patch_tool = patch_tool,
+            patches = patches,
             registries = from_package.registries,
             header_symlinks = header_symlinks_mode,
             replace_scm_with_registry = replace_scm_with_registry,

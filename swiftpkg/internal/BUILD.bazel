@@ -456,9 +456,11 @@ bzl_library(
         ":header_symlinks",
         ":pkg_ctxs",
         ":repo_rules",
+        ":swift_package",
         ":swift_package_tool_attrs",
         "@bazel_skylib//lib:dicts",
         "@bazel_skylib//lib:paths",
+        "@bazel_tools//tools/build_defs/repo:utils.bzl",
     ],
 )
 

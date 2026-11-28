@@ -561,6 +561,132 @@ def _header_symlinks_routing_test(ctx):
 
 header_symlinks_routing_test = unittest.make(_header_symlinks_routing_test)
 
+_patches_config_pkg = struct(
+    build_file = None,
+    init_submodules = False,
+    recursive_init_submodules = True,
+    patch_args = ["-p1"],
+    patch_cmds = ["echo patched"],
+    patch_cmds_win = ["Write-Output patched"],
+    patch_tool = "patch",
+    patches = ["//patches:foo.patch"],
+    publicly_expose_all_targets = False,
+    header_symlinks = "warn",
+)
+
+_patch_attrs = [
+    "patches",
+    "patch_args",
+    "patch_cmds",
+    "patch_cmds_win",
+    "patch_tool",
+]
+
+def _declare_pkg_with_patches(dep):
+    """Declare a package with `_patches_config_pkg` and record the rule calls.
+
+    Args:
+        dep: The dependency `struct` to declare.
+
+    Returns:
+        A `dict` keyed by package rule name (`git`, `local`, `registry`). Each
+        value is a `list` of the kwargs passed to that rule.
+    """
+    calls = {"git": [], "local": [], "registry": []}
+    from_package = struct(
+        env = {},
+        env_inherit = [],
+        registries = {},
+        resolved = None,
+        make_files_read_only = False,
+        netrc = None,
+    )
+    swift_deps_test_utils.declare_pkg_from_dependency(
+        dep,
+        _patches_config_pkg,
+        from_package,
+        None,
+        None,
+        {},
+        {},
+        "",
+        "/workspace",
+        "",
+        None,
+        {"binary_target_deps": False, "system_sdk_deps": False},
+        package_rules = struct(
+            git = lambda **kwargs: calls["git"].append(kwargs),
+            local = lambda **kwargs: calls["local"].append(kwargs),
+            registry = lambda **kwargs: calls["registry"].append(kwargs),
+        ),
+    )
+    return calls
+
+def _assert_patch_attrs(env, call):
+    for attr in _patch_attrs:
+        asserts.equals(
+            env,
+            getattr(_patches_config_pkg, attr),
+            call.get(attr),
+            attr,
+        )
+
+def _configure_package_patches_git_test(ctx):
+    env = unittest.begin(ctx)
+
+    source_control = struct(pin = struct(
+        state = struct(revision = "abc", version = "1.0.0"),
+        location = "https://example.com/foo.git",
+    ))
+    dep = struct(
+        name = "foo",
+        identity = "foo",
+        source_control = source_control,
+        file_system = None,
+        registry = None,
+    )
+    calls = _declare_pkg_with_patches(dep)
+    asserts.equals(env, 1, len(calls["git"]))
+    asserts.equals(env, 0, len(calls["local"]))
+    asserts.equals(env, 0, len(calls["registry"]))
+    if calls["git"]:
+        _assert_patch_attrs(env, calls["git"][0])
+
+    return unittest.end(env)
+
+configure_package_patches_git_test = unittest.make(
+    _configure_package_patches_git_test,
+)
+
+def _configure_package_patches_registry_test(ctx):
+    env = unittest.begin(ctx)
+
+    registry = struct(pin = struct(
+        identity = "example.foo",
+        state = struct(version = "1.0.0"),
+    ))
+    dep = struct(
+        name = "foo",
+        identity = "foo",
+        source_control = None,
+        file_system = None,
+        registry = registry,
+    )
+    calls = _declare_pkg_with_patches(dep)
+    asserts.equals(env, 0, len(calls["git"]))
+    asserts.equals(env, 0, len(calls["local"]))
+    asserts.equals(env, 1, len(calls["registry"]))
+    if calls["registry"]:
+        call = calls["registry"][0]
+        asserts.equals(env, "example.foo", call.get("id"))
+        _assert_patch_attrs(env, call)
+
+    return unittest.end(env)
+
+configure_package_patches_registry_test = unittest.make(
+    _configure_package_patches_registry_test,
+)
+
 _EXTENSION_METADATA_SENTINEL = struct(sentinel = "extension_metadata")
 
 def _new_fake_module_ctx(modules, metadata):
@@ -766,6 +892,8 @@ def swift_deps_test_suite():
         inference_validation_test,
         inference_repository_routing_test,
         header_symlinks_routing_test,
+        configure_package_patches_git_test,
+        configure_package_patches_registry_test,
         bazel_target_mods_by_repo_test,
         branch_values_test,
         build_file_conflict_error_test,

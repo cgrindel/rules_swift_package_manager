@@ -1385,16 +1385,6 @@ def _new_swift_src_info(
 
 # MARK: - Clang Source Info
 
-_FRAMEWORK_SRC_EXTS = [".c", ".cc", ".cpp", ".m", ".mm", ".h", ".hpp"]
-_HEADER_EXTS = [".h", ".hpp", ".hh", ".hxx", ".inc", ".inl", ".modulemap"]
-
-# Excluded source files with these extensions stay available to #include.
-_EXCLUDED_TEXTUAL_SRC_EXTS = [".c", ".cc", ".cpp", ".m", ".mm"]
-
-def _is_framework_src(path):
-    _root, ext = paths.split_extension(path)
-    return lists.contains(_FRAMEWORK_SRC_EXTS, ext)
-
 def _detect_frameworks_from_sources(repository_ctx, srcs):
     """Detect Apple frameworks from #include <Framework/Header.h> patterns in \
     C source files."""
@@ -1402,7 +1392,7 @@ def _detect_frameworks_from_sources(repository_ctx, srcs):
 
     for src in srcs:
         # Only scan C/C++/ObjC source and header files
-        if not _is_framework_src(src):
+        if not clang_files.is_framework_scan_file(src):
             continue
 
         # Read the file and look for framework includes
@@ -1525,9 +1515,10 @@ def _new_clang_src_info_from_sources(
                 ])
 
     # SPM's exclude list only excludes files from being compiled as sources,
-    # but headers in excluded directories are still available for inclusion.
-    # We need to find all header files in excluded directories and add them
-    # to all_srcs so they can be discovered and added to the BUILD file.
+    # but files in excluded directories can still be #included by other
+    # sources. Add files in excluded directories that can still be #included
+    # (see `clang_files.is_includable_excluded_file`) to all_srcs so they can
+    # be discovered and added to the BUILD file.
     for ep in exclude_paths:
         abs_exclude_path = paths.normalize(paths.join(abs_target_path, ep))
         if repository_files.is_directory(repository_ctx, abs_exclude_path):
@@ -1538,19 +1529,17 @@ def _new_clang_src_info_from_sources(
                 exclude_paths = [],
             )
 
-            # Filter to only header files
+            # Keep only files that other sources can still include
             for f in excluded_files:
-                _, ext = paths.split_extension(f)
-                if ext in _HEADER_EXTS:
+                if clang_files.is_includable_excluded_file(f):
                     all_srcs.append(f)
         elif repository_files.path_exists(repository_ctx, abs_exclude_path):
             # The same holds for an excluded file. A C-family source file is
             # kept as a textual header: it is not compiled, but other sources
             # may #include it.
-            _, ext = paths.split_extension(abs_exclude_path)
             if clang_files.is_hdr(abs_exclude_path):
                 all_srcs.append(abs_exclude_path)
-            elif ext in _EXCLUDED_TEXTUAL_SRC_EXTS:
+            elif clang_files.is_c_family_src(abs_exclude_path):
                 excluded_textual_srcs.append(abs_exclude_path)
 
     # Organize the source files

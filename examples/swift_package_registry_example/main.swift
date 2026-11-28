@@ -6,6 +6,9 @@ let orderedSet = OrderedSet([1, 2, 3, 4, 5])
 print("Hello, world!")
 print(orderedSet)
 
+// Declared by the patch in third-party/swift-collections.
+print(CollectionsPatchMarker.applied)
+
 let buffer = ByteBuffer(string: "10101010101")
 print(buffer)
 

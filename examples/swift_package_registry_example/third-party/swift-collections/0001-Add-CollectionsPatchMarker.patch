@@ -1,0 +1,10 @@
+--- a/Sources/Collections/Collections.swift
++++ b/Sources/Collections/Collections.swift
+@@ -18,3 +18,7 @@
+ // Note: _RopeModule is very intentionally not reexported, as its contents
+ // aren't part of this package's stable API surface (yet).
+ #endif
++
++public enum CollectionsPatchMarker {
++  public static let applied = true
++}
