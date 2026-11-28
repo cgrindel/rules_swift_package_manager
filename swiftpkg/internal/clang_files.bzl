@@ -56,7 +56,7 @@ _SRC_EXTS = _C_SRC_EXTS + _CXX_SRC_EXTS + _OBJC_SRC_EXTS + _OBJCXX_SRC_EXTS + \
 _FRAMEWORK_SCAN_EXTS = _C_SRC_EXTS + _CXX_SRC_EXTS + _OBJC_SRC_EXTS + \
                        _OBJCXX_SRC_EXTS + [".h", ".hpp"]
 
-# Files in an excluded directory that other sources can still `#include`.
+# Excluded files that other sources can still `#include`.
 _INCLUDABLE_EXCLUDED_FILE_EXTS = _HEADER_EXTS + _PUBLIC_INCLUDE_FILE_EXTS + \
                                  _INC_EXTS
 
@@ -69,11 +69,11 @@ def _is_public_include_file(path):
     return _is_hdr(path) or lists.contains(_PUBLIC_INCLUDE_FILE_EXTS, ext)
 
 def _is_includable_excluded_file(path):
-    """Determines whether a file in an excluded directory must be kept.
+    """Determines whether an excluded file must be kept.
 
     SwiftPM only skips compiling excluded files. Files in an excluded
-    directory can still be `#include`d by other sources, so they must remain
-    available.
+    directory, and individually excluded files, can still be `#include`d by
+    other sources, so they must remain available.
 
     Args:
         path: A path `string` value.

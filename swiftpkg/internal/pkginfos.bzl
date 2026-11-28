@@ -1515,10 +1515,12 @@ def _new_clang_src_info_from_sources(
                 ])
 
     # SPM's exclude list only excludes files from being compiled as sources,
-    # but files in excluded directories can still be #included by other
-    # sources. Add files in excluded directories that can still be #included
-    # (see `clang_files.is_includable_excluded_file`) to all_srcs so they can
-    # be discovered and added to the BUILD file.
+    # but excluded files, whether listed individually or inside an excluded
+    # directory, can still be #included by other sources. Add the ones that
+    # can be #included (see `clang_files.is_includable_excluded_file`) to
+    # all_srcs so they can be discovered and added to the BUILD file.
+    # C-family source files are kept as textual headers: they are not
+    # compiled, but other sources may #include them.
     for ep in exclude_paths:
         abs_exclude_path = paths.normalize(paths.join(abs_target_path, ep))
         if repository_files.is_directory(repository_ctx, abs_exclude_path):
@@ -1533,11 +1535,10 @@ def _new_clang_src_info_from_sources(
             for f in excluded_files:
                 if clang_files.is_includable_excluded_file(f):
                     all_srcs.append(f)
+                elif clang_files.is_c_family_src(f):
+                    excluded_textual_srcs.append(f)
         elif repository_files.path_exists(repository_ctx, abs_exclude_path):
-            # The same holds for an excluded file. A C-family source file is
-            # kept as a textual header: it is not compiled, but other sources
-            # may #include it.
-            if clang_files.is_hdr(abs_exclude_path):
+            if clang_files.is_includable_excluded_file(abs_exclude_path):
                 all_srcs.append(abs_exclude_path)
             elif clang_files.is_c_family_src(abs_exclude_path):
                 excluded_textual_srcs.append(abs_exclude_path)
@@ -1563,10 +1564,13 @@ def _new_clang_src_info_from_sources(
     # non-header files (e.g. `#include "xmltok_impl.c"`). The ensure that all of the files are
     # present for compilation, we add any non-header source files to the `textual_hdrs`.
     # Related to GH252.
-    textual_hdrs = organized_files.textual_hdrs + [
-        clang_files.relativize(p, pkg_path)
-        for p in excluded_textual_srcs
-    ]
+    # Dedup because the same file can be listed in more than one exclude entry.
+    textual_hdrs = sorted(sets.to_list(sets.make(
+        organized_files.textual_hdrs + [
+            clang_files.relativize(p, pkg_path)
+            for p in excluded_textual_srcs
+        ],
+    )))
     hdrs = []
     srcs = []
     explicit_srcs = []

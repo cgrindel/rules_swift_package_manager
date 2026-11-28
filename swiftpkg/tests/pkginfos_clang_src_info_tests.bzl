@@ -244,6 +244,201 @@ header_search_path_headers_are_sorted_test = unittest.make(
     _header_search_path_headers_are_sorted_test,
 )
 
+def _new_excluded_files_src_info(
+        exclude_paths,
+        lib_files = [],
+        find_results = {},
+        is_directory_results = {},
+        path_exists_results = {}):
+    # Build the clang source info for a `Lib` target at `/pkg/Sources/Lib`
+    # that has a public header and a source file plus `lib_files`. Note that
+    # every non-header source, including the compiled `Lib.c`, is also listed
+    # in `textual_hdrs` (GH252).
+    all_find_results = {
+        "/pkg/Sources/Lib": [
+            "/pkg/Sources/Lib/Lib.c",
+            "/pkg/Sources/Lib/include/Lib.h",
+        ] + lib_files,
+    }
+    all_find_results.update(find_results)
+    repository_ctx = testutils.new_stub_repository_ctx(
+        "lib",
+        find_results = all_find_results,
+        is_directory_results = is_directory_results,
+        path_exists_results = path_exists_results,
+    )
+    return pkginfos_testing.new_clang_src_info_from_sources(
+        repository_ctx = repository_ctx,
+        pkg_path = "/pkg",
+        c99name = "Lib",
+        target_path = "Sources/Lib",
+        source_paths = None,
+        public_hdrs_path = "include",
+        exclude_paths = exclude_paths,
+    )
+
+def _excluded_header_file_is_kept_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = _new_excluded_files_src_info(
+        exclude_paths = ["include/Excluded.h"],
+        lib_files = ["/pkg/Sources/Lib/include/Excluded.h"],
+        path_exists_results = {
+            "/pkg/Sources/Lib/include/Excluded.h": True,
+        },
+    )
+
+    asserts.equals(
+        env,
+        ["Sources/Lib/include/Excluded.h", "Sources/Lib/include/Lib.h"],
+        actual.hdrs,
+    )
+
+    return unittest.end(env)
+
+excluded_header_file_is_kept_test = unittest.make(
+    _excluded_header_file_is_kept_test,
+)
+
+def _excluded_inc_file_is_kept_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = _new_excluded_files_src_info(
+        exclude_paths = ["table.inc"],
+        lib_files = ["/pkg/Sources/Lib/table.inc"],
+        path_exists_results = {
+            "/pkg/Sources/Lib/table.inc": True,
+        },
+    )
+
+    asserts.equals(
+        env,
+        ["Sources/Lib/table.inc"],
+        actual.organized_srcs.other_srcs,
+    )
+    asserts.equals(env, ["Sources/Lib/Lib.c"], actual.organized_srcs.c_srcs)
+
+    return unittest.end(env)
+
+excluded_inc_file_is_kept_test = unittest.make(
+    _excluded_inc_file_is_kept_test,
+)
+
+def _excluded_c_file_is_textual_hdr_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = _new_excluded_files_src_info(
+        exclude_paths = ["Excluded.c"],
+        lib_files = ["/pkg/Sources/Lib/Excluded.c"],
+        path_exists_results = {
+            "/pkg/Sources/Lib/Excluded.c": True,
+        },
+    )
+
+    asserts.equals(
+        env,
+        ["Sources/Lib/Excluded.c", "Sources/Lib/Lib.c"],
+        actual.textual_hdrs,
+    )
+    asserts.equals(env, ["Sources/Lib/Lib.c"], actual.organized_srcs.c_srcs)
+    asserts.false(env, "Sources/Lib/Excluded.c" in actual.explicit_srcs)
+
+    return unittest.end(env)
+
+excluded_c_file_is_textual_hdr_test = unittest.make(
+    _excluded_c_file_is_textual_hdr_test,
+)
+
+def _c_file_in_excluded_directory_is_textual_hdr_test(ctx):
+    env = unittest.begin(ctx)
+
+    impl_files = [
+        "/pkg/Sources/Lib/impl/impl.c",
+        "/pkg/Sources/Lib/impl/impl.h",
+    ]
+    actual = _new_excluded_files_src_info(
+        exclude_paths = ["impl"],
+        lib_files = impl_files,
+        find_results = {
+            "/pkg/Sources/Lib/impl": impl_files,
+        },
+        is_directory_results = {
+            "/pkg/Sources/Lib/impl": True,
+        },
+    )
+
+    asserts.equals(
+        env,
+        ["Sources/Lib/Lib.c", "Sources/Lib/impl/impl.c"],
+        actual.textual_hdrs,
+    )
+    asserts.equals(env, ["Sources/Lib/Lib.c"], actual.organized_srcs.c_srcs)
+    asserts.equals(
+        env,
+        ["Sources/Lib/impl/impl.h"],
+        actual.organized_srcs.other_srcs,
+    )
+
+    return unittest.end(env)
+
+c_file_in_excluded_directory_is_textual_hdr_test = unittest.make(
+    _c_file_in_excluded_directory_is_textual_hdr_test,
+)
+
+def _file_excluded_twice_is_listed_once_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = _new_excluded_files_src_info(
+        exclude_paths = ["Excluded.c", "./Excluded.c"],
+        lib_files = ["/pkg/Sources/Lib/Excluded.c"],
+        path_exists_results = {
+            "/pkg/Sources/Lib/Excluded.c": True,
+        },
+    )
+
+    asserts.equals(
+        env,
+        ["Sources/Lib/Excluded.c", "Sources/Lib/Lib.c"],
+        actual.textual_hdrs,
+    )
+
+    return unittest.end(env)
+
+file_excluded_twice_is_listed_once_test = unittest.make(
+    _file_excluded_twice_is_listed_once_test,
+)
+
+def _textual_hdrs_are_sorted_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = _new_excluded_files_src_info(
+        exclude_paths = ["zeta.c", "alpha.c"],
+        lib_files = [
+            "/pkg/Sources/Lib/alpha.c",
+            "/pkg/Sources/Lib/mid.def",
+            "/pkg/Sources/Lib/zeta.c",
+        ],
+        path_exists_results = {
+            "/pkg/Sources/Lib/alpha.c": True,
+            "/pkg/Sources/Lib/zeta.c": True,
+        },
+    )
+
+    asserts.equals(
+        env,
+        [
+            "Sources/Lib/Lib.c",
+            "Sources/Lib/alpha.c",
+            "Sources/Lib/mid.def",
+            "Sources/Lib/zeta.c",
+        ],
+        actual.textual_hdrs,
+    )
+
+    return unittest.end(env)
+
+textual_hdrs_are_sorted_test = unittest.make(_textual_hdrs_are_sorted_test)
+
 def pkginfos_clang_src_info_test_suite():
     unittest.suite(
         "pkginfos_clang_src_info_tests",
@@ -251,4 +446,10 @@ def pkginfos_clang_src_info_test_suite():
         explicit_source_paths_keep_separate_public_include_test,
         explicit_source_file_discovers_sibling_public_headers_test,
         header_search_path_headers_are_sorted_test,
+        excluded_header_file_is_kept_test,
+        excluded_inc_file_is_kept_test,
+        excluded_c_file_is_textual_hdr_test,
+        c_file_in_excluded_directory_is_textual_hdr_test,
+        file_excluded_twice_is_listed_once_test,
+        textual_hdrs_are_sorted_test,
     )
