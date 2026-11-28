@@ -2,9 +2,11 @@
 
 load("@bazel_skylib//lib:dicts.bzl", "dicts")
 load("@bazel_skylib//lib:paths.bzl", "paths")
+load("@bazel_tools//tools/build_defs/repo:utils.bzl", "patch")
 load("//swiftpkg/internal:header_symlinks.bzl", "header_symlinks")
 load("//swiftpkg/internal:pkg_ctxs.bzl", "pkg_ctxs")
 load("//swiftpkg/internal:repo_rules.bzl", "repo_rules")
+load("//swiftpkg/internal:swift_package.bzl", "PATCH_ATTRS")
 load(
     "//swiftpkg/internal:swift_package_tool_attrs.bzl",
     "swift_package_tool_attrs",
@@ -222,6 +224,8 @@ def _registry_swift_package_impl(repository_ctx):
         ),
     )
 
+    patch(repository_ctx)
+
     # Warn about header symlinks, or remove them so that the BUILD file
     # recreates them.
     hdr_symlinks = header_symlinks.process(
@@ -337,12 +341,10 @@ A `Package.resolved`, used to de-duplicate dependency identities when \
 _ALL_ATTRS = dicts.add(
     _REGISTRY_ATTRS,
     header_symlinks.attrs,
+    PATCH_ATTRS,
     repo_rules.env_attrs,
     repo_rules.swift_attrs,
     {
-        "build_file": attr.label(
-            doc = "When used, the provided BUILD file will be used instead of generating one.",
-        ),
         "cached_json_directory": attr.string(),
     },
     swift_package_tool_attrs.swift_package_registry,
