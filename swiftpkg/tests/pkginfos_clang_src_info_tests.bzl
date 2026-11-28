@@ -249,7 +249,9 @@ def _new_excluded_files_src_info(
         lib_files = [],
         find_results = {},
         is_directory_results = {},
-        path_exists_results = {}):
+        path_exists_results = {},
+        file_contents = {},
+        source_paths = None):
     # Build the clang source info for a `Lib` target at `/pkg/Sources/Lib`
     # that has a public header and a source file plus `lib_files`. Note that
     # every non-header source, including the compiled `Lib.c`, is also listed
@@ -263,6 +265,7 @@ def _new_excluded_files_src_info(
     all_find_results.update(find_results)
     repository_ctx = testutils.new_stub_repository_ctx(
         "lib",
+        file_contents = file_contents,
         find_results = all_find_results,
         is_directory_results = is_directory_results,
         path_exists_results = path_exists_results,
@@ -272,7 +275,7 @@ def _new_excluded_files_src_info(
         pkg_path = "/pkg",
         c99name = "Lib",
         target_path = "Sources/Lib",
-        source_paths = None,
+        source_paths = source_paths,
         public_hdrs_path = "include",
         exclude_paths = exclude_paths,
     )
@@ -439,6 +442,164 @@ def _textual_hdrs_are_sorted_test(ctx):
 
 textual_hdrs_are_sorted_test = unittest.make(_textual_hdrs_are_sorted_test)
 
+def _excluded_modulemap_file_is_not_kept_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = _new_excluded_files_src_info(
+        exclude_paths = ["include/module.modulemap"],
+        lib_files = ["/pkg/Sources/Lib/include/module.modulemap"],
+        file_contents = {
+            "/pkg/Sources/Lib/include/module.modulemap": """
+module Lib {
+  header "Lib.h"
+  export *
+}
+""",
+        },
+        path_exists_results = {
+            "/pkg/Sources/Lib/include/module.modulemap": True,
+        },
+    )
+
+    asserts.equals(env, None, actual.modulemap_path)
+    asserts.equals(env, ["Sources/Lib/include/Lib.h"], actual.hdrs)
+
+    return unittest.end(env)
+
+excluded_modulemap_file_is_not_kept_test = unittest.make(
+    _excluded_modulemap_file_is_not_kept_test,
+)
+
+def _excluded_modulemap_file_does_not_replace_modulemap_test(ctx):
+    env = unittest.begin(ctx)
+
+    modulemap_contents = """
+module Lib {
+  header "Lib.h"
+  export *
+}
+"""
+    actual = _new_excluded_files_src_info(
+        exclude_paths = ["include/module.modulemap"],
+        lib_files = [
+            "/pkg/Sources/Lib/include/Lib/module.modulemap",
+            "/pkg/Sources/Lib/include/module.modulemap",
+        ],
+        file_contents = {
+            "/pkg/Sources/Lib/include/Lib/module.modulemap": modulemap_contents,
+            "/pkg/Sources/Lib/include/module.modulemap": modulemap_contents,
+        },
+        path_exists_results = {
+            "/pkg/Sources/Lib/include/module.modulemap": True,
+        },
+    )
+
+    asserts.equals(
+        env,
+        "Sources/Lib/include/Lib/module.modulemap",
+        actual.modulemap_path,
+    )
+    asserts.equals(env, "Lib", actual.module_name)
+
+    return unittest.end(env)
+
+excluded_modulemap_file_does_not_replace_modulemap_test = unittest.make(
+    _excluded_modulemap_file_does_not_replace_modulemap_test,
+)
+
+# The find results for a `Lib` target with `sources: ["src"]`.
+_SRC_FIND_RESULTS = {
+    "/pkg/Sources/Lib/include": ["/pkg/Sources/Lib/include/Lib.h"],
+    "/pkg/Sources/Lib/src": [
+        "/pkg/Sources/Lib/src/Lib.c",
+        "/pkg/Sources/Lib/src/inner.h",
+    ],
+}
+
+def _excluded_file_outside_sources_is_not_kept_test(ctx):
+    env = unittest.begin(ctx)
+
+    actual = _new_excluded_files_src_info(
+        exclude_paths = ["tools/gen.h"],
+        lib_files = ["/pkg/Sources/Lib/tools/gen.h"],
+        find_results = _SRC_FIND_RESULTS,
+        path_exists_results = {
+            "/pkg/Sources/Lib/tools/gen.h": True,
+        },
+        source_paths = ["src"],
+    )
+
+    asserts.equals(env, ["Sources/Lib/include/Lib.h"], actual.hdrs)
+    asserts.false(
+        env,
+        "Sources/Lib/tools/gen.h" in actual.organized_srcs.other_srcs,
+    )
+
+    return unittest.end(env)
+
+excluded_file_outside_sources_is_not_kept_test = unittest.make(
+    _excluded_file_outside_sources_is_not_kept_test,
+)
+
+def _excluded_directory_outside_sources_is_not_kept_test(ctx):
+    env = unittest.begin(ctx)
+
+    tools_files = [
+        "/pkg/Sources/Lib/tools/gen.c",
+        "/pkg/Sources/Lib/tools/gen.h",
+    ]
+    find_results = dict(_SRC_FIND_RESULTS)
+    find_results["/pkg/Sources/Lib/tools"] = tools_files
+    actual = _new_excluded_files_src_info(
+        exclude_paths = ["tools"],
+        lib_files = tools_files,
+        find_results = find_results,
+        is_directory_results = {
+            "/pkg/Sources/Lib/tools": True,
+        },
+        source_paths = ["src"],
+    )
+
+    asserts.equals(env, ["Sources/Lib/src/Lib.c"], actual.textual_hdrs)
+    asserts.equals(
+        env,
+        ["Sources/Lib/src/inner.h"],
+        actual.organized_srcs.other_srcs,
+    )
+
+    return unittest.end(env)
+
+excluded_directory_outside_sources_is_not_kept_test = unittest.make(
+    _excluded_directory_outside_sources_is_not_kept_test,
+)
+
+def _excluded_file_inside_sources_is_kept_test(ctx):
+    env = unittest.begin(ctx)
+
+    find_results = dict(_SRC_FIND_RESULTS)
+    src_dir = "/pkg/Sources/Lib/src"
+    find_results[src_dir] = _SRC_FIND_RESULTS[src_dir] + [src_dir + "/gen.h"]
+    actual = _new_excluded_files_src_info(
+        exclude_paths = ["src/gen.h"],
+        find_results = find_results,
+        path_exists_results = {
+            "/pkg/Sources/Lib/src/gen.h": True,
+        },
+        source_paths = ["src"],
+    )
+
+    asserts.equals(
+        env,
+        ["Sources/Lib/src/gen.h", "Sources/Lib/src/inner.h"],
+        actual.organized_srcs.other_srcs,
+    )
+
+    return unittest.end(env)
+
+excluded_file_inside_sources_is_kept_test = unittest.make(
+    _excluded_file_inside_sources_is_kept_test,
+)
+
 def pkginfos_clang_src_info_test_suite():
     unittest.suite(
         "pkginfos_clang_src_info_tests",
@@ -452,4 +613,9 @@ def pkginfos_clang_src_info_test_suite():
         c_file_in_excluded_directory_is_textual_hdr_test,
         file_excluded_twice_is_listed_once_test,
         textual_hdrs_are_sorted_test,
+        excluded_modulemap_file_is_not_kept_test,
+        excluded_modulemap_file_does_not_replace_modulemap_test,
+        excluded_file_outside_sources_is_not_kept_test,
+        excluded_directory_outside_sources_is_not_kept_test,
+        excluded_file_inside_sources_is_kept_test,
     )

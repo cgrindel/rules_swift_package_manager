@@ -85,6 +85,18 @@ def _is_includable_excluded_file(path):
     _root, ext = paths.split_extension(path)
     return lists.contains(_INCLUDABLE_EXCLUDED_FILE_EXTS, ext)
 
+def _is_modulemap(path):
+    """Determines whether a file is a module map.
+
+    Args:
+        path: A path `string` value.
+
+    Returns:
+        A `bool` indicating whether the file has a `.modulemap` extension.
+    """
+    _root, ext = paths.split_extension(path)
+    return ext == ".modulemap"
+
 def _is_c_family_src(path):
     """Determines whether a file is a C-family source file.
 
@@ -522,6 +534,7 @@ clang_files = struct(
     is_hdr = _is_hdr,
     is_includable_excluded_file = _is_includable_excluded_file,
     is_include_hdr = _is_include_hdr,
+    is_modulemap = _is_modulemap,
     is_public_include_file = _is_public_include_file,
     is_public_modulemap = _is_public_modulemap,
     is_under_path = _is_under_path,
